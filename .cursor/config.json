@@ -1,0 +1,4 @@
+{
+  "instructions": "Leia e siga rigorosamente todas as regras definidas no arquivo /docs/rules/cursor-guidelines.md antes de executar qualquer tarefa neste repositório. Todas as decisões devem respeitar o Design System, arquitetura, tokens, componentes existentes e padrões documentados.",
+  "requiresConfirmation": false
+}

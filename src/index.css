@@ -1,0 +1,73 @@
+@import "./design-system/theme/colors.css";
+@import "./design-system/theme/typography.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    overflow-x: hidden;
+    background-color: hsl(var(--color-muted));
+  }
+}
+
+/* Customização do FsLightbox - Fora do layer para garantir prioridade */
+.fslightbox-container {
+  background-color: rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Garante que TODAS as imagens dentro do lightbox sejam grandes */
+.fslightbox-container img,
+.fslightbox-slide img,
+.fslightbox-slide-detect img,
+.fslightbox-slide-image img,
+.fslightbox-slide-image,
+.fslightbox-slide-detect,
+.fslightbox-slide img[src],
+.fslightbox-slide-detect img[src],
+.fslightbox-container .fslightbox-slide img {
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  min-width: 70vw !important;
+  min-height: 70vh !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  margin: auto !important;
+  display: block !important;
+}
+
+.fslightbox-slide {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100vh !important;
+}
+
+/* Garante que o container do slide também respeite o tamanho */
+.fslightbox-slide-wrapper,
+.fslightbox-slide-container {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100vh !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Força o tamanho do container principal */
+.fslightbox-container .fslightbox-slide-container {
+  width: 100vw !important;
+  height: 100vh !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
