@@ -1,7 +1,6 @@
 import {
   createRootRoute,
   createRoute,
-  createRouter,
   Outlet,
 } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
@@ -79,8 +78,27 @@ function RootComponent() {
   );
 }
 
+// Componente para página não encontrada
+function NotFound() {
+  return (
+    <div className="flex min-h-[60vh] flex-col items-center justify-center px-4">
+      <h1 className="mb-4 text-4xl font-bold text-primary">404</h1>
+      <p className="mb-8 text-lg text-muted-foreground">
+        Página não encontrada
+      </p>
+      <a
+        href="/"
+        className="rounded-md bg-primary px-6 py-3 text-primary-foreground transition-colors hover:bg-primary/90"
+      >
+        Voltar para a página inicial
+      </a>
+    </div>
+  );
+}
+
 const rootRoute = createRootRoute({
   component: RootComponent,
+  notFoundComponent: NotFound,
 });
 
 const indexRoute = createRoute({
@@ -109,6 +127,10 @@ const detalhesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/detalhes/$slug",
   component: DetalhesPage,
+  loader: async ({ params }) => {
+    // Garante que os parâmetros estão disponíveis quando a rota é acessada diretamente
+    return { slug: params.slug };
+  },
 });
 
 const sobreRoute = createRoute({
@@ -123,7 +145,7 @@ const contatoRoute = createRoute({
   component: ContatoPage,
 });
 
-const routeTree = rootRoute.addChildren([
+export const routeTree = rootRoute.addChildren([
   indexRoute,
   seminovosRoute,
   detalhesRoute,
@@ -131,10 +153,8 @@ const routeTree = rootRoute.addChildren([
   contatoRoute,
 ]);
 
-export const router = createRouter({ routeTree });
+// Exporta NotFound para uso no RouterProvider
+export { NotFound };
 
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
+// O router será criado dinamicamente no RouterProvider
+// Isso permite detectar o basepath corretamente após o DOM estar pronto
