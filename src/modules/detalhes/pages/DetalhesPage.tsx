@@ -293,7 +293,7 @@ function CTASidebar() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="bg-surface border border-primary p-6 sm:p-8 flex flex-col items-center"
+        className="border border-border p-6 sm:p-8 flex flex-col items-center"
       >
         <div className="w-full max-w-[246px] h-[148px] mb-6 overflow-hidden">
           <img
