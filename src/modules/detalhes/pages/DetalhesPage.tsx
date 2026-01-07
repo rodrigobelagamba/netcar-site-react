@@ -489,18 +489,29 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
 }
 
 function DetailItem({ label, value }: DetailItemProps) {
+  const isModelo = label === "Modelo:";
+  const isCombustivel = label === "Combustível:";
+  const isCambio = label === "Cambio:";
+  const isDetailField = isModelo || isCombustivel || isCambio;
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-      className="flex flex-col"
+      className="flex flex-col min-w-0"
     >
-      <span className="text-muted-foreground text-[11px] sm:text-[12px] lg:text-[13px] uppercase mb-1">
+      <span className="text-muted-foreground text-[11px] sm:text-[12px] lg:text-[13px] uppercase mb-1 whitespace-nowrap">
         {label}
       </span>
-      <span className="text-fg text-[16px] sm:text-[18px] lg:text-[20px] font-bold">
+      <span 
+        className={`text-fg font-bold ${
+          isDetailField
+            ? "text-[14px] sm:text-[16px] lg:text-[18px] whitespace-nowrap" 
+            : "text-[16px] sm:text-[18px] lg:text-[20px] break-words"
+        }`}
+      >
         {value}
       </span>
     </motion.div>
@@ -656,14 +667,14 @@ export function DetalhesPage() {
       {/* Hero Section */}
       <section className="w-full pt-16">
         <div className="max-w-[1290px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-[660px_630px]">
+          <div className="grid grid-cols-1 lg:grid-cols-[30%_70%]">
             {/* Left Content */}
           <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              className="px-4 sm:px-6 lg:pl-0 lg:pr-[63px] py-6 sm:py-8 lg:py-[27px] flex flex-col justify-between order-2 lg:order-1"
+              className="px-4 sm:px-6 lg:pl-8 lg:pr-[63px] py-6 sm:py-8 lg:py-[27px] flex flex-col justify-between order-2 lg:order-1"
             >
               {/* Brand */}
               <motion.p
@@ -690,7 +701,7 @@ export function DetalhesPage() {
                   delay: 0.2,
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
-                className="text-fg text-[28px] sm:text-[36px] lg:text-[48px] font-bold leading-[1.1] mb-4 sm:mb-6 lg:mb-8 max-w-full lg:max-w-[350px]"
+                className="text-fg text-[28px] sm:text-[36px] lg:text-[48px] font-bold leading-[1.1] mb-4 sm:mb-6 lg:mb-8 max-w-full lg:max-w-[350px] break-words"
               >
                 {modeloCompleto}
               </motion.h1>
@@ -712,7 +723,7 @@ export function DetalhesPage() {
             </div>
 
               {/* Price & CTA */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex flex-row items-center gap-4">
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -722,10 +733,12 @@ export function DetalhesPage() {
                     delay: 0.3,
                     ease: [0.25, 0.1, 0.25, 1],
                   }}
-                  className="text-secondary text-[28px] sm:text-[32px] lg:text-[36px] font-bold"
+                  className="text-secondary text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap flex-shrink-0"
                   dangerouslySetInnerHTML={{ __html: price }}
                 />
-                <ContactButton />
+                <div className="flex-shrink-0">
+                  <ContactButton />
+                </div>
             </div>
           </motion.div>
 
@@ -735,13 +748,13 @@ export function DetalhesPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              className="relative h-[280px] sm:h-[360px] lg:h-[476px] overflow-hidden order-1 lg:order-2"
+              className="relative h-[280px] sm:h-[360px] lg:h-[476px] order-1 lg:order-2 overflow-hidden"
             >
               {mainImage && (
                 <img
               src={mainImage}
                   alt={`${marca} ${modeloCompleto}`}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="w-full h-full object-cover object-bottom"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = "none";
               }}
