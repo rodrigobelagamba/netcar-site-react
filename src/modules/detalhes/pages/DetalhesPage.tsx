@@ -17,6 +17,7 @@ import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
+import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
 
 interface Badge {
   text: string;
@@ -786,6 +787,13 @@ export function DetalhesPage() {
 
       {/* Details Section */}
       <DetailsSection vehicle={vehicle} />
+
+      {/* Fábrica de Valor Section */}
+      <section className="w-full pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16 bg-[rgb(247,247,247)]">
+        <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0">
+          <FabricaDeValor />
+        </div>
+      </section>
 
       {/* Related Vehicles Section */}
       <RelatedVehiclesSection currentVehicleId={vehicle.id} />
