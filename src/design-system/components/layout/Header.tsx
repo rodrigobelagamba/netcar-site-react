@@ -67,33 +67,42 @@ export function Header() {
         />
 
         <div className="container mx-auto relative flex h-16 items-center justify-between px-4">
-          {/* Logo à esquerda */}
-          <Link to="/" aria-label="NetCar - Página inicial">
+          {/* Espaçador à esquerda para balancear */}
+          <div className="hidden md:block flex-1"></div>
+
+          {/* Logo e Menu centralizados juntos - Desktop */}
+          <div className="hidden md:flex items-center gap-8 flex-1 justify-center">
+            <Link to="/" aria-label="NetCar - Página inicial" className="flex-shrink-0">
+              <img src={logoNetcar} alt="NetCar" className="h-8 w-auto" />
+            </Link>
+
+            <nav className="flex items-center gap-6 flex-shrink-0">
+              {menuLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className="group relative text-[14px]  text-fg overflow-hidden h-[22px] flex items-center whitespace-nowrap"
+                >
+                  {/* Texto padrão */}
+                  <span className="block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                    {link.label}
+                  </span>
+                  {/* Texto que sobe no hover */}
+                  <span className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                    {link.label}
+                  </span>
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Logo - Mobile */}
+          <Link to="/" aria-label="NetCar - Página inicial" className="md:hidden">
             <img src={logoNetcar} alt="NetCar" className="h-8 w-auto" />
           </Link>
 
-          {/* Links no centro - Desktop */}
-          <nav className="hidden md:flex items-center gap-6">
-            {menuLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="group relative text-[14px]  text-fg overflow-hidden h-[22px] flex items-center"
-              >
-                {/* Texto padrão */}
-                <span className="block transition-transform duration-300 ease-out group-hover:-translate-y-full">
-                  {link.label}
-                </span>
-                {/* Texto que sobe no hover */}
-                <span className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
-                  {link.label}
-                </span>
-              </Link>
-            ))}
-          </nav>
-
           {/* Botões à direita - Desktop */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4 flex-1 justify-end">
             <button className="flex items-center gap-2">
               <Search className="w-4 h-4" />
               <span>Buscar</span>
