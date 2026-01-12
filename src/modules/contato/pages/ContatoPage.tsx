@@ -1,8 +1,10 @@
 import { cn } from "@/lib/cn";
+import { Footer } from "@/design-system/components/layout/Footer";
 
 export function ContatoPage() {
   return (
-    <main className="container mx-auto flex-1 px-4 py-12">
+    <>
+      <main className="container mx-auto flex-1 px-4 py-12">
       <div className="mx-auto max-w-2xl">
         <h1 className="mb-6 text-4xl font-bold text-fg">Entre em Contato</h1>
         <div className="rounded-lg border border-border bg-surface p-8">
@@ -84,6 +86,10 @@ export function ContatoPage() {
           </form>
         </div>
       </div>
-    </main>
+      </main>
+      <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8">
+        <Footer />
+      </div>
+    </>
   );
 }
