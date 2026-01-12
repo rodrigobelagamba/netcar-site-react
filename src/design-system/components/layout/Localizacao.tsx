@@ -91,7 +91,6 @@ export function Localizacao() {
 
       const tryGeocode = (addressIndex: number) => {
         if (addressIndex >= addressVariants.length) {
-          console.warn(`⚠️ Geocodificação falhou para ${loja.nome} após tentar todos os formatos. Usando coordenadas padrão.`);
           return;
         }
 
@@ -108,13 +107,6 @@ export function Localizacao() {
               const lat = location.lat();
               const lng = location.lng();
               
-              console.log(`✅ Geocodificação bem-sucedida para ${loja.nome}:`, { 
-                lat, 
-                lng, 
-                address,
-                formattedAddress: results[0].formatted_address 
-              });
-              
               setLojas((prevLojas) =>
                 prevLojas.map((l) =>
                   l.id === loja.id
@@ -130,7 +122,6 @@ export function Localizacao() {
               );
             } else {
               // Tenta próximo formato de endereço
-              console.log(`🔄 Tentando próximo formato para ${loja.nome}... (tentativa ${addressIndex + 1}/${addressVariants.length})`);
               tryGeocode(addressIndex + 1);
             }
           }
@@ -161,7 +152,6 @@ export function Localizacao() {
   // Criar marcadores usando AdvancedMarkerElement ou Marker padrão como fallback
   const createAdvancedMarkers = useCallback(() => {
     if (!map || !window.google?.maps) {
-      console.warn("Mapa ou Google Maps não disponível");
       return;
     }
 
@@ -186,7 +176,6 @@ export function Localizacao() {
           const mapId = (map as any).mapId || mapOptions.mapId;
           
           if (!mapId) {
-            console.warn(`⚠️ Map ID não encontrado para ${loja.nome}. Usando Marker padrão.`);
             // Fallback para Marker padrão se não houver mapId
             const color = loja.cor === "primary" ? "#6cc4ca" : "#f59e0b";
             const svg = `
@@ -211,12 +200,10 @@ export function Localizacao() {
             });
 
             marker.addListener("click", () => {
-              console.log(`Marcador ${loja.nome} clicado`);
               setSelectedLoja(loja.id);
             });
 
             markersRef.current.push(marker as any);
-            console.log(`✅ Marcador padrão criado para ${loja.nome}:`, loja.coordenadas);
             return;
           }
           
@@ -229,12 +216,10 @@ export function Localizacao() {
 
           // Adicionar evento de clique
           marker.addListener("click", () => {
-            console.log(`Marcador ${loja.nome} clicado`);
             setSelectedLoja(loja.id);
           });
 
           markersRef.current.push(marker as any);
-          console.log(`✅ Marcador AdvancedMarkerElement criado para ${loja.nome}:`, loja.coordenadas);
         } else {
           // Fallback para Marker padrão
           const color = loja.cor === "primary" ? "#6cc4ca" : "#f59e0b";
@@ -260,12 +245,10 @@ export function Localizacao() {
           });
 
           marker.addListener("click", () => {
-            console.log(`Marcador ${loja.nome} clicado`);
             setSelectedLoja(loja.id);
           });
 
           markersRef.current.push(marker as any);
-          console.log(`✅ Marcador padrão criado para ${loja.nome}:`, loja.coordenadas);
         }
       } catch (error) {
         console.error(`Erro ao criar marcador para ${loja.nome}:`, error);
@@ -278,13 +261,6 @@ export function Localizacao() {
     if (mapLoaded && typeof window !== "undefined" && window.google?.maps) {
       const geocoderInstance = new window.google.maps.Geocoder();
       setGeocoder(geocoderInstance);
-      
-      // Verificar se AdvancedMarkerElement está disponível
-      if (window.google.maps.marker?.AdvancedMarkerElement) {
-        console.log("✅ AdvancedMarkerElement disponível");
-      } else {
-        console.warn("⚠️ AdvancedMarkerElement não disponível. Usando Marker padrão.");
-      }
     }
   }, [mapLoaded]);
 
@@ -406,37 +382,11 @@ export function Localizacao() {
           version="weekly"
           id="google-maps-script"
           onLoad={() => {
-            console.log("✅ Google Maps script carregado com sucesso");
-            console.log("Chave da API:", GOOGLE_MAPS_API_KEY ? "Configurada" : "Não configurada");
-            console.log("Google Maps disponível:", !!window.google?.maps);
-            
-            // Verificar versão da API
-            if (window.google?.maps) {
-              console.log("Versão da API:", window.google.maps.version || "Desconhecida");
-              console.log("Maps API carregada:", !!window.google.maps.Map);
-              console.log("Geocoder disponível:", !!window.google.maps.Geocoder);
-              console.log("Marker disponível:", !!window.google.maps.Marker);
-            }
-            
-            // Verificar AdvancedMarkerElement
-            if (window.google?.maps?.marker) {
-              console.log("Biblioteca marker carregada:", true);
-              console.log("AdvancedMarkerElement disponível:", !!window.google.maps.marker.AdvancedMarkerElement);
-            } else {
-              console.warn("⚠️ Biblioteca marker não carregada");
-            }
-            
-            console.log("URL do script:", `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=marker&v=weekly&callback=initMap`);
+            setMapLoaded(true);
           }}
           onError={(error) => {
-            console.error("❌ Erro ao carregar Google Maps:", error);
-            console.error("Chave da API:", GOOGLE_MAPS_API_KEY ? `${GOOGLE_MAPS_API_KEY.substring(0, 20)}...` : "Não configurada");
-            console.error("Possíveis causas:");
-            console.error("1. A chave da API não está válida ou expirou");
-            console.error("2. As APIs necessárias não estão habilitadas (Maps JavaScript API, Geocoding API)");
-            console.error("3. A chave tem restrições que bloqueiam este domínio");
-            console.error("4. Não há faturação configurada no Google Cloud Console");
-            setMapError("Erro ao carregar Google Maps. Verifique o console para mais detalhes.");
+            console.error("Erro ao carregar Google Maps:", error);
+            setMapError("Erro ao carregar Google Maps. Verifique a chave da API e as configurações.");
           }}
         >
           <GoogleMap
@@ -445,38 +395,11 @@ export function Localizacao() {
             zoom={15}
             options={mapOptions}
             onLoad={(mapInstance) => {
-              console.log("✅ GoogleMap carregado", mapInstance);
               if (mapInstance) {
                 setMap(mapInstance);
                 setMapLoaded(true);
-                setMapError(null); // Limpar erro se carregou com sucesso
-                
-                // Verificar funcionalidades disponíveis
-                const mapId = (mapInstance as any).mapId || mapOptions.mapId;
-                console.log("📊 Status das funcionalidades do Google Maps:");
-                console.log("- Map instance:", !!mapInstance);
-                console.log("- Map ID:", mapId || "Não configurado");
-                console.log("- Geocoder:", !!window.google?.maps?.Geocoder);
-                console.log("- Marker (legado):", !!window.google?.maps?.Marker);
-                console.log("- AdvancedMarkerElement:", !!window.google?.maps?.marker?.AdvancedMarkerElement);
-                console.log("- PinElement:", !!window.google?.maps?.marker?.PinElement);
-                
-                // Verificar se AdvancedMarkerElement está disponível e se o mapa tem ID
-                if (window.google?.maps?.marker?.AdvancedMarkerElement) {
-                  if (mapId) {
-                    console.log("✅ AdvancedMarkerElement disponível - usando nova API com Map ID:", mapId);
-                  } else {
-                    console.warn("⚠️ AdvancedMarkerElement disponível mas Map ID não configurado!");
-                    console.warn("💡 O Map ID é necessário para usar AdvancedMarkerElement.");
-                  }
-                } else {
-                  console.warn("⚠️ AdvancedMarkerElement não disponível. Usando Marker padrão como fallback.");
-                  console.warn("💡 Dica: Certifique-se de que a biblioteca 'marker' foi carregada corretamente.");
-                }
+                setMapError(null);
               }
-            }}
-            onUnmount={() => {
-              console.log("GoogleMap desmontado");
             }}
           >
             {selectedLoja && (() => {
