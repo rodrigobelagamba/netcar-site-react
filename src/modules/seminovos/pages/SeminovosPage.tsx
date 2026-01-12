@@ -9,7 +9,8 @@ export function SeminovosPage() {
   const { data: vehicles, isLoading } = useVehiclesQuery(search);
 
   return (
-    <main className="container mx-auto flex-1 px-4 py-8">
+    <>
+      <main className="container mx-auto flex-1 px-4 py-8">
       <div className="mb-8">
         <h1 className="mb-4 text-4xl font-bold text-fg">Carros Seminovos</h1>
         <p className="text-muted-foreground">
