@@ -658,7 +658,27 @@ export function DetalhesPage() {
 
   // Imagens
   const images = vehicle.fullImages || vehicle.fotos || vehicle.images || [];
-  const mainImage = images[0] || "";
+  
+  // URL da imagem de carro coberto usada como fallback quando não houver PNG
+  const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
+  
+  // Filtra apenas imagens PNG para a foto de destaque
+  const pngImages = images.filter(img => {
+    if (!img) return false;
+    const imgLower = img.toLowerCase();
+    return imgLower.endsWith('.png') || imgLower.includes('.png');
+  });
+  
+  // Verifica se a primeira imagem PNG é a imagem específica que deve ser substituída
+  const firstPngImage = pngImages.length > 0 ? pngImages[0] : null;
+  // Verifica se contém o nome do arquivo problemático (case-insensitive)
+  const shouldUsePlaceholder = firstPngImage && firstPngImage.toLowerCase().includes('271_131072img_8213');
+  
+  // Se não tiver PNG válido ou se for a imagem específica problemática, usa o placeholder
+  // Caso contrário, usa a primeira PNG encontrada
+  const mainImage: string = (pngImages.length > 0 && !shouldUsePlaceholder && firstPngImage) 
+    ? firstPngImage
+    : CAR_COVERED_PLACEHOLDER_URL;
 
   // Badges
   const badges: Badge[] = [
