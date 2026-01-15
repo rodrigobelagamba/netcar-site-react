@@ -572,6 +572,8 @@ function RelatedVehiclesSection({
               year={vehicle.year || new Date().getFullYear()}
               km={vehicle.km || 0}
               images={vehicle.images || vehicle.fotos || []}
+              marca={vehicle.marca}
+              modelo={vehicle.modelo}
             />
           ))}
         </div>
