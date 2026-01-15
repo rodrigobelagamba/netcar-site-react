@@ -74,7 +74,7 @@ export function Header() {
 
   const menuLinks = [
     { to: "/sobre", label: "Sobre" },
-    { to: "/showroom", label: "Showroom" },
+    { to: "/seminovos", label: "Showroom" },
     { to: "/social", label: "Social" },
     { to: "/blog", label: "Blog" },
     { to: "/contato", label: "Contato" },

@@ -40,14 +40,14 @@ export interface StockPriceRange {
 }
 
 export interface StockAllData {
-  enterprises: StockBrand[];
-  cars: StockModel[];
-  years: StockYear[];
-  colors: StockColor[];
-  motors: StockMotor[];
-  fuels: StockFuel[];
-  transmissions: StockTransmission[];
-  prices: StockPriceRange[];
+  enterprises: string[]; // Array de strings simples
+  cars: string[]; // Array de strings simples
+  years: (string | number)[]; // Array misto de strings e números
+  colors: string[]; // Array de strings simples
+  motors: string[]; // Array de strings simples
+  fuels: string[]; // Array de strings simples
+  transmissions: string[]; // Array de strings simples
+  prices: number[]; // Array de números simples
 }
 
 export interface ApiStockResponse<T> {
