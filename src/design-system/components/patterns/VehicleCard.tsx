@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { formatPrice, formatKm, formatYear } from "@/lib/formatters";
+import { formatPrice, formatYear } from "@/lib/formatters";
 import { cn } from "@/lib/cn";
 import { Plus } from "lucide-react";
 
@@ -25,9 +25,7 @@ export function VehicleCard({
   name,
   price,
   year,
-  km,
   images,
-  badges = [],
   valor_formatado,
   marca,
   modelo,
@@ -47,8 +45,8 @@ export function VehicleCard({
   );
   
   // Se não tiver PNG ou se for a imagem específica, usa a imagem de carro coberto como fallback
-  const mainImage = (pngImages.length > 0 && !shouldUsePlaceholder) 
-    ? firstPngImage 
+  const mainImage: string = (pngImages.length > 0 && !shouldUsePlaceholder) 
+    ? (firstPngImage || CAR_COVERED_PLACEHOLDER_URL)
     : CAR_COVERED_PLACEHOLDER_URL;
 
   const handleClick = () => {
