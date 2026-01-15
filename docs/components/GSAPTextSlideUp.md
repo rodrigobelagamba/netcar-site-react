@@ -1,5 +1,16 @@
-// Componentes novos a serem adicionados após o fechamento da função DetalhesPage
+# Componente GSAPTextSlideUp
 
+Componente para animação de texto que sobe ao hover usando GSAP.
+
+## Status
+⚠️ **Não implementado** - Referência para implementação futura
+
+## Descrição
+Componente que cria um efeito de texto deslizando para cima ao passar o mouse, usando GSAP para animações suaves.
+
+## Código Proposto
+
+```typescript
 // Componente: Texto sobe ao hover
 function GSAPTextSlideUp({
   children,
@@ -76,3 +87,14 @@ function GSAPTextSlideUp({
     </Button>
   );
 }
+```
+
+## Dependências Necessárias
+- `gsap` - Biblioteca de animações
+- `useRef` e `useEffect` do React
+- Componente `Button` (do design system)
+
+## Notas
+- Este componente foi planejado mas ainda não foi implementado na página de detalhes
+- Pode ser útil para melhorar a interatividade dos botões CTA
+- Originalmente planejado para ser adicionado após o fechamento da função `DetalhesPage`
