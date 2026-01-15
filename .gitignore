@@ -8,6 +8,11 @@ dist/
 .env
 .env.local
 .env.*.local
+# Mantém .env.example e .env.development/.env.production no repositório
+# Mas permite que sejam sobrescritos localmente
+!.env.example
+!.env.development
+!.env.production
 
 # Logs
 *.log

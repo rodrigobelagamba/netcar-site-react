@@ -204,7 +204,7 @@ Para publicar o projeto em um VPS usando Docker:
 
 3. **Acesse:** `http://seu-servidor:8080`
 
-Para mais detalhes, consulte [README.DOCKER.md](./README.DOCKER.md)
+Para mais detalhes, consulte [README.DOCKER.md](./docs/README.DOCKER.md)
 
 ### Deploy Manual (WAMP/XAMPP)
 

@@ -1,12 +1,12 @@
 import axios from "axios";
-
-const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
+import { config } from "./config";
 
 export const axiosInstance = axios.create({
-  baseURL,
-  timeout: 30000, // Aumentado para 30s devido à API externa
+  baseURL: config.apiBaseUrl,
+  timeout: config.apiTimeout,
   headers: {
     "Content-Type": "application/json",
+    "Accept": "application/json",
   },
 });
 

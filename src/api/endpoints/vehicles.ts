@@ -1,4 +1,5 @@
 import { axiosInstance } from "../axios-instance";
+import { config } from "../config";
 
 export interface Vehicle {
   id: string;
@@ -161,17 +162,19 @@ function normalizeImageUrl(url: string): string {
   
   // Se começa com /, adiciona o domínio base
   if (normalized.startsWith("/")) {
-    return `https://www.netcarmultimarcas.com.br${normalized}`;
+    const baseDomain = config.apiBaseUrl.replace("/api/v1", "");
+    return `${baseDomain}${normalized}`;
   }
   
   // Caso contrário, adiciona o caminho base completo
-  return `https://www.netcarmultimarcas.com.br/${normalized}`;
+  const baseDomain = config.apiBaseUrl.replace("/api/v1", "");
+  return `${baseDomain}/${normalized}`;
 }
 
 export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
   try {
     const response = await axiosInstance.get<ApiVehicleResponse>(
-      "https://www.netcarmultimarcas.com.br/api/v1/veiculos"
+      `${config.apiBaseUrl}/veiculos`
     );
 
     if (!response.data.success || !response.data.data) {
@@ -265,7 +268,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
 export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
   try {
     const response = await axiosInstance.get<ApiVehicleResponse>(
-      `https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/${id}`
+      `${config.apiBaseUrl}/veiculos/id/${id}`
     );
 
     if (!response.data.success || !response.data.data || response.data.data.length === 0) {
