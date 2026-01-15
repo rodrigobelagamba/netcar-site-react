@@ -561,7 +561,7 @@ function RelatedVehiclesSection({
         </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 lg:gap-[30px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 lg:gap-[30px] pt-16">
           {relatedVehicles.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}

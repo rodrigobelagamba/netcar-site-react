@@ -3,6 +3,10 @@ import { formatPrice, formatKm, formatYear } from "@/lib/formatters";
 import { cn } from "@/lib/cn";
 import { Plus } from "lucide-react";
 
+// URL da imagem de carro coberto usada como fallback quando não houver PNG
+// A imagem está em public/images/semcapa.png
+const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
+
 export interface VehicleCardProps {
   id: string;
   name: string;
@@ -35,12 +39,17 @@ export function VehicleCard({
     img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
   );
   
-  // Se não tiver PNG, não mostra o card
-  if (pngImages.length === 0) {
-    return null;
-  }
+  // Verifica se a primeira imagem PNG é a imagem específica que deve ser substituída
+  const firstPngImage = pngImages.length > 0 ? pngImages[0] : null;
+  const shouldUsePlaceholder = firstPngImage && (
+    firstPngImage.includes('271_131072IMG_8213.png') || 
+    firstPngImage.includes('271_131072IMG_8213.PNG')
+  );
   
-  const mainImage = pngImages[0];
+  // Se não tiver PNG ou se for a imagem específica, usa a imagem de carro coberto como fallback
+  const mainImage = (pngImages.length > 0 && !shouldUsePlaceholder) 
+    ? firstPngImage 
+    : CAR_COVERED_PLACEHOLDER_URL;
 
   const handleClick = () => {
     // Usa o ID para navegação, já que a API busca por ID
@@ -108,7 +117,7 @@ export function VehicleCard({
       </div>
 
       {/* Informações do veículo - parte branca */}
-      <div className="p-4 pt-[60%] pb-3 relative z-10 bg-white rounded-lg shadow-lg">
+      <div className="p-4 pt-[55%] pb-3 relative z-10 bg-white rounded-lg shadow-lg">
         {/* Tag da marca abaixo da imagem */}
         {marca && (
           <div className="mb-2">

@@ -16,6 +16,16 @@ export function HomePage() {
     ? banners.map(banner => banner.imagem)
     : [];
 
+  // Filtra veículos que têm imagem PNG e pega apenas os 4 primeiros
+  const vehiclesWithPhotos = vehicles
+    ? vehicles.filter(vehicle => {
+        // Verifica se tem pelo menos uma imagem PNG
+        return vehicle.images?.some(img => 
+          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
+        );
+      }).slice(0, 4)
+    : [];
+
   return (
     <main className="flex-1">
       {heroImages.length > 0 && (
@@ -44,7 +54,7 @@ export function HomePage() {
 
       <section className="container mx-auto px-4 py-12">
         <h2 className="mb-8 text-3xl font-bold text-fg">Destaques</h2>
-        <ProductList vehicles={vehicles || []} isLoading={isLoading} />
+        <ProductList vehicles={vehiclesWithPhotos} isLoading={isLoading} />
       </section>
 
       <section className="bg-surface-alt py-12">

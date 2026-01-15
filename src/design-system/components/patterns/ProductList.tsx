@@ -51,7 +51,7 @@ export function ProductList({ vehicles, isLoading }: ProductListProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" style={{ overflow: 'visible' }}>
+    <div className="grid grid-cols-1 gap-y-32 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pt-16" style={{ overflow: 'visible' }}>
       {vehicles.map((vehicle) => (
         <VehicleCard key={vehicle.id} {...vehicle} />
       ))}
