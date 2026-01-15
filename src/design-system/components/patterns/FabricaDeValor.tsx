@@ -2,22 +2,22 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Imports das imagens
-import fabrica1 from '@/assets/images/fabrica/1.gif';
-import fabrica2 from '@/assets/images/fabrica/2.gif';
-import fabrica3 from '@/assets/images/fabrica/3.gif';
-import fabrica4 from '@/assets/images/fabrica/4.gif';
-import fabrica5 from '@/assets/images/fabrica/5.gif';
-import fabrica6 from '@/assets/images/fabrica/6.gif';
+// Caminhos das imagens no public
+const fabrica1 = '/images/fabrica/1.gif';
+const fabrica2 = '/images/fabrica/2.gif';
+const fabrica3 = '/images/fabrica/3.gif';
+const fabrica4 = '/images/fabrica/4.gif';
+const fabrica5 = '/images/fabrica/5.gif';
+const fabrica6 = '/images/fabrica/6.gif';
 
-import fabricaMb01 from '@/assets/images/fabrica-mb/01.png';
-import fabricaMb02 from '@/assets/images/fabrica-mb/02.png';
-import fabricaMb03_1 from '@/assets/images/fabrica-mb/03_1.png';
-import fabricaMb03_2 from '@/assets/images/fabrica-mb/03_2.png';
-import fabricaMb03_3 from '@/assets/images/fabrica-mb/03_3.png';
-import fabricaMb04 from '@/assets/images/fabrica-mb/04.png';
-import fabricaMb05 from '@/assets/images/fabrica-mb/05.png';
-import fabricaMb06 from '@/assets/images/fabrica-mb/06.png';
+const fabricaMb01 = '/images/fabrica-mb/01.png';
+const fabricaMb02 = '/images/fabrica-mb/02.png';
+const fabricaMb03_1 = '/images/fabrica-mb/03_1.png';
+const fabricaMb03_2 = '/images/fabrica-mb/03_2.png';
+const fabricaMb03_3 = '/images/fabrica-mb/03_3.png';
+const fabricaMb04 = '/images/fabrica-mb/04.png';
+const fabricaMb05 = '/images/fabrica-mb/05.png';
+const fabricaMb06 = '/images/fabrica-mb/06.png';
 
 interface Category {
   id: number;
