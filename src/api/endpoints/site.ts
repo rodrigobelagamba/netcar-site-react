@@ -314,12 +314,35 @@ export async function fetchWhatsApp(): Promise<WhatsAppInfo> {
       `${config.apiBaseUrl}/site.php?action=whatsapp`
     );
 
-    if (!response.data.success || !response.data.data) {
-      console.warn("API retornou sem sucesso ou sem dados");
+    console.log("WhatsApp API Response:", response.data);
+
+    if (!response.data.success) {
+      console.warn("API retornou sem sucesso:", response.data);
       return { numero: "" };
     }
 
-    return response.data.data;
+    // Verifica se os dados existem
+    if (!response.data.data) {
+      console.warn("API retornou sem dados");
+      return { numero: "" };
+    }
+
+    const data = response.data.data;
+    
+    // Aceita tanto 'numero' quanto 'whatsapp' como campo
+    const numero = data.numero || (data as any).whatsapp || "";
+    
+    // Garante que temos pelo menos um número
+    if (!numero || numero.trim() === "") {
+      console.warn("WhatsApp sem número válido:", data);
+      return { numero: "" };
+    }
+
+    return {
+      numero,
+      mensagem: data.mensagem,
+      link: data.link,
+    };
   } catch (error) {
     console.error("Erro ao buscar WhatsApp:", error);
     return { numero: "" };

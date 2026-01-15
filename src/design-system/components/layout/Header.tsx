@@ -2,11 +2,53 @@ import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { Search, Phone, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { data: whatsapp, isLoading: isLoadingWhatsApp, error: whatsappError } = useWhatsAppQuery();
+
+  // Debug: log do WhatsApp quando carregar
+  useEffect(() => {
+    console.log("WhatsApp Status:", {
+      isLoading: isLoadingWhatsApp,
+      data: whatsapp,
+      error: whatsappError,
+      hasNumero: !!whatsapp?.numero,
+      numero: whatsapp?.numero
+    });
+  }, [whatsapp, isLoadingWhatsApp, whatsappError]);
+
+  // Formata telefone para exibição
+  const formatPhone = (phone?: string) => {
+    if (!phone) return "";
+    // Remove caracteres não numéricos e formata
+    const cleaned = phone.replace(/\D/g, "");
+    if (cleaned.length === 11) {
+      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
+    }
+    if (cleaned.length === 10) {
+      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
+    }
+    return phone;
+  };
+
+  // Gera link do WhatsApp (usa link da API se disponível, senão gera)
+  const getWhatsAppLink = () => {
+    if (!whatsapp?.numero) return "#";
+    
+    // Se a API já retornou um link, usa ele
+    if (whatsapp.link) {
+      return whatsapp.link;
+    }
+    
+    // Senão, gera o link do WhatsApp
+    const cleaned = whatsapp.numero.replace(/\D/g, "");
+    const message = whatsapp.mensagem || "Olá! Gostaria de mais informações.";
+    return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -107,10 +149,17 @@ export function Header() {
               <Search className="w-4 h-4" />
               <span>Buscar</span>
             </button>
-            <button className="flex items-center gap-2">
-              <Phone className="w-4 h-4" />
-              <span>(00) 0000-0000</span>
-            </button>
+            {whatsapp?.numero && (
+              <a
+                href={getWhatsAppLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:text-primary transition-colors"
+              >
+                <Phone className="w-4 h-4" />
+                <span>{formatPhone(whatsapp.numero)}</span>
+              </a>
+            )}
           </div>
 
           {/* Botão hambúrguer/X - Mobile */}
@@ -167,6 +216,24 @@ export function Header() {
                     </Link>
                   </motion.div>
                 ))}
+                {whatsapp?.numero && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.2 + menuLinks.length * 0.05 }}
+                  >
+                    <a
+                      href={getWhatsAppLink()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-white text-xl hover:text-green-200 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Phone className="w-5 h-5" />
+                      <span>{formatPhone(whatsapp.numero)}</span>
+                    </a>
+                  </motion.div>
+                )}
               </nav>
             </motion.div>
           </>
