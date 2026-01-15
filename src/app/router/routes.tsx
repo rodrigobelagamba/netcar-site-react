@@ -8,6 +8,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Sun, Moon } from "lucide-react";
 import { Header } from "@/design-system/components/layout/Header";
+import { Footer } from "@/design-system/components/layout/Footer";
 import { HomePage } from "@/modules/home/pages/HomePage";
 import { SeminovosPage } from "@/modules/seminovos/pages/SeminovosPage";
 import { DetalhesPage } from "@/modules/detalhes/pages/DetalhesPage";
@@ -71,6 +72,7 @@ function RootComponent() {
           </motion.div>
         </AnimatePresence>
       </div>
+      <Footer />
       <ThemeToggle />
     </div>
   );

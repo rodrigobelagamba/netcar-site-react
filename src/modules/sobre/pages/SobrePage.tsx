@@ -1,4 +1,3 @@
-import { Footer } from "@/design-system/components/layout/Footer";
 
 export function SobrePage() {
   return (
@@ -22,9 +21,6 @@ export function SobrePage() {
           </div>
         </div>
       </main>
-      <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8">
-        <Footer />
-      </div>
     </>
   );
 }

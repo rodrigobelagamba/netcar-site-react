@@ -4,11 +4,88 @@ import {
   Facebook,
   Youtube
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { 
+  useBannersLoja1Query, 
+  useBannersLoja2Query,
+  usePhoneQuery,
+  useAddressQuery,
+  useWhatsAppQuery,
+  useScheduleQuery
+} from "@/api";
+import type { AddressInfo } from "@/api/endpoints/site";
 
 // Logo
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
+// Mesmos menus do Header
+const menuLinks = [
+  { to: "/sobre", label: "Sobre" },
+  { to: "/showroom", label: "Showroom" },
+  { to: "/social", label: "Social" },
+  { to: "/blog", label: "Blog" },
+  { to: "/contato", label: "Contato" },
+  { to: "/localizacao", label: "Localização" },
+];
+
 export function Footer() {
+  // Busca dados da API
+  const { data: bannersLoja1 } = useBannersLoja1Query();
+  const { data: bannersLoja2 } = useBannersLoja2Query();
+  const { data: phoneLoja1 } = usePhoneQuery("Loja1");
+  const { data: phoneLoja2 } = usePhoneQuery("Loja2");
+  const { data: addressLoja1 } = useAddressQuery("Loja1");
+  const { data: addressLoja2 } = useAddressQuery("Loja2");
+  const { data: whatsapp } = useWhatsAppQuery();
+  const { data: schedule } = useScheduleQuery();
+
+  // Pega imagem com título "Fachada" de cada loja (ou primeira imagem, ou fallback)
+  const getFachadaImage = (banners: Array<{ titulo?: string; imagem: string }> | undefined, fallback: string): string => {
+    if (!banners || banners.length === 0) return fallback;
+    
+    // Busca imagem com título "Fachada" (case insensitive)
+    const fachada = banners.find(
+      (banner) => banner.titulo?.toLowerCase() === "fachada"
+    );
+    
+    // Se encontrar, retorna a imagem da fachada
+    if (fachada?.imagem) return fachada.imagem;
+    
+    // Caso contrário, retorna a primeira imagem ou fallback
+    return banners[0]?.imagem || fallback;
+  };
+
+  const imagemLoja1 = getFachadaImage(bannersLoja1, "/images/loja1.jpg");
+  const imagemLoja2 = getFachadaImage(bannersLoja2, "/images/loja2.jpg");
+
+  // Formata telefone para exibição
+  const formatPhone = (phone?: string) => {
+    if (!phone) return "";
+    // Remove caracteres não numéricos e formata
+    const cleaned = phone.replace(/\D/g, "");
+    if (cleaned.length === 11) {
+      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
+    }
+    if (cleaned.length === 10) {
+      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
+    }
+    return phone;
+  };
+
+  // Formata endereço para exibição em múltiplas linhas
+  const formatAddress = (address?: AddressInfo): string[] | null => {
+    if (!address?.endereco) return null;
+    const parts = [address.endereco];
+    if (address.cidade || address.estado) {
+      const cidadeEstado = [address.cidade, address.estado].filter(Boolean).join(" – ");
+      if (cidadeEstado) parts.push(cidadeEstado);
+    }
+    return parts;
+  };
+
+  // Endereços formatados
+  const enderecoLoja1 = formatAddress(addressLoja1);
+  const enderecoLoja2 = formatAddress(addressLoja2);
 
   return (
     <footer className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8">
@@ -26,23 +103,50 @@ export function Footer() {
               />
 
               <div className="space-y-5 w-full">
-                <div>
-                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">WhatsApp Vendas</p>
-                  <a href="https://wa.me/5551998879281" className="text-[17px] text-primary font-bold hover:underline tracking-tight">
-                    (51) 99887-9281
-                  </a>
-                </div>
-                <div>
-                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Telefone</p>
-                  <p className="text-[15px] font-medium text-gray-600">
-                    (51) 3473-7900 <span className="text-gray-300 mx-1">/</span> (51) 3033-3900
-                  </p>
-                </div>
+                {whatsapp?.numero && (
+                  <div>
+                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">WhatsApp Vendas</p>
+                    <a 
+                      href={whatsapp.link || `https://wa.me/${whatsapp.numero.replace(/\D/g, "")}`} 
+                      className="text-[17px] text-primary font-bold hover:underline tracking-tight"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {formatPhone(whatsapp.numero)}
+                    </a>
+                  </div>
+                )}
+                {(phoneLoja1?.telefone || phoneLoja2?.telefone) && (
+                  <div>
+                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Telefone</p>
+                    <p className="text-[15px] font-medium text-gray-600">
+                      {phoneLoja1?.telefone && formatPhone(phoneLoja1.telefone)}
+                      {phoneLoja1?.telefone && phoneLoja2?.telefone && <span className="text-gray-300 mx-1">/</span>}
+                      {phoneLoja2?.telefone && formatPhone(phoneLoja2.telefone)}
+                    </p>
+                  </div>
+                )}
                 <div>
                   <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Atendimento</p>
                   <div className="text-[14px] font-bold text-gray-700 leading-snug">
-                    <span className="block text-fg mb-1">Seg a Sex: <span className="text-primary">9h às 18h</span></span>
-                    <span className="block text-fg">Sábado: <span className="text-amber-500">9h às 16h30</span></span>
+                    {schedule?.dias_semana ? (
+                      <span className="block text-fg mb-1">
+                        Seg a Sex: <span className="text-primary">{schedule.dias_semana}</span>
+                      </span>
+                    ) : (
+                      <span className="block text-fg mb-1">
+                        Seg a Sex: <span className="text-primary">9h às 18h</span>
+                      </span>
+                    )}
+                    {schedule?.sabado ? (
+                      <span className="block text-fg">
+                        Sábado: <span className="text-amber-500">{schedule.sabado}</span>
+                      </span>
+                    ) : (
+                      <span className="block text-fg">
+                        Sábado: <span className="text-amber-500">9h às 16h30</span>
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -72,20 +176,40 @@ export function Footer() {
                     Matriz
                   </div>
                   <img 
-                    src="/images/loja1.jpg"
+                    src={imagemLoja1}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     alt="Loja 1"
+                    onError={(e) => {
+                      // Fallback para imagem padrão se a da API falhar
+                      if (e.currentTarget.src !== "/images/loja1.jpg") {
+                        e.currentTarget.src = "/images/loja1.jpg";
+                      }
+                    }}
                   />
                 </div>
                 <div className="flex flex-col flex-1 gap-4 px-1">
                   <div>
                     <h5 className="font-bold text-fg text-[16px] mb-2 group-hover:text-primary transition-colors">Loja 1</h5>
                     <p className="text-[14px] text-muted-foreground leading-relaxed">
-                      Av. Presidente Vargas, 740<br/>Centro – Esteio/RS
+                      {enderecoLoja1 ? (
+                        <>
+                          {enderecoLoja1[0]}
+                          {enderecoLoja1[1] && (
+                            <>
+                              <br />
+                              {enderecoLoja1[1]}
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          Av. Presidente Vargas, 740<br/>Centro – Esteio/RS
+                        </>
+                      )}
                     </p>
                   </div>
                   <a href="#" className="inline-flex items-center text-[13px] font-bold text-fg group-hover:underline mt-auto pt-4 border-t border-border w-full">
-                    Ver no mapa <span className="text-primary ml-2 mr-2">•</span> (51) 3473-7900
+                    {phoneLoja1?.telefone ? formatPhone(phoneLoja1.telefone) : "(51) 3473-7900"}
                   </a>
                 </div>
               </div>
@@ -96,20 +220,40 @@ export function Footer() {
                     Filial
                   </div>
                   <img 
-                    src="/images/loja2.jpg"
+                    src={imagemLoja2}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     alt="Loja 2"
+                    onError={(e) => {
+                      // Fallback para imagem padrão se a da API falhar
+                      if (e.currentTarget.src !== "/images/loja2.jpg") {
+                        e.currentTarget.src = "/images/loja2.jpg";
+                      }
+                    }}
                   />
                 </div>
                 <div className="flex flex-col flex-1 gap-4 px-1">
                   <div>
                     <h5 className="font-bold text-fg text-[16px] mb-2 group-hover:text-primary transition-colors">Loja 2</h5>
                     <p className="text-[14px] text-muted-foreground leading-relaxed">
-                      Av. Presidente Vargas, 1106<br/>Centro – Esteio/RS
+                      {enderecoLoja2 ? (
+                        <>
+                          {enderecoLoja2[0]}
+                          {enderecoLoja2[1] && (
+                            <>
+                              <br />
+                              {enderecoLoja2[1]}
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          Av. Presidente Vargas, 1106<br/>Centro – Esteio/RS
+                        </>
+                      )}
                     </p>
                   </div>
                   <a href="#" className="inline-flex items-center text-[13px] font-bold text-fg group-hover:underline mt-auto pt-4 border-t border-border w-full">
-                    Ver no mapa <span className="text-primary ml-2 mr-2">•</span> (51) 3033-3900
+                    {phoneLoja2?.telefone ? formatPhone(phoneLoja2.telefone) : "(51) 3033-3900"}
                   </a>
                 </div>
               </div>
@@ -117,22 +261,18 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Coluna 3: Institucional */}
+          {/* Coluna 3: Menu (mesmos do Header) */}
           <div className="lg:pl-6 h-full">
-            <h4 className="text-[12px] font-bold text-gray-400 mb-6 uppercase tracking-widest">Institucional</h4>
+            <h4 className="text-[12px] font-bold text-gray-400 mb-6 uppercase tracking-widest">Menu</h4>
             <ul className="space-y-3">
-              {[
-                "Sobre nós", 
-                "Serviços", 
-                "Pós-venda (Nethelp)", 
-                "Contato", 
-                "Política de privacidade", 
-                "Termos de uso"
-              ].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-[14px] text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block font-medium">
-                    {item}
-                  </a>
+              {menuLinks.map((link) => (
+                <li key={link.to}>
+                  <Link 
+                    to={link.to}
+                    className="text-[14px] text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block font-medium"
+                  >
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>

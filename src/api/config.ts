@@ -15,6 +15,7 @@
  * Documentação:
  * - docs/ENV_SETUP.md - Configuração de variáveis de ambiente
  * - docs/api/FALLBACK_VALUES.md - Valores padrão (fallback)
+ * - docs/api/README.md - Documentação completa da API
  */
 
 // Valores padrão (fallback)

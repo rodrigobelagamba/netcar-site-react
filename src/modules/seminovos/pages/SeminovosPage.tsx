@@ -2,7 +2,6 @@ import { useSearch } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
 import { cn } from "@/lib/cn";
-import { Footer } from "@/design-system/components/layout/Footer";
 
 export function SeminovosPage() {
   const search = useSearch({ from: "/seminovos" });
@@ -116,9 +115,6 @@ export function SeminovosPage() {
         </div>
       </div>
       </main>
-      <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8">
-        <Footer />
-      </div>
     </>
   );
 }

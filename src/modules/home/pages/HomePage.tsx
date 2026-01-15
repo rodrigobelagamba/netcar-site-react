@@ -4,7 +4,6 @@ import { ProductList } from "@/design-system/components/patterns/ProductList";
 import { cn } from "@/lib/cn";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
-import { Footer } from "@/design-system/components/layout/Footer";
 
 export function HomePage() {
   const { emblaRef } = useEmbla({ loop: true });
@@ -83,7 +82,6 @@ export function HomePage() {
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
         <Localizacao />
         <IanBot />
-        <Footer />
       </div>
     </main>
   );

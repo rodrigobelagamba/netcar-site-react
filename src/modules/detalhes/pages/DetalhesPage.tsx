@@ -20,7 +20,6 @@ import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
-import { Footer } from "@/design-system/components/layout/Footer";
 
 interface Badge {
   text: string;
@@ -820,7 +819,6 @@ export function DetalhesPage() {
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
         <Localizacao />
         <IanBot />
-        <Footer />
       </div>
     </main>
   );
