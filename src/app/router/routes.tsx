@@ -132,12 +132,8 @@ const detalhesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/veiculo/$slug",
   component: DetalhesPage,
-  loader: async ({ params, location }) => {
-    // Captura o slug completo da URL
-    const fullPath = location.pathname;
-    const slug = fullPath.replace(/^\/veiculo\//, '') || params.slug || "";
-    return { slug };
-  },
+  // Removido o loader para evitar problemas em produção
+  // O componente usa useParams e useLocation diretamente, que são mais confiáveis
 });
 
 const sobreRoute = createRoute({

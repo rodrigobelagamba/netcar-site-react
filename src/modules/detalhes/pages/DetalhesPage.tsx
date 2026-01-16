@@ -531,8 +531,9 @@ function RelatedVehiclesSection({
   const { data: vehicles, isLoading } = useVehiclesQuery();
 
   // Filtrar veículos relacionados (excluir o atual e pegar até 4)
+  // Converte ambos os IDs para string para comparação correta
   const relatedVehicles =
-    vehicles?.filter((v) => v.id !== currentVehicleId).slice(0, 4) || [];
+    vehicles?.filter((v) => String(v.id) !== String(currentVehicleId)).slice(0, 4) || [];
 
   if (isLoading || relatedVehicles.length === 0) {
     return null;
@@ -567,13 +568,13 @@ function RelatedVehiclesSection({
           {relatedVehicles.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}
-              id={vehicle.id}
+              id={String(vehicle.id)}
               name={vehicle.modelo || vehicle.name}
               price={vehicle.price || 0}
               valor_formatado={vehicle.valor_formatado}
               year={vehicle.year || new Date().getFullYear()}
               km={vehicle.km || 0}
-              images={vehicle.images || vehicle.fotos || []}
+              images={vehicle.images || vehicle.fotos || vehicle.fullImages || []}
               marca={vehicle.marca}
               modelo={vehicle.modelo}
               placa={vehicle.placa}
@@ -625,10 +626,12 @@ function EmbedSocialSection() {
 }
 
 export function DetalhesPage() {
+  // Todos os hooks devem ser chamados sempre na mesma ordem
+  // Não usar useLoaderData pode causar problemas em produção, então vamos usar apenas useParams e useLocation
   const { slug: paramSlug } = useParams({ from: "/veiculo/$slug" });
   const location = useLocation();
   
-  // Fallback: se slug não vier dos params, tenta extrair da URL diretamente
+  // Extrai o slug da URL (funciona tanto em navegação quanto em refresh/F5)
   const slug = paramSlug || location.pathname.replace(/^\/veiculo\//, '') || "";
   
   const { data: vehicle, isLoading, error } = useVehicleQuery(slug);
@@ -636,44 +639,18 @@ export function DetalhesPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-muted-foreground">Carregando...</p>
-      </div>
-    );
-  }
-
-  if (error || !vehicle) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="text-center">
-          <p className="text-fg mb-2">Veículo não encontrado</p>
-          <p className="text-muted-foreground text-sm mb-2">Slug recebido: {slug || "não fornecido"}</p>
-          <p className="text-muted-foreground text-sm mb-2">URL completa: {window.location.pathname}</p>
-          {error && (
-            <p className="text-red-500 text-sm mb-4">
-              Erro: {error instanceof Error ? error.message : String(error)}
-            </p>
-          )}
-          <button onClick={() => window.history.back()}>Voltar</button>
-        </div>
-      </div>
-    );
-  }
-
-  // Preparar dados do veículo
-  const marca = vehicle.marca || vehicle.name?.split(" ")[0] || "";
-  const modeloCompleto = vehicle.modelo || vehicle.name || "";
+  // Preparar dados do veículo (mesmo quando ainda está carregando, para evitar problemas com hooks)
+  const marca = vehicle?.marca || vehicle?.name?.split(" ")[0] || "";
+  const modeloCompleto = vehicle?.modelo || vehicle?.name || "";
   const price =
-    vehicle.valor_formatado ||
-    `R$ ${vehicle.price?.toLocaleString("pt-BR") || "0"}`;
-  const year = vehicle.year ? `${vehicle.year} / ${vehicle.year + 1}` : "";
-  const combustivel = vehicle.combustivel || "";
-  const cambio = vehicle.cambio || "";
+    vehicle?.valor_formatado ||
+    (vehicle?.price ? `R$ ${vehicle.price.toLocaleString("pt-BR")}` : "");
+  const year = vehicle?.year ? `${vehicle.year} / ${vehicle.year + 1}` : "";
+  const combustivel = vehicle?.combustivel || "";
+  const cambio = vehicle?.cambio || "";
 
   // Imagens
-  const images = vehicle.fullImages || vehicle.fotos || vehicle.images || [];
+  const images = vehicle?.fullImages || vehicle?.fotos || vehicle?.images || [];
   
   // URL da imagem de carro coberto usada como fallback quando não houver PNG
   const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
@@ -706,16 +683,74 @@ export function DetalhesPage() {
     return imageUrl.startsWith("/") ? `${baseUrl}${imageUrl}` : `${baseUrl}/${imageUrl}`;
   };
 
-  // Configura metatags para compartilhamento
-  const vehicleTitle = `${marca} ${modeloCompleto} ${year ? year.split(' / ')[0] : ''}`.trim();
-  const vehicleDescription = `Confira este ${vehicleTitle} na Netcar. ${price ? `Preço: ${price}` : ''}${combustivel ? `. ${combustivel}` : ''}${cambio ? `, ${cambio}` : ''}. Seminovos com procedência em Esteio/RS.`;
+  // Configura metatags para compartilhamento (sempre chamado, mesmo durante loading)
+  // Título no formato: "2008 allure 2020 marrom izn-xx02" (minúsculas, sem "Netcar -")
+  // Formato: {modelo} {ano} {cor} {placa-mascarada}
+  const vehicleYear = vehicle?.year ? String(vehicle.year) : "";
+  const vehicleModelo = modeloCompleto.toLowerCase();
+  const vehicleCor = vehicle?.cor?.toLowerCase() || "";
+  const vehiclePlacaMascarada = vehicle?.placa ? maskPlate(vehicle.placa).toLowerCase() : "";
+  
+  // Monta o título no formato correto
+  const titleParts = [];
+  if (vehicleModelo) titleParts.push(vehicleModelo);
+  if (vehicleYear) titleParts.push(vehicleYear);
+  if (vehicleCor) titleParts.push(vehicleCor);
+  if (vehiclePlacaMascarada) titleParts.push(vehiclePlacaMascarada);
+  
+  const vehicleTitle = vehicle && titleParts.length > 0
+    ? titleParts.join(' ')
+    : "veículo";
+  
+  const vehicleDescription = "Seminovo é na Netcar";
+  
+  // Extrai o preço numérico (remove formatação)
+  const priceAmount = vehicle?.price || 0;
+  
+  // URL completa da página
+  const pageUrl = typeof window !== "undefined" ? window.location.href : "";
   
   useMetaTags({
     title: vehicleTitle,
     description: vehicleDescription,
     image: getAbsoluteImageUrl(mainImage),
+    url: pageUrl,
     type: "article",
+    imageWidth: 1200,
+    imageHeight: 900,
+    productBrand: "Netcar",
+    productAvailability: "in stock",
+    productCondition: "used_like_new",
+    productPriceAmount: priceAmount,
+    productPriceCurrency: "BRL",
+    productRetailerItemId: vehiclePlacaMascarada,
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-muted-foreground">Carregando...</p>
+      </div>
+    );
+  }
+
+  if (error || !vehicle) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="text-center">
+          <p className="text-fg mb-2">Veículo não encontrado</p>
+          <p className="text-muted-foreground text-sm mb-2">Slug recebido: {slug || "não fornecido"}</p>
+          <p className="text-muted-foreground text-sm mb-2">URL completa: {window.location.pathname}</p>
+          {error && (
+            <p className="text-red-500 text-sm mb-4">
+              Erro: {error instanceof Error ? error.message : String(error)}
+            </p>
+          )}
+          <button onClick={() => window.history.back()}>Voltar</button>
+        </div>
+      </div>
+    );
+  }
 
   // Badges
   const badges: Badge[] = [
@@ -870,7 +905,7 @@ export function DetalhesPage() {
       </section>
 
       {/* Related Vehicles Section */}
-      <RelatedVehiclesSection currentVehicleId={vehicle.id} />
+      <RelatedVehiclesSection currentVehicleId={String(vehicle.id)} />
 
       {/* Social Embeds Section (deve ser a última sessão) */}
       <EmbedSocialSection />
