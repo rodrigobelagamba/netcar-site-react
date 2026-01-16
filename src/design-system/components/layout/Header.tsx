@@ -8,18 +8,7 @@ import logoNetcar from "@/assets/images/logo-netcar.png";
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { data: whatsapp, isLoading: isLoadingWhatsApp, error: whatsappError } = useWhatsAppQuery();
-
-  // Debug: log do WhatsApp quando carregar
-  useEffect(() => {
-    console.log("WhatsApp Status:", {
-      isLoading: isLoadingWhatsApp,
-      data: whatsapp,
-      error: whatsappError,
-      hasNumero: !!whatsapp?.numero,
-      numero: whatsapp?.numero
-    });
-  }, [whatsapp, isLoadingWhatsApp, whatsappError]);
+  const { data: whatsapp } = useWhatsAppQuery();
 
   // Formata telefone para exibição
   const formatPhone = (phone?: string) => {

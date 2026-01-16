@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { formatPrice, formatYear } from "@/lib/formatters";
+import { generateVehicleSlug } from "@/lib/slug";
 import { cn } from "@/lib/cn";
 import { Plus } from "lucide-react";
 
@@ -18,6 +19,7 @@ export interface VehicleCardProps {
   valor_formatado?: string;
   marca?: string;
   modelo?: string;
+  placa?: string;
 }
 
 export function VehicleCard({
@@ -29,6 +31,7 @@ export function VehicleCard({
   valor_formatado,
   marca,
   modelo,
+  placa,
 }: VehicleCardProps) {
   const navigate = useNavigate();
   
@@ -50,8 +53,15 @@ export function VehicleCard({
     : CAR_COVERED_PLACEHOLDER_URL;
 
   const handleClick = () => {
-    // Usa o ID para navegação, já que a API busca por ID
-    navigate({ to: `/detalhes/${id}` });
+    // Gera slug amigável para a URL
+    const slug = generateVehicleSlug({
+      modelo: modelo || name,
+      marca,
+      year,
+      placa,
+      id,
+    });
+    navigate({ to: `/veiculo/${slug}` });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

@@ -99,50 +99,6 @@ export interface VehiclesQuery {
   anoMax?: string;
 }
 
-const mockVehicles: Vehicle[] = [
-  {
-    id: "1",
-    name: "Honda Civic 2023",
-    slug: "honda-civic-2023",
-    price: 125000,
-    year: 2023,
-    km: 15000,
-    images: [
-      "https://via.placeholder.com/800x600/6cc4ca/ffffff?text=Honda+Civic+1",
-      "https://via.placeholder.com/800x600/6cc4ca/ffffff?text=Honda+Civic+2",
-    ],
-    marca: "Honda",
-    modelo: "Civic",
-  },
-  {
-    id: "2",
-    name: "Toyota Corolla 2022",
-    slug: "toyota-corolla-2022",
-    price: 110000,
-    year: 2022,
-    km: 25000,
-    images: [
-      "https://via.placeholder.com/800x600/6cc4ca/ffffff?text=Toyota+Corolla+1",
-    ],
-    marca: "Toyota",
-    modelo: "Corolla",
-  },
-  {
-    id: "3",
-    name: "Volkswagen Golf 2021",
-    slug: "volkswagen-golf-2021",
-    price: 95000,
-    year: 2021,
-    km: 35000,
-    images: [
-      "https://via.placeholder.com/800x600/6cc4ca/ffffff?text=Golf+1",
-      "https://via.placeholder.com/800x600/6cc4ca/ffffff?text=Golf+2",
-    ],
-    marca: "Volkswagen",
-    modelo: "Golf",
-  },
-];
-
 /**
  * Normaliza URLs de imagens que podem vir com caminhos relativos
  */
@@ -260,7 +216,6 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
     return vehicles;
   } catch (error) {
     console.error("Erro ao buscar veículos:", error);
-    // Em caso de erro, retorna array vazio ou pode retornar dados mockados como fallback
     return [];
   }
 }
@@ -323,34 +278,16 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
 }
 
 export async function fetchVehicleBySlug(slug: string): Promise<Vehicle> {
-  // Se o slug for um número (ID), busca por ID
-  const numericId = Number(slug);
-  if (!isNaN(numericId) && numericId > 0) {
-    try {
-      return await fetchVehicleById(numericId);
-    } catch (error) {
-      console.error("Erro ao buscar veículo por ID:", error);
-      throw error;
-    }
+  // Importa a função de extração de ID
+  const { extractVehicleIdFromSlug } = await import("@/lib/slug");
+  
+  // Extrai o ID do slug (suporta formato amigável ou apenas ID)
+  const vehicleId = extractVehicleIdFromSlug(slug);
+  
+  if (!vehicleId) {
+    throw new Error(`ID do veículo não encontrado no slug: ${slug}`);
   }
-
-  // Se não for um ID numérico, tenta buscar por ID como string
-  if (slug && slug.trim() !== "") {
-    try {
-      return await fetchVehicleById(slug);
-    } catch (error) {
-      console.warn("Falha ao buscar por ID string, tentando fallback");
-    }
-  }
-
-  // Fallback para dados mockados apenas se não for um ID válido
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
-  const vehicle = mockVehicles.find((v) => v.slug === slug || v.id === slug);
-
-  if (!vehicle) {
-    throw new Error("Vehicle not found");
-  }
-
-  return vehicle;
+  
+  // Busca o veículo por ID
+  return fetchVehicleById(vehicleId);
 }

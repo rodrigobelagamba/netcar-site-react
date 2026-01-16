@@ -1,4 +1,4 @@
-import { useParams } from "@tanstack/react-router";
+import { useParams, useLocation } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageCircleMore,
@@ -20,6 +20,7 @@ import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
+import { maskPlate } from "@/lib/slug";
 
 interface Badge {
   text: string;
@@ -574,6 +575,7 @@ function RelatedVehiclesSection({
               images={vehicle.images || vehicle.fotos || []}
               marca={vehicle.marca}
               modelo={vehicle.modelo}
+              placa={vehicle.placa}
             />
           ))}
         </div>
@@ -622,8 +624,14 @@ function EmbedSocialSection() {
 }
 
 export function DetalhesPage() {
-  const { slug } = useParams({ from: "/detalhes/$slug" });
-  const { data: vehicle, isLoading, error } = useVehicleQuery(slug || "");
+  const { slug: paramSlug } = useParams({ from: "/veiculo/$slug" });
+  const location = useLocation();
+  
+  // Fallback: se slug não vier dos params, tenta extrair da URL diretamente
+  const slug = paramSlug || location.pathname.replace(/^\/veiculo\//, '') || "";
+  
+  const { data: vehicle, isLoading, error } = useVehicleQuery(slug);
+  
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
@@ -640,6 +648,13 @@ export function DetalhesPage() {
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="text-center">
           <p className="text-fg mb-2">Veículo não encontrado</p>
+          <p className="text-muted-foreground text-sm mb-2">Slug recebido: {slug || "não fornecido"}</p>
+          <p className="text-muted-foreground text-sm mb-2">URL completa: {window.location.pathname}</p>
+          {error && (
+            <p className="text-red-500 text-sm mb-4">
+              Erro: {error instanceof Error ? error.message : String(error)}
+            </p>
+          )}
           <button onClick={() => window.history.back()}>Voltar</button>
         </div>
       </div>
@@ -862,7 +877,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
     vehicle.year && { label: "Ano:", value: `${year}` },
     vehicle.cor && { label: "Cor:", value: vehicle.cor },
     vehicle.portas && { label: "Portas:", value: `${vehicle.portas}` },
-    vehicle.placa && { label: "Placa:", value: vehicle.placa },
+    vehicle.placa && { label: "Placa:", value: maskPlate(vehicle.placa) },
     vehicle.motor && { label: "Motor:", value: vehicle.motor },
     vehicle.potencia && { label: "Potência:", value: `${vehicle.potencia} cv` },
     vehicle.combustivel && {

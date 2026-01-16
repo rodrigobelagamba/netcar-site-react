@@ -155,10 +155,20 @@ export function Localizacao() {
       return;
     }
 
+    // Verifica se o Google Maps está totalmente carregado
+    if (!window.google.maps.Map || !window.google.maps.LatLng || !window.google.maps.Marker) {
+      console.warn("Google Maps API não está totalmente carregado");
+      return;
+    }
+
     // Limpar marcadores existentes
     markersRef.current.forEach(marker => {
-      if (marker && 'map' in marker) {
-        (marker as any).map = null;
+      try {
+        if (marker && 'map' in marker) {
+          (marker as any).map = null;
+        }
+      } catch (error) {
+        console.warn("Erro ao limpar marcador:", error);
       }
     });
     markersRef.current = [];
@@ -168,7 +178,13 @@ export function Localizacao() {
     // Criar novos marcadores
     lojas.forEach((loja) => {
       try {
-        if (useAdvancedMarker) {
+        // Verifica se todas as dependências estão disponíveis
+        if (!window.google?.maps || !window.google.maps.LatLng || !window.google.maps.Marker) {
+          console.warn("Google Maps API não disponível para criar marcadores");
+          return;
+        }
+        
+        if (useAdvancedMarker && window.google.maps.marker) {
           // Usar AdvancedMarkerElement
           const content = createMarkerContent(loja.cor);
           

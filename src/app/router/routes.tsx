@@ -55,6 +55,11 @@ function RootComponent() {
     select: (state) => state.location,
   });
 
+  // Scroll para o topo quando a rota mudar
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [location.pathname]);
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -125,11 +130,13 @@ const seminovosRoute = createRoute({
 
 const detalhesRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/detalhes/$slug",
+  path: "/veiculo/$slug",
   component: DetalhesPage,
-  loader: async ({ params }) => {
-    // Garante que os parâmetros estão disponíveis quando a rota é acessada diretamente
-    return { slug: params.slug };
+  loader: async ({ params, location }) => {
+    // Captura o slug completo da URL
+    const fullPath = location.pathname;
+    const slug = fullPath.replace(/^\/veiculo\//, '') || params.slug || "";
+    return { slug };
   },
 });
 
