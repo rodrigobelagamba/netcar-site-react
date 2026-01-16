@@ -21,6 +21,7 @@ import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeVal
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { maskPlate } from "@/lib/slug";
+import { useMetaTags } from "@/hooks/useMetaTags";
 
 interface Badge {
   text: string;
@@ -694,6 +695,27 @@ export function DetalhesPage() {
   const mainImage: string = (pngImages.length > 0 && !shouldUsePlaceholder && firstPngImage) 
     ? firstPngImage
     : CAR_COVERED_PLACEHOLDER_URL;
+
+  // Converte imagem para URL absoluta para metatags (WhatsApp precisa de URL absoluta)
+  const getAbsoluteImageUrl = (imageUrl: string): string => {
+    if (!imageUrl) return "";
+    if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+      return imageUrl;
+    }
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+    return imageUrl.startsWith("/") ? `${baseUrl}${imageUrl}` : `${baseUrl}/${imageUrl}`;
+  };
+
+  // Configura metatags para compartilhamento
+  const vehicleTitle = `${marca} ${modeloCompleto} ${year ? year.split(' / ')[0] : ''}`.trim();
+  const vehicleDescription = `Confira este ${vehicleTitle} na Netcar. ${price ? `Preço: ${price}` : ''}${combustivel ? `. ${combustivel}` : ''}${cambio ? `, ${cambio}` : ''}. Seminovos com procedência em Esteio/RS.`;
+  
+  useMetaTags({
+    title: vehicleTitle,
+    description: vehicleDescription,
+    image: getAbsoluteImageUrl(mainImage),
+    type: "article",
+  });
 
   // Badges
   const badges: Badge[] = [

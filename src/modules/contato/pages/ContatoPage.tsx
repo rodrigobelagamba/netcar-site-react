@@ -1,6 +1,12 @@
 import { cn } from "@/lib/cn";
+import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 
 export function ContatoPage() {
+  useDefaultMetaTags(
+    "Contato",
+    "Entre em contato com a Netcar. Estamos prontos para ajudar você a encontrar o veículo ideal."
+  );
+
   return (
     <>
       <main className="container mx-auto flex-1 px-4 py-12">

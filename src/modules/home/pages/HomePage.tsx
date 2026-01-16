@@ -5,11 +5,17 @@ import { ProductList } from "@/design-system/components/patterns/ProductList";
 import { cn } from "@/lib/cn";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
+import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 
 export function HomePage() {
   const { emblaRef } = useEmbla({ loop: true });
   const { data: vehicles, isLoading } = useVehiclesQuery();
   const { data: banners = [] } = useBannersQuery();
+
+  useDefaultMetaTags(
+    "Home",
+    "Netcar - Seminovos com procedência e qualidade. Confira nossos veículos em destaque."
+  );
 
   // Usa banners da API ou fallback vazio
   const heroImages = banners.length > 0 

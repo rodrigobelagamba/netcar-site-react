@@ -1,6 +1,6 @@
 {
-  "name": "NetCar - Catálogo de Carros Seminovos",
-  "short_name": "NetCar",
+  "name": "Netcar",
+  "short_name": "Netcar",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

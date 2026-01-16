@@ -103,8 +103,8 @@ export function Header() {
 
           {/* Logo e Menu centralizados juntos - Desktop */}
           <div className="hidden md:flex items-center gap-8 flex-1 justify-center">
-            <Link to="/" aria-label="NetCar - Página inicial" className="flex-shrink-0">
-              <img src={logoNetcar} alt="NetCar" className="h-8 w-auto" />
+            <Link to="/" aria-label="Netcar - Página inicial" className="flex-shrink-0">
+              <img src={logoNetcar} alt="Netcar" className="h-8 w-auto" />
             </Link>
 
             <nav className="flex items-center gap-6 flex-shrink-0">
@@ -128,8 +128,8 @@ export function Header() {
           </div>
 
           {/* Logo - Mobile */}
-          <Link to="/" aria-label="NetCar - Página inicial" className="md:hidden">
-            <img src={logoNetcar} alt="NetCar" className="h-8 w-auto" />
+          <Link to="/" aria-label="Netcar - Página inicial" className="md:hidden">
+            <img src={logoNetcar} alt="Netcar" className="h-8 w-auto" />
           </Link>
 
           {/* Botões à direita - Desktop */}

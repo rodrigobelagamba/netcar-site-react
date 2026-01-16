@@ -3,6 +3,7 @@ import { useAboutTextQuery, useCountersQuery, useBannersQuery } from "@/api/quer
 import { useBannersLoja1Query, useBannersLoja2Query, useAddressQuery, usePhoneQuery, useWhatsAppQuery } from "@/api/queries/useSiteQuery";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
+import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 
 export function SobrePage() {
   // Busca dados da API
@@ -18,6 +19,11 @@ export function SobrePage() {
   const { data: whatsapp } = useWhatsAppQuery();
   const { data: historia } = useAboutTextQuery("História");
   const { data: valores } = useAboutTextQuery("Valores");
+
+  useDefaultMetaTags(
+    "Sobre Nós",
+    "Desde 1997, a Netcar seleciona carros com histórico, qualidade e transparência. Conheça nossa história e valores."
+  );
 
   // Imagem da essência (primeiro banner ou fallback)
   const essenciaImage = banners?.[0]?.imagem || "/images/loja1.jpg";
@@ -119,7 +125,7 @@ export function SobrePage() {
             >
               <img
                 src={essenciaImage}
-                alt="Showroom da Netcar Multimarcas"
+                alt="Showroom da Netcar"
                 className="w-full h-full object-cover transition-transform hover:scale-105"
                 onError={(e) => {
                   e.currentTarget.src = "/images/loja1.jpg";

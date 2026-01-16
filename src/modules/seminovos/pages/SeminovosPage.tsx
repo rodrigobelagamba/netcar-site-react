@@ -7,6 +7,7 @@ import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSe
 import { cn } from "@/lib/cn";
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
 
@@ -17,6 +18,11 @@ export function SeminovosPage() {
   const navigate = useNavigate();
   const { data: vehicles, isLoading } = useVehiclesQuery(search);
   const { data: stockData } = useAllStockDataQuery();
+
+  useDefaultMetaTags(
+    "Showroom",
+    "Confira nosso estoque de seminovos com procedência. Filtre por marca, ano, preço e encontre o veículo ideal na Netcar."
+  );
   
   // Extrai dados do stockData (agora são arrays simples)
   const brands = stockData?.enterprises || [];

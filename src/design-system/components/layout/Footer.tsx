@@ -325,7 +325,7 @@ export function Footer() {
 
         <div className="border-t border-gray-100 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[12px] font-medium text-gray-400">
-            © {new Date().getFullYear()} Netcar Multimarcas.
+            © {new Date().getFullYear()} Netcar.
           </p>
           <div className="flex gap-6">
              <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Design by Netcar</span>
