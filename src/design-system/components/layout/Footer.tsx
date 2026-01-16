@@ -25,7 +25,7 @@ const menuLinks = [
   { to: "/social", label: "Social" },
   { to: "/blog", label: "Blog" },
   { to: "/contato", label: "Contato" },
-  { to: "/localizacao", label: "Localização" },
+  { to: "https://maps.google.com/?q=Netcar+Esteio", label: "Localização", external: true },
 ];
 
 export function Footer() {
@@ -267,12 +267,23 @@ export function Footer() {
             <ul className="space-y-3">
               {menuLinks.map((link) => (
                 <li key={link.to}>
-                  <Link 
-                    to={link.to}
-                    className="text-[14px] text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block font-medium"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a 
+                      href={link.to}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[14px] text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block font-medium"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link 
+                      to={link.to}
+                      className="text-[14px] text-muted-foreground hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block font-medium"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

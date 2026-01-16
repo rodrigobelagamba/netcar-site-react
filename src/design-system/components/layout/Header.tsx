@@ -67,7 +67,7 @@ export function Header() {
     { to: "/social", label: "Social" },
     { to: "/blog", label: "Blog" },
     { to: "/contato", label: "Contato" },
-    { to: "/localizacao", label: "Localização" },
+    { to: "https://maps.google.com/?q=Netcar+Esteio", label: "Localização", external: true },
   ];
 
   return (
@@ -108,22 +108,47 @@ export function Header() {
             </Link>
 
             <nav className="flex items-center gap-6 flex-shrink-0">
-              {menuLinks.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className="group relative text-[14px]  text-fg overflow-hidden h-[22px] flex items-center whitespace-nowrap"
-                >
-                  {/* Texto padrão */}
-                  <span className="block transition-transform duration-300 ease-out group-hover:-translate-y-full">
-                    {link.label}
-                  </span>
-                  {/* Texto que sobe no hover */}
-                  <span className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
-                    {link.label}
-                  </span>
-                </Link>
-              ))}
+              {menuLinks.map((link) => {
+                const linkClassName = "group relative text-[14px]  text-fg overflow-hidden h-[22px] flex items-center whitespace-nowrap";
+                
+                if (link.external) {
+                  return (
+                    <a
+                      key={link.to}
+                      href={link.to}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={linkClassName}
+                    >
+                      {/* Texto padrão */}
+                      <span className="block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                        {link.label}
+                      </span>
+                      {/* Texto que sobe no hover */}
+                      <span className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                        {link.label}
+                      </span>
+                    </a>
+                  );
+                }
+                
+                return (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={linkClassName}
+                  >
+                    {/* Texto padrão */}
+                    <span className="block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                      {link.label}
+                    </span>
+                    {/* Texto que sobe no hover */}
+                    <span className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                      {link.label}
+                    </span>
+                  </Link>
+                );
+              })}
             </nav>
           </div>
 
@@ -196,13 +221,25 @@ export function Header() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: 0.2 + index * 0.05 }}
                   >
-                    <Link
-                      to={link.to}
-                      className="text-white text-xl"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
+                    {link.external ? (
+                      <a
+                        href={link.to}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white text-xl"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        to={link.to}
+                        className="text-white text-xl"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </motion.div>
                 ))}
                 {whatsapp?.numero && (
