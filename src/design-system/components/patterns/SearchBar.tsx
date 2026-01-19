@@ -134,7 +134,21 @@ export function SearchBar() {
     if (!searchQuery.trim()) return;
 
     const query = searchQuery.trim().toLowerCase();
-    const searchParams: Record<string, string | number | undefined> = {};
+    const searchParams: {
+      marca: string | undefined;
+      modelo: string | undefined;
+      precoMin: string | undefined;
+      precoMax: string | undefined;
+      anoMin: string | undefined;
+      anoMax: string | undefined;
+    } = {
+      marca: undefined,
+      modelo: undefined,
+      precoMin: undefined,
+      precoMax: undefined,
+      anoMin: undefined,
+      anoMax: undefined,
+    };
 
     // Detecta faixa de preço
     const priceRegex = /(?:até|menor que|abaixo de|acima de|maior que|entre)\s*(?:r\$\s*)?(\d+)(?:k|mil)?/i;
@@ -147,9 +161,9 @@ export function SearchBar() {
         }
         
         if (query.includes('até') || query.includes('menor') || query.includes('abaixo')) {
-          searchParams.precoMax = value;
+          searchParams.precoMax = value.toString();
         } else if (query.includes('maior') || query.includes('acima')) {
-          searchParams.precoMin = value;
+          searchParams.precoMin = value.toString();
         }
       }
     }
@@ -167,26 +181,6 @@ export function SearchBar() {
       }
     } else {
       searchParams.marca = searchQuery.trim();
-    }
-
-    // Detecta cor
-    if (stockData?.colors) {
-      const matchedColor = stockData.colors.find(color => 
-        color && (color.toLowerCase().includes(query) || query.includes(color.toLowerCase()))
-      );
-      if (matchedColor) {
-        searchParams.cor = matchedColor;
-      }
-    }
-
-    // Detecta câmbio
-    if (stockData?.transmissions) {
-      const matchedTransmission = stockData.transmissions.find(trans => 
-        trans && (trans.toLowerCase().includes(query) || query.includes(trans.toLowerCase()))
-      );
-      if (matchedTransmission) {
-        searchParams.cambio = matchedTransmission;
-      }
     }
 
     // Navega para a página de seminovos com os filtros
