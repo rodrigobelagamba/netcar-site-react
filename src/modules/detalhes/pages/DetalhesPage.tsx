@@ -74,6 +74,8 @@ interface CTAButtonProps {
   hoverBgColor?: string;
   className?: string;
   initialAnimation?: boolean;
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
 function CTAButton({
@@ -84,6 +86,8 @@ function CTAButton({
   hoverBgColor = "bg-green-dark",
   className = "",
   initialAnimation = false,
+  onClick,
+  disabled = false,
 }: CTAButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -105,7 +109,9 @@ function CTAButton({
       {...animationProps}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className={`relative border ${borderColor} rounded-[65px] px-6 sm:px-8 h-[50px] flex items-center justify-center gap-2 sm:gap-3 uppercase text-[13px] sm:text-[14px] lg:text-[15px] font-bold tracking-wide overflow-hidden ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+      className={`relative border ${borderColor} rounded-[65px] px-6 sm:px-8 h-[50px] flex items-center justify-center gap-2 sm:gap-3 uppercase text-[13px] sm:text-[14px] lg:text-[15px] font-bold tracking-wide overflow-hidden ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
     >
       <motion.div
         className={`absolute inset-0 ${hoverBgColor} rounded-[65px]`}
@@ -275,7 +281,58 @@ function OptionalItem({ text }: OptionalItemProps) {
   );
 }
 
-function CTASidebar() {
+interface CTASidebarProps {
+  vehicle?: any;
+}
+
+function CTASidebar({ vehicle }: CTASidebarProps) {
+  const handleDownloadPDF = () => {
+    if (!vehicle?.pdf_url && !vehicle?.pdf) {
+      console.warn("PDF não disponível para este veículo");
+      return;
+    }
+
+    // Obtém a URL do PDF (já deve estar normalizada pela API)
+    let pdfUrl = vehicle.pdf_url;
+    
+    // Se não tiver pdf_url mas tiver pdf, constrói a URL
+    if (!pdfUrl && vehicle.pdf) {
+      const baseDomain = typeof window !== "undefined" 
+        ? window.location.origin 
+        : "https://www.netcarmultimarcas.com.br";
+      pdfUrl = `${baseDomain}/arquivos/autocheck/${vehicle.pdf}`;
+    }
+
+    if (!pdfUrl) {
+      console.warn("Não foi possível determinar a URL do PDF");
+      return;
+    }
+
+    // Garante que a URL é absoluta
+    if (!pdfUrl.startsWith("http://") && !pdfUrl.startsWith("https://")) {
+      const baseDomain = typeof window !== "undefined" 
+        ? window.location.origin 
+        : "https://www.netcarmultimarcas.com.br";
+      pdfUrl = pdfUrl.startsWith("/") 
+        ? `${baseDomain}${pdfUrl}` 
+        : `${baseDomain}/${pdfUrl}`;
+    }
+
+    // Cria um link temporário para fazer o download
+    const link = document.createElement("a");
+    link.href = pdfUrl;
+    link.download = vehicle.pdf || `relatorio-${vehicle.placa || vehicle.id}.pdf`;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    
+    // Adiciona ao DOM, clica e remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const hasPDF = vehicle?.pdf_url || vehicle?.pdf;
+
   return (
     <div className="space-y-4 lg:space-y-6">
       {/* I-Check Card */}
@@ -296,12 +353,14 @@ function CTASidebar() {
 
         <div className="w-full max-w-[300px]">
           <CTAButton
-            text="Baixe o relatório"
+            text={hasPDF ? "Baixe o relatório" : "Relatório não disponível"}
             icon={Download}
             borderColor="border-green"
             textColor="text-green"
             hoverBgColor="bg-green"
             className="w-full bg-green/10"
+            onClick={handleDownloadPDF}
+            disabled={!hasPDF}
           />
         </div>
       </motion.div>
@@ -1179,7 +1238,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
 
           {/* Sticky Sidebar - ordem invertida no mobile */}
           <div className="order-2 lg:order-2 lg:sticky lg:top-8 lg:self-start">
-            <CTASidebar />
+            <CTASidebar vehicle={vehicle} />
           </div>
         </div>
       </div>
