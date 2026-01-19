@@ -5,6 +5,7 @@ import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/HomeHero";
+import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { useMemo } from "react";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
@@ -83,6 +84,8 @@ export function HomePage() {
       {heroVehicles.length > 0 && (
         <HomeHero vehicles={heroVehicles} />
       )}
+
+      <SearchBar />
 
       <section className="container mx-auto px-4 py-12">
         <h2 className="mb-8 text-3xl font-bold text-fg">Destaques</h2>
