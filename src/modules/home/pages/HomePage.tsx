@@ -1,28 +1,74 @@
-import { useEmbla } from "@/hooks/useEmbla";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
-import { useBannersQuery } from "@/api/queries/useSiteQuery";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
 import { cn } from "@/lib/cn";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
+import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/HomeHero";
+import { useMemo } from "react";
+
+const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
+const PROBLEMATIC_IMAGE_PATTERN = "271_131072IMG_8213";
 
 export function HomePage() {
-  const { emblaRef } = useEmbla({ loop: true });
   const { data: vehicles, isLoading } = useVehiclesQuery();
-  const { data: banners = [] } = useBannersQuery();
 
   useDefaultMetaTags(
     "Home",
     "Netcar - Seminovos com procedência e qualidade. Confira nossos veículos em destaque."
   );
 
-  // Usa banners da API ou fallback vazio
-  const heroImages = banners.length > 0 
-    ? banners.map(banner => banner.imagem)
-    : [];
+  // Prepara veículos para o HomeHero - filtra PNGs e pega os primeiros 5
+  const heroVehicles: HomeHeroVehicle[] = useMemo(() => {
+    if (!vehicles) return [];
 
-  // Filtra veículos que têm imagem PNG e pega apenas os 5 primeiros
+    return vehicles
+      .filter(vehicle => {
+        // Verifica se tem pelo menos uma imagem PNG válida
+        const pngImages = vehicle.images?.filter(img => 
+          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
+        ) || [];
+        
+        if (pngImages.length === 0) return false;
+        
+        // Verifica se não é a imagem problemática
+        const firstPng = pngImages[0];
+        const isProblematic = firstPng?.toLowerCase().includes(PROBLEMATIC_IMAGE_PATTERN.toLowerCase());
+        
+        return !isProblematic;
+      })
+      .slice(0, 5)
+      .map(vehicle => {
+        const pngImages = vehicle.images?.filter(img => 
+          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
+        ) || [];
+        
+        const mainImage = pngImages.length > 0 ? pngImages[0] : CAR_COVERED_PLACEHOLDER_URL;
+        
+        // Monta a tag (combustível + motor se disponível)
+        const tagParts = [];
+        if (vehicle.combustivel) tagParts.push(vehicle.combustivel);
+        if (vehicle.motor) tagParts.push(vehicle.motor);
+        const tag = tagParts.join(' ');
+
+        return {
+          id: vehicle.id,
+          brand: vehicle.marca || vehicle.name?.split(' ')[0] || '',
+          model: vehicle.modelo || vehicle.name || '',
+          year: vehicle.year,
+          price: vehicle.price,
+          image: mainImage,
+          tag: tag || undefined,
+          marca: vehicle.marca,
+          modelo: vehicle.modelo,
+          placa: vehicle.placa,
+          combustivel: vehicle.combustivel,
+          cambio: vehicle.cambio,
+        };
+      });
+  }, [vehicles]);
+
+  // Filtra veículos que têm imagem PNG e pega apenas os 5 primeiros para a lista
   const vehiclesWithPhotos = vehicles
     ? vehicles.filter(vehicle => {
         // Verifica se tem pelo menos uma imagem PNG
@@ -34,28 +80,8 @@ export function HomePage() {
 
   return (
     <main className="flex-1 overflow-x-hidden max-w-full">
-      {heroImages.length > 0 && (
-        <section className="relative overflow-hidden">
-          <div className="embla" ref={emblaRef}>
-            <div className="embla__container flex">
-              {heroImages.map((img, i) => (
-                <div key={i} className="embla__slide flex-[0_0_100%]">
-                  <div className="relative h-[400px] md:h-[600px]">
-                    <img
-                      src={img}
-                      alt={banners[i]?.titulo || `Hero ${i + 1}`}
-                      className="h-full w-full object-cover"
-                      onError={(e) => {
-                        // Remove a imagem se falhar ao carregar
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+      {heroVehicles.length > 0 && (
+        <HomeHero vehicles={heroVehicles} />
       )}
 
       <section className="container mx-auto px-4 py-12">
