@@ -397,6 +397,19 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
     }
   };
 
+  const handleTradeInClick = () => {
+    if (!whatsapp?.numero) return;
+    
+    // Mensagem específica para avaliação de troca
+    const message = "Oi, gostaria que meu veículo fosse avaliado por um consultor Netcar.";
+    
+    // Gera o link do WhatsApp com a mensagem de troca
+    const cleaned = whatsapp.numero.replace(/\D/g, "");
+    const link = `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+    
+    window.open(link, "_blank", "noopener,noreferrer");
+  };
+
   const hasPDF = vehicle?.pdf_url || vehicle?.pdf;
 
   return (
@@ -468,6 +481,8 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
             textColor="text-primary"
             hoverBgColor="bg-primary"
             className="w-full"
+            onClick={handleTradeInClick}
+            disabled={!whatsapp?.numero}
           />
         </div>
       </motion.div>
