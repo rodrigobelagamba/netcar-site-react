@@ -215,7 +215,7 @@ export function Header() {
                   animate={{ width: 250, opacity: 1 }}
                   exit={{ width: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="overflow-hidden"
+                  className="overflow-hidden bg-white rounded-md shadow-lg px-3 py-2 relative z-[100]"
                 >
                   <div className="flex items-center gap-2 border-b border-border pb-1">
                     <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
