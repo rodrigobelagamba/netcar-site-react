@@ -14,6 +14,7 @@ import {
 import { useEffect, useState, useMemo } from "react";
 import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
+import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
@@ -154,7 +155,40 @@ function CTAButton({
   );
 }
 
-function ContactButton() {
+interface ContactButtonProps {
+  modeloCompleto?: string;
+}
+
+function ContactButton({ modeloCompleto }: ContactButtonProps) {
+  const { data: whatsapp } = useWhatsAppQuery();
+
+  const getWhatsAppLink = () => {
+    if (!whatsapp?.numero) return "#";
+    
+    // Mensagem formatada com o modelo do carro
+    const message = modeloCompleto 
+      ? `Oi gostaria de saber mais sobre o ${modeloCompleto}!`
+      : "Oi gostaria de saber mais informações!";
+    
+    // Se a API já retornou um link, usa ele mas substitui a mensagem
+    if (whatsapp.link) {
+      // Extrai o número do link existente ou usa o número da API
+      const cleaned = whatsapp.numero.replace(/\D/g, "");
+      return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+    }
+    
+    // Senão, gera o link do WhatsApp
+    const cleaned = whatsapp.numero.replace(/\D/g, "");
+    return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+  };
+
+  const handleClick = () => {
+    const link = getWhatsAppLink();
+    if (link !== "#") {
+      window.open(link, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <CTAButton
       text="Solicitar contato"
@@ -164,6 +198,8 @@ function ContactButton() {
       hoverBgColor="bg-secondary"
       className="w-full sm:w-auto"
       initialAnimation={true}
+      onClick={handleClick}
+      disabled={!whatsapp?.numero}
     />
   );
 }
@@ -283,9 +319,12 @@ function OptionalItem({ text }: OptionalItemProps) {
 
 interface CTASidebarProps {
   vehicle?: any;
+  modeloCompleto?: string;
 }
 
-function CTASidebar({ vehicle }: CTASidebarProps) {
+function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
+  const { data: whatsapp } = useWhatsAppQuery();
+
   const handleDownloadPDF = () => {
     if (!vehicle?.pdf_url && !vehicle?.pdf) {
       console.warn("PDF não disponível para este veículo");
@@ -329,6 +368,33 @@ function CTASidebar({ vehicle }: CTASidebarProps) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const getWhatsAppLink = () => {
+    if (!whatsapp?.numero) return "#";
+    
+    // Mensagem formatada com o modelo do carro
+    const message = modeloCompleto 
+      ? `Oi gostaria de saber mais sobre o ${modeloCompleto}!`
+      : "Oi gostaria de saber mais informações!";
+    
+    // Se a API já retornou um link, usa ele mas substitui a mensagem
+    if (whatsapp.link) {
+      // Extrai o número do link existente ou usa o número da API
+      const cleaned = whatsapp.numero.replace(/\D/g, "");
+      return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+    }
+    
+    // Senão, gera o link do WhatsApp
+    const cleaned = whatsapp.numero.replace(/\D/g, "");
+    return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+  };
+
+  const handleWhatsAppClick = () => {
+    const link = getWhatsAppLink();
+    if (link !== "#") {
+      window.open(link, "_blank", "noopener,noreferrer");
+    }
   };
 
   const hasPDF = vehicle?.pdf_url || vehicle?.pdf;
@@ -389,6 +455,8 @@ function CTASidebar({ vehicle }: CTASidebarProps) {
             textColor="text-green"
             hoverBgColor="bg-green"
             className="w-full"
+            onClick={handleWhatsAppClick}
+            disabled={!whatsapp?.numero}
           />
         </div>
 
@@ -918,7 +986,7 @@ export function DetalhesPage() {
                 <PriceWithShimmer price={price} />
               </div>
               <div className="flex-shrink-0 w-full sm:w-auto">
-                <ContactButton />
+                <ContactButton modeloCompleto={modeloCompleto} />
               </div>
             </div>
           </motion.div>
@@ -1238,7 +1306,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
 
           {/* Sticky Sidebar - ordem invertida no mobile */}
           <div className="order-2 lg:order-2 lg:sticky lg:top-8 lg:self-start">
-            <CTASidebar vehicle={vehicle} />
+            <CTASidebar vehicle={vehicle} modeloCompleto={modeloCompleto} />
           </div>
         </div>
       </div>
