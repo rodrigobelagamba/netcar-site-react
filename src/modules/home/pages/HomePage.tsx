@@ -1,6 +1,5 @@
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
-import { cn } from "@/lib/cn";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
@@ -97,45 +96,6 @@ export function HomePage() {
       <ServicesSection />
 
       <DNASection />
-
-      <section className="bg-surface-alt py-12">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="mb-4 text-3xl font-bold text-fg">
-              Receba ofertas exclusivas
-            </h2>
-            <p className="mb-6 text-muted-foreground">
-              Cadastre-se para receber novidades e promoções.
-            </p>
-            <form
-              className="flex gap-2"
-              onSubmit={(e) => {
-                e.preventDefault();
-                // TODO: Implementar newsletter
-              }}
-            >
-              <input
-                type="email"
-                placeholder="Seu e-mail"
-                className={cn(
-                  "flex-1 rounded-md border border-border bg-bg px-4 py-2",
-                  "text-fg placeholder:text-muted-foreground",
-                  "focus:outline-none focus:ring-2 focus:ring-primary"
-                )}
-              />
-              <button
-                type="submit"
-                className={cn(
-                  "rounded-md bg-primary px-6 py-2 text-primary-foreground",
-                  "hover:bg-primary/90 transition-colors"
-                )}
-              >
-                Cadastrar
-              </button>
-            </form>
-          </div>
-        </div>
-      </section>
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
         <Localizacao />
