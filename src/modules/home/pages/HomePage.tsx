@@ -6,6 +6,8 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/HomeHero";
 import { SearchBar } from "@/design-system/components/patterns/SearchBar";
+import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
+import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { useMemo } from "react";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
@@ -19,7 +21,7 @@ export function HomePage() {
     "Netcar - Seminovos com procedência e qualidade. Confira nossos veículos em destaque."
   );
 
-  // Prepara veículos para o HomeHero - filtra PNGs e pega os primeiros 5
+  // Prepara veículos para o HomeHero - filtra PNGs e pega os primeiros 4
   const heroVehicles: HomeHeroVehicle[] = useMemo(() => {
     if (!vehicles) return [];
 
@@ -38,7 +40,7 @@ export function HomePage() {
         
         return !isProblematic;
       })
-      .slice(0, 5)
+      .slice(0, 4)
       .map(vehicle => {
         const pngImages = vehicle.images?.filter(img => 
           img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
@@ -69,14 +71,14 @@ export function HomePage() {
       });
   }, [vehicles]);
 
-  // Filtra veículos que têm imagem PNG e pega apenas os 5 primeiros para a lista
+  // Filtra veículos que têm imagem PNG e pega apenas os 4 primeiros para a lista
   const vehiclesWithPhotos = vehicles
     ? vehicles.filter(vehicle => {
         // Verifica se tem pelo menos uma imagem PNG
         return vehicle.images?.some(img => 
           img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
         );
-      }).slice(0, 5)
+      }).slice(0, 4)
     : [];
 
   return (
@@ -91,6 +93,10 @@ export function HomePage() {
         <h2 className="mb-8 text-3xl font-bold text-fg">Destaques</h2>
         <ProductList vehicles={vehiclesWithPhotos} isLoading={isLoading} />
       </section>
+
+      <ServicesSection />
+
+      <DNASection />
 
       <section className="bg-surface-alt py-12">
         <div className="container mx-auto px-4">
