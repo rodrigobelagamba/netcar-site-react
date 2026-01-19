@@ -11,7 +11,7 @@ import {
   CheckSquare,
   LucideIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
@@ -23,13 +23,24 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 import { maskPlate } from "@/lib/slug";
 import { useMetaTags } from "@/hooks/useMetaTags";
 
+// Constantes de animação
+const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
+const ANIMATION_DURATION = {
+  fast: 0.3,
+  normal: 0.7,
+  slow: 0.8,
+} as const;
+
+// Constantes de imagem
+const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
+const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
+
 interface Badge {
   text: string;
   variant: "success" | "purple";
   icon?: boolean;
 }
 
-// Badge Component
 function Badge({ text, variant, icon }: Badge) {
   const bgColor = variant === "success" ? "bg-secondary" : "bg-purple";
   const textColor =
@@ -42,7 +53,7 @@ function Badge({ text, variant, icon }: Badge) {
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
       className={`${bgColor} ${textColor} px-3 sm:px-4 lg:px-5 h-[22px] sm:h-[24px] lg:h-[26px] rounded-[45px] flex items-center gap-1.5 sm:gap-2 uppercase text-[12px] sm:text-[14px] lg:text-[16px] font-bold tracking-wide`}
     >
       {icon && (
@@ -55,7 +66,6 @@ function Badge({ text, variant, icon }: Badge) {
   );
 }
 
-// CTA Button Component with Hover Animation
 interface CTAButtonProps {
   text: string;
   icon?: LucideIcon;
@@ -77,64 +87,53 @@ function CTAButton({
 }: CTAButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const buttonContent = (
+  const animationProps = initialAnimation
+    ? {
+        initial: { opacity: 0 },
+        whileInView: { opacity: 1 },
+        viewport: { once: true },
+        transition: {
+          duration: ANIMATION_DURATION.slow,
+          delay: 0.25,
+          ease: ANIMATION_EASING,
+        },
+      }
+    : {};
+
+  return (
     <motion.button
-      {...(initialAnimation
-        ? {
-            initial: { opacity: 0 },
-            whileInView: { opacity: 1 },
-            viewport: { once: true },
-            transition: {
-              duration: 0.8,
-              delay: 0.25,
-              ease: [0.25, 0.1, 0.25, 1],
-            },
-          }
-        : {})}
+      {...animationProps}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       className={`relative border ${borderColor} rounded-[65px] px-6 sm:px-8 h-[50px] flex items-center justify-center gap-2 sm:gap-3 uppercase text-[13px] sm:text-[14px] lg:text-[15px] font-bold tracking-wide overflow-hidden ${className}`}
     >
-      {/* Background hover com fade */}
       <motion.div
         className={`absolute inset-0 ${hoverBgColor} rounded-[65px]`}
         initial={{ opacity: 0 }}
         animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+        transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
       />
 
-      {/* Container para conteúdo com overflow hidden */}
       <div className="relative flex items-center gap-2 sm:gap-3 h-full">
-        {/* Container para texto com overflow hidden */}
         <div className="relative overflow-hidden h-full flex items-center">
-          {/* Texto verde que sobe e desaparece */}
           <motion.span
             className={`${textColor} whitespace-nowrap relative z-10`}
             initial={{ y: 0, opacity: 1 }}
-            animate={{
-              y: isHovered ? -40 : 0,
-              opacity: isHovered ? 0 : 1,
-            }}
-            transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+            animate={{ y: isHovered ? -40 : 0, opacity: isHovered ? 0 : 1 }}
+            transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
           >
             {text}
           </motion.span>
-
-          {/* Texto branco que sobe e aparece */}
           <motion.span
             className="text-white whitespace-nowrap absolute left-0 top-0 h-full flex items-center z-10"
             initial={{ y: 40, opacity: 0 }}
-            animate={{
-              y: isHovered ? 0 : 40,
-              opacity: isHovered ? 1 : 0,
-            }}
-            transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+            animate={{ y: isHovered ? 0 : 40, opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
           >
             {text}
           </motion.span>
-    </div>
+        </div>
 
-        {/* Ícone fixo que apenas muda de cor */}
         {Icon && (
           <div className="relative w-[22px] h-[22px] sm:w-[24px] sm:h-[24px] lg:w-[26px] lg:h-[26px] flex-shrink-0 z-10">
             <Icon
@@ -147,11 +146,8 @@ function CTAButton({
       </div>
     </motion.button>
   );
-
-  return buttonContent;
 }
 
-// Contact Button Component
 function ContactButton() {
   return (
     <CTAButton
@@ -166,13 +162,7 @@ function ContactButton() {
   );
 }
 
-// Car Detail Item
-interface DetailItemProps {
-  label: string;
-  value: string;
-}
 
-// Accordion Item Component
 interface AccordionItemProps {
   title: string;
   children: React.ReactNode;
@@ -191,7 +181,7 @@ function AccordionItem({
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
       className="border-b border-border pb-4 mb-4"
     >
       <button
@@ -203,7 +193,7 @@ function AccordionItem({
         </h3>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
           className="flex-shrink-0"
         >
           <ChevronDown className="w-6 h-6 text-muted-foreground" />
@@ -217,7 +207,7 @@ function AccordionItem({
           opacity: isOpen ? 1 : 0,
           marginTop: isOpen ? 16 : 0,
         }}
-        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+        transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
         className="overflow-hidden"
       >
         {children}
@@ -226,7 +216,6 @@ function AccordionItem({
   );
 }
 
-// Specification Badge Component
 interface SpecBadgeProps {
   label: string;
   value: string;
@@ -254,7 +243,6 @@ function SpecBadge({ label, value, index = 0 }: SpecBadgeProps) {
   );
 }
 
-// Optional Item Component
 interface OptionalItemProps {
   text: string;
 }
@@ -287,7 +275,6 @@ function OptionalItem({ text }: OptionalItemProps) {
   );
 }
 
-// CTA Sidebar Component
 function CTASidebar() {
   return (
     <div className="space-y-4 lg:space-y-6">
@@ -296,7 +283,7 @@ function CTASidebar() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
         className="border border-border p-6 sm:p-8 flex flex-col items-center"
       >
         <div className="w-full max-w-[246px] h-[148px] mb-6 overflow-hidden">
@@ -361,7 +348,6 @@ function CTASidebar() {
   );
 }
 
-// Lightbox Modal Component
 interface LightboxProps {
   images: string[];
   currentIndex: number;
@@ -454,7 +440,6 @@ function Lightbox({
   );
 }
 
-// Gallery Item Component
 interface GalleryItemProps {
   image: string;
   index: number;
@@ -492,37 +477,7 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
   );
 }
 
-function DetailItem({ label, value }: DetailItemProps) {
-  const isModelo = label === "Modelo:";
-  const isCombustivel = label === "Combustível:";
-  const isCambio = label === "Cambio:";
-  const isDetailField = isModelo || isCombustivel || isCambio;
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-      className="flex flex-col min-w-0"
-    >
-      <span className="text-muted-foreground text-[11px] sm:text-[12px] lg:text-[13px] uppercase mb-1 whitespace-nowrap">
-        {label}
-      </span>
-      <span 
-        className={`text-fg font-bold ${
-          isDetailField
-            ? "text-[14px] sm:text-[16px] lg:text-[18px] whitespace-nowrap" 
-            : "text-[16px] sm:text-[18px] lg:text-[20px] break-words"
-        }`}
-      >
-        {value}
-      </span>
-    </motion.div>
-  );
-}
 
-// Related Vehicles Section
 function RelatedVehiclesSection({
   currentVehicleId,
 }: {
@@ -547,7 +502,7 @@ function RelatedVehiclesSection({
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
           className="mb-8 sm:mb-10 lg:mb-12"
         >
           <div className="flex items-center gap-3 mb-6">
@@ -586,7 +541,6 @@ function RelatedVehiclesSection({
   );
 }
 
-// Embed Social Section (Hashtag + Stories)
 function EmbedSocialSection() {
   useEffect(() => {
     // EmbedSocial Hashtag script
@@ -625,106 +579,163 @@ function EmbedSocialSection() {
   );
 }
 
+function PriceWithShimmer({ price }: { price: string }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.7,
+        delay: 0.3,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+      className="relative overflow-hidden cursor-pointer flex-shrink-0"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <motion.p
+        className="text-secondary text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap relative z-20"
+        dangerouslySetInnerHTML={{ __html: price }}
+        animate={{
+          y: isHovered ? -4 : 0,
+        }}
+        transition={{
+          duration: 0.3,
+          ease: [0.25, 0.1, 0.25, 1],
+        }}
+      />
+      {/* Efeito Espelhamento (Shimmer) - Movimento diagonal principal com movimento vertical pronunciado */}
+      <span 
+        className="absolute inset-0 pointer-events-none z-30"
+        style={{
+          background: 'linear-gradient(135deg, transparent 20%, rgba(255,255,255,0.8) 50%, transparent 80%)',
+          transform: isHovered 
+            ? 'translateX(100%) translateY(calc(100% + 40px))' 
+            : 'translateX(-100%) translateY(calc(-100% - 40px))',
+          transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)',
+          mixBlendMode: 'screen',
+        }}
+      />
+      {/* Efeito secundário para mais profundidade com movimento vertical */}
+      <span 
+        className="absolute inset-0 pointer-events-none z-30"
+        style={{
+          background: 'linear-gradient(45deg, transparent 20%, rgba(255,255,255,0.6) 50%, transparent 80%)',
+          transform: isHovered 
+            ? 'translateX(100%) translateY(calc(100% + 30px))' 
+            : 'translateX(-100%) translateY(calc(-100% - 30px))',
+          transition: 'transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)',
+          mixBlendMode: 'lighten',
+        }}
+      />
+    </motion.div>
+  );
+}
+
 export function DetalhesPage() {
-  // Todos os hooks devem ser chamados sempre na mesma ordem
-  // Não usar useLoaderData pode causar problemas em produção, então vamos usar apenas useParams e useLocation
   const { slug: paramSlug } = useParams({ from: "/veiculo/$slug" });
   const location = useLocation();
-  
-  // Extrai o slug da URL (funciona tanto em navegação quanto em refresh/F5)
-  const slug = paramSlug || location.pathname.replace(/^\/veiculo\//, '') || "";
+  const slug = paramSlug || location.pathname.replace(/^\/veiculo\//, "") || "";
   
   const { data: vehicle, isLoading, error } = useVehicleQuery(slug);
   
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  // Preparar dados do veículo (mesmo quando ainda está carregando, para evitar problemas com hooks)
-  const marca = vehicle?.marca || vehicle?.name?.split(" ")[0] || "";
-  const modeloCompleto = vehicle?.modelo || vehicle?.name || "";
-  const price =
-    vehicle?.valor_formatado ||
-    (vehicle?.price ? `R$ ${vehicle.price.toLocaleString("pt-BR")}` : "");
-  const year = vehicle?.year ? `${vehicle.year} / ${vehicle.year + 1}` : "";
-  const combustivel = vehicle?.combustivel || "";
-  const cambio = vehicle?.cambio || "";
+  const vehicleData = useMemo(() => {
+    if (!vehicle) return null;
+    return {
+      marca: vehicle.marca || vehicle.name?.split(" ")[0] || "",
+      modeloCompleto: vehicle.modelo || vehicle.name || "",
+      price:
+        vehicle.valor_formatado ||
+        (vehicle.price ? `R$ ${vehicle.price.toLocaleString("pt-BR")}` : ""),
+      year: vehicle.year ? `${vehicle.year} / ${vehicle.year + 1}` : "",
+      combustivel: vehicle.combustivel || "",
+      cambio: vehicle.cambio || "",
+      images: vehicle.fullImages || vehicle.fotos || vehicle.images || [],
+    };
+  }, [vehicle]);
 
-  // Imagens
-  const images = vehicle?.fullImages || vehicle?.fotos || vehicle?.images || [];
+  const marca = vehicleData?.marca || "";
+  const modeloCompleto = vehicleData?.modeloCompleto || "";
+  const price = vehicleData?.price || "";
+  const year = vehicleData?.year || "";
+  const combustivel = vehicleData?.combustivel || "";
+  const cambio = vehicleData?.cambio || "";
+  const images = vehicleData?.images || [];
   
-  // URL da imagem de carro coberto usada como fallback quando não houver PNG
-  const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
-  
-  // Filtra apenas imagens PNG para a foto de destaque
-  const pngImages = images.filter(img => {
-    if (!img) return false;
-    const imgLower = img.toLowerCase();
-    return imgLower.endsWith('.png') || imgLower.includes('.png');
-  });
-  
-  // Verifica se a primeira imagem PNG é a imagem específica que deve ser substituída
-  const firstPngImage = pngImages.length > 0 ? pngImages[0] : null;
-  // Verifica se contém o nome do arquivo problemático (case-insensitive)
-  const shouldUsePlaceholder = firstPngImage && firstPngImage.toLowerCase().includes('271_131072img_8213');
-  
-  // Se não tiver PNG válido ou se for a imagem específica problemática, usa o placeholder
-  // Caso contrário, usa a primeira PNG encontrada
-  const mainImage: string = (pngImages.length > 0 && !shouldUsePlaceholder && firstPngImage) 
-    ? firstPngImage
-    : CAR_COVERED_PLACEHOLDER_URL;
+  const mainImage = useMemo(() => {
+    if (!images.length) return CAR_COVERED_PLACEHOLDER_URL;
 
-  // Converte imagem para URL absoluta para metatags (WhatsApp precisa de URL absoluta)
-  const getAbsoluteImageUrl = (imageUrl: string): string => {
-    if (!imageUrl) return "";
-    if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
-      return imageUrl;
+    const pngImages = images.filter(
+      (img) =>
+        img &&
+        (img.toLowerCase().endsWith(".png") || img.toLowerCase().includes(".png"))
+    );
+
+    const firstPng = pngImages[0];
+    const isProblematic =
+      firstPng?.toLowerCase().includes(PROBLEMATIC_IMAGE_PATTERN);
+
+    return pngImages.length > 0 && !isProblematic && firstPng
+      ? firstPng
+      : CAR_COVERED_PLACEHOLDER_URL;
+  }, [images]);
+
+  // Converte imagem para URL absoluta para metatags
+  const absoluteImageUrl = useMemo(() => {
+    if (!mainImage) return "";
+    if (mainImage.startsWith("http://") || mainImage.startsWith("https://")) {
+      return mainImage;
     }
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    return imageUrl.startsWith("/") ? `${baseUrl}${imageUrl}` : `${baseUrl}/${imageUrl}`;
-  };
+    return mainImage.startsWith("/")
+      ? `${baseUrl}${mainImage}`
+      : `${baseUrl}/${mainImage}`;
+  }, [mainImage]);
 
-  // Configura metatags para compartilhamento (sempre chamado, mesmo durante loading)
-  // Título no formato: "2008 allure 2020 marrom izn-xx02" (minúsculas, sem "Netcar -")
-  // Formato: {modelo} {ano} {cor} {placa-mascarada}
-  const vehicleYear = vehicle?.year ? String(vehicle.year) : "";
-  const vehicleModelo = modeloCompleto.toLowerCase();
-  const vehicleCor = vehicle?.cor?.toLowerCase() || "";
-  const vehiclePlacaMascarada = vehicle?.placa ? maskPlate(vehicle.placa).toLowerCase() : "";
-  
-  // Monta o título no formato correto
-  const titleParts = [];
-  if (vehicleModelo) titleParts.push(vehicleModelo);
-  if (vehicleYear) titleParts.push(vehicleYear);
-  if (vehicleCor) titleParts.push(vehicleCor);
-  if (vehiclePlacaMascarada) titleParts.push(vehiclePlacaMascarada);
-  
-  const vehicleTitle = vehicle && titleParts.length > 0
-    ? titleParts.join(' ')
-    : "veículo";
-  
-  const vehicleDescription = "Seminovo é na Netcar";
-  
-  // Extrai o preço numérico (remove formatação)
-  const priceAmount = vehicle?.price || 0;
-  
-  // URL completa da página
-  const pageUrl = typeof window !== "undefined" ? window.location.href : "";
-  
-  useMetaTags({
-    title: vehicleTitle,
-    description: vehicleDescription,
-    image: getAbsoluteImageUrl(mainImage),
-    url: pageUrl,
-    type: "article",
-    imageWidth: 1200,
-    imageHeight: 900,
-    productBrand: "Netcar",
-    productAvailability: "in stock",
-    productCondition: "used_like_new",
-    productPriceAmount: priceAmount,
-    productPriceCurrency: "BRL",
-    productRetailerItemId: vehiclePlacaMascarada,
-  });
+  // Configura metatags para compartilhamento
+  const metaTags = useMemo(() => {
+    if (!vehicle) return null;
+
+    const titleParts = [
+      modeloCompleto.toLowerCase(),
+      vehicle.year ? String(vehicle.year) : "",
+      vehicle.cor?.toLowerCase() || "",
+      vehicle.placa ? maskPlate(vehicle.placa).toLowerCase() : "",
+    ].filter(Boolean);
+
+    return {
+      title: titleParts.length > 0 ? titleParts.join(" ") : "veículo",
+      description: "Seminovo é na Netcar",
+      image: absoluteImageUrl,
+      url: typeof window !== "undefined" ? window.location.href : "",
+      type: "article" as const,
+      imageWidth: 1200,
+      imageHeight: 900,
+      productBrand: "Netcar",
+      productAvailability: "in stock" as const,
+      productCondition: "used_like_new" as const,
+      productPriceAmount: vehicle.price || 0,
+      productPriceCurrency: "BRL" as const,
+      productRetailerItemId: vehicle.placa
+        ? maskPlate(vehicle.placa).toLowerCase()
+        : "",
+    };
+  }, [vehicle, modeloCompleto, absoluteImageUrl]);
+
+  useMetaTags(
+    metaTags || {
+      title: "veículo",
+      description: "Seminovo é na Netcar",
+      image: "",
+      url: "",
+    }
+  );
 
   if (isLoading) {
     return (
@@ -761,104 +772,132 @@ export function DetalhesPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="w-full pt-16">
-        <div className="max-w-[1290px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-[30%_70%]">
-            {/* Left Content */}
+      <section className="w-full pt-16 lg:pt-0 pb-0 relative overflow-x-hidden min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[100vh]">
+        {/* Left Content - 50% dentro do container */}
+        <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-8 relative">
           <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: ANIMATION_DURATION.slow, ease: ANIMATION_EASING }}
+            className="w-full lg:w-[50%] lg:max-w-[50%] py-8 sm:py-10 lg:py-12 flex flex-col relative z-10"
+          >
+            {/* Brand */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              className="px-4 sm:px-6 lg:pl-8 lg:pr-[63px] py-6 sm:py-8 lg:py-[27px] flex flex-col justify-between order-2 lg:order-1"
-            >
-              {/* Brand */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.15,
-                  ease: [0.25, 0.1, 0.25, 1],
-                }}
-                className="text-muted-foreground text-[14px] sm:text-[16px] lg:text-[18px] uppercase tracking-wide mb-1 sm:mb-2"
-              >
-                {marca}
-              </motion.p>
-
-              {/* Model */}
-              <motion.h1
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.2,
-                  ease: [0.25, 0.1, 0.25, 1],
-                }}
-                className="text-fg text-[28px] sm:text-[36px] lg:text-[48px] font-bold leading-[1.1] mb-4 sm:mb-6 lg:mb-8 max-w-full lg:max-w-[350px] break-words"
-              >
-                {modeloCompleto}
-              </motion.h1>
-
-              {/* Badges */}
-              <div className="flex flex-wrap gap-2 sm:gap-3 lg:gap-4 mb-4 sm:mb-6 lg:mb-8">
-                {badges.map((badge, idx) => (
-                  <Badge key={idx} {...badge} />
-                ))}
-              </div>
-
-              {/* Details Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-4 sm:mb-5 lg:mb-6 pb-4 sm:pb-5 lg:pb-6 border-b border-black/5">
-                {year && <DetailItem label="Modelo:" value={year} />}
-                {combustivel && (
-                  <DetailItem label="Combustível:" value={combustivel} />
-                )}
-                {cambio && <DetailItem label="Cambio:" value={cambio} />}
-            </div>
-
-              {/* Price & CTA */}
-              <div className="flex flex-row items-center gap-4">
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.7,
-                    delay: 0.3,
-                    ease: [0.25, 0.1, 0.25, 1],
-                  }}
-                  className="text-secondary text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap flex-shrink-0"
-                  dangerouslySetInnerHTML={{ __html: price }}
-                />
-                <div className="flex-shrink-0">
-                  <ContactButton />
-                </div>
-            </div>
-          </motion.div>
-
-            {/* Right Image */}
-          <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              className="relative h-[280px] sm:h-[360px] lg:h-[476px] order-1 lg:order-2 overflow-hidden"
-            >
-              {mainImage && (
-                <img
-              src={mainImage}
-                  alt={`${marca} ${modeloCompleto}`}
-              className="w-full h-full object-cover object-bottom"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
+              transition={{
+                duration: 0.8,
+                delay: 0.15,
+                ease: [0.25, 0.1, 0.25, 1],
               }}
-            />
+              className="text-muted-foreground text-[13px] sm:text-[14px] lg:text-[15px] uppercase tracking-[0.15em] font-semibold mb-2 sm:mb-3"
+            >
+              {marca}
+            </motion.p>
+
+            {/* Model */}
+            <motion.h1
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                delay: 0.2,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+              className="text-fg text-[32px] sm:text-[42px] lg:text-[52px] xl:text-[58px] font-bold leading-[1.15] mb-6 sm:mb-8 max-w-full lg:max-w-[420px] break-words"
+            >
+              {modeloCompleto}
+            </motion.h1>
+
+            {/* Badges */}
+            <div className="flex flex-wrap gap-2.5 sm:gap-3 mb-8 sm:mb-10">
+              {badges.map((badge, idx) => (
+                <Badge key={idx} {...badge} />
+              ))}
+            </div>
+
+            {/* Details Grid - Melhorado */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 mb-8 sm:mb-10 pb-6 sm:pb-8 border-b border-border/60">
+              {year && (
+                <div className="flex flex-col">
+                  <span className="text-muted-foreground text-[11px] sm:text-[12px] uppercase tracking-wider mb-1.5 font-medium">
+                    Modelo
+                  </span>
+                  <span className="text-fg text-[16px] sm:text-[18px] font-semibold">
+                    {year}
+                  </span>
+                </div>
               )}
+              {combustivel && (
+                <div className="flex flex-col">
+                  <span className="text-muted-foreground text-[11px] sm:text-[12px] uppercase tracking-wider mb-1.5 font-medium">
+                    Combustível
+                  </span>
+                  <span className="text-fg text-[16px] sm:text-[18px] font-semibold">
+                    {combustivel}
+                  </span>
+                </div>
+              )}
+              {cambio && (
+                <div className="flex flex-col">
+                  <span className="text-muted-foreground text-[11px] sm:text-[12px] uppercase tracking-wider mb-1.5 font-medium">
+                    Câmbio
+                  </span>
+                  <span className="text-fg text-[16px] sm:text-[18px] font-semibold">
+                    {cambio}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Price & CTA - Melhorado */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+              <div className="flex-shrink-0">
+                <PriceWithShimmer price={price} />
+              </div>
+              <div className="flex-shrink-0 w-full sm:w-auto">
+                <ContactButton />
+              </div>
+            </div>
           </motion.div>
         </div>
-        </div>
+
+        {/* Right Image - 50% da tela inteira */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: ANIMATION_DURATION.slow, ease: ANIMATION_EASING }}
+          className="absolute right-0 z-0 overflow-visible w-[50vw] lg:w-[55vw] xl:w-[60vw]"
+          style={{
+            top: '-15vh',
+            height: 'calc(100vh + 15vh)',
+            minHeight: '600px',
+          }}
+        >
+          {mainImage && (
+            <div className="w-full h-full flex items-start justify-center overflow-visible">
+              <img
+                src={mainImage}
+                alt={`${marca} ${modeloCompleto}`}
+                className="object-contain"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  maxWidth: '100%',
+                  objectFit: 'contain',
+                  objectPosition: 'top center',
+                }}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
+            </div>
+          )}
+        </motion.div>
       </section>
 
       {/* Gallery Section */}
@@ -918,7 +957,6 @@ export function DetalhesPage() {
   );
 }
 
-// Details Section Component
 interface DetailsSectionProps {
   vehicle: any;
 }
@@ -972,7 +1010,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
               initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
               className="mb-12"
             >
               <div className="flex items-center gap-3 mb-6 pb-4 border-b border-primary">
@@ -1000,7 +1038,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
                 initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
                 className="mb-12"
               >
                 <div className="flex items-center gap-3 mb-6 pb-4 border-b border-primary">
@@ -1048,7 +1086,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
               className="flex items-start gap-3 mb-6"
             >
               <SpecIcon className="w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] lg:w-[42px] lg:h-[42px] flex-shrink-0 mt-1" />
@@ -1067,7 +1105,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
               className="text-fg text-[14px] sm:text-[15px] leading-[26px] mb-8"
             >
               O novo {marca} {modeloCompleto} é a escolha perfeita para quem

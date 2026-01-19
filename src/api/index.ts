@@ -22,6 +22,10 @@ export * from "./queries/useDepoimentosQuery";
 export * from "./endpoints/site";
 export * from "./queries/useSiteQuery";
 
+// Info
+export * from "./endpoints/info";
+export * from "./queries/useInfoQuery";
+
 // Axios instance
 export { axiosInstance } from "./axios-instance";
 

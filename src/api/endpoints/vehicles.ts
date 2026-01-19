@@ -22,7 +22,9 @@ export interface Vehicle {
   portas?: number;
   lugares?: number;
   valor_formatado?: string;
-  opcionais?: Array<{ descricao: string }>;
+  opcionais?: Array<{ tag: string; descricao: string }>;
+  pdf?: string; // Nome do arquivo PDF
+  pdf_url?: string; // URL relativa do PDF
   fotos?: string[]; // Deprecated - usar fullImages ao invés
 }
 
@@ -81,6 +83,8 @@ export interface ApiVehicleResponse {
       thumb: string[];
       full: string[];
     };
+    pdf?: string; // Nome do arquivo PDF
+    pdf_url?: string; // URL relativa do PDF
     data_cadastro: string | null;
     data_atualizacao: string | null;
     status: string | null;
@@ -88,15 +92,30 @@ export interface ApiVehicleResponse {
     promocao: number;
   }>;
   total_results: number;
+  limit?: number;
+  offset?: number;
 }
 
 export interface VehiclesQuery {
-  marca?: string;
+  montadora?: string; // Alias para marca (conforme API)
+  marca?: string; // Mantido para compatibilidade
   modelo?: string;
-  precoMin?: string;
-  precoMax?: string;
-  anoMin?: string;
-  anoMax?: string;
+  valor_min?: string | number; // Alias para precoMin (conforme API)
+  valor_max?: string | number; // Alias para precoMax (conforme API)
+  precoMin?: string | number; // Mantido para compatibilidade
+  precoMax?: string | number; // Mantido para compatibilidade
+  ano_min?: string | number; // Alias para anoMin (conforme API)
+  ano_max?: string | number; // Alias para anoMax (conforme API)
+  anoMin?: string | number; // Mantido para compatibilidade
+  anoMax?: string | number; // Mantido para compatibilidade
+  cambio?: string;
+  combustivel?: string;
+  motor?: string;
+  cor?: string;
+  opcional?: string; // Tag de um único opcional
+  opcionais?: string; // Múltiplas tags separadas por vírgula
+  limit?: number; // Número máximo de resultados
+  offset?: number; // Número de registros para pular
 }
 
 /**
@@ -129,9 +148,84 @@ function normalizeImageUrl(url: string): string {
 
 export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
   try {
-    const response = await axiosInstance.get<ApiVehicleResponse>(
-      `${config.apiBaseUrl}/veiculos`
-    );
+    // Constrói os parâmetros da query string
+    const params = new URLSearchParams();
+    
+    // Montadora/Marca
+    if (query?.montadora) {
+      params.append("montadora", query.montadora);
+    } else if (query?.marca) {
+      params.append("montadora", query.marca);
+    }
+    
+    // Modelo
+    if (query?.modelo) {
+      params.append("modelo", query.modelo);
+    }
+    
+    // Preço
+    if (query?.valor_min !== undefined) {
+      params.append("valor_min", String(query.valor_min));
+    } else if (query?.precoMin !== undefined) {
+      params.append("valor_min", String(query.precoMin));
+    }
+    
+    if (query?.valor_max !== undefined) {
+      params.append("valor_max", String(query.valor_max));
+    } else if (query?.precoMax !== undefined) {
+      params.append("valor_max", String(query.precoMax));
+    }
+    
+    // Ano
+    if (query?.ano_min !== undefined) {
+      params.append("ano_min", String(query.ano_min));
+    } else if (query?.anoMin !== undefined) {
+      params.append("ano_min", String(query.anoMin));
+    }
+    
+    if (query?.ano_max !== undefined) {
+      params.append("ano_max", String(query.ano_max));
+    } else if (query?.anoMax !== undefined) {
+      params.append("ano_max", String(query.anoMax));
+    }
+    
+    // Filtros adicionais
+    if (query?.cambio) {
+      params.append("cambio", query.cambio);
+    }
+    
+    if (query?.combustivel) {
+      params.append("combustivel", query.combustivel);
+    }
+    
+    if (query?.motor) {
+      params.append("motor", query.motor);
+    }
+    
+    if (query?.cor) {
+      params.append("cor", query.cor);
+    }
+    
+    // Opcionais
+    if (query?.opcional) {
+      params.append("opcional", query.opcional);
+    }
+    
+    if (query?.opcionais) {
+      params.append("opcionais", query.opcionais);
+    }
+    
+    // Paginação
+    if (query?.limit !== undefined) {
+      params.append("limit", String(query.limit));
+    }
+    
+    if (query?.offset !== undefined) {
+      params.append("offset", String(query.offset));
+    }
+
+    const url = `${config.apiBaseUrl}/veiculos.php${params.toString() ? `?${params.toString()}` : ""}`;
+    const response = await axiosInstance.get<ApiVehicleResponse>(url);
 
     if (!response.data.success || !response.data.data) {
       console.warn("API retornou sem sucesso ou sem dados");
@@ -139,7 +233,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
     }
 
     // Mapeia os dados da API para a interface Vehicle
-    let vehicles: Vehicle[] = response.data.data.map((apiVehicle) => {
+    const vehicles: Vehicle[] = response.data.data.map((apiVehicle) => {
       // Normaliza as URLs das imagens thumbnails (para cards)
       const thumbUrls = apiVehicle.imagens?.thumb?.length 
         ? apiVehicle.imagens.thumb 
@@ -155,6 +249,15 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         ? apiVehicle.imagens.thumb 
         : [];
       const normalizedFullImages = fullUrls.map(normalizeImageUrl);
+
+      // Normaliza URL do PDF se existir
+      let pdfUrl: string | undefined;
+      if (apiVehicle.pdf_url) {
+        pdfUrl = normalizeImageUrl(apiVehicle.pdf_url);
+      } else if (apiVehicle.pdf) {
+        // Se só tem o nome do arquivo, constrói o caminho completo
+        pdfUrl = normalizeImageUrl(`arquivos/autocheck/${apiVehicle.pdf}`);
+      }
 
       return {
         id: apiVehicle.id,
@@ -176,42 +279,11 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         portas: apiVehicle.portas,
         lugares: apiVehicle.lugares,
         valor_formatado: apiVehicle.valor_formatado,
-        opcionais: apiVehicle.opcionais?.map((opt) => ({ descricao: opt.descricao })) || [],
+        opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
+        pdf: apiVehicle.pdf,
+        pdf_url: pdfUrl,
       };
     });
-
-    // Aplica filtros se fornecidos
-    if (query?.marca) {
-      vehicles = vehicles.filter((v) =>
-        v.marca?.toLowerCase().includes(query.marca!.toLowerCase())
-      );
-    }
-
-    if (query?.modelo) {
-      vehicles = vehicles.filter((v) =>
-        v.modelo?.toLowerCase().includes(query.modelo!.toLowerCase())
-      );
-    }
-
-    if (query?.precoMin) {
-      const min = Number(query.precoMin);
-      vehicles = vehicles.filter((v) => v.price >= min);
-    }
-
-    if (query?.precoMax) {
-      const max = Number(query.precoMax);
-      vehicles = vehicles.filter((v) => v.price <= max);
-    }
-
-    if (query?.anoMin) {
-      const min = Number(query.anoMin);
-      vehicles = vehicles.filter((v) => v.year >= min);
-    }
-
-    if (query?.anoMax) {
-      const max = Number(query.anoMax);
-      vehicles = vehicles.filter((v) => v.year <= max);
-    }
 
     return vehicles;
   } catch (error) {
@@ -268,14 +340,16 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       placa: apiVehicle.placa,
       portas: apiVehicle.portas,
       lugares: apiVehicle.lugares,
-      valor_formatado: apiVehicle.valor_formatado,
-      opcionais: apiVehicle.opcionais?.map((opt) => ({ descricao: opt.descricao })) || [],
-    };
-  } catch (error) {
-    console.error("Error fetching vehicle by ID:", error);
-    throw error;
+        valor_formatado: apiVehicle.valor_formatado,
+        opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
+        pdf: apiVehicle.pdf,
+        pdf_url: apiVehicle.pdf_url ? normalizeImageUrl(apiVehicle.pdf_url) : undefined,
+      };
+    } catch (error) {
+      console.error("Error fetching vehicle by ID:", error);
+      throw error;
+    }
   }
-}
 
 export async function fetchVehicleBySlug(slug: string): Promise<Vehicle> {
   // Importa a função de extração de ID
@@ -290,4 +364,39 @@ export async function fetchVehicleBySlug(slug: string): Promise<Vehicle> {
   
   // Busca o veículo por ID
   return fetchVehicleById(vehicleId);
+}
+
+/**
+ * Interface para opcionais disponíveis
+ */
+export interface Optional {
+  tag: string;
+  descricao: string;
+}
+
+export interface ApiOpcionaisResponse {
+  success: boolean;
+  message?: string;
+  data: Optional[];
+}
+
+/**
+ * Lista todos os opcionais disponíveis para veículos
+ */
+export async function fetchOpcionais(): Promise<Optional[]> {
+  try {
+    const response = await axiosInstance.get<ApiOpcionaisResponse>(
+      `${config.apiBaseUrl}/veiculos.php?action=opcionais`
+    );
+
+    if (!response.data.success || !response.data.data) {
+      console.warn("API retornou sem sucesso ou sem dados");
+      return [];
+    }
+
+    return response.data.data;
+  } catch (error) {
+    console.error("Erro ao buscar opcionais:", error);
+    return [];
+  }
 }

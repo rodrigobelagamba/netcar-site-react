@@ -10,13 +10,15 @@ src/api/
 │   ├── vehicles.ts    # API de Veículos
 │   ├── stock.ts       # API de Stock (marcas, modelos, etc.)
 │   ├── depoimentos.ts # API de Depoimentos
-│   └── site.ts        # API do Site (banners, informações, etc.)
+│   ├── site.ts        # API do Site (banners, informações, etc.)
+│   └── info.ts        # API Info (dados da tabela info)
 ├── queries/           # Hooks React Query
 │   ├── useVehicleQuery.ts
 │   ├── useVehiclesQuery.ts
 │   ├── useStockQuery.ts
 │   ├── useDepoimentosQuery.ts
-│   └── useSiteQuery.ts
+│   ├── useSiteQuery.ts
+│   └── useInfoQuery.ts
 ├── axios-instance.ts  # Configuração do Axios
 └── index.ts           # Barrel exports
 ```
@@ -39,21 +41,40 @@ import { useVehiclesQuery, useBrandsQuery, useDepoimentosQuery } from '@/api';
 #### 🚗 API Veículos
 
 ```typescript
-import { useVehiclesQuery, useVehicleQuery } from '@/api';
+import { useVehiclesQuery, useVehicleQuery, useOpcionaisQuery } from '@/api';
 
 function VehiclesList() {
   const { data: vehicles, isLoading } = useVehiclesQuery({
-    marca: 'FORD',
-    precoMin: '30000',
-    precoMax: '60000'
+    montadora: 'FORD',
+    valor_min: 30000,
+    valor_max: 60000,
+    cambio: 'AUTOMATICO',
+    opcionais: 'ar_condicionado,alarme',
+    limit: 20,
+    offset: 0
   });
+
+  const { data: opcionais } = useOpcionaisQuery();
 
   if (isLoading) return <div>Carregando...</div>;
 
   return (
     <div>
       {vehicles?.map(vehicle => (
-        <div key={vehicle.id}>{vehicle.name}</div>
+        <div key={vehicle.id}>
+          <h3>{vehicle.name}</h3>
+          <p>Preço: {vehicle.valor_formatado}</p>
+          {vehicle.pdf_url && (
+            <a href={vehicle.pdf_url} target="_blank">Ver PDF</a>
+          )}
+          {vehicle.opcionais && (
+            <ul>
+              {vehicle.opcionais.map(opt => (
+                <li key={opt.tag}>{opt.descricao}</li>
+              ))}
+            </ul>
+          )}
+        </div>
       ))}
     </div>
   );
@@ -129,10 +150,33 @@ function HomePage() {
 - `fetchVehicles(query?)` - Lista veículos com filtros opcionais
 - `fetchVehicleById(id)` - Busca veículo por ID
 - `fetchVehicleBySlug(slug)` - Busca veículo por slug
+- `fetchOpcionais()` - Lista todos os opcionais disponíveis
 
 **Hooks:**
 - `useVehiclesQuery(query?)` - Hook para listar veículos
 - `useVehicleQuery(slug)` - Hook para buscar veículo específico
+- `useOpcionaisQuery()` - Hook para listar opcionais disponíveis
+
+**Filtros disponíveis:**
+- `montadora` ou `marca` - Fabricante do veículo
+- `modelo` - Modelo do veículo
+- `valor_min` ou `precoMin` - Valor mínimo
+- `valor_max` ou `precoMax` - Valor máximo
+- `ano_min` ou `anoMin` - Ano mínimo
+- `ano_max` ou `anoMax` - Ano máximo
+- `cambio` - Tipo de câmbio (MANUAL, AUTOMATICO)
+- `combustivel` - Tipo de combustível (Flex, Gasolina, etc.)
+- `motor` - Motorização (1.0, 1.6, 2.0, etc.)
+- `cor` - Cor do veículo (BRANCA, PRETA, PRATA, etc.)
+- `opcional` - Tag de um único opcional (ex: ar_condicionado)
+- `opcionais` - Múltiplas tags separadas por vírgula (ex: ar_condicionado,alarme)
+- `limit` - Número máximo de resultados
+- `offset` - Número de registros para pular
+
+**Campos adicionais:**
+- `pdf` - Nome do arquivo PDF
+- `pdf_url` - URL completa do PDF
+- `opcionais` - Array com tag e descrição dos opcionais
 
 ### 📊 API Stock
 
@@ -208,6 +252,58 @@ function HomePage() {
 - `useNewsQuery()` - Hook para notícias
 - `useVideosQuery(local?)` - Hook para vídeos
 - `useMobileCheckQuery()` - Hook para verificação mobile
+
+### ℹ️ API Info
+
+- `fetchInfo(query?)` - Lista itens da tabela info com filtros opcionais
+- `fetchInfoByType(tipo)` - Busca informações por tipo
+- `fetchInfoByTitle(titulo)` - Busca informações por título
+- `fetchInfoByLocal(local)` - Busca informações por local
+- `fetchInfoCombined(query)` - Busca informações com filtros combinados
+
+**Hooks:**
+- `useInfoQuery(query?)` - Hook para listar informações
+- `useInfoByTypeQuery(tipo)` - Hook para buscar por tipo
+- `useInfoByTitleQuery(titulo)` - Hook para buscar por título
+- `useInfoByLocalQuery(local)` - Hook para buscar por local
+- `useInfoCombinedQuery(query)` - Hook para buscar com filtros combinados
+
+**Tipos disponíveis:**
+- `Texto` - Textos gerais
+- `Numeros` - Números/contadores
+- `Telefone` - Informações de telefone
+- `Endereço` - Informações de endereço
+- `RedeSocial` - Informações de redes sociais
+
+**Locais disponíveis:**
+- `Todos` - Todas as localizações
+- `Empresa` - Apenas empresa
+
+**Exemplo de uso:**
+```typescript
+import { useInfoQuery, useInfoByTypeQuery } from '@/api';
+
+function InfoSection() {
+  const { data: info } = useInfoQuery({
+    tipo: 'Texto',
+    local: 'Empresa',
+    titulo: 'Desenvolvemos'
+  });
+
+  const { data: textos } = useInfoByTypeQuery('Texto');
+
+  return (
+    <div>
+      {info?.map(item => (
+        <div key={item.id}>
+          <h3>{item.titulo}</h3>
+          <p>{item.conteudo}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
 
 ## ⚙️ Configuração
 
