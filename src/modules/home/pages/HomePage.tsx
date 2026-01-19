@@ -22,14 +22,14 @@ export function HomePage() {
     ? banners.map(banner => banner.imagem)
     : [];
 
-  // Filtra veículos que têm imagem PNG e pega apenas os 4 primeiros
+  // Filtra veículos que têm imagem PNG e pega apenas os 5 primeiros
   const vehiclesWithPhotos = vehicles
     ? vehicles.filter(vehicle => {
         // Verifica se tem pelo menos uma imagem PNG
         return vehicle.images?.some(img => 
           img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
         );
-      }).slice(0, 4)
+      }).slice(0, 5)
     : [];
 
   return (

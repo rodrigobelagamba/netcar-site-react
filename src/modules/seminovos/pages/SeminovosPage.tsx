@@ -313,7 +313,7 @@ export function SeminovosPage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-y-32 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pt-32" style={{ overflow: 'visible' }}>
+            <div className="grid grid-cols-1 gap-y-32 gap-x-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pt-32" style={{ overflow: 'visible' }}>
               {visibleVehicles.map((vehicle) => (
                 <VehicleCard
                   key={vehicle.id}

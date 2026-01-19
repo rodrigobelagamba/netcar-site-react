@@ -113,7 +113,7 @@ export function VehicleCard({
       onKeyDown={handleKeyDown}
     >
       {/* Imagem PNG do veículo - posicionamento absoluto para transbordar */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 z-20" style={{ top: '-45%', width: '110%' }}>
+      <div className="absolute left-1/2 transform -translate-x-1/2 z-20" style={{ top: '-40%', width: '110%' }}>
         <div className="relative mx-auto w-full aspect-[4/3] overflow-hidden bg-gray-100">
           <img
             src={mainImage}
@@ -125,66 +125,65 @@ export function VehicleCard({
       </div>
 
       {/* Informações do veículo - parte branca */}
-      <div className="p-4 pt-[55%] pb-3 relative z-10 bg-white rounded-lg shadow-lg">
+      <div className="p-4 pt-[55%] pb-4 relative z-10 bg-white rounded-lg shadow-lg min-h-[280px] flex flex-col">
         {/* Tag da marca abaixo da imagem */}
         {marca && (
-          <div className="mb-2">
-            <span className="px-3 py-1 text-[10px] font-bold text-white uppercase tracking-wide rounded-full inline-block" style={{ backgroundColor: 'rgb(3, 54, 61)' }}>
+          <div className="mb-3">
+            <span className="px-3 py-1.5 text-[10px] font-bold text-white uppercase tracking-wide rounded-full inline-block" style={{ backgroundColor: 'rgb(3, 54, 61)' }}>
               {marca}
             </span>
           </div>
         )}
 
-        {/* Informações do veículo */}
-        <div className="mb-3 space-y-0.5">
-          <h3 className="text-base font-semibold text-gray-800 leading-tight">
-            {displayModelo}
-          </h3>
+        {/* Informações do veículo - expandido */}
+        <div className="mb-4 space-y-1 flex-grow">
+          <div>
+            <h3 className="text-sm font-semibold text-gray-800 leading-snug break-words">
+              {displayModelo}
+            </h3>
+            <p className="text-xs text-gray-600 leading-tight font-medium mt-1">
+              {formatYear(year)}
+            </p>
+          </div>
           {displayVersao && displayVersao !== displayModelo && (
-            <p className="text-sm text-gray-600 leading-tight">
+            <p className="text-xs text-gray-500 leading-tight line-clamp-1">
               {displayVersao}
             </p>
           )}
-          <p className="text-sm text-gray-600 leading-tight">
-            {formatYear(year)}
-          </p>
         </div>
 
-        {/* Preço */}
-        <div className="mb-3">
+        {/* Preço e Botão - alinhados na mesma linha */}
+        <div className="mb-0 mt-auto pt-4 flex items-center justify-between gap-3">
           <p
-            className="text-xl font-bold leading-tight"
-            style={{ color: 'rgb(3, 54, 61)' }}
+            className="text-secondary text-xl font-bold leading-tight flex-1"
             dangerouslySetInnerHTML={{
               __html: valor_formatado || formatPrice(price),
             }}
           />
+          <button
+            onClick={handleButtonClick}
+            className={cn(
+              "w-9 h-9 rounded-full flex-shrink-0",
+              "text-white flex items-center justify-center",
+              "transition-all hover:scale-110",
+              "focus:outline-none focus:ring-2 focus:ring-offset-2",
+              "shadow-lg"
+            )}
+            style={{ 
+              backgroundColor: 'rgb(3, 54, 61)',
+              '--hover-bg': 'rgb(2, 40, 45)'
+            } as React.CSSProperties & { '--hover-bg': string }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgb(2, 40, 45)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgb(3, 54, 61)';
+            }}
+            aria-label={`Ver detalhes de ${name}`}
+          >
+            <Plus className="w-5 h-5" />
+          </button>
         </div>
-
-        {/* Botão circular no canto inferior direito */}
-        <button
-          onClick={handleButtonClick}
-          className={cn(
-            "absolute bottom-3 right-3 w-10 h-10 rounded-full",
-            "text-white flex items-center justify-center",
-            "transition-all hover:scale-110",
-            "focus:outline-none focus:ring-2 focus:ring-offset-2",
-            "shadow-md"
-          )}
-          style={{ 
-            backgroundColor: 'rgb(3, 54, 61)',
-            '--hover-bg': 'rgb(2, 40, 45)'
-          } as React.CSSProperties & { '--hover-bg': string }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgb(2, 40, 45)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgb(3, 54, 61)';
-          }}
-          aria-label={`Ver detalhes de ${name}`}
-        >
-          <Plus className="w-5 h-5" />
-        </button>
       </div>
     </div>
   );
