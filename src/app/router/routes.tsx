@@ -61,9 +61,9 @@ function RootComponent() {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
       <Header />
-      <div className="relative flex-1">
+      <div className="relative flex-1 overflow-x-hidden max-w-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -71,7 +71,7 @@ function RootComponent() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="h-full"
+            className="h-full overflow-x-hidden max-w-full"
           >
             <Outlet />
           </motion.div>

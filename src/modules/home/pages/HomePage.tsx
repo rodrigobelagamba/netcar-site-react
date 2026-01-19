@@ -33,7 +33,7 @@ export function HomePage() {
     : [];
 
   return (
-    <main className="flex-1">
+    <main className="flex-1 overflow-x-hidden max-w-full">
       {heroImages.length > 0 && (
         <section className="relative overflow-hidden">
           <div className="embla" ref={emblaRef}>

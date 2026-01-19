@@ -77,7 +77,7 @@ export function SobrePage() {
   ];
 
   return (
-    <main className="flex-1">
+    <main className="flex-1 overflow-x-hidden max-w-full">
       {/* Hero Section */}
       <header className="relative py-20 text-center overflow-hidden">
         <div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-primary/10 via-transparent to-transparent" />

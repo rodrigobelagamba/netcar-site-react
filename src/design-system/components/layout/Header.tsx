@@ -73,7 +73,7 @@ export function Header() {
   return (
     <>
       <header 
-        className={`fixed top-0 left-0 right-0 ${isMobileMenuOpen ? 'z-[75]' : 'z-50'}`}
+        className={`fixed top-0 left-0 right-0 overflow-x-hidden max-w-full ${isMobileMenuOpen ? 'z-[75]' : 'z-50'}`}
       >
         {/* Fundo que aparece de cima para baixo */}
         <motion.div

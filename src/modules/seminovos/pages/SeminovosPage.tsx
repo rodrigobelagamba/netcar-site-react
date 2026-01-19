@@ -147,7 +147,7 @@ export function SeminovosPage() {
   }, [search.marca, search.modelo, search.precoMin, search.precoMax, search.anoMin, search.anoMax, sortBy]);
 
   return (
-    <main className="flex-1 pt-16">
+    <main className="flex-1 pt-16 overflow-x-hidden max-w-full">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filtros Horizontais */}
         <div className="mb-6 pb-6">

@@ -9,7 +9,7 @@ export function ContatoPage() {
 
   return (
     <>
-      <main className="container mx-auto flex-1 px-4 py-12">
+      <main className="container mx-auto flex-1 px-4 py-12 overflow-x-hidden max-w-full">
       <div className="mx-auto max-w-2xl">
         <h1 className="mb-6 text-4xl font-bold text-fg">Entre em Contato</h1>
         <div className="rounded-lg border border-border bg-surface p-8">

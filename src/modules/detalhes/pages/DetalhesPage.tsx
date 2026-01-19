@@ -414,35 +414,36 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
 
   return (
     <div className="space-y-4 lg:space-y-6">
-      {/* I-Check Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
-        className="border border-border p-6 sm:p-8 flex flex-col items-center"
-      >
-        <div className="w-full max-w-[246px] h-[148px] mb-6 overflow-hidden">
-          <img
-            src={iCheckLogo}
-            alt="i-Check"
-            className="w-full h-full object-contain"
-          />
-        </div>
+      {/* I-Check Card - Só exibe se houver PDF */}
+      {hasPDF && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+          className="border border-border p-6 sm:p-8 flex flex-col items-center"
+        >
+          <div className="w-full max-w-[246px] h-[148px] mb-6 overflow-hidden">
+            <img
+              src={iCheckLogo}
+              alt="i-Check"
+              className="w-full h-full object-contain"
+            />
+          </div>
 
-        <div className="w-full max-w-[300px]">
-          <CTAButton
-            text={hasPDF ? "Baixe o relatório" : "Relatório não disponível"}
-            icon={Download}
-            borderColor="border-green"
-            textColor="text-green"
-            hoverBgColor="bg-green"
-            className="w-full bg-green/10"
-            onClick={handleDownloadPDF}
-            disabled={!hasPDF}
-          />
-        </div>
-      </motion.div>
+          <div className="w-full max-w-[300px]">
+            <CTAButton
+              text="Baixe o relatório"
+              icon={Download}
+              borderColor="border-green"
+              textColor="text-green"
+              hoverBgColor="bg-green"
+              className="w-full bg-green/10"
+              onClick={handleDownloadPDF}
+            />
+          </div>
+        </motion.div>
+      )}
 
       {/* Help Card */}
       <motion.div
@@ -519,7 +520,7 @@ function Lightbox({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+        className="fixed inset-0 z-50 bg-black flex items-center justify-center"
         onClick={onClose}
       >
         {/* Close Button */}
@@ -531,7 +532,7 @@ function Lightbox({
         </button>
 
         {/* Image Counter */}
-        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 text-white text-sm sm:text-base font-bold">
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 text-white text-sm sm:text-base font-bold z-10">
           {index + 1} / {images.length}
         </div>
 
@@ -541,13 +542,13 @@ function Lightbox({
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
-          className="relative max-w-5xl max-h-[80vh] w-full"
+          className="relative w-full h-full flex items-center justify-center"
           onClick={(e) => e.stopPropagation()}
         >
           <img
             src={images[index]}
             alt={`${vehicleName} - Imagem ${index + 1}`}
-            className="w-full h-full object-contain"
+            className="w-full h-full max-w-full object-contain"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = "none";
             }}
@@ -562,7 +563,7 @@ function Lightbox({
                 e.stopPropagation();
                 handlePrev();
               }}
-              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-2 sm:p-3 bg-black/50 rounded-full"
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-2 sm:p-3 bg-black/50 rounded-full z-10"
             >
               <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
             </button>
@@ -571,7 +572,7 @@ function Lightbox({
                 e.stopPropagation();
                 handleNext();
               }}
-              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-2 sm:p-3 bg-black/50 rounded-full"
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-2 sm:p-3 bg-black/50 rounded-full z-10"
             >
               <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
             </button>
@@ -607,7 +608,7 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
         <img
           src={image}
           alt={alt}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className="absolute inset-0 w-full h-full max-w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = "none";
           }}
@@ -912,9 +913,31 @@ export function DetalhesPage() {
   ];
 
   return (
-    <main>
+    <main className="overflow-x-hidden max-w-full">
       {/* Hero Section */}
-      <section className="w-full pt-16 lg:pt-0 pb-0 relative overflow-x-hidden min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[100vh]">
+      <section className="w-full pt-16 lg:pt-0 pb-0 relative overflow-x-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[100vh]">
+        {/* Mobile Image - Aparece primeiro no mobile, acima das informações */}
+        <div className="lg:hidden w-full mb-6">
+          {mainImage && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+              className="w-full h-[300px] sm:h-[400px] flex items-center justify-center bg-gray-50"
+            >
+              <img
+                src={mainImage}
+                alt={`${marca} ${modeloCompleto}`}
+                className="w-full h-full max-w-full object-contain"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
+            </motion.div>
+          )}
+        </div>
+
         {/* Left Content - 50% dentro do container */}
         <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-8 relative">
           <motion.div
@@ -1007,13 +1030,13 @@ export function DetalhesPage() {
           </motion.div>
         </div>
 
-        {/* Right Image - 50% da tela inteira */}
+        {/* Desktop Image - Posicionamento absoluto apenas no desktop */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: ANIMATION_DURATION.slow, ease: ANIMATION_EASING }}
-          className="absolute right-0 z-0 overflow-visible w-[50vw] lg:w-[55vw] xl:w-[60vw]"
+          className="hidden lg:block absolute right-0 z-0 overflow-hidden w-[50vw] lg:w-[55vw] xl:w-[60vw] max-w-[calc(100vw-50%)]"
           style={{
             top: '-15vh',
             height: 'calc(100vh + 15vh)',
@@ -1021,11 +1044,11 @@ export function DetalhesPage() {
           }}
         >
           {mainImage && (
-            <div className="w-full h-full flex items-start justify-center overflow-visible">
+            <div className="w-full h-full flex items-start justify-center overflow-hidden">
               <img
                 src={mainImage}
                 alt={`${marca} ${modeloCompleto}`}
-                className="object-contain"
+                className="object-contain max-w-full"
                 style={{
                   width: '100%',
                   height: '100%',
