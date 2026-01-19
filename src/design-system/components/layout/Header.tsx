@@ -1,14 +1,20 @@
-import { useState, useEffect } from "react";
-import { Link } from "@tanstack/react-router";
+import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { Search, Phone, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { useSearchContext } from "@/contexts/SearchContext";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
   const { data: whatsapp } = useWhatsAppQuery();
+  const { searchTerm, setSearchTerm } = useSearchContext();
 
   // Formata telefone para exibição
   const formatPhone = (phone?: string) => {
@@ -60,6 +66,48 @@ export function Header() {
       document.body.style.overflow = "unset";
     };
   }, [isMobileMenuOpen]);
+
+  // Foca no input quando o campo de busca é aberto
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
+
+  // Limpa a busca quando sai da página de seminovos
+  useEffect(() => {
+    if (location.pathname !== "/seminovos" && searchTerm) {
+      setSearchTerm("");
+    }
+  }, [location.pathname, searchTerm, setSearchTerm]);
+
+  // Função para lidar com a busca
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    
+    // Se não está na página de seminovos e há texto, redireciona para seminovos
+    if (location.pathname !== "/seminovos" && value.trim()) {
+      navigate({
+        to: "/seminovos",
+        search: {
+          marca: undefined,
+          modelo: undefined,
+          precoMin: undefined,
+          precoMax: undefined,
+          anoMin: undefined,
+          anoMax: undefined,
+        },
+      });
+    }
+  };
+
+  // Função para abrir/fechar o campo de busca
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+    if (!isSearchOpen) {
+      setSearchTerm("");
+    }
+  };
 
   const menuLinks = [
     { to: "/sobre", label: "Sobre" },
@@ -159,10 +207,52 @@ export function Header() {
 
           {/* Botões à direita - Desktop */}
           <div className="hidden md:flex items-center gap-4 flex-1 justify-end">
-            <button className="flex items-center gap-2">
-              <Search className="w-4 h-4" />
-              <span>Buscar</span>
-            </button>
+            {/* Campo de Busca */}
+            <AnimatePresence>
+              {isSearchOpen ? (
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: 250, opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <div className="flex items-center gap-2 border-b border-border pb-1">
+                    <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      value={searchTerm}
+                      onChange={(e) => handleSearch(e.target.value)}
+                      placeholder="Buscar veículo..."
+                      className="flex-1 bg-transparent border-0 outline-none text-sm text-fg placeholder:text-muted-foreground"
+                      onBlur={() => {
+                        if (!searchTerm.trim()) {
+                          setIsSearchOpen(false);
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={toggleSearch}
+                      className="text-muted-foreground hover:text-fg transition-colors flex-shrink-0"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={toggleSearch}
+                  className="flex items-center gap-2 hover:text-primary transition-colors"
+                >
+                  <Search className="w-4 h-4" />
+                  <span>Buscar</span>
+                </motion.button>
+              )}
+            </AnimatePresence>
             {whatsapp?.numero && (
               <a
                 href={getWhatsAppLink()}
@@ -214,12 +304,32 @@ export function Header() {
               transition={{ duration: 0.4, delay: 0.1 }}
             >
               <nav className="flex flex-col items-center gap-6">
+                {/* Campo de Busca Mobile */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="w-full max-w-xs px-4"
+                >
+                  <div className="flex items-center gap-2 border-b border-white/30 pb-2">
+                    <Search className="w-5 h-5 text-white flex-shrink-0" />
+                    <input
+                      type="text"
+                      value={searchTerm}
+                      onChange={(e) => handleSearch(e.target.value)}
+                      placeholder="Buscar veículo..."
+                      className="flex-1 bg-transparent border-0 outline-none text-white text-lg placeholder:text-white/70"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    />
+                  </div>
+                </motion.div>
+                
                 {menuLinks.map((link, index) => (
                   <motion.div
                     key={link.to}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.2 + index * 0.05 }}
+                    transition={{ duration: 0.3, delay: 0.2 + (index + 1) * 0.05 }}
                   >
                     {link.external ? (
                       <a
@@ -246,7 +356,7 @@ export function Header() {
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.2 + menuLinks.length * 0.05 }}
+                    transition={{ duration: 0.3, delay: 0.2 + (menuLinks.length + 1) * 0.05 }}
                   >
                     <a
                       href={getWhatsAppLink()}

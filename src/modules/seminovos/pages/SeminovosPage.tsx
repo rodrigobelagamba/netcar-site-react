@@ -8,6 +8,7 @@ import { cn } from "@/lib/cn";
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
+import { useSearchContext } from "@/contexts/SearchContext";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
 
@@ -18,6 +19,7 @@ export function SeminovosPage() {
   const navigate = useNavigate();
   const { data: vehicles, isLoading } = useVehiclesQuery(search);
   const { data: stockData } = useAllStockDataQuery();
+  const { searchTerm } = useSearchContext();
 
   useDefaultMetaTags(
     "Showroom",
@@ -47,7 +49,7 @@ export function SeminovosPage() {
       to: "/seminovos",
       search: {
         marca: marca || undefined,
-        modelo: search.modelo || undefined,
+        modelo: undefined,
         precoMin: precoMin || undefined,
         precoMax: precoMax || undefined,
         anoMin: anoMin || undefined,
@@ -61,6 +63,30 @@ export function SeminovosPage() {
     if (!vehicles) return [];
 
     let filtered = [...vehicles];
+
+    // Filtro de busca local (por conteúdo dos cards)
+    if (searchTerm.trim()) {
+      const searchLower = searchTerm.toLowerCase().trim();
+      filtered = filtered.filter((vehicle) => {
+        const searchFields = [
+          vehicle.marca,
+          vehicle.modelo,
+          vehicle.name,
+          vehicle.cor,
+          vehicle.combustivel,
+          vehicle.cambio,
+          vehicle.motor,
+          vehicle.placa,
+          vehicle.year?.toString(),
+          vehicle.price?.toString(),
+          vehicle.valor_formatado,
+        ].filter(Boolean);
+
+        return searchFields.some((field) =>
+          String(field).toLowerCase().includes(searchLower)
+        );
+      });
+    }
 
     // Ordenação
     filtered.sort((a, b) => {
@@ -79,7 +105,7 @@ export function SeminovosPage() {
     });
 
     return filtered;
-  }, [vehicles, sortBy]);
+  }, [vehicles, sortBy, searchTerm]);
 
   // Anos para o dropdown (do mais recente para o mais antigo)
   const sortedYears = useMemo(() => {
@@ -144,7 +170,7 @@ export function SeminovosPage() {
   // Reset visible count quando filtros mudam
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
-  }, [search.marca, search.modelo, search.precoMin, search.precoMax, search.anoMin, search.anoMax, sortBy]);
+  }, [search.marca, search.precoMin, search.precoMax, search.anoMin, search.anoMax, sortBy, searchTerm]);
 
   return (
     <main className="flex-1 pt-16 overflow-x-hidden max-w-full">
