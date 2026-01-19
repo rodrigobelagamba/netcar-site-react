@@ -5,8 +5,8 @@ import {
 } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouterState } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import { Sun, Moon } from "lucide-react";
+import { useEffect } from "react";
+import { MessageCircle } from "lucide-react";
 import { Header } from "@/design-system/components/layout/Header";
 import { Footer } from "@/design-system/components/layout/Footer";
 import { HomePage } from "@/modules/home/pages/HomePage";
@@ -14,39 +14,46 @@ import { SeminovosPage } from "@/modules/seminovos/pages/SeminovosPage";
 import { DetalhesPage } from "@/modules/detalhes/pages/DetalhesPage";
 import { SobrePage } from "@/modules/sobre/pages/SobrePage";
 import { ContatoPage } from "@/modules/contato/pages/ContatoPage";
+import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
 
-// Theme Toggle Button Component (Temporary)
-function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+// WhatsApp Button Component
+function WhatsAppButton() {
+  const { data: whatsapp } = useWhatsAppQuery();
 
-  useEffect(() => {
-    // Verifica o tema atual
-    const currentTheme =
-      document.documentElement.getAttribute("data-theme") || "light";
-    setTheme(currentTheme as "light" | "dark");
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-    document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(newTheme);
+  const getWhatsAppLink = () => {
+    if (!whatsapp?.numero) return "#";
+    
+    // Se a API já retornou um link, usa ele
+    if (whatsapp.link) {
+      return whatsapp.link;
+    }
+    
+    // Senão, gera o link do WhatsApp
+    const cleaned = whatsapp.numero.replace(/\D/g, "");
+    const message = whatsapp.mensagem || "Olá! Gostaria de mais informações.";
+    return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
   };
 
+  if (!whatsapp?.numero) {
+    return null;
+  }
+
   return (
-    <button
-      onClick={toggleTheme}
-      className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all hover:scale-110 hover:shadow-xl"
-      aria-label={`Alternar para modo ${theme === "light" ? "escuro" : "claro"}`}
-      title={`Alternar para modo ${theme === "light" ? "escuro" : "claro"}`}
+    <motion.a
+      href={getWhatsAppLink()}
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
+      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all hover:shadow-xl"
+      style={{ backgroundColor: '#25D366' }}
+      aria-label="Fale conosco no WhatsApp"
+      title="Fale conosco no WhatsApp"
     >
-      {theme === "light" ? (
-        <Moon className="h-5 w-5" />
-      ) : (
-        <Sun className="h-5 w-5" />
-      )}
-    </button>
+      <MessageCircle className="h-7 w-7 text-white" />
+    </motion.a>
   );
 }
 
@@ -78,7 +85,7 @@ function RootComponent() {
         </AnimatePresence>
       </div>
       <Footer />
-      <ThemeToggle />
+      <WhatsAppButton />
     </div>
   );
 }

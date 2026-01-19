@@ -629,10 +629,10 @@ function RelatedVehiclesSection({
 }) {
   const { data: vehicles, isLoading } = useVehiclesQuery();
 
-  // Filtrar veículos relacionados (excluir o atual e pegar até 5)
+  // Filtrar veículos relacionados (excluir o atual e pegar até 4)
   // Converte ambos os IDs para string para comparação correta
   const relatedVehicles =
-    vehicles?.filter((v) => String(v.id) !== String(currentVehicleId)).slice(0, 5) || [];
+    vehicles?.filter((v) => String(v.id) !== String(currentVehicleId)).slice(0, 4) || [];
 
   if (isLoading || relatedVehicles.length === 0) {
     return null;
@@ -663,7 +663,7 @@ function RelatedVehiclesSection({
         </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 gap-y-32 gap-x-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pt-32" style={{ overflow: 'visible' }}>
+        <div className="grid grid-cols-1 gap-y-32 gap-x-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pt-32" style={{ overflow: 'visible' }}>
           {relatedVehicles.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}
