@@ -1,8 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
-import { formatPrice, formatYear } from "@/lib/formatters";
+import { formatPrice, formatYear, formatKm } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
-import { cn } from "@/lib/cn";
-import { Plus } from "lucide-react";
+import { CardsHero } from "./CardsHero";
 
 // URL da imagem de carro coberto usada como fallback quando não houver PNG
 // A imagem está em public/images/semcapa.png
@@ -20,6 +19,9 @@ export interface VehicleCardProps {
   marca?: string;
   modelo?: string;
   placa?: string;
+  combustivel?: string;
+  cambio?: string;
+  delay?: number;
 }
 
 export function VehicleCard({
@@ -27,11 +29,15 @@ export function VehicleCard({
   name,
   price,
   year,
+  km,
   images,
   valor_formatado,
   marca,
   modelo,
   placa,
+  combustivel,
+  cambio,
+  delay = 0,
 }: VehicleCardProps) {
   const navigate = useNavigate();
   
@@ -64,127 +70,31 @@ export function VehicleCard({
     navigate({ to: `/veiculo/${slug}` });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      handleClick();
-    }
-  };
+  // Remove HTML tags se houver no valor_formatado
+  const priceFormatted = valor_formatado 
+    ? valor_formatado.replace(/<[^>]*>/g, '') 
+    : formatPrice(price);
 
-  const handleButtonClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    handleClick();
-  };
-
-  // Extrai modelo e versão do name se não tiver separados
-  // Se tiver marca e modelo separados, usa modelo
-  // Senão, tenta extrair do name (assumindo formato "Marca Modelo Versão")
-  let displayModelo = modelo || name;
-  let displayVersao = '';
-  
-  if (marca && !modelo) {
-    // Se tem marca mas não modelo, remove a marca do name
-    displayModelo = name.replace(new RegExp(`^${marca}\\s*`, 'i'), '').trim() || name;
-  }
-  
-  // Se o name tem mais de 2 palavras e não tem modelo separado, assume que a última parte é versão
-  if (!modelo && name.split(' ').length > 2) {
-    const parts = name.split(' ');
-    if (marca) {
-      displayModelo = parts.slice(1, -1).join(' ');
-      displayVersao = parts[parts.length - 1];
-    } else {
-      displayModelo = parts.slice(0, -1).join(' ');
-      displayVersao = parts[parts.length - 1];
-    }
-  }
+  // Adapta dados para o formato do CardsHero
+  const brand = marca || '';
+  const model = modelo || name;
+  const yearFormatted = formatYear(year);
+  const mileageFormatted = formatKm(km);
+  const fuel = combustivel || '';
+  const transmission = cambio || '';
 
   return (
-    <div
-      className={cn(
-        "group relative",
-        "transition-all hover:shadow-xl cursor-pointer",
-        "focus-within:ring-2 focus-within:ring-primary"
-      )}
-      role="article"
-      aria-label={name}
-      tabIndex={0}
+    <CardsHero
+      image={mainImage}
+      brand={brand}
+      model={model}
+      year={yearFormatted}
+      fuel={fuel}
+      transmission={transmission}
+      mileage={mileageFormatted}
+      price={priceFormatted}
+      delay={delay}
       onClick={handleClick}
-      onKeyDown={handleKeyDown}
-    >
-      {/* Imagem PNG do veículo - posicionamento absoluto para transbordar */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 z-20" style={{ top: '-40%', width: '110%' }}>
-        <div className="relative mx-auto w-full aspect-[4/3] overflow-hidden bg-gray-100">
-          <img
-            src={mainImage}
-            alt={name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-          />
-        </div>
-      </div>
-
-      {/* Informações do veículo - parte branca */}
-      <div className="p-4 pt-[55%] pb-4 relative z-10 bg-white rounded-lg shadow-lg min-h-[280px] flex flex-col">
-        {/* Tag da marca abaixo da imagem */}
-        {marca && (
-          <div className="mb-3">
-            <span className="px-3 py-1.5 text-[10px] font-bold text-white uppercase tracking-wide rounded-full inline-block" style={{ backgroundColor: 'rgb(3, 54, 61)' }}>
-              {marca}
-            </span>
-          </div>
-        )}
-
-        {/* Informações do veículo - expandido */}
-        <div className="mb-4 space-y-1 flex-grow">
-          <div>
-            <h3 className="text-sm font-semibold text-gray-800 leading-snug break-words">
-              {displayModelo}
-            </h3>
-            <p className="text-xs text-gray-600 leading-tight font-medium mt-1">
-              {formatYear(year)}
-            </p>
-          </div>
-          {displayVersao && displayVersao !== displayModelo && (
-            <p className="text-xs text-gray-500 leading-tight line-clamp-1">
-              {displayVersao}
-            </p>
-          )}
-        </div>
-
-        {/* Preço e Botão - alinhados na mesma linha */}
-        <div className="mb-0 mt-auto pt-4 flex items-center justify-between gap-3">
-          <p
-            className="text-secondary text-xl font-bold leading-tight flex-1"
-            dangerouslySetInnerHTML={{
-              __html: valor_formatado || formatPrice(price),
-            }}
-          />
-          <button
-            onClick={handleButtonClick}
-            className={cn(
-              "w-9 h-9 rounded-full flex-shrink-0",
-              "text-white flex items-center justify-center",
-              "transition-all hover:scale-110",
-              "focus:outline-none focus:ring-2 focus:ring-offset-2",
-              "shadow-lg"
-            )}
-            style={{ 
-              backgroundColor: 'rgb(3, 54, 61)',
-              '--hover-bg': 'rgb(2, 40, 45)'
-            } as React.CSSProperties & { '--hover-bg': string }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgb(2, 40, 45)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgb(3, 54, 61)';
-            }}
-            aria-label={`Ver detalhes de ${name}`}
-          >
-            <Plus className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-    </div>
+    />
   );
 }
