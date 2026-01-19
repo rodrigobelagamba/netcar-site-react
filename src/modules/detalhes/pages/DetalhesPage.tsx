@@ -1036,7 +1036,7 @@ export function DetalhesPage() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: ANIMATION_DURATION.slow, ease: ANIMATION_EASING }}
-          className="hidden lg:block absolute right-0 z-0 overflow-hidden w-[50vw] lg:w-[55vw] xl:w-[60vw] max-w-[calc(100vw-50%)]"
+          className="hidden lg:block absolute right-0 z-0 overflow-hidden w-[60vw] max-w-[calc(100vw-40%)]"
           style={{
             top: '-15vh',
             height: 'calc(100vh + 15vh)',
