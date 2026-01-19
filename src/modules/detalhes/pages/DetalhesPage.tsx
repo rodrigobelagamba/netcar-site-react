@@ -1177,7 +1177,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {optionals
-                    .slice(0, showMoreOptionals ? optionals.length : 5)
+                    .slice(0, showMoreOptionals ? optionals.length : 15)
                     .map((optional: string, index: number) => (
                     <motion.div
                         key={index}
@@ -1194,7 +1194,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
                     ))}
                 </div>
 
-                {!showMoreOptionals && optionals.length > 5 && (
+                {!showMoreOptionals && optionals.length > 15 && (
                   <motion.button
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
