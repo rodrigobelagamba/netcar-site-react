@@ -47,15 +47,17 @@ export function ServicesSection() {
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ y: -12 }}
-            className="group relative h-[450px] md:h-[500px] rounded-[32px] overflow-hidden cursor-pointer shadow-2xl border border-white/20 block"
+            className="group relative h-[450px] md:h-[500px] rounded-[32px] overflow-hidden cursor-pointer shadow-2xl !border-0 block"
+            style={{ border: 'none' }}
           >
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#001524] via-[#001524]/10 to-transparent z-10 opacity-70" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#001524] via-[#001524]/10 to-transparent z-10 opacity-70 !border-0" style={{ border: 'none' }} />
             
             <img 
               src={service.image} 
-              className="absolute inset-0 w-full h-full object-cover object-[center_25%] group-hover:scale-105 transition-transform duration-[1.2s] ease-out" 
+              className="absolute inset-0 w-full h-full object-cover object-[center_25%] group-hover:scale-105 transition-transform duration-[1.2s] ease-out !border-0" 
               alt={service.title}
+              style={{ border: 'none' }}
               onError={(e) => {
                 // Fallback para uma cor sólida se a imagem não carregar
                 e.currentTarget.style.display = 'none';
@@ -66,19 +68,19 @@ export function ServicesSection() {
               }}
             />
             
-            <div className="absolute inset-0 z-20 p-8 md:p-10 flex flex-col justify-end items-start text-left pb-12">
-              <div className="transform transition-transform duration-500 translate-y-2 group-hover:translate-y-0">
-                <div className="inline-block px-6 py-2 rounded-full mb-3 shadow-lg" style={{ backgroundColor: '#5CD29D', color: '#00283C' }}>
-                  <h3 className="text-sm font-bold uppercase tracking-wider">{service.title}</h3>
+            <div className="absolute inset-0 z-20 p-8 md:p-10 flex flex-col justify-end items-start text-left pb-12 !border-0" style={{ border: 'none' }}>
+              <div className="transform transition-transform duration-500 translate-y-2 group-hover:translate-y-0 !border-0" style={{ border: 'none' }}>
+                <div className="inline-block px-6 py-2 rounded-full mb-3 shadow-lg !border-0" style={{ backgroundColor: '#5CD29D', color: '#00283C', border: 'none' }}>
+                  <h3 className="text-sm font-bold uppercase tracking-wider !border-0" style={{ border: 'none' }}>{service.title}</h3>
                 </div>
-                <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-[280px] font-medium">
+                <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-[280px] font-medium !border-0" style={{ border: 'none' }}>
                   {service.desc}
                 </p>
               </div>
               
-              <div className="mt-6 flex items-center gap-2 font-bold text-sm uppercase tracking-wider group/btn" style={{ color: '#5CD29D' }}>
-                <span>{service.cta}</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+              <div className="mt-6 flex items-center gap-2 font-bold text-sm uppercase tracking-wider group/btn !border-0" style={{ color: '#5CD29D', border: 'none' }}>
+                <span className="!border-0" style={{ border: 'none' }}>{service.cta}</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1 !border-0" style={{ border: 'none' }} />
               </div>
             </div>
           </motion.a>

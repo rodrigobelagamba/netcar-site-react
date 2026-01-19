@@ -19,6 +19,7 @@ import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
+import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { maskPlate } from "@/lib/slug";
@@ -684,43 +685,6 @@ function RelatedVehiclesSection({
   );
 }
 
-function EmbedSocialSection() {
-  useEffect(() => {
-    // EmbedSocial Hashtag script
-    if (!document.getElementById("EmbedSocialHashtagScript")) {
-      const script = document.createElement("script");
-      script.id = "EmbedSocialHashtagScript";
-      script.src = "https://embedsocial.com/cdn/ht.js";
-      document.head.appendChild(script);
-    }
-
-    // EmbedSocial Stories script
-    if (!document.getElementById("EmbedSocialStoriesScript")) {
-      const script = document.createElement("script");
-      script.id = "EmbedSocialStoriesScript";
-      script.src = "https://embedsocial.com/embedscript/st.js";
-      document.head.appendChild(script);
-    }
-  }, []);
-
-  return (
-    <section className="w-full py-8 sm:py-12 lg:py-16 bg-bg">
-      <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0 space-y-10">
-        {/* Hashtag Feed */}
-        <div
-          className="embedsocial-hashtag"
-          data-ref="811726996bfe08c76a3bd507a02fcebb16fc6ad1"
-        />
-
-        {/* Stories */}
-        <div
-          className="embedsocial-stories"
-          data-ref="b86f52e1790e82bd3b547af9c36814370d2526d7"
-        />
-      </div>
-    </section>
-  );
-}
 
 function PriceWithShimmer({ price }: { price: string }) {
   const [isHovered, setIsHovered] = useState(false);

@@ -7,6 +7,7 @@ import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/H
 import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
+import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
 import { useMemo } from "react";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
@@ -96,6 +97,8 @@ export function HomePage() {
       <ServicesSection />
 
       <DNASection />
+
+      <EmbedSocialSection />
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
         <Localizacao />
