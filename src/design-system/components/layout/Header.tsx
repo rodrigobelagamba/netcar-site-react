@@ -96,6 +96,8 @@ export function Header() {
           precoMax: undefined,
           anoMin: undefined,
           anoMax: undefined,
+          cambio: undefined,
+          cor: undefined,
         },
       });
     }

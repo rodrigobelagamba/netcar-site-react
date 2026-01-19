@@ -385,6 +385,8 @@ export function SobrePage() {
                     precoMax: undefined,
                     anoMin: undefined,
                     anoMax: undefined,
+                    cambio: undefined,
+                    cor: undefined,
                   }}
                   className={cn(
                     "px-5 py-3.5 rounded-[14px] font-semibold tracking-wide",

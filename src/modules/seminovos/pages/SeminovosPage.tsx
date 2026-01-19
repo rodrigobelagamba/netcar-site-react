@@ -54,6 +54,8 @@ export function SeminovosPage() {
         precoMax: precoMax || undefined,
         anoMin: anoMin || undefined,
         anoMax: anoMax || undefined,
+        cambio: undefined,
+        cor: undefined,
       },
     });
   };

@@ -131,6 +131,8 @@ const seminovosRoute = createRoute({
       precoMax: (search.precoMax as string) || undefined,
       anoMin: (search.anoMin as string) || undefined,
       anoMax: (search.anoMax as string) || undefined,
+      cambio: (search.cambio as string) || undefined,
+      cor: (search.cor as string) || undefined,
     };
   },
 });

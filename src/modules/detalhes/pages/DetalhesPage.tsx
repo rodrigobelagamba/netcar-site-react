@@ -11,7 +11,7 @@ import {
   CheckSquare,
   LucideIcon,
 } from "lucide-react";
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";

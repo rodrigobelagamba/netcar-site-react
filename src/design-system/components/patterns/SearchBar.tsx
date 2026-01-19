@@ -307,7 +307,6 @@ export function SearchBar() {
     const cambioKeywords = {
       'automático': 'AUTOMATICO',
       'automatico': 'AUTOMATICO',
-      'automático': 'AUTOMATICO',
       'manual': 'MANUAL',
     };
 
