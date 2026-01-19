@@ -215,10 +215,9 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
       params.append("opcionais", query.opcionais);
     }
     
-    // Paginação
-    if (query?.limit !== undefined) {
-      params.append("limit", String(query.limit));
-    }
+    // Paginação - padrão de 100 por página se não especificado
+    const limit = query?.limit !== undefined ? query.limit : 100;
+    params.append("limit", String(limit));
     
     if (query?.offset !== undefined) {
       params.append("offset", String(query.offset));
