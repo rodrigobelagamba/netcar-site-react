@@ -226,64 +226,76 @@ export function SobrePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="relative h-[320px] rounded-[20px] overflow-hidden border border-border bg-gradient-to-br from-[#F6F6F6] to-[#E8E8E8] cursor-pointer group"
-                onClick={handleVehicleClick}
+                className="relative"
               >
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={currentVehicle.id}
-                    initial={{ opacity: 0, x: direction > 0 ? 50 : -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: direction > 0 ? -50 : 50 }}
-                    transition={{ duration: 0.4 }}
-                    className="absolute inset-0 flex flex-col"
-                  >
-                    <div className="flex-1 flex items-center justify-center p-4">
-                      <img
-                        src={currentVehicle.image}
-                        alt={currentVehicle.model}
-                        className="max-h-[180px] w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform"
-                      />
+                <div className="bg-white rounded-[28px] shadow-lg overflow-hidden">
+                  <div className="relative flex items-center">
+                    {heroVehicles.length > 1 && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md hover:shadow-lg flex items-center justify-center transition-all z-10"
+                      >
+                        <ChevronLeft className="w-5 h-5 text-gray-500" />
+                      </button>
+                    )}
+                    
+                    <div 
+                      className="flex-1 bg-gradient-to-br from-[#F8F8F8] to-[#EEEEEE] rounded-[20px] mx-4 my-4 cursor-pointer group overflow-hidden"
+                      onClick={handleVehicleClick}
+                    >
+                      <AnimatePresence mode="wait" initial={false}>
+                        <motion.div
+                          key={currentVehicle.id}
+                          initial={{ opacity: 0, x: direction > 0 ? 30 : -30 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: direction > 0 ? -30 : 30 }}
+                          transition={{ duration: 0.35 }}
+                          className="flex items-center justify-center py-8 px-4"
+                        >
+                          <img
+                            src={currentVehicle.image}
+                            alt={currentVehicle.model}
+                            className="max-h-[160px] w-auto object-contain drop-shadow-xl group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </motion.div>
+                      </AnimatePresence>
                     </div>
-                    <div className="bg-white/90 backdrop-blur-sm p-4 border-t border-border">
-                      <div className="text-xs text-primary font-semibold uppercase tracking-wider">{currentVehicle.brand}</div>
-                      <div className="text-lg font-bold text-fg truncate">{currentVehicle.model}</div>
-                      <div className="flex items-center justify-between mt-1">
-                        <span className="text-sm text-muted-foreground">{formatYear(currentVehicle.year)}</span>
-                        <span className="text-primary font-bold">{formatPrice(currentVehicle.price)}</span>
+                    
+                    {heroVehicles.length > 1 && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md hover:shadow-lg flex items-center justify-center transition-all z-10"
+                      >
+                        <ChevronRight className="w-5 h-5 text-gray-500" />
+                      </button>
+                    )}
+                  </div>
+                  
+                  <div className="border-t border-gray-100 px-6 py-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs text-primary font-semibold uppercase tracking-wider mb-0.5">{currentVehicle.brand}</div>
+                        <div className="text-lg font-bold text-fg truncate">{currentVehicle.model}</div>
+                        <div className="text-sm text-muted-foreground mt-0.5">{formatYear(currentVehicle.year)}</div>
                       </div>
+                      {heroVehicles.length > 1 && (
+                        <div className="flex gap-1.5 items-center pt-2">
+                          {heroVehicles.map((_, idx) => (
+                            <button
+                              key={idx}
+                              onClick={(e) => { e.stopPropagation(); setDirection(idx > currentIndex ? 1 : -1); setCurrentIndex(idx); }}
+                              className={cn(
+                                "w-2 h-2 rounded-full transition-all",
+                                idx === currentIndex ? "bg-primary w-5" : "bg-gray-200 hover:bg-gray-300"
+                              )}
+                            />
+                          ))}
+                        </div>
+                      )}
+                      <div className="text-primary font-bold text-lg whitespace-nowrap">{formatPrice(currentVehicle.price)}</div>
                     </div>
-                  </motion.div>
-                </AnimatePresence>
-                
-                {heroVehicles.length > 1 && (
-                  <>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); prevSlide(); }}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-all z-10"
-                    >
-                      <ChevronLeft className="w-4 h-4 text-fg" />
-                    </button>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); nextSlide(); }}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-all z-10"
-                    >
-                      <ChevronRight className="w-4 h-4 text-fg" />
-                    </button>
-                    <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-                      {heroVehicles.map((_, idx) => (
-                        <button
-                          key={idx}
-                          onClick={(e) => { e.stopPropagation(); setDirection(idx > currentIndex ? 1 : -1); setCurrentIndex(idx); }}
-                          className={cn(
-                            "w-2 h-2 rounded-full transition-all",
-                            idx === currentIndex ? "bg-primary w-4" : "bg-gray-300 hover:bg-gray-400"
-                          )}
-                        />
-                      ))}
-                    </div>
-                  </>
-                )}
+                  </div>
+                </div>
               </motion.div>
             ) : (
               <motion.figure
