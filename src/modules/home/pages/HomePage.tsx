@@ -103,7 +103,10 @@ export function HomePage() {
       <SearchBar />
 
       <section className="container mx-auto px-4 py-12">
-        <h2 className="mb-8 text-3xl font-bold text-fg">Destaques</h2>
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-fg">Destaques</h2>
+          <p className="mt-2 text-gray-600 text-lg font-medium">Novidades da semana, olha só o que separamos para você!</p>
+        </div>
         <ProductList vehicles={vehiclesWithPhotos} isLoading={isLoading} />
       </section>
 

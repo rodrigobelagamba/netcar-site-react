@@ -152,7 +152,12 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="w-full bg-primary rounded-xl p-5 text-white shadow-md shadow-primary/10 hover:-translate-y-0.5 transition-transform duration-300 cursor-default mt-auto">
+            <a 
+              href="https://wa.me/5551995109169?text=Olá!%20Preciso%20de%20suporte%20Nethelp."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-primary rounded-xl p-5 text-white shadow-md shadow-primary/10 hover:-translate-y-0.5 transition-transform duration-300 cursor-pointer mt-auto block"
+            >
               <div className="flex items-center gap-2.5 mb-2">
                 <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
                   <Headphones className="w-5 h-5" />
@@ -162,7 +167,7 @@ export function Footer() {
               <p className="text-[13px] leading-snug opacity-95 font-medium">
                 Suporte exclusivo para veículos em período de garantia legal.
               </p>
-            </div>
+            </a>
           </div>
 
           {/* Coluna 2: Lojas */}
