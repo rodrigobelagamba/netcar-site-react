@@ -332,30 +332,23 @@ export function SobrePage() {
       </section>
 
       {/* Nossos números */}
-      <section className="py-20 md:py-28 overflow-hidden">
+      <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {counters && counters.length > 0 ? (
               counters.slice(0, 4).map((counter, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group"
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="text-center md:text-left"
                 >
-                  <div className="relative">
-                    <span className="absolute -top-4 -left-2 text-[120px] md:text-[160px] font-black text-gray-100 leading-none select-none pointer-events-none">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    <div className="relative z-10 pt-12 md:pt-16">
-                      <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                        {counter.valor.toLocaleString("pt-BR")}
-                      </div>
-                      <div className="text-muted-foreground text-sm">{counter.titulo}</div>
-                    </div>
+                  <div className="text-4xl md:text-5xl font-bold text-fg mb-1">
+                    {counter.valor.toLocaleString("pt-BR")}
                   </div>
+                  <div className="text-primary text-sm font-medium">{counter.titulo}</div>
                 </motion.div>
               ))
             ) : (
@@ -368,21 +361,14 @@ export function SobrePage() {
                 ].map((item, index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className="group"
+                    transition={{ duration: 0.5, delay: index * 0.08 }}
+                    className="text-center md:text-left"
                   >
-                    <div className="relative">
-                      <span className="absolute -top-4 -left-2 text-[120px] md:text-[160px] font-black text-gray-100 leading-none select-none pointer-events-none">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                      <div className="relative z-10 pt-12 md:pt-16">
-                        <div className="text-4xl md:text-5xl font-bold text-primary mb-2">{item.value}</div>
-                        <div className="text-muted-foreground text-sm">{item.label}</div>
-                      </div>
-                    </div>
+                    <div className="text-4xl md:text-5xl font-bold text-fg mb-1">{item.value}</div>
+                    <div className="text-primary text-sm font-medium">{item.label}</div>
                   </motion.div>
                 ))}
               </>
