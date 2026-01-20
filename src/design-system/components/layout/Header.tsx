@@ -114,7 +114,7 @@ export function Header() {
   const menuLinks = [
     { to: "/sobre", label: "Sobre" },
     { to: "/seminovos", label: "Showroom" },
-    { to: "/blog", label: "Blog" },
+    { to: "/blog", label: "Atualidades" },
     { to: "/contato", label: "Contato" },
     { to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9", label: "Localização", external: true },
   ];
