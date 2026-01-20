@@ -17,11 +17,26 @@ export function EmbedSocialSection() {
       script.src = "https://embedsocial.com/embedscript/st.js";
       document.head.appendChild(script);
     }
+
+    // EmbedSocial Reviews script
+    if (!document.getElementById("EmbedSocialReviewsScript")) {
+      const script = document.createElement("script");
+      script.id = "EmbedSocialReviewsScript";
+      script.src = "https://embedsocial.com/cdn/rv.js";
+      document.head.appendChild(script);
+    }
   }, []);
 
   return (
     <section className="w-full py-8 sm:py-12 lg:py-16 bg-bg !border-0" style={{ border: 'none' }}>
       <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0 space-y-10 !border-0" style={{ border: 'none' }}>
+        {/* Google Reviews / Depoimentos */}
+        <div
+          className="embedsocial-reviews !border-0"
+          data-ref="811726996bfe08c76a3bd507a02fcebb16fc6ad1"
+          style={{ border: 'none' }}
+        />
+
         {/* Hashtag Feed */}
         <div
           className="embedsocial-hashtag !border-0"
