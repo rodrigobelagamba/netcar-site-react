@@ -134,10 +134,10 @@ export function AutocompleteSelect({
       <div className="relative group">
         <div
           className={cn(
-            "w-full rounded-lg border border-border bg-bg px-4 py-2.5 pr-10",
+            "w-full border-0 border-b border-gray-200 bg-transparent px-0 py-2 pr-6",
             "text-sm text-fg transition-all duration-200",
-            "hover:border-primary/50 hover:bg-bg/50",
-            "focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary",
+            "hover:border-primary/50",
+            "focus-within:border-primary",
             "cursor-text flex items-center"
           )}
           onClick={() => {

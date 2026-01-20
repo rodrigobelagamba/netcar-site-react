@@ -255,7 +255,7 @@ export function SeminovosPage() {
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Filtros em Card Minimalista */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-8">
+        <div className="bg-white rounded-2xl shadow-sm p-5 mb-8">
           <div className="flex flex-wrap items-end gap-6">
             {/* Marca */}
             <div className="flex-1 min-w-[140px]">
@@ -301,7 +301,7 @@ export function SeminovosPage() {
                 value={precoMin}
                 onChange={(e) => setPrecoMin(e.target.value)}
                 placeholder={minPrice > 0 ? `R$ ${minPrice.toLocaleString('pt-BR')}` : "R$ 0"}
-                className="w-full border border-gray-200 rounded-lg bg-white px-3 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                className="w-full border-0 border-b border-gray-200 rounded-none bg-transparent px-0 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-primary"
               />
             </div>
 
@@ -313,7 +313,7 @@ export function SeminovosPage() {
                 value={precoMax}
                 onChange={(e) => setPrecoMax(e.target.value)}
                 placeholder={maxPrice > 0 ? `R$ ${maxPrice.toLocaleString('pt-BR')}` : "R$ 500.000"}
-                className="w-full border border-gray-200 rounded-lg bg-white px-3 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                className="w-full border-0 border-b border-gray-200 rounded-none bg-transparent px-0 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-primary"
               />
             </div>
 
@@ -341,7 +341,7 @@ export function SeminovosPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="appearance-none rounded-lg border border-gray-200 bg-white px-4 py-2 pr-8 text-sm text-gray-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                className="appearance-none rounded-lg border-0 bg-gray-50 px-4 py-2 pr-8 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-primary/20"
               >
                 <option value="az">A &gt; Z</option>
                 <option value="za">Z &gt; A</option>
