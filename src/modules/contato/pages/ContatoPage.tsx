@@ -12,8 +12,7 @@ import {
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { 
   usePhoneQuery, 
-  useWhatsAppQuery,
-  useScheduleQuery
+  useWhatsAppQuery
 } from "@/api";
 
 export function ContatoPage() {
@@ -32,7 +31,6 @@ export function ContatoPage() {
 
   const { data: phoneLoja1 } = usePhoneQuery("Loja1");
   const { data: whatsapp } = useWhatsAppQuery();
-  const { data: schedule } = useScheduleQuery();
 
   const getWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
@@ -265,11 +263,11 @@ export function ContatoPage() {
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-500">Segunda a Sexta</span>
-                  <span className="font-medium text-fg">{schedule?.semana || "8h às 18h30"}</span>
+                  <span className="font-bold text-fg">8h às 18h30</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-500">Sábados</span>
-                  <span className="font-medium text-fg">{schedule?.sabado || "9h às 13h30"}</span>
+                  <span className="font-bold text-fg">9h às 13h30</span>
                 </div>
                 <p className="text-xs text-gray-400 pt-2 flex items-center gap-1">
                   <ArrowRight className="w-3 h-3" />
