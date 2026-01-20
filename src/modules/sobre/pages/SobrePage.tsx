@@ -365,7 +365,7 @@ export function SobrePage() {
       {/* Nossos números */}
       <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {counters && counters.length > 0 ? (
               counters.slice(0, 4).map((counter, index) => (
                 <motion.div
@@ -374,7 +374,7 @@ export function SobrePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.08 }}
-                  className="text-center md:text-left"
+                  className="p-6 rounded-2xl border border-gray-200 bg-white hover:border-primary/30 hover:shadow-md transition-all text-center md:text-left"
                 >
                   <div className="text-4xl md:text-5xl font-bold text-fg mb-1">
                     {counter.valor.toLocaleString("pt-BR")}
@@ -396,7 +396,7 @@ export function SobrePage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.08 }}
-                    className="text-center md:text-left"
+                    className="p-6 rounded-2xl border border-gray-200 bg-white hover:border-primary/30 hover:shadow-md transition-all text-center md:text-left"
                   >
                     <div className="text-4xl md:text-5xl font-bold text-fg mb-1">{item.value}</div>
                     <div className="text-primary text-sm font-medium">{item.label}</div>
@@ -497,14 +497,14 @@ export function SobrePage() {
       {/* Linha do tempo + Valores */}
       <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-stretch">
             {/* Nossa história */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="h-full"
+              className="h-full p-6 md:p-8 rounded-2xl border border-gray-200 bg-white hover:border-primary/30 hover:shadow-md transition-all"
             >
               <div className="mb-6">
                 <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-2 block">Trajetória</span>
@@ -520,7 +520,7 @@ export function SobrePage() {
                   {timelineItems.map((item, index) => (
                     <motion.div 
                       key={index} 
-                      className="group relative py-5 border-b border-gray-100 last:border-0"
+                      className="group relative py-4 border-b border-gray-100 last:border-0"
                       initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -545,7 +545,7 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="h-full"
+              className="h-full p-6 md:p-8 rounded-2xl border border-gray-200 bg-white hover:border-primary/30 hover:shadow-md transition-all"
             >
               <div className="mb-6">
                 <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-2 block">Princípios</span>
@@ -569,7 +569,7 @@ export function SobrePage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="group py-5 border-b border-gray-100 last:border-0"
+                      className="group py-4 border-b border-gray-100 last:border-0"
                     >
                       <div className="flex items-start gap-4">
                         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
