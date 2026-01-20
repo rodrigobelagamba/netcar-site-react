@@ -482,52 +482,42 @@ export function SobrePage() {
       {/* Linha do tempo + Valores */}
       <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-stretch">
             {/* Nossa história */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="relative bg-white rounded-[24px] p-8 md:p-10 shadow-sm h-full overflow-hidden"
+              className="h-full"
             >
-              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent" />
-              <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Trajetória</span>
-              <h2 className="text-2xl md:text-[28px] font-bold mb-4">Nossa história</h2>
+              <div className="mb-6">
+                <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-2 block">Trajetória</span>
+                <h2 className="text-2xl md:text-[28px] font-bold">Nossa história</h2>
+              </div>
               {historia?.conteudo ? (
                 <div
-                  className="text-muted-foreground"
+                  className="text-muted-foreground leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: historia.conteudo }}
                 />
               ) : (
-                <div className="relative pl-6">
-                  <div className="absolute top-0 bottom-0 left-2 w-0.5 bg-gradient-to-b from-primary to-transparent opacity-40" />
+                <div className="space-y-0">
                   {timelineItems.map((item, index) => (
                     <motion.div 
                       key={index} 
-                      className="relative pl-4 pb-4 transition-transform hover:translate-x-1"
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
+                      className="group relative py-5 border-b border-gray-100 last:border-0"
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                     >
-                      <motion.div 
-                        className="absolute left-[-2px] top-5 w-2.5 h-2.5 rounded-full bg-primary"
-                        animate={{
-                          boxShadow: [
-                            "0 0 0 0 rgba(108, 196, 202, 0.7)",
-                            "0 0 0 8px rgba(108, 196, 202, 0)",
-                            "0 0 0 0 rgba(108, 196, 202, 0)",
-                          ],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          delay: index * 0.5,
-                        }}
-                      />
-                      <h4 className="font-semibold mb-1">{item.year} — {item.title}</h4>
-                      <p className="text-muted-foreground text-sm">{item.description}</p>
+                      <div className="flex items-start gap-4">
+                        <span className="text-primary font-bold text-lg min-w-[60px]">{item.year}</span>
+                        <div>
+                          <h4 className="font-semibold text-fg group-hover:text-primary transition-colors">{item.title}</h4>
+                          <p className="text-muted-foreground text-sm mt-1">{item.description}</p>
+                        </div>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -540,18 +530,19 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="relative bg-white rounded-[24px] p-8 md:p-10 shadow-sm h-full overflow-hidden"
+              className="h-full"
             >
-              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent" />
-              <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Princípios</span>
-              <h2 className="text-2xl md:text-[28px] font-bold mb-4">Nossos valores</h2>
+              <div className="mb-6">
+                <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-2 block">Princípios</span>
+                <h2 className="text-2xl md:text-[28px] font-bold">Nossos valores</h2>
+              </div>
               {valores?.conteudo ? (
                 <div
-                  className="text-muted-foreground"
+                  className="text-muted-foreground leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: valores.conteudo }}
                 />
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-0">
                   {[
                     { icon: Shield, title: "Transparência", description: "Informação clara em cada etapa da compra." },
                     { icon: CheckCircle2, title: "Procedência", description: "Histórico e documentação verificados." },
@@ -559,16 +550,20 @@ export function SobrePage() {
                   ].map((valor, index) => (
                     <motion.div
                       key={index}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="flex items-start gap-4 py-4 border-b border-gray-100 last:border-0 hover:pl-2 transition-all group"
+                      className="group py-5 border-b border-gray-100 last:border-0"
                     >
-                      <valor.icon className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="font-semibold mb-0.5 group-hover:text-primary transition-colors">{valor.title}</h4>
-                        <p className="text-muted-foreground text-sm">{valor.description}</p>
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <valor.icon className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-fg group-hover:text-primary transition-colors">{valor.title}</h4>
+                          <p className="text-muted-foreground text-sm mt-1">{valor.description}</p>
+                        </div>
                       </div>
                     </motion.div>
                   ))}
