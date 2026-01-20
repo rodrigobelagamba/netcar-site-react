@@ -408,9 +408,9 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-all group"
+              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group"
             >
-              <div className="relative h-[220px] overflow-hidden">
+              <div className="relative h-[220px] rounded-t-[20px] overflow-hidden">
                 <img
                   src={loja1Image}
                   alt="Fachada da Loja 1"
@@ -419,16 +419,16 @@ export function SobrePage() {
                     e.currentTarget.src = "/images/loja1.jpg";
                   }}
                 />
-                <div className="absolute top-3 right-3 w-24 h-16 rounded-lg overflow-hidden shadow-lg border-2 border-white">
-                  <img
-                    src={loja2Image}
-                    alt="Miniatura Loja 2"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = "/images/loja2.jpg";
-                    }}
-                  />
-                </div>
+              </div>
+              <div className="absolute -top-4 -right-4 w-28 h-20 rounded-xl overflow-hidden shadow-xl border-3 border-white z-10 rotate-3 hover:rotate-0 transition-transform duration-300">
+                <img
+                  src={loja2Image}
+                  alt="Miniatura Loja 2"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/loja2.jpg";
+                  }}
+                />
               </div>
               <div className="p-6">
                 <h3 className="text-lg font-bold text-fg mb-1">Loja 1 — Centro, Esteio/RS</h3>
@@ -445,9 +445,9 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-all group"
+              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group"
             >
-              <div className="relative h-[220px] overflow-hidden">
+              <div className="relative h-[220px] rounded-t-[20px] overflow-hidden">
                 <img
                   src={loja2Image}
                   alt="Fachada da Loja 2"
@@ -456,16 +456,16 @@ export function SobrePage() {
                     e.currentTarget.src = "/images/loja2.jpg";
                   }}
                 />
-                <div className="absolute top-3 right-3 w-24 h-16 rounded-lg overflow-hidden shadow-lg border-2 border-white">
-                  <img
-                    src={loja1Image}
-                    alt="Miniatura Loja 1"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = "/images/loja1.jpg";
-                    }}
-                  />
-                </div>
+              </div>
+              <div className="absolute -top-4 -right-4 w-28 h-20 rounded-xl overflow-hidden shadow-xl border-3 border-white z-10 rotate-3 hover:rotate-0 transition-transform duration-300">
+                <img
+                  src={loja1Image}
+                  alt="Miniatura Loja 1"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/loja1.jpg";
+                  }}
+                />
               </div>
               <div className="p-6">
                 <h3 className="text-lg font-bold text-fg mb-1">Loja 2 — Centro, Esteio/RS</h3>
