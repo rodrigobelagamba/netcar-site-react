@@ -420,7 +420,7 @@ export function SobrePage() {
                   }}
                 />
               </div>
-              <div className="absolute -top-3 -right-3 w-32 h-24 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
+              <div className="absolute -top-4 -right-4 w-40 h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <img
                   src={loja2Image}
                   alt="Miniatura Loja 2"
@@ -457,7 +457,7 @@ export function SobrePage() {
                   }}
                 />
               </div>
-              <div className="absolute -top-3 -right-3 w-32 h-24 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
+              <div className="absolute -top-4 -right-4 w-40 h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <img
                   src={loja1Image}
                   alt="Miniatura Loja 1"
