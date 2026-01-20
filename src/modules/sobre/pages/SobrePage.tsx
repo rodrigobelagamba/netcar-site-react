@@ -8,7 +8,7 @@ import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useState, useEffect, useMemo } from "react";
 import { formatPrice, formatYear } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle2, Shield, Award, Clock, Users, MapPin, Phone } from "lucide-react";
 
 export function SobrePage() {
   const navigate = useNavigate();
@@ -107,8 +107,6 @@ export function SobrePage() {
 
   const loja1Image = getFachadaImage(bannersLoja1) || "/images/loja1.jpg";
   const loja2Image = getFachadaImage(bannersLoja2) || "/images/loja2.jpg";
-  const loja1DetailImage = bannersLoja1?.[1]?.imagem || loja1Image;
-  const loja2DetailImage = bannersLoja2?.[1]?.imagem || loja2Image;
 
   // Formata endereço
   const formatAddress = (address?: { endereco?: string; cidade?: string; estado?: string }) => {
@@ -131,13 +129,6 @@ export function SobrePage() {
     { year: "2024", title: "Segunda loja", description: "Expansão do showroom e atendimento em dois endereços." },
   ];
 
-  // Valores (pode vir da API ou ser estático)
-  const valoresList = valores?.conteudo ? [] : [
-    { title: "Transparência", description: "Informação clara em cada etapa da compra." },
-    { title: "Procedência", description: "Histórico e documentação verificados." },
-    { title: "Experiência", description: "Desde 1997 no mercado de seminovos." },
-  ];
-
   // Equipe (mock - pode vir da API futuramente)
   const team = [
     { name: "Marcelo Marchis", role: "Gestão & Relacionamento" },
@@ -147,44 +138,83 @@ export function SobrePage() {
   ];
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full">
+    <main className="flex-1 overflow-x-hidden max-w-full bg-gradient-to-b from-white via-gray-50/50 to-white">
       {/* Hero Section */}
-      <header className="relative py-20 text-center overflow-hidden">
-        <div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-primary/10 via-transparent to-transparent" />
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-primary text-xs font-semibold tracking-widest uppercase mb-2">
-            Sobre a Netcar
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-[52px] font-bold leading-tight mb-4 transition-colors hover:text-primary">
-            Desde 1997, curadoria e procedência em seminovos.
-          </h1>
-          <p className="max-w-[760px] mx-auto text-muted-foreground text-base md:text-lg">
-            Há quase três décadas selecionando carros com histórico, qualidade e transparência. Nosso foco é um <strong>estoque qualificado</strong>, com procedência do RS, checklist técnico e entrega sem surpresa.
-          </p>
+      <header className="relative py-24 md:py-32 text-center overflow-hidden">
+        <div className="absolute inset-0 -z-10 pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-primary/8 rounded-full blur-3xl" />
         </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="max-w-[1200px] mx-auto px-6"
+        >
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-semibold tracking-widest uppercase mb-6"
+          >
+            <Award className="w-4 h-4" />
+            Sobre a Netcar
+          </motion.div>
+          <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight mb-6 bg-gradient-to-r from-fg via-fg to-primary bg-clip-text">
+            Desde 1997, curadoria e<br className="hidden md:block" /> procedência em seminovos.
+          </h1>
+          <p className="max-w-[680px] mx-auto text-muted-foreground text-lg md:text-xl leading-relaxed">
+            Há quase três décadas selecionando carros com histórico, qualidade e transparência.
+          </p>
+          <div className="flex flex-wrap justify-center gap-6 mt-10">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <CheckCircle2 className="w-5 h-5 text-primary" />
+              <span>Procedência comprovada</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <CheckCircle2 className="w-5 h-5 text-primary" />
+              <span>Checklist técnico</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <CheckCircle2 className="w-5 h-5 text-primary" />
+              <span>Entrega sem surpresa</span>
+            </div>
+          </div>
+        </motion.div>
       </header>
 
       {/* Nossa essência */}
-      <section className="py-14">
+      <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] gap-7 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] gap-8 items-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
+              className="bg-white border border-gray-100 rounded-[28px] p-8 md:p-10 shadow-lg hover:shadow-xl transition-all"
             >
-              <h2 className="text-2xl md:text-[28px] font-bold mb-2">Nossa essência</h2>
-              <p className="text-muted-foreground mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
+                <Shield className="w-3.5 h-3.5" />
+                Essência
+              </div>
+              <h2 className="text-2xl md:text-[30px] font-bold mb-4 leading-tight">Nossa essência</h2>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
                 {essencia?.conteudo || "Selecionamos cada veículo com critérios objetivos de quilometragem, histórico e procedência. O preparo e a transparência fazem parte do processo, para você comprar certo."}
               </p>
-              <ul className="list-disc pl-5 text-muted-foreground space-y-1">
-                <li>Curadoria de estoque com <strong>procedência comprovada</strong></li>
-                <li>Checklist técnico e histórico de manutenção</li>
-                <li>Laudos e documentação quando aplicável</li>
-                <li>Atendimento próximo e experiente</li>
-              </ul>
+              <div className="space-y-3">
+                {[
+                  { icon: CheckCircle2, text: "Curadoria de estoque com procedência comprovada" },
+                  { icon: CheckCircle2, text: "Checklist técnico e histórico de manutenção" },
+                  { icon: CheckCircle2, text: "Laudos e documentação quando aplicável" },
+                  { icon: CheckCircle2, text: "Atendimento próximo e experiente" },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-3 group">
+                    <item.icon className="w-5 h-5 text-primary flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                    <span className="text-muted-foreground text-sm">{item.text}</span>
+                  </div>
+                ))}
+              </div>
             </motion.div>
             {currentVehicle ? (
               <motion.div
@@ -271,63 +301,78 @@ export function SobrePage() {
       </section>
 
       {/* Nossos números */}
-      <section className="py-14">
+      <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm"
+            className="relative bg-gradient-to-br from-[#00283C] to-[#004560] rounded-[32px] p-8 md:p-12 shadow-2xl overflow-hidden"
           >
-            <h2 className="text-2xl md:text-[26px] font-bold mb-1">Nossos números</h2>
-            <p className="text-muted-foreground mb-5">Resultados consistentes construídos com relacionamento e transparência.</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-7">
-              {counters && counters.length > 0 ? (
-                counters.slice(0, 4).map((counter, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-surface border border-border rounded-[20px] p-7 text-center shadow-sm hover:shadow-md transition-all hover:-translate-y-1 hover:scale-[1.01]"
-                  >
-                    <div className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-2">
-                      {counter.valor.toLocaleString("pt-BR")}
-                    </div>
-                    <div className="text-muted-foreground text-sm">{counter.titulo}</div>
-                  </motion.div>
-                ))
-              ) : (
-                <>
-                  <div className="bg-surface border border-border rounded-[20px] p-7 text-center shadow-sm">
-                    <div className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-2">1997</div>
-                    <div className="text-muted-foreground text-sm">Desde</div>
-                  </div>
-                  <div className="bg-surface border border-border rounded-[20px] p-7 text-center shadow-sm">
-                    <div className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-2">+2.500</div>
-                    <div className="text-muted-foreground text-sm">Clientes atendidos</div>
-                  </div>
-                  <div className="bg-surface border border-border rounded-[20px] p-7 text-center shadow-sm">
-                    <div className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-2">2</div>
-                    <div className="text-muted-foreground text-sm">Lojas em Esteio/RS</div>
-                  </div>
-                  <div className="bg-surface border border-border rounded-[20px] p-7 text-center shadow-sm">
-                    <div className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-2">100%</div>
-                    <div className="text-muted-foreground text-sm">Estoque com procedência</div>
-                  </div>
-                </>
-              )}
+            <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-primary/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-white/5 rounded-full blur-2xl" />
+            <div className="relative z-10">
+              <div className="text-center mb-10">
+                <h2 className="text-2xl md:text-[32px] font-bold mb-2 text-white">Nossos números</h2>
+                <p className="text-white/70 max-w-lg mx-auto">Resultados consistentes construídos com relacionamento e transparência.</p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                {counters && counters.length > 0 ? (
+                  counters.slice(0, 4).map((counter, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-[20px] p-6 text-center hover:bg-white/15 transition-all hover:-translate-y-1"
+                    >
+                      <div className="text-3xl md:text-4xl lg:text-[44px] font-bold mb-2 text-white">
+                        {counter.valor.toLocaleString("pt-BR")}
+                      </div>
+                      <div className="text-white/60 text-sm">{counter.titulo}</div>
+                    </motion.div>
+                  ))
+                ) : (
+                  <>
+                    {[
+                      { value: "1997", label: "Desde" },
+                      { value: "+2.500", label: "Clientes atendidos" },
+                      { value: "2", label: "Lojas em Esteio/RS" },
+                      { value: "100%", label: "Estoque com procedência" },
+                    ].map((item, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-[20px] p-6 text-center hover:bg-white/15 transition-all hover:-translate-y-1"
+                      >
+                        <div className="text-3xl md:text-4xl lg:text-[44px] font-bold mb-2 text-white">{item.value}</div>
+                        <div className="text-white/60 text-sm">{item.label}</div>
+                      </motion.div>
+                    ))}
+                  </>
+                )}
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Nossas lojas */}
-      <section className="py-14">
+      <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <h2 className="text-2xl md:text-[26px] font-bold mb-4">Nossas lojas</h2>
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
+              <MapPin className="w-3.5 h-3.5" />
+              Localização
+            </div>
+            <h2 className="text-2xl md:text-[32px] font-bold mb-2">Nossas lojas</h2>
+            <p className="text-muted-foreground max-w-lg mx-auto">Dois endereços estratégicos em Esteio/RS para melhor atendê-lo.</p>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
             {/* Loja 1 */}
             <motion.article
@@ -335,34 +380,33 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="relative bg-surface border border-border rounded-[20px] p-6 shadow-md hover:shadow-lg transition-all hover:-translate-y-1 overflow-visible"
+              className="relative bg-white border border-gray-100 rounded-[24px] overflow-hidden shadow-lg hover:shadow-xl transition-all group"
             >
-              <div className="relative rounded-[14px] overflow-hidden h-[260px] mb-4">
+              <div className="relative h-[240px] overflow-hidden">
                 <img
                   src={loja1Image}
                   alt="Fachada da Loja 1"
-                  className="w-full h-full object-cover transition-transform hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja1.jpg";
                   }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-6 right-6">
+                  <span className="inline-block px-3 py-1 bg-primary text-white text-xs font-bold rounded-full mb-2">Matriz</span>
+                  <h3 className="text-xl font-bold text-white">Loja 1 — Centro</h3>
+                </div>
               </div>
-              <div className="hidden lg:block absolute top-[-50px] right-6 w-[42%] max-w-[200px] h-[160px] rounded-[18px] overflow-hidden border border-border shadow-sm transition-transform hover:-translate-y-1 hover:scale-105">
-                <img
-                  src={loja1DetailImage}
-                  alt="Detalhe da Loja 1"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = loja1Image;
-                  }}
-                />
-              </div>
-              <div className="mt-4 space-y-1">
-                <h3 className="text-lg font-semibold">Loja 1 — Centro, Esteio/RS</h3>
-                <p className="text-muted-foreground text-sm">
-                  {formatAddress(addressLoja1) || "Av. Presidente Vargas, 740"} — {formatPhone(phoneLoja1) || "(51) 3473‑7900"}
-                </p>
-                <p className="text-muted-foreground text-sm">Showroom amplo, atendimento personalizado e test‑drive.</p>
+              <div className="p-6 space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground text-sm">{formatAddress(addressLoja1) || "Av. Presidente Vargas, 740, Esteio/RS"}</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground text-sm">{formatPhone(phoneLoja1) || "(51) 3473‑7900"}</span>
+                </div>
+                <p className="text-muted-foreground text-sm pt-2 border-t border-gray-100">Showroom amplo, atendimento personalizado e test‑drive.</p>
               </div>
             </motion.article>
 
@@ -372,34 +416,33 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="relative bg-surface border border-border rounded-[20px] p-6 shadow-md hover:shadow-lg transition-all hover:-translate-y-1 overflow-visible"
+              className="relative bg-white border border-gray-100 rounded-[24px] overflow-hidden shadow-lg hover:shadow-xl transition-all group"
             >
-              <div className="relative rounded-[14px] overflow-hidden h-[260px] mb-4">
+              <div className="relative h-[240px] overflow-hidden">
                 <img
                   src={loja2Image}
                   alt="Fachada da Loja 2"
-                  className="w-full h-full object-cover transition-transform hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja2.jpg";
                   }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-6 right-6">
+                  <span className="inline-block px-3 py-1 bg-fg text-white text-xs font-bold rounded-full mb-2">Filial</span>
+                  <h3 className="text-xl font-bold text-white">Loja 2 — Centro</h3>
+                </div>
               </div>
-              <div className="hidden lg:block absolute top-[-50px] right-6 w-[42%] max-w-[200px] h-[160px] rounded-[18px] overflow-hidden border border-border shadow-sm transition-transform hover:-translate-y-1 hover:scale-105">
-                <img
-                  src={loja2DetailImage}
-                  alt="Detalhe da Loja 2"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = loja2Image;
-                  }}
-                />
-              </div>
-              <div className="mt-4 space-y-1">
-                <h3 className="text-lg font-semibold">Loja 2 — Centro, Esteio/RS</h3>
-                <p className="text-muted-foreground text-sm">
-                  {formatAddress(addressLoja2) || "Av. Presidente Vargas, 1106"} — {formatPhone(phoneLoja2) || "(51) 3033‑3900"}
-                </p>
-                <p className="text-muted-foreground text-sm">Seleção de seminovos e condições especiais de financiamento.</p>
+              <div className="p-6 space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground text-sm">{formatAddress(addressLoja2) || "Av. Presidente Vargas, 1106, Esteio/RS"}</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground text-sm">{formatPhone(phoneLoja2) || "(51) 3033‑3900"}</span>
+                </div>
+                <p className="text-muted-foreground text-sm pt-2 border-t border-gray-100">Seleção de seminovos e condições especiais de financiamento.</p>
               </div>
             </motion.article>
           </div>
@@ -407,7 +450,7 @@ export function SobrePage() {
       </section>
 
       {/* Linha do tempo + Valores */}
-      <section className="py-14">
+      <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-stretch">
             {/* Nossa história */}
@@ -416,9 +459,13 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm h-full"
+              className="bg-white border border-gray-100 rounded-[28px] p-8 md:p-10 shadow-lg h-full"
             >
-              <h2 className="text-2xl md:text-[26px] font-bold mb-2">Nossa história</h2>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
+                <Clock className="w-3.5 h-3.5" />
+                Trajetória
+              </div>
+              <h2 className="text-2xl md:text-[28px] font-bold mb-4">Nossa história</h2>
               {historia?.conteudo ? (
                 <div
                   className="text-muted-foreground"
@@ -465,24 +512,41 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm h-full"
+              className="bg-white border border-gray-100 rounded-[28px] p-8 md:p-10 shadow-lg h-full"
             >
-              <h2 className="text-2xl md:text-[26px] font-bold mb-2">Nossos valores</h2>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
+                <Award className="w-3.5 h-3.5" />
+                Princípios
+              </div>
+              <h2 className="text-2xl md:text-[28px] font-bold mb-4">Nossos valores</h2>
               {valores?.conteudo ? (
                 <div
                   className="text-muted-foreground"
                   dangerouslySetInnerHTML={{ __html: valores.conteudo }}
                 />
               ) : (
-                <div className="grid grid-cols-1 gap-4">
-                  {valoresList.map((valor, index) => (
-                    <div
+                <div className="space-y-4">
+                  {[
+                    { icon: Shield, title: "Transparência", description: "Informação clara em cada etapa da compra." },
+                    { icon: CheckCircle2, title: "Procedência", description: "Histórico e documentação verificados." },
+                    { icon: Award, title: "Experiência", description: "Desde 1997 no mercado de seminovos." },
+                  ].map((valor, index) => (
+                    <motion.div
                       key={index}
-                      className="bg-surface border border-border rounded-[20px] p-6 transition-all hover:border-primary/35 hover:bg-gradient-to-b hover:from-surface hover:to-surface-alt hover:-translate-y-1"
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="flex items-start gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-primary/5 hover:border-primary/20 transition-all group"
                     >
-                      <h4 className="font-semibold mb-1">{valor.title}</h4>
-                      <p className="text-muted-foreground text-sm">{valor.description}</p>
-                    </div>
+                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                        <valor.icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-1">{valor.title}</h4>
+                        <p className="text-muted-foreground text-sm">{valor.description}</p>
+                      </div>
+                    </motion.div>
                   ))}
                 </div>
               )}
@@ -492,10 +556,16 @@ export function SobrePage() {
       </section>
 
       {/* Equipe */}
-      <section className="py-14">
+      <section className="py-16 md:py-20 bg-gray-50/50">
         <div className="max-w-[1200px] mx-auto px-6">
-          <h2 className="text-2xl md:text-[26px] font-bold mb-2">Nossa equipe</h2>
-          <p className="text-muted-foreground mb-5">Profissionais que somam experiência, cuidado e atenção a cada detalhe.</p>
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
+              <Users className="w-3.5 h-3.5" />
+              Time
+            </div>
+            <h2 className="text-2xl md:text-[32px] font-bold mb-2">Nossa equipe</h2>
+            <p className="text-muted-foreground max-w-lg mx-auto">Profissionais que somam experiência, cuidado e atenção a cada detalhe.</p>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {team.map((person, index) => (
               <motion.div
@@ -504,10 +574,12 @@ export function SobrePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex flex-col items-center gap-2.5 p-5 border border-border rounded-[20px] bg-surface transition-all hover:-translate-y-1 hover:shadow-md"
+                className="flex flex-col items-center gap-3 p-6 border border-gray-100 rounded-[24px] bg-white shadow-md transition-all hover:-translate-y-2 hover:shadow-xl group"
               >
-                <div className="w-20 h-20 rounded-full bg-muted border border-border transition-all hover:shadow-[0_0_0_6px_rgba(31,111,235,0.1)] hover:scale-105" />
-                <h5 className="font-semibold text-center">{person.name}</h5>
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/20 flex items-center justify-center transition-all group-hover:scale-110 group-hover:border-primary/40">
+                  <Users className="w-8 h-8 text-primary/60" />
+                </div>
+                <h5 className="font-bold text-center text-fg">{person.name}</h5>
                 <p className="text-muted-foreground text-sm text-center">{person.role}</p>
               </motion.div>
             ))}
@@ -516,21 +588,21 @@ export function SobrePage() {
       </section>
 
       {/* CTA Estoque */}
-      <section className="py-14">
+      <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative bg-gradient-to-br from-surface via-surface to-surface-alt border border-border rounded-[28px] text-center p-12 shadow-md hover:shadow-lg transition-all hover:-translate-y-1 overflow-hidden"
+            className="relative bg-gradient-to-br from-[#00283C] to-[#004560] rounded-[32px] text-center p-10 md:p-16 shadow-2xl overflow-hidden"
           >
-            <div className="absolute top-0 left-0 w-[400px] h-[200px] bg-primary/12 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute bottom-0 right-0 w-[400px] h-[200px] bg-primary/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+            <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-primary/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
             <div className="relative z-10">
-              <h3 className="text-2xl font-bold mb-2">Quer ver nosso estoque qualificado?</h3>
-              <p className="text-muted-foreground mb-6">Fale com a equipe ou explore as ofertas atualizadas nas duas lojas.</p>
-              <div className="flex flex-wrap gap-3 justify-center">
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-white">Quer ver nosso estoque qualificado?</h3>
+              <p className="text-white/70 mb-8 max-w-lg mx-auto text-lg">Fale com a equipe ou explore as ofertas atualizadas nas duas lojas.</p>
+              <div className="flex flex-wrap gap-4 justify-center">
                 <Link
                   to="/seminovos"
                   search={{
@@ -544,9 +616,9 @@ export function SobrePage() {
                     cor: undefined,
                   }}
                   className={cn(
-                    "px-5 py-3.5 rounded-[14px] font-semibold tracking-wide",
-                    "bg-fg text-white shadow-md transition-all",
-                    "hover:-translate-y-0.5 hover:shadow-lg hover:bg-primary"
+                    "px-8 py-4 rounded-xl font-bold tracking-wide text-lg",
+                    "bg-primary text-white shadow-lg transition-all",
+                    "hover:-translate-y-1 hover:shadow-xl hover:bg-primary/90"
                   )}
                 >
                   Ver estoque
@@ -557,36 +629,12 @@ export function SobrePage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
-                      "px-5 py-3.5 rounded-[14px] font-semibold tracking-wide",
-                      "bg-muted text-fg border border-border transition-all",
-                      "hover:-translate-y-0.5 hover:bg-fg hover:text-white"
+                      "px-8 py-4 rounded-xl font-bold tracking-wide text-lg",
+                      "bg-white/10 text-white border border-white/20 backdrop-blur-sm transition-all",
+                      "hover:-translate-y-1 hover:bg-white/20"
                     )}
                   >
                     Chamar no WhatsApp
-                  </a>
-                )}
-                {phoneLoja1?.telefone && (
-                  <a
-                    href={`tel:${phoneLoja1.telefone.replace(/\D/g, "")}`}
-                    className={cn(
-                      "px-5 py-3.5 rounded-[14px] font-semibold tracking-wide",
-                      "bg-muted text-fg border border-border transition-all",
-                      "hover:-translate-y-0.5 hover:bg-fg hover:text-white"
-                    )}
-                  >
-                    Loja 1
-                  </a>
-                )}
-                {phoneLoja2?.telefone && (
-                  <a
-                    href={`tel:${phoneLoja2.telefone.replace(/\D/g, "")}`}
-                    className={cn(
-                      "px-5 py-3.5 rounded-[14px] font-semibold tracking-wide",
-                      "bg-muted text-fg border border-border transition-all",
-                      "hover:-translate-y-0.5 hover:bg-fg hover:text-white"
-                    )}
-                  >
-                    Loja 2
                   </a>
                 )}
               </div>
