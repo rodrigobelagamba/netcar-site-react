@@ -164,7 +164,7 @@ export function ContatoPage() {
                 <label className="block text-sm font-medium text-fg mb-2">Mensagem</label>
                 <textarea
                   required
-                  rows={5}
+                  rows={3}
                   value={formData.mensagem}
                   onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
                   className="w-full bg-gray-50 border-0 rounded-xl px-5 py-4 text-fg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all resize-none"
