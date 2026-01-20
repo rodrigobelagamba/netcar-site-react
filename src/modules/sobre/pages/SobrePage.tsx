@@ -8,7 +8,7 @@ import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useState, useEffect, useMemo } from "react";
 import { formatPrice, formatYear } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
-import { ChevronLeft, ChevronRight, CheckCircle2, Shield, Award, MapPin, Phone } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle2, Shield, Award } from "lucide-react";
 
 export function SobrePage() {
   const navigate = useNavigate();
@@ -394,7 +394,7 @@ export function SobrePage() {
       </section>
 
       {/* Nossas lojas */}
-      <section className="py-16 md:py-20">
+      <section className="py-16 md:py-20 bg-gray-50/50 relative z-10 overflow-hidden">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="mb-10">
             <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Onde estamos</span>
@@ -408,33 +408,24 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="relative bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-all group"
+              className="bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-all group"
             >
-              <div className="relative h-[240px] overflow-hidden">
+              <div className="relative h-[220px] overflow-hidden">
                 <img
                   src={loja1Image}
                   alt="Fachada da Loja 1"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja1.jpg";
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-6 right-6">
-                  <span className="inline-block px-3 py-1 bg-primary text-white text-xs font-bold rounded-full mb-2">Matriz</span>
-                  <h3 className="text-xl font-bold text-white">Loja 1 — Centro</h3>
-                </div>
               </div>
-              <div className="p-6 space-y-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                  <span className="text-muted-foreground text-sm">{formatAddress(addressLoja1) || "Av. Presidente Vargas, 740, Esteio/RS"}</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                  <span className="text-muted-foreground text-sm">{formatPhone(phoneLoja1) || "(51) 3473‑7900"}</span>
-                </div>
-                <p className="text-muted-foreground text-sm pt-2 border-t border-gray-100">Showroom amplo, atendimento personalizado e test‑drive.</p>
+              <div className="p-6">
+                <h3 className="text-lg font-bold text-fg mb-1">Loja 1 — Centro, Esteio/RS</h3>
+                <p className="text-muted-foreground text-sm mb-3">
+                  {formatAddress(addressLoja1) || "Av. Presidente Vargas, 740"} — {formatPhone(phoneLoja1) || "(51) 3473-7900"}
+                </p>
+                <p className="text-muted-foreground text-sm">Showroom amplo, atendimento personalizado e test-drive.</p>
               </div>
             </motion.article>
 
@@ -444,33 +435,24 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="relative bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-all group"
+              className="bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-all group"
             >
-              <div className="relative h-[240px] overflow-hidden">
+              <div className="relative h-[220px] overflow-hidden">
                 <img
                   src={loja2Image}
                   alt="Fachada da Loja 2"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja2.jpg";
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-6 right-6">
-                  <span className="inline-block px-3 py-1 bg-fg text-white text-xs font-bold rounded-full mb-2">Filial</span>
-                  <h3 className="text-xl font-bold text-white">Loja 2 — Centro</h3>
-                </div>
               </div>
-              <div className="p-6 space-y-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                  <span className="text-muted-foreground text-sm">{formatAddress(addressLoja2) || "Av. Presidente Vargas, 1106, Esteio/RS"}</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                  <span className="text-muted-foreground text-sm">{formatPhone(phoneLoja2) || "(51) 3033‑3900"}</span>
-                </div>
-                <p className="text-muted-foreground text-sm pt-2 border-t border-gray-100">Seleção de seminovos e condições especiais de financiamento.</p>
+              <div className="p-6">
+                <h3 className="text-lg font-bold text-fg mb-1">Loja 2 — Centro, Esteio/RS</h3>
+                <p className="text-muted-foreground text-sm mb-3">
+                  {formatAddress(addressLoja2) || "Av. Presidente Vargas, 1106"} — {formatPhone(phoneLoja2) || "(51) 3033-3900"}
+                </p>
+                <p className="text-muted-foreground text-sm">Seleção de seminovos e condições especiais de financiamento.</p>
               </div>
             </motion.article>
           </div>
