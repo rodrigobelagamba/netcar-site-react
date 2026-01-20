@@ -701,47 +701,30 @@ function PriceWithShimmer({ price }: { price: string }) {
       }}
       className="flex-shrink-0"
     >
-      <span 
-        className="relative inline-block overflow-hidden cursor-pointer"
+      <motion.p
+        className="text-secondary text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-      >
-        <motion.p
-          className="text-secondary text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap relative z-20"
-          dangerouslySetInnerHTML={{ __html: price }}
-          animate={{
-            y: isHovered ? -4 : 0,
-          }}
-          transition={{
-            duration: 0.3,
-            ease: [0.25, 0.1, 0.25, 1],
-          }}
-        />
-        {/* Efeito Espelhamento (Shimmer) - Movimento diagonal apenas sobre o texto */}
-        <span 
-          className="absolute inset-0 pointer-events-none z-30"
-          style={{
-            background: 'linear-gradient(135deg, transparent 20%, rgba(255,255,255,0.8) 50%, transparent 80%)',
-            transform: isHovered 
-              ? 'translateX(100%) translateY(calc(100% + 40px))' 
-              : 'translateX(-100%) translateY(calc(-100% - 40px))',
-            transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)',
-            mixBlendMode: 'screen',
-          }}
-        />
-        {/* Efeito secundário para mais profundidade */}
-        <span 
-          className="absolute inset-0 pointer-events-none z-30"
-          style={{
-            background: 'linear-gradient(45deg, transparent 20%, rgba(255,255,255,0.6) 50%, transparent 80%)',
-            transform: isHovered 
-              ? 'translateX(100%) translateY(calc(100% + 30px))' 
-              : 'translateX(-100%) translateY(calc(-100% - 30px))',
-            transition: 'transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)',
-            mixBlendMode: 'lighten',
-          }}
-        />
-      </span>
+        dangerouslySetInnerHTML={{ __html: price }}
+        animate={{
+          y: isHovered ? -4 : 0,
+        }}
+        transition={{
+          duration: 0.3,
+          ease: [0.25, 0.1, 0.25, 1],
+        }}
+        style={{
+          backgroundImage: isHovered 
+            ? 'linear-gradient(90deg, hsl(var(--color-secondary)) 0%, hsl(var(--color-secondary)) 40%, rgba(255,255,255,0.9) 50%, hsl(var(--color-secondary)) 60%, hsl(var(--color-secondary)) 100%)'
+            : 'none',
+          backgroundSize: '200% 100%',
+          backgroundPosition: isHovered ? '100% 0' : '-100% 0',
+          WebkitBackgroundClip: isHovered ? 'text' : 'unset',
+          backgroundClip: isHovered ? 'text' : 'unset',
+          WebkitTextFillColor: isHovered ? 'transparent' : 'hsl(var(--color-secondary))',
+          transition: 'background-position 0.8s ease-out',
+        }}
+      />
     </motion.div>
   );
 }
