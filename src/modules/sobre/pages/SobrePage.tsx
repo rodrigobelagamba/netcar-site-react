@@ -131,10 +131,17 @@ export function SobrePage() {
 
   // Equipe (mock - pode vir da API futuramente)
   const team = [
-    { name: "Marcelo Marchis", role: "Gestão & Relacionamento" },
-    { name: "Gilnei", role: "Consultor Comercial" },
-    { name: "Bruno", role: "Consultor Comercial" },
-    { name: "Tiago", role: "Consultor Comercial" },
+    { name: "Carlos", role: "Fundador & Diretor", image: "/team/carlos.jpg" },
+    { name: "Shirley", role: "Administração", image: "/team/shirley.png" },
+    { name: "Marcelo", role: "Gestão & Relacionamento", image: "/team/marcelo.jpg" },
+    { name: "Tiago", role: "Consultor Comercial", image: "/team/tiago.jpg" },
+    { name: "Bruno", role: "Consultor Comercial", image: "/team/bruno.jpg" },
+    { name: "Gilnei", role: "Consultor Comercial", image: "/team/gilnei.jpg" },
+    { name: "Filipe", role: "Marketing", image: "/team/filipe.jpg" },
+    { name: "Cristiano", role: "Consultor Comercial", image: "/team/cristiano.jpg" },
+    { name: "Claudio", role: "Manutenção & Preparação", image: "/team/claudio.jpg" },
+    { name: "Herick", role: "Consultor Comercial", image: "/team/herick.jpg" },
+    { name: "Juliano", role: "Gestão & Operações", image: "/team/juliano.jpg" },
   ];
 
   return (
@@ -544,30 +551,36 @@ export function SobrePage() {
       </section>
 
       {/* Equipe */}
-      <section className="py-16 md:py-20 bg-gray-50/50">
+      <section className="py-16 md:py-24 bg-gray-50/50">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-center mb-10">
+          <div className="text-center mb-12">
             <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Quem faz acontecer</span>
             <h2 className="text-2xl md:text-[32px] font-bold mb-2">Nossa equipe</h2>
             <p className="text-muted-foreground max-w-lg mx-auto">Experiência, cuidado e atenção a cada detalhe.</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8">
             {team.map((person, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center group"
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+                className="group"
               >
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center transition-all group-hover:from-primary/10 group-hover:to-primary/5">
-                  <span className="text-2xl font-bold text-gray-300 group-hover:text-primary transition-colors">
-                    {person.name.charAt(0)}
-                  </span>
+                <div className="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                  <img 
+                    src={person.image} 
+                    alt={person.name}
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    <p className="text-white/90 text-sm font-medium">{person.role}</p>
+                  </div>
                 </div>
-                <h5 className="font-semibold text-fg">{person.name}</h5>
-                <p className="text-muted-foreground text-sm">{person.role}</p>
+                <h5 className="font-semibold text-fg text-center">{person.name}</h5>
+                <p className="text-muted-foreground text-sm text-center md:hidden">{person.role}</p>
               </motion.div>
             ))}
           </div>
