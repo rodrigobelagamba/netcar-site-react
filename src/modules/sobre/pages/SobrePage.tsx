@@ -1,15 +1,24 @@
-import { motion } from "framer-motion";
-import { useAboutTextQuery, useCountersQuery, useBannersQuery } from "@/api/queries/useSiteQuery";
+import { motion, AnimatePresence } from "framer-motion";
+import { useAboutTextQuery, useCountersQuery } from "@/api/queries/useSiteQuery";
 import { useBannersLoja1Query, useBannersLoja2Query, useAddressQuery, usePhoneQuery, useWhatsAppQuery } from "@/api/queries/useSiteQuery";
-import { Link } from "@tanstack/react-router";
+import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
+import { useState, useEffect, useMemo } from "react";
+import { formatPrice, formatYear } from "@/lib/formatters";
+import { generateVehicleSlug } from "@/lib/slug";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function SobrePage() {
+  const navigate = useNavigate();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  
   // Busca dados da API
   const { data: essencia } = useAboutTextQuery("Essência");
   const { data: counters } = useCountersQuery("Sobre");
-  const { data: banners } = useBannersQuery();
+  const { data: vehicles } = useVehiclesQuery();
   const { data: bannersLoja1 } = useBannersLoja1Query();
   const { data: bannersLoja2 } = useBannersLoja2Query();
   const { data: addressLoja1 } = useAddressQuery("Loja1");
@@ -25,8 +34,69 @@ export function SobrePage() {
     "Desde 1997, a Netcar seleciona carros com histórico, qualidade e transparência. Conheça nossa história e valores."
   );
 
-  // Imagem da essência (primeiro banner ou fallback)
-  const essenciaImage = banners?.[0]?.imagem || "/images/loja1.jpg";
+  // Prepara veículos para o mini carousel
+  const heroVehicles = useMemo(() => {
+    if (!vehicles) return [];
+    return vehicles
+      .filter(vehicle => {
+        const pngImages = vehicle.images?.filter(img => 
+          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
+        ) || [];
+        return pngImages.length > 0;
+      })
+      .slice(0, 4)
+      .map(vehicle => {
+        const pngImages = vehicle.images?.filter(img => 
+          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
+        ) || [];
+        return {
+          id: vehicle.id,
+          brand: vehicle.marca || vehicle.name?.split(' ')[0] || '',
+          model: vehicle.modelo || vehicle.name || '',
+          year: vehicle.year,
+          price: vehicle.price,
+          image: pngImages[0] || "/images/semcapa.png",
+          marca: vehicle.marca,
+          modelo: vehicle.modelo,
+          placa: vehicle.placa,
+        };
+      });
+  }, [vehicles]);
+
+  const currentVehicle = heroVehicles[currentIndex] || null;
+
+  const nextSlide = () => {
+    if (heroVehicles.length === 0) return;
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % heroVehicles.length);
+  };
+  
+  const prevSlide = () => {
+    if (heroVehicles.length === 0) return;
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev - 1 + heroVehicles.length) % heroVehicles.length);
+  };
+
+  useEffect(() => {
+    if (heroVehicles.length === 0) return;
+    const timer = setInterval(() => {
+      setDirection(1);
+      setCurrentIndex((prev) => (prev + 1) % heroVehicles.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [heroVehicles.length]);
+
+  const handleVehicleClick = () => {
+    if (!currentVehicle) return;
+    const slug = generateVehicleSlug({
+      modelo: currentVehicle.modelo || currentVehicle.model,
+      marca: currentVehicle.marca || currentVehicle.brand,
+      year: currentVehicle.year,
+      placa: currentVehicle.placa,
+      id: currentVehicle.id,
+    });
+    navigate({ to: `/veiculo/${slug}` });
+  };
   
   // Imagem da fachada para cada loja
   const getFachadaImage = (banners?: Array<{ titulo?: string; imagem: string }>) => {
@@ -116,22 +186,86 @@ export function SobrePage() {
                 <li>Atendimento próximo e experiente</li>
               </ul>
             </motion.div>
-            <motion.figure
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="relative h-[320px] rounded-[20px] overflow-hidden border border-border"
-            >
-              <img
-                src={essenciaImage}
-                alt="Showroom da Netcar"
-                className="w-full h-full object-cover transition-transform hover:scale-105"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/loja1.jpg";
-                }}
-              />
-            </motion.figure>
+            {currentVehicle ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                className="relative h-[320px] rounded-[20px] overflow-hidden border border-border bg-gradient-to-br from-[#F6F6F6] to-[#E8E8E8] cursor-pointer group"
+                onClick={handleVehicleClick}
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={currentVehicle.id}
+                    initial={{ opacity: 0, x: direction > 0 ? 50 : -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: direction > 0 ? -50 : 50 }}
+                    transition={{ duration: 0.4 }}
+                    className="absolute inset-0 flex flex-col"
+                  >
+                    <div className="flex-1 flex items-center justify-center p-4">
+                      <img
+                        src={currentVehicle.image}
+                        alt={currentVehicle.model}
+                        className="max-h-[180px] w-auto object-contain drop-shadow-lg group-hover:scale-105 transition-transform"
+                      />
+                    </div>
+                    <div className="bg-white/90 backdrop-blur-sm p-4 border-t border-border">
+                      <div className="text-xs text-primary font-semibold uppercase tracking-wider">{currentVehicle.brand}</div>
+                      <div className="text-lg font-bold text-fg truncate">{currentVehicle.model}</div>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-sm text-muted-foreground">{formatYear(currentVehicle.year)}</span>
+                        <span className="text-primary font-bold">{formatPrice(currentVehicle.price)}</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+                
+                {heroVehicles.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-all z-10"
+                    >
+                      <ChevronLeft className="w-4 h-4 text-fg" />
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-all z-10"
+                    >
+                      <ChevronRight className="w-4 h-4 text-fg" />
+                    </button>
+                    <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                      {heroVehicles.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={(e) => { e.stopPropagation(); setDirection(idx > currentIndex ? 1 : -1); setCurrentIndex(idx); }}
+                          className={cn(
+                            "w-2 h-2 rounded-full transition-all",
+                            idx === currentIndex ? "bg-primary w-4" : "bg-gray-300 hover:bg-gray-400"
+                          )}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </motion.div>
+            ) : (
+              <motion.figure
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                className="relative h-[320px] rounded-[20px] overflow-hidden border border-border"
+              >
+                <img
+                  src="/images/loja1.jpg"
+                  alt="Showroom da Netcar"
+                  className="w-full h-full object-cover transition-transform hover:scale-105"
+                />
+              </motion.figure>
+            )}
           </div>
         </div>
       </section>
