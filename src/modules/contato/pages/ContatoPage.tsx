@@ -105,12 +105,12 @@ export function ContatoPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:col-span-2 bg-white rounded-3xl p-8 md:p-10 shadow-sm"
+            className="lg:col-span-2 bg-white rounded-3xl p-6 md:p-8 shadow-sm"
           >
-            <h2 className="text-2xl font-bold text-fg mb-2">Envie uma mensagem</h2>
-            <p className="text-gray-400 mb-8">Responderemos o mais breve possível</p>
+            <h2 className="text-2xl font-bold text-fg mb-1">Envie uma mensagem</h2>
+            <p className="text-gray-400 mb-5">Responderemos o mais breve possível</p>
             
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-fg mb-2">Nome</label>
