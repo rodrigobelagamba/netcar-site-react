@@ -76,7 +76,7 @@ export function ContatoPage() {
             href={getWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-green-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-600 transition-colors shadow-lg shadow-green-500/25"
+            className="inline-flex items-center gap-3 bg-[#25D366] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#22c55e] transition-colors shadow-lg shadow-green-500/30"
           >
             <MessageCircle className="w-5 h-5" />
             WhatsApp
