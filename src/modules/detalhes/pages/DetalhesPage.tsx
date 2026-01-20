@@ -687,8 +687,6 @@ function RelatedVehiclesSection({
 
 
 function PriceWithShimmer({ price }: { price: string }) {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -699,31 +697,11 @@ function PriceWithShimmer({ price }: { price: string }) {
         delay: 0.3,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className="flex-shrink-0"
+      className="flex-shrink-0 group"
     >
-      <motion.p
-        className="text-secondary text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap cursor-pointer"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+      <p
+        className="text-secondary text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap cursor-pointer transition-transform duration-300 group-hover:-translate-y-1"
         dangerouslySetInnerHTML={{ __html: price }}
-        animate={{
-          y: isHovered ? -4 : 0,
-        }}
-        transition={{
-          duration: 0.3,
-          ease: [0.25, 0.1, 0.25, 1],
-        }}
-        style={{
-          backgroundImage: isHovered 
-            ? 'linear-gradient(90deg, hsl(var(--color-secondary)) 0%, hsl(var(--color-secondary)) 40%, rgba(255,255,255,0.9) 50%, hsl(var(--color-secondary)) 60%, hsl(var(--color-secondary)) 100%)'
-            : 'none',
-          backgroundSize: '200% 100%',
-          backgroundPosition: isHovered ? '100% 0' : '-100% 0',
-          WebkitBackgroundClip: isHovered ? 'text' : 'unset',
-          backgroundClip: isHovered ? 'text' : 'unset',
-          WebkitTextFillColor: isHovered ? 'transparent' : 'hsl(var(--color-secondary))',
-          transition: 'background-position 0.8s ease-out',
-        }}
       />
     </motion.div>
   );
