@@ -1,8 +1,7 @@
 import { 
   Headphones,
   Instagram,
-  Facebook,
-  Youtube
+  Facebook
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { 
@@ -298,15 +297,22 @@ export function Footer() {
           <div className="h-full">
             <h4 className="text-[12px] font-bold text-gray-400 mb-6 uppercase tracking-widest">Conecte-se</h4>
             <div className="flex gap-2">
-              {[Instagram, Facebook, Youtube].map((Icon, idx) => (
-                <a 
-                  key={idx} 
-                  href="#" 
-                  className="w-11 h-11 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 bg-surface"
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
+              <a 
+                href="https://instagram.com/netcar_rc" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 bg-surface"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a 
+                href="https://www.facebook.com/NetcarRC" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 bg-surface"
+              >
+                <Facebook className="w-5 h-5" />
+              </a>
             </div>
           </div>
 
