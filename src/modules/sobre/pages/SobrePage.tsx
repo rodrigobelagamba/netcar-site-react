@@ -332,29 +332,23 @@ export function SobrePage() {
       </section>
 
       {/* Nossos números */}
-      <section className="py-16 md:py-20">
+      <section className="py-16 md:py-24 bg-[#fafafa]">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-center mb-12">
-            <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Resultados</span>
-            <h2 className="text-2xl md:text-[32px] font-bold mb-3">Nossos números</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">Resultados consistentes construídos com relacionamento e transparência.</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-200 rounded-2xl overflow-hidden">
             {counters && counters.length > 0 ? (
               counters.slice(0, 4).map((counter, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="text-center group"
+                  className="bg-white p-8 md:p-10 text-center group hover:bg-primary/5 transition-colors"
                 >
-                  <div className="text-4xl md:text-5xl lg:text-[56px] font-bold mb-2 text-fg group-hover:text-primary transition-colors">
+                  <div className="text-4xl md:text-5xl lg:text-[52px] font-bold mb-3 text-primary">
                     {counter.valor.toLocaleString("pt-BR")}
                   </div>
-                  <div className="text-muted-foreground text-sm">{counter.titulo}</div>
-                  <div className="w-12 h-0.5 bg-primary/30 mx-auto mt-4 group-hover:w-20 transition-all" />
+                  <div className="text-muted-foreground text-sm uppercase tracking-wide">{counter.titulo}</div>
                 </motion.div>
               ))
             ) : (
@@ -367,15 +361,14 @@ export function SobrePage() {
                 ].map((item, index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="text-center group"
+                    className="bg-white p-8 md:p-10 text-center group hover:bg-primary/5 transition-colors"
                   >
-                    <div className="text-4xl md:text-5xl lg:text-[56px] font-bold mb-2 text-fg group-hover:text-primary transition-colors">{item.value}</div>
-                    <div className="text-muted-foreground text-sm">{item.label}</div>
-                    <div className="w-12 h-0.5 bg-primary/30 mx-auto mt-4 group-hover:w-20 transition-all" />
+                    <div className="text-4xl md:text-5xl lg:text-[52px] font-bold mb-3 text-primary">{item.value}</div>
+                    <div className="text-muted-foreground text-sm uppercase tracking-wide">{item.label}</div>
                   </motion.div>
                 ))}
               </>
@@ -629,52 +622,59 @@ export function SobrePage() {
       </section>
 
       {/* CTA Estoque */}
-      <section className="py-16 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section className="py-20 md:py-28">
+        <div className="max-w-[900px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="text-center py-12 md:py-16 border-t border-gray-100"
+            className="relative"
           >
-            <h3 className="text-3xl md:text-4xl font-bold mb-4 text-fg">Quer ver nosso estoque qualificado?</h3>
-            <p className="text-muted-foreground mb-8 max-w-lg mx-auto text-lg">Fale com a equipe ou explore as ofertas atualizadas nas duas lojas.</p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link
-                to="/seminovos"
-                search={{
-                  marca: undefined,
-                  modelo: undefined,
-                  precoMin: undefined,
-                  precoMax: undefined,
-                  anoMin: undefined,
-                  anoMax: undefined,
-                  cambio: undefined,
-                  cor: undefined,
-                }}
-                className={cn(
-                  "px-8 py-4 rounded-xl font-bold tracking-wide text-lg",
-                  "bg-primary text-white shadow-lg transition-all",
-                  "hover:-translate-y-1 hover:shadow-xl hover:bg-primary/90"
-                )}
-              >
-                Ver estoque
-              </Link>
-              {whatsapp?.link && (
-                <a
-                  href={whatsapp.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
+            <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-primary/50 to-transparent rounded-full" />
+            <div className="pl-8">
+              <h3 className="text-3xl md:text-[42px] font-bold mb-4 text-fg leading-tight">
+                Quer ver nosso<br />estoque qualificado?
+              </h3>
+              <p className="text-muted-foreground mb-8 text-lg max-w-md">
+                Fale com a equipe ou explore as ofertas atualizadas nas duas lojas.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  to="/seminovos"
+                  search={{
+                    marca: undefined,
+                    modelo: undefined,
+                    precoMin: undefined,
+                    precoMax: undefined,
+                    anoMin: undefined,
+                    anoMax: undefined,
+                    cambio: undefined,
+                    cor: undefined,
+                  }}
                   className={cn(
-                    "px-8 py-4 rounded-xl font-bold tracking-wide text-lg",
-                    "border-2 border-fg/20 text-fg transition-all",
-                    "hover:-translate-y-1 hover:border-primary hover:text-primary"
+                    "px-7 py-3.5 rounded-full font-semibold",
+                    "bg-primary text-white transition-all",
+                    "hover:bg-primary/90 hover:shadow-lg"
                   )}
                 >
-                  Chamar no WhatsApp
-                </a>
-              )}
+                  Ver estoque
+                </Link>
+                {whatsapp?.link && (
+                  <a
+                    href={whatsapp.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      "px-7 py-3.5 rounded-full font-semibold",
+                      "text-primary underline underline-offset-4 transition-all",
+                      "hover:text-primary/80"
+                    )}
+                  >
+                    Chamar no WhatsApp
+                  </a>
+                )}
+              </div>
             </div>
           </motion.div>
         </div>
