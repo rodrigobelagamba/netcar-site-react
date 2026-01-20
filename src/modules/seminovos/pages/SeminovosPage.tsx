@@ -204,7 +204,7 @@ export function SeminovosPage() {
       {/* Barra de Busca Principal */}
       <div className="bg-gradient-to-b from-gray-50 to-white py-6">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-full shadow-lg border border-gray-100 px-4 py-2 flex items-center gap-3">
+          <div className="bg-white rounded-full shadow-lg px-4 py-2 flex items-center gap-3">
             <Car className="w-5 h-5 text-primary flex-shrink-0" />
             <input
               type="text"
@@ -218,13 +218,13 @@ export function SeminovosPage() {
               <span>EXEMPLOS:</span>
               <button
                 onClick={() => handleQuickSearch("automático")}
-                className="px-2 py-0.5 rounded border border-gray-200 text-gray-500 hover:border-primary hover:text-primary transition-colors"
+                className="px-2 py-0.5 rounded bg-gray-100 text-gray-500 hover:bg-primary/10 hover:text-primary transition-colors"
               >
                 AUTOMÁTICO
               </button>
               <button
                 onClick={() => handleQuickSearch("preto")}
-                className="px-2 py-0.5 rounded border border-gray-200 text-gray-500 hover:border-primary hover:text-primary transition-colors"
+                className="px-2 py-0.5 rounded bg-gray-100 text-gray-500 hover:bg-primary/10 hover:text-primary transition-colors"
               >
                 PRETO
               </button>
@@ -244,7 +244,7 @@ export function SeminovosPage() {
               <button
                 key={filter.value}
                 onClick={() => handleQuickSearch(filter.label.toLowerCase())}
-                className="px-4 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 hover:border-primary hover:text-primary transition-colors"
+                className="px-4 py-1.5 rounded-full bg-white shadow-sm text-xs font-medium text-gray-600 hover:bg-primary/5 hover:text-primary transition-colors"
               >
                 {filter.label}
               </button>
