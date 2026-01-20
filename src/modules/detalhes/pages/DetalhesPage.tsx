@@ -687,6 +687,8 @@ function RelatedVehiclesSection({
 
 
 function PriceWithShimmer({ price }: { price: string }) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -697,10 +699,23 @@ function PriceWithShimmer({ price }: { price: string }) {
         delay: 0.3,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className="flex-shrink-0 group"
+      className="flex-shrink-0"
     >
       <p
-        className="text-secondary text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap cursor-pointer transition-transform duration-300 group-hover:-translate-y-1"
+        className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap cursor-pointer transition-transform duration-300 hover:-translate-y-1"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{
+          background: isHovered 
+            ? 'linear-gradient(90deg, hsl(var(--color-secondary)) 0%, hsl(var(--color-secondary)) 35%, #fff 50%, hsl(var(--color-secondary)) 65%, hsl(var(--color-secondary)) 100%)'
+            : 'hsl(var(--color-secondary))',
+          backgroundSize: isHovered ? '300% 100%' : '100% 100%',
+          backgroundPosition: isHovered ? '100% 0' : '0% 0',
+          WebkitBackgroundClip: 'text',
+          backgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          transition: 'background-position 0.6s ease-in-out',
+        }}
         dangerouslySetInnerHTML={{ __html: price }}
       />
     </motion.div>
