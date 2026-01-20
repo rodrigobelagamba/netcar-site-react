@@ -138,14 +138,20 @@ export function Footer() {
                       </span>
                     )}
                     {schedule?.sabado ? (
-                      <span className="block text-fg">
+                      <span className="block text-fg mb-1">
                         Sábado: <span className="text-amber-500">{schedule.sabado}</span>
                       </span>
                     ) : (
-                      <span className="block text-fg">
+                      <span className="block text-fg mb-1">
                         Sábado: <span className="text-amber-500">9h às 16h30</span>
                       </span>
                     )}
+                    <span className="block text-fg mb-1">
+                      Jan-Fev (Sáb): <span className="text-amber-500">9h às 13h30</span>
+                    </span>
+                    <span className="block text-xs text-muted-foreground font-medium mt-2">
+                      Não fechamos ao meio-dia
+                    </span>
                   </div>
                 </div>
               </div>
