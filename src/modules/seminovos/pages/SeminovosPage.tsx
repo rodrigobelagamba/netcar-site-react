@@ -253,105 +253,104 @@ export function SeminovosPage() {
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Showroom */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Filtros em Card Minimalista */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-8">
+          <div className="flex flex-wrap items-end gap-6">
+            {/* Marca */}
+            <div className="flex-1 min-w-[140px]">
+              <label className="mb-2 block text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Marca</label>
+              <AutocompleteSelect
+                options={brandOptions}
+                value={marca}
+                onChange={setMarca}
+                placeholder="Selecione"
+                label=""
+              />
+            </div>
+
+            {/* Ano mínimo */}
+            <div className="flex-1 min-w-[120px]">
+              <label className="mb-2 block text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Ano de</label>
+              <AutocompleteSelect
+                options={yearOptions}
+                value={anoMin}
+                onChange={setAnoMin}
+                placeholder="Selecione"
+                label=""
+              />
+            </div>
+
+            {/* Ano máximo */}
+            <div className="flex-1 min-w-[120px]">
+              <label className="mb-2 block text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Ano até</label>
+              <AutocompleteSelect
+                options={yearOptions}
+                value={anoMax}
+                onChange={setAnoMax}
+                placeholder="Selecione"
+                label=""
+              />
+            </div>
+
+            {/* Valor de */}
+            <div className="flex-1 min-w-[120px]">
+              <label className="mb-2 block text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Valor de</label>
+              <input
+                type="text"
+                value={precoMin}
+                onChange={(e) => setPrecoMin(e.target.value)}
+                placeholder={minPrice > 0 ? `R$ ${minPrice.toLocaleString('pt-BR')}` : "R$ 0"}
+                className="w-full border border-gray-200 rounded-lg bg-white px-3 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+              />
+            </div>
+
+            {/* Valor até */}
+            <div className="flex-1 min-w-[120px]">
+              <label className="mb-2 block text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Valor até</label>
+              <input
+                type="text"
+                value={precoMax}
+                onChange={(e) => setPrecoMax(e.target.value)}
+                placeholder={maxPrice > 0 ? `R$ ${maxPrice.toLocaleString('pt-BR')}` : "R$ 500.000"}
+                className="w-full border border-gray-200 rounded-lg bg-white px-3 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+              />
+            </div>
+
+            {/* Botão Filtrar */}
+            <button
+              onClick={handleFilter}
+              className="px-6 py-2.5 rounded-lg bg-fg text-white text-sm font-semibold uppercase hover:bg-fg/90 transition-all duration-200 hover:shadow-md"
+            >
+              Filtrar
+            </button>
+          </div>
+        </div>
+
+        {/* Header com Título e Ordenação */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-fg">Showroom</h1>
-            <p className="text-sm text-muted-foreground mt-1">
+            <h1 className="text-2xl font-bold text-fg">Showroom</h1>
+            <p className="text-sm text-gray-500 mt-1">
               {filteredAndSortedVehicles.length} veículo{filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado{filteredAndSortedVehicles.length !== 1 ? "s" : ""}
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">Ordenar por</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-gray-500 uppercase">Ordenar por</span>
             <div className="relative">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className={cn(
-                  "appearance-none rounded-full border border-gray-200 bg-white px-4 py-2 pr-10",
-                  "text-sm text-fg",
-                  "focus:outline-none focus:border-primary"
-                )}
+                className="appearance-none rounded-lg border border-gray-200 bg-white px-4 py-2 pr-8 text-sm text-gray-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
               >
                 <option value="az">A &gt; Z</option>
                 <option value="za">Z &gt; A</option>
                 <option value="preco-asc">Menor preço</option>
                 <option value="preco-desc">Maior preço</option>
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
             </div>
           </div>
-        </div>
-
-        {/* Filtros Inline - Estilo Minimalista */}
-        <div className="flex flex-wrap items-center gap-3 mb-8">
-          <span className="text-xs font-medium text-muted-foreground uppercase">Filtrar:</span>
-          
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 bg-white hover:border-primary transition-colors">
-            <span className="text-xs text-muted-foreground">Marca:</span>
-            <select
-              value={marca}
-              onChange={(e) => setMarca(e.target.value)}
-              className="bg-transparent border-none text-sm text-fg focus:outline-none cursor-pointer"
-            >
-              <option value="">Todas</option>
-              {brands.map((brand) => (
-                <option key={brand} value={brand}>{brand}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 bg-white hover:border-primary transition-colors">
-            <span className="text-xs text-muted-foreground">Ano:</span>
-            <select
-              value={anoMin}
-              onChange={(e) => setAnoMin(e.target.value)}
-              className="bg-transparent border-none text-sm text-fg focus:outline-none cursor-pointer"
-            >
-              <option value="">De</option>
-              {sortedYears.map((year) => (
-                <option key={year} value={String(year)}>{year}</option>
-              ))}
-            </select>
-            <span className="text-muted-foreground">-</span>
-            <select
-              value={anoMax}
-              onChange={(e) => setAnoMax(e.target.value)}
-              className="bg-transparent border-none text-sm text-fg focus:outline-none cursor-pointer"
-            >
-              <option value="">Até</option>
-              {sortedYears.map((year) => (
-                <option key={year} value={String(year)}>{year}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 bg-white hover:border-primary transition-colors">
-            <span className="text-xs text-muted-foreground">Valor:</span>
-            <input
-              type="text"
-              value={precoMin}
-              onChange={(e) => setPrecoMin(e.target.value)}
-              placeholder="R$ min"
-              className="w-20 bg-transparent border-none text-sm text-fg focus:outline-none placeholder:text-gray-400"
-            />
-            <span className="text-muted-foreground">-</span>
-            <input
-              type="text"
-              value={precoMax}
-              onChange={(e) => setPrecoMax(e.target.value)}
-              placeholder="R$ max"
-              className="w-20 bg-transparent border-none text-sm text-fg focus:outline-none placeholder:text-gray-400"
-            />
-          </div>
-
-          <button
-            onClick={handleFilter}
-            className="px-4 py-1.5 rounded-full bg-fg text-white text-xs font-semibold uppercase hover:bg-fg/90 transition-colors"
-          >
-            Aplicar
-          </button>
         </div>
 
         {/* Grid de Veículos */}
