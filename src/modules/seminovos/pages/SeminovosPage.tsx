@@ -4,9 +4,7 @@ import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
-import { cn } from "@/lib/cn";
 import { ChevronDown, Car, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
 
