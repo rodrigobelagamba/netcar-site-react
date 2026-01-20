@@ -214,22 +214,7 @@ export function SeminovosPage() {
               placeholder="Busque por marca, modelo, cor, câmbio, valor..."
               className="flex-1 bg-transparent border-none outline-none text-sm text-gray-600 placeholder:text-gray-400"
             />
-            <div className="hidden md:flex items-center gap-2 text-xs text-gray-400">
-              <span>EXEMPLOS:</span>
-              <button
-                onClick={() => handleQuickSearch("automático")}
-                className="px-2 py-0.5 rounded bg-gray-100 text-gray-500 hover:bg-primary/10 hover:text-primary transition-colors"
-              >
-                AUTOMÁTICO
-              </button>
-              <button
-                onClick={() => handleQuickSearch("preto")}
-                className="px-2 py-0.5 rounded bg-gray-100 text-gray-500 hover:bg-primary/10 hover:text-primary transition-colors"
-              >
-                PRETO
-              </button>
-            </div>
-            <button
+                        <button
               onClick={handleSearchSubmit}
               className="bg-fg text-white px-5 py-2 rounded-full flex items-center gap-2 text-sm font-semibold hover:bg-fg/90 transition-colors"
             >
