@@ -334,62 +334,53 @@ export function SobrePage() {
       {/* Nossos números */}
       <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="relative bg-gradient-to-br from-[#00283C] to-[#004560] rounded-[32px] p-8 md:p-12 shadow-2xl overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-primary/20 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-white/5 rounded-full blur-2xl" />
-            <div className="relative z-10">
-              <div className="text-center mb-10">
-                <h2 className="text-2xl md:text-[32px] font-bold mb-2 text-white">Nossos números</h2>
-                <p className="text-white/70 max-w-lg mx-auto">Resultados consistentes construídos com relacionamento e transparência.</p>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                {counters && counters.length > 0 ? (
-                  counters.slice(0, 4).map((counter, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-[20px] p-6 text-center hover:bg-white/15 transition-all hover:-translate-y-1"
-                    >
-                      <div className="text-3xl md:text-4xl lg:text-[44px] font-bold mb-2 text-white">
-                        {counter.valor.toLocaleString("pt-BR")}
-                      </div>
-                      <div className="text-white/60 text-sm">{counter.titulo}</div>
-                    </motion.div>
-                  ))
-                ) : (
-                  <>
-                    {[
-                      { value: "1997", label: "Desde" },
-                      { value: "+2.500", label: "Clientes atendidos" },
-                      { value: "2", label: "Lojas em Esteio/RS" },
-                      { value: "100%", label: "Estoque com procedência" },
-                    ].map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-[20px] p-6 text-center hover:bg-white/15 transition-all hover:-translate-y-1"
-                      >
-                        <div className="text-3xl md:text-4xl lg:text-[44px] font-bold mb-2 text-white">{item.value}</div>
-                        <div className="text-white/60 text-sm">{item.label}</div>
-                      </motion.div>
-                    ))}
-                  </>
-                )}
-              </div>
-            </div>
-          </motion.div>
+          <div className="text-center mb-12">
+            <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Resultados</span>
+            <h2 className="text-2xl md:text-[32px] font-bold mb-3">Nossos números</h2>
+            <p className="text-muted-foreground max-w-lg mx-auto">Resultados consistentes construídos com relacionamento e transparência.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            {counters && counters.length > 0 ? (
+              counters.slice(0, 4).map((counter, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="text-center group"
+                >
+                  <div className="text-4xl md:text-5xl lg:text-[56px] font-bold mb-2 text-fg group-hover:text-primary transition-colors">
+                    {counter.valor.toLocaleString("pt-BR")}
+                  </div>
+                  <div className="text-muted-foreground text-sm">{counter.titulo}</div>
+                  <div className="w-12 h-0.5 bg-primary/30 mx-auto mt-4 group-hover:w-20 transition-all" />
+                </motion.div>
+              ))
+            ) : (
+              <>
+                {[
+                  { value: "1997", label: "Desde" },
+                  { value: "+2.500", label: "Clientes atendidos" },
+                  { value: "2", label: "Lojas em Esteio/RS" },
+                  { value: "100%", label: "Estoque com procedência" },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="text-center group"
+                  >
+                    <div className="text-4xl md:text-5xl lg:text-[56px] font-bold mb-2 text-fg group-hover:text-primary transition-colors">{item.value}</div>
+                    <div className="text-muted-foreground text-sm">{item.label}</div>
+                    <div className="w-12 h-0.5 bg-primary/30 mx-auto mt-4 group-hover:w-20 transition-all" />
+                  </motion.div>
+                ))}
+              </>
+            )}
+          </div>
         </div>
       </section>
 
@@ -645,49 +636,45 @@ export function SobrePage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative bg-gradient-to-br from-[#00283C] to-[#004560] rounded-[32px] text-center p-10 md:p-16 shadow-2xl overflow-hidden"
+            className="text-center py-12 md:py-16 border-t border-gray-100"
           >
-            <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-primary/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
-            <div className="relative z-10">
-              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-white">Quer ver nosso estoque qualificado?</h3>
-              <p className="text-white/70 mb-8 max-w-lg mx-auto text-lg">Fale com a equipe ou explore as ofertas atualizadas nas duas lojas.</p>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <Link
-                  to="/seminovos"
-                  search={{
-                    marca: undefined,
-                    modelo: undefined,
-                    precoMin: undefined,
-                    precoMax: undefined,
-                    anoMin: undefined,
-                    anoMax: undefined,
-                    cambio: undefined,
-                    cor: undefined,
-                  }}
+            <h3 className="text-3xl md:text-4xl font-bold mb-4 text-fg">Quer ver nosso estoque qualificado?</h3>
+            <p className="text-muted-foreground mb-8 max-w-lg mx-auto text-lg">Fale com a equipe ou explore as ofertas atualizadas nas duas lojas.</p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link
+                to="/seminovos"
+                search={{
+                  marca: undefined,
+                  modelo: undefined,
+                  precoMin: undefined,
+                  precoMax: undefined,
+                  anoMin: undefined,
+                  anoMax: undefined,
+                  cambio: undefined,
+                  cor: undefined,
+                }}
+                className={cn(
+                  "px-8 py-4 rounded-xl font-bold tracking-wide text-lg",
+                  "bg-primary text-white shadow-lg transition-all",
+                  "hover:-translate-y-1 hover:shadow-xl hover:bg-primary/90"
+                )}
+              >
+                Ver estoque
+              </Link>
+              {whatsapp?.link && (
+                <a
+                  href={whatsapp.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={cn(
                     "px-8 py-4 rounded-xl font-bold tracking-wide text-lg",
-                    "bg-primary text-white shadow-lg transition-all",
-                    "hover:-translate-y-1 hover:shadow-xl hover:bg-primary/90"
+                    "border-2 border-fg/20 text-fg transition-all",
+                    "hover:-translate-y-1 hover:border-primary hover:text-primary"
                   )}
                 >
-                  Ver estoque
-                </Link>
-                {whatsapp?.link && (
-                  <a
-                    href={whatsapp.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(
-                      "px-8 py-4 rounded-xl font-bold tracking-wide text-lg",
-                      "bg-white/10 text-white border border-white/20 backdrop-blur-sm transition-all",
-                      "hover:-translate-y-1 hover:bg-white/20"
-                    )}
-                  >
-                    Chamar no WhatsApp
-                  </a>
-                )}
-              </div>
+                  Chamar no WhatsApp
+                </a>
+              )}
             </div>
           </motion.div>
         </div>
