@@ -5,7 +5,7 @@ import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
 import { cn } from "@/lib/cn";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Car, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
@@ -174,129 +174,164 @@ export function SeminovosPage() {
     setVisibleCount(ITEMS_PER_PAGE);
   }, [search.marca, search.precoMin, search.precoMax, search.anoMin, search.anoMax, sortBy, searchTerm]);
 
+  const [localSearch, setLocalSearch] = useState("");
+
+  const quickFilters = [
+    { label: "ATÉ R$ 100K", value: "100000" },
+    { label: "AUTOMÁTICO", value: "automatico" },
+    { label: "SUV", value: "suv" },
+    { label: "PRATA", value: "prata" },
+  ];
+
+  const handleQuickSearch = (value: string) => {
+    setLocalSearch(value);
+  };
+
+  const handleSearchSubmit = () => {
+    if (localSearch.trim()) {
+      navigate({
+        to: "/seminovos",
+        search: {
+          ...search,
+          modelo: localSearch.trim(),
+        },
+      });
+    }
+  };
+
   return (
     <main className="flex-1 pt-16 overflow-x-hidden max-w-full">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filtros Horizontais */}
-        <div className="mb-6 pb-6">
-          <h2 className="text-sm font-semibold text-muted-foreground mb-4 uppercase">Filtros</h2>
-          <div className="flex flex-wrap items-end gap-4">
+      {/* Barra de Busca Principal */}
+      <div className="bg-gradient-to-b from-surface to-bg py-6">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-bg rounded-full shadow-lg px-4 py-2 flex items-center gap-3">
+            <Car className="w-5 h-5 text-primary flex-shrink-0" />
+            <input
+              type="text"
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
+              placeholder="Busque por marca, modelo, cor, câmbio, valor..."
+              className="flex-1 bg-transparent border-none outline-none text-sm text-fg placeholder:text-muted-foreground"
+            />
+                        <button
+              onClick={handleSearchSubmit}
+              className="bg-fg text-white px-5 py-2 rounded-full flex items-center gap-2 text-sm font-semibold hover:bg-fg/90 transition-colors"
+            >
+              <ArrowRight className="w-4 h-4" />
+              BUSCAR
+            </button>
+          </div>
+
+          {/* Quick Filters */}
+          <div className="flex justify-center gap-3 mt-4">
+            {quickFilters.map((filter) => (
+              <button
+                key={filter.value}
+                onClick={() => handleQuickSearch(filter.label.toLowerCase())}
+                className="px-4 py-1.5 rounded-full bg-bg shadow-sm text-xs font-medium text-muted-foreground hover:bg-primary/5 hover:text-primary transition-colors"
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Filtros em Card Minimalista */}
+        <div className="bg-bg rounded-2xl shadow-sm p-5 mb-8">
+          <div className="flex flex-wrap items-end gap-6">
             {/* Marca */}
-            <div className="flex-1 min-w-[150px]">
+            <div className="flex-1 min-w-[140px]">
+              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Marca</label>
               <AutocompleteSelect
                 options={brandOptions}
                 value={marca}
                 onChange={setMarca}
-                placeholder="SELECIONE"
-                label="Marca:"
+                placeholder="Selecione"
+                label=""
               />
             </div>
 
             {/* Ano mínimo */}
-            <div className="flex-1 min-w-[150px]">
+            <div className="flex-1 min-w-[120px]">
+              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Ano de</label>
               <AutocompleteSelect
                 options={yearOptions}
                 value={anoMin}
                 onChange={setAnoMin}
-                placeholder="SELECIONE"
-                label="Ano mínimo:"
+                placeholder="Selecione"
+                label=""
               />
             </div>
 
             {/* Ano máximo */}
-            <div className="flex-1 min-w-[150px]">
+            <div className="flex-1 min-w-[120px]">
+              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Ano até</label>
               <AutocompleteSelect
                 options={yearOptions}
                 value={anoMax}
                 onChange={setAnoMax}
-                placeholder="SELECIONE"
-                label="Ano até:"
+                placeholder="Selecione"
+                label=""
               />
             </div>
 
             {/* Valor de */}
-            <div className="flex-1 min-w-[150px]">
-              <label className="mb-1 block text-xs font-medium text-fg uppercase">Valor de:</label>
+            <div className="flex-1 min-w-[120px]">
+              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Valor de</label>
               <input
-                type="number"
+                type="text"
                 value={precoMin}
                 onChange={(e) => setPrecoMin(e.target.value)}
-                placeholder={minPrice > 0 ? `R$ ${minPrice.toLocaleString('pt-BR')}` : "DIGITE"}
-                min={minPrice}
-                max={maxPrice}
-                className={cn(
-                  "w-full border-0 border-b border-border bg-transparent px-0 py-2",
-                  "text-sm text-fg placeholder:text-muted-foreground",
-                  "focus:outline-none focus:border-primary"
-                )}
+                placeholder={minPrice > 0 ? `R$ ${minPrice.toLocaleString('pt-BR')}` : "R$ 0"}
+                className="w-full border-0 border-b border-border rounded-none bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:outline-none focus:border-primary"
               />
             </div>
 
             {/* Valor até */}
-            <div className="flex-1 min-w-[150px]">
-              <label className="mb-1 block text-xs font-medium text-fg uppercase">Valor até:</label>
+            <div className="flex-1 min-w-[120px]">
+              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Valor até</label>
               <input
-                type="number"
+                type="text"
                 value={precoMax}
                 onChange={(e) => setPrecoMax(e.target.value)}
-                placeholder={maxPrice > 0 ? `R$ ${maxPrice.toLocaleString('pt-BR')}` : "DIGITE"}
-                min={minPrice}
-                max={maxPrice}
-                className={cn(
-                  "w-full border-0 border-b border-border bg-transparent px-0 py-2",
-                  "text-sm text-fg placeholder:text-muted-foreground",
-                  "focus:outline-none focus:border-primary"
-                )}
+                placeholder={maxPrice > 0 ? `R$ ${maxPrice.toLocaleString('pt-BR')}` : "R$ 500.000"}
+                className="w-full border-0 border-b border-border rounded-none bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:outline-none focus:border-primary"
               />
             </div>
 
             {/* Botão Filtrar */}
             <button
               onClick={handleFilter}
-              className={cn(
-                "px-6 py-2.5 rounded-lg bg-fg text-white",
-                "text-sm font-semibold uppercase",
-                "hover:bg-fg/90 transition-all duration-200 hover:shadow-md",
-                "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-              )}
+              className="px-6 py-2.5 rounded-lg bg-fg text-white text-sm font-semibold uppercase hover:bg-fg/90 transition-all duration-200 hover:shadow-md"
             >
               Filtrar
             </button>
           </div>
-          
-          {/* Linha animada abaixo dos filtros */}
-          <motion.div
-            className="h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent mt-6"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          />
         </div>
 
-        {/* Título */}
-        <h1 className="text-3xl md:text-4xl font-bold text-fg mb-6">Showroom</h1>
-
-        {/* Ordenação */}
-        <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="text-sm text-muted-foreground">
-            {filteredAndSortedVehicles.length} veículo{filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado{filteredAndSortedVehicles.length !== 1 ? "s" : ""}
+        {/* Header com Título e Ordenação */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-fg">Showroom</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              {filteredAndSortedVehicles.length} veículo{filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado{filteredAndSortedVehicles.length !== 1 ? "s" : ""}
+            </p>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-fg">Ordenar por</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-muted-foreground uppercase">Ordenar por</span>
             <div className="relative">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className={cn(
-                  "appearance-none rounded-md border border-border bg-bg px-4 py-2 pr-8",
-                  "text-sm text-fg",
-                  "focus:outline-none focus:ring-2 focus:ring-primary"
-                )}
+                className="appearance-none rounded-lg border-0 bg-surface px-4 py-2 pr-8 text-sm text-fg focus:outline-none focus:ring-1 focus:ring-primary/20"
               >
                 <option value="az">A &gt; Z</option>
                 <option value="za">Z &gt; A</option>
-                <option value="preco-asc">Preço menor para maior</option>
-                <option value="preco-desc">Preço maior para menor</option>
+                <option value="preco-asc">Menor preço</option>
+                <option value="preco-desc">Maior preço</option>
               </select>
               <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
             </div>

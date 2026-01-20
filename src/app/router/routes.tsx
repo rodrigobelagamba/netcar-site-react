@@ -13,6 +13,8 @@ import { SeminovosPage } from "@/modules/seminovos/pages/SeminovosPage";
 import { DetalhesPage } from "@/modules/detalhes/pages/DetalhesPage";
 import { SobrePage } from "@/modules/sobre/pages/SobrePage";
 import { ContatoPage } from "@/modules/contato/pages/ContatoPage";
+import { BlogPage } from "@/modules/blog/pages/BlogPage";
+import { CompraPage } from "@/modules/compra/pages/CompraPage";
 
 // WhatsApp Button Component - iAN
 function WhatsAppButton() {
@@ -67,7 +69,7 @@ function RootComponent() {
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
       <Header />
-      <div className="relative flex-1 overflow-x-hidden max-w-full">
+      <div className="relative flex-1 overflow-x-hidden max-w-full pt-20">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -154,12 +156,26 @@ const contatoRoute = createRoute({
   component: ContatoPage,
 });
 
+const blogRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/blog",
+  component: BlogPage,
+});
+
+const compraRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/compra",
+  component: CompraPage,
+});
+
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   seminovosRoute,
   detalhesRoute,
   sobreRoute,
   contatoRoute,
+  blogRoute,
+  compraRoute,
 ]);
 
 // Exporta NotFound para uso no RouterProvider

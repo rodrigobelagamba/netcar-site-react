@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
-import { useAboutTextQuery, useCountersQuery, useBannersQuery } from "@/api/queries/useSiteQuery";
+import { useAboutTextQuery, useCountersQuery } from "@/api/queries/useSiteQuery";
 import { useBannersLoja1Query, useBannersLoja2Query, useAddressQuery, usePhoneQuery, useWhatsAppQuery } from "@/api/queries/useSiteQuery";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
+import { CheckCircle2, Shield, Award } from "lucide-react";
 
 export function SobrePage() {
   // Busca dados da API
   const { data: essencia } = useAboutTextQuery("Essência");
   const { data: counters } = useCountersQuery("Sobre");
-  const { data: banners } = useBannersQuery();
   const { data: bannersLoja1 } = useBannersLoja1Query();
   const { data: bannersLoja2 } = useBannersLoja2Query();
   const { data: addressLoja1 } = useAddressQuery("Loja1");
@@ -24,9 +24,6 @@ export function SobrePage() {
     "Sobre Nós",
     "Desde 1997, a Netcar seleciona carros com histórico, qualidade e transparência. Conheça nossa história e valores."
   );
-
-  // Imagem da essência (primeiro banner ou fallback)
-  const essenciaImage = banners?.[0]?.imagem || "/images/loja1.jpg";
   
   // Imagem da fachada para cada loja
   const getFachadaImage = (banners?: Array<{ titulo?: string; imagem: string }>) => {
@@ -37,8 +34,6 @@ export function SobrePage() {
 
   const loja1Image = getFachadaImage(bannersLoja1) || "/images/loja1.jpg";
   const loja2Image = getFachadaImage(bannersLoja2) || "/images/loja2.jpg";
-  const loja1DetailImage = bannersLoja1?.[1]?.imagem || loja1Image;
-  const loja2DetailImage = bannersLoja2?.[1]?.imagem || loja2Image;
 
   // Formata endereço
   const formatAddress = (address?: { endereco?: string; cidade?: string; estado?: string }) => {
@@ -61,139 +56,199 @@ export function SobrePage() {
     { year: "2024", title: "Segunda loja", description: "Expansão do showroom e atendimento em dois endereços." },
   ];
 
-  // Valores (pode vir da API ou ser estático)
-  const valoresList = valores?.conteudo ? [] : [
-    { title: "Transparência", description: "Informação clara em cada etapa da compra." },
-    { title: "Procedência", description: "Histórico e documentação verificados." },
-    { title: "Experiência", description: "Desde 1997 no mercado de seminovos." },
-  ];
-
-  // Equipe (mock - pode vir da API futuramente)
-  const team = [
-    { name: "Marcelo Marchis", role: "Gestão & Relacionamento" },
-    { name: "Gilnei", role: "Consultor Comercial" },
-    { name: "Bruno", role: "Consultor Comercial" },
-    { name: "Tiago", role: "Consultor Comercial" },
+  // Equipe organizada por setor
+  const teamBySector = [
+    {
+      sector: "Gestão & Administração",
+      members: [
+        { name: "Cristiano", role: "Gestão", image: "/team/cristiano.jpg" },
+        { name: "Marcelo", role: "Administração & TI", image: "/team/marcelo.jpg" },
+        { name: "Shirley", role: "Financeiro & RH", image: "/team/shirley.png" },
+      ]
+    },
+    {
+      sector: "Comercial",
+      members: [
+        { name: "Carlos", role: "Consultor", image: "/team/carlos.jpg" },
+        { name: "Filipe", role: "Consultor", image: "/team/filipe.jpg" },
+        { name: "Tiago", role: "Consultor", image: "/team/tiago.jpg" },
+        { name: "Bruno", role: "Consultor", image: "/team/bruno.jpg" },
+        { name: "Gilnei", role: "Consultor", image: "/team/gilnei.jpg" },
+      ]
+    },
+    {
+      sector: "Manutenção & Preparação",
+      members: [
+        { name: "Juliano", role: "Preparação", image: "/team/juliano.jpg" },
+        { name: "Herick", role: "Preparação", image: "/team/herick.jpg" },
+        { name: "Claudio", role: "Preparação", image: "/team/claudio.jpg" },
+      ]
+    },
   ];
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full">
+    <main className="flex-1 overflow-x-hidden max-w-full bg-gradient-to-b from-white via-gray-50/50 to-white">
       {/* Hero Section */}
-      <header className="relative py-20 text-center overflow-hidden">
-        <div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-primary/10 via-transparent to-transparent" />
+      <header className="relative py-16 md:py-24 overflow-hidden">
+        <div className="absolute inset-0 -z-10 pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-secondary/8 rounded-full blur-3xl" />
+        </div>
+        
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-primary text-xs font-semibold tracking-widest uppercase mb-2">
-            Sobre a Netcar
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.span 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-primary text-xs font-semibold tracking-widest uppercase mb-4 block"
+              >
+                Sobre a Netcar
+              </motion.span>
+              <h1 className="text-3xl md:text-4xl lg:text-[48px] font-bold leading-tight mb-5 text-fg">
+                Desde 1997, curadoria e procedência em seminovos.
+              </h1>
+              <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-6">
+                Há quase três décadas selecionando carros com histórico, qualidade e transparência.
+              </p>
+              
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                  <span>Procedência comprovada</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                  <span>Checklist técnico</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                  <span>Entrega sem surpresa</span>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="flex justify-center lg:justify-end"
+            >
+              <div className="relative">
+                <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 p-2">
+                  <div className="w-full h-full rounded-full bg-white p-2 shadow-xl overflow-hidden">
+                    <img 
+                      src={loja1Image || "/images/loja1.jpg"}
+                      alt="Netcar Multimarcas"
+                      className="w-full h-full rounded-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/images/loja1.jpg";
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="absolute bottom-4 right-4 bg-white rounded-full px-4 py-2 shadow-lg border border-gray-100 flex items-center gap-2">
+                  <Award className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-medium text-fg">Desde 1997</span>
+                </div>
+              </div>
+            </motion.div>
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-[52px] font-bold leading-tight mb-4 transition-colors hover:text-primary">
-            Desde 1997, curadoria e procedência em seminovos.
-          </h1>
-          <p className="max-w-[760px] mx-auto text-muted-foreground text-base md:text-lg">
-            Há quase três décadas selecionando carros com histórico, qualidade e transparência. Nosso foco é um <strong>estoque qualificado</strong>, com procedência do RS, checklist técnico e entrega sem surpresa.
-          </p>
         </div>
       </header>
 
       {/* Nossa essência */}
-      <section className="py-14">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] gap-7 items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
-            >
-              <h2 className="text-2xl md:text-[28px] font-bold mb-2">Nossa essência</h2>
-              <p className="text-muted-foreground mb-4">
-                {essencia?.conteudo || "Selecionamos cada veículo com critérios objetivos de quilometragem, histórico e procedência. O preparo e a transparência fazem parte do processo, para você comprar certo."}
-              </p>
-              <ul className="list-disc pl-5 text-muted-foreground space-y-1">
-                <li>Curadoria de estoque com <strong>procedência comprovada</strong></li>
-                <li>Checklist técnico e histórico de manutenção</li>
-                <li>Laudos e documentação quando aplicável</li>
-                <li>Atendimento próximo e experiente</li>
-              </ul>
-            </motion.div>
-            <motion.figure
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="relative h-[320px] rounded-[20px] overflow-hidden border border-border"
-            >
-              <img
-                src={essenciaImage}
-                alt="Showroom da Netcar"
-                className="w-full h-full object-cover transition-transform hover:scale-105"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/loja1.jpg";
-                }}
-              />
-            </motion.figure>
-          </div>
-        </div>
-      </section>
-
-      {/* Nossos números */}
-      <section className="py-14">
+      <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm"
+            className="relative bg-white rounded-[24px] p-8 md:p-10 shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden"
           >
-            <h2 className="text-2xl md:text-[26px] font-bold mb-1">Nossos números</h2>
-            <p className="text-muted-foreground mb-5">Resultados consistentes construídos com relacionamento e transparência.</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-7">
-              {counters && counters.length > 0 ? (
-                counters.slice(0, 4).map((counter, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-surface border border-border rounded-[20px] p-7 text-center shadow-sm hover:shadow-md transition-all hover:-translate-y-1 hover:scale-[1.01]"
-                  >
-                    <div className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-2">
-                      {counter.valor.toLocaleString("pt-BR")}
-                    </div>
-                    <div className="text-muted-foreground text-sm">{counter.titulo}</div>
-                  </motion.div>
-                ))
-              ) : (
-                <>
-                  <div className="bg-surface border border-border rounded-[20px] p-7 text-center shadow-sm">
-                    <div className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-2">1997</div>
-                    <div className="text-muted-foreground text-sm">Desde</div>
-                  </div>
-                  <div className="bg-surface border border-border rounded-[20px] p-7 text-center shadow-sm">
-                    <div className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-2">+2.500</div>
-                    <div className="text-muted-foreground text-sm">Clientes atendidos</div>
-                  </div>
-                  <div className="bg-surface border border-border rounded-[20px] p-7 text-center shadow-sm">
-                    <div className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-2">2</div>
-                    <div className="text-muted-foreground text-sm">Lojas em Esteio/RS</div>
-                  </div>
-                  <div className="bg-surface border border-border rounded-[20px] p-7 text-center shadow-sm">
-                    <div className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-2">100%</div>
-                    <div className="text-muted-foreground text-sm">Estoque com procedência</div>
-                  </div>
-                </>
-              )}
+            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent" />
+            <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Nossa essência</span>
+            <h2 className="text-2xl md:text-[30px] font-bold mb-4 leading-tight">Curadoria com propósito</h2>
+            <p className="text-muted-foreground mb-6 leading-relaxed max-w-3xl">
+              {essencia?.conteudo || "Selecionamos cada veículo com critérios objetivos de quilometragem, histórico e procedência. O preparo e a transparência fazem parte do processo, para você comprar certo."}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { icon: CheckCircle2, text: "Curadoria de estoque com procedência comprovada" },
+                { icon: CheckCircle2, text: "Checklist técnico e histórico de manutenção" },
+                { icon: CheckCircle2, text: "Laudos e documentação quando aplicável" },
+                { icon: CheckCircle2, text: "Atendimento próximo e experiente" },
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-start gap-3 group">
+                  <item.icon className="w-5 h-5 text-primary flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                  <span className="text-muted-foreground text-sm">{item.text}</span>
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Nossas lojas */}
-      <section className="py-14">
+      {/* Nossos números */}
+      <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <h2 className="text-2xl md:text-[26px] font-bold mb-4">Nossas lojas</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {counters && counters.length > 0 ? (
+              counters.slice(0, 4).map((counter, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="p-6 rounded-2xl border border-gray-200 bg-white hover:border-primary/30 hover:shadow-md transition-all text-center md:text-left"
+                >
+                  <div className="text-4xl md:text-5xl font-bold text-fg mb-1">
+                    {counter.valor.toLocaleString("pt-BR")}
+                  </div>
+                  <div className="text-primary text-sm font-medium">{counter.titulo}</div>
+                </motion.div>
+              ))
+            ) : (
+              <>
+                {[
+                  { value: "1997", label: "Desde" },
+                  { value: "+2.750", label: "Clientes atendidos" },
+                  { value: "94%", label: "Clientes recomendam" },
+                  { value: "83%", label: "Taxa de recompra" },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.08 }}
+                    className="p-6 rounded-2xl border border-gray-200 bg-white hover:border-primary/30 hover:shadow-md transition-all text-center md:text-left"
+                  >
+                    <div className="text-4xl md:text-5xl font-bold text-fg mb-1">{item.value}</div>
+                    <div className="text-primary text-sm font-medium">{item.label}</div>
+                  </motion.div>
+                ))}
+              </>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Nossas lojas */}
+      <section className="py-16 md:py-20 bg-gray-50/50 relative z-10 overflow-hidden">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="mb-10">
+            <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Onde estamos</span>
+            <h2 className="text-2xl md:text-[32px] font-bold mb-2">Nossas lojas</h2>
+            <p className="text-muted-foreground max-w-lg">Dois endereços em Esteio/RS para melhor atendê-lo.</p>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
             {/* Loja 1 */}
             <motion.article
@@ -201,34 +256,34 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="relative bg-surface border border-border rounded-[20px] p-6 shadow-md hover:shadow-lg transition-all hover:-translate-y-1 overflow-visible"
+              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group"
             >
-              <div className="relative rounded-[14px] overflow-hidden h-[260px] mb-4">
+              <div className="relative h-[220px] rounded-t-[20px] overflow-hidden">
                 <img
                   src={loja1Image}
                   alt="Fachada da Loja 1"
-                  className="w-full h-full object-cover transition-transform hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja1.jpg";
                   }}
                 />
               </div>
-              <div className="hidden lg:block absolute top-[-50px] right-6 w-[42%] max-w-[200px] h-[160px] rounded-[18px] overflow-hidden border border-border shadow-sm transition-transform hover:-translate-y-1 hover:scale-105">
+              <div className="absolute -top-6 -right-6 w-40 h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <img
-                  src={loja1DetailImage}
-                  alt="Detalhe da Loja 1"
+                  src={loja2Image}
+                  alt="Miniatura Loja 2"
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.currentTarget.src = loja1Image;
+                    e.currentTarget.src = "/images/loja2.jpg";
                   }}
                 />
               </div>
-              <div className="mt-4 space-y-1">
-                <h3 className="text-lg font-semibold">Loja 1 — Centro, Esteio/RS</h3>
-                <p className="text-muted-foreground text-sm">
-                  {formatAddress(addressLoja1) || "Av. Presidente Vargas, 740"} — {formatPhone(phoneLoja1) || "(51) 3473‑7900"}
+              <div className="p-6">
+                <h3 className="text-lg font-bold text-fg mb-1">Loja 1 — Centro, Esteio/RS</h3>
+                <p className="text-muted-foreground text-sm mb-3">
+                  {formatAddress(addressLoja1) || "Av. Presidente Vargas, 740"} — {formatPhone(phoneLoja1) || "(51) 3473-7900"}
                 </p>
-                <p className="text-muted-foreground text-sm">Showroom amplo, atendimento personalizado e test‑drive.</p>
+                <p className="text-muted-foreground text-sm">Showroom amplo, atendimento personalizado e test-drive.</p>
               </div>
             </motion.article>
 
@@ -238,32 +293,32 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="relative bg-surface border border-border rounded-[20px] p-6 shadow-md hover:shadow-lg transition-all hover:-translate-y-1 overflow-visible"
+              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group"
             >
-              <div className="relative rounded-[14px] overflow-hidden h-[260px] mb-4">
+              <div className="relative h-[220px] rounded-t-[20px] overflow-hidden">
                 <img
                   src={loja2Image}
                   alt="Fachada da Loja 2"
-                  className="w-full h-full object-cover transition-transform hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja2.jpg";
                   }}
                 />
               </div>
-              <div className="hidden lg:block absolute top-[-50px] right-6 w-[42%] max-w-[200px] h-[160px] rounded-[18px] overflow-hidden border border-border shadow-sm transition-transform hover:-translate-y-1 hover:scale-105">
+              <div className="absolute -top-6 -right-6 w-40 h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <img
-                  src={loja2DetailImage}
-                  alt="Detalhe da Loja 2"
+                  src={loja1Image}
+                  alt="Miniatura Loja 1"
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.currentTarget.src = loja2Image;
+                    e.currentTarget.src = "/images/loja1.jpg";
                   }}
                 />
               </div>
-              <div className="mt-4 space-y-1">
-                <h3 className="text-lg font-semibold">Loja 2 — Centro, Esteio/RS</h3>
-                <p className="text-muted-foreground text-sm">
-                  {formatAddress(addressLoja2) || "Av. Presidente Vargas, 1106"} — {formatPhone(phoneLoja2) || "(51) 3033‑3900"}
+              <div className="p-6">
+                <h3 className="text-lg font-bold text-fg mb-1">Loja 2 — Centro, Esteio/RS</h3>
+                <p className="text-muted-foreground text-sm mb-3">
+                  {formatAddress(addressLoja2) || "Av. Presidente Vargas, 1106"} — {formatPhone(phoneLoja2) || "(51) 3033-3900"}
                 </p>
                 <p className="text-muted-foreground text-sm">Seleção de seminovos e condições especiais de financiamento.</p>
               </div>
@@ -273,32 +328,45 @@ export function SobrePage() {
       </section>
 
       {/* Linha do tempo + Valores */}
-      <section className="py-14">
+      <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-stretch">
             {/* Nossa história */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm"
+              className="h-full p-6 md:p-8 rounded-2xl border border-gray-200 bg-white hover:border-primary/30 hover:shadow-md transition-all"
             >
-              <h2 className="text-2xl md:text-[26px] font-bold mb-2">Nossa história</h2>
+              <div className="mb-6">
+                <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-2 block">Trajetória</span>
+                <h2 className="text-2xl md:text-[28px] font-bold">Nossa história</h2>
+              </div>
               {historia?.conteudo ? (
                 <div
-                  className="text-muted-foreground"
+                  className="text-muted-foreground leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: historia.conteudo }}
                 />
               ) : (
-                <div className="relative pl-6">
-                  <div className="absolute top-0 bottom-0 left-2 w-0.5 bg-gradient-to-b from-primary to-transparent opacity-40" />
+                <div className="space-y-0">
                   {timelineItems.map((item, index) => (
-                    <div key={index} className="relative pl-4 pb-4 transition-transform hover:translate-x-1">
-                      <div className="absolute left-[-2px] top-5 w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_0_5px_rgba(31,111,235,0.1)]" />
-                      <h4 className="font-semibold mb-1">{item.year} — {item.title}</h4>
-                      <p className="text-muted-foreground text-sm">{item.description}</p>
-                    </div>
+                    <motion.div 
+                      key={index} 
+                      className="group relative py-4 border-b border-gray-100 last:border-0"
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                    >
+                      <div className="flex items-start gap-4">
+                        <span className="text-primary font-bold text-lg min-w-[60px]">{item.year}</span>
+                        <div>
+                          <h4 className="font-semibold text-fg group-hover:text-primary transition-colors">{item.title}</h4>
+                          <p className="text-muted-foreground text-sm mt-1">{item.description}</p>
+                        </div>
+                      </div>
+                    </motion.div>
                   ))}
                 </div>
               )}
@@ -310,24 +378,42 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm"
+              className="h-full p-6 md:p-8 rounded-2xl border border-gray-200 bg-white hover:border-primary/30 hover:shadow-md transition-all"
             >
-              <h2 className="text-2xl md:text-[26px] font-bold mb-2">Nossos valores</h2>
+              <div className="mb-6">
+                <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-2 block">Princípios</span>
+                <h2 className="text-2xl md:text-[28px] font-bold">Nossos valores</h2>
+              </div>
               {valores?.conteudo ? (
                 <div
-                  className="text-muted-foreground"
+                  className="text-muted-foreground leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: valores.conteudo }}
                 />
               ) : (
-                <div className="grid grid-cols-1 gap-4">
-                  {valoresList.map((valor, index) => (
-                    <div
+                <div className="space-y-0">
+                  {[
+                    { icon: Shield, title: "Transparência", description: "Informação clara em cada etapa da compra." },
+                    { icon: CheckCircle2, title: "Procedência", description: "Histórico e documentação verificados." },
+                    { icon: Award, title: "Experiência", description: "Desde 1997 no mercado de seminovos." },
+                  ].map((valor, index) => (
+                    <motion.div
                       key={index}
-                      className="bg-surface border border-border rounded-[20px] p-6 transition-all hover:border-primary/35 hover:bg-gradient-to-b hover:from-surface hover:to-surface-alt hover:-translate-y-1"
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="group py-4 border-b border-gray-100 last:border-0"
                     >
-                      <h4 className="font-semibold mb-1">{valor.title}</h4>
-                      <p className="text-muted-foreground text-sm">{valor.description}</p>
-                    </div>
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <valor.icon className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-fg group-hover:text-primary transition-colors">{valor.title}</h4>
+                          <p className="text-muted-foreground text-sm mt-1">{valor.description}</p>
+                        </div>
+                      </div>
+                    </motion.div>
                   ))}
                 </div>
               )}
@@ -337,23 +423,62 @@ export function SobrePage() {
       </section>
 
       {/* Equipe */}
-      <section className="py-14">
+      <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-[1200px] mx-auto px-6">
-          <h2 className="text-2xl md:text-[26px] font-bold mb-2">Nossa equipe</h2>
-          <p className="text-muted-foreground mb-5">Profissionais que somam experiência, cuidado e atenção a cada detalhe.</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {team.map((person, index) => (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Quem faz acontecer</span>
+            <h2 className="text-2xl md:text-[36px] font-bold mb-3">Nossa equipe</h2>
+            <p className="text-muted-foreground max-w-md mx-auto">Profissionais dedicados em cada etapa do seu atendimento.</p>
+          </motion.div>
+          
+          <div className="space-y-16">
+            {teamBySector.map((sector, sectorIndex) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
+                key={sector.sector}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex flex-col items-center gap-2.5 p-5 border border-border rounded-[20px] bg-surface transition-all hover:-translate-y-1 hover:shadow-md"
+                transition={{ duration: 0.6, delay: sectorIndex * 0.1 }}
               >
-                <div className="w-20 h-20 rounded-full bg-muted border border-border transition-all hover:shadow-[0_0_0_6px_rgba(31,111,235,0.1)] hover:scale-105" />
-                <h5 className="font-semibold text-center">{person.name}</h5>
-                <p className="text-muted-foreground text-sm text-center">{person.role}</p>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-200 to-gray-200" />
+                  <h3 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground px-4">{sector.sector}</h3>
+                  <div className="h-px flex-1 bg-gradient-to-l from-transparent via-gray-200 to-gray-200" />
+                </div>
+                
+                <div className={cn(
+                  "grid gap-6 md:gap-8",
+                  sector.members.length <= 3 ? "grid-cols-2 sm:grid-cols-3 max-w-2xl mx-auto" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+                )}>
+                  {sector.members.map((person, index) => (
+                    <motion.div
+                      key={person.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.08 }}
+                      className="group text-center"
+                    >
+                      <div className="relative mb-4 mx-auto w-28 h-28 md:w-32 md:h-32">
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="relative w-full h-full rounded-full overflow-hidden ring-2 ring-white shadow-lg group-hover:ring-primary/30 transition-all duration-300">
+                          <img 
+                            src={person.image} 
+                            alt={person.name}
+                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                          />
+                        </div>
+                      </div>
+                      <h5 className="font-semibold text-fg group-hover:text-primary transition-colors">{person.name}</h5>
+                      <p className="text-muted-foreground text-sm mt-0.5">{person.role}</p>
+                    </motion.div>
+                  ))}
+                </div>
               </motion.div>
             ))}
           </div>
@@ -361,21 +486,24 @@ export function SobrePage() {
       </section>
 
       {/* CTA Estoque */}
-      <section className="py-14">
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section className="py-20 md:py-28">
+        <div className="max-w-[900px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative bg-gradient-to-br from-surface via-surface to-surface-alt border border-border rounded-[28px] text-center p-12 shadow-md hover:shadow-lg transition-all hover:-translate-y-1 overflow-hidden"
+            className="relative"
           >
-            <div className="absolute top-0 left-0 w-[400px] h-[200px] bg-primary/12 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute bottom-0 right-0 w-[400px] h-[200px] bg-primary/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
-            <div className="relative z-10">
-              <h3 className="text-2xl font-bold mb-2">Quer ver nosso estoque qualificado?</h3>
-              <p className="text-muted-foreground mb-6">Fale com a equipe ou explore as ofertas atualizadas nas duas lojas.</p>
-              <div className="flex flex-wrap gap-3 justify-center">
+            <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-primary/50 to-transparent rounded-full" />
+            <div className="pl-8">
+              <h3 className="text-3xl md:text-[42px] font-bold mb-4 text-fg leading-tight">
+                Quer ver nosso<br />estoque qualificado?
+              </h3>
+              <p className="text-muted-foreground mb-8 text-lg max-w-md">
+                Fale com a equipe ou explore as ofertas atualizadas nas duas lojas.
+              </p>
+              <div className="flex flex-wrap gap-4">
                 <Link
                   to="/seminovos"
                   search={{
@@ -389,9 +517,9 @@ export function SobrePage() {
                     cor: undefined,
                   }}
                   className={cn(
-                    "px-5 py-3.5 rounded-[14px] font-semibold tracking-wide",
-                    "bg-fg text-white shadow-md transition-all",
-                    "hover:-translate-y-0.5 hover:shadow-lg hover:bg-primary"
+                    "px-7 py-3.5 rounded-full font-semibold",
+                    "bg-primary text-white transition-all",
+                    "hover:bg-primary/90 hover:shadow-lg"
                   )}
                 >
                   Ver estoque
@@ -402,36 +530,12 @@ export function SobrePage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
-                      "px-5 py-3.5 rounded-[14px] font-semibold tracking-wide",
-                      "bg-muted text-fg border border-border transition-all",
-                      "hover:-translate-y-0.5 hover:bg-fg hover:text-white"
+                      "px-7 py-3.5 rounded-full font-semibold",
+                      "text-primary underline underline-offset-4 transition-all",
+                      "hover:text-primary/80"
                     )}
                   >
                     Chamar no WhatsApp
-                  </a>
-                )}
-                {phoneLoja1?.telefone && (
-                  <a
-                    href={`tel:${phoneLoja1.telefone.replace(/\D/g, "")}`}
-                    className={cn(
-                      "px-5 py-3.5 rounded-[14px] font-semibold tracking-wide",
-                      "bg-muted text-fg border border-border transition-all",
-                      "hover:-translate-y-0.5 hover:bg-fg hover:text-white"
-                    )}
-                  >
-                    Loja 1
-                  </a>
-                )}
-                {phoneLoja2?.telefone && (
-                  <a
-                    href={`tel:${phoneLoja2.telefone.replace(/\D/g, "")}`}
-                    className={cn(
-                      "px-5 py-3.5 rounded-[14px] font-semibold tracking-wide",
-                      "bg-muted text-fg border border-border transition-all",
-                      "hover:-translate-y-0.5 hover:bg-fg hover:text-white"
-                    )}
-                  >
-                    Loja 2
                   </a>
                 )}
               </div>

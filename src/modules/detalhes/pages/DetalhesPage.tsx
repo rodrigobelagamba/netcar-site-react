@@ -401,8 +401,11 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
   const handleTradeInClick = () => {
     if (!whatsapp?.numero) return;
     
-    // Mensagem específica para avaliação de troca
-    const message = "Oi, gostaria que meu veículo fosse avaliado por um consultor Netcar.";
+    // Mensagem específica para avaliação de troca com nome do veículo
+    const vehicleName = modeloCompleto ? modeloCompleto.toUpperCase() : "";
+    const message = vehicleName 
+      ? `Oi, gostaria que meu veículo fosse avaliado na troca deste ${vehicleName}.`
+      : "Oi, gostaria que meu veículo fosse avaliado na troca.";
     
     // Gera o link do WhatsApp com a mensagem de troca
     const cleaned = whatsapp.numero.replace(/\D/g, "");
@@ -629,23 +632,10 @@ function RelatedVehiclesSection({
 }) {
   const { data: vehicles, isLoading } = useVehiclesQuery();
 
-  // Função helper para verificar se veículo está vendido
-  const isVehicleSold = (vehicle: { status?: string | null }) => {
-    if (!vehicle.status) return false;
-    const statusLower = vehicle.status.toLowerCase().trim();
-    return statusLower === 'vendido' || statusLower === 'sold' || statusLower === 'v';
-  };
-
-  // Filtrar veículos relacionados (excluir o atual, vendidos e pegar até 4)
+  // Filtrar veículos relacionados (excluir o atual e pegar até 4)
   // Converte ambos os IDs para string para comparação correta
   const relatedVehicles =
-    vehicles?.filter((v) => {
-      // Exclui o veículo atual
-      if (String(v.id) === String(currentVehicleId)) return false;
-      // Exclui veículos vendidos
-      if (isVehicleSold(v)) return false;
-      return true;
-    }).slice(0, 4) || [];
+    vehicles?.filter((v) => String(v.id) !== String(currentVehicleId)).slice(0, 4) || [];
 
   if (isLoading || relatedVehicles.length === 0) {
     return null;
@@ -712,44 +702,24 @@ function PriceWithShimmer({ price }: { price: string }) {
         delay: 0.3,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className="relative overflow-hidden cursor-pointer flex-shrink-0"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className="flex-shrink-0"
     >
-      <motion.p
-        className="text-secondary text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap relative z-20"
+      <p
+        className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap cursor-pointer transition-transform duration-300 hover:-translate-y-1"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{
+          background: isHovered 
+            ? 'linear-gradient(90deg, hsl(var(--color-secondary)) 0%, hsl(var(--color-secondary)) 35%, hsl(var(--color-bg)) 50%, hsl(var(--color-secondary)) 65%, hsl(var(--color-secondary)) 100%)'
+            : 'hsl(var(--color-secondary))',
+          backgroundSize: isHovered ? '300% 100%' : '100% 100%',
+          backgroundPosition: isHovered ? '100% 0' : '0% 0',
+          WebkitBackgroundClip: 'text',
+          backgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          transition: 'background-position 0.6s ease-in-out',
+        }}
         dangerouslySetInnerHTML={{ __html: price }}
-        animate={{
-          y: isHovered ? -4 : 0,
-        }}
-        transition={{
-          duration: 0.3,
-          ease: [0.25, 0.1, 0.25, 1],
-        }}
-      />
-      {/* Efeito Espelhamento (Shimmer) - Movimento diagonal principal com movimento vertical pronunciado */}
-      <span 
-        className="absolute inset-0 pointer-events-none z-30"
-        style={{
-          background: 'linear-gradient(135deg, transparent 20%, rgba(255,255,255,0.8) 50%, transparent 80%)',
-          transform: isHovered 
-            ? 'translateX(100%) translateY(calc(100% + 40px))' 
-            : 'translateX(-100%) translateY(calc(-100% - 40px))',
-          transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)',
-          mixBlendMode: 'screen',
-        }}
-      />
-      {/* Efeito secundário para mais profundidade com movimento vertical */}
-      <span 
-        className="absolute inset-0 pointer-events-none z-30"
-        style={{
-          background: 'linear-gradient(45deg, transparent 20%, rgba(255,255,255,0.6) 50%, transparent 80%)',
-          transform: isHovered 
-            ? 'translateX(100%) translateY(calc(100% + 30px))' 
-            : 'translateX(-100%) translateY(calc(-100% - 30px))',
-          transition: 'transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)',
-          mixBlendMode: 'lighten',
-        }}
       />
     </motion.div>
   );
@@ -978,8 +948,8 @@ export function DetalhesPage() {
                   <span className="text-muted-foreground text-[11px] sm:text-[12px] uppercase tracking-wider mb-1.5 font-medium">
                     Combustível
                   </span>
-                  <span className="text-fg text-[16px] sm:text-[18px] font-semibold">
-                    {combustivel}
+                  <span className="text-fg text-[16px] sm:text-[18px] font-semibold uppercase">
+                    FLEX
                   </span>
                 </div>
               )}
@@ -1079,7 +1049,7 @@ export function DetalhesPage() {
       <DetailsSection vehicle={vehicle} />
 
       {/* Fábrica de Valor Section */}
-      <section className="w-full pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16 bg-[rgb(247,247,247)]">
+      <section className="w-full pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16 bg-surface">
         <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0">
           <FabricaDeValor />
         </div>

@@ -114,10 +114,10 @@ export function Header() {
   const menuLinks = [
     { to: "/sobre", label: "Sobre" },
     { to: "/seminovos", label: "Showroom" },
-    { to: "/social", label: "Social" },
-    { to: "/blog", label: "Blog" },
+    { to: "/compra", label: "Compra" },
+    { to: "/blog", label: "Atualidades" },
     { to: "/contato", label: "Contato" },
-    { to: "https://maps.google.com/?q=Netcar+Esteio", label: "Localização", external: true },
+    { to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9", label: "Localização", external: true },
   ];
 
   return (
