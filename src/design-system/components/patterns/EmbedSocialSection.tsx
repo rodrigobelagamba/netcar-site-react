@@ -1,59 +1,56 @@
-import { useEffect, useRef } from "react";
-
-declare global {
-  interface Window {
-    EmbedSocialHashtagScript?: { init?: () => void };
-    EmbedSocialStoriesScript?: { init?: () => void };
-    EmbedSocialReviewsScript?: { init?: () => void };
-  }
-}
+import { useEffect, useRef, useState } from "react";
 
 export function EmbedSocialSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
-    const loadScript = (id: string, src: string) => {
-      return new Promise<void>((resolve) => {
-        if (document.getElementById(id)) {
-          resolve();
-          return;
-        }
-        const script = document.createElement("script");
-        script.id = id;
-        script.src = src;
-        script.async = true;
-        script.onload = () => resolve();
-        script.onerror = () => resolve();
-        document.head.appendChild(script);
-      });
+    const forceLoadScripts = () => {
+      // Remove scripts existentes para forçar reload
+      const existingHt = document.getElementById("EmbedSocialHashtagScript");
+      const existingSt = document.getElementById("EmbedSocialStoriesScript");
+      const existingRv = document.getElementById("EmbedSocialReviewsScript");
+      
+      if (existingHt) existingHt.remove();
+      if (existingSt) existingSt.remove();
+      if (existingRv) existingRv.remove();
+
+      // Carrega scripts novamente
+      const htScript = document.createElement("script");
+      htScript.id = "EmbedSocialHashtagScript";
+      htScript.src = "https://embedsocial.com/cdn/ht.js";
+      htScript.async = true;
+      document.body.appendChild(htScript);
+
+      const stScript = document.createElement("script");
+      stScript.id = "EmbedSocialStoriesScript";
+      stScript.src = "https://embedsocial.com/embedscript/st.js";
+      stScript.async = true;
+      document.body.appendChild(stScript);
+
+      const rvScript = document.createElement("script");
+      rvScript.id = "EmbedSocialReviewsScript";
+      rvScript.src = "https://embedsocial.com/cdn/rv.js";
+      rvScript.async = true;
+      document.body.appendChild(rvScript);
     };
 
-    const initWidgets = async () => {
-      await Promise.all([
-        loadScript("EmbedSocialHashtagScript", "https://embedsocial.com/cdn/ht.js"),
-        loadScript("EmbedSocialStoriesScript", "https://embedsocial.com/embedscript/st.js"),
-        loadScript("EmbedSocialReviewsScript", "https://embedsocial.com/cdn/rv.js"),
-      ]);
+    // Força reload dos scripts
+    forceLoadScripts();
 
-      setTimeout(() => {
-        if (typeof (window as any).EmbedSocialHashtagWidget !== "undefined") {
-          (window as any).EmbedSocialHashtagWidget?.init?.();
-        }
-        if (typeof (window as any).EmbedSocialStoriesWidget !== "undefined") {
-          (window as any).EmbedSocialStoriesWidget?.init?.();
-        }
-        if (typeof (window as any).EmbedSocialReviewsWidget !== "undefined") {
-          (window as any).EmbedSocialReviewsWidget?.init?.();
-        }
-      }, 500);
+    // Força re-render do componente após um delay
+    const timer = setTimeout(() => {
+      setKey(prev => prev + 1);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
     };
-
-    initWidgets();
   }, []);
 
   return (
     <section ref={containerRef} className="w-full py-8 sm:py-12 lg:py-16 bg-bg">
-      <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0 space-y-10">
+      <div key={key} className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0 space-y-10">
         {/* Google Reviews / Depoimentos */}
         <div
           className="embedsocial-reviews"
