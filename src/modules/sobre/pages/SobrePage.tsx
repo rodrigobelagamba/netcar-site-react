@@ -162,46 +162,77 @@ export function SobrePage() {
   return (
     <main className="flex-1 overflow-x-hidden max-w-full bg-gradient-to-b from-white via-gray-50/50 to-white">
       {/* Hero Section */}
-      <header className="relative py-24 md:py-32 text-center overflow-hidden">
+      <header className="relative py-16 md:py-24 overflow-hidden">
         <div className="absolute inset-0 -z-10 pointer-events-none">
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-primary/8 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-secondary/8 rounded-full blur-3xl" />
         </div>
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-[1200px] mx-auto px-6"
-        >
-          <motion.span 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-primary text-xs font-semibold tracking-widest uppercase mb-6 block"
-          >
-            Sobre a Netcar
-          </motion.span>
-          <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight mb-6 bg-gradient-to-r from-fg via-fg to-primary bg-clip-text">
-            Desde 1997, curadoria e<br className="hidden md:block" /> procedência em seminovos.
-          </h1>
-          <p className="max-w-[680px] mx-auto text-muted-foreground text-lg md:text-xl leading-relaxed">
-            Há quase três décadas selecionando carros com histórico, qualidade e transparência.
-          </p>
-          <div className="flex flex-wrap justify-center gap-6 mt-10">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Procedência comprovada</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Checklist técnico</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
-              <span>Entrega sem surpresa</span>
-            </div>
+        
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.span 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-primary text-xs font-semibold tracking-widest uppercase mb-4 block"
+              >
+                Sobre a Netcar
+              </motion.span>
+              <h1 className="text-3xl md:text-4xl lg:text-[48px] font-bold leading-tight mb-5 text-fg">
+                Desde 1997, curadoria e procedência em seminovos.
+              </h1>
+              <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-6">
+                Há quase três décadas selecionando carros com histórico, qualidade e transparência.
+              </p>
+              
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                  <span>Procedência comprovada</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                  <span>Checklist técnico</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                  <span>Entrega sem surpresa</span>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="flex justify-center lg:justify-end"
+            >
+              <div className="relative">
+                <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 p-2">
+                  <div className="w-full h-full rounded-full bg-white p-2 shadow-xl overflow-hidden">
+                    <img 
+                      src={loja1Image || "/images/loja1.jpg"}
+                      alt="Netcar Multimarcas"
+                      className="w-full h-full rounded-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/images/loja1.jpg";
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="absolute bottom-4 right-4 bg-white rounded-full px-4 py-2 shadow-lg border border-gray-100 flex items-center gap-2">
+                  <Award className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-medium text-fg">Desde 1997</span>
+                </div>
+              </div>
+            </motion.div>
           </div>
-        </motion.div>
+        </div>
       </header>
 
       {/* Nossa essência */}
