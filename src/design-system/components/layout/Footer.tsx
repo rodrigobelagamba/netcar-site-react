@@ -8,7 +8,8 @@ import {
   useBannersLoja1Query, 
   useBannersLoja2Query,
   usePhoneQuery,
-  useWhatsAppQuery
+  useWhatsAppQuery,
+  useScheduleQuery
 } from "@/api";
 
 import logoNetcar from "@/assets/images/logo-netcar.png";
@@ -27,6 +28,7 @@ export function Footer() {
   const { data: phoneLoja1 } = usePhoneQuery("Loja1");
   const { data: phoneLoja2 } = usePhoneQuery("Loja2");
   const { data: whatsapp } = useWhatsAppQuery();
+  const { data: schedule } = useScheduleQuery();
 
   const getFachadaImage = (banners: Array<{ titulo?: string; imagem: string }> | undefined, fallback: string): string => {
     if (!banners || banners.length === 0) return fallback;
@@ -80,18 +82,11 @@ export function Footer() {
 
             <div>
               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Atendimento</p>
-              <div className="text-sm text-fg space-y-1.5">
-                <div className="flex justify-between gap-4">
-                  <span className="text-gray-600">Segunda a Sexta</span>
-                  <span className="font-bold">8h às 18h30</span>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <span className="text-gray-600">Sábados</span>
-                  <span className="font-bold">9h às 13h30</span>
-                </div>
-                <p className="text-xs text-gray-400 font-medium pt-2 flex items-center gap-1">
-                  <span>→</span> Não fechamos ao meio-dia
-                </p>
+              <div className="text-sm font-semibold text-fg space-y-1">
+                <p>Seg a Sex: <span className="text-primary">{schedule?.dias_semana || "9h às 18h"}</span></p>
+                <p>Sábado: <span className="text-amber-500">{schedule?.sabado || "9h às 16h30"}</span></p>
+                <p>Jan-Fev (Sáb): <span className="text-amber-500">9h às 13h30</span></p>
+                <p className="text-xs text-gray-400 font-medium pt-1">Não fechamos ao meio-dia</p>
               </div>
             </div>
 
