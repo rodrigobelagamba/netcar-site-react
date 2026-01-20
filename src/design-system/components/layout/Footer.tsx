@@ -21,10 +21,9 @@ import logoNetcar from "@/assets/images/logo-netcar.png";
 const menuLinks = [
   { to: "/sobre", label: "Sobre" },
   { to: "/seminovos", label: "Showroom" },
-  { to: "/social", label: "Social" },
   { to: "/blog", label: "Blog" },
   { to: "/contato", label: "Contato" },
-  { to: "https://maps.google.com/?q=Netcar+Esteio", label: "Localização", external: true },
+  { to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9", label: "Localização", external: true },
 ];
 
 export function Footer() {
