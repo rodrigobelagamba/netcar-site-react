@@ -238,127 +238,33 @@ export function SobrePage() {
       {/* Nossa essência */}
       <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] gap-8 items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="relative bg-white rounded-[24px] p-8 md:p-10 shadow-sm hover:shadow-md transition-all overflow-hidden"
-            >
-              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent" />
-              <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Nossa essência</span>
-              <h2 className="text-2xl md:text-[30px] font-bold mb-4 leading-tight">Curadoria com propósito</h2>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                {essencia?.conteudo || "Selecionamos cada veículo com critérios objetivos de quilometragem, histórico e procedência. O preparo e a transparência fazem parte do processo, para você comprar certo."}
-              </p>
-              <div className="space-y-3">
-                {[
-                  { icon: CheckCircle2, text: "Curadoria de estoque com procedência comprovada" },
-                  { icon: CheckCircle2, text: "Checklist técnico e histórico de manutenção" },
-                  { icon: CheckCircle2, text: "Laudos e documentação quando aplicável" },
-                  { icon: CheckCircle2, text: "Atendimento próximo e experiente" },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3 group">
-                    <item.icon className="w-5 h-5 text-primary flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                    <span className="text-muted-foreground text-sm">{item.text}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-            {currentVehicle ? (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className="relative"
-              >
-                <div className="bg-white rounded-[28px] shadow-lg overflow-hidden">
-                  <div className="relative flex items-center">
-                    {heroVehicles.length > 1 && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); prevSlide(); }}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md hover:shadow-lg flex items-center justify-center transition-all z-10"
-                      >
-                        <ChevronLeft className="w-5 h-5 text-gray-500" />
-                      </button>
-                    )}
-                    
-                    <div 
-                      className="flex-1 bg-gradient-to-br from-[#F8F8F8] to-[#EEEEEE] rounded-[20px] mx-4 my-4 cursor-pointer group overflow-hidden"
-                      onClick={handleVehicleClick}
-                    >
-                      <AnimatePresence mode="wait" initial={false}>
-                        <motion.div
-                          key={currentVehicle.id}
-                          initial={{ opacity: 0, x: direction > 0 ? 30 : -30 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: direction > 0 ? -30 : 30 }}
-                          transition={{ duration: 0.35 }}
-                          className="flex items-center justify-center py-8 px-4"
-                        >
-                          <img
-                            src={currentVehicle.image}
-                            alt={currentVehicle.model}
-                            className="max-h-[160px] w-auto object-contain drop-shadow-xl group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
-                    
-                    {heroVehicles.length > 1 && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); nextSlide(); }}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md hover:shadow-lg flex items-center justify-center transition-all z-10"
-                      >
-                        <ChevronRight className="w-5 h-5 text-gray-500" />
-                      </button>
-                    )}
-                  </div>
-                  
-                  <div className="border-t border-gray-100 px-6 py-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs text-primary font-semibold uppercase tracking-wider mb-0.5">{currentVehicle.brand}</div>
-                        <div className="text-lg font-bold text-fg truncate">{currentVehicle.model}</div>
-                        <div className="text-sm text-muted-foreground mt-0.5">{formatYear(currentVehicle.year)}</div>
-                      </div>
-                      {heroVehicles.length > 1 && (
-                        <div className="flex gap-1.5 items-center pt-2">
-                          {heroVehicles.map((_, idx) => (
-                            <button
-                              key={idx}
-                              onClick={(e) => { e.stopPropagation(); setDirection(idx > currentIndex ? 1 : -1); setCurrentIndex(idx); }}
-                              className={cn(
-                                "w-2 h-2 rounded-full transition-all",
-                                idx === currentIndex ? "bg-primary w-5" : "bg-gray-200 hover:bg-gray-300"
-                              )}
-                            />
-                          ))}
-                        </div>
-                      )}
-                      <div className="text-primary font-bold text-lg whitespace-nowrap">{formatPrice(currentVehicle.price)}</div>
-                    </div>
-                  </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="relative bg-white rounded-[24px] p-8 md:p-10 shadow-sm border border-gray-200 hover:border-primary/30 hover:shadow-md transition-all overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent" />
+            <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Nossa essência</span>
+            <h2 className="text-2xl md:text-[30px] font-bold mb-4 leading-tight">Curadoria com propósito</h2>
+            <p className="text-muted-foreground mb-6 leading-relaxed max-w-3xl">
+              {essencia?.conteudo || "Selecionamos cada veículo com critérios objetivos de quilometragem, histórico e procedência. O preparo e a transparência fazem parte do processo, para você comprar certo."}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { icon: CheckCircle2, text: "Curadoria de estoque com procedência comprovada" },
+                { icon: CheckCircle2, text: "Checklist técnico e histórico de manutenção" },
+                { icon: CheckCircle2, text: "Laudos e documentação quando aplicável" },
+                { icon: CheckCircle2, text: "Atendimento próximo e experiente" },
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-start gap-3 group">
+                  <item.icon className="w-5 h-5 text-primary flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                  <span className="text-muted-foreground text-sm">{item.text}</span>
                 </div>
-              </motion.div>
-            ) : (
-              <motion.figure
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className="relative h-[320px] rounded-[20px] overflow-hidden border border-border"
-              >
-                <img
-                  src="/images/loja1.jpg"
-                  alt="Showroom da Netcar"
-                  className="w-full h-full object-cover transition-transform hover:scale-105"
-                />
-              </motion.figure>
-            )}
-          </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 
