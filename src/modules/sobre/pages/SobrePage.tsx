@@ -129,19 +129,34 @@ export function SobrePage() {
     { year: "2024", title: "Segunda loja", description: "Expansão do showroom e atendimento em dois endereços." },
   ];
 
-  // Equipe (mock - pode vir da API futuramente)
-  const team = [
-    { name: "Carlos", role: "Consultor Comercial", image: "/team/carlos.jpg" },
-    { name: "Shirley", role: "Financeiro & RH", image: "/team/shirley.png" },
-    { name: "Cristiano", role: "Gestão", image: "/team/cristiano.jpg" },
-    { name: "Marcelo", role: "Administração & TI", image: "/team/marcelo.jpg" },
-    { name: "Filipe", role: "Consultor Comercial", image: "/team/filipe.jpg" },
-    { name: "Tiago", role: "Consultor Comercial", image: "/team/tiago.jpg" },
-    { name: "Bruno", role: "Consultor Comercial", image: "/team/bruno.jpg" },
-    { name: "Gilnei", role: "Consultor Comercial", image: "/team/gilnei.jpg" },
-    { name: "Juliano", role: "Manutenção & Preparação", image: "/team/juliano.jpg" },
-    { name: "Herick", role: "Manutenção & Preparação", image: "/team/herick.jpg" },
-    { name: "Claudio", role: "Manutenção & Preparação", image: "/team/claudio.jpg" },
+  // Equipe organizada por setor
+  const teamBySector = [
+    {
+      sector: "Gestão & Administração",
+      members: [
+        { name: "Cristiano", role: "Gestão", image: "/team/cristiano.jpg" },
+        { name: "Marcelo", role: "Administração & TI", image: "/team/marcelo.jpg" },
+        { name: "Shirley", role: "Financeiro & RH", image: "/team/shirley.png" },
+      ]
+    },
+    {
+      sector: "Comercial",
+      members: [
+        { name: "Carlos", role: "Consultor", image: "/team/carlos.jpg" },
+        { name: "Filipe", role: "Consultor", image: "/team/filipe.jpg" },
+        { name: "Tiago", role: "Consultor", image: "/team/tiago.jpg" },
+        { name: "Bruno", role: "Consultor", image: "/team/bruno.jpg" },
+        { name: "Gilnei", role: "Consultor", image: "/team/gilnei.jpg" },
+      ]
+    },
+    {
+      sector: "Manutenção & Preparação",
+      members: [
+        { name: "Juliano", role: "Preparação", image: "/team/juliano.jpg" },
+        { name: "Herick", role: "Preparação", image: "/team/herick.jpg" },
+        { name: "Claudio", role: "Preparação", image: "/team/claudio.jpg" },
+      ]
+    },
   ];
 
   return (
@@ -563,36 +578,62 @@ export function SobrePage() {
       </section>
 
       {/* Equipe */}
-      <section className="py-16 md:py-24 bg-gray-50/50">
+      <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-center mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
             <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Quem faz acontecer</span>
-            <h2 className="text-2xl md:text-[32px] font-bold mb-2">Nossa equipe</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">Experiência, cuidado e atenção a cada detalhe.</p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8">
-            {team.map((person, index) => (
+            <h2 className="text-2xl md:text-[36px] font-bold mb-3">Nossa equipe</h2>
+            <p className="text-muted-foreground max-w-md mx-auto">Profissionais dedicados em cada etapa do seu atendimento.</p>
+          </motion.div>
+          
+          <div className="space-y-16">
+            {teamBySector.map((sector, sectorIndex) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
+                key={sector.sector}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="group"
+                transition={{ duration: 0.6, delay: sectorIndex * 0.1 }}
               >
-                <div className="relative mb-4 overflow-hidden rounded-2xl aspect-square">
-                  <img 
-                    src={person.image} 
-                    alt={person.name}
-                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <p className="text-white/90 text-sm font-medium">{person.role}</p>
-                  </div>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-200 to-gray-200" />
+                  <h3 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground px-4">{sector.sector}</h3>
+                  <div className="h-px flex-1 bg-gradient-to-l from-transparent via-gray-200 to-gray-200" />
                 </div>
-                <h5 className="font-semibold text-fg text-center">{person.name}</h5>
-                <p className="text-muted-foreground text-sm text-center md:hidden">{person.role}</p>
+                
+                <div className={cn(
+                  "grid gap-6 md:gap-8",
+                  sector.members.length <= 3 ? "grid-cols-2 sm:grid-cols-3 max-w-2xl mx-auto" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+                )}>
+                  {sector.members.map((person, index) => (
+                    <motion.div
+                      key={person.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.08 }}
+                      className="group text-center"
+                    >
+                      <div className="relative mb-4 mx-auto w-28 h-28 md:w-32 md:h-32">
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="relative w-full h-full rounded-full overflow-hidden ring-2 ring-white shadow-lg group-hover:ring-primary/30 transition-all duration-300">
+                          <img 
+                            src={person.image} 
+                            alt={person.name}
+                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                          />
+                        </div>
+                      </div>
+                      <h5 className="font-semibold text-fg group-hover:text-primary transition-colors">{person.name}</h5>
+                      <p className="text-muted-foreground text-sm mt-0.5">{person.role}</p>
+                    </motion.div>
+                  ))}
+                </div>
               </motion.div>
             ))}
           </div>
