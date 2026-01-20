@@ -161,7 +161,7 @@ export function Footer() {
               href="https://wa.me/5551995109169?text=Olá!%20Preciso%20de%20suporte%20Nethelp."
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full bg-[#152535] rounded-xl p-5 text-white shadow-md shadow-black/10 hover:-translate-y-0.5 transition-transform duration-300 cursor-pointer mt-auto block"
+              className="w-full bg-gradient-to-b from-[#1a3a4a] to-[#1d4a5a] rounded-xl p-5 text-white shadow-md shadow-black/10 hover:-translate-y-0.5 transition-transform duration-300 cursor-pointer mt-auto block"
             >
               <div className="flex items-center gap-2.5 mb-2">
                 <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
