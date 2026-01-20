@@ -5,8 +5,7 @@ import {
   Mail, 
   MapPin, 
   Send,
-  MessageCircle,
-  ArrowRight
+  MessageCircle
 } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { 
@@ -48,210 +47,221 @@ export function ContatoPage() {
     window.open(whatsappUrl, "_blank");
   };
 
-  const lojas = [
-    {
-      nome: "Loja 1 — Centro, Esteio/RS",
-      endereco: "Av. Presidente Vargas, 740",
-      telefone: "(51) 3473-7900",
-      maps: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
-    },
-    {
-      nome: "Loja 2 — Centro, Esteio/RS",
-      endereco: "Av. Presidente Vargas, 1106",
-      telefone: "(51) 3033-3900",
-      maps: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
-    }
-  ];
-
   return (
     <main className="flex-1 pt-12 pb-20 overflow-x-hidden max-w-full">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <span className="text-primary text-sm font-medium uppercase tracking-wider">Entre em contato</span>
-          <h1 className="text-4xl md:text-5xl font-bold text-fg mt-3 mb-5">Como podemos ajudar?</h1>
-          <p className="text-gray-500 text-lg max-w-xl mx-auto">
-            Escolha a forma mais conveniente para você
+          <h1 className="text-4xl md:text-5xl font-bold text-fg mb-4">Fale Conosco</h1>
+          <p className="text-gray-500 text-lg">
+            Estamos prontos para ajudar
           </p>
         </motion.div>
 
-        {/* Main Contact Options */}
+        {/* Contact Cards Row */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-16"
         >
           <a
             href={getWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-white rounded-3xl p-10 text-center shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-gray-100/50"
+            className="group flex items-center gap-4 bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100"
           >
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-              <MessageCircle className="w-7 h-7 text-green-600" />
+            <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0 group-hover:bg-green-100 transition-colors">
+              <MessageCircle className="w-5 h-5 text-green-600" />
             </div>
-            <h3 className="text-xl font-bold text-fg mb-2">WhatsApp</h3>
-            <p className="text-gray-400 text-sm">Resposta imediata</p>
+            <div>
+              <h3 className="font-semibold text-fg text-sm">WhatsApp</h3>
+              <p className="text-primary text-sm font-medium">(51) 99887-9281</p>
+            </div>
           </a>
 
           <a
             href={`tel:${phoneLoja1?.telefone || "5134737900"}`}
-            className="group bg-white rounded-3xl p-10 text-center shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-gray-100/50"
+            className="group flex items-center gap-4 bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100"
           >
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/5 to-primary/15 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-              <Phone className="w-7 h-7 text-primary" />
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+              <Phone className="w-5 h-5 text-primary" />
             </div>
-            <h3 className="text-xl font-bold text-fg mb-2">Telefone</h3>
-            <p className="text-gray-400 text-sm">{phoneLoja1?.telefone || "(51) 3473-7900"}</p>
+            <div>
+              <h3 className="font-semibold text-fg text-sm">Telefone</h3>
+              <p className="text-gray-500 text-sm">{phoneLoja1?.telefone || "(51) 3473-7900"}</p>
+            </div>
           </a>
 
           <a
             href="mailto:contato@netcarmultimarcas.com.br"
-            className="group bg-white rounded-3xl p-10 text-center shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-gray-100/50"
+            className="group flex items-center gap-4 bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100"
           >
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-              <Mail className="w-7 h-7 text-gray-600" />
+            <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0 group-hover:bg-gray-200 transition-colors">
+              <Mail className="w-5 h-5 text-gray-600" />
             </div>
-            <h3 className="text-xl font-bold text-fg mb-2">E-mail</h3>
-            <p className="text-gray-400 text-sm">contato@netcarmultimarcas.com.br</p>
+            <div>
+              <h3 className="font-semibold text-fg text-sm">E-mail</h3>
+              <p className="text-gray-500 text-sm truncate">contato@netcarmultimarcas.com.br</p>
+            </div>
           </a>
         </motion.div>
 
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           
-          {/* Contact Form - 3 columns */}
+          {/* Form Card */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:col-span-3"
+            className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100"
           >
-            <h2 className="text-2xl font-bold text-fg mb-8">Envie uma mensagem</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <h2 className="text-xl font-bold text-fg mb-6">Envie uma mensagem</h2>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">Nome</label>
+                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Nome</label>
                   <input
                     type="text"
                     required
                     value={formData.nome}
                     onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                    className="w-full bg-transparent border-0 border-b border-gray-200 px-0 py-3 text-fg placeholder:text-gray-400 focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-gray-50 rounded-xl px-4 py-3 text-sm text-fg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all"
                     placeholder="Seu nome"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">Telefone</label>
+                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Telefone</label>
                   <input
                     type="tel"
                     required
                     value={formData.telefone}
                     onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
-                    className="w-full bg-transparent border-0 border-b border-gray-200 px-0 py-3 text-fg placeholder:text-gray-400 focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-gray-50 rounded-xl px-4 py-3 text-sm text-fg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all"
                     placeholder="(00) 00000-0000"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">E-mail</label>
+                <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">E-mail</label>
                 <input
                   type="email"
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-transparent border-0 border-b border-gray-200 px-0 py-3 text-fg placeholder:text-gray-400 focus:outline-none focus:border-primary transition-colors"
+                  className="w-full bg-gray-50 rounded-xl px-4 py-3 text-sm text-fg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all"
                   placeholder="seu@email.com"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">Assunto</label>
+                <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Assunto</label>
                 <input
                   type="text"
                   required
                   value={formData.assunto}
                   onChange={(e) => setFormData({ ...formData, assunto: e.target.value })}
-                  className="w-full bg-transparent border-0 border-b border-gray-200 px-0 py-3 text-fg placeholder:text-gray-400 focus:outline-none focus:border-primary transition-colors"
+                  className="w-full bg-gray-50 rounded-xl px-4 py-3 text-sm text-fg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all"
                   placeholder="Sobre o que deseja falar?"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">Mensagem</label>
+                <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Mensagem</label>
                 <textarea
                   required
                   rows={4}
                   value={formData.mensagem}
                   onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
-                  className="w-full bg-transparent border-0 border-b border-gray-200 px-0 py-3 text-fg placeholder:text-gray-400 focus:outline-none focus:border-primary transition-colors resize-none"
+                  className="w-full bg-gray-50 rounded-xl px-4 py-3 text-sm text-fg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all resize-none"
                   placeholder="Como podemos ajudar?"
                 />
               </div>
 
               <button
                 type="submit"
-                className="bg-fg text-white px-8 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-fg/90 transition-all hover:shadow-lg group"
+                className="w-full bg-fg text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-fg/90 transition-colors"
               >
-                <Send className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                Enviar mensagem
+                <Send className="w-4 h-4" />
+                Enviar via WhatsApp
               </button>
             </form>
           </motion.div>
 
-          {/* Info Column - 2 columns */}
+          {/* Info Card */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="lg:col-span-2 space-y-8"
+            className="space-y-6"
           >
             {/* Lojas */}
-            <div>
-              <h2 className="text-2xl font-bold text-fg mb-8">Nossas Lojas</h2>
-              <div className="space-y-6">
-                {lojas.map((loja, index) => (
-                  <a
-                    key={index}
-                    href={loja.maps}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block group"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                        <MapPin className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-fg mb-1 group-hover:text-primary transition-colors">{loja.nome}</h3>
-                        <p className="text-gray-500 text-sm leading-relaxed mb-2">{loja.endereco}</p>
-                        <p className="text-gray-400 text-sm">{loja.telefone}</p>
-                      </div>
-                    </div>
-                  </a>
-                ))}
+            <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100">
+              <h2 className="text-xl font-bold text-fg mb-6">Nossas Lojas</h2>
+              <div className="space-y-5">
+                <a
+                  href="https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-4 group"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <MapPin className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-fg text-sm group-hover:text-primary transition-colors">Loja 1 — Centro, Esteio/RS</h3>
+                    <p className="text-gray-500 text-sm">Av. Presidente Vargas, 740</p>
+                    <p className="text-fg text-sm font-medium mt-1">(51) 3473-7900</p>
+                  </div>
+                </a>
+
+                <div className="h-px bg-gray-100" />
+
+                <a
+                  href="https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-4 group"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <MapPin className="w-5 h-5 text-amber-500" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-fg text-sm group-hover:text-primary transition-colors">Loja 2 — Centro, Esteio/RS</h3>
+                    <p className="text-gray-500 text-sm">Av. Presidente Vargas, 1106</p>
+                    <p className="text-fg text-sm font-medium mt-1">(51) 3033-3900</p>
+                  </div>
+                </a>
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="h-px bg-gray-100" />
-
             {/* Horários */}
-            <div>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Atendimento</p>
-              <div className="space-y-2 text-sm font-semibold text-fg">
-                <p>Seg a Sex: <span className="text-primary">{schedule?.dias_semana || "9h às 18h"}</span></p>
-                <p>Sábado: <span className="text-amber-500">{schedule?.sabado || "9h às 16h30"}</span></p>
-                <p>Jan-Fev (Sáb): <span className="text-amber-500">9h às 13h30</span></p>
-                <p className="text-xs text-gray-400 font-medium pt-2">Não fechamos ao meio-dia</p>
+            <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100">
+              <h2 className="text-xl font-bold text-fg mb-6">Atendimento</h2>
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Seg a Sex</span>
+                  <span className="font-semibold text-primary">{schedule?.dias_semana || "9h às 18h"}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Sábado</span>
+                  <span className="font-semibold text-amber-500">{schedule?.sabado || "9h às 16h30"}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Jan-Fev (Sáb)</span>
+                  <span className="font-semibold text-amber-500">9h às 13h30</span>
+                </div>
+                <div className="pt-3 border-t border-gray-100">
+                  <p className="text-xs text-gray-400 text-center">Não fechamos ao meio-dia</p>
+                </div>
               </div>
             </div>
           </motion.div>
