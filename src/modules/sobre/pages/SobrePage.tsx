@@ -409,14 +409,14 @@ export function SobrePage() {
       {/* Linha do tempo + Valores */}
       <section className="py-14">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-stretch">
             {/* Nossa história */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm"
+              className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm h-full"
             >
               <h2 className="text-2xl md:text-[26px] font-bold mb-2">Nossa história</h2>
               {historia?.conteudo ? (
@@ -428,11 +428,32 @@ export function SobrePage() {
                 <div className="relative pl-6">
                   <div className="absolute top-0 bottom-0 left-2 w-0.5 bg-gradient-to-b from-primary to-transparent opacity-40" />
                   {timelineItems.map((item, index) => (
-                    <div key={index} className="relative pl-4 pb-4 transition-transform hover:translate-x-1">
-                      <div className="absolute left-[-2px] top-5 w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_0_5px_rgba(31,111,235,0.1)]" />
+                    <motion.div 
+                      key={index} 
+                      className="relative pl-4 pb-4 transition-transform hover:translate-x-1"
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                    >
+                      <motion.div 
+                        className="absolute left-[-2px] top-5 w-2.5 h-2.5 rounded-full bg-primary"
+                        animate={{
+                          boxShadow: [
+                            "0 0 0 0 rgba(108, 196, 202, 0.7)",
+                            "0 0 0 8px rgba(108, 196, 202, 0)",
+                            "0 0 0 0 rgba(108, 196, 202, 0)",
+                          ],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          delay: index * 0.5,
+                        }}
+                      />
                       <h4 className="font-semibold mb-1">{item.year} — {item.title}</h4>
                       <p className="text-muted-foreground text-sm">{item.description}</p>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               )}
@@ -444,7 +465,7 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm"
+              className="bg-surface border border-border rounded-[24px] p-6 md:p-9 shadow-sm h-full"
             >
               <h2 className="text-2xl md:text-[26px] font-bold mb-2">Nossos valores</h2>
               {valores?.conteudo ? (
