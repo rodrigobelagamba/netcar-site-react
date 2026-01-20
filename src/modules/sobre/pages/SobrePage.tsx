@@ -14,7 +14,6 @@ export function SobrePage() {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
-  const [storeImageIndex, setStoreImageIndex] = useState(0);
   
   // Busca dados da API
   const { data: essencia } = useAboutTextQuery("Essência");
@@ -86,13 +85,6 @@ export function SobrePage() {
     }, 5000);
     return () => clearInterval(timer);
   }, [heroVehicles.length]);
-
-  useEffect(() => {
-    const storeTimer = setInterval(() => {
-      setStoreImageIndex((prev) => (prev + 1) % 2);
-    }, 4000);
-    return () => clearInterval(storeTimer);
-  }, []);
 
   const handleVehicleClick = () => {
     if (!currentVehicle) return;
@@ -402,139 +394,85 @@ export function SobrePage() {
       </section>
 
       {/* Nossas lojas */}
-      <section className="py-16 md:py-24 bg-gray-50/50">
+      <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            {/* Galeria de fotos com efeito sobreposto */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+          <div className="mb-10">
+            <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Onde estamos</span>
+            <h2 className="text-2xl md:text-[32px] font-bold mb-2">Nossas lojas</h2>
+            <p className="text-muted-foreground max-w-lg">Dois endereços em Esteio/RS para melhor atendê-lo.</p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            {/* Loja 1 */}
+            <motion.article
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="relative"
+              className="relative bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-all group"
             >
-              <div className="relative">
-                {/* Imagem principal grande */}
-                <div className="relative rounded-[24px] overflow-hidden shadow-xl">
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={storeImageIndex === 0 ? loja1Image : loja2Image}
-                      src={storeImageIndex === 0 ? loja1Image : loja2Image}
-                      alt="Fachada da loja"
-                      className="w-full h-[320px] md:h-[400px] object-cover"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.6 }}
-                      onError={(e) => {
-                        e.currentTarget.src = storeImageIndex === 0 ? "/images/loja1.jpg" : "/images/loja2.jpg";
-                      }}
-                    />
-                  </AnimatePresence>
-                </div>
-                
-                {/* Imagem menor sobreposta */}
-                <motion.div 
-                  className="absolute -top-4 -right-4 md:-top-6 md:-right-6 w-[140px] h-[100px] md:w-[200px] md:h-[140px] rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={storeImageIndex === 0 ? loja2Image : loja1Image}
-                      src={storeImageIndex === 0 ? loja2Image : loja1Image}
-                      alt="Interior da loja"
-                      className="w-full h-full object-cover"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.6 }}
-                      onError={(e) => {
-                        e.currentTarget.src = storeImageIndex === 0 ? "/images/loja2.jpg" : "/images/loja1.jpg";
-                      }}
-                    />
-                  </AnimatePresence>
-                </motion.div>
-                
-                {/* Indicadores */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {[0, 1].map((idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setStoreImageIndex(idx)}
-                      className={cn(
-                        "w-2 h-2 rounded-full transition-all",
-                        idx === storeImageIndex ? "bg-white w-6" : "bg-white/50 hover:bg-white/70"
-                      )}
-                    />
-                  ))}
+              <div className="relative h-[240px] overflow-hidden">
+                <img
+                  src={loja1Image}
+                  alt="Fachada da Loja 1"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/loja1.jpg";
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-6 right-6">
+                  <span className="inline-block px-3 py-1 bg-primary text-white text-xs font-bold rounded-full mb-2">Matriz</span>
+                  <h3 className="text-xl font-bold text-white">Loja 1 — Centro</h3>
                 </div>
               </div>
-            </motion.div>
-            
-            {/* Informações das lojas */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              <div className="p-6 space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground text-sm">{formatAddress(addressLoja1) || "Av. Presidente Vargas, 740, Esteio/RS"}</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground text-sm">{formatPhone(phoneLoja1) || "(51) 3473‑7900"}</span>
+                </div>
+                <p className="text-muted-foreground text-sm pt-2 border-t border-gray-100">Showroom amplo, atendimento personalizado e test‑drive.</p>
+              </div>
+            </motion.article>
+
+            {/* Loja 2 */}
+            <motion.article
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
+              className="relative bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-all group"
             >
-              <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Onde estamos</span>
-              <h2 className="text-2xl md:text-[36px] font-bold mb-4">Nossas lojas</h2>
-              <p className="text-muted-foreground mb-8">Dois endereços em Esteio/RS para melhor atendê-lo. Showroom amplo com atendimento personalizado.</p>
-              
-              <div className="space-y-6">
-                {/* Loja 1 */}
-                <div 
-                  className={cn(
-                    "p-5 rounded-2xl border-2 transition-all cursor-pointer",
-                    storeImageIndex === 0 ? "border-primary bg-primary/5" : "border-gray-100 hover:border-gray-200"
-                  )}
-                  onClick={() => setStoreImageIndex(0)}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="px-2.5 py-1 bg-primary text-white text-xs font-bold rounded-full">Matriz</span>
-                    <h3 className="font-bold text-lg">Loja 1</h3>
-                  </div>
-                  <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex items-start gap-2">
-                      <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span>{formatAddress(addressLoja1) || "Av. Presidente Vargas, 740, Esteio/RS"}</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <Phone className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span>{formatPhone(phoneLoja1) || "(51) 3473‑7900"}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Loja 2 */}
-                <div 
-                  className={cn(
-                    "p-5 rounded-2xl border-2 transition-all cursor-pointer",
-                    storeImageIndex === 1 ? "border-primary bg-primary/5" : "border-gray-100 hover:border-gray-200"
-                  )}
-                  onClick={() => setStoreImageIndex(1)}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="px-2.5 py-1 bg-fg text-white text-xs font-bold rounded-full">Filial</span>
-                    <h3 className="font-bold text-lg">Loja 2</h3>
-                  </div>
-                  <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex items-start gap-2">
-                      <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span>{formatAddress(addressLoja2) || "Av. Presidente Vargas, 1106, Esteio/RS"}</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <Phone className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span>{formatPhone(phoneLoja2) || "(51) 3033‑3900"}</span>
-                    </div>
-                  </div>
+              <div className="relative h-[240px] overflow-hidden">
+                <img
+                  src={loja2Image}
+                  alt="Fachada da Loja 2"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/loja2.jpg";
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-6 right-6">
+                  <span className="inline-block px-3 py-1 bg-fg text-white text-xs font-bold rounded-full mb-2">Filial</span>
+                  <h3 className="text-xl font-bold text-white">Loja 2 — Centro</h3>
                 </div>
               </div>
-            </motion.div>
+              <div className="p-6 space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground text-sm">{formatAddress(addressLoja2) || "Av. Presidente Vargas, 1106, Esteio/RS"}</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground text-sm">{formatPhone(phoneLoja2) || "(51) 3033‑3900"}</span>
+                </div>
+                <p className="text-muted-foreground text-sm pt-2 border-t border-gray-100">Seleção de seminovos e condições especiais de financiamento.</p>
+              </div>
+            </motion.article>
           </div>
         </div>
       </section>
