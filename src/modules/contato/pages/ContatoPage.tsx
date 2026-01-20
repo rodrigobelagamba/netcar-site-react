@@ -12,7 +12,6 @@ import {
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { 
   usePhoneQuery, 
-  useAddressQuery, 
   useWhatsAppQuery,
   useScheduleQuery
 } from "@/api";
@@ -32,9 +31,6 @@ export function ContatoPage() {
   });
 
   const { data: phoneLoja1 } = usePhoneQuery("Loja1");
-  const { data: phoneLoja2 } = usePhoneQuery("Loja2");
-  const { data: addressLoja1 } = useAddressQuery("Loja1");
-  const { data: addressLoja2 } = useAddressQuery("Loja2");
   const { data: whatsapp } = useWhatsAppQuery();
   const { data: schedule } = useScheduleQuery();
 
@@ -55,25 +51,21 @@ export function ContatoPage() {
 
   const lojas = [
     {
-      nome: "Esteio",
-      endereco: addressLoja1 
-        ? `${addressLoja1.endereco}, ${addressLoja1.cidade}/${addressLoja1.estado}`
-        : "Av. Presidente Vargas, 2505 - Centro, Esteio/RS",
-      telefone: phoneLoja1?.telefone || "(51) 3473-7900",
+      nome: "Loja 1 — Centro, Esteio/RS",
+      endereco: "Av. Presidente Vargas, 740",
+      telefone: "(51) 3473-7900",
       maps: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
     },
     {
-      nome: "Sapucaia do Sul",
-      endereco: addressLoja2 
-        ? `${addressLoja2.endereco}, ${addressLoja2.cidade}/${addressLoja2.estado}`
-        : "Av. Presidente Lucena, 2700 - Centro, Sapucaia do Sul/RS",
-      telefone: phoneLoja2?.telefone || "(51) 3033-3900",
+      nome: "Loja 2 — Centro, Esteio/RS",
+      endereco: "Av. Presidente Vargas, 1106",
+      telefone: "(51) 3033-3900",
       maps: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
     }
   ];
 
   return (
-    <main className="flex-1 pt-12 pb-20 overflow-x-hidden max-w-full bg-gradient-to-b from-gray-50 to-white">
+    <main className="flex-1 pt-12 pb-20 overflow-x-hidden max-w-full">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Hero Section */}
@@ -162,7 +154,7 @@ export function ContatoPage() {
                     required
                     value={formData.nome}
                     onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                    className="w-full bg-white border-0 border-b-2 border-gray-100 px-0 py-3 text-fg placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-transparent border-0 border-b border-gray-200 px-0 py-3 text-fg placeholder:text-gray-400 focus:outline-none focus:border-primary transition-colors"
                     placeholder="Seu nome"
                   />
                 </div>
@@ -173,7 +165,7 @@ export function ContatoPage() {
                     required
                     value={formData.telefone}
                     onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
-                    className="w-full bg-white border-0 border-b-2 border-gray-100 px-0 py-3 text-fg placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-transparent border-0 border-b border-gray-200 px-0 py-3 text-fg placeholder:text-gray-400 focus:outline-none focus:border-primary transition-colors"
                     placeholder="(00) 00000-0000"
                   />
                 </div>
@@ -186,7 +178,7 @@ export function ContatoPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-white border-0 border-b-2 border-gray-100 px-0 py-3 text-fg placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors"
+                  className="w-full bg-transparent border-0 border-b border-gray-200 px-0 py-3 text-fg placeholder:text-gray-400 focus:outline-none focus:border-primary transition-colors"
                   placeholder="seu@email.com"
                 />
               </div>
@@ -198,7 +190,7 @@ export function ContatoPage() {
                   required
                   value={formData.assunto}
                   onChange={(e) => setFormData({ ...formData, assunto: e.target.value })}
-                  className="w-full bg-white border-0 border-b-2 border-gray-100 px-0 py-3 text-fg placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors"
+                  className="w-full bg-transparent border-0 border-b border-gray-200 px-0 py-3 text-fg placeholder:text-gray-400 focus:outline-none focus:border-primary transition-colors"
                   placeholder="Sobre o que deseja falar?"
                 />
               </div>
@@ -210,7 +202,7 @@ export function ContatoPage() {
                   rows={4}
                   value={formData.mensagem}
                   onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
-                  className="w-full bg-white border-0 border-b-2 border-gray-100 px-0 py-3 text-fg placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors resize-none"
+                  className="w-full bg-transparent border-0 border-b border-gray-200 px-0 py-3 text-fg placeholder:text-gray-400 focus:outline-none focus:border-primary transition-colors resize-none"
                   placeholder="Como podemos ajudar?"
                 />
               </div>
