@@ -14,6 +14,7 @@ import { DetalhesPage } from "@/modules/detalhes/pages/DetalhesPage";
 import { SobrePage } from "@/modules/sobre/pages/SobrePage";
 import { ContatoPage } from "@/modules/contato/pages/ContatoPage";
 import { BlogPage } from "@/modules/blog/pages/BlogPage";
+import { CompraPage } from "@/modules/compra/pages/CompraPage";
 
 // WhatsApp Button Component - iAN
 function WhatsAppButton() {
@@ -161,6 +162,12 @@ const blogRoute = createRoute({
   component: BlogPage,
 });
 
+const compraRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/compra",
+  component: CompraPage,
+});
+
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   seminovosRoute,
@@ -168,6 +175,7 @@ export const routeTree = rootRoute.addChildren([
   sobreRoute,
   contatoRoute,
   blogRoute,
+  compraRoute,
 ]);
 
 // Exporta NotFound para uso no RouterProvider
