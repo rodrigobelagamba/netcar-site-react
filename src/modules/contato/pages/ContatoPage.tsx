@@ -86,50 +86,41 @@ export function ContatoPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-20"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20"
         >
           <a
             href={getWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-white rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+            className="group bg-white rounded-3xl p-10 text-center shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-gray-100/50"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative">
-              <div className="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center mx-auto mb-5">
-                <MessageCircle className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-fg mb-1">WhatsApp</h3>
-              <p className="text-gray-400 text-sm">Resposta imediata</p>
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <MessageCircle className="w-7 h-7 text-green-600" />
             </div>
+            <h3 className="text-xl font-bold text-fg mb-2">WhatsApp</h3>
+            <p className="text-gray-400 text-sm">Resposta imediata</p>
           </a>
 
           <a
             href={`tel:${phoneLoja1?.telefone || "5134737900"}`}
-            className="group bg-white rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+            className="group bg-white rounded-3xl p-10 text-center shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-gray-100/50"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative">
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
-                <Phone className="w-6 h-6 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold text-fg mb-1">Telefone</h3>
-              <p className="text-gray-400 text-sm">{phoneLoja1?.telefone || "(51) 3473-7900"}</p>
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/5 to-primary/15 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <Phone className="w-7 h-7 text-primary" />
             </div>
+            <h3 className="text-xl font-bold text-fg mb-2">Telefone</h3>
+            <p className="text-gray-400 text-sm">{phoneLoja1?.telefone || "(51) 3473-7900"}</p>
           </a>
 
           <a
             href="mailto:contato@netcarmultimarcas.com.br"
-            className="group bg-white rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+            className="group bg-white rounded-3xl p-10 text-center shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-gray-100/50"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative">
-              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mx-auto mb-5">
-                <Mail className="w-6 h-6 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-fg mb-1">E-mail</h3>
-              <p className="text-gray-400 text-sm">contato@netcarmultimarcas.com.br</p>
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <Mail className="w-7 h-7 text-gray-600" />
             </div>
+            <h3 className="text-xl font-bold text-fg mb-2">E-mail</h3>
+            <p className="text-gray-400 text-sm">contato@netcarmultimarcas.com.br</p>
           </a>
         </motion.div>
 
