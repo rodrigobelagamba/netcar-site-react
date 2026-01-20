@@ -13,6 +13,7 @@ import { SeminovosPage } from "@/modules/seminovos/pages/SeminovosPage";
 import { DetalhesPage } from "@/modules/detalhes/pages/DetalhesPage";
 import { SobrePage } from "@/modules/sobre/pages/SobrePage";
 import { ContatoPage } from "@/modules/contato/pages/ContatoPage";
+import { BlogPage } from "@/modules/blog/pages/BlogPage";
 
 // WhatsApp Button Component - iAN
 function WhatsAppButton() {
@@ -154,12 +155,19 @@ const contatoRoute = createRoute({
   component: ContatoPage,
 });
 
+const blogRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/blog",
+  component: BlogPage,
+});
+
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   seminovosRoute,
   detalhesRoute,
   sobreRoute,
   contatoRoute,
+  blogRoute,
 ]);
 
 // Exporta NotFound para uso no RouterProvider
