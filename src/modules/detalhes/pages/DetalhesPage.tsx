@@ -404,8 +404,8 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
     // Mensagem específica para avaliação de troca com nome do veículo
     const vehicleName = modeloCompleto ? modeloCompleto.toUpperCase() : "";
     const message = vehicleName 
-      ? `Oi, gostaria que meu veículo fosse avaliado por um consultor na troca deste ${vehicleName}.`
-      : "Oi, gostaria que meu veículo fosse avaliado por um consultor Netcar.";
+      ? `Oi, gostaria que meu veículo fosse avaliado na troca deste ${vehicleName}.`
+      : "Oi, gostaria que meu veículo fosse avaliado na troca.";
     
     // Gera o link do WhatsApp com a mensagem de troca
     const cleaned = whatsapp.numero.replace(/\D/g, "");
