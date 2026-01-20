@@ -21,12 +21,22 @@ export function HomePage() {
     "Netcar - Seminovos com procedência e qualidade. Confira nossos veículos em destaque."
   );
 
+  // Função helper para verificar se veículo está vendido
+  const isVehicleSold = (vehicle: { status?: string | null }) => {
+    if (!vehicle.status) return false;
+    const statusLower = vehicle.status.toLowerCase().trim();
+    return statusLower === 'vendido' || statusLower === 'sold' || statusLower === 'v';
+  };
+
   // Prepara veículos para o HomeHero - filtra PNGs e pega os primeiros 4
   const heroVehicles: HomeHeroVehicle[] = useMemo(() => {
     if (!vehicles) return [];
 
     return vehicles
       .filter(vehicle => {
+        // Exclui veículos vendidos
+        if (isVehicleSold(vehicle)) return false;
+        
         // Verifica se tem pelo menos uma imagem PNG válida
         const pngImages = vehicle.images?.filter(img => 
           img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
@@ -74,6 +84,9 @@ export function HomePage() {
   // Filtra veículos que têm imagem PNG e pega apenas os 4 primeiros para a lista
   const vehiclesWithPhotos = vehicles
     ? vehicles.filter(vehicle => {
+        // Exclui veículos vendidos
+        if (isVehicleSold(vehicle)) return false;
+        
         // Verifica se tem pelo menos uma imagem PNG
         return vehicle.images?.some(img => 
           img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
