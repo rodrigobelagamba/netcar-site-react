@@ -131,17 +131,17 @@ export function SobrePage() {
 
   // Equipe (mock - pode vir da API futuramente)
   const team = [
-    { name: "Carlos", role: "Fundador & Diretor", image: "/team/carlos.jpg" },
-    { name: "Shirley", role: "Administração", image: "/team/shirley.png" },
-    { name: "Marcelo", role: "Gestão & Relacionamento", image: "/team/marcelo.jpg" },
+    { name: "Carlos", role: "Consultor Comercial", image: "/team/carlos.jpg" },
+    { name: "Shirley", role: "Financeiro & RH", image: "/team/shirley.png" },
+    { name: "Cristiano", role: "Gestão", image: "/team/cristiano.jpg" },
+    { name: "Marcelo", role: "Administração & TI", image: "/team/marcelo.jpg" },
+    { name: "Filipe", role: "Consultor Comercial", image: "/team/filipe.jpg" },
     { name: "Tiago", role: "Consultor Comercial", image: "/team/tiago.jpg" },
     { name: "Bruno", role: "Consultor Comercial", image: "/team/bruno.jpg" },
     { name: "Gilnei", role: "Consultor Comercial", image: "/team/gilnei.jpg" },
-    { name: "Filipe", role: "Marketing", image: "/team/filipe.jpg" },
-    { name: "Cristiano", role: "Consultor Comercial", image: "/team/cristiano.jpg" },
+    { name: "Juliano", role: "Manutenção & Preparação", image: "/team/juliano.jpg" },
+    { name: "Herick", role: "Manutenção & Preparação", image: "/team/herick.jpg" },
     { name: "Claudio", role: "Manutenção & Preparação", image: "/team/claudio.jpg" },
-    { name: "Herick", role: "Consultor Comercial", image: "/team/herick.jpg" },
-    { name: "Juliano", role: "Gestão & Operações", image: "/team/juliano.jpg" },
   ];
 
   return (
