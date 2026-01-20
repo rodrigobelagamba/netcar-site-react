@@ -167,7 +167,7 @@ export function Footer() {
                 <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
                   <Headphones className="w-5 h-5" />
                 </div>
-                <span className="font-bold text-[15px] tracking-tight">Nethelp</span>
+                <span className="font-bold text-[15px] tracking-tight text-primary">Nethelp</span>
               </div>
               <p className="text-[13px] leading-snug opacity-95 font-medium">
                 Suporte exclusivo para veículos em período de garantia legal.
