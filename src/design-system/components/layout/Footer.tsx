@@ -63,7 +63,7 @@ export function Footer() {
             <img
               src={logoNetcar}
               alt="Netcar"
-              className="h-10 w-auto"
+              className="h-8 w-auto object-contain"
             />
 
             {whatsapp?.numero && (
