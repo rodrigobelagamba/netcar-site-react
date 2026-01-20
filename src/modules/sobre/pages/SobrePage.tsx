@@ -332,26 +332,30 @@ export function SobrePage() {
       </section>
 
       {/* Nossos números */}
-      <section className="py-20 md:py-28">
+      <section className="py-20 md:py-28 overflow-hidden">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-stretch">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
             {counters && counters.length > 0 ? (
               counters.slice(0, 4).map((counter, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={cn(
-                    "flex-1 py-10 md:py-0 text-center relative",
-                    index < 3 && "md:border-r border-b md:border-b-0 border-gray-200"
-                  )}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="group"
                 >
-                  <div className="text-5xl md:text-6xl lg:text-[72px] font-light text-fg mb-2">
-                    {counter.valor.toLocaleString("pt-BR")}
+                  <div className="relative">
+                    <span className="absolute -top-4 -left-2 text-[120px] md:text-[160px] font-black text-gray-100 leading-none select-none pointer-events-none">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <div className="relative z-10 pt-12 md:pt-16">
+                      <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
+                        {counter.valor.toLocaleString("pt-BR")}
+                      </div>
+                      <div className="text-muted-foreground text-sm">{counter.titulo}</div>
+                    </div>
                   </div>
-                  <div className="text-muted-foreground text-xs uppercase tracking-[0.2em]">{counter.titulo}</div>
                 </motion.div>
               ))
             ) : (
@@ -364,17 +368,21 @@ export function SobrePage() {
                 ].map((item, index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className={cn(
-                      "flex-1 py-10 md:py-0 text-center relative",
-                      index < 3 && "md:border-r border-b md:border-b-0 border-gray-200"
-                    )}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="group"
                   >
-                    <div className="text-5xl md:text-6xl lg:text-[72px] font-light text-fg mb-2">{item.value}</div>
-                    <div className="text-muted-foreground text-xs uppercase tracking-[0.2em]">{item.label}</div>
+                    <div className="relative">
+                      <span className="absolute -top-4 -left-2 text-[120px] md:text-[160px] font-black text-gray-100 leading-none select-none pointer-events-none">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <div className="relative z-10 pt-12 md:pt-16">
+                        <div className="text-4xl md:text-5xl font-bold text-primary mb-2">{item.value}</div>
+                        <div className="text-muted-foreground text-sm">{item.label}</div>
+                      </div>
+                    </div>
                   </motion.div>
                 ))}
               </>
