@@ -4,7 +4,6 @@ import {
   Phone, 
   Mail, 
   MapPin, 
-  Clock, 
   Send,
   MessageCircle,
   ArrowRight
@@ -256,25 +255,12 @@ export function ContatoPage() {
 
             {/* Horários */}
             <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-primary" />
-                </div>
-                <h3 className="font-semibold text-fg">Horários</h3>
-              </div>
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-500">Segunda a Sexta</span>
-                  <span className="font-medium text-fg">{schedule?.semana || "8h às 18h30"}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-500">Sábados</span>
-                  <span className="font-medium text-fg">{schedule?.sabado || "9h às 13h30"}</span>
-                </div>
-                <p className="text-xs text-gray-400 pt-2 flex items-center gap-1">
-                  <ArrowRight className="w-3 h-3" />
-                  Não fechamos ao meio-dia
-                </p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Atendimento</p>
+              <div className="space-y-2 text-sm font-semibold text-fg">
+                <p>Seg a Sex: <span className="text-primary">{schedule?.dias_semana || "9h às 18h"}</span></p>
+                <p>Sábado: <span className="text-amber-500">{schedule?.sabado || "9h às 16h30"}</span></p>
+                <p>Jan-Fev (Sáb): <span className="text-amber-500">9h às 13h30</span></p>
+                <p className="text-xs text-gray-400 font-medium pt-2">Não fechamos ao meio-dia</p>
               </div>
             </div>
           </motion.div>
