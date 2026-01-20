@@ -67,7 +67,7 @@ function RootComponent() {
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
       <Header />
-      <div className="relative flex-1 overflow-x-hidden max-w-full">
+      <div className="relative flex-1 overflow-x-hidden max-w-full pt-20">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}

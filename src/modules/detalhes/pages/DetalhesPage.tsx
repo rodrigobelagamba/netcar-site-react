@@ -629,23 +629,10 @@ function RelatedVehiclesSection({
 }) {
   const { data: vehicles, isLoading } = useVehiclesQuery();
 
-  // Função helper para verificar se veículo está vendido
-  const isVehicleSold = (vehicle: { status?: string | null }) => {
-    if (!vehicle.status) return false;
-    const statusLower = vehicle.status.toLowerCase().trim();
-    return statusLower === 'vendido' || statusLower === 'sold' || statusLower === 'v';
-  };
-
-  // Filtrar veículos relacionados (excluir o atual, vendidos e pegar até 4)
+  // Filtrar veículos relacionados (excluir o atual e pegar até 4)
   // Converte ambos os IDs para string para comparação correta
   const relatedVehicles =
-    vehicles?.filter((v) => {
-      // Exclui o veículo atual
-      if (String(v.id) === String(currentVehicleId)) return false;
-      // Exclui veículos vendidos
-      if (isVehicleSold(v)) return false;
-      return true;
-    }).slice(0, 4) || [];
+    vehicles?.filter((v) => String(v.id) !== String(currentVehicleId)).slice(0, 4) || [];
 
   if (isLoading || relatedVehicles.length === 0) {
     return null;

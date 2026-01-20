@@ -25,7 +25,6 @@ export interface Vehicle {
   opcionais?: Array<{ tag: string; descricao: string }>;
   pdf?: string; // Nome do arquivo PDF
   pdf_url?: string; // URL relativa do PDF
-  status?: string | null; // Status do veículo (vendido, disponível, etc.)
   fotos?: string[]; // Deprecated - usar fullImages ao invés
 }
 
@@ -282,7 +281,6 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
         pdf: apiVehicle.pdf,
         pdf_url: pdfUrl,
-        status: apiVehicle.status,
       };
     });
 
@@ -341,12 +339,11 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       placa: apiVehicle.placa,
       portas: apiVehicle.portas,
       lugares: apiVehicle.lugares,
-      valor_formatado: apiVehicle.valor_formatado,
-      opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
-      pdf: apiVehicle.pdf,
-      pdf_url: apiVehicle.pdf_url ? normalizeImageUrl(apiVehicle.pdf_url) : undefined,
-      status: apiVehicle.status,
-    };
+        valor_formatado: apiVehicle.valor_formatado,
+        opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
+        pdf: apiVehicle.pdf,
+        pdf_url: apiVehicle.pdf_url ? normalizeImageUrl(apiVehicle.pdf_url) : undefined,
+      };
     } catch (error) {
       console.error("Error fetching vehicle by ID:", error);
       throw error;

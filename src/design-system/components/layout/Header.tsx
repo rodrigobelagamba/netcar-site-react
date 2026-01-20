@@ -117,7 +117,7 @@ export function Header() {
     { to: "/social", label: "Social" },
     { to: "/blog", label: "Blog" },
     { to: "/contato", label: "Contato" },
-    { to: "https://maps.google.com/?q=Netcar+Esteio", label: "Localização", external: true },
+    { to: "https://maps.app.goo.gl/CacX6bBDpw2PbeYY7", label: "Localização", external: true },
   ];
 
   return (
