@@ -162,8 +162,20 @@ export function CompraPage() {
             >
               <div className="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-gray-100">
                 <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Car className="w-8 h-8 text-primary" />
+                  <div className="relative w-20 h-20 mx-auto mb-4">
+                    <div className="w-20 h-20 rounded-full bg-white p-1 shadow-lg border border-gray-100">
+                      <img 
+                        src="/images/IMG_8886.JPG"
+                        alt="iAN - Assistente Virtual"
+                        className="w-full h-full rounded-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "https://ui-avatars.com/api/?name=iAN&background=6cbe9d&color=fff&size=128&bold=true";
+                        }}
+                      />
+                    </div>
+                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-md border border-gray-50">
+                      <div className="w-3 h-3 bg-secondary rounded-full animate-pulse ring-2 ring-white" />
+                    </div>
                   </div>
                   <h3 className="text-xl font-bold text-fg mb-2">Fale com iAN</h3>
                   <p className="text-muted-foreground text-sm">
@@ -177,8 +189,8 @@ export function CompraPage() {
                   rel="noopener noreferrer"
                   className={cn(
                     "w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-semibold",
-                    "bg-[#25D366] text-white transition-all",
-                    "hover:bg-[#20bd5a] hover:shadow-lg"
+                    "bg-secondary text-white transition-all",
+                    "hover:opacity-90 hover:shadow-lg"
                   )}
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -187,8 +199,9 @@ export function CompraPage() {
                   Conversar com iAN
                 </a>
 
-                <p className="text-center text-muted-foreground text-xs mt-4">
-                  Resposta em tempo real
+                <p className="text-center text-muted-foreground text-xs mt-4 flex items-center justify-center gap-2">
+                  <span className="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
+                  Online agora
                 </p>
               </div>
             </motion.div>
