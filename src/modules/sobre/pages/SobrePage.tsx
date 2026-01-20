@@ -192,7 +192,7 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="bg-white border border-gray-100 rounded-[28px] p-8 md:p-10 shadow-lg hover:shadow-xl transition-all"
+              className="bg-white rounded-[24px] p-8 md:p-10 shadow-sm hover:shadow-md transition-all"
             >
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
                 <Shield className="w-3.5 h-3.5" />
@@ -380,7 +380,7 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="relative bg-white border border-gray-100 rounded-[24px] overflow-hidden shadow-lg hover:shadow-xl transition-all group"
+              className="relative bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-all group"
             >
               <div className="relative h-[240px] overflow-hidden">
                 <img
@@ -416,7 +416,7 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="relative bg-white border border-gray-100 rounded-[24px] overflow-hidden shadow-lg hover:shadow-xl transition-all group"
+              className="relative bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-all group"
             >
               <div className="relative h-[240px] overflow-hidden">
                 <img
@@ -459,7 +459,7 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="bg-white border border-gray-100 rounded-[28px] p-8 md:p-10 shadow-lg h-full"
+              className="bg-white rounded-[24px] p-8 md:p-10 shadow-sm h-full"
             >
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
                 <Clock className="w-3.5 h-3.5" />
@@ -512,11 +512,11 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="bg-white border border-gray-100 rounded-[28px] p-8 md:p-10 shadow-lg h-full"
+              className="bg-white rounded-[24px] p-8 md:p-10 shadow-sm h-full"
             >
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
                 <Award className="w-3.5 h-3.5" />
-                Princípios
+                Valores
               </div>
               <h2 className="text-2xl md:text-[28px] font-bold mb-4">Nossos valores</h2>
               {valores?.conteudo ? (
@@ -537,7 +537,7 @@ export function SobrePage() {
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="flex items-start gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-primary/5 hover:border-primary/20 transition-all group"
+                      className="flex items-start gap-4 p-4 rounded-xl bg-gray-50/70 hover:bg-primary/5 transition-all group"
                     >
                       <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                         <valor.icon className="w-5 h-5 text-primary" />
@@ -574,10 +574,10 @@ export function SobrePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex flex-col items-center gap-3 p-6 border border-gray-100 rounded-[24px] bg-white shadow-md transition-all hover:-translate-y-2 hover:shadow-xl group"
+                className="flex flex-col items-center gap-3 p-6 rounded-[20px] bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-md group"
               >
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/20 flex items-center justify-center transition-all group-hover:scale-110 group-hover:border-primary/40">
-                  <Users className="w-8 h-8 text-primary/60" />
+                <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center transition-all group-hover:scale-105">
+                  <Users className="w-6 h-6 text-gray-400" />
                 </div>
                 <h5 className="font-bold text-center text-fg">{person.name}</h5>
                 <p className="text-muted-foreground text-sm text-center">{person.role}</p>
