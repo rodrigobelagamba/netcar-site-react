@@ -8,7 +8,7 @@ import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useState, useEffect, useMemo } from "react";
 import { formatPrice, formatYear } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
-import { ChevronLeft, ChevronRight, CheckCircle2, Shield, Award, Clock, Users, MapPin, Phone } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle2, Shield, Award, MapPin, Phone } from "lucide-react";
 
 export function SobrePage() {
   const navigate = useNavigate();
@@ -151,15 +151,14 @@ export function SobrePage() {
           transition={{ duration: 0.8 }}
           className="max-w-[1200px] mx-auto px-6"
         >
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+          <motion.span 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-semibold tracking-widest uppercase mb-6"
+            className="text-primary text-xs font-semibold tracking-widest uppercase mb-6 block"
           >
-            <Award className="w-4 h-4" />
             Sobre a Netcar
-          </motion.div>
+          </motion.span>
           <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight mb-6 bg-gradient-to-r from-fg via-fg to-primary bg-clip-text">
             Desde 1997, curadoria e<br className="hidden md:block" /> procedência em seminovos.
           </h1>
@@ -192,13 +191,11 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="bg-white rounded-[24px] p-8 md:p-10 shadow-sm hover:shadow-md transition-all"
+              className="relative bg-white rounded-[24px] p-8 md:p-10 shadow-sm hover:shadow-md transition-all overflow-hidden"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
-                <Shield className="w-3.5 h-3.5" />
-                Essência
-              </div>
-              <h2 className="text-2xl md:text-[30px] font-bold mb-4 leading-tight">Nossa essência</h2>
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent" />
+              <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Nossa essência</span>
+              <h2 className="text-2xl md:text-[30px] font-bold mb-4 leading-tight">Curadoria com propósito</h2>
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 {essencia?.conteudo || "Selecionamos cada veículo com critérios objetivos de quilometragem, histórico e procedência. O preparo e a transparência fazem parte do processo, para você comprar certo."}
               </p>
@@ -365,13 +362,10 @@ export function SobrePage() {
       {/* Nossas lojas */}
       <section className="py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
-              <MapPin className="w-3.5 h-3.5" />
-              Localização
-            </div>
+          <div className="mb-10">
+            <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Onde estamos</span>
             <h2 className="text-2xl md:text-[32px] font-bold mb-2">Nossas lojas</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">Dois endereços estratégicos em Esteio/RS para melhor atendê-lo.</p>
+            <p className="text-muted-foreground max-w-lg">Dois endereços em Esteio/RS para melhor atendê-lo.</p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
             {/* Loja 1 */}
@@ -459,12 +453,10 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="bg-white rounded-[24px] p-8 md:p-10 shadow-sm h-full"
+              className="relative bg-white rounded-[24px] p-8 md:p-10 shadow-sm h-full overflow-hidden"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
-                <Clock className="w-3.5 h-3.5" />
-                Trajetória
-              </div>
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent" />
+              <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Trajetória</span>
               <h2 className="text-2xl md:text-[28px] font-bold mb-4">Nossa história</h2>
               {historia?.conteudo ? (
                 <div
@@ -512,12 +504,10 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="bg-white rounded-[24px] p-8 md:p-10 shadow-sm h-full"
+              className="relative bg-white rounded-[24px] p-8 md:p-10 shadow-sm h-full overflow-hidden"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
-                <Award className="w-3.5 h-3.5" />
-                Valores
-              </div>
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent" />
+              <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Princípios</span>
               <h2 className="text-2xl md:text-[28px] font-bold mb-4">Nossos valores</h2>
               {valores?.conteudo ? (
                 <div
@@ -537,13 +527,11 @@ export function SobrePage() {
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="flex items-start gap-4 p-4 rounded-xl bg-gray-50/70 hover:bg-primary/5 transition-all group"
+                      className="flex items-start gap-4 py-4 border-b border-gray-100 last:border-0 hover:pl-2 transition-all group"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                        <valor.icon className="w-5 h-5 text-primary" />
-                      </div>
+                      <valor.icon className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                       <div>
-                        <h4 className="font-semibold mb-1">{valor.title}</h4>
+                        <h4 className="font-semibold mb-0.5 group-hover:text-primary transition-colors">{valor.title}</h4>
                         <p className="text-muted-foreground text-sm">{valor.description}</p>
                       </div>
                     </motion.div>
@@ -559,12 +547,9 @@ export function SobrePage() {
       <section className="py-16 md:py-20 bg-gray-50/50">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">
-              <Users className="w-3.5 h-3.5" />
-              Time
-            </div>
+            <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Quem faz acontecer</span>
             <h2 className="text-2xl md:text-[32px] font-bold mb-2">Nossa equipe</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">Profissionais que somam experiência, cuidado e atenção a cada detalhe.</p>
+            <p className="text-muted-foreground max-w-lg mx-auto">Experiência, cuidado e atenção a cada detalhe.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {team.map((person, index) => (
@@ -574,13 +559,15 @@ export function SobrePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex flex-col items-center gap-3 p-6 rounded-[20px] bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-md group"
+                className="text-center group"
               >
-                <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center transition-all group-hover:scale-105">
-                  <Users className="w-6 h-6 text-gray-400" />
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center transition-all group-hover:from-primary/10 group-hover:to-primary/5">
+                  <span className="text-2xl font-bold text-gray-300 group-hover:text-primary transition-colors">
+                    {person.name.charAt(0)}
+                  </span>
                 </div>
-                <h5 className="font-bold text-center text-fg">{person.name}</h5>
-                <p className="text-muted-foreground text-sm text-center">{person.role}</p>
+                <h5 className="font-semibold text-fg">{person.name}</h5>
+                <p className="text-muted-foreground text-sm">{person.role}</p>
               </motion.div>
             ))}
           </div>
