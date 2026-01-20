@@ -419,6 +419,16 @@ export function SobrePage() {
                     e.currentTarget.src = "/images/loja1.jpg";
                   }}
                 />
+                <div className="absolute top-3 right-3 w-24 h-16 rounded-lg overflow-hidden shadow-lg border-2 border-white">
+                  <img
+                    src={loja2Image}
+                    alt="Miniatura Loja 2"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = "/images/loja2.jpg";
+                    }}
+                  />
+                </div>
               </div>
               <div className="p-6">
                 <h3 className="text-lg font-bold text-fg mb-1">Loja 1 — Centro, Esteio/RS</h3>
@@ -446,6 +456,16 @@ export function SobrePage() {
                     e.currentTarget.src = "/images/loja2.jpg";
                   }}
                 />
+                <div className="absolute top-3 right-3 w-24 h-16 rounded-lg overflow-hidden shadow-lg border-2 border-white">
+                  <img
+                    src={loja1Image}
+                    alt="Miniatura Loja 1"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = "/images/loja1.jpg";
+                    }}
+                  />
+                </div>
               </div>
               <div className="p-6">
                 <h3 className="text-lg font-bold text-fg mb-1">Loja 2 — Centro, Esteio/RS</h3>
