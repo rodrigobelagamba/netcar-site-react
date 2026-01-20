@@ -59,7 +59,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[220px_1fr_140px_120px] gap-x-10 gap-y-10 mb-10">
           
           {/* Coluna 1: Contato & Nethelp */}
-          <div className="flex flex-col space-y-6">
+          <div className="flex flex-col space-y-6 items-start">
             <img
               src={logoNetcar}
               alt="Netcar"
