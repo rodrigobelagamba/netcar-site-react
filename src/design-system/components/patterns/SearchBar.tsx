@@ -509,12 +509,7 @@ export function SearchBar() {
               '--tw-ring-color': 'rgba(92, 210, 157, 0.2)',
             } as React.CSSProperties & { '--tw-ring-color': string }}
           />
-          <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-2 pointer-events-none">
-            <span className="text-[10px] font-bold uppercase tracking-widest mr-2" style={{ color: 'rgba(0, 40, 60, 0.2)' }}>Exemplos:</span>
-            <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" style={{ backgroundColor: 'rgba(0, 40, 60, 0.05)', color: 'rgba(0, 40, 60, 0.4)' }}>AUTOMÁTICO</span>
-            <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" style={{ backgroundColor: 'rgba(0, 40, 60, 0.05)', color: 'rgba(0, 40, 60, 0.4)' }}>PRETO</span>
-          </div>
-
+          
           {/* Live Search Results Dropdown */}
           <AnimatePresence>
             {isFocused && searchQuery.length > 0 && filteredSuggestions.length > 0 && (
