@@ -5,7 +5,7 @@ import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
 import { cn } from "@/lib/cn";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Car, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
@@ -174,8 +174,85 @@ export function SeminovosPage() {
     setVisibleCount(ITEMS_PER_PAGE);
   }, [search.marca, search.precoMin, search.precoMax, search.anoMin, search.anoMax, sortBy, searchTerm]);
 
+  const [localSearch, setLocalSearch] = useState("");
+
+  const quickFilters = [
+    { label: "ATÉ R$ 100K", value: "100000" },
+    { label: "AUTOMÁTICO", value: "automatico" },
+    { label: "SUV", value: "suv" },
+    { label: "PRATA", value: "prata" },
+  ];
+
+  const handleQuickSearch = (value: string) => {
+    setLocalSearch(value);
+  };
+
+  const handleSearchSubmit = () => {
+    if (localSearch.trim()) {
+      navigate({
+        to: "/seminovos",
+        search: {
+          ...search,
+          modelo: localSearch.trim(),
+        },
+      });
+    }
+  };
+
   return (
     <main className="flex-1 pt-16 overflow-x-hidden max-w-full">
+      {/* Barra de Busca Principal */}
+      <div className="bg-gradient-to-b from-gray-50 to-white py-6">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-full shadow-lg border border-gray-100 px-4 py-2 flex items-center gap-3">
+            <Car className="w-5 h-5 text-primary flex-shrink-0" />
+            <input
+              type="text"
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
+              placeholder="Busque por marca, modelo, cor, câmbio, valor..."
+              className="flex-1 bg-transparent border-none outline-none text-sm text-gray-600 placeholder:text-gray-400"
+            />
+            <div className="hidden md:flex items-center gap-2 text-xs text-gray-400">
+              <span>EXEMPLOS:</span>
+              <button
+                onClick={() => handleQuickSearch("automático")}
+                className="px-2 py-0.5 rounded border border-gray-200 text-gray-500 hover:border-primary hover:text-primary transition-colors"
+              >
+                AUTOMÁTICO
+              </button>
+              <button
+                onClick={() => handleQuickSearch("preto")}
+                className="px-2 py-0.5 rounded border border-gray-200 text-gray-500 hover:border-primary hover:text-primary transition-colors"
+              >
+                PRETO
+              </button>
+            </div>
+            <button
+              onClick={handleSearchSubmit}
+              className="bg-fg text-white px-5 py-2 rounded-full flex items-center gap-2 text-sm font-semibold hover:bg-fg/90 transition-colors"
+            >
+              <ArrowRight className="w-4 h-4" />
+              BUSCAR
+            </button>
+          </div>
+
+          {/* Quick Filters */}
+          <div className="flex justify-center gap-3 mt-4">
+            {quickFilters.map((filter) => (
+              <button
+                key={filter.value}
+                onClick={() => handleQuickSearch(filter.label.toLowerCase())}
+                className="px-4 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 hover:border-primary hover:text-primary transition-colors"
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filtros Horizontais */}
         <div className="mb-6 pb-6">
