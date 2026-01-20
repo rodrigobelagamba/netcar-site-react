@@ -105,33 +105,38 @@ export function CompraPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mb-12"
+            className="text-center mb-12"
           >
-            <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Vantagens</span>
-            <h2 className="text-2xl md:text-[32px] font-bold">Por que vender seu carro com a NETCAR?</h2>
+            <h2 className="text-2xl md:text-[32px] font-bold mb-3">Por que vender com a NETCAR?</h2>
+            <p className="text-muted-foreground">Simplificamos todo o processo para você.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {benefits.map((benefit, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {[
+              { number: "01", title: "Rápido", description: "Sem anúncios, fotos ou negociações demoradas." },
+              { number: "02", title: "Transparente", description: "Avaliação justa com critérios claros e objetivos." },
+              { number: "03", title: "Ágil", description: "Transferência em até 72h após confirmação." },
+              { number: "04", title: "Justo", description: "Pagamos o valor real do seu veículo." },
+            ].map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group flex gap-5 p-6 rounded-2xl bg-white border border-gray-100 hover:border-primary/20 hover:shadow-lg transition-all"
+                className="group p-6 rounded-2xl border border-gray-200 hover:border-primary/30 hover:shadow-md transition-all bg-white"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                  <benefit.icon className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-fg mb-1 group-hover:text-primary transition-colors">
-                    {benefit.title}
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="text-lg font-bold text-fg group-hover:text-primary transition-colors">
+                    {item.title}
                   </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {benefit.description}
-                  </p>
+                  <span className="text-3xl md:text-4xl font-black text-[#1a2b3c]/80">
+                    {item.number}
+                  </span>
                 </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {item.description}
+                </p>
               </motion.div>
             ))}
           </div>
