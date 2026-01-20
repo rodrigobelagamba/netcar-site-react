@@ -332,23 +332,26 @@ export function SobrePage() {
       </section>
 
       {/* Nossos números */}
-      <section className="py-16 md:py-24 bg-[#fafafa]">
+      <section className="py-20 md:py-28">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-200 rounded-2xl overflow-hidden">
+          <div className="flex flex-col md:flex-row items-stretch">
             {counters && counters.length > 0 ? (
               counters.slice(0, 4).map((counter, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white p-8 md:p-10 text-center group hover:bg-primary/5 transition-colors"
+                  className={cn(
+                    "flex-1 py-10 md:py-0 text-center relative",
+                    index < 3 && "md:border-r border-b md:border-b-0 border-gray-200"
+                  )}
                 >
-                  <div className="text-4xl md:text-5xl lg:text-[52px] font-bold mb-3 text-primary">
+                  <div className="text-5xl md:text-6xl lg:text-[72px] font-light text-fg mb-2">
                     {counter.valor.toLocaleString("pt-BR")}
                   </div>
-                  <div className="text-muted-foreground text-sm uppercase tracking-wide">{counter.titulo}</div>
+                  <div className="text-muted-foreground text-xs uppercase tracking-[0.2em]">{counter.titulo}</div>
                 </motion.div>
               ))
             ) : (
@@ -361,14 +364,17 @@ export function SobrePage() {
                 ].map((item, index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-white p-8 md:p-10 text-center group hover:bg-primary/5 transition-colors"
+                    className={cn(
+                      "flex-1 py-10 md:py-0 text-center relative",
+                      index < 3 && "md:border-r border-b md:border-b-0 border-gray-200"
+                    )}
                   >
-                    <div className="text-4xl md:text-5xl lg:text-[52px] font-bold mb-3 text-primary">{item.value}</div>
-                    <div className="text-muted-foreground text-sm uppercase tracking-wide">{item.label}</div>
+                    <div className="text-5xl md:text-6xl lg:text-[72px] font-light text-fg mb-2">{item.value}</div>
+                    <div className="text-muted-foreground text-xs uppercase tracking-[0.2em]">{item.label}</div>
                   </motion.div>
                 ))}
               </>
