@@ -1,24 +1,15 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useAboutTextQuery, useCountersQuery } from "@/api/queries/useSiteQuery";
 import { useBannersLoja1Query, useBannersLoja2Query, useAddressQuery, usePhoneQuery, useWhatsAppQuery } from "@/api/queries/useSiteQuery";
-import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
-import { useState, useEffect, useMemo } from "react";
-import { formatPrice, formatYear } from "@/lib/formatters";
-import { generateVehicleSlug } from "@/lib/slug";
-import { ChevronLeft, ChevronRight, CheckCircle2, Shield, Award } from "lucide-react";
+import { CheckCircle2, Shield, Award } from "lucide-react";
 
 export function SobrePage() {
-  const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
-  
   // Busca dados da API
   const { data: essencia } = useAboutTextQuery("Essência");
   const { data: counters } = useCountersQuery("Sobre");
-  const { data: vehicles } = useVehiclesQuery();
   const { data: bannersLoja1 } = useBannersLoja1Query();
   const { data: bannersLoja2 } = useBannersLoja2Query();
   const { data: addressLoja1 } = useAddressQuery("Loja1");
@@ -33,70 +24,6 @@ export function SobrePage() {
     "Sobre Nós",
     "Desde 1997, a Netcar seleciona carros com histórico, qualidade e transparência. Conheça nossa história e valores."
   );
-
-  // Prepara veículos para o mini carousel
-  const heroVehicles = useMemo(() => {
-    if (!vehicles) return [];
-    return vehicles
-      .filter(vehicle => {
-        const pngImages = vehicle.images?.filter(img => 
-          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
-        ) || [];
-        return pngImages.length > 0;
-      })
-      .slice(0, 4)
-      .map(vehicle => {
-        const pngImages = vehicle.images?.filter(img => 
-          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
-        ) || [];
-        return {
-          id: vehicle.id,
-          brand: vehicle.marca || vehicle.name?.split(' ')[0] || '',
-          model: vehicle.modelo || vehicle.name || '',
-          year: vehicle.year,
-          price: vehicle.price,
-          image: pngImages[0] || "/images/semcapa.png",
-          marca: vehicle.marca,
-          modelo: vehicle.modelo,
-          placa: vehicle.placa,
-        };
-      });
-  }, [vehicles]);
-
-  const currentVehicle = heroVehicles[currentIndex] || null;
-
-  const nextSlide = () => {
-    if (heroVehicles.length === 0) return;
-    setDirection(1);
-    setCurrentIndex((prev) => (prev + 1) % heroVehicles.length);
-  };
-  
-  const prevSlide = () => {
-    if (heroVehicles.length === 0) return;
-    setDirection(-1);
-    setCurrentIndex((prev) => (prev - 1 + heroVehicles.length) % heroVehicles.length);
-  };
-
-  useEffect(() => {
-    if (heroVehicles.length === 0) return;
-    const timer = setInterval(() => {
-      setDirection(1);
-      setCurrentIndex((prev) => (prev + 1) % heroVehicles.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [heroVehicles.length]);
-
-  const handleVehicleClick = () => {
-    if (!currentVehicle) return;
-    const slug = generateVehicleSlug({
-      modelo: currentVehicle.modelo || currentVehicle.model,
-      marca: currentVehicle.marca || currentVehicle.brand,
-      year: currentVehicle.year,
-      placa: currentVehicle.placa,
-      id: currentVehicle.id,
-    });
-    navigate({ to: `/veiculo/${slug}` });
-  };
   
   // Imagem da fachada para cada loja
   const getFachadaImage = (banners?: Array<{ titulo?: string; imagem: string }>) => {
@@ -243,7 +170,7 @@ export function SobrePage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative bg-white rounded-[24px] p-8 md:p-10 shadow-sm border border-gray-200 hover:border-primary/30 hover:shadow-md transition-all overflow-hidden"
+            className="relative bg-white rounded-[24px] p-8 md:p-10 shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden"
           >
             <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent" />
             <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Nossa essência</span>
@@ -292,9 +219,9 @@ export function SobrePage() {
               <>
                 {[
                   { value: "1997", label: "Desde" },
-                  { value: "+2.500", label: "Clientes atendidos" },
-                  { value: "2", label: "Lojas em Esteio/RS" },
-                  { value: "100%", label: "Estoque com procedência" },
+                  { value: "+2.750", label: "Clientes atendidos" },
+                  { value: "94%", label: "Clientes recomendam" },
+                  { value: "83%", label: "Taxa de recompra" },
                 ].map((item, index) => (
                   <motion.div
                     key={index}
