@@ -464,10 +464,7 @@ export function SobrePage() {
                   <div className="h-px flex-1 bg-gradient-to-l from-transparent via-gray-200 to-gray-200" />
                 </div>
                 
-                <div className={cn(
-                  "grid gap-6 md:gap-8",
-                  sector.members.length <= 3 ? "grid-cols-2 sm:grid-cols-3 max-w-2xl mx-auto" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
-                )}>
+                <div className="flex flex-wrap justify-center gap-10 md:gap-12 max-w-5xl mx-auto">
                   {sector.members.map((person, index) => (
                     <motion.div
                       key={person.name}
@@ -475,7 +472,7 @@ export function SobrePage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.4, delay: index * 0.08 }}
-                      className="group text-center"
+                      className="group text-center flex flex-col items-center w-36 md:w-44"
                     >
                       <div className="relative mb-4 mx-auto w-28 h-28 md:w-32 md:h-32">
                         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
