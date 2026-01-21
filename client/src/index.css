@@ -10,7 +10,7 @@
   --color-secondary-foreground: hsl(var(--color-secondary-foreground));
   --color-tertiary: hsl(var(--color-tertiary));
   --color-tertiary-foreground: hsl(var(--color-tertiary-foreground));
-  --color-gray: hsl(var(--color-gray));
+  /* --color-gray: hsl(var(--color-gray)); Removed to prevent potential conflict with default palette */
   --color-blue: hsl(var(--color-blue));
   --color-blue-dark: hsl(var(--color-blue-dark));
   --color-grey-light: hsl(var(--color-grey-light));
@@ -40,6 +40,12 @@
     background-color: hsl(var(--color-muted));
     color: hsl(var(--color-fg));
   }
+}
+
+@layer utilities {
+  .bg-gray { background-color: hsl(var(--color-gray)); }
+  .text-gray { color: hsl(var(--color-gray)); }
+  .border-gray { border-color: hsl(var(--color-gray)); }
 }
 
 /* Customização do FsLightbox - Fora do layer para garantir prioridade */
