@@ -4,7 +4,6 @@ import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/HomeHero";
-import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
@@ -17,7 +16,7 @@ const PROBLEMATIC_IMAGE_PATTERN = "271_131072IMG_8213";
 function HomeHeroSkeleton() {
   return (
     <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
-      <div className="container mx-auto px-4 md:px-6 relative z-10 flex flex-col items-center justify-center w-full">
+      <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">
         {/* Brand Label Skeleton */}
         <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
           <div className="flex items-center gap-3">
@@ -28,7 +27,7 @@ function HomeHeroSkeleton() {
         </div>
 
         {/* Image Skeleton */}
-        <div className="relative w-full max-w-[1400px] flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
+        <div className="relative w-full max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
           <div className="w-full h-[45vh] md:h-[60vh] bg-gray-200 rounded-lg animate-pulse" />
         </div>
 
@@ -137,9 +136,7 @@ export function HomePage() {
         <HomeHero vehicles={heroVehicles} />
       ) : null}
 
-      <SearchBar />
-
-      <section className="container mx-auto px-4 py-12">
+      <section className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-12">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-fg">Destaques</h2>
           <p className="mt-2 text-gray-600 text-lg font-medium">Novidades da semana, olha só o que separamos para você!</p>
@@ -153,9 +150,11 @@ export function HomePage() {
 
       <EmbedSocialSection />
 
-      <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
-        <Localizacao />
-        <IanBot />
+      <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto space-y-8">
+          <Localizacao />
+          <IanBot />
+        </div>
       </div>
     </main>
   );

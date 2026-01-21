@@ -95,7 +95,7 @@ export function SobrePage() {
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-secondary/8 rounded-full blur-3xl" />
         </div>
         
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
@@ -164,7 +164,7 @@ export function SobrePage() {
 
       {/* Nossa essência */}
       <section className="py-16 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -197,7 +197,7 @@ export function SobrePage() {
 
       {/* Nossos números */}
       <section className="py-16 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {counters && counters.length > 0 ? (
               counters.slice(0, 4).map((counter, index) => (
@@ -243,7 +243,7 @@ export function SobrePage() {
 
       {/* Nossas lojas */}
       <section className="py-16 md:py-20 bg-gray-50/50 relative z-10 overflow-hidden">
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="mb-10">
             <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Onde estamos</span>
             <h2 className="text-2xl md:text-[32px] font-bold mb-2">Nossas lojas</h2>
@@ -329,7 +329,7 @@ export function SobrePage() {
 
       {/* Linha do tempo + Valores */}
       <section className="py-16 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-stretch">
             {/* Nossa história */}
             <motion.div
@@ -424,7 +424,7 @@ export function SobrePage() {
 
       {/* Equipe */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -487,7 +487,7 @@ export function SobrePage() {
 
       {/* CTA Estoque */}
       <section className="py-20 md:py-28">
-        <div className="max-w-[900px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

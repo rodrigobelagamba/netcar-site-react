@@ -301,7 +301,7 @@ export function Localizacao() {
   // Se não houver chave da API, usa o iframe como fallback
   if (!GOOGLE_MAPS_API_KEY) {
     return (
-      <section className="max-w-[1400px] mx-auto w-full bg-white rounded-[32px] shadow-sm overflow-hidden border border-white relative group">
+      <section className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto w-full bg-white rounded-[32px] shadow-sm overflow-hidden border border-white relative group">
         <div className="w-full h-[450px] relative grayscale-[0.1]">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13826.0!2d-51.171175!3d-29.839405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjnCsDUwJzIxLjkiUyA1McKwMTAnMTYuMiJX!5e0!3m2!1spt-BR!2sbr!4v1704628800000!5m2!1spt-BR!2sbr"
@@ -357,7 +357,7 @@ export function Localizacao() {
   // Se houver erro, mostrar mensagem
   if (mapError) {
     return (
-      <section className="max-w-[1400px] mx-auto w-full bg-white rounded-[32px] shadow-sm overflow-hidden border border-white relative group">
+      <section className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto w-full bg-white rounded-[32px] shadow-sm overflow-hidden border border-white relative group">
         <div className="w-full h-[450px] relative flex items-center justify-center bg-gray-50 rounded-lg">
           <div className="text-center p-8">
             <div className="text-red-500 text-4xl mb-4">⚠️</div>

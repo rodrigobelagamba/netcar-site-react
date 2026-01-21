@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export function DNASection() {
   return (
-    <section className="py-20 container mx-auto px-4">
+    <section className="py-20 max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
       {/* Dark DNA Block */}
       <div className="bg-white rounded-[40px] p-8 md:p-16 relative overflow-hidden shadow-2xl !border-0" style={{ color: '#00283C', border: 'none' }}>
         {/* Geometric Accents Inside Block */}

@@ -4,7 +4,7 @@ import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
-import { ChevronDown, Car, ArrowRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
 
@@ -172,71 +172,9 @@ export function SeminovosPage() {
     setVisibleCount(ITEMS_PER_PAGE);
   }, [search.marca, search.precoMin, search.precoMax, search.anoMin, search.anoMax, sortBy, searchTerm]);
 
-  const [localSearch, setLocalSearch] = useState("");
-
-  const quickFilters = [
-    { label: "ATÉ R$ 100K", value: "100000" },
-    { label: "AUTOMÁTICO", value: "automatico" },
-    { label: "SUV", value: "suv" },
-    { label: "PRATA", value: "prata" },
-  ];
-
-  const handleQuickSearch = (value: string) => {
-    setLocalSearch(value);
-  };
-
-  const handleSearchSubmit = () => {
-    if (localSearch.trim()) {
-      navigate({
-        to: "/seminovos",
-        search: {
-          ...search,
-          modelo: localSearch.trim(),
-        },
-      });
-    }
-  };
-
   return (
     <main className="flex-1 pt-16 overflow-x-hidden max-w-full">
-      {/* Barra de Busca Principal */}
-      <div className="bg-gradient-to-b from-surface to-bg py-6">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-bg rounded-full shadow-lg px-4 py-2 flex items-center gap-3">
-            <Car className="w-5 h-5 text-primary flex-shrink-0" />
-            <input
-              type="text"
-              value={localSearch}
-              onChange={(e) => setLocalSearch(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
-              placeholder="Busque por marca, modelo, cor, câmbio, valor..."
-              className="flex-1 bg-transparent border-none outline-none text-sm text-fg placeholder:text-muted-foreground"
-            />
-                        <button
-              onClick={handleSearchSubmit}
-              className="bg-fg text-white px-5 py-2 rounded-full flex items-center gap-2 text-sm font-semibold hover:bg-fg/90 transition-colors"
-            >
-              <ArrowRight className="w-4 h-4" />
-              BUSCAR
-            </button>
-          </div>
-
-          {/* Quick Filters */}
-          <div className="flex justify-center gap-3 mt-4">
-            {quickFilters.map((filter) => (
-              <button
-                key={filter.value}
-                onClick={() => handleQuickSearch(filter.label.toLowerCase())}
-                className="px-4 py-1.5 rounded-full bg-bg shadow-sm text-xs font-medium text-muted-foreground hover:bg-primary/5 hover:text-primary transition-colors"
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
         {/* Filtros em Card Minimalista */}
         <div className="bg-bg rounded-2xl shadow-sm p-5 mb-8">
           <div className="flex flex-wrap items-end gap-6">
@@ -348,7 +286,7 @@ export function SeminovosPage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" style={{ overflow: 'visible' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10" style={{ overflow: 'visible' }}>
               {visibleVehicles.map((vehicle, index) => (
                 <VehicleCard
                   key={vehicle.id}

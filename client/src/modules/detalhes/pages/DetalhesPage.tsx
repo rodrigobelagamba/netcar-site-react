@@ -886,7 +886,7 @@ export function DetalhesPage() {
         </div>
 
         {/* Left Content - 50% dentro do container */}
-        <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -1015,7 +1015,7 @@ export function DetalhesPage() {
       {/* Gallery Section */}
       {images.length > 1 && (
         <section className="w-full py-8 sm:py-12 lg:py-16">
-          <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0">
+          <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
             {/* Grid Container */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-[6px]">
               {images.map((image, index) => (
@@ -1050,7 +1050,7 @@ export function DetalhesPage() {
 
       {/* Fábrica de Valor Section */}
       <section className="w-full pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16 bg-surface">
-        <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <FabricaDeValor />
         </div>
       </section>

@@ -27,7 +27,7 @@ export function CompraPage() {
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-secondary/8 rounded-full blur-3xl" />
         </div>
         
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
@@ -106,7 +106,7 @@ export function CompraPage() {
 
       {/* Benefícios */}
       <section className="py-16 md:py-24">
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -152,7 +152,7 @@ export function CompraPage() {
 
       {/* Requisitos */}
       <section className="py-16 md:py-24 bg-[#fafafa]">
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -244,7 +244,7 @@ export function CompraPage() {
 
       {/* CTA Final */}
       <section className="py-20 md:py-28">
-        <div className="max-w-[900px] mx-auto px-6">
+        <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -111,7 +111,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
         </motion.div>
       </AnimatePresence>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10 flex flex-col items-center justify-center w-full">
+      <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">
         
         {/* Brand Label */}
         <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
@@ -132,7 +132,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
           </AnimatePresence>
         </div>
 
-        <div className="relative w-full max-w-[1400px] flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
+        <div className="relative w-full max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
           {/* Main Car Image - MAXIMIZED SIZE */}
           <AnimatePresence mode="popLayout" initial={false} custom={direction}>
             <motion.div
