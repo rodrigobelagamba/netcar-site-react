@@ -4,7 +4,7 @@ import { useBannersLoja1Query, useBannersLoja2Query, useAddressQuery, usePhoneQu
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
-import { CheckCircle2, Shield, Award } from "lucide-react";
+import { CheckCircle2, Shield, Award, Users, TrendingUp } from "lucide-react";
 
 export function SobrePage() {
   // Busca dados da API
@@ -394,9 +394,26 @@ export function SobrePage() {
               ) : (
                 <div className="space-y-0">
                   {[
-                    { icon: Shield, title: "Transparência", description: "Informação clara em cada etapa da compra." },
-                    { icon: CheckCircle2, title: "Procedência", description: "Histórico e documentação verificados." },
-                    { icon: Award, title: "Experiência", description: "Desde 1997 no mercado de seminovos." },
+                    { 
+                      icon: Shield, 
+                      title: "Transparência que Gera Confiança", 
+                      description: "A gente acredita que confiança não se pede, se constrói. Por isso, na Netcar, tudo é claro desde o início: explicamos os processos, falamos de forma objetiva e ajudamos o cliente a tomar decisões com segurança e respeito." 
+                    },
+                    { 
+                      icon: CheckCircle2, 
+                      title: "Qualidade com Responsabilidade", 
+                      description: "Cada carro que entra na Netcar passa por uma seleção criteriosa e um preparo cuidadoso. Isso acontece dentro da nossa Fábrica de Valor, um processo exclusivo, com mais de 60 itens técnicos e funcionais verificados. É assim que garantimos segurança, qualidade e tranquilidade em cada entrega." 
+                    },
+                    { 
+                      icon: Users, 
+                      title: "Uma Relação que Não Acaba na Entrega", 
+                      description: "Aqui, a venda não termina quando as chaves mudam de mão. Com o Nethelp, nosso programa exclusivo de pós-venda, seguimos presentes, assumindo responsabilidade e dando suporte sempre que o cliente precisa." 
+                    },
+                    { 
+                      icon: TrendingUp, 
+                      title: "Evoluir Faz Parte de Quem Somos", 
+                      description: "Estamos em constante evolução. Investimos em tecnologia, processos e, principalmente, em pessoas. Tudo para oferecer uma experiência de compra cada vez melhor, sem perder o que é mais importante: o atendimento humano, próximo e verdadeiro." 
+                    }
                   ].map((valor, index) => (
                     <motion.div
                       key={index}
@@ -404,15 +421,15 @@ export function SobrePage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="group py-4 border-b border-gray-100 last:border-0"
+                      className="group relative py-4 border-b border-gray-100 last:border-0"
                     >
                       <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
                           <valor.icon className="w-5 h-5 text-primary" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-fg group-hover:text-primary transition-colors">{valor.title}</h4>
-                          <p className="text-muted-foreground text-sm mt-1">{valor.description}</p>
+                          <p className="text-muted-foreground text-sm mt-1 leading-relaxed">{valor.description}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -438,7 +455,7 @@ export function SobrePage() {
             <p className="text-muted-foreground max-w-md mx-auto">Profissionais dedicados em cada etapa do seu atendimento.</p>
           </motion.div>
           
-          <div className="space-y-16">
+          <div className="space-y-16 flex flex-col items-center">
             {teamBySector.map((sector, sectorIndex) => (
               <motion.div
                 key={sector.sector}
@@ -446,16 +463,21 @@ export function SobrePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: sectorIndex * 0.1 }}
+                className="w-full flex flex-col items-center"
               >
-                <div className="flex items-center gap-4 mb-8">
+                <div className="flex items-center gap-4 mb-8 w-full max-w-4xl">
                   <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-200 to-gray-200" />
-                  <h3 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground px-4">{sector.sector}</h3>
+                  <h3 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground px-4 whitespace-nowrap">{sector.sector}</h3>
                   <div className="h-px flex-1 bg-gradient-to-l from-transparent via-gray-200 to-gray-200" />
                 </div>
                 
                 <div className={cn(
-                  "grid gap-6 md:gap-8",
-                  sector.members.length <= 3 ? "grid-cols-2 sm:grid-cols-3 max-w-2xl mx-auto" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+                  "grid gap-6 md:gap-8 justify-items-center w-full",
+                  sector.members.length <= 3 
+                    ? "grid-cols-2 sm:grid-cols-3 justify-center" 
+                    : sector.members.length === 4
+                    ? "grid-cols-2 sm:grid-cols-4 justify-center"
+                    : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 justify-center"
                 )}>
                   {sector.members.map((person, index) => (
                     <motion.div
