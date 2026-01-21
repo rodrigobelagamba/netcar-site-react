@@ -64,6 +64,7 @@ export function SobrePage() {
       sector: "Gestão & Administração",
       members: [
         { name: "Cristiano", role: "Gestão", image: "/team/cristiano.jpg" },
+        { name: "Carlos", role: "Consultor Especialista", image: "/team/carlos.jpg" },
         { name: "Marcelo", role: "Administração & TI", image: "/team/marcelo.jpg" },
         { name: "Shirley", role: "Financeiro & RH", image: "/team/shirley.png" },
       ]
@@ -71,7 +72,6 @@ export function SobrePage() {
     {
       sector: "Comercial",
       members: [
-        { name: "Carlos", role: "Consultor", image: "/team/carlos.jpg" },
         { name: "Filipe", role: "Consultor", image: "/team/filipe.jpg" },
         { name: "Tiago", role: "Consultor", image: "/team/tiago.jpg" },
         { name: "Bruno", role: "Consultor", image: "/team/bruno.jpg" },
