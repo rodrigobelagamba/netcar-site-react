@@ -1,0 +1,162 @@
+import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
+import { ProductList } from "@/design-system/components/patterns/ProductList";
+import { Localizacao } from "@/design-system/components/layout/Localizacao";
+import { IanBot } from "@/design-system/components/layout/IanBot";
+import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
+import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/HomeHero";
+import { SearchBar } from "@/design-system/components/patterns/SearchBar";
+import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
+import { DNASection } from "@/design-system/components/patterns/DNASection";
+import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
+import { useMemo, useEffect } from "react";
+
+const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
+const PROBLEMATIC_IMAGE_PATTERN = "271_131072IMG_8213";
+
+// Skeleton do HomeHero para evitar layout shift
+function HomeHeroSkeleton() {
+  return (
+    <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
+      <div className="container mx-auto px-4 md:px-6 relative z-10 flex flex-col items-center justify-center w-full">
+        {/* Brand Label Skeleton */}
+        <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
+          <div className="flex items-center gap-3">
+            <div className="h-[1px] w-8 md:w-12 bg-gray-300 animate-pulse" />
+            <div className="h-4 w-24 bg-gray-300 rounded animate-pulse" />
+            <div className="h-[1px] w-8 md:w-12 bg-gray-300 animate-pulse" />
+          </div>
+        </div>
+
+        {/* Image Skeleton */}
+        <div className="relative w-full max-w-[1400px] flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
+          <div className="w-full h-[45vh] md:h-[60vh] bg-gray-200 rounded-lg animate-pulse" />
+        </div>
+
+        {/* Info Bar Skeleton */}
+        <div className="relative w-full max-w-5xl h-[300px] md:h-[150px] mx-4 mt-8 md:mt-24 z-20">
+          <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 w-full bg-white/70 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/50 shadow-2xl">
+            <div className="p-3 md:p-4 lg:p-8 flex flex-col justify-center items-center bg-gray-200 animate-pulse" />
+            <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center border-y md:border-y-0 md:border-x border-gray-200 bg-gray-100 animate-pulse" />
+            <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center bg-gray-100 animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function HomePage() {
+  const { data: vehicles, isLoading } = useVehiclesQuery();
+
+  useDefaultMetaTags(
+    "Home",
+    "Netcar - Seminovos com procedência e qualidade. Confira nossos veículos em destaque."
+  );
+
+  // Prepara veículos para o HomeHero - filtra PNGs e pega os primeiros 4
+  const heroVehicles: HomeHeroVehicle[] = useMemo(() => {
+    if (!vehicles) return [];
+
+    return vehicles
+      .filter(vehicle => {
+        // Verifica se tem pelo menos uma imagem PNG válida
+        const pngImages = vehicle.images?.filter(img => 
+          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
+        ) || [];
+        
+        if (pngImages.length === 0) return false;
+        
+        // Verifica se não é a imagem problemática
+        const firstPng = pngImages[0];
+        const isProblematic = firstPng?.toLowerCase().includes(PROBLEMATIC_IMAGE_PATTERN.toLowerCase());
+        
+        return !isProblematic;
+      })
+      .slice(0, 4)
+      .map(vehicle => {
+        const pngImages = vehicle.images?.filter(img => 
+          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
+        ) || [];
+        
+        const mainImage = pngImages.length > 0 ? pngImages[0] : CAR_COVERED_PLACEHOLDER_URL;
+        
+        // Monta a tag (combustível + motor se disponível)
+        const tagParts = [];
+        if (vehicle.combustivel) tagParts.push(vehicle.combustivel);
+        if (vehicle.motor) tagParts.push(vehicle.motor);
+        const tag = tagParts.join(' ');
+
+        return {
+          id: vehicle.id,
+          brand: vehicle.marca || vehicle.name?.split(' ')[0] || '',
+          model: vehicle.modelo || vehicle.name || '',
+          year: vehicle.year,
+          price: vehicle.price,
+          image: mainImage,
+          tag: tag || undefined,
+          marca: vehicle.marca,
+          modelo: vehicle.modelo,
+          placa: vehicle.placa,
+          combustivel: vehicle.combustivel,
+          cambio: vehicle.cambio,
+        };
+      });
+  }, [vehicles]);
+
+  // Filtra veículos que têm imagem PNG e pega apenas os 4 primeiros para a lista
+  const vehiclesWithPhotos = vehicles
+    ? vehicles.filter(vehicle => {
+        // Verifica se tem pelo menos uma imagem PNG
+        return vehicle.images?.some(img => 
+          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
+        );
+      }).slice(0, 4)
+    : [];
+
+  // Pré-carrega a primeira imagem do banner para melhorar a experiência
+  useEffect(() => {
+    if (heroVehicles.length > 0 && heroVehicles[0].image) {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = heroVehicles[0].image;
+      document.head.appendChild(link);
+      
+      return () => {
+        document.head.removeChild(link);
+      };
+    }
+  }, [heroVehicles]);
+
+  return (
+    <main className="flex-1 overflow-x-hidden max-w-full">
+      {/* Banner com skeleton durante loading */}
+      {isLoading ? (
+        <HomeHeroSkeleton />
+      ) : heroVehicles.length > 0 ? (
+        <HomeHero vehicles={heroVehicles} />
+      ) : null}
+
+      <SearchBar />
+
+      <section className="container mx-auto px-4 py-12">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-fg">Destaques</h2>
+          <p className="mt-2 text-gray-600 text-lg font-medium">Novidades da semana, olha só o que separamos para você!</p>
+        </div>
+        <ProductList vehicles={vehiclesWithPhotos} isLoading={isLoading} />
+      </section>
+
+      <ServicesSection />
+
+      <DNASection />
+
+      <EmbedSocialSection />
+
+      <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
+        <Localizacao />
+        <IanBot />
+      </div>
+    </main>
+  );
+}

@@ -1,0 +1,66 @@
+:root[data-theme="light"] {
+  /* Cores da Marca - Primárias */
+  --color-gray: 200 10% 34%; /* Cinza Estrada (#505a5f) - RGB: 80, 90, 95 */
+  --color-blue: 183 47% 60%; /* Azul Céu (#6cc4ca) - RGB: 108, 196, 202 */
+  --color-blue-dark: 190 100% 20%; /* Azul Noite (#005b66) - RGB: 0, 91, 102 */
+
+  /* Cores da Marca - Secundárias */
+  --color-grey-light: 0 0% 88%; /* Cinza Neblina (#e0e0e0) - RGB: 224, 224, 224 */
+  --color-green-dark: 190 100% 11%; /* Verde Noite (#00363b) - RGB: 0, 54, 59 */
+  --color-green: 151 49% 58%; /* Apoio 1 (#6cbe9d) - RGB: 108, 190, 157 */
+  --color-green-light: 72 58% 73%; /* Apoio 2 (#d0df94) - RGB: 208, 223, 148 */
+  --color-purple: 288 27% 52%; /* Apoio 3 (#9c63a6) - RGB: 156, 99, 166 */
+
+  /* Cores de Tema */
+  --color-primary: var(--color-blue); /* Azul Céu */
+  --color-primary-foreground: 0 0% 100%; /* branco */
+  --color-secondary: var(--color-green); /* Apoio 1 */
+  --color-secondary-foreground: 0 0% 100%; /* branco */
+  --color-tertiary: var(--color-blue-dark); /* Azul Noite */
+  --color-tertiary-foreground: 0 0% 100%; /* branco */
+
+  /* Neutrals / surfaces */
+  --color-fg: 217 90% 10%; /* texto escuro */
+  --color-bg: 0 0% 100%; /* branco de fundo */
+  --color-surface: 0 0% 98%; /* superfície clara */
+  --color-surface-alt: 217 10% 96%; /* superfície alternativa */
+  --color-muted: 217 10% 95%; /* fundo muted */
+  --color-muted-foreground: 217 15% 40%; /* texto muted - contraste adequado */
+  --color-border: 217 20% 80%; /* borda */
+}
+
+/* Dark theme - seguindo boas práticas de UX/UI */
+:root[data-theme="dark"] {
+  /* Cores da Marca - Primárias
+     Mantém a mesma matiz (hue), ajusta apenas luminosidade para melhor contraste no fundo escuro */
+  --color-gray: 200 10% 65%; /* Mais claro para contraste no fundo escuro */
+  --color-blue: 183 47% 65%; /* Azul Céu mais claro para destacar no dark */
+  --color-blue-dark: 190 100% 45%; /* Azul Noite mais claro, mantém identidade */
+
+  /* Cores da Marca - Secundárias
+     Mantém matizes originais, ajusta luminosidade para visibilidade */
+  --color-grey-light: 0 0% 25%; /* Cinza Neblina escuro para dark mode */
+  --color-green-dark: 190 100% 35%; /* Verde Noite mais claro, mantém identidade */
+  --color-green: 151 49% 65%; /* Verde mantém matiz 151, mais claro para dark */
+  --color-green-light: 72 58% 60%; /* Verde claro ajustado para dark */
+  --color-purple: 288 27% 65%; /* Roxo mantém matiz, mais claro para dark */
+
+  /* Cores de Tema */
+  --color-primary: var(--color-blue); /* Azul Céu */
+  --color-primary-foreground: 0 0% 100%; /* branco */
+  --color-secondary: var(--color-green); /* Verde */
+  --color-secondary-foreground: 0 0% 100%; /* branco */
+  --color-tertiary: var(--color-blue-dark); /* Azul Noite */
+  --color-tertiary-foreground: 0 0% 100%; /* branco */
+
+  /* Neutrals / surfaces
+     Fundos escuros mas não pretos puros (reduz fadiga visual)
+     Textos claros mas não brancos puros (melhor legibilidade) */
+  --color-fg: 0 0% 98%; /* Texto principal: quase branco para contraste */
+  --color-bg: 217 14% 8%; /* Fundo: cinza muito escuro (não preto puro) */
+  --color-surface: 217 14% 10%; /* Superfície: ligeiramente mais clara que fundo */
+  --color-surface-alt: 217 14% 12%; /* Superfície alternativa: mais clara ainda */
+  --color-muted: 217 10% 15%; /* Fundo muted: cinza escuro */
+  --color-muted-foreground: 217 10% 65%; /* Texto muted: cinza médio para contraste adequado */
+  --color-border: 217 20% 25%; /* Borda: cinza escuro visível mas sutil */
+}
