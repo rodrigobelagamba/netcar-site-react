@@ -382,7 +382,7 @@ export function Localizacao() {
   }
 
   return (
-    <section className="max-w-[1400px] mx-auto w-full bg-white rounded-[32px] shadow-sm overflow-hidden border border-white relative group">
+    <section className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto w-full bg-white rounded-[32px] shadow-sm overflow-hidden border border-white relative group">
       <div className="w-full h-[450px] relative grayscale-[0.1]">
         <LoadScript
           googleMapsApiKey={GOOGLE_MAPS_API_KEY}
