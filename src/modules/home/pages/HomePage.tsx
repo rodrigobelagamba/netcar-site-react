@@ -52,12 +52,26 @@ export function HomePage() {
     "Netcar - Seminovos com procedência e qualidade. Confira nossos veículos em destaque."
   );
 
-  // Prepara veículos para o HomeHero - filtra PNGs e pega os primeiros 4
+  // Prepara veículos para o HomeHero - filtra PNGs, preço > 80000 e ordena aleatoriamente
   const heroVehicles: HomeHeroVehicle[] = useMemo(() => {
     if (!vehicles) return [];
 
-    return vehicles
+    // Função para embaralhar array (Fisher-Yates shuffle)
+    const shuffleArray = <T,>(array: T[]): T[] => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
+    const filtered = vehicles
       .filter(vehicle => {
+        // Filtra apenas carros com preço maior que 80 mil
+        const price = typeof vehicle.price === 'number' ? vehicle.price : Number(vehicle.price);
+        if (!price || isNaN(price) || price <= 80000) return false;
+        
         // Verifica se tem pelo menos uma imagem PNG válida
         const pngImages = vehicle.images?.filter(img => 
           img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
@@ -70,8 +84,10 @@ export function HomePage() {
         const isProblematic = firstPng?.toLowerCase().includes(PROBLEMATIC_IMAGE_PATTERN.toLowerCase());
         
         return !isProblematic;
-      })
-      .slice(0, 4)
+      });
+
+    // Embaralha aleatoriamente e pega os 4 primeiros
+    return shuffleArray(filtered).slice(0, 4)
       .map(vehicle => {
         const pngImages = vehicle.images?.filter(img => 
           img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
@@ -102,15 +118,29 @@ export function HomePage() {
       });
   }, [vehicles]);
 
-  // Filtra veículos que têm imagem PNG e pega apenas os 4 primeiros para a lista
-  const vehiclesWithPhotos = vehicles
-    ? vehicles.filter(vehicle => {
+  // Filtra veículos que têm imagem PNG, preço > 0 e ordena por ID maior
+  const vehiclesWithPhotos = useMemo(() => {
+    if (!vehicles) return [];
+
+    return vehicles
+      .filter(vehicle => {
+        // Filtra apenas carros com preço maior que zero (carro vendido tem valor = 0)
+        const price = typeof vehicle.price === 'number' ? vehicle.price : Number(vehicle.price);
+        if (!price || isNaN(price) || price <= 0) return false;
+        
         // Verifica se tem pelo menos uma imagem PNG
         return vehicle.images?.some(img => 
           img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
         );
-      }).slice(0, 4)
-    : [];
+      })
+      .sort((a, b) => {
+        // Ordena por ID maior primeiro (mais recentes)
+        const idA = parseInt(a.id) || 0;
+        const idB = parseInt(b.id) || 0;
+        return idB - idA;
+      })
+      .slice(0, 4);
+  }, [vehicles]);
 
   // Pré-carrega a primeira imagem do banner para melhorar a experiência
   useEffect(() => {

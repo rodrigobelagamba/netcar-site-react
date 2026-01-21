@@ -632,10 +632,30 @@ function RelatedVehiclesSection({
 }) {
   const { data: vehicles, isLoading } = useVehiclesQuery();
 
-  // Filtrar veículos relacionados (excluir o atual e pegar até 4)
+  // Filtrar veículos relacionados (excluir o atual, vendidos e pegar até 4)
   // Converte ambos os IDs para string para comparação correta
-  const relatedVehicles =
-    vehicles?.filter((v) => String(v.id) !== String(currentVehicleId)).slice(0, 4) || [];
+  const relatedVehicles = useMemo(() => {
+    if (!vehicles) return [];
+    
+    return vehicles
+      .filter((v) => {
+        // Exclui o veículo atual
+        if (String(v.id) === String(currentVehicleId)) return false;
+        
+        // Filtra apenas carros com preço maior que zero (carro vendido tem valor = 0)
+        const price = typeof v.price === 'number' ? v.price : Number(v.price);
+        if (!price || isNaN(price) || price <= 0) return false;
+        
+        return true;
+      })
+      .sort((a, b) => {
+        // Ordena por ID maior primeiro (mais recentes)
+        const idA = parseInt(a.id) || 0;
+        const idB = parseInt(b.id) || 0;
+        return idB - idA;
+      })
+      .slice(0, 4);
+  }, [vehicles, currentVehicleId]);
 
   if (isLoading || relatedVehicles.length === 0) {
     return null;
