@@ -1114,10 +1114,94 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
     vehicle.cambio && { label: "Câmbio:", value: vehicle.cambio },
   ].filter(Boolean) as Array<{ label: string; value: string }>;
 
-  const optionals =
+  // Mapeamento de tags para pesos (peso menor = maior prioridade)
+  const OPTIONAL_PRIORITY_MAP: Record<string, number> = {
+    "sete_lugares": 1,           // 7 Lugares
+    "teto_panoramico": 2,        // Teto Panorâmico
+    "teto_solar": 3,             // Teto Solar (somente se panorâmico não estiver presente)
+    "multimidia": 4,             // Central Multimídia
+    "bancos_de_couro": 5,       // Bancos em Couro
+    "piloto_adaptativo": 6,      // Piloto Automático Adaptativo
+    "piloto_automatico": 7,     // Piloto Automático (somente se adaptativo não estiver presente)
+    "botao": 8,                  // Botão de Partida
+  };
+
+  // Peso padrão para opcionais não listados
+  const DEFAULT_PRIORITY = 999;
+
+  // Função para ordenar opcionais por prioridade usando tags
+  const sortOptionals = (
+    optionals: Array<{ tag?: string; descricao?: string } | string>
+  ): Array<{ tag?: string; descricao?: string } | string> => {
+    // Converte para formato padronizado
+    const normalizedOptionals = optionals.map((op) => {
+      if (typeof op === "string") {
+        return { tag: "", descricao: op };
+      }
+      return { tag: op.tag || "", descricao: op.descricao || "" };
+    });
+
+    // Verifica se existe teto solar panorâmico na lista
+    const hasPanoramicSunroof = normalizedOptionals.some(
+      (opt) => opt.tag === "teto_panoramico"
+    );
+
+    // Verifica se existe piloto automático adaptativo na lista
+    const hasAdaptiveCruise = normalizedOptionals.some(
+      (opt) => opt.tag === "piloto_adaptativo"
+    );
+
+    // Função para obter o peso de um opcional usando a tag
+    const getPriority = (optional: { tag: string; descricao: string }): number => {
+      const tag = optional.tag.toLowerCase().trim();
+
+      // Verifica se a tag está no mapeamento de prioridades
+      if (OPTIONAL_PRIORITY_MAP[tag] !== undefined) {
+        // Casos especiais com lógica condicional
+        if (tag === "teto_solar") {
+          // Teto solar só tem peso 3 se não houver panorâmico
+          return hasPanoramicSunroof ? DEFAULT_PRIORITY : OPTIONAL_PRIORITY_MAP[tag];
+        }
+
+        if (tag === "piloto_automatico") {
+          // Piloto automático só tem peso 7 se não houver adaptativo
+          return hasAdaptiveCruise ? DEFAULT_PRIORITY : OPTIONAL_PRIORITY_MAP[tag];
+        }
+
+        // Para os outros, retorna o peso direto do mapa
+        return OPTIONAL_PRIORITY_MAP[tag];
+      }
+
+      return DEFAULT_PRIORITY;
+    };
+
+    // Ordena por prioridade (menor peso primeiro)
+    return normalizedOptionals.sort((a, b) => {
+      const priorityA = getPriority(a as { tag: string; descricao: string });
+      const priorityB = getPriority(b as { tag: string; descricao: string });
+
+      // Se as prioridades forem iguais, mantém a ordem original
+      if (priorityA === priorityB) {
+        return 0;
+      }
+
+      return priorityA - priorityB;
+    });
+  };
+
+  // Extrai opcionais do veículo (pode ser string ou objeto com tag/descricao)
+  const rawOptionals =
     vehicle.opcionais?.map((op: any) =>
-      typeof op === "string" ? op : op?.descricao || ""
+      typeof op === "string" ? op : { tag: op.tag || "", descricao: op.descricao || op.nome || "" }
     ) || [];
+
+  // Aplica ordenação por prioridade usando tags
+  const sortedOptionals = sortOptionals(rawOptionals);
+
+  // Converte de volta para strings (descrição) para renderização
+  const optionals = sortedOptionals.map((op) =>
+    typeof op === "string" ? op : op.descricao || ""
+  );
 
   // SVG Icon Component
   const SpecIcon = ({ className }: { className?: string }) => (
