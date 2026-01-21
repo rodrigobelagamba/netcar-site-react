@@ -5,6 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { CheckCircle2, Shield, Award, Users, TrendingUp } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export function SobrePage() {
   // Busca dados da API
@@ -34,6 +35,38 @@ export function SobrePage() {
 
   const loja1Image = getFachadaImage(bannersLoja1) || "/images/loja1.jpg";
   const loja2Image = getFachadaImage(bannersLoja2) || "/images/loja2.jpg";
+
+  // Extrai todas as imagens das lojas (todas as fotos, exceto a fachada principal que já está no card)
+  const getAllLojaImages = (banners?: Array<{ titulo?: string; imagem: string }>) => {
+    if (!banners || banners.length === 0) return [];
+    return banners
+      .filter(b => b.imagem && b.titulo?.toLowerCase() !== "fachada")
+      .map(b => b.imagem);
+  };
+
+  const loja1Images = getAllLojaImages(bannersLoja1);
+  const loja2Images = getAllLojaImages(bannersLoja2);
+
+  // Hook para rotacionar imagens nas miniaturas
+  function useRotatingImages(images: string[], fallbackImage: string, interval: number = 3000) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const imagesToUse = images.length > 0 ? images : [fallbackImage];
+
+    useEffect(() => {
+      if (imagesToUse.length <= 1) return;
+
+      const timer = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % imagesToUse.length);
+      }, interval);
+
+      return () => clearInterval(timer);
+    }, [imagesToUse.length, interval]);
+
+    return imagesToUse[currentIndex] || fallbackImage;
+  }
+
+  const rotatingLoja1Image = useRotatingImages(loja1Images, loja2Image, 3000);
+  const rotatingLoja2Image = useRotatingImages(loja2Images, loja1Image, 3000);
 
   // Formata endereço
   const formatAddress = (address?: { endereco?: string; cidade?: string; estado?: string }) => {
@@ -272,9 +305,9 @@ export function SobrePage() {
               </div>
               <div className="absolute -top-6 -right-6 w-40 h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <img
-                  src={loja2Image}
+                  src={rotatingLoja2Image || loja2Image}
                   alt="Miniatura Loja 2"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-opacity duration-500"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja2.jpg";
                   }}
@@ -309,9 +342,9 @@ export function SobrePage() {
               </div>
               <div className="absolute -top-6 -right-6 w-40 h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <img
-                  src={loja1Image}
+                  src={rotatingLoja1Image || loja1Image}
                   alt="Miniatura Loja 1"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-opacity duration-500"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja1.jpg";
                   }}
