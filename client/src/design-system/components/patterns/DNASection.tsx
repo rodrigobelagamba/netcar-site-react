@@ -56,21 +56,23 @@ export function DNASection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="space-y-8 relative group !border-0"
+              className="space-y-6 relative group !border-0"
               style={{ border: 'none' }}
             >
-              <div className="!border-0" style={{ border: 'none' }}>
-                <h3 className="font-bold text-2xl mb-4 flex items-center gap-3 !border-0" style={{ color: '#00283C', border: 'none' }}>
-                  <div className="w-2 h-2 rounded-full !border-0" style={{ backgroundColor: '#5CD29D', border: 'none' }}></div>
-                  Muito além do preço.
-                </h3>
-                <p className="font-medium pl-5 !border-0" style={{ borderLeft: '1px solid rgba(0, 40, 60, 0.1)', borderTop: 'none', borderRight: 'none', borderBottom: 'none' }}>
-                  Porque a gente acredita que comprar um carro vai muito além do preço. Investimos em tecnologia própria, modernizamos nossos processos e cuidamos de cada detalhe — do administrativo ao comercial.
-                </p>
-              </div>
+              <p className="font-medium !border-0">
+                Comprar um carro é uma decisão importante. Envolve expectativa, confiança e a certeza de estar fazendo a escolha certa.
+              </p>
               
-              <p className="font-medium pl-5 !border-0" style={{ border: 'none' }}>
-                Criamos a nossa <span className="font-bold !border-0" style={{ color: '#5CD29D', border: 'none' }}>Fábrica de Valor</span>, um processo exclusivo de preparação com mais de 60 itens verificados, para que cada veículo entregue realmente o que promete.
+              <p className="font-bold text-xl !border-0" style={{ color: '#00283C' }}>
+                É por isso que, na Netcar, cada detalhe importa.
+              </p>
+
+              <p className="font-medium !border-0">
+                A gente cuida de todo o processo com atenção, critério e responsabilidade — do administrativo ao atendimento, da avaliação à entrega. Nada é tratado como simples quando o impacto é grande na vida de quem compra.
+              </p>
+              
+              <p className="font-medium !border-0">
+                Criamos a <span className="font-bold" style={{ color: '#5CD29D' }}>Fábrica de Valor</span>, nosso processo exclusivo de preparação, com mais de 60 itens verificados, para garantir que cada veículo entregue exatamente o que promete. E esse cuidado não termina na entrega: com o <span className="font-bold" style={{ color: '#5CD29D' }}>NetHelp</span>, nosso serviço exclusivo de pós-venda, o cliente conta com um canal direto de atendimento para suporte em situações funcionais e de segurança, trazendo mais tranquilidade no pós-compra.
               </p>
             </motion.div>
 
@@ -79,28 +81,31 @@ export function DNASection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="space-y-8 flex flex-col justify-between relative group !border-0"
+              className="space-y-6 flex flex-col relative group !border-0"
               style={{ border: 'none' }}
             >
-              <div className="!border-0" style={{ border: 'none' }}>
-                <h3 className="font-bold text-2xl mb-4 flex items-center gap-3 !border-0" style={{ color: '#00283C', border: 'none' }}>
-                  <div className="w-2 h-2 rounded-full !border-0" style={{ backgroundColor: '#5CD29D', border: 'none' }}></div>
-                  Transparência na prática.
-                </h3>
-                <p className="font-medium mb-8 pl-5 !border-0" style={{ borderLeft: '1px solid rgba(0, 40, 60, 0.1)', borderTop: 'none', borderRight: 'none', borderBottom: 'none' }}>
-                  Aqui, transparência não é discurso: é prática. A gente escuta nossos clientes, aprende com eles e evolui o tempo todo.
-                </p>
-                <p className="font-medium pl-5 !border-0" style={{ border: 'none' }}>
-                  Estamos presentes onde as pessoas estão — no digital, nos canais certos, no momento certo — sempre buscando oferecer uma experiência de compra mais simples, segura e humana.
+              <p className="font-medium !border-0">
+                A tecnologia faz parte do nosso DNA. Trabalhamos com processos digitais, sistemas próprios e presença ativa nos principais canais, conectando atendimento humano com tecnologia que simplifica, organiza e traz mais clareza para toda a jornada de compra.
+              </p>
+
+              <div className="!border-0 pl-5" style={{ borderLeft: '1px solid rgba(0, 40, 60, 0.1)', borderTop: 'none', borderRight: 'none', borderBottom: 'none' }}>
+                <p className="font-medium !border-0">
+                  Aqui, transparência não é discurso. É prática. <br/>
+                  A gente escuta, aprende com cada cliente e evolui todos os dias, ajustando processos e melhorando a experiência.
                 </p>
               </div>
               
               <div className="relative pl-8 pt-6 mt-4 !border-0" style={{ borderTop: '1px solid rgba(0, 40, 60, 0.05)', borderLeft: 'none', borderRight: 'none', borderBottom: 'none' }}>
                 <div className="absolute left-0 top-6 bottom-0 w-[3px] rounded-full !border-0" style={{ backgroundColor: '#5CD29D', border: 'none' }}></div>
-                <p className="text-2xl font-serif italic leading-relaxed !border-0" style={{ color: '#00283C', border: 'none' }}>
-                  "Na Netcar, vender carros é importante. <br/>
-                  Construir confiança é essencial."
+                <p className="text-2xl font-serif italic leading-relaxed mb-4 !border-0" style={{ color: '#00283C', border: 'none' }}>
+                  "Na Netcar, vender carros faz parte do que fazemos. <br/>
+                  Cuidar das pessoas é o que nos move."
                 </p>
+                
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#00283C' }}>Netcar</span>
+                  <span className="text-sm font-medium opacity-80" style={{ color: '#6B7280' }}>A conexão perfeita entre você e seu futuro carro.</span>
+                </div>
               </div>
             </motion.div>
           </div>
