@@ -4,7 +4,7 @@ import { useBannersLoja1Query, useBannersLoja2Query, useAddressQuery, usePhoneQu
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
-import { CheckCircle2, Shield, Award } from "lucide-react";
+import { CheckCircle2, Shield, Award, Handshake, TrendingUp } from "lucide-react";
 
 export function SobrePage() {
   // Busca dados da API
@@ -380,43 +380,54 @@ export function SobrePage() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="h-full p-6 md:p-8 rounded-2xl border border-gray-200 bg-white hover:border-primary/30 hover:shadow-md transition-all"
             >
-              <div className="mb-6">
+              <div className="mb-8">
                 <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-2 block">Princípios</span>
                 <h2 className="text-2xl md:text-[28px] font-bold">Nossos valores</h2>
               </div>
-              {valores?.conteudo ? (
-                <div
-                  className="text-muted-foreground leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: valores.conteudo }}
-                />
-              ) : (
-                <div className="space-y-0">
-                  {[
-                    { icon: Shield, title: "Transparência", description: "Informação clara em cada etapa da compra." },
-                    { icon: CheckCircle2, title: "Procedência", description: "Histórico e documentação verificados." },
-                    { icon: Award, title: "Experiência", description: "Desde 1997 no mercado de seminovos." },
-                  ].map((valor, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="group py-4 border-b border-gray-100 last:border-0"
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <valor.icon className="w-5 h-5 text-primary" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-fg group-hover:text-primary transition-colors">{valor.title}</h4>
-                          <p className="text-muted-foreground text-sm mt-1">{valor.description}</p>
-                        </div>
+              
+              <div className="space-y-8">
+                {[
+                  { 
+                    icon: Shield, 
+                    title: "Transparência que Gera Confiança", 
+                    description: "A gente acredita que confiança não se pede, se constrói. Por isso, na Netcar, tudo é claro desde o início: explicamos os processos, falamos de forma objetiva e ajudamos o cliente a tomar decisões com segurança e respeito." 
+                  },
+                  { 
+                    icon: CheckCircle2, 
+                    title: "Qualidade com Responsabilidade", 
+                    description: "Cada carro que entra na Netcar passa por uma seleção criteriosa e um preparo cuidadoso. Isso acontece dentro da nossa Fábrica de Valor, um processo exclusivo, com mais de 60 itens técnicos e funcionais verificados. É assim que garantimos segurança, qualidade e tranquilidade em cada entrega." 
+                  },
+                  { 
+                    icon: Handshake, 
+                    title: "Uma Relação que Não Acaba na Entrega", 
+                    description: "Aqui, a venda não termina quando as chaves mudam de mão. Com o Nethelp, nosso programa exclusivo de pós-venda, seguimos presentes, assumindo responsabilidade e dando suporte sempre que o cliente precisa." 
+                  },
+                  { 
+                    icon: TrendingUp, 
+                    title: "Evoluir Faz Parte de Quem Somos", 
+                    description: "Estamos em constante evolução. Investimos em tecnologia, processos e, principalmente, em pessoas. Tudo para oferecer uma experiência de compra cada vez melhor, sem perder o que é mais importante: o atendimento humano, próximo e verdadeiro." 
+                  }
+                ].map((valor, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="group border-b border-gray-100 last:border-0 pb-6 last:pb-0"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+                        <valor.icon className="w-5 h-5 text-primary" />
                       </div>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
+                      <div>
+                        <h4 className="font-bold text-lg text-fg group-hover:text-primary transition-colors mb-2">{valor.title}</h4>
+                        <p className="text-muted-foreground text-sm leading-relaxed">{valor.description}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>
