@@ -50,10 +50,12 @@ export function SobrePage() {
 
   // Timeline items (pode vir da API ou ser estático)
   const timelineItems = [
-    { year: "1997", title: "Início em Esteio", description: "Nasce a Netcar com foco em confiança e relacionamento." },
-    { year: "2010", title: "Curadoria reforçada", description: "Processos de avaliação e seleção ganham rigor e padronização." },
-    { year: "2018", title: "Fábrica de Valor", description: "Preparo técnico estruturado para entrega de qualidade." },
-    { year: "2024", title: "Segunda loja", description: "Expansão do showroom e atendimento em dois endereços." },
+    { year: "1997", title: "Início em Esteio", description: "A Netcar inicia suas atividades com foco no mercado de veículos seminovos, pautada desde o começo por relações de confiança, seriedade nos negócios e compromisso com o cliente. Princípios que se consolidaram como base da empresa ao longo dos anos." },
+    { year: "2011", title: "Inauguração da Loja 2", description: "Abertura da segunda unidade, ampliando a capacidade de atendimento e fortalecendo a presença da Netcar na região." },
+    { year: "2014", title: "Fábrica de Valor", description: "Lançamento do processo exclusivo de preparação de veículos da Netcar. A Fábrica de Valor estabelece critérios técnicos próprios e um padrão rigoroso de verificação, elevando o nível de qualidade e segurança dos veículos comercializados." },
+    { year: "2021", title: "Ampliação da Matriz", description: "A matriz é ampliada e consolidada, passando a contar com mais de 1.800 m² de showroom, reforçando a estrutura física e a experiência do cliente." },
+    { year: "2022", title: "NetHelp", description: "Criação do NetHelp, serviço exclusivo de pós-venda da Netcar. O programa nasce para assumir responsabilidade após a entrega do veículo, oferecendo suporte em situações funcionais e de segurança, fortalecendo o relacionamento e a confiança no pós-compra." },
+    { year: "2026", title: "Novo Site", description: "Lançamento do novo site da Netcar, refletindo a evolução da marca, com foco em tecnologia, transparência, usabilidade e integração com os processos comerciais e de atendimento." },
   ];
 
   // Equipe organizada por setor
@@ -62,14 +64,14 @@ export function SobrePage() {
       sector: "Gestão & Administração",
       members: [
         { name: "Cristiano", role: "Gestão", image: "/team/cristiano.jpg" },
-        { name: "Marcelo", role: "Administração & TI", image: "/team/marcelo.jpg" },
+        { name: "Carlos", role: "Consultor Especialista", image: "/team/carlos.jpg" },
+        { name: "Marcelo", role: "Administração & TI", image: "/team/marcelo.jpg", imagePosition: "center 20%" },
         { name: "Shirley", role: "Financeiro & RH", image: "/team/shirley.png" },
       ]
     },
     {
       sector: "Comercial",
       members: [
-        { name: "Carlos", role: "Consultor", image: "/team/carlos.jpg" },
         { name: "Filipe", role: "Consultor", image: "/team/filipe.jpg" },
         { name: "Tiago", role: "Consultor", image: "/team/tiago.jpg" },
         { name: "Bruno", role: "Consultor", image: "/team/bruno.jpg" },
@@ -470,7 +472,8 @@ export function SobrePage() {
                           <img 
                             src={person.image} 
                             alt={person.name}
-                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            style={{ objectPosition: (person as any).imagePosition || "center top" }}
                           />
                         </div>
                       </div>

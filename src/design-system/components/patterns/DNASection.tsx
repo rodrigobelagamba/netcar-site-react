@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Heart, ShieldCheck, Zap, Users } from "lucide-react";
 
 export function DNASection() {
   return (
@@ -10,7 +11,7 @@ export function DNASection() {
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] rounded-full translate-y-1/2 -translate-x-1/4" style={{ border: '1.5px solid rgba(0, 40, 60, 0.2)' }}></div>
 
         <div className="relative z-10 max-w-6xl mx-auto !border-0" style={{ border: 'none' }}>
-          <div className="text-center mb-16 space-y-4 relative !border-0" style={{ border: 'none' }}>
+          <div className="text-center mb-20 space-y-4 relative !border-0" style={{ border: 'none' }}>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -51,56 +52,103 @@ export function DNASection() {
             {/* Central Divider */}
             <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-primary/10 to-transparent -translate-x-1/2 !border-0" style={{ backgroundImage: 'linear-gradient(to bottom, transparent, rgba(0, 40, 60, 0.1), transparent)', border: 'none' }}></div>
             
+            {/* Left Column */}
             <motion.div 
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="space-y-8 relative group !border-0"
+              className="space-y-12 relative group !border-0"
               style={{ border: 'none' }}
             >
-              <div className="!border-0" style={{ border: 'none' }}>
-                <h3 className="font-bold text-2xl mb-4 flex items-center gap-3 !border-0" style={{ color: '#00283C', border: 'none' }}>
-                  <div className="w-2 h-2 rounded-full !border-0" style={{ backgroundColor: '#5CD29D', border: 'none' }}></div>
-                  Muito além do preço.
+              <div className="space-y-6">
+                <p className="font-medium !border-0">
+                  Comprar um carro é uma decisão importante. Envolve expectativa, confiança e a certeza de estar fazendo a escolha certa.
+                </p>
+                
+                <p className="font-bold text-xl md:text-2xl !border-0" style={{ color: '#00283C' }}>
+                  É por isso que, na Netcar, cada detalhe importa.
+                </p>
+              </div>
+
+              <div className="relative pl-8 border-l-2 space-y-4" style={{ borderColor: 'rgba(92, 210, 157, 0.3)' }}>
+                <div className="absolute -left-[11px] top-0 bg-white p-1 rounded-full border border-gray-100 shadow-sm">
+                  <Heart size={20} className="text-[#5CD29D] fill-[#5CD29D]/20" />
+                </div>
+                
+                <h3 className="font-bold text-xl flex items-center gap-2" style={{ color: '#00283C' }}>
+                  Cuidado em cada etapa
                 </h3>
-                <p className="font-medium pl-5 !border-0" style={{ borderLeft: '1px solid rgba(0, 40, 60, 0.1)', borderTop: 'none', borderRight: 'none', borderBottom: 'none' }}>
-                  Porque a gente acredita que comprar um carro vai muito além do preço. Investimos em tecnologia própria, modernizamos nossos processos e cuidamos de cada detalhe — do administrativo ao comercial.
+                
+                <p className="font-medium !border-0 text-base">
+                  A gente cuida de todo o processo com atenção, critério e responsabilidade — do administrativo ao atendimento, da avaliação à entrega. Nada é tratado como simples quando o impacto é grande na vida de quem compra.
                 </p>
               </div>
               
-              <p className="font-medium pl-5 !border-0" style={{ border: 'none' }}>
-                Criamos a nossa <span className="font-bold !border-0" style={{ color: '#5CD29D', border: 'none' }}>Fábrica de Valor</span>, um processo exclusivo de preparação com mais de 60 itens verificados, para que cada veículo entregue realmente o que promete.
-              </p>
+              <div className="relative pl-8 border-l-2 space-y-4" style={{ borderColor: 'rgba(92, 210, 157, 0.3)' }}>
+                 <div className="absolute -left-[11px] top-0 bg-white p-1 rounded-full border border-gray-100 shadow-sm">
+                  <ShieldCheck size={20} className="text-[#5CD29D] fill-[#5CD29D]/20" />
+                </div>
+
+                <h3 className="font-bold text-xl flex items-center gap-2" style={{ color: '#00283C' }}>
+                  Garantia real
+                </h3>
+
+                <p className="font-medium !border-0 text-base">
+                  Criamos a <span className="font-bold" style={{ color: '#5CD29D' }}>Fábrica de Valor</span>, nosso processo exclusivo de preparação, com mais de 60 itens verificados. E esse cuidado não termina na entrega: com o <span className="font-bold" style={{ color: '#5CD29D' }}>NetHelp</span>, nosso serviço exclusivo de pós-venda, o cliente conta com suporte funcional e de segurança.
+                </p>
+              </div>
             </motion.div>
 
+            {/* Right Column */}
             <motion.div 
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="space-y-8 flex flex-col justify-between relative group !border-0"
+              className="space-y-12 flex flex-col relative group !border-0"
               style={{ border: 'none' }}
             >
-              <div className="!border-0" style={{ border: 'none' }}>
-                <h3 className="font-bold text-2xl mb-4 flex items-center gap-3 !border-0" style={{ color: '#00283C', border: 'none' }}>
-                  <div className="w-2 h-2 rounded-full !border-0" style={{ backgroundColor: '#5CD29D', border: 'none' }}></div>
-                  Transparência na prática.
+              <div className="relative pl-8 border-l-2 space-y-4" style={{ borderColor: 'rgba(92, 210, 157, 0.3)' }}>
+                 <div className="absolute -left-[11px] top-0 bg-white p-1 rounded-full border border-gray-100 shadow-sm">
+                  <Zap size={20} className="text-[#5CD29D] fill-[#5CD29D]/20" />
+                </div>
+
+                <h3 className="font-bold text-xl flex items-center gap-2" style={{ color: '#00283C' }}>
+                  Tecnologia no DNA
                 </h3>
-                <p className="font-medium mb-8 pl-5 !border-0" style={{ borderLeft: '1px solid rgba(0, 40, 60, 0.1)', borderTop: 'none', borderRight: 'none', borderBottom: 'none' }}>
-                  Aqui, transparência não é discurso: é prática. A gente escuta nossos clientes, aprende com eles e evolui o tempo todo.
+
+                <p className="font-medium !border-0 text-base">
+                  A tecnologia faz parte do nosso DNA. Trabalhamos com processos digitais, sistemas próprios e presença ativa nos principais canais, conectando atendimento humano com tecnologia que simplifica, organiza e traz mais clareza para toda a jornada de compra.
                 </p>
-                <p className="font-medium pl-5 !border-0" style={{ border: 'none' }}>
-                  Estamos presentes onde as pessoas estão — no digital, nos canais certos, no momento certo — sempre buscando oferecer uma experiência de compra mais simples, segura e humana.
+              </div>
+
+              <div className="relative pl-8 border-l-2 space-y-4" style={{ borderColor: 'rgba(92, 210, 157, 0.3)' }}>
+                 <div className="absolute -left-[11px] top-0 bg-white p-1 rounded-full border border-gray-100 shadow-sm">
+                  <Users size={20} className="text-[#5CD29D] fill-[#5CD29D]/20" />
+                </div>
+
+                <h3 className="font-bold text-xl flex items-center gap-2" style={{ color: '#00283C' }}>
+                  Transparência na prática
+                </h3>
+
+                <p className="font-medium !border-0 text-base">
+                  Aqui, transparência não é discurso. É prática. <br/>
+                  A gente escuta, aprende com cada cliente e evolui todos os dias, ajustando processos e melhorando a experiência.
                 </p>
               </div>
               
-              <div className="relative pl-8 pt-6 mt-4 !border-0" style={{ borderTop: '1px solid rgba(0, 40, 60, 0.05)', borderLeft: 'none', borderRight: 'none', borderBottom: 'none' }}>
+              <div className="relative pl-8 pt-6 mt-8 !border-0" style={{ borderTop: '1px solid rgba(0, 40, 60, 0.05)', borderLeft: 'none', borderRight: 'none', borderBottom: 'none' }}>
                 <div className="absolute left-0 top-6 bottom-0 w-[3px] rounded-full !border-0" style={{ backgroundColor: '#5CD29D', border: 'none' }}></div>
-                <p className="text-2xl font-serif italic leading-relaxed !border-0" style={{ color: '#00283C', border: 'none' }}>
-                  "Na Netcar, vender carros é importante. <br/>
-                  Construir confiança é essencial."
+                <p className="text-2xl font-serif italic leading-relaxed mb-4 !border-0" style={{ color: '#00283C', border: 'none' }}>
+                  "Na Netcar, vender carros faz parte do que fazemos. <br/>
+                  Cuidar das pessoas é o que nos move."
                 </p>
+                
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#00283C' }}>Netcar</span>
+                  <span className="text-sm font-medium opacity-80" style={{ color: '#6B7280' }}>A conexão perfeita entre você e seu futuro carro.</span>
+                </div>
               </div>
             </motion.div>
           </div>
