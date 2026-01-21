@@ -79,7 +79,9 @@ export function EmbedSocialSection() {
           resolve();
         };
         script.onerror = () => {
-          console.error(`Failed to load EmbedSocial script: ${src}`);
+          // Não loga erro crítico, apenas avisa se necessário
+          // Alguns scripts podem falhar mas os widgets ainda funcionam
+          console.warn(`EmbedSocial script failed to load: ${id} (this may be non-critical)`);
           resolve(); // Resolve mesmo com erro para não bloquear
         };
         

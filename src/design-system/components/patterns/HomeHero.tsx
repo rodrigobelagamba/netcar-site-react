@@ -164,7 +164,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                 src={vehicle.image || CAR_COVERED_PLACEHOLDER_URL} 
                 alt={vehicle.model}
                 loading={currentIndex === 0 ? "eager" : "lazy"}
-                fetchPriority={currentIndex === 0 ? "high" : "auto"}
+                {...(currentIndex === 0 && { fetchpriority: "high" as any })}
                 className="w-full h-auto drop-shadow-[0_40px_50px_rgba(0,0,0,0.15)] md:drop-shadow-[0_80px_60px_rgba(0,0,0,0.18)] hover:scale-[1.02] transition-transform duration-700 ease-out max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125"
                 style={{ mixBlendMode: 'multiply' }}
               />
