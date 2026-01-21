@@ -8,10 +8,42 @@ import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072IMG_8213";
+
+// Skeleton do HomeHero para evitar layout shift
+function HomeHeroSkeleton() {
+  return (
+    <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
+      <div className="container mx-auto px-4 md:px-6 relative z-10 flex flex-col items-center justify-center w-full">
+        {/* Brand Label Skeleton */}
+        <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
+          <div className="flex items-center gap-3">
+            <div className="h-[1px] w-8 md:w-12 bg-gray-300 animate-pulse" />
+            <div className="h-4 w-24 bg-gray-300 rounded animate-pulse" />
+            <div className="h-[1px] w-8 md:w-12 bg-gray-300 animate-pulse" />
+          </div>
+        </div>
+
+        {/* Image Skeleton */}
+        <div className="relative w-full max-w-[1400px] flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
+          <div className="w-full h-[45vh] md:h-[60vh] bg-gray-200 rounded-lg animate-pulse" />
+        </div>
+
+        {/* Info Bar Skeleton */}
+        <div className="relative w-full max-w-5xl h-[300px] md:h-[150px] mx-4 mt-8 md:mt-24 z-20">
+          <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 w-full bg-white/70 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/50 shadow-2xl">
+            <div className="p-3 md:p-4 lg:p-8 flex flex-col justify-center items-center bg-gray-200 animate-pulse" />
+            <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center border-y md:border-y-0 md:border-x border-gray-200 bg-gray-100 animate-pulse" />
+            <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center bg-gray-100 animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function HomePage() {
   const { data: vehicles, isLoading } = useVehiclesQuery();
@@ -81,11 +113,29 @@ export function HomePage() {
       }).slice(0, 4)
     : [];
 
+  // Pré-carrega a primeira imagem do banner para melhorar a experiência
+  useEffect(() => {
+    if (heroVehicles.length > 0 && heroVehicles[0].image) {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = heroVehicles[0].image;
+      document.head.appendChild(link);
+      
+      return () => {
+        document.head.removeChild(link);
+      };
+    }
+  }, [heroVehicles]);
+
   return (
     <main className="flex-1 overflow-x-hidden max-w-full">
-      {heroVehicles.length > 0 && (
+      {/* Banner com skeleton durante loading */}
+      {isLoading ? (
+        <HomeHeroSkeleton />
+      ) : heroVehicles.length > 0 ? (
         <HomeHero vehicles={heroVehicles} />
-      )}
+      ) : null}
 
       <SearchBar />
 
