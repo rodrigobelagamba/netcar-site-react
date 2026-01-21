@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { QueryClientProviderWrapper } from "./providers/query-client";
 import { ThemeProvider } from "./providers/theme-provider";
 import { RouterProvider } from "./providers/router-provider";
@@ -13,12 +13,9 @@ export function App() {
     return !hasVisited && isMainUrl;
   });
 
-  useEffect(() => {
-    // Marca como visitado assim que o app carrega
-    sessionStorage.setItem("netcar_visited", "true");
-  }, []);
-
   const handlePreloaderComplete = () => {
+    // Marca como visitado apenas quando o preloader completar
+    sessionStorage.setItem("netcar_visited", "true");
     setShowPreloader(false);
   };
 
