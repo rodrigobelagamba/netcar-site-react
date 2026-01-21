@@ -246,7 +246,7 @@ export function EmbedSocialSection() {
 
   return (
     <section ref={containerRef} className="w-full py-8 sm:py-12 lg:py-16 bg-bg">
-      <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0 space-y-10">
+      <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-10">
         {/* Google Reviews / Depoimentos */}
         <div
           key={`reviews-${forceReload}`}
