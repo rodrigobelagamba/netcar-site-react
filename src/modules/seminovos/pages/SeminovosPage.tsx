@@ -174,7 +174,7 @@ export function SeminovosPage() {
 
   return (
     <main className="flex-1 pt-16 overflow-x-hidden max-w-full">
-      <div className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
+      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
         {/* Filtros em Card Minimalista */}
         <div className="bg-bg rounded-2xl shadow-sm p-5 mb-8">
           <div className="flex flex-wrap items-end gap-6">

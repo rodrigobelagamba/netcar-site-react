@@ -1,6 +1,6 @@
 export function IanBot() {
   return (
-    <section className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto w-full bg-white rounded-[32px] shadow-sm border border-white py-10 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-hidden relative">
+    <section className="container-main w-full bg-white rounded-[32px] shadow-sm border border-white py-10 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-hidden relative">
       
       {/* Background Pattern - Pontos Sutis */}
       <div className="absolute inset-0 opacity-[0.4] pointer-events-none">

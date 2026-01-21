@@ -55,7 +55,7 @@ export function Footer() {
 
   return (
     <footer className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8">
-      <section className="max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto w-full bg-white rounded-[32px] shadow-sm border border-white pt-10 pb-8 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <section className="container-main w-full bg-white rounded-[32px] shadow-sm border border-white pt-10 pb-8 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[220px_1fr_140px_120px] gap-x-10 gap-y-10 mb-10">
           

@@ -16,6 +16,12 @@
   }
 }
 
+@layer components {
+  .container-main {
+    @apply max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto;
+  }
+}
+
 /* Customização do FsLightbox - Fora do layer para garantir prioridade */
 .fslightbox-container {
   background-color: rgba(0, 0, 0, 0.95) !important;
