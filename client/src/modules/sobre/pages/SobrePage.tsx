@@ -65,7 +65,7 @@ export function SobrePage() {
       members: [
         { name: "Cristiano", role: "Gestão", image: "/team/cristiano.jpg" },
         { name: "Carlos", role: "Consultor Especialista", image: "/team/carlos.jpg" },
-        { name: "Marcelo", role: "Administração & TI", image: "/team/marcelo.jpg" },
+        { name: "Marcelo", role: "Administração & TI", image: "/team/marcelo.jpg", imagePosition: "center 20%" },
         { name: "Shirley", role: "Financeiro & RH", image: "/team/shirley.png" },
       ]
     },
@@ -480,7 +480,8 @@ export function SobrePage() {
                           <img 
                             src={person.image} 
                             alt={person.name}
-                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            style={{ objectPosition: (person as any).imagePosition || 'top' }}
                           />
                         </div>
                       </div>
