@@ -17,7 +17,40 @@ const ITEMS_PER_PAGE = 12;
 export function SeminovosPage() {
   const search = useSearch({ from: "/seminovos" });
   const navigate = useNavigate();
-  const { data: vehicles, isLoading } = useVehiclesQuery(search);
+  
+  // Mapeia os parâmetros de busca para o formato esperado pela API
+  const vehiclesQuery = useMemo(() => {
+    const query: {
+      marca?: string;
+      modelo?: string;
+      precoMin?: string;
+      precoMax?: string;
+      anoMin?: string;
+      anoMax?: string;
+      cambio?: string;
+      cor?: string;
+      categoria?: string;
+    } = {};
+    
+    // Só adiciona campos que têm valores definidos
+    if (search.marca) query.marca = search.marca;
+    if (search.modelo) query.modelo = search.modelo;
+    if (search.precoMin) query.precoMin = search.precoMin;
+    if (search.precoMax) query.precoMax = search.precoMax;
+    if (search.anoMin) query.anoMin = search.anoMin;
+    if (search.anoMax) query.anoMax = search.anoMax;
+    if (search.cambio) query.cambio = search.cambio;
+    if (search.cor) query.cor = search.cor;
+    if (search.categoria) {
+      // Garante que categoria está em maiúsculas (como a API espera)
+      query.categoria = search.categoria.toUpperCase();
+    }
+    
+    // Retorna o objeto mesmo se vazio (para buscar todos os veículos)
+    return query;
+  }, [search.marca, search.modelo, search.precoMin, search.precoMax, search.anoMin, search.anoMax, search.cambio, search.cor, search.categoria]);
+  
+  const { data: vehicles, isLoading } = useVehiclesQuery(vehiclesQuery);
   const { data: stockData } = useAllStockDataQuery();
   const { searchTerm } = useSearchContext();
 
@@ -43,6 +76,15 @@ export function SeminovosPage() {
   // Ref para o elemento observado (infinite scroll)
   const observerTarget = useRef<HTMLDivElement>(null);
 
+  // Sincroniza estados locais com parâmetros da URL quando mudam
+  useEffect(() => {
+    setMarca(search.marca || "");
+    setAnoMin(search.anoMin || "");
+    setAnoMax(search.anoMax || "");
+    setPrecoMin(search.precoMin || "");
+    setPrecoMax(search.precoMax || "");
+  }, [search.marca, search.anoMin, search.anoMax, search.precoMin, search.precoMax]);
+
   // Aplica filtros
   const handleFilter = () => {
     navigate({
@@ -56,6 +98,7 @@ export function SeminovosPage() {
         anoMax: anoMax || undefined,
         cambio: undefined,
         cor: undefined,
+        categoria: search.categoria || undefined, // Preserva categoria da URL
       },
     });
   };
@@ -65,6 +108,15 @@ export function SeminovosPage() {
     if (!vehicles) return [];
 
     let filtered = [...vehicles];
+
+    // Filtro por categoria (fallback caso a API não filtre corretamente)
+    if (search.categoria) {
+      const categoriaUpper = search.categoria.toUpperCase();
+      filtered = filtered.filter((vehicle) => {
+        const vehicleCategoria = vehicle.categoria?.toUpperCase();
+        return vehicleCategoria === categoriaUpper;
+      });
+    }
 
     // Filtro de busca local (por conteúdo dos cards)
     if (searchTerm.trim()) {
@@ -116,7 +168,7 @@ export function SeminovosPage() {
     });
 
     return filtered;
-  }, [vehicles, sortBy, searchTerm]);
+  }, [vehicles, sortBy, searchTerm, search.categoria]);
 
   // Anos para o dropdown (do mais recente para o mais antigo)
   const sortedYears = useMemo(() => {
@@ -181,7 +233,7 @@ export function SeminovosPage() {
   // Reset visible count quando filtros mudam
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
-  }, [search.marca, search.precoMin, search.precoMax, search.anoMin, search.anoMax, sortBy, searchTerm]);
+  }, [search.marca, search.precoMin, search.precoMax, search.anoMin, search.anoMax, search.categoria, sortBy, searchTerm]);
 
   return (
     <main className="flex-1 pt-16 overflow-x-hidden max-w-full">
