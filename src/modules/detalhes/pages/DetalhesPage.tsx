@@ -25,6 +25,7 @@ import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { maskPlate } from "@/lib/slug";
 import { useMetaTags } from "@/hooks/useMetaTags";
+import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -552,7 +553,7 @@ function Lightbox({
         >
           <img
             src={images[index]}
-            alt={`${vehicleName} - Imagem ${index + 1}`}
+            alt={`${vehicleName} - Foto ${index + 1} de ${images.length} - Netcar Multimarcas`}
             className="w-full h-full max-w-full object-contain"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = "none";
@@ -823,21 +824,32 @@ export function DetalhesPage() {
     if (!vehicle) return null;
 
     const titleParts = [
-      modeloCompleto.toLowerCase(),
+      marca,
+      modeloCompleto,
       vehicle.year ? String(vehicle.year) : "",
-      vehicle.cor?.toLowerCase() || "",
-      vehicle.placa ? maskPlate(vehicle.placa).toLowerCase() : "",
+    ].filter(Boolean);
+
+    const descriptionParts = [
+      marca,
+      modeloCompleto,
+      vehicle.year ? `${vehicle.year} seminovo` : "seminovo",
+      vehicle.km ? `com ${vehicle.km.toLocaleString("pt-BR")}km` : "",
+      cambio ? `${cambio}` : "",
+      combustivel ? `${combustivel}` : "",
+      vehicle.price ? `Preço: R$ ${vehicle.price.toLocaleString("pt-BR")}` : "",
     ].filter(Boolean);
 
     return {
-      title: titleParts.length > 0 ? titleParts.join(" ") : "veículo",
-      description: "Seminovo é na Netcar",
+      title: titleParts.length > 0 ? `${titleParts.join(" ")} | Netcar` : "Veículo | Netcar",
+      description: descriptionParts.length > 0 
+        ? `${descriptionParts.join(". ")}.` 
+        : `${marca} ${modeloCompleto} seminovo com garantia, vistoriado e financiamento facilitado.`,
       image: absoluteImageUrl,
       url: typeof window !== "undefined" ? window.location.href : "",
       type: "article" as const,
       imageWidth: 1200,
       imageHeight: 900,
-      productBrand: "Netcar",
+      productBrand: marca,
       productAvailability: "in stock" as const,
       productCondition: "used_like_new" as const,
       productPriceAmount: vehicle.price || 0,
@@ -846,7 +858,7 @@ export function DetalhesPage() {
         ? maskPlate(vehicle.placa).toLowerCase()
         : "",
     };
-  }, [vehicle, modeloCompleto, absoluteImageUrl]);
+  }, [vehicle, marca, modeloCompleto, cambio, combustivel, absoluteImageUrl]);
 
   useMetaTags(
     metaTags || {
@@ -891,6 +903,20 @@ export function DetalhesPage() {
 
   return (
     <main className="overflow-x-hidden max-w-full">
+      {vehicle && (
+        <VehicleSchemaOrg
+          marca={marca}
+          modelo={modeloCompleto}
+          ano={vehicle.year}
+          km={vehicle.km}
+          combustivel={combustivel}
+          cambio={cambio}
+          cor={vehicle.cor}
+          images={images}
+          price={vehicle.price || 0}
+          placa={vehicle.placa}
+        />
+      )}
       {/* Hero Section */}
       <section className="w-full pt-16 lg:pt-0 pb-0 relative overflow-x-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[100vh]">
         {/* Mobile Image - Aparece primeiro no mobile, acima das informações */}
@@ -905,7 +931,7 @@ export function DetalhesPage() {
             >
               <img
                 src={mainImage}
-                alt={`${marca} ${modeloCompleto}`}
+                alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Frente - Netcar Multimarcas`}
                 className="w-full h-full max-w-full object-contain"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
@@ -1024,7 +1050,7 @@ export function DetalhesPage() {
             <div className="w-full h-full flex items-start justify-center overflow-hidden">
               <img
                 src={mainImage}
-                alt={`${marca} ${modeloCompleto}`}
+                alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Frente - Netcar Multimarcas`}
                 className="object-contain max-w-full"
                 style={{
                   width: '100%',
@@ -1046,6 +1072,7 @@ export function DetalhesPage() {
       {avifImages.length > 0 && (
         <section className="w-full py-8 sm:py-12 lg:py-16">
           <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+            <h2 className="text-2xl font-bold text-fg mb-6">Galeria de Fotos</h2>
             {/* Grid Container */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-[6px]">
               {avifImages.map((image, index) => (
@@ -1053,7 +1080,7 @@ export function DetalhesPage() {
                   key={index}
                   image={image}
                   index={index}
-                  alt={`${modeloCompleto} - Imagem ${index + 1}`}
+                  alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Foto ${index + 1} - Netcar Multimarcas`}
                   onClick={() => {
                     setLightboxIndex(index);
                     setLightboxOpen(true);
@@ -1241,9 +1268,9 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
             >
               <div className="flex items-center gap-3 mb-6 pb-4 border-b border-primary">
                       <SpecIcon />
-                <h3 className="text-primary text-[17px] sm:text-[18px] lg:text-[19px] font-medium">
+                <h2 className="text-primary text-[17px] sm:text-[18px] lg:text-[19px] font-medium">
                         Especificações
-                      </h3>
+                      </h2>
                     </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
@@ -1269,9 +1296,9 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
               >
                 <div className="flex items-center gap-3 mb-6 pb-4 border-b border-primary">
                         <SpecIcon />
-                  <h3 className="text-primary text-[17px] sm:text-[18px] lg:text-[19px] font-medium">
+                  <h2 className="text-primary text-[17px] sm:text-[18px] lg:text-[19px] font-medium">
                           Opcionais
-                        </h3>
+                        </h2>
                       </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

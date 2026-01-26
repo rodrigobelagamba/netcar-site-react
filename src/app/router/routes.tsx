@@ -18,6 +18,7 @@ import { CompraPage } from "@/modules/compra/pages/CompraPage";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
 import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
+import { SchemaOrg } from "@/components/seo/SchemaOrg";
 
 // WhatsApp Button Component - iAN
 function WhatsAppButton() {
@@ -96,6 +97,7 @@ function RootComponent() {
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
+      <SchemaOrg />
       <Header />
       <div className="relative flex-1 overflow-x-hidden max-w-full pt-20">
         <AnimatePresence mode="wait">

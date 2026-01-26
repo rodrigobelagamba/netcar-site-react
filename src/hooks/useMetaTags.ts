@@ -109,6 +109,15 @@ export function useMetaTags({
     updateMetaTag("twitter:description", description || defaultDescription, false);
     updateMetaTag("twitter:image", image || defaultImage, false);
 
+    // Canonical URL
+    let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (!canonicalLink) {
+      canonicalLink = document.createElement("link");
+      canonicalLink.setAttribute("rel", "canonical");
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute("href", currentUrl);
+
     // Limpeza ao desmontar (opcional, mas mantém as tags padrão)
     return () => {
       // Restaura valores padrão se necessário

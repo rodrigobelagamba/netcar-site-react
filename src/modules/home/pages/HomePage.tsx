@@ -49,8 +49,8 @@ export function HomePage() {
   const { data: vehicles, isLoading } = useVehiclesQuery();
 
   useDefaultMetaTags(
-    "Home",
-    "Netcar - Seminovos com procedência e qualidade. Confira nossos veículos em destaque."
+    "Seminovos em Esteio",
+    "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas."
   );
 
   // Prepara veículos para o HomeHero - filtra PNGs, preço > 80000 e ordena aleatoriamente

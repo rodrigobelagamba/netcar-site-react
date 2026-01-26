@@ -55,8 +55,8 @@ export function SeminovosPage() {
   const { searchTerm } = useSearchContext();
 
   useDefaultMetaTags(
-    "Showroom",
-    "Confira nosso estoque de seminovos com procedência. Filtre por marca, ano, preço e encontre o veículo ideal na Netcar."
+    "Carros Seminovos",
+    "Confira nosso estoque de seminovos. Todas as marcas, financiamento facilitado e garantia."
   );
   
   // Extrai dados do stockData (agora são arrays simples)

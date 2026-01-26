@@ -70,6 +70,15 @@ export function useDefaultMetaTags(title?: string, description?: string) {
     updateMetaTag("twitter:title", title ? `Netcar - ${title}` : defaultTitle, false);
     updateMetaTag("twitter:description", description || defaultDescription, false);
     updateMetaTag("twitter:image", absoluteImageUrl, false);
+
+    // Canonical URL
+    let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (!canonicalLink) {
+      canonicalLink = document.createElement("link");
+      canonicalLink.setAttribute("rel", "canonical");
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute("href", currentUrl);
   }, [title, description, bannersLoja1]);
 }
 
