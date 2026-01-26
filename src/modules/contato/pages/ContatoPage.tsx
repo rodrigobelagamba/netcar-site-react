@@ -14,6 +14,7 @@ import {
   useWhatsAppQuery,
   useScheduleQuery
 } from "@/api";
+import { formatWhatsAppNumber } from "@/lib/formatters";
 
 export function ContatoPage() {
   useDefaultMetaTags(
@@ -36,15 +37,20 @@ export function ContatoPage() {
   const getWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
     if (whatsapp.link) return whatsapp.link;
-    const cleaned = whatsapp.numero.replace(/\D/g, "");
+    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
     const message = whatsapp.mensagem || "Olá! Gostaria de mais informações.";
-    return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!whatsapp?.numero) {
+      alert("WhatsApp não disponível no momento. Por favor, tente novamente mais tarde.");
+      return;
+    }
+    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
     const message = `*Contato via Site*\n\n*Nome:* ${formData.nome}\n*Email:* ${formData.email}\n*Telefone:* ${formData.telefone}\n*Assunto:* ${formData.assunto}\n\n*Mensagem:*\n${formData.mensagem}`;
-    const whatsappUrl = `https://wa.me/5551998879281?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
   };
 

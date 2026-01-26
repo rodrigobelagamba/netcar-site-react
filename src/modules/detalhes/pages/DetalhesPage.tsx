@@ -15,6 +15,7 @@ import { useState, useMemo } from "react";
 import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { formatWhatsAppNumber } from "@/lib/formatters";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
@@ -174,13 +175,13 @@ function ContactButton({ modeloCompleto }: ContactButtonProps) {
     // Se a API já retornou um link, usa ele mas substitui a mensagem
     if (whatsapp.link) {
       // Extrai o número do link existente ou usa o número da API
-      const cleaned = whatsapp.numero.replace(/\D/g, "");
-      return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+      const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
+      return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
     }
     
     // Senão, gera o link do WhatsApp
-    const cleaned = whatsapp.numero.replace(/\D/g, "");
-    return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
+    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
   };
 
   const handleClick = () => {
@@ -382,13 +383,13 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
     // Se a API já retornou um link, usa ele mas substitui a mensagem
     if (whatsapp.link) {
       // Extrai o número do link existente ou usa o número da API
-      const cleaned = whatsapp.numero.replace(/\D/g, "");
-      return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+      const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
+      return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
     }
     
     // Senão, gera o link do WhatsApp
-    const cleaned = whatsapp.numero.replace(/\D/g, "");
-    return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
+    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
   };
 
   const handleWhatsAppClick = () => {
@@ -408,8 +409,8 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
       : "Oi, gostaria que meu veículo fosse avaliado na troca.";
     
     // Gera o link do WhatsApp com a mensagem de troca
-    const cleaned = whatsapp.numero.replace(/\D/g, "");
-    const link = `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
+    const link = `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
     
     window.open(link, "_blank", "noopener,noreferrer");
   };

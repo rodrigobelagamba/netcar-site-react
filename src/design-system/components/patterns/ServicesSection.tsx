@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { formatWhatsAppNumber } from "@/lib/formatters";
 
 interface Service {
   title: string;
@@ -16,8 +17,8 @@ export function ServicesSection() {
   const getWhatsAppLink = (message: string) => {
     if (!whatsapp?.numero) return "#";
     
-    const cleaned = whatsapp.numero.replace(/\D/g, "");
-    return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
+    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
   };
 
   const services: Service[] = [

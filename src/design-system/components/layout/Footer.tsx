@@ -11,7 +11,7 @@ import {
   useWhatsAppQuery,
   useScheduleQuery
 } from "@/api";
-
+import { formatWhatsAppNumber } from "@/lib/formatters";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 const menuLinks = [
@@ -71,7 +71,7 @@ export function Footer() {
               <div>
                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">WhatsApp Vendas</p>
                 <a 
-                  href={whatsapp.link || `https://wa.me/${whatsapp.numero.replace(/\D/g, "")}`} 
+                  href={whatsapp.link || `https://wa.me/${formatWhatsAppNumber(whatsapp.numero)}`} 
                   className="text-base text-primary font-bold hover:underline"
                   target="_blank"
                   rel="noopener noreferrer"

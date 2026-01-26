@@ -1,4 +1,16 @@
+import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { formatWhatsAppNumber } from "@/lib/formatters";
+
 export function IanBot() {
+  const { data: whatsapp } = useWhatsAppQuery();
+
+  const getIanWhatsAppLink = () => {
+    if (!whatsapp?.numero) return "#";
+    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
+    const message = "Oi iAN! Estou procurando um carro...";
+    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+  };
+
   return (
     <section className="container-main w-full bg-white rounded-[32px] shadow-sm border border-white py-10 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 overflow-hidden relative">
       
@@ -49,7 +61,7 @@ export function IanBot() {
         {/* CTA */}
         <div className="flex flex-col items-center lg:items-end gap-3">
           <a
-            href="https://wa.me/5551998879281?text=Oi%20iAN!%20Estou%20procurando%20um%20carro..."
+            href={getIanWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
             className="relative overflow-hidden group flex items-center gap-4 bg-secondary hover:opacity-90 text-white font-bold text-[16px] md:text-[18px] px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"

@@ -4,6 +4,7 @@ import { Search, Phone, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
 import { useSearchContext } from "@/contexts/SearchContext";
+import { formatWhatsAppNumber } from "@/lib/formatters";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 export function Header() {
@@ -40,9 +41,9 @@ export function Header() {
     }
     
     // Senão, gera o link do WhatsApp
-    const cleaned = whatsapp.numero.replace(/\D/g, "");
+    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
     const message = whatsapp.mensagem || "Olá! Gostaria de mais informações.";
-    return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
+    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
   };
 
   useEffect(() => {

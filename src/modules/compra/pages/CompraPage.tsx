@@ -2,9 +2,18 @@ import { motion } from "framer-motion";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { Car, MapPin, Calendar, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { formatWhatsAppNumber } from "@/lib/formatters";
 
 export function CompraPage() {
-  const ianWhatsApp = "https://wa.me/5551998879281?text=Oi%20iAN!%20Gostaria%20de%20vender%20meu%20carro%20para%20a%20Netcar.";
+  const { data: whatsapp } = useWhatsAppQuery();
+
+  const getIanWhatsAppLink = () => {
+    if (!whatsapp?.numero) return "#";
+    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
+    const message = "Oi iAN! Gostaria de vender meu carro para a Netcar.";
+    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+  };
 
   useDefaultMetaTags(
     "Venda seu Carro",
@@ -51,7 +60,7 @@ export function CompraPage() {
               
               <div className="flex flex-wrap items-center gap-4">
                 <motion.a
-                  href={ianWhatsApp}
+                  href={getIanWhatsAppLink()}
                   target="_blank"
                   rel="noopener noreferrer"
                   initial={{ opacity: 0, y: 10 }}
@@ -217,7 +226,7 @@ export function CompraPage() {
                 </div>
 
                 <a
-                  href={ianWhatsApp}
+                  href={getIanWhatsAppLink()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cn(
@@ -260,7 +269,7 @@ export function CompraPage() {
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <a
-                href={ianWhatsApp}
+                href={getIanWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(

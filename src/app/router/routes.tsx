@@ -15,14 +15,23 @@ import { SobrePage } from "@/modules/sobre/pages/SobrePage";
 import { ContatoPage } from "@/modules/contato/pages/ContatoPage";
 import { BlogPage } from "@/modules/blog/pages/BlogPage";
 import { CompraPage } from "@/modules/compra/pages/CompraPage";
+import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { formatWhatsAppNumber } from "@/lib/formatters";
 
 // WhatsApp Button Component - iAN
 function WhatsAppButton() {
-  const ianWhatsApp = "https://wa.me/5551998879281?text=Oi%20iAN!%20Estou%20procurando%20um%20carro...";
+  const { data: whatsapp } = useWhatsAppQuery();
+
+  const getIanWhatsAppLink = () => {
+    if (!whatsapp?.numero) return "#";
+    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
+    const message = "Oi iAN! Estou procurando um carro...";
+    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+  };
 
   return (
     <motion.a
-      href={ianWhatsApp}
+      href={getIanWhatsAppLink()}
       target="_blank"
       rel="noopener noreferrer"
       initial={{ scale: 0 }}
