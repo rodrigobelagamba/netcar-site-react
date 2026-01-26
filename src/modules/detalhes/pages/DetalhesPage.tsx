@@ -779,6 +779,15 @@ export function DetalhesPage() {
   const cambio = vehicleData?.cambio || "";
   const images = vehicleData?.images || [];
   
+  // Filtra apenas imagens AVIF para a galeria
+  const avifImages = useMemo(() => {
+    return images.filter(
+      (img) =>
+        img &&
+        (img.toLowerCase().endsWith(".avif") || img.toLowerCase().includes(".avif"))
+    );
+  }, [images]);
+  
   const mainImage = useMemo(() => {
     if (!images.length) return CAR_COVERED_PLACEHOLDER_URL;
 
@@ -1034,12 +1043,12 @@ export function DetalhesPage() {
       </section>
 
       {/* Gallery Section */}
-      {images.length > 1 && (
+      {avifImages.length > 0 && (
         <section className="w-full py-8 sm:py-12 lg:py-16">
           <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
             {/* Grid Container */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-[6px]">
-              {images.map((image, index) => (
+              {avifImages.map((image, index) => (
                 <GalleryItem
                   key={index}
                   image={image}
@@ -1059,7 +1068,7 @@ export function DetalhesPage() {
       {/* Lightbox Modal */}
       {lightboxOpen && (
         <Lightbox
-          images={images}
+          images={avifImages}
           currentIndex={lightboxIndex}
           onClose={() => setLightboxOpen(false)}
           vehicleName={modeloCompleto}
