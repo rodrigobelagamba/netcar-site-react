@@ -16,16 +16,35 @@ import { ContatoPage } from "@/modules/contato/pages/ContatoPage";
 import { BlogPage } from "@/modules/blog/pages/BlogPage";
 import { CompraPage } from "@/modules/compra/pages/CompraPage";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 
 // WhatsApp Button Component - iAN
 function WhatsAppButton() {
   const { data: whatsapp } = useWhatsAppQuery();
+  const location = useRouterState({
+    select: (state) => state.location,
+  });
+  
+  // Detecta se está na página de detalhes do veículo
+  const isDetalhesPage = location.pathname.startsWith("/veiculo/");
+  const slug = isDetalhesPage ? location.pathname.replace("/veiculo/", "") : "";
+  // useVehicleQuery já verifica se slug existe internamente, então não faz query se slug for vazio
+  const { data: vehicle } = useVehicleQuery(slug);
 
   const getIanWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
     const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    const message = "Oi iAN! Estou procurando um carro...";
+    
+    // Se estiver na página de detalhes e tiver dados do veículo, usa mensagem personalizada
+    let message = "Oi iAN! Estou procurando um carro...";
+    if (isDetalhesPage && vehicle) {
+      const modeloCompleto = vehicle.modelo || vehicle.name || "";
+      if (modeloCompleto) {
+        message = `Oi gostaria de saber mais sobre o ${modeloCompleto}!`;
+      }
+    }
+    
     return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
   };
 

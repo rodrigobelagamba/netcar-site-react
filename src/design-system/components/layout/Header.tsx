@@ -12,6 +12,7 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { data: whatsapp } = useWhatsAppQuery();
@@ -75,6 +76,16 @@ export function Header() {
     }
   }, [isSearchOpen]);
 
+  // Foca no input mobile quando o menu mobile é aberto
+  useEffect(() => {
+    if (isMobileMenuOpen && mobileSearchInputRef.current) {
+      // Pequeno delay para garantir que o elemento está visível
+      setTimeout(() => {
+        mobileSearchInputRef.current?.focus();
+      }, 300);
+    }
+  }, [isMobileMenuOpen]);
+
   // Limpa a busca quando sai da página de seminovos
   useEffect(() => {
     if (location.pathname !== "/seminovos" && searchTerm) {
@@ -101,6 +112,15 @@ export function Header() {
           cor: undefined,
         },
       });
+      // Fecha o menu mobile após navegar
+      setIsMobileMenuOpen(false);
+    }
+  };
+
+  // Handler para quando o usuário pressionar Enter no campo de busca mobile
+  const handleMobileSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchTerm.trim()) {
+      setIsMobileMenuOpen(false);
     }
   };
 
@@ -313,16 +333,20 @@ export function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.2 }}
                   className="w-full max-w-xs px-4"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center gap-2 border-b border-white/30 pb-2">
                     <Search className="w-5 h-5 text-white flex-shrink-0" />
                     <input
+                      ref={mobileSearchInputRef}
                       type="text"
                       value={searchTerm}
                       onChange={(e) => handleSearch(e.target.value)}
+                      onKeyDown={handleMobileSearchKeyDown}
                       placeholder="Buscar veículo..."
                       className="flex-1 bg-transparent border-0 outline-none text-white text-lg placeholder:text-white/70"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      onClick={(e) => e.stopPropagation()}
+                      onFocus={(e) => e.stopPropagation()}
                     />
                   </div>
                 </motion.div>
