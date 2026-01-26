@@ -92,15 +92,24 @@ export function SeminovosPage() {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "az":
-          return (a.name || "").localeCompare(b.name || "");
+          // Ordena por modelo (A-Z)
+          const modeloA = (a.modelo || a.name || "").toLowerCase();
+          const modeloB = (b.modelo || b.name || "").toLowerCase();
+          return modeloA.localeCompare(modeloB);
         case "za":
-          return (b.name || "").localeCompare(a.name || "");
+          // Ordena por modelo (Z-A)
+          const modeloZA = (a.modelo || a.name || "").toLowerCase();
+          const modeloZB = (b.modelo || b.name || "").toLowerCase();
+          return modeloZB.localeCompare(modeloZA);
         case "preco-asc":
           return (a.price || 0) - (b.price || 0);
         case "preco-desc":
           return (b.price || 0) - (a.price || 0);
         default:
-          return 0;
+          // Por padrão, ordena alfabeticamente por modelo (A-Z)
+          const defaultModeloA = (a.modelo || a.name || "").toLowerCase();
+          const defaultModeloB = (b.modelo || b.name || "").toLowerCase();
+          return defaultModeloA.localeCompare(defaultModeloB);
       }
     });
 
