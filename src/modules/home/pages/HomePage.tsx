@@ -4,6 +4,7 @@ import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/HomeHero";
+import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
@@ -184,6 +185,9 @@ export function HomePage() {
       ) : heroVehicles.length > 0 ? (
         <HomeHero vehicles={heroVehicles} />
       ) : null}
+
+      {/* SearchBar logo abaixo do banner */}
+      <SearchBar />
 
       <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-12">
         <div className="mb-8">

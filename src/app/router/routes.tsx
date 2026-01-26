@@ -160,6 +160,7 @@ const seminovosRoute = createRoute({
       anoMax: (search.anoMax as string) || undefined,
       cambio: (search.cambio as string) || undefined,
       cor: (search.cor as string) || undefined,
+      categoria: (search.categoria as string) || undefined,
     };
   },
 });

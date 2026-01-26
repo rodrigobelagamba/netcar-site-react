@@ -228,6 +228,7 @@ export function SearchBar() {
       anoMax: string | undefined;
       cambio: string | undefined;
       cor: string | undefined;
+      categoria: string | undefined;
     } = {
       marca: undefined,
       modelo: undefined,
@@ -237,6 +238,7 @@ export function SearchBar() {
       anoMax: undefined,
       cambio: undefined,
       cor: undefined,
+      categoria: undefined,
     };
 
     // Detecta faixa de preço com regex melhorada
@@ -301,6 +303,28 @@ export function SearchBar() {
         search: searchParams,
       });
       return;
+    }
+
+    // Detecta categoria (SUV, Sedan, Hatch, etc.)
+    const categoriaKeywords = {
+      'suv': 'SUV',
+      'sedan': 'SEDAN',
+      'hatch': 'HATCH',
+      'hatchback': 'HATCH',
+      'pickup': 'PICKUP',
+      'picape': 'PICKUP',
+    };
+
+    for (const [keyword, categoriaValue] of Object.entries(categoriaKeywords)) {
+      if (query.includes(keyword)) {
+        searchParams.categoria = categoriaValue;
+        // Se detectou categoria, navega diretamente sem filtrar por marca/modelo
+        navigate({
+          to: "/seminovos",
+          search: searchParams,
+        });
+        return;
+      }
     }
 
     // Detecta tipo de câmbio (Automático ou Manual)
@@ -387,6 +411,7 @@ export function SearchBar() {
           anoMax: undefined,
           cambio: undefined,
           cor: suggestion.text,
+          categoria: undefined,
         },
       });
     } else if (suggestion.detail === "Câmbio") {
@@ -406,6 +431,7 @@ export function SearchBar() {
           anoMax: undefined,
           cambio: cambioValue,
           cor: undefined,
+          categoria: undefined,
         },
       });
     } else {
@@ -429,6 +455,7 @@ export function SearchBar() {
           anoMax: undefined,
           cambio: undefined,
           cor: undefined,
+          categoria: undefined,
         },
       });
     } else if (filterValue.toLowerCase() === "automático" || filterValue.toLowerCase() === "automatico") {
@@ -444,6 +471,23 @@ export function SearchBar() {
           anoMax: undefined,
           cambio: "AUTOMATICO",
           cor: undefined,
+          categoria: undefined,
+        },
+      });
+    } else if (filterValue.toLowerCase() === "suv") {
+      // Define filtro de categoria SUV
+      navigate({
+        to: "/seminovos",
+        search: {
+          marca: undefined,
+          modelo: undefined,
+          precoMin: undefined,
+          precoMax: undefined,
+          anoMin: undefined,
+          anoMax: undefined,
+          cambio: undefined,
+          cor: undefined,
+          categoria: "SUV",
         },
       });
     } else {
@@ -467,6 +511,7 @@ export function SearchBar() {
               anoMax: undefined,
               cambio: undefined,
               cor: matchedColor,
+              categoria: undefined,
             },
           });
           return;

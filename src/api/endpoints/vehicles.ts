@@ -114,6 +114,7 @@ export interface VehiclesQuery {
   combustivel?: string;
   motor?: string;
   cor?: string;
+  categoria?: string;
   opcional?: string; // Tag de um único opcional
   opcionais?: string; // Múltiplas tags separadas por vírgula
   limit?: number; // Número máximo de resultados
@@ -206,6 +207,10 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
     
     if (query?.cor) {
       params.append("cor", query.cor);
+    }
+    
+    if (query?.categoria) {
+      params.append("categoria", query.categoria);
     }
     
     // Opcionais

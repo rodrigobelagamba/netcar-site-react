@@ -8,6 +8,7 @@ Este diretório contém todos os endpoints e hooks React Query para interagir co
 src/api/
 ├── endpoints/          # Funções de chamada à API
 │   ├── vehicles.ts    # API de Veículos
+│   ├── categorias.ts  # API de Categorias
 │   ├── stock.ts       # API de Stock (marcas, modelos, etc.)
 │   ├── depoimentos.ts # API de Depoimentos
 │   ├── site.ts        # API do Site (banners, informações, etc.)
@@ -15,6 +16,7 @@ src/api/
 ├── queries/           # Hooks React Query
 │   ├── useVehicleQuery.ts
 │   ├── useVehiclesQuery.ts
+│   ├── useCategoriasQuery.ts
 │   ├── useStockQuery.ts
 │   ├── useDepoimentosQuery.ts
 │   ├── useSiteQuery.ts
@@ -168,6 +170,7 @@ function HomePage() {
 - `combustivel` - Tipo de combustível (Flex, Gasolina, etc.)
 - `motor` - Motorização (1.0, 1.6, 2.0, etc.)
 - `cor` - Cor do veículo (BRANCA, PRETA, PRATA, etc.)
+- `categoria` - Categoria do veículo (ex: SUV, Sedan, Hatchback)
 - `opcional` - Tag de um único opcional (ex: ar_condicionado)
 - `opcionais` - Múltiplas tags separadas por vírgula (ex: ar_condicionado,alarme)
 - `limit` - Número máximo de resultados
@@ -177,6 +180,19 @@ function HomePage() {
 - `pdf` - Nome do arquivo PDF
 - `pdf_url` - URL completa do PDF
 - `opcionais` - Array com tag e descrição dos opcionais
+- `categoria` - Categoria do veículo (ex: SUV, Sedan, Hatchback)
+
+### 🏷️ API Categorias
+
+- `fetchCategorias()` - Lista todas as categorias de veículos disponíveis
+
+**Hooks:**
+- `useCategoriasQuery()` - Hook para listar categorias disponíveis
+
+**Notas:**
+- Retorna apenas categorias de veículos com valor diferente de zero
+- As categorias são ordenadas alfabeticamente
+- Exemplo de retorno: `["Hatchback", "Sedan", "SUV"]`
 
 ### 📊 API Stock
 

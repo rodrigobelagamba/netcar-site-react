@@ -26,6 +26,10 @@ export * from "./queries/useSiteQuery";
 export * from "./endpoints/info";
 export * from "./queries/useInfoQuery";
 
+// Categorias
+export * from "./endpoints/categorias";
+export * from "./queries/useCategoriasQuery";
+
 // Axios instance
 export { axiosInstance } from "./axios-instance";
 
