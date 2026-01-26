@@ -7,6 +7,8 @@ import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSe
 import { ChevronDown } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
+import { Localizacao } from "@/design-system/components/layout/Localizacao";
+import { IanBot } from "@/design-system/components/layout/IanBot";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
 
@@ -321,6 +323,13 @@ export function SeminovosPage() {
             )}
           </>
         )}
+      </div>
+
+      <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
+        <div className="container-main space-y-8">
+          <Localizacao />
+          <IanBot />
+        </div>
       </div>
     </main>
   );

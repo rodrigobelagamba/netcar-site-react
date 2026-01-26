@@ -6,6 +6,8 @@ import { cn } from "@/lib/cn";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { CheckCircle2, Shield, Award, Users, TrendingUp } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Localizacao } from "@/design-system/components/layout/Localizacao";
+import { IanBot } from "@/design-system/components/layout/IanBot";
 
 export function SobrePage() {
   // Busca dados da API
@@ -601,6 +603,13 @@ export function SobrePage() {
           </motion.div>
         </div>
       </section>
+
+      <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
+        <div className="container-main space-y-8">
+          <Localizacao />
+          <IanBot />
+        </div>
+      </div>
     </main>
   );
 }
