@@ -90,6 +90,9 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
   const priceFormatted = formatPrice(vehicle.price);
   const yearFormatted = formatYear(vehicle.year);
   const tag = vehicle.tag || vehicle.combustivel || "";
+  
+  // Extrai apenas o primeiro nome do modelo para o texto de fundo (ex: "COMPASS" ao invés de "COMPASS LIMITED")
+  const primeiroNomeModelo = vehicle.model ? vehicle.model.trim().split(/\s+/)[0].toUpperCase() : "";
 
   return (
     <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
@@ -106,7 +109,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <h2 className="text-[25vw] md:text-[32vw] font-black tracking-tighter whitespace-nowrap leading-none text-center" style={{ color: '#00283C' }}>
-            {vehicle.model}
+            {primeiroNomeModelo}
           </h2>
         </motion.div>
       </AnimatePresence>
