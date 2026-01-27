@@ -15,6 +15,7 @@ import React, { useState, useMemo } from "react";
 import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { useAnuncioQuery } from "@/api/queries/useAnuncioQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
@@ -755,6 +756,9 @@ export function DetalhesPage() {
   
   const { data: vehicle, isLoading, error } = useVehicleQuery(slug);
   
+  // Busca o anúncio (campo GPT) separadamente usando o novo endpoint
+  const { data: anuncio } = useAnuncioQuery(vehicle?.id);
+  
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
@@ -1104,7 +1108,7 @@ export function DetalhesPage() {
       )}
 
       {/* Details Section */}
-      <DetailsSection vehicle={vehicle} />
+      <DetailsSection vehicle={vehicle} anuncio={anuncio || null} />
 
       {/* Fábrica de Valor Section */}
       <section className="w-full pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16 bg-surface">
@@ -1129,64 +1133,18 @@ export function DetalhesPage() {
 
 interface DetailsSectionProps {
   vehicle: any;
+  anuncio?: string | null;
 }
 
-/**
- * Processa texto convertendo asteriscos grudados em negrito (*texto*)
- * Exemplo: "*Motor* 1.6 Flex" → <strong>Motor</strong> 1.6 Flex
- */
-function processBoldText(text: string): React.ReactNode[] {
-  if (!text || typeof text !== "string") return [text];
-  
-  const parts: React.ReactNode[] = [];
-  // Regex para capturar texto entre asteriscos grudados (*texto*)
-  const regex = /\*([^*]+)\*/g;
-  let lastIndex = 0;
-  let match;
-  let key = 0;
-
-  // Reinicia o regex para garantir que funcione corretamente
-  regex.lastIndex = 0;
-
-  while ((match = regex.exec(text)) !== null) {
-    // Adiciona texto antes do negrito
-    if (match.index > lastIndex) {
-      const beforeText = text.substring(lastIndex, match.index);
-      if (beforeText) {
-        parts.push(beforeText);
-      }
-    }
-    // Adiciona texto em negrito
-    const boldText = match[1].trim();
-    if (boldText) {
-      parts.push(<strong key={`bold-${key++}`}>{boldText}</strong>);
-    }
-    lastIndex = regex.lastIndex;
-  }
-
-  // Adiciona texto restante
-  if (lastIndex < text.length) {
-    const remainingText = text.substring(lastIndex);
-    if (remainingText) {
-      parts.push(remainingText);
-    }
-  }
-
-  return parts.length > 0 ? parts : [text];
-}
-
-function DetailsSection({ vehicle }: DetailsSectionProps) {
+function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
   const [showMoreOptionals, setShowMoreOptionals] = useState(false);
 
   const marca = vehicle.marca || vehicle.name?.split(" ")[0] || "";
   const modeloCompleto = vehicle.modelo || vehicle.name || "";
   const year = vehicle.year || 0;
 
-  // Debug: Mostra o conteúdo do campo GPT
-  console.log("GPT Content:", vehicle.gpt);
-
-  // Parse do conteúdo GPT
-  const gptContent = useMemo(() => parseGptContent(vehicle.gpt), [vehicle.gpt]);
+  // Parse do conteúdo do anúncio (vem do endpoint separado)
+  const gptContent = useMemo(() => parseGptContent(anuncio || null), [anuncio]);
 
   const specifications = [
     vehicle.year && { label: "Ano:", value: `${year}` },
@@ -1414,7 +1372,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
               className="text-fg text-[14px] sm:text-[15px] leading-[26px] mb-8"
             >
               {gptContent?.apresentacao ? (
-                processBoldText(gptContent.apresentacao)
+                gptContent.apresentacao
               ) : (
                 `O novo ${marca} ${modeloCompleto} é a escolha perfeita para quem
                 busca um veículo versátil, ideal para famílias modernas e
@@ -1436,27 +1394,27 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
                     title={accordion.title}
                     defaultOpen={index === 0}
                   >
-                    {typeof accordion.content === "string" ? (
-                      <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
-                        {processBoldText(accordion.content)}
-                      </p>
-                    ) : (
+                    {typeof accordion.content === "object" && accordion.content !== null && "itens" in accordion.content ? (
                       <>
                         {accordion.content.introducao && (
                           <p className="text-fg text-[14px] sm:text-[15px] leading-[26px] mb-4">
-                            {processBoldText(accordion.content.introducao)}
+                            {accordion.content.introducao}
                           </p>
                         )}
                         {accordion.content.itens.length > 0 && (
                           <ul className="space-y-2 list-disc list-outside text-fg text-[14px] sm:text-[15px] leading-[26px] ml-5">
                             {accordion.content.itens.map((item, itemIndex) => (
                               <li key={itemIndex} className="pl-2">
-                                {item.label && <strong>{item.label}</strong>} {processBoldText(item.texto)}
+                                {item.label && <strong>{item.label}</strong>} {item.texto}
                               </li>
                             ))}
                           </ul>
                         )}
                       </>
+                    ) : (
+                      <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                        {accordion.content}
+                      </p>
                     )}
                   </AccordionItem>
                 ))

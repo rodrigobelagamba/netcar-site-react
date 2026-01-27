@@ -572,6 +572,7 @@ export function SobrePage() {
                     precoMin: undefined,
                     precoMax: undefined,
                     anoMin: undefined,
+                    categoria: undefined,
                     anoMax: undefined,
                     cambio: undefined,
                     cor: undefined,

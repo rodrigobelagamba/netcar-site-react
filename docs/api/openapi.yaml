@@ -1,0 +1,1054 @@
+openapi: 3.0.3
+info:
+  title: API Netcar v1
+  description: |
+    API para consulta de veículos seminovos, estoque, depoimentos e informações do site.
+    
+    **Versão:** 2.5
+    
+    **Status:** ✅ Funcionando
+    
+    Todas as requisições retornam JSON e suportam filtros opcionais via query parameters.
+  version: 2.5
+  contact:
+    name: Netcar Veículos
+    url: https://www.netcarmultimarcas.com.br
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://www.netcarmultimarcas.com.br/api/v1
+    description: Servidor de produção
+  - url: http://localhost/netcar/api/v1
+    description: Servidor local (desenvolvimento)
+
+tags:
+  - name: Veículos
+    description: Endpoints para consulta de veículos
+  - name: Categorias
+    description: Endpoints para consulta de categorias de veículos
+  - name: Anúncios
+    description: Endpoints para consulta de anúncios de veículos
+  - name: Info
+    description: Endpoints para consulta de dados da tabela info
+  - name: Site
+    description: Endpoints para informações do site (banners, contatos, etc.)
+  - name: Stock
+    description: Endpoints para dados do estoque
+  - name: Depoimentos
+    description: Endpoints para depoimentos de clientes
+
+paths:
+  /veiculos.php:
+    get:
+      summary: Buscar veículos
+      description: |
+        Retorna lista de veículos com filtros opcionais.
+        
+        **Filtros disponíveis:**
+        - Filtros básicos: montadora, modelo, cor, motor, combustível, câmbio, categoria
+        - Filtros numéricos: ano_min, ano_max, valor_min, valor_max
+        - Filtros de opcionais: opcional (tag única) ou opcionais (múltiplas tags)
+        - Paginação: limit e offset
+      operationId: listVeiculos
+      tags:
+        - Veículos
+      parameters:
+        - name: montadora
+          in: query
+          description: Fabricante do veículo (busca exata, case-sensitive)
+          required: false
+          schema:
+            type: string
+            example: FORD
+        - name: modelo
+          in: query
+          description: Modelo do veículo (busca exata, case-sensitive)
+          required: false
+          schema:
+            type: string
+            example: KA
+        - name: cambio
+          in: query
+          description: Tipo de câmbio
+          required: false
+          schema:
+            type: string
+            enum: [MANUAL, AUTOMATICO]
+            example: AUTOMATICO
+        - name: combustivel
+          in: query
+          description: Tipo de combustível
+          required: false
+          schema:
+            type: string
+            example: Flex
+        - name: motor
+          in: query
+          description: Motor
+          required: false
+          schema:
+            type: string
+            example: 1.6
+        - name: cor
+          in: query
+          description: Cor do veículo (case-sensitive)
+          required: false
+          schema:
+            type: string
+            example: BRANCA
+        - name: categoria
+          in: query
+          description: Categoria do veículo
+          required: false
+          schema:
+            type: string
+            example: SUV
+        - name: ano_min
+          in: query
+          description: Ano mínimo
+          required: false
+          schema:
+            type: integer
+            minimum: 1900
+            example: 2015
+        - name: ano_max
+          in: query
+          description: Ano máximo
+          required: false
+          schema:
+            type: integer
+            minimum: 1900
+            example: 2022
+        - name: valor_min
+          in: query
+          description: Valor mínimo em reais
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            example: 20000
+        - name: valor_max
+          in: query
+          description: Valor máximo em reais
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            example: 100000
+        - name: opcional
+          in: query
+          description: "Tag de um único opcional (ex: ar_condicionado)"
+          required: false
+          schema:
+            type: string
+            example: ar_condicionado
+        - name: opcionais
+          in: query
+          description: Múltiplas tags separadas por vírgula (veículo deve ter TODOS)
+          required: false
+          schema:
+            type: string
+            example: ar_condicionado,alarme,air_bag
+        - name: id
+          in: query
+          description: ID do veículo específico
+          required: false
+          schema:
+            type: integer
+            example: 12345
+        - name: limit
+          in: query
+          description: Número máximo de resultados
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+            example: 25
+        - name: offset
+          in: query
+          description: Número de registros para pular
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+            example: 0
+        - name: action
+          in: query
+          description: Ação especial a executar (opcionais para listar opcionais disponíveis)
+          required: false
+          schema:
+            type: string
+            enum: [opcionais]
+            example: opcionais
+      responses:
+        '200':
+          description: Lista de veículos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VeiculoListResponse'
+              examples:
+                success:
+                  summary: Busca bem-sucedida
+                  value:
+                    success: true
+                    message: "Veículos encontrados com sucesso"
+                    filters_applied:
+                      montadora: "FORD"
+                      modelo: ""
+                      ano_min: 0
+                      ano_max: 0
+                    total_results: 15
+                    limit: 50
+                    offset: 0
+                    data:
+                      - id: "12345"
+                        marca: "FORD"
+                        modelo: "KA"
+                        ano: 2018
+                        valor: 45000.00
+                        valor_formatado: "R$ 45.000,00"
+                        categoria: "SUV"
+        '405':
+          description: Método não permitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /info.php:
+    get:
+      summary: Buscar dados da tabela info
+      description: |
+        Retorna dados da tabela info com filtros opcionais.
+        
+        **Filtros disponíveis:**
+        - tipo: Tipo do item
+        - titulo: Título do item
+        - local: Local do item
+        
+        Filtros podem ser usados individualmente ou combinados.
+      operationId: listInfo
+      tags:
+        - Info
+      parameters:
+        - name: tipo
+          in: query
+          description: Tipo do item (busca exata, case-sensitive)
+          required: false
+          schema:
+            type: string
+            example: Texto
+        - name: titulo
+          in: query
+          description: Título do item (busca exata, case-sensitive)
+          required: false
+          schema:
+            type: string
+            example: Desenvolvemos
+        - name: local
+          in: query
+          description: Local do item (busca exata, case-sensitive)
+          required: false
+          schema:
+            type: string
+            example: Empresa
+      responses:
+        '200':
+          description: Dados da tabela info retornados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoResponse'
+        '405':
+          description: Método não permitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /site.php:
+    get:
+      summary: Dados do site
+      description: |
+        Retorna informações do site conforme a ação especificada.
+        
+        **Ações disponíveis:**
+        - info: Informações gerais do site (padrão)
+        - banners: Lista de banners
+        - loja1: Banners da Loja 1
+        - loja2: Banners da Loja 2
+        - notifications: Notificações
+        - phone: Telefone de uma loja
+      operationId: getSiteInfo
+      tags:
+        - Site
+      parameters:
+        - name: action
+          in: query
+          description: Tipo de dados a retornar
+          required: false
+          schema:
+            type: string
+            enum: [info, banners, loja1, loja2, notifications, subgallery, phone, address, whatsapp, schedule, about, counters, news, videos, mobile_check]
+            default: info
+            example: banners
+        - name: loja
+          in: query
+          description: Loja (para phone e address)
+          required: false
+          schema:
+            type: string
+            enum: [Loja1, Loja2]
+            example: Loja1
+        - name: titulo
+          in: query
+          description: Título (para about e counters)
+          required: false
+          schema:
+            type: string
+            example: Desenvolvemos
+        - name: local
+          in: query
+          description: Local (para videos)
+          required: false
+          schema:
+            type: string
+            example: Home
+      responses:
+        '200':
+          description: Dados do site retornados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResponse'
+        '405':
+          description: Método não permitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /stock.php:
+    get:
+      summary: Dados do estoque
+      description: |
+        Retorna dados do estoque conforme a ação especificada.
+        
+        **Ações disponíveis:**
+        - enterprises: Lista de marcas
+        - cars_by_brand: Modelos por marca
+        - years: Anos disponíveis
+        - colors: Cores disponíveis
+        - motors: Motores disponíveis
+        - fuels: Combustíveis disponíveis
+        - transmissions: Transmissões disponíveis
+        - prices: Preços disponíveis
+        - all: Todos os dados
+        - list: Lista completa (padrão)
+      operationId: getStockInfo
+      tags:
+        - Stock
+      parameters:
+        - name: action
+          in: query
+          description: Tipo de dados a retornar
+          required: false
+          schema:
+            type: string
+            enum: [enterprises, cars_by_brand, years, colors, motors, fuels, transmissions, prices, all, list]
+            default: list
+            example: enterprises
+        - name: brand
+          in: query
+          description: Marca (obrigatório para cars_by_brand)
+          required: false
+          schema:
+            type: string
+            example: FORD
+      responses:
+        '200':
+          description: Dados do estoque retornados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockResponse'
+        '405':
+          description: Método não permitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /depoimentos.php:
+    get:
+      summary: Depoimentos de clientes
+      description: |
+        Retorna depoimentos de clientes conforme a ação especificada.
+        
+        **Ações disponíveis:**
+        - list: Lista todos os depoimentos
+        - single: Depoimento específico por ID
+        - gallery: Galeria de imagens
+        - list_with_images: Lista com imagens
+        - depoiments: Método alternativo
+      operationId: getDepoimentos
+      tags:
+        - Depoimentos
+      parameters:
+        - name: action
+          in: query
+          description: Tipo de dados a retornar
+          required: false
+          schema:
+            type: string
+            enum: [list, single, gallery, list_with_images, depoiments]
+            default: list
+            example: list
+        - name: id
+          in: query
+          description: ID do depoimento (obrigatório para single)
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Número máximo de resultados
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+            example: 25
+        - name: offset
+          in: query
+          description: Número de registros para pular
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+            example: 0
+      responses:
+        '200':
+          description: Depoimentos retornados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepoimentoResponse'
+        '405':
+          description: Método não permitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /categorias.php:
+    get:
+      summary: Listar categorias de veículos
+      description: |
+        Retorna lista de todas as categorias únicas presentes na base de dados.
+        
+        Apenas categorias de veículos disponíveis (valor diferente de zero) são retornadas.
+        As categorias são ordenadas alfabeticamente.
+      operationId: listCategorias
+      tags:
+        - Categorias
+      responses:
+        '200':
+          description: Categorias retornadas com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriaResponse'
+        '405':
+          description: Método não permitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /anuncio.php:
+    get:
+      summary: Buscar anúncio de veículo
+      description: |
+        Retorna o anúncio (campo GPT) de um veículo específico.
+        
+        O anúncio contém texto gerado por GPT com informações sobre o veículo.
+      operationId: getAnuncio
+      tags:
+        - Anúncios
+      parameters:
+        - name: id
+          in: query
+          description: ID do veículo
+          required: true
+          schema:
+            type: string
+            example: "12345"
+      responses:
+        '200':
+          description: Anúncio retornado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnuncioResponse'
+              examples:
+                success:
+                  summary: Anúncio encontrado
+                  value:
+                    success: true
+                    message: "Anúncio obtido com sucesso"
+                    data:
+                      id: "12345"
+                      marca: "FORD"
+                      modelo: "KA"
+                      ano: 2018
+                      anuncio: "Veículo em excelente estado de conservação, com baixa quilometragem e histórico de manutenções em dia. Ideal para quem busca economia e confiabilidade."
+                    timestamp: "2025-01-26 10:30:00"
+                sem_anuncio:
+                  summary: Veículo sem anúncio
+                  value:
+                    success: true
+                    message: "Anúncio obtido com sucesso"
+                    data:
+                      id: "12346"
+                      marca: "VOLKSWAGEN"
+                      modelo: "GOL"
+                      ano: 2020
+                      anuncio: null
+                    timestamp: "2025-01-26 10:30:00"
+        '400':
+          description: Parâmetro id não fornecido ou inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Veículo não encontrado ou não disponível
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: Método não permitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    Veiculo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID do veículo
+          example: "12345"
+        marca:
+          type: string
+          description: Fabricante
+          example: FORD
+        modelo:
+          type: string
+          description: Modelo
+          example: KA
+        ano:
+          type: integer
+          description: Ano do veículo
+          example: 2018
+        valor:
+          type: number
+          format: float
+          description: Valor em reais
+          example: 45000.00
+        valor_formatado:
+          type: string
+          description: Valor formatado com HTML
+          example: "<span>R$</span> 45.000,00"
+        preco_com_troca:
+          type: number
+          format: float
+          description: Preço com troca
+          example: 48000.00
+        preco_com_troca_formatado:
+          type: string
+          description: Preço com troca formatado
+          example: "R$ 48.000,00"
+        tem_desconto:
+          type: integer
+          description: Indica se tem desconto (0 ou 1)
+          enum: [0, 1]
+          example: 1
+        valor_sem_desconto:
+          type: string
+          nullable: true
+          description: Valor sem desconto formatado
+          example: "R$ 50.000,00"
+        cor:
+          type: string
+          description: Cor do veículo
+          example: BRANCA
+        motor:
+          type: string
+          description: Motor
+          example: "1.0"
+        combustivel:
+          type: string
+          description: Tipo de combustível
+          example: Flex
+        cambio:
+          type: string
+          description: Tipo de câmbio
+          enum: [MANUAL, AUTOMATICO]
+          example: MANUAL
+        potencia:
+          type: integer
+          description: Potência em cv
+          example: 85
+        km:
+          type: integer
+          description: Quilometragem
+          example: 45000
+        placa:
+          type: string
+          description: Placa do veículo
+          example: ABC1234
+        chassi:
+          type: string
+          description: Chassi
+          example: "9BW12345678901234"
+        renavam:
+          type: string
+          description: RENAVAM
+          example: "12345678901"
+        portas:
+          type: integer
+          description: Número de portas
+          example: 4
+        lugares:
+          type: integer
+          description: Número de lugares
+          example: 5
+        direcao:
+          type: string
+          description: Tipo de direção
+          example: "Hidráulica"
+        ar_condicionado:
+          type: string
+          description: Ar condicionado
+          example: "Sim"
+        vidros_eletricos:
+          type: string
+          description: Vidros elétricos
+          example: "Sim"
+        travas_eletricas:
+          type: string
+          description: Travas elétricas
+          example: "Sim"
+        airbag:
+          type: string
+          description: Airbag
+          example: "Sim"
+        abs:
+          type: string
+          description: ABS
+          example: "Sim"
+        alarme:
+          type: string
+          description: Alarme
+          example: "Sim"
+        pdf:
+          type: string
+          nullable: true
+          description: Nome do arquivo PDF
+          example: CheckAuto_ABC1234_1506.pdf
+        pdf_url:
+          type: string
+          nullable: true
+          description: Caminho relativo do PDF
+          example: arquivos/autocheck/CheckAuto_ABC1234_1506.pdf
+        link:
+          type: string
+          description: Link para detalhes do veículo
+          example: detalhe-produto-ka-2018-ABC-xx34-branca.html
+        have_galery:
+          type: integer
+          description: Indica se tem galeria (0 ou 1)
+          enum: [0, 1]
+          example: 1
+        opcionais:
+          type: array
+          description: Lista de opcionais do veículo
+          items:
+            $ref: '#/components/schemas/Opcional'
+        imagens:
+          type: object
+          description: Imagens do veículo
+          properties:
+            thumb:
+              type: array
+              items:
+                type: string
+              description: URLs das imagens miniatura
+            full:
+              type: array
+              items:
+                type: string
+              description: URLs das imagens completas
+        data_cadastro:
+          type: string
+          nullable: true
+          format: date-time
+          description: Data de cadastro
+        data_atualizacao:
+          type: string
+          nullable: true
+          format: date-time
+          description: Data de atualização
+        status:
+          type: string
+          nullable: true
+          description: Status do veículo
+        categoria:
+          type: string
+          nullable: true
+          description: Categoria do veículo
+          example: SUV
+
+    Opcional:
+      type: object
+      properties:
+        tag:
+          type: string
+          description: Tag do opcional
+          example: ar_condicionado
+        descricao:
+          type: string
+          description: Descrição do opcional
+          example: Ar Condicionado
+
+    VeiculoListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indica se a requisição foi bem-sucedida
+          example: true
+        message:
+          type: string
+          description: Mensagem descritiva
+          example: "Veículos encontrados com sucesso"
+        filters_applied:
+          type: object
+          description: Filtros aplicados na busca
+          properties:
+            montadora:
+              type: string
+            modelo:
+              type: string
+            ano_min:
+              type: integer
+            ano_max:
+              type: integer
+            valor_min:
+              type: integer
+            valor_max:
+              type: integer
+        total_results:
+          type: integer
+          description: Total de resultados encontrados
+          example: 15
+        limit:
+          type: integer
+          description: Limite de resultados por página
+          example: 50
+        offset:
+          type: integer
+          description: Registros pulados
+          example: 0
+        data:
+          type: array
+          description: Lista de veículos
+          items:
+            $ref: '#/components/schemas/Veiculo'
+        timestamp:
+          type: string
+          format: date-time
+          description: Data e hora da resposta
+          example: "2025-01-15 17:58:55"
+
+    InfoItem:
+      type: object
+      properties:
+        id_info:
+          type: integer
+          description: ID do item
+          example: 1
+        tipo:
+          type: string
+          description: Tipo do item
+          example: Texto
+        titulo:
+          type: string
+          description: Título do item
+          example: Desenvolvemos
+        texto:
+          type: string
+          description: Conteúdo do texto
+          example: "Conteúdo do texto..."
+        local:
+          type: string
+          description: Local do item
+          example: Empresa
+        ordem:
+          type: integer
+          description: Ordem de exibição
+          example: 1
+
+    InfoResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Dados da tabela info obtidos com sucesso"
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfoItem'
+        total_results:
+          type: integer
+          example: 5
+        filters:
+          type: object
+          properties:
+            tipo:
+              type: string
+            titulo:
+              type: string
+            local:
+              type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    SiteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Dados do site obtidos com sucesso"
+        action:
+          type: string
+          example: banners
+        data:
+          type: object
+          description: Dados conforme a ação solicitada
+        total_results:
+          type: integer
+          example: 10
+        timestamp:
+          type: string
+          format: date-time
+
+    StockResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Dados do estoque obtidos com sucesso"
+        action:
+          type: string
+          example: enterprises
+        data:
+          oneOf:
+            - type: array
+              items:
+                type: string
+            - type: object
+          description: Dados conforme a ação solicitada
+        total_results:
+          type: integer
+          example: 4
+        timestamp:
+          type: string
+          format: date-time
+
+    DepoimentoResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Depoimentos obtidos com sucesso"
+        action:
+          type: string
+          example: list
+        data:
+          type: array
+          items:
+            type: object
+        total_results:
+          type: integer
+          example: 25
+        limit:
+          type: integer
+          example: 50
+        offset:
+          type: integer
+          example: 0
+        timestamp:
+          type: string
+          format: date-time
+
+    CategoriaResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Categorias obtidas com sucesso"
+        data:
+          type: array
+          items:
+            type: string
+          description: Lista de categorias únicas
+          example: ["Hatchback", "Sedan", "SUV"]
+        total_results:
+          type: integer
+          example: 3
+        timestamp:
+          type: string
+          format: date-time
+
+    AnuncioResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Anúncio obtido com sucesso"
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              description: ID do veículo
+              example: "12345"
+            marca:
+              type: string
+              nullable: true
+              description: Fabricante do veículo
+              example: "FORD"
+            modelo:
+              type: string
+              nullable: true
+              description: Modelo do veículo
+              example: "KA"
+            ano:
+              type: integer
+              nullable: true
+              description: Ano do veículo
+              example: 2018
+            anuncio:
+              type: string
+              nullable: true
+              description: Texto do anúncio gerado por GPT
+              example: "Veículo em excelente estado de conservação..."
+        timestamp:
+          type: string
+          format: date-time
+          description: Data e hora da resposta
+          example: "2025-01-26 10:30:00"
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          description: Mensagem de erro
+          example: "Erro ao buscar dados"
+        error_code:
+          type: integer
+          description: Código de erro
+          example: 500
+        timestamp:
+          type: string
+          format: date-time
+          description: Data e hora do erro
+
+  securitySchemes:
+    NoAuth:
+      type: http
+      scheme: none
+      description: A API não requer autenticação
+
+security:
+  - NoAuth: []

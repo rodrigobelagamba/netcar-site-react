@@ -30,6 +30,10 @@ export * from "./queries/useInfoQuery";
 export * from "./endpoints/categorias";
 export * from "./queries/useCategoriasQuery";
 
+// Anúncios
+export * from "./endpoints/anuncios";
+export * from "./queries/useAnuncioQuery";
+
 // Axios instance
 export { axiosInstance } from "./axios-instance";
 

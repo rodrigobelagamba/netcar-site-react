@@ -2,6 +2,15 @@
 
 Este diretório contém todos os endpoints e hooks React Query para interagir com a API Netcar.
 
+## 📖 Documentação Completa da API
+
+Para documentação completa da API, consulte:
+
+- **[README_API.md](./README_API.md)** - Documentação completa da API com exemplos e endpoints
+- **[openapi.yaml](./openapi.yaml)** - Especificação OpenAPI 3.0 da API
+- **[API_CHANGELOG.md](./API_CHANGELOG.md)** - Histórico de mudanças da API
+- **[Postman Collection](./postman/)** - Collection e Environment do Postman para testes
+
 ## 📁 Estrutura
 
 ```
@@ -353,8 +362,20 @@ Todos os endpoints retornam arrays vazios `[]` ou objetos vazios `{}` em caso de
 - Os dados são tipados com TypeScript
 - Os hooks têm `staleTime` configurado para otimizar requisições
 
+## 📖 Documentação Completa da API
+
+Para documentação completa da API, consulte:
+
+- **[README_API.md](./README_API.md)** - Documentação completa da API com exemplos e endpoints
+- **[openapi.yaml](./openapi.yaml)** - Especificação OpenAPI 3.0 da API
+- **[API_CHANGELOG.md](./API_CHANGELOG.md)** - Histórico de mudanças da API
+- **[Postman Collection](./postman/)** - Collection e Environment do Postman para testes
+  - [Collection](./postman/Netcar_API_Collection.postman_collection.json)
+  - [Environment](./postman/Netcar_API_Environment.postman_environment.json)
+  - [Instruções](./postman/README_Postman.md)
+
 ## 🔗 Links Úteis
 
 - [Documentação da API Netcar](../../../netcar/api/v1/docs/README_API.md)
-- [Collection Postman](../../../netcar/api/v1/docs/Netcar_API_Collection.postman_collection.json)
+- [Swagger UI](https://www.netcarmultimarcas.com.br/api/v1/docs) - Documentação interativa da API
 

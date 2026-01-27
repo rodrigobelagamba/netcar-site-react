@@ -110,6 +110,7 @@ export function Header() {
           anoMax: undefined,
           cambio: undefined,
           cor: undefined,
+          categoria: undefined,
         },
       });
       // Fecha o menu mobile após navegar

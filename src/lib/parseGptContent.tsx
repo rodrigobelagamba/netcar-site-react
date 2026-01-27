@@ -1,11 +1,13 @@
+import { type ReactNode } from "react";
+
 /**
  * Interface para seção de acordeão
  */
 export interface AccordionSection {
   title: string;
-  content: string | {
-    introducao?: string;
-    itens: Array<{ label?: string; texto: string }>;
+  content: ReactNode | {
+    introducao?: ReactNode;
+    itens: Array<{ label?: string; texto: ReactNode }>;
   };
 }
 
@@ -13,8 +15,118 @@ export interface AccordionSection {
  * Interface para o conteúdo parseado do GPT
  */
 export interface ParsedGptContent {
-  apresentacao?: string; // [APRESENTAÇÃO DO MODELO] - texto introdutório
+  apresentacao?: ReactNode; // [APRESENTAÇÃO DO MODELO] - texto introdutório (já processado)
   accordions: AccordionSection[]; // Seções dinâmicas do acordeão (todos os outros colchetes)
+}
+
+/**
+ * Processa texto convertendo asteriscos grudados em negrito
+ * Suporta:
+ * - *texto* (padrão)
+ * - *palavra (começa com asterisco mas não termina)
+ * - **texto* (dois asteriscos no início, um no final)
+ */
+export function processBoldText(text: string): ReactNode[] {
+  if (!text || typeof text !== "string") return [text];
+  
+  // O texto já vem com ** substituído por * após o decode
+  let processedText = text;
+  
+  let key = 0;
+  
+  // Array para armazenar os matches encontrados com suas posições
+  const matches: Array<{ start: number; end: number; text: string }> = [];
+  
+  // Agora processa apenas casos *texto* (padrão) já que ** foi convertido para *
+  const standardRegex = /\*([^*]+)\*/g;
+  standardRegex.lastIndex = 0;
+  
+  let match: RegExpExecArray | null;
+  while ((match = standardRegex.exec(processedText)) !== null) {
+    const boldText = match[1].trim();
+    if (boldText) {
+      matches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        text: boldText
+      });
+    }
+  }
+  
+  // 2. Processa casos *palavra (começa com asterisco mas não termina)
+  // Procura por * seguido de uma palavra (letras, números, acentos) até encontrar espaço ou fim
+  const singleAsteriskRegex = /\*([a-zA-ZÀ-ÿ0-9]+)(?=\s|$|[.,;:!?])/g;
+  singleAsteriskRegex.lastIndex = 0;
+  
+  match = null;
+  while ((match = singleAsteriskRegex.exec(processedText)) !== null) {
+    // Verifica se não está dentro de um match já processado
+    const isInsideMatch = matches.some(m => 
+      match!.index >= m.start && match!.index < m.end
+    );
+    
+    if (!isInsideMatch) {
+      const boldText = match[1].trim();
+      if (boldText) {
+        matches.push({
+          start: match.index,
+          end: match.index + match[0].length,
+          text: boldText
+        });
+      }
+    }
+  }
+  
+  // Ordena matches por posição
+  matches.sort((a, b) => a.start - b.start);
+  
+  // Reconstrói o texto substituindo os matches por placeholders únicos
+  const replacements: Array<{ placeholder: string; text: string }> = [];
+  
+  // Processa de trás para frente para não alterar índices
+  for (let i = matches.length - 1; i >= 0; i--) {
+    const m = matches[i];
+    const placeholder = `__BOLD_${key++}__`;
+    processedText = processedText.substring(0, m.start) + 
+                   placeholder + 
+                   processedText.substring(m.end);
+    replacements.unshift({ placeholder, text: m.text });
+  }
+  
+  // Agora reconstrói o resultado final substituindo placeholders por elementos React
+  const finalParts: ReactNode[] = [];
+  const placeholderRegex = /__BOLD_\d+__/g;
+  let lastIndex = 0;
+  let replacementIndex = 0;
+  placeholderRegex.lastIndex = 0;
+  
+  while ((match = placeholderRegex.exec(processedText)) !== null) {
+    // Adiciona texto antes do placeholder
+    if (match.index > lastIndex) {
+      const beforeText = processedText.substring(lastIndex, match.index);
+      if (beforeText) {
+        finalParts.push(beforeText);
+      }
+    }
+    
+    // Adiciona o texto em negrito
+    if (replacementIndex < replacements.length) {
+      const replacement = replacements[replacementIndex++];
+      finalParts.push(<strong key={`bold-${key++}`}>{replacement.text}</strong>);
+    }
+    
+    lastIndex = match.index + match[0].length;
+  }
+  
+  // Adiciona texto restante
+  if (lastIndex < processedText.length) {
+    const remainingText = processedText.substring(lastIndex);
+    if (remainingText) {
+      finalParts.push(remainingText);
+    }
+  }
+  
+  return finalParts.length > 0 ? finalParts : [text];
 }
 
 /**
@@ -141,6 +253,9 @@ export function parseGptContent(gptContent: string | null | undefined): ParsedGp
     if (gptContent.length > 50 && !gptContent.includes("[") && !gptContent.includes("]")) {
       text = decodeBase64(gptContent);
     }
+    
+    // Logo após o decode, substitui ** por *
+    text = text.replace(/\*\*/g, '*');
 
     const result: ParsedGptContent = {
       accordions: [],
@@ -172,7 +287,7 @@ export function parseGptContent(gptContent: string | null | undefined): ParsedGp
       }
       // [APRESENTAÇÃO DO MODELO] ou [APRESENTACAO DO MODELO] - texto introdutório (não vai para acordeon)
       else if (upperTitle === "APRESENTAÇÃO DO MODELO" || upperTitle === "APRESENTACAO DO MODELO") {
-        result.apresentacao = sectionContent;
+        result.apresentacao = processBoldText(sectionContent);
       }
       // Todos os outros colchetes são títulos de accordion
       else {
@@ -219,12 +334,16 @@ export function parseGptContent(gptContent: string | null | undefined): ParsedGp
           const listItems = listText
             .split(/\n/)
             .filter((line) => line.trim().length > 0)
-            .map(parseListItem);
+            .map(parseListItem)
+            .map(item => ({
+              label: item.label,
+              texto: processBoldText(item.texto)
+            }));
           
           result.accordions.push({
             title: sectionTitle,
             content: {
-              introducao: intro.intro,
+              introducao: processBoldText(intro.intro),
               itens: listItems,
             },
           });
@@ -236,7 +355,11 @@ export function parseGptContent(gptContent: string | null | undefined): ParsedGp
           const areListItems = lines.some((line) => /^[•\-\*]\s/.test(line.trim()));
           
           if (areListItems) {
-            const listItems = lines.map(parseListItem);
+            const listItems = lines.map(parseListItem)
+              .map(item => ({
+                label: item.label,
+                texto: processBoldText(item.texto)
+              }));
             result.accordions.push({
               title: sectionTitle,
               content: {
@@ -247,7 +370,7 @@ export function parseGptContent(gptContent: string | null | undefined): ParsedGp
             // Múltiplas linhas mas não são lista, trata como texto simples
             result.accordions.push({
               title: sectionTitle,
-              content: sectionContent,
+              content: processBoldText(sectionContent),
             });
           }
         } 
@@ -255,7 +378,7 @@ export function parseGptContent(gptContent: string | null | undefined): ParsedGp
         else {
           result.accordions.push({
             title: sectionTitle,
-            content: sectionContent,
+            content: processBoldText(sectionContent),
           });
         }
       }

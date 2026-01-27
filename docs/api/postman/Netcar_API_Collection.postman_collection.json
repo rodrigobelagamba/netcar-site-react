@@ -1,0 +1,1751 @@
+{
+	"info": {
+		"_postman_id": "netcar-api-collection-2025",
+		"name": "Netcar API Collection",
+		"description": "Collection completa da API Netcar com todos os endpoints disponíveis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "netcar-api"
+	},
+	"item": [
+		{
+			"name": "🚗 API Veículos",
+			"item": [
+				{
+					"name": "Listar Todos os Veículos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							]
+						},
+						"description": "Retorna todos os veículos disponíveis"
+					},
+					"response": [
+						{
+							"name": "Sucesso - Lista de Veículos",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/veiculos.php",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "veiculos.php"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Veículos encontrados com sucesso\",\n    \"filters_applied\": {},\n    \"total_results\": 2,\n    \"limit\": 50,\n    \"offset\": 0,\n    \"data\": [\n        {\n            \"id\": \"12345\",\n            \"marca\": \"FORD\",\n            \"modelo\": \"KA\",\n            \"ano\": 2018,\n            \"valor\": 45000.00,\n            \"valor_formatado\": \"R$ 45.000,00\",\n            \"cor\": \"BRANCA\",\n            \"motor\": \"1.0\",\n            \"combustivel\": \"Flex\",\n            \"cambio\": \"MANUAL\",\n            \"categoria\": \"SUV\",\n            \"placa\": \"ABC1234\",\n            \"km\": 45000,\n            \"have_galery\": 1,\n            \"opcionais\": []\n        },\n        {\n            \"id\": \"12346\",\n            \"marca\": \"VOLKSWAGEN\",\n            \"modelo\": \"GOL\",\n            \"ano\": 2020,\n            \"valor\": 55000.00,\n            \"valor_formatado\": \"R$ 55.000,00\",\n            \"cor\": \"PRETA\",\n            \"motor\": \"1.6\",\n            \"combustivel\": \"Flex\",\n            \"cambio\": \"AUTOMATICO\",\n            \"categoria\": \"Hatchback\",\n            \"placa\": \"XYZ5678\",\n            \"km\": 30000,\n            \"have_galery\": 1,\n            \"opcionais\": []\n        }\n    ],\n    \"timestamp\": \"2025-01-26 10:30:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Buscar por Montadora",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php?montadora=FORD",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							],
+							"query": [
+								{
+									"key": "montadora",
+									"value": "FORD",
+									"description": "Fabricante do veículo"
+								}
+							]
+						},
+						"description": "Busca veículos por montadora específica"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Faixa de Preço",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php?valor_min=30000&valor_max=60000",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							],
+							"query": [
+								{
+									"key": "valor_min",
+									"value": "30000",
+									"description": "Valor mínimo em reais"
+								},
+								{
+									"key": "valor_max",
+									"value": "60000",
+									"description": "Valor máximo em reais"
+								}
+							]
+						},
+						"description": "Busca veículos por faixa de preço"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Faixa de Ano",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php?ano_min=2018&ano_max=2022",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							],
+							"query": [
+								{
+									"key": "ano_min",
+									"value": "2018",
+									"description": "Ano mínimo"
+								},
+								{
+									"key": "ano_max",
+									"value": "2022",
+									"description": "Ano máximo"
+								}
+							]
+						},
+						"description": "Busca veículos por faixa de ano"
+					},
+					"response": []
+				},
+				{
+					"name": "Busca Completa com Múltiplos Filtros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php?montadora=VOLKSWAGEN&modelo=GOL&ano_min=2015&ano_max=2020&valor_min=25000&valor_max=45000&cambio=MANUAL&combustivel=Flex&motor=1.6&cor=BRANCA&categoria=SUV&limit=25",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							],
+							"query": [
+								{
+									"key": "montadora",
+									"value": "VOLKSWAGEN"
+								},
+								{
+									"key": "modelo",
+									"value": "GOL"
+								},
+								{
+									"key": "ano_min",
+									"value": "2015"
+								},
+								{
+									"key": "ano_max",
+									"value": "2020"
+								},
+								{
+									"key": "valor_min",
+									"value": "25000"
+								},
+								{
+									"key": "valor_max",
+									"value": "45000"
+								},
+								{
+									"key": "cambio",
+									"value": "MANUAL"
+								},
+								{
+									"key": "combustivel",
+									"value": "Flex"
+								},
+								{
+									"key": "motor",
+									"value": "1.6"
+								},
+								{
+									"key": "cor",
+									"value": "BRANCA"
+								},
+								{
+									"key": "categoria",
+									"value": "SUV",
+									"description": "Categoria do veículo"
+								},
+								{
+									"key": "limit",
+									"value": "25"
+								}
+							]
+						},
+						"description": "Exemplo de busca com múltiplos filtros combinados"
+					},
+					"response": []
+				},
+				{
+					"name": "Paginação",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php?limit=20&offset=40",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "20",
+									"description": "Número máximo de resultados"
+								},
+								{
+									"key": "offset",
+									"value": "40",
+									"description": "Número de registros para pular"
+								}
+							]
+						},
+						"description": "Exemplo de paginação"
+					},
+					"response": []
+				},
+				{
+					"name": "URL Amigável - Montadora",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos/montadora/FORD",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos",
+								"montadora",
+								"FORD"
+							]
+						},
+						"description": "URL amigável para buscar por montadora"
+					},
+					"response": []
+				},
+				{
+					"name": "URL Amigável - Múltiplos Filtros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos/montadora/FIAT/valor_min/100000/ano_min/2015",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos",
+								"montadora",
+								"FIAT",
+								"valor_min",
+								"100000",
+								"ano_min",
+								"2015"
+							]
+						},
+						"description": "URL amigável com múltiplos filtros no path"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Opcionais",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php?action=opcionais",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "opcionais",
+									"description": "Retorna todos os opcionais disponíveis"
+								}
+							]
+						},
+						"description": "Retorna lista completa de todos os opcionais disponíveis para veículos"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Opcional (Tag única)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php?opcional=ar_condicionado",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							],
+							"query": [
+								{
+									"key": "opcional",
+									"value": "ar_condicionado",
+									"description": "Tag do opcional (use a tag retornada pelo endpoint de opcionais)"
+								}
+							]
+						},
+						"description": "Busca veículos que possuem um opcional específico. Use a tag do opcional (ex: ar_condicionado, alarme, etc.)"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Múltiplos Opcionais",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php?opcionais=ar_condicionado,alarme,air_bag",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							],
+							"query": [
+								{
+									"key": "opcionais",
+									"value": "ar_condicionado,alarme,air_bag",
+									"description": "Múltiplos opcionais separados por vírgula (veículo deve ter TODOS os opcionais)"
+								}
+							]
+						},
+						"description": "Busca veículos que possuem TODOS os opcionais especificados. Opcionais separados por vírgula."
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar com Opcionais e Outros Filtros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php?montadora=FORD&ano_min=2015&opcionais=ar_condicionado,alarme",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							],
+							"query": [
+								{
+									"key": "montadora",
+									"value": "FORD",
+									"description": "Fabricante do veículo"
+								},
+								{
+									"key": "ano_min",
+									"value": "2015",
+									"description": "Ano mínimo"
+								},
+								{
+									"key": "opcionais",
+									"value": "ar_condicionado,alarme",
+									"description": "Opcionais desejados (separados por vírgula)"
+								}
+							]
+						},
+						"description": "Exemplo de busca combinando filtros tradicionais com filtro de opcionais"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Categoria",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/veiculos.php?categoria=SUV",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"veiculos.php"
+							],
+							"query": [
+								{
+									"key": "categoria",
+									"value": "SUV",
+									"description": "Categoria do veículo (ex: SUV, Sedan, Hatchback)"
+								}
+							]
+						},
+						"description": "Busca veículos por categoria específica"
+					},
+					"response": [
+						{
+							"name": "Sucesso - Veículos por Categoria",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/veiculos.php?categoria=SUV",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "veiculos.php"],
+									"query": [
+										{
+											"key": "categoria",
+											"value": "SUV"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Veículos encontrados com sucesso\",\n    \"filters_applied\": {\n        \"categoria\": \"SUV\"\n    },\n    \"total_results\": 1,\n    \"limit\": 50,\n    \"offset\": 0,\n    \"data\": [\n        {\n            \"id\": \"12345\",\n            \"marca\": \"FORD\",\n            \"modelo\": \"ECOSPORT\",\n            \"ano\": 2019,\n            \"valor\": 75000.00,\n            \"valor_formatado\": \"R$ 75.000,00\",\n            \"cor\": \"BRANCA\",\n            \"motor\": \"2.0\",\n            \"combustivel\": \"Flex\",\n            \"cambio\": \"AUTOMATICO\",\n            \"categoria\": \"SUV\",\n            \"placa\": \"SUV1234\",\n            \"km\": 35000,\n            \"have_galery\": 1,\n            \"opcionais\": []\n        }\n    ],\n    \"timestamp\": \"2025-01-26 10:30:00\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Endpoints da API de Veículos"
+		},
+		{
+			"name": "📋 API Categorias",
+			"item": [
+				{
+					"name": "Listar Todas as Categorias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/categorias.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"categorias.php"
+							]
+						},
+						"description": "Retorna lista de todas as categorias únicas de veículos disponíveis"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para consulta de categorias de veículos"
+		},
+		{
+			"name": "📢 API Anúncios",
+			"item": [
+				{
+					"name": "Buscar Anúncio por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/anuncio.php?id=12345",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"anuncio.php"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "12345",
+									"description": "ID do veículo"
+								}
+							]
+						},
+						"description": "Retorna o anúncio (campo GPT) de um veículo específico"
+					},
+					"response": [
+						{
+							"name": "Sucesso - Anúncio Encontrado",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/anuncio.php?id=12345",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "anuncio.php"],
+									"query": [
+										{
+											"key": "id",
+											"value": "12345"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Anúncio obtido com sucesso\",\n    \"data\": {\n        \"id\": \"12345\",\n        \"marca\": \"FORD\",\n        \"modelo\": \"KA\",\n        \"ano\": 2018,\n        \"anuncio\": \"Veículo em excelente estado de conservação, com baixa quilometragem e histórico de manutenções em dia. Ideal para quem busca economia e confiabilidade.\"\n    },\n    \"timestamp\": \"2025-01-26 10:30:00\"\n}"
+						},
+						{
+							"name": "Erro - Veículo Não Encontrado",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/anuncio.php?id=99999",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "anuncio.php"],
+									"query": [
+										{
+											"key": "id",
+											"value": "99999"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": false,\n    \"message\": \"Veículo não encontrado ou não disponível\",\n    \"error_code\": 404,\n    \"timestamp\": \"2025-01-26 10:30:00\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Endpoints para consulta de anúncios de veículos"
+		},
+		{
+			"name": "📊 API Stock",
+			"item": [
+				{
+					"name": "Listar Marcas (Enterprises)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php?action=enterprises",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "enterprises",
+									"description": "Lista todas as marcas disponíveis"
+								}
+							]
+						},
+						"description": "Retorna lista de todas as marcas/montadoras"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Modelos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php?action=cars",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "cars",
+									"description": "Lista todos os modelos disponíveis"
+								}
+							]
+						},
+						"description": "Retorna lista de todos os modelos"
+					},
+					"response": []
+				},
+				{
+					"name": "Modelos por Marca",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php?action=cars_by_brand&brand=FORD",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "cars_by_brand",
+									"description": "Lista modelos de uma marca específica"
+								},
+								{
+									"key": "brand",
+									"value": "FORD",
+									"description": "Marca para filtrar (obrigatório)"
+								}
+							]
+						},
+						"description": "Retorna modelos de uma marca específica"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Anos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php?action=years",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "years",
+									"description": "Lista todos os anos disponíveis"
+								}
+							]
+						},
+						"description": "Retorna lista de todos os anos disponíveis"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Cores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php?action=colors",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "colors",
+									"description": "Lista todas as cores disponíveis"
+								}
+							]
+						},
+						"description": "Retorna lista de todas as cores disponíveis"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Motores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php?action=motors",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "motors",
+									"description": "Lista todas as motorizações disponíveis"
+								}
+							]
+						},
+						"description": "Retorna lista de todas as motorizações"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Combustíveis",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php?action=fuels",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "fuels",
+									"description": "Lista todos os tipos de combustível"
+								}
+							]
+						},
+						"description": "Retorna lista de todos os tipos de combustível"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Transmissões",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php?action=transmissions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "transmissions",
+									"description": "Lista todos os tipos de transmissão"
+								}
+							]
+						},
+						"description": "Retorna lista de todos os tipos de transmissão"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Faixas de Preço",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php?action=prices",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "prices",
+									"description": "Lista todas as faixas de preço disponíveis"
+								}
+							]
+						},
+						"description": "Retorna lista de todas as faixas de preço"
+					},
+					"response": []
+				},
+				{
+					"name": "Todos os Dados (All)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php?action=all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "all",
+									"description": "Retorna todos os dados de uma vez"
+								}
+							]
+						},
+						"description": "Retorna todos os dados de estoque de uma vez"
+					},
+					"response": []
+				},
+				{
+					"name": "Lista Padrão (JSON)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/stock.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"stock.php"
+							]
+						},
+						"description": "Retorna dados padrão do estoque em formato JSON"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints da API de Stock"
+		},
+		{
+			"name": "💬 API Depoimentos",
+			"item": [
+				{
+					"name": "Listar Todos os Depoimentos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/depoimentos.php?action=list",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"depoimentos.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "list",
+									"description": "Lista todos os depoimentos com paginação"
+								}
+							]
+						},
+						"description": "Retorna lista paginada de todos os depoimentos"
+					},
+					"response": []
+				},
+				{
+					"name": "Depoimento Específico",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/depoimentos.php?action=single&id=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"depoimentos.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "single",
+									"description": "Retorna um depoimento específico"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"description": "ID do depoimento (obrigatório)"
+								}
+							]
+						},
+						"description": "Retorna um depoimento específico por ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Galeria de Depoimentos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/depoimentos.php?action=gallery",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"depoimentos.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "gallery",
+									"description": "Retorna galeria de depoimentos"
+								}
+							]
+						},
+						"description": "Retorna galeria de depoimentos"
+					},
+					"response": []
+				},
+				{
+					"name": "Depoimentos com Imagens",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/depoimentos.php?action=list_with_images",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"depoimentos.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "list_with_images",
+									"description": "Lista depoimentos com links de imagens"
+								}
+							]
+						},
+						"description": "Retorna depoimentos com links de imagens"
+					},
+					"response": []
+				},
+				{
+					"name": "Depoimentos (Método Depoiments)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/depoimentos.php?action=depoiments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"depoimentos.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "depoiments",
+									"description": "Método alternativo para listar depoimentos"
+								}
+							]
+						},
+						"description": "Método alternativo para listar depoimentos"
+					},
+					"response": []
+				},
+				{
+					"name": "Paginação de Depoimentos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/depoimentos.php?action=list&limit=10&offset=20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"depoimentos.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "list"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Número máximo de resultados"
+								},
+								{
+									"key": "offset",
+									"value": "20",
+									"description": "Número de registros para pular"
+								}
+							]
+						},
+						"description": "Exemplo de paginação para depoimentos"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints da API de Depoimentos"
+		},
+		{
+			"name": "🏢 API Site",
+			"item": [
+				{
+					"name": "Informações Gerais do Site",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=info",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "info",
+									"description": "Retorna informações gerais do site"
+								}
+							]
+						},
+						"description": "Retorna informações gerais do site"
+					},
+					"response": []
+				},
+				{
+					"name": "Banners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=banners",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "banners",
+									"description": "Retorna banners do site"
+								}
+							]
+						},
+						"description": "Retorna banners do site"
+					},
+					"response": []
+				},
+				{
+					"name": "Banners Loja 1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=loja1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "loja1",
+									"description": "Retorna banners da Loja 1"
+								}
+							]
+						},
+						"description": "Retorna banners filtrados por tipo 'Loja 1'"
+					},
+					"response": []
+				},
+				{
+					"name": "Banners Loja 2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=loja2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "loja2",
+									"description": "Retorna banners da Loja 2"
+								}
+							]
+						},
+						"description": "Retorna banners filtrados por tipo 'Loja 2'"
+					},
+					"response": []
+				},
+				{
+					"name": "Notificações",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=notifications",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "notifications",
+									"description": "Retorna notificações do site"
+								}
+							]
+						},
+						"description": "Retorna notificações do site"
+					},
+					"response": []
+				},
+				{
+					"name": "Subgaleria",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=subgallery",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "subgallery",
+									"description": "Retorna subgaleria do site"
+								}
+							]
+						},
+						"description": "Retorna subgaleria do site"
+					},
+					"response": []
+				},
+				{
+					"name": "Telefone da Loja 1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=phone&loja=Loja1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "phone",
+									"description": "Retorna telefone da loja"
+								},
+								{
+									"key": "loja",
+									"value": "Loja1",
+									"description": "Nome da loja (Loja1 ou Loja2)"
+								}
+							]
+						},
+						"description": "Retorna telefone da Loja 1"
+					},
+					"response": []
+				},
+				{
+					"name": "Telefone da Loja 2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=phone&loja=Loja2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "phone",
+									"description": "Retorna telefone da loja"
+								},
+								{
+									"key": "loja",
+									"value": "Loja2",
+									"description": "Nome da loja (Loja1 ou Loja2)"
+								}
+							]
+						},
+						"description": "Retorna telefone da Loja 2"
+					},
+					"response": []
+				},
+				{
+					"name": "Endereço da Loja 1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=address&loja=Loja1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "address",
+									"description": "Retorna endereço da loja"
+								},
+								{
+									"key": "loja",
+									"value": "Loja1",
+									"description": "Nome da loja (Loja1 ou Loja2)"
+								}
+							]
+						},
+						"description": "Retorna endereço da Loja 1"
+					},
+					"response": []
+				},
+				{
+					"name": "Endereço da Loja 2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=address&loja=Loja2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "address",
+									"description": "Retorna endereço da loja"
+								},
+								{
+									"key": "loja",
+									"value": "Loja2",
+									"description": "Nome da loja (Loja1 ou Loja2)"
+								}
+							]
+						},
+						"description": "Retorna endereço da Loja 2"
+					},
+					"response": []
+				},
+				{
+					"name": "WhatsApp",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=whatsapp",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "whatsapp",
+									"description": "Retorna informações do WhatsApp"
+								}
+							]
+						},
+						"description": "Retorna informações do WhatsApp"
+					},
+					"response": []
+				},
+				{
+					"name": "Horário de Atendimento",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=schedule",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "schedule",
+									"description": "Retorna horário de atendimento"
+								}
+							]
+						},
+						"description": "Retorna horário de atendimento"
+					},
+					"response": []
+				},
+				{
+					"name": "Texto Sobre - Desenvolvemos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=about&titulo=Desenvolvemos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "about",
+									"description": "Retorna texto sobre a empresa"
+								},
+								{
+									"key": "titulo",
+									"value": "Desenvolvemos",
+									"description": "Título da seção (obrigatório)"
+								}
+							]
+						},
+						"description": "Retorna texto da seção 'Desenvolvemos'"
+					},
+					"response": []
+				},
+				{
+					"name": "Contadores - Experiência",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=counters&titulo=Experiencia",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "counters",
+									"description": "Retorna contadores da empresa"
+								},
+								{
+									"key": "titulo",
+									"value": "Experiencia",
+									"description": "Título da seção (obrigatório)"
+								}
+							]
+						},
+						"description": "Retorna contadores da seção 'Experiência'"
+					},
+					"response": []
+				},
+				{
+					"name": "Notícias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=news",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "news",
+									"description": "Retorna feed de notícias"
+								}
+							]
+						},
+						"description": "Retorna feed de notícias"
+					},
+					"response": []
+				},
+				{
+					"name": "Vídeos - Home",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=videos&local=Home",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "videos",
+									"description": "Retorna vídeos do Vimeo"
+								},
+								{
+									"key": "local",
+									"value": "Home",
+									"description": "Local dos vídeos (ex: Home)"
+								}
+							]
+						},
+						"description": "Retorna vídeos da seção Home"
+					},
+					"response": []
+				},
+				{
+					"name": "Verificação Mobile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/site.php?action=mobile_check",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site.php"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "mobile_check",
+									"description": "Verifica se é dispositivo mobile"
+								}
+							]
+						},
+						"description": "Verifica se o dispositivo é mobile"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints da API do Site"
+		},
+		{
+			"name": "ℹ️ API Info",
+			"item": [
+				{
+					"name": "Listar Todos os Itens",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/info.php",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"info.php"
+							]
+						},
+						"description": "Retorna todos os itens da tabela info"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar por Tipo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/info.php?tipo=Texto",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"info.php"
+							],
+							"query": [
+								{
+									"key": "tipo",
+									"value": "Texto",
+									"description": "Filtrar por tipo (Texto, Numeros, Telefone, Endereço, RedeSocial)"
+								}
+							]
+						},
+						"description": "Filtra itens da tabela info por tipo"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar por Título",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/info.php?titulo=Desenvolvemos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"info.php"
+							],
+							"query": [
+								{
+									"key": "titulo",
+									"value": "Desenvolvemos",
+									"description": "Filtrar por título"
+								}
+							]
+						},
+						"description": "Filtra itens da tabela info por título"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar por Local",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/info.php?local=Empresa",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"info.php"
+							],
+							"query": [
+								{
+									"key": "local",
+									"value": "Empresa",
+									"description": "Filtrar por local (Todos, Empresa)"
+								}
+							]
+						},
+						"description": "Filtra itens da tabela info por local"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar Combinado",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/info.php?tipo=Texto&local=Empresa&titulo=Desenvolvemos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"info.php"
+							],
+							"query": [
+								{
+									"key": "tipo",
+									"value": "Texto",
+									"description": "Filtrar por tipo"
+								},
+								{
+									"key": "local",
+									"value": "Empresa",
+									"description": "Filtrar por local"
+								},
+								{
+									"key": "titulo",
+									"value": "Desenvolvemos",
+									"description": "Filtrar por título"
+								}
+							]
+						},
+						"description": "Filtra itens da tabela info combinando múltiplos filtros (tipo, titulo, local)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints da API Info - Consulta de dados da tabela info"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://www.netcarmultimarcas.com.br",
+			"type": "string",
+			"description": "URL base da API Netcar"
+		}
+	]
+}
