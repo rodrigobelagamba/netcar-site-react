@@ -60,10 +60,10 @@ function Badge({ text, variant, icon }: Badge) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
-      className={`${bgColor} ${textColor} px-3 sm:px-4 lg:px-5 h-[22px] sm:h-[24px] lg:h-[26px] rounded-[45px] flex items-center gap-1.5 sm:gap-2 uppercase text-[12px] sm:text-[14px] lg:text-[16px] font-bold tracking-wide`}
+      className={`${bgColor} ${textColor} rounded-[45px] flex items-center uppercase font-bold tracking-wide info-badge`}
     >
       {icon && (
-        <div className="w-[12px] h-[12px] sm:w-[13px] sm:h-[13px] lg:w-[15px] lg:h-[15px] flex-shrink-0">
+        <div className="flex-shrink-0">
           <CheckSquare className="w-full h-full text-fg" />
     </div>
       )}
@@ -117,7 +117,7 @@ function CTAButton({
       onHoverEnd={() => setIsHovered(false)}
       onClick={onClick}
       disabled={disabled}
-      className={`relative border ${borderColor} rounded-[65px] px-6 sm:px-8 h-[50px] flex items-center justify-center gap-2 sm:gap-3 uppercase text-[13px] sm:text-[14px] lg:text-[15px] font-bold tracking-wide overflow-hidden ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
+      className={`relative border ${borderColor} rounded-[65px] flex items-center justify-center uppercase font-bold tracking-wide overflow-hidden ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
     >
       <motion.div
         className={`absolute inset-0 ${hoverBgColor} rounded-[65px]`}
@@ -126,28 +126,28 @@ function CTAButton({
         transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
       />
 
-      <div className="relative flex items-center gap-2 sm:gap-3 h-full">
+      <div className="relative flex items-center h-full">
         <div className="relative overflow-hidden h-full flex items-center">
-          <motion.span
-            className={`${textColor} whitespace-nowrap relative z-10`}
-            initial={{ y: 0, opacity: 1 }}
-            animate={{ y: isHovered ? -40 : 0, opacity: isHovered ? 0 : 1 }}
-            transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
-          >
-            {text}
-          </motion.span>
-          <motion.span
-            className="text-white whitespace-nowrap absolute left-0 top-0 h-full flex items-center z-10"
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: isHovered ? 0 : 40, opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
-          >
-            {text}
-          </motion.span>
+            <motion.span
+              className={`${textColor} whitespace-nowrap relative z-10`}
+              initial={{ y: 0, opacity: 1 }}
+              animate={{ y: isHovered ? -40 : 0, opacity: isHovered ? 0 : 1 }}
+              transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
+            >
+              {text}
+            </motion.span>
+            <motion.span
+              className="text-white whitespace-nowrap absolute left-0 top-0 h-full flex items-center z-10 info-contact-button"
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: isHovered ? 0 : 40, opacity: isHovered ? 1 : 0 }}
+              transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
+            >
+              {text}
+            </motion.span>
         </div>
 
         {Icon && (
-          <div className="relative w-[22px] h-[22px] sm:w-[24px] sm:h-[24px] lg:w-[26px] lg:h-[26px] flex-shrink-0 z-10">
+          <div className="relative flex-shrink-0 z-10">
             <Icon
               className={`w-full h-full transition-colors duration-300 ${
                 isHovered ? "text-white" : textColor
@@ -201,7 +201,7 @@ function ContactButton({ modeloCompleto }: ContactButtonProps) {
       borderColor="border-secondary"
       textColor="text-secondary"
       hoverBgColor="bg-secondary"
-      className="w-full sm:w-auto"
+      className="w-full info-contact-button-wrapper"
       initialAnimation={true}
       onClick={handleClick}
       disabled={!whatsapp?.numero}
@@ -680,7 +680,7 @@ function RelatedVehiclesSection({
             <div className="w-[26px] h-[26px] sm:w-[28px] sm:h-[28px] lg:w-[30px] lg:h-[30px]">
               <img src={icon1} alt="" className="block size-full" />
             </div>
-            <h2 className="text-primary text-[17px] sm:text-[18px] lg:text-[19px] font-medium">
+            <h2 className="section-heading">
               Você também pode gostar
             </h2>
           </div>
@@ -690,7 +690,7 @@ function RelatedVehiclesSection({
         </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 gap-y-32 gap-x-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pt-32" style={{ overflow: 'visible' }}>
+        <div className="grid grid-cols-1 gap-y-32 gap-x-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pt-32 overflow-visible">
           {relatedVehicles.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}
@@ -729,20 +729,11 @@ function PriceWithShimmer({ price }: { price: string }) {
       className="flex-shrink-0"
     >
       <p
-        className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold whitespace-nowrap cursor-pointer transition-transform duration-300 hover:-translate-y-1"
+        className={`font-bold whitespace-nowrap cursor-pointer text-secondary leading-tight info-price info-price-shimmer ${
+          isHovered ? "info-price-shimmer-hover" : ""
+        }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        style={{
-          background: isHovered 
-            ? 'linear-gradient(90deg, hsl(var(--color-secondary)) 0%, hsl(var(--color-secondary)) 35%, hsl(var(--color-bg)) 50%, hsl(var(--color-secondary)) 65%, hsl(var(--color-secondary)) 100%)'
-            : 'hsl(var(--color-secondary))',
-          backgroundSize: isHovered ? '300% 100%' : '100% 100%',
-          backgroundPosition: isHovered ? '100% 0' : '0% 0',
-          WebkitBackgroundClip: 'text',
-          backgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          transition: 'background-position 0.6s ease-in-out',
-        }}
         dangerouslySetInnerHTML={{ __html: price }}
       />
     </motion.div>
@@ -923,7 +914,7 @@ export function DetalhesPage() {
         />
       )}
       {/* Hero Section */}
-      <section className="w-full pt-16 lg:pt-0 pb-0 relative overflow-x-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[100vh]">
+      <section className="w-full pt-16 lg:pt-0 pb-0 relative overflow-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[95vh]">
         {/* Mobile Image - Aparece primeiro no mobile, acima das informações */}
         <div className="lg:hidden w-full mb-6">
           {mainImage && (
@@ -946,14 +937,22 @@ export function DetalhesPage() {
           )}
         </div>
 
-        {/* Left Content - 50% dentro do container */}
+        {/* Left Content - 50% com posicionamento absoluto */}
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: ANIMATION_DURATION.slow, ease: ANIMATION_EASING }}
-            className="w-full lg:w-[50%] lg:max-w-[50%] py-8 sm:py-10 lg:py-12 flex flex-col relative z-10"
+            className="w-full lg:absolute 
+            lg:w-[25%] lg:left-[10%] lg:top-[20%]
+            xl:w-[25%] xl:left-[5rem] xl:top-[1rem]
+            2xl:w-[30%] 2xl:left-[5rem] 2xl:top-[2rem]
+            3xl:w-[35%] 3xl:left-[5rem] 3xl:top-[3rem]
+            4xl:w-[40%] 4xl:left-[-10rem] 4xl:top-[6rem]
+            5xl:w-[50%] 5xl:left-[-50rem] 5xl:top-[20rem] 
+            6xl:w-[65%] 6xl:left-[-70rem] 6xl:top-[25rem] 
+            lg:py-4 sm:py-6 lg:py-6 flex flex-col relative lg:relative z-10"
           >
             {/* Brand */}
             <motion.p
@@ -965,7 +964,7 @@ export function DetalhesPage() {
                 delay: 0.15,
                 ease: [0.25, 0.1, 0.25, 1],
               }}
-              className="text-muted-foreground text-[13px] sm:text-[14px] lg:text-[15px] uppercase tracking-[0.15em] font-semibold mb-2 sm:mb-3"
+              className="text-muted-foreground uppercase tracking-[0.15em] font-semibold mb-1 sm:mb-1.5 info-brand"
             >
               {marca}
             </motion.p>
@@ -980,46 +979,46 @@ export function DetalhesPage() {
                 delay: 0.2,
                 ease: [0.25, 0.1, 0.25, 1],
               }}
-              className="text-fg text-[32px] sm:text-[42px] lg:text-[52px] xl:text-[58px] font-bold leading-[1.15] mb-6 sm:mb-8 max-w-full lg:max-w-[420px] break-words"
+              className="text-fg font-bold leading-[1.15] mb-6 sm:mb-8 max-w-full  break-words info-model"
             >
               {modeloCompleto}
             </motion.h1>
 
             {/* Badges */}
-            <div className="flex flex-wrap gap-2.5 sm:gap-3 mb-8 sm:mb-10">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">
               {badges.map((badge, idx) => (
                 <Badge key={idx} {...badge} />
               ))}
             </div>
 
             {/* Details Grid - Melhorado */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 mb-8 sm:mb-10 pb-6 sm:pb-8 border-b border-border/60">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-border/60">
               {year && (
                 <div className="flex flex-col">
-                  <span className="text-muted-foreground text-[11px] sm:text-[12px] uppercase tracking-wider mb-1.5 font-medium">
+                  <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
                     Modelo
                   </span>
-                  <span className="text-fg text-[16px] sm:text-[18px] font-semibold">
+                  <span className="text-fg font-semibold info-value">
                     {year}
                   </span>
                 </div>
               )}
               {combustivel && (
                 <div className="flex flex-col">
-                  <span className="text-muted-foreground text-[11px] sm:text-[12px] uppercase tracking-wider mb-1.5 font-medium">
+                  <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
                     Combustível
                   </span>
-                  <span className="text-fg text-[16px] sm:text-[18px] font-semibold uppercase">
+                  <span className="text-fg font-semibold uppercase info-value">
                     FLEX
                   </span>
                 </div>
               )}
               {cambio && (
                 <div className="flex flex-col">
-                  <span className="text-muted-foreground text-[11px] sm:text-[12px] uppercase tracking-wider mb-1.5 font-medium">
+                  <span className="text-muted-foreground uppercase tracking-wider mb-1.5 font-medium info-label">
                     Câmbio
                   </span>
-                  <span className="text-fg text-[16px] sm:text-[18px] font-semibold">
+                  <span className="text-fg font-semibold info-value">
                     {cambio}
                   </span>
                 </div>
@@ -1027,43 +1026,37 @@ export function DetalhesPage() {
             </div>
 
             {/* Price & CTA - Melhorado */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-              <div className="flex-shrink-0">
+            <div className="flex flex-col items-start gap-3 w-full">
+              <div className="w-full">
                 <PriceWithShimmer price={price} />
               </div>
-              <div className="flex-shrink-0 w-full sm:w-auto">
+              <div className="w-full">
                 <ContactButton modeloCompleto={modeloCompleto} />
               </div>
             </div>
           </motion.div>
         </div>
 
-        {/* Desktop Image - Posicionamento absoluto apenas no desktop */}
+        {/* Desktop Image - Posicionamento absoluto apenas no desktop - Vindo da direita - Sem limite */}
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: ANIMATION_DURATION.slow, ease: ANIMATION_EASING }}
-          className="hidden lg:block absolute right-0 z-0 overflow-hidden w-[60vw] max-w-[calc(100vw-40%)]"
-          style={{
-            top: '-15vh',
-            height: 'calc(100vh + 15vh)',
-            minHeight: '600px',
-          }}
+          className="desktop-hero-image hidden lg:block absolute pointer-events-none select-none z-[2]
+                     lg:w-[70vw] lg:top-[-3rem] lg:right-[-15%] lg:translate-x-0
+                     xl:w-[70vw] xl:top-[-10rem] xl:right-[-5rem]
+                     2xl:w-[70vw] 2xl:top-[-15rem] 2xl:right-[-25rem]
+                     3xl:w-[70vw] 3xl:top-[-15rem] 3xl:right-[-30rem]
+                     4xl:w-[70vw] 4xl:top-[-20rem] 4xl:right-[-30rem]
+                     5xl:w-[70vw] 5xl:top-[-35rem] 5xl:right-[-30rem]"
         >
           {mainImage && (
-            <div className="w-full h-full flex items-start justify-center overflow-hidden">
+            <div className="w-full h-full flex items-start justify-center overflow-visible">
               <img
                 src={mainImage}
                 alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Frente - Netcar Multimarcas`}
-                className="object-contain max-w-full"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  maxWidth: '100%',
-                  objectFit: 'contain',
-                  objectPosition: 'top center',
-                }}
+                className="w-full h-auto object-contain"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
@@ -1277,7 +1270,7 @@ function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
             >
               <div className="flex items-center gap-3 mb-6 pb-4 border-b border-primary">
                       <SpecIcon />
-                <h2 className="text-primary text-[17px] sm:text-[18px] lg:text-[19px] font-medium">
+                <h2 className="section-heading">
                         Especificações
                       </h2>
                     </div>
@@ -1305,7 +1298,7 @@ function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
               >
                 <div className="flex items-center gap-3 mb-6 pb-4 border-b border-primary">
                         <SpecIcon />
-                  <h2 className="text-primary text-[17px] sm:text-[18px] lg:text-[19px] font-medium">
+                  <h2 className="section-heading">
                           Opcionais
                         </h2>
                       </div>
@@ -1369,7 +1362,7 @@ function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
               transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
-              className="text-fg text-[14px] sm:text-[15px] leading-[26px] mb-8"
+              className="section-text mb-8"
             >
               {gptContent?.apresentacao ? (
                 gptContent.apresentacao
@@ -1397,7 +1390,7 @@ function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
                     {typeof accordion.content === "object" && accordion.content !== null && "itens" in accordion.content ? (
                       <>
                         {accordion.content.introducao && (
-                          <p className="text-fg text-[14px] sm:text-[15px] leading-[26px] mb-4">
+                          <p className="section-text mb-4">
                             {accordion.content.introducao}
                           </p>
                         )}
@@ -1412,7 +1405,7 @@ function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
                         )}
                       </>
                     ) : (
-                      <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                      <p className="section-text">
                         {accordion.content}
                       </p>
                     )}
@@ -1425,12 +1418,12 @@ function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
                     title="Diferenciais técnicos que destacam o modelo"
                     defaultOpen={true}
                   >
-                    <p className="text-fg text-[14px] sm:text-[15px] leading-[26px] mb-4">
+                    <p className="section-text mb-4">
                       O {modeloCompleto} é projetado para proporcionar uma jornada
                       suave e eficiente. Entre os destaques técnicos, este modelo
                       inclui:
                     </p>
-                    <ul className="space-y-2 list-disc list-outside text-fg text-[14px] sm:text-[15px] leading-[26px] ml-5">
+                    <ul className="space-y-2 list-disc list-outside section-text ml-5">
                       <li className="pl-2">
                         Motor {vehicle.motor || "potente"} que oferece excelente
                         desempenho e eficiência energética.

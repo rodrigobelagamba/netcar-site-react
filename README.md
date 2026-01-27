@@ -93,9 +93,13 @@ src/
 - **Proibido**: aplicar `font-family` inline
 
 #### Estilização
-- **Apenas Tailwind CSS** - classes utilitárias
-- **Proibido**: CSS externo, styled-components, inline styles
-- Espaçamentos, radius e shadows: sempre Tailwind nativo
+- **Preferir** classes utilitárias Tailwind CSS
+- CSS customizado permitido quando necessário:
+  - Padrões reutilizáveis → `@layer components` no `src/index.css`
+  - Estilos específicos de página/componente → arquivo CSS co-localizado
+  - Media queries complexas ou animações que não cabem bem em classes Tailwind
+- **Proibido**: styled-components, inline styles para valores estáticos
+- Espaçamentos, radius e shadows: preferir Tailwind nativo
 
 ### Componentes
 

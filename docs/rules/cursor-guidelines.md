@@ -55,10 +55,15 @@ styles/
 - Nunca aplicar font-family inline.
 
 ### 🔹 Tailwind
-- Sempre usar classes utilitárias.
-- Nunca criar CSS externo.
-- Nunca usar styled-components.
-- Nunca usar inline styles.
+- **Preferir** classes utilitárias Tailwind para estilos comuns.
+- CSS customizado permitido apenas quando:
+  - **Padrões reutilizáveis** → usar `@layer components` no `src/index.css`
+  - **Estilos específicos de página** → arquivo CSS co-localizado (ex: `DetalhesPage.css` ao lado do componente)
+  - **Media queries muito complexas** (>5 breakpoints ou lógica complexa)
+  - **Animações complexas** que não cabem bem em classes Tailwind
+- Nunca usar styled-components (mantém consistência do projeto).
+- Nunca usar inline styles (exceto estilos dinâmicos calculados via JavaScript).
+- Quando usar CSS customizado, sempre usar tokens CSS do Design System: `hsl(var(--token-name))`.
 
 ### 🔹 Espaçamentos / radius / shadow
 - Sempre Tailwind nativo.
@@ -150,7 +155,7 @@ O Cursor DEVE usar exclusivamente esses tokens (var(--...)) para cores e tipogra
 ============================================================
 REGRAS GERAIS (IMPRESCINDÍVEL)
 1) NÃO adicionar, remover ou substituir bibliotecas.
-2) Usar apenas Tailwind classes e CSS variables (hsl(var(--...))) para cores.
+2) **Preferir** classes Tailwind utilitárias. CSS customizado apenas quando necessário (padrões reutilizáveis em `@layer components`, estilos específicos co-localizados).
 3) Usar shadcn/ui como primitives onde possível — não reimplementar microestilos.
 4) Todos os componentes novos devem ter:
    - um teste Vitest básico (render smoke test) em src/**/…/*.test.tsx
@@ -227,7 +232,7 @@ REGRAS GERAIS (IMPRESCINDÍVEL)
 1) NÃO inventar bibliotecas, não substituir libs.  
 2) NÃO criar tokens extras (spacing, radius, shadow). Use padrões de shadcn/ui e Tailwind.  
 3) Todas as cores devem ser referenciadas via CSS variables (hsl(var(--...))) conforme tokens.  
-4) Não usar estilos inline globais (!important) nem inline style attributes exceto quando inevitável para demo.  
+4) Não usar estilos inline globais (!important). Inline styles apenas para valores dinâmicos calculados via JavaScript (ex: `style={{ transform: `translateX(${x}px)` }}`).  
 5) Todos os componentes devem ter testes unitários básicos (Vitest + RTL) que confiram renderização.  
 6) Inserir comentários TODO onde for necessário configurar URLs reais de API ou chaves.  
 7) Fornecer scripts em package.json: dev, build, preview, lint, format, test.  
@@ -248,8 +253,8 @@ O QUE FAZER
 O QUE NÃO FAZER
 - Criar novos tokens de cores ou tipografia
 - Alterar arquivos em theme/ ou tokens/
-- Usar CSS externo ou styled-components
-- Usar inline styles
+- Usar styled-components (mantém consistência do projeto)
+- Usar inline styles para valores estáticos (preferir classes Tailwind ou CSS customizado)
 - Inventar componentes que já existem
 - Adicionar novas bibliotecas sem autorização
 - Alterar arquitetura do projeto
@@ -283,14 +288,14 @@ ENTREGA
 
 ---------------------------------------------------------------
 ## 7) ❌ PROIBIDO
-- Criar novos tokens
-- Criar novas cores
-- Alterar theme/ ou tokens/
-- Usar CSS externo ou styled-components
-- Usar inline style
+- Criar novos tokens de cores ou tipografia
+- Alterar theme/ ou tokens/ sem autorização
+- Usar styled-components (mantém consistência)
+- Usar inline styles para valores estáticos (preferir classes Tailwind)
 - Inventar componentes que já existem
-- Usar next/image
+- Usar next/image (projeto usa Vite, não Next.js)
 - Alterar arquitetura do projeto
+- Criar CSS externo para estilos simples que podem ser feitos com Tailwind
 
 ---------------------------------------------------------------
 ## 8) ✔ PERMITIDO
@@ -299,6 +304,9 @@ ENTREGA
 - Melhorar responsividade
 - Corrigir acessibilidade
 - Criar novos patterns quando necessário sem alterar o DS global
+- Criar arquivos CSS co-localizados para estilos específicos de página/componente quando necessário
+- Usar `@layer components` no `src/index.css` para padrões reutilizáveis
+- Usar inline styles apenas para valores dinâmicos calculados (ex: posicionamento baseado em estado)
 
 ---------------------------------------------------------------
 # Fim do arquivo

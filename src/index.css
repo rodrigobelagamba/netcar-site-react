@@ -20,6 +20,623 @@
   .container-main {
     @apply max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto;
   }
+
+  /* DetalhesPage - Utility Classes */
+  .section-heading {
+    @apply text-primary text-[17px] sm:text-[18px] lg:text-[19px] font-medium;
+  }
+
+  .section-text {
+    @apply text-fg text-[14px] sm:text-[15px] leading-[26px];
+  }
+
+  .section-text-sm {
+    @apply text-fg text-[14px] sm:text-[15px];
+  }
+
+  /* DetalhesPage - Typography Scale (baseado em proporções de 1280px) */
+  .info-brand {
+    font-size: 0.5em;
+  }
+
+  @media (min-width: 640px) {
+    .info-brand {
+      font-size: 0.5625em;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .info-brand {
+      font-size: 0.65625em;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .info-brand {
+      font-size: 0.75em;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .info-brand {
+      font-size: 1.096875em;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .info-brand {
+      font-size: 1.4em;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .info-brand {
+      font-size: 1.8em;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .info-brand {
+      font-size: 2.4em;
+    }
+  }
+
+  @media (min-width: 5000px) {
+    .info-brand {
+      font-size: 3em;
+    }
+  }
+
+  .info-model {
+    font-size: 2em;
+  }
+
+  @media (min-width: 640px) {
+    .info-model {
+      font-size: 2.25em;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .info-model {
+      font-size: 2.625em;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .info-model {
+      font-size: 3em;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .info-model {
+      font-size: 3em;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .info-model {
+      font-size: 3em;
+    }
+  }
+
+  @media (min-width: 2000px) {
+    .info-model {
+      font-size: 3em;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .info-model {
+      font-size: 6em;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .info-model {
+      font-size: 6em;
+    }
+  }
+
+  @media (min-width: 5000px) {
+    .info-model {
+      font-size: 12em;
+    }
+  }
+
+  .info-label {
+    font-size: 0.5em;
+  }
+
+  @media (min-width: 640px) {
+    .info-label {
+      font-size: 0.5625em;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .info-label {
+      font-size: 0.65625em;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .info-label {
+      font-size: 0.75em;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .info-label {
+      font-size: 1.096875em;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .info-label {
+      font-size: 1.4em;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .info-label {
+      font-size: 1.8em;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .info-label {
+      font-size: 2.4em;
+    }
+  }
+
+  @media (min-width: 5000px) {
+    .info-label {
+      font-size: 3em;
+    }
+  }
+
+  .info-value {
+    font-size: 0.75em;
+  }
+
+  @media (min-width: 640px) {
+    .info-value {
+      font-size: 0.84375em;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .info-value {
+      font-size: 0.984375em;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .info-value {
+      font-size: 1.125em;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .info-value {
+      font-size: 1.6453125em;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .info-value {
+      font-size: 1.6em;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .info-value {
+      font-size: 1.6em;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .info-value {
+      font-size: 2.6em;
+    }
+  }
+
+  @media (min-width: 5000px) {
+    .info-value {
+      font-size: 2.5em;
+    }
+  }
+
+  .info-price {
+    font-size: 1.835em;
+  }
+
+  @media (min-width: 640px) {
+    .info-price {
+      font-size: 2.0625em;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .info-price {
+      font-size: 2.40625em;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .info-price {
+      font-size: 2.75em;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .info-price {
+      font-size: 3.025em;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .info-price {
+      font-size: 3.138em;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .info-price {
+      font-size: 7.4em;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .info-price {
+      font-size: 8.808em;
+    }
+  }
+
+  @media (min-width: 5000px) {
+    .info-price {
+      font-size: 12.01em;
+    }
+  }
+
+  /* Price Shimmer Effect */
+  .info-price-shimmer {
+    @apply transition-all duration-300;
+  }
+
+  .info-price-shimmer:hover {
+    @apply -translate-y-1 brightness-110;
+  }
+
+  .info-price-shimmer-hover {
+    background: linear-gradient(
+      90deg,
+      hsl(151 49% 58%) 0%,
+      hsl(151 49% 58%) 30%,
+      hsl(0 0% 100%) 50%,
+      hsl(151 49% 58%) 70%,
+      hsl(151 49% 58%) 100%
+    );
+    background-size: 200% 100%;
+    background-position: 200% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: background-position 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.3s ease;
+  }
+
+  /* Badge Styles */
+  .info-badge {
+    font-size: 0.75em;
+    height: 1.833em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    gap: 0.75em;
+  }
+
+  .info-badge > div {
+    width: 0.75em;
+    height: 0.75em;
+  }
+
+  @media (min-width: 640px) {
+    .info-badge {
+      font-size: 0.875em;
+      height: 1.714em;
+      padding-left: 1.75em;
+      padding-right: 1.75em;
+      gap: 0.875em;
+    }
+
+    .info-badge > div {
+      width: 0.8125em;
+      height: 0.8125em;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .info-badge {
+      font-size: 1em;
+      height: 1.625em;
+      padding-left: 2em;
+      padding-right: 2em;
+      gap: 1em;
+    }
+
+    .info-badge > div {
+      width: 0.9375em;
+      height: 0.9375em;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .info-badge {
+      font-size: 1em;
+      height: 1.625em;
+      padding-left: 2em;
+      padding-right: 2em;
+      gap: 1em;
+    }
+
+    .info-badge > div {
+      width: 0.9375em;
+      height: 0.9375em;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .info-badge {
+      font-size: 1.096875em;
+      height: 1.781em;
+      padding-left: 2.19em;
+      padding-right: 2.19em;
+      gap: 1.096875em;
+    }
+
+    .info-badge > div {
+      width: 1.028em;
+      height: 1.028em;
+    }
+  }
+
+  @media (min-width: 1800px) {
+    .info-badge {
+      font-size: 1.096875em;
+      height: 1.781em;
+      padding-left: 2.19em;
+      padding-right: 2.19em;
+      gap: 1.096875em;
+    }
+
+    .info-badge > div {
+      width: 1.028em;
+      height: 1.028em;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .info-badge {
+      font-size: 1.2em;
+      height: 1.95em;
+      padding-left: 2.4em;
+      padding-right: 2.4em;
+      gap: 1.2em;
+    }
+
+    .info-badge > div {
+      width: 1.125em;
+      height: 1.125em;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .info-badge {
+      font-size: 1.35em;
+      height: 2.194em;
+      padding-left: 2.7em;
+      padding-right: 2.7em;
+      gap: 1.35em;
+    }
+
+    .info-badge > div {
+      width: 1.266em;
+      height: 1.266em;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .info-badge {
+      font-size: 1.3em;
+      height: 2.113em;
+      padding-left: 2.6em;
+      padding-right: 2.6em;
+      gap: 1.3em;
+    }
+
+    .info-badge > div {
+      width: 1.219em;
+      height: 1.219em;
+    }
+  }
+
+  @media (min-width: 5000px) {
+    .info-badge {
+      font-size: 1.9em;
+      height: 3.088em;
+      padding-left: 3.8em;
+      padding-right: 3.8em;
+      gap: 1.9em;
+    }
+
+    .info-badge > div {
+      width: 1.781em;
+      height: 1.781em;
+    }
+  }
+
+  /* Contact Button Wrapper */
+  .info-contact-button-wrapper {
+    font-size: 0.8125em;
+    height: 3.846em;
+    padding-left: 1.846em;
+    padding-right: 1.846em;
+    gap: 0.923em;
+  }
+
+  .info-contact-button-wrapper span {
+    font-size: inherit;
+  }
+
+  .info-contact-button-wrapper > div > div:last-child {
+    width: 1.692em;
+    height: 1.692em;
+  }
+
+  @media (min-width: 640px) {
+    .info-contact-button-wrapper {
+      font-size: 0.875em;
+      height: 3.571em;
+      padding-left: 2.286em;
+      padding-right: 2.286em;
+      gap: 1.071em;
+    }
+
+    .info-contact-button-wrapper > div > div:last-child {
+      width: 1.714em;
+      height: 1.714em;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .info-contact-button-wrapper {
+      font-size: 0.9375em;
+      height: 3.333em;
+      padding-left: 2.133em;
+      padding-right: 2.133em;
+      gap: 1.067em;
+    }
+
+    .info-contact-button-wrapper > div > div:last-child {
+      width: 1.733em;
+      height: 1.733em;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .info-contact-button-wrapper {
+      font-size: 1em;
+      height: 3.125em;
+      padding-left: 2.25em;
+      padding-right: 2.25em;
+      gap: 1.125em;
+    }
+
+    .info-contact-button-wrapper > div > div:last-child {
+      width: 1.875em;
+      height: 1.875em;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .info-contact-button-wrapper {
+      font-size: 1.096875em;
+      height: 3.425em;
+      padding-left: 2.47em;
+      padding-right: 2.47em;
+      gap: 1.234em;
+    }
+
+    .info-contact-button-wrapper > div > div:last-child {
+      width: 2.056em;
+      height: 2.056em;
+    }
+  }
+
+  @media (min-width: 1800px) {
+    .info-contact-button-wrapper {
+      font-size: 1.096875em;
+      height: 3.425em;
+      padding-left: 2.47em;
+      padding-right: 2.47em;
+      gap: 1.234em;
+    }
+
+    .info-contact-button-wrapper > div > div:last-child {
+      width: 2.056em;
+      height: 2.056em;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .info-contact-button-wrapper {
+      font-size: 1.2em;
+      height: 3.75em;
+      padding-left: 2.7em;
+      padding-right: 2.7em;
+      gap: 1.35em;
+    }
+
+    .info-contact-button-wrapper > div > div:last-child {
+      width: 2.25em;
+      height: 2.25em;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .info-contact-button-wrapper {
+      font-size: 1.35em;
+      height: 4.22em;
+      padding-left: 3.04em;
+      padding-right: 3.04em;
+      gap: 1.52em;
+    }
+
+    .info-contact-button-wrapper > div > div:last-child {
+      width: 2.53em;
+      height: 2.53em;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .info-contact-button-wrapper {
+      font-size: 1.4em;
+      height: 4.375em;
+      padding-left: 3.15em;
+      padding-right: 3.15em;
+      gap: 1.575em;
+    }
+
+    .info-contact-button-wrapper > div > div:last-child {
+      width: 2.625em;
+      height: 2.625em;
+    }
+  }
+
+  @media (min-width: 5000px) {
+    .info-contact-button-wrapper {
+      font-size: 2.5em;
+      height: 5.5em;
+      padding-left: 5.625em;
+      padding-right: 5.625em;
+      gap: 2.8125em;
+      min-width: 25em;
+    }
+
+    .info-contact-button-wrapper > div > div:last-child {
+      width: 4.6875em;
+      height: 4.6875em;
+    }
+  }
+
+  /* Desktop Hero Image Positioning */
+  @media (min-width: 1400px) {
+    .desktop-hero-image {
+      right: -8% !important;
+    }
+  }
 }
 
 /* Customização do FsLightbox - Fora do layer para garantir prioridade */
