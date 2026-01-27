@@ -23,6 +23,7 @@ export interface Vehicle {
   lugares?: number;
   valor_formatado?: string;
   categoria?: string;
+  gpt?: string | null; // Texto gerado por GPT sobre o veículo
   opcionais?: Array<{ tag: string; descricao: string }>;
   pdf?: string; // Nome do arquivo PDF
   pdf_url?: string; // URL relativa do PDF
@@ -92,6 +93,7 @@ export interface ApiVehicleResponse {
     destaque: number;
     promocao: number;
     categoria?: string;
+    gpt?: string | null; // Texto gerado por GPT sobre o veículo
   }>;
   total_results: number;
   limit?: number;
@@ -349,6 +351,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       lugares: apiVehicle.lugares,
         valor_formatado: apiVehicle.valor_formatado,
         categoria: apiVehicle.categoria,
+        gpt: apiVehicle.gpt || null,
         opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
         pdf: apiVehicle.pdf,
         pdf_url: apiVehicle.pdf_url ? normalizeImageUrl(apiVehicle.pdf_url) : undefined,

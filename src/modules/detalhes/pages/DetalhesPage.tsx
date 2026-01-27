@@ -11,7 +11,7 @@ import {
   CheckSquare,
   LucideIcon,
 } from "lucide-react";
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
@@ -26,6 +26,7 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 import { maskPlate } from "@/lib/slug";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
+import { parseGptContent, AccordionSection } from "@/lib/parseGptContent";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -1130,12 +1131,62 @@ interface DetailsSectionProps {
   vehicle: any;
 }
 
+/**
+ * Processa texto convertendo asteriscos grudados em negrito (*texto*)
+ * Exemplo: "*Motor* 1.6 Flex" → <strong>Motor</strong> 1.6 Flex
+ */
+function processBoldText(text: string): React.ReactNode[] {
+  if (!text || typeof text !== "string") return [text];
+  
+  const parts: React.ReactNode[] = [];
+  // Regex para capturar texto entre asteriscos grudados (*texto*)
+  const regex = /\*([^*]+)\*/g;
+  let lastIndex = 0;
+  let match;
+  let key = 0;
+
+  // Reinicia o regex para garantir que funcione corretamente
+  regex.lastIndex = 0;
+
+  while ((match = regex.exec(text)) !== null) {
+    // Adiciona texto antes do negrito
+    if (match.index > lastIndex) {
+      const beforeText = text.substring(lastIndex, match.index);
+      if (beforeText) {
+        parts.push(beforeText);
+      }
+    }
+    // Adiciona texto em negrito
+    const boldText = match[1].trim();
+    if (boldText) {
+      parts.push(<strong key={`bold-${key++}`}>{boldText}</strong>);
+    }
+    lastIndex = regex.lastIndex;
+  }
+
+  // Adiciona texto restante
+  if (lastIndex < text.length) {
+    const remainingText = text.substring(lastIndex);
+    if (remainingText) {
+      parts.push(remainingText);
+    }
+  }
+
+  return parts.length > 0 ? parts : [text];
+}
+
 function DetailsSection({ vehicle }: DetailsSectionProps) {
   const [showMoreOptionals, setShowMoreOptionals] = useState(false);
 
   const marca = vehicle.marca || vehicle.name?.split(" ")[0] || "";
   const modeloCompleto = vehicle.modelo || vehicle.name || "";
   const year = vehicle.year || 0;
+
+  // Debug: Mostra o conteúdo do campo GPT
+  console.log("GPT Content:", vehicle.gpt);
+
+  // Parse do conteúdo GPT
+  const gptContent = useMemo(() => parseGptContent(vehicle.gpt), [vehicle.gpt]);
 
   const specifications = [
     vehicle.year && { label: "Ano:", value: `${year}` },
@@ -1354,6 +1405,7 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
               </motion.div>
 
             {/* Introduction */}
+            {(gptContent?.apresentacao || !gptContent) && (
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1361,72 +1413,114 @@ function DetailsSection({ vehicle }: DetailsSectionProps) {
               transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
               className="text-fg text-[14px] sm:text-[15px] leading-[26px] mb-8"
             >
-              O novo {marca} {modeloCompleto} é a escolha perfeita para quem
-              busca um veículo versátil, ideal para famílias modernas e
-              aventureiros urbanos. Com um design atrativo e sofisticado, este
-              modelo não só parece bom, mas também oferece uma experiência de
-              condução excepcional, graças às suas características técnicas
-              avançadas e conforto superior.
+              {gptContent?.apresentacao ? (
+                processBoldText(gptContent.apresentacao)
+              ) : (
+                `O novo ${marca} ${modeloCompleto} é a escolha perfeita para quem
+                busca um veículo versátil, ideal para famílias modernas e
+                aventureiros urbanos. Com um design atrativo e sofisticado, este
+                modelo não só parece bom, mas também oferece uma experiência de
+                condução excepcional, graças às suas características técnicas
+                avançadas e conforto superior.`
+              )}
                 </motion.p>
+            )}
 
             {/* Accordion Sections */}
             <div className="space-y-2">
-              <AccordionItem
-                title="Diferenciais técnicos que destacam o modelo"
-                defaultOpen={true}
-              >
-                <p className="text-fg text-[14px] sm:text-[15px] leading-[26px] mb-4">
-                  O {modeloCompleto} é projetado para proporcionar uma jornada
-                  suave e eficiente. Entre os destaques técnicos, este modelo
-                  inclui:
-                </p>
-                <ul className="space-y-2 list-disc list-inside text-fg text-[14px] sm:text-[15px] leading-[26px]">
-                  <li>
-                    Motor {vehicle.motor || "potente"} que oferece excelente
-                    desempenho e eficiência energética.
-                  </li>
-                  <li>
-                    Câmbio {vehicle.cambio?.toLowerCase() || "automático"} que
-                    garante trocas suaves e ágeis.
-                  </li>
-                  <li>
-                    Direção elétrica que proporciona um manuseio preciso e
-                    facilita a condução em espaços apertados.
-                  </li>
-                  <li>
-                    Suspensão otimizada que melhora o conforto em diferentes
-                    tipos de terreno.
-                  </li>
-                </ul>
-              </AccordionItem>
+              {/* Accordions dinâmicos do GPT */}
+              {gptContent && gptContent.accordions.length > 0 ? (
+                gptContent.accordions.map((accordion: AccordionSection, index: number) => (
+                  <AccordionItem
+                    key={index}
+                    title={accordion.title}
+                    defaultOpen={index === 0}
+                  >
+                    {typeof accordion.content === "string" ? (
+                      <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                        {processBoldText(accordion.content)}
+                      </p>
+                    ) : (
+                      <>
+                        {accordion.content.introducao && (
+                          <p className="text-fg text-[14px] sm:text-[15px] leading-[26px] mb-4">
+                            {processBoldText(accordion.content.introducao)}
+                          </p>
+                        )}
+                        {accordion.content.itens.length > 0 && (
+                          <ul className="space-y-2 list-disc list-outside text-fg text-[14px] sm:text-[15px] leading-[26px] ml-5">
+                            {accordion.content.itens.map((item, itemIndex) => (
+                              <li key={itemIndex} className="pl-2">
+                                {item.label && <strong>{item.label}</strong>} {processBoldText(item.texto)}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </>
+                    )}
+                  </AccordionItem>
+                ))
+              ) : (
+                /* Fallback: Accordions estáticos quando não há conteúdo GPT */
+                <>
+                  <AccordionItem
+                    title="Diferenciais técnicos que destacam o modelo"
+                    defaultOpen={true}
+                  >
+                    <p className="text-fg text-[14px] sm:text-[15px] leading-[26px] mb-4">
+                      O {modeloCompleto} é projetado para proporcionar uma jornada
+                      suave e eficiente. Entre os destaques técnicos, este modelo
+                      inclui:
+                    </p>
+                    <ul className="space-y-2 list-disc list-outside text-fg text-[14px] sm:text-[15px] leading-[26px] ml-5">
+                      <li className="pl-2">
+                        Motor {vehicle.motor || "potente"} que oferece excelente
+                        desempenho e eficiência energética.
+                      </li>
+                      <li className="pl-2">
+                        Câmbio {vehicle.cambio?.toLowerCase() || "automático"} que
+                        garante trocas suaves e ágeis.
+                      </li>
+                      <li className="pl-2">
+                        Direção elétrica que proporciona um manuseio preciso e
+                        facilita a condução em espaços apertados.
+                      </li>
+                      <li className="pl-2">
+                        Suspensão otimizada que melhora o conforto em diferentes
+                        tipos de terreno.
+                      </li>
+                    </ul>
+                  </AccordionItem>
 
-              <AccordionItem title="Tecnologia e conforto a bordo">
-                <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
-                  Equipado com as mais recentes tecnologias para garantir
-                  conforto e conectividade durante toda a jornada.
-                </p>
-              </AccordionItem>
+                  <AccordionItem title="Tecnologia e conforto a bordo">
+                    <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                      Equipado com as mais recentes tecnologias para garantir
+                      conforto e conectividade durante toda a jornada.
+                    </p>
+                  </AccordionItem>
 
-              <AccordionItem title="Recursos avançados de segurança">
-                <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
-                  Sistema completo de segurança com múltiplos air bags, controle
-                  de estabilidade e muito mais.
-                </p>
-              </AccordionItem>
+                  <AccordionItem title="Recursos avançados de segurança">
+                    <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                      Sistema completo de segurança com múltiplos air bags, controle
+                      de estabilidade e muito mais.
+                    </p>
+                  </AccordionItem>
 
-              <AccordionItem title="Espaço e capacidade">
-                <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
-                  Amplo espaço interno para passageiros e bagagens, perfeito
-                  para viagens longas.
-                </p>
-              </AccordionItem>
+                  <AccordionItem title="Espaço e capacidade">
+                    <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                      Amplo espaço interno para passageiros e bagagens, perfeito
+                      para viagens longas.
+                    </p>
+                  </AccordionItem>
 
-              <AccordionItem title="Por que optar pelo modelo?">
-                <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
-                  Combinação perfeita de design, tecnologia, conforto e
-                  economia, ideal para seu dia a dia.
-                </p>
-              </AccordionItem>
+                  <AccordionItem title="Por que optar pelo modelo?">
+                    <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                      Combinação perfeita de design, tecnologia, conforto e
+                      economia, ideal para seu dia a dia.
+                    </p>
+                  </AccordionItem>
+                </>
+              )}
             </div>
           </div>
 
