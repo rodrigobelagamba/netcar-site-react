@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
@@ -12,8 +12,6 @@ import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
-
-const ITEMS_PER_PAGE = 12;
 
 export function SeminovosPage() {
   const search = useSearch({ from: "/seminovos" });
@@ -72,11 +70,7 @@ export function SeminovosPage() {
   const [precoMin, setPrecoMin] = useState(search.precoMin || "");
   const [precoMax, setPrecoMax] = useState(search.precoMax || "");
   const [sortBy, setSortBy] = useState<SortOption>("az");
-  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  
-  // Ref para o elemento observado (infinite scroll)
-  const observerTarget = useRef<HTMLDivElement>(null);
 
   // Sincroniza estados locais com parâmetros da URL quando mudam
   useEffect(() => {
@@ -240,40 +234,6 @@ export function SeminovosPage() {
     return Math.max(...priceRanges);
   }, [priceRanges]);
 
-  // Veículos visíveis (carregamento gradual)
-  const visibleVehicles = useMemo(() => {
-    return filteredAndSortedVehicles.slice(0, visibleCount);
-  }, [filteredAndSortedVehicles, visibleCount]);
-
-  const hasMore = visibleCount < filteredAndSortedVehicles.length;
-
-  // Infinite scroll com Intersection Observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoading) {
-          setVisibleCount((prev) => Math.min(prev + ITEMS_PER_PAGE, filteredAndSortedVehicles.length));
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentTarget = observerTarget.current;
-    if (currentTarget) {
-      observer.observe(currentTarget);
-    }
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [hasMore, isLoading, filteredAndSortedVehicles.length]);
-
-  // Reset visible count quando filtros mudam
-  useEffect(() => {
-    setVisibleCount(ITEMS_PER_PAGE);
-  }, [search.marca, search.precoMin, search.precoMax, search.anoMin, search.anoMax, search.categoria, sortBy, searchTerm]);
 
   return (
     <main className="flex-1 pt-16 overflow-x-hidden max-w-full pb-20 md:pb-6">
@@ -282,14 +242,17 @@ export function SeminovosPage() {
         <div className="hidden md:block bg-bg rounded-2xl shadow-sm p-5 mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-fg">Filtros</h2>
-            {activeFiltersCount > 0 && (
-              <button
-                onClick={handleClearFilters}
-                className="text-xs text-primary hover:text-primary/80 font-medium uppercase tracking-wider transition-colors"
-              >
-                Limpar filtros
-              </button>
-            )}
+            <button
+              onClick={handleClearFilters}
+              disabled={activeFiltersCount === 0}
+              className={`text-xs font-medium uppercase tracking-wider transition-colors ${
+                activeFiltersCount > 0
+                  ? "text-primary hover:text-primary/80 cursor-pointer"
+                  : "text-muted-foreground cursor-not-allowed opacity-50"
+              }`}
+            >
+              Limpar filtros
+            </button>
           </div>
           <div className="flex flex-wrap items-end gap-6">
             {/* Marca */}
@@ -400,32 +363,24 @@ export function SeminovosPage() {
             <p className="text-muted-foreground">Tente ajustar os filtros de busca.</p>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10" style={{ overflow: 'visible' }}>
-              {visibleVehicles.map((vehicle, index) => (
-                <VehicleCard
-                  key={vehicle.id}
-                  id={vehicle.id}
-                  name={vehicle.modelo || vehicle.name}
-                  price={vehicle.price || 0}
-                  valor_formatado={vehicle.valor_formatado}
-                  year={vehicle.year || new Date().getFullYear()}
-                  km={vehicle.km || 0}
-                  images={vehicle.images || vehicle.fotos || []}
-                  marca={vehicle.marca}
-                  modelo={vehicle.modelo}
-                  delay={index}
-                />
-              ))}
-            </div>
-            
-            {/* Elemento observado para infinite scroll */}
-            {hasMore && (
-              <div ref={observerTarget} className="h-20 flex items-center justify-center">
-                <p className="text-muted-foreground text-sm">Carregando mais veículos...</p>
-              </div>
-            )}
-          </>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10" style={{ overflow: 'visible' }}>
+            {filteredAndSortedVehicles.map((vehicle, index) => (
+              <VehicleCard
+                key={vehicle.id}
+                id={vehicle.id}
+                name={vehicle.modelo || vehicle.name}
+                price={vehicle.price || 0}
+                valor_formatado={vehicle.valor_formatado}
+                year={vehicle.year || new Date().getFullYear()}
+                km={vehicle.km || 0}
+                images={vehicle.images || vehicle.fotos || []}
+                marca={vehicle.marca}
+                modelo={vehicle.modelo}
+                delay={index}
+                fastAnimation={index >= 8}
+              />
+            ))}
+          </div>
         )}
       </div>
 

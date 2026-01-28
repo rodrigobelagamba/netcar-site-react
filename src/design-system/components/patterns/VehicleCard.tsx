@@ -22,6 +22,7 @@ export interface VehicleCardProps {
   combustivel?: string;
   cambio?: string;
   delay?: number;
+  fastAnimation?: boolean;
 }
 
 export function VehicleCard({
@@ -38,6 +39,7 @@ export function VehicleCard({
   combustivel,
   cambio,
   delay = 0,
+  fastAnimation = false,
 }: VehicleCardProps) {
   const navigate = useNavigate();
   
@@ -94,6 +96,7 @@ export function VehicleCard({
       mileage={mileageFormatted}
       price={priceFormatted}
       delay={delay}
+      fastAnimation={fastAnimation}
       onClick={handleClick}
     />
   );
