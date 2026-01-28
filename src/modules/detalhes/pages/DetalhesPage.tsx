@@ -631,17 +631,21 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
 
 function RelatedVehiclesSection({
   currentVehicleId,
+  currentCategory,
+  currentPrice,
 }: {
   currentVehicleId: string;
+  currentCategory?: string;
+  currentPrice?: number;
 }) {
   const { data: vehicles, isLoading } = useVehiclesQuery();
 
-  // Filtrar veículos relacionados (excluir o atual, vendidos e pegar até 4)
-  // Converte ambos os IDs para string para comparação correta
+  // Filtrar veículos relacionados
   const relatedVehicles = useMemo(() => {
     if (!vehicles) return [];
     
-    return vehicles
+    // Primeiro filtra veículos básicos (com foto, preço válido, não é o atual)
+    const filtered = vehicles
       .filter((v) => {
         // Exclui o veículo atual
         if (String(v.id) === String(currentVehicleId)) return false;
@@ -650,16 +654,56 @@ function RelatedVehiclesSection({
         const price = typeof v.price === 'number' ? v.price : Number(v.price);
         if (!price || isNaN(price) || price <= 0) return false;
         
+        // Filtra apenas veículos com foto (images não vazias)
+        const hasImages = (v.images && v.images.length > 0) || 
+                         (v.fotos && v.fotos.length > 0) || 
+                         (v.fullImages && v.fullImages.length > 0);
+        if (!hasImages) return false;
+        
         return true;
       })
-      .sort((a, b) => {
-        // Ordena por ID maior primeiro (mais recentes)
-        const idA = parseInt(a.id) || 0;
-        const idB = parseInt(b.id) || 0;
-        return idB - idA;
-      })
-      .slice(0, 4);
-  }, [vehicles, currentVehicleId]);
+      .map((v) => {
+        const price = typeof v.price === 'number' ? v.price : Number(v.price);
+        const vehicleCategory = v.categoria?.toUpperCase() || '';
+        const targetCategory = currentCategory?.toUpperCase() || '';
+        const sameCategory = currentCategory ? vehicleCategory === targetCategory : false;
+        
+        return {
+          ...v,
+          priceDifference: currentPrice ? Math.abs(price - currentPrice) : Infinity,
+          sameCategory,
+        };
+      });
+
+    // Separa veículos da mesma categoria e de outras categorias
+    const sameCategoryVehicles = filtered.filter(v => v.sameCategory);
+    const otherVehicles = filtered.filter(v => !v.sameCategory);
+
+    // Ordena cada grupo por diferença de preço (mais próximo primeiro)
+    const sortByPrice = (a: typeof filtered[0], b: typeof filtered[0]) => {
+      if (currentPrice) {
+        return a.priceDifference - b.priceDifference;
+      }
+      // Se não tem preço de referência, ordena por ID maior primeiro (mais recentes)
+      const idA = parseInt(a.id) || 0;
+      const idB = parseInt(b.id) || 0;
+      return idB - idA;
+    };
+
+    const sortedSameCategory = sameCategoryVehicles.sort(sortByPrice);
+    const sortedOther = otherVehicles.sort(sortByPrice);
+
+    // Combina: primeiro os da mesma categoria, depois completa com os mais próximos de outras categorias
+    const result = [...sortedSameCategory];
+    
+    // Se não tem 4 veículos, completa com os mais próximos de outras categorias
+    if (result.length < 4) {
+      const needed = 4 - result.length;
+      result.push(...sortedOther.slice(0, needed));
+    }
+
+    return result.slice(0, 4);
+  }, [vehicles, currentVehicleId, currentCategory, currentPrice]);
 
   if (isLoading || relatedVehicles.length === 0) {
     return null;
@@ -1111,7 +1155,11 @@ export function DetalhesPage() {
       </section>
 
       {/* Related Vehicles Section */}
-      <RelatedVehiclesSection currentVehicleId={String(vehicle.id)} />
+      <RelatedVehiclesSection 
+        currentVehicleId={String(vehicle.id)} 
+        currentCategory={vehicle.categoria}
+        currentPrice={vehicle.price}
+      />
 
       {/* Social Embeds Section (deve ser a última sessão) */}
       <EmbedSocialSection />
