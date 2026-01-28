@@ -88,7 +88,7 @@ src/
 - Tokens disponíveis: `primary`, `secondary`, `muted`, `bg`, `fg`, `surface`, `border`, `brand-*`
 
 #### Tipografia
-- Fonte principal: **Montserrat** (Google Fonts, definida em `theme/typography.css`)
+- Fonte principal: **System fonts** (definida em `theme/typography.css`)
 - Tamanhos controlados via classes Tailwind: `text-sm`, `text-base`, `text-lg`, etc.
 - **Proibido**: aplicar `font-family` inline
 
