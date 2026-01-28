@@ -16,7 +16,7 @@ As cores estão disponíveis através do objeto `colors` exportado de `src/desig
 
 ## Tipografia
 
-A tipografia utiliza a fonte Gotham com pesos 400, 500 e 700, definida em `src/design-system/theme/typography.css`.
+A tipografia utiliza a fonte Montserrat (Google Fonts) com pesos 400, 500 e 700, definida em `src/design-system/theme/typography.css`.
 
 ### Variáveis
 

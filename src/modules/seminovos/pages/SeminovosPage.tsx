@@ -4,7 +4,8 @@ import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, X, Filter } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
@@ -72,6 +73,7 @@ export function SeminovosPage() {
   const [precoMax, setPrecoMax] = useState(search.precoMax || "");
   const [sortBy, setSortBy] = useState<SortOption>("az");
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   
   // Ref para o elemento observado (infinite scroll)
   const observerTarget = useRef<HTMLDivElement>(null);
@@ -101,7 +103,45 @@ export function SeminovosPage() {
         categoria: search.categoria || undefined, // Preserva categoria da URL
       },
     });
+    // Fecha o modal mobile após aplicar filtros
+    setIsMobileFilterOpen(false);
   };
+
+  // Limpa todos os filtros
+  const handleClearFilters = () => {
+    setMarca("");
+    setAnoMin("");
+    setAnoMax("");
+    setPrecoMin("");
+    setPrecoMax("");
+    navigate({
+      to: "/seminovos",
+      search: {
+        marca: undefined,
+        modelo: undefined,
+        precoMin: undefined,
+        precoMax: undefined,
+        anoMin: undefined,
+        anoMax: undefined,
+        cambio: undefined,
+        cor: undefined,
+        categoria: search.categoria || undefined, // Preserva categoria da URL
+      },
+    });
+    // Fecha o modal mobile após limpar filtros
+    setIsMobileFilterOpen(false);
+  };
+
+  // Conta quantos filtros estão ativos
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (marca) count++;
+    if (anoMin) count++;
+    if (anoMax) count++;
+    if (precoMin) count++;
+    if (precoMax) count++;
+    return count;
+  }, [marca, anoMin, anoMax, precoMin, precoMax]);
 
   // Filtra e ordena veículos
   const filteredAndSortedVehicles = useMemo(() => {
@@ -236,10 +276,21 @@ export function SeminovosPage() {
   }, [search.marca, search.precoMin, search.precoMax, search.anoMin, search.anoMax, search.categoria, sortBy, searchTerm]);
 
   return (
-    <main className="flex-1 pt-16 overflow-x-hidden max-w-full">
+    <main className="flex-1 pt-16 overflow-x-hidden max-w-full pb-20 md:pb-6">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
-        {/* Filtros em Card Minimalista */}
-        <div className="bg-bg rounded-2xl shadow-sm p-5 mb-8">
+        {/* Filtros em Card Minimalista - Desktop */}
+        <div className="hidden md:block bg-bg rounded-2xl shadow-sm p-5 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-fg">Filtros</h2>
+            {activeFiltersCount > 0 && (
+              <button
+                onClick={handleClearFilters}
+                className="text-xs text-primary hover:text-primary/80 font-medium uppercase tracking-wider transition-colors"
+              >
+                Limpar filtros
+              </button>
+            )}
+          </div>
           <div className="flex flex-wrap items-end gap-6">
             {/* Marca */}
             <div className="flex-1 min-w-[140px]">
@@ -319,7 +370,8 @@ export function SeminovosPage() {
               {filteredAndSortedVehicles.length} veículo{filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado{filteredAndSortedVehicles.length !== 1 ? "s" : ""}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          {/* Ordenação - Ocultar no mobile (está no modal) */}
+          <div className="hidden md:flex items-center gap-2">
             <span className="text-xs font-medium text-muted-foreground uppercase">Ordenar por</span>
             <div className="relative">
               <select
@@ -383,6 +435,183 @@ export function SeminovosPage() {
           <IanBot />
         </div>
       </div>
+
+      {/* Botão Fixo de Filtro Mobile */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
+        <button
+          onClick={() => setIsMobileFilterOpen(true)}
+          className="w-full px-4 py-4 bg-fg text-white font-semibold uppercase flex items-center justify-center gap-2 hover:bg-fg/90 transition-colors"
+        >
+          <Filter className="w-5 h-5" />
+          Filtrar
+          {activeFiltersCount > 0 && (
+            <span className="bg-white text-fg rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+              {activeFiltersCount}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* Modal de Filtros Mobile */}
+      <AnimatePresence>
+        {isMobileFilterOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/50 z-[60] md:hidden"
+              onClick={() => setIsMobileFilterOpen(false)}
+            />
+
+            {/* Modal */}
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-2xl shadow-2xl max-h-[90vh] overflow-y-auto md:hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header do Modal */}
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between z-10">
+                <h2 className="text-lg font-bold text-fg">Filtros</h2>
+                <div className="flex items-center gap-3">
+                  {activeFiltersCount > 0 && (
+                    <button
+                      onClick={handleClearFilters}
+                      className="text-sm text-primary hover:text-primary/80 font-medium uppercase tracking-wider transition-colors"
+                    >
+                      Limpar
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setIsMobileFilterOpen(false)}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <X className="w-6 h-6 text-fg" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Conteúdo dos Filtros */}
+              <div className="p-4 space-y-6">
+                {/* Ordenar */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
+                    Ordenar por
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as SortOption)}
+                      className="w-full appearance-none rounded-lg border border-border bg-surface px-4 py-3 pr-10 text-sm text-fg focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    >
+                      <option value="az">A &gt; Z</option>
+                      <option value="za">Z &gt; A</option>
+                      <option value="preco-asc">Menor preço</option>
+                      <option value="preco-desc">Maior preço</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                  </div>
+                </div>
+
+                {/* Divisor */}
+                <div className="border-t border-gray-200"></div>
+                {/* Marca */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
+                    Marca
+                  </label>
+                  <AutocompleteSelect
+                    options={brandOptions}
+                    value={marca}
+                    onChange={setMarca}
+                    placeholder="Selecione"
+                    label=""
+                  />
+                </div>
+
+                {/* Ano mínimo */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
+                    Ano de
+                  </label>
+                  <AutocompleteSelect
+                    options={yearOptions}
+                    value={anoMin}
+                    onChange={setAnoMin}
+                    placeholder="Selecione"
+                    label=""
+                  />
+                </div>
+
+                {/* Ano máximo */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
+                    Ano até
+                  </label>
+                  <AutocompleteSelect
+                    options={yearOptions}
+                    value={anoMax}
+                    onChange={setAnoMax}
+                    placeholder="Selecione"
+                    label=""
+                  />
+                </div>
+
+                {/* Valor de */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
+                    Valor de
+                  </label>
+                  <input
+                    type="text"
+                    value={precoMin}
+                    onChange={(e) => setPrecoMin(e.target.value)}
+                    placeholder={minPrice > 0 ? `R$ ${minPrice.toLocaleString('pt-BR')}` : "R$ 0"}
+                    className="w-full border-0 border-b border-border rounded-none bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                  />
+                </div>
+
+                {/* Valor até */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
+                    Valor até
+                  </label>
+                  <input
+                    type="text"
+                    value={precoMax}
+                    onChange={(e) => setPrecoMax(e.target.value)}
+                    placeholder={maxPrice > 0 ? `R$ ${maxPrice.toLocaleString('pt-BR')}` : "R$ 500.000"}
+                    className="w-full border-0 border-b border-border rounded-none bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                  />
+                </div>
+
+                {/* Botões de Ação */}
+                <div className="sticky bottom-0 bg-white pt-4 pb-4 border-t border-gray-200 -mx-4 px-4 space-y-3">
+                  <button
+                    onClick={handleFilter}
+                    className="w-full px-6 py-4 rounded-lg bg-fg text-white text-sm font-semibold uppercase hover:bg-fg/90 transition-all duration-200 shadow-md"
+                  >
+                    Aplicar Filtros
+                  </button>
+                  {activeFiltersCount > 0 && (
+                    <button
+                      onClick={handleClearFilters}
+                      className="w-full px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 text-sm font-semibold uppercase hover:bg-gray-50 transition-all duration-200"
+                    >
+                      Limpar Todos os Filtros
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

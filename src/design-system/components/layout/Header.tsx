@@ -1,22 +1,38 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { Search, Phone, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
 import { useSearchContext } from "@/contexts/SearchContext";
+import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
+import { generateVehicleSlug } from "@/lib/slug";
 import logoNetcar from "@/assets/images/logo-netcar.png";
+
+interface VehicleSuggestion {
+  marca: string;
+  modelo: string;
+  ano: number;
+  cor: string;
+  id: string;
+  placa?: string;
+  displayText: string;
+}
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileAutocompleteOpen, setIsMobileAutocompleteOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
+  const mobileAutocompleteRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { data: whatsapp } = useWhatsAppQuery();
   const { searchTerm, setSearchTerm } = useSearchContext();
+  const { data: vehicles } = useVehiclesQuery();
 
   // Formata telefone para exibição
   const formatPhone = (phone?: string) => {
@@ -86,44 +102,185 @@ export function Header() {
     }
   }, [isMobileMenuOpen]);
 
-  // Limpa a busca quando sai da página de seminovos
+  // Limpa a busca apenas quando realmente sai da página de seminovos
+  // Não limpa quando o menu mobile ou busca desktop estão abertos
+  const prevPathnameRef = useRef(location.pathname);
   useEffect(() => {
-    if (location.pathname !== "/seminovos" && searchTerm) {
+    const prevPathname = prevPathnameRef.current;
+    const currentPathname = location.pathname;
+    
+    // Só limpa se saiu da página de seminovos (estava em /seminovos e agora não está mais)
+    // E se o menu mobile e busca desktop estão fechados
+    if (
+      prevPathname === "/seminovos" && 
+      currentPathname !== "/seminovos" && 
+      searchTerm && 
+      !isMobileMenuOpen && 
+      !isSearchOpen
+    ) {
       setSearchTerm("");
     }
-  }, [location.pathname, searchTerm, setSearchTerm]);
+    
+    prevPathnameRef.current = currentPathname;
+  }, [location.pathname, searchTerm, isMobileMenuOpen, isSearchOpen, setSearchTerm]);
+
+  // Gera sugestões de autocomplete baseadas em Marca Modelo Ano Cor
+  const vehicleSuggestions = useMemo<VehicleSuggestion[]>(() => {
+    if (!vehicles || vehicles.length === 0 || !searchTerm || searchTerm.length < 2) {
+      return [];
+    }
+
+    const lowerQuery = searchTerm.toLowerCase().trim();
+    const suggestions: VehicleSuggestion[] = [];
+
+    // Cria um Set para evitar duplicatas baseado no ID do veículo
+    const seenIds = new Set<string>();
+
+    vehicles.forEach((vehicle) => {
+      // Só processa se tiver todos os dados necessários
+      if (!vehicle.marca || !vehicle.modelo || !vehicle.year || !vehicle.cor || !vehicle.id) {
+        return;
+      }
+
+      // Evita duplicatas pelo ID
+      if (seenIds.has(vehicle.id)) {
+        return;
+      }
+
+      const marca = vehicle.marca.toLowerCase();
+      const modelo = vehicle.modelo.toLowerCase();
+      const ano = vehicle.year.toString();
+      const cor = vehicle.cor.toLowerCase();
+
+      // Verifica se a busca corresponde a marca, modelo, ano ou cor
+      const matches =
+        marca.includes(lowerQuery) ||
+        modelo.includes(lowerQuery) ||
+        ano.includes(lowerQuery) ||
+        cor.includes(lowerQuery) ||
+        `${marca} ${modelo}`.includes(lowerQuery) ||
+        `${marca} ${modelo} ${ano}`.includes(lowerQuery) ||
+        `${marca} ${modelo} ${ano} ${cor}`.includes(lowerQuery);
+
+      if (matches) {
+        seenIds.add(vehicle.id);
+        suggestions.push({
+          marca: vehicle.marca,
+          modelo: vehicle.modelo,
+          ano: vehicle.year,
+          cor: vehicle.cor,
+          id: vehicle.id,
+          placa: vehicle.placa,
+          displayText: `${vehicle.marca} ${vehicle.modelo} ${vehicle.year} ${vehicle.cor}`,
+        });
+      }
+    });
+
+    // Ordena por relevância (marca primeiro, depois modelo, depois ano)
+    suggestions.sort((a, b) => {
+      const aMarca = a.marca.toLowerCase();
+      const bMarca = b.marca.toLowerCase();
+      const aModelo = a.modelo.toLowerCase();
+      const bModelo = b.modelo.toLowerCase();
+
+      // Se a busca começa com marca, prioriza
+      if (aMarca.startsWith(lowerQuery) && !bMarca.startsWith(lowerQuery)) return -1;
+      if (!aMarca.startsWith(lowerQuery) && bMarca.startsWith(lowerQuery)) return 1;
+
+      // Se a busca começa com modelo, prioriza
+      if (aModelo.startsWith(lowerQuery) && !bModelo.startsWith(lowerQuery)) return -1;
+      if (!aModelo.startsWith(lowerQuery) && bModelo.startsWith(lowerQuery)) return 1;
+
+      return 0;
+    });
+
+    return suggestions.slice(0, 8); // Limita a 8 sugestões
+  }, [vehicles, searchTerm]);
 
   // Função para lidar com a busca
   const handleSearch = (value: string) => {
     setSearchTerm(value);
+    setIsMobileAutocompleteOpen(value.length >= 2);
+    setHighlightedIndex(0);
+  };
+
+  // Função para selecionar uma sugestão do autocomplete
+  const handleSuggestionSelect = (suggestion: VehicleSuggestion) => {
+    // Gera o slug do veículo e navega diretamente para a página de detalhes
+    const slug = generateVehicleSlug({
+      modelo: suggestion.modelo,
+      marca: suggestion.marca,
+      year: suggestion.ano,
+      placa: suggestion.placa,
+      id: suggestion.id,
+    });
     
-    // Se não está na página de seminovos e há texto, redireciona para seminovos
-    if (location.pathname !== "/seminovos" && value.trim()) {
-      navigate({
-        to: "/seminovos",
-        search: {
-          marca: undefined,
-          modelo: undefined,
-          precoMin: undefined,
-          precoMax: undefined,
-          anoMin: undefined,
-          anoMax: undefined,
-          cambio: undefined,
-          cor: undefined,
-          categoria: undefined,
-        },
-      });
-      // Fecha o menu mobile após navegar
-      setIsMobileMenuOpen(false);
+    navigate({ to: `/veiculo/${slug}` });
+    setIsMobileMenuOpen(false);
+    setIsMobileAutocompleteOpen(false);
+    setSearchTerm("");
+  };
+
+  // Handler para quando o usuário pressionar teclas no campo de busca mobile
+  const handleMobileSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      if (vehicleSuggestions.length > 0 && highlightedIndex >= 0 && highlightedIndex < vehicleSuggestions.length) {
+        // Se há sugestões e uma está destacada, seleciona ela
+        handleSuggestionSelect(vehicleSuggestions[highlightedIndex]);
+      } else if (searchTerm.trim()) {
+        // Senão, faz busca normal
+        navigate({
+          to: "/seminovos",
+          search: {
+            modelo: searchTerm.trim(),
+            marca: undefined,
+            precoMin: undefined,
+            precoMax: undefined,
+            anoMin: undefined,
+            anoMax: undefined,
+            cambio: undefined,
+            cor: undefined,
+            categoria: undefined,
+          },
+        });
+        setIsMobileMenuOpen(false);
+        setIsMobileAutocompleteOpen(false);
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (vehicleSuggestions.length > 0) {
+        setIsMobileAutocompleteOpen(true);
+        setHighlightedIndex((prev) =>
+          prev < vehicleSuggestions.length - 1 ? prev + 1 : prev
+        );
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : 0));
+    } else if (e.key === "Escape") {
+      setIsMobileAutocompleteOpen(false);
+      setHighlightedIndex(0);
     }
   };
 
-  // Handler para quando o usuário pressionar Enter no campo de busca mobile
-  const handleMobileSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && searchTerm.trim()) {
-      setIsMobileMenuOpen(false);
+  // Fecha autocomplete ao clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        mobileAutocompleteRef.current &&
+        !mobileAutocompleteRef.current.contains(event.target as Node) &&
+        mobileSearchInputRef.current &&
+        !mobileSearchInputRef.current.contains(event.target as Node)
+      ) {
+        setIsMobileAutocompleteOpen(false);
+      }
+    };
+
+    if (isMobileAutocompleteOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
     }
-  };
+  }, [isMobileAutocompleteOpen]);
 
   // Função para abrir/fechar o campo de busca
   const toggleSearch = () => {
@@ -328,15 +485,16 @@ export function Header() {
               transition={{ duration: 0.4, delay: 0.1 }}
             >
               <nav className="flex flex-col items-center gap-6">
-                {/* Campo de Busca Mobile */}
+                {/* Campo de Busca Mobile com Autocomplete */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.2 }}
-                  className="w-full max-w-xs px-4"
+                  className="w-full max-w-xs px-4 relative"
                   onClick={(e) => e.stopPropagation()}
+                  ref={mobileAutocompleteRef}
                 >
-                  <div className="flex items-center gap-2 border-b border-white/30 pb-2">
+                  <div className="flex items-center gap-2 border-b border-white/30 pb-2 relative">
                     <Search className="w-5 h-5 text-white flex-shrink-0" />
                     <input
                       ref={mobileSearchInputRef}
@@ -344,12 +502,50 @@ export function Header() {
                       value={searchTerm}
                       onChange={(e) => handleSearch(e.target.value)}
                       onKeyDown={handleMobileSearchKeyDown}
-                      placeholder="Buscar veículo..."
+                      onFocus={() => {
+                        if (searchTerm.length >= 2) {
+                          setIsMobileAutocompleteOpen(true);
+                        }
+                      }}
+                      placeholder="Buscar por marca, modelo, ano ou cor..."
                       className="flex-1 bg-transparent border-0 outline-none text-white text-lg placeholder:text-white/70"
                       onClick={(e) => e.stopPropagation()}
-                      onFocus={(e) => e.stopPropagation()}
                     />
                   </div>
+
+                  {/* Dropdown de Autocomplete */}
+                  <AnimatePresence>
+                    {isMobileAutocompleteOpen && vehicleSuggestions.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-[80] max-h-64 overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {vehicleSuggestions.map((suggestion, index) => (
+                          <div
+                            key={suggestion.id}
+                            onClick={() => handleSuggestionSelect(suggestion)}
+                            className={`px-4 py-3 cursor-pointer transition-colors ${
+                              highlightedIndex === index
+                                ? "bg-primary/10"
+                                : "hover:bg-gray-50"
+                            }`}
+                            onMouseEnter={() => setHighlightedIndex(index)}
+                          >
+                            <div className="text-sm font-medium text-gray-900">
+                              {suggestion.displayText}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-0.5">
+                              {suggestion.marca} • {suggestion.ano} • {suggestion.cor}
+                            </div>
+                          </div>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
                 
                 {menuLinks.map((link, index) => (

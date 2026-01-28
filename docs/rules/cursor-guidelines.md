@@ -112,7 +112,7 @@ REGRAS OBRIGATÓRIAS:
 
 TOKENS DISPONÍVEIS:
 - Cores: primary, secondary, muted, bg, fg, surface, surface-alt, border, brand-900/700/500/300/100
-- Tipografia: fonte Gotham (definida em src/design-system/theme/typography.css)
+- Tipografia: fonte Montserrat (Google Fonts, definida em src/design-system/theme/typography.css)
 
 ENTREGA:
 - Código React/TypeScript completo
@@ -177,7 +177,7 @@ CORES (via Tailwind classes):
 - brand-900, brand-700, brand-500, brand-300, brand-100
 
 TIPOGRAFIA:
-- Fonte: Gotham (definida em src/design-system/theme/typography.css)
+- Fonte: Montserrat (Google Fonts, definida em src/design-system/theme/typography.css)
 - Usar classes Tailwind padrão para tamanhos: text-sm, text-base, text-lg, text-xl, etc.
 
 ============================================================
