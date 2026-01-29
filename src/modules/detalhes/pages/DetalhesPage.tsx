@@ -866,46 +866,106 @@ export function DetalhesPage() {
       : `${baseUrl}/${mainImage}`;
   }, [mainImage]);
 
+  // Gera URL no formato antigo para compatibilidade com meta tags
+  const legacyUrl = useMemo(() => {
+    if (!vehicle) return "";
+    
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://www.netcarmultimarcas.com.br";
+    
+    // Gera slug no formato antigo: detalhe-produto-{modelo}-{ano}-{placa}-{cor}.html
+    const parts: string[] = [];
+    
+    // Modelo em minúsculas, sem acentos, espaços viram hífens
+    if (modeloCompleto) {
+      const modeloSlug = modeloCompleto
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+        .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais
+        .replace(/\s+/g, '-') // Substitui espaços por hífens
+        .replace(/-+/g, '-') // Remove hífens duplicados
+        .replace(/^-|-$/g, ''); // Remove hífens do início/fim
+      if (modeloSlug) parts.push(modeloSlug);
+    }
+    
+    // Ano
+    if (vehicle.year) parts.push(String(vehicle.year));
+    
+    // Placa mascarada em maiúsculas
+    if (vehicle.placa) {
+      const placaMascarada = maskPlate(vehicle.placa).toUpperCase();
+      parts.push(placaMascarada);
+    }
+    
+    // Cor em minúsculas
+    if (vehicle.cor) {
+      const corSlug = vehicle.cor
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+        .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais
+        .replace(/\s+/g, '-') // Substitui espaços por hífens
+        .replace(/-+/g, '-') // Remove hífens duplicados
+        .replace(/^-|-$/g, ''); // Remove hífens do início/fim
+      if (corSlug) parts.push(corSlug);
+    }
+    
+    const slug = parts.join('-');
+    return slug ? `${baseUrl}/detalhe-produto-${slug}.html` : baseUrl;
+  }, [vehicle, modeloCompleto]);
+
   // Configura metatags para compartilhamento
   const metaTags = useMemo(() => {
     if (!vehicle) return null;
 
-    const titleParts = [
-      marca,
-      modeloCompleto,
-      vehicle.year ? String(vehicle.year) : "",
-    ].filter(Boolean);
-
-    const descriptionParts = [
-      marca,
-      modeloCompleto,
-      vehicle.year ? `${vehicle.year} seminovo` : "seminovo",
-      vehicle.km ? `com ${vehicle.km.toLocaleString("pt-BR")}km` : "",
-      cambio ? `${cambio}` : "",
-      combustivel ? `${combustivel}` : "",
-      vehicle.price ? `Preço: R$ ${vehicle.price.toLocaleString("pt-BR")}` : "",
-    ].filter(Boolean);
+    // Título no formato: "Fluence gt sport 2013 preta iui-xx58" (modelo com primeira letra maiúscula)
+    const titleParts: string[] = [];
+    
+    // Modelo completo - primeira letra maiúscula, resto minúsculas
+    if (modeloCompleto) {
+      const modeloLower = modeloCompleto.toLowerCase();
+      const modeloCapitalized = modeloLower.charAt(0).toUpperCase() + modeloLower.slice(1);
+      titleParts.push(modeloCapitalized);
+    }
+    
+    // Ano
+    if (vehicle.year) {
+      titleParts.push(String(vehicle.year));
+    }
+    
+    // Cor em minúsculas
+    if (vehicle.cor) {
+      titleParts.push(vehicle.cor.toLowerCase());
+    }
+    
+    // Placa mascarada em minúsculas
+    if (vehicle.placa) {
+      const placaMascarada = maskPlate(vehicle.placa).toLowerCase();
+      titleParts.push(placaMascarada);
+    }
+    
+    const ogTitle = titleParts.length > 0 ? titleParts.join(" ") : "Veículo";
 
     return {
-      title: titleParts.length > 0 ? `${titleParts.join(" ")} | Netcar` : "Veículo | Netcar",
-      description: descriptionParts.length > 0 
-        ? `${descriptionParts.join(". ")}.` 
-        : `${marca} ${modeloCompleto} seminovo com garantia, vistoriado e financiamento facilitado.`,
+      title: `${ogTitle} | Netcar`, // Título da página (com Netcar)
+      description: "Seminovo é na Netcar", // Descrição fixa conforme exemplo
       image: absoluteImageUrl,
-      url: typeof window !== "undefined" ? window.location.href : "",
+      url: legacyUrl || (typeof window !== "undefined" ? window.location.href : ""),
       type: "article" as const,
       imageWidth: 1200,
       imageHeight: 900,
-      productBrand: marca,
+      productBrand: "Netcar", // Sempre "Netcar", não a marca do veículo
       productAvailability: "in stock" as const,
       productCondition: "used_like_new" as const,
       productPriceAmount: vehicle.price || 0,
       productPriceCurrency: "BRL" as const,
       productRetailerItemId: vehicle.placa
-        ? maskPlate(vehicle.placa).toLowerCase()
+        ? maskPlate(vehicle.placa).toUpperCase() // Placa em MAIÚSCULAS
         : "",
+      // Propriedade adicional para og:title (sem "| Netcar")
+      ogTitle: ogTitle,
     };
-  }, [vehicle, marca, modeloCompleto, cambio, combustivel, absoluteImageUrl]);
+  }, [vehicle, modeloCompleto, absoluteImageUrl, legacyUrl]);
 
   useMetaTags(
     metaTags || {

@@ -15,6 +15,8 @@ interface MetaTagsProps {
   productPriceAmount?: number;
   productPriceCurrency?: string;
   productRetailerItemId?: string;
+  // Título específico para Open Graph (se diferente do title)
+  ogTitle?: string;
 }
 
 /**
@@ -34,6 +36,7 @@ export function useMetaTags({
   productPriceAmount,
   productPriceCurrency,
   productRetailerItemId,
+  ogTitle,
 }: MetaTagsProps) {
   useEffect(() => {
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
@@ -68,7 +71,8 @@ export function useMetaTags({
     
     // Open Graph tags
     updateMetaTag("og:site_name", "Netcar");
-    updateMetaTag("og:title", title || defaultTitle);
+    // Usa ogTitle se fornecido, senão usa title
+    updateMetaTag("og:title", ogTitle || title || defaultTitle);
     updateMetaTag("og:description", description || defaultDescription);
     updateMetaTag("og:image", image || defaultImage);
     updateMetaTag("og:url", currentUrl);
@@ -137,6 +141,7 @@ export function useMetaTags({
     productPriceAmount,
     productPriceCurrency,
     productRetailerItemId,
+    ogTitle,
   ]);
 }
 

@@ -340,7 +340,7 @@ export function parseGptContent(gptContent: string | null | undefined): ParsedGp
             
             // Substitui "•" por quebra de linha + "•" (exceto o primeiro)
             // Regex: encontra qualquer caractere seguido de espaço/ponto e depois "•"
-            listText = listText.replace(/([^\n])(\s*)(•\s*)/g, (match, before, spaces, bullet) => {
+            listText = listText.replace(/([^\n])(\s*)(•\s*)/g, (match, before, _spaces, bullet) => {
               // Se o caractere anterior já é uma quebra de linha, não adiciona outra
               if (before === "\n") return match;
               // Adiciona quebra antes do marcador
