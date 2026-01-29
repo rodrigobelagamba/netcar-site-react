@@ -102,6 +102,31 @@ export function Header() {
     }
   }, [isMobileMenuOpen]);
 
+  // Navega para showroom quando digita na busca desktop (com debounce)
+  useEffect(() => {
+    // Só navega se a busca desktop está aberta e há pelo menos uma letra
+    if (isSearchOpen && searchTerm.trim().length > 0 && !isMobileMenuOpen) {
+      const timeoutId = setTimeout(() => {
+        navigate({
+          to: "/seminovos",
+          search: {
+            modelo: searchTerm.trim(),
+            marca: undefined,
+            precoMin: undefined,
+            precoMax: undefined,
+            anoMin: undefined,
+            anoMax: undefined,
+            cambio: undefined,
+            cor: undefined,
+            categoria: undefined,
+          },
+        });
+      }, 200); // Debounce de 200ms para evitar navegações excessivas
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchTerm, isSearchOpen, isMobileMenuOpen, navigate]);
+
   // Limpa a busca apenas quando realmente sai da página de seminovos
   // Não limpa quando o menu mobile ou busca desktop estão abertos
   const prevPathnameRef = useRef(location.pathname);
@@ -219,6 +244,49 @@ export function Header() {
     setIsMobileMenuOpen(false);
     setIsMobileAutocompleteOpen(false);
     setSearchTerm("");
+  };
+
+  // Handler para quando o usuário pressionar teclas no campo de busca desktop
+  const handleDesktopSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchTerm.trim()) {
+      // Se está na página showroom, apenas atualiza os filtros
+      if (location.pathname === "/seminovos") {
+        navigate({
+          to: "/seminovos",
+          search: {
+            modelo: searchTerm.trim(),
+            marca: undefined,
+            precoMin: undefined,
+            precoMax: undefined,
+            anoMin: undefined,
+            anoMax: undefined,
+            cambio: undefined,
+            cor: undefined,
+            categoria: undefined,
+          },
+        });
+        setIsSearchOpen(false);
+        setSearchTerm("");
+      } else {
+        // Se não está na página showroom, navega para lá
+        navigate({
+          to: "/seminovos",
+          search: {
+            modelo: searchTerm.trim(),
+            marca: undefined,
+            precoMin: undefined,
+            precoMax: undefined,
+            anoMin: undefined,
+            anoMax: undefined,
+            cambio: undefined,
+            cor: undefined,
+            categoria: undefined,
+          },
+        });
+        setIsSearchOpen(false);
+        setSearchTerm("");
+      }
+    }
   };
 
   // Handler para quando o usuário pressionar teclas no campo de busca mobile
@@ -405,6 +473,7 @@ export function Header() {
                       type="text"
                       value={searchTerm}
                       onChange={(e) => handleSearch(e.target.value)}
+                      onKeyDown={handleDesktopSearchKeyDown}
                       placeholder="Buscar veículo..."
                       className="flex-1 bg-transparent border-0 outline-none text-sm text-fg placeholder:text-muted-foreground"
                       onBlur={() => {

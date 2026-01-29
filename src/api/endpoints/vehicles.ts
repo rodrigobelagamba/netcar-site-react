@@ -24,6 +24,7 @@ export interface Vehicle {
   valor_formatado?: string;
   categoria?: string;
   opcionais?: Array<{ tag: string; descricao: string }>;
+  diferenciais?: Array<{ tag: string; descricao: string }>; // Opcionais do tipo Piado (diferenciais)
   pdf?: string; // Nome do arquivo PDF
   pdf_url?: string; // URL relativa do PDF
   fotos?: string[]; // Deprecated - usar fullImages ao invés
@@ -92,6 +93,10 @@ export interface ApiVehicleResponse {
     destaque: number;
     promocao: number;
     categoria?: string;
+    diferenciais?: Array<{
+      tag: string;
+      descricao: string;
+    }>; // Opcionais do tipo Piado (diferenciais)
   }>;
   total_results: number;
   limit?: number;
@@ -287,6 +292,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         valor_formatado: apiVehicle.valor_formatado,
         categoria: apiVehicle.categoria,
         opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
+        diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
         pdf: apiVehicle.pdf,
         pdf_url: pdfUrl,
       };
@@ -350,6 +356,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
         valor_formatado: apiVehicle.valor_formatado,
         categoria: apiVehicle.categoria,
         opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
+        diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
         pdf: apiVehicle.pdf,
         pdf_url: apiVehicle.pdf_url ? normalizeImageUrl(apiVehicle.pdf_url) : undefined,
       };

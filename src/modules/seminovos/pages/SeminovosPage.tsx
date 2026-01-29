@@ -236,7 +236,7 @@ export function SeminovosPage() {
 
 
   return (
-    <main className="flex-1 pt-16 overflow-x-hidden max-w-full pb-20 md:pb-6">
+    <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-20 md:pb-6">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
         {/* Filtros em Card Minimalista - Desktop */}
         <div className="hidden md:block bg-bg rounded-2xl shadow-sm p-5 mb-8">

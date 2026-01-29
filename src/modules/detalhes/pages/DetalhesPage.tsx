@@ -43,15 +43,22 @@ const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
 
 interface Badge {
   text: string;
-  variant: "success" | "purple";
+  variant: "success" | "purple" | "blue";
   icon?: boolean;
 }
 
 function Badge({ text, variant, icon }: Badge) {
-  const bgColor = variant === "success" ? "bg-secondary" : "bg-purple";
+  const bgColor =
+    variant === "success"
+      ? "bg-secondary"
+      : variant === "blue"
+      ? "bg-blue"
+      : "bg-purple";
   const textColor =
     variant === "success"
       ? "text-secondary-foreground"
+      : variant === "blue"
+      ? "text-white"
       : "text-primary-foreground";
 
   return (
@@ -936,9 +943,16 @@ export function DetalhesPage() {
   }
 
   // Badges
+  const hasGarantiaFabrica = vehicle?.diferenciais?.some(
+    (diff) => diff.tag === "garantia_fabrica"
+  ) || false;
+
   const badges: Badge[] = [
     { text: "Vistoriado e aprovado", variant: "success", icon: true },
     { text: "Retire hoje", variant: "purple" },
+    ...(hasGarantiaFabrica
+      ? [{ text: "Garantia de Fábrica", variant: "blue" as const }]
+      : []),
   ];
 
   return (

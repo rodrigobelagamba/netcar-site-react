@@ -213,6 +213,11 @@ paths:
                         valor: 45000.00
                         valor_formatado: "R$ 45.000,00"
                         categoria: "SUV"
+                        diferenciais:
+                          - tag: garantia_fabrica
+                            descricao: Garantia de Fábrica
+                          - tag: baixa_km
+                            descricao: Baixa Quilometragem
         '405':
           description: Método não permitido
           content:
@@ -764,6 +769,16 @@ components:
           nullable: true
           description: Categoria do veículo
           example: SUV
+        diferenciais:
+          type: array
+          description: Lista de diferenciais do veículo (opcionais do tipo Piado)
+          items:
+            $ref: '#/components/schemas/Opcional'
+          example:
+            - tag: garantia_fabrica
+              descricao: Garantia de Fábrica
+            - tag: baixa_km
+              descricao: Baixa Quilometragem
 
     Opcional:
       type: object
