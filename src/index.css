@@ -81,6 +81,35 @@
       width: 100%;
       box-sizing: border-box;
     }
+    
+    /* Garante que modais fixos respeitem a largura máxima */
+    [class*="fixed"][class*="bottom-0"] {
+      max-width: 393px !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    /* Garante que overlays de modal respeitem a largura */
+    [class*="fixed"][class*="inset-0"] {
+      max-width: 393px !important;
+      width: 100% !important;
+    }
+    
+    /* Garante que elementos dentro de modais respeitem a largura */
+    [class*="fixed"][class*="bottom-0"] * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    
+    /* Garante que inputs e selects dentro de modais respeitem a largura */
+    [class*="fixed"][class*="bottom-0"] input,
+    [class*="fixed"][class*="bottom-0"] select,
+    [class*="fixed"][class*="bottom-0"] button {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
   }
 }
 
@@ -812,11 +841,13 @@
   transition: background-position 0.3s ease;
 }
 
-.button-text-shimmer:hover {
-  animation: none;
-  background: none;
-  -webkit-background-clip: unset;
-  background-clip: unset;
-  -webkit-text-fill-color: white;
-  color: white;
+.button-text-shimmer:hover,
+.group:hover .button-text-shimmer {
+  animation: none !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: white !important;
+  color: white !important;
+  transition: color 0.3s ease, -webkit-text-fill-color 0.3s ease;
 }

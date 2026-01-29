@@ -431,9 +431,9 @@ export function SeminovosPage() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header do Modal */}
-              <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between z-10">
-                <h2 className="text-lg font-bold text-fg">Filtros</h2>
-                <div className="flex items-center gap-3">
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between z-10 max-w-full">
+                <h2 className="text-lg font-bold text-fg truncate">Filtros</h2>
+                <div className="flex items-center gap-3 flex-shrink-0">
                   {activeFiltersCount > 0 && (
                     <button
                       onClick={handleClearFilters}
@@ -452,7 +452,7 @@ export function SeminovosPage() {
               </div>
 
               {/* Conteúdo dos Filtros */}
-              <div className="p-4 space-y-6">
+              <div className="p-4 space-y-6 max-w-full overflow-x-hidden">
                 {/* Ordenar */}
                 <div>
                   <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
@@ -546,7 +546,7 @@ export function SeminovosPage() {
                 </div>
 
                 {/* Botões de Ação */}
-                <div className="sticky bottom-0 bg-white pt-4 pb-4 border-t border-gray-200 -mx-4 px-4 space-y-3">
+                <div className="sticky bottom-0 bg-white pt-4 pb-4 border-t border-gray-200 -mx-4 px-4 space-y-3 max-w-full">
                   <button
                     onClick={handleFilter}
                     className="w-full px-6 py-4 rounded-lg bg-fg text-white text-sm font-semibold uppercase hover:bg-fg/90 transition-all duration-200 shadow-md"

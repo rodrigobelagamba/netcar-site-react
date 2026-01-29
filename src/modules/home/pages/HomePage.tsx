@@ -245,7 +245,7 @@ export function HomePage() {
           className="group relative overflow-hidden bg-white hover:bg-white text-[#00283C] font-bold py-6 px-10 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3 active:scale-95"
         >
           <div className="absolute inset-0 bg-[#00283C] translate-y-[102%] group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-          <span className="relative z-10 group-hover:text-white transition-colors duration-300 button-text-shimmer">VER ESTOQUE COMPLETO</span>
+          <span className="relative z-10 transition-colors duration-300 button-text-shimmer">VER ESTOQUE COMPLETO</span>
           <motion.div
             animate={{
               x: [0, 6, 0],
