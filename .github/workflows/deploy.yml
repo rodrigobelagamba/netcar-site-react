@@ -31,16 +31,17 @@ jobs:
           VITE_API_TIMEOUT: ${{ secrets.VITE_API_TIMEOUT || '30000' }}
           VITE_BASE_PATH: ${{ secrets.VITE_BASE_PATH || '/' }}
 
-      - name: Setup SSH and RSYNC
+      - name: Setup FTP tools
         run: |
-          sudo apt-get update && sudo apt-get install -y openssh-client rsync sshpass
+          sudo apt-get update && sudo apt-get install -y lftp
 
-      - name: Deploy to server via SSH/RSYNC
+      - name: Deploy via FTP using LFTP
         run: |
-          sshpass -p '${{ secrets.SSH_PASSWORD }}' rsync -avz --delete \
-            --exclude='.git*' \
-            --exclude='node_modules' \
-            --exclude='.DS_Store' \
-            --exclude='Thumbs.db' \
-            -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
-            dist/ netcarmultimarcas@netcarmultimarcas.com.br:/www/
+          lftp -c "
+          set ftp:ssl-allow no
+          set ftp:passive-mode yes
+          open -u netcarmultimarcas,${{ secrets.FTP_PASSWORD }} ftp.netcarmultimarcas.com.br
+          lcd dist
+          mirror -R --verbose --parallel=5
+          bye
+          "
