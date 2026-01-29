@@ -4,7 +4,7 @@ import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown, X, Filter } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
@@ -72,6 +72,7 @@ export function SeminovosPage() {
   const [precoMax, setPrecoMax] = useState(search.precoMax || "");
   const [sortBy, setSortBy] = useState<SortOption>("az");
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
   // Sincroniza estados locais com parâmetros da URL quando mudam
   useEffect(() => {
@@ -238,9 +239,35 @@ export function SeminovosPage() {
 
   return (
     <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-20 md:pb-6">
-      {/* SearchBar - Apenas Mobile */}
-      <div className="md:hidden mb-6">
-        <SearchBar />
+      {/* SearchBar - Fixada logo abaixo do Header, apenas Mobile, controlada por estado */}
+      <AnimatePresence>
+        {isSearchBarVisible && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden fixed top-16 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-lg"
+          >
+            <SearchBar onAction={() => setIsSearchBarVisible(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Espaçamento para compensar Header (64px) + SearchBar fixa (~180px) no mobile, apenas quando visível */}
+      {isSearchBarVisible && <div className="md:hidden h-[244px]"></div>}
+      
+      {/* Botão Filtrar Fixo - Apenas Mobile */}
+      <div className="md:hidden fixed bottom-6 left-6 z-[51]">
+        <button
+          onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
+          className="px-6 py-4 rounded-full bg-fg text-white shadow-lg hover:bg-fg/90 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 font-semibold"
+          style={{ backgroundColor: '#00283C' }}
+          aria-label="Filtrar"
+        >
+          <Filter className="w-5 h-5" />
+          <span>Filtrar</span>
+        </button>
       </div>
       
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">

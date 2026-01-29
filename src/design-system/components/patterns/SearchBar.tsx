@@ -12,7 +12,11 @@ interface SearchSuggestion {
   detail: string;
 }
 
-export function SearchBar() {
+interface SearchBarProps {
+  onAction?: () => void; // Callback chamado quando buscar ou clicar em tag
+}
+
+export function SearchBar({ onAction }: SearchBarProps = {}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
@@ -388,6 +392,9 @@ export function SearchBar() {
       to: "/seminovos",
       search: searchParams,
     });
+    
+    // Fecha a SearchBar se houver callback
+    onAction?.();
   };
 
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
@@ -414,6 +421,7 @@ export function SearchBar() {
           categoria: undefined,
         },
       });
+      onAction?.();
     } else if (suggestion.detail === "Câmbio") {
       // Se for uma sugestão de câmbio, navega diretamente
       const cambioValue = suggestion.text.toLowerCase().includes('automático') || 
@@ -434,6 +442,7 @@ export function SearchBar() {
           categoria: undefined,
         },
       });
+      onAction?.();
     } else {
       // Para outras sugestões, apenas atualiza o campo de busca
       const cleanText = suggestion.text.replace(/.*: /, '');
@@ -458,6 +467,7 @@ export function SearchBar() {
           categoria: undefined,
         },
       });
+      onAction?.();
     } else if (filterValue.toLowerCase() === "automático" || filterValue.toLowerCase() === "automatico") {
       // Define filtro de câmbio automático
       navigate({
@@ -474,6 +484,7 @@ export function SearchBar() {
           categoria: undefined,
         },
       });
+      onAction?.();
     } else if (filterValue.toLowerCase() === "suv") {
       // Define filtro de categoria SUV
       navigate({
@@ -490,6 +501,7 @@ export function SearchBar() {
           categoria: "SUV",
         },
       });
+      onAction?.();
     } else {
       // Verifica se é uma cor conhecida
       const filterLower = filterValue.toLowerCase();
@@ -514,6 +526,7 @@ export function SearchBar() {
               categoria: undefined,
             },
           });
+          onAction?.();
           return;
         }
       }
@@ -531,9 +544,9 @@ export function SearchBar() {
   ];
 
   return (
-    <section className="relative z-30 pt-12 container mx-auto px-4">
+    <section className="relative z-30 pt-2 md:pt-12 container mx-auto px-4 pb-2 md:pb-0 py-2">
       {/* Quick Filters - Apenas Mobile, acima da barra de busca */}
-      <div className="md:hidden flex flex-wrap justify-center gap-3 mb-4">
+      <div className="md:hidden flex flex-wrap justify-center gap-3 mb-3">
         {quickFilters.map((filter) => (
           <button 
             key={filter} 
