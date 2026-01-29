@@ -38,7 +38,7 @@ function EmptyState() {
 export function ProductList({ vehicles, isLoading }: ProductListProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" style={{ overflow: 'visible' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8" style={{ overflow: 'visible' }}>
         {Array.from({ length: 10 }).map((_, i) => (
           <SkeletonCard key={i} />
         ))}
@@ -51,7 +51,7 @@ export function ProductList({ vehicles, isLoading }: ProductListProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" style={{ overflow: 'visible' }}>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8" style={{ overflow: 'visible' }}>
       {vehicles.map((vehicle, index) => (
         <VehicleCard key={vehicle.id} {...vehicle} delay={index} />
       ))}

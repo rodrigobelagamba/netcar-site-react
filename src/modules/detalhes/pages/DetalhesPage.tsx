@@ -11,7 +11,7 @@ import {
   CheckSquare,
   LucideIcon,
 } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
@@ -645,7 +645,34 @@ function RelatedVehiclesSection({
   currentCategory?: string;
   currentPrice?: number;
 }) {
-  const { data: vehicles, isLoading } = useVehiclesQuery();
+  // Busca mais veículos para telas grandes (4xl mostra 5 cards)
+  const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 100 });
+  
+  // Detecta número de colunas baseado no tamanho da tela
+  const [columnsPerRow, setColumnsPerRow] = useState(4);
+  
+  useEffect(() => {
+    const updateColumns = () => {
+      const width = window.innerWidth;
+      if (width >= 3360) {
+        setColumnsPerRow(5); // 4xl
+      } else if (width >= 1920) {
+        setColumnsPerRow(5); // 3xl e 2xl
+      } else if (width >= 1280) {
+        setColumnsPerRow(4); // xl
+      } else if (width >= 1024) {
+        setColumnsPerRow(3); // lg
+      } else if (width >= 768) {
+        setColumnsPerRow(2); // md
+      } else {
+        setColumnsPerRow(1); // mobile
+      }
+    };
+    
+    updateColumns();
+    window.addEventListener('resize', updateColumns);
+    return () => window.removeEventListener('resize', updateColumns);
+  }, []);
 
   // Filtrar veículos relacionados
   const relatedVehicles = useMemo(() => {
@@ -703,14 +730,17 @@ function RelatedVehiclesSection({
     // Combina: primeiro os da mesma categoria, depois completa com os mais próximos de outras categorias
     const result = [...sortedSameCategory];
     
-    // Se não tem 4 veículos, completa com os mais próximos de outras categorias
-    if (result.length < 4) {
-      const needed = 4 - result.length;
+    // Completa com veículos de outras categorias se necessário (apenas 1 linha)
+    if (result.length < columnsPerRow) {
+      const needed = columnsPerRow - result.length;
       result.push(...sortedOther.slice(0, needed));
     }
 
-    return result.slice(0, 4);
-  }, [vehicles, currentVehicleId, currentCategory, currentPrice]);
+    // Limita para completar linhas inteiras (múltiplos do número de colunas)
+    const rowsToShow = 1; // Mostra 1 linha completa
+    const maxVehicles = columnsPerRow * rowsToShow;
+    return result.slice(0, maxVehicles);
+  }, [vehicles, currentVehicleId, currentCategory, currentPrice, columnsPerRow]);
 
   if (isLoading || relatedVehicles.length === 0) {
     return null;
@@ -741,7 +771,7 @@ function RelatedVehiclesSection({
         </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10 overflow-visible">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10 overflow-visible">
           {relatedVehicles.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}
@@ -931,11 +961,6 @@ export function DetalhesPage() {
     // Ano
     if (vehicle.year) {
       titleParts.push(String(vehicle.year));
-    }
-    
-    // Cor em minúsculas
-    if (vehicle.cor) {
-      titleParts.push(vehicle.cor.toLowerCase());
     }
     
     // Placa mascarada em minúsculas

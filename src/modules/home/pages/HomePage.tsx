@@ -8,7 +8,7 @@ import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/design-system/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -50,8 +50,35 @@ function HomeHeroSkeleton() {
 }
 
 export function HomePage() {
-  const { data: vehicles, isLoading } = useVehiclesQuery();
+  // Busca mais veículos para telas grandes (4xl mostra 5 cards)
+  const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 100 });
   const navigate = useNavigate();
+  
+  // Detecta número de colunas baseado no tamanho da tela
+  const [columnsPerRow, setColumnsPerRow] = useState(4);
+  
+  useEffect(() => {
+    const updateColumns = () => {
+      const width = window.innerWidth;
+      if (width >= 3360) {
+        setColumnsPerRow(5); // 4xl
+      } else if (width >= 1920) {
+        setColumnsPerRow(5); // 3xl e 2xl
+      } else if (width >= 1280) {
+        setColumnsPerRow(4); // xl
+      } else if (width >= 1024) {
+        setColumnsPerRow(4); // lg
+      } else if (width >= 768) {
+        setColumnsPerRow(2); // md
+      } else {
+        setColumnsPerRow(1); // mobile
+      }
+    };
+    
+    updateColumns();
+    window.addEventListener('resize', updateColumns);
+    return () => window.removeEventListener('resize', updateColumns);
+  }, []);
 
   useDefaultMetaTags(
     "Seminovos em Esteio",
@@ -128,7 +155,7 @@ export function HomePage() {
   const vehiclesWithPhotos = useMemo(() => {
     if (!vehicles) return [];
 
-    return vehicles
+    const filtered = vehicles
       .filter(vehicle => {
         // Filtra apenas carros com preço maior que zero (carro vendido tem valor = 0)
         const price = typeof vehicle.price === 'number' ? vehicle.price : Number(vehicle.price);
@@ -163,9 +190,13 @@ export function HomePage() {
         const idA = parseInt(a.id) || 0;
         const idB = parseInt(b.id) || 0;
         return idB - idA;
-      })
-      .slice(0, 4);
-  }, [vehicles]);
+      });
+    
+    // Limita para completar linhas inteiras (múltiplos do número de colunas)
+    const rowsToShow = 1; // Mostra 1 linha completa
+    const maxVehicles = columnsPerRow * rowsToShow;
+    return filtered.slice(0, maxVehicles);
+  }, [vehicles, columnsPerRow]);
 
   // Pré-carrega a primeira imagem do banner para melhorar a experiência
   useEffect(() => {
