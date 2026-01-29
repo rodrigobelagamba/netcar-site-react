@@ -291,20 +291,38 @@ export function parseGptContent(gptContent: string | null | undefined): ParsedGp
       }
       // Todos os outros colchetes são títulos de accordion
       else {
-        // Verifica se tem introdução (texto antes de lista)
-        const intro = extractIntro(sectionContent);
+        // Verifica se há marcadores de lista (•, -, *) no conteúdo
+        const hasListMarkers = sectionContent.includes("•") || 
+                               sectionContent.includes("- ") || 
+                               /^[•\-\*]\s/.test(sectionContent.trim());
         
-        // Verifica se há marcadores de lista no INÍCIO de linhas (•, -, *)
-        // Verifica se começa com marcador OU se tem múltiplas linhas começando com marcador
-        const restLines = intro.rest.split(/\n/).filter((line) => line.trim().length > 0);
-        const hasListMarkers = restLines.some((line) => /^[•\-\*]\s/.test(line.trim())) ||
-                               /^[•\-\*]\s/.test(intro.rest.trim());
-        
-        // Se tem introdução e lista identificada por marcadores no início
-        if (intro.intro && hasListMarkers) {
-          // Separa os itens da lista (pode estar tudo em uma linha ou em múltiplas linhas)
-          let listText = intro.rest;
+        // Se tem marcadores de lista, processa como lista
+        if (hasListMarkers) {
+          // Tenta extrair introdução (texto antes do primeiro marcador)
+          let introText = "";
+          let listText = sectionContent;
           
+          // Procura pelo primeiro marcador "•" ou "-" seguido de espaço
+          const firstBulletIndex = sectionContent.search(/[•\-]\s/);
+          if (firstBulletIndex > 0) {
+            // Há texto antes do primeiro marcador - pode ser introdução
+            const beforeFirstBullet = sectionContent.substring(0, firstBulletIndex).trim();
+            // Se o texto antes tem mais de 20 caracteres, considera como introdução
+            if (beforeFirstBullet.length > 20) {
+              introText = beforeFirstBullet;
+              listText = sectionContent.substring(firstBulletIndex).trim();
+            }
+          }
+          
+          // Se não encontrou introdução pelo método acima, tenta pelo extractIntro
+          if (!introText) {
+            const intro = extractIntro(sectionContent);
+            if (intro.intro) {
+              introText = intro.intro;
+              listText = intro.rest;
+            }
+          }
+          // Separa os itens da lista (pode estar tudo em uma linha ou em múltiplas linhas)
           // Se não tem quebras de linha mas tem marcadores no início, separa por marcadores
           // IMPORTANTE: Não separa por asteriscos que estão grudados em palavras (*texto*)
           if (!listText.includes("\n")) {
@@ -320,8 +338,18 @@ export function parseGptContent(gptContent: string | null | undefined): ParsedGp
               return marker;
             });
             
-            // Agora separa por marcadores de lista reais (•, -) ou asterisco solto seguido de espaço
-            listText = listText.replace(/([•\-])\s+/g, "\n$1 ");
+            // Substitui "•" por quebra de linha + "•" (exceto o primeiro)
+            // Regex: encontra qualquer caractere seguido de espaço/ponto e depois "•"
+            listText = listText.replace(/([^\n])(\s*)(•\s*)/g, (match, before, spaces, bullet) => {
+              // Se o caractere anterior já é uma quebra de linha, não adiciona outra
+              if (before === "\n") return match;
+              // Adiciona quebra antes do marcador
+              return `${before}\n${bullet}`;
+            });
+            
+            // Também trata marcadores "-" seguidos de espaço
+            listText = listText.replace(/([^\n])(\s+)(-\s+)/g, "$1\n$3");
+            
             // Asterisco solto (não protegido) seguido de espaço
             listText = listText.replace(/\*\s+/g, "\n* ");
             
@@ -343,7 +371,7 @@ export function parseGptContent(gptContent: string | null | undefined): ParsedGp
           result.accordions.push({
             title: sectionTitle,
             content: {
-              introducao: processBoldText(intro.intro),
+              ...(introText ? { introducao: processBoldText(introText) } : {}),
               itens: listItems,
             },
           });
