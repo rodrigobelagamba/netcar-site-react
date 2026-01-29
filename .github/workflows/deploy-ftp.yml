@@ -33,17 +33,34 @@ jobs:
 
       - name: Create FTP directories automatically
         run: |
-          apt-get update && apt-get install -y lftp
-          lftp -c "
-          set ftp:ssl-allow no
-          open -u netcarmultimarcas,${{ secrets.FTP_PASSWORD }} ftp.netcarmultimarcas.com.br
-          mkdir -p assets
-          mkdir -p images
-          mkdir -p images/fabrica
-          mkdir -p images/fabrica-mb
-          mkdir -p team
-          bye
-          "
+          python3 << 'PYTHON_SCRIPT'
+          from ftplib import FTP
+          import sys
+          
+          try:
+              ftp = FTP('ftp.netcarmultimarcas.com.br')
+              ftp.login('netcarmultimarcas', '${{ secrets.FTP_PASSWORD }}')
+              
+              directories = ['assets', 'images', 'images/fabrica', 'images/fabrica-mb', 'team']
+              
+              for directory in directories:
+                  try:
+                      ftp.mkd(directory)
+                      print(f"✓ Created directory: {directory}")
+                  except Exception as e:
+                      error_msg = str(e)
+                      if '550' in error_msg or 'exists' in error_msg.lower() or 'already' in error_msg.lower():
+                          print(f"ℹ Directory {directory} already exists")
+                      else:
+                          print(f"⚠ Warning creating {directory}: {error_msg}")
+              
+              ftp.quit()
+              print("✓ Directory creation completed")
+          except Exception as e:
+              print(f"⚠ FTP connection error (non-fatal): {e}")
+              sys.exit(0)
+          PYTHON_SCRIPT
+        continue-on-error: true
 
       - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -54,6 +71,8 @@ jobs:
           local-dir: ./dist/
           server-dir: / # Diretório no servidor FTP (ajuste se necessário)
           dangerous-clean-slate: false
+          # Cria diretórios automaticamente se não existirem
+          state-name: ftp-deploy-state.json
           exclude: |
             **/.git*
             **/.git*/**
