@@ -31,6 +31,20 @@ jobs:
           VITE_API_TIMEOUT: ${{ secrets.VITE_API_TIMEOUT || '30000' }}
           VITE_BASE_PATH: ${{ secrets.VITE_BASE_PATH || '/' }}
 
+      - name: Create FTP directories automatically
+        run: |
+          apt-get update && apt-get install -y lftp
+          lftp -c "
+          set ftp:ssl-allow no
+          open -u netcarmultimarcas,${{ secrets.FTP_PASSWORD }} ftp.netcarmultimarcas.com.br
+          mkdir -p assets
+          mkdir -p images
+          mkdir -p images/fabrica
+          mkdir -p images/fabrica-mb
+          mkdir -p team
+          bye
+          "
+
       - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -39,9 +53,11 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
           server-dir: / # Diretório no servidor FTP (ajuste se necessário)
+          dangerous-clean-slate: false
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
             **/.DS_Store
             **/Thumbs.db
+          log-level: verbose
