@@ -609,14 +609,14 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
         delay: index * 0.04,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className="relative overflow-hidden cursor-pointer bg-gray-200 group"
+      className="relative overflow-hidden cursor-pointer bg-gray-200 group aspect-[1920/1441]"
       onClick={onClick}
     >
-      <div className="relative w-full h-[180px] sm:h-[200px] lg:h-[202px]">
+      <div className="relative w-full h-full">
         <img
           src={image}
           alt={alt}
-          className="absolute inset-0 w-full h-full max-w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = "none";
           }}
@@ -654,11 +654,11 @@ function RelatedVehiclesSection({
         const price = typeof v.price === 'number' ? v.price : Number(v.price);
         if (!price || isNaN(price) || price <= 0) return false;
         
-        // Filtra apenas veículos com foto (images não vazias)
-        const hasImages = (v.images && v.images.length > 0) || 
-                         (v.fotos && v.fotos.length > 0) || 
-                         (v.fullImages && v.fullImages.length > 0);
-        if (!hasImages) return false;
+        // Filtra apenas veículos com foto (images válidas e não vazias)
+        const imagesArray = v.images || v.fotos || v.fullImages || [];
+        const hasValidImages = imagesArray.length > 0 && 
+                               imagesArray.some(img => img && typeof img === 'string' && img.trim().length > 0);
+        if (!hasValidImages) return false;
         
         return true;
       })
@@ -711,7 +711,7 @@ function RelatedVehiclesSection({
 
   return (
     <section className="w-full py-8 sm:py-12 lg:py-16">
-      <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0">
+      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -734,7 +734,7 @@ function RelatedVehiclesSection({
         </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 gap-y-32 gap-x-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pt-32 overflow-visible">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10 overflow-visible">
           {relatedVehicles.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}
@@ -958,7 +958,8 @@ export function DetalhesPage() {
         />
       )}
       {/* Hero Section */}
-      <section className="w-full pt-16 lg:pt-0 pb-0 relative overflow-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[95vh]">
+      <section className="w-full pt-16 lg:pt-0 pb-0 relative overflow-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] 
+      xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[95vh] 4xl:min-h-[75vh]">
         {/* Mobile Image - Aparece primeiro no mobile, acima das informações */}
         <div className="lg:hidden w-full mb-6">
           {mainImage && (
@@ -992,11 +993,12 @@ export function DetalhesPage() {
             lg:w-[25%] lg:left-[10%] lg:top-[20%]
             xl:w-[25%] xl:left-[5rem] xl:top-[1rem]
             2xl:w-[30%] 2xl:left-[5rem] 2xl:top-[2rem]
-            3xl:w-[35%] 3xl:left-[5rem] 3xl:top-[3rem]
-            4xl:w-[40%] 4xl:left-[-10rem] 4xl:top-[6rem]
+            3xl:w-[30%] 3xl:left-[5rem] 3xl:top-[3rem]
+            4xl:w-[600px] 4xl:left-[-15rem] 4xl:top-[10rem]
             5xl:w-[50%] 5xl:left-[-50rem] 5xl:top-[20rem] 
             6xl:w-[65%] 6xl:left-[-70rem] 6xl:top-[25rem] 
-            lg:py-4 sm:py-6 lg:py-6 flex flex-col relative lg:relative z-10"
+            lg:py-4 sm:py-6 lg:py-6 flex flex-col relative lg:relative z-10
+            border border-none"
           >
             {/* Brand */}
             <motion.p
@@ -1070,8 +1072,8 @@ export function DetalhesPage() {
             </div>
 
             {/* Price & CTA - Melhorado */}
-            <div className="flex flex-col items-start gap-3 w-full">
-              <div className="w-full">
+            <div className="flex flex-col items-center gap-3 w-full">
+              <div className="w-full flex justify-center items-center">
                 <PriceWithShimmer price={price} />
               </div>
               <div className="w-full">
@@ -1115,21 +1117,21 @@ export function DetalhesPage() {
         <section className="w-full py-8 sm:py-12 lg:py-16">
           <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
             <h2 className="text-2xl font-bold text-fg mb-6">Galeria de Fotos</h2>
-            {/* Grid Container */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-[6px]">
-              {avifImages.map((image, index) => (
-                <GalleryItem
-                  key={index}
-                  image={image}
-                  index={index}
-                  alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Foto ${index + 1} - Netcar Multimarcas`}
-                  onClick={() => {
-                    setLightboxIndex(index);
-                    setLightboxOpen(true);
-                  }}
-                />
-                  ))}
-                </div>
+          </div>
+          {/* Grid Container - Ocupa toda a largura sem padding */}
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8 gap-1 sm:gap-2">
+            {avifImages.map((image, index) => (
+              <GalleryItem
+                key={index}
+                image={image}
+                index={index}
+                alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Foto ${index + 1} - Netcar Multimarcas`}
+                onClick={() => {
+                  setLightboxIndex(index);
+                  setLightboxOpen(true);
+                }}
+              />
+            ))}
           </div>
         </section>
       )}
@@ -1304,7 +1306,7 @@ function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
 
   return (
     <section className="w-full py-8 sm:py-12 lg:py-16">
-      <div className="max-w-[1290px] mx-auto px-4 sm:px-6 lg:px-0">
+      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_410px] gap-8 lg:gap-10">
           {/* Main Content */}
           <div className="order-1 lg:order-1">
