@@ -50,8 +50,8 @@ function HomeHeroSkeleton() {
 }
 
 export function HomePage() {
-  // Busca mais veículos para telas grandes (4xl mostra 5 cards)
-  const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 100 });
+  // Busca 4 veículos para o carrossel mobile
+  const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 4 });
   const navigate = useNavigate();
   
   // Detecta número de colunas baseado no tamanho da tela
@@ -192,7 +192,13 @@ export function HomePage() {
         return idB - idA;
       });
     
-    // Limita para completar linhas inteiras (múltiplos do número de colunas)
+    // No mobile usa carrossel, então retorna todos os veículos filtrados (até 4 da API)
+    // No desktop limita por colunas
+    if (columnsPerRow === 1) {
+      // Mobile: retorna todos os veículos (até 4)
+      return filtered;
+    }
+    // Desktop: limita para completar linhas inteiras
     const rowsToShow = 1; // Mostra 1 linha completa
     const maxVehicles = columnsPerRow * rowsToShow;
     return filtered.slice(0, maxVehicles);

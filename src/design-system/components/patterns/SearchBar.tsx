@@ -532,6 +532,20 @@ export function SearchBar() {
 
   return (
     <section className="relative z-30 pt-12 container mx-auto px-4">
+      {/* Quick Filters - Apenas Mobile, acima da barra de busca */}
+      <div className="md:hidden flex flex-wrap justify-center gap-3 mb-4">
+        {quickFilters.map((filter) => (
+          <button 
+            key={filter} 
+            onClick={() => handleQuickFilterClick(filter)}
+            className="px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-gray-100 text-[11px] font-bold uppercase tracking-widest text-primary/60 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 active:scale-95"
+            style={{ color: 'rgba(0, 40, 60, 0.6)' }}
+          >
+            {filter}
+          </button>
+        ))}
+      </div>
+      
       <div className="bg-white/80 backdrop-blur-2xl rounded-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] p-3 md:p-4 border border-white/50 max-w-5xl mx-auto flex flex-col md:flex-row gap-2 items-center relative">
         <div className="relative flex-1 w-full group">
           <div className="absolute left-6 top-1/2 -translate-y-1/2 transition-colors group-focus-within:text-secondary" style={{ color: 'rgba(0, 40, 60, 0.3)' }}>
@@ -636,8 +650,8 @@ export function SearchBar() {
         </Button>
       </div>
       
-      {/* Quick Filters */}
-      <div className="flex flex-wrap justify-center gap-3 mt-6">
+      {/* Quick Filters - Desktop, abaixo da barra de busca */}
+      <div className="hidden md:flex flex-wrap justify-center gap-3 mt-6">
         {quickFilters.map((filter) => (
           <button 
             key={filter} 

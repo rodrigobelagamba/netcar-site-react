@@ -1,5 +1,7 @@
 import { VehicleCard, type VehicleCardProps } from "./VehicleCard";
 import { Button } from "../ui/button";
+import { useEmbla } from "@/hooks/useEmbla";
+import { useEffect, useRef } from "react";
 
 interface ProductListProps {
   vehicles: VehicleCardProps[];
@@ -36,13 +38,83 @@ function EmptyState() {
 }
 
 export function ProductList({ vehicles, isLoading }: ProductListProps) {
+  const { emblaRef, emblaApi } = useEmbla({
+    slidesToScroll: 1,
+    align: "start",
+    loop: true,
+  });
+
+  const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const hasUserInteractedRef = useRef(false);
+
+  // Para o autoplay definitivamente após primeira interação
+  const handleUserInteraction = () => {
+    if (!hasUserInteractedRef.current) {
+      hasUserInteractedRef.current = true;
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+        autoplayIntervalRef.current = null;
+      }
+    }
+  };
+
+  // Autoplay - passa automaticamente a cada 4 segundos (apenas se não houver interação)
+  useEffect(() => {
+    if (!emblaApi || vehicles.length <= 1 || hasUserInteractedRef.current) return;
+
+    const startAutoplay = () => {
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+      }
+      autoplayIntervalRef.current = setInterval(() => {
+        if (emblaApi && vehicles.length > 1 && !hasUserInteractedRef.current) {
+          emblaApi.scrollNext();
+        }
+      }, 4000);
+    };
+
+    const stopAutoplay = () => {
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+        autoplayIntervalRef.current = null;
+      }
+    };
+
+    // Detecta interações do usuário através do Embla (arrastar, toque)
+    const onPointerDown = () => handleUserInteraction();
+
+    emblaApi.on("pointerDown", onPointerDown);
+
+    startAutoplay();
+
+    return () => {
+      stopAutoplay();
+      emblaApi.off("pointerDown", onPointerDown);
+    };
+  }, [emblaApi, vehicles.length]);
+
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8" style={{ overflow: 'visible' }}>
-        {Array.from({ length: 10 }).map((_, i) => (
-          <SkeletonCard key={i} />
-        ))}
-      </div>
+      <>
+        {/* Mobile Skeleton - Carrossel */}
+        <div className="md:hidden">
+          <div className="embla overflow-hidden" ref={emblaRef}>
+            <div className="embla__container flex">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="embla__slide flex-[0_0_100%] min-w-0 px-2">
+                  <SkeletonCard />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        {/* Desktop Skeleton - Grid */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8" style={{ overflow: 'visible' }}>
+          {Array.from({ length: 10 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
+      </>
     );
   }
 
@@ -51,10 +123,34 @@ export function ProductList({ vehicles, isLoading }: ProductListProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8" style={{ overflow: 'visible' }}>
-      {vehicles.map((vehicle, index) => (
-        <VehicleCard key={vehicle.id} {...vehicle} delay={index} />
-      ))}
-    </div>
+    <>
+      {/* Mobile - Carrossel */}
+      <div 
+        className="md:hidden relative"
+        onMouseEnter={handleUserInteraction}
+        onTouchStart={handleUserInteraction}
+        onPointerDown={handleUserInteraction}
+      >
+        <div className="embla overflow-hidden" ref={emblaRef}>
+          <div className="embla__container flex">
+            {vehicles.map((vehicle, index) => (
+              <div
+                key={vehicle.id}
+                className="embla__slide flex-[0_0_100%] min-w-0 px-2"
+              >
+                <VehicleCard {...vehicle} delay={index} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop - Grid */}
+      <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8" style={{ overflow: 'visible' }}>
+        {vehicles.map((vehicle, index) => (
+          <VehicleCard key={vehicle.id} {...vehicle} delay={index} />
+        ))}
+      </div>
+    </>
   );
 }

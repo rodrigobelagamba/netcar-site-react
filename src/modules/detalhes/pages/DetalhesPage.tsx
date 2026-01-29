@@ -11,7 +11,7 @@ import {
   CheckSquare,
   LucideIcon,
 } from "lucide-react";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
@@ -22,6 +22,7 @@ import icon1 from "@/assets/images/icon-1.svg";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
 import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
+import { useEmbla } from "@/hooks/useEmbla";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { maskPlate } from "@/lib/slug";
@@ -636,6 +637,99 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
 }
 
 
+// Componente de carrossel para veículos relacionados (mobile)
+function RelatedVehiclesCarousel({ vehicles }: { vehicles: any[] }) {
+  const { emblaRef, emblaApi } = useEmbla({
+    slidesToScroll: 1,
+    align: "start",
+    loop: true,
+  });
+
+  const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const hasUserInteractedRef = useRef(false);
+
+  // Para o autoplay definitivamente após primeira interação
+  const handleUserInteraction = () => {
+    if (!hasUserInteractedRef.current) {
+      hasUserInteractedRef.current = true;
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+        autoplayIntervalRef.current = null;
+      }
+    }
+  };
+
+  // Autoplay - passa automaticamente a cada 4 segundos (apenas se não houver interação)
+  useEffect(() => {
+    if (!emblaApi || vehicles.length <= 1 || hasUserInteractedRef.current) return;
+
+    const startAutoplay = () => {
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+      }
+      autoplayIntervalRef.current = setInterval(() => {
+        if (emblaApi && vehicles.length > 1 && !hasUserInteractedRef.current) {
+          emblaApi.scrollNext();
+        }
+      }, 4000);
+    };
+
+    const stopAutoplay = () => {
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+        autoplayIntervalRef.current = null;
+      }
+    };
+
+    // Detecta interações do usuário através do Embla (arrastar, toque)
+    const onPointerDown = () => handleUserInteraction();
+
+    emblaApi.on("pointerDown", onPointerDown);
+
+    startAutoplay();
+
+    return () => {
+      stopAutoplay();
+      emblaApi.off("pointerDown", onPointerDown);
+    };
+  }, [emblaApi, vehicles.length]);
+
+  if (vehicles.length === 0) return null;
+
+  return (
+    <div 
+      className="relative"
+      onMouseEnter={handleUserInteraction}
+      onTouchStart={handleUserInteraction}
+      onPointerDown={handleUserInteraction}
+    >
+      <div className="embla overflow-hidden" ref={emblaRef}>
+        <div className="embla__container flex">
+          {vehicles.map((vehicle) => (
+            <div
+              key={vehicle.id}
+              className="embla__slide flex-[0_0_100%] min-w-0 px-2"
+            >
+              <VehicleCard
+                id={String(vehicle.id)}
+                name={vehicle.modelo || vehicle.name}
+                price={vehicle.price || 0}
+                valor_formatado={vehicle.valor_formatado}
+                year={vehicle.year || new Date().getFullYear()}
+                km={vehicle.km || 0}
+                images={vehicle.images || vehicle.fotos || vehicle.fullImages || []}
+                marca={vehicle.marca}
+                modelo={vehicle.modelo}
+                placa={vehicle.placa}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function RelatedVehiclesSection({
   currentVehicleId,
   currentCategory,
@@ -645,8 +739,8 @@ function RelatedVehiclesSection({
   currentCategory?: string;
   currentPrice?: number;
 }) {
-  // Busca mais veículos para telas grandes (4xl mostra 5 cards)
-  const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 100 });
+  // Busca 4 veículos para o carrossel mobile
+  const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 4 });
   
   // Detecta número de colunas baseado no tamanho da tela
   const [columnsPerRow, setColumnsPerRow] = useState(4);
@@ -736,7 +830,13 @@ function RelatedVehiclesSection({
       result.push(...sortedOther.slice(0, needed));
     }
 
-    // Limita para completar linhas inteiras (múltiplos do número de colunas)
+    // No mobile usa carrossel, então retorna todos os veículos filtrados (até 4 da API)
+    // No desktop limita por colunas
+    if (columnsPerRow === 1) {
+      // Mobile: retorna todos os veículos (até 4)
+      return result;
+    }
+    // Desktop: limita para completar linhas inteiras
     const rowsToShow = 1; // Mostra 1 linha completa
     const maxVehicles = columnsPerRow * rowsToShow;
     return result.slice(0, maxVehicles);
@@ -770,8 +870,13 @@ function RelatedVehiclesSection({
           <div className="h-[1px] bg-primary w-full"></div>
         </motion.div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10 overflow-visible">
+        {/* Mobile - Carrossel */}
+        <div className="md:hidden relative">
+          <RelatedVehiclesCarousel vehicles={relatedVehicles} />
+        </div>
+
+        {/* Desktop - Grid */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10 overflow-visible">
           {relatedVehicles.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}

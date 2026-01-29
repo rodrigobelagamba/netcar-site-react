@@ -4,12 +4,13 @@ import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
-import { ChevronDown, X, Filter } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
+import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
 
@@ -237,6 +238,11 @@ export function SeminovosPage() {
 
   return (
     <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-20 md:pb-6">
+      {/* SearchBar - Apenas Mobile */}
+      <div className="md:hidden mb-6">
+        <SearchBar />
+      </div>
+      
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
         {/* Filtros em Card Minimalista - Desktop */}
         <div className="hidden md:block bg-bg rounded-2xl shadow-sm p-5 mb-8">
@@ -391,23 +397,8 @@ export function SeminovosPage() {
         </div>
       </div>
 
-      {/* Botão Fixo de Filtro Mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg">
-        <button
-          onClick={() => setIsMobileFilterOpen(true)}
-          className="w-full px-4 py-4 bg-fg text-white font-semibold uppercase flex items-center justify-center gap-2 hover:bg-fg/90 transition-colors"
-        >
-          <Filter className="w-5 h-5" />
-          Filtrar
-          {activeFiltersCount > 0 && (
-            <span className="bg-white text-fg rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
-              {activeFiltersCount}
-            </span>
-          )}
-        </button>
-      </div>
-
-      {/* Modal de Filtros Mobile */}
+      {/* Modal de Filtros Mobile - Oculto no mobile (usando SearchBar) */}
+      <div className="hidden">
       <AnimatePresence>
         {isMobileFilterOpen && (
           <>
@@ -567,6 +558,7 @@ export function SeminovosPage() {
           </>
         )}
       </AnimatePresence>
+      </div>
     </main>
   );
 }
