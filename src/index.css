@@ -8,11 +8,79 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     overflow-x: hidden;
     background-color: hsl(var(--color-muted));
+  }
+  
+  /* Garante que containers principais respeitem a largura APENAS em telas pequenas */
+  @media (max-width: 393px) {
+    html, body {
+      max-width: 393px;
+      overflow-x: hidden;
+      width: 100%;
+      position: relative;
+    }
+    
+    /* Previne overflow em elementos com viewport width apenas em telas pequenas */
+    [class*="vw"] {
+      max-width: 393px !important;
+    }
+    
+    /* Específico para textos grandes com viewport width apenas em telas pequenas */
+    h1[class*="vw"], h2[class*="vw"], h3[class*="vw"] {
+      font-size: clamp(1.5rem, 25vw, 393px) !important;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    
+    /* Garante que elementos com whitespace-nowrap não causem overflow apenas em telas pequenas */
+    .whitespace-nowrap {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    
+    /* Previne overflow em imagens apenas em telas pequenas */
+    img, picture, video {
+      max-width: 100% !important;
+      height: auto;
+    }
+    
+    /* Garante que elementos absolutos não saiam da tela apenas em telas pequenas */
+    /* Aplica apenas em elementos que realmente estão causando overflow */
+    [class*="absolute"][class*="right-[-"] {
+      right: 0 !important;
+      max-width: 393px;
+    }
+    
+    /* Previne overflow em elementos com right negativo apenas em telas pequenas */
+    [class*="right-[-"] {
+      right: 0 !important;
+    }
+    
+    /* Garante que seções não ultrapassem a largura apenas em telas pequenas */
+    section, main {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    
+    /* Previne overflow em elementos com transform apenas em telas pequenas */
+    [class*="translate"][class*="right-[-"] {
+      max-width: 100%;
+    }
+    
+    /* Container main específico para telas pequenas */
+    .container-main {
+      max-width: 393px;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
 }
 
@@ -693,7 +761,25 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
 }
+
+/* Previne overflow em telas pequenas - APENAS para lightbox */
+@media (max-width: 393px) {
+  .fslightbox-container .fslightbox-slide-container {
+    max-width: 393px !important;
+  }
+  
+  .fslightbox-container img,
+  .fslightbox-slide img,
+  .fslightbox-slide-detect img,
+  .fslightbox-slide-image img {
+    max-width: 90vw !important;
+    min-width: auto !important;
+  }
+}
+
 
 /* Button Text Shimmer Effect - Efeito de brilho que passa pelo texto periodicamente */
 @keyframes button-text-shimmer {

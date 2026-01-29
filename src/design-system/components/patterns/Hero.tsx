@@ -99,7 +99,7 @@ export function Hero({ vehicles }: HeroProps) {
           exit={{ opacity: 0, scale: 1.3 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <h2 className="text-[25vw] md:text-[32vw] font-black tracking-tighter text-primary whitespace-nowrap leading-none text-center">
+          <h2 className="text-[25vw] md:text-[32vw] font-black tracking-tighter text-primary whitespace-nowrap leading-none text-center overflow-hidden max-w-full w-full">
             {vehicle.model}
           </h2>
         </motion.div>

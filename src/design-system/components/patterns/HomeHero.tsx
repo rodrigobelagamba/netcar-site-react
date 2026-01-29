@@ -95,7 +95,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
   const primeiroNomeModelo = vehicle.model ? vehicle.model.trim().split(/\s+/)[0].toUpperCase() : "";
 
   return (
-    <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
+    <div className="relative w-full bg-[#F6F6F6] overflow-hidden max-w-full min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
       
       {/* Background Typography */}
       <AnimatePresence mode="popLayout" initial={false} custom={direction}>
@@ -108,7 +108,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
           exit={{ opacity: 0, scale: 1.3 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <h2 className="text-[25vw] md:text-[32vw] font-black tracking-tighter whitespace-nowrap leading-none text-center" style={{ color: '#00283C' }}>
+          <h2 className="text-[25vw] md:text-[32vw] font-black tracking-tighter whitespace-nowrap leading-none text-center overflow-hidden max-w-full w-full" style={{ color: '#00283C' }}>
             {primeiroNomeModelo}
           </h2>
         </motion.div>
