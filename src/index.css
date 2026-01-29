@@ -694,3 +694,43 @@
   align-items: center !important;
   justify-content: center !important;
 }
+
+/* Button Text Shimmer Effect - Efeito de brilho que passa pelo texto periodicamente */
+@keyframes button-text-shimmer {
+  0%, 28.57%, 100% {
+    background-position: -200% 0;
+    -webkit-text-fill-color: #00283C;
+  }
+  28.56% {
+    background-position: 200% 0;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.button-text-shimmer {
+  color: #00283C;
+  background: linear-gradient(
+    90deg,
+    #00283C 0%,
+    #00283C 30%,
+    rgba(255, 255, 255, 0.9) 50%,
+    #00283C 70%,
+    #00283C 100%
+  );
+  background-size: 200% 100%;
+  background-position: -200% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: #00283C;
+  animation: button-text-shimmer 7s ease-in-out infinite;
+  transition: background-position 0.3s ease;
+}
+
+.button-text-shimmer:hover {
+  animation: none;
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  -webkit-text-fill-color: white;
+  color: white;
+}
