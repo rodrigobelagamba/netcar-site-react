@@ -958,7 +958,7 @@ export function DetalhesPage() {
         />
       )}
       {/* Hero Section */}
-      <section className="w-full pt-16 lg:pt-0 pb-0 relative overflow-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] 
+      <section className="w-full py-0 pt-0 lg:pt-0 pb-0 relative overflow-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] 
       xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[95vh] 4xl:min-h-[75vh]">
         {/* Mobile Image - Aparece primeiro no mobile, acima das informações */}
         <div className="lg:hidden w-full mb-6">
@@ -997,7 +997,7 @@ export function DetalhesPage() {
             4xl:w-[600px] 4xl:left-[-15rem] 4xl:top-[10rem]
             5xl:w-[50%] 5xl:left-[-50rem] 5xl:top-[20rem] 
             6xl:w-[65%] 6xl:left-[-70rem] 6xl:top-[25rem] 
-            lg:py-4 sm:py-6 lg:py-6 flex flex-col relative lg:relative z-10
+            pt-2 sm:py-6 lg:py-4 lg:py-6 flex flex-col relative lg:relative z-10
             border border-none"
           >
             {/* Brand */}
