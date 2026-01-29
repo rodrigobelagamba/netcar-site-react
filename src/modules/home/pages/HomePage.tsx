@@ -196,7 +196,20 @@ export function HomePage() {
       {/* Botão Ver Estoque Completo */}
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 mt-8 flex justify-center">
         <Button 
-          onClick={() => navigate({ to: "/seminovos" })}
+          onClick={() => navigate({ 
+            to: "/seminovos",
+            search: {
+              marca: undefined,
+              modelo: undefined,
+              precoMin: undefined,
+              precoMax: undefined,
+              anoMin: undefined,
+              anoMax: undefined,
+              cambio: undefined,
+              cor: undefined,
+              categoria: undefined,
+            }
+          })}
           className="group relative overflow-hidden bg-white hover:bg-white text-[#00283C] font-bold py-6 px-10 rounded-2xl border-2 border-[#00283C]/10 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3 active:scale-95"
         >
           <div className="absolute inset-0 bg-[#00283C] translate-y-[102%] group-hover:translate-y-0 transition-transform duration-300 ease-out" />
