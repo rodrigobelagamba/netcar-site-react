@@ -1,8 +1,7 @@
-import { Car, ArrowRight, Search } from "lucide-react";
+import { Car, Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { Button } from "@/design-system/components/ui/button";
+import { useNavigate, useLocation } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
 
@@ -10,6 +9,8 @@ interface SearchSuggestion {
   type: string;
   text: string;
   detail: string;
+  marca?: string;
+  modelo?: string;
 }
 
 interface SearchBarProps {
@@ -20,6 +21,22 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Obtém os search params da URL (funciona em qualquer rota)
+  const searchParams = new URLSearchParams(location.search);
+  const search = {
+    marca: searchParams.get("marca") || undefined,
+    modelo: searchParams.get("modelo") || undefined,
+    categoria: searchParams.get("categoria") || undefined,
+    cor: searchParams.get("cor") || undefined,
+    cambio: searchParams.get("cambio") || undefined,
+    precoMin: searchParams.get("precoMin") || undefined,
+    precoMax: searchParams.get("precoMax") || undefined,
+    anoMin: searchParams.get("anoMin") || undefined,
+    anoMax: searchParams.get("anoMax") || undefined,
+  };
+  
   const { data: vehicles } = useVehiclesQuery();
   const { data: stockData } = useAllStockDataQuery();
 
@@ -37,13 +54,16 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
           const marca = vehicle.marca?.toLowerCase() || "";
           const modelo = vehicle.modelo?.toLowerCase() || "";
           const name = vehicle.name?.toLowerCase() || "";
-          return marca.includes(lowerQuery) || modelo.includes(lowerQuery) || name.includes(lowerQuery);
+          const fullName = `${marca} ${modelo}`.toLowerCase();
+          return marca.includes(lowerQuery) || modelo.includes(lowerQuery) || name.includes(lowerQuery) || fullName.includes(lowerQuery);
         })
-        .slice(0, 3)
+        .slice(0, 5)
         .map(vehicle => ({
           type: "Veículo",
           text: `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name || ""}`.trim(),
           detail: vehicle.year?.toString() || "",
+          marca: vehicle.marca,
+          modelo: vehicle.modelo || vehicle.name,
         }));
       suggestions.push(...vehicleMatches);
     }
@@ -174,6 +194,76 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     return uniqueSuggestions.slice(0, 6);
   }, [searchQuery, vehicles, stockData]);
 
+  // Formata os filtros ativos para exibição
+  const activeFiltersText = useMemo(() => {
+    const filters: string[] = [];
+    
+    if (search?.marca) {
+      filters.push(`Marca: ${search.marca}`);
+    }
+    if (search?.modelo) {
+      filters.push(`Modelo: ${search.modelo}`);
+    }
+    if (search?.categoria) {
+      filters.push(`Categoria: ${search.categoria}`);
+    }
+    if (search?.cor) {
+      filters.push(`Cor: ${search.cor}`);
+    }
+    if (search?.cambio) {
+      filters.push(`Câmbio: ${search.cambio}`);
+    }
+    if (search?.precoMin) {
+      filters.push(`Preço min: R$ ${parseInt(search.precoMin).toLocaleString('pt-BR')}`);
+    }
+    if (search?.precoMax) {
+      filters.push(`Preço max: R$ ${parseInt(search.precoMax).toLocaleString('pt-BR')}`);
+    }
+    if (search?.anoMin) {
+      filters.push(`Ano min: ${search.anoMin}`);
+    }
+    if (search?.anoMax) {
+      filters.push(`Ano max: ${search.anoMax}`);
+    }
+    
+    return filters.length > 0 ? filters.join(" • ") : "";
+  }, [search]);
+
+  // Limpa todos os filtros
+  const handleClearFilters = () => {
+    navigate({
+      to: "/seminovos",
+      search: {
+        marca: undefined,
+        modelo: undefined,
+        precoMin: undefined,
+        precoMax: undefined,
+        anoMin: undefined,
+        anoMax: undefined,
+        cambio: undefined,
+        cor: undefined,
+        categoria: undefined,
+      },
+    });
+    setSearchQuery("");
+    onAction?.();
+  };
+
+  // Verifica se há filtros ativos
+  const hasActiveFilters = useMemo(() => {
+    return !!(
+      search?.marca ||
+      search?.modelo ||
+      search?.categoria ||
+      search?.cor ||
+      search?.cambio ||
+      search?.precoMin ||
+      search?.precoMax ||
+      search?.anoMin ||
+      search?.anoMax
+    );
+  }, [search]);
+
   // Função helper para parsear valores monetários
   const parsePriceValue = (input: string): number | null => {
     if (!input) return null;
@@ -244,6 +334,27 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       cor: undefined,
       categoria: undefined,
     };
+
+    // Detecta marca + modelo (ex: "HYUNDAI CRETA", "FORD KA")
+    if (stockData?.enterprises) {
+      const brands = stockData.enterprises || [];
+      const queryWords = query.split(/\s+/);
+      
+      // Tenta encontrar uma marca no início da query
+      for (const brand of brands) {
+        if (!brand) continue;
+        const brandLower = brand.toLowerCase();
+        if (queryWords[0] === brandLower || query.startsWith(brandLower + " ")) {
+          searchParams.marca = brand;
+          // O resto pode ser o modelo
+          const remainingQuery = query.replace(brandLower, "").trim();
+          if (remainingQuery) {
+            searchParams.modelo = remainingQuery;
+          }
+          break;
+        }
+      }
+    }
 
     // Detecta faixa de preço com regex melhorada
     const pricePatterns = [
@@ -371,9 +482,38 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       }
     }
 
-    // Detecta marca (verifica se corresponde a alguma marca conhecida)
-    // Só executa se não detectou um preço ou câmbio
-    if (stockData?.enterprises) {
+    // Detecta marca + modelo (ex: "HYUNDAI CRETA", "FORD KA")
+    // Só executa se não detectou um preço, câmbio ou cor
+    if (stockData?.enterprises && !searchParams.marca) {
+      const brands = stockData.enterprises || [];
+      const queryWords = query.split(/\s+/).filter(w => w.length > 0);
+      
+      // Tenta encontrar uma marca no início da query
+      for (const brand of brands) {
+        if (!brand) continue;
+        const brandLower = brand.toLowerCase();
+        // Verifica se a query começa com a marca
+        if (queryWords.length >= 2 && (queryWords[0] === brandLower || query.startsWith(brandLower + " "))) {
+          searchParams.marca = brand;
+          // O resto pode ser o modelo
+          const remainingQuery = query.replace(brandLower, "").trim();
+          if (remainingQuery) {
+            searchParams.modelo = remainingQuery;
+          }
+          // Navega com marca e modelo
+          navigate({
+            to: "/seminovos",
+            search: searchParams,
+          });
+          onAction?.();
+          return;
+        }
+      }
+    }
+
+    // Detecta apenas marca (verifica se corresponde a alguma marca conhecida)
+    // Só executa se não detectou marca+modelo, preço, câmbio ou cor
+    if (stockData?.enterprises && !searchParams.marca) {
       const matchedBrand = stockData.enterprises.find(brand => 
         brand && (brand.toLowerCase().includes(query) || query.includes(brand.toLowerCase()))
       );
@@ -438,6 +578,40 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
           anoMin: undefined,
           anoMax: undefined,
           cambio: cambioValue,
+          cor: undefined,
+          categoria: undefined,
+        },
+      });
+      onAction?.();
+    } else if (suggestion.type === "Veículo" && suggestion.marca && suggestion.modelo) {
+      // Se for uma sugestão de veículo com marca e modelo, navega diretamente
+      navigate({
+        to: "/seminovos",
+        search: {
+          marca: suggestion.marca,
+          modelo: suggestion.modelo,
+          precoMin: undefined,
+          precoMax: undefined,
+          anoMin: undefined,
+          anoMax: undefined,
+          cambio: undefined,
+          cor: undefined,
+          categoria: undefined,
+        },
+      });
+      onAction?.();
+    } else if (suggestion.detail === "Marca") {
+      // Se for apenas uma marca, navega com a marca
+      navigate({
+        to: "/seminovos",
+        search: {
+          marca: suggestion.text,
+          modelo: undefined,
+          precoMin: undefined,
+          precoMax: undefined,
+          anoMin: undefined,
+          anoMax: undefined,
+          cambio: undefined,
           cor: undefined,
           categoria: undefined,
         },
@@ -561,9 +735,17 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       
       <div className="bg-white/80 backdrop-blur-2xl rounded-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] p-3 md:p-4 border border-white/50 max-w-5xl mx-auto flex flex-col md:flex-row gap-2 items-center relative">
         <div className="relative flex-1 w-full group">
-          <div className="absolute left-6 top-1/2 -translate-y-1/2 transition-colors group-focus-within:text-secondary" style={{ color: 'rgba(0, 40, 60, 0.3)' }}>
+          <div className="absolute left-6 top-1/2 -translate-y-1/2 transition-colors group-focus-within:text-secondary z-10" style={{ color: 'rgba(0, 40, 60, 0.3)' }}>
             <Car className="w-6 h-6" />
           </div>
+          
+          {/* Mostra filtros ativos quando não está focado e não há texto digitado */}
+          {!isFocused && !searchQuery && hasActiveFilters && (
+            <div className="absolute left-16 right-12 top-1/2 -translate-y-1/2 text-sm text-primary/60 truncate pointer-events-none">
+              {activeFiltersText}
+            </div>
+          )}
+          
           <input 
             type="text" 
             value={searchQuery}
@@ -571,16 +753,34 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
             onFocus={() => setIsFocused(true)}
             onBlur={() => setTimeout(() => setIsFocused(false), 200)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
+              if (e.key === 'Enter' && filteredSuggestions.length > 0) {
+                // Se houver sugestões, seleciona a primeira
+                handleSuggestionClick(filteredSuggestions[0]);
+              } else if (e.key === 'Enter') {
+                // Se não houver sugestões, tenta buscar
                 handleSearch();
               }
             }}
-            placeholder="Busque por marca, modelo, cor, câmbio, valor..."
-            className="w-full bg-gray-50/50 border-none rounded-2xl py-6 pl-16 pr-6 md:pr-64 text-lg font-medium placeholder:text-primary/20 focus:ring-2 transition-all outline-none"
+            placeholder={hasActiveFilters && !isFocused ? "" : "Busque por marca, modelo, cor, câmbio, valor..."}
+            className={`w-full bg-gray-50/50 border-none rounded-2xl py-6 pl-16 text-lg font-medium placeholder:text-primary/20 focus:ring-2 transition-all outline-none ${
+              hasActiveFilters && !isFocused && !searchQuery ? 'pr-20' : 'pr-6 md:pr-16'
+            }`}
             style={{ 
               '--tw-ring-color': 'rgba(92, 210, 157, 0.2)',
             } as React.CSSProperties & { '--tw-ring-color': string }}
           />
+          
+          {/* Botão para limpar filtros */}
+          {hasActiveFilters && (
+            <button
+              onClick={handleClearFilters}
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-gray-200/50 transition-colors z-10"
+              aria-label="Limpar filtros"
+              title="Limpar filtros"
+            >
+              <X className="w-5 h-5 text-primary/60 hover:text-primary" />
+            </button>
+          )}
           
           {/* Live Search Results Dropdown */}
           <AnimatePresence>
@@ -650,17 +850,6 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
             )}
           </AnimatePresence>
         </div>
-        <Button 
-          onClick={handleSearch}
-          className="w-full md:w-auto md:px-12 h-[72px] text-white font-black hover:bg-primary/90 rounded-2xl flex items-center gap-3 transition-all active:scale-95 shadow-lg"
-          style={{ 
-            backgroundColor: '#00283C',
-            boxShadow: '0 10px 15px -3px rgba(0, 40, 60, 0.2)',
-          }}
-        >
-          <ArrowRight className="w-5 h-5" />
-          BUSCAR
-        </Button>
       </div>
       
       {/* Quick Filters - Desktop, abaixo da barra de busca */}
