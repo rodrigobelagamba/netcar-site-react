@@ -1,0 +1,46 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: # Permite executar manualmente
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL || 'https://www.netcarmultimarcas.com.br/api/v1' }}
+          VITE_API_TIMEOUT: ${{ secrets.VITE_API_TIMEOUT || '30000' }}
+          VITE_BASE_PATH: ${{ secrets.VITE_BASE_PATH || '/' }}
+
+      - name: Setup SSH and RSYNC
+        run: |
+          sudo apt-get update && sudo apt-get install -y openssh-client rsync sshpass
+
+      - name: Deploy to server via SSH/RSYNC
+        run: |
+          sshpass -p '${{ secrets.SSH_PASSWORD }}' rsync -avz --delete \
+            --exclude='.git*' \
+            --exclude='node_modules' \
+            --exclude='.DS_Store' \
+            --exclude='Thumbs.db' \
+            -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
+            dist/ netcarmultimarcas@netcarmultimarcas.com.br:/www/
