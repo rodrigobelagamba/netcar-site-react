@@ -1116,7 +1116,6 @@ export function DetalhesPage() {
       {avifImages.length > 0 && (
         <section className="w-full py-8 sm:py-12 lg:py-16">
           <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-            <h2 className="text-2xl font-bold text-fg mb-6">Galeria de Fotos</h2>
           </div>
           {/* Grid Container - Ocupa toda a largura sem padding */}
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8 gap-1 sm:gap-2">
