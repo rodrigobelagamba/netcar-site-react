@@ -293,9 +293,9 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group"
+              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group flex flex-col"
             >
-              <div className="relative h-[220px] rounded-t-[20px] overflow-hidden">
+              <div className="relative aspect-video w-full rounded-t-[20px] overflow-hidden bg-gray-100">
                 <img
                   src={loja1Image}
                   alt="Fachada da Loja 1"
@@ -330,9 +330,9 @@ export function SobrePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group"
+              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group flex flex-col"
             >
-              <div className="relative h-[220px] rounded-t-[20px] overflow-hidden">
+              <div className="relative aspect-video w-full rounded-t-[20px] overflow-hidden bg-gray-100">
                 <img
                   src={loja2Image}
                   alt="Fachada da Loja 2"
