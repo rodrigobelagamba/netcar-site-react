@@ -1,5 +1,6 @@
 import { axiosInstance } from "../axios-instance";
 import { config } from "../config";
+import { extractVehicleIdFromSlug } from "@/lib/slug";
 
 export interface Vehicle {
   id: string;
@@ -367,9 +368,6 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
   }
 
 export async function fetchVehicleBySlug(slug: string): Promise<Vehicle> {
-  // Importa a função de extração de ID
-  const { extractVehicleIdFromSlug } = await import("@/lib/slug");
-  
   // Extrai o ID do slug (suporta formato amigável ou apenas ID)
   const vehicleId = extractVehicleIdFromSlug(slug);
   

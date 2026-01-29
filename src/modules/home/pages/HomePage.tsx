@@ -9,6 +9,9 @@ import { ServicesSection } from "@/design-system/components/patterns/ServicesSec
 import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
 import { useMemo, useEffect } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { Button } from "@/design-system/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072IMG_8213";
@@ -47,6 +50,7 @@ function HomeHeroSkeleton() {
 
 export function HomePage() {
   const { data: vehicles, isLoading } = useVehiclesQuery();
+  const navigate = useNavigate();
 
   useDefaultMetaTags(
     "Seminovos em Esteio",
@@ -188,6 +192,31 @@ export function HomePage() {
 
       {/* SearchBar logo abaixo do banner */}
       <SearchBar />
+
+      {/* Botão Ver Estoque Completo */}
+      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 mt-8 flex justify-center">
+        <Button 
+          onClick={() => navigate({ 
+            to: "/seminovos",
+            search: {
+              marca: undefined,
+              modelo: undefined,
+              precoMin: undefined,
+              precoMax: undefined,
+              anoMin: undefined,
+              anoMax: undefined,
+              cambio: undefined,
+              cor: undefined,
+              categoria: undefined,
+            }
+          })}
+          className="group relative overflow-hidden bg-white hover:bg-white text-[#00283C] font-bold py-6 px-10 rounded-2xl border-2 border-[#00283C]/10 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3 active:scale-95"
+        >
+          <div className="absolute inset-0 bg-[#00283C] translate-y-[102%] group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+          <span className="relative z-10 group-hover:text-white transition-colors duration-300">VER ESTOQUE COMPLETO</span>
+          <ArrowRight className="relative z-10 w-5 h-5 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
+        </Button>
+      </div>
 
       <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-12">
         <div className="mb-8">
