@@ -7,7 +7,8 @@ export interface Vehicle {
   name: string;
   slug: string;
   price: number;
-  year: number;
+  year: number; // Ano modelo
+  anoFabricacao?: number; // Ano de fabricação
   km: number;
   images: string[]; // Thumbnails (para cards e miniaturas)
   fullImages?: string[]; // Imagens em alta resolução (para galeria)
@@ -38,7 +39,8 @@ export interface ApiVehicleResponse {
     id: string;
     marca: string;
     modelo: string;
-    ano: number;
+    ano: number; // Ano modelo
+    ano_fabricacao?: number | null; // Ano de fabricação
     valor: number;
     valor_formatado: string;
     preco_com_troca: number;
@@ -276,7 +278,8 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         name: `${apiVehicle.marca} ${apiVehicle.modelo}`,
         slug: apiVehicle.link || apiVehicle.id,
         price: apiVehicle.valor || 0,
-        year: apiVehicle.ano,
+        year: apiVehicle.ano, // Ano modelo
+        anoFabricacao: apiVehicle.ano_fabricacao || undefined, // Ano de fabricação
         km: apiVehicle.km,
         images: normalizedThumbs, // Thumbnails para cards
         fullImages: normalizedFullImages, // Imagens em alta resolução para galeria
@@ -340,7 +343,8 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       name: `${apiVehicle.marca} ${apiVehicle.modelo}`,
       slug: apiVehicle.link || String(apiVehicle.id),
       price: apiVehicle.valor || 0,
-      year: apiVehicle.ano,
+      year: apiVehicle.ano, // Ano modelo
+      anoFabricacao: apiVehicle.ano_fabricacao || undefined, // Ano de fabricação
       km: apiVehicle.km,
       images: normalizedThumbs, // Thumbnails para cards
       fullImages: normalizedFullImages, // Imagens em alta resolução para galeria

@@ -102,7 +102,8 @@ $vehicle = $data['data'][0];
 // Prepara dados para meta tags
 $marca = isset($vehicle['marca']) ? $vehicle['marca'] : '';
 $modelo = isset($vehicle['modelo']) ? $vehicle['modelo'] : '';
-$ano = isset($vehicle['ano']) ? $vehicle['ano'] : '';
+$ano = isset($vehicle['ano']) ? $vehicle['ano'] : ''; // Ano modelo
+$anoFabricacao = isset($vehicle['ano_fabricacao']) && $vehicle['ano_fabricacao'] ? $vehicle['ano_fabricacao'] : null; // Ano de fabricação
 $placa = isset($vehicle['placa']) ? $vehicle['placa'] : '';
 $cor = isset($vehicle['cor']) ? $vehicle['cor'] : '';
 $preco = isset($vehicle['valor']) ? $vehicle['valor'] : 0;
@@ -134,14 +135,22 @@ if ($ano) {
 }
 $ogTitle = implode(' ', $titleParts);
 
-// Formata descrição detalhada: "2019 - 135.000km • Flex • MANUAL • MARROM"
+// Formata descrição detalhada: "2018 / 2019 - 135.000km • Flex • MANUAL • MARROM"
 $descriptionParts = [];
-// Ano e KM juntos com " - " entre eles
-if ($ano && $km > 0) {
-    $kmFormatado = number_format($km, 0, '.', '.');
-    $descriptionParts[] = $ano . ' - ' . $kmFormatado . 'km';
+// Formata ano: se tem ambos, mostra "ano_fabricacao / ano_modelo", senão só o ano modelo
+$anoDisplay = '';
+if ($anoFabricacao && $ano) {
+    $anoDisplay = $anoFabricacao . ' / ' . $ano;
 } elseif ($ano) {
-    $descriptionParts[] = $ano;
+    $anoDisplay = $ano;
+}
+
+// Ano e KM juntos com " - " entre eles
+if ($anoDisplay && $km > 0) {
+    $kmFormatado = number_format($km, 0, '.', '.');
+    $descriptionParts[] = $anoDisplay . ' - ' . $kmFormatado . 'km';
+} elseif ($anoDisplay) {
+    $descriptionParts[] = $anoDisplay;
 } elseif ($km > 0) {
     $kmFormatado = number_format($km, 0, '.', '.');
     $descriptionParts[] = $kmFormatado . 'km';

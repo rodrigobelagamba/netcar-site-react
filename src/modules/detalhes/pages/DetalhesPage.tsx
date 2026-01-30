@@ -941,13 +941,24 @@ export function DetalhesPage() {
 
   const vehicleData = useMemo(() => {
     if (!vehicle) return null;
+    
+    // Formata ano fabricação / ano modelo
+    let yearDisplay = "";
+    if (vehicle.anoFabricacao && vehicle.year) {
+      // Se tem ambos, mostra: "2023 / 2024" (ano fabricação / ano modelo)
+      yearDisplay = `${vehicle.anoFabricacao} / ${vehicle.year}`;
+    } else if (vehicle.year) {
+      // Se só tem ano modelo, mostra apenas ele
+      yearDisplay = String(vehicle.year);
+    }
+    
     return {
       marca: vehicle.marca || vehicle.name?.split(" ")[0] || "",
       modeloCompleto: vehicle.modelo || vehicle.name || "",
       price:
         vehicle.valor_formatado ||
         (vehicle.price ? `R$ ${vehicle.price.toLocaleString("pt-BR")}` : ""),
-      year: vehicle.year ? `${vehicle.year} / ${vehicle.year + 1}` : "",
+      year: yearDisplay,
       combustivel: vehicle.combustivel || "",
       cambio: vehicle.cambio || "",
       images: vehicle.fullImages || vehicle.fotos || vehicle.images || [],
@@ -1290,7 +1301,7 @@ export function DetalhesPage() {
               {year && (
                 <div className="flex flex-col">
                   <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
-                    Modelo
+                    Ano
                   </span>
                   <span className="text-fg font-semibold info-value">
                     {year}
@@ -1432,12 +1443,20 @@ function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
   const marca = vehicle.marca || vehicle.name?.split(" ")[0] || "";
   const modeloCompleto = vehicle.modelo || vehicle.name || "";
   const year = vehicle.year || 0;
+  const anoFabricacao = vehicle.anoFabricacao;
 
   // Parse do conteúdo do anúncio (vem do endpoint separado)
   const gptContent = useMemo(() => parseGptContent(anuncio || null), [anuncio]);
 
+  // Formata ano para especificações técnicas
+  const anoDisplay = anoFabricacao && year 
+    ? `${anoFabricacao} / ${year}` 
+    : year 
+    ? String(year) 
+    : "";
+
   const specifications = [
-    vehicle.year && { label: "Ano:", value: `${year}` },
+    anoDisplay && { label: "Ano:", value: anoDisplay },
     vehicle.cor && { label: "Cor:", value: vehicle.cor },
     vehicle.portas && { label: "Portas:", value: `${vehicle.portas}` },
     vehicle.placa && { label: "Placa:", value: maskPlate(vehicle.placa) },
