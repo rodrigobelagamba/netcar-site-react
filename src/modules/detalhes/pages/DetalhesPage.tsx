@@ -990,64 +990,108 @@ export function DetalhesPage() {
   }, [images]);
 
   // Converte imagem para URL absoluta para metatags
+  // PRIORIZA imagens full JPG para aparecer GRANDE EM CIMA no WhatsApp
+  // WhatsApp precisa de pelo menos 300px de largura para mostrar imagem grande em cima
   const absoluteImageUrl = useMemo(() => {
-    if (!mainImage) return "";
-    if (mainImage.startsWith("http://") || mainImage.startsWith("https://")) {
-      return mainImage;
-    }
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    return mainImage.startsWith("/")
-      ? `${baseUrl}${mainImage}`
-      : `${baseUrl}/${mainImage}`;
-  }, [mainImage]);
-
-  // Gera URL no formato antigo para compatibilidade com meta tags
-  const legacyUrl = useMemo(() => {
     if (!vehicle) return "";
+    
+    // Função para verificar se é JPG
+    const isJpg = (img: string) => {
+      if (!img) return false;
+      const imgLower = img.toLowerCase();
+      return imgLower.endsWith('.jpg') || imgLower.endsWith('.jpeg') || 
+             imgLower.includes('.jpg') || imgLower.includes('.jpeg');
+    };
+    
+    // PRIORIDADE 1: Busca primeira imagem JPG nas imagens full (alta resolução - aparece grande em cima)
+    let imageToUse = '';
+    if (vehicle.fullImages && vehicle.fullImages.length > 0) {
+      const jpg = vehicle.fullImages.find(img => isJpg(img));
+      if (jpg) {
+        imageToUse = jpg;
+      }
+    }
+    
+    // PRIORIDADE 2: Se não encontrou JPG nas full, usa primeira imagem full disponível
+    if (!imageToUse && vehicle.fullImages && vehicle.fullImages.length > 0) {
+      imageToUse = vehicle.fullImages[0];
+    }
+    
+    // PRIORIDADE 3: Fallback - primeira JPG nas thumbnails
+    if (!imageToUse && vehicle.images && vehicle.images.length > 0) {
+      const jpg = vehicle.images.find(img => isJpg(img));
+      if (jpg) {
+        imageToUse = jpg;
+      }
+    }
+    
+    // PRIORIDADE 4: Fallback final - primeira thumbnail disponível
+    if (!imageToUse && vehicle.images && vehicle.images.length > 0) {
+      imageToUse = vehicle.images[0];
+    }
+    
+    if (!imageToUse) return "";
+    
+    // Função para codificar apenas espaços e caracteres especiais (sem dupla codificação)
+    const encodeImagePath = (path: string): string => {
+      // Se já contém % (já está codificada), não codifica novamente
+      if (path.includes('%')) {
+        return path;
+      }
+      
+      // Se já é URL absoluta, codifica apenas espaços e caracteres especiais
+      if (path.startsWith("http://") || path.startsWith("https://")) {
+        try {
+          const url = new URL(path);
+          // Codifica apenas espaços e caracteres especiais no pathname
+          url.pathname = url.pathname
+            .replace(/ /g, '%20')
+            .replace(/\(/g, '%28')
+            .replace(/\)/g, '%29');
+          return url.toString();
+        } catch {
+          return path.replace(/ /g, '%20').replace(/\(/g, '%28').replace(/\)/g, '%29');
+        }
+      }
+      
+      // Para caminhos relativos, codifica apenas espaços e caracteres especiais
+      return path
+        .replace(/ /g, '%20')
+        .replace(/\(/g, '%28')
+        .replace(/\)/g, '%29');
+    };
+    
+    // Codifica o caminho da imagem (especialmente espaços no nome do arquivo)
+    const encodedImage = encodeImagePath(imageToUse);
+    
+    // Se já é URL absoluta, retorna como está (já codificada)
+    if (encodedImage.startsWith("http://") || encodedImage.startsWith("https://")) {
+      return encodedImage;
+    }
     
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://www.netcarmultimarcas.com.br";
     
-    // Gera slug no formato antigo: detalhe-produto-{modelo}-{ano}-{placa}-{cor}.html
-    const parts: string[] = [];
-    
-    // Modelo em minúsculas, sem acentos, espaços viram hífens
-    if (modeloCompleto) {
-      const modeloSlug = modeloCompleto
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '') // Remove acentos
-        .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais
-        .replace(/\s+/g, '-') // Substitui espaços por hífens
-        .replace(/-+/g, '-') // Remove hífens duplicados
-        .replace(/^-|-$/g, ''); // Remove hífens do início/fim
-      if (modeloSlug) parts.push(modeloSlug);
+    // Se começa com /, adiciona apenas o domínio
+    if (encodedImage.startsWith("/")) {
+      return `${baseUrl}${encodedImage}`;
     }
     
-    // Ano
-    if (vehicle.year) parts.push(String(vehicle.year));
+    // Se contém ./ no início, remove e adiciona domínio
+    const cleanedImage = encodedImage.replace(/^\.\/+/, "");
     
-    // Placa mascarada em maiúsculas
-    if (vehicle.placa) {
-      const placaMascarada = maskPlate(vehicle.placa).toUpperCase();
-      parts.push(placaMascarada);
-    }
+    // Adiciona domínio e barra inicial
+    return `${baseUrl}/${cleanedImage}`;
+  }, [vehicle, mainImage]);
+
+  // Gera URL no formato PHP para compatibilidade com meta tags
+  const legacyUrl = useMemo(() => {
+    if (!vehicle || !vehicle.id) return "";
     
-    // Cor em minúsculas
-    if (vehicle.cor) {
-      const corSlug = vehicle.cor
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '') // Remove acentos
-        .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais
-        .replace(/\s+/g, '-') // Substitui espaços por hífens
-        .replace(/-+/g, '-') // Remove hífens duplicados
-        .replace(/^-|-$/g, ''); // Remove hífens do início/fim
-      if (corSlug) parts.push(corSlug);
-    }
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://www.netcarmultimarcas.com.br";
     
-    const slug = parts.join('-');
-    return slug ? `${baseUrl}/detalhe-produto-${slug}.html` : baseUrl;
-  }, [vehicle, modeloCompleto]);
+    // Usa o formato PHP com ID: detalhe-veiculo.php?id={id}
+    return `${baseUrl}/detalhe-veiculo.php?id=${vehicle.id}`;
+  }, [vehicle]);
 
   // Configura metatags para compartilhamento
   const metaTags = useMemo(() => {
@@ -1095,7 +1139,7 @@ export function DetalhesPage() {
       // Propriedade adicional para og:title (sem "| Netcar")
       ogTitle: ogTitle,
     };
-  }, [vehicle, modeloCompleto, absoluteImageUrl, legacyUrl]);
+  }, [vehicle, modeloCompleto, absoluteImageUrl, legacyUrl, vehicle?.id]);
 
   useMetaTags(
     metaTags || {

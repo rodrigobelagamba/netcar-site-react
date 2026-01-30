@@ -81,6 +81,13 @@
   RewriteCond %{REQUEST_URI} ^/(index|not-found)\.html$ [NC]
   RewriteRule ^ - [L]
   
+  # Quinto: interceptar /veiculo/{slug} APENAS quando for bot/crawler (meta tags para WhatsApp)
+  # Usuários normais acessam diretamente o React app
+  RewriteCond %{REQUEST_URI} ^/veiculo/ [NC]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Slackbot|SkypeUriPreview|LinkedInBot|Twitterbot|WhatsApp|facebookexternalhit|Facebot|Google-Structured-Data-Testing-Tool|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteRule ^veiculo/(.+)$ detalhe-veiculo.php?slug=$1 [L,QSA]
+  
   # Por último: redirecionar tudo para index.html (SPA routing)
   RewriteRule ^ index.html [L]
 </IfModule>
