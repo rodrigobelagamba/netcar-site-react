@@ -407,6 +407,7 @@ export function SeminovosPage() {
                 year={vehicle.year || new Date().getFullYear()}
                 km={vehicle.km || 0}
                 images={vehicle.images || vehicle.fotos || []}
+                imagens_site={vehicle.imagens_site}
                 marca={vehicle.marca}
                 modelo={vehicle.modelo}
                 delay={index}

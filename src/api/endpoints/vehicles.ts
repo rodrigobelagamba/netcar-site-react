@@ -2,6 +2,13 @@ import { axiosInstance } from "../axios-instance";
 import { config } from "../config";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
 
+export interface VehicleImagesSite {
+  capa: string | null;
+  capa_thumb: string | null;
+  capa_opengraph: string | null;
+  galeria: string[];
+}
+
 export interface Vehicle {
   id: string;
   name: string;
@@ -12,6 +19,7 @@ export interface Vehicle {
   km: number;
   images: string[]; // Thumbnails (para cards e miniaturas)
   fullImages?: string[]; // Imagens em alta resolução (para galeria)
+  imagens_site?: VehicleImagesSite; // Imagens organizadas para uso no site
   marca?: string;
   modelo?: string;
   // Campos adicionais da API
@@ -87,6 +95,12 @@ export interface ApiVehicleResponse {
     imagens: {
       thumb: string[];
       full: string[];
+    };
+    imagens_site?: {
+      capa: string | null;
+      capa_thumb: string | null;
+      capa_opengraph: string | null;
+      galeria: string[];
     };
     pdf?: string; // Nome do arquivo PDF
     pdf_url?: string; // URL relativa do PDF
@@ -273,6 +287,17 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         pdfUrl = normalizeImageUrl(`arquivos/autocheck/${apiVehicle.pdf}`);
       }
 
+      // Normaliza imagens_site se existir
+      let imagensSite: VehicleImagesSite | undefined;
+      if (apiVehicle.imagens_site) {
+        imagensSite = {
+          capa: apiVehicle.imagens_site.capa ? normalizeImageUrl(apiVehicle.imagens_site.capa) : null,
+          capa_thumb: apiVehicle.imagens_site.capa_thumb ? normalizeImageUrl(apiVehicle.imagens_site.capa_thumb) : null,
+          capa_opengraph: apiVehicle.imagens_site.capa_opengraph ? normalizeImageUrl(apiVehicle.imagens_site.capa_opengraph) : null,
+          galeria: apiVehicle.imagens_site.galeria?.map(normalizeImageUrl) || [],
+        };
+      }
+
       return {
         id: apiVehicle.id,
         name: `${apiVehicle.marca} ${apiVehicle.modelo}`,
@@ -283,6 +308,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         km: apiVehicle.km,
         images: normalizedThumbs, // Thumbnails para cards
         fullImages: normalizedFullImages, // Imagens em alta resolução para galeria
+        imagens_site: imagensSite, // Imagens organizadas para uso no site
         marca: apiVehicle.marca,
         modelo: apiVehicle.modelo,
         cor: apiVehicle.cor,
@@ -337,6 +363,25 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       : [];
     const normalizedFullImages = fullUrls.map(normalizeImageUrl);
 
+    // Normaliza imagens_site se existir
+    let imagensSite: VehicleImagesSite | undefined;
+    if (apiVehicle.imagens_site) {
+      imagensSite = {
+        capa: apiVehicle.imagens_site.capa ? normalizeImageUrl(apiVehicle.imagens_site.capa) : null,
+        capa_thumb: apiVehicle.imagens_site.capa_thumb ? normalizeImageUrl(apiVehicle.imagens_site.capa_thumb) : null,
+        capa_opengraph: apiVehicle.imagens_site.capa_opengraph ? normalizeImageUrl(apiVehicle.imagens_site.capa_opengraph) : null,
+        galeria: apiVehicle.imagens_site.galeria?.map(normalizeImageUrl) || [],
+      };
+    }
+
+    // Normaliza URL do PDF se existir
+    let pdfUrl: string | undefined;
+    if (apiVehicle.pdf_url) {
+      pdfUrl = normalizeImageUrl(apiVehicle.pdf_url);
+    } else if (apiVehicle.pdf) {
+      pdfUrl = normalizeImageUrl(`arquivos/autocheck/${apiVehicle.pdf}`);
+    }
+
     // Mapeia os dados da API para a interface Vehicle
     return {
       id: String(apiVehicle.id),
@@ -348,6 +393,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       km: apiVehicle.km,
       images: normalizedThumbs, // Thumbnails para cards
       fullImages: normalizedFullImages, // Imagens em alta resolução para galeria
+      imagens_site: imagensSite, // Imagens organizadas para uso no site
       marca: apiVehicle.marca,
       modelo: apiVehicle.modelo,
       cor: apiVehicle.cor,
@@ -358,13 +404,13 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       placa: apiVehicle.placa,
       portas: apiVehicle.portas,
       lugares: apiVehicle.lugares,
-        valor_formatado: apiVehicle.valor_formatado,
-        categoria: apiVehicle.categoria,
-        opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
-        diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
-        pdf: apiVehicle.pdf,
-        pdf_url: apiVehicle.pdf_url ? normalizeImageUrl(apiVehicle.pdf_url) : undefined,
-      };
+      valor_formatado: apiVehicle.valor_formatado,
+      categoria: apiVehicle.categoria,
+      opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
+      diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
+      pdf: apiVehicle.pdf,
+      pdf_url: pdfUrl,
+    };
     } catch (error) {
       console.error("Error fetching vehicle by ID:", error);
       throw error;

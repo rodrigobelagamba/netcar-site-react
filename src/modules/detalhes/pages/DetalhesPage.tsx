@@ -718,6 +718,7 @@ function RelatedVehiclesCarousel({ vehicles }: { vehicles: any[] }) {
                 year={vehicle.year || new Date().getFullYear()}
                 km={vehicle.km || 0}
                 images={vehicle.images || vehicle.fotos || vehicle.fullImages || []}
+                imagens_site={vehicle.imagens_site}
                 marca={vehicle.marca}
                 modelo={vehicle.modelo}
                 placa={vehicle.placa}
@@ -887,6 +888,7 @@ function RelatedVehiclesSection({
               year={vehicle.year || new Date().getFullYear()}
               km={vehicle.km || 0}
               images={vehicle.images || vehicle.fotos || vehicle.fullImages || []}
+              imagens_site={vehicle.imagens_site}
               marca={vehicle.marca}
               modelo={vehicle.modelo}
               placa={vehicle.placa}
@@ -973,16 +975,26 @@ export function DetalhesPage() {
   const cambio = vehicleData?.cambio || "";
   const images = vehicleData?.images || [];
   
-  // Filtra apenas imagens AVIF para a galeria
+  // PRIORIDADE 1: Usa imagens_site.galeria se disponível, senão filtra AVIF das imagens
   const avifImages = useMemo(() => {
+    if (vehicle?.imagens_site?.galeria && vehicle.imagens_site.galeria.length > 0) {
+      return vehicle.imagens_site.galeria;
+    }
+    // FALLBACK: Comportamento anterior - filtra apenas imagens AVIF
     return images.filter(
       (img) =>
         img &&
         (img.toLowerCase().endsWith(".avif") || img.toLowerCase().includes(".avif"))
     );
-  }, [images]);
+  }, [images, vehicle?.imagens_site?.galeria]);
   
+  // PRIORIDADE 1: Usa imagens_site.capa se disponível
   const mainImage = useMemo(() => {
+    if (vehicle?.imagens_site?.capa) {
+      return vehicle.imagens_site.capa;
+    }
+    
+    // FALLBACK: Comportamento anterior
     if (!images.length) return CAR_COVERED_PLACEHOLDER_URL;
 
     const pngImages = images.filter(
@@ -998,47 +1010,52 @@ export function DetalhesPage() {
     return pngImages.length > 0 && !isProblematic && firstPng
       ? firstPng
       : CAR_COVERED_PLACEHOLDER_URL;
-  }, [images]);
+  }, [images, vehicle?.imagens_site?.capa]);
 
-  // Converte imagem para URL absoluta para metatags
-  // PRIORIZA imagens full JPG para aparecer GRANDE EM CIMA no WhatsApp
-  // WhatsApp precisa de pelo menos 300px de largura para mostrar imagem grande em cima
+  // Converte imagem para URL absoluta para metatags (Open Graph)
+  // PRIORIDADE 1: Usa imagens_site.capa_opengraph se disponível
   const absoluteImageUrl = useMemo(() => {
     if (!vehicle) return "";
     
-    // Função para verificar se é JPG
-    const isJpg = (img: string) => {
-      if (!img) return false;
-      const imgLower = img.toLowerCase();
-      return imgLower.endsWith('.jpg') || imgLower.endsWith('.jpeg') || 
-             imgLower.includes('.jpg') || imgLower.includes('.jpeg');
-    };
-    
-    // PRIORIDADE 1: Busca primeira imagem JPG nas imagens full (alta resolução - aparece grande em cima)
+    // PRIORIDADE 1: Usa imagens_site.capa_opengraph (específico para Open Graph)
     let imageToUse = '';
-    if (vehicle.fullImages && vehicle.fullImages.length > 0) {
-      const jpg = vehicle.fullImages.find(img => isJpg(img));
-      if (jpg) {
-        imageToUse = jpg;
+    if (vehicle.imagens_site?.capa_opengraph) {
+      imageToUse = vehicle.imagens_site.capa_opengraph;
+    } else {
+      // FALLBACK: Comportamento anterior
+      // Função para verificar se é JPG
+      const isJpg = (img: string) => {
+        if (!img) return false;
+        const imgLower = img.toLowerCase();
+        return imgLower.endsWith('.jpg') || imgLower.endsWith('.jpeg') || 
+               imgLower.includes('.jpg') || imgLower.includes('.jpeg');
+      };
+      
+      // PRIORIDADE 2: Busca primeira imagem JPG nas imagens full (alta resolução - aparece grande em cima)
+      if (vehicle.fullImages && vehicle.fullImages.length > 0) {
+        const jpg = vehicle.fullImages.find(img => isJpg(img));
+        if (jpg) {
+          imageToUse = jpg;
+        }
       }
-    }
-    
-    // PRIORIDADE 2: Se não encontrou JPG nas full, usa primeira imagem full disponível
-    if (!imageToUse && vehicle.fullImages && vehicle.fullImages.length > 0) {
-      imageToUse = vehicle.fullImages[0];
-    }
-    
-    // PRIORIDADE 3: Fallback - primeira JPG nas thumbnails
-    if (!imageToUse && vehicle.images && vehicle.images.length > 0) {
-      const jpg = vehicle.images.find(img => isJpg(img));
-      if (jpg) {
-        imageToUse = jpg;
+      
+      // PRIORIDADE 3: Se não encontrou JPG nas full, usa primeira imagem full disponível
+      if (!imageToUse && vehicle.fullImages && vehicle.fullImages.length > 0) {
+        imageToUse = vehicle.fullImages[0];
       }
-    }
-    
-    // PRIORIDADE 4: Fallback final - primeira thumbnail disponível
-    if (!imageToUse && vehicle.images && vehicle.images.length > 0) {
-      imageToUse = vehicle.images[0];
+      
+      // PRIORIDADE 4: Fallback - primeira JPG nas thumbnails
+      if (!imageToUse && vehicle.images && vehicle.images.length > 0) {
+        const jpg = vehicle.images.find(img => isJpg(img));
+        if (jpg) {
+          imageToUse = jpg;
+        }
+      }
+      
+      // PRIORIDADE 5: Fallback final - primeira thumbnail disponível
+      if (!imageToUse && vehicle.images && vehicle.images.length > 0) {
+        imageToUse = vehicle.images[0];
+      }
     }
     
     if (!imageToUse) return "";
