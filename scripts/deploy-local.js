@@ -285,15 +285,23 @@ async function deploy() {
           log('✅ Diretório criado e acessado', 'green');
         }
 
-        // Contar arquivos antes do upload
+        // Contar arquivos antes do upload (excluindo arquivos do Git e temporários)
         function getAllFiles(dirPath, arrayOfFiles = []) {
           const filesInDir = readdirSync(dirPath);
           filesInDir.forEach(file => {
+            // Ignorar pastas e arquivos do Git
+            if (file === '.git' || file === '.gitignore') {
+              return;
+            }
+            
             const filePath = join(dirPath, file);
             if (statSync(filePath).isDirectory()) {
               arrayOfFiles = getAllFiles(filePath, arrayOfFiles);
             } else {
-              arrayOfFiles.push(filePath);
+              // Ignorar arquivos temporários
+              if (!file.startsWith('.git-') && !file.endsWith('.tmp') && !file.endsWith('.log')) {
+                arrayOfFiles.push(filePath);
+              }
             }
           });
           return arrayOfFiles;
@@ -310,7 +318,21 @@ async function deploy() {
 
         // Upload arquivo por arquivo para melhor controle
         for (const filePath of allFiles) {
-          const relativePath = filePath.replace(distPath + '/', '').replace(/\\/g, '/');
+          // Normalizar caminho: converter caminhos absolutos do Windows para relativos
+          let relativePath = filePath.replace(distPath, '').replace(/\\/g, '/');
+          // Remover barra inicial se houver
+          if (relativePath.startsWith('/')) {
+            relativePath = relativePath.substring(1);
+          }
+          // Garantir que não há caminhos absolutos do Windows
+          relativePath = relativePath.replace(/^[A-Z]:\/?/i, '').replace(/^[A-Z]:\\/i, '');
+          
+          // Validar que o caminho relativo não contém referências ao Windows
+          if (relativePath.includes('C:\\') || relativePath.includes('C:/') || relativePath.includes('wamp64')) {
+            log(`   ⚠️  Ignorando arquivo com caminho inválido: ${relativePath}`, 'yellow');
+            continue;
+          }
+          
           const dirPath = relativePath.split('/').slice(0, -1).join('/');
           
           let retries = 3;
