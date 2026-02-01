@@ -971,7 +971,14 @@ export function DetalhesPage() {
   const year = vehicleData?.year || "";
   const combustivel = vehicleData?.combustivel || "";
   const cambio = vehicleData?.cambio || "";
+  const motor = vehicle?.motor || "";
+  const potencia = vehicle?.potencia || "";
   const images = vehicleData?.images || [];
+  
+  // Formata motor com potência se disponível (ex: "1.0/240hp" ou "1.0")
+  const motorFormatado = motor && potencia 
+    ? `${motor} / ${potencia}hp` 
+    : motor || "";
   
   // PRIORIDADE 1: Usa imagens_site.galeria se disponível, senão filtra AVIF das imagens
   const avifImages = useMemo(() => {
@@ -1335,11 +1342,21 @@ export function DetalhesPage() {
               )}
               {cambio && (
                 <div className="flex flex-col">
-                  <span className="text-muted-foreground uppercase tracking-wider mb-1.5 font-medium info-label">
+                  <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
                     Câmbio
                   </span>
                   <span className="text-fg font-semibold info-value">
                     {cambio}
+                  </span>
+                </div>
+              )}
+              {motorFormatado && (
+                <div className="flex flex-col">
+                  <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
+                    Motor
+                  </span>
+                  <span className="text-fg font-semibold info-value">
+                    {motorFormatado}
                   </span>
                 </div>
               )}
