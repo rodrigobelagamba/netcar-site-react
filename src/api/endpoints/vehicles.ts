@@ -7,6 +7,7 @@ export interface VehicleImagesSite {
   capa_thumb: string | null;
   capa_opengraph: string | null;
   galeria: string[];
+  tem_fotos?: number; // Flag indicando se o carro possui fotos na base (0 = não possui, usa fotos do banner, 1 = possui fotos na base)
 }
 
 export interface Vehicle {
@@ -101,6 +102,7 @@ export interface ApiVehicleResponse {
       capa_thumb: string | null;
       capa_opengraph: string | null;
       galeria: string[];
+      tem_fotos?: number; // Flag indicando se o carro possui fotos na base (0 = não possui, usa fotos do banner, 1 = possui fotos na base)
     };
     pdf?: string; // Nome do arquivo PDF
     pdf_url?: string; // URL relativa do PDF
@@ -295,6 +297,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
           capa_thumb: apiVehicle.imagens_site.capa_thumb ? normalizeImageUrl(apiVehicle.imagens_site.capa_thumb) : null,
           capa_opengraph: apiVehicle.imagens_site.capa_opengraph ? normalizeImageUrl(apiVehicle.imagens_site.capa_opengraph) : null,
           galeria: apiVehicle.imagens_site.galeria?.map(normalizeImageUrl) || [],
+          tem_fotos: apiVehicle.imagens_site.tem_fotos ?? apiVehicle.have_galery, // Usa tem_fotos da API ou fallback para have_galery
         };
       }
 
@@ -371,6 +374,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
         capa_thumb: apiVehicle.imagens_site.capa_thumb ? normalizeImageUrl(apiVehicle.imagens_site.capa_thumb) : null,
         capa_opengraph: apiVehicle.imagens_site.capa_opengraph ? normalizeImageUrl(apiVehicle.imagens_site.capa_opengraph) : null,
         galeria: apiVehicle.imagens_site.galeria?.map(normalizeImageUrl) || [],
+        tem_fotos: apiVehicle.imagens_site.tem_fotos ?? apiVehicle.have_galery, // Usa tem_fotos da API ou fallback para have_galery
       };
     }
 

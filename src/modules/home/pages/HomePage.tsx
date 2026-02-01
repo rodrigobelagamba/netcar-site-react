@@ -15,7 +15,6 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
-const PROBLEMATIC_IMAGE_PATTERN = "271_131072IMG_8213";
 
 // Skeleton do HomeHero para evitar layout shift
 function HomeHeroSkeleton() {
@@ -105,18 +104,11 @@ export function HomePage() {
         const price = typeof vehicle.price === 'number' ? vehicle.price : Number(vehicle.price);
         if (!price || isNaN(price) || price <= 80000) return false;
         
-        // Verifica se tem pelo menos uma imagem PNG válida
-        const pngImages = vehicle.images?.filter(img => 
-          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
-        ) || [];
+        // Filtra apenas veículos que possuem fotos (tem_fotos === 1)
+        const temFotos = vehicle.imagens_site?.tem_fotos;
+        if (temFotos === 0 || temFotos === undefined) return false;
         
-        if (pngImages.length === 0) return false;
-        
-        // Verifica se não é a imagem problemática
-        const firstPng = pngImages[0];
-        const isProblematic = firstPng?.toLowerCase().includes(PROBLEMATIC_IMAGE_PATTERN.toLowerCase());
-        
-        return !isProblematic;
+        return true;
       });
 
     // Embaralha aleatoriamente e pega os 4 primeiros
@@ -151,7 +143,7 @@ export function HomePage() {
       });
   }, [vehicles]);
 
-  // Filtra veículos que têm imagem PNG válida, preço > 0 e ordena por ID maior
+  // Filtra veículos que têm foto (tem_fotos === 1), preço > 0 e ordena por ID maior
   const vehiclesWithPhotos = useMemo(() => {
     if (!vehicles) return [];
 
@@ -161,29 +153,11 @@ export function HomePage() {
         const price = typeof vehicle.price === 'number' ? vehicle.price : Number(vehicle.price);
         if (!price || isNaN(price) || price <= 0) return false;
         
-        // Verifica se tem imagens válidas
-        if (!vehicle.images || vehicle.images.length === 0) return false;
+        // Filtra apenas veículos que possuem fotos (tem_fotos === 1)
+        const temFotos = vehicle.imagens_site?.tem_fotos;
+        if (temFotos === 0 || temFotos === undefined) return false;
         
-        // Filtra apenas imagens PNG válidas (não vazias, não placeholder, não problemática)
-        const validPngImages = vehicle.images.filter(img => {
-          if (!img || typeof img !== 'string') return false;
-          
-          const normalizedImg = img.toLowerCase().trim();
-          
-          // Deve ser PNG
-          if (!normalizedImg.includes('.png')) return false;
-          
-          // Não deve ser placeholder
-          if (normalizedImg.includes('semcapa') || normalizedImg.includes('placeholder')) return false;
-          
-          // Não deve ser a imagem problemática
-          if (normalizedImg.includes(PROBLEMATIC_IMAGE_PATTERN.toLowerCase())) return false;
-          
-          return true;
-        });
-        
-        // Deve ter pelo menos uma imagem PNG válida
-        return validPngImages.length > 0;
+        return true;
       })
       .sort((a, b) => {
         // Ordena por ID maior primeiro (mais recentes)

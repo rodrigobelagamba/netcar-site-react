@@ -783,11 +783,9 @@ function RelatedVehiclesSection({
         const price = typeof v.price === 'number' ? v.price : Number(v.price);
         if (!price || isNaN(price) || price <= 0) return false;
         
-        // Filtra apenas veículos com foto (images válidas e não vazias)
-        const imagesArray = v.images || v.fotos || v.fullImages || [];
-        const hasValidImages = imagesArray.length > 0 && 
-                               imagesArray.some(img => img && typeof img === 'string' && img.trim().length > 0);
-        if (!hasValidImages) return false;
+        // Filtra apenas veículos que possuem fotos (tem_fotos === 1)
+        const temFotos = v.imagens_site?.tem_fotos;
+        if (temFotos === 0 || temFotos === undefined) return false;
         
         return true;
       })

@@ -47,10 +47,14 @@ export function VehicleCard({
   const navigate = useNavigate();
   
   // PRIORIDADE 1: Usa imagens_site.capa_thumb se disponível
+  // PRIORIDADE 2: Usa imagens_site.capa como fallback
+  // FALLBACK FINAL: Placeholder
   let mainImage: string = CAR_COVERED_PLACEHOLDER_URL;
   
   if (imagens_site?.capa_thumb) {
     mainImage = imagens_site.capa_thumb;
+  } else if (imagens_site?.capa) {
+    mainImage = imagens_site.capa;
   } else {
     // FALLBACK: Comportamento anterior - filtra apenas imagens PNG
     const pngImages = images.filter(img => 
