@@ -122,18 +122,29 @@ function maskPlate($placa) {
     return $placaLower;
 }
 
-// Formata título completo: "HYUNDAI HB20 UNIQUE 1.0 2019"
+// Formata título completo no formato do React: "Fluence gt sport 2013 preta iui-xx58"
+// (modelo com primeira letra maiúscula, resto minúsculas, ano, placa mascarada em minúsculas)
 $titleParts = [];
-if ($marca) {
-    $titleParts[] = strtoupper($marca);
-}
+
+// Modelo completo - primeira letra maiúscula, resto minúsculas
 if ($modelo) {
-    $titleParts[] = strtoupper($modelo);
+    $modeloLower = strtolower(trim($modelo));
+    $modeloCapitalized = ucfirst($modeloLower);
+    $titleParts[] = $modeloCapitalized;
 }
+
+// Ano
 if ($ano) {
     $titleParts[] = $ano;
 }
-$ogTitle = implode(' ', $titleParts);
+
+// Placa mascarada em minúsculas
+if ($placa) {
+    $placaMascarada = maskPlate($placa);
+    $titleParts[] = strtolower($placaMascarada);
+}
+
+$ogTitle = !empty($titleParts) ? implode(' ', $titleParts) : 'Veículo';
 
 // Formata descrição detalhada: "2018 / 2019 - 135.000km • Flex • MANUAL • MARROM"
 $descriptionParts = [];
@@ -184,50 +195,19 @@ if (empty($ogDescription)) {
     }
 }
 
-// Busca primeira imagem JPG nas imagens full (alta resolução) para aparecer GRANDE EM CIMA
+// Busca imagem para Open Graph - USA APENAS imagens_site.capa_opengraph (sem fallback)
 // IMPORTANTE: WhatsApp precisa de pelo menos 300px de largura para mostrar imagem grande em cima
-// Thumbnails são muito pequenas e aparecem ao lado, não em cima
 $imagem = '';
-$imagensFull = !empty($vehicle['imagens']['full']) && is_array($vehicle['imagens']['full']) ? $vehicle['imagens']['full'] : [];
-$imagensThumb = !empty($vehicle['imagens']['thumb']) && is_array($vehicle['imagens']['thumb']) ? $vehicle['imagens']['thumb'] : [];
 
-// Função auxiliar para verificar se é JPG (case-insensitive)
-function isJpgImage($img) {
-    if (!$img || !is_string($img)) return false;
-    $imgLower = strtolower(trim($img));
-    // Verifica se termina com .jpg ou .jpeg ou contém no caminho
-    return (substr($imgLower, -4) === '.jpg' || substr($imgLower, -5) === '.jpeg' || 
-            (strpos($imgLower, '.jpg') !== false || strpos($imgLower, '.jpeg') !== false));
-}
-
-// PRIORIDADE 1: Busca primeira imagem JPG nas imagens full (alta resolução - aparece grande em cima)
-if (!empty($imagensFull)) {
-    foreach ($imagensFull as $img) {
-        if ($img && is_string($img) && isJpgImage($img)) {
-            $imagem = trim($img);
-            break; // Para na primeira JPG encontrada nas imagens full
-        }
+// USA APENAS imagens_site.capa_opengraph (sem fallback)
+if (!empty($vehicle['imagens_site']['capa_opengraph']) && is_string($vehicle['imagens_site']['capa_opengraph'])) {
+    $imagem = trim($vehicle['imagens_site']['capa_opengraph']);
+    
+    // Se a imagem estiver em 'small/', substitui por 'big/' para garantir imagem grande
+    // Isso garante que a imagem apareça grande em cima no WhatsApp/Facebook
+    if (strpos($imagem, '/small/') !== false) {
+        $imagem = str_replace('/small/', '/big/', $imagem);
     }
-}
-
-// PRIORIDADE 2: Se não encontrou JPG nas full, usa primeira imagem full disponível
-if (empty($imagem) && !empty($imagensFull[0]) && is_string($imagensFull[0])) {
-    $imagem = trim($imagensFull[0]);
-}
-
-// PRIORIDADE 3: Fallback - primeira JPG nas thumbnails (se não houver imagens full)
-if (empty($imagem) && !empty($imagensThumb)) {
-    foreach ($imagensThumb as $img) {
-        if ($img && is_string($img) && isJpgImage($img)) {
-            $imagem = trim($img);
-            break;
-        }
-    }
-}
-
-// PRIORIDADE 4: Fallback final - primeira thumbnail disponível
-if (empty($imagem) && !empty($imagensThumb[0]) && is_string($imagensThumb[0])) {
-    $imagem = trim($imagensThumb[0]);
 }
 
 // Normaliza URL da imagem
@@ -333,7 +313,6 @@ if ($placa) {
     <meta property="og:description" content="<?php echo htmlspecialchars($ogDescription, ENT_QUOTES, 'UTF-8'); ?>" />
     <!-- DEBUG: Imagem selecionada: <?php echo htmlspecialchars($imagem ?: 'NENHUMA', ENT_QUOTES, 'UTF-8'); ?> -->
     <!-- DEBUG: URL final: <?php echo htmlspecialchars($imagemUrl, ENT_QUOTES, 'UTF-8'); ?> -->
-    <!-- DEBUG: É JPG? <?php echo isJpgImage($imagem) ? 'SIM' : 'NÃO'; ?> -->
     <meta property="og:image" content="<?php echo htmlspecialchars($imagemUrl, ENT_QUOTES, 'UTF-8'); ?>" />
     <?php
     // IMPORTANTE: Para imagem aparecer GRANDE EM CIMA no WhatsApp:
@@ -346,11 +325,9 @@ if ($placa) {
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="<?php echo htmlspecialchars($ogTitle, ENT_QUOTES, 'UTF-8'); ?>" />
     <?php 
-    // Detecta o tipo de imagem baseado na extensão
-    // Verifica se a imagem selecionada é JPG
-    $isJpgSelected = isJpgImage($imagem);
+    // Detecta o tipo de imagem baseado na extensão da URL final
     $imageType = 'image/jpeg'; // padrão (JPG)
-    if ($isJpgSelected || stripos($imagemUrl, '.jpg') !== false || stripos($imagemUrl, '.jpeg') !== false) {
+    if (stripos($imagemUrl, '.jpg') !== false || stripos($imagemUrl, '.jpeg') !== false) {
         $imageType = 'image/jpeg';
     } elseif (stripos($imagemUrl, '.png') !== false) {
         $imageType = 'image/png';

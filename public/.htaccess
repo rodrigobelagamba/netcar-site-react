@@ -64,6 +64,9 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   
+  # Redirecionamento específico: seminovos.php -> /seminovos
+  RewriteRule ^seminovos\.php$ /seminovos [R=301,L]
+  
   # Primeiro: verificar se é um arquivo ou diretório existente - servir diretamente
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d

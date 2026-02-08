@@ -1018,52 +1018,20 @@ export function DetalhesPage() {
   }, [images, vehicle?.imagens_site?.capa]);
 
   // Converte imagem para URL absoluta para metatags (Open Graph)
-  // PRIORIDADE 1: Usa imagens_site.capa_opengraph se disponível
+  // USA APENAS imagens_site.capa_opengraph (sem fallback)
   const absoluteImageUrl = useMemo(() => {
     if (!vehicle) return "";
     
-    // PRIORIDADE 1: Usa imagens_site.capa_opengraph (específico para Open Graph)
-    let imageToUse = '';
-    if (vehicle.imagens_site?.capa_opengraph) {
-      imageToUse = vehicle.imagens_site.capa_opengraph;
-    } else {
-      // FALLBACK: Comportamento anterior
-      // Função para verificar se é JPG
-      const isJpg = (img: string) => {
-        if (!img) return false;
-        const imgLower = img.toLowerCase();
-        return imgLower.endsWith('.jpg') || imgLower.endsWith('.jpeg') || 
-               imgLower.includes('.jpg') || imgLower.includes('.jpeg');
-      };
-      
-      // PRIORIDADE 2: Busca primeira imagem JPG nas imagens full (alta resolução - aparece grande em cima)
-      if (vehicle.fullImages && vehicle.fullImages.length > 0) {
-        const jpg = vehicle.fullImages.find(img => isJpg(img));
-        if (jpg) {
-          imageToUse = jpg;
-        }
-      }
-      
-      // PRIORIDADE 3: Se não encontrou JPG nas full, usa primeira imagem full disponível
-      if (!imageToUse && vehicle.fullImages && vehicle.fullImages.length > 0) {
-        imageToUse = vehicle.fullImages[0];
-      }
-      
-      // PRIORIDADE 4: Fallback - primeira JPG nas thumbnails
-      if (!imageToUse && vehicle.images && vehicle.images.length > 0) {
-        const jpg = vehicle.images.find(img => isJpg(img));
-        if (jpg) {
-          imageToUse = jpg;
-        }
-      }
-      
-      // PRIORIDADE 5: Fallback final - primeira thumbnail disponível
-      if (!imageToUse && vehicle.images && vehicle.images.length > 0) {
-        imageToUse = vehicle.images[0];
-      }
-    }
+    // USA APENAS imagens_site.capa_opengraph (sem fallback)
+    if (!vehicle.imagens_site?.capa_opengraph) return "";
     
-    if (!imageToUse) return "";
+    let imageToUse = vehicle.imagens_site.capa_opengraph;
+    
+    // Se a imagem estiver em 'small/', substitui por 'big/' para garantir imagem grande
+    // Isso garante que a imagem apareça grande em cima no WhatsApp/Facebook
+    if (imageToUse.includes('/small/')) {
+      imageToUse = imageToUse.replace('/small/', '/big/');
+    }
     
     // Função para codificar apenas espaços e caracteres especiais (sem dupla codificação)
     const encodeImagePath = (path: string): string => {
@@ -1114,7 +1082,7 @@ export function DetalhesPage() {
     
     // Adiciona domínio e barra inicial
     return `${baseUrl}/${cleanedImage}`;
-  }, [vehicle, mainImage]);
+  }, [vehicle]);
 
   // Gera URL no formato PHP para compatibilidade com meta tags
   const legacyUrl = useMemo(() => {
