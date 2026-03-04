@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { 
-  usePhoneQuery, 
+  usePhoneQuery,
+  useAddressQuery,
   useWhatsAppQuery,
   useScheduleQuery
 } from "@/api";
@@ -33,8 +34,23 @@ export function ContatoPage() {
   });
 
   const { data: phoneLoja1 } = usePhoneQuery("Loja1");
+  const { data: phoneLoja2 } = usePhoneQuery("Loja2");
+  const { data: addressLoja1 } = useAddressQuery("Loja1");
+  const { data: addressLoja2 } = useAddressQuery("Loja2");
   const { data: whatsapp } = useWhatsAppQuery();
   const { data: schedule } = useScheduleQuery();
+
+  const formatPhone = (phone?: string) => {
+    if (!phone) return "";
+    const cleaned = phone.replace(/\D/g, "");
+    if (cleaned.length === 11) {
+      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
+    }
+    if (cleaned.length === 10) {
+      return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
+    }
+    return phone;
+  };
 
   const getWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
@@ -90,11 +106,11 @@ export function ContatoPage() {
             WhatsApp
           </a>
           <a
-            href={`tel:${phoneLoja1?.telefone || "5134737900"}`}
+            href={phoneLoja1?.telefone ? `tel:${phoneLoja1.telefone.replace(/\D/g, "")}` : "#"}
             className="inline-flex items-center gap-3 bg-bg text-fg px-8 py-4 rounded-full font-semibold hover:bg-surface transition-colors shadow-lg"
           >
             <Phone className="w-5 h-5 text-primary" />
-            {phoneLoja1?.telefone || "(51) 3473-7900"}
+            {phoneLoja1?.telefone ? formatPhone(phoneLoja1.telefone) : ""}
           </a>
           <a
             href="mailto:contato@netcarmultimarcas.com.br"
@@ -207,31 +223,41 @@ export function ContatoPage() {
               </div>
               
               <div className="space-y-6">
-                <a
-                  href="https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block group"
-                >
-                  <p className="font-semibold text-fg group-hover:text-primary transition-colors">Loja 1</p>
-                  <p className="text-muted-foreground text-sm">Av. Presidente Vargas, 740</p>
-                  <p className="text-muted-foreground text-sm">Centro, Esteio/RS</p>
-                  <p className="text-primary text-sm font-medium mt-1">(51) 3473-7900</p>
-                </a>
+                {addressLoja1?.address && (
+                  <a
+                    href="https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block group"
+                  >
+                    <p className="font-semibold text-fg group-hover:text-primary transition-colors">Loja 1</p>
+                    <p className="text-muted-foreground text-sm" dangerouslySetInnerHTML={{
+                      __html: addressLoja1.address.replace(/ - /g, "<br/>")
+                    }} />
+                    {phoneLoja1?.telefone && (
+                      <p className="text-primary text-sm font-medium mt-1">{formatPhone(phoneLoja1.telefone)}</p>
+                    )}
+                  </a>
+                )}
 
                 <div className="h-px bg-border" />
 
-                <a
-                  href="https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block group"
-                >
-                  <p className="font-semibold text-fg group-hover:text-primary transition-colors">Loja 2</p>
-                  <p className="text-muted-foreground text-sm">Av. Presidente Vargas, 1106</p>
-                  <p className="text-muted-foreground text-sm">Centro, Esteio/RS</p>
-                  <p className="text-primary text-sm font-medium mt-1">(51) 3033-3900</p>
-                </a>
+                {addressLoja2?.address && (
+                  <a
+                    href="https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block group"
+                  >
+                    <p className="font-semibold text-fg group-hover:text-primary transition-colors">Loja 2</p>
+                    <p className="text-muted-foreground text-sm" dangerouslySetInnerHTML={{
+                      __html: addressLoja2.address.replace(/ - /g, "<br/>")
+                    }} />
+                    {phoneLoja2?.telefone && (
+                      <p className="text-primary text-sm font-medium mt-1">{formatPhone(phoneLoja2.telefone)}</p>
+                    )}
+                  </a>
+                )}
               </div>
             </div>
 

@@ -1,33 +1,22 @@
 import { MapPin, ExternalLink } from "lucide-react";
 import { GoogleMap, LoadScript, InfoWindow } from "@react-google-maps/api";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useAddressQuery, usePhoneQuery } from "@/api/queries/useSiteQuery";
 
-// Dados das lojas com endereços completos para geocodificação
-const lojasData = [
-  {
-    id: 1,
-    nome: "LOJA 1",
-    tipo: "Matriz",
-    endereco: "Av. Presidente Vargas, 740\nEsteio/RS",
-    enderecoCompleto: "Av. Presidente Vargas, 740, Esteio, RS, 93260-000, Brasil",
-    telefone: "(51) 3473-7900",
-    coordenadas: { lat: -29.844377, lng: -51.173593 }, // Coordenadas aproximadas Av. Presidente Vargas, 740, Esteio
-    cor: "primary"
-  },
-  {
-    id: 2,
-    nome: "LOJA 2",
-    tipo: "Filial",
-    endereco: "Av. Presidente Vargas, 1106\nEsteio/RS",
-    enderecoCompleto: "Av. Presidente Vargas, 1106, Esteio, RS, 93260-000, Brasil",
-    telefone: "(51) 3033-3900",
-    coordenadas: { lat: -29.844800, lng: -51.174000 }, // Coordenadas aproximadas Av. Presidente Vargas, 1106, Esteio
-    cor: "amber-500"
-  }
-];
+// Tipo para loja
+type LojaData = {
+  id: number;
+  nome: string;
+  tipo: string;
+  endereco: string;
+  enderecoCompleto: string;
+  telefone: string;
+  coordenadas: { lat: number; lng: number };
+  cor: "primary" | "amber-500";
+};
 
 // Função para calcular o centro do mapa baseado nas coordenadas das lojas
-const calculateCenter = (lojas: typeof lojasData) => {
+const calculateCenter = (lojas: LojaData[]) => {
   if (lojas.length === 0) {
     return { lat: -29.839952, lng: -51.170587 }; // Coordenadas padrão de Esteio
   }
@@ -68,6 +57,50 @@ const mapOptions: google.maps.MapOptions = {
 };
 
 export function Localizacao() {
+  // Busca dados da API
+  const { data: addressLoja1 } = useAddressQuery("Loja1");
+  const { data: addressLoja2 } = useAddressQuery("Loja2");
+  const { data: phoneLoja1 } = usePhoneQuery("Loja1");
+  const { data: phoneLoja2 } = usePhoneQuery("Loja2");
+
+  // Constrói array de lojas apenas com dados da API
+  const lojasData = useMemo(() => {
+    const lojas: LojaData[] = [];
+
+    if (addressLoja1?.address) {
+      lojas.push({
+        id: 1,
+        nome: "LOJA 1",
+        tipo: "Matriz",
+        endereco: addressLoja1.address.replace(/ - /g, "\n"),
+        enderecoCompleto: `${addressLoja1.address}, Brasil`,
+        telefone: phoneLoja1?.telefone || "",
+        coordenadas: { lat: -29.844377, lng: -51.173593 },
+        cor: "primary" as const
+      });
+    }
+
+    if (addressLoja2?.address) {
+      lojas.push({
+        id: 2,
+        nome: "LOJA 2",
+        tipo: "Filial",
+        endereco: addressLoja2.address.replace(/ - /g, "\n"),
+        enderecoCompleto: `${addressLoja2.address}, Brasil`,
+        telefone: phoneLoja2?.telefone || "",
+        coordenadas: { lat: -29.844800, lng: -51.174000 },
+        cor: "amber-500" as const
+      });
+    }
+
+    return lojas;
+  }, [addressLoja1, addressLoja2, phoneLoja1, phoneLoja2]);
+
+  // Não renderiza se não houver dados da API
+  if (lojasData.length === 0) {
+    return null;
+  }
+
   const [selectedLoja, setSelectedLoja] = useState<number | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [lojas, setLojas] = useState(lojasData);
@@ -76,18 +109,22 @@ export function Localizacao() {
   const [mapError, setMapError] = useState<string | null>(null);
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
 
+  // Atualiza lojas quando os dados da API mudarem
+  useEffect(() => {
+    setLojas(lojasData);
+  }, [lojasData]);
+
   // Função para geocodificar endereços e atualizar coordenadas
   const geocodeAddresses = useCallback(() => {
     if (!geocoder || !window.google?.maps) return;
 
-    lojasData.forEach((loja) => {
+    lojas.forEach((loja) => {
       // Tenta múltiplos formatos de endereço para melhor precisão
       const addressVariants = [
         loja.enderecoCompleto,
-        `Av. Presidente Vargas, ${loja.id === 1 ? '740' : '1106'}, Esteio, RS, Brasil`,
-        `Av. Presidente Vargas, ${loja.id === 1 ? '740' : '1106'}, Centro, Esteio, RS`,
-        `${loja.enderecoCompleto.split(',')[0]}, Esteio, RS, Brasil`
-      ];
+        `${loja.enderecoCompleto.split(',')[0]}, Esteio, RS, Brasil`,
+        loja.endereco.replace('\n', ', ')
+      ].filter(Boolean);
 
       const tryGeocode = (addressIndex: number) => {
         if (addressIndex >= addressVariants.length) {

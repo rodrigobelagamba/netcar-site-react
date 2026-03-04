@@ -8,6 +8,7 @@ import {
   useBannersLoja1Query, 
   useBannersLoja2Query,
   usePhoneQuery,
+  useAddressQuery,
   useWhatsAppQuery,
   useScheduleQuery
 } from "@/api";
@@ -28,6 +29,8 @@ export function Footer() {
   const { data: bannersLoja2 } = useBannersLoja2Query();
   const { data: phoneLoja1 } = usePhoneQuery("Loja1");
   const { data: phoneLoja2 } = usePhoneQuery("Loja2");
+  const { data: addressLoja1 } = useAddressQuery("Loja1");
+  const { data: addressLoja2 } = useAddressQuery("Loja2");
   const { data: whatsapp } = useWhatsAppQuery();
   const { data: schedule } = useScheduleQuery();
 
@@ -132,11 +135,13 @@ export function Footer() {
                   />
                 </div>
                 <h5 className="font-bold text-fg text-sm mb-1">Loja 1</h5>
-                <p className="text-xs text-muted-foreground leading-relaxed mb-2">
-                  Av. Presidente Vargas, 740<br/>Centro – Esteio/RS
-                </p>
+                {addressLoja1?.address && (
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-2" dangerouslySetInnerHTML={{
+                    __html: addressLoja1.address.replace(/ - /g, "<br/>")
+                  }} />
+                )}
                 <p className="text-sm font-semibold text-fg">
-                  {phoneLoja1?.telefone ? formatPhone(phoneLoja1.telefone) : "(51) 3473-7900"}
+                  {phoneLoja1?.telefone ? formatPhone(phoneLoja1.telefone) : ""}
                 </p>
               </div>
 
@@ -158,11 +163,13 @@ export function Footer() {
                   />
                 </div>
                 <h5 className="font-bold text-fg text-sm mb-1">Loja 2</h5>
-                <p className="text-xs text-muted-foreground leading-relaxed mb-2">
-                  Av. Presidente Vargas, 1106<br/>Centro – Esteio/RS
-                </p>
+                {addressLoja2?.address && (
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-2" dangerouslySetInnerHTML={{
+                    __html: addressLoja2.address.replace(/ - /g, "<br/>")
+                  }} />
+                )}
                 <p className="text-sm font-semibold text-fg">
-                  {phoneLoja2?.telefone ? formatPhone(phoneLoja2.telefone) : "(51) 3033-3900"}
+                  {phoneLoja2?.telefone ? formatPhone(phoneLoja2.telefone) : ""}
                 </p>
               </div>
 

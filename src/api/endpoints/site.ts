@@ -40,10 +40,7 @@ export interface PhoneInfo {
 }
 
 export interface AddressInfo {
-  endereco: string;
-  cidade: string;
-  estado: string;
-  cep?: string;
+  address: string;
   loja?: string;
 }
 
@@ -295,13 +292,13 @@ export async function fetchAddress(
 
     if (!response.data.success || !response.data.data) {
       console.warn("API retornou sem sucesso ou sem dados");
-      return { endereco: "", cidade: "", estado: "" };
+      return { address: "", loja };
     }
 
     return response.data.data;
   } catch (error) {
     console.error("Erro ao buscar endereço:", error);
-    return { endereco: "", cidade: "", estado: "" };
+    return { address: "", loja };
   }
 }
 

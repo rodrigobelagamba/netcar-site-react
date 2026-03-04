@@ -71,10 +71,9 @@ export function SobrePage() {
   const rotatingLoja2Image = useRotatingImages(loja2Images, loja1Image, 3000);
 
   // Formata endereço
-  const formatAddress = (address?: { endereco?: string; cidade?: string; estado?: string }) => {
-    if (!address) return "";
-    const parts = [address.endereco, address.cidade, address.estado].filter(Boolean);
-    return parts.join(", ");
+  const formatAddress = (address?: { address?: string }) => {
+    if (!address?.address) return "";
+    return address.address;
   };
 
   // Formata telefone
@@ -318,7 +317,7 @@ export function SobrePage() {
               <div className="p-6">
                 <h3 className="text-lg font-bold text-fg mb-1">Loja 1 — Centro, Esteio/RS</h3>
                 <p className="text-muted-foreground text-sm mb-3">
-                  {formatAddress(addressLoja1) || "Av. Presidente Vargas, 740"} — {formatPhone(phoneLoja1) || "(51) 3473-7900"}
+                  {formatAddress(addressLoja1)} — {formatPhone(phoneLoja1)}
                 </p>
                 <p className="text-muted-foreground text-sm">Showroom amplo, atendimento personalizado e test-drive.</p>
               </div>
@@ -355,7 +354,7 @@ export function SobrePage() {
               <div className="p-6">
                 <h3 className="text-lg font-bold text-fg mb-1">Loja 2 — Centro, Esteio/RS</h3>
                 <p className="text-muted-foreground text-sm mb-3">
-                  {formatAddress(addressLoja2) || "Av. Presidente Vargas, 1106"} — {formatPhone(phoneLoja2) || "(51) 3033-3900"}
+                  {formatAddress(addressLoja2)} — {formatPhone(phoneLoja2)}
                 </p>
                 <p className="text-muted-foreground text-sm">Seleção de seminovos e condições especiais de financiamento.</p>
               </div>

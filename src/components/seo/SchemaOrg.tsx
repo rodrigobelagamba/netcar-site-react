@@ -11,43 +11,29 @@ export function SchemaOrg() {
   const { data: phoneLoja1 } = usePhoneQuery("Loja1");
 
   useEffect(() => {
+    // Não renderiza schema se não houver dados da API
+    if (!addressLoja1?.address || !addressLoja2?.address || !phoneLoja1?.telefone) {
+      return;
+    }
+
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://www.netcarmultimarcas.com.br";
-    
-    // Valores padrão do documento
-    const defaultAddress1 = {
-      streetAddress: "Av. Presidente Vargas, 740",
-      addressLocality: "Esteio",
-      addressRegion: "RS",
-      postalCode: "93265-000",
-    };
-    
-    const defaultAddress2 = {
-      streetAddress: "Av. Presidente Vargas, 1106",
+
+    // Usa apenas dados da API
+    const address1 = {
+      streetAddress: addressLoja1.address,
       addressLocality: "Esteio",
       addressRegion: "RS",
       postalCode: "93265-000",
     };
 
-    // Usa dados da API se disponível, senão usa valores padrão
-    const address1 = addressLoja1?.endereco 
-      ? {
-          streetAddress: addressLoja1.endereco,
-          addressLocality: addressLoja1.cidade || "Esteio",
-          addressRegion: addressLoja1.estado || "RS",
-          postalCode: addressLoja1.cep || "93265-000",
-        }
-      : defaultAddress1;
+    const address2 = {
+      streetAddress: addressLoja2.address,
+      addressLocality: "Esteio",
+      addressRegion: "RS",
+      postalCode: "93265-000",
+    };
 
-    const address2 = addressLoja2?.endereco
-      ? {
-          streetAddress: addressLoja2.endereco,
-          addressLocality: addressLoja2.cidade || "Esteio",
-          addressRegion: addressLoja2.estado || "RS",
-          postalCode: addressLoja2.cep || "93265-000",
-        }
-      : defaultAddress2;
-
-    const phone = phoneLoja1?.telefone || "(51) 3473-7900";
+    const phone = phoneLoja1.telefone;
     // Remove caracteres não numéricos e formata para E.164
     const phoneFormatted = phone.replace(/\D/g, "");
     const phoneE164 = phoneFormatted.length >= 10 
