@@ -96,11 +96,6 @@ export function Localizacao() {
     return lojas;
   }, [addressLoja1, addressLoja2, phoneLoja1, phoneLoja2]);
 
-  // Não renderiza se não houver dados da API
-  if (lojasData.length === 0) {
-    return null;
-  }
-
   const [selectedLoja, setSelectedLoja] = useState<number | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [lojas, setLojas] = useState(lojasData);
@@ -334,6 +329,11 @@ export function Localizacao() {
       geocodeAddresses();
     }
   }, [geocoder, geocodeAddresses]);
+
+  // Não renderiza se não houver dados da API (depois de todos os hooks)
+  if (lojas.length === 0) {
+    return null;
+  }
 
   // Se não houver chave da API, usa o iframe como fallback
   if (!GOOGLE_MAPS_API_KEY) {
