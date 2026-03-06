@@ -1,9 +1,11 @@
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
+import { useBannersQuery } from "@/api/queries/useSiteQuery";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/HomeHero";
+import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
@@ -49,9 +51,14 @@ function HomeHeroSkeleton() {
 }
 
 export function HomePage() {
-  // Busca 4 veículos para o carrossel mobile
-  const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 4 });
+  const { data: vehicles, isLoading: isLoadingVehicles } = useVehiclesQuery({ limit: 4 });
+  const { data: banners, isLoading: isLoadingBanners } = useBannersQuery();
   const navigate = useNavigate();
+
+  const hasBanners = Boolean(banners && banners.length > 0);
+  const showBanners = hasBanners;
+  const showVehiclesHero = !showBanners && !isLoadingBanners;
+  const isLoadingHero = isLoadingBanners || (showVehiclesHero && isLoadingVehicles);
   
   // Detecta número de colunas baseado no tamanho da tela
   const [columnsPerRow, setColumnsPerRow] = useState(4);
@@ -178,26 +185,30 @@ export function HomePage() {
     return filtered.slice(0, maxVehicles);
   }, [vehicles, columnsPerRow]);
 
-  // Pré-carrega a primeira imagem do banner para melhorar a experiência
+  // Pré-carrega a primeira imagem do banner/hero para melhorar a experiência
   useEffect(() => {
-    if (heroVehicles.length > 0 && heroVehicles[0].image) {
+    const url = hasBanners && banners?.[0]?.imagem
+      ? banners[0].imagem
+      : heroVehicles[0]?.image;
+    if (url) {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
-      link.href = heroVehicles[0].image;
+      link.href = url;
       document.head.appendChild(link);
-      
       return () => {
         document.head.removeChild(link);
       };
     }
-  }, [heroVehicles]);
+  }, [hasBanners, banners, heroVehicles]);
 
   return (
     <main className="flex-1 overflow-x-hidden max-w-full">
-      {/* Banner com skeleton durante loading */}
-      {isLoading ? (
+      {/* Banner: se a API retornar banners, mostra slider de banners; senão, slide dos carros */}
+      {isLoadingHero ? (
         <HomeHeroSkeleton />
+      ) : showBanners ? (
+        <BannerHero banners={banners!} />
       ) : heroVehicles.length > 0 ? (
         <HomeHero vehicles={heroVehicles} />
       ) : null}
@@ -248,7 +259,7 @@ export function HomePage() {
           <h2 className="text-3xl font-bold text-fg">Destaques</h2>
           <p className="mt-2 text-gray-600 text-lg font-medium">Novidades da semana, olha só o que separamos para você!</p>
         </div>
-        <ProductList vehicles={vehiclesWithPhotos} isLoading={isLoading} />
+        <ProductList vehicles={vehiclesWithPhotos} isLoading={isLoadingVehicles} />
       </section>
 
       <ServicesSection />
