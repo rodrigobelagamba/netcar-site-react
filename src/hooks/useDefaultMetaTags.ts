@@ -10,7 +10,11 @@ export function useDefaultMetaTags(title?: string, description?: string) {
 
   useEffect(() => {
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    const currentUrl = typeof window !== "undefined" ? window.location.href : "";
+    // URL amigável (sem query/hash) para og:url e canonical — ao compartilhar no Android/apps usam essa URL
+    const currentUrl =
+      typeof window !== "undefined"
+        ? `${window.location.origin}${window.location.pathname}`
+        : "";
     
     // Busca imagem da fachada ou primeira imagem da loja
     const getStoreImage = () => {

@@ -40,7 +40,12 @@ export function useMetaTags({
 }: MetaTagsProps) {
   useEffect(() => {
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    const currentUrl = url || (typeof window !== "undefined" ? window.location.href : "");
+    // Se url não for passada, usa URL amigável (origin + pathname) para compartilhamento correto (ex.: Android)
+    const currentUrl =
+      url ||
+      (typeof window !== "undefined"
+        ? `${window.location.origin}${window.location.pathname}`
+        : "");
     const defaultTitle = "Netcar";
     const defaultDescription =
       "Netcar - Seminovos com procedência e qualidade. Desde 1997 oferecendo os melhores veículos em Esteio/RS.";

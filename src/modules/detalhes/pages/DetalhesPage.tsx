@@ -1084,15 +1084,12 @@ export function DetalhesPage() {
     return `${baseUrl}/${cleanedImage}`;
   }, [vehicle]);
 
-  // Gera URL no formato PHP para compatibilidade com meta tags
-  const legacyUrl = useMemo(() => {
-    if (!vehicle || !vehicle.id) return "";
-    
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://www.netcarmultimarcas.com.br";
-    
-    // Usa o formato PHP com ID: detalhe-veiculo.php?id={id}
-    return `${baseUrl}/detalhe-veiculo.php?id=${vehicle.id}`;
-  }, [vehicle]);
+  // URL amigável para compartilhamento (og:url/canonical) — ex.: /veiculo/fluence-gt-2013
+  const friendlyUrl = useMemo(() => {
+    if (!vehicle || !slug) return "";
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+    return `${baseUrl}/veiculo/${slug}`;
+  }, [vehicle, slug]);
 
   // Configura metatags para compartilhamento
   const metaTags = useMemo(() => {
@@ -1125,7 +1122,7 @@ export function DetalhesPage() {
       title: `${ogTitle} | Netcar`, // Título da página (com Netcar)
       description: "Seminovo é na Netcar", // Descrição fixa conforme exemplo
       image: absoluteImageUrl,
-      url: legacyUrl || (typeof window !== "undefined" ? window.location.href : ""),
+      url: friendlyUrl || (typeof window !== "undefined" ? `${window.location.origin}${window.location.pathname}` : ""),
       type: "article" as const,
       imageWidth: 1200,
       imageHeight: 900,
@@ -1140,7 +1137,7 @@ export function DetalhesPage() {
       // Propriedade adicional para og:title (sem "| Netcar")
       ogTitle: ogTitle,
     };
-  }, [vehicle, modeloCompleto, absoluteImageUrl, legacyUrl, vehicle?.id]);
+  }, [vehicle, modeloCompleto, absoluteImageUrl, friendlyUrl, vehicle?.id]);
 
   useMetaTags(
     metaTags || {
