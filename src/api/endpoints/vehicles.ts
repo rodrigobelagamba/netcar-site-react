@@ -15,6 +15,7 @@ export interface Vehicle {
   name: string;
   slug: string;
   price: number;
+  preco_com_troca?: number;
   year: number; // Ano modelo
   anoFabricacao?: number; // Ano de fabricação
   km: number;
@@ -33,6 +34,7 @@ export interface Vehicle {
   portas?: number;
   lugares?: number;
   valor_formatado?: string;
+  preco_com_troca_formatado?: string;
   categoria?: string;
   opcionais?: Array<{ tag: string; descricao: string }>;
   diferenciais?: Array<{ tag: string; descricao: string }>; // Opcionais do tipo Piado (diferenciais)
@@ -306,6 +308,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         name: `${apiVehicle.marca} ${apiVehicle.modelo}`,
         slug: apiVehicle.link || apiVehicle.id,
         price: apiVehicle.valor || 0,
+        preco_com_troca: apiVehicle.preco_com_troca,
         year: apiVehicle.ano, // Ano modelo
         anoFabricacao: apiVehicle.ano_fabricacao || undefined, // Ano de fabricação
         km: apiVehicle.km,
@@ -323,6 +326,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         portas: apiVehicle.portas,
         lugares: apiVehicle.lugares,
         valor_formatado: apiVehicle.valor_formatado,
+        preco_com_troca_formatado: apiVehicle.preco_com_troca_formatado,
         categoria: apiVehicle.categoria,
         opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
         diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
@@ -392,6 +396,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       name: `${apiVehicle.marca} ${apiVehicle.modelo}`,
       slug: apiVehicle.link || String(apiVehicle.id),
       price: apiVehicle.valor || 0,
+      preco_com_troca: apiVehicle.preco_com_troca,
       year: apiVehicle.ano, // Ano modelo
       anoFabricacao: apiVehicle.ano_fabricacao || undefined, // Ano de fabricação
       km: apiVehicle.km,
@@ -409,6 +414,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       portas: apiVehicle.portas,
       lugares: apiVehicle.lugares,
       valor_formatado: apiVehicle.valor_formatado,
+      preco_com_troca_formatado: apiVehicle.preco_com_troca_formatado,
       categoria: apiVehicle.categoria,
       opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
       diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],

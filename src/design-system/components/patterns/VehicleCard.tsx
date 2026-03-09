@@ -18,6 +18,8 @@ export interface VehicleCardProps {
   imagens_site?: VehicleImagesSite;
   badges?: string[];
   valor_formatado?: string;
+  preco_com_troca?: number;
+  preco_com_troca_formatado?: string;
   marca?: string;
   modelo?: string;
   placa?: string;
@@ -36,6 +38,8 @@ export function VehicleCard({
   images,
   imagens_site,
   valor_formatado,
+  preco_com_troca,
+  preco_com_troca_formatado,
   marca,
   modelo,
   placa,
@@ -86,10 +90,28 @@ export function VehicleCard({
     navigate({ to: `/veiculo/${slug}` });
   };
 
-  // Remove HTML tags se houver no valor_formatado
-  const priceFormatted = valor_formatado 
-    ? valor_formatado.replace(/<[^>]*>/g, '') 
-    : formatPrice(price);
+  const sanitizeFormattedPrice = (formatted?: string) =>
+    formatted ? formatted.replace(/<[^>]*>/g, "") : "";
+
+  // Preço base (valor)
+  const priceFormatted = sanitizeFormattedPrice(valor_formatado) || formatPrice(price);
+
+  const tradePriceValue =
+    typeof preco_com_troca === "number" && Number.isFinite(preco_com_troca)
+      ? preco_com_troca
+      : undefined;
+  const basePriceValue =
+    typeof price === "number" && Number.isFinite(price) ? price : 0;
+
+  const shouldShowPriceComparison =
+    tradePriceValue !== undefined && tradePriceValue !== basePriceValue;
+
+  // Quando houver diferença, mostra:
+  // De: preço com troca (riscado)
+  // Para: preço normal
+  const previousPriceFormatted = shouldShowPriceComparison
+    ? sanitizeFormattedPrice(preco_com_troca_formatado) || formatPrice(tradePriceValue!)
+    : undefined;
 
   // Adapta dados para o formato do CardsHero
   const brand = marca || '';
@@ -109,6 +131,8 @@ export function VehicleCard({
       transmission={transmission}
       mileage={mileageFormatted}
       price={priceFormatted}
+      previousPrice={previousPriceFormatted}
+      showPriceComparison={shouldShowPriceComparison}
       delay={delay}
       fastAnimation={fastAnimation}
       onClick={handleClick}

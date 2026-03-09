@@ -404,6 +404,8 @@ export function SeminovosPage() {
                 name={vehicle.modelo || vehicle.name}
                 price={vehicle.price || 0}
                 valor_formatado={vehicle.valor_formatado}
+                preco_com_troca={vehicle.preco_com_troca}
+                preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
                 year={vehicle.year || new Date().getFullYear()}
                 km={vehicle.km || 0}
                 images={vehicle.images || vehicle.fotos || []}

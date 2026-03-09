@@ -715,6 +715,8 @@ function RelatedVehiclesCarousel({ vehicles }: { vehicles: any[] }) {
                 name={vehicle.modelo || vehicle.name}
                 price={vehicle.price || 0}
                 valor_formatado={vehicle.valor_formatado}
+                preco_com_troca={vehicle.preco_com_troca}
+                preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
                 year={vehicle.year || new Date().getFullYear()}
                 km={vehicle.km || 0}
                 images={vehicle.images || vehicle.fotos || vehicle.fullImages || []}
@@ -883,6 +885,8 @@ function RelatedVehiclesSection({
               name={vehicle.modelo || vehicle.name}
               price={vehicle.price || 0}
               valor_formatado={vehicle.valor_formatado}
+              preco_com_troca={vehicle.preco_com_troca}
+              preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
               year={vehicle.year || new Date().getFullYear()}
               km={vehicle.km || 0}
               images={vehicle.images || vehicle.fotos || vehicle.fullImages || []}
@@ -899,7 +903,15 @@ function RelatedVehiclesSection({
 }
 
 
-function PriceWithShimmer({ price }: { price: string }) {
+function PriceWithShimmer({
+  price,
+  previousPrice,
+  showComparison = false,
+}: {
+  price: string;
+  previousPrice?: string;
+  showComparison?: boolean;
+}) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -914,14 +926,33 @@ function PriceWithShimmer({ price }: { price: string }) {
       }}
       className="flex-shrink-0"
     >
-      <p
-        className={`font-bold whitespace-nowrap cursor-pointer text-secondary leading-tight info-price info-price-shimmer ${
-          isHovered ? "info-price-shimmer-hover" : ""
-        }`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        dangerouslySetInnerHTML={{ __html: price }}
-      />
+      {showComparison && previousPrice ? (
+        <div className="flex flex-col items-start gap-1">
+          <p className="text-fg/70 text-[16px] font-semibold leading-none whitespace-nowrap">
+            De: <span className="line-through" dangerouslySetInnerHTML={{ __html: previousPrice }} />
+          </p>
+          <span className="text-fg/60 text-[11px] font-semibold uppercase leading-none whitespace-nowrap">
+            Para:
+          </span>
+          <p
+            className={`font-bold whitespace-nowrap cursor-pointer text-secondary leading-tight info-price info-price-shimmer ${
+              isHovered ? "info-price-shimmer-hover" : ""
+            }`}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            dangerouslySetInnerHTML={{ __html: price }}
+          />
+        </div>
+      ) : (
+        <p
+          className={`font-bold whitespace-nowrap cursor-pointer text-secondary leading-tight info-price info-price-shimmer ${
+            isHovered ? "info-price-shimmer-hover" : ""
+          }`}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          dangerouslySetInnerHTML={{ __html: price }}
+        />
+      )}
     </motion.div>
   );
 }
@@ -952,12 +983,25 @@ export function DetalhesPage() {
       yearDisplay = String(vehicle.year);
     }
     
+    const sanitizeFormattedPrice = (formatted?: string) =>
+      formatted ? formatted.replace(/<[^>]*>/g, "") : "";
+    const basePrice = Number(vehicle.price) || 0;
+    const tradePrice =
+      typeof vehicle.preco_com_troca === "number" ? vehicle.preco_com_troca : undefined;
+    const showPriceComparison =
+      tradePrice !== undefined && Number.isFinite(tradePrice) && tradePrice !== basePrice;
+
     return {
       marca: vehicle.marca || vehicle.name?.split(" ")[0] || "",
       modeloCompleto: vehicle.modelo || vehicle.name || "",
       price:
         vehicle.valor_formatado ||
         (vehicle.price ? `R$ ${vehicle.price.toLocaleString("pt-BR")}` : ""),
+      previousPrice: showPriceComparison
+        ? sanitizeFormattedPrice(vehicle.preco_com_troca_formatado) ||
+          `R$ ${tradePrice!.toLocaleString("pt-BR")}`
+        : "",
+      showPriceComparison,
       year: yearDisplay,
       combustivel: vehicle.combustivel || "",
       cambio: vehicle.cambio || "",
@@ -968,6 +1012,8 @@ export function DetalhesPage() {
   const marca = vehicleData?.marca || "";
   const modeloCompleto = vehicleData?.modeloCompleto || "";
   const price = vehicleData?.price || "";
+  const previousPrice = vehicleData?.previousPrice || "";
+  const showPriceComparison = vehicleData?.showPriceComparison || false;
   const year = vehicleData?.year || "";
   const combustivel = vehicleData?.combustivel || "";
   const cambio = vehicleData?.cambio || "";
@@ -1330,7 +1376,11 @@ export function DetalhesPage() {
             {/* Price & CTA - Melhorado */}
             <div className="flex flex-col items-center gap-3 w-full">
               <div className="w-full flex justify-center items-center">
-                <PriceWithShimmer price={price} />
+                <PriceWithShimmer
+                  price={price}
+                  previousPrice={previousPrice}
+                  showComparison={showPriceComparison}
+                />
               </div>
               <div className="w-full">
                 <ContactButton modeloCompleto={modeloCompleto} />

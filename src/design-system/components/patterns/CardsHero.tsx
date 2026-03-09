@@ -10,14 +10,33 @@ interface CardsHeroProps {
   transmission: string;
   mileage: string;
   price: string;
+  previousPrice?: string;
+  showPriceComparison?: boolean;
   delay?: number;
   fastAnimation?: boolean;
   onClick?: () => void;
 }
 
-export function CardsHero({ image, brand, model, price, year, delay = 0, fastAnimation = false, onClick }: CardsHeroProps) {
+export function CardsHero({
+  image,
+  brand,
+  model,
+  price,
+  previousPrice,
+  showPriceComparison = false,
+  year,
+  delay = 0,
+  fastAnimation = false,
+  onClick,
+}: CardsHeroProps) {
   const content = (
     <div className="group relative bg-white rounded-[40px] shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 p-8 flex flex-col items-center" style={{ border: '1px solid rgba(229, 231, 235, 0.5)' }}>
+      {/* Selo em formato de carimbo */}
+      <img
+        src="/selos/selo_campanha.png"
+        alt="Selo de campanha"
+        className="absolute top-2 right-2 md:top-3 md:right-3 w-20 md:w-24 h-auto z-20 pointer-events-none select-none"
+      />
       
       {/* Floating Image Section - LARGER */}
       <div className="!border-0 absolute -top-32 md:-top-44 left-[-2%] right-[-2%] md:left-[-10%] md:right-[-10%] h-64 md:h-80 flex items-center justify-center z-10 pointer-events-none">
@@ -46,13 +65,29 @@ export function CardsHero({ image, brand, model, price, year, delay = 0, fastAni
          </div>
 
          {/* Price and Action - Left aligned price, right aligned button */}
-         <div className="!border-0 flex items-center justify-between w-full pt-4">
-           <p className="!border-0 text-[24px] font-bold font-sans tracking-tight" style={{ color: '#5CD29D' }}>
-             {price}
-           </p>
+         <div className="!border-0 flex items-end justify-between w-full pt-4 gap-3">
+           <div className="!border-0 flex-1 min-w-0">
+             {showPriceComparison && previousPrice ? (
+               <div className="flex flex-col items-start gap-1 min-h-[56px]">
+                 <p className="!border-0 text-[15px] font-semibold text-gray-500 leading-none whitespace-nowrap">
+                   De: <span className="line-through">{previousPrice}</span>
+                 </p>
+                 <div className="flex flex-col items-start leading-none gap-0.5 whitespace-nowrap">
+                   <span className="!border-0 text-[11px] font-semibold uppercase text-gray-400 whitespace-nowrap">Para:</span>
+                   <p className="!border-0 text-[24px] font-bold font-sans tracking-tight whitespace-nowrap" style={{ color: '#5CD29D' }}>
+                     {price}
+                   </p>
+                 </div>
+               </div>
+             ) : (
+               <p className="!border-0 text-[24px] font-bold font-sans tracking-tight whitespace-nowrap" style={{ color: '#5CD29D' }}>
+                 {price}
+               </p>
+             )}
+           </div>
            
            <button 
-             className="!border-0 h-10 w-10 rounded-full transition-all duration-300 shadow-lg group/btn flex items-center justify-center"
+             className="!border-0 h-10 w-10 rounded-full transition-all duration-300 shadow-lg group/btn flex items-center justify-center shrink-0"
              style={{ 
                backgroundColor: '#00283C',
                color: 'white',

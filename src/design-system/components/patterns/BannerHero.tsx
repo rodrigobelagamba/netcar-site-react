@@ -16,6 +16,8 @@ export function BannerHero({ banners }: BannerHeroProps) {
   }
 
   const currentBanner = banners[currentIndex];
+  const bannerLink = currentBanner.link?.trim() || "";
+  const isExternalLink = /^https?:\/\//i.test(bannerLink);
 
   const next = () => {
     setDirection(1);
@@ -73,7 +75,7 @@ export function BannerHero({ banners }: BannerHeroProps) {
   );
 
   return (
-    <div className="relative w-full bg-[#F6F6F6] overflow-hidden max-w-full md:aspect-[21/9]">
+    <div className="relative w-full bg-[#F6F6F6] overflow-hidden max-w-full pt-16 md:pt-0 md:aspect-[21/9] z-0">
       {/* Máscara em desktop: altura fixa proporcional (21:9). No mobile a altura acompanha a imagem inteira. */}
       <div className="relative w-full h-full overflow-hidden bg-gray-200 md:absolute md:inset-0">
         <AnimatePresence mode="popLayout" initial={false} custom={direction}>
@@ -90,11 +92,11 @@ export function BannerHero({ banners }: BannerHeroProps) {
             }}
             className="flex items-center justify-center w-full h-full md:absolute md:inset-0"
           >
-            {currentBanner.link ? (
+            {bannerLink ? (
               <a
-                href={currentBanner.link}
-                target={currentBanner.link.startsWith("http") ? "_blank" : undefined}
-                rel={currentBanner.link.startsWith("http") ? "noopener noreferrer" : undefined}
+                href={bannerLink}
+                target={isExternalLink ? "_blank" : undefined}
+                rel={isExternalLink ? "noopener noreferrer" : undefined}
                 className="block w-full h-full"
               >
                 {imageContent}

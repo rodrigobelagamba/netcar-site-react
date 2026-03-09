@@ -14,6 +14,9 @@ export interface HomeHeroVehicle {
   model: string;
   year: number;
   price: number;
+  valor_formatado?: string;
+  preco_com_troca?: number;
+  preco_com_troca_formatado?: string;
   image: string;
   tag?: string;
   marca?: string;
@@ -87,7 +90,19 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
     navigate({ to: `/veiculo/${slug}` });
   };
 
-  const priceFormatted = formatPrice(vehicle.price);
+  const sanitizeFormattedPrice = (formatted?: string) =>
+    formatted ? formatted.replace(/<[^>]*>/g, "") : "";
+  const priceFormatted =
+    sanitizeFormattedPrice(vehicle.valor_formatado) || formatPrice(vehicle.price);
+  const tradePriceValue =
+    typeof vehicle.preco_com_troca === "number" && Number.isFinite(vehicle.preco_com_troca)
+      ? vehicle.preco_com_troca
+      : undefined;
+  const showPriceComparison =
+    tradePriceValue !== undefined && tradePriceValue !== vehicle.price;
+  const previousPriceFormatted = showPriceComparison
+    ? sanitizeFormattedPrice(vehicle.preco_com_troca_formatado) || formatPrice(tradePriceValue!)
+    : "";
   const yearFormatted = formatYear(vehicle.year);
   const tag = vehicle.tag || vehicle.combustivel || "";
   
@@ -198,7 +213,25 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                     </>
                   )}
                 </div>
-                <div className="mt-1 md:mt-2 lg:mt-4 text-xl md:text-2xl lg:text-3xl font-black whitespace-nowrap" style={{ color: '#5CD29D' }}>{priceFormatted}</div>
+                <div className="mt-1 md:mt-2 lg:mt-4">
+                  {showPriceComparison ? (
+                    <div className="flex flex-col items-center">
+                      <span className="text-[15px] md:text-base font-semibold text-gray-300">
+                        De: <span className="line-through">{previousPriceFormatted}</span>
+                      </span>
+                      <span className="text-[11px] md:text-xs font-semibold uppercase text-gray-400 leading-none">
+                        Para:
+                      </span>
+                      <span className="text-xl md:text-2xl lg:text-3xl font-black whitespace-nowrap" style={{ color: '#5CD29D' }}>
+                        {priceFormatted}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-xl md:text-2xl lg:text-3xl font-black whitespace-nowrap" style={{ color: '#5CD29D' }}>
+                      {priceFormatted}
+                    </span>
+                  )}
+                </div>
               </div>
               
               <div 
