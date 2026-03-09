@@ -35,7 +35,7 @@ export function CardsHero({
       <img
         src="/selos/selo_campanha.png"
         alt="Selo de campanha"
-        className="absolute top-2 right-2 md:top-3 md:right-3 w-20 md:w-24 h-auto z-20 pointer-events-none select-none"
+        className="absolute top-16 right-2 md:top-16 md:right-3 w-20 md:w-24 h-auto z-20 pointer-events-none select-none"
       />
       
       {/* Floating Image Section - LARGER */}
