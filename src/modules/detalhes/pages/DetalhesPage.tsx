@@ -29,6 +29,7 @@ import { maskPlate } from "@/lib/slug";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
 import { parseGptContent, AccordionSection } from "@/lib/parseGptContent";
+import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -1253,15 +1254,22 @@ export function DetalhesPage() {
       <section className="w-full py-0 pt-0 lg:pt-0 pb-0 relative overflow-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] 
       xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[95vh] 4xl:min-h-[75vh]">
         {/* Mobile Image - Aparece primeiro no mobile, acima das informações */}
-        <div className="lg:hidden w-full mb-6">
+        <div className="lg:hidden w-full mb-6 relative">
           {mainImage && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
-              className="w-full h-[300px] sm:h-[400px] flex items-center justify-center bg-gray-50"
+              className="w-full h-[300px] sm:h-[400px] flex items-center justify-center bg-gray-50 relative overflow-visible"
             >
+              {SHOW_CAMPAIGN_STAMP && (
+                <img
+                  src="/selos/selo_campanha.png"
+                  alt="Selo de campanha"
+                  className="absolute bottom-[6%] right-[10%] sm:bottom-[8%] sm:right-[14%] w-20 sm:w-24 h-auto z-50 pointer-events-none select-none"
+                />
+              )}
               <img
                 src={mainImage}
                 alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Frente - Netcar Multimarcas`}
@@ -1404,7 +1412,19 @@ export function DetalhesPage() {
                      5xl:w-[70vw] 5xl:top-[-35rem] 5xl:right-[-30rem]"
         >
           {mainImage && (
-            <div className="w-full h-full flex items-start justify-center overflow-visible">
+            <div className="w-full h-full flex items-start justify-center overflow-visible relative">
+              {SHOW_CAMPAIGN_STAMP && (
+                <img
+                  src="/selos/selo_campanha.png"
+                  alt="Selo de campanha"
+                  className="absolute bottom-[6%] right-[10%]
+                             md:bottom-[7%] md:right-[11%]
+                             xl:bottom-[8%] xl:right-[16%]
+                             2xl:bottom-[9%] 2xl:right-[18%]
+                             w-24 md:w-28 xl:w-32 2xl:w-36
+                             h-auto z-50 pointer-events-none select-none"
+                />
+              )}
               <img
                 src={mainImage}
                 alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Frente - Netcar Multimarcas`}

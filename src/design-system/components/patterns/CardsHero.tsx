@@ -1,5 +1,6 @@
 import { Plus } from "lucide-react";
 import { motion } from "framer-motion";
+import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 
 interface CardsHeroProps {
   image: string;
@@ -32,11 +33,13 @@ export function CardsHero({
   const content = (
     <div className="group relative bg-white rounded-[40px] shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 p-8 flex flex-col items-center" style={{ border: '1px solid rgba(229, 231, 235, 0.5)' }}>
       {/* Selo em formato de carimbo */}
-      <img
-        src="/selos/selo_campanha.png"
-        alt="Selo de campanha"
-        className="absolute top-16 right-2 md:top-16 md:right-3 w-20 md:w-24 h-auto z-20 pointer-events-none select-none"
-      />
+      {SHOW_CAMPAIGN_STAMP && (
+        <img
+          src="/selos/selo_campanha.png"
+          alt="Selo de campanha"
+          className="absolute top-16 right-2 md:top-16 md:right-3 w-20 md:w-24 h-auto z-20 pointer-events-none select-none"
+        />
+      )}
       
       {/* Floating Image Section - LARGER */}
       <div className="!border-0 absolute -top-32 md:-top-44 left-[-2%] right-[-2%] md:left-[-10%] md:right-[-10%] h-64 md:h-80 flex items-center justify-center z-10 pointer-events-none">
