@@ -79,7 +79,8 @@ export function VehicleCard({
   }
 
   const handleClick = () => {
-    // Gera slug amigável para a URL
+    sessionStorage.setItem("showroom-scroll", String(window.scrollY));
+
     const slug = generateVehicleSlug({
       modelo: modelo || name,
       marca,

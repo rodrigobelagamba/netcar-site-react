@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
@@ -58,6 +58,33 @@ export function SeminovosPage() {
     "Carros Seminovos",
     "Confira nosso estoque de seminovos. Todas as marcas, financiamento facilitado e garantia."
   );
+
+  const scrollRestored = useRef(false);
+
+  useEffect(() => {
+    if (isLoading || !vehicles || scrollRestored.current) return;
+
+    const saved = sessionStorage.getItem("showroom-scroll");
+    if (!saved) return;
+
+    scrollRestored.current = true;
+    sessionStorage.removeItem("showroom-scroll");
+
+    const pos = Number(saved);
+    const restore = () => window.scrollTo({ top: pos, behavior: "instant" });
+
+    // Executa várias vezes para vencer a corrida com o scrollTo(0) do routes
+    // e a animação de transição do Framer Motion (200ms)
+    restore();
+    requestAnimationFrame(restore);
+    const t1 = setTimeout(restore, 100);
+    const t2 = setTimeout(restore, 300);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [isLoading, vehicles]);
   
   // Extrai dados do stockData (agora são arrays simples)
   const brands = stockData?.enterprises || [];
