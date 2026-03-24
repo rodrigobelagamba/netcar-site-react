@@ -8,10 +8,8 @@ export function useVehiclesQuery(query?: VehiclesQuery) {
   const queryKey = useMemo(() => {
     if (!query) return ["vehicles"];
     
-    // Cria uma chave baseada nos valores, não na referência do objeto
     const key: (string | number | undefined)[] = ["vehicles"];
     
-    // Adiciona todos os campos na mesma ordem sempre para garantir consistência
     if (query.marca) key.push("marca", query.marca);
     if (query.modelo) key.push("modelo", query.modelo);
     if (query.precoMin) key.push("precoMin", query.precoMin);
