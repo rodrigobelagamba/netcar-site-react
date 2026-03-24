@@ -4,15 +4,14 @@ node_modules/
 # Build output
 dist/
 
-# Environment variables
+# Environment variables (não versionar — copie de .env.example)
 .env
 .env.local
 .env.*.local
-# Mantém .env.example e .env.development/.env.production no repositório
-# Mas permite que sejam sobrescritos localmente
+.env.development
+.env.production
+# Apenas o exemplo fica no repositório
 !.env.example
-!.env.development
-!.env.production
 
 # Logs
 *.log
