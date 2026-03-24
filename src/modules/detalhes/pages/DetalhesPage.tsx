@@ -743,8 +743,7 @@ function RelatedVehiclesSection({
   currentCategory?: string;
   currentPrice?: number;
 }) {
-  // Busca 4 veículos para o carrossel mobile
-  const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 4 });
+  const { data: vehicles, isLoading } = useVehiclesQuery();
   
   // Detecta número de colunas baseado no tamanho da tela
   const [columnsPerRow, setColumnsPerRow] = useState(4);

@@ -51,7 +51,7 @@ function HomeHeroSkeleton() {
 }
 
 export function HomePage() {
-  const { data: vehicles, isLoading: isLoadingVehicles } = useVehiclesQuery({ limit: 4 });
+  const { data: vehicles, isLoading: isLoadingVehicles } = useVehiclesQuery();
   const { data: banners, isLoading: isLoadingBanners } = useBannersQuery();
   const navigate = useNavigate();
 
