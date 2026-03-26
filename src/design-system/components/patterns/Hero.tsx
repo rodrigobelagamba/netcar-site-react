@@ -168,13 +168,23 @@ export function Hero({ vehicles }: HeroProps) {
                 scale: { duration: 0.5 }
               }}
               className="absolute inset-0 flex items-center justify-center cursor-grab active:cursor-grabbing touch-none"
+              onPointerDown={(e) => {
+                (e.currentTarget as any)._dragStartX = e.clientX;
+                (e.currentTarget as any)._dragStartY = e.clientY;
+              }}
+              onPointerUp={(e) => {
+                const dx = Math.abs(e.clientX - ((e.currentTarget as any)._dragStartX || 0));
+                const dy = Math.abs(e.clientY - ((e.currentTarget as any)._dragStartY || 0));
+                if (dx < 10 && dy < 10) handleViewDetails();
+              }}
             >
               <img 
                 src={vehicle.image} 
                 alt={vehicle.model}
-                className="w-full h-auto drop-shadow-[0_40px_50px_rgba(0,0,0,0.15)] md:drop-shadow-[0_80px_60px_rgba(0,0,0,0.18)] hover:scale-[1.02] transition-transform duration-700 ease-out max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125"
+                className="w-full h-auto drop-shadow-[0_40px_50px_rgba(0,0,0,0.15)] md:drop-shadow-[0_80px_60px_rgba(0,0,0,0.18)] hover:scale-[1.02] transition-transform duration-700 ease-out max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125 cursor-pointer"
                 style={{ mixBlendMode: 'multiply' }}
                 loading="eager"
+                draggable={false}
               />
             </motion.div>
           </AnimatePresence>
