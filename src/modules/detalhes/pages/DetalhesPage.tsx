@@ -1354,7 +1354,7 @@ export function DetalhesPage() {
                     Combustível
                   </span>
                   <span className="text-fg font-semibold uppercase info-value">
-                    FLEX
+                    {combustivel}
                   </span>
                 </div>
               )}
