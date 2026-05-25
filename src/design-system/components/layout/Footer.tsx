@@ -12,7 +12,7 @@ import {
   useWhatsAppQuery,
   useScheduleQuery
 } from "@/api";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { formatWhatsAppNumber, buildMapsUrl, LOJA_COORDS } from "@/lib/formatters";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 const menuLinks = [
@@ -118,7 +118,17 @@ export function Footer() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
               {/* Loja 1 */}
-              <div className="group">
+              <a
+                href={buildMapsUrl(
+                  addressLoja1?.address || "Av. Getúlio Vargas, 740 - Centro - Esteio/RS",
+                  LOJA_COORDS.Loja1
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir localização da Loja 1 (Matriz) no Google Maps"
+                title="Abrir no Google Maps"
+                className="group block cursor-pointer hover:opacity-95 transition-opacity"
+              >
                 <div className="aspect-[16/10] rounded-xl overflow-hidden mb-3 relative">
                   <div className="absolute top-2 left-2 bg-primary/90 backdrop-blur px-2.5 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wide z-10">
                     Matriz
@@ -134,7 +144,7 @@ export function Footer() {
                     }}
                   />
                 </div>
-                <h5 className="font-bold text-fg text-sm mb-1">Loja 1</h5>
+                <h5 className="font-bold text-fg text-sm mb-1 group-hover:text-primary transition-colors">Loja 1</h5>
                 {addressLoja1?.address && (
                   <p className="text-xs text-muted-foreground leading-relaxed mb-2" dangerouslySetInnerHTML={{
                     __html: addressLoja1.address.replace(/ - /g, "<br/>")
@@ -143,10 +153,20 @@ export function Footer() {
                 <p className="text-sm font-semibold text-fg">
                   {phoneLoja1?.telefone ? formatPhone(phoneLoja1.telefone) : ""}
                 </p>
-              </div>
+              </a>
 
               {/* Loja 2 */}
-              <div className="group">
+              <a
+                href={buildMapsUrl(
+                  addressLoja2?.address || "Av. Getúlio Vargas, 1106 - Centro - Esteio/RS",
+                  LOJA_COORDS.Loja2
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir localização da Loja 2 (Filial) no Google Maps"
+                title="Abrir no Google Maps"
+                className="group block cursor-pointer hover:opacity-95 transition-opacity"
+              >
                 <div className="aspect-[16/10] rounded-xl overflow-hidden mb-3 relative">
                   <div className="absolute top-2 left-2 bg-amber-500/90 backdrop-blur px-2.5 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wide z-10">
                     Filial
@@ -162,7 +182,7 @@ export function Footer() {
                     }}
                   />
                 </div>
-                <h5 className="font-bold text-fg text-sm mb-1">Loja 2</h5>
+                <h5 className="font-bold text-fg text-sm mb-1 group-hover:text-primary transition-colors">Loja 2</h5>
                 {addressLoja2?.address && (
                   <p className="text-xs text-muted-foreground leading-relaxed mb-2" dangerouslySetInnerHTML={{
                     __html: addressLoja2.address.replace(/ - /g, "<br/>")
@@ -171,7 +191,7 @@ export function Footer() {
                 <p className="text-sm font-semibold text-fg">
                   {phoneLoja2?.telefone ? formatPhone(phoneLoja2.telefone) : ""}
                 </p>
-              </div>
+              </a>
 
             </div>
           </div>

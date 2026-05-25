@@ -8,6 +8,7 @@ import { CheckCircle2, Shield, Award, Users, TrendingUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
+import { buildMapsUrl, LOJA_COORDS } from "@/lib/formatters";
 
 export function SobrePage() {
   // Busca dados da API
@@ -287,12 +288,20 @@ export function SobrePage() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
             {/* Loja 1 */}
-            <motion.article
+            <motion.a
+              href={buildMapsUrl(
+                addressLoja1?.address || "Av. Getúlio Vargas, 740 - Centro - Esteio/RS",
+                LOJA_COORDS.Loja1
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Abrir localização da Loja 1 (Matriz) no Google Maps"
+              title="Abrir no Google Maps"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group flex flex-col"
+              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group flex flex-col cursor-pointer no-underline"
             >
               <div className="relative aspect-video w-full rounded-t-[20px] overflow-hidden bg-gray-100">
                 <img
@@ -321,15 +330,23 @@ export function SobrePage() {
                 </p>
                 <p className="text-muted-foreground text-sm">Showroom amplo, atendimento personalizado e test-drive.</p>
               </div>
-            </motion.article>
+            </motion.a>
 
             {/* Loja 2 */}
-            <motion.article
+            <motion.a
+              href={buildMapsUrl(
+                addressLoja2?.address || "Av. Getúlio Vargas, 1106 - Centro - Esteio/RS",
+                LOJA_COORDS.Loja2
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Abrir localização da Loja 2 (Filial) no Google Maps"
+              title="Abrir no Google Maps"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group flex flex-col"
+              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group flex flex-col cursor-pointer no-underline"
             >
               <div className="relative aspect-video w-full rounded-t-[20px] overflow-hidden bg-gray-100">
                 <img
@@ -358,7 +375,7 @@ export function SobrePage() {
                 </p>
                 <p className="text-muted-foreground text-sm">Seleção de seminovos e condições especiais de financiamento.</p>
               </div>
-            </motion.article>
+            </motion.a>
           </div>
         </div>
       </section>
