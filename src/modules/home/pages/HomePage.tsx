@@ -105,6 +105,10 @@ export function HomePage() {
       return shuffled;
     };
 
+    // Helper: confere se a string é uma URL de imagem PNG.
+    const isPngUrl = (img?: string | null): img is string =>
+      !!img && img.toLowerCase().includes(".png");
+
     const filtered = vehicles
       .filter(vehicle => {
         // Filtra apenas carros com preço maior que 80 mil
@@ -114,18 +118,20 @@ export function HomePage() {
         // Filtra apenas veículos que possuem fotos (tem_fotos === 1)
         const temFotos = vehicle.imagens_site?.tem_fotos;
         if (temFotos === 0 || temFotos === undefined) return false;
-        
+
+        // O banner da home só pode usar a foto-capa em PNG (alta resolução,
+        // fundo transparente). Veículos sem capa PNG são excluídos do hero
+        // pra não cair em thumbnails de baixa resolução.
+        if (!isPngUrl(vehicle.imagens_site?.capa)) return false;
+
         return true;
       });
 
     // Embaralha aleatoriamente e pega os 4 primeiros
     return shuffleArray(filtered).slice(0, 4)
       .map(vehicle => {
-        const pngImages = vehicle.images?.filter(img => 
-          img && (img.toLowerCase().endsWith('.png') || img.includes('.png'))
-        ) || [];
-        
-        const mainImage = pngImages.length > 0 ? pngImages[0] : CAR_COVERED_PLACEHOLDER_URL;
+        // Garantido pelo filter acima: imagens_site.capa existe e é PNG.
+        const mainImage = vehicle.imagens_site?.capa || CAR_COVERED_PLACEHOLDER_URL;
         
         // Monta a tag (combustível + motor se disponível)
         const tagParts = [];
