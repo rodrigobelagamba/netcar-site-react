@@ -43,25 +43,24 @@ const ANIMATION_DURATION = {
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
 
+type BadgeVariant = "success" | "purple" | "blue" | "blue-dark" | "green-dark";
+
 interface Badge {
   text: string;
-  variant: "success" | "purple" | "blue";
+  variant: BadgeVariant;
   icon?: boolean;
 }
 
+const BADGE_STYLES: Record<BadgeVariant, { bg: string; text: string }> = {
+  success: { bg: "bg-secondary", text: "text-secondary-foreground" },
+  purple: { bg: "bg-purple", text: "text-primary-foreground" },
+  blue: { bg: "bg-blue", text: "text-white" },
+  "blue-dark": { bg: "bg-blue-dark", text: "text-white" },
+  "green-dark": { bg: "bg-green-dark", text: "text-white" },
+};
+
 function Badge({ text, variant, icon }: Badge) {
-  const bgColor =
-    variant === "success"
-      ? "bg-secondary"
-      : variant === "blue"
-      ? "bg-blue"
-      : "bg-purple";
-  const textColor =
-    variant === "success"
-      ? "text-secondary-foreground"
-      : variant === "blue"
-      ? "text-white"
-      : "text-primary-foreground";
+  const { bg: bgColor, text: textColor } = BADGE_STYLES[variant];
 
   return (
     <motion.div
@@ -1221,15 +1220,21 @@ export function DetalhesPage() {
   }
 
   // Badges
-  const hasGarantiaFabrica = vehicle?.diferenciais?.some(
-    (diff) => diff.tag === "garantia_fabrica"
-  ) || false;
+  const diferenciais = vehicle?.diferenciais ?? [];
+  const hasDiferencial = (tag: string) =>
+    diferenciais.some((diff) => diff.tag === tag);
 
   const badges: Badge[] = [
     { text: "Vistoriado e aprovado", variant: "success", icon: true },
     { text: "Retire hoje", variant: "purple" },
-    ...(hasGarantiaFabrica
+    ...(hasDiferencial("garantia_fabrica")
       ? [{ text: "Garantia de Fábrica", variant: "blue" as const }]
+      : []),
+    ...(hasDiferencial("baixa_km")
+      ? [{ text: "Baixa KM", variant: "blue-dark" as const }]
+      : []),
+    ...(hasDiferencial("unico_dono")
+      ? [{ text: "Único Dono", variant: "green-dark" as const }]
       : []),
   ];
 
