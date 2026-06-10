@@ -11,6 +11,7 @@ interface VehicleSchemaOrgProps {
   images: string[];
   price: number;
   placa?: string;
+  isSold?: boolean;
 }
 
 /**
@@ -28,6 +29,7 @@ export function VehicleSchemaOrg({
   images,
   price,
   placa,
+  isSold = false,
 }: VehicleSchemaOrgProps) {
   useEffect(() => {
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://www.netcarmultimarcas.com.br";
@@ -96,7 +98,9 @@ export function VehicleSchemaOrg({
         "price": price,
         "priceCurrency": "BRL",
         "itemCondition": "https://schema.org/UsedCondition",
-        "availability": "https://schema.org/InStock",
+        "availability": isSold
+          ? "https://schema.org/SoldOut"
+          : "https://schema.org/InStock",
         "url": currentUrl,
         "seller": {
           "@type": "AutoDealer",
@@ -126,7 +130,7 @@ export function VehicleSchemaOrg({
         scriptToRemove.remove();
       }
     };
-  }, [marca, modelo, ano, km, combustivel, cambio, cor, images, price, placa]);
+  }, [marca, modelo, ano, km, combustivel, cambio, cor, images, price, placa, isSold]);
 
   return null;
 }

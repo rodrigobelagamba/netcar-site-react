@@ -5,15 +5,20 @@ import { useBannersLoja1Query } from "@/api/queries/useSiteQuery";
  * Hook para configurar metatags padrão usando foto da loja
  * Usado em páginas que não são de veículos específicos
  */
-export function useDefaultMetaTags(title?: string, description?: string) {
+export function useDefaultMetaTags(
+  title?: string,
+  description?: string,
+  options?: { canonicalPath?: string }
+) {
   const { data: bannersLoja1 } = useBannersLoja1Query();
 
   useEffect(() => {
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    // URL amigável (sem query/hash) para og:url e canonical — ao compartilhar no Android/apps usam essa URL
     const currentUrl =
       typeof window !== "undefined"
-        ? `${window.location.origin}${window.location.pathname}`
+        ? options?.canonicalPath
+          ? `${window.location.origin}${options.canonicalPath}`
+          : `${window.location.origin}${window.location.pathname}`
         : "";
     
     // Busca imagem da fachada ou primeira imagem da loja
@@ -36,9 +41,9 @@ export function useDefaultMetaTags(title?: string, description?: string) {
         ? `${baseUrl}${storeImage}` 
         : `${baseUrl}/${storeImage}`;
 
-    const defaultTitle = "Netcar";
+    const defaultTitle = "Netcar Multimarcas";
     const defaultDescription =
-      "Netcar - Seminovos com procedência e qualidade. Desde 1997 oferecendo os melhores veículos em Esteio/RS.";
+      "Netcar Multimarcas - Seminovos com procedência e qualidade. Desde 1997 oferecendo os melhores veículos em Esteio/RS.";
 
     // Título no formato "Netcar - [Nome da Página]"
     document.title = title ? `Netcar - ${title}` : defaultTitle;
@@ -66,7 +71,7 @@ export function useDefaultMetaTags(title?: string, description?: string) {
     updateMetaTag("og:image", absoluteImageUrl);
     updateMetaTag("og:url", currentUrl);
     updateMetaTag("og:type", "website");
-    updateMetaTag("og:site_name", "Netcar");
+    updateMetaTag("og:site_name", "Netcar Multimarcas");
     updateMetaTag("og:locale", "pt_BR");
 
     // Twitter Card tags
@@ -83,7 +88,7 @@ export function useDefaultMetaTags(title?: string, description?: string) {
       document.head.appendChild(canonicalLink);
     }
     canonicalLink.setAttribute("href", currentUrl);
-  }, [title, description, bannersLoja1]);
+  }, [title, description, bannersLoja1, options?.canonicalPath]);
 }
 
 

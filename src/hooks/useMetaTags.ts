@@ -6,6 +6,7 @@ interface MetaTagsProps {
   image?: string;
   url?: string;
   type?: string;
+  robots?: string;
   // Propriedades específicas para produtos (veículos)
   imageWidth?: number;
   imageHeight?: number;
@@ -37,6 +38,7 @@ export function useMetaTags({
   productPriceCurrency,
   productRetailerItemId,
   ogTitle,
+  robots,
 }: MetaTagsProps) {
   useEffect(() => {
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
@@ -46,9 +48,9 @@ export function useMetaTags({
       (typeof window !== "undefined"
         ? `${window.location.origin}${window.location.pathname}`
         : "");
-    const defaultTitle = "Netcar";
+    const defaultTitle = "Netcar Multimarcas";
     const defaultDescription =
-      "Netcar - Seminovos com procedência e qualidade. Desde 1997 oferecendo os melhores veículos em Esteio/RS.";
+      "Netcar Multimarcas - Seminovos com procedência e qualidade. Desde 1997 oferecendo os melhores veículos em Esteio/RS.";
     const defaultImage = `${baseUrl}/images/loja1.jpg`;
 
     // Título no formato "Netcar - [Nome da Página]" (ou apenas o título se já incluir Netcar)
@@ -75,7 +77,7 @@ export function useMetaTags({
     updateMetaTag("description", description || defaultDescription, false);
     
     // Open Graph tags
-    updateMetaTag("og:site_name", "Netcar");
+    updateMetaTag("og:site_name", "Netcar Multimarcas");
     // Usa ogTitle se fornecido, senão usa title
     updateMetaTag("og:title", ogTitle || title || defaultTitle);
     updateMetaTag("og:description", description || defaultDescription);
@@ -118,6 +120,10 @@ export function useMetaTags({
     updateMetaTag("twitter:description", description || defaultDescription, false);
     updateMetaTag("twitter:image", image || defaultImage, false);
 
+    if (robots) {
+      updateMetaTag("robots", robots, false);
+    }
+
     // Canonical URL
     let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
     if (!canonicalLink) {
@@ -147,6 +153,7 @@ export function useMetaTags({
     productPriceCurrency,
     productRetailerItemId,
     ogTitle,
+    robots,
   ]);
 }
 

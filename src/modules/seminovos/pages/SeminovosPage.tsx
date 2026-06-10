@@ -55,8 +55,9 @@ export function SeminovosPage() {
   const { searchTerm } = useSearchContext();
 
   useDefaultMetaTags(
-    "Carros Seminovos",
-    "Confira nosso estoque de seminovos. Todas as marcas, financiamento facilitado e garantia."
+    "Carros Seminovos à Venda em Esteio/RS",
+    "Confira o estoque de seminovos da Netcar em Esteio. Filtre por marca, modelo, ano e preço. Vistoriados e com garantia.",
+    { canonicalPath: "/seminovos" }
   );
 
   const scrollRestored = useRef(false);

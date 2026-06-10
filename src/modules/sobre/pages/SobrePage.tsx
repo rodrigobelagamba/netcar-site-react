@@ -25,8 +25,8 @@ export function SobrePage() {
   const { data: valores } = useAboutTextQuery("Valores");
 
   useDefaultMetaTags(
-    "Sobre Nós",
-    "Desde 1997, a Netcar seleciona carros com histórico, qualidade e transparência. Conheça nossa história e valores."
+    "Sobre a Netcar · Seminovos desde 1997",
+    "Conheça a Netcar Multimarcas: Fábrica de Valor, garantia GestAuto e 20+ anos vendendo seminovos com procedência em Esteio/RS."
   );
   
   // Imagem da fachada para cada loja

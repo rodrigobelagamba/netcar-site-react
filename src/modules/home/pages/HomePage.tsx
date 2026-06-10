@@ -88,7 +88,7 @@ export function HomePage() {
 
   useDefaultMetaTags(
     "Seminovos em Esteio",
-    "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Getúlio Vargas."
+    "Loja de seminovos em Esteio/RS. 2 lojas na Av. Getúlio Vargas. Garantia, Fábrica de Valor e Nethelp. Financiamento facilitado."
   );
 
   // Prepara veículos para o HomeHero - filtra PNGs, preço > 80000 e ordena aleatoriamente

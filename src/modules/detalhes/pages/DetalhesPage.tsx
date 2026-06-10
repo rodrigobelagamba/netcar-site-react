@@ -1162,32 +1162,37 @@ export function DetalhesPage() {
     }
     
     const ogTitle = titleParts.length > 0 ? titleParts.join(" ") : "Veículo";
+    const isSold = !vehicle.price || vehicle.price <= 0;
+    const priceText = vehicle.valor_formatado?.replace(/<[^>]*>/g, "") || "";
+    const description = isSold
+      ? `${marca} ${modeloCompleto} ${vehicle.year || ""} — veículo vendido. Confira seminovos similares na Netcar Multimarcas, Esteio/RS.`.trim()
+      : `${marca} ${modeloCompleto} ${vehicle.year || ""} seminovo por ${priceText}, ${vehicle.km?.toLocaleString("pt-BR") || 0} km, em Esteio/RS. Vistoriado, com garantia Netcar.`.trim();
 
     return {
-      title: `${ogTitle} | Netcar`, // Título da página (com Netcar)
-      description: "Seminovo é na Netcar", // Descrição fixa conforme exemplo
+      title: `${ogTitle} | Netcar Multimarcas`,
+      description,
       image: absoluteImageUrl,
       url: friendlyUrl || (typeof window !== "undefined" ? `${window.location.origin}${window.location.pathname}` : ""),
       type: "article" as const,
       imageWidth: 1200,
       imageHeight: 900,
-      productBrand: "Netcar", // Sempre "Netcar", não a marca do veículo
-      productAvailability: "in stock" as const,
+      productBrand: "Netcar Multimarcas",
+      productAvailability: isSold ? ("out of stock" as const) : ("in stock" as const),
       productCondition: "used_like_new" as const,
       productPriceAmount: vehicle.price || 0,
       productPriceCurrency: "BRL" as const,
       productRetailerItemId: vehicle.placa
-        ? maskPlate(vehicle.placa).toUpperCase() // Placa em MAIÚSCULAS
+        ? maskPlate(vehicle.placa).toUpperCase()
         : "",
-      // Propriedade adicional para og:title (sem "| Netcar")
       ogTitle: ogTitle,
+      robots: isSold ? "noindex, follow" : undefined,
     };
-  }, [vehicle, modeloCompleto, absoluteImageUrl, friendlyUrl, vehicle?.id]);
+  }, [vehicle, modeloCompleto, marca, absoluteImageUrl, friendlyUrl]);
 
   useMetaTags(
     metaTags || {
-      title: "veículo",
-      description: "Seminovo é na Netcar",
+      title: "Veículo",
+      description: "Seminovos com garantia na Netcar Multimarcas, Esteio/RS.",
       image: "",
       url: "",
     }
@@ -1252,6 +1257,7 @@ export function DetalhesPage() {
           images={images}
           price={vehicle.price || 0}
           placa={vehicle.placa}
+          isSold={!vehicle.price || vehicle.price <= 0}
         />
       )}
       {/* Hero Section */}

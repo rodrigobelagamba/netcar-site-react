@@ -112,6 +112,8 @@ $combustivel = isset($vehicle['combustivel']) ? $vehicle['combustivel'] : '';
 $cambio = isset($vehicle['cambio']) ? $vehicle['cambio'] : '';
 $valorFormatado = isset($vehicle['valor_formatado']) ? $vehicle['valor_formatado'] : '';
 
+$isSold = intval($preco) <= 0;
+
 // Função para mascarar placa (ex: ABC1234 -> abc-xx34)
 function maskPlate($placa) {
     if (!$placa) return '';
@@ -304,11 +306,14 @@ if ($placa) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Meta tags básicas -->
-    <title><?php echo htmlspecialchars($ogTitle . ' | Netcar', ENT_QUOTES, 'UTF-8'); ?></title>
+    <title><?php echo htmlspecialchars($ogTitle . ' | Netcar Multimarcas', ENT_QUOTES, 'UTF-8'); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($ogDescription, ENT_QUOTES, 'UTF-8'); ?>" />
+    <?php if ($isSold): ?>
+    <meta name="robots" content="noindex, follow" />
+    <?php endif; ?>
     
     <!-- Open Graph / Facebook -->
-    <meta property="og:site_name" content="Netcar" />
+    <meta property="og:site_name" content="Netcar Multimarcas" />
     <meta property="og:title" content="<?php echo htmlspecialchars($ogTitle, ENT_QUOTES, 'UTF-8'); ?>" />
     <meta property="og:description" content="<?php echo htmlspecialchars($ogDescription, ENT_QUOTES, 'UTF-8'); ?>" />
     <!-- DEBUG: Imagem selecionada: <?php echo htmlspecialchars($imagem ?: 'NENHUMA', ENT_QUOTES, 'UTF-8'); ?> -->
@@ -345,7 +350,7 @@ if ($placa) {
     
     <!-- Product tags -->
     <meta property="product:brand" content="Netcar" />
-    <meta property="product:availability" content="in stock" />
+    <meta property="product:availability" content="<?php echo $isSold ? 'out of stock' : 'in stock'; ?>" />
     <meta property="product:condition" content="used_like_new" />
     <meta property="product:price:amount" content="<?php echo intval($preco); ?>" />
     <meta property="product:price:currency" content="BRL" />
@@ -433,7 +438,7 @@ if ($placa) {
         "price": <?php echo intval($preco); ?>,
         "priceCurrency": "BRL",
         "itemCondition": "https://schema.org/UsedCondition",
-        "availability": "https://schema.org/InStock",
+        "availability": "<?php echo $isSold ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock'; ?>",
         "url": "<?php echo htmlspecialchars($pageUrl, ENT_QUOTES, 'UTF-8'); ?>",
         "seller": {
           "@type": "AutoDealer",

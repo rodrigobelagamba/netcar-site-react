@@ -64,8 +64,19 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   
-  # Redirecionamento específico: seminovos.php -> /seminovos
+  # Domínio canônico: força www
+  RewriteCond %{HTTP_HOST} ^netcarmultimarcas\.com\.br$ [NC]
+  RewriteRule ^(.*)$ https://www.netcarmultimarcas.com.br/$1 [R=301,L]
+  
+  # Redirects 301 — site legado PHP/HTML
   RewriteRule ^seminovos\.php$ /seminovos [R=301,L]
+  RewriteRule ^sobre-nos\.php$ /sobre [R=301,L]
+  RewriteRule ^listagem-produtos\.php$ /seminovos [R=301,L]
+  RewriteRule ^clientes\.php$ / [R=301,L]
+  RewriteRule ^contato\.php$ /contato [R=301,L]
+  RewriteRule ^contato\.html$ /contato [R=301,L]
+  RewriteRule ^ficha-cadastral\.php$ /seminovos [R=301,L]
+  RewriteRule ^detalhe-produto-(.+)$ /veiculo/detalhe-produto-$1 [R=301,L]
   
   # Primeiro: verificar se é um arquivo ou diretório existente - servir diretamente
   RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -84,7 +95,18 @@
   RewriteCond %{REQUEST_URI} ^/(index|not-found)\.html$ [NC]
   RewriteRule ^ - [L]
   
-  # Quinto: interceptar /veiculo/{slug} APENAS quando for bot/crawler (meta tags para WhatsApp)
+  # Sexto: interceptar rotas principais para bots (HTML com conteúdo real)
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Google-Structured-Data-Testing-Tool|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteCond %{REQUEST_URI} ^/(seminovos|sobre|contato|compra|blog)/?$ [NC]
+  RewriteRule ^ seo-pagina.php [L,QSA]
+
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Google-Structured-Data-Testing-Tool|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteCond %{REQUEST_URI} ^/?$ [NC]
+  RewriteRule ^$ seo-pagina.php [L,QSA]
+
+  # Sétimo: interceptar /veiculo/{slug} APENAS quando for bot/crawler (meta tags para WhatsApp)
   # Usuários normais acessam diretamente o React app
   RewriteCond %{REQUEST_URI} ^/veiculo/ [NC]
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Slackbot|SkypeUriPreview|LinkedInBot|Twitterbot|WhatsApp|facebookexternalhit|Facebot|Google-Structured-Data-Testing-Tool|bot|crawler|spider|scraper) [NC,OR]
