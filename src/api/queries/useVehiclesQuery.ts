@@ -2,7 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { fetchVehicles, fetchOpcionais, type VehiclesQuery } from "../endpoints/vehicles";
 
-export function useVehiclesQuery(query?: VehiclesQuery) {
+export function useVehiclesQuery(
+  query?: VehiclesQuery,
+  options?: { enabled?: boolean }
+) {
   // Cria uma chave de query estável baseada nos valores do objeto
   // Isso garante que mudanças em qualquer campo (incluindo categoria) sejam detectadas
   const queryKey = useMemo(() => {
@@ -41,6 +44,7 @@ export function useVehiclesQuery(query?: VehiclesQuery) {
     queryKey,
     queryFn: () => fetchVehicles(query),
     staleTime: 1000 * 60 * 5, // 5 minutos
+    enabled: options?.enabled ?? true,
   });
 }
 

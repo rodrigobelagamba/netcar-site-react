@@ -56,10 +56,13 @@ export function EmbedSocialSection() {
   };
 
   useEffect(() => {
-    // Garante que os elementos DOM existam antes de carregar scripts
-    if (!reviewsRef.current || !hashtagRef.current || !storiesRef.current) {
+    if (!reviewsRef.current || !hashtagRef.current || !storiesRef.current || !containerRef.current) {
       return;
     }
+
+    let cancelled = false;
+    let verificationTimer: ReturnType<typeof setTimeout> | null = null;
+    let initTimer: ReturnType<typeof setTimeout> | null = null;
 
     const loadScript = (id: string, src: string): Promise<void> => {
       return new Promise((resolve) => {
@@ -92,6 +95,7 @@ export function EmbedSocialSection() {
     };
 
     const initializeWidgets = async () => {
+      if (cancelled || scriptsLoadedRef.current) return;
       try {
         scriptsLoadedRef.current = true;
 
@@ -190,57 +194,43 @@ export function EmbedSocialSection() {
       }
     };
 
-    // Pequeno delay para garantir que o DOM está totalmente renderizado
-    const timer = setTimeout(() => {
-      initializeWidgets();
-    }, 100);
-
-    // Verificação periódica para detectar se os widgets não carregaram
-    const verificationTimer = setTimeout(() => {
-      if (!checkWidgetsLoaded() && scriptsLoadedRef.current) {
-        console.warn("EmbedSocial widgets verification: widgets not loaded after 8 seconds");
-        // Tenta recarregar se ainda não carregou
-        if (retryCountRef.current < 3) {
-          forceReloadWidgets();
+    const startWhenVisible = () => {
+      initTimer = setTimeout(() => {
+        if (!cancelled) {
+          initializeWidgets();
         }
-      }
-    }, 8000);
+      }, 100);
 
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(verificationTimer);
-      if (checkIntervalRef.current) {
-        clearInterval(checkIntervalRef.current);
-        checkIntervalRef.current = null;
-      }
+      verificationTimer = setTimeout(() => {
+        if (!checkWidgetsLoaded() && scriptsLoadedRef.current) {
+          if (retryCountRef.current < 3) {
+            forceReloadWidgets();
+          }
+        }
+      }, 8000);
     };
-  }, [forceReload]);
-
-  // IntersectionObserver para detectar quando a seção está visível e tentar recarregar se necessário
-  useEffect(() => {
-    if (!containerRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Quando a seção fica visível, verifica se os widgets carregaram
-            setTimeout(() => {
-              if (!checkWidgetsLoaded() && scriptsLoadedRef.current && retryCountRef.current < 3) {
-                console.log("Section visible but widgets not loaded, attempting reload...");
-                forceReloadWidgets();
-              }
-            }, 2000);
-          }
-        });
+        if (entries.some((entry) => entry.isIntersecting)) {
+          startWhenVisible();
+          observer.disconnect();
+        }
       },
-      { threshold: 0.1 }
+      { rootMargin: "200px", threshold: 0.01 }
     );
 
     observer.observe(containerRef.current);
 
     return () => {
+      cancelled = true;
       observer.disconnect();
+      if (initTimer) clearTimeout(initTimer);
+      if (verificationTimer) clearTimeout(verificationTimer);
+      if (checkIntervalRef.current) {
+        clearInterval(checkIntervalRef.current);
+        checkIntervalRef.current = null;
+      }
     };
   }, [forceReload]);
 

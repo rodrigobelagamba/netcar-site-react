@@ -16,7 +16,7 @@ import {
   useScheduleQuery
 } from "@/api";
 import { formatWhatsAppNumber } from "@/lib/formatters";
-import { Localizacao } from "@/design-system/components/layout/Localizacao";
+import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 
 export function ContatoPage() {
@@ -294,7 +294,7 @@ export function ContatoPage() {
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
         <div className="container-main space-y-8">
-          <Localizacao />
+          <LazyLocalizacao />
           <IanBot />
         </div>
       </div>

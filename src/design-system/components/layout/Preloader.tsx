@@ -13,12 +13,12 @@ export function Preloader({ onComplete }: PreloaderProps) {
   useEffect(() => {
     const revealTimer = setTimeout(() => {
       setIsRevealing(true);
-    }, 3000);
+    }, 800);
 
     const hideTimer = setTimeout(() => {
       setIsVisible(false);
       onComplete?.();
-    }, 4200);
+    }, 1400);
 
     return () => {
       clearTimeout(revealTimer);

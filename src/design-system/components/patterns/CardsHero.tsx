@@ -46,7 +46,9 @@ export function CardsHero({
         <div className="!border-0 relative w-full h-full">
           <img 
             src={image} 
-            alt={`${brand} ${model}`}
+            alt={`${brand} ${model}`.trim() || "Veículo seminovo"}
+            loading="lazy"
+            decoding="async"
             className="!border-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-2 drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)]"
           />
         </div>

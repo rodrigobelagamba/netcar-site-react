@@ -6,20 +6,42 @@ import {
 } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouterState } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Header } from "@/design-system/components/layout/Header";
 import { Footer } from "@/design-system/components/layout/Footer";
-import { HomePage } from "@/modules/home/pages/HomePage";
-import { SeminovosPage } from "@/modules/seminovos/pages/SeminovosPage";
-import { DetalhesPage } from "@/modules/detalhes/pages/DetalhesPage";
-import { SobrePage } from "@/modules/sobre/pages/SobrePage";
-import { ContatoPage } from "@/modules/contato/pages/ContatoPage";
-import { BlogPage } from "@/modules/blog/pages/BlogPage";
-import { CompraPage } from "@/modules/compra/pages/CompraPage";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
 import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 import { SchemaOrg } from "@/components/seo/SchemaOrg";
+import { PageLoader } from "@/components/layout/PageLoader";
+
+const HomePage = lazy(() =>
+  import("@/modules/home/pages/HomePage").then((m) => ({ default: m.HomePage }))
+);
+const SeminovosPage = lazy(() =>
+  import("@/modules/seminovos/pages/SeminovosPage").then((m) => ({
+    default: m.SeminovosPage,
+  }))
+);
+const DetalhesPage = lazy(() =>
+  import("@/modules/detalhes/pages/DetalhesPage").then((m) => ({
+    default: m.DetalhesPage,
+  }))
+);
+const SobrePage = lazy(() =>
+  import("@/modules/sobre/pages/SobrePage").then((m) => ({ default: m.SobrePage }))
+);
+const ContatoPage = lazy(() =>
+  import("@/modules/contato/pages/ContatoPage").then((m) => ({
+    default: m.ContatoPage,
+  }))
+);
+const BlogPage = lazy(() =>
+  import("@/modules/blog/pages/BlogPage").then((m) => ({ default: m.BlogPage }))
+);
+const CompraPage = lazy(() =>
+  import("@/modules/compra/pages/CompraPage").then((m) => ({ default: m.CompraPage }))
+);
 
 // WhatsApp Button Component - iAN
 function WhatsAppButton() {
@@ -98,6 +120,12 @@ function RootComponent() {
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
+      <a
+        href="#conteudo-principal"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[10000] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-white focus:outline-none"
+      >
+        Pular para o conteúdo
+      </a>
       <SchemaOrg />
       <Header />
       <div className="relative flex-1 overflow-x-hidden max-w-full pt-0 sm:pt-20">
@@ -109,8 +137,12 @@ function RootComponent() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="h-full overflow-x-hidden max-w-full"
+            id="conteudo-principal"
+            tabIndex={-1}
           >
-            <Outlet />
+            <Suspense fallback={<PageLoader />}>
+              <Outlet />
+            </Suspense>
           </motion.div>
         </AnimatePresence>
       </div>

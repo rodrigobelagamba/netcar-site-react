@@ -419,7 +419,7 @@ export function Localizacao() {
   }
 
   return (
-    <section className="container-main w-full bg-white rounded-[32px] shadow-sm overflow-hidden border border-white relative group">
+    <section className="container-main w-full bg-white rounded-[32px] shadow-sm overflow-hidden border border-white relative group" aria-labelledby="mapa-lojas-titulo">
       <div className="w-full h-[450px] relative grayscale-[0.1]">
         <LoadScript
           googleMapsApiKey={GOOGLE_MAPS_API_KEY}
@@ -478,7 +478,7 @@ export function Localizacao() {
         
         {/* Card Flutuante */}
         <div className="absolute top-6 right-6 md:top-8 md:right-8 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-white/50 hidden md:block max-w-[340px] z-30">
-          <h5 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+          <h5 id="mapa-lojas-titulo" className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
             Nossas Unidades
           </h5>
@@ -486,8 +486,17 @@ export function Localizacao() {
           {lojas.map((loja, index) => (
             <div
               key={loja.id}
+              role="button"
+              tabIndex={0}
+              aria-label={`Ver ${loja.nome} no mapa`}
               className={`flex items-start gap-4 ${index < lojas.length - 1 ? "mb-6 relative" : ""} group/item hover:bg-gray-50/50 p-2 -mx-2 rounded-lg transition-colors cursor-pointer`}
               onClick={() => setSelectedLoja(loja.id)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setSelectedLoja(loja.id);
+                }
+              }}
             >
               {index < lojas.length - 1 && (
                 <div className="absolute left-[17px] top-10 bottom-[-16px] w-[2px] border-l-2 border-dotted border-gray-200"></div>

@@ -32,7 +32,9 @@ export function Header() {
   const location = useLocation();
   const { data: whatsapp } = useWhatsAppQuery();
   const { searchTerm, setSearchTerm } = useSearchContext();
-  const { data: vehicles } = useVehiclesQuery();
+  const { data: vehicles } = useVehiclesQuery(undefined, {
+    enabled: isSearchOpen || isMobileMenuOpen,
+  });
 
   // Formata telefone para exibição
   const formatPhone = (phone?: string) => {
@@ -401,10 +403,10 @@ export function Header() {
           {/* Logo e Menu centralizados juntos - Desktop */}
           <div className="hidden md:flex items-center gap-8 flex-1 justify-center">
             <Link to="/" aria-label="Netcar - Página inicial" className="flex-shrink-0">
-              <img src={logoNetcar} alt="Netcar" className="h-8 w-auto" />
+              <img src={logoNetcar} alt="Netcar Multimarcas" className="h-8 w-auto" />
             </Link>
 
-            <nav className="flex items-center gap-6 flex-shrink-0">
+            <nav className="flex items-center gap-6 flex-shrink-0" aria-label="Menu principal">
               {menuLinks.map((link) => {
                 const linkClassName = "group relative text-[14px]  text-fg overflow-hidden h-[22px] flex items-center whitespace-nowrap";
                 
@@ -451,7 +453,7 @@ export function Header() {
 
           {/* Logo - Mobile */}
           <Link to="/" aria-label="Netcar - Página inicial" className="md:hidden">
-            <img src={logoNetcar} alt="Netcar" className="h-8 w-auto" />
+            <img src={logoNetcar} alt="Netcar Multimarcas" className="h-8 w-auto" />
           </Link>
 
           {/* Botões à direita - Desktop */}
@@ -553,7 +555,7 @@ export function Header() {
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.4, delay: 0.1 }}
             >
-              <nav className="flex flex-col items-center gap-6">
+              <nav className="flex flex-col items-center gap-6" aria-label="Menu mobile">
                 {/* Campo de Busca Mobile com Autocomplete */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}

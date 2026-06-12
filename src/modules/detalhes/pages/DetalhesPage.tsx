@@ -23,7 +23,7 @@ import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
 import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
 import { useEmbla } from "@/hooks/useEmbla";
-import { Localizacao } from "@/design-system/components/layout/Localizacao";
+import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { maskPlate } from "@/lib/slug";
 import { useMetaTags } from "@/hooks/useMetaTags";
@@ -859,7 +859,7 @@ function RelatedVehiclesSection({
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-[26px] h-[26px] sm:w-[28px] sm:h-[28px] lg:w-[30px] lg:h-[30px]">
-              <img src={icon1} alt="" className="block size-full" />
+              <img src={icon1} alt="" aria-hidden="true" className="block size-full" />
             </div>
             <h2 className="section-heading">
               Você também pode gostar
@@ -1502,7 +1502,7 @@ export function DetalhesPage() {
       <EmbedSocialSection />
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
-        <Localizacao />
+        <LazyLocalizacao />
         <IanBot />
       </div>
     </main>
@@ -1643,7 +1643,7 @@ function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
         "w-[26px] h-[26px] sm:w-[28px] sm:h-[28px] lg:w-[30px] lg:h-[30px]"
       }
     >
-      <img src={icon1} alt="" className="block size-full" />
+      <img src={icon1} alt="" aria-hidden="true" className="block size-full" />
     </div>
   );
 
