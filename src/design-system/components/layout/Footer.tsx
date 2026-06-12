@@ -18,7 +18,7 @@ import logoNetcar from "@/assets/images/logo-netcar.png";
 const menuLinks = [
   { to: "/sobre", label: "Sobre" },
   { to: "/seminovos", label: "Showroom" },
-  { to: "/compra", label: "Venda seu carro" },
+  { to: "/compra", label: "Netcar compra" },
   { to: "/blog", label: "Atualidades" },
   { to: "/contato", label: "Contato" },
   { to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9", label: "Localização", external: true },
@@ -247,6 +247,12 @@ export function Footer() {
             </div>
           </div>
 
+        </div>
+
+        <div className="border-t border-border pt-6 pb-4">
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Netcar Multimarcas — seminovos revisados e compra de usados em Esteio/RS. Atendemos Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha e região metropolitana de Porto Alegre.
+          </p>
         </div>
 
         {/* Texto Legal */}

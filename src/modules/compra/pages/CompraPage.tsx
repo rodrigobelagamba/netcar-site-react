@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useRouterState } from "@tanstack/react-router";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { Car, MapPin, Calendar, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/cn";
@@ -9,17 +10,24 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 
 export function CompraPage() {
   const { data: whatsapp } = useWhatsAppQuery();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isCompramosAlias =
+    pathname === "/compramos-seu-usado" || pathname === "/vender-meu-carro";
 
   const getIanWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
     const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    const message = "Oi iAN! Gostaria de vender meu carro para a Netcar.";
+    const message = isCompramosAlias
+      ? "Oi! Quero avaliar meu carro para venda ou troca na Netcar."
+      : "Oi iAN! Gostaria de vender meu carro para a Netcar.";
     return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
   };
 
   useDefaultMetaTags(
-    "Venda seu Carro",
-    "Vendemos seu carro de forma rápida, segura e sem complicações. Avaliação gratuita e valores justos."
+    isCompramosAlias ? "Compramos Seu Carro Usado" : "Netcar Compra — Venda seu Carro",
+    isCompramosAlias
+      ? "Quer vender ou trocar seu carro? A Netcar compra mesmo financiado. Avaliação rápida em Esteio/RS e região metropolitana."
+      : "A Netcar compra seu carro usado com avaliação justa e pagamento ágil. Esteio, Canoas, Sapucaia e Grande POA. Mesmo financiado."
   );
 
   const requirements = [
@@ -54,11 +62,18 @@ export function CompraPage() {
                 Compramos seu veículo
               </motion.span>
               <h1 className="text-3xl md:text-4xl lg:text-[48px] font-bold leading-tight mb-5 text-fg">
-                Quer vender seu carro de forma rápida e segura?
+                {isCompramosAlias
+                  ? "Compramos seu carro — mesmo financiado"
+                  : "Quer vender seu carro de forma rápida e segura?"}
               </h1>
-              <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-6">
-                A NETCAR compra seu veículo por meio de um processo simples, transparente e confiável, sempre oferecendo valores justos e alinhados com o mercado.
+              <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-4">
+                A Netcar compra seu veículo com processo simples e transparente — valores alinhados ao mercado, sem anúncio e sem negociação com desconhecido.
               </p>
+              {isCompramosAlias && (
+                <p className="text-fg font-medium text-base md:text-lg leading-relaxed mb-6 rounded-xl bg-secondary/10 border border-secondary/20 px-4 py-3">
+                  Seu carro ainda tem parcela? A gente quita o financiamento e você troca por um seminovo — ou recebe o valor na conta se quiser só vender.
+                </p>
+              )}
               
               <div className="flex flex-wrap items-center gap-4">
                 <motion.a
@@ -114,6 +129,20 @@ export function CompraPage() {
           </div>
         </div>
       </header>
+
+      <section className="py-12 md:py-16 bg-[#fafafa] border-y border-gray-100">
+        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">
+          <h2 className="text-2xl font-bold text-fg mb-4">Como funciona a venda ou troca</h2>
+          <ol className="list-decimal pl-5 space-y-2 text-muted-foreground mb-6">
+            <li>Conte modelo, ano, km e se ainda tem financiamento</li>
+            <li>Receba avaliação com critérios claros</li>
+            <li>Fechou? Pagamento via transferência ou valor na troca por seminovo</li>
+          </ol>
+          <p className="text-sm text-muted-foreground">
+            Atendemos vendedores de Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha e região metropolitana de Porto Alegre.
+          </p>
+        </div>
+      </section>
 
       {/* Benefícios */}
       <section className="py-16 md:py-24">

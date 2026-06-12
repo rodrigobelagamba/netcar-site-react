@@ -100,6 +100,16 @@ export function SchemaOrg() {
         }
       ],
       "priceRange": "R$ 40.000 - R$ 300.000",
+      "areaServed": [
+        { "@type": "City", "name": "Esteio" },
+        { "@type": "City", "name": "Canoas" },
+        { "@type": "City", "name": "Sapucaia do Sul" },
+        { "@type": "City", "name": "São Leopoldo" },
+        { "@type": "City", "name": "Novo Hamburgo" },
+        { "@type": "City", "name": "Gravataí" },
+        { "@type": "City", "name": "Cachoeirinha" },
+        { "@type": "AdministrativeArea", "name": "Região Metropolitana de Porto Alegre" }
+      ],
       "sameAs": [
         "https://www.instagram.com/netcar_rc",
         "https://www.facebook.com/NetcarRC"

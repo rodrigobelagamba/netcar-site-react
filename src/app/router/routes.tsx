@@ -42,6 +42,31 @@ const BlogPage = lazy(() =>
 const CompraPage = lazy(() =>
   import("@/modules/compra/pages/CompraPage").then((m) => ({ default: m.CompraPage }))
 );
+const BlogPostPage = lazy(() =>
+  import("@/modules/blog/pages/BlogPostPage").then((m) => ({
+    default: m.BlogPostPage,
+  }))
+);
+const CityLandingPage = lazy(() =>
+  import("@/modules/seo/pages/CityLandingPage").then((m) => ({
+    default: m.CityLandingPage,
+  }))
+);
+const FinanciamentoSemEntradaPage = lazy(() =>
+  import("@/modules/seo/pages/FinanciamentoSemEntradaPage").then((m) => ({
+    default: m.FinanciamentoSemEntradaPage,
+  }))
+);
+const SeminovosAutomaticosPage = lazy(() =>
+  import("@/modules/seo/pages/SeminovosAutomaticosPage").then((m) => ({
+    default: m.SeminovosAutomaticosPage,
+  }))
+);
+const SellCityLandingPage = lazy(() =>
+  import("@/modules/seo/pages/SellCityLandingPage").then((m) => ({
+    default: m.SellCityLandingPage,
+  }))
+);
 
 // WhatsApp Button Component - iAN
 function WhatsAppButton() {
@@ -234,10 +259,52 @@ const blogRoute = createRoute({
   component: BlogPage,
 });
 
+const blogPostRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/blog/$slug",
+  component: BlogPostPage,
+});
+
 const compraRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/compra",
   component: CompraPage,
+});
+
+const compramosSeuUsadoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/compramos-seu-usado",
+  component: CompraPage,
+});
+
+const venderMeuCarroRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/vender-meu-carro",
+  component: CompraPage,
+});
+
+const financiamentoSemEntradaRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/financiamento-sem-entrada",
+  component: FinanciamentoSemEntradaPage,
+});
+
+const seminovosAutomaticosRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/seminovos-automaticos",
+  component: SeminovosAutomaticosPage,
+});
+
+const cityLandingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/seminovos-{$citySlug}",
+  component: CityLandingPage,
+});
+
+const sellCityLandingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/vender-carro-{$citySlug}",
+  component: SellCityLandingPage,
 });
 
 export const routeTree = rootRoute.addChildren([
@@ -247,7 +314,14 @@ export const routeTree = rootRoute.addChildren([
   sobreRoute,
   contatoRoute,
   blogRoute,
+  blogPostRoute,
   compraRoute,
+  compramosSeuUsadoRoute,
+  venderMeuCarroRoute,
+  financiamentoSemEntradaRoute,
+  seminovosAutomaticosRoute,
+  cityLandingRoute,
+  sellCityLandingRoute,
 ]);
 
 // Exporta NotFound para uso no RouterProvider
