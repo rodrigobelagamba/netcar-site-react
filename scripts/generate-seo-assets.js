@@ -251,8 +251,6 @@ const staticPages = [
   { path: "/compramos-seu-usado", priority: "0.85", changefreq: "weekly" },
   { path: "/vender-meu-carro", priority: "0.85", changefreq: "weekly" },
   { path: "/blog", priority: "0.8", changefreq: "weekly" },
-  { path: "/financiamento-sem-entrada", priority: "0.8", changefreq: "monthly" },
-  { path: "/seminovos-automaticos", priority: "0.8", changefreq: "daily" },
 ];
 
 // Preserva URLs de veículos no sitemap. No build, generate-sitemap.js roda antes
