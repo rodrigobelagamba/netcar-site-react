@@ -45,7 +45,9 @@ export function SchemaOrg() {
       "@type": "AutoDealer",
       "@id": `${baseUrl}/#organization`,
       "name": "Netcar Multimarcas",
+      "alternateName": "Netcar Veículos",
       "legalName": "Netcar Veículos Ltda",
+      "foundingDate": "1997",
       "description": "Loja de seminovos em Esteio/RS com mais de 15 anos de mercado. Carros com garantia, vistoriados e financiamento facilitado.",
       "url": baseUrl,
       "logo": {

@@ -78,6 +78,14 @@
   RewriteRule ^ficha-cadastral\.php$ /seminovos [R=301,L]
   RewriteRule ^detalhe-produto-(.+)$ /veiculo/detalhe-produto-$1 [R=301,L]
   
+  # Home para bots: precisa vir ANTES do short-circuit de arquivo/diretório,
+  # senão a raiz "/" casa com o diretório docroot (-d) e o crawler recebe o
+  # index.html (shell vazio do React) em vez do conteúdo real do seo-pagina.php.
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Google-Structured-Data-Testing-Tool|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteCond %{REQUEST_URI} ^/?$ [NC]
+  RewriteRule ^$ seo-pagina.php [L,QSA]
+  
   # Primeiro: verificar se é um arquivo ou diretório existente - servir diretamente
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
@@ -100,11 +108,6 @@
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{REQUEST_URI} ^/(seminovos|sobre|contato|compra|blog)/?$ [NC]
   RewriteRule ^ seo-pagina.php [L,QSA]
-
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Google-Structured-Data-Testing-Tool|bot|crawler|spider|scraper) [NC,OR]
-  RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
-  RewriteCond %{REQUEST_URI} ^/?$ [NC]
-  RewriteRule ^$ seo-pagina.php [L,QSA]
 
   # SEO estático para crawlers (blog + páginas locais)
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]

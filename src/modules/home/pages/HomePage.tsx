@@ -87,7 +87,7 @@ export function HomePage() {
   }, []);
 
   useDefaultMetaTags(
-    "Seminovos em Esteio",
+    "Seminovos em Esteio/RS",
     "Loja de seminovos em Esteio/RS. 2 lojas na Av. Getúlio Vargas. Garantia, Fábrica de Valor e Nethelp. Financiamento facilitado."
   );
 
@@ -224,6 +224,17 @@ export function HomePage() {
 
       {/* SearchBar logo abaixo do banner */}
       <SearchBar />
+
+      {/* Título principal (H1) para busca local */}
+      <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 mt-8 text-center">
+        <h1 className="text-2xl md:text-3xl font-bold text-fg">
+          Netcar Multimarcas — Seminovos em Esteio/RS
+        </h1>
+        <p className="mt-2 mx-auto max-w-3xl text-base md:text-lg text-gray-600">
+          Seminovos vistoriados, com garantia e financiamento em Esteio/RS desde 1997.
+          Duas lojas na Av. Getúlio Vargas com estoque atualizado de multimarcas.
+        </p>
+      </section>
 
       {/* Botão Ver Estoque Completo */}
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 mt-8 flex justify-center">

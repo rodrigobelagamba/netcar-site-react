@@ -8,6 +8,77 @@ function seo_h($value)
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
+/**
+ * Schema.org AutoDealer (LocalBusiness) para as páginas servidas a crawlers.
+ * Mantém os mesmos dados do index.html (NAP, geo, horários) e acrescenta
+ * foundingDate e alternateName. Sem AggregateRating/reviews.
+ */
+function seo_org_schema()
+{
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'AutoDealer',
+        '@id' => SEO_SITE_URL . '/#organization',
+        'name' => 'Netcar Multimarcas',
+        'alternateName' => 'Netcar Veículos',
+        'legalName' => 'Netcar Veículos Ltda',
+        'foundingDate' => '1997',
+        'description' => 'Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Getúlio Vargas. Compra de usados, mesmo financiados.',
+        'url' => SEO_SITE_URL,
+        'logo' => [
+            '@type' => 'ImageObject',
+            'url' => SEO_SITE_URL . '/images/Logotipo7_1768863597989.png',
+        ],
+        'image' => [
+            SEO_SITE_URL . '/images/loja1.jpg',
+            SEO_SITE_URL . '/images/loja2.jpg',
+        ],
+        'telephone' => '+55-51-3473-7900',
+        'email' => 'contato@netcarmultimarcas.com.br',
+        'address' => [
+            [
+                '@type' => 'PostalAddress',
+                'name' => 'Matriz',
+                'streetAddress' => 'Av. Getúlio Vargas, 740',
+                'addressLocality' => 'Esteio',
+                'addressRegion' => 'RS',
+                'postalCode' => '93265-000',
+                'addressCountry' => 'BR',
+            ],
+            [
+                '@type' => 'PostalAddress',
+                'name' => 'Filial',
+                'streetAddress' => 'Av. Getúlio Vargas, 1106',
+                'addressLocality' => 'Esteio',
+                'addressRegion' => 'RS',
+                'postalCode' => '93265-000',
+                'addressCountry' => 'BR',
+            ],
+        ],
+        'geo' => [
+            '@type' => 'GeoCoordinates',
+            'latitude' => '-29.837920',
+            'longitude' => '-51.170236',
+        ],
+        'openingHoursSpecification' => [
+            [
+                '@type' => 'OpeningHoursSpecification',
+                'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                'opens' => '09:00',
+                'closes' => '18:00',
+            ],
+            [
+                '@type' => 'OpeningHoursSpecification',
+                'dayOfWeek' => 'Saturday',
+                'opens' => '09:00',
+                'closes' => '16:30',
+            ],
+        ],
+    ];
+
+    return json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+}
+
 function seo_fetch_json($url)
 {
     $ch = curl_init($url);
@@ -148,6 +219,7 @@ function seo_render_head($title, $description, $canonical, $extraHead = '')
     <meta name="twitter:title" content="<?php echo seo_h($title); ?>" />
     <meta name="twitter:description" content="<?php echo seo_h($description); ?>" />
     <meta name="twitter:image" content="<?php echo SEO_SITE_URL; ?>/images/loja1.jpg" />
+    <script type="application/ld+json"><?php echo seo_org_schema(); ?></script>
     <?php echo $extraHead; ?>
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; color: #222; max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
