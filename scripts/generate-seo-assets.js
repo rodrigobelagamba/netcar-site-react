@@ -17,6 +17,79 @@ const seoStaticDir = join(publicDir, "seo-static");
 const SITE = "https://www.netcarmultimarcas.com.br";
 const today = new Date().toISOString().slice(0, 10);
 
+// AutoDealer (LocalBusiness) — mesmos dados de seo_org_schema() em public/seo/helpers.php.
+// Sem AggregateRating/reviews.
+const ORG_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "AutoDealer",
+  "@id": `${SITE}/#organization`,
+  name: "Netcar Multimarcas",
+  alternateName: "Netcar Veículos",
+  legalName: "Netcar Veículos Ltda",
+  foundingDate: "1997",
+  description:
+    "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Getúlio Vargas. Compra de usados, mesmo financiados.",
+  url: SITE,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE}/images/Logotipo7_1768863597989.png`,
+  },
+  image: [`${SITE}/images/loja1.jpg`, `${SITE}/images/loja2.jpg`],
+  telephone: "+55-51-3473-7900",
+  email: "contato@netcarmultimarcas.com.br",
+  address: [
+    {
+      "@type": "PostalAddress",
+      name: "Matriz",
+      streetAddress: "Av. Getúlio Vargas, 740",
+      addressLocality: "Esteio",
+      addressRegion: "RS",
+      postalCode: "93265-000",
+      addressCountry: "BR",
+    },
+    {
+      "@type": "PostalAddress",
+      name: "Filial",
+      streetAddress: "Av. Getúlio Vargas, 1106",
+      addressLocality: "Esteio",
+      addressRegion: "RS",
+      postalCode: "93265-000",
+      addressCountry: "BR",
+    },
+  ],
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: "-29.837920",
+    longitude: "-51.170236",
+  },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "18:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: "09:00",
+      closes: "16:30",
+    },
+  ],
+};
+
+function faqSchema(faq) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+}
+
 const blogPosts = JSON.parse(
   readFileSync(join(rootDir, "src/data/seo/blog-posts.json"), "utf-8")
 );
@@ -52,7 +125,16 @@ function renderSections(sections) {
     .join("\n");
 }
 
-function pageShell({ title, description, canonical, body }) {
+function pageShell({ title, description, canonical, body, schemas = [] }) {
+  const schemaTags = schemas.length
+    ? "\n" +
+      schemas
+        .map(
+          (schema) =>
+            `  <script type="application/ld+json">${JSON.stringify(schema)}</script>`
+        )
+        .join("\n")
+    : "";
   return `<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -66,7 +148,7 @@ function pageShell({ title, description, canonical, body }) {
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:url" content="${canonical}" />
-  <meta property="og:image" content="${SITE}/images/loja1.jpg" />
+  <meta property="og:image" content="${SITE}/images/loja1.jpg" />${schemaTags}
 </head>
 <body>
   <header>
@@ -122,7 +204,13 @@ for (const city of cities) {
     </article>`;
   writeFileSync(
     join(seoStaticDir, `city-${city.slug}.html`),
-    pageShell({ title: city.title, description: city.description, canonical, body })
+    pageShell({
+      title: city.title,
+      description: city.description,
+      canonical,
+      body,
+      schemas: [ORG_SCHEMA, faqSchema(city.faq)],
+    })
   );
 
   if (city.sell) {
@@ -148,6 +236,7 @@ for (const city of cities) {
         description: city.sell.description,
         canonical: sellCanonical,
         body: sellBody,
+        schemas: [ORG_SCHEMA, faqSchema(city.sell.faq)],
       })
     );
   }
