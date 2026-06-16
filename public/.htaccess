@@ -1,3 +1,9 @@
+# Home servida via index.php (injeta preload do banner para melhorar LCP).
+# Se PHP não estiver disponível, cai no index.html normalmente.
+<IfModule mod_dir.c>
+  DirectoryIndex index.php index.html
+</IfModule>
+
 # Configuração de tipos MIME (deve vir primeiro)
 <IfModule mod_mime.c>
   # JavaScript modules
@@ -58,6 +64,12 @@
   <FilesMatch "\.(js|mjs)$">
     Header set Content-Type "application/javascript"
   </FilesMatch>
+
+  # Banners e fotos do sistema legado (/imagens/) estavam saindo com
+  # Cache-Control: max-age=1800 (30 min). Banner muda raramente: 7 dias.
+  <If "%{REQUEST_URI} =~ m#^/imagens/#">
+    Header set Cache-Control "public, max-age=604800"
+  </If>
 </IfModule>
 
 # Rewrite Rules para SPA

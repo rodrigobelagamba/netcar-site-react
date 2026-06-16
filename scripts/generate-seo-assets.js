@@ -17,6 +17,23 @@ const seoStaticDir = join(publicDir, "seo-static");
 const SITE = "https://www.netcarmultimarcas.com.br";
 const today = new Date().toISOString().slice(0, 10);
 
+// Gera config PHP a partir do .env.production, para o index.php não duplicar
+// a URL da API. O .env não vai para o servidor; este arquivo gerado vai.
+try {
+  const envFile = readFileSync(join(rootDir, ".env.production"), "utf-8");
+  const apiBaseMatch = envFile.match(/^VITE_API_BASE_URL=(.+)$/m);
+  const apiBaseUrl = apiBaseMatch ? apiBaseMatch[1].trim().replace(/^["']|["']$/g, "") : "";
+  if (apiBaseUrl) {
+    writeFileSync(
+      join(publicDir, "netcar-config.php"),
+      `<?php\n// Gerado no build a partir de .env.production — nao editar manualmente.\ndefine('NETCAR_API_BASE_URL', '${apiBaseUrl.replace(/'/g, "\\'")}');\n`
+    );
+    console.log(`netcar-config.php gerado (API: ${apiBaseUrl})`);
+  }
+} catch {
+  console.warn("Aviso: .env.production não encontrado; netcar-config.php não gerado.");
+}
+
 // AutoDealer (LocalBusiness) — mesmos dados de seo_org_schema() em public/seo/helpers.php.
 // Sem AggregateRating/reviews.
 const ORG_SCHEMA = {

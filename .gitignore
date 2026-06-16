@@ -13,6 +13,9 @@ dist/
 # Apenas o exemplo fica no repositório
 !.env.example
 
+# Gerado no build a partir do .env.production
+public/netcar-config.php
+
 # Logs
 *.log
 npm-debug.log*
