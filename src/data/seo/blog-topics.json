@@ -1,0 +1,86 @@
+[
+  {
+    "slug": "suv-seminovo-ate-100-mil",
+    "keyword": "suv seminovo até 100 mil",
+    "titleHint": "SUVs seminovos até R$ 100 mil: melhores opções na Grande POA",
+    "intent": "compra",
+    "status": "pendente"
+  },
+  {
+    "slug": "documentacao-compra-seminovo-rs",
+    "keyword": "transferência de veículo rs documentos",
+    "titleHint": "Documentação na compra de seminovo no RS: passo a passo",
+    "intent": "compra",
+    "status": "pendente"
+  },
+  {
+    "slug": "primeiro-carro-qual-escolher",
+    "keyword": "primeiro carro qual comprar",
+    "titleHint": "Primeiro carro: como escolher sem se arrepender",
+    "intent": "compra",
+    "status": "pendente"
+  },
+  {
+    "slug": "tabela-fipe-como-usar-negociacao",
+    "keyword": "tabela fipe carro usado",
+    "titleHint": "Tabela FIPE: como usar de verdade na hora de comprar ou vender",
+    "intent": "venda",
+    "status": "pendente"
+  },
+  {
+    "slug": "custos-alem-da-parcela",
+    "keyword": "quanto custa manter um carro",
+    "titleHint": "Quanto custa manter um carro além da parcela: seguro, IPVA e manutenção",
+    "intent": "financiamento",
+    "status": "pendente"
+  },
+  {
+    "slug": "como-funciona-avaliacao-usado-na-troca",
+    "keyword": "avaliação de carro usado na troca",
+    "titleHint": "Como funciona a avaliação do seu usado na troca",
+    "intent": "venda",
+    "status": "pendente"
+  },
+  {
+    "slug": "carro-para-aplicativo-grande-poa",
+    "keyword": "melhor carro para uber 99",
+    "titleHint": "Carro para rodar de aplicativo na Grande POA: o que considerar",
+    "intent": "compra",
+    "status": "pendente"
+  },
+  {
+    "slug": "consorcio-ou-financiamento-seminovo",
+    "keyword": "consórcio ou financiamento carro",
+    "titleHint": "Consórcio ou financiamento: qual faz mais sentido pro seminovo",
+    "intent": "financiamento",
+    "status": "pendente"
+  },
+  {
+    "slug": "picape-seminova-para-trabalho",
+    "keyword": "picape seminova barata",
+    "titleHint": "Picape seminova para trabalho: opções e o que verificar",
+    "intent": "compra",
+    "status": "pendente"
+  },
+  {
+    "slug": "quando-trocar-de-carro-sinais",
+    "keyword": "quando vale a pena trocar de carro",
+    "titleHint": "Quando trocar de carro: 6 sinais de que chegou a hora",
+    "intent": "venda",
+    "status": "pendente"
+  },
+  {
+    "slug": "carro-automatico-na-cidade-vale-a-pena",
+    "keyword": "carro automático vale a pena",
+    "titleHint": "Carro automático no trânsito da Grande POA: vale a pena?",
+    "intent": "compra",
+    "status": "pendente"
+  },
+  {
+    "slug": "hatch-ou-sedan-qual-escolher",
+    "keyword": "hatch ou sedan qual melhor",
+    "titleHint": "Hatch ou sedan: qual combina com seu uso",
+    "intent": "compra",
+    "status": "pendente"
+  }
+]
