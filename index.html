@@ -58,6 +58,32 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#6cc4ca" />
+
+    <!-- Conteúdo SEO estático da home (injetado pelo index.php): fora do #root, invisível com JS -->
+    <style>
+      #netcar-seo-prerender {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      noscript #netcar-seo-prerender {
+        position: static;
+        width: auto;
+        height: auto;
+        margin: 0;
+        padding: 1rem 1.25rem;
+        overflow: visible;
+        clip: auto;
+        white-space: normal;
+        max-width: 48rem;
+      }
+    </style>
     
     <!-- Meta tags padrão (atualizadas dinamicamente pelo React em cada rota) -->
     <meta name="description" content="Seminovos vistoriados com garantia e financiamento em Esteio/RS. Desde 1997 na Av. Getúlio Vargas. Veja o estoque da Netcar Multimarcas." />

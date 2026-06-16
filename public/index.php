@@ -103,6 +103,31 @@ if ($isHome) {
             . '" fetchpriority="high" />';
         $html = str_replace('</head>', "  {$preload}\n  </head>", $html);
     }
+
+    // HTML válido fora do #root: React (createRoot) não remove; fica no source para crawlers.
+    // Visualmente oculto via #netcar-seo-prerender no index.html; visível em <noscript>.
+    $seoPrerender = <<<'HTML'
+<div id="netcar-seo-prerender" aria-hidden="true">
+  <main>
+    <h1>Seminovos em Esteio/RS — Netcar Multimarcas</h1>
+    <p>
+      Loja de seminovos em Esteio desde 1997. Carros vistoriados, garantia, financiamento em até 60x
+      e compra de usados — mesmo financiados. Duas lojas na Av. Getúlio Vargas.
+      Atendemos Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Novo Hamburgo, Gravataí,
+      Cachoeirinha, Porto Alegre e região metropolitana.
+    </p>
+    <nav aria-label="Navegação principal">
+      <a href="/seminovos">Ver seminovos</a>
+      <a href="/compra">Vender ou trocar meu carro</a>
+      <a href="/sobre">Sobre a Netcar</a>
+      <a href="/contato">Contato</a>
+      <a href="/blog">Blog</a>
+    </nav>
+  </main>
+</div>
+
+HTML;
+    $html = str_replace('<div id="root">', $seoPrerender . '<div id="root">', $html);
 }
 
 header('Content-Type: text/html; charset=UTF-8');
