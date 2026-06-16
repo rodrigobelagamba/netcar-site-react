@@ -14,6 +14,7 @@ import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 import { SchemaOrg } from "@/components/seo/SchemaOrg";
 import { PageLoader } from "@/components/layout/PageLoader";
+import { getCityPage } from "@/data/seo";
 
 const HomePage = lazy(() =>
   import("@/modules/home/pages/HomePage").then((m) => ({ default: m.HomePage }))
@@ -68,6 +69,32 @@ const SellCityLandingPage = lazy(() =>
   }))
 );
 
+// Mensagem do WhatsApp contextual por rota: lead chega no iAN já qualificado
+function getContextualMessage(pathname: string): string {
+  if (pathname.startsWith("/vender-carro-")) {
+    const city = getCityPage(pathname.replace("/vender-carro-", ""));
+    if (city) return `Oi! Moro em ${city.name} e quero vender meu carro para a Netcar.`;
+  }
+  if (pathname.startsWith("/seminovos-") && pathname !== "/seminovos-automaticos") {
+    const city = getCityPage(pathname.replace("/seminovos-", ""));
+    if (city) return `Oi iAN! Moro em ${city.name} e estou procurando um seminovo.`;
+  }
+  if (
+    pathname === "/compra" ||
+    pathname === "/compramos-seu-usado" ||
+    pathname === "/vender-meu-carro"
+  ) {
+    return "Oi! Quero avaliar meu carro para venda ou troca na Netcar.";
+  }
+  if (pathname === "/financiamento-sem-entrada") {
+    return "Oi iAN! Quero simular o financiamento de um seminovo.";
+  }
+  if (pathname === "/seminovos-automaticos") {
+    return "Oi iAN! Estou procurando um seminovo automático.";
+  }
+  return "Oi iAN! Estou procurando um carro...";
+}
+
 // WhatsApp Button Component - iAN
 function WhatsAppButton() {
   const { data: whatsapp } = useWhatsAppQuery();
@@ -86,7 +113,7 @@ function WhatsAppButton() {
     const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
     
     // Se estiver na página de detalhes e tiver dados do veículo, usa mensagem personalizada
-    let message = "Oi iAN! Estou procurando um carro...";
+    let message = getContextualMessage(location.pathname);
     if (isDetalhesPage && vehicle) {
       const modeloCompleto = vehicle.modelo || vehicle.name || "";
       if (modeloCompleto) {

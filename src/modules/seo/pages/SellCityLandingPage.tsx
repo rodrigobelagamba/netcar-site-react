@@ -9,6 +9,7 @@ import { formatWhatsAppNumber } from "@/lib/formatters";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
+import { QuickSellForm } from "@/components/QuickSellForm";
 
 export function SellCityLandingPage() {
   const { citySlug } = useParams({ from: "/vender-carro-{$citySlug}" });
@@ -108,6 +109,12 @@ export function SellCityLandingPage() {
               </Link>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      <section className="pb-12">
+        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">
+          <QuickSellForm cityName={city.name} />
         </div>
       </section>
 

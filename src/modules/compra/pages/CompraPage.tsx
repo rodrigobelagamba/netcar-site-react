@@ -5,8 +5,9 @@ import { Car, MapPin, Calendar, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
-import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
+import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
+import { QuickSellForm } from "@/components/QuickSellForm";
 
 export function CompraPage() {
   const { data: whatsapp } = useWhatsAppQuery();
@@ -129,6 +130,12 @@ export function CompraPage() {
           </div>
         </div>
       </header>
+
+      <section className="pb-12">
+        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">
+          <QuickSellForm />
+        </div>
+      </section>
 
       <section className="py-12 md:py-16 bg-[#fafafa] border-y border-gray-100">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">
@@ -328,7 +335,7 @@ export function CompraPage() {
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
         <div className="container-main space-y-8">
-          <LazyLocalizacao />
+          <Localizacao />
           <IanBot />
         </div>
       </div>
