@@ -37,6 +37,8 @@ tags:
     description: Endpoints para dados do estoque
   - name: Depoimentos
     description: Endpoints para depoimentos de clientes
+  - name: Social
+    description: Google Reviews e Stories (substituem EmbedSocial)
 
 paths:
   /veiculos.php:
@@ -479,6 +481,61 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /google-reviews.php:
+    get:
+      summary: Google Reviews (cache)
+      description: |
+        Retorna summary (rating, total) e lista de reviews do cache JSON.
+        Reviews com `hidden: true` são filtradas. Ordenação: pinned primeiro, depois recentes.
+        Fallback: seed ou backup com `stale: true`.
+      operationId: getGoogleReviews
+      tags:
+        - Social
+      responses:
+        '200':
+          description: Reviews retornados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleReviewsResponse'
+        '503':
+          description: Cache indisponível
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /stories.php:
+    get:
+      summary: Stories Netcar
+      description: |
+        Retorna profile Instagram e stories ativos (não expirados).
+        Ação padrão: `list`.
+      operationId: getStories
+      tags:
+        - Social
+      parameters:
+        - name: action
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [list]
+            default: list
+      responses:
+        '200':
+          description: Stories retornados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoriesResponse'
+        '503':
+          description: Cache indisponível
           content:
             application/json:
               schema:
@@ -1058,6 +1115,125 @@ components:
           type: string
           format: date-time
           description: Data e hora do erro
+
+    GoogleReviewsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        stale:
+          type: boolean
+          example: false
+        syncedAt:
+          type: string
+          format: date-time
+          nullable: true
+        summary:
+          type: object
+          properties:
+            rating:
+              type: number
+              example: 4.9
+            totalCount:
+              type: integer
+              example: 914
+            placeUrl:
+              type: string
+              format: uri
+            writeReviewUrl:
+              type: string
+              format: uri
+        reviews:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              authorName:
+                type: string
+              authorPhotoUrl:
+                type: string
+                format: uri
+                nullable: true
+              rating:
+                type: integer
+                minimum: 1
+                maximum: 5
+              text:
+                type: string
+              relativeTime:
+                type: string
+                example: "há 3 semanas"
+              photoUrl:
+                type: string
+                format: uri
+                nullable: true
+              variant:
+                type: string
+                enum: [text, photo, dark]
+              pinned:
+                type: boolean
+              hidden:
+                type: boolean
+
+    StoriesResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        stale:
+          type: boolean
+        profile:
+          type: object
+          properties:
+            username:
+              type: string
+              example: netcar_rc
+            displayName:
+              type: string
+              example: Netcar
+            avatarUrl:
+              type: string
+              format: uri
+            followUrl:
+              type: string
+              format: uri
+        stories:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              title:
+                type: string
+              coverImage:
+                type: string
+                format: uri
+              relativeTime:
+                type: string
+                example: "6 h"
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                      enum: [image, video]
+                    url:
+                      type: string
+                      format: uri
+                    durationMs:
+                      type: integer
+                      example: 5000
+                    caption:
+                      type: string
 
   securitySchemes:
     NoAuth:

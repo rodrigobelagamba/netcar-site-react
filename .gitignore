@@ -16,6 +16,12 @@ dist/
 # Gerado no build a partir do .env.production
 public/netcar-config.php
 
+# Social sync — credenciais e tokens (KingHost)
+docs/api/php-samples/social-config.php
+docs/api/php-samples/data/cache/social-tokens.json
+docs/api/php-samples/data/cache/google-reviews.json
+docs/api/php-samples/data/cache/stories.json
+
 # Logs
 *.log
 npm-debug.log*

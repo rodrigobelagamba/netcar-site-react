@@ -1,3 +1,4 @@
+/** @deprecated Use NetcarSocialSection — placeholder legado, não utilizado */
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 

@@ -21,7 +21,7 @@ import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
-import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
+import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
 import { useEmbla } from "@/hooks/useEmbla";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
@@ -1499,7 +1499,7 @@ export function DetalhesPage() {
       />
 
       {/* Social Embeds Section (deve ser a última sessão) */}
-      <EmbedSocialSection />
+      <NetcarSocialSection />
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
         <LazyLocalizacao />

@@ -98,6 +98,9 @@
   RewriteCond %{REQUEST_URI} ^/?$ [NC]
   RewriteRule ^$ seo-pagina.php [L,QSA]
   
+  # Bridge social — PHP antes do React (paginação reviews/stories)
+  RewriteRule ^embedsocial-bridge\.php$ - [L]
+
   # Primeiro: verificar se é um arquivo ou diretório existente - servir diretamente
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d

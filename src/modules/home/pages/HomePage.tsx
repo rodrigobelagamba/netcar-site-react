@@ -9,7 +9,7 @@ import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
-import { EmbedSocialSection } from "@/design-system/components/patterns/EmbedSocialSection";
+import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
 import { useMemo, useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/design-system/components/ui/button";
@@ -286,7 +286,7 @@ export function HomePage() {
 
       <DNASection />
 
-      <EmbedSocialSection />
+      <NetcarSocialSection />
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
         <div className="container-main space-y-8">

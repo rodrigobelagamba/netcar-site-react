@@ -12,6 +12,16 @@ export default defineConfig({
     },
     dedupe: ["react", "react-dom"],
   },
+  server: {
+    proxy: {
+      "/api/embedsocial-proxy": {
+        target: "https://embedsocial.com",
+        changeOrigin: true,
+        rewrite: (requestPath) =>
+          requestPath.replace(/^\/api\/embedsocial-proxy\/?/, "/api/"),
+      },
+    },
+  },
   build: {
     outDir: "dist",
     assetsDir: "assets",

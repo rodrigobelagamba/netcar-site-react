@@ -34,6 +34,13 @@ export * from "./queries/useCategoriasQuery";
 export * from "./endpoints/anuncios";
 export * from "./queries/useAnuncioQuery";
 
+// Social (Google Reviews + Stories)
+export * from "./types/social";
+export * from "./endpoints/googleReviews";
+export * from "./endpoints/stories";
+export * from "./queries/useGoogleReviewsQuery";
+export * from "./queries/useStoriesQuery";
+
 // Axios instance
 export { axiosInstance } from "./axios-instance";
 

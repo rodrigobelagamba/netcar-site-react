@@ -1,0 +1,71 @@
+{
+  "success": true,
+  "profile": {
+    "username": "netcar_rc",
+    "displayName": "Netcar",
+    "avatarUrl": "https://embedsocial.com/admin/story-cdn/17841402339444396/source_cover_photo.jpeg",
+    "followUrl": "https://www.instagram.com/netcar_rc"
+  },
+  "stories": [
+    {
+      "id": "17895370554494821",
+      "title": "Netcar",
+      "coverImage": "https://embedsocial.com/admin/story-cdn/17841402339444396/17895370554494821.jpg",
+      "relativeTime": "6 h",
+      "items": [
+        {
+          "id": "17895370554494821",
+          "type": "image",
+          "url": "https://embedsocial.com/admin/story-cdn/17841402339444396/17895370554494821_large.jpg",
+          "previewUrl": "https://embedsocial.com/admin/story-cdn/17841402339444396/17895370554494821.jpg",
+          "durationMs": 5000
+        }
+      ]
+    },
+    {
+      "id": "18042912416637489",
+      "title": "Netcar",
+      "coverImage": "https://embedsocial.com/admin/story-cdn/17841402339444396/18042912416637489.jpg",
+      "relativeTime": "5 h",
+      "items": [
+        {
+          "id": "18042912416637489",
+          "type": "image",
+          "url": "https://embedsocial.com/admin/story-cdn/17841402339444396/18042912416637489_large.jpg",
+          "previewUrl": "https://embedsocial.com/admin/story-cdn/17841402339444396/18042912416637489.jpg",
+          "durationMs": 5000
+        }
+      ]
+    },
+    {
+      "id": "17894956689527726",
+      "title": "Netcar",
+      "coverImage": "https://embedsocial.com/admin/story-cdn/17841402339444396/17894956689527726.jpg",
+      "relativeTime": "4 h",
+      "items": [
+        {
+          "id": "17894956689527726",
+          "type": "image",
+          "url": "https://embedsocial.com/admin/story-cdn/17841402339444396/17894956689527726_large.jpg",
+          "previewUrl": "https://embedsocial.com/admin/story-cdn/17841402339444396/17894956689527726.jpg",
+          "durationMs": 5000
+        }
+      ]
+    },
+    {
+      "id": "17933642415275372",
+      "title": "Netcar",
+      "coverImage": "https://embedsocial.com/admin/story-cdn/17841402339444396/17933642415275372.jpg",
+      "relativeTime": "4 h",
+      "items": [
+        {
+          "id": "17933642415275372",
+          "type": "image",
+          "url": "https://embedsocial.com/admin/story-cdn/17841402339444396/17933642415275372_large.jpg",
+          "previewUrl": "https://embedsocial.com/admin/story-cdn/17841402339444396/17933642415275372.jpg",
+          "durationMs": 5000
+        }
+      ]
+    }
+  ]
+}

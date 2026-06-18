@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsc && vite build",
+    "build": "node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsc && vite build && node scripts/copy-social-php.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "seo:generate": "node scripts/generate-seo-assets.js",
     "preview": "vite preview",
