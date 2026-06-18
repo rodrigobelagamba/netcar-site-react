@@ -15,7 +15,13 @@ const publicDir = join(rootDir, "public");
 const seoStaticDir = join(publicDir, "seo-static");
 
 const SITE = "https://www.netcarmultimarcas.com.br";
+const WHATSAPP_IAN = "5551997293118";
 const today = new Date().toISOString().slice(0, 10);
+
+function cityWhatsAppLink(cityName) {
+  const text = `Oi iAN! Moro em ${cityName} e estou procurando um seminovo.`;
+  return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
+}
 
 // Gera config PHP a partir do .env.production, para o index.php não duplicar
 // a URL da API. O .env não vai para o servidor; este arquivo gerado vai.
@@ -217,7 +223,11 @@ for (const city of cities) {
       <p>${escapeHtml(city.intro)}</p>
       ${paragraphs}
       ${faqHtml}
-      <p><a href="${SITE}/seminovos">Ver estoque</a></p>
+      <p>
+        <a href="${SITE}/seminovos">Ver estoque</a>
+        ·
+        <a href="${cityWhatsAppLink(city.name)}">Falar com consultor · 24/7</a>
+      </p>
     </article>`;
   writeFileSync(
     join(seoStaticDir, `city-${city.slug}.html`),

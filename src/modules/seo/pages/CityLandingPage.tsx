@@ -1,9 +1,11 @@
 import { Link, useParams } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { MapPin, Clock, Car } from "lucide-react";
+import { MapPin, Clock, Car, MessageCircle } from "lucide-react";
 import { useEffect } from "react";
 import { getCityPage } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
+import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { formatWhatsAppNumber } from "@/lib/formatters";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
@@ -12,6 +14,7 @@ import { emptySeminovosSearch } from "@/lib/seminovos-search";
 export function CityLandingPage() {
   const { citySlug } = useParams({ from: "/seminovos-{$citySlug}" });
   const city = getCityPage(citySlug);
+  const { data: whatsapp } = useWhatsAppQuery();
 
   useMetaTags({
     title: city?.title,
@@ -52,6 +55,13 @@ export function CityLandingPage() {
   if (!city) {
     return <NotFoundRedirect />;
   }
+
+  const waLink = (() => {
+    if (!whatsapp?.numero) return "#";
+    const number = formatWhatsAppNumber(whatsapp.numero);
+    const text = `Oi iAN! Moro em ${city.name} e estou procurando um seminovo.`;
+    return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+  })();
 
   return (
     <main className="flex-1 overflow-x-hidden max-w-full bg-gradient-to-b from-white via-gray-50/30 to-white">
@@ -95,12 +105,15 @@ export function CityLandingPage() {
                 <Car className="w-4 h-4" />
                 Ver estoque
               </Link>
-              <Link
-                to="/contato"
-                className="inline-flex items-center justify-center rounded-xl border border-primary/20 px-5 py-3 text-primary font-semibold hover:bg-primary/5"
+              <a
+                href={waLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-primary/20 px-5 py-3 text-primary font-semibold hover:bg-primary/5"
               >
-                Falar com consultor
-              </Link>
+                <MessageCircle className="w-4 h-4" />
+                Falar com consultor · 24/7
+              </a>
               <Link
                 to="/vender-carro-{$citySlug}"
                 params={{ citySlug: city.slug }}
