@@ -14,7 +14,7 @@ import {
   useAddressQuery,
   useWhatsAppQuery,
   useScheduleQuery
-} from "@/api";
+} from "@/catalog";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";

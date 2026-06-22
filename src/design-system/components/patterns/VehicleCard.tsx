@@ -2,7 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { formatPrice, formatYear, formatKm } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
 import { CardsHero } from "./CardsHero";
-import { VehicleImagesSite } from "@/api/endpoints/vehicles";
+import { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 
 // URL da imagem de carro coberto usada como fallback quando não houver PNG
 // A imagem está em public/images/semcapa.png

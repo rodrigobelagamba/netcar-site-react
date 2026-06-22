@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
-import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
+import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";

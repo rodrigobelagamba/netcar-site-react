@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useBannersLoja1Query } from "@/api/queries/useSiteQuery";
+import { useBannersLoja1Query } from "@/catalog/queries/useSiteQuery";
 
 /**
  * Hook para configurar metatags padrão usando foto da loja

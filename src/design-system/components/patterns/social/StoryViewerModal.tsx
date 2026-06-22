@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { StoryGroup } from "@/api/types/social";
+import type { StoryGroup } from "@/social/types";
 import {
   findFlatIndex,
   flattenStoryItems,

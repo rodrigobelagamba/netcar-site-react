@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * OAuth — conectar Google Business Profile + Instagram (Meta)
  *
- * GET /api/v1/social-oauth.php?provider=google|meta&action=connect|callback|status
+ * GET /social/v1/social-oauth.php?provider=google|meta&action=connect|callback|status
  */
 
 require_once __DIR__ . '/lib/bootstrap.php';
@@ -28,8 +28,8 @@ try {
                 'ig_user_id' => $tokens->get('meta')['ig_user_id'] ?? null,
             ],
             'connect_urls' => [
-                'google' => '/api/v1/social-oauth.php?provider=google&action=connect',
-                'meta' => '/api/v1/social-oauth.php?provider=meta&action=connect',
+                'google' => '/social/v1/social-oauth.php?provider=google&action=connect',
+                'meta' => '/social/v1/social-oauth.php?provider=meta&action=connect',
             ],
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;

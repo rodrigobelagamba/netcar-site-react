@@ -300,7 +300,8 @@ VITE_API_URL=https://api.exemplo.com
 - **`src/app/`** - Configuração da aplicação (providers, router)
 - **`src/modules/`** - Módulos/páginas da aplicação
 - **`src/design-system/`** - Design System (componentes, tema, tokens)
-- **`src/api/`** - Configuração e queries da API
+- **`src/catalog/`** - Cliente HTTP do catálogo (veículos, site, stock)
+- **`src/social/`** - Widgets sociais (Google Reviews + Instagram)
 - **`src/hooks/`** - Custom React hooks
 - **`src/lib/`** - Utilitários e helpers
 - **`src/store/`** - Stores do Zustand

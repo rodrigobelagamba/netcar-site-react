@@ -13,7 +13,7 @@
 | Paginação "Carregar mais" (21 reviews por página) | ✅ |
 | Endpoints PHP (`google-reviews.php`, `stories.php`, `social-oauth.php`, `sync-social.php`) | ✅ |
 | Lib PHP Google + Meta/Instagram | ✅ |
-| Build copia PHP → `dist/api/v1/` (`scripts/copy-social-php.js`) | ✅ |
+| Build copia PHP → `dist/social/v1/` (`scripts/copy-social-php.js`) | ✅ |
 | Flag `VITE_USE_NETCAR_SOCIAL=true` (`.env.example`) | ✅ |
 | Credenciais OAuth preparadas localmente (ver abaixo) | ✅ arquivo local, não versionado |
 
@@ -33,7 +33,7 @@ git checkout feat/netcar-social-widgets
 Copiar template e preencher secrets (obter `client_secret` / `app_secret` / `sync.secret` com gestor TI ou Meta/Google Console):
 
 ```bash
-cp docs/api/php-samples/social-config.example.php docs/api/php-samples/social-config.php
+cp docs/social/social-config.example.php docs/social/social-config.php
 ```
 
 **IDs já definidos (públicos):**
@@ -42,9 +42,9 @@ cp docs/api/php-samples/social-config.example.php docs/api/php-samples/social-co
 |-------|--------|
 | Google GCP project | `fabled-skein-484500-g7` (My Project 62332) |
 | Google OAuth Client ID | `796541076133-rtjj5ibs0m04rfs5ae7o59eik4pao963.apps.googleusercontent.com` |
-| Google redirect URI | `https://www.netcarmultimarcas.com.br/api/v1/social-oauth.php?provider=google&action=callback` |
+| Google redirect URI | `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=google&action=callback` |
 | Meta app | **AutoAds Analyst** — App ID `1864158561129535` |
-| Meta redirect URI | `https://www.netcarmultimarcas.com.br/api/v1/social-oauth.php?provider=meta&action=callback` (já cadastrado no app) |
+| Meta redirect URI | `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=meta&action=callback` (já cadastrado no app) |
 | Instagram username | `netcar_rc` |
 | Instagram Graph user_id | `17841402339444396` |
 
@@ -66,7 +66,7 @@ cp docs/api/php-samples/social-config.example.php docs/api/php-samples/social-co
 npm run build
 ```
 
-O build gera `dist/` incluindo `dist/api/v1/` (PHP + lib). Se existir `social-config.php` local, é copiado automaticamente.
+O build gera `dist/` incluindo `dist/social/v1/` (PHP + lib). Se existir `social-config.php` local, é copiado automaticamente.
 
 **Deploy FTP** (`.env.local` na raiz do projeto):
 
@@ -81,12 +81,12 @@ FTP_SERVER_DIR=/www/
 npm run deploy:local
 ```
 
-**Manual:** subir conteúdo de `dist/api/v1/` para `/www/api/v1/` no KingHost. Garantir que PHP executa nessa pasta (não cair no fallback SPA do React).
+**Manual:** subir conteúdo de `dist/social/v1/` para `/www/social/v1/` no KingHost. Garantir que PHP executa nessa pasta (não cair no fallback SPA do React).
 
 **Validar após deploy:**
 
 ```bash
-curl -s "https://www.netcarmultimarcas.com.br/api/v1/social-oauth.php?action=status"
+curl -s "https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?action=status"
 # esperado: JSON (não HTML 404)
 ```
 
@@ -95,13 +95,13 @@ curl -s "https://www.netcarmultimarcas.com.br/api/v1/social-oauth.php?action=sta
 Logado como **Owner/Manager** das 2 lojas Google e admin da Page/Instagram Netcar:
 
 1. Google:  
-   `https://www.netcarmultimarcas.com.br/api/v1/social-oauth.php?provider=google&action=connect`
+   `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=google&action=connect`
 
 2. Meta/Instagram:  
-   `https://www.netcarmultimarcas.com.br/api/v1/social-oauth.php?provider=meta&action=connect`
+   `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=meta&action=connect`
 
 3. Status:  
-   `https://www.netcarmultimarcas.com.br/api/v1/social-oauth.php?action=status`  
+   `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?action=status`  
    → `google.connected: true`, `meta.connected: true`
 
 Tokens gravados em `data/cache/social-tokens.json` no servidor (não versionar).
@@ -109,7 +109,7 @@ Tokens gravados em `data/cache/social-tokens.json` no servidor (não versionar).
 ### 5. Primeiro sync
 
 ```bash
-curl -s "https://www.netcarmultimarcas.com.br/api/v1/sync-social.php?key=SEU_SYNC_SECRET"
+curl -s "https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?key=SEU_SYNC_SECRET"
 ```
 
 Resposta esperada: `reviews.count`, `stories.count`, `success: true`.
@@ -118,20 +118,20 @@ Resposta esperada: `reviews.count`, `stories.count`, `success: true`.
 
 ```cron
 # Reviews — 2x/dia (Loja 1 + Loja 2 agregadas)
-0 6,18 * * * curl -s "https://www.netcarmultimarcas.com.br/api/v1/sync-social.php?key=SEU_SYNC_SECRET&reviews_only=1"
+0 6,18 * * * curl -s "https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?key=SEU_SYNC_SECRET&reviews_only=1"
 
 # Stories — 15 min (expiram em 24h)
-*/15 * * * * curl -s "https://www.netcarmultimarcas.com.br/api/v1/sync-social.php?key=SEU_SYNC_SECRET&stories_only=1"
+*/15 * * * * curl -s "https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?key=SEU_SYNC_SECRET&stories_only=1"
 ```
 
 ### 7. Testes finais
 
 ```bash
 # Reviews paginados
-curl -s "https://www.netcarmultimarcas.com.br/api/v1/google-reviews.php?page=1&limit=21"
+curl -s "https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=21"
 
 # Stories
-curl -s "https://www.netcarmultimarcas.com.br/api/v1/stories.php?action=list"
+curl -s "https://www.netcarmultimarcas.com.br/social/v1/stories.php?action=list"
 ```
 
 **Site:**
@@ -151,12 +151,12 @@ curl -s "https://www.netcarmultimarcas.com.br/api/v1/stories.php?action=list"
 
 | Caminho | Função |
 |---------|--------|
-| `docs/api/php-samples/` | Fonte PHP (copiada no build) |
-| `docs/api/SOCIAL_SYNC_SETUP.md` | Detalhes técnicos OAuth/API |
+| `docs/social/` | Fonte PHP (copiada no build) |
+| `docs/social/SOCIAL_SYNC_SETUP.md` | Detalhes técnicos OAuth |
 | `docs/social-design-spec.md` | Spec visual vs EmbedSocial |
 | `src/design-system/components/patterns/social/` | Componentes UI |
-| `src/api/endpoints/googleReviews.ts` | Fetch reviews |
-| `src/api/endpoints/stories.ts` | Fetch stories |
+| `src/social/endpoints/googleReviews.ts` | Fetch reviews |
+| `src/social/endpoints/stories.ts` | Fetch stories |
 | `scripts/copy-social-php.js` | Copia PHP no build |
 
 ---
@@ -165,7 +165,7 @@ curl -s "https://www.netcarmultimarcas.com.br/api/v1/stories.php?action=list"
 
 | Sintoma | Causa provável |
 |---------|----------------|
-| `/api/v1/*.php` retorna HTML (index React) | PHP não deployado ou `.htaccess` roteando tudo pro SPA |
+| `/social/v1/*.php` retorna HTML (index React) | PHP não deployado ou `.htaccess` roteando tudo pro SPA |
 | Google OAuth 403 / API error | Business Profile API não aprovada ou conta sem Manager das lojas |
 | Meta "ig_user_id ausente" | Page Facebook sem `@netcar_rc` vinculado como Business |
 | Stories vazio | Nenhum story ativo nas últimas 24h (normal) |

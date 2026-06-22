@@ -189,7 +189,7 @@ final class GoogleReviewsClient
         $photoUrl = null;
 
         if (!empty($review['reviewPhotoUrls']) && is_array($review['reviewPhotoUrls'])) {
-            $photoUrl = $review['reviewPhotoUrls'][0] ?? null;
+            $photoUrl = $this->sanitizeGoogleMediaUrl($review['reviewPhotoUrls'][0] ?? null);
         }
 
         $variant = $photoUrl ? 'photo' : 'text';
@@ -199,7 +199,7 @@ final class GoogleReviewsClient
         return [
             'id' => (string) $reviewId,
             'authorName' => $review['reviewer']['displayName'] ?? 'Cliente',
-            'authorPhotoUrl' => $review['reviewer']['profilePhotoUrl'] ?? null,
+            'authorPhotoUrl' => $this->sanitizeGoogleMediaUrl($review['reviewer']['profilePhotoUrl'] ?? null),
             'rating' => $rating,
             'text' => $text,
             'relativeTime' => $this->formatRelativeTime($publishedAt),
@@ -238,5 +238,27 @@ final class GoogleReviewsClient
         }
 
         return 'há ' . max(1, (int) floor($diff / (86400 * 365))) . ' anos';
+    }
+
+    /**
+     * Imagens em googleusercontent.com não podem ser hotlinked fora do Google.
+     */
+    private function sanitizeGoogleMediaUrl($url)
+    {
+        if (!$url || !is_string($url)) {
+            return null;
+        }
+
+        $host = parse_url($url, PHP_URL_HOST);
+        if (!$host) {
+            return $url;
+        }
+
+        $host = strtolower($host);
+        if ($host === 'lh3.googleusercontent.com' || strpos($host, '.googleusercontent.com') !== false) {
+            return null;
+        }
+
+        return $url;
     }
 }

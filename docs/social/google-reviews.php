@@ -2,8 +2,8 @@
 /**
  * Google Reviews API — Netcar
  *
- * GET /api/v1/google-reviews.php
- * GET /api/v1/google-reviews.php?page=2&limit=21
+ * GET /social/v1/google-reviews.php
+ * GET /social/v1/google-reviews.php?page=2&limit=21
  *
  * Lê cache JSON (sync-social.php) e pagina no servidor.
  * Fallback: backup → seed com stale=true.

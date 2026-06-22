@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useAddressQuery, usePhoneQuery } from "@/api/queries/useSiteQuery";
+import { useAddressQuery, usePhoneQuery } from "@/catalog/queries/useSiteQuery";
 
 /**
  * Componente que adiciona Schema.org AutoDealer no head do documento

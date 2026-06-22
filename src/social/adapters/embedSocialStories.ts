@@ -1,6 +1,6 @@
 import { pickStoryImageUrl } from "@/lib/socialMedia";
 import { EMBEDSOCIAL_STORIES_PATH } from "../constants/embedSocial";
-import type { StoriesResponse, StoryGroup } from "../types/social";
+import type { StoriesResponse, StoryGroup } from "../types";
 import {
   extractStoriesArray,
   fetchEmbedSocialHtml,

@@ -1,4 +1,4 @@
-import type { StoryGroup } from "@/api/types/social";
+import type { StoryGroup } from "@/social/types";
 
 export interface StoryViewerState {
   groupIndex: number;

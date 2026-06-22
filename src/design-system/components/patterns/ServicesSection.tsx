@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 
 interface Service {

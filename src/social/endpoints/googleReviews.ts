@@ -1,8 +1,8 @@
-import { axiosInstance } from "../axios-instance";
+import { axiosInstance } from "@/catalog/axios-instance";
 import { EMBEDSOCIAL_REVIEWS_WIDGET_ID } from "../constants/embedSocial";
-import { config } from "../config";
-import { REVIEWS_PAGINATION } from "@/lib/socialMedia";
-import type { GoogleReview, GoogleReviewsResponse } from "../types/social";
+import { socialConfig, siteOriginFromApiBase } from "../config";
+import { REVIEWS_PAGINATION, sanitizeGoogleMediaUrl } from "@/lib/socialMedia";
+import type { GoogleReview, GoogleReviewsResponse } from "../types";
 
 function normalizeMediaUrl(url?: string): string | undefined {
   if (!url) return undefined;
@@ -13,7 +13,7 @@ function normalizeMediaUrl(url?: string): string | undefined {
     return normalized;
   }
 
-  const baseDomain = config.apiBaseUrl.replace("/api/v1", "");
+  const baseDomain = siteOriginFromApiBase(socialConfig.baseUrl);
 
   if (normalized.startsWith("/")) {
     return `${baseDomain}${normalized}`;
@@ -23,11 +23,25 @@ function normalizeMediaUrl(url?: string): string | undefined {
 }
 
 function normalizeReview(review: GoogleReview): GoogleReview {
+  const photoUrl = sanitizeGoogleMediaUrl(normalizeMediaUrl(review.photoUrl));
+  const largePhotoUrl = sanitizeGoogleMediaUrl(
+    normalizeMediaUrl(review.largePhotoUrl ?? review.photoUrl)
+  );
+  const authorPhotoUrl = sanitizeGoogleMediaUrl(normalizeMediaUrl(review.authorPhotoUrl));
+  const hasPhoto = Boolean(photoUrl || largePhotoUrl);
+  const variant =
+    review.variant === "photo" && !hasPhoto
+      ? "text"
+      : review.variant === "photo" && hasPhoto
+        ? "photo"
+        : review.variant;
+
   return {
     ...review,
-    authorPhotoUrl: normalizeMediaUrl(review.authorPhotoUrl),
-    photoUrl: normalizeMediaUrl(review.photoUrl),
-    largePhotoUrl: normalizeMediaUrl(review.largePhotoUrl ?? review.photoUrl),
+    authorPhotoUrl,
+    photoUrl,
+    largePhotoUrl,
+    variant,
   };
 }
 
@@ -74,7 +88,7 @@ async function fetchSeedFallback(page = 1): Promise<GoogleReviewsResponse | null
 async function fetchFromPhpApi(page = 1): Promise<GoogleReviewsResponse | null> {
   try {
     const response = await axiosInstance.get<GoogleReviewsResponse>(
-      `${config.apiBaseUrl}/google-reviews.php`,
+      `${socialConfig.baseUrl}/google-reviews.php`,
       {
         params: {
           page,

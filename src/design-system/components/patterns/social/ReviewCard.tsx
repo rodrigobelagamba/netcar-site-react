@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import type { GoogleReview } from "@/api/types/social";
+import type { GoogleReview } from "@/social/types";
 import { photoReviewHeadline, pickReviewPhotoUrl } from "@/lib/socialMedia";
 import { ReviewDetailModal } from "./ReviewDetailModal";
 import { ReviewPhotoLightbox } from "./ReviewPhotoLightbox";
+import { GoogleGIcon } from "./GoogleGIcon";
 import { StarRating } from "./StarRating";
 
 interface ReviewCardProps {
@@ -72,13 +73,7 @@ function TextReviewCard({
         <StarRating rating={review.rating} color={isDark ? "white" : "gold"} className="mb-3 shrink-0" />
 
         <div className="flex justify-center my-2 shrink-0">
-          <img
-            src={isDark ? "/icons/google-g-white.svg" : "/icons/google-g-color.svg"}
-            alt="Google"
-            className="w-8 h-8"
-            width={32}
-            height={32}
-          />
+          <GoogleGIcon variant={isDark ? "white" : "color"} className="w-8 h-8" />
         </div>
 
         <p
@@ -156,20 +151,15 @@ function PhotoReviewCard({
           <StarRating rating={review.rating} color="white" className="justify-start mb-1" />
           <p className="text-white text-sm font-bold truncate">{review.authorName}</p>
         </div>
-        <img
-          src="/icons/google-g-white.svg"
-          alt="Google"
-          className="w-6 h-6 shrink-0"
-          width={24}
-          height={24}
-        />
+        <GoogleGIcon variant="white" className="w-6 h-6" />
       </div>
     </button>
   );
 }
 
 export function ReviewCard({ review, googlePlaceUrl }: ReviewCardProps) {
-  const isPhoto = review.variant === "photo" && Boolean(review.photoUrl);
+  const hasReviewPhoto = Boolean(pickReviewPhotoUrl(review.photoUrl, review.largePhotoUrl));
+  const isPhoto = review.variant === "photo" && hasReviewPhoto;
   const isDark = !isPhoto && review.variant === "dark" && Boolean(review.pinned);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Banknote } from "lucide-react";
-import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 
 interface QuickSellFormProps {

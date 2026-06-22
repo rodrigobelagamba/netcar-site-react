@@ -32,7 +32,7 @@ final class SocialEnv
         );
     }
 
-    public static function get(string $key, mixed $default = null): mixed
+    public static function get(string $key, $default = null)
     {
         $config = self::config();
         $segments = explode('.', $key);

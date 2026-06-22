@@ -9,12 +9,12 @@ final class HttpClient
         return self::request('GET', $url, null, $headers);
     }
 
-    public static function post(string $url, array|string $body, array $headers = []): array
+    public static function post(string $url, $body, array $headers = []): array
     {
         return self::request('POST', $url, $body, $headers);
     }
 
-    private static function request(string $method, string $url, array|string|null $body, array $headers): array
+    private static function request(string $method, string $url, $body, array $headers): array
     {
         $ch = curl_init($url);
         if ($ch === false) {

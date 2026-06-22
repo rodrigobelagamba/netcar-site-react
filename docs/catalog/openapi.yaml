@@ -18,7 +18,9 @@ info:
 
 servers:
   - url: https://www.netcarmultimarcas.com.br/api/v1
-    description: Servidor de produção
+    description: API catálogo (veículos, site, stock)
+  - url: https://www.netcarmultimarcas.com.br/social/v1
+    description: Widgets sociais (reviews + stories)
   - url: http://localhost/netcar/api/v1
     description: Servidor local (desenvolvimento)
 

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
-import type { GoogleReview } from "@/api/types/social";
+import type { GoogleReview } from "@/social/types";
+import { pickReviewPhotoUrl } from "@/lib/socialMedia";
 import { StarRating } from "./StarRating";
 
 interface ReviewPhotoLightboxProps {
@@ -17,7 +18,7 @@ export function ReviewPhotoLightbox({
 }: ReviewPhotoLightboxProps) {
   if (!review) return null;
 
-  const imageUrl = review.largePhotoUrl || review.photoUrl;
+  const imageUrl = pickReviewPhotoUrl(review.photoUrl, review.largePhotoUrl);
   const externalUrl = review.reviewUrl || googlePlaceUrl;
 
   return (

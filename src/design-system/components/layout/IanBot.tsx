@@ -1,4 +1,4 @@
-import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 
 export function IanBot() {

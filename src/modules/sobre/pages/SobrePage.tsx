@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { useAboutTextQuery, useCountersQuery } from "@/api/queries/useSiteQuery";
-import { useBannersLoja1Query, useBannersLoja2Query, useAddressQuery, usePhoneQuery, useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { useAboutTextQuery, useCountersQuery } from "@/catalog/queries/useSiteQuery";
+import { useBannersLoja1Query, useBannersLoja2Query, useAddressQuery, usePhoneQuery, useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";

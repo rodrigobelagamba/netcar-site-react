@@ -1,4 +1,5 @@
-import type { GoogleReviewsSummary } from "@/api/types/social";
+import type { GoogleReviewsSummary } from "@/social/types";
+import { GoogleGIcon } from "./GoogleGIcon";
 import { StarRating } from "./StarRating";
 
 interface ReviewsSummaryHeaderProps {
@@ -18,13 +19,7 @@ export function ReviewsSummaryHeader({ summary }: ReviewsSummaryHeaderProps) {
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 lg:gap-8">
         <div className="flex items-center gap-2 sm:gap-3">
-          <img
-            src="/icons/google-g-color.svg"
-            alt="Google"
-            className="w-8 h-8 sm:w-9 sm:h-9 shrink-0"
-            width={36}
-            height={36}
-          />
+          <GoogleGIcon className="w-8 h-8 sm:w-9 sm:h-9" />
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <span className="text-lg sm:text-xl font-bold text-[#00283C]">{ratingLabel}</span>
             <StarRating rating={Math.round(summary.rating)} size="md" />

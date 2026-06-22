@@ -6,10 +6,10 @@ declare(strict_types=1);
  * Sync social cache — Google Reviews + Instagram Stories
  *
  * CLI:  php sync-social.php
- * HTTP: GET /api/v1/sync-social.php?key=SEU_SYNC_SECRET
- * Cron KingHost (2x/dia reviews, 15min stories):
- *   0 6,18 * * * curl -s "https://www.netcarmultimarcas.com.br/api/v1/sync-social.php?key=..."
- *   */15 * * * * curl -s "...?key=...&stories_only=1"
+ * HTTP: GET /social/v1/sync-social.php?key=SEU_SYNC_SECRET
+ * Cron KingHost (2x/dia reviews, a cada 15 min stories):
+ *   0 6,18 * * * curl -s "https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?key=...&reviews_only=1"
+ *   (cron) a cada 15 min: curl -s ".../social/v1/sync-social.php?key=...&stories_only=1"
  */
 
 require_once __DIR__ . '/lib/bootstrap.php';
@@ -34,10 +34,7 @@ $storiesOnly = isset($_GET['stories_only']);
 
 try {
     $runner = new SocialSyncRunner();
-    $result = $runner->run(
-        reviews: !$storiesOnly,
-        stories: !$reviewsOnly
-    );
+    $result = $runner->run(!$storiesOnly, !$reviewsOnly);
 
     $json = json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 

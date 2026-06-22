@@ -47,7 +47,24 @@ export function pickReviewPhotoUrl(
   photoUrl?: string,
   largePhotoUrl?: string
 ): string | undefined {
-  return largePhotoUrl || photoUrl;
+  return sanitizeGoogleMediaUrl(largePhotoUrl || photoUrl);
+}
+
+/** Imagens hospedadas no Google não podem ser exibidas fora do ecossistema deles. */
+export function isBlockedGoogleMediaUrl(url?: string | null): boolean {
+  if (!url) return false;
+
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    return host === "lh3.googleusercontent.com" || host.endsWith(".googleusercontent.com");
+  } catch {
+    return false;
+  }
+}
+
+export function sanitizeGoogleMediaUrl(url?: string | null): string | undefined {
+  if (!url || isBlockedGoogleMediaUrl(url)) return undefined;
+  return url;
 }
 
 export function photoReviewHeadline(text: string): string {

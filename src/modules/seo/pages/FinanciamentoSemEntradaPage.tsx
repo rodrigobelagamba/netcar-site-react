@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
-import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";

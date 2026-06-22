@@ -2,8 +2,8 @@ import { Car, Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
-import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
-import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
+import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
+import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
 
 interface SearchSuggestion {
   type: string;

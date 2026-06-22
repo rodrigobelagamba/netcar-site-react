@@ -6,8 +6,8 @@ import type {
   GoogleReview,
   GoogleReviewsPagination,
   GoogleReviewsResponse,
-} from "../types/social";
-import { REVIEWS_PAGINATION } from "@/lib/socialMedia";
+} from "../types";
+import { REVIEWS_PAGINATION, sanitizeGoogleMediaUrl } from "@/lib/socialMedia";
 import {
   extractWindowJson,
   fetchEmbedSocialHtml,
@@ -85,18 +85,23 @@ export function mapEmbedSocialReviewItem(item: EmbedSocialReviewItem): GoogleRev
       item.carousel?.[0]?.source
   );
 
+  const photoUrl = variant === "photo" ? sanitizeGoogleMediaUrl(imageSource) : undefined;
+  const largePhotoUrl = variant === "photo" ? sanitizeGoogleMediaUrl(largeImageSource) : undefined;
+  const resolvedVariant =
+    variant === "photo" && !photoUrl && !largePhotoUrl ? "text" : variant;
+
   return {
     id: String(item.id),
     authorName: item.authorName || "Cliente",
-    authorPhotoUrl: unescapeEmbedSocialUrl(item.profilePhotoUrl),
+    authorPhotoUrl: sanitizeGoogleMediaUrl(unescapeEmbedSocialUrl(item.profilePhotoUrl)),
     rating: item.rating ?? 5,
     text: (item.caption || item.formattedCaption || "").trim(),
     relativeTime: item.formattedDate || item.mediaCreatedOn || "",
     publishedAt: item.originalCreatedOn,
-    photoUrl: variant === "photo" ? imageSource : undefined,
-    largePhotoUrl: variant === "photo" ? largeImageSource : undefined,
+    photoUrl,
+    largePhotoUrl,
     reviewUrl: unescapeEmbedSocialUrl(item.mediaLink || item.sourceLink),
-    variant,
+    variant: resolvedVariant,
     pinned: Boolean(item.pinStatus),
   };
 }

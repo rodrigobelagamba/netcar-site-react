@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { fetchGoogleReviewsPage } from "@/api/endpoints/googleReviews";
-import type { GoogleReview } from "@/api/types/social";
-import { useGoogleReviewsQuery } from "@/api/queries/useGoogleReviewsQuery";
+import { fetchGoogleReviewsPage } from "@/social/endpoints/googleReviews";
+import type { GoogleReview } from "@/social/types";
+import { useGoogleReviewsQuery } from "@/social/queries/useGoogleReviewsQuery";
 import { REVIEW_CARD_SIZE, ReviewsMasonryGrid } from "./ReviewsMasonryGrid";
 import { ReviewsSummaryHeader } from "./ReviewsSummaryHeader";
 

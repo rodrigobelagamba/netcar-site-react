@@ -32,7 +32,7 @@ Este documento descreve os valores que serão assumidos quando **não houver arq
 
 ## 🔍 Como Funciona
 
-O código em `src/api/config.ts` usa o operador `||` (OR lógico) para definir valores padrão:
+O código em `src/catalog/config.ts` usa o operador `||` (OR lógico) para definir valores padrão:
 
 ```typescript
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL;
@@ -68,8 +68,8 @@ Para testar se os valores padrão estão funcionando:
 ## 📝 Exemplo de Uso
 
 ```typescript
-// src/api/config.ts
-import { config } from '@/api';
+// src/catalog/config.ts
+import { config } from '@/catalog';
 
 // Sem arquivos .env, config terá:
 console.log(config.apiBaseUrl); 

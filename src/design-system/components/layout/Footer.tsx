@@ -11,7 +11,7 @@ import {
   useAddressQuery,
   useWhatsAppQuery,
   useScheduleQuery
-} from "@/api";
+} from "@/catalog";
 import { formatWhatsAppNumber, buildMapsUrl, LOJA_COORDS } from "@/lib/formatters";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 

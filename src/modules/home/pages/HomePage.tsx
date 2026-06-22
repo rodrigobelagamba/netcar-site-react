@@ -1,5 +1,5 @@
-import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
-import { useBannersQuery } from "@/api/queries/useSiteQuery";
+import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
+import { useBannersQuery } from "@/catalog/queries/useSiteQuery";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";

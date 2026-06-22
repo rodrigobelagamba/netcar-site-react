@@ -14,7 +14,7 @@ Para documentação completa da API, consulte:
 ## 📁 Estrutura
 
 ```
-src/api/
+src/catalog/
 ├── endpoints/          # Funções de chamada à API
 │   ├── vehicles.ts    # API de Veículos
 │   ├── categorias.ts  # API de Categorias
@@ -40,11 +40,11 @@ src/api/
 
 ```typescript
 // Importação individual
-import { useVehiclesQuery } from '@/api/queries/useVehiclesQuery';
-import { useBrandsQuery } from '@/api/queries/useStockQuery';
+import { useVehiclesQuery } from '@/catalog/queries/useVehiclesQuery';
+import { useBrandsQuery } from '@/catalog/queries/useStockQuery';
 
 // Ou usando barrel export
-import { useVehiclesQuery, useBrandsQuery, useDepoimentosQuery } from '@/api';
+import { useVehiclesQuery, useBrandsQuery, useDepoimentosQuery } from '@/catalog';
 ```
 
 ### Exemplos de Uso
@@ -52,7 +52,7 @@ import { useVehiclesQuery, useBrandsQuery, useDepoimentosQuery } from '@/api';
 #### 🚗 API Veículos
 
 ```typescript
-import { useVehiclesQuery, useVehicleQuery, useOpcionaisQuery } from '@/api';
+import { useVehiclesQuery, useVehicleQuery, useOpcionaisQuery } from '@/catalog';
 
 function VehiclesList() {
   const { data: vehicles, isLoading } = useVehiclesQuery({
@@ -95,7 +95,7 @@ function VehiclesList() {
 #### 📊 API Stock
 
 ```typescript
-import { useBrandsQuery, useModelsByBrandQuery } from '@/api';
+import { useBrandsQuery, useModelsByBrandQuery } from '@/catalog';
 
 function Filters() {
   const { data: brands } = useBrandsQuery();
@@ -114,7 +114,7 @@ function Filters() {
 #### 💬 API Depoimentos
 
 ```typescript
-import { useDepoimentosQuery } from '@/api';
+import { useDepoimentosQuery } from '@/catalog';
 
 function DepoimentosList() {
   const { data: depoimentos } = useDepoimentosQuery({ limit: 10 });
@@ -135,7 +135,7 @@ function DepoimentosList() {
 #### 🏢 API Site
 
 ```typescript
-import { useBannersQuery, usePhoneQuery, useWhatsAppQuery } from '@/api';
+import { useBannersQuery, usePhoneQuery, useWhatsAppQuery } from '@/catalog';
 
 function HomePage() {
   const { data: banners } = useBannersQuery();
@@ -306,7 +306,7 @@ function HomePage() {
 
 **Exemplo de uso:**
 ```typescript
-import { useInfoQuery, useInfoByTypeQuery } from '@/api';
+import { useInfoQuery, useInfoByTypeQuery } from '@/catalog';
 
 function InfoSection() {
   const { data: info } = useInfoQuery({
@@ -340,7 +340,7 @@ O projeto já vem com arquivos de ambiente configurados:
 - `.env.production` - Usado em `npm run build`
 - `.env.example` - Template de exemplo
 
-A configuração é feita através da variável `VITE_API_BASE_URL` no arquivo `src/api/config.ts`.
+A configuração é feita através da variável `VITE_API_BASE_URL` no arquivo `src/catalog/config.ts`.
 
 **Para desenvolvimento local**, edite `.env.development`:
 ```env

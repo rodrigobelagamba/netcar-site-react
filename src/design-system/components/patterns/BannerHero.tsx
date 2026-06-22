@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import type { Banner } from "@/api/endpoints/site";
+import type { Banner } from "@/catalog/endpoints/site";
 
 interface BannerHeroProps {
   banners: Banner[];

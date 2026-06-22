@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearch, useNavigate } from "@tanstack/react-router";
-import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
-import { useAllStockDataQuery } from "@/api/queries/useStockQuery";
+import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
+import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
 import { ChevronDown, X, Filter } from "lucide-react";

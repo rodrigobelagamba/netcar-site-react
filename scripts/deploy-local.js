@@ -170,46 +170,221 @@ Thumbs.db
   }
 }
 
-// Carregar configurações FTP
-function loadFTPConfig() {
-  // Tentar carregar de variáveis de ambiente ou arquivo .env.local
-  let ftpConfig = {
-    server: process.env.FTP_SERVER || '',
-    username: process.env.FTP_USERNAME || '',
-    password: process.env.FTP_PASSWORD || '',
-    serverDir: process.env.FTP_SERVER_DIR || '/www/',
+// Carregar configurações FTP / SSH
+function loadDeployConfig() {
+  let config = {
+    method: (process.env.DEPLOY_METHOD || 'ftp').toLowerCase(),
+    ftp: {
+      server: process.env.FTP_SERVER || '',
+      username: process.env.FTP_USERNAME || '',
+      password: process.env.FTP_PASSWORD || '',
+      serverDir: process.env.FTP_SERVER_DIR || '/www/',
+      secure: process.env.FTP_SECURE === 'true',
+    },
+    ssh: {
+      host: process.env.SSH_HOST || 'netcarmultimarcas.com.br',
+      user: process.env.SSH_USER || '',
+      remoteDir: process.env.SSH_DIR || 'www/',
+    },
   };
 
-  // Tentar carregar do .env.local
   const envLocalPath = join(rootDir, '.env.local');
   if (existsSync(envLocalPath)) {
     const envContent = readFileSync(envLocalPath, 'utf-8');
-    envContent.split('\n').forEach(line => {
+    envContent.split('\n').forEach((line) => {
       const trimmed = line.trim();
       if (trimmed && !trimmed.startsWith('#')) {
         const [key, ...valueParts] = trimmed.split('=');
         const value = valueParts.join('=').trim();
-        if (key === 'FTP_SERVER') ftpConfig.server = value;
-        if (key === 'FTP_USERNAME') ftpConfig.username = value;
-        if (key === 'FTP_PASSWORD') ftpConfig.password = value;
-        if (key === 'FTP_SERVER_DIR') ftpConfig.serverDir = value;
+        if (key === 'DEPLOY_METHOD') config.method = value.toLowerCase();
+        if (key === 'FTP_SERVER') config.ftp.server = value;
+        if (key === 'FTP_USERNAME') config.ftp.username = value;
+        if (key === 'FTP_PASSWORD') config.ftp.password = value;
+        if (key === 'FTP_SERVER_DIR') config.ftp.serverDir = value;
+        if (key === 'FTP_SECURE') config.ftp.secure = value === 'true';
+        if (key === 'SSH_HOST') config.ssh.host = value;
+        if (key === 'SSH_USER') config.ssh.user = value;
+        if (key === 'SSH_DIR') config.ssh.remoteDir = value;
       }
     });
   }
 
-  // Verificar se está configurado
-  if (!ftpConfig.server || !ftpConfig.username || !ftpConfig.password) {
+  if (config.method === 'ssh') {
+    if (!config.ssh.user) {
+      config.ssh.user = config.ftp.username;
+    }
+    if (!config.ssh.user) {
+      log('❌ SSH: configure SSH_USER ou FTP_USERNAME no .env.local', 'red');
+      process.exit(1);
+    }
+    return config;
+  }
+
+  if (!config.ftp.server || !config.ftp.username || !config.ftp.password) {
     log('❌ Configuração FTP não encontrada!', 'red');
     log('\n📋 Crie um arquivo .env.local na raiz do projeto com:', 'yellow');
+    log('   DEPLOY_METHOD=ssh   # recomendado (você já tem SSH na KingHost)', 'yellow');
+    log('   SSH_USER=netcarmultimarcas', 'yellow');
+    log('   SSH_DIR=www/', 'yellow');
+    log('\n   Ou FTP:', 'yellow');
     log('   FTP_SERVER=ftp.seusite.com.br', 'yellow');
     log('   FTP_USERNAME=seu_usuario', 'yellow');
     log('   FTP_PASSWORD=sua_senha', 'yellow');
     log('   FTP_SERVER_DIR=/www/', 'yellow');
-    log('\n💡 Ou configure variáveis de ambiente do sistema', 'yellow');
     process.exit(1);
   }
 
-  return ftpConfig;
+  return config;
+}
+
+/** @deprecated use loadDeployConfig */
+function loadFTPConfig() {
+  return loadDeployConfig().ftp;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isFtpConnectionError(error) {
+  const message = String(error?.message || error).toLowerCase();
+  return (
+    message.includes('econnreset') ||
+    message.includes('client is closed') ||
+    message.includes('etimedout') ||
+    message.includes('timeout') ||
+    message.includes('econnrefused') ||
+    message.includes('broken pipe') ||
+    message.includes('socket hang up')
+  );
+}
+
+function createFtpClient() {
+  // allowSeparateTransferHost: false = usa IP do controle no PASV (igual FileZilla)
+  // Corrige ECONNRESET quando o servidor devolve IP interno na porta de dados
+  const client = new ftp.Client(120000, { allowSeparateTransferHost: false });
+  client.ftp.verbose = false;
+  client.ftp.ipFamily = 4;
+  return client;
+}
+
+async function connectFtp(client, ftpConfig) {
+  await client.access({
+    host: ftpConfig.server,
+    user: ftpConfig.username,
+    password: ftpConfig.password,
+    secure: ftpConfig.secure ? true : false,
+  });
+
+  const remoteDir = ftpConfig.serverDir.replace(/\/$/, '') || '/www';
+  try {
+    await client.cd(remoteDir);
+  } catch {
+    await client.ensureDir(remoteDir);
+    await client.cd(remoteDir);
+  }
+}
+
+async function reconnectFtp(ftpConfig) {
+  const client = createFtpClient();
+  await connectFtp(client, ftpConfig);
+  return client;
+}
+
+async function uploadDistFiles(initialClient, ftpConfig, distPath, allFiles) {
+  let client = initialClient;
+  let uploadedCount = 0;
+  const failedFiles = [];
+  const totalFiles = allFiles.length;
+
+  log('📤 Fazendo upload dos arquivos (FTP)...', 'blue');
+  log('   Modo passivo: IP do servidor de controle (compatível com KingHost)', 'yellow');
+
+  for (const filePath of allFiles) {
+    let relativePath = filePath.replace(distPath, '').replace(/\\/g, '/');
+    if (relativePath.startsWith('/')) {
+      relativePath = relativePath.substring(1);
+    }
+    relativePath = relativePath.replace(/^[A-Z]:\/?/i, '').replace(/^[A-Z]:\\/i, '');
+
+    if (relativePath.includes('C:\\') || relativePath.includes('C:/') || relativePath.includes('wamp64')) {
+      log(`   ⚠️  Ignorando arquivo com caminho inválido: ${relativePath}`, 'yellow');
+      continue;
+    }
+
+    const dirPath = relativePath.split('/').slice(0, -1).join('/');
+    let retries = 5;
+    let uploaded = false;
+
+    while (retries > 0 && !uploaded) {
+      try {
+        if (dirPath) {
+          await client.ensureDir(dirPath);
+        }
+        await client.uploadFrom(filePath, relativePath);
+        uploaded = true;
+        uploadedCount++;
+
+        if (uploadedCount % 10 === 0 || uploadedCount === totalFiles) {
+          log(
+            `   Progresso: ${uploadedCount}/${totalFiles} arquivos (${Math.round((uploadedCount / totalFiles) * 100)}%)`,
+            'blue'
+          );
+        }
+
+        // Pausa leve — evita o KingHost derrubar a conexão em rajada
+        await sleep(50);
+      } catch (fileError) {
+        retries--;
+        const attempt = 5 - retries;
+
+        if (retries > 0 && isFtpConnectionError(fileError)) {
+          const waitMs = Math.min(2000 * attempt, 10000);
+          log(
+            `   ⚠️  Conexão FTP caiu em ${relativePath} — nova sessão (${retries} tentativas restantes)...`,
+            'yellow'
+          );
+          try {
+            client.close();
+          } catch {
+            // ignore
+          }
+          await sleep(waitMs);
+          client = await reconnectFtp(ftpConfig);
+          continue;
+        }
+
+        if (retries > 0) {
+          log(
+            `   ⚠️  Erro em ${relativePath}, tentando novamente... (${retries} restantes)`,
+            'yellow'
+          );
+          await sleep(1000 * attempt);
+          continue;
+        }
+
+        log(`   ❌ Falha ao fazer upload de ${relativePath}: ${fileError.message}`, 'red');
+        failedFiles.push(relativePath);
+      }
+    }
+  }
+
+  return { uploadedCount, failedFiles, totalFiles, client };
+}
+
+function deployViaSsh(sshConfig, distPath) {
+  const remote = `${sshConfig.user}@${sshConfig.host}`;
+  const remoteDir = sshConfig.remoteDir.replace(/\/$/, '');
+  const distPosix = distPath.replace(/\\/g, '/');
+
+  log('📤 Deploy via SSH (recomendado na KingHost dedicada)', 'blue');
+  log(`   ${remote}:${remoteDir}/`, 'blue');
+
+  // tar over SSH — funciona no Git Bash sem rsync; preserva estrutura de dist/
+  const cmd = `tar -C "${distPosix}" -cf - . | ssh "${remote}" "mkdir -p ${remoteDir} && tar -C ${remoteDir} -xf -"`;
+  log('   Enviando pacote compactado...', 'yellow');
+  execSync(cmd, { stdio: 'inherit', cwd: rootDir, shell: true });
+  log('\n✅ Deploy SSH concluído!', 'green');
 }
 
 async function deploy() {
@@ -228,14 +403,25 @@ async function deploy() {
     const env = loadEnv();
     log('🔧 Variáveis de ambiente carregadas', 'green');
     
-    const ftpConfig = loadFTPConfig();
-    log('🔐 Configuração FTP carregada\n', 'green');
+    const deployConfig = loadDeployConfig();
+    log(
+      deployConfig.method === 'ssh'
+        ? '🔐 Deploy via SSH configurado\n'
+        : '🔐 Configuração FTP carregada\n',
+      'green'
+    );
 
     // 3. Gerar build
     log('🔨 Gerando build de produção...', 'blue');
     process.env.VITE_API_BASE_URL = env.VITE_API_BASE_URL;
     process.env.VITE_API_TIMEOUT = env.VITE_API_TIMEOUT;
     process.env.VITE_BASE_PATH = env.VITE_BASE_PATH;
+    if (env.VITE_SOCIAL_API_BASE_URL) {
+      process.env.VITE_SOCIAL_API_BASE_URL = env.VITE_SOCIAL_API_BASE_URL;
+    }
+    if (env.VITE_USE_NETCAR_SOCIAL) {
+      process.env.VITE_USE_NETCAR_SOCIAL = env.VITE_USE_NETCAR_SOCIAL;
+    }
     
     execSync('npm run build', { stdio: 'inherit', cwd: rootDir });
     log('✅ Build gerado com sucesso\n', 'green');
@@ -251,124 +437,64 @@ async function deploy() {
     commitDistBuild(distPath);
     log('', 'reset'); // Linha em branco
 
-    // 6. Upload via FTP
-    if (ftp) {
+    // 6. Upload
+    if (deployConfig.method === 'ssh') {
+      deployViaSsh(deployConfig.ssh, distPath);
+    } else if (ftp) {
+      const ftpConfig = deployConfig.ftp;
       // Upload automático usando basic-ftp
       log('🚀 Conectando ao servidor FTP...', 'blue');
       log(`   Servidor: ${ftpConfig.server}`, 'blue');
       log(`   Usuário: ${ftpConfig.username}`, 'blue');
-      
-      const client = new ftp.Client();
-      client.ftp.verbose = false; // Desabilitar verbose para logs mais limpos
-      client.ftp.timeout = 60000; // Timeout de 60 segundos
+
+      const client = createFtpClient();
 
       try {
-        await client.access({
-          host: ftpConfig.server,
-          user: ftpConfig.username,
-          password: ftpConfig.password,
-          secure: false, // FTP padrão (não FTPS)
-        });
-
+        await connectFtp(client, ftpConfig);
         log('✅ Conectado ao servidor FTP', 'green');
+        log(`📁 Diretório remoto: ${ftpConfig.serverDir}`, 'blue');
 
-        // Navegar para o diretório do servidor
-        log(`📁 Navegando para: ${ftpConfig.serverDir}`, 'blue');
-        try {
-          await client.cd(ftpConfig.serverDir);
-          log('✅ Diretório acessado', 'green');
-        } catch (cdError) {
-          log(`⚠️  Erro ao acessar diretório: ${cdError.message}`, 'yellow');
-          log('📁 Tentando criar diretório...', 'blue');
-          await client.ensureDir(ftpConfig.serverDir);
-          await client.cd(ftpConfig.serverDir);
-          log('✅ Diretório criado e acessado', 'green');
-        }
-
-        // Contar arquivos antes do upload (excluindo arquivos do Git e temporários)
         function getAllFiles(dirPath, arrayOfFiles = []) {
           const filesInDir = readdirSync(dirPath);
-          filesInDir.forEach(file => {
-            // Ignorar pastas e arquivos do Git
+          filesInDir.forEach((file) => {
             if (file === '.git' || file === '.gitignore') {
               return;
             }
-            
+
             const filePath = join(dirPath, file);
             if (statSync(filePath).isDirectory()) {
-              arrayOfFiles = getAllFiles(filePath, arrayOfFiles);
-            } else {
-              // Ignorar arquivos temporários
-              if (!file.startsWith('.git-') && !file.endsWith('.tmp') && !file.endsWith('.log')) {
-                arrayOfFiles.push(filePath);
-              }
+              getAllFiles(filePath, arrayOfFiles);
+            } else if (
+              !file.startsWith('.git-') &&
+              !file.endsWith('.tmp') &&
+              !file.endsWith('.log')
+            ) {
+              arrayOfFiles.push(filePath);
             }
           });
           return arrayOfFiles;
         }
+
         const allFiles = getAllFiles(distPath);
         log(`📊 Total de arquivos para upload: ${allFiles.length}`, 'blue');
 
-        // Upload de todos os arquivos com progresso
-        log('📤 Fazendo upload dos arquivos...', 'blue');
-        log('   (Isso pode levar alguns minutos dependendo da quantidade de arquivos)', 'yellow');
-        
-        let uploadedCount = 0;
-        const totalFiles = allFiles.length;
-
-        // Upload arquivo por arquivo para melhor controle
-        for (const filePath of allFiles) {
-          // Normalizar caminho: converter caminhos absolutos do Windows para relativos
-          let relativePath = filePath.replace(distPath, '').replace(/\\/g, '/');
-          // Remover barra inicial se houver
-          if (relativePath.startsWith('/')) {
-            relativePath = relativePath.substring(1);
-          }
-          // Garantir que não há caminhos absolutos do Windows
-          relativePath = relativePath.replace(/^[A-Z]:\/?/i, '').replace(/^[A-Z]:\\/i, '');
-          
-          // Validar que o caminho relativo não contém referências ao Windows
-          if (relativePath.includes('C:\\') || relativePath.includes('C:/') || relativePath.includes('wamp64')) {
-            log(`   ⚠️  Ignorando arquivo com caminho inválido: ${relativePath}`, 'yellow');
-            continue;
-          }
-          
-          const dirPath = relativePath.split('/').slice(0, -1).join('/');
-          
-          let retries = 3;
-          let uploaded = false;
-          
-          while (retries > 0 && !uploaded) {
-            try {
-              // Criar diretórios se necessário
-              if (dirPath) {
-                await client.ensureDir(ftpConfig.serverDir + '/' + dirPath);
-              }
-              
-              // Fazer upload do arquivo
-              await client.uploadFrom(filePath, ftpConfig.serverDir + '/' + relativePath);
-              uploaded = true;
-              uploadedCount++;
-              
-              if (uploadedCount % 10 === 0 || uploadedCount === totalFiles) {
-                log(`   Progresso: ${uploadedCount}/${totalFiles} arquivos (${Math.round(uploadedCount/totalFiles*100)}%)`, 'blue');
-              }
-            } catch (fileError) {
-              retries--;
-              if (retries > 0) {
-                log(`   ⚠️  Erro ao fazer upload de ${relativePath}, tentando novamente... (${retries} tentativas restantes)`, 'yellow');
-                await new Promise(resolve => setTimeout(resolve, 1000)); // Aguardar 1 segundo antes de retry
-              } else {
-                log(`   ❌ Falha ao fazer upload de ${relativePath}: ${fileError.message}`, 'red');
-              }
-            }
-          }
-        }
+        const { uploadedCount, failedFiles, totalFiles } = await uploadDistFiles(
+          client,
+          ftpConfig,
+          distPath,
+          allFiles
+        );
 
         log(`\n✅ Upload concluído: ${uploadedCount}/${totalFiles} arquivos enviados`, 'green');
-        
-        if (uploadedCount < totalFiles) {
-          log(`⚠️  Atenção: ${totalFiles - uploadedCount} arquivos não foram enviados`, 'yellow');
+
+        if (failedFiles.length > 0) {
+          log(`\n❌ ${failedFiles.length} arquivo(s) não enviado(s):`, 'red');
+          failedFiles.slice(0, 15).forEach((f) => log(`   - ${f}`, 'red'));
+          if (failedFiles.length > 15) {
+            log(`   ... e mais ${failedFiles.length - 15}`, 'red');
+          }
+          log('\n💡 Rode npm run deploy:local novamente — só os que faltam serão reenviados.', 'yellow');
+          process.exit(1);
         }
 
         log('\n✅ Deploy concluído com sucesso!', 'green');
@@ -381,7 +507,8 @@ async function deploy() {
         log('   - Servidor FTP inacessível', 'yellow');
         log('   - Diretório FTP incorreto', 'yellow');
         log('   - Firewall bloqueando conexão', 'yellow');
-        log('\n📤 Alternativa: Faça upload manual via FileZilla', 'yellow');
+        log('\n📤 Alternativa: use DEPLOY_METHOD=ssh no .env.local (recomendado)', 'yellow');
+        log('   Ou upload manual via FileZilla', 'yellow');
         process.exit(1);
       } finally {
         try {
@@ -391,6 +518,7 @@ async function deploy() {
         }
       }
     } else {
+      const ftpConfig = deployConfig.ftp;
       // Instruções para upload manual
       log('\n📤 Upload Manual Necessário', 'yellow');
       log('\n============================================================', 'blue');

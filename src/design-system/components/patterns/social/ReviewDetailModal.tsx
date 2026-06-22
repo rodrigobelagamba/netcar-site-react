@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
-import type { GoogleReview } from "@/api/types/social";
+import type { GoogleReview } from "@/social/types";
+import { GoogleGIcon } from "./GoogleGIcon";
 import { StarRating } from "./StarRating";
 
 interface ReviewDetailModalProps {
@@ -78,13 +79,7 @@ export function ReviewDetailModal({
 
             <div className="px-6 pt-6 pb-4 text-center border-b border-[#F3F4F6]">
               <StarRating rating={review.rating} color="gold" className="mb-4" />
-              <img
-                src="/icons/google-g-color.svg"
-                alt="Google"
-                className="w-9 h-9 mx-auto"
-                width={36}
-                height={36}
-              />
+              <GoogleGIcon className="w-9 h-9 mx-auto" />
             </div>
 
             <div className="px-6 py-5">

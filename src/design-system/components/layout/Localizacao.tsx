@@ -1,7 +1,7 @@
 import { MapPin, ExternalLink } from "lucide-react";
 import { GoogleMap, LoadScript, InfoWindow } from "@react-google-maps/api";
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { useAddressQuery, usePhoneQuery } from "@/api/queries/useSiteQuery";
+import { useAddressQuery, usePhoneQuery } from "@/catalog/queries/useSiteQuery";
 
 // Tipo para loja
 type LojaData = {

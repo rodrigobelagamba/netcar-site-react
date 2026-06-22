@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Copia endpoints sociais para dist/api/v1/ (deploy KingHost junto com o site).
+ * Copia endpoints sociais para dist/social/v1/ (deploy KingHost junto com o site).
  */
 import { cpSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
@@ -8,8 +8,8 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
-const src = join(root, 'docs/api/php-samples');
-const dest = join(root, 'dist/api/v1');
+const src = join(root, 'docs/social');
+const dest = join(root, 'dist/social/v1');
 
 if (!existsSync(join(root, 'dist'))) {
   console.warn('copy-social-php: dist/ não existe — rode npm run build primeiro');
@@ -35,11 +35,11 @@ for (const file of files) {
 const socialConfig = join(src, 'social-config.php');
 if (existsSync(socialConfig)) {
   cpSync(socialConfig, join(dest, 'social-config.php'));
-  console.log('social-config.php copiado para dist/api/v1/');
+  console.log('social-config.php copiado para dist/social/v1/');
 }
 
 cpSync(join(src, 'lib'), join(dest, 'lib'), { recursive: true });
 cpSync(join(src, 'data/google-reviews.seed.json'), join(dest, 'data/google-reviews.seed.json'));
 cpSync(join(src, 'data/stories.seed.json'), join(dest, 'data/stories.seed.json'));
 
-console.log('Social PHP copiado para dist/api/v1/');
+console.log('Social PHP copiado para dist/social/v1/');

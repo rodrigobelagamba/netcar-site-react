@@ -12,10 +12,10 @@ import {
   LucideIcon,
 } from "lucide-react";
 import React, { useState, useMemo, useEffect, useRef } from "react";
-import { useVehicleQuery } from "@/api/queries/useVehicleQuery";
-import { useVehiclesQuery } from "@/api/queries/useVehiclesQuery";
-import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
-import { useAnuncioQuery } from "@/api/queries/useAnuncioQuery";
+import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
+import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
+import { useAnuncioQuery } from "@/catalog/queries/useAnuncioQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";

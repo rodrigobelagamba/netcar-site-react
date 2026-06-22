@@ -4,7 +4,7 @@ import { MapPin, Clock, Banknote } from "lucide-react";
 import { useEffect } from "react";
 import { getCityPage } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
-import { useWhatsAppQuery } from "@/api/queries/useSiteQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";

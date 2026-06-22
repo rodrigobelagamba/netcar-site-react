@@ -2,7 +2,7 @@
 /**
  * Stories API — Netcar
  *
- * GET /api/v1/stories.php?action=list
+ * GET /social/v1/stories.php?action=list
  *
  * Lê cache JSON e retorna profile + stories ativas/não expiradas.
  */

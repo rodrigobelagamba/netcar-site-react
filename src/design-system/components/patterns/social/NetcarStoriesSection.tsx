@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useStoriesQuery } from "@/api/queries/useStoriesQuery";
+import { useStoriesQuery } from "@/social/queries/useStoriesQuery";
 import { useEmbla } from "@/hooks/useEmbla";
 import { useStoryCarouselLayout } from "@/hooks/useStoryCarouselLayout";
 import logoNetcar from "@/assets/images/logo-netcar.png";

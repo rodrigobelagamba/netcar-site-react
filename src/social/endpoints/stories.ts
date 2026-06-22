@@ -1,6 +1,6 @@
-import { axiosInstance } from "../axios-instance";
-import { config } from "../config";
-import type { StoriesResponse, StoryGroup } from "../types/social";
+import { axiosInstance } from "@/catalog/axios-instance";
+import { socialConfig, siteOriginFromApiBase } from "../config";
+import type { StoriesResponse, StoryGroup } from "../types";
 
 function normalizeMediaUrl(url?: string): string | undefined {
   if (!url) return undefined;
@@ -11,7 +11,7 @@ function normalizeMediaUrl(url?: string): string | undefined {
     return normalized;
   }
 
-  const baseDomain = config.apiBaseUrl.replace("/api/v1", "");
+  const baseDomain = siteOriginFromApiBase(socialConfig.baseUrl);
 
   if (normalized.startsWith("/")) {
     return `${baseDomain}${normalized}`;
@@ -55,7 +55,7 @@ async function fetchSeedFallback(): Promise<StoriesResponse | null> {
 export async function fetchStories(): Promise<StoriesResponse | null> {
   try {
     const response = await axiosInstance.get<StoriesResponse>(
-      `${config.apiBaseUrl}/stories.php?action=list`,
+      `${socialConfig.baseUrl}/stories.php?action=list`,
       { validateStatus: (status) => status < 500 }
     );
 

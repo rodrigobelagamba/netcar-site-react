@@ -1,4 +1,4 @@
-import type { GoogleReview } from "@/api/types/social";
+import type { GoogleReview } from "@/social/types";
 import { ReviewCard } from "./ReviewCard";
 
 export const REVIEW_CARD_SIZE = "h-[280px]";
