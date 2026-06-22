@@ -119,9 +119,11 @@ function TextReviewCard({
 function PhotoReviewCard({
   review,
   onOpen,
+  onImageError,
 }: {
   review: GoogleReview;
   onOpen: () => void;
+  onImageError: () => void;
 }) {
   const imageSrc = pickReviewPhotoUrl(review.photoUrl, review.largePhotoUrl);
   const headline = photoReviewHeadline(review.text);
@@ -139,6 +141,8 @@ function PhotoReviewCard({
         className="absolute inset-0 w-full h-full object-cover"
         loading="lazy"
         decoding="async"
+        referrerPolicy="no-referrer"
+        onError={onImageError}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 p-2.5 sm:p-4 flex items-end justify-between gap-2 pointer-events-none">
@@ -162,7 +166,8 @@ function PhotoReviewCard({
 
 export function ReviewCard({ review, googlePlaceUrl }: ReviewCardProps) {
   const hasReviewPhoto = Boolean(pickReviewPhotoUrl(review.photoUrl, review.largePhotoUrl));
-  const isPhoto = review.variant === "photo" && hasReviewPhoto;
+  const [photoLoadFailed, setPhotoLoadFailed] = useState(false);
+  const isPhoto = review.variant === "photo" && hasReviewPhoto && !photoLoadFailed;
   const isDark = !isPhoto && review.variant === "dark" && Boolean(review.pinned);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -186,7 +191,11 @@ export function ReviewCard({ review, googlePlaceUrl }: ReviewCardProps) {
   if (isPhoto) {
     return (
       <>
-        <PhotoReviewCard review={review} onOpen={() => setLightboxOpen(true)} />
+        <PhotoReviewCard
+          review={review}
+          onOpen={() => setLightboxOpen(true)}
+          onImageError={() => setPhotoLoadFailed(true)}
+        />
         <ReviewPhotoLightbox
           review={review}
           googlePlaceUrl={googlePlaceUrl}

@@ -48,7 +48,7 @@ final class GoogleReviewsClient
             }
 
             foreach ($locationReviews['reviews'] as $review) {
-                $mapped = $this->mapReview($review, $location);
+                $mapped = $this->mapReview($review, $location, $accessToken);
                 $allReviews[$mapped['id']] = $mapped;
             }
 
@@ -174,7 +174,7 @@ final class GoogleReviewsClient
         ];
     }
 
-    private function mapReview(array $review, array $location): array
+    private function mapReview(array $review, array $location, string $accessToken): array
     {
         $ratingMap = [
             'ONE' => 1,
@@ -186,14 +186,15 @@ final class GoogleReviewsClient
 
         $rating = $ratingMap[$review['starRating'] ?? 'FIVE'] ?? 5;
         $text = trim($review['comment'] ?? '');
-        $photoUrl = $this->extractReviewPhotoUrl($review);
+        $remotePhotoUrl = $this->extractReviewPhotoUrl($review);
+        $publishedAt = $review['createTime'] ?? null;
+        $reviewId = (string) ($review['reviewId'] ?? ($review['name'] ?? uniqid('review_')));
+        $photoUrl = ReviewPhotoCache::resolve($reviewId, $remotePhotoUrl, $accessToken);
 
         $variant = $photoUrl ? 'photo' : 'text';
-        $publishedAt = $review['createTime'] ?? null;
-        $reviewId = $review['reviewId'] ?? ($review['name'] ?? uniqid('review_'));
 
         return [
-            'id' => (string) $reviewId,
+            'id' => $reviewId,
             'authorName' => $review['reviewer']['displayName'] ?? 'Cliente',
             'authorPhotoUrl' => $this->normalizeMediaUrl($review['reviewer']['profilePhotoUrl'] ?? null),
             'rating' => $rating,

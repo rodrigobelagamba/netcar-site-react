@@ -31,7 +31,6 @@ export function NetcarGoogleReviewsSection() {
 
   const totalCount = data?.pagination?.totalCount ?? data?.summary.totalCount ?? reviews.length;
   const hasMore = reviews.length < totalCount;
-  const googleReviewsUrl = data?.summary.placeUrl || LOJA1_GOOGLE_REVIEWS_URL;
 
   if (isLoading) {
     return (
@@ -66,7 +65,7 @@ export function NetcarGoogleReviewsSection() {
       {hasMore && (
         <div className="flex flex-col items-center mt-8">
           <a
-            href={googleReviewsUrl}
+            href={LOJA1_GOOGLE_REVIEWS_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-[5px] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
