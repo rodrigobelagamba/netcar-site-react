@@ -480,7 +480,7 @@ async function deploy() {
         const allFiles = getAllFiles(distPath).sort((a, b) => {
           const aName = a.replace(/\\/g, "/").split("/").pop() || "";
           const bName = b.replace(/\\/g, "/").split("/").pop() || "";
-          const deployLast = (name: string) =>
+          const deployLast = (name) =>
             name === "index.html" || name === "index.php" ? 1 : 0;
           return deployLast(aName) - deployLast(bName);
         });
