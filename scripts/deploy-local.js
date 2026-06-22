@@ -477,7 +477,13 @@ async function deploy() {
           return arrayOfFiles;
         }
 
-        const allFiles = getAllFiles(distPath);
+        const allFiles = getAllFiles(distPath).sort((a, b) => {
+          const aName = a.replace(/\\/g, "/").split("/").pop() || "";
+          const bName = b.replace(/\\/g, "/").split("/").pop() || "";
+          const deployLast = (name: string) =>
+            name === "index.html" || name === "index.php" ? 1 : 0;
+          return deployLast(aName) - deployLast(bName);
+        });
         log(`📊 Total de arquivos para upload: ${allFiles.length}`, 'blue');
 
         const { uploadedCount, failedFiles, totalFiles } = await uploadDistFiles(

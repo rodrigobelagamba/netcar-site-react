@@ -6,7 +6,8 @@ import {
 } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouterState } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect } from "react";
+import { Suspense, useEffect } from "react";
+import { lazyWithRetry } from "@/lib/lazyWithRetry";
 import { Header } from "@/design-system/components/layout/Header";
 import { Footer } from "@/design-system/components/layout/Footer";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
@@ -16,54 +17,54 @@ import { SchemaOrg } from "@/components/seo/SchemaOrg";
 import { PageLoader } from "@/components/layout/PageLoader";
 import { getCityPage } from "@/data/seo";
 
-const HomePage = lazy(() =>
+const HomePage = lazyWithRetry(() =>
   import("@/modules/home/pages/HomePage").then((m) => ({ default: m.HomePage }))
 );
-const SeminovosPage = lazy(() =>
+const SeminovosPage = lazyWithRetry(() =>
   import("@/modules/seminovos/pages/SeminovosPage").then((m) => ({
     default: m.SeminovosPage,
   }))
 );
-const DetalhesPage = lazy(() =>
+const DetalhesPage = lazyWithRetry(() =>
   import("@/modules/detalhes/pages/DetalhesPage").then((m) => ({
     default: m.DetalhesPage,
   }))
 );
-const SobrePage = lazy(() =>
+const SobrePage = lazyWithRetry(() =>
   import("@/modules/sobre/pages/SobrePage").then((m) => ({ default: m.SobrePage }))
 );
-const ContatoPage = lazy(() =>
+const ContatoPage = lazyWithRetry(() =>
   import("@/modules/contato/pages/ContatoPage").then((m) => ({
     default: m.ContatoPage,
   }))
 );
-const BlogPage = lazy(() =>
+const BlogPage = lazyWithRetry(() =>
   import("@/modules/blog/pages/BlogPage").then((m) => ({ default: m.BlogPage }))
 );
-const CompraPage = lazy(() =>
+const CompraPage = lazyWithRetry(() =>
   import("@/modules/compra/pages/CompraPage").then((m) => ({ default: m.CompraPage }))
 );
-const BlogPostPage = lazy(() =>
+const BlogPostPage = lazyWithRetry(() =>
   import("@/modules/blog/pages/BlogPostPage").then((m) => ({
     default: m.BlogPostPage,
   }))
 );
-const CityLandingPage = lazy(() =>
+const CityLandingPage = lazyWithRetry(() =>
   import("@/modules/seo/pages/CityLandingPage").then((m) => ({
     default: m.CityLandingPage,
   }))
 );
-const FinanciamentoSemEntradaPage = lazy(() =>
+const FinanciamentoSemEntradaPage = lazyWithRetry(() =>
   import("@/modules/seo/pages/FinanciamentoSemEntradaPage").then((m) => ({
     default: m.FinanciamentoSemEntradaPage,
   }))
 );
-const SeminovosAutomaticosPage = lazy(() =>
+const SeminovosAutomaticosPage = lazyWithRetry(() =>
   import("@/modules/seo/pages/SeminovosAutomaticosPage").then((m) => ({
     default: m.SeminovosAutomaticosPage,
   }))
 );
-const SellCityLandingPage = lazy(() =>
+const SellCityLandingPage = lazyWithRetry(() =>
   import("@/modules/seo/pages/SellCityLandingPage").then((m) => ({
     default: m.SellCityLandingPage,
   }))
