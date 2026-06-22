@@ -153,6 +153,72 @@
     @apply max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto;
   }
 
+  /* Pins do mapa de lojas (Leaflet) */
+  .lojas-map-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .lojas-map-marker__pin-wrap {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lojas-map-marker__ping {
+    position: absolute;
+    inset: -12px;
+    border-radius: 9999px;
+    opacity: 0.3;
+    animation: lojas-map-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .lojas-map-marker__ping--delayed {
+    animation-delay: 700ms;
+  }
+
+  .lojas-map-marker__halo {
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .lojas-map-marker__svg {
+    position: relative;
+    z-index: 10;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+  }
+
+  .lojas-map-marker__stem {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 4px;
+    height: 32px;
+    transform: translateX(-50%);
+    opacity: 0.5;
+    background: linear-gradient(to bottom, var(--pin-color), transparent);
+  }
+
+  @keyframes lojas-map-ping {
+    75%,
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  .leaflet-marker-icon.lojas-map-marker-icon {
+    background: transparent;
+    border: none;
+  }
+
   /* Story preview cards — ratio e crop iguais ao EmbedSocial */
   .social-story-card__media {
     padding-top: calc(180% - 6px);

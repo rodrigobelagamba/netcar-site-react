@@ -45,9 +45,8 @@ export const LOJA_COORDS: {
   Loja1?: { lat: number; lng: number };
   Loja2?: { lat: number; lng: number };
 } = {
-  Loja1: { lat: -29.8395968, lng: -51.1711853 },
-  // TODO: confirmar coordenadas da Loja 2 (Av. Getúlio Vargas, 1106) via "Compartilhar" no Google Maps
-  Loja2: undefined,
+  Loja1: { lat: -29.8380385, lng: -51.1702399 },
+  Loja2: { lat: -29.8411446, lng: -51.1721442 },
 };
 
 export function formatPrice(value: number): string {

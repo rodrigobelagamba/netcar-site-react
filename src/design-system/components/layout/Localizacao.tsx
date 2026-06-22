@@ -2,70 +2,34 @@ import { MapPin, ExternalLink } from "lucide-react";
 import { useMemo } from "react";
 import { useAddressQuery, usePhoneQuery } from "@/catalog/queries/useSiteQuery";
 import { buildMapsUrl, LOJA_COORDS } from "@/lib/formatters";
+import { LojasMap } from "./LojasMap";
 
 type LojaData = {
   id: number;
   nome: string;
   tipo: string;
   endereco: string;
-  enderecoCompleto: string;
   telefone: string;
   cor: "primary" | "amber-500";
   mapsUrl: string;
-  pinPosition: { top: string; left: string };
 };
 
-/** Embed estático da região Av. Getúlio Vargas, Esteio — pins CSS por cima */
-const MAP_EMBED_URL =
-  "https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d6914.0!2d-51.171175!3d-29.839405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spt-BR!2sbr!4v1704628800000!5m2!1spt-BR!2sbr";
-
-const PIN_POSITIONS: Record<number, { top: string; left: string }> = {
-  1: { top: "25%", left: "65%" },
-  2: { top: "75%", left: "35%" },
+const DEFAULT_LOJAS = {
+  1: {
+    nome: "LOJA 1",
+    tipo: "Matriz",
+    address: "Av. Getúlio Vargas, 740 - Centro - Esteio/RS",
+    telefone: "(51) 3473-7900",
+    cor: "primary" as const,
+  },
+  2: {
+    nome: "LOJA 2",
+    tipo: "Filial",
+    address: "Av. Getúlio Vargas, 1106 - Centro - Esteio/RS",
+    telefone: "(51) 3033-3900",
+    cor: "amber-500" as const,
+  },
 };
-
-function MapPinOverlay({
-  label,
-  colorClass,
-  position,
-  delayPing,
-}: {
-  label: string;
-  colorClass: "primary" | "amber-500";
-  position: { top: string; left: string };
-  delayPing?: boolean;
-}) {
-  const isPrimary = colorClass === "primary";
-
-  return (
-    <div
-      className="absolute -translate-x-1/2 -translate-y-1/2 z-10 hover:z-20 group"
-      style={{ top: position.top, left: position.left }}
-    >
-      <div className="relative flex flex-col items-center pointer-events-none">
-        <div className="mb-2 bg-white px-3 py-1.5 rounded-lg shadow-md border border-gray-100 flex items-center gap-2 whitespace-nowrap transform transition-transform group-hover:-translate-y-1">
-          <span
-            className={`w-2 h-2 rounded-full ${isPrimary ? "bg-primary" : "bg-amber-500"}`}
-          />
-          <p className="text-[11px] font-bold text-gray-800">{label}</p>
-        </div>
-        <div className="relative">
-          <span
-            className={`absolute -inset-3 rounded-full ${isPrimary ? "bg-primary" : "bg-amber-500"} opacity-30 animate-ping ${delayPing ? "delay-700" : ""}`}
-          />
-          <span className="absolute -inset-1 rounded-full bg-white opacity-90" />
-          <MapPin
-            className={`w-8 h-8 ${isPrimary ? "text-primary" : "text-amber-500"} drop-shadow-lg relative z-10`}
-            fill="currentColor"
-          />
-          <div
-            className={`absolute top-full left-1/2 -translate-x-1/2 w-1 h-8 bg-gradient-to-b ${isPrimary ? "from-primary" : "from-amber-500"} to-transparent opacity-50`}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function UnidadesCard({ lojas }: { lojas: LojaData[] }) {
   return (
@@ -135,70 +99,38 @@ export function Localizacao() {
   const { data: phoneLoja2 } = usePhoneQuery("Loja2");
 
   const lojas = useMemo(() => {
-    const items: LojaData[] = [];
+    return ([1, 2] as const).map((id) => {
+      const defaults = DEFAULT_LOJAS[id];
+      const addressApi = id === 1 ? addressLoja1 : addressLoja2;
+      const phoneApi = id === 1 ? phoneLoja1 : phoneLoja2;
+      const address = addressApi?.address || defaults.address;
 
-    if (addressLoja1?.address) {
-      items.push({
-        id: 1,
-        nome: "LOJA 1",
-        tipo: "Matriz",
-        endereco: addressLoja1.address.replace(/ - /g, "\n"),
-        enderecoCompleto: `${addressLoja1.address}, Brasil`,
-        telefone: phoneLoja1?.telefone || "",
-        cor: "primary",
-        mapsUrl: buildMapsUrl(addressLoja1.address, LOJA_COORDS.Loja1),
-        pinPosition: PIN_POSITIONS[1],
-      });
-    }
-
-    if (addressLoja2?.address) {
-      items.push({
-        id: 2,
-        nome: "LOJA 2",
-        tipo: "Filial",
-        endereco: addressLoja2.address.replace(/ - /g, "\n"),
-        enderecoCompleto: `${addressLoja2.address}, Brasil`,
-        telefone: phoneLoja2?.telefone || "",
-        cor: "amber-500",
-        mapsUrl: buildMapsUrl(addressLoja2.address, LOJA_COORDS.Loja2),
-        pinPosition: PIN_POSITIONS[2],
-      });
-    }
-
-    return items;
+      return {
+        id,
+        nome: defaults.nome,
+        tipo: defaults.tipo,
+        endereco: address.replace(/ - /g, "\n"),
+        telefone: phoneApi?.telefone || defaults.telefone,
+        cor: defaults.cor,
+        mapsUrl: buildMapsUrl(address, LOJA_COORDS[`Loja${id}`]),
+      };
+    });
   }, [addressLoja1, addressLoja2, phoneLoja1, phoneLoja2]);
-
-  if (lojas.length === 0) {
-    return null;
-  }
 
   return (
     <section
       className="container-main w-full bg-white rounded-[32px] shadow-sm overflow-hidden border border-white relative group"
       aria-labelledby="mapa-lojas-titulo"
     >
-      <div className="w-full h-[450px] relative grayscale-[0.1]">
-        <iframe
-          src={MAP_EMBED_URL}
-          width="100%"
-          height="100%"
-          style={{ border: 0 }}
-          allowFullScreen
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          title="Localização das lojas Netcar"
-          className="w-full h-full"
+      <div className="w-full h-[450px] relative">
+        <LojasMap
+          lojas={lojas.map((loja) => ({
+            id: loja.id as 1 | 2,
+            nome: loja.nome,
+            cor: loja.cor,
+            mapsUrl: loja.mapsUrl,
+          }))}
         />
-
-        {lojas.map((loja) => (
-          <MapPinOverlay
-            key={loja.id}
-            label={loja.nome}
-            colorClass={loja.cor}
-            position={loja.pinPosition}
-            delayPing={loja.id === 2}
-          />
-        ))}
 
         <UnidadesCard lojas={lojas} />
       </div>
