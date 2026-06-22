@@ -45,6 +45,8 @@ function loadEnv() {
     log('📝 Criando .env.production com valores padrão...', 'yellow');
     return {
       VITE_API_BASE_URL: 'https://www.netcarmultimarcas.com.br/api/v1',
+      VITE_SOCIAL_API_BASE_URL: 'https://www.netcarmultimarcas.com.br/social/v1',
+      VITE_USE_NETCAR_SOCIAL: 'true',
       VITE_API_TIMEOUT: '30000',
       VITE_BASE_PATH: '/',
     };
@@ -416,11 +418,11 @@ async function deploy() {
     process.env.VITE_API_BASE_URL = env.VITE_API_BASE_URL;
     process.env.VITE_API_TIMEOUT = env.VITE_API_TIMEOUT;
     process.env.VITE_BASE_PATH = env.VITE_BASE_PATH;
-    if (env.VITE_SOCIAL_API_BASE_URL) {
-      process.env.VITE_SOCIAL_API_BASE_URL = env.VITE_SOCIAL_API_BASE_URL;
-    }
-    if (env.VITE_USE_NETCAR_SOCIAL) {
-      process.env.VITE_USE_NETCAR_SOCIAL = env.VITE_USE_NETCAR_SOCIAL;
+    process.env.VITE_SOCIAL_API_BASE_URL =
+      env.VITE_SOCIAL_API_BASE_URL || 'https://www.netcarmultimarcas.com.br/social/v1';
+    process.env.VITE_USE_NETCAR_SOCIAL = env.VITE_USE_NETCAR_SOCIAL || 'true';
+    if (env.VITE_GOOGLE_MAPS_API_KEY) {
+      process.env.VITE_GOOGLE_MAPS_API_KEY = env.VITE_GOOGLE_MAPS_API_KEY;
     }
     
     execSync('npm run build', { stdio: 'inherit', cwd: rootDir });
