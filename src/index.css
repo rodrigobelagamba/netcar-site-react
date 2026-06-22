@@ -127,6 +127,11 @@
       left: 0 !important;
       right: 0 !important;
     }
+
+    .story-viewer-modal__frame {
+      max-width: min(100%, 320px) !important;
+      max-height: min(85vh, 640px) !important;
+    }
     /* Garante que elementos dentro de modais respeitem a largura */
     [class*="fixed"][class*="bottom-0"] * {
       max-width: 100%;

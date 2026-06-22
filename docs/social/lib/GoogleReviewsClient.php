@@ -186,11 +186,7 @@ final class GoogleReviewsClient
 
         $rating = $ratingMap[$review['starRating'] ?? 'FIVE'] ?? 5;
         $text = trim($review['comment'] ?? '');
-        $photoUrl = null;
-
-        if (!empty($review['reviewPhotoUrls']) && is_array($review['reviewPhotoUrls'])) {
-            $photoUrl = $this->sanitizeGoogleMediaUrl($review['reviewPhotoUrls'][0] ?? null);
-        }
+        $photoUrl = $this->extractReviewPhotoUrl($review);
 
         $variant = $photoUrl ? 'photo' : 'text';
         $publishedAt = $review['createTime'] ?? null;
@@ -199,7 +195,7 @@ final class GoogleReviewsClient
         return [
             'id' => (string) $reviewId,
             'authorName' => $review['reviewer']['displayName'] ?? 'Cliente',
-            'authorPhotoUrl' => $this->sanitizeGoogleMediaUrl($review['reviewer']['profilePhotoUrl'] ?? null),
+            'authorPhotoUrl' => $this->normalizeMediaUrl($review['reviewer']['profilePhotoUrl'] ?? null),
             'rating' => $rating,
             'text' => $text,
             'relativeTime' => $this->formatRelativeTime($publishedAt),
@@ -240,22 +236,36 @@ final class GoogleReviewsClient
         return 'há ' . max(1, (int) floor($diff / (86400 * 365))) . ' anos';
     }
 
-    /**
-     * Imagens em googleusercontent.com não podem ser hotlinked fora do Google.
-     */
-    private function sanitizeGoogleMediaUrl($url)
+    private function extractReviewPhotoUrl(array $review): ?string
+    {
+        if (!empty($review['reviewMediaItems']) && is_array($review['reviewMediaItems'])) {
+            foreach ($review['reviewMediaItems'] as $item) {
+                if (!is_array($item)) {
+                    continue;
+                }
+
+                $url = $item['thumbnailUrl'] ?? null;
+                if ($url) {
+                    return $this->normalizeMediaUrl($url);
+                }
+            }
+        }
+
+        if (!empty($review['reviewPhotoUrls']) && is_array($review['reviewPhotoUrls'])) {
+            return $this->normalizeMediaUrl($review['reviewPhotoUrls'][0] ?? null);
+        }
+
+        return null;
+    }
+
+    private function normalizeMediaUrl($url): ?string
     {
         if (!$url || !is_string($url)) {
             return null;
         }
 
-        $host = parse_url($url, PHP_URL_HOST);
-        if (!$host) {
-            return $url;
-        }
-
-        $host = strtolower($host);
-        if ($host === 'lh3.googleusercontent.com' || strpos($host, '.googleusercontent.com') !== false) {
+        $url = trim($url);
+        if ($url === '' || !preg_match('#^https?://#i', $url)) {
             return null;
         }
 

@@ -52,6 +52,10 @@ final class InstagramStoriesClient
             $stories[] = $this->mapStory($item, $profileBody);
         }
 
+        usort($stories, static function ($a, $b) {
+            return strcmp($a['publishedAt'] ?? '', $b['publishedAt'] ?? '');
+        });
+
         return [
             'success' => true,
             'stale' => false,

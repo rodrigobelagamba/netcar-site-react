@@ -32,6 +32,15 @@ function normalizeStoryGroup(story: StoryGroup): StoryGroup {
   };
 }
 
+/** Instagram: mais antigo à esquerda, mais novo à direita */
+function sortStoriesChronological(stories: StoryGroup[]): StoryGroup[] {
+  return [...stories].sort((a, b) => {
+    const aTime = a.publishedAt ? Date.parse(a.publishedAt) : 0;
+    const bTime = b.publishedAt ? Date.parse(b.publishedAt) : 0;
+    return aTime - bTime;
+  });
+}
+
 async function fetchSeedFallback(): Promise<StoriesResponse | null> {
   try {
     const response = await fetch("/data/stories.seed.json");
@@ -45,7 +54,9 @@ async function fetchSeedFallback(): Promise<StoriesResponse | null> {
         avatarUrl:
           normalizeMediaUrl(data.profile.avatarUrl) ?? data.profile.avatarUrl,
       },
-      stories: (data.stories ?? []).map(normalizeStoryGroup),
+      stories: sortStoriesChronological(
+        (data.stories ?? []).map(normalizeStoryGroup)
+      ),
     };
   } catch {
     return null;
@@ -68,7 +79,9 @@ export async function fetchStories(): Promise<StoriesResponse | null> {
             normalizeMediaUrl(response.data.profile.avatarUrl) ??
             response.data.profile.avatarUrl,
         },
-        stories: (response.data.stories ?? []).map(normalizeStoryGroup),
+        stories: sortStoriesChronological(
+          (response.data.stories ?? []).map(normalizeStoryGroup)
+        ),
       };
     }
   } catch (error) {

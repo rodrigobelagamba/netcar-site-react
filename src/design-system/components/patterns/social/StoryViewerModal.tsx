@@ -170,82 +170,91 @@ export function StoryViewerModal({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="story-viewer-modal fixed inset-0 z-[100] bg-black"
+          className="story-viewer-modal fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 sm:p-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          onMouseDown={() => setPaused(true)}
-          onMouseUp={() => setPaused(false)}
+          onClick={onClose}
         >
-          <div className="absolute top-0 left-0 right-0 z-20 px-3 pt-4 pb-2 flex gap-1 safe-area-top">
-            {segments.map((segment, index) => (
-              <div
-                key={segment.id}
-                className="flex-1 h-0.5 bg-white/30 rounded-full overflow-hidden"
-              >
+          <motion.div
+            className="story-viewer-modal__frame relative h-[min(720px,85vh)] w-auto max-w-[calc(100vw-2rem)] sm:max-w-[360px] aspect-[9/16] rounded-2xl overflow-hidden bg-black shadow-2xl"
+            initial={{ scale: 0.96, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.96, opacity: 0 }}
+            onClick={(event) => event.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={() => setPaused(true)}
+            onMouseUp={() => setPaused(false)}
+          >
+            <div className="absolute top-0 left-0 right-0 z-20 px-3 pt-3 pb-2 flex gap-1">
+              {segments.map((segment, index) => (
                 <div
-                  className="h-full bg-white"
-                  style={{ width: `${segmentProgress[index] * 100}%` }}
+                  key={segment.id}
+                  className="flex-1 h-0.5 bg-white/30 rounded-full overflow-hidden"
+                >
+                  <div
+                    className="h-full bg-white"
+                    style={{ width: `${segmentProgress[index] * 100}%` }}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute top-3 right-3 z-30 text-white/90 hover:text-white p-1.5"
+              aria-label="Fechar stories"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div
+              className="absolute inset-0"
+              onClick={(event) => {
+                const bounds = event.currentTarget.getBoundingClientRect();
+                handlePointerUp(event.clientX - bounds.left, bounds.width);
+              }}
+            >
+              {current.item.type === "video" ? (
+                <video
+                  key={current.item.id}
+                  src={mediaUrl}
+                  className="w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  playsInline
                 />
-              </div>
-            ))}
-          </div>
+              ) : (
+                <img
+                  key={current.item.id}
+                  src={mediaUrl}
+                  alt={current.item.caption ?? current.group.title}
+                  className="w-full h-full object-cover"
+                />
+              )}
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute top-4 right-4 z-30 text-white/90 hover:text-white p-2"
-            aria-label="Fechar stories"
-          >
-            <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-
-          <div
-            className="absolute inset-0"
-            onClick={(event) => {
-              const bounds = event.currentTarget.getBoundingClientRect();
-              handlePointerUp(event.clientX - bounds.left, bounds.width);
-            }}
-          >
-            {current.item.type === "video" ? (
-              <video
-                key={current.item.id}
-                src={mediaUrl}
-                className="w-full h-full object-cover"
-                autoPlay
-                muted
-                playsInline
-              />
-            ) : (
-              <img
-                key={current.item.id}
-                src={mediaUrl}
-                alt={current.item.caption ?? current.group.title}
-                className="w-full h-full object-cover"
-              />
-            )}
-
-            {current.item.caption && (
-              <div className="absolute bottom-0 left-0 right-0 px-6 pb-10 pt-16 bg-gradient-to-t from-black/80 to-transparent pointer-events-none">
-                <p className="text-white text-base font-semibold drop-shadow-lg text-center">
-                  {current.item.caption}
-                </p>
-                {current.item.link && (
-                  <a
-                    href={current.item.link.href}
-                    className="inline-block mt-3 px-4 py-2 rounded-full bg-white text-black text-sm font-bold pointer-events-auto mx-auto block w-fit"
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    {current.item.link.label ?? "Saiba mais"}
-                  </a>
-                )}
-              </div>
-            )}
-          </div>
+              {current.item.caption && (
+                <div className="absolute bottom-0 left-0 right-0 px-4 pb-6 pt-12 bg-gradient-to-t from-black/80 to-transparent pointer-events-none">
+                  <p className="text-white text-sm font-semibold drop-shadow-lg text-center">
+                    {current.item.caption}
+                  </p>
+                  {current.item.link && (
+                    <a
+                      href={current.item.link.href}
+                      className="inline-block mt-2 px-4 py-2 rounded-full bg-white text-black text-sm font-bold pointer-events-auto mx-auto block w-fit"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      {current.item.link.label ?? "Saiba mais"}
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

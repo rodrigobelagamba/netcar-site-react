@@ -142,16 +142,19 @@ function PhotoReviewCard({
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 p-2.5 sm:p-4 flex items-end justify-between gap-2 pointer-events-none">
-        <div className="min-w-0">
-          {headline && (
-            <p className="text-white text-xs font-bold uppercase tracking-wide mb-2 line-clamp-2 drop-shadow">
-              {headline}
-            </p>
-          )}
-          <StarRating rating={review.rating} color="white" className="justify-start mb-1" />
-          <p className="text-white text-sm font-bold truncate">{review.authorName}</p>
+        <div className="min-w-0 flex items-end gap-2">
+          <AuthorAvatar review={review} />
+          <div className="min-w-0">
+            {headline && (
+              <p className="text-white text-xs font-bold uppercase tracking-wide mb-2 line-clamp-2 drop-shadow">
+                {headline}
+              </p>
+            )}
+            <StarRating rating={review.rating} color="white" className="justify-start mb-1" />
+            <p className="text-white text-sm font-bold truncate">{review.authorName}</p>
+          </div>
         </div>
-        <GoogleGIcon variant="white" className="w-6 h-6" />
+        <GoogleGIcon variant="white" className="w-6 h-6 shrink-0" />
       </div>
     </button>
   );
