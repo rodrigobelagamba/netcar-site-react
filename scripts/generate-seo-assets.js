@@ -351,7 +351,7 @@ for (const landing of landings) {
       </p>
       ${relatedLandingsHtml(landing.slug)}
     </article>`;
-  writeFileSync(
+  writeTextFile(
     join(seoStaticDir, `landing-${landing.slug}.html`),
     pageShell({
       title: landing.title,
@@ -389,7 +389,7 @@ for (const page of contentPages) {
       ${faqHtml}
       <p><a href="${SITE}${page.secondHref}">${escapeHtml(page.secondLabel)}</a></p>
     </article>`;
-  writeFileSync(
+  writeTextFile(
     join(seoStaticDir, `page-${page.slug}.html`),
     pageShell({
       title: page.title,
