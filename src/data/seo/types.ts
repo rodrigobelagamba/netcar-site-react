@@ -42,3 +42,21 @@ export interface CitySeoPage {
   faq: CityFaq[];
   sell: CitySellSeo;
 }
+
+// Landing de marca/categoria gerada automaticamente a partir do estoque real
+// (scripts/generate-landings.js). filterKey/filterValue alimentam a busca
+// de veículos na página, garantindo conteúdo único (o estoque de verdade).
+export interface LandingSeoPage {
+  slug: string;
+  type: "marca" | "categoria";
+  name: string;
+  count: number;
+  filterKey: "marca" | "categoria" | "cambio";
+  filterValue: string;
+  title: string;
+  description: string;
+  h1: string;
+  intro: string;
+  paragraphs: string[];
+  faq: CityFaq[];
+}

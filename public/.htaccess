@@ -155,6 +155,10 @@
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteRule ^vender-carro-([a-z0-9-]+)/?$ seo-static/sell-city-$1.html [L]
 
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteRule ^comprar-([a-z0-9-]+)/?$ seo-static/landing-$1.html [L]
+
   # Sétimo: interceptar /veiculo/{slug} APENAS quando for bot/crawler (meta tags para WhatsApp)
   # Usuários normais acessam diretamente o React app
   RewriteCond %{REQUEST_URI} ^/veiculo/ [NC]

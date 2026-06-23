@@ -15,7 +15,7 @@ import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
 import { SchemaOrg } from "@/components/seo/SchemaOrg";
 import { PageLoader } from "@/components/layout/PageLoader";
-import { getCityPage } from "@/data/seo";
+import { getCityPage, getLandingPage } from "@/data/seo";
 
 const HomePage = lazyWithRetry(() =>
   import("@/modules/home/pages/HomePage").then((m) => ({ default: m.HomePage }))
@@ -69,6 +69,11 @@ const SellCityLandingPage = lazyWithRetry(() =>
     default: m.SellCityLandingPage,
   }))
 );
+const EstoqueLandingPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/EstoqueLandingPage").then((m) => ({
+    default: m.EstoqueLandingPage,
+  }))
+);
 
 // Mensagem do WhatsApp contextual por rota: lead chega no iAN já qualificado
 function getContextualMessage(pathname: string): string {
@@ -79,6 +84,10 @@ function getContextualMessage(pathname: string): string {
   if (pathname.startsWith("/seminovos-") && pathname !== "/seminovos-automaticos") {
     const city = getCityPage(pathname.replace("/seminovos-", ""));
     if (city) return `Oi iAN! Moro em ${city.name} e estou procurando um seminovo.`;
+  }
+  if (pathname.startsWith("/comprar-")) {
+    const landing = getLandingPage(pathname.replace("/comprar-", ""));
+    if (landing) return `Oi iAN! Estou procurando um ${landing.name} seminovo em Esteio.`;
   }
   if (
     pathname === "/compra" ||
@@ -335,6 +344,12 @@ const sellCityLandingRoute = createRoute({
   component: SellCityLandingPage,
 });
 
+const estoqueLandingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/comprar-{$landingSlug}",
+  component: EstoqueLandingPage,
+});
+
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   seminovosRoute,
@@ -350,6 +365,7 @@ export const routeTree = rootRoute.addChildren([
   seminovosAutomaticosRoute,
   cityLandingRoute,
   sellCityLandingRoute,
+  estoqueLandingRoute,
 ]);
 
 // Exporta NotFound para uso no RouterProvider

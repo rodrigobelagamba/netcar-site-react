@@ -25,6 +25,11 @@ function cityWhatsAppLink(cityName) {
   return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
 }
 
+function landingWhatsAppLink(name) {
+  const text = `Oi iAN! Estou procurando um ${name} seminovo em Esteio.`;
+  return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
+}
+
 // Gera config PHP a partir do .env.production, para o index.php não duplicar
 // a URL da API. O .env não vai para o servidor; este arquivo gerado vai.
 try {
@@ -121,6 +126,14 @@ const blogPosts = JSON.parse(
 const cities = JSON.parse(
   readFileSync(join(rootDir, "src/data/seo/cities.json"), "utf-8")
 );
+let landings = [];
+try {
+  landings = JSON.parse(
+    readFileSync(join(rootDir, "src/data/seo/landings.json"), "utf-8")
+  );
+} catch {
+  console.warn("Aviso: landings.json não encontrado; landings de marca/categoria ignoradas.");
+}
 
 function escapeHtml(value) {
   return String(value)
@@ -283,6 +296,52 @@ for (const city of cities) {
   }
 }
 
+// Landings de marca/categoria (HTML estático p/ crawler) — geradas do estoque real.
+function relatedLandingsHtml(currentSlug) {
+  const links = landings
+    .filter((l) => l.slug !== currentSlug)
+    .map(
+      (l) =>
+        `<li><a href="${SITE}/comprar-${l.slug}">${escapeHtml(l.h1)}</a></li>`
+    )
+    .join("");
+  if (!links) return "";
+  return `<nav aria-label="Outros seminovos"><h2>Veja também</h2><ul>${links}</ul></nav>`;
+}
+
+for (const landing of landings) {
+  const canonical = `${SITE}/comprar-${landing.slug}`;
+  const faqHtml = landing.faq
+    .map((item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`)
+    .join("");
+  const paragraphs = landing.paragraphs
+    .map((p) => `<p>${escapeHtml(p)}</p>`)
+    .join("");
+  const body = `
+    <article>
+      <h1>${escapeHtml(landing.h1)}</h1>
+      <p>${escapeHtml(landing.intro)}</p>
+      ${paragraphs}
+      ${faqHtml}
+      <p>
+        <a href="${SITE}/seminovos">Ver estoque completo</a>
+        ·
+        <a href="${landingWhatsAppLink(landing.name)}">Falar com consultor · 24/7</a>
+      </p>
+      ${relatedLandingsHtml(landing.slug)}
+    </article>`;
+  writeFileSync(
+    join(seoStaticDir, `landing-${landing.slug}.html`),
+    pageShell({
+      title: landing.title,
+      description: landing.description,
+      canonical,
+      body,
+      schemas: [ORG_SCHEMA, faqSchema(landing.faq)],
+    })
+  );
+}
+
 const staticPages = [
   { path: "/", priority: "1.0", changefreq: "daily" },
   { path: "/seminovos", priority: "0.9", changefreq: "daily" },
@@ -362,6 +421,11 @@ const urls = [
       priority: "0.8",
       changefreq: "weekly",
     })),
+  ...landings.map((landing) => ({
+    loc: `${SITE}/comprar-${landing.slug}`,
+    priority: "0.8",
+    changefreq: "weekly",
+  })),
 ];
 
 let previousLastmods = new Map();
@@ -390,5 +454,5 @@ writeTextFile(join(publicDir, "sitemap.xml"), sitemap);
 
 const sellPages = cities.filter((city) => city.sell).length;
 console.log(
-  `SEO assets gerados: ${blogPosts.length} posts, ${cities.length} cidades compra, ${sellPages} cidades venda, ${vehicleUrls.length} veículos preservados, sitemap com ${urls.length} URLs`
+  `SEO assets gerados: ${blogPosts.length} posts, ${cities.length} cidades compra, ${sellPages} cidades venda, ${landings.length} landings marca/categoria, ${vehicleUrls.length} veículos preservados, sitemap com ${urls.length} URLs`
 );
