@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-landings.js && node scripts/generate-blog.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsc && vite build && node scripts/copy-social-php.js",
+    "build": "node scripts/generate-landings.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsc && vite build && node scripts/copy-social-php.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "generate-landings": "node scripts/generate-landings.js",
     "generate-blog": "node scripts/generate-blog.js",
+    "blog:rotate": "node scripts/generate-blog.js",
+    "weekly": "node scripts/generate-blog.js && npm run deploy:local",
     "seo:generate": "node scripts/generate-seo-assets.js",
     "preview": "vite preview",
     "deploy:local": "node scripts/deploy-local.js",
