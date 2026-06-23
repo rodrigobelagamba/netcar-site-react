@@ -8,6 +8,7 @@
     "build": "node scripts/generate-landings.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsc && vite build && node scripts/copy-social-php.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "generate-landings": "node scripts/generate-landings.js",
+    "blog:drafts": "node scripts/generate-blog-drafts.js",
     "seo:generate": "node scripts/generate-seo-assets.js",
     "preview": "vite preview",
     "deploy:local": "node scripts/deploy-local.js",
