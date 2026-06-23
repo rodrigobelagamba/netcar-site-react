@@ -5,9 +5,11 @@
  * Roda no postbuild antes do deploy.
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from "fs";
+import { readFileSync, mkdirSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import { writeTextFile } from "./lib/write-text-file.js";
+import { fetchVehicleSitemapUrls } from "./lib/vehicle-sitemap-urls.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
@@ -30,7 +32,7 @@ try {
   const apiBaseMatch = envFile.match(/^VITE_API_BASE_URL=(.+)$/m);
   const apiBaseUrl = apiBaseMatch ? apiBaseMatch[1].trim().replace(/^["']|["']$/g, "") : "";
   if (apiBaseUrl) {
-    writeFileSync(
+    writeTextFile(
       join(publicDir, "netcar-config.php"),
       `<?php\n// Gerado no build a partir de .env.production — nao editar manualmente.\ndefine('NETCAR_API_BASE_URL', '${apiBaseUrl.replace(/'/g, "\\'")}');\n`
     );
@@ -200,7 +202,7 @@ for (const post of blogPosts) {
       ${renderSections(post.sections)}
       <p><a href="${SITE}${post.ctaHref}">${escapeHtml(post.ctaLabel)}</a></p>
     </article>`;
-  writeFileSync(
+  writeTextFile(
     join(seoStaticDir, `blog-${post.slug}.html`),
     pageShell({ title: post.title, description: post.description, canonical, body })
   );
@@ -241,7 +243,7 @@ for (const city of cities) {
       </p>
       ${relatedCitiesHtml(city.slug)}
     </article>`;
-  writeFileSync(
+  writeTextFile(
     join(seoStaticDir, `city-${city.slug}.html`),
     pageShell({
       title: city.title,
@@ -268,7 +270,7 @@ for (const city of cities) {
       ${sellFaqHtml}
       <p><a href="${SITE}/compra">Avaliar meu carro</a></p>
     </article>`;
-    writeFileSync(
+    writeTextFile(
       join(seoStaticDir, `sell-city-${city.slug}.html`),
       pageShell({
         title: city.sell.title,
@@ -302,6 +304,13 @@ function extractVehicleUrls(xml) {
 
 async function getVehicleUrls() {
   try {
+    const apiUrls = await fetchVehicleSitemapUrls();
+    if (apiUrls.length > 0) return apiUrls;
+  } catch (error) {
+    console.warn(`Aviso: API de veículos indisponível (${error.message}); tentando sitemap local.`);
+  }
+
+  try {
     const localXml = readFileSync(join(publicDir, "sitemap.xml"), "utf-8");
     const localUrls = extractVehicleUrls(localXml);
     if (localUrls.length > 0) return localUrls;
@@ -317,6 +326,14 @@ async function getVehicleUrls() {
     console.warn("Aviso: não foi possível buscar sitemap de produção; veículos ficam de fora.");
     return [];
   }
+}
+
+function parseSitemapLastmods(xml) {
+  const map = new Map();
+  for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>\s*\n\s*<lastmod>([^<]+)<\/lastmod>/g)) {
+    map.set(match[1], match[2]);
+  }
+  return map;
 }
 
 const vehicleUrls = await getVehicleUrls();
@@ -347,13 +364,20 @@ const urls = [
     })),
 ];
 
+let previousLastmods = new Map();
+try {
+  previousLastmods = parseSitemapLastmods(readFileSync(join(publicDir, "sitemap.xml"), "utf-8"));
+} catch {
+  // sem sitemap anterior
+}
+
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls
   .map(
     (url) => `  <url>
     <loc>${url.loc}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${previousLastmods.get(url.loc) ?? today}</lastmod>
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority}</priority>
   </url>`
@@ -362,7 +386,7 @@ ${urls
 </urlset>
 `;
 
-writeFileSync(join(publicDir, "sitemap.xml"), sitemap);
+writeTextFile(join(publicDir, "sitemap.xml"), sitemap);
 
 const sellPages = cities.filter((city) => city.sell).length;
 console.log(

@@ -7,6 +7,7 @@
 
 import { execSync } from 'child_process';
 import { existsSync, readFileSync, writeFileSync, readdirSync, statSync, unlinkSync } from 'fs';
+import { homedir } from 'os';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -187,6 +188,8 @@ function loadDeployConfig() {
       host: process.env.SSH_HOST || 'netcarmultimarcas.com.br',
       user: process.env.SSH_USER || '',
       remoteDir: process.env.SSH_DIR || 'www/',
+      password: process.env.SSH_PASSWORD || '',
+      identityFile: process.env.SSH_KEY_PATH || '',
     },
   };
 
@@ -207,6 +210,8 @@ function loadDeployConfig() {
         if (key === 'SSH_HOST') config.ssh.host = value;
         if (key === 'SSH_USER') config.ssh.user = value;
         if (key === 'SSH_DIR') config.ssh.remoteDir = value;
+        if (key === 'SSH_PASSWORD') config.ssh.password = value;
+        if (key === 'SSH_KEY_PATH') config.ssh.identityFile = value;
       }
     });
   }
@@ -374,18 +379,80 @@ async function uploadDistFiles(initialClient, ftpConfig, distPath, allFiles) {
   return { uploadedCount, failedFiles, totalFiles, client };
 }
 
+function shellQuote(value) {
+  return `"${String(value).replace(/"/g, '\\"')}"`;
+}
+
+function hasCommand(command) {
+  try {
+    execSync(`command -v ${command}`, { stdio: 'pipe', shell: true });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function resolveSshIdentityFile(sshConfig) {
+  if (sshConfig.identityFile && existsSync(sshConfig.identityFile)) {
+    return sshConfig.identityFile;
+  }
+
+  const defaults = ['id_ed25519', 'id_rsa'].map((name) => join(homedir(), '.ssh', name));
+  return defaults.find((path) => existsSync(path)) || '';
+}
+
+function buildSshInvocation(sshConfig, remote, remoteCommand) {
+  const identityFile = resolveSshIdentityFile(sshConfig);
+  const sshOptions = ['-o StrictHostKeyChecking=accept-new'];
+
+  if (identityFile) {
+    sshOptions.push(`-i ${shellQuote(identityFile)}`, '-o IdentitiesOnly=yes');
+  }
+
+  const sshTarget = `${remote} ${shellQuote(remoteCommand)}`;
+  const sshBase = `ssh ${sshOptions.join(' ')} ${sshTarget}`;
+
+  if (sshConfig.password && hasCommand('sshpass')) {
+    return {
+      command: `sshpass -e ${sshBase}`,
+      env: { SSHPASS: sshConfig.password },
+      mode: 'password',
+    };
+  }
+
+  if (identityFile) {
+    return { command: sshBase, env: {}, mode: 'key' };
+  }
+
+  return { command: sshBase, env: {}, mode: 'interactive' };
+}
+
 function deployViaSsh(sshConfig, distPath) {
   const remote = `${sshConfig.user}@${sshConfig.host}`;
   const remoteDir = sshConfig.remoteDir.replace(/\/$/, '');
   const distPosix = distPath.replace(/\\/g, '/');
+  const remoteCommand = `mkdir -p ${remoteDir} && tar -C ${remoteDir} -xf -`;
+  const ssh = buildSshInvocation(sshConfig, remote, remoteCommand);
 
   log('📤 Deploy via SSH (recomendado na KingHost dedicada)', 'blue');
   log(`   ${remote}:${remoteDir}/`, 'blue');
+  if (ssh.mode === 'key') {
+    log('   Autenticação: chave SSH', 'blue');
+  } else if (ssh.mode === 'password') {
+    log('   Autenticação: SSH_PASSWORD (sshpass)', 'blue');
+  } else {
+    log('   Autenticação: senha interativa (ou configure SSH_KEY_PATH)', 'yellow');
+    log('   Dica: rode npm run deploy:ssh-setup uma vez para não digitar senha', 'yellow');
+  }
 
-  // tar over SSH — funciona no Git Bash sem rsync; preserva estrutura de dist/
-  const cmd = `tar -C "${distPosix}" -cf - . | ssh "${remote}" "mkdir -p ${remoteDir} && tar -C ${remoteDir} -xf -"`;
+  const cmd = `tar -C ${shellQuote(distPosix)} -cf - . | ${ssh.command}`;
   log('   Enviando pacote compactado...', 'yellow');
-  execSync(cmd, { stdio: 'inherit', cwd: rootDir, shell: true });
+  execSync(cmd, {
+    stdio: 'inherit',
+    cwd: rootDir,
+    shell: true,
+    env: { ...process.env, ...ssh.env },
+  });
   log('\n✅ Deploy SSH concluído!', 'green');
 }
 

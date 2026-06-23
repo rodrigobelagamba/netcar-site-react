@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsc && vite build && node scripts/copy-social-php.js",
+    "build": "node scripts/generate-seo-assets.js && tsc && vite build && node scripts/copy-social-php.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "seo:generate": "node scripts/generate-seo-assets.js",
     "preview": "vite preview",
     "deploy:local": "node scripts/deploy-local.js",
+    "deploy:ssh-setup": "node scripts/ssh-setup.js",
     "deploy:local:win": "scripts\\deploy-local.bat",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
