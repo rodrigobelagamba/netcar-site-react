@@ -131,14 +131,21 @@ Agendar no host (crontab) — **segunda-feira 06:00**:
 > persistente. Se rodar em ambiente efêmero (CI limpo a cada vez), o blog
 > recomeça do lote inicial — por isso a VPS com volume é o caminho certo.
 
-### Opcional: commitar o histórico de volta
-Para versionar o crescimento do blog, ao fim do run:
+### Versionamento no Git
+
+**Não versionar** (`.gitignore`): `public/seo-static/`, `public/sitemap.xml`,
+`src/data/seo/landings.json` — regenerados a cada `npm run build`.
+
+**Versionar** (estado editorial): `src/data/seo/blog-auto.json` (histórico do blog
+automático), `blog-posts.json`, `cities.json`.
+
+### Opcional: commitar só o histórico do blog após weekly
+
 ```bash
-git add src/data/seo/blog-auto.json public/seo-static public/sitemap.xml \
+git add src/data/seo/blog-auto.json \
   && git commit -m "chore(blog): rodada semanal automática" \
   && git push
 ```
-(Requer credencial git na VPS.)
 
 ## 5. Cidades (já existente)
 

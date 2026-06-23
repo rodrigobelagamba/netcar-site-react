@@ -16,6 +16,11 @@ dist/
 # Gerado no build a partir do .env.production
 public/netcar-config.php
 
+# Gerado no build (generate-landings / generate-seo-assets / generate-sitemap)
+public/seo-static/
+public/sitemap.xml
+src/data/seo/landings.json
+
 # Social sync — credenciais e tokens (KingHost)
 docs/social/social-config.php
 docs/social/data/cache/social-tokens.json
