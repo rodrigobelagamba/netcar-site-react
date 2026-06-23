@@ -33,6 +33,7 @@
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
   ExpiresByType text/javascript "access plus 1 month"
+  ExpiresByType application/json "access plus 0 seconds"
   
   # Fontes
   ExpiresByType font/woff "access plus 1 year"
@@ -69,6 +70,14 @@
   # Cache-Control: max-age=1800 (30 min). Banner muda raramente: 7 dias.
   <If "%{REQUEST_URI} =~ m#^/imagens/#">
     Header set Cache-Control "public, max-age=604800"
+  </If>
+
+  # Assets do build (/assets/) têm hash no nome (ex.: index-Rjk3oydK.js):
+  # o conteúdo nunca muda para um mesmo arquivo, então cache de 1 ano + immutable.
+  # Em produção estavam saindo com max-age=1800 (30 min), forçando re-download
+  # a cada visita e penalizando LCP de retorno. immutable evita revalidação.
+  <If "%{REQUEST_URI} =~ m#^/assets/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
   </If>
 </IfModule>
 
