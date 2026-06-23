@@ -36,7 +36,9 @@ export function NetcarStoriesSection() {
   const carouselLayout = useStoryCarouselLayout(emblaApi, storyCount);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
+  const [autoplayPaused, setAutoplayPaused] = useState(false);
   const dragMovedRef = useRef(false);
+  const hoveredRef = useRef(false);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -46,19 +48,41 @@ export function NetcarStoriesSection() {
 
     const onPointerDown = () => {
       dragMovedRef.current = false;
+      setAutoplayPaused(true);
     };
     const onScroll = () => {
       dragMovedRef.current = true;
     };
+    const onSettle = () => {
+      if (!hoveredRef.current) setAutoplayPaused(false);
+    };
 
     emblaApi.on("pointerDown", onPointerDown);
     emblaApi.on("scroll", onScroll);
+    emblaApi.on("settle", onSettle);
 
     return () => {
       emblaApi.off("pointerDown", onPointerDown);
       emblaApi.off("scroll", onScroll);
+      emblaApi.off("settle", onSettle);
     };
   }, [emblaApi]);
+
+  /** Autoplay: avança 1 card a cada 3,5s; pausa em hover, arraste e com o viewer aberto */
+  useEffect(() => {
+    if (!emblaApi || viewerOpen || autoplayPaused) return;
+    if (!emblaApi.canScrollNext() && !emblaApi.canScrollPrev()) return;
+
+    const id = window.setInterval(() => {
+      if (emblaApi.canScrollNext()) {
+        emblaApi.scrollNext();
+      } else {
+        emblaApi.scrollTo(0);
+      }
+    }, 3500);
+
+    return () => window.clearInterval(id);
+  }, [emblaApi, viewerOpen, autoplayPaused, storyCount]);
 
   const openViewer = (groupIndex: number) => {
     setSelectedGroupIndex(groupIndex);
@@ -133,7 +157,17 @@ export function NetcarStoriesSection() {
         </a>
       </div>
 
-      <div className="relative">
+      <div
+        className="relative"
+        onMouseEnter={() => {
+          hoveredRef.current = true;
+          setAutoplayPaused(true);
+        }}
+        onMouseLeave={() => {
+          hoveredRef.current = false;
+          setAutoplayPaused(false);
+        }}
+      >
         {stories.length > 3 && (
           <>
             <button

@@ -4,9 +4,11 @@ import { useGoogleReviewsQuery } from "@/social/queries/useGoogleReviewsQuery";
 import { REVIEW_CARD_SIZE, ReviewsMasonryGrid } from "./ReviewsMasonryGrid";
 import { ReviewsSummaryHeader } from "./ReviewsSummaryHeader";
 
-/** Busca geral "Netcar Multimarcas" no Maps — cobre Loja 1 e Loja 2 */
-const NETCAR_GOOGLE_PLACE_URL =
-  "https://www.google.com/maps/search/Netcar+Multimarcas+Esteio+RS";
+/** Perfis do Google Business (com avaliações) de cada loja */
+const LOJA_REVIEWS_URL = {
+  loja1: "https://maps.google.com/maps?cid=9144067949621682127",
+  loja2: "https://maps.google.com/maps?cid=10839197980729051544",
+} as const;
 
 function ReviewsSkeleton() {
   return (
@@ -29,9 +31,6 @@ export function NetcarGoogleReviewsSection() {
     if (!data?.reviews?.length) return;
     setReviews(data.reviews);
   }, [data]);
-
-  const totalCount = data?.pagination?.totalCount ?? data?.summary.totalCount ?? reviews.length;
-  const hasMore = reviews.length < totalCount;
 
   if (isLoading) {
     return (
@@ -63,19 +62,30 @@ export function NetcarGoogleReviewsSection() {
     <div>
       <ReviewsSummaryHeader summary={data.summary} />
       <ReviewsMasonryGrid reviews={reviews} googlePlaceUrl={data.summary.placeUrl} />
-      {hasMore && (
-        <div className="flex flex-col items-center mt-8">
+
+      <div className="mt-8 flex flex-col items-center gap-3">
+        <p className="text-sm text-[#6B7280]">Veja todas as avaliações no Google</p>
+        <div className="flex flex-wrap items-center justify-center gap-3">
           <a
-            href={data.summary.placeUrl || NETCAR_GOOGLE_PLACE_URL}
+            href={LOJA_REVIEWS_URL.loja1}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-[5px] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#0033ff" }}
+            style={{ backgroundColor: "#6cc4ca" }}
           >
-            Carregar mais
+            Avaliações — Loja 1 (Matriz)
+          </a>
+          <a
+            href={LOJA_REVIEWS_URL.loja2}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-[5px] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            style={{ backgroundColor: "#f59e0b" }}
+          >
+            Avaliações — Loja 2 (Filial)
           </a>
         </div>
-      )}
+      </div>
     </div>
   );
 }
