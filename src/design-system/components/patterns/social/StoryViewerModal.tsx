@@ -14,7 +14,8 @@ interface StoryViewerModalProps {
   onClose: () => void;
 }
 
-const DEFAULT_DURATION_MS = 5000;
+const DEFAULT_IMAGE_DURATION_MS = 5000;
+const FALLBACK_VIDEO_DURATION_MS = 15000;
 
 export function StoryViewerModal({
   stories,
@@ -26,13 +27,22 @@ export function StoryViewerModal({
   const [flatIndex, setFlatIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [muted, setMuted] = useState(false);
   const progressRef = useRef<number | null>(null);
   const startedAtRef = useRef(0);
   const elapsedRef = useRef(0);
+  const pausedRef = useRef(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const touchStartY = useRef<number | null>(null);
   const touchStartX = useRef<number | null>(null);
 
   const current: FlatStoryItem | undefined = flatItems[flatIndex];
+  const isVideo = current?.item.type === "video";
+
+  const setPausedState = useCallback((value: boolean) => {
+    pausedRef.current = value;
+    setPaused(value);
+  }, []);
 
   const clearProgress = useCallback(() => {
     if (progressRef.current !== null) {
@@ -55,14 +65,16 @@ export function StoryViewerModal({
     setFlatIndex((prev) => Math.max(0, prev - 1));
   }, []);
 
-  const startProgress = useCallback(
-    (durationMs: number, resumeFrom = 0) => {
+  /** Timer por rAF — usado só para imagens (vídeo é guiado pelo próprio elemento) */
+  const startImageProgress = useCallback(
+    (durationMs: number) => {
       clearProgress();
-      elapsedRef.current = resumeFrom;
-      startedAtRef.current = performance.now() - resumeFrom;
+      elapsedRef.current = 0;
+      startedAtRef.current = performance.now();
 
       const tick = (now: number) => {
-        if (paused) {
+        if (pausedRef.current) {
+          startedAtRef.current = now - elapsedRef.current;
           progressRef.current = window.requestAnimationFrame(tick);
           return;
         }
@@ -82,7 +94,7 @@ export function StoryViewerModal({
 
       progressRef.current = window.requestAnimationFrame(tick);
     },
-    [clearProgress, goNext, paused]
+    [clearProgress, goNext]
   );
 
   useEffect(() => {
@@ -91,21 +103,66 @@ export function StoryViewerModal({
     const initialFlatIndex = findFlatIndex(flatItems, initialGroupIndex, 0);
     setFlatIndex(initialFlatIndex >= 0 ? initialFlatIndex : 0);
     setProgress(0);
-    setPaused(false);
-  }, [isOpen, initialGroupIndex, flatItems]);
+    setPausedState(false);
+    setMuted(false);
+  }, [isOpen, initialGroupIndex, flatItems, setPausedState]);
 
   useEffect(() => {
     if (!isOpen || !current) return;
 
     document.body.style.overflow = "hidden";
-    const durationMs = current.item.durationMs ?? DEFAULT_DURATION_MS;
-    startProgress(durationMs);
+    setProgress(0);
+
+    if (current.item.type === "image") {
+      const durationMs = current.item.durationMs ?? DEFAULT_IMAGE_DURATION_MS;
+      startImageProgress(durationMs);
+    } else {
+      clearProgress();
+    }
 
     return () => {
       document.body.style.overflow = "";
       clearProgress();
     };
-  }, [isOpen, current, flatIndex, startProgress, clearProgress]);
+  }, [isOpen, current, flatIndex, startImageProgress, clearProgress]);
+
+  /** Vídeo: tenta tocar com som; se o navegador bloquear, cai pra mudo */
+  useEffect(() => {
+    if (!isOpen || !isVideo) return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = muted;
+
+    if (pausedRef.current) {
+      video.pause();
+      return;
+    }
+
+    const attempt = video.play();
+    if (attempt && typeof attempt.catch === "function") {
+      attempt.catch(() => {
+        if (!video.muted) {
+          video.muted = true;
+          setMuted(true);
+          video.play().catch(() => undefined);
+        }
+      });
+    }
+  }, [isOpen, isVideo, current, muted]);
+
+  /** Segurar (hold) pausa o vídeo; soltar retoma */
+  useEffect(() => {
+    if (!isVideo) return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (paused) {
+      video.pause();
+    } else {
+      video.play().catch(() => undefined);
+    }
+  }, [paused, isVideo]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -132,7 +189,7 @@ export function StoryViewerModal({
   const handleTouchStart = (event: React.TouchEvent) => {
     touchStartY.current = event.touches[0]?.clientY ?? null;
     touchStartX.current = event.touches[0]?.clientX ?? null;
-    setPaused(true);
+    setPausedState(true);
   };
 
   const handleTouchEnd = (event: React.TouchEvent) => {
@@ -142,7 +199,7 @@ export function StoryViewerModal({
     const endX = event.changedTouches[0]?.clientX;
     touchStartY.current = null;
     touchStartX.current = null;
-    setPaused(false);
+    setPausedState(false);
 
     if (startY !== null && endY !== undefined && endY - startY > 80) {
       onClose();
@@ -184,8 +241,8 @@ export function StoryViewerModal({
             onClick={(event) => event.stopPropagation()}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            onMouseDown={() => setPaused(true)}
-            onMouseUp={() => setPaused(false)}
+            onMouseDown={() => setPausedState(true)}
+            onMouseUp={() => setPausedState(false)}
           >
             <div className="absolute top-0 left-0 right-0 z-20 px-3 pt-3 pb-2 flex gap-1">
               {segments.map((segment, index) => (
@@ -200,6 +257,29 @@ export function StoryViewerModal({
                 </div>
               ))}
             </div>
+
+            {isVideo && (
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setMuted((prev) => !prev);
+                }}
+                className="absolute top-3 right-12 z-30 text-white/90 hover:text-white p-1.5"
+                aria-label={muted ? "Ativar som" : "Desativar som"}
+              >
+                {muted ? (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9l4 4m0-4l-4 4" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072M17.95 6.05a8 8 0 010 11.9M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                  </svg>
+                )}
+              </button>
+            )}
 
             <button
               type="button"
@@ -222,11 +302,19 @@ export function StoryViewerModal({
               {current.item.type === "video" ? (
                 <video
                   key={current.item.id}
+                  ref={videoRef}
                   src={mediaUrl}
                   className="w-full h-full object-cover"
                   autoPlay
-                  muted
                   playsInline
+                  onTimeUpdate={(event) => {
+                    const video = event.currentTarget;
+                    const total = Number.isFinite(video.duration) && video.duration > 0
+                      ? video.duration
+                      : FALLBACK_VIDEO_DURATION_MS / 1000;
+                    setProgress(Math.min(video.currentTime / total, 1));
+                  }}
+                  onEnded={goNext}
                 />
               ) : (
                 <img

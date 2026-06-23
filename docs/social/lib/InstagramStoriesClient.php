@@ -91,7 +91,8 @@ final class InstagramStoriesClient
                 'type' => $mediaType === 'VIDEO' ? 'video' : 'image',
                 'url' => $full,
                 'previewUrl' => $cover,
-                'durationMs' => $mediaType === 'VIDEO' ? 5000 : 5000,
+                // Vídeo: cliente usa a duração real do arquivo. Imagem: 5s fixo.
+                'durationMs' => $mediaType === 'VIDEO' ? null : 5000,
                 'caption' => $item['caption'] ?? null,
             ]],
         ];

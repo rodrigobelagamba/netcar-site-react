@@ -4,8 +4,9 @@ import { useGoogleReviewsQuery } from "@/social/queries/useGoogleReviewsQuery";
 import { REVIEW_CARD_SIZE, ReviewsMasonryGrid } from "./ReviewsMasonryGrid";
 import { ReviewsSummaryHeader } from "./ReviewsSummaryHeader";
 
-const LOJA1_GOOGLE_REVIEWS_URL =
-  "https://maps.google.com/maps?cid=10839197980729051544";
+/** Busca geral "Netcar Multimarcas" no Maps — cobre Loja 1 e Loja 2 */
+const NETCAR_GOOGLE_PLACE_URL =
+  "https://www.google.com/maps/search/Netcar+Multimarcas+Esteio+RS";
 
 function ReviewsSkeleton() {
   return (
@@ -65,7 +66,7 @@ export function NetcarGoogleReviewsSection() {
       {hasMore && (
         <div className="flex flex-col items-center mt-8">
           <a
-            href={LOJA1_GOOGLE_REVIEWS_URL}
+            href={data.summary.placeUrl || NETCAR_GOOGLE_PLACE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-[5px] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"

@@ -6,6 +6,9 @@ import logoNetcar from "@/assets/images/logo-netcar.png";
 import { StoryPreviewCard } from "./StoryPreviewCard";
 import { StoryViewerModal } from "./StoryViewerModal";
 
+/** Limite de stories visíveis — mostra os mais recentes (igual EmbedSocial) */
+const MAX_VISIBLE_STORIES = 10;
+
 function StoriesSkeleton({ flexBasis, gap }: { flexBasis: string; gap: number }) {
   return (
     <div className="flex overflow-hidden" style={{ gap }}>
@@ -28,7 +31,8 @@ export function NetcarStoriesSection() {
     dragFree: false,
     slidesToScroll: 1,
   });
-  const storyCount = data?.stories.length ?? 4;
+  const visibleStories = (data?.stories ?? []).slice(-MAX_VISIBLE_STORIES);
+  const storyCount = visibleStories.length || 4;
   const carouselLayout = useStoryCarouselLayout(emblaApi, storyCount);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
@@ -94,7 +98,8 @@ export function NetcarStoriesSection() {
     );
   }
 
-  const { profile, stories } = data;
+  const { profile } = data;
+  const stories = visibleStories;
   const avatar = profile.avatarUrl || logoNetcar;
 
   return (
