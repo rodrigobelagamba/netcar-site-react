@@ -13,6 +13,7 @@ import {
   useScheduleQuery
 } from "@/catalog";
 import { formatWhatsAppNumber, buildMapsUrl, LOJA_COORDS } from "@/lib/formatters";
+import { cityPages } from "@/data/seo";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 const menuLinks = [
@@ -247,6 +248,24 @@ export function Footer() {
             </div>
           </div>
 
+        </div>
+
+        {/* Cidades que atendemos (SEO local + links internos) */}
+        <div className="border-t border-border pt-6 pb-2">
+          <h4 className="text-[10px] font-bold text-muted-foreground mb-4 uppercase tracking-widest">Seminovos por cidade</h4>
+          <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            {cityPages.map((city) => (
+              <li key={city.slug}>
+                <Link
+                  to="/seminovos-{$citySlug}"
+                  params={{ citySlug: city.slug }}
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Seminovos perto de {city.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="border-t border-border pt-6 pb-4">

@@ -79,6 +79,12 @@
   # Domínio canônico: força www
   RewriteCond %{HTTP_HOST} ^netcarmultimarcas\.com\.br$ [NC]
   RewriteRule ^(.*)$ https://www.netcarmultimarcas.com.br/$1 [R=301,L]
+
+  # Canônico da home: /index.html acessado direto -> / (301).
+  # THE_REQUEST garante que só o request externo do browser/crawler é
+  # redirecionado; o rewrite interno do SPA para index.html não casa aqui.
+  RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+  RewriteRule ^index\.html$ / [R=301,L]
   
   # Redirects 301 — site legado PHP/HTML
   RewriteRule ^seminovos\.php$ /seminovos [R=301,L]

@@ -206,6 +206,17 @@ for (const post of blogPosts) {
   );
 }
 
+function relatedCitiesHtml(currentSlug) {
+  const links = cities
+    .filter((c) => c.slug !== currentSlug)
+    .map(
+      (c) =>
+        `<li><a href="${SITE}/seminovos-${c.slug}">Seminovos perto de ${escapeHtml(c.name)}</a></li>`
+    )
+    .join("");
+  return `<nav aria-label="Seminovos em outras cidades"><h2>Seminovos em outras cidades</h2><ul>${links}</ul></nav>`;
+}
+
 for (const city of cities) {
   const canonical = `${SITE}/seminovos-${city.slug}`;
   const faqHtml = city.faq
@@ -228,6 +239,7 @@ for (const city of cities) {
         ·
         <a href="${cityWhatsAppLink(city.name)}">Falar com consultor · 24/7</a>
       </p>
+      ${relatedCitiesHtml(city.slug)}
     </article>`;
   writeFileSync(
     join(seoStaticDir, `city-${city.slug}.html`),
