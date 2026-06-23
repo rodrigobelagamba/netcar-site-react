@@ -120,9 +120,22 @@ function faqSchema(faq) {
   };
 }
 
-const blogPosts = JSON.parse(
+const manualBlogPosts = JSON.parse(
   readFileSync(join(rootDir, "src/data/seo/blog-posts.json"), "utf-8")
 );
+let autoBlogPosts = [];
+try {
+  autoBlogPosts = JSON.parse(
+    readFileSync(join(rootDir, "src/data/seo/blog-auto.json"), "utf-8")
+  );
+} catch {
+  /* sem posts automáticos ainda */
+}
+// Manuais têm prioridade no slug
+const blogPosts = [
+  ...manualBlogPosts,
+  ...autoBlogPosts.filter((a) => !manualBlogPosts.some((m) => m.slug === a.slug)),
+];
 const cities = JSON.parse(
   readFileSync(join(rootDir, "src/data/seo/cities.json"), "utf-8")
 );

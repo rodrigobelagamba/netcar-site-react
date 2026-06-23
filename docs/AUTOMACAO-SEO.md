@@ -39,25 +39,26 @@ Adicionar carro de uma marca nova ao estoque → próximo build cria a landing s
 
 **Rodar isolado:** `npm run generate-landings`
 
-## 2. Blog (semi-automático, NÃO publica sozinho)
+## 2. Blog (automático, PUBLICA sozinho)
 
-`scripts/generate-blog-drafts.js`:
-- Combina pautas de **alta intenção de compra** com dados reais (marca/categoria
-  mais forte do estoque).
-- Escreve `src/data/seo/blog-drafts.json` com título, query-alvo, outline e
-  parágrafo-semente.
-- **Não publica.** Fluxo: revisar/expandir o rascunho → mover o post pronto para
-  `blog-posts.json` (que é o que o site renderiza e indexa).
+`scripts/generate-blog.js`:
+- Gera posts **completos** (título, seções h2/p/ul, CTA) parametrizados por
+  dados reais do estoque (marca/categoria mais forte, faixas de preço).
+- Escreve `src/data/seo/blog-auto.json` e **publica direto** — datas
+  escalonadas (1 post a cada ~4 dias) para o blog parecer contínuo.
+- O loader mescla `blog-posts.json` (manuais) + `blog-auto.json` (auto);
+  **manuais têm prioridade** no slug (nunca sobrescreve conteúdo humano).
 
-Por que não auto-publicar: post raso gerado em massa é penalizado pelo Google
-(scaled content). O rascunho acelera; a qualidade final é humana (ou LLM revisado).
+Posts atuais: guia da marca top, melhor categoria, "quanto custa um seminovo",
+financiamento no RS, checklist de compra, troca x venda. Adicionar novo tema =
+nova função em `generate-blog.js`.
 
-**Rodar:** `npm run blog:drafts`
+**Rodar:** `npm run generate-blog`
 
-### Evoluir para rascunho com LLM (opcional)
-Trocar o `seedParagraph`/outline por chamada a uma API LLM (mesma ideia do
-StackPick `pipeline/editorial.py`): gerar o texto completo do rascunho, mantendo
-o gate de **revisão humana antes de publicar**.
+> Nota de qualidade: os artigos usam dados reais e estrutura própria para
+> "fazer sentido" e evitar texto vazio. Para subir ainda mais a qualidade,
+> trocar os parágrafos por geração via LLM (mesma ideia do StackPick
+> `pipeline/editorial.py`), mantendo a publicação automática.
 
 ## 3. Cidades (já existente)
 
