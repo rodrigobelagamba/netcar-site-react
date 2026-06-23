@@ -2,7 +2,13 @@ import blogPostsJson from "./blog-posts.json";
 import blogAutoJson from "./blog-auto.json";
 import citiesJson from "./cities.json";
 import landingsJson from "./landings.json";
-import type { BlogPost, CitySeoPage, LandingSeoPage } from "./types";
+import contentPagesJson from "./content-pages.json";
+import type {
+  BlogPost,
+  CitySeoPage,
+  LandingSeoPage,
+  ContentSeoPage,
+} from "./types";
 
 // Blog = posts manuais + posts auto-publicados (gerados do estoque real).
 // Manuais têm prioridade: se houver slug repetido, o manual vence.
@@ -13,6 +19,11 @@ const autoPosts = (blogAutoJson as BlogPost[]).filter(
 export const blogPosts: BlogPost[] = [...manualPosts, ...autoPosts];
 export const cityPages = citiesJson as CitySeoPage[];
 export const landingPages = landingsJson as LandingSeoPage[];
+export const contentPages = contentPagesJson as ContentSeoPage[];
+
+export function getContentPage(slug: string): ContentSeoPage | undefined {
+  return contentPages.find((p) => p.slug === slug);
+}
 
 export function getBlogPost(slug: string): BlogPost | undefined {
   return blogPosts.find((post) => post.slug === slug);

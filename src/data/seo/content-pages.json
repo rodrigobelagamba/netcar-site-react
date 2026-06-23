@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "financiamento",
+    "title": "Financiamento de seminovos em Esteio/RS | Netcar Multimarcas",
+    "description": "Financie seu seminovo na Netcar, em Esteio/RS: entrada a partir de 20%, em até 60x, com as melhores taxas do mercado e aprovação rápida pelo WhatsApp. Aceitamos seu usado na troca.",
+    "h1": "Financiamento de seminovos em Esteio/RS",
+    "intro": "Na Netcar você financia seu seminovo com condições reais: entrada a partir de 20% a 30%, parcelas em até 60x e taxas competitivas com bancos e financeiras parceiras. Simule pelo WhatsApp com o iAN e receba resposta antes mesmo de ir à loja.",
+    "waText": "Oi iAN! Quero simular o financiamento de um seminovo.",
+    "ctaLabel": "Simular financiamento no WhatsApp",
+    "secondLabel": "Ver estoque",
+    "secondHref": "/seminovos",
+    "sections": [
+      { "type": "h2", "text": "Entrada a partir de 20% a 30%" },
+      { "type": "p", "text": "Uma entrada entre 20% e 30% do valor do carro reduz a parcela e melhora as condições de aprovação. Quanto maior a entrada, menores os juros totais — e o valor do seu usado na troca pode compor essa entrada." },
+      { "type": "h2", "text": "As melhores taxas do mercado" },
+      { "type": "p", "text": "Trabalhamos com vários bancos e financeiras ao mesmo tempo. Isso significa que buscamos a melhor taxa disponível para o seu perfil, em vez de depender de uma única instituição. Você compara e escolhe a proposta que cabe no bolso." },
+      { "type": "h2", "text": "Aceitamos seu usado na troca" },
+      { "type": "p", "text": "Tem carro para dar na troca? O valor entra como parte da entrada e pode reduzir — ou eliminar — o desembolso inicial. Aceitamos inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo." },
+      { "type": "h2", "text": "Como simular" },
+      { "type": "ol", "items": [
+        "Escolha o seminovo no estoque online ou com ajuda do consultor",
+        "Envie RG, CPF, comprovante de renda e de endereço pelo WhatsApp",
+        "Receba a simulação com as melhores taxas das financeiras parceiras",
+        "Aprovou? Retire o carro na loja em Esteio"
+      ] },
+      { "type": "h2", "text": "Financiamento para autônomo e nome restrito" },
+      { "type": "p", "text": "Autônomos comprovam renda por extrato bancário, e há linhas específicas para quem tem restrição — geralmente com entrada maior. O consultor avalia o melhor caminho para o seu caso, sem compromisso." }
+    ],
+    "faq": [
+      { "q": "Qual a entrada mínima para financiar?", "a": "Em geral, entre 20% e 30% do valor do veículo. O percentual exato depende do seu perfil de crédito e do banco; o valor do seu usado na troca pode compor essa entrada." },
+      { "q": "Em quantas vezes posso financiar?", "a": "Em até 60x, conforme aprovação. Prazos mais longos reduzem a parcela mas aumentam o custo total — simule para encontrar o equilíbrio." },
+      { "q": "Vocês conseguem a melhor taxa?", "a": "Buscamos entre vários bancos e financeiras parceiras ao mesmo tempo, comparando para oferecer a melhor taxa disponível para o seu perfil." },
+      { "q": "Posso usar meu carro como entrada?", "a": "Sim. Avaliamos seu usado e o valor entra na negociação, inclusive se ainda estiver financiado, mediante quitação do saldo." }
+    ]
+  },
+  {
+    "slug": "atendimento-24h",
+    "title": "Atendimento 24h com o iAN | Netcar Multimarcas Esteio",
+    "description": "Atendimento 24 horas por dia, 7 dias por semana, com o iAN — o assistente da Netcar no WhatsApp. Tire dúvidas, veja estoque, simule financiamento e avalie seu usado a qualquer hora.",
+    "h1": "Atendimento 24/7 com o iAN, da Netcar",
+    "intro": "Comprar carro não tem hora. Por isso a Netcar tem o iAN, nosso atendente no WhatsApp disponível 24 horas por dia, 7 dias por semana. Ele responde dúvidas, mostra o estoque, inicia sua simulação de financiamento e organiza a avaliação do seu usado — a qualquer momento.",
+    "waText": "Oi iAN! Quero atendimento agora.",
+    "ctaLabel": "Falar com o iAN agora",
+    "secondLabel": "Ver estoque",
+    "secondHref": "/seminovos",
+    "sections": [
+      { "type": "h2", "text": "Atendimento a qualquer hora" },
+      { "type": "p", "text": "De madrugada, no fim de semana ou no intervalo do trabalho: o iAN responde na hora pelo WhatsApp. Você não precisa esperar o horário comercial para tirar uma dúvida ou reservar a visita." },
+      { "type": "h2", "text": "O que o iAN resolve" },
+      { "type": "ul", "items": [
+        "Mostra os carros do estoque conforme o que você procura",
+        "Inicia a simulação de financiamento e pede os documentos certos",
+        "Organiza a avaliação do seu usado para troca",
+        "Agenda visita e test drive nas lojas de Esteio",
+        "Encaminha você para um consultor humano quando precisar"
+      ] },
+      { "type": "h2", "text": "Avalie seu usado a qualquer momento" },
+      { "type": "p", "text": "Mande modelo, ano, quilometragem e fotos do seu carro pelo WhatsApp. O iAN inicia a avaliação na hora e um consultor retorna com a orientação de valor — sem você precisar sair de casa." },
+      { "type": "h2", "text": "Humano quando você quiser" },
+      { "type": "p", "text": "O iAN agiliza o começo, mas quem fecha negócio é gente de verdade. A qualquer momento você fala com um consultor da Netcar para conduzir a negociação com calma e segurança." }
+    ],
+    "faq": [
+      { "q": "O atendimento é realmente 24 horas?", "a": "Sim. O iAN responde no WhatsApp 24 horas por dia, 7 dias por semana. Atendimento humano ocorre no horário comercial das lojas." },
+      { "q": "O iAN é um robô?", "a": "O iAN é o assistente digital da Netcar que agiliza o primeiro atendimento. Quando necessário, ele encaminha você para um consultor humano." },
+      { "q": "Consigo avaliar meu carro pelo WhatsApp?", "a": "Sim. Envie modelo, ano, km e fotos; a avaliação começa na hora e um consultor retorna com a orientação de valor." }
+    ]
+  }
+]

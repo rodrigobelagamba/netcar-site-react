@@ -43,6 +43,22 @@ export interface CitySeoPage {
   sell: CitySellSeo;
 }
 
+// Página de conteúdo SEO institucional (financiamento, atendimento, etc.)
+// Data-driven: copy fica em content-pages.json, renderizada por ContentSeoPage.
+export interface ContentSeoPage {
+  slug: string;
+  title: string;
+  description: string;
+  h1: string;
+  intro: string;
+  waText: string;
+  ctaLabel: string;
+  secondLabel: string;
+  secondHref: string;
+  sections: BlogSection[];
+  faq: CityFaq[];
+}
+
 // Landing de marca/categoria gerada automaticamente a partir do estoque real
 // (scripts/generate-landings.js). filterKey/filterValue alimentam a busca
 // de veículos na página, garantindo conteúdo único (o estoque de verdade).

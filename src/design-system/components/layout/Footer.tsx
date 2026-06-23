@@ -19,7 +19,10 @@ import logoNetcar from "@/assets/images/logo-netcar.png";
 const menuLinks = [
   { to: "/sobre", label: "Sobre" },
   { to: "/seminovos", label: "Showroom" },
+  { to: "/comparar", label: "Comparar seminovos" },
+  { to: "/financiamento", label: "Financiamento" },
   { to: "/compra", label: "Netcar compra" },
+  { to: "/atendimento-24h", label: "Atendimento 24h" },
   { to: "/blog", label: "Atualidades" },
   { to: "/contato", label: "Contato" },
   { to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9", label: "Localização", external: true },

@@ -147,6 +147,14 @@ try {
 } catch {
   console.warn("Aviso: landings.json não encontrado; landings de marca/categoria ignoradas.");
 }
+let contentPages = [];
+try {
+  contentPages = JSON.parse(
+    readFileSync(join(rootDir, "src/data/seo/content-pages.json"), "utf-8")
+  );
+} catch {
+  console.warn("Aviso: content-pages.json não encontrado.");
+}
 
 function escapeHtml(value) {
   return String(value)
@@ -355,6 +363,44 @@ for (const landing of landings) {
   );
 }
 
+// Páginas de conteúdo SEO (financiamento, atendimento) — HTML estático p/ crawler
+function renderContentSections(sections) {
+  return sections
+    .map((s) => {
+      if (s.type === "h2") return `<h2>${escapeHtml(s.text)}</h2>`;
+      if (s.type === "p") return `<p>${escapeHtml(s.text)}</p>`;
+      if (s.type === "ul" && s.items) return `<ul>${s.items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`;
+      if (s.type === "ol" && s.items) return `<ol>${s.items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ol>`;
+      return "";
+    })
+    .join("\n");
+}
+
+for (const page of contentPages) {
+  const canonical = `${SITE}/${page.slug}`;
+  const faqHtml = (page.faq || [])
+    .map((item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`)
+    .join("");
+  const body = `
+    <article>
+      <h1>${escapeHtml(page.h1)}</h1>
+      <p>${escapeHtml(page.intro)}</p>
+      ${renderContentSections(page.sections || [])}
+      ${faqHtml}
+      <p><a href="${SITE}${page.secondHref}">${escapeHtml(page.secondLabel)}</a></p>
+    </article>`;
+  writeFileSync(
+    join(seoStaticDir, `page-${page.slug}.html`),
+    pageShell({
+      title: page.title,
+      description: page.description,
+      canonical,
+      body,
+      schemas: [ORG_SCHEMA, faqSchema(page.faq || [])],
+    })
+  );
+}
+
 const staticPages = [
   { path: "/", priority: "1.0", changefreq: "daily" },
   { path: "/seminovos", priority: "0.9", changefreq: "daily" },
@@ -364,6 +410,12 @@ const staticPages = [
   { path: "/compramos-seu-usado", priority: "0.85", changefreq: "weekly" },
   { path: "/vender-meu-carro", priority: "0.85", changefreq: "weekly" },
   { path: "/blog", priority: "0.8", changefreq: "weekly" },
+  // Páginas de intenção (antes fora do sitemap)
+  { path: "/financiamento", priority: "0.85", changefreq: "monthly" },
+  { path: "/financiamento-sem-entrada", priority: "0.8", changefreq: "monthly" },
+  { path: "/atendimento-24h", priority: "0.7", changefreq: "monthly" },
+  { path: "/comparar", priority: "0.7", changefreq: "weekly" },
+  { path: "/seminovos-automaticos", priority: "0.8", changefreq: "weekly" },
 ];
 
 // Preserva URLs de veículos no sitemap. No build, generate-sitemap.js roda antes
@@ -467,5 +519,5 @@ writeTextFile(join(publicDir, "sitemap.xml"), sitemap);
 
 const sellPages = cities.filter((city) => city.sell).length;
 console.log(
-  `SEO assets gerados: ${blogPosts.length} posts, ${cities.length} cidades compra, ${sellPages} cidades venda, ${landings.length} landings marca/categoria, ${vehicleUrls.length} veículos preservados, sitemap com ${urls.length} URLs`
+  `SEO assets gerados: ${blogPosts.length} posts, ${cities.length} cidades compra, ${sellPages} cidades venda, ${landings.length} landings marca/categoria, ${contentPages.length} páginas de conteúdo, ${vehicleUrls.length} veículos preservados, sitemap com ${urls.length} URLs`
 );

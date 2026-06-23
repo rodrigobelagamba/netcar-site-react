@@ -74,6 +74,21 @@ const EstoqueLandingPage = lazyWithRetry(() =>
     default: m.EstoqueLandingPage,
   }))
 );
+const FinanciamentoPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.FinanciamentoPage,
+  }))
+);
+const Atendimento24hPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.Atendimento24hPage,
+  }))
+);
+const ComparadorPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/ComparadorPage").then((m) => ({
+    default: m.ComparadorPage,
+  }))
+);
 
 // Mensagem do WhatsApp contextual por rota: lead chega no iAN já qualificado
 function getContextualMessage(pathname: string): string {
@@ -96,8 +111,14 @@ function getContextualMessage(pathname: string): string {
   ) {
     return "Oi! Quero avaliar meu carro para venda ou troca na Netcar.";
   }
-  if (pathname === "/financiamento-sem-entrada") {
+  if (pathname === "/financiamento-sem-entrada" || pathname === "/financiamento") {
     return "Oi iAN! Quero simular o financiamento de um seminovo.";
+  }
+  if (pathname === "/atendimento-24h") {
+    return "Oi iAN! Quero atendimento agora.";
+  }
+  if (pathname === "/comparar") {
+    return "Oi iAN! Quero ajuda para comparar alguns seminovos.";
   }
   if (pathname === "/seminovos-automaticos") {
     return "Oi iAN! Estou procurando um seminovo automático.";
@@ -350,6 +371,24 @@ const estoqueLandingRoute = createRoute({
   component: EstoqueLandingPage,
 });
 
+const financiamentoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/financiamento",
+  component: FinanciamentoPage,
+});
+
+const atendimento24hRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/atendimento-24h",
+  component: Atendimento24hPage,
+});
+
+const comparadorRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/comparar",
+  component: ComparadorPage,
+});
+
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   seminovosRoute,
@@ -366,6 +405,9 @@ export const routeTree = rootRoute.addChildren([
   cityLandingRoute,
   sellCityLandingRoute,
   estoqueLandingRoute,
+  financiamentoRoute,
+  atendimento24hRoute,
+  comparadorRoute,
 ]);
 
 // Exporta NotFound para uso no RouterProvider
