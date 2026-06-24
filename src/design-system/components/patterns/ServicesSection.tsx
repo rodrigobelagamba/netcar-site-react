@@ -9,6 +9,7 @@ interface Service {
   desc: string;
   cta: string;
   message: string;
+  objectPosition?: string;
 }
 
 export function ServicesSection() {
@@ -28,6 +29,7 @@ export function ServicesSection() {
       desc: "Aprovação rápida com as melhores taxas do mercado.",
       cta: "Simular Agora",
       message: "Olá IAN, tenho interesse em financiar um veículo.",
+      objectPosition: "30% center",
     },
     {
       title: "Venda seu Veículo",
@@ -35,6 +37,7 @@ export function ServicesSection() {
       desc: "Processo simples, negociação transparente!",
       cta: "Avaliar Carro",
       message: "Olá IAN, tenho interesse em vender meu carro para a Netcar.",
+      objectPosition: "center 25%",
     },
   ];
 
@@ -56,9 +59,9 @@ export function ServicesSection() {
             
             <img 
               src={service.image} 
-              className="absolute inset-0 w-full h-full object-cover object-[center_25%] group-hover:scale-105 transition-transform duration-[1.2s] ease-out !border-0" 
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.2s] ease-out !border-0" 
               alt={service.title}
-              style={{ border: 'none' }}
+              style={{ border: 'none', objectPosition: service.objectPosition || 'center 25%' }}
               onError={(e) => {
                 // Fallback para uma cor sólida se a imagem não carregar
                 e.currentTarget.style.display = 'none';
