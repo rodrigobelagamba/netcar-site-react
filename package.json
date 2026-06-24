@@ -14,6 +14,7 @@
     "seo:generate": "node scripts/generate-seo-assets.js",
     "preview": "vite preview",
     "deploy:local": "node scripts/deploy-local.js",
+    "deploy:ssh-setup": "node scripts/ssh-setup.js",
     "deploy:local:win": "scripts\\deploy-local.bat",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
@@ -31,6 +32,7 @@
     "framer-motion": "^10.16.16",
     "fslightbox-react": "^2.0.0",
     "gsap": "^3.14.2",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.309.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -42,6 +44,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^20.10.6",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
@@ -56,6 +59,7 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "postcss": "^8.4.32",
     "prettier": "^3.1.1",
+    "ssh2": "^1.17.0",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.3.3",
     "vite": "^5.4.0"

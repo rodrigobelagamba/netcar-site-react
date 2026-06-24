@@ -8,9 +8,9 @@
 import { execSync } from 'child_process';
 import { existsSync, readFileSync, writeFileSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { homedir } from 'os';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { deployTarViaSshPassword, tarExcludeShellFlags } from './lib/ssh-deploy.js';
 
 // Tentar importar basic-ftp (opcional)
 let ftp;
@@ -401,33 +401,104 @@ function resolveSshIdentityFile(sshConfig) {
   return defaults.find((path) => existsSync(path)) || '';
 }
 
-function buildSshInvocation(sshConfig, remote, remoteCommand) {
+function resolveSshDeployMode(sshConfig) {
   const identityFile = resolveSshIdentityFile(sshConfig);
+  const hasPassword = Boolean(sshConfig.password);
+  const hasSshpass = hasCommand('sshpass');
+
+  if (hasPassword && !hasSshpass) {
+    return { mode: 'ssh2', identityFile };
+  }
+  if (hasPassword && hasSshpass) {
+    return { mode: 'sshpass', identityFile };
+  }
+  if (identityFile) {
+    return { mode: 'key', identityFile };
+  }
+  return { mode: 'interactive', identityFile: '' };
+}
+
+function buildSshInvocation(sshConfig, remote, remoteCommand) {
+  const { mode, identityFile } = resolveSshDeployMode(sshConfig);
   const sshOptions = ['-o StrictHostKeyChecking=accept-new'];
 
-  if (identityFile) {
-    sshOptions.push(`-i ${shellQuote(identityFile)}`, '-o IdentitiesOnly=yes');
+  if (identityFile && mode !== 'ssh2') {
+    sshOptions.push(`-i ${shellQuote(toPosixPath(identityFile))}`, '-o IdentitiesOnly=yes');
   }
 
   const sshTarget = `${remote} ${shellQuote(remoteCommand)}`;
   const sshBase = `ssh ${sshOptions.join(' ')} ${sshTarget}`;
 
-  if (sshConfig.password && hasCommand('sshpass')) {
+  if (mode === 'sshpass') {
     return {
       command: `sshpass -e ${sshBase}`,
       env: { SSHPASS: sshConfig.password },
-      mode: 'password',
+      mode,
     };
   }
 
-  if (identityFile) {
-    return { command: sshBase, env: {}, mode: 'key' };
+  if (mode === 'key') {
+    return { command: sshBase, env: {}, mode };
+  }
+
+  if (mode === 'ssh2') {
+    return { command: '', env: {}, mode };
   }
 
   return { command: sshBase, env: {}, mode: 'interactive' };
 }
 
-function deployViaSsh(sshConfig, distPath) {
+function toPosixPath(filePath) {
+  const normalized = String(filePath).replace(/\\/g, '/');
+  const driveMatch = normalized.match(/^([A-Za-z]):\//);
+  if (driveMatch) {
+    return `/${driveMatch[1].toLowerCase()}${normalized.slice(2)}`;
+  }
+  return normalized;
+}
+
+function commitBlogAutoIfChanged() {
+  const blogRelPath = 'src/data/seo/blog-auto.json';
+  const blogPath = join(rootDir, blogRelPath);
+
+  if (!existsSync(blogPath)) {
+    return;
+  }
+
+  try {
+    const status = execSync(`git status --porcelain -- ${blogRelPath}`, {
+      encoding: 'utf-8',
+      cwd: rootDir,
+      stdio: 'pipe',
+    }).trim();
+
+    if (!status) {
+      return;
+    }
+
+    execSync(`git add -- ${blogRelPath}`, { cwd: rootDir, stdio: 'pipe' });
+
+    const date = new Date().toISOString().slice(0, 10);
+    const commitMessage = `chore(blog): rodada weekly ${date}`;
+    const commitMsgFile = join(rootDir, '.git-commit-msg.txt');
+
+    try {
+      writeFileSync(commitMsgFile, commitMessage, 'utf-8');
+      execSync('git commit -F .git-commit-msg.txt', { cwd: rootDir, stdio: 'pipe' });
+      unlinkSync(commitMsgFile);
+      log(`📝 blog-auto.json commitado (${commitMessage})`, 'green');
+    } catch (commitError) {
+      try {
+        if (existsSync(commitMsgFile)) unlinkSync(commitMsgFile);
+      } catch (e) {}
+      throw commitError;
+    }
+  } catch (error) {
+    log(`⚠️  Não foi possível commitar blog-auto.json: ${error.message}`, 'yellow');
+  }
+}
+
+async function deployViaSsh(sshConfig, distPath) {
   const remote = `${sshConfig.user}@${sshConfig.host}`;
   const remoteDir = sshConfig.remoteDir.replace(/\/$/, '');
   const distPosix = distPath.replace(/\\/g, '/');
@@ -438,14 +509,31 @@ function deployViaSsh(sshConfig, distPath) {
   log(`   ${remote}:${remoteDir}/`, 'blue');
   if (ssh.mode === 'key') {
     log('   Autenticação: chave SSH', 'blue');
-  } else if (ssh.mode === 'password') {
+  } else if (ssh.mode === 'sshpass') {
     log('   Autenticação: SSH_PASSWORD (sshpass)', 'blue');
+  } else if (ssh.mode === 'ssh2') {
+    log('   Autenticação: SSH_PASSWORD (ssh2, sem prompt)', 'blue');
   } else {
     log('   Autenticação: senha interativa (ou configure SSH_KEY_PATH)', 'yellow');
     log('   Dica: rode npm run deploy:ssh-setup uma vez para não digitar senha', 'yellow');
   }
 
-  const cmd = `tar -C ${shellQuote(distPosix)} -cf - . | ${ssh.command}`;
+  if (ssh.mode === 'ssh2') {
+    log('   Enviando pacote compactado...', 'yellow');
+    await deployTarViaSshPassword({
+      host: sshConfig.host,
+      user: sshConfig.user,
+      password: sshConfig.password,
+      remoteDir,
+      localDir: distPath,
+      onProgress: (message) => log(message, 'yellow'),
+    });
+    log('\n✅ Deploy SSH concluído!', 'green');
+    return;
+  }
+
+  const tarExcludes = tarExcludeShellFlags();
+  const cmd = `tar -C ${shellQuote(distPosix)} ${tarExcludes} -cf - . | ${ssh.command}`;
   log('   Enviando pacote compactado...', 'yellow');
   execSync(cmd, {
     stdio: 'inherit',
@@ -480,6 +568,9 @@ async function deploy() {
       'green'
     );
 
+    commitBlogAutoIfChanged();
+    log('', 'reset');
+
     // 3. Gerar build
     log('🔨 Gerando build de produção...', 'blue');
     process.env.VITE_API_BASE_URL = env.VITE_API_BASE_URL;
@@ -508,7 +599,7 @@ async function deploy() {
 
     // 6. Upload
     if (deployConfig.method === 'ssh') {
-      deployViaSsh(deployConfig.ssh, distPath);
+      await deployViaSsh(deployConfig.ssh, distPath);
     } else if (ftp) {
       const ftpConfig = deployConfig.ftp;
       // Upload automático usando basic-ftp

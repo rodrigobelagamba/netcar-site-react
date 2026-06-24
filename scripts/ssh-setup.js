@@ -10,6 +10,7 @@ import { existsSync, readFileSync } from 'fs';
 import { homedir } from 'os';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { installSshPublicKey } from './lib/ssh-deploy.js';
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -66,23 +67,38 @@ console.log(`🔑 Usando chave: ${keyPath}`);
 console.log(`🌐 Servidor: ${remote}`);
 console.log('');
 
-if (env.SSH_PASSWORD && hasCommand('sshpass')) {
-  console.log('📤 Copiando chave com SSH_PASSWORD (sshpass)...');
-  execSync(
-    `sshpass -e ssh-copy-id -i ${JSON.stringify(pubPath)} -o StrictHostKeyChecking=accept-new ${remote}`,
-    {
-      stdio: 'inherit',
-      shell: true,
-      env: { ...process.env, SSHPASS: env.SSH_PASSWORD },
-    }
-  );
-} else {
-  console.log('📤 Copiando chave (digite a senha SSH uma última vez)...');
-  execSync(
-    `ssh-copy-id -i ${JSON.stringify(pubPath)} -o StrictHostKeyChecking=accept-new ${remote}`,
-    { stdio: 'inherit', shell: true }
-  );
+async function main() {
+  if (env.SSH_PASSWORD && hasCommand('sshpass')) {
+    console.log('📤 Copiando chave com SSH_PASSWORD (sshpass)...');
+    execSync(
+      `sshpass -e ssh-copy-id -i ${JSON.stringify(pubPath)} -o StrictHostKeyChecking=accept-new ${remote}`,
+      {
+        stdio: 'inherit',
+        shell: true,
+        env: { ...process.env, SSHPASS: env.SSH_PASSWORD },
+      }
+    );
+  } else if (env.SSH_PASSWORD) {
+    console.log('📤 Copiando chave com SSH_PASSWORD (ssh2, sem sshpass)...');
+    await installSshPublicKey({
+      host: env.SSH_HOST,
+      user: env.SSH_USER,
+      password: env.SSH_PASSWORD,
+      publicKeyPath: pubPath,
+    });
+  } else {
+    console.log('📤 Copiando chave (digite a senha SSH uma última vez)...');
+    execSync(
+      `ssh-copy-id -i ${JSON.stringify(pubPath)} -o StrictHostKeyChecking=accept-new ${remote}`,
+      { stdio: 'inherit', shell: true }
+    );
+  }
+
+  console.log('\n✅ Pronto! Teste: ssh -o BatchMode=yes ' + remote + ' "echo ok"');
+  console.log('   Depois: npm run deploy:local');
 }
 
-console.log('\n✅ Pronto! Teste: ssh -o BatchMode=yes ' + remote + ' "echo ok"');
-console.log('   Depois: npm run deploy:local');
+main().catch((error) => {
+  console.error('❌ Falha ao configurar SSH:', error.message);
+  process.exit(1);
+});

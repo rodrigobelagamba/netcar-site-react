@@ -20,9 +20,10 @@
  * Uso: node scripts/generate-blog.js
  */
 
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import { writeTextFile } from "./lib/write-text-file.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
@@ -385,9 +386,12 @@ async function main() {
   }
 
   out.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-  writeFileSync(OUT, JSON.stringify(out, null, 2) + "\n", "utf-8");
+  const json = JSON.stringify(out, null, 2) + "\n";
+  const wrote = writeTextFile(OUT, json);
   const pendentes = pool.length - out.length;
-  console.log(`Blog: ${out.length} publicados | ${pendentes} pauta(s) na fila | estoque ${stock.total}.`);
+  console.log(
+    `Blog: ${out.length} publicados | ${pendentes} pauta(s) na fila | estoque ${stock.total}${wrote ? "" : " (sem alteração no arquivo)"}.`
+  );
 }
 
 main().catch((err) => {
