@@ -42,7 +42,7 @@ function seo_org_schema()
                 'streetAddress' => 'Av. Presidente Vargas, 740',
                 'addressLocality' => 'Esteio',
                 'addressRegion' => 'RS',
-                'postalCode' => '93265-000',
+                'postalCode' => '93260-048',
                 'addressCountry' => 'BR',
             ],
             [
@@ -51,7 +51,7 @@ function seo_org_schema()
                 'streetAddress' => 'Av. Presidente Vargas, 1106',
                 'addressLocality' => 'Esteio',
                 'addressRegion' => 'RS',
-                'postalCode' => '93265-000',
+                'postalCode' => '93260-001',
                 'addressCountry' => 'BR',
             ],
         ],

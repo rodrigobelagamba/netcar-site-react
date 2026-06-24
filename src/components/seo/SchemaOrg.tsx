@@ -23,14 +23,14 @@ export function SchemaOrg() {
       streetAddress: addressLoja1.address,
       addressLocality: "Esteio",
       addressRegion: "RS",
-      postalCode: "93265-000",
+      postalCode: "93260-048",
     };
 
     const address2 = {
       streetAddress: addressLoja2.address,
       addressLocality: "Esteio",
       addressRegion: "RS",
-      postalCode: "93265-000",
+      postalCode: "93260-001",
     };
 
     const phone = phoneLoja1.telefone;

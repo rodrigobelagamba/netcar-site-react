@@ -68,8 +68,8 @@ switch ($page) {
         echo '<p class="intro">Entre em contato para comprar, vender ou financiar seu seminovo em Esteio/RS.</p>';
         echo '<h2>Nossas lojas</h2>';
         echo '<address>';
-        echo '<p><strong>Matriz</strong><br />Av. Presidente Vargas, 740 — Centro — Esteio/RS — CEP 93265-000<br />Tel: (51) 3473-7900</p>';
-        echo '<p><strong>Filial</strong><br />Av. Presidente Vargas, 1106 — Centro — Esteio/RS — CEP 93265-000<br />Tel: (51) 3033-3900</p>';
+        echo '<p><strong>Matriz</strong><br />Av. Presidente Vargas, 740 — Centro — Esteio/RS — CEP 93260-048<br />Tel: (51) 3473-7900</p>';
+        echo '<p><strong>Filial</strong><br />Av. Presidente Vargas, 1106 — Centro — Esteio/RS — CEP 93260-001<br />Tel: (51) 3033-3900</p>';
         echo '</address>';
         echo '<p>WhatsApp: (51) 99887-9281<br />E-mail: contato@netcarmultimarcas.com.br</p>';
         echo '<p>Horário: Seg–Sex 9h–18h · Sáb 9h–16h30</p>';
