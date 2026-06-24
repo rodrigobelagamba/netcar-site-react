@@ -15,6 +15,35 @@
       };
       window._fbq = window._fbq || window.fbq;
 
+      // Detecção de tráfego vindo de IAs (ChatGPT, Perplexity, Claude, Gemini...).
+      // Empurra o evento 'ai_referral' no dataLayer para medir no GA4/GTM quando
+      // uma IA cita a Netcar e o usuário clica. Captura a parcela que chega com
+      // referrer ou utm_source (o resto é "dark traffic", invisível a qualquer tool).
+      (function () {
+        try {
+          var ref = document.referrer || "";
+          var map = [
+            [/chatgpt\.com|chat\.openai\.com|openai\.com/i, "ChatGPT"],
+            [/perplexity\.ai/i, "Perplexity"],
+            [/claude\.ai|anthropic\.com/i, "Claude"],
+            [/gemini\.google\.com|bard\.google\.com/i, "Gemini"],
+            [/copilot\.microsoft\.com/i, "Copilot"],
+            [/grok\.com|x\.ai/i, "Grok"],
+            [/you\.com|poe\.com|meta\.ai|deepseek\.com/i, "Outra IA"],
+          ];
+          var src = "";
+          for (var i = 0; i < map.length; i++) {
+            if (map[i][0].test(ref)) { src = map[i][1]; break; }
+          }
+          var um = location.search.match(/[?&]utm_source=(chatgpt|perplexity|gemini|claude|copilot)[^&]*/i);
+          if (!src && um) { src = um[1].charAt(0).toUpperCase() + um[1].slice(1); }
+          if (src && !sessionStorage.getItem("ai_ref_tracked")) {
+            sessionStorage.setItem("ai_ref_tracked", "1");
+            window.dataLayer.push({ event: "ai_referral", ai_source: src, ai_referrer: ref });
+          }
+        } catch (e) { /* noop */ }
+      })();
+
       function loadDeferredAnalytics() {
         if (window.__netcarAnalyticsLoaded) return;
         window.__netcarAnalyticsLoaded = true;
