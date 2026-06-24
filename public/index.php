@@ -112,7 +112,7 @@ if ($isHome) {
     <h1>Seminovos em Esteio/RS — Netcar Multimarcas</h1>
     <p>
       Loja de seminovos em Esteio desde 1997. Carros vistoriados, garantia, financiamento em até 60x
-      e compra de usados — mesmo financiados. Duas lojas na Av. Getúlio Vargas.
+      e compra de usados — mesmo financiados. Duas lojas na Av. Presidente Vargas.
       Atendemos Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Novo Hamburgo, Gravataí,
       Cachoeirinha, Porto Alegre e região metropolitana.
     </p>

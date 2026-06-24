@@ -17,12 +17,12 @@ $vehicles = in_array($page, ['home', 'seminovos'], true) ? seo_fetch_available_v
 switch ($page) {
     case 'home':
         $title = 'Seminovos em Esteio/RS | Netcar Multimarcas';
-        $description = 'Seminovos vistoriados com garantia e financiamento em Esteio/RS. 2 lojas na Av. Getúlio Vargas. Veja o estoque da Netcar Multimarcas.';
+        $description = 'Seminovos vistoriados com garantia e financiamento em Esteio/RS. 2 lojas na Av. Presidente Vargas. Veja o estoque da Netcar Multimarcas.';
         $canonical = SEO_SITE_URL . '/';
         seo_render_head($title, $description, $canonical);
         echo '<h1>Seminovos em Esteio/RS com Garantia</h1>';
         echo '<p class="intro">A Netcar Multimarcas vende seminovos vistoriados em Esteio/RS desde 1997. ';
-        echo 'Duas lojas na Av. Getúlio Vargas (740 e 1106), financiamento facilitado, Fábrica de Valor e pós-venda Nethelp.</p>';
+        echo 'Duas lojas na Av. Presidente Vargas (740 e 1106), financiamento facilitado, Fábrica de Valor e pós-venda Nethelp.</p>';
         echo '<h2>Destaques do estoque</h2>';
         seo_render_vehicle_list($vehicles, 12);
         echo '<p><a href="' . SEO_SITE_URL . '/seminovos">Ver todos os seminovos disponíveis</a></p>';
@@ -47,7 +47,7 @@ switch ($page) {
         echo '<h1>Sobre a Netcar Multimarcas</h1>';
         echo '<p class="intro">Desde 1997, a Netcar seleciona seminovos com histórico, qualidade e transparência em Esteio/RS.</p>';
         echo '<h2>Nossa história</h2>';
-        echo '<p>Somos uma revenda multimarcas com duas lojas no Centro de Esteio, na Av. Getúlio Vargas. ';
+        echo '<p>Somos uma revenda multimarcas com duas lojas no Centro de Esteio, na Av. Presidente Vargas. ';
         echo 'Cada veículo passa pela Fábrica de Valor, com mais de 60 itens verificados antes da venda.</p>';
         echo '<h2>Diferenciais</h2>';
         echo '<ul>';
@@ -61,15 +61,15 @@ switch ($page) {
 
     case 'contato':
         $title = 'Contato | Netcar Multimarcas — 2 Lojas Esteio';
-        $description = 'WhatsApp (51) 99887-9281. Av. Getúlio Vargas 740 e 1106, Esteio/RS.';
+        $description = 'WhatsApp (51) 99887-9281. Av. Presidente Vargas 740 e 1106, Esteio/RS.';
         $canonical = SEO_SITE_URL . '/contato';
         seo_render_head($title, $description, $canonical);
         echo '<h1>Fale com a Netcar Multimarcas</h1>';
         echo '<p class="intro">Entre em contato para comprar, vender ou financiar seu seminovo em Esteio/RS.</p>';
         echo '<h2>Nossas lojas</h2>';
         echo '<address>';
-        echo '<p><strong>Matriz</strong><br />Av. Getúlio Vargas, 740 — Centro — Esteio/RS — CEP 93265-000<br />Tel: (51) 3473-7900</p>';
-        echo '<p><strong>Filial</strong><br />Av. Getúlio Vargas, 1106 — Centro — Esteio/RS — CEP 93265-000<br />Tel: (51) 3033-3900</p>';
+        echo '<p><strong>Matriz</strong><br />Av. Presidente Vargas, 740 — Centro — Esteio/RS — CEP 93265-000<br />Tel: (51) 3473-7900</p>';
+        echo '<p><strong>Filial</strong><br />Av. Presidente Vargas, 1106 — Centro — Esteio/RS — CEP 93265-000<br />Tel: (51) 3033-3900</p>';
         echo '</address>';
         echo '<p>WhatsApp: (51) 99887-9281<br />E-mail: contato@netcarmultimarcas.com.br</p>';
         echo '<p>Horário: Seg–Sex 9h–18h · Sáb 9h–16h30</p>';

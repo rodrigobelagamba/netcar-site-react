@@ -290,7 +290,7 @@ export function SobrePage() {
             {/* Loja 1 */}
             <motion.a
               href={buildMapsUrl(
-                addressLoja1?.address || "Av. Getúlio Vargas, 740 - Centro - Esteio/RS",
+                addressLoja1?.address || "Av. Presidente Vargas, 740 - Centro - Esteio/RS",
                 LOJA_COORDS.Loja1
               )}
               target="_blank"
@@ -335,7 +335,7 @@ export function SobrePage() {
             {/* Loja 2 */}
             <motion.a
               href={buildMapsUrl(
-                addressLoja2?.address || "Av. Getúlio Vargas, 1106 - Centro - Esteio/RS",
+                addressLoja2?.address || "Av. Presidente Vargas, 1106 - Centro - Esteio/RS",
                 LOJA_COORDS.Loja2
               )}
               target="_blank"

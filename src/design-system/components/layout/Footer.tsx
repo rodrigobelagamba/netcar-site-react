@@ -124,7 +124,7 @@ export function Footer() {
               {/* Loja 1 */}
               <a
                 href={buildMapsUrl(
-                  addressLoja1?.address || "Av. Getúlio Vargas, 740 - Centro - Esteio/RS",
+                  addressLoja1?.address || "Av. Presidente Vargas, 740 - Centro - Esteio/RS",
                   LOJA_COORDS.Loja1
                 )}
                 target="_blank"
@@ -162,7 +162,7 @@ export function Footer() {
               {/* Loja 2 */}
               <a
                 href={buildMapsUrl(
-                  addressLoja2?.address || "Av. Getúlio Vargas, 1106 - Centro - Esteio/RS",
+                  addressLoja2?.address || "Av. Presidente Vargas, 1106 - Centro - Esteio/RS",
                   LOJA_COORDS.Loja2
                 )}
                 target="_blank"

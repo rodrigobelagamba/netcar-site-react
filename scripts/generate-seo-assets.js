@@ -58,7 +58,7 @@ const ORG_SCHEMA = {
   legalName: "Netcar Veículos Ltda",
   foundingDate: "1997",
   description:
-    "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Getúlio Vargas. Compra de usados, mesmo financiados.",
+    "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.",
   url: SITE,
   logo: {
     "@type": "ImageObject",
@@ -71,7 +71,7 @@ const ORG_SCHEMA = {
     {
       "@type": "PostalAddress",
       name: "Matriz",
-      streetAddress: "Av. Getúlio Vargas, 740",
+      streetAddress: "Av. Presidente Vargas, 740",
       addressLocality: "Esteio",
       addressRegion: "RS",
       postalCode: "93265-000",
@@ -80,7 +80,7 @@ const ORG_SCHEMA = {
     {
       "@type": "PostalAddress",
       name: "Filial",
-      streetAddress: "Av. Getúlio Vargas, 1106",
+      streetAddress: "Av. Presidente Vargas, 1106",
       addressLocality: "Esteio",
       addressRegion: "RS",
       postalCode: "93265-000",
@@ -220,7 +220,7 @@ function pageShell({ title, description, canonical, body, schemas = [] }) {
     </nav>
   </header>
   <main>${body}</main>
-  <footer><p>Netcar Multimarcas — Av. Getúlio Vargas, Esteio/RS</p></footer>
+  <footer><p>Netcar Multimarcas — Av. Presidente Vargas, Esteio/RS</p></footer>
 </body>
 </html>`;
 }

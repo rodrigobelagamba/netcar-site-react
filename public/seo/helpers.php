@@ -23,7 +23,7 @@ function seo_org_schema()
         'alternateName' => 'Netcar Veículos',
         'legalName' => 'Netcar Veículos Ltda',
         'foundingDate' => '1997',
-        'description' => 'Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Getúlio Vargas. Compra de usados, mesmo financiados.',
+        'description' => 'Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.',
         'url' => SEO_SITE_URL,
         'logo' => [
             '@type' => 'ImageObject',
@@ -39,7 +39,7 @@ function seo_org_schema()
             [
                 '@type' => 'PostalAddress',
                 'name' => 'Matriz',
-                'streetAddress' => 'Av. Getúlio Vargas, 740',
+                'streetAddress' => 'Av. Presidente Vargas, 740',
                 'addressLocality' => 'Esteio',
                 'addressRegion' => 'RS',
                 'postalCode' => '93265-000',
@@ -48,7 +48,7 @@ function seo_org_schema()
             [
                 '@type' => 'PostalAddress',
                 'name' => 'Filial',
-                'streetAddress' => 'Av. Getúlio Vargas, 1106',
+                'streetAddress' => 'Av. Presidente Vargas, 1106',
                 'addressLocality' => 'Esteio',
                 'addressRegion' => 'RS',
                 'postalCode' => '93265-000',
@@ -256,7 +256,7 @@ function seo_render_foot()
     ?>
     </main>
     <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #e5e5e5; color: #666; font-size: 0.9rem;">
-        <p>Netcar Multimarcas · Av. Getúlio Vargas, 740 e 1106 — Centro, Esteio/RS</p>
+        <p>Netcar Multimarcas · Av. Presidente Vargas, 740 e 1106 — Centro, Esteio/RS</p>
         <p>Tel: (51) 3473-7900 · WhatsApp: (51) 99887-9281 · contato@netcarmultimarcas.com.br</p>
     </footer>
 </body>

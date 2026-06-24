@@ -18,14 +18,14 @@ const DEFAULT_LOJAS = {
   1: {
     nome: "LOJA 1",
     tipo: "Matriz",
-    address: "Av. Getúlio Vargas, 740 - Centro - Esteio/RS",
+    address: "Av. Presidente Vargas, 740 - Centro - Esteio/RS",
     telefone: "(51) 3473-7900",
     cor: "primary" as const,
   },
   2: {
     nome: "LOJA 2",
     tipo: "Filial",
-    address: "Av. Getúlio Vargas, 1106 - Centro - Esteio/RS",
+    address: "Av. Presidente Vargas, 1106 - Centro - Esteio/RS",
     telefone: "(51) 3033-3900",
     cor: "amber-500" as const,
   },

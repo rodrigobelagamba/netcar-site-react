@@ -22,7 +22,7 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 export function ContatoPage() {
   useDefaultMetaTags(
     "Contato · 2 Lojas em Esteio/RS",
-    "WhatsApp (51) 99887-9281. Av. Getúlio Vargas 740 e 1106, Esteio/RS. Netcar Multimarcas."
+    "WhatsApp (51) 99887-9281. Av. Presidente Vargas 740 e 1106, Esteio/RS. Netcar Multimarcas."
   );
 
   const [formData, setFormData] = useState({

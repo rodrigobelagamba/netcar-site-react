@@ -62,7 +62,7 @@ Guia para geração de artigos do blog (humana ou por agente). O blog existe par
 ## Fatos da Netcar (usar somente estes — NÃO inventar)
 
 - Netcar Multimarcas, em Esteio/RS, desde 1997.
-- Duas unidades na Av. Getúlio Vargas (matriz e filial), acesso pela BR-116.
+- Duas unidades na Av. Presidente Vargas (matriz e filial), acesso pela BR-116.
 - Estoque multimarcas: hatch, sedan, SUV e picape.
 - Veículos passam pela "Fábrica de Valor" (processo próprio de preparação) antes da vitrine.
 - Pós-venda com NetHelp.
