@@ -11,14 +11,14 @@ export function FinanciamentoSemEntradaPage() {
   const { data: whatsapp } = useWhatsAppQuery();
 
   useDefaultMetaTags(
-    "Carro Sem Entrada em Esteio",
-    "Compre seminovo sem entrada em Esteio/RS. Financiamento em até 60x com aprovação rápida na Netcar Multimarcas."
+    "Financiamento de Seminovos em Esteio",
+    "Financie seu seminovo na Netcar em até 60x, com primeira parcela para 60 dias e entrada parcelada em até 10x sem juros. Sujeito a análise de crédito."
   );
 
   const waLink = (() => {
     if (!whatsapp?.numero) return "#";
     const text = siteWhatsAppMessage(
-      "quero simular financiamento sem entrada para um seminovo.",
+      "quero simular o financiamento de um seminovo na Netcar.",
     );
     return buildWhatsAppUrl(whatsapp.numero, text);
   })();
@@ -29,10 +29,22 @@ export function FinanciamentoSemEntradaPage() {
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="text-3xl md:text-4xl font-bold text-fg mb-4">
-              Carro sem entrada — financiamento 100%
+              Financiamento de seminovos em Esteio
             </h1>
             <p className="text-lg text-gray-600 mb-6">
-              Quer trocar de carro sem desembolsar entrada? Na Netcar você simula com documentos pelo WhatsApp e recebe resposta objetiva antes de ir à loja.
+              Quer financiar seu próximo seminovo? Na Netcar você simula com documentos pelo WhatsApp e recebe resposta objetiva antes de ir à loja. Trabalhamos com bancos e financeiras parceiras — tudo mediante análise de crédito.
+            </p>
+
+            <h2 className="text-xl font-bold text-fg mt-8 mb-3">Condições</h2>
+            <ul className="list-disc pl-5 space-y-2 text-gray-600 mb-3">
+              <li>Financiamento em 24x, 36x, 48x ou 60x</li>
+              <li>Primeira parcela para 60 dias</li>
+              <li>Entrada de 20% a 30%, parcelável em até 10x sem juros</li>
+              <li>Financiamento também pelo cartão de crédito em até 24x</li>
+              <li>Avaliamos seu usado na troca como parte do pagamento</li>
+            </ul>
+            <p className="text-sm text-gray-500 mb-6">
+              Condições sujeitas a análise de crédito.
             </p>
 
             <h2 className="text-xl font-bold text-fg mt-8 mb-3">Como funciona</h2>
@@ -45,7 +57,7 @@ export function FinanciamentoSemEntradaPage() {
 
             <h2 className="text-xl font-bold text-fg mt-8 mb-3">Troca com parcela em aberto</h2>
             <p className="text-gray-600 mb-6">
-              Se você tem carro para dar na troca — inclusive financiado — o valor entra na negociação e pode reduzir ou eliminar a necessidade de entrada.
+              Se você tem carro para dar na troca — inclusive financiado — o valor entra na negociação e pode abater parte da entrada.
             </p>
 
             <div className="flex flex-wrap gap-3">
