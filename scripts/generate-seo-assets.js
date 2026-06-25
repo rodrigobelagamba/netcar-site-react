@@ -236,14 +236,15 @@ function pageShell({ title, description, canonical, body, schemas = [] }) {
   <meta property="og:url" content="${canonical}" />
   <meta property="og:image" content="${SITE}/images/loja1.jpg" />${schemaTags}
   <style>
-    .blog-cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin:24px 0}
-    .blog-car{display:block;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;background:#fff}
-    .blog-car img{display:block;width:100%;height:160px;object-fit:cover;background:#f3f4f6}
-    .blog-car__info{display:block;padding:12px}
-    .blog-car__info b{display:block;font-size:15px}
-    .blog-car__info small{display:block;color:#6b7280;margin:4px 0}
-    .blog-car__info strong{display:block;color:#b91c1c;font-size:17px}
-    .blog-car .selo{display:inline-block;margin-top:6px;font-size:11px;background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:999px}
+    .blog-cars{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin:32px 0}
+    .blog-car{display:flex;flex-direction:column;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;background:#fff;transition:box-shadow .2s}
+    .blog-car:hover{box-shadow:0 10px 30px rgba(0,0,0,.08)}
+    .blog-car img{display:block;width:100%;height:180px;object-fit:cover;background:#f3f4f6}
+    .blog-car__info{display:flex;flex-direction:column;padding:18px;flex:1}
+    .blog-car__info b{font-size:16px;line-height:1.3}
+    .blog-car__info small{color:#6b7280;margin:6px 0}
+    .blog-car__info strong{color:#111827;font-size:20px;margin-top:auto}
+    .blog-car .selo{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:#fee2e2;color:#b91c1c;padding:3px 10px;border-radius:999px;align-self:flex-start}
   </style>
 </head>
 <body>

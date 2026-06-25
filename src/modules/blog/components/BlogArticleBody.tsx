@@ -41,12 +41,12 @@ function renderSection(section: BlogSection, index: number) {
 
   if (section.type === "cars" && section.cars && section.cars.length > 0) {
     return (
-      <div key={index} className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6 not-prose">
+      <div key={index} className="not-prose my-8 grid gap-5 sm:grid-cols-2">
         {section.cars.map((car) => (
           <a
             key={car.url}
             href={car.url}
-            className="group block rounded-2xl border border-gray-200 overflow-hidden bg-white hover:shadow-lg hover:border-primary/30 transition-all"
+            className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
           >
             {car.img ? (
               <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
@@ -54,26 +54,27 @@ function renderSection(section: BlogSection, index: number) {
                   src={car.img}
                   alt={car.modelo}
                   loading="lazy"
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent" />
                 {car.destaque ? (
-                  <span className="absolute top-2 left-2 rounded-full bg-primary/90 px-2.5 py-1 text-[11px] font-semibold text-white">
+                  <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-primary shadow-sm">
                     {car.destaque}
                   </span>
                 ) : null}
               </div>
             ) : null}
-            <div className="p-4">
-              <p className="font-bold text-fg leading-snug">{car.modelo}</p>
+            <div className="flex flex-1 flex-col p-5">
+              <p className="text-base font-bold leading-snug text-fg">{car.modelo}</p>
               <p className="mt-1 text-sm text-gray-500">
-                {[car.ano, car.km, car.cambio].filter(Boolean).join(" · ")}
+                {[car.ano, car.km, car.cambio, car.combustivel].filter(Boolean).join(" · ")}
               </p>
-              {car.preco ? (
-                <p className="mt-2 text-lg font-bold text-primary">{car.preco}</p>
-              ) : null}
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:underline">
-                Ver detalhes →
-              </span>
+              <div className="mt-auto pt-4">
+                {car.preco ? <p className="text-xl font-extrabold text-fg">{car.preco}</p> : null}
+                <span className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors group-hover:bg-primary/90">
+                  Ver detalhes e agendar test drive
+                </span>
+              </div>
             </div>
           </a>
         ))}
