@@ -1,34 +1,46 @@
 [
   {
     "slug": "melhor-hatch-seminovo-esteio-2026",
-    "title": "Como escolher um hatch seminovo em Esteio sem se arrepender (2026)",
-    "description": "Guia honesto para escolher um hatch seminovo com bom custo-benefício em Esteio e região — espaço, consumo, manutenção e os hatch que valem o test drive na Netcar.",
+    "title": "Hatch usado: qual versão faz sentido pro seu dia a dia",
+    "description": "Perfil urbano, família ou estrada: qual hatch seminovo escolher em Esteio. Exemplos reais do estoque Netcar.",
     "publishedAt": "2026-06-25",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Decidiu que o próximo carro vai ser um hatch? Ótima escolha. Agora vem a parte difícil: escolher o certo. Veja o que realmente importa num hatch usado."
+        "text": "Não existe hatch \"melhor do mundo\" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e indicamos o que observar em cada um."
       },
       {
         "type": "h2",
-        "text": "Por que tanta gente escolhe um hatch"
+        "text": "Perfil 1 — Só cidade, poucos km por dia"
       },
       {
         "type": "p",
-        "text": "O hatch combina porta-malas, conforto de viagem e robustez no dia a dia. É uma das categorias que mais saem na Netcar — e procura alta costuma significar boa revenda lá na frente."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "text": "Priorize consumo, manutenção barata e facilidade de estacionar. Versões compactas e automáticas aliviam trânsito."
       },
       {
         "type": "h2",
-        "text": "Direto da nossa vitrine — enquanto durar"
+        "text": "Perfil 2 — Família com criança ou bagagem"
       },
       {
         "type": "p",
-        "text": "Pra deixar concreto: estes hatch passaram pela nossa conferência e estão disponíveis agora."
+        "text": "Porta-malas, espaço traseiro e segurança (airbag, ISOFIX) pesam mais que potência. Confira estado de bancos e fixação."
+      },
+      {
+        "type": "h2",
+        "text": "Perfil 3 — Estrada e viagem frequente"
+      },
+      {
+        "type": "p",
+        "text": "Estabilidade, conforto em 100 km/h e motor que não force na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
+      },
+      {
+        "type": "h2",
+        "text": "Hatch que atendem esses perfis — no estoque hoje"
+      },
+      {
+        "type": "p",
+        "text": "Estes modelos aparecem bastante pra quem se encaixa nos perfis acima:"
       },
       {
         "type": "cars",
@@ -58,68 +70,46 @@
         ]
       },
       {
-        "type": "p",
-        "text": "Carro bom com procedência e preço justo raramente fica parado. Quando achar o seu, confirme se ainda está disponível pelo WhatsApp."
-      },
-      {
         "type": "h2",
-        "text": "O que olhar num hatch usado"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Consumo real de combustível",
-          "Custo de manutenção e preço de peças",
-          "Estado de pneus, freios e suspensão",
-          "Histórico de revisões e procedência",
-          "Espaço interno e porta-malas pra sua rotina"
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "Automático ou manual?"
+        "text": "Automático ou manual pro seu caso?"
       },
       {
         "type": "p",
-        "text": "A maioria dos hatch seminovos hoje é automática — ajuda no trânsito e valoriza na revenda. O manual aparece nas versões de entrada e sai um pouco mais barato."
-      },
-      {
-        "type": "h2",
-        "text": "Faixas de preço"
+        "text": "Cidade pura → automático costuma valer. Orçamento apertado → manual de entrada. Estrada mista → depende do gosto e do bolso."
       },
       {
         "type": "p",
-        "text": "No estoque atual os valores vão de R$ 36.900 a R$ 209.900. A maior parte fica na faixa intermediária, onde costuma estar o melhor custo-benefício."
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Se for financiar"
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "Pra quem vai financiar, vale conhecer as opções antes de decidir:"
+        "text": "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Encontrou seu perfil?"
       },
       {
         "type": "p",
-        "text": "O melhor hatch é o que cabe no orçamento, tem procedência e foi revisado antes da venda. Veja os hatch da Netcar e agende um test drive antes que o seu favorito saia."
+        "text": "Veja todos os Hatch e marque test drive com o consultor — ele cruza perfil, orçamento e estoque."
       }
     ],
     "ctaLabel": "Ver hatch no estoque",
@@ -127,34 +117,59 @@
   },
   {
     "slug": "melhor-sedan-seminovo-esteio-2026",
-    "title": "Como escolher um sedan seminovo em Esteio sem se arrepender (2026)",
-    "description": "Guia honesto para escolher um sedan seminovo com bom custo-benefício em Esteio e região — espaço, consumo, manutenção e os sedan que valem o test drive na Netcar.",
+    "title": "Comprar sedan de particular ou na loja? Comparativo honesto",
+    "description": "Particular x revenda na hora de comprar sedan seminovo: prós, contras e quando cada opção faz sentido. Veja Sedan revisados na Netcar.",
     "publishedAt": "2026-06-25",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "O sedan é a categoria preferida de quem precisa de espaço sem abrir mão de conforto. Mas tem detalhe que separa o sedan que vale a pena do que vira dor de cabeça — e é nisso que a gente entra."
+        "text": "Na dúvida entre anúncio de particular e seminovo de loja, a decisão não é só preço — é risco, tempo e o que vem depois. Comparativo direto aplicado a Sedan."
       },
       {
         "type": "h2",
-        "text": "Por que tanta gente escolhe um sedan"
+        "text": "Particular: quando pode valer"
       },
       {
-        "type": "p",
-        "text": "O sedan combina porta-malas, conforto de viagem e robustez no dia a dia. É uma das categorias que mais saem na Netcar — e procura alta costuma significar boa revenda lá na frente."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "type": "ul",
+        "items": [
+          "Conhece o dono e o histórico de verdade",
+          "Disposto a assumir revisão por conta própria",
+          "Tem mecânico de confiança pra inspecionar antes"
+        ]
       },
       {
         "type": "h2",
-        "text": "Selecionados a dedo pra essa pauta"
+        "text": "Particular: onde dói"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Sem garantia ou laudo padronizado",
+          "Burocracia e risco na transferência",
+          "Test drive com estranhos e negociação cansativa"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Revenda preparada: o que muda"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Inspeção antes da vitrine (na Netcar: Fábrica de Valor, 60+ itens)",
+          "Documentação conferida",
+          "Financiamento, troca e simulação no mesmo lugar",
+          "Respaldo pós-venda"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Sedan revisados na Netcar — veja lado a lado"
       },
       {
         "type": "p",
-        "text": "Antes da teoria, olhe o que já está no pátio — revisado e com preço do dia:"
+        "text": "Compare estes exemplares já preparados — ficha, foto e preço real:"
       },
       {
         "type": "cars",
@@ -184,60 +199,34 @@
         ]
       },
       {
-        "type": "p",
-        "text": "Os modelos com selo costumam ser os primeiros a sair. Vale garantir o test drive antes que vire história."
-      },
-      {
         "type": "h2",
-        "text": "O que olhar num sedan usado"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Consumo real de combustível",
-          "Custo de manutenção e preço de peças",
-          "Estado de pneus, freios e suspensão",
-          "Histórico de revisões e procedência",
-          "Espaço interno e porta-malas pra sua rotina"
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "Automático ou manual?"
+        "text": "Conta final: não é só o valor do carro"
       },
       {
         "type": "p",
-        "text": "A maioria dos sedan seminovos hoje é automática — ajuda no trânsito e valoriza na revenda. O manual aparece nas versões de entrada e sai um pouco mais barato."
+        "text": "Some tempo, risco, revisão eventual e revenda futura. Muitas vezes loja fica competitiva quando você coloca tudo na planilha."
       },
       {
         "type": "h2",
-        "text": "Faixas de preço"
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "No estoque atual os valores vão de R$ 36.900 a R$ 209.900. A maior parte fica na faixa intermediária, onde costuma estar o melhor custo-benefício."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "E se for financiar, a conta não precisa assustar. Na Netcar dá pra simular pelo WhatsApp e já chegar sabendo a parcela:"
+        "text": "Pra fechar a conta antes de ir à loja:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
@@ -245,7 +234,7 @@
       },
       {
         "type": "p",
-        "text": "O melhor sedan é o que cabe no orçamento, tem procedência e foi revisado antes da venda. Veja os sedan da Netcar e agende um test drive antes que o seu favorito saia."
+        "text": "Se quer tranquilidade na compra de sedan, revenda preparada encurta o caminho. Veja os Sedan do estoque."
       }
     ],
     "ctaLabel": "Ver sedan no estoque",
@@ -253,34 +242,46 @@
   },
   {
     "slug": "fiat-usado-em-esteio-vale-a-pena-2026",
-    "title": "Fiat seminovo: o que ninguém te conta antes de comprar",
-    "description": "Guia de quem entende: o que pesa de verdade num Fiat usado em Esteio e região, faixas de preço, financiamento — e os Fiat que valem o test drive agora na Netcar.",
+    "title": "Da pesquisa ao volante: jornada de quem compra fiat seminovo",
+    "description": "Cronograma real de compra de fiat usado — pesquisa, visita, test drive, financiamento e retirada. Com Fiat do estoque Netcar.",
     "publishedAt": "2026-06-24",
-    "readMinutes": 6,
+    "readMinutes": 7,
     "sections": [
       {
         "type": "p",
-        "text": "Se o Fiat está na sua lista, senta que esse texto vale a leitura: o que checar, quanto custa hoje e quais Fiat a gente tem prontos pra rodar — sem enrolação."
+        "text": "Comprar fiat seminovo não precisa ser corrida contra o relógio — mas ter ordem ajuda. Esta é a jornada que clientes da Netcar seguem, do primeiro Google ao carro na garagem."
       },
       {
         "type": "h2",
-        "text": "Por que um Fiat usado faz sentido"
+        "text": "Semana 1 — Pesquisa e orçamento"
       },
       {
-        "type": "p",
-        "text": "O Fiat é um dos mais procurados de quem compra usado na região — e procura alta significa preço estável e revenda rápida no dia em que você quiser trocar de novo."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "type": "ol",
+        "items": [
+          "Defina teto de parcela ou valor total",
+          "Liste 2–3 modelos/versões que atendem sua rotina",
+          "Compare preços no estoque real (não só tabela genérica)"
+        ]
       },
       {
         "type": "h2",
-        "text": "A recomendação da nossa equipe"
+        "text": "Semana 2 — Contato e pré-seleção"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Peça ficha, fotos e histórico dos favoritos",
+          "Simule financiamento pelo WhatsApp",
+          "Separe 2–3 carros pra visitar num dia só"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Exemplos pra começar sua shortlist"
       },
       {
         "type": "p",
-        "text": "Pra sair da teoria: estes Fiat estão revisados e prontos no nosso pátio agora. Clique pra ver foto, ficha e preço do dia."
+        "text": "Estes Fiat estão disponíveis e são frequentes na shortlist de clientes:"
       },
       {
         "type": "cars",
@@ -310,64 +311,58 @@
         ]
       },
       {
+        "type": "h2",
+        "text": "Semana 3 — Visita e test drive"
+      },
+      {
         "type": "p",
-        "text": "Os modelos com selo costumam ser os primeiros a sair. Vale garantir o test drive antes que vire história."
+        "text": "Reserve 30–40 min por carro. Leve documento, faça percurso variado e não tenha vergonha de perguntar sobre revisão e laudo."
       },
       {
         "type": "h2",
-        "text": "Na hora de avaliar, não deixe passar"
+        "text": "Semana 4 — Fechamento"
       },
       {
-        "type": "ul",
+        "type": "ol",
         "items": [
-          "Histórico de manutenção e procedência (peça o laudo)",
-          "Motor, câmbio e suspensão sem ruído ou vazamento",
-          "Quilometragem coerente com o ano",
-          "Documentação em dia, sem restrição",
-          "Test drive em velocidades diferentes"
+          "Confirme documentação e condições de garantia",
+          "Assine financiamento ou pagamento",
+          "Agende retirada e primeiros cuidados pós-compra"
         ]
       },
       {
         "type": "p",
-        "text": "Vários dos nossos Fiat chegam com selos como Eleito Melhor Compra — não é enfeite: é carro escolhido a dedo e que costuma sair rápido."
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Quanto custa um Fiat seminovo hoje"
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Fiat costumam ter saída rápida, então o preço do dia é o que vale."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "Quer dividir? As condições são diretas, sem letra miúda:"
+        "text": "Pra fechar a conta antes de ir à loja:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Pronto pra começar?"
       },
       {
         "type": "p",
-        "text": "No fim, o bom Fiat não é o mais barato do anúncio: é o que tem histórico, revisão e respaldo. Na Netcar você encontra os dois — confira o estoque enquanto está fresco."
+        "text": "Dá pra encurtar essa jornada em uma visita bem planejada. Veja Fiat no estoque e fale com a equipe."
       }
     ],
     "ctaLabel": "Ver Fiat no estoque",
@@ -375,34 +370,58 @@
   },
   {
     "slug": "ford-usado-em-esteio-vale-a-pena-2026",
-    "title": "Ford seminovo: o que ninguém te conta antes de comprar",
-    "description": "Guia de quem entende: o que pesa de verdade num Ford usado em Esteio e região, faixas de preço, financiamento — e os Ford que valem o test drive agora na Netcar.",
+    "title": "Ford seminovo: perguntas que todo mundo faz (com resposta direta)",
+    "description": "Dúvidas frequentes sobre ford usado em Esteio: preço, financiamento, garantia, troca — e onde ver Ford disponíveis na Netcar.",
     "publishedAt": "2026-06-24",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Se o Ford está na sua lista, senta que esse texto vale a leitura: o que checar, quanto custa hoje e quais Ford a gente tem prontos pra rodar — sem enrolação."
+        "text": "Reunimos as perguntas que mais aparecem no WhatsApp e na loja sobre ford seminovo. Resposta curta, sem enrolação — e no final, exemplos reais do estoque."
       },
       {
         "type": "h2",
-        "text": "Por que um Ford usado faz sentido"
+        "text": "Quanto custa um ford seminovo em 2026?"
       },
       {
         "type": "p",
-        "text": "Quem escolhe Ford normalmente quer um carro que não dá dor de cabeça: peça acessível, mecânico em qualquer esquina e boa revenda. No usado é onde isso mais pesa no bolso."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "text": "Depende de ano, versão e km. No estoque geral da Netcar, seminovos vão de R$ 36.900 a R$ 209.900. Simule ou veja a ficha de cada Ford pra preço exato."
       },
       {
         "type": "h2",
-        "text": "O que vale o seu test drive agora"
+        "text": "Ford usado dá problema?"
       },
       {
         "type": "p",
-        "text": "Em vez de tabela genérica, comece pelo que existe de verdade. Estes Ford passaram pela nossa conferência e estão disponíveis:"
+        "text": "Depende do exemplar, não só da marca. Histórico de revisão, laudo e inspeção técnica separam o bom do problemático. Revenda preparada reduz esse risco."
+      },
+      {
+        "type": "h2",
+        "text": "Vale financiar ou pagar à vista?"
+      },
+      {
+        "type": "p",
+        "text": "À vista dá margem na negociação; financiamento preserva caixa. Com entrada de 20–30% parcelável e 1ª parcela em 60 dias, muita gente equilibra as duas coisas."
+      },
+      {
+        "type": "h2",
+        "text": "Posso dar meu carro na troca?"
+      },
+      {
+        "type": "p",
+        "text": "Sim — inclusive financiado. Avaliamos seu usado e o valor entra na negociação do seminovo escolhido."
+      },
+      {
+        "type": "h2",
+        "text": "Como sei se ainda está disponível?"
+      },
+      {
+        "type": "p",
+        "text": "Estoque muda todo dia. O jeito mais rápido: clique no modelo abaixo ou chame no WhatsApp com o nome do carro."
+      },
+      {
+        "type": "h2",
+        "text": "Ford disponíveis agora — confira"
       },
       {
         "type": "cars",
@@ -432,64 +451,20 @@
         ]
       },
       {
+        "type": "h2",
+        "text": "Tem garantia?"
+      },
+      {
         "type": "p",
-        "text": "Estoque de seminovo é rotativo: o exemplar que está na vitrine hoje pode ter dono amanhã. Se algum te interessou, vale checar a disponibilidade antes de vir."
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine. Consultor detalha cobertura na proposta."
       },
       {
         "type": "h2",
-        "text": "Na hora de avaliar, não deixe passar"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Histórico de manutenção e procedência (peça o laudo)",
-          "Motor, câmbio e suspensão sem ruído ou vazamento",
-          "Quilometragem coerente com o ano",
-          "Documentação em dia, sem restrição",
-          "Test drive em velocidades diferentes"
-        ]
+        "text": "Onde fica a Netcar?"
       },
       {
         "type": "p",
-        "text": "Vários dos nossos Ford chegam com selos como Baixa KM e Eleito Melhor Compra — não é enfeite: é carro escolhido a dedo e que costuma sair rápido."
-      },
-      {
-        "type": "h2",
-        "text": "Quanto custa um Ford seminovo hoje"
-      },
-      {
-        "type": "p",
-        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Ford costumam ter saída rápida, então o preço do dia é o que vale."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "Pra quem vai financiar, vale conhecer as opções antes de decidir:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
-      },
-      {
-        "type": "h2",
-        "text": "Veredito"
-      },
-      {
-        "type": "p",
-        "text": "Um Ford usado vale a pena quando vem com procedência, revisão e condições claras — e é exatamente assim que ele sai da Netcar. Veja os Ford disponíveis antes que o seu favorito ache outro dono."
+        "text": "Esteio/RS, Av. Presidente Vargas — duas lojas. Agende visita e test drive."
       }
     ],
     "ctaLabel": "Ver Ford no estoque",
@@ -497,34 +472,47 @@
   },
   {
     "slug": "quanto-custa-seminovo-esteio-2026",
-    "title": "Quanto custa um seminovo em Esteio em 2026? (preços reais)",
-    "description": "Faixas de preço reais de seminovos em Esteio, do carro de entrada ao SUV. Veja quanto custa, exemplos do estoque e como financiar na Netcar.",
+    "title": "Quanto custa um seminovo em Esteio em 2026? Guia de preços reais",
+    "description": "Faixas de preço por perfil de comprador, o que inclui o valor e exemplos do estoque Netcar — sem tabela genérica.",
     "publishedAt": "2026-06-23",
-    "readMinutes": 5,
+    "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "\"Quanto custa um seminovo?\" é a primeira pergunta de quem vai trocar de carro — e a resposta honesta não vem de tabela genérica, vem do estoque real de uma loja da região. Então vamos aos números de verdade."
+        "text": "Pergunta clássica: quanto custa um seminovo? Resposta honesta não cabe num número único — cabe em faixas, perfil de uso e estado do exemplar. Vamos por partes."
       },
       {
         "type": "h2",
-        "text": "Faixas de preço no estoque agora"
+        "text": "Três faixas que aparecem no pátio"
       },
       {
-        "type": "p",
-        "text": "Na Netcar, em Esteio, os seminovos disponíveis vão de R$ 36.900 a R$ 209.900. A maior parte está na faixa intermediária — geralmente onde mora o melhor custo-benefício."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "type": "ul",
+        "items": [
+          "Entrada (primeiro carro, uso urbano): a partir de R$ 36.900",
+          "Intermediário (melhor custo-benefício): faixa central do estoque",
+          "Premium (SUV, pickup, seminovo recente): até R$ 209.900"
+        ]
       },
       {
         "type": "h2",
-        "text": "A recomendação da nossa equipe"
+        "text": "O que entra no preço além do adesivo"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Ano, km e versão",
+          "Histórico de manutenção e número de donos",
+          "Preparação e itens revisados antes da venda",
+          "Demanda na região (modelo que sai rápido vs. encalhado)"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Exemplos reais em cada faixa"
       },
       {
         "type": "p",
-        "text": "Pra você ver na prática o que esse valor compra hoje:"
+        "text": "Três seminovos do estoque atual — clique pra ver qual faixa cada um representa:"
       },
       {
         "type": "cars",
@@ -554,46 +542,29 @@
         ]
       },
       {
-        "type": "p",
-        "text": "Carro bom com procedência e preço justo raramente fica parado. Quando achar o seu, confirme se ainda está disponível pelo WhatsApp."
-      },
-      {
         "type": "h2",
-        "text": "O que faz o preço variar"
+        "text": "Como não pagar a mais"
       },
       {
-        "type": "p",
-        "text": "Ano e quilometragem pesam, mas procedência, histórico de manutenção, número de donos e a preparação do veículo influenciam tanto o valor quanto o risco. Barato sem história costuma sair caro depois."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "Pra quem vai financiar, vale conhecer as opções antes de decidir:"
-      },
-      {
-        "type": "ul",
+        "type": "ol",
         "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Simule financiamento antes da visita",
+          "Compare exemplares similares (ano/km)",
+          "Peça laudo e histórico",
+          "Desconfie de outlier muito barato"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Próximo passo"
       },
       {
         "type": "p",
-        "text": "Há opção pra cada orçamento — e o estoque muda toda semana. Veja os preços atualizados e fale com um consultor antes que a faixa que te interessa mude."
+        "text": "Preços mudam conforme entra carro novo. Veja o estoque atualizado e fale com consultor."
       }
     ],
     "ctaLabel": "Ver estoque com preços",
@@ -601,43 +572,46 @@
   },
   {
     "slug": "melhor-primeiro-carro-seminovo-esteio",
-    "title": "Qual o melhor primeiro carro seminovo pra começar bem?",
-    "description": "Guia pro primeiro carro: modelos econômicos, baratos de manter e seguros. Veja opções de entrada no estoque da Netcar, em Esteio/RS.",
+    "title": "Comprando o primeiro carro usado: o que ninguém te avisou",
+    "description": "Primeiro carro: orçamento real, modelos seguros, financiamento e opções de entrada no estoque Netcar, Esteio.",
     "publishedAt": "2026-06-23",
-    "readMinutes": 5,
+    "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "O primeiro carro precisa ser econômico, barato de manter e fácil de revender — porque dali a pouco vem a próxima troca. Veja como escolher um bom seminovo pra começar sem comprometer o orçamento."
+        "text": "Primeiro carro não precisa ser o mais bonito — precisa ser o que não quebra o orçamento nem a paciência. Roteiro pra quem nunca comprou usado."
       },
       {
         "type": "h2",
-        "text": "O que priorizar no primeiro carro"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Consumo baixo de combustível",
-          "Seguro e manutenção acessíveis",
-          "Peças fáceis de encontrar",
-          "Boa revenda pra próxima troca"
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "Hatch é a melhor porta de entrada"
+        "text": "Regra 1 — Parcela total, não só do carro"
       },
       {
         "type": "p",
-        "text": "Compactos são mais baratos pra comprar, abastecer e estacionar — ideais pra quem está começando a dirigir e não quer susto no fim do mês."
+        "text": "Some seguro, combustível e manutenção. Regra prática: parcela do carro ≤ 25% da renda líquida (se financiar)."
       },
       {
         "type": "h2",
-        "text": "Direto da nossa vitrine — enquanto durar"
+        "text": "Regra 2 — Hatch compacto quase sempre acerta"
       },
       {
         "type": "p",
-        "text": "Estes são alguns dos mais em conta no nosso estoque agora — bons candidatos a primeiro carro:"
+        "text": "Barato de manter, fácil de estacionar, peça abundante. Ideal pra aprender a dirigir sem susto."
+      },
+      {
+        "type": "h2",
+        "text": "Regra 3 — Desconfie de 'oportunidade única'"
+      },
+      {
+        "type": "p",
+        "text": "Pressa é tática de vendedor desonesto. Carro bom aguenta uma segunda visita."
+      },
+      {
+        "type": "h2",
+        "text": "Porta de entrada: estes estão no pátio agora"
+      },
+      {
+        "type": "p",
+        "text": "Alguns dos mais acessíveis e revisados — bons candidatos a primeiro carro:"
       },
       {
         "type": "cars",
@@ -667,38 +641,24 @@
         ]
       },
       {
+        "type": "h2",
+        "text": "Regra 4 — Simule antes de emocionar"
+      },
+      {
         "type": "p",
-        "text": "Carro bom com procedência e preço justo raramente fica parado. Quando achar o seu, confirme se ainda está disponível pelo WhatsApp."
+        "text": "WhatsApp, documentos, parcela real. Depois visite."
+      },
+      {
+        "type": "p",
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Se for financiar"
+        "text": "Pronto pro primeiro carro?"
       },
       {
         "type": "p",
-        "text": "Quer dividir? As condições são diretas, sem letra miúda:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
-      },
-      {
-        "type": "h2",
-        "text": "Veredito"
-      },
-      {
-        "type": "p",
-        "text": "O melhor primeiro carro é o econômico e revisado, com parcela que cabe no bolso. Veja as opções de entrada na Netcar enquanto ainda estão disponíveis."
+        "text": "Veja estoque de entrada e leve alguém experiente no test drive — ou confie no processo da loja."
       }
     ],
     "ctaLabel": "Ver estoque",
@@ -706,34 +666,35 @@
   },
   {
     "slug": "hyundai-usado-em-esteio-vale-a-pena-2026",
-    "title": "Comprar Hyundai seminovo em Esteio: o guia honesto de 2026",
-    "description": "Guia de quem entende: o que pesa de verdade num Hyundai usado em Esteio e região, faixas de preço, financiamento — e os Hyundai que valem o test drive agora na Netcar.",
+    "title": "2 Hyundai seminovos que se destacam no estoque agora (2026)",
+    "description": "Seleção editorial de Hyundai no estoque real da Netcar: critérios, faixas de preço e os modelos que valem test drive em Esteio.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Tem Hyundai pra todo gosto rodando por aí — e justamente por isso aparece muito anúncio que esconde problema. Esse guia é o atalho pra você não cair em furada."
+        "text": "Ranking de blog não é nota inventada — é curadoria. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Hyundai se destacaram no pátio esta semana."
       },
       {
         "type": "h2",
-        "text": "Por que um Hyundai usado faz sentido"
+        "text": "Como escolhemos os destaques"
       },
       {
-        "type": "p",
-        "text": "Quem escolhe Hyundai normalmente quer um carro que não dá dor de cabeça: peça acessível, mecânico em qualquer esquina e boa revenda. No usado é onde isso mais pesa no bolso."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "type": "ul",
+        "items": [
+          "Passou pela Fábrica de Valor (60+ itens)",
+          "Quilometragem coerente com o ano",
+          "Preço alinhado ao mercado regional",
+          "Procura real de quem visita a loja"
+        ]
       },
       {
         "type": "h2",
-        "text": "A recomendação da nossa equipe"
+        "text": "Os Hyundai em destaque agora"
       },
       {
         "type": "p",
-        "text": "Pra sair da teoria: estes Hyundai estão revisados e prontos no nosso pátio agora. Clique pra ver foto, ficha e preço do dia."
+        "text": "Temos 2 Hyundai selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
       },
       {
         "type": "cars",
@@ -764,63 +725,45 @@
       },
       {
         "type": "p",
-        "text": "Carro bom com procedência e preço justo raramente fica parado. Quando achar o seu, confirme se ainda está disponível pelo WhatsApp."
+        "text": "Carro bem preparado e bem precificado não fica parado. Quando bater o olho no certo, vale reservar o test drive."
       },
       {
         "type": "h2",
-        "text": "Na hora de avaliar, não deixe passar"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Histórico de manutenção e procedência (peça o laudo)",
-          "Motor, câmbio e suspensão sem ruído ou vazamento",
-          "Quilometragem coerente com o ano",
-          "Documentação em dia, sem restrição",
-          "Test drive em velocidades diferentes"
-        ]
+        "text": "Faixa de preço de referência"
       },
       {
         "type": "p",
-        "text": "Vários dos nossos Hyundai chegam com selos como Baixa KM e Eleito Melhor Compra — não é enfeite: é carro escolhido a dedo e que costuma sair rápido."
+        "text": "Seminovos na Netcar hoje: R$ 36.900 a R$ 209.900. Seu hyundai ideal provavelmente está no meio dessa faixa — dependendo de ano e versão."
       },
       {
         "type": "h2",
-        "text": "Quanto custa um Hyundai seminovo hoje"
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Hyundai costumam ter saída rápida, então o preço do dia é o que vale."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "E se for financiar, a conta não precisa assustar. Na Netcar dá pra simular pelo WhatsApp e já chegar sabendo a parcela:"
+        "text": "Pra fechar a conta antes de ir à loja:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Quer ver mais opções?"
       },
       {
         "type": "p",
-        "text": "No fim, o bom Hyundai não é o mais barato do anúncio: é o que tem histórico, revisão e respaldo. Na Netcar você encontra os dois — confira o estoque enquanto está fresco."
+        "text": "Ranking muda conforme entra carro novo no pátio. Veja todos os Hyundai do estoque atualizado."
       }
     ],
     "ctaLabel": "Ver Hyundai no estoque",
@@ -828,34 +771,46 @@
   },
   {
     "slug": "jeep-usado-em-esteio-vale-a-pena-2026",
-    "title": "Jeep seminovo: o que ninguém te conta antes de comprar",
-    "description": "Guia de quem entende: o que pesa de verdade num Jeep usado em Esteio e região, faixas de preço, financiamento — e os Jeep que valem o test drive agora na Netcar.",
+    "title": "Da pesquisa ao volante: jornada de quem compra jeep seminovo",
+    "description": "Cronograma real de compra de jeep usado — pesquisa, visita, test drive, financiamento e retirada. Com Jeep do estoque Netcar.",
     "publishedAt": "2026-06-23",
-    "readMinutes": 6,
+    "readMinutes": 7,
     "sections": [
       {
         "type": "p",
-        "text": "Se o Jeep está na sua lista, senta que esse texto vale a leitura: o que checar, quanto custa hoje e quais Jeep a gente tem prontos pra rodar — sem enrolação."
+        "text": "Comprar jeep seminovo não precisa ser corrida contra o relógio — mas ter ordem ajuda. Esta é a jornada que clientes da Netcar seguem, do primeiro Google ao carro na garagem."
       },
       {
         "type": "h2",
-        "text": "Por que um Jeep usado faz sentido"
+        "text": "Semana 1 — Pesquisa e orçamento"
       },
       {
-        "type": "p",
-        "text": "O Jeep é um dos mais procurados de quem compra usado na região — e procura alta significa preço estável e revenda rápida no dia em que você quiser trocar de novo."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "type": "ol",
+        "items": [
+          "Defina teto de parcela ou valor total",
+          "Liste 2–3 modelos/versões que atendem sua rotina",
+          "Compare preços no estoque real (não só tabela genérica)"
+        ]
       },
       {
         "type": "h2",
-        "text": "A recomendação da nossa equipe"
+        "text": "Semana 2 — Contato e pré-seleção"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Peça ficha, fotos e histórico dos favoritos",
+          "Simule financiamento pelo WhatsApp",
+          "Separe 2–3 carros pra visitar num dia só"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Exemplos pra começar sua shortlist"
       },
       {
         "type": "p",
-        "text": "Pra sair da teoria: estes Jeep estão revisados e prontos no nosso pátio agora. Clique pra ver foto, ficha e preço do dia."
+        "text": "Estes Jeep estão disponíveis e são frequentes na shortlist de clientes:"
       },
       {
         "type": "cars",
@@ -885,64 +840,58 @@
         ]
       },
       {
+        "type": "h2",
+        "text": "Semana 3 — Visita e test drive"
+      },
+      {
         "type": "p",
-        "text": "Os modelos com selo costumam ser os primeiros a sair. Vale garantir o test drive antes que vire história."
+        "text": "Reserve 30–40 min por carro. Leve documento, faça percurso variado e não tenha vergonha de perguntar sobre revisão e laudo."
       },
       {
         "type": "h2",
-        "text": "Na hora de avaliar, não deixe passar"
+        "text": "Semana 4 — Fechamento"
       },
       {
-        "type": "ul",
+        "type": "ol",
         "items": [
-          "Histórico de manutenção e procedência (peça o laudo)",
-          "Motor, câmbio e suspensão sem ruído ou vazamento",
-          "Quilometragem coerente com o ano",
-          "Documentação em dia, sem restrição",
-          "Test drive em velocidades diferentes"
+          "Confirme documentação e condições de garantia",
+          "Assine financiamento ou pagamento",
+          "Agende retirada e primeiros cuidados pós-compra"
         ]
       },
       {
         "type": "p",
-        "text": "Vários dos nossos Jeep chegam com selos como Baixa KM — não é enfeite: é carro escolhido a dedo e que costuma sair rápido."
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Quanto custa um Jeep seminovo hoje"
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Jeep costumam ter saída rápida, então o preço do dia é o que vale."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "Quer dividir? As condições são diretas, sem letra miúda:"
+        "text": "Pra fechar a conta antes de ir à loja:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Pronto pra começar?"
       },
       {
         "type": "p",
-        "text": "No fim, o bom Jeep não é o mais barato do anúncio: é o que tem histórico, revisão e respaldo. Na Netcar você encontra os dois — confira o estoque enquanto está fresco."
+        "text": "Dá pra encurtar essa jornada em uma visita bem planejada. Veja Jeep no estoque e fale com a equipe."
       }
     ],
     "ctaLabel": "Ver Jeep no estoque",
@@ -950,34 +899,54 @@
   },
   {
     "slug": "chery-usado-em-esteio-vale-a-pena-2026",
-    "title": "Comprar Chery seminovo em Esteio: o guia honesto de 2026",
-    "description": "Guia de quem entende: o que pesa de verdade num Chery usado em Esteio e região, faixas de preço, financiamento — e os Chery que valem o test drive agora na Netcar.",
+    "title": "Chery usado: passo a passo antes de fechar negócio",
+    "description": "Do primeiro contato ao test drive: o que verificar num chery seminovo, quanto custa e quais Chery estão no estoque da Netcar agora.",
     "publishedAt": "2026-06-23",
-    "readMinutes": 6,
+    "readMinutes": 7,
     "sections": [
       {
         "type": "p",
-        "text": "Tem Chery pra todo gosto rodando por aí — e justamente por isso aparece muito anúncio que esconde problema. Esse guia é o atalho pra você não cair em furada."
+        "text": "Comprar chery seminovo sem plano é receita pra pagar caro ou levar problema escondido. Este guia segue a ordem que a gente usa na loja quando orienta cliente — do perfil de uso ao fechamento."
       },
       {
         "type": "h2",
-        "text": "Por que um Chery usado faz sentido"
+        "text": "Passo 1 — Defina o que você precisa de verdade"
       },
       {
-        "type": "p",
-        "text": "O Chery é um dos mais procurados de quem compra usado na região — e procura alta significa preço estável e revenda rápida no dia em que você quiser trocar de novo."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "type": "ul",
+        "items": [
+          "Uso diário: cidade, estrada ou misto?",
+          "Quanto pode comprometer por mês (carro + seguro + combustível)?",
+          "Precisa de porta-malas grande, cadeirinha, ou só você no volante?"
+        ]
       },
       {
         "type": "h2",
-        "text": "O que vale o seu test drive agora"
+        "text": "Passo 2 — Entenda a faixa de preço real"
       },
       {
         "type": "p",
-        "text": "Em vez de tabela genérica, comece pelo que existe de verdade. Estes Chery passaram pela nossa conferência e estão disponíveis:"
+        "text": "Hoje, seminovos na Netcar vão de R$ 36.900 a R$ 209.900. Chery costuma ficar na faixa intermediária — desconfie de preço muito abaixo do mercado sem laudo."
+      },
+      {
+        "type": "h2",
+        "text": "Passo 3 — Documentação e procedência"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "CRLV e CPF do vendedor batendo",
+          "Sem restrição, multa ou pendência oculta",
+          "Histórico de donos coerente com a km"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Passo 4 — Veja exemplos reais no estoque"
+      },
+      {
+        "type": "p",
+        "text": "Estes Chery já passaram pela nossa conferência. Clique pra ficha completa:"
       },
       {
         "type": "cars",
@@ -1007,64 +976,51 @@
         ]
       },
       {
-        "type": "p",
-        "text": "Carro bom com procedência e preço justo raramente fica parado. Quando achar o seu, confirme se ainda está disponível pelo WhatsApp."
-      },
-      {
         "type": "h2",
-        "text": "Na hora de avaliar, não deixe passar"
+        "text": "Passo 5 — Test drive com olho clínico"
       },
       {
-        "type": "ul",
+        "type": "ol",
         "items": [
-          "Histórico de manutenção e procedência (peça o laudo)",
-          "Motor, câmbio e suspensão sem ruído ou vazamento",
-          "Quilometragem coerente com o ano",
-          "Documentação em dia, sem restrição",
-          "Test drive em velocidades diferentes"
+          "Partida a frio: motor liso, sem fumaça",
+          "Retomada em subida e frenagem em descida",
+          "Ruídos em buracos e curvas fechadas",
+          "Painel, ar, vidros e central multimídia"
         ]
       },
       {
         "type": "p",
-        "text": "Vários dos nossos Chery chegam com selos como Baixa KM — não é enfeite: é carro escolhido a dedo e que costuma sair rápido."
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Quanto custa um Chery seminovo hoje"
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Chery costumam ter saída rápida, então o preço do dia é o que vale."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "E se for financiar, a conta não precisa assustar. Na Netcar dá pra simular pelo WhatsApp e já chegar sabendo a parcela:"
+        "text": "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Resumo"
       },
       {
         "type": "p",
-        "text": "Um Chery usado vale a pena quando vem com procedência, revisão e condições claras — e é exatamente assim que ele sai da Netcar. Veja os Chery disponíveis antes que o seu favorito ache outro dono."
+        "text": "Seguiu os passos? Falta só escolher o exemplar. Confira os Chery disponíveis."
       }
     ],
     "ctaLabel": "Ver Chery no estoque",
@@ -1072,34 +1028,46 @@
   },
   {
     "slug": "chevrolet-usado-em-esteio-vale-a-pena-2026",
-    "title": "Chevrolet usado em Esteio vale a pena em 2026?",
-    "description": "Guia de quem entende: o que pesa de verdade num Chevrolet usado em Esteio e região, faixas de preço, financiamento — e os Chevrolet que valem o test drive agora na Netcar.",
+    "title": "Chevrolet seminovo: 5 mitos que fazem você errar na compra",
+    "description": "Verdade ou mito sobre chevrolet usado? Desmistificamos o que mais confunde compradores em Esteio — e mostramos Chevrolet reais no estoque.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Procurar um Chevrolet usado na região de Porto Alegre é fácil; achar um Chevrolet com procedência e preço que faça sentido é outra história. Como quem vê dezenas passarem pela loja toda semana, a gente te conta onde olhar."
+        "text": "Tem conversa repetida na hora de comprar chevrolet usado — e muito mito vira decisão ruim. Separamos o que é papo de bar de o que é fato, com olhar de quem vê carro passar todo dia na loja."
       },
       {
         "type": "h2",
-        "text": "Por que um Chevrolet usado faz sentido"
+        "text": "Mito 1: \"Quanto mais barato, melhor o negócio\""
       },
       {
         "type": "p",
-        "text": "Robustez, economia ou revenda: cada um tem seu motivo pra preferir Chevrolet. No seminovo, todos eles continuam valendo — desde que o exemplar tenha história limpa."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "text": "Preço baixo sem laudo e sem histórico é loteria. Economia na compra vira oficina depois. O custo total inclui procedência, revisão e revenda futura."
       },
       {
         "type": "h2",
-        "text": "Selecionados a dedo pra essa pauta"
+        "text": "Mito 2: \"Se está bonito por fora, está tudo certo\""
       },
       {
         "type": "p",
-        "text": "Pra sair da teoria: estes Chevrolet estão revisados e prontos no nosso pátio agora. Clique pra ver foto, ficha e preço do dia."
+        "text": "Pintura nova pode esconder batida. Interior impecável não garante câmbio saudável. Por isso inspeção técnica pesa mais que brilho na vitrine."
+      },
+      {
+        "type": "h2",
+        "text": "Mito 3: \"Todo usado é igual — só muda o ano\""
+      },
+      {
+        "type": "p",
+        "text": "Dois Chevrolet do mesmo ano podem ter históricos opostos: um revisado em concessionária, outro rodando sem manutenção. O exemplar importa tanto quanto o modelo."
+      },
+      {
+        "type": "h2",
+        "text": "Na prática: estes exemplares no nosso pátio"
+      },
+      {
+        "type": "p",
+        "text": "Sem achismo — estes Chevrolet estão disponíveis com ficha e fotos reais:"
       },
       {
         "type": "cars",
@@ -1129,64 +1097,54 @@
         ]
       },
       {
+        "type": "h2",
+        "text": "Mito 4: \"Financiar seminovo sempre sai caro demais\""
+      },
+      {
         "type": "p",
-        "text": "Os modelos com selo costumam ser os primeiros a sair. Vale garantir o test drive antes que vire história."
+        "text": "Depende do prazo, da entrada e do perfil. Simular antes evita surpresa — e parcela bem montada cabe no orçamento sem sufocar."
       },
       {
         "type": "h2",
-        "text": "Na hora de avaliar, não deixe passar"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Histórico de manutenção e procedência (peça o laudo)",
-          "Motor, câmbio e suspensão sem ruído ou vazamento",
-          "Quilometragem coerente com o ano",
-          "Documentação em dia, sem restrição",
-          "Test drive em velocidades diferentes"
-        ]
+        "text": "Mito 5: \"Particular sempre sai mais barato que loja\""
       },
       {
         "type": "p",
-        "text": "Vários dos nossos Chevrolet chegam com selos como Baixa KM — não é enfeite: é carro escolhido a dedo e que costuma sair rápido."
+        "text": "Particular pode parecer mais barato, mas sem revisão, sem garantia e com burocracia sua. Revenda preparada entrega respaldo — e muitas vezes o custo-benefício final é melhor."
+      },
+      {
+        "type": "p",
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Quanto custa um Chevrolet seminovo hoje"
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Chevrolet costumam ter saída rápida, então o preço do dia é o que vale."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "E se for financiar, a conta não precisa assustar. Na Netcar dá pra simular pelo WhatsApp e já chegar sabendo a parcela:"
+        "text": "Pra fechar a conta antes de ir à loja:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Conclusão"
       },
       {
         "type": "p",
-        "text": "No fim, o bom Chevrolet não é o mais barato do anúncio: é o que tem histórico, revisão e respaldo. Na Netcar você encontra os dois — confira o estoque enquanto está fresco."
+        "text": "Comprar chevrolet seminovo com critério é ignorar mito e olhar fato: laudo, km, donos, test drive. Veja os Chevrolet da Netcar."
       }
     ],
     "ctaLabel": "Ver Chevrolet no estoque",
@@ -1194,34 +1152,35 @@
   },
   {
     "slug": "nissan-usado-em-esteio-vale-a-pena-2026",
-    "title": "Comprar Nissan seminovo em Esteio: o guia honesto de 2026",
-    "description": "Guia de quem entende: o que pesa de verdade num Nissan usado em Esteio e região, faixas de preço, financiamento — e os Nissan que valem o test drive agora na Netcar.",
+    "title": "2 Nissan seminovos que se destacam no estoque agora (2026)",
+    "description": "Seleção editorial de Nissan no estoque real da Netcar: critérios, faixas de preço e os modelos que valem test drive em Esteio.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Tem Nissan pra todo gosto rodando por aí — e justamente por isso aparece muito anúncio que esconde problema. Esse guia é o atalho pra você não cair em furada."
+        "text": "Ranking de blog não é nota inventada — é curadoria. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Nissan se destacaram no pátio esta semana."
       },
       {
         "type": "h2",
-        "text": "Por que um Nissan usado faz sentido"
+        "text": "Como escolhemos os destaques"
       },
       {
-        "type": "p",
-        "text": "Quem escolhe Nissan normalmente quer um carro que não dá dor de cabeça: peça acessível, mecânico em qualquer esquina e boa revenda. No usado é onde isso mais pesa no bolso."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "type": "ul",
+        "items": [
+          "Passou pela Fábrica de Valor (60+ itens)",
+          "Quilometragem coerente com o ano",
+          "Preço alinhado ao mercado regional",
+          "Procura real de quem visita a loja"
+        ]
       },
       {
         "type": "h2",
-        "text": "A recomendação da nossa equipe"
+        "text": "Os Nissan em destaque agora"
       },
       {
         "type": "p",
-        "text": "Pra sair da teoria: estes Nissan estão revisados e prontos no nosso pátio agora. Clique pra ver foto, ficha e preço do dia."
+        "text": "Temos 2 Nissan selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
       },
       {
         "type": "cars",
@@ -1252,63 +1211,45 @@
       },
       {
         "type": "p",
-        "text": "Carro bom com procedência e preço justo raramente fica parado. Quando achar o seu, confirme se ainda está disponível pelo WhatsApp."
+        "text": "Carro bem preparado e bem precificado não fica parado. Quando bater o olho no certo, vale reservar o test drive."
       },
       {
         "type": "h2",
-        "text": "Na hora de avaliar, não deixe passar"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Histórico de manutenção e procedência (peça o laudo)",
-          "Motor, câmbio e suspensão sem ruído ou vazamento",
-          "Quilometragem coerente com o ano",
-          "Documentação em dia, sem restrição",
-          "Test drive em velocidades diferentes"
-        ]
+        "text": "Faixa de preço de referência"
       },
       {
         "type": "p",
-        "text": "Vários dos nossos Nissan chegam com selos como Baixa KM — não é enfeite: é carro escolhido a dedo e que costuma sair rápido."
+        "text": "Seminovos na Netcar hoje: R$ 36.900 a R$ 209.900. Seu nissan ideal provavelmente está no meio dessa faixa — dependendo de ano e versão."
       },
       {
         "type": "h2",
-        "text": "Quanto custa um Nissan seminovo hoje"
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Nissan costumam ter saída rápida, então o preço do dia é o que vale."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "Pra quem vai financiar, vale conhecer as opções antes de decidir:"
+        "text": "Pra fechar a conta antes de ir à loja:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Quer ver mais opções?"
       },
       {
         "type": "p",
-        "text": "No fim, o bom Nissan não é o mais barato do anúncio: é o que tem histórico, revisão e respaldo. Na Netcar você encontra os dois — confira o estoque enquanto está fresco."
+        "text": "Ranking muda conforme entra carro novo no pátio. Veja todos os Nissan do estoque atualizado."
       }
     ],
     "ctaLabel": "Ver Nissan no estoque",
@@ -1316,34 +1257,35 @@
   },
   {
     "slug": "honda-usado-em-esteio-vale-a-pena-2026",
-    "title": "Honda usado em Esteio vale a pena em 2026?",
-    "description": "Guia de quem entende: o que pesa de verdade num Honda usado em Esteio e região, faixas de preço, financiamento — e os Honda que valem o test drive agora na Netcar.",
+    "title": "2 Honda seminovos que se destacam no estoque agora (2026)",
+    "description": "Seleção editorial de Honda no estoque real da Netcar: critérios, faixas de preço e os modelos que valem test drive em Esteio.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Procurar um Honda usado na região de Porto Alegre é fácil; achar um Honda com procedência e preço que faça sentido é outra história. Como quem vê dezenas passarem pela loja toda semana, a gente te conta onde olhar."
+        "text": "Ranking de blog não é nota inventada — é curadoria. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Honda se destacaram no pátio esta semana."
       },
       {
         "type": "h2",
-        "text": "Por que um Honda usado faz sentido"
+        "text": "Como escolhemos os destaques"
       },
       {
-        "type": "p",
-        "text": "O Honda é um dos mais procurados de quem compra usado na região — e procura alta significa preço estável e revenda rápida no dia em que você quiser trocar de novo."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "type": "ul",
+        "items": [
+          "Passou pela Fábrica de Valor (60+ itens)",
+          "Quilometragem coerente com o ano",
+          "Preço alinhado ao mercado regional",
+          "Procura real de quem visita a loja"
+        ]
       },
       {
         "type": "h2",
-        "text": "A recomendação da nossa equipe"
+        "text": "Os Honda em destaque agora"
       },
       {
         "type": "p",
-        "text": "Pra sair da teoria: estes Honda estão revisados e prontos no nosso pátio agora. Clique pra ver foto, ficha e preço do dia."
+        "text": "Temos 2 Honda selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
       },
       {
         "type": "cars",
@@ -1374,63 +1316,45 @@
       },
       {
         "type": "p",
-        "text": "Estoque de seminovo é rotativo: o exemplar que está na vitrine hoje pode ter dono amanhã. Se algum te interessou, vale checar a disponibilidade antes de vir."
+        "text": "Carro bem preparado e bem precificado não fica parado. Quando bater o olho no certo, vale reservar o test drive."
       },
       {
         "type": "h2",
-        "text": "Na hora de avaliar, não deixe passar"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Histórico de manutenção e procedência (peça o laudo)",
-          "Motor, câmbio e suspensão sem ruído ou vazamento",
-          "Quilometragem coerente com o ano",
-          "Documentação em dia, sem restrição",
-          "Test drive em velocidades diferentes"
-        ]
+        "text": "Faixa de preço de referência"
       },
       {
         "type": "p",
-        "text": "Vários dos nossos Honda chegam com selos como Baixa KM e Eleito Melhor Compra — não é enfeite: é carro escolhido a dedo e que costuma sair rápido."
+        "text": "Seminovos na Netcar hoje: R$ 36.900 a R$ 209.900. Seu honda ideal provavelmente está no meio dessa faixa — dependendo de ano e versão."
       },
       {
         "type": "h2",
-        "text": "Quanto custa um Honda seminovo hoje"
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Honda costumam ter saída rápida, então o preço do dia é o que vale."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "Pra quem vai financiar, vale conhecer as opções antes de decidir:"
+        "text": "Pra fechar a conta antes de ir à loja:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Quer ver mais opções?"
       },
       {
         "type": "p",
-        "text": "No fim, o bom Honda não é o mais barato do anúncio: é o que tem histórico, revisão e respaldo. Na Netcar você encontra os dois — confira o estoque enquanto está fresco."
+        "text": "Ranking muda conforme entra carro novo no pátio. Veja todos os Honda do estoque atualizado."
       }
     ],
     "ctaLabel": "Ver Honda no estoque",
@@ -1438,67 +1362,86 @@
   },
   {
     "slug": "checklist-comprar-seminovo-o-que-verificar",
-    "title": "Checklist: 10 itens para conferir antes de comprar um seminovo",
-    "description": "Os 10 pontos que separam um bom negócio de uma dor de cabeça na compra de usado. Guia prático da Netcar, em Esteio/RS.",
+    "title": "Checklist definitivo antes de comprar seminovo (imprima e leve)",
+    "description": "Lista completa: documentação, mecânica, estrutura, elétrica e test drive. Guia pilar Netcar, Esteio/RS.",
     "publishedAt": "2026-06-19",
-    "readMinutes": 5,
+    "readMinutes": 8,
     "sections": [
       {
         "type": "p",
-        "text": "Comprar seminovo de particular tem risco real — e o barato costuma sair caro. Esse checklist reúne os 10 itens pra conferir antes de fechar negócio, e mostra por que comprar de uma revenda preparada resolve a maior parte deles de antemão."
+        "text": "Use este checklist na visita — de particular ou loja. Cada item marcado reduz chance de levar problema pra casa."
       },
       {
         "type": "h2",
-        "text": "Documentação e histórico"
+        "text": "Bloco A — Documentação"
       },
       {
-        "type": "ul",
+        "type": "ol",
         "items": [
-          "Documento sem restrição e multas",
-          "Histórico de donos e procedência",
-          "Chassi batendo com o documento"
+          "CRLV em dia e coerente com o vendedor",
+          "Consulta de restrição, multa e sinistro",
+          "Chassi e motor batendo com documento",
+          "Número de proprietários faz sentido?"
         ]
       },
       {
         "type": "h2",
-        "text": "Mecânica"
+        "text": "Bloco B — Exterior e estrutura"
       },
       {
-        "type": "ul",
+        "type": "ol",
         "items": [
-          "Motor sem ruído ou vazamento",
-          "Câmbio engatando suave",
-          "Suspensão sem barulho"
+          "Pintura uniforme, sem onda ou remendos",
+          "Vidros com marca original",
+          "Pneus com desgaste parecido nos quatro",
+          "Faróis e lanternas íntegros"
         ]
       },
       {
         "type": "h2",
-        "text": "Estrutura e segurança"
+        "text": "Bloco C — Mecânica"
       },
       {
-        "type": "ul",
+        "type": "ol",
         "items": [
-          "Lataria e pintura sem batida mal reparada",
-          "Pneus e freios em bom estado",
-          "Airbag, ABS e cintos funcionando",
-          "Test drive em diferentes velocidades"
+          "Vazamento embaixo do motor",
+          "Ruído em marcha lenta e retomada",
+          "Câmbio suave (auto ou manual)",
+          "Freio reto, sem vibração"
         ]
       },
       {
         "type": "h2",
-        "text": "O atalho: comprar de quem já fez o checklist"
+        "text": "Bloco D — Interior e elétrica"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Ar condicionado gelando",
+          "Vidros, travas, central",
+          "Airbag sem luz de alerta acesa",
+          "Odômetro coerente com desgaste"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Bloco E — Test drive"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Mínimo 15 minutos, ruas e lombadas",
+          "Subida, descida e frenagem forte",
+          "Ruído de suspensão em curva"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Quer pular metade do checklist?"
       },
       {
         "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
-      },
-      {
-        "type": "h2",
-        "text": "Direto da nossa vitrine — enquanto durar"
-      },
-      {
-        "type": "p",
-        "text": "Estes, por exemplo, já passaram por tudo isso e estão prontos:"
+        "text": "Estes seminovos já passaram pela Fábrica de Valor — inspeção feita antes de chegar na vitrine:"
       },
       {
         "type": "cars",
@@ -1529,15 +1472,15 @@
       },
       {
         "type": "p",
-        "text": "Carro bom com procedência e preço justo raramente fica parado. Quando achar o seu, confirme se ainda está disponível pelo WhatsApp."
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Salvou o checklist?"
       },
       {
         "type": "p",
-        "text": "Carro revisado, documentação limpa e respaldo de loja: é isso que separa economia de prejuízo. Veja o estoque revisado da Netcar."
+        "text": "Leve na visita. Ou comece por estoque já revisado na Netcar."
       }
     ],
     "ctaLabel": "Ver estoque revisado",
@@ -1545,34 +1488,46 @@
   },
   {
     "slug": "volkswagen-usado-em-esteio-vale-a-pena-2026",
-    "title": "Volkswagen seminovo: o que ninguém te conta antes de comprar",
-    "description": "Guia de quem entende: o que pesa de verdade num Volkswagen usado em Esteio e região, faixas de preço, financiamento — e os Volkswagen que valem o test drive agora na Netcar.",
+    "title": "Volkswagen usado: qual versão faz sentido pro seu dia a dia",
+    "description": "Perfil urbano, família ou estrada: qual volkswagen seminovo escolher em Esteio. Exemplos reais do estoque Netcar.",
     "publishedAt": "2026-06-15",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Se o Volkswagen está na sua lista, senta que esse texto vale a leitura: o que checar, quanto custa hoje e quais Volkswagen a gente tem prontos pra rodar — sem enrolação."
+        "text": "Não existe volkswagen \"melhor do mundo\" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e indicamos o que observar em cada um."
       },
       {
         "type": "h2",
-        "text": "Por que um Volkswagen usado faz sentido"
+        "text": "Perfil 1 — Só cidade, poucos km por dia"
       },
       {
         "type": "p",
-        "text": "O Volkswagen é um dos mais procurados de quem compra usado na região — e procura alta significa preço estável e revenda rápida no dia em que você quiser trocar de novo."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "text": "Priorize consumo, manutenção barata e facilidade de estacionar. Versões compactas e automáticas aliviam trânsito."
       },
       {
         "type": "h2",
-        "text": "Direto da nossa vitrine — enquanto durar"
+        "text": "Perfil 2 — Família com criança ou bagagem"
       },
       {
         "type": "p",
-        "text": "Em vez de tabela genérica, comece pelo que existe de verdade. Estes Volkswagen passaram pela nossa conferência e estão disponíveis:"
+        "text": "Porta-malas, espaço traseiro e segurança (airbag, ISOFIX) pesam mais que potência. Confira estado de bancos e fixação."
+      },
+      {
+        "type": "h2",
+        "text": "Perfil 3 — Estrada e viagem frequente"
+      },
+      {
+        "type": "p",
+        "text": "Estabilidade, conforto em 100 km/h e motor que não force na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
+      },
+      {
+        "type": "h2",
+        "text": "Volkswagen que atendem esses perfis — no estoque hoje"
+      },
+      {
+        "type": "p",
+        "text": "Estes modelos aparecem bastante pra quem se encaixa nos perfis acima:"
       },
       {
         "type": "cars",
@@ -1602,64 +1557,46 @@
         ]
       },
       {
+        "type": "h2",
+        "text": "Automático ou manual pro seu caso?"
+      },
+      {
         "type": "p",
-        "text": "Os modelos com selo costumam ser os primeiros a sair. Vale garantir o test drive antes que vire história."
+        "text": "Cidade pura → automático costuma valer. Orçamento apertado → manual de entrada. Estrada mista → depende do gosto e do bolso."
+      },
+      {
+        "type": "p",
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Na hora de avaliar, não deixe passar"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Histórico de manutenção e procedência (peça o laudo)",
-          "Motor, câmbio e suspensão sem ruído ou vazamento",
-          "Quilometragem coerente com o ano",
-          "Documentação em dia, sem restrição",
-          "Test drive em velocidades diferentes"
-        ]
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "Vários dos nossos Volkswagen chegam com selos como Baixa KM e Estepe Novo — não é enfeite: é carro escolhido a dedo e que costuma sair rápido."
-      },
-      {
-        "type": "h2",
-        "text": "Quanto custa um Volkswagen seminovo hoje"
-      },
-      {
-        "type": "p",
-        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Volkswagen costumam ter saída rápida, então o preço do dia é o que vale."
-      },
-      {
-        "type": "h2",
-        "text": "Se for financiar"
-      },
-      {
-        "type": "p",
-        "text": "E se for financiar, a conta não precisa assustar. Na Netcar dá pra simular pelo WhatsApp e já chegar sabendo a parcela:"
+        "text": "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Encontrou seu perfil?"
       },
       {
         "type": "p",
-        "text": "Um Volkswagen usado vale a pena quando vem com procedência, revisão e condições claras — e é exatamente assim que ele sai da Netcar. Veja os Volkswagen disponíveis antes que o seu favorito ache outro dono."
+        "text": "Veja todos os Volkswagen e marque test drive com o consultor — ele cruza perfil, orçamento e estoque."
       }
     ],
     "ctaLabel": "Ver Volkswagen no estoque",
@@ -1667,34 +1604,46 @@
   },
   {
     "slug": "melhor-suv-seminovo-esteio-2026",
-    "title": "Como escolher um suv seminovo em Esteio sem se arrepender (2026)",
-    "description": "Guia honesto para escolher um suv seminovo com bom custo-benefício em Esteio e região — espaço, consumo, manutenção e os suv que valem o test drive na Netcar.",
+    "title": "Suv usado: qual versão faz sentido pro seu dia a dia",
+    "description": "Perfil urbano, família ou estrada: qual suv seminovo escolher em Esteio. Exemplos reais do estoque Netcar.",
     "publishedAt": "2026-06-11",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Decidiu que o próximo carro vai ser um suv? Ótima escolha. Agora vem a parte difícil: escolher o certo. Veja o que realmente importa num suv usado."
+        "text": "Não existe suv \"melhor do mundo\" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e indicamos o que observar em cada um."
       },
       {
         "type": "h2",
-        "text": "Por que tanta gente escolhe um suv"
+        "text": "Perfil 1 — Só cidade, poucos km por dia"
       },
       {
         "type": "p",
-        "text": "O suv combina porta-malas, conforto de viagem e robustez no dia a dia. É uma das categorias que mais saem na Netcar — e procura alta costuma significar boa revenda lá na frente."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "text": "Priorize consumo, manutenção barata e facilidade de estacionar. Versões compactas e automáticas aliviam trânsito."
       },
       {
         "type": "h2",
-        "text": "Direto da nossa vitrine — enquanto durar"
+        "text": "Perfil 2 — Família com criança ou bagagem"
       },
       {
         "type": "p",
-        "text": "Pra deixar concreto: estes suv passaram pela nossa conferência e estão disponíveis agora."
+        "text": "Porta-malas, espaço traseiro e segurança (airbag, ISOFIX) pesam mais que potência. Confira estado de bancos e fixação."
+      },
+      {
+        "type": "h2",
+        "text": "Perfil 3 — Estrada e viagem frequente"
+      },
+      {
+        "type": "p",
+        "text": "Estabilidade, conforto em 100 km/h e motor que não force na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
+      },
+      {
+        "type": "h2",
+        "text": "Suv que atendem esses perfis — no estoque hoje"
+      },
+      {
+        "type": "p",
+        "text": "Estes modelos aparecem bastante pra quem se encaixa nos perfis acima:"
       },
       {
         "type": "cars",
@@ -1724,68 +1673,46 @@
         ]
       },
       {
-        "type": "p",
-        "text": "Os modelos com selo costumam ser os primeiros a sair. Vale garantir o test drive antes que vire história."
-      },
-      {
         "type": "h2",
-        "text": "O que olhar num suv usado"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Consumo real de combustível",
-          "Custo de manutenção e preço de peças",
-          "Estado de pneus, freios e suspensão",
-          "Histórico de revisões e procedência",
-          "Espaço interno e porta-malas pra sua rotina"
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "Automático ou manual?"
+        "text": "Automático ou manual pro seu caso?"
       },
       {
         "type": "p",
-        "text": "A maioria dos suv seminovos hoje é automática — ajuda no trânsito e valoriza na revenda. O manual aparece nas versões de entrada e sai um pouco mais barato."
-      },
-      {
-        "type": "h2",
-        "text": "Faixas de preço"
+        "text": "Cidade pura → automático costuma valer. Orçamento apertado → manual de entrada. Estrada mista → depende do gosto e do bolso."
       },
       {
         "type": "p",
-        "text": "No estoque atual os valores vão de R$ 36.900 a R$ 209.900. A maior parte fica na faixa intermediária, onde costuma estar o melhor custo-benefício."
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Se for financiar"
+        "text": "Financiamento: como fica na prática"
       },
       {
         "type": "p",
-        "text": "E se for financiar, a conta não precisa assustar. Na Netcar dá pra simular pelo WhatsApp e já chegar sabendo a parcela:"
+        "text": "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:"
       },
       {
         "type": "ul",
         "items": [
           "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela só para 60 dias",
-          "Entrada de 20% a 30%, que dá pra dividir em até 10x sem juros",
-          "Opção de financiar pelo cartão de crédito em até 24x",
-          "Seu usado avaliado na troca como parte do pagamento"
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
         ]
       },
       {
         "type": "p",
-        "text": "Tudo mediante análise de crédito — simule com seus dados reais para receber a parcela certa antes de visitar a loja."
+        "text": "Mediante análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Encontrou seu perfil?"
       },
       {
         "type": "p",
-        "text": "O melhor suv é o que cabe no orçamento, tem procedência e foi revisado antes da venda. Veja os suv da Netcar e agende um test drive antes que o seu favorito saia."
+        "text": "Veja todos os Suv e marque test drive com o consultor — ele cruza perfil, orçamento e estoque."
       }
     ],
     "ctaLabel": "Ver suv no estoque",
@@ -1793,49 +1720,64 @@
   },
   {
     "slug": "vender-carro-usado-ou-dar-na-troca",
-    "title": "Vender o usado por conta própria ou dar na troca? A conta real",
-    "description": "Quanto você recebe, tempo, risco e burocracia: a comparação honesta entre vender seu carro sozinho e dar na troca. Avalie na Netcar.",
+    "title": "Vender sozinho ou dar na troca? Tabela comparativa",
+    "description": "Lado a lado: quanto você recebe, tempo gasto, risco e burocracia em cada caminho. Avalie seu usado na Netcar.",
     "publishedAt": "2026-06-07",
     "readMinutes": 5,
     "sections": [
       {
         "type": "p",
-        "text": "Vender o usado sozinho pra tentar tirar mais, ou dar na troca e resolver de uma vez? Os dois têm prós — e o que decide é quanto você valoriza tempo e tranquilidade."
+        "text": "Duas estradas, dois custos escondidos. Tabela mental pra decidir sem ilusão."
       },
       {
         "type": "h2",
-        "text": "Quanto você realmente recebe"
-      },
-      {
-        "type": "p",
-        "text": "A venda particular pode render um pouco mais no papel, mas custa tempo, anúncios, estranhos no seu carro e risco na transferência. A troca entrega praticidade e abate na hora do próximo — e o valor pode entrar como parte da entrada."
-      },
-      {
-        "type": "h2",
-        "text": "Tempo, risco e burocracia"
+        "text": "Venda particular"
       },
       {
         "type": "ul",
         "items": [
-          "Particular: anúncios, contatos, test drives com desconhecidos e transferência por sua conta",
-          "Troca: avaliação na loja, sem exposição, documentação conduzida pela revenda"
+          "Potencial: preço um pouco acima em anúncio bem feito",
+          "Custo de tempo: fotos, respostas, visitas, transferência",
+          "Risco: golpe, pagamento, carro parado na rua",
+          "Prazo: imprevisível (semanas ou meses)"
         ]
       },
       {
         "type": "h2",
-        "text": "Carro financiado dá pra trocar?"
+        "text": "Troca na revenda"
       },
       {
-        "type": "p",
-        "text": "Dá. A revenda calcula a quitação do saldo e o valor líquido entra como parte do pagamento no seminovo escolhido. Menos dor de cabeça, tudo numa negociação só."
+        "type": "ul",
+        "items": [
+          "Potencial: valor justo de mercado na hora",
+          "Custo de tempo: uma visita, uma negociação",
+          "Risco: baixo — processo conduzido pela loja",
+          "Prazo: mesmo dia em muitos casos"
+        ]
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Financiado? Troca ainda funciona"
       },
       {
         "type": "p",
-        "text": "Se você valoriza tempo e segurança — ou já achou o próximo carro — a troca quase sempre compensa. Traga seu usado pra uma avaliação sem compromisso na Netcar."
+        "text": "Calculamos quitação do saldo; valor líquido entra no seminovo novo. Uma negociação, zero exposição."
+      },
+      {
+        "type": "h2",
+        "text": "Quando cada um ganha"
+      },
+      {
+        "type": "p",
+        "text": "Particular: sobra tempo, tem paciência e mecânico de confiança. Troca: quer resolver rápido, já escolheu o próximo carro ou valoriza segurança."
+      },
+      {
+        "type": "h2",
+        "text": "Próximo passo"
+      },
+      {
+        "type": "p",
+        "text": "Traga seu usado pra avaliação sem compromisso — saiba quanto entra na troca hoje."
       }
     ],
     "ctaLabel": "Avaliar meu carro",
@@ -1843,58 +1785,56 @@
   },
   {
     "slug": "cambio-automatico-vale-a-pena-seminovo",
-    "title": "Câmbio automático vale a pena num seminovo? Sem achismo",
-    "description": "Automático x manual num usado: consumo, manutenção, revenda e conforto, sem achismo. Veja automáticos revisados no estoque da Netcar.",
+    "title": "Automático ou manual no seminovo? Comparativo técnico",
+    "description": "Consumo, manutenção, revenda e conforto — lado a lado. Automáticos revisados no estoque Netcar.",
     "publishedAt": "2026-06-03",
-    "readMinutes": 5,
+    "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "O automático dominou o mercado, mas num seminovo a decisão tem nuances de custo e manutenção que ninguém comenta no anúncio. Vamos ao que pesa de verdade."
+        "text": "A decisão não é religiosa — é matemática de uso, bolso e revenda. Comparativo direto."
       },
       {
         "type": "h2",
-        "text": "Vantagens do automático"
+        "text": "Automático"
       },
       {
         "type": "ul",
         "items": [
-          "Mais conforto no trânsito de cidade",
-          "Melhor valor de revenda",
-          "Tendência de mercado — mais procura, sai mais rápido"
+          "Conforto urbano superior",
+          "Revenda melhor na maioria dos segmentos",
+          "Exige histórico de troca de fluido do câmbio",
+          "Consumo um pouco maior em alguns modelos"
         ]
       },
       {
         "type": "h2",
-        "text": "Quando o manual ainda compensa"
+        "text": "Manual"
       },
       {
         "type": "ul",
         "items": [
-          "Preço de compra menor",
-          "Manutenção geralmente mais barata",
-          "Versões de entrada mais acessíveis"
+          "Preço de entrada menor",
+          "Manutenção geralmente mais simples",
+          "Controle total — pra quem gosta",
+          "Revenda mais lenta em alguns nichos"
         ]
       },
       {
         "type": "h2",
-        "text": "Manutenção: o ponto que separa o joio do trigo"
+        "text": "No usado, o diferencial é histórico"
       },
       {
         "type": "p",
-        "text": "No usado, o segredo é o histórico do câmbio automático (trocas de óleo em dia). Um automático bem cuidado é tão confiável quanto o manual — e a preparação da loja é o que te dá essa garantia."
-      },
-      {
-        "type": "p",
-        "text": "Cada carro da Netcar passa pela Fábrica de Valor: mais de 60 itens conferidos, laudo e revisão antes de ir pra vitrine. Você compra com respaldo, não no escuro."
+        "text": "Automático mal cuidado assusta; automático com revisão documentada tranquiliza. Manual mal usado (embreagem estourada) também aparece — test drive longo revela."
       },
       {
         "type": "h2",
-        "text": "A recomendação da nossa equipe"
+        "text": "Automáticos revisados no estoque"
       },
       {
         "type": "p",
-        "text": "Estes automáticos já passaram pela nossa conferência e estão prontos:"
+        "text": "Exemplos com câmbio auto já conferido:"
       },
       {
         "type": "cars",
@@ -1925,15 +1865,15 @@
       },
       {
         "type": "p",
-        "text": "Os modelos com selo costumam ser os primeiros a sair. Vale garantir o test drive antes que vire história."
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
-        "text": "Veredito"
+        "text": "Qual escolher?"
       },
       {
         "type": "p",
-        "text": "Se você roda muito em cidade e pensa na revenda, o automático compensa. Veja os automáticos revisados na Netcar antes que saiam."
+        "text": "Cidade + revenda → automático. Orçamento apertado + controle → manual. Na dúvida, test drive nos dois."
       }
     ],
     "ctaLabel": "Ver automáticos",
