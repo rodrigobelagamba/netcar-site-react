@@ -1,7 +1,21 @@
+// Carro real do estoque embutido numa matéria (propaganda do estoque).
+export interface BlogCar {
+  modelo: string;
+  ano: string;
+  km: string;
+  preco: string;
+  cambio?: string;
+  combustivel?: string;
+  destaque?: string;
+  url: string;
+  img?: string;
+}
+
 export interface BlogSection {
-  type: "p" | "h2" | "ul" | "ol";
+  type: "p" | "h2" | "ul" | "ol" | "cars";
   text?: string;
   items?: string[];
+  cars?: BlogCar[];
 }
 
 export interface BlogPost {
