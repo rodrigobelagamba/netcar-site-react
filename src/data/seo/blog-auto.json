@@ -1,36 +1,306 @@
 [
   {
+    "slug": "melhor-hatch-seminovo-esteio-2026",
+    "title": "Como escolher um hatch seminovo em Esteio sem errar (2026)",
+    "description": "Guia para escolher um hatch seminovo com bom custo-benefício em Esteio e região: espaço, consumo, manutenção, faixas de preço e os hatch disponíveis na Netcar.",
+    "publishedAt": "2026-06-25",
+    "readMinutes": 6,
+    "sections": [
+      {
+        "type": "p",
+        "text": "Se você decidiu que o próximo carro vai ser um hatch, falta a parte difícil: escolher o certo. Veja o que pesa de verdade num hatch seminovo."
+      },
+      {
+        "type": "h2",
+        "text": "Comece pelos hatch que já temos"
+      },
+      {
+        "type": "p",
+        "text": "Antes da teoria, veja o que está no pátio agora — revisado e com preço atualizado:"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Fiat Argo Drive",
+            "ano": "2023/2024",
+            "km": "32.500 km",
+            "preco": "R$ 89.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-argo-drive-2024-JCL-xx85-branca.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/28032026ARGO%20DRIVE%20JCL5B85CAPA.png"
+          },
+          {
+            "modelo": "Honda City Exl",
+            "ano": "2022/2023",
+            "km": "53.000 km",
+            "preco": "R$ 109.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-city-exl-2023-JBP-xx03-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/10032026CITY%20EXL%20JBP5C03CAPA.png"
+          },
+          {
+            "modelo": "Fiat Mobi Like",
+            "ano": "2020",
+            "km": "77.000 km",
+            "preco": "R$ 51.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-mobi-like-2020-JAF-xx60-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/23032026mobi%20like%20JAF4F60CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Automático ou manual?"
+      },
+      {
+        "type": "p",
+        "text": "A maioria dos hatch seminovos hoje é automática, o que ajuda no trânsito e valoriza na revenda. O manual aparece em versões de entrada e sai um pouco mais barato."
+      },
+      {
+        "type": "h2",
+        "text": "Faixas de preço"
+      },
+      {
+        "type": "p",
+        "text": "No estoque atual os valores vão de R$ 36.900 a R$ 209.900. A maior parte fica na faixa intermediária, onde costuma estar o melhor custo-benefício."
+      },
+      {
+        "type": "h2",
+        "text": "Como fica o financiamento"
+      },
+      {
+        "type": "p",
+        "text": "Financiar não precisa ser um bicho de sete cabeças. Na prática, funciona assim:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
+      },
+      {
+        "type": "h2",
+        "text": "Veredito"
+      },
+      {
+        "type": "p",
+        "text": "O melhor hatch é o que cabe no orçamento, tem procedência e foi revisado antes da venda. Veja os hatch da Netcar e agende um test drive."
+      }
+    ],
+    "ctaLabel": "Ver hatch no estoque",
+    "ctaHref": "/comprar-hatch"
+  },
+  {
+    "slug": "melhor-sedan-seminovo-esteio-2026",
+    "title": "Melhor sedan seminovo para famílias em Esteio (2026)",
+    "description": "Guia para escolher um sedan seminovo com bom custo-benefício em Esteio e região: espaço, consumo, manutenção, faixas de preço e os sedan disponíveis na Netcar.",
+    "publishedAt": "2026-06-25",
+    "readMinutes": 6,
+    "sections": [
+      {
+        "type": "p",
+        "text": "O sedan é uma das categorias preferidas das famílias na região de Esteio. Espaço, conforto e revenda boa — mas tem detalhe que faz diferença na hora de escolher."
+      },
+      {
+        "type": "h2",
+        "text": "Por que tanta gente escolhe um sedan"
+      },
+      {
+        "type": "p",
+        "text": "O sedan combina porta-malas, conforto de viagem e robustez no dia a dia. É uma das categorias que mais saem na Netcar, com opções de várias marcas e faixas de preço."
+      },
+      {
+        "type": "h2",
+        "text": "Opções reais no estoque hoje"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Chevrolet Onix Premier Plus Turbo",
+            "ano": "2023/2024",
+            "km": "39.943 km",
+            "preco": "R$ 94.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-onix-premier-plus-turbo-2024-JCI-xx11-branca.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/23062026ONIX%20PREMIERE%20PLUS%20JCI3C11CAPA.png"
+          },
+          {
+            "modelo": "Nissan Versa Advance",
+            "ano": "2023/2024",
+            "km": "64.889 km",
+            "preco": "R$ 99.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-versa-advance-2024-JCL-xx90-branca.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+          },
+          {
+            "modelo": "Nissan Versa Exclusive",
+            "ano": "2023/2024",
+            "km": "65.700 km",
+            "preco": "R$ 109.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-versa-exclusive-2024-JCG-xx72-branca.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026versa%20JCG6B72CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que olhar num sedan usado"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Consumo real de combustível",
+          "Custo de manutenção e preço de peças",
+          "Estado de pneus, freios e suspensão",
+          "Histórico de revisões e procedência",
+          "Espaço interno e porta-malas para sua rotina"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Faixas de preço"
+      },
+      {
+        "type": "p",
+        "text": "No estoque atual os valores vão de R$ 36.900 a R$ 209.900. A maior parte fica na faixa intermediária, onde costuma estar o melhor custo-benefício."
+      },
+      {
+        "type": "h2",
+        "text": "Como fica o financiamento"
+      },
+      {
+        "type": "p",
+        "text": "Antes de escolher, vale entender como fica a conta. Na Netcar você simula pelo WhatsApp e já chega à loja sabendo a parcela:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
+      },
+      {
+        "type": "h2",
+        "text": "Veredito"
+      },
+      {
+        "type": "p",
+        "text": "O melhor sedan é o que cabe no orçamento, tem procedência e foi revisado antes da venda. Veja os sedan da Netcar e agende um test drive."
+      }
+    ],
+    "ctaLabel": "Ver sedan no estoque",
+    "ctaHref": "/comprar-sedan"
+  },
+  {
     "slug": "fiat-usado-em-esteio-vale-a-pena-2026",
     "title": "Fiat usado em Esteio vale a pena em 2026?",
-    "description": "Guia para quem procura Fiat seminovo em Esteio e região: modelos, o que verificar, faixas de preço e financiamento. Estoque real na Netcar.",
+    "description": "Guia direto para quem procura Fiat seminovo em Esteio e região: o que olhar, faixas de preço, financiamento e os Fiat disponíveis agora na Netcar.",
     "publishedAt": "2026-06-24",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Se você procura um Fiat usado na região metropolitana de Porto Alegre, a oferta é grande — e a qualidade varia muito. Este guia ajuda a escolher um Fiat seminovo com procedência, sem pagar a mais."
+        "text": "Se o Fiat está na sua lista, este texto é pra você: o que checar, quanto custa e quais Fiat a Netcar tem prontos pra rodar agora em Esteio."
       },
       {
         "type": "h2",
-        "text": "Por que o Fiat é uma boa escolha de seminovo"
+        "text": "Por que o Fiat é uma aposta segura no usado"
       },
       {
         "type": "p",
-        "text": "O Fiat é uma das marcas mais procuradas por quem compra usado no Rio Grande do Sul: peças acessíveis, rede de assistência ampla e boa revenda. Na Netcar, em Esteio, costuma ter saída rápida."
+        "text": "Peças acessíveis, rede de assistência ampla e boa revenda fazem do Fiat um dos preferidos de quem compra seminovo no Rio Grande do Sul. Na prática, isso significa menos surpresa no bolso e mais facilidade na hora de vender depois."
       },
       {
         "type": "h2",
-        "text": "O que verificar antes de comprar um Fiat usado"
+        "text": "Direto da vitrine da Netcar"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Fiat Fastback Impetus Turbo",
+            "ano": "2024/2025",
+            "km": "9.500 km",
+            "preco": "R$ 124.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-fastback-impetus-turbo-2025-JDD-xx45-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/22062026FASTBACK%20JDD5G45CAPA.png"
+          },
+          {
+            "modelo": "Fiat Argo Drive",
+            "ano": "2023/2024",
+            "km": "32.500 km",
+            "preco": "R$ 89.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-argo-drive-2024-JCL-xx85-branca.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/28032026ARGO%20DRIVE%20JCL5B85CAPA.png"
+          },
+          {
+            "modelo": "Fiat Mobi Like",
+            "ano": "2020",
+            "km": "77.000 km",
+            "preco": "R$ 51.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-mobi-like-2020-JAF-xx60-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/23032026mobi%20like%20JAF4F60CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que conferir antes de fechar"
       },
       {
         "type": "ul",
         "items": [
-          "Histórico de manutenção e procedência",
-          "Estado de motor, câmbio e suspensão (peça o laudo)",
-          "Quilometragem compatível com o ano",
+          "Histórico de manutenção e procedência (peça o laudo)",
+          "Motor, câmbio e suspensão sem ruído ou vazamento",
+          "Quilometragem coerente com o ano",
           "Documentação em dia, sem restrição",
-          "Sinais de batida na lataria e alinhamento da pintura"
+          "Lataria e pintura sem sinal de batida mal reparada"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Vários dos nossos Fiat chegam com selos como Eleito Melhor Compra — sinal de carro bem cuidado e escolhido a dedo pela Fábrica de Valor."
       },
       {
         "type": "h2",
@@ -38,23 +308,37 @@
       },
       {
         "type": "p",
-        "text": "O valor depende de modelo, ano e versão. No estoque atual da Netcar os preços vão de R$ 36.900 a R$ 209.900 entre todas as marcas. Veja os Fiat disponíveis na página da marca."
+        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Fiat costumam ter saída rápida, então vale conferir o preço do dia."
       },
       {
         "type": "h2",
-        "text": "Financiamento e troca"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "Dá para financiar o Fiat em até 60x com simulação na hora e usar seu carro como entrada na troca — inclusive financiado, mediante avaliação. Simule antes de visitar."
+        "text": "A parte do dinheiro costuma travar a decisão — então aqui vai sem rodeio. As condições na Netcar:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Um Fiat usado vale a pena quando você compra com procedência, revisão e condições claras. Veja os Fiat na Netcar e fale com um consultor pelo WhatsApp."
+        "text": "Um Fiat usado vale a pena quando vem com procedência, revisão e condições claras — e é exatamente assim que ele sai da Netcar. Veja os Fiat disponíveis e fale com um consultor."
       }
     ],
     "ctaLabel": "Ver Fiat no estoque",
@@ -62,36 +346,77 @@
   },
   {
     "slug": "ford-usado-em-esteio-vale-a-pena-2026",
-    "title": "Ford usado em Esteio vale a pena em 2026?",
-    "description": "Guia para quem procura Ford seminovo em Esteio e região: modelos, o que verificar, faixas de preço e financiamento. Estoque real na Netcar.",
+    "title": "Comprar Ford seminovo em Esteio: o que pesar em 2026",
+    "description": "Guia direto para quem procura Ford seminovo em Esteio e região: o que olhar, faixas de preço, financiamento e os Ford disponíveis agora na Netcar.",
     "publishedAt": "2026-06-24",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Se você procura um Ford usado na região metropolitana de Porto Alegre, a oferta é grande — e a qualidade varia muito. Este guia ajuda a escolher um Ford seminovo com procedência, sem pagar a mais."
+        "text": "Se o Ford está na sua lista, este texto é pra você: o que checar, quanto custa e quais Ford a Netcar tem prontos pra rodar agora em Esteio."
       },
       {
         "type": "h2",
-        "text": "Por que o Ford é uma boa escolha de seminovo"
+        "text": "Os Ford que separamos pra você"
       },
       {
         "type": "p",
-        "text": "O Ford é uma das marcas mais procuradas por quem compra usado no Rio Grande do Sul: peças acessíveis, rede de assistência ampla e boa revenda. Na Netcar, em Esteio, costuma ter saída rápida."
+        "text": "Em vez de teoria, comece pelo que existe de verdade no pátio. Estes Ford estão revisados e prontos — clique pra ver fotos, ficha e preço atualizado:"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Ford Territory Titanium Turbo",
+            "ano": "2023/2024",
+            "km": "30.000 km",
+            "preco": "R$ 172.900,00",
+            "cambio": "Automatico",
+            "combustivel": "GASOLINA",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-territory-titanium-turbo-2024-JCL-xx69-azul.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20042026TERRITORY%20JCL9E69CAPA.png"
+          },
+          {
+            "modelo": "Ford Ka Se Plus",
+            "ano": "2020/2021",
+            "km": "106.000 km",
+            "preco": "R$ 57.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-ka-se-plus-2021-JAF-xx81-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/17032026KA%20SE%20PLUS%20JAF1G81CAPA.png"
+          },
+          {
+            "modelo": "Ford Ecosport Se",
+            "ano": "2018/2019",
+            "km": "112.700 km",
+            "preco": "R$ 72.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-ecosport-se-2019-IYP-xx15-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/08052026ECOSPORT%20SE%20IYP2F15CAPA.png"
+          }
+        ]
       },
       {
         "type": "h2",
-        "text": "O que verificar antes de comprar um Ford usado"
+        "text": "Na hora de avaliar, olhe isto"
       },
       {
         "type": "ul",
         "items": [
-          "Histórico de manutenção e procedência",
-          "Estado de motor, câmbio e suspensão (peça o laudo)",
-          "Quilometragem compatível com o ano",
-          "Documentação em dia, sem restrição",
-          "Sinais de batida na lataria e alinhamento da pintura"
+          "Estado real de motor e câmbio (test drive ajuda)",
+          "Pneus, freios e itens de segurança funcionando",
+          "Histórico de revisões e número de donos",
+          "Procedência e documentação sem pendência"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Vários dos nossos Ford chegam com selos como Baixa KM, Eleito Melhor Compra — sinal de carro bem cuidado e escolhido a dedo pela Fábrica de Valor."
       },
       {
         "type": "h2",
@@ -99,23 +424,37 @@
       },
       {
         "type": "p",
-        "text": "O valor depende de modelo, ano e versão. No estoque atual da Netcar os preços vão de R$ 36.900 a R$ 209.900 entre todas as marcas. Veja os Ford disponíveis na página da marca."
+        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Ford costumam ter saída rápida, então vale conferir o preço do dia."
       },
       {
         "type": "h2",
-        "text": "Financiamento e troca"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "Dá para financiar o Ford em até 60x com simulação na hora e usar seu carro como entrada na troca — inclusive financiado, mediante avaliação. Simule antes de visitar."
+        "text": "Financiar não precisa ser um bicho de sete cabeças. Na prática, funciona assim:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Um Ford usado vale a pena quando você compra com procedência, revisão e condições claras. Veja os Ford na Netcar e fale com um consultor pelo WhatsApp."
+        "text": "No fim, o bom Ford não é o mais barato do anúncio: é o que tem histórico, revisão e respaldo. Na Netcar você encontra os dois. Confira o estoque de Ford."
       }
     ],
     "ctaLabel": "Ver Ford no estoque",
@@ -124,13 +463,13 @@
   {
     "slug": "quanto-custa-seminovo-esteio-2026",
     "title": "Quanto custa um seminovo em Esteio em 2026?",
-    "description": "Faixas de preço reais de seminovos em Esteio: do carro de entrada ao SUV. Veja quanto custa e como financiar na Netcar.",
+    "description": "Faixas de preço reais de seminovos em Esteio: do carro de entrada ao SUV. Veja quanto custa, exemplos do estoque e como financiar na Netcar.",
     "publishedAt": "2026-06-23",
     "readMinutes": 5,
     "sections": [
       {
         "type": "p",
-        "text": "\"Quanto custa um seminovo?\" é a primeira pergunta de quem vai trocar de carro. Dá para ter boa referência olhando o estoque real de uma revenda da região."
+        "text": "\"Quanto custa um seminovo?\" é a primeira pergunta de quem vai trocar de carro. A melhor referência não é tabela genérica — é o estoque real de uma loja da região."
       },
       {
         "type": "h2",
@@ -142,27 +481,83 @@
       },
       {
         "type": "h2",
+        "text": "Direto da vitrine da Netcar"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Hyundai Creta Limited Turbo",
+            "ano": "2025/2026",
+            "km": "2.700 km",
+            "preco": "R$ 151.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-creta-limited-turbo-2026-TQW-xx90-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04062026CRETA%20LIMITED%20TQW0J90CAPA.png"
+          },
+          {
+            "modelo": "Chevrolet Tracker Rs Turbo",
+            "ano": "2025/2026",
+            "km": "3.500 km",
+            "preco": "R$ 155.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tracker-rs-turbo-2026-TQY-xx35-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026TRACKER%20RS%20TQY3H35CAPA.png"
+          },
+          {
+            "modelo": "Volkswagen Tera High Turbo",
+            "ano": "2025/2026",
+            "km": "6.700 km",
+            "preco": "R$ 137.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tera-high-turbo-2026-TQQ-xx21-prata.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026tera%20TQQ7G21CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
         "text": "O que faz o preço variar"
       },
       {
         "type": "p",
-        "text": "Ano e quilometragem pesam, mas procedência, histórico de manutenção, número de donos e a preparação do veículo influenciam o valor — e o risco da compra."
+        "text": "Ano e quilometragem pesam, mas procedência, histórico de manutenção, número de donos e a preparação do veículo influenciam tanto o valor quanto o risco da compra."
       },
       {
         "type": "h2",
-        "text": "Vale a pena financiar?"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "Com financiamento em até 60x, dá para sair com o carro pagando parcela que cabe no orçamento. Simule antes de visitar para já saber a faixa viável."
+        "text": "Financiar não precisa ser um bicho de sete cabeças. Na prática, funciona assim:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Há opção para cada orçamento. Veja o estoque completo da Netcar com preços atualizados e fale com um consultor para simular."
+        "text": "Há opção para cada orçamento. Veja o estoque completo da Netcar com preços atualizados e fale com um consultor para simular a parcela."
       }
     ],
     "ctaLabel": "Ver estoque com preços",
@@ -171,13 +566,13 @@
   {
     "slug": "melhor-primeiro-carro-seminovo-esteio",
     "title": "Qual o melhor primeiro carro seminovo para começar?",
-    "description": "Guia para o primeiro carro: modelos econômicos, baratos de manter e seguros para começar. Opções de seminovo na Netcar, em Esteio/RS.",
+    "description": "Guia para o primeiro carro: modelos econômicos, baratos de manter e seguros. Veja opções de entrada no estoque da Netcar, em Esteio/RS.",
     "publishedAt": "2026-06-23",
     "readMinutes": 5,
     "sections": [
       {
         "type": "p",
-        "text": "O primeiro carro precisa ser econômico, barato de manter e fácil de revender. Veja como escolher um bom seminovo para começar."
+        "text": "O primeiro carro precisa ser econômico, barato de manter e fácil de revender. Veja como escolher um bom seminovo para começar — sem comprometer o orçamento."
       },
       {
         "type": "h2",
@@ -194,6 +589,48 @@
       },
       {
         "type": "h2",
+        "text": "No nosso pátio agora"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Fiat Mobi Like",
+            "ano": "2020",
+            "km": "77.000 km",
+            "preco": "R$ 51.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-mobi-like-2020-JAF-xx60-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/23032026mobi%20like%20JAF4F60CAPA.png"
+          },
+          {
+            "modelo": "Kia Picanto Ex",
+            "ano": "2012",
+            "km": "80.000 km",
+            "preco": "R$ 49.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Manual Proprietário e Chave Reserva",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-picanto-ex-2012-ISV-xx76-vermelha.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/18062026picanto%20ex%20ISV8276CAPA.png"
+          },
+          {
+            "modelo": "Renault Sandero Expression",
+            "ano": "2013/2014",
+            "km": "88.409 km",
+            "preco": "R$ 36.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-sandero-expression-2014-IUN-xx29-bege.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
         "text": "Hatch é a melhor porta de entrada"
       },
       {
@@ -202,19 +639,33 @@
       },
       {
         "type": "h2",
-        "text": "Financiamento para o primeiro carro"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "Com entrada e prazo ajustados, a parcela cabe no orçamento de quem está começando. Simule antes de escolher."
+        "text": "A parte do dinheiro costuma travar a decisão — então aqui vai sem rodeio. As condições na Netcar:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "O melhor primeiro carro é o econômico e revisado. Veja as opções de entrada no estoque da Netcar."
+        "text": "O melhor primeiro carro é o econômico e revisado, com parcela que cabe no bolso. Veja as opções de entrada no estoque da Netcar."
       }
     ],
     "ctaLabel": "Ver estoque",
@@ -223,35 +674,81 @@
   {
     "slug": "hyundai-usado-em-esteio-vale-a-pena-2026",
     "title": "Hyundai usado em Esteio vale a pena em 2026?",
-    "description": "Guia para quem procura Hyundai seminovo em Esteio e região: modelos, o que verificar, faixas de preço e financiamento. Estoque real na Netcar.",
+    "description": "Guia direto para quem procura Hyundai seminovo em Esteio e região: o que olhar, faixas de preço, financiamento e os Hyundai disponíveis agora na Netcar.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Se você procura um Hyundai usado na região metropolitana de Porto Alegre, a oferta é grande — e a qualidade varia muito. Este guia ajuda a escolher um Hyundai seminovo com procedência, sem pagar a mais."
+        "text": "O Hyundai é um dos carros que mais saem por aqui — e justamente por isso aparece muito anúncio duvidoso. Veja como escolher um Hyundai seminovo sem cair em furada."
       },
       {
         "type": "h2",
-        "text": "Por que o Hyundai é uma boa escolha de seminovo"
+        "text": "Por que o Hyundai é uma aposta segura no usado"
       },
       {
         "type": "p",
-        "text": "O Hyundai é uma das marcas mais procuradas por quem compra usado no Rio Grande do Sul: peças acessíveis, rede de assistência ampla e boa revenda. Na Netcar, em Esteio, costuma ter saída rápida."
+        "text": "Peças acessíveis, rede de assistência ampla e boa revenda fazem do Hyundai um dos preferidos de quem compra seminovo no Rio Grande do Sul. Na prática, isso significa menos surpresa no bolso e mais facilidade na hora de vender depois."
       },
       {
         "type": "h2",
-        "text": "O que verificar antes de comprar um Hyundai usado"
+        "text": "Direto da vitrine da Netcar"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Hyundai Creta Limited Turbo",
+            "ano": "2025/2026",
+            "km": "2.700 km",
+            "preco": "R$ 151.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-creta-limited-turbo-2026-TQW-xx90-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04062026CRETA%20LIMITED%20TQW0J90CAPA.png"
+          },
+          {
+            "modelo": "Hyundai Tucson Turbo Gls",
+            "ano": "2019/2020",
+            "km": "60.328 km",
+            "preco": "R$ 109.900,00",
+            "cambio": "Automatico",
+            "combustivel": "GASOLINA",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tucson-turbo-gls-2020-IZX-xx27-prata.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/19062026TUCSON%20IZX9G27CAPA.png"
+          },
+          {
+            "modelo": "Hyundai Creta Action",
+            "ano": "2021",
+            "km": "87.500 km",
+            "preco": "R$ 92.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-creta-action-2021-JAQ-xx37-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/12032026CRETA%20ACTION%20JAQ5F37CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que conferir antes de fechar"
       },
       {
         "type": "ul",
         "items": [
-          "Histórico de manutenção e procedência",
-          "Estado de motor, câmbio e suspensão (peça o laudo)",
-          "Quilometragem compatível com o ano",
+          "Histórico de manutenção e procedência (peça o laudo)",
+          "Motor, câmbio e suspensão sem ruído ou vazamento",
+          "Quilometragem coerente com o ano",
           "Documentação em dia, sem restrição",
-          "Sinais de batida na lataria e alinhamento da pintura"
+          "Lataria e pintura sem sinal de batida mal reparada"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Vários dos nossos Hyundai chegam com selos como Baixa KM, Eleito Melhor Compra — sinal de carro bem cuidado e escolhido a dedo pela Fábrica de Valor."
       },
       {
         "type": "h2",
@@ -259,23 +756,37 @@
       },
       {
         "type": "p",
-        "text": "O valor depende de modelo, ano e versão. No estoque atual da Netcar os preços vão de R$ 36.900 a R$ 209.900 entre todas as marcas. Veja os Hyundai disponíveis na página da marca."
+        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Hyundai costumam ter saída rápida, então vale conferir o preço do dia."
       },
       {
         "type": "h2",
-        "text": "Financiamento e troca"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "Dá para financiar o Hyundai em até 60x com simulação na hora e usar seu carro como entrada na troca — inclusive financiado, mediante avaliação. Simule antes de visitar."
+        "text": "Antes de escolher, vale entender como fica a conta. Na Netcar você simula pelo WhatsApp e já chega à loja sabendo a parcela:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Um Hyundai usado vale a pena quando você compra com procedência, revisão e condições claras. Veja os Hyundai na Netcar e fale com um consultor pelo WhatsApp."
+        "text": "Um Hyundai usado vale a pena quando vem com procedência, revisão e condições claras — e é exatamente assim que ele sai da Netcar. Veja os Hyundai disponíveis e fale com um consultor."
       }
     ],
     "ctaLabel": "Ver Hyundai no estoque",
@@ -284,35 +795,81 @@
   {
     "slug": "jeep-usado-em-esteio-vale-a-pena-2026",
     "title": "Jeep usado em Esteio vale a pena em 2026?",
-    "description": "Guia para quem procura Jeep seminovo em Esteio e região: modelos, o que verificar, faixas de preço e financiamento. Estoque real na Netcar.",
+    "description": "Guia direto para quem procura Jeep seminovo em Esteio e região: o que olhar, faixas de preço, financiamento e os Jeep disponíveis agora na Netcar.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Se você procura um Jeep usado na região metropolitana de Porto Alegre, a oferta é grande — e a qualidade varia muito. Este guia ajuda a escolher um Jeep seminovo com procedência, sem pagar a mais."
+        "text": "Se o Jeep está na sua lista, este texto é pra você: o que checar, quanto custa e quais Jeep a Netcar tem prontos pra rodar agora em Esteio."
       },
       {
         "type": "h2",
-        "text": "Por que o Jeep é uma boa escolha de seminovo"
+        "text": "Por que o Jeep é uma aposta segura no usado"
       },
       {
         "type": "p",
-        "text": "O Jeep é uma das marcas mais procuradas por quem compra usado no Rio Grande do Sul: peças acessíveis, rede de assistência ampla e boa revenda. Na Netcar, em Esteio, costuma ter saída rápida."
+        "text": "Peças acessíveis, rede de assistência ampla e boa revenda fazem do Jeep um dos preferidos de quem compra seminovo no Rio Grande do Sul. Na prática, isso significa menos surpresa no bolso e mais facilidade na hora de vender depois."
       },
       {
         "type": "h2",
-        "text": "O que verificar antes de comprar um Jeep usado"
+        "text": "Direto da vitrine da Netcar"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Jeep Commander Overland Turbo",
+            "ano": "2023",
+            "km": "28.500 km",
+            "preco": "R$ 178.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-commander-overland-turbo-2023-JBZ-xx68-prata.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/05062026COMMANDER%20JBZ3F68CAPA.png"
+          },
+          {
+            "modelo": "Jeep Compass Serie S T270 Turbo",
+            "ano": "2024/2025",
+            "km": "33.000 km",
+            "preco": "R$ 177.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-compass-serie-s-t270-turbo-2025-JCQ-xx63-branca.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/12062026compass%20series%20s%20JCQ7J63CAPA.png"
+          },
+          {
+            "modelo": "Jeep Compass Limited T270 Turbo",
+            "ano": "2023",
+            "km": "54.000 km",
+            "preco": "R$ 149.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-compass-limited-t270-turbo-2023-JBV-xx36-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/17032026COMPASS%20LIMITED%20JBV0G36CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que conferir antes de fechar"
       },
       {
         "type": "ul",
         "items": [
-          "Histórico de manutenção e procedência",
-          "Estado de motor, câmbio e suspensão (peça o laudo)",
-          "Quilometragem compatível com o ano",
+          "Histórico de manutenção e procedência (peça o laudo)",
+          "Motor, câmbio e suspensão sem ruído ou vazamento",
+          "Quilometragem coerente com o ano",
           "Documentação em dia, sem restrição",
-          "Sinais de batida na lataria e alinhamento da pintura"
+          "Lataria e pintura sem sinal de batida mal reparada"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Vários dos nossos Jeep chegam com selos como Baixa KM — sinal de carro bem cuidado e escolhido a dedo pela Fábrica de Valor."
       },
       {
         "type": "h2",
@@ -320,23 +877,37 @@
       },
       {
         "type": "p",
-        "text": "O valor depende de modelo, ano e versão. No estoque atual da Netcar os preços vão de R$ 36.900 a R$ 209.900 entre todas as marcas. Veja os Jeep disponíveis na página da marca."
+        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Jeep costumam ter saída rápida, então vale conferir o preço do dia."
       },
       {
         "type": "h2",
-        "text": "Financiamento e troca"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "Dá para financiar o Jeep em até 60x com simulação na hora e usar seu carro como entrada na troca — inclusive financiado, mediante avaliação. Simule antes de visitar."
+        "text": "A parte do dinheiro costuma travar a decisão — então aqui vai sem rodeio. As condições na Netcar:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Um Jeep usado vale a pena quando você compra com procedência, revisão e condições claras. Veja os Jeep na Netcar e fale com um consultor pelo WhatsApp."
+        "text": "Um Jeep usado vale a pena quando vem com procedência, revisão e condições claras — e é exatamente assim que ele sai da Netcar. Veja os Jeep disponíveis e fale com um consultor."
       }
     ],
     "ctaLabel": "Ver Jeep no estoque",
@@ -344,36 +915,77 @@
   },
   {
     "slug": "chery-usado-em-esteio-vale-a-pena-2026",
-    "title": "Chery usado em Esteio vale a pena em 2026?",
-    "description": "Guia para quem procura Chery seminovo em Esteio e região: modelos, o que verificar, faixas de preço e financiamento. Estoque real na Netcar.",
+    "title": "Comprar Chery seminovo em Esteio: o que pesar em 2026",
+    "description": "Guia direto para quem procura Chery seminovo em Esteio e região: o que olhar, faixas de preço, financiamento e os Chery disponíveis agora na Netcar.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Se você procura um Chery usado na região metropolitana de Porto Alegre, a oferta é grande — e a qualidade varia muito. Este guia ajuda a escolher um Chery seminovo com procedência, sem pagar a mais."
+        "text": "O Chery é um dos carros que mais saem por aqui — e justamente por isso aparece muito anúncio duvidoso. Veja como escolher um Chery seminovo sem cair em furada."
       },
       {
         "type": "h2",
-        "text": "Por que o Chery é uma boa escolha de seminovo"
+        "text": "Os Chery que separamos pra você"
       },
       {
         "type": "p",
-        "text": "O Chery é uma das marcas mais procuradas por quem compra usado no Rio Grande do Sul: peças acessíveis, rede de assistência ampla e boa revenda. Na Netcar, em Esteio, costuma ter saída rápida."
+        "text": "Em vez de teoria, comece pelo que existe de verdade no pátio. Estes Chery estão revisados e prontos — clique pra ver fotos, ficha e preço atualizado:"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Chery Tiggo 7 Pro Max Drive Turbo",
+            "ano": "2025/2026",
+            "km": "7.600 km",
+            "preco": "R$ 165.900,00",
+            "cambio": "Automatico",
+            "combustivel": "GASOLINA",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tiggo-7-pro-max-drive-turbo-2026-TQO-xx19-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+          },
+          {
+            "modelo": "Chery Tiggo 7 Sport Turbo",
+            "ano": "2024/2025",
+            "km": "11.900 km",
+            "preco": "R$ 135.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tiggo-7-sport-turbo-2025-JCZ-xx98-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/11062026TIGGO%207%20PRO%20JCZ4C98CAPA.png"
+          },
+          {
+            "modelo": "Chery Tiggo 5x Sport Turbo",
+            "ano": "2023/2024",
+            "km": "28.000 km",
+            "preco": "R$ 114.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tiggo-5x-sport-turbo-2024-JCA-xx04-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15062026tiggo%205x%20JCA3I04CAPA.png"
+          }
+        ]
       },
       {
         "type": "h2",
-        "text": "O que verificar antes de comprar um Chery usado"
+        "text": "Na hora de avaliar, olhe isto"
       },
       {
         "type": "ul",
         "items": [
-          "Histórico de manutenção e procedência",
-          "Estado de motor, câmbio e suspensão (peça o laudo)",
-          "Quilometragem compatível com o ano",
-          "Documentação em dia, sem restrição",
-          "Sinais de batida na lataria e alinhamento da pintura"
+          "Estado real de motor e câmbio (test drive ajuda)",
+          "Pneus, freios e itens de segurança funcionando",
+          "Histórico de revisões e número de donos",
+          "Procedência e documentação sem pendência"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Vários dos nossos Chery chegam com selos como Baixa KM — sinal de carro bem cuidado e escolhido a dedo pela Fábrica de Valor."
       },
       {
         "type": "h2",
@@ -381,23 +993,37 @@
       },
       {
         "type": "p",
-        "text": "O valor depende de modelo, ano e versão. No estoque atual da Netcar os preços vão de R$ 36.900 a R$ 209.900 entre todas as marcas. Veja os Chery disponíveis na página da marca."
+        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Chery costumam ter saída rápida, então vale conferir o preço do dia."
       },
       {
         "type": "h2",
-        "text": "Financiamento e troca"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "Dá para financiar o Chery em até 60x com simulação na hora e usar seu carro como entrada na troca — inclusive financiado, mediante avaliação. Simule antes de visitar."
+        "text": "Antes de escolher, vale entender como fica a conta. Na Netcar você simula pelo WhatsApp e já chega à loja sabendo a parcela:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Um Chery usado vale a pena quando você compra com procedência, revisão e condições claras. Veja os Chery na Netcar e fale com um consultor pelo WhatsApp."
+        "text": "No fim, o bom Chery não é o mais barato do anúncio: é o que tem histórico, revisão e respaldo. Na Netcar você encontra os dois. Confira o estoque de Chery."
       }
     ],
     "ctaLabel": "Ver Chery no estoque",
@@ -406,35 +1032,81 @@
   {
     "slug": "chevrolet-usado-em-esteio-vale-a-pena-2026",
     "title": "Chevrolet usado em Esteio vale a pena em 2026?",
-    "description": "Guia para quem procura Chevrolet seminovo em Esteio e região: modelos, o que verificar, faixas de preço e financiamento. Estoque real na Netcar.",
+    "description": "Guia direto para quem procura Chevrolet seminovo em Esteio e região: o que olhar, faixas de preço, financiamento e os Chevrolet disponíveis agora na Netcar.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Se você procura um Chevrolet usado na região metropolitana de Porto Alegre, a oferta é grande — e a qualidade varia muito. Este guia ajuda a escolher um Chevrolet seminovo com procedência, sem pagar a mais."
+        "text": "Procurar um Chevrolet usado na região de Porto Alegre é fácil; achar um Chevrolet com procedência e preço justo é que separa o bom negócio da dor de cabeça. Esse guia vai direto ao ponto."
       },
       {
         "type": "h2",
-        "text": "Por que o Chevrolet é uma boa escolha de seminovo"
+        "text": "Por que o Chevrolet é uma aposta segura no usado"
       },
       {
         "type": "p",
-        "text": "O Chevrolet é uma das marcas mais procuradas por quem compra usado no Rio Grande do Sul: peças acessíveis, rede de assistência ampla e boa revenda. Na Netcar, em Esteio, costuma ter saída rápida."
+        "text": "Peças acessíveis, rede de assistência ampla e boa revenda fazem do Chevrolet um dos preferidos de quem compra seminovo no Rio Grande do Sul. Na prática, isso significa menos surpresa no bolso e mais facilidade na hora de vender depois."
       },
       {
         "type": "h2",
-        "text": "O que verificar antes de comprar um Chevrolet usado"
+        "text": "Opções reais no estoque hoje"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Chevrolet Tracker Rs Turbo",
+            "ano": "2025/2026",
+            "km": "3.500 km",
+            "preco": "R$ 155.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tracker-rs-turbo-2026-TQY-xx35-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026TRACKER%20RS%20TQY3H35CAPA.png"
+          },
+          {
+            "modelo": "Chevrolet Onix Premier Plus Turbo",
+            "ano": "2023/2024",
+            "km": "39.943 km",
+            "preco": "R$ 94.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-onix-premier-plus-turbo-2024-JCI-xx11-branca.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/23062026ONIX%20PREMIERE%20PLUS%20JCI3C11CAPA.png"
+          },
+          {
+            "modelo": "Chevrolet Tracker Premier Turbo",
+            "ano": "2022/2023",
+            "km": "68.900 km",
+            "preco": "R$ 113.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tracker-premier-turbo-2023-JBL-xx15-azul.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/17042026TRACKER%20PREMIERE2%20JBL4F15CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que conferir antes de fechar"
       },
       {
         "type": "ul",
         "items": [
-          "Histórico de manutenção e procedência",
-          "Estado de motor, câmbio e suspensão (peça o laudo)",
-          "Quilometragem compatível com o ano",
+          "Histórico de manutenção e procedência (peça o laudo)",
+          "Motor, câmbio e suspensão sem ruído ou vazamento",
+          "Quilometragem coerente com o ano",
           "Documentação em dia, sem restrição",
-          "Sinais de batida na lataria e alinhamento da pintura"
+          "Lataria e pintura sem sinal de batida mal reparada"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Vários dos nossos Chevrolet chegam com selos como Baixa KM, Eleito Melhor Compra — sinal de carro bem cuidado e escolhido a dedo pela Fábrica de Valor."
       },
       {
         "type": "h2",
@@ -442,121 +1114,120 @@
       },
       {
         "type": "p",
-        "text": "O valor depende de modelo, ano e versão. No estoque atual da Netcar os preços vão de R$ 36.900 a R$ 209.900 entre todas as marcas. Veja os Chevrolet disponíveis na página da marca."
+        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Chevrolet costumam ter saída rápida, então vale conferir o preço do dia."
       },
       {
         "type": "h2",
-        "text": "Financiamento e troca"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "Dá para financiar o Chevrolet em até 60x com simulação na hora e usar seu carro como entrada na troca — inclusive financiado, mediante avaliação. Simule antes de visitar."
+        "text": "Antes de escolher, vale entender como fica a conta. Na Netcar você simula pelo WhatsApp e já chega à loja sabendo a parcela:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Um Chevrolet usado vale a pena quando você compra com procedência, revisão e condições claras. Veja os Chevrolet na Netcar e fale com um consultor pelo WhatsApp."
+        "text": "Um Chevrolet usado vale a pena quando vem com procedência, revisão e condições claras — e é exatamente assim que ele sai da Netcar. Veja os Chevrolet disponíveis e fale com um consultor."
       }
     ],
     "ctaLabel": "Ver Chevrolet no estoque",
     "ctaHref": "/comprar-chevrolet"
   },
   {
-    "slug": "honda-usado-em-esteio-vale-a-pena-2026",
-    "title": "Honda usado em Esteio vale a pena em 2026?",
-    "description": "Guia para quem procura Honda seminovo em Esteio e região: modelos, o que verificar, faixas de preço e financiamento. Estoque real na Netcar.",
-    "publishedAt": "2026-06-23",
-    "readMinutes": 6,
-    "sections": [
-      {
-        "type": "p",
-        "text": "Se você procura um Honda usado na região metropolitana de Porto Alegre, a oferta é grande — e a qualidade varia muito. Este guia ajuda a escolher um Honda seminovo com procedência, sem pagar a mais."
-      },
-      {
-        "type": "h2",
-        "text": "Por que o Honda é uma boa escolha de seminovo"
-      },
-      {
-        "type": "p",
-        "text": "O Honda é uma das marcas mais procuradas por quem compra usado no Rio Grande do Sul: peças acessíveis, rede de assistência ampla e boa revenda. Na Netcar, em Esteio, costuma ter saída rápida."
-      },
-      {
-        "type": "h2",
-        "text": "O que verificar antes de comprar um Honda usado"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Histórico de manutenção e procedência",
-          "Estado de motor, câmbio e suspensão (peça o laudo)",
-          "Quilometragem compatível com o ano",
-          "Documentação em dia, sem restrição",
-          "Sinais de batida na lataria e alinhamento da pintura"
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "Quanto custa um Honda seminovo hoje"
-      },
-      {
-        "type": "p",
-        "text": "O valor depende de modelo, ano e versão. No estoque atual da Netcar os preços vão de R$ 36.900 a R$ 209.900 entre todas as marcas. Veja os Honda disponíveis na página da marca."
-      },
-      {
-        "type": "h2",
-        "text": "Financiamento e troca"
-      },
-      {
-        "type": "p",
-        "text": "Dá para financiar o Honda em até 60x com simulação na hora e usar seu carro como entrada na troca — inclusive financiado, mediante avaliação. Simule antes de visitar."
-      },
-      {
-        "type": "h2",
-        "text": "Conclusão"
-      },
-      {
-        "type": "p",
-        "text": "Um Honda usado vale a pena quando você compra com procedência, revisão e condições claras. Veja os Honda na Netcar e fale com um consultor pelo WhatsApp."
-      }
-    ],
-    "ctaLabel": "Ver Honda no estoque",
-    "ctaHref": "/comprar-honda"
-  },
-  {
     "slug": "nissan-usado-em-esteio-vale-a-pena-2026",
     "title": "Nissan usado em Esteio vale a pena em 2026?",
-    "description": "Guia para quem procura Nissan seminovo em Esteio e região: modelos, o que verificar, faixas de preço e financiamento. Estoque real na Netcar.",
+    "description": "Guia direto para quem procura Nissan seminovo em Esteio e região: o que olhar, faixas de preço, financiamento e os Nissan disponíveis agora na Netcar.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Se você procura um Nissan usado na região metropolitana de Porto Alegre, a oferta é grande — e a qualidade varia muito. Este guia ajuda a escolher um Nissan seminovo com procedência, sem pagar a mais."
+        "text": "O Nissan é um dos carros que mais saem por aqui — e justamente por isso aparece muito anúncio duvidoso. Veja como escolher um Nissan seminovo sem cair em furada."
       },
       {
         "type": "h2",
-        "text": "Por que o Nissan é uma boa escolha de seminovo"
+        "text": "Por que o Nissan é uma aposta segura no usado"
       },
       {
         "type": "p",
-        "text": "O Nissan é uma das marcas mais procuradas por quem compra usado no Rio Grande do Sul: peças acessíveis, rede de assistência ampla e boa revenda. Na Netcar, em Esteio, costuma ter saída rápida."
+        "text": "Peças acessíveis, rede de assistência ampla e boa revenda fazem do Nissan um dos preferidos de quem compra seminovo no Rio Grande do Sul. Na prática, isso significa menos surpresa no bolso e mais facilidade na hora de vender depois."
       },
       {
         "type": "h2",
-        "text": "O que verificar antes de comprar um Nissan usado"
+        "text": "Direto da vitrine da Netcar"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Nissan Kicks Sense Turbo",
+            "ano": "2025/2026",
+            "km": "7.800 km",
+            "preco": "R$ 149.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-kicks-sense-turbo-2026-TQU-xx34-branca.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/18062026KICKS%20SENSE%20TQU9E34CAPA.png"
+          },
+          {
+            "modelo": "Nissan Versa Advance",
+            "ano": "2023/2024",
+            "km": "64.889 km",
+            "preco": "R$ 99.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-versa-advance-2024-JCL-xx90-branca.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+          },
+          {
+            "modelo": "Nissan Versa Exclusive",
+            "ano": "2023/2024",
+            "km": "65.700 km",
+            "preco": "R$ 109.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-versa-exclusive-2024-JCG-xx72-branca.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026versa%20JCG6B72CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que conferir antes de fechar"
       },
       {
         "type": "ul",
         "items": [
-          "Histórico de manutenção e procedência",
-          "Estado de motor, câmbio e suspensão (peça o laudo)",
-          "Quilometragem compatível com o ano",
+          "Histórico de manutenção e procedência (peça o laudo)",
+          "Motor, câmbio e suspensão sem ruído ou vazamento",
+          "Quilometragem coerente com o ano",
           "Documentação em dia, sem restrição",
-          "Sinais de batida na lataria e alinhamento da pintura"
+          "Lataria e pintura sem sinal de batida mal reparada"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Vários dos nossos Nissan chegam com selos como Baixa KM, Eleito Melhor Compra — sinal de carro bem cuidado e escolhido a dedo pela Fábrica de Valor."
       },
       {
         "type": "h2",
@@ -564,27 +1235,162 @@
       },
       {
         "type": "p",
-        "text": "O valor depende de modelo, ano e versão. No estoque atual da Netcar os preços vão de R$ 36.900 a R$ 209.900 entre todas as marcas. Veja os Nissan disponíveis na página da marca."
+        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Nissan costumam ter saída rápida, então vale conferir o preço do dia."
       },
       {
         "type": "h2",
-        "text": "Financiamento e troca"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "Dá para financiar o Nissan em até 60x com simulação na hora e usar seu carro como entrada na troca — inclusive financiado, mediante avaliação. Simule antes de visitar."
+        "text": "Financiar não precisa ser um bicho de sete cabeças. Na prática, funciona assim:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Um Nissan usado vale a pena quando você compra com procedência, revisão e condições claras. Veja os Nissan na Netcar e fale com um consultor pelo WhatsApp."
+        "text": "Um Nissan usado vale a pena quando vem com procedência, revisão e condições claras — e é exatamente assim que ele sai da Netcar. Veja os Nissan disponíveis e fale com um consultor."
       }
     ],
     "ctaLabel": "Ver Nissan no estoque",
     "ctaHref": "/comprar-nissan"
+  },
+  {
+    "slug": "honda-usado-em-esteio-vale-a-pena-2026",
+    "title": "Honda usado em Esteio vale a pena em 2026?",
+    "description": "Guia direto para quem procura Honda seminovo em Esteio e região: o que olhar, faixas de preço, financiamento e os Honda disponíveis agora na Netcar.",
+    "publishedAt": "2026-06-23",
+    "readMinutes": 6,
+    "sections": [
+      {
+        "type": "p",
+        "text": "Procurar um Honda usado na região de Porto Alegre é fácil; achar um Honda com procedência e preço justo é que separa o bom negócio da dor de cabeça. Esse guia vai direto ao ponto."
+      },
+      {
+        "type": "h2",
+        "text": "Por que o Honda é uma aposta segura no usado"
+      },
+      {
+        "type": "p",
+        "text": "Peças acessíveis, rede de assistência ampla e boa revenda fazem do Honda um dos preferidos de quem compra seminovo no Rio Grande do Sul. Na prática, isso significa menos surpresa no bolso e mais facilidade na hora de vender depois."
+      },
+      {
+        "type": "h2",
+        "text": "Direto da vitrine da Netcar"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Honda City Exl",
+            "ano": "2022/2023",
+            "km": "53.000 km",
+            "preco": "R$ 109.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-city-exl-2023-JBP-xx03-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/10032026CITY%20EXL%20JBP5C03CAPA.png"
+          },
+          {
+            "modelo": "Honda Hrv Advance",
+            "ano": "2024",
+            "km": "59.000 km",
+            "preco": "R$ 159.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-hrv-advance-2024-JCN-xx74-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15062026HRV%20JCN8I74CAPA.png"
+          },
+          {
+            "modelo": "Honda Fit Ex",
+            "ano": "2018",
+            "km": "86.400 km",
+            "preco": "R$ 82.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-fit-ex-2018-IYP-xx15-prata.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026FIT%20EX%20IYP0215CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que conferir antes de fechar"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Histórico de manutenção e procedência (peça o laudo)",
+          "Motor, câmbio e suspensão sem ruído ou vazamento",
+          "Quilometragem coerente com o ano",
+          "Documentação em dia, sem restrição",
+          "Lataria e pintura sem sinal de batida mal reparada"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Vários dos nossos Honda chegam com selos como Baixa KM, Eleito Melhor Compra — sinal de carro bem cuidado e escolhido a dedo pela Fábrica de Valor."
+      },
+      {
+        "type": "h2",
+        "text": "Quanto custa um Honda seminovo hoje"
+      },
+      {
+        "type": "p",
+        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Honda costumam ter saída rápida, então vale conferir o preço do dia."
+      },
+      {
+        "type": "h2",
+        "text": "Como fica o financiamento"
+      },
+      {
+        "type": "p",
+        "text": "Financiar não precisa ser um bicho de sete cabeças. Na prática, funciona assim:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
+      },
+      {
+        "type": "h2",
+        "text": "Veredito"
+      },
+      {
+        "type": "p",
+        "text": "Um Honda usado vale a pena quando vem com procedência, revisão e condições claras — e é exatamente assim que ele sai da Netcar. Veja os Honda disponíveis e fale com um consultor."
+      }
+    ],
+    "ctaLabel": "Ver Honda no estoque",
+    "ctaHref": "/comprar-honda"
   },
   {
     "slug": "checklist-comprar-seminovo-o-que-verificar",
@@ -595,7 +1401,7 @@
     "sections": [
       {
         "type": "p",
-        "text": "Comprar seminovo de particular tem risco. Este checklist reúne os 10 itens para conferir antes de fechar negócio."
+        "text": "Comprar seminovo de particular tem risco real. Este checklist reúne os 10 itens que você precisa conferir antes de fechar negócio — e por que uma revenda preparada reduz a maior parte deles."
       },
       {
         "type": "h2",
@@ -604,7 +1410,7 @@
       {
         "type": "ul",
         "items": [
-          "Documento sem restrição/multas",
+          "Documento sem restrição e multas",
           "Histórico de donos e procedência",
           "Chassi batendo com o documento"
         ]
@@ -616,7 +1422,7 @@
       {
         "type": "ul",
         "items": [
-          "Motor sem ruído/vazamento",
+          "Motor sem ruído ou vazamento",
           "Câmbio engatando suave",
           "Suspensão sem barulho"
         ]
@@ -628,7 +1434,7 @@
       {
         "type": "ul",
         "items": [
-          "Lataria/pintura sem batida mal reparada",
+          "Lataria e pintura sem batida mal reparada",
           "Pneus e freios em bom estado",
           "Airbag, ABS e cintos funcionando",
           "Test drive em diferentes velocidades"
@@ -636,19 +1442,50 @@
       },
       {
         "type": "h2",
-        "text": "Por que revenda reduz risco"
+        "text": "Por que comprar de revenda reduz risco"
       },
       {
         "type": "p",
-        "text": "Numa revenda com preparação, o carro já passou por checklist técnico e há pós-venda — elimina boa parte das surpresas."
+        "text": "Na Netcar, todo seminovo passa pela Fábrica de Valor com mais de 60 itens verificados, laudo e pós-venda. Boa parte do checklist acima já vem resolvida."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "No nosso pátio agora"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Hyundai Creta Limited Turbo",
+            "ano": "2025/2026",
+            "km": "2.700 km",
+            "preco": "R$ 151.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-creta-limited-turbo-2026-TQW-xx90-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04062026CRETA%20LIMITED%20TQW0J90CAPA.png"
+          },
+          {
+            "modelo": "Chevrolet Tracker Rs Turbo",
+            "ano": "2025/2026",
+            "km": "3.500 km",
+            "preco": "R$ 155.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tracker-rs-turbo-2026-TQY-xx35-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026TRACKER%20RS%20TQY3H35CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Na Netcar, todo seminovo passa pela Fábrica de Valor com mais de 60 itens verificados. Veja o estoque revisado."
+        "text": "Carro revisado, documentação limpa e respaldo de loja: é isso que separa economia de prejuízo. Veja o estoque revisado da Netcar."
       }
     ],
     "ctaLabel": "Ver estoque revisado",
@@ -656,36 +1493,77 @@
   },
   {
     "slug": "volkswagen-usado-em-esteio-vale-a-pena-2026",
-    "title": "Volkswagen usado em Esteio vale a pena em 2026?",
-    "description": "Guia para quem procura Volkswagen seminovo em Esteio e região: modelos, o que verificar, faixas de preço e financiamento. Estoque real na Netcar.",
+    "title": "Comprar Volkswagen seminovo em Esteio: o que pesar em 2026",
+    "description": "Guia direto para quem procura Volkswagen seminovo em Esteio e região: o que olhar, faixas de preço, financiamento e os Volkswagen disponíveis agora na Netcar.",
     "publishedAt": "2026-06-15",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Se você procura um Volkswagen usado na região metropolitana de Porto Alegre, a oferta é grande — e a qualidade varia muito. Este guia ajuda a escolher um Volkswagen seminovo com procedência, sem pagar a mais."
+        "text": "Se o Volkswagen está na sua lista, este texto é pra você: o que checar, quanto custa e quais Volkswagen a Netcar tem prontos pra rodar agora em Esteio."
       },
       {
         "type": "h2",
-        "text": "Por que o Volkswagen é uma boa escolha de seminovo"
+        "text": "Os Volkswagen que separamos pra você"
       },
       {
         "type": "p",
-        "text": "O Volkswagen é uma das marcas mais procuradas por quem compra usado no Rio Grande do Sul: peças acessíveis, rede de assistência ampla e boa revenda. Na Netcar, em Esteio, costuma ter saída rápida."
+        "text": "Em vez de teoria, comece pelo que existe de verdade no pátio. Estes Volkswagen estão revisados e prontos — clique pra ver fotos, ficha e preço atualizado:"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Volkswagen Tera High Turbo",
+            "ano": "2025/2026",
+            "km": "6.700 km",
+            "preco": "R$ 137.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tera-high-turbo-2026-TQQ-xx21-prata.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026tera%20TQQ7G21CAPA.png"
+          },
+          {
+            "modelo": "Volkswagen Taos Highline Turbo",
+            "ano": "2023",
+            "km": "41.000 km",
+            "preco": "R$ 147.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Estepe Novo",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-taos-highline-turbo-2023-JCB-xx26-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026TAOS%20HIGHLINE%20JCB7H26CAPA.png"
+          },
+          {
+            "modelo": "Volkswagen Nivus Highline Turbo",
+            "ano": "2024",
+            "km": "50.000 km",
+            "preco": "R$ 121.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-nivus-highline-turbo-2024-JCV-xx24-preta.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/11052026NIVUS%20HIGHLINE%20JCV5E24CAPA.png"
+          }
+        ]
       },
       {
         "type": "h2",
-        "text": "O que verificar antes de comprar um Volkswagen usado"
+        "text": "Na hora de avaliar, olhe isto"
       },
       {
         "type": "ul",
         "items": [
-          "Histórico de manutenção e procedência",
-          "Estado de motor, câmbio e suspensão (peça o laudo)",
-          "Quilometragem compatível com o ano",
-          "Documentação em dia, sem restrição",
-          "Sinais de batida na lataria e alinhamento da pintura"
+          "Estado real de motor e câmbio (test drive ajuda)",
+          "Pneus, freios e itens de segurança funcionando",
+          "Histórico de revisões e número de donos",
+          "Procedência e documentação sem pendência"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Vários dos nossos Volkswagen chegam com selos como Baixa KM, Estepe Novo, Eleito Melhor Compra — sinal de carro bem cuidado e escolhido a dedo pela Fábrica de Valor."
       },
       {
         "type": "h2",
@@ -693,23 +1571,37 @@
       },
       {
         "type": "p",
-        "text": "O valor depende de modelo, ano e versão. No estoque atual da Netcar os preços vão de R$ 36.900 a R$ 209.900 entre todas as marcas. Veja os Volkswagen disponíveis na página da marca."
+        "text": "O valor varia por modelo, ano e versão. No estoque atual da Netcar os seminovos vão de R$ 36.900 a R$ 209.900 entre todas as marcas — e os Volkswagen costumam ter saída rápida, então vale conferir o preço do dia."
       },
       {
         "type": "h2",
-        "text": "Financiamento e troca"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "Dá para financiar o Volkswagen em até 60x com simulação na hora e usar seu carro como entrada na troca — inclusive financiado, mediante avaliação. Simule antes de visitar."
+        "text": "Antes de escolher, vale entender como fica a conta. Na Netcar você simula pelo WhatsApp e já chega à loja sabendo a parcela:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Um Volkswagen usado vale a pena quando você compra com procedência, revisão e condições claras. Veja os Volkswagen na Netcar e fale com um consultor pelo WhatsApp."
+        "text": "No fim, o bom Volkswagen não é o mais barato do anúncio: é o que tem histórico, revisão e respaldo. Na Netcar você encontra os dois. Confira o estoque de Volkswagen."
       }
     ],
     "ctaLabel": "Ver Volkswagen no estoque",
@@ -717,35 +1609,59 @@
   },
   {
     "slug": "melhor-suv-seminovo-esteio-2026",
-    "title": "Melhor suv seminovo para famílias em Esteio (2026)",
-    "description": "Como escolher um suv seminovo com bom custo-benefício em Esteio e região: espaço, consumo, manutenção e faixas de preço. Estoque real na Netcar.",
+    "title": "Como escolher um suv seminovo em Esteio sem errar (2026)",
+    "description": "Guia para escolher um suv seminovo com bom custo-benefício em Esteio e região: espaço, consumo, manutenção, faixas de preço e os suv disponíveis na Netcar.",
     "publishedAt": "2026-06-11",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "O suv é uma das categorias preferidas das famílias na região de Esteio. Se você quer espaço, conforto e bom valor de revenda, veja como escolher um suv seminovo sem errar."
+        "text": "Se você decidiu que o próximo carro vai ser um suv, falta a parte difícil: escolher o certo. Veja o que pesa de verdade num suv seminovo."
       },
       {
         "type": "h2",
-        "text": "Por que o suv é tão procurado"
+        "text": "Comece pelos suv que já temos"
       },
       {
         "type": "p",
-        "text": "O suv combina porta-malas, conforto de viagem e robustez no dia a dia. Na Netcar é uma das categorias que mais saem, com opções de várias marcas e faixas de preço."
+        "text": "Antes da teoria, veja o que está no pátio agora — revisado e com preço atualizado:"
       },
       {
-        "type": "h2",
-        "text": "O que olhar num suv usado"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Consumo real de combustível",
-          "Custo de manutenção e preço de peças",
-          "Estado de pneus, freios e suspensão",
-          "Histórico de revisões e procedência",
-          "Espaço interno e porta-malas para sua necessidade"
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Hyundai Creta Limited Turbo",
+            "ano": "2025/2026",
+            "km": "2.700 km",
+            "preco": "R$ 151.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-creta-limited-turbo-2026-TQW-xx90-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04062026CRETA%20LIMITED%20TQW0J90CAPA.png"
+          },
+          {
+            "modelo": "Chevrolet Tracker Rs Turbo",
+            "ano": "2025/2026",
+            "km": "3.500 km",
+            "preco": "R$ 155.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tracker-rs-turbo-2026-TQY-xx35-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026TRACKER%20RS%20TQY3H35CAPA.png"
+          },
+          {
+            "modelo": "Volkswagen Tera High Turbo",
+            "ano": "2025/2026",
+            "km": "6.700 km",
+            "preco": "R$ 137.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tera-high-turbo-2026-TQQ-xx21-prata.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026tera%20TQQ7G21CAPA.png"
+          }
         ]
       },
       {
@@ -754,7 +1670,7 @@
       },
       {
         "type": "p",
-        "text": "A maioria dos suv seminovos hoje é automática, o que valoriza na revenda e facilita no trânsito. O manual aparece em versões de entrada e sai um pouco mais barato."
+        "text": "A maioria dos suv seminovos hoje é automática, o que ajuda no trânsito e valoriza na revenda. O manual aparece em versões de entrada e sai um pouco mais barato."
       },
       {
         "type": "h2",
@@ -762,15 +1678,37 @@
       },
       {
         "type": "p",
-        "text": "No estoque atual os valores vão de R$ 36.900 a R$ 209.900. Veja os suv com preço atualizado e foto na página da categoria."
+        "text": "No estoque atual os valores vão de R$ 36.900 a R$ 209.900. A maior parte fica na faixa intermediária, onde costuma estar o melhor custo-benefício."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Como fica o financiamento"
       },
       {
         "type": "p",
-        "text": "O melhor suv é o que cabe no seu orçamento, tem procedência e foi revisado antes da venda. Veja os suv na Netcar e agende um test drive."
+        "text": "Antes de escolher, vale entender como fica a conta. Na Netcar você simula pelo WhatsApp e já chega à loja sabendo a parcela:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Financiamento em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Financiamento também pelo cartão de crédito em até 24x",
+          "Avaliamos seu usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tudo mediante análise de crédito. Simule com seus dados reais para receber a parcela exata antes de visitar a loja."
+      },
+      {
+        "type": "h2",
+        "text": "Veredito"
+      },
+      {
+        "type": "p",
+        "text": "O melhor suv é o que cabe no orçamento, tem procedência e foi revisado antes da venda. Veja os suv da Netcar e agende um test drive."
       }
     ],
     "ctaLabel": "Ver suv no estoque",
@@ -785,7 +1723,7 @@
     "sections": [
       {
         "type": "p",
-        "text": "Vender o usado sozinho para tentar tirar mais, ou dar na troca e resolver de uma vez? Veja a conta real de cada opção."
+        "text": "Vender o usado sozinho para tentar tirar mais, ou dar na troca e resolver de uma vez? Veja a conta real de cada caminho."
       },
       {
         "type": "h2",
@@ -793,7 +1731,7 @@
       },
       {
         "type": "p",
-        "text": "A venda particular pode render um pouco mais, mas custa tempo, anúncios e risco. A troca entrega praticidade e abate na hora do próximo carro."
+        "text": "A venda particular pode render um pouco mais, mas custa tempo, anúncios e risco. A troca entrega praticidade e abate na hora do próximo carro — e o valor pode entrar como parte da entrada."
       },
       {
         "type": "h2",
@@ -812,23 +1750,15 @@
       },
       {
         "type": "p",
-        "text": "Sim. A revenda calcula a quitação do saldo e o valor líquido entra como entrada no seminovo escolhido."
+        "text": "Sim. A revenda calcula a quitação do saldo e o valor líquido entra como parte do pagamento no seminovo escolhido."
       },
       {
         "type": "h2",
-        "text": "Quando a troca compensa"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Quando você valoriza tempo e segurança, ou já encontrou o próximo carro. Se a diferença de valor for pequena, a praticidade pesa mais."
-      },
-      {
-        "type": "h2",
-        "text": "Conclusão"
-      },
-      {
-        "type": "p",
-        "text": "Depende de quanto você valoriza tempo e tranquilidade. Avalie seu carro na Netcar sem compromisso."
+        "text": "Se você valoriza tempo e segurança — ou já achou o próximo carro — a troca compensa. Avalie seu usado na Netcar sem compromisso."
       }
     ],
     "ctaLabel": "Avaliar meu carro",
@@ -837,7 +1767,7 @@
   {
     "slug": "cambio-automatico-vale-a-pena-seminovo",
     "title": "Câmbio automático vale a pena num seminovo?",
-    "description": "Automático x manual num carro usado: consumo, manutenção, revenda e conforto. Entenda qual escolher na hora de comprar um seminovo.",
+    "description": "Automático x manual num carro usado: consumo, manutenção, revenda e conforto. Veja exemplos automáticos no estoque da Netcar.",
     "publishedAt": "2026-06-03",
     "readMinutes": 5,
     "sections": [
@@ -871,19 +1801,61 @@
       },
       {
         "type": "h2",
+        "text": "Direto da vitrine da Netcar"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Hyundai Creta Limited Turbo",
+            "ano": "2025/2026",
+            "km": "2.700 km",
+            "preco": "R$ 151.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-creta-limited-turbo-2026-TQW-xx90-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04062026CRETA%20LIMITED%20TQW0J90CAPA.png"
+          },
+          {
+            "modelo": "Chevrolet Tracker Rs Turbo",
+            "ano": "2025/2026",
+            "km": "3.500 km",
+            "preco": "R$ 155.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tracker-rs-turbo-2026-TQY-xx35-cinza.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026TRACKER%20RS%20TQY3H35CAPA.png"
+          },
+          {
+            "modelo": "Volkswagen Tera High Turbo",
+            "ano": "2025/2026",
+            "km": "6.700 km",
+            "preco": "R$ 137.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/detalhe-produto-tera-high-turbo-2026-TQQ-xx21-prata.html",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026tera%20TQQ7G21CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
         "text": "Manutenção: o ponto de atenção"
       },
       {
         "type": "p",
-        "text": "No usado, verifique o histórico do câmbio automático (trocas de óleo em dia). Um automático bem cuidado é tão confiável quanto o manual."
+        "text": "No usado, verifique o histórico do câmbio automático (trocas de óleo em dia). Um automático bem cuidado é tão confiável quanto o manual — e a preparação da loja ajuda a garantir isso."
       },
       {
         "type": "h2",
-        "text": "Conclusão"
+        "text": "Veredito"
       },
       {
         "type": "p",
-        "text": "Se você roda muito em cidade e pensa em revenda, o automático compensa. Veja os automáticos revisados na Netcar."
+        "text": "Se você roda muito em cidade e pensa na revenda, o automático compensa. Veja os automáticos revisados na Netcar."
       }
     ],
     "ctaLabel": "Ver automáticos",

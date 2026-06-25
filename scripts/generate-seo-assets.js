@@ -193,6 +193,19 @@ function renderSections(sections) {
       if (section.type === "ol" && section.items) {
         return `<ol>${section.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>`;
       }
+      if (section.type === "cars" && section.cars) {
+        return `<div class="blog-cars">${section.cars
+          .map((car) => {
+            const specs = [car.ano, car.km, car.cambio].filter(Boolean).map(escapeHtml).join(" &middot; ");
+            const img = car.img
+              ? `<img src="${escapeHtml(car.img)}" alt="${escapeHtml(car.modelo)}" loading="lazy" />`
+              : "";
+            const preco = car.preco ? `<strong>${escapeHtml(car.preco)}</strong>` : "";
+            const selo = car.destaque ? `<span class="selo">${escapeHtml(car.destaque)}</span>` : "";
+            return `<a class="blog-car" href="${escapeHtml(car.url)}">${img}<span class="blog-car__info"><b>${escapeHtml(car.modelo)}</b><small>${specs}</small>${preco}${selo}</span></a>`;
+          })
+          .join("")}</div>`;
+      }
       return "";
     })
     .join("\n");
@@ -222,6 +235,16 @@ function pageShell({ title, description, canonical, body, schemas = [] }) {
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:url" content="${canonical}" />
   <meta property="og:image" content="${SITE}/images/loja1.jpg" />${schemaTags}
+  <style>
+    .blog-cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin:24px 0}
+    .blog-car{display:block;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;background:#fff}
+    .blog-car img{display:block;width:100%;height:160px;object-fit:cover;background:#f3f4f6}
+    .blog-car__info{display:block;padding:12px}
+    .blog-car__info b{display:block;font-size:15px}
+    .blog-car__info small{display:block;color:#6b7280;margin:4px 0}
+    .blog-car__info strong{display:block;color:#b91c1c;font-size:17px}
+    .blog-car .selo{display:inline-block;margin-top:6px;font-size:11px;background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:999px}
+  </style>
 </head>
 <body>
   <header>
