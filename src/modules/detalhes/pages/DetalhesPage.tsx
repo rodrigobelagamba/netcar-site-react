@@ -28,6 +28,7 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 import { maskPlate } from "@/lib/slug";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
+import { VehicleUnavailableRedirect } from "@/components/VehicleUnavailableRedirect";
 import { parseGptContent, AccordionSection } from "@/lib/parseGptContent";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 
@@ -1207,21 +1208,12 @@ export function DetalhesPage() {
   }
 
   if (error || !vehicle) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="text-center">
-          <p className="text-fg mb-2">Veículo não encontrado</p>
-          <p className="text-muted-foreground text-sm mb-2">Slug recebido: {slug || "não fornecido"}</p>
-          <p className="text-muted-foreground text-sm mb-2">URL completa: {window.location.pathname}</p>
-          {error && (
-            <p className="text-red-500 text-sm mb-4">
-              Erro: {error instanceof Error ? error.message : String(error)}
-            </p>
-          )}
-          <button onClick={() => window.history.back()}>Voltar</button>
-        </div>
-      </div>
-    );
+    return <VehicleUnavailableRedirect />;
+  }
+
+  const isSold = !vehicle.price || vehicle.price <= 0;
+  if (isSold) {
+    return <VehicleUnavailableRedirect />;
   }
 
   // Badges
