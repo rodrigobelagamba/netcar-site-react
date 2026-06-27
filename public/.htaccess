@@ -121,9 +121,10 @@
   # Bridge social — PHP antes do React (paginação reviews/stories legado)
   RewriteRule ^embedsocial-bridge\.php$ - [L]
 
-  # Primeiro: verificar se é um arquivo ou diretório existente - servir diretamente
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
+  # Primeiro: servir só arquivos reais (-f).
+  # NÃO usar -d aqui: o docroot de produção ainda tem pastas legadas
+  # (seminovos/, veiculo/, etc.) que interceptavam a URL e mandavam para not-found.html.
+  RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
   
   # Segundo: não reescrever arquivos estáticos por extensão
@@ -173,6 +174,6 @@
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteRule ^veiculo/(.+)$ detalhe-veiculo.php?slug=$1 [L,QSA]
   
-  # Por último: redirecionar tudo para index.html (SPA routing)
-  RewriteRule ^ index.html [L]
+  # SPA React — index.php serve o shell (home ganha preload LCP via PHP)
+  RewriteRule ^ index.php [L]
 </IfModule>
