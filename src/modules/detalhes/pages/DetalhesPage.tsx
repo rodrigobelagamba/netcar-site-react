@@ -7,8 +7,11 @@ import {
   ChevronRight,
   ChevronDown,
   Download,
-  Phone,
   CheckSquare,
+  CalendarDays,
+  Calculator,
+  ArrowLeftRight,
+  Image as ImageIcon,
   LucideIcon,
 } from "lucide-react";
 import React, { useState, useMemo, useEffect, useRef } from "react";
@@ -90,6 +93,7 @@ interface CTAButtonProps {
   initialAnimation?: boolean;
   onClick?: () => void;
   disabled?: boolean;
+  filled?: boolean;
 }
 
 function CTAButton({
@@ -102,8 +106,11 @@ function CTAButton({
   initialAnimation = false,
   onClick,
   disabled = false,
+  filled = false,
 }: CTAButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const restingTextColor = filled ? "text-white" : textColor;
+  const restingIconColor = filled ? "text-white" : textColor;
 
   const animationProps = initialAnimation
     ? {
@@ -125,7 +132,7 @@ function CTAButton({
       onHoverEnd={() => setIsHovered(false)}
       onClick={onClick}
       disabled={disabled}
-      className={`relative border ${borderColor} rounded-[65px] flex items-center justify-center uppercase font-bold tracking-wide overflow-hidden ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
+      className={`relative border ${borderColor} rounded-[65px] flex items-center justify-center uppercase font-bold tracking-wide overflow-hidden ${filled ? "bg-secondary border-secondary shadow-sm" : ""} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
     >
       <motion.div
         className={`absolute inset-0 ${hoverBgColor} rounded-[65px]`}
@@ -137,7 +144,7 @@ function CTAButton({
       <div className="relative flex items-center h-full">
         <div className="relative overflow-hidden h-full flex items-center">
             <motion.span
-              className={`${textColor} whitespace-nowrap relative z-10`}
+              className={`${restingTextColor} whitespace-nowrap relative z-10`}
               initial={{ y: 0, opacity: 1 }}
               animate={{ y: isHovered ? -40 : 0, opacity: isHovered ? 0 : 1 }}
               transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
@@ -158,7 +165,7 @@ function CTAButton({
           <div className="relative flex-shrink-0 z-10">
             <Icon
               className={`w-full h-full transition-colors duration-300 ${
-                isHovered ? "text-white" : textColor
+                isHovered ? "text-white" : restingIconColor
               }`}
             />
           </div>
@@ -174,46 +181,32 @@ interface ContactButtonProps {
 
 function ContactButton({ modeloCompleto }: ContactButtonProps) {
   const { data: whatsapp } = useWhatsAppQuery();
-
-  const getWhatsAppLink = () => {
-    if (!whatsapp?.numero) return "#";
-    
-    // Mensagem formatada com o modelo do carro
-    const message = modeloCompleto 
-      ? `Oi gostaria de saber mais sobre o ${modeloCompleto}!`
-      : "Oi gostaria de saber mais informações!";
-    
-    // Se a API já retornou um link, usa ele mas substitui a mensagem
-    if (whatsapp.link) {
-      // Extrai o número do link existente ou usa o número da API
-      const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-      return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
-    }
-    
-    // Senão, gera o link do WhatsApp
-    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
-  };
+  const vehicleLabel = modeloCompleto || "veículo";
 
   const handleClick = () => {
-    const link = getWhatsAppLink();
-    if (link !== "#") {
-      window.open(link, "_blank", "noopener,noreferrer");
-    }
+    if (!whatsapp?.numero) return;
+    const link = buildWhatsAppUrl(
+      whatsapp.numero,
+      `Oi! Quero saber mais sobre o ${vehicleLabel}.`,
+    );
+    window.open(link, "_blank", "noopener,noreferrer");
   };
 
   return (
-    <CTAButton
-      text="Solicitar contato"
-      icon={MessageCircleMore}
-      borderColor="border-secondary"
-      textColor="text-secondary"
-      hoverBgColor="bg-secondary"
-      className="w-full info-contact-button-wrapper"
-      initialAnimation={true}
-      onClick={handleClick}
-      disabled={!whatsapp?.numero}
-    />
+    <WhatsAppPulseRing>
+      <CTAButton
+        text="Chamar no WhatsApp"
+        icon={MessageCircleMore}
+        borderColor="border-[#25D366]"
+        textColor="text-white"
+        hoverBgColor="bg-green-dark"
+        filled
+        className="w-full info-contact-button-wrapper !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.3)]"
+        initialAnimation={true}
+        onClick={handleClick}
+        disabled={!whatsapp?.numero}
+      />
+    </WhatsAppPulseRing>
   );
 }
 
@@ -335,6 +328,127 @@ interface CTASidebarProps {
   modeloCompleto?: string;
 }
 
+function buildWhatsAppUrl(numero: string, message: string): string {
+  const formattedNumber = formatWhatsAppNumber(numero);
+  return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+}
+
+function WhatsAppPulseRing({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative w-full">
+      <motion.span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-[65px] border-2 border-[#25D366]/50"
+        animate={{
+          scale: [1, 1.04, 1],
+          opacity: [0.55, 0.15, 0.55],
+        }}
+        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {children}
+    </div>
+  );
+}
+
+function WhatsAppQuickAction({
+  href,
+  icon: Icon,
+  label,
+  disabled,
+}: {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+  disabled?: boolean;
+}) {
+  if (disabled || href === "#") {
+    return (
+      <div className="flex items-center gap-3 rounded-xl border border-border/80 bg-muted/40 px-3 py-3 opacity-50">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366]/15 text-[#128C7E]">
+          <Icon className="h-4 w-4" />
+        </span>
+        <span className="text-left text-[13px] font-semibold leading-tight text-fg">{label}</span>
+      </div>
+    );
+  }
+
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      whileHover={{ scale: 1.02, y: -1 }}
+      whileTap={{ scale: 0.98 }}
+      className="group flex items-center gap-3 rounded-xl border border-[#25D366]/25 bg-white px-3 py-3 shadow-sm transition-colors hover:border-[#25D366]/50 hover:bg-[#25D366]/[0.06] hover:shadow-md"
+    >
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_4px_14px_rgba(37,211,102,0.35)] transition-transform group-hover:scale-105">
+        <Icon className="h-4 w-4" />
+      </span>
+      <span className="text-left text-[13px] font-semibold leading-tight text-fg group-hover:text-green-dark">
+        {label}
+      </span>
+      <MessageCircleMore className="ml-auto h-4 w-4 shrink-0 text-[#25D366] opacity-0 transition-opacity group-hover:opacity-100" />
+    </motion.a>
+  );
+}
+
+function SidebarActionCard({
+  children,
+  variant,
+  badge,
+}: {
+  children: React.ReactNode;
+  variant: "trust" | "contact";
+  badge: string;
+}) {
+  const styles =
+    variant === "trust"
+      ? "border-secondary/40 bg-gradient-to-br from-secondary/[0.12] via-white to-white shadow-[0_10px_40px_rgba(108,190,157,0.16)]"
+      : "border-[#25D366]/30 bg-gradient-to-br from-[#25D366]/[0.08] via-white to-primary/[0.05] shadow-[0_10px_40px_rgba(37,211,102,0.12)]";
+
+  const badgeClass =
+    variant === "trust"
+      ? "border-secondary/30 text-secondary"
+      : "border-[#25D366]/35 text-[#128C7E]";
+
+  const glowColor =
+    variant === "trust" ? "rgba(108,190,157,0.35)" : "rgba(37,211,102,0.28)";
+
+  return (
+    <div className={`relative overflow-hidden rounded-2xl border p-6 sm:p-8 flex flex-col items-center transition-shadow duration-300 hover:shadow-[0_16px_48px_rgba(0,91,102,0.14)] ${styles}`}>
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full blur-3xl"
+        style={{ backgroundColor: glowColor }}
+        animate={{ opacity: [0.35, 0.65, 0.35], scale: [1, 1.08, 1] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-12 -left-8 h-28 w-28 rounded-full blur-3xl bg-primary/20"
+        animate={{ opacity: [0.2, 0.45, 0.2], scale: [1, 1.12, 1] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+      />
+
+      {variant === "contact" && (
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#25D366]/15"
+          animate={{ rotate: [0, 8, -8, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <MessageCircleMore className="h-5 w-5 text-[#25D366]" />
+        </motion.div>
+      )}
+
+      <span className={`relative mb-4 inline-flex items-center rounded-full border bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] shadow-sm ${badgeClass}`}>
+        {badge}
+      </span>
+      <div className="relative w-full flex flex-col items-center">{children}</div>
+    </div>
+  );
+}
+
 function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
 
@@ -383,125 +497,129 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
     document.body.removeChild(link);
   };
 
-  const getWhatsAppLink = () => {
+  const getWhatsAppLink = (message: string) => {
     if (!whatsapp?.numero) return "#";
-    
-    // Mensagem formatada com o modelo do carro
-    const message = modeloCompleto 
-      ? `Oi gostaria de saber mais sobre o ${modeloCompleto}!`
-      : "Oi gostaria de saber mais informações!";
-    
-    // Se a API já retornou um link, usa ele mas substitui a mensagem
-    if (whatsapp.link) {
-      // Extrai o número do link existente ou usa o número da API
-      const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-      return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
-    }
-    
-    // Senão, gera o link do WhatsApp
-    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+    return buildWhatsAppUrl(whatsapp.numero, message);
   };
+
+  const vehicleLabel = modeloCompleto || "veículo";
+  const whatsappReady = Boolean(whatsapp?.numero);
+
+  const whatsappActions = [
+    {
+      icon: Calculator,
+      label: "Simular financiamento",
+      message: `Oi! Quero simular o financiamento do ${vehicleLabel}.`,
+    },
+    {
+      icon: CalendarDays,
+      label: "Agendar visita",
+      message: `Oi! Quero agendar uma visita para ver o ${vehicleLabel}.`,
+    },
+    {
+      icon: ArrowLeftRight,
+      label: "Avaliar meu usado na troca",
+      message: modeloCompleto
+        ? `Oi! Tenho um usado na troca e quero saber mais sobre o ${modeloCompleto}.`
+        : "Oi! Tenho um usado na troca e quero mais informações.",
+    },
+    {
+      icon: ImageIcon,
+      label: "Pedir mais fotos ou vídeo",
+      message: `Oi! Pode me enviar mais fotos ou um vídeo do ${vehicleLabel}?`,
+    },
+  ];
 
   const handleWhatsAppClick = () => {
-    const link = getWhatsAppLink();
-    if (link !== "#") {
-      window.open(link, "_blank", "noopener,noreferrer");
-    }
-  };
-
-  const handleTradeInClick = () => {
-    if (!whatsapp?.numero) return;
-    
-    // Mensagem específica para avaliação de troca com nome do veículo
-    const vehicleName = modeloCompleto ? modeloCompleto.toUpperCase() : "";
-    const message = vehicleName 
-      ? `Oi, gostaria que meu veículo fosse avaliado na troca deste ${vehicleName}.`
-      : "Oi, gostaria que meu veículo fosse avaliado na troca.";
-    
-    // Gera o link do WhatsApp com a mensagem de troca
-    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    const link = `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
-    
-    window.open(link, "_blank", "noopener,noreferrer");
+    const link = getWhatsAppLink(`Oi! Quero saber mais sobre o ${vehicleLabel}.`);
+    if (link !== "#") window.open(link, "_blank", "noopener,noreferrer");
   };
 
   const hasPDF = vehicle?.pdf_url || vehicle?.pdf;
 
   return (
     <div className="space-y-4 lg:space-y-6">
-      {/* I-Check Card - Só exibe se houver PDF */}
       {hasPDF && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
-          className="border border-border p-6 sm:p-8 flex flex-col items-center"
         >
-          <div className="w-full max-w-[246px] h-[148px] mb-6 overflow-hidden">
-            <img
-              src={iCheckLogo}
-              alt="i-Check"
-              className="w-full h-full object-contain"
-            />
-          </div>
+          <SidebarActionCard variant="trust" badge="Confiança Netcar">
+            <div className="w-full max-w-[246px] h-[148px] mb-4 overflow-hidden">
+              <img
+                src={iCheckLogo}
+                alt="i-Check"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <p className="text-muted-foreground text-sm text-center mb-5 max-w-[280px]">
+              Histórico completo do veículo, pronto para download.
+            </p>
 
-          <div className="w-full max-w-[300px]">
-            <CTAButton
-              text="Baixe o relatório"
-              icon={Download}
-              borderColor="border-green"
-              textColor="text-green"
-              hoverBgColor="bg-green"
-              className="w-full bg-green/10"
-              onClick={handleDownloadPDF}
-            />
-          </div>
+            <div className="w-full max-w-[300px]">
+              <CTAButton
+                text="Baixe o relatório"
+                icon={Download}
+                borderColor="border-secondary"
+                textColor="text-secondary"
+                hoverBgColor="bg-green-dark"
+                filled
+                className="w-full"
+                onClick={handleDownloadPDF}
+              />
+            </div>
+          </SidebarActionCard>
         </motion.div>
       )}
 
-      {/* Help Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="border border-border p-6 sm:p-8 flex flex-col items-center"
       >
-        <h3 className="text-primary text-[20px] sm:text-[22px] lg:text-[24px] font-bold mb-2 text-center">
-          Ficou com dúvidas?
-        </h3>
-        <p className="text-fg text-[17px] sm:text-[18px] lg:text-[19px] mb-6 text-center">
-          Nós te ajudamos
-        </p>
+        <SidebarActionCard variant="contact" badge="WhatsApp Netcar">
+          <h3 className="text-primary text-[20px] sm:text-[22px] lg:text-[24px] font-bold mb-2 text-center">
+            Ficou com dúvidas?
+          </h3>
+          <p className="text-fg text-[17px] sm:text-[18px] lg:text-[19px] mb-5 text-center">
+            Nós te ajudamos — resposta rápida no WhatsApp
+          </p>
 
-        {/* WhatsApp Button */}
-        <div className="mb-3 w-full max-w-[300px]">
-          <CTAButton
-            text="Fale conosco agora"
-            icon={Phone}
-            borderColor="border-green"
-            textColor="text-green"
-            hoverBgColor="bg-green"
-            className="w-full"
-            onClick={handleWhatsAppClick}
-            disabled={!whatsapp?.numero}
-          />
-        </div>
+          <div className="mb-4 w-full max-w-[300px]">
+            <WhatsAppPulseRing>
+              <CTAButton
+                text="Chamar no WhatsApp"
+                icon={MessageCircleMore}
+                borderColor="border-[#25D366]"
+                textColor="text-white"
+                hoverBgColor="bg-green-dark"
+                filled
+                className="w-full !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
+                onClick={handleWhatsAppClick}
+                disabled={!whatsappReady}
+              />
+            </WhatsAppPulseRing>
+          </div>
 
-        {/* Trade-in Button */}
-        <div className="w-full max-w-[300px]">
-          <CTAButton
-            text="Avalie seu carro na troca"
-            borderColor="border-primary"
-            textColor="text-primary"
-            hoverBgColor="bg-primary"
-            className="w-full"
-            onClick={handleTradeInClick}
-            disabled={!whatsapp?.numero}
-          />
-        </div>
+          <p className="mb-3 w-full max-w-[300px] text-center text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+            Outras formas de falar conosco
+          </p>
+
+          <div className="grid w-full max-w-[300px] grid-cols-1 gap-2">
+            {whatsappActions.map((action) => (
+              <WhatsAppQuickAction
+                key={action.label}
+                href={getWhatsAppLink(action.message)}
+                icon={action.icon}
+                label={action.label}
+                disabled={!whatsappReady}
+              />
+            ))}
+          </div>
+        </SidebarActionCard>
       </motion.div>
     </div>
   );
