@@ -3,5 +3,7 @@ Allow: /
 
 Disallow: /admin/
 Disallow: /api/
+Disallow: /seminovos?*
+Disallow: /detalhe-produto-*
 
 Sitemap: https://www.netcarmultimarcas.com.br/sitemap.xml

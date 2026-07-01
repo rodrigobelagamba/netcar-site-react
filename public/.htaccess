@@ -85,10 +85,11 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   
-  # Domínio canônico: força www
-  RewriteCond %{HTTP_HOST} ^netcarmultimarcas\.com\.br$ [NC]
-  RewriteRule ^(.*)$ https://www.netcarmultimarcas.com.br/$1 [R=301,L]
-
+  # HTTPS canônico (http -> https://www)
+  RewriteCond %{HTTPS} off [OR]
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  RewriteRule ^ https://www.netcarmultimarcas.com.br%{REQUEST_URI} [R=301,L]
+  
   # Canônico da home: /index.html acessado direto -> / (301).
   # THE_REQUEST garante que só o request externo do browser/crawler é
   # redirecionado; o rewrite interno do SPA para index.html não casa aqui.
@@ -103,7 +104,8 @@
   RewriteRule ^contato\.php$ /contato [R=301,L]
   RewriteRule ^contato\.html$ /contato [R=301,L]
   RewriteRule ^ficha-cadastral\.php$ /seminovos [R=301,L]
-  RewriteRule ^detalhe-produto-(.+)$ /veiculo/detalhe-produto-$1 [R=301,L]
+  RewriteRule ^detalhe-produto-(.+)\.html?$ /seminovos [R=301,L]
+  RewriteRule ^detalhe-produto-(.+)$ /seminovos [R=301,L]
   
   # Home para bots: precisa vir ANTES do short-circuit de arquivo/diretório,
   # senão a raiz "/" casa com o diretório docroot (-d) e o crawler recebe o

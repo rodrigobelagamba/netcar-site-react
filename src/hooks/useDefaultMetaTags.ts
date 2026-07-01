@@ -8,7 +8,7 @@ import { useBannersLoja1Query } from "@/catalog/queries/useSiteQuery";
 export function useDefaultMetaTags(
   title?: string,
   description?: string,
-  options?: { canonicalPath?: string }
+  options?: { canonicalPath?: string; robots?: string }
 ) {
   const { data: bannersLoja1 } = useBannersLoja1Query();
 
@@ -88,7 +88,14 @@ export function useDefaultMetaTags(
       document.head.appendChild(canonicalLink);
     }
     canonicalLink.setAttribute("href", currentUrl);
-  }, [title, description, bannersLoja1, options?.canonicalPath]);
+
+    if (options?.robots) {
+      updateMetaTag("robots", options.robots, false);
+    } else {
+      const robotsTag = document.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
+      if (robotsTag) robotsTag.remove();
+    }
+  }, [title, description, bannersLoja1, options?.canonicalPath, options?.robots]);
 }
 
 

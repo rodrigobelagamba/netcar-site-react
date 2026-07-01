@@ -54,10 +54,40 @@ export function SeminovosPage() {
   const { data: stockData } = useAllStockDataQuery();
   const { searchTerm } = useSearchContext();
 
+  const hasFilterParams = useMemo(() => {
+    if (typeof window !== "undefined" && window.location.search.length > 1) {
+      return true;
+    }
+    return Boolean(
+      search.marca ||
+        search.modelo ||
+        search.precoMin ||
+        search.precoMax ||
+        search.anoMin ||
+        search.anoMax ||
+        search.cambio ||
+        search.cor ||
+        search.categoria,
+    );
+  }, [
+    search.marca,
+    search.modelo,
+    search.precoMin,
+    search.precoMax,
+    search.anoMin,
+    search.anoMax,
+    search.cambio,
+    search.cor,
+    search.categoria,
+  ]);
+
   useDefaultMetaTags(
     "Carros Seminovos à Venda em Esteio/RS",
     "Confira o estoque de seminovos da Netcar em Esteio. Filtre por marca, modelo, ano e preço. Vistoriados e com garantia.",
-    { canonicalPath: "/seminovos" }
+    {
+      canonicalPath: "/seminovos",
+      robots: hasFilterParams ? "noindex, follow" : undefined,
+    },
   );
 
   const scrollRestored = useRef(false);
