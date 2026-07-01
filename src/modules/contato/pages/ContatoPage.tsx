@@ -16,6 +16,7 @@ import {
   useScheduleQuery
 } from "@/catalog";
 import { formatWhatsAppNumber } from "@/lib/formatters";
+import { openWhatsApp } from "@/lib/analytics";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 
@@ -69,7 +70,7 @@ export function ContatoPage() {
     const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
     const message = `*Contato via Site*\n\n*Nome:* ${formData.nome}\n*Email:* ${formData.email}\n*Telefone:* ${formData.telefone}\n*Assunto:* ${formData.assunto}\n\n*Mensagem:*\n${formData.mensagem}`;
     const whatsappUrl = `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
+    openWhatsApp(whatsappUrl, { source: "contato", intent: "contact_form" });
   };
 
   return (

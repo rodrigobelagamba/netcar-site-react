@@ -510,7 +510,8 @@ export function Header() {
                 href={getWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-primary transition-colors"
+                data-wa-source="header"
+                data-wa-intent="header_contact"
               >
                 <Phone className="w-4 h-4" />
                 <span>{formatPhone(whatsapp.numero)}</span>
@@ -657,7 +658,8 @@ export function Header() {
                       href={getWhatsAppLink()}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-white text-xl hover:text-green-200 transition-colors"
+                      data-wa-source="header"
+                      data-wa-intent="mobile_menu_contact"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <Phone className="w-5 h-5" />

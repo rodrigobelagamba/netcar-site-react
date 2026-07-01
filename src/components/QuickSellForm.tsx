@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Banknote } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
+import { openWhatsApp } from "@/lib/analytics";
 
 interface QuickSellFormProps {
   /** Cidade de origem do lead, quando a página é uma landing de cidade */
@@ -31,7 +32,7 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
     if (cityName) parts.push(`Cidade: ${cityName}`);
 
     const url = `https://wa.me/${number}?text=${encodeURIComponent(parts.join("\n"))}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    openWhatsApp(url, { source: "form", intent: "sell_evaluation", pagePath: window.location.pathname });
   };
 
   const inputClass =

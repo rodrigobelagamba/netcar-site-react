@@ -13,6 +13,7 @@ import { Footer } from "@/design-system/components/layout/Footer";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
+import { trackPageView } from "@/lib/analytics";
 import { SchemaOrg } from "@/components/seo/SchemaOrg";
 import { PageLoader } from "@/components/layout/PageLoader";
 import { getCityPage, getLandingPage } from "@/data/seo";
@@ -160,6 +161,8 @@ function WhatsAppButton() {
       href={getIanWhatsAppLink()}
       target="_blank"
       rel="noopener noreferrer"
+      data-wa-source="ian_floater"
+      data-wa-intent="ian_contact"
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       whileHover={{ scale: 1.1 }}
@@ -200,6 +203,10 @@ function RootComponent() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [location.pathname]);
+
+  useEffect(() => {
+    trackPageView(`${location.pathname}${location.search}`);
+  }, [location.pathname, location.search]);
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
