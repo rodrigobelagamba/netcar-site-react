@@ -20,6 +20,7 @@ import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useAnuncioQuery } from "@/catalog/queries/useAnuncioQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
+import { openWhatsApp } from "@/lib/analytics";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
@@ -185,11 +186,10 @@ function ContactButton({ modeloCompleto }: ContactButtonProps) {
 
   const handleClick = () => {
     if (!whatsapp?.numero) return;
-    const link = buildWhatsAppUrl(
-      whatsapp.numero,
-      `Oi! Quero saber mais sobre o ${vehicleLabel}.`,
+    openWhatsApp(
+      buildWhatsAppUrl(whatsapp.numero, `Oi! Quero saber mais sobre o ${vehicleLabel}.`),
+      { source: "hero", intent: "vehicle_inquiry", vehicleName: modeloCompleto },
     );
-    window.open(link, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -377,6 +377,8 @@ function WhatsAppQuickAction({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      data-wa-source="sidebar_action"
+      data-wa-intent={label}
       whileHover={{ scale: 1.02, y: -1 }}
       whileTap={{ scale: 0.98 }}
       className="group flex items-center gap-3 rounded-xl border border-[#25D366]/25 bg-white px-3 py-3 shadow-sm transition-colors hover:border-[#25D366]/50 hover:bg-[#25D366]/[0.06] hover:shadow-md"
@@ -532,7 +534,12 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
 
   const handleWhatsAppClick = () => {
     const link = getWhatsAppLink(`Oi! Quero saber mais sobre o ${vehicleLabel}.`);
-    if (link !== "#") window.open(link, "_blank", "noopener,noreferrer");
+    openWhatsApp(link, {
+      source: "sidebar_primary",
+      intent: "vehicle_inquiry",
+      vehicleId: vehicle?.id,
+      vehicleName: modeloCompleto,
+    });
   };
 
   const hasPDF = vehicle?.pdf_url || vehicle?.pdf;
