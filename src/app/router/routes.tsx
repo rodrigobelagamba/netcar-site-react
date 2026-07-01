@@ -205,8 +205,14 @@ function RootComponent() {
   }, [location.pathname]);
 
   useEffect(() => {
-    trackPageView(`${location.pathname}${location.search}`);
-  }, [location.pathname, location.search]);
+    const search =
+      typeof location.searchStr === "string"
+        ? location.searchStr
+        : typeof location.search === "string"
+          ? location.search
+          : "";
+    trackPageView(`${location.pathname}${search}`);
+  }, [location.pathname, location.search, location.searchStr]);
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
