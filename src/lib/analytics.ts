@@ -42,6 +42,27 @@ function getPagePath(): string {
     : "/";
 }
 
+function inferPageType(pagePath: string): string {
+  if (pagePath.startsWith("/veiculo/")) return "vehicle_detail";
+  if (pagePath === "/") return "home";
+  if (pagePath.startsWith("/contato")) return "contact";
+  return "other";
+}
+
+const WA_CLICK_DEDUP_MS = 400;
+let lastWhatsAppTrackKey = "";
+let lastWhatsAppTrackAt = 0;
+
+function shouldSkipDuplicateWhatsAppTrack(key: string): boolean {
+  const now = Date.now();
+  if (key === lastWhatsAppTrackKey && now - lastWhatsAppTrackAt < WA_CLICK_DEDUP_MS) {
+    return true;
+  }
+  lastWhatsAppTrackKey = key;
+  lastWhatsAppTrackAt = now;
+  return false;
+}
+
 export function pushDataLayer(payload: Record<string, unknown>): void {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer || [];
@@ -71,6 +92,14 @@ export function trackPageView(path?: string, title?: string): void {
 
 export function trackWhatsAppClick(params: WhatsAppClickParams): void {
   const pagePath = params.pagePath ?? getPagePath();
+  const dedupKey = [
+    pagePath,
+    params.source,
+    params.intent ?? "general",
+    params.vehicleId ?? "",
+  ].join("|");
+
+  if (shouldSkipDuplicateWhatsAppTrack(dedupKey)) return;
 
   pushDataLayer({
     event: "whatsapp_click",
@@ -78,6 +107,7 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
     wa_intent: params.intent ?? "general",
     wa_vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
     wa_vehicle_name: params.vehicleName,
+    wa_page_type: inferPageType(pagePath),
     page_path: pagePath,
   });
 

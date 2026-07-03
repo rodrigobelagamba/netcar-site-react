@@ -20,7 +20,7 @@ import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useAnuncioQuery } from "@/catalog/queries/useAnuncioQuery";
 import { formatWhatsAppNumber } from "@/lib/formatters";
-import { openWhatsApp } from "@/lib/analytics";
+import type { WhatsAppClickSource } from "@/lib/analytics";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
@@ -94,6 +94,11 @@ interface CTAButtonProps {
   className?: string;
   initialAnimation?: boolean;
   onClick?: () => void;
+  href?: string;
+  waSource?: WhatsAppClickSource;
+  waIntent?: string;
+  waVehicleId?: string | number;
+  waVehicleName?: string;
   disabled?: boolean;
   filled?: boolean;
 }
@@ -107,6 +112,11 @@ function CTAButton({
   className = "",
   initialAnimation = false,
   onClick,
+  href,
+  waSource,
+  waIntent,
+  waVehicleId,
+  waVehicleName,
   disabled = false,
   filled = false,
 }: CTAButtonProps) {
@@ -127,15 +137,13 @@ function CTAButton({
       }
     : {};
 
-  return (
-    <motion.button
-      {...animationProps}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      onClick={onClick}
-      disabled={disabled}
-      className={`relative border ${borderColor} rounded-[65px] flex items-center justify-center uppercase font-bold tracking-wide overflow-hidden ${filled ? "bg-secondary border-secondary shadow-sm" : ""} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
-    >
+  const sharedClassName = `relative border ${borderColor} rounded-[65px] flex items-center justify-center uppercase font-bold tracking-wide overflow-hidden ${filled ? "bg-secondary border-secondary shadow-sm" : ""} ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${className}`;
+  const sharedHandlers = {
+    onHoverStart: () => setIsHovered(true),
+    onHoverEnd: () => setIsHovered(false),
+  };
+  const innerContent = (
+    <>
       <motion.div
         className={`absolute inset-0 ${hoverBgColor} rounded-[65px]`}
         initial={{ opacity: 0 }}
@@ -173,25 +181,52 @@ function CTAButton({
           </div>
         )}
       </div>
+    </>
+  );
+
+  if (href && !disabled) {
+    return (
+      <motion.a
+        {...animationProps}
+        {...sharedHandlers}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-wa-source={waSource}
+        data-wa-intent={waIntent}
+        data-wa-vehicle-id={waVehicleId != null ? String(waVehicleId) : undefined}
+        data-wa-vehicle-name={waVehicleName}
+        className={sharedClassName}
+      >
+        {innerContent}
+      </motion.a>
+    );
+  }
+
+  return (
+    <motion.button
+      {...animationProps}
+      {...sharedHandlers}
+      onClick={onClick}
+      disabled={disabled}
+      className={sharedClassName}
+    >
+      {innerContent}
     </motion.button>
   );
 }
 
 interface ContactButtonProps {
   modeloCompleto?: string;
+  vehicleId?: string | number;
 }
 
-function ContactButton({ modeloCompleto }: ContactButtonProps) {
+function ContactButton({ modeloCompleto, vehicleId }: ContactButtonProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const vehicleLabel = modeloCompleto || "veículo";
-
-  const handleClick = () => {
-    if (!whatsapp?.numero) return;
-    openWhatsApp(
-      buildWhatsAppUrl(whatsapp.numero, `Oi! Quero saber mais sobre o ${vehicleLabel}.`),
-      { source: "hero", intent: "vehicle_inquiry", vehicleName: modeloCompleto },
-    );
-  };
+  const href = whatsapp?.numero
+    ? buildWhatsAppUrl(whatsapp.numero, `Oi! Quero saber mais sobre o ${vehicleLabel}.`)
+    : undefined;
 
   return (
     <WhatsAppPulseRing>
@@ -204,7 +239,11 @@ function ContactButton({ modeloCompleto }: ContactButtonProps) {
         filled
         className="w-full info-contact-button-wrapper !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.3)]"
         initialAnimation={true}
-        onClick={handleClick}
+        href={href}
+        waSource="hero"
+        waIntent="vehicle_inquiry"
+        waVehicleId={vehicleId}
+        waVehicleName={modeloCompleto}
         disabled={!whatsapp?.numero}
       />
     </WhatsAppPulseRing>
@@ -356,11 +395,15 @@ function WhatsAppQuickAction({
   icon: Icon,
   label,
   disabled,
+  vehicleId,
+  vehicleName,
 }: {
   href: string;
   icon: LucideIcon;
   label: string;
   disabled?: boolean;
+  vehicleId?: string | number;
+  vehicleName?: string;
 }) {
   if (disabled || href === "#") {
     return (
@@ -380,6 +423,8 @@ function WhatsAppQuickAction({
       rel="noopener noreferrer"
       data-wa-source="sidebar_action"
       data-wa-intent={label}
+      data-wa-vehicle-id={vehicleId != null ? String(vehicleId) : undefined}
+      data-wa-vehicle-name={vehicleName}
       whileHover={{ scale: 1.02, y: -1 }}
       whileTap={{ scale: 0.98 }}
       className="group flex items-center gap-3 rounded-xl border border-[#25D366]/25 bg-white px-3 py-3 shadow-sm transition-colors hover:border-[#25D366]/50 hover:bg-[#25D366]/[0.06] hover:shadow-md"
@@ -507,6 +552,9 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
 
   const vehicleLabel = modeloCompleto || "veículo";
   const whatsappReady = Boolean(whatsapp?.numero);
+  const primaryWhatsAppHref = whatsappReady
+    ? getWhatsAppLink(`Oi! Quero saber mais sobre o ${vehicleLabel}.`)
+    : undefined;
 
   const whatsappActions = [
     {
@@ -532,16 +580,6 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
       message: `Oi! Pode me enviar mais fotos ou um vídeo do ${vehicleLabel}?`,
     },
   ];
-
-  const handleWhatsAppClick = () => {
-    const link = getWhatsAppLink(`Oi! Quero saber mais sobre o ${vehicleLabel}.`);
-    openWhatsApp(link, {
-      source: "sidebar_primary",
-      intent: "vehicle_inquiry",
-      vehicleId: vehicle?.id,
-      vehicleName: modeloCompleto,
-    });
-  };
 
   const hasPDF = vehicle?.pdf_url || vehicle?.pdf;
 
@@ -606,7 +644,11 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
                 hoverBgColor="bg-green-dark"
                 filled
                 className="w-full !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
-                onClick={handleWhatsAppClick}
+                href={primaryWhatsAppHref}
+                waSource="sidebar_primary"
+                waIntent="vehicle_inquiry"
+                waVehicleId={vehicle?.id}
+                waVehicleName={modeloCompleto}
                 disabled={!whatsappReady}
               />
             </WhatsAppPulseRing>
@@ -624,6 +666,8 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
                 icon={action.icon}
                 label={action.label}
                 disabled={!whatsappReady}
+                vehicleId={vehicle?.id}
+                vehicleName={modeloCompleto}
               />
             ))}
           </div>
@@ -1518,7 +1562,7 @@ export function DetalhesPage() {
                 />
               </div>
               <div className="w-full">
-                <ContactButton modeloCompleto={modeloCompleto} />
+                <ContactButton modeloCompleto={modeloCompleto} vehicleId={vehicle?.id} />
               </div>
             </div>
           </motion.div>

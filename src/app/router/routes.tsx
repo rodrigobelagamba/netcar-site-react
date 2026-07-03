@@ -162,7 +162,11 @@ function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       data-wa-source="ian_floater"
-      data-wa-intent="ian_contact"
+      data-wa-intent={isDetalhesPage && vehicle ? "vehicle_inquiry" : "ian_contact"}
+      data-wa-vehicle-id={isDetalhesPage && vehicle?.id ? String(vehicle.id) : undefined}
+      data-wa-vehicle-name={
+        isDetalhesPage && vehicle ? (vehicle.modelo || vehicle.name || undefined) : undefined
+      }
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       whileHover={{ scale: 1.1 }}
