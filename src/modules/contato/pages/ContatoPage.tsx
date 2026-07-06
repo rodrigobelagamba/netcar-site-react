@@ -15,7 +15,7 @@ import {
   useWhatsAppQuery,
   useScheduleQuery
 } from "@/catalog";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, contactFormWhatsAppMessage, resolveSiteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { openWhatsApp } from "@/lib/analytics";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
@@ -56,9 +56,8 @@ export function ContatoPage() {
   const getWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
     if (whatsapp.link) return whatsapp.link;
-    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    const message = whatsapp.mensagem || "Olá! Gostaria de mais informações.";
-    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+    const message = resolveSiteWhatsAppMessage(whatsapp.mensagem);
+    return buildWhatsAppUrl(whatsapp.numero, message);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -67,9 +66,8 @@ export function ContatoPage() {
       alert("WhatsApp não disponível no momento. Por favor, tente novamente mais tarde.");
       return;
     }
-    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    const message = `*Contato via Site*\n\n*Nome:* ${formData.nome}\n*Email:* ${formData.email}\n*Telefone:* ${formData.telefone}\n*Assunto:* ${formData.assunto}\n\n*Mensagem:*\n${formData.mensagem}`;
-    const whatsappUrl = `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+    const message = contactFormWhatsAppMessage(formData);
+    const whatsappUrl = buildWhatsAppUrl(whatsapp.numero, message);
     openWhatsApp(whatsappUrl, { source: "contato", intent: "contact_form" });
   };
 

@@ -4,7 +4,7 @@ import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { Car, MapPin, Calendar, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { QuickSellForm } from "@/components/QuickSellForm";
@@ -17,11 +17,10 @@ export function CompraPage() {
 
   const getIanWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
-    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
     const message = isCompramosAlias
-      ? "Oi! Quero avaliar meu carro para venda ou troca na Netcar."
-      : "Oi iAN! Gostaria de vender meu carro para a Netcar.";
-    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+      ? siteWhatsAppMessage("quero avaliar meu carro para venda ou troca na Netcar.")
+      : siteWhatsAppMessage("gostaria de vender meu carro para a Netcar.");
+    return buildWhatsAppUrl(whatsapp.numero, message);
   };
 
   useDefaultMetaTags(

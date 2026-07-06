@@ -20,13 +20,27 @@ const SITE = "https://www.netcarmultimarcas.com.br";
 const WHATSAPP_IAN = "5551997293118";
 const today = new Date().toISOString().slice(0, 10);
 
+const SITE_WHATSAPP_PREFIX = "Estava olhando o site da Netcar e";
+
+function siteWhatsAppMessage(body) {
+  const trimmed = body.trim();
+  if (!trimmed) {
+    return `${SITE_WHATSAPP_PREFIX} gostaria de mais informações.`;
+  }
+  if (trimmed.startsWith(SITE_WHATSAPP_PREFIX)) {
+    return trimmed.endsWith(".") ? trimmed : `${trimmed}.`;
+  }
+  const normalized = trimmed.charAt(0).toLowerCase() + trimmed.slice(1);
+  return `${SITE_WHATSAPP_PREFIX} ${normalized.endsWith(".") ? normalized : `${normalized}.`}`;
+}
+
 function cityWhatsAppLink(cityName) {
-  const text = `Oi iAN! Moro em ${cityName} e estou procurando um seminovo.`;
+  const text = siteWhatsAppMessage(`moro em ${cityName} e estou procurando um seminovo.`);
   return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
 }
 
 function landingWhatsAppLink(name) {
-  const text = `Oi iAN! Estou procurando um ${name} seminovo em Esteio.`;
+  const text = siteWhatsAppMessage(`estou procurando um ${name} seminovo em Esteio.`);
   return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
 }
 

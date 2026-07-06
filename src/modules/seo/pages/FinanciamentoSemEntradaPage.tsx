@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
@@ -17,9 +17,10 @@ export function FinanciamentoSemEntradaPage() {
 
   const waLink = (() => {
     if (!whatsapp?.numero) return "#";
-    const number = formatWhatsAppNumber(whatsapp.numero);
-    const text = "Oi! Quero simular financiamento sem entrada para um seminovo.";
-    return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+    const text = siteWhatsAppMessage(
+      "quero simular financiamento sem entrada para um seminovo.",
+    );
+    return buildWhatsAppUrl(whatsapp.numero, text);
   })();
 
   return (

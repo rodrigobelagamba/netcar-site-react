@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 
 interface Service {
   title: string;
@@ -17,9 +17,7 @@ export function ServicesSection() {
 
   const getWhatsAppLink = (message: string) => {
     if (!whatsapp?.numero) return "#";
-    
-    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+    return buildWhatsAppUrl(whatsapp.numero, siteWhatsAppMessage(message));
   };
 
   const services: Service[] = [
@@ -28,7 +26,7 @@ export function ServicesSection() {
       image: "/images/financing.png",
       desc: "Aprovação rápida com as melhores taxas do mercado.",
       cta: "Simular Agora",
-      message: "Olá IAN, tenho interesse em financiar um veículo.",
+      message: "tenho interesse em financiar um veículo.",
       objectPosition: "30% center",
     },
     {
@@ -36,7 +34,7 @@ export function ServicesSection() {
       image: "/images/vehicle-evaluation.png",
       desc: "Processo simples, negociação transparente!",
       cta: "Avaliar Carro",
-      message: "Olá IAN, tenho interesse em vender meu carro para a Netcar.",
+      message: "tenho interesse em vender meu carro para a Netcar.",
       objectPosition: "center 25%",
     },
   ];

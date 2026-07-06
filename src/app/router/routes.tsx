@@ -12,8 +12,12 @@ import { Header } from "@/design-system/components/layout/Header";
 import { Footer } from "@/design-system/components/layout/Footer";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
 import { trackPageView } from "@/lib/analytics";
+import {
+  buildWhatsAppUrl,
+  siteWhatsAppMessage,
+  vehicleWhatsAppMessages,
+} from "@/lib/whatsappMessages";
 import { SchemaOrg } from "@/components/seo/SchemaOrg";
 import { PageLoader } from "@/components/layout/PageLoader";
 import { getCityPage, getLandingPage } from "@/data/seo";
@@ -95,36 +99,50 @@ const ComparadorPage = lazyWithRetry(() =>
 function getContextualMessage(pathname: string): string {
   if (pathname.startsWith("/vender-carro-")) {
     const city = getCityPage(pathname.replace("/vender-carro-", ""));
-    if (city) return `Oi! Moro em ${city.name} e quero vender meu carro para a Netcar.`;
+    if (city) {
+      return siteWhatsAppMessage(
+        `moro em ${city.name} e quero vender meu carro para a Netcar.`,
+      );
+    }
   }
   if (pathname.startsWith("/seminovos-") && pathname !== "/seminovos-automaticos") {
     const city = getCityPage(pathname.replace("/seminovos-", ""));
-    if (city) return `Oi iAN! Moro em ${city.name} e estou procurando um seminovo.`;
+    if (city) {
+      return siteWhatsAppMessage(
+        `moro em ${city.name} e estou procurando um seminovo.`,
+      );
+    }
   }
   if (pathname.startsWith("/comprar-")) {
     const landing = getLandingPage(pathname.replace("/comprar-", ""));
-    if (landing) return `Oi iAN! Estou procurando um ${landing.name} seminovo em Esteio.`;
+    if (landing) {
+      return siteWhatsAppMessage(
+        `estou procurando um ${landing.name} seminovo em Esteio.`,
+      );
+    }
   }
   if (
     pathname === "/compra" ||
     pathname === "/compramos-seu-usado" ||
     pathname === "/vender-meu-carro"
   ) {
-    return "Oi! Quero avaliar meu carro para venda ou troca na Netcar.";
+    return siteWhatsAppMessage(
+      "quero avaliar meu carro para venda ou troca na Netcar.",
+    );
   }
   if (pathname === "/financiamento-sem-entrada" || pathname === "/financiamento") {
-    return "Oi iAN! Quero simular o financiamento de um seminovo.";
+    return siteWhatsAppMessage("quero simular o financiamento de um seminovo.");
   }
   if (pathname === "/atendimento-24h") {
-    return "Oi iAN! Quero atendimento agora.";
+    return siteWhatsAppMessage("quero atendimento agora.");
   }
   if (pathname === "/comparar") {
-    return "Oi iAN! Quero ajuda para comparar alguns seminovos.";
+    return siteWhatsAppMessage("quero ajuda para comparar alguns seminovos.");
   }
   if (pathname === "/seminovos-automaticos") {
-    return "Oi iAN! Estou procurando um seminovo automático.";
+    return siteWhatsAppMessage("estou procurando um seminovo automático.");
   }
-  return "Oi iAN! Estou procurando um carro...";
+  return siteWhatsAppMessage("estou procurando um seminovo.");
 }
 
 // WhatsApp Button Component - iAN
@@ -142,18 +160,14 @@ function WhatsAppButton() {
 
   const getIanWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
-    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    
-    // Se estiver na página de detalhes e tiver dados do veículo, usa mensagem personalizada
+
     let message = getContextualMessage(location.pathname);
     if (isDetalhesPage && vehicle) {
-      const modeloCompleto = vehicle.modelo || vehicle.name || "";
-      if (modeloCompleto) {
-        message = `Oi gostaria de saber mais sobre o ${modeloCompleto}!`;
-      }
+      const vehicleLabel = vehicle.modelo || vehicle.name || "veículo";
+      message = vehicleWhatsAppMessages(vehicleLabel).info;
     }
-    
-    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+
+    return buildWhatsAppUrl(whatsapp.numero, message);
   };
 
   return (

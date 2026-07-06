@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Banknote } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, quickSellWhatsAppMessage } from "@/lib/whatsappMessages";
 import { openWhatsApp } from "@/lib/analytics";
 
 interface QuickSellFormProps {
@@ -24,14 +24,13 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
     e.preventDefault();
     if (!whatsapp?.numero) return;
 
-    const number = formatWhatsAppNumber(whatsapp.numero);
-    const parts = ["Oi! Quero avaliar meu carro para venda:"];
-    if (modelo.trim()) parts.push(`Modelo: ${modelo.trim()}`);
-    if (ano.trim()) parts.push(`Ano: ${ano.trim()}`);
-    if (km.trim()) parts.push(`KM: ${km.trim()}`);
-    if (cityName) parts.push(`Cidade: ${cityName}`);
-
-    const url = `https://wa.me/${number}?text=${encodeURIComponent(parts.join("\n"))}`;
+    const message = quickSellWhatsAppMessage({
+      modelo,
+      ano,
+      km,
+      cityName,
+    });
+    const url = buildWhatsAppUrl(whatsapp.numero, message);
     openWhatsApp(url, { source: "form", intent: "sell_evaluation", pagePath: window.location.pathname });
   };
 

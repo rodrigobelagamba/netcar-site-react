@@ -19,7 +19,7 @@ import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useAnuncioQuery } from "@/catalog/queries/useAnuncioQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, vehicleWhatsAppMessages } from "@/lib/whatsappMessages";
 import type { WhatsAppClickSource } from "@/lib/analytics";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
@@ -225,7 +225,7 @@ function ContactButton({ modeloCompleto, vehicleId }: ContactButtonProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const vehicleLabel = modeloCompleto || "veículo";
   const href = whatsapp?.numero
-    ? buildWhatsAppUrl(whatsapp.numero, `Oi! Quero saber mais sobre o ${vehicleLabel}.`)
+    ? buildWhatsAppUrl(whatsapp.numero, vehicleWhatsAppMessages(vehicleLabel).info)
     : undefined;
 
   return (
@@ -366,11 +366,6 @@ function OptionalItem({ text }: OptionalItemProps) {
 interface CTASidebarProps {
   vehicle?: any;
   modeloCompleto?: string;
-}
-
-function buildWhatsAppUrl(numero: string, message: string): string {
-  const formattedNumber = formatWhatsAppNumber(numero);
-  return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
 }
 
 function WhatsAppPulseRing({ children }: { children: React.ReactNode }) {
@@ -552,32 +547,31 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
 
   const vehicleLabel = modeloCompleto || "veículo";
   const whatsappReady = Boolean(whatsapp?.numero);
+  const vehicleMessages = vehicleWhatsAppMessages(vehicleLabel, modeloCompleto);
   const primaryWhatsAppHref = whatsappReady
-    ? getWhatsAppLink(`Oi! Quero saber mais sobre o ${vehicleLabel}.`)
+    ? getWhatsAppLink(vehicleMessages.info)
     : undefined;
 
   const whatsappActions = [
     {
       icon: Calculator,
       label: "Simular financiamento",
-      message: `Oi! Quero simular o financiamento do ${vehicleLabel}.`,
+      message: vehicleMessages.finance,
     },
     {
       icon: CalendarDays,
       label: "Agendar visita",
-      message: `Oi! Quero agendar uma visita para ver o ${vehicleLabel}.`,
+      message: vehicleMessages.visit,
     },
     {
       icon: ArrowLeftRight,
       label: "Avaliar meu usado na troca",
-      message: modeloCompleto
-        ? `Oi! Tenho um usado na troca e quero saber mais sobre o ${modeloCompleto}.`
-        : "Oi! Tenho um usado na troca e quero mais informações.",
+      message: vehicleMessages.trade,
     },
     {
       icon: ImageIcon,
       label: "Pedir mais fotos ou vídeo",
-      message: `Oi! Pode me enviar mais fotos ou um vídeo do ${vehicleLabel}?`,
+      message: vehicleMessages.photos,
     },
   ];
 
