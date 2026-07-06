@@ -1,6 +1,7 @@
 /**
- * Analytics helpers — GA4 direto + dataLayer para GTM/Ads.
- * Eventos explícitos garantem conversão WhatsApp mesmo com window.open().
+ * Analytics helpers — dataLayer para GTM/Ads + GA4 direto só em page view.
+ * whatsapp_click: um único push no dataLayer (GTM dispara conversão).
+ * Não usar gtag("event") aqui: gtag() também escreve no dataLayer e duplicava hit Ads.
  */
 
 export const GA4_MEASUREMENT_ID = "G-MGPNBDNQ9G";
@@ -110,16 +111,6 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
     wa_page_type: inferPageType(pagePath),
     page_path: pagePath,
   });
-
-  if (typeof window.gtag === "function") {
-    window.gtag("event", "whatsapp_click", {
-      source: params.source,
-      intent: params.intent ?? "general",
-      vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
-      vehicle_name: params.vehicleName,
-      page_path: pagePath,
-    });
-  }
 
   if (typeof window.fbq === "function") {
     window.fbq("trackCustom", "WhatsAppClick", {
