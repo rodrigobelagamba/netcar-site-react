@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { getCityPage } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
@@ -58,9 +58,8 @@ export function CityLandingPage() {
 
   const waLink = (() => {
     if (!whatsapp?.numero) return "#";
-    const number = formatWhatsAppNumber(whatsapp.numero);
-    const text = `Oi iAN! Moro em ${city.name} e estou procurando um seminovo.`;
-    return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+    const text = siteWhatsAppMessage(`moro em ${city.name} e estou procurando um seminovo.`);
+    return buildWhatsAppUrl(whatsapp.numero, text);
   })();
 
   return (

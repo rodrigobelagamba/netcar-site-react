@@ -6,7 +6,7 @@ import { getLandingPage } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
@@ -64,9 +64,10 @@ export function EstoqueLandingPage() {
 
   const waLink = (() => {
     if (!whatsapp?.numero) return "#";
-    const number = formatWhatsAppNumber(whatsapp.numero);
-    const text = `Oi iAN! Estou procurando um ${landing.name} seminovo em Esteio.`;
-    return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+    const text = siteWhatsAppMessage(
+      `estou procurando um ${landing.name} seminovo em Esteio.`,
+    );
+    return buildWhatsAppUrl(whatsapp.numero, text);
   })();
 
   // Filtro pré-aplicado no showroom ao clicar em "Ver todos"

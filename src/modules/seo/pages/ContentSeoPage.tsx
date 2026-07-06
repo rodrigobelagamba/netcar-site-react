@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import type { ContentSeoPage as ContentSeoPageData } from "@/data/seo/types";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
@@ -42,8 +42,7 @@ export function ContentSeoPage({ page }: { page: ContentSeoPageData }) {
 
   const waLink = (() => {
     if (!whatsapp?.numero) return "#";
-    const number = formatWhatsAppNumber(whatsapp.numero);
-    return `https://wa.me/${number}?text=${encodeURIComponent(page.waText)}`;
+    return buildWhatsAppUrl(whatsapp.numero, siteWhatsAppMessage(page.waText));
   })();
 
   return (

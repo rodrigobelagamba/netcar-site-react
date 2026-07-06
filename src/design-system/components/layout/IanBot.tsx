@@ -1,14 +1,15 @@
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 
 export function IanBot() {
   const { data: whatsapp } = useWhatsAppQuery();
 
   const getIanWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
-    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    const message = "Oi iAN! Estou procurando um carro...";
-    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+    return buildWhatsAppUrl(
+      whatsapp.numero,
+      siteWhatsAppMessage("estou procurando um seminovo."),
+    );
   };
 
   return (

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useSearchContext } from "@/contexts/SearchContext";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
-import { formatWhatsAppNumber } from "@/lib/formatters";
+import { buildWhatsAppUrl, resolveSiteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { generateVehicleSlug } from "@/lib/slug";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
@@ -60,9 +60,8 @@ export function Header() {
     }
     
     // Senão, gera o link do WhatsApp
-    const formattedNumber = formatWhatsAppNumber(whatsapp.numero);
-    const message = whatsapp.mensagem || "Olá! Gostaria de mais informações.";
-    return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
+    const message = resolveSiteWhatsAppMessage(whatsapp.mensagem);
+    return buildWhatsAppUrl(whatsapp.numero, message);
   };
 
   useEffect(() => {
