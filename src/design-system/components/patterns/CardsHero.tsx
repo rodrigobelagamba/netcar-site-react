@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { MessageCircle, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 
@@ -16,6 +16,11 @@ interface CardsHeroProps {
   delay?: number;
   fastAnimation?: boolean;
   onClick?: () => void;
+  whatsAppHref?: string;
+  whatsAppVehicleId?: string;
+  whatsAppVehicleName?: string;
+  whatsAppSource?: string;
+  compact?: boolean;
 }
 
 export function CardsHero({
@@ -29,9 +34,18 @@ export function CardsHero({
   delay = 0,
   fastAnimation = false,
   onClick,
+  whatsAppHref,
+  whatsAppVehicleId,
+  whatsAppVehicleName,
+  whatsAppSource = "home_destaques",
+  compact = false,
 }: CardsHeroProps) {
   const content = (
-    <div className="group relative bg-white rounded-[40px] shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 p-8 flex flex-col items-center" style={{ border: '1px solid rgba(229, 231, 235, 0.5)' }}>
+    <div className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center ${
+      compact
+        ? "rounded-[28px] p-4"
+        : "rounded-[40px] p-8"
+    }`} style={{ border: '1px solid rgba(229, 231, 235, 0.5)' }}>
       {/* Selo em formato de carimbo */}
       {SHOW_CAMPAIGN_STAMP && (
         <img
@@ -42,7 +56,11 @@ export function CardsHero({
       )}
       
       {/* Floating Image Section - LARGER */}
-      <div className="!border-0 absolute -top-32 md:-top-44 left-[-2%] right-[-2%] md:left-[-10%] md:right-[-10%] h-64 md:h-80 flex items-center justify-center z-10 pointer-events-none">
+      <div className={`!border-0 absolute left-[-2%] right-[-2%] flex items-center justify-center z-10 pointer-events-none ${
+        compact
+          ? "-top-16 h-32 md:-top-44 md:h-80"
+          : "-top-32 md:-top-44 h-64 md:h-80"
+      }`}>
         <div className="!border-0 relative w-full h-full">
           <img 
             src={image} 
@@ -55,60 +73,80 @@ export function CardsHero({
       </div>
 
       {/* Content Section - Adjusted to match photo exactly */}
-      <div className="!border-0 pt-28 md:pt-32 w-full flex flex-col items-start text-left space-y-4">
-         {/* Brand Badge - Left aligned as in photo */}
-         <span className="!border-0 bg-[#00283C] text-white hover:bg-[#00283C] rounded-md px-3 py-1 text-[10px] font-bold tracking-widest uppercase w-fit inline-block">
+      <div className={`!border-0 w-full flex flex-col items-start text-left ${
+        compact ? "pt-14 space-y-2" : "pt-28 md:pt-32 space-y-4"
+      }`}>
+         <span className={`!border-0 bg-[#00283C] text-white hover:bg-[#00283C] rounded-md font-bold tracking-widest uppercase w-fit inline-block ${
+           compact ? "px-2 py-0.5 text-[8px]" : "px-3 py-1 text-[10px]"
+         }`}>
            {brand}
          </span>
 
          {/* Model and Year - Left aligned */}
          <div className="!border-0 space-y-1">
-           <h3 className="!border-0 text-[17px] font-bold leading-tight" style={{ color: '#00283C' }}>
+           <h3 className={`!border-0 font-bold leading-tight ${compact ? "text-sm" : "text-[17px]"}`} style={{ color: '#00283C' }}>
              {model}
            </h3>
-           <p className="!border-0 text-gray-400 font-medium text-base">{year}</p>
+           <p className={`!border-0 text-gray-400 font-medium ${compact ? "text-xs" : "text-base"}`}>{year}</p>
          </div>
 
-         {/* Price and Action - Left aligned price, right aligned button */}
-         <div className="!border-0 flex items-end justify-between w-full pt-4 gap-3">
-           <div className="!border-0 flex-1 min-w-0">
+         {/* Price and Action — sempre stacked, botão largura total (evita sobrepor preço) */}
+         <div className="!border-0 w-full pt-4 flex flex-col items-stretch gap-2">
+           <div className="!border-0 w-full">
              {showPriceComparison && previousPrice ? (
-               <div className="flex flex-col items-start gap-1 min-h-[56px]">
-                 <p className="!border-0 text-[15px] font-semibold text-gray-500 leading-none whitespace-nowrap">
+               <div className="flex flex-col items-start gap-1">
+                 <p className="!border-0 font-semibold text-gray-500 leading-none text-xs">
                    De: <span className="line-through">{previousPrice}</span>
                  </p>
-                 <div className="flex flex-col items-start leading-none gap-0.5 whitespace-nowrap">
-                   <span className="!border-0 text-[11px] font-semibold uppercase text-gray-400 whitespace-nowrap">Para:</span>
-                   <p className="!border-0 text-[24px] font-bold font-sans tracking-tight whitespace-nowrap" style={{ color: '#5CD29D' }}>
+                 <div className="flex flex-col items-start leading-none gap-0.5">
+                   <span className="!border-0 text-[11px] font-semibold uppercase text-gray-400">Para:</span>
+                   <p className="!border-0 font-bold font-sans tracking-tight text-base leading-tight" style={{ color: '#5CD29D' }}>
                      {price}
                    </p>
                  </div>
                </div>
              ) : (
-               <p className="!border-0 text-[24px] font-bold font-sans tracking-tight whitespace-nowrap" style={{ color: '#5CD29D' }}>
+               <p className={`!border-0 font-bold font-sans tracking-tight leading-tight ${compact ? "text-base" : "text-[24px]"}`} style={{ color: '#5CD29D' }}>
                  {price}
                </p>
              )}
            </div>
-           
-           <button 
-             className="!border-0 h-10 w-10 rounded-full transition-all duration-300 shadow-lg group/btn flex items-center justify-center shrink-0"
-             style={{ 
-               backgroundColor: '#00283C',
-               color: 'white',
-               outline: 'none'
-             }}
-             onMouseEnter={(e) => {
-               e.currentTarget.style.backgroundColor = '#5CD29D';
-               e.currentTarget.style.color = '#00283C';
-             }}
-             onMouseLeave={(e) => {
-               e.currentTarget.style.backgroundColor = '#00283C';
-               e.currentTarget.style.color = 'white';
-             }}
-           >
-             <Plus className="h-5 w-5 group-hover/btn:rotate-90 transition-transform duration-300" />
-           </button>
+
+           {whatsAppHref ? (
+             <a
+               href={whatsAppHref}
+               target="_blank"
+               rel="noopener noreferrer"
+               data-wa-source={whatsAppSource}
+               data-wa-intent="ask_km"
+               data-wa-vehicle-id={whatsAppVehicleId}
+               data-wa-vehicle-name={whatsAppVehicleName}
+               onClick={(e) => e.stopPropagation()}
+               className="!border-0 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[#25D366] font-black uppercase tracking-wide text-white shadow-lg transition-colors hover:bg-[#128C7E] h-10 px-3 text-[11px]"
+             >
+              <MessageCircle className="h-4 w-4" />
+              Saber sobre a KM
+             </a>
+           ) : (
+             <button
+               className="!border-0 h-10 w-10 rounded-full transition-all duration-300 shadow-lg group/btn flex items-center justify-center shrink-0"
+               style={{
+                 backgroundColor: '#00283C',
+                 color: 'white',
+                 outline: 'none'
+               }}
+               onMouseEnter={(e) => {
+                 e.currentTarget.style.backgroundColor = '#5CD29D';
+                 e.currentTarget.style.color = '#00283C';
+               }}
+               onMouseLeave={(e) => {
+                 e.currentTarget.style.backgroundColor = '#00283C';
+                 e.currentTarget.style.color = 'white';
+               }}
+             >
+               <Plus className="h-5 w-5 group-hover/btn:rotate-90 transition-transform duration-300" />
+             </button>
+           )}
          </div>
       </div>
     </div>
@@ -122,7 +160,7 @@ export function CardsHero({
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: delay * 0.1 }}
         viewport={{ once: true }}
-        className={`pt-24 md:pt-32 ${onClick ? 'cursor-pointer' : ''}`}
+        className={`${compact ? "pt-14" : "pt-24 md:pt-32"} ${onClick ? 'cursor-pointer' : ''}`}
         onClick={onClick}
       >
         {content}
@@ -136,7 +174,7 @@ export function CardsHero({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: delay * 0.05 }}
-      className={`pt-24 md:pt-32 ${onClick ? 'cursor-pointer' : ''}`}
+      className={`${compact ? "pt-14" : "pt-24 md:pt-32"} ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
       {content}

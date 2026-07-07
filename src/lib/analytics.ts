@@ -70,6 +70,48 @@ export function pushDataLayer(payload: Record<string, unknown>): void {
   window.dataLayer.push(payload);
 }
 
+/** Evento GA4: visualização de página de veículo (funil Browse → Detalhe → WA). */
+export function trackViewItem(params: {
+  vehicleId: string | number;
+  vehicleName: string;
+  price?: number;
+  currency?: string;
+}): void {
+  pushDataLayer({
+    event: "view_item",
+    ecommerce: {
+      items: [
+        {
+          item_id: String(params.vehicleId),
+          item_name: params.vehicleName,
+          price: params.price,
+          currency: params.currency ?? "BRL",
+        },
+      ],
+    },
+  });
+}
+
+/** Evento GA4: usuário aplicou filtro no estoque. */
+export function trackStockFilterApply(params: {
+  filters: Record<string, string | undefined>;
+  resultCount: number;
+}): void {
+  pushDataLayer({
+    event: "stock_filter_apply",
+    filters: params.filters,
+    result_count: params.resultCount,
+  });
+}
+
+/** Evento GA4: scroll 50% na Home (engajamento). */
+export function trackHomeScrollDepth(depthPercent: number): void {
+  pushDataLayer({
+    event: "scroll_depth_home",
+    scroll_depth_percent: depthPercent,
+  });
+}
+
 export function trackPageView(path?: string, title?: string): void {
   const pagePath = path ?? getPagePath();
   const pageTitle = title ?? (typeof document !== "undefined" ? document.title : "");

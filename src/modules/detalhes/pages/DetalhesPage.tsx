@@ -14,19 +14,20 @@ import {
   Image as ImageIcon,
   LucideIcon,
 } from "lucide-react";
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useAnuncioQuery } from "@/catalog/queries/useAnuncioQuery";
 import { buildWhatsAppUrl, vehicleWhatsAppMessages } from "@/lib/whatsappMessages";
 import type { WhatsAppClickSource } from "@/lib/analytics";
+import { trackViewItem } from "@/lib/analytics";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
-import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
+import { ProductList } from "@/design-system/components/patterns/ProductList";
+import type { VehicleCardProps } from "@/design-system/components/patterns/VehicleCard";
 import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
 import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
-import { useEmbla } from "@/hooks/useEmbla";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { maskPlate } from "@/lib/slug";
@@ -801,102 +802,6 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
 }
 
 
-// Componente de carrossel para veículos relacionados (mobile)
-function RelatedVehiclesCarousel({ vehicles }: { vehicles: any[] }) {
-  const { emblaRef, emblaApi } = useEmbla({
-    slidesToScroll: 1,
-    align: "start",
-    loop: true,
-  });
-
-  const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const hasUserInteractedRef = useRef(false);
-
-  // Para o autoplay definitivamente após primeira interação
-  const handleUserInteraction = () => {
-    if (!hasUserInteractedRef.current) {
-      hasUserInteractedRef.current = true;
-      if (autoplayIntervalRef.current) {
-        clearInterval(autoplayIntervalRef.current);
-        autoplayIntervalRef.current = null;
-      }
-    }
-  };
-
-  // Autoplay - passa automaticamente a cada 4 segundos (apenas se não houver interação)
-  useEffect(() => {
-    if (!emblaApi || vehicles.length <= 1 || hasUserInteractedRef.current) return;
-
-    const startAutoplay = () => {
-      if (autoplayIntervalRef.current) {
-        clearInterval(autoplayIntervalRef.current);
-      }
-      autoplayIntervalRef.current = setInterval(() => {
-        if (emblaApi && vehicles.length > 1 && !hasUserInteractedRef.current) {
-          emblaApi.scrollNext();
-        }
-      }, 4000);
-    };
-
-    const stopAutoplay = () => {
-      if (autoplayIntervalRef.current) {
-        clearInterval(autoplayIntervalRef.current);
-        autoplayIntervalRef.current = null;
-      }
-    };
-
-    // Detecta interações do usuário através do Embla (arrastar, toque)
-    const onPointerDown = () => handleUserInteraction();
-
-    emblaApi.on("pointerDown", onPointerDown);
-
-    startAutoplay();
-
-    return () => {
-      stopAutoplay();
-      emblaApi.off("pointerDown", onPointerDown);
-    };
-  }, [emblaApi, vehicles.length]);
-
-  if (vehicles.length === 0) return null;
-
-  return (
-    <div 
-      className="relative"
-      onMouseEnter={handleUserInteraction}
-      onTouchStart={handleUserInteraction}
-      onPointerDown={handleUserInteraction}
-    >
-      <div className="embla overflow-hidden" ref={emblaRef}>
-        <div className="embla__container flex">
-          {vehicles.map((vehicle) => (
-            <div
-              key={vehicle.id}
-              className="embla__slide flex-[0_0_100%] min-w-0 px-2"
-            >
-              <VehicleCard
-                id={String(vehicle.id)}
-                name={vehicle.modelo || vehicle.name}
-                price={vehicle.price || 0}
-                valor_formatado={vehicle.valor_formatado}
-                preco_com_troca={vehicle.preco_com_troca}
-                preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
-                year={vehicle.year || new Date().getFullYear()}
-                km={vehicle.km || 0}
-                images={vehicle.images || vehicle.fotos || vehicle.fullImages || []}
-                imagens_site={vehicle.imagens_site}
-                marca={vehicle.marca}
-                modelo={vehicle.modelo}
-                placa={vehicle.placa}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function RelatedVehiclesSection({
   currentVehicleId,
   currentCategory,
@@ -907,59 +812,29 @@ function RelatedVehiclesSection({
   currentPrice?: number;
 }) {
   const { data: vehicles, isLoading } = useVehiclesQuery();
-  
-  // Detecta número de colunas baseado no tamanho da tela
-  const [columnsPerRow, setColumnsPerRow] = useState(4);
-  
-  useEffect(() => {
-    const updateColumns = () => {
-      const width = window.innerWidth;
-      if (width >= 3360) {
-        setColumnsPerRow(5); // 4xl
-      } else if (width >= 1920) {
-        setColumnsPerRow(5); // 3xl e 2xl
-      } else if (width >= 1280) {
-        setColumnsPerRow(4); // xl
-      } else if (width >= 1024) {
-        setColumnsPerRow(3); // lg
-      } else if (width >= 768) {
-        setColumnsPerRow(2); // md
-      } else {
-        setColumnsPerRow(1); // mobile
-      }
-    };
-    
-    updateColumns();
-    window.addEventListener('resize', updateColumns);
-    return () => window.removeEventListener('resize', updateColumns);
-  }, []);
+  const maxRelatedVehicles = 4;
 
-  // Filtrar veículos relacionados
-  const relatedVehicles = useMemo(() => {
+  const relatedVehicleCards = useMemo((): VehicleCardProps[] => {
     if (!vehicles) return [];
-    
-    // Primeiro filtra veículos básicos (com foto, preço válido, não é o atual)
+
     const filtered = vehicles
       .filter((v) => {
-        // Exclui o veículo atual
         if (String(v.id) === String(currentVehicleId)) return false;
-        
-        // Filtra apenas carros com preço maior que zero (carro vendido tem valor = 0)
-        const price = typeof v.price === 'number' ? v.price : Number(v.price);
+
+        const price = typeof v.price === "number" ? v.price : Number(v.price);
         if (!price || isNaN(price) || price <= 0) return false;
-        
-        // Filtra apenas veículos que possuem fotos (tem_fotos === 1)
+
         const temFotos = v.imagens_site?.tem_fotos;
         if (temFotos === 0 || temFotos === undefined) return false;
-        
+
         return true;
       })
       .map((v) => {
-        const price = typeof v.price === 'number' ? v.price : Number(v.price);
-        const vehicleCategory = v.categoria?.toUpperCase() || '';
-        const targetCategory = currentCategory?.toUpperCase() || '';
+        const price = typeof v.price === "number" ? v.price : Number(v.price);
+        const vehicleCategory = v.categoria?.toUpperCase() || "";
+        const targetCategory = currentCategory?.toUpperCase() || "";
         const sameCategory = currentCategory ? vehicleCategory === targetCategory : false;
-        
+
         return {
           ...v,
           priceDifference: currentPrice ? Math.abs(price - currentPrice) : Infinity,
@@ -967,16 +842,13 @@ function RelatedVehiclesSection({
         };
       });
 
-    // Separa veículos da mesma categoria e de outras categorias
-    const sameCategoryVehicles = filtered.filter(v => v.sameCategory);
-    const otherVehicles = filtered.filter(v => !v.sameCategory);
+    const sameCategoryVehicles = filtered.filter((v) => v.sameCategory);
+    const otherVehicles = filtered.filter((v) => !v.sameCategory);
 
-    // Ordena cada grupo por diferença de preço (mais próximo primeiro)
-    const sortByPrice = (a: typeof filtered[0], b: typeof filtered[0]) => {
+    const sortByPrice = (a: (typeof filtered)[0], b: (typeof filtered)[0]) => {
       if (currentPrice) {
         return a.priceDifference - b.priceDifference;
       }
-      // Se não tem preço de referência, ordena por ID maior primeiro (mais recentes)
       const idA = parseInt(a.id) || 0;
       const idB = parseInt(b.id) || 0;
       return idB - idA;
@@ -984,36 +856,37 @@ function RelatedVehiclesSection({
 
     const sortedSameCategory = sameCategoryVehicles.sort(sortByPrice);
     const sortedOther = otherVehicles.sort(sortByPrice);
-
-    // Combina: primeiro os da mesma categoria, depois completa com os mais próximos de outras categorias
     const result = [...sortedSameCategory];
-    
-    // Completa com veículos de outras categorias se necessário (apenas 1 linha)
-    if (result.length < columnsPerRow) {
-      const needed = columnsPerRow - result.length;
+
+    if (result.length < maxRelatedVehicles) {
+      const needed = maxRelatedVehicles - result.length;
       result.push(...sortedOther.slice(0, needed));
     }
 
-    // No mobile usa carrossel, então retorna todos os veículos filtrados (até 4 da API)
-    // No desktop limita por colunas
-    if (columnsPerRow === 1) {
-      // Mobile: retorna todos os veículos (até 4)
-      return result;
-    }
-    // Desktop: limita para completar linhas inteiras
-    const rowsToShow = 1; // Mostra 1 linha completa
-    const maxVehicles = columnsPerRow * rowsToShow;
-    return result.slice(0, maxVehicles);
-  }, [vehicles, currentVehicleId, currentCategory, currentPrice, columnsPerRow]);
+    return result.slice(0, maxRelatedVehicles).map((vehicle) => ({
+      id: String(vehicle.id),
+      name: vehicle.modelo || vehicle.name,
+      price: vehicle.price || 0,
+      valor_formatado: vehicle.valor_formatado,
+      preco_com_troca: vehicle.preco_com_troca,
+      preco_com_troca_formatado: vehicle.preco_com_troca_formatado,
+      year: vehicle.year || new Date().getFullYear(),
+      km: vehicle.km || 0,
+      images: vehicle.images || vehicle.fotos || vehicle.fullImages || [],
+      imagens_site: vehicle.imagens_site,
+      marca: vehicle.marca,
+      modelo: vehicle.modelo,
+      placa: vehicle.placa,
+    }));
+  }, [vehicles, currentVehicleId, currentCategory, currentPrice]);
 
-  if (isLoading || relatedVehicles.length === 0) {
+  if (isLoading || relatedVehicleCards.length === 0) {
     return null;
   }
 
   return (
     <section className="w-full py-8 sm:py-12 lg:py-16">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -1025,41 +898,16 @@ function RelatedVehiclesSection({
             <div className="w-[26px] h-[26px] sm:w-[28px] sm:h-[28px] lg:w-[30px] lg:h-[30px]">
               <img src={icon1} alt="" aria-hidden="true" className="block size-full" />
             </div>
-            <h2 className="section-heading">
-              Você também pode gostar
-            </h2>
+            <h2 className="section-heading">Você também pode gostar</h2>
           </div>
-
-          {/* Divider Line */}
           <div className="h-[1px] bg-primary w-full"></div>
         </motion.div>
 
-        {/* Mobile - Carrossel */}
-        <div className="md:hidden relative">
-          <RelatedVehiclesCarousel vehicles={relatedVehicles} />
-        </div>
-
-        {/* Desktop - Grid */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10 overflow-visible">
-          {relatedVehicles.map((vehicle) => (
-            <VehicleCard
-              key={vehicle.id}
-              id={String(vehicle.id)}
-              name={vehicle.modelo || vehicle.name}
-              price={vehicle.price || 0}
-              valor_formatado={vehicle.valor_formatado}
-              preco_com_troca={vehicle.preco_com_troca}
-              preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
-              year={vehicle.year || new Date().getFullYear()}
-              km={vehicle.km || 0}
-              images={vehicle.images || vehicle.fotos || vehicle.fullImages || []}
-              imagens_site={vehicle.imagens_site}
-              marca={vehicle.marca}
-              modelo={vehicle.modelo}
-              placa={vehicle.placa}
-            />
-          ))}
-        </div>
+        <ProductList
+          vehicles={relatedVehicleCards}
+          showWhatsAppInterest
+          whatsAppSource="detalhe_relacionados"
+        />
       </div>
     </section>
   );
@@ -1126,6 +974,18 @@ export function DetalhesPage() {
   const slug = paramSlug || location.pathname.replace(/^\/veiculo\//, "") || "";
   
   const { data: vehicle, isLoading, error } = useVehicleQuery(slug);
+
+  // GA4: view_item — dispara quando detalhe carrega
+  useEffect(() => {
+    if (!vehicle) return;
+    trackViewItem({
+      vehicleId: vehicle.id,
+      vehicleName:
+        [vehicle.marca, vehicle.modelo, vehicle.year].filter(Boolean).join(" ") ||
+        vehicle.name,
+      price: vehicle.price,
+    });
+  }, [vehicle]);
   
   // Busca o anúncio (campo GPT) separadamente usando o novo endpoint
   const { data: anuncio } = useAnuncioQuery(vehicle?.id);

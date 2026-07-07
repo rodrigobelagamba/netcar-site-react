@@ -1,10 +1,12 @@
-import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Maximize2, MessageCircle } from "lucide-react";
 import { Button } from "@/design-system/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatPrice, formatYear } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
+import { buildWhatsAppUrl, homeWhatsAppMessages } from "@/lib/whatsappMessages";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 
@@ -34,6 +36,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const navigate = useNavigate();
+  const { data: whatsapp } = useWhatsAppQuery();
   
   if (!vehicles || vehicles.length === 0) {
     return null;
@@ -89,6 +92,19 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
     });
     navigate({ to: `/veiculo/${slug}` });
   };
+
+  const heroVehicleLabel = [vehicle.marca || vehicle.brand, vehicle.modelo || vehicle.model, vehicle.year]
+    .filter(Boolean)
+    .join(" ");
+  const heroWhatsAppHref =
+    whatsapp?.numero && heroVehicleLabel
+      ? buildWhatsAppUrl(
+          whatsapp.numero,
+          homeWhatsAppMessages({
+            vehicleLabel: heroVehicleLabel,
+          }).vehicleInterest,
+        )
+      : undefined;
 
   const sanitizeFormattedPrice = (formatted?: string) =>
     formatted ? formatted.replace(/<[^>]*>/g, "") : "";
@@ -252,10 +268,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                 <span className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest text-center transition-colors group-hover:text-primary" style={{ color: 'rgba(0, 40, 60, 0.6)' }}>Ver Fotos</span>
               </div>
 
-              <div 
-                className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center hover:bg-white/40 transition-colors cursor-pointer group h-full"
-                onClick={handleViewDetails}
-              >
+              <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center hover:bg-white/40 transition-colors group h-full">
                 <div className="flex items-center gap-2 mb-0.5 md:mb-2 justify-center">
                   <motion.div 
                     animate={{ scale: [1, 1.3, 1], opacity: [1, 0.4, 1] }}
@@ -274,14 +287,30 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                     Vistoriado
                   </motion.span>
                 </div>
-                <Button 
-                  variant="ghost" 
-                  className="font-black hover:text-secondary p-0 h-auto text-xs md:text-sm lg:text-base whitespace-nowrap"
-                  style={{ color: '#00283C' }}
-                  onClick={handleViewDetails}
-                >
-                  QUERO ESTE CARRO
-                </Button>
+                {heroWhatsAppHref ? (
+                  <a
+                    href={heroWhatsAppHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-wa-source="home_hero"
+                    data-wa-intent="vehicle_interest"
+                    data-wa-vehicle-id={vehicle.id}
+                    data-wa-vehicle-name={heroVehicleLabel}
+                    className="inline-flex items-center gap-1 font-black text-xs md:text-sm lg:text-base whitespace-nowrap text-[#25D366] hover:text-[#128C7E]"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    TENHO INTERESSE
+                  </a>
+                ) : (
+                  <Button 
+                    variant="ghost" 
+                    className="font-black hover:text-secondary p-0 h-auto text-xs md:text-sm lg:text-base whitespace-nowrap"
+                    style={{ color: '#00283C' }}
+                    onClick={handleViewDetails}
+                  >
+                    QUERO ESTE CARRO
+                  </Button>
+                )}
               </div>
             </motion.div>
           </AnimatePresence>

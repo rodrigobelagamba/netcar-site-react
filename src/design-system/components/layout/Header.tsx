@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useSearchContext } from "@/contexts/SearchContext";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
-import { buildWhatsAppUrl, resolveSiteWhatsAppMessage } from "@/lib/whatsappMessages";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { generateVehicleSlug } from "@/lib/slug";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
@@ -50,18 +50,13 @@ export function Header() {
     return phone;
   };
 
-  // Gera link do WhatsApp (usa link da API se disponível, senão gera)
+  // Gera link do WhatsApp (mensagem curta fixa — facilita qualificação no iAN)
   const getWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
-    
-    // Se a API já retornou um link, usa ele
-    if (whatsapp.link) {
-      return whatsapp.link;
-    }
-    
-    // Senão, gera o link do WhatsApp
-    const message = resolveSiteWhatsAppMessage(whatsapp.mensagem);
-    return buildWhatsAppUrl(whatsapp.numero, message);
+    return buildWhatsAppUrl(
+      whatsapp.numero,
+      siteWhatsAppMessage("quero falar com a Netcar sobre seminovos."),
+    );
   };
 
   useEffect(() => {

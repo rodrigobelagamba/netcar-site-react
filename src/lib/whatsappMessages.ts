@@ -45,6 +45,9 @@ export function vehicleWhatsAppMessages(
     photos: siteWhatsAppMessage(
       `quero ver mais fotos ou vídeo do ${vehicleLabel}.`,
     ),
+    km: siteWhatsAppMessage(
+      `quero saber mais sobre a quilometragem do ${vehicleLabel}.`,
+    ),
   };
 }
 
@@ -80,4 +83,38 @@ export function quickSellWhatsAppMessage(details: {
   if (details.km?.trim()) lines.push(`KM: ${details.km.trim()}`);
   if (details.cityName) lines.push(`Cidade: ${details.cityName}`);
   return lines.join("\n");
+}
+
+/** Mensagens de conversão da Home e curadoria de estoque. */
+export function homeWhatsAppMessages(options?: {
+  vehicleLabel?: string;
+}) {
+  const label = options?.vehicleLabel?.trim();
+
+  return {
+    vehicleInterest: label
+      ? siteWhatsAppMessage(`tenho interesse no ${label}.`)
+      : siteWhatsAppMessage("quero ajuda para escolher um seminovo do estoque."),
+    simulateFinance: siteWhatsAppMessage(
+      label
+        ? `quero simular entrada e parcelas do ${label}.`
+        : "quero simular entrada e parcelas de um seminovo.",
+    ),
+    similarOptions: siteWhatsAppMessage(
+      label
+        ? `quero receber opções parecidas com o ${label}.`
+        : "quero receber opções de seminovos parecidos com meu perfil.",
+    ),
+    talkToIan: siteWhatsAppMessage(
+      "quero falar com a IA da Netcar para me ajudar a escolher um carro.",
+    ),
+    visitStore: siteWhatsAppMessage(
+      "quero agendar uma visita na loja de Esteio para ver seminovos.",
+    ),
+    askKm: siteWhatsAppMessage(
+      label
+        ? `quero saber mais sobre a quilometragem do ${label}.`
+        : "quero saber mais sobre a quilometragem de um seminovo.",
+    ),
+  };
 }

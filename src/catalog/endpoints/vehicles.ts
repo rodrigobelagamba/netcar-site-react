@@ -41,6 +41,8 @@ export interface Vehicle {
   pdf?: string; // Nome do arquivo PDF
   pdf_url?: string; // URL relativa do PDF
   fotos?: string[]; // Deprecated - usar fullImages ao invés
+  destaque?: number;
+  promocao?: number;
 }
 
 export interface ApiVehicleResponse {
@@ -332,6 +334,8 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
         pdf: apiVehicle.pdf,
         pdf_url: pdfUrl,
+        destaque: apiVehicle.destaque,
+        promocao: apiVehicle.promocao,
       };
     });
 
@@ -420,6 +424,8 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
       pdf: apiVehicle.pdf,
       pdf_url: pdfUrl,
+      destaque: apiVehicle.destaque,
+      promocao: apiVehicle.promocao,
     };
     } catch (error) {
       console.error("Error fetching vehicle by ID:", error);

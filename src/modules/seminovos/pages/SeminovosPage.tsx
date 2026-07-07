@@ -2,15 +2,18 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
-import { ChevronDown, X, Filter } from "lucide-react";
+import { ChevronDown, X, Filter, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { SearchBar } from "@/design-system/components/patterns/SearchBar";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
+import { trackStockFilterApply } from "@/lib/analytics";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
 
@@ -52,6 +55,7 @@ export function SeminovosPage() {
   
   const { data: vehicles, isLoading } = useVehiclesQuery(vehiclesQuery);
   const { data: stockData } = useAllStockDataQuery();
+  const { data: whatsapp } = useWhatsAppQuery();
   const { searchTerm } = useSearchContext();
 
   const hasFilterParams = useMemo(() => {
@@ -143,6 +147,17 @@ export function SeminovosPage() {
 
   // Aplica filtros
   const handleFilter = () => {
+    trackStockFilterApply({
+      filters: {
+        marca: marca || undefined,
+        anoMin: anoMin || undefined,
+        anoMax: anoMax || undefined,
+        precoMin: precoMin || undefined,
+        precoMax: precoMax || undefined,
+        categoria: search.categoria || undefined,
+      },
+      resultCount: filteredAndSortedVehicles.length,
+    });
     navigate({
       to: "/seminovos",
       search: {
@@ -295,8 +310,44 @@ export function SeminovosPage() {
   }, [priceRanges]);
 
 
+  // Monta mensagem WhatsApp com filtros ativos
+  const seminovosWhatsAppHref = useMemo(() => {
+    if (!whatsapp?.numero) return "#";
+    const parts: string[] = [];
+    if (search.marca) parts.push(`marca ${search.marca}`);
+    if (search.modelo) parts.push(`modelo ${search.modelo}`);
+    if (search.categoria) parts.push(`categoria ${search.categoria}`);
+    if (search.cambio) parts.push(`câmbio ${search.cambio}`);
+    if (search.cor) parts.push(`cor ${search.cor}`);
+    if (search.precoMin || search.precoMax) {
+      const min = search.precoMin ? `R$ ${search.precoMin}` : "—";
+      const max = search.precoMax ? `R$ ${search.precoMax}` : "—";
+      parts.push(`preço entre ${min} e ${max}`);
+    }
+    if (search.anoMin || search.anoMax) {
+      const min = search.anoMin || "—";
+      const max = search.anoMax || "—";
+      parts.push(`ano entre ${min} e ${max}`);
+    }
+    const body = parts.length
+      ? `quero help pra achar um seminovo com: ${parts.join(", ")}.`
+      : "quero help pra achar um seminovo do estoque.";
+    return buildWhatsAppUrl(whatsapp.numero, siteWhatsAppMessage(body));
+  }, [
+    whatsapp?.numero,
+    search.marca,
+    search.modelo,
+    search.categoria,
+    search.cambio,
+    search.cor,
+    search.precoMin,
+    search.precoMax,
+    search.anoMin,
+    search.anoMax,
+  ]);
+
   return (
-    <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-20 md:pb-6">
+    <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-32 md:pb-6">
       {/* SearchBar - Fixada logo abaixo do Header, apenas Mobile, controlada por estado */}
       <AnimatePresence>
         {isSearchBarVisible && (
@@ -315,17 +366,35 @@ export function SeminovosPage() {
       {/* Espaçamento para compensar Header (64px) + SearchBar fixa (~180px) no mobile, apenas quando visível */}
       {isSearchBarVisible && <div className="md:hidden h-[244px]"></div>}
       
-      {/* Botão Filtrar Fixo - Apenas Mobile */}
-      <div className="md:hidden fixed bottom-6 left-6 z-[51]">
+      {/* Botão Filtrar Fixo - Apenas Mobile (acima da sticky WA) */}
+      <div className="md:hidden fixed bottom-24 left-4 z-[51]">
         <button
           onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
-          className="px-6 py-4 rounded-full bg-fg text-white shadow-lg hover:bg-fg/90 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 font-semibold"
+          className="px-5 py-3.5 rounded-full bg-fg text-white shadow-lg hover:bg-fg/90 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 font-semibold"
           style={{ backgroundColor: '#00283C' }}
           aria-label="Filtrar"
         >
           <Filter className="w-5 h-5" />
           <span>Filtrar</span>
         </button>
+      </div>
+
+      {/* Sticky WhatsApp com filtros - Apenas Mobile */}
+      <div className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#25D366]/30 bg-white/95 px-4 py-3 shadow-[0_-12px_40px_rgba(0,0,0,0.12)] backdrop-blur-md">
+        <p className="mb-1.5 text-center text-[11px] font-semibold uppercase tracking-wide text-[#00283C]/70">
+          Atendimento no WhatsApp 24 horas, 7 dias por semana
+        </p>
+        <a
+          href={seminovosWhatsAppHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-wa-source="seminovos_sticky"
+          data-wa-intent="stock_help"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-4 py-3.5 text-base font-black text-white shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
+        >
+          <MessageCircle className="h-5 w-5" />
+          {hasFilterParams ? "Receber opções no WhatsApp" : "Falar sobre seminovos"}
+        </a>
       </div>
       
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
@@ -472,6 +541,7 @@ export function SeminovosPage() {
                 modelo={vehicle.modelo}
                 delay={index}
                 fastAnimation={index >= 8}
+                showWhatsAppInterest
               />
             ))}
           </div>

@@ -7,23 +7,26 @@ import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/HomeHero";
 import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { SearchBar } from "@/design-system/components/patterns/SearchBar";
+import { HomeWhatsAppConversionPanel } from "../components/HomeWhatsAppConversionPanel";
+import { HomeMobileWhatsAppBar } from "../components/HomeMobileWhatsAppBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
 import { useMemo, useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Button } from "@/design-system/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import {
+  pickFeaturedHomeVehicle,
+  pickHomeHighlightVehicles,
+} from "@/lib/homeStock";
+import { trackHomeScrollDepth } from "@/lib/analytics";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 
-// Skeleton do HomeHero para evitar layout shift
 function HomeHeroSkeleton() {
   return (
       <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">
-        {/* Brand Label Skeleton */}
         <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
           <div className="flex items-center gap-3">
             <div className="h-[1px] w-8 md:w-12 bg-gray-300 animate-pulse" />
@@ -32,12 +35,10 @@ function HomeHeroSkeleton() {
           </div>
         </div>
 
-        {/* Image Skeleton */}
         <div className="relative w-full container-main flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
           <div className="w-full h-[45vh] md:h-[60vh] bg-gray-200 rounded-lg animate-pulse" />
         </div>
 
-        {/* Info Bar Skeleton */}
         <div className="relative w-full max-w-5xl h-[300px] md:h-[150px] mx-4 mt-8 md:mt-24 z-20">
           <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 w-full bg-white/70 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/50 shadow-2xl">
             <div className="p-3 md:p-4 lg:p-8 flex flex-col justify-center items-center bg-gray-200 animate-pulse" />
@@ -60,24 +61,23 @@ export function HomePage() {
   const showVehiclesHero = !showBanners && !isLoadingBanners;
   const isLoadingHero = isLoadingBanners || (showVehiclesHero && isLoadingVehicles);
   
-  // Detecta número de colunas baseado no tamanho da tela
   const [columnsPerRow, setColumnsPerRow] = useState(4);
   
   useEffect(() => {
     const updateColumns = () => {
       const width = window.innerWidth;
       if (width >= 3360) {
-        setColumnsPerRow(5); // 4xl
+        setColumnsPerRow(5);
       } else if (width >= 1920) {
-        setColumnsPerRow(5); // 3xl e 2xl
+        setColumnsPerRow(5);
       } else if (width >= 1280) {
-        setColumnsPerRow(4); // xl
+        setColumnsPerRow(4);
       } else if (width >= 1024) {
-        setColumnsPerRow(4); // lg
+        setColumnsPerRow(4);
       } else if (width >= 768) {
-        setColumnsPerRow(2); // md
+        setColumnsPerRow(2);
       } else {
-        setColumnsPerRow(1); // mobile
+        setColumnsPerRow(1);
       }
     };
     
@@ -91,11 +91,14 @@ export function HomePage() {
     "Loja de seminovos em Esteio/RS. 2 lojas na Av. Presidente Vargas. Garantia, Fábrica de Valor e Nethelp. Financiamento facilitado."
   );
 
-  // Prepara veículos para o HomeHero - filtra PNGs, preço > 80000 e ordena aleatoriamente
+  const featuredVehicle = useMemo(
+    () => (vehicles ? pickFeaturedHomeVehicle(vehicles) : undefined),
+    [vehicles],
+  );
+
   const heroVehicles: HomeHeroVehicle[] = useMemo(() => {
     if (!vehicles) return [];
 
-    // Função para embaralhar array (Fisher-Yates shuffle)
     const shuffleArray = <T,>(array: T[]): T[] => {
       const shuffled = [...array];
       for (let i = shuffled.length - 1; i > 0; i--) {
@@ -105,35 +108,28 @@ export function HomePage() {
       return shuffled;
     };
 
-    // Helper: confere se a string é uma URL de imagem PNG.
     const isPngUrl = (img?: string | null): img is string =>
       !!img && img.toLowerCase().includes(".png");
 
     const filtered = vehicles
       .filter(vehicle => {
-        // Filtra apenas carros com preço maior que 80 mil
+        if (featuredVehicle && vehicle.id === featuredVehicle.id) return false;
+
         const price = typeof vehicle.price === 'number' ? vehicle.price : Number(vehicle.price);
         if (!price || isNaN(price) || price <= 80000) return false;
         
-        // Filtra apenas veículos que possuem fotos (tem_fotos === 1)
         const temFotos = vehicle.imagens_site?.tem_fotos;
         if (temFotos === 0 || temFotos === undefined) return false;
 
-        // O banner da home só pode usar a foto-capa em PNG (alta resolução,
-        // fundo transparente). Veículos sem capa PNG são excluídos do hero
-        // pra não cair em thumbnails de baixa resolução.
         if (!isPngUrl(vehicle.imagens_site?.capa)) return false;
 
         return true;
       });
 
-    // Embaralha aleatoriamente e pega os 4 primeiros
     return shuffleArray(filtered).slice(0, 4)
       .map(vehicle => {
-        // Garantido pelo filter acima: imagens_site.capa existe e é PNG.
         const mainImage = vehicle.imagens_site?.capa || CAR_COVERED_PLACEHOLDER_URL;
         
-        // Monta a tag (combustível + motor se disponível)
         const tagParts = [];
         if (vehicle.combustivel) tagParts.push(vehicle.combustivel);
         if (vehicle.motor) tagParts.push(vehicle.motor);
@@ -157,44 +153,45 @@ export function HomePage() {
           cambio: vehicle.cambio,
         };
       });
-  }, [vehicles]);
+  }, [vehicles, featuredVehicle]);
 
-  // Filtra veículos que têm foto (tem_fotos === 1), preço > 0 e ordena por ID maior
+  const HOME_HIGHLIGHTS_MOBILE = 6;
+  const HOME_HIGHLIGHTS_DESKTOP_ROWS = 2;
+
   const vehiclesWithPhotos = useMemo(() => {
     if (!vehicles) return [];
 
-    const filtered = vehicles
-      .filter(vehicle => {
-        // Filtra apenas carros com preço maior que zero (carro vendido tem valor = 0)
-        const price = typeof vehicle.price === 'number' ? vehicle.price : Number(vehicle.price);
-        if (!price || isNaN(price) || price <= 0) return false;
-        
-        // Filtra apenas veículos que possuem fotos (tem_fotos === 1)
-        const temFotos = vehicle.imagens_site?.tem_fotos;
-        if (temFotos === 0 || temFotos === undefined) return false;
-        
-        return true;
-      })
-      .sort((a, b) => {
-        // Ordena por ID maior primeiro (mais recentes)
-        const idA = parseInt(a.id) || 0;
-        const idB = parseInt(b.id) || 0;
-        return idB - idA;
-      });
-    
-    // No mobile usa carrossel, então retorna todos os veículos filtrados (até 4 da API)
-    // No desktop limita por colunas
-    if (columnsPerRow === 1) {
-      // Mobile: retorna todos os veículos (até 4)
-      return filtered;
-    }
-    // Desktop: limita para completar linhas inteiras
-    const rowsToShow = 1; // Mostra 1 linha completa
-    const maxVehicles = columnsPerRow * rowsToShow;
-    return filtered.slice(0, maxVehicles);
-  }, [vehicles, columnsPerRow]);
+    const limit =
+      columnsPerRow === 1
+        ? HOME_HIGHLIGHTS_MOBILE
+        : columnsPerRow * HOME_HIGHLIGHTS_DESKTOP_ROWS;
 
-  // Pré-carrega a primeira imagem do banner/hero para melhorar a experiência
+    return pickHomeHighlightVehicles(
+      vehicles,
+      limit,
+      featuredVehicle ? [featuredVehicle.id] : [],
+    );
+  }, [vehicles, columnsPerRow, featuredVehicle]);
+
+  const featuredVehicleLabel = featuredVehicle
+    ? [featuredVehicle.marca, featuredVehicle.modelo, featuredVehicle.year].filter(Boolean).join(" ")
+    : undefined;
+
+  const goToStock = () => navigate({
+    to: "/seminovos",
+    search: {
+      marca: undefined,
+      modelo: undefined,
+      precoMin: undefined,
+      precoMax: undefined,
+      anoMin: undefined,
+      anoMax: undefined,
+      cambio: undefined,
+      cor: undefined,
+      categoria: undefined,
+    },
+  });
+
   useEffect(() => {
     const url = hasBanners && banners?.[0]?.imagem
       ? banners[0].imagem
@@ -211,9 +208,27 @@ export function HomePage() {
     }
   }, [hasBanners, banners, heroVehicles]);
 
+  // GA4: scroll 50% na Home (engajamento)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let fired50 = false;
+    const onScroll = () => {
+      if (fired50) return;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0 && scrollTop / docHeight >= 0.5) {
+        fired50 = true;
+        trackHomeScrollDepth(50);
+        window.removeEventListener("scroll", onScroll);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full">
-      {/* Banner: se a API retornar banners, mostra slider de banners; senão, slide dos carros */}
+    <main className="flex-1 overflow-x-hidden max-w-full pb-24 md:pb-0">
       {isLoadingHero ? (
         <HomeHeroSkeleton />
       ) : showBanners ? (
@@ -222,64 +237,35 @@ export function HomePage() {
         <HomeHero vehicles={heroVehicles} />
       ) : null}
 
-      {/* SearchBar logo abaixo do banner */}
+      <HomeWhatsAppConversionPanel
+        featuredVehicle={featuredVehicle}
+        onViewStock={goToStock}
+      />
+
       <SearchBar />
 
-      {/* Título principal (H1) para busca local */}
-      <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 mt-8 text-center">
-        <h1 className="text-2xl md:text-3xl font-bold text-fg">
-          Netcar Multimarcas — Seminovos em Esteio/RS
-        </h1>
-        <p className="mt-2 mx-auto max-w-3xl text-base md:text-lg text-gray-600">
-          Seminovos vistoriados, com garantia e financiamento em Esteio/RS desde 1997.
-          Duas lojas na Av. Presidente Vargas com estoque atualizado de multimarcas.
-        </p>
-      </section>
-
-      {/* Botão Ver Estoque Completo */}
-      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 mt-8 flex justify-center">
-        <Button 
-          onClick={() => navigate({ 
-            to: "/seminovos",
-            search: {
-              marca: undefined,
-              modelo: undefined,
-              precoMin: undefined,
-              precoMax: undefined,
-              anoMin: undefined,
-              anoMax: undefined,
-              cambio: undefined,
-              cor: undefined,
-              categoria: undefined,
-            }
-          })}
-          className="group relative overflow-hidden bg-white hover:bg-white text-[#00283C] font-bold py-6 px-10 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3 active:scale-95"
-        >
-          <div className="absolute inset-0 bg-[#00283C] translate-y-[102%] group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-          <span className="relative z-10 transition-colors duration-300 button-text-shimmer">VER ESTOQUE COMPLETO</span>
-          <motion.div
-            animate={{
-              x: [0, 6, 0],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              repeatDelay: 3,
-              ease: "easeInOut",
-            }}
-            className="relative z-10"
-          >
-            <ArrowRight className="w-5 h-5 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
-          </motion.div>
-        </Button>
-      </div>
-
       <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-12">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-fg">Destaques</h2>
-          <p className="mt-2 text-gray-600 text-lg font-medium">Novidades da semana, olha só o que separamos para você!</p>
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="text-3xl font-bold text-fg">Destaques do estoque</h2>
+            <p className="mt-2 max-w-2xl text-gray-600 text-lg font-medium">
+              Escolha um seminovo real, fale no WhatsApp com mensagem pronta — entrada facilitada, troca aceita e atendimento 24 horas, 7 dias por semana.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={goToStock}
+            className="inline-flex w-full shrink-0 items-center justify-center gap-2.5 rounded-full bg-[#00283C] px-8 py-4 text-base font-black uppercase tracking-wider text-white shadow-[0_12px_32px_rgba(0,40,60,0.28)] transition-all hover:bg-[#00435a] hover:shadow-[0_16px_40px_rgba(0,40,60,0.34)] active:scale-[0.98] md:w-auto"
+          >
+            Ver todos no estoque
+            <ArrowRight className="h-5 w-5" />
+          </button>
         </div>
-        <ProductList vehicles={vehiclesWithPhotos} isLoading={isLoadingVehicles} />
+        <ProductList
+          vehicles={vehiclesWithPhotos}
+          isLoading={isLoadingVehicles}
+          showWhatsAppInterest
+        />
       </section>
 
       <ServicesSection />
@@ -294,6 +280,8 @@ export function HomePage() {
           <IanBot />
         </div>
       </div>
+
+      <HomeMobileWhatsAppBar vehicleLabel={featuredVehicleLabel} />
     </main>
   );
 }

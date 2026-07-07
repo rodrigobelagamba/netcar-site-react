@@ -1,9 +1,11 @@
-import { Car, Search, X } from "lucide-react";
+import { Car, Search, X, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 
 interface SearchSuggestion {
   type: string;
@@ -39,6 +41,35 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
   
   const { data: vehicles } = useVehiclesQuery();
   const { data: stockData } = useAllStockDataQuery();
+  const { data: whatsapp } = useWhatsAppQuery();
+
+  const notFoundWhatsAppHref = useMemo(() => {
+    if (!whatsapp?.numero) return "#";
+    const parts: string[] = [];
+    if (search.marca) parts.push(`marca ${search.marca}`);
+    if (search.modelo) parts.push(`modelo ${search.modelo}`);
+    if (search.categoria) parts.push(`categoria ${search.categoria}`);
+    if (search.cambio) parts.push(`câmbio ${search.cambio}`);
+    if (search.cor) parts.push(`cor ${search.cor}`);
+    if (search.precoMin || search.precoMax) {
+      const min = search.precoMin ? `R$ ${search.precoMin}` : "—";
+      const max = search.precoMax ? `R$ ${search.precoMax}` : "—";
+      parts.push(`preço entre ${min} e ${max}`);
+    }
+    const body = parts.length
+      ? `não achei o carro que quero. Pode me ajudar com: ${parts.join(", ")}?`
+      : "não achei o carro que quero. Pode me enviar opções parecidas?";
+    return buildWhatsAppUrl(whatsapp.numero, siteWhatsAppMessage(body));
+  }, [
+    whatsapp?.numero,
+    search.marca,
+    search.modelo,
+    search.categoria,
+    search.cambio,
+    search.cor,
+    search.precoMin,
+    search.precoMax,
+  ]);
 
   // Gera sugestões baseadas na query
   const filteredSuggestions = useMemo<SearchSuggestion[]>(() => {
@@ -865,6 +896,23 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
           </button>
         ))}
       </div>
+
+      {/* CTA "Não achou? WhatsApp" — aparece quando busca/filtros ativos */}
+      {(searchQuery || hasActiveFilters) && (
+        <div className="mt-4 flex justify-center">
+          <a
+            href={notFoundWhatsAppHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-wa-source="searchbar_notfound"
+            data-wa-intent="similar_options"
+            className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-bold text-white shadow-lg transition-colors hover:bg-[#128C7E]"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Não achou? Receba opções no WhatsApp
+          </a>
+        </div>
+      )}
     </section>
   );
 }

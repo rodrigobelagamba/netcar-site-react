@@ -1,6 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatPrice, formatYear, formatKm } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
+import { buildWhatsAppUrl, vehicleWhatsAppMessages } from "@/lib/whatsappMessages";
 import { CardsHero } from "./CardsHero";
 import { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 
@@ -27,6 +29,9 @@ export interface VehicleCardProps {
   cambio?: string;
   delay?: number;
   fastAnimation?: boolean;
+  showWhatsAppInterest?: boolean;
+  whatsAppSource?: string;
+  compact?: boolean;
 }
 
 export function VehicleCard({
@@ -47,8 +52,12 @@ export function VehicleCard({
   cambio,
   delay = 0,
   fastAnimation = false,
+  showWhatsAppInterest = false,
+  whatsAppSource = "home_destaques",
+  compact = false,
 }: VehicleCardProps) {
   const navigate = useNavigate();
+  const { data: whatsapp } = useWhatsAppQuery();
   
   // PRIORIDADE 1: Usa imagens_site.capa_thumb se disponível
   // PRIORIDADE 2: Usa imagens_site.capa como fallback
@@ -121,6 +130,15 @@ export function VehicleCard({
   const mileageFormatted = formatKm(km);
   const fuel = combustivel || '';
   const transmission = cambio || '';
+  const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
+  const isSold = !price || price <= 0;
+  const whatsAppHref =
+    showWhatsAppInterest && whatsapp?.numero && !isSold
+      ? buildWhatsAppUrl(
+          whatsapp.numero,
+          vehicleWhatsAppMessages(vehicleLabel).km,
+        )
+      : undefined;
 
   return (
     <CardsHero
@@ -137,6 +155,11 @@ export function VehicleCard({
       delay={delay}
       fastAnimation={fastAnimation}
       onClick={handleClick}
+      whatsAppHref={whatsAppHref}
+      whatsAppVehicleId={id}
+      whatsAppVehicleName={vehicleLabel}
+      whatsAppSource={whatsAppSource}
+      compact={compact}
     />
   );
 }

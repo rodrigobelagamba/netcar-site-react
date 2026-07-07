@@ -185,7 +185,8 @@ function WhatsAppButton() {
       animate={{ scale: 1 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      className="fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full shadow-lg transition-all hover:shadow-2xl group"
+      // Na Home mobile a sticky bar propria cobre CTA WA — esconde flutuante pra nao competir
+      className="fixed bottom-6 right-6 z-50 hidden md:flex h-16 w-16 items-center justify-center rounded-full shadow-lg transition-all hover:shadow-2xl group"
       style={{ backgroundColor: '#25D366' }}
       aria-label="Fale com iAN no WhatsApp"
       title="Fale com iAN no WhatsApp"
