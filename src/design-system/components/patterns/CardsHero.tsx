@@ -18,6 +18,7 @@ interface CardsHeroProps {
   onClick?: () => void;
   whatsAppHref?: string;
   tradeInHref?: string;
+  financeHref?: string;
   whatsAppVehicleId?: string;
   whatsAppVehicleName?: string;
   whatsAppSource?: string;
@@ -37,6 +38,7 @@ export function CardsHero({
   onClick,
   whatsAppHref,
   tradeInHref,
+  financeHref,
   whatsAppVehicleId,
   whatsAppVehicleName,
   whatsAppSource = "home_destaques",
@@ -167,6 +169,24 @@ export function CardsHero({
                }`}
              >
                {compact ? "Troca deste →" : "Avaliar meu carro na troca deste →"}
+             </a>
+           ) : null}
+
+           {whatsAppHref && financeHref ? (
+             <a
+               href={financeHref}
+               target="_blank"
+               rel="noopener noreferrer"
+               data-wa-source={`${whatsAppSource}_finance`}
+               data-wa-intent="simulate_finance"
+               data-wa-vehicle-id={whatsAppVehicleId}
+               data-wa-vehicle-name={whatsAppVehicleName}
+               onClick={(e) => e.stopPropagation()}
+               className={`!border-0 w-full text-center font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D] ${
+                 compact ? "text-[10px] leading-tight" : "text-xs"
+               }`}
+             >
+               {compact ? "Financiamento →" : "Simular um financiamento →"}
              </a>
            ) : null}
          </div>

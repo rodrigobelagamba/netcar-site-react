@@ -147,6 +147,13 @@ export function VehicleCard({
           vehicleWhatsAppMessages(vehicleLabel, tradeModelLabel).trade,
         )
       : undefined;
+  const financeHref =
+    showWhatsAppInterest && whatsapp?.numero && !isSold
+      ? buildWhatsAppUrl(
+          whatsapp.numero,
+          vehicleWhatsAppMessages(vehicleLabel).finance,
+        )
+      : undefined;
 
   return (
     <CardsHero
@@ -165,6 +172,7 @@ export function VehicleCard({
       onClick={handleClick}
       whatsAppHref={whatsAppHref}
       tradeInHref={tradeInHref}
+      financeHref={financeHref}
       whatsAppVehicleId={id}
       whatsAppVehicleName={vehicleLabel}
       whatsAppSource={whatsAppSource}
