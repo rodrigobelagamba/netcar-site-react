@@ -156,7 +156,7 @@ export function HomePage() {
   }, [vehicles, featuredVehicle]);
 
   const HOME_HIGHLIGHTS_MOBILE = 6;
-  const HOME_HIGHLIGHTS_DESKTOP_ROWS = 2;
+  const HOME_HIGHLIGHTS_DESKTOP_ROWS = 3;
 
   const vehiclesWithPhotos = useMemo(() => {
     if (!vehicles) return [];
