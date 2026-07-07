@@ -122,10 +122,12 @@ export function CardsHero({
                data-wa-vehicle-id={whatsAppVehicleId}
                data-wa-vehicle-name={whatsAppVehicleName}
                onClick={(e) => e.stopPropagation()}
-               className="!border-0 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[#25D366] font-black uppercase tracking-wide text-white shadow-lg transition-colors hover:bg-[#128C7E] h-10 px-3 text-[11px]"
+               className={`!border-0 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[#25D366] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#128C7E] h-10 px-3 ${
+                 compact ? "text-[10px] tracking-normal whitespace-nowrap" : "text-[11px] tracking-wide"
+               }`}
              >
-              <MessageCircle className="h-4 w-4" />
-              Saber sobre a KM
+              <MessageCircle className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4"}`} />
+              {compact ? "Saber KM" : "Saber sobre a KM"}
              </a>
            ) : (
              <button

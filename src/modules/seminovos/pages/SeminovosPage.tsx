@@ -523,28 +523,56 @@ export function SeminovosPage() {
             <p className="text-muted-foreground">Tente ajustar os filtros de busca.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10" style={{ overflow: 'visible' }}>
-            {filteredAndSortedVehicles.map((vehicle, index) => (
-              <VehicleCard
-                key={vehicle.id}
-                id={vehicle.id}
-                name={vehicle.modelo || vehicle.name}
-                price={vehicle.price || 0}
-                valor_formatado={vehicle.valor_formatado}
-                preco_com_troca={vehicle.preco_com_troca}
-                preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
-                year={vehicle.year || new Date().getFullYear()}
-                km={vehicle.km || 0}
-                images={vehicle.images || vehicle.fotos || []}
-                imagens_site={vehicle.imagens_site}
-                marca={vehicle.marca}
-                modelo={vehicle.modelo}
-                delay={index}
-                fastAnimation={index >= 8}
-                showWhatsAppInterest
-              />
-            ))}
-          </div>
+          <>
+            <div className="md:hidden grid grid-cols-2 gap-3" style={{ overflow: "visible" }}>
+              {filteredAndSortedVehicles.map((vehicle, index) => (
+                <VehicleCard
+                  key={vehicle.id}
+                  id={vehicle.id}
+                  name={vehicle.modelo || vehicle.name}
+                  price={vehicle.price || 0}
+                  valor_formatado={vehicle.valor_formatado}
+                  preco_com_troca={vehicle.preco_com_troca}
+                  preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
+                  year={vehicle.year || new Date().getFullYear()}
+                  km={vehicle.km || 0}
+                  images={vehicle.images || vehicle.fotos || []}
+                  imagens_site={vehicle.imagens_site}
+                  marca={vehicle.marca}
+                  modelo={vehicle.modelo}
+                  delay={index}
+                  fastAnimation
+                  showWhatsAppInterest
+                  whatsAppSource="seminovos_grid"
+                  compact
+                />
+              ))}
+            </div>
+
+            <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10" style={{ overflow: "visible" }}>
+              {filteredAndSortedVehicles.map((vehicle, index) => (
+                <VehicleCard
+                  key={vehicle.id}
+                  id={vehicle.id}
+                  name={vehicle.modelo || vehicle.name}
+                  price={vehicle.price || 0}
+                  valor_formatado={vehicle.valor_formatado}
+                  preco_com_troca={vehicle.preco_com_troca}
+                  preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
+                  year={vehicle.year || new Date().getFullYear()}
+                  km={vehicle.km || 0}
+                  images={vehicle.images || vehicle.fotos || []}
+                  imagens_site={vehicle.imagens_site}
+                  marca={vehicle.marca}
+                  modelo={vehicle.modelo}
+                  delay={index}
+                  fastAnimation={index >= 8}
+                  showWhatsAppInterest
+                  whatsAppSource="seminovos_grid"
+                />
+              ))}
+            </div>
+          </>
         )}
       </div>
 
