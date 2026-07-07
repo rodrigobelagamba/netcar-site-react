@@ -39,8 +39,8 @@ export function vehicleWhatsAppMessages(
     ),
     trade: siteWhatsAppMessage(
       modeloCompleto
-        ? `quero avaliar meu usado na troca do ${modeloCompleto}.`
-        : "quero avaliar meu usado na troca.",
+        ? `quero avaliar meu carro na troca do ${modeloCompleto}.`
+        : "quero avaliar meu carro na troca.",
     ),
     photos: siteWhatsAppMessage(
       `quero ver mais fotos ou vídeo do ${vehicleLabel}.`,

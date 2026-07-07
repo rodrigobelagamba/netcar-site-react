@@ -17,6 +17,7 @@ interface CardsHeroProps {
   fastAnimation?: boolean;
   onClick?: () => void;
   whatsAppHref?: string;
+  tradeInHref?: string;
   whatsAppVehicleId?: string;
   whatsAppVehicleName?: string;
   whatsAppSource?: string;
@@ -35,6 +36,7 @@ export function CardsHero({
   fastAnimation = false,
   onClick,
   whatsAppHref,
+  tradeInHref,
   whatsAppVehicleId,
   whatsAppVehicleName,
   whatsAppSource = "home_destaques",
@@ -149,6 +151,24 @@ export function CardsHero({
                <Plus className="h-5 w-5 group-hover/btn:rotate-90 transition-transform duration-300" />
              </button>
            )}
+
+           {whatsAppHref && tradeInHref ? (
+             <a
+               href={tradeInHref}
+               target="_blank"
+               rel="noopener noreferrer"
+               data-wa-source={`${whatsAppSource}_trade`}
+               data-wa-intent="trade_in"
+               data-wa-vehicle-id={whatsAppVehicleId}
+               data-wa-vehicle-name={whatsAppVehicleName}
+               onClick={(e) => e.stopPropagation()}
+               className={`!border-0 w-full text-center font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D] ${
+                 compact ? "text-[10px] leading-tight" : "text-xs"
+               }`}
+             >
+               {compact ? "Troca deste →" : "Avaliar meu carro na troca deste →"}
+             </a>
+           ) : null}
          </div>
       </div>
     </div>

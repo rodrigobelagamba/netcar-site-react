@@ -225,29 +225,129 @@ interface ContactButtonProps {
 function ContactButton({ modeloCompleto, vehicleId }: ContactButtonProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const vehicleLabel = modeloCompleto || "veículo";
+  const messages = vehicleWhatsAppMessages(vehicleLabel, modeloCompleto);
   const href = whatsapp?.numero
-    ? buildWhatsAppUrl(whatsapp.numero, vehicleWhatsAppMessages(vehicleLabel).info)
+    ? buildWhatsAppUrl(whatsapp.numero, messages.info)
+    : undefined;
+  const tradeHref = whatsapp?.numero
+    ? buildWhatsAppUrl(whatsapp.numero, messages.trade)
     : undefined;
 
   return (
-    <WhatsAppPulseRing>
-      <CTAButton
-        text="Chamar no WhatsApp"
-        icon={MessageCircleMore}
-        borderColor="border-[#25D366]"
-        textColor="text-white"
-        hoverBgColor="bg-green-dark"
-        filled
-        className="w-full info-contact-button-wrapper !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.3)]"
-        initialAnimation={true}
-        href={href}
-        waSource="hero"
-        waIntent="vehicle_inquiry"
-        waVehicleId={vehicleId}
-        waVehicleName={modeloCompleto}
-        disabled={!whatsapp?.numero}
+    <div className="flex w-full flex-col items-center gap-2.5">
+      <WhatsAppPulseRing>
+        <CTAButton
+          text="Chamar no WhatsApp"
+          icon={MessageCircleMore}
+          borderColor="border-[#25D366]"
+          textColor="text-white"
+          hoverBgColor="bg-green-dark"
+          filled
+          className="w-full info-contact-button-wrapper !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.3)]"
+          initialAnimation={true}
+          href={href}
+          waSource="hero"
+          waIntent="vehicle_inquiry"
+          waVehicleId={vehicleId}
+          waVehicleName={modeloCompleto}
+          disabled={!whatsapp?.numero}
+        />
+      </WhatsAppPulseRing>
+      <TradeInTextLink
+        href={tradeHref}
+        modeloCompleto={modeloCompleto}
+        vehicleId={vehicleId}
+        className="justify-center text-center"
       />
-    </WhatsAppPulseRing>
+    </div>
+  );
+}
+
+interface TradeInTextLinkProps {
+  href?: string;
+  modeloCompleto?: string;
+  vehicleId?: string | number;
+  className?: string;
+  compact?: boolean;
+}
+
+function TradeInTextLink({
+  href,
+  modeloCompleto,
+  vehicleId,
+  className = "",
+  compact = false,
+}: TradeInTextLinkProps) {
+  if (!href) return null;
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-wa-source="detalhe_trade"
+      data-wa-intent="trade_in"
+      data-wa-vehicle-id={vehicleId}
+      data-wa-vehicle-name={modeloCompleto}
+      className={`inline-flex items-center gap-1.5 font-bold text-[#00283C] transition-colors hover:text-[#5CD29D] ${compact ? "text-xs" : "text-sm"} ${className}`}
+    >
+      <ArrowLeftRight className={compact ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4 shrink-0"} />
+      <span className="underline underline-offset-4">Tenho carro na troca deste</span>
+    </a>
+  );
+}
+
+interface DetalheMobileStickyBarProps {
+  price: string;
+  modeloCompleto: string;
+  vehicleId?: string | number;
+}
+
+function DetalheMobileStickyBar({
+  price,
+  modeloCompleto,
+  vehicleId,
+}: DetalheMobileStickyBarProps) {
+  const { data: whatsapp } = useWhatsAppQuery();
+  const vehicleLabel = modeloCompleto || "veículo";
+  const messages = vehicleWhatsAppMessages(vehicleLabel, modeloCompleto);
+  const ready = Boolean(whatsapp?.numero);
+
+  if (!ready) return null;
+
+  const primaryHref = buildWhatsAppUrl(whatsapp!.numero, messages.info);
+  const tradeHref = buildWhatsAppUrl(whatsapp!.numero, messages.trade);
+  const priceLabel = price.replace(/<[^>]*>/g, "");
+
+  return (
+    <div className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#25D366]/30 bg-white/95 px-4 py-3 shadow-[0_-12px_40px_rgba(0,0,0,0.12)] backdrop-blur-md">
+      <div className="mb-2 flex items-center gap-3">
+        <p className="min-w-0 flex-1 truncate text-base font-black leading-tight text-[#5CD29D]">
+          {priceLabel}
+        </p>
+        <a
+          href={primaryHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-wa-source="detalhe_sticky"
+          data-wa-intent="vehicle_inquiry"
+          data-wa-vehicle-id={vehicleId}
+          data-wa-vehicle-name={modeloCompleto}
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-4 py-3 text-sm font-black text-white shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
+        >
+          <MessageCircleMore className="h-4 w-4" />
+          WhatsApp
+        </a>
+      </div>
+      <div className="flex justify-center">
+        <TradeInTextLink
+          href={tradeHref}
+          modeloCompleto={modeloCompleto}
+          vehicleId={vehicleId}
+          compact
+        />
+      </div>
+    </div>
   );
 }
 
@@ -647,6 +747,14 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
                 disabled={!whatsappReady}
               />
             </WhatsAppPulseRing>
+          </div>
+
+          <div className="mb-4 flex w-full max-w-[300px] justify-center">
+            <TradeInTextLink
+              href={whatsappReady ? getWhatsAppLink(vehicleMessages.trade) : undefined}
+              modeloCompleto={modeloCompleto}
+              vehicleId={vehicle?.id}
+            />
           </div>
 
           <p className="mb-3 w-full max-w-[300px] text-center text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
@@ -1259,7 +1367,7 @@ export function DetalhesPage() {
   ];
 
   return (
-    <main className="overflow-x-hidden max-w-full">
+    <main className="overflow-x-hidden max-w-full pb-36 md:pb-0">
       {vehicle && (
         <VehicleSchemaOrg
           marca={marca}
@@ -1520,6 +1628,12 @@ export function DetalhesPage() {
         <LazyLocalizacao />
         <IanBot />
       </div>
+
+      <DetalheMobileStickyBar
+        price={price}
+        modeloCompleto={modeloCompleto}
+        vehicleId={vehicle.id}
+      />
     </main>
   );
 }
