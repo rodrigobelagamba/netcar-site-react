@@ -524,7 +524,7 @@ export function SeminovosPage() {
           </div>
         ) : (
           <>
-            <div className="md:hidden grid grid-cols-2 gap-3" style={{ overflow: "visible" }}>
+            <div className="md:hidden grid grid-cols-2 items-stretch gap-2" style={{ overflow: "visible" }}>
               {filteredAndSortedVehicles.map((vehicle, index) => (
                 <VehicleCard
                   key={vehicle.id}

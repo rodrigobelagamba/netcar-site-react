@@ -46,7 +46,7 @@ export function ProductList({
   if (isLoading) {
     return (
       <>
-        <div className="md:hidden grid grid-cols-2 gap-3">
+        <div className="md:hidden grid grid-cols-2 items-stretch gap-2">
           {Array.from({ length: 6 }).map((_, i) => (
             <SkeletonCard key={i} compact />
           ))}
@@ -66,7 +66,7 @@ export function ProductList({
 
   return (
     <>
-      <div className="md:hidden grid grid-cols-2 gap-3">
+      <div className="md:hidden grid grid-cols-2 items-stretch gap-2">
         {vehicles.map((vehicle, index) => (
           <VehicleCard
             key={vehicle.id}

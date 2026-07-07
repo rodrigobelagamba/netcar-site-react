@@ -45,9 +45,9 @@ export function CardsHero({
   compact = false,
 }: CardsHeroProps) {
   const content = (
-    <div className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center ${
+    <div className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center h-full ${
       compact
-        ? "rounded-[28px] p-4"
+        ? "rounded-[22px] p-3"
         : "rounded-[40px] p-8"
     }`} style={{ border: '1px solid rgba(229, 231, 235, 0.5)' }}>
       {/* Selo em formato de carimbo */}
@@ -62,7 +62,7 @@ export function CardsHero({
       {/* Floating Image Section - LARGER */}
       <div className={`!border-0 absolute left-[-2%] right-[-2%] flex items-center justify-center z-10 pointer-events-none ${
         compact
-          ? "-top-16 h-32 md:-top-44 md:h-80"
+          ? "-top-12 h-28 md:-top-44 md:h-80"
           : "-top-32 md:-top-44 h-64 md:h-80"
       }`}>
         <div className="!border-0 relative w-full h-full">
@@ -77,8 +77,8 @@ export function CardsHero({
       </div>
 
       {/* Content Section - Adjusted to match photo exactly */}
-      <div className={`!border-0 w-full flex flex-col items-start text-left ${
-        compact ? "pt-14 space-y-2" : "pt-28 md:pt-32 space-y-4"
+      <div className={`!border-0 w-full flex flex-col items-start text-left flex-1 ${
+        compact ? "pt-11 space-y-1.5" : "pt-28 md:pt-32 space-y-4"
       }`}>
          <span className={`!border-0 bg-[#00283C] text-white hover:bg-[#00283C] rounded-md font-bold tracking-widest uppercase w-fit inline-block ${
            compact ? "px-2 py-0.5 text-[8px]" : "px-3 py-1 text-[10px]"
@@ -87,15 +87,15 @@ export function CardsHero({
          </span>
 
          {/* Model and Year - Left aligned */}
-         <div className="!border-0 space-y-1">
-           <h3 className={`!border-0 font-bold leading-tight ${compact ? "text-sm" : "text-[17px]"}`} style={{ color: '#00283C' }}>
+         <div className="!border-0 space-y-0.5 w-full">
+           <h3 className={`!border-0 font-bold leading-snug ${compact ? "line-clamp-2 min-h-[2.35rem] text-[11px]" : "text-[17px]"}`} style={{ color: '#00283C' }}>
              {model}
            </h3>
-           <p className={`!border-0 text-gray-400 font-medium ${compact ? "text-xs" : "text-base"}`}>{year}</p>
+           <p className={`!border-0 text-gray-400 font-medium ${compact ? "text-[10px]" : "text-base"}`}>{year}</p>
          </div>
 
          {/* Price and Action — sempre stacked, botão largura total (evita sobrepor preço) */}
-         <div className="!border-0 w-full pt-4 flex flex-col items-stretch gap-2">
+         <div className={`!border-0 w-full flex flex-col items-stretch mt-auto ${compact ? "gap-1.5 pt-2" : "gap-2 pt-4"}`}>
            <div className="!border-0 w-full">
              {showPriceComparison && previousPrice ? (
                <div className="flex flex-col items-start gap-1">
@@ -110,7 +110,7 @@ export function CardsHero({
                  </div>
                </div>
              ) : (
-               <p className={`!border-0 font-bold font-sans tracking-tight leading-tight ${compact ? "text-base" : "text-[24px]"}`} style={{ color: '#5CD29D' }}>
+               <p className={`!border-0 font-bold font-sans tracking-tight leading-tight ${compact ? "text-sm" : "text-[24px]"}`} style={{ color: '#5CD29D' }}>
                  {price}
                </p>
              )}
@@ -126,8 +126,8 @@ export function CardsHero({
                data-wa-vehicle-id={whatsAppVehicleId}
                data-wa-vehicle-name={whatsAppVehicleName}
                onClick={(e) => e.stopPropagation()}
-               className={`!border-0 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[#25D366] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#128C7E] h-10 px-3 ${
-                 compact ? "text-[10px] tracking-normal whitespace-nowrap" : "text-[11px] tracking-wide"
+               className={`!border-0 inline-flex w-full items-center justify-center gap-1 rounded-full bg-[#25D366] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#128C7E] ${
+                 compact ? "h-9 px-2 text-[9px] tracking-normal whitespace-nowrap" : "h-10 px-3 text-[11px] tracking-wide"
                }`}
              >
               <MessageCircle className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4"}`} />
@@ -154,7 +154,45 @@ export function CardsHero({
              </button>
            )}
 
-           {whatsAppHref && tradeInHref ? (
+           {compact && whatsAppHref && (tradeInHref || financeHref) ? (
+             <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold leading-none">
+               {tradeInHref ? (
+                 <a
+                   href={tradeInHref}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-wa-source={`${whatsAppSource}_trade`}
+                   data-wa-intent="trade_in"
+                   data-wa-vehicle-id={whatsAppVehicleId}
+                   data-wa-vehicle-name={whatsAppVehicleName}
+                   onClick={(e) => e.stopPropagation()}
+                   className="text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D]"
+                 >
+                   Troca →
+                 </a>
+               ) : null}
+               {tradeInHref && financeHref ? (
+                 <span className="text-gray-300" aria-hidden="true">·</span>
+               ) : null}
+               {financeHref ? (
+                 <a
+                   href={financeHref}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-wa-source={`${whatsAppSource}_finance`}
+                   data-wa-intent="simulate_finance"
+                   data-wa-vehicle-id={whatsAppVehicleId}
+                   data-wa-vehicle-name={whatsAppVehicleName}
+                   onClick={(e) => e.stopPropagation()}
+                   className="text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D]"
+                 >
+                   Financ. →
+                 </a>
+               ) : null}
+             </div>
+           ) : null}
+
+           {!compact && whatsAppHref && tradeInHref ? (
              <a
                href={tradeInHref}
                target="_blank"
@@ -172,7 +210,7 @@ export function CardsHero({
              </a>
            ) : null}
 
-           {whatsAppHref && financeHref ? (
+           {!compact && whatsAppHref && financeHref ? (
              <a
                href={financeHref}
                target="_blank"
@@ -202,7 +240,7 @@ export function CardsHero({
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: delay * 0.1 }}
         viewport={{ once: true }}
-        className={`${compact ? "pt-14" : "pt-24 md:pt-32"} ${onClick ? 'cursor-pointer' : ''}`}
+        className={`${compact ? "pt-12 h-full" : "pt-24 md:pt-32"} ${onClick ? 'cursor-pointer' : ''}`}
         onClick={onClick}
       >
         {content}
@@ -216,7 +254,7 @@ export function CardsHero({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: delay * 0.05 }}
-      className={`${compact ? "pt-14" : "pt-24 md:pt-32"} ${onClick ? 'cursor-pointer' : ''}`}
+      className={`${compact ? "pt-12 h-full" : "pt-24 md:pt-32"} ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
       {content}
