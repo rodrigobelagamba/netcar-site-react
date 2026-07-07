@@ -49,6 +49,16 @@ export const LOJA_COORDS: {
   Loja2: { lat: -29.8411446, lng: -51.1721442 },
 };
 
+/** Texto de busca no Google Maps — abre a ficha da loja, não só o endereço. */
+export const LOJA_MAPS_QUERIES = {
+  Loja1: "Netcar Loja 1",
+  Loja2: "Netcar Loja 2",
+} as const;
+
+export function buildLojaMapsUrl(loja: keyof typeof LOJA_MAPS_QUERIES): string {
+  return buildMapsUrl(LOJA_MAPS_QUERIES[loja], LOJA_COORDS[loja]);
+}
+
 export function formatPrice(value: number): string {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",

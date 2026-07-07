@@ -1,7 +1,7 @@
 import { MapPin, ExternalLink } from "lucide-react";
 import { useMemo } from "react";
 import { useAddressQuery, usePhoneQuery } from "@/catalog/queries/useSiteQuery";
-import { buildMapsUrl, LOJA_COORDS } from "@/lib/formatters";
+import { buildLojaMapsUrl, buildMapsUrl } from "@/lib/formatters";
 import { LojasMap } from "./LojasMap";
 
 type LojaData = {
@@ -112,7 +112,7 @@ export function Localizacao() {
         endereco: address.replace(/ - /g, "\n"),
         telefone: phoneApi?.telefone || defaults.telefone,
         cor: defaults.cor,
-        mapsUrl: buildMapsUrl(address, LOJA_COORDS[`Loja${id}`]),
+        mapsUrl: buildLojaMapsUrl(`Loja${id}`),
       };
     });
   }, [addressLoja1, addressLoja2, phoneLoja1, phoneLoja2]);

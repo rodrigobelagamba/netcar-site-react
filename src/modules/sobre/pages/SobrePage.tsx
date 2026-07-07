@@ -8,7 +8,7 @@ import { CheckCircle2, Shield, Award, Users, TrendingUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
-import { buildMapsUrl, LOJA_COORDS } from "@/lib/formatters";
+import { buildLojaMapsUrl } from "@/lib/formatters";
 
 export function SobrePage() {
   // Busca dados da API
@@ -289,10 +289,7 @@ export function SobrePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
             {/* Loja 1 */}
             <motion.a
-              href={buildMapsUrl(
-                addressLoja1?.address || "Av. Presidente Vargas, 740 - Centro - Esteio/RS",
-                LOJA_COORDS.Loja1
-              )}
+              href={buildLojaMapsUrl("Loja1")}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Abrir localização da Loja 1 (Matriz) no Google Maps"
@@ -334,10 +331,7 @@ export function SobrePage() {
 
             {/* Loja 2 */}
             <motion.a
-              href={buildMapsUrl(
-                addressLoja2?.address || "Av. Presidente Vargas, 1106 - Centro - Esteio/RS",
-                LOJA_COORDS.Loja2
-              )}
+              href={buildLojaMapsUrl("Loja2")}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Abrir localização da Loja 2 (Filial) no Google Maps"

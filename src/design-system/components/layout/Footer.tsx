@@ -12,7 +12,7 @@ import {
   useWhatsAppQuery,
   useScheduleQuery
 } from "@/catalog";
-import { formatWhatsAppNumber, buildMapsUrl, LOJA_COORDS } from "@/lib/formatters";
+import { formatWhatsAppNumber, buildLojaMapsUrl } from "@/lib/formatters";
 import { cityPages, landingPages } from "@/data/seo";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
@@ -123,10 +123,7 @@ export function Footer() {
               
               {/* Loja 1 */}
               <a
-                href={buildMapsUrl(
-                  addressLoja1?.address || "Av. Presidente Vargas, 740 - Centro - Esteio/RS",
-                  LOJA_COORDS.Loja1
-                )}
+                href={buildLojaMapsUrl("Loja1")}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Abrir localização da Loja 1 (Matriz) no Google Maps"
@@ -161,10 +158,7 @@ export function Footer() {
 
               {/* Loja 2 */}
               <a
-                href={buildMapsUrl(
-                  addressLoja2?.address || "Av. Presidente Vargas, 1106 - Centro - Esteio/RS",
-                  LOJA_COORDS.Loja2
-                )}
+                href={buildLojaMapsUrl("Loja2")}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Abrir localização da Loja 2 (Filial) no Google Maps"
