@@ -490,6 +490,7 @@ function WhatsAppQuickAction({
   href,
   icon: Icon,
   label,
+  intent,
   disabled,
   vehicleId,
   vehicleName,
@@ -497,6 +498,7 @@ function WhatsAppQuickAction({
   href: string;
   icon: LucideIcon;
   label: string;
+  intent: string;
   disabled?: boolean;
   vehicleId?: string | number;
   vehicleName?: string;
@@ -518,7 +520,7 @@ function WhatsAppQuickAction({
       target="_blank"
       rel="noopener noreferrer"
       data-wa-source="sidebar_action"
-      data-wa-intent={label}
+      data-wa-intent={intent}
       data-wa-vehicle-id={vehicleId != null ? String(vehicleId) : undefined}
       data-wa-vehicle-name={vehicleName}
       whileHover={{ scale: 1.02, y: -1 }}
@@ -657,21 +659,25 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
     {
       icon: Calculator,
       label: "Simular financiamento",
+      intent: "simulate_finance",
       message: vehicleMessages.finance,
     },
     {
       icon: CalendarDays,
       label: "Agendar visita",
+      intent: "schedule_visit",
       message: vehicleMessages.visit,
     },
     {
       icon: ArrowLeftRight,
       label: "Avaliar meu usado na troca",
+      intent: "trade_in",
       message: vehicleMessages.trade,
     },
     {
       icon: ImageIcon,
       label: "Pedir mais fotos ou vídeo",
+      intent: "request_photos",
       message: vehicleMessages.photos,
     },
   ];
@@ -768,6 +774,7 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
                 href={getWhatsAppLink(action.message)}
                 icon={action.icon}
                 label={action.label}
+                intent={action.intent}
                 disabled={!whatsappReady}
                 vehicleId={vehicle?.id}
                 vehicleName={modeloCompleto}
@@ -1272,27 +1279,25 @@ export function DetalhesPage() {
   const metaTags = useMemo(() => {
     if (!vehicle) return null;
 
-    // Título no formato: "Fluence gt sport 2013 preta iui-xx58" (modelo com primeira letra maiúscula)
+    // Título no formato: "Peugeot 2008 Allure Turbo 2025 - R$ 123.900,00 | Netcar Esteio/RS"
+    // Sem placa (irrelevante pra busca e expõe dado do veículo).
+    const toTitleCase = (text: string) =>
+      text.toLowerCase().replace(/(^|\s)\S/g, (char) => char.toUpperCase());
+
     const titleParts: string[] = [];
-    
-    // Modelo completo - primeira letra maiúscula, resto minúsculas
-    if (modeloCompleto) {
-      const modeloLower = modeloCompleto.toLowerCase();
-      const modeloCapitalized = modeloLower.charAt(0).toUpperCase() + modeloLower.slice(1);
-      titleParts.push(modeloCapitalized);
+
+    if (marca) {
+      titleParts.push(toTitleCase(String(marca)));
     }
-    
-    // Ano
+
+    if (modeloCompleto) {
+      titleParts.push(toTitleCase(modeloCompleto));
+    }
+
     if (vehicle.year) {
       titleParts.push(String(vehicle.year));
     }
-    
-    // Placa mascarada em minúsculas
-    if (vehicle.placa) {
-      const placaMascarada = maskPlate(vehicle.placa).toLowerCase();
-      titleParts.push(placaMascarada);
-    }
-    
+
     const ogTitle = titleParts.length > 0 ? titleParts.join(" ") : "Veículo";
     const isSold = !vehicle.price || vehicle.price <= 0;
     const priceText = vehicle.valor_formatado?.replace(/<[^>]*>/g, "") || "";
@@ -1300,8 +1305,12 @@ export function DetalhesPage() {
       ? `${marca} ${modeloCompleto} ${vehicle.year || ""} — veículo vendido. Confira seminovos similares na Netcar Multimarcas, Esteio/RS.`.trim()
       : `${marca} ${modeloCompleto} ${vehicle.year || ""} seminovo por ${priceText}, ${vehicle.km?.toLocaleString("pt-BR") || 0} km, em Esteio/RS. Vistoriado, com garantia Netcar.`.trim();
 
+    const pageTitle = !isSold && priceText
+      ? `${ogTitle} - ${priceText} | Netcar Esteio/RS`
+      : `${ogTitle} | Netcar Esteio/RS`;
+
     return {
-      title: `${ogTitle} | Netcar Multimarcas`,
+      title: pageTitle,
       description,
       image: absoluteImageUrl,
       url: friendlyUrl || (typeof window !== "undefined" ? `${window.location.origin}${window.location.pathname}` : ""),
