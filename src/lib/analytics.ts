@@ -154,6 +154,21 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
     page_path: pagePath,
   });
 
+  // GA4 direto: o container GTM não tem tag de evento pra whatsapp_click,
+  // então o push acima nunca chega ao GA4. send_to explícito garante que o
+  // hit vai SÓ pro GA4 (não re-dispara conversão Ads via googtag do GTM).
+  if (typeof window.gtag === "function") {
+    window.gtag("event", "whatsapp_click", {
+      send_to: GA4_MEASUREMENT_ID,
+      wa_source: params.source,
+      wa_intent: params.intent ?? "general",
+      wa_vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
+      wa_vehicle_name: params.vehicleName,
+      wa_page_type: inferPageType(pagePath),
+      page_path: pagePath,
+    });
+  }
+
   if (typeof window.fbq === "function") {
     window.fbq("trackCustom", "WhatsAppClick", {
       source: params.source,
