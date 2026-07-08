@@ -41,8 +41,12 @@ curl "https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&l
 
 ## Cron
 
-Já agendado na **VPS** (`root@191.252.212.86`, crontab root) — diário, 7 reviews/loja
+Agendar em **cron externa** (ex.: VPS ou serviço de cron HTTP) — diário, 7 reviews/loja
 (~430/mês, dentro do free tier de 500 do Outscraper). Nada a fazer no KingHost.
+
+```cron
+0 7 * * * curl -s "https://www.netcarmultimarcas.com.br/social/v1/outscraper-sync.php?key=SYNC_SECRET&limit=7"
+```
 
 ## Quando GBP API aprovar
 
