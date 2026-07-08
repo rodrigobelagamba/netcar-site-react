@@ -26,6 +26,15 @@ return [
         // ],
     ],
 
+    // Plano B — reviews via Outscraper enquanto GBP API não aprova
+    'outscraper' => [
+        'api_key' => 'OBTER_EM_APP_OUTSCRAPER_CLOUD_PROFILE',
+        'queries' => [
+            'ChIJSRolPVtvGZURzx88U1pB5n4', // Loja 1 — Av. Pres. Vargas 740
+            'ChIJq78McFxvGZURmIl8iyKRbJY', // Loja 2 — Av. Pres. Vargas 1106
+        ],
+    ],
+
     'meta' => [
         // App Meta existente: AutoAds Analyst (já tem Instagram Graph API)
         'app_id' => '1864158561129535',
