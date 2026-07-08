@@ -13,13 +13,15 @@ export function HomeMobileWhatsAppBar({
 
   if (!whatsapp?.numero) return null;
 
-  const messages = homeWhatsAppMessages({ vehicleLabel });
+  // Mensagem sempre genérica: botão fala "um seminovo", não deve puxar o
+  // veículo sorteado aleatoriamente no destaque da Home.
+  const messages = homeWhatsAppMessages();
   const href = buildWhatsAppUrl(whatsapp.numero, messages.vehicleInterest);
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#25D366]/30 bg-white/95 px-4 py-3 shadow-[0_-12px_40px_rgba(0,0,0,0.12)] backdrop-blur-md md:hidden">
-      <p className="mb-2 text-center text-[11px] font-semibold uppercase tracking-wide text-[#00283C]/70">
-        Atendimento no WhatsApp 24 horas, 7 dias por semana
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#25D366]/30 bg-white/95 px-3 py-2 shadow-[0_-10px_30px_rgba(0,0,0,0.10)] backdrop-blur-md md:hidden">
+      <p className="mb-1 text-center text-[10px] font-semibold uppercase tracking-wide text-[#00283C]/70">
+        Atendimento 24h no WhatsApp
       </p>
       <a
         href={href}
@@ -28,9 +30,9 @@ export function HomeMobileWhatsAppBar({
         data-wa-source="home_sticky"
         data-wa-intent="vehicle_interest"
         data-wa-vehicle-name={vehicleLabel}
-        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-4 py-3.5 text-base font-black text-white shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-sm font-black text-white shadow-[0_6px_18px_rgba(37,211,102,0.30)]"
       >
-        <MessageCircle className="h-5 w-5" />
+        <MessageCircle className="h-4 w-4" />
         Tenho interesse em um seminovo
       </a>
     </div>

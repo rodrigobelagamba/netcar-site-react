@@ -249,12 +249,12 @@ export function HomeWhatsAppConversionPanel({
           <button
             type="button"
             onClick={goToFeaturedVehicle}
-            className="mt-4 block w-full overflow-hidden rounded-2xl bg-[#F6F6F6] p-4 transition-transform hover:scale-[1.01]"
+            className="mt-4 block w-full overflow-hidden rounded-2xl bg-[#F6F6F6] p-2 transition-transform hover:scale-[1.01]"
           >
             <img
               src={image}
               alt={label}
-              className="mx-auto h-44 w-full object-contain drop-shadow-[0_24px_28px_rgba(0,0,0,0.16)] md:h-52"
+              className="mx-auto h-56 w-full object-contain drop-shadow-[0_24px_28px_rgba(0,0,0,0.16)] md:h-64"
               loading="eager"
             />
           </button>

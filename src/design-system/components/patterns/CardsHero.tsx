@@ -62,7 +62,7 @@ export function CardsHero({
       {/* Floating Image Section - LARGER */}
       <div className={`!border-0 absolute left-[-2%] right-[-2%] flex items-center justify-center z-10 pointer-events-none ${
         compact
-          ? "-top-12 h-28 md:-top-44 md:h-80"
+          ? "-top-16 h-32 md:-top-44 md:h-80"
           : "-top-32 md:-top-44 h-64 md:h-80"
       }`}>
         <div className="!border-0 relative w-full h-full">
@@ -78,7 +78,7 @@ export function CardsHero({
 
       {/* Content Section - Adjusted to match photo exactly */}
       <div className={`!border-0 w-full flex flex-col items-start text-left flex-1 ${
-        compact ? "pt-11 space-y-1.5" : "pt-28 md:pt-32 space-y-4"
+        compact ? "pt-16 space-y-1.5" : "pt-28 md:pt-32 space-y-4"
       }`}>
          <span className={`!border-0 bg-[#00283C] text-white hover:bg-[#00283C] rounded-md font-bold tracking-widest uppercase w-fit inline-block ${
            compact ? "px-2 py-0.5 text-[8px]" : "px-3 py-1 text-[10px]"

@@ -247,8 +247,8 @@ export function HomePage() {
       <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-12">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-fg">Destaques do estoque</h2>
-          <p className="mt-2 max-w-2xl text-gray-600 text-lg font-medium">
-            Escolha um seminovo real, fale no WhatsApp com mensagem pronta — entrada facilitada, troca aceita e atendimento 24 horas, 7 dias por semana.
+          <p className="mt-2 max-w-2xl text-gray-600 text-base md:text-lg font-medium">
+            Troca aceita, financiamento facilitado e atendimento 24h no WhatsApp.
           </p>
         </div>
         <ProductList
