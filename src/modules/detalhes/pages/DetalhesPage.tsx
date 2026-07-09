@@ -31,6 +31,7 @@ import { NetcarSocialSection } from "@/design-system/components/patterns/social/
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { maskPlate } from "@/lib/slug";
+import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
 import { VehicleUnavailableRedirect } from "@/components/VehicleUnavailableRedirect";
@@ -1180,7 +1181,7 @@ export function DetalhesPage() {
   // PRIORIDADE 1: Usa imagens_site.capa se disponível
   const mainImage = useMemo(() => {
     if (vehicle?.imagens_site?.capa) {
-      return vehicle.imagens_site.capa;
+      return optimizeStockImage(vehicle.imagens_site.capa, 1600);
     }
     
     // FALLBACK: Comportamento anterior

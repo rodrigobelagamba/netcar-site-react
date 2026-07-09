@@ -61,7 +61,7 @@ switch ($page) {
 
     case 'contato':
         $title = 'Contato | Netcar Multimarcas — 2 Lojas Esteio';
-        $description = 'WhatsApp (51) 99887-9281. Av. Presidente Vargas 740 e 1106, Esteio/RS.';
+        $description = 'WhatsApp (51) 99729-3118. Av. Presidente Vargas 740 e 1106, Esteio/RS.';
         $canonical = SEO_SITE_URL . '/contato';
         seo_render_head($title, $description, $canonical);
         echo '<h1>Fale com a Netcar Multimarcas</h1>';
@@ -71,7 +71,7 @@ switch ($page) {
         echo '<p><strong>Matriz</strong><br />Av. Presidente Vargas, 740 — Centro — Esteio/RS — CEP 93260-048<br />Tel: (51) 3473-7900</p>';
         echo '<p><strong>Filial</strong><br />Av. Presidente Vargas, 1106 — Centro — Esteio/RS — CEP 93260-001<br />Tel: (51) 3033-3900</p>';
         echo '</address>';
-        echo '<p>WhatsApp: (51) 99887-9281<br />E-mail: contato@netcarmultimarcas.com.br</p>';
+        echo '<p>WhatsApp: (51) 99729-3118<br />E-mail: contato@netcarmultimarcas.com.br</p>';
         echo '<p>Horário: Seg–Sex 9h–18h · Sáb 9h–16h30</p>';
         break;
 
@@ -82,7 +82,7 @@ switch ($page) {
         seo_render_head($title, $description, $canonical);
         echo '<h1>Venda seu carro para a Netcar</h1>';
         echo '<p class="intro">Avaliamos e compramos seu veículo em Esteio/RS. Processo rápido, seguro e sem complicações.</p>';
-        echo '<p>WhatsApp: (51) 99887-9281</p>';
+        echo '<p>WhatsApp: (51) 99729-3118</p>';
         break;
 
     case 'blog':
