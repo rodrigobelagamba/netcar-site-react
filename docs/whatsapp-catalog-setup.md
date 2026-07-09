@@ -1,5 +1,6 @@
 # Loja WhatsApp — catálogo automático a partir da API do site
 
+**Branch / commit:** `master` (a partir de `ea85b03`)  
 **Fonte dos dados:** API JSON do site  
 `https://www.netcarmultimarcas.com.br/api/v1/veiculos.php`
 
@@ -7,44 +8,132 @@ Não precisa copiar XML/CSV na mão. O estoque já está na API; o feed só trad
 
 Número Netcar já está na **Cloud API com coexistence** — não precisa migrar de novo.
 
+---
+
+## HANDOFF — o que o programador DEVE fazer
+
+**Objetivo:** tirar o feed do tunnel Cloudflare temporário (`trycloudflare`) e publicar URL **fixa** no site KingHost. Sem isso, se o tunnel reiniciar a loja do WhatsApp para de atualizar.
+
+### Por que é obrigatório
+
+| Situação hoje | Risco |
+|---|---|
+| Meta puxa `*.trycloudflare.com/...` | URL muda se o serviço de tunnel reiniciar |
+| Feed PHP ainda **não** está no ar em `netcarmultimarcas.com.br/feeds/` | Deploy KingHost ainda não rodou com estes arquivos |
+
+### 1. Pull da master
+
+```bash
+git fetch origin
+git checkout master
+git pull origin master
+```
+
+### 2. Deploy KingHost (build + upload)
+
+Garantir `.env.local` na raiz (ver `.env.local.example`):
+
+```env
+DEPLOY_METHOD=ssh
+SSH_HOST=netcarmultimarcas.com.br
+SSH_USER=netcarmultimarcas
+SSH_DIR=www/
+# SSH_KEY_PATH=...  ou  SSH_PASSWORD=...
+```
+
+```bash
+npm run deploy:local
+```
+
+Isso roda `npm run build` (inclui `catalog:whatsapp`) e sobe `dist/` + `public/feeds/` + `.htaccess` pra KingHost.
+
+Arquivos que **precisam** existir em produção:
+
+- `www/feeds/whatsapp-catalog.php`
+- `www/feeds/whatsapp-catalog.csv` (snapshot; o rewrite manda pro PHP)
+- `www/feeds/whatsapp-catalog.xml`
+- regras em `www/.htaccess` para `/feeds/whatsapp-catalog.csv` e `.xml` → PHP
+
+### 3. Validar URL fixa (gate)
+
+```bash
+curl -sI "https://www.netcarmultimarcas.com.br/feeds/whatsapp-catalog.csv" | head -20
+curl -s "https://www.netcarmultimarcas.com.br/feeds/whatsapp-catalog.csv" | head -n 2
+```
+
+**OK se:**
+- `Content-Type: text/csv`
+- 1ª linha = header `id,title,description,...`
+- ~60 linhas de produtos (estoque ativo)
+
+**Falha se:** HTML do site / 404 / SPA React.
+
+### 4. Trocar URL do feed no Commerce Manager
+
+1. [Commerce Manager](https://business.facebook.com/commerce) → business **Netcar**
+2. Catálogo **Catalog_Products** (`840925975586000`)
+3. **Fontes de dados** → feed **Netcar Seminovos WhatsApp** (`1317841283872681`)
+4. **Configurações** do feed → alterar URL para:
+
+```
+https://www.netcarmultimarcas.com.br/feeds/whatsapp-catalog.csv
+```
+
+5. Salvar → **Recarregar arquivo de dados** (ou esperar o ciclo horário)
+6. Confirmar que **Produtos** continua ~60 e sem erro de fetch
+
+### 5. Conferir WhatsApp (já feito; só validar)
+
+| Item | Esperado |
+|---|---|
+| WABA / número | `+55 51 9729-3118` |
+| Catálogo ligado | **Catalog_Products** |
+| Ícone da loja | Ativado |
+| Carrinho | Desativado |
+
+Teste no celular: perfil Netcar → ícone loja → carros com preço.
+
+### 6. Depois do deploy estável (opcional)
+
+Na VPS `191.252.212.86`, pode desligar o tunnel temporário (só depois da URL KingHost validada no Meta):
+
+```bash
+systemctl disable --now netcar-whatsapp-catalog-tunnel
+# manter o serviço Python só se ainda quiser fallback local:
+# systemctl status netcar-whatsapp-catalog
+```
+
+---
+
 ## O que é automático vs o que é 1 clique
 
 | Parte | Automático? |
 |---|---|
 | Ler estoque da API | Sim |
-| Gerar CSV + XML | Sim |
-| Atualizar quando carro entra/sai (endpoint ao vivo) | Sim (após deploy do PHP) |
-| Meta puxar o feed de hora em hora | Sim (depois de colar a URL 1x) |
-| Criar catálogo + conectar à WABA | **1x manual** no Commerce Manager |
+| Gerar CSV + XML no build | Sim |
+| Atualizar quando carro entra/sai (endpoint PHP ao vivo) | Sim **após deploy KingHost** |
+| Meta puxar o feed de hora em hora | Sim (URL correta no Commerce Manager) |
+| Criar catálogo + conectar à WABA | Já feito (2026-07-09) |
 
-## URLs pra colar no Commerce Manager
+## URLs
 
-### Opção A — VPS (já no ar)
+### Produção (alvo — após deploy KingHost)
 
-Serviço na VPS `191.252.212.86` (`netcar-whatsapp-catalog` + tunnel Cloudflare).
+```
+https://www.netcarmultimarcas.com.br/feeds/whatsapp-catalog.csv
+https://www.netcarmultimarcas.com.br/feeds/whatsapp-catalog.xml
+```
 
-**HTTPS atual (colar no Meta):**
+### Temporário VPS (não usar como definitivo)
+
+Serviço na VPS `191.252.212.86` (`netcar-whatsapp-catalog` + tunnel Cloudflare quick).
 
 ```
 https://cir-possession-shall-various.trycloudflare.com/feeds/whatsapp-catalog.csv
-```
-
-XML:
-
-```
-https://cir-possession-shall-various.trycloudflare.com/feeds/whatsapp-catalog.xml
-```
-
-Teste local na VPS / HTTP direto:
-
-```
 http://191.252.212.86:3099/feeds/whatsapp-catalog.csv
 ```
 
-**Atenção:** URL `*.trycloudflare.com` **muda** se o serviço `netcar-whatsapp-catalog-tunnel` reiniciar.  
-Pra URL fixa depois: tunnel Cloudflare nomeado ou DNS apontando pra VPS.
-
-Comandos na VPS:
+**Atenção:** URL `*.trycloudflare.com` **muda** se o tunnel reiniciar. Só fallback até o passo 4 do handoff.
 
 ```bash
 systemctl status netcar-whatsapp-catalog
@@ -52,16 +141,7 @@ systemctl status netcar-whatsapp-catalog-tunnel
 journalctl -u netcar-whatsapp-catalog-tunnel -n 30 | grep trycloudflare
 ```
 
-Código do serviço: `scripts/vps/whatsapp-catalog-server.py` → `/opt/netcar-whatsapp-catalog/server.py`
-
-### Opção C — site principal (após deploy KingHost)
-
-```
-https://www.netcarmultimarcas.com.br/feeds/whatsapp-catalog.csv
-https://www.netcarmultimarcas.com.br/feeds/whatsapp-catalog.xml
-```
-
-Meta aceita CSV ou XML. CSV é o caminho mais simples.
+Código VPS: `scripts/vps/whatsapp-catalog-server.py` → `/opt/netcar-whatsapp-catalog/server.py`
 
 ## No repo
 
@@ -87,16 +167,16 @@ Também roda no `npm run build`. O `.htaccess` redireciona `.csv` / `.xml` pro P
 | Catálogo | **Catalog_Products** (`840925975586000`) |
 | Feed | **Netcar Seminovos WhatsApp** (`1317841283872681`) |
 | Produtos | **60** (sync horário) |
-| Feed URL | `https://cir-possession-shall-various.trycloudflare.com/feeds/whatsapp-catalog.csv` |
+| Feed URL atual (temporário) | `https://cir-possession-shall-various.trycloudflare.com/feeds/whatsapp-catalog.csv` |
 | WhatsApp | `+55 51 9729-3118` ligado a **Catalog_Products** |
 | Ícone loja | **Ativado** |
 | Carrinho | **Desativado** |
 
-### Checklist residual
+### Checklist residual (programador)
 
-1. Celular: perfil Netcar → ícone loja → ver carros
-2. Quando puder: URL fixa (tunnel Cloudflare nomeado / DNS) — `trycloudflare` muda se reiniciar
-3. Opcional: deploy feed também em `netcarmultimarcas.com.br/feeds/` (KingHost)
+1. **Obrigatório:** deploy KingHost + trocar URL do feed (seção HANDOFF acima)
+2. Celular: perfil Netcar → ícone loja → ver carros
+3. Depois da URL KingHost ok no Meta: desligar tunnel VPS temporário
 
 ## Campos
 
