@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, Fragment } from "react";
 import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
@@ -12,8 +12,13 @@ import { useSearchContext } from "@/contexts/SearchContext";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { SearchBar } from "@/design-system/components/patterns/SearchBar";
-import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
+import {
+  buildWhatsAppUrl,
+  homeWhatsAppMessages,
+  siteWhatsAppMessage,
+} from "@/lib/whatsappMessages";
 import { trackStockFilterApply } from "@/lib/analytics";
+import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
 
@@ -329,10 +334,18 @@ export function SeminovosPage() {
       const max = search.anoMax || "—";
       parts.push(`ano entre ${min} e ${max}`);
     }
-    const body = parts.length
-      ? `quero help pra achar um seminovo com: ${parts.join(", ")}.`
-      : "quero help pra achar um seminovo do estoque.";
-    return buildWhatsAppUrl(whatsapp.numero, siteWhatsAppMessage(body));
+    if (!parts.length) {
+      return buildWhatsAppUrl(
+        whatsapp.numero,
+        homeWhatsAppMessages().vehicleInterest,
+      );
+    }
+    return buildWhatsAppUrl(
+      whatsapp.numero,
+      siteWhatsAppMessage(
+        `quero help pra achar um seminovo com: ${parts.join(", ")}.`,
+      ),
+    );
   }, [
     whatsapp?.numero,
     search.marca,
@@ -393,7 +406,7 @@ export function SeminovosPage() {
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-sm font-black text-white shadow-[0_6px_18px_rgba(37,211,102,0.30)]"
         >
           <MessageCircle className="h-4 w-4" />
-          {hasFilterParams ? "Receber opções no WhatsApp" : "Falar sobre seminovos"}
+          {hasFilterParams ? "Receber opções no WhatsApp" : "Tenho interesse em um seminovo"}
         </a>
       </div>
       
@@ -486,7 +499,7 @@ export function SeminovosPage() {
         </div>
 
         {/* Header com Título e Ordenação */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
           <div>
             <h1 className="text-2xl font-bold text-fg">Showroom</h1>
             <p className="text-sm text-muted-foreground mt-1">
@@ -512,64 +525,99 @@ export function SeminovosPage() {
           </div>
         </div>
 
+        <SeminovosWhatsAppHelpPanel
+          stockHelpHref={seminovosWhatsAppHref}
+          hasFilters={hasFilterParams}
+          variant="banner"
+        />
+
         {/* Grid de Veículos */}
         {isLoading ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">Carregando...</p>
           </div>
         ) : filteredAndSortedVehicles.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-fg text-lg font-semibold mb-2">Nenhum veículo encontrado</p>
-            <p className="text-muted-foreground">Tente ajustar os filtros de busca.</p>
+          <div className="text-center py-12 space-y-4">
+            <div>
+              <p className="text-fg text-lg font-semibold mb-2">Nenhum veículo encontrado</p>
+              <p className="text-muted-foreground">Tente ajustar os filtros — ou peça opções no WhatsApp.</p>
+            </div>
+            <a
+              href={seminovosWhatsAppHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-wa-source="seminovos_empty"
+              data-wa-intent="stock_help"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 py-3 text-sm font-black text-white shadow-[0_6px_18px_rgba(37,211,102,0.30)]"
+            >
+              <MessageCircle className="h-4 w-4" />
+              Pedir opções no WhatsApp
+            </a>
           </div>
         ) : (
           <>
             <div className="md:hidden grid grid-cols-2 items-stretch gap-2" style={{ overflow: "visible" }}>
               {filteredAndSortedVehicles.map((vehicle, index) => (
-                <VehicleCard
-                  key={vehicle.id}
-                  id={vehicle.id}
-                  name={vehicle.modelo || vehicle.name}
-                  price={vehicle.price || 0}
-                  valor_formatado={vehicle.valor_formatado}
-                  preco_com_troca={vehicle.preco_com_troca}
-                  preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
-                  year={vehicle.year || new Date().getFullYear()}
-                  km={vehicle.km || 0}
-                  images={vehicle.images || vehicle.fotos || []}
-                  imagens_site={vehicle.imagens_site}
-                  marca={vehicle.marca}
-                  modelo={vehicle.modelo}
-                  delay={index}
-                  fastAnimation
-                  showWhatsAppInterest
-                  whatsAppSource="seminovos_grid"
-                  compact
-                />
+                <Fragment key={vehicle.id}>
+                  <VehicleCard
+                    id={vehicle.id}
+                    name={vehicle.modelo || vehicle.name}
+                    price={vehicle.price || 0}
+                    valor_formatado={vehicle.valor_formatado}
+                    preco_com_troca={vehicle.preco_com_troca}
+                    preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
+                    year={vehicle.year || new Date().getFullYear()}
+                    km={vehicle.km || 0}
+                    images={vehicle.images || vehicle.fotos || []}
+                    imagens_site={vehicle.imagens_site}
+                    marca={vehicle.marca}
+                    modelo={vehicle.modelo}
+                    delay={index}
+                    fastAnimation
+                    showWhatsAppInterest
+                    whatsAppSource="seminovos_grid"
+                    compact
+                  />
+                  {index === 5 && filteredAndSortedVehicles.length > 8 && (
+                    <SeminovosWhatsAppHelpPanel
+                      stockHelpHref={seminovosWhatsAppHref}
+                      hasFilters={hasFilterParams}
+                      variant="inline"
+                    />
+                  )}
+                </Fragment>
               ))}
             </div>
 
             <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10" style={{ overflow: "visible" }}>
               {filteredAndSortedVehicles.map((vehicle, index) => (
-                <VehicleCard
-                  key={vehicle.id}
-                  id={vehicle.id}
-                  name={vehicle.modelo || vehicle.name}
-                  price={vehicle.price || 0}
-                  valor_formatado={vehicle.valor_formatado}
-                  preco_com_troca={vehicle.preco_com_troca}
-                  preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
-                  year={vehicle.year || new Date().getFullYear()}
-                  km={vehicle.km || 0}
-                  images={vehicle.images || vehicle.fotos || []}
-                  imagens_site={vehicle.imagens_site}
-                  marca={vehicle.marca}
-                  modelo={vehicle.modelo}
-                  delay={index}
-                  fastAnimation={index >= 8}
-                  showWhatsAppInterest
-                  whatsAppSource="seminovos_grid"
-                />
+                <Fragment key={vehicle.id}>
+                  <VehicleCard
+                    id={vehicle.id}
+                    name={vehicle.modelo || vehicle.name}
+                    price={vehicle.price || 0}
+                    valor_formatado={vehicle.valor_formatado}
+                    preco_com_troca={vehicle.preco_com_troca}
+                    preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
+                    year={vehicle.year || new Date().getFullYear()}
+                    km={vehicle.km || 0}
+                    images={vehicle.images || vehicle.fotos || []}
+                    imagens_site={vehicle.imagens_site}
+                    marca={vehicle.marca}
+                    modelo={vehicle.modelo}
+                    delay={index}
+                    fastAnimation={index >= 8}
+                    showWhatsAppInterest
+                    whatsAppSource="seminovos_grid"
+                  />
+                  {index === 7 && filteredAndSortedVehicles.length > 12 && (
+                    <SeminovosWhatsAppHelpPanel
+                      stockHelpHref={seminovosWhatsAppHref}
+                      hasFilters={hasFilterParams}
+                      variant="inline"
+                    />
+                  )}
+                </Fragment>
               ))}
             </div>
           </>
