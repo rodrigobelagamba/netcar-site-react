@@ -126,8 +126,12 @@
   RewriteRule ^feeds/whatsapp-catalog\.xml$ feeds/whatsapp-catalog.php?format=xml [L,QSA]
   RewriteRule ^feeds/whatsapp-catalog\.php$ - [L]
 
+  # Pastas do servidor que NÃO são SPA (gerenciador PHP + API).
+  # Sem isso, /admin/ cai no index.php React (bug após remoção do -d abaixo).
+  RewriteRule ^(admin|api)(/|$) - [L]
+
   # Primeiro: servir só arquivos reais (-f).
-  # NÃO usar -d aqui: o docroot de produção ainda tem pastas legadas
+  # NÃO usar -d genérico: o docroot de produção ainda tem pastas legadas
   # (seminovos/, veiculo/, etc.) que interceptavam a URL e mandavam para not-found.html.
   RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
