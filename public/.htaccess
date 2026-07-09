@@ -121,6 +121,11 @@
   # Bridge social — PHP antes do React (paginação reviews/stories legado)
   RewriteRule ^embedsocial-bridge\.php$ - [L]
 
+  # Feed WhatsApp Catalog — sempre ao vivo via API (antes do -f estático)
+  RewriteRule ^feeds/whatsapp-catalog\.csv$ feeds/whatsapp-catalog.php?format=csv [L,QSA]
+  RewriteRule ^feeds/whatsapp-catalog\.xml$ feeds/whatsapp-catalog.php?format=xml [L,QSA]
+  RewriteRule ^feeds/whatsapp-catalog\.php$ - [L]
+
   # Primeiro: servir só arquivos reais (-f).
   # NÃO usar -d aqui: o docroot de produção ainda tem pastas legadas
   # (seminovos/, veiculo/, etc.) que interceptavam a URL e mandavam para not-found.html.
