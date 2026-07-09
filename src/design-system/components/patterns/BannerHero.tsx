@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import type { Banner } from "@/catalog/endpoints/site";
+import { optimizeStockImage } from "@/lib/images";
 
 interface BannerHeroProps {
   banners: Banner[];
@@ -57,7 +58,7 @@ export function BannerHero({ banners }: BannerHeroProps) {
   const imageContent = (
     <>
       <img
-        src={currentBanner.imagem}
+        src={optimizeStockImage(currentBanner.imagem, 1920)}
         alt={currentBanner.titulo || "Banner"}
         className="w-full h-auto md:h-full object-contain md:object-cover object-center"
         loading={currentIndex === 0 ? "eager" : "lazy"}

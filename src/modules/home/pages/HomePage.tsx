@@ -20,6 +20,7 @@ import {
   pickHomeHighlightVehicles,
 } from "@/lib/homeStock";
 import { trackHomeScrollDepth } from "@/lib/analytics";
+import { optimizeStockImage } from "@/lib/images";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 
@@ -128,7 +129,9 @@ export function HomePage() {
 
     return shuffleArray(filtered).slice(0, 4)
       .map(vehicle => {
-        const mainImage = vehicle.imagens_site?.capa || CAR_COVERED_PLACEHOLDER_URL;
+        const mainImage = vehicle.imagens_site?.capa
+          ? optimizeStockImage(vehicle.imagens_site.capa, 1600)
+          : CAR_COVERED_PLACEHOLDER_URL;
         
         const tagParts = [];
         if (vehicle.combustivel) tagParts.push(vehicle.combustivel);
