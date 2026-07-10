@@ -142,7 +142,8 @@ function mapOutscraperReview(array $r, string $placeUrl): ?array
 {
     $text = trim((string) ($r['review_text'] ?? ''));
     $rating = (int) ($r['review_rating'] ?? 0);
-    if ($rating < 1) {
+    // Site só publica 3★+ — 1★ e 2★ não entram no cache
+    if ($rating < 3) {
         return null;
     }
 
