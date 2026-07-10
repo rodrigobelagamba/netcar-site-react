@@ -22,9 +22,30 @@ import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpP
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
 
+/** Colunas do grid desktop — espelha Tailwind md/lg/xl/2xl do showroom. */
+function useDesktopStockColumns(): number {
+  const [cols, setCols] = useState(2);
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      if (w >= 1536) setCols(5);
+      else if (w >= 1280) setCols(4);
+      else if (w >= 1024) setCols(3);
+      else setCols(2);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return cols;
+}
+
 export function SeminovosPage() {
   const search = useSearch({ from: "/seminovos" });
   const navigate = useNavigate();
+  const desktopCols = useDesktopStockColumns();
   
   // Mapeia os parâmetros de busca para o formato esperado pela API
   const vehiclesQuery = useMemo(() => {
@@ -283,6 +304,17 @@ export function SeminovosPage() {
 
     return filtered;
   }, [vehicles, sortBy, searchTerm, search.categoria]);
+
+  // Banner WA no meio do grid: só depois de 2 linhas completas (evita buraco à direita).
+  const desktopMidBreak = desktopCols * 2;
+  const showDesktopMidBanner =
+    filteredAndSortedVehicles.length > desktopMidBreak + desktopCols;
+  const desktopVehiclesBefore = showDesktopMidBanner
+    ? filteredAndSortedVehicles.slice(0, desktopMidBreak)
+    : filteredAndSortedVehicles;
+  const desktopVehiclesAfter = showDesktopMidBanner
+    ? filteredAndSortedVehicles.slice(desktopMidBreak)
+    : [];
 
   // Anos para o dropdown (do mais recente para o mais antigo)
   const sortedYears = useMemo(() => {
@@ -589,10 +621,14 @@ export function SeminovosPage() {
               ))}
             </div>
 
-            <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10" style={{ overflow: "visible" }}>
-              {filteredAndSortedVehicles.map((vehicle, index) => (
-                <Fragment key={vehicle.id}>
+            <div className="hidden md:contents">
+              <div
+                className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10"
+                style={{ overflow: "visible" }}
+              >
+                {desktopVehiclesBefore.map((vehicle, index) => (
                   <VehicleCard
+                    key={vehicle.id}
                     id={vehicle.id}
                     name={vehicle.modelo || vehicle.name}
                     price={vehicle.price || 0}
@@ -610,15 +646,45 @@ export function SeminovosPage() {
                     showWhatsAppInterest
                     whatsAppSource="seminovos_grid"
                   />
-                  {index === 7 && filteredAndSortedVehicles.length > 12 && (
-                    <SeminovosWhatsAppHelpPanel
-                      stockHelpHref={seminovosWhatsAppHref}
-                      hasFilters={hasFilterParams}
-                      variant="inline"
+                ))}
+              </div>
+              {showDesktopMidBanner && (
+                <div className="hidden md:block my-6">
+                  <SeminovosWhatsAppHelpPanel
+                    stockHelpHref={seminovosWhatsAppHref}
+                    hasFilters={hasFilterParams}
+                    variant="inline"
+                  />
+                </div>
+              )}
+              {desktopVehiclesAfter.length > 0 && (
+                <div
+                  className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10"
+                  style={{ overflow: "visible" }}
+                >
+                  {desktopVehiclesAfter.map((vehicle, index) => (
+                    <VehicleCard
+                      key={vehicle.id}
+                      id={vehicle.id}
+                      name={vehicle.modelo || vehicle.name}
+                      price={vehicle.price || 0}
+                      valor_formatado={vehicle.valor_formatado}
+                      preco_com_troca={vehicle.preco_com_troca}
+                      preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
+                      year={vehicle.year || new Date().getFullYear()}
+                      km={vehicle.km || 0}
+                      images={vehicle.images || vehicle.fotos || []}
+                      imagens_site={vehicle.imagens_site}
+                      marca={vehicle.marca}
+                      modelo={vehicle.modelo}
+                      delay={desktopMidBreak + index}
+                      fastAnimation
+                      showWhatsAppInterest
+                      whatsAppSource="seminovos_grid"
                     />
-                  )}
-                </Fragment>
-              ))}
+                  ))}
+                </div>
+              )}
             </div>
           </>
         )}

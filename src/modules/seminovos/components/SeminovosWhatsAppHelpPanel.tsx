@@ -28,7 +28,7 @@ export function SeminovosWhatsAppHelpPanel({
 
   if (variant === "inline") {
     return (
-      <div className="col-span-2 md:col-span-2 lg:col-span-3 xl:col-span-4 2xl:col-span-5 rounded-2xl border border-[#25D366]/35 bg-[#00283C] px-4 py-4 text-white shadow-lg sm:px-5">
+      <div className="col-span-2 w-full rounded-2xl border border-[#25D366]/35 bg-[#00283C] px-4 py-4 text-white shadow-lg sm:px-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#5CD29D]">

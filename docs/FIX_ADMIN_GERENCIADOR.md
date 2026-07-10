@@ -1,50 +1,56 @@
-# Fix — Gerenciador `/admin/` sumiu (vira site React)
+# Fix — Gerenciador `/sistema/` (e `/admin/`) sumiu (vira site React)
 
-**Data:** 2026-07-09
+**Data:** 2026-07-09 · atualizado 2026-07-10
 
 ## Sintoma
 
-`https://www.netcarmultimarcas.com.br/admin/` abre o site React (título "Seminovos em Esteio…") em vez do painel/gerenciador PHP.
+`https://www.netcarmultimarcas.com.br/sistema/` (ou `/admin/`) abre o site React
+em vez do painel/gerenciador PHP.
 
 ## Causa
 
-Commit `0a6d552` (27/06) removeu `RewriteCond %{REQUEST_FILENAME} -d` do `.htaccess` para destravar rotas SPA (`/seminovos`, `/veiculo/*`) bloqueadas por pastas legadas.
+Commit `0a6d552` (27/06) removeu `RewriteCond %{REQUEST_FILENAME} -d` do `.htaccess`
+para destravar rotas SPA (`/seminovos`, `/veiculo/*`) bloqueadas por pastas legadas.
 
-Efeito colateral: pasta real `/admin/` no docroot deixou de ser servida e caiu no fallback SPA (`index.php`).
+Efeito colateral: pastas reais `/sistema/` e `/admin/` no docroot deixaram de ser
+servidas e caíram no fallback SPA (`index.php`).
 
-`robots.txt` já tinha `Disallow: /admin/` — confirma que o path sempre foi o gerenciador.
+Path real do gerenciador Netcar: **`/sistema/`** (não só `/admin/`).
 
-## Fix no código (esta branch)
+## Fix no código
 
-`public/.htaccess` — excluir `admin` e `api` do rewrite SPA:
+`public/.htaccess` — excluir `admin`, `sistema` e `api` do rewrite SPA:
 
 ```apache
-RewriteRule ^(admin|api)(/|$) - [L]
+RewriteRule ^(admin|sistema|api)(/|$) - [L]
 ```
 
-`scripts/deploy-local.sh` — `mirror --delete` não apaga mais `admin/`, `api/`, `social/`.
+`scripts/deploy-local.sh` — `mirror --delete` não apaga mais `admin/`, `sistema/`,
+`api/`, `social/`.
+
+`public/robots.txt` — `Disallow: /sistema/`.
 
 ## Deploy
 
 1. Subir `.htaccess` novo (de `dist/` após build, ou `public/.htaccess` direto no docroot).
-2. Testar: `https://www.netcarmultimarcas.com.br/admin/`
+2. Testar: `https://www.netcarmultimarcas.com.br/sistema/`
 
 ### Se ainda abrir o React
 
-Pasta `/admin/` **não existe mais** no servidor (possível apagão por deploy com `--delete`).
+Pasta `/sistema/` **não existe mais** no servidor (possível apagão por deploy com `--delete`).
 
 Restaurar no KingHost:
 
 1. Painel KingHost → Backup / File Manager
-2. Restaurar pasta `www/admin/` (ou `public_html/admin/`) de backup **antes de 27/06/2026**
-3. Confirmar que existe `admin/index.php` (ou login equivalente)
-4. Retestar `/admin/`
+2. Restaurar pasta `www/sistema/` (ou `public_html/sistema/`) de backup **antes de 27/06/2026**
+3. Confirmar que existe `sistema/index.php` (ou login equivalente)
+4. Retestar `/sistema/`
 
 ## Validação
 
 ```bash
 # Deve ser o gerenciador (NÃO título "Seminovos em Esteio")
-curl -sS "https://www.netcarmultimarcas.com.br/admin/" | head -c 500
+curl -sS "https://www.netcarmultimarcas.com.br/sistema/" | head -c 500
 
 # SPA continua ok
 curl -sS -o /dev/null -w "%{http_code}\n" "https://www.netcarmultimarcas.com.br/seminovos"

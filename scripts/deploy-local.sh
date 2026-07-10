@@ -73,7 +73,7 @@ if command -v lftp &> /dev/null; then
     open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_SERVER;
     cd $FTP_SERVER_DIR;
     lcd dist;
-    mirror --reverse --delete --verbose --exclude-glob .git* --exclude-glob node_modules --exclude-glob admin --exclude-glob admin/** --exclude-glob api --exclude-glob api/** --exclude-glob social --exclude-glob social/**;
+    mirror --reverse --delete --verbose --exclude-glob .git* --exclude-glob node_modules --exclude-glob admin --exclude-glob admin/** --exclude-glob sistema --exclude-glob sistema/** --exclude-glob api --exclude-glob api/** --exclude-glob social --exclude-glob social/**;
     "
     echo -e "${GREEN}✅ Upload concluído!${NC}"
 elif command -v ftp &> /dev/null; then

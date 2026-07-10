@@ -127,8 +127,8 @@
   RewriteRule ^feeds/whatsapp-catalog\.php$ - [L]
 
   # Pastas do servidor que NÃO são SPA (gerenciador PHP + API).
-  # Sem isso, /admin/ cai no index.php React (bug após remoção do -d abaixo).
-  RewriteRule ^(admin|api)(/|$) - [L]
+  # Sem isso, /admin/ e /sistema/ caem no index.php React (bug após remoção do -d abaixo).
+  RewriteRule ^(admin|sistema|api)(/|$) - [L]
 
   # Primeiro: servir só arquivos reais (-f).
   # NÃO usar -d genérico: o docroot de produção ainda tem pastas legadas
