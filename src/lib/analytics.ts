@@ -1,7 +1,7 @@
 /**
  * Analytics helpers — dataLayer para GTM/Ads + GA4 direto só em page view.
- * whatsapp_click: um único push no dataLayer (GTM dispara conversão).
- * Não usar gtag("event") aqui: gtag() também escreve no dataLayer e duplicava hit Ads.
+ * whatsapp_click: objeto com wa_ads_conversion=true dispara Ads.
+ * gtag direto envia ao GA4 com wa_ads_conversion=false para não repetir Ads.
  */
 
 export const GA4_MEASUREMENT_ID = "G-MGPNBDNQ9G";
@@ -146,6 +146,7 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
 
   pushDataLayer({
     event: "whatsapp_click",
+    wa_ads_conversion: true,
     wa_source: params.source,
     wa_intent: params.intent ?? "general",
     wa_vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
@@ -154,12 +155,13 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
     page_path: pagePath,
   });
 
-  // GA4 direto: o container GTM não tem tag de evento pra whatsapp_click,
-  // então o push acima nunca chega ao GA4. send_to explícito garante que o
-  // hit vai SÓ pro GA4 (não re-dispara conversão Ads via googtag do GTM).
+  // Data Layer v2 persiste valores entre eventos. O false explícito é essencial:
+  // limpa o estado antes do gtag; sem isso, ele herdaria true e repetiria Ads.
   if (typeof window.gtag === "function") {
+    pushDataLayer({ wa_ads_conversion: false });
     window.gtag("event", "whatsapp_click", {
       send_to: GA4_MEASUREMENT_ID,
+      wa_ads_conversion: false,
       wa_source: params.source,
       wa_intent: params.intent ?? "general",
       wa_vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
