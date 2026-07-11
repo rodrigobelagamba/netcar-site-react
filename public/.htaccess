@@ -97,15 +97,15 @@
   RewriteRule ^index\.html$ / [R=301,L]
   
   # Redirects 301 — site legado PHP/HTML
-  RewriteRule ^seminovos\.php$ /seminovos [R=301,L]
-  RewriteRule ^sobre-nos\.php$ /sobre [R=301,L]
-  RewriteRule ^listagem-produtos\.php$ /seminovos [R=301,L]
-  RewriteRule ^clientes\.php$ / [R=301,L]
-  RewriteRule ^contato\.php$ /contato [R=301,L]
-  RewriteRule ^contato\.html$ /contato [R=301,L]
-  RewriteRule ^ficha-cadastral\.php$ /seminovos [R=301,L]
-  RewriteRule ^detalhe-produto-(.+)\.html?$ /seminovos [R=301,L]
-  RewriteRule ^detalhe-produto-(.+)$ /seminovos [R=301,L]
+  # QSD remove parâmetros obsoletos (id/código) do destino canônico.
+  RewriteRule ^seminovos\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
+  RewriteRule ^sobre-nos\.(php|html?)$ /sobre [R=301,L,QSD,NC]
+  RewriteRule ^listagem-produtos\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
+  RewriteRule ^clientes?\.(php|html?)$ / [R=301,L,QSD,NC]
+  RewriteRule ^contato\.(php|html?)$ /contato [R=301,L,QSD,NC]
+  RewriteRule ^ficha-cadastral\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
+  RewriteRule ^detalhe-produto-(.+)\.html?$ /seminovos [R=301,L,QSD,NC]
+  RewriteRule ^detalhe-produto-(.+)$ /seminovos [R=301,L,QSD,NC]
   
   # Home para bots: precisa vir ANTES do short-circuit de arquivo/diretório,
   # senão a raiz "/" casa com o diretório docroot (-d) e o crawler recebe o
@@ -158,6 +158,10 @@
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteRule ^blog/([^/]+)/?$ seo-static/blog-$1.html [L]
+
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteRule ^regioes-atendidas/?$ seo-static/regions-hub.html [L]
 
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]

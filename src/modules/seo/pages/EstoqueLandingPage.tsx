@@ -102,6 +102,7 @@ export function EstoqueLandingPage() {
               <Link
                 to="/seminovos"
                 search={showroomSearch}
+                data-regional-action="view_filtered_stock"
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-white font-semibold hover:bg-primary/90"
               >
                 <Car className="w-4 h-4" />
@@ -111,6 +112,7 @@ export function EstoqueLandingPage() {
                 href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-regional-action="landing_whatsapp"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-primary/20 px-5 py-3 text-primary font-semibold hover:bg-primary/5"
               >
                 <MessageCircle className="w-4 h-4" />

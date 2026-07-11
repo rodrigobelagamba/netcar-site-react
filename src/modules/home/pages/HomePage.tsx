@@ -13,8 +13,8 @@ import { ServicesSection } from "@/design-system/components/patterns/ServicesSec
 import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
 import { useMemo, useEffect, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { ArrowRight, MapPin } from "lucide-react";
 import {
   pickFeaturedHomeVehicle,
   pickHomeHighlightVehicles,
@@ -26,7 +26,7 @@ const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 
 function HomeHeroSkeleton() {
   return (
-      <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
+    <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">
         <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
           <div className="flex items-center gap-3">
@@ -276,6 +276,54 @@ export function HomePage() {
       <DNASection />
 
       <NetcarSocialSection />
+
+      <section className="container-main px-4 py-12 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+        <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm md:p-8">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div className="max-w-2xl">
+              <span className="mb-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+                <MapPin className="h-4 w-4" />
+                Atendimento regional
+              </span>
+              <h2 className="text-2xl font-bold text-fg md:text-3xl">
+                Pesquise de qualquer cidade. Visite em Esteio.
+              </h2>
+              <p className="mt-3 leading-relaxed text-gray-600">
+                Estoque, simulação e pré-avaliação ajudam a planejar deslocamento.
+                Lojas físicas ficam somente na Av. Presidente Vargas, em Esteio.
+              </p>
+            </div>
+            <Link
+              to="/regioes-atendidas"
+              className="inline-flex shrink-0 items-center gap-2 font-bold text-primary hover:underline"
+            >
+              Ver cidades atendidas
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <nav
+            aria-label="Seminovos por região"
+            className="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-gray-100 pt-5 text-sm"
+          >
+            {[
+              ["taquara", "Taquara"],
+              ["igrejinha", "Igrejinha"],
+              ["gramado", "Gramado"],
+              ["caxias-do-sul", "Caxias do Sul"],
+              ["bento-goncalves", "Bento Gonçalves"],
+            ].map(([slug, name]) => (
+              <Link
+                key={slug}
+                to="/seminovos-{$citySlug}"
+                params={{ citySlug: slug }}
+                className="text-gray-600 hover:text-primary"
+              >
+                Seminovos para {name}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </section>
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
         <div className="container-main space-y-8">

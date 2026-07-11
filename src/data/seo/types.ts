@@ -46,8 +46,11 @@ export interface CitySellSeo {
 export interface CitySeoPage {
   slug: string;
   name: string;
+  regionName?: string;
   distanceKm: number;
   travelTime: string;
+  routeNote?: string;
+  visitPlanning?: string;
   title: string;
   description: string;
   h1: string;

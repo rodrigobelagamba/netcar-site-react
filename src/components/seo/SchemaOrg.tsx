@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useAddressQuery, usePhoneQuery } from "@/catalog/queries/useSiteQuery";
+import { cityPages } from "@/data/seo";
 
 /**
  * Componente que adiciona Schema.org AutoDealer no head do documento
@@ -48,7 +49,7 @@ export function SchemaOrg() {
       "alternateName": "Netcar Veículos",
       "legalName": "Netcar Veículos Ltda",
       "foundingDate": "1997",
-      "description": "Loja de seminovos em Esteio/RS com mais de 15 anos de mercado. Carros com garantia, vistoriados e financiamento facilitado.",
+      "description": "Loja de seminovos em Esteio/RS desde 1997. Carros com garantia, vistoriados e financiamento facilitado.",
       "url": baseUrl,
       "logo": {
         "@type": "ImageObject",
@@ -104,12 +105,7 @@ export function SchemaOrg() {
       "priceRange": "R$ 40.000 - R$ 300.000",
       "areaServed": [
         { "@type": "City", "name": "Esteio" },
-        { "@type": "City", "name": "Canoas" },
-        { "@type": "City", "name": "Sapucaia do Sul" },
-        { "@type": "City", "name": "São Leopoldo" },
-        { "@type": "City", "name": "Novo Hamburgo" },
-        { "@type": "City", "name": "Gravataí" },
-        { "@type": "City", "name": "Cachoeirinha" },
+        ...cityPages.map((city) => ({ "@type": "City", "name": city.name })),
         { "@type": "AdministrativeArea", "name": "Região Metropolitana de Porto Alegre" }
       ],
       "sameAs": [

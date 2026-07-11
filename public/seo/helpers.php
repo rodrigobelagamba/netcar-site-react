@@ -15,6 +15,23 @@ function seo_h($value)
  */
 function seo_org_schema()
 {
+    $servedCities = ['Canoas', 'Sapucaia do Sul', 'São Leopoldo', 'Novo Hamburgo', 'Gravataí', 'Cachoeirinha', 'Porto Alegre', 'Alvorada', 'Viamão', 'Guaíba', 'Campo Bom', 'Estância Velha', 'Montenegro', 'Taquara', 'Igrejinha', 'Gramado', 'Caxias do Sul', 'Bento Gonçalves'];
+    $citiesFile = __DIR__ . '/cities.json';
+    if (is_file($citiesFile)) {
+        $generatedCities = json_decode(file_get_contents($citiesFile), true);
+        if (is_array($generatedCities) && count($generatedCities) > 0) {
+            $servedCities = $generatedCities;
+        }
+    }
+    $areaServed = [['@type' => 'City', 'name' => 'Esteio']];
+    foreach ($servedCities as $city) {
+        $areaServed[] = ['@type' => 'City', 'name' => $city];
+    }
+    $areaServed[] = [
+        '@type' => 'AdministrativeArea',
+        'name' => 'Região Metropolitana de Porto Alegre',
+    ];
+
     $schema = [
         '@context' => 'https://schema.org',
         '@type' => 'AutoDealer',
@@ -74,6 +91,7 @@ function seo_org_schema()
                 'closes' => '16:30',
             ],
         ],
+        'areaServed' => $areaServed,
     ];
 
     return json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

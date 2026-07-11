@@ -26,6 +26,16 @@ switch ($page) {
         echo '<h2>Destaques do estoque</h2>';
         seo_render_vehicle_list($vehicles, 12);
         echo '<p><a href="' . SEO_SITE_URL . '/seminovos">Ver todos os seminovos disponíveis</a></p>';
+        echo '<h2>Atendimento regional</h2>';
+        echo '<p>Consulte estoque e pré-avaliação antes de viajar. As lojas físicas ficam somente na Av. Presidente Vargas, em Esteio.</p>';
+        echo '<p><a href="' . SEO_SITE_URL . '/regioes-atendidas">Ver regiões atendidas</a></p>';
+        echo '<ul>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-taquara">Seminovos para Taquara</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-igrejinha">Seminovos para Igrejinha</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-gramado">Seminovos para Gramado</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-caxias-do-sul">Seminovos para Caxias do Sul</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-bento-goncalves">Seminovos para Bento Gonçalves</a></li>';
+        echo '</ul>';
         break;
 
     case 'seminovos':

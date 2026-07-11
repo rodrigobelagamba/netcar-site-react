@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, Maximize2, MessageCircle } from "lucide-react";
 import { Button } from "@/design-system/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatPrice, formatYear } from "@/lib/formatters";
@@ -53,14 +53,6 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
     setDirection(-1);
     setCurrentIndex((prev) => (prev - 1 + vehicles.length) % vehicles.length);
   };
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setDirection(1);
-      setCurrentIndex((prev) => (prev + 1) % vehicles.length);
-    }, 12000);
-    return () => clearInterval(timer);
-  }, [currentIndex, vehicles.length]);
 
   const slideVariants = {
     enter: (direction: number) => ({

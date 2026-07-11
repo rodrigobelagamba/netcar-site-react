@@ -94,6 +94,11 @@ const ComparadorPage = lazyWithRetry(() =>
     default: m.ComparadorPage,
   }))
 );
+const RegionsHubPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/RegionsHubPage").then((m) => ({
+    default: m.RegionsHubPage,
+  }))
+);
 
 // Mensagem do WhatsApp contextual por rota: lead chega no iAN já qualificado
 function getContextualMessage(pathname: string): string {
@@ -243,7 +248,7 @@ function RootComponent() {
       </a>
       <SchemaOrg />
       <Header />
-      <div className="relative flex-1 overflow-x-hidden max-w-full pt-0 sm:pt-20">
+      <div className="relative min-h-[100dvh] flex-1 overflow-x-hidden max-w-full pt-0 sm:pt-20">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -421,6 +426,12 @@ const comparadorRoute = createRoute({
   component: ComparadorPage,
 });
 
+const regionsHubRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/regioes-atendidas",
+  component: RegionsHubPage,
+});
+
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   seminovosRoute,
@@ -440,6 +451,7 @@ export const routeTree = rootRoute.addChildren([
   financiamentoRoute,
   atendimento24hRoute,
   comparadorRoute,
+  regionsHubRoute,
 ]);
 
 // Exporta NotFound para uso no RouterProvider

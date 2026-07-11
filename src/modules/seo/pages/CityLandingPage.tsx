@@ -1,7 +1,14 @@
 import { Link, useParams } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { MapPin, Clock, Car, MessageCircle } from "lucide-react";
-import { useEffect } from "react";
+import {
+  CalendarCheck,
+  Car,
+  Clock,
+  MapPin,
+  MessageCircle,
+  Search,
+} from "lucide-react";
+import { useEffect, useRef } from "react";
 import { getCityPage } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
@@ -10,11 +17,13 @@ import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
+import { trackTrustSectionView } from "@/lib/analytics";
 
 export function CityLandingPage() {
   const { citySlug } = useParams({ from: "/seminovos-{$citySlug}" });
   const city = getCityPage(citySlug);
   const { data: whatsapp } = useWhatsAppQuery();
+  const trustSectionRef = useRef<HTMLElement>(null);
 
   useMetaTags({
     title: city?.title,
@@ -52,6 +61,24 @@ export function CityLandingPage() {
     };
   }, [city]);
 
+  useEffect(() => {
+    const section = trustSectionRef.current;
+    if (!city || !section || typeof IntersectionObserver === "undefined") return;
+
+    let tracked = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || tracked) return;
+        tracked = true;
+        trackTrustSectionView("regional_remote_process");
+        observer.disconnect();
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [city]);
+
   if (!city) {
     return <NotFoundRedirect />;
   }
@@ -73,7 +100,7 @@ export function CityLandingPage() {
             className="max-w-3xl"
           >
             <span className="text-primary text-xs font-semibold tracking-widest uppercase mb-4 block">
-              Região metropolitana
+              {city.regionName ?? "Atendimento regional"}
             </span>
             <h1 className="text-3xl md:text-4xl font-bold text-fg mb-4">{city.h1}</h1>
             <p className="text-lg text-gray-600 mb-6">{city.intro}</p>
@@ -94,34 +121,84 @@ export function CityLandingPage() {
                 {paragraph}
               </p>
             ))}
+            {city.routeNote && (
+              <p className="rounded-xl border border-primary/10 bg-primary/5 p-4 text-sm leading-relaxed text-gray-600">
+                <strong className="text-fg">Referência de trajeto:</strong>{" "}
+                {city.routeNote}
+              </p>
+            )}
 
             <div className="flex flex-wrap gap-3 mt-8">
               <Link
                 to="/seminovos"
                 search={emptySeminovosSearch}
+                data-regional-action="view_stock"
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-white font-semibold hover:bg-primary/90"
               >
                 <Car className="w-4 h-4" />
                 Ver estoque
               </Link>
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-primary/20 px-5 py-3 text-primary font-semibold hover:bg-primary/5"
-              >
-                <MessageCircle className="w-4 h-4" />
-                Falar com consultor · 24/7
-              </a>
               <Link
                 to="/vender-carro-{$citySlug}"
                 params={{ citySlug: city.slug }}
+                data-regional-action="sell_city"
                 className="inline-flex items-center justify-center rounded-xl border border-secondary/30 px-5 py-3 text-secondary font-semibold hover:bg-secondary/5"
               >
                 Quer vender seu carro?
               </Link>
+              <a
+                href={waLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-regional-action="whatsapp"
+                className="inline-flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold text-gray-500 hover:text-primary"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Tirar dúvida no WhatsApp
+              </a>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      <section ref={trustSectionRef} className="pb-16">
+        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <h2 className="mb-6 text-2xl font-bold text-fg">
+            Da pesquisa à visita em Esteio
+          </h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+              <Search className="mb-3 h-5 w-5 text-primary" />
+              <h3 className="mb-2 font-semibold text-fg">1. Pesquise no site</h3>
+              <p className="text-sm leading-relaxed text-gray-600">
+                Compare estoque, fotos, preços e versões. Site é ponto de partida
+                antes de conversar com equipe.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+              <Car className="mb-3 h-5 w-5 text-primary" />
+              <h3 className="mb-2 font-semibold text-fg">2. Adiante negociação</h3>
+              <p className="text-sm leading-relaxed text-gray-600">
+                Simulação e pré-avaliação da troca podem começar remotamente.
+                Condições finais dependem das análises presenciais.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+              <CalendarCheck className="mb-3 h-5 w-5 text-primary" />
+              <h3 className="mb-2 font-semibold text-fg">3. Confirme visita</h3>
+              <p className="text-sm leading-relaxed text-gray-600">
+                {city.visitPlanning ??
+                  "Confirme disponibilidade e visite as lojas da Av. Presidente Vargas, em Esteio, para test drive e fechamento."}
+              </p>
+            </article>
+          </div>
+          <p className="mt-5 text-sm text-gray-500">
+            Netcar possui lojas físicas somente em Esteio.{" "}
+            <Link to="/regioes-atendidas" className="font-semibold text-primary hover:underline">
+              Veja todas as regiões atendidas
+            </Link>
+            .
+          </p>
         </div>
       </section>
 

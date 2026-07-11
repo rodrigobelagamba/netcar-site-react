@@ -1,6 +1,14 @@
 import { Link, useParams } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { MapPin, Clock, Banknote } from "lucide-react";
+import {
+  Banknote,
+  Camera,
+  Car,
+  ClipboardCheck,
+  Clock,
+  MapPin,
+  Store,
+} from "lucide-react";
 import { useEffect } from "react";
 import { getCityPage } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
@@ -94,28 +102,92 @@ export function SellCityLandingPage() {
 
             <div className="flex flex-wrap gap-3 mt-8">
               <a
+                href="#pre-avaliacao"
+                className="inline-flex items-center gap-2 rounded-xl bg-secondary px-5 py-3 text-white font-semibold hover:opacity-90"
+              >
+                <ClipboardCheck className="w-4 h-4" />
+                Iniciar pré-avaliação
+              </a>
+              <Link
+                to="/seminovos"
+                search={{
+                  marca: undefined,
+                  modelo: undefined,
+                  precoMin: undefined,
+                  precoMax: undefined,
+                  anoMin: undefined,
+                  anoMax: undefined,
+                  cambio: undefined,
+                  cor: undefined,
+                  categoria: undefined,
+                }}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-secondary/20 px-5 py-3 text-secondary font-semibold hover:bg-secondary/5"
+              >
+                <Car className="w-4 h-4" />
+                Ver estoque para troca
+              </Link>
+              <a
                 href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-secondary px-5 py-3 text-white font-semibold hover:opacity-90"
+                data-regional-action="sell_whatsapp"
+                className="inline-flex items-center gap-2 px-3 py-3 text-sm font-semibold text-gray-500 hover:text-secondary"
               >
                 <Banknote className="w-4 h-4" />
-                Avaliar meu carro
+                Tirar dúvida no WhatsApp
               </a>
-              <Link
-                to="/compra"
-                className="inline-flex items-center justify-center rounded-xl border border-secondary/20 px-5 py-3 text-secondary font-semibold hover:bg-secondary/5"
-              >
-                Como funciona
-              </Link>
             </div>
           </motion.div>
         </div>
       </section>
 
       <section className="pb-12">
-        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">
+        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <h2 className="mb-6 text-2xl font-bold text-fg">
+            Pré-avaliação remota, vistoria em Esteio
+          </h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+              <Camera className="mb-3 h-5 w-5 text-secondary" />
+              <h3 className="mb-2 font-semibold text-fg">1. Envie dados reais</h3>
+              <p className="text-sm leading-relaxed text-gray-600">
+                Modelo, versão, ano, km, fotos, avarias e saldo de financiamento
+                ajudam no primeiro filtro.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+              <ClipboardCheck className="mb-3 h-5 w-5 text-secondary" />
+              <h3 className="mb-2 font-semibold text-fg">2. Receba orientação</h3>
+              <p className="text-sm leading-relaxed text-gray-600">
+                Pré-avaliação indica se vale avançar. Não é proposta final nem
+                garantia de compra.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+              <Store className="mb-3 h-5 w-5 text-secondary" />
+              <h3 className="mb-2 font-semibold text-fg">3. Agende vistoria</h3>
+              <p className="text-sm leading-relaxed text-gray-600">
+                Conferência do carro, documentos e proposta final acontecem nas
+                lojas da Av. Presidente Vargas, somente em Esteio.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="pb-12">
+        <div
+          id="pre-avaliacao"
+          className="container-main scroll-mt-28 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl"
+        >
           <QuickSellForm cityName={city.name} />
+          <p className="mt-4 text-center text-sm text-gray-500">
+            Sem unidade ou ponto de coleta em {city.name}.{" "}
+            <Link to="/regioes-atendidas" className="font-semibold text-secondary hover:underline">
+              Consulte regiões atendidas
+            </Link>
+            .
+          </p>
         </div>
       </section>
 

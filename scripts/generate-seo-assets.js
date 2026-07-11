@@ -153,6 +153,18 @@ const blogPosts = [
 const cities = JSON.parse(
   readFileSync(join(rootDir, "src/data/seo/cities.json"), "utf-8")
 );
+ORG_SCHEMA.areaServed = [
+  { "@type": "City", name: "Esteio" },
+  ...cities.map((city) => ({ "@type": "City", name: city.name })),
+  {
+    "@type": "AdministrativeArea",
+    name: "Região Metropolitana de Porto Alegre",
+  },
+];
+writeTextFile(
+  join(publicDir, "seo", "cities.json"),
+  `${JSON.stringify(cities.map((city) => city.name), null, 2)}\n`
+);
 let landings = [];
 try {
   landings = JSON.parse(
@@ -253,6 +265,7 @@ function pageShell({ title, description, canonical, body, schemas = [] }) {
     <nav>
       <a href="${SITE}/">Home</a>
       <a href="${SITE}/seminovos">Seminovos</a>
+      <a href="${SITE}/regioes-atendidas">Regiões atendidas</a>
       <a href="${SITE}/blog">Blog</a>
       <a href="${SITE}/contato">Contato</a>
     </nav>
@@ -264,6 +277,41 @@ function pageShell({ title, description, canonical, body, schemas = [] }) {
 }
 
 mkdirSync(seoStaticDir, { recursive: true });
+
+const regionsHubCanonical = `${SITE}/regioes-atendidas`;
+const regionsHubBody = `
+  <article>
+    <h1>Seminovos para Grande Porto Alegre, Vales e Serra Gaúcha</h1>
+    <p>Consulte estoque, preços e condições antes de viajar. Simulação de financiamento e pré-avaliação da troca podem começar remotamente.</p>
+    <p>A Netcar possui lojas físicas somente na Av. Presidente Vargas, em Esteio. Test drive, vistoria e fechamento são presenciais.</p>
+    <h2>Como planejar a visita</h2>
+    <ol>
+      <li>Pesquise veículos, fotos e preços no estoque online.</li>
+      <li>Adiante simulação e envie dados completos do usado.</li>
+      <li>Confirme disponibilidade e agenda antes de ir a Esteio.</li>
+    </ol>
+    <h2>Cidades atendidas</h2>
+    <ul>
+      ${cities
+        .map(
+          (city) =>
+            `<li><a href="${SITE}/seminovos-${city.slug}">${escapeHtml(city.name)}</a> — cerca de ${city.distanceKm} km, ${escapeHtml(city.travelTime)}</li>`
+        )
+        .join("")}
+    </ul>
+    <p><a href="${SITE}/seminovos">Ver estoque atual</a> · <a href="${SITE}/compra">Pré-avaliar meu carro</a></p>
+  </article>`;
+writeTextFile(
+  join(seoStaticDir, "regions-hub.html"),
+  pageShell({
+    title: "Regiões atendidas | Netcar Multimarcas Esteio",
+    description:
+      "Consulte seminovos e pré-avaliação para cidades da Grande Porto Alegre, Vale do Paranhana e Serra Gaúcha. Lojas Netcar somente em Esteio.",
+    canonical: regionsHubCanonical,
+    body: regionsHubBody,
+    schemas: [ORG_SCHEMA],
+  })
+);
 
 for (const post of blogPosts) {
   const canonical = `${SITE}/blog/${post.slug}`;
@@ -288,7 +336,7 @@ function relatedCitiesHtml(currentSlug) {
         `<li><a href="${SITE}/seminovos-${c.slug}">Seminovos perto de ${escapeHtml(c.name)}</a></li>`
     )
     .join("");
-  return `<nav aria-label="Seminovos em outras cidades"><h2>Seminovos em outras cidades</h2><ul>${links}</ul></nav>`;
+  return `<nav aria-label="Seminovos em outras cidades"><h2>Seminovos em outras cidades</h2><p><a href="${SITE}/regioes-atendidas">Ver todas as regiões atendidas</a></p><ul>${links}</ul></nav>`;
 }
 
 for (const city of cities) {
@@ -307,6 +355,14 @@ for (const city of cities) {
       <h1>${escapeHtml(city.h1)}</h1>
       <p>${escapeHtml(city.intro)}</p>
       ${paragraphs}
+      ${city.routeNote ? `<p><strong>Referência de trajeto:</strong> ${escapeHtml(city.routeNote)}</p>` : ""}
+      <h2>Da pesquisa à visita em Esteio</h2>
+      <ol>
+        <li>Consulte fotos, preços e versões no estoque online.</li>
+        <li>Adiante simulação e pré-avaliação da troca.</li>
+        <li>${escapeHtml(city.visitPlanning || "Confirme disponibilidade e visite as lojas da Av. Presidente Vargas, em Esteio.")}</li>
+      </ol>
+      <p>A Netcar possui lojas físicas somente em Esteio.</p>
       ${faqHtml}
       <p>
         <a href="${SITE}/seminovos">Ver estoque</a>
@@ -339,8 +395,15 @@ for (const city of cities) {
       <h1>${escapeHtml(city.sell.h1)}</h1>
       <p>${escapeHtml(city.sell.intro)}</p>
       ${sellParagraphs}
+      <h2>Pré-avaliação remota, vistoria em Esteio</h2>
+      <ol>
+        <li>Envie modelo, versão, ano, quilometragem, fotos e histórico.</li>
+        <li>Receba uma orientação inicial, que não representa proposta final.</li>
+        <li>Agende vistoria e conferência documental na Av. Presidente Vargas, em Esteio.</li>
+      </ol>
+      <p>A Netcar não possui unidade ou ponto de coleta em ${escapeHtml(city.name)}.</p>
       ${sellFaqHtml}
-      <p><a href="${SITE}/compra">Avaliar meu carro</a></p>
+      <p><a href="${SITE}/compra">Iniciar pré-avaliação</a> · <a href="${SITE}/seminovos">Ver estoque para troca</a></p>
     </article>`;
     writeTextFile(
       join(seoStaticDir, `sell-city-${city.slug}.html`),
@@ -442,6 +505,7 @@ for (const page of contentPages) {
 const staticPages = [
   { path: "/", priority: "1.0", changefreq: "daily" },
   { path: "/seminovos", priority: "0.9", changefreq: "daily" },
+  { path: "/regioes-atendidas", priority: "0.85", changefreq: "monthly" },
   { path: "/sobre", priority: "0.8", changefreq: "monthly" },
   { path: "/contato", priority: "0.8", changefreq: "monthly" },
   { path: "/compra", priority: "0.85", changefreq: "weekly" },

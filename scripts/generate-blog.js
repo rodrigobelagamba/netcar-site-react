@@ -32,6 +32,7 @@ import {
   buildTrocaArticle,
   buildAutomaticoArticle,
   buildPrimeiroCarroArticle,
+  buildRegionalStockArticle,
 } from "./lib/blog-formats.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -279,11 +280,43 @@ function temaPrimeiroCarro(stock, priority) {
   );
 }
 
+function temaRegional(stock, priority, config) {
+  const slug = slugify(`${config.topic} ${YEAR}`);
+  return wrap(
+    priority,
+    buildRegionalStockArticle({
+      slug,
+      region: config.region,
+      cities: config.cities,
+      angle: config.angle,
+      cars: featuredCars(stock.cars, (v) => v.valor > 0),
+      ctaHref: "/seminovos",
+      ctaLabel: "Ver estoque atualizado",
+    })
+  );
+}
+
 function buildPool(stock) {
   const pool = [];
   let p = 100;
   pool.push(temaPrecos(stock, p++));
   pool.push(temaChecklist(stock, p++));
+  pool.push(
+    temaRegional(stock, p++, {
+      topic: "seminovos vale dos sinos estoque e procedencia",
+      region: "Vale dos Sinos",
+      cities: ["São Leopoldo", "Novo Hamburgo", "Campo Bom", "Estância Velha"],
+      angle: "estoque",
+    })
+  );
+  pool.push(
+    temaRegional(stock, p++, {
+      topic: "comprar seminovo a distancia serra gaucha",
+      region: "Serra Gaúcha",
+      cities: ["Caxias do Sul", "Bento Gonçalves", "Farroupilha"],
+      angle: "remoto",
+    })
+  );
   if (stock.topMarca) pool.push(temaMarca(stock.topMarca.name, stock, p++));
   if (stock.topCategoria) pool.push(temaCategoria(stock.topCategoria.name, stock, p++));
   pool.push(temaPrimeiroCarro(stock, p++));

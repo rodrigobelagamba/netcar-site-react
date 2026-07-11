@@ -82,5 +82,65 @@
     "titleHint": "Hatch ou sedan: qual combina com seu uso",
     "intent": "compra",
     "status": "pendente"
+  },
+  {
+    "slug": "comprar-seminovo-distancia-grande-porto-alegre",
+    "keyword": "comprar seminovo à distância grande porto alegre",
+    "titleHint": "Comprar seminovo à distância na Grande Porto Alegre: roteiro seguro",
+    "intent": "compra",
+    "region": "Grande Porto Alegre",
+    "cities": ["Canoas", "Sapucaia do Sul", "São Leopoldo", "Novo Hamburgo", "Gravataí"],
+    "asset": "guia-negociacao-remota",
+    "status": "publicado"
+  },
+  {
+    "slug": "seminovos-vale-dos-sinos-como-comparar",
+    "keyword": "seminovos vale dos sinos",
+    "titleHint": "Seminovos no Vale dos Sinos: como comparar estoque e procedência",
+    "intent": "compra",
+    "region": "Vale dos Sinos",
+    "cities": ["São Leopoldo", "Novo Hamburgo", "Campo Bom", "Estância Velha"],
+    "asset": "checklist-estoque-confianca",
+    "status": "publicado"
+  },
+  {
+    "slug": "suv-seminovo-serra-gaucha-estoque-real",
+    "keyword": "suv seminovo serra gaúcha",
+    "titleHint": "SUV seminovo para quem vem da Serra: como filtrar o estoque antes da viagem",
+    "intent": "compra",
+    "region": "Serra Gaúcha",
+    "cities": ["Caxias do Sul", "Bento Gonçalves", "Farroupilha"],
+    "asset": "curadoria-estoque",
+    "status": "pendente"
+  },
+  {
+    "slug": "vender-carro-vale-do-cai-avaliacao",
+    "keyword": "vender carro vale do caí",
+    "titleHint": "Vender carro no Vale do Caí: documentos e perguntas antes da avaliação",
+    "intent": "venda",
+    "region": "Vale do Caí",
+    "cities": ["Montenegro", "São Sebastião do Caí", "Bom Princípio"],
+    "asset": "checklist-avaliacao",
+    "status": "pendente"
+  },
+  {
+    "slug": "picape-seminova-regiao-metropolitana-trabalho",
+    "keyword": "picape seminova região metropolitana porto alegre",
+    "titleHint": "Picape seminova na Região Metropolitana: checklist por tipo de trabalho",
+    "intent": "compra",
+    "region": "Região Metropolitana de Porto Alegre",
+    "cities": ["Canoas", "Gravataí", "Cachoeirinha", "Alvorada"],
+    "asset": "guia-por-uso",
+    "status": "pendente"
+  },
+  {
+    "slug": "carro-financiado-negociacao-remota-rs",
+    "keyword": "trocar carro financiado à distância rs",
+    "titleHint": "Troca de carro financiado à distância no RS: o que adiantar antes da visita",
+    "intent": "venda",
+    "region": "Rio Grande do Sul",
+    "cities": ["Porto Alegre", "Canoas", "Novo Hamburgo", "Montenegro"],
+    "asset": "roteiro-negociacao-remota",
+    "status": "pendente"
   }
 ]

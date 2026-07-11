@@ -22,6 +22,7 @@ const menuLinks = [
   { to: "/comparar", label: "Comparar seminovos" },
   { to: "/financiamento", label: "Financiamento" },
   { to: "/compra", label: "Netcar compra" },
+  { to: "/regioes-atendidas", label: "Regiões atendidas" },
   { to: "/atendimento-24h", label: "Atendimento 24h" },
   { to: "/blog", label: "Atualidades" },
   { to: "/contato", label: "Contato" },
@@ -249,7 +250,15 @@ export function Footer() {
 
         {/* Cidades que atendemos (SEO local + links internos) */}
         <div className="border-t border-border pt-6 pb-2">
-          <h4 className="text-[10px] font-bold text-muted-foreground mb-4 uppercase tracking-widest">Seminovos por cidade</h4>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Seminovos por cidade</h4>
+            <Link
+              to="/regioes-atendidas"
+              className="text-xs font-semibold text-primary hover:underline"
+            >
+              Ver regiões e como funciona
+            </Link>
+          </div>
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
             {cityPages.map((city) => (
               <li key={city.slug}>
@@ -287,7 +296,7 @@ export function Footer() {
 
         <div className="border-t border-border pt-6 pb-4">
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Netcar Multimarcas — seminovos revisados e compra de usados em Esteio/RS. Atendemos Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha e região metropolitana de Porto Alegre.
+            Netcar Multimarcas — seminovos revisados e compra de usados em Esteio/RS. Atendimento remoto para Grande Porto Alegre, Vale do Paranhana e Serra Gaúcha; lojas físicas somente na Av. Presidente Vargas, em Esteio.
           </p>
         </div>
 

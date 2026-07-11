@@ -414,5 +414,180 @@
         { "q": "Pagam à vista?", "a": "Pagamento via transferência após vistoria e conferência de documentação, no prazo combinado." }
       ]
     }
+  },
+  {
+    "slug": "taquara",
+    "name": "Taquara",
+    "regionName": "Vale do Paranhana",
+    "distanceKm": 75,
+    "travelTime": "1h15 a 1h30",
+    "routeNote": "O trajeto costuma seguir pela RS-239 até o Vale dos Sinos e depois pela BR-116 até Esteio; horário de pico pode aumentar o tempo.",
+    "visitPlanning": "Consulte estoque e disponibilidade no site, envie dados da troca para uma pré-avaliação e marque a visita às lojas da Av. Presidente Vargas, em Esteio.",
+    "title": "Seminovos para Taquara | Estoque Netcar em Esteio",
+    "description": "Para quem busca seminovo em Taquara: veja estoque e preços da Netcar, negocie à distância e planeje visita à loja física em Esteio.",
+    "h1": "Seminovos para quem mora em Taquara",
+    "intro": "Quem sai de Taquara para comparar carros na região metropolitana pode fazer boa parte da seleção antes de pegar a estrada: estoque, fotos e preços ficam disponíveis no site da Netcar.",
+    "paragraphs": [
+      "O acesso pelo eixo da RS-239 e BR-116 torna viável uma visita planejada a Esteio. Como o percurso varia com o trânsito de Novo Hamburgo e São Leopoldo, vale confirmar os veículos escolhidos e concentrar comparação, test drive e simulação no mesmo horário.",
+      "A Netcar não possui loja em Taquara. O atendimento remoto serve para filtrar modelos, estimar financiamento e adiantar dados do usado; conferência final, test drive e assinatura acontecem nas unidades da Av. Presidente Vargas, em Esteio."
+    ],
+    "faq": [
+      { "q": "Quanto tempo leva de Taquara até a Netcar?", "a": "Em condições normais, cerca de 1h15 a 1h30 de carro. Trânsito na RS-239 e na BR-116 pode alterar o percurso." },
+      { "q": "Como evitar uma viagem sem o carro disponível?", "a": "Confira o estoque no site e confirme a disponibilidade com a equipe antes de sair. Também é possível adiantar simulação e dados da troca." }
+    ],
+    "sell": {
+      "title": "Vender carro em Taquara | Pré-avaliação Netcar",
+      "description": "Envie dados do seu carro em Taquara para pré-avaliação. Se houver interesse, agende vistoria presencial da Netcar em Esteio.",
+      "h1": "Vender carro em Taquara com pré-avaliação",
+      "intro": "Para não percorrer cerca de 75 km sem alinhamento, o processo começa à distância e só avança para vistoria em Esteio quando veículo e expectativa de negociação fizerem sentido.",
+      "paragraphs": [
+        "Informe modelo, ano, quilometragem, versão, histórico e fotos. A equipe verifica se o carro atende aos critérios de compra e dá uma orientação inicial, que não substitui a vistoria.",
+        "A Netcar não mantém ponto de avaliação em Taquara e não promete retirada local. A proposta final depende da conferência do veículo e dos documentos nas lojas da Av. Presidente Vargas, em Esteio."
+      ],
+      "faq": [
+        { "q": "A Netcar avalia o carro em Taquara?", "a": "A pré-avaliação pode começar remotamente. Vistoria e proposta final são presenciais em Esteio." },
+        { "q": "Posso aproveitar a visita para escolher outro carro?", "a": "Sim. Consulte o estoque antes e informe quais modelos quer comparar para organizar avaliação do usado e test drive na mesma visita." }
+      ]
+    }
+  },
+  {
+    "slug": "igrejinha",
+    "name": "Igrejinha",
+    "regionName": "Vale do Paranhana",
+    "distanceKm": 88,
+    "travelTime": "1h25 a 1h45",
+    "routeNote": "A rota mais comum passa pela RS-115 e RS-239, seguindo pelo Vale dos Sinos até a BR-116 em direção a Esteio.",
+    "visitPlanning": "Escolha opções no showroom online, compare parcelas e confirme a agenda antes do deslocamento do Vale do Paranhana até Esteio.",
+    "title": "Seminovos para Igrejinha | Netcar Multimarcas",
+    "description": "Compare seminovos saindo de Igrejinha: estoque online, negociação prévia e visita planejada à Netcar na Av. Presidente Vargas, Esteio.",
+    "h1": "Seminovos para clientes de Igrejinha",
+    "intro": "Em Igrejinha, onde deslocamentos pelo Vale do Paranhana fazem parte da busca por mais variedade, o showroom online ajuda a comparar versões e faixas de preço sem rodar por várias lojas.",
+    "paragraphs": [
+      "Antes de seguir pela RS-115 e RS-239, selecione os carros que atendem seu uso — compacto para rotina urbana, SUV familiar ou picape — e confira fotos, quilometragem e valor publicados.",
+      "As únicas lojas físicas da Netcar ficam em Esteio, na Av. Presidente Vargas. Atendimento remoto pode adiantar proposta de financiamento e pré-avaliação da troca; a visita serve para conferir o carro, dirigir e validar a negociação."
+    ],
+    "faq": [
+      { "q": "Existe unidade da Netcar em Igrejinha?", "a": "Não. As unidades físicas ficam somente na Av. Presidente Vargas, em Esteio." },
+      { "q": "Consigo deixar financiamento encaminhado antes da visita?", "a": "É possível adiantar uma simulação e os dados necessários. Aprovação, condições finais e contrato dependem da análise e da negociação." }
+    ],
+    "sell": {
+      "title": "Vender carro em Igrejinha | Netcar pré-avalia",
+      "description": "Comece a venda do seu carro em Igrejinha com pré-avaliação remota. Vistoria e proposta final são feitas na Netcar em Esteio.",
+      "h1": "Venda de carro para quem está em Igrejinha",
+      "intro": "O primeiro filtro acontece sem sair de Igrejinha: dados completos e fotos ajudam a saber se o veículo se encaixa no estoque antes de marcar vistoria.",
+      "paragraphs": [
+        "A orientação remota considera ano, versão, quilometragem, estado aparente e histórico informado. Diferenças identificadas presencialmente podem mudar ou impedir a proposta.",
+        "Se houver alinhamento, a vistoria é agendada em Esteio. Não há endereço, equipe de compra ou promessa de coleta da Netcar em Igrejinha."
+      ],
+      "faq": [
+        { "q": "Fotos garantem o valor final?", "a": "Não. Fotos apoiam a pré-avaliação; valor final depende da vistoria física, histórico e documentação." },
+        { "q": "Carro financiado pode ser analisado?", "a": "Sim. Informe saldo devedor. Eventual compra depende das condições de quitação e da aprovação final do veículo." }
+      ]
+    }
+  },
+  {
+    "slug": "gramado",
+    "name": "Gramado",
+    "regionName": "Região das Hortênsias",
+    "distanceKm": 110,
+    "travelTime": "1h50 a 2h20",
+    "routeNote": "O percurso costuma descer pela RS-115, conectar à RS-239 e seguir pela BR-116; clima, movimento turístico e horários de pico afetam o tempo.",
+    "visitPlanning": "Use o estoque online para montar uma lista curta, peça simulação e pré-avaliação da troca, depois confirme a visita presencial em Esteio.",
+    "title": "Seminovos para Gramado | Planeje visita à Netcar",
+    "description": "Veja seminovos para quem está em Gramado. Compare estoque e negocie antes de visitar as lojas Netcar em Esteio, a cerca de 110 km.",
+    "h1": "Seminovos para quem está em Gramado",
+    "intro": "A distância entre Gramado e Esteio pede uma compra organizada. O site permite começar por preço, versão e disponibilidade para que a viagem seja dedicada aos carros que realmente entraram na seleção.",
+    "paragraphs": [
+      "O tempo pela RS-115, RS-239 e BR-116 muda com neblina, obras, fluxo turístico e trânsito metropolitano. Por isso, confirme os veículos no dia e reserve margem no planejamento.",
+      "A Netcar atende remotamente, mas sua estrutura física está somente na Av. Presidente Vargas, em Esteio. Fotos, simulação e negociação inicial reduzem incertezas; inspeção, test drive e fechamento continuam presenciais."
+    ],
+    "faq": [
+      { "q": "A Netcar entrega carros em Gramado?", "a": "A página não oferece promessa de entrega. Retirada e eventual logística devem ser tratadas na negociação, cuja referência física é a loja em Esteio." },
+      { "q": "Posso comparar mais de um veículo na mesma visita?", "a": "Sim, desde que estejam disponíveis. Envie sua lista antes de viajar para a equipe confirmar cada opção." }
+    ],
+    "sell": {
+      "title": "Vender carro em Gramado | Avaliação Netcar Esteio",
+      "description": "Pré-avalie remotamente seu carro em Gramado e viaje só após alinhamento. Vistoria e proposta final da Netcar ocorrem em Esteio.",
+      "h1": "Como vender seu carro saindo de Gramado",
+      "intro": "Com um trajeto próximo de duas horas, faz sentido separar pré-avaliação e vistoria: primeiro dados e fotos; depois, se houver interesse, conferência presencial em Esteio.",
+      "paragraphs": [
+        "Envie imagens externas, internas, painel, pneus e eventuais avarias, além de versão, ano, km e informações de financiamento. Quanto melhor o material, mais útil será a orientação inicial.",
+        "Não existe unidade ou avaliador fixo da Netcar em Gramado. Proposta definitiva e documentação dependem de visita à Av. Presidente Vargas, em Esteio."
+      ],
+      "faq": [
+        { "q": "Preciso viajar para receber uma primeira resposta?", "a": "Não. O enquadramento inicial pode ser feito a distância. Viaje apenas após confirmar interesse e agenda de vistoria." },
+        { "q": "A pré-avaliação obriga a venda?", "a": "Não. Ela serve para orientar os próximos passos; ambas as partes decidem depois da vistoria e da proposta final." }
+      ]
+    }
+  },
+  {
+    "slug": "caxias-do-sul",
+    "name": "Caxias do Sul",
+    "regionName": "Serra Gaúcha",
+    "distanceKm": 115,
+    "travelTime": "1h45 a 2h15",
+    "routeNote": "A ligação costuma usar a BR-116 e a RS-122; serra, obras e fluxo de caminhões podem ampliar o tempo de viagem.",
+    "visitPlanning": "Filtre estoque e preço no site, envie documentação básica para simulação e confirme os carros antes de descer a Serra até Esteio.",
+    "title": "Seminovos para Caxias do Sul | Estoque em Esteio",
+    "description": "Clientes de Caxias do Sul podem comparar estoque da Netcar, adiantar negociação e visitar as lojas em Esteio com horário planejado.",
+    "h1": "Seminovos para clientes de Caxias do Sul",
+    "intro": "Caxias do Sul tem mercado automotivo amplo, mas comparar com estoque da região metropolitana pode revelar outras versões e faixas de preço. Na Netcar, essa comparação começa pelo site.",
+    "paragraphs": [
+      "Como a descida pela RS-122 e BR-116 pode passar de duas horas em dias de movimento, use filtros do showroom para criar uma lista objetiva e peça confirmação de disponibilidade antes de sair.",
+      "Não há filial da Netcar em Caxias do Sul. As lojas ficam na Av. Presidente Vargas, em Esteio; atendimento remoto adianta simulação e troca, enquanto vistoria do usado, test drive e contratação são presenciais."
+    ],
+    "faq": [
+      { "q": "Qual a distância de Caxias do Sul até a Netcar?", "a": "A referência é cerca de 115 km, com viagem normalmente entre 1h45 e 2h15. Condições da serra podem alterar bastante o tempo." },
+      { "q": "O preço visto no site pode ser confirmado antes de viajar?", "a": "Consulte a página do veículo e confirme disponibilidade e condições com a equipe. Estoque tem rotatividade." }
+    ],
+    "sell": {
+      "title": "Vender carro em Caxias do Sul | Netcar Esteio",
+      "description": "Envie dados do carro em Caxias do Sul para pré-avaliação. Vistoria e proposta final da Netcar acontecem presencialmente em Esteio.",
+      "h1": "Pré-avaliação de carro em Caxias do Sul",
+      "intro": "Quem está na Serra pode evitar deslocamento prematuro: a equipe primeiro analisa informações e imagens e informa se vale agendar a avaliação física.",
+      "paragraphs": [
+        "Além de modelo, versão, ano e km, informe histórico de manutenção, pneus, avarias e saldo de financiamento. Esses dados ajudam a reduzir diferenças entre expectativa e vistoria.",
+        "A Netcar não possui operação de compra em Caxias do Sul. Se houver avanço, o veículo é conferido em Esteio e somente então pode receber proposta definitiva."
+      ],
+      "faq": [
+        { "q": "A Netcar busca o veículo em Caxias do Sul?", "a": "Não há promessa de coleta. O fluxo informado é pré-avaliação remota e vistoria presencial na loja em Esteio." },
+        { "q": "Posso usar o carro como entrada?", "a": "Sim, se aprovado na vistoria. O valor final pode entrar na negociação de um veículo disponível no estoque." }
+      ]
+    }
+  },
+  {
+    "slug": "bento-goncalves",
+    "name": "Bento Gonçalves",
+    "regionName": "Serra Gaúcha",
+    "distanceKm": 125,
+    "travelTime": "2h a 2h30",
+    "routeNote": "A viagem pode combinar RS-453, RS-122 e BR-116; pista de serra, clima e fluxo regional influenciam o tempo.",
+    "visitPlanning": "Compare estoque e condições de troca remotamente e agende uma visita concentrada para ver veículos, fazer test drive e concluir análise em Esteio.",
+    "title": "Seminovos para Bento Gonçalves | Netcar Esteio",
+    "description": "Pesquise seminovos saindo de Bento Gonçalves. Estoque online e negociação prévia antes da visita presencial à Netcar em Esteio.",
+    "h1": "Seminovos para Bento Gonçalves",
+    "intro": "Para quem está em Bento Gonçalves, ampliar a pesquisa até a região metropolitana exige critério. A Netcar publica estoque para você eliminar opções fora do perfil antes de enfrentar o trajeto.",
+    "paragraphs": [
+      "A rota pela Serra pode variar conforme ponto de saída e condições da RS-453 e RS-122. Planeje de duas a duas horas e meia e confirme no mesmo dia se os veículos selecionados continuam disponíveis.",
+      "Toda estrutura física da Netcar fica em Esteio, na Av. Presidente Vargas. Contato remoto permite discutir entrada, financiamento e pré-avaliação; não representa loja local, entrega garantida nem compra sem vistoria."
+    ],
+    "faq": [
+      { "q": "Há loja da Netcar em Bento Gonçalves?", "a": "Não. A Netcar possui lojas físicas somente em Esteio." },
+      { "q": "O que devo adiantar antes da viagem?", "a": "Selecione veículos no site, confirme disponibilidade, envie dados para simulação e, se houver troca, fotos e informações completas do usado." }
+    ],
+    "sell": {
+      "title": "Vender carro em Bento Gonçalves | Pré-avaliação",
+      "description": "Comece remotamente a avaliação do seu carro em Bento Gonçalves. Proposta final e vistoria da Netcar são presenciais em Esteio.",
+      "h1": "Vender carro saindo de Bento Gonçalves",
+      "intro": "A pré-avaliação organiza um possível negócio antes da viagem: a equipe confere enquadramento do veículo e você decide se compensa agendar a vistoria em Esteio.",
+      "paragraphs": [
+        "Envie fotos nítidas, versão exata, ano, quilometragem, histórico e detalhes de avarias. Se houver financiamento, inclua saldo para que a conversa considere a quitação.",
+        "A avaliação final não ocorre em Bento Gonçalves. Ela depende da inspeção do carro e documentos na Av. Presidente Vargas, em Esteio, sem garantia prévia de compra."
+      ],
+      "faq": [
+        { "q": "A orientação remota já é uma proposta?", "a": "Não. É uma referência condicionada ao estado real, histórico e documentação verificados presencialmente." },
+        { "q": "Consigo vistoriar e escolher outro carro no mesmo dia?", "a": "É possível planejar ambos na mesma visita, desde que agenda e disponibilidade do estoque sejam confirmadas antes." }
+      ]
+    }
   }
 ]
