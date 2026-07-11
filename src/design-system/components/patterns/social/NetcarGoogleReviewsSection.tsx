@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { GoogleReview } from "@/social/types";
 import { useGoogleReviewsQuery } from "@/social/queries/useGoogleReviewsQuery";
+import { REVIEWS_PAGINATION } from "@/lib/socialMedia";
 import { REVIEW_CARD_SIZE, ReviewsMasonryGrid } from "./ReviewsMasonryGrid";
 import { ReviewsSummaryHeader } from "./ReviewsSummaryHeader";
 
@@ -29,7 +30,7 @@ export function NetcarGoogleReviewsSection() {
 
   useEffect(() => {
     if (!data?.reviews?.length) return;
-    setReviews(data.reviews);
+    setReviews(data.reviews.slice(0, REVIEWS_PAGINATION.pageSize));
   }, [data]);
 
   if (isLoading) {

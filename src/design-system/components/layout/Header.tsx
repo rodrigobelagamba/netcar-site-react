@@ -501,8 +501,9 @@ export function Header() {
                 rel="noopener noreferrer"
                 data-wa-source="header"
                 data-wa-intent="header_contact"
+                className="inline-flex items-center gap-2 hover:text-primary transition-colors"
               >
-                <Phone className="w-4 h-4" />
+                <Phone className="w-4 h-4 shrink-0" />
                 <span>{formatPhone(whatsapp.numero)}</span>
               </a>
             )}
@@ -650,8 +651,9 @@ export function Header() {
                       data-wa-source="header"
                       data-wa-intent="mobile_menu_contact"
                       onClick={() => setIsMobileMenuOpen(false)}
+                      className="inline-flex items-center gap-2"
                     >
-                      <Phone className="w-5 h-5" />
+                      <Phone className="w-5 h-5 shrink-0" />
                       <span>{formatPhone(whatsapp.numero)}</span>
                     </a>
                   </motion.div>

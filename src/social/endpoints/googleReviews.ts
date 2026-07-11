@@ -46,14 +46,18 @@ function normalizeReview(review: GoogleReview): GoogleReview {
 }
 
 function normalizeResponse(data: GoogleReviewsResponse): GoogleReviewsResponse {
+  const reviews = (data.reviews ?? [])
+    .map(normalizeReview)
+    .slice(0, REVIEWS_PAGINATION.pageSize);
+
   return {
     ...data,
-    reviews: (data.reviews ?? []).map(normalizeReview),
+    reviews,
     pagination: data.pagination ?? {
       page: 1,
       pageSize: REVIEWS_PAGINATION.pageSize,
-      totalCount: data.summary?.totalCount ?? data.reviews.length,
-      hasMore: data.reviews.length < (data.summary?.totalCount ?? data.reviews.length),
+      totalCount: data.summary?.totalCount ?? reviews.length,
+      hasMore: false,
       widgetId: EMBEDSOCIAL_REVIEWS_WIDGET_ID,
     },
   };

@@ -37,11 +37,12 @@ export function FinanciamentoSemEntradaPage() {
 
             <h2 className="text-xl font-bold text-fg mt-8 mb-3">Condições</h2>
             <ul className="list-disc pl-5 space-y-2 text-gray-600 mb-3">
-              <li>Financiamento em 24x, 36x, 48x ou 60x</li>
+              <li>Financiamento em até 60x (24x, 36x, 48x ou 60x)</li>
               <li>Primeira parcela para 60 dias</li>
               <li>Entrada de 20% a 30%, parcelável em até 10x sem juros</li>
-              <li>Financiamento também pelo cartão de crédito em até 24x</li>
-              <li>Avaliamos seu usado na troca como parte do pagamento</li>
+              <li>Cartão de crédito em até 21x</li>
+              <li>Avaliamos seu veículo na troca como parte do pagamento</li>
+              <li>Levamos ao Detran com despachante credenciado</li>
             </ul>
             <p className="text-sm text-gray-500 mb-6">
               Condições sujeitas a análise de crédito.

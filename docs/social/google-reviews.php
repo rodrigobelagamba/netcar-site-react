@@ -3,7 +3,7 @@
  * Google Reviews API — Netcar
  *
  * GET /social/v1/google-reviews.php
- * GET /social/v1/google-reviews.php?page=2&limit=21
+ * GET /social/v1/google-reviews.php?page=2&limit=20
  *
  * Lê cache JSON (sync-social.php) e pagina no servidor.
  * Fallback: backup → seed com stale=true.
@@ -26,7 +26,7 @@ $seedFile = $dataDir . '/google-reviews.seed.json';
 $backupFile = $cacheDir . '/google-reviews.backup.json';
 
 $page = max(1, (int) ($_GET['page'] ?? 1));
-$limit = max(1, min(50, (int) ($_GET['limit'] ?? 21)));
+$limit = max(1, min(50, (int) ($_GET['limit'] ?? 20)));
 
 function loadJsonFile(string $path): ?array
 {
@@ -43,7 +43,7 @@ function loadJsonFile(string $path): ?array
     return is_array($decoded) ? $decoded : null;
 }
 
-function normalizeReviewsResponse(array $data, bool $stale = false, int $page = 1, int $limit = 21): array
+function normalizeReviewsResponse(array $data, bool $stale = false, int $page = 1, int $limit = 20): array
 {
     $reviews = $data['reviews'] ?? [];
 

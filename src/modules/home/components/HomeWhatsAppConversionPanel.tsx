@@ -277,7 +277,7 @@ export function HomeWhatsAppConversionPanel({
           <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                Entrada facilitada · troca aceita
+                Até 60x · cartão 21x · troca
               </span>
               <p className="text-2xl font-black text-[#00283C]">{price || "Consulte"}</p>
             </div>

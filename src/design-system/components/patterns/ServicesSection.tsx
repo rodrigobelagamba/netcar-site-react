@@ -24,7 +24,7 @@ export function ServicesSection() {
     {
       title: "Financiamento",
       image: "/images/financing.png",
-      desc: "Compare condições em diversos bancos e financeiras parceiras para buscar a melhor opção disponível para seu perfil. Sujeito à análise.",
+      desc: "Financiamento em até 60x ou cartão em até 21x. Compare bancos e financeiras parceiras — sujeito à análise.",
       cta: "Comparar Condições",
       message: "quero simular um financiamento e comparar condições entre os bancos e financeiras parceiras.",
       objectPosition: "30% center",
@@ -32,7 +32,7 @@ export function ServicesSection() {
     {
       title: "Venda seu Veículo",
       image: "/images/vehicle-evaluation.png",
-      desc: "Processo simples, negociação transparente!",
+      desc: "Avaliamos seu veículo na troca. Documentação com despachante credenciado até o DETRAN.",
       cta: "Avaliar Carro",
       message: "tenho interesse em vender meu carro para a Netcar.",
       objectPosition: "center 25%",

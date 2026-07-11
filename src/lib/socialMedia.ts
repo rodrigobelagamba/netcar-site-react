@@ -12,9 +12,9 @@ export const SOCIAL_REFRESH = {
   },
 } as const;
 
-/** Paginação do grid de reviews (igual EmbedSocial postsPerPage) */
+/** Quantidade fixa de reviews no grid da home (sempre os mais recentes) */
 export const REVIEWS_PAGINATION = {
-  pageSize: 21,
+  pageSize: 20,
 } as const;
 
 /**

@@ -183,6 +183,8 @@ if ($type === 'reviews') {
         ];
     }
 
+    $reviews = array_slice($reviews, 0, 20);
+
     respond([
         'success' => true,
         'stale' => false,
@@ -195,9 +197,9 @@ if ($type === 'reviews') {
         ],
         'pagination' => [
             'page' => $page,
-            'pageSize' => 21,
+            'pageSize' => 20,
             'totalCount' => $total,
-            'hasMore' => ($page * 21) < $total,
+            'hasMore' => false,
             'widgetId' => $widgetId !== null ? (string) $widgetId : null,
         ],
         'reviews' => $reviews,

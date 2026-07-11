@@ -82,11 +82,11 @@ final class GoogleReviewsClient
             ],
             'pagination' => [
                 'page' => 1,
-                'pageSize' => 21,
+                'pageSize' => 20,
                 'totalCount' => $totalCount > 0 ? $totalCount : count($allReviews),
-                'hasMore' => count($allReviews) > 21,
+                'hasMore' => count($allReviews) > 20,
             ],
-            'reviews' => $allReviews,
+            'reviews' => array_slice($allReviews, 0, 20),
         ];
     }
 
