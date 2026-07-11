@@ -121,7 +121,7 @@ export function HomeWhatsAppConversionPanel({
             Encontre seu seminovo no estoque e fale com a Netcar em um clique.
           </h1>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/78 md:text-lg">
-            Simule parcelas, peça opções parecidas ou diga qual carro te interessou. A mensagem já vai pronta no WhatsApp — nossa IA e consultores respondem 24 horas, todos os dias.
+            Diga qual carro te interessou, peça opções parecidas ou compare financiamento em diversos bancos e financeiras parceiras. A mensagem já vai pronta no WhatsApp — condições sujeitas à análise.
           </p>
 
           <div className="mt-5 grid gap-3 text-sm font-semibold text-white/90 sm:grid-cols-2 lg:grid-cols-4">
@@ -184,7 +184,7 @@ export function HomeWhatsAppConversionPanel({
               className={quickActionClass}
             >
               <Calculator className="h-4 w-4 text-[#5CD29D]" />
-              Simular parcelas
+              Comparar financiamento
             </a>
             <a
               href={kmHref}

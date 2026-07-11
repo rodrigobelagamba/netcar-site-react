@@ -122,7 +122,7 @@ export function CardsHero({
                target="_blank"
                rel="noopener noreferrer"
                data-wa-source={whatsAppSource}
-               data-wa-intent="ask_km"
+               data-wa-intent="vehicle_inquiry"
                data-wa-vehicle-id={whatsAppVehicleId}
                data-wa-vehicle-name={whatsAppVehicleName}
                onClick={(e) => e.stopPropagation()}
@@ -131,7 +131,7 @@ export function CardsHero({
                }`}
              >
               <MessageCircle className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4"}`} />
-              {compact ? "Saber KM" : "Saber sobre a KM"}
+              {compact ? "Tenho interesse" : "Tenho interesse neste carro"}
              </a>
            ) : (
              <button
@@ -186,7 +186,7 @@ export function CardsHero({
                    onClick={(e) => e.stopPropagation()}
                    className="text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D]"
                  >
-                   Financ. →
+                  Simular →
                  </a>
                ) : null}
              </div>
@@ -224,7 +224,7 @@ export function CardsHero({
                  compact ? "text-[10px] leading-tight" : "text-xs"
                }`}
              >
-               {compact ? "Financiamento →" : "Simular um financiamento →"}
+               {compact ? "Simular →" : "Comparar financiamento →"}
              </a>
            ) : null}
          </div>

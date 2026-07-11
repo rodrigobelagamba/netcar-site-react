@@ -32,7 +32,7 @@ export function vehicleWhatsAppMessages(
   return {
     info: siteWhatsAppMessage(`quero mais informações sobre o ${vehicleLabel}.`),
     finance: siteWhatsAppMessage(
-      `quero simular o financiamento do ${vehicleLabel}.`,
+      `quero simular o financiamento do ${vehicleLabel} e comparar condições entre os bancos e financeiras parceiras.`,
     ),
     visit: siteWhatsAppMessage(
       `quero agendar uma visita para ver o ${vehicleLabel}.`,
@@ -97,8 +97,8 @@ export function homeWhatsAppMessages(options?: {
       : siteWhatsAppMessage("quero ajuda para escolher um seminovo do estoque."),
     simulateFinance: siteWhatsAppMessage(
       label
-        ? `quero simular entrada e parcelas do ${label}.`
-        : "quero simular entrada e parcelas de um seminovo.",
+        ? `quero simular entrada e parcelas do ${label}, comparando condições entre os bancos e financeiras parceiras.`
+        : "quero simular entrada e parcelas de um seminovo, comparando condições entre os bancos e financeiras parceiras.",
     ),
     similarOptions: siteWhatsAppMessage(
       label

@@ -24,9 +24,9 @@ export function ServicesSection() {
     {
       title: "Financiamento",
       image: "/images/financing.png",
-      desc: "Aprovação rápida com as melhores taxas do mercado.",
-      cta: "Simular Agora",
-      message: "tenho interesse em financiar um veículo.",
+      desc: "Compare condições em diversos bancos e financeiras parceiras para buscar a melhor opção disponível para seu perfil. Sujeito à análise.",
+      cta: "Comparar Condições",
+      message: "quero simular um financiamento e comparar condições entre os bancos e financeiras parceiras.",
       objectPosition: "30% center",
     },
     {

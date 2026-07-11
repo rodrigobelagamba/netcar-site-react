@@ -251,7 +251,7 @@ export function HomePage() {
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-fg">Destaques do estoque</h2>
           <p className="mt-2 max-w-2xl text-gray-600 text-base md:text-lg font-medium">
-            Troca aceita, financiamento facilitado e atendimento 24h no WhatsApp.
+            Troca aceita e financiamento comparado em diversos bancos e financeiras parceiras, sujeito à análise. Atendimento 24h no WhatsApp.
           </p>
         </div>
         <ProductList

@@ -12,7 +12,7 @@ export function FinanciamentoSemEntradaPage() {
 
   useDefaultMetaTags(
     "Financiamento de Seminovos em Esteio",
-    "Financie seu seminovo na Netcar em até 60x, com primeira parcela para 60 dias e entrada parcelada em até 10x sem juros. Sujeito a análise de crédito."
+    "Compare condições de financiamento para seminovos em diversos bancos e financeiras parceiras da Netcar. Opções sujeitas à análise de crédito."
   );
 
   const waLink = (() => {
@@ -32,7 +32,7 @@ export function FinanciamentoSemEntradaPage() {
               Financiamento de seminovos em Esteio
             </h1>
             <p className="text-lg text-gray-600 mb-6">
-              Quer financiar seu próximo seminovo? Na Netcar você simula com documentos pelo WhatsApp e recebe resposta objetiva antes de ir à loja. Trabalhamos com bancos e financeiras parceiras — tudo mediante análise de crédito.
+              Quer financiar seu próximo seminovo? Na Netcar você simula pelo WhatsApp e compara condições em diversos bancos e financeiras parceiras para buscar a melhor opção disponível para seu perfil — tudo mediante análise de crédito.
             </p>
 
             <h2 className="text-xl font-bold text-fg mt-8 mb-3">Condições</h2>

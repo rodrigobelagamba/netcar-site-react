@@ -659,7 +659,7 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
   const whatsappActions = [
     {
       icon: Calculator,
-      label: "Simular financiamento",
+      label: "Comparar financiamento",
       intent: "simulate_finance",
       message: vehicleMessages.finance,
     },
@@ -1084,6 +1084,71 @@ function PriceWithShimmer({
   );
 }
 
+function vehicleLabelFromSlug(slug: string): string {
+  const parts = slug.split("-").filter(Boolean);
+  if (/^\d+$/.test(parts[parts.length - 1] || "")) parts.pop();
+
+  return parts
+    .map((part) =>
+      /^\d+$/.test(part)
+        ? part
+        : `${part.charAt(0).toUpperCase()}${part.slice(1)}`,
+    )
+    .join(" ");
+}
+
+function vehicleIdFromSlug(slug: string): string | undefined {
+  const parts = slug.split("-").filter(Boolean);
+  const id = parts[parts.length - 1];
+  return id && /^\d+$/.test(id) ? id : undefined;
+}
+
+function LoadingVehicleDetail({ slug }: { slug: string }) {
+  const modeloCompleto = vehicleLabelFromSlug(slug) || "este seminovo";
+  const vehicleId = vehicleIdFromSlug(slug);
+
+  return (
+    <main className="min-h-[70vh] bg-gradient-to-b from-white to-gray-50 px-4 pb-36 pt-10 md:pb-16 md:pt-16">
+      <section className="container-main mx-auto max-w-4xl">
+        <div className="grid items-center gap-8 rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm md:grid-cols-[1fr_0.9fr] md:p-10">
+          <div
+            className="aspect-[4/3] animate-pulse rounded-3xl bg-gray-100"
+            aria-hidden="true"
+          />
+          <div>
+            <span className="text-xs font-black uppercase tracking-[0.18em] text-[#128C7E]">
+              Carregando detalhes
+            </span>
+            <h1 className="mt-2 text-3xl font-black leading-tight text-[#00283C] md:text-4xl">
+              {modeloCompleto}
+            </h1>
+            <p className="mt-4 text-base leading-relaxed text-gray-600">
+              Enquanto preço, fotos e ficha carregam, você já pode confirmar
+              disponibilidade e tirar dúvidas no WhatsApp.
+            </p>
+            <div className="mt-6">
+              <ContactButton
+                modeloCompleto={modeloCompleto}
+                vehicleId={vehicleId}
+              />
+            </div>
+            <p className="mt-4 text-sm leading-relaxed text-gray-500">
+              Financiamento disponível com comparação entre diversos bancos e
+              financeiras parceiras para buscar a melhor condição disponível
+              para seu perfil. Sujeito à análise.
+            </p>
+          </div>
+        </div>
+      </section>
+      <DetalheMobileStickyBar
+        price="Consultando preço"
+        modeloCompleto={modeloCompleto}
+        vehicleId={vehicleId}
+      />
+    </main>
+  );
+}
+
 export function DetalhesPage() {
   const { slug: paramSlug } = useParams({ from: "/veiculo/$slug" });
   const location = useLocation();
@@ -1341,11 +1406,7 @@ export function DetalhesPage() {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-muted-foreground">Carregando...</p>
-      </div>
-    );
+    return <LoadingVehicleDetail slug={slug} />;
   }
 
   if (error || !vehicle) {
@@ -1535,6 +1596,11 @@ export function DetalhesPage() {
               </div>
               <div className="w-full">
                 <ContactButton modeloCompleto={modeloCompleto} vehicleId={vehicle?.id} />
+                <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">
+                  Compare condições em diversos bancos e financeiras parceiras
+                  para buscar a melhor opção disponível para seu perfil.
+                  Sujeito à análise.
+                </p>
               </div>
             </div>
           </motion.div>

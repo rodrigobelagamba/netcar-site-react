@@ -136,7 +136,7 @@ export function VehicleCard({
     showWhatsAppInterest && whatsapp?.numero && !isSold
       ? buildWhatsAppUrl(
           whatsapp.numero,
-          vehicleWhatsAppMessages(vehicleLabel).km,
+          vehicleWhatsAppMessages(vehicleLabel).info,
         )
       : undefined;
   const tradeModelLabel = model || name;
