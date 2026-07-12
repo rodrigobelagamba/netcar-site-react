@@ -44,11 +44,14 @@ jobs:
             NEED_REBUILD=0
             if [ "$BEFORE" = "$AFTER" ]; then
               echo "Repo já estava atualizado ($AFTER)"
-            elif git diff --quiet "$BEFORE" "$AFTER" -- devops/ .github/workflows/devops-deploy.yml; then
-              echo "Só código do site mudou — sync ok, sem rebuild do painel"
             else
-              NEED_REBUILD=1
-              echo "Mudanças em devops/ — rebuild do painel"
+              # git diff --quiet retorna 1 quando há diff — não pode falhar o script (set -e)
+              if git diff --quiet "$BEFORE" "$AFTER" -- devops/ .github/workflows/devops-deploy.yml; then
+                echo "Só código do site mudou — sync ok, sem rebuild do painel"
+              else
+                NEED_REBUILD=1
+                echo "Mudanças em devops/ — rebuild do painel"
+              fi
             fi
 
             export SITE_REPO_PATH="$REPO_DIR"
