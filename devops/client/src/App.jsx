@@ -68,6 +68,40 @@ function SecretPills({ secrets }) {
   );
 }
 
+function PendingBanner({ pending, busy, onDeployDist, onDeployLocal }) {
+  if (!pending?.hasPending) return null;
+
+  return (
+    <div className="pending-banner">
+      <div>
+        <strong>Novo deploy disponível</strong>
+        <p>{pending.message}</p>
+      </div>
+      <div className="actions" style={{ marginBottom: 0 }}>
+        {pending.action === 'deploy:local' ? (
+          <button
+            type="button"
+            className="btn btn-primary"
+            disabled={busy}
+            onClick={onDeployLocal}
+          >
+            Build + deploy completo
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-primary"
+            disabled={busy}
+            onClick={onDeployDist}
+          >
+            Deploy último (HEAD)
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [token, setToken] = useState(() => getStoredToken());
   const [status, setStatus] = useState(null);
@@ -113,6 +147,15 @@ export default function App() {
       cancelled = true;
     };
   }, [token, refresh]);
+
+  // Atualiza pendências quando a Action sincroniza o repo na VPS
+  useEffect(() => {
+    if (!token || busy) return undefined;
+    const id = setInterval(() => {
+      refresh(token).catch(() => {});
+    }, 20000);
+    return () => clearInterval(id);
+  }, [token, busy, refresh]);
 
   useEffect(() => {
     if (logRef.current) {
@@ -172,6 +215,7 @@ export default function App() {
 
   const repo = status?.repo;
   const distHead = status?.dist?.head;
+  const pending = status?.pending;
 
   return (
     <div className="app">
@@ -202,13 +246,41 @@ export default function App() {
           {distHead ? (
             <span>
               dist HEAD <strong>{distHead.shortHash}</strong>
+              {status?.dist?.builtFromSource ? (
+                <>
+                  {' '}
+                  (build de <strong>{status.dist.builtFromSource}</strong>)
+                </>
+              ) : null}
             </span>
           ) : null}
+          {pending?.lastDeploy?.distShortHash ? (
+            <span>
+              último deploy <strong>{pending.lastDeploy.distShortHash}</strong>
+            </span>
+          ) : (
+            <span className="pill">nenhum deploy registrado neste painel</span>
+          )}
           <SecretPills secrets={status?.secrets} />
         </div>
       </header>
 
       {error ? <div className="error-banner">{error}</div> : null}
+
+      <PendingBanner
+        pending={pending}
+        busy={busy}
+        onDeployDist={() => run(() => api.deployDist(token))}
+        onDeployLocal={() => {
+          if (
+            window.confirm(
+              'Rodar build completo + deploy (npm run deploy:local)? Pode demorar vários minutos.'
+            )
+          ) {
+            run(() => api.deployLocal(token));
+          }
+        }}
+      />
 
       <div className="grid grid-main">
         <section className="panel">

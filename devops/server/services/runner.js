@@ -61,7 +61,7 @@ function ensureListeners(job) {
 }
 
 /**
- * @param {{ label: string, command: string, args?: string[], cwd?: string, env?: Record<string, string> }} opts
+ * @param {{ label: string, command: string, args?: string[], cwd?: string, env?: Record<string, string>, meta?: object, onSuccess?: (job: Job) => void }} opts
  */
 export function enqueueJob(opts) {
   const job = {
@@ -71,6 +71,8 @@ export function enqueueJob(opts) {
     args: opts.args || [],
     cwd: opts.cwd || config.workspaceRoot,
     env: opts.env || {},
+    meta: opts.meta || null,
+    onSuccess: opts.onSuccess || null,
     status: /** @type {JobStatus} */ ('queued'),
     log: '',
     createdAt: Date.now(),
@@ -182,13 +184,22 @@ function runJob(job) {
       job.error = `exit ${code}`;
     }
     appendLog(job, `\n[devops] finalizado com código ${code}\n`);
+
+    if (code === 0 && typeof job.onSuccess === 'function') {
+      try {
+        job.onSuccess(job);
+      } catch (err) {
+        appendLog(job, `\n[devops] aviso ao registrar deploy: ${err.message}\n`);
+      }
+    }
+
     activeJobId = null;
     job.child = null;
     pump();
   });
 }
 
-export function npmRun(script, extraArgs = []) {
+export function npmRun(script, extraArgs = [], opts = {}) {
   const args = ['run', script];
   if (extraArgs.length) {
     args.push('--', ...extraArgs);
@@ -198,5 +209,7 @@ export function npmRun(script, extraArgs = []) {
     command: process.platform === 'win32' ? 'npm.cmd' : 'npm',
     args,
     cwd: config.workspaceRoot,
+    meta: opts.meta,
+    onSuccess: opts.onSuccess,
   });
 }

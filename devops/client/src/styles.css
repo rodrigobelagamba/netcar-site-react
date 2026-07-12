@@ -310,6 +310,27 @@ select {
   font-size: 0.9rem;
 }
 
+.pending-banner {
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(196, 138, 26, 0.45);
+  background: linear-gradient(135deg, rgba(196, 138, 26, 0.12), rgba(108, 196, 202, 0.12));
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pending-banner strong {
+  color: var(--night);
+  font-size: 0.95rem;
+}
+
+.pending-banner p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
 .logout {
   margin-left: auto;
 }

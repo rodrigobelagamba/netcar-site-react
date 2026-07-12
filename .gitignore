@@ -4,6 +4,9 @@ node_modules/
 # Build output
 dist/
 
+# Estado local do painel devops (último deploy registrado)
+.devops/
+
 # Environment variables (não versionar — copie de .env.example)
 .env
 .env.local
