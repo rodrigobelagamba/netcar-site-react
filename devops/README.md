@@ -71,7 +71,10 @@ Painel: `http://VPS:3090` (proteja com firewall / reverse proxy).
 
 ## CI
 
-Workflow [`.github/workflows/devops-deploy.yml`](../.github/workflows/devops-deploy.yml) sobe **só o painel** em push `main`/`master` com mudanças em `devops/**` (ou `workflow_dispatch`).
+Workflow [`.github/workflows/devops-deploy.yml`](../.github/workflows/devops-deploy.yml) roda em **qualquer push** em `main`/`master` (ou `workflow_dispatch`):
+- atualiza o clone na VPS (`git fetch` + `reset --hard`);
+- só reconstrói o container do painel se `devops/` (ou o próprio workflow) mudou;
+- **não** publica o site na KingHost.
 
 Secrets no GitHub:
 

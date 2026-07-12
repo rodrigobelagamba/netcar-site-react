@@ -3,9 +3,6 @@ name: Deploy DevOps panel
 on:
   push:
     branches: [main, master]
-    paths:
-      - 'devops/**'
-      - '.github/workflows/devops-deploy.yml'
   workflow_dispatch:
 
 jobs:
@@ -20,7 +17,7 @@ jobs:
           [ -n "${{ secrets.DEVOPS_VPS_SSH_KEY }}" ] || { echo "Missing secret DEVOPS_VPS_SSH_KEY"; missing=1; }
           exit "$missing"
 
-      - name: Deploy panel on VPS
+      - name: Sync VPS and refresh panel if needed
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.DEVOPS_VPS_HOST }}
@@ -34,17 +31,35 @@ jobs:
             cd "$REPO_DIR"
             git config --global --add safe.directory "$REPO_DIR" || true
             git config --global --add safe.directory "$REPO_DIR/dist" || true
+
+            BEFORE="$(git rev-parse HEAD)"
             if git remote get-url origin >/dev/null 2>&1; then
               git fetch --all --prune
               git reset --hard origin/master || git reset --hard origin/main
             else
-              echo "origin ausente — mantendo cópia local e só rebuildando o painel"
+              echo "origin ausente — mantendo cópia local"
             fi
+            AFTER="$(git rev-parse HEAD)"
+
             export SITE_REPO_PATH="$REPO_DIR"
             export SECRETS_DIR
             export DEVOPS_ENV_FILE="$SECRETS_DIR/devops.env"
             cd devops
-            docker compose up -d --build
+
+            NEED_REBUILD=0
+            if [ "$BEFORE" = "$AFTER" ]; then
+              echo "Repo já estava atualizado ($AFTER)"
+            elif git diff --quiet "$BEFORE" "$AFTER" -- devops/ .github/workflows/devops-deploy.yml; then
+              echo "Só código do site mudou — sync ok, sem rebuild do painel"
+            else
+              NEED_REBUILD=1
+              echo "Mudanças em devops/ — rebuild do painel"
+            fi
+
+            if [ "$NEED_REBUILD" = "1" ] || ! docker compose ps --status running 2>/dev/null | grep -q netcar-devops; then
+              docker compose up -d --build
+            fi
+
             docker compose ps
             for i in 1 2 3 4 5 6 7 8 9 10; do
               if curl -fsS "http://127.0.0.1:3090/api/health"; then
