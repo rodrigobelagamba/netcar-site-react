@@ -16,6 +16,7 @@
     "catalog:whatsapp": "node scripts/generate-whatsapp-catalog-feed.js",
     "preview": "vite preview",
     "deploy:local": "node scripts/deploy-local.js",
+    "deploy:dist": "node scripts/deploy-dist.js",
     "deploy:ssh-setup": "node scripts/ssh-setup.js",
     "deploy:local:win": "scripts\\deploy-local.bat",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

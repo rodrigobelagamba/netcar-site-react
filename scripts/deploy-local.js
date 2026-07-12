@@ -2,12 +2,22 @@
 
 /**
  * Script de Deploy Local para KingHost
- * Executa build e upload via FTP da sua máquina (IP nacional)
+ * - Padrão: build + upload (FTP/SSH)
+ * - --from-dist [hash]: sobe um commit já versionado em dist/ sem rebuild
  */
 
-import { execSync } from 'child_process';
-import { existsSync, readFileSync, writeFileSync, readdirSync, statSync, unlinkSync } from 'fs';
-import { homedir } from 'os';
+import { execFileSync, execSync } from 'child_process';
+import {
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  unlinkSync,
+  writeFileSync,
+} from 'fs';
+import { homedir, tmpdir } from 'os';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { deployTarViaSshPassword, tarExcludeShellFlags } from './lib/ssh-deploy.js';
@@ -544,6 +554,246 @@ async function deployViaSsh(sshConfig, distPath) {
   log('\n✅ Deploy SSH concluído!', 'green');
 }
 
+function getAllDistFiles(dirPath, arrayOfFiles = []) {
+  const filesInDir = readdirSync(dirPath);
+  filesInDir.forEach((file) => {
+    if (file === '.git' || file === '.gitignore') {
+      return;
+    }
+
+    const filePath = join(dirPath, file);
+    if (statSync(filePath).isDirectory()) {
+      getAllDistFiles(filePath, arrayOfFiles);
+    } else if (
+      !file.startsWith('.git-') &&
+      !file.endsWith('.tmp') &&
+      !file.endsWith('.log')
+    ) {
+      arrayOfFiles.push(filePath);
+    }
+  });
+  return arrayOfFiles;
+}
+
+async function uploadDist(distPath, deployConfig) {
+  if (deployConfig.method === 'ssh') {
+    await deployViaSsh(deployConfig.ssh, distPath);
+    return;
+  }
+
+  if (ftp) {
+    const ftpConfig = deployConfig.ftp;
+    log('🚀 Conectando ao servidor FTP...', 'blue');
+    log(`   Servidor: ${ftpConfig.server}`, 'blue');
+    log(`   Usuário: ${ftpConfig.username}`, 'blue');
+
+    const client = createFtpClient();
+
+    try {
+      await connectFtp(client, ftpConfig);
+      log('✅ Conectado ao servidor FTP', 'green');
+      log(`📁 Diretório remoto: ${ftpConfig.serverDir}`, 'blue');
+
+      const allFiles = getAllDistFiles(distPath).sort((a, b) => {
+        const aName = a.replace(/\\/g, '/').split('/').pop() || '';
+        const bName = b.replace(/\\/g, '/').split('/').pop() || '';
+        const deployLast = (name) =>
+          name === 'index.html' || name === 'index.php' ? 1 : 0;
+        return deployLast(aName) - deployLast(bName);
+      });
+      log(`📊 Total de arquivos para upload: ${allFiles.length}`, 'blue');
+
+      const { uploadedCount, failedFiles, totalFiles } = await uploadDistFiles(
+        client,
+        ftpConfig,
+        distPath,
+        allFiles
+      );
+
+      log(`\n✅ Upload concluído: ${uploadedCount}/${totalFiles} arquivos enviados`, 'green');
+
+      if (failedFiles.length > 0) {
+        log(`\n❌ ${failedFiles.length} arquivo(s) não enviado(s):`, 'red');
+        failedFiles.slice(0, 15).forEach((f) => log(`   - ${f}`, 'red'));
+        if (failedFiles.length > 15) {
+          log(`   ... e mais ${failedFiles.length - 15}`, 'red');
+        }
+        log('\n💡 Rode o deploy novamente — só os que faltam serão reenviados.', 'yellow');
+        process.exit(1);
+      }
+
+      log('\n✅ Deploy concluído com sucesso!', 'green');
+      log('🌐 Site atualizado no servidor', 'green');
+    } catch (ftpError) {
+      log(`\n❌ Erro ao fazer upload via FTP: ${ftpError.message}`, 'red');
+      log('\n💡 Possíveis causas:', 'yellow');
+      log('   - Credenciais FTP incorretas', 'yellow');
+      log('   - Servidor FTP inacessível', 'yellow');
+      log('   - Diretório FTP incorreto', 'yellow');
+      log('   - Firewall bloqueando conexão', 'yellow');
+      log('\n📤 Alternativa: use DEPLOY_METHOD=ssh no .env.local (recomendado)', 'yellow');
+      log('   Ou upload manual via FileZilla', 'yellow');
+      process.exit(1);
+    } finally {
+      try {
+        client.close();
+      } catch (e) {
+        // Ignorar erro ao fechar conexão
+      }
+    }
+    return;
+  }
+
+  const ftpConfig = deployConfig.ftp;
+  log('\n📤 Upload Manual Necessário', 'yellow');
+  log('\n============================================================', 'blue');
+  log('✅ BUILD PRONTO PARA DEPLOY!', 'green');
+  log('============================================================', 'blue');
+  log('\n📁 Pasta de build: dist/', 'blue');
+  log('\n📤 Para fazer upload automático, instale basic-ftp:', 'yellow');
+  log('   npm install --save-dev basic-ftp', 'yellow');
+  log('   E então execute: npm run deploy:local', 'yellow');
+  log('\n📤 Ou faça upload manual via FileZilla:', 'yellow');
+  log(`   1. Abra FileZilla`, 'yellow');
+  log(`   2. Conecte ao servidor: ${ftpConfig.server}`, 'yellow');
+  log(`   3. Usuário: ${ftpConfig.username}`, 'yellow');
+  log(`   4. Navegue até: ${ftpConfig.serverDir}`, 'yellow');
+  log(`   5. Faça upload de TODOS os arquivos da pasta dist/`, 'yellow');
+  log('\n============================================================\n', 'blue');
+}
+
+function parseCliArgs(argv) {
+  const args = argv.slice(2).filter((arg) => arg !== '--');
+  const fromDist = args.includes('--from-dist');
+  const help = args.includes('--help') || args.includes('-h');
+  const hash = args.find((arg) => !arg.startsWith('-')) || '';
+  return { fromDist, help, hash };
+}
+
+function resolveDistCommit(distPath, hash) {
+  const ref = hash || 'HEAD';
+  try {
+    // execFileSync evita o shell do Windows tratar ^ como escape (HEAD^{commit})
+    const fullHash = execFileSync('git', ['rev-parse', '--verify', `${ref}^{commit}`], {
+      encoding: 'utf-8',
+      cwd: distPath,
+      stdio: ['pipe', 'pipe', 'pipe'],
+    }).trim();
+
+    const shortHash = execFileSync('git', ['rev-parse', '--short', fullHash], {
+      encoding: 'utf-8',
+      cwd: distPath,
+      stdio: ['pipe', 'pipe', 'pipe'],
+    }).trim();
+
+    const subject = execFileSync('git', ['log', '-1', '--pretty=%s', fullHash], {
+      encoding: 'utf-8',
+      cwd: distPath,
+      stdio: ['pipe', 'pipe', 'pipe'],
+    }).trim();
+
+    return { fullHash, shortHash, subject };
+  } catch {
+    log(`❌ Commit não encontrado no Git de dist/: ${ref}`, 'red');
+    log('\nCommits recentes em dist/:', 'yellow');
+    try {
+      const recent = execSync('git log --oneline -10', {
+        encoding: 'utf-8',
+        cwd: distPath,
+      }).trim();
+      console.log(recent || '(nenhum)');
+    } catch {
+      // ignore
+    }
+    process.exit(1);
+  }
+}
+
+function extractDistCommitToTemp(distPath, fullHash) {
+  const tempDir = mkdtempSync(join(tmpdir(), 'netcar-deploy-dist-'));
+  const tarName = '_snapshot.tar';
+  const tarPath = join(tempDir, tarName);
+
+  // archive não altera o index/worktree de dist/
+  execFileSync('git', ['archive', '--format=tar', '-o', tarPath, fullHash], {
+    cwd: distPath,
+    stdio: 'pipe',
+  });
+
+  // Caminho relativo: no Windows, tar trata "C:" como host remoto
+  execFileSync('tar', ['-xf', tarName], {
+    cwd: tempDir,
+    stdio: 'pipe',
+  });
+
+  unlinkSync(tarPath);
+  return tempDir;
+}
+
+function printDeployDistHelp() {
+  log('Uso: npm run deploy:dist [-- <hash>]', 'blue');
+  log('', 'reset');
+  log('  Sem argumentos  → faz deploy do último commit em dist/', 'blue');
+  log('  Com <hash>      → faz deploy de um commit anterior do Git em dist/', 'blue');
+  log('', 'reset');
+  log('Exemplos:', 'yellow');
+  log('  npm run deploy:dist', 'yellow');
+  log('  npm run deploy:dist -- 701d0a7', 'yellow');
+  log('  npm run deploy:dist -- HEAD~2', 'yellow');
+}
+
+/**
+ * Deploy a partir do histórico Git de dist/ — sem rebuild.
+ * @param {string} [hash]
+ */
+async function deployFromDist(hash = '') {
+  log('🚀 Deploy a partir de dist/ (sem build)...\n', 'blue');
+
+  const distPath = join(rootDir, 'dist');
+  if (!existsSync(distPath)) {
+    log('❌ Pasta dist/ não existe!', 'red');
+    log('   Rode npm run build ou npm run deploy:local antes.', 'yellow');
+    process.exit(1);
+  }
+
+  if (!existsSync(join(distPath, '.git'))) {
+    log('❌ dist/ não tem repositório Git de builds.', 'red');
+    log('   O histórico é criado automaticamente em npm run deploy:local.', 'yellow');
+    process.exit(1);
+  }
+
+  const commit = resolveDistCommit(distPath, hash);
+  log(`📦 Commit: ${commit.shortHash} — ${commit.subject}`, 'blue');
+  if (!hash) {
+    log('   (último commit de dist/)', 'blue');
+  }
+  log('', 'reset');
+
+  const deployConfig = loadDeployConfig();
+  log(
+    deployConfig.method === 'ssh'
+      ? '🔐 Deploy via SSH configurado\n'
+      : '🔐 Configuração FTP carregada\n',
+    'green'
+  );
+
+  let tempDir = '';
+  try {
+    log('📂 Extraindo arquivos do commit (sem alterar dist/)...', 'blue');
+    tempDir = extractDistCommitToTemp(distPath, commit.fullHash);
+    log('✅ Snapshot pronto para upload\n', 'green');
+    await uploadDist(tempDir, deployConfig);
+  } finally {
+    if (tempDir && existsSync(tempDir)) {
+      try {
+        rmSync(tempDir, { recursive: true, force: true });
+      } catch {
+        // ignore cleanup errors
+      }
+    }
+  }
+}
+
 async function deploy() {
   try {
     log('🚀 Iniciando deploy local...\n', 'blue');
@@ -559,7 +809,7 @@ async function deploy() {
     // 2. Carregar configurações
     const env = loadEnv();
     log('🔧 Variáveis de ambiente carregadas', 'green');
-    
+
     const deployConfig = loadDeployConfig();
     log(
       deployConfig.method === 'ssh'
@@ -582,7 +832,7 @@ async function deploy() {
     if (env.VITE_GOOGLE_MAPS_API_KEY) {
       process.env.VITE_GOOGLE_MAPS_API_KEY = env.VITE_GOOGLE_MAPS_API_KEY;
     }
-    
+
     execSync('npm run build', { stdio: 'inherit', cwd: rootDir });
     log('✅ Build gerado com sucesso\n', 'green');
 
@@ -595,118 +845,25 @@ async function deploy() {
 
     // 5. Registrar build no Git da pasta dist
     commitDistBuild(distPath);
-    log('', 'reset'); // Linha em branco
+    log('', 'reset');
 
     // 6. Upload
-    if (deployConfig.method === 'ssh') {
-      await deployViaSsh(deployConfig.ssh, distPath);
-    } else if (ftp) {
-      const ftpConfig = deployConfig.ftp;
-      // Upload automático usando basic-ftp
-      log('🚀 Conectando ao servidor FTP...', 'blue');
-      log(`   Servidor: ${ftpConfig.server}`, 'blue');
-      log(`   Usuário: ${ftpConfig.username}`, 'blue');
-
-      const client = createFtpClient();
-
-      try {
-        await connectFtp(client, ftpConfig);
-        log('✅ Conectado ao servidor FTP', 'green');
-        log(`📁 Diretório remoto: ${ftpConfig.serverDir}`, 'blue');
-
-        function getAllFiles(dirPath, arrayOfFiles = []) {
-          const filesInDir = readdirSync(dirPath);
-          filesInDir.forEach((file) => {
-            if (file === '.git' || file === '.gitignore') {
-              return;
-            }
-
-            const filePath = join(dirPath, file);
-            if (statSync(filePath).isDirectory()) {
-              getAllFiles(filePath, arrayOfFiles);
-            } else if (
-              !file.startsWith('.git-') &&
-              !file.endsWith('.tmp') &&
-              !file.endsWith('.log')
-            ) {
-              arrayOfFiles.push(filePath);
-            }
-          });
-          return arrayOfFiles;
-        }
-
-        const allFiles = getAllFiles(distPath).sort((a, b) => {
-          const aName = a.replace(/\\/g, "/").split("/").pop() || "";
-          const bName = b.replace(/\\/g, "/").split("/").pop() || "";
-          const deployLast = (name) =>
-            name === "index.html" || name === "index.php" ? 1 : 0;
-          return deployLast(aName) - deployLast(bName);
-        });
-        log(`📊 Total de arquivos para upload: ${allFiles.length}`, 'blue');
-
-        const { uploadedCount, failedFiles, totalFiles } = await uploadDistFiles(
-          client,
-          ftpConfig,
-          distPath,
-          allFiles
-        );
-
-        log(`\n✅ Upload concluído: ${uploadedCount}/${totalFiles} arquivos enviados`, 'green');
-
-        if (failedFiles.length > 0) {
-          log(`\n❌ ${failedFiles.length} arquivo(s) não enviado(s):`, 'red');
-          failedFiles.slice(0, 15).forEach((f) => log(`   - ${f}`, 'red'));
-          if (failedFiles.length > 15) {
-            log(`   ... e mais ${failedFiles.length - 15}`, 'red');
-          }
-          log('\n💡 Rode npm run deploy:local novamente — só os que faltam serão reenviados.', 'yellow');
-          process.exit(1);
-        }
-
-        log('\n✅ Deploy concluído com sucesso!', 'green');
-        log('🌐 Site atualizado no servidor', 'green');
-
-      } catch (ftpError) {
-        log(`\n❌ Erro ao fazer upload via FTP: ${ftpError.message}`, 'red');
-        log('\n💡 Possíveis causas:', 'yellow');
-        log('   - Credenciais FTP incorretas', 'yellow');
-        log('   - Servidor FTP inacessível', 'yellow');
-        log('   - Diretório FTP incorreto', 'yellow');
-        log('   - Firewall bloqueando conexão', 'yellow');
-        log('\n📤 Alternativa: use DEPLOY_METHOD=ssh no .env.local (recomendado)', 'yellow');
-        log('   Ou upload manual via FileZilla', 'yellow');
-        process.exit(1);
-      } finally {
-        try {
-          client.close();
-        } catch (e) {
-          // Ignorar erro ao fechar conexão
-        }
-      }
-    } else {
-      const ftpConfig = deployConfig.ftp;
-      // Instruções para upload manual
-      log('\n📤 Upload Manual Necessário', 'yellow');
-      log('\n============================================================', 'blue');
-      log('✅ BUILD PRONTO PARA DEPLOY!', 'green');
-      log('============================================================', 'blue');
-      log('\n📁 Pasta de build: dist/', 'blue');
-      log('\n📤 Para fazer upload automático, instale basic-ftp:', 'yellow');
-      log('   npm install --save-dev basic-ftp', 'yellow');
-      log('   E então execute: npm run deploy:local', 'yellow');
-      log('\n📤 Ou faça upload manual via FileZilla:', 'yellow');
-      log(`   1. Abra FileZilla`, 'yellow');
-      log(`   2. Conecte ao servidor: ${ftpConfig.server}`, 'yellow');
-      log(`   3. Usuário: ${ftpConfig.username}`, 'yellow');
-      log(`   4. Navegue até: ${ftpConfig.serverDir}`, 'yellow');
-      log(`   5. Faça upload de TODOS os arquivos da pasta dist/`, 'yellow');
-      log('\n============================================================\n', 'blue');
-    }
-
+    await uploadDist(distPath, deployConfig);
   } catch (error) {
     log(`\n❌ Erro durante deploy: ${error.message}`, 'red');
     process.exit(1);
   }
 }
 
-deploy();
+const cli = parseCliArgs(process.argv);
+
+if (cli.help && cli.fromDist) {
+  printDeployDistHelp();
+} else if (cli.fromDist) {
+  deployFromDist(cli.hash).catch((error) => {
+    log(`\n❌ Erro durante deploy: ${error.message}`, 'red');
+    process.exit(1);
+  });
+} else {
+  deploy();
+}

@@ -1,0 +1,39 @@
+name: Deploy DevOps panel
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'devops/**'
+      - '.github/workflows/devops-deploy.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy panel on VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEVOPS_VPS_HOST }}
+          username: ${{ secrets.DEVOPS_VPS_USER }}
+          key: ${{ secrets.DEVOPS_VPS_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            REPO_DIR="${{ secrets.DEVOPS_SITE_REPO_PATH }}"
+            if [ -z "$REPO_DIR" ]; then
+              REPO_DIR="/opt/netcar-site-react"
+            fi
+            cd "$REPO_DIR"
+            git fetch --all --prune
+            git pull --ff-only
+            export SITE_REPO_PATH="$REPO_DIR"
+            export SECRETS_DIR="${{ secrets.DEVOPS_SECRETS_DIR }}"
+            if [ -z "$SECRETS_DIR" ]; then
+              export SECRETS_DIR="/opt/netcar-secrets"
+            fi
+            export DEVOPS_ENV_FILE="$SECRETS_DIR/devops.env"
+            cd devops
+            docker compose up -d --build
+            docker compose ps
