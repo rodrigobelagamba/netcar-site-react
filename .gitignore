@@ -19,6 +19,7 @@ public/netcar-config.php
 # Gerado no build (generate-landings / generate-seo-assets / generate-sitemap)
 public/seo-static/
 public/sitemap.xml
+public/feeds/*
 src/data/seo/landings.json
 
 # Social sync — credenciais e tokens (KingHost)
