@@ -41,11 +41,6 @@ jobs:
             fi
             AFTER="$(git rev-parse HEAD)"
 
-            export SITE_REPO_PATH="$REPO_DIR"
-            export SECRETS_DIR
-            export DEVOPS_ENV_FILE="$SECRETS_DIR/devops.env"
-            cd devops
-
             NEED_REBUILD=0
             if [ "$BEFORE" = "$AFTER" ]; then
               echo "Repo já estava atualizado ($AFTER)"
@@ -55,6 +50,11 @@ jobs:
               NEED_REBUILD=1
               echo "Mudanças em devops/ — rebuild do painel"
             fi
+
+            export SITE_REPO_PATH="$REPO_DIR"
+            export SECRETS_DIR
+            export DEVOPS_ENV_FILE="$SECRETS_DIR/devops.env"
+            cd devops
 
             if [ "$NEED_REBUILD" = "1" ] || ! docker compose ps --status running 2>/dev/null | grep -q netcar-devops; then
               docker compose up -d --build
