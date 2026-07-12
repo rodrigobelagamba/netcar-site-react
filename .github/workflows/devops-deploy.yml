@@ -12,6 +12,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Check deploy secrets
+        run: |
+          missing=0
+          [ -n "${{ secrets.DEVOPS_VPS_HOST }}" ] || { echo "Missing secret DEVOPS_VPS_HOST"; missing=1; }
+          [ -n "${{ secrets.DEVOPS_VPS_USER }}" ] || { echo "Missing secret DEVOPS_VPS_USER"; missing=1; }
+          [ -n "${{ secrets.DEVOPS_VPS_SSH_KEY }}" ] || { echo "Missing secret DEVOPS_VPS_SSH_KEY"; missing=1; }
+          exit "$missing"
+
       - name: Deploy panel on VPS
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -21,19 +29,21 @@ jobs:
           script_stop: true
           script: |
             set -euo pipefail
-            REPO_DIR="${{ secrets.DEVOPS_SITE_REPO_PATH }}"
-            if [ -z "$REPO_DIR" ]; then
-              REPO_DIR="/opt/netcar-site-react"
-            fi
+            REPO_DIR="/opt/netcar-site-react"
+            SECRETS_DIR="/opt/netcar-secrets"
             cd "$REPO_DIR"
-            git fetch --all --prune
-            git pull --ff-only
-            export SITE_REPO_PATH="$REPO_DIR"
-            export SECRETS_DIR="${{ secrets.DEVOPS_SECRETS_DIR }}"
-            if [ -z "$SECRETS_DIR" ]; then
-              export SECRETS_DIR="/opt/netcar-secrets"
+            git config --global --add safe.directory "$REPO_DIR" || true
+            git config --global --add safe.directory "$REPO_DIR/dist" || true
+            if git remote get-url origin >/dev/null 2>&1; then
+              git fetch --all --prune
+              git reset --hard origin/master || git reset --hard origin/main
+            else
+              echo "origin ausente — mantendo cópia local e só rebuildando o painel"
             fi
+            export SITE_REPO_PATH="$REPO_DIR"
+            export SECRETS_DIR
             export DEVOPS_ENV_FILE="$SECRETS_DIR/devops.env"
             cd devops
             docker compose up -d --build
             docker compose ps
+            curl -fsS "http://127.0.0.1:3090/api/health"
