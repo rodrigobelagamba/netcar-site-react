@@ -29,7 +29,7 @@ export function HomePurchaseBenefits() {
     <section className="container-main px-4 py-10 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 md:py-14">
       <div className="mb-8 max-w-2xl">
         <h2 className="text-2xl font-bold text-fg md:text-3xl">
-          Facilidades na sua compra
+          Facilidades na compra
         </h2>
         <p className="mt-2 text-base font-medium text-gray-600 md:text-lg">
           Financiamento, cartão, troca e documentação — tudo no mesmo atendimento.
