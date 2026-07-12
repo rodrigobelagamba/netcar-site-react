@@ -171,7 +171,37 @@ Thumbs.db
         }
         log('✅ Build registrado no Git', 'green');
       } else {
-        log('ℹ️  Nenhuma mudança detectada no build', 'blue');
+        // Mesmo sem diff de arquivos, registra no histórico (lista do painel + hash da origem)
+        try {
+          execSync('git config user.name "Build System"', {
+            cwd: distPath,
+            stdio: 'pipe',
+          });
+          execSync('git config user.email "build@netcar.com.br"', {
+            cwd: distPath,
+            stdio: 'pipe',
+          });
+        } catch (e) {}
+
+        const commitMsgFile = join(distPath, '.git-commit-msg.txt');
+        try {
+          writeFileSync(
+            commitMsgFile,
+            `${commitMessage} (sem mudanças de artefato)`,
+            'utf-8'
+          );
+          execSync('git commit --allow-empty -F .git-commit-msg.txt', {
+            cwd: distPath,
+            stdio: 'pipe',
+          });
+          unlinkSync(commitMsgFile);
+          log('ℹ️  Build idêntico ao anterior — commit vazio registrado no histórico', 'blue');
+        } catch (emptyCommitError) {
+          try {
+            if (existsSync(commitMsgFile)) unlinkSync(commitMsgFile);
+          } catch (e) {}
+          log('ℹ️  Nenhuma mudança detectada no build', 'blue');
+        }
       }
     } catch (statusError) {
       log('⚠️  Não foi possível verificar status do Git', 'yellow');
