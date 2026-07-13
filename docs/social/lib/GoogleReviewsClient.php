@@ -221,7 +221,7 @@ final class GoogleReviewsClient
             return null;
         }
 
-        $text = trim($review['comment'] ?? '');
+        $text = $this->stripGoogleTranslation(trim($review['comment'] ?? ''));
         if ($text === '') {
             return null;
         }
@@ -247,6 +247,31 @@ final class GoogleReviewsClient
             'variant' => $variant,
             'locationTitle' => $location['title'] ?? null,
         ];
+    }
+
+    /**
+     * GBP API concatena original + tradução automática no campo comment.
+     * Mantém só o texto original (PT).
+     */
+    private function stripGoogleTranslation(string $text): string
+    {
+        if ($text === '') {
+            return '';
+        }
+
+        // Formato comum: "original\n\n(Translated by Google)\nenglish"
+        if (preg_match('/\(Translated by Google\)|\(Traduzido pelo Google\)/iu', $text)) {
+            $parts = preg_split('/\n*\s*\((?:Translated by Google|Traduzido pelo Google)\)\s*\n*/iu', $text, 2);
+            $text = trim($parts[0] ?? '');
+        }
+
+        // Formato alternativo: "(Original)\ntexto\n\n(Translated by Google)\n..."
+        if (preg_match('/^\(Original\)\s*\n/iu', $text)) {
+            $text = preg_replace('/^\(Original\)\s*\n/iu', '', $text);
+            $text = trim($text);
+        }
+
+        return trim($text);
     }
 
     private function formatRelativeTime(?string $isoDate): string
