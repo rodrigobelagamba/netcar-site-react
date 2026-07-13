@@ -211,7 +211,9 @@ export function HomeWhatsAppConversionPanel({
               onClick={onViewStock}
               className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-4 text-base font-black text-white transition-colors hover:bg-white/18"
             >
-              Ver estoque completo
+              <span className="button-text-shimmer-on-dark">
+                Ver estoque completo
+              </span>
               <ArrowRight className="h-5 w-5" />
             </button>
           </div>

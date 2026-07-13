@@ -53,6 +53,11 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error("[whatsapp-catalog] falhou:", err.message || err);
-  process.exit(1);
+  // Build no container às vezes falha em fetch transitório; feed vivo é o PHP.
+  // Não derruba deploy — mantém CSV/XML já em public/feeds/.
+  console.warn(
+    "[whatsapp-catalog] aviso (seguindo build):",
+    err.message || err
+  );
+  process.exit(0);
 });
