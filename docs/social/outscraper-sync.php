@@ -159,8 +159,8 @@ function mapOutscraperReview(array $r, string $placeUrl): ?array
         $photoUrl = null;
     }
 
-    // Sem texto e sem foto = card vazio no site — pular
-    if ($text === '' && !$photoUrl) {
+    // Só estrela (sem texto) não entra — mesmo com foto
+    if ($text === '') {
         return null;
     }
 
