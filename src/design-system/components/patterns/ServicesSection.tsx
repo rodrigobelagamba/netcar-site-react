@@ -40,8 +40,8 @@ export function ServicesSection() {
   ];
 
   return (
-    <section className="py-24 container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <section className="container-main px-4 py-10 sm:px-6 md:py-24 lg:px-8 xl:px-12 2xl:px-16">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
         {services.map((service, i) => (
           <motion.a
             key={i}
@@ -49,7 +49,7 @@ export function ServicesSection() {
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ y: -12 }}
-            className="group relative h-[450px] md:h-[500px] rounded-[32px] overflow-hidden cursor-pointer shadow-2xl !border-0 block"
+            className="group relative block h-[220px] cursor-pointer overflow-hidden rounded-[24px] shadow-xl !border-0 md:h-[500px] md:rounded-[32px] md:shadow-2xl"
             style={{ border: 'none' }}
           >
             {/* Gradient Overlay */}
