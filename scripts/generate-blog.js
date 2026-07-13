@@ -33,6 +33,9 @@ import {
   buildAutomaticoArticle,
   buildPrimeiroCarroArticle,
   buildRegionalStockArticle,
+  buildFaixaPrecoArticle,
+  buildModeloArticle,
+  buildUsoArticle,
 } from "./lib/blog-formats.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -45,9 +48,11 @@ const SITE = "https://www.netcarmultimarcas.com.br";
 const API_URL = `${SITE}/api/v1/veiculos.php?limit=500`;
 const YEAR = new Date().getFullYear();
 
-const MAX_NEW_PER_RUN = 1; // pautas novas por execução (depois do lote inicial)
+// 2/semana: fila longa de SEO orgânico (modelos, faixas, regionais, uso).
+const MAX_NEW_PER_RUN = 2;
 const INITIAL_BATCH = 6; // lote inicial quando não há histórico
 const FEATURED = 2; // carros embutidos por matéria
+const MIN_MODELO_COUNT = 2; // volume mínimo pra pauta de modelo
 
 /**
  * Slugs do pool auto que colidem em INTENÇÃO com manuais já publicados
@@ -61,6 +66,10 @@ const TOPIC_BLOCKLIST = new Set([
   "seminovos-vale-dos-sinos-estoque-e-procedencia-2026",
   "comprar-seminovo-a-distancia-serra-gaucha-2026",
   "melhor-suv-seminovo-esteio-2026",
+  // Evita overlap com manuais / topics (mesmo com slug diferente)
+  "seminovo-ate-100-mil-esteio-2026",
+  "carro-aplicativo-grande-poa-2026",
+  "picape-seminova-regiao-metropolitana-2026",
 ]);
 
 function readTopicBlocklist() {
@@ -320,6 +329,75 @@ function temaRegional(stock, priority, config) {
   );
 }
 
+function temaFaixa(stock, priority, maxPrice, label) {
+  const slug = slugify(`seminovo ate ${label} esteio ${YEAR}`);
+  const cars = stock.cars.filter((v) => v.valor > 0 && v.valor <= maxPrice);
+  if (cars.length < 2) return null;
+  return wrap(
+    priority,
+    buildFaixaPrecoArticle({
+      slug,
+      maxPrice,
+      label,
+      cars: featuredCars(cars, () => true),
+      hashStr,
+      ctaHref: "/seminovos",
+      ctaLabel: `Ver até ${label}`,
+    })
+  );
+}
+
+function temaModelo(stock, priority, modelo) {
+  const slug = slugify(`${modelo} seminovo esteio ${YEAR}`);
+  const cars = stock.cars.filter(
+    (v) => v.modelo && v.modelo.toLowerCase() === modelo.toLowerCase() && v.valor > 0
+  );
+  if (cars.length < MIN_MODELO_COUNT) return null;
+  return wrap(
+    priority,
+    buildModeloArticle({
+      slug,
+      modelo: titleCase(modelo),
+      cars: featuredCars(cars, () => true),
+      hashStr,
+      ctaHref: "/seminovos",
+      ctaLabel: `Ver ${titleCase(modelo)}`,
+    })
+  );
+}
+
+function temaUso(stock, priority, uso, topic) {
+  const slug = slugify(`${topic} ${YEAR}`);
+  let filter = (v) => v.valor > 0;
+  if (uso === "familia") {
+    filter = (v) =>
+      v.valor > 0 && /suv|sedan|minivan|utilitario/i.test(v.categoria || "");
+  } else if (uso === "baixa-km") {
+    filter = (v) => v.valor > 0 && v.km > 0 && v.km <= 60000;
+  } else if (uso === "cidade") {
+    filter = (v) => v.valor > 0 && /hatch|sedan/i.test(v.categoria || "");
+  } else if (uso === "viagem") {
+    filter = (v) => v.valor > 0 && /suv|sedan/i.test(v.categoria || "");
+  }
+  const cars = stock.cars.filter(filter);
+  if (cars.length < 2) return null;
+  return wrap(
+    priority,
+    buildUsoArticle({
+      slug,
+      uso,
+      cars: featuredCars(cars, () => true),
+      hashStr,
+      ctaHref: "/seminovos",
+      ctaLabel: "Ver estoque",
+    })
+  );
+}
+
+function pushTema(pool, tema) {
+  if (tema) pool.push(tema);
+}
+
 function buildPool(stock) {
   const pool = [];
   let p = 100;
@@ -341,17 +419,68 @@ function buildPool(stock) {
       angle: "remoto",
     })
   );
+  // Regionais extras (não cobertos por manuais Vale dos Sinos / Grande POA distância)
+  pool.push(
+    temaRegional(stock, p++, {
+      topic: "seminovos grande porto alegre estoque e procedencia",
+      region: "Grande Porto Alegre",
+      cities: ["Porto Alegre", "Canoas", "Gravataí", "Cachoeirinha"],
+      angle: "estoque",
+    })
+  );
+  pool.push(
+    temaRegional(stock, p++, {
+      topic: "seminovos vale do cai procedencia",
+      region: "Vale do Caí",
+      cities: ["Montenegro", "São Sebastião do Caí", "Harmonia"],
+      angle: "estoque",
+    })
+  );
+  pool.push(
+    temaRegional(stock, p++, {
+      topic: "seminovos paranhana igrejinha taquara",
+      region: "Paranhana",
+      cities: ["Igrejinha", "Taquara", "Parobé"],
+      angle: "estoque",
+    })
+  );
+  pool.push(
+    temaRegional(stock, p++, {
+      topic: "comprar seminovo a distancia litoral norte rs",
+      region: "Litoral Norte RS",
+      cities: ["Tramandaí", "Capão da Canoa", "Osório"],
+      angle: "remoto",
+    })
+  );
+
   if (stock.topMarca) pool.push(temaMarca(stock.topMarca.name, stock, p++));
   if (stock.topCategoria) pool.push(temaCategoria(stock.topCategoria.name, stock, p++));
   pool.push(temaPrimeiroCarro(stock, p++));
   pool.push(temaTroca(p++));
   pool.push(temaAutomatico(stock, p++));
+
+  // Faixas de preço (evita 100 mil — overlap com SUV manual)
+  pushTema(pool, temaFaixa(stock, p++, 60000, "60 mil"));
+  pushTema(pool, temaFaixa(stock, p++, 80000, "80 mil"));
+  pushTema(pool, temaFaixa(stock, p++, 120000, "120 mil"));
+  pushTema(pool, temaFaixa(stock, p++, 150000, "150 mil"));
+
+  // Uso / intenção
+  pushTema(pool, temaUso(stock, p++, "familia", "carro familia seminovo esteio"));
+  pushTema(pool, temaUso(stock, p++, "baixa-km", "seminovo baixa km esteio"));
+  pushTema(pool, temaUso(stock, p++, "cidade", "hatch seminovo cidade esteio"));
+  pushTema(pool, temaUso(stock, p++, "viagem", "seminovo para viagem serra rs"));
+
   for (const [name] of stock.marcas.slice(1)) {
     pool.push(temaMarca(name, stock, p++));
   }
   for (const [name] of stock.categorias.slice(1)) {
     pool.push(temaCategoria(name, stock, p++));
   }
+  for (const [name] of stock.modelos || []) {
+    pushTema(pool, temaModelo(stock, p++, name));
+  }
+
   const bySlug = new Map();
   for (const t of pool.sort((a, b) => a.priority - b.priority)) {
     if (!bySlug.has(t.slug)) bySlug.set(t.slug, t);
@@ -376,6 +505,7 @@ async function fetchStock() {
   const prices = v.map((x) => Number(x.valor)).filter((n) => n > 0);
   const marcas = tally("marca").filter(([, c]) => c >= 3);
   const categorias = tally("categoria").filter(([, c]) => c >= 3);
+  const modelos = tally("modelo").filter(([, c]) => c >= MIN_MODELO_COUNT);
   const cars = v.map((x) => ({
     id: x.id,
     placa: x.placa,
@@ -399,6 +529,7 @@ async function fetchStock() {
     maxPrice: prices.length ? Math.max(...prices) : 150000,
     marcas,
     categorias,
+    modelos,
     cars,
     topMarca: marcas[0] ? { name: marcas[0][0], count: marcas[0][1] } : null,
     topCategoria: categorias[0] ? { name: categorias[0][0], count: categorias[0][1] } : null,

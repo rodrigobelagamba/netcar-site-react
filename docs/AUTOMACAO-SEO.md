@@ -111,25 +111,34 @@ O container roda `npm run weekly` (= `generate-blog` + `deploy:local`):
 ```dockerfile
 CMD ["npm","run","weekly"]
 ```
-Agendar no host (crontab) — **segunda-feira 06:00**:
+Agendar no host (crontab) — **segunda-feira 06:00** — script que
+**commita** o histórico (senão o próximo `git pull` apaga posts novos):
+
 ```cron
-0 6 * * 1 cd /opt/netcar-site-react && git pull --ff-only && docker compose run --rm netcar-weekly >> /var/log/netcar-weekly.log 2>&1
+0 6 * * 1 /opt/netcar-site-react/scripts/weekly-persist.sh >> /var/log/netcar-weekly.log 2>&1
+```
+
+`weekly-persist.sh` = `git pull` + `docker run … npm run weekly` + `commit-blog-auto.sh`.
+
+Equivalente só do commit (se weekly já rodou):
+```bash
+bash scripts/commit-blog-auto.sh
 ```
 
 ### O que cada run faz
 1. `git pull` (pega ajustes de código).
-2. `npm run weekly`:
-   - `generate-blog.js` → publica **1 pauta nova** da fila (acumula no histórico).
+2. `npm run weekly` (ou docker `netcar-weekly`):
+   - `generate-blog.js` → publica até **2 pautas novas** da fila (acumula no histórico).
    - `deploy:local` → `npm run build` (landings + sitemap + HTML estático) +
      deploy SSH/FTP para a KingHost.
-3. `blog-auto.json` é atualizado **no volume** (persiste o histórico).
+3. Se `blog-auto.json` mudou → `git commit` + `git push` (histórico versionado).
 
 > Importante: `generate-blog` roda **só aqui** (rodada semanal), não no `build`.
 > Assim builds de teste do programador não inflam o blog — só o cron publica.
 
 > Importante: o blog **acumula** porque o `blog-auto.json` fica no volume
-> persistente. Se rodar em ambiente efêmero (CI limpo a cada vez), o blog
-> recomeça do lote inicial — por isso a VPS com volume é o caminho certo.
+> **e** no git. Sem o commit pós-weekly, `git pull --ff-only` pode reverter
+> o arquivo para o estado antigo do remote.
 
 ### Versionamento no Git
 
@@ -139,13 +148,15 @@ Agendar no host (crontab) — **segunda-feira 06:00**:
 **Versionar** (estado editorial): `src/data/seo/blog-auto.json` (histórico do blog
 automático), `blog-posts.json`, `cities.json`.
 
-### Opcional: commitar só o histórico do blog após weekly
+### Pool orgânico (auto)
 
-```bash
-git add src/data/seo/blog-auto.json \
-  && git commit -m "chore(blog): rodada semanal automática" \
-  && git push
-```
+Além de marcas/categorias/checklist, o pool inclui:
+- faixas de preço (60/80/120/150 mil — evita overlap com SUV até 100 mil manual)
+- modelos com ≥2 unidades no estoque
+- regionais (Grande POA estoque, Vale do Caí, Paranhana, Litoral Norte remoto)
+- uso (família, baixa km, cidade, viagem)
+
+Blocklist + `blog-topics.json` impedem slug/intenção colidente com manuais.
 
 ## 5. Cidades (já existente)
 

@@ -786,3 +786,182 @@ export function buildPrimeiroCarroArticle({ slug, cars, hashStr, ctaHref, ctaLab
     ],
   };
 }
+
+/**
+ * Guia por teto de preço (SEO de intenção "seminovo até X mil").
+ * Evita overlap com manuais de SUV/categoria específica.
+ */
+export function buildFaixaPrecoArticle({
+  slug,
+  maxPrice,
+  label,
+  cars,
+  hashStr,
+  ctaHref,
+  ctaLabel,
+}) {
+  const pick = makePick(hashStr);
+  const maxLabel = label || `R$ ${Math.round(maxPrice / 1000)} mil`;
+  return {
+    slug,
+    title: pick(
+      [
+        `Seminovo até ${maxLabel} em Esteio: o que cabe no orçamento`,
+        `Carro seminovo até ${maxLabel}: como filtrar sem se perder`,
+      ],
+      slug + "t"
+    ),
+    description: `Como escolher seminovo até ${maxLabel} com estoque real em Esteio — checklist de preço, km e procedência.`,
+    readMinutes: 6,
+    ctaLabel,
+    ctaHref,
+    sections: [
+      P(
+        `Busca por seminovo até ${maxLabel} costuma misturar anúncio antigo, preço “a partir de” e carro que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive.`
+      ),
+      H2("O que o teto de preço realmente compra"),
+      P(
+        `Até ${maxLabel}, o foco costuma ser hatch, sedan compacto ou SUV de entrada com mais km. O erro comum é forçar categoria premium no mesmo orçamento — aí sobra manutenção cara e falta margem de reserva.`
+      ),
+      H2("Três filtros antes do WhatsApp"),
+      UL([
+        "Preço anunciado × histórico de revisão (não só “aceito troca”).",
+        "Km coerente com o ano — fora da curva pede vistoria mais rígida.",
+        "Documentação e procedência claros antes de falar em parcela.",
+      ]),
+      ...carsBlock(
+        cars,
+        `Opções até ${maxLabel} no pátio agora`,
+        "Recorte do estoque Netcar nesta faixa — compare e escolha 2 ou 3 pra visitar:"
+      ),
+      H2("Financiamento: simule o total, não só a parcela"),
+      P(
+        "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, desça uma faixa ou aumente entrada."
+      ),
+      P(AUTORIDADE),
+      H2(`Pronto pra filtrar até ${maxLabel}?`),
+      P("Abra o estoque com o teto de preço e mande a shortlist no WhatsApp — a gente confirma disponibilidade na hora."),
+    ],
+  };
+}
+
+/**
+ * Guia por modelo com volume no estoque (ex.: T-Cross, Nivus, Creta).
+ */
+export function buildModeloArticle({ slug, modelo, cars, hashStr, ctaHref, ctaLabel }) {
+  const pick = makePick(hashStr);
+  return {
+    slug,
+    title: pick(
+      [
+        `${modelo} seminovo em Esteio: vale a pena em 2026?`,
+        `Comprar ${modelo} usado: o que conferir antes da visita`,
+      ],
+      slug + "t"
+    ),
+    description: `${modelo} seminovo em Esteio: pontos de atenção, comparação no estoque e quando faz sentido fechar.`,
+    readMinutes: 6,
+    ctaLabel,
+    ctaHref,
+    sections: [
+      P(
+        `${modelo} seminovo aparece muito em busca local — e também em anúncio genérico. Aqui o filtro é estoque real em Esteio: versão, km e preço lado a lado.`
+      ),
+      H2(`Por que ${modelo} entra na shortlist`),
+      P(
+        "Modelo com peça fácil, revenda previsível e demanda regional costuma ser escolha segura. Ainda assim, unidade a unidade muda: um ano/km errado estraga o negócio."
+      ),
+      H2("Checklist rápido na visita"),
+      UL([
+        "Histórico de manutenção e recalls da marca.",
+        "Estado de freios, suspensão e pneus (custo escondido).",
+        "Test drive em rua e velocidade — barulho e alinhamento.",
+      ]),
+      ...carsBlock(
+        cars,
+        `${modelo} disponíveis agora`,
+        `Unidades ${modelo} no pátio Netcar — use pra comparar preço e km:`
+      ),
+      H2("Troca e financiamento"),
+      P(
+        "Se vai dar o atual na troca, leve avaliação atualizada. Financiamento: simule entrada + prazo antes de emocionar no modelo."
+      ),
+      P(AUTORIDADE),
+      H2(`Ver ${modelo} no estoque`),
+      P("Filtre pelo modelo, escolha duas unidades e chame no WhatsApp pra agendar."),
+    ],
+  };
+}
+
+/**
+ * Intenção de uso: família, baixa km, cidade, viagem.
+ */
+export function buildUsoArticle({ slug, uso, cars, hashStr, ctaHref, ctaLabel }) {
+  const pick = makePick(hashStr);
+  const copy = {
+    familia: {
+      title: ["Carro pra família seminovo: espaço sem estourar orçamento", "Seminovo familiar em Esteio: o que priorizar"],
+      desc: "Carro pra família: espaço, segurança e custo — com opções reais no estoque Netcar em Esteio.",
+      lead: "Família muda o critério: porta-malas, bancos traseiros e custo mensal pesam mais que design.",
+      h2a: "O que família realmente precisa",
+      pa: "Espaço pra cadeirinha, acesso fácil às portas traseiras e porta-malas que aguenta mala + mercado. SUV compacto e sedan médio costumam ganhar do hatch puro.",
+      h2b: "Custo mensal além da parcela",
+      pb: "Seguro, combustível e pneus sobem com porte. Vale simular dois portes no mesmo orçamento.",
+    },
+    "baixa-km": {
+      title: ["Seminovo com baixa km: quando vale o prêmio", "Carro usado com poucos km: o que checar"],
+      desc: "Seminovo baixa km em Esteio: como ler odômetro, preço e procedência sem cair em anúncio maquiado.",
+      lead: "Baixa km atrai — e também anúncio hinário. O prêmio só faz sentido com histórico limpo.",
+      h2a: "Km baixo ≠ carro perfeito",
+      pa: "Carro parado muito tempo também sofre (borracha, bateria, fluidos). Peça revisão recente e confira uso real.",
+      h2b: "Quando pagar a mais",
+      pb: "Faz sentido se o gap de preço vs unidade similar com mais km for menor que o custo estimado de manutenção adiantada.",
+    },
+    cidade: {
+      title: ["Hatch seminovo pra cidade: econômico e prático", "Carro pra uso urbano em Esteio e Grande POA"],
+      desc: "Hatch e compacto seminovo pra cidade: consumo, manobra e opções no estoque Netcar.",
+      lead: "Uso urbano premia carro curto, econômico e fácil de estacionar — sem pagar porte de estrada.",
+      h2a: "Prioridades na cidade",
+      pa: "Raio de giro, visibilidade e consumo no trânsito param e andam. Hatch 1.0/1.6 costuma acertar.",
+      h2b: "Onde o SUV compacto ainda ganha",
+      pb: "Se tem garagem alta ou estrada de terra leve no fim de semana, SUV de entrada entra na disputa — sem exagerar porte.",
+    },
+    viagem: {
+      title: ["Seminovo pra viagem e Serra: conforto e porta-malas", "Carro pra viagem no RS: o que levar na shortlist"],
+      desc: "Seminovo pra viagem e Serra Gaúcha: conforto, estabilidade e estoque real em Esteio.",
+      lead: "Viagem longa e Serra pedem freio/suspensão em dia, porta-malas útil e motor que não sofre em subida.",
+      h2a: "Checklist antes da estrada",
+      pa: "Pneus, freios, ar-condicionado e histórico de revisão. Na Serra, transmissão e refrigeração importam.",
+      h2b: "Porte certo sem exagero",
+      pb: "SUV compacto e sedan médio cobrem a maioria dos roteiros RS sem custo de full-size.",
+    },
+  }[uso] || {
+    title: ["Seminovo sob medida: como escolher pelo uso", "Escolher seminovo pelo uso real"],
+    desc: "Escolha seminovo pelo uso — com estoque real Netcar em Esteio.",
+    lead: "Uso define a shortlist melhor que marca sozinha.",
+    h2a: "Defina o uso principal",
+    pa: "Cidade, família, viagem ou km baixo mudam categoria e orçamento.",
+    h2b: "Compare no estoque",
+    pb: "Duas ou três unidades reais batem qualquer lista genérica da internet.",
+  };
+
+  return {
+    slug,
+    title: pick(copy.title, slug + "t"),
+    description: copy.desc,
+    readMinutes: 6,
+    ctaLabel,
+    ctaHref,
+    sections: [
+      P(copy.lead),
+      H2(copy.h2a),
+      P(copy.pa),
+      H2(copy.h2b),
+      P(copy.pb),
+      ...carsBlock(cars, "Opções alinhadas a esse uso", "Recorte do estoque Netcar pra essa intenção:"),
+      P(AUTORIDADE),
+      H2("Próximo passo"),
+      P("Filtre o estoque, monte a shortlist e chame no WhatsApp pra agendar visita."),
+    ],
+  };
+}
