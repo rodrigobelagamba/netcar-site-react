@@ -26,6 +26,7 @@ const files = [
   'social-oauth.php',
   'sync-social.php',
   'outscraper-sync.php',
+  'review-media.php',
   'social-config.example.php',
 ];
 
