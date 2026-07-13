@@ -3,7 +3,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 
 /**
- * Veículo vendido ou removido da API: redireciona para o estoque em vez de 404.
+ * Veículo ausente na API (slug inválido / removido): redireciona para o estoque.
+ * Carros vendidos (price=0) continuam na página de detalhe.
  */
 export function VehicleUnavailableRedirect() {
   const navigate = useNavigate();

@@ -9,3 +9,4 @@
 public/seo-static/** text eol=lf
 public/sitemap.xml text eol=lf
 public/netcar-config.php text eol=lf
+devops/**/*.sh text eol=lf

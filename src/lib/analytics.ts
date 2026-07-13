@@ -1,7 +1,7 @@
 /**
  * Analytics helpers — dataLayer para GTM/Ads + GA4 direto só em page view.
- * whatsapp_click: um único push no dataLayer (GTM dispara conversão).
- * Não usar gtag("event") aqui: gtag() também escreve no dataLayer e duplicava hit Ads.
+ * whatsapp_click: objeto com wa_ads_conversion=true dispara Ads.
+ * gtag direto envia ao GA4 com wa_ads_conversion=false para não repetir Ads.
  */
 
 export const GA4_MEASUREMENT_ID = "G-MGPNBDNQ9G";
@@ -28,6 +28,16 @@ export interface WhatsAppClickParams {
   pagePath?: string;
 }
 
+export type AnalyticsPageType =
+  | "home"
+  | "contact"
+  | "city_buy"
+  | "city_sell"
+  | "regional_hub"
+  | "brand_landing"
+  | "vehicle_detail"
+  | "other";
+
 declare global {
   interface Window {
     dataLayer?: Record<string, unknown>[];
@@ -43,11 +53,41 @@ function getPagePath(): string {
     : "/";
 }
 
-function inferPageType(pagePath: string): string {
-  if (pagePath.startsWith("/veiculo/")) return "vehicle_detail";
-  if (pagePath === "/") return "home";
-  if (pagePath.startsWith("/contato")) return "contact";
+export function inferPageType(pagePath: string): AnalyticsPageType {
+  const pathname = pagePath.split(/[?#]/, 1)[0].replace(/\/+$/, "") || "/";
+  if (pathname.startsWith("/veiculo/")) return "vehicle_detail";
+  if (
+    pathname.includes("regiao-metropolitana") ||
+    pathname === "/regioes-atendidas" ||
+    pathname.startsWith("/regiao-") ||
+    pathname.startsWith("/grande-porto-alegre")
+  ) {
+    return "regional_hub";
+  }
+  if (pathname.startsWith("/vender-carro-")) return "city_sell";
+  if (pathname.startsWith("/seminovos-") && pathname !== "/seminovos-automaticos") {
+    return "city_buy";
+  }
+  if (pathname.startsWith("/comprar-")) return "brand_landing";
+  if (pathname === "/") return "home";
+  if (pathname.startsWith("/contato")) return "contact";
   return "other";
+}
+
+function getRegionalDimensions(pagePath: string): Record<string, string> {
+  const pathname = pagePath.split(/[?#]/, 1)[0].replace(/\/+$/, "") || "/";
+  const pageType = inferPageType(pathname);
+
+  if (pageType === "city_buy") {
+    return { regional_city_slug: pathname.replace("/seminovos-", "") };
+  }
+  if (pageType === "city_sell") {
+    return { regional_city_slug: pathname.replace("/vender-carro-", "") };
+  }
+  if (pageType === "brand_landing") {
+    return { landing_slug: pathname.replace("/comprar-", "") };
+  }
+  return {};
 }
 
 const WA_CLICK_DEDUP_MS = 400;
@@ -116,21 +156,89 @@ export function trackPageView(path?: string, title?: string): void {
   const pagePath = path ?? getPagePath();
   const pageTitle = title ?? (typeof document !== "undefined" ? document.title : "");
   const pageLocation = typeof window !== "undefined" ? window.location.href : "";
+  const pageType = inferPageType(pagePath);
+  const regionalDimensions = getRegionalDimensions(pagePath);
 
   pushDataLayer({
     event: "virtual_page_view",
     page_path: pagePath,
     page_title: pageTitle,
     page_location: pageLocation,
+    page_type: pageType,
+    ...regionalDimensions,
   });
+
+  if (["city_buy", "city_sell", "regional_hub"].includes(pageType)) {
+    pushDataLayer({
+      event: "regional_landing_view",
+      page_type: pageType,
+      page_path: pagePath,
+      ...regionalDimensions,
+    });
+  }
 
   if (typeof window.gtag === "function") {
     window.gtag("config", GA4_MEASUREMENT_ID, {
       page_path: pagePath,
       page_title: pageTitle,
       page_location: pageLocation,
+      page_type: pageType,
+      ...regionalDimensions,
     });
   }
+}
+
+/** Evento para CTAs de páginas regionais e landings de estoque. */
+export function trackRegionalCtaClick(action: string, pagePath = getPagePath()): void {
+  const pageType = inferPageType(pagePath);
+  if (!["city_buy", "city_sell", "regional_hub", "brand_landing"].includes(pageType)) {
+    return;
+  }
+
+  pushDataLayer({
+    event: "regional_cta_click",
+    regional_action: action,
+    page_type: pageType,
+    page_path: pagePath,
+    ...getRegionalDimensions(pagePath),
+  });
+
+  if (action.includes("stock") || action.startsWith("city_buy_")) {
+    pushDataLayer({
+      event: "regional_stock_click",
+      regional_action: action,
+      page_type: pageType,
+      page_path: pagePath,
+      ...getRegionalDimensions(pagePath),
+    });
+  }
+}
+
+export function trackTrustSectionView(
+  section: string,
+  pagePath = getPagePath(),
+): void {
+  pushDataLayer({
+    event: "trust_section_view",
+    trust_section: section,
+    page_type: inferPageType(pagePath),
+    page_path: pagePath,
+    ...getRegionalDimensions(pagePath),
+  });
+}
+
+export function trackSellEvaluation(
+  stage: "start" | "completed",
+  cityName?: string,
+  pagePath = getPagePath(),
+): void {
+  pushDataLayer({
+    event: `sell_evaluation_${stage}`,
+    city_name: cityName,
+    page_type: inferPageType(pagePath),
+    page_path: pagePath,
+    ...getRegionalDimensions(pagePath),
+  });
 }
 
 export function trackWhatsAppClick(params: WhatsAppClickParams): void {
@@ -146,26 +254,30 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
 
   pushDataLayer({
     event: "whatsapp_click",
+    wa_ads_conversion: true,
     wa_source: params.source,
     wa_intent: params.intent ?? "general",
     wa_vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
     wa_vehicle_name: params.vehicleName,
     wa_page_type: inferPageType(pagePath),
     page_path: pagePath,
+    ...getRegionalDimensions(pagePath),
   });
 
-  // GA4 direto: o container GTM não tem tag de evento pra whatsapp_click,
-  // então o push acima nunca chega ao GA4. send_to explícito garante que o
-  // hit vai SÓ pro GA4 (não re-dispara conversão Ads via googtag do GTM).
+  // Data Layer v2 persiste valores entre eventos. O false explícito é essencial:
+  // limpa o estado antes do gtag; sem isso, ele herdaria true e repetiria Ads.
   if (typeof window.gtag === "function") {
+    pushDataLayer({ wa_ads_conversion: false });
     window.gtag("event", "whatsapp_click", {
       send_to: GA4_MEASUREMENT_ID,
+      wa_ads_conversion: false,
       wa_source: params.source,
       wa_intent: params.intent ?? "general",
       wa_vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
       wa_vehicle_name: params.vehicleName,
       wa_page_type: inferPageType(pagePath),
       page_path: pagePath,
+      ...getRegionalDimensions(pagePath),
     });
   }
 
@@ -204,6 +316,10 @@ export function initAnalytics(): void {
     (event) => {
       const anchor = (event.target as Element | null)?.closest("a[href]");
       if (!(anchor instanceof HTMLAnchorElement)) return;
+      const regionalAction = anchor.getAttribute("data-regional-action");
+      if (regionalAction) {
+        trackRegionalCtaClick(regionalAction);
+      }
       const href = anchor.href || "";
       if (!/wa\.me|api\.whatsapp\.com/i.test(href)) return;
       trackWhatsAppClick({

@@ -23,6 +23,7 @@ interface CardsHeroProps {
   whatsAppVehicleName?: string;
   whatsAppSource?: string;
   compact?: boolean;
+  isSold?: boolean;
 }
 
 export function CardsHero({
@@ -43,6 +44,7 @@ export function CardsHero({
   whatsAppVehicleName,
   whatsAppSource = "home_destaques",
   compact = false,
+  isSold = false,
 }: CardsHeroProps) {
   const content = (
     <div className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center h-full ${
@@ -51,7 +53,7 @@ export function CardsHero({
         : "rounded-[40px] p-8"
     }`} style={{ border: '1px solid rgba(229, 231, 235, 0.5)' }}>
       {/* Selo em formato de carimbo */}
-      {SHOW_CAMPAIGN_STAMP && (
+      {SHOW_CAMPAIGN_STAMP && !isSold && (
         <img
           src="/selos/selo_campanha.png"
           alt="Selo de campanha"
@@ -71,8 +73,24 @@ export function CardsHero({
             alt={`${brand} ${model}`.trim() || "Veículo seminovo"}
             loading="lazy"
             decoding="async"
-            className="!border-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-2 drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)]"
+            className={`!border-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-2 drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] ${isSold ? "grayscale-[0.25]" : ""}`}
           />
+          {isSold && (
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 z-20 flex items-center justify-center pt-4 md:pt-8"
+            >
+              <span
+                className={`-rotate-[16deg] border-[#E10600]/70 bg-white/40 font-black uppercase tracking-[0.08em] text-[#E10600]/80 shadow-[0_8px_24px_rgba(0,0,0,0.12)] ${
+                  compact
+                    ? "rounded-lg border-[3px] px-2 py-0.5 text-xs sm:rounded-xl sm:border-[4px] sm:px-3 sm:py-1 sm:text-sm md:text-base"
+                    : "rounded-xl border-[5px] px-4 py-1.5 text-2xl sm:rounded-2xl sm:border-[6px] sm:px-6 sm:py-2 sm:text-3xl md:border-[7px] md:px-7 md:py-2.5 md:text-4xl"
+                }`}
+              >
+                Vendido
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -94,10 +112,18 @@ export function CardsHero({
            <p className={`!border-0 text-gray-400 font-medium ${compact ? "text-[10px]" : "text-base"}`}>{year}</p>
          </div>
 
-         {/* Price and Action — sempre stacked, botão largura total (evita sobrepor preço) */}
-         <div className={`!border-0 w-full flex flex-col items-stretch mt-auto ${compact ? "gap-1.5 pt-2" : "gap-2 pt-4"}`}>
-           <div className="!border-0 w-full">
-             {showPriceComparison && previousPrice ? (
+         {/* Price and Action — altura reservada pra alinhar CTA entre cards */}
+         <div className={`!border-0 w-full min-w-0 flex flex-col items-stretch mt-auto ${compact ? "gap-1.5 pt-2" : "gap-2 pt-4"}`}>
+           <div
+             className={`!border-0 w-full min-w-0 flex items-end ${
+               compact ? "min-h-[1.25rem]" : "min-h-[2rem]"
+             }`}
+           >
+             {isSold ? (
+               <p className={`!border-0 font-semibold font-sans tracking-tight leading-tight text-[#00283C]/45 ${compact ? "text-xs" : "text-sm"}`}>
+                 Indisponível · ver similares
+               </p>
+             ) : showPriceComparison && previousPrice ? (
                <div className="flex flex-col items-start gap-1">
                  <p className="!border-0 font-semibold text-gray-500 leading-none text-xs">
                    De: <span className="line-through">{previousPrice}</span>
@@ -116,13 +142,21 @@ export function CardsHero({
              )}
            </div>
 
-           {whatsAppHref ? (
+           {isSold ? (
+             <div
+               className={`!border-0 box-border flex w-full min-w-0 items-center justify-center rounded-full border border-[#00283C]/15 bg-[#F3F5F6] font-bold text-[#00283C] ${
+                 compact ? "h-9 px-3 text-[9px]" : "h-10 px-4 text-[12px]"
+               }`}
+             >
+               Ver detalhes
+             </div>
+           ) : whatsAppHref ? (
              <a
                href={whatsAppHref}
                target="_blank"
                rel="noopener noreferrer"
                data-wa-source={whatsAppSource}
-               data-wa-intent="ask_km"
+               data-wa-intent="vehicle_inquiry"
                data-wa-vehicle-id={whatsAppVehicleId}
                data-wa-vehicle-name={whatsAppVehicleName}
                onClick={(e) => e.stopPropagation()}
@@ -131,7 +165,7 @@ export function CardsHero({
                }`}
              >
               <MessageCircle className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4"}`} />
-              {compact ? "Saber KM" : "Saber sobre a KM"}
+              {compact ? "Tenho interesse" : "Tenho interesse neste carro"}
              </a>
            ) : (
              <button
@@ -154,7 +188,7 @@ export function CardsHero({
              </button>
            )}
 
-           {compact && whatsAppHref && (tradeInHref || financeHref) ? (
+           {!isSold && compact && whatsAppHref && (tradeInHref || financeHref) ? (
              <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold leading-none">
                {tradeInHref ? (
                  <a
@@ -186,46 +220,45 @@ export function CardsHero({
                    onClick={(e) => e.stopPropagation()}
                    className="text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D]"
                  >
-                   Financ. →
+                  Simular →
                  </a>
                ) : null}
              </div>
            ) : null}
 
-           {!compact && whatsAppHref && tradeInHref ? (
-             <a
-               href={tradeInHref}
-               target="_blank"
-               rel="noopener noreferrer"
-               data-wa-source={`${whatsAppSource}_trade`}
-               data-wa-intent="trade_in"
-               data-wa-vehicle-id={whatsAppVehicleId}
-               data-wa-vehicle-name={whatsAppVehicleName}
-               onClick={(e) => e.stopPropagation()}
-               className={`!border-0 w-full text-center font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D] ${
-                 compact ? "text-[10px] leading-tight" : "text-xs"
-               }`}
-             >
-               {compact ? "Troca deste →" : "Avaliar meu carro na troca deste →"}
-             </a>
-           ) : null}
-
-           {!compact && whatsAppHref && financeHref ? (
-             <a
-               href={financeHref}
-               target="_blank"
-               rel="noopener noreferrer"
-               data-wa-source={`${whatsAppSource}_finance`}
-               data-wa-intent="simulate_finance"
-               data-wa-vehicle-id={whatsAppVehicleId}
-               data-wa-vehicle-name={whatsAppVehicleName}
-               onClick={(e) => e.stopPropagation()}
-               className={`!border-0 w-full text-center font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D] ${
-                 compact ? "text-[10px] leading-tight" : "text-xs"
-               }`}
-             >
-               {compact ? "Financiamento →" : "Simular um financiamento →"}
-             </a>
+           {!compact ? (
+             <div className="flex min-h-[2.75rem] flex-col justify-start gap-2">
+               {!isSold && whatsAppHref && tradeInHref ? (
+                 <a
+                   href={tradeInHref}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-wa-source={`${whatsAppSource}_trade`}
+                   data-wa-intent="trade_in"
+                   data-wa-vehicle-id={whatsAppVehicleId}
+                   data-wa-vehicle-name={whatsAppVehicleName}
+                   onClick={(e) => e.stopPropagation()}
+                   className="!border-0 w-full text-center text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
+                 >
+                   Avaliar meu carro na troca deste →
+                 </a>
+               ) : null}
+               {!isSold && whatsAppHref && financeHref ? (
+                 <a
+                   href={financeHref}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-wa-source={`${whatsAppSource}_finance`}
+                   data-wa-intent="simulate_finance"
+                   data-wa-vehicle-id={whatsAppVehicleId}
+                   data-wa-vehicle-name={whatsAppVehicleName}
+                   onClick={(e) => e.stopPropagation()}
+                   className="!border-0 w-full text-center text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
+                 >
+                   Comparar financiamento →
+                 </a>
+               ) : null}
+             </div>
            ) : null}
          </div>
       </div>
@@ -240,7 +273,7 @@ export function CardsHero({
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: delay * 0.1 }}
         viewport={{ once: true }}
-        className={`${compact ? "pt-12 h-full" : "pt-24 md:pt-32"} ${onClick ? 'cursor-pointer' : ''}`}
+        className={`${compact ? "pt-12 h-full" : "pt-24 md:pt-32 h-full"} ${onClick ? 'cursor-pointer' : ''}`}
         onClick={onClick}
       >
         {content}
@@ -254,7 +287,7 @@ export function CardsHero({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: delay * 0.05 }}
-      className={`${compact ? "pt-12 h-full" : "pt-24 md:pt-32"} ${onClick ? 'cursor-pointer' : ''}`}
+      className={`${compact ? "pt-12 h-full" : "pt-24 md:pt-32 h-full"} ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
       {content}

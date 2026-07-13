@@ -494,6 +494,85 @@ export function buildSubjectArticle(raw) {
 
 // ---- Temas dedicados (formato fixo, estrutura própria) ----
 
+/**
+ * Formato regional agrupado. Uma matéria cobre cidades com a mesma intenção e
+ * entrega roteiro próprio; evita clonar uma página para cada município.
+ * Cards sempre chegam do estoque consultado pelo gerador.
+ */
+export function buildRegionalStockArticle({
+  slug,
+  region,
+  cities,
+  angle,
+  cars,
+  ctaHref,
+  ctaLabel,
+}) {
+  const cityList = cities.join(", ");
+  const isRemote = angle === "remoto";
+  return {
+    slug,
+    title: isRemote
+      ? `Comprar seminovo à distância: roteiro para ${region}`
+      : `Seminovos em ${region}: estoque e procedência`,
+    description: isRemote
+      ? `Como filtrar estoque, conferir procedência e organizar a visita saindo de ${cityList}.`
+      : `Como comparar estoque real e procedência ao buscar seminovo em ${cityList}.`,
+    readMinutes: 7,
+    ctaLabel,
+    ctaHref,
+    sections: [
+      P(
+        isRemote
+          ? `Quem está em ${cityList} pode adiantar a pesquisa sem tentar fechar tudo por mensagem. O objetivo do contato remoto é comparar veículos reais, registrar dúvidas e chegar à visita com uma lista curta.`
+          : `Buscar seminovo em ${region} exige comparar exemplares, não repetir a mesma busca para cada cidade. Este roteiro serve para quem está em ${cityList} e quer separar estoque real de anúncio genérico.`
+      ),
+      H2("Comece no estoque oficial"),
+      UL([
+        "Defina uso, orçamento total e itens obrigatórios",
+        "Separe dois ou três veículos que resolvam a mesma necessidade",
+        "Compare versão, ano, quilometragem e equipamentos",
+        "Confirme disponibilidade perto da visita",
+      ]),
+      ...carsBlock(
+        cars,
+        "Exemplos do estoque consultado agora",
+        "Dados abaixo vêm do estoque oficial no momento da geração. Abra a ficha e confirme disponibilidade:"
+      ),
+      H2("Confiança precisa de evidência"),
+      UL([
+        "Empresa, endereço e canais oficiais identificáveis",
+        "Documentação e histórico disponível explicados sem promessa vaga",
+        "Processo de preparação que o consultor consiga detalhar",
+        "Test drive e proposta completa antes da decisão",
+      ]),
+      H2(isRemote ? "O que adiantar antes do deslocamento" : "Como montar uma comparação útil"),
+      OL(
+        isRemote
+          ? [
+              "Envie as URLs dos veículos escolhidos no site",
+              "Peça confirmação dos dados e documentos necessários",
+              "Se houver troca, informe modelo, ano, km e financiamento em aberto",
+              "Agende a visita para validar carro, test drive e proposta",
+            ]
+          : [
+              "Registre os dados comprováveis de cada exemplar",
+              "Liste dúvidas de documentação, preparação e pós-venda",
+              "Faça test drive dos finalistas no mesmo dia quando possível",
+              "Compare condição total registrada na proposta",
+            ]
+      ),
+      H2("O que não fechar só por mensagem"),
+      P(
+        "Foto e vídeo ajudam na triagem, mas não substituem inspeção, test drive e leitura da proposta. Simulação não é aprovação; avaliação por fotos não é valor final."
+      ),
+      P(AUTORIDADE),
+      H2("Próximo passo"),
+      P("Veja o estoque atualizado no site, escolha os candidatos e só então organize o contato e a visita."),
+    ],
+  };
+}
+
 export function buildPrecosArticle({ slug, cars, stock, brl, ctaHref, ctaLabel }) {
   return {
     slug,

@@ -58,7 +58,7 @@ function marcaLanding(name, count) {
     title: `${nice} usados e seminovos em Esteio/RS | Netcar Multimarcas`,
     description: `${nice} seminovos revisados em Esteio/RS na Netcar. Estoque com procedência, financiamento em até 60x e troca com avaliação na hora. Veja os ${nice} disponíveis.`,
     h1: `${nice} seminovos em Esteio/RS`,
-    intro: `Procurando um ${nice} usado com procedência na região metropolitana de Porto Alegre? A Netcar reúne ${nice} seminovos revisados pela Fábrica de Valor em duas lojas na Av. Getúlio Vargas, em Esteio.`,
+    intro: `Procurando um ${nice} usado com procedência na região metropolitana de Porto Alegre? A Netcar reúne ${nice} seminovos revisados pela Fábrica de Valor em duas lojas na Av. Presidente Vargas, em Esteio.`,
     paragraphs: [
       `Cada ${nice} do nosso estoque passa por checklist técnico antes de ir para a vitrine. Você compara versões, simula financiamento em até 60x e avalia seu usado na troca — tudo na mesma visita.`,
       `Atendemos clientes de Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Gravataí e toda a região metropolitana. Comece pelo WhatsApp com o iAN: diga o ${nice} que procura e a faixa de parcela, e chegue na loja com os carros separados.`,
@@ -93,7 +93,7 @@ function categoriaLanding(name, count) {
     title: `${nice} seminovos em Esteio/RS | Netcar Multimarcas`,
     description: `${nice} seminovos revisados em Esteio/RS na Netcar. Estoque multimarcas com procedência, financiamento facilitado e troca. Veja os ${lower} disponíveis.`,
     h1: `${nice} seminovos em Esteio/RS`,
-    intro: `Quer um ${lower} seminovo com procedência perto de Porto Alegre? A Netcar concentra ${lower} multimarcas revisados pela Fábrica de Valor em duas lojas na Av. Getúlio Vargas, em Esteio.`,
+    intro: `Quer um ${lower} seminovo com procedência perto de Porto Alegre? A Netcar concentra ${lower} multimarcas revisados pela Fábrica de Valor em duas lojas na Av. Presidente Vargas, em Esteio.`,
     paragraphs: [
       `No nosso estoque você encontra ${lower} de várias marcas e faixas de preço, todos com checklist técnico antes da vitrine. Compare modelos, simule financiamento em até 60x e avalie seu usado na troca.`,
       `Atendemos toda a região metropolitana — Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Gravataí e mais. Fale com o iAN no WhatsApp, diga o ${lower} que procura, e já deixamos as opções separadas para sua visita.`,

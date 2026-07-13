@@ -1,4 +1,4 @@
-import { useParams, useLocation } from "@tanstack/react-router";
+import { useParams, useLocation, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageCircleMore,
@@ -11,6 +11,7 @@ import {
   CalendarDays,
   Calculator,
   ArrowLeftRight,
+  ArrowRight,
   Image as ImageIcon,
   LucideIcon,
 } from "lucide-react";
@@ -19,7 +20,11 @@ import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useAnuncioQuery } from "@/catalog/queries/useAnuncioQuery";
-import { buildWhatsAppUrl, vehicleWhatsAppMessages } from "@/lib/whatsappMessages";
+import {
+  buildWhatsAppUrl,
+  siteWhatsAppMessage,
+  vehicleWhatsAppMessages,
+} from "@/lib/whatsappMessages";
 import type { WhatsAppClickSource } from "@/lib/analytics";
 import { trackViewItem } from "@/lib/analytics";
 import iCheckLogo from "@/assets/images/i-check-ogo.svg";
@@ -35,6 +40,7 @@ import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
 import { VehicleUnavailableRedirect } from "@/components/VehicleUnavailableRedirect";
+import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { parseGptContent, AccordionSection } from "@/lib/parseGptContent";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 
@@ -221,18 +227,76 @@ function CTAButton({
 interface ContactButtonProps {
   modeloCompleto?: string;
   vehicleId?: string | number;
+  isSold?: boolean;
+  vehicleLabel?: string;
 }
 
-function ContactButton({ modeloCompleto, vehicleId }: ContactButtonProps) {
+function ContactButton({
+  modeloCompleto,
+  vehicleId,
+  isSold = false,
+  vehicleLabel,
+}: ContactButtonProps) {
   const { data: whatsapp } = useWhatsAppQuery();
-  const vehicleLabel = modeloCompleto || "veículo";
-  const messages = vehicleWhatsAppMessages(vehicleLabel, modeloCompleto);
+  const label = vehicleLabel || modeloCompleto || "veículo";
+  const messages = vehicleWhatsAppMessages(label, modeloCompleto);
   const href = whatsapp?.numero
     ? buildWhatsAppUrl(whatsapp.numero, messages.info)
     : undefined;
   const tradeHref = whatsapp?.numero
     ? buildWhatsAppUrl(whatsapp.numero, messages.trade)
     : undefined;
+  const similarHref = whatsapp?.numero
+    ? buildWhatsAppUrl(
+        whatsapp.numero,
+        siteWhatsAppMessage(
+          `o ${label} que eu vi no site já foi vendido. Quero opções parecidas disponíveis.`,
+        ),
+      )
+    : undefined;
+
+  if (isSold) {
+    return (
+      <div className="relative w-full overflow-hidden rounded-2xl border border-[#00283C]/12 bg-[#F3F5F6]">
+        <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(-12deg,transparent,transparent_10px,rgba(0,40,60,0.03)_10px,rgba(0,40,60,0.03)_20px)]" />
+        <div className="relative space-y-3 px-4 py-5 text-center">
+          <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#00283C]/50">
+            Indisponível para compra
+          </p>
+          <p className="text-base font-semibold leading-snug text-[#00283C]">
+            Este seminovo já encontrou dono.
+          </p>
+          <p className="text-sm leading-relaxed text-[#00283C]/65">
+            Confira opções parecidas ainda no estoque, na mesma faixa.
+          </p>
+          <div className="flex flex-col gap-2 pt-1">
+            <a
+              href="#opcoes-parecidas"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#00283C] px-4 py-3 text-sm font-black text-white"
+            >
+              Ver opções parecidas
+              <ArrowRight className="h-4 w-4" />
+            </a>
+            {similarHref && (
+              <a
+                href={similarHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-wa-source="detalhe_vendido"
+                data-wa-intent="similar_vehicle"
+                data-wa-vehicle-id={vehicleId}
+                data-wa-vehicle-name={label}
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#25D366]/40 bg-white px-4 py-3 text-sm font-bold text-[#00283C]"
+              >
+                <MessageCircleMore className="h-4 w-4 text-[#25D366]" />
+                Quero um similar
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full flex-col items-center gap-2.5">
@@ -302,23 +366,67 @@ interface DetalheMobileStickyBarProps {
   price: string;
   modeloCompleto: string;
   vehicleId?: string | number;
+  isSold?: boolean;
+  vehicleLabel?: string;
 }
 
 function DetalheMobileStickyBar({
   price,
   modeloCompleto,
   vehicleId,
+  isSold = false,
+  vehicleLabel,
 }: DetalheMobileStickyBarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
-  const vehicleLabel = modeloCompleto || "veículo";
-  const messages = vehicleWhatsAppMessages(vehicleLabel, modeloCompleto);
+  const label = vehicleLabel || modeloCompleto || "veículo";
+  const messages = vehicleWhatsAppMessages(label, modeloCompleto);
   const ready = Boolean(whatsapp?.numero);
+  const priceLabel = price.replace(/<[^>]*>/g, "");
+
+  if (isSold) {
+    return (
+      <div className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#00283C]/15 bg-white/95 px-4 py-3 shadow-[0_-12px_40px_rgba(0,0,0,0.12)] backdrop-blur-md">
+        <div className="mb-2 flex items-center gap-3">
+          <p className="min-w-0 flex-1 truncate text-base font-black leading-tight text-[#00283C]">
+            Vendido
+          </p>
+          <a
+            href="#opcoes-parecidas"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-[#00283C] px-4 py-3 text-sm font-black text-white"
+          >
+            Ver opções
+          </a>
+        </div>
+        {ready && (
+          <div className="flex justify-center">
+            <a
+              href={buildWhatsAppUrl(
+                whatsapp!.numero,
+                siteWhatsAppMessage(
+                  `o ${label} que eu vi no site já foi vendido. Quero opções parecidas disponíveis.`,
+                ),
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-wa-source="detalhe_sticky_vendido"
+              data-wa-intent="similar_vehicle"
+              data-wa-vehicle-id={vehicleId}
+              data-wa-vehicle-name={label}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#128C7E]"
+            >
+              <MessageCircleMore className="h-3.5 w-3.5" />
+              Quero um similar no WhatsApp
+            </a>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   if (!ready) return null;
 
   const primaryHref = buildWhatsAppUrl(whatsapp!.numero, messages.info);
   const tradeHref = buildWhatsAppUrl(whatsapp!.numero, messages.trade);
-  const priceLabel = price.replace(/<[^>]*>/g, "");
 
   return (
     <div className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#25D366]/30 bg-white/95 px-4 py-3 shadow-[0_-12px_40px_rgba(0,0,0,0.12)] backdrop-blur-md">
@@ -468,6 +576,7 @@ function OptionalItem({ text }: OptionalItemProps) {
 interface CTASidebarProps {
   vehicle?: any;
   modeloCompleto?: string;
+  isSold?: boolean;
 }
 
 function WhatsAppPulseRing({ children }: { children: React.ReactNode }) {
@@ -596,7 +705,7 @@ function SidebarActionCard({
   );
 }
 
-function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
+function CTASidebar({ vehicle, modeloCompleto, isSold = false }: CTASidebarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
 
   const handleDownloadPDF = () => {
@@ -653,13 +762,19 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
   const whatsappReady = Boolean(whatsapp?.numero);
   const vehicleMessages = vehicleWhatsAppMessages(vehicleLabel, modeloCompleto);
   const primaryWhatsAppHref = whatsappReady
-    ? getWhatsAppLink(vehicleMessages.info)
+    ? getWhatsAppLink(
+        isSold
+          ? siteWhatsAppMessage(
+              `o ${vehicleLabel} que eu vi no site já foi vendido. Quero opções parecidas disponíveis.`,
+            )
+          : vehicleMessages.info,
+      )
     : undefined;
 
   const whatsappActions = [
     {
       icon: Calculator,
-      label: "Simular financiamento",
+      label: "Comparar financiamento",
       intent: "simulate_finance",
       message: vehicleMessages.finance,
     },
@@ -687,7 +802,7 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
 
   return (
     <div className="space-y-4 lg:space-y-6">
-      {hasPDF && (
+      {hasPDF && !isSold && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -728,60 +843,102 @@ function CTASidebar({ vehicle, modeloCompleto }: CTASidebarProps) {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        <SidebarActionCard variant="contact" badge="WhatsApp Netcar">
-          <h3 className="text-primary text-[20px] sm:text-[22px] lg:text-[24px] font-bold mb-2 text-center">
-            Ficou com dúvidas?
-          </h3>
-          <p className="text-fg text-[17px] sm:text-[18px] lg:text-[19px] mb-5 text-center">
-            Nós te ajudamos — resposta rápida no WhatsApp
-          </p>
+        <SidebarActionCard
+          variant="contact"
+          badge={isSold ? "Próximo passo" : "WhatsApp Netcar"}
+        >
+          {isSold ? (
+            <>
+              <h3 className="text-primary text-[20px] sm:text-[22px] lg:text-[24px] font-bold mb-2 text-center">
+                Quer um carro parecido?
+              </h3>
+              <p className="text-fg text-[15px] sm:text-[16px] lg:text-[17px] mb-5 text-center text-muted-foreground">
+                Este já saiu — a gente aponta opções no mesmo perfil
+              </p>
+              <div className="mb-3 w-full max-w-[300px]">
+                <a
+                  href="#opcoes-parecidas"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#00283C] px-4 py-3 text-sm font-black text-white"
+                >
+                  Ver opções parecidas
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
+              <div className="w-full max-w-[300px]">
+                <CTAButton
+                  text="Quero um similar"
+                  icon={MessageCircleMore}
+                  borderColor="border-[#25D366]"
+                  textColor="text-white"
+                  hoverBgColor="bg-green-dark"
+                  filled
+                  className="w-full !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
+                  href={primaryWhatsAppHref}
+                  waSource="sidebar_primary"
+                  waIntent="similar_vehicle"
+                  waVehicleId={vehicle?.id}
+                  waVehicleName={modeloCompleto}
+                  disabled={!whatsappReady}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <h3 className="text-primary text-[20px] sm:text-[22px] lg:text-[24px] font-bold mb-2 text-center">
+                Ficou com dúvidas?
+              </h3>
+              <p className="text-fg text-[17px] sm:text-[18px] lg:text-[19px] mb-5 text-center">
+                Nós te ajudamos — resposta rápida no WhatsApp
+              </p>
 
-          <div className="mb-4 w-full max-w-[300px]">
-            <WhatsAppPulseRing>
-              <CTAButton
-                text="Chamar no WhatsApp"
-                icon={MessageCircleMore}
-                borderColor="border-[#25D366]"
-                textColor="text-white"
-                hoverBgColor="bg-green-dark"
-                filled
-                className="w-full !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
-                href={primaryWhatsAppHref}
-                waSource="sidebar_primary"
-                waIntent="vehicle_inquiry"
-                waVehicleId={vehicle?.id}
-                waVehicleName={modeloCompleto}
-                disabled={!whatsappReady}
-              />
-            </WhatsAppPulseRing>
-          </div>
+              <div className="mb-4 w-full max-w-[300px]">
+                <WhatsAppPulseRing>
+                  <CTAButton
+                    text="Chamar no WhatsApp"
+                    icon={MessageCircleMore}
+                    borderColor="border-[#25D366]"
+                    textColor="text-white"
+                    hoverBgColor="bg-green-dark"
+                    filled
+                    className="w-full !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
+                    href={primaryWhatsAppHref}
+                    waSource="sidebar_primary"
+                    waIntent="vehicle_inquiry"
+                    waVehicleId={vehicle?.id}
+                    waVehicleName={modeloCompleto}
+                    disabled={!whatsappReady}
+                  />
+                </WhatsAppPulseRing>
+              </div>
 
-          <div className="mb-4 flex w-full max-w-[300px] justify-center">
-            <TradeInTextLink
-              href={whatsappReady ? getWhatsAppLink(vehicleMessages.trade) : undefined}
-              modeloCompleto={modeloCompleto}
-              vehicleId={vehicle?.id}
-            />
-          </div>
+              <div className="mb-4 flex w-full max-w-[300px] justify-center">
+                <TradeInTextLink
+                  href={whatsappReady ? getWhatsAppLink(vehicleMessages.trade) : undefined}
+                  modeloCompleto={modeloCompleto}
+                  vehicleId={vehicle?.id}
+                />
+              </div>
 
-          <p className="mb-3 w-full max-w-[300px] text-center text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-            Outras formas de falar conosco
-          </p>
+              <p className="mb-3 w-full max-w-[300px] text-center text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                Outras formas de falar conosco
+              </p>
 
-          <div className="grid w-full max-w-[300px] grid-cols-1 gap-2">
-            {whatsappActions.map((action) => (
-              <WhatsAppQuickAction
-                key={action.label}
-                href={getWhatsAppLink(action.message)}
-                icon={action.icon}
-                label={action.label}
-                intent={action.intent}
-                disabled={!whatsappReady}
-                vehicleId={vehicle?.id}
-                vehicleName={modeloCompleto}
-              />
-            ))}
-          </div>
+              <div className="grid w-full max-w-[300px] grid-cols-1 gap-2">
+                {whatsappActions.map((action) => (
+                  <WhatsAppQuickAction
+                    key={action.label}
+                    href={getWhatsAppLink(action.message)}
+                    icon={action.icon}
+                    label={action.label}
+                    intent={action.intent}
+                    disabled={!whatsappReady}
+                    vehicleId={vehicle?.id}
+                    vehicleName={modeloCompleto}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </SidebarActionCard>
       </motion.div>
     </div>
@@ -918,68 +1075,147 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
 }
 
 
+function medianPrice(prices: number[]): number {
+  if (prices.length === 0) return 0;
+  const sorted = [...prices].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? (sorted[mid - 1] + sorted[mid]) / 2
+    : sorted[mid];
+}
+
 function RelatedVehiclesSection({
   currentVehicleId,
   currentCategory,
   currentPrice,
+  currentMarca,
+  currentYear,
+  currentModelo,
+  isSold = false,
 }: {
   currentVehicleId: string;
   currentCategory?: string;
   currentPrice?: number;
+  currentMarca?: string;
+  currentYear?: number;
+  currentModelo?: string;
+  isSold?: boolean;
 }) {
   const { data: vehicles, isLoading } = useVehiclesQuery();
-  const maxRelatedVehicles = 4;
+  const maxRelatedVehicles = isSold ? 8 : 4;
+  const priceRangeRatio = 0.25;
 
   const relatedVehicleCards = useMemo((): VehicleCardProps[] => {
     if (!vehicles) return [];
 
-    const filtered = vehicles
-      .filter((v) => {
-        if (String(v.id) === String(currentVehicleId)) return false;
+    const available = vehicles.filter((v) => {
+      if (String(v.id) === String(currentVehicleId)) return false;
+      const price = typeof v.price === "number" ? v.price : Number(v.price);
+      if (!price || Number.isNaN(price) || price <= 0) return false;
+      const temFotos = v.imagens_site?.tem_fotos;
+      if (temFotos === 0 || temFotos === undefined) return false;
+      return true;
+    });
 
-        const price = typeof v.price === "number" ? v.price : Number(v.price);
-        if (!price || isNaN(price) || price <= 0) return false;
+    const marcaKey = (currentMarca || "").toUpperCase();
+    const catKey = (currentCategory || "").toUpperCase();
+    const modelToken = (currentModelo || "")
+      .toUpperCase()
+      .replace(marcaKey, "")
+      .trim()
+      .split(/\s+/)[0];
 
-        const temFotos = v.imagens_site?.tem_fotos;
-        if (temFotos === 0 || temFotos === undefined) return false;
+    const sameMarcaCat = available.filter((v) => {
+      const sameMarca =
+        marcaKey && (v.marca || "").toUpperCase() === marcaKey;
+      const sameCat =
+        catKey && (v.categoria || "").toUpperCase() === catKey;
+      return sameMarca && sameCat;
+    });
+    const sameMarca = available.filter(
+      (v) => marcaKey && (v.marca || "").toUpperCase() === marcaKey,
+    );
+    const sameCat = available.filter(
+      (v) => catKey && (v.categoria || "").toUpperCase() === catKey,
+    );
 
-        return true;
-      })
+    const referencePool =
+      sameMarcaCat.length >= 3
+        ? sameMarcaCat
+        : sameMarca.length >= 3
+          ? sameMarca
+          : sameCat.length >= 3
+            ? sameCat
+            : available;
+
+    const referencePrice =
+      currentPrice && currentPrice > 0
+        ? currentPrice
+        : medianPrice(
+            referencePool.map((v) =>
+              typeof v.price === "number" ? v.price : Number(v.price),
+            ),
+          );
+
+    const minPrice = referencePrice > 0 ? referencePrice * (1 - priceRangeRatio) : 0;
+    const maxPrice = referencePrice > 0 ? referencePrice * (1 + priceRangeRatio) : Infinity;
+
+    const scored = available
       .map((v) => {
         const price = typeof v.price === "number" ? v.price : Number(v.price);
-        const vehicleCategory = v.categoria?.toUpperCase() || "";
-        const targetCategory = currentCategory?.toUpperCase() || "";
-        const sameCategory = currentCategory ? vehicleCategory === targetCategory : false;
+        const sameMarcaMatch =
+          marcaKey && (v.marca || "").toUpperCase() === marcaKey;
+        const sameCatMatch =
+          catKey && (v.categoria || "").toUpperCase() === catKey;
+        const modelo = (v.modelo || v.name || "").toUpperCase();
+        const sameModelFamily =
+          Boolean(modelToken) &&
+          modelToken.length > 2 &&
+          modelo.includes(modelToken);
+        const yearDiff =
+          currentYear && v.year ? Math.abs(v.year - currentYear) : 99;
+        const inPriceRange = price >= minPrice && price <= maxPrice;
+        const priceDiff = referencePrice
+          ? Math.abs(price - referencePrice)
+          : Number.POSITIVE_INFINITY;
+
+        let score = 0;
+        if (sameMarcaMatch) score += 100;
+        if (sameCatMatch) score += 50;
+        if (sameModelFamily) score += 40;
+        if (inPriceRange) score += 35;
+        score += Math.max(0, 24 - yearDiff * 4);
+        score += Math.max(0, 20 - Math.min(20, priceDiff / Math.max(referencePrice, 1) * 20));
 
         return {
           ...v,
-          priceDifference: currentPrice ? Math.abs(price - currentPrice) : Infinity,
-          sameCategory,
+          score,
+          inPriceRange,
+          priceDiff,
+          sameMarcaMatch,
+          sameCatMatch,
         };
+      })
+      .sort((a, b) => {
+        if (isSold) {
+          if (a.inPriceRange !== b.inPriceRange) {
+            return a.inPriceRange ? -1 : 1;
+          }
+          return b.score - a.score;
+        }
+        if (a.sameCatMatch !== b.sameCatMatch) {
+          return a.sameCatMatch ? -1 : 1;
+        }
+        return a.priceDiff - b.priceDiff;
       });
 
-    const sameCategoryVehicles = filtered.filter((v) => v.sameCategory);
-    const otherVehicles = filtered.filter((v) => !v.sameCategory);
+    const preferred = isSold
+      ? scored.filter((v) => v.inPriceRange || v.sameMarcaMatch || v.sameCatMatch)
+      : scored;
 
-    const sortByPrice = (a: (typeof filtered)[0], b: (typeof filtered)[0]) => {
-      if (currentPrice) {
-        return a.priceDifference - b.priceDifference;
-      }
-      const idA = parseInt(a.id) || 0;
-      const idB = parseInt(b.id) || 0;
-      return idB - idA;
-    };
+    const pool = preferred.length >= Math.min(4, maxRelatedVehicles) ? preferred : scored;
 
-    const sortedSameCategory = sameCategoryVehicles.sort(sortByPrice);
-    const sortedOther = otherVehicles.sort(sortByPrice);
-    const result = [...sortedSameCategory];
-
-    if (result.length < maxRelatedVehicles) {
-      const needed = maxRelatedVehicles - result.length;
-      result.push(...sortedOther.slice(0, needed));
-    }
-
-    return result.slice(0, maxRelatedVehicles).map((vehicle) => ({
+    return pool.slice(0, maxRelatedVehicles).map((vehicle) => ({
       id: String(vehicle.id),
       name: vehicle.modelo || vehicle.name,
       price: vehicle.price || 0,
@@ -994,14 +1230,27 @@ function RelatedVehiclesSection({
       modelo: vehicle.modelo,
       placa: vehicle.placa,
     }));
-  }, [vehicles, currentVehicleId, currentCategory, currentPrice]);
+  }, [
+    vehicles,
+    currentVehicleId,
+    currentCategory,
+    currentPrice,
+    currentMarca,
+    currentYear,
+    currentModelo,
+    isSold,
+    maxRelatedVehicles,
+  ]);
 
   if (isLoading || relatedVehicleCards.length === 0) {
     return null;
   }
 
   return (
-    <section className="w-full py-8 sm:py-12 lg:py-16">
+    <section
+      id="opcoes-parecidas"
+      className="scroll-mt-24 w-full py-8 sm:py-12 lg:py-16"
+    >
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -1010,19 +1259,40 @@ function RelatedVehiclesSection({
           transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
           className="mb-8 sm:mb-10 lg:mb-12"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-[26px] h-[26px] sm:w-[28px] sm:h-[28px] lg:w-[30px] lg:h-[30px]">
-              <img src={icon1} alt="" aria-hidden="true" className="block size-full" />
+          <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-[26px] w-[26px] sm:h-[28px] sm:w-[28px] lg:h-[30px] lg:w-[30px]">
+                <img src={icon1} alt="" aria-hidden="true" className="block size-full" />
+              </div>
+              <div>
+                <h2 className="section-heading">
+                  {isSold ? "Opções parecidas no estoque" : "Você também pode gostar"}
+                </h2>
+                {isSold && (
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Seminovos no mesmo perfil e faixa de preço deste carro.
+                  </p>
+                )}
+              </div>
             </div>
-            <h2 className="section-heading">Você também pode gostar</h2>
+            {isSold && (
+              <Link
+                to="/seminovos"
+                search={emptySeminovosSearch}
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-[#128C7E] hover:underline"
+              >
+                Ver estoque completo
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
           </div>
-          <div className="h-[1px] bg-primary w-full"></div>
+          <div className="h-[1px] w-full bg-primary" />
         </motion.div>
 
         <ProductList
           vehicles={relatedVehicleCards}
           showWhatsAppInterest
-          whatsAppSource="detalhe_relacionados"
+          whatsAppSource={isSold ? "detalhe_vendido_similares" : "detalhe_relacionados"}
         />
       </div>
     </section>
@@ -1081,6 +1351,71 @@ function PriceWithShimmer({
         />
       )}
     </motion.div>
+  );
+}
+
+function vehicleLabelFromSlug(slug: string): string {
+  const parts = slug.split("-").filter(Boolean);
+  if (/^\d+$/.test(parts[parts.length - 1] || "")) parts.pop();
+
+  return parts
+    .map((part) =>
+      /^\d+$/.test(part)
+        ? part
+        : `${part.charAt(0).toUpperCase()}${part.slice(1)}`,
+    )
+    .join(" ");
+}
+
+function vehicleIdFromSlug(slug: string): string | undefined {
+  const parts = slug.split("-").filter(Boolean);
+  const id = parts[parts.length - 1];
+  return id && /^\d+$/.test(id) ? id : undefined;
+}
+
+function LoadingVehicleDetail({ slug }: { slug: string }) {
+  const modeloCompleto = vehicleLabelFromSlug(slug) || "este seminovo";
+  const vehicleId = vehicleIdFromSlug(slug);
+
+  return (
+    <main className="min-h-[70vh] bg-gradient-to-b from-white to-gray-50 px-4 pb-36 pt-10 md:pb-16 md:pt-16">
+      <section className="container-main mx-auto max-w-4xl">
+        <div className="grid items-center gap-8 rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm md:grid-cols-[1fr_0.9fr] md:p-10">
+          <div
+            className="aspect-[4/3] animate-pulse rounded-3xl bg-gray-100"
+            aria-hidden="true"
+          />
+          <div>
+            <span className="text-xs font-black uppercase tracking-[0.18em] text-[#128C7E]">
+              Carregando detalhes
+            </span>
+            <h1 className="mt-2 text-3xl font-black leading-tight text-[#00283C] md:text-4xl">
+              {modeloCompleto}
+            </h1>
+            <p className="mt-4 text-base leading-relaxed text-gray-600">
+              Enquanto preço, fotos e ficha carregam, você já pode confirmar
+              disponibilidade e tirar dúvidas no WhatsApp.
+            </p>
+            <div className="mt-6">
+              <ContactButton
+                modeloCompleto={modeloCompleto}
+                vehicleId={vehicleId}
+              />
+            </div>
+            <p className="mt-4 text-sm leading-relaxed text-gray-500">
+              Financiamento disponível com comparação entre diversos bancos e
+              financeiras parceiras para buscar a melhor condição disponível
+              para seu perfil. Sujeito à análise.
+            </p>
+          </div>
+        </div>
+      </section>
+      <DetalheMobileStickyBar
+        price="Consultando preço"
+        modeloCompleto={modeloCompleto}
+        vehicleId={vehicleId}
+      />
+    </main>
   );
 }
 
@@ -1306,9 +1641,11 @@ export function DetalhesPage() {
       ? `${marca} ${modeloCompleto} ${vehicle.year || ""} — veículo vendido. Confira seminovos similares na Netcar Multimarcas, Esteio/RS.`.trim()
       : `${marca} ${modeloCompleto} ${vehicle.year || ""} seminovo por ${priceText}, ${vehicle.km?.toLocaleString("pt-BR") || 0} km, em Esteio/RS. Vistoriado, com garantia Netcar.`.trim();
 
-    const pageTitle = !isSold && priceText
-      ? `${ogTitle} - ${priceText} | Netcar Esteio/RS`
-      : `${ogTitle} | Netcar Esteio/RS`;
+    const pageTitle = isSold
+      ? `${ogTitle} - Vendido | Netcar Esteio/RS`
+      : priceText
+        ? `${ogTitle} - ${priceText} | Netcar Esteio/RS`
+        : `${ogTitle} | Netcar Esteio/RS`;
 
     return {
       title: pageTitle,
@@ -1327,7 +1664,6 @@ export function DetalhesPage() {
         ? maskPlate(vehicle.placa).toUpperCase()
         : "",
       ogTitle: ogTitle,
-      robots: isSold ? "noindex, follow" : undefined,
     };
   }, [vehicle, modeloCompleto, marca, absoluteImageUrl, friendlyUrl]);
 
@@ -1341,11 +1677,7 @@ export function DetalhesPage() {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-muted-foreground">Carregando...</p>
-      </div>
-    );
+    return <LoadingVehicleDetail slug={slug} />;
   }
 
   if (error || !vehicle) {
@@ -1353,28 +1685,30 @@ export function DetalhesPage() {
   }
 
   const isSold = !vehicle.price || vehicle.price <= 0;
-  if (isSold) {
-    return <VehicleUnavailableRedirect />;
-  }
+  const vehicleLabel = [marca, modeloCompleto, vehicle.year]
+    .filter(Boolean)
+    .join(" ");
 
   // Badges
   const diferenciais = vehicle?.diferenciais ?? [];
   const hasDiferencial = (tag: string) =>
     diferenciais.some((diff) => diff.tag === tag);
 
-  const badges: Badge[] = [
-    { text: "Vistoriado e aprovado", variant: "success", icon: true },
-    { text: "Retire hoje", variant: "purple" },
-    ...(hasDiferencial("garantia_fabrica")
-      ? [{ text: "Garantia de Fábrica", variant: "blue" as const }]
-      : []),
-    ...(hasDiferencial("baixa_km")
-      ? [{ text: "Baixa KM", variant: "blue-dark" as const }]
-      : []),
-    ...(hasDiferencial("unico_dono")
-      ? [{ text: "Único Dono", variant: "green-dark" as const }]
-      : []),
-  ];
+  const badges: Badge[] = isSold
+    ? []
+    : [
+        { text: "Vistoriado e aprovado", variant: "success", icon: true },
+        { text: "Retire hoje", variant: "purple" },
+        ...(hasDiferencial("garantia_fabrica")
+          ? [{ text: "Garantia de Fábrica", variant: "blue" as const }]
+          : []),
+        ...(hasDiferencial("baixa_km")
+          ? [{ text: "Baixa KM", variant: "blue-dark" as const }]
+          : []),
+        ...(hasDiferencial("unico_dono")
+          ? [{ text: "Único Dono", variant: "green-dark" as const }]
+          : []),
+      ];
 
   return (
     <main className="overflow-x-hidden max-w-full pb-36 md:pb-0">
@@ -1390,7 +1724,7 @@ export function DetalhesPage() {
           images={images}
           price={vehicle.price || 0}
           placa={vehicle.placa}
-          isSold={!vehicle.price || vehicle.price <= 0}
+          isSold={isSold}
         />
       )}
       {/* Hero Section */}
@@ -1406,7 +1740,17 @@ export function DetalhesPage() {
               transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
               className="w-full h-[300px] sm:h-[400px] flex items-center justify-center bg-gray-50 relative overflow-visible"
             >
-              {SHOW_CAMPAIGN_STAMP && (
+              {isSold && (
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
+                >
+                  <span className="-rotate-[18deg] rounded-2xl border-[7px] border-[#E10600]/70 bg-white/40 px-8 py-3 text-5xl font-black uppercase tracking-[0.1em] text-[#E10600]/80 shadow-[0_10px_32px_rgba(0,0,0,0.14)] sm:rounded-[1.25rem] sm:border-[8px] sm:px-10 sm:py-4 sm:text-6xl">
+                    Vendido
+                  </span>
+                </div>
+              )}
+              {SHOW_CAMPAIGN_STAMP && !isSold && (
                 <img
                   src="/selos/selo_campanha.png"
                   alt="Selo de campanha"
@@ -1416,7 +1760,7 @@ export function DetalhesPage() {
               <img
                 src={mainImage}
                 alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Frente - Netcar Multimarcas`}
-                className="w-full h-full max-w-full object-contain"
+                className={`w-full h-full max-w-full object-contain ${isSold ? "grayscale-[0.25]" : ""}`}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
@@ -1474,11 +1818,13 @@ export function DetalhesPage() {
             </motion.h1>
 
             {/* Badges */}
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">
-              {badges.map((badge, idx) => (
-                <Badge key={idx} {...badge} />
-              ))}
-            </div>
+            {badges.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">
+                {badges.map((badge, idx) => (
+                  <Badge key={idx} {...badge} />
+                ))}
+              </div>
+            )}
 
             {/* Details Grid - Melhorado */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-border/60">
@@ -1526,15 +1872,29 @@ export function DetalhesPage() {
 
             {/* Price & CTA - Melhorado */}
             <div className="flex flex-col items-center gap-3 w-full">
-              <div className="w-full flex justify-center items-center">
-                <PriceWithShimmer
-                  price={price}
-                  previousPrice={previousPrice}
-                  showComparison={showPriceComparison}
-                />
-              </div>
+              {!isSold && (
+                <div className="w-full flex justify-center items-center">
+                  <PriceWithShimmer
+                    price={price}
+                    previousPrice={previousPrice}
+                    showComparison={showPriceComparison}
+                  />
+                </div>
+              )}
               <div className="w-full">
-                <ContactButton modeloCompleto={modeloCompleto} vehicleId={vehicle?.id} />
+                <ContactButton
+                  modeloCompleto={modeloCompleto}
+                  vehicleId={vehicle?.id}
+                  isSold={isSold}
+                  vehicleLabel={vehicleLabel}
+                />
+                {!isSold && (
+                  <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">
+                    Compare condições em diversos bancos e financeiras parceiras
+                    para buscar a melhor opção disponível para seu perfil.
+                    Sujeito à análise.
+                  </p>
+                )}
               </div>
             </div>
           </motion.div>
@@ -1556,7 +1916,17 @@ export function DetalhesPage() {
         >
           {mainImage && (
             <div className="w-full h-full flex items-start justify-center overflow-visible relative">
-              {SHOW_CAMPAIGN_STAMP && (
+              {isSold && (
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
+                >
+                  <span className="-rotate-[18deg] rounded-[1.75rem] border-[10px] border-[#E10600]/70 bg-white/40 px-14 py-5 text-7xl font-black uppercase tracking-[0.12em] text-[#E10600]/80 shadow-[0_16px_48px_rgba(0,0,0,0.16)] xl:border-[12px] xl:px-16 xl:py-6 xl:text-8xl 2xl:border-[14px] 2xl:px-20 2xl:py-7 2xl:text-9xl">
+                    Vendido
+                  </span>
+                </div>
+              )}
+              {SHOW_CAMPAIGN_STAMP && !isSold && (
                 <img
                   src="/selos/selo_campanha.png"
                   alt="Selo de campanha"
@@ -1571,7 +1941,7 @@ export function DetalhesPage() {
               <img
                 src={mainImage}
                 alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Frente - Netcar Multimarcas`}
-                className="w-full h-auto object-contain"
+                className={`w-full h-auto object-contain ${isSold ? "grayscale-[0.25]" : ""}`}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
@@ -1615,7 +1985,11 @@ export function DetalhesPage() {
       )}
 
       {/* Details Section */}
-      <DetailsSection vehicle={vehicle} anuncio={anuncio || null} />
+      <DetailsSection
+        vehicle={vehicle}
+        anuncio={anuncio || null}
+        isSold={isSold}
+      />
 
       {/* Fábrica de Valor Section */}
       <section className="w-full pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16 bg-surface">
@@ -1629,6 +2003,10 @@ export function DetalhesPage() {
         currentVehicleId={String(vehicle.id)} 
         currentCategory={vehicle.categoria}
         currentPrice={vehicle.price}
+        currentMarca={vehicle.marca}
+        currentYear={vehicle.year}
+        currentModelo={vehicle.modelo || vehicle.name}
+        isSold={isSold}
       />
 
       {/* Social Embeds Section (deve ser a última sessão) */}
@@ -1643,6 +2021,8 @@ export function DetalhesPage() {
         price={price}
         modeloCompleto={modeloCompleto}
         vehicleId={vehicle.id}
+        isSold={isSold}
+        vehicleLabel={vehicleLabel}
       />
     </main>
   );
@@ -1651,9 +2031,10 @@ export function DetalhesPage() {
 interface DetailsSectionProps {
   vehicle: any;
   anuncio?: string | null;
+  isSold?: boolean;
 }
 
-function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
+function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProps) {
   const [showMoreOptionals, setShowMoreOptionals] = useState(false);
 
   const marca = vehicle.marca || vehicle.name?.split(" ")[0] || "";
@@ -2009,7 +2390,11 @@ function DetailsSection({ vehicle, anuncio }: DetailsSectionProps) {
 
           {/* Sticky Sidebar - ordem invertida no mobile */}
           <div className="order-2 lg:order-2 lg:sticky lg:top-8 lg:self-start">
-            <CTASidebar vehicle={vehicle} modeloCompleto={modeloCompleto} />
+            <CTASidebar
+              vehicle={vehicle}
+              modeloCompleto={modeloCompleto}
+              isSold={isSold}
+            />
           </div>
         </div>
       </div>

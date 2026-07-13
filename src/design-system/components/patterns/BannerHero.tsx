@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { Banner } from "@/catalog/endpoints/site";
 import { optimizeStockImage } from "@/lib/images";
 
@@ -30,14 +30,6 @@ export function BannerHero({ banners }: BannerHeroProps) {
     setCurrentIndex((prev) => (prev - 1 + banners.length) % banners.length);
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setDirection(1);
-      setCurrentIndex((prev) => (prev + 1) % banners.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [currentIndex, banners.length]);
-
   const slideVariants = {
     enter: (direction: number) => ({
       x: direction > 0 ? "100%" : "-100%",
@@ -60,6 +52,8 @@ export function BannerHero({ banners }: BannerHeroProps) {
       <img
         src={optimizeStockImage(currentBanner.imagem, 1920)}
         alt={currentBanner.titulo || "Banner"}
+        width={1920}
+        height={823}
         className="w-full h-auto md:h-full object-contain md:object-cover object-center"
         loading={currentIndex === 0 ? "eager" : "lazy"}
         {...(currentIndex === 0 && { fetchPriority: "high" })}
@@ -76,9 +70,9 @@ export function BannerHero({ banners }: BannerHeroProps) {
   );
 
   return (
-    <div className="relative w-full bg-[#F6F6F6] overflow-hidden max-w-full pt-16 md:pt-0 md:aspect-[21/9] z-0">
+    <div className="relative w-full bg-[#F6F6F6] overflow-hidden max-w-full pt-16 md:pt-0 z-0">
       {/* Máscara em desktop: altura fixa proporcional (21:9). No mobile a altura acompanha a imagem inteira. */}
-      <div className="relative w-full h-full overflow-hidden bg-gray-200 md:absolute md:inset-0">
+      <div className="relative aspect-[21/9] w-full overflow-hidden bg-gray-200">
         <AnimatePresence mode="popLayout" initial={false} custom={direction}>
           <motion.div
             key={currentBanner.id}

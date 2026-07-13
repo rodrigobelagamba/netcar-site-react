@@ -20,6 +20,7 @@ const SITE_URL = "https://www.netcarmultimarcas.com.br";
 const STATIC_PAGES = [
   { loc: "/", changefreq: "daily", priority: "1.0" },
   { loc: "/seminovos", changefreq: "daily", priority: "0.9" },
+  { loc: "/regioes-atendidas", changefreq: "monthly", priority: "0.85" },
   { loc: "/sobre", changefreq: "monthly", priority: "0.8" },
   { loc: "/contato", changefreq: "monthly", priority: "0.8" },
   { loc: "/compra", changefreq: "monthly", priority: "0.7" },
@@ -62,6 +63,9 @@ function parseSitemapLastmods(xml) {
 
 async function main() {
   console.log("Gerando sitemap.xml...");
+  const cities = JSON.parse(
+    readFileSync(join(rootDir, "src", "data", "seo", "cities.json"), "utf-8")
+  );
 
   let vehicleUrls = [];
   try {
@@ -88,6 +92,14 @@ async function main() {
     entries.push(buildUrlEntry(loc, page.changefreq, page.priority, lastmod));
   }
 
+  for (const city of cities) {
+    for (const path of [`/seminovos-${city.slug}`, `/vender-carro-${city.slug}`]) {
+      const loc = `${SITE_URL}${path}`;
+      const lastmod = previousLastmods.get(loc) ?? today;
+      entries.push(buildUrlEntry(loc, "weekly", "0.8", lastmod));
+    }
+  }
+
   for (const vehicle of vehicleUrls) {
     const loc = vehicle.loc;
     const lastmod = previousLastmods.get(loc) ?? today;
@@ -104,7 +116,7 @@ async function main() {
 
   const wrote = writeTextFile(outputPath, xml);
   console.log(
-    `  ${wrote ? "Salvo" : "Sem alterações"} em ${outputPath} (${STATIC_PAGES.length + vehicleUrls.length} URLs)`
+    `  ${wrote ? "Salvo" : "Sem alterações"} em ${outputPath} (${STATIC_PAGES.length + cities.length * 2 + vehicleUrls.length} URLs)`
   );
 }
 

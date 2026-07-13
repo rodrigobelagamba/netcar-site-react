@@ -4,6 +4,7 @@ Allow: /
 Disallow: /admin/
 Disallow: /sistema/
 Disallow: /api/
+Disallow: /backend/
 Disallow: /seminovos?*
 Disallow: /detalhe-produto-*
 

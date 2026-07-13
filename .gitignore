@@ -4,6 +4,9 @@ node_modules/
 # Build output
 dist/
 
+# Estado local do painel devops (último deploy registrado)
+.devops/
+
 # Environment variables (não versionar — copie de .env.example)
 .env
 .env.local
@@ -19,6 +22,7 @@ public/netcar-config.php
 # Gerado no build (generate-landings / generate-seo-assets / generate-sitemap)
 public/seo-static/
 public/sitemap.xml
+public/feeds/*
 src/data/seo/landings.json
 
 # Social sync — credenciais e tokens (KingHost)

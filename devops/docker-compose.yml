@@ -1,0 +1,35 @@
+services:
+  devops:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: netcar-devops
+    ports:
+      - "${DEVOPS_PORT:-3090}:3090"
+    restart: unless-stopped
+    env_file:
+      - ${DEVOPS_ENV_FILE:-/opt/netcar-secrets/devops.env}
+    environment:
+      WORKSPACE_ROOT: /workspace
+      PORT: "3090"
+      NODE_ENV: production
+    volumes:
+      # Clone do monorepo site-react
+      - ${SITE_REPO_PATH:?set SITE_REPO_PATH}:/workspace
+      # Secrets do site (nunca na image)
+      - ${SECRETS_DIR:-/opt/netcar-secrets}/.env.local:/workspace/.env.local:ro
+      - ${SECRETS_DIR:-/opt/netcar-secrets}/.env.production:/workspace/.env.production:ro
+      - ${SECRETS_DIR:-/opt/netcar-secrets}/social-config.php:/workspace/docs/social/social-config.php:ro
+      - ${SECRETS_DIR:-/opt/netcar-secrets}/id_ed25519:/root/.ssh/id_ed25519:ro
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3090/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s

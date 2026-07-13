@@ -108,7 +108,7 @@ export function SeminovosWhatsAppHelpPanel({
               className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/10 px-3 py-2.5 text-xs font-bold text-white transition-colors hover:bg-white/16"
             >
               <Bot className="h-3.5 w-3.5" />
-              Falar com a IA
+              Falar com o iAN
             </a>
           </div>
         </div>

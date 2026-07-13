@@ -366,41 +366,38 @@ export function Header() {
   return (
     <>
       <header 
-        className={`fixed top-0 left-0 right-0 overflow-x-hidden max-w-full ${isMobileMenuOpen ? 'z-[75]' : 'z-50'}`}
+        className={`fixed top-0 left-0 right-0 overflow-x-hidden max-w-full isolate ${isMobileMenuOpen ? 'z-[75]' : 'z-50'}`}
       >
-        {/* Fundo que aparece de cima para baixo */}
+        {/* Fundo branco ao scroll — opacity (não clipPath): Safari iOS fantasma/duplicava o logo */}
         <motion.div
-          className="absolute inset-0 bg-white"
-          initial={{ 
-            clipPath: "inset(0% 0% 100% 0%)",
-            boxShadow: "none",
-          }}
+          className="pointer-events-none absolute inset-0 bg-white"
+          initial={false}
           animate={{
-            clipPath: isMobileMenuOpen
-              ? "inset(0% 0% 100% 0%)"
-              : isScrolled
-              ? "inset(0% 0% 0% 0%)"
-              : "inset(0% 0% 100% 0%)",
+            opacity: isMobileMenuOpen ? 0 : isScrolled ? 1 : 0,
             boxShadow: isMobileMenuOpen
               ? "none"
-              : isScrolled 
-              ? "0 0 30px rgba(0,0,0,.35)" 
+              : isScrolled
+              ? "0 0 30px rgba(0,0,0,.35)"
               : "none",
           }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
         />
 
         <div className="container mx-auto relative flex h-16 items-center justify-between px-4">
-          {/* Espaçador à esquerda para balancear */}
-          <div className="hidden md:block flex-1"></div>
-
-          {/* Logo e Menu centralizados juntos - Desktop */}
-          <div className="hidden md:flex items-center gap-8 flex-1 justify-center">
+          {/* Logo único + nav desktop (centrado no md+) */}
+          <div className="relative z-10 flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:gap-8">
             <Link to="/" aria-label="Netcar - Página inicial" className="flex-shrink-0">
-              <img src={logoNetcar} alt="Netcar Multimarcas" className="h-8 w-auto" />
+              <img
+                src={logoNetcar}
+                alt="Netcar Multimarcas"
+                className="h-8 w-auto"
+                width={149}
+                height={38}
+                decoding="async"
+              />
             </Link>
 
-            <nav className="flex items-center gap-6 flex-shrink-0" aria-label="Menu principal">
+            <nav className="hidden md:flex items-center gap-6 flex-shrink-0" aria-label="Menu principal">
               {menuLinks.map((link) => {
                 const linkClassName = "group relative text-[14px]  text-fg overflow-hidden h-[22px] flex items-center whitespace-nowrap";
                 
@@ -418,7 +415,7 @@ export function Header() {
                         {link.label}
                       </span>
                       {/* Texto que sobe no hover */}
-                      <span className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                      <span aria-hidden="true" className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
                         {link.label}
                       </span>
                     </a>
@@ -436,7 +433,7 @@ export function Header() {
                       {link.label}
                     </span>
                     {/* Texto que sobe no hover */}
-                    <span className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                    <span aria-hidden="true" className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
                       {link.label}
                     </span>
                   </Link>
@@ -445,13 +442,11 @@ export function Header() {
             </nav>
           </div>
 
-          {/* Logo - Mobile */}
-          <Link to="/" aria-label="Netcar - Página inicial" className="md:hidden">
-            <img src={logoNetcar} alt="Netcar Multimarcas" className="h-8 w-auto" />
-          </Link>
+          {/* Empurra ações desktop para a direita */}
+          <div className="hidden md:block flex-1" aria-hidden="true" />
 
           {/* Botões à direita - Desktop */}
-          <div className="hidden md:flex items-center gap-4 flex-1 justify-end">
+          <div className="relative z-10 hidden md:flex items-center gap-4">
             {/* Campo de Busca */}
             <AnimatePresence>
               {isSearchOpen ? (
@@ -506,8 +501,9 @@ export function Header() {
                 rel="noopener noreferrer"
                 data-wa-source="header"
                 data-wa-intent="header_contact"
+                className="inline-flex items-center gap-2 hover:text-primary transition-colors"
               >
-                <Phone className="w-4 h-4" />
+                <Phone className="w-4 h-4 shrink-0" />
                 <span>{formatPhone(whatsapp.numero)}</span>
               </a>
             )}
@@ -655,8 +651,9 @@ export function Header() {
                       data-wa-source="header"
                       data-wa-intent="mobile_menu_contact"
                       onClick={() => setIsMobileMenuOpen(false)}
+                      className="inline-flex items-center gap-2"
                     >
-                      <Phone className="w-5 h-5" />
+                      <Phone className="w-5 h-5 shrink-0" />
                       <span>{formatPhone(whatsapp.numero)}</span>
                     </a>
                   </motion.div>

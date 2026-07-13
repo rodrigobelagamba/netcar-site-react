@@ -2,25 +2,25 @@
   {
     "slug": "financiamento",
     "title": "Financiamento de seminovos em Esteio/RS | Netcar Multimarcas",
-    "description": "Financie seu seminovo na Netcar, em Esteio/RS: entrada a partir de 20%, em até 60x, com as melhores taxas do mercado e aprovação rápida pelo WhatsApp. Aceitamos seu usado na troca.",
+    "description": "Compare condições de financiamento para seminovos em diversos bancos e financeiras parceiras da Netcar, em Esteio/RS. Opções sujeitas à análise de crédito.",
     "h1": "Financiamento de seminovos em Esteio/RS",
-    "intro": "Na Netcar você financia seu seminovo com condições reais: entrada a partir de 20% a 30%, parcelas em até 60x e taxas competitivas com bancos e financeiras parceiras. Simule pelo WhatsApp com o iAN e receba resposta antes mesmo de ir à loja.",
-    "waText": "quero simular o financiamento de um seminovo.",
-    "ctaLabel": "Simular financiamento no WhatsApp",
+    "intro": "Na Netcar você compara condições de financiamento em diversos bancos e financeiras parceiras para buscar a melhor opção disponível para seu perfil. Simule pelo WhatsApp com o iAN antes de ir à loja. Todas as condições dependem da análise de crédito.",
+    "waText": "quero simular o financiamento de um seminovo e comparar condições entre os bancos e financeiras parceiras.",
+    "ctaLabel": "Comparar financiamento no WhatsApp",
     "secondLabel": "Ver estoque",
     "secondHref": "/seminovos",
     "sections": [
       { "type": "h2", "text": "Entrada a partir de 20% a 30%" },
       { "type": "p", "text": "Uma entrada entre 20% e 30% do valor do carro reduz a parcela e melhora as condições de aprovação. Quanto maior a entrada, menores os juros totais — e o valor do seu usado na troca pode compor essa entrada." },
-      { "type": "h2", "text": "As melhores taxas do mercado" },
-      { "type": "p", "text": "Trabalhamos com vários bancos e financeiras ao mesmo tempo. Isso significa que buscamos a melhor taxa disponível para o seu perfil, em vez de depender de uma única instituição. Você compara e escolhe a proposta que cabe no bolso." },
+      { "type": "h2", "text": "Diversos bancos, condições comparadas" },
+      { "type": "p", "text": "Consultamos bancos e financeiras parceiras para buscar a melhor taxa disponível para o seu perfil, em vez de depender de uma única instituição. Você compara as propostas aprovadas e escolhe a opção que cabe no seu orçamento." },
       { "type": "h2", "text": "Aceitamos seu usado na troca" },
       { "type": "p", "text": "Tem carro para dar na troca? O valor entra como parte da entrada e pode reduzir — ou eliminar — o desembolso inicial. Aceitamos inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo." },
       { "type": "h2", "text": "Como simular" },
       { "type": "ol", "items": [
         "Escolha o seminovo no estoque online ou com ajuda do consultor",
         "Envie RG, CPF, comprovante de renda e de endereço pelo WhatsApp",
-        "Receba a simulação com as melhores taxas das financeiras parceiras",
+        "Receba e compare as condições aprovadas pelos bancos e financeiras parceiras",
         "Aprovou? Retire o carro na loja em Esteio"
       ] },
       { "type": "h2", "text": "Financiamento para autônomo e nome restrito" },
@@ -29,7 +29,7 @@
     "faq": [
       { "q": "Qual a entrada mínima para financiar?", "a": "Em geral, entre 20% e 30% do valor do veículo. O percentual exato depende do seu perfil de crédito e do banco; o valor do seu usado na troca pode compor essa entrada." },
       { "q": "Em quantas vezes posso financiar?", "a": "Em até 60x, conforme aprovação. Prazos mais longos reduzem a parcela mas aumentam o custo total — simule para encontrar o equilíbrio." },
-      { "q": "Vocês conseguem a melhor taxa?", "a": "Buscamos entre vários bancos e financeiras parceiras ao mesmo tempo, comparando para oferecer a melhor taxa disponível para o seu perfil." },
+      { "q": "Como vocês buscam uma boa taxa?", "a": "Consultamos diversos bancos e financeiras parceiras e comparamos as condições aprovadas para buscar a melhor opção disponível para o seu perfil." },
       { "q": "Posso usar meu carro como entrada?", "a": "Sim. Avaliamos seu usado e o valor entra na negociação, inclusive se ainda estiver financiado, mediante quitação do saldo." }
     ]
   },

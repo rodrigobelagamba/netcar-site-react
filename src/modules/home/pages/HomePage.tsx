@@ -8,6 +8,7 @@ import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/H
 import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { HomeWhatsAppConversionPanel } from "../components/HomeWhatsAppConversionPanel";
+import { HomePurchaseBenefits } from "../components/HomePurchaseBenefits";
 import { HomeMobileWhatsAppBar } from "../components/HomeMobileWhatsAppBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
@@ -26,7 +27,7 @@ const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 
 function HomeHeroSkeleton() {
   return (
-      <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
+    <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">
         <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
           <div className="flex items-center gap-3">
@@ -89,7 +90,8 @@ export function HomePage() {
 
   useDefaultMetaTags(
     "Seminovos em Esteio/RS",
-    "Loja de seminovos em Esteio/RS. 2 lojas na Av. Presidente Vargas. Garantia, Fábrica de Valor e Nethelp. Financiamento facilitado."
+    "Loja de seminovos em Esteio/RS. 2 lojas na Av. Presidente Vargas. Garantia, Fábrica de Valor e Nethelp. Financiamento facilitado.",
+    { canonicalPath: "/" }
   );
 
   const featuredVehicle = useMemo(
@@ -251,7 +253,7 @@ export function HomePage() {
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-fg">Destaques do estoque</h2>
           <p className="mt-2 max-w-2xl text-gray-600 text-base md:text-lg font-medium">
-            Troca aceita, financiamento facilitado e atendimento 24h no WhatsApp.
+            Financiamento em até 60x, cartão em até 21x, troca avaliada e documentação com despachante. Atendimento 24h no WhatsApp.
           </p>
         </div>
         <ProductList
@@ -272,6 +274,8 @@ export function HomePage() {
       </section>
 
       <ServicesSection />
+
+      <HomePurchaseBenefits />
 
       <DNASection />
 

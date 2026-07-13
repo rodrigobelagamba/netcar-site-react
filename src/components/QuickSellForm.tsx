@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Banknote } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { buildWhatsAppUrl, quickSellWhatsAppMessage } from "@/lib/whatsappMessages";
-import { openWhatsApp } from "@/lib/analytics";
+import { openWhatsApp, trackSellEvaluation } from "@/lib/analytics";
 
 interface QuickSellFormProps {
   /** Cidade de origem do lead, quando a página é uma landing de cidade */
@@ -19,6 +19,13 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
   const [modelo, setModelo] = useState("");
   const [ano, setAno] = useState("");
   const [km, setKm] = useState("");
+  const startedRef = useRef(false);
+
+  const trackStart = () => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    trackSellEvaluation("start", cityName);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +38,7 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
       cityName,
     });
     const url = buildWhatsAppUrl(whatsapp.numero, message);
+    trackSellEvaluation("completed", cityName);
     openWhatsApp(url, { source: "form", intent: "sell_evaluation", pagePath: window.location.pathname });
   };
 
@@ -43,6 +51,7 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       onSubmit={handleSubmit}
+      onFocusCapture={trackStart}
       className="rounded-2xl bg-white p-6 shadow-md border border-gray-100"
     >
       <div className="flex items-center gap-3 mb-1">

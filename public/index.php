@@ -113,15 +113,23 @@ if ($isHome) {
     <p>
       Loja de seminovos em Esteio desde 1997. Carros vistoriados, garantia, financiamento em até 60x
       e compra de usados — mesmo financiados. Duas lojas na Av. Presidente Vargas.
-      Atendemos Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Novo Hamburgo, Gravataí,
-      Cachoeirinha, Porto Alegre e região metropolitana.
+      Atendimento regional para Grande Porto Alegre, Vale do Paranhana e Serra Gaúcha.
+      Lojas físicas somente em Esteio; consulta de estoque e pré-avaliação podem começar online.
     </p>
     <nav aria-label="Navegação principal">
       <a href="/seminovos">Ver seminovos</a>
+      <a href="/regioes-atendidas">Regiões atendidas</a>
       <a href="/compra">Vender ou trocar meu carro</a>
       <a href="/sobre">Sobre a Netcar</a>
       <a href="/contato">Contato</a>
       <a href="/blog">Blog</a>
+    </nav>
+    <nav aria-label="Seminovos por cidade">
+      <a href="/seminovos-taquara">Taquara</a>
+      <a href="/seminovos-igrejinha">Igrejinha</a>
+      <a href="/seminovos-gramado">Gramado</a>
+      <a href="/seminovos-caxias-do-sul">Caxias do Sul</a>
+      <a href="/seminovos-bento-goncalves">Bento Gonçalves</a>
     </nav>
   </main>
 </div>

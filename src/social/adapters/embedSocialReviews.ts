@@ -255,17 +255,16 @@ export async function fetchEmbedSocialReviewsPage(
     if (bridge.ok) {
       const data = await parseJsonResponse<GoogleReviewsResponse>(bridge);
       if (data?.success && data.reviews?.length) {
+        const reviews = data.reviews.slice(0, REVIEWS_PAGINATION.pageSize);
         return {
           ...data,
+          reviews,
           pagination: {
             page: data.pagination?.page ?? page,
-            pageSize: data.pagination?.pageSize ?? REVIEWS_PAGINATION.pageSize,
+            pageSize: REVIEWS_PAGINATION.pageSize,
             totalCount:
-              data.pagination?.totalCount ?? data.summary?.totalCount ?? data.reviews.length,
-            hasMore:
-              data.pagination?.hasMore ??
-              data.reviews.length <
-                (data.pagination?.totalCount ?? data.summary?.totalCount ?? data.reviews.length),
+              data.pagination?.totalCount ?? data.summary?.totalCount ?? reviews.length,
+            hasMore: false,
             widgetId: data.pagination?.widgetId ?? resolvedWidgetId,
           },
         };
@@ -282,17 +281,19 @@ export async function fetchEmbedSocialReviewsPage(
   const widget = html ? extractWindowJson<EmbedSocialWidget>(html, "widget") : null;
 
   const totalCount = payload.totalNumMedias ?? payload.media.length;
-  const loadedCount = page * REVIEWS_PAGINATION.pageSize;
+  const reviews = payload.media
+    .map(mapEmbedSocialReviewItem)
+    .slice(0, REVIEWS_PAGINATION.pageSize);
 
   return {
     success: true,
     stale: false,
     syncedAt: new Date().toISOString(),
     summary: buildSummary(widget, payload.media, totalCount),
-    reviews: payload.media.map(mapEmbedSocialReviewItem),
+    reviews,
     pagination: buildPagination(
       page,
-      Math.min(loadedCount, totalCount),
+      reviews.length,
       totalCount,
       resolvedWidgetId
     ),

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { CANONICAL_ORIGIN, canonicalUrl } from "@/lib/seo";
 
 interface MetaTagsProps {
   title?: string;
@@ -41,13 +42,13 @@ export function useMetaTags({
   robots,
 }: MetaTagsProps) {
   useEffect(() => {
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    // Se url não for passada, usa URL amigável (origin + pathname) para compartilhamento correto (ex.: Android)
+    const baseUrl = CANONICAL_ORIGIN;
+    // Canonical/og:url sempre no host www — nunca window.location.origin
     const currentUrl =
       url ||
       (typeof window !== "undefined"
-        ? `${window.location.origin}${window.location.pathname}`
-        : "");
+        ? canonicalUrl(window.location.pathname)
+        : CANONICAL_ORIGIN);
     const defaultTitle = "Netcar Multimarcas";
     const defaultDescription =
       "Netcar Multimarcas - Seminovos com procedência e qualidade. Desde 1997 oferecendo os melhores veículos em Esteio/RS.";
