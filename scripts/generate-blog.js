@@ -70,6 +70,10 @@ const TOPIC_BLOCKLIST = new Set([
   "seminovo-ate-100-mil-esteio-2026",
   "carro-aplicativo-grande-poa-2026",
   "picape-seminova-regiao-metropolitana-2026",
+  // Manual âncora híbrido — auto usa slug próprio; este bloqueia colisão de intenção se slug coincidir
+  "seminovo-hibrido-vale-a-pena-esteio",
+  "seminovo-hibrido-esteio-2026",
+  "mobilidade-urbana-seminovo-grande-poa",
 ]);
 
 function readTopicBlocklist() {
@@ -470,6 +474,7 @@ function buildPool(stock) {
   pushTema(pool, temaUso(stock, p++, "baixa-km", "seminovo baixa km esteio"));
   pushTema(pool, temaUso(stock, p++, "cidade", "hatch seminovo cidade esteio"));
   pushTema(pool, temaUso(stock, p++, "viagem", "seminovo para viagem serra rs"));
+  // Híbrido: intenção coberta pelo manual seminovo-hibrido-vale-a-pena-esteio (anti-overlap)
 
   for (const [name] of stock.marcas.slice(1)) {
     pool.push(temaMarca(name, stock, p++));

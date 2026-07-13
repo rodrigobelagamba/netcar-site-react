@@ -23,15 +23,59 @@ export const FORMAT_IDS = [
 ];
 
 const URGENCIA = [
-  "Estoque rotativo: o que está na vitrine hoje pode sair amanhã. Se algum chamou atenção, confirme disponibilidade antes de vir.",
-  "Carro bem preparado e bem precificado não fica parado. Quando bater o olho no certo, vale reservar o test drive.",
+  "Estoque rotativo: se algum exemplar chamou atenção, confirme disponibilidade antes de montar a visita.",
+  "Carro bem preparado e bem precificado gira rápido. Quando achar o encaixe certo, vale reservar o test drive.",
 ];
 
-const AUTORIDADE =
-  "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine.";
+const AUTORIDADE_LINES = [
+  "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine.",
+  "Desde 1997 em Esteio, a Netcar prepara seminovos com processo próprio (Fábrica de Valor) antes de ir pra vitrine.",
+];
+
+const SOFT_SELL_CLOSE = [
+  "Monte a shortlist no estoque, escolha duas ou três fichas e fale com o consultor pra agendar a visita.",
+  "Quando a lista estiver curta, o próximo passo é simples: abrir o estoque e confirmar disponibilidade.",
+  "Com o perfil alinhado, vale olhar as opções reais no pátio e marcar test drive sem pressa.",
+  "Filtre no site, compare os exemplares e chame no WhatsApp só com a shortlist na mão.",
+];
+
+const VISIT_TIPS = [
+  "No test drive, varie rua e velocidade: partida a frio, retomada e freio em descida.",
+  "Na visita, confira histórico de revisão, estado de pneus e se a documentação fecha com a ficha.",
+  "Leve a shortlist impressa ou no celular — facilita comparar versão, km e equipamentos lado a lado.",
+  "Pergunte sobre preparação e laudo do exemplar. Carro revisado encurta a decisão.",
+];
+
+const PRAISE_BY_KIND = {
+  marca: (label) =>
+    `${label} costuma agradar quem busca peça acessível, revenda previsível e opções claras de versão no mercado regional.`,
+  categoria: (label) =>
+    `${label} seminovo acerta quando o uso diário pede esse porte — conforto certo sem pagar o que você não vai usar.`,
+  modelo: (label) =>
+    `${label} entra fácil na shortlist: demanda regional boa, peças conhecidas e perfil que funciona no dia a dia do RS.`,
+  faixa: (label) =>
+    `Nessa faixa até ${label}, dá pra montar um pacote equilibrado: carro preparado, custo previsível e margem pra seguro e manutenção.`,
+  uso: () =>
+    "Quando o uso está claro, o carro certo aparece mais rápido — e a visita rende em vez de virar passeio sem fim.",
+  regional: (region) =>
+    `Quem pesquisa em ${region} ganha tempo filtrando estoque real em Esteio e chegando com shortlist — menos deslocamento à toa.`,
+  hibrido: () =>
+    "Híbrido seminovo faz sentido pra quem roda muito em cidade: resposta suave, consumo mais eficiente no trânsito e tecnologia que valoriza o pacote.",
+};
 
 function makePick(hashStr) {
   return (arr, seed) => arr[hashStr(seed) % arr.length];
+}
+
+/** Hash FNV-1a local (quando o gerador não passa hashStr). */
+function defaultHashStr(s) {
+  let h = 2166136261;
+  const str = String(s);
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
 }
 
 function carsBlock(cars, h2, lead) {
@@ -42,14 +86,27 @@ function carsBlock(cars, h2, lead) {
   return out;
 }
 
-function financeBlock(seed, hashStr) {
+/** Autoridade no máx. 1x e só em metade dos posts (anti-spam). */
+function maybeAutoridade(slug, hashStr) {
+  if (hashStr(slug + ":auth") % 2 !== 0) return [];
+  const pick = makePick(hashStr);
+  return [P(pick(AUTORIDADE_LINES, slug + "auth"))];
+}
+
+/**
+ * Bloco financeiro só em formatos de compra que pedem conta
+ * (evita o mesmo checklist em todo post).
+ */
+function maybeFinanceBlock(slug, hashStr, allowed) {
+  if (!allowed) return [];
+  if (hashStr(slug + ":fin") % 3 !== 0) return [];
   const pick = makePick(hashStr);
   const lead = pick(
     [
       "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:",
       "Pra fechar a conta antes de ir à loja:",
     ],
-    seed + "fin"
+    slug + "fin"
   );
   return [
     H2("Financiamento: como fica na prática"),
@@ -63,6 +120,23 @@ function financeBlock(seed, hashStr) {
     ]),
     P("Mediante análise de crédito."),
   ];
+}
+
+function softClose(slug, hashStr, extra) {
+  const pick = makePick(hashStr);
+  const base = pick(SOFT_SELL_CLOSE, slug + "close");
+  return P(extra ? `${extra} ${base}` : base);
+}
+
+function visitTip(slug, hashStr) {
+  const pick = makePick(hashStr);
+  return P(pick(VISIT_TIPS, slug + "visit"));
+}
+
+function praise(kind, label, slug, hashStr) {
+  const fn = PRAISE_BY_KIND[kind] || PRAISE_BY_KIND.uso;
+  const line = typeof fn === "function" ? fn(label) : fn;
+  return P(line);
 }
 
 /** Contexto comum a todos os formatos */
@@ -85,8 +159,9 @@ function baseCtx(raw) {
 // ---- Marca / categoria: 8 formatos distintos ----
 
 function formatGuia(ctx) {
-  const { label, slug, cars, stock, brl, pick: p } = ctx;
+  const { label, kind, slug, cars, stock, brl, pick: p, hashStr } = ctx;
   const ll = label.toLowerCase();
+  const praiseKind = kind === "categoria" ? "categoria" : "marca";
   return {
     title: p(
       [
@@ -95,14 +170,14 @@ function formatGuia(ctx) {
       ],
       slug + "t"
     ),
-    description: `Do primeiro contato ao test drive: o que verificar num ${ll} seminovo, quanto custa e quais ${label} estão no estoque da Netcar agora.`,
+    description: `Do perfil de uso ao test drive: como escolher ${ll} seminovo com critério — e ver opções reais no estoque Netcar em Esteio.`,
     readMinutes: 7,
     sections: [
       P(
         p(
           [
-            `Comprar ${ll} seminovo sem plano é receita pra pagar caro ou levar problema escondido. Este guia segue a ordem que a gente usa na loja quando orienta cliente — do perfil de uso ao fechamento.`,
-            `Se ${label} está na sua lista, use este roteiro antes de ir a qualquer vitrine. Vale pra Esteio e região metropolitana.`,
+            `Comprar ${ll} seminovo rende mais quando o perfil de uso vem antes do anúncio. Este roteiro é o que a gente usa na loja pra orientar cliente em Esteio e na Grande POA.`,
+            `Se ${label} está na sua lista, siga a ordem: uso → faixa → procedência → visita. Assim a shortlist fica objetiva.`,
           ],
           slug + "i"
         )
@@ -115,12 +190,13 @@ function formatGuia(ctx) {
       ]),
       H2("Passo 2 — Entenda a faixa de preço real"),
       P(
-        `Hoje, seminovos na Netcar vão de ${brl(stock.minPrice)} a ${brl(stock.maxPrice)}. ${label} costuma ficar na faixa intermediária — desconfie de preço muito abaixo do mercado sem laudo.`
+        `Hoje, seminovos na Netcar vão de ${brl(stock.minPrice)} a ${brl(stock.maxPrice)}. ${label} costuma aparecer em faixas intermediárias — o exemplar certo equilibra ano, km e versão.`
       ),
+      praise(praiseKind, label, slug, hashStr),
       H2("Passo 3 — Documentação e procedência"),
       UL([
-        "CRLV e CPF do vendedor batendo",
-        "Sem restrição, multa ou pendência oculta",
+        "CRLV e dados do vendedor batendo",
+        "Sem restrição ou pendência na transferência",
         "Histórico de donos coerente com a km",
       ]),
       ...carsBlock(
@@ -135,49 +211,48 @@ function formatGuia(ctx) {
         "Ruídos em buracos e curvas fechadas",
         "Painel, ar, vidros e central multimídia",
       ]),
-      P(AUTORIDADE),
-      ...financeBlock(slug, ctx.hashStr),
+      visitTip(slug, hashStr),
+      ...maybeAutoridade(slug, hashStr),
+      ...maybeFinanceBlock(slug, hashStr, true),
       H2("Resumo"),
-      P(
-        p(
-          [
-            `Bom ${ll} seminovo = procedência + revisão + preço coerente. Na Netcar você encurta o caminho — veja o estoque e agende test drive.`,
-            `Seguiu os passos? Falta só escolher o exemplar. Confira os ${label} disponíveis.`,
-          ],
-          slug + "f"
-        )
+      softClose(
+        slug,
+        hashStr,
+        `Bom ${ll} seminovo = procedência + revisão + preço coerente.`
       ),
     ],
   };
 }
 
 function formatMitos(ctx) {
-  const { label, slug, cars, pick: p } = ctx;
+  const { label, kind, slug, cars, pick: p, hashStr } = ctx;
   const ll = label.toLowerCase();
+  const praiseKind = kind === "categoria" ? "categoria" : "marca";
   return {
     title: `${label} seminovo: 5 mitos que fazem você errar na compra`,
-    description: `Verdade ou mito sobre ${ll} usado? Desmistificamos o que mais confunde compradores em Esteio — e mostramos ${label} reais no estoque.`,
+    description: `Verdade ou mito sobre ${ll} usado? Clareza pra decidir melhor em Esteio — com ${label} reais no estoque Netcar.`,
     readMinutes: 6,
     sections: [
       P(
-        `Tem conversa repetida na hora de comprar ${ll} usado — e muito mito vira decisão ruim. Separamos o que é papo de bar de o que é fato, com olhar de quem vê carro passar todo dia na loja.`
+        `Tem conversa repetida na hora de comprar ${ll} usado — e muito mito atrasa uma boa escolha. Separamos papo de bar de fato útil, com olhar de quem vê carro passar todo dia na loja.`
       ),
       H2('Mito 1: "Quanto mais barato, melhor o negócio"'),
       P(
-        "Preço baixo sem laudo e sem histórico é loteria. Economia na compra vira oficina depois. O custo total inclui procedência, revisão e revenda futura."
+        "Preço baixo sem laudo e sem histórico é loteria. Economia na compra pode virar oficina depois. O custo total inclui procedência, revisão e revenda futura."
       ),
       H2('Mito 2: "Se está bonito por fora, está tudo certo"'),
       P(
-        "Pintura nova pode esconder batida. Interior impecável não garante câmbio saudável. Por isso inspeção técnica pesa mais que brilho na vitrine."
+        "Acabamento impecável ajuda, mas não substitui inspeção. Por isso preparação técnica e test drive pesam mais que brilho na vitrine."
       ),
       H2('Mito 3: "Todo usado é igual — só muda o ano"'),
       P(
-        `Dois ${label} do mesmo ano podem ter históricos opostos: um revisado em concessionária, outro rodando sem manutenção. O exemplar importa tanto quanto o modelo.`
+        `Dois ${label} do mesmo ano podem ter históricos diferentes: um com revisão em dia, outro com uso mais intenso. O exemplar importa tanto quanto o modelo.`
       ),
+      praise(praiseKind, label, slug, hashStr),
       ...carsBlock(
         cars,
         "Na prática: estes exemplares no nosso pátio",
-        `Sem achismo — estes ${label} estão disponíveis com ficha e fotos reais:`
+        `Sem achismo — estes ${label} estão com ficha e fotos reais:`
       ),
       H2('Mito 4: "Financiar seminovo sempre sai caro demais"'),
       P(
@@ -185,18 +260,21 @@ function formatMitos(ctx) {
       ),
       H2('Mito 5: "Particular sempre sai mais barato que loja"'),
       P(
-        "Particular pode parecer mais barato, mas sem revisão, sem garantia e com burocracia sua. Revenda preparada entrega respaldo — e muitas vezes o custo-benefício final é melhor."
+        "Particular pode parecer mais barato na etiqueta. Revenda preparada entrega processo, documentação e caminho de financiamento/troca no mesmo lugar — muitas vezes o custo-benefício final equilibra."
       ),
-      P(AUTORIDADE),
-      ...financeBlock(slug, ctx.hashStr),
+      ...maybeAutoridade(slug, hashStr),
       H2("Conclusão"),
-      P(`Comprar ${ll} seminovo com critério é ignorar mito e olhar fato: laudo, km, donos, test drive. Veja os ${label} da Netcar.`),
+      softClose(
+        slug,
+        hashStr,
+        `Comprar ${ll} seminovo com critério é olhar laudo, km, donos e test drive.`
+      ),
     ],
   };
 }
 
 function formatErros(ctx) {
-  const { label, slug, cars, pick: p } = ctx;
+  const { label, slug, cars, hashStr } = ctx;
   const ll = label.toLowerCase();
   return {
     title: `7 erros ao comprar ${ll} usado (e como evitar cada um)`,
@@ -204,10 +282,10 @@ function formatErros(ctx) {
     readMinutes: 7,
     sections: [
       P(
-        `A gente vê comprador chegar na loja depois de quase cair em armadilha com ${ll}. Estes são os erros mais comuns — e o antídoto de cada um.`
+        `A gente vê comprador chegar na loja depois de quase fechar no impulso um ${ll}. Estes são os deslizes mais comuns — e o antídoto de cada um.`
       ),
       H2("Erro 1 — Comprar no impulso pelo anúncio"),
-      P("Foto bonita não paga IPVA. Visite, ligue, peça laudo. Carro bom aguenta pergunta."),
+      P("Foto bonita não paga IPVA. Visite, peça ficha e laudo. Carro bom aguenta pergunta."),
       H2("Erro 2 — Ignorar a quilometragem versus idade"),
       P("50 mil km em 3 anos é história diferente de 50 mil em 8. Cruze km, ano e tipo de uso."),
       H2("Erro 3 — Não fazer test drive longo o suficiente"),
@@ -217,51 +295,53 @@ function formatErros(ctx) {
       ...carsBlock(
         cars,
         "Em vez de errar: comece por estes modelos conferidos",
-        `Estes ${label} já passaram pelo nosso processo — menos risco, mais clareza:`
+        `Estes ${label} já passaram pelo nosso processo — mais clareza na shortlist:`
       ),
       H2("Erro 5 — Esquecer custo de manutenção"),
-      P("IPVA, seguro, pneu, revisão: some tudo. Carro barato com peça cara não é economia."),
+      P("IPVA, seguro, pneu, revisão: some tudo. O carro certo é o que cabe no mês inteiro, não só na entrada."),
       H2("Erro 6 — Não verificar documentação"),
-      P("Restrição, multa, chassi divergente: cada um vira dor de cabeça na transferência."),
+      P("Restrição, multa, dados divergentes: cada um atrasa a transferência. Confira antes de fechar."),
       H2("Erro 7 — Comparar só preço, não valor"),
-      P("Valor = preço + procedência + preparação + pós-venda. Por isso revenda certificada existe."),
-      P(AUTORIDADE),
+      P("Valor = preço + procedência + preparação + pós-venda. Por isso revenda preparada existe."),
+      ...maybeAutoridade(slug, hashStr),
       H2("Próximo passo"),
-      P(`Evitou os erros? Veja ${label} revisados no estoque e marque test drive.`),
+      softClose(slug, hashStr, `Evitou os erros?`),
     ],
   };
 }
 
 function formatRanking(ctx) {
-  const { label, slug, cars, stock, brl, pick: p } = ctx;
+  const { label, kind, slug, cars, stock, brl, pick: p, hashStr } = ctx;
   const ll = label.toLowerCase();
   const n = cars.length;
+  const praiseKind = kind === "categoria" ? "categoria" : "marca";
   return {
     title: p(
       [
-        `${n > 0 ? n : ""} ${label} seminovos que se destacam no estoque agora (${ctx.year})`,
-        `Ranking: melhores ${ll} seminovos em Esteio nesta semana`,
+        `${n > 0 ? n + " " : ""}${label} seminovos que se destacam no estoque agora (${ctx.year})`,
+        `Curadoria: ${ll} seminovos em Esteio que valem test drive`,
       ],
       slug + "t"
     ),
-    description: `Seleção editorial de ${label} no estoque real da Netcar: critérios, faixas de preço e os modelos que valem test drive em Esteio.`,
+    description: `Seleção editorial de ${label} no estoque real da Netcar: critérios, faixas de preço e modelos que encaixam bem na visita em Esteio.`,
     readMinutes: 6,
     sections: [
       P(
-        `Ranking de blog não é nota inventada — é curadoria. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes ${label} se destacaram no pátio esta semana.`
+        `Isto não é nota inventada — é curadoria de pátio. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes ${label} se destacaram esta semana.`
       ),
       H2("Como escolhemos os destaques"),
       UL([
         "Passou pela Fábrica de Valor (60+ itens)",
         "Quilometragem coerente com o ano",
         "Preço alinhado ao mercado regional",
-        "Procura real de quem visita a loja",
+        "Encaixe real com o que o cliente da região busca",
       ]),
+      praise(praiseKind, label, slug, hashStr),
       ...carsBlock(
         cars,
         `Os ${label} em destaque agora`,
         n
-          ? `Temos ${n} ${label} selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:`
+          ? `${n} ${label} selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:`
           : `Confira os ${label} disponíveis no estoque:`
       ),
       P(p(URGENCIA, slug + "u")),
@@ -269,31 +349,35 @@ function formatRanking(ctx) {
       P(
         `Seminovos na Netcar hoje: ${brl(stock.minPrice)} a ${brl(stock.maxPrice)}. Seu ${ll} ideal provavelmente está no meio dessa faixa — dependendo de ano e versão.`
       ),
-      ...financeBlock(slug, ctx.hashStr),
+      ...maybeFinanceBlock(slug, hashStr, true),
       H2("Quer ver mais opções?"),
-      P(`Ranking muda conforme entra carro novo no pátio. Veja todos os ${label} do estoque atualizado.`),
+      softClose(
+        slug,
+        hashStr,
+        `A curadoria muda conforme entra carro novo no pátio.`
+      ),
     ],
   };
 }
 
 function formatFaq(ctx) {
-  const { label, slug, cars, stock, brl, pick: p } = ctx;
+  const { label, slug, cars, stock, brl, hashStr } = ctx;
   const ll = label.toLowerCase();
   return {
     title: `${label} seminovo: perguntas que todo mundo faz (com resposta direta)`,
-    description: `Dúvidas frequentes sobre ${ll} usado em Esteio: preço, financiamento, garantia, troca — e onde ver ${label} disponíveis na Netcar.`,
+    description: `Dúvidas frequentes sobre ${ll} usado em Esteio: preço, financiamento, troca — e onde ver ${label} no estoque Netcar.`,
     readMinutes: 6,
     sections: [
       P(
-        `Reunimos as perguntas que mais aparecem no WhatsApp e na loja sobre ${ll} seminovo. Resposta curta, sem enrolação — e no final, exemplos reais do estoque.`
+        `Reunimos as perguntas que mais aparecem no WhatsApp e na loja sobre ${ll} seminovo. Resposta curta — e no final, exemplos reais do estoque.`
       ),
       H2(`Quanto custa um ${ll} seminovo em ${ctx.year}?`),
       P(
-        `Depende de ano, versão e km. No estoque geral da Netcar, seminovos vão de ${brl(stock.minPrice)} a ${brl(stock.maxPrice)}. Simule ou veja a ficha de cada ${label} pra preço exato.`
+        `Depende de ano, versão e km. No estoque geral da Netcar, seminovos vão de ${brl(stock.minPrice)} a ${brl(stock.maxPrice)}. Veja a ficha de cada ${label} pra preço exato.`
       ),
-      H2(`${label} usado dá problema?`),
+      H2(`Como escolher um bom ${ll} usado?`),
       P(
-        "Depende do exemplar, não só da marca. Histórico de revisão, laudo e inspeção técnica separam o bom do problemático. Revenda preparada reduz esse risco."
+        "Foque no exemplar: histórico de revisão, laudo, km coerente e test drive. Revenda preparada encurta essa conferência."
       ),
       H2("Vale financiar ou pagar à vista?"),
       P(
@@ -305,39 +389,39 @@ function formatFaq(ctx) {
       ),
       H2("Como sei se ainda está disponível?"),
       P(
-        "Estoque muda todo dia. O jeito mais rápido: clique no modelo abaixo ou chame no WhatsApp com o nome do carro."
+        "Estoque muda com frequência. O jeito mais rápido: abrir a ficha abaixo ou chamar no WhatsApp com o nome do carro."
       ),
-      ...carsBlock(cars, `${label} disponíveis agora — confira`, null),
-      H2("Tem garantia?"),
-      P(AUTORIDADE + " Consultor detalha cobertura na proposta."),
+      ...carsBlock(cars, `${label} no estoque — confira`, null),
+      ...maybeAutoridade(slug, hashStr),
       H2("Onde fica a Netcar?"),
       P("Esteio/RS, Av. Presidente Vargas — duas lojas. Agende visita e test drive."),
+      softClose(slug, hashStr),
     ],
   };
 }
 
 function formatComparativo(ctx) {
-  const { label, slug, cars, pick: p } = ctx;
+  const { label, slug, cars, pick: p, hashStr } = ctx;
   const ll = label.toLowerCase();
   return {
     title: `Comprar ${ll} de particular ou na loja? Comparativo honesto`,
-    description: `Particular x revenda na hora de comprar ${ll} seminovo: prós, contras e quando cada opção faz sentido. Veja ${label} revisados na Netcar.`,
+    description: `Particular x revenda na hora de comprar ${ll} seminovo: quando cada caminho faz sentido. Veja ${label} revisados na Netcar.`,
     readMinutes: 6,
     sections: [
       P(
-        `Na dúvida entre anúncio de particular e seminovo de loja, a decisão não é só preço — é risco, tempo e o que vem depois. Comparativo direto aplicado a ${label}.`
+        `Na dúvida entre anúncio de particular e seminovo de loja, a decisão não é só preço — é tempo, processo e o que vem depois. Comparativo direto aplicado a ${label}.`
       ),
       H2("Particular: quando pode valer"),
       UL([
         "Conhece o dono e o histórico de verdade",
-        "Disposto a assumir revisão por conta própria",
+        "Disposto a organizar revisão por conta própria",
         "Tem mecânico de confiança pra inspecionar antes",
       ]),
-      H2("Particular: onde dói"),
+      H2("Particular: o que exige mais de você"),
       UL([
-        "Sem garantia ou laudo padronizado",
-        "Burocracia e risco na transferência",
-        "Test drive com estranhos e negociação cansativa",
+        "Conferência de laudo e documentação por conta",
+        "Burocracia e prazo na transferência",
+        "Negociação e test drive sem estrutura de loja",
       ]),
       H2("Revenda preparada: o que muda"),
       UL([
@@ -353,15 +437,17 @@ function formatComparativo(ctx) {
       ),
       H2("Conta final: não é só o valor do carro"),
       P(
-        "Some tempo, risco, revisão eventual e revenda futura. Muitas vezes loja fica competitiva quando você coloca tudo na planilha."
+        "Some tempo, conferência técnica e caminho de financiamento/troca. Muitas vezes loja fica competitiva quando você coloca tudo na planilha."
       ),
-      ...financeBlock(slug, ctx.hashStr),
+      ...maybeFinanceBlock(slug, hashStr, true),
       H2("Veredito"),
-      P(
+      softClose(
+        slug,
+        hashStr,
         p(
           [
-            `Se quer tranquilidade na compra de ${ll}, revenda preparada encurta o caminho. Veja os ${label} do estoque.`,
-            `Particular exige expertise; loja entrega processo. Para ${label}, confira o que temos prontos.`,
+            `Se quer tranquilidade na compra de ${ll}, revenda preparada encurta o caminho.`,
+            `Particular exige mais expertise; loja entrega processo. Para ${label}, o estoque ajuda a decidir com calma.`,
           ],
           slug + "v"
         )
@@ -371,8 +457,9 @@ function formatComparativo(ctx) {
 }
 
 function formatPerfil(ctx) {
-  const { label, slug, cars, pick: p } = ctx;
+  const { label, kind, slug, cars, pick: p, hashStr } = ctx;
   const ll = label.toLowerCase();
+  const praiseKind = kind === "categoria" ? "categoria" : "marca";
   return {
     title: p(
       [
@@ -385,11 +472,11 @@ function formatPerfil(ctx) {
     readMinutes: 6,
     sections: [
       P(
-        `Não existe ${ll} "melhor do mundo" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e indicamos o que observar em cada um.`
+        `Não existe ${ll} "melhor do mundo" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e o que observar em cada um.`
       ),
       H2("Perfil 1 — Só cidade, poucos km por dia"),
       P(
-        "Priorize consumo, manutenção barata e facilidade de estacionar. Versões compactas e automáticas aliviam trânsito."
+        "Priorize consumo, manutenção acessível e facilidade de estacionar. Versões compactas e automáticas aliviam o trânsito da Grande POA."
       ),
       H2("Perfil 2 — Família com criança ou bagagem"),
       P(
@@ -397,27 +484,32 @@ function formatPerfil(ctx) {
       ),
       H2("Perfil 3 — Estrada e viagem frequente"),
       P(
-        "Estabilidade, conforto em 100 km/h e motor que não force na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
+        "Estabilidade, conforto em velocidade de estrada e motor folgado na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
       ),
+      praise(praiseKind, label, slug, hashStr),
       ...carsBlock(
         cars,
-        `${label} que atendem esses perfis — no estoque hoje`,
+        `${label} que atendem esses perfis — no estoque`,
         `Estes modelos aparecem bastante pra quem se encaixa nos perfis acima:`
       ),
       H2("Automático ou manual pro seu caso?"),
       P(
-        "Cidade pura → automático costuma valer. Orçamento apertado → manual de entrada. Estrada mista → depende do gosto e do bolso."
+        "Cidade pura → automático costuma agradar. Orçamento mais enxuto → manual de entrada. Estrada mista → depende do gosto e do bolso."
       ),
-      P(AUTORIDADE),
-      ...financeBlock(slug, ctx.hashStr),
+      visitTip(slug, hashStr),
+      ...maybeAutoridade(slug, hashStr),
       H2("Encontrou seu perfil?"),
-      P(`Veja todos os ${label} e marque test drive com o consultor — ele cruza perfil, orçamento e estoque.`),
+      softClose(
+        slug,
+        hashStr,
+        `Cruze perfil, orçamento e estoque com o consultor.`
+      ),
     ],
   };
 }
 
 function formatJornada(ctx) {
-  const { label, slug, cars, pick: p } = ctx;
+  const { label, slug, cars, hashStr } = ctx;
   const ll = label.toLowerCase();
   return {
     title: `Da pesquisa ao volante: jornada de quem compra ${ll} seminovo`,
@@ -425,7 +517,7 @@ function formatJornada(ctx) {
     readMinutes: 7,
     sections: [
       P(
-        `Comprar ${ll} seminovo não precisa ser corrida contra o relógio — mas ter ordem ajuda. Esta é a jornada que clientes da Netcar seguem, do primeiro Google ao carro na garagem.`
+        `Comprar ${ll} seminovo não precisa ser corrida — mas ter ordem ajuda. Esta é a jornada que orientamos na Netcar, do primeiro Google ao carro na garagem.`
       ),
       H2("Semana 1 — Pesquisa e orçamento"),
       OL([
@@ -442,22 +534,27 @@ function formatJornada(ctx) {
       ...carsBlock(
         cars,
         "Exemplos pra começar sua shortlist",
-        `Estes ${label} estão disponíveis e são frequentes na shortlist de clientes:`
+        `Estes ${label} estão no estoque e costumam entrar na shortlist:`
       ),
       H2("Semana 3 — Visita e test drive"),
       P(
-        "Reserve 30–40 min por carro. Leve documento, faça percurso variado e não tenha vergonha de perguntar sobre revisão e laudo."
+        "Reserve 30–40 min por carro. Leve documento, faça percurso variado e pergunte sobre revisão e laudo."
       ),
+      visitTip(slug, hashStr),
       H2("Semana 4 — Fechamento"),
       OL([
-        "Confirme documentação e condições de garantia",
+        "Confirme documentação e condições da proposta",
         "Assine financiamento ou pagamento",
         "Agende retirada e primeiros cuidados pós-compra",
       ]),
-      P(AUTORIDADE),
-      ...financeBlock(slug, ctx.hashStr),
+      ...maybeAutoridade(slug, hashStr),
+      ...maybeFinanceBlock(slug, hashStr, true),
       H2("Pronto pra começar?"),
-      P(`Dá pra encurtar essa jornada em uma visita bem planejada. Veja ${label} no estoque e fale com a equipe.`),
+      softClose(
+        slug,
+        hashStr,
+        `Dá pra encurtar essa jornada em uma visita bem planejada.`
+      ),
     ],
   };
 }
@@ -566,14 +663,18 @@ export function buildRegionalStockArticle({
       P(
         "Foto e vídeo ajudam na triagem, mas não substituem inspeção, test drive e leitura da proposta. Simulação não é aprovação; avaliação por fotos não é valor final."
       ),
-      P(AUTORIDADE),
+      ...maybeAutoridade(slug, defaultHashStr),
       H2("Próximo passo"),
-      P("Veja o estoque atualizado no site, escolha os candidatos e só então organize o contato e a visita."),
+      P(
+        angle === "remoto"
+          ? "Quem vem de fora ganha tempo chegando em Esteio com shortlist. Veja o estoque, escolha os candidatos e organize a visita."
+          : "Veja o estoque atualizado no site, escolha os candidatos e só então organize o contato e a visita."
+      ),
     ],
   };
 }
 
-export function buildPrecosArticle({ slug, cars, stock, brl, ctaHref, ctaLabel }) {
+export function buildPrecosArticle({ slug, cars, stock, brl, ctaHref, ctaLabel, hashStr = defaultHashStr }) {
   return {
     slug,
     title: `Quanto custa um seminovo em Esteio em ${stock.year || new Date().getFullYear()}? Guia de preços reais`,
@@ -607,14 +708,14 @@ export function buildPrecosArticle({ slug, cars, stock, brl, ctaHref, ctaLabel }
         "Peça laudo e histórico",
         "Desconfie de outlier muito barato",
       ]),
-      P(AUTORIDADE),
+      ...maybeAutoridade(slug, defaultHashStr),
       H2("Próximo passo"),
       P("Preços mudam conforme entra carro novo. Veja o estoque atualizado e fale com consultor."),
     ],
   };
 }
 
-export function buildChecklistArticle({ slug, cars, ctaHref, ctaLabel }) {
+export function buildChecklistArticle({ slug, cars, ctaHref, ctaLabel, hashStr = defaultHashStr }) {
   return {
     slug,
     title: "Checklist definitivo antes de comprar seminovo (imprima e leve)",
@@ -666,7 +767,7 @@ export function buildChecklistArticle({ slug, cars, ctaHref, ctaLabel }) {
         "Quer pular metade do checklist?",
         "Estes seminovos já passaram pela Fábrica de Valor — inspeção feita antes de chegar na vitrine:"
       ),
-      P(AUTORIDADE),
+      ...maybeAutoridade(slug, defaultHashStr),
       H2("Salvou o checklist?"),
       P("Leve na visita. Ou comece por estoque já revisado na Netcar."),
     ],
@@ -710,7 +811,7 @@ export function buildTrocaArticle({ slug, ctaHref, ctaLabel }) {
   };
 }
 
-export function buildAutomaticoArticle({ slug, cars, ctaHref, ctaLabel }) {
+export function buildAutomaticoArticle({ slug, cars, ctaHref, ctaLabel, hashStr = defaultHashStr }) {
   return {
     slug,
     title: "Automático ou manual no seminovo? Comparativo técnico",
@@ -740,7 +841,7 @@ export function buildAutomaticoArticle({ slug, cars, ctaHref, ctaLabel }) {
         "Automático mal cuidado assusta; automático com revisão documentada tranquiliza. Manual mal usado (embreagem estourada) também aparece — test drive longo revela."
       ),
       ...carsBlock(cars, "Automáticos revisados no estoque", "Exemplos com câmbio auto já conferido:"),
-      P(AUTORIDADE),
+      ...maybeAutoridade(slug, defaultHashStr),
       H2("Qual escolher?"),
       P("Cidade + revenda → automático. Orçamento apertado + controle → manual. Na dúvida, test drive nos dois."),
     ],
@@ -780,7 +881,7 @@ export function buildPrimeiroCarroArticle({ slug, cars, hashStr, ctaHref, ctaLab
       ),
       H2("Regra 4 — Simule antes de emocionar"),
       P("WhatsApp, documentos, parcela real. Depois visite."),
-      P(AUTORIDADE),
+      ...maybeAutoridade(slug, defaultHashStr),
       H2("Pronto pro primeiro carro?"),
       P("Veja estoque de entrada e leve alguém experiente no test drive — ou confie no processo da loja."),
     ],
@@ -817,16 +918,17 @@ export function buildFaixaPrecoArticle({
     ctaHref,
     sections: [
       P(
-        `Busca por seminovo até ${maxLabel} costuma misturar anúncio antigo, preço “a partir de” e carro que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive.`
+        `Busca por seminovo até ${maxLabel} costuma misturar anúncio antigo e preço que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive.`
       ),
-      H2("O que o teto de preço realmente compra"),
+      H2("O que cabe bem nessa faixa"),
       P(
-        `Até ${maxLabel}, o foco costuma ser hatch, sedan compacto ou SUV de entrada com mais km. O erro comum é forçar categoria premium no mesmo orçamento — aí sobra manutenção cara e falta margem de reserva.`
+        `Até ${maxLabel}, o pátio costuma mostrar hatch, sedan compacto e SUV de entrada com ótimo custo-benefício. Dá pra montar pacote equilibrado: carro preparado, custo previsível e margem pra seguro.`
       ),
+      praise("faixa", maxLabel, slug, hashStr),
       H2("Três filtros antes do WhatsApp"),
       UL([
         "Preço anunciado × histórico de revisão (não só “aceito troca”).",
-        "Km coerente com o ano — fora da curva pede vistoria mais rígida.",
+        "Km coerente com o ano — alinhe expectativa de uso.",
         "Documentação e procedência claros antes de falar em parcela.",
       ]),
       ...carsBlock(
@@ -834,13 +936,14 @@ export function buildFaixaPrecoArticle({
         `Opções até ${maxLabel} no pátio agora`,
         "Recorte do estoque Netcar nesta faixa — compare e escolha 2 ou 3 pra visitar:"
       ),
+      visitTip(slug, hashStr),
       H2("Financiamento: simule o total, não só a parcela"),
       P(
-        "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, desça uma faixa ou aumente entrada."
+        "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, ajuste entrada ou prazo — o consultor ajuda a fechar a conta."
       ),
-      P(AUTORIDADE),
+      ...maybeAutoridade(slug, hashStr),
       H2(`Pronto pra filtrar até ${maxLabel}?`),
-      P("Abra o estoque com o teto de preço e mande a shortlist no WhatsApp — a gente confirma disponibilidade na hora."),
+      softClose(slug, hashStr, `Abra o estoque com o teto de preço.`),
     ],
   };
 }
@@ -854,41 +957,43 @@ export function buildModeloArticle({ slug, modelo, cars, hashStr, ctaHref, ctaLa
     slug,
     title: pick(
       [
-        `${modelo} seminovo em Esteio: vale a pena em 2026?`,
-        `Comprar ${modelo} usado: o que conferir antes da visita`,
+        `${modelo} seminovo em Esteio: por que entra na shortlist`,
+        `Comprar ${modelo} usado: o que confere na visita`,
       ],
       slug + "t"
     ),
-    description: `${modelo} seminovo em Esteio: pontos de atenção, comparação no estoque e quando faz sentido fechar.`,
+    description: `${modelo} seminovo em Esteio: quando faz sentido, o que olhar na visita e opções reais no estoque Netcar.`,
     readMinutes: 6,
     ctaLabel,
     ctaHref,
     sections: [
       P(
-        `${modelo} seminovo aparece muito em busca local — e também em anúncio genérico. Aqui o filtro é estoque real em Esteio: versão, km e preço lado a lado.`
+        `${modelo} seminovo aparece muito em busca local — e com razão: é modelo que o cliente da região reconhece. Aqui o filtro é estoque real em Esteio: versão, km e preço lado a lado.`
       ),
-      H2(`Por que ${modelo} entra na shortlist`),
+      H2(`Por que ${modelo} costuma agradar`),
+      praise("modelo", modelo, slug, hashStr),
       P(
-        "Modelo com peça fácil, revenda previsível e demanda regional costuma ser escolha segura. Ainda assim, unidade a unidade muda: um ano/km errado estraga o negócio."
+        `No dia a dia do RS, ${modelo} entrega o que a maioria precisa: uso misto cidade/estrada, peça conhecida e revenda previsível. A decisão fina fica no exemplar — ano, km e equipamentos.`
       ),
-      H2("Checklist rápido na visita"),
+      H2("O que conferir na visita (sem drama)"),
       UL([
-        "Histórico de manutenção e recalls da marca.",
-        "Estado de freios, suspensão e pneus (custo escondido).",
-        "Test drive em rua e velocidade — barulho e alinhamento.",
+        "Histórico de manutenção e revisão em dia.",
+        "Estado de freios, suspensão e pneus.",
+        "Test drive em rua e velocidade — conforto e alinhamento.",
       ]),
+      visitTip(slug, hashStr),
       ...carsBlock(
         cars,
-        `${modelo} disponíveis agora`,
-        `Unidades ${modelo} no pátio Netcar — use pra comparar preço e km:`
+        `${modelo} no estoque agora`,
+        `Unidades ${modelo} no pátio Netcar — compare preço e km:`
       ),
       H2("Troca e financiamento"),
       P(
-        "Se vai dar o atual na troca, leve avaliação atualizada. Financiamento: simule entrada + prazo antes de emocionar no modelo."
+        "Se vai dar o atual na troca, leve avaliação atualizada. Financiamento: simule entrada + prazo antes de fechar no modelo."
       ),
-      P(AUTORIDADE),
+      ...maybeAutoridade(slug, hashStr),
       H2(`Ver ${modelo} no estoque`),
-      P("Filtre pelo modelo, escolha duas unidades e chame no WhatsApp pra agendar."),
+      softClose(slug, hashStr, `Filtre pelo modelo e escolha duas unidades.`),
     ],
   };
 }
@@ -904,36 +1009,40 @@ export function buildUsoArticle({ slug, uso, cars, hashStr, ctaHref, ctaLabel })
       desc: "Carro pra família: espaço, segurança e custo — com opções reais no estoque Netcar em Esteio.",
       lead: "Família muda o critério: porta-malas, bancos traseiros e custo mensal pesam mais que design.",
       h2a: "O que família realmente precisa",
-      pa: "Espaço pra cadeirinha, acesso fácil às portas traseiras e porta-malas que aguenta mala + mercado. SUV compacto e sedan médio costumam ganhar do hatch puro.",
+      pa: "Espaço pra cadeirinha, acesso fácil às portas traseiras e porta-malas que aguenta mala + mercado. SUV compacto e sedan médio costumam encaixar muito bem nesse perfil.",
       h2b: "Custo mensal além da parcela",
-      pb: "Seguro, combustível e pneus sobem com porte. Vale simular dois portes no mesmo orçamento.",
+      pb: "Seguro, combustível e pneus sobem com porte. Vale simular dois portes no mesmo orçamento e escolher o que mantém folga no mês.",
+      praiseExtra: "Pra família, o carro certo é o que chega inteiro no fim do dia — conforto e previsibilidade de custo.",
     },
     "baixa-km": {
-      title: ["Seminovo com baixa km: quando vale o prêmio", "Carro usado com poucos km: o que checar"],
-      desc: "Seminovo baixa km em Esteio: como ler odômetro, preço e procedência sem cair em anúncio maquiado.",
-      lead: "Baixa km atrai — e também anúncio hinário. O prêmio só faz sentido com histórico limpo.",
-      h2a: "Km baixo ≠ carro perfeito",
-      pa: "Carro parado muito tempo também sofre (borracha, bateria, fluidos). Peça revisão recente e confira uso real.",
+      title: ["Seminovo com baixa km: quando o prêmio faz sentido", "Carro usado com poucos km: o que checar"],
+      desc: "Seminovo baixa km em Esteio: como ler odômetro, preço e procedência com estoque real.",
+      lead: "Baixa km atrai — e o prêmio faz sentido quando o histórico vem limpo e a preparação está clara.",
+      h2a: "Km baixo com histórico em dia",
+      pa: "Odômetro baixo + revisão documentada é combinação forte. Peça o histórico e confira se o uso declarado fecha com o estado do carro.",
       h2b: "Quando pagar a mais",
-      pb: "Faz sentido se o gap de preço vs unidade similar com mais km for menor que o custo estimado de manutenção adiantada.",
+      pb: "Faz sentido se o gap de preço vs unidade similar com mais km for menor que o custo estimado de manutenção adiantada — e se a ficha estiver completa.",
+      praiseExtra: "Unidade com poucos km e preparação séria costuma ser shortlist rápida na loja.",
     },
     cidade: {
       title: ["Hatch seminovo pra cidade: econômico e prático", "Carro pra uso urbano em Esteio e Grande POA"],
       desc: "Hatch e compacto seminovo pra cidade: consumo, manobra e opções no estoque Netcar.",
-      lead: "Uso urbano premia carro curto, econômico e fácil de estacionar — sem pagar porte de estrada.",
+      lead: "Uso urbano premia carro ágil, econômico e fácil de estacionar — o pacote certo pra trânsito da Grande POA.",
       h2a: "Prioridades na cidade",
-      pa: "Raio de giro, visibilidade e consumo no trânsito param e andam. Hatch 1.0/1.6 costuma acertar.",
-      h2b: "Onde o SUV compacto ainda ganha",
-      pb: "Se tem garagem alta ou estrada de terra leve no fim de semana, SUV de entrada entra na disputa — sem exagerar porte.",
+      pa: "Raio de giro, visibilidade e consumo no para-e-anda. Hatch e compacto costumam acertar sem pagar porte que você não usa.",
+      h2b: "Quando o SUV compacto ainda encaixa",
+      pb: "Se tem garagem alta ou estrada de terra leve no fim de semana, SUV de entrada entra na disputa com ótimo equilíbrio cidade/estrada.",
+      praiseExtra: "Na cidade, o seminovo certo reduz fadiga no trânsito e custo no posto.",
     },
     viagem: {
       title: ["Seminovo pra viagem e Serra: conforto e porta-malas", "Carro pra viagem no RS: o que levar na shortlist"],
       desc: "Seminovo pra viagem e Serra Gaúcha: conforto, estabilidade e estoque real em Esteio.",
-      lead: "Viagem longa e Serra pedem freio/suspensão em dia, porta-malas útil e motor que não sofre em subida.",
+      lead: "Viagem longa e Serra pedem freio/suspensão em dia, porta-malas útil e motor folgado na subida.",
       h2a: "Checklist antes da estrada",
-      pa: "Pneus, freios, ar-condicionado e histórico de revisão. Na Serra, transmissão e refrigeração importam.",
-      h2b: "Porte certo sem exagero",
-      pb: "SUV compacto e sedan médio cobrem a maioria dos roteiros RS sem custo de full-size.",
+      pa: "Pneus, freios, ar-condicionado e histórico de revisão. Na Serra, transmissão e refrigeração importam — o test drive revela.",
+      h2b: "Porte certo pro roteiro RS",
+      pb: "SUV compacto e sedan médio cobrem a maioria dos roteiros do estado com conforto e custo equilibrados.",
+      praiseExtra: "Pra quem viaja, o seminovo certo é o que chega descansado — e volta sem susto.",
     },
   }[uso] || {
     title: ["Seminovo sob medida: como escolher pelo uso", "Escolher seminovo pelo uso real"],
@@ -943,6 +1052,7 @@ export function buildUsoArticle({ slug, uso, cars, hashStr, ctaHref, ctaLabel })
     pa: "Cidade, família, viagem ou km baixo mudam categoria e orçamento.",
     h2b: "Compare no estoque",
     pb: "Duas ou três unidades reais batem qualquer lista genérica da internet.",
+    praiseExtra: "Quando o uso está claro, a visita rende.",
   };
 
   return {
@@ -958,10 +1068,66 @@ export function buildUsoArticle({ slug, uso, cars, hashStr, ctaHref, ctaLabel })
       P(copy.pa),
       H2(copy.h2b),
       P(copy.pb),
+      P(copy.praiseExtra),
+      praise("uso", uso, slug, hashStr),
       ...carsBlock(cars, "Opções alinhadas a esse uso", "Recorte do estoque Netcar pra essa intenção:"),
-      P(AUTORIDADE),
+      visitTip(slug, hashStr),
+      ...maybeAutoridade(slug, hashStr),
       H2("Próximo passo"),
-      P("Filtre o estoque, monte a shortlist e chame no WhatsApp pra agendar visita."),
+      softClose(slug, hashStr),
+    ],
+  };
+}
+
+/**
+ * Híbrido seminovo — só quando há unidades no estoque (venda sutil, zero detração).
+ */
+export function buildHibridoArticle({ slug, cars, hashStr, ctaHref, ctaLabel }) {
+  const pick = makePick(hashStr);
+  return {
+    slug,
+    title: pick(
+      [
+        "Seminovo híbrido em Esteio: quando faz sentido",
+        "Carro híbrido usado: guia prático pra Grande POA",
+      ],
+      slug + "t"
+    ),
+    description:
+      "Híbrido seminovo em Esteio: perfil de uso, o que conferir na visita e opções reais no estoque Netcar.",
+    readMinutes: 6,
+    ctaLabel,
+    ctaHref,
+    sections: [
+      P(
+        "Híbrido seminovo atrai quem roda muito em cidade e quer resposta suave no trânsito. Em Esteio, a conversa certa começa pelo uso — não por moda."
+      ),
+      praise("hibrido", "híbrido", slug, hashStr),
+      H2("Quando o híbrido encaixa bem"),
+      UL([
+        "Muitos km em trânsito urbano (para-e-anda).",
+        "Busca por conforto e tecnologia no pacote.",
+        "Orçamento alinhado a seminovos de porte médio/alto.",
+      ]),
+      H2("O que olhar na visita"),
+      UL([
+        "Histórico de revisão e bateria conforme orientação da marca.",
+        "Test drive em cidade: retomada, silêncio e modos de condução.",
+        "Documentação e procedência iguais a qualquer seminovo.",
+      ]),
+      visitTip(slug, hashStr),
+      ...carsBlock(
+        cars,
+        "Híbridos no estoque agora",
+        "Exemplares híbridos consultados no estoque oficial — confirme disponibilidade na ficha:"
+      ),
+      ...maybeAutoridade(slug, hashStr),
+      H2("Próximo passo"),
+      softClose(
+        slug,
+        hashStr,
+        "Se o perfil de uso combina, vale comparar os híbridos do pátio lado a lado."
+      ),
     ],
   };
 }

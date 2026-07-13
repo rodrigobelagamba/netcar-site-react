@@ -420,16 +420,12 @@
         "text": "Foto e vídeo ajudam na triagem, mas não substituem inspeção, test drive e leitura da proposta. Simulação não é aprovação; avaliação por fotos não é valor final."
       },
       {
-        "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
-      },
-      {
         "type": "h2",
         "text": "Próximo passo"
       },
       {
         "type": "p",
-        "text": "Veja o estoque atualizado no site, escolha os candidatos e só então organize o contato e a visita."
+        "text": "Quem vem de fora ganha tempo chegando em Esteio com shortlist. Veja o estoque, escolha os candidatos e organize a visita."
       }
     ],
     "ctaLabel": "Ver estoque atualizado",
@@ -444,15 +440,19 @@
     "sections": [
       {
         "type": "p",
-        "text": "Busca por seminovo até 60 mil costuma misturar anúncio antigo, preço “a partir de” e carro que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive."
+        "text": "Busca por seminovo até 60 mil costuma misturar anúncio antigo e preço que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive."
       },
       {
         "type": "h2",
-        "text": "O que o teto de preço realmente compra"
+        "text": "O que cabe bem nessa faixa"
       },
       {
         "type": "p",
-        "text": "Até 60 mil, o foco costuma ser hatch, sedan compacto ou SUV de entrada com mais km. O erro comum é forçar categoria premium no mesmo orçamento — aí sobra manutenção cara e falta margem de reserva."
+        "text": "Até 60 mil, o pátio costuma mostrar hatch, sedan compacto e SUV de entrada com ótimo custo-benefício. Dá pra montar pacote equilibrado: carro preparado, custo previsível e margem pra seguro."
+      },
+      {
+        "type": "p",
+        "text": "Nessa faixa até 60 mil, dá pra montar um pacote equilibrado: carro preparado, custo previsível e margem pra seguro e manutenção."
       },
       {
         "type": "h2",
@@ -462,7 +462,7 @@
         "type": "ul",
         "items": [
           "Preço anunciado × histórico de revisão (não só “aceito troca”).",
-          "Km coerente com o ano — fora da curva pede vistoria mais rígida.",
+          "Km coerente com o ano — alinhe expectativa de uso.",
           "Documentação e procedência claros antes de falar em parcela."
         ]
       },
@@ -502,16 +502,16 @@
         ]
       },
       {
+        "type": "p",
+        "text": "No test drive, varie rua e velocidade: partida a frio, retomada e freio em descida."
+      },
+      {
         "type": "h2",
         "text": "Financiamento: simule o total, não só a parcela"
       },
       {
         "type": "p",
-        "text": "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, desça uma faixa ou aumente entrada."
-      },
-      {
-        "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
+        "text": "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, ajuste entrada ou prazo — o consultor ajuda a fechar a conta."
       },
       {
         "type": "h2",
@@ -519,7 +519,7 @@
       },
       {
         "type": "p",
-        "text": "Abra o estoque com o teto de preço e mande a shortlist no WhatsApp — a gente confirma disponibilidade na hora."
+        "text": "Abra o estoque com o teto de preço. Filtre no site, compare os exemplares e chame no WhatsApp só com a shortlist na mão."
       }
     ],
     "ctaLabel": "Ver até 60 mil",
@@ -534,15 +534,19 @@
     "sections": [
       {
         "type": "p",
-        "text": "Busca por seminovo até 80 mil costuma misturar anúncio antigo, preço “a partir de” e carro que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive."
+        "text": "Busca por seminovo até 80 mil costuma misturar anúncio antigo e preço que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive."
       },
       {
         "type": "h2",
-        "text": "O que o teto de preço realmente compra"
+        "text": "O que cabe bem nessa faixa"
       },
       {
         "type": "p",
-        "text": "Até 80 mil, o foco costuma ser hatch, sedan compacto ou SUV de entrada com mais km. O erro comum é forçar categoria premium no mesmo orçamento — aí sobra manutenção cara e falta margem de reserva."
+        "text": "Até 80 mil, o pátio costuma mostrar hatch, sedan compacto e SUV de entrada com ótimo custo-benefício. Dá pra montar pacote equilibrado: carro preparado, custo previsível e margem pra seguro."
+      },
+      {
+        "type": "p",
+        "text": "Nessa faixa até 80 mil, dá pra montar um pacote equilibrado: carro preparado, custo previsível e margem pra seguro e manutenção."
       },
       {
         "type": "h2",
@@ -552,7 +556,7 @@
         "type": "ul",
         "items": [
           "Preço anunciado × histórico de revisão (não só “aceito troca”).",
-          "Km coerente com o ano — fora da curva pede vistoria mais rígida.",
+          "Km coerente com o ano — alinhe expectativa de uso.",
           "Documentação e procedência claros antes de falar em parcela."
         ]
       },
@@ -592,16 +596,16 @@
         ]
       },
       {
+        "type": "p",
+        "text": "Leve a shortlist impressa ou no celular — facilita comparar versão, km e equipamentos lado a lado."
+      },
+      {
         "type": "h2",
         "text": "Financiamento: simule o total, não só a parcela"
       },
       {
         "type": "p",
-        "text": "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, desça uma faixa ou aumente entrada."
-      },
-      {
-        "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
+        "text": "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, ajuste entrada ou prazo — o consultor ajuda a fechar a conta."
       },
       {
         "type": "h2",
@@ -609,7 +613,7 @@
       },
       {
         "type": "p",
-        "text": "Abra o estoque com o teto de preço e mande a shortlist no WhatsApp — a gente confirma disponibilidade na hora."
+        "text": "Abra o estoque com o teto de preço. Quando a lista estiver curta, o próximo passo é simples: abrir o estoque e confirmar disponibilidade."
       }
     ],
     "ctaLabel": "Ver até 80 mil",
@@ -624,15 +628,19 @@
     "sections": [
       {
         "type": "p",
-        "text": "Busca por seminovo até 120 mil costuma misturar anúncio antigo, preço “a partir de” e carro que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive."
+        "text": "Busca por seminovo até 120 mil costuma misturar anúncio antigo e preço que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive."
       },
       {
         "type": "h2",
-        "text": "O que o teto de preço realmente compra"
+        "text": "O que cabe bem nessa faixa"
       },
       {
         "type": "p",
-        "text": "Até 120 mil, o foco costuma ser hatch, sedan compacto ou SUV de entrada com mais km. O erro comum é forçar categoria premium no mesmo orçamento — aí sobra manutenção cara e falta margem de reserva."
+        "text": "Até 120 mil, o pátio costuma mostrar hatch, sedan compacto e SUV de entrada com ótimo custo-benefício. Dá pra montar pacote equilibrado: carro preparado, custo previsível e margem pra seguro."
+      },
+      {
+        "type": "p",
+        "text": "Nessa faixa até 120 mil, dá pra montar um pacote equilibrado: carro preparado, custo previsível e margem pra seguro e manutenção."
       },
       {
         "type": "h2",
@@ -642,7 +650,7 @@
         "type": "ul",
         "items": [
           "Preço anunciado × histórico de revisão (não só “aceito troca”).",
-          "Km coerente com o ano — fora da curva pede vistoria mais rígida.",
+          "Km coerente com o ano — alinhe expectativa de uso.",
           "Documentação e procedência claros antes de falar em parcela."
         ]
       },
@@ -682,12 +690,16 @@
         ]
       },
       {
+        "type": "p",
+        "text": "Pergunte sobre preparação e laudo do exemplar. Carro revisado encurta a decisão."
+      },
+      {
         "type": "h2",
         "text": "Financiamento: simule o total, não só a parcela"
       },
       {
         "type": "p",
-        "text": "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, desça uma faixa ou aumente entrada."
+        "text": "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, ajuste entrada ou prazo — o consultor ajuda a fechar a conta."
       },
       {
         "type": "p",
@@ -699,7 +711,7 @@
       },
       {
         "type": "p",
-        "text": "Abra o estoque com o teto de preço e mande a shortlist no WhatsApp — a gente confirma disponibilidade na hora."
+        "text": "Abra o estoque com o teto de preço. Monte a shortlist no estoque, escolha duas ou três fichas e fale com o consultor pra agendar a visita."
       }
     ],
     "ctaLabel": "Ver até 120 mil",
@@ -714,15 +726,19 @@
     "sections": [
       {
         "type": "p",
-        "text": "Busca por seminovo até 150 mil costuma misturar anúncio antigo, preço “a partir de” e carro que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive."
+        "text": "Busca por seminovo até 150 mil costuma misturar anúncio antigo e preço que não fecha na visita. O caminho curto: filtrar estoque real, cruzar km/ano e só então agendar test drive."
       },
       {
         "type": "h2",
-        "text": "O que o teto de preço realmente compra"
+        "text": "O que cabe bem nessa faixa"
       },
       {
         "type": "p",
-        "text": "Até 150 mil, o foco costuma ser hatch, sedan compacto ou SUV de entrada com mais km. O erro comum é forçar categoria premium no mesmo orçamento — aí sobra manutenção cara e falta margem de reserva."
+        "text": "Até 150 mil, o pátio costuma mostrar hatch, sedan compacto e SUV de entrada com ótimo custo-benefício. Dá pra montar pacote equilibrado: carro preparado, custo previsível e margem pra seguro."
+      },
+      {
+        "type": "p",
+        "text": "Nessa faixa até 150 mil, dá pra montar um pacote equilibrado: carro preparado, custo previsível e margem pra seguro e manutenção."
       },
       {
         "type": "h2",
@@ -732,7 +748,7 @@
         "type": "ul",
         "items": [
           "Preço anunciado × histórico de revisão (não só “aceito troca”).",
-          "Km coerente com o ano — fora da curva pede vistoria mais rígida.",
+          "Km coerente com o ano — alinhe expectativa de uso.",
           "Documentação e procedência claros antes de falar em parcela."
         ]
       },
@@ -772,16 +788,16 @@
         ]
       },
       {
+        "type": "p",
+        "text": "Leve a shortlist impressa ou no celular — facilita comparar versão, km e equipamentos lado a lado."
+      },
+      {
         "type": "h2",
         "text": "Financiamento: simule o total, não só a parcela"
       },
       {
         "type": "p",
-        "text": "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, desça uma faixa ou aumente entrada."
-      },
-      {
-        "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
+        "text": "Some seguro, IPVA e manutenção. Se a parcela “cabe” mas o total aperta, ajuste entrada ou prazo — o consultor ajuda a fechar a conta."
       },
       {
         "type": "h2",
@@ -789,7 +805,7 @@
       },
       {
         "type": "p",
-        "text": "Abra o estoque com o teto de preço e mande a shortlist no WhatsApp — a gente confirma disponibilidade na hora."
+        "text": "Abra o estoque com o teto de preço. Quando a lista estiver curta, o próximo passo é simples: abrir o estoque e confirmar disponibilidade."
       }
     ],
     "ctaLabel": "Ver até 150 mil",
@@ -812,7 +828,7 @@
       },
       {
         "type": "p",
-        "text": "Espaço pra cadeirinha, acesso fácil às portas traseiras e porta-malas que aguenta mala + mercado. SUV compacto e sedan médio costumam ganhar do hatch puro."
+        "text": "Espaço pra cadeirinha, acesso fácil às portas traseiras e porta-malas que aguenta mala + mercado. SUV compacto e sedan médio costumam encaixar muito bem nesse perfil."
       },
       {
         "type": "h2",
@@ -820,7 +836,15 @@
       },
       {
         "type": "p",
-        "text": "Seguro, combustível e pneus sobem com porte. Vale simular dois portes no mesmo orçamento."
+        "text": "Seguro, combustível e pneus sobem com porte. Vale simular dois portes no mesmo orçamento e escolher o que mantém folga no mês."
+      },
+      {
+        "type": "p",
+        "text": "Pra família, o carro certo é o que chega inteiro no fim do dia — conforto e previsibilidade de custo."
+      },
+      {
+        "type": "p",
+        "text": "Quando o uso está claro, o carro certo aparece mais rápido — e a visita rende em vez de virar passeio sem fim."
       },
       {
         "type": "h2",
@@ -859,6 +883,10 @@
       },
       {
         "type": "p",
+        "text": "Pergunte sobre preparação e laudo do exemplar. Carro revisado encurta a decisão."
+      },
+      {
+        "type": "p",
         "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
@@ -867,7 +895,7 @@
       },
       {
         "type": "p",
-        "text": "Filtre o estoque, monte a shortlist e chame no WhatsApp pra agendar visita."
+        "text": "Monte a shortlist no estoque, escolha duas ou três fichas e fale com o consultor pra agendar a visita."
       }
     ],
     "ctaLabel": "Ver estoque",
@@ -876,21 +904,21 @@
   {
     "slug": "seminovo-baixa-km-esteio-2026",
     "title": "Carro usado com poucos km: o que checar",
-    "description": "Seminovo baixa km em Esteio: como ler odômetro, preço e procedência sem cair em anúncio maquiado.",
+    "description": "Seminovo baixa km em Esteio: como ler odômetro, preço e procedência com estoque real.",
     "publishedAt": "2026-07-13",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Baixa km atrai — e também anúncio hinário. O prêmio só faz sentido com histórico limpo."
+        "text": "Baixa km atrai — e o prêmio faz sentido quando o histórico vem limpo e a preparação está clara."
       },
       {
         "type": "h2",
-        "text": "Km baixo ≠ carro perfeito"
+        "text": "Km baixo com histórico em dia"
       },
       {
         "type": "p",
-        "text": "Carro parado muito tempo também sofre (borracha, bateria, fluidos). Peça revisão recente e confira uso real."
+        "text": "Odômetro baixo + revisão documentada é combinação forte. Peça o histórico e confira se o uso declarado fecha com o estado do carro."
       },
       {
         "type": "h2",
@@ -898,7 +926,15 @@
       },
       {
         "type": "p",
-        "text": "Faz sentido se o gap de preço vs unidade similar com mais km for menor que o custo estimado de manutenção adiantada."
+        "text": "Faz sentido se o gap de preço vs unidade similar com mais km for menor que o custo estimado de manutenção adiantada — e se a ficha estiver completa."
+      },
+      {
+        "type": "p",
+        "text": "Unidade com poucos km e preparação séria costuma ser shortlist rápida na loja."
+      },
+      {
+        "type": "p",
+        "text": "Quando o uso está claro, o carro certo aparece mais rápido — e a visita rende em vez de virar passeio sem fim."
       },
       {
         "type": "h2",
@@ -937,7 +973,7 @@
       },
       {
         "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
+        "text": "No test drive, varie rua e velocidade: partida a frio, retomada e freio em descida."
       },
       {
         "type": "h2",
@@ -945,7 +981,7 @@
       },
       {
         "type": "p",
-        "text": "Filtre o estoque, monte a shortlist e chame no WhatsApp pra agendar visita."
+        "text": "Filtre no site, compare os exemplares e chame no WhatsApp só com a shortlist na mão."
       }
     ],
     "ctaLabel": "Ver estoque",
@@ -960,7 +996,7 @@
     "sections": [
       {
         "type": "p",
-        "text": "Uso urbano premia carro curto, econômico e fácil de estacionar — sem pagar porte de estrada."
+        "text": "Uso urbano premia carro ágil, econômico e fácil de estacionar — o pacote certo pra trânsito da Grande POA."
       },
       {
         "type": "h2",
@@ -968,15 +1004,23 @@
       },
       {
         "type": "p",
-        "text": "Raio de giro, visibilidade e consumo no trânsito param e andam. Hatch 1.0/1.6 costuma acertar."
+        "text": "Raio de giro, visibilidade e consumo no para-e-anda. Hatch e compacto costumam acertar sem pagar porte que você não usa."
       },
       {
         "type": "h2",
-        "text": "Onde o SUV compacto ainda ganha"
+        "text": "Quando o SUV compacto ainda encaixa"
       },
       {
         "type": "p",
-        "text": "Se tem garagem alta ou estrada de terra leve no fim de semana, SUV de entrada entra na disputa — sem exagerar porte."
+        "text": "Se tem garagem alta ou estrada de terra leve no fim de semana, SUV de entrada entra na disputa com ótimo equilíbrio cidade/estrada."
+      },
+      {
+        "type": "p",
+        "text": "Na cidade, o seminovo certo reduz fadiga no trânsito e custo no posto."
+      },
+      {
+        "type": "p",
+        "text": "Quando o uso está claro, o carro certo aparece mais rápido — e a visita rende em vez de virar passeio sem fim."
       },
       {
         "type": "h2",
@@ -1015,6 +1059,10 @@
       },
       {
         "type": "p",
+        "text": "Pergunte sobre preparação e laudo do exemplar. Carro revisado encurta a decisão."
+      },
+      {
+        "type": "p",
         "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
@@ -1023,7 +1071,7 @@
       },
       {
         "type": "p",
-        "text": "Filtre o estoque, monte a shortlist e chame no WhatsApp pra agendar visita."
+        "text": "Monte a shortlist no estoque, escolha duas ou três fichas e fale com o consultor pra agendar a visita."
       }
     ],
     "ctaLabel": "Ver estoque",
@@ -1038,7 +1086,7 @@
     "sections": [
       {
         "type": "p",
-        "text": "Viagem longa e Serra pedem freio/suspensão em dia, porta-malas útil e motor que não sofre em subida."
+        "text": "Viagem longa e Serra pedem freio/suspensão em dia, porta-malas útil e motor folgado na subida."
       },
       {
         "type": "h2",
@@ -1046,15 +1094,23 @@
       },
       {
         "type": "p",
-        "text": "Pneus, freios, ar-condicionado e histórico de revisão. Na Serra, transmissão e refrigeração importam."
+        "text": "Pneus, freios, ar-condicionado e histórico de revisão. Na Serra, transmissão e refrigeração importam — o test drive revela."
       },
       {
         "type": "h2",
-        "text": "Porte certo sem exagero"
+        "text": "Porte certo pro roteiro RS"
       },
       {
         "type": "p",
-        "text": "SUV compacto e sedan médio cobrem a maioria dos roteiros RS sem custo de full-size."
+        "text": "SUV compacto e sedan médio cobrem a maioria dos roteiros do estado com conforto e custo equilibrados."
+      },
+      {
+        "type": "p",
+        "text": "Pra quem viaja, o seminovo certo é o que chega descansado — e volta sem susto."
+      },
+      {
+        "type": "p",
+        "text": "Quando o uso está claro, o carro certo aparece mais rápido — e a visita rende em vez de virar passeio sem fim."
       },
       {
         "type": "h2",
@@ -1093,7 +1149,7 @@
       },
       {
         "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
+        "text": "Leve a shortlist impressa ou no celular — facilita comparar versão, km e equipamentos lado a lado."
       },
       {
         "type": "h2",
@@ -1101,10 +1157,300 @@
       },
       {
         "type": "p",
-        "text": "Filtre o estoque, monte a shortlist e chame no WhatsApp pra agendar visita."
+        "text": "Quando a lista estiver curta, o próximo passo é simples: abrir o estoque e confirmar disponibilidade."
       }
     ],
     "ctaLabel": "Ver estoque",
+    "ctaHref": "/seminovos"
+  },
+  {
+    "slug": "nivus-highline-turbo-seminovo-esteio-2026",
+    "title": "Nivus Highline Turbo seminovo em Esteio: por que entra na shortlist",
+    "description": "Nivus Highline Turbo seminovo em Esteio: quando faz sentido, o que olhar na visita e opções reais no estoque Netcar.",
+    "publishedAt": "2026-07-13",
+    "readMinutes": 6,
+    "sections": [
+      {
+        "type": "p",
+        "text": "Nivus Highline Turbo seminovo aparece muito em busca local — e com razão: é modelo que o cliente da região reconhece. Aqui o filtro é estoque real em Esteio: versão, km e preço lado a lado."
+      },
+      {
+        "type": "h2",
+        "text": "Por que Nivus Highline Turbo costuma agradar"
+      },
+      {
+        "type": "p",
+        "text": "Nivus Highline Turbo entra fácil na shortlist: demanda regional boa, peças conhecidas e perfil que funciona no dia a dia do RS."
+      },
+      {
+        "type": "p",
+        "text": "No dia a dia do RS, Nivus Highline Turbo entrega o que a maioria precisa: uso misto cidade/estrada, peça conhecida e revenda previsível. A decisão fina fica no exemplar — ano, km e equipamentos."
+      },
+      {
+        "type": "h2",
+        "text": "O que conferir na visita (sem drama)"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Histórico de manutenção e revisão em dia.",
+          "Estado de freios, suspensão e pneus.",
+          "Test drive em rua e velocidade — conforto e alinhamento."
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Na visita, confira histórico de revisão, estado de pneus e se a documentação fecha com a ficha."
+      },
+      {
+        "type": "h2",
+        "text": "Nivus Highline Turbo no estoque agora"
+      },
+      {
+        "type": "p",
+        "text": "Unidades Nivus Highline Turbo no pátio Netcar — compare preço e km:"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Volkswagen Nivus Highline Turbo",
+            "ano": "2024",
+            "km": "50.000 km",
+            "preco": "R$ 121.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/nivus-highline-turbo-2024-jcv-xx24-19788",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/11052026NIVUS%20HIGHLINE%20JCV5E24CAPA.png"
+          },
+          {
+            "modelo": "Volkswagen Nivus Highline Turbo",
+            "ano": "2023/2024",
+            "km": "64.500 km",
+            "preco": "R$ 121.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/nivus-highline-turbo-2024-jcj-xx54-19815",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/25052026NIVUS%20JCJ0G54CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Troca e financiamento"
+      },
+      {
+        "type": "p",
+        "text": "Se vai dar o atual na troca, leve avaliação atualizada. Financiamento: simule entrada + prazo antes de fechar no modelo."
+      },
+      {
+        "type": "p",
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
+      },
+      {
+        "type": "h2",
+        "text": "Ver Nivus Highline Turbo no estoque"
+      },
+      {
+        "type": "p",
+        "text": "Filtre pelo modelo e escolha duas unidades. Com o perfil alinhado, vale olhar as opções reais no pátio e marcar test drive sem pressa."
+      }
+    ],
+    "ctaLabel": "Ver Nivus Highline Turbo",
+    "ctaHref": "/seminovos"
+  },
+  {
+    "slug": "t-cross-highline-turbo-seminovo-esteio-2026",
+    "title": "T Cross Highline Turbo seminovo em Esteio: por que entra na shortlist",
+    "description": "T Cross Highline Turbo seminovo em Esteio: quando faz sentido, o que olhar na visita e opções reais no estoque Netcar.",
+    "publishedAt": "2026-07-13",
+    "readMinutes": 6,
+    "sections": [
+      {
+        "type": "p",
+        "text": "T Cross Highline Turbo seminovo aparece muito em busca local — e com razão: é modelo que o cliente da região reconhece. Aqui o filtro é estoque real em Esteio: versão, km e preço lado a lado."
+      },
+      {
+        "type": "h2",
+        "text": "Por que T Cross Highline Turbo costuma agradar"
+      },
+      {
+        "type": "p",
+        "text": "T Cross Highline Turbo entra fácil na shortlist: demanda regional boa, peças conhecidas e perfil que funciona no dia a dia do RS."
+      },
+      {
+        "type": "p",
+        "text": "No dia a dia do RS, T Cross Highline Turbo entrega o que a maioria precisa: uso misto cidade/estrada, peça conhecida e revenda previsível. A decisão fina fica no exemplar — ano, km e equipamentos."
+      },
+      {
+        "type": "h2",
+        "text": "O que conferir na visita (sem drama)"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Histórico de manutenção e revisão em dia.",
+          "Estado de freios, suspensão e pneus.",
+          "Test drive em rua e velocidade — conforto e alinhamento."
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Na visita, confira histórico de revisão, estado de pneus e se a documentação fecha com a ficha."
+      },
+      {
+        "type": "h2",
+        "text": "T Cross Highline Turbo no estoque agora"
+      },
+      {
+        "type": "p",
+        "text": "Unidades T Cross Highline Turbo no pátio Netcar — compare preço e km:"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Volkswagen T Cross Highline Turbo",
+            "ano": "2023/2024",
+            "km": "44.035 km",
+            "preco": "R$ 138.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/t-cross-highline-turbo-2024-jcj-xx23-19903",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/10072026T%20CROSS%20HIGHLINE%20JCJ6A23CAPA.png"
+          },
+          {
+            "modelo": "Volkswagen T Cross Highline Turbo",
+            "ano": "2020/2021",
+            "km": "92.800 km",
+            "preco": "R$ 115.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/t-cross-highline-turbo-2021-jan-xx57-19750",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/18042026T%20CROSS%20HIGHLINE%20JAN6C57CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Troca e financiamento"
+      },
+      {
+        "type": "p",
+        "text": "Se vai dar o atual na troca, leve avaliação atualizada. Financiamento: simule entrada + prazo antes de fechar no modelo."
+      },
+      {
+        "type": "p",
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
+      },
+      {
+        "type": "h2",
+        "text": "Ver T Cross Highline Turbo no estoque"
+      },
+      {
+        "type": "p",
+        "text": "Filtre pelo modelo e escolha duas unidades. Com o perfil alinhado, vale olhar as opções reais no pátio e marcar test drive sem pressa."
+      }
+    ],
+    "ctaLabel": "Ver T Cross Highline Turbo",
+    "ctaHref": "/seminovos"
+  },
+  {
+    "slug": "fox-comfortline-seminovo-esteio-2026",
+    "title": "Comprar Fox Comfortline usado: o que confere na visita",
+    "description": "Fox Comfortline seminovo em Esteio: quando faz sentido, o que olhar na visita e opções reais no estoque Netcar.",
+    "publishedAt": "2026-07-13",
+    "readMinutes": 6,
+    "sections": [
+      {
+        "type": "p",
+        "text": "Fox Comfortline seminovo aparece muito em busca local — e com razão: é modelo que o cliente da região reconhece. Aqui o filtro é estoque real em Esteio: versão, km e preço lado a lado."
+      },
+      {
+        "type": "h2",
+        "text": "Por que Fox Comfortline costuma agradar"
+      },
+      {
+        "type": "p",
+        "text": "Fox Comfortline entra fácil na shortlist: demanda regional boa, peças conhecidas e perfil que funciona no dia a dia do RS."
+      },
+      {
+        "type": "p",
+        "text": "No dia a dia do RS, Fox Comfortline entrega o que a maioria precisa: uso misto cidade/estrada, peça conhecida e revenda previsível. A decisão fina fica no exemplar — ano, km e equipamentos."
+      },
+      {
+        "type": "h2",
+        "text": "O que conferir na visita (sem drama)"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Histórico de manutenção e revisão em dia.",
+          "Estado de freios, suspensão e pneus.",
+          "Test drive em rua e velocidade — conforto e alinhamento."
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Leve a shortlist impressa ou no celular — facilita comparar versão, km e equipamentos lado a lado."
+      },
+      {
+        "type": "h2",
+        "text": "Fox Comfortline no estoque agora"
+      },
+      {
+        "type": "p",
+        "text": "Unidades Fox Comfortline no pátio Netcar — compare preço e km:"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Volkswagen Fox Comfortline",
+            "ano": "2016/2017",
+            "km": "110.000 km",
+            "preco": "R$ 56.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/fox-comfortline-2017-ixn-xx61-19840",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/23062026FOX%20COMFORTLINE%20IXN6161CAPA.png"
+          },
+          {
+            "modelo": "Volkswagen Fox Comfortline",
+            "ano": "2016/2017",
+            "km": "127.000 km",
+            "preco": "R$ 56.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/fox-comfortline-2017-ixk-xx89-19786",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026fox%20comfortline%20IXK1A89CAPA.png"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Troca e financiamento"
+      },
+      {
+        "type": "p",
+        "text": "Se vai dar o atual na troca, leve avaliação atualizada. Financiamento: simule entrada + prazo antes de fechar no modelo."
+      },
+      {
+        "type": "h2",
+        "text": "Ver Fox Comfortline no estoque"
+      },
+      {
+        "type": "p",
+        "text": "Filtre pelo modelo e escolha duas unidades. Quando a lista estiver curta, o próximo passo é simples: abrir o estoque e confirmar disponibilidade."
+      }
+    ],
+    "ctaLabel": "Ver Fox Comfortline",
     "ctaHref": "/seminovos"
   },
   {
@@ -1116,7 +1462,7 @@
     "sections": [
       {
         "type": "p",
-        "text": "Não existe hatch \"melhor do mundo\" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e indicamos o que observar em cada um."
+        "text": "Não existe hatch \"melhor do mundo\" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e o que observar em cada um."
       },
       {
         "type": "h2",
@@ -1124,7 +1470,7 @@
       },
       {
         "type": "p",
-        "text": "Priorize consumo, manutenção barata e facilidade de estacionar. Versões compactas e automáticas aliviam trânsito."
+        "text": "Priorize consumo, manutenção acessível e facilidade de estacionar. Versões compactas e automáticas aliviam o trânsito da Grande POA."
       },
       {
         "type": "h2",
@@ -1140,11 +1486,15 @@
       },
       {
         "type": "p",
-        "text": "Estabilidade, conforto em 100 km/h e motor que não force na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
+        "text": "Estabilidade, conforto em velocidade de estrada e motor folgado na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
+      },
+      {
+        "type": "p",
+        "text": "Hatch seminovo acerta quando o uso diário pede esse porte — conforto certo sem pagar o que você não vai usar."
       },
       {
         "type": "h2",
-        "text": "Hatch que atendem esses perfis — no estoque hoje"
+        "text": "Hatch que atendem esses perfis — no estoque"
       },
       {
         "type": "p",
@@ -1183,33 +1533,11 @@
       },
       {
         "type": "p",
-        "text": "Cidade pura → automático costuma valer. Orçamento apertado → manual de entrada. Estrada mista → depende do gosto e do bolso."
+        "text": "Cidade pura → automático costuma agradar. Orçamento mais enxuto → manual de entrada. Estrada mista → depende do gosto e do bolso."
       },
       {
         "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
-      },
-      {
-        "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
+        "text": "Leve a shortlist impressa ou no celular — facilita comparar versão, km e equipamentos lado a lado."
       },
       {
         "type": "h2",
@@ -1217,7 +1545,7 @@
       },
       {
         "type": "p",
-        "text": "Veja todos os Hatch e marque test drive com o consultor — ele cruza perfil, orçamento e estoque."
+        "text": "Cruze perfil, orçamento e estoque com o consultor. Quando a lista estiver curta, o próximo passo é simples: abrir o estoque e confirmar disponibilidade."
       }
     ],
     "ctaLabel": "Ver hatch no estoque",
@@ -1226,13 +1554,13 @@
   {
     "slug": "melhor-sedan-seminovo-esteio-2026",
     "title": "Comprar sedan de particular ou na loja? Comparativo honesto",
-    "description": "Particular x revenda na hora de comprar sedan seminovo: prós, contras e quando cada opção faz sentido. Veja Sedan revisados na Netcar.",
+    "description": "Particular x revenda na hora de comprar sedan seminovo: quando cada caminho faz sentido. Veja Sedan revisados na Netcar.",
     "publishedAt": "2026-06-25",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Na dúvida entre anúncio de particular e seminovo de loja, a decisão não é só preço — é risco, tempo e o que vem depois. Comparativo direto aplicado a Sedan."
+        "text": "Na dúvida entre anúncio de particular e seminovo de loja, a decisão não é só preço — é tempo, processo e o que vem depois. Comparativo direto aplicado a Sedan."
       },
       {
         "type": "h2",
@@ -1242,20 +1570,20 @@
         "type": "ul",
         "items": [
           "Conhece o dono e o histórico de verdade",
-          "Disposto a assumir revisão por conta própria",
+          "Disposto a organizar revisão por conta própria",
           "Tem mecânico de confiança pra inspecionar antes"
         ]
       },
       {
         "type": "h2",
-        "text": "Particular: onde dói"
+        "text": "Particular: o que exige mais de você"
       },
       {
         "type": "ul",
         "items": [
-          "Sem garantia ou laudo padronizado",
-          "Burocracia e risco na transferência",
-          "Test drive com estranhos e negociação cansativa"
+          "Conferência de laudo e documentação por conta",
+          "Burocracia e prazo na transferência",
+          "Negociação e test drive sem estrutura de loja"
         ]
       },
       {
@@ -1312,29 +1640,7 @@
       },
       {
         "type": "p",
-        "text": "Some tempo, risco, revisão eventual e revenda futura. Muitas vezes loja fica competitiva quando você coloca tudo na planilha."
-      },
-      {
-        "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Pra fechar a conta antes de ir à loja:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
+        "text": "Some tempo, conferência técnica e caminho de financiamento/troca. Muitas vezes loja fica competitiva quando você coloca tudo na planilha."
       },
       {
         "type": "h2",
@@ -1342,7 +1648,7 @@
       },
       {
         "type": "p",
-        "text": "Se quer tranquilidade na compra de sedan, revenda preparada encurta o caminho. Veja os Sedan do estoque."
+        "text": "Se quer tranquilidade na compra de sedan, revenda preparada encurta o caminho. Monte a shortlist no estoque, escolha duas ou três fichas e fale com o consultor pra agendar a visita."
       }
     ],
     "ctaLabel": "Ver sedan no estoque",
@@ -1357,7 +1663,7 @@
     "sections": [
       {
         "type": "p",
-        "text": "Comprar fiat seminovo não precisa ser corrida contra o relógio — mas ter ordem ajuda. Esta é a jornada que clientes da Netcar seguem, do primeiro Google ao carro na garagem."
+        "text": "Comprar fiat seminovo não precisa ser corrida — mas ter ordem ajuda. Esta é a jornada que orientamos na Netcar, do primeiro Google ao carro na garagem."
       },
       {
         "type": "h2",
@@ -1389,7 +1695,7 @@
       },
       {
         "type": "p",
-        "text": "Estes Fiat estão disponíveis e são frequentes na shortlist de clientes:"
+        "text": "Estes Fiat estão no estoque e costumam entrar na shortlist:"
       },
       {
         "type": "cars",
@@ -1424,7 +1730,11 @@
       },
       {
         "type": "p",
-        "text": "Reserve 30–40 min por carro. Leve documento, faça percurso variado e não tenha vergonha de perguntar sobre revisão e laudo."
+        "text": "Reserve 30–40 min por carro. Leve documento, faça percurso variado e pergunte sobre revisão e laudo."
+      },
+      {
+        "type": "p",
+        "text": "Na visita, confira histórico de revisão, estado de pneus e se a documentação fecha com a ficha."
       },
       {
         "type": "h2",
@@ -1433,7 +1743,7 @@
       {
         "type": "ol",
         "items": [
-          "Confirme documentação e condições de garantia",
+          "Confirme documentação e condições da proposta",
           "Assine financiamento ou pagamento",
           "Agende retirada e primeiros cuidados pós-compra"
         ]
@@ -1470,7 +1780,7 @@
       },
       {
         "type": "p",
-        "text": "Dá pra encurtar essa jornada em uma visita bem planejada. Veja Fiat no estoque e fale com a equipe."
+        "text": "Dá pra encurtar essa jornada em uma visita bem planejada. Com o perfil alinhado, vale olhar as opções reais no pátio e marcar test drive sem pressa."
       }
     ],
     "ctaLabel": "Ver Fiat no estoque",
@@ -1479,13 +1789,13 @@
   {
     "slug": "ford-usado-em-esteio-vale-a-pena-2026",
     "title": "Ford seminovo: perguntas que todo mundo faz (com resposta direta)",
-    "description": "Dúvidas frequentes sobre ford usado em Esteio: preço, financiamento, garantia, troca — e onde ver Ford disponíveis na Netcar.",
+    "description": "Dúvidas frequentes sobre ford usado em Esteio: preço, financiamento, troca — e onde ver Ford no estoque Netcar.",
     "publishedAt": "2026-06-24",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Reunimos as perguntas que mais aparecem no WhatsApp e na loja sobre ford seminovo. Resposta curta, sem enrolação — e no final, exemplos reais do estoque."
+        "text": "Reunimos as perguntas que mais aparecem no WhatsApp e na loja sobre ford seminovo. Resposta curta — e no final, exemplos reais do estoque."
       },
       {
         "type": "h2",
@@ -1493,15 +1803,15 @@
       },
       {
         "type": "p",
-        "text": "Depende de ano, versão e km. No estoque geral da Netcar, seminovos vão de R$ 49.900 a R$ 209.900. Simule ou veja a ficha de cada Ford pra preço exato."
+        "text": "Depende de ano, versão e km. No estoque geral da Netcar, seminovos vão de R$ 49.900 a R$ 209.900. Veja a ficha de cada Ford pra preço exato."
       },
       {
         "type": "h2",
-        "text": "Ford usado dá problema?"
+        "text": "Como escolher um bom ford usado?"
       },
       {
         "type": "p",
-        "text": "Depende do exemplar, não só da marca. Histórico de revisão, laudo e inspeção técnica separam o bom do problemático. Revenda preparada reduz esse risco."
+        "text": "Foque no exemplar: histórico de revisão, laudo, km coerente e test drive. Revenda preparada encurta essa conferência."
       },
       {
         "type": "h2",
@@ -1525,11 +1835,11 @@
       },
       {
         "type": "p",
-        "text": "Estoque muda todo dia. O jeito mais rápido: clique no modelo abaixo ou chame no WhatsApp com o nome do carro."
+        "text": "Estoque muda com frequência. O jeito mais rápido: abrir a ficha abaixo ou chamar no WhatsApp com o nome do carro."
       },
       {
         "type": "h2",
-        "text": "Ford disponíveis agora — confira"
+        "text": "Ford no estoque — confira"
       },
       {
         "type": "cars",
@@ -1560,19 +1870,15 @@
       },
       {
         "type": "h2",
-        "text": "Tem garantia?"
-      },
-      {
-        "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine. Consultor detalha cobertura na proposta."
-      },
-      {
-        "type": "h2",
         "text": "Onde fica a Netcar?"
       },
       {
         "type": "p",
         "text": "Esteio/RS, Av. Presidente Vargas — duas lojas. Agende visita e test drive."
+      },
+      {
+        "type": "p",
+        "text": "Filtre no site, compare os exemplares e chame no WhatsApp só com a shortlist na mão."
       }
     ],
     "ctaLabel": "Ver Ford no estoque",
@@ -1757,10 +2063,6 @@
         "text": "WhatsApp, documentos, parcela real. Depois visite."
       },
       {
-        "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
-      },
-      {
         "type": "h2",
         "text": "Pronto pro primeiro carro?"
       },
@@ -1775,13 +2077,13 @@
   {
     "slug": "hyundai-usado-em-esteio-vale-a-pena-2026",
     "title": "2 Hyundai seminovos que se destacam no estoque agora (2026)",
-    "description": "Seleção editorial de Hyundai no estoque real da Netcar: critérios, faixas de preço e os modelos que valem test drive em Esteio.",
+    "description": "Seleção editorial de Hyundai no estoque real da Netcar: critérios, faixas de preço e modelos que encaixam bem na visita em Esteio.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Ranking de blog não é nota inventada — é curadoria. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Hyundai se destacaram no pátio esta semana."
+        "text": "Isto não é nota inventada — é curadoria de pátio. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Hyundai se destacaram esta semana."
       },
       {
         "type": "h2",
@@ -1793,8 +2095,12 @@
           "Passou pela Fábrica de Valor (60+ itens)",
           "Quilometragem coerente com o ano",
           "Preço alinhado ao mercado regional",
-          "Procura real de quem visita a loja"
+          "Encaixe real com o que o cliente da região busca"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Hyundai costuma agradar quem busca peça acessível, revenda previsível e opções claras de versão no mercado regional."
       },
       {
         "type": "h2",
@@ -1802,7 +2108,7 @@
       },
       {
         "type": "p",
-        "text": "Temos 2 Hyundai selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
+        "text": "2 Hyundai selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
       },
       {
         "type": "cars",
@@ -1833,7 +2139,7 @@
       },
       {
         "type": "p",
-        "text": "Carro bem preparado e bem precificado não fica parado. Quando bater o olho no certo, vale reservar o test drive."
+        "text": "Carro bem preparado e bem precificado gira rápido. Quando achar o encaixe certo, vale reservar o test drive."
       },
       {
         "type": "h2",
@@ -1845,33 +2151,11 @@
       },
       {
         "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Pra fechar a conta antes de ir à loja:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
-      },
-      {
-        "type": "h2",
         "text": "Quer ver mais opções?"
       },
       {
         "type": "p",
-        "text": "Ranking muda conforme entra carro novo no pátio. Veja todos os Hyundai do estoque atualizado."
+        "text": "A curadoria muda conforme entra carro novo no pátio. Com o perfil alinhado, vale olhar as opções reais no pátio e marcar test drive sem pressa."
       }
     ],
     "ctaLabel": "Ver Hyundai no estoque",
@@ -1886,7 +2170,7 @@
     "sections": [
       {
         "type": "p",
-        "text": "Comprar jeep seminovo não precisa ser corrida contra o relógio — mas ter ordem ajuda. Esta é a jornada que clientes da Netcar seguem, do primeiro Google ao carro na garagem."
+        "text": "Comprar jeep seminovo não precisa ser corrida — mas ter ordem ajuda. Esta é a jornada que orientamos na Netcar, do primeiro Google ao carro na garagem."
       },
       {
         "type": "h2",
@@ -1918,7 +2202,7 @@
       },
       {
         "type": "p",
-        "text": "Estes Jeep estão disponíveis e são frequentes na shortlist de clientes:"
+        "text": "Estes Jeep estão no estoque e costumam entrar na shortlist:"
       },
       {
         "type": "cars",
@@ -1953,7 +2237,11 @@
       },
       {
         "type": "p",
-        "text": "Reserve 30–40 min por carro. Leve documento, faça percurso variado e não tenha vergonha de perguntar sobre revisão e laudo."
+        "text": "Reserve 30–40 min por carro. Leve documento, faça percurso variado e pergunte sobre revisão e laudo."
+      },
+      {
+        "type": "p",
+        "text": "Na visita, confira histórico de revisão, estado de pneus e se a documentação fecha com a ficha."
       },
       {
         "type": "h2",
@@ -1962,7 +2250,7 @@
       {
         "type": "ol",
         "items": [
-          "Confirme documentação e condições de garantia",
+          "Confirme documentação e condições da proposta",
           "Assine financiamento ou pagamento",
           "Agende retirada e primeiros cuidados pós-compra"
         ]
@@ -1973,33 +2261,11 @@
       },
       {
         "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Pra fechar a conta antes de ir à loja:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
-      },
-      {
-        "type": "h2",
         "text": "Pronto pra começar?"
       },
       {
         "type": "p",
-        "text": "Dá pra encurtar essa jornada em uma visita bem planejada. Veja Jeep no estoque e fale com a equipe."
+        "text": "Dá pra encurtar essa jornada em uma visita bem planejada. Com o perfil alinhado, vale olhar as opções reais no pátio e marcar test drive sem pressa."
       }
     ],
     "ctaLabel": "Ver Jeep no estoque",
@@ -2008,13 +2274,13 @@
   {
     "slug": "chevrolet-usado-em-esteio-vale-a-pena-2026",
     "title": "Chevrolet seminovo: 5 mitos que fazem você errar na compra",
-    "description": "Verdade ou mito sobre chevrolet usado? Desmistificamos o que mais confunde compradores em Esteio — e mostramos Chevrolet reais no estoque.",
+    "description": "Verdade ou mito sobre chevrolet usado? Clareza pra decidir melhor em Esteio — com Chevrolet reais no estoque Netcar.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Tem conversa repetida na hora de comprar chevrolet usado — e muito mito vira decisão ruim. Separamos o que é papo de bar de o que é fato, com olhar de quem vê carro passar todo dia na loja."
+        "text": "Tem conversa repetida na hora de comprar chevrolet usado — e muito mito atrasa uma boa escolha. Separamos papo de bar de fato útil, com olhar de quem vê carro passar todo dia na loja."
       },
       {
         "type": "h2",
@@ -2022,7 +2288,7 @@
       },
       {
         "type": "p",
-        "text": "Preço baixo sem laudo e sem histórico é loteria. Economia na compra vira oficina depois. O custo total inclui procedência, revisão e revenda futura."
+        "text": "Preço baixo sem laudo e sem histórico é loteria. Economia na compra pode virar oficina depois. O custo total inclui procedência, revisão e revenda futura."
       },
       {
         "type": "h2",
@@ -2030,7 +2296,7 @@
       },
       {
         "type": "p",
-        "text": "Pintura nova pode esconder batida. Interior impecável não garante câmbio saudável. Por isso inspeção técnica pesa mais que brilho na vitrine."
+        "text": "Acabamento impecável ajuda, mas não substitui inspeção. Por isso preparação técnica e test drive pesam mais que brilho na vitrine."
       },
       {
         "type": "h2",
@@ -2038,7 +2304,11 @@
       },
       {
         "type": "p",
-        "text": "Dois Chevrolet do mesmo ano podem ter históricos opostos: um revisado em concessionária, outro rodando sem manutenção. O exemplar importa tanto quanto o modelo."
+        "text": "Dois Chevrolet do mesmo ano podem ter históricos diferentes: um com revisão em dia, outro com uso mais intenso. O exemplar importa tanto quanto o modelo."
+      },
+      {
+        "type": "p",
+        "text": "Chevrolet costuma agradar quem busca peça acessível, revenda previsível e opções claras de versão no mercado regional."
       },
       {
         "type": "h2",
@@ -2046,7 +2316,7 @@
       },
       {
         "type": "p",
-        "text": "Sem achismo — estes Chevrolet estão disponíveis com ficha e fotos reais:"
+        "text": "Sem achismo — estes Chevrolet estão com ficha e fotos reais:"
       },
       {
         "type": "cars",
@@ -2089,7 +2359,7 @@
       },
       {
         "type": "p",
-        "text": "Particular pode parecer mais barato, mas sem revisão, sem garantia e com burocracia sua. Revenda preparada entrega respaldo — e muitas vezes o custo-benefício final é melhor."
+        "text": "Particular pode parecer mais barato na etiqueta. Revenda preparada entrega processo, documentação e caminho de financiamento/troca no mesmo lugar — muitas vezes o custo-benefício final equilibra."
       },
       {
         "type": "p",
@@ -2097,33 +2367,11 @@
       },
       {
         "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Pra fechar a conta antes de ir à loja:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
-      },
-      {
-        "type": "h2",
         "text": "Conclusão"
       },
       {
         "type": "p",
-        "text": "Comprar chevrolet seminovo com critério é ignorar mito e olhar fato: laudo, km, donos, test drive. Veja os Chevrolet da Netcar."
+        "text": "Comprar chevrolet seminovo com critério é olhar laudo, km, donos e test drive. Monte a shortlist no estoque, escolha duas ou três fichas e fale com o consultor pra agendar a visita."
       }
     ],
     "ctaLabel": "Ver Chevrolet no estoque",
@@ -2132,13 +2380,13 @@
   {
     "slug": "honda-usado-em-esteio-vale-a-pena-2026",
     "title": "2 Honda seminovos que se destacam no estoque agora (2026)",
-    "description": "Seleção editorial de Honda no estoque real da Netcar: critérios, faixas de preço e os modelos que valem test drive em Esteio.",
+    "description": "Seleção editorial de Honda no estoque real da Netcar: critérios, faixas de preço e modelos que encaixam bem na visita em Esteio.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Ranking de blog não é nota inventada — é curadoria. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Honda se destacaram no pátio esta semana."
+        "text": "Isto não é nota inventada — é curadoria de pátio. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Honda se destacaram esta semana."
       },
       {
         "type": "h2",
@@ -2150,8 +2398,12 @@
           "Passou pela Fábrica de Valor (60+ itens)",
           "Quilometragem coerente com o ano",
           "Preço alinhado ao mercado regional",
-          "Procura real de quem visita a loja"
+          "Encaixe real com o que o cliente da região busca"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Honda costuma agradar quem busca peça acessível, revenda previsível e opções claras de versão no mercado regional."
       },
       {
         "type": "h2",
@@ -2159,7 +2411,7 @@
       },
       {
         "type": "p",
-        "text": "Temos 2 Honda selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
+        "text": "2 Honda selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
       },
       {
         "type": "cars",
@@ -2190,7 +2442,7 @@
       },
       {
         "type": "p",
-        "text": "Carro bem preparado e bem precificado não fica parado. Quando bater o olho no certo, vale reservar o test drive."
+        "text": "Carro bem preparado e bem precificado gira rápido. Quando achar o encaixe certo, vale reservar o test drive."
       },
       {
         "type": "h2",
@@ -2202,33 +2454,11 @@
       },
       {
         "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Pra fechar a conta antes de ir à loja:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
-      },
-      {
-        "type": "h2",
         "text": "Quer ver mais opções?"
       },
       {
         "type": "p",
-        "text": "Ranking muda conforme entra carro novo no pátio. Veja todos os Honda do estoque atualizado."
+        "text": "A curadoria muda conforme entra carro novo no pátio. Com o perfil alinhado, vale olhar as opções reais no pátio e marcar test drive sem pressa."
       }
     ],
     "ctaLabel": "Ver Honda no estoque",
@@ -2237,13 +2467,13 @@
   {
     "slug": "nissan-usado-em-esteio-vale-a-pena-2026",
     "title": "2 Nissan seminovos que se destacam no estoque agora (2026)",
-    "description": "Seleção editorial de Nissan no estoque real da Netcar: critérios, faixas de preço e os modelos que valem test drive em Esteio.",
+    "description": "Seleção editorial de Nissan no estoque real da Netcar: critérios, faixas de preço e modelos que encaixam bem na visita em Esteio.",
     "publishedAt": "2026-06-23",
     "readMinutes": 6,
     "sections": [
       {
         "type": "p",
-        "text": "Ranking de blog não é nota inventada — é curadoria. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Nissan se destacaram no pátio esta semana."
+        "text": "Isto não é nota inventada — é curadoria de pátio. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Nissan se destacaram esta semana."
       },
       {
         "type": "h2",
@@ -2255,8 +2485,12 @@
           "Passou pela Fábrica de Valor (60+ itens)",
           "Quilometragem coerente com o ano",
           "Preço alinhado ao mercado regional",
-          "Procura real de quem visita a loja"
+          "Encaixe real com o que o cliente da região busca"
         ]
+      },
+      {
+        "type": "p",
+        "text": "Nissan costuma agradar quem busca peça acessível, revenda previsível e opções claras de versão no mercado regional."
       },
       {
         "type": "h2",
@@ -2264,7 +2498,7 @@
       },
       {
         "type": "p",
-        "text": "Temos 2 Nissan selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
+        "text": "2 Nissan selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
       },
       {
         "type": "cars",
@@ -2295,7 +2529,7 @@
       },
       {
         "type": "p",
-        "text": "Carro bem preparado e bem precificado não fica parado. Quando bater o olho no certo, vale reservar o test drive."
+        "text": "Carro bem preparado e bem precificado gira rápido. Quando achar o encaixe certo, vale reservar o test drive."
       },
       {
         "type": "h2",
@@ -2307,33 +2541,11 @@
       },
       {
         "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Pra fechar a conta antes de ir à loja:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
-      },
-      {
-        "type": "h2",
         "text": "Quer ver mais opções?"
       },
       {
         "type": "p",
-        "text": "Ranking muda conforme entra carro novo no pátio. Veja todos os Nissan do estoque atualizado."
+        "text": "A curadoria muda conforme entra carro novo no pátio. Com o perfil alinhado, vale olhar as opções reais no pátio e marcar test drive sem pressa."
       }
     ],
     "ctaLabel": "Ver Nissan no estoque",
@@ -2342,13 +2554,13 @@
   {
     "slug": "chery-usado-em-esteio-vale-a-pena-2026",
     "title": "Chery usado: passo a passo antes de fechar negócio",
-    "description": "Do primeiro contato ao test drive: o que verificar num chery seminovo, quanto custa e quais Chery estão no estoque da Netcar agora.",
+    "description": "Do perfil de uso ao test drive: como escolher chery seminovo com critério — e ver opções reais no estoque Netcar em Esteio.",
     "publishedAt": "2026-06-23",
     "readMinutes": 7,
     "sections": [
       {
         "type": "p",
-        "text": "Comprar chery seminovo sem plano é receita pra pagar caro ou levar problema escondido. Este guia segue a ordem que a gente usa na loja quando orienta cliente — do perfil de uso ao fechamento."
+        "text": "Comprar chery seminovo rende mais quando o perfil de uso vem antes do anúncio. Este roteiro é o que a gente usa na loja pra orientar cliente em Esteio e na Grande POA."
       },
       {
         "type": "h2",
@@ -2368,7 +2580,11 @@
       },
       {
         "type": "p",
-        "text": "Hoje, seminovos na Netcar vão de R$ 49.900 a R$ 209.900. Chery costuma ficar na faixa intermediária — desconfie de preço muito abaixo do mercado sem laudo."
+        "text": "Hoje, seminovos na Netcar vão de R$ 49.900 a R$ 209.900. Chery costuma aparecer em faixas intermediárias — o exemplar certo equilibra ano, km e versão."
+      },
+      {
+        "type": "p",
+        "text": "Chery costuma agradar quem busca peça acessível, revenda previsível e opções claras de versão no mercado regional."
       },
       {
         "type": "h2",
@@ -2377,8 +2593,8 @@
       {
         "type": "ul",
         "items": [
-          "CRLV e CPF do vendedor batendo",
-          "Sem restrição, multa ou pendência oculta",
+          "CRLV e dados do vendedor batendo",
+          "Sem restrição ou pendência na transferência",
           "Histórico de donos coerente com a km"
         ]
       },
@@ -2432,29 +2648,7 @@
       },
       {
         "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
-      },
-      {
-        "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
+        "text": "No test drive, varie rua e velocidade: partida a frio, retomada e freio em descida."
       },
       {
         "type": "h2",
@@ -2462,7 +2656,7 @@
       },
       {
         "type": "p",
-        "text": "Seguiu os passos? Falta só escolher o exemplar. Confira os Chery disponíveis."
+        "text": "Bom chery seminovo = procedência + revisão + preço coerente. Filtre no site, compare os exemplares e chame no WhatsApp só com a shortlist na mão."
       }
     ],
     "ctaLabel": "Ver Chery no estoque",
@@ -2579,10 +2773,6 @@
         ]
       },
       {
-        "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
-      },
-      {
         "type": "h2",
         "text": "Salvou o checklist?"
       },
@@ -2603,7 +2793,7 @@
     "sections": [
       {
         "type": "p",
-        "text": "Não existe volkswagen \"melhor do mundo\" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e indicamos o que observar em cada um."
+        "text": "Não existe volkswagen \"melhor do mundo\" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e o que observar em cada um."
       },
       {
         "type": "h2",
@@ -2611,7 +2801,7 @@
       },
       {
         "type": "p",
-        "text": "Priorize consumo, manutenção barata e facilidade de estacionar. Versões compactas e automáticas aliviam trânsito."
+        "text": "Priorize consumo, manutenção acessível e facilidade de estacionar. Versões compactas e automáticas aliviam o trânsito da Grande POA."
       },
       {
         "type": "h2",
@@ -2627,11 +2817,15 @@
       },
       {
         "type": "p",
-        "text": "Estabilidade, conforto em 100 km/h e motor que não force na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
+        "text": "Estabilidade, conforto em velocidade de estrada e motor folgado na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
+      },
+      {
+        "type": "p",
+        "text": "Volkswagen costuma agradar quem busca peça acessível, revenda previsível e opções claras de versão no mercado regional."
       },
       {
         "type": "h2",
-        "text": "Volkswagen que atendem esses perfis — no estoque hoje"
+        "text": "Volkswagen que atendem esses perfis — no estoque"
       },
       {
         "type": "p",
@@ -2670,33 +2864,11 @@
       },
       {
         "type": "p",
-        "text": "Cidade pura → automático costuma valer. Orçamento apertado → manual de entrada. Estrada mista → depende do gosto e do bolso."
+        "text": "Cidade pura → automático costuma agradar. Orçamento mais enxuto → manual de entrada. Estrada mista → depende do gosto e do bolso."
       },
       {
         "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
-      },
-      {
-        "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
+        "text": "Leve a shortlist impressa ou no celular — facilita comparar versão, km e equipamentos lado a lado."
       },
       {
         "type": "h2",
@@ -2704,7 +2876,7 @@
       },
       {
         "type": "p",
-        "text": "Veja todos os Volkswagen e marque test drive com o consultor — ele cruza perfil, orçamento e estoque."
+        "text": "Cruze perfil, orçamento e estoque com o consultor. Quando a lista estiver curta, o próximo passo é simples: abrir o estoque e confirmar disponibilidade."
       }
     ],
     "ctaLabel": "Ver Volkswagen no estoque",
@@ -2719,7 +2891,7 @@
     "sections": [
       {
         "type": "p",
-        "text": "Não existe suv \"melhor do mundo\" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e indicamos o que observar em cada um."
+        "text": "Não existe suv \"melhor do mundo\" — existe o melhor pro seu uso. Agrupamos cenários reais de quem compra na região e o que observar em cada um."
       },
       {
         "type": "h2",
@@ -2727,7 +2899,7 @@
       },
       {
         "type": "p",
-        "text": "Priorize consumo, manutenção barata e facilidade de estacionar. Versões compactas e automáticas aliviam trânsito."
+        "text": "Priorize consumo, manutenção acessível e facilidade de estacionar. Versões compactas e automáticas aliviam o trânsito da Grande POA."
       },
       {
         "type": "h2",
@@ -2743,11 +2915,15 @@
       },
       {
         "type": "p",
-        "text": "Estabilidade, conforto em 100 km/h e motor que não force na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
+        "text": "Estabilidade, conforto em velocidade de estrada e motor folgado na subida. Veja pneus, freio e ruído de rodagem no test drive longo."
+      },
+      {
+        "type": "p",
+        "text": "Suv seminovo acerta quando o uso diário pede esse porte — conforto certo sem pagar o que você não vai usar."
       },
       {
         "type": "h2",
-        "text": "Suv que atendem esses perfis — no estoque hoje"
+        "text": "Suv que atendem esses perfis — no estoque"
       },
       {
         "type": "p",
@@ -2786,33 +2962,11 @@
       },
       {
         "type": "p",
-        "text": "Cidade pura → automático costuma valer. Orçamento apertado → manual de entrada. Estrada mista → depende do gosto e do bolso."
+        "text": "Cidade pura → automático costuma agradar. Orçamento mais enxuto → manual de entrada. Estrada mista → depende do gosto e do bolso."
       },
       {
         "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
-      },
-      {
-        "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
+        "text": "Leve a shortlist impressa ou no celular — facilita comparar versão, km e equipamentos lado a lado."
       },
       {
         "type": "h2",
@@ -2820,7 +2974,7 @@
       },
       {
         "type": "p",
-        "text": "Veja todos os Suv e marque test drive com o consultor — ele cruza perfil, orçamento e estoque."
+        "text": "Cruze perfil, orçamento e estoque com o consultor. Quando a lista estiver curta, o próximo passo é simples: abrir o estoque e confirmar disponibilidade."
       }
     ],
     "ctaLabel": "Ver suv no estoque",

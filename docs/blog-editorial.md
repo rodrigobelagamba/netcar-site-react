@@ -73,6 +73,50 @@ Status válidos em `blog-topics.json`: `pendente` | `publicado` | `adiado` | `ca
 - Falar de valores em faixas realistas (ex: "na faixa de R$ 70 a 90 mil"), nunca preço exato de modelo específico.
 - Citar Grande POA / região metropolitana / Esteio quando natural — é SEO local.
 
+## Anti-detração (estoque) — obrigatório
+
+Somos vendedores. Texto ajuda a escolher **sem** queimar carro, marca ou modelo do pátio.
+
+**Proibido**
+
+- “Fuja de…”, “problema crônico de marca X”, “esse modelo é armadilha”.
+- Ranking ou mito que humilha opção que está (ou pode estar) no estoque.
+- Comparar “bom vs ruim” entre marcas do pátio.
+
+**Permitido**
+
+- “Pra uso Y, priorize Z.”
+- “Na visita, confira X” (neutro, sem alarmismo).
+- “Nessa faixa o foco costuma ser hatch / SUV de entrada / …” (descreve mercado, não pejora unidade).
+
+Comparar **usos e perfis**, nunca destruir produto.
+
+## Venda sutil (arco obrigatório)
+
+Todo artigo (auto ou manual) fecha este arco:
+
+1. Responde a dúvida da busca no 1º parágrafo.
+2. Critério de escolha / uso (valor educacional).
+3. Reflexão positiva alinhada ao que a Netcar vende (categoria, porte, híbrido, urbano, etc.).
+4. Prova: cards da API **ou** convite a filtrar o estoque (manual sem preço fixo no texto corrido).
+5. Confiança curta: Fábrica de Valor / NetHelp / desde 1997 — **no máximo 1 menção** por artigo.
+6. CTA interno (`/seminovos`, `/compra`, …) com label de ajuda (“Ver opções no estoque”), não de pressão (“Compre já”).
+
+Venda sutil = leitor sai com shortlist e caminho claro pro site. Não é hard sell.
+
+## Checklist QA pré-publish (humanização)
+
+Antes de marcar `publicado` ou mergear auto:
+
+- [ ] Soa consultor de loja, não robô nem YouTuber “detonando carro”.
+- [ ] Zero detração de marca/modelo do estoque.
+- [ ] Cada `h2` muda a utilidade (nada de H2 só pra encher).
+- [ ] Abertura responde a busca; fechamento convida ao estoque sem gritar.
+- [ ] Fábrica de Valor / autoridade aparece no máx. 1 vez.
+- [ ] Bloco de financiamento só quando intent compra/financiamento e não em todo post.
+- [ ] Sem clichê de IA; frases curtas; SEO local natural.
+- [ ] Anti-overlap conferido (auto + manual + blocklist).
+
 ## Conteúdo regional sem doorway page
 
 Cidade ou região precisa mudar a utilidade do artigo, não só título e topônimo. Artigo regional deve ter pelo menos **dois elementos próprios**:

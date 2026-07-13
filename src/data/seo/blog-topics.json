@@ -151,5 +151,22 @@
     "asset": "roteiro-negociacao-remota",
     "status": "adiado",
     "reason": "Overlap com trocar-carro-financiado / vender-carro-financiado"
+  },
+  {
+    "slug": "seminovo-hibrido-vale-a-pena-esteio",
+    "keyword": "seminovo híbrido esteio",
+    "titleHint": "Seminovo híbrido em Esteio: quando faz sentido na Grande POA",
+    "intent": "compra",
+    "status": "publicado"
+  },
+  {
+    "slug": "mobilidade-urbana-seminovo-grande-poa",
+    "keyword": "mobilidade urbana seminovo grande porto alegre",
+    "titleHint": "Mobilidade urbana na Grande POA: como escolher seminovo pro trânsito",
+    "intent": "compra",
+    "region": "Grande Porto Alegre",
+    "cities": ["Porto Alegre", "Canoas", "Esteio", "Gravataí"],
+    "asset": "guia-por-uso",
+    "status": "publicado"
   }
 ]
