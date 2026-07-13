@@ -193,7 +193,14 @@ export async function deployTarViaSshPassword({
     report('   Extraindo no servidor…');
     await execRemote(
       conn,
-      `mkdir -p ${remotePath} && tar -C ${remotePath} -xf $HOME/${remoteTarName} && rm -f $HOME/${remoteTarName}`,
+      [
+        `mkdir -p ${remotePath}`,
+        // --no-same-permissions: evita tar aplicar mode 700 do '.' do dist (Apache 403 no .htaccess)
+        `tar -C ${remotePath} --no-same-owner --no-same-permissions -xf $HOME/${remoteTarName}`,
+        `rm -f $HOME/${remoteTarName}`,
+        `chmod 755 ${remotePath}`,
+        `chmod -R a+rX ${remotePath}`,
+      ].join(' && '),
       onProgress
     );
 
