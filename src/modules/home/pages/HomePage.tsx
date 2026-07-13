@@ -249,11 +249,18 @@ export function HomePage() {
 
       <SearchBar />
 
-      <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-12">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-fg">Destaques do estoque</h2>
-          <p className="mt-2 max-w-2xl text-gray-600 text-base md:text-lg font-medium">
-            Financiamento em até 60x, cartão em até 21x, troca avaliada e documentação com despachante. Atendimento 24h no WhatsApp.
+      {/* Estoque sobe na rolagem: prioridade no mobile */}
+      <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 md:py-12">
+        <div className="mb-6 md:mb-8">
+          <h2 className="text-2xl font-bold text-fg md:text-3xl">
+            Destaques do estoque
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm font-medium text-gray-600 md:text-lg">
+            <span className="md:hidden">Escolha um carro e fale no WhatsApp.</span>
+            <span className="hidden md:inline">
+              Financiamento em até 60x, cartão em até 21x, troca avaliada e
+              documentação com despachante. Atendimento 24h no WhatsApp.
+            </span>
           </p>
         </div>
         <ProductList
@@ -261,13 +268,15 @@ export function HomePage() {
           isLoading={isLoadingVehicles}
           showWhatsAppInterest
         />
-        <div className="mt-10 flex justify-center">
+        <div className="mt-8 flex justify-center md:mt-10">
           <button
             type="button"
             onClick={goToStock}
             className="inline-flex w-full max-w-md shrink-0 items-center justify-center gap-2.5 rounded-full bg-[#00283C] px-8 py-4 text-base font-black uppercase tracking-wider text-white shadow-[0_12px_32px_rgba(0,40,60,0.28)] transition-all hover:bg-[#00435a] hover:shadow-[0_16px_40px_rgba(0,40,60,0.34)] active:scale-[0.98] sm:w-auto"
           >
-            Ver todos no estoque
+            <span className="button-text-shimmer-on-dark">
+              Ver todos no estoque
+            </span>
             <ArrowRight className="h-5 w-5" />
           </button>
         </div>
@@ -275,16 +284,22 @@ export function HomePage() {
 
       <ServicesSection />
 
-      <HomePurchaseBenefits />
+      {/* Desktop only: evita repetir benefícios e DNA longos no mobile */}
+      <div className="hidden md:block">
+        <HomePurchaseBenefits />
+        <DNASection />
+      </div>
 
-      <DNASection />
+      <div className="hidden md:block">
+        <NetcarSocialSection />
+      </div>
 
-      <NetcarSocialSection />
-
-      <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
+      <div className="w-full space-y-8 bg-muted px-4 py-8 font-sans text-muted-foreground antialiased sm:px-6 md:py-12 lg:px-8 xl:px-12 2xl:px-16">
         <div className="container-main space-y-8">
           <LazyLocalizacao />
-          <IanBot />
+          <div className="hidden md:block">
+            <IanBot />
+          </div>
         </div>
       </div>
 
