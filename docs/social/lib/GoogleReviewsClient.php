@@ -21,6 +21,16 @@ final class GoogleReviewsClient
             $locations = array_values(array_filter(
                 $locations,
                 static fn($loc) => in_array($loc['name'], $configuredIds, true)
+                    || in_array($loc['reviewsParent'] ?? '', $configuredIds, true)
+            ));
+        } else {
+            // Sem lista explícita: só lojas Netcar (evita contas extras tipo "academia")
+            $locations = array_values(array_filter(
+                $locations,
+                static function ($loc) {
+                    $title = (string) ($loc['title'] ?? '');
+                    return stripos($title, 'netcar') !== false;
+                }
             ));
         }
 
@@ -38,7 +48,8 @@ final class GoogleReviewsClient
         );
 
         foreach ($locations as $location) {
-            $locationReviews = $this->fetchLocationReviews($accessToken, $location['name']);
+            $parent = $location['reviewsParent'] ?? $location['name'];
+            $locationReviews = $this->fetchLocationReviews($accessToken, $parent);
             $totalCount += (int) ($locationReviews['totalReviewCount'] ?? count($locationReviews['reviews']));
 
             if (!empty($locationReviews['averageRating'])) {
@@ -49,6 +60,9 @@ final class GoogleReviewsClient
 
             foreach ($locationReviews['reviews'] as $review) {
                 $mapped = $this->mapReview($review, $location, $accessToken);
+                if ($mapped === null) {
+                    continue;
+                }
                 $allReviews[$mapped['id']] = $mapped;
             }
 
@@ -82,14 +96,18 @@ final class GoogleReviewsClient
             ],
             'pagination' => [
                 'page' => 1,
-                'pageSize' => 20,
+                'pageSize' => 21,
                 'totalCount' => $totalCount > 0 ? $totalCount : count($allReviews),
-                'hasMore' => count($allReviews) > 20,
+                'hasMore' => count($allReviews) > 21,
             ],
-            'reviews' => array_slice($allReviews, 0, 20),
+            'reviews' => $allReviews,
         ];
     }
 
+    /**
+     * Business Information API devolve name=locations/{id}.
+     * Reviews API v4 exige parent=accounts/{id}/locations/{id}.
+     */
     private function listLocations(string $accessToken): array
     {
         $accountsResponse = HttpClient::get(
@@ -126,6 +144,18 @@ final class GoogleReviewsClient
                 }
 
                 foreach ($response['body']['locations'] ?? [] as $location) {
+                    $locName = (string) ($location['name'] ?? '');
+                    if ($locName === '') {
+                        continue;
+                    }
+
+                    if (strpos($locName, 'accounts/') === 0) {
+                        $location['reviewsParent'] = $locName;
+                    } else {
+                        $locationId = preg_replace('#^locations/#', '', $locName);
+                        $location['reviewsParent'] = $accountName . '/locations/' . $locationId;
+                    }
+
                     $locations[] = $location;
                 }
 
@@ -136,7 +166,7 @@ final class GoogleReviewsClient
         return $locations;
     }
 
-    private function fetchLocationReviews(string $accessToken, string $locationName): array
+    private function fetchLocationReviews(string $accessToken, string $reviewsParent): array
     {
         $reviews = [];
         $nextPageToken = null;
@@ -147,9 +177,10 @@ final class GoogleReviewsClient
             $query = http_build_query(array_filter([
                 'pageSize' => 50,
                 'pageToken' => $nextPageToken,
+                'orderBy' => 'updateTime desc',
             ]));
 
-            $url = 'https://mybusiness.googleapis.com/v4/' . $locationName . '/reviews?' . $query;
+            $url = 'https://mybusiness.googleapis.com/v4/' . $reviewsParent . '/reviews?' . $query;
             $response = HttpClient::get($url, ['Authorization: Bearer ' . $accessToken]);
 
             if ($response['status'] !== 200) {
@@ -174,7 +205,7 @@ final class GoogleReviewsClient
         ];
     }
 
-    private function mapReview(array $review, array $location, string $accessToken): array
+    private function mapReview(array $review, array $location, string $accessToken): ?array
     {
         $ratingMap = [
             'ONE' => 1,
@@ -185,10 +216,19 @@ final class GoogleReviewsClient
         ];
 
         $rating = $ratingMap[$review['starRating'] ?? 'FIVE'] ?? 5;
+        // Mesma regra do Outscraper: site só publica 4★+ com texto
+        if ($rating < 4) {
+            return null;
+        }
+
         $text = trim($review['comment'] ?? '');
+        if ($text === '') {
+            return null;
+        }
+
         $remotePhotoUrl = $this->extractReviewPhotoUrl($review);
         $publishedAt = $review['createTime'] ?? null;
-        $reviewId = (string) ($review['reviewId'] ?? ($review['name'] ?? uniqid('review_')));
+        $reviewId = (string) ($review['reviewId'] ?? ($review['name'] ?? uniqid('review_', true)));
         $photoUrl = ReviewPhotoCache::resolve($reviewId, $remotePhotoUrl, $accessToken);
 
         $variant = $photoUrl ? 'photo' : 'text';
@@ -225,16 +265,20 @@ final class GoogleReviewsClient
             return 'hoje';
         }
         if ($diff < 86400 * 7) {
-            return 'há ' . max(1, (int) floor($diff / 86400)) . ' dias';
+            $n = max(1, (int) floor($diff / 86400));
+            return $n === 1 ? 'há 1 dia' : 'há ' . $n . ' dias';
         }
         if ($diff < 86400 * 30) {
-            return 'há ' . max(1, (int) floor($diff / (86400 * 7))) . ' semanas';
+            $n = max(1, (int) floor($diff / (86400 * 7)));
+            return $n === 1 ? 'há uma semana' : 'há ' . $n . ' semanas';
         }
         if ($diff < 86400 * 365) {
-            return 'há ' . max(1, (int) floor($diff / (86400 * 30))) . ' meses';
+            $n = max(1, (int) floor($diff / (86400 * 30)));
+            return $n === 1 ? 'há um mês' : 'há ' . $n . ' meses';
         }
 
-        return 'há ' . max(1, (int) floor($diff / (86400 * 365))) . ' anos';
+        $n = max(1, (int) floor($diff / (86400 * 365)));
+        return $n === 1 ? 'há um ano' : 'há ' . $n . ' anos';
     }
 
     private function extractReviewPhotoUrl(array $review): ?string
