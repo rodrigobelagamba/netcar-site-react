@@ -74,9 +74,7 @@ export function HomeWhatsAppConversionPanel({
   );
   const similarHref = wa(homeMessages.similarOptions);
   const ianHref = wa(homeMessages.talkToIan);
-  const kmHref = wa(
-    vehicleMessages?.km ?? homeMessages.askKm,
-  );
+  const kmHref = wa(vehicleMessages?.km ?? homeMessages.askKm);
 
   const goToFeaturedVehicle = () => {
     if (!featuredVehicle) {
@@ -100,31 +98,46 @@ export function HomeWhatsAppConversionPanel({
     "inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-white/16";
 
   return (
-    <section className="relative overflow-hidden bg-[#00283C] px-4 py-6 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+    <section className="relative overflow-hidden bg-[#00283C] px-4 py-4 md:py-6 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
       <div className="pointer-events-none absolute -left-20 top-0 h-56 w-56 rounded-full bg-[#5CD29D]/20 blur-3xl" />
       <div className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
 
-      <div className="container-main relative grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+      <div className="container-main relative grid gap-4 md:gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45 }}
-          className="rounded-3xl border border-white/10 bg-white/[0.07] p-5 text-white shadow-2xl backdrop-blur md:p-7 lg:p-8"
+          className="rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-white shadow-2xl backdrop-blur md:p-7 lg:p-8"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-[#5CD29D]/30 bg-[#5CD29D]/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#5CD29D]">
             <MessageCircle className="h-4 w-4" />
-            Atendimento 24h · iAN + consultor
+            <span className="md:hidden">Atendimento 24h</span>
+            <span className="hidden md:inline">
+              Atendimento 24h · iAN + consultor
+            </span>
           </span>
 
-          <h1 className="mt-4 text-3xl font-black leading-tight md:text-4xl lg:text-[2.75rem]">
-            Seminovos em Esteio/RS com garantia
+          <h1 className="mt-3 text-2xl font-black leading-tight md:mt-4 md:text-4xl lg:text-[2.75rem]">
+            <span className="md:hidden">Seminovos em Esteio/RS</span>
+            <span className="hidden md:inline">
+              Seminovos em Esteio/RS com garantia
+            </span>
           </h1>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/78 md:text-lg">
-            Encontre seu seminovo no estoque e fale com a Netcar em um clique. Diga qual carro te interessou, peça opções parecidas ou compare financiamento em bancos e financeiras parceiras. A mensagem já vai pronta no WhatsApp — condições sujeitas à análise.
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/78 md:mt-3 md:text-lg">
+            <span className="md:hidden">
+              Veja o estoque ou chame no WhatsApp — mensagem pronta.
+            </span>
+            <span className="hidden md:inline">
+              Encontre seu seminovo no estoque e fale com a Netcar em um clique.
+              Diga qual carro te interessou, peça opções parecidas ou compare
+              financiamento em bancos e financeiras parceiras. A mensagem já vai
+              pronta no WhatsApp — condições sujeitas à análise.
+            </span>
           </p>
 
-          <div className="mt-5 grid gap-3 text-sm font-semibold text-white/90 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Chips — só desktop (md+), igual master */}
+          <div className="mt-5 hidden gap-3 text-sm font-semibold text-white/90 md:grid md:grid-cols-2 lg:grid-cols-4">
             <div className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-3">
               <MapPin className="h-4 w-4 shrink-0 text-[#5CD29D]" />
               2 lojas Esteio
@@ -143,7 +156,38 @@ export function HomeWhatsAppConversionPanel({
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          {/* CTAs mobile: estoque primeiro */}
+          <div className="mt-4 flex flex-col gap-2.5 md:hidden">
+            <button
+              type="button"
+              onClick={onViewStock}
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-base font-black text-[#00283C] transition-colors hover:bg-white/90"
+            >
+              Ver estoque
+              <ArrowRight className="h-5 w-5" />
+            </button>
+            <a
+              href={primaryHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-wa-source="home_conversion"
+              data-wa-intent="vehicle_interest"
+              data-wa-vehicle-id={featuredVehicle?.id}
+              data-wa-vehicle-name={label}
+              aria-disabled={ctaDisabled}
+              className={`inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-base font-black shadow-[0_14px_34px_rgba(92,210,157,0.28)] transition-transform hover:scale-[1.02] ${
+                ctaDisabled
+                  ? "pointer-events-none bg-white/20 text-white/60"
+                  : "bg-[#25D366] text-white"
+              }`}
+            >
+              <MessageCircle className="h-5 w-5" />
+              WhatsApp
+            </a>
+          </div>
+
+          {/* CTAs desktop — igual master */}
+          <div className="mt-6 hidden flex-col gap-3 md:flex md:flex-row">
             <a
               href={primaryHref}
               target="_blank"
@@ -172,7 +216,8 @@ export function HomeWhatsAppConversionPanel({
             </button>
           </div>
 
-          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Quick actions — só desktop */}
+          <div className="mt-4 hidden gap-2 md:grid md:grid-cols-2 lg:grid-cols-4">
             <a
               href={financeHref}
               target="_blank"
@@ -225,12 +270,13 @@ export function HomeWhatsAppConversionPanel({
           </div>
         </motion.div>
 
+        {/* Card destaque — só md+ (no mobile poluia rolagem) */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45, delay: 0.08 }}
-          className="rounded-3xl border border-white/12 bg-white p-4 shadow-2xl md:p-5"
+          className="hidden rounded-3xl border border-white/12 bg-white p-4 shadow-2xl md:block md:p-5"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -261,15 +307,21 @@ export function HomeWhatsAppConversionPanel({
 
           <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs font-bold text-gray-600">
             <div className="rounded-2xl bg-gray-50 px-2 py-3">
-              <span className="block text-[10px] uppercase tracking-wider text-gray-400">Ano</span>
+              <span className="block text-[10px] uppercase tracking-wider text-gray-400">
+                Ano
+              </span>
               {featuredVehicle ? formatYear(featuredVehicle.year) : "—"}
             </div>
             <div className="rounded-2xl bg-gray-50 px-2 py-3">
-              <span className="block text-[10px] uppercase tracking-wider text-gray-400">KM</span>
+              <span className="block text-[10px] uppercase tracking-wider text-gray-400">
+                KM
+              </span>
               {featuredVehicle ? formatKm(featuredVehicle.km) : "—"}
             </div>
             <div className="rounded-2xl bg-gray-50 px-2 py-3">
-              <span className="block text-[10px] uppercase tracking-wider text-gray-400">Câmbio</span>
+              <span className="block text-[10px] uppercase tracking-wider text-gray-400">
+                Câmbio
+              </span>
               {featuredVehicle?.cambio || "—"}
             </div>
           </div>
@@ -279,7 +331,9 @@ export function HomeWhatsAppConversionPanel({
               <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
                 Até 60x · cartão 21x · troca
               </span>
-              <p className="text-2xl font-black text-[#00283C]">{price || "Consulte"}</p>
+              <p className="text-2xl font-black text-[#00283C]">
+                {price || "Consulte"}
+              </p>
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
               <a
