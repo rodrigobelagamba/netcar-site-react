@@ -1371,9 +1371,11 @@ export function DetalhesPage() {
       ? `${marca} ${modeloCompleto} ${vehicle.year || ""} — veículo vendido. Confira seminovos similares na Netcar Multimarcas, Esteio/RS.`.trim()
       : `${marca} ${modeloCompleto} ${vehicle.year || ""} seminovo por ${priceText}, ${vehicle.km?.toLocaleString("pt-BR") || 0} km, em Esteio/RS. Vistoriado, com garantia Netcar.`.trim();
 
-    const pageTitle = !isSold && priceText
-      ? `${ogTitle} - ${priceText} | Netcar Esteio/RS`
-      : `${ogTitle} | Netcar Esteio/RS`;
+    const pageTitle = isSold
+      ? `${ogTitle} - Vendido | Netcar Esteio/RS`
+      : priceText
+        ? `${ogTitle} - ${priceText} | Netcar Esteio/RS`
+        : `${ogTitle} | Netcar Esteio/RS`;
 
     return {
       title: pageTitle,
@@ -1392,7 +1394,6 @@ export function DetalhesPage() {
         ? maskPlate(vehicle.placa).toUpperCase()
         : "",
       ogTitle: ogTitle,
-      robots: isSold ? "noindex, follow" : undefined,
     };
   }, [vehicle, modeloCompleto, marca, absoluteImageUrl, friendlyUrl]);
 
@@ -1414,28 +1415,27 @@ export function DetalhesPage() {
   }
 
   const isSold = !vehicle.price || vehicle.price <= 0;
-  if (isSold) {
-    return <VehicleUnavailableRedirect />;
-  }
 
   // Badges
   const diferenciais = vehicle?.diferenciais ?? [];
   const hasDiferencial = (tag: string) =>
     diferenciais.some((diff) => diff.tag === tag);
 
-  const badges: Badge[] = [
-    { text: "Vistoriado e aprovado", variant: "success", icon: true },
-    { text: "Retire hoje", variant: "purple" },
-    ...(hasDiferencial("garantia_fabrica")
-      ? [{ text: "Garantia de Fábrica", variant: "blue" as const }]
-      : []),
-    ...(hasDiferencial("baixa_km")
-      ? [{ text: "Baixa KM", variant: "blue-dark" as const }]
-      : []),
-    ...(hasDiferencial("unico_dono")
-      ? [{ text: "Único Dono", variant: "green-dark" as const }]
-      : []),
-  ];
+  const badges: Badge[] = isSold
+    ? [{ text: "Vendido", variant: "success", icon: true }]
+    : [
+        { text: "Vistoriado e aprovado", variant: "success", icon: true },
+        { text: "Retire hoje", variant: "purple" },
+        ...(hasDiferencial("garantia_fabrica")
+          ? [{ text: "Garantia de Fábrica", variant: "blue" as const }]
+          : []),
+        ...(hasDiferencial("baixa_km")
+          ? [{ text: "Baixa KM", variant: "blue-dark" as const }]
+          : []),
+        ...(hasDiferencial("unico_dono")
+          ? [{ text: "Único Dono", variant: "green-dark" as const }]
+          : []),
+      ];
 
   return (
     <main className="overflow-x-hidden max-w-full pb-36 md:pb-0">
