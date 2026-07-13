@@ -13,10 +13,12 @@ docker run --rm \
   -v "$ROOT:/app" \
   -v "$SECRETS/.env.local:/app/.env.local:ro" \
   -v "$SECRETS/.env.production:/app/.env.production:ro" \
-  -v "$SECRETS/id_ed25519:/root/.ssh/id_ed25519:ro" \
+  -v "$SECRETS/id_ed25519:/root/.ssh/id_deploy:ro" \
   -w /app node:20-alpine \
   sh -c 'apk add --no-cache git openssh-client tar >/dev/null \
-    && mkdir -p /root/.ssh && chmod 600 /root/.ssh/id_ed25519 \
+    && mkdir -p /root/.ssh \
+    && cp /root/.ssh/id_deploy /root/.ssh/id_ed25519 \
+    && chmod 600 /root/.ssh/id_ed25519 \
     && ssh-keyscan -H netcarmultimarcas.com.br >> /root/.ssh/known_hosts 2>/dev/null \
     && npm run weekly'
 
