@@ -79,6 +79,11 @@
   <If "%{REQUEST_URI} =~ m#^/assets/#">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </If>
+
+  # Pastas internas: não indexar mesmo se crawler achar URL
+  <If "%{REQUEST_URI} =~ m#^/(admin|sistema|api|backend)(/|$)#">
+    Header set X-Robots-Tag "noindex, nofollow"
+  </If>
 </IfModule>
 
 # Rewrite Rules para SPA
@@ -126,9 +131,9 @@
   RewriteRule ^feeds/whatsapp-catalog\.xml$ feeds/whatsapp-catalog.php?format=xml [L,QSA]
   RewriteRule ^feeds/whatsapp-catalog\.php$ - [L]
 
-  # Pastas do servidor que NÃO são SPA (gerenciador PHP + API).
+  # Pastas do servidor que NÃO são SPA (gerenciador PHP + API + backend legado).
   # Sem isso, /admin/ e /sistema/ caem no index.php React (bug após remoção do -d abaixo).
-  RewriteRule ^(admin|sistema|api)(/|$) - [L]
+  RewriteRule ^(admin|sistema|api|backend)(/|$) - [L]
 
   # Primeiro: servir só arquivos reais (-f).
   # NÃO usar -d genérico: o docroot de produção ainda tem pastas legadas

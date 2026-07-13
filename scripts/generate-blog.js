@@ -39,6 +39,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
 const OUT = join(rootDir, "src", "data", "seo", "blog-auto.json");
 const MANUAL = join(rootDir, "src", "data", "seo", "blog-posts.json");
+const TOPICS = join(rootDir, "src", "data", "seo", "blog-topics.json");
 
 const SITE = "https://www.netcarmultimarcas.com.br";
 const API_URL = `${SITE}/api/v1/veiculos.php?limit=500`;
@@ -47,6 +48,29 @@ const YEAR = new Date().getFullYear();
 const MAX_NEW_PER_RUN = 1; // pautas novas por execução (depois do lote inicial)
 const INITIAL_BATCH = 6; // lote inicial quando não há histórico
 const FEATURED = 2; // carros embutidos por matéria
+
+/**
+ * Slugs do pool auto que colidem em INTENÇÃO com manuais já publicados
+ * ou com pautas manuais prioritárias (pendente/publicado). Não republicar.
+ */
+const TOPIC_BLOCKLIST = new Set([
+  "checklist-comprar-seminovo-o-que-verificar",
+  "melhor-primeiro-carro-seminovo-esteio",
+  "cambio-automatico-vale-a-pena-seminovo",
+  "vender-carro-usado-ou-dar-na-troca",
+  "seminovos-vale-dos-sinos-estoque-e-procedencia-2026",
+  "comprar-seminovo-a-distancia-serra-gaucha-2026",
+  "melhor-suv-seminovo-esteio-2026",
+]);
+
+function readTopicBlocklist() {
+  const blocked = new Set(TOPIC_BLOCKLIST);
+  for (const t of readJson(TOPICS, [])) {
+    // Pautas manuais ativas ou já publicadas: auto não gera slug igual
+    if (t.slug && t.status !== "cancelado") blocked.add(t.slug);
+  }
+  return blocked;
+}
 
 function slugify(s) {
   return String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -399,10 +423,14 @@ async function main() {
   }
 
   const manualSlugs = new Set(readJson(MANUAL, []).map((p) => p.slug));
+  const topicBlock = readTopicBlocklist();
   const existing = readJson(OUT, []);
   const existingBySlug = new Map(existing.map((p) => [p.slug, p]));
 
+  // Pool completo (sem manuais) atualiza posts já publicados.
+  // Blocklist só impede TEMA NOVO com intenção colidente.
   const pool = buildPool(stock).filter((t) => !manualSlugs.has(t.slug));
+  const poolForNew = pool.filter((t) => !topicBlock.has(t.slug));
 
   const finalize = (tema, publishedAt) => ({
     slug: tema.slug,
@@ -418,7 +446,7 @@ async function main() {
   const out = [];
 
   if (existing.length === 0) {
-    pool.slice(0, INITIAL_BATCH).forEach((tema, i) => {
+    poolForNew.slice(0, INITIAL_BATCH).forEach((tema, i) => {
       out.push(finalize(tema, daysAgo(i * 4)));
     });
     console.log(`Primeira execução: ${out.length} posts iniciais.`);
@@ -427,7 +455,10 @@ async function main() {
     for (const tema of pool) {
       if (existingBySlug.has(tema.slug)) {
         out.push(finalize(tema, existingBySlug.get(tema.slug).publishedAt));
-      } else if (added < MAX_NEW_PER_RUN) {
+      }
+    }
+    for (const tema of poolForNew) {
+      if (!existingBySlug.has(tema.slug) && added < MAX_NEW_PER_RUN) {
         out.push(finalize(tema, today()));
         added++;
       }
@@ -438,7 +469,7 @@ async function main() {
   out.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
   const json = JSON.stringify(out, null, 2) + "\n";
   const wrote = writeTextFile(OUT, json);
-  const pendentes = pool.length - out.length;
+  const pendentes = poolForNew.filter((t) => !out.some((p) => p.slug === t.slug)).length;
   console.log(
     `Blog: ${out.length} publicados | ${pendentes} pauta(s) na fila | estoque ${stock.total}${wrote ? "" : " (sem alteração no arquivo)"}.`
   );

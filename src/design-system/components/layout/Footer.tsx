@@ -274,6 +274,34 @@ export function Footer() {
           </ul>
         </div>
 
+        {/* Vender carro por cidade (SEO local + linkagem interna) */}
+        <div className="border-t border-border pt-6 pb-2">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+              Vender carro por cidade
+            </h4>
+            <Link
+              to="/regioes-atendidas"
+              className="text-xs font-semibold text-primary hover:underline"
+            >
+              Ver regiões e como funciona
+            </Link>
+          </div>
+          <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            {cityPages.map((city) => (
+              <li key={`sell-${city.slug}`}>
+                <Link
+                  to="/vender-carro-{$citySlug}"
+                  params={{ citySlug: city.slug }}
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Vender carro em {city.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         {/* Seminovos por marca/categoria (gerado do estoque real) */}
         {landingPages.length > 0 && (
           <div className="border-t border-border pt-6 pb-2">

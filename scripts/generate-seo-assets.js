@@ -339,6 +339,17 @@ function relatedCitiesHtml(currentSlug) {
   return `<nav aria-label="Seminovos em outras cidades"><h2>Seminovos em outras cidades</h2><p><a href="${SITE}/regioes-atendidas">Ver todas as regiões atendidas</a></p><ul>${links}</ul></nav>`;
 }
 
+function relatedSellCitiesHtml(currentSlug) {
+  const links = cities
+    .filter((c) => c.slug !== currentSlug && c.sell)
+    .map(
+      (c) =>
+        `<li><a href="${SITE}/vender-carro-${c.slug}">Vender carro em ${escapeHtml(c.name)}</a></li>`
+    )
+    .join("");
+  return `<nav aria-label="Vender carro em outras cidades"><h2>Vender carro em outras cidades</h2><p><a href="${SITE}/regioes-atendidas">Ver todas as regiões atendidas</a></p><ul>${links}</ul></nav>`;
+}
+
 for (const city of cities) {
   const canonical = `${SITE}/seminovos-${city.slug}`;
   const faqHtml = city.faq
@@ -404,6 +415,7 @@ for (const city of cities) {
       <p>A Netcar não possui unidade ou ponto de coleta em ${escapeHtml(city.name)}.</p>
       ${sellFaqHtml}
       <p><a href="${SITE}/compra">Iniciar pré-avaliação</a> · <a href="${SITE}/seminovos">Ver estoque para troca</a></p>
+      ${relatedSellCitiesHtml(city.slug)}
     </article>`;
     writeTextFile(
       join(seoStaticDir, `sell-city-${city.slug}.html`),

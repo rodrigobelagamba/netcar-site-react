@@ -1,0 +1,8 @@
+services:
+  netcar-weekly:
+    build: .
+    volumes:
+      - /opt/netcar-site-react:/app
+      - /opt/netcar-secrets/.env.local:/app/.env.local:ro
+      - /opt/netcar-secrets/.env.production:/app/.env.production:ro
+      - /opt/netcar-secrets/id_ed25519:/root/.ssh/id_ed25519:ro

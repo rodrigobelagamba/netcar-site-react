@@ -118,10 +118,10 @@ export function HomeWhatsAppConversionPanel({
           </span>
 
           <h1 className="mt-4 text-3xl font-black leading-tight md:text-4xl lg:text-[2.75rem]">
-            Encontre seu seminovo no estoque e fale com a Netcar em um clique.
+            Seminovos em Esteio/RS com garantia
           </h1>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/78 md:text-lg">
-            Diga qual carro te interessou, peça opções parecidas ou compare financiamento em diversos bancos e financeiras parceiras. A mensagem já vai pronta no WhatsApp — condições sujeitas à análise.
+            Encontre seu seminovo no estoque e fale com a Netcar em um clique. Diga qual carro te interessou, peça opções parecidas ou compare financiamento em bancos e financeiras parceiras. A mensagem já vai pronta no WhatsApp — condições sujeitas à análise.
           </p>
 
           <div className="mt-5 grid gap-3 text-sm font-semibold text-white/90 sm:grid-cols-2 lg:grid-cols-4">

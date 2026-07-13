@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useBannersLoja1Query } from "@/catalog/queries/useSiteQuery";
+import { CANONICAL_ORIGIN, canonicalUrl } from "@/lib/seo";
 
 /**
  * Hook para configurar metatags padrão usando foto da loja
@@ -13,13 +14,12 @@ export function useDefaultMetaTags(
   const { data: bannersLoja1 } = useBannersLoja1Query();
 
   useEffect(() => {
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    const currentUrl =
-      typeof window !== "undefined"
-        ? options?.canonicalPath
-          ? `${window.location.origin}${options.canonicalPath}`
-          : `${window.location.origin}${window.location.pathname}`
-        : "";
+    const baseUrl = CANONICAL_ORIGIN;
+    const currentUrl = options?.canonicalPath
+      ? canonicalUrl(options.canonicalPath)
+      : typeof window !== "undefined"
+        ? canonicalUrl(window.location.pathname)
+        : CANONICAL_ORIGIN;
     
     // Busca imagem da fachada ou primeira imagem da loja
     const getStoreImage = () => {

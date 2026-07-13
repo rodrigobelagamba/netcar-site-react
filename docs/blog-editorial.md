@@ -10,15 +10,28 @@ Guia para geração de artigos do blog (humana ou por agente). O blog existe par
 - Render: `src/modules/blog/components/BlogArticleBody.tsx`
 - O build (`npm run build`) regenera `public/sitemap.xml` e os HTML estáticos de `public/seo-static/` automaticamente via `scripts/generate-seo-assets.js`.
 
+## Anti-overlap com blog automático (obrigatório)
+
+Antes de escrever qualquer manual, conferir:
+
+- `blog-auto.json` (posts automáticos)
+- `blog-posts.json` (manuais)
+- fila `buildPool()` / `TOPIC_BLOCKLIST` em `scripts/generate-blog.js`
+
+Se a intenção já existe (mesmo com slug diferente), marcar pauta como `adiado` ou `cancelado` — **nunca** duas URLs. Cadência: ~1 manual a cada 2 semanas; volume semanal fica com `generate-blog` / `npm run weekly`.
+
+Status válidos em `blog-topics.json`: `pendente` | `publicado` | `adiado` | `cancelado`.
+
 ## Processo para publicar um artigo novo
 
-1. Pegar a primeira pauta com `"status": "pendente"` em `blog-topics.json`.
-2. Escrever o artigo seguindo as regras abaixo.
-3. Adicionar o objeto ao FINAL do array em `blog-posts.json`.
-4. Marcar a pauta como `"status": "publicado"` em `blog-topics.json`.
-5. Validar: `npm ci && npm run build` deve passar sem erro.
-6. Commit + push em branch `blog/<slug>` e abrir PR para `master`.
-7. NUNCA fazer deploy. Deploy é manual após merge do PR.
+1. Checar anti-overlap (seção acima).
+2. Pegar a primeira pauta com `"status": "pendente"` em `blog-topics.json`.
+3. Escrever o artigo seguindo as regras abaixo.
+4. Adicionar o objeto ao FINAL do array em `blog-posts.json`.
+5. Marcar a pauta como `"status": "publicado"` em `blog-topics.json`.
+6. Validar: `npm ci && npm run build` deve passar sem erro.
+7. Commit + push em branch `blog/<slug>` e abrir PR para `master`.
+8. NUNCA fazer deploy. Deploy é manual após merge do PR.
 
 ## Schema do artigo (obrigatório)
 

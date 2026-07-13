@@ -4,7 +4,7 @@
     "keyword": "suv seminovo até 100 mil",
     "titleHint": "SUVs seminovos até R$ 100 mil: melhores opções na Grande POA",
     "intent": "compra",
-    "status": "pendente"
+    "status": "publicado"
   },
   {
     "slug": "documentacao-compra-seminovo-rs",
@@ -18,7 +18,8 @@
     "keyword": "primeiro carro qual comprar",
     "titleHint": "Primeiro carro: como escolher sem se arrepender",
     "intent": "compra",
-    "status": "pendente"
+    "status": "adiado",
+    "reason": "Overlap com blog-auto melhor-primeiro-carro-seminovo-esteio"
   },
   {
     "slug": "tabela-fipe-como-usar-negociacao",
@@ -39,7 +40,8 @@
     "keyword": "avaliação de carro usado na troca",
     "titleHint": "Como funciona a avaliação do seu usado na troca",
     "intent": "venda",
-    "status": "pendente"
+    "status": "adiado",
+    "reason": "Overlap com quanto-vale-meu-carro-usado / vender-carro-financiado"
   },
   {
     "slug": "carro-para-aplicativo-grande-poa",
@@ -53,14 +55,16 @@
     "keyword": "consórcio ou financiamento carro",
     "titleHint": "Consórcio ou financiamento: qual faz mais sentido pro seminovo",
     "intent": "financiamento",
-    "status": "pendente"
+    "status": "adiado",
+    "reason": "Overlap com como-financiar-carro-usado-rs"
   },
   {
     "slug": "picape-seminova-para-trabalho",
     "keyword": "picape seminova barata",
     "titleHint": "Picape seminova para trabalho: opções e o que verificar",
     "intent": "compra",
-    "status": "pendente"
+    "status": "cancelado",
+    "reason": "Preferir pauta regional picape-seminova-regiao-metropolitana-trabalho"
   },
   {
     "slug": "quando-trocar-de-carro-sinais",
@@ -74,14 +78,16 @@
     "keyword": "carro automático vale a pena",
     "titleHint": "Carro automático no trânsito da Grande POA: vale a pena?",
     "intent": "compra",
-    "status": "pendente"
+    "status": "cancelado",
+    "reason": "Overlap com blog-auto cambio-automatico + /seminovos-automaticos"
   },
   {
     "slug": "hatch-ou-sedan-qual-escolher",
     "keyword": "hatch ou sedan qual melhor",
     "titleHint": "Hatch ou sedan: qual combina com seu uso",
     "intent": "compra",
-    "status": "pendente"
+    "status": "adiado",
+    "reason": "Overlap com blog-auto melhor-hatch / melhor-sedan"
   },
   {
     "slug": "comprar-seminovo-distancia-grande-porto-alegre",
@@ -111,7 +117,8 @@
     "region": "Serra Gaúcha",
     "cities": ["Caxias do Sul", "Bento Gonçalves", "Farroupilha"],
     "asset": "curadoria-estoque",
-    "status": "pendente"
+    "status": "adiado",
+    "reason": "Aguardar/bloquear tema regional Serra do blog-auto"
   },
   {
     "slug": "vender-carro-vale-do-cai-avaliacao",
@@ -121,7 +128,8 @@
     "region": "Vale do Caí",
     "cities": ["Montenegro", "São Sebastião do Caí", "Bom Princípio"],
     "asset": "checklist-avaliacao",
-    "status": "pendente"
+    "status": "adiado",
+    "reason": "Overlap parcial com onde-vender-carro-usado-regiao-porto-alegre"
   },
   {
     "slug": "picape-seminova-regiao-metropolitana-trabalho",
@@ -141,6 +149,7 @@
     "region": "Rio Grande do Sul",
     "cities": ["Porto Alegre", "Canoas", "Novo Hamburgo", "Montenegro"],
     "asset": "roteiro-negociacao-remota",
-    "status": "pendente"
+    "status": "adiado",
+    "reason": "Overlap com trocar-carro-financiado / vender-carro-financiado"
   }
 ]

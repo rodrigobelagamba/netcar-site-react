@@ -584,5 +584,74 @@
     ],
     "ctaLabel": "Ver estoque atualizado",
     "ctaHref": "/seminovos"
+  },
+  {
+    "slug": "suv-seminovo-ate-100-mil",
+    "title": "SUV seminovo até R$ 100 mil na Grande POA",
+    "description": "Como filtrar SUV seminovo até R$ 100 mil na Grande Porto Alegre: uso, custos e o que conferir antes da visita em Esteio.",
+    "publishedAt": "2026-07-13",
+    "readMinutes": 6,
+    "sections": [
+      {
+        "type": "p",
+        "text": "Quem busca SUV seminovo até R$ 100 mil na Grande Porto Alegre encontra anúncios misturados: versões diferentes, quilometragem alta e preços que mudam rápido. O teto de orçamento ajuda a eliminar ilusão — o passo seguinte é filtrar por uso real e conferir o exemplar no estoque oficial, não só na lista de classificados."
+      },
+      {
+        "type": "h2",
+        "text": "Defina o uso antes do modelo"
+      },
+      {
+        "type": "p",
+        "text": "SUV cobre rotinas bem distintas. Trânsito diário entre Canoas, Esteio e Porto Alegre pede tamanho gerenciável e câmbio confortável. Família com cadeirinha exige espaço traseiro e ISOFIX. Estrada ocasional pede atenção a pneus, freios e estabilidade. Sem esse filtro, qualquer SUV “bonito no anúncio” entra na shortlist e o orçamento estoura na prática."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Uso principal: cidade, família, estrada leve ou misto",
+          "Limite total de compra (entrada + financiamento, se houver)",
+          "Itens obrigatórios: automático, ar, multimídia, espaço de mala",
+          "Dois modelos alternativos na mesma faixa de preço"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que R$ 100 mil costuma comprar de verdade"
+      },
+      {
+        "type": "p",
+        "text": "Nessa faixa, o mercado regional costuma mostrar SUVs compactos e alguns médios mais rodados. Ano, versão e quilometragem pesam mais que a marca sozinha. Um exemplar mais novo com km alto pode custar o mesmo que um mais antigo bem cuidado. Compare ficha com ficha — nunca “média de mercado”."
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Abra o estoque e filtre categoria SUV + teto de preço",
+          "Anote versão, ano, km e equipamentos de cada finalista",
+          "Descarte anúncio sem fotos reais ou dados incompletos",
+          "Confirme disponibilidade perto da visita — seminovo é unidade única"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Custos além do preço da vitrine"
+      },
+      {
+        "type": "p",
+        "text": "Parcela ou valor à vista não fecham a conta. Inclua IPVA, seguro, pneus e manutenção típica da categoria. Se houver troca, a avaliação do usado muda o valor final — peça orientação inicial pelo WhatsApp e trate proposta definitiva só após vistoria."
+      },
+      {
+        "type": "h2",
+        "text": "Visita em Esteio sem deslocamento à toa"
+      },
+      {
+        "type": "p",
+        "text": "A Netcar concentra o estoque em Esteio, na Av. Presidente Vargas. Quem vem de Canoas, São Leopoldo, Novo Hamburgo ou Gravataí ganha tempo se montar a lista curta no site e confirmar os veículos antes de sair de casa. Test drive, documentação e simulação de financiamento acontecem na loja — condições sujeitas à análise."
+      },
+      {
+        "type": "p",
+        "text": "Comece pelo estoque atualizado. Filtre SUVs na sua faixa e fale com o consultor só depois de escolher dois ou três exemplares concretos."
+      }
+    ],
+    "ctaLabel": "Ver SUVs no estoque",
+    "ctaHref": "/seminovos"
   }
 ]

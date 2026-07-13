@@ -90,7 +90,8 @@ export function HomePage() {
 
   useDefaultMetaTags(
     "Seminovos em Esteio/RS",
-    "Loja de seminovos em Esteio/RS. 2 lojas na Av. Presidente Vargas. Garantia, Fábrica de Valor e Nethelp. Financiamento facilitado."
+    "Loja de seminovos em Esteio/RS. 2 lojas na Av. Presidente Vargas. Garantia, Fábrica de Valor e Nethelp. Financiamento facilitado.",
+    { canonicalPath: "/" }
   );
 
   const featuredVehicle = useMemo(

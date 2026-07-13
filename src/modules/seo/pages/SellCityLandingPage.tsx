@@ -18,6 +18,7 @@ import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 import { QuickSellForm } from "@/components/QuickSellForm";
+import { RelatedCitiesNav } from "@/modules/seo/components/RelatedCitiesNav";
 
 export function SellCityLandingPage() {
   const { citySlug } = useParams({ from: "/vender-carro-{$citySlug}" });
@@ -190,6 +191,8 @@ export function SellCityLandingPage() {
           </p>
         </div>
       </section>
+
+      <RelatedCitiesNav currentSlug={city.slug} variant="sell" />
 
       <section className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">

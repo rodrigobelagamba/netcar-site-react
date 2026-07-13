@@ -18,6 +18,7 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { trackTrustSectionView } from "@/lib/analytics";
+import { RelatedCitiesNav } from "@/modules/seo/components/RelatedCitiesNav";
 
 export function CityLandingPage() {
   const { citySlug } = useParams({ from: "/seminovos-{$citySlug}" });
@@ -201,6 +202,8 @@ export function CityLandingPage() {
           </p>
         </div>
       </section>
+
+      <RelatedCitiesNav currentSlug={city.slug} variant="buy" />
 
       <section className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">

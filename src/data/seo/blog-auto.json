@@ -175,6 +175,17 @@
         "type": "cars",
         "cars": [
           {
+            "modelo": "Fiat Cronos Drive",
+            "ano": "2024/2025",
+            "km": "39.102 km",
+            "preco": "R$ 88.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/cronos-drive-2025-jcw-xx18-19915",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/27052026CRONOS%20DRIVE%20JCW2F18CAPA.png"
+          },
+          {
             "modelo": "Chevrolet Onix Premier Plus Turbo",
             "ano": "2023/2024",
             "km": "39.943 km",
@@ -184,17 +195,6 @@
             "destaque": "Baixa KM",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/onix-premier-plus-turbo-2024-jci-xx11-19877",
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/23062026ONIX%20PREMIERE%20PLUS%20JCI3C11CAPA.png"
-          },
-          {
-            "modelo": "Nissan Versa Advance",
-            "ano": "2023/2024",
-            "km": "64.889 km",
-            "preco": "R$ 99.900,00",
-            "cambio": "Automatico",
-            "combustivel": "Flex",
-            "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/versa-advance-2024-jcl-xx90-19892",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
           }
         ]
       },
@@ -385,7 +385,7 @@
       },
       {
         "type": "p",
-        "text": "Depende de ano, versão e km. No estoque geral da Netcar, seminovos vão de R$ 36.900 a R$ 209.900. Simule ou veja a ficha de cada Ford pra preço exato."
+        "text": "Depende de ano, versão e km. No estoque geral da Netcar, seminovos vão de R$ 49.900 a R$ 209.900. Simule ou veja a ficha de cada Ford pra preço exato."
       },
       {
         "type": "h2",
@@ -429,7 +429,7 @@
           {
             "modelo": "Ford Territory Titanium Turbo",
             "ano": "2023/2024",
-            "km": "30.000 km",
+            "km": "31.500 km",
             "preco": "R$ 172.900,00",
             "cambio": "Automatico",
             "combustivel": "GASOLINA",
@@ -488,7 +488,7 @@
       {
         "type": "ul",
         "items": [
-          "Entrada (primeiro carro, uso urbano): a partir de R$ 36.900",
+          "Entrada (primeiro carro, uso urbano): a partir de R$ 49.900",
           "Intermediário (melhor custo-benefício): faixa central do estoque",
           "Premium (SUV, pickup, seminovo recente): até R$ 209.900"
         ]
@@ -521,7 +521,7 @@
             "modelo": "Hyundai Creta Limited Turbo",
             "ano": "2025/2026",
             "km": "2.700 km",
-            "preco": "R$ 151.900,00",
+            "preco": "R$ 148.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -529,15 +529,15 @@
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04062026CRETA%20LIMITED%20TQW0J90CAPA.png"
           },
           {
-            "modelo": "Chevrolet Tracker Rs Turbo",
+            "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
-            "km": "3.500 km",
-            "preco": "R$ 155.900,00",
+            "km": "6.700 km",
+            "preco": "R$ 137.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/tracker-rs-turbo-2026-tqy-xx35-19820",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026TRACKER%20RS%20TQY3H35CAPA.png"
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/tera-high-turbo-2026-tqq-xx21-19587",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026tera%20TQQ7G21CAPA.png"
           }
         ]
       },
@@ -703,7 +703,7 @@
             "modelo": "Hyundai Creta Limited Turbo",
             "ano": "2025/2026",
             "km": "2.700 km",
-            "preco": "R$ 151.900,00",
+            "preco": "R$ 148.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -711,15 +711,15 @@
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04062026CRETA%20LIMITED%20TQW0J90CAPA.png"
           },
           {
-            "modelo": "Hyundai Tucson Turbo Gls",
-            "ano": "2019/2020",
-            "km": "60.328 km",
-            "preco": "R$ 109.900,00",
+            "modelo": "Hyundai Tucson Gls Turbo",
+            "ano": "2020/2021",
+            "km": "79.310 km",
+            "preco": "R$ 115.900,00",
             "cambio": "Automatico",
             "combustivel": "GASOLINA",
-            "destaque": "Eleito Melhor Compra",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/tucson-turbo-gls-2020-izx-xx27-19885",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/19062026TUCSON%20IZX9G27CAPA.png"
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/tucson-gls-turbo-2021-jaa-xx15-19895",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04072026TUCSON%20JAA7G15CAPA.png"
           }
         ]
       },
@@ -733,7 +733,7 @@
       },
       {
         "type": "p",
-        "text": "Seminovos na Netcar hoje: R$ 36.900 a R$ 209.900. Seu hyundai ideal provavelmente está no meio dessa faixa — dependendo de ano e versão."
+        "text": "Seminovos na Netcar hoje: R$ 49.900 a R$ 209.900. Seu hyundai ideal provavelmente está no meio dessa faixa — dependendo de ano e versão."
       },
       {
         "type": "h2",
@@ -816,17 +816,6 @@
         "type": "cars",
         "cars": [
           {
-            "modelo": "Jeep Commander Overland Turbo",
-            "ano": "2023",
-            "km": "28.500 km",
-            "preco": "R$ 178.900,00",
-            "cambio": "Automatico",
-            "combustivel": "Flex",
-            "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/commander-overland-turbo-2023-jbz-xx68-19841",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/05062026COMMANDER%20JBZ3F68CAPA.png"
-          },
-          {
             "modelo": "Jeep Compass Serie S T270 Turbo",
             "ano": "2024/2025",
             "km": "33.000 km",
@@ -836,6 +825,17 @@
             "destaque": "Baixa KM",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/compass-serie-s-t270-turbo-2025-jcq-xx63-19866",
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/12062026compass%20series%20s%20JCQ7J63CAPA.png"
+          },
+          {
+            "modelo": "Jeep Compass Limited T270 Turbo",
+            "ano": "2023",
+            "km": "54.000 km",
+            "preco": "R$ 149.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/compass-limited-t270-turbo-2023-jbv-xx36-19724",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/17032026COMPASS%20LIMITED%20JBV0G36CAPA.png"
           }
         ]
       },
@@ -898,135 +898,6 @@
     "ctaHref": "/comprar-jeep"
   },
   {
-    "slug": "chery-usado-em-esteio-vale-a-pena-2026",
-    "title": "Chery usado: passo a passo antes de fechar negócio",
-    "description": "Do primeiro contato ao test drive: o que verificar num chery seminovo, quanto custa e quais Chery estão no estoque da Netcar agora.",
-    "publishedAt": "2026-06-23",
-    "readMinutes": 7,
-    "sections": [
-      {
-        "type": "p",
-        "text": "Comprar chery seminovo sem plano é receita pra pagar caro ou levar problema escondido. Este guia segue a ordem que a gente usa na loja quando orienta cliente — do perfil de uso ao fechamento."
-      },
-      {
-        "type": "h2",
-        "text": "Passo 1 — Defina o que você precisa de verdade"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Uso diário: cidade, estrada ou misto?",
-          "Quanto pode comprometer por mês (carro + seguro + combustível)?",
-          "Precisa de porta-malas grande, cadeirinha, ou só você no volante?"
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "Passo 2 — Entenda a faixa de preço real"
-      },
-      {
-        "type": "p",
-        "text": "Hoje, seminovos na Netcar vão de R$ 36.900 a R$ 209.900. Chery costuma ficar na faixa intermediária — desconfie de preço muito abaixo do mercado sem laudo."
-      },
-      {
-        "type": "h2",
-        "text": "Passo 3 — Documentação e procedência"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "CRLV e CPF do vendedor batendo",
-          "Sem restrição, multa ou pendência oculta",
-          "Histórico de donos coerente com a km"
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "Passo 4 — Veja exemplos reais no estoque"
-      },
-      {
-        "type": "p",
-        "text": "Estes Chery já passaram pela nossa conferência. Clique pra ficha completa:"
-      },
-      {
-        "type": "cars",
-        "cars": [
-          {
-            "modelo": "Chery Tiggo 7 Pro Max Drive Turbo",
-            "ano": "2025/2026",
-            "km": "7.600 km",
-            "preco": "R$ 165.900,00",
-            "cambio": "Automatico",
-            "combustivel": "GASOLINA",
-            "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/tiggo-7-pro-max-drive-turbo-2026-tqo-xx19-19891",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
-          },
-          {
-            "modelo": "Chery Tiggo 7 Sport Turbo",
-            "ano": "2024/2025",
-            "km": "11.900 km",
-            "preco": "R$ 135.900,00",
-            "cambio": "Automatico",
-            "combustivel": "Flex",
-            "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/tiggo-7-sport-turbo-2025-jcz-xx98-19827",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/11062026TIGGO%207%20PRO%20JCZ4C98CAPA.png"
-          }
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "Passo 5 — Test drive com olho clínico"
-      },
-      {
-        "type": "ol",
-        "items": [
-          "Partida a frio: motor liso, sem fumaça",
-          "Retomada em subida e frenagem em descida",
-          "Ruídos em buracos e curvas fechadas",
-          "Painel, ar, vidros e central multimídia"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
-      },
-      {
-        "type": "h2",
-        "text": "Financiamento: como fica na prática"
-      },
-      {
-        "type": "p",
-        "text": "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Parcelas em 24x, 36x, 48x ou 60x",
-          "Primeira parcela para 60 dias",
-          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-          "Cartão de crédito em até 24x",
-          "Usado na troca como parte do pagamento"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Mediante análise de crédito."
-      },
-      {
-        "type": "h2",
-        "text": "Resumo"
-      },
-      {
-        "type": "p",
-        "text": "Seguiu os passos? Falta só escolher o exemplar. Confira os Chery disponíveis."
-      }
-    ],
-    "ctaLabel": "Ver Chery no estoque",
-    "ctaHref": "/comprar-chery"
-  },
-  {
     "slug": "chevrolet-usado-em-esteio-vale-a-pena-2026",
     "title": "Chevrolet seminovo: 5 mitos que fazem você errar na compra",
     "description": "Verdade ou mito sobre chevrolet usado? Desmistificamos o que mais confunde compradores em Esteio — e mostramos Chevrolet reais no estoque.",
@@ -1073,17 +944,6 @@
         "type": "cars",
         "cars": [
           {
-            "modelo": "Chevrolet Tracker Rs Turbo",
-            "ano": "2025/2026",
-            "km": "3.500 km",
-            "preco": "R$ 155.900,00",
-            "cambio": "Automatico",
-            "combustivel": "Flex",
-            "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/tracker-rs-turbo-2026-tqy-xx35-19820",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026TRACKER%20RS%20TQY3H35CAPA.png"
-          },
-          {
             "modelo": "Chevrolet Onix Premier Plus Turbo",
             "ano": "2023/2024",
             "km": "39.943 km",
@@ -1093,6 +953,17 @@
             "destaque": "Baixa KM",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/onix-premier-plus-turbo-2024-jci-xx11-19877",
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/23062026ONIX%20PREMIERE%20PLUS%20JCI3C11CAPA.png"
+          },
+          {
+            "modelo": "Chevrolet Tracker Premier Turbo",
+            "ano": "2022/2023",
+            "km": "68.900 km",
+            "preco": "R$ 111.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/tracker-premier-turbo-2023-jbl-xx15-19690",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/17042026TRACKER%20PREMIERE2%20JBL4F15CAPA.png"
           }
         ]
       },
@@ -1151,6 +1022,111 @@
     "ctaHref": "/comprar-chevrolet"
   },
   {
+    "slug": "honda-usado-em-esteio-vale-a-pena-2026",
+    "title": "2 Honda seminovos que se destacam no estoque agora (2026)",
+    "description": "Seleção editorial de Honda no estoque real da Netcar: critérios, faixas de preço e os modelos que valem test drive em Esteio.",
+    "publishedAt": "2026-06-23",
+    "readMinutes": 6,
+    "sections": [
+      {
+        "type": "p",
+        "text": "Ranking de blog não é nota inventada — é curadoria. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Honda se destacaram no pátio esta semana."
+      },
+      {
+        "type": "h2",
+        "text": "Como escolhemos os destaques"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Passou pela Fábrica de Valor (60+ itens)",
+          "Quilometragem coerente com o ano",
+          "Preço alinhado ao mercado regional",
+          "Procura real de quem visita a loja"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Os Honda em destaque agora"
+      },
+      {
+        "type": "p",
+        "text": "Temos 2 Honda selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
+      },
+      {
+        "type": "cars",
+        "cars": [
+          {
+            "modelo": "Honda City Exl",
+            "ano": "2022/2023",
+            "km": "53.000 km",
+            "preco": "R$ 109.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/city-exl-2023-jbp-xx03-19688",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/10032026CITY%20EXL%20JBP5C03CAPA.png"
+          },
+          {
+            "modelo": "Honda Hrv Touring Turbo",
+            "ano": "2023/2024",
+            "km": "58.975 km",
+            "preco": "R$ 161.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/hrv-touring-turbo-2024-jci-xx59-19898",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Carro bem preparado e bem precificado não fica parado. Quando bater o olho no certo, vale reservar o test drive."
+      },
+      {
+        "type": "h2",
+        "text": "Faixa de preço de referência"
+      },
+      {
+        "type": "p",
+        "text": "Seminovos na Netcar hoje: R$ 49.900 a R$ 209.900. Seu honda ideal provavelmente está no meio dessa faixa — dependendo de ano e versão."
+      },
+      {
+        "type": "h2",
+        "text": "Financiamento: como fica na prática"
+      },
+      {
+        "type": "p",
+        "text": "Pra fechar a conta antes de ir à loja:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Parcelas em 24x, 36x, 48x ou 60x",
+          "Primeira parcela para 60 dias",
+          "Entrada de 20% a 30%, parcelável em até 10x sem juros",
+          "Cartão de crédito em até 24x",
+          "Usado na troca como parte do pagamento"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Mediante análise de crédito."
+      },
+      {
+        "type": "h2",
+        "text": "Quer ver mais opções?"
+      },
+      {
+        "type": "p",
+        "text": "Ranking muda conforme entra carro novo no pátio. Veja todos os Honda do estoque atualizado."
+      }
+    ],
+    "ctaLabel": "Ver Honda no estoque",
+    "ctaHref": "/comprar-honda"
+  },
+  {
     "slug": "nissan-usado-em-esteio-vale-a-pena-2026",
     "title": "2 Nissan seminovos que se destacam no estoque agora (2026)",
     "description": "Seleção editorial de Nissan no estoque real da Netcar: critérios, faixas de preço e os modelos que valem test drive em Esteio.",
@@ -1205,7 +1181,7 @@
             "combustivel": "Flex",
             "destaque": "Baixa KM",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/versa-advance-2024-jcl-xx90-19892",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04072026VERSA%20ADVANCE%20JCL5E90CAPA.png"
           }
         ]
       },
@@ -1219,7 +1195,7 @@
       },
       {
         "type": "p",
-        "text": "Seminovos na Netcar hoje: R$ 36.900 a R$ 209.900. Seu nissan ideal provavelmente está no meio dessa faixa — dependendo de ano e versão."
+        "text": "Seminovos na Netcar hoje: R$ 49.900 a R$ 209.900. Seu nissan ideal provavelmente está no meio dessa faixa — dependendo de ano e versão."
       },
       {
         "type": "h2",
@@ -1256,75 +1232,99 @@
     "ctaHref": "/comprar-nissan"
   },
   {
-    "slug": "honda-usado-em-esteio-vale-a-pena-2026",
-    "title": "2 Honda seminovos que se destacam no estoque agora (2026)",
-    "description": "Seleção editorial de Honda no estoque real da Netcar: critérios, faixas de preço e os modelos que valem test drive em Esteio.",
+    "slug": "chery-usado-em-esteio-vale-a-pena-2026",
+    "title": "Chery usado: passo a passo antes de fechar negócio",
+    "description": "Do primeiro contato ao test drive: o que verificar num chery seminovo, quanto custa e quais Chery estão no estoque da Netcar agora.",
     "publishedAt": "2026-06-23",
-    "readMinutes": 6,
+    "readMinutes": 7,
     "sections": [
       {
         "type": "p",
-        "text": "Ranking de blog não é nota inventada — é curadoria. Olhamos procedência, km, preparação, preço versus mercado e procura na região. Estes Honda se destacaram no pátio esta semana."
+        "text": "Comprar chery seminovo sem plano é receita pra pagar caro ou levar problema escondido. Este guia segue a ordem que a gente usa na loja quando orienta cliente — do perfil de uso ao fechamento."
       },
       {
         "type": "h2",
-        "text": "Como escolhemos os destaques"
+        "text": "Passo 1 — Defina o que você precisa de verdade"
       },
       {
         "type": "ul",
         "items": [
-          "Passou pela Fábrica de Valor (60+ itens)",
-          "Quilometragem coerente com o ano",
-          "Preço alinhado ao mercado regional",
-          "Procura real de quem visita a loja"
+          "Uso diário: cidade, estrada ou misto?",
+          "Quanto pode comprometer por mês (carro + seguro + combustível)?",
+          "Precisa de porta-malas grande, cadeirinha, ou só você no volante?"
         ]
       },
       {
         "type": "h2",
-        "text": "Os Honda em destaque agora"
+        "text": "Passo 2 — Entenda a faixa de preço real"
       },
       {
         "type": "p",
-        "text": "Temos 2 Honda selecionados abaixo — clique pra ver fotos, ficha e disponibilidade:"
+        "text": "Hoje, seminovos na Netcar vão de R$ 49.900 a R$ 209.900. Chery costuma ficar na faixa intermediária — desconfie de preço muito abaixo do mercado sem laudo."
+      },
+      {
+        "type": "h2",
+        "text": "Passo 3 — Documentação e procedência"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "CRLV e CPF do vendedor batendo",
+          "Sem restrição, multa ou pendência oculta",
+          "Histórico de donos coerente com a km"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Passo 4 — Veja exemplos reais no estoque"
+      },
+      {
+        "type": "p",
+        "text": "Estes Chery já passaram pela nossa conferência. Clique pra ficha completa:"
       },
       {
         "type": "cars",
         "cars": [
           {
-            "modelo": "Honda City Exl",
-            "ano": "2022/2023",
-            "km": "53.000 km",
-            "preco": "R$ 109.900,00",
+            "modelo": "Chery Tiggo 5x Sport Turbo",
+            "ano": "2024/2025",
+            "km": "29.500 km",
+            "preco": "R$ 115.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/city-exl-2023-jbp-xx03-19688",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/10032026CITY%20EXL%20JBP5C03CAPA.png"
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/tiggo-5x-sport-turbo-2025-jco-xx91-19810",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20052026tiggo%205x%20jco3j91CAPA.png"
           },
           {
-            "modelo": "Honda Hrv Advance",
-            "ano": "2024",
-            "km": "59.000 km",
-            "preco": "R$ 159.900,00",
+            "modelo": "Chery Tiggo 8 Max Drive Turbo",
+            "ano": "2024/2025",
+            "km": "37.890 km",
+            "preco": "R$ 166.900,00",
             "cambio": "Automatico",
-            "combustivel": "Flex",
+            "combustivel": "GASOLINA",
             "destaque": "Eleito Melhor Compra",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/hrv-advance-2024-jcn-xx74-19854",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15062026HRV%20JCN8I74CAPA.png"
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/tiggo-8-max-drive-turbo-2025-jcz-xx29-19910",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
           }
         ]
       },
       {
-        "type": "p",
-        "text": "Carro bem preparado e bem precificado não fica parado. Quando bater o olho no certo, vale reservar o test drive."
-      },
-      {
         "type": "h2",
-        "text": "Faixa de preço de referência"
+        "text": "Passo 5 — Test drive com olho clínico"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Partida a frio: motor liso, sem fumaça",
+          "Retomada em subida e frenagem em descida",
+          "Ruídos em buracos e curvas fechadas",
+          "Painel, ar, vidros e central multimídia"
+        ]
       },
       {
         "type": "p",
-        "text": "Seminovos na Netcar hoje: R$ 36.900 a R$ 209.900. Seu honda ideal provavelmente está no meio dessa faixa — dependendo de ano e versão."
+        "text": "Na Netcar, cada seminovo passa pela Fábrica de Valor — mais de 60 itens conferidos, laudo e revisão antes da vitrine."
       },
       {
         "type": "h2",
@@ -1332,7 +1332,7 @@
       },
       {
         "type": "p",
-        "text": "Pra fechar a conta antes de ir à loja:"
+        "text": "Vai financiar? Simule pelo WhatsApp e chegue sabendo a parcela:"
       },
       {
         "type": "ul",
@@ -1350,15 +1350,15 @@
       },
       {
         "type": "h2",
-        "text": "Quer ver mais opções?"
+        "text": "Resumo"
       },
       {
         "type": "p",
-        "text": "Ranking muda conforme entra carro novo no pátio. Veja todos os Honda do estoque atualizado."
+        "text": "Seguiu os passos? Falta só escolher o exemplar. Confira os Chery disponíveis."
       }
     ],
-    "ctaLabel": "Ver Honda no estoque",
-    "ctaHref": "/comprar-honda"
+    "ctaLabel": "Ver Chery no estoque",
+    "ctaHref": "/comprar-chery"
   },
   {
     "slug": "checklist-comprar-seminovo-o-que-verificar",
@@ -1450,7 +1450,7 @@
             "modelo": "Hyundai Creta Limited Turbo",
             "ano": "2025/2026",
             "km": "2.700 km",
-            "preco": "R$ 151.900,00",
+            "preco": "R$ 148.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -1458,15 +1458,15 @@
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04062026CRETA%20LIMITED%20TQW0J90CAPA.png"
           },
           {
-            "modelo": "Chevrolet Tracker Rs Turbo",
+            "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
-            "km": "3.500 km",
-            "preco": "R$ 155.900,00",
+            "km": "6.700 km",
+            "preco": "R$ 137.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/tracker-rs-turbo-2026-tqy-xx35-19820",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026TRACKER%20RS%20TQY3H35CAPA.png"
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/tera-high-turbo-2026-tqq-xx21-19587",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026tera%20TQQ7G21CAPA.png"
           }
         ]
       },
@@ -1547,7 +1547,7 @@
             "modelo": "Volkswagen Taos Highline Turbo",
             "ano": "2023",
             "km": "41.000 km",
-            "preco": "R$ 147.900,00",
+            "preco": "R$ 145.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Estepe Novo",
@@ -1652,7 +1652,7 @@
             "modelo": "Hyundai Creta Limited Turbo",
             "ano": "2025/2026",
             "km": "2.700 km",
-            "preco": "R$ 151.900,00",
+            "preco": "R$ 148.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -1660,15 +1660,15 @@
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04062026CRETA%20LIMITED%20TQW0J90CAPA.png"
           },
           {
-            "modelo": "Chevrolet Tracker Rs Turbo",
+            "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
-            "km": "3.500 km",
-            "preco": "R$ 155.900,00",
+            "km": "6.700 km",
+            "preco": "R$ 137.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/tracker-rs-turbo-2026-tqy-xx35-19820",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026TRACKER%20RS%20TQY3H35CAPA.png"
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/tera-high-turbo-2026-tqq-xx21-19587",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026tera%20TQQ7G21CAPA.png"
           }
         ]
       },
@@ -1843,7 +1843,7 @@
             "modelo": "Hyundai Creta Limited Turbo",
             "ano": "2025/2026",
             "km": "2.700 km",
-            "preco": "R$ 151.900,00",
+            "preco": "R$ 148.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -1851,15 +1851,15 @@
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/04062026CRETA%20LIMITED%20TQW0J90CAPA.png"
           },
           {
-            "modelo": "Chevrolet Tracker Rs Turbo",
+            "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
-            "km": "3.500 km",
-            "preco": "R$ 155.900,00",
+            "km": "6.700 km",
+            "preco": "R$ 137.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/tracker-rs-turbo-2026-tqy-xx35-19820",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/15052026TRACKER%20RS%20TQY3H35CAPA.png"
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/tera-high-turbo-2026-tqq-xx21-19587",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/20012026tera%20TQQ7G21CAPA.png"
           }
         ]
       },
