@@ -161,10 +161,10 @@ export function HomeWhatsAppConversionPanel({
             <button
               type="button"
               onClick={onViewStock}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-base font-black text-[#00283C] transition-colors hover:bg-white/90"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-base font-black text-[#00283C] shadow-[0_10px_28px_rgba(92,210,157,0.35)] transition-colors hover:bg-white/90"
             >
-              Ver estoque
-              <ArrowRight className="h-5 w-5" />
+              <span className="button-text-shimmer">Ver estoque</span>
+              <ArrowRight className="h-5 w-5 text-[#00283C]" />
             </button>
             <a
               href={primaryHref}
