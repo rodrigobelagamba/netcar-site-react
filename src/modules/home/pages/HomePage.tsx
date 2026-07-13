@@ -274,7 +274,9 @@ export function HomePage() {
             onClick={goToStock}
             className="inline-flex w-full max-w-md shrink-0 items-center justify-center gap-2.5 rounded-full bg-[#00283C] px-8 py-4 text-base font-black uppercase tracking-wider text-white shadow-[0_12px_32px_rgba(0,40,60,0.28)] transition-all hover:bg-[#00435a] hover:shadow-[0_16px_40px_rgba(0,40,60,0.34)] active:scale-[0.98] sm:w-auto"
           >
-            Ver todos no estoque
+            <span className="button-text-shimmer-on-dark">
+              Ver todos no estoque
+            </span>
             <ArrowRight className="h-5 w-5" />
           </button>
         </div>
