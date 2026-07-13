@@ -177,6 +177,7 @@ export function VehicleCard({
       whatsAppVehicleName={vehicleLabel}
       whatsAppSource={whatsAppSource}
       compact={compact}
+      isSold={isSold}
     />
   );
 }
