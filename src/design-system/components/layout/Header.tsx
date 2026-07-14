@@ -7,6 +7,7 @@ import { useSearchContext } from "@/contexts/SearchContext";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { generateVehicleSlug } from "@/lib/slug";
+import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 interface VehicleSuggestion {
@@ -356,12 +357,18 @@ export function Header() {
 
   const menuLinks = [
     { to: "/sobre", label: "Sobre" },
-    { to: "/seminovos", label: "Showroom" },
+    { to: "/seminovos", label: "Showroom", search: emptySeminovosSearch },
     { to: "/compra", label: "Venda seu carro" },
     { to: "/blog", label: "Atualidades" },
     { to: "/contato", label: "Contato" },
     { to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9", label: "Localização", external: true },
   ];
+
+  const resetShowroomNav = () => {
+    setSearchTerm("");
+    setIsSearchOpen(false);
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <>
@@ -426,6 +433,8 @@ export function Header() {
                   <Link
                     key={link.to}
                     to={link.to}
+                    search={"search" in link ? link.search : undefined}
+                    onClick={"search" in link ? resetShowroomNav : undefined}
                     className={linkClassName}
                   >
                     {/* Texto padrão */}
@@ -630,8 +639,12 @@ export function Header() {
                     ) : (
                       <Link
                         to={link.to}
+                        search={"search" in link ? link.search : undefined}
                         className="text-white text-xl"
-                        onClick={() => setIsMobileMenuOpen(false)}
+                        onClick={() => {
+                          if ("search" in link) resetShowroomNav();
+                          else setIsMobileMenuOpen(false);
+                        }}
                       >
                         {link.label}
                       </Link>
