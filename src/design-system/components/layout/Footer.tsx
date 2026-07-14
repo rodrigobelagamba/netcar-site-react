@@ -14,11 +14,12 @@ import {
 } from "@/catalog";
 import { formatWhatsAppNumber, buildLojaMapsUrl } from "@/lib/formatters";
 import { cityPages, landingPages } from "@/data/seo";
+import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 const menuLinks = [
   { to: "/sobre", label: "Sobre" },
-  { to: "/seminovos", label: "Showroom" },
+  { to: "/seminovos", label: "Showroom", search: emptySeminovosSearch },
   { to: "/comparar", label: "Comparar seminovos" },
   { to: "/financiamento", label: "Financiamento" },
   { to: "/compra", label: "Netcar compra" },
@@ -213,6 +214,7 @@ export function Footer() {
                   ) : (
                     <Link 
                       to={link.to}
+                      search={"search" in link ? link.search : undefined}
                       className="text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       {link.label}
