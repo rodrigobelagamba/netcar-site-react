@@ -10,27 +10,31 @@
     "secondLabel": "Ver estoque",
     "secondHref": "/seminovos",
     "sections": [
-      { "type": "h2", "text": "Entrada a partir de 20% a 30%" },
-      { "type": "p", "text": "Uma entrada entre 20% e 30% do valor do carro reduz a parcela e melhora as condições de aprovação. Quanto maior a entrada, menores os juros totais — e o valor do seu usado na troca pode compor essa entrada." },
+      { "type": "h2", "text": "Entrada mínima de 20%" },
+      { "type": "p", "text": "Não há financiamento 100% nem carro sem entrada. A entrada mínima é de 20% do valor do veículo (em geral entre 20% e 30%). Quanto maior a entrada, menores os juros totais. O valor do seu usado na troca pode compor parte dessa entrada, sempre sujeito à análise de crédito." },
+      { "type": "h2", "text": "Entrada parcelada no cartão" },
+      { "type": "p", "text": "A entrada pode ser parcelada no cartão de crédito, conforme disponibilidade da operadora e aprovação. Condições e número de parcelas dependem da análise — simule pelo WhatsApp antes de ir à loja." },
       { "type": "h2", "text": "Diversos bancos, condições comparadas" },
-      { "type": "p", "text": "Consultamos bancos e financeiras parceiras para buscar a melhor taxa disponível para o seu perfil, em vez de depender de uma única instituição. Você compara as propostas aprovadas e escolhe a opção que cabe no seu orçamento." },
+      { "type": "p", "text": "Consultamos bancos e financeiras parceiras para buscar a melhor taxa disponível para o seu perfil, em vez de depender de uma única instituição. Você compara as propostas aprovadas e escolhe a opção que cabe no seu orçamento. Toda proposta depende de análise de crédito — não há aprovação garantida." },
       { "type": "h2", "text": "Aceitamos seu usado na troca" },
-      { "type": "p", "text": "Tem carro para dar na troca? O valor entra como parte da entrada e pode reduzir — ou eliminar — o desembolso inicial. Aceitamos inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo." },
+      { "type": "p", "text": "Tem carro para dar na troca? O valor entra como parte da entrada e pode abater o desembolso inicial, mantendo a regra de entrada mínima de 20% no financiamento. Aceitamos inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo." },
       { "type": "h2", "text": "Como simular" },
       { "type": "ol", "items": [
         "Escolha o seminovo no estoque online ou com ajuda do consultor",
         "Envie RG, CPF, comprovante de renda e de endereço pelo WhatsApp",
-        "Receba e compare as condições aprovadas pelos bancos e financeiras parceiras",
+        "Receba e compare as condições aprovadas pelos bancos e financeiras parceiras (sujeito a análise)",
         "Aprovou? Retire o carro na loja em Esteio"
       ] },
-      { "type": "h2", "text": "Financiamento para autônomo e nome restrito" },
-      { "type": "p", "text": "Autônomos comprovam renda por extrato bancário, e há linhas específicas para quem tem restrição — geralmente com entrada maior. O consultor avalia o melhor caminho para o seu caso, sem compromisso." }
+      { "type": "h2", "text": "Autônomo e comprovação de renda" },
+      { "type": "p", "text": "Autônomos podem comprovar renda por extrato bancário e demais documentos pedidos pela financeira. Cada caso passa por análise de crédito das instituições parceiras — a Netcar não oferece linha específica para negativados nem aprovação sem análise." }
     ],
     "faq": [
-      { "q": "Qual a entrada mínima para financiar?", "a": "Em geral, entre 20% e 30% do valor do veículo. O percentual exato depende do seu perfil de crédito e do banco; o valor do seu usado na troca pode compor essa entrada." },
-      { "q": "Em quantas vezes posso financiar?", "a": "Em até 60x, conforme aprovação. Prazos mais longos reduzem a parcela mas aumentam o custo total — simule para encontrar o equilíbrio." },
+      { "q": "Qual a entrada mínima para financiar?", "a": "Mínimo de 20% do valor do veículo (em geral 20% a 30%). Não trabalhamos com financiamento 100% nem sem entrada. O percentual exato depende do perfil de crédito e do banco; o valor do usado na troca pode compor parte dessa entrada." },
+      { "q": "A entrada pode ser parcelada no cartão?", "a": "Sim, a entrada pode ser parcelada no cartão de crédito, conforme disponibilidade e análise. Simule pelo WhatsApp para confirmar as condições do seu caso." },
+      { "q": "Vocês financiam para negativado ou nome restrito?", "a": "Não. Não temos linha de crédito específica para negativados. Toda simulação depende de análise de crédito das financeiras parceiras — sem garantia de aprovação." },
+      { "q": "Em quantas vezes posso financiar?", "a": "Em até 60x (24x, 36x, 48x ou 60x), conforme aprovação. Prazos mais longos reduzem a parcela mas aumentam o custo total — simule para encontrar o equilíbrio." },
       { "q": "Como vocês buscam uma boa taxa?", "a": "Consultamos diversos bancos e financeiras parceiras e comparamos as condições aprovadas para buscar a melhor opção disponível para o seu perfil." },
-      { "q": "Posso usar meu carro como entrada?", "a": "Sim. Avaliamos seu usado e o valor entra na negociação, inclusive se ainda estiver financiado, mediante quitação do saldo." }
+      { "q": "Posso usar meu carro como entrada?", "a": "Sim. Avaliamos seu usado e o valor entra na negociação, inclusive se ainda estiver financiado, mediante quitação do saldo. A entrada mínima de 20% no financiamento continua valendo." }
     ]
   },
   {

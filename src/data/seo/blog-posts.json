@@ -52,14 +52,14 @@
   },
   {
     "slug": "como-financiar-carro-usado-rs",
-    "title": "Como financiar carro usado no RS sem burocracia",
-    "description": "Entenda documentos, prazos e opções de financiamento para seminovos em Esteio. Aprovação rápida e simulação pelo WhatsApp.",
+    "title": "Como financiar carro usado no RS: documentos, entrada e análise",
+    "description": "Entenda documentos, entrada mínima de 20%, parcelamento no cartão e opções de financiamento para seminovos em Esteio. Tudo sujeito à análise de crédito.",
     "publishedAt": "2026-06-08",
     "readMinutes": 5,
     "sections": [
       {
         "type": "p",
-        "text": "Financiar seminovo no Rio Grande do Sul é mais simples do que parece — desde que você tenha documentação organizada e escolha uma loja que trabalhe com bancos e financeiras de forma transparente."
+        "text": "Financiar seminovo no Rio Grande do Sul fica mais claro quando você organiza a documentação e escolhe uma loja que trabalhe com bancos e financeiras de forma transparente — sempre com análise de crédito, sem promessa de aprovação."
       },
       {
         "type": "h2",
@@ -76,27 +76,27 @@
       },
       {
         "type": "h2",
-        "text": "Prazos e entrada"
+        "text": "Prazos e entrada mínima"
       },
       {
         "type": "p",
-        "text": "Na Netcar, a simulação costuma sair em poucos minutos após o envio dos documentos. A entrada fica entre 20% e 30% do valor e pode ser parcelada em até 10x sem juros. Você ainda pode usar seu carro atual na troca — inclusive com parcelas em aberto, mediante avaliação. Tudo sujeito a análise de crédito."
+        "text": "Na Netcar não há financiamento 100% nem carro sem entrada. A entrada mínima é de 20% do valor (em geral 20% a 30%) e pode ser parcelada no cartão de crédito, conforme disponibilidade e análise. O financiamento do saldo pode ir em até 60x. Você ainda pode usar seu carro atual na troca — inclusive com parcelas em aberto, mediante avaliação. Tudo sujeito a análise de crédito."
       },
       {
         "type": "h2",
-        "text": "Score baixo ou restrição: e agora?"
+        "text": "Análise de crédito: o que esperar"
       },
       {
         "type": "p",
-        "text": "Ter restrição no nome não encerra a conversa automaticamente. Cada caso é analisado com as financeiras parceiras. O importante é não esconder informação e simular com dados reais — assim você evita surpresa na hora de assinar."
+        "text": "Toda simulação passa pelas financeiras parceiras. A Netcar não oferece linha específica para negativados nem aprovação garantida. Informe dados reais na simulação — assim você evita surpresa na hora de assinar."
       },
       {
         "type": "p",
-        "text": "Chame no WhatsApp, envie os documentos e receba proposta antes de ir à loja. Menos ida e volta, mais clareza."
+        "text": "Chame no WhatsApp, envie os documentos e receba a simulação antes de ir à loja. Menos ida e volta, mais clareza."
       }
     ],
     "ctaLabel": "Simular financiamento",
-    "ctaHref": "/financiamento-sem-entrada"
+    "ctaHref": "/financiamento"
   },
   {
     "slug": "o-que-verificar-antes-de-comprar-seminovo",
