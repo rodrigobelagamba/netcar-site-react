@@ -103,6 +103,8 @@
   
   # Redirects 301 — site legado PHP/HTML
   # QSD remove parâmetros obsoletos (id/código) do destino canônico.
+  # URL enganosa: Netcar não oferece financiamento 100% / sem entrada.
+  RewriteRule ^financiamento-sem-entrada/?$ /financiamento [R=301,L,QSD,NC]
   RewriteRule ^seminovos\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
   RewriteRule ^sobre-nos\.(php|html?)$ /sobre [R=301,L,QSD,NC]
   RewriteRule ^listagem-produtos\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
