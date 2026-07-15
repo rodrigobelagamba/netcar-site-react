@@ -54,8 +54,9 @@ Status válidos em `blog-topics.json`: `pendente` | `publicado` | `adiado` | `ca
 ```
 
 - Tipos de seção permitidos: `p`, `h2`, `ul`, `ol`. Nada de HTML, markdown ou links dentro do texto.
-- `ctaHref` permitidos: `/seminovos`, `/compra`, `/financiamento-sem-entrada`, `/seminovos-automaticos`, `/contato`.
-- Intent `compra` → CTA `/seminovos`. Intent `venda` → CTA `/compra`. Intent `financiamento` → CTA `/financiamento-sem-entrada`.
+- `ctaHref` permitidos: `/seminovos`, `/compra`, `/financiamento`, `/seminovos-automaticos`, `/contato`.
+- Intent `compra` → CTA `/seminovos`. Intent `venda` → CTA `/compra`. Intent `financiamento` → CTA `/financiamento`.
+- Financiamento: nunca prometer 100%, sem entrada, negativado/nome restrito ou aprovação garantida. Entrada mínima 20%; entrada no cartão e demais condições sujeitas à análise.
 - CTA deve apontar primeiro para página do próprio site. WhatsApp entra depois, na página de destino; não usar link externo como CTA principal.
 
 ## Estrutura recomendada
@@ -159,7 +160,7 @@ Regras anti-thin:
 - Financiamento em até 60x; aceita troca inclusive com financiamento em aberto.
 - Compra usados: nacionais até 7 anos, origem RS, sem passagem por leilão.
 - Atendimento pelo iAN (assistente virtual) no WhatsApp.
-- NÃO prometer: entrega em domicílio, garantia específica em meses, taxa de juros, aprovação garantida.
+- NÃO prometer: entrega em domicílio, garantia específica em meses, taxa de juros, aprovação garantida, financiamento 100%, sem entrada, crédito para negativado/nome restrito.
 - NÃO inventar: prazo de pagamento/entrega/avaliação, taxa, entrada, parcela, rating, volume de clientes, depoimento ou caso de sucesso.
 - Condição financeira ou comercial só entra quando validada em fonte oficial vigente e deve trazer ressalva aplicável. Na dúvida, remover número.
 

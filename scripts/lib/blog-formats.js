@@ -112,13 +112,13 @@ function maybeFinanceBlock(slug, hashStr, allowed) {
     H2("Financiamento: como fica na prática"),
     P(lead),
     UL([
-      "Parcelas em 24x, 36x, 48x ou 60x",
+      "Entrada mínima de 20% (em geral 20% a 30%) — sem financiamento 100%",
+      "Entrada parcelável no cartão de crédito, conforme análise",
+      "Parcelas do saldo em 24x, 36x, 48x ou 60x",
       "Primeira parcela para 60 dias",
-      "Entrada de 20% a 30%, parcelável em até 10x sem juros",
-      "Cartão de crédito em até 24x",
-      "Usado na troca como parte do pagamento",
+      "Usado na troca como parte da entrada",
     ]),
-    P("Mediante análise de crédito."),
+    P("Tudo mediante análise de crédito. Sem linha específica para negativados e sem aprovação garantida."),
   ];
 }
 
@@ -381,7 +381,7 @@ function formatFaq(ctx) {
       ),
       H2("Vale financiar ou pagar à vista?"),
       P(
-        "À vista dá margem na negociação; financiamento preserva caixa. Com entrada de 20–30% parcelável e 1ª parcela em 60 dias, muita gente equilibra as duas coisas."
+        "À vista dá margem na negociação; financiamento preserva caixa. Entrada mínima de 20% (parcelável no cartão, sujeita a análise) e 1ª parcela em 60 dias — sem financiamento 100%."
       ),
       H2("Posso dar meu carro na troca?"),
       P(

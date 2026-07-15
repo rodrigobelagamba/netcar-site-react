@@ -59,11 +59,6 @@ const CityLandingPage = lazyWithRetry(() =>
     default: m.CityLandingPage,
   }))
 );
-const FinanciamentoSemEntradaPage = lazyWithRetry(() =>
-  import("@/modules/seo/pages/FinanciamentoSemEntradaPage").then((m) => ({
-    default: m.FinanciamentoSemEntradaPage,
-  }))
-);
 const SeminovosAutomaticosPage = lazyWithRetry(() =>
   import("@/modules/seo/pages/SeminovosAutomaticosPage").then((m) => ({
     default: m.SeminovosAutomaticosPage,
@@ -135,7 +130,7 @@ function getContextualMessage(pathname: string): string {
       "quero avaliar meu carro para venda ou troca na Netcar.",
     );
   }
-  if (pathname === "/financiamento-sem-entrada" || pathname === "/financiamento") {
+  if (pathname === "/financiamento") {
     return siteWhatsAppMessage("quero simular o financiamento de um seminovo.");
   }
   if (pathname === "/atendimento-24h") {
@@ -378,12 +373,6 @@ const venderMeuCarroRoute = createRoute({
   component: CompraPage,
 });
 
-const financiamentoSemEntradaRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/financiamento-sem-entrada",
-  component: FinanciamentoSemEntradaPage,
-});
-
 const seminovosAutomaticosRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/seminovos-automaticos",
@@ -443,7 +432,6 @@ export const routeTree = rootRoute.addChildren([
   compraRoute,
   compramosSeuUsadoRoute,
   venderMeuCarroRoute,
-  financiamentoSemEntradaRoute,
   seminovosAutomaticosRoute,
   cityLandingRoute,
   sellCityLandingRoute,
