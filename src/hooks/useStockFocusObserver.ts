@@ -3,7 +3,7 @@ import type { VehicleFocusPayload } from "@/design-system/components/patterns/Ve
 
 const FOCUS_MIN_RATIO = 0.35;
 
-/** Um observer pra vários cards — escolhe o mais visível. Também usado com hover (callback direto). */
+/** Um observer pra vários cards — escolhe o mais visível no scroll. */
 export function useStockFocusObserver(
   rootRef: RefObject<HTMLElement | null>,
   onVehicleFocus: ((vehicle: VehicleFocusPayload) => void) | undefined,

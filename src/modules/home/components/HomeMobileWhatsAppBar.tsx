@@ -23,7 +23,7 @@ export function HomeMobileWhatsAppBar({
   focusedVehicle = null,
   coldHref,
   coldCtaLabel = "Quero ajuda pra escolher",
-  coldHint = "Passe o mouse ou role o estoque pra falar de um carro",
+  coldHint = "Role os carros pra falar de um específico",
   sourceHot = "sticky_hot",
   sourceCold = "sticky_cold",
 }: HomeMobileWhatsAppBarProps) {
