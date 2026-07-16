@@ -170,6 +170,12 @@ function WhatsAppButton() {
     return buildWhatsAppUrl(whatsapp.numero, message);
   };
 
+  // Home/estoque: sticky contextual cobre WA. Detalhe mantém floater (desktop) + sticky próprio (mobile).
+  const hideFloater =
+    location.pathname === "/" || location.pathname === "/seminovos";
+
+  if (hideFloater) return null;
+
   return (
     <motion.a
       href={getIanWhatsAppLink()}
@@ -185,7 +191,6 @@ function WhatsAppButton() {
       animate={{ scale: 1 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      // Na Home mobile a sticky bar propria cobre CTA WA — esconde flutuante pra nao competir
       className="fixed bottom-6 right-6 z-50 hidden md:flex h-16 w-16 items-center justify-center rounded-full shadow-lg transition-all hover:shadow-2xl group"
       style={{ backgroundColor: '#25D366' }}
       aria-label="Fale com iAN no WhatsApp"

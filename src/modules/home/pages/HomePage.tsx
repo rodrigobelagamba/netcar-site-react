@@ -9,11 +9,14 @@ import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { HomeWhatsAppConversionPanel } from "../components/HomeWhatsAppConversionPanel";
 import { HomePurchaseBenefits } from "../components/HomePurchaseBenefits";
-import { HomeMobileWhatsAppBar } from "../components/HomeMobileWhatsAppBar";
+import {
+  HomeMobileWhatsAppBar,
+  type HomeStickyVehicle,
+} from "../components/HomeMobileWhatsAppBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import {
@@ -64,6 +67,12 @@ export function HomePage() {
   const isLoadingHero = isLoadingBanners || (showVehiclesHero && isLoadingVehicles);
   
   const [columnsPerRow, setColumnsPerRow] = useState(4);
+  const [stickyVehicle, setStickyVehicle] = useState<HomeStickyVehicle | null>(
+    null,
+  );
+  const handleVehicleFocus = useCallback((vehicle: HomeStickyVehicle) => {
+    setStickyVehicle((prev) => (prev?.id === vehicle.id ? prev : vehicle));
+  }, []);
   
   useEffect(() => {
     const updateColumns = () => {
@@ -178,9 +187,6 @@ export function HomePage() {
     );
   }, [vehicles, columnsPerRow, featuredVehicle]);
 
-  const featuredVehicleLabel = featuredVehicle
-    ? [featuredVehicle.marca, featuredVehicle.modelo, featuredVehicle.year].filter(Boolean).join(" ")
-    : undefined;
 
   const goToStock = () => navigate({
     to: "/seminovos",
@@ -233,7 +239,7 @@ export function HomePage() {
   }, []);
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full pb-24 md:pb-0">
+    <main className="flex-1 overflow-x-hidden max-w-full pb-36">
       {isLoadingHero ? (
         <HomeHeroSkeleton />
       ) : showBanners ? (
@@ -267,6 +273,7 @@ export function HomePage() {
           vehicles={vehiclesWithPhotos}
           isLoading={isLoadingVehicles}
           showWhatsAppInterest
+          onVehicleFocus={handleVehicleFocus}
         />
         <div className="mt-8 flex justify-center md:mt-10">
           <button
@@ -303,7 +310,11 @@ export function HomePage() {
         </div>
       </div>
 
-      <HomeMobileWhatsAppBar vehicleLabel={featuredVehicleLabel} />
+      <HomeMobileWhatsAppBar
+        focusedVehicle={stickyVehicle}
+        sourceHot="home_sticky_hot"
+        sourceCold="home_sticky_cold"
+      />
     </main>
   );
 }
