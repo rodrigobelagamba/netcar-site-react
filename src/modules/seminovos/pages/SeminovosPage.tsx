@@ -515,7 +515,7 @@ export function SeminovosPage() {
         {/* Header com Título e Ordenação */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-fg">Showroom</h1>
+            <h1 className="text-2xl font-bold text-fg">Seminovos</h1>
             <p className="text-sm text-muted-foreground mt-1">
               {filteredAndSortedVehicles.length} veículo{filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado{filteredAndSortedVehicles.length !== 1 ? "s" : ""}
             </p>

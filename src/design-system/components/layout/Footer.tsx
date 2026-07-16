@@ -19,7 +19,7 @@ import logoNetcar from "@/assets/images/logo-netcar.png";
 
 const menuLinks = [
   { to: "/sobre", label: "Sobre" },
-  { to: "/seminovos", label: "Showroom", search: emptySeminovosSearch },
+  { to: "/seminovos", label: "Seminovos", search: emptySeminovosSearch },
   { to: "/comparar", label: "Comparar seminovos" },
   { to: "/financiamento", label: "Financiamento" },
   { to: "/compra", label: "Netcar compra" },

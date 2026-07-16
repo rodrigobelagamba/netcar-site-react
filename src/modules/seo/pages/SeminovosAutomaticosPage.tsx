@@ -25,7 +25,7 @@ export function SeminovosAutomaticosPage() {
               Conforto no trânsito, praticidade no dia a dia e melhor revenda. Na Netcar você encontra automáticos e CVT revisados pela Fábrica de Valor.
             </p>
             <Link to="/seminovos" search={automaticSeminovosSearch} className="text-primary font-semibold hover:underline">
-              Ver todos os automáticos no showroom
+              Ver todos os automáticos nos seminovos
             </Link>
           </motion.div>
 
