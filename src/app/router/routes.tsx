@@ -170,11 +170,8 @@ function WhatsAppButton() {
     return buildWhatsAppUrl(whatsapp.numero, message);
   };
 
-  // Home/estoque: sticky contextual cobre WA. Detalhe mantém floater (desktop) + sticky próprio (mobile).
-  const hideFloater =
-    location.pathname === "/" || location.pathname === "/seminovos";
-
-  if (hideFloater) return null;
+  // Home: sticky contextual cobre WA. Estoque/detalhe mantêm floater (desktop).
+  if (location.pathname === "/") return null;
 
   return (
     <motion.a
