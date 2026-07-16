@@ -10,7 +10,7 @@ interface ProductListProps {
 
 function SkeletonCard({ compact = false }: { compact?: boolean }) {
   return (
-    <div className={`overflow-hidden rounded-lg border border-border bg-surface ${compact ? "mt-14" : "mt-24"}`}>
+    <div className={`overflow-hidden rounded-lg border border-border bg-surface ${compact ? "mt-14" : "mt-24 short1600:mt-16"}`}>
       <div className={`w-full animate-pulse bg-muted ${compact ? "aspect-[4/3]" : "aspect-video"}`} />
       <div className={`space-y-3 ${compact ? "p-3" : "p-4"}`}>
         <div className="h-6 w-3/4 animate-pulse rounded bg-muted" />
@@ -51,7 +51,7 @@ export function ProductList({
             <SkeletonCard key={i} compact />
           ))}
         </div>
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8" style={{ overflow: 'visible' }}>
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8 short1600:gap-5" style={{ overflow: 'visible' }}>
           {Array.from({ length: 8 }).map((_, i) => (
             <SkeletonCard key={i} />
           ))}
@@ -80,7 +80,7 @@ export function ProductList({
         ))}
       </div>
 
-      <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8" style={{ overflow: 'visible' }}>
+      <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8 short1600:gap-5" style={{ overflow: 'visible' }}>
         {vehicles.map((vehicle, index) => (
           <VehicleCard
             key={vehicle.id}
