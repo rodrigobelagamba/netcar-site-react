@@ -92,7 +92,6 @@ export function ProductList({
             showWhatsAppInterest={showWhatsAppInterest}
             whatsAppSource={whatsAppSource}
             enableFocusTracking={trackFocus}
-            onVehicleFocus={onVehicleFocus}
             compact
             fastAnimation
           />
@@ -108,7 +107,6 @@ export function ProductList({
             showWhatsAppInterest={showWhatsAppInterest}
             whatsAppSource={whatsAppSource}
             enableFocusTracking={trackFocus}
-            onVehicleFocus={onVehicleFocus}
           />
         ))}
       </div>

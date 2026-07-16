@@ -39,9 +39,8 @@ export interface VehicleCardProps {
   showWhatsAppInterest?: boolean;
   whatsAppSource?: string;
   compact?: boolean;
-  /** Marca o card pra sticky contextual (scroll + hover). */
+  /** Marca o card pra sticky contextual (scroll / visibilidade). */
   enableFocusTracking?: boolean;
-  onVehicleFocus?: (vehicle: VehicleFocusPayload) => void;
 }
 
 export function VehicleCard({
@@ -66,7 +65,6 @@ export function VehicleCard({
   whatsAppSource = "home_destaques",
   compact = false,
   enableFocusTracking = false,
-  onVehicleFocus,
 }: VehicleCardProps) {
   const navigate = useNavigate();
   const { data: whatsapp } = useWhatsAppQuery();
@@ -197,13 +195,6 @@ export function VehicleCard({
     return card;
   }
 
-  const focusPayload: VehicleFocusPayload = {
-    id,
-    label: vehicleLabel,
-    priceLabel: priceFormatted || "Consulte",
-    image: mainImage,
-  };
-
   return (
     <div
       className="h-full"
@@ -212,7 +203,6 @@ export function VehicleCard({
       data-vehicle-label={vehicleLabel}
       data-vehicle-price={priceFormatted || "Consulte"}
       data-vehicle-image={mainImage}
-      onMouseEnter={() => onVehicleFocus?.(focusPayload)}
     >
       {card}
     </div>
