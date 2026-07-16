@@ -50,22 +50,26 @@ export function CardsHero({
     <div className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center h-full ${
       compact
         ? "rounded-[22px] p-3"
-        : "rounded-[40px] p-8"
+        : "rounded-[40px] p-8 short1600:rounded-[28px] short1600:p-5"
     }`} style={{ border: '1px solid rgba(229, 231, 235, 0.5)' }}>
       {/* Selo em formato de carimbo */}
       {SHOW_CAMPAIGN_STAMP && !isSold && (
         <img
           src="/selos/selo_campanha.png"
           alt="Selo de campanha"
-          className="absolute top-16 right-2 md:top-16 md:right-3 w-20 md:w-24 h-auto z-20 pointer-events-none select-none"
+          className={`absolute z-20 pointer-events-none select-none h-auto ${
+            compact
+              ? "top-16 right-2 md:top-16 md:right-3 w-20 md:w-24"
+              : "top-16 right-2 md:top-16 md:right-3 w-20 md:w-24 short1600:top-14 short1600:right-3 short1600:w-20"
+          }`}
         />
       )}
       
-      {/* Floating Image Section - LARGER */}
+      {/* Floating Image Section */}
       <div className={`!border-0 absolute left-[-2%] right-[-2%] flex items-center justify-center z-10 pointer-events-none ${
         compact
           ? "-top-16 h-32 md:-top-44 md:h-80"
-          : "-top-32 md:-top-44 h-64 md:h-80"
+          : "-top-32 md:-top-44 h-64 md:h-80 short1600:-top-24 short1600:h-52"
       }`}>
         <div className="!border-0 relative w-full h-full">
           <img 
@@ -78,13 +82,15 @@ export function CardsHero({
           {isSold && (
             <div
               aria-hidden="true"
-              className="absolute inset-0 z-20 flex items-center justify-center pt-4 md:pt-8"
+              className={`absolute inset-0 z-20 flex items-center justify-center ${
+                compact ? "pt-4 md:pt-8" : "pt-4 md:pt-8 short1600:pt-4"
+              }`}
             >
               <span
                 className={`-rotate-[16deg] border-[#E10600]/70 bg-white/40 font-black uppercase tracking-[0.08em] text-[#E10600]/80 shadow-[0_8px_24px_rgba(0,0,0,0.12)] ${
                   compact
                     ? "rounded-lg border-[3px] px-2 py-0.5 text-xs sm:rounded-xl sm:border-[4px] sm:px-3 sm:py-1 sm:text-sm md:text-base"
-                    : "rounded-xl border-[5px] px-4 py-1.5 text-2xl sm:rounded-2xl sm:border-[6px] sm:px-6 sm:py-2 sm:text-3xl md:border-[7px] md:px-7 md:py-2.5 md:text-4xl"
+                    : "rounded-xl border-[5px] px-4 py-1.5 text-2xl sm:rounded-2xl sm:border-[6px] sm:px-6 sm:py-2 sm:text-3xl md:border-[7px] md:px-7 md:py-2.5 md:text-4xl short1600:border-[5px] short1600:px-4 short1600:py-1.5 short1600:text-2xl"
                 }`}
               >
                 Vendido
@@ -94,29 +100,37 @@ export function CardsHero({
         </div>
       </div>
 
-      {/* Content Section - Adjusted to match photo exactly */}
+      {/* Content Section */}
       <div className={`!border-0 w-full flex flex-col items-start text-left flex-1 ${
-        compact ? "pt-16 space-y-1.5" : "pt-28 md:pt-32 space-y-4"
+        compact
+          ? "pt-16 space-y-1.5"
+          : "pt-28 md:pt-32 space-y-4 short1600:pt-24 short1600:space-y-2"
       }`}>
          <span className={`!border-0 bg-[#00283C] text-white hover:bg-[#00283C] rounded-md font-bold tracking-widest uppercase w-fit inline-block ${
-           compact ? "px-2 py-0.5 text-[8px]" : "px-3 py-1 text-[10px]"
+           compact ? "px-2 py-0.5 text-[8px]" : "px-3 py-1 text-[10px] short1600:px-2.5 short1600:py-0.5 short1600:text-[9px]"
          }`}>
            {brand}
          </span>
 
          {/* Model and Year - Left aligned */}
          <div className="!border-0 space-y-0.5 w-full">
-           <h3 className={`!border-0 font-bold leading-snug ${compact ? "line-clamp-2 min-h-[2.35rem] text-[11px]" : "text-[17px]"}`} style={{ color: '#00283C' }}>
+           <h3 className={`!border-0 font-bold leading-snug ${
+             compact
+               ? "line-clamp-2 min-h-[2.35rem] text-[11px]"
+               : "text-[17px] short1600:line-clamp-2 short1600:text-[15px]"
+           }`} style={{ color: '#00283C' }}>
              {model}
            </h3>
-           <p className={`!border-0 text-gray-400 font-medium ${compact ? "text-[10px]" : "text-base"}`}>{year}</p>
+           <p className={`!border-0 text-gray-400 font-medium ${compact ? "text-[10px]" : "text-base short1600:text-sm"}`}>{year}</p>
          </div>
 
          {/* Price and Action — altura reservada pra alinhar CTA entre cards */}
-         <div className={`!border-0 w-full min-w-0 flex flex-col items-stretch mt-auto ${compact ? "gap-1.5 pt-2" : "gap-2 pt-4"}`}>
+         <div className={`!border-0 w-full min-w-0 flex flex-col items-stretch mt-auto ${
+           compact ? "gap-1.5 pt-2" : "gap-2 pt-4 short1600:gap-1.5 short1600:pt-2"
+         }`}>
            <div
              className={`!border-0 w-full min-w-0 flex items-end ${
-               compact ? "min-h-[1.25rem]" : "min-h-[2rem]"
+               compact ? "min-h-[1.25rem]" : "min-h-[2rem] short1600:min-h-[1.5rem]"
              }`}
            >
              {isSold ? (
@@ -124,19 +138,21 @@ export function CardsHero({
                  Indisponível · ver similares
                </p>
              ) : showPriceComparison && previousPrice ? (
-               <div className="flex flex-col items-start gap-1">
+               <div className="flex flex-col items-start gap-1 short1600:gap-0.5">
                  <p className="!border-0 font-semibold text-gray-500 leading-none text-xs">
                    De: <span className="line-through">{previousPrice}</span>
                  </p>
                  <div className="flex flex-col items-start leading-none gap-0.5">
                    <span className="!border-0 text-[11px] font-semibold uppercase text-gray-400">Para:</span>
-                   <p className="!border-0 font-bold font-sans tracking-tight text-base leading-tight" style={{ color: '#5CD29D' }}>
+                   <p className="!border-0 font-bold font-sans tracking-tight text-base leading-tight short1600:text-sm" style={{ color: '#5CD29D' }}>
                      {price}
                    </p>
                  </div>
                </div>
              ) : (
-               <p className={`!border-0 font-bold font-sans tracking-tight leading-tight ${compact ? "text-sm" : "text-[24px]"}`} style={{ color: '#5CD29D' }}>
+               <p className={`!border-0 font-bold font-sans tracking-tight leading-tight ${
+                 compact ? "text-sm" : "text-[24px] short1600:text-xl"
+               }`} style={{ color: '#5CD29D' }}>
                  {price}
                </p>
              )}
@@ -145,7 +161,7 @@ export function CardsHero({
            {isSold ? (
              <div
                className={`!border-0 box-border flex w-full min-w-0 items-center justify-center rounded-full border border-[#00283C]/15 bg-[#F3F5F6] font-bold text-[#00283C] ${
-                 compact ? "h-9 px-3 text-[9px]" : "h-10 px-4 text-[12px]"
+                 compact ? "h-9 px-3 text-[9px]" : "h-10 px-4 text-[12px] short1600:h-9 short1600:px-3 short1600:text-[11px]"
                }`}
              >
                Ver detalhes
@@ -161,15 +177,22 @@ export function CardsHero({
                data-wa-vehicle-name={whatsAppVehicleName}
                onClick={(e) => e.stopPropagation()}
                className={`!border-0 inline-flex w-full items-center justify-center gap-1 rounded-full bg-[#25D366] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#128C7E] ${
-                 compact ? "h-9 px-2 text-[9px] tracking-normal whitespace-nowrap" : "h-10 px-3 text-[11px] tracking-wide"
+                 compact
+                   ? "h-9 px-2 text-[9px] tracking-normal whitespace-nowrap"
+                   : "h-10 px-3 text-[11px] tracking-wide short1600:h-9 short1600:text-[10px] short1600:whitespace-nowrap"
                }`}
              >
-              <MessageCircle className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4"}`} />
-              {compact ? "Tenho interesse" : "Tenho interesse neste carro"}
+              <MessageCircle className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4 short1600:h-3.5 short1600:w-3.5"}`} />
+              <span className={compact ? undefined : "short1600:hidden"}>
+                {compact ? "Tenho interesse" : "Tenho interesse neste carro"}
+              </span>
+              {!compact ? (
+                <span className="hidden short1600:inline">Tenho interesse</span>
+              ) : null}
              </a>
            ) : (
              <button
-               className="!border-0 h-10 w-10 rounded-full transition-all duration-300 shadow-lg group/btn flex items-center justify-center shrink-0"
+               className="!border-0 h-10 w-10 short1600:h-9 short1600:w-9 rounded-full transition-all duration-300 shadow-lg group/btn flex items-center justify-center shrink-0"
                style={{
                  backgroundColor: '#00283C',
                  color: 'white',
@@ -188,6 +211,7 @@ export function CardsHero({
              </button>
            )}
 
+           {/* Mobile compact: links curtos */}
            {!isSold && compact && whatsAppHref && (tradeInHref || financeHref) ? (
              <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold leading-none">
                {tradeInHref ? (
@@ -226,39 +250,80 @@ export function CardsHero({
              </div>
            ) : null}
 
+           {/* Desktop normal: textos longos; short1600: linha compacta */}
            {!compact ? (
-             <div className="flex min-h-[2.75rem] flex-col justify-start gap-2">
-               {!isSold && whatsAppHref && tradeInHref ? (
-                 <a
-                   href={tradeInHref}
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   data-wa-source={`${whatsAppSource}_trade`}
-                   data-wa-intent="trade_in"
-                   data-wa-vehicle-id={whatsAppVehicleId}
-                   data-wa-vehicle-name={whatsAppVehicleName}
-                   onClick={(e) => e.stopPropagation()}
-                   className="!border-0 w-full text-center text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
-                 >
-                   Avaliar meu carro na troca deste →
-                 </a>
+             <>
+               <div className="flex min-h-[2.75rem] flex-col justify-start gap-2 short1600:hidden">
+                 {!isSold && whatsAppHref && tradeInHref ? (
+                   <a
+                     href={tradeInHref}
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     data-wa-source={`${whatsAppSource}_trade`}
+                     data-wa-intent="trade_in"
+                     data-wa-vehicle-id={whatsAppVehicleId}
+                     data-wa-vehicle-name={whatsAppVehicleName}
+                     onClick={(e) => e.stopPropagation()}
+                     className="!border-0 w-full text-center text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
+                   >
+                     Avaliar meu carro na troca deste →
+                   </a>
+                 ) : null}
+                 {!isSold && whatsAppHref && financeHref ? (
+                   <a
+                     href={financeHref}
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     data-wa-source={`${whatsAppSource}_finance`}
+                     data-wa-intent="simulate_finance"
+                     data-wa-vehicle-id={whatsAppVehicleId}
+                     data-wa-vehicle-name={whatsAppVehicleName}
+                     onClick={(e) => e.stopPropagation()}
+                     className="!border-0 w-full text-center text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
+                   >
+                     Comparar financiamento →
+                   </a>
+                 ) : null}
+               </div>
+
+               {!isSold && whatsAppHref && (tradeInHref || financeHref) ? (
+                 <div className="hidden short1600:flex items-center justify-center gap-1.5 text-[10px] font-bold leading-none">
+                   {tradeInHref ? (
+                     <a
+                       href={tradeInHref}
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       data-wa-source={`${whatsAppSource}_trade`}
+                       data-wa-intent="trade_in"
+                       data-wa-vehicle-id={whatsAppVehicleId}
+                       data-wa-vehicle-name={whatsAppVehicleName}
+                       onClick={(e) => e.stopPropagation()}
+                       className="text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D]"
+                     >
+                       Troca →
+                     </a>
+                   ) : null}
+                   {tradeInHref && financeHref ? (
+                     <span className="text-gray-300" aria-hidden="true">·</span>
+                   ) : null}
+                   {financeHref ? (
+                     <a
+                       href={financeHref}
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       data-wa-source={`${whatsAppSource}_finance`}
+                       data-wa-intent="simulate_finance"
+                       data-wa-vehicle-id={whatsAppVehicleId}
+                       data-wa-vehicle-name={whatsAppVehicleName}
+                       onClick={(e) => e.stopPropagation()}
+                       className="text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D]"
+                     >
+                       Financiar →
+                     </a>
+                   ) : null}
+                 </div>
                ) : null}
-               {!isSold && whatsAppHref && financeHref ? (
-                 <a
-                   href={financeHref}
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   data-wa-source={`${whatsAppSource}_finance`}
-                   data-wa-intent="simulate_finance"
-                   data-wa-vehicle-id={whatsAppVehicleId}
-                   data-wa-vehicle-name={whatsAppVehicleName}
-                   onClick={(e) => e.stopPropagation()}
-                   className="!border-0 w-full text-center text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
-                 >
-                   Comparar financiamento →
-                 </a>
-               ) : null}
-             </div>
+             </>
            ) : null}
          </div>
       </div>
@@ -273,7 +338,11 @@ export function CardsHero({
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: delay * 0.1 }}
         viewport={{ once: true }}
-        className={`${compact ? "pt-12 h-full" : "pt-24 md:pt-32 h-full"} ${onClick ? 'cursor-pointer' : ''}`}
+        className={`${
+          compact
+            ? "pt-12 h-full"
+            : "pt-24 md:pt-32 h-full short1600:pt-20"
+        } ${onClick ? 'cursor-pointer' : ''}`}
         onClick={onClick}
       >
         {content}
@@ -287,11 +356,14 @@ export function CardsHero({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: delay * 0.05 }}
-      className={`${compact ? "pt-12 h-full" : "pt-24 md:pt-32 h-full"} ${onClick ? 'cursor-pointer' : ''}`}
+      className={`${
+        compact
+          ? "pt-12 h-full"
+          : "pt-24 md:pt-32 h-full short1600:pt-20"
+      } ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
       {content}
     </motion.div>
   );
 }
-
