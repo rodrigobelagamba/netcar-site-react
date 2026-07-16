@@ -106,7 +106,7 @@ export function EstoqueLandingPage() {
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-white font-semibold hover:bg-primary/90"
               >
                 <Car className="w-4 h-4" />
-                Ver todos no showroom
+                Ver todos nos seminovos
               </Link>
               <a
                 href={waLink}
