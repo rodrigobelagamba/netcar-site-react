@@ -6,6 +6,13 @@ import { buildWhatsAppUrl, vehicleWhatsAppMessages } from "@/lib/whatsappMessage
 import { CardsHero } from "./CardsHero";
 import { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 
+export type VehicleFocusPayload = {
+  id: string;
+  label: string;
+  priceLabel: string;
+  image: string;
+};
+
 // URL da imagem de carro coberto usada como fallback quando não houver PNG
 // A imagem está em public/images/semcapa.png
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
@@ -32,6 +39,9 @@ export interface VehicleCardProps {
   showWhatsAppInterest?: boolean;
   whatsAppSource?: string;
   compact?: boolean;
+  /** Marca o card pra sticky contextual (scroll + hover). */
+  enableFocusTracking?: boolean;
+  onVehicleFocus?: (vehicle: VehicleFocusPayload) => void;
 }
 
 export function VehicleCard({
@@ -55,6 +65,8 @@ export function VehicleCard({
   showWhatsAppInterest = false,
   whatsAppSource = "home_destaques",
   compact = false,
+  enableFocusTracking = false,
+  onVehicleFocus,
 }: VehicleCardProps) {
   const navigate = useNavigate();
   const { data: whatsapp } = useWhatsAppQuery();
@@ -155,7 +167,7 @@ export function VehicleCard({
         )
       : undefined;
 
-  return (
+  const card = (
     <CardsHero
       image={mainImage}
       brand={brand}
@@ -179,5 +191,30 @@ export function VehicleCard({
       compact={compact}
       isSold={isSold}
     />
+  );
+
+  if (!enableFocusTracking || isSold) {
+    return card;
+  }
+
+  const focusPayload: VehicleFocusPayload = {
+    id,
+    label: vehicleLabel,
+    priceLabel: priceFormatted || "Consulte",
+    image: mainImage,
+  };
+
+  return (
+    <div
+      className="h-full"
+      data-stock-focus-card=""
+      data-vehicle-id={id}
+      data-vehicle-label={vehicleLabel}
+      data-vehicle-price={priceFormatted || "Consulte"}
+      data-vehicle-image={mainImage}
+      onMouseEnter={() => onVehicleFocus?.(focusPayload)}
+    >
+      {card}
+    </div>
   );
 }

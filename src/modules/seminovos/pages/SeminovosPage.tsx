@@ -1,9 +1,12 @@
-import { useState, useMemo, useEffect, useRef, Fragment } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback, Fragment } from "react";
 import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
+import {
+  VehicleCard,
+  type VehicleFocusPayload,
+} from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
 import { ChevronDown, X, Filter, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,6 +21,11 @@ import {
   siteWhatsAppMessage,
 } from "@/lib/whatsappMessages";
 import { trackStockFilterApply } from "@/lib/analytics";
+import { useStockFocusObserver } from "@/hooks/useStockFocusObserver";
+import {
+  HomeMobileWhatsAppBar,
+  type HomeStickyVehicle,
+} from "@/modules/home/components/HomeMobileWhatsAppBar";
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
@@ -46,6 +54,13 @@ export function SeminovosPage() {
   const search = useSearch({ from: "/seminovos" });
   const navigate = useNavigate();
   const desktopCols = useDesktopStockColumns();
+  const stockFocusRootRef = useRef<HTMLDivElement>(null);
+  const [stickyVehicle, setStickyVehicle] = useState<HomeStickyVehicle | null>(
+    null,
+  );
+  const handleVehicleFocus = useCallback((vehicle: VehicleFocusPayload) => {
+    setStickyVehicle((prev) => (prev?.id === vehicle.id ? prev : vehicle));
+  }, []);
   
   // Mapeia os parâmetros de busca para o formato esperado pela API
   const vehiclesQuery = useMemo(() => {
@@ -391,8 +406,14 @@ export function SeminovosPage() {
     search.anoMax,
   ]);
 
+  useStockFocusObserver(
+    stockFocusRootRef,
+    handleVehicleFocus,
+    filteredAndSortedVehicles,
+  );
+
   return (
-    <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-32 md:pb-6">
+    <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-36">
       {/* SearchBar - Fixada logo abaixo do Header, apenas Mobile, controlada por estado */}
       <AnimatePresence>
         {isSearchBarVisible && (
@@ -412,7 +433,7 @@ export function SeminovosPage() {
       {isSearchBarVisible && <div className="md:hidden h-[244px]"></div>}
       
       {/* Botão Filtrar Fixo - Apenas Mobile (acima da sticky WA) */}
-      <div className="md:hidden fixed bottom-24 left-4 z-[51]">
+      <div className="md:hidden fixed bottom-36 left-4 z-[51]">
         <button
           onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
           className="px-5 py-3.5 rounded-full bg-fg text-white shadow-lg hover:bg-fg/90 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 font-semibold"
@@ -424,23 +445,18 @@ export function SeminovosPage() {
         </button>
       </div>
 
-      {/* Sticky WhatsApp com filtros - Apenas Mobile */}
-      <div className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#25D366]/30 bg-white/95 px-3 py-2 shadow-[0_-10px_30px_rgba(0,0,0,0.10)] backdrop-blur-md">
-        <p className="mb-1 text-center text-[10px] font-semibold uppercase tracking-wide text-[#00283C]/70">
-          Atendimento 24h no WhatsApp
-        </p>
-        <a
-          href={seminovosWhatsAppHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-wa-source="seminovos_sticky"
-          data-wa-intent="stock_help"
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-sm font-black text-white shadow-[0_6px_18px_rgba(37,211,102,0.30)]"
-        >
-          <MessageCircle className="h-4 w-4" />
-          {hasFilterParams ? "Receber opções no WhatsApp" : "Tenho interesse em um seminovo"}
-        </a>
-      </div>
+      <HomeMobileWhatsAppBar
+        focusedVehicle={stickyVehicle}
+        coldHref={seminovosWhatsAppHref}
+        coldCtaLabel={
+          hasFilterParams
+            ? "Receber opções no WhatsApp"
+            : "Quero ajuda pra escolher"
+        }
+        coldHint="Passe o mouse ou role o estoque pra falar de um carro"
+        sourceHot="seminovos_sticky_hot"
+        sourceCold="seminovos_sticky_cold"
+      />
       
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
         {/* Filtros em Card Minimalista - Desktop */}
@@ -587,7 +603,7 @@ export function SeminovosPage() {
             </a>
           </div>
         ) : (
-          <>
+          <div ref={stockFocusRootRef}>
             <div className="md:hidden grid grid-cols-2 items-stretch gap-2" style={{ overflow: "visible" }}>
               {filteredAndSortedVehicles.map((vehicle, index) => (
                 <Fragment key={vehicle.id}>
@@ -608,6 +624,8 @@ export function SeminovosPage() {
                     fastAnimation
                     showWhatsAppInterest
                     whatsAppSource="seminovos_grid"
+                    enableFocusTracking
+                    onVehicleFocus={handleVehicleFocus}
                     compact
                   />
                   {index === 5 && filteredAndSortedVehicles.length > 8 && (
@@ -645,6 +663,8 @@ export function SeminovosPage() {
                     fastAnimation={index >= 8}
                     showWhatsAppInterest
                     whatsAppSource="seminovos_grid"
+                    enableFocusTracking
+                    onVehicleFocus={handleVehicleFocus}
                   />
                 ))}
               </div>
@@ -681,12 +701,14 @@ export function SeminovosPage() {
                       fastAnimation
                       showWhatsAppInterest
                       whatsAppSource="seminovos_grid"
+                      enableFocusTracking
+                      onVehicleFocus={handleVehicleFocus}
                     />
                   ))}
                 </div>
               )}
             </div>
-          </>
+          </div>
         )}
       </div>
 

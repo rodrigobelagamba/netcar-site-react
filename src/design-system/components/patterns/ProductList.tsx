@@ -1,11 +1,18 @@
-import { VehicleCard, type VehicleCardProps } from "./VehicleCard";
+import { useRef } from "react";
+import {
+  VehicleCard,
+  type VehicleCardProps,
+  type VehicleFocusPayload,
+} from "./VehicleCard";
 import { Button } from "../ui/button";
+import { useStockFocusObserver } from "@/hooks/useStockFocusObserver";
 
 interface ProductListProps {
   vehicles: VehicleCardProps[];
   isLoading?: boolean;
   showWhatsAppInterest?: boolean;
   whatsAppSource?: string;
+  onVehicleFocus?: (vehicle: VehicleFocusPayload) => void;
 }
 
 function SkeletonCard({ compact = false }: { compact?: boolean }) {
@@ -42,7 +49,15 @@ export function ProductList({
   isLoading,
   showWhatsAppInterest = false,
   whatsAppSource = "home_destaques",
+  onVehicleFocus,
 }: ProductListProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  useStockFocusObserver(
+    rootRef,
+    isLoading ? undefined : onVehicleFocus,
+    vehicles,
+  );
+
   if (isLoading) {
     return (
       <>
@@ -64,8 +79,10 @@ export function ProductList({
     return <EmptyState />;
   }
 
+  const trackFocus = Boolean(onVehicleFocus);
+
   return (
-    <>
+    <div ref={rootRef}>
       <div className="md:hidden grid grid-cols-2 items-stretch gap-2">
         {vehicles.map((vehicle, index) => (
           <VehicleCard
@@ -74,6 +91,8 @@ export function ProductList({
             delay={index}
             showWhatsAppInterest={showWhatsAppInterest}
             whatsAppSource={whatsAppSource}
+            enableFocusTracking={trackFocus}
+            onVehicleFocus={onVehicleFocus}
             compact
             fastAnimation
           />
@@ -88,9 +107,11 @@ export function ProductList({
             delay={index}
             showWhatsAppInterest={showWhatsAppInterest}
             whatsAppSource={whatsAppSource}
+            enableFocusTracking={trackFocus}
+            onVehicleFocus={onVehicleFocus}
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }
