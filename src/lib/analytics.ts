@@ -4,6 +4,13 @@
  * gtag direto envia ao GA4 com wa_ads_conversion=false para não repetir Ads.
  */
 
+import {
+  appendWaRefToUrl,
+  buildWaRef,
+  captureTrafficSource,
+  getTrafficSource,
+} from "@/lib/waTracking";
+
 export const GA4_MEASUREMENT_ID = "G-MGPNBDNQ9G";
 
 export type WhatsAppClickSource =
@@ -252,6 +259,9 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
 
   if (shouldSkipDuplicateWhatsAppTrack(dedupKey)) return;
 
+  const traffic = getTrafficSource();
+  const waRef = buildWaRef(params.vehicleId);
+
   pushDataLayer({
     event: "whatsapp_click",
     wa_ads_conversion: true,
@@ -260,6 +270,9 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
     wa_vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
     wa_vehicle_name: params.vehicleName,
     wa_page_type: inferPageType(pagePath),
+    wa_ref: waRef,
+    traffic_source: traffic.src,
+    traffic_campaign: traffic.campaign,
     page_path: pagePath,
     ...getRegionalDimensions(pagePath),
   });
@@ -276,6 +289,9 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
       wa_vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
       wa_vehicle_name: params.vehicleName,
       wa_page_type: inferPageType(pagePath),
+      wa_ref: waRef,
+      traffic_source: traffic.src,
+      traffic_campaign: traffic.campaign,
       page_path: pagePath,
       ...getRegionalDimensions(pagePath),
     });
@@ -292,7 +308,11 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
 export function openWhatsApp(url: string, params: WhatsAppClickParams): void {
   if (!url || url === "#") return;
   trackWhatsAppClick(params);
-  window.open(url, "_blank", "noopener,noreferrer");
+  window.open(
+    appendWaRefToUrl(url, params.vehicleId),
+    "_blank",
+    "noopener,noreferrer",
+  );
 }
 
 function inferSourceFromElement(el: HTMLElement): WhatsAppClickSource {
@@ -311,6 +331,8 @@ export function initAnalytics(): void {
   if (typeof window === "undefined" || window.__netcarAnalyticsInit) return;
   window.__netcarAnalyticsInit = true;
 
+  captureTrafficSource();
+
   document.addEventListener(
     "click",
     (event) => {
@@ -322,10 +344,14 @@ export function initAnalytics(): void {
       }
       const href = anchor.href || "";
       if (!/wa\.me|api\.whatsapp\.com/i.test(href)) return;
+      const vehicleId = anchor.getAttribute("data-wa-vehicle-id") ?? undefined;
+      // Injeta a ref de rastreio no href antes do navegador seguir o link
+      // (fase capture roda antes da ação padrão do clique).
+      anchor.href = appendWaRefToUrl(href, vehicleId);
       trackWhatsAppClick({
         source: inferSourceFromElement(anchor),
         intent: anchor.getAttribute("data-wa-intent") ?? "link_click",
-        vehicleId: anchor.getAttribute("data-wa-vehicle-id") ?? undefined,
+        vehicleId,
         vehicleName: anchor.getAttribute("data-wa-vehicle-name") ?? undefined,
       });
     },
