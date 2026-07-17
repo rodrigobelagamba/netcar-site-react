@@ -41,6 +41,10 @@ export interface VehicleCardProps {
   compact?: boolean;
   /** Marca o card pra sticky contextual (scroll / visibilidade). */
   enableFocusTracking?: boolean;
+  onVehicleFocus?: (
+    vehicle: VehicleFocusPayload,
+    source: "scroll" | "click",
+  ) => void;
 }
 
 export function VehicleCard({
@@ -65,6 +69,7 @@ export function VehicleCard({
   whatsAppSource = "home_destaques",
   compact = false,
   enableFocusTracking = false,
+  onVehicleFocus,
 }: VehicleCardProps) {
   const navigate = useNavigate();
   const { data: whatsapp } = useWhatsAppQuery();
@@ -96,19 +101,6 @@ export function VehicleCard({
       ? (firstPngImage || CAR_COVERED_PLACEHOLDER_URL)
       : CAR_COVERED_PLACEHOLDER_URL;
   }
-
-  const handleClick = () => {
-    sessionStorage.setItem("showroom-scroll", String(window.scrollY));
-
-    const slug = generateVehicleSlug({
-      modelo: modelo || name,
-      marca,
-      year,
-      placa,
-      id,
-    });
-    navigate({ to: `/veiculo/${slug}` });
-  };
 
   const sanitizeFormattedPrice = (formatted?: string) =>
     formatted ? formatted.replace(/<[^>]*>/g, "") : "";
@@ -142,6 +134,34 @@ export function VehicleCard({
   const transmission = cambio || '';
   const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
   const isSold = !price || price <= 0;
+
+  const emitFocus = () => {
+    if (!onVehicleFocus || isSold) return;
+    onVehicleFocus(
+      {
+        id,
+        label: vehicleLabel,
+        priceLabel: priceFormatted || "Consulte",
+        image: mainImage,
+      },
+      "click",
+    );
+  };
+
+  const handleClick = () => {
+    emitFocus();
+    sessionStorage.setItem("showroom-scroll", String(window.scrollY));
+
+    const slug = generateVehicleSlug({
+      modelo: modelo || name,
+      marca,
+      year,
+      placa,
+      id,
+    });
+    navigate({ to: `/veiculo/${slug}` });
+  };
+
   const whatsAppHref =
     showWhatsAppInterest && whatsapp?.numero && !isSold
       ? buildWhatsAppUrl(

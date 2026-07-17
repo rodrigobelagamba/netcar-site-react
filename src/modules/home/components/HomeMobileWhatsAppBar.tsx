@@ -11,25 +11,31 @@ export type HomeStickyVehicle = VehicleFocusPayload;
 
 interface HomeMobileWhatsAppBarProps {
   focusedVehicle?: HomeStickyVehicle | null;
+  /** false = esconde (ex.: ainda no hero). */
+  visible?: boolean;
   /** Override do link frio (ex.: filtros do estoque). */
   coldHref?: string;
   coldCtaLabel?: string;
   coldHint?: string;
   sourceHot?: string;
   sourceCold?: string;
+  /** Trava foco por scroll enquanto mira/clica o sticky. */
+  onPointerLockChange?: (locked: boolean) => void;
 }
 
 export function HomeMobileWhatsAppBar({
   focusedVehicle = null,
+  visible = true,
   coldHref,
   coldCtaLabel = "Quero ajuda pra escolher",
   coldHint = "Role os carros pra falar de um específico",
   sourceHot = "sticky_hot",
   sourceCold = "sticky_cold",
+  onPointerLockChange,
 }: HomeMobileWhatsAppBarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
 
-  if (!whatsapp?.numero) return null;
+  if (!visible || !whatsapp?.numero) return null;
 
   const hot = focusedVehicle;
   const coldMessages = homeWhatsAppMessages();
@@ -42,8 +48,12 @@ export function HomeMobileWhatsAppBar({
       buildWhatsAppUrl(whatsapp.numero, coldMessages.vehicleInterest);
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center px-3">
-      <div className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[#25D366]/30 bg-white/95 px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.16)] backdrop-blur-md">
+    <div className="pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center px-3 md:hidden">
+      <div
+        className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[#25D366]/30 bg-white/95 px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.16)] backdrop-blur-md"
+        onPointerEnter={() => onPointerLockChange?.(true)}
+        onPointerLeave={() => onPointerLockChange?.(false)}
+      >
         {hot ? (
           <>
             <div className="mb-1.5 flex items-center justify-center gap-2.5">
