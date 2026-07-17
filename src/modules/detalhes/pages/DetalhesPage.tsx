@@ -579,6 +579,8 @@ interface CTASidebarProps {
   vehicle?: any;
   modeloCompleto?: string;
   isSold?: boolean;
+  /** Slug da URL atual (/veiculo/$slug) — NÃO usar vehicle.slug (link legado .html da API). */
+  pageSlug?: string;
 }
 
 function WhatsAppPulseRing({ children }: { children: React.ReactNode }) {
@@ -701,11 +703,15 @@ function CTASidebar({
   vehicle,
   modeloCompleto,
   isSold = false,
+  pageSlug,
 }: CTASidebarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
 
   const handleOpenLaudo = () => {
-    const laudoSlug = vehicle?.slug;
+    // pageSlug da rota tem o ID no fim; vehicle.slug da API é link legado .html sem ID
+    const laudoSlug =
+      (pageSlug && String(pageSlug).trim()) ||
+      (vehicle?.id != null ? String(vehicle.id) : "");
     if (!laudoSlug) {
       console.warn("Slug indisponível para abrir laudo");
       return;
@@ -1893,6 +1899,7 @@ export function DetalhesPage() {
         vehicle={vehicle}
         anuncio={anuncio || null}
         isSold={isSold}
+        pageSlug={slug}
       />
 
       {/* Fábrica de Valor Section */}
@@ -1937,9 +1944,15 @@ interface DetailsSectionProps {
   vehicle: any;
   anuncio?: string | null;
   isSold?: boolean;
+  pageSlug?: string;
 }
 
-function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProps) {
+function DetailsSection({
+  vehicle,
+  anuncio,
+  isSold = false,
+  pageSlug,
+}: DetailsSectionProps) {
   const [showMoreOptionals, setShowMoreOptionals] = useState(false);
 
   const marca = vehicle.marca || vehicle.name?.split(" ")[0] || "";
@@ -2290,6 +2303,7 @@ function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProp
               vehicle={vehicle}
               modeloCompleto={modeloCompleto}
               isSold={isSold}
+              pageSlug={pageSlug}
             />
           </div>
         </div>
