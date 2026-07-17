@@ -9,14 +9,11 @@ import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { HomeWhatsAppConversionPanel } from "../components/HomeWhatsAppConversionPanel";
 import { HomePurchaseBenefits } from "../components/HomePurchaseBenefits";
-import {
-  HomeMobileWhatsAppBar,
-  type HomeStickyVehicle,
-} from "../components/HomeMobileWhatsAppBar";
+import { HomeMobileWhatsAppBar } from "../components/HomeMobileWhatsAppBar";
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
-import { useMemo, useEffect, useState, useCallback, useRef } from "react";
+import { useMemo, useEffect, useState, useRef } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import {
@@ -68,20 +65,9 @@ export function HomePage() {
   const isLoadingHero = isLoadingBanners || (showVehiclesHero && isLoadingVehicles);
   
   const [columnsPerRow, setColumnsPerRow] = useState(4);
-  const [stickyVehicle, setStickyVehicle] = useState<HomeStickyVehicle | null>(
-    null,
-  );
-  const [scrollFocusPaused, setScrollFocusPaused] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const pastHero = usePastElement(heroRef);
-  const handleVehicleFocus = useCallback(
-    (vehicle: HomeStickyVehicle, _source: "scroll" | "click") => {
-      // Troca por scroll já é filtrada (deadzone / cooldown / pause no sticky).
-      setStickyVehicle((prev) => (prev?.id === vehicle.id ? prev : vehicle));
-    },
-    [],
-  );
-  
+
   useEffect(() => {
     const updateColumns = () => {
       const width = window.innerWidth;
@@ -283,8 +269,6 @@ export function HomePage() {
           vehicles={vehiclesWithPhotos}
           isLoading={isLoadingVehicles}
           showWhatsAppInterest
-          onVehicleFocus={handleVehicleFocus}
-          scrollFocusPaused={scrollFocusPaused}
         />
         <div className="mt-8 flex justify-center md:mt-10">
           <button
@@ -323,11 +307,7 @@ export function HomePage() {
 
       <HomeMobileWhatsAppBar
         visible={pastHero}
-        focusedVehicle={stickyVehicle}
-        sourceHot="home_sticky_hot"
         sourceCold="home_sticky_cold"
-        coldHint="Toque num carro pra falar dele"
-        onPointerLockChange={setScrollFocusPaused}
       />
     </main>
   );
