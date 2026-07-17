@@ -456,8 +456,8 @@ function DetalheFloatingWhatsApp({
 
   return (
     <FloatingPortal>
-      <div className="pointer-events-none fixed inset-x-0 bottom-3 z-[60] flex justify-center px-3">
-        <div className="pointer-events-auto w-full max-w-sm">
+      <div className="pointer-events-none fixed inset-x-0 bottom-2 z-[60] flex justify-center px-2 md:bottom-3 md:px-3">
+        <div className="pointer-events-auto w-full max-w-[22rem] md:max-w-sm">
           <VehicleWhatsAppCard
             vehicle={{
               id: String(vehicleId),
