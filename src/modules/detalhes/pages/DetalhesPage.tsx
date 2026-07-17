@@ -697,42 +697,20 @@ function SidebarActionCard({
   );
 }
 
-function CTASidebar({ vehicle, modeloCompleto, isSold = false }: CTASidebarProps) {
+function CTASidebar({
+  vehicle,
+  modeloCompleto,
+  isSold = false,
+}: CTASidebarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
 
-  const handleDownloadPDF = () => {
-    if (!vehicle?.pdf_url && !vehicle?.pdf) {
-      console.warn("PDF não disponível para este veículo");
+  const handleOpenLaudo = () => {
+    const laudoSlug = vehicle?.slug;
+    if (!laudoSlug) {
+      console.warn("Slug indisponível para abrir laudo");
       return;
     }
-
-    // Preferir caminho same-origin (serve PDF novo no preview local via /public).
-    // Em produção, depois do overwrite em arquivos/autocheck/, continua o mesmo path.
-    const fileName = vehicle.pdf || null;
-    let pdfUrl: string | undefined;
-
-    if (fileName) {
-      pdfUrl = `/arquivos/autocheck/${fileName}`;
-    } else if (vehicle.pdf_url) {
-      pdfUrl = vehicle.pdf_url;
-    }
-
-    if (!pdfUrl) {
-      console.warn("Não foi possível determinar a URL do PDF");
-      return;
-    }
-
-    if (!pdfUrl.startsWith("http://") && !pdfUrl.startsWith("https://")) {
-      const baseDomain =
-        typeof window !== "undefined"
-          ? window.location.origin
-          : "https://www.netcarmultimarcas.com.br";
-      pdfUrl = pdfUrl.startsWith("/")
-        ? `${baseDomain}${pdfUrl}`
-        : `${baseDomain}/${pdfUrl}`;
-    }
-
-    window.open(pdfUrl, "_blank", "noopener,noreferrer");
+    window.open(`/laudo/${laudoSlug}`, "_blank", "noopener,noreferrer");
   };
 
   const getWhatsAppLink = (message: string) => {
@@ -791,7 +769,7 @@ function CTASidebar({ vehicle, modeloCompleto, isSold = false }: CTASidebarProps
         >
           <button
             type="button"
-            onClick={handleDownloadPDF}
+            onClick={handleOpenLaudo}
             className="group relative w-full overflow-hidden rounded-[1.35rem] bg-gradient-to-br from-[#E7F8F0] via-white to-[#F7FBFA] px-6 py-6 text-center shadow-[0_10px_32px_rgba(46,125,50,0.16)] ring-1 ring-inset ring-secondary/15 transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(46,125,50,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 sm:px-8 sm:py-7"
             aria-label="Abrir laudo i-CHECK em nova aba"
           >

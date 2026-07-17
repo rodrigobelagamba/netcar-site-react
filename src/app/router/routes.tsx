@@ -35,6 +35,11 @@ const DetalhesPage = lazyWithRetry(() =>
     default: m.DetalhesPage,
   }))
 );
+const ICheckLaudoPage = lazyWithRetry(() =>
+  import("@/modules/detalhes/pages/ICheckLaudoPage").then((m) => ({
+    default: m.ICheckLaudoPage,
+  }))
+);
 const SobrePage = lazyWithRetry(() =>
   import("@/modules/sobre/pages/SobrePage").then((m) => ({ default: m.SobrePage }))
 );
@@ -153,9 +158,12 @@ function WhatsAppButton() {
   });
   // Detecta se está na página de detalhes do veículo
   const isDetalhesPage = location.pathname.startsWith("/veiculo/");
+  const isLaudoPage = location.pathname.startsWith("/laudo/");
   const slug = isDetalhesPage ? location.pathname.replace("/veiculo/", "") : "";
   // useVehicleQuery já verifica se slug existe internamente, então não faz query se slug for vazio
   const { data: vehicle } = useVehicleQuery(slug);
+
+  if (isLaudoPage) return null;
 
   const getIanWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
@@ -243,8 +251,10 @@ function RootComponent() {
         Pular para o conteúdo
       </a>
       <SchemaOrg />
-      <Header />
-      <div className="relative min-h-[100dvh] flex-1 overflow-x-hidden max-w-full pt-0 sm:pt-20">
+      <div className="print:hidden">
+        <Header />
+      </div>
+      <div className="relative min-h-[100dvh] flex-1 overflow-x-hidden max-w-full pt-0 sm:pt-20 print:min-h-0 print:pt-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -262,8 +272,10 @@ function RootComponent() {
           </motion.div>
         </AnimatePresence>
       </div>
-      <Footer />
-      <WhatsAppButton />
+      <div className="print:hidden">
+        <Footer />
+        <WhatsAppButton />
+      </div>
     </div>
   );
 }
@@ -330,6 +342,12 @@ const detalhesRoute = createRoute({
   component: DetalhesPage,
   // Removido o loader para evitar problemas em produção
   // O componente usa useParams e useLocation diretamente, que são mais confiáveis
+});
+
+const icheckLaudoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/laudo/$slug",
+  component: ICheckLaudoPage,
 });
 
 const sobreRoute = createRoute({
@@ -426,6 +444,7 @@ export const routeTree = rootRoute.addChildren([
   indexRoute,
   seminovosRoute,
   detalhesRoute,
+  icheckLaudoRoute,
   sobreRoute,
   contatoRoute,
   blogRoute,
