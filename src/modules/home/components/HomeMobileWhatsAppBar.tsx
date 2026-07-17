@@ -48,7 +48,7 @@ export function HomeMobileWhatsAppBar({
       buildWhatsAppUrl(whatsapp.numero, coldMessages.vehicleInterest);
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center px-3 md:hidden">
+    <div className="pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center px-3">
       <div
         className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[#25D366]/30 bg-white/95 px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.16)] backdrop-blur-md"
         onPointerEnter={() => onPointerLockChange?.(true)}

@@ -247,7 +247,7 @@ export function HomePage() {
   }, []);
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full pb-36 md:pb-0">
+    <main className="flex-1 overflow-x-hidden max-w-full pb-36">
       <div ref={heroRef}>
         {isLoadingHero ? (
           <HomeHeroSkeleton />
