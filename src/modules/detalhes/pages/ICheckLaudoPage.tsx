@@ -155,28 +155,46 @@ export function ICheckLaudoPage() {
 
       <article className="mx-auto max-w-3xl px-4 py-6 print:max-w-none print:px-0 print:py-0 sm:py-8">
         <div className="overflow-hidden rounded-[1.5rem] bg-white shadow-[0_12px_40px_rgba(0,40,60,0.08)] print:rounded-none print:shadow-none">
-          {/* Header */}
-          <header className="flex items-start justify-between gap-4 border-b border-[#E4EAEF] px-5 py-5 sm:px-8">
-            <div className="flex items-center gap-3">
-              <img
-                src="/brand/checkauto-dekra.png"
-                alt="DEKRA CheckAuto"
-                className="h-24 w-24 object-contain sm:h-28 sm:w-28"
-              />
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#5A6B73]">
-                  Histórico atestado via
-                </p>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#5A6B73]">
-                  Relatório i-CHECK do seminovo
-                </p>
+          {/* Header — DEKRA em destaque */}
+          <header className="border-b border-[#E4EAEF] px-5 py-5 sm:px-8">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center gap-4 sm:gap-5">
+                <img
+                  src="/brand/checkauto-dekra.png"
+                  alt="DEKRA CheckAuto"
+                  className="h-36 w-36 object-contain sm:h-44 sm:w-44"
+                />
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#5A6B73]">
+                    Histórico atestado via
+                  </p>
+                  <p className="mt-1 text-sm font-extrabold uppercase tracking-[0.08em] text-[#1B5E20] sm:text-base">
+                    DEKRA · CheckAuto
+                  </p>
+                  <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#5A6B73]">
+                    Relatório i-CHECK do seminovo
+                  </p>
+                </div>
               </div>
+              <img
+                src="/brand/netcar.png"
+                alt="Netcar"
+                className="h-7 w-auto object-contain opacity-90 sm:h-8"
+              />
             </div>
-            <img
-              src="/brand/netcar.png"
-              alt="Netcar"
-              className="h-7 w-auto object-contain opacity-90 sm:h-8"
-            />
+            <div className="mt-4 rounded-xl border border-[#5CD29D]/50 bg-[#F3FBF7] px-4 py-3">
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#1B5E20]">
+                Autoridade DEKRA — líder global em inspeção veicular
+              </p>
+              <p className="mt-1.5 text-xs leading-relaxed text-[#5A6B73] sm:text-[13px]">
+                A <strong className="font-bold text-[#00283C]">DEKRA</strong> é a
+                maior empresa de inspeção veicular do mundo e líder global em
+                testes, vistorias e certificações. Fundada na Alemanha em 1925,
+                opera focada em garantir a segurança da interação humana com a
+                tecnologia e o meio ambiente. O histórico deste seminovo foi
+                consultado via CheckAuto, uma empresa DEKRA.
+              </p>
+            </div>
           </header>
 
           <div className="space-y-6 px-5 py-6 sm:px-8 sm:py-8">

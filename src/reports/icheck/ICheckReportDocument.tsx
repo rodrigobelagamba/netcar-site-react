@@ -29,27 +29,49 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: 14,
+    marginBottom: 10,
   },
   brandBlock: { flexDirection: "column", gap: 2 },
-  partnerBadge: { width: 190, height: 184, objectFit: "contain" },
-  dekraLogo: { width: 160, height: 36, objectFit: "contain" },
-  checkautoLogo: { width: 100, height: 20, objectFit: "contain", marginTop: 2 },
-  netcarLogo: { width: 96, height: 24, objectFit: "contain" },
-  partnerFallback: { fontSize: 14, fontFamily: "Helvetica-Bold", color: GREEN },
+  partnerBadge: { width: 248, height: 240, objectFit: "contain" },
+  dekraLogo: { width: 200, height: 46, objectFit: "contain" },
+  checkautoLogo: { width: 120, height: 24, objectFit: "contain", marginTop: 2 },
+  netcarLogo: { width: 88, height: 22, objectFit: "contain" },
+  partnerFallback: { fontSize: 18, fontFamily: "Helvetica-Bold", color: GREEN },
   eyebrow: {
-    fontSize: 7,
+    fontSize: 8,
     letterSpacing: 1.1,
     color: MUTED,
     textTransform: "uppercase",
     marginBottom: 2,
   },
   reportTag: {
-    fontSize: 7,
+    fontSize: 8,
     letterSpacing: 1.0,
     color: MUTED,
     textTransform: "uppercase",
     marginTop: 4,
+  },
+  authorityBox: {
+    backgroundColor: "#F3FBF7",
+    borderWidth: 1,
+    borderColor: MINT,
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    marginBottom: 12,
+    maxWidth: 420,
+  },
+  authorityTitle: {
+    fontSize: 8,
+    fontFamily: "Helvetica-Bold",
+    color: GREEN,
+    marginBottom: 3,
+    letterSpacing: 0.4,
+  },
+  authorityBody: {
+    fontSize: 7.5,
+    color: MUTED,
+    lineHeight: 1.35,
   },
   title: {
     fontSize: 16,
@@ -317,43 +339,71 @@ function PageFooter({
   );
 }
 
-function Header({ data }: { data: ICheckReportData }) {
+function Header({
+  data,
+  showAuthority = false,
+}: {
+  data: ICheckReportData;
+  showAuthority?: boolean;
+}) {
   const hasPartnerBadge = Boolean(data.partnerLogosPath);
   const hasDekra = Boolean(data.dekraLogoPath);
   const hasCheckauto = Boolean(data.checkautoLogoPath);
 
   return (
-    <View style={styles.headerRow}>
-      {/* Esquerda: badge oficial DEKRA + CheckAuto (quem atesta) */}
-      <View style={[styles.brandBlock, { flexDirection: "row", alignItems: "center", gap: 10 }]}>
-        {hasPartnerBadge ? (
-          <Image src={data.partnerLogosPath} style={styles.partnerBadge} />
-        ) : null}
-        <View style={{ flexDirection: "column", gap: 2 }}>
-          <Text style={styles.eyebrow}>Histórico atestado via</Text>
-          {!hasPartnerBadge && hasDekra ? (
-            <Image src={data.dekraLogoPath} style={styles.dekraLogo} />
+    <View>
+      <View style={styles.headerRow}>
+        {/* Esquerda: badge oficial DEKRA + CheckAuto (quem atesta) */}
+        <View
+          style={[
+            styles.brandBlock,
+            { flexDirection: "row", alignItems: "center", gap: 12 },
+          ]}
+        >
+          {hasPartnerBadge ? (
+            <Image src={data.partnerLogosPath} style={styles.partnerBadge} />
           ) : null}
-          {!hasPartnerBadge && hasCheckauto ? (
-            <Image src={data.checkautoLogoPath} style={styles.checkautoLogo} />
-          ) : null}
-          {!hasPartnerBadge && !hasDekra ? (
-            <Text style={styles.partnerFallback}>DEKRA · CheckAuto</Text>
-          ) : null}
-          <Text style={styles.reportTag}>Relatório i-CHECK do seminovo</Text>
+          <View style={{ flexDirection: "column", gap: 3, maxWidth: 280 }}>
+            <Text style={styles.eyebrow}>Histórico atestado via</Text>
+            {!hasPartnerBadge && hasDekra ? (
+              <Image src={data.dekraLogoPath} style={styles.dekraLogo} />
+            ) : null}
+            {!hasPartnerBadge && hasCheckauto ? (
+              <Image src={data.checkautoLogoPath} style={styles.checkautoLogo} />
+            ) : null}
+            {!hasPartnerBadge && !hasDekra ? (
+              <Text style={styles.partnerFallback}>DEKRA · CheckAuto</Text>
+            ) : null}
+            <Text style={styles.reportTag}>Relatório i-CHECK do seminovo</Text>
+          </View>
+        </View>
+
+        {/* Direita: Netcar */}
+        <View style={{ alignItems: "flex-end", justifyContent: "flex-start" }}>
+          {data.netcarLogoPath ? (
+            <Image src={data.netcarLogoPath} style={styles.netcarLogo} />
+          ) : (
+            <Text style={{ fontSize: 12, fontFamily: "Helvetica-Bold", color: NAVY }}>
+              Netcar
+            </Text>
+          )}
         </View>
       </View>
 
-      {/* Direita: Netcar */}
-      <View style={{ alignItems: "flex-end", justifyContent: "flex-start" }}>
-        {data.netcarLogoPath ? (
-          <Image src={data.netcarLogoPath} style={styles.netcarLogo} />
-        ) : (
-          <Text style={{ fontSize: 12, fontFamily: "Helvetica-Bold", color: NAVY }}>
-            Netcar
+      {showAuthority ? (
+        <View style={styles.authorityBox}>
+          <Text style={styles.authorityTitle}>
+            AUTORIDADE DEKRA — LÍDER GLOBAL EM INSPEÇÃO VEICULAR
           </Text>
-        )}
-      </View>
+          <Text style={styles.authorityBody}>
+            A DEKRA é a maior empresa de inspeção veicular do mundo e líder global em
+            testes, vistorias e certificações. Fundada na Alemanha em 1925, opera
+            focada em garantir a segurança da interação humana com a tecnologia e o
+            meio ambiente. O histórico deste seminovo foi consultado via CheckAuto,
+            uma empresa DEKRA.
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -371,7 +421,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
     >
       {/* Página 1 — Capa */}
       <Page size="A4" style={styles.page}>
-        <Header data={data} />
+        <Header data={data} showAuthority />
         <Text style={styles.title}>{data.vehicleName}</Text>
         <Text style={styles.subtitle}>
           Dossiê com fotos do veículo, ficha técnica e histórico CheckAuto/DEKRA —
