@@ -232,7 +232,7 @@ async function main() {
     }
   }
 
-  // Prefer fotos do site (fundo cinza + logo Netcar), não o recorte branco
+  // Prefer imagens_site (fundo cinza + logo Netcar); AVIF/PNG → JPEG via sips
   const galeria = (
     vehicle.imagens_site?.galeria?.length
       ? vehicle.imagens_site.galeria
@@ -249,10 +249,11 @@ async function main() {
     if (local) photoPaths.push(local);
   }
 
+  // capa PNG às vezes vem sem fundo cinza/logo — preferir 1ª da galeria site
   const capa =
+    (galeria[0] ? absUrl(galeria[0]) : null) ||
     absUrl(vehicle.imagens_site?.capa) ||
-    absUrl(vehicle.imagens_site?.capa_thumb) ||
-    (galeria[0] ? absUrl(galeria[0]) : null);
+    absUrl(vehicle.imagens_site?.capa_thumb);
   const capaLocal = capa
     ? await downloadToCache(capa, cacheDir, "capa")
     : photoPaths[0] || null;

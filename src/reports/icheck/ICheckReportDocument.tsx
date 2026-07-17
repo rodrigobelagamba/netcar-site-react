@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   brandBlock: { flexDirection: "column", gap: 2 },
-  partnerBadge: { width: 150, height: 145, objectFit: "contain" },
-  dekraLogo: { width: 132, height: 30, objectFit: "contain" },
-  checkautoLogo: { width: 88, height: 18, objectFit: "contain", marginTop: 2 },
+  partnerBadge: { width: 190, height: 184, objectFit: "contain" },
+  dekraLogo: { width: 160, height: 36, objectFit: "contain" },
+  checkautoLogo: { width: 100, height: 20, objectFit: "contain", marginTop: 2 },
   netcarLogo: { width: 96, height: 24, objectFit: "contain" },
   partnerFallback: { fontSize: 14, fontFamily: "Helvetica-Bold", color: GREEN },
   eyebrow: {
