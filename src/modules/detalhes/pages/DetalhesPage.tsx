@@ -6,7 +6,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
-  Download,
   CheckSquare,
   CalendarDays,
   Calculator,
@@ -27,7 +26,6 @@ import {
 } from "@/lib/whatsappMessages";
 import type { WhatsAppClickSource } from "@/lib/analytics";
 import { trackViewItem } from "@/lib/analytics";
-import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
 import type { VehicleCardProps } from "@/design-system/components/patterns/VehicleCard";
@@ -495,21 +493,23 @@ function AccordionItem({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
-      className="border-b border-border pb-4 mb-4"
+      className={`mb-1 rounded-xl border-b border-[#00283C]/[0.08] px-1 pb-4 transition-colors ${
+        isOpen ? "border-[#00283C]/15" : ""
+      }`}
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between text-left group"
+        className="group flex w-full items-center justify-between rounded-lg py-1 text-left transition-colors hover:bg-[#00283C]/[0.02]"
       >
-        <h3 className="text-primary text-[17px] sm:text-[18px] lg:text-[19px] font-medium pr-4">
+        <h3 className="pr-4 text-[17px] font-medium text-primary sm:text-[18px] lg:text-[19px]">
           {title}
         </h3>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
-          className="flex-shrink-0"
+          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#00283C]/[0.05] text-[#00283C]/70 transition-colors group-hover:bg-[#00283C]/[0.08]"
         >
-          <ChevronDown className="w-6 h-6 text-muted-foreground" />
+          <ChevronDown className="h-4 w-4" />
         </motion.div>
       </button>
 
@@ -542,15 +542,17 @@ function SpecBadge({ label, value, index = 0 }: SpecBadgeProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{
-        duration: 0.6,
-        delay: index * 0.05,
+        duration: 0.5,
+        delay: index * 0.04,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className="border border-purple rounded-[45px] px-4 h-[26px] flex items-center justify-center whitespace-nowrap"
+      className="flex min-h-[34px] items-center justify-center whitespace-nowrap rounded-full border border-[#00283C]/[0.08] bg-[#00283C]/[0.03] px-4 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
     >
-      <p className="text-purple text-[14px] sm:text-[15px] lg:text-[16px] font-bold uppercase">
-        <span>{label} </span>
-        <span className="font-light">{value}</span>
+      <p className="text-[13px] font-medium uppercase tracking-wide text-[#00283C]/90 sm:text-[14px] lg:text-[15px]">
+        <span className="font-semibold text-[#00283C]">{label} </span>
+        <span className="font-normal normal-case tracking-normal text-[#00283C]/80">
+          {value}
+        </span>
       </p>
     </motion.div>
   );
@@ -563,27 +565,12 @@ interface OptionalItemProps {
 function OptionalItem({ text }: OptionalItemProps) {
   return (
     <div className="flex items-center gap-2">
-      <div className="w-6 h-6 flex-shrink-0 text-primary">
-        <svg className="block size-full" fill="none" viewBox="0 0 24 24">
-          <mask
-            height="24"
-            id="mask0_19_234"
-            maskUnits="userSpaceOnUse"
-            style={{ maskType: "alpha" }}
-            width="24"
-            x="0"
-            y="0"
-          >
-            <rect fill="hsl(var(--color-muted-foreground))" height="24" width="24" />
-          </mask>
-          <g mask="url(#mask0_19_234)">
-            <path d="M10 17V7L15 12L10 17Z" fill="currentColor" />
-          </g>
+      <div className="h-6 w-6 flex-shrink-0 text-primary">
+        <svg className="block size-full" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M10 17V7L15 12L10 17Z" fill="currentColor" />
         </svg>
       </div>
-      <span className="text-fg text-[14px] sm:text-[15px] leading-[29px]">
-        {text}
-      </span>
+      <span className="text-[14px] leading-[29px] text-fg sm:text-[15px]">{text}</span>
     </div>
   );
 }
@@ -630,7 +617,7 @@ function WhatsAppQuickAction({
 }) {
   if (disabled || href === "#") {
     return (
-      <div className="flex items-center gap-3 rounded-xl border border-border/80 bg-muted/40 px-3 py-3 opacity-50">
+      <div className="flex items-center gap-3 rounded-2xl border border-[#00283C]/[0.06] bg-[#F7F9FA] px-3 py-3 opacity-50">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366]/15 text-[#128C7E]">
           <Icon className="h-4 w-4" />
         </span>
@@ -648,14 +635,14 @@ function WhatsAppQuickAction({
       data-wa-intent={intent}
       data-wa-vehicle-id={vehicleId != null ? String(vehicleId) : undefined}
       data-wa-vehicle-name={vehicleName}
-      whileHover={{ scale: 1.02, y: -1 }}
+      whileHover={{ scale: 1.01, y: -1 }}
       whileTap={{ scale: 0.98 }}
-      className="group flex items-center gap-3 rounded-xl border border-[#25D366]/25 bg-white px-3 py-3 shadow-sm transition-colors hover:border-[#25D366]/50 hover:bg-[#25D366]/[0.06] hover:shadow-md"
+      className="group flex items-center gap-3 rounded-2xl border border-[#00283C]/[0.06] bg-[#FAFCFB] px-3 py-3 shadow-[0_1px_2px_rgba(0,40,60,0.04)] transition-all hover:border-[#25D366]/35 hover:bg-[#25D366]/[0.06] hover:shadow-[0_4px_14px_rgba(37,211,102,0.12)]"
     >
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_4px_14px_rgba(37,211,102,0.35)] transition-transform group-hover:scale-105">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_3px_10px_rgba(37,211,102,0.28)] transition-transform group-hover:scale-105">
         <Icon className="h-4 w-4" />
       </span>
-      <span className="text-left text-[13px] font-semibold leading-tight text-fg group-hover:text-green-dark">
+      <span className="text-left text-[13px] font-semibold leading-tight text-[#00283C] group-hover:text-green-dark">
         {label}
       </span>
       <MessageCircleMore className="ml-auto h-4 w-4 shrink-0 text-[#25D366] opacity-0 transition-opacity group-hover:opacity-100" />
@@ -674,48 +661,38 @@ function SidebarActionCard({
 }) {
   const styles =
     variant === "trust"
-      ? "border-secondary/40 bg-gradient-to-br from-secondary/[0.12] via-white to-white shadow-[0_10px_40px_rgba(108,190,157,0.16)]"
-      : "border-[#25D366]/30 bg-gradient-to-br from-[#25D366]/[0.08] via-white to-primary/[0.05] shadow-[0_10px_40px_rgba(37,211,102,0.12)]";
+      ? "border-secondary/25 bg-gradient-to-br from-secondary/[0.14] via-white to-[#F7FBFA] shadow-[0_8px_28px_rgba(108,190,157,0.14)]"
+      : "border-[#00283C]/[0.07] bg-white shadow-[0_6px_24px_rgba(0,40,60,0.06)]";
 
   const badgeClass =
     variant === "trust"
-      ? "border-secondary/30 text-secondary"
-      : "border-[#25D366]/35 text-[#128C7E]";
-
-  const glowColor =
-    variant === "trust" ? "rgba(108,190,157,0.35)" : "rgba(37,211,102,0.28)";
+      ? "border-secondary/25 text-secondary"
+      : "border-[#00283C]/10 text-[#00283C]/80";
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl border p-6 sm:p-8 flex flex-col items-center transition-shadow duration-300 hover:shadow-[0_16px_48px_rgba(0,91,102,0.14)] ${styles}`}>
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full blur-3xl"
-        style={{ backgroundColor: glowColor }}
-        animate={{ opacity: [0.35, 0.65, 0.35], scale: [1, 1.08, 1] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-12 -left-8 h-28 w-28 rounded-full blur-3xl bg-primary/20"
-        animate={{ opacity: [0.2, 0.45, 0.2], scale: [1, 1.12, 1] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-      />
+    <div className={`relative flex flex-col items-center overflow-hidden rounded-[1.35rem] border p-6 ring-1 ring-inset ring-white/60 transition-shadow duration-300 hover:shadow-[0_12px_32px_rgba(0,40,60,0.1)] sm:p-8 ${styles}`}>
+      {variant === "trust" ? (
+        <>
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full blur-3xl"
+            style={{ backgroundColor: "rgba(108,190,157,0.35)" }}
+            animate={{ opacity: [0.35, 0.65, 0.35], scale: [1, 1.08, 1] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-12 -left-8 h-28 w-28 rounded-full bg-primary/20 blur-3xl"
+            animate={{ opacity: [0.2, 0.45, 0.2], scale: [1, 1.12, 1] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+          />
+        </>
+      ) : null}
 
-      {variant === "contact" && (
-        <motion.div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#25D366]/15"
-          animate={{ rotate: [0, 8, -8, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <MessageCircleMore className="h-5 w-5 text-[#25D366]" />
-        </motion.div>
-      )}
-
-      <span className={`relative mb-4 inline-flex items-center rounded-full border bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] shadow-sm ${badgeClass}`}>
+      <span className={`relative mb-4 inline-flex items-center rounded-full border bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] shadow-[0_1px_2px_rgba(0,40,60,0.04)] ${badgeClass}`}>
         {badge}
       </span>
-      <div className="relative w-full flex flex-col items-center">{children}</div>
+      <div className="relative flex w-full flex-col items-center">{children}</div>
     </div>
   );
 }
@@ -729,15 +706,15 @@ function CTASidebar({ vehicle, modeloCompleto, isSold = false }: CTASidebarProps
       return;
     }
 
-    // Obtém a URL do PDF (já deve estar normalizada pela API)
-    let pdfUrl = vehicle.pdf_url;
-    
-    // Se não tiver pdf_url mas tiver pdf, constrói a URL
-    if (!pdfUrl && vehicle.pdf) {
-      const baseDomain = typeof window !== "undefined" 
-        ? window.location.origin 
-        : "https://www.netcarmultimarcas.com.br";
-      pdfUrl = `${baseDomain}/arquivos/autocheck/${vehicle.pdf}`;
+    // Preferir caminho same-origin (serve PDF novo no preview local via /public).
+    // Em produção, depois do overwrite em arquivos/autocheck/, continua o mesmo path.
+    const fileName = vehicle.pdf || null;
+    let pdfUrl: string | undefined;
+
+    if (fileName) {
+      pdfUrl = `/arquivos/autocheck/${fileName}`;
+    } else if (vehicle.pdf_url) {
+      pdfUrl = vehicle.pdf_url;
     }
 
     if (!pdfUrl) {
@@ -745,27 +722,17 @@ function CTASidebar({ vehicle, modeloCompleto, isSold = false }: CTASidebarProps
       return;
     }
 
-    // Garante que a URL é absoluta
     if (!pdfUrl.startsWith("http://") && !pdfUrl.startsWith("https://")) {
-      const baseDomain = typeof window !== "undefined" 
-        ? window.location.origin 
-        : "https://www.netcarmultimarcas.com.br";
-      pdfUrl = pdfUrl.startsWith("/") 
-        ? `${baseDomain}${pdfUrl}` 
+      const baseDomain =
+        typeof window !== "undefined"
+          ? window.location.origin
+          : "https://www.netcarmultimarcas.com.br";
+      pdfUrl = pdfUrl.startsWith("/")
+        ? `${baseDomain}${pdfUrl}`
         : `${baseDomain}/${pdfUrl}`;
     }
 
-    // Cria um link temporário para fazer o download
-    const link = document.createElement("a");
-    link.href = pdfUrl;
-    link.download = vehicle.pdf || `relatorio-${vehicle.placa || vehicle.id}.pdf`;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    
-    // Adiciona ao DOM, clica e remove
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open(pdfUrl, "_blank", "noopener,noreferrer");
   };
 
   const getWhatsAppLink = (message: string) => {
@@ -776,13 +743,11 @@ function CTASidebar({ vehicle, modeloCompleto, isSold = false }: CTASidebarProps
   const vehicleLabel = modeloCompleto || "veículo";
   const whatsappReady = Boolean(whatsapp?.numero);
   const vehicleMessages = vehicleWhatsAppMessages(vehicleLabel, modeloCompleto);
-  const primaryWhatsAppHref = whatsappReady
+  const primaryWhatsAppHref = whatsappReady && isSold
     ? getWhatsAppLink(
-        isSold
-          ? siteWhatsAppMessage(
-              `o ${vehicleLabel} que eu vi no site já foi vendido. Quero opções parecidas disponíveis.`,
-            )
-          : vehicleMessages.info,
+        siteWhatsAppMessage(
+          `o ${vehicleLabel} que eu vi no site já foi vendido. Quero opções parecidas disponíveis.`,
+        ),
       )
     : undefined;
 
@@ -824,31 +789,37 @@ function CTASidebar({ vehicle, modeloCompleto, isSold = false }: CTASidebarProps
           viewport={{ once: true }}
           transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
         >
-          <SidebarActionCard variant="trust" badge="Confiança Netcar">
-            <div className="w-full max-w-[246px] h-[148px] mb-4 overflow-hidden">
-              <img
-                src={iCheckLogo}
-                alt="i-Check"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <p className="text-muted-foreground text-sm text-center mb-5 max-w-[280px]">
-              Histórico completo do veículo, pronto para download.
-            </p>
-
-            <div className="w-full max-w-[300px]">
-              <CTAButton
-                text="Baixe o relatório"
-                icon={Download}
-                borderColor="border-secondary"
-                textColor="text-secondary"
-                hoverBgColor="bg-green-dark"
-                filled
-                className="w-full"
-                onClick={handleDownloadPDF}
-              />
-            </div>
-          </SidebarActionCard>
+          <button
+            type="button"
+            onClick={handleDownloadPDF}
+            className="group relative w-full overflow-hidden rounded-[1.35rem] bg-gradient-to-br from-[#E7F8F0] via-white to-[#F7FBFA] px-6 py-6 text-center shadow-[0_10px_32px_rgba(46,125,50,0.16)] ring-1 ring-inset ring-secondary/15 transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(46,125,50,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 sm:px-8 sm:py-7"
+            aria-label="Abrir laudo i-CHECK em nova aba"
+          >
+            <motion.div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-secondary/25 blur-2xl"
+              animate={{ opacity: [0.35, 0.7, 0.35], scale: [1, 1.1, 1] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <span className="relative mb-3 inline-block text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">
+              i-CHECK Netcar
+            </span>
+            <img
+              src="/brand/checkauto-dekra.png"
+              alt="DEKRA CheckAuto"
+              className="relative mx-auto mb-3 h-[112px] w-[112px] object-contain drop-shadow-md transition duration-300 group-hover:scale-[1.04]"
+            />
+            <span className="relative mb-1 block text-[15px] font-extrabold uppercase tracking-[0.1em] text-[#1B5E20]">
+              Histórico aprovado
+            </span>
+            <span className="relative mb-4 block text-[12px] leading-snug text-[#00283C]/70">
+              Laudo técnico com fotos e consulta DEKRA / CheckAuto
+            </span>
+            <span className="relative inline-flex items-center gap-2 rounded-full bg-secondary px-5 py-2.5 text-[12px] font-bold uppercase tracking-[0.08em] text-white shadow-sm transition group-hover:bg-[#1B5E20]">
+              Ver laudo
+              <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+            </span>
+          </button>
         </motion.div>
       )}
 
@@ -860,14 +831,14 @@ function CTASidebar({ vehicle, modeloCompleto, isSold = false }: CTASidebarProps
       >
         <SidebarActionCard
           variant="contact"
-          badge={isSold ? "Próximo passo" : "WhatsApp Netcar"}
+          badge={isSold ? "Próximo passo" : "Fale com a Netcar"}
         >
           {isSold ? (
             <>
-              <h3 className="text-primary text-[20px] sm:text-[22px] lg:text-[24px] font-bold mb-2 text-center">
+              <h3 className="mb-2 text-center text-[20px] font-bold text-[#00283C] sm:text-[22px] lg:text-[24px]">
                 Quer um carro parecido?
               </h3>
-              <p className="text-fg text-[15px] sm:text-[16px] lg:text-[17px] mb-5 text-center text-muted-foreground">
+              <p className="mb-5 text-center text-[15px] text-muted-foreground sm:text-[16px] lg:text-[17px]">
                 Este já saiu — a gente aponta opções no mesmo perfil
               </p>
               <div className="mb-3 w-full max-w-[300px]">
@@ -899,43 +870,11 @@ function CTASidebar({ vehicle, modeloCompleto, isSold = false }: CTASidebarProps
             </>
           ) : (
             <>
-              <h3 className="text-primary text-[20px] sm:text-[22px] lg:text-[24px] font-bold mb-2 text-center">
-                Ficou com dúvidas?
-              </h3>
-              <p className="text-fg text-[17px] sm:text-[18px] lg:text-[19px] mb-5 text-center">
-                Nós te ajudamos — resposta rápida no WhatsApp
-              </p>
-
-              <div className="mb-4 w-full max-w-[300px]">
-                <WhatsAppPulseRing>
-                  <CTAButton
-                    text="Chamar no WhatsApp"
-                    icon={MessageCircleMore}
-                    borderColor="border-[#25D366]"
-                    textColor="text-white"
-                    hoverBgColor="bg-green-dark"
-                    filled
-                    className="w-full !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
-                    href={primaryWhatsAppHref}
-                    waSource="sidebar_primary"
-                    waIntent="vehicle_inquiry"
-                    waVehicleId={vehicle?.id}
-                    waVehicleName={modeloCompleto}
-                    disabled={!whatsappReady}
-                  />
-                </WhatsAppPulseRing>
-              </div>
-
-              <div className="mb-4 flex w-full max-w-[300px] justify-center">
-                <TradeInTextLink
-                  href={whatsappReady ? getWhatsAppLink(vehicleMessages.trade) : undefined}
-                  modeloCompleto={modeloCompleto}
-                  vehicleId={vehicle?.id}
-                />
-              </div>
-
-              <p className="mb-3 w-full max-w-[300px] text-center text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+              <h3 className="mb-2 text-center text-[18px] font-bold text-[#00283C] sm:text-[20px]">
                 Outras formas de falar conosco
+              </h3>
+              <p className="mb-4 max-w-[300px] text-center text-sm text-muted-foreground">
+                Financiamento, visita, troca ou mais fotos — escolha abaixo.
               </p>
 
               <div className="grid w-full max-w-[300px] grid-cols-1 gap-2">
@@ -1382,54 +1321,24 @@ function vehicleLabelFromSlug(slug: string): string {
     .join(" ");
 }
 
-function vehicleIdFromSlug(slug: string): string | undefined {
-  const parts = slug.split("-").filter(Boolean);
-  const id = parts[parts.length - 1];
-  return id && /^\d+$/.test(id) ? id : undefined;
-}
-
+/** Skeleton quieto — só cold load sem cache do estoque. */
 function LoadingVehicleDetail({ slug }: { slug: string }) {
-  const modeloCompleto = vehicleLabelFromSlug(slug) || "este seminovo";
-  const vehicleId = vehicleIdFromSlug(slug);
+  const modeloCompleto = vehicleLabelFromSlug(slug) || "Seminovo";
 
   return (
-    <main className="min-h-[70vh] bg-gradient-to-b from-white to-gray-50 px-4 pb-36 pt-10 md:pb-16 md:pt-16">
-      <section className="container-main mx-auto max-w-4xl">
-        <div className="grid items-center gap-8 rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm md:grid-cols-[1fr_0.9fr] md:p-10">
-          <div
-            className="aspect-[4/3] animate-pulse rounded-3xl bg-gray-100"
-            aria-hidden="true"
-          />
-          <div>
-            <span className="text-xs font-black uppercase tracking-[0.18em] text-[#128C7E]">
-              Carregando detalhes
-            </span>
-            <h1 className="mt-2 text-3xl font-black leading-tight text-[#00283C] md:text-4xl">
-              {modeloCompleto}
-            </h1>
-            <p className="mt-4 text-base leading-relaxed text-gray-600">
-              Enquanto preço, fotos e ficha carregam, você já pode confirmar
-              disponibilidade e tirar dúvidas no WhatsApp.
-            </p>
-            <div className="mt-6">
-              <ContactButton
-                modeloCompleto={modeloCompleto}
-                vehicleId={vehicleId}
-              />
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-gray-500">
-              Financiamento disponível com comparação entre diversos bancos e
-              financeiras parceiras para buscar a melhor condição disponível
-              para seu perfil. Sujeito à análise.
-            </p>
+    <main className="max-w-full overflow-x-hidden pb-40" aria-busy="true">
+      <section className="relative w-full min-h-[70vh] overflow-hidden py-8 lg:py-12">
+        <div className="container-main grid grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+          <div className="order-2 space-y-4 lg:order-1">
+            <div className="h-4 w-24 animate-pulse rounded bg-muted" />
+            <div className="h-10 w-4/5 max-w-md animate-pulse rounded bg-muted" />
+            <div className="h-8 w-40 animate-pulse rounded bg-muted" />
+            <div className="h-12 w-56 animate-pulse rounded-full bg-muted" />
+            <p className="sr-only">Carregando {modeloCompleto}</p>
           </div>
+          <div className="order-1 aspect-[4/3] w-full animate-pulse rounded-2xl bg-muted lg:order-2" />
         </div>
       </section>
-      <DetalheFloatingWhatsApp
-        price="Consultando preço"
-        modeloCompleto={modeloCompleto}
-        vehicleId={vehicleId}
-      />
     </main>
   );
 }
@@ -1439,11 +1348,11 @@ export function DetalhesPage() {
   const location = useLocation();
   const slug = paramSlug || location.pathname.replace(/^\/veiculo\//, "") || "";
   
-  const { data: vehicle, isLoading, error } = useVehicleQuery(slug);
+  const { data: vehicle, isPlaceholderData, error, isPending } = useVehicleQuery(slug);
 
-  // GA4: view_item — dispara quando detalhe carrega
+  // GA4: view_item — só dado real da API (não placeholder do estoque)
   useEffect(() => {
-    if (!vehicle) return;
+    if (!vehicle || isPlaceholderData) return;
     trackViewItem({
       vehicleId: vehicle.id,
       vehicleName:
@@ -1451,7 +1360,7 @@ export function DetalhesPage() {
         vehicle.name,
       price: vehicle.price,
     });
-  }, [vehicle]);
+  }, [vehicle, isPlaceholderData]);
   
   // Busca o anúncio (campo GPT) separadamente usando o novo endpoint
   const { data: anuncio } = useAnuncioQuery(vehicle?.id);
@@ -1691,12 +1600,12 @@ export function DetalhesPage() {
     }
   );
 
-  if (isLoading) {
+  // Com placeholder do estoque, `vehicle` já existe → pula tela intermediária.
+  if (!vehicle) {
+    if (error || !isPending) {
+      return <VehicleUnavailableRedirect />;
+    }
     return <LoadingVehicleDetail slug={slug} />;
-  }
-
-  if (error || !vehicle) {
-    return <VehicleUnavailableRedirect />;
   }
 
   const isSold = !vehicle.price || vehicle.price <= 0;
@@ -2173,12 +2082,11 @@ function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProp
     typeof op === "string" ? op : op.descricao || ""
   );
 
-  // SVG Icon Component
   const SpecIcon = ({ className }: { className?: string }) => (
     <div
       className={
         className ||
-        "w-[26px] h-[26px] sm:w-[28px] sm:h-[28px] lg:w-[30px] lg:h-[30px]"
+        "h-[26px] w-[26px] sm:h-[28px] sm:w-[28px] lg:h-[30px] lg:w-[30px]"
       }
     >
       <img src={icon1} alt="" aria-hidden="true" className="block size-full" />
@@ -2188,68 +2096,83 @@ function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProp
   return (
     <section className="w-full py-8 sm:py-12 lg:py-16">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_410px] gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_410px] lg:gap-10">
           {/* Main Content */}
           <div className="order-1 lg:order-1">
-            {/* Specifications Section */}
-                <motion.div
+            {/* Título */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+              className="mb-10 flex items-start gap-3"
+            >
+              <SpecIcon className="mt-1 h-[36px] w-[36px] flex-shrink-0 sm:h-[40px] sm:w-[40px] lg:h-[42px] lg:w-[42px]" />
+              <div>
+                <h2 className="mb-1 text-[18px] font-medium text-fg sm:text-[20px] lg:text-[22px]">
+                  {marca} {modeloCompleto} {year}
+                </h2>
+                <p className="text-[16px] font-light text-primary sm:text-[18px] lg:text-[22px]">
+                  Conquiste a cidade com estilo, tecnologia e conforto.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Especificações */}
+            <motion.div
               initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
               className="mb-12"
             >
-              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-primary">
-                      <SpecIcon />
-                <h2 className="section-heading">
-                        Especificações
-                      </h2>
-                    </div>
+              <div className="mb-6 flex items-center gap-3 border-b border-primary/70 pb-4">
+                <SpecIcon />
+                <h2 className="section-heading">Especificações</h2>
+              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
-                      {specifications.map((spec, index) => (
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
+                {specifications.map((spec, index) => (
                   <SpecBadge
-                          key={index}
+                    key={index}
                     label={spec.label}
                     value={spec.value}
                     index={index}
                   />
                 ))}
-                  </div>
-                </motion.div>
+              </div>
+            </motion.div>
 
-            {/* Optionals Section */}
+            {/* Opcionais */}
             {optionals.length > 0 && (
-                  <motion.div
+              <motion.div
                 initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
                 className="mb-12"
               >
-                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-primary">
-                        <SpecIcon />
-                  <h2 className="section-heading">
-                          Opcionais
-                        </h2>
-                      </div>
+                <div className="mb-6 flex items-center gap-3 border-b border-primary/70 pb-4">
+                  <SpecIcon />
+                  <h2 className="section-heading">Opcionais</h2>
+                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {optionals
                     .slice(0, showMoreOptionals ? optionals.length : 15)
                     .map((optional: string, index: number) => (
-                    <motion.div
+                      <motion.div
                         key={index}
                         initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                      transition={{
+                        transition={{
                           duration: 0.3,
-                        delay: index * 0.05,
+                          delay: Math.min(index * 0.05, 0.4),
                         }}
                       >
                         <OptionalItem text={optional} />
-                        </motion.div>
+                      </motion.div>
                     ))}
                 </div>
 
@@ -2259,58 +2182,38 @@ function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProp
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     onClick={() => setShowMoreOptionals(true)}
-                    className="mt-4 text-primary text-[14px] sm:text-[15px] font-bold underline hover:text-primary/80 transition-colors"
+                    className="mt-4 text-[14px] font-bold text-primary underline transition-colors hover:text-primary/80 sm:text-[15px]"
                   >
                     Carregar mais informações [+]
                   </motion.button>
                 )}
-                    </motion.div>
+              </motion.div>
             )}
 
-            {/* Header with Icon */}
-              <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-              transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
-              className="flex items-start gap-3 mb-6"
-            >
-              <SpecIcon className="w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] lg:w-[42px] lg:h-[42px] flex-shrink-0 mt-1" />
-              <div>
-                <h2 className="text-fg text-[18px] sm:text-[20px] lg:text-[22px] font-medium mb-1">
-                  {marca} {modeloCompleto} {year}
-                </h2>
-                <p className="text-primary text-[16px] sm:text-[18px] lg:text-[22px] font-light">
-                  Conquiste a cidade com estilo, tecnologia e conforto.
-                </p>
-              </div>
-              </motion.div>
-
-            {/* Introduction */}
+            {/* Introdução */}
             {(gptContent?.apresentacao || !gptContent) && (
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-              transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
-              className="section-text mb-8"
-            >
-              {gptContent?.apresentacao ? (
-                gptContent.apresentacao
-              ) : (
-                `O novo ${marca} ${modeloCompleto} é a escolha perfeita para quem
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+                className="section-text mb-8"
+              >
+                {gptContent?.apresentacao ? (
+                  gptContent.apresentacao
+                ) : (
+                  `O novo ${marca} ${modeloCompleto} é a escolha perfeita para quem
                 busca um veículo versátil, ideal para famílias modernas e
                 aventureiros urbanos. Com um design atrativo e sofisticado, este
                 modelo não só parece bom, mas também oferece uma experiência de
                 condução excepcional, graças às suas características técnicas
                 avançadas e conforto superior.`
-              )}
-                </motion.p>
+                )}
+              </motion.p>
             )}
 
             {/* Accordion Sections */}
             <div className="space-y-2">
-              {/* Accordions dinâmicos do GPT */}
               {gptContent && gptContent.accordions.length > 0 ? (
                 gptContent.accordions.map((accordion: AccordionSection, index: number) => (
                   <AccordionItem
@@ -2326,7 +2229,7 @@ function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProp
                           </p>
                         )}
                         {accordion.content.itens.length > 0 && (
-                          <ul className="space-y-2 list-disc list-outside text-fg text-[14px] sm:text-[15px] leading-[26px] ml-5">
+                          <ul className="ml-5 list-outside list-disc space-y-2 text-[14px] leading-[26px] text-fg sm:text-[15px]">
                             {accordion.content.itens.map((item, itemIndex) => (
                               <li key={itemIndex} className="pl-2">
                                 {item.label && <strong>{item.label}</strong>} {item.texto}
@@ -2336,14 +2239,11 @@ function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProp
                         )}
                       </>
                     ) : (
-                      <p className="section-text">
-                        {accordion.content}
-                      </p>
+                      <p className="section-text">{accordion.content}</p>
                     )}
                   </AccordionItem>
                 ))
               ) : (
-                /* Fallback: Accordions estáticos quando não há conteúdo GPT */
                 <>
                   <AccordionItem
                     title="Diferenciais técnicos que destacam o modelo"
@@ -2354,7 +2254,7 @@ function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProp
                       suave e eficiente. Entre os destaques técnicos, este modelo
                       inclui:
                     </p>
-                    <ul className="space-y-2 list-disc list-outside section-text ml-5">
+                    <ul className="section-text ml-5 list-outside list-disc space-y-2">
                       <li className="pl-2">
                         Motor {vehicle.motor || "potente"} que oferece excelente
                         desempenho e eficiência energética.
@@ -2375,28 +2275,28 @@ function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProp
                   </AccordionItem>
 
                   <AccordionItem title="Tecnologia e conforto a bordo">
-                    <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                    <p className="text-[14px] leading-[26px] text-fg sm:text-[15px]">
                       Equipado com as mais recentes tecnologias para garantir
                       conforto e conectividade durante toda a jornada.
                     </p>
                   </AccordionItem>
 
                   <AccordionItem title="Recursos avançados de segurança">
-                    <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                    <p className="text-[14px] leading-[26px] text-fg sm:text-[15px]">
                       Sistema completo de segurança com múltiplos air bags, controle
                       de estabilidade e muito mais.
                     </p>
                   </AccordionItem>
 
                   <AccordionItem title="Espaço e capacidade">
-                    <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                    <p className="text-[14px] leading-[26px] text-fg sm:text-[15px]">
                       Amplo espaço interno para passageiros e bagagens, perfeito
                       para viagens longas.
                     </p>
                   </AccordionItem>
 
                   <AccordionItem title="Por que optar pelo modelo?">
-                    <p className="text-fg text-[14px] sm:text-[15px] leading-[26px]">
+                    <p className="text-[14px] leading-[26px] text-fg sm:text-[15px]">
                       Combinação perfeita de design, tecnologia, conforto e
                       economia, ideal para seu dia a dia.
                     </p>
@@ -2406,8 +2306,8 @@ function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProp
             </div>
           </div>
 
-          {/* Sticky Sidebar - ordem invertida no mobile */}
-          <div className="order-2 lg:order-2 lg:sticky lg:top-8 lg:self-start">
+          {/* Sticky Sidebar */}
+          <div className="order-2 lg:sticky lg:top-8 lg:self-start">
             <CTASidebar
               vehicle={vehicle}
               modeloCompleto={modeloCompleto}
@@ -2416,6 +2316,6 @@ function DetailsSection({ vehicle, anuncio, isSold = false }: DetailsSectionProp
           </div>
         </div>
       </div>
-        </section>
+    </section>
   );
 }

@@ -4,6 +4,9 @@ node_modules/
 # Build output
 dist/
 
+# PDF i-CHECK gerado localmente
+output/
+
 # Estado local do painel devops (último deploy registrado)
 .devops/
 
@@ -49,3 +52,6 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+
+# PDF i-CHECK local (preview) — não versionar
+public/arquivos/
