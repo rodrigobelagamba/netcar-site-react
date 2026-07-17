@@ -340,7 +340,7 @@ export function initAnalytics(): void {
       }
       const href = anchor.href || "";
       if (!/wa\.me|api\.whatsapp\.com/i.test(href)) return;
-      // Anexa (M4) no text antes do navegador seguir o link.
+      // Anexa (M482) no text antes do navegador seguir o link.
       anchor.href = appendWaRefToUrl(href);
       trackWhatsAppClick({
         source: inferSourceFromElement(anchor),
