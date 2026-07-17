@@ -1,5 +1,5 @@
 import { useParams, Link } from "@tanstack/react-router";
-import { Printer, ArrowLeft, Check } from "lucide-react";
+import { Printer, Download, ArrowLeft, Check } from "lucide-react";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { maskPlate } from "@/lib/slug";
 import { optimizeStockImage } from "@/lib/images";
@@ -76,27 +76,61 @@ export function ICheckLaudoPage() {
 
   const handlePrint = () => window.print();
 
+  const handleSavePdf = () => {
+    const fileName = vehicle.pdf || null;
+    let pdfUrl = fileName
+      ? `/arquivos/autocheck/${fileName}`
+      : vehicle.pdf_url || "";
+    if (!pdfUrl) {
+      // Sem arquivo no servidor: salva via diálogo de impressão → PDF
+      window.print();
+      return;
+    }
+    if (!pdfUrl.startsWith("http")) {
+      pdfUrl = `${window.location.origin}${pdfUrl.startsWith("/") ? "" : "/"}${pdfUrl}`;
+    }
+    // cache-buster evita PDF antigo em cache
+    const sep = pdfUrl.includes("?") ? "&" : "?";
+    const link = document.createElement("a");
+    link.href = `${pdfUrl}${sep}v=${Date.now()}`;
+    link.download = fileName || `laudo-icheck-${vehicle.id}.pdf`;
+    link.rel = "noopener";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
-    <div className="bg-[#F3F6F8] print:bg-white">
-      {/* Barra de ações — some na impressão */}
-      <div className="sticky top-0 z-30 border-b border-[#00283C]/08 bg-white/95 print:hidden sm:top-20">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">
+    <div className="min-h-[100dvh] bg-[#F3F6F8] print:bg-white">
+      {/* Barra de ações — documento isolado, some na impressão */}
+      <div className="sticky top-0 z-30 border-b border-[#00283C]/08 bg-white/95 print:hidden">
+        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3 px-4 py-3">
           <Link
             to="/veiculo/$slug"
             params={{ slug }}
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#00283C]/80 transition hover:text-[#00283C]"
           >
             <ArrowLeft className="h-4 w-4" />
-            Voltar ao anúncio
+            Fechar
           </Link>
-          <button
-            type="button"
-            onClick={handlePrint}
-            className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-white shadow-sm transition hover:bg-[#1B5E20]"
-          >
-            <Printer className="h-3.5 w-3.5" />
-            Imprimir / PDF
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={handleSavePdf}
+              className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-secondary shadow-sm transition hover:border-secondary hover:bg-[#E8F7EF]"
+            >
+              <Download className="h-3.5 w-3.5" strokeWidth={2.5} />
+              Salvar PDF
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-white shadow-sm transition hover:bg-[#1B5E20]"
+            >
+              <Printer className="h-3.5 w-3.5" />
+              Imprimir
+            </button>
+          </div>
         </div>
       </div>
 
