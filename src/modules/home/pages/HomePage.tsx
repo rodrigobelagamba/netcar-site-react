@@ -16,7 +16,7 @@ import {
 import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
 import { DNASection } from "@/design-system/components/patterns/DNASection";
 import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
-import { useMemo, useEffect, useState, useCallback } from "react";
+import { useMemo, useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import {
@@ -25,6 +25,7 @@ import {
 } from "@/lib/homeStock";
 import { trackHomeScrollDepth } from "@/lib/analytics";
 import { optimizeStockImage } from "@/lib/images";
+import { usePastElement } from "@/hooks/usePastElement";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 
@@ -70,9 +71,16 @@ export function HomePage() {
   const [stickyVehicle, setStickyVehicle] = useState<HomeStickyVehicle | null>(
     null,
   );
-  const handleVehicleFocus = useCallback((vehicle: HomeStickyVehicle) => {
-    setStickyVehicle((prev) => (prev?.id === vehicle.id ? prev : vehicle));
-  }, []);
+  const [scrollFocusPaused, setScrollFocusPaused] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const pastHero = usePastElement(heroRef);
+  const handleVehicleFocus = useCallback(
+    (vehicle: HomeStickyVehicle, _source: "scroll" | "click") => {
+      // Troca por scroll já é filtrada (deadzone / cooldown / pause no sticky).
+      setStickyVehicle((prev) => (prev?.id === vehicle.id ? prev : vehicle));
+    },
+    [],
+  );
   
   useEffect(() => {
     const updateColumns = () => {
@@ -239,14 +247,16 @@ export function HomePage() {
   }, []);
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full pb-36">
-      {isLoadingHero ? (
-        <HomeHeroSkeleton />
-      ) : showBanners ? (
-        <BannerHero banners={banners!} />
-      ) : heroVehicles.length > 0 ? (
-        <HomeHero vehicles={heroVehicles} />
-      ) : null}
+    <main className="flex-1 overflow-x-hidden max-w-full pb-36 md:pb-0">
+      <div ref={heroRef}>
+        {isLoadingHero ? (
+          <HomeHeroSkeleton />
+        ) : showBanners ? (
+          <BannerHero banners={banners!} />
+        ) : heroVehicles.length > 0 ? (
+          <HomeHero vehicles={heroVehicles} />
+        ) : null}
+      </div>
 
       <HomeWhatsAppConversionPanel
         featuredVehicle={featuredVehicle}
@@ -274,6 +284,7 @@ export function HomePage() {
           isLoading={isLoadingVehicles}
           showWhatsAppInterest
           onVehicleFocus={handleVehicleFocus}
+          scrollFocusPaused={scrollFocusPaused}
         />
         <div className="mt-8 flex justify-center md:mt-10">
           <button
@@ -311,9 +322,12 @@ export function HomePage() {
       </div>
 
       <HomeMobileWhatsAppBar
+        visible={pastHero}
         focusedVehicle={stickyVehicle}
         sourceHot="home_sticky_hot"
         sourceCold="home_sticky_cold"
+        coldHint="Toque num carro pra falar dele"
+        onPointerLockChange={setScrollFocusPaused}
       />
     </main>
   );

@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouterState } from "@tanstack/react-router";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { lazyWithRetry } from "@/lib/lazyWithRetry";
 import { Header } from "@/design-system/components/layout/Header";
 import { Footer } from "@/design-system/components/layout/Footer";
@@ -151,7 +151,29 @@ function WhatsAppButton() {
   const location = useRouterState({
     select: (state) => state.location,
   });
-  
+  const isHome = location.pathname === "/";
+  const [pastHomeHero, setPastHomeHero] = useState(false);
+
+  // Home desktop: floater só depois de ~passar o hero (primeira dobra limpa).
+  useEffect(() => {
+    if (!isHome) {
+      setPastHomeHero(true);
+      return;
+    }
+
+    const update = () => {
+      setPastHomeHero(window.scrollY > window.innerHeight * 0.9);
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [isHome]);
+
   // Detecta se está na página de detalhes do veículo
   const isDetalhesPage = location.pathname.startsWith("/veiculo/");
   const slug = isDetalhesPage ? location.pathname.replace("/veiculo/", "") : "";
@@ -170,8 +192,7 @@ function WhatsAppButton() {
     return buildWhatsAppUrl(whatsapp.numero, message);
   };
 
-  // Home: sticky contextual cobre WA. Estoque/detalhe mantêm floater (desktop).
-  if (location.pathname === "/") return null;
+  if (isHome && !pastHomeHero) return null;
 
   return (
     <motion.a

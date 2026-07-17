@@ -2,17 +2,21 @@ import { useRef } from "react";
 import {
   VehicleCard,
   type VehicleCardProps,
-  type VehicleFocusPayload,
 } from "./VehicleCard";
 import { Button } from "../ui/button";
-import { useStockFocusObserver } from "@/hooks/useStockFocusObserver";
+import {
+  useStockFocusObserver,
+  type VehicleFocusHandler,
+} from "@/hooks/useStockFocusObserver";
 
 interface ProductListProps {
   vehicles: VehicleCardProps[];
   isLoading?: boolean;
   showWhatsAppInterest?: boolean;
   whatsAppSource?: string;
-  onVehicleFocus?: (vehicle: VehicleFocusPayload) => void;
+  onVehicleFocus?: VehicleFocusHandler;
+  /** Pausa foco por scroll (ex.: ponteiro no sticky WA). */
+  scrollFocusPaused?: boolean;
 }
 
 function SkeletonCard({ compact = false }: { compact?: boolean }) {
@@ -50,12 +54,14 @@ export function ProductList({
   showWhatsAppInterest = false,
   whatsAppSource = "home_destaques",
   onVehicleFocus,
+  scrollFocusPaused = false,
 }: ProductListProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   useStockFocusObserver(
     rootRef,
     isLoading ? undefined : onVehicleFocus,
     vehicles,
+    scrollFocusPaused,
   );
 
   if (isLoading) {
@@ -92,6 +98,7 @@ export function ProductList({
             showWhatsAppInterest={showWhatsAppInterest}
             whatsAppSource={whatsAppSource}
             enableFocusTracking={trackFocus}
+            onVehicleFocus={onVehicleFocus}
             compact
             fastAnimation
           />
@@ -106,7 +113,6 @@ export function ProductList({
             delay={index}
             showWhatsAppInterest={showWhatsAppInterest}
             whatsAppSource={whatsAppSource}
-            enableFocusTracking={trackFocus}
           />
         ))}
       </div>
