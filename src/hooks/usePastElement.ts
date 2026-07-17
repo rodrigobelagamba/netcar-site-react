@@ -1,23 +1,39 @@
 import { useEffect, useState, type RefObject } from "react";
 
-/** true quando o elemento sai do viewport (ex.: hero rolado pra cima). */
-export function usePastElement(ref: RefObject<HTMLElement | null>) {
+/** true quando o fundo do elemento passa acima do topo (ex.: hero rolado). */
+export function usePastElement(
+  ref: RefObject<HTMLElement | null>,
+  /** px abaixo do topo pra considerar “passou” (header). */
+  topOffset = 72,
+) {
   const [past, setPast] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (!el) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setPast(!entry.isIntersecting);
-      },
-      { threshold: 0 },
-    );
+    const update = () => {
+      const node = ref.current;
+      if (!node) return;
+      setPast(node.getBoundingClientRect().bottom < topOffset);
+    };
 
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [ref]);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+
+    let observer: IntersectionObserver | undefined;
+    if (typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver(update, { threshold: [0, 0.01, 0.1] });
+      observer.observe(el);
+    }
+
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+      observer?.disconnect();
+    };
+  }, [ref, topOffset]);
 
   return past;
 }
