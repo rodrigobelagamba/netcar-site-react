@@ -62,7 +62,8 @@ export function ICheckLaudoPage() {
     .filter(Boolean)
     .slice(0, 9) as string[];
 
-  const heroA = vehicle.imagens_site?.capa || gallery[0];
+  // Galeria site = fundo cinza + logo Netcar (não usar capa PNG sem tratamento)
+  const heroA = gallery[0] || vehicle.imagens_site?.capa;
   const heroB = gallery[1] || gallery[0];
   const yearLabel =
     vehicle.anoFabricacao && vehicle.year
@@ -160,7 +161,7 @@ export function ICheckLaudoPage() {
               <img
                 src="/brand/checkauto-dekra.png"
                 alt="DEKRA CheckAuto"
-                className="h-16 w-16 object-contain sm:h-20 sm:w-20"
+                className="h-24 w-24 object-contain sm:h-28 sm:w-28"
               />
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#5A6B73]">
