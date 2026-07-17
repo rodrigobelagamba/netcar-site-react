@@ -6,8 +6,8 @@
 
 import {
   appendWaRefToUrl,
-  buildWaRef,
   captureTrafficSource,
+  getOrCreateClickCode,
   getTrafficSource,
 } from "@/lib/waTracking";
 
@@ -260,7 +260,7 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
   if (shouldSkipDuplicateWhatsAppTrack(dedupKey)) return;
 
   const traffic = getTrafficSource();
-  const waRef = buildWaRef(params.vehicleId);
+  const waRef = getOrCreateClickCode();
 
   pushDataLayer({
     event: "whatsapp_click",
@@ -308,11 +308,7 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
 export function openWhatsApp(url: string, params: WhatsAppClickParams): void {
   if (!url || url === "#") return;
   trackWhatsAppClick(params);
-  window.open(
-    appendWaRefToUrl(url, params.vehicleId),
-    "_blank",
-    "noopener,noreferrer",
-  );
+  window.open(appendWaRefToUrl(url), "_blank", "noopener,noreferrer");
 }
 
 function inferSourceFromElement(el: HTMLElement): WhatsAppClickSource {
@@ -344,14 +340,12 @@ export function initAnalytics(): void {
       }
       const href = anchor.href || "";
       if (!/wa\.me|api\.whatsapp\.com/i.test(href)) return;
-      const vehicleId = anchor.getAttribute("data-wa-vehicle-id") ?? undefined;
-      // Injeta a ref de rastreio no href antes do navegador seguir o link
-      // (fase capture roda antes da ação padrão do clique).
-      anchor.href = appendWaRefToUrl(href, vehicleId);
+      // Anexa (M4T7X) no text antes do navegador seguir o link.
+      anchor.href = appendWaRefToUrl(href);
       trackWhatsAppClick({
         source: inferSourceFromElement(anchor),
         intent: anchor.getAttribute("data-wa-intent") ?? "link_click",
-        vehicleId,
+        vehicleId: anchor.getAttribute("data-wa-vehicle-id") ?? undefined,
         vehicleName: anchor.getAttribute("data-wa-vehicle-name") ?? undefined,
       });
     },
