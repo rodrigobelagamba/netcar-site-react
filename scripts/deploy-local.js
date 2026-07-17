@@ -880,7 +880,10 @@ async function deploy() {
     // 6. Upload
     await uploadDist(distPath, deployConfig);
   } catch (error) {
-    log(`\n❌ Erro durante deploy: ${error.message}`, 'red');
+    const detail =
+      (error && (error.stack || error.message)) ||
+      (typeof error === 'string' ? error : JSON.stringify(error));
+    log(`\n❌ Erro durante deploy: ${detail}`, 'red');
     process.exit(1);
   }
 }
@@ -891,7 +894,10 @@ if (cli.help && cli.fromDist) {
   printDeployDistHelp();
 } else if (cli.fromDist) {
   deployFromDist(cli.hash).catch((error) => {
-    log(`\n❌ Erro durante deploy: ${error.message}`, 'red');
+    const detail =
+      (error && (error.stack || error.message)) ||
+      (typeof error === 'string' ? error : JSON.stringify(error));
+    log(`\n❌ Erro durante deploy: ${detail}`, 'red');
     process.exit(1);
   });
 } else {

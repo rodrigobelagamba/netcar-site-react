@@ -18,22 +18,53 @@ function formatMb(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-function connectSsh({ host, user, password }) {
+function formatSshError(error) {
+  if (!error) return 'erro SSH desconhecido';
+  if (typeof error === 'string') return error;
+  const parts = [
+    error.message,
+    error.level ? `level=${error.level}` : '',
+    error.code ? `code=${error.code}` : '',
+    error.description ? `desc=${error.description}` : '',
+  ].filter(Boolean);
+  return parts.join(' | ') || String(error);
+}
+
+function connectSshOnce({ host, user, password }) {
   return new Promise((resolve, reject) => {
     const conn = new Client();
 
     conn.on('ready', () => resolve(conn));
-    conn.on('error', reject);
+    conn.on('error', (error) => {
+      reject(new Error(formatSshError(error)));
+    });
 
     conn.connect({
       host,
       username: user,
       password,
-      readyTimeout: 30000,
+      readyTimeout: 45000,
       keepaliveInterval: 10000,
       keepaliveCountMax: 3,
+      // KingHost às vezes falha handshake na 1ª tentativa
+      tryKeyboard: false,
     });
   });
+}
+
+async function connectSsh({ host, user, password, retries = 3 }) {
+  let lastError;
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      return await connectSshOnce({ host, user, password });
+    } catch (error) {
+      lastError = error;
+      if (attempt < retries) {
+        await new Promise((r) => setTimeout(r, 1500 * attempt));
+      }
+    }
+  }
+  throw lastError || new Error('Falha SSH sem detalhe');
 }
 
 function execRemote(conn, command, onProgress) {
@@ -182,8 +213,18 @@ export async function deployTarViaSshPassword({
     report('   Gerando pacote local…');
     localTarPath = await createLocalTarArchive(localDir, onProgress);
 
+    if (!password) {
+      throw new Error(
+        'SSH_PASSWORD vazio — configure no .env.local / secrets do devops',
+      );
+    }
+
     report('   Conectando ao servidor…');
-    conn = await connectSsh({ host, user, password });
+    try {
+      conn = await connectSsh({ host, user, password });
+    } catch (error) {
+      throw new Error(`Falha ao conectar SSH: ${formatSshError(error)}`);
+    }
 
     report('   Enviando via SFTP…');
     const sftp = await openSftp(conn);
