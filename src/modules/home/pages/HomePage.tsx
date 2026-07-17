@@ -233,7 +233,7 @@ export function HomePage() {
   }, []);
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full pb-36">
+    <main className="flex-1 overflow-x-hidden max-w-full pb-36 md:pb-0">
       <div ref={heroRef}>
         {isLoadingHero ? (
           <HomeHeroSkeleton />
@@ -260,8 +260,11 @@ export function HomePage() {
           <p className="mt-2 max-w-2xl text-sm font-medium text-gray-600 md:text-lg">
             <span className="md:hidden">Escolha um carro e fale no WhatsApp.</span>
             <span className="hidden md:inline">
-              Financiamento em até 60x, cartão em até 21x, troca avaliada e
-              documentação com despachante. Atendimento 24h no WhatsApp.
+              Aceitamos seu carro na troca — inclusive com financiamento em
+              aberto, mediante avaliação. Dá pra financiar em até 60x ou
+              parcelar no cartão em até 21x. Documentação com despachante e
+              atendimento no WhatsApp o dia todo, pra você tirar dúvida sem
+              compromisso.
             </span>
           </p>
         </div>
@@ -296,7 +299,7 @@ export function HomePage() {
         <NetcarSocialSection />
       </div>
 
-      <div className="w-full space-y-8 bg-muted px-4 py-8 font-sans text-muted-foreground antialiased sm:px-6 md:py-12 lg:px-8 xl:px-12 2xl:px-16">
+      <div className="w-full space-y-8 bg-muted px-4 py-8 font-sans text-muted-foreground antialiased sm:px-6 md:py-8 lg:px-8 xl:px-12 2xl:px-16">
         <div className="container-main space-y-8">
           <LazyLocalizacao />
           <div className="hidden md:block">
