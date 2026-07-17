@@ -232,12 +232,12 @@ async function main() {
     }
   }
 
-  // Prefer full (jpg/png); galeria AVIF cai no conversor sips
+  // Prefer fotos do site (fundo cinza + logo Netcar), não o recorte branco
   const galeria = (
-    vehicle.imagens?.full?.length
-      ? vehicle.imagens.full
-      : vehicle.imagens_site?.galeria?.length
-        ? vehicle.imagens_site.galeria
+    vehicle.imagens_site?.galeria?.length
+      ? vehicle.imagens_site.galeria
+      : vehicle.imagens?.full?.length
+        ? vehicle.imagens.full
         : vehicle.imagens?.thumb || []
   ).filter(Boolean);
 
