@@ -4,11 +4,12 @@
  * Captura gclid/fbclid/UTM (30d, last non-direct). No clique WA gera código
  * curto e discreto anexado ao fim da mensagem, ex.:
  *
- *   ...quero mais informações sobre o Tiggo 7 Pro 2023 - (M4).
+ *   ...quero mais informações sobre o Tiggo 7 Pro 2023 - (M482).
  *
  * 1ª letra = fonte (M Meta, G Google Ads, O orgânico, S social, R referral,
- * D direto, U outro). 1 dígito seguinte diferencia o clique de forma leve.
- * Mesmo código vai no GA4 (wa_ref). iAN extrai `(X9)`.
+ * D direto, U outro). 3 dígitos identificam o clique (join no GA4).
+ * Campanha NÃO vai na mensagem: fica em traffic_campaign (UTM / ID Meta)
+ * e no Google Ads via gclid. iAN extrai `(X999)`.
  */
 
 const STORAGE_KEY = "nc_traffic_ref";
@@ -164,13 +165,13 @@ const CLICK_CODE_TTL_MS = 3000;
 let currentClickCode = "";
 let currentClickCodeAt = 0;
 
-/** 1 dígito (0–9). */
-function randomDigit(): string {
-  return String(Math.floor(Math.random() * 10));
+/** 3 dígitos (100–999). */
+function randomDigits3(): string {
+  return String(100 + Math.floor(Math.random() * 900));
 }
 
 /**
- * Código do clique, ex. "M4" (1 letra da fonte + 1 dígito).
+ * Código do clique, ex. "M482" (1 letra da fonte + 3 dígitos).
  * Mesmo clique → mesmo código na mensagem WA e no evento GA4 (janela 3s).
  */
 export function getOrCreateClickCode(): string {
@@ -178,18 +179,18 @@ export function getOrCreateClickCode(): string {
   if (currentClickCode && now - currentClickCodeAt < CLICK_CODE_TTL_MS) {
     return currentClickCode;
   }
-  currentClickCode = `${sourceLetter(getTrafficSource().src)}${randomDigit()}`;
+  currentClickCode = `${sourceLetter(getTrafficSource().src)}${randomDigits3()}`;
   currentClickCodeAt = now;
   return currentClickCode;
 }
 
 const WA_URL_PATTERN = /wa\.me|api\.whatsapp\.com/i;
-/** Já tem código novo (M4) ou legado (M4827 / M4T7X). */
-const CODE_IN_TEXT_PATTERN = /\(\s*[A-Z](?:\d|[A-Z2-9]{4}|\d{4})\s*\)/;
+/** Já tem código (M482) ou legado (M4 / M4827 / M4T7X). */
+const CODE_IN_TEXT_PATTERN = /\(\s*[A-Z](?:\d{1,4}|[A-Z2-9]{4})\s*\)/;
 
 /**
- * Anexa ` - (M4).` ao fim da mensagem pré-preenchida.
- * Idempotente. Cliente vê letra + 1 dígito entre parênteses.
+ * Anexa ` - (M482).` ao fim da mensagem pré-preenchida.
+ * Idempotente. Cliente vê letra + 3 dígitos entre parênteses.
  */
 export function appendWaRefToUrl(url: string): string {
   if (!url || !WA_URL_PATTERN.test(url)) return url;
