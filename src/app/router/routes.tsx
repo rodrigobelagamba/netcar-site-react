@@ -169,8 +169,8 @@ function WhatsAppButton() {
     return buildWhatsAppUrl(whatsapp.numero, message);
   };
 
-  // Home: sticky contextual cobre WA (após o hero). Floater só nas outras páginas.
-  if (location.pathname === "/") return null;
+  // Home/detalhe: sticky contextual cobre WA. Floater só nas demais páginas.
+  if (location.pathname === "/" || isDetalhesPage) return null;
 
   return (
     <motion.a

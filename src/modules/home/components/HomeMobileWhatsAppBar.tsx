@@ -1,4 +1,5 @@
-import { MessageCircle } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import {
   buildWhatsAppUrl,
@@ -6,6 +7,8 @@ import {
   vehicleWhatsAppMessages,
 } from "@/lib/whatsappMessages";
 import type { VehicleFocusPayload } from "@/design-system/components/patterns/VehicleCard";
+import { VehicleWhatsAppCard } from "@/design-system/components/patterns/VehicleWhatsAppCard";
+import { emptySeminovosSearch } from "@/lib/seminovos-search";
 
 export type HomeStickyVehicle = VehicleFocusPayload;
 
@@ -17,6 +20,7 @@ interface HomeMobileWhatsAppBarProps {
   coldHref?: string;
   coldCtaLabel?: string;
   coldHint?: string;
+  stockCtaLabel?: string;
   sourceHot?: string;
   sourceCold?: string;
   /** Trava foco por scroll enquanto mira/clica o sticky. */
@@ -27,8 +31,9 @@ export function HomeMobileWhatsAppBar({
   focusedVehicle = null,
   visible = true,
   coldHref,
-  coldCtaLabel = "Quero ajuda pra escolher",
-  coldHint = "Role os carros pra falar de um específico",
+  coldCtaLabel = "Quero ajuda",
+  coldHint = "Toque num carro pra falar dele",
+  stockCtaLabel = "Ver estoque",
   sourceHot = "sticky_hot",
   sourceCold = "sticky_cold",
   onPointerLockChange,
@@ -55,57 +60,39 @@ export function HomeMobileWhatsAppBar({
         onPointerLeave={() => onPointerLockChange?.(false)}
       >
         {hot ? (
-          <>
-            <div className="mb-1.5 flex items-center justify-center gap-2.5">
-              <img
-                src={hot.image}
-                alt=""
-                className="h-11 w-14 shrink-0 rounded-lg bg-[#F3F5F6] object-contain"
-                loading="lazy"
-              />
-              <div className="min-w-0 max-w-[70%] text-left">
-                <p className="truncate text-[11px] font-bold uppercase tracking-wide text-[#00283C]/55">
-                  Último que você viu
-                </p>
-                <p className="truncate text-sm font-black leading-tight text-[#00283C]">
-                  {hot.label}
-                </p>
-                <p className="truncate text-sm font-black text-[#5CD29D]">
-                  {hot.priceLabel}
-                </p>
-              </div>
-            </div>
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source={sourceHot}
-              data-wa-intent="vehicle_inquiry"
-              data-wa-vehicle-id={hot.id}
-              data-wa-vehicle-name={hot.label}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-sm font-black text-white shadow-[0_6px_18px_rgba(37,211,102,0.30)]"
-            >
-              <MessageCircle className="h-4 w-4" />
-              Falar deste carro
-            </a>
-          </>
+          <VehicleWhatsAppCard
+            vehicle={hot}
+            href={href}
+            source={sourceHot}
+            className="border-0 bg-transparent p-0 shadow-none"
+          />
         ) : (
           <>
-            <p className="mb-1 text-center text-[10px] font-semibold uppercase tracking-wide text-[#00283C]/70">
+            <p className="mb-1.5 text-center text-[10px] font-semibold uppercase tracking-wide text-[#00283C]/70">
               Atendimento 24h no WhatsApp
             </p>
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source={sourceCold}
-              data-wa-intent="vehicle_interest"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-sm font-black text-white shadow-[0_6px_18px_rgba(37,211,102,0.30)]"
-            >
-              <MessageCircle className="h-4 w-4" />
-              {coldCtaLabel}
-            </a>
-            <p className="mt-1 text-center text-[10px] font-medium text-[#00283C]/50">
+            <div className="grid grid-cols-2 gap-2">
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-wa-source={sourceCold}
+                data-wa-intent="vehicle_interest"
+                className="flex items-center justify-center gap-1.5 rounded-xl bg-[#25D366] px-2 py-2.5 text-xs font-black text-white shadow-[0_6px_18px_rgba(37,211,102,0.30)] sm:text-sm"
+              >
+                <MessageCircle className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">{coldCtaLabel}</span>
+              </a>
+              <Link
+                to="/seminovos"
+                search={emptySeminovosSearch}
+                className="flex items-center justify-center gap-1.5 rounded-xl bg-[#00283C] px-2 py-2.5 text-xs font-black text-white shadow-[0_6px_18px_rgba(0,40,60,0.22)] transition-colors hover:bg-[#00435a] sm:text-sm"
+              >
+                <span className="truncate">{stockCtaLabel}</span>
+                <ArrowRight className="h-3.5 w-3.5 shrink-0" />
+              </Link>
+            </div>
+            <p className="mt-1.5 text-center text-[10px] font-medium text-[#00283C]/50">
               {coldHint}
             </p>
           </>
