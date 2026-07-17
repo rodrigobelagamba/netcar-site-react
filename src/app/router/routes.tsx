@@ -242,6 +242,8 @@ function RootComponent() {
     trackPageView(`${location.pathname}${search}`);
   }, [location.pathname, location.search, location.searchStr]);
 
+  const isLaudoPage = location.pathname.startsWith("/laudo/");
+
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
       <a
@@ -250,11 +252,20 @@ function RootComponent() {
       >
         Pular para o conteúdo
       </a>
-      <SchemaOrg />
-      <div className="print:hidden">
-        <Header />
-      </div>
-      <div className="relative min-h-[100dvh] flex-1 overflow-x-hidden max-w-full pt-0 sm:pt-20 print:min-h-0 print:pt-0">
+      {!isLaudoPage ? <SchemaOrg /> : null}
+      {/* Laudo i-CHECK = documento isolado (sem header/footer do site) */}
+      {!isLaudoPage ? (
+        <div className="print:hidden">
+          <Header />
+        </div>
+      ) : null}
+      <div
+        className={`relative flex-1 overflow-x-hidden max-w-full print:min-h-0 print:pt-0 ${
+          isLaudoPage
+            ? "min-h-[100dvh] pt-0"
+            : "min-h-[100dvh] pt-0 sm:pt-20"
+        }`}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -272,10 +283,12 @@ function RootComponent() {
           </motion.div>
         </AnimatePresence>
       </div>
-      <div className="print:hidden">
-        <Footer />
-        <WhatsAppButton />
-      </div>
+      {!isLaudoPage ? (
+        <div className="print:hidden">
+          <Footer />
+          <WhatsAppButton />
+        </div>
+      ) : null}
     </div>
   );
 }
