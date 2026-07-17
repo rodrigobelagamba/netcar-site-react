@@ -31,6 +31,7 @@ import iCheckLogo from "@/assets/images/i-check-ogo.svg";
 import icon1 from "@/assets/images/icon-1.svg";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
 import type { VehicleCardProps } from "@/design-system/components/patterns/VehicleCard";
+import { VehicleWhatsAppCard } from "@/design-system/components/patterns/VehicleWhatsAppCard";
 import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
 import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
@@ -229,6 +230,8 @@ interface ContactButtonProps {
   vehicleId?: string | number;
   isSold?: boolean;
   vehicleLabel?: string;
+  image?: string;
+  priceLabel?: string;
 }
 
 function ContactButton({
@@ -236,6 +239,8 @@ function ContactButton({
   vehicleId,
   isSold = false,
   vehicleLabel,
+  image,
+  priceLabel,
 }: ContactButtonProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const label = vehicleLabel || modeloCompleto || "veículo";
@@ -254,6 +259,16 @@ function ContactButton({
         ),
       )
     : undefined;
+
+  const identifiedVehicle =
+    image && priceLabel && vehicleId != null
+      ? {
+          id: String(vehicleId),
+          label,
+          priceLabel,
+          image,
+        }
+      : null;
 
   if (isSold) {
     return (
@@ -298,26 +313,32 @@ function ContactButton({
     );
   }
 
+  // Card WA fica flutuante (DetalheFloatingWhatsApp). Aqui só troca + fallback sem foto.
   return (
     <div className="flex w-full flex-col items-center gap-2.5">
-      <WhatsAppPulseRing>
-        <CTAButton
-          text="Chamar no WhatsApp"
-          icon={MessageCircleMore}
-          borderColor="border-[#25D366]"
-          textColor="text-white"
-          hoverBgColor="bg-green-dark"
-          filled
-          className="w-full info-contact-button-wrapper !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.3)]"
-          initialAnimation={true}
-          href={href}
-          waSource="hero"
-          waIntent="vehicle_inquiry"
-          waVehicleId={vehicleId}
-          waVehicleName={modeloCompleto}
-          disabled={!whatsapp?.numero}
-        />
-      </WhatsAppPulseRing>
+      {!identifiedVehicle && href ? (
+        <div className="w-full">
+          <WhatsAppPulseRing>
+            <CTAButton
+              text="Chamar no WhatsApp"
+              icon={MessageCircleMore}
+              borderColor="border-[#25D366]"
+              textColor="text-white"
+              hoverBgColor="bg-green-dark"
+              filled
+              className="w-full info-contact-button-wrapper !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.3)]"
+              initialAnimation={true}
+              href={href}
+              waSource="hero"
+              waIntent="vehicle_inquiry"
+              waVehicleId={vehicleId}
+              waVehicleName={modeloCompleto}
+              disabled={!whatsapp?.numero}
+            />
+          </WhatsAppPulseRing>
+        </div>
+      ) : null}
+
       <TradeInTextLink
         href={tradeHref}
         modeloCompleto={modeloCompleto}
@@ -362,21 +383,24 @@ function TradeInTextLink({
   );
 }
 
-interface DetalheMobileStickyBarProps {
+interface DetalheFloatingWhatsAppProps {
   price: string;
   modeloCompleto: string;
   vehicleId?: string | number;
   isSold?: boolean;
   vehicleLabel?: string;
+  image?: string;
 }
 
-function DetalheMobileStickyBar({
+/** Sticky flutuante com carro identificado — substitui bolinha iAN no detalhe. */
+function DetalheFloatingWhatsApp({
   price,
   modeloCompleto,
   vehicleId,
   isSold = false,
   vehicleLabel,
-}: DetalheMobileStickyBarProps) {
+  image,
+}: DetalheFloatingWhatsAppProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const label = vehicleLabel || modeloCompleto || "veículo";
   const messages = vehicleWhatsAppMessages(label, modeloCompleto);
@@ -385,20 +409,19 @@ function DetalheMobileStickyBar({
 
   if (isSold) {
     return (
-      <div className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#00283C]/15 bg-white/95 px-4 py-3 shadow-[0_-12px_40px_rgba(0,0,0,0.12)] backdrop-blur-md">
-        <div className="mb-2 flex items-center gap-3">
-          <p className="min-w-0 flex-1 truncate text-base font-black leading-tight text-[#00283C]">
-            Vendido
+      <div className="pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center px-3">
+        <div className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[#00283C]/15 bg-white/95 px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.16)] backdrop-blur-md">
+          <p className="mb-2 text-center text-sm font-black text-[#00283C]">
+            Este seminovo já foi vendido
           </p>
           <a
             href="#opcoes-parecidas"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-[#00283C] px-4 py-3 text-sm font-black text-white"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#00283C] px-4 py-2.5 text-sm font-black text-white"
           >
-            Ver opções
+            Ver opções parecidas
+            <ArrowRight className="h-4 w-4" />
           </a>
-        </div>
-        {ready && (
-          <div className="flex justify-center">
+          {ready ? (
             <a
               href={buildWhatsAppUrl(
                 whatsapp!.numero,
@@ -412,48 +435,34 @@ function DetalheMobileStickyBar({
               data-wa-intent="similar_vehicle"
               data-wa-vehicle-id={vehicleId}
               data-wa-vehicle-name={label}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#128C7E]"
+              className="mt-2 flex w-full items-center justify-center gap-1.5 text-xs font-bold text-[#128C7E]"
             >
               <MessageCircleMore className="h-3.5 w-3.5" />
               Quero um similar no WhatsApp
             </a>
-          </div>
-        )}
+          ) : null}
+        </div>
       </div>
     );
   }
 
-  if (!ready) return null;
+  if (!ready || !image || vehicleId == null || !priceLabel) return null;
 
-  const primaryHref = buildWhatsAppUrl(whatsapp!.numero, messages.info);
-  const tradeHref = buildWhatsAppUrl(whatsapp!.numero, messages.trade);
+  const href = buildWhatsAppUrl(whatsapp!.numero, messages.info);
 
   return (
-    <div className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-[#25D366]/30 bg-white/95 px-4 py-3 shadow-[0_-12px_40px_rgba(0,0,0,0.12)] backdrop-blur-md">
-      <div className="mb-2 flex items-center gap-3">
-        <p className="min-w-0 flex-1 truncate text-base font-black leading-tight text-[#5CD29D]">
-          {priceLabel}
-        </p>
-        <a
-          href={primaryHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-wa-source="detalhe_sticky"
-          data-wa-intent="vehicle_inquiry"
-          data-wa-vehicle-id={vehicleId}
-          data-wa-vehicle-name={modeloCompleto}
-          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-4 py-3 text-sm font-black text-white shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
-        >
-          <MessageCircleMore className="h-4 w-4" />
-          WhatsApp
-        </a>
-      </div>
-      <div className="flex justify-center">
-        <TradeInTextLink
-          href={tradeHref}
-          modeloCompleto={modeloCompleto}
-          vehicleId={vehicleId}
-          compact
+    <div className="pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center px-3">
+      <div className="pointer-events-auto w-full max-w-sm">
+        <VehicleWhatsAppCard
+          vehicle={{
+            id: String(vehicleId),
+            label,
+            priceLabel,
+            image,
+          }}
+          href={href}
+          source="detalhe_sticky"
+          eyebrow="Este carro"
         />
       </div>
     </div>
@@ -1410,7 +1419,7 @@ function LoadingVehicleDetail({ slug }: { slug: string }) {
           </div>
         </div>
       </section>
-      <DetalheMobileStickyBar
+      <DetalheFloatingWhatsApp
         price="Consultando preço"
         modeloCompleto={modeloCompleto}
         vehicleId={vehicleId}
@@ -1711,7 +1720,7 @@ export function DetalhesPage() {
       ];
 
   return (
-    <main className="overflow-x-hidden max-w-full pb-36 md:pb-0">
+    <main className="overflow-x-hidden max-w-full pb-40">
       {vehicle && (
         <VehicleSchemaOrg
           marca={marca}
@@ -1887,6 +1896,8 @@ export function DetalhesPage() {
                   vehicleId={vehicle?.id}
                   isSold={isSold}
                   vehicleLabel={vehicleLabel}
+                  image={mainImage}
+                  priceLabel={price.replace(/<[^>]*>/g, "") || undefined}
                 />
                 {!isSold && (
                   <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">
@@ -2017,12 +2028,13 @@ export function DetalhesPage() {
         <IanBot />
       </div>
 
-      <DetalheMobileStickyBar
+      <DetalheFloatingWhatsApp
         price={price}
         modeloCompleto={modeloCompleto}
         vehicleId={vehicle.id}
         isSold={isSold}
         vehicleLabel={vehicleLabel}
+        image={mainImage}
       />
     </main>
   );
