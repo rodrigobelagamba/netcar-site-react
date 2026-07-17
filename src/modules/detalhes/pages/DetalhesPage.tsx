@@ -716,16 +716,7 @@ function CTASidebar({
       console.warn("Slug indisponível para abrir laudo");
       return;
     }
-    const w = Math.min(920, screen.availWidth - 40);
-    const h = Math.min(980, screen.availHeight - 40);
-    const left = Math.max(0, Math.round((screen.availWidth - w) / 2));
-    const top = Math.max(0, Math.round((screen.availHeight - h) / 2));
-    const popup = window.open(
-      `/laudo/${laudoSlug}`,
-      "icheck_laudo",
-      `width=${w},height=${h},left=${left},top=${top},scrollbars=yes,resizable=yes`,
-    );
-    if (popup) popup.opener = null;
+    window.open(`/laudo/${laudoSlug}`, "_blank", "noopener,noreferrer");
   };
 
   const getWhatsAppLink = (message: string) => {
