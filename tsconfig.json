@@ -21,5 +21,6 @@
     }
   },
   "include": ["src"],
+  "exclude": ["src/reports"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
