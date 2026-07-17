@@ -32,6 +32,7 @@ import icon1 from "@/assets/images/icon-1.svg";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
 import type { VehicleCardProps } from "@/design-system/components/patterns/VehicleCard";
 import { VehicleWhatsAppCard } from "@/design-system/components/patterns/VehicleWhatsAppCard";
+import { FloatingPortal } from "@/components/FloatingPortal";
 import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
 import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
@@ -409,63 +410,68 @@ function DetalheFloatingWhatsApp({
 
   if (isSold) {
     return (
-      <div className="pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center px-3">
-        <div className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[#00283C]/15 bg-white/95 px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.16)] backdrop-blur-md">
-          <p className="mb-2 text-center text-sm font-black text-[#00283C]">
-            Este seminovo já foi vendido
-          </p>
-          <a
-            href="#opcoes-parecidas"
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#00283C] px-4 py-2.5 text-sm font-black text-white"
-          >
-            Ver opções parecidas
-            <ArrowRight className="h-4 w-4" />
-          </a>
-          {ready ? (
+      <FloatingPortal>
+        <div className="pointer-events-none fixed inset-x-0 bottom-3 z-[60] flex justify-center px-3">
+          <div className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[#00283C]/15 bg-white/95 px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.16)] backdrop-blur-md">
+            <p className="mb-2 text-center text-sm font-black text-[#00283C]">
+              Este seminovo já foi vendido
+            </p>
             <a
-              href={buildWhatsAppUrl(
-                whatsapp!.numero,
-                siteWhatsAppMessage(
-                  `o ${label} que eu vi no site já foi vendido. Quero opções parecidas disponíveis.`,
-                ),
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source="detalhe_sticky_vendido"
-              data-wa-intent="similar_vehicle"
-              data-wa-vehicle-id={vehicleId}
-              data-wa-vehicle-name={label}
-              className="mt-2 flex w-full items-center justify-center gap-1.5 text-xs font-bold text-[#128C7E]"
+              href="#opcoes-parecidas"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#00283C] px-4 py-2.5 text-sm font-black text-white"
             >
-              <MessageCircleMore className="h-3.5 w-3.5" />
-              Quero um similar no WhatsApp
+              Ver opções parecidas
+              <ArrowRight className="h-4 w-4" />
             </a>
-          ) : null}
+            {ready ? (
+              <a
+                href={buildWhatsAppUrl(
+                  whatsapp!.numero,
+                  siteWhatsAppMessage(
+                    `o ${label} que eu vi no site já foi vendido. Quero opções parecidas disponíveis.`,
+                  ),
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-wa-source="detalhe_sticky_vendido"
+                data-wa-intent="similar_vehicle"
+                data-wa-vehicle-id={vehicleId}
+                data-wa-vehicle-name={label}
+                className="mt-2 flex w-full items-center justify-center gap-1.5 text-xs font-bold text-[#128C7E]"
+              >
+                <MessageCircleMore className="h-3.5 w-3.5" />
+                Quero um similar no WhatsApp
+              </a>
+            ) : null}
+          </div>
         </div>
-      </div>
+      </FloatingPortal>
     );
   }
 
-  if (!ready || !image || vehicleId == null || !priceLabel) return null;
+  if (!ready || vehicleId == null || !priceLabel) return null;
 
   const href = buildWhatsAppUrl(whatsapp!.numero, messages.info);
+  const cardImage = image || "/images/semcapa.png";
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center px-3">
-      <div className="pointer-events-auto w-full max-w-sm">
-        <VehicleWhatsAppCard
-          vehicle={{
-            id: String(vehicleId),
-            label,
-            priceLabel,
-            image,
-          }}
-          href={href}
-          source="detalhe_sticky"
-          eyebrow="Este carro"
-        />
+    <FloatingPortal>
+      <div className="pointer-events-none fixed inset-x-0 bottom-3 z-[60] flex justify-center px-3">
+        <div className="pointer-events-auto w-full max-w-sm">
+          <VehicleWhatsAppCard
+            vehicle={{
+              id: String(vehicleId),
+              label,
+              priceLabel,
+              image: cardImage,
+            }}
+            href={href}
+            source="detalhe_sticky"
+            eyebrow="Este carro"
+          />
+        </div>
       </div>
-    </div>
+    </FloatingPortal>
   );
 }
 
