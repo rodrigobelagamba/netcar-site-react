@@ -76,28 +76,46 @@ export function ICheckLaudoPage() {
 
   const handlePrint = () => window.print();
 
-  const handleSavePdf = () => {
-    const fileName = vehicle.pdf || null;
-    let pdfUrl = fileName
-      ? `/arquivos/autocheck/${fileName}`
+  const handleSavePdf = async () => {
+    const fileName = vehicle.pdf || `laudo-icheck-${vehicle.id}.pdf`;
+    let pdfUrl = vehicle.pdf
+      ? `/arquivos/autocheck/${vehicle.pdf}`
       : vehicle.pdf_url || "";
+
     if (!pdfUrl) {
-      // Sem arquivo no servidor: salva via diálogo de impressão → PDF
+      // Sem arquivo no host: salva via diálogo (Salvar como PDF)
       window.print();
       return;
     }
+
     if (!pdfUrl.startsWith("http")) {
       pdfUrl = `${window.location.origin}${pdfUrl.startsWith("/") ? "" : "/"}${pdfUrl}`;
     }
-    // cache-buster evita PDF antigo em cache
-    const sep = pdfUrl.includes("?") ? "&" : "?";
-    const link = document.createElement("a");
-    link.href = `${pdfUrl}${sep}v=${Date.now()}`;
-    link.download = fileName || `laudo-icheck-${vehicle.id}.pdf`;
-    link.rel = "noopener";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+    try {
+      const res = await fetch(`${pdfUrl}${pdfUrl.includes("?") ? "&" : "?"}v=${Date.now()}`, {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache", Pragma: "no-cache" },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const blob = await res.blob();
+      // PDF antigo CheckAuto ~50KB; laudo novo ~2MB — se veio miúdo, usa impressão da tela
+      if (blob.size < 200_000) {
+        window.print();
+        return;
+      }
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(objectUrl);
+    } catch {
+      // Fallback: salva o que está na tela
+      window.print();
+    }
   };
 
   return (
