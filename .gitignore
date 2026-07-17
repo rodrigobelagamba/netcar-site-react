@@ -53,5 +53,8 @@ pnpm-debug.log*
 *.sw?
 
 
-# PDF i-CHECK local (preview) — não versionar
-public/arquivos/
+# PDF i-CHECK gerado: versiona autocheck pra overwrite no deploy
+public/arquivos/*
+!public/arquivos/autocheck/
+public/arquivos/autocheck/*
+!public/arquivos/autocheck/*.pdf

@@ -128,13 +128,23 @@ async function findVehicleIdByPlaca(placa) {
 }
 
 function ensureJpeg(localPath, cacheDir, basename) {
-  const ext = extname(localPath).toLowerCase();
-  if ([".jpg", ".jpeg", ".png"].includes(ext)) return localPath;
   const outPath = join(cacheDir, `${basename}.jpg`);
   try {
-    execFileSync("sips", ["-s", "format", "jpeg", localPath, "--out", outPath], {
-      stdio: "ignore",
-    });
+    // Converte + limita largura — PDF leve o bastante pra overwrite no host
+    execFileSync(
+      "sips",
+      [
+        "-s",
+        "format",
+        "jpeg",
+        "-Z",
+        "1400",
+        localPath,
+        "--out",
+        outPath,
+      ],
+      { stdio: "ignore" },
+    );
     return existsSync(outPath) ? outPath : null;
   } catch {
     console.warn(`   Aviso: não converteu ${localPath} para JPEG`);
@@ -348,6 +358,12 @@ async function main() {
   );
   writeFileSync(friendly, buffer);
   console.log(`OK → ${friendly}`);
+
+  // Copia pro public/ p/ overwrite no deploy:local (mesmo path do host)
+  const publicAutocheck = join(rootDir, "public", "arquivos", "autocheck");
+  mkdirSync(publicAutocheck, { recursive: true });
+  writeFileSync(join(publicAutocheck, outName), buffer);
+  console.log(`OK → public/arquivos/autocheck/${outName}`);
 
   if (args.deploy) {
     const deploy = loadDeployEnv(process.env);
