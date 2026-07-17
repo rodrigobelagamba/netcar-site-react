@@ -240,7 +240,13 @@ function loadDeployConfig() {
       const trimmed = line.trim();
       if (trimmed && !trimmed.startsWith('#')) {
         const [key, ...valueParts] = trimmed.split('=');
-        const value = valueParts.join('=').trim();
+        let value = valueParts.join('=').trim();
+        if (
+          (value.startsWith('"') && value.endsWith('"')) ||
+          (value.startsWith("'") && value.endsWith("'"))
+        ) {
+          value = value.slice(1, -1);
+        }
         if (key === 'DEPLOY_METHOD') config.method = value.toLowerCase();
         if (key === 'FTP_SERVER') config.ftp.server = value;
         if (key === 'FTP_USERNAME') config.ftp.username = value;
