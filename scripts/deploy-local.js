@@ -20,7 +20,11 @@ import {
 import { homedir, tmpdir } from 'os';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { deployTarViaSshPassword, tarExcludeShellFlags } from './lib/ssh-deploy.js';
+// ssh-deploy importa ssh2; import lazy para o script iniciar mesmo com
+// node_modules desatualizado (o npm ci roda dentro deste script).
+async function loadSshDeploy() {
+  return import('./lib/ssh-deploy.js');
+}
 
 // Tentar importar basic-ftp (opcional)
 let ftp;
@@ -566,6 +570,7 @@ async function deployViaSsh(sshConfig, distPath) {
 
   if (ssh.mode === 'ssh2') {
     log('   Enviando pacote compactado...', 'yellow');
+    const { deployTarViaSshPassword } = await loadSshDeploy();
     await deployTarViaSshPassword({
       host: sshConfig.host,
       user: sshConfig.user,
@@ -578,6 +583,7 @@ async function deployViaSsh(sshConfig, distPath) {
     return;
   }
 
+  const { tarExcludeShellFlags } = await loadSshDeploy();
   const tarExcludes = tarExcludeShellFlags();
   const cmd = `tar -C ${shellQuote(distPosix)} ${tarExcludes} -cf - . | ${ssh.command}`;
   log('   Enviando pacote compactado...', 'yellow');
