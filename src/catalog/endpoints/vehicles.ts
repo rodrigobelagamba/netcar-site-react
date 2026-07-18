@@ -204,6 +204,15 @@ export function vehicleHasFactoryWarranty(vehicle: {
   );
 }
 
+/** Selo card/detalhe: diferencial `baixa_km` da API (PIADO). */
+export function vehicleHasBaixaKm(vehicle: {
+  diferenciais?: Array<{ tag: string }> | null;
+}): boolean {
+  return Boolean(
+    vehicle.diferenciais?.some((diff) => diff.tag === "baixa_km"),
+  );
+}
+
 /** Selo/CTA i-CHECK: só pdf/pdf_url da API (sem mapa, sem filtro de anos). */
 export function vehicleHasIcheck(vehicle: {
   pdf?: string | null;

@@ -6,7 +6,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
-  CheckSquare,
   CalendarDays,
   Calculator,
   ArrowLeftRight,
@@ -61,38 +60,31 @@ const ANIMATION_DURATION = {
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
 
-type BadgeVariant = "success" | "purple" | "blue" | "blue-dark" | "green-dark";
+type BadgeVariant = "icheck" | "garantia" | "baixa-km" | "green-dark";
 
 interface Badge {
   text: string;
   variant: BadgeVariant;
-  icon?: boolean;
 }
 
-const BADGE_STYLES: Record<BadgeVariant, { bg: string; text: string }> = {
-  success: { bg: "bg-secondary", text: "text-secondary-foreground" },
-  purple: { bg: "bg-purple", text: "text-primary-foreground" },
-  blue: { bg: "bg-blue", text: "text-white" },
-  "blue-dark": { bg: "bg-blue-dark", text: "text-white" },
-  "green-dark": { bg: "bg-green-dark", text: "text-white" },
+/** Cores pill (screenshot selos). */
+const BADGE_COLORS: Record<BadgeVariant, string> = {
+  icheck: "#59C897",
+  garantia: "#69BDCD",
+  "baixa-km": "#004C5C",
+  "green-dark": "#00363B",
 };
 
-function Badge({ text, variant, icon }: Badge) {
-  const { bg: bgColor, text: textColor } = BADGE_STYLES[variant];
-
+function Badge({ text, variant }: Badge) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
-      className={`${bgColor} ${textColor} rounded-[45px] flex items-center uppercase font-bold tracking-wide info-badge`}
+      className="rounded-[45px] flex items-center uppercase font-bold tracking-wide text-white info-badge"
+      style={{ backgroundColor: BADGE_COLORS[variant] }}
     >
-      {icon && (
-        <div className="flex-shrink-0">
-          <CheckSquare className="w-full h-full text-fg" />
-    </div>
-      )}
       <span className="whitespace-nowrap">{text}</span>
     </motion.div>
   );
@@ -1700,21 +1692,23 @@ export function DetalhesPage() {
     .filter(Boolean)
     .join(" ");
 
-  // Badges
+  // Badges (só selos de dados reais — sem Retire hoje / Vistoriado genérico)
   const diferenciais = vehicle?.diferenciais ?? [];
   const hasDiferencial = (tag: string) =>
     diferenciais.some((diff) => diff.tag === tag);
+  const hasIcheckSeal = Boolean(vehicle?.pdf_url || vehicle?.pdf);
 
   const badges: Badge[] = isSold
     ? []
     : [
-        { text: "Vistoriado e aprovado", variant: "success", icon: true },
-        { text: "Retire hoje", variant: "purple" },
+        ...(hasIcheckSeal
+          ? [{ text: "iCheck aprovado", variant: "icheck" as const }]
+          : []),
         ...(hasDiferencial("garantia_fabrica")
-          ? [{ text: "Garantia de Fábrica", variant: "blue" as const }]
+          ? [{ text: "Garantia de Fábrica", variant: "garantia" as const }]
           : []),
         ...(hasDiferencial("baixa_km")
-          ? [{ text: "Baixa KM", variant: "blue-dark" as const }]
+          ? [{ text: "Baixa KM", variant: "baixa-km" as const }]
           : []),
         ...(hasDiferencial("unico_dono")
           ? [{ text: "Único Dono", variant: "green-dark" as const }]

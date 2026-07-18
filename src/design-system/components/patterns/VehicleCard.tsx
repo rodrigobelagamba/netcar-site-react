@@ -6,6 +6,7 @@ import { buildWhatsAppUrl, vehicleWhatsAppMessages } from "@/lib/whatsappMessage
 import { CardsHero } from "./CardsHero";
 import {
   VehicleImagesSite,
+  vehicleHasBaixaKm,
   vehicleHasFactoryWarranty,
   vehicleHasIcheck,
 } from "@/catalog/endpoints/vehicles";
@@ -145,6 +146,7 @@ export function VehicleCard({
   const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
   const isSold = !price || price <= 0;
   const hasFactoryWarranty = vehicleHasFactoryWarranty({ diferenciais });
+  const hasBaixaKm = vehicleHasBaixaKm({ diferenciais });
   const hasIcheck = vehicleHasIcheck({ pdf, pdf_url });
 
   const emitFocus = () => {
@@ -221,6 +223,7 @@ export function VehicleCard({
       compact={compact}
       isSold={isSold}
       hasFactoryWarranty={hasFactoryWarranty}
+      hasBaixaKm={hasBaixaKm}
       hasIcheck={hasIcheck}
     />
   );
