@@ -7,6 +7,10 @@ import { resolveIcheckProtocol } from "@/lib/icheck-protocol";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleUnavailableRedirect } from "@/components/VehicleUnavailableRedirect";
+import {
+  buildClientICheckReportData,
+  downloadICheckReportPdf,
+} from "@/reports/icheck/downloadICheckReportPdf";
 
 type HistoryMetaItem = {
   key: string;
@@ -83,6 +87,7 @@ export function ICheckLaudoPage() {
   const { data: vehicle, isLoading, isError } = useVehicleQuery(slug);
   const [protocol, setProtocol] = useState<CheckAutoProtocolMeta | null>(null);
   const [protocolReady, setProtocolReady] = useState(false);
+  const [savingPdf, setSavingPdf] = useState(false);
 
   const title = vehicle
     ? `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name || ""} ${vehicle.year || ""}`.trim()
@@ -221,14 +226,24 @@ export function ICheckLaudoPage() {
     .filter(Boolean)
     .slice(0, 28);
 
-  /** Sempre a tela do laudo — não o PDF estático de arquivos/autocheck. */
-  const printOnScreenLaudo = () => window.print();
+  /** Imprimir = HTML on-screen. Salvar PDF = react-pdf Netcar (não CheckAuto estático). */
+  const handlePrint = () => window.print();
 
-  const handlePrint = () => printOnScreenLaudo();
-
-  const handleSavePdf = () => {
-    // Diálogo do browser: destino "Salvar como PDF" = mesmo conteúdo da tela.
-    printOnScreenLaudo();
+  const handleSavePdf = async () => {
+    if (savingPdf) return;
+    setSavingPdf(true);
+    try {
+      const data = buildClientICheckReportData({ vehicle, protocol, slug });
+      const platePart = vehicle.placa
+        ? vehicle.placa.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()
+        : slug;
+      await downloadICheckReportPdf(data, `i-CHECK-${platePart}.pdf`);
+    } catch (err) {
+      console.error("[i-CHECK] falha ao gerar PDF", err);
+      window.alert("Não foi possível gerar o PDF. Tente novamente.");
+    } finally {
+      setSavingPdf(false);
+    }
   };
 
   return (
@@ -247,12 +262,13 @@ export function ICheckLaudoPage() {
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
-              onClick={handleSavePdf}
-              title="Abre impressão — escolha Salvar como PDF. Mesmo conteúdo da tela."
-              className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-secondary shadow-sm transition hover:border-secondary hover:bg-[#E8F7EF]"
+              onClick={() => void handleSavePdf()}
+              disabled={savingPdf}
+              title="Baixa PDF Netcar i-CHECK (mesmo dossiê da tela)"
+              className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-secondary shadow-sm transition hover:border-secondary hover:bg-[#E8F7EF] disabled:cursor-wait disabled:opacity-60"
             >
               <Download className="h-3.5 w-3.5" strokeWidth={2.5} />
-              Salvar PDF
+              {savingPdf ? "Gerando…" : "Salvar PDF"}
             </button>
             <button
               type="button"
