@@ -358,6 +358,7 @@ export function Header() {
   const menuLinks = [
     { to: "/sobre", label: "Sobre" },
     { to: "/seminovos", label: "Seminovos", search: emptySeminovosSearch },
+    { to: "/comparar", label: "Comparar" },
     { to: "/compra", label: "Venda seu carro" },
     { to: "/blog", label: "Atualidades" },
     { to: "/contato", label: "Contato" },

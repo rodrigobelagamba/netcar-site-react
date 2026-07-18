@@ -29,35 +29,23 @@ function CtaContent({
   title,
   subtitle,
   dark,
-  shimmer,
 }: {
   icon: typeof Car;
   title: string;
   subtitle: string;
   dark?: boolean;
-  shimmer?: "light" | "dark";
 }) {
   return (
     <>
       <Icon className="h-5 w-5 shrink-0" strokeWidth={2.4} />
       <span className="min-w-0 flex-1 text-left">
-        {shimmer === "dark" ? (
-          <span className="button-text-shimmer-on-dark block text-sm font-black uppercase tracking-wider sm:text-base">
-            {title}
-          </span>
-        ) : shimmer === "light" ? (
-          <span className="button-text-shimmer block text-sm font-black uppercase tracking-wider sm:text-base">
-            {title}
-          </span>
-        ) : (
-          <span className="block text-sm font-black uppercase tracking-wider sm:text-base">
-            {title}
-          </span>
-        )}
+        <span className="block text-sm font-black uppercase tracking-wider sm:text-base">
+          {title}
+        </span>
         <span
           className={cn(
             "mt-0.5 block text-[11px] font-semibold normal-case tracking-normal sm:text-xs",
-            dark ? "text-white/75" : "text-current/65",
+            dark ? "text-white/80" : "opacity-65",
           )}
         >
           {subtitle}
@@ -115,7 +103,6 @@ export function RegionalActionCtas({
       icon={Banknote}
       title="Vender meu carro"
       subtitle={sellSubtitle}
-      shimmer={primary === "sell" ? "light" : undefined}
     />
   );
 
@@ -138,7 +125,6 @@ export function RegionalActionCtas({
           title={stockLabel}
           subtitle={stockSubtitle}
           dark={primary === "stock"}
-          shimmer={primary === "stock" ? "dark" : "light"}
         />
       </Link>
 
