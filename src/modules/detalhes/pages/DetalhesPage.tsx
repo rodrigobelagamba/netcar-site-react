@@ -1,4 +1,4 @@
-import { useParams, useLocation, Link } from "@tanstack/react-router";
+import { useParams, useLocation, Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageCircleMore,
@@ -35,7 +35,8 @@ import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeVal
 import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
-import { maskPlate } from "@/lib/slug";
+import { generateVehicleSlug, maskPlate } from "@/lib/slug";
+import { canonicalUrl } from "@/lib/seo";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
@@ -1330,9 +1331,32 @@ function LoadingVehicleDetail({ slug }: { slug: string }) {
 export function DetalhesPage() {
   const { slug: paramSlug } = useParams({ from: "/veiculo/$slug" });
   const location = useLocation();
+  const navigate = useNavigate();
   const slug = paramSlug || location.pathname.replace(/^\/veiculo\//, "") || "";
-  
+
   const { data: vehicle, isPlaceholderData, error, isPending } = useVehicleQuery(slug);
+
+  const officialSlug = useMemo(() => {
+    if (!vehicle) return "";
+    return generateVehicleSlug({
+      modelo: vehicle.modelo,
+      marca: vehicle.marca,
+      year: vehicle.year,
+      placa: vehicle.placa,
+      id: vehicle.id,
+    });
+  }, [vehicle]);
+
+  // URL curta / slug legado → slug canônico oficial (evita conflito GSC)
+  useEffect(() => {
+    if (!vehicle || !officialSlug || !slug) return;
+    if (slug === officialSlug) return;
+    navigate({
+      to: "/veiculo/$slug",
+      params: { slug: officialSlug },
+      replace: true,
+    });
+  }, [vehicle, officialSlug, slug, navigate]);
 
   // GA4: view_item — só dado real da API (não placeholder do estoque)
   useEffect(() => {
@@ -1512,12 +1536,11 @@ export function DetalhesPage() {
     return `${baseUrl}/${cleanedImage}`;
   }, [vehicle]);
 
-  // URL amigável para compartilhamento (og:url/canonical) — ex.: /veiculo/fluence-gt-2013
+  // URL canônica oficial (sempre slug com placa mascarada)
   const friendlyUrl = useMemo(() => {
-    if (!vehicle || !slug) return "";
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    return `${baseUrl}/veiculo/${slug}`;
-  }, [vehicle, slug]);
+    if (!officialSlug) return "";
+    return canonicalUrl(`/veiculo/${officialSlug}`);
+  }, [officialSlug]);
 
   // Configura metatags para compartilhamento
   const metaTags = useMemo(() => {
