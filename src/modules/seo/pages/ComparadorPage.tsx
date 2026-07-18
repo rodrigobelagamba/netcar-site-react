@@ -18,6 +18,14 @@ function fmtKm(km?: number) {
   return km ? `${km.toLocaleString("pt-BR")} km` : "—";
 }
 
+/** API manda preço com HTML (`<span>R$</span>`); remove tags. */
+function fmtPrice(vehicle: Vehicle) {
+  const cleaned = vehicle.valor_formatado?.replace(/<[^>]*>/g, "").trim();
+  if (cleaned) return cleaned;
+  if (vehicle.price) return `R$ ${vehicle.price.toLocaleString("pt-BR")}`;
+  return "—";
+}
+
 export function ComparadorPage() {
   const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 500 });
   const [selected, setSelected] = useState<string[]>([]);
@@ -54,7 +62,7 @@ export function ComparadorPage() {
   }
 
   const rows: { label: string; get: (v: Vehicle) => string }[] = [
-    { label: "Preço", get: (v) => v.valor_formatado || (v.price ? `R$ ${v.price.toLocaleString("pt-BR")}` : "—") },
+    { label: "Preço", get: (v) => fmtPrice(v) },
     { label: "Ano", get: (v) => (v.year ? String(v.year) : "—") },
     { label: "KM", get: (v) => fmtKm(v.km) },
     { label: "Câmbio", get: (v) => v.cambio || "—" },
@@ -199,7 +207,7 @@ export function ComparadorPage() {
                         {v.year} · {fmtKm(v.km)}
                       </p>
                       <p className="text-sm font-bold text-primary mt-1">
-                        {v.valor_formatado || (v.price ? `R$ ${v.price.toLocaleString("pt-BR")}` : "")}
+                        {fmtPrice(v)}
                       </p>
                     </div>
                   </button>
