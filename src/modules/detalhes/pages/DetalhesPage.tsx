@@ -40,7 +40,6 @@ import {
   icheckProtocolFromDate,
   resolveIcheckProtocol,
 } from "@/lib/icheck-protocol";
-import { isConsultaValid } from "@/lib/icheck-validity";
 import { canonicalUrl } from "@/lib/seo";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
@@ -827,8 +826,7 @@ function CTASidebar({
   ];
 
   const hasPDF = vehicle?.pdf_url || vehicle?.pdf;
-  const showIcheckCta =
-    Boolean(hasPDF) && !isSold && isConsultaValid(dataHoraConsulta);
+  const showIcheckCta = Boolean(hasPDF) && !isSold;
 
   return (
     <div className="space-y-4 lg:space-y-6">
