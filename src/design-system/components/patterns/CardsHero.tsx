@@ -25,8 +25,15 @@ interface CardsHeroProps {
   compact?: boolean;
   isSold?: boolean;
   hasFactoryWarranty?: boolean;
+  hasBaixaKm?: boolean;
   hasIcheck?: boolean;
 }
+
+const SEAL_COLORS = {
+  garantia: "#69BDCD",
+  baixaKm: "#004C5C",
+  icheck: "#59C897",
+} as const;
 
 export function CardsHero({
   image,
@@ -48,12 +55,13 @@ export function CardsHero({
   compact = false,
   isSold = false,
   hasFactoryWarranty = false,
+  hasBaixaKm = false,
   hasIcheck = false,
 }: CardsHeroProps) {
-  const showSeals = hasFactoryWarranty || hasIcheck;
+  const showSeals = !isSold && (hasFactoryWarranty || hasBaixaKm || hasIcheck);
   const sealBase = compact
-    ? "rounded px-1.5 py-0.5 text-[7px] tracking-[0.04em]"
-    : "rounded-md px-2 py-0.5 text-[9px] tracking-[0.06em] short1600:px-1.5 short1600:text-[8px]";
+    ? "rounded-full px-2 py-0.5 text-[7px] tracking-[0.04em] font-bold uppercase text-white leading-none"
+    : "rounded-full px-2.5 py-1 text-[9px] tracking-[0.06em] font-bold uppercase text-white leading-none short1600:px-2 short1600:py-0.5 short1600:text-[8px]";
 
   const content = (
     <div className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center h-full ${
@@ -72,32 +80,6 @@ export function CardsHero({
               : "top-16 right-2 md:top-16 md:right-3 w-20 md:w-24 short1600:top-14 short1600:right-3 short1600:w-20"
           }`}
         />
-      )}
-
-      {/* Selos: canto superior esquerdo do card (abaixo imagem flutuante) */}
-      {showSeals && (
-        <div
-          className={`absolute z-30 pointer-events-none flex flex-col items-start gap-1 ${
-            compact
-              ? "left-2 top-2"
-              : "left-4 top-3 short1600:left-3 short1600:top-2.5"
-          }`}
-        >
-          {hasFactoryWarranty ? (
-            <span
-              className={`${sealBase} font-bold uppercase text-[#00283C] bg-white/95 border border-[#00283C]/20 shadow-[0_2px_8px_rgba(0,40,60,0.08)]`}
-            >
-              {compact ? "Garantia" : "Garantia de fábrica"}
-            </span>
-          ) : null}
-          {hasIcheck ? (
-            <span
-              className={`${sealBase} font-bold uppercase text-[#00283C] bg-[#5CD29D] border border-[#5CD29D] shadow-[0_2px_8px_rgba(92,210,157,0.35)]`}
-            >
-              {compact ? "i-CHECK" : "i-CHECK aprovado"}
-            </span>
-          ) : null}
-        </div>
       )}
       
       {/* Floating Image Section */}
@@ -158,6 +140,27 @@ export function CardsHero({
            </h3>
            <p className={`!border-0 text-gray-400 font-medium ${compact ? "text-[10px]" : "text-base short1600:text-sm"}`}>{year}</p>
          </div>
+
+         {/* Selos pill: body do card (não overlay da foto) */}
+         {showSeals ? (
+           <div className={`!border-0 flex flex-wrap items-center ${compact ? "gap-1" : "gap-1.5"}`}>
+             {hasFactoryWarranty ? (
+               <span className={sealBase} style={{ backgroundColor: SEAL_COLORS.garantia }}>
+                 Garantia de fábrica
+               </span>
+             ) : null}
+             {hasBaixaKm ? (
+               <span className={sealBase} style={{ backgroundColor: SEAL_COLORS.baixaKm }}>
+                 Baixa KM
+               </span>
+             ) : null}
+             {hasIcheck ? (
+               <span className={sealBase} style={{ backgroundColor: SEAL_COLORS.icheck }}>
+                 iCheck aprovado
+               </span>
+             ) : null}
+           </div>
+         ) : null}
 
          {/* Price and Action — altura reservada pra alinhar CTA entre cards */}
          <div className={`!border-0 w-full min-w-0 flex flex-col items-stretch mt-auto ${
