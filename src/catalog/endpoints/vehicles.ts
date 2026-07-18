@@ -212,6 +212,35 @@ export function vehicleHasIcheck(vehicle: {
   return Boolean(vehicle.pdf || vehicle.pdf_url);
 }
 
+/**
+ * Campo `cambio` da API às vezes vem errado (ex.: MANUAL com opcional cambio_automatico).
+ * Opcional de transmissão da ficha corrige o valor no catálogo/laudo.
+ */
+export function resolveVehicleCambio(
+  cambio: string | null | undefined,
+  opcionais?: Array<{ tag?: string | null; descricao?: string | null }> | null,
+): string | undefined {
+  const field = String(cambio || "").trim();
+  const tags = new Set(
+    (opcionais || []).map((o) => String(o?.tag || "").toLowerCase()),
+  );
+  const hasAutoOpt =
+    tags.has("cambio_automatico") ||
+    tags.has("cambio_automatizado") ||
+    tags.has("cvt");
+  const hasManualOpt = tags.has("cambio_manual");
+
+  if (hasAutoOpt && !hasManualOpt) {
+    if (!field || /manual/i.test(field)) return "AUTOMATICO";
+    return field;
+  }
+  if (hasManualOpt && !hasAutoOpt) {
+    if (!field || /autom/i.test(field)) return "MANUAL";
+    return field;
+  }
+  return field || undefined;
+}
+
 export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
   try {
     // Constrói os parâmetros da query string
@@ -350,7 +379,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         cor: apiVehicle.cor,
         motor: apiVehicle.motor,
         combustivel: apiVehicle.combustivel,
-        cambio: apiVehicle.cambio,
+        cambio: resolveVehicleCambio(apiVehicle.cambio, apiVehicle.opcionais),
         potencia: apiVehicle.potencia,
         placa: apiVehicle.placa,
         portas: apiVehicle.portas,
@@ -434,7 +463,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       cor: apiVehicle.cor,
       motor: apiVehicle.motor,
       combustivel: apiVehicle.combustivel,
-      cambio: apiVehicle.cambio,
+      cambio: resolveVehicleCambio(apiVehicle.cambio, apiVehicle.opcionais),
       potencia: apiVehicle.potencia,
       placa: apiVehicle.placa,
       portas: apiVehicle.portas,
