@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Document,
   Page,
@@ -632,7 +631,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
                   key={label}
                   style={[
                     styles.idCell,
-                    index >= arr.length - 2 ? { borderBottomWidth: 0 } : null,
+                    index >= arr.length - 2 ? { borderBottomWidth: 0 } : {},
                   ]}
                 >
                   <Text style={styles.idLabel}>{label}</Text>
@@ -664,7 +663,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
                     key={item.key}
                     style={[
                       styles.historyCard,
-                      isWarn ? styles.historyCardWarn : null,
+                      isWarn ? styles.historyCardWarn : {},
                     ]}
                   >
                     {isOk && data.checkIconPath ? (
@@ -752,7 +751,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
                   key={item.label}
                   style={[
                     styles.idCell,
-                    index >= arr.length - 2 ? { borderBottomWidth: 0 } : null,
+                    index >= arr.length - 2 ? { borderBottomWidth: 0 } : {},
                   ]}
                 >
                   <Text style={styles.idLabel}>{item.label}</Text>
