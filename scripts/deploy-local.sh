@@ -40,12 +40,10 @@ if [ -z "$FTP_SERVER" ] || [ -z "$FTP_USERNAME" ] || [ -z "$FTP_PASSWORD" ]; the
     exit 1
 fi
 
-# 1. Verificar dependências
-echo -e "${BLUE}📦 Verificando dependências...${NC}"
-if [ ! -d "node_modules" ]; then
-    echo "📥 Instalando dependências..."
-    npm install
-fi
+# 1. Sync deps from lockfile — never skip when node_modules exists.
+# Stale installs miss new packages (e.g. @react-pdf/renderer) and break tsc.
+echo -e "${BLUE}📦 Sincronizando dependências (npm ci)...${NC}"
+npm ci
 echo -e "${GREEN}✅ Dependências OK${NC}"
 echo ""
 

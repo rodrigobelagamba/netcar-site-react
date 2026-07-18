@@ -834,12 +834,10 @@ async function deploy() {
   try {
     log('🚀 Iniciando deploy local...\n', 'blue');
 
-    // 1. Verificar dependências
-    log('📦 Verificando dependências...', 'blue');
-    if (!existsSync(join(rootDir, 'node_modules'))) {
-      log('📥 Instalando dependências...', 'yellow');
-      execSync('npm install', { stdio: 'inherit', cwd: rootDir });
-    }
+    // 1. Sync deps from lockfile — never skip when node_modules exists.
+    // Stale /workspace installs miss new packages (e.g. @react-pdf/renderer) and break tsc.
+    log('📦 Sincronizando dependências (npm ci)...', 'blue');
+    execSync('npm ci', { stdio: 'inherit', cwd: rootDir });
     log('✅ Dependências OK\n', 'green');
 
     // 2. Carregar configurações

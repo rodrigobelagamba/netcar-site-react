@@ -46,11 +46,13 @@ if "%FTP_PASSWORD%"=="" (
     exit /b 1
 )
 
-REM 1. Verificar dependências
-echo 📦 Verificando dependências...
-if not exist "node_modules" (
-    echo 📥 Instalando dependências...
-    call npm install
+REM 1. Sync deps from lockfile — never skip when node_modules exists.
+REM Stale installs miss new packages (e.g. @react-pdf/renderer) and break tsc.
+echo 📦 Sincronizando dependências (npm ci)...
+call npm ci
+if %errorlevel% neq 0 (
+    echo ❌ Erro no npm ci
+    exit /b 1
 )
 echo ✅ Dependências OK
 echo.
