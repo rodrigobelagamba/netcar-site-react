@@ -1,11 +1,29 @@
 User-agent: *
 Allow: /
 
+# Painéis e API
 Disallow: /admin/
 Disallow: /sistema/
 Disallow: /api/
 Disallow: /backend/
+
+# Filtros de estoque (query string) — canônico é /seminovos
 Disallow: /seminovos?*
+
+# URLs legadas do site antigo (não indexar)
 Disallow: /detalhe-produto-*
+Disallow: /Tour3D/
+Disallow: /Tour3DRC/
+Disallow: /arquivos/autocheck/
+Disallow: /cliente.php
+Disallow: /clientes.php
+Disallow: /ficha-cadastral.php
+Disallow: /compramos-seu-usado.php
+Disallow: /contato.html
+Disallow: /contato.php
+Disallow: /seminovos.php
+Disallow: /seminovos.html
+Disallow: /sobre-nos.php
+Disallow: /listagem-produtos.php
 
 Sitemap: https://www.netcarmultimarcas.com.br/sitemap.xml
