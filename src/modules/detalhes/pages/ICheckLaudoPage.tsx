@@ -4,7 +4,6 @@ import { Printer, Download, ArrowLeft, Check, AlertTriangle } from "lucide-react
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { maskPlate } from "@/lib/slug";
 import { resolveIcheckProtocol } from "@/lib/icheck-protocol";
-import { isConsultaValid } from "@/lib/icheck-validity";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleUnavailableRedirect } from "@/components/VehicleUnavailableRedirect";
@@ -178,16 +177,14 @@ export function ICheckLaudoPage() {
   }
 
   const hasApiPdf = Boolean(vehicle.pdf || vehicle.pdf_url);
-  if (!hasApiPdf || !isConsultaValid(protocol?.dataHoraConsulta)) {
+  if (!hasApiPdf) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 px-4 text-center">
         <p className="text-[17px] font-bold text-[#00283C]">
           Consulta i-CHECK indisponível
         </p>
         <p className="max-w-md text-sm text-[#00283C]/70">
-          {hasApiPdf
-            ? "Esta consulta tem mais de 2 anos e não é mais exibida."
-            : "Este veículo não tem laudo i-CHECK anexado no estoque."}
+          Este veículo não tem laudo i-CHECK anexado no estoque.
         </p>
         <Link
           to="/veiculo/$slug"
