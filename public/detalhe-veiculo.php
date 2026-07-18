@@ -114,7 +114,7 @@ $valorFormatado = isset($vehicle['valor_formatado']) ? $vehicle['valor_formatado
 
 $isSold = intval($preco) <= 0;
 
-// Função para mascarar placa (ex: ABC1234 -> abc-xx34)
+// Função para mascarar placa na exibição do título (ex: ABC1234 -> abc-21)
 function maskPlate($placa) {
     if (!$placa) return '';
     $placaLower = strtolower(trim($placa));
@@ -122,6 +122,75 @@ function maskPlate($placa) {
         return substr($placaLower, 0, 3) . '-' . substr($placaLower, -2);
     }
     return $placaLower;
+}
+
+/**
+ * Máscara de placa no slug — espelha src/lib/slug.ts (maskPlate).
+ * Ex.: JCO1D21 → jco-xx21
+ */
+function maskPlateForSlug($placa) {
+    if (!$placa) return '';
+    $clean = strtoupper(preg_replace('/\s+/', '', $placa));
+    $clean = str_replace('-', '', $clean);
+    if (strlen($clean) < 5) {
+        return strtolower($clean);
+    }
+    $prefix = substr($clean, 0, 3);
+    preg_match_all('/\d/', $clean, $digitMatches);
+    $digits = $digitMatches[0] ?? [];
+    if (count($digits) >= 2) {
+        $suffix = $digits[count($digits) - 2] . $digits[count($digits) - 1];
+    } else {
+        $suffix = substr($clean, -2);
+    }
+    return strtolower($prefix . '-xx' . $suffix);
+}
+
+/**
+ * Slug canônico — espelha src/lib/slug.ts (generateVehicleSlug).
+ * Formato: {modelo}-{ano}-{placa-mascarada}-{id}
+ */
+function generateVehicleSlug($vehicle, $id) {
+    $parts = [];
+    $modelo = isset($vehicle['modelo']) ? trim((string) $vehicle['modelo']) : '';
+    $marca = isset($vehicle['marca']) ? trim((string) $vehicle['marca']) : '';
+
+    if ($modelo !== '' && $marca !== '' && stripos($modelo, $marca) === 0) {
+        $modelo = trim(substr($modelo, strlen($marca)));
+    }
+
+    if ($modelo !== '') {
+        $modeloSlug = strtolower($modelo);
+        if (function_exists('iconv')) {
+            $transliterated = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $modeloSlug);
+            if ($transliterated !== false) {
+                $modeloSlug = $transliterated;
+            }
+        }
+        $modeloSlug = preg_replace('/[^a-z0-9\s-]/', '', $modeloSlug);
+        $modeloSlug = preg_replace('/\s+/', '-', $modeloSlug);
+        $modeloSlug = preg_replace('/-+/', '-', $modeloSlug);
+        $modeloSlug = trim($modeloSlug, '-');
+        if ($modeloSlug !== '') {
+            $parts[] = $modeloSlug;
+        }
+    }
+
+    $ano = isset($vehicle['ano']) ? $vehicle['ano'] : '';
+    if ($ano) {
+        $parts[] = (string) $ano;
+    }
+
+    $placa = isset($vehicle['placa']) ? $vehicle['placa'] : '';
+    if ($placa) {
+        $placaSlug = maskPlateForSlug($placa);
+        if ($placaSlug !== '') {
+            $parts[] = $placaSlug;
+        }
+    }
+
+    $parts[] = (string) $id;
+    return implode('-', $parts);
 }
 
 // Formata título completo no formato do React: "Fluence gt sport 2013 preta iui-xx58"
@@ -279,14 +348,20 @@ if (!$isBot && isset($_GET['slug'])) {
     $isBot = true;
 }
 
-// Prepara URL de redirecionamento (preserva slug se disponível)
-$redirectUrl = '/veiculo/' . $vehicleId;
-if (isset($_GET['slug'])) {
-    $redirectUrl = '/veiculo/' . $_GET['slug'];
+// Slug canônico oficial (com placa mascarada). URLs curtas sem placa → 301.
+$requestSlug = isset($_GET['slug']) ? trim((string) $_GET['slug']) : '';
+$canonicalSlug = generateVehicleSlug($vehicle, $vehicleId);
+$canonicalPath = '/veiculo/' . $canonicalSlug;
+
+if ($requestSlug !== '' && $requestSlug !== $canonicalSlug) {
+    header('HTTP/1.1 301 Moved Permanently');
+    header('Location: ' . $baseUrl . $canonicalPath);
+    header('Cache-Control: public, max-age=86400');
+    exit;
 }
 
-// URL da página (usa slug se disponível, senão usa ID)
-$pageUrl = $baseUrl . $redirectUrl;
+$redirectUrl = $canonicalPath;
+$pageUrl = $baseUrl . $canonicalPath;
 
 // Mascara placa para product:retailer_item_id (em MAIÚSCULAS)
 $placaRetailer = '';
