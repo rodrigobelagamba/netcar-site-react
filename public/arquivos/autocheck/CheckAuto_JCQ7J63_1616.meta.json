@@ -3,7 +3,7 @@
   "placa": "JCQ7J63",
   "consultaId": null,
   "dataHoraConsulta": "02/06/2026 15:17:49",
-  "tipoChave": "Placa: JCQ7J-xx UF: RS",
+  "tipoChave": "Placa: JCQ-XX63 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JCQ7J63_1616.pdf",
   "pdf": "CheckAuto_JCQ7J63_1616.pdf",
   "updatedAt": "2026-07-18T18:35:36.476Z",
-  "protocoloConsulta": "060226"
+  "protocoloConsulta": "06022026"
 }

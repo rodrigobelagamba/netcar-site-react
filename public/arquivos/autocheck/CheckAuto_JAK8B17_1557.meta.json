@@ -3,7 +3,7 @@
   "placa": "JAK8B17",
   "consultaId": null,
   "dataHoraConsulta": "04/06/2026 15:57:54",
-  "tipoChave": "Placa: JAK8B-xx UF: RS",
+  "tipoChave": "Placa: JAK-XX17 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JAK8B17_1557.pdf",
   "pdf": "CheckAuto_JAK8B17_1557.pdf",
   "updatedAt": "2026-07-18T18:35:28.689Z",
-  "protocoloConsulta": "060426"
+  "protocoloConsulta": "06042026"
 }

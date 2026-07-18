@@ -3,7 +3,7 @@
   "placa": "JAL1F78",
   "consultaId": "36896005",
   "dataHoraConsulta": "10/03/2026 11:17:49",
-  "tipoChave": "Placa: JAL1F78 UF: RS",
+  "tipoChave": "Placa: JAL-XX78 UF: RS",
   "history": [
     {
       "key": "registroEstadual",
@@ -90,5 +90,5 @@
   ],
   "pdf": "CheckAuto_JAL1F78.pdf",
   "updatedAt": "2026-07-18T18:11:22.668Z",
-  "protocoloConsulta": "031026"
+  "protocoloConsulta": "03102026"
 }

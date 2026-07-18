@@ -36,7 +36,11 @@ import { NetcarSocialSection } from "@/design-system/components/patterns/social/
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { generateVehicleSlug, maskPlate } from "@/lib/slug";
-import { icheckProtocolFromDate } from "@/lib/icheck-protocol";
+import {
+  icheckProtocolFromDate,
+  resolveIcheckProtocol,
+} from "@/lib/icheck-protocol";
+import { isConsultaValid } from "@/lib/icheck-validity";
 import icheckPdfMap from "@/data/icheck-pdf-map.json";
 import { canonicalUrl } from "@/lib/seo";
 import { optimizeStockImage } from "@/lib/images";
@@ -768,7 +772,7 @@ function CTASidebar({
               ? String(json.protocoloConsulta).trim()
               : "";
           setDataHoraConsulta(data || null);
-          setConsultaIdMeta(fromMeta || icheckProtocolFromDate(data) || null);
+          setConsultaIdMeta(resolveIcheckProtocol(fromMeta, data) || null);
           return;
         } catch {
           /* tenta próximo */
@@ -841,10 +845,12 @@ function CTASidebar({
   ];
 
   const hasPDF = vehicle?.pdf_url || vehicle?.pdf;
+  const showIcheckCta =
+    Boolean(hasPDF) && !isSold && isConsultaValid(dataHoraConsulta);
 
   return (
     <div className="space-y-4 lg:space-y-6">
-      {hasPDF && !isSold && (
+      {showIcheckCta && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

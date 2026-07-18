@@ -3,7 +3,7 @@
   "placa": "IWX1G66",
   "consultaId": null,
   "dataHoraConsulta": "09/02/2026 17:27:27",
-  "tipoChave": "Placa: IWX1G-xx UF: RS",
+  "tipoChave": "Placa: IWX-XX66 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_IWX1G66_1555.pdf",
   "pdf": "CheckAuto_IWX1G66_1555.pdf",
   "updatedAt": "2026-07-18T18:34:33.694Z",
-  "protocoloConsulta": "020926"
+  "protocoloConsulta": "02092026"
 }

@@ -3,7 +3,7 @@
   "placa": "JCJ6A23",
   "consultaId": "30631351",
   "dataHoraConsulta": "26/11/2024 13:44:29",
-  "tipoChave": "Placa: JCJ6A-xx UF: RS",
+  "tipoChave": "Placa: JCJ-XX23 UF: RS",
   "history": [
     {
       "key": "registroEstadual",
@@ -70,5 +70,5 @@
   ],
   "pdf": "CheckAuto_JCJ6A23_1344.pdf",
   "updatedAt": "2026-07-18T18:23:33.313Z",
-  "protocoloConsulta": "112624"
+  "protocoloConsulta": "11262024"
 }

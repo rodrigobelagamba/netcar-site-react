@@ -3,7 +3,7 @@
   "placa": "JAX4B20",
   "consultaId": "30031568",
   "dataHoraConsulta": "28/09/2024 10:34:10",
-  "tipoChave": "Placa: JAX4B-xx UF: RS",
+  "tipoChave": "Placa: JAX-XX20 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -34,7 +34,7 @@
       "label": "Informações Estaduais",
       "hint": "Situação no DETRAN / gravames",
       "status": "Consultado",
-      "clear": false,
+      "clear": true,
       "riskLevel": "ok"
     }
   ],
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20241022_112600/CheckAuto_JAX4B20_1521.pdf",
   "pdf": "CheckAuto_JAX4B20_1521.pdf",
   "updatedAt": "2026-07-18T18:36:45.928Z",
-  "protocoloConsulta": "092824"
+  "protocoloConsulta": "09282024"
 }

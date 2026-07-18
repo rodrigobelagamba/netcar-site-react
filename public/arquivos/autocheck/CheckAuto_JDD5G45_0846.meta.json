@@ -3,7 +3,7 @@
   "placa": "JDD5G45",
   "consultaId": null,
   "dataHoraConsulta": "19/06/2026 08:46:08",
-  "tipoChave": "Placa: JDD5G-xx UF: RS",
+  "tipoChave": "Placa: JDD-XX45 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JDD5G45_0846.pdf",
   "pdf": "CheckAuto_JDD5G45_0846.pdf",
   "updatedAt": "2026-07-18T18:35:54.546Z",
-  "protocoloConsulta": "061926"
+  "protocoloConsulta": "06192026"
 }

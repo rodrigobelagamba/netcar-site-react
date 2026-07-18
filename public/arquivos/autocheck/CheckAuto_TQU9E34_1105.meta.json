@@ -3,7 +3,7 @@
   "placa": "TQU9E34",
   "consultaId": null,
   "dataHoraConsulta": "02/06/2026 11:05:47",
-  "tipoChave": "Placa: TQU9E-xx UF: RS",
+  "tipoChave": "Placa: TQU-XX34 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_TQU9E34_1105.pdf",
   "pdf": "CheckAuto_TQU9E34_1105.pdf",
   "updatedAt": "2026-07-18T18:35:25.890Z",
-  "protocoloConsulta": "060226"
+  "protocoloConsulta": "06022026"
 }

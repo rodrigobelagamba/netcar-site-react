@@ -3,7 +3,7 @@
   "placa": "JBL4F15",
   "consultaId": null,
   "dataHoraConsulta": "10/01/2026 10:45:11",
-  "tipoChave": "Placa: JBL4F-xx UF: RS",
+  "tipoChave": "Placa: JBL-XX15 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JBL4F15_1045.pdf",
   "pdf": "CheckAuto_JBL4F15_1045.pdf",
   "updatedAt": "2026-07-18T18:33:14.987Z",
-  "protocoloConsulta": "011026"
+  "protocoloConsulta": "01102026"
 }

@@ -3,7 +3,7 @@
   "placa": "JAO0J32",
   "consultaId": "28806403",
   "dataHoraConsulta": "13/06/2024 11:03:24",
-  "tipoChave": "Placa: JAO0J-xx UF: RS",
+  "tipoChave": "Placa: JAO-XX32 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -34,7 +34,7 @@
       "label": "Informações Estaduais",
       "hint": "Situação no DETRAN / gravames",
       "status": "Consultado",
-      "clear": false,
+      "clear": true,
       "riskLevel": "ok"
     }
   ],
@@ -59,5 +59,5 @@
   "source": "checkauto-pdf",
   "pdf": "CheckAuto_JAO0J32_1103.pdf",
   "updatedAt": "2026-07-18T18:29:40.049Z",
-  "protocoloConsulta": "061324"
+  "protocoloConsulta": "06132024"
 }

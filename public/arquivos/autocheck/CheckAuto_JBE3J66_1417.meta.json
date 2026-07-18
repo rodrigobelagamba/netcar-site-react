@@ -3,7 +3,7 @@
   "placa": "JBE3J66",
   "consultaId": null,
   "dataHoraConsulta": "25/08/2025 14:17:59",
-  "tipoChave": "Placa: JBE3J-xx UF: RS",
+  "tipoChave": "Placa: JBE-XX66 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JBE3J66_1417.pdf",
   "pdf": "CheckAuto_JBE3J66_1417.pdf",
   "updatedAt": "2026-07-18T18:32:47.181Z",
-  "protocoloConsulta": "082525"
+  "protocoloConsulta": "08252025"
 }

@@ -3,7 +3,7 @@
   "placa": "TQQ7G21",
   "consultaId": null,
   "dataHoraConsulta": "17/12/2025 16:40:56",
-  "tipoChave": "Placa: TQQ7G-xx UF: RS",
+  "tipoChave": "Placa: TQQ-XX21 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_TQQ7G21_1640.pdf",
   "pdf": "CheckAuto_TQQ7G21_1640.pdf",
   "updatedAt": "2026-07-18T18:32:53.703Z",
-  "protocoloConsulta": "121725"
+  "protocoloConsulta": "12172025"
 }

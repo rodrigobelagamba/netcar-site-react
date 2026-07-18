@@ -3,7 +3,7 @@
   "placa": "IXX0J55",
   "consultaId": null,
   "dataHoraConsulta": "31/01/2026 12:08:11",
-  "tipoChave": "Placa: IXX0J-xx UF: RS",
+  "tipoChave": "Placa: IXX-XX55 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_IXX0J55_1443.pdf",
   "pdf": "CheckAuto_IXX0J55_1443.pdf",
   "updatedAt": "2026-07-18T18:33:01.642Z",
-  "protocoloConsulta": "013126"
+  "protocoloConsulta": "01312026"
 }

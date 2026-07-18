@@ -3,7 +3,7 @@
   "placa": "JAZ2H32",
   "consultaId": "27705089",
   "dataHoraConsulta": "13/03/2024 08:57:40",
-  "tipoChave": "Placa: JAZ2H-xx UF: RS",
+  "tipoChave": "Placa: JAZ-XX32 UF: RS",
   "history": [
     {
       "key": "estaduais",
@@ -24,5 +24,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20240611_165500/CheckAuto_JAZ2H32_0900.pdf",
   "pdf": "CheckAuto_JAZ2H32_0900.pdf",
   "updatedAt": "2026-07-18T18:36:48.586Z",
-  "protocoloConsulta": "031324"
+  "protocoloConsulta": "03132024"
 }

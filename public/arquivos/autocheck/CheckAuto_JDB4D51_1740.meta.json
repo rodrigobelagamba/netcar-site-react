@@ -3,7 +3,7 @@
   "placa": "JDB4D51",
   "consultaId": null,
   "dataHoraConsulta": "19/06/2026 17:40:38",
-  "tipoChave": "Placa: JDB4D-xx UF: RS",
+  "tipoChave": "Placa: JDB-XX51 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JDB4D51_1740.pdf",
   "pdf": "CheckAuto_JDB4D51_1740.pdf",
   "updatedAt": "2026-07-18T18:35:58.147Z",
-  "protocoloConsulta": "061926"
+  "protocoloConsulta": "06192026"
 }

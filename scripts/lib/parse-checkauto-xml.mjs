@@ -53,7 +53,8 @@ function maskPlate(placa) {
     .replace(/[^a-zA-Z0-9]/g, "")
     .toUpperCase();
   if (clean.length < 5) return clean || "—";
-  return `${clean.slice(0, -2)}-xx`;
+  // Padrão certificado CheckAuto: IZT6J30 → IZT-XX30
+  return `${clean.slice(0, 3)}-XX${clean.slice(-2)}`;
 }
 
 function moneyBr(value) {

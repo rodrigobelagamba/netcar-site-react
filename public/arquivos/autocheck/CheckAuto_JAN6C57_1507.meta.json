@@ -3,7 +3,7 @@
   "placa": "JAN6C57",
   "consultaId": null,
   "dataHoraConsulta": "31/03/2026 15:07:08",
-  "tipoChave": "Placa: JAN6C-xx UF: RS",
+  "tipoChave": "Placa: JAN-XX57 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JAN6C57_1507.pdf",
   "pdf": "CheckAuto_JAN6C57_1507.pdf",
   "updatedAt": "2026-07-18T18:34:09.770Z",
-  "protocoloConsulta": "033126"
+  "protocoloConsulta": "03312026"
 }

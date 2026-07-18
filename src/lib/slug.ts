@@ -1,17 +1,22 @@
 /**
- * Mascara a placa do veículo para exibição
- * Formato: ABC1D23 → ABC1D-xx (esconde os 2 últimos caracteres)
+ * Mascara a placa no padrão do certificado CheckAuto.
+ * Formato: ABC1D23 / IZT6J30 → ABC-XX23 / IZT-XX30
+ * (3 letras + XX + 2 últimos caracteres)
  */
 export function maskPlate(placa: string): string {
   if (!placa) return "";
 
-  const placaSemHifen = placa.replace(/[\s-]/g, "").toUpperCase();
+  const clean = placa.replace(/[\s-]/g, "").toUpperCase();
 
-  if (placaSemHifen.length < 5) {
-    return placaSemHifen;
+  if (clean.length < 5) {
+    return clean;
   }
 
-  return `${placaSemHifen.slice(0, -2)}-xx`;
+  if (clean.length >= 7) {
+    return `${clean.slice(0, 3)}-XX${clean.slice(-2)}`;
+  }
+
+  return `${clean.slice(0, 3)}-XX${clean.slice(-2)}`;
 }
 
 /**
