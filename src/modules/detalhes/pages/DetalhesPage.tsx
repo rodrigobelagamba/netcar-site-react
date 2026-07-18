@@ -36,6 +36,8 @@ import { NetcarSocialSection } from "@/design-system/components/patterns/social/
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { generateVehicleSlug, maskPlate } from "@/lib/slug";
+import { icheckProtocolFromDate } from "@/lib/icheck-protocol";
+import icheckPdfMap from "@/data/icheck-pdf-map.json";
 import { canonicalUrl } from "@/lib/seo";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
@@ -707,6 +709,81 @@ function CTASidebar({
   pageSlug,
 }: CTASidebarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
+  const [dataHoraConsulta, setDataHoraConsulta] = useState<string | null>(null);
+  const [consultaIdMeta, setConsultaIdMeta] = useState<string | null>(null);
+  const protocoloConsulta =
+    consultaIdMeta || icheckProtocolFromDate(dataHoraConsulta);
+
+  useEffect(() => {
+    const pdfFromVehicle =
+      vehicle?.pdf ||
+      (vehicle?.pdf_url ? String(vehicle.pdf_url).split("/").pop() : "") ||
+      "";
+    const placa = String(vehicle?.placa || "")
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .toUpperCase();
+    const mapById = (
+      icheckPdfMap as { byId?: Record<string, { pdf?: string }> }
+    ).byId?.[String(vehicle?.id ?? "")];
+    const mapByPlaca = (
+      icheckPdfMap as { byPlaca?: Record<string, { pdf?: string }> }
+    ).byPlaca?.[placa];
+
+    const pdfCandidates = [
+      pdfFromVehicle,
+      mapById?.pdf,
+      mapByPlaca?.pdf,
+    ].filter(Boolean) as string[];
+
+    const metaCandidates = [
+      ...new Set(
+        pdfCandidates.map((pdf) =>
+          String(pdf).replace(/^.*\//, "").replace(/\.pdf$/i, ".meta.json"),
+        ),
+      ),
+    ];
+
+    if (!metaCandidates.length) {
+      setDataHoraConsulta(null);
+      setConsultaIdMeta(null);
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      for (const metaName of metaCandidates) {
+        try {
+          const res = await fetch(`/arquivos/autocheck/${metaName}`, {
+            cache: "no-store",
+          });
+          if (!res.ok) continue;
+          const json = await res.json();
+          if (cancelled) return;
+          const data =
+            json?.dataHoraConsulta != null
+              ? String(json.dataHoraConsulta).trim()
+              : "";
+          const fromMeta =
+            json?.protocoloConsulta != null
+              ? String(json.protocoloConsulta).trim()
+              : "";
+          setDataHoraConsulta(data || null);
+          setConsultaIdMeta(fromMeta || icheckProtocolFromDate(data) || null);
+          return;
+        } catch {
+          /* tenta próximo */
+        }
+      }
+      if (!cancelled) {
+        setDataHoraConsulta(null);
+        setConsultaIdMeta(null);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [vehicle?.pdf, vehicle?.pdf_url, vehicle?.placa, vehicle?.id]);
 
   const handleOpenLaudo = () => {
     // pageSlug da rota tem o ID no fim; vehicle.slug da API é link legado .html sem ID
@@ -778,7 +855,11 @@ function CTASidebar({
             type="button"
             onClick={handleOpenLaudo}
             className="group relative w-full overflow-hidden rounded-[1.35rem] bg-gradient-to-br from-[#E7F8F0] via-white to-[#F7FBFA] px-6 py-6 text-center shadow-[0_10px_32px_rgba(46,125,50,0.16)] ring-1 ring-inset ring-secondary/15 transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(46,125,50,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 sm:px-8 sm:py-7"
-            aria-label="Abrir laudo i-CHECK em nova aba"
+            aria-label={
+              protocoloConsulta
+                ? `Abrir laudo i-CHECK, ConsultaID ${protocoloConsulta}`
+                : "Abrir laudo i-CHECK em nova aba"
+            }
           >
             <motion.div
               aria-hidden="true"
@@ -797,9 +878,19 @@ function CTASidebar({
             <span className="relative mb-1 block text-[15px] font-extrabold uppercase tracking-[0.1em] text-[#1B5E20]">
               Histórico aprovado
             </span>
-            <span className="relative mb-4 block text-[12px] leading-snug text-[#00283C]/70">
-              Laudo técnico com fotos e consulta DEKRA / CheckAuto
+            <span className="relative mb-3 block text-[12px] leading-snug text-[#00283C]/70">
+              Consulta informativa com fotos e histórico DEKRA / CheckAuto
             </span>
+            {protocoloConsulta ? (
+              <span className="relative mb-4 flex w-full flex-col items-center gap-0.5 rounded-xl border border-[#2E7D32]/30 bg-white/85 px-3 py-2.5">
+                <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5A6B73]">
+                  ConsultaID
+                </span>
+                <span className="text-[18px] font-black tabular-nums tracking-[0.08em] text-[#00283C]">
+                  {protocoloConsulta}
+                </span>
+              </span>
+            ) : null}
             <span className="relative inline-flex items-center gap-2 rounded-full bg-secondary px-5 py-2.5 text-[12px] font-bold uppercase tracking-[0.08em] text-white shadow-sm transition group-hover:bg-[#1B5E20]">
               Ver laudo
               <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />

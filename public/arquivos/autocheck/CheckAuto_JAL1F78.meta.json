@@ -1,0 +1,94 @@
+{
+  "vehicleId": "xml-JAL1F78",
+  "placa": "JAL1F78",
+  "consultaId": "36896005",
+  "dataHoraConsulta": "10/03/2026 11:17:49",
+  "tipoChave": "Placa: JAL1F78 UF: RS",
+  "history": [
+    {
+      "key": "registroEstadual",
+      "label": "Registro DETRAN",
+      "status": "Veículo encontrado — ver restrições",
+      "hint": "Identidade e situação no DETRAN",
+      "clear": false,
+      "riskLevel": "attention"
+    },
+    {
+      "key": "rouboFurto",
+      "label": "Roubo / Furto",
+      "status": "3 ocorrência(ões) — ver histórico",
+      "hint": "Bases federais de ocorrência",
+      "clear": false,
+      "riskLevel": "attention"
+    },
+    {
+      "key": "leilao",
+      "label": "Leilão / Sinistro",
+      "status": "Sem registro de leilão/sinistro",
+      "hint": "Remarketing e sinistro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "agregado",
+      "label": "Chassi / Motor",
+      "status": "Identificadores cruzados",
+      "hint": "Cruzamento placa · chassi · motor",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "decodificador",
+      "label": "VIN (chassi)",
+      "status": "VIN decodificado",
+      "hint": "Fabricante, fábrica, versão",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "precificador",
+      "label": "Tabela FIPE",
+      "status": "2 referência(s) FIPE",
+      "hint": "Referência de mercado",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "consultationHighlights": [
+    {
+      "label": "Situação DETRAN",
+      "value": "EM CIRCULA��O"
+    },
+    {
+      "label": "Município",
+      "value": "SAPUCAIA DO SUL"
+    },
+    {
+      "label": "Restrições",
+      "value": "INF - Alienacao Fidu"
+    },
+    {
+      "label": "Débitos",
+      "value": "EXISTE D�BITO DE IPVA E LICENCIAMENTO"
+    },
+    {
+      "label": "Nº motor",
+      "value": "XNKGM8041200"
+    },
+    {
+      "label": "Roubo/furto",
+      "value": "3 ocorrência(ões) — ver histórico"
+    },
+    {
+      "label": "FIPE (ref.)",
+      "value": "R$ 50.014,00"
+    },
+    {
+      "label": "Leilão",
+      "value": "Sem registro de leilão/sinistro"
+    }
+  ],
+  "pdf": "CheckAuto_JAL1F78.pdf",
+  "updatedAt": "2026-07-18T18:11:22.668Z",
+  "protocoloConsulta": "031026"
+}

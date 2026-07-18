@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, unlinkSync } from "node:fs";
+import { readFileSync, writeFileSync, unlinkSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
@@ -22,12 +22,27 @@ const HISTORY_ITEMS = [
   },
 ];
 
-function statusNearLabel(text, patterns) {
+function statusNearLabel(text, patterns, key) {
   for (const pattern of patterns) {
     const match = pattern.exec(text);
     if (!match) continue;
     const idx = match.index;
-    const window = text.slice(Math.max(0, idx - 100), idx + match[0].length + 120);
+    const before = text.slice(Math.max(0, idx - 120), idx);
+    const after = text.slice(idx, idx + match[0].length + 180);
+    const window = before + after;
+
+    // Certificado oficial: alienação vem logo após "Informações Estaduais"
+    if (key === "estaduais") {
+      const alien = after.match(
+        /Aliena[cç][aã]o\s+Fiduci[aá]ria[^\n.]{0,80}/i,
+      );
+      if (alien) return alien[0].replace(/\s+/g, " ").trim();
+      const restri = after.match(
+        /(?:Restri[cç][aã]o|Bloqueio|Pend[eê]ncia)[^\n.]{0,80}/i,
+      );
+      if (restri) return restri[0].replace(/\s+/g, " ").trim();
+    }
+
     if (/sem\s*registro/i.test(window)) return "Sem Registro";
     if (/nenhum\s*registro/i.test(window)) return "Sem Registro";
     if (/com\s*registro|consta\s+registro|registro\s+encontrado/i.test(window)) {
@@ -40,6 +55,68 @@ function statusNearLabel(text, patterns) {
 function extractField(text, labelPattern) {
   const m = text.match(labelPattern);
   return m?.[1]?.trim() || null;
+}
+
+function normalizeTipoChave(raw) {
+  if (!raw) return null;
+  const compact = String(raw)
+    .replace(/\s+/g, " ")
+    .replace(/\s*UF:\s*/i, " UF: ")
+    .trim();
+  return compact || null;
+}
+
+/**
+ * Extrai protocolo CheckAuto (veracidade) de XML ou texto de PDF.
+ * Campos: ConsultaID, DataHoraConsulta, TipoChave.
+ */
+export function extractCheckAutoProtocol(source) {
+  const text = String(source || "");
+  if (!text.trim()) {
+    return { consultaId: null, dataHoraConsulta: null, tipoChave: null };
+  }
+
+  const consultaId =
+    extractField(text, /<ConsultaID>\s*(\d+)\s*<\/ConsultaID>/i) ||
+    extractField(text, /ConsultaID\s*[:=]?\s*(\d{6,})/i) ||
+    extractField(text, /Protocolo\s*[:=]?\s*(\d{6,})/i) ||
+    null;
+
+  const dataHoraConsulta =
+    extractField(
+      text,
+      /<DataHoraConsulta>\s*([^<]+?)\s*<\/DataHoraConsulta>/i,
+    ) ||
+    extractField(
+      text,
+      /DataHoraConsulta\s*[:=]?\s*(\d{2}\/\d{2}\/\d{4}\s+\d{2}:\d{2}:\d{2})/i,
+    ) ||
+    extractField(text, /(\d{2}\/\d{2}\/\d{4}\s+\d{2}:\d{2}:\d{2})/) ||
+    null;
+
+  let tipoChave =
+    extractField(text, /<TipoChave>\s*([\s\S]*?)\s*<\/TipoChave>/i) ||
+    extractField(text, /TipoChave\s*[:=]?\s*(Placa:\s*[A-Z0-9-]+\s*UF:\s*[A-Z]{2})/i) ||
+    null;
+
+  if (!tipoChave) {
+    const placa = extractField(text, /Placa:\s*([A-Z]{3}[- ]?[0-9][0-9A-Z][0-9]{2})/i);
+    const uf = extractField(text, /\bUF:\s*([A-Z]{2})\b/i);
+    if (placa && uf) tipoChave = `Placa: ${placa.replace(/\s+/g, "")} UF: ${uf}`;
+  }
+
+  return {
+    consultaId: consultaId ? String(consultaId) : null,
+    dataHoraConsulta: dataHoraConsulta ? String(dataHoraConsulta).trim() : null,
+    tipoChave: normalizeTipoChave(tipoChave),
+  };
+}
+
+export function parseCheckAutoXml(xmlPathOrString) {
+  const xml = existsSync(xmlPathOrString)
+    ? readFileSync(xmlPathOrString, "utf8")
+    : String(xmlPathOrString || "");
+  return extractCheckAutoProtocol(xml);
 }
 
 function extractTextWithPython(buffer) {
@@ -85,6 +162,9 @@ export async function parseCheckAutoPdf(pdfPathOrBuffer) {
       text: "",
       issuedAt: null,
       chassi: null,
+      consultaId: null,
+      dataHoraConsulta: null,
+      tipoChave: null,
       history: HISTORY_ITEMS.map((item) => ({
         key: item.key,
         label: item.label,
@@ -98,15 +178,16 @@ export async function parseCheckAutoPdf(pdfPathOrBuffer) {
   const history = HISTORY_ITEMS.map((item) => ({
     key: item.key,
     label: item.label,
-    status: statusNearLabel(rawText, item.patterns),
+    status: statusNearLabel(rawText, item.patterns, item.key),
   }));
 
   const available = history.some((h) => h.status != null);
   const allClear =
     available && history.every((h) => h.status === "Sem Registro");
 
-  const issuedAt =
-    extractField(rawText, /(\d{2}\/\d{2}\/\d{4}\s+\d{2}:\d{2}:\d{2})/) || null;
+  const protocol = extractCheckAutoProtocol(rawText);
+
+  const issuedAt = protocol.dataHoraConsulta || null;
 
   const chassi =
     extractField(rawText, /Chassi:\s*([A-Z0-9X]{8,})/i) ||
@@ -119,6 +200,9 @@ export async function parseCheckAutoPdf(pdfPathOrBuffer) {
     text: rawText,
     issuedAt,
     chassi,
+    consultaId: protocol.consultaId,
+    dataHoraConsulta: protocol.dataHoraConsulta,
+    tipoChave: protocol.tipoChave,
     history,
     allClear,
     available,

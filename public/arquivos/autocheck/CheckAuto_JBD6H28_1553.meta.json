@@ -1,0 +1,27 @@
+{
+  "vehicleId": "19847",
+  "placa": "JBD6H28",
+  "consultaId": "29052649",
+  "dataHoraConsulta": "03/07/2024 15:52:08",
+  "tipoChave": "Placa: JBD6H-xx UF: RS",
+  "history": [
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "hint": "Situação no DETRAN / gravames",
+      "status": "ALIENAÇÃO FIDUCIÁRIA",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "consultationHighlights": [
+    {
+      "label": "Informações Estaduais",
+      "value": "ALIENAÇÃO FIDUCIÁRIA"
+    }
+  ],
+  "source": "checkauto-pdf",
+  "pdf": "CheckAuto_JBD6H28_1553.pdf",
+  "updatedAt": "2026-07-18T18:29:37.563Z",
+  "protocoloConsulta": "070324"
+}

@@ -1,0 +1,63 @@
+{
+  "vehicleId": "19848",
+  "placa": "JAO0J32",
+  "consultaId": "28806403",
+  "dataHoraConsulta": "13/06/2024 11:03:24",
+  "tipoChave": "Placa: JAO0J-xx UF: RS",
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "hint": "Remarketing e leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "hint": "Perda total / sinistro",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "hint": "Bases de roubo e furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "hint": "Situação no DETRAN / gravames",
+      "status": "Consultado",
+      "clear": false,
+      "riskLevel": "ok"
+    }
+  ],
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Consultado"
+    }
+  ],
+  "source": "checkauto-pdf",
+  "pdf": "CheckAuto_JAO0J32_1103.pdf",
+  "updatedAt": "2026-07-18T18:29:40.049Z",
+  "protocoloConsulta": "061324"
+}

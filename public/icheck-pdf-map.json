@@ -1,0 +1,140 @@
+{
+  "updatedAt": "2026-07-18T19:10:04.366073Z",
+  "note": "Fallback quando API não retorna pdf — amarra laudo i-CHECK por id/placa",
+  "byId": {
+    "19786": {
+      "pdf": "CheckAuto_IXK1A89_1102.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_IXK1A89_1102.pdf",
+      "consultaId": "23934413",
+      "placa": "IXK1A89"
+    },
+    "19864": {
+      "pdf": "CheckAuto_JBT5G78_1346.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JBT5G78_1346.pdf",
+      "consultaId": "21013576",
+      "placa": "JBT5G78"
+    },
+    "19919": {
+      "pdf": "CheckAuto_JAX4B20_1521.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JAX4B20_1521.pdf",
+      "consultaId": "30031568",
+      "placa": "JAX4B20"
+    },
+    "19847": {
+      "pdf": "CheckAuto_JBD6H28_1553.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JBD6H28_1553.pdf",
+      "consultaId": "29052649",
+      "placa": "JBD6H28"
+    },
+    "19839": {
+      "pdf": "CheckAuto_JBR1C53_1614.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JBR1C53_1614.pdf",
+      "consultaId": "31922306",
+      "placa": "JBR1C53"
+    },
+    "19901": {
+      "pdf": "CheckAuto_JAJ6H26_1057.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JAJ6H26_1057.pdf",
+      "consultaId": "28089358",
+      "placa": "JAJ6H26"
+    },
+    "19848": {
+      "pdf": "CheckAuto_JAO0J32_1103.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JAO0J32_1103.pdf",
+      "consultaId": "28806403",
+      "placa": "JAO0J32"
+    },
+    "19812": {
+      "pdf": "CheckAuto_JAL6E22_1151.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JAL6E22_1151.pdf",
+      "consultaId": "22470366",
+      "placa": "JAL6E22"
+    },
+    "19903": {
+      "pdf": "CheckAuto_JCJ6A23_1344.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JCJ6A23_1344.pdf",
+      "consultaId": "30631351",
+      "placa": "JCJ6A23"
+    },
+    "19921": {
+      "pdf": "CheckAuto_JAZ2H32_0900.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JAZ2H32_0900.pdf",
+      "consultaId": "27705089",
+      "placa": "JAZ2H32"
+    },
+    "19739": {
+      "pdf": "CheckAuto_IYQ5G33_1544.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_IYQ5G33_1544.pdf",
+      "consultaId": "112025",
+      "placa": "IYQ5G33"
+    }
+  },
+  "byPlaca": {
+    "IXK1A89": {
+      "pdf": "CheckAuto_IXK1A89_1102.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_IXK1A89_1102.pdf",
+      "consultaId": "23934413",
+      "placa": "IXK1A89"
+    },
+    "JBT5G78": {
+      "pdf": "CheckAuto_JBT5G78_1346.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JBT5G78_1346.pdf",
+      "consultaId": "21013576",
+      "placa": "JBT5G78"
+    },
+    "JAX4B20": {
+      "pdf": "CheckAuto_JAX4B20_1521.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JAX4B20_1521.pdf",
+      "consultaId": "30031568",
+      "placa": "JAX4B20"
+    },
+    "JBD6H28": {
+      "pdf": "CheckAuto_JBD6H28_1553.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JBD6H28_1553.pdf",
+      "consultaId": "29052649",
+      "placa": "JBD6H28"
+    },
+    "JBR1C53": {
+      "pdf": "CheckAuto_JBR1C53_1614.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JBR1C53_1614.pdf",
+      "consultaId": "31922306",
+      "placa": "JBR1C53"
+    },
+    "JAJ6H26": {
+      "pdf": "CheckAuto_JAJ6H26_1057.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JAJ6H26_1057.pdf",
+      "consultaId": "28089358",
+      "placa": "JAJ6H26"
+    },
+    "JAO0J32": {
+      "pdf": "CheckAuto_JAO0J32_1103.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JAO0J32_1103.pdf",
+      "consultaId": "28806403",
+      "placa": "JAO0J32"
+    },
+    "JAL6E22": {
+      "pdf": "CheckAuto_JAL6E22_1151.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JAL6E22_1151.pdf",
+      "consultaId": "22470366",
+      "placa": "JAL6E22"
+    },
+    "JCJ6A23": {
+      "pdf": "CheckAuto_JCJ6A23_1344.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JCJ6A23_1344.pdf",
+      "consultaId": "30631351",
+      "placa": "JCJ6A23"
+    },
+    "JAZ2H32": {
+      "pdf": "CheckAuto_JAZ2H32_0900.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_JAZ2H32_0900.pdf",
+      "consultaId": "27705089",
+      "placa": "JAZ2H32"
+    },
+    "IYQ5G33": {
+      "pdf": "CheckAuto_IYQ5G33_1544.pdf",
+      "pdf_url": "arquivos/autocheck/CheckAuto_IYQ5G33_1544.pdf",
+      "consultaId": "112025",
+      "placa": "IYQ5G33"
+    }
+  }
+}

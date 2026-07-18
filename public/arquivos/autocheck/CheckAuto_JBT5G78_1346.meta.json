@@ -1,0 +1,27 @@
+{
+  "vehicleId": "19864",
+  "placa": "JBT5G78",
+  "consultaId": "21013576",
+  "dataHoraConsulta": "09/04/2022 13:46:19",
+  "tipoChave": "Placa: JBT5G-xx UF: RS",
+  "history": [
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "hint": "Situação no DETRAN / gravames",
+      "status": "ALIENAÇÃO FIDUCIÁRIA",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "consultationHighlights": [
+    {
+      "label": "Informações Estaduais",
+      "value": "ALIENAÇÃO FIDUCIÁRIA"
+    }
+  ],
+  "source": "checkauto-pdf",
+  "pdf": "CheckAuto_JBT5G78_1346.pdf",
+  "updatedAt": "2026-07-18T18:29:58.955Z",
+  "protocoloConsulta": "040922"
+}

@@ -1,26 +1,80 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "@tanstack/react-router";
-import { Printer, Download, ArrowLeft, Check } from "lucide-react";
+import { Printer, Download, ArrowLeft, Check, AlertTriangle } from "lucide-react";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { maskPlate } from "@/lib/slug";
+import { icheckProtocolFromDate } from "@/lib/icheck-protocol";
+import icheckPdfMap from "@/data/icheck-pdf-map.json";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleUnavailableRedirect } from "@/components/VehicleUnavailableRedirect";
 
-const HISTORY_ITEMS = [
-  { key: "leilao", label: "Leilão" },
-  { key: "sinistro", label: "Sinistro / Perda" },
-  { key: "roubo", label: "Roubo / Furto" },
-  { key: "estaduais", label: "Informações Estaduais" },
-] as const;
+type HistoryMetaItem = {
+  key: string;
+  label: string;
+  status: string | null;
+  hint?: string;
+  clear?: boolean;
+  riskLevel?: string;
+};
 
-function Spec({ label, value }: { label: string; value?: string | number | null }) {
+type CheckAutoProtocolMeta = {
+  consultaId?: string | null;
+  dataHoraConsulta?: string | null;
+  protocoloConsulta?: string | null;
+  tipoChave?: string | null;
+  history?: HistoryMetaItem[];
+  consultationHighlights?: Array<{ label: string; value: string }>;
+};
+
+/** "Sem Registro" do certificado → destaque "NADA CONSTA". */
+function formatHistoryStatus(status: string | null | undefined): string {
+  if (!status) return "";
+  if (/^sem\s*registro\.?$/i.test(status.trim())) return "NADA CONSTA";
+  return status;
+}
+
+function isClearStatus(status: string | null | undefined): boolean {
+  const s = String(status || "");
+  return /^sem\s*registro/i.test(s) || /^nada\s*consta/i.test(s);
+}
+
+function isAlienacaoFiduciaria(text: string | null | undefined): boolean {
+  return /aliena[cç][aã]o\s*fiduci/i.test(String(text || ""));
+}
+
+function Spec({
+  label,
+  value,
+  warn = false,
+}: {
+  label: string;
+  value?: string | number | null;
+  warn?: boolean;
+}) {
   if (value == null || value === "" || value === "—") return null;
   return (
-    <div className="rounded-xl bg-[#F5F8F9] px-3 py-2">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#5A6B73]">
+    <div
+      className={`rounded-xl px-3 py-2 ring-1 ring-inset ${
+        warn
+          ? "bg-[#FFF8E1] ring-[#F59E0B]/55"
+          : "bg-[#F5F8F9] ring-transparent"
+      }`}
+    >
+      <p
+        className={`text-[10px] font-semibold uppercase tracking-[0.12em] ${
+          warn ? "text-[#92400E]" : "text-[#5A6B73]"
+        }`}
+      >
         {label}
       </p>
-      <p className="text-sm font-bold text-[#00283C]">{String(value)}</p>
+      <p
+        className={`text-sm font-bold ${
+          warn ? "text-[#B45309]" : "text-[#00283C]"
+        }`}
+      >
+        {String(value)}
+      </p>
     </div>
   );
 }
@@ -28,6 +82,7 @@ function Spec({ label, value }: { label: string; value?: string | number | null 
 export function ICheckLaudoPage() {
   const { slug } = useParams({ from: "/laudo/$slug" });
   const { data: vehicle, isLoading, isError } = useVehicleQuery(slug);
+  const [protocol, setProtocol] = useState<CheckAutoProtocolMeta | null>(null);
 
   const title = vehicle
     ? `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name || ""} ${vehicle.year || ""}`.trim()
@@ -36,9 +91,70 @@ export function ICheckLaudoPage() {
   useMetaTags({
     title: vehicle ? `Laudo i-CHECK — ${title}` : "Laudo i-CHECK",
     description:
-      "Laudo técnico-informativo Netcar com fotos, ficha e histórico consultado via DEKRA / CheckAuto. Não é vistoria cautelar.",
+      "Consulta i-CHECK Netcar com fotos, ficha e histórico CheckAuto/DEKRA. Não tem caráter de laudo técnico nem vistoria cautelar.",
     robots: "noindex, nofollow",
   });
+
+  useEffect(() => {
+    if (!vehicle) {
+      setProtocol(null);
+      return;
+    }
+    const pdfFromVehicle =
+      vehicle.pdf || vehicle.pdf_url?.split("/").pop() || "";
+    const placa = String(vehicle.placa || "")
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .toUpperCase();
+    const mapById = (
+      icheckPdfMap as { byId?: Record<string, { pdf?: string }> }
+    ).byId?.[String(vehicle.id)];
+    const mapByPlaca = (
+      icheckPdfMap as { byPlaca?: Record<string, { pdf?: string }> }
+    ).byPlaca?.[placa];
+    const metaCandidates = [
+      ...new Set(
+        [pdfFromVehicle, mapById?.pdf, mapByPlaca?.pdf]
+          .filter(Boolean)
+          .map((pdf) =>
+            String(pdf).replace(/^.*\//, "").replace(/\.pdf$/i, ".meta.json"),
+          ),
+      ),
+    ];
+    if (!metaCandidates.length) {
+      setProtocol(null);
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      for (const metaName of metaCandidates) {
+        try {
+          const res = await fetch(
+            `/arquivos/autocheck/${metaName}?v=${Date.now()}`,
+            { cache: "no-store" },
+          );
+          if (!res.ok) continue;
+          const json = (await res.json()) as CheckAutoProtocolMeta;
+          if (cancelled) return;
+          setProtocol(json);
+          return;
+        } catch {
+          /* próximo */
+        }
+      }
+      if (!cancelled) {
+        setProtocol({
+          consultaId: null,
+          dataHoraConsulta: null,
+          tipoChave: placa ? `Placa: ${maskPlate(placa)} UF: RS` : null,
+        });
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [vehicle?.pdf, vehicle?.pdf_url, vehicle?.placa, vehicle?.id]);
 
   if (isLoading && !vehicle) {
     return (
@@ -205,8 +321,8 @@ export function ICheckLaudoPage() {
                 transparência Netcar na sua compra.
               </p>
               <p className="mt-2 text-xs leading-relaxed text-[#5A6B73]">
-                Documento de caráter técnico-informativo. Não constitui vistoria
-                cautelar nem laudo estrutural/pericial.
+                Esta consulta não tem caráter de laudo técnico. Não constitui
+                vistoria cautelar nem laudo estrutural/pericial.
               </p>
             </div>
 
@@ -222,6 +338,60 @@ export function ICheckLaudoPage() {
                 itens abaixo
               </p>
             </div>
+
+            {(() => {
+              const protocoloNetcar =
+                (protocol?.protocoloConsulta
+                  ? String(protocol.protocoloConsulta).trim()
+                  : "") ||
+                icheckProtocolFromDate(protocol?.dataHoraConsulta);
+              if (
+                !protocol?.dataHoraConsulta &&
+                !protocoloNetcar &&
+                !protocol?.tipoChave
+              ) {
+                return null;
+              }
+              return (
+                <section className="rounded-2xl border-2 border-[#2E7D32]/45 bg-[#E8F7EF] px-4 py-4 shadow-[0_8px_24px_rgba(46,125,50,0.12)]">
+                  <h2 className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#1B5E20]">
+                    Consulta CheckAuto / DEKRA
+                  </h2>
+                  <dl className="mt-3 space-y-2">
+                    {protocol?.dataHoraConsulta ? (
+                      <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
+                        <dt className="w-28 shrink-0 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#5A6B73]">
+                          Data / hora
+                        </dt>
+                        <dd className="text-sm font-bold tabular-nums text-[#00283C]">
+                          {protocol.dataHoraConsulta}
+                        </dd>
+                      </div>
+                    ) : null}
+                    {protocoloNetcar ? (
+                      <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
+                        <dt className="w-28 shrink-0 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#5A6B73]">
+                          ConsultaID
+                        </dt>
+                        <dd className="text-sm font-bold tabular-nums tracking-wide text-[#00283C]">
+                          {protocoloNetcar}
+                        </dd>
+                      </div>
+                    ) : null}
+                    {protocol?.tipoChave ? (
+                      <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
+                        <dt className="w-28 shrink-0 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#5A6B73]">
+                          Chave
+                        </dt>
+                        <dd className="text-sm font-bold text-[#00283C]">
+                          {protocol.tipoChave}
+                        </dd>
+                      </div>
+                    ) : null}
+                  </dl>
+                </section>
+              );
+            })()}
 
             {(heroA || heroB) && (
               <div className="grid grid-cols-2 gap-2 print:gap-1.5">
@@ -272,31 +442,183 @@ export function ICheckLaudoPage() {
               </div>
             </section>
 
-            <section>
-              <h2 className="mb-3 rounded-md bg-[#00283C] px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white">
-                Histórico do veículo (CheckAuto / DEKRA)
-              </h2>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {HISTORY_ITEMS.map((item) => (
-                  <div
-                    key={item.key}
-                    className="flex items-center gap-3 rounded-xl bg-[#F5F8F9] px-3 py-3"
-                  >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2E7D32] text-white">
-                      <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-[#00283C]">{item.label}</p>
-                      <p className="text-xs text-[#5A6B73]">Sem Registro</p>
-                    </div>
+            {(() => {
+              const historyCards = protocol?.history?.length
+                ? protocol.history.filter(
+                    (item) =>
+                      item.status &&
+                      !/indispon[ií]vel/i.test(item.status),
+                  )
+                : [];
+              if (!historyCards.length) return null;
+              return (
+                <section>
+                  <h2 className="mb-3 rounded-md bg-[#00283C] px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white">
+                    Histórico do veículo
+                  </h2>
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {historyCards.map((item) => {
+                      const statusLabel = formatHistoryStatus(item.status);
+                      const alienacao = isAlienacaoFiduciaria(item.status);
+                      const clear =
+                        !alienacao &&
+                        item.clear !== false &&
+                        item.riskLevel !== "alert" &&
+                        isClearStatus(item.status);
+                      const isAlert =
+                        !alienacao &&
+                        (item.riskLevel === "alert" || item.clear === false);
+                      return (
+                        <div
+                          key={item.key}
+                          className={`flex items-start gap-3 rounded-xl px-3 py-3 ring-1 ring-inset ${
+                            alienacao
+                              ? "bg-[#FFF8E1] ring-[#F59E0B]/55"
+                              : clear
+                                ? "bg-[#E8F7EF] ring-[#2E7D32]/25"
+                                : isAlert
+                                  ? "bg-[#FEF2F2] ring-[#B91C1C]/25"
+                                  : "bg-[#F5F8F9] ring-[#00283C]/10"
+                          }`}
+                        >
+                          <span
+                            className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white ${
+                              alienacao
+                                ? "bg-[#F59E0B]"
+                                : isAlert
+                                  ? "bg-[#B91C1C]"
+                                  : "bg-[#2E7D32]"
+                            }`}
+                          >
+                            {alienacao ? (
+                              <AlertTriangle className="h-3.5 w-3.5" strokeWidth={3} />
+                            ) : (
+                              <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                            )}
+                          </span>
+                          <div className="min-w-0">
+                            <p className="text-sm font-bold text-[#00283C]">
+                              {item.label}
+                            </p>
+                            <p
+                              className={`mt-0.5 text-sm font-extrabold tracking-[0.04em] ${
+                                alienacao
+                                  ? "normal-case text-[#B45309]"
+                                  : clear
+                                    ? "uppercase tracking-[0.06em] text-[#1B5E20]"
+                                    : isAlert
+                                      ? "uppercase tracking-[0.06em] text-[#B91C1C]"
+                                      : "text-[#00283C]"
+                              }`}
+                            >
+                              {statusLabel}
+                            </p>
+                            {item.hint ? (
+                              <p className="mt-0.5 text-[11px] text-[#5A6B73]/80">
+                                {item.hint}
+                              </p>
+                            ) : null}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
-              </div>
-              <p className="mt-2 text-[11px] leading-relaxed text-[#5A6B73]">
-                Status conforme consulta CheckAuto/DEKRA às bases disponíveis na
-                emissão do laudo vinculado a este seminovo.
-              </p>
-            </section>
+                </section>
+              );
+            })()}
+
+            {(() => {
+              const history = (protocol?.history || []).filter(
+                (item) => item.status && !/indispon[ií]vel/i.test(item.status),
+              );
+              if (!history.length) return null;
+
+              const hasAlienacao = history.some((item) =>
+                isAlienacaoFiduciaria(item.status),
+              );
+              const hasGraveAlert = history.some((item) => {
+                if (isAlienacaoFiduciaria(item.status)) return false;
+                if (item.riskLevel === "alert" || item.clear === false) return true;
+                const s = String(item.status || "");
+                return (
+                  /com\s*registro|consta\s+registro|ocorr[eê]ncia/i.test(s) &&
+                  !isClearStatus(s)
+                );
+              });
+              const cleanCore = history
+                .filter((item) => !isAlienacaoFiduciaria(item.status))
+                .every(
+                  (item) =>
+                    isClearStatus(item.status) ||
+                    (item.clear !== false && item.riskLevel !== "alert"),
+                );
+
+              if (hasGraveAlert) {
+                return (
+                  <section>
+                    <h2 className="mb-3 rounded-md bg-[#00283C] px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white">
+                      Leitura para financiamento e seguro
+                    </h2>
+                    <div className="rounded-2xl border border-[#B91C1C]/25 bg-[#FEF2F2] px-4 py-4">
+                      <p className="text-sm font-extrabold text-[#991B1B]">
+                        Há apontamento relevante no histórico
+                      </p>
+                      <p className="mt-2 text-sm leading-relaxed text-[#5A6B73]">
+                        Bancos e seguradoras costumam analisar caso a caso quando
+                        existe registro de leilão, sinistro ou roubo/furto.
+                        A Netcar orienta confirmar a situação com a instituição
+                        antes de fechar crédito ou apólice.
+                      </p>
+                    </div>
+                  </section>
+                );
+              }
+
+              if (!cleanCore && !hasAlienacao) return null;
+
+              return (
+                <section>
+                  <h2 className="mb-3 rounded-md bg-[#00283C] px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white">
+                    Leitura para financiamento e seguro
+                  </h2>
+                  <div className="rounded-2xl border border-[#2E7D32]/30 bg-[#F3FBF7] px-4 py-4">
+                    <p className="inline-flex items-center gap-2 text-sm font-extrabold uppercase tracking-[0.08em] text-[#1B5E20]">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2E7D32] text-white">
+                        <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                      </span>
+                      Veículo apto a crédito e seguro
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed text-[#00283C]/85">
+                      De acordo com as bases consultadas, não foram encontrados
+                      registros de leilão, sinistro com perda total ou ocorrência
+                      de roubo/furto. A ausência desses apontamentos pode
+                      contribuir positivamente para análises de financiamento e
+                      contratação de seguro, observadas as políticas e critérios
+                      de cada instituição.
+                    </p>
+                    {hasAlienacao ? (
+                      <div className="mt-3 rounded-xl bg-[#FFF8E1] px-3 py-3 ring-1 ring-inset ring-[#F59E0B]/45">
+                        <p className="text-xs font-extrabold uppercase tracking-[0.1em] text-[#92400E]">
+                          Sobre a alienação fiduciária
+                        </p>
+                        <p className="mt-1.5 text-sm leading-relaxed text-[#78350F]/90">
+                          Consta vínculo com instituição financeira (veículo
+                          financiado). Não impede a compra: na transferência, o
+                          gravame é quitado/baixado com o banco. Seguradoras e
+                          financeiras costumam aceitar o bem após regularização
+                          do financiamento.
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="mt-3 text-xs leading-relaxed text-[#5A6B73]">
+                        Histórico limpo nos itens críticos — perfil compatível
+                        com produtos de crédito e proteção veicular do mercado.
+                      </p>
+                    )}
+                  </div>
+                </section>
+              );
+            })()}
 
             {gallery.length > 0 ? (
               <section>
@@ -347,13 +669,14 @@ export function ICheckLaudoPage() {
 
             <section className="rounded-2xl bg-[#FFF8E8] px-4 py-4">
               <h2 className="text-xs font-extrabold uppercase tracking-[0.08em] text-[#00283C]">
-                Natureza deste documento — não é vistoria cautelar
+                Natureza desta consulta — não é laudo técnico
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-[#5A6B73]">
-                Esta consulta tem caráter de laudo técnico / dossiê informativo do
-                veículo (procedência e histórico em bases CheckAuto/DEKRA, fotos e
-                ficha do seminovo). Não substitui vistoria cautelar, laudo de
-                engenharia, perícia estrutural nem inspeção veicular presencial.
+                Esta consulta <strong className="font-bold text-[#00283C]">não tem
+                caráter de laudo técnico</strong>. É um dossiê informativo de
+                procedência e histórico (bases CheckAuto/DEKRA), com fotos e ficha
+                do seminovo. Não substitui vistoria cautelar, laudo de engenharia,
+                perícia estrutural nem inspeção veicular presencial.
               </p>
             </section>
           </div>

@@ -1,0 +1,28 @@
+{
+  "vehicleId": "19000",
+  "placa": "JCB7H26",
+  "consultaId": null,
+  "dataHoraConsulta": "18/12/2024 10:21:22",
+  "tipoChave": "Placa: JCB7H-xx UF: RS",
+  "history": [
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "hint": "Situação no DETRAN / gravames",
+      "status": "ALIENAÇÃO FIDUCIÁRIA",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "consultationHighlights": [
+    {
+      "label": "Informações Estaduais",
+      "value": "ALIENAÇÃO FIDUCIÁRIA"
+    }
+  ],
+  "source": "automacar-pdf",
+  "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JCB7H26_1021.pdf",
+  "pdf": "CheckAuto_JCB7H26_1021.pdf",
+  "updatedAt": "2026-07-18T18:32:40.927Z",
+  "protocoloConsulta": "121824"
+}
