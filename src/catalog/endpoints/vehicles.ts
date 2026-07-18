@@ -1,7 +1,6 @@
 import { axiosInstance } from "../axios-instance";
 import { config } from "../config";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
-import icheckPdfMap from "@/data/icheck-pdf-map.json";
 
 export interface VehicleImagesSite {
   capa: string | null;
@@ -178,35 +177,21 @@ function normalizeImageUrl(url: string): string {
   return `${baseDomain}/${normalized}`;
 }
 
-/** Fallback quando API não tem pdf: mapa local dos laudos Netcar gerados. */
+/**
+ * Presença i-CHECK = campo pdf/pdf_url da API (mesmo sinal do sistema Automacar).
+ * Sem fallback de mapa local — "Adicionar Arquivo" no admin ⇒ sem CTA no site.
+ */
 function resolveVehiclePdf(apiVehicle: {
-  id: number | string;
-  placa?: string;
-  pdf?: string;
-  pdf_url?: string;
+  pdf?: string | null;
+  pdf_url?: string | null;
 }): { pdf?: string; pdf_url?: string } {
-  if (apiVehicle.pdf || apiVehicle.pdf_url) {
-    const pdfUrl = apiVehicle.pdf_url
-      ? normalizeImageUrl(apiVehicle.pdf_url)
-      : normalizeImageUrl(`arquivos/autocheck/${apiVehicle.pdf}`);
-    return { pdf: apiVehicle.pdf, pdf_url: pdfUrl };
-  }
-
-  const byId = (icheckPdfMap as { byId?: Record<string, { pdf: string; pdf_url: string }> }).byId?.[
-    String(apiVehicle.id)
-  ];
-  const placa = String(apiVehicle.placa || "")
-    .replace(/[^a-zA-Z0-9]/g, "")
-    .toUpperCase();
-  const byPlaca = (icheckPdfMap as { byPlaca?: Record<string, { pdf: string; pdf_url: string }> }).byPlaca?.[
-    placa
-  ];
-  const hit = byId || byPlaca;
-  if (!hit?.pdf) return {};
-
+  if (!apiVehicle.pdf && !apiVehicle.pdf_url) return {};
+  const pdfUrl = apiVehicle.pdf_url
+    ? normalizeImageUrl(apiVehicle.pdf_url)
+    : normalizeImageUrl(`arquivos/autocheck/${apiVehicle.pdf}`);
   return {
-    pdf: hit.pdf,
-    pdf_url: normalizeImageUrl(hit.pdf_url || `arquivos/autocheck/${hit.pdf}`),
+    pdf: apiVehicle.pdf || undefined,
+    pdf_url: pdfUrl,
   };
 }
 

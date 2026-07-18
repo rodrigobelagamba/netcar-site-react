@@ -41,7 +41,6 @@ import {
   resolveIcheckProtocol,
 } from "@/lib/icheck-protocol";
 import { isConsultaValid } from "@/lib/icheck-validity";
-import icheckPdfMap from "@/data/icheck-pdf-map.json";
 import { canonicalUrl } from "@/lib/seo";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
@@ -719,75 +718,58 @@ function CTASidebar({
     consultaIdMeta || icheckProtocolFromDate(dataHoraConsulta);
 
   useEffect(() => {
+    // Meta só a partir do PDF da API (Automacar) — sem mapa local.
     const pdfFromVehicle =
       vehicle?.pdf ||
       (vehicle?.pdf_url ? String(vehicle.pdf_url).split("/").pop() : "") ||
       "";
-    const placa = String(vehicle?.placa || "")
-      .replace(/[^a-zA-Z0-9]/g, "")
-      .toUpperCase();
-    const mapById = (
-      icheckPdfMap as { byId?: Record<string, { pdf?: string }> }
-    ).byId?.[String(vehicle?.id ?? "")];
-    const mapByPlaca = (
-      icheckPdfMap as { byPlaca?: Record<string, { pdf?: string }> }
-    ).byPlaca?.[placa];
-
-    const pdfCandidates = [
-      pdfFromVehicle,
-      mapById?.pdf,
-      mapByPlaca?.pdf,
-    ].filter(Boolean) as string[];
-
-    const metaCandidates = [
-      ...new Set(
-        pdfCandidates.map((pdf) =>
-          String(pdf).replace(/^.*\//, "").replace(/\.pdf$/i, ".meta.json"),
-        ),
-      ),
-    ];
-
-    if (!metaCandidates.length) {
+    if (!pdfFromVehicle) {
       setDataHoraConsulta(null);
       setConsultaIdMeta(null);
       return;
     }
 
+    const metaName = String(pdfFromVehicle)
+      .replace(/^.*\//, "")
+      .replace(/\.pdf$/i, ".meta.json");
+
     let cancelled = false;
     (async () => {
-      for (const metaName of metaCandidates) {
-        try {
-          const res = await fetch(`/arquivos/autocheck/${metaName}`, {
-            cache: "no-store",
-          });
-          if (!res.ok) continue;
-          const json = await res.json();
-          if (cancelled) return;
-          const data =
-            json?.dataHoraConsulta != null
-              ? String(json.dataHoraConsulta).trim()
-              : "";
-          const fromMeta =
-            json?.protocoloConsulta != null
-              ? String(json.protocoloConsulta).trim()
-              : "";
-          setDataHoraConsulta(data || null);
-          setConsultaIdMeta(resolveIcheckProtocol(fromMeta, data) || null);
+      try {
+        const res = await fetch(`/arquivos/autocheck/${metaName}`, {
+          cache: "no-store",
+        });
+        if (!res.ok) {
+          if (!cancelled) {
+            setDataHoraConsulta(null);
+            setConsultaIdMeta(null);
+          }
           return;
-        } catch {
-          /* tenta próximo */
         }
-      }
-      if (!cancelled) {
-        setDataHoraConsulta(null);
-        setConsultaIdMeta(null);
+        const json = await res.json();
+        if (cancelled) return;
+        const data =
+          json?.dataHoraConsulta != null
+            ? String(json.dataHoraConsulta).trim()
+            : "";
+        const fromMeta =
+          json?.protocoloConsulta != null
+            ? String(json.protocoloConsulta).trim()
+            : "";
+        setDataHoraConsulta(data || null);
+        setConsultaIdMeta(resolveIcheckProtocol(fromMeta, data) || null);
+      } catch {
+        if (!cancelled) {
+          setDataHoraConsulta(null);
+          setConsultaIdMeta(null);
+        }
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [vehicle?.pdf, vehicle?.pdf_url, vehicle?.placa, vehicle?.id]);
+  }, [vehicle?.pdf, vehicle?.pdf_url]);
 
   const handleOpenLaudo = () => {
     // pageSlug da rota tem o ID no fim; vehicle.slug da API é link legado .html sem ID
