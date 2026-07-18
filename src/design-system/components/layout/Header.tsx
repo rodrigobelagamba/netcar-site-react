@@ -392,8 +392,8 @@ export function Header() {
         />
 
         <div className="container mx-auto relative flex h-16 items-center justify-between px-4">
-          {/* Logo único + nav desktop (centrado no md+) */}
-          <div className="relative z-10 flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:gap-8">
+          {/* Logo + nav desktop só em xl+ (abaixo: hambúrguer — evita overlap com Buscar/telefone) */}
+          <div className="relative z-10 flex items-center xl:absolute xl:left-1/2 xl:top-1/2 xl:-translate-x-1/2 xl:-translate-y-1/2 xl:gap-5 2xl:gap-8">
             <Link to="/" aria-label="Netcar - Página inicial" className="flex-shrink-0">
               <img
                 src={logoNetcar}
@@ -405,9 +405,9 @@ export function Header() {
               />
             </Link>
 
-            <nav className="hidden md:flex items-center gap-6 flex-shrink-0" aria-label="Menu principal">
+            <nav className="hidden xl:flex items-center gap-3 2xl:gap-5 flex-shrink-0" aria-label="Menu principal">
               {menuLinks.map((link) => {
-                const linkClassName = "group relative text-[14px]  text-fg overflow-hidden h-[22px] flex items-center whitespace-nowrap";
+                const linkClassName = "group relative text-[13px] 2xl:text-[14px] text-fg overflow-hidden h-[22px] flex items-center whitespace-nowrap";
                 
                 if (link.external) {
                   return (
@@ -453,10 +453,10 @@ export function Header() {
           </div>
 
           {/* Empurra ações desktop para a direita */}
-          <div className="hidden md:block flex-1" aria-hidden="true" />
+          <div className="hidden xl:block flex-1" aria-hidden="true" />
 
-          {/* Botões à direita - Desktop */}
-          <div className="relative z-10 hidden md:flex items-center gap-4">
+          {/* Botões à direita - Desktop (xl+) */}
+          <div className="relative z-10 hidden xl:flex items-center gap-3 2xl:gap-4">
             {/* Campo de Busca */}
             <AnimatePresence>
               {isSearchOpen ? (
@@ -498,9 +498,10 @@ export function Header() {
                   exit={{ opacity: 0 }}
                   onClick={toggleSearch}
                   className="flex items-center gap-2 hover:text-primary transition-colors"
+                  aria-label="Buscar"
                 >
                   <Search className="w-4 h-4" />
-                  <span>Buscar</span>
+                  <span className="hidden 2xl:inline">Buscar</span>
                 </motion.button>
               )}
             </AnimatePresence>
@@ -512,16 +513,17 @@ export function Header() {
                 data-wa-source="header"
                 data-wa-intent="header_contact"
                 className="inline-flex items-center gap-2 hover:text-primary transition-colors"
+                aria-label={formatPhone(whatsapp.numero)}
               >
                 <Phone className="w-4 h-4 shrink-0" />
-                <span>{formatPhone(whatsapp.numero)}</span>
+                <span className="hidden 2xl:inline">{formatPhone(whatsapp.numero)}</span>
               </a>
             )}
           </div>
 
-          {/* Botão hambúrguer/X - Mobile */}
+          {/* Hambúrguer — mobile, tablet e desktop abaixo de xl */}
           <button
-            className="md:hidden p-2 relative z-10"
+            className="xl:hidden p-2 relative z-10"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
           >
