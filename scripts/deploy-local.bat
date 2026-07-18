@@ -49,7 +49,7 @@ if "%FTP_PASSWORD%"=="" (
 REM 1. Sync deps from lockfile — never skip when node_modules exists.
 REM Stale installs miss new packages (e.g. @react-pdf/renderer) and break tsc.
 echo 📦 Sincronizando dependências (npm ci)...
-call npm ci
+call npm ci --include=dev
 if %errorlevel% neq 0 (
     echo ❌ Erro no npm ci
     exit /b 1

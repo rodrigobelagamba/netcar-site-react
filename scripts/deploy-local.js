@@ -837,7 +837,8 @@ async function deploy() {
     // 1. Sync deps from lockfile — never skip when node_modules exists.
     // Stale /workspace installs miss new packages (e.g. @react-pdf/renderer) and break tsc.
     log('📦 Sincronizando dependências (npm ci)...', 'blue');
-    execSync('npm ci', { stdio: 'inherit', cwd: rootDir });
+    // --include=dev: CI roda com NODE_ENV=production e sem devDeps não há tsc/vite.
+    execSync('npm ci --include=dev', { stdio: 'inherit', cwd: rootDir });
     log('✅ Dependências OK\n', 'green');
 
     // 2. Carregar configurações

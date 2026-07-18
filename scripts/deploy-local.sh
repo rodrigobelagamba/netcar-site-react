@@ -43,7 +43,7 @@ fi
 # 1. Sync deps from lockfile — never skip when node_modules exists.
 # Stale installs miss new packages (e.g. @react-pdf/renderer) and break tsc.
 echo -e "${BLUE}📦 Sincronizando dependências (npm ci)...${NC}"
-npm ci
+npm ci --include=dev
 echo -e "${GREEN}✅ Dependências OK${NC}"
 echo ""
 
