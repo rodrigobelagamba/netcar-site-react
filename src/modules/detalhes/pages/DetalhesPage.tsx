@@ -1699,7 +1699,7 @@ export function DetalhesPage() {
     ? []
     : [
         ...(hasIcheckSeal
-          ? [{ text: "iCheck aprovado", variant: "icheck" as const }]
+          ? [{ text: "ICHECK APROVADO", variant: "icheck" as const }]
           : []),
         ...(hasDiferencial("garantia_fabrica")
           ? [{ text: "Garantia de Fábrica", variant: "garantia" as const }]
