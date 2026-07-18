@@ -14,10 +14,6 @@ import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 
 const MAX_COMPARE = 4;
 
-function fmtKm(km?: number) {
-  return km ? `${km.toLocaleString("pt-BR")} km` : "—";
-}
-
 /** API manda preço com HTML (`<span>R$</span>`); remove tags. */
 function fmtPrice(vehicle: Vehicle) {
   const cleaned = vehicle.valor_formatado?.replace(/<[^>]*>/g, "").trim();
@@ -33,7 +29,7 @@ export function ComparadorPage() {
 
   useDefaultMetaTags(
     "Comparar seminovos lado a lado",
-    "Compare até 4 seminovos do estoque da Netcar lado a lado: preço, ano, km, câmbio, motor e itens. Escolha o seu em Esteio/RS."
+    "Compare até 4 seminovos do estoque da Netcar lado a lado: preço, ano, câmbio, motor e itens. Escolha o seu em Esteio/RS."
   );
 
   const list = useMemo(
@@ -64,7 +60,6 @@ export function ComparadorPage() {
   const rows: { label: string; get: (v: Vehicle) => string }[] = [
     { label: "Preço", get: (v) => fmtPrice(v) },
     { label: "Ano", get: (v) => (v.year ? String(v.year) : "—") },
-    { label: "KM", get: (v) => fmtKm(v.km) },
     { label: "Câmbio", get: (v) => v.cambio || "—" },
     { label: "Motor", get: (v) => v.motor || "—" },
     { label: "Combustível", get: (v) => v.combustivel || "—" },
@@ -79,7 +74,7 @@ export function ComparadorPage() {
       <RegionalSeoHero
         eyebrow="Ferramenta de escolha"
         title="Comparar seminovos lado a lado"
-        intro={`Escolha de 2 a ${MAX_COMPARE} carros do estoque e compare preço, ano, km, câmbio e itens. Depois avance com troca, parcelamento ou WhatsApp.`}
+        intro={`Escolha de 2 a ${MAX_COMPARE} carros do estoque e compare preço, ano, câmbio e itens. Depois avance com troca, parcelamento ou WhatsApp.`}
       >
         <RegionalActionCtas
           className="mt-8"
@@ -204,7 +199,7 @@ export function ComparadorPage() {
                         {v.marca} {v.modelo}
                       </p>
                       <p className="text-xs text-gray-500 mt-1">
-                        {v.year} · {fmtKm(v.km)}
+                        {v.year || "—"}
                       </p>
                       <p className="text-sm font-bold text-primary mt-1">
                         {fmtPrice(v)}
