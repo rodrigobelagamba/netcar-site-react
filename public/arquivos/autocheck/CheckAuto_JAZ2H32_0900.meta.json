@@ -10,8 +10,8 @@
       "label": "Informações Estaduais",
       "hint": "Situação no DETRAN / gravames",
       "status": "ALIENAÇÃO FIDUCIÁRIA",
-      "clear": true,
-      "riskLevel": "ok"
+      "clear": false,
+      "riskLevel": "warn"
     }
   ],
   "consultationHighlights": [
@@ -23,6 +23,6 @@
   "source": "automacar-pdf",
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20240611_165500/CheckAuto_JAZ2H32_0900.pdf",
   "pdf": "CheckAuto_JAZ2H32_0900.pdf",
-  "updatedAt": "2026-07-18T18:36:48.586Z",
+  "updatedAt": "2026-07-18T19:51:36.319Z",
   "protocoloConsulta": "03132024"
 }

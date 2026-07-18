@@ -22,25 +22,41 @@ const HISTORY_ITEMS = [
   },
 ];
 
+function cleanStatus(raw) {
+  return String(raw || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\.+$/, "");
+}
+
+/**
+ * Certificado CheckAuto usa layout 2 colunas: status de itens anteriores
+ * aparece em `before`. Para estaduais, ler só `after` do label.
+ * Abreviação oficial: "INF Alienacao Fidu" (não "Alienação Fiduciária").
+ */
 function statusNearLabel(text, patterns, key) {
   for (const pattern of patterns) {
     const match = pattern.exec(text);
     if (!match) continue;
     const idx = match.index;
     const before = text.slice(Math.max(0, idx - 120), idx);
-    const after = text.slice(idx, idx + match[0].length + 180);
+    const after = text.slice(idx, idx + match[0].length + 220);
     const window = before + after;
 
-    // Certificado oficial: alienação vem logo após "Informações Estaduais"
     if (key === "estaduais") {
-      const alien = after.match(
-        /Aliena[cç][aã]o\s+Fiduci[aá]ria[^\n.]{0,80}/i,
-      );
-      if (alien) return alien[0].replace(/\s+/g, " ").trim();
+      const alien =
+        after.match(/INF\s*Aliena[cç]?[aã]?o?\s*Fidu[a-z]*[^\n]{0,40}/i) ||
+        after.match(/Aliena[cç][aã]o\s+Fiduci[aá]ria[^\n.]{0,80}/i) ||
+        after.match(/Aliena[cç][aã]o\s+Fidu[^\n.]{0,40}/i);
+      if (alien) return cleanStatus(alien[0]);
       const restri = after.match(
         /(?:Restri[cç][aã]o|Bloqueio|Pend[eê]ncia)[^\n.]{0,80}/i,
       );
-      if (restri) return restri[0].replace(/\s+/g, " ").trim();
+      if (restri) return cleanStatus(restri[0]);
+      // Sem Registro só no after — before sempre poluído por outros itens
+      if (/sem\s*registro/i.test(after)) return "Sem Registro";
+      if (/nenhum\s*registro/i.test(after)) return "Sem Registro";
+      continue;
     }
 
     if (/sem\s*registro/i.test(window)) return "Sem Registro";

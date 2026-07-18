@@ -220,7 +220,7 @@ function resolveVehicleCambio(cambio, opcionais) {
     if (!field || /autom/i.test(field)) return "MANUAL";
     return field;
   }
-  return field || "—";
+  return field || "";
 }
 
 function maskTipoChave(tipoChave) {
@@ -576,12 +576,14 @@ async function main() {
         const status = String(h.status);
         const clear =
           /^sem\s*registro/i.test(status) || /^consultado\.?$/i.test(status);
+        // Alienação = aviso amarelo (CheckAuto), não alerta grave vermelho
+        const warn = /aliena/i.test(status);
         const alert =
           !clear &&
-          /aliena|roubo|furto|leil[aã]o|sinistro|bloqueio|restri/i.test(status) &&
-          !/^sem\s*registro/i.test(status);
-        // Alienação = aviso (amarelo no PDF oficial), não "alerta grave"
-        const warn = /aliena[cç][aã]o/i.test(status);
+          !warn &&
+          /roubo|furto|leil[aã]o|sinistro|bloqueio|restri|com\s*registro/i.test(
+            status,
+          );
         return {
           key: h.key,
           label: h.label,
@@ -596,8 +598,8 @@ async function main() {
                     ? "Bases de roubo e furto"
                     : "",
           status,
-          clear: clear || warn,
-          riskLevel: alert && !warn ? "alert" : "ok",
+          clear: clear && !warn,
+          riskLevel: alert ? "alert" : warn ? "warn" : "ok",
         };
       });
   }
