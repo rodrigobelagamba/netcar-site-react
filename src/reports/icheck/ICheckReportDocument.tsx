@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
 } from "@react-pdf/renderer";
+import { icheckProtocolFromDate } from "../../lib/icheck-protocol";
 
 const NAVY = "#00283C";
 const MINT = "#5CD29D";
@@ -114,6 +115,52 @@ const styles = StyleSheet.create({
     marginTop: 3,
     letterSpacing: 0.3,
   },
+  protocolBox: {
+    backgroundColor: "#F3FBF7",
+    borderWidth: 1,
+    borderColor: MINT,
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    marginTop: 8,
+  },
+  protocolTitle: {
+    fontSize: 7.5,
+    fontFamily: "Helvetica-Bold",
+    color: GREEN,
+    letterSpacing: 0.8,
+    textTransform: "uppercase",
+    marginBottom: 6,
+  },
+  protocolGrid: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  protocolCell: { flex: 1 },
+  protocolLabel: {
+    fontSize: 7,
+    color: MUTED,
+    textTransform: "uppercase",
+    letterSpacing: 0.3,
+    marginBottom: 1,
+  },
+  protocolValue: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: NAVY,
+  },
+  protocolValueMono: {
+    fontSize: 11,
+    fontFamily: "Helvetica-Bold",
+    color: NAVY,
+    letterSpacing: 0.6,
+  },
+  historyHint: {
+    fontSize: 6.5,
+    color: MUTED,
+    marginTop: 1,
+  },
   statusBannerText: {
     fontSize: 11,
     fontFamily: "Helvetica-Bold",
@@ -184,6 +231,18 @@ const styles = StyleSheet.create({
   checkIcon: { width: 14, height: 14 },
   historyLabel: { fontSize: 8, fontFamily: "Helvetica-Bold", color: NAVY },
   historyStatus: { fontSize: 8, color: MUTED },
+  historyStatusOk: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: GREEN,
+    textTransform: "uppercase",
+  },
+  historyStatusAlert: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: "#B91C1C",
+    textTransform: "uppercase",
+  },
   footer: {
     position: "absolute",
     bottom: 16,
@@ -289,6 +348,8 @@ export type ICheckHistoryItem = {
   key: string;
   label: string;
   status: string | null;
+  hint?: string;
+  clear?: boolean;
 };
 
 export type ICheckReportData = {
@@ -304,6 +365,10 @@ export type ICheckReportData = {
   motor: string;
   chassiMasked: string;
   issuedAt: string;
+  /** Protocolo CheckAuto — veracidade da consulta */
+  consultaId?: string;
+  dataHoraConsulta?: string;
+  tipoChave?: string;
   listingUrl: string;
   dekraLogoPath: string;
   checkautoLogoPath: string;
@@ -317,6 +382,8 @@ export type ICheckReportData = {
   history: ICheckHistoryItem[];
   historyAvailable: boolean;
   allClear: boolean;
+  /** Destaques curtos da consulta (DETRAN, FIPE, etc.) */
+  consultationHighlights?: Array<{ label: string; value: string }>;
 };
 
 function PageFooter({
@@ -409,7 +476,45 @@ function Header({
 }
 
 export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
-  const totalPages = 3;
+  const history = (data.history || []).filter(
+    (item) => item.status && !/indispon[ií]vel/i.test(item.status),
+  );
+  const highlights = (data.consultationHighlights || []).filter(
+    (item) => item.value && item.value !== "—" && !/indispon[ií]vel/i.test(item.value),
+  );
+  const vehicleFields = [
+    ["Marca / modelo", `${data.marca} ${data.modelo}`.trim()],
+    ["Ano", data.yearLabel],
+    ["Placa", data.placaMasked],
+    ["Km", data.kmLabel],
+    ["Cor", data.cor],
+    ["Combustível", data.combustivel],
+    ["Câmbio", data.cambio],
+    ["Motor", data.motor],
+    ["Chassi", data.chassiMasked],
+    ["Emissão", data.dataHoraConsulta || data.issuedAt],
+  ].filter(([, value]) => value && value !== "—");
+
+  const dataHora = data.dataHoraConsulta || data.issuedAt || "";
+  const protocoloNetcar = icheckProtocolFromDate(dataHora);
+  const hasProtocol = Boolean(
+    protocoloNetcar || dataHora || data.tipoChave,
+  );
+
+  const formatStatus = (status?: string | null) => {
+    if (!status) return "";
+    if (/^sem\s*registro\.?$/i.test(String(status).trim())) return "NADA CONSTA";
+    return status;
+  };
+  const hasPhotos = data.galleryPhotos.length > 0 || data.heroPhotos.length > 0;
+  const hasSpecs = data.specs.length > 0;
+  const hasOptionals = data.optionals.length > 0;
+  const hasHighlights = highlights.length > 0;
+  const hasFichaPage = hasHighlights || hasSpecs || hasOptionals;
+
+  const totalPages = 1 + (hasPhotos ? 1 : 0) + (hasFichaPage ? 1 : 0);
+  const galleryPage = hasPhotos ? 2 : 0;
+  const fichaPage = hasFichaPage ? (hasPhotos ? 3 : 2) : 0;
   const heroA = data.heroPhotos[0];
   const heroB = data.heroPhotos[1] || data.heroPhotos[0];
 
@@ -436,8 +541,8 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
             maxWidth: 460,
           }}
         >
-          Documento de caráter técnico-informativo. Não constitui vistoria cautelar
-          nem laudo estrutural/pericial.
+          Esta consulta não tem caráter de laudo técnico. Não constitui vistoria
+          cautelar nem laudo estrutural/pericial.
         </Text>
 
         {data.allClear ? (
@@ -463,128 +568,195 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
               Sem registros graves nas bases CheckAuto / DEKRA consultadas
             </Text>
           </View>
-        ) : (
+        ) : history.length > 0 ? (
           <View style={[styles.statusBanner, { marginTop: 10 }]}>
             <Text style={styles.statusBannerMuted}>
-              {data.historyAvailable
-                ? "HISTÓRICO CONSULTADO — VER DETALHES ABAIXO"
-                : "HISTÓRICO CHECKAUTO INDISPONÍVEL NESTA EMISSÃO"}
+              HISTÓRICO CONSULTADO — VER DETALHES ABAIXO
             </Text>
           </View>
-        )}
+        ) : null}
 
-        <View style={styles.heroRow}>
-          {heroA ? (
-            <Image src={heroA} style={styles.heroImg} />
-          ) : (
-            <View style={styles.emptyPhoto}>
-              <Text style={{ color: MUTED, fontSize: 8 }}>Sem foto</Text>
+        {hasProtocol ? (
+          <View style={styles.protocolBox}>
+            <Text style={styles.protocolTitle}>
+              Consulta CheckAuto — data e ConsultaID (MMDDYY)
+            </Text>
+            <View style={styles.protocolGrid}>
+              {protocoloNetcar ? (
+                <View style={styles.protocolCell}>
+                  <Text style={styles.protocolLabel}>ConsultaID</Text>
+                  <Text style={styles.protocolValueMono}>{protocoloNetcar}</Text>
+                </View>
+              ) : null}
+              {dataHora ? (
+                <View style={styles.protocolCell}>
+                  <Text style={styles.protocolLabel}>Data / hora</Text>
+                  <Text style={styles.protocolValue}>{dataHora}</Text>
+                </View>
+              ) : null}
+              {data.tipoChave ? (
+                <View style={styles.protocolCell}>
+                  <Text style={styles.protocolLabel}>Chave</Text>
+                  <Text style={styles.protocolValue}>{data.tipoChave}</Text>
+                </View>
+              ) : null}
             </View>
-          )}
-          {heroB ? (
-            <Image src={heroB} style={styles.heroImg} />
-          ) : (
-            <View style={styles.emptyPhoto}>
-              <Text style={{ color: MUTED, fontSize: 8 }}>Sem foto</Text>
-            </View>
-          )}
-        </View>
+          </View>
+        ) : null}
 
-        <Text style={styles.sectionTitle}>DADOS DO VEÍCULO</Text>
-        <View style={styles.idGrid}>
-          {[
-            ["Marca / modelo", `${data.marca} ${data.modelo}`.trim()],
-            ["Ano", data.yearLabel || "—"],
-            ["Placa", data.placaMasked || "—"],
-            ["Km", data.kmLabel || "—"],
-            ["Cor", data.cor || "—"],
-            ["Combustível", data.combustivel || "—"],
-            ["Câmbio", data.cambio || "—"],
-            ["Motor", data.motor || "—"],
-            ["Chassi", data.chassiMasked || "—"],
-            ["Emissão", data.issuedAt || "—"],
-          ].map(([label, value], index, arr) => (
-            <View
-              key={label}
-              style={[
-                styles.idCell,
-                index >= arr.length - 2 ? { borderBottomWidth: 0 } : null,
-              ]}
-            >
-              <Text style={styles.idLabel}>{label}</Text>
-              <Text style={styles.idValue}>{value}</Text>
-            </View>
-          ))}
-        </View>
-
-        <Text style={styles.sectionTitle}>HISTÓRICO DO VEÍCULO (CHECKAUTO / DEKRA)</Text>
-        <View style={styles.historyGrid}>
-          {data.history.map((item) => (
-            <View key={item.key} style={styles.historyCard}>
-              {item.status === "Sem Registro" && data.checkIconPath ? (
-                <Image src={data.checkIconPath} style={styles.checkIcon} />
-              ) : (
-                <View
-                  style={{
-                    width: 14,
-                    height: 14,
-                    borderRadius: 7,
-                    backgroundColor: LINE,
-                  }}
-                />
-              )}
-              <View>
-                <Text style={styles.historyLabel}>{item.label}</Text>
-                <Text style={styles.historyStatus}>
-                  {item.status || "Indisponível — consultar fonte CheckAuto"}
-                </Text>
+        {heroA || heroB ? (
+          <View style={styles.heroRow}>
+            {heroA ? (
+              <Image src={heroA} style={styles.heroImg} />
+            ) : (
+              <View style={styles.emptyPhoto}>
+                <Text style={{ color: MUTED, fontSize: 8 }}>Sem foto</Text>
               </View>
+            )}
+            {heroB ? (
+              <Image src={heroB} style={styles.heroImg} />
+            ) : null}
+          </View>
+        ) : null}
+
+        {vehicleFields.length > 0 ? (
+          <>
+            <Text style={styles.sectionTitle}>DADOS DO VEÍCULO</Text>
+            <View style={styles.idGrid}>
+              {vehicleFields.map(([label, value], index, arr) => (
+                <View
+                  key={label}
+                  style={[
+                    styles.idCell,
+                    index >= arr.length - 2 ? { borderBottomWidth: 0 } : null,
+                  ]}
+                >
+                  <Text style={styles.idLabel}>{label}</Text>
+                  <Text style={styles.idValue}>{value}</Text>
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
+          </>
+        ) : null}
+
+        {history.length > 0 ? (
+          <>
+            <Text style={styles.sectionTitle}>CONSULTA CHECKAUTO / DEKRA</Text>
+            <View style={styles.historyGrid}>
+              {history.map((item) => {
+                const isAlert = item.clear === false;
+                const statusLabel = formatStatus(item.status);
+                const isOk = /^nada\s*consta$/i.test(statusLabel);
+                return (
+                  <View key={item.key} style={styles.historyCard}>
+                    {!isAlert && data.checkIconPath ? (
+                      <Image src={data.checkIconPath} style={styles.checkIcon} />
+                    ) : (
+                      <View
+                        style={{
+                          width: 14,
+                          height: 14,
+                          borderRadius: 7,
+                          backgroundColor: isAlert ? "#B91C1C" : LINE,
+                        }}
+                      />
+                    )}
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.historyLabel}>{item.label}</Text>
+                      <Text
+                        style={
+                          isAlert
+                            ? styles.historyStatusAlert
+                            : isOk
+                              ? styles.historyStatusOk
+                              : styles.historyStatus
+                        }
+                      >
+                        {statusLabel}
+                      </Text>
+                      {item.hint ? (
+                        <Text style={styles.historyHint}>{item.hint}</Text>
+                      ) : null}
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          </>
+        ) : null}
 
         <PageFooter page={1} total={totalPages} listingUrl={data.listingUrl} />
       </Page>
 
-      {/* Página 2 — Galeria */}
-      <Page size="A4" style={styles.page}>
-        <Header data={data} />
-        <Text style={styles.sectionTitle}>FOTOS DO SEMINOVO NA NETCAR</Text>
-        <Text style={[styles.subtitle, { marginBottom: 10 }]}>
-          Imagens reais do estoque — o mesmo carro que você vê no anúncio.
-        </Text>
-        <View style={styles.galleryGrid}>
-          {(data.galleryPhotos.length > 0
-            ? data.galleryPhotos.slice(0, 9)
-            : []
-          ).map((src, index) => (
-            <Image key={`${src}-${index}`} src={src} style={styles.galleryImg} />
-          ))}
-        </View>
-        {data.galleryPhotos.length === 0 ? (
-          <Text style={{ color: MUTED, marginTop: 20 }}>
-            Galeria indisponível para este veículo no momento da emissão.
+      {/* Galeria — só se houver fotos */}
+      {hasPhotos ? (
+        <Page size="A4" style={styles.page}>
+          <Header data={data} />
+          <Text style={styles.sectionTitle}>FOTOS DO SEMINOVO NA NETCAR</Text>
+          <Text style={[styles.subtitle, { marginBottom: 10 }]}>
+            Imagens reais do estoque — o mesmo carro que você vê no anúncio.
           </Text>
-        ) : null}
-        <PageFooter page={2} total={totalPages} listingUrl={data.listingUrl} />
-      </Page>
+          <View style={styles.galleryGrid}>
+            {(data.galleryPhotos.length > 0
+              ? data.galleryPhotos.slice(0, 9)
+              : data.heroPhotos
+            ).map((src, index) => (
+              <Image key={`${src}-${index}`} src={src} style={styles.galleryImg} />
+            ))}
+          </View>
+          <PageFooter
+            page={galleryPage}
+            total={totalPages}
+            listingUrl={data.listingUrl}
+          />
+        </Page>
+      ) : null}
 
-      {/* Página 3 — Ficha + selo */}
+      {/* Ficha + selo — só blocos com conteúdo */}
+      {hasFichaPage ? (
       <Page size="A4" style={styles.page}>
         <Header data={data} />
-        <Text style={styles.sectionTitle}>FICHA TÉCNICA</Text>
-        <View style={styles.specGrid}>
-          {data.specs.map((spec) => (
-            <View key={spec.label} style={styles.specPill}>
-              <Text style={styles.specText}>
-                <Text style={{ fontFamily: "Helvetica-Bold" }}>{spec.label}: </Text>
-                {spec.value}
-              </Text>
+        {hasHighlights ? (
+          <>
+            <Text style={styles.sectionTitle}>RESUMO DA CONSULTA</Text>
+            <Text style={[styles.subtitle, { marginBottom: 8 }]}>
+              Pontos principais da consulta CheckAuto — leitura rápida.
+            </Text>
+            <View style={styles.idGrid}>
+              {highlights.slice(0, 8).map((item, index, arr) => (
+                <View
+                  key={item.label}
+                  style={[
+                    styles.idCell,
+                    index >= arr.length - 2 ? { borderBottomWidth: 0 } : null,
+                  ]}
+                >
+                  <Text style={styles.idLabel}>{item.label}</Text>
+                  <Text style={styles.idValue}>{item.value}</Text>
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
+          </>
+        ) : null}
+        {hasSpecs ? (
+          <>
+            <Text style={styles.sectionTitle}>FICHA TÉCNICA</Text>
+            <View style={styles.specGrid}>
+              {data.specs.map((spec) => (
+                <View key={spec.label} style={styles.specPill}>
+                  <Text style={styles.specText}>
+                    <Text style={{ fontFamily: "Helvetica-Bold" }}>
+                      {spec.label}:{" "}
+                    </Text>
+                    {spec.value}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </>
+        ) : null}
 
-        {data.optionals.length > 0 ? (
+        {hasOptionals ? (
           <>
             <Text style={styles.sectionTitle}>OPCIONAIS EM DESTAQUE</Text>
             <View style={styles.chipRow}>
@@ -609,12 +781,12 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
 
         <View style={styles.disclaimerBox}>
           <Text style={styles.disclaimerTitle}>
-            NATUREZA DESTE DOCUMENTO — NÃO É VISTORIA CAUTELAR
+            NATUREZA DESTA CONSULTA — NÃO É LAUDO TÉCNICO
           </Text>
           <Text style={styles.disclaimerBody}>
-            Esta consulta tem caráter de laudo técnico / dossiê informativo do
-            veículo (procedência e histórico em bases CheckAuto/DEKRA, fotos e
-            ficha do seminovo). Não substitui vistoria cautelar, laudo de
+            Esta consulta NÃO tem caráter de laudo técnico. É um dossiê
+            informativo de procedência e histórico (bases CheckAuto/DEKRA), com
+            fotos e ficha do seminovo. Não substitui vistoria cautelar, laudo de
             engenharia, perícia estrutural nem inspeção veicular presencial.
             Complemente sempre com avaliação na loja e documentação oficial.
           </Text>
@@ -634,8 +806,13 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
           </View>
         ))}
 
-        <PageFooter page={3} total={totalPages} listingUrl={data.listingUrl} />
+        <PageFooter
+          page={fichaPage}
+          total={totalPages}
+          listingUrl={data.listingUrl}
+        />
       </Page>
+      ) : null}
     </Document>
   );
 }

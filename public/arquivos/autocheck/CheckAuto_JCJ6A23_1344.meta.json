@@ -1,0 +1,74 @@
+{
+  "vehicleId": "19903",
+  "placa": "JCJ6A23",
+  "consultaId": "30631351",
+  "dataHoraConsulta": "26/11/2024 13:44:29",
+  "tipoChave": "Placa: JCJ6A-xx UF: RS",
+  "history": [
+    {
+      "key": "registroEstadual",
+      "label": "Registro DETRAN",
+      "hint": "Identidade e situação no DETRAN",
+      "status": "Informação encontrada",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "rouboFurto",
+      "label": "Roubo / Furto",
+      "hint": "Bases federais de ocorrência",
+      "status": "Sem registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "leilao",
+      "label": "Leilão / Sinistro",
+      "hint": "Remarketing e sinistro",
+      "status": "Sem registro de leilão/sinistro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "agregado",
+      "label": "Chassi / Motor",
+      "hint": "Cruzamento placa · chassi · motor",
+      "status": "Identificadores cruzados",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "decodificador",
+      "label": "VIN (chassi)",
+      "hint": "Fabricante, fábrica, versão",
+      "status": "VIN decodificado",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "precificador",
+      "label": "Tabela FIPE",
+      "hint": "Referência de mercado",
+      "status": "Informação encontrada",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "consultationHighlights": [
+    {
+      "label": "Restrições",
+      "value": "Nenhuma informada"
+    },
+    {
+      "label": "Roubo/furto",
+      "value": "Sem registro"
+    },
+    {
+      "label": "Leilão",
+      "value": "Sem registro de leilão/sinistro"
+    }
+  ],
+  "pdf": "CheckAuto_JCJ6A23_1344.pdf",
+  "updatedAt": "2026-07-18T18:23:33.313Z",
+  "protocoloConsulta": "112624"
+}

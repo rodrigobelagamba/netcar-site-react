@@ -58,3 +58,4 @@ public/arquivos/*
 !public/arquivos/autocheck/
 public/arquivos/autocheck/*
 !public/arquivos/autocheck/*.pdf
+!public/arquivos/autocheck/*.meta.json

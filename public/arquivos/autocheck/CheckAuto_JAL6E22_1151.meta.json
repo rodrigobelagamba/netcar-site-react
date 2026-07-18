@@ -1,0 +1,63 @@
+{
+  "vehicleId": "19812",
+  "placa": "JAL6E22",
+  "consultaId": "22470366",
+  "dataHoraConsulta": "25/11/2022 11:51:36",
+  "tipoChave": "Placa: JAL6E-xx UF: RS",
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "hint": "Remarketing e leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "hint": "Perda total / sinistro",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "hint": "Bases de roubo e furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "hint": "Situação no DETRAN / gravames",
+      "status": "Consultado",
+      "clear": false,
+      "riskLevel": "ok"
+    }
+  ],
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Consultado"
+    }
+  ],
+  "source": "checkauto-pdf",
+  "pdf": "CheckAuto_JAL6E22_1151.pdf",
+  "updatedAt": "2026-07-18T18:29:06.189Z",
+  "protocoloConsulta": "112522"
+}

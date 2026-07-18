@@ -1,6 +1,7 @@
 import { axiosInstance } from "../axios-instance";
 import { config } from "../config";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
+import icheckPdfMap from "@/data/icheck-pdf-map.json";
 
 export interface VehicleImagesSite {
   capa: string | null;
@@ -177,6 +178,38 @@ function normalizeImageUrl(url: string): string {
   return `${baseDomain}/${normalized}`;
 }
 
+/** Fallback quando API não tem pdf: mapa local dos laudos Netcar gerados. */
+function resolveVehiclePdf(apiVehicle: {
+  id: number | string;
+  placa?: string;
+  pdf?: string;
+  pdf_url?: string;
+}): { pdf?: string; pdf_url?: string } {
+  if (apiVehicle.pdf || apiVehicle.pdf_url) {
+    const pdfUrl = apiVehicle.pdf_url
+      ? normalizeImageUrl(apiVehicle.pdf_url)
+      : normalizeImageUrl(`arquivos/autocheck/${apiVehicle.pdf}`);
+    return { pdf: apiVehicle.pdf, pdf_url: pdfUrl };
+  }
+
+  const byId = (icheckPdfMap as { byId?: Record<string, { pdf: string; pdf_url: string }> }).byId?.[
+    String(apiVehicle.id)
+  ];
+  const placa = String(apiVehicle.placa || "")
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .toUpperCase();
+  const byPlaca = (icheckPdfMap as { byPlaca?: Record<string, { pdf: string; pdf_url: string }> }).byPlaca?.[
+    placa
+  ];
+  const hit = byId || byPlaca;
+  if (!hit?.pdf) return {};
+
+  return {
+    pdf: hit.pdf,
+    pdf_url: normalizeImageUrl(hit.pdf_url || `arquivos/autocheck/${hit.pdf}`),
+  };
+}
+
 export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
   try {
     // Constrói os parâmetros da query string
@@ -284,14 +317,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         : [];
       const normalizedFullImages = fullUrls.map(normalizeImageUrl);
 
-      // Normaliza URL do PDF se existir
-      let pdfUrl: string | undefined;
-      if (apiVehicle.pdf_url) {
-        pdfUrl = normalizeImageUrl(apiVehicle.pdf_url);
-      } else if (apiVehicle.pdf) {
-        // Se só tem o nome do arquivo, constrói o caminho completo
-        pdfUrl = normalizeImageUrl(`arquivos/autocheck/${apiVehicle.pdf}`);
-      }
+      const { pdf, pdf_url: pdfUrl } = resolveVehiclePdf(apiVehicle);
 
       // Normaliza imagens_site se existir
       let imagensSite: VehicleImagesSite | undefined;
@@ -332,7 +358,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         categoria: apiVehicle.categoria,
         opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
         diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
-        pdf: apiVehicle.pdf,
+        pdf,
         pdf_url: pdfUrl,
         destaque: apiVehicle.destaque,
         promocao: apiVehicle.promocao,
@@ -386,13 +412,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       };
     }
 
-    // Normaliza URL do PDF se existir
-    let pdfUrl: string | undefined;
-    if (apiVehicle.pdf_url) {
-      pdfUrl = normalizeImageUrl(apiVehicle.pdf_url);
-    } else if (apiVehicle.pdf) {
-      pdfUrl = normalizeImageUrl(`arquivos/autocheck/${apiVehicle.pdf}`);
-    }
+    const { pdf, pdf_url: pdfUrl } = resolveVehiclePdf(apiVehicle);
 
     // Mapeia os dados da API para a interface Vehicle
     return {
@@ -422,7 +442,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       categoria: apiVehicle.categoria,
       opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
       diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
-      pdf: apiVehicle.pdf,
+      pdf,
       pdf_url: pdfUrl,
       destaque: apiVehicle.destaque,
       promocao: apiVehicle.promocao,

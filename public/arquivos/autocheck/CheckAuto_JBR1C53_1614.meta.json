@@ -1,0 +1,64 @@
+{
+  "vehicleId": "19839",
+  "placa": "JBR1C53",
+  "consultaId": "31922306",
+  "dataHoraConsulta": "20/03/2025 16:13:35",
+  "tipoChave": "Placa: JBR1C-xx UF: RS",
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "hint": "Remarketing e leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "hint": "Perda total / sinistro",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "hint": "Bases de roubo e furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "hint": "Situação no DETRAN / gravames",
+      "status": "Consultado",
+      "clear": false,
+      "riskLevel": "ok"
+    }
+  ],
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Consultado"
+    }
+  ],
+  "source": "automacar-pdf",
+  "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20250505_105000/CheckAuto_JBR1C53_1614.pdf",
+  "pdf": "CheckAuto_JBR1C53_1614.pdf",
+  "updatedAt": "2026-07-18T18:34:50.619Z",
+  "protocoloConsulta": "032025"
+}

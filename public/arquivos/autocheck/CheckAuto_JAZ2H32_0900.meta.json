@@ -1,0 +1,28 @@
+{
+  "vehicleId": "19921",
+  "placa": "JAZ2H32",
+  "consultaId": "27705089",
+  "dataHoraConsulta": "13/03/2024 08:57:40",
+  "tipoChave": "Placa: JAZ2H-xx UF: RS",
+  "history": [
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "hint": "Situação no DETRAN / gravames",
+      "status": "ALIENAÇÃO FIDUCIÁRIA",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "consultationHighlights": [
+    {
+      "label": "Informações Estaduais",
+      "value": "ALIENAÇÃO FIDUCIÁRIA"
+    }
+  ],
+  "source": "automacar-pdf",
+  "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20240611_165500/CheckAuto_JAZ2H32_0900.pdf",
+  "pdf": "CheckAuto_JAZ2H32_0900.pdf",
+  "updatedAt": "2026-07-18T18:36:48.586Z",
+  "protocoloConsulta": "031324"
+}

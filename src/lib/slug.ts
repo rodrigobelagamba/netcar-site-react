@@ -1,33 +1,17 @@
 /**
  * Mascara a placa do veículo para exibição
- * Formato: ABC-1234 ou ABC1D23 → ABC-xx34 ou ABC-xx23
- * Mostra os 3 primeiros caracteres, depois "-xx" e os 2 últimos dígitos
+ * Formato: ABC1D23 → ABC1D-xx (esconde os 2 últimos caracteres)
  */
 export function maskPlate(placa: string): string {
   if (!placa) return "";
-  
-  // Remove espaços e converte para maiúsculo
-  const cleanPlaca = placa.replace(/\s/g, "").toUpperCase();
-  
-  // Remove hífen se existir (formato antigo ABC-1234)
-  const placaSemHifen = cleanPlaca.replace(/-/g, "");
-  
-  // Se tiver menos de 5 caracteres, retorna como está
+
+  const placaSemHifen = placa.replace(/[\s-]/g, "").toUpperCase();
+
   if (placaSemHifen.length < 5) {
-    return cleanPlaca;
+    return placaSemHifen;
   }
-  
-  // Pega os 3 primeiros caracteres
-  const prefixo = placaSemHifen.substring(0, 3);
-  
-  // Pega os 2 últimos dígitos (números)
-  const sufixo = placaSemHifen.match(/\d/g);
-  const ultimosDigitos = sufixo && sufixo.length >= 2 
-    ? sufixo.slice(-2).join("")
-    : placaSemHifen.slice(-2);
-  
-  // Retorna no formato: ABC-xx34
-  return `${prefixo}-xx${ultimosDigitos}`;
+
+  return `${placaSemHifen.slice(0, -2)}-xx`;
 }
 
 /**
