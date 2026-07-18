@@ -1,22 +1,22 @@
 import { Link, useParams } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { Car, MessageCircle } from "lucide-react";
-import { useEffect } from "react";
+import { ArrowRight } from "lucide-react";
+import { useEffect, useMemo } from "react";
 import { getLandingPage } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
-import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
+import { isAvailableHomeStockVehicle } from "@/lib/homeStock";
+import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
+import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
+import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 
 export function EstoqueLandingPage() {
   const { landingSlug } = useParams({ from: "/comprar-{$landingSlug}" });
   const landing = getLandingPage(landingSlug);
-  const { data: whatsapp } = useWhatsAppQuery();
 
   const vehiclesQuery = landing
     ? { ...emptySeminovosSearch, [landing.filterKey]: landing.filterValue }
@@ -24,6 +24,10 @@ export function EstoqueLandingPage() {
   const { data: vehicles, isLoading } = useVehiclesQuery(vehiclesQuery, {
     enabled: !!landing,
   });
+  const availableVehicles = useMemo(
+    () => (vehicles ?? []).filter(isAvailableHomeStockVehicle),
+    [vehicles],
+  );
 
   useMetaTags({
     title: landing?.title,
@@ -62,66 +66,35 @@ export function EstoqueLandingPage() {
     return <NotFoundRedirect />;
   }
 
-  const waLink = (() => {
-    if (!whatsapp?.numero) return "#";
-    const text = siteWhatsAppMessage(
-      `estou procurando um ${landing.name} seminovo em Esteio.`,
-    );
-    return buildWhatsAppUrl(whatsapp.numero, text);
-  })();
-
-  // Filtro pré-aplicado no showroom ao clicar em "Ver todos"
   const showroomSearch = {
     ...emptySeminovosSearch,
     [landing.filterKey]: landing.filterValue,
-  };
+  } as typeof emptySeminovosSearch;
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full bg-gradient-to-b from-white via-gray-50/30 to-white">
-      <section className="py-12 md:py-16">
-        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-3xl"
-          >
-            <span className="text-primary text-xs font-semibold tracking-widest uppercase mb-4 block">
-              Seminovos em Esteio/RS
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-fg mb-4">{landing.h1}</h1>
-            <p className="text-lg text-gray-600 mb-6">{landing.intro}</p>
-
-            {landing.paragraphs.map((paragraph) => (
-              <p key={paragraph} className="text-gray-600 leading-relaxed mb-4">
-                {paragraph}
-              </p>
-            ))}
-
-            <div className="flex flex-wrap gap-3 mt-8">
-              <Link
-                to="/seminovos"
-                search={showroomSearch}
-                data-regional-action="view_filtered_stock"
-                className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-white font-semibold hover:bg-primary/90"
-              >
-                <Car className="w-4 h-4" />
-                Ver todos nos seminovos
-              </Link>
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-regional-action="landing_whatsapp"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-primary/20 px-5 py-3 text-primary font-semibold hover:bg-primary/5"
-              >
-                <MessageCircle className="w-4 h-4" />
-                Falar com consultor · 24/7
-              </a>
-            </div>
-          </motion.div>
+    <main className="flex-1 overflow-x-hidden max-w-full bg-white">
+      <RegionalSeoHero
+        eyebrow="Seminovos em Esteio/RS"
+        title={landing.h1}
+        intro={landing.intro}
+      >
+        <div className="mt-6 space-y-4">
+          {landing.paragraphs.map((paragraph) => (
+            <p key={paragraph} className="leading-relaxed text-gray-600">
+              {paragraph}
+            </p>
+          ))}
         </div>
-      </section>
+        <RegionalActionCtas
+          className="mt-8"
+          waText={`estou procurando um ${landing.name} seminovo em Esteio.`}
+          stockSearch={showroomSearch}
+          stockLabel={`Ver ${landing.name} nos seminovos`}
+          primary="stock"
+        />
+      </RegionalSeoHero>
+
+      <RegionalTrustSignals />
 
       <section className="pb-12">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
@@ -133,7 +106,7 @@ export function EstoqueLandingPage() {
             <p className="text-gray-500">Carregando estoque...</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {(vehicles || []).map((vehicle, index) => (
+              {availableVehicles.map((vehicle, index) => (
                 <VehicleCard
                   key={vehicle.id}
                   id={vehicle.id}
@@ -146,20 +119,35 @@ export function EstoqueLandingPage() {
                   imagens_site={vehicle.imagens_site}
                   marca={vehicle.marca}
                   modelo={vehicle.modelo}
+                  placa={vehicle.placa}
+                  showWhatsAppInterest
+                  whatsAppSource="estoque_landing"
                   delay={index}
                 />
               ))}
             </div>
           )}
 
-          {!isLoading && (!vehicles || vehicles.length === 0) && (
+          {!isLoading && availableVehicles.length === 0 && (
             <p className="text-gray-500">
-              Nenhum {landing.name} disponível no momento.{" "}
-              <Link to="/seminovos" search={emptySeminovosSearch} className="text-primary font-semibold hover:underline">
-                Confira o estoque completo
-              </Link>
-              .
+              Nenhum {landing.name} disponível no momento.
             </p>
+          )}
+
+          {!isLoading && (
+            <div className="mt-10 flex justify-center">
+              <Link
+                to="/seminovos"
+                search={showroomSearch}
+                data-regional-action="view_stock_more"
+                className="inline-flex w-full max-w-md items-center justify-center gap-2.5 rounded-full bg-[#00283C] px-8 py-4 text-base font-black uppercase tracking-wider text-white shadow-[0_12px_32px_rgba(0,40,60,0.28)] transition-all hover:bg-[#00435a] hover:shadow-[0_16px_40px_rgba(0,40,60,0.34)] active:scale-[0.98] sm:w-auto"
+              >
+                <span className="button-text-shimmer-on-dark">
+                  Ver mais {landing.name}
+                </span>
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+            </div>
           )}
         </div>
       </section>

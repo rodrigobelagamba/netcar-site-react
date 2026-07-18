@@ -1,9 +1,6 @@
 import { Link, useParams } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import {
-  Banknote,
   Camera,
-  Car,
   ClipboardCheck,
   Clock,
   MapPin,
@@ -12,19 +9,20 @@ import {
 import { useEffect } from "react";
 import { getCityPage } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
-import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 import { QuickSellForm } from "@/components/QuickSellForm";
 import { RelatedCitiesNav } from "@/modules/seo/components/RelatedCitiesNav";
+import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
+import { RegionalStockPreview } from "@/modules/seo/components/RegionalStockPreview";
+import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
+import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 
 export function SellCityLandingPage() {
   const { citySlug } = useParams({ from: "/vender-carro-{$citySlug}" });
   const city = getCityPage(citySlug);
   const sell = city?.sell;
-  const { data: whatsapp } = useWhatsAppQuery();
 
   useMetaTags({
     title: sell?.title,
@@ -57,90 +55,58 @@ export function SellCityLandingPage() {
     };
   }, [sell]);
 
-  const waLink = (() => {
-    if (!whatsapp?.numero || !city) return "#";
-    const text = siteWhatsAppMessage(
-      `moro em ${city.name} e quero vender meu carro para a Netcar.`,
-    );
-    return buildWhatsAppUrl(whatsapp.numero, text);
-  })();
-
   if (!city || !sell) {
     return <NotFoundRedirect />;
   }
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full bg-gradient-to-b from-white via-gray-50/30 to-white">
-      <section className="py-14 md:py-20">
-        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-3xl"
-          >
-            <span className="text-secondary text-xs font-semibold tracking-widest uppercase mb-4 block">
-              Netcar compra
+    <main className="flex-1 overflow-x-hidden max-w-full bg-white">
+      <RegionalSeoHero
+        eyebrow="Netcar compra · usado na troca ou à vista"
+        title={sell.h1}
+        intro={sell.intro}
+        accent="secondary"
+        badges={
+          <>
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm text-gray-600 shadow-sm ring-1 ring-black/5">
+              <MapPin className="h-4 w-4 text-secondary" />
+              Avaliação em Esteio — ~{city.distanceKm} km de {city.name}
             </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-fg mb-4">{sell.h1}</h1>
-            <p className="text-lg text-gray-600 mb-6">{sell.intro}</p>
-
-            <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-8">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-sm">
-                <MapPin className="w-4 h-4 text-secondary" />
-                Avaliação em Esteio — ~{city.distanceKm} km de {city.name}
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-sm">
-                <Clock className="w-4 h-4 text-secondary" />
-                {city.travelTime} de carro
-              </span>
-            </div>
-
-            {sell.paragraphs.map((paragraph) => (
-              <p key={paragraph} className="text-gray-600 leading-relaxed mb-4">
-                {paragraph}
-              </p>
-            ))}
-
-            <div className="flex flex-wrap gap-3 mt-8">
-              <a
-                href="#pre-avaliacao"
-                className="inline-flex items-center gap-2 rounded-xl bg-secondary px-5 py-3 text-white font-semibold hover:opacity-90"
-              >
-                <ClipboardCheck className="w-4 h-4" />
-                Iniciar pré-avaliação
-              </a>
-              <Link
-                to="/seminovos"
-                search={{
-                  marca: undefined,
-                  modelo: undefined,
-                  precoMin: undefined,
-                  precoMax: undefined,
-                  anoMin: undefined,
-                  anoMax: undefined,
-                  cambio: undefined,
-                  cor: undefined,
-                  categoria: undefined,
-                }}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-secondary/20 px-5 py-3 text-secondary font-semibold hover:bg-secondary/5"
-              >
-                <Car className="w-4 h-4" />
-                Ver estoque para troca
-              </Link>
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-regional-action="sell_whatsapp"
-                className="inline-flex items-center gap-2 px-3 py-3 text-sm font-semibold text-gray-500 hover:text-secondary"
-              >
-                <Banknote className="w-4 h-4" />
-                Tirar dúvida no WhatsApp
-              </a>
-            </div>
-          </motion.div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm text-gray-600 shadow-sm ring-1 ring-black/5">
+              <Clock className="h-4 w-4 text-secondary" />
+              {city.travelTime} de carro
+            </span>
+          </>
+        }
+      >
+        <div className="mt-6 space-y-4">
+          {sell.paragraphs.map((paragraph) => (
+            <p key={paragraph} className="leading-relaxed text-gray-600">
+              {paragraph}
+            </p>
+          ))}
         </div>
-      </section>
+        <RegionalActionCtas
+          className="mt-8"
+          waText={`moro em ${city.name} e quero vender meu carro para a Netcar.`}
+          sellTo="/compra"
+          primary="whatsapp"
+        />
+        <a
+          href="#pre-avaliacao"
+          className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:underline"
+        >
+          <ClipboardCheck className="h-4 w-4" />
+          Ir para o formulário de pré-avaliação
+        </a>
+      </RegionalSeoHero>
+
+      <RegionalTrustSignals />
+
+      <RegionalStockPreview
+        title="Estoque para quem quer trocar de carro"
+        limit={8}
+      />
 
       <section className="pb-12">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
