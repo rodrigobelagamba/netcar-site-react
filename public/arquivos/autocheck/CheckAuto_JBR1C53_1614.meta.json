@@ -3,7 +3,7 @@
   "placa": "JBR1C53",
   "consultaId": "31922306",
   "dataHoraConsulta": "20/03/2025 16:13:35",
-  "tipoChave": "Placa: JBR1C-xx UF: RS",
+  "tipoChave": "Placa: JBR-XX53 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -34,7 +34,7 @@
       "label": "Informações Estaduais",
       "hint": "Situação no DETRAN / gravames",
       "status": "Consultado",
-      "clear": false,
+      "clear": true,
       "riskLevel": "ok"
     }
   ],
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20250505_105000/CheckAuto_JBR1C53_1614.pdf",
   "pdf": "CheckAuto_JBR1C53_1614.pdf",
   "updatedAt": "2026-07-18T18:34:50.619Z",
-  "protocoloConsulta": "032025"
+  "protocoloConsulta": "03202025"
 }

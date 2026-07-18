@@ -3,7 +3,7 @@
   "placa": "JCN8I74",
   "consultaId": null,
   "dataHoraConsulta": "01/06/2026 10:23:11",
-  "tipoChave": "Placa: JCN8I-xx UF: RS",
+  "tipoChave": "Placa: JCN-XX74 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JCN8I74_1023.pdf",
   "pdf": "CheckAuto_JCN8I74_1023.pdf",
   "updatedAt": "2026-07-18T18:35:22.795Z",
-  "protocoloConsulta": "060126"
+  "protocoloConsulta": "06012026"
 }

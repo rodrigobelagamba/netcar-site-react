@@ -3,7 +3,7 @@
   "placa": "IZN2I88",
   "consultaId": null,
   "dataHoraConsulta": "17/04/2024 17:32:29",
-  "tipoChave": "Placa: IZN2I-xx UF: RS",
+  "tipoChave": "Placa: IZN-XX88 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_IZN2I88_1033.pdf",
   "pdf": "CheckAuto_IZN2I88_1033.pdf",
   "updatedAt": "2026-07-18T18:32:43.575Z",
-  "protocoloConsulta": "041724"
+  "protocoloConsulta": "04172024"
 }

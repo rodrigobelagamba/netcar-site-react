@@ -3,7 +3,7 @@
   "placa": "IYP0C15",
   "consultaId": null,
   "dataHoraConsulta": "14/11/2025 17:10:29",
-  "tipoChave": "Placa: IYP0C-xx UF: RS",
+  "tipoChave": "Placa: IYP-XX15 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_IYP0215_1710.pdf",
   "pdf": "CheckAuto_IYP0215_1710.pdf",
   "updatedAt": "2026-07-18T18:32:50.085Z",
-  "protocoloConsulta": "111425"
+  "protocoloConsulta": "11142025"
 }

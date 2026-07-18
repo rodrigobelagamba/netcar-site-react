@@ -3,7 +3,7 @@
   "placa": "JCG6B72",
   "consultaId": null,
   "dataHoraConsulta": "27/12/2025 11:22:26",
-  "tipoChave": "Placa: JCG6B-xx UF: RS",
+  "tipoChave": "Placa: JCG-XX72 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JCG6B72_1122.pdf",
   "pdf": "CheckAuto_JCG6B72_1122.pdf",
   "updatedAt": "2026-07-18T18:32:57.864Z",
-  "protocoloConsulta": "122725"
+  "protocoloConsulta": "12272025"
 }

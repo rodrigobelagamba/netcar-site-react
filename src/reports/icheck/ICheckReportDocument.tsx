@@ -350,6 +350,7 @@ export type ICheckHistoryItem = {
   status: string | null;
   hint?: string;
   clear?: boolean;
+  riskLevel?: string;
 };
 
 export type ICheckReportData = {
@@ -579,7 +580,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
         {hasProtocol ? (
           <View style={styles.protocolBox}>
             <Text style={styles.protocolTitle}>
-              Consulta CheckAuto — data e ConsultaID (MMDDYY)
+              Consulta CheckAuto — data e ConsultaID (MMDDYYYY)
             </Text>
             <View style={styles.protocolGrid}>
               {protocoloNetcar ? (
@@ -644,7 +645,11 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
             <Text style={styles.sectionTitle}>CONSULTA CHECKAUTO / DEKRA</Text>
             <View style={styles.historyGrid}>
               {history.map((item) => {
-                const isAlert = item.clear === false;
+                const isAlert =
+                  item.riskLevel === "alert" ||
+                  (item.clear === false &&
+                    !/^consultado\.?$/i.test(String(item.status || "")) &&
+                    !/^sem\s*registro/i.test(String(item.status || "")));
                 const statusLabel = formatStatus(item.status);
                 const isOk = /^nada\s*consta$/i.test(statusLabel);
                 return (

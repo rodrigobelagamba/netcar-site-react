@@ -3,7 +3,7 @@
   "placa": "JCL5B85",
   "consultaId": null,
   "dataHoraConsulta": "24/02/2026 09:29:04",
-  "tipoChave": "Placa: JCL5B-xx UF: RS",
+  "tipoChave": "Placa: JCL-XX85 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JCL5B85_1631.pdf",
   "pdf": "CheckAuto_JCL5B85_1631.pdf",
   "updatedAt": "2026-07-18T18:33:11.680Z",
-  "protocoloConsulta": "022426"
+  "protocoloConsulta": "02242026"
 }

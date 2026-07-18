@@ -3,7 +3,7 @@
   "placa": "IZT9D11",
   "consultaId": null,
   "dataHoraConsulta": "27/02/2026 10:58:47",
-  "tipoChave": "Placa: IZT9D-xx UF: RS",
+  "tipoChave": "Placa: IZT-XX11 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_IZT9D11_1058.pdf",
   "pdf": "CheckAuto_IZT9D11_1058.pdf",
   "updatedAt": "2026-07-18T18:33:22.525Z",
-  "protocoloConsulta": "022726"
+  "protocoloConsulta": "02272026"
 }

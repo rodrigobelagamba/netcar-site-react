@@ -3,7 +3,8 @@ import { useParams, Link } from "@tanstack/react-router";
 import { Printer, Download, ArrowLeft, Check, AlertTriangle } from "lucide-react";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { maskPlate } from "@/lib/slug";
-import { icheckProtocolFromDate } from "@/lib/icheck-protocol";
+import { resolveIcheckProtocol } from "@/lib/icheck-protocol";
+import { isConsultaValid } from "@/lib/icheck-validity";
 import icheckPdfMap from "@/data/icheck-pdf-map.json";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
@@ -83,6 +84,7 @@ export function ICheckLaudoPage() {
   const { slug } = useParams({ from: "/laudo/$slug" });
   const { data: vehicle, isLoading, isError } = useVehicleQuery(slug);
   const [protocol, setProtocol] = useState<CheckAutoProtocolMeta | null>(null);
+  const [protocolReady, setProtocolReady] = useState(false);
 
   const title = vehicle
     ? `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name || ""} ${vehicle.year || ""}`.trim()
@@ -98,8 +100,10 @@ export function ICheckLaudoPage() {
   useEffect(() => {
     if (!vehicle) {
       setProtocol(null);
+      setProtocolReady(false);
       return;
     }
+    setProtocolReady(false);
     const pdfFromVehicle =
       vehicle.pdf || vehicle.pdf_url?.split("/").pop() || "";
     const placa = String(vehicle.placa || "")
@@ -122,6 +126,7 @@ export function ICheckLaudoPage() {
     ];
     if (!metaCandidates.length) {
       setProtocol(null);
+      setProtocolReady(true);
       return;
     }
 
@@ -137,6 +142,7 @@ export function ICheckLaudoPage() {
           const json = (await res.json()) as CheckAutoProtocolMeta;
           if (cancelled) return;
           setProtocol(json);
+          setProtocolReady(true);
           return;
         } catch {
           /* próximo */
@@ -148,6 +154,7 @@ export function ICheckLaudoPage() {
           dataHoraConsulta: null,
           tipoChave: placa ? `Placa: ${maskPlate(placa)} UF: RS` : null,
         });
+        setProtocolReady(true);
       }
     })();
 
@@ -166,6 +173,35 @@ export function ICheckLaudoPage() {
 
   if (isError || !vehicle) {
     return <VehicleUnavailableRedirect />;
+  }
+
+  if (!protocolReady) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center text-[#00283C]/70">
+        Carregando laudo…
+      </div>
+    );
+  }
+
+  if (!isConsultaValid(protocol?.dataHoraConsulta)) {
+    return (
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 px-4 text-center">
+        <p className="text-[17px] font-bold text-[#00283C]">
+          Consulta i-CHECK indisponível
+        </p>
+        <p className="max-w-md text-sm text-[#00283C]/70">
+          Esta consulta tem mais de 2 anos e não é mais exibida.
+        </p>
+        <Link
+          to="/veiculo/$slug"
+          params={{ slug }}
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#00283C]/80 transition hover:text-[#00283C]"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Voltar ao veículo
+        </Link>
+      </div>
+    );
   }
 
   const gallery = (
@@ -191,48 +227,14 @@ export function ICheckLaudoPage() {
     .filter(Boolean)
     .slice(0, 28);
 
-  const handlePrint = () => window.print();
+  /** Sempre a tela do laudo — não o PDF estático de arquivos/autocheck. */
+  const printOnScreenLaudo = () => window.print();
 
-  const handleSavePdf = async () => {
-    const fileName = vehicle.pdf || `laudo-icheck-${vehicle.id}.pdf`;
-    let pdfUrl = vehicle.pdf
-      ? `/arquivos/autocheck/${vehicle.pdf}`
-      : vehicle.pdf_url || "";
+  const handlePrint = () => printOnScreenLaudo();
 
-    if (!pdfUrl) {
-      // Sem arquivo no host: salva via diálogo (Salvar como PDF)
-      window.print();
-      return;
-    }
-
-    if (!pdfUrl.startsWith("http")) {
-      pdfUrl = `${window.location.origin}${pdfUrl.startsWith("/") ? "" : "/"}${pdfUrl}`;
-    }
-
-    try {
-      const res = await fetch(`${pdfUrl}${pdfUrl.includes("?") ? "&" : "?"}v=${Date.now()}`, {
-        cache: "no-store",
-        headers: { "Cache-Control": "no-cache", Pragma: "no-cache" },
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const blob = await res.blob();
-      // PDF antigo CheckAuto ~50KB; laudo novo ~2MB — se veio miúdo, usa impressão da tela
-      if (blob.size < 200_000) {
-        window.print();
-        return;
-      }
-      const objectUrl = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = objectUrl;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(objectUrl);
-    } catch {
-      // Fallback: salva o que está na tela
-      window.print();
-    }
+  const handleSavePdf = () => {
+    // Diálogo do browser: destino "Salvar como PDF" = mesmo conteúdo da tela.
+    printOnScreenLaudo();
   };
 
   return (
@@ -252,6 +254,7 @@ export function ICheckLaudoPage() {
             <button
               type="button"
               onClick={handleSavePdf}
+              title="Abre impressão — escolha Salvar como PDF. Mesmo conteúdo da tela."
               className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-secondary shadow-sm transition hover:border-secondary hover:bg-[#E8F7EF]"
             >
               <Download className="h-3.5 w-3.5" strokeWidth={2.5} />
@@ -260,6 +263,7 @@ export function ICheckLaudoPage() {
             <button
               type="button"
               onClick={handlePrint}
+              title="Imprime o laudo exibido nesta página"
               className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-white shadow-sm transition hover:bg-[#1B5E20]"
             >
               <Printer className="h-3.5 w-3.5" />
@@ -340,11 +344,10 @@ export function ICheckLaudoPage() {
             </div>
 
             {(() => {
-              const protocoloNetcar =
-                (protocol?.protocoloConsulta
-                  ? String(protocol.protocoloConsulta).trim()
-                  : "") ||
-                icheckProtocolFromDate(protocol?.dataHoraConsulta);
+              const protocoloNetcar = resolveIcheckProtocol(
+                protocol?.protocoloConsulta,
+                protocol?.dataHoraConsulta,
+              );
               if (
                 !protocol?.dataHoraConsulta &&
                 !protocoloNetcar &&
@@ -378,13 +381,21 @@ export function ICheckLaudoPage() {
                         </dd>
                       </div>
                     ) : null}
-                    {protocol?.tipoChave ? (
+                    {protocol?.tipoChave || vehicle.placa ? (
                       <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
                         <dt className="w-28 shrink-0 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#5A6B73]">
                           Chave
                         </dt>
                         <dd className="text-sm font-bold text-[#00283C]">
-                          {protocol.tipoChave}
+                          {vehicle.placa
+                            ? `Placa: ${maskPlate(vehicle.placa)} UF: RS`
+                            : String(protocol?.tipoChave || "").replace(
+                                /Placa:\s*[A-Z0-9-]+/i,
+                                (m) => {
+                                  const raw = m.replace(/^Placa:\s*/i, "");
+                                  return `Placa: ${maskPlate(raw)}`;
+                                },
+                              )}
                         </dd>
                       </div>
                     ) : null}
@@ -460,14 +471,10 @@ export function ICheckLaudoPage() {
                     {historyCards.map((item) => {
                       const statusLabel = formatHistoryStatus(item.status);
                       const alienacao = isAlienacaoFiduciaria(item.status);
-                      const clear =
-                        !alienacao &&
-                        item.clear !== false &&
-                        item.riskLevel !== "alert" &&
-                        isClearStatus(item.status);
+                      // Vermelho só riskLevel "alert" — "Consultado" (clear:false) não é grave.
                       const isAlert =
-                        !alienacao &&
-                        (item.riskLevel === "alert" || item.clear === false);
+                        !alienacao && item.riskLevel === "alert";
+                      const clear = !alienacao && !isAlert;
                       return (
                         <div
                           key={item.key}
@@ -538,7 +545,7 @@ export function ICheckLaudoPage() {
               );
               const hasGraveAlert = history.some((item) => {
                 if (isAlienacaoFiduciaria(item.status)) return false;
-                if (item.riskLevel === "alert" || item.clear === false) return true;
+                if (item.riskLevel === "alert") return true;
                 const s = String(item.status || "");
                 return (
                   /com\s*registro|consta\s+registro|ocorr[eê]ncia/i.test(s) &&
@@ -547,11 +554,7 @@ export function ICheckLaudoPage() {
               });
               const cleanCore = history
                 .filter((item) => !isAlienacaoFiduciaria(item.status))
-                .every(
-                  (item) =>
-                    isClearStatus(item.status) ||
-                    (item.clear !== false && item.riskLevel !== "alert"),
-                );
+                .every((item) => item.riskLevel !== "alert");
 
               if (hasGraveAlert) {
                 return (

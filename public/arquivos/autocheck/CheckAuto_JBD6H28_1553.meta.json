@@ -3,7 +3,7 @@
   "placa": "JBD6H28",
   "consultaId": "29052649",
   "dataHoraConsulta": "03/07/2024 15:52:08",
-  "tipoChave": "Placa: JBD6H-xx UF: RS",
+  "tipoChave": "Placa: JBD-XX28 UF: RS",
   "history": [
     {
       "key": "estaduais",
@@ -23,5 +23,5 @@
   "source": "checkauto-pdf",
   "pdf": "CheckAuto_JBD6H28_1553.pdf",
   "updatedAt": "2026-07-18T18:29:37.563Z",
-  "protocoloConsulta": "070324"
+  "protocoloConsulta": "07032024"
 }

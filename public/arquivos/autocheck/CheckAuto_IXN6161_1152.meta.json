@@ -3,7 +3,7 @@
   "placa": "IXN6161",
   "consultaId": null,
   "dataHoraConsulta": "23/05/2026 11:52:12",
-  "tipoChave": "Placa: IXN61-xx UF: RS",
+  "tipoChave": "Placa: IXN-XX61 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_IXN6161_1152.pdf",
   "pdf": "CheckAuto_IXN6161_1152.pdf",
   "updatedAt": "2026-07-18T18:35:18.623Z",
-  "protocoloConsulta": "052326"
+  "protocoloConsulta": "05232026"
 }

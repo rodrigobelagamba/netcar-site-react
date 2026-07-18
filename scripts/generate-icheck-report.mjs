@@ -197,8 +197,8 @@ function maskPlate(placa) {
     .replace(/[^a-zA-Z0-9]/g, "")
     .toUpperCase();
   if (clean.length < 5) return clean || "—";
-  // Esconde os 2 últimos caracteres: IZT6J30 → IZT6J-xx
-  return `${clean.slice(0, -2)}-xx`;
+  // Padrão certificado CheckAuto: IZT6J30 → IZT-XX30
+  return `${clean.slice(0, 3)}-XX${clean.slice(-2)}`;
 }
 
 function maskTipoChave(tipoChave) {
@@ -552,7 +552,8 @@ async function main() {
       .filter((h) => h?.status)
       .map((h) => {
         const status = String(h.status);
-        const clear = /^sem\s*registro/i.test(status);
+        const clear =
+          /^sem\s*registro/i.test(status) || /^consultado\.?$/i.test(status);
         const alert =
           !clear &&
           /aliena|roubo|furto|leil[aã]o|sinistro|bloqueio|restri/i.test(status) &&
@@ -743,9 +744,9 @@ async function main() {
   const protocoloMatch = String(dataHoraMeta || "").match(
     /(\d{2})\/(\d{2})\/(\d{4})/,
   );
-  // MMDDYY (americano): 22/12/2023 → 122223
+  // MMDDYYYY (americano): 22/12/2023 → 12222023
   const protocoloConsulta = protocoloMatch
-    ? `${protocoloMatch[2]}${protocoloMatch[1]}${protocoloMatch[3].slice(2)}`
+    ? `${protocoloMatch[2]}${protocoloMatch[1]}${protocoloMatch[3]}`
     : null;
 
   const meta = {

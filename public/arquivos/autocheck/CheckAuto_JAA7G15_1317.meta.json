@@ -3,7 +3,7 @@
   "placa": "JAA7G15",
   "consultaId": null,
   "dataHoraConsulta": "24/06/2026 13:17:56",
-  "tipoChave": "Placa: JAA7G-xx UF: RS",
+  "tipoChave": "Placa: JAA-XX15 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260707_091600/CheckAuto_JAA7G15_1317.pdf",
   "pdf": "CheckAuto_JAA7G15_1317.pdf",
   "updatedAt": "2026-07-18T18:36:12.126Z",
-  "protocoloConsulta": "062426"
+  "protocoloConsulta": "06242026"
 }

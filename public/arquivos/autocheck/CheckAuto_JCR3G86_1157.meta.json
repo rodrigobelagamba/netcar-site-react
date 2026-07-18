@@ -3,7 +3,7 @@
   "placa": "JCR3G86",
   "consultaId": null,
   "dataHoraConsulta": "13/06/2026 11:57:29",
-  "tipoChave": "Placa: JCR3G-xx UF: RS",
+  "tipoChave": "Placa: JCR-XX86 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260707_091600/CheckAuto_JCR3G86_1157.pdf",
   "pdf": "CheckAuto_JCR3G86_1157.pdf",
   "updatedAt": "2026-07-18T18:35:44.103Z",
-  "protocoloConsulta": "061326"
+  "protocoloConsulta": "06132026"
 }

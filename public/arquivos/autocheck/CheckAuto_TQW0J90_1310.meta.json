@@ -3,7 +3,7 @@
   "placa": "TQW0J90",
   "consultaId": null,
   "dataHoraConsulta": "20/05/2026 13:10:12",
-  "tipoChave": "Placa: TQW0J-xx UF: RS",
+  "tipoChave": "Placa: TQW-XX90 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_TQW0J90_1310.pdf",
   "pdf": "CheckAuto_TQW0J90_1310.pdf",
   "updatedAt": "2026-07-18T18:34:48.070Z",
-  "protocoloConsulta": "052026"
+  "protocoloConsulta": "05202026"
 }

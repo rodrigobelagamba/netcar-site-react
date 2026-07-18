@@ -3,7 +3,7 @@
   "placa": "JAI8B37",
   "consultaId": null,
   "dataHoraConsulta": "04/04/2026 10:23:19",
-  "tipoChave": "Placa: JAI8B-xx UF: RS",
+  "tipoChave": "Placa: JAI-XX37 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JAI8B37_1148.pdf",
   "pdf": "CheckAuto_JAI8B37_1148.pdf",
   "updatedAt": "2026-07-18T18:34:13.051Z",
-  "protocoloConsulta": "040426"
+  "protocoloConsulta": "04042026"
 }

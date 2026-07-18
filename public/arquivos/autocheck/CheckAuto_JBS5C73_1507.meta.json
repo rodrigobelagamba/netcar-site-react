@@ -3,7 +3,7 @@
   "placa": "JBS5C73",
   "consultaId": null,
   "dataHoraConsulta": "13/05/2026 15:07:46",
-  "tipoChave": "Placa: JBS5C-xx UF: RS",
+  "tipoChave": "Placa: JBS-XX73 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_JBS5C73_1507.pdf",
   "pdf": "CheckAuto_JBS5C73_1507.pdf",
   "updatedAt": "2026-07-18T18:34:40.101Z",
-  "protocoloConsulta": "051326"
+  "protocoloConsulta": "05132026"
 }

@@ -3,7 +3,7 @@
   "placa": "IYQ5G33",
   "consultaId": null,
   "dataHoraConsulta": "20/11/2025 12:03:45",
-  "tipoChave": "Placa: IYQ5G-xx UF: RS",
+  "tipoChave": "Placa: IYQ-XX33 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20251226_100800/CheckAuto_IYQ5G33_1544.pdf",
   "pdf": "CheckAuto_IYQ5G33_1544.pdf",
   "updatedAt": "2026-07-18T18:34:04.451Z",
-  "protocoloConsulta": "112025"
+  "protocoloConsulta": "11202025"
 }

@@ -3,7 +3,7 @@
   "placa": "JCW2F18",
   "consultaId": null,
   "dataHoraConsulta": "07/05/2026 11:28:56",
-  "tipoChave": "Placa: JCW2F-xx UF: RS",
+  "tipoChave": "Placa: JCW-XX18 UF: RS",
   "history": [
     {
       "key": "leilao",
@@ -60,5 +60,5 @@
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260610_145600/CheckAuto_JCW2F18_1128.pdf",
   "pdf": "CheckAuto_JCW2F18_1128.pdf",
   "updatedAt": "2026-07-18T18:36:44.073Z",
-  "protocoloConsulta": "050726"
+  "protocoloConsulta": "05072026"
 }

@@ -3,7 +3,7 @@
   "placa": "JAJ6H26",
   "consultaId": "28089358",
   "dataHoraConsulta": "16/04/2024 10:56:52",
-  "tipoChave": "Placa: JAJ6H-xx UF: RS",
+  "tipoChave": "Placa: JAJ-XX26 UF: RS",
   "history": [
     {
       "key": "registroEstadual",
@@ -70,5 +70,5 @@
   ],
   "pdf": "CheckAuto_JAJ6H26_1057.pdf",
   "updatedAt": "2026-07-18T18:23:18.873Z",
-  "protocoloConsulta": "041624"
+  "protocoloConsulta": "04162024"
 }
