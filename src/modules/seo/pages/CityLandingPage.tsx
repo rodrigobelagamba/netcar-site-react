@@ -1,29 +1,27 @@
 import { Link, useParams } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import {
   CalendarCheck,
   Car,
   Clock,
   MapPin,
-  MessageCircle,
   Search,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { getCityPage } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
-import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
-import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { trackTrustSectionView } from "@/lib/analytics";
 import { RelatedCitiesNav } from "@/modules/seo/components/RelatedCitiesNav";
+import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
+import { RegionalStockPreview } from "@/modules/seo/components/RegionalStockPreview";
+import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
+import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 
 export function CityLandingPage() {
   const { citySlug } = useParams({ from: "/seminovos-{$citySlug}" });
   const city = getCityPage(citySlug);
-  const { data: whatsapp } = useWhatsAppQuery();
   const trustSectionRef = useRef<HTMLElement>(null);
 
   useMetaTags({
@@ -84,83 +82,52 @@ export function CityLandingPage() {
     return <NotFoundRedirect />;
   }
 
-  const waLink = (() => {
-    if (!whatsapp?.numero) return "#";
-    const text = siteWhatsAppMessage(`moro em ${city.name} e estou procurando um seminovo.`);
-    return buildWhatsAppUrl(whatsapp.numero, text);
-  })();
-
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full bg-gradient-to-b from-white via-gray-50/30 to-white">
-      <section className="py-14 md:py-20">
-        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-3xl"
-          >
-            <span className="text-primary text-xs font-semibold tracking-widest uppercase mb-4 block">
-              {city.regionName ?? "Atendimento regional"}
+    <main className="flex-1 overflow-x-hidden max-w-full bg-white">
+      <RegionalSeoHero
+        eyebrow={city.regionName ?? "Atendimento regional"}
+        title={city.h1}
+        intro={city.intro}
+        badges={
+          <>
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm text-gray-600 shadow-sm ring-1 ring-black/5">
+              <MapPin className="h-4 w-4 text-primary" />
+              ~{city.distanceKm} km de {city.name}
             </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-fg mb-4">{city.h1}</h1>
-            <p className="text-lg text-gray-600 mb-6">{city.intro}</p>
-
-            <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-8">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-sm">
-                <MapPin className="w-4 h-4 text-primary" />
-                ~{city.distanceKm} km de {city.name}
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-sm">
-                <Clock className="w-4 h-4 text-primary" />
-                {city.travelTime} de carro
-              </span>
-            </div>
-
-            {city.paragraphs.map((paragraph) => (
-              <p key={paragraph} className="text-gray-600 leading-relaxed mb-4">
-                {paragraph}
-              </p>
-            ))}
-            {city.routeNote && (
-              <p className="rounded-xl border border-primary/10 bg-primary/5 p-4 text-sm leading-relaxed text-gray-600">
-                <strong className="text-fg">Referência de trajeto:</strong>{" "}
-                {city.routeNote}
-              </p>
-            )}
-
-            <div className="flex flex-wrap gap-3 mt-8">
-              <Link
-                to="/seminovos"
-                search={emptySeminovosSearch}
-                data-regional-action="view_stock"
-                className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-white font-semibold hover:bg-primary/90"
-              >
-                <Car className="w-4 h-4" />
-                Ver estoque
-              </Link>
-              <Link
-                to="/vender-carro-{$citySlug}"
-                params={{ citySlug: city.slug }}
-                data-regional-action="sell_city"
-                className="inline-flex items-center justify-center rounded-xl border border-secondary/30 px-5 py-3 text-secondary font-semibold hover:bg-secondary/5"
-              >
-                Quer vender seu carro?
-              </Link>
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-regional-action="whatsapp"
-                className="inline-flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold text-gray-500 hover:text-primary"
-              >
-                <MessageCircle className="w-4 h-4" />
-                Tirar dúvida no WhatsApp
-              </a>
-            </div>
-          </motion.div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm text-gray-600 shadow-sm ring-1 ring-black/5">
+              <Clock className="h-4 w-4 text-primary" />
+              {city.travelTime} de carro
+            </span>
+          </>
+        }
+      >
+        <div className="mt-6 space-y-4">
+          {city.paragraphs.map((paragraph) => (
+            <p key={paragraph} className="text-gray-600 leading-relaxed">
+              {paragraph}
+            </p>
+          ))}
+          {city.routeNote && (
+            <p className="rounded-xl border border-primary/10 bg-primary/5 p-4 text-sm leading-relaxed text-gray-600">
+              <strong className="text-fg">Referência de trajeto:</strong>{" "}
+              {city.routeNote}
+            </p>
+          )}
         </div>
-      </section>
+        <RegionalActionCtas
+          className="mt-8"
+          waText={`moro em ${city.name} e estou procurando um seminovo.`}
+          sellCitySlug={city.slug}
+          primary="stock"
+        />
+      </RegionalSeoHero>
+
+      <RegionalTrustSignals />
+
+      <RegionalStockPreview
+        title={`Seminovos para quem vem de ${city.name}`}
+        limit={8}
+      />
 
       <section ref={trustSectionRef} className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
@@ -168,7 +135,7 @@ export function CityLandingPage() {
             Da pesquisa à visita em Esteio
           </h2>
           <div className="grid gap-4 md:grid-cols-3">
-            <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <article className="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-gray-50/80 p-5 shadow-sm">
               <Search className="mb-3 h-5 w-5 text-primary" />
               <h3 className="mb-2 font-semibold text-fg">1. Pesquise no site</h3>
               <p className="text-sm leading-relaxed text-gray-600">
@@ -176,20 +143,20 @@ export function CityLandingPage() {
                 antes de conversar com equipe.
               </p>
             </article>
-            <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <article className="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-gray-50/80 p-5 shadow-sm">
               <Car className="mb-3 h-5 w-5 text-primary" />
               <h3 className="mb-2 font-semibold text-fg">2. Adiante negociação</h3>
               <p className="text-sm leading-relaxed text-gray-600">
-                Simulação e pré-avaliação da troca podem começar remotamente.
-                Condições finais dependem das análises presenciais.
+                Troca do usado, simulação de parcelamento e dúvidas no WhatsApp
+                podem começar remotamente. Condições finais na loja.
               </p>
             </article>
-            <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <article className="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-gray-50/80 p-5 shadow-sm">
               <CalendarCheck className="mb-3 h-5 w-5 text-primary" />
               <h3 className="mb-2 font-semibold text-fg">3. Confirme visita</h3>
               <p className="text-sm leading-relaxed text-gray-600">
                 {city.visitPlanning ??
-                  "Confirme disponibilidade e visite as lojas da Av. Presidente Vargas, em Esteio, para test drive e fechamento."}
+                  "Confirme disponibilidade e visite as lojas da Av. Presidente Vargas, em Esteio, para test drive, despachante e fechamento."}
               </p>
             </article>
           </div>

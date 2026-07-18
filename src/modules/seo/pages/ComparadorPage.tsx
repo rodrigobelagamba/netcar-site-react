@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Check, Plus, X, Car } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
@@ -8,6 +7,10 @@ import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { Localizacao } from "@/design-system/components/layout/Localizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
+import { isAvailableHomeStockVehicle } from "@/lib/homeStock";
+import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
+import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
+import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 
 const MAX_COMPARE = 4;
 
@@ -25,7 +28,10 @@ export function ComparadorPage() {
     "Compare até 4 seminovos do estoque da Netcar lado a lado: preço, ano, km, câmbio, motor e itens. Escolha o seu em Esteio/RS."
   );
 
-  const list = vehicles || [];
+  const list = useMemo(
+    () => (vehicles ?? []).filter(isAvailableHomeStockVehicle),
+    [vehicles],
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -61,17 +67,23 @@ export function ComparadorPage() {
   ];
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full bg-gradient-to-b from-white via-gray-50/30 to-white">
-      <section className="py-12 md:py-16">
-        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-fg mb-3">Comparar seminovos lado a lado</h1>
-            <p className="text-lg text-gray-600">
-              Escolha de 2 a {MAX_COMPARE} carros do nosso estoque e compare preço, ano, quilometragem, câmbio e itens —
-              tudo numa tela só. Estoque real da Netcar, em Esteio/RS.
-            </p>
-          </motion.div>
+    <main className="flex-1 overflow-x-hidden max-w-full bg-white">
+      <RegionalSeoHero
+        eyebrow="Ferramenta de escolha"
+        title="Comparar seminovos lado a lado"
+        intro={`Escolha de 2 a ${MAX_COMPARE} carros do estoque e compare preço, ano, km, câmbio e itens. Depois avance com troca, parcelamento ou WhatsApp.`}
+      >
+        <RegionalActionCtas
+          className="mt-8"
+          waText="vim pelo comparador e quero ajuda para escolher um seminovo."
+          primary="stock"
+        />
+      </RegionalSeoHero>
 
+      <RegionalTrustSignals />
+
+      <section className="pb-16">
+        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           {/* Tabela comparativa */}
           {chosen.length > 0 && (
             <div className="mb-10 overflow-x-auto rounded-2xl border border-gray-200 bg-white">
