@@ -5,7 +5,6 @@ import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { maskPlate } from "@/lib/slug";
 import { resolveIcheckProtocol } from "@/lib/icheck-protocol";
 import { isConsultaValid } from "@/lib/icheck-validity";
-import icheckPdfMap from "@/data/icheck-pdf-map.json";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleUnavailableRedirect } from "@/components/VehicleUnavailableRedirect";
@@ -104,65 +103,60 @@ export function ICheckLaudoPage() {
       return;
     }
     setProtocolReady(false);
+    // Meta só do PDF da API (Automacar) — sem mapa local.
     const pdfFromVehicle =
       vehicle.pdf || vehicle.pdf_url?.split("/").pop() || "";
     const placa = String(vehicle.placa || "")
       .replace(/[^a-zA-Z0-9]/g, "")
       .toUpperCase();
-    const mapById = (
-      icheckPdfMap as { byId?: Record<string, { pdf?: string }> }
-    ).byId?.[String(vehicle.id)];
-    const mapByPlaca = (
-      icheckPdfMap as { byPlaca?: Record<string, { pdf?: string }> }
-    ).byPlaca?.[placa];
-    const metaCandidates = [
-      ...new Set(
-        [pdfFromVehicle, mapById?.pdf, mapByPlaca?.pdf]
-          .filter(Boolean)
-          .map((pdf) =>
-            String(pdf).replace(/^.*\//, "").replace(/\.pdf$/i, ".meta.json"),
-          ),
-      ),
-    ];
-    if (!metaCandidates.length) {
+    if (!pdfFromVehicle) {
       setProtocol(null);
       setProtocolReady(true);
       return;
     }
 
+    const metaName = String(pdfFromVehicle)
+      .replace(/^.*\//, "")
+      .replace(/\.pdf$/i, ".meta.json");
+
     let cancelled = false;
     (async () => {
-      for (const metaName of metaCandidates) {
-        try {
-          const res = await fetch(
-            `/arquivos/autocheck/${metaName}?v=${Date.now()}`,
-            { cache: "no-store" },
-          );
-          if (!res.ok) continue;
-          const json = (await res.json()) as CheckAutoProtocolMeta;
-          if (cancelled) return;
-          setProtocol(json);
-          setProtocolReady(true);
+      try {
+        const res = await fetch(
+          `/arquivos/autocheck/${metaName}?v=${Date.now()}`,
+          { cache: "no-store" },
+        );
+        if (!res.ok) {
+          if (!cancelled) {
+            setProtocol({
+              consultaId: null,
+              dataHoraConsulta: null,
+              tipoChave: placa ? `Placa: ${maskPlate(placa)} UF: RS` : null,
+            });
+            setProtocolReady(true);
+          }
           return;
-        } catch {
-          /* próximo */
         }
-      }
-      if (!cancelled) {
-        setProtocol({
-          consultaId: null,
-          dataHoraConsulta: null,
-          tipoChave: placa ? `Placa: ${maskPlate(placa)} UF: RS` : null,
-        });
+        const json = (await res.json()) as CheckAutoProtocolMeta;
+        if (cancelled) return;
+        setProtocol(json);
         setProtocolReady(true);
+      } catch {
+        if (!cancelled) {
+          setProtocol({
+            consultaId: null,
+            dataHoraConsulta: null,
+            tipoChave: placa ? `Placa: ${maskPlate(placa)} UF: RS` : null,
+          });
+          setProtocolReady(true);
+        }
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [vehicle?.pdf, vehicle?.pdf_url, vehicle?.placa, vehicle?.id]);
-
+  }, [vehicle?.pdf, vehicle?.pdf_url, vehicle?.placa]);
   if (isLoading && !vehicle) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center text-[#00283C]/70">
@@ -183,14 +177,17 @@ export function ICheckLaudoPage() {
     );
   }
 
-  if (!isConsultaValid(protocol?.dataHoraConsulta)) {
+  const hasApiPdf = Boolean(vehicle.pdf || vehicle.pdf_url);
+  if (!hasApiPdf || !isConsultaValid(protocol?.dataHoraConsulta)) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 px-4 text-center">
         <p className="text-[17px] font-bold text-[#00283C]">
           Consulta i-CHECK indisponível
         </p>
         <p className="max-w-md text-sm text-[#00283C]/70">
-          Esta consulta tem mais de 2 anos e não é mais exibida.
+          {hasApiPdf
+            ? "Esta consulta tem mais de 2 anos e não é mais exibida."
+            : "Este veículo não tem laudo i-CHECK anexado no estoque."}
         </p>
         <Link
           to="/veiculo/$slug"
