@@ -62,6 +62,9 @@ export function SeminovosAutomaticosPage() {
                   marca={vehicle.marca}
                   modelo={vehicle.modelo}
                   placa={vehicle.placa}
+                  pdf={vehicle.pdf}
+                  pdf_url={vehicle.pdf_url}
+                  diferenciais={vehicle.diferenciais}
                   showWhatsAppInterest
                   whatsAppSource="automaticos_landing"
                   delay={index}

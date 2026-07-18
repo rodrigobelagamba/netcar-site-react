@@ -586,6 +586,9 @@ export function SeminovosPage() {
                     imagens_site={vehicle.imagens_site}
                     marca={vehicle.marca}
                     modelo={vehicle.modelo}
+                    pdf={vehicle.pdf}
+                    pdf_url={vehicle.pdf_url}
+                    diferenciais={vehicle.diferenciais}
                     delay={index}
                     fastAnimation
                     showWhatsAppInterest
@@ -623,6 +626,9 @@ export function SeminovosPage() {
                     imagens_site={vehicle.imagens_site}
                     marca={vehicle.marca}
                     modelo={vehicle.modelo}
+                    pdf={vehicle.pdf}
+                    pdf_url={vehicle.pdf_url}
+                    diferenciais={vehicle.diferenciais}
                     delay={index}
                     fastAnimation={index >= 8}
                     showWhatsAppInterest
@@ -659,6 +665,9 @@ export function SeminovosPage() {
                       imagens_site={vehicle.imagens_site}
                       marca={vehicle.marca}
                       modelo={vehicle.modelo}
+                      pdf={vehicle.pdf}
+                      pdf_url={vehicle.pdf_url}
+                      diferenciais={vehicle.diferenciais}
                       delay={desktopMidBreak + index}
                       fastAnimation
                       showWhatsAppInterest
