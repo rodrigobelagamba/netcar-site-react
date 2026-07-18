@@ -8,10 +8,17 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 import { icheckProtocolFromDate } from "../../lib/icheck-protocol";
+import {
+  formatHistoryStatus,
+  isAlienacaoFiduciaria,
+  type ICheckHistoryItem,
+} from "./icheckHistory";
 
 const NAVY = "#00283C";
 const MINT = "#5CD29D";
 const GREEN = "#2E7D32";
+const AMBER = "#F59E0B";
+const AMBER_TEXT = "#B45309";
 const MUTED = "#5A6B73";
 const LINE = "#E4EAEF";
 const SOFT = "#F5F8F9";
@@ -243,6 +250,15 @@ const styles = StyleSheet.create({
     color: "#B91C1C",
     textTransform: "uppercase",
   },
+  historyStatusWarn: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: AMBER_TEXT,
+  },
+  historyCardWarn: {
+    backgroundColor: "#FFF8E1",
+    borderColor: "#F59E0B",
+  },
   footer: {
     position: "absolute",
     bottom: 16,
@@ -344,14 +360,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export type ICheckHistoryItem = {
-  key: string;
-  label: string;
-  status: string | null;
-  hint?: string;
-  clear?: boolean;
-  riskLevel?: string;
-};
+export type { ICheckHistoryItem };
 
 export type ICheckReportData = {
   vehicleName: string;
@@ -501,12 +510,6 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
   const hasProtocol = Boolean(
     protocoloNetcar || dataHora || data.tipoChave,
   );
-
-  const formatStatus = (status?: string | null) => {
-    if (!status) return "";
-    if (/^sem\s*registro\.?$/i.test(String(status).trim())) return "NADA CONSTA";
-    return status;
-  };
   const hasPhotos = data.galleryPhotos.length > 0 || data.heroPhotos.length > 0;
   const hasSpecs = data.specs.length > 0;
   const hasOptionals = data.optionals.length > 0;
@@ -645,16 +648,26 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
             <Text style={styles.sectionTitle}>CONSULTA CHECKAUTO / DEKRA</Text>
             <View style={styles.historyGrid}>
               {history.map((item) => {
+                const isWarn =
+                  item.riskLevel === "warn" ||
+                  isAlienacaoFiduciaria(item.status);
                 const isAlert =
-                  item.riskLevel === "alert" ||
-                  (item.clear === false &&
-                    !/^consultado\.?$/i.test(String(item.status || "")) &&
-                    !/^sem\s*registro/i.test(String(item.status || "")));
-                const statusLabel = formatStatus(item.status);
-                const isOk = /^nada\s*consta$/i.test(statusLabel);
+                  !isWarn &&
+                  (item.riskLevel === "alert" ||
+                    (item.clear === false &&
+                      !/^consultado\.?$/i.test(String(item.status || "")) &&
+                      !/^sem\s*registro/i.test(String(item.status || ""))));
+                const statusLabel = formatHistoryStatus(item.status);
+                const isOk = !isWarn && !isAlert && /^nada\s*consta$/i.test(statusLabel);
                 return (
-                  <View key={item.key} style={styles.historyCard}>
-                    {!isAlert && data.checkIconPath ? (
+                  <View
+                    key={item.key}
+                    style={[
+                      styles.historyCard,
+                      isWarn ? styles.historyCardWarn : null,
+                    ]}
+                  >
+                    {isOk && data.checkIconPath ? (
                       <Image src={data.checkIconPath} style={styles.checkIcon} />
                     ) : (
                       <View
@@ -662,7 +675,11 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
                           width: 14,
                           height: 14,
                           borderRadius: 7,
-                          backgroundColor: isAlert ? "#B91C1C" : LINE,
+                          backgroundColor: isWarn
+                            ? AMBER
+                            : isAlert
+                              ? "#B91C1C"
+                              : LINE,
                         }}
                       />
                     )}
@@ -670,11 +687,13 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
                       <Text style={styles.historyLabel}>{item.label}</Text>
                       <Text
                         style={
-                          isAlert
-                            ? styles.historyStatusAlert
-                            : isOk
-                              ? styles.historyStatusOk
-                              : styles.historyStatus
+                          isWarn
+                            ? styles.historyStatusWarn
+                            : isAlert
+                              ? styles.historyStatusAlert
+                              : isOk
+                                ? styles.historyStatusOk
+                                : styles.historyStatus
                         }
                       >
                         {statusLabel}

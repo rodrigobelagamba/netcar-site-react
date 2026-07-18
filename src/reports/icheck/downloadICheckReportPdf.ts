@@ -6,9 +6,12 @@ import { resolveIcheckProtocol } from "@/lib/icheck-protocol";
 import { CANONICAL_ORIGIN } from "@/lib/seo";
 import {
   ICheckReportDocument,
-  type ICheckHistoryItem,
   type ICheckReportData,
 } from "./ICheckReportDocument";
+import {
+  normalizeHistoryItems,
+  type ICheckHistoryItem,
+} from "./icheckHistory";
 
 type ProtocolMeta = {
   consultaId?: string | null;
@@ -74,9 +77,8 @@ export function buildClientICheckReportData(input: {
         return `Placa: ${maskPlate(raw)}`;
       });
 
-  const history = (protocol?.history || []).filter(
-    (item) => item.status && !/indispon[ií]vel/i.test(item.status),
-  );
+  // Histórico só do meta CheckAuto (normalize = mesma regra HTML/PDF)
+  const history = normalizeHistoryItems(protocol?.history);
 
   const allClear =
     history.length === 0 ||
@@ -96,6 +98,12 @@ export function buildClientICheckReportData(input: {
   const marca = vehicle.marca || "";
   const modelo = vehicle.modelo || vehicle.name || "";
 
+  // Specs = catálogo API (não inventar). Omitir vazio / "—".
+  const cambio = String(vehicle.cambio || "").trim();
+  const cor = String(vehicle.cor || "").trim();
+  const combustivel = String(vehicle.combustivel || "").trim();
+  const motor = String(vehicle.motor || "").trim();
+
   return {
     vehicleName: `${marca} ${modelo} ${vehicle.year || ""}`.trim(),
     marca,
@@ -105,12 +113,12 @@ export function buildClientICheckReportData(input: {
     kmLabel:
       vehicle.km != null
         ? `${Number(vehicle.km).toLocaleString("pt-BR")} km`
-        : "—",
-    cor: vehicle.cor || "—",
-    combustivel: vehicle.combustivel || "—",
-    cambio: vehicle.cambio || "—",
-    motor: vehicle.motor || "—",
-    chassiMasked: "—",
+        : "",
+    cor,
+    combustivel,
+    cambio,
+    motor,
+    chassiMasked: "",
     issuedAt: dataHora,
     consultaId: consultaId || undefined,
     dataHoraConsulta: dataHora || undefined,
@@ -125,24 +133,24 @@ export function buildClientICheckReportData(input: {
     galleryPhotos: gallery,
     specs: [
       { label: "Ano", value: yearLabel },
-      { label: "Cor", value: vehicle.cor || "—" },
+      { label: "Cor", value: cor },
       {
         label: "Km",
         value:
           vehicle.km != null
             ? `${Number(vehicle.km).toLocaleString("pt-BR")} km`
-            : "—",
+            : "",
       },
-      { label: "Motor", value: vehicle.motor || "—" },
+      { label: "Motor", value: motor },
       {
         label: "Potência",
-        value: vehicle.potencia ? `${vehicle.potencia} cv` : "—",
+        value: vehicle.potencia ? `${vehicle.potencia} cv` : "",
       },
-      { label: "Combustível", value: vehicle.combustivel || "—" },
-      { label: "Câmbio", value: vehicle.cambio || "—" },
+      { label: "Combustível", value: combustivel },
+      { label: "Câmbio", value: cambio },
       {
         label: "Portas",
-        value: vehicle.portas != null ? String(vehicle.portas) : "—",
+        value: vehicle.portas != null ? String(vehicle.portas) : "",
       },
     ].filter((s) => s.value && s.value !== "—"),
     optionals,

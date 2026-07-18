@@ -11,40 +11,22 @@ import {
   buildClientICheckReportData,
   downloadICheckReportPdf,
 } from "@/reports/icheck/downloadICheckReportPdf";
-
-type HistoryMetaItem = {
-  key: string;
-  label: string;
-  status: string | null;
-  hint?: string;
-  clear?: boolean;
-  riskLevel?: string;
-};
+import {
+  formatHistoryStatus,
+  isAlienacaoFiduciaria,
+  isClearHistoryStatus,
+  normalizeHistoryItems,
+  type ICheckHistoryItem,
+} from "@/reports/icheck/icheckHistory";
 
 type CheckAutoProtocolMeta = {
   consultaId?: string | null;
   dataHoraConsulta?: string | null;
   protocoloConsulta?: string | null;
   tipoChave?: string | null;
-  history?: HistoryMetaItem[];
+  history?: ICheckHistoryItem[];
   consultationHighlights?: Array<{ label: string; value: string }>;
 };
-
-/** "Sem Registro" do certificado → destaque "NADA CONSTA". */
-function formatHistoryStatus(status: string | null | undefined): string {
-  if (!status) return "";
-  if (/^sem\s*registro\.?$/i.test(status.trim())) return "NADA CONSTA";
-  return status;
-}
-
-function isClearStatus(status: string | null | undefined): boolean {
-  const s = String(status || "");
-  return /^sem\s*registro/i.test(s) || /^nada\s*consta/i.test(s);
-}
-
-function isAlienacaoFiduciaria(text: string | null | undefined): boolean {
-  return /aliena[cç][aã]o\s*fiduci/i.test(String(text || ""));
-}
 
 function Spec({
   label,
@@ -464,13 +446,7 @@ export function ICheckLaudoPage() {
             </section>
 
             {(() => {
-              const historyCards = protocol?.history?.length
-                ? protocol.history.filter(
-                    (item) =>
-                      item.status &&
-                      !/indispon[ií]vel/i.test(item.status),
-                  )
-                : [];
+              const historyCards = normalizeHistoryItems(protocol?.history);
               if (!historyCards.length) return null;
               return (
                 <section>
@@ -480,10 +456,10 @@ export function ICheckLaudoPage() {
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     {historyCards.map((item) => {
                       const statusLabel = formatHistoryStatus(item.status);
-                      const alienacao = isAlienacaoFiduciaria(item.status);
-                      // Vermelho só riskLevel "alert" — "Consultado" (clear:false) não é grave.
-                      const isAlert =
-                        !alienacao && item.riskLevel === "alert";
+                      const alienacao =
+                        item.riskLevel === "warn" ||
+                        isAlienacaoFiduciaria(item.status);
+                      const isAlert = !alienacao && item.riskLevel === "alert";
                       const clear = !alienacao && !isAlert;
                       return (
                         <div
@@ -545,9 +521,7 @@ export function ICheckLaudoPage() {
             })()}
 
             {(() => {
-              const history = (protocol?.history || []).filter(
-                (item) => item.status && !/indispon[ií]vel/i.test(item.status),
-              );
+              const history = normalizeHistoryItems(protocol?.history);
               if (!history.length) return null;
 
               const hasAlienacao = history.some((item) =>
@@ -559,7 +533,7 @@ export function ICheckLaudoPage() {
                 const s = String(item.status || "");
                 return (
                   /com\s*registro|consta\s+registro|ocorr[eê]ncia/i.test(s) &&
-                  !isClearStatus(s)
+                  !isClearHistoryStatus(s)
                 );
               });
               const cleanCore = history

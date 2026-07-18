@@ -34,8 +34,8 @@
       "label": "Informações Estaduais",
       "hint": "Situação no DETRAN / gravames",
       "status": "Alienação Fiduciária Ativa (Veículo Financiado)",
-      "clear": true,
-      "riskLevel": "ok"
+      "clear": false,
+      "riskLevel": "warn"
     }
   ],
   "consultationHighlights": [
@@ -59,6 +59,6 @@
   "source": "automacar-pdf",
   "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_IZN2I88_1033.pdf",
   "pdf": "CheckAuto_IZN2I88_1033.pdf",
-  "updatedAt": "2026-07-18T18:32:43.575Z",
+  "updatedAt": "2026-07-18T19:51:35.392Z",
   "protocoloConsulta": "04172024"
 }
