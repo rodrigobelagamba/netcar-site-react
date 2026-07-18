@@ -4,12 +4,7 @@ import { formatPrice, formatYear, formatKm } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
 import { buildWhatsAppUrl, vehicleWhatsAppMessages } from "@/lib/whatsappMessages";
 import { CardsHero } from "./CardsHero";
-import {
-  VehicleImagesSite,
-  vehicleHasBaixaKm,
-  vehicleHasFactoryWarranty,
-  vehicleHasIcheck,
-} from "@/catalog/endpoints/vehicles";
+import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 
 export type VehicleFocusPayload = {
   id: string;
@@ -39,9 +34,6 @@ export interface VehicleCardProps {
   placa?: string;
   combustivel?: string;
   cambio?: string;
-  pdf?: string;
-  pdf_url?: string;
-  diferenciais?: Array<{ tag: string; descricao?: string }>;
   delay?: number;
   fastAnimation?: boolean;
   showWhatsAppInterest?: boolean;
@@ -71,9 +63,6 @@ export function VehicleCard({
   placa,
   combustivel,
   cambio,
-  pdf,
-  pdf_url,
-  diferenciais,
   delay = 0,
   fastAnimation = false,
   showWhatsAppInterest = false,
@@ -145,9 +134,6 @@ export function VehicleCard({
   const transmission = cambio || '';
   const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
   const isSold = !price || price <= 0;
-  const hasFactoryWarranty = vehicleHasFactoryWarranty({ diferenciais });
-  const hasBaixaKm = vehicleHasBaixaKm({ diferenciais });
-  const hasIcheck = vehicleHasIcheck({ pdf, pdf_url });
 
   const emitFocus = () => {
     if (!onVehicleFocus || isSold) return;
@@ -222,9 +208,6 @@ export function VehicleCard({
       whatsAppSource={whatsAppSource}
       compact={compact}
       isSold={isSold}
-      hasFactoryWarranty={hasFactoryWarranty}
-      hasBaixaKm={hasBaixaKm}
-      hasIcheck={hasIcheck}
     />
   );
 

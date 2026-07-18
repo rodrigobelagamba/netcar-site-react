@@ -24,16 +24,7 @@ interface CardsHeroProps {
   whatsAppSource?: string;
   compact?: boolean;
   isSold?: boolean;
-  hasFactoryWarranty?: boolean;
-  hasBaixaKm?: boolean;
-  hasIcheck?: boolean;
 }
-
-const SEAL_COLORS = {
-  garantia: "#69BDCD",
-  baixaKm: "#004C5C",
-  icheck: "#59C897",
-} as const;
 
 export function CardsHero({
   image,
@@ -54,15 +45,7 @@ export function CardsHero({
   whatsAppSource = "home_destaques",
   compact = false,
   isSold = false,
-  hasFactoryWarranty = false,
-  hasBaixaKm = false,
-  hasIcheck = false,
 }: CardsHeroProps) {
-  const showSeals = !isSold && (hasFactoryWarranty || hasBaixaKm || hasIcheck);
-  const sealBase = compact
-    ? "rounded-full px-2 py-0.5 text-[7px] tracking-[0.04em] font-bold uppercase text-white leading-none"
-    : "rounded-full px-2.5 py-1 text-[9px] tracking-[0.06em] font-bold uppercase text-white leading-none short1600:px-2 short1600:py-0.5 short1600:text-[8px]";
-
   const content = (
     <div className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center h-full ${
       compact
@@ -140,27 +123,6 @@ export function CardsHero({
            </h3>
            <p className={`!border-0 text-gray-400 font-medium ${compact ? "text-[10px]" : "text-base short1600:text-sm"}`}>{year}</p>
          </div>
-
-         {/* Selos pill: body do card (não overlay da foto) */}
-         {showSeals ? (
-           <div className={`!border-0 flex flex-wrap items-center ${compact ? "gap-1" : "gap-1.5"}`}>
-             {hasFactoryWarranty ? (
-               <span className={sealBase} style={{ backgroundColor: SEAL_COLORS.garantia }}>
-                 Garantia de fábrica
-               </span>
-             ) : null}
-             {hasBaixaKm ? (
-               <span className={sealBase} style={{ backgroundColor: SEAL_COLORS.baixaKm }}>
-                 Baixa KM
-               </span>
-             ) : null}
-             {hasIcheck ? (
-               <span className={sealBase} style={{ backgroundColor: SEAL_COLORS.icheck }}>
-                 iCheck aprovado
-               </span>
-             ) : null}
-           </div>
-         ) : null}
 
          {/* Price and Action — altura reservada pra alinhar CTA entre cards */}
          <div className={`!border-0 w-full min-w-0 flex flex-col items-stretch mt-auto ${

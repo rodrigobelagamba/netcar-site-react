@@ -195,32 +195,6 @@ function resolveVehiclePdf(apiVehicle: {
   };
 }
 
-/** Selo card/detalhe: diferencial `garantia_fabrica` da API. */
-export function vehicleHasFactoryWarranty(vehicle: {
-  diferenciais?: Array<{ tag: string }> | null;
-}): boolean {
-  return Boolean(
-    vehicle.diferenciais?.some((diff) => diff.tag === "garantia_fabrica"),
-  );
-}
-
-/** Selo card/detalhe: diferencial `baixa_km` da API (PIADO). */
-export function vehicleHasBaixaKm(vehicle: {
-  diferenciais?: Array<{ tag: string }> | null;
-}): boolean {
-  return Boolean(
-    vehicle.diferenciais?.some((diff) => diff.tag === "baixa_km"),
-  );
-}
-
-/** Selo/CTA i-CHECK: só pdf/pdf_url da API (sem mapa, sem filtro de anos). */
-export function vehicleHasIcheck(vehicle: {
-  pdf?: string | null;
-  pdf_url?: string | null;
-}): boolean {
-  return Boolean(vehicle.pdf || vehicle.pdf_url);
-}
-
 export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
   try {
     // Constrói os parâmetros da query string
