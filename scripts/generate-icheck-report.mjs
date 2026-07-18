@@ -201,28 +201,6 @@ function maskPlate(placa) {
   return `${clean.slice(0, 3)}-XX${clean.slice(-2)}`;
 }
 
-/** Campo cambio API às vezes erra; opcional cambio_automatico corrige. */
-function resolveVehicleCambio(cambio, opcionais) {
-  const field = String(cambio || "").trim();
-  const tags = new Set(
-    (opcionais || []).map((o) => String(o?.tag || "").toLowerCase()),
-  );
-  const hasAutoOpt =
-    tags.has("cambio_automatico") ||
-    tags.has("cambio_automatizado") ||
-    tags.has("cvt");
-  const hasManualOpt = tags.has("cambio_manual");
-  if (hasAutoOpt && !hasManualOpt) {
-    if (!field || /manual/i.test(field)) return "AUTOMATICO";
-    return field;
-  }
-  if (hasManualOpt && !hasAutoOpt) {
-    if (!field || /autom/i.test(field)) return "MANUAL";
-    return field;
-  }
-  return field || "";
-}
-
 function maskTipoChave(tipoChave) {
   const raw = String(tipoChave || "").trim();
   if (!raw) return "";
@@ -664,7 +642,6 @@ async function main() {
 
   const slug = generateSlug(vehicle);
   const listingUrl = `${SITE_ORIGIN}/veiculo/${slug}`;
-  const cambio = resolveVehicleCambio(vehicle.cambio, vehicle.opcionais);
 
   const data = {
     vehicleName: `${marca} ${modelo} ${vehicle.ano || ""}`.trim(),
@@ -678,7 +655,7 @@ async function main() {
         : "—",
     cor: vehicle.cor || "—",
     combustivel: vehicle.combustivel || "—",
-    cambio,
+    cambio: vehicle.cambio || "—",
     motor: vehicle.motor || "—",
     chassiMasked: maskChassi(historyParse.chassi || vehicle.chassi),
     issuedAt: historyParse.dataHoraConsulta || historyParse.issuedAt || "",
@@ -701,7 +678,7 @@ async function main() {
       { label: "Motor", value: vehicle.motor || "—" },
       { label: "Potência", value: vehicle.potencia ? `${vehicle.potencia} cv` : "—" },
       { label: "Combustível", value: vehicle.combustivel || "—" },
-      { label: "Câmbio", value: cambio },
+      { label: "Câmbio", value: vehicle.cambio || "—" },
       { label: "Portas", value: vehicle.portas != null ? String(vehicle.portas) : "—" },
     ].filter((s) => s.value && s.value !== "—"),
     optionals: (vehicle.opcionais || [])
