@@ -84,6 +84,11 @@
   <If "%{REQUEST_URI} =~ m#^/(admin|sistema|api|backend)(/|$)#">
     Header set X-Robots-Tag "noindex, nofollow"
   </If>
+
+  # Legado / laudos: acessível pra humano, fora do índice
+  <If "%{REQUEST_URI} =~ m#^/(Tour3D|Tour3DRC|arquivos/autocheck)(/|$)#">
+    Header set X-Robots-Tag "noindex, nofollow"
+  </If>
 </IfModule>
 
 # Rewrite Rules para SPA
@@ -111,8 +116,12 @@
   RewriteRule ^clientes?\.(php|html?)$ / [R=301,L,QSD,NC]
   RewriteRule ^contato\.(php|html?)$ /contato [R=301,L,QSD,NC]
   RewriteRule ^ficha-cadastral\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
+  RewriteRule ^compramos-seu-usado\.(php|html?)$ /compra [R=301,L,QSD,NC]
   RewriteRule ^detalhe-produto-(.+)\.html?$ /seminovos [R=301,L,QSD,NC]
   RewriteRule ^detalhe-produto-(.+)$ /seminovos [R=301,L,QSD,NC]
+
+  # Tours 3D antigos (2016) — Tour3D e Tour3DRC
+  RewriteRule ^Tour3DR?C?(/.*)?$ / [R=301,L,NC]
   
   # Home para bots: precisa vir ANTES do short-circuit de arquivo/diretório,
   # senão a raiz "/" casa com o diretório docroot (-d) e o crawler recebe o
