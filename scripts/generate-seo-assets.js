@@ -526,6 +526,7 @@ const staticPages = [
   { path: "/blog", priority: "0.8", changefreq: "weekly" },
   // Páginas de intenção (antes fora do sitemap)
   { path: "/financiamento", priority: "0.85", changefreq: "monthly" },
+  { path: "/move-brasil", priority: "0.85", changefreq: "weekly" },
   { path: "/atendimento-24h", priority: "0.7", changefreq: "monthly" },
   { path: "/comparar", priority: "0.7", changefreq: "weekly" },
   { path: "/seminovos-automaticos", priority: "0.8", changefreq: "weekly" },

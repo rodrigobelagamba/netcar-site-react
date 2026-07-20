@@ -89,6 +89,11 @@ const Atendimento24hPage = lazyWithRetry(() =>
     default: m.Atendimento24hPage,
   }))
 );
+const MoveBrasilPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.MoveBrasilPage,
+  }))
+);
 const ComparadorPage = lazyWithRetry(() =>
   import("@/modules/seo/pages/ComparadorPage").then((m) => ({
     default: m.ComparadorPage,
@@ -140,6 +145,11 @@ function getContextualMessage(pathname: string): string {
   }
   if (pathname === "/atendimento-24h") {
     return siteWhatsAppMessage("quero atendimento agora.");
+  }
+  if (pathname === "/move-brasil") {
+    return siteWhatsAppMessage(
+      "sou motorista de aplicativo ou taxista e quero ver seminovos elegíveis ao Move Brasil.",
+    );
   }
   if (pathname === "/comparar") {
     return siteWhatsAppMessage("quero ajuda para comparar alguns seminovos.");
@@ -441,6 +451,12 @@ const atendimento24hRoute = createRoute({
   component: Atendimento24hPage,
 });
 
+const moveBrasilRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/move-brasil",
+  component: MoveBrasilPage,
+});
+
 const comparadorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/comparar",
@@ -471,6 +487,7 @@ export const routeTree = rootRoute.addChildren([
   estoqueLandingRoute,
   financiamentoRoute,
   atendimento24hRoute,
+  moveBrasilRoute,
   comparadorRoute,
   regionsHubRoute,
 ]);

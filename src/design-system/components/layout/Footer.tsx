@@ -22,6 +22,7 @@ const menuLinks = [
   { to: "/seminovos", label: "Seminovos", search: emptySeminovosSearch },
   { to: "/comparar", label: "Comparar seminovos" },
   { to: "/financiamento", label: "Financiamento" },
+  { to: "/move-brasil", label: "Move Brasil" },
   { to: "/compra", label: "Netcar compra" },
   { to: "/regioes-atendidas", label: "Regiões atendidas" },
   { to: "/atendimento-24h", label: "Atendimento 24h" },

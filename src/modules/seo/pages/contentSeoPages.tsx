@@ -14,3 +14,8 @@ export function Atendimento24hPage() {
   const page = getContentPage("atendimento-24h");
   return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
 }
+
+export function MoveBrasilPage() {
+  const page = getContentPage("move-brasil");
+  return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
+}

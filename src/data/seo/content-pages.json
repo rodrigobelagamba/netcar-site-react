@@ -26,7 +26,9 @@
         "Aprovou? Retire o carro na loja em Esteio"
       ] },
       { "type": "h2", "text": "Autônomo e comprovação de renda" },
-      { "type": "p", "text": "Autônomos podem comprovar renda por extrato bancário e demais documentos pedidos pela financeira. Cada caso passa por análise de crédito das instituições parceiras — a Netcar não oferece linha específica para negativados nem aprovação sem análise." }
+      { "type": "p", "text": "Autônomos podem comprovar renda por extrato bancário e demais documentos pedidos pela financeira. Cada caso passa por análise de crédito das instituições parceiras — a Netcar não oferece linha específica para negativados nem aprovação sem análise." },
+      { "type": "h2", "text": "Motorista de app ou taxista? Conheça o Move Brasil" },
+      { "type": "p", "text": "Se você é motorista de aplicativo ou taxista, o programa federal Move Brasil ampliou a linha de crédito e passou a contemplar também alguns seminovos (elétricos ou híbridos flex a partir de 2024, com regras oficiais). Veja a página Move Brasil ou fale no WhatsApp para orientação." }
     ],
     "faq": [
       { "q": "Qual a entrada mínima para financiar?", "a": "Mínimo de 20% do valor do veículo (em geral 20% a 30%). Não trabalhamos com financiamento 100% nem sem entrada. O percentual exato depende do perfil de crédito e do banco; o valor do usado na troca pode compor parte dessa entrada." },
@@ -67,6 +69,51 @@
       { "q": "O atendimento é realmente 24 horas?", "a": "Sim. O iAN responde no WhatsApp 24 horas por dia, 7 dias por semana. Atendimento humano ocorre no horário comercial das lojas." },
       { "q": "O iAN é um robô?", "a": "O iAN é o assistente digital da Netcar que agiliza o primeiro atendimento. Quando necessário, ele encaminha você para um consultor humano." },
       { "q": "Consigo avaliar meu carro pelo WhatsApp?", "a": "Sim. Envie modelo, ano, km e fotos; a avaliação começa na hora e um consultor retorna com a orientação de valor." }
+    ]
+  },
+  {
+    "slug": "move-brasil",
+    "title": "Move Brasil seminovos em Esteio/RS | Crédito para motoristas | Netcar",
+    "description": "Move Brasil liberou financiamento de seminovos elétricos e híbridos flex (a partir de 2024) para motoristas de app e taxistas. Veja regras e fale com a Netcar em Esteio/RS pelo WhatsApp.",
+    "h1": "Move Brasil: seminovos com linha de crédito do governo",
+    "intro": "O programa federal Move Brasil ampliou a linha de crédito e passou a contemplar também veículos seminovos — com regras específicas. Na Netcar Multimarcas, em Esteio/RS, ajudamos motoristas de aplicativo e taxistas a entender a elegibilidade, ver carros do estoque que podem enquadrar e seguir pelo WhatsApp com o iAN. A aprovação do programa e do banco é sempre do governo e das instituições financeiras credenciadas.",
+    "waText": "sou motorista de aplicativo ou taxista e quero ver seminovos elegíveis ao Move Brasil.",
+    "ctaLabel": "Falar no WhatsApp sobre Move Brasil",
+    "secondLabel": "Ver estoque de seminovos",
+    "secondHref": "/seminovos",
+    "sections": [
+      { "type": "h2", "text": "O que é o Move Brasil" },
+      { "type": "p", "text": "Move Brasil é uma linha de financiamento coordenada com recursos do BNDES, voltada à renovação de frota de profissionais do transporte de passageiros (motoristas de aplicativo, taxistas e cooperativas de táxi). O objetivo é facilitar a troca por veículos mais novos, com condições definidas pelo programa oficial." },
+      { "type": "h2", "text": "Seminovos entram — com regra clara" },
+      { "type": "p", "text": "Com a ampliação do programa (MP nº 1.376/2026), passou a ser possível financiar também seminovos. Não é qualquer usado: a linha contempla veículos elétricos ou híbridos flex fabricados a partir de 2024, respeitando o teto de valor do programa (até R$ 150 mil, conforme regras oficiais). Modelos a combustão convencional fora desse enquadramento não entram nessa modalidade." },
+      { "type": "h2", "text": "Quem pode participar" },
+      { "type": "ul", "items": [
+        "Motoristas de aplicativo com cadastro ativo há pelo menos 12 meses na mesma plataforma e mínimo de corridas exigido pelo programa",
+        "Taxistas e cooperativas com licença e regularidade perante os órgãos competentes",
+        "Cadastro e verificação de elegibilidade pelo portal oficial do governo (gov.br / Move Brasil)",
+        "Depois da habilitação no programa, a instituição financeira ainda faz a análise de crédito do financiamento"
+      ] },
+      { "type": "h2", "text": "O que a Netcar faz por você" },
+      { "type": "ol", "items": [
+        "Orientamos se o seu perfil e o carro desejado parecem enquadrar nas regras divulgadas do Move Brasil",
+        "Mostramos seminovos do estoque em Esteio que possam se aproximar dos critérios (ano, tecnologia e faixa de preço)",
+        "Ajudamos a organizar a próxima etapa pelo WhatsApp — documentos, visita e conversa com consultor",
+        "Se o Move Brasil não for o caminho do seu caso, comparamos o financiamento tradicional da Netcar com bancos e financeiras parceiras"
+      ] },
+      { "type": "h2", "text": "Como começar pelo WhatsApp" },
+      { "type": "p", "text": "Clique no botão e diga que é motorista ou taxista interessado no Move Brasil. O iAN e a equipe da Netcar retornam com orientação e opções do estoque. Em paralelo, faça ou confirme seu cadastro no portal oficial do programa — a Netcar não substitui o gov.br nem aprova crédito do BNDES." },
+      { "type": "h2", "text": "Importante (transparência)" },
+      { "type": "p", "text": "Esta página explica o programa com base nas regras públicas divulgadas e mostra como a Netcar pode ajudar na escolha do veículo e no atendimento. Taxas, prazos, carência, documentos e elegibilidade podem mudar e valem o que estiver no site oficial e no contrato da instituição financeira. Não prometemos aprovação de crédito nem que todo seminovo do estoque seja elegível ao Move Brasil." },
+      { "type": "h2", "text": "Financiamento comum também" },
+      { "type": "p", "text": "Não é motorista de app nem taxista? Ou o carro que você quer não entra no Move Brasil? A Netcar continua oferecendo simulação de financiamento tradicional com entrada mínima de 20% e comparação entre bancos parceiros — veja a página de financiamento ou fale no WhatsApp." }
+    ],
+    "faq": [
+      { "q": "O Move Brasil financia qualquer seminovo?", "a": "Não. Na modalidade de seminovos, o programa contempla veículos elétricos ou híbridos flex fabricados a partir de 2024, dentro do teto de valor oficial (até R$ 150 mil, conforme regras do governo). Confirme sempre no portal Move Brasil / gov.br." },
+      { "q": "Qualquer pessoa pode usar o Move Brasil?", "a": "Não. A linha é voltada a motoristas de aplicativo, taxistas e cooperativas que cumpram os critérios de elegibilidade do programa. A verificação começa no cadastro oficial do governo." },
+      { "q": "A Netcar aprova o crédito do Move Brasil?", "a": "Não. A elegibilidade é do programa federal e a análise de crédito é da instituição financeira credenciada. A Netcar ajuda com estoque, orientação e atendimento em Esteio/RS." },
+      { "q": "Como falo com a Netcar sobre Move Brasil?", "a": "Pelo WhatsApp, pelo botão desta página. Informe que é motorista ou taxista e que busca seminovo elegível ao Move Brasil — o iAN inicia o atendimento." },
+      { "q": "E se eu não me enquadrar no programa?", "a": "Podemos simular o financiamento tradicional da Netcar com bancos e financeiras parceiras, sujeito à análise de crédito. Veja também a página /financiamento." },
+      { "q": "Onde confirmo as regras oficiais?", "a": "No portal oficial do Move Brasil em gov.br e nas instituições financeiras habilitadas. Use esta página da Netcar como guia de atendimento e estoque, não como substituto do canal do governo." }
     ]
   }
 ]
