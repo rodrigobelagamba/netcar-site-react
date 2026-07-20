@@ -36,7 +36,7 @@ export function SeminovosAutomaticosPage() {
           waText="estou procurando um seminovo automático em Esteio."
           stockSearch={automaticSeminovosSearch}
           stockLabel="Ver automáticos nos seminovos"
-          primary="stock"
+          primary="whatsapp"
         />
       </RegionalSeoHero>
 

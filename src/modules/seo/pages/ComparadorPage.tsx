@@ -79,7 +79,7 @@ export function ComparadorPage() {
         <RegionalActionCtas
           className="mt-8"
           waText="vim pelo comparador e quero ajuda para escolher um seminovo."
-          primary="stock"
+          primary="whatsapp"
         />
       </RegionalSeoHero>
 

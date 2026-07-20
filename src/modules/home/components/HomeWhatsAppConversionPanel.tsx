@@ -156,16 +156,8 @@ export function HomeWhatsAppConversionPanel({
             </div>
           </div>
 
-          {/* CTAs mobile: estoque primeiro */}
+          {/* CTAs mobile: WhatsApp primeiro */}
           <div className="mt-4 flex flex-col gap-2.5 md:hidden">
-            <button
-              type="button"
-              onClick={onViewStock}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-base font-black text-[#00283C] shadow-[0_10px_28px_rgba(92,210,157,0.35)] transition-colors hover:bg-white/90"
-            >
-              <span className="button-text-shimmer">Ver estoque</span>
-              <ArrowRight className="h-5 w-5 text-[#00283C]" />
-            </button>
             <a
               href={primaryHref}
               target="_blank"
@@ -184,6 +176,14 @@ export function HomeWhatsAppConversionPanel({
               <MessageCircle className="h-5 w-5" />
               WhatsApp
             </a>
+            <button
+              type="button"
+              onClick={onViewStock}
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-base font-black text-[#00283C] shadow-[0_10px_28px_rgba(92,210,157,0.35)] transition-colors hover:bg-white/90"
+            >
+              <span className="button-text-shimmer">Ver estoque</span>
+              <ArrowRight className="h-5 w-5 text-[#00283C]" />
+            </button>
           </div>
 
           {/* CTAs desktop — igual master */}

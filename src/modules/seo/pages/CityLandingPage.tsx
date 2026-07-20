@@ -118,7 +118,7 @@ export function CityLandingPage() {
           className="mt-8"
           waText={`moro em ${city.name} e estou procurando um seminovo.`}
           sellCitySlug={city.slug}
-          primary="stock"
+          primary="whatsapp"
         />
       </RegionalSeoHero>
 

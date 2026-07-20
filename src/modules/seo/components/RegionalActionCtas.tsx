@@ -68,7 +68,7 @@ export function RegionalActionCtas({
   stockSubtitle = "Fotos, preço e km reais",
   waSubtitle = "Atendimento rápido · 24h",
   sellSubtitle = "Troca ou venda · avaliação",
-  primary = "stock",
+  primary = "whatsapp",
   className = "",
 }: RegionalActionCtasProps) {
   const { data: whatsapp } = useWhatsAppQuery();
@@ -106,6 +106,67 @@ export function RegionalActionCtas({
     />
   );
 
+  const stockLink = (
+    <Link
+      to="/seminovos"
+      search={stockSearch}
+      data-regional-action="view_stock"
+      className={stockBtn}
+    >
+      <CtaContent
+        icon={Car}
+        title={stockLabel}
+        subtitle={stockSubtitle}
+        dark={primary === "stock"}
+      />
+    </Link>
+  );
+
+  const waLink = (
+    <a
+      href={waHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-wa-source="landing"
+      data-wa-intent="regional_help"
+      data-regional-action="whatsapp"
+      className={waBtn}
+    >
+      <CtaContent
+        icon={MessageCircle}
+        title="WhatsApp"
+        subtitle={waSubtitle}
+        dark
+      />
+    </a>
+  );
+
+  const sellLink = sellCitySlug ? (
+    <Link
+      to="/vender-carro-{$citySlug}"
+      params={{ citySlug: sellCitySlug }}
+      data-regional-action="sell_city"
+      className={sellBtn}
+    >
+      {sellInner}
+    </Link>
+  ) : (
+    <Link
+      to={sellTo}
+      data-regional-action="sell_evaluation"
+      className={sellBtn}
+    >
+      {sellInner}
+    </Link>
+  );
+
+  const ordered =
+    primary === "whatsapp"
+      ? [waLink, stockLink, sellLink]
+      : primary === "sell"
+        ? [sellLink, waLink, stockLink]
+        : [stockLink, waLink, sellLink];
+
   return (
     <div
       className={cn(
@@ -114,55 +175,7 @@ export function RegionalActionCtas({
       )}
       data-regional-ctas
     >
-      <Link
-        to="/seminovos"
-        search={stockSearch}
-        data-regional-action="view_stock"
-        className={stockBtn}
-      >
-        <CtaContent
-          icon={Car}
-          title={stockLabel}
-          subtitle={stockSubtitle}
-          dark={primary === "stock"}
-        />
-      </Link>
-
-      <a
-        href={waHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-wa-source="landing"
-        data-wa-intent="regional_help"
-        data-regional-action="whatsapp"
-        className={waBtn}
-      >
-        <CtaContent
-          icon={MessageCircle}
-          title="WhatsApp"
-          subtitle={waSubtitle}
-          dark
-        />
-      </a>
-
-      {sellCitySlug ? (
-        <Link
-          to="/vender-carro-{$citySlug}"
-          params={{ citySlug: sellCitySlug }}
-          data-regional-action="sell_city"
-          className={sellBtn}
-        >
-          {sellInner}
-        </Link>
-      ) : (
-        <Link
-          to={sellTo}
-          data-regional-action="sell_evaluation"
-          className={sellBtn}
-        >
-          {sellInner}
-        </Link>
-      )}
+      {ordered}
     </div>
   );
 }

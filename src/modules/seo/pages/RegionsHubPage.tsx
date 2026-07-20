@@ -74,7 +74,7 @@ export function RegionsHubPage() {
         <RegionalActionCtas
           className="mt-8"
           waText="vim pela página de regiões atendidas e quero ajuda com seminovos ou venda do meu carro."
-          primary="stock"
+          primary="whatsapp"
         />
       </RegionalSeoHero>
 

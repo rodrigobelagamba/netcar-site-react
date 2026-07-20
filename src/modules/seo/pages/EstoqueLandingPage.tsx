@@ -90,7 +90,7 @@ export function EstoqueLandingPage() {
           waText={`estou procurando um ${landing.name} seminovo em Esteio.`}
           stockSearch={showroomSearch}
           stockLabel={`Ver ${landing.name} nos seminovos`}
-          primary="stock"
+          primary="whatsapp"
         />
       </RegionalSeoHero>
 

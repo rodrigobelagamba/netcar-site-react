@@ -22,8 +22,6 @@ import {
 } from "@/lib/homeStock";
 import { trackHomeScrollDepth } from "@/lib/analytics";
 import { optimizeStockImage } from "@/lib/images";
-import { usePastElement } from "@/hooks/usePastElement";
-
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
 
 function HomeHeroSkeleton() {
@@ -66,7 +64,6 @@ export function HomePage() {
   
   const [columnsPerRow, setColumnsPerRow] = useState(4);
   const heroRef = useRef<HTMLDivElement>(null);
-  const pastHero = usePastElement(heroRef);
 
   useEffect(() => {
     const updateColumns = () => {
@@ -309,7 +306,7 @@ export function HomePage() {
       </div>
 
       <HomeMobileWhatsAppBar
-        visible={pastHero}
+        visible
         sourceCold="home_sticky_cold"
       />
     </main>
