@@ -229,7 +229,7 @@ export function ICheckLaudoPage() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-[#F3F6F8] print:bg-white">
+    <div className="min-h-[100dvh] bg-[#F3F6F8] print:bg-white print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact]">
       {/* Barra de ações — documento isolado, some na impressão */}
       <div className="sticky top-0 z-30 border-b border-[#00283C]/08 bg-white/95 print:hidden">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3 px-4 py-3">
@@ -265,10 +265,10 @@ export function ICheckLaudoPage() {
         </div>
       </div>
 
-      <article className="mx-auto max-w-3xl px-4 py-6 print:max-w-none print:px-0 print:py-0 sm:py-8">
+      <article className="mx-auto max-w-3xl px-4 py-6 print:max-w-none print:px-2 print:py-0 sm:py-8">
         <div className="overflow-hidden rounded-[1.5rem] bg-white shadow-[0_12px_40px_rgba(0,40,60,0.08)] print:rounded-none print:shadow-none">
           {/* Header — DEKRA em destaque (mobile empilhado, sem overlap) */}
-          <header className="border-b border-[#E4EAEF] px-4 py-5 sm:px-8">
+          <header className="border-b border-[#E4EAEF] px-4 py-5 print:break-inside-avoid sm:px-8">
             <div className="mb-3 flex items-center justify-between gap-3">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#5A6B73]">
                 Histórico atestado via
@@ -307,8 +307,8 @@ export function ICheckLaudoPage() {
             </div>
           </header>
 
-          <div className="space-y-6 px-5 py-6 sm:px-8 sm:py-8">
-            <div>
+          <div className="space-y-6 px-5 py-6 print:space-y-4 sm:px-8 sm:py-8">
+            <div className="print:break-inside-avoid">
               <h1 className="text-2xl font-extrabold uppercase tracking-tight text-[#00283C] sm:text-[28px]">
                 {title}
               </h1>
@@ -322,7 +322,7 @@ export function ICheckLaudoPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border-2 border-[#2E7D32] bg-[#E8F7EF] px-4 py-4 text-center">
+            <div className="rounded-2xl border-2 border-[#2E7D32] bg-[#E8F7EF] px-4 py-4 text-center print:break-inside-avoid">
               <p className="inline-flex items-center gap-2 text-base font-extrabold uppercase tracking-[0.12em] text-[#1B5E20] sm:text-lg">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2E7D32] text-white">
                   <Check className="h-3.5 w-3.5" strokeWidth={3} />
@@ -348,7 +348,7 @@ export function ICheckLaudoPage() {
                 return null;
               }
               return (
-                <section className="rounded-2xl border-2 border-[#2E7D32]/45 bg-[#E8F7EF] px-4 py-4 shadow-[0_8px_24px_rgba(46,125,50,0.12)]">
+                <section className="rounded-2xl border-2 border-[#2E7D32]/45 bg-[#E8F7EF] px-4 py-4 shadow-[0_8px_24px_rgba(46,125,50,0.12)] print:break-inside-avoid print:shadow-none">
                   <h2 className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#1B5E20]">
                     Consulta CheckAuto / DEKRA
                   </h2>

@@ -10,6 +10,7 @@ import { icheckProtocolFromDate } from "../../lib/icheck-protocol";
 import {
   formatHistoryStatus,
   isAlienacaoFiduciaria,
+  isClearHistoryStatus,
   type ICheckHistoryItem,
 } from "./icheckHistory";
 
@@ -32,31 +33,41 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     backgroundColor: "#FFFFFF",
   },
-  headerRow: {
+  headerTop: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 10,
+    alignItems: "center",
+    marginBottom: 8,
   },
-  brandBlock: { flexDirection: "column", gap: 2 },
-  partnerBadge: { width: 248, height: 240, objectFit: "contain" },
-  dekraLogo: { width: 200, height: 46, objectFit: "contain" },
-  checkautoLogo: { width: 120, height: 24, objectFit: "contain", marginTop: 2 },
-  netcarLogo: { width: 88, height: 22, objectFit: "contain" },
-  partnerFallback: { fontSize: 18, fontFamily: "Helvetica-Bold", color: GREEN },
+  headerCenter: {
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  partnerBadge: { width: 140, height: 140, objectFit: "contain" },
+  dekraLogo: { width: 160, height: 36, objectFit: "contain" },
+  checkautoLogo: { width: 110, height: 22, objectFit: "contain", marginTop: 2 },
+  netcarLogo: { width: 72, height: 18, objectFit: "contain" },
+  partnerFallback: { fontSize: 14, fontFamily: "Helvetica-Bold", color: GREEN },
+  partnerTitle: {
+    fontSize: 11,
+    fontFamily: "Helvetica-Bold",
+    color: GREEN,
+    textTransform: "uppercase",
+    letterSpacing: 1.0,
+    marginTop: 4,
+  },
   eyebrow: {
     fontSize: 8,
     letterSpacing: 1.1,
     color: MUTED,
     textTransform: "uppercase",
-    marginBottom: 2,
   },
   reportTag: {
     fontSize: 8,
     letterSpacing: 1.0,
     color: MUTED,
     textTransform: "uppercase",
-    marginTop: 4,
+    marginTop: 2,
   },
   authorityBox: {
     backgroundColor: "#F3FBF7",
@@ -66,7 +77,58 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 10,
     marginBottom: 12,
-    maxWidth: 420,
+  },
+  financeBox: {
+    borderWidth: 1,
+    borderColor: "#2E7D324D",
+    backgroundColor: "#F3FBF7",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 12,
+  },
+  financeBoxAlert: {
+    borderWidth: 1,
+    borderColor: "#B91C1C40",
+    backgroundColor: "#FEF2F2",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 12,
+  },
+  financeTitle: {
+    fontSize: 10,
+    fontFamily: "Helvetica-Bold",
+    color: GREEN,
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+    marginBottom: 4,
+  },
+  financeTitleAlert: {
+    fontSize: 10,
+    fontFamily: "Helvetica-Bold",
+    color: "#991B1B",
+    marginBottom: 4,
+  },
+  financeBody: { fontSize: 8, color: NAVY, lineHeight: 1.4 },
+  financeAlienacao: {
+    marginTop: 6,
+    backgroundColor: "#FFF8E1",
+    borderWidth: 1,
+    borderColor: "#F59E0B73",
+    borderRadius: 6,
+    padding: 7,
+  },
+  financeAlienacaoTitle: {
+    fontSize: 7.5,
+    fontFamily: "Helvetica-Bold",
+    color: "#92400E",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: 2,
+  },
+  financeAlienacaoBody: {
+    fontSize: 7.5,
+    color: "#78350F",
+    lineHeight: 1.35,
   },
   authorityTitle: {
     fontSize: 8,
@@ -122,9 +184,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   protocolBox: {
-    backgroundColor: "#F3FBF7",
-    borderWidth: 1,
-    borderColor: MINT,
+    backgroundColor: "#E8F7EF",
+    borderWidth: 2,
+    borderColor: "#2E7D3273",
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 10,
@@ -428,42 +490,35 @@ function Header({
 
   return (
     <View>
-      <View style={styles.headerRow}>
-        {/* Esquerda: badge oficial DEKRA + CheckAuto (quem atesta) */}
-        <View
-          style={[
-            styles.brandBlock,
-            { flexDirection: "row", alignItems: "center", gap: 12 },
-          ]}
-        >
-          {hasPartnerBadge ? (
-            <Image src={data.partnerLogosPath} style={styles.partnerBadge} />
-          ) : null}
-          <View style={{ flexDirection: "column", gap: 3, maxWidth: 280 }}>
-            <Text style={styles.eyebrow}>Histórico atestado via</Text>
-            {!hasPartnerBadge && hasDekra ? (
+      <View style={styles.headerTop}>
+        <Text style={styles.eyebrow}>Histórico atestado via</Text>
+        {data.netcarLogoPath ? (
+          <Image src={data.netcarLogoPath} style={styles.netcarLogo} />
+        ) : (
+          <Text style={{ fontSize: 11, fontFamily: "Helvetica-Bold", color: NAVY }}>
+            Netcar
+          </Text>
+        )}
+      </View>
+
+      <View style={styles.headerCenter}>
+        {hasPartnerBadge ? (
+          <Image src={data.partnerLogosPath} style={styles.partnerBadge} />
+        ) : (
+          <View style={{ alignItems: "center", gap: 2 }}>
+            {hasDekra ? (
               <Image src={data.dekraLogoPath} style={styles.dekraLogo} />
             ) : null}
-            {!hasPartnerBadge && hasCheckauto ? (
+            {hasCheckauto ? (
               <Image src={data.checkautoLogoPath} style={styles.checkautoLogo} />
             ) : null}
-            {!hasPartnerBadge && !hasDekra ? (
+            {!hasDekra && !hasCheckauto ? (
               <Text style={styles.partnerFallback}>DEKRA · CheckAuto</Text>
             ) : null}
-            <Text style={styles.reportTag}>Relatório i-CHECK do seminovo</Text>
           </View>
-        </View>
-
-        {/* Direita: Netcar */}
-        <View style={{ alignItems: "flex-end", justifyContent: "flex-start" }}>
-          {data.netcarLogoPath ? (
-            <Image src={data.netcarLogoPath} style={styles.netcarLogo} />
-          ) : (
-            <Text style={{ fontSize: 12, fontFamily: "Helvetica-Bold", color: NAVY }}>
-              Netcar
-            </Text>
-          )}
-        </View>
+        )}
+        <Text style={styles.partnerTitle}>DEKRA · CheckAuto</Text>
+        <Text style={styles.reportTag}>Relatório i-CHECK do seminovo</Text>
       </View>
 
       {showAuthority ? (
@@ -473,13 +528,97 @@ function Header({
           </Text>
           <Text style={styles.authorityBody}>
             A DEKRA é a maior empresa de inspeção veicular do mundo e líder global em
-            testes, vistorias e certificações. Fundada na Alemanha em 1925, opera
-            focada em garantir a segurança da interação humana com a tecnologia e o
-            meio ambiente. O histórico deste seminovo foi consultado via CheckAuto,
-            uma empresa DEKRA.
+            testes, vistorias e certificações. Fundada na Alemanha em 1925. Histórico
+            consultado via CheckAuto, uma empresa DEKRA.
           </Text>
         </View>
       ) : null}
+    </View>
+  );
+}
+
+/** Mesma regra da tela: bloco "Leitura para financiamento e seguro". */
+function FinancingBlock({ history }: { history: ICheckHistoryItem[] }) {
+  if (!history.length) return null;
+
+  const hasAlienacao = history.some((item) =>
+    isAlienacaoFiduciaria(item.status),
+  );
+  const hasGraveAlert = history.some((item) => {
+    if (isAlienacaoFiduciaria(item.status)) return false;
+    if (item.riskLevel === "alert") return true;
+    const s = String(item.status || "");
+    return (
+      /com\s*registro|consta\s+registro|ocorr[eê]ncia/i.test(s) &&
+      !isClearHistoryStatus(s)
+    );
+  });
+  const cleanCore = history
+    .filter((item) => !isAlienacaoFiduciaria(item.status))
+    .every((item) => item.riskLevel !== "alert");
+
+  if (hasGraveAlert) {
+    return (
+      <View>
+        <Text style={styles.sectionTitle}>
+          LEITURA PARA FINANCIAMENTO E SEGURO
+        </Text>
+        <View style={styles.financeBoxAlert}>
+          <Text style={styles.financeTitleAlert}>
+            Há apontamento relevante no histórico
+          </Text>
+          <Text style={[styles.financeBody, { color: MUTED }]}>
+            Bancos e seguradoras costumam analisar caso a caso quando existe registro
+            de leilão, sinistro ou roubo/furto. A Netcar orienta confirmar a situação
+            com a instituição antes de fechar crédito ou apólice.
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
+  if (!cleanCore && !hasAlienacao) return null;
+
+  return (
+    <View>
+      <Text style={styles.sectionTitle}>
+        LEITURA PARA FINANCIAMENTO E SEGURO
+      </Text>
+      <View style={styles.financeBox}>
+        <Text style={styles.financeTitle}>Veículo apto a crédito e seguro</Text>
+        <Text style={styles.financeBody}>
+          De acordo com as bases consultadas, não foram encontrados registros de
+          leilão, sinistro com perda total ou ocorrência de roubo/furto. A ausência
+          desses apontamentos pode contribuir positivamente para análises de
+          financiamento e contratação de seguro, observadas as políticas e critérios
+          de cada instituição.
+        </Text>
+        {hasAlienacao ? (
+          <View style={styles.financeAlienacao}>
+            <Text style={styles.financeAlienacaoTitle}>
+              Sobre a alienação fiduciária
+            </Text>
+            <Text style={styles.financeAlienacaoBody}>
+              Consta vínculo com instituição financeira (veículo financiado). Não
+              impede a compra: na transferência, o gravame é quitado/baixado com o
+              banco. Seguradoras e financeiras costumam aceitar o bem após
+              regularização do financiamento.
+            </Text>
+          </View>
+        ) : (
+          <Text
+            style={{
+              fontSize: 7.5,
+              color: MUTED,
+              marginTop: 5,
+              lineHeight: 1.35,
+            }}
+          >
+            Histórico limpo nos itens críticos — perfil compatível com produtos de
+            crédito e proteção veicular do mercado.
+          </Text>
+        )}
+      </View>
     </View>
   );
 }
@@ -488,9 +627,9 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
   const history = (data.history || []).filter(
     (item) => item.status && !/indispon[ií]vel/i.test(item.status),
   );
-  const highlights = (data.consultationHighlights || []).filter(
-    (item) => item.value && item.value !== "—" && !/indispon[ií]vel/i.test(item.value),
-  );
+  const potencia =
+    data.specs.find((s) => s.label === "Potência")?.value || "";
+  // Mesmos campos da tela (sem Chassi / Emissão inventados)
   const vehicleFields = [
     ["Marca / modelo", `${data.marca} ${data.modelo}`.trim()],
     ["Ano", data.yearLabel],
@@ -500,24 +639,18 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
     ["Combustível", data.combustivel],
     ["Câmbio", data.cambio],
     ["Motor", data.motor],
-    ["Chassi", data.chassiMasked],
-    ["Emissão", data.dataHoraConsulta || data.issuedAt],
+    ["Potência", potencia],
   ].filter(([, value]) => value && value !== "—");
 
   const dataHora = data.dataHoraConsulta || data.issuedAt || "";
-  const protocoloNetcar = icheckProtocolFromDate(dataHora);
-  const hasProtocol = Boolean(
-    protocoloNetcar || dataHora || data.tipoChave,
-  );
+  const protocoloNetcar =
+    data.consultaId || icheckProtocolFromDate(dataHora) || "";
+  const hasProtocol = Boolean(protocoloNetcar || dataHora || data.tipoChave);
   const hasPhotos = data.galleryPhotos.length > 0 || data.heroPhotos.length > 0;
-  const hasSpecs = data.specs.length > 0;
   const hasOptionals = data.optionals.length > 0;
-  const hasHighlights = highlights.length > 0;
-  const hasFichaPage = hasHighlights || hasSpecs || hasOptionals;
+  const hasPage2 = hasPhotos || hasOptionals;
 
-  const totalPages = 1 + (hasPhotos ? 1 : 0) + (hasFichaPage ? 1 : 0);
-  const galleryPage = hasPhotos ? 2 : 0;
-  const fichaPage = hasFichaPage ? (hasPhotos ? 3 : 2) : 0;
+  const totalPages = 1 + (hasPage2 ? 1 : 0);
   const heroA = data.heroPhotos[0];
   const heroB = data.heroPhotos[1] || data.heroPhotos[0];
 
@@ -527,12 +660,12 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
       author="Netcar Multimarcas"
       subject="Relatório de procedência do seminovo"
     >
-      {/* Página 1 — Capa */}
+      {/* Página 1 — mesmo fluxo da tela até financiamento */}
       <Page size="A4" style={styles.page}>
         <Header data={data} showAuthority />
         <Text style={styles.title}>{data.vehicleName}</Text>
         <Text style={styles.subtitle}>
-          Dossiê com fotos do veículo, ficha técnica e histórico CheckAuto/DEKRA —
+          Dossiê com fotos, ficha técnica e histórico CheckAuto/DEKRA —
           transparência Netcar na sua compra.
         </Text>
         <Text
@@ -548,53 +681,47 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
           cautelar nem laudo estrutural/pericial.
         </Text>
 
-        {data.allClear ? (
-          <View style={[styles.statusBannerApproved, { marginTop: 10 }]}>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              {data.checkIconPath ? (
-                <Image
-                  src={data.checkIconPath}
-                  style={{ width: 18, height: 18 }}
-                />
-              ) : null}
-              <Text style={styles.statusBannerApprovedTitle}>
-                HISTÓRICO APROVADO
-              </Text>
-            </View>
-            <Text style={styles.statusBannerApprovedSub}>
-              Sem registros graves nas bases CheckAuto / DEKRA consultadas
+        {/* Tela sempre mostra o banner verde — PDF espelha */}
+        <View style={[styles.statusBannerApproved, { marginTop: 10 }]}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            {data.checkIconPath ? (
+              <Image
+                src={data.checkIconPath}
+                style={{ width: 18, height: 18 }}
+              />
+            ) : null}
+            <Text style={styles.statusBannerApprovedTitle}>
+              HISTÓRICO APROVADO
             </Text>
           </View>
-        ) : history.length > 0 ? (
-          <View style={[styles.statusBanner, { marginTop: 10 }]}>
-            <Text style={styles.statusBannerMuted}>
-              HISTÓRICO CONSULTADO — VER DETALHES ABAIXO
-            </Text>
-          </View>
-        ) : null}
+          <Text style={styles.statusBannerApprovedSub}>
+            Consulta às bases CheckAuto / DEKRA — sem registros graves nos itens
+            abaixo
+          </Text>
+        </View>
 
         {hasProtocol ? (
           <View style={styles.protocolBox}>
             <Text style={styles.protocolTitle}>
-              Consulta CheckAuto — data e ConsultaID (MMDDYYYY)
+              Consulta CheckAuto / DEKRA
             </Text>
             <View style={styles.protocolGrid}>
-              {protocoloNetcar ? (
-                <View style={styles.protocolCell}>
-                  <Text style={styles.protocolLabel}>ConsultaID</Text>
-                  <Text style={styles.protocolValueMono}>{protocoloNetcar}</Text>
-                </View>
-              ) : null}
               {dataHora ? (
                 <View style={styles.protocolCell}>
                   <Text style={styles.protocolLabel}>Data / hora</Text>
                   <Text style={styles.protocolValue}>{dataHora}</Text>
+                </View>
+              ) : null}
+              {protocoloNetcar ? (
+                <View style={styles.protocolCell}>
+                  <Text style={styles.protocolLabel}>ConsultaID</Text>
+                  <Text style={styles.protocolValueMono}>{protocoloNetcar}</Text>
                 </View>
               ) : null}
               {data.tipoChave ? (
@@ -616,9 +743,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
                 <Text style={{ color: MUTED, fontSize: 8 }}>Sem foto</Text>
               </View>
             )}
-            {heroB ? (
-              <Image src={heroB} style={styles.heroImg} />
-            ) : null}
+            {heroB ? <Image src={heroB} style={styles.heroImg} /> : null}
           </View>
         ) : null}
 
@@ -644,7 +769,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
 
         {history.length > 0 ? (
           <>
-            <Text style={styles.sectionTitle}>CONSULTA CHECKAUTO / DEKRA</Text>
+            <Text style={styles.sectionTitle}>HISTÓRICO DO VEÍCULO</Text>
             <View style={styles.historyGrid}>
               {history.map((item) => {
                 const isWarn =
@@ -657,13 +782,22 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
                       !/^consultado\.?$/i.test(String(item.status || "")) &&
                       !/^sem\s*registro/i.test(String(item.status || ""))));
                 const statusLabel = formatHistoryStatus(item.status);
-                const isOk = !isWarn && !isAlert && /^nada\s*consta$/i.test(statusLabel);
+                const isOk =
+                  !isWarn &&
+                  !isAlert &&
+                  /^nada\s*consta$/i.test(statusLabel);
                 return (
                   <View
                     key={item.key}
                     style={[
                       styles.historyCard,
                       isWarn ? styles.historyCardWarn : {},
+                      !isWarn && !isAlert
+                        ? { backgroundColor: "#E8F7EF", borderColor: "#2E7D3240" }
+                        : {},
+                      isAlert
+                        ? { backgroundColor: "#FEF2F2", borderColor: "#B91C1C40" }
+                        : {},
                     ]}
                   >
                     {isOk && data.checkIconPath ? (
@@ -678,7 +812,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
                             ? AMBER
                             : isAlert
                               ? "#B91C1C"
-                              : LINE,
+                              : GREEN,
                         }}
                       />
                     )}
@@ -708,133 +842,105 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
           </>
         ) : null}
 
+        <FinancingBlock history={history} />
+
+        {!hasPage2 ? (
+          <>
+            <View style={styles.trustBox}>
+              <Text style={styles.trustTitle}>
+                CONFIANÇA GARANTIDA PELA NETCAR
+              </Text>
+              <Text style={styles.trustBody}>
+                A Netcar atesta a curadoria deste seminovo e que o histórico acima
+                foi obtido via consulta CheckAuto/DEKRA. Complemente sempre com a
+                avaliação presencial e a documentação do Detran.
+              </Text>
+            </View>
+            <View style={styles.disclaimerBox}>
+              <Text style={styles.disclaimerTitle}>
+                NATUREZA DESTA CONSULTA — NÃO É LAUDO TÉCNICO
+              </Text>
+              <Text style={styles.disclaimerBody}>
+                Esta consulta NÃO tem caráter de laudo técnico. É um dossiê
+                informativo de procedência e histórico (bases CheckAuto/DEKRA), com
+                fotos e ficha do seminovo. Não substitui vistoria cautelar, laudo
+                de engenharia, perícia estrutural nem inspeção veicular presencial.
+              </Text>
+            </View>
+          </>
+        ) : null}
+
         <PageFooter page={1} total={totalPages} listingUrl={data.listingUrl} />
       </Page>
 
-      {/* Galeria — só se houver fotos */}
-      {hasPhotos ? (
+      {/* Página 2 — galeria + opcionais + disclaimers (ordem da tela) */}
+      {hasPage2 ? (
         <Page size="A4" style={styles.page}>
           <Header data={data} />
-          <Text style={styles.sectionTitle}>FOTOS DO SEMINOVO NA NETCAR</Text>
-          <Text style={[styles.subtitle, { marginBottom: 10 }]}>
-            Imagens reais do estoque — o mesmo carro que você vê no anúncio.
-          </Text>
-          <View style={styles.galleryGrid}>
-            {(data.galleryPhotos.length > 0
-              ? data.galleryPhotos.slice(0, 9)
-              : data.heroPhotos
-            ).map((src, index) => (
-              <Image key={`${src}-${index}`} src={src} style={styles.galleryImg} />
-            ))}
+          {hasPhotos ? (
+            <>
+              <Text style={styles.sectionTitle}>
+                FOTOS DO SEMINOVO NA NETCAR
+              </Text>
+              <View style={styles.galleryGrid}>
+                {(data.galleryPhotos.length > 0
+                  ? data.galleryPhotos.slice(0, 9)
+                  : data.heroPhotos
+                ).map((src, index) => (
+                  <Image
+                    key={`${src}-${index}`}
+                    src={src}
+                    style={styles.galleryImg}
+                  />
+                ))}
+              </View>
+            </>
+          ) : null}
+
+          {hasOptionals ? (
+            <>
+              <Text style={[styles.sectionTitle, { marginTop: 10 }]}>
+                OPCIONAIS EM DESTAQUE
+              </Text>
+              <View style={styles.chipRow}>
+                {data.optionals.slice(0, 28).map((item) => (
+                  <View key={item} style={styles.chip}>
+                    <Text style={styles.chipText}>{item}</Text>
+                  </View>
+                ))}
+              </View>
+            </>
+          ) : null}
+
+          <View style={styles.trustBox}>
+            <Text style={styles.trustTitle}>
+              CONFIANÇA GARANTIDA PELA NETCAR
+            </Text>
+            <Text style={styles.trustBody}>
+              A Netcar atesta a curadoria deste seminovo e que o histórico acima
+              foi obtido via consulta CheckAuto/DEKRA. Complemente sempre com a
+              avaliação presencial e a documentação do Detran.
+            </Text>
           </View>
+
+          <View style={styles.disclaimerBox}>
+            <Text style={styles.disclaimerTitle}>
+              NATUREZA DESTA CONSULTA — NÃO É LAUDO TÉCNICO
+            </Text>
+            <Text style={styles.disclaimerBody}>
+              Esta consulta NÃO tem caráter de laudo técnico. É um dossiê
+              informativo de procedência e histórico (bases CheckAuto/DEKRA), com
+              fotos e ficha do seminovo. Não substitui vistoria cautelar, laudo de
+              engenharia, perícia estrutural nem inspeção veicular presencial.
+            </Text>
+          </View>
+
           <PageFooter
-            page={galleryPage}
+            page={2}
             total={totalPages}
             listingUrl={data.listingUrl}
           />
         </Page>
-      ) : null}
-
-      {/* Ficha + selo — só blocos com conteúdo */}
-      {hasFichaPage ? (
-      <Page size="A4" style={styles.page}>
-        <Header data={data} />
-        {hasHighlights ? (
-          <>
-            <Text style={styles.sectionTitle}>RESUMO DA CONSULTA</Text>
-            <Text style={[styles.subtitle, { marginBottom: 8 }]}>
-              Pontos principais da consulta CheckAuto — leitura rápida.
-            </Text>
-            <View style={styles.idGrid}>
-              {highlights.slice(0, 8).map((item, index, arr) => (
-                <View
-                  key={item.label}
-                  style={[
-                    styles.idCell,
-                    index >= arr.length - 2 ? { borderBottomWidth: 0 } : {},
-                  ]}
-                >
-                  <Text style={styles.idLabel}>{item.label}</Text>
-                  <Text style={styles.idValue}>{item.value}</Text>
-                </View>
-              ))}
-            </View>
-          </>
-        ) : null}
-        {hasSpecs ? (
-          <>
-            <Text style={styles.sectionTitle}>FICHA TÉCNICA</Text>
-            <View style={styles.specGrid}>
-              {data.specs.map((spec) => (
-                <View key={spec.label} style={styles.specPill}>
-                  <Text style={styles.specText}>
-                    <Text style={{ fontFamily: "Helvetica-Bold" }}>
-                      {spec.label}:{" "}
-                    </Text>
-                    {spec.value}
-                  </Text>
-                </View>
-              ))}
-            </View>
-          </>
-        ) : null}
-
-        {hasOptionals ? (
-          <>
-            <Text style={styles.sectionTitle}>OPCIONAIS EM DESTAQUE</Text>
-            <View style={styles.chipRow}>
-              {data.optionals.slice(0, 24).map((item) => (
-                <View key={item} style={styles.chip}>
-                  <Text style={styles.chipText}>{item}</Text>
-                </View>
-              ))}
-            </View>
-          </>
-        ) : null}
-
-        <View style={styles.trustBox}>
-          <Text style={styles.trustTitle}>CONFIANÇA GARANTIDA PELA NETCAR</Text>
-          <Text style={styles.trustBody}>
-            A Netcar atesta que este seminovo passou pela curadoria da loja e que o
-            histórico acima foi obtido via consulta CheckAuto/DEKRA às bases
-            disponíveis. Transparência e segurança na sua compra — complemente
-            sempre com a avaliação presencial e a documentação do Detran.
-          </Text>
-        </View>
-
-        <View style={styles.disclaimerBox}>
-          <Text style={styles.disclaimerTitle}>
-            NATUREZA DESTA CONSULTA — NÃO É LAUDO TÉCNICO
-          </Text>
-          <Text style={styles.disclaimerBody}>
-            Esta consulta NÃO tem caráter de laudo técnico. É um dossiê
-            informativo de procedência e histórico (bases CheckAuto/DEKRA), com
-            fotos e ficha do seminovo. Não substitui vistoria cautelar, laudo de
-            engenharia, perícia estrutural nem inspeção veicular presencial.
-            Complemente sempre com avaliação na loja e documentação oficial.
-          </Text>
-        </View>
-
-        <Text style={styles.notesTitle}>Observações explicativas</Text>
-        {[
-          "As informações de histórico foram obtidas por consulta a bases públicas e privadas. A CheckAuto/DEKRA reproduz os dados conforme constam nos sistemas oficiais.",
-          "O relatório tem caráter informativo e preventivo, sendo complementar à análise presencial do veículo — e não equivale a vistoria cautelar.",
-          "A ausência de registros de leilão, perda total, furto ou roubo indica histórico sem esses agravantes nas bases consultadas na data da emissão.",
-          "Sistemas estaduais e federais podem atualizar em momentos diferentes — confirme restrições no Detran quando necessário.",
-          "Alienação fiduciária, se existir, é vínculo com instituição financeira e pode ser regularizada na venda com segurança.",
-        ].map((note) => (
-          <View key={note} style={styles.noteItem}>
-            <View style={styles.bullet} />
-            <Text style={styles.noteText}>{note}</Text>
-          </View>
-        ))}
-
-        <PageFooter
-          page={fichaPage}
-          total={totalPages}
-          listingUrl={data.listingUrl}
-        />
-      </Page>
       ) : null}
     </Document>
   );

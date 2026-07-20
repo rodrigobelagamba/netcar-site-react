@@ -8,6 +8,7 @@ import {
   ICheckReportDocument,
   type ICheckReportData,
 } from "./ICheckReportDocument";
+import { toPdfSafeImageUrl } from "@/lib/images";
 import {
   normalizeHistoryItems,
   type ICheckHistoryItem,
@@ -60,8 +61,11 @@ export function buildClientICheckReportData(input: {
 }): ICheckReportData {
   const { vehicle, protocol, slug } = input;
   const origin = siteOrigin();
-  const gallery = galleryFromVehicle(vehicle).map(absUrl);
-  const heroA = gallery[0] || absUrl(vehicle.imagens_site?.capa);
+  const gallery = galleryFromVehicle(vehicle)
+    .map(absUrl)
+    .map(toPdfSafeImageUrl);
+  const heroA =
+    gallery[0] || toPdfSafeImageUrl(absUrl(vehicle.imagens_site?.capa));
   const heroB = gallery[1] || gallery[0];
 
   const yearLabel =
@@ -123,7 +127,7 @@ export function buildClientICheckReportData(input: {
     consultaId: consultaId || undefined,
     dataHoraConsulta: dataHora || undefined,
     tipoChave: tipoChave || undefined,
-    listingUrl: `${origin}/veiculo/${slug}`,
+    listingUrl: `${origin}/laudo/${slug}`,
     dekraLogoPath: brandUrl("dekra.png"),
     checkautoLogoPath: brandUrl("checkauto.png"),
     partnerLogosPath: brandUrl("checkauto-dekra.png"),
