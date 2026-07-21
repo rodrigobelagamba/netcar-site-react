@@ -3,7 +3,7 @@ import { useAboutTextQuery, useCountersQuery } from "@/catalog/queries/useSiteQu
 import { useBannersLoja1Query, useBannersLoja2Query, useAddressQuery, usePhoneQuery, useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
-import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
+import { useMetaTags } from "@/hooks/useMetaTags";
 import { CheckCircle2, Shield, Award, Users, TrendingUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
@@ -24,10 +24,12 @@ export function SobrePage() {
   const { data: historia } = useAboutTextQuery("História");
   const { data: valores } = useAboutTextQuery("Valores");
 
-  useDefaultMetaTags(
-    "Sobre a Netcar · Seminovos desde 1997",
-    "Conheça a Netcar Multimarcas: Fábrica de Valor, garantia GestAuto e 20+ anos vendendo seminovos com procedência em Esteio/RS."
-  );
+  useMetaTags({
+    title: "Sobre a Netcar Multimarcas | Revenda em Esteio",
+    description:
+      "Conheça a Netcar Multimarcas em Esteio/RS: Fábrica de Valor, garantia, Nethelp e duas lojas. Seminovos com procedência desde 1997.",
+    url: "https://www.netcarmultimarcas.com.br/sobre",
+  });
   
   // Imagem da fachada para cada loja
   const getFachadaImage = (banners?: Array<{ titulo?: string; imagem: string }>) => {

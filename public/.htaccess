@@ -117,6 +117,10 @@
   RewriteRule ^contato\.(php|html?)$ /contato [R=301,L,QSD,NC]
   RewriteRule ^ficha-cadastral\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
   RewriteRule ^compramos-seu-usado\.(php|html?)$ /compra [R=301,L,QSD,NC]
+  # Canônico único da página de venda/compra de usado (mesmo componente React).
+  # Sem QSD: preserva UTM e demais query params de campanha.
+  RewriteRule ^compramos-seu-usado/?$ /compra [R=301,L,NC]
+  RewriteRule ^vender-meu-carro/?$ /compra [R=301,L,NC]
   RewriteRule ^detalhe-produto-(.+)\.html?$ /seminovos [R=301,L,QSD,NC]
   RewriteRule ^detalhe-produto-(.+)$ /seminovos [R=301,L,QSD,NC]
 

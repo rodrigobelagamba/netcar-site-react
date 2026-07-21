@@ -322,9 +322,39 @@ for (const post of blogPosts) {
       ${renderSections(post.sections)}
       <p><a href="${SITE}${post.ctaHref}">${escapeHtml(post.ctaLabel)}</a></p>
     </article>`;
+  const blogPostingSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    mainEntityOfPage: canonical,
+    url: canonical,
+    author: {
+      "@type": "Organization",
+      name: "Netcar Multimarcas",
+      url: SITE,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Netcar Multimarcas",
+      url: SITE,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE}/images/Logotipo7_1768863597989.png`,
+      },
+    },
+  };
   writeTextFile(
     join(seoStaticDir, `blog-${post.slug}.html`),
-    pageShell({ title: post.title, description: post.description, canonical, body })
+    pageShell({
+      title: post.title,
+      description: post.description,
+      canonical,
+      body,
+      schemas: [ORG_SCHEMA, blogPostingSchema],
+    })
   );
 }
 
@@ -521,8 +551,6 @@ const staticPages = [
   { path: "/sobre", priority: "0.8", changefreq: "monthly" },
   { path: "/contato", priority: "0.8", changefreq: "monthly" },
   { path: "/compra", priority: "0.85", changefreq: "weekly" },
-  { path: "/compramos-seu-usado", priority: "0.85", changefreq: "weekly" },
-  { path: "/vender-meu-carro", priority: "0.85", changefreq: "weekly" },
   { path: "/blog", priority: "0.8", changefreq: "weekly" },
   // Páginas de intenção (antes fora do sitemap)
   { path: "/financiamento", priority: "0.85", changefreq: "monthly" },

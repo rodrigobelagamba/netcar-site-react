@@ -360,6 +360,7 @@ export function Header() {
     { to: "/seminovos", label: "Seminovos", search: emptySeminovosSearch },
     { to: "/comparar", label: "Comparar" },
     { to: "/compra", label: "Venda seu carro" },
+    { to: "/regioes-atendidas", label: "Regiões" },
     { to: "/blog", label: "Atualidades" },
     { to: "/contato", label: "Contato" },
     { to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9", label: "Localização", external: true },
