@@ -110,9 +110,17 @@
   # QSD remove parâmetros obsoletos (id/código) do destino canônico.
   # URL enganosa: Netcar não oferece financiamento 100% / sem entrada.
   RewriteRule ^financiamento-sem-entrada/?$ /financiamento [R=301,L,QSD,NC]
-  # Sitelink Google Ads legado aponta pra /financiamento.html (SPA NotFound).
+  # Extensões legadas (.html/.php) caem no shell SPA e viram NotFound no React.
   # Sem QSD: preserva gclid/UTM da campanha.
   RewriteRule ^financiamento\.(php|html?)$ /financiamento [R=301,L,NC]
+  RewriteRule ^sobre\.(php|html?)$ /sobre [R=301,L,NC]
+  RewriteRule ^compra\.(php|html?)$ /compra [R=301,L,NC]
+  RewriteRule ^atendimento-24h\.(php|html?)$ /atendimento-24h [R=301,L,NC]
+  RewriteRule ^move-brasil\.(php|html?)$ /move-brasil [R=301,L,NC]
+  RewriteRule ^blog\.(php|html?)$ /blog [R=301,L,NC]
+  RewriteRule ^regioes-atendidas\.(php|html?)$ /regioes-atendidas [R=301,L,NC]
+  RewriteRule ^comparar\.(php|html?)$ /comparar [R=301,L,NC]
+  RewriteRule ^vender-meu-carro\.(php|html?)$ /compra [R=301,L,NC]
   RewriteRule ^seminovos\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
   RewriteRule ^sobre-nos\.(php|html?)$ /sobre [R=301,L,QSD,NC]
   RewriteRule ^listagem-produtos\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
