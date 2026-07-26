@@ -22,6 +22,10 @@ Caxias do Sul e Bento Gonçalves.
 
 Registrar os últimos 90 dias e salvar a data de extração.
 
+> Linha de base medida: [BASELINE-SEO-2026-07.md](BASELINE-SEO-2026-07.md)
+> (26/07/2026, 28 dias) — extraída antes de o índice reprocessar as correções de
+> rastreio daquele dia.
+
 ### Search Console
 
 Exportar em **Desempenho > Resultados da pesquisa**:
