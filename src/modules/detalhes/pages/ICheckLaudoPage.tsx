@@ -6,7 +6,7 @@ import { maskPlate } from "@/lib/slug";
 import { resolveIcheckProtocol } from "@/lib/icheck-protocol";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
-import { VehicleUnavailableRedirect } from "@/components/VehicleUnavailableRedirect";
+import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
 import {
   buildClientICheckReportData,
   downloadICheckReportPdf,
@@ -152,7 +152,7 @@ export function ICheckLaudoPage() {
   }
 
   if (isError || !vehicle) {
-    return <VehicleUnavailableRedirect />;
+    return <VehicleUnavailablePage />;
   }
 
   if (!protocolReady) {

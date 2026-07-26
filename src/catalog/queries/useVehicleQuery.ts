@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 import { fetchVehicleBySlug, type Vehicle } from "../endpoints/vehicles";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
 
@@ -19,6 +20,14 @@ function findVehicleInListCache(
   return undefined;
 }
 
+/** Carro que saiu do estoque: a API responde 404 e insistir não muda nada. */
+function isVehicleGone(error: unknown): boolean {
+  if (isAxiosError(error)) {
+    return error.response?.status === 404;
+  }
+  return error instanceof Error && error.message === "Vehicle not found";
+}
+
 export function useVehicleQuery(slug: string) {
   const queryClient = useQueryClient();
 
@@ -27,5 +36,8 @@ export function useVehicleQuery(slug: string) {
     queryFn: () => fetchVehicleBySlug(slug),
     enabled: !!slug,
     placeholderData: () => findVehicleInListCache(queryClient, slug),
+    // Sem isso, o link antigo de um carro vendido deixava o visitante uns 7s
+    // olhando skeleton enquanto o react-query repetia o 404 três vezes.
+    retry: (failureCount, error) => !isVehicleGone(error) && failureCount < 2,
   });
 }

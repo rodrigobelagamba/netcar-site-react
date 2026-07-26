@@ -17,8 +17,13 @@ API de veículos (/api/v1/veiculos.php)
         └─ generate-blog-drafts.js→ src/data/seo/blog-drafts.json (RASCUNHOS, não publica)
 ```
 
-Tudo (menos blog) roda no `npm run build`. Se a API cair, cada gerador
-preserva o JSON anterior — build nunca quebra por causa disso.
+Tudo (menos blog) roda no `npm run build`. Se a API cair, cada gerador preserva o
+JSON anterior — com **uma exceção deliberada**: o sitemap interrompe o build em
+vez de publicar sem veículos (ver "Sitemap" abaixo).
+
+O contrato de status/HTML por URL (200, 301, 410, 503) está em
+[SEO-RESPOSTAS-CRAWLER.md](SEO-RESPOSTAS-CRAWLER.md). Ler antes de mexer em
+`.htaccess` ou nos PHP de prerender.
 
 ## 1. Landings de marca/categoria (automático, publica)
 
@@ -162,6 +167,43 @@ Blocklist + `blog-topics.json` impedem slug/intenção colidente com manuais.
 
 `cities.json` → `/seminovos-{cidade}` + `/vender-carro-{cidade}` + estático + sitemap.
 Mesmo padrão; editado à mão porque o copy local é específico por cidade.
+
+## 6. Vitrine de estoque nas páginas estáticas
+
+As 18 páginas de cidade e as landings de marca/categoria falavam da região sem
+mostrar um carro: o crawler lia 18 variações do mesmo texto institucional, sem
+nenhum link para as fichas. `generate-seo-assets.js` agora busca o estoque uma
+vez (`fetchStock()`) e injeta cards reais via `stockShowcase()`:
+
+- **Cidade:** 8 carros, com rotação por índice da cidade (`offset: cityIndex * 3`).
+  Canoas e Porto Alegre não repetem nenhum carro — cada página tem conteúdo
+  próprio e muda quando o estoque muda.
+- **Marca/categoria:** até 12, filtrados por `filterKey`/`filterValue` da landing.
+- **Página de conteúdo:** opcional, via campo `stock` no `content-pages.json`
+  (`{ field, match, heading }`). É assim que `/seminovos-automaticos` lista os
+  automáticos.
+
+Carro com foto real vem primeiro. Carro sem foto cadastrada recebe um banner
+genérico do CMS em `imagens_site.capa`, que é descartado (`isBannerPlaceholder`).
+
+Se a API cair, a vitrine sai vazia e o resto da página é gerado normalmente.
+
+## Sitemap: por que o build falha em vez de publicar vazio
+
+Em julho/2026 o sitemap de produção ficou com **zero veículos** por dias. A
+cadeia era: `public/sitemap.xml` é gitignorado, então num checkout limpo não
+existe fallback local; a API falhou numa execução; o gerador caiu no último
+fallback, que era **copiar o sitemap de produção** — já zerado — e regravá-lo
+zerado. O sitemap vazio virava a fonte do build seguinte, indefinidamente.
+
+Hoje:
+- `fetchVehicleSitemapUrls()` tenta a API **3 vezes** com espera progressiva.
+- A cadeia de fallback continua (API → sitemap local → produção).
+- Se nenhuma fonte devolver veículo, o gerador **lança erro e o build para**.
+
+Publicar um sitemap sem estoque é pior que não publicar: sinaliza ao Google que
+as fichas deixaram de existir. Se o build parar com essa mensagem, o problema é
+a API, não o gerador.
 
 ## Manutenção
 

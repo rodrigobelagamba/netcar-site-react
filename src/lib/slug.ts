@@ -135,3 +135,27 @@ export function extractVehicleIdFromSlug(slug: string): string {
   }
 }
 
+/**
+ * Nome comercial legível a partir do slug, sem id nem placa.
+ * Usado quando o veículo já saiu da API e só temos a URL.
+ * Ex.: "creta-prestige-2018-iyo-xx70-19801" -> "Creta Prestige 2018"
+ */
+export function vehicleNameFromSlug(slug: string): string {
+  const cleaned = String(slug || "")
+    .trim()
+    .replace(/^\/?veiculo\//, "")
+    .replace(/-\d{3,}$/, "")
+    .replace(/-[a-z]{3}-xx\w{1,3}$/i, "")
+    .replace(/-[a-z]{3}\d[a-z0-9]{2,}$/i, "")
+    .replace(/-/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!cleaned) return "";
+
+  return cleaned
+    .split(" ")
+    .map((word) => (/^\d+$/.test(word) ? word : word.charAt(0).toUpperCase() + word.slice(1)))
+    .join(" ");
+}
+

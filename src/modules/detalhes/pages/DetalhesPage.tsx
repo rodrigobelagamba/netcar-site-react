@@ -43,7 +43,7 @@ import { canonicalUrl } from "@/lib/seo";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
-import { VehicleUnavailableRedirect } from "@/components/VehicleUnavailableRedirect";
+import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { parseGptContent, AccordionSection } from "@/lib/parseGptContent";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
@@ -1679,7 +1679,7 @@ export function DetalhesPage() {
   // Com placeholder do estoque, `vehicle` já existe → pula tela intermediária.
   if (!vehicle) {
     if (error || !isPending) {
-      return <VehicleUnavailableRedirect />;
+      return <VehicleUnavailablePage />;
     }
     return <LoadingVehicleDetail slug={slug} />;
   }
