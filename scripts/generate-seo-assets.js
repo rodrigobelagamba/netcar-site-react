@@ -9,7 +9,7 @@ import { readFileSync, mkdirSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
-import { fetchVehicleSitemapUrls } from "./lib/vehicle-sitemap-urls.js";
+import { fetchVehicleSitemapUrls, generateVehicleSlug } from "./lib/vehicle-sitemap-urls.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
@@ -223,6 +223,89 @@ function renderSections(sections) {
     .join("\n");
 }
 
+// Estoque real para as vitrines das landings de cidade/marca. Sem isso, as
+// páginas que o crawler recebe falam da cidade mas não mostram nenhum carro —
+// nem geram link interno para as fichas.
+async function fetchStock() {
+  try {
+    const res = await fetch(`${SITE}/api/v1/veiculos.php?limit=500`, {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    if (!json.success || !Array.isArray(json.data)) throw new Error("resposta inválida");
+    return json.data.filter((vehicle) => Number(vehicle.valor) > 0);
+  } catch (error) {
+    console.warn(`Aviso: estoque indisponível (${error.message}); vitrines ficam sem carros.`);
+    return [];
+  }
+}
+
+const stock = await fetchStock();
+
+function titleCase(text) {
+  return String(text || "")
+    .toLowerCase()
+    .replace(/(^|[\s-])(\p{L})/gu, (_, sep, letter) => sep + letter.toUpperCase());
+}
+
+// Carro sem foto cadastrada recebe um banner genérico do CMS no lugar da capa.
+const isBannerPlaceholder = (path) => /\/imagens\/banner\//i.test(String(path || ""));
+
+function vehicleCardImage(vehicle) {
+  const raw = [
+    vehicle?.imagens_site?.capa_opengraph,
+    vehicle?.imagens_site?.capa,
+    vehicle?.imagens?.thumb?.[0],
+  ].find((candidate) => candidate && !isBannerPlaceholder(candidate));
+  if (!raw) return "";
+  const img = String(raw)
+    .trim()
+    .replace(/^\.\/+/, "")
+    .replace(/ /g, "%20")
+    .replace(/\(/g, "%28")
+    .replace(/\)/g, "%29");
+  if (/^https?:\/\//i.test(img)) return img.replace(/^http:/i, "https:");
+  return `${SITE}/${img.replace(/^\/+/, "")}`;
+}
+
+function vehicleDisplayName(vehicle) {
+  let modelo = String(vehicle.modelo || "").trim();
+  const marca = String(vehicle.marca || "").trim();
+  if (modelo && marca && modelo.toUpperCase().startsWith(marca.toUpperCase())) {
+    modelo = modelo.slice(marca.length).trim();
+  }
+  return [titleCase(marca), titleCase(modelo), vehicle.ano].filter(Boolean).join(" ");
+}
+
+/** Vitrine de estoque em HTML, reaproveitando os cards de carro do blog. */
+function stockShowcase({ heading, vehicles, limit = 8, offset = 0, ctaLabel, ctaHref }) {
+  if (!vehicles.length) return "";
+  // Carro com foto real na frente: vitrine sem imagem converte muito pior.
+  const ordered = [
+    ...vehicles.filter((vehicle) => vehicleCardImage(vehicle)),
+    ...vehicles.filter((vehicle) => !vehicleCardImage(vehicle)),
+  ];
+  const start = ordered.length ? offset % ordered.length : 0;
+  const rotated = [...ordered.slice(start), ...ordered.slice(0, start)];
+  const cars = rotated.slice(0, limit).map((vehicle) => ({
+    modelo: vehicleDisplayName(vehicle),
+    url: `${SITE}/veiculo/${generateVehicleSlug(vehicle)}`,
+    ano: vehicle.ano ? String(vehicle.ano) : "",
+    km: Number(vehicle.km) > 0 ? `${Number(vehicle.km).toLocaleString("pt-BR")} km` : "",
+    cambio: vehicle.cambio ? titleCase(vehicle.cambio) : "",
+    preco: `R$ ${Number(vehicle.valor).toLocaleString("pt-BR")}`,
+    img: vehicleCardImage(vehicle),
+  }));
+  const cta = ctaHref
+    ? `<p><a href="${ctaHref}">${escapeHtml(ctaLabel || "Ver estoque completo")}</a></p>`
+    : "";
+  return `<h2>${escapeHtml(heading)}</h2>
+      ${renderSections([{ type: "cars", cars }])}
+      ${cta}`;
+}
+
 function pageShell({ title, description, canonical, body, schemas = [] }) {
   const schemaTags = schemas.length
     ? "\n" +
@@ -380,7 +463,7 @@ function relatedSellCitiesHtml(currentSlug) {
   return `<nav aria-label="Vender carro em outras cidades"><h2>Vender carro em outras cidades</h2><p><a href="${SITE}/regioes-atendidas">Ver todas as regiões atendidas</a></p><ul>${links}</ul></nav>`;
 }
 
-for (const city of cities) {
+for (const [cityIndex, city] of cities.entries()) {
   const canonical = `${SITE}/seminovos-${city.slug}`;
   const faqHtml = city.faq
     .map(
@@ -397,6 +480,14 @@ for (const city of cities) {
       <p>${escapeHtml(city.intro)}</p>
       ${paragraphs}
       ${city.routeNote ? `<p><strong>Referência de trajeto:</strong> ${escapeHtml(city.routeNote)}</p>` : ""}
+      ${stockShowcase({
+        heading: `Seminovos em estoque agora para quem é de ${city.name}`,
+        vehicles: stock,
+        limit: 8,
+        offset: cityIndex * 3,
+        ctaLabel: "Ver todo o estoque de seminovos",
+        ctaHref: `${SITE}/seminovos`,
+      })}
       <h2>Da pesquisa à visita em Esteio</h2>
       <ol>
         <li>Consulte fotos, preços e versões no estoque online.</li>
@@ -481,11 +572,23 @@ for (const landing of landings) {
   const paragraphs = landing.paragraphs
     .map((p) => `<p>${escapeHtml(p)}</p>`)
     .join("");
+  const landingStock = stock.filter(
+    (vehicle) =>
+      String(vehicle[landing.filterKey] || "").toUpperCase() ===
+      String(landing.filterValue || "").toUpperCase(),
+  );
   const body = `
     <article>
       <h1>${escapeHtml(landing.h1)}</h1>
       <p>${escapeHtml(landing.intro)}</p>
       ${paragraphs}
+      ${stockShowcase({
+        heading: `${landing.name} em estoque agora na Netcar`,
+        vehicles: landingStock,
+        limit: 12,
+        ctaLabel: "Ver todo o estoque de seminovos",
+        ctaHref: `${SITE}/seminovos`,
+      })}
       ${faqHtml}
       <p>
         <a href="${SITE}/seminovos">Ver estoque completo</a>
@@ -524,11 +627,23 @@ for (const page of contentPages) {
   const faqHtml = (page.faq || [])
     .map((item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`)
     .join("");
+  const pageStock = page.stock
+    ? stock.filter((vehicle) =>
+        new RegExp(page.stock.match, "i").test(String(vehicle[page.stock.field] || "")),
+      )
+    : [];
   const body = `
     <article>
       <h1>${escapeHtml(page.h1)}</h1>
       <p>${escapeHtml(page.intro)}</p>
       ${renderContentSections(page.sections || [])}
+      ${stockShowcase({
+        heading: page.stock?.heading || "Em estoque agora",
+        vehicles: pageStock,
+        limit: 12,
+        ctaLabel: "Ver todo o estoque de seminovos",
+        ctaHref: `${SITE}/seminovos`,
+      })}
       ${faqHtml}
       <p><a href="${SITE}${page.secondHref}">${escapeHtml(page.secondLabel)}</a></p>
     </article>`;
@@ -584,14 +699,24 @@ async function getVehicleUrls() {
     // sem sitemap local; tenta produção
   }
 
+  let productionUrls = [];
   try {
     const res = await fetch(`${SITE}/sitemap.xml`, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) return [];
-    return extractVehicleUrls(await res.text());
+    if (res.ok) {
+      productionUrls = extractVehicleUrls(await res.text());
+    }
   } catch {
-    console.warn("Aviso: não foi possível buscar sitemap de produção; veículos ficam de fora.");
-    return [];
+    console.warn("Aviso: não foi possível buscar sitemap de produção.");
   }
+
+  if (productionUrls.length > 0) return productionUrls;
+
+  // Sem nenhuma fonte de veículos, gravar o sitemap removeria o estoque inteiro
+  // do índice — e o próprio sitemap zerado viraria a fonte do build seguinte.
+  throw new Error(
+    "Nenhuma URL de veículo encontrada (API, sitemap local e produção falharam). " +
+      "Build interrompido para não publicar sitemap sem estoque.",
+  );
 }
 
 function parseSitemapLastmods(xml) {

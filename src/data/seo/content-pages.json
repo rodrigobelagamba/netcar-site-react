@@ -115,5 +115,47 @@
       { "q": "E se eu não me enquadrar no programa?", "a": "Podemos simular o financiamento tradicional da Netcar com bancos e financeiras parceiras, sujeito à análise de crédito. Veja também a página /financiamento." },
       { "q": "Onde confirmo as regras oficiais?", "a": "No portal oficial do Move Brasil em gov.br e nas instituições financeiras habilitadas. Use esta página da Netcar como guia de atendimento e estoque, não como substituto do canal do governo." }
     ]
+  },
+  {
+    "slug": "seminovos-automaticos",
+    "title": "Seminovos automáticos em Esteio/RS | Netcar Multimarcas",
+    "description": "Carros seminovos com câmbio automático e CVT revisados em Esteio/RS. Veja o estoque, simule financiamento e dê seu usado na troca na Netcar Multimarcas.",
+    "h1": "Seminovos automáticos em Esteio/RS",
+    "intro": "Conforto no trânsito, praticidade no dia a dia e melhor revenda: o câmbio automático deixou de ser luxo e virou o preferido de quem roda todo dia entre Esteio, Canoas, Sapucaia do Sul e Porto Alegre. Na Netcar Multimarcas você encontra automáticos e CVT revisados pela Fábrica de Valor, com laudo de vistoria, garantia e financiamento comparado entre bancos parceiros.",
+    "waText": "estou procurando um seminovo automático em Esteio.",
+    "ctaLabel": "Ver automáticos no WhatsApp",
+    "secondLabel": "Ver estoque completo de seminovos",
+    "secondHref": "/seminovos",
+    "stock": {
+      "field": "cambio",
+      "match": "automat|cvt",
+      "heading": "Automáticos em estoque agora na Netcar"
+    },
+    "sections": [
+      { "type": "h2", "text": "Por que escolher um automático seminovo" },
+      { "type": "ul", "items": [
+        "Menos desgaste no trânsito da BR-116 e da Av. Presidente Vargas, em Esteio",
+        "Direção mais leve para quem enfrenta congestionamento diário até Porto Alegre",
+        "Revenda mais rápida: automático tem procura maior no mercado de usados",
+        "Opções de 6 marchas, CVT e automatizado, cada uma com um perfil de uso"
+      ] },
+      { "type": "h2", "text": "Tipos de câmbio automático que você encontra no estoque" },
+      { "type": "p", "text": "O automático convencional (conversor de torque) é o mais comum em SUVs e sedãs e costuma ser o mais robusto. O CVT trabalha sem trocas perceptíveis e rende bem em cidade, sendo comum em modelos como HR-V, Kicks e Civic. O automatizado de embreagem simples é mais econômico na compra, porém tem trocas mais lentas. Na loja, o consultor explica qual combina com o seu trajeto." },
+      { "type": "h2", "text": "Revisão da Fábrica de Valor antes de ir à vitrine" },
+      { "type": "p", "text": "Todo seminovo automático passa pela nossa Fábrica de Valor: avaliação mecânica, verificação do funcionamento do câmbio em rodagem, troca de fluidos quando necessário e correção de itens antes de o carro entrar no estoque. Você recebe laudo de vistoria e garantia — e pode consultar o histórico do veículo antes de fechar." },
+      { "type": "h2", "text": "Câmbio automático dá manutenção caro?" },
+      { "type": "p", "text": "Automático bem cuidado é confiável. O ponto que exige atenção é a troca do fluido no intervalo indicado pelo fabricante e evitar reboque com as rodas de tração no chão. Por isso verificamos o câmbio em rodagem antes de anunciar o carro e orientamos o cliente sobre o plano de manutenção na entrega." },
+      { "type": "h2", "text": "Financiamento e troca" },
+      { "type": "p", "text": "Comparamos condições entre bancos e financeiras parceiras, com entrada mínima de 20% e possibilidade de parcelar a entrada no cartão, sujeito a análise de crédito. Seu usado pode compor a entrada — inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo." },
+      { "type": "h2", "text": "Atendemos toda a Região Metropolitana" },
+      { "type": "p", "text": "Nossas duas lojas ficam na Av. Presidente Vargas, em Esteio/RS, a poucos minutos de Sapucaia do Sul, Canoas, São Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha, Alvorada, Viamão e Porto Alegre. Também atendemos compradores de Caxias do Sul, Gramado, Taquara e Igrejinha, com envio de vídeos e laudo pelo WhatsApp antes da viagem." }
+    ],
+    "faq": [
+      { "q": "Quais seminovos automáticos vocês têm em estoque?", "a": "O estoque muda toda semana. Veja a lista atualizada em /seminovos filtrando por câmbio automático, ou peça as opções pelo WhatsApp informando faixa de preço e tipo de carro." },
+      { "q": "Automático gasta mais combustível que manual?", "a": "Nos modelos atuais a diferença é pequena, e no trânsito urbano o automático moderno costuma empatar ou até levar vantagem. O consumo real depende mais do motor e do seu trajeto do que do tipo de câmbio." },
+      { "q": "O câmbio automático tem garantia?", "a": "Sim. Os seminovos da Netcar saem com garantia e laudo de vistoria. As condições e a cobertura são apresentadas por escrito antes do fechamento." },
+      { "q": "Consigo financiar um automático dando meu carro na troca?", "a": "Sim. Avaliamos seu usado e o valor entra como parte da entrada, respeitando a entrada mínima de 20% do financiamento e sujeito à análise de crédito." },
+      { "q": "Vocês vendem para quem mora em outra cidade?", "a": "Sim. Atendemos a Grande Porto Alegre, o Vale dos Sinos, o Vale do Caí, a Serra e o Litoral Norte. Enviamos vídeos, fotos e o laudo pelo WhatsApp antes de você se deslocar até Esteio." }
+    ]
   }
 ]

@@ -40,10 +40,10 @@ export function generateVehicleSlug(vehicle) {
   return parts.join("-");
 }
 
-/** URLs absolutas dos veículos disponíveis na API. */
-export async function fetchVehicleSitemapUrls() {
+async function fetchOnce() {
   const response = await fetch(API_URL, {
     headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(20000),
   });
 
   if (!response.ok) {
@@ -58,4 +58,24 @@ export async function fetchVehicleSitemapUrls() {
   return json.data
     .filter((vehicle) => Number(vehicle.valor) > 0)
     .map((vehicle) => `${SITE_URL}/veiculo/${generateVehicleSlug(vehicle)}`);
+}
+
+/**
+ * URLs absolutas dos veículos disponíveis na API.
+ * Tenta 3 vezes: uma falha isolada aqui já apagou os veículos do sitemap
+ * de produção e o fallback perpetuou o sitemap vazio.
+ */
+export async function fetchVehicleSitemapUrls() {
+  let lastError;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      return await fetchOnce();
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) {
+        await new Promise((resolve) => setTimeout(resolve, attempt * 2000));
+      }
+    }
+  }
+  throw lastError;
 }

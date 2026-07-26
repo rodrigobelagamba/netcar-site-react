@@ -82,18 +82,95 @@ curl_setopt($ch, CURLOPT_TIMEOUT, 3); // Timeout curto para não bloquear
 curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
+// curl_close() é no-op desde o PHP 8.0 e emite Deprecated no 8.5 — o aviso
+// conta como output e derruba todo header()/http_response_code() seguinte.
+if (PHP_VERSION_ID < 80000) {
+    curl_close($ch);
+}
 
-if ($httpCode !== 200 || !$response) {
-    // Se não encontrar, redireciona para React app (que vai buscar os dados)
-    header('Location: /veiculo/' . $vehicleId);
+/**
+ * Nome legível a partir do slug, para quando a API já não tem o veículo.
+ * Ex.: "onix-lt-2021-jal-xx10-19803" -> "Onix Lt 2021"
+ */
+function humanizeVehicleSlug($slug) {
+    $s = preg_replace('/^\/?veiculo\//', '', trim((string) $slug));
+    $s = preg_replace('/-\d{3,}$/', '', $s);              // id no fim
+    $s = preg_replace('/-[a-z]{3}-xx\w{1,3}$/i', '', $s); // placa mascarada
+    $s = preg_replace('/-[a-z]{3}\d[a-z0-9]{2,}$/i', '', $s); // placa legada
+    $s = str_replace('-', ' ', $s);
+    $s = trim(preg_replace('/\s+/', ' ', $s));
+    if ($s === '') {
+        return 'Este seminovo';
+    }
+    return function_exists('mb_convert_case')
+        ? mb_convert_case($s, MB_CASE_TITLE, 'UTF-8')
+        : ucwords($s);
+}
+
+// A API respondeu que o veículo não existe mais (vendido e removido do estoque)?
+// Antes o código fazia header('Location: /veiculo/{id}') para "deixar o React
+// resolver" — mas o .htaccess manda todo bot de volta para este mesmo arquivo,
+// gerando 302 infinito. Agora: 410 com página de vendido; 503 se a API cair.
+// Só 200 e 404 são respostas confiáveis da API. Qualquer outra coisa (timeout,
+// 5xx, 429) é instabilidade: devolver 410 nesse caso derrubaria carro à venda.
+$apiAuthoritative = ($response !== false && ($httpCode === 200 || $httpCode === 404));
+$data = $apiAuthoritative ? json_decode($response, true) : null;
+$vehicleMissing = !$data || empty($data['success']) || empty($data['data']);
+
+if (!$apiAuthoritative) {
+    // Falha transitória: 503 mantém a URL no índice e pede nova tentativa.
+    http_response_code(503);
+    header('Retry-After: 3600');
+    header('Cache-Control: no-store');
+    header('Content-Type: text/html; charset=UTF-8');
+    echo '<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8">'
+        . '<title>Estoque temporariamente indisponível | Netcar Multimarcas</title>'
+        . '<meta name="robots" content="noindex, follow"></head><body>'
+        . '<h1>Estoque temporariamente indisponível</h1>'
+        . '<p>Não foi possível carregar este seminovo agora. Tente novamente em alguns minutos.</p>'
+        . '<p><a href="/seminovos">Ver todos os seminovos</a></p>'
+        . '</body></html>';
     exit;
 }
 
-$data = json_decode($response, true);
-
-if (!$data || !$data['success'] || empty($data['data'])) {
-    header('Location: /veiculo/' . $vehicleId);
+if ($vehicleMissing) {
+    $goneName = humanizeVehicleSlug(isset($_GET['slug']) ? $_GET['slug'] : (string) $vehicleId);
+    http_response_code(410);
+    header('Content-Type: text/html; charset=UTF-8');
+    header('Cache-Control: public, max-age=86400');
+    ?>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><?php echo htmlspecialchars($goneName . ' já foi vendido | Netcar Multimarcas', ENT_QUOTES, 'UTF-8'); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars($goneName . ' já foi vendido. Veja seminovos similares disponíveis agora na Netcar Multimarcas, em Esteio/RS.', ENT_QUOTES, 'UTF-8'); ?>" />
+    <meta name="robots" content="noindex, follow" />
+    <meta property="og:site_name" content="Netcar Multimarcas" />
+    <meta property="og:title" content="<?php echo htmlspecialchars($goneName . ' já foi vendido', ENT_QUOTES, 'UTF-8'); ?>" />
+    <meta property="og:description" content="Veja seminovos similares disponíveis na Netcar Multimarcas, Esteio/RS." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+</head>
+<body>
+    <div style="padding: 20px; font-family: Arial, sans-serif;">
+        <h1><?php echo htmlspecialchars($goneName, ENT_QUOTES, 'UTF-8'); ?> já foi vendido</h1>
+        <p>Este seminovo saiu do estoque da Netcar Multimarcas, em Esteio/RS. O estoque
+        muda toda semana e provavelmente temos opções parecidas disponíveis agora.</p>
+        <ul>
+            <li><a href="/seminovos">Ver todos os seminovos em estoque</a></li>
+            <li><a href="/comprar-suv">SUVs seminovos</a></li>
+            <li><a href="/comprar-hatch">Hatches seminovos</a></li>
+            <li><a href="/comprar-sedan">Sedãs seminovos</a></li>
+            <li><a href="/seminovos-automaticos">Seminovos automáticos</a></li>
+            <li><a href="/financiamento">Financiamento de seminovos</a></li>
+            <li><a href="/regioes-atendidas">Regiões atendidas</a></li>
+        </ul>
+    </div>
+</body>
+</html>
+    <?php
     exit;
 }
 
@@ -193,29 +270,61 @@ function generateVehicleSlug($vehicle, $id) {
     return implode('-', $parts);
 }
 
-// Formata título completo no formato do React: "Fluence gt sport 2013 preta iui-xx58"
-// (modelo com primeira letra maiúscula, resto minúsculas, ano, placa mascarada em minúsculas)
-$titleParts = [];
-
-// Modelo completo - primeira letra maiúscula, resto minúsculas
-if ($modelo) {
-    $modeloLower = strtolower(trim($modelo));
-    $modeloCapitalized = ucfirst($modeloLower);
-    $titleParts[] = $modeloCapitalized;
+/** Title Case preservando UTF-8. */
+function titleCase($text) {
+    $text = trim((string) $text);
+    if ($text === '') return '';
+    return function_exists('mb_convert_case')
+        ? mb_convert_case(mb_strtolower($text, 'UTF-8'), MB_CASE_TITLE, 'UTF-8')
+        : ucwords(strtolower($text));
 }
 
-// Ano
+// Nome comercial do veículo: marca + modelo + ano ("Hyundai Creta Prestige 2018").
+// A placa saiu do título — quem busca digita a marca, não o fragmento da placa.
+$modeloSemMarca = trim((string) $modelo);
+if ($modeloSemMarca !== '' && $marca !== '' && stripos($modeloSemMarca, $marca) === 0) {
+    $modeloSemMarca = trim(substr($modeloSemMarca, strlen($marca)));
+}
+$nomeParts = [];
+if ($marca) {
+    $nomeParts[] = titleCase($marca);
+}
+if ($modeloSemMarca !== '') {
+    $nomeParts[] = titleCase($modeloSemMarca);
+}
 if ($ano) {
-    $titleParts[] = $ano;
+    $nomeParts[] = $ano;
+}
+$vehicleName = !empty($nomeParts) ? implode(' ', $nomeParts) : 'Seminovo';
+
+// Preço e km em formatos curtos, reaproveitados no title, og e corpo.
+$precoCurto = intval($preco) > 0 ? 'R$ ' . number_format($preco, 0, ',', '.') : '';
+$kmCurto = '';
+if ($km > 0) {
+    $kmCurto = $km >= 1000
+        ? number_format($km / 1000, 0, ',', '.') . ' mil km'
+        : number_format($km, 0, ',', '.') . ' km';
 }
 
-// Placa mascarada em minúsculas
-if ($placa) {
-    $placaMascarada = maskPlate($placa);
-    $titleParts[] = strtolower($placaMascarada);
+// og:title (WhatsApp, Facebook): nome + preço.
+$ogTitle = $vehicleName;
+if ($isSold) {
+    $ogTitle .= ' — vendido';
+} elseif ($precoCurto) {
+    $ogTitle .= ' — ' . $precoCurto;
 }
 
-$ogTitle = !empty($titleParts) ? implode(' ', $titleParts) : 'Veículo';
+// <title> do Google: nome + km + preço + loja. Km diferencia dois carros iguais.
+$pageTitleParts = [$vehicleName];
+if (!$isSold && $kmCurto) {
+    $pageTitleParts[] = '· ' . $kmCurto;
+}
+if ($isSold) {
+    $pageTitleParts[] = '— vendido';
+} elseif ($precoCurto) {
+    $pageTitleParts[] = '— ' . $precoCurto;
+}
+$pageTitle = implode(' ', $pageTitleParts) . ' | Netcar Multimarcas Esteio';
 
 // Formata descrição detalhada: "2018 / 2019 - 135.000km • Flex • MANUAL • MARROM"
 $descriptionParts = [];
@@ -265,6 +374,32 @@ if (empty($ogDescription)) {
         $ogDescription = 'Seminovo é na Netcar';
     }
 }
+
+// Meta description do Google: frase completa com nome, km, preço e cidade.
+// A versão com bullets (og) serve para preview de link, não para snippet.
+$metaParts = [$vehicleName];
+if ($kmCurto) {
+    $metaParts[] = 'com ' . $kmCurto;
+}
+$detalhe = [];
+if ($cambio) {
+    $detalhe[] = 'câmbio ' . mb_strtolower($cambio, 'UTF-8');
+}
+if ($combustivel) {
+    $detalhe[] = mb_strtolower($combustivel, 'UTF-8');
+}
+if ($cor) {
+    $detalhe[] = mb_strtolower($cor, 'UTF-8');
+}
+$metaDescription = implode(' ', $metaParts);
+if (!empty($detalhe)) {
+    $metaDescription .= ', ' . implode(', ', $detalhe);
+}
+$metaDescription .= '. ';
+$metaDescription .= $isSold
+    ? 'Este seminovo foi vendido — veja similares disponíveis na Netcar Multimarcas, em Esteio/RS.'
+    : ($precoCurto ? $precoCurto . ' na Netcar Multimarcas, em Esteio/RS. ' : 'Na Netcar Multimarcas, em Esteio/RS. ')
+        . 'Laudo de vistoria, garantia e financiamento com análise no mesmo dia.';
 
 // Busca imagem para Open Graph - USA APENAS imagens_site.capa_opengraph (sem fallback)
 // IMPORTANTE: WhatsApp precisa de pelo menos 300px de largura para mostrar imagem grande em cima
@@ -354,7 +489,7 @@ $canonicalSlug = generateVehicleSlug($vehicle, $vehicleId);
 $canonicalPath = '/veiculo/' . $canonicalSlug;
 
 if ($requestSlug !== '' && $requestSlug !== $canonicalSlug) {
-    header('HTTP/1.1 301 Moved Permanently');
+    http_response_code(301);
     header('Location: ' . $baseUrl . $canonicalPath);
     header('Cache-Control: public, max-age=86400');
     exit;
@@ -381,8 +516,8 @@ if ($placa) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Meta tags básicas -->
-    <title><?php echo htmlspecialchars($ogTitle . ' | Netcar Multimarcas', ENT_QUOTES, 'UTF-8'); ?></title>
-    <meta name="description" content="<?php echo htmlspecialchars($ogDescription, ENT_QUOTES, 'UTF-8'); ?>" />
+    <title><?php echo htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars($metaDescription, ENT_QUOTES, 'UTF-8'); ?>" />
     <?php if ($isSold): ?>
     <meta name="robots" content="noindex, follow" />
     <?php endif; ?>
@@ -391,8 +526,6 @@ if ($placa) {
     <meta property="og:site_name" content="Netcar Multimarcas" />
     <meta property="og:title" content="<?php echo htmlspecialchars($ogTitle, ENT_QUOTES, 'UTF-8'); ?>" />
     <meta property="og:description" content="<?php echo htmlspecialchars($ogDescription, ENT_QUOTES, 'UTF-8'); ?>" />
-    <!-- DEBUG: Imagem selecionada: <?php echo htmlspecialchars($imagem ?: 'NENHUMA', ENT_QUOTES, 'UTF-8'); ?> -->
-    <!-- DEBUG: URL final: <?php echo htmlspecialchars($imagemUrl, ENT_QUOTES, 'UTF-8'); ?> -->
     <meta property="og:image" content="<?php echo htmlspecialchars($imagemUrl, ENT_QUOTES, 'UTF-8'); ?>" />
     <?php
     // IMPORTANTE: Para imagem aparecer GRANDE EM CIMA no WhatsApp:
@@ -447,12 +580,33 @@ if ($placa) {
     {
       "@context": "https://schema.org",
       "@type": "Car",
-      "name": "<?php echo htmlspecialchars($marca . ' ' . $modelo . ' ' . $ano, ENT_QUOTES, 'UTF-8'); ?>",
+      "name": "<?php echo htmlspecialchars($vehicleName, ENT_QUOTES, 'UTF-8'); ?>",
       "brand": {
         "@type": "Brand",
-        "name": "<?php echo htmlspecialchars($marca, ENT_QUOTES, 'UTF-8'); ?>"
+        "name": "<?php echo htmlspecialchars(titleCase($marca), ENT_QUOTES, 'UTF-8'); ?>"
       },
-      "model": "<?php echo htmlspecialchars($modelo, ENT_QUOTES, 'UTF-8'); ?>",
+      "model": "<?php echo htmlspecialchars(titleCase($modeloSemMarca !== '' ? $modeloSemMarca : $modelo), ENT_QUOTES, 'UTF-8'); ?>",
+      <?php if ($anoFabricacao): ?>
+      "productionDate": "<?php echo htmlspecialchars($anoFabricacao, ENT_QUOTES, 'UTF-8'); ?>",
+      <?php endif; ?>
+      <?php if (!empty($vehicle['portas'])): ?>
+      "numberOfDoors": <?php echo intval($vehicle['portas']); ?>,
+      <?php endif; ?>
+      <?php if (!empty($vehicle['motor'])): ?>
+      "vehicleEngine": {
+        "@type": "EngineSpecification",
+        "engineDisplacement": {
+          "@type": "QuantitativeValue",
+          "value": "<?php echo htmlspecialchars($vehicle['motor'], ENT_QUOTES, 'UTF-8'); ?>",
+          "unitCode": "LTR"
+        }<?php if (!empty($vehicle['potencia'])): ?>,
+        "enginePower": {
+          "@type": "QuantitativeValue",
+          "value": <?php echo intval($vehicle['potencia']); ?>,
+          "unitCode": "N12"
+        }<?php endif; ?>
+      },
+      <?php endif; ?>
       "vehicleModelDate": "<?php echo htmlspecialchars($ano, ENT_QUOTES, 'UTF-8'); ?>",
       <?php if ($km > 0): ?>
       "mileageFromOdometer": {
@@ -473,6 +627,18 @@ if ($placa) {
       "image": [
         <?php 
         // Adiciona todas as imagens full (limitado a 5 primeiras para não ficar muito grande)
+        // $imagensFull vinha indefinido: o schema saía sempre com 1 imagem só.
+        $imagensFull = [];
+        foreach ([
+            isset($vehicle['imagens_site']['galeria']) ? $vehicle['imagens_site']['galeria'] : null,
+            isset($vehicle['imagens']['full']) ? $vehicle['imagens']['full'] : null,
+            isset($vehicle['imagens']['thumb']) ? $vehicle['imagens']['thumb'] : null,
+        ] as $candidate) {
+            if (!empty($candidate) && is_array($candidate)) {
+                $imagensFull = $candidate;
+                break;
+            }
+        }
         $imageList = [];
         if (!empty($imagensFull)) {
             $count = 0;
@@ -521,9 +687,9 @@ if ($placa) {
           "url": "https://www.netcarmultimarcas.com.br"
         }
       }
-      <?php if ($placa): ?>
+      <?php if ($placaRetailer): ?>
       ,
-      "identifier": "<?php echo htmlspecialchars(strtoupper($placa), ENT_QUOTES, 'UTF-8'); ?>"
+      "sku": "<?php echo htmlspecialchars($placaRetailer, ENT_QUOTES, 'UTF-8'); ?>"
       <?php endif; ?>
     }
     </script>
@@ -550,15 +716,81 @@ if ($placa) {
         window.location.href = '<?php echo $redirectUrl; ?>';
     </script>
     <?php else: ?>
-    <!-- Bot detectado - mostra conteúdo básico para crawlers -->
+    <!-- Bot/crawler: conteúdo real da ficha (antes eram 4 linhas, tratadas como
+         página vazia pelo Google) + links internos para estoque e cidades. -->
     <div style="padding: 20px; font-family: Arial, sans-serif;">
-        <h1><?php echo htmlspecialchars($ogTitle, ENT_QUOTES, 'UTF-8'); ?></h1>
-        <p>Seminovo é na Netcar</p>
-        <p>Preço: R$ <?php echo number_format($preco, 0, ',', '.'); ?></p>
-        <?php if ($marca && $modelo): ?>
-        <p><?php echo htmlspecialchars($marca . ' ' . $modelo, ENT_QUOTES, 'UTF-8'); ?></p>
+        <h1><?php echo htmlspecialchars($vehicleName, ENT_QUOTES, 'UTF-8'); ?></h1>
+        <?php if ($isSold): ?>
+        <p><strong>Este veículo já foi vendido.</strong> Veja abaixo outras opções
+        disponíveis no estoque da Netcar Multimarcas, em Esteio/RS.</p>
+        <?php else: ?>
+        <p><strong><?php echo htmlspecialchars($precoCurto !== '' ? $precoCurto : 'Consulte o valor', ENT_QUOTES, 'UTF-8'); ?></strong>
+        — seminovo à venda na Netcar Multimarcas, Av. Presidente Vargas, Esteio/RS.</p>
         <?php endif; ?>
-        <p><a href="<?php echo $redirectUrl; ?>">Ver detalhes completos</a></p>
+
+        <h2>Ficha técnica</h2>
+        <ul>
+            <?php if ($anoDisplay): ?><li>Ano: <?php echo htmlspecialchars($anoDisplay, ENT_QUOTES, 'UTF-8'); ?></li><?php endif; ?>
+            <?php if ($km > 0): ?><li>Quilometragem: <?php echo number_format($km, 0, ',', '.'); ?> km</li><?php endif; ?>
+            <?php if ($cambio): ?><li>Câmbio: <?php echo htmlspecialchars(titleCase($cambio), ENT_QUOTES, 'UTF-8'); ?></li><?php endif; ?>
+            <?php if ($combustivel): ?><li>Combustível: <?php echo htmlspecialchars(titleCase($combustivel), ENT_QUOTES, 'UTF-8'); ?></li><?php endif; ?>
+            <?php if ($cor): ?><li>Cor: <?php echo htmlspecialchars(titleCase($cor), ENT_QUOTES, 'UTF-8'); ?></li><?php endif; ?>
+            <?php if (!empty($vehicle['motor'])): ?><li>Motor: <?php echo htmlspecialchars($vehicle['motor'], ENT_QUOTES, 'UTF-8'); ?></li><?php endif; ?>
+            <?php if (!empty($vehicle['potencia'])): ?><li>Potência: <?php echo htmlspecialchars($vehicle['potencia'], ENT_QUOTES, 'UTF-8'); ?> cv</li><?php endif; ?>
+            <?php if (!empty($vehicle['portas'])): ?><li>Portas: <?php echo intval($vehicle['portas']); ?></li><?php endif; ?>
+            <?php if ($placa): ?><li>Referência do veículo: <?php echo htmlspecialchars(strtoupper(maskPlate($placa)), ENT_QUOTES, 'UTF-8'); ?></li><?php endif; ?>
+        </ul>
+
+        <?php
+        $opcionais = [];
+        if (!empty($vehicle['opcionais']) && is_array($vehicle['opcionais'])) {
+            foreach ($vehicle['opcionais'] as $opcional) {
+                $descricao = is_array($opcional)
+                    ? (isset($opcional['descricao']) ? $opcional['descricao'] : '')
+                    : $opcional;
+                $descricao = trim(ltrim((string) $descricao, '.'));
+                if ($descricao !== '') {
+                    $opcionais[] = $descricao;
+                }
+            }
+        }
+        ?>
+        <?php if (!empty($opcionais)): ?>
+        <h2>Itens e opcionais</h2>
+        <ul>
+            <?php foreach (array_slice($opcionais, 0, 30) as $opcional): ?>
+            <li><?php echo htmlspecialchars($opcional, ENT_QUOTES, 'UTF-8'); ?></li>
+            <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
+
+        <h2>Como a Netcar prepara este seminovo</h2>
+        <p>Todo carro do nosso estoque passa pela Fábrica de Valor: avaliação mecânica,
+        revisão dos itens de segurança e correção do que for necessário antes de entrar
+        na vitrine. Você recebe laudo de vistoria e garantia, e pode comparar condições
+        de financiamento entre bancos e financeiras parceiras — com entrada mínima de
+        20% e possibilidade de dar seu usado na troca, sujeito à análise de crédito.</p>
+
+        <h2>Onde ver este carro</h2>
+        <p>Netcar Multimarcas — Av. Presidente Vargas, Esteio/RS. Duas lojas na mesma
+        avenida, a poucos minutos de Sapucaia do Sul, Canoas, São Leopoldo e Gravataí,
+        atendendo toda a Região Metropolitana de Porto Alegre.</p>
+
+        <h2>Continue navegando</h2>
+        <ul>
+            <li><a href="<?php echo htmlspecialchars($redirectUrl, ENT_QUOTES, 'UTF-8'); ?>">Ficha completa com todas as fotos</a></li>
+            <li><a href="/seminovos">Estoque completo de seminovos</a></li>
+            <li><a href="/seminovos-automaticos">Seminovos automáticos</a></li>
+            <li><a href="/financiamento">Financiamento de seminovos</a></li>
+            <li><a href="/compra">Vender ou dar meu carro na troca</a></li>
+            <li><a href="/seminovos-canoas">Seminovos para Canoas</a></li>
+            <li><a href="/seminovos-sapucaia-do-sul">Seminovos para Sapucaia do Sul</a></li>
+            <li><a href="/seminovos-sao-leopoldo">Seminovos para São Leopoldo</a></li>
+            <li><a href="/seminovos-porto-alegre">Seminovos para Porto Alegre</a></li>
+            <li><a href="/seminovos-novo-hamburgo">Seminovos para Novo Hamburgo</a></li>
+            <li><a href="/seminovos-gravatai">Seminovos para Gravataí</a></li>
+            <li><a href="/regioes-atendidas">Todas as regiões atendidas</a></li>
+        </ul>
     </div>
     <?php endif; ?>
 </body>

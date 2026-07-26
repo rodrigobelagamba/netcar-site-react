@@ -135,6 +135,14 @@
   RewriteRule ^detalhe-produto-(.+)\.html?$ /seminovos [R=301,L,QSD,NC]
   RewriteRule ^detalhe-produto-(.+)$ /seminovos [R=301,L,QSD,NC]
 
+  # Cidade no formato legado com barra (/seminovos/canoas) caía no shell do SPA
+  # e virava soft 404. O canônico é /seminovos-{cidade}.
+  RewriteRule ^seminovos/(alvorada|bento-goncalves|cachoeirinha|campo-bom|canoas|caxias-do-sul|estancia-velha|gramado|gravatai|guaiba|igrejinha|montenegro|novo-hamburgo|porto-alegre|sao-leopoldo|sapucaia-do-sul|taquara|viamao)/?$ /seminovos-$1 [R=301,L,QSD,NC]
+  # Qualquer outro /seminovos/algo sem extensão volta para a listagem.
+  # A checagem de ponto preserva arquivos reais da pasta legada seminovos/.
+  RewriteCond %{REQUEST_URI} !\.
+  RewriteRule ^seminovos/(.+)$ /seminovos [R=301,L,QSD,NC]
+
   # Tours 3D antigos (2016) — Tour3D e Tour3DRC
   RewriteRule ^Tour3DR?C?(/.*)?$ / [R=301,L,NC]
   
@@ -175,8 +183,12 @@
   RewriteCond %{REQUEST_URI} ^/assets/ [NC]
   RewriteRule ^ - [L]
   
-  # Quarto: não reescrever index.html e not-found.html (evita loops)
-  RewriteCond %{REQUEST_URI} ^/(index|not-found)\.html$ [NC]
+  # /not-found.html é resquício do site legado e estava em 302 para si mesmo —
+  # o Googlebot registrava isso como erro de redirecionamento. Agora responde 410.
+  RewriteRule ^not-found\.html$ - [G,L]
+
+  # Quarto: não reescrever index.html (evita loop no fallback do SPA)
+  RewriteCond %{REQUEST_URI} ^/index\.html$ [NC]
   RewriteRule ^ - [L]
   
   # Sexto: interceptar rotas principais para bots (HTML com conteúdo real)
@@ -196,20 +208,26 @@
 
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  # Sem o -f, /seminovos-automaticos casava aqui e apontava para um city-*.html
+  # inexistente: o bot recebia o shell do SPA com o title da home.
+  RewriteCond %{DOCUMENT_ROOT}/seo-static/city-$1.html -f
   RewriteRule ^seminovos-([a-z0-9-]+)/?$ seo-static/city-$1.html [L]
 
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteCond %{DOCUMENT_ROOT}/seo-static/sell-city-$1.html -f
   RewriteRule ^vender-carro-([a-z0-9-]+)/?$ seo-static/sell-city-$1.html [L]
 
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteCond %{DOCUMENT_ROOT}/seo-static/landing-$1.html -f
   RewriteRule ^comprar-([a-z0-9-]+)/?$ seo-static/landing-$1.html [L]
 
-  # Páginas de conteúdo SEO (financiamento, atendimento-24h) para crawlers
+  # Páginas de conteúdo SEO (financiamento, atendimento-24h, automáticos) para crawlers
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
-  RewriteRule ^(financiamento|atendimento-24h)/?$ seo-static/page-$1.html [L]
+  RewriteCond %{DOCUMENT_ROOT}/seo-static/page-$1.html -f
+  RewriteRule ^(financiamento|atendimento-24h|move-brasil|seminovos-automaticos)/?$ seo-static/page-$1.html [L]
 
   # Sétimo: interceptar /veiculo/{slug} APENAS quando for bot/crawler (meta tags para WhatsApp)
   # Usuários normais acessam diretamente o React app
