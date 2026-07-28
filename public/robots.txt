@@ -10,20 +10,10 @@ Disallow: /backend/
 # Filtros de estoque (query string) — canônico é /seminovos
 Disallow: /seminovos?*
 
-# URLs legadas do site antigo (não indexar)
-Disallow: /detalhe-produto-*
-Disallow: /Tour3D/
-Disallow: /Tour3DRC/
-Disallow: /arquivos/autocheck/
-Disallow: /cliente.php
-Disallow: /clientes.php
-Disallow: /ficha-cadastral.php
-Disallow: /compramos-seu-usado.php
-Disallow: /contato.html
-Disallow: /contato.php
-Disallow: /seminovos.php
-Disallow: /seminovos.html
-Disallow: /sobre-nos.php
-Disallow: /listagem-produtos.php
+# O legado do site antigo (/detalhe-produto-*, /contato.php, /Tour3D/, laudos em
+# /arquivos/autocheck/…) NÃO entra aqui de propósito. Essas URLs já respondem
+# 301 ou mandam X-Robots-Tag: noindex, e o Google só enxerga isso se puder
+# rastreá-las. Bloquear no robots as congela indexadas e sem conteúdo — foi o que
+# gerou o alerta "Indexada, mas bloqueada pelo robots.txt" em 27/07/2026.
 
 Sitemap: https://www.netcarmultimarcas.com.br/sitemap.xml

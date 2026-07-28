@@ -70,6 +70,35 @@ antiga tinha 128 caracteres e era tratada como página vazia.
 | `/not-found.html` | 410 | Estava em 302 para si mesmo, contando como erro de redirecionamento |
 | `/detalhe-produto-*` | 301 para `/seminovos` | Fichas do site de 2016 |
 
+## robots.txt não tira nada do índice
+
+Regra que já foi violada uma vez: **URL que precisa sair do índice tem que
+continuar rastreável.**
+
+`Disallow` proíbe rastrear, não proíbe indexar. O Google mantém a URL no índice,
+só que sem conteúdo — e como não pode buscá-la, nunca vê o 301, o 410 nem o
+`X-Robots-Tag: noindex`. A URL fica congelada lá.
+
+Foi o que aconteceu em 27/07/2026: as URLs legadas tinham 301 no `.htaccess`
+**e** `Disallow` no `robots.txt` ao mesmo tempo. Os dois trechos foram escritos
+com um dia de diferença, cada um resolvendo um problema, e juntos se anulavam.
+Resultado: alerta "Indexada, mas bloqueada pelo robots.txt" em `/clientes.php`,
+`/contato.html`, `/listagem-produtos.php` e dois PDFs de laudo, mais o grupo
+"Bloqueada pelo robots.txt" saltando de 2 para 21 páginas assim que a validação
+de correção fez o Google tentar rastrear de novo.
+
+Como escolher:
+
+| Objetivo | Ferramenta certa | Nunca |
+|---|---|---|
+| Tirar do índice | 301, 410 ou `X-Robots-Tag: noindex` | `Disallow` |
+| Poupar rastreio de área privada nunca indexada | `Disallow` | — |
+| Evitar facetas/query string duplicada | `Disallow` + canônico | — |
+
+Por isso o `robots.txt` bloqueia só `/admin/`, `/sistema/`, `/api/`, `/backend/`
+e `/seminovos?*`. Todo o resto do legado fica rastreável de propósito, para o
+Google poder ler o 301 e esquecer a URL.
+
 ## Prerender: a regra do `-f`
 
 Toda regra que aponta para um arquivo de `seo-static/` **precisa** de
