@@ -5,7 +5,7 @@
  * Roda no postbuild antes do deploy.
  */
 
-import { readFileSync, mkdirSync } from "fs";
+import { readFileSync, mkdirSync, readdirSync, unlinkSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
@@ -783,6 +783,52 @@ ${urls
 `;
 
 writeTextFile(join(publicDir, "sitemap.xml"), sitemap);
+
+// Página que sai da fonte de dados precisa sumir do disco também. O gerador só
+// escrevia, então o HTML de um slug removido continuava servido ao crawler com
+// 200 — fora do sitemap e sem nada apontando para ele. Foi assim que sobraram
+// blog-ford e blog-ix35-gl depois que os posts saíram do JSON.
+const expectedFiles = new Set([
+  "regions-hub.html",
+  ...blogPosts.map((post) => `blog-${post.slug}.html`),
+  ...cities.map((city) => `city-${city.slug}.html`),
+  ...cities.filter((city) => city.sell).map((city) => `sell-city-${city.slug}.html`),
+  ...landings.map((landing) => `landing-${landing.slug}.html`),
+  ...contentPages.map((page) => `page-${page.slug}.html`),
+]);
+const orphans = readdirSync(seoStaticDir).filter(
+  (file) => file.endsWith(".html") && !expectedFiles.has(file)
+);
+for (const file of orphans) {
+  unlinkSync(join(seoStaticDir, file));
+  console.log(`Removido órfão: seo-static/${file}`);
+}
+
+// Os 301 de consolidação editorial mandam marca e categoria para /comprar-{slug},
+// mas landing só é gerada com estoque mínimo. Se a marca esvazia, o redirect
+// passa a apontar para uma página que não existe mais e o crawler recebe o shell
+// do SPA — soft 404 no fim de um 301. Avisa antes que isso aconteça calado.
+const landingSlugs = new Set(landings.map((landing) => landing.slug));
+const redirectTargets = new Set();
+for (const [, pattern, target] of readFileSync(join(publicDir, ".htaccess"), "utf-8").matchAll(
+  /^\s*RewriteRule\s+(\S+)\s+\/comprar-(\S+)\s/gm
+)) {
+  if (target === "$1") {
+    // Destino vem do grupo de captura da origem: /comprar-$1 com ^blog/(a|b|c)-…
+    const group = pattern.match(/\(([^)]+)\)/);
+    if (group) for (const slug of group[1].split("|")) redirectTargets.add(slug);
+  } else {
+    redirectTargets.add(target);
+  }
+}
+const brokenTargets = [...redirectTargets].filter((slug) => !landingSlugs.has(slug));
+if (brokenTargets.length > 0) {
+  console.warn(
+    `Aviso: 301 em .htaccess aponta para landing inexistente: ${brokenTargets
+      .map((slug) => `/comprar-${slug}`)
+      .join(", ")}. Redirecionar para /seminovos enquanto não houver estoque.`
+  );
+}
 
 const sellPages = cities.filter((city) => city.sell).length;
 console.log(

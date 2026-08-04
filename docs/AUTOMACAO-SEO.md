@@ -11,11 +11,17 @@ criar conteúdo vazio (thin/AI slop).
 API de veículos (/api/v1/veiculos.php)
         │
         ├─ generate-landings.js   → src/data/seo/landings.json   (marca/categoria)
+        ├─ validate-blog-intent.js→ trava o build se dois posts duplicarem intenção
         ├─ generate-sitemap.js    → public/sitemap.xml           (veículos)
         ├─ generate-seo-assets.js → public/seo-static/*.html     (HTML p/ crawler)
         │                           + sitemap final (estático+veículos+cidades+landings)
-        └─ generate-blog-drafts.js→ src/data/seo/blog-drafts.json (RASCUNHOS, não publica)
+        │                           + remove HTML órfão e confere destino dos 301
+        └─ generate-blog.js       → src/data/seo/blog-auto.json  (fora do build)
 ```
+
+`generate-seo-assets.js` apaga o HTML de slug que saiu da fonte de dados. Sem
+isso o arquivo continuava servido ao crawler com 200, fora do sitemap e sem
+nada apontando para ele — foi como sobraram `blog-ford` e `blog-ix35-gl`.
 
 Tudo (menos blog) roda no `npm run build`. Se a API cair, cada gerador preserva o
 JSON anterior — com **uma exceção deliberada**: o sitemap interrompe o build em

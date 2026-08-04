@@ -86,8 +86,8 @@
     "keyword": "hatch ou sedan qual melhor",
     "titleHint": "Hatch ou sedan: qual combina com seu uso",
     "intent": "compra",
-    "status": "adiado",
-    "reason": "Overlap com blog-auto melhor-hatch / melhor-sedan"
+    "status": "pendente",
+    "reason": "Liberado em 04/08/2026: melhor-hatch e melhor-sedan foram consolidados nas landings. Comparativo hatch vs sedan é intenção informacional, distinta de /comprar-hatch e /comprar-sedan"
   },
   {
     "slug": "comprar-seminovo-distancia-grande-porto-alegre",
