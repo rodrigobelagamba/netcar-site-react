@@ -200,8 +200,15 @@ const isAuto = (v) => /autom/i.test(v.cambio);
 
 // ---------- Pool de temas (formatos em scripts/lib/blog-formats.js) ----------
 
-function wrap(priority, article) {
-  return { priority, ...article };
+/**
+ * `perEntity`: pauta que repete o mesmo formato trocando só a entidade (marca,
+ * categoria, modelo, faixa de preço). Continua no pool para ATUALIZAR post já
+ * publicado, mas nunca vira pauta nova: a intenção dessas buscas já tem página
+ * transacional (/comprar-{marca|categoria}) ou guarda-chuva no blog, e uma URL
+ * por entidade dilui o sinal em vez de cobri-lo.
+ */
+function wrap(priority, article, meta = {}) {
+  return { priority, ...article, ...meta };
 }
 
 function temaMarca(name, stock, priority) {
@@ -220,7 +227,8 @@ function temaMarca(name, stock, priority) {
       hashStr,
       ctaHref: `/comprar-${slugify(name)}`,
       ctaLabel: `Ver ${m} no estoque`,
-    })
+    }),
+    { perEntity: true }
   );
 }
 
@@ -241,7 +249,8 @@ function temaCategoria(name, stock, priority) {
       hashStr,
       ctaHref: `/comprar-${slugify(c)}`,
       ctaLabel: `Ver ${cl} no estoque`,
-    })
+    }),
+    { perEntity: true }
   );
 }
 
@@ -347,7 +356,8 @@ function temaFaixa(stock, priority, maxPrice, label) {
       hashStr,
       ctaHref: "/seminovos",
       ctaLabel: `Ver até ${label}`,
-    })
+    }),
+    { perEntity: true }
   );
 }
 
@@ -366,7 +376,8 @@ function temaModelo(stock, priority, modelo) {
       hashStr,
       ctaHref: "/seminovos",
       ctaLabel: `Ver ${titleCase(modelo)}`,
-    })
+    }),
+    { perEntity: true }
   );
 }
 
@@ -432,22 +443,9 @@ function buildPool(stock) {
       angle: "estoque",
     })
   );
-  pool.push(
-    temaRegional(stock, p++, {
-      topic: "seminovos vale do cai procedencia",
-      region: "Vale do Caí",
-      cities: ["Montenegro", "São Sebastião do Caí", "Harmonia"],
-      angle: "estoque",
-    })
-  );
-  pool.push(
-    temaRegional(stock, p++, {
-      topic: "seminovos paranhana igrejinha taquara",
-      region: "Paranhana",
-      cities: ["Igrejinha", "Taquara", "Parobé"],
-      angle: "estoque",
-    })
-  );
+  // Vale do Caí e Paranhana saíram: o formato "estoque" repetia o de Grande
+  // Porto Alegre trocando só os topônimos (82% do texto igual). Região só ganha
+  // URL própria quando muda a utilidade do artigo — ver docs/blog-editorial.md.
   pool.push(
     temaRegional(stock, p++, {
       topic: "comprar seminovo a distancia litoral norte rs",
@@ -564,9 +562,9 @@ async function main() {
   const existingBySlug = new Map(existing.map((p) => [p.slug, p]));
 
   // Pool completo (sem manuais) atualiza posts já publicados.
-  // Blocklist só impede TEMA NOVO com intenção colidente.
+  // Blocklist e perEntity só impedem TEMA NOVO com intenção colidente.
   const pool = buildPool(stock).filter((t) => !manualSlugs.has(t.slug));
-  const poolForNew = pool.filter((t) => !topicBlock.has(t.slug));
+  const poolForNew = pool.filter((t) => !topicBlock.has(t.slug) && !t.perEntity);
 
   const finalize = (tema, publishedAt) => ({
     slug: tema.slug,

@@ -22,6 +22,16 @@ Se a intenção já existe (mesmo com slug diferente), marcar pauta como `adiado
 
 Status válidos em `blog-topics.json`: `pendente` | `publicado` | `adiado` | `cancelado`.
 
+## Uma página por entidade não cobre keyword — dilui (04/08/2026)
+
+O pool automático gerava um post por marca, categoria, modelo e faixa de preço, todos com o mesmo template. Medição de similaridade textual entre os irmãos: 0,86 a 0,99 (`seminovo-ate-150-mil` contra `seminovo-ate-80-mil` deu 0,993). São 40 páginas respondendo à mesma intenção, não 40 keywords cobertas: o Google mantém uma URL e trata as outras como duplicadas.
+
+24 posts foram consolidados, com 301 em `public/.htaccess`. Marca e categoria apontam para a landing transacional, que já responde à busca e converte; faixa de preço aponta para `quanto-custa-seminovo-esteio-2026`.
+
+Temas marcados com `perEntity: true` em `scripts/generate-blog.js` continuam atualizando post já publicado, mas nunca viram pauta nova. Antes de remover a marca de um deles, verificar se a intenção não está coberta por `/comprar-{slug}`.
+
+Consequência prática: a fila automática ficou em zero. `npm run weekly` roda sem publicar até existir pauta que responda a uma intenção ainda descoberta. É o comportamento desejado — a alternativa é voltar a publicar duplicata.
+
 ## Processo para publicar um artigo novo
 
 1. Checar anti-overlap (seção acima).

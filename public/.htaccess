@@ -143,6 +143,30 @@
   RewriteCond %{REQUEST_URI} !\.
   RewriteRule ^seminovos/(.+)$ /seminovos [R=301,L,QSD,NC]
 
+  # Consolidação editorial — posts que respondiam à MESMA intenção com o mesmo
+  # template, trocando só a entidade (marca, categoria, modelo, faixa de preço).
+  # Medição em 04/08/2026: 0,86 a 0,99 de similaridade textual entre irmãos.
+  # O Google mantinha uma URL e tratava as demais como duplicadas, então o sinal
+  # ficava diluído em vez de coberto. Cada intenção agora tem uma URL só.
+  # Sem QSD: preserva gclid/UTM de quem chega por campanha ou link antigo.
+  #
+  # Marca e categoria vão para a landing transacional, que já é a página que
+  # responde à busca e converte. Se a marca sair do estoque, a landing deixa de
+  # ser gerada (mínimo de 3 veículos em generate-landings.js) — nesse caso o
+  # destino aqui precisa passar a ser /seminovos.
+  RewriteRule ^blog/(chery|chevrolet|fiat|honda|hyundai|jeep|nissan|volkswagen)-usado-em-esteio-vale-a-pena-2026/?$ /comprar-$1 [R=301,L,NC]
+  RewriteRule ^blog/melhor-(hatch|sedan|suv)-seminovo-esteio-2026/?$ /comprar-$1 [R=301,L,NC]
+  RewriteRule ^blog/(t-cross-highline-turbo|fox-comfortline|nivus-highline-turbo)-seminovo-esteio-2026/?$ /comprar-volkswagen [R=301,L,NC]
+  RewriteRule ^blog/tracker-lt-turbo-seminovo-esteio-2026/?$ /comprar-chevrolet [R=301,L,NC]
+  RewriteRule ^blog/compass-serie-s-t270-turbo-seminovo-esteio-2026/?$ /comprar-jeep [R=301,L,NC]
+  RewriteRule ^blog/hrv-ex-seminovo-esteio-2026/?$ /comprar-honda [R=301,L,NC]
+  # Faixa de preço: quatro recortes do mesmo texto viram o guarda-chuva.
+  RewriteRule ^blog/seminovo-ate-(60|80|120|150)-mil-esteio-2026/?$ /blog/quanto-custa-seminovo-esteio-2026 [R=301,L,NC]
+  # Intenção idêntica à do artigo manual, publicada com slug diferente.
+  RewriteRule ^blog/checklist-comprar-seminovo-o-que-verificar/?$ /blog/o-que-verificar-antes-de-comprar-seminovo [R=301,L,NC]
+  # Regionais que só trocavam topônimo sobre o mesmo corpo de texto.
+  RewriteRule ^blog/seminovos-(vale-do-cai-procedencia|paranhana-igrejinha-taquara)-2026/?$ /blog/seminovos-grande-porto-alegre-estoque-e-procedencia-2026 [R=301,L,NC]
+
   # Tours 3D antigos (2016) — Tour3D e Tour3DRC
   RewriteRule ^Tour3DR?C?(/.*)?$ / [R=301,L,NC]
   
