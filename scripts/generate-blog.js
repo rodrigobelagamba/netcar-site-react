@@ -95,13 +95,17 @@ function titleCase(s) {
 function brl(n) {
   return "R$ " + Math.round(n).toLocaleString("pt-BR");
 }
+// Data no fuso da loja, não em UTC. Com toISOString(), qualquer rodada depois
+// das 21h em Brasília datava o post no dia seguinte — data futura para quem lê
+// e para o Google. en-CA formata como AAAA-MM-DD.
+const DATE_FMT = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" });
 function today() {
-  return new Date().toISOString().slice(0, 10);
+  return DATE_FMT.format(new Date());
 }
 function daysAgo(n) {
   const d = new Date();
   d.setDate(d.getDate() - n);
-  return d.toISOString().slice(0, 10);
+  return DATE_FMT.format(d);
 }
 // Hash determinístico (FNV-1a) para escolher variantes de forma estável por slug.
 function hashStr(s) {
@@ -566,16 +570,29 @@ async function main() {
   const pool = buildPool(stock).filter((t) => !manualSlugs.has(t.slug));
   const poolForNew = pool.filter((t) => !topicBlock.has(t.slug) && !t.perEntity);
 
-  const finalize = (tema, publishedAt) => ({
-    slug: tema.slug,
-    title: tema.title,
-    description: tema.description,
-    publishedAt,
-    readMinutes: tema.readMinutes,
-    sections: tema.sections,
-    ctaLabel: tema.ctaLabel,
-    ctaHref: tema.ctaHref,
-  });
+  // updatedAt só avança quando o texto realmente muda. Rodada que reescreve o
+  // post com o mesmo conteúdo não pode anunciar atualização que não houve.
+  const contentOf = (post) =>
+    JSON.stringify([post.title, post.description, post.sections, post.ctaLabel, post.ctaHref]);
+
+  const finalize = (tema, publishedAt, previous) => {
+    const post = {
+      slug: tema.slug,
+      title: tema.title,
+      description: tema.description,
+      publishedAt,
+      updatedAt: publishedAt,
+      readMinutes: tema.readMinutes,
+      sections: tema.sections,
+      ctaLabel: tema.ctaLabel,
+      ctaHref: tema.ctaHref,
+    };
+    if (previous) {
+      const unchanged = contentOf(previous) === contentOf(post);
+      post.updatedAt = unchanged ? (previous.updatedAt ?? previous.publishedAt) : today();
+    }
+    return post;
+  };
 
   const out = [];
 
@@ -588,7 +605,8 @@ async function main() {
     let added = 0;
     for (const tema of pool) {
       if (existingBySlug.has(tema.slug)) {
-        out.push(finalize(tema, existingBySlug.get(tema.slug).publishedAt));
+        const previous = existingBySlug.get(tema.slug);
+        out.push(finalize(tema, previous.publishedAt, previous));
       }
     }
     for (const tema of poolForNew) {

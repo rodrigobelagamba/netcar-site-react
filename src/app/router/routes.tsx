@@ -94,6 +94,11 @@ const MoveBrasilPage = lazyWithRetry(() =>
     default: m.MoveBrasilPage,
   }))
 );
+const PoliticaEditorialPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.PoliticaEditorialPage,
+  }))
+);
 const ComparadorPage = lazyWithRetry(() =>
   import("@/modules/seo/pages/ComparadorPage").then((m) => ({
     default: m.ComparadorPage,
@@ -457,6 +462,12 @@ const moveBrasilRoute = createRoute({
   component: MoveBrasilPage,
 });
 
+const politicaEditorialRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/politica-editorial",
+  component: PoliticaEditorialPage,
+});
+
 const comparadorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/comparar",
@@ -488,6 +499,7 @@ export const routeTree = rootRoute.addChildren([
   financiamentoRoute,
   atendimento24hRoute,
   moveBrasilRoute,
+  politicaEditorialRoute,
   comparadorRoute,
   regionsHubRoute,
 ]);

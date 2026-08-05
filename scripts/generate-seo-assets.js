@@ -61,6 +61,22 @@ try {
   console.warn("Aviso: .env.production não encontrado; netcar-config.php não gerado.");
 }
 
+// Quem assina o blog. Antes o author era a própria Netcar Multimarcas, o que
+// não diz nada sobre quem escreve nem sob qual critério: texto sem responsável
+// identificável é o que o Google separa de conteúdo com supervisão editorial.
+// A url aponta para a página que descreve o processo, incluindo o uso de
+// geração automática a partir do estoque.
+const EDITORIAL_AUTHOR = {
+  "@type": "Organization",
+  name: "Equipe editorial Netcar",
+  url: `${SITE}/politica-editorial`,
+};
+
+function formatDateBr(isoDate) {
+  const [year, month, day] = String(isoDate).split("-");
+  return `${day}/${month}/${year}`;
+}
+
 // AutoDealer (LocalBusiness) — mesmos dados de seo_org_schema() em public/seo/helpers.php.
 // Sem AggregateRating/reviews.
 const ORG_SCHEMA = {
@@ -398,9 +414,14 @@ writeTextFile(
 
 for (const post of blogPosts) {
   const canonical = `${SITE}/blog/${post.slug}`;
+  const updatedAt = post.updatedAt ?? post.publishedAt;
+  const byline = `
+      <p>Por <a href="${SITE}/politica-editorial">${EDITORIAL_AUTHOR.name}</a> · Publicado em ${formatDateBr(post.publishedAt)}${
+        updatedAt !== post.publishedAt ? ` · Atualizado em ${formatDateBr(updatedAt)}` : ""
+      } · ${post.readMinutes} min de leitura</p>`;
   const body = `
     <article>
-      <h1>${escapeHtml(post.title)}</h1>
+      <h1>${escapeHtml(post.title)}</h1>${byline}
       <p>${escapeHtml(post.description)}</p>
       ${renderSections(post.sections)}
       <p><a href="${SITE}${post.ctaHref}">${escapeHtml(post.ctaLabel)}</a></p>
@@ -411,14 +432,10 @@ for (const post of blogPosts) {
     headline: post.title,
     description: post.description,
     datePublished: post.publishedAt,
-    dateModified: post.publishedAt,
+    dateModified: updatedAt,
     mainEntityOfPage: canonical,
     url: canonical,
-    author: {
-      "@type": "Organization",
-      name: "Netcar Multimarcas",
-      url: SITE,
-    },
+    author: EDITORIAL_AUTHOR,
     publisher: {
       "@type": "Organization",
       name: "Netcar Multimarcas",
@@ -673,6 +690,9 @@ const staticPages = [
   { path: "/atendimento-24h", priority: "0.7", changefreq: "monthly" },
   { path: "/comparar", priority: "0.7", changefreq: "weekly" },
   { path: "/seminovos-automaticos", priority: "0.8", changefreq: "weekly" },
+  // Não vende nada, mas é a página que o blog cita como autor e onde o processo
+  // editorial fica explícito. Precisa ser rastreável para valer como sinal.
+  { path: "/politica-editorial", priority: "0.4", changefreq: "yearly" },
 ];
 
 // Preserva URLs de veículos no sitemap. No build, generate-sitemap.js roda antes

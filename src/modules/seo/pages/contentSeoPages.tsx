@@ -19,3 +19,8 @@ export function MoveBrasilPage() {
   const page = getContentPage("move-brasil");
   return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
 }
+
+export function PoliticaEditorialPage() {
+  const page = getContentPage("politica-editorial");
+  return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
+}

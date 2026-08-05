@@ -23,6 +23,10 @@ export interface BlogPost {
   title: string;
   description: string;
   publishedAt: string;
+  // Data em que o texto mudou de fato. O gerador automático reescreve os posts
+  // a cada rodada para refletir o estoque, então sem este campo dateModified
+  // repetiria publishedAt e o site nunca informaria a atualização.
+  updatedAt?: string;
   readMinutes: number;
   sections: BlogSection[];
   ctaLabel: string;

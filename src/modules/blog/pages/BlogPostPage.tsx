@@ -29,9 +29,11 @@ export function BlogPostPage() {
       headline: post.title,
       description: post.description,
       datePublished: post.publishedAt,
+      dateModified: post.updatedAt ?? post.publishedAt,
       author: {
         "@type": "Organization",
-        name: "Netcar Multimarcas",
+        name: "Equipe editorial Netcar",
+        url: "https://www.netcarmultimarcas.com.br/politica-editorial",
       },
       publisher: {
         "@type": "Organization",

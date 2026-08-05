@@ -10,33 +10,93 @@
     "secondLabel": "Ver estoque",
     "secondHref": "/seminovos",
     "sections": [
-      { "type": "h2", "text": "Entrada mínima de 20%" },
-      { "type": "p", "text": "Não há financiamento 100% nem carro sem entrada. A entrada mínima é de 20% do valor do veículo (em geral entre 20% e 30%). Quanto maior a entrada, menores os juros totais. O valor do seu usado na troca pode compor parte dessa entrada, sempre sujeito à análise de crédito." },
-      { "type": "h2", "text": "Entrada parcelada no cartão" },
-      { "type": "p", "text": "A entrada pode ser parcelada no cartão de crédito, conforme disponibilidade da operadora e aprovação. Condições e número de parcelas dependem da análise — simule pelo WhatsApp antes de ir à loja." },
-      { "type": "h2", "text": "Diversos bancos, condições comparadas" },
-      { "type": "p", "text": "Consultamos bancos e financeiras parceiras para buscar a melhor taxa disponível para o seu perfil, em vez de depender de uma única instituição. Você compara as propostas aprovadas e escolhe a opção que cabe no seu orçamento. Toda proposta depende de análise de crédito — não há aprovação garantida." },
-      { "type": "h2", "text": "Aceitamos seu usado na troca" },
-      { "type": "p", "text": "Tem carro para dar na troca? O valor entra como parte da entrada e pode abater o desembolso inicial, mantendo a regra de entrada mínima de 20% no financiamento. Aceitamos inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo." },
-      { "type": "h2", "text": "Como simular" },
-      { "type": "ol", "items": [
-        "Escolha o seminovo no estoque online ou com ajuda do consultor",
-        "Envie RG, CPF, comprovante de renda e de endereço pelo WhatsApp",
-        "Receba e compare as condições aprovadas pelos bancos e financeiras parceiras (sujeito a análise)",
-        "Aprovou? Retire o carro na loja em Esteio"
-      ] },
-      { "type": "h2", "text": "Autônomo e comprovação de renda" },
-      { "type": "p", "text": "Autônomos podem comprovar renda por extrato bancário e demais documentos pedidos pela financeira. Cada caso passa por análise de crédito das instituições parceiras — a Netcar não oferece linha específica para negativados nem aprovação sem análise." },
-      { "type": "h2", "text": "Motorista de app ou taxista? Conheça o Move Brasil" },
-      { "type": "p", "text": "Se você é motorista de aplicativo ou taxista, o programa federal Move Brasil ampliou a linha de crédito e passou a contemplar também alguns seminovos (elétricos ou híbridos flex a partir de 2024, com regras oficiais). Veja a página Move Brasil ou fale no WhatsApp para orientação." }
+      {
+        "type": "h2",
+        "text": "Entrada mínima de 20%"
+      },
+      {
+        "type": "p",
+        "text": "Não há financiamento 100% nem carro sem entrada. A entrada mínima é de 20% do valor do veículo (em geral entre 20% e 30%). Quanto maior a entrada, menores os juros totais. O valor do seu usado na troca pode compor parte dessa entrada, sempre sujeito à análise de crédito."
+      },
+      {
+        "type": "h2",
+        "text": "Entrada parcelada no cartão"
+      },
+      {
+        "type": "p",
+        "text": "A entrada pode ser parcelada no cartão de crédito, conforme disponibilidade da operadora e aprovação. Condições e número de parcelas dependem da análise — simule pelo WhatsApp antes de ir à loja."
+      },
+      {
+        "type": "h2",
+        "text": "Diversos bancos, condições comparadas"
+      },
+      {
+        "type": "p",
+        "text": "Consultamos bancos e financeiras parceiras para buscar a melhor taxa disponível para o seu perfil, em vez de depender de uma única instituição. Você compara as propostas aprovadas e escolhe a opção que cabe no seu orçamento. Toda proposta depende de análise de crédito — não há aprovação garantida."
+      },
+      {
+        "type": "h2",
+        "text": "Aceitamos seu usado na troca"
+      },
+      {
+        "type": "p",
+        "text": "Tem carro para dar na troca? O valor entra como parte da entrada e pode abater o desembolso inicial, mantendo a regra de entrada mínima de 20% no financiamento. Aceitamos inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo."
+      },
+      {
+        "type": "h2",
+        "text": "Como simular"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Escolha o seminovo no estoque online ou com ajuda do consultor",
+          "Envie RG, CPF, comprovante de renda e de endereço pelo WhatsApp",
+          "Receba e compare as condições aprovadas pelos bancos e financeiras parceiras (sujeito a análise)",
+          "Aprovou? Retire o carro na loja em Esteio"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Autônomo e comprovação de renda"
+      },
+      {
+        "type": "p",
+        "text": "Autônomos podem comprovar renda por extrato bancário e demais documentos pedidos pela financeira. Cada caso passa por análise de crédito das instituições parceiras — a Netcar não oferece linha específica para negativados nem aprovação sem análise."
+      },
+      {
+        "type": "h2",
+        "text": "Motorista de app ou taxista? Conheça o Move Brasil"
+      },
+      {
+        "type": "p",
+        "text": "Se você é motorista de aplicativo ou taxista, o programa federal Move Brasil ampliou a linha de crédito e passou a contemplar também alguns seminovos (elétricos ou híbridos flex a partir de 2024, com regras oficiais). Veja a página Move Brasil ou fale no WhatsApp para orientação."
+      }
     ],
     "faq": [
-      { "q": "Qual a entrada mínima para financiar?", "a": "Mínimo de 20% do valor do veículo (em geral 20% a 30%). Não trabalhamos com financiamento 100% nem sem entrada. O percentual exato depende do perfil de crédito e do banco; o valor do usado na troca pode compor parte dessa entrada." },
-      { "q": "A entrada pode ser parcelada no cartão?", "a": "Sim, a entrada pode ser parcelada no cartão de crédito, conforme disponibilidade e análise. Simule pelo WhatsApp para confirmar as condições do seu caso." },
-      { "q": "Vocês financiam para negativado ou nome restrito?", "a": "Não. Não temos linha de crédito específica para negativados. Toda simulação depende de análise de crédito das financeiras parceiras — sem garantia de aprovação." },
-      { "q": "Em quantas vezes posso financiar?", "a": "Em até 60x (24x, 36x, 48x ou 60x), conforme aprovação. Prazos mais longos reduzem a parcela mas aumentam o custo total — simule para encontrar o equilíbrio." },
-      { "q": "Como vocês buscam uma boa taxa?", "a": "Consultamos diversos bancos e financeiras parceiras e comparamos as condições aprovadas para buscar a melhor opção disponível para o seu perfil." },
-      { "q": "Posso usar meu carro como entrada?", "a": "Sim. Avaliamos seu usado e o valor entra na negociação, inclusive se ainda estiver financiado, mediante quitação do saldo. A entrada mínima de 20% no financiamento continua valendo." }
+      {
+        "q": "Qual a entrada mínima para financiar?",
+        "a": "Mínimo de 20% do valor do veículo (em geral 20% a 30%). Não trabalhamos com financiamento 100% nem sem entrada. O percentual exato depende do perfil de crédito e do banco; o valor do usado na troca pode compor parte dessa entrada."
+      },
+      {
+        "q": "A entrada pode ser parcelada no cartão?",
+        "a": "Sim, a entrada pode ser parcelada no cartão de crédito, conforme disponibilidade e análise. Simule pelo WhatsApp para confirmar as condições do seu caso."
+      },
+      {
+        "q": "Vocês financiam para negativado ou nome restrito?",
+        "a": "Não. Não temos linha de crédito específica para negativados. Toda simulação depende de análise de crédito das financeiras parceiras — sem garantia de aprovação."
+      },
+      {
+        "q": "Em quantas vezes posso financiar?",
+        "a": "Em até 60x (24x, 36x, 48x ou 60x), conforme aprovação. Prazos mais longos reduzem a parcela mas aumentam o custo total — simule para encontrar o equilíbrio."
+      },
+      {
+        "q": "Como vocês buscam uma boa taxa?",
+        "a": "Consultamos diversos bancos e financeiras parceiras e comparamos as condições aprovadas para buscar a melhor opção disponível para o seu perfil."
+      },
+      {
+        "q": "Posso usar meu carro como entrada?",
+        "a": "Sim. Avaliamos seu usado e o valor entra na negociação, inclusive se ainda estiver financiado, mediante quitação do saldo. A entrada mínima de 20% no financiamento continua valendo."
+      }
     ]
   },
   {
@@ -50,25 +110,58 @@
     "secondLabel": "Ver estoque",
     "secondHref": "/seminovos",
     "sections": [
-      { "type": "h2", "text": "Atendimento a qualquer hora" },
-      { "type": "p", "text": "De madrugada, no fim de semana ou no intervalo do trabalho: o iAN responde na hora pelo WhatsApp. Você não precisa esperar o horário comercial para tirar uma dúvida ou reservar a visita." },
-      { "type": "h2", "text": "O que o iAN resolve" },
-      { "type": "ul", "items": [
-        "Mostra os carros do estoque conforme o que você procura",
-        "Inicia a simulação de financiamento e pede os documentos certos",
-        "Organiza a avaliação do seu usado para troca",
-        "Agenda visita e test drive nas lojas de Esteio",
-        "Encaminha você para um consultor humano quando precisar"
-      ] },
-      { "type": "h2", "text": "Avalie seu usado a qualquer momento" },
-      { "type": "p", "text": "Mande modelo, ano, quilometragem e fotos do seu carro pelo WhatsApp. O iAN inicia a avaliação na hora e um consultor retorna com a orientação de valor — sem você precisar sair de casa." },
-      { "type": "h2", "text": "Humano quando você quiser" },
-      { "type": "p", "text": "O iAN agiliza o começo, mas quem fecha negócio é gente de verdade. A qualquer momento você fala com um consultor da Netcar para conduzir a negociação com calma e segurança." }
+      {
+        "type": "h2",
+        "text": "Atendimento a qualquer hora"
+      },
+      {
+        "type": "p",
+        "text": "De madrugada, no fim de semana ou no intervalo do trabalho: o iAN responde na hora pelo WhatsApp. Você não precisa esperar o horário comercial para tirar uma dúvida ou reservar a visita."
+      },
+      {
+        "type": "h2",
+        "text": "O que o iAN resolve"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Mostra os carros do estoque conforme o que você procura",
+          "Inicia a simulação de financiamento e pede os documentos certos",
+          "Organiza a avaliação do seu usado para troca",
+          "Agenda visita e test drive nas lojas de Esteio",
+          "Encaminha você para um consultor humano quando precisar"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Avalie seu usado a qualquer momento"
+      },
+      {
+        "type": "p",
+        "text": "Mande modelo, ano, quilometragem e fotos do seu carro pelo WhatsApp. O iAN inicia a avaliação na hora e um consultor retorna com a orientação de valor — sem você precisar sair de casa."
+      },
+      {
+        "type": "h2",
+        "text": "Humano quando você quiser"
+      },
+      {
+        "type": "p",
+        "text": "O iAN agiliza o começo, mas quem fecha negócio é gente de verdade. A qualquer momento você fala com um consultor da Netcar para conduzir a negociação com calma e segurança."
+      }
     ],
     "faq": [
-      { "q": "O atendimento é realmente 24 horas?", "a": "Sim. O iAN responde no WhatsApp 24 horas por dia, 7 dias por semana. Atendimento humano ocorre no horário comercial das lojas." },
-      { "q": "O iAN é um robô?", "a": "O iAN é o assistente digital da Netcar que agiliza o primeiro atendimento. Quando necessário, ele encaminha você para um consultor humano." },
-      { "q": "Consigo avaliar meu carro pelo WhatsApp?", "a": "Sim. Envie modelo, ano, km e fotos; a avaliação começa na hora e um consultor retorna com a orientação de valor." }
+      {
+        "q": "O atendimento é realmente 24 horas?",
+        "a": "Sim. O iAN responde no WhatsApp 24 horas por dia, 7 dias por semana. Atendimento humano ocorre no horário comercial das lojas."
+      },
+      {
+        "q": "O iAN é um robô?",
+        "a": "O iAN é o assistente digital da Netcar que agiliza o primeiro atendimento. Quando necessário, ele encaminha você para um consultor humano."
+      },
+      {
+        "q": "Consigo avaliar meu carro pelo WhatsApp?",
+        "a": "Sim. Envie modelo, ano, km e fotos; a avaliação começa na hora e um consultor retorna com a orientação de valor."
+      }
     ]
   },
   {
@@ -82,38 +175,98 @@
     "secondLabel": "Ver estoque de seminovos",
     "secondHref": "/seminovos",
     "sections": [
-      { "type": "h2", "text": "O que é o Move Brasil" },
-      { "type": "p", "text": "Move Brasil é uma linha de financiamento coordenada com recursos do BNDES, voltada à renovação de frota de profissionais do transporte de passageiros (motoristas de aplicativo, taxistas e cooperativas de táxi). O objetivo é facilitar a troca por veículos mais novos, com condições definidas pelo programa oficial." },
-      { "type": "h2", "text": "Seminovos entram — com regra clara" },
-      { "type": "p", "text": "Com a ampliação do programa (MP nº 1.376/2026), passou a ser possível financiar também seminovos. Não é qualquer usado: a linha contempla veículos elétricos ou híbridos flex fabricados a partir de 2024, respeitando o teto de valor do programa (até R$ 150 mil, conforme regras oficiais). Modelos a combustão convencional fora desse enquadramento não entram nessa modalidade." },
-      { "type": "h2", "text": "Quem pode participar" },
-      { "type": "ul", "items": [
-        "Motoristas de aplicativo com cadastro ativo há pelo menos 12 meses na mesma plataforma e mínimo de corridas exigido pelo programa",
-        "Taxistas e cooperativas com licença e regularidade perante os órgãos competentes",
-        "Cadastro e verificação de elegibilidade pelo portal oficial do governo (gov.br / Move Brasil)",
-        "Depois da habilitação no programa, a instituição financeira ainda faz a análise de crédito do financiamento"
-      ] },
-      { "type": "h2", "text": "O que a Netcar faz por você" },
-      { "type": "ol", "items": [
-        "Orientamos se o seu perfil e o carro desejado parecem enquadrar nas regras divulgadas do Move Brasil",
-        "Mostramos seminovos do estoque em Esteio que possam se aproximar dos critérios (ano, tecnologia e faixa de preço)",
-        "Ajudamos a organizar a próxima etapa pelo WhatsApp — documentos, visita e conversa com consultor",
-        "Se o Move Brasil não for o caminho do seu caso, comparamos o financiamento tradicional da Netcar com bancos e financeiras parceiras"
-      ] },
-      { "type": "h2", "text": "Como começar pelo WhatsApp" },
-      { "type": "p", "text": "Clique no botão e diga que é motorista ou taxista interessado no Move Brasil. O iAN e a equipe da Netcar retornam com orientação e opções do estoque. Em paralelo, faça ou confirme seu cadastro no portal oficial do programa — a Netcar não substitui o gov.br nem aprova crédito do BNDES." },
-      { "type": "h2", "text": "Importante (transparência)" },
-      { "type": "p", "text": "Esta página explica o programa com base nas regras públicas divulgadas e mostra como a Netcar pode ajudar na escolha do veículo e no atendimento. Taxas, prazos, carência, documentos e elegibilidade podem mudar e valem o que estiver no site oficial e no contrato da instituição financeira. Não prometemos aprovação de crédito nem que todo seminovo do estoque seja elegível ao Move Brasil." },
-      { "type": "h2", "text": "Financiamento comum também" },
-      { "type": "p", "text": "Não é motorista de app nem taxista? Ou o carro que você quer não entra no Move Brasil? A Netcar continua oferecendo simulação de financiamento tradicional com entrada mínima de 20% e comparação entre bancos parceiros — veja a página de financiamento ou fale no WhatsApp." }
+      {
+        "type": "h2",
+        "text": "O que é o Move Brasil"
+      },
+      {
+        "type": "p",
+        "text": "Move Brasil é uma linha de financiamento coordenada com recursos do BNDES, voltada à renovação de frota de profissionais do transporte de passageiros (motoristas de aplicativo, taxistas e cooperativas de táxi). O objetivo é facilitar a troca por veículos mais novos, com condições definidas pelo programa oficial."
+      },
+      {
+        "type": "h2",
+        "text": "Seminovos entram — com regra clara"
+      },
+      {
+        "type": "p",
+        "text": "Com a ampliação do programa (MP nº 1.376/2026), passou a ser possível financiar também seminovos. Não é qualquer usado: a linha contempla veículos elétricos ou híbridos flex fabricados a partir de 2024, respeitando o teto de valor do programa (até R$ 150 mil, conforme regras oficiais). Modelos a combustão convencional fora desse enquadramento não entram nessa modalidade."
+      },
+      {
+        "type": "h2",
+        "text": "Quem pode participar"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Motoristas de aplicativo com cadastro ativo há pelo menos 12 meses na mesma plataforma e mínimo de corridas exigido pelo programa",
+          "Taxistas e cooperativas com licença e regularidade perante os órgãos competentes",
+          "Cadastro e verificação de elegibilidade pelo portal oficial do governo (gov.br / Move Brasil)",
+          "Depois da habilitação no programa, a instituição financeira ainda faz a análise de crédito do financiamento"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que a Netcar faz por você"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Orientamos se o seu perfil e o carro desejado parecem enquadrar nas regras divulgadas do Move Brasil",
+          "Mostramos seminovos do estoque em Esteio que possam se aproximar dos critérios (ano, tecnologia e faixa de preço)",
+          "Ajudamos a organizar a próxima etapa pelo WhatsApp — documentos, visita e conversa com consultor",
+          "Se o Move Brasil não for o caminho do seu caso, comparamos o financiamento tradicional da Netcar com bancos e financeiras parceiras"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Como começar pelo WhatsApp"
+      },
+      {
+        "type": "p",
+        "text": "Clique no botão e diga que é motorista ou taxista interessado no Move Brasil. O iAN e a equipe da Netcar retornam com orientação e opções do estoque. Em paralelo, faça ou confirme seu cadastro no portal oficial do programa — a Netcar não substitui o gov.br nem aprova crédito do BNDES."
+      },
+      {
+        "type": "h2",
+        "text": "Importante (transparência)"
+      },
+      {
+        "type": "p",
+        "text": "Esta página explica o programa com base nas regras públicas divulgadas e mostra como a Netcar pode ajudar na escolha do veículo e no atendimento. Taxas, prazos, carência, documentos e elegibilidade podem mudar e valem o que estiver no site oficial e no contrato da instituição financeira. Não prometemos aprovação de crédito nem que todo seminovo do estoque seja elegível ao Move Brasil."
+      },
+      {
+        "type": "h2",
+        "text": "Financiamento comum também"
+      },
+      {
+        "type": "p",
+        "text": "Não é motorista de app nem taxista? Ou o carro que você quer não entra no Move Brasil? A Netcar continua oferecendo simulação de financiamento tradicional com entrada mínima de 20% e comparação entre bancos parceiros — veja a página de financiamento ou fale no WhatsApp."
+      }
     ],
     "faq": [
-      { "q": "O Move Brasil financia qualquer seminovo?", "a": "Não. Na modalidade de seminovos, o programa contempla veículos elétricos ou híbridos flex fabricados a partir de 2024, dentro do teto de valor oficial (até R$ 150 mil, conforme regras do governo). Confirme sempre no portal Move Brasil / gov.br." },
-      { "q": "Qualquer pessoa pode usar o Move Brasil?", "a": "Não. A linha é voltada a motoristas de aplicativo, taxistas e cooperativas que cumpram os critérios de elegibilidade do programa. A verificação começa no cadastro oficial do governo." },
-      { "q": "A Netcar aprova o crédito do Move Brasil?", "a": "Não. A elegibilidade é do programa federal e a análise de crédito é da instituição financeira credenciada. A Netcar ajuda com estoque, orientação e atendimento em Esteio/RS." },
-      { "q": "Como falo com a Netcar sobre Move Brasil?", "a": "Pelo WhatsApp, pelo botão desta página. Informe que é motorista ou taxista e que busca seminovo elegível ao Move Brasil — o iAN inicia o atendimento." },
-      { "q": "E se eu não me enquadrar no programa?", "a": "Podemos simular o financiamento tradicional da Netcar com bancos e financeiras parceiras, sujeito à análise de crédito. Veja também a página /financiamento." },
-      { "q": "Onde confirmo as regras oficiais?", "a": "No portal oficial do Move Brasil em gov.br e nas instituições financeiras habilitadas. Use esta página da Netcar como guia de atendimento e estoque, não como substituto do canal do governo." }
+      {
+        "q": "O Move Brasil financia qualquer seminovo?",
+        "a": "Não. Na modalidade de seminovos, o programa contempla veículos elétricos ou híbridos flex fabricados a partir de 2024, dentro do teto de valor oficial (até R$ 150 mil, conforme regras do governo). Confirme sempre no portal Move Brasil / gov.br."
+      },
+      {
+        "q": "Qualquer pessoa pode usar o Move Brasil?",
+        "a": "Não. A linha é voltada a motoristas de aplicativo, taxistas e cooperativas que cumpram os critérios de elegibilidade do programa. A verificação começa no cadastro oficial do governo."
+      },
+      {
+        "q": "A Netcar aprova o crédito do Move Brasil?",
+        "a": "Não. A elegibilidade é do programa federal e a análise de crédito é da instituição financeira credenciada. A Netcar ajuda com estoque, orientação e atendimento em Esteio/RS."
+      },
+      {
+        "q": "Como falo com a Netcar sobre Move Brasil?",
+        "a": "Pelo WhatsApp, pelo botão desta página. Informe que é motorista ou taxista e que busca seminovo elegível ao Move Brasil — o iAN inicia o atendimento."
+      },
+      {
+        "q": "E se eu não me enquadrar no programa?",
+        "a": "Podemos simular o financiamento tradicional da Netcar com bancos e financeiras parceiras, sujeito à análise de crédito. Veja também a página /financiamento."
+      },
+      {
+        "q": "Onde confirmo as regras oficiais?",
+        "a": "No portal oficial do Move Brasil em gov.br e nas instituições financeiras habilitadas. Use esta página da Netcar como guia de atendimento e estoque, não como substituto do canal do governo."
+      }
     ]
   },
   {
@@ -132,30 +285,158 @@
       "heading": "Automáticos em estoque agora na Netcar"
     },
     "sections": [
-      { "type": "h2", "text": "Por que escolher um automático seminovo" },
-      { "type": "ul", "items": [
-        "Menos desgaste no trânsito da BR-116 e da Av. Presidente Vargas, em Esteio",
-        "Direção mais leve para quem enfrenta congestionamento diário até Porto Alegre",
-        "Revenda mais rápida: automático tem procura maior no mercado de usados",
-        "Opções de 6 marchas, CVT e automatizado, cada uma com um perfil de uso"
-      ] },
-      { "type": "h2", "text": "Tipos de câmbio automático que você encontra no estoque" },
-      { "type": "p", "text": "O automático convencional (conversor de torque) é o mais comum em SUVs e sedãs e costuma ser o mais robusto. O CVT trabalha sem trocas perceptíveis e rende bem em cidade, sendo comum em modelos como HR-V, Kicks e Civic. O automatizado de embreagem simples é mais econômico na compra, porém tem trocas mais lentas. Na loja, o consultor explica qual combina com o seu trajeto." },
-      { "type": "h2", "text": "Revisão da Fábrica de Valor antes de ir à vitrine" },
-      { "type": "p", "text": "Todo seminovo automático passa pela nossa Fábrica de Valor: avaliação mecânica, verificação do funcionamento do câmbio em rodagem, troca de fluidos quando necessário e correção de itens antes de o carro entrar no estoque. Você recebe laudo de vistoria e garantia — e pode consultar o histórico do veículo antes de fechar." },
-      { "type": "h2", "text": "Câmbio automático dá manutenção caro?" },
-      { "type": "p", "text": "Automático bem cuidado é confiável. O ponto que exige atenção é a troca do fluido no intervalo indicado pelo fabricante e evitar reboque com as rodas de tração no chão. Por isso verificamos o câmbio em rodagem antes de anunciar o carro e orientamos o cliente sobre o plano de manutenção na entrega." },
-      { "type": "h2", "text": "Financiamento e troca" },
-      { "type": "p", "text": "Comparamos condições entre bancos e financeiras parceiras, com entrada mínima de 20% e possibilidade de parcelar a entrada no cartão, sujeito a análise de crédito. Seu usado pode compor a entrada — inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo." },
-      { "type": "h2", "text": "Atendemos toda a Região Metropolitana" },
-      { "type": "p", "text": "Nossas duas lojas ficam na Av. Presidente Vargas, em Esteio/RS, a poucos minutos de Sapucaia do Sul, Canoas, São Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha, Alvorada, Viamão e Porto Alegre. Também atendemos compradores de Caxias do Sul, Gramado, Taquara e Igrejinha, com envio de vídeos e laudo pelo WhatsApp antes da viagem." }
+      {
+        "type": "h2",
+        "text": "Por que escolher um automático seminovo"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Menos desgaste no trânsito da BR-116 e da Av. Presidente Vargas, em Esteio",
+          "Direção mais leve para quem enfrenta congestionamento diário até Porto Alegre",
+          "Revenda mais rápida: automático tem procura maior no mercado de usados",
+          "Opções de 6 marchas, CVT e automatizado, cada uma com um perfil de uso"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Tipos de câmbio automático que você encontra no estoque"
+      },
+      {
+        "type": "p",
+        "text": "O automático convencional (conversor de torque) é o mais comum em SUVs e sedãs e costuma ser o mais robusto. O CVT trabalha sem trocas perceptíveis e rende bem em cidade, sendo comum em modelos como HR-V, Kicks e Civic. O automatizado de embreagem simples é mais econômico na compra, porém tem trocas mais lentas. Na loja, o consultor explica qual combina com o seu trajeto."
+      },
+      {
+        "type": "h2",
+        "text": "Revisão da Fábrica de Valor antes de ir à vitrine"
+      },
+      {
+        "type": "p",
+        "text": "Todo seminovo automático passa pela nossa Fábrica de Valor: avaliação mecânica, verificação do funcionamento do câmbio em rodagem, troca de fluidos quando necessário e correção de itens antes de o carro entrar no estoque. Você recebe laudo de vistoria e garantia — e pode consultar o histórico do veículo antes de fechar."
+      },
+      {
+        "type": "h2",
+        "text": "Câmbio automático dá manutenção caro?"
+      },
+      {
+        "type": "p",
+        "text": "Automático bem cuidado é confiável. O ponto que exige atenção é a troca do fluido no intervalo indicado pelo fabricante e evitar reboque com as rodas de tração no chão. Por isso verificamos o câmbio em rodagem antes de anunciar o carro e orientamos o cliente sobre o plano de manutenção na entrega."
+      },
+      {
+        "type": "h2",
+        "text": "Financiamento e troca"
+      },
+      {
+        "type": "p",
+        "text": "Comparamos condições entre bancos e financeiras parceiras, com entrada mínima de 20% e possibilidade de parcelar a entrada no cartão, sujeito a análise de crédito. Seu usado pode compor a entrada — inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo."
+      },
+      {
+        "type": "h2",
+        "text": "Atendemos toda a Região Metropolitana"
+      },
+      {
+        "type": "p",
+        "text": "Nossas duas lojas ficam na Av. Presidente Vargas, em Esteio/RS, a poucos minutos de Sapucaia do Sul, Canoas, São Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha, Alvorada, Viamão e Porto Alegre. Também atendemos compradores de Caxias do Sul, Gramado, Taquara e Igrejinha, com envio de vídeos e laudo pelo WhatsApp antes da viagem."
+      }
     ],
     "faq": [
-      { "q": "Quais seminovos automáticos vocês têm em estoque?", "a": "O estoque muda toda semana. Veja a lista atualizada em /seminovos filtrando por câmbio automático, ou peça as opções pelo WhatsApp informando faixa de preço e tipo de carro." },
-      { "q": "Automático gasta mais combustível que manual?", "a": "Nos modelos atuais a diferença é pequena, e no trânsito urbano o automático moderno costuma empatar ou até levar vantagem. O consumo real depende mais do motor e do seu trajeto do que do tipo de câmbio." },
-      { "q": "O câmbio automático tem garantia?", "a": "Sim. Os seminovos da Netcar saem com garantia e laudo de vistoria. As condições e a cobertura são apresentadas por escrito antes do fechamento." },
-      { "q": "Consigo financiar um automático dando meu carro na troca?", "a": "Sim. Avaliamos seu usado e o valor entra como parte da entrada, respeitando a entrada mínima de 20% do financiamento e sujeito à análise de crédito." },
-      { "q": "Vocês vendem para quem mora em outra cidade?", "a": "Sim. Atendemos a Grande Porto Alegre, o Vale dos Sinos, o Vale do Caí, a Serra e o Litoral Norte. Enviamos vídeos, fotos e o laudo pelo WhatsApp antes de você se deslocar até Esteio." }
+      {
+        "q": "Quais seminovos automáticos vocês têm em estoque?",
+        "a": "O estoque muda toda semana. Veja a lista atualizada em /seminovos filtrando por câmbio automático, ou peça as opções pelo WhatsApp informando faixa de preço e tipo de carro."
+      },
+      {
+        "q": "Automático gasta mais combustível que manual?",
+        "a": "Nos modelos atuais a diferença é pequena, e no trânsito urbano o automático moderno costuma empatar ou até levar vantagem. O consumo real depende mais do motor e do seu trajeto do que do tipo de câmbio."
+      },
+      {
+        "q": "O câmbio automático tem garantia?",
+        "a": "Sim. Os seminovos da Netcar saem com garantia e laudo de vistoria. As condições e a cobertura são apresentadas por escrito antes do fechamento."
+      },
+      {
+        "q": "Consigo financiar um automático dando meu carro na troca?",
+        "a": "Sim. Avaliamos seu usado e o valor entra como parte da entrada, respeitando a entrada mínima de 20% do financiamento e sujeito à análise de crédito."
+      },
+      {
+        "q": "Vocês vendem para quem mora em outra cidade?",
+        "a": "Sim. Atendemos a Grande Porto Alegre, o Vale dos Sinos, o Vale do Caí, a Serra e o Litoral Norte. Enviamos vídeos, fotos e o laudo pelo WhatsApp antes de você se deslocar até Esteio."
+      }
+    ]
+  },
+  {
+    "slug": "politica-editorial",
+    "title": "Política editorial do blog | Netcar Multimarcas",
+    "description": "Quem escreve o blog da Netcar, como as pautas nascem, onde entra automação a partir do estoque e o que revisamos antes de publicar. Esteio/RS.",
+    "h1": "Como fazemos o conteúdo do blog",
+    "intro": "O blog da Netcar existe para responder dúvidas que aparecem no balcão e no WhatsApp: como financiar, o que conferir num seminovo, quanto vale o carro na troca. Esta página explica quem escreve, de onde vêm os dados e o que conferimos antes de publicar — inclusive onde usamos automação.",
+    "waText": "vi a política editorial do site e queria falar sobre um conteúdo do blog.",
+    "ctaLabel": "Falar com a Netcar no WhatsApp",
+    "secondLabel": "Ler o blog",
+    "secondHref": "/blog",
+    "sections": [
+      {
+        "type": "h2",
+        "text": "Quem assina"
+      },
+      {
+        "type": "p",
+        "text": "Os artigos são assinados pela Equipe editorial Netcar: as pessoas que atendem na loja, avaliam usados e acompanham financiamento, junto com quem cuida do site. Não contratamos redator externo nem publicamos texto de parceiro como se fosse nosso. A Netcar atua em Esteio desde 1997, com duas unidades na Av. Presidente Vargas."
+      },
+      {
+        "type": "h2",
+        "text": "De onde vêm as pautas"
+      },
+      {
+        "type": "p",
+        "text": "A fila de assuntos sai das perguntas que mais se repetem no atendimento. Cada pauta tem uma dúvida principal e um destino: comprar, vender ou financiar. Quando duas pautas respondem à mesma pergunta, juntamos numa página só em vez de publicar as duas — página repetida não ajuda quem lê e concorre com o próprio site."
+      },
+      {
+        "type": "h2",
+        "text": "Onde usamos automação"
+      },
+      {
+        "type": "p",
+        "text": "Parte dos artigos é montada automaticamente a partir do estoque real da loja, e essa é a razão de existirem: os carros, preços, quilometragem e anos citados vêm do mesmo sistema que alimenta a vitrine, e são reescritos quando o estoque muda. Nenhum artigo é publicado sem passar pelas regras abaixo, e a data de atualização no topo do texto mostra quando ele mudou pela última vez."
+      },
+      {
+        "type": "p",
+        "text": "Estoque de seminovo é item único e muda rápido. Sempre confirme disponibilidade, preço e condição na página do veículo ou com um consultor antes de se deslocar."
+      },
+      {
+        "type": "h2",
+        "text": "O que conferimos antes de publicar"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Se o texto responde a dúvida logo no começo, sem enrolação",
+          "Se cada dado sobre veículo confere com o estoque no momento da publicação",
+          "Se não há promessa de crédito: não trabalhamos com financiamento 100%, sem entrada ou aprovação garantida, e toda condição depende de análise",
+          "Se nenhuma marca ou modelo é detratado — comparamos usos e perfis, não destruímos produto",
+          "Se não há depoimento, nota, prazo ou número inventado para preencher espaço"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Erro no conteúdo"
+      },
+      {
+        "type": "p",
+        "text": "Se algum dado estiver errado ou desatualizado, avise pelo WhatsApp ou pela página de contato. Corrigimos o texto e a data de atualização passa a refletir a correção."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Os artigos do blog são escritos por inteligência artificial?",
+        "a": "Parte deles é montada automaticamente a partir do estoque real da loja, com apoio de ferramenta de geração de texto. Todos seguem as regras editoriais desta página e a curadoria é da equipe da Netcar. Artigos sobre financiamento, avaliação e documentação são escritos e conferidos por quem faz isso no dia a dia."
+      },
+      {
+        "q": "Os preços e carros citados nos artigos estão disponíveis agora?",
+        "a": "Não necessariamente. Seminovo é unidade única e o estoque muda. Os artigos são atualizados quando o estoque muda, mas confirme disponibilidade e valor na página do veículo ou com um consultor antes de ir à loja."
+      },
+      {
+        "q": "A Netcar publica conteúdo pago ou de parceiros?",
+        "a": "Não. O blog é conteúdo próprio da loja, sobre compra, venda e financiamento de seminovos na região de Esteio e Grande Porto Alegre."
+      }
     ]
   }
 ]

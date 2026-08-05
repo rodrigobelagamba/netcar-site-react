@@ -94,7 +94,15 @@ export function BlogArticleBody({ post }: BlogArticleBodyProps) {
     <article className="max-w-3xl">
       <header className="mb-8">
         <p className="text-sm text-gray-400 mb-3">
-          {new Date(`${post.publishedAt}T12:00:00`).toLocaleDateString("pt-BR")} · {post.readMinutes} min de leitura
+          Por{" "}
+          <Link to="/politica-editorial" className="underline hover:text-primary">
+            Equipe editorial Netcar
+          </Link>{" "}
+          · {new Date(`${post.publishedAt}T12:00:00`).toLocaleDateString("pt-BR")}
+          {post.updatedAt && post.updatedAt !== post.publishedAt && (
+            <> · Atualizado em {new Date(`${post.updatedAt}T12:00:00`).toLocaleDateString("pt-BR")}</>
+          )}{" "}
+          · {post.readMinutes} min de leitura
         </p>
         <h1 className="text-3xl md:text-4xl font-bold text-fg mb-4">{post.title}</h1>
         <p className="text-lg text-gray-500">{post.description}</p>
