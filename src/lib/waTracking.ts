@@ -211,15 +211,20 @@ export function logWaClick(code: string): void {
       page: window.location.pathname.slice(0, 200),
       ts: Math.floor(Date.now() / 1000),
     });
+    // text/plain evita preflight CORS; servidor aceita JSON no body do mesmo jeito
     if (navigator.sendBeacon) {
       navigator.sendBeacon(
         WA_LOG_ENDPOINT,
-        new Blob([body], { type: "application/json" }),
+        new Blob([body], { type: "text/plain" }),
       );
     } else {
-      void fetch(WA_LOG_ENDPOINT, { method: "POST", body, keepalive: true }).catch(
-        () => {},
-      );
+      void fetch(WA_LOG_ENDPOINT, {
+        method: "POST",
+        body,
+        headers: { "Content-Type": "text/plain" },
+        keepalive: true,
+        mode: "cors",
+      }).catch(() => {});
     }
   } catch {
     // log é best-effort
