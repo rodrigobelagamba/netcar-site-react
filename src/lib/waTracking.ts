@@ -28,6 +28,9 @@ export type TrafficSourceCode =
 interface StoredTrafficRef {
   src: TrafficSourceCode;
   campaign?: string;
+  gclid?: string;
+  gbraid?: string;
+  wbraid?: string;
   ts: number;
 }
 
@@ -69,8 +72,11 @@ function detectFromUrl(): StoredTrafficRef | null {
   const campaignRaw = params.get("utm_campaign") ?? "";
   const campaign = campaignRaw ? sanitizeToken(campaignRaw) : undefined;
 
-  if (params.get("gclid") || params.get("gbraid") || params.get("wbraid")) {
-    return { src: "GADS", campaign, ts: Date.now() };
+  const gclid = params.get("gclid") ?? undefined;
+  const gbraid = params.get("gbraid") ?? undefined;
+  const wbraid = params.get("wbraid") ?? undefined;
+  if (gclid || gbraid || wbraid) {
+    return { src: "GADS", campaign, gclid, gbraid, wbraid, ts: Date.now() };
   }
   if (params.get("fbclid")) {
     return { src: "META", campaign, ts: Date.now() };
@@ -184,6 +190,42 @@ export function getOrCreateClickCode(): string {
   return currentClickCode;
 }
 
+const WA_LOG_ENDPOINT = "https://wa.netcarmultimarcas.com.br/";
+
+/**
+ * Log próprio do clique WA (fire-and-forget): grava wa_ref + gclid/utm
+ * no servidor. É o que liga o código da mensagem à campanha Google/Meta
+ * sem expor nada na mensagem. Falha aqui nunca quebra o clique.
+ */
+export function logWaClick(code: string): void {
+  if (typeof window === "undefined" || typeof navigator === "undefined") return;
+  try {
+    const ref = readStored();
+    const body = JSON.stringify({
+      code,
+      src: ref?.src ?? "DIR",
+      campaign: ref?.campaign ?? "",
+      gclid: ref?.gclid ?? "",
+      gbraid: ref?.gbraid ?? "",
+      wbraid: ref?.wbraid ?? "",
+      page: window.location.pathname.slice(0, 200),
+      ts: Math.floor(Date.now() / 1000),
+    });
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(
+        WA_LOG_ENDPOINT,
+        new Blob([body], { type: "application/json" }),
+      );
+    } else {
+      void fetch(WA_LOG_ENDPOINT, { method: "POST", body, keepalive: true }).catch(
+        () => {},
+      );
+    }
+  } catch {
+    // log é best-effort
+  }
+}
+
 const WA_URL_PATTERN = /wa\.me|api\.whatsapp\.com/i;
 /** Já tem código (M482) ou legado (M4 / M4827 / M4T7X). */
 const CODE_IN_TEXT_PATTERN = /\(\s*[A-Z](?:\d{1,4}|[A-Z2-9]{4})\s*\)/;
@@ -200,6 +242,7 @@ export function appendWaRefToUrl(url: string): string {
     if (CODE_IN_TEXT_PATTERN.test(currentText)) return url;
 
     const code = getOrCreateClickCode();
+    logWaClick(code);
     const trimmed = currentText.trimEnd();
     const base = trimmed.replace(/\.+$/, "").trimEnd();
     const newText = base
