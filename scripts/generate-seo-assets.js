@@ -150,6 +150,23 @@ function faqSchema(faq) {
   };
 }
 
+// Trilha Home > seção > página. Ajuda o Google a entender a hierarquia e pode
+// renderizar breadcrumb no resultado no lugar da URL crua.
+function breadcrumbSchema(items) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+const HOME_CRUMB = { name: "Home", url: SITE };
+
 const manualBlogPosts = JSON.parse(
   readFileSync(join(rootDir, "src/data/seo/blog-posts.json"), "utf-8")
 );
@@ -322,7 +339,7 @@ function stockShowcase({ heading, vehicles, limit = 8, offset = 0, ctaLabel, cta
       ${cta}`;
 }
 
-function pageShell({ title, description, canonical, body, schemas = [] }) {
+function pageShell({ title, description, canonical, body, schemas = [], ogImage }) {
   const schemaTags = schemas.length
     ? "\n" +
       schemas
@@ -345,7 +362,7 @@ function pageShell({ title, description, canonical, body, schemas = [] }) {
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:url" content="${canonical}" />
-  <meta property="og:image" content="${SITE}/images/loja1.jpg" />${schemaTags}
+  <meta property="og:image" content="${escapeHtml(ogImage || `${SITE}/images/loja1.jpg`)}" />${schemaTags}
   <style>
     .blog-cars{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin:32px 0}
     .blog-car{display:flex;flex-direction:column;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;background:#fff;transition:box-shadow .2s}
@@ -412,9 +429,71 @@ writeTextFile(
   })
 );
 
+// Palavras-chave do slug para achar posts relacionados. Stopwords de intenção
+// (seminovo, esteio, 2026) não distinguem nada — o que liga dois posts é o
+// assunto (financiamento, troca, suv, documento).
+const POST_STOPWORDS = new Set([
+  "seminovo", "seminovos", "usado", "usados", "esteio", "rs", "2026", "2025",
+  "carro", "carros", "netcar", "como", "qual", "quanto", "custa", "vale",
+  "pena", "guia", "completo", "grande", "porto", "alegre", "regiao", "o", "a",
+  "de", "do", "da", "em", "e", "ou", "para", "com", "um", "uma", "no", "na",
+]);
+
+function postKeywords(text) {
+  return String(text)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .split(/[^a-z0-9]+/)
+    .filter((w) => w.length > 2 && !POST_STOPWORDS.has(w));
+}
+
+// Slug sozinho é pobre demais para casar posts (cada um tem vocabulário
+// próprio). Usa slug + título e, se mesmo assim não houver par, completa com
+// os posts mais recentes — link interno fraco é melhor que nenhum.
+function relatedPosts(current, all, limit = 3) {
+  const currentKw = new Set([...postKeywords(current.slug), ...postKeywords(current.title)]);
+  const scored = all
+    .filter((p) => p.slug !== current.slug)
+    .map((p) => {
+      const kw = new Set([...postKeywords(p.slug), ...postKeywords(p.title)]);
+      const shared = [...currentKw].filter((w) => kw.has(w)).length;
+      return { post: p, score: shared };
+    })
+    .sort((a, b) => b.score - a.score || b.post.publishedAt.localeCompare(a.post.publishedAt));
+  const strong = scored.filter((r) => r.score > 0).map((r) => r.post);
+  if (strong.length >= limit) return strong.slice(0, limit);
+  const strongSlugs = new Set(strong.map((p) => p.slug));
+  const recent = scored
+    .filter((r) => !strongSlugs.has(r.post.slug))
+    .map((r) => r.post);
+  return [...strong, ...recent].slice(0, limit);
+}
+
+// Capa do post: primeira imagem real do estoque citado nas seções "cars", ou
+// a primeira do estoque geral. Post sem nenhuma imagem no HTML é snippet sem
+// thumbnail no Discover e nas redes.
+function postCoverImage(post, fallbackStock) {
+  for (const section of post.sections || []) {
+    if (section.type === "cars" && Array.isArray(section.cars)) {
+      const withImg = section.cars.find((car) => car.img);
+      if (withImg) return withImg.img;
+    }
+  }
+  const firstWithImg = fallbackStock.find((v) => vehicleCardImage(v));
+  return firstWithImg ? vehicleCardImage(firstWithImg) : `${SITE}/images/loja1.jpg`;
+}
+
 for (const post of blogPosts) {
   const canonical = `${SITE}/blog/${post.slug}`;
   const updatedAt = post.updatedAt ?? post.publishedAt;
+  const cover = postCoverImage(post, stock);
+  const related = relatedPosts(post, blogPosts);
+  const relatedHtml = related.length
+    ? `<nav aria-label="Leia também"><h2>Leia também</h2><ul>${related
+        .map((r) => `<li><a href="${SITE}/blog/${r.slug}">${escapeHtml(r.title)}</a></li>`)
+        .join("")}</ul></nav>`
+    : "";
   const byline = `
       <p>Por <a href="${SITE}/politica-editorial">${EDITORIAL_AUTHOR.name}</a> · Publicado em ${formatDateBr(post.publishedAt)}${
         updatedAt !== post.publishedAt ? ` · Atualizado em ${formatDateBr(updatedAt)}` : ""
@@ -422,9 +501,11 @@ for (const post of blogPosts) {
   const body = `
     <article>
       <h1>${escapeHtml(post.title)}</h1>${byline}
+      ${cover ? `<img src="${escapeHtml(cover)}" alt="${escapeHtml(post.title)}" loading="lazy" style="width:100%;border-radius:16px;margin:16px 0" />` : ""}
       <p>${escapeHtml(post.description)}</p>
       ${renderSections(post.sections)}
       <p><a href="${SITE}${post.ctaHref}">${escapeHtml(post.ctaLabel)}</a></p>
+      ${relatedHtml}
     </article>`;
   const blogPostingSchema = {
     "@context": "https://schema.org",
@@ -435,6 +516,7 @@ for (const post of blogPosts) {
     dateModified: updatedAt,
     mainEntityOfPage: canonical,
     url: canonical,
+    image: cover ? [cover] : undefined,
     author: EDITORIAL_AUTHOR,
     publisher: {
       "@type": "Organization",
@@ -453,7 +535,16 @@ for (const post of blogPosts) {
       description: post.description,
       canonical,
       body,
-      schemas: [ORG_SCHEMA, blogPostingSchema],
+      schemas: [
+        ORG_SCHEMA,
+        blogPostingSchema,
+        breadcrumbSchema([
+          HOME_CRUMB,
+          { name: "Blog", url: `${SITE}/blog` },
+          { name: post.title, url: canonical },
+        ]),
+      ],
+      ogImage: cover,
     })
   );
 }
@@ -527,7 +618,15 @@ for (const [cityIndex, city] of cities.entries()) {
       description: city.description,
       canonical,
       body,
-      schemas: [ORG_SCHEMA, faqSchema(city.faq)],
+      schemas: [
+        ORG_SCHEMA,
+        faqSchema(city.faq),
+        breadcrumbSchema([
+          HOME_CRUMB,
+          { name: "Regiões atendidas", url: `${SITE}/regioes-atendidas` },
+          { name: city.name, url: canonical },
+        ]),
+      ],
     })
   );
 
@@ -562,7 +661,15 @@ for (const [cityIndex, city] of cities.entries()) {
         description: city.sell.description,
         canonical: sellCanonical,
         body: sellBody,
-        schemas: [ORG_SCHEMA, faqSchema(city.sell.faq)],
+        schemas: [
+          ORG_SCHEMA,
+          faqSchema(city.sell.faq),
+          breadcrumbSchema([
+            HOME_CRUMB,
+            { name: "Vender meu carro", url: `${SITE}/compra` },
+            { name: city.name, url: sellCanonical },
+          ]),
+        ],
       })
     );
   }
@@ -621,7 +728,15 @@ for (const landing of landings) {
       description: landing.description,
       canonical,
       body,
-      schemas: [ORG_SCHEMA, faqSchema(landing.faq)],
+      schemas: [
+        ORG_SCHEMA,
+        faqSchema(landing.faq),
+        breadcrumbSchema([
+          HOME_CRUMB,
+          { name: "Seminovos", url: `${SITE}/seminovos` },
+          { name: landing.name, url: canonical },
+        ]),
+      ],
     })
   );
 }
@@ -671,7 +786,11 @@ for (const page of contentPages) {
       description: page.description,
       canonical,
       body,
-      schemas: [ORG_SCHEMA, faqSchema(page.faq || [])],
+      schemas: [
+        ORG_SCHEMA,
+        faqSchema(page.faq || []),
+        breadcrumbSchema([HOME_CRUMB, { name: page.h1, url: canonical }]),
+      ],
     })
   );
 }

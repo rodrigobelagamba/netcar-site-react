@@ -221,9 +221,12 @@
   RewriteCond %{REQUEST_URI} ^/(seminovos|sobre|contato|compra|blog)/?$ [NC]
   RewriteRule ^ seo-pagina.php [L,QSA]
 
-  # SEO estático para crawlers (blog + páginas locais)
+  # SEO estático para crawlers (blog + páginas locais).
+  # O -f garante que só post com HTML gerado é servido; slug inexistente cai na
+  # regra 404 abaixo em vez de devolver o shell do SPA (soft 404).
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteCond %{DOCUMENT_ROOT}/seo-static/blog-$1.html -f
   RewriteRule ^blog/([^/]+)/?$ seo-static/blog-$1.html [L]
 
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
@@ -253,6 +256,14 @@
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/page-$1.html -f
   RewriteRule ^(financiamento|atendimento-24h|move-brasil|seminovos-automaticos|politica-editorial)/?$ seo-static/page-$1.html [L]
+
+  # 404 real para padrões SEO sem página correspondente. Sem isso, um slug
+  # inválido (ex.: /blog/foo-bar, /comprar-moto, /seminovos-atlantis) caía no
+  # fallback do SPA e devolvia 200 com o shell da home — soft 404 para o bot.
+  # O [G] (410 Gone) diz ao crawler que a URL não existe e não volta.
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteRule ^(blog/[^/]+|comprar-[a-z0-9-]+|seminovos-[a-z0-9-]+|vender-carro-[a-z0-9-]+)/?$ - [G,L]
 
   # Sétimo: interceptar /veiculo/{slug} APENAS quando for bot/crawler (meta tags para WhatsApp)
   # Usuários normais acessam diretamente o React app
