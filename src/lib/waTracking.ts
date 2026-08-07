@@ -4,12 +4,12 @@
  * Captura gclid/fbclid/UTM (30d, last non-direct). No clique WA gera código
  * curto e discreto anexado ao fim da mensagem, ex.:
  *
- *   ...quero mais informações sobre o Tiggo 7 Pro 2023 - (M482).
+ *   ...quero mais informações sobre o Tiggo 7 Pro 2023 - (M48217).
  *
  * 1ª letra = fonte (M Meta, G Google Ads, O orgânico, S social, R referral,
- * D direto, U outro). 3 dígitos identificam o clique (join no GA4).
+ * D direto, U outro). 5 dígitos identificam o clique (join no beacon/GA4).
  * Campanha NÃO vai na mensagem: fica em traffic_campaign (UTM / ID Meta)
- * e no Google Ads via gclid. iAN extrai `(X999)`.
+ * e no Google Ads via gclid. Parser aceita legado `(X999)` e novo `(X99999)`.
  */
 
 const STORAGE_KEY = "nc_traffic_ref";
@@ -171,13 +171,13 @@ const CLICK_CODE_TTL_MS = 3000;
 let currentClickCode = "";
 let currentClickCodeAt = 0;
 
-/** 3 dígitos (100–999). */
-function randomDigits3(): string {
-  return String(100 + Math.floor(Math.random() * 900));
+/** 5 dígitos (00000–99999) → 100k combinações por letra (antes: 900). */
+function randomDigits5(): string {
+  return String(Math.floor(Math.random() * 100_000)).padStart(5, "0");
 }
 
 /**
- * Código do clique, ex. "M482" (1 letra da fonte + 3 dígitos).
+ * Código do clique, ex. "M48217" (1 letra da fonte + 5 dígitos).
  * Mesmo clique → mesmo código na mensagem WA e no evento GA4 (janela 3s).
  */
 export function getOrCreateClickCode(): string {
@@ -185,7 +185,7 @@ export function getOrCreateClickCode(): string {
   if (currentClickCode && now - currentClickCodeAt < CLICK_CODE_TTL_MS) {
     return currentClickCode;
   }
-  currentClickCode = `${sourceLetter(getTrafficSource().src)}${randomDigits3()}`;
+  currentClickCode = `${sourceLetter(getTrafficSource().src)}${randomDigits5()}`;
   currentClickCodeAt = now;
   return currentClickCode;
 }
@@ -232,12 +232,12 @@ export function logWaClick(code: string): void {
 }
 
 const WA_URL_PATTERN = /wa\.me|api\.whatsapp\.com/i;
-/** Já tem código (M482) ou legado (M4 / M4827 / M4T7X). */
-const CODE_IN_TEXT_PATTERN = /\(\s*[A-Z](?:\d{1,4}|[A-Z2-9]{4})\s*\)/;
+/** Já tem código novo (M48217) ou legado (M482 / M4 / M4T7X). */
+const CODE_IN_TEXT_PATTERN = /\(\s*[A-Z](?:\d{1,5}|[A-Z2-9]{4})\s*\)/;
 
 /**
- * Anexa ` - (M482).` ao fim da mensagem pré-preenchida.
- * Idempotente. Cliente vê letra + 3 dígitos entre parênteses.
+ * Anexa ` - (M48217).` ao fim da mensagem pré-preenchida.
+ * Idempotente. Cliente vê letra + 5 dígitos entre parênteses.
  */
 export function appendWaRefToUrl(url: string): string {
   if (!url || !WA_URL_PATTERN.test(url)) return url;

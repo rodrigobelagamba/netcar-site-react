@@ -107,19 +107,27 @@ def main():
     crm = crm_leads()
     print(f"vendas ERP: {len(sales)} | leads CRM: {len(crm)}")
 
-    n_venda = n_crm = 0
+    n_venda = n_crm = n_descartada = 0
     for r in rows:
         n = norm(r.get("telefone", ""))
         sv = sales.get(n)
-        r["virou_venda"] = "1" if sv else "0"
-        r["data_venda"] = sv[0] if sv else ""
-        r["valor_venda"] = f"{sv[1]:.2f}" if sv else ""
+        # Venda so conta se data >= 1o contato WA. Match de telefone com venda
+        # anterior = pos-venda/recompra, nao aquisicao.
+        contato = (r.get("primeiro_contato") or "")[:10]
+        venda_ok = bool(sv and contato and sv[0] >= contato)
+        if sv and not venda_ok:
+            n_descartada += 1
+        r["virou_venda"] = "1" if venda_ok else "0"
+        r["data_venda"] = sv[0] if venda_ok else ""
+        r["valor_venda"] = f"{sv[1]:.2f}" if venda_ok else ""
         cl = crm.get(n)
         r["no_crm"] = "1" if cl else "0"
         r["crm_estado"] = str(cl["estado"]) if cl else ""
         r["crm_origem"] = cl["origem"] if cl else ""
-        if sv: n_venda += 1
-        if cl: n_crm += 1
+        if venda_ok:
+            n_venda += 1
+        if cl:
+            n_crm += 1
 
     fields = list(rows[0].keys())
     with open(OUT_CSV, "w", newline="", encoding="utf-8") as f:
@@ -128,7 +136,7 @@ def main():
         w.writerows(rows)
 
     print(f"\nCSV: {OUT_CSV}")
-    print(f"com venda: {n_venda} | no CRM: {n_crm}")
+    print(f"com venda (pos-contato): {n_venda} | descartadas (venda antes do contato): {n_descartada} | no CRM: {n_crm}")
 
 
 if __name__ == "__main__":

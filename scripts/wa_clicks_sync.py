@@ -5,7 +5,7 @@ Sync do log proprio de cliques WhatsApp (site -> wa-log.php)
 Baixa incremental de https://www.netcarmultimarcas.com.br/wa-log.php
 (token) e grava docs/wa_clicks_log.jsonl (dedupe por code+ts).
 
-Join com atribuicao: codigo_site (G482) = code aqui -> gclid/campanha.
+Join com atribuicao: codigo_site (G48217 ou legado G482) = code aqui -> gclid/campanha.
 Com gclid + telefone do lead + venda ERP => offline conversions Google.
 
 Uso:

@@ -5,7 +5,7 @@ Atribuicao de leads WhatsApp — Netcar
 Extrai da Evolution API (instancia netcar-bot) a origem de cada conversa:
 
 1. CTWA (click-to-WhatsApp ads Meta): payload conversionSource=FB_Ads + link do criativo
-2. Codigo (X999): gerado pelo site na 1a mensagem (M=Meta, G=Google Ads, O=organico, D=direto, S=social, R=referral)
+2. Codigo (X99999 ou legado X999): gerado pelo site na 1a mensagem (M=Meta, G=Google Ads, O=organico, D=direto, S=social, R=referral)
 
 Saida: docs/atribuicao_whatsapp_leads.csv (incremental, dedupe por jid)
 Checkpoint: scripts/.evolution_checkpoint.json (so refaz chats novos/atualizados)
@@ -34,7 +34,8 @@ BACKFILL_ADS = "--backfill-ads" in sys.argv  # reprocessa chats CTWA sem ad_id s
 _since = next((a.split("=", 1)[1] for a in sys.argv if a.startswith("--since=")), None)
 SINCE = datetime.datetime.strptime(_since, "%Y-%m-%d") if _since else None
 
-CODPAT = re.compile(r"\(([MGODSR]\d{3})\)")
+# Aceita legado (G482) e novo (G48217) — site gera 5 digitos desde ago/2026
+CODPAT = re.compile(r"\(([MGODSR]\d{3,5})\)")
 LETRA = {"M": "Meta (via site)", "G": "Google Ads", "O": "Organico", "D": "Direto", "S": "Social", "R": "Referral"}
 
 
