@@ -23,7 +23,9 @@ jobs:
           host: ${{ secrets.DEVOPS_VPS_HOST }}
           username: ${{ secrets.DEVOPS_VPS_USER }}
           key: ${{ secrets.DEVOPS_VPS_SSH_KEY }}
-          script_stop: true
+          # false: com true o drone-ssh abortava no meio do if/else multilinha
+          # logo após o git reset (exit 1 sem echo). O script já tem set -euo pipefail.
+          script_stop: false
           script: |
             set -euo pipefail
             REPO_DIR="/opt/netcar-site-react"
