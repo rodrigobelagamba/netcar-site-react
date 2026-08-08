@@ -33,6 +33,7 @@ jobs:
             git config --global --add safe.directory "$REPO_DIR/dist" || true
 
             BEFORE="$(git rev-parse HEAD)"
+            echo "BEFORE=$BEFORE"
             if git remote get-url origin >/dev/null 2>&1; then
               git fetch --all --prune
               git reset --hard origin/master || git reset --hard origin/main
@@ -40,17 +41,24 @@ jobs:
               echo "origin ausente — mantendo cópia local"
             fi
             AFTER="$(git rev-parse HEAD)"
+            echo "AFTER=$AFTER"
 
             NEED_REBUILD=0
             if [ "$BEFORE" = "$AFTER" ]; then
               echo "Repo já estava atualizado ($AFTER)"
             else
-              # git diff --quiet retorna 1 quando há diff — não pode falhar o script (set -e)
-              if git diff --quiet "$BEFORE" "$AFTER" -- devops/ .github/workflows/devops-deploy.yml; then
+              # git diff --quiet: 0=igual, 1=difere. Capturar rc fora do if
+              # evita edge case com set -e / script_stop do appleboy.
+              DIFF_RC=0
+              git diff --quiet "$BEFORE" "$AFTER" -- devops/ .github/workflows/devops-deploy.yml || DIFF_RC=$?
+              if [ "$DIFF_RC" -eq 0 ]; then
                 echo "Só código do site mudou — sync ok, sem rebuild do painel"
-              else
+              elif [ "$DIFF_RC" -eq 1 ]; then
                 NEED_REBUILD=1
                 echo "Mudanças em devops/ — rebuild do painel"
+              else
+                echo "git diff falhou rc=$DIFF_RC — forçando rebuild"
+                NEED_REBUILD=1
               fi
             fi
 
@@ -59,14 +67,20 @@ jobs:
             export DEVOPS_ENV_FILE="$SECRETS_DIR/devops.env"
             cd devops
 
-            if [ "$NEED_REBUILD" = "1" ] || ! docker compose ps --status running 2>/dev/null | grep -q netcar-devops; then
+            PANEL_UP=0
+            docker compose ps --status running 2>/dev/null | grep -q netcar-devops && PANEL_UP=1 || true
+            if [ "$NEED_REBUILD" = "1" ] || [ "$PANEL_UP" = "0" ]; then
+              echo "Subindo painel (rebuild=$NEED_REBUILD panel_up=$PANEL_UP)"
               docker compose up -d --build
+            else
+              echo "Painel já rodando — sem rebuild"
             fi
 
-            docker compose ps
+            docker compose ps || true
             for i in 1 2 3 4 5 6 7 8 9 10; do
               if curl -fsS "http://127.0.0.1:3090/api/health"; then
                 echo
+                echo "health ok"
                 exit 0
               fi
               sleep 2
