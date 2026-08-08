@@ -189,15 +189,25 @@
   RewriteRule ^feeds/whatsapp-catalog\.xml$ feeds/whatsapp-catalog.php?format=xml [L,QSA]
   RewriteRule ^feeds/whatsapp-catalog\.php$ - [L]
 
-  # Pastas do servidor que NÃO são SPA (gerenciador PHP + API + backend legado).
+  # /backend/* — 410 Gone direto (sem 302→not-found).
+  # Estava indexada no GSC com Disallow no robots = alerta
+  # "Indexada, mas bloqueada pelo robots.txt" (validação falhou 08/08/2026).
+  # Sem Disallow + 410 rastreável = Google lê e tira do índice.
+  RewriteRule ^backend(/|$) - [G,L]
+
+  # Pastas do servidor que NÃO são SPA (gerenciador PHP + API).
   # Sem isso, /admin/ e /sistema/ caem no index.php React (bug após remoção do -d abaixo).
-  RewriteRule ^(admin|sistema|api|backend)(/|$) - [L]
+  RewriteRule ^(admin|sistema|api)(/|$) - [L]
 
   # Primeiro: servir só arquivos reais (-f).
   # NÃO usar -d genérico: o docroot de produção ainda tem pastas legadas
   # (seminovos/, veiculo/, etc.) que interceptavam a URL e mandavam para not-found.html.
   RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
+
+  # Laudos/arquivos ausentes: 410 Gone (antes caía no SPA com 200 = soft 404).
+  # Arquivo real já foi servido pela regra -f acima.
+  RewriteRule ^arquivos/ - [G,L]
   
   # Segundo: não reescrever arquivos estáticos por extensão
   RewriteCond %{REQUEST_URI} \.(js|mjs|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|json|webmanifest|xml|txt|map)$ [NC]

@@ -69,6 +69,8 @@ antiga tinha 128 caracteres e era tratada como página vazia.
 | `/seminovos/{outro}` sem extensão | 301 para `/seminovos` | A checagem de ponto preserva arquivos reais da pasta legada |
 | `/not-found.html` | 410 | Estava em 302 para si mesmo, contando como erro de redirecionamento |
 | `/detalhe-produto-*` | 301 para `/seminovos` | Fichas do site de 2016 |
+| `/backend/*` | **410** direto | Indexada no GSC; 302→not-found + Disallow congelava no índice (08/08/2026) |
+| `/arquivos/*` inexistente | **410** | Soft 404: caía no SPA com 200 HTML; arquivo real continua 200 via `-f` |
 
 ## robots.txt não tira nada do índice
 
@@ -95,9 +97,10 @@ Como escolher:
 | Poupar rastreio de área privada nunca indexada | `Disallow` | — |
 | Evitar facetas/query string duplicada | `Disallow` + canônico | — |
 
-Por isso o `robots.txt` bloqueia só `/admin/`, `/sistema/`, `/api/`, `/backend/`
-e `/seminovos?*`. Todo o resto do legado fica rastreável de propósito, para o
-Google poder ler o 301 e esquecer a URL.
+Por isso o `robots.txt` bloqueia só `/admin/`, `/sistema/`, `/api/` e
+`/seminovos?*`. `/backend/` ficou fora do Disallow em 08/08/2026 — estava
+indexada e o Disallow impedia o Google de ler o 410. Todo o legado fica
+rastreável de propósito, para o Google poder ler o 301/410 e esquecer a URL.
 
 ## Prerender: a regra do `-f`
 

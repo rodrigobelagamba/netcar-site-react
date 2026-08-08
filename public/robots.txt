@@ -1,19 +1,21 @@
 User-agent: *
 Allow: /
 
-# Painéis e API
+# Painéis privados que nunca devem ser indexados (nunca estiveram no índice)
 Disallow: /admin/
 Disallow: /sistema/
 Disallow: /api/
-Disallow: /backend/
 
 # Filtros de estoque (query string) — canônico é /seminovos
 Disallow: /seminovos?*
 
-# O legado do site antigo (/detalhe-produto-*, /contato.php, /Tour3D/, laudos em
-# /arquivos/autocheck/…) NÃO entra aqui de propósito. Essas URLs já respondem
-# 301 ou mandam X-Robots-Tag: noindex, e o Google só enxerga isso se puder
-# rastreá-las. Bloquear no robots as congela indexadas e sem conteúdo — foi o que
-# gerou o alerta "Indexada, mas bloqueada pelo robots.txt" em 27/07/2026.
+# /backend/ NÃO entra no Disallow de propósito (08/08/2026).
+# Estava indexada no GSC (/backend/Netcar) + Disallow = alerta
+# "Indexada, mas bloqueada pelo robots.txt". URL que precisa SAIR do índice
+# tem que permanecer rastreável para o Google ler o 410 Gone do .htaccess.
+#
+# O legado do site antigo (/detalhe-produto-*, /contato.php, /Tour3D/, laudos
+# em /arquivos/autocheck/…) também fica rastreável pelo mesmo motivo.
+# Bloquear no robots congela URL indexada sem conteúdo — incidente 27/07/2026.
 
 Sitemap: https://www.netcarmultimarcas.com.br/sitemap.xml
