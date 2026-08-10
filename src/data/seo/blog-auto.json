@@ -677,7 +677,7 @@
     "title": "Comprando o primeiro carro usado: o que ninguém te avisou",
     "description": "Primeiro carro: orçamento real, modelos seguros, financiamento e opções de entrada no estoque Netcar, Esteio.",
     "publishedAt": "2026-06-23",
-    "updatedAt": "2026-06-23",
+    "updatedAt": "2026-08-10",
     "readMinutes": 6,
     "sections": [
       {
@@ -720,6 +720,17 @@
         "type": "cars",
         "cars": [
           {
+            "modelo": "Volkswagen Fox Xtreme",
+            "ano": "2019/2020",
+            "km": "67.688 km",
+            "preco": "R$ 69.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/fox-xtreme-2020-izw-xx17-19952",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+          },
+          {
             "modelo": "Kia Picanto Ex",
             "ano": "2012",
             "km": "80.000 km",
@@ -729,17 +740,6 @@
             "destaque": "Manual Proprietário e Chave Reserva",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/picanto-ex-2012-isv-xx76-19785",
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/18062026picanto%20ex%20ISV8276CAPA.png"
-          },
-          {
-            "modelo": "Hyundai Hb20s Premium",
-            "ano": "2016",
-            "km": "92.300 km",
-            "preco": "R$ 68.900,00",
-            "cambio": "Automatico",
-            "combustivel": "Flex",
-            "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/hb20s-premium-2016-ixd-xx52-19945",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
           }
         ]
       },
