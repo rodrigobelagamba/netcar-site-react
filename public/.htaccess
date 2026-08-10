@@ -100,11 +100,13 @@
   RewriteCond %{HTTP_HOST} !^www\. [NC]
   RewriteRule ^ https://www.netcarmultimarcas.com.br%{REQUEST_URI} [R=301,L]
   
-  # Canônico da home: /index.html acessado direto -> / (301).
+  # Canônico da home: /index.html ou /index.php acessado direto -> / (301).
   # THE_REQUEST garante que só o request externo do browser/crawler é
-  # redirecionado; o rewrite interno do SPA para index.html não casa aqui.
+  # redirecionado; DirectoryIndex e o rewrite interno do SPA não casam aqui.
   RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
   RewriteRule ^index\.html$ / [R=301,L]
+  RewriteCond %{THE_REQUEST} \s/+index\.php[\s?] [NC]
+  RewriteRule ^index\.php$ / [R=301,L]
   
   # Redirects 301 — site legado PHP/HTML
   # QSD remove parâmetros obsoletos (id/código) do destino canônico.

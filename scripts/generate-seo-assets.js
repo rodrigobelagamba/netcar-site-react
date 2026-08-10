@@ -394,6 +394,17 @@ function pageShell({ title, description, canonical, body, schemas = [], ogImage 
 
 mkdirSync(seoStaticDir, { recursive: true });
 
+// O sitemap preserva lastmod para não fingir atualização em todo deploy. Quando
+// o HTML realmente muda (copy, estoque exibido, links ou schema), esta coleção
+// permite atualizar somente a URL afetada.
+const changedSeoUrls = new Set();
+
+function writeSeoPage(filePath, canonical, content) {
+  const changed = writeTextFile(filePath, content);
+  if (changed) changedSeoUrls.add(canonical);
+  return changed;
+}
+
 const regionsHubCanonical = `${SITE}/regioes-atendidas`;
 const regionsHubBody = `
   <article>
@@ -417,8 +428,9 @@ const regionsHubBody = `
     </ul>
     <p><a href="${SITE}/seminovos">Ver estoque atual</a> · <a href="${SITE}/compra">Pré-avaliar meu carro</a></p>
   </article>`;
-writeTextFile(
+writeSeoPage(
   join(seoStaticDir, "regions-hub.html"),
+  regionsHubCanonical,
   pageShell({
     title: "Regiões atendidas | Netcar Multimarcas Esteio",
     description:
@@ -528,8 +540,9 @@ for (const post of blogPosts) {
       },
     },
   };
-  writeTextFile(
+  writeSeoPage(
     join(seoStaticDir, `blog-${post.slug}.html`),
+    canonical,
     pageShell({
       title: post.title,
       description: post.description,
@@ -611,8 +624,9 @@ for (const [cityIndex, city] of cities.entries()) {
       </p>
       ${relatedCitiesHtml(city.slug)}
     </article>`;
-  writeTextFile(
+  writeSeoPage(
     join(seoStaticDir, `city-${city.slug}.html`),
+    canonical,
     pageShell({
       title: city.title,
       description: city.description,
@@ -650,12 +664,21 @@ for (const [cityIndex, city] of cities.entries()) {
         <li>Agende vistoria e conferência documental na Av. Presidente Vargas, em Esteio.</li>
       </ol>
       <p>A Netcar não possui unidade ou ponto de coleta em ${escapeHtml(city.name)}.</p>
+      ${stockShowcase({
+        heading: `Seminovos disponíveis para usar seu carro na troca`,
+        vehicles: stock,
+        limit: 4,
+        offset: cityIndex * 2,
+        ctaLabel: "Ver todo o estoque para troca",
+        ctaHref: `${SITE}/seminovos`,
+      })}
       ${sellFaqHtml}
       <p><a href="${SITE}/compra">Iniciar pré-avaliação</a> · <a href="${SITE}/seminovos">Ver estoque para troca</a></p>
       ${relatedSellCitiesHtml(city.slug)}
     </article>`;
-    writeTextFile(
+    writeSeoPage(
       join(seoStaticDir, `sell-city-${city.slug}.html`),
+      sellCanonical,
       pageShell({
         title: city.sell.title,
         description: city.sell.description,
@@ -721,8 +744,9 @@ for (const landing of landings) {
       </p>
       ${relatedLandingsHtml(landing.slug)}
     </article>`;
-  writeTextFile(
+  writeSeoPage(
     join(seoStaticDir, `landing-${landing.slug}.html`),
+    canonical,
     pageShell({
       title: landing.title,
       description: landing.description,
@@ -779,8 +803,9 @@ for (const page of contentPages) {
       ${faqHtml}
       <p><a href="${SITE}${page.secondHref}">${escapeHtml(page.secondLabel)}</a></p>
     </article>`;
-  writeTextFile(
+  writeSeoPage(
     join(seoStaticDir, `page-${page.slug}.html`),
+    canonical,
     pageShell({
       title: page.title,
       description: page.description,
@@ -912,7 +937,7 @@ ${urls
   .map(
     (url) => `  <url>
     <loc>${url.loc}</loc>
-    <lastmod>${previousLastmods.get(url.loc) ?? today}</lastmod>
+    <lastmod>${changedSeoUrls.has(url.loc) ? today : (previousLastmods.get(url.loc) ?? today)}</lastmod>
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority}</priority>
   </url>`

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-landings.js && node scripts/validate-regional-seo.js && node scripts/validate-blog-intent.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && node scripts/generate-whatsapp-catalog-feed.js && tsc && vite build && node scripts/copy-social-php.js",
+    "build": "node scripts/generate-landings.js && node scripts/validate-regional-seo.js && node scripts/validate-blog-intent.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && node scripts/validate-generated-seo.js && node scripts/generate-whatsapp-catalog-feed.js && tsc && vite build && node scripts/copy-social-php.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "generate-landings": "node scripts/generate-landings.js",
     "generate-blog": "node scripts/generate-blog.js",
@@ -13,6 +13,7 @@
     "weekly": "node scripts/generate-blog.js && node scripts/validate-blog-intent.js && npm run deploy:local",
     "seo:generate": "node scripts/generate-seo-assets.js",
     "seo:validate-regional": "node scripts/validate-regional-seo.js",
+    "seo:validate-generated": "node scripts/validate-generated-seo.js",
     "seo:validate-blog": "node scripts/validate-blog-intent.js",
     "catalog:whatsapp": "node scripts/generate-whatsapp-catalog-feed.js",
     "report:icheck": "tsx scripts/generate-icheck-report.mjs",

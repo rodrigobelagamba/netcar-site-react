@@ -125,11 +125,13 @@ if ($isHome) {
       <a href="/blog">Blog</a>
     </nav>
     <nav aria-label="Seminovos por cidade">
-      <a href="/seminovos-taquara">Taquara</a>
-      <a href="/seminovos-igrejinha">Igrejinha</a>
-      <a href="/seminovos-gramado">Gramado</a>
-      <a href="/seminovos-caxias-do-sul">Caxias do Sul</a>
-      <a href="/seminovos-bento-goncalves">Bento Gonçalves</a>
+      <a href="/seminovos-canoas">Canoas</a>
+      <a href="/seminovos-sapucaia-do-sul">Sapucaia do Sul</a>
+      <a href="/seminovos-sao-leopoldo">São Leopoldo</a>
+      <a href="/seminovos-novo-hamburgo">Novo Hamburgo</a>
+      <a href="/seminovos-cachoeirinha">Cachoeirinha</a>
+      <a href="/seminovos-gravatai">Gravataí</a>
+      <a href="/seminovos-porto-alegre">Porto Alegre</a>
     </nav>
   </main>
 </div>
