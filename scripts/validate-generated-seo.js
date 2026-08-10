@@ -16,6 +16,7 @@ const cities = JSON.parse(
   readFileSync(join(root, "src/data/seo/cities.json"), "utf8"),
 );
 const sitemap = readFileSync(join(root, "public/sitemap.xml"), "utf8");
+const crawlerHome = readFileSync(join(root, "public/seo-pagina.php"), "utf8");
 const errors = [];
 const canonicals = new Set();
 
@@ -120,6 +121,21 @@ for (const city of cities) {
 if (sitemap.includes("<loc>https://www.netcarmultimarcas.com.br/index.php</loc>")) {
   errors.push("sitemap não pode conter /index.php");
 }
+
+for (const slug of [
+  "canoas",
+  "sapucaia-do-sul",
+  "sao-leopoldo",
+  "novo-hamburgo",
+  "cachoeirinha",
+  "gravatai",
+  "porto-alegre",
+]) {
+  if (!crawlerHome.includes(`/seminovos-${slug}`)) {
+    errors.push(`home do crawler sem prioridade regional para ${slug}`);
+  }
+}
+
 for (const match of sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(match[1])) {
     errors.push(`lastmod inválido no sitemap: ${match[1]}`);

@@ -30,11 +30,13 @@ switch ($page) {
         echo '<p>Consulte estoque e pré-avaliação antes de viajar. As lojas físicas ficam somente na Av. Presidente Vargas, em Esteio.</p>';
         echo '<p><a href="' . SEO_SITE_URL . '/regioes-atendidas">Ver regiões atendidas</a></p>';
         echo '<ul>';
-        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-taquara">Seminovos para Taquara</a></li>';
-        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-igrejinha">Seminovos para Igrejinha</a></li>';
-        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-gramado">Seminovos para Gramado</a></li>';
-        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-caxias-do-sul">Seminovos para Caxias do Sul</a></li>';
-        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-bento-goncalves">Seminovos para Bento Gonçalves</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-canoas">Seminovos para Canoas</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-sapucaia-do-sul">Seminovos para Sapucaia do Sul</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-sao-leopoldo">Seminovos para São Leopoldo</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-novo-hamburgo">Seminovos para Novo Hamburgo</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-cachoeirinha">Seminovos para Cachoeirinha</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-gravatai">Seminovos para Gravataí</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-porto-alegre">Seminovos para Porto Alegre</a></li>';
         echo '</ul>';
         break;
 
