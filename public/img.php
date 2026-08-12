@@ -4,11 +4,12 @@
  * Uso: /img.php?src=/imagens/veiculos_automacar/FOO.png&w=1600
  * - Só serve arquivos locais em /imagens/ ou /images/ (sem traversal)
  * - Nunca faz upscale (se original <= w, serve original)
- * - WebP q82 com alpha preservado; cache em disco + headers 1 ano
+ * - WebP otimizado com alpha preservado; cache em disco + headers 1 ano
  */
 
 $src = isset($_GET['src']) ? $_GET['src'] : '';
 $w   = isset($_GET['w']) ? (int) $_GET['w'] : 1600;
+$quality = 74;
 
 $w = max(200, min($w, 2400));
 
@@ -38,7 +39,7 @@ $cacheDir = $docroot . '/cache/img';
 if (!is_dir($cacheDir)) {
     @mkdir($cacheDir, 0755, true);
 }
-$cacheKey  = md5($src . '|' . $w . '|' . filemtime($file));
+$cacheKey  = md5($src . '|' . $w . '|q' . $quality . '|' . filemtime($file));
 $cacheFile = $cacheDir . '/' . $cacheKey . '.webp';
 
 $serve = function ($path, $type) {
@@ -94,7 +95,7 @@ if ($ow > $w) {
     imagesavealpha($img, true);
 }
 
-imagewebp($img, $cacheFile, 82);
+imagewebp($img, $cacheFile, $quality);
 imagedestroy($img);
 
 if (is_file($cacheFile) && filesize($cacheFile) > 0) {

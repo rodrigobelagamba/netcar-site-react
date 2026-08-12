@@ -105,9 +105,11 @@
       #netcar-initial-shell{box-sizing:border-box;display:flex;min-height:100vh;flex-direction:column;background:#f6f6f6;color:#00283c;font-family:Arial,sans-serif}
       #netcar-initial-shell header{display:flex;height:64px;align-items:center;justify-content:space-between;background:#fff;padding:0 20px}
       #netcar-initial-shell strong{font-size:18px}
-      #netcar-initial-shell main{display:grid;flex:1;place-content:center;padding:24px;text-align:center}
-      #netcar-initial-lcp{display:flex;min-height:260px;align-items:center;justify-content:center}
-      #netcar-initial-lcp img{display:block;width:min(100%,760px);height:auto;max-height:54vh;object-fit:contain}
+      #netcar-initial-shell main{display:grid;flex:1;place-content:center;overflow:hidden;padding:24px;text-align:center}
+      #netcar-initial-lcp{display:flex;width:min(100vw,1280px);min-height:45vh;align-items:center;justify-content:center}
+      #netcar-initial-lcp img{display:block;width:100%;height:auto;max-height:55vh;object-fit:contain;transform:scale(1.4)}
+      #netcar-initial-lcp img.netcar-initial-banner{max-height:none;transform:none}
+      @media (min-width:768px){#netcar-initial-lcp{min-height:60vh}#netcar-initial-lcp img{max-height:75vh;transform:scale(1.25)}}
       #netcar-initial-shell p{color:#52616b}
       #netcar-initial-shell nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:16px}
       #netcar-initial-shell a{border:1px solid #00283c;border-radius:999px;color:#00283c;font-weight:700;padding:10px 16px;text-decoration:none}

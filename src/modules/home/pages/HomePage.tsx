@@ -130,13 +130,12 @@ function HomeHeroSkeleton() {
               srcSet={initialLcpImage.srcSet}
               sizes={initialLcpImage.sizes}
               alt="Carro seminovo em destaque"
-              width={1600}
-              height={900}
+              width={1280}
+              height={960}
               loading="eager"
-              decoding="async"
+              decoding="sync"
               fetchPriority="high"
               className="w-full h-auto max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125"
-              style={{ mixBlendMode: "multiply" }}
             />
           ) : (
             <div className="w-full h-[45vh] md:h-[60vh] bg-gray-200 rounded-lg animate-pulse" />

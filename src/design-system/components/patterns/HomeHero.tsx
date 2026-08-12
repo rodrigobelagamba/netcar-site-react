@@ -154,17 +154,16 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                 }}
               />
               <img 
-                src={optimizeStockImage(vehicle.image || CAR_COVERED_PLACEHOLDER_URL, 1280)}
-                srcSet={stockImageSrcSet(vehicle.image, [480, 768, 960, 1280, 1600])}
-                sizes="100vw"
+                src={optimizeStockImage(vehicle.image || CAR_COVERED_PLACEHOLDER_URL, 960)}
+                srcSet={stockImageSrcSet(vehicle.image, [480, 640, 768, 960, 1280])}
+                sizes="(max-width: 767px) 60vw, 70vw"
                 alt={vehicle.model}
-                width={1600}
-                height={900}
+                width={1280}
+                height={960}
                 loading={currentIndex === 0 ? "eager" : "lazy"}
-                decoding="async"
+                decoding={currentIndex === 0 ? "sync" : "async"}
                 {...(currentIndex === 0 && { fetchPriority: "high" as const })}
                 className="relative z-10 w-full h-auto hover:scale-[1.02] transition-transform duration-700 ease-out max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125 cursor-pointer"
-                style={{ mixBlendMode: 'multiply' }}
                 draggable={false}
               />
             </div>

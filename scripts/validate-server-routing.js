@@ -26,6 +26,18 @@ expect(controller.includes("netcar_render_error(404)"), "controlador sem 404 rea
 expect(controller.includes("netcar_apply_route_meta"), "metadados por rota não são aplicados ao HTML comum");
 expect(controller.includes("imagesrcset="), "preload responsivo do LCP ausente");
 expect(
+  controller.includes("(max-width: 767px) 60vw, 70vw"),
+  "sizes do LCP da Home voltou a solicitar imagem excessiva no mobile",
+);
+expect(
+  controller.includes("array(480, 640, 768, 960, 1280)"),
+  "variantes leves do LCP da Home ausentes",
+);
+expect(
+  controller.includes("array_slice($vehicles, 0, 20)"),
+  "bootstrap enxuto da Home ausente",
+);
+expect(
   controller.includes("netcar_prepend_critical_head_markup($html, $preload)"),
   "preload da Home não está priorizado no início do head",
 );

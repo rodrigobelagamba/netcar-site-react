@@ -278,12 +278,32 @@ function netcar_stock_bootstrap_value()
     return $value;
 }
 
-function netcar_stock_bootstrap_script()
+function netcar_stock_bootstrap_script($path)
 {
     $value = netcar_stock_bootstrap_value();
     if (!is_array($value) || empty($value['vehicles']) || !is_array($value['vehicles'])) {
         return null;
     }
+
+    // A Home usa no máximo 4 carros no hero e 15 nos destaques. Não bloquear
+    // o primeiro paint com os 60+ veículos completos; a API revalida depois.
+    if ($path === '/') {
+        $vehicles = array_values(array_filter($value['vehicles'], function ($vehicle) {
+            return is_array($vehicle)
+                && !empty($vehicle['price'])
+                && isset($vehicle['imagens_site']['tem_fotos'])
+                && intval($vehicle['imagens_site']['tem_fotos']) !== 0;
+        }));
+        usort($vehicles, function ($left, $right) {
+            $highlight = intval(isset($right['destaque']) ? $right['destaque'] : 0)
+                - intval(isset($left['destaque']) ? $left['destaque'] : 0);
+            if ($highlight !== 0) return $highlight;
+            return intval(isset($right['id']) ? $right['id'] : 0)
+                - intval(isset($left['id']) ? $left['id'] : 0);
+        });
+        $value['vehicles'] = array_slice($vehicles, 0, 20);
+    }
+
     return '<script>window.__NETCAR_STOCK__='
         . json_encode($value, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
         . ';</script>';
@@ -613,7 +633,7 @@ $isHome = $path === '/';
 
 $modulePreloads = netcar_route_modulepreloads($path);
 $stockBootstrapScript = netcar_route_uses_stock_bootstrap($path)
-    ? netcar_stock_bootstrap_script()
+    ? netcar_stock_bootstrap_script($path)
     : null;
 
 $criticalImageByPath = array(
@@ -664,7 +684,7 @@ if ($isHome) {
         // escolher outra largura no preload, ele baixa a imagem duas vezes.
         $imageWidths = $hasActiveBanner
             ? array(480, 768, 960, 1280, 1920)
-            : array(480, 768, 960, 1280, 1600);
+            : array(480, 640, 768, 960, 1280);
         $srcsetParts = array();
         foreach ($imageWidths as $imageWidth) {
             $srcsetParts[] = htmlspecialchars(
@@ -674,18 +694,25 @@ if ($isHome) {
             ) . ' ' . $imageWidth . 'w';
         }
         $responsiveSrcset = implode(', ', $srcsetParts);
-        $banner1280 = netcar_banner_variant($bannerUrl, 1280);
+        $fallbackWidth = $hasActiveBanner ? 1280 : 960;
+        $heroSizes = $hasActiveBanner ? '100vw' : '(max-width: 767px) 60vw, 70vw';
+        $heroWidth = $hasActiveBanner ? 1920 : 1280;
+        $heroHeight = $hasActiveBanner ? 680 : 960;
+        $heroClass = $hasActiveBanner ? ' class="netcar-initial-banner"' : '';
+        $bannerFallback = netcar_banner_variant($bannerUrl, $fallbackWidth);
         $preload = '<link rel="preload" as="image" href="'
-            . htmlspecialchars($banner1280, ENT_QUOTES, 'UTF-8')
+            . htmlspecialchars($bannerFallback, ENT_QUOTES, 'UTF-8')
             . '" imagesrcset="'
             . $responsiveSrcset
-            . '" imagesizes="100vw" fetchpriority="high" />';
+            . '" imagesizes="' . $heroSizes . '" fetchpriority="high" />';
         $html = netcar_prepend_critical_head_markup($html, $preload);
         $initialHero = '<div id="netcar-initial-lcp"><img src="'
-            . htmlspecialchars($banner1280, ENT_QUOTES, 'UTF-8')
+            . htmlspecialchars($bannerFallback, ENT_QUOTES, 'UTF-8')
             . '" srcset="'
             . $responsiveSrcset
-            . '" sizes="100vw" alt="Carro seminovo em destaque" width="1600" height="900" loading="eager" decoding="async" fetchpriority="high"></div>';
+            . '" sizes="' . $heroSizes . '" alt="Carro seminovo em destaque" width="' . $heroWidth
+            . '" height="' . $heroHeight . '" loading="eager" decoding="sync" fetchpriority="high"'
+            . $heroClass . '></div>';
         $html = str_replace('<div id="netcar-initial-lcp"></div>', $initialHero, $html);
     }
 }

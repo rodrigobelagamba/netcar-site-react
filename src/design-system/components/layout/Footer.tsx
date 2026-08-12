@@ -134,7 +134,7 @@ export function Footer() {
 
           {/* Coluna 2: Lojas */}
           <div>
-            <h4 className="text-[10px] font-bold text-muted-foreground mb-5 uppercase tracking-widest">Nossas Lojas</h4>
+            <h2 className="text-[10px] font-bold text-muted-foreground mb-5 uppercase tracking-widest">Nossas Lojas</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
               {/* Loja 1 */}
@@ -171,7 +171,7 @@ export function Footer() {
                     }}
                   />
                 </div>
-                <h5 className="font-bold text-fg text-sm mb-1 group-hover:text-primary transition-colors">Loja 1</h5>
+                <h3 className="font-bold text-fg text-sm mb-1 group-hover:text-primary transition-colors">Loja 1</h3>
                 {addressLoja1?.address && (
                   <p className="text-xs text-muted-foreground leading-relaxed mb-2" dangerouslySetInnerHTML={{
                     __html: addressLoja1.address.replace(/ - /g, "<br/>")
@@ -223,7 +223,7 @@ export function Footer() {
                     }}
                   />
                 </div>
-                <h5 className="font-bold text-fg text-sm mb-1 group-hover:text-primary transition-colors">Loja 2</h5>
+                <h3 className="font-bold text-fg text-sm mb-1 group-hover:text-primary transition-colors">Loja 2</h3>
                 {addressLoja2?.address && (
                   <p className="text-xs text-muted-foreground leading-relaxed mb-2" dangerouslySetInnerHTML={{
                     __html: addressLoja2.address.replace(/ - /g, "<br/>")
@@ -246,7 +246,7 @@ export function Footer() {
 
           {/* Coluna 3: Menu */}
           <div>
-            <h4 className="text-[10px] font-bold text-muted-foreground mb-5 uppercase tracking-widest">Menu</h4>
+            <h2 className="text-[10px] font-bold text-muted-foreground mb-5 uppercase tracking-widest">Menu</h2>
             <ul className="space-y-2.5">
               {menuLinks.map((link) => (
                 <li key={link.to}>
@@ -275,7 +275,7 @@ export function Footer() {
 
           {/* Coluna 4: Social */}
           <div>
-            <h4 className="text-[10px] font-bold text-muted-foreground mb-5 uppercase tracking-widest">Conecte-se</h4>
+            <h2 className="text-[10px] font-bold text-muted-foreground mb-5 uppercase tracking-widest">Conecte-se</h2>
             <div className="flex gap-2">
               <a 
                 href="https://instagram.com/netcar_rc" 
@@ -303,7 +303,7 @@ export function Footer() {
         {/* Cidades que atendemos (SEO local + links internos) */}
         <div className="border-t border-border pt-6 pb-2">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Seminovos por cidade</h4>
+            <h2 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Seminovos por cidade</h2>
             <Link
               to="/regioes-atendidas"
               className="text-xs font-semibold text-[#00616A] hover:underline"
@@ -329,9 +329,9 @@ export function Footer() {
         {/* Vender carro por cidade (SEO local + linkagem interna) */}
         <div className="border-t border-border pt-6 pb-2">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+            <h2 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
               Vender carro por cidade
-            </h4>
+            </h2>
             <Link
               to="/regioes-atendidas"
               className="text-xs font-semibold text-[#00616A] hover:underline"
@@ -357,7 +357,7 @@ export function Footer() {
         {/* Seminovos por marca/categoria (gerado do estoque real) */}
         {landingPages.length > 0 && (
           <div className="border-t border-border pt-6 pb-2">
-            <h4 className="text-[10px] font-bold text-muted-foreground mb-4 uppercase tracking-widest">Seminovos por marca e categoria</h4>
+            <h2 className="text-[10px] font-bold text-muted-foreground mb-4 uppercase tracking-widest">Seminovos por marca e categoria</h2>
             <ul className="flex flex-wrap gap-x-5 gap-y-2">
               {landingPages.map((landing) => (
                 <li key={landing.slug}>
