@@ -1,4 +1,17 @@
 {
   "id": "19944",
-  "image": "/imagens/veiculos_automacar/04082026TIGGO 7 JBW0J76CAPA.png"
+  "image": "/imagens/veiculos_automacar/04082026TIGGO 7 JBW0J76CAPA.png",
+  "brand": "CHERY",
+  "model": "TIGGO 8 TXS TURBO",
+  "year": 2022,
+  "price": 129900,
+  "valor_formatado": "<span>R$</span> 129.900,00",
+  "preco_com_troca": 129900,
+  "preco_com_troca_formatado": "129.900,00",
+  "tag": "GASOLINA 1.6",
+  "marca": "CHERY",
+  "modelo": "TIGGO 8 TXS TURBO",
+  "placa": "JAX1E16",
+  "combustivel": "GASOLINA",
+  "cambio": "AUTOMATICO"
 }

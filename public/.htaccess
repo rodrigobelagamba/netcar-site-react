@@ -46,8 +46,8 @@ ErrorDocument 410 /410.html
   ExpiresByType application/font-woff "access plus 1 year"
   ExpiresByType application/font-woff2 "access plus 1 year"
   
-  # HTML (sem cache para permitir atualizações)
-  ExpiresByType text/html "access plus 0 seconds"
+  # HTML recebe sua política do controlador PHP. Definir Expires aqui adicionava
+  # um segundo Cache-Control: max-age=0 e anulava o cache curto da Home.
 </IfModule>
 
 # Compressão GZIP

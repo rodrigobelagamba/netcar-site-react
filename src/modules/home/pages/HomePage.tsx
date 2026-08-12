@@ -30,6 +30,12 @@ type InitialHomeLcpImage = {
   sizes?: string;
 };
 
+type HomeBootstrapWindow = Window & {
+  __NETCAR_HOME_HERO__?: HomeHeroVehicle;
+  __NETCAR_HOME_HAS_ACTIVE_BANNER__?: boolean;
+  __NETCAR_HOME_LCP_ID__?: string;
+};
+
 function readInitialHomeLcpImage(): InitialHomeLcpImage | null {
   if (typeof document === "undefined") return null;
 
@@ -43,6 +49,34 @@ function readInitialHomeLcpImage(): InitialHomeLcpImage | null {
     srcSet: preload.getAttribute("imagesrcset") || undefined,
     sizes: preload.getAttribute("imagesizes") || "100vw",
   };
+}
+
+function readInitialHomeHeroVehicle(): HomeHeroVehicle | null {
+  if (typeof window === "undefined") return null;
+  const vehicle = (window as HomeBootstrapWindow).__NETCAR_HOME_HERO__;
+  if (
+    !vehicle ||
+    !vehicle.id ||
+    !vehicle.brand ||
+    !vehicle.model ||
+    !vehicle.image ||
+    !Number.isFinite(Number(vehicle.year)) ||
+    !Number.isFinite(Number(vehicle.price))
+  ) {
+    return null;
+  }
+
+  return {
+    ...vehicle,
+    id: String(vehicle.id),
+    year: Number(vehicle.year),
+    price: Number(vehicle.price),
+  };
+}
+
+function readInitialBannerState(): boolean | undefined {
+  if (typeof window === "undefined") return undefined;
+  return (window as HomeBootstrapWindow).__NETCAR_HOME_HAS_ACTIVE_BANNER__;
 }
 
 function HomeHeroSkeleton() {
@@ -98,11 +132,17 @@ export function HomePage() {
   const { data: vehicles, isLoading: isLoadingVehicles } = useVehiclesQuery();
   const { data: banners, isLoading: isLoadingBanners } = useBannersQuery();
   const navigate = useNavigate();
+  const initialHeroVehicle = useMemo(readInitialHomeHeroVehicle, []);
+  const initialBannerState = useMemo(readInitialBannerState, []);
 
   const hasBanners = Boolean(banners && banners.length > 0);
   const showBanners = hasBanners;
   const showVehiclesHero = !showBanners && !isLoadingBanners;
-  const isLoadingHero = isLoadingBanners || (showVehiclesHero && isLoadingVehicles);
+  const canRenderInitialVehicle =
+    initialBannerState === false && initialHeroVehicle !== null;
+  const isLoadingHero = isLoadingBanners
+    ? !canRenderInitialVehicle
+    : showVehiclesHero && isLoadingVehicles && initialHeroVehicle === null;
   
   const [columnsPerRow, setColumnsPerRow] = useState(4);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -163,9 +203,10 @@ export function HomePage() {
       });
 
     const preferredHeroId =
-      typeof window !== "undefined"
-        ? (window as Window & { __NETCAR_HOME_LCP_ID__?: string }).__NETCAR_HOME_LCP_ID__
-        : undefined;
+      initialHeroVehicle?.id ||
+      (typeof window !== "undefined"
+        ? (window as HomeBootstrapWindow).__NETCAR_HOME_LCP_ID__
+        : undefined);
     const ordered =
       preferredHeroId && filtered.some((vehicle) => vehicle.id === preferredHeroId)
         ? [
@@ -203,7 +244,17 @@ export function HomePage() {
           cambio: vehicle.cambio,
         };
       });
-  }, [vehicles, featuredVehicle]);
+  }, [vehicles, featuredVehicle, initialHeroVehicle]);
+
+  const displayedHeroVehicles = useMemo(
+    () =>
+      heroVehicles.length > 0
+        ? heroVehicles
+        : initialHeroVehicle
+          ? [initialHeroVehicle]
+          : [],
+    [heroVehicles, initialHeroVehicle],
+  );
 
   const HOME_HIGHLIGHTS_MOBILE = 6;
   const HOME_HIGHLIGHTS_DESKTOP_ROWS = 3;
@@ -265,8 +316,8 @@ export function HomePage() {
           <HomeHeroSkeleton />
         ) : showBanners ? (
           <BannerHero banners={banners!} />
-        ) : heroVehicles.length > 0 ? (
-          <HomeHero vehicles={heroVehicles} />
+        ) : displayedHeroVehicles.length > 0 ? (
+          <HomeHero vehicles={displayedHeroVehicles} />
         ) : null}
       </div>
 

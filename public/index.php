@@ -294,14 +294,49 @@ function netcar_get_build_home_lcp()
         return null;
     }
     $value = json_decode((string) @file_get_contents($file), true);
-    if (!is_array($value) || empty($value['id']) || empty($value['image'])) {
+    if (
+        !is_array($value)
+        || empty($value['id'])
+        || empty($value['image'])
+        || empty($value['brand'])
+        || empty($value['model'])
+        || empty($value['year'])
+        || empty($value['price'])
+    ) {
         return null;
     }
     $image = netcar_normalize_banner_path($value['image']);
     if ($image === null) {
         return null;
     }
-    return array('id' => (string) $value['id'], 'image' => $image);
+
+    $hero = array(
+        'id' => (string) $value['id'],
+        'brand' => trim((string) $value['brand']),
+        'model' => trim((string) $value['model']),
+        'year' => (int) $value['year'],
+        'price' => (float) $value['price'],
+        'image' => $image,
+    );
+    foreach (array(
+        'valor_formatado',
+        'preco_com_troca_formatado',
+        'tag',
+        'marca',
+        'modelo',
+        'placa',
+        'combustivel',
+        'cambio',
+    ) as $field) {
+        if (isset($value[$field]) && $value[$field] !== '') {
+            $hero[$field] = trim((string) $value[$field]);
+        }
+    }
+    if (isset($value['preco_com_troca']) && is_numeric($value['preco_com_troca'])) {
+        $hero['preco_com_troca'] = (float) $value['preco_com_troca'];
+    }
+
+    return array('id' => (string) $value['id'], 'image' => $image, 'hero' => $hero);
 }
 
 $html = @file_get_contents(__DIR__ . '/index.html');
@@ -324,11 +359,17 @@ if ($isHome) {
     $bannerUrl = netcar_get_active_banner_url();
     $hasActiveBanner = $bannerUrl !== null;
     $buildHomeLcp = netcar_get_build_home_lcp();
+    $bannerStateScript = '<script>window.__NETCAR_HOME_HAS_ACTIVE_BANNER__='
+        . ($hasActiveBanner ? 'true' : 'false')
+        . ';</script>';
+    $html = str_replace('</head>', "  {$bannerStateScript}\n  </head>", $html);
     if ($buildHomeLcp !== null) {
-        $heroIdScript = '<script>window.__NETCAR_HOME_LCP_ID__='
+        $heroBootstrapScript = '<script>window.__NETCAR_HOME_LCP_ID__='
             . json_encode($buildHomeLcp['id'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
+            . ';window.__NETCAR_HOME_HERO__='
+            . json_encode($buildHomeLcp['hero'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
             . ';</script>';
-        $html = str_replace('</head>', "  {$heroIdScript}\n  </head>", $html);
+        $html = str_replace('</head>', "  {$heroBootstrapScript}\n  </head>", $html);
     }
     if ($bannerUrl === null && $buildHomeLcp !== null) {
         $bannerUrl = $buildHomeLcp['image'];

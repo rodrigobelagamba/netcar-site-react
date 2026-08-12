@@ -27,8 +27,17 @@ expect(controller.includes("netcar_apply_route_meta"), "metadados por rota não 
 expect(controller.includes("imagesrcset="), "preload responsivo do LCP ausente");
 expect(controller.includes("home-lcp.json"), "fallback de LCP gerado no build ausente");
 expect(controller.includes("__NETCAR_HOME_LCP_ID__"), "LCP não está alinhado entre servidor e React");
+expect(controller.includes("__NETCAR_HOME_HERO__"), "dados iniciais do hero não são entregues ao React");
+expect(
+  controller.includes("__NETCAR_HOME_HAS_ACTIVE_BANNER__"),
+  "estado inicial de banner não é entregue ao React",
+);
 expect(controller.includes('id="netcar-initial-lcp"'), "imagem do LCP ausente do HTML inicial");
 expect(controller.includes("array(480, 768, 960, 1280"), "srcset do servidor diverge do React");
+expect(
+  !htaccess.includes('ExpiresByType text/html "access plus 0 seconds"'),
+  "cache da Home é anulado por max-age=0 do mod_expires",
+);
 expect(initialHtml.includes('href="tel:+555134737900"'), "telefone ausente do HTML inicial");
 expect(initialHtml.includes("https://wa.me/5551997293118"), "WhatsApp ausente do HTML inicial");
 
@@ -39,7 +48,18 @@ for (const path of ["public/404.html", "public/410.html"]) {
   }
 }
 
-expect(existsSync(join(root, "public/seo/home-lcp.json")), "manifesto do LCP da Home ausente");
+const homeLcpManifestPath = "public/seo/home-lcp.json";
+expect(existsSync(join(root, homeLcpManifestPath)), "manifesto do LCP da Home ausente");
+if (existsSync(join(root, homeLcpManifestPath))) {
+  try {
+    const manifest = JSON.parse(read(homeLcpManifestPath));
+    for (const field of ["id", "image", "brand", "model", "year", "price"]) {
+      expect(Boolean(manifest?.[field]), `manifesto do LCP sem ${field}`);
+    }
+  } catch {
+    errors.push("manifesto do LCP da Home inválido");
+  }
+}
 
 for (const path of [
   "public/seo-static/regions-hub.html",

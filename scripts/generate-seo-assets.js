@@ -321,6 +321,23 @@ const homeLcp = homeHeroVehicle
   ? {
       id: String(homeHeroVehicle.id),
       image: normalizeHomeImage(homeHeroVehicle.imagens_site.capa),
+      brand: String(homeHeroVehicle.marca || "").trim(),
+      model: String(homeHeroVehicle.modelo || homeHeroVehicle.name || "").trim(),
+      year: Number(homeHeroVehicle.ano || homeHeroVehicle.year || 0),
+      price: Number(homeHeroVehicle.valor || homeHeroVehicle.price || 0),
+      valor_formatado: String(homeHeroVehicle.valor_formatado || "").trim(),
+      preco_com_troca: Number(homeHeroVehicle.preco_com_troca || 0),
+      preco_com_troca_formatado: String(
+        homeHeroVehicle.preco_com_troca_formatado || "",
+      ).trim(),
+      tag: [homeHeroVehicle.combustivel, homeHeroVehicle.motor]
+        .filter(Boolean)
+        .join(" "),
+      marca: String(homeHeroVehicle.marca || "").trim(),
+      modelo: String(homeHeroVehicle.modelo || "").trim(),
+      placa: String(homeHeroVehicle.placa || "").trim(),
+      combustivel: String(homeHeroVehicle.combustivel || "").trim(),
+      cambio: String(homeHeroVehicle.cambio || "").trim(),
     }
   : null;
 writeTextFile(
