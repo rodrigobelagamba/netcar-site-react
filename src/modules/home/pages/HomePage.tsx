@@ -24,7 +24,33 @@ import {
 import { trackHomeScrollDepth } from "@/lib/analytics";
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
+type InitialHomeLcpImage = {
+  src: string;
+  srcSet?: string;
+  sizes?: string;
+};
+
+function readInitialHomeLcpImage(): InitialHomeLcpImage | null {
+  if (typeof document === "undefined") return null;
+
+  const preload = document.querySelector<HTMLLinkElement>(
+    'link[rel="preload"][as="image"][fetchpriority="high"]',
+  );
+  if (!preload?.href) return null;
+
+  return {
+    src: preload.href,
+    srcSet: preload.getAttribute("imagesrcset") || undefined,
+    sizes: preload.getAttribute("imagesizes") || "100vw",
+  };
+}
+
 function HomeHeroSkeleton() {
+  // O PHP já iniciou o download desta imagem no HTML. Mantê-la visível enquanto
+  // o estoque carrega evita trocar o LCP por um bloco cinza e pintá-lo novamente
+  // apenas depois da consulta à API.
+  const initialLcpImage = readInitialHomeLcpImage();
+
   return (
     <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">
@@ -37,7 +63,23 @@ function HomeHeroSkeleton() {
         </div>
 
         <div className="relative w-full container-main flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
-          <div className="w-full h-[45vh] md:h-[60vh] bg-gray-200 rounded-lg animate-pulse" />
+          {initialLcpImage ? (
+            <img
+              src={initialLcpImage.src}
+              srcSet={initialLcpImage.srcSet}
+              sizes={initialLcpImage.sizes}
+              alt="Carro seminovo em destaque"
+              width={1600}
+              height={900}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              className="w-full h-auto max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125"
+              style={{ mixBlendMode: "multiply" }}
+            />
+          ) : (
+            <div className="w-full h-[45vh] md:h-[60vh] bg-gray-200 rounded-lg animate-pulse" />
+          )}
         </div>
 
         <div className="relative w-full max-w-5xl h-[300px] md:h-[150px] mx-4 mt-8 md:mt-24 z-20">

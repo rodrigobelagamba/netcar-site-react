@@ -166,7 +166,9 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
               key={`${vehicle.id}-image`}
               custom={direction}
               variants={slideVariants}
-              initial="enter"
+              // A primeira imagem já foi antecipada pelo HTML/PHP. Não animá-la
+              // da lateral no mount: o movimento posterga o timestamp do LCP.
+              initial={direction === 0 ? false : "enter"}
               animate="center"
               exit="exit"
               drag="x"
