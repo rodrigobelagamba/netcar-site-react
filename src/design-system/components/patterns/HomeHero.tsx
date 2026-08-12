@@ -198,6 +198,14 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                 if (dx < 10 && dy < 10) handleViewDetails();
               }}
             >
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-1/2 top-[72%] h-10 w-[78%] -translate-x-1/2 rounded-[50%] md:top-[76%] md:h-14 md:w-[68%]"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.08) 44%, rgba(0, 0, 0, 0) 74%)",
+                }}
+              />
               <img 
                 src={optimizeStockImage(vehicle.image || CAR_COVERED_PLACEHOLDER_URL, 1280)}
                 srcSet={stockImageSrcSet(vehicle.image, [480, 768, 960, 1280, 1600])}
@@ -208,7 +216,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                 loading={currentIndex === 0 ? "eager" : "lazy"}
                 decoding="async"
                 {...(currentIndex === 0 && { fetchPriority: "high" as const })}
-                className="w-full h-auto drop-shadow-[0_40px_50px_rgba(0,0,0,0.15)] md:drop-shadow-[0_80px_60px_rgba(0,0,0,0.18)] hover:scale-[1.02] transition-transform duration-700 ease-out max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125 cursor-pointer"
+                className="relative z-10 w-full h-auto hover:scale-[1.02] transition-transform duration-700 ease-out max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125 cursor-pointer"
                 style={{ mixBlendMode: 'multiply' }}
                 draggable={false}
               />
