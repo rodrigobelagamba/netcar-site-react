@@ -23,6 +23,36 @@ define('NETCAR_BANNER_CACHE_TTL', 600);   // 10 min — evita bloquear o HTML a 
 define('NETCAR_BANNER_FAIL_TTL', 60);     // não martelar a API quando ela falhar
 define('NETCAR_BANNER_HTTP_TIMEOUT', 0.20); // fail-fast: manifesto de build cobre a imagem se a API demorar
 
+/**
+ * Coloca o preload crítico no início do head, logo após o charset.
+ * Inserir perto de </head> faz o navegador descobrir a imagem somente depois
+ * dos bundles, CSS e dados inline, desperdiçando boa parte do benefício.
+ */
+function netcar_prepend_critical_head_markup($html, $markup)
+{
+    $count = 0;
+    $result = preg_replace_callback(
+        '#<meta\\b[^>]*\\bcharset=[^ >]+[^>]*>#i',
+        function ($matches) use ($markup) {
+            return $matches[0] . "\n    " . $markup;
+        },
+        $html,
+        1,
+        $count
+    );
+
+    if ($result !== null && $count > 0) {
+        return $result;
+    }
+
+    return preg_replace(
+        '#<head>#i',
+        "<head>\n    " . $markup,
+        $html,
+        1
+    );
+}
+
 /** Normaliza a rota sem aceitar caminho codificado ou traversal. */
 function netcar_request_path()
 {
@@ -595,16 +625,15 @@ $criticalImageByPath = array(
 );
 if (isset($criticalImageByPath[$path])) {
     $criticalImage = $criticalImageByPath[$path];
-    $html = str_replace(
-        '</head>',
-        "  <link rel=\"preload\" as=\"image\" href=\"{$criticalImage['src']}\" imagesrcset=\"{$criticalImage['srcset']}\" imagesizes=\"{$criticalImage['sizes']}\" fetchpriority=\"high\">\n  </head>",
-        $html
+    $html = netcar_prepend_critical_head_markup(
+        $html,
+        "<link rel=\"preload\" as=\"image\" href=\"{$criticalImage['src']}\" imagesrcset=\"{$criticalImage['srcset']}\" imagesizes=\"{$criticalImage['sizes']}\" fetchpriority=\"high\">"
     );
 }
 
 $stockCriticalPreload = netcar_stock_critical_preload($path);
 if ($stockCriticalPreload !== '') {
-    $html = str_replace('</head>', "  {$stockCriticalPreload}\n  </head>", $html);
+    $html = netcar_prepend_critical_head_markup($html, $stockCriticalPreload);
 }
 $stockInitialLcp = netcar_stock_initial_lcp($path);
 if ($stockInitialLcp !== '') {
@@ -651,7 +680,7 @@ if ($isHome) {
             . '" imagesrcset="'
             . $responsiveSrcset
             . '" imagesizes="100vw" fetchpriority="high" />';
-        $html = str_replace('</head>', "  {$preload}\n  </head>", $html);
+        $html = netcar_prepend_critical_head_markup($html, $preload);
         $initialHero = '<div id="netcar-initial-lcp"><img src="'
             . htmlspecialchars($banner1280, ENT_QUOTES, 'UTF-8')
             . '" srcset="'
@@ -667,7 +696,9 @@ if ($modulePreloads !== '') {
     $html = str_replace('</head>', "  {$modulePreloads}\n  </head>", $html);
 }
 if ($stockBootstrapScript !== null) {
-    $html = str_replace('</head>', "  {$stockBootstrapScript}\n  </head>", $html);
+    // O módulo principal só executa depois do parse. No fim do body, os dados
+    // continuam disponíveis a tempo e deixam de atrasar a descoberta do LCP.
+    $html = str_replace('</body>', "  {$stockBootstrapScript}\n  </body>", $html);
 }
 
 header('Content-Type: text/html; charset=UTF-8');

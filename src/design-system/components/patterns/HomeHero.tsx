@@ -107,9 +107,13 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
           className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
           style={{ opacity: 0.04, transform: "scale(1.2)" }}
         >
-          <h2 className="text-[25vw] md:text-[32vw] font-black tracking-tighter whitespace-nowrap leading-none text-center overflow-hidden max-w-full w-full" style={{ color: '#00283C' }}>
+          <div
+            aria-hidden="true"
+            className="text-[25vw] md:text-[32vw] font-black tracking-tighter whitespace-nowrap leading-none text-center overflow-hidden max-w-full w-full"
+            style={{ color: '#00283C' }}
+          >
             {primeiroNomeModelo}
-          </h2>
+          </div>
         </div>
 
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">

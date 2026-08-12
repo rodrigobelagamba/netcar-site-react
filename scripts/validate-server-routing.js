@@ -25,6 +25,18 @@ expect(/\^ficha-cadastral\\\.\(php\|html\?\)\$ - \[G/.test(htaccess), "410 de fi
 expect(controller.includes("netcar_render_error(404)"), "controlador sem 404 real para rota desconhecida");
 expect(controller.includes("netcar_apply_route_meta"), "metadados por rota não são aplicados ao HTML comum");
 expect(controller.includes("imagesrcset="), "preload responsivo do LCP ausente");
+expect(
+  controller.includes("netcar_prepend_critical_head_markup($html, $preload)"),
+  "preload da Home não está priorizado no início do head",
+);
+expect(
+  controller.includes("netcar_prepend_critical_head_markup($html, $stockCriticalPreload)"),
+  "preload do estoque não está priorizado no início do head",
+);
+expect(
+  controller.includes('str_replace(\'</body>\', "  {$stockBootstrapScript}'),
+  "JSON do estoque voltou a bloquear a descoberta da imagem no head",
+);
 expect(controller.includes("home-lcp.json"), "fallback de LCP gerado no build ausente");
 expect(controller.includes("__NETCAR_HOME_LCP_ID__"), "LCP não está alinhado entre servidor e React");
 expect(controller.includes("__NETCAR_HOME_HERO__"), "dados iniciais do hero não são entregues ao React");

@@ -70,7 +70,7 @@ export function IanBot() {
             href={getIanWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="relative overflow-hidden group flex items-center gap-4 bg-secondary hover:opacity-90 text-white font-bold text-[16px] md:text-[18px] px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            className="relative overflow-hidden group flex items-center gap-4 bg-[#00363B] hover:bg-[#005B66] text-white font-bold text-[16px] md:text-[18px] px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             {/* Efeito Espelhamento (Shimmer) */}
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out z-10" />
