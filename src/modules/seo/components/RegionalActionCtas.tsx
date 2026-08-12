@@ -87,8 +87,8 @@ export function RegionalActionCtas({
   const waBtn = cn(
     "inline-flex min-h-[64px] items-center justify-center gap-2.5 rounded-2xl px-5 py-3.5 text-white transition-transform hover:scale-[1.02] sm:min-w-[200px] sm:flex-1",
     primary === "whatsapp"
-      ? "bg-[#25D366] shadow-[0_14px_34px_rgba(37,211,102,0.35)] hover:bg-[#1ebe57]"
-      : "bg-[#25D366] shadow-[0_10px_28px_rgba(37,211,102,0.28)] hover:bg-[#128C7E]",
+      ? "bg-[#087A37] shadow-[0_14px_34px_rgba(8,122,55,0.35)] hover:bg-[#075E54]"
+      : "bg-[#087A37] shadow-[0_10px_28px_rgba(8,122,55,0.28)] hover:bg-[#075E54]",
   );
 
   const sellBtn = cn(

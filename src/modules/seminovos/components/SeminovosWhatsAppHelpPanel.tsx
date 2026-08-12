@@ -44,7 +44,7 @@ export function SeminovosWhatsAppHelpPanel({
             rel="noopener noreferrer"
             data-wa-source="seminovos_midgrid"
             data-wa-intent="stock_help"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-sm font-black text-white shadow-[0_6px_18px_rgba(37,211,102,0.30)]"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#087A37] px-4 py-2.5 text-sm font-black text-white shadow-[0_6px_18px_rgba(8,122,55,0.30)]"
           >
             <MessageCircle className="h-4 w-4" />
             {primaryLabel}
@@ -82,7 +82,7 @@ export function SeminovosWhatsAppHelpPanel({
             rel="noopener noreferrer"
             data-wa-source="seminovos_banner"
             data-wa-intent="stock_help"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-black text-white shadow-[0_6px_18px_rgba(37,211,102,0.30)]"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#087A37] px-4 py-3 text-sm font-black text-white shadow-[0_6px_18px_rgba(8,122,55,0.30)]"
           >
             <MessageCircle className="h-4 w-4" />
             {primaryLabel}

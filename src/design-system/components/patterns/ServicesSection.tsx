@@ -23,7 +23,7 @@ export function ServicesSection() {
   const services: Service[] = [
     {
       title: "Financiamento",
-      image: "/images/financing.png",
+      image: "/images/financing.webp",
       desc: "Financiamento em até 60x ou cartão em até 21x. Compare bancos e financeiras parceiras — sujeito à análise.",
       cta: "Comparar Condições",
       message: "quero simular um financiamento e comparar condições entre os bancos e financeiras parceiras.",
@@ -31,7 +31,7 @@ export function ServicesSection() {
     },
     {
       title: "Venda seu Veículo",
-      image: "/images/vehicle-evaluation.png",
+      image: "/images/vehicle-evaluation.webp",
       desc: "Avaliamos seu veículo na troca. Documentação com despachante credenciado até o DETRAN.",
       cta: "Avaliar Carro",
       message: "tenho interesse em vender meu carro para a Netcar.",
@@ -91,4 +91,3 @@ export function ServicesSection() {
     </section>
   );
 }
-

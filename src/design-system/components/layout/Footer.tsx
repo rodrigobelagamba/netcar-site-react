@@ -16,6 +16,7 @@ import { formatWhatsAppNumber, buildLojaMapsUrl } from "@/lib/formatters";
 import { cityPages, landingPages } from "@/data/seo";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import logoNetcar from "@/assets/images/logo-netcar.png";
+import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
 const menuLinks = [
   { to: "/sobre", label: "Sobre" },
@@ -40,6 +41,8 @@ export function Footer() {
   const { data: addressLoja2 } = useAddressQuery("Loja2");
   const { data: whatsapp } = useWhatsAppQuery();
   const { data: schedule } = useScheduleQuery();
+  const loja1Phone = phoneLoja1?.telefone || "5134737900";
+  const loja2Phone = phoneLoja2?.telefone || "5130333900";
 
   const getFachadaImage = (banners: Array<{ titulo?: string; imagem: string }> | undefined, fallback: string): string => {
     if (!banners || banners.length === 0) return fallback;
@@ -48,8 +51,8 @@ export function Footer() {
     return banners[0]?.imagem || fallback;
   };
 
-  const imagemLoja1 = getFachadaImage(bannersLoja1, "/images/loja1.jpg");
-  const imagemLoja2 = getFachadaImage(bannersLoja2, "/images/loja2.jpg");
+  const imagemLoja1 = getFachadaImage(bannersLoja1, "/images/loja1.webp");
+  const imagemLoja2 = getFachadaImage(bannersLoja2, "/images/loja2.webp");
 
   const formatPhone = (phone?: string) => {
     if (!phone) return "";
@@ -63,6 +66,12 @@ export function Footer() {
     return phone;
   };
 
+  const phoneHref = (phone?: string) => {
+    const digits = phone?.replace(/\D/g, "") ?? "";
+    if (!digits) return "#";
+    return `tel:+${digits.startsWith("55") ? digits : `55${digits}`}`;
+  };
+
   return (
     <footer className="w-full font-sans antialiased text-muted-foreground bg-muted py-0 px-4 md:px-8">
       <section className="container-main w-full bg-white rounded-[32px] shadow-sm border border-white pt-10 pb-8 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
@@ -74,7 +83,11 @@ export function Footer() {
             <img
               src={logoNetcar}
               alt="Netcar"
+              width={149}
+              height={38}
               className="h-8 w-auto object-contain"
+              loading="lazy"
+              decoding="async"
             />
 
             {whatsapp?.numero && (
@@ -82,7 +95,7 @@ export function Footer() {
                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">WhatsApp Vendas</p>
                 <a 
                   href={whatsapp.link || `https://wa.me/${formatWhatsAppNumber(whatsapp.numero)}`} 
-                  className="text-base text-primary font-bold hover:underline"
+                  className="text-base text-[#00616A] font-bold hover:underline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -94,9 +107,9 @@ export function Footer() {
             <div>
               <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Atendimento</p>
               <div className="text-sm font-semibold text-fg space-y-1">
-                <p>Seg a Sex: <span className="text-primary">{schedule?.dias_semana || "9h às 18h"}</span></p>
-                <p>Sábado: <span className="text-amber-500">{schedule?.sabado || "9h às 16h30"}</span></p>
-                <p>Jan-Fev (Sáb): <span className="text-amber-500">9h às 13h30</span></p>
+                <p>Seg a Sex: <span className="text-[#00616A]">{schedule?.dias_semana || "9h às 18h"}</span></p>
+                <p>Sábado: <span className="text-[#8A5200]">{schedule?.sabado || "9h às 16h30"}</span></p>
+                <p>Jan-Fev (Sáb): <span className="text-[#8A5200]">9h às 13h30</span></p>
                 <p className="text-xs text-muted-foreground font-medium pt-1">Não fechamos ao meio-dia</p>
               </div>
             </div>
@@ -125,25 +138,35 @@ export function Footer() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
               {/* Loja 1 */}
+              <article
+                className="group"
+              >
               <a
                 href={buildLojaMapsUrl("Loja1")}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Abrir localização da Loja 1 (Matriz) no Google Maps"
                 title="Abrir no Google Maps"
-                className="group block cursor-pointer hover:opacity-95 transition-opacity"
+                className="block cursor-pointer hover:opacity-95 transition-opacity"
               >
                 <div className="aspect-[16/10] rounded-xl overflow-hidden mb-3 relative">
                   <div className="absolute top-2 left-2 bg-primary/90 backdrop-blur px-2.5 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wide z-10">
                     Matriz
                   </div>
                   <img 
-                    src={imagemLoja1}
+                    src={optimizeStockImage(imagemLoja1, 640)}
+                    srcSet={stockImageSrcSet(imagemLoja1, [320, 480, 640])}
+                    sizes="(max-width: 639px) 100vw, 320px"
+                    width={640}
+                    height={400}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     alt="Loja 1"
                     onError={(e) => {
-                      if (e.currentTarget.src !== "/images/loja1.jpg") {
-                        e.currentTarget.src = "/images/loja1.jpg";
+                      if (!e.currentTarget.src.endsWith("/images/loja1.webp")) {
+                        e.currentTarget.srcset = "";
+                        e.currentTarget.src = "/images/loja1.webp";
                       }
                     }}
                   />
@@ -154,31 +177,48 @@ export function Footer() {
                     __html: addressLoja1.address.replace(/ - /g, "<br/>")
                   }} />
                 )}
-                <p className="text-sm font-semibold text-fg">
-                  {phoneLoja1?.telefone ? formatPhone(phoneLoja1.telefone) : ""}
-                </p>
               </a>
+              {loja1Phone && (
+                <a
+                  href={phoneHref(loja1Phone)}
+                  data-phone-source="footer_store_1"
+                  className="mt-2 inline-flex text-sm font-semibold text-fg hover:text-primary hover:underline"
+                >
+                  {formatPhone(loja1Phone)}
+                </a>
+              )}
+              </article>
 
               {/* Loja 2 */}
+              <article
+                className="group"
+              >
               <a
                 href={buildLojaMapsUrl("Loja2")}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Abrir localização da Loja 2 (Filial) no Google Maps"
                 title="Abrir no Google Maps"
-                className="group block cursor-pointer hover:opacity-95 transition-opacity"
+                className="block cursor-pointer hover:opacity-95 transition-opacity"
               >
                 <div className="aspect-[16/10] rounded-xl overflow-hidden mb-3 relative">
                   <div className="absolute top-2 left-2 bg-amber-500/90 backdrop-blur px-2.5 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wide z-10">
                     Filial
                   </div>
                   <img 
-                    src={imagemLoja2}
+                    src={optimizeStockImage(imagemLoja2, 640)}
+                    srcSet={stockImageSrcSet(imagemLoja2, [320, 480, 640])}
+                    sizes="(max-width: 639px) 100vw, 320px"
+                    width={640}
+                    height={400}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     alt="Loja 2"
                     onError={(e) => {
-                      if (e.currentTarget.src !== "/images/loja2.jpg") {
-                        e.currentTarget.src = "/images/loja2.jpg";
+                      if (!e.currentTarget.src.endsWith("/images/loja2.webp")) {
+                        e.currentTarget.srcset = "";
+                        e.currentTarget.src = "/images/loja2.webp";
                       }
                     }}
                   />
@@ -189,10 +229,17 @@ export function Footer() {
                     __html: addressLoja2.address.replace(/ - /g, "<br/>")
                   }} />
                 )}
-                <p className="text-sm font-semibold text-fg">
-                  {phoneLoja2?.telefone ? formatPhone(phoneLoja2.telefone) : ""}
-                </p>
               </a>
+              {loja2Phone && (
+                <a
+                  href={phoneHref(loja2Phone)}
+                  data-phone-source="footer_store_2"
+                  className="mt-2 inline-flex text-sm font-semibold text-fg hover:text-primary hover:underline"
+                >
+                  {formatPhone(loja2Phone)}
+                </a>
+              )}
+              </article>
 
             </div>
           </div>
@@ -232,6 +279,7 @@ export function Footer() {
             <div className="flex gap-2">
               <a 
                 href="https://instagram.com/netcar_rc" 
+                aria-label="Instagram da Netcar"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 flex items-center justify-center rounded-lg border border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors"
@@ -240,6 +288,7 @@ export function Footer() {
               </a>
               <a 
                 href="https://www.facebook.com/NetcarRC" 
+                aria-label="Facebook da Netcar"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 flex items-center justify-center rounded-lg border border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors"
@@ -257,7 +306,7 @@ export function Footer() {
             <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Seminovos por cidade</h4>
             <Link
               to="/regioes-atendidas"
-              className="text-xs font-semibold text-primary hover:underline"
+              className="text-xs font-semibold text-[#00616A] hover:underline"
             >
               Ver regiões e como funciona
             </Link>
@@ -285,7 +334,7 @@ export function Footer() {
             </h4>
             <Link
               to="/regioes-atendidas"
-              className="text-xs font-semibold text-primary hover:underline"
+              className="text-xs font-semibold text-[#00616A] hover:underline"
             >
               Ver regiões e como funciona
             </Link>
@@ -345,7 +394,7 @@ export function Footer() {
             className="flex-shrink-0 hover:opacity-80 transition-opacity"
           >
              <img 
-               src="/images/selo-sustentabilidade.png" 
+               src="/images/selo-sustentabilidade.webp"
                alt="Selo Sustentabilidade" 
                className="h-16 w-auto object-contain"
                onError={(e) => {

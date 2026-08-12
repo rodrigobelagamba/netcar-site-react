@@ -80,10 +80,10 @@ switch ($page) {
         echo '<p class="intro">Entre em contato para comprar, vender ou financiar seu seminovo em Esteio/RS.</p>';
         echo '<h2>Nossas lojas</h2>';
         echo '<address>';
-        echo '<p><strong>Matriz</strong><br />Av. Presidente Vargas, 740 — Centro — Esteio/RS — CEP 93260-048<br />Tel: (51) 3473-7900</p>';
-        echo '<p><strong>Filial</strong><br />Av. Presidente Vargas, 1106 — Centro — Esteio/RS — CEP 93260-001<br />Tel: (51) 3033-3900</p>';
+        echo '<p><strong>Matriz</strong><br />Av. Presidente Vargas, 740 — Centro — Esteio/RS — CEP 93260-048<br /><a href="tel:+555134737900">Tel: (51) 3473-7900</a></p>';
+        echo '<p><strong>Filial</strong><br />Av. Presidente Vargas, 1106 — Centro — Esteio/RS — CEP 93260-001<br /><a href="tel:+555130333900">Tel: (51) 3033-3900</a></p>';
         echo '</address>';
-        echo '<p>WhatsApp: (51) 99729-3118<br />E-mail: contato@netcarmultimarcas.com.br</p>';
+        echo '<p><a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es.">WhatsApp: (51) 99729-3118</a><br /><a href="mailto:contato@netcarmultimarcas.com.br">E-mail: contato@netcarmultimarcas.com.br</a></p>';
         echo '<p>Horário: Seg–Sex 9h–18h · Sáb 9h–16h30</p>';
         break;
 
@@ -94,7 +94,7 @@ switch ($page) {
         seo_render_head($title, $description, $canonical);
         echo '<h1>Venda seu carro para a Netcar</h1>';
         echo '<p class="intro">Avaliamos e compramos seu veículo em Esteio/RS. Processo rápido, seguro e sem complicações.</p>';
-        echo '<p>WhatsApp: (51) 99729-3118</p>';
+        echo '<p><a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Quero%20avaliar%20meu%20carro%20para%20venda%20ou%20troca%20na%20Netcar.">Avaliar pelo WhatsApp: (51) 99729-3118</a></p>';
         break;
 
     case 'blog':

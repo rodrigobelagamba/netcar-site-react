@@ -11,14 +11,24 @@ import { emptySeminovosSearch } from "@/lib/seminovos-search";
  */
 export function NotFoundRedirect() {
   useEffect(() => {
+    const previousTitle = document.title;
     document.title = "Página não encontrada | Netcar Multimarcas";
     let meta = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    const hadMeta = Boolean(meta);
+    const previousRobots = meta?.content ?? "";
     if (!meta) {
       meta = document.createElement("meta");
       meta.name = "robots";
       document.head.appendChild(meta);
     }
     meta.content = "noindex, nofollow";
+
+    return () => {
+      document.title = previousTitle;
+      if (!meta) return;
+      if (hadMeta) meta.content = previousRobots;
+      else meta.remove();
+    };
   }, []);
 
   return (

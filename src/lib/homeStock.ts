@@ -28,20 +28,15 @@ export function sortHomeStockVehicles(vehicles: Vehicle[]): Vehicle[] {
   return [...highlighted, ...regular];
 }
 
-function shuffleArray<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
-/** Card grande do painel — sorteado a cada carga da Home. */
+/**
+ * Card grande do painel em ordem estável.
+ *
+ * Não sortear aqui: uma escolha aleatória impede o servidor de antecipar a
+ * imagem do LCP e ainda muda o conteúdo principal entre visitas/crawlers.
+ */
 export function pickFeaturedHomeVehicle(vehicles: Vehicle[]): Vehicle | undefined {
   const pool = sortHomeStockVehicles(vehicles);
-  if (pool.length === 0) return undefined;
-  return shuffleArray(pool)[0];
+  return pool[0];
 }
 
 /** Grid "Destaques do estoque" — pode excluir o carro já exibido no painel. */

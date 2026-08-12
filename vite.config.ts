@@ -67,10 +67,8 @@ export default defineConfig({
             return "vendor-embla";
           }
           
-          // Lucide React (muitos ícones)
-          if (id.includes("lucide-react")) {
-            return "vendor-icons";
-          }
+          // Lucide não deve virar um chunk global: cada rota usa poucos ícones.
+          // O chunk único obrigava a home a baixar ícones de páginas ainda não abertas.
           
           // React Hook Form e Zod
           if (id.includes("react-hook-form") || id.includes("/zod/")) {

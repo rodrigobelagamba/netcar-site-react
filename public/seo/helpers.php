@@ -275,7 +275,7 @@ function seo_render_foot()
     </main>
     <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #e5e5e5; color: #666; font-size: 0.9rem;">
         <p>Netcar Multimarcas · Av. Presidente Vargas, 740 e 1106 — Centro, Esteio/RS</p>
-        <p>Tel: (51) 3473-7900 · WhatsApp: (51) 99729-3118 · contato@netcarmultimarcas.com.br</p>
+        <p><a href="tel:+555134737900">Tel: (51) 3473-7900</a> · <a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es.">WhatsApp: (51) 99729-3118</a> · <a href="mailto:contato@netcarmultimarcas.com.br">contato@netcarmultimarcas.com.br</a></p>
     </footer>
 </body>
 </html>

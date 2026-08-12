@@ -246,6 +246,55 @@ export function trackSellEvaluation(
     page_path: pagePath,
     ...getRegionalDimensions(pagePath),
   });
+
+  if (stage === "completed") {
+    pushDataLayer({
+      event: "generate_lead",
+      lead_type: "sell_evaluation",
+      city_name: cityName,
+      page_path: pagePath,
+      ...getRegionalDimensions(pagePath),
+    });
+  }
+}
+
+export function trackPhoneClick(params: {
+  phoneNumber: string;
+  source?: string;
+  pagePath?: string;
+}): void {
+  const pagePath = params.pagePath ?? getPagePath();
+  const traffic = getTrafficSource();
+  pushDataLayer({
+    event: "phone_click",
+    phone_number: params.phoneNumber,
+    phone_source: params.source ?? "link",
+    page_type: inferPageType(pagePath),
+    traffic_source: traffic.src,
+    traffic_campaign: traffic.campaign,
+    page_path: pagePath,
+    ...getRegionalDimensions(pagePath),
+  });
+  if (typeof window.fbq === "function") {
+    window.fbq("track", "Contact", { content_name: "phone_call" });
+  }
+}
+
+export function trackContactFormSubmit(pagePath = getPagePath()): void {
+  const traffic = getTrafficSource();
+  pushDataLayer({
+    event: "contact_form_submit",
+    form_destination: "whatsapp",
+    page_type: inferPageType(pagePath),
+    traffic_source: traffic.src,
+    traffic_campaign: traffic.campaign,
+    page_path: pagePath,
+  });
+  pushDataLayer({
+    event: "generate_lead",
+    lead_type: "contact_form",
+    page_path: pagePath,
+  });
 }
 
 export function trackWhatsAppClick(params: WhatsAppClickParams): void {
@@ -339,6 +388,15 @@ export function initAnalytics(): void {
         trackRegionalCtaClick(regionalAction);
       }
       const href = anchor.href || "";
+      if (href.startsWith("tel:")) {
+        trackPhoneClick({
+          phoneNumber: href.replace(/^tel:/, ""),
+          source:
+            anchor.getAttribute("data-phone-source") ??
+            (anchor.closest("header") ? "header" : anchor.closest("footer") ? "footer" : "content"),
+        });
+        return;
+      }
       if (!/wa\.me|api\.whatsapp\.com/i.test(href)) return;
       // Anexa (M482) no text antes do navegador seguir o link.
       anchor.href = appendWaRefToUrl(href);

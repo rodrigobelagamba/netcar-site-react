@@ -7,8 +7,9 @@ import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatPrice, formatYear } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
 import { buildWhatsAppUrl, homeWhatsAppMessages } from "@/lib/whatsappMessages";
+import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
-const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
+const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
 export interface HomeHeroVehicle {
   id: string;
@@ -196,10 +197,15 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
               }}
             >
               <img 
-                src={vehicle.image || CAR_COVERED_PLACEHOLDER_URL} 
+                src={optimizeStockImage(vehicle.image || CAR_COVERED_PLACEHOLDER_URL, 1280)}
+                srcSet={stockImageSrcSet(vehicle.image, [480, 768, 960, 1280, 1600])}
+                sizes="100vw"
                 alt={vehicle.model}
+                width={1600}
+                height={900}
                 loading={currentIndex === 0 ? "eager" : "lazy"}
-                {...(currentIndex === 0 && { fetchpriority: "high" as any })}
+                decoding="async"
+                {...(currentIndex === 0 && { fetchPriority: "high" as const })}
                 className="w-full h-auto drop-shadow-[0_40px_50px_rgba(0,0,0,0.15)] md:drop-shadow-[0_80px_60px_rgba(0,0,0,0.18)] hover:scale-[1.02] transition-transform duration-700 ease-out max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125 cursor-pointer"
                 style={{ mixBlendMode: 'multiply' }}
                 draggable={false}
@@ -257,7 +263,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                 onClick={handleViewDetails}
               >
                 <Maximize2 className="w-5 h-5 md:w-6 lg:w-8 md:h-6 lg:h-8 mb-0.5 md:mb-2 transition-colors group-hover:text-secondary" style={{ color: '#00283C' }} />
-                <span className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest text-center transition-colors group-hover:text-primary" style={{ color: 'rgba(0, 40, 60, 0.6)' }}>Ver Fotos</span>
+                <span className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest text-center transition-colors group-hover:text-primary" style={{ color: '#365565' }}>Ver Fotos</span>
               </div>
 
               <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center hover:bg-white/40 transition-colors group h-full">
@@ -270,14 +276,12 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                   >
                     <div className="w-1.5 h-1.5 md:w-1.5 lg:w-2 md:h-1.5 lg:h-2 rounded-full shadow-[0_0_12px_rgba(92,210,157,1)]" style={{ backgroundColor: '#5CD29D' }} />
                   </motion.div>
-                  <motion.span 
-                    animate={{ opacity: [1, 0.4, 1] }}
-                    transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
+                  <span
                     className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap"
-                    style={{ color: '#5CD29D' }}
+                    style={{ color: '#0B6B4B' }}
                   >
                     Vistoriado
-                  </motion.span>
+                  </span>
                 </div>
                 {heroWhatsAppHref ? (
                   <a
@@ -288,7 +292,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                     data-wa-intent="vehicle_interest"
                     data-wa-vehicle-id={vehicle.id}
                     data-wa-vehicle-name={heroVehicleLabel}
-                    className="inline-flex items-center gap-1 font-black text-xs md:text-sm lg:text-base whitespace-nowrap text-[#25D366] hover:text-[#128C7E]"
+                    className="inline-flex items-center gap-1 font-black text-xs md:text-sm lg:text-base whitespace-nowrap text-[#087A37] hover:text-[#075E54]"
                   >
                     <MessageCircle className="h-4 w-4" />
                     TENHO INTERESSE
@@ -357,4 +361,3 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
     </div>
   );
 }
-

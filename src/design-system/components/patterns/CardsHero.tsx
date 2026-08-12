@@ -1,6 +1,7 @@
 import { MessageCircle, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
+import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
 interface CardsHeroProps {
   image: string;
@@ -76,8 +77,12 @@ export function CardsHero({
       }`}>
         <div className="!border-0 relative w-full h-full">
           <img 
-            src={image}
+            src={optimizeStockImage(image, compact ? 640 : 960)}
+            srcSet={stockImageSrcSet(image, [320, 480, 640, 768, 960])}
+            sizes={compact ? "(max-width: 767px) 50vw, 25vw" : "(max-width: 767px) 100vw, 25vw"}
             alt={`${brand} ${model}`.trim() || "Veículo seminovo"}
+            width={960}
+            height={640}
             loading={isAboveTheFold ? "eager" : "lazy"}
             fetchPriority={delay === 0 ? "high" : "auto"}
             decoding="async"
@@ -148,7 +153,7 @@ export function CardsHero({
                  </p>
                  <div className="flex flex-col items-start leading-none gap-0.5">
                    <span className="!border-0 text-[11px] font-semibold uppercase text-gray-400">Para:</span>
-                   <p className="!border-0 font-bold font-sans tracking-tight text-base leading-tight short1600:text-sm" style={{ color: '#5CD29D' }}>
+                   <p className="!border-0 font-bold font-sans tracking-tight text-base leading-tight short1600:text-sm" style={{ color: '#0B6B4B' }}>
                      {price}
                    </p>
                  </div>
@@ -156,7 +161,7 @@ export function CardsHero({
              ) : (
                <p className={`!border-0 font-bold font-sans tracking-tight leading-tight ${
                  compact ? "text-sm" : "text-[24px] short1600:text-xl"
-               }`} style={{ color: '#5CD29D' }}>
+               }`} style={{ color: '#0B6B4B' }}>
                  {price}
                </p>
              )}
@@ -180,7 +185,7 @@ export function CardsHero({
                data-wa-vehicle-id={whatsAppVehicleId}
                data-wa-vehicle-name={whatsAppVehicleName}
                onClick={(e) => e.stopPropagation()}
-               className={`!border-0 inline-flex w-full items-center justify-center gap-1 rounded-full bg-[#25D366] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#128C7E] ${
+               className={`!border-0 inline-flex w-full items-center justify-center gap-1 rounded-full bg-[#087A37] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#075E54] ${
                  compact
                    ? "h-9 px-2 text-[9px] tracking-normal whitespace-nowrap"
                    : "h-10 px-3 text-[11px] tracking-wide short1600:h-9 short1600:text-[10px] short1600:whitespace-nowrap"
@@ -217,7 +222,7 @@ export function CardsHero({
 
            {/* Mobile compact: links curtos */}
            {!isSold && compact && whatsAppHref && (tradeInHref || financeHref) ? (
-             <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold leading-none">
+             <div className="flex items-center justify-center gap-1 text-[9px] font-bold leading-none">
                {tradeInHref ? (
                  <a
                    href={tradeInHref}
@@ -228,7 +233,7 @@ export function CardsHero({
                    data-wa-vehicle-id={whatsAppVehicleId}
                    data-wa-vehicle-name={whatsAppVehicleName}
                    onClick={(e) => e.stopPropagation()}
-                   className="text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D]"
+                   className="inline-flex min-h-6 items-center px-1 text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#0B6B4B]"
                  >
                    Troca →
                  </a>
@@ -246,7 +251,7 @@ export function CardsHero({
                    data-wa-vehicle-id={whatsAppVehicleId}
                    data-wa-vehicle-name={whatsAppVehicleName}
                    onClick={(e) => e.stopPropagation()}
-                   className="text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D]"
+                   className="inline-flex min-h-6 items-center px-1 text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#0B6B4B]"
                  >
                   Simular →
                  </a>

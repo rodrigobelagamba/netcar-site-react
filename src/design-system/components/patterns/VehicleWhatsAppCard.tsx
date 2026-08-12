@@ -50,7 +50,7 @@ export function VehicleWhatsAppCard({
         data-wa-intent="vehicle_inquiry"
         data-wa-vehicle-id={vehicle.id}
         data-wa-vehicle-name={vehicle.label}
-        className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#25D366] px-3 py-2 text-xs font-black text-white shadow-[0_4px_12px_rgba(37,211,102,0.28)] transition-colors hover:bg-[#128C7E] md:gap-2 md:rounded-xl md:px-4 md:py-2.5 md:text-sm md:shadow-[0_6px_18px_rgba(37,211,102,0.30)]"
+        className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#087A37] px-3 py-2 text-xs font-black text-white shadow-[0_4px_12px_rgba(8,122,55,0.28)] transition-colors hover:bg-[#075E54] md:gap-2 md:rounded-xl md:px-4 md:py-2.5 md:text-sm md:shadow-[0_6px_18px_rgba(8,122,55,0.30)]"
       >
         <MessageCircle className="h-3.5 w-3.5 md:h-4 md:w-4" />
         {ctaLabel}

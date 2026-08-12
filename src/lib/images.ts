@@ -34,3 +34,19 @@ export function optimizeStockImage(url: string | null | undefined, width = 1600)
     return url;
   }
 }
+
+/** Cria variantes responsivas apenas quando o proxy realmente altera a URL. */
+export function stockImageSrcSet(
+  url: string | null | undefined,
+  widths: number[] = [480, 768, 1280, 1920],
+): string | undefined {
+  if (!url) return undefined;
+  const variants = widths.map((width) => ({
+    width,
+    url: optimizeStockImage(url, width),
+  }));
+  if (new Set(variants.map((variant) => variant.url)).size <= 1) {
+    return undefined;
+  }
+  return variants.map((variant) => `${variant.url} ${variant.width}w`).join(", ");
+}

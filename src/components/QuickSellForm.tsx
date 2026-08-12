@@ -66,6 +66,8 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
         <input
+          name="vehicle-model"
+          autoComplete="off"
           type="text"
           value={modelo}
           onChange={(e) => setModelo(e.target.value)}
@@ -75,6 +77,8 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
           className={inputClass}
         />
         <input
+          name="vehicle-year"
+          autoComplete="off"
           type="text"
           inputMode="numeric"
           value={ano}
@@ -85,6 +89,8 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
           className={inputClass}
         />
         <input
+          name="vehicle-mileage"
+          autoComplete="off"
           type="text"
           inputMode="numeric"
           value={km}

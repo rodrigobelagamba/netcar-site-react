@@ -1,13 +1,13 @@
 import { RouterProvider as TanStackRouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "../router/routes";
 import { getBasePath } from "@/lib/base-path";
-import { NotFound } from "../router/routes";
+import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 
 // Cria o router com basepath configurado
 const router = createRouter({
   routeTree,
   basepath: getBasePath(),
-  defaultNotFoundComponent: NotFound,
+  defaultNotFoundComponent: NotFoundRedirect,
   defaultErrorComponent: ({ error }) => (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-4">
       <h1 className="mb-4 text-4xl font-bold text-destructive">Erro</h1>

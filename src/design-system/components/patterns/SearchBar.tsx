@@ -756,8 +756,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
           <button 
             key={filter} 
             onClick={() => handleQuickFilterClick(filter)}
-            className="px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-gray-100 text-[11px] font-bold uppercase tracking-widest text-primary/60 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 active:scale-95"
-            style={{ color: 'rgba(0, 40, 60, 0.6)' }}
+            className="px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-gray-100 text-[11px] font-bold uppercase tracking-widest text-[#365565] hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 active:scale-95"
           >
             {filter}
           </button>
@@ -889,8 +888,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
           <button 
             key={filter} 
             onClick={() => handleQuickFilterClick(filter)}
-            className="px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-gray-100 text-[11px] font-bold uppercase tracking-widest text-primary/60 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 active:scale-95"
-            style={{ color: 'rgba(0, 40, 60, 0.6)' }}
+            className="px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-gray-100 text-[11px] font-bold uppercase tracking-widest text-[#365565] hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 active:scale-95"
           >
             {filter}
           </button>
@@ -906,7 +904,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
             rel="noopener noreferrer"
             data-wa-source="searchbar_notfound"
             data-wa-intent="similar_options"
-            className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-bold text-white shadow-lg transition-colors hover:bg-[#128C7E]"
+            className="inline-flex items-center gap-2 rounded-full bg-[#087A37] px-5 py-2.5 text-sm font-bold text-white shadow-lg transition-colors hover:bg-[#075E54]"
           >
             <MessageCircle className="h-4 w-4" />
             Não achou? Receba opções no WhatsApp
@@ -916,4 +914,3 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     </section>
   );
 }
-

@@ -38,8 +38,8 @@ export function SobrePage() {
     return fachada?.imagem || banners[0]?.imagem || "";
   };
 
-  const loja1Image = getFachadaImage(bannersLoja1) || "/images/loja1.jpg";
-  const loja2Image = getFachadaImage(bannersLoja2) || "/images/loja2.jpg";
+  const loja1Image = getFachadaImage(bannersLoja1) || "/images/loja1.webp";
+  const loja2Image = getFachadaImage(bannersLoja2) || "/images/loja2.webp";
 
   // Extrai todas as imagens das lojas (todas as fotos, exceto a fachada principal que já está no card)
   const getAllLojaImages = (banners?: Array<{ titulo?: string; imagem: string }>) => {
@@ -182,11 +182,11 @@ export function SobrePage() {
                 <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 p-2">
                   <div className="w-full h-full rounded-full bg-white p-2 shadow-xl overflow-hidden">
                     <img 
-                      src={loja1Image || "/images/loja1.jpg"}
+                      src={loja1Image || "/images/loja1.webp"}
                       alt="Netcar Multimarcas"
                       className="w-full h-full rounded-full object-cover"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/images/loja1.jpg";
+                        (e.target as HTMLImageElement).src = "/images/loja1.webp";
                       }}
                     />
                   </div>
@@ -308,7 +308,7 @@ export function SobrePage() {
                   alt="Fachada da Loja 1"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
-                    e.currentTarget.src = "/images/loja1.jpg";
+                    e.currentTarget.src = "/images/loja1.webp";
                   }}
                 />
               </div>
@@ -318,7 +318,7 @@ export function SobrePage() {
                   alt="Miniatura Loja 2"
                   className="w-full h-full object-cover transition-opacity duration-500"
                   onError={(e) => {
-                    e.currentTarget.src = "/images/loja2.jpg";
+                    e.currentTarget.src = "/images/loja2.webp";
                   }}
                 />
               </div>
@@ -350,7 +350,7 @@ export function SobrePage() {
                   alt="Fachada da Loja 2"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
-                    e.currentTarget.src = "/images/loja2.jpg";
+                    e.currentTarget.src = "/images/loja2.webp";
                   }}
                 />
               </div>
@@ -360,7 +360,7 @@ export function SobrePage() {
                   alt="Miniatura Loja 1"
                   className="w-full h-full object-cover transition-opacity duration-500"
                   onError={(e) => {
-                    e.currentTarget.src = "/images/loja1.jpg";
+                    e.currentTarget.src = "/images/loja1.webp";
                   }}
                 />
               </div>

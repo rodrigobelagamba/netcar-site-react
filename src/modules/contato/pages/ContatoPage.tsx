@@ -16,7 +16,7 @@ import {
   useScheduleQuery
 } from "@/catalog";
 import { buildWhatsAppUrl, contactFormWhatsAppMessage, resolveSiteWhatsAppMessage } from "@/lib/whatsappMessages";
-import { openWhatsApp } from "@/lib/analytics";
+import { openWhatsApp, trackContactFormSubmit } from "@/lib/analytics";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 
@@ -40,6 +40,8 @@ export function ContatoPage() {
   const { data: addressLoja2 } = useAddressQuery("Loja2");
   const { data: whatsapp } = useWhatsAppQuery();
   const { data: schedule } = useScheduleQuery();
+  const loja1Phone = phoneLoja1?.telefone || "5134737900";
+  const loja2Phone = phoneLoja2?.telefone || "5130333900";
 
   const formatPhone = (phone?: string) => {
     if (!phone) return "";
@@ -51,6 +53,12 @@ export function ContatoPage() {
       return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
     }
     return phone;
+  };
+
+  const phoneHref = (phone?: string) => {
+    const digits = phone?.replace(/\D/g, "") ?? "";
+    if (!digits) return "#";
+    return `tel:+${digits.startsWith("55") ? digits : `55${digits}`}`;
   };
 
   const getWhatsAppLink = () => {
@@ -68,6 +76,7 @@ export function ContatoPage() {
     }
     const message = contactFormWhatsAppMessage(formData);
     const whatsappUrl = buildWhatsAppUrl(whatsapp.numero, message);
+    trackContactFormSubmit();
     openWhatsApp(whatsappUrl, { source: "contato", intent: "contact_form" });
   };
 
@@ -105,11 +114,12 @@ export function ContatoPage() {
             WhatsApp
           </a>
           <a
-            href={phoneLoja1?.telefone ? `tel:${phoneLoja1.telefone.replace(/\D/g, "")}` : "#"}
+            href={phoneHref(loja1Phone)}
+            data-phone-source="contact_quick_action"
             className="inline-flex items-center gap-3 bg-bg text-fg px-8 py-4 rounded-full font-semibold hover:bg-surface transition-colors shadow-lg"
           >
             <Phone className="w-5 h-5 text-primary" />
-            {phoneLoja1?.telefone ? formatPhone(phoneLoja1.telefone) : ""}
+            {formatPhone(loja1Phone)}
           </a>
           <a
             href="mailto:contato@netcarmultimarcas.com.br"
@@ -136,8 +146,11 @@ export function ContatoPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-fg mb-2">Nome</label>
+                  <label htmlFor="contact-name" className="block text-sm font-medium text-fg mb-2">Nome</label>
                   <input
+                    id="contact-name"
+                    name="name"
+                    autoComplete="name"
                     type="text"
                     required
                     value={formData.nome}
@@ -147,8 +160,12 @@ export function ContatoPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-fg mb-2">Telefone</label>
+                  <label htmlFor="contact-phone" className="block text-sm font-medium text-fg mb-2">Telefone</label>
                   <input
+                    id="contact-phone"
+                    name="phone"
+                    autoComplete="tel"
+                    inputMode="tel"
                     type="tel"
                     required
                     value={formData.telefone}
@@ -160,8 +177,11 @@ export function ContatoPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-fg mb-2">E-mail</label>
+                <label htmlFor="contact-email" className="block text-sm font-medium text-fg mb-2">E-mail</label>
                 <input
+                  id="contact-email"
+                  name="email"
+                  autoComplete="email"
                   type="email"
                   required
                   value={formData.email}
@@ -172,8 +192,11 @@ export function ContatoPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-fg mb-2">Assunto</label>
+                <label htmlFor="contact-subject" className="block text-sm font-medium text-fg mb-2">Assunto</label>
                 <input
+                  id="contact-subject"
+                  name="subject"
+                  autoComplete="off"
                   type="text"
                   required
                   value={formData.assunto}
@@ -184,8 +207,10 @@ export function ContatoPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-fg mb-2">Mensagem</label>
+                <label htmlFor="contact-message" className="block text-sm font-medium text-fg mb-2">Mensagem</label>
                 <textarea
+                  id="contact-message"
+                  name="message"
                   required
                   rows={3}
                   value={formData.mensagem}
@@ -223,6 +248,7 @@ export function ContatoPage() {
               
               <div className="space-y-6">
                 {addressLoja1?.address && (
+                  <div>
                   <a
                     href="https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
                     target="_blank"
@@ -233,15 +259,23 @@ export function ContatoPage() {
                     <p className="text-muted-foreground text-sm" dangerouslySetInnerHTML={{
                       __html: addressLoja1.address.replace(/ - /g, "<br/>")
                     }} />
-                    {phoneLoja1?.telefone && (
-                      <p className="text-primary text-sm font-medium mt-1">{formatPhone(phoneLoja1.telefone)}</p>
-                    )}
                   </a>
+                  {loja1Phone && (
+                    <a
+                      href={phoneHref(loja1Phone)}
+                      data-phone-source="contact_store_1"
+                      className="mt-1 inline-flex text-primary text-sm font-medium hover:underline"
+                    >
+                      {formatPhone(loja1Phone)}
+                    </a>
+                  )}
+                  </div>
                 )}
 
                 <div className="h-px bg-border" />
 
                 {addressLoja2?.address && (
+                  <div>
                   <a
                     href="https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
                     target="_blank"
@@ -252,10 +286,17 @@ export function ContatoPage() {
                     <p className="text-muted-foreground text-sm" dangerouslySetInnerHTML={{
                       __html: addressLoja2.address.replace(/ - /g, "<br/>")
                     }} />
-                    {phoneLoja2?.telefone && (
-                      <p className="text-primary text-sm font-medium mt-1">{formatPhone(phoneLoja2.telefone)}</p>
-                    )}
                   </a>
+                  {loja2Phone && (
+                    <a
+                      href={phoneHref(loja2Phone)}
+                      data-phone-source="contact_store_2"
+                      className="mt-1 inline-flex text-primary text-sm font-medium hover:underline"
+                    >
+                      {formatPhone(loja2Phone)}
+                    </a>
+                  )}
+                  </div>
                 )}
               </div>
             </div>

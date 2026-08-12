@@ -78,6 +78,8 @@ export function CompraPage() {
               <div className="flex flex-wrap items-center gap-4">
                 <motion.a
                   href={getIanWhatsAppLink()}
+                  data-wa-source="form"
+                  data-wa-intent="sell_evaluation_start"
                   target="_blank"
                   rel="noopener noreferrer"
                   initial={{ opacity: 0, y: 10 }}
@@ -111,7 +113,7 @@ export function CompraPage() {
                 <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 p-2">
                   <div className="w-full h-full rounded-full bg-white p-2 shadow-xl">
                     <img 
-                      src="/images/IMG_8886.JPG"
+                      src="/images/ian.webp"
                       alt="iAN - Assistente Virtual"
                       className="w-full h-full rounded-full object-cover"
                       onError={(e) => {
@@ -244,7 +246,7 @@ export function CompraPage() {
                   <div className="relative w-20 h-20 mx-auto mb-4">
                     <div className="w-20 h-20 rounded-full bg-white p-1 shadow-lg border border-gray-100">
                       <img 
-                        src="/images/IMG_8886.JPG"
+                        src="/images/ian.webp"
                         alt="iAN - Assistente Virtual"
                         className="w-full h-full rounded-full object-cover"
                         onError={(e) => {
@@ -264,6 +266,8 @@ export function CompraPage() {
 
                 <a
                   href={getIanWhatsAppLink()}
+                  data-wa-source="form"
+                  data-wa-intent="sell_evaluation_help"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cn(
@@ -307,6 +311,8 @@ export function CompraPage() {
             <div className="flex flex-wrap gap-4 justify-center">
               <a
                 href={getIanWhatsAppLink()}
+                data-wa-source="form"
+                data-wa-intent="sell_evaluation_final"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(

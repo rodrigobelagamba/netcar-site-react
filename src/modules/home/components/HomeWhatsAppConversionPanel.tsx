@@ -21,8 +21,9 @@ import {
   homeWhatsAppMessages,
   vehicleWhatsAppMessages,
 } from "@/lib/whatsappMessages";
+import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
-const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
+const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
 interface HomeWhatsAppConversionPanelProps {
   featuredVehicle?: Vehicle;
@@ -170,7 +171,7 @@ export function HomeWhatsAppConversionPanel({
               className={`inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-base font-black shadow-[0_14px_34px_rgba(92,210,157,0.28)] transition-transform hover:scale-[1.02] ${
                 ctaDisabled
                   ? "pointer-events-none bg-white/20 text-white/60"
-                  : "bg-[#25D366] text-white"
+                  : "bg-[#087A37] text-white"
               }`}
             >
               <MessageCircle className="h-5 w-5" />
@@ -200,7 +201,7 @@ export function HomeWhatsAppConversionPanel({
               className={`inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-4 text-base font-black shadow-[0_14px_34px_rgba(92,210,157,0.28)] transition-transform hover:scale-[1.02] ${
                 ctaDisabled
                   ? "pointer-events-none bg-white/20 text-white/60"
-                  : "bg-[#25D366] text-white"
+                  : "bg-[#087A37] text-white"
               }`}
             >
               <MessageCircle className="h-5 w-5" />
@@ -300,10 +301,15 @@ export function HomeWhatsAppConversionPanel({
             className="mt-4 block w-full overflow-hidden rounded-2xl bg-[#F6F6F6] p-2 transition-transform hover:scale-[1.01]"
           >
             <img
-              src={image}
+              src={optimizeStockImage(image, 768)}
+              srcSet={stockImageSrcSet(image, [480, 640, 768, 960])}
+              sizes="(min-width: 768px) 45vw, 100vw"
               alt={label}
+              width={960}
+              height={640}
               className="mx-auto h-56 w-full object-contain drop-shadow-[0_24px_28px_rgba(0,0,0,0.16)] md:h-64"
               loading="eager"
+              decoding="async"
             />
           </button>
 
@@ -346,7 +352,7 @@ export function HomeWhatsAppConversionPanel({
                 data-wa-intent="featured_card_whatsapp"
                 data-wa-vehicle-id={featuredVehicle?.id}
                 data-wa-vehicle-name={label}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-black text-white"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#087A37] px-4 py-3 text-sm font-black text-white"
               >
                 <MessageCircle className="h-4 w-4" />
                 Tenho interesse

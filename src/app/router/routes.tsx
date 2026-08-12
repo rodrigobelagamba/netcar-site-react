@@ -2,14 +2,13 @@ import {
   createRootRoute,
   createRoute,
   Outlet,
-  useNavigate,
 } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouterState } from "@tanstack/react-router";
 import { Suspense, useEffect } from "react";
 import { lazyWithRetry } from "@/lib/lazyWithRetry";
 import { Header } from "@/design-system/components/layout/Header";
-import { Footer } from "@/design-system/components/layout/Footer";
+import { LazyFooter } from "@/design-system/components/layout/LazyFooter";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { trackPageView } from "@/lib/analytics";
@@ -21,6 +20,7 @@ import {
 import { SchemaOrg } from "@/components/seo/SchemaOrg";
 import { PageLoader } from "@/components/layout/PageLoader";
 import { getCityPage, getLandingPage } from "@/data/seo";
+import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 
 const HomePage = lazyWithRetry(() =>
   import("@/modules/home/pages/HomePage").then((m) => ({ default: m.HomePage }))
@@ -300,7 +300,7 @@ function RootComponent() {
       </div>
       {!isLaudoPage ? (
         <div className="print:hidden">
-          <Footer />
+          <LazyFooter />
           <WhatsAppButton />
         </div>
       ) : null}
@@ -308,35 +308,9 @@ function RootComponent() {
   );
 }
 
-// Componente para página não encontrada - redireciona automaticamente para home
-function NotFound() {
-  const navigate = useNavigate();
-  
-  useEffect(() => {
-    // Redireciona automaticamente para a home após um pequeno delay
-    const timer = setTimeout(() => {
-      navigate({ to: "/" });
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, [navigate]);
-  
-  return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center px-4">
-      <h1 className="mb-4 text-4xl font-bold text-primary">404</h1>
-      <p className="mb-8 text-lg text-muted-foreground">
-        Página não encontrada
-      </p>
-      <p className="text-sm text-muted-foreground">
-        Redirecionando para a página inicial...
-      </p>
-    </div>
-  );
-}
-
 const rootRoute = createRootRoute({
   component: RootComponent,
-  notFoundComponent: NotFound,
+  notFoundComponent: NotFoundRedirect,
 });
 
 const indexRoute = createRoute({
@@ -503,9 +477,6 @@ export const routeTree = rootRoute.addChildren([
   comparadorRoute,
   regionsHubRoute,
 ]);
-
-// Exporta NotFound para uso no RouterProvider
-export { NotFound };
 
 // O router será criado dinamicamente no RouterProvider
 // Isso permite detectar o basepath corretamente após o DOM estar pronto

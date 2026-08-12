@@ -277,6 +277,43 @@ async function fetchStock() {
 
 const stock = await fetchStock();
 
+function byHomePriority(a, b) {
+  const destaqueDiff = Number(b?.destaque === 1) - Number(a?.destaque === 1);
+  if (destaqueDiff !== 0) return destaqueDiff;
+  return (Number(b?.id) || 0) - (Number(a?.id) || 0);
+}
+
+function hasHomePhoto(vehicle) {
+  const temFotos = vehicle?.imagens_site?.tem_fotos;
+  return Number(vehicle?.valor) > 0 && temFotos !== 0 && temFotos !== undefined;
+}
+
+function normalizeHomeImage(raw) {
+  if (!raw) return "";
+  const normalized = String(raw).trim().replace(/\\/g, "/").replace(/^\.\/+/, "");
+  if (/^https?:\/\//i.test(normalized)) return normalized.replace(/^http:/i, "https:");
+  return `/${normalized.replace(/^\/+/, "")}`;
+}
+
+// Mantém o primeiro carro da Home estável e grava a imagem para o PHP iniciar
+// seu download no HTML, antes de React e da consulta de estoque.
+const orderedHomeStock = stock.filter(hasHomePhoto).sort(byHomePriority);
+const featuredHomeVehicle = orderedHomeStock[0];
+const homeHeroVehicle = orderedHomeStock
+  .filter((vehicle) => String(vehicle.id) !== String(featuredHomeVehicle?.id || ""))
+  .filter((vehicle) => Number(vehicle.valor) > 80000)
+  .filter((vehicle) => /\.png(?:$|[?#])/i.test(String(vehicle?.imagens_site?.capa || "")))[0];
+const homeLcp = homeHeroVehicle
+  ? {
+      id: String(homeHeroVehicle.id),
+      image: normalizeHomeImage(homeHeroVehicle.imagens_site.capa),
+    }
+  : null;
+writeTextFile(
+  join(publicDir, "seo", "home-lcp.json"),
+  `${JSON.stringify(homeLcp, null, 2)}\n`
+);
+
 function titleCase(text) {
   return String(text || "")
     .toLowerCase()
@@ -387,7 +424,10 @@ function pageShell({ title, description, canonical, body, schemas = [], ogImage 
     </nav>
   </header>
   <main>${body}</main>
-  <footer><p>Netcar Multimarcas — Av. Presidente Vargas, Esteio/RS</p></footer>
+  <footer>
+    <p>Netcar Multimarcas — Av. Presidente Vargas, 740 e 1106, Esteio/RS</p>
+    <p><a href="tel:+555134737900">Ligar: (51) 3473-7900</a> · <a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es.">WhatsApp: (51) 99729-3118</a></p>
+  </footer>
 </body>
 </html>`;
 }

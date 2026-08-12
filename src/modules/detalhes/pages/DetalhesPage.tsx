@@ -57,7 +57,7 @@ const ANIMATION_DURATION = {
 } as const;
 
 // Constantes de imagem
-const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
+const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
 
 type BadgeVariant = "icheck" | "garantia" | "baixa-km" | "green-dark";
@@ -322,7 +322,7 @@ function ContactButton({
               textColor="text-white"
               hoverBgColor="bg-green-dark"
               filled
-              className="w-full info-contact-button-wrapper !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.3)]"
+              className="w-full info-contact-button-wrapper !bg-[#087A37] !border-[#087A37] shadow-[0_8px_24px_rgba(8,122,55,0.3)]"
               initialAnimation={true}
               href={href}
               waSource="hero"
@@ -447,7 +447,7 @@ function DetalheFloatingWhatsApp({
   if (!ready || vehicleId == null || !priceLabel) return null;
 
   const href = buildWhatsAppUrl(whatsapp!.numero, messages.info);
-  const cardImage = image || "/images/semcapa.png";
+  const cardImage = image || "/images/semcapa.webp";
 
   return (
     <FloatingPortal>
@@ -638,7 +638,7 @@ function WhatsAppQuickAction({
       whileTap={{ scale: 0.98 }}
       className="group flex items-center gap-3 rounded-2xl border border-[#00283C]/[0.06] bg-[#FAFCFB] px-3 py-3 shadow-[0_1px_2px_rgba(0,40,60,0.04)] transition-all hover:border-[#25D366]/35 hover:bg-[#25D366]/[0.06] hover:shadow-[0_4px_14px_rgba(37,211,102,0.12)]"
     >
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_3px_10px_rgba(37,211,102,0.28)] transition-transform group-hover:scale-105">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#087A37] text-white shadow-[0_3px_10px_rgba(8,122,55,0.28)] transition-transform group-hover:scale-105">
         <Icon className="h-4 w-4" />
       </span>
       <span className="text-left text-[13px] font-semibold leading-tight text-[#00283C] group-hover:text-green-dark">
@@ -912,7 +912,7 @@ function CTASidebar({
                   textColor="text-white"
                   hoverBgColor="bg-green-dark"
                   filled
-                  className="w-full !bg-[#25D366] !border-[#25D366] shadow-[0_8px_24px_rgba(37,211,102,0.35)]"
+                  className="w-full !bg-[#087A37] !border-[#087A37] shadow-[0_8px_24px_rgba(8,122,55,0.35)]"
                   href={primaryWhatsAppHref}
                   waSource="sidebar_primary"
                   waIntent="similar_vehicle"

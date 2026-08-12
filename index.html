@@ -100,30 +100,18 @@
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#6cc4ca" />
 
-    <!-- Conteúdo SEO estático da home (injetado pelo index.php): fora do #root, invisível com JS -->
+    <!-- Shell mínimo do primeiro paint; o React o substitui ao montar. -->
     <style>
-      #netcar-seo-prerender {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-      }
-      noscript #netcar-seo-prerender {
-        position: static;
-        width: auto;
-        height: auto;
-        margin: 0;
-        padding: 1rem 1.25rem;
-        overflow: visible;
-        clip: auto;
-        white-space: normal;
-        max-width: 48rem;
-      }
+      #netcar-initial-shell{box-sizing:border-box;display:flex;min-height:100vh;flex-direction:column;background:#f6f6f6;color:#00283c;font-family:Arial,sans-serif}
+      #netcar-initial-shell header{display:flex;height:64px;align-items:center;justify-content:space-between;background:#fff;padding:0 20px}
+      #netcar-initial-shell strong{font-size:18px}
+      #netcar-initial-shell main{display:grid;flex:1;place-content:center;padding:24px;text-align:center}
+      #netcar-initial-lcp{display:flex;min-height:260px;align-items:center;justify-content:center}
+      #netcar-initial-lcp img{display:block;width:min(100%,760px);height:auto;max-height:54vh;object-fit:contain}
+      #netcar-initial-shell p{color:#52616b}
+      #netcar-initial-shell nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:16px}
+      #netcar-initial-shell a{border:1px solid #00283c;border-radius:999px;color:#00283c;font-weight:700;padding:10px 16px;text-decoration:none}
+      #netcar-initial-shell a:first-child{background:#087a37;border-color:#087a37;color:#fff}
     </style>
     
     <!-- Meta tags padrão (atualizadas dinamicamente pelo React em cada rota) -->
@@ -257,11 +245,12 @@
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M8MZRTL9"
+    <noscript><iframe title="Google Tag Manager" src="https://www.googletagmanager.com/ns.html?id=GTM-M8MZRTL9"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <noscript>
       <img
+        alt=""
         height="1"
         width="1"
         style="display:none"
@@ -269,7 +258,22 @@
       />
     </noscript>
     
-    <div id="root"></div>
+    <div id="root">
+      <div id="netcar-initial-shell" role="status" aria-live="polite">
+        <header><strong>Netcar Multimarcas</strong><span>Esteio/RS</span></header>
+        <main>
+          <div>
+            <div id="netcar-initial-lcp"></div>
+            <p>Carregando estoque e condições atualizadas…</p>
+            <nav aria-label="Contato rápido">
+              <a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es.">WhatsApp</a>
+              <a href="tel:+555134737900">Ligar para a loja</a>
+              <a href="/seminovos">Ver seminovos</a>
+            </nav>
+          </div>
+        </main>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

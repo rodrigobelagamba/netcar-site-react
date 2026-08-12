@@ -48,7 +48,7 @@ export function HomeMobileWhatsAppBar({
               rel="noopener noreferrer"
               data-wa-source={sourceCold}
               data-wa-intent="vehicle_interest"
-              className="flex items-center justify-center gap-1 rounded-lg bg-[#25D366] px-1.5 py-2 text-[11px] font-black leading-none text-white shadow-[0_4px_12px_rgba(37,211,102,0.28)] md:gap-1.5 md:rounded-xl md:px-2 md:py-2.5 md:text-sm md:shadow-[0_6px_18px_rgba(37,211,102,0.30)]"
+              className="flex items-center justify-center gap-1 rounded-lg bg-[#087A37] px-1.5 py-2 text-[11px] font-black leading-none text-white shadow-[0_4px_12px_rgba(8,122,55,0.28)] md:gap-1.5 md:rounded-xl md:px-2 md:py-2.5 md:text-sm md:shadow-[0_6px_18px_rgba(8,122,55,0.30)]"
             >
               <MessageCircle className="h-3 w-3 shrink-0 md:h-3.5 md:w-3.5" />
               <span className="truncate">{coldCtaLabel}</span>

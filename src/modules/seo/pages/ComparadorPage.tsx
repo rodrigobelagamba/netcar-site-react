@@ -165,7 +165,7 @@ export function ComparadorPage() {
               {filtered.map((v) => {
                 const isSel = selected.includes(v.id);
                 const full = selected.length >= MAX_COMPARE && !isSel;
-                const cover = v.imagens_site?.capa_thumb || v.images?.[0] || "/images/loja1.jpg";
+                const cover = v.imagens_site?.capa_thumb || v.images?.[0] || "/images/loja1.webp";
                 return (
                   <button
                     key={v.id}
@@ -183,7 +183,7 @@ export function ComparadorPage() {
                         alt={`${v.marca} ${v.modelo}`}
                         loading="lazy"
                         className="w-full h-full object-cover"
-                        onError={(e) => { e.currentTarget.src = "/images/loja1.jpg"; }}
+                        onError={(e) => { e.currentTarget.src = "/images/loja1.webp"; }}
                       />
                       <span
                         className={[

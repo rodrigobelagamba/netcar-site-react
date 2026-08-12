@@ -31,7 +31,7 @@ export function IanBot() {
           <div className="relative flex-shrink-0">
             <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-white p-1 shadow-lg border border-gray-100">
               <img 
-                src="/images/IMG_8886.JPG"
+                src="/images/ian.webp"
                 alt="iAN - Assistente Virtual"
                 className="w-full h-full rounded-full object-cover"
                 onError={(e) => {
@@ -87,4 +87,3 @@ export function IanBot() {
     </section>
   );
 }
-

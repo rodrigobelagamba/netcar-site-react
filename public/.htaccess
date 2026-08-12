@@ -4,6 +4,11 @@
   DirectoryIndex index.php index.html
 </IfModule>
 
+# Páginas de erro leves, com noindex e saídas úteis para o usuário. O status
+# original (404/410) é preservado pelo Apache no subrequest do ErrorDocument.
+ErrorDocument 404 /404.html
+ErrorDocument 410 /410.html
+
 # Configuração de tipos MIME (deve vir primeiro)
 <IfModule mod_mime.c>
   # JavaScript modules
@@ -48,6 +53,11 @@
 # Compressão GZIP
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Brotli quando disponível; mod_deflate continua como fallback na hospedagem.
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/xml text/css text/javascript application/javascript application/json application/ld+json image/svg+xml
 </IfModule>
 
 # Headers de segurança
@@ -126,9 +136,13 @@
   RewriteRule ^seminovos\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
   RewriteRule ^sobre-nos\.(php|html?)$ /sobre [R=301,L,QSD,NC]
   RewriteRule ^listagem-produtos\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
-  RewriteRule ^clientes?\.(php|html?)$ / [R=301,L,QSD,NC]
   RewriteRule ^contato\.(php|html?)$ /contato [R=301,L,QSD,NC]
-  RewriteRule ^ficha-cadastral\.(php|html?)$ /seminovos [R=301,L,QSD,NC]
+  RewriteRule ^noticias?\.(php|html?)$ /blog [R=301,L,QSD,NC]
+  RewriteRule ^equipe\.(php|html?)$ /sobre [R=301,L,QSD,NC]
+  # Rotas antigas com possível dado de cliente não têm substituta pública.
+  # 410 remove o lixo do índice sem redirecionar consultas privadas para a home.
+  RewriteRule ^clientes?\.(php|html?)$ - [G,L,NC]
+  RewriteRule ^ficha-cadastral\.(php|html?)$ - [G,L,NC]
   RewriteRule ^compramos-seu-usado\.(php|html?)$ /compra [R=301,L,QSD,NC]
   # Canônico único da página de venda/compra de usado (mesmo componente React).
   # Sem QSD: preserva UTM e demais query params de campanha.
@@ -272,10 +286,10 @@
   # 404 real para padrões SEO sem página correspondente. Sem isso, um slug
   # inválido (ex.: /blog/foo-bar, /comprar-moto, /seminovos-atlantis) caía no
   # fallback do SPA e devolvia 200 com o shell da home — soft 404 para o bot.
-  # O [G] (410 Gone) diz ao crawler que a URL não existe e não volta.
+  # URL inventada/errada recebe 404. 410 fica reservado ao legado conhecido.
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
-  RewriteRule ^(blog/[^/]+|comprar-[a-z0-9-]+|seminovos-[a-z0-9-]+|vender-carro-[a-z0-9-]+)/?$ - [G,L]
+  RewriteRule ^(blog/[^/]+|comprar-[a-z0-9-]+|seminovos-[a-z0-9-]+|vender-carro-[a-z0-9-]+)/?$ - [R=404,L]
 
   # Sétimo: interceptar /veiculo/{slug} APENAS quando for bot/crawler (meta tags para WhatsApp)
   # Usuários normais acessam diretamente o React app

@@ -15,7 +15,7 @@ export type VehicleFocusPayload = {
 
 // URL da imagem de carro coberto usada como fallback quando não houver PNG
 // A imagem está em public/images/semcapa.png
-const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
+const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
 export interface VehicleCardProps {
   id: string;

@@ -19,10 +19,10 @@ import { ArrowRight } from "lucide-react";
 import {
   pickFeaturedHomeVehicle,
   pickHomeHighlightVehicles,
+  sortHomeStockVehicles,
 } from "@/lib/homeStock";
 import { trackHomeScrollDepth } from "@/lib/analytics";
-import { optimizeStockImage } from "@/lib/images";
-const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.png";
+const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
 function HomeHeroSkeleton() {
   return (
@@ -102,19 +102,10 @@ export function HomePage() {
   const heroVehicles: HomeHeroVehicle[] = useMemo(() => {
     if (!vehicles) return [];
 
-    const shuffleArray = <T,>(array: T[]): T[] => {
-      const shuffled = [...array];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
-    };
-
     const isPngUrl = (img?: string | null): img is string =>
       !!img && img.toLowerCase().includes(".png");
 
-    const filtered = vehicles
+    const filtered = sortHomeStockVehicles(vehicles)
       .filter(vehicle => {
         if (featuredVehicle && vehicle.id === featuredVehicle.id) return false;
 
@@ -129,10 +120,22 @@ export function HomePage() {
         return true;
       });
 
-    return shuffleArray(filtered).slice(0, 4)
+    const preferredHeroId =
+      typeof window !== "undefined"
+        ? (window as Window & { __NETCAR_HOME_LCP_ID__?: string }).__NETCAR_HOME_LCP_ID__
+        : undefined;
+    const ordered =
+      preferredHeroId && filtered.some((vehicle) => vehicle.id === preferredHeroId)
+        ? [
+            ...filtered.filter((vehicle) => vehicle.id === preferredHeroId),
+            ...filtered.filter((vehicle) => vehicle.id !== preferredHeroId),
+          ]
+        : filtered;
+
+    return ordered.slice(0, 4)
       .map(vehicle => {
         const mainImage = vehicle.imagens_site?.capa
-          ? optimizeStockImage(vehicle.imagens_site.capa, 1600)
+          ? vehicle.imagens_site.capa
           : CAR_COVERED_PLACEHOLDER_URL;
         
         const tagParts = [];
@@ -193,22 +196,6 @@ export function HomePage() {
       categoria: undefined,
     },
   });
-
-  useEffect(() => {
-    const url = hasBanners && banners?.[0]?.imagem
-      ? banners[0].imagem
-      : heroVehicles[0]?.image;
-    if (url) {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = url;
-      document.head.appendChild(link);
-      return () => {
-        document.head.removeChild(link);
-      };
-    }
-  }, [hasBanners, banners, heroVehicles]);
 
   // GA4: scroll 50% na Home (engajamento)
   useEffect(() => {
