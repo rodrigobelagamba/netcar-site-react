@@ -24,7 +24,7 @@ define('NETCAR_BANNER_FAIL_TTL', 60);     // não martelar a API quando ela falh
 define('NETCAR_BANNER_HTTP_TIMEOUT', 0.20); // fail-fast: manifesto de build cobre a imagem se a API demorar
 
 /**
- * Coloca o preload crítico no início do head, logo após o charset.
+ * Coloca o preload crítico no início do head, logo após o viewport.
  * Inserir perto de </head> faz o navegador descobrir a imagem somente depois
  * dos bundles, CSS e dados inline, desperdiçando boa parte do benefício.
  */
@@ -32,7 +32,7 @@ function netcar_prepend_critical_head_markup($html, $markup)
 {
     $count = 0;
     $result = preg_replace_callback(
-        '#<meta\\b[^>]*\\bcharset=[^ >]+[^>]*>#i',
+        '#<meta\\b[^>]*\\bname="viewport"[^>]*>#i',
         function ($matches) use ($markup) {
             return $matches[0] . "\n    " . $markup;
         },
@@ -695,7 +695,7 @@ if ($isHome) {
         }
         $responsiveSrcset = implode(', ', $srcsetParts);
         $fallbackWidth = $hasActiveBanner ? 1280 : 960;
-        $heroSizes = $hasActiveBanner ? '100vw' : '(max-width: 767px) 60vw, 70vw';
+        $heroSizes = $hasActiveBanner ? '100vw' : '(max-width: 767px) 50vw, 70vw';
         $heroWidth = $hasActiveBanner ? 1920 : 1280;
         $heroHeight = $hasActiveBanner ? 680 : 960;
         $heroClass = $hasActiveBanner ? ' class="netcar-initial-banner"' : '';

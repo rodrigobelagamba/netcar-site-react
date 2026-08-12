@@ -26,7 +26,7 @@ expect(controller.includes("netcar_render_error(404)"), "controlador sem 404 rea
 expect(controller.includes("netcar_apply_route_meta"), "metadados por rota não são aplicados ao HTML comum");
 expect(controller.includes("imagesrcset="), "preload responsivo do LCP ausente");
 expect(
-  controller.includes("(max-width: 767px) 60vw, 70vw"),
+  controller.includes("(max-width: 767px) 50vw, 70vw"),
   "sizes do LCP da Home voltou a solicitar imagem excessiva no mobile",
 );
 expect(

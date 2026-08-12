@@ -156,7 +156,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
               <img 
                 src={optimizeStockImage(vehicle.image || CAR_COVERED_PLACEHOLDER_URL, 960)}
                 srcSet={stockImageSrcSet(vehicle.image, [480, 640, 768, 960, 1280])}
-                sizes="(max-width: 767px) 60vw, 70vw"
+                sizes="(max-width: 767px) 50vw, 70vw"
                 alt={vehicle.model}
                 width={1280}
                 height={960}
