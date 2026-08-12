@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { fetchVehicles, fetchOpcionais, type VehiclesQuery } from "../endpoints/vehicles";
+import { getBootstrapVehicles } from "@/lib/stockBootstrap";
 
 export function useVehiclesQuery(
   query?: VehiclesQuery,
@@ -40,12 +41,29 @@ export function useVehiclesQuery(
     query?.opcionais,
   ]);
 
-  return useQuery({
+  const bootstrapVehicles = useMemo(
+    () => getBootstrapVehicles(query),
+    [queryKey],
+  );
+  const result = useQuery({
     queryKey,
     queryFn: () => fetchVehicles(query),
     staleTime: 1000 * 60 * 5, // 5 minutos
+    initialData: bootstrapVehicles,
+    initialDataUpdatedAt: bootstrapVehicles ? Date.now() : undefined,
+    refetchOnMount: bootstrapVehicles ? false : undefined,
     enabled: options?.enabled ?? true,
   });
+
+  useEffect(() => {
+    if (!bootstrapVehicles || options?.enabled === false) return;
+    const timer = window.setTimeout(() => {
+      void result.refetch();
+    }, 15_000);
+    return () => window.clearTimeout(timer);
+  }, [bootstrapVehicles, options?.enabled, result.refetch]);
+
+  return result;
 }
 
 /**

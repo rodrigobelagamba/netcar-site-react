@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import type { ContentSeoPage as ContentSeoPageData } from "@/data/seo/types";
 import { useMetaTags } from "@/hooks/useMetaTags";
-import { Localizacao } from "@/design-system/components/layout/Localizacao";
+import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
 import { RegionalStockPreview } from "@/modules/seo/components/RegionalStockPreview";
@@ -121,7 +121,7 @@ export function ContentSeoPage({ page }: { page: ContentSeoPageData }) {
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
         <div className="container-main space-y-8">
-          <Localizacao />
+          <LazyLocalizacao />
           <IanBot />
         </div>
       </div>

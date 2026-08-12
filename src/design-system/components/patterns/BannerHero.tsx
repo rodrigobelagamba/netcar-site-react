@@ -1,5 +1,4 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import type { Banner } from "@/catalog/endpoints/site";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
@@ -10,7 +9,6 @@ interface BannerHeroProps {
 
 export function BannerHero({ banners }: BannerHeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
 
   if (!banners || banners.length === 0) {
     return null;
@@ -21,30 +19,11 @@ export function BannerHero({ banners }: BannerHeroProps) {
   const isExternalLink = /^https?:\/\//i.test(bannerLink);
 
   const next = () => {
-    setDirection(1);
     setCurrentIndex((prev) => (prev + 1) % banners.length);
   };
 
   const prev = () => {
-    setDirection(-1);
     setCurrentIndex((prev) => (prev - 1 + banners.length) % banners.length);
-  };
-
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? "100%" : "-100%",
-      opacity: 0,
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? "100%" : "-100%",
-      opacity: 0,
-    }),
   };
 
   const imageContent = (
@@ -76,18 +55,8 @@ export function BannerHero({ banners }: BannerHeroProps) {
     <div className="relative w-full bg-[#F6F6F6] overflow-hidden max-w-full pt-16 md:pt-0 z-0">
       {/* Máscara em desktop: altura fixa proporcional (21:9). No mobile a altura acompanha a imagem inteira. */}
       <div className="relative aspect-[21/9] w-full overflow-hidden bg-gray-200">
-        <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-          <motion.div
+          <div
             key={currentBanner.id}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.3 },
-            }}
             className="flex items-center justify-center w-full h-full md:absolute md:inset-0"
           >
             {bannerLink ? (
@@ -102,8 +71,7 @@ export function BannerHero({ banners }: BannerHeroProps) {
             ) : (
               imageContent
             )}
-          </motion.div>
-        </AnimatePresence>
+          </div>
       </div>
 
       {/* Navigation */}
@@ -147,7 +115,6 @@ export function BannerHero({ banners }: BannerHeroProps) {
               key={idx}
               type="button"
               onClick={() => {
-                setDirection(idx > currentIndex ? 1 : -1);
                 setCurrentIndex(idx);
               }}
               aria-label={`Ir para banner ${idx + 1}`}

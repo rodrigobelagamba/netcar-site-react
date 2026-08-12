@@ -1,21 +1,19 @@
 import { motion } from "framer-motion";
 import { useAboutTextQuery, useCountersQuery } from "@/catalog/queries/useSiteQuery";
-import { useBannersLoja1Query, useBannersLoja2Query, useAddressQuery, usePhoneQuery, useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
+import { useAddressQuery, usePhoneQuery, useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { CheckCircle2, Shield, Award, Users, TrendingUp } from "lucide-react";
-import { useState, useEffect } from "react";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { buildLojaMapsUrl } from "@/lib/formatters";
+import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
 export function SobrePage() {
   // Busca dados da API
   const { data: essencia } = useAboutTextQuery("Essência");
   const { data: counters } = useCountersQuery("Sobre");
-  const { data: bannersLoja1 } = useBannersLoja1Query();
-  const { data: bannersLoja2 } = useBannersLoja2Query();
   const { data: addressLoja1 } = useAddressQuery("Loja1");
   const { data: addressLoja2 } = useAddressQuery("Loja2");
   const { data: phoneLoja1 } = usePhoneQuery("Loja1");
@@ -31,47 +29,10 @@ export function SobrePage() {
     url: "https://www.netcarmultimarcas.com.br/sobre",
   });
   
-  // Imagem da fachada para cada loja
-  const getFachadaImage = (banners?: Array<{ titulo?: string; imagem: string }>) => {
-    if (!banners || banners.length === 0) return "";
-    const fachada = banners.find(b => b.titulo?.toLowerCase() === "fachada");
-    return fachada?.imagem || banners[0]?.imagem || "";
-  };
-
-  const loja1Image = getFachadaImage(bannersLoja1) || "/images/loja1.webp";
-  const loja2Image = getFachadaImage(bannersLoja2) || "/images/loja2.webp";
-
-  // Extrai todas as imagens das lojas (todas as fotos, exceto a fachada principal que já está no card)
-  const getAllLojaImages = (banners?: Array<{ titulo?: string; imagem: string }>) => {
-    if (!banners || banners.length === 0) return [];
-    return banners
-      .filter(b => b.imagem && b.titulo?.toLowerCase() !== "fachada")
-      .map(b => b.imagem);
-  };
-
-  const loja1Images = getAllLojaImages(bannersLoja1);
-  const loja2Images = getAllLojaImages(bannersLoja2);
-
-  // Hook para rotacionar imagens nas miniaturas
-  function useRotatingImages(images: string[], fallbackImage: string, interval: number = 3000) {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const imagesToUse = images.length > 0 ? images : [fallbackImage];
-
-    useEffect(() => {
-      if (imagesToUse.length <= 1) return;
-
-      const timer = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % imagesToUse.length);
-      }, interval);
-
-      return () => clearInterval(timer);
-    }, [imagesToUse.length, interval]);
-
-    return imagesToUse[currentIndex] || fallbackImage;
-  }
-
-  const rotatingLoja1Image = useRotatingImages(loja1Images, loja2Image, 3000);
-  const rotatingLoja2Image = useRotatingImages(loja2Images, loja1Image, 3000);
+  // Fachadas locais já comprimidas. Evita trocar a imagem principal após a API
+  // responder e impede que o LCP seja atualizado vários segundos depois.
+  const loja1Image = "/images/loja1.webp";
+  const loja2Image = "/images/loja2.webp";
 
   // Formata endereço
   const formatAddress = (address?: { address?: string }) => {
@@ -136,19 +97,10 @@ export function SobrePage() {
         
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <motion.span 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-primary text-xs font-semibold tracking-widest uppercase mb-4 block"
-              >
+            <div>
+              <span className="text-primary text-xs font-semibold tracking-widest uppercase mb-4 block">
                 Sobre a Netcar
-              </motion.span>
+              </span>
               <h1 className="text-3xl md:text-4xl lg:text-[48px] font-bold leading-tight mb-5 text-fg">
                 Desde 1997, curadoria e procedência em seminovos.
               </h1>
@@ -170,20 +122,22 @@ export function SobrePage() {
                   <span>Entrega sem surpresa</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex justify-center lg:justify-end"
-            >
+            <div className="flex justify-center lg:justify-end">
               <div className="relative">
                 <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 p-2">
                   <div className="w-full h-full rounded-full bg-white p-2 shadow-xl overflow-hidden">
                     <img 
-                      src={loja1Image || "/images/loja1.webp"}
+                      src={optimizeStockImage(loja1Image, 640)}
+                      srcSet={stockImageSrcSet(loja1Image, [320, 480, 640])}
+                      sizes="(max-width: 767px) 70vw, 320px"
                       alt="Netcar Multimarcas"
+                      width={640}
+                      height={640}
+                      loading="eager"
+                      decoding="async"
+                      fetchPriority="high"
                       className="w-full h-full rounded-full object-cover"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = "/images/loja1.webp";
@@ -196,7 +150,7 @@ export function SobrePage() {
                   <span className="text-sm font-medium text-fg">Desde 1997</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </header>
@@ -304,8 +258,14 @@ export function SobrePage() {
             >
               <div className="relative aspect-video w-full rounded-t-[20px] overflow-hidden bg-gray-100">
                 <img
-                  src={loja1Image}
+                  src={optimizeStockImage(loja1Image, 640)}
+                  srcSet={stockImageSrcSet(loja1Image, [320, 480, 640])}
+                  sizes="(max-width: 767px) 100vw, 50vw"
                   alt="Fachada da Loja 1"
+                  width={640}
+                  height={360}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja1.webp";
@@ -314,8 +274,14 @@ export function SobrePage() {
               </div>
               <div className="absolute -top-6 -right-6 w-40 h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <img
-                  src={rotatingLoja2Image || loja2Image}
+                  src={optimizeStockImage(loja2Image, 320)}
+                  srcSet={stockImageSrcSet(loja2Image, [200, 320])}
+                  sizes="160px"
                   alt="Miniatura Loja 2"
+                  width={320}
+                  height={224}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-opacity duration-500"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja2.webp";
@@ -346,8 +312,14 @@ export function SobrePage() {
             >
               <div className="relative aspect-video w-full rounded-t-[20px] overflow-hidden bg-gray-100">
                 <img
-                  src={loja2Image}
+                  src={optimizeStockImage(loja2Image, 640)}
+                  srcSet={stockImageSrcSet(loja2Image, [320, 480, 640])}
+                  sizes="(max-width: 767px) 100vw, 50vw"
                   alt="Fachada da Loja 2"
+                  width={640}
+                  height={360}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja2.webp";
@@ -356,8 +328,14 @@ export function SobrePage() {
               </div>
               <div className="absolute -top-6 -right-6 w-40 h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <img
-                  src={rotatingLoja1Image || loja1Image}
+                  src={optimizeStockImage(loja1Image, 320)}
+                  srcSet={stockImageSrcSet(loja1Image, [200, 320])}
+                  sizes="160px"
                   alt="Miniatura Loja 1"
+                  width={320}
+                  height={224}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-opacity duration-500"
                   onError={(e) => {
                     e.currentTarget.src = "/images/loja1.webp";
@@ -541,6 +519,10 @@ export function SobrePage() {
                           <img 
                             src={person.image} 
                             alt={person.name}
+                            width={128}
+                            height={128}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             style={{ objectPosition: (person as any).imagePosition || "center top" }}
                           />

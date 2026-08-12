@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { Search, Phone, Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useSearchContext } from "@/contexts/SearchContext";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
@@ -378,18 +377,17 @@ export function Header() {
         className={`fixed top-0 left-0 right-0 overflow-x-hidden max-w-full isolate ${isMobileMenuOpen ? 'z-[75]' : 'z-50'}`}
       >
         {/* Fundo branco ao scroll — opacity (não clipPath): Safari iOS fantasma/duplicava o logo */}
-        <motion.div
+        <div
           className="pointer-events-none absolute inset-0 bg-white"
-          initial={false}
-          animate={{
+          style={{
             opacity: isMobileMenuOpen ? 0 : isScrolled ? 1 : 0,
             boxShadow: isMobileMenuOpen
               ? "none"
               : isScrolled
               ? "0 0 30px rgba(0,0,0,.35)"
               : "none",
+            transition: "opacity 0.2s ease, box-shadow 0.2s ease",
           }}
-          transition={{ duration: 0.4, ease: "easeInOut" }}
         />
 
         <div className="container mx-auto relative flex h-16 items-center justify-between px-4">
@@ -459,15 +457,8 @@ export function Header() {
           {/* Botões à direita - Desktop (xl+) */}
           <div className="relative z-10 hidden xl:flex items-center gap-3 2xl:gap-4">
             {/* Campo de Busca */}
-            <AnimatePresence>
-              {isSearchOpen ? (
-                <motion.div
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 250, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="overflow-hidden bg-white rounded-md shadow-lg px-3 py-2 relative z-[100]"
-                >
+            {isSearchOpen ? (
+                <div className="w-[250px] overflow-hidden bg-white rounded-md shadow-lg px-3 py-2 relative z-[100]">
                   <div className="flex items-center gap-2 border-b border-border pb-1">
                     <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                     <input
@@ -491,21 +482,17 @@ export function Header() {
                       <X className="w-4 h-4" />
                     </button>
                   </div>
-                </motion.div>
+                </div>
               ) : (
-                <motion.button
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                <button
                   onClick={toggleSearch}
                   className="flex items-center gap-2 hover:text-primary transition-colors"
                   aria-label="Buscar"
                 >
                   <Search className="w-4 h-4" />
                   <span className="hidden 2xl:inline">Buscar</span>
-                </motion.button>
+                </button>
               )}
-            </AnimatePresence>
             {whatsapp?.numero && (
               <a
                 href={getWhatsAppLink()}
@@ -538,33 +525,21 @@ export function Header() {
       </header>
 
       {/* Menu Mobile Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
+      {isMobileMenuOpen && (
           <>
             {/* Fundo colorido com fade-in - cobre toda a tela incluindo header */}
-            <motion.div
+            <div
               className="fixed inset-0 z-[60] bg-green-dark"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
             {/* Menu centralizado com animação */}
-            <motion.div
+            <div
               className="fixed inset-0 z-[70] flex items-center justify-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
             >
               <nav className="flex flex-col items-center gap-6" aria-label="Menu mobile">
                 {/* Campo de Busca Mobile com Autocomplete */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
+                <div
                   className="w-full max-w-xs px-4 relative"
                   onClick={(e) => e.stopPropagation()}
                   ref={mobileAutocompleteRef}
@@ -589,13 +564,8 @@ export function Header() {
                   </div>
 
                   {/* Dropdown de Autocomplete */}
-                  <AnimatePresence>
-                    {isMobileAutocompleteOpen && vehicleSuggestions.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.2 }}
+                  {isMobileAutocompleteOpen && vehicleSuggestions.length > 0 && (
+                      <div
                         className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-[80] max-h-64 overflow-y-auto"
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -618,17 +588,13 @@ export function Header() {
                             </div>
                           </div>
                         ))}
-                      </motion.div>
+                      </div>
                     )}
-                  </AnimatePresence>
-                </motion.div>
+                </div>
                 
-                {menuLinks.map((link, index) => (
-                  <motion.div
+                {menuLinks.map((link) => (
+                  <div
                     key={link.to}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.2 + (index + 1) * 0.05 }}
                   >
                     {link.external ? (
                       <a
@@ -653,14 +619,10 @@ export function Header() {
                         {link.label}
                       </Link>
                     )}
-                  </motion.div>
+                  </div>
                 ))}
                 {whatsapp?.numero && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.2 + (menuLinks.length + 1) * 0.05 }}
-                  >
+                  <div>
                     <a
                       href={getWhatsAppLink()}
                       target="_blank"
@@ -673,13 +635,12 @@ export function Header() {
                       <Phone className="w-5 h-5 shrink-0" />
                       <span>{formatPhone(whatsapp.numero)}</span>
                     </a>
-                  </motion.div>
+                  </div>
                 )}
               </nav>
-            </motion.div>
+            </div>
           </>
         )}
-      </AnimatePresence>
     </>
   );
 }

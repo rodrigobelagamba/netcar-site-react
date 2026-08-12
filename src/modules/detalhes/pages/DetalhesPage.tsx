@@ -1,5 +1,5 @@
 import { useParams, useLocation, Link, useNavigate } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "@/design-system/components/utils/StaticMotion";
 import {
   MessageCircleMore,
   X,
@@ -30,8 +30,7 @@ import { ProductList } from "@/design-system/components/patterns/ProductList";
 import type { VehicleCardProps } from "@/design-system/components/patterns/VehicleCard";
 import { VehicleWhatsAppCard } from "@/design-system/components/patterns/VehicleWhatsAppCard";
 import { FloatingPortal } from "@/components/FloatingPortal";
-import { FabricaDeValor } from "@/design-system/components/patterns/FabricaDeValor";
-import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
+import { DeferredRender } from "@/design-system/components/layout/DeferredRender";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { generateVehicleSlug, maskPlate } from "@/lib/slug";
@@ -40,7 +39,7 @@ import {
   resolveIcheckProtocol,
 } from "@/lib/icheck-protocol";
 import { canonicalUrl } from "@/lib/seo";
-import { optimizeStockImage } from "@/lib/images";
+import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
 import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
@@ -59,6 +58,17 @@ const ANIMATION_DURATION = {
 // Constantes de imagem
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
+
+const FabricaDeValor = React.lazy(() =>
+  import("@/design-system/components/patterns/FabricaDeValor").then((module) => ({
+    default: module.FabricaDeValor,
+  })),
+);
+const NetcarSocialSection = React.lazy(() =>
+  import("@/design-system/components/patterns/social/NetcarSocialSection").then(
+    (module) => ({ default: module.NetcarSocialSection }),
+  ),
+);
 
 type BadgeVariant = "icheck" | "garantia" | "baixa-km" | "green-dark";
 
@@ -1005,7 +1015,7 @@ function Lightbox({
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
           className="relative w-full h-full flex items-center justify-center"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
         >
           <img
             src={images[index]}
@@ -1068,8 +1078,14 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
     >
       <div className="relative w-full h-full">
         <img
-          src={image}
+          src={optimizeStockImage(image, 640)}
+          srcSet={stockImageSrcSet(image, [320, 480, 640, 768, 960])}
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
           alt={alt}
+          width={1920}
+          height={1441}
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = "none";
@@ -1517,7 +1533,7 @@ export function DetalhesPage() {
   // PRIORIDADE 1: Usa imagens_site.capa se disponível
   const mainImage = useMemo(() => {
     if (vehicle?.imagens_site?.capa) {
-      return optimizeStockImage(vehicle.imagens_site.capa, 1600);
+      return vehicle.imagens_site.capa;
     }
     
     // FALLBACK: Comportamento anterior
@@ -1732,16 +1748,16 @@ export function DetalhesPage() {
       {/* Hero Section */}
       <section className="w-full py-0 pt-0 lg:pt-0 pb-0 relative overflow-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] 
       xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[95vh] 4xl:min-h-[75vh]">
-        {/* Mobile Image - Aparece primeiro no mobile, acima das informações */}
-        <div className="lg:hidden w-full mb-6 relative">
+        {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
+        <div className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
+                        lg:w-[70vw] lg:top-[-3rem] lg:right-[-15%]
+                        xl:w-[70vw] xl:top-[-10rem] xl:right-[-5rem]
+                        2xl:w-[70vw] 2xl:top-[-15rem] 2xl:right-[-25rem]
+                        3xl:w-[70vw] 3xl:top-[-15rem] 3xl:right-[-30rem]
+                        4xl:w-[70vw] 4xl:top-[-20rem] 4xl:right-[-30rem]
+                        5xl:w-[70vw] 5xl:top-[-35rem] 5xl:right-[-30rem]">
           {mainImage && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
-              className="w-full h-[300px] sm:h-[400px] flex items-center justify-center bg-gray-50 relative overflow-visible"
-            >
+            <div className="w-full h-[300px] sm:h-[400px] lg:h-auto flex items-center lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible">
               {isSold && (
                 <div
                   aria-hidden="true"
@@ -1760,14 +1776,21 @@ export function DetalhesPage() {
                 />
               )}
               <img
-                src={mainImage}
+                src={optimizeStockImage(mainImage, 960)}
+                srcSet={stockImageSrcSet(mainImage, [480, 640, 768, 960, 1280])}
+                sizes="(max-width: 1023px) 100vw, 70vw"
                 alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Frente - Netcar Multimarcas`}
-                className={`w-full h-full max-w-full object-contain ${isSold ? "grayscale-[0.25]" : ""}`}
+                width={1600}
+                height={900}
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                className={`w-full h-full lg:h-auto max-w-full object-contain ${isSold ? "grayscale-[0.25]" : ""}`}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
               />
-            </motion.div>
+            </div>
           )}
         </div>
 
@@ -1904,55 +1927,6 @@ export function DetalhesPage() {
           </motion.div>
         </div>
 
-        {/* Desktop Image - Posicionamento absoluto apenas no desktop - Vindo da direita - Sem limite */}
-        <motion.div
-          initial={{ opacity: 0, x: 100 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: ANIMATION_DURATION.slow, ease: ANIMATION_EASING }}
-          className="desktop-hero-image hidden lg:block absolute pointer-events-none select-none z-[2]
-                     lg:w-[70vw] lg:top-[-3rem] lg:right-[-15%] lg:translate-x-0
-                     xl:w-[70vw] xl:top-[-10rem] xl:right-[-5rem]
-                     2xl:w-[70vw] 2xl:top-[-15rem] 2xl:right-[-25rem]
-                     3xl:w-[70vw] 3xl:top-[-15rem] 3xl:right-[-30rem]
-                     4xl:w-[70vw] 4xl:top-[-20rem] 4xl:right-[-30rem]
-                     5xl:w-[70vw] 5xl:top-[-35rem] 5xl:right-[-30rem]"
-        >
-          {mainImage && (
-            <div className="w-full h-full flex items-start justify-center overflow-visible relative">
-              {isSold && (
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
-                >
-                  <span className="-rotate-[18deg] rounded-[1.75rem] border-[10px] border-[#E10600]/70 bg-white/40 px-14 py-5 text-7xl font-black uppercase tracking-[0.12em] text-[#E10600]/80 shadow-[0_16px_48px_rgba(0,0,0,0.16)] xl:border-[12px] xl:px-16 xl:py-6 xl:text-8xl 2xl:border-[14px] 2xl:px-20 2xl:py-7 2xl:text-9xl">
-                    Vendido
-                  </span>
-                </div>
-              )}
-              {SHOW_CAMPAIGN_STAMP && !isSold && (
-                <img
-                  src="/selos/selo_campanha.png"
-                  alt="Selo de campanha"
-                  className="absolute bottom-[6%] right-[10%]
-                             md:bottom-[7%] md:right-[11%]
-                             xl:bottom-[8%] xl:right-[16%]
-                             2xl:bottom-[9%] 2xl:right-[18%]
-                             w-24 md:w-28 xl:w-32 2xl:w-36
-                             h-auto z-50 pointer-events-none select-none"
-                />
-              )}
-              <img
-                src={mainImage}
-                alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Frente - Netcar Multimarcas`}
-                className={`w-full h-auto object-contain ${isSold ? "grayscale-[0.25]" : ""}`}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                }}
-              />
-            </div>
-          )}
-        </motion.div>
       </section>
 
       {/* Gallery Section */}
@@ -1999,7 +1973,11 @@ export function DetalhesPage() {
       {/* Fábrica de Valor Section */}
       <section className="w-full pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16 bg-surface">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <FabricaDeValor />
+          <DeferredRender minHeight={600}>
+            <React.Suspense fallback={null}>
+              <FabricaDeValor />
+            </React.Suspense>
+          </DeferredRender>
         </div>
       </section>
 
@@ -2015,7 +1993,11 @@ export function DetalhesPage() {
       />
 
       {/* Social Embeds Section (deve ser a última sessão) */}
-      <NetcarSocialSection />
+      <DeferredRender minHeight={800}>
+        <React.Suspense fallback={null}>
+          <NetcarSocialSection />
+        </React.Suspense>
+      </DeferredRender>
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
         <LazyLocalizacao />

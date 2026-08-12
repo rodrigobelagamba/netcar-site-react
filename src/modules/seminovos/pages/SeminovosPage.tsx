@@ -1,19 +1,18 @@
-import { useState, useMemo, useEffect, useRef, Fragment } from "react";
+import { useState, useMemo, useEffect, useRef, Fragment, lazy, Suspense } from "react";
 import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
-import { ChevronDown, X, Filter, MessageCircle } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, Filter, MessageCircle } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
-import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import {
   buildWhatsAppUrl,
+  DEFAULT_SALES_WHATSAPP,
   homeWhatsAppMessages,
   siteWhatsAppMessage,
 } from "@/lib/whatsappMessages";
@@ -21,6 +20,12 @@ import { trackStockFilterApply } from "@/lib/analytics";
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
+const STOCK_PAGE_SIZE = 16;
+const SearchBar = lazy(() =>
+  import("@/design-system/components/patterns/SearchBar").then((module) => ({
+    default: module.SearchBar,
+  })),
+);
 
 /** Colunas do grid desktop — espelha Tailwind md/lg/xl/2xl do showroom. */
 function useDesktopStockColumns(): number {
@@ -159,7 +164,7 @@ export function SeminovosPage() {
   const [precoMin, setPrecoMin] = useState(search.precoMin || "");
   const [precoMax, setPrecoMax] = useState(search.precoMax || "");
   const [sortBy, setSortBy] = useState<SortOption>("az");
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(STOCK_PAGE_SIZE);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
   // Sincroniza estados locais com parâmetros da URL quando mudam
@@ -198,8 +203,6 @@ export function SeminovosPage() {
         categoria: search.categoria || undefined, // Preserva categoria da URL
       },
     });
-    // Fecha o modal mobile após aplicar filtros
-    setIsMobileFilterOpen(false);
   };
 
   // Limpa todos os filtros
@@ -223,8 +226,6 @@ export function SeminovosPage() {
         categoria: search.categoria || undefined, // Preserva categoria da URL
       },
     });
-    // Fecha o modal mobile após limpar filtros
-    setIsMobileFilterOpen(false);
   };
 
   // Conta quantos filtros estão ativos
@@ -305,15 +306,36 @@ export function SeminovosPage() {
     return filtered;
   }, [vehicles, sortBy, searchTerm, search.categoria]);
 
+  useEffect(() => {
+    setVisibleCount(STOCK_PAGE_SIZE);
+  }, [
+    sortBy,
+    searchTerm,
+    search.marca,
+    search.modelo,
+    search.precoMin,
+    search.precoMax,
+    search.anoMin,
+    search.anoMax,
+    search.cambio,
+    search.cor,
+    search.categoria,
+  ]);
+
+  const visibleVehicles = useMemo(
+    () => filteredAndSortedVehicles.slice(0, visibleCount),
+    [filteredAndSortedVehicles, visibleCount],
+  );
+
   // Banner WA no meio do grid: só depois de 2 linhas completas (evita buraco à direita).
   const desktopMidBreak = desktopCols * 2;
   const showDesktopMidBanner =
-    filteredAndSortedVehicles.length > desktopMidBreak + desktopCols;
+    visibleVehicles.length > desktopMidBreak + desktopCols;
   const desktopVehiclesBefore = showDesktopMidBanner
-    ? filteredAndSortedVehicles.slice(0, desktopMidBreak)
-    : filteredAndSortedVehicles;
+    ? visibleVehicles.slice(0, desktopMidBreak)
+    : visibleVehicles;
   const desktopVehiclesAfter = showDesktopMidBanner
-    ? filteredAndSortedVehicles.slice(desktopMidBreak)
+    ? visibleVehicles.slice(desktopMidBreak)
     : [];
 
   // Anos para o dropdown (do mais recente para o mais antigo)
@@ -349,7 +371,7 @@ export function SeminovosPage() {
 
   // Monta mensagem WhatsApp com filtros ativos
   const seminovosWhatsAppHref = useMemo(() => {
-    if (!whatsapp?.numero) return "#";
+    const whatsappNumber = whatsapp?.numero || DEFAULT_SALES_WHATSAPP;
     const parts: string[] = [];
     if (search.marca) parts.push(`marca ${search.marca}`);
     if (search.modelo) parts.push(`modelo ${search.modelo}`);
@@ -368,12 +390,12 @@ export function SeminovosPage() {
     }
     if (!parts.length) {
       return buildWhatsAppUrl(
-        whatsapp.numero,
+        whatsappNumber,
         homeWhatsAppMessages().vehicleInterest,
       );
     }
     return buildWhatsAppUrl(
-      whatsapp.numero,
+      whatsappNumber,
       siteWhatsAppMessage(
         `quero help pra achar um seminovo com: ${parts.join(", ")}.`,
       ),
@@ -394,19 +416,13 @@ export function SeminovosPage() {
   return (
     <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-6">
       {/* SearchBar - Fixada logo abaixo do Header, apenas Mobile, controlada por estado */}
-      <AnimatePresence>
-        {isSearchBarVisible && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden fixed top-16 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-lg"
-          >
-            <SearchBar onAction={() => setIsSearchBarVisible(false)} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isSearchBarVisible && (
+          <div className="md:hidden fixed top-16 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-lg">
+            <Suspense fallback={null}>
+              <SearchBar onAction={() => setIsSearchBarVisible(false)} />
+            </Suspense>
+          </div>
+      )}
       
       {/* Espaçamento para compensar Header (64px) + SearchBar fixa (~180px) no mobile, apenas quando visível */}
       {isSearchBarVisible && <div className="md:hidden h-[244px]"></div>}
@@ -571,7 +587,7 @@ export function SeminovosPage() {
         ) : (
           <>
             <div className="md:hidden grid grid-cols-2 items-stretch gap-2" style={{ overflow: "visible" }}>
-              {filteredAndSortedVehicles.map((vehicle, index) => (
+              {visibleVehicles.map((vehicle, index) => (
                 <Fragment key={vehicle.id}>
                   <VehicleCard
                     id={vehicle.id}
@@ -668,6 +684,17 @@ export function SeminovosPage() {
                 </div>
               )}
             </div>
+            {visibleCount < filteredAndSortedVehicles.length && (
+              <div className="mt-10 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((count) => count + STOCK_PAGE_SIZE)}
+                  className="rounded-full border border-primary/25 bg-white px-7 py-3 text-sm font-bold text-primary shadow-sm transition hover:border-primary hover:bg-primary/5"
+                >
+                  Carregar mais veículos
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
@@ -679,168 +706,6 @@ export function SeminovosPage() {
         </div>
       </div>
 
-      {/* Modal de Filtros Mobile - Oculto no mobile (usando SearchBar) */}
-      <div className="hidden">
-      <AnimatePresence>
-        {isMobileFilterOpen && (
-          <>
-            {/* Overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/50 z-[60] md:hidden"
-              onClick={() => setIsMobileFilterOpen(false)}
-            />
-
-            {/* Modal */}
-            <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-2xl shadow-2xl max-h-[90vh] overflow-y-auto md:hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header do Modal */}
-              <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between z-10 max-w-full">
-                <h2 className="text-lg font-bold text-fg truncate">Filtros</h2>
-                <div className="flex items-center gap-3 flex-shrink-0">
-                  {activeFiltersCount > 0 && (
-                    <button
-                      onClick={handleClearFilters}
-                      className="text-sm text-primary hover:text-primary/80 font-medium uppercase tracking-wider transition-colors"
-                    >
-                      Limpar
-                    </button>
-                  )}
-                  <button
-                    onClick={() => setIsMobileFilterOpen(false)}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                  >
-                    <X className="w-6 h-6 text-fg" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Conteúdo dos Filtros */}
-              <div className="p-4 space-y-6 max-w-full overflow-x-hidden">
-                {/* Ordenar */}
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
-                    Ordenar por
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as SortOption)}
-                      className="w-full appearance-none rounded-lg border border-border bg-surface px-4 py-3 pr-10 text-sm text-fg focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    >
-                      <option value="az">A &gt; Z</option>
-                      <option value="za">Z &gt; A</option>
-                      <option value="preco-asc">Menor preço</option>
-                      <option value="preco-desc">Maior preço</option>
-                    </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-                  </div>
-                </div>
-
-                {/* Divisor */}
-                <div className="border-t border-gray-200"></div>
-                {/* Marca */}
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
-                    Marca
-                  </label>
-                  <AutocompleteSelect
-                    options={brandOptions}
-                    value={marca}
-                    onChange={setMarca}
-                    placeholder="Selecione"
-                    label=""
-                  />
-                </div>
-
-                {/* Ano mínimo */}
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
-                    Ano de
-                  </label>
-                  <AutocompleteSelect
-                    options={yearOptions}
-                    value={anoMin}
-                    onChange={setAnoMin}
-                    placeholder="Selecione"
-                    label=""
-                  />
-                </div>
-
-                {/* Ano máximo */}
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
-                    Ano até
-                  </label>
-                  <AutocompleteSelect
-                    options={yearOptions}
-                    value={anoMax}
-                    onChange={setAnoMax}
-                    placeholder="Selecione"
-                    label=""
-                  />
-                </div>
-
-                {/* Valor de */}
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
-                    Valor de
-                  </label>
-                  <input
-                    type="text"
-                    value={precoMin}
-                    onChange={(e) => setPrecoMin(e.target.value)}
-                    placeholder={minPrice > 0 ? `R$ ${minPrice.toLocaleString('pt-BR')}` : "R$ 0"}
-                    className="w-full border-0 border-b border-border rounded-none bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:outline-none focus:border-primary"
-                  />
-                </div>
-
-                {/* Valor até */}
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-fg uppercase tracking-wider">
-                    Valor até
-                  </label>
-                  <input
-                    type="text"
-                    value={precoMax}
-                    onChange={(e) => setPrecoMax(e.target.value)}
-                    placeholder={maxPrice > 0 ? `R$ ${maxPrice.toLocaleString('pt-BR')}` : "R$ 500.000"}
-                    className="w-full border-0 border-b border-border rounded-none bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:outline-none focus:border-primary"
-                  />
-                </div>
-
-                {/* Botões de Ação */}
-                <div className="sticky bottom-0 bg-white pt-4 pb-4 border-t border-gray-200 -mx-4 px-4 space-y-3 max-w-full">
-                  <button
-                    onClick={handleFilter}
-                    className="w-full px-6 py-4 rounded-lg bg-fg text-white text-sm font-semibold uppercase hover:bg-fg/90 transition-all duration-200 shadow-md"
-                  >
-                    Aplicar Filtros
-                  </button>
-                  {activeFiltersCount > 0 && (
-                    <button
-                      onClick={handleClearFilters}
-                      className="w-full px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 text-sm font-semibold uppercase hover:bg-gray-50 transition-all duration-200"
-                    >
-                      Limpar Todos os Filtros
-                    </button>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-      </div>
     </main>
   );
 }

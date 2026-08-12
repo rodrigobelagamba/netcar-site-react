@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { getBlogPost } from "@/data/seo";
 import { BlogArticleBody } from "@/modules/blog/components/BlogArticleBody";
 import { useMetaTags } from "@/hooks/useMetaTags";
-import { Localizacao } from "@/design-system/components/layout/Localizacao";
+import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 
@@ -85,7 +85,7 @@ export function BlogPostPage() {
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8 mt-10">
         <div className="container-main space-y-8">
-          <Localizacao />
+          <LazyLocalizacao />
           <IanBot />
         </div>
       </div>

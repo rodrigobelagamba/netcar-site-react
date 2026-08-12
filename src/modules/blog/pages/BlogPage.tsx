@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Calendar, Clock } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { blogPosts } from "@/data/seo";
@@ -19,26 +18,16 @@ export function BlogPage() {
   return (
     <main className="flex-1 pt-8 pb-16 overflow-x-hidden max-w-full">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-10"
-        >
+        <div className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-fg mb-2">Blog Netcar</h1>
           <p className="text-gray-500 max-w-2xl">
             Conteúdo próprio sobre seminovos, financiamento e compra inteligente na Grande Porto Alegre.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sortedPosts.map((post, index) => (
-            <motion.div
-              key={post.slug}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-            >
+          {sortedPosts.map((post) => (
+            <div key={post.slug}>
               <Link
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
@@ -69,7 +58,7 @@ export function BlogPage() {
                   </span>
                 </div>
               </Link>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

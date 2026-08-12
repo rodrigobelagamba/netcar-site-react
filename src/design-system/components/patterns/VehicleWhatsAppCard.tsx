@@ -1,5 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import type { VehicleFocusPayload } from "./VehicleCard";
+import { optimizeStockImage } from "@/lib/images";
 
 interface VehicleWhatsAppCardProps {
   vehicle: VehicleFocusPayload;
@@ -25,8 +26,11 @@ export function VehicleWhatsAppCard({
     >
       <div className="mb-1 flex items-center justify-center gap-2 md:mb-1.5 md:gap-2.5">
         <img
-          src={vehicle.image}
+          src={optimizeStockImage(vehicle.image, 200)}
           alt=""
+          width={56}
+          height={44}
+          decoding="async"
           className="h-8 w-11 shrink-0 rounded-md bg-[#F3F5F6] object-contain md:h-11 md:w-14 md:rounded-lg"
           loading="lazy"
         />

@@ -1,5 +1,6 @@
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
+import { optimizeStockImage } from "@/lib/images";
 
 export function IanBot() {
   const { data: whatsapp } = useWhatsAppQuery();
@@ -31,8 +32,12 @@ export function IanBot() {
           <div className="relative flex-shrink-0">
             <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-white p-1 shadow-lg border border-gray-100">
               <img 
-                src="/images/ian.webp"
+                src={optimizeStockImage("/images/ian.webp", 200)}
                 alt="iAN - Assistente Virtual"
+                width={112}
+                height={112}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full rounded-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "https://ui-avatars.com/api/?name=iAN&background=6cbe9d&color=fff&size=128&bold=true";

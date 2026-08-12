@@ -1,19 +1,14 @@
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useBannersQuery } from "@/catalog/queries/useSiteQuery";
-import { ProductList } from "@/design-system/components/patterns/ProductList";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
+import { DeferredRender } from "@/design-system/components/layout/DeferredRender";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/HomeHero";
 import { BannerHero } from "@/design-system/components/patterns/BannerHero";
-import { SearchBar } from "@/design-system/components/patterns/SearchBar";
 import { HomeWhatsAppConversionPanel } from "../components/HomeWhatsAppConversionPanel";
-import { HomePurchaseBenefits } from "../components/HomePurchaseBenefits";
 import { HomeMobileWhatsAppBar } from "../components/HomeMobileWhatsAppBar";
-import { ServicesSection } from "@/design-system/components/patterns/ServicesSection";
-import { DNASection } from "@/design-system/components/patterns/DNASection";
-import { NetcarSocialSection } from "@/design-system/components/patterns/social/NetcarSocialSection";
-import { useMemo, useEffect, useState, useRef } from "react";
+import { lazy, Suspense, useMemo, useEffect, useState, useRef } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import {
@@ -23,6 +18,38 @@ import {
 } from "@/lib/homeStock";
 import { trackHomeScrollDepth } from "@/lib/analytics";
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
+
+const ProductList = lazy(() =>
+  import("@/design-system/components/patterns/ProductList").then((module) => ({
+    default: module.ProductList,
+  })),
+);
+const SearchBar = lazy(() =>
+  import("@/design-system/components/patterns/SearchBar").then((module) => ({
+    default: module.SearchBar,
+  })),
+);
+
+const ServicesSection = lazy(() =>
+  import("@/design-system/components/patterns/ServicesSection").then((module) => ({
+    default: module.ServicesSection,
+  })),
+);
+const HomePurchaseBenefits = lazy(() =>
+  import("../components/HomePurchaseBenefits").then((module) => ({
+    default: module.HomePurchaseBenefits,
+  })),
+);
+const DNASection = lazy(() =>
+  import("@/design-system/components/patterns/DNASection").then((module) => ({
+    default: module.DNASection,
+  })),
+);
+const NetcarSocialSection = lazy(() =>
+  import("@/design-system/components/patterns/social/NetcarSocialSection").then(
+    (module) => ({ default: module.NetcarSocialSection }),
+  ),
+);
 
 type InitialHomeLcpImage = {
   src: string;
@@ -326,7 +353,11 @@ export function HomePage() {
         onViewStock={goToStock}
       />
 
-      <SearchBar />
+      <DeferredRender minHeight={96} rootMargin="100px">
+        <Suspense fallback={null}>
+          <SearchBar />
+        </Suspense>
+      </DeferredRender>
 
       {/* Estoque sobe na rolagem: prioridade no mobile */}
       <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 md:py-12">
@@ -345,11 +376,15 @@ export function HomePage() {
             </span>
           </p>
         </div>
-        <ProductList
-          vehicles={vehiclesWithPhotos}
-          isLoading={isLoadingVehicles}
-          showWhatsAppInterest
-        />
+        <DeferredRender minHeight={900} rootMargin="0px">
+          <Suspense fallback={null}>
+            <ProductList
+              vehicles={vehiclesWithPhotos}
+              isLoading={isLoadingVehicles}
+              showWhatsAppInterest
+            />
+          </Suspense>
+        </DeferredRender>
         <div className="mt-8 flex justify-center md:mt-10">
           <button
             type="button"
@@ -364,16 +399,28 @@ export function HomePage() {
         </div>
       </section>
 
-      <ServicesSection />
+      <DeferredRender minHeight={480}>
+        <Suspense fallback={null}>
+          <ServicesSection />
+        </Suspense>
+      </DeferredRender>
 
       {/* Desktop only: evita repetir benefícios e DNA longos no mobile */}
       <div className="hidden md:block">
-        <HomePurchaseBenefits />
-        <DNASection />
+        <DeferredRender minHeight={900}>
+          <Suspense fallback={null}>
+            <HomePurchaseBenefits />
+            <DNASection />
+          </Suspense>
+        </DeferredRender>
       </div>
 
       <div className="hidden md:block">
-        <NetcarSocialSection />
+        <DeferredRender minHeight={800}>
+          <Suspense fallback={null}>
+            <NetcarSocialSection />
+          </Suspense>
+        </DeferredRender>
       </div>
 
       <div className="w-full space-y-8 bg-muted px-4 py-8 font-sans text-muted-foreground antialiased sm:px-6 md:py-8 lg:px-8 xl:px-12 2xl:px-16">

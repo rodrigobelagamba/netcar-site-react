@@ -62,6 +62,17 @@ ErrorDocument 410 /410.html
 
 # Headers de segurança
 <IfModule mod_headers.c>
+  # A hospedagem adiciona Expires/max-age=0 ao HTML e anulava o cache curto
+  # enviado pelo PHP. Remover as duas tabelas evita cabeçalhos conflitantes;
+  # s-maxage permite cache de borda sem deixar navegador com HTML antigo.
+  <Files "index.php">
+    Header onsuccess unset Expires
+    Header always unset Expires
+    Header onsuccess unset Cache-Control
+    Header always unset Cache-Control
+    Header always set Cache-Control "public, max-age=60, s-maxage=300, stale-while-revalidate=60"
+  </Files>
+
   # Previne clickjacking
   Header set X-Frame-Options "SAMEORIGIN"
   

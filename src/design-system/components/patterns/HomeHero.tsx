@@ -1,12 +1,15 @@
 import { ChevronLeft, ChevronRight, Maximize2, MessageCircle } from "lucide-react";
 import { Button } from "@/design-system/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatPrice, formatYear } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
-import { buildWhatsAppUrl, homeWhatsAppMessages } from "@/lib/whatsappMessages";
+import {
+  buildWhatsAppUrl,
+  DEFAULT_SALES_WHATSAPP,
+  homeWhatsAppMessages,
+} from "@/lib/whatsappMessages";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
@@ -35,7 +38,6 @@ interface HomeHeroProps {
 
 export function HomeHero({ vehicles }: HomeHeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
   const navigate = useNavigate();
   const { data: whatsapp } = useWhatsAppQuery();
   
@@ -46,33 +48,11 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
   const vehicle = vehicles[currentIndex];
 
   const next = () => {
-    setDirection(1);
     setCurrentIndex((prev) => (prev + 1) % vehicles.length);
   };
   
   const prev = () => {
-    setDirection(-1);
     setCurrentIndex((prev) => (prev - 1 + vehicles.length) % vehicles.length);
-  };
-
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? "100%" : "-100%",
-      opacity: 0,
-      scale: 1.1
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      scale: 1
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? "100%" : "-100%",
-      opacity: 0,
-      scale: 0.9
-    })
   };
 
   const handleViewDetails = () => {
@@ -90,9 +70,9 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
     .filter(Boolean)
     .join(" ");
   const heroWhatsAppHref =
-    whatsapp?.numero && heroVehicleLabel
+    heroVehicleLabel
       ? buildWhatsAppUrl(
-          whatsapp.numero,
+          whatsapp?.numero || DEFAULT_SALES_WHATSAPP,
           homeWhatsAppMessages({
             vehicleLabel: heroVehicleLabel,
           }).vehicleInterest,
@@ -122,71 +102,34 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
     <div className="relative w-full bg-[#F6F6F6] overflow-hidden max-w-full min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
       
       {/* Background Typography */}
-      <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-        <motion.div 
+        <div
           key={vehicle.id}
           className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-          custom={direction}
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 0.04, scale: 1.2 }}
-          exit={{ opacity: 0, scale: 1.3 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          style={{ opacity: 0.04, transform: "scale(1.2)" }}
         >
           <h2 className="text-[25vw] md:text-[32vw] font-black tracking-tighter whitespace-nowrap leading-none text-center overflow-hidden max-w-full w-full" style={{ color: '#00283C' }}>
             {primeiroNomeModelo}
           </h2>
-        </motion.div>
-      </AnimatePresence>
+        </div>
 
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">
         
         {/* Brand Label */}
         <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
-          <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-            <motion.div 
+            <div
               key={`${vehicle.id}-brand`}
-              custom={direction}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
               className="flex items-center gap-3"
             >
               <div className="h-[1px] w-8 md:w-12" style={{ backgroundColor: 'rgba(0, 40, 60, 0.2)' }} />
               <span className="text-[14px] md:text-[16px] font-bold uppercase tracking-[0.5em] whitespace-nowrap" style={{ color: '#00283C' }}>{vehicle.brand}</span>
               <div className="h-[1px] w-8 md:w-12" style={{ backgroundColor: 'rgba(0, 40, 60, 0.2)' }} />
-            </motion.div>
-          </AnimatePresence>
+            </div>
         </div>
 
         <div className="relative w-full container-main flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
           {/* Main Car Image - MAXIMIZED SIZE */}
-          <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-            <motion.div
+            <div
               key={`${vehicle.id}-image`}
-              custom={direction}
-              variants={slideVariants}
-              // A primeira imagem já foi antecipada pelo HTML/PHP. Não animá-la
-              // da lateral no mount: o movimento posterga o timestamp do LCP.
-              initial={direction === 0 ? false : "enter"}
-              animate="center"
-              exit="exit"
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.2}
-              onDragEnd={(_, info) => {
-                const swipeThreshold = 50;
-                if (info.offset.x > swipeThreshold) {
-                  prev();
-                } else if (info.offset.x < -swipeThreshold) {
-                  next();
-                }
-              }}
-              transition={{
-                x: { type: "spring", stiffness: 200, damping: 25, mass: 1 },
-                opacity: { duration: 0.5, ease: "easeInOut" },
-                scale: { duration: 0.5 }
-              }}
               className="absolute inset-0 flex items-center justify-center cursor-grab active:cursor-grabbing touch-none"
               onPointerDown={(e) => {
                 (e.currentTarget as any)._dragStartX = e.clientX;
@@ -220,20 +163,13 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                 style={{ mixBlendMode: 'multiply' }}
                 draggable={false}
               />
-            </motion.div>
-          </AnimatePresence>
+            </div>
         </div>
 
         {/* Info Bar */}
         <div className="relative w-full max-w-5xl h-[300px] md:h-[150px] mx-4 mt-8 md:mt-24 z-20">
-          <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-            <motion.div 
+            <div
               key={`${vehicle.id}-info`}
-              custom={direction}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -40 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 w-full bg-white/70 backdrop-blur-2xl rounded-2xl md:rounded-2xl overflow-hidden border border-white/50 shadow-2xl"
             >
               <div className="p-3 md:p-4 lg:p-8 flex flex-col justify-center items-center text-white h-full" style={{ backgroundColor: '#00283C' }}>
@@ -278,14 +214,12 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
 
               <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center hover:bg-white/40 transition-colors group h-full">
                 <div className="flex items-center gap-2 mb-0.5 md:mb-2 justify-center">
-                  <motion.div 
-                    animate={{ scale: [1, 1.3, 1], opacity: [1, 0.4, 1] }}
-                    transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
-                    className="w-3 h-3 md:w-3.5 lg:w-4 md:h-3.5 lg:h-4 rounded-full flex items-center justify-center shrink-0"
+                  <div
+                    className="w-3 h-3 md:w-3.5 lg:w-4 md:h-3.5 lg:h-4 rounded-full flex items-center justify-center shrink-0 animate-pulse"
                     style={{ border: '2px solid #5CD29D' }}
                   >
                     <div className="w-1.5 h-1.5 md:w-1.5 lg:w-2 md:h-1.5 lg:h-2 rounded-full shadow-[0_0_12px_rgba(92,210,157,1)]" style={{ backgroundColor: '#5CD29D' }} />
-                  </motion.div>
+                  </div>
                   <span
                     className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap"
                     style={{ color: '#0B6B4B' }}
@@ -318,8 +252,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                   </Button>
                 )}
               </div>
-            </motion.div>
-          </AnimatePresence>
+            </div>
         </div>
 
         {/* Navigation - Hidden on Mobile */}

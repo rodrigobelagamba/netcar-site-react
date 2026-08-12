@@ -291,6 +291,71 @@ async function fetchStock() {
 
 const stock = await fetchStock();
 
+function normalizeBootstrapImage(raw) {
+  if (!raw) return "";
+  const value = String(raw).trim().replace(/\\/g, "/").replace(/^\.\/+/, "");
+  if (/^https?:\/\//i.test(value)) return value.replace(/^http:/i, "https:");
+  return `${SITE}/${value.replace(/^\/+/, "")}`;
+}
+
+// O endpoint completo do estoque passa perto de 1 MB. Entregar no HTML apenas os
+// campos usados no primeiro paint elimina a espera pela API sem expor chassi,
+// Renavam ou observações administrativas. O React atualiza os detalhes depois,
+// fora da janela crítica do LCP.
+const stockBootstrap = stock.map((vehicle) => {
+  const thumb = Array.isArray(vehicle?.imagens?.thumb)
+    ? vehicle.imagens.thumb.slice(0, 1).map(normalizeBootstrapImage)
+    : [];
+  const siteImages = vehicle?.imagens_site || {};
+
+  return {
+    id: String(vehicle.id),
+    name: [vehicle.marca, vehicle.modelo].filter(Boolean).join(" "),
+    slug: String(vehicle.link || vehicle.id),
+    price: Number(vehicle.valor || 0),
+    preco_com_troca: Number(vehicle.preco_com_troca || 0),
+    year: Number(vehicle.ano || 0),
+    anoFabricacao: vehicle.ano_fabricacao ? Number(vehicle.ano_fabricacao) : undefined,
+    km: Number(vehicle.km || 0),
+    images: thumb,
+    imagens_site: {
+      capa: siteImages.capa ? normalizeBootstrapImage(siteImages.capa) : null,
+      capa_thumb: siteImages.capa_thumb
+        ? normalizeBootstrapImage(siteImages.capa_thumb)
+        : null,
+      capa_opengraph: siteImages.capa_opengraph
+        ? normalizeBootstrapImage(siteImages.capa_opengraph)
+        : null,
+      galeria: [],
+      tem_fotos: siteImages.tem_fotos,
+    },
+    marca: String(vehicle.marca || ""),
+    modelo: String(vehicle.modelo || ""),
+    cor: String(vehicle.cor || ""),
+    motor: String(vehicle.motor || ""),
+    combustivel: String(vehicle.combustivel || ""),
+    cambio: String(vehicle.cambio || ""),
+    potencia: String(vehicle.potencia || ""),
+    placa: String(vehicle.placa || ""),
+    portas: Number(vehicle.portas || 0),
+    lugares: Number(vehicle.lugares || 0),
+    valor_formatado: String(vehicle.valor_formatado || ""),
+    preco_com_troca_formatado: String(vehicle.preco_com_troca_formatado || ""),
+    categoria: String(vehicle.categoria || ""),
+    opcionais: [],
+    diferenciais: [],
+    pdf: vehicle.pdf ? String(vehicle.pdf) : undefined,
+    pdf_url: vehicle.pdf_url ? normalizeBootstrapImage(vehicle.pdf_url) : undefined,
+    destaque: Number(vehicle.destaque || 0),
+    promocao: Number(vehicle.promocao || 0),
+  };
+});
+
+writeTextFile(
+  join(publicDir, "seo", "stock-bootstrap.json"),
+  `${JSON.stringify({ generatedAt: new Date().toISOString(), vehicles: stockBootstrap })}\n`,
+);
+
 function byHomePriority(a, b) {
   const destaqueDiff = Number(b?.destaque === 1) - Number(a?.destaque === 1);
   if (destaqueDiff !== 0) return destaqueDiff;

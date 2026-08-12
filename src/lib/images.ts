@@ -4,7 +4,7 @@
  * img.php nunca faz upscale, então a nitidez do original é preservada.
  */
 const STOCK_IMAGE_PATH = /\/(imagens|images)\//;
-const RASTER_EXT = /\.(png|jpe?g)$/i;
+const RASTER_EXT = /\.(png|jpe?g|webp)$/i;
 const AVIF_EXT = /\.avif$/i;
 
 /** react-pdf não decodifica AVIF — troca por .jpg irmão no estoque. Logos PNG ficam intactos. */

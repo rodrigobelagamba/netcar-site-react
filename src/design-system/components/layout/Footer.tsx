@@ -394,8 +394,12 @@ export function Footer() {
             className="flex-shrink-0 hover:opacity-80 transition-opacity"
           >
              <img 
-               src="/images/selo-sustentabilidade.webp"
-               alt="Selo Sustentabilidade" 
+               src={optimizeStockImage("/images/selo-sustentabilidade.webp", 200)}
+               alt="Selo Sustentabilidade"
+               width={160}
+               height={64}
+               loading="lazy"
+               decoding="async"
                className="h-16 w-auto object-contain"
                onError={(e) => {
                  e.currentTarget.style.display = 'none';

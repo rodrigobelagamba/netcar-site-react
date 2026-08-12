@@ -10,7 +10,6 @@ import {
   Gauge,
   Bot,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { useNavigate } from "@tanstack/react-router";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
@@ -18,6 +17,7 @@ import { formatKm, formatPrice, formatYear } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
 import {
   buildWhatsAppUrl,
+  DEFAULT_SALES_WHATSAPP,
   homeWhatsAppMessages,
   vehicleWhatsAppMessages,
 } from "@/lib/whatsappMessages";
@@ -67,7 +67,7 @@ export function HomeWhatsAppConversionPanel({
     : null;
 
   const wa = (message: string) =>
-    whatsapp?.numero ? buildWhatsAppUrl(whatsapp.numero, message) : "#";
+    buildWhatsAppUrl(whatsapp?.numero || DEFAULT_SALES_WHATSAPP, message);
 
   const primaryHref = wa(homeMessages.vehicleInterest);
   const financeHref = wa(
@@ -93,7 +93,7 @@ export function HomeWhatsAppConversionPanel({
     navigate({ to: `/veiculo/${slug}` });
   };
 
-  const ctaDisabled = !whatsapp?.numero;
+  const ctaDisabled = false;
 
   const quickActionClass =
     "inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-white/16";
@@ -104,13 +104,7 @@ export function HomeWhatsAppConversionPanel({
       <div className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
 
       <div className="container-main relative grid gap-4 md:gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.45 }}
-          className="rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-white shadow-2xl backdrop-blur md:p-7 lg:p-8"
-        >
+        <div className="rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-white shadow-2xl backdrop-blur md:p-7 lg:p-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#5CD29D]/30 bg-[#5CD29D]/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#5CD29D]">
             <MessageCircle className="h-4 w-4" />
             <span className="md:hidden">Atendimento 24h</span>
@@ -271,16 +265,10 @@ export function HomeWhatsAppConversionPanel({
               Falar com a iAN
             </a>
           </div>
-        </motion.div>
+        </div>
 
         {/* Card destaque — só md+ (no mobile poluia rolagem) */}
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.45, delay: 0.08 }}
-          className="hidden rounded-3xl border border-white/12 bg-white p-4 shadow-2xl md:block md:p-5"
-        >
+        <div className="hidden rounded-3xl border border-white/12 bg-white p-4 shadow-2xl md:block md:p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
               <span className="text-xs font-black uppercase tracking-[0.18em] text-[#128C7E]">
@@ -366,7 +354,7 @@ export function HomeWhatsAppConversionPanel({
               </button>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

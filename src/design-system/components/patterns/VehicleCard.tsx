@@ -2,7 +2,11 @@ import { useNavigate } from "@tanstack/react-router";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatPrice, formatYear, formatKm } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
-import { buildWhatsAppUrl, vehicleWhatsAppMessages } from "@/lib/whatsappMessages";
+import {
+  buildWhatsAppUrl,
+  DEFAULT_SALES_WHATSAPP,
+  vehicleWhatsAppMessages,
+} from "@/lib/whatsappMessages";
 import { CardsHero } from "./CardsHero";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 
@@ -73,6 +77,7 @@ export function VehicleCard({
 }: VehicleCardProps) {
   const navigate = useNavigate();
   const { data: whatsapp } = useWhatsAppQuery();
+  const whatsappNumber = whatsapp?.numero || DEFAULT_SALES_WHATSAPP;
   
   // PRIORIDADE 1: Usa imagens_site.capa_thumb se disponível
   // PRIORIDADE 2: Usa imagens_site.capa como fallback
@@ -163,24 +168,24 @@ export function VehicleCard({
   };
 
   const whatsAppHref =
-    showWhatsAppInterest && whatsapp?.numero && !isSold
+    showWhatsAppInterest && !isSold
       ? buildWhatsAppUrl(
-          whatsapp.numero,
+          whatsappNumber,
           vehicleWhatsAppMessages(vehicleLabel).info,
         )
       : undefined;
   const tradeModelLabel = model || name;
   const tradeInHref =
-    showWhatsAppInterest && whatsapp?.numero && !isSold
+    showWhatsAppInterest && !isSold
       ? buildWhatsAppUrl(
-          whatsapp.numero,
+          whatsappNumber,
           vehicleWhatsAppMessages(vehicleLabel, tradeModelLabel).trade,
         )
       : undefined;
   const financeHref =
-    showWhatsAppInterest && whatsapp?.numero && !isSold
+    showWhatsAppInterest && !isSold
       ? buildWhatsAppUrl(
-          whatsapp.numero,
+          whatsappNumber,
           vehicleWhatsAppMessages(vehicleLabel).finance,
         )
       : undefined;

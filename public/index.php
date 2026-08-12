@@ -214,6 +214,232 @@ function netcar_apply_route_meta($html, $meta)
     return $html;
 }
 
+function netcar_route_uses_stock_bootstrap($path)
+{
+    return $path === '/'
+        || $path === '/seminovos'
+        || $path === '/regioes-atendidas'
+        || in_array($path, array('/financiamento', '/atendimento-24h', '/move-brasil'), true)
+        || preg_match('#^/veiculo/#', (string) $path)
+        || preg_match('#^/seminovos-[a-z0-9-]+$#', (string) $path)
+        || preg_match('#^/vender-carro-[a-z0-9-]+$#', (string) $path)
+        || preg_match('#^/comprar-[a-z0-9-]+$#', (string) $path);
+}
+
+function netcar_stock_bootstrap_value()
+{
+    static $loaded = false;
+    static $value = null;
+
+    if ($loaded) {
+        return $value;
+    }
+    $loaded = true;
+
+    $file = __DIR__ . '/seo/stock-bootstrap.json';
+    if (!is_readable($file)) {
+        return null;
+    }
+    $decoded = json_decode((string) @file_get_contents($file), true);
+    if (!is_array($decoded) || empty($decoded['vehicles']) || !is_array($decoded['vehicles'])) {
+        return null;
+    }
+    $value = $decoded;
+    return $value;
+}
+
+function netcar_stock_bootstrap_script()
+{
+    $value = netcar_stock_bootstrap_value();
+    if (!is_array($value) || empty($value['vehicles']) || !is_array($value['vehicles'])) {
+        return null;
+    }
+    return '<script>window.__NETCAR_STOCK__='
+        . json_encode($value, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
+        . ';</script>';
+}
+
+/** Veículo cuja capa será o LCP nas rotas de estoque e detalhe. */
+function netcar_stock_critical_vehicle($path)
+{
+    $stock = netcar_stock_bootstrap_value();
+    if (!is_array($stock) || empty($stock['vehicles'])) {
+        return null;
+    }
+    $vehicles = $stock['vehicles'];
+
+    if ($path === '/seminovos') {
+        usort($vehicles, function ($left, $right) {
+            $leftModel = isset($left['modelo']) ? (string) $left['modelo'] : (isset($left['name']) ? (string) $left['name'] : '');
+            $rightModel = isset($right['modelo']) ? (string) $right['modelo'] : (isset($right['name']) ? (string) $right['name'] : '');
+            return strnatcasecmp($leftModel, $rightModel);
+        });
+        return isset($vehicles[0]) && is_array($vehicles[0]) ? $vehicles[0] : null;
+    }
+
+    if (preg_match('#/([0-9]+)$#', (string) $path, $matches)) {
+        foreach ($vehicles as $vehicle) {
+            if (is_array($vehicle) && isset($vehicle['id']) && (string) $vehicle['id'] === $matches[1]) {
+                return $vehicle;
+            }
+        }
+    }
+    return null;
+}
+
+function netcar_vehicle_cover($vehicle, $preferThumb)
+{
+    if (!is_array($vehicle)) {
+        return null;
+    }
+    $siteImages = isset($vehicle['imagens_site']) && is_array($vehicle['imagens_site'])
+        ? $vehicle['imagens_site']
+        : array();
+    $candidates = $preferThumb
+        ? array(isset($siteImages['capa_thumb']) ? $siteImages['capa_thumb'] : null, isset($siteImages['capa']) ? $siteImages['capa'] : null)
+        : array(isset($siteImages['capa']) ? $siteImages['capa'] : null, isset($siteImages['capa_thumb']) ? $siteImages['capa_thumb'] : null);
+    if (!empty($vehicle['images'][0])) {
+        $candidates[] = $vehicle['images'][0];
+    }
+    foreach ($candidates as $candidate) {
+        if (is_string($candidate) && trim($candidate) !== '') {
+            return trim($candidate);
+        }
+    }
+    return null;
+}
+
+/** Preload responsivo idêntico ao <img> que o React renderiza. */
+function netcar_stock_critical_preload($path)
+{
+    if ($path !== '/seminovos' && !preg_match('#^/veiculo/#', (string) $path)) {
+        return '';
+    }
+    $isStock = $path === '/seminovos';
+    $vehicle = netcar_stock_critical_vehicle($path);
+    $cover = netcar_vehicle_cover($vehicle, $isStock);
+    if ($cover === null) {
+        return '';
+    }
+
+    $widths = $isStock ? array(320, 480, 640, 768, 960) : array(480, 640, 768, 960, 1280);
+    $fallbackWidth = $isStock ? 640 : 960;
+    $srcset = array();
+    foreach ($widths as $width) {
+        $srcset[] = htmlspecialchars(netcar_banner_variant($cover, $width), ENT_QUOTES, 'UTF-8') . ' ' . $width . 'w';
+    }
+    $href = htmlspecialchars(netcar_banner_variant($cover, $fallbackWidth), ENT_QUOTES, 'UTF-8');
+    $sizes = $isStock ? '(max-width: 767px) 50vw, 25vw' : '(max-width: 1023px) 100vw, 70vw';
+    return '<link rel="preload" as="image" href="' . $href
+        . '" imagesrcset="' . implode(', ', $srcset)
+        . '" imagesizes="' . $sizes . '" fetchpriority="high">';
+}
+
+function netcar_stock_initial_lcp($path)
+{
+    if ($path !== '/seminovos' && !preg_match('#^/veiculo/#', (string) $path)) {
+        return '';
+    }
+    $isStock = $path === '/seminovos';
+    $vehicle = netcar_stock_critical_vehicle($path);
+    $cover = netcar_vehicle_cover($vehicle, $isStock);
+    if ($cover === null) {
+        return '';
+    }
+    $widths = $isStock ? array(320, 480, 640, 768, 960) : array(480, 640, 768, 960, 1280);
+    $fallbackWidth = $isStock ? 640 : 960;
+    $srcset = array();
+    foreach ($widths as $width) {
+        $srcset[] = htmlspecialchars(netcar_banner_variant($cover, $width), ENT_QUOTES, 'UTF-8') . ' ' . $width . 'w';
+    }
+    $name = is_array($vehicle) && !empty($vehicle['name']) ? (string) $vehicle['name'] : 'Veículo seminovo';
+    $sizes = $isStock ? '(max-width: 767px) 50vw, 25vw' : '100vw';
+    $style = $isStock ? ' style="width:50vw;max-width:380px"' : '';
+    return '<img src="'
+        . htmlspecialchars(netcar_banner_variant($cover, $fallbackWidth), ENT_QUOTES, 'UTF-8')
+        . '" srcset="' . implode(', ', $srcset)
+        . '" sizes="' . $sizes
+        . '" alt="' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8')
+        . '" width="1600" height="900" loading="eager" decoding="async" fetchpriority="high"'
+        . $style . '>';
+}
+
+function netcar_route_manifest_entry($path)
+{
+    if ($path === '/') return 'src/modules/home/pages/HomePage.tsx';
+    if ($path === '/seminovos') return 'src/modules/seminovos/pages/SeminovosPage.tsx';
+    if (preg_match('#^/veiculo/#', (string) $path)) return 'src/modules/detalhes/pages/DetalhesPage.tsx';
+    if (preg_match('#^/laudo/#', (string) $path)) return 'src/modules/detalhes/pages/ICheckLaudoPage.tsx';
+    if ($path === '/sobre') return 'src/modules/sobre/pages/SobrePage.tsx';
+    if ($path === '/contato') return 'src/modules/contato/pages/ContatoPage.tsx';
+    if (in_array($path, array('/compra', '/compramos-seu-usado', '/vender-meu-carro'), true)) {
+        return 'src/modules/compra/pages/CompraPage.tsx';
+    }
+    if ($path === '/blog') return 'src/modules/blog/pages/BlogPage.tsx';
+    if (preg_match('#^/blog/#', (string) $path)) return 'src/modules/blog/pages/BlogPostPage.tsx';
+    if ($path === '/seminovos-automaticos') return 'src/modules/seo/pages/SeminovosAutomaticosPage.tsx';
+    if ($path === '/comparar') return 'src/modules/seo/pages/ComparadorPage.tsx';
+    if ($path === '/regioes-atendidas') return 'src/modules/seo/pages/RegionsHubPage.tsx';
+    if (preg_match('#^/seminovos-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/CityLandingPage.tsx';
+    if (preg_match('#^/vender-carro-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/SellCityLandingPage.tsx';
+    if (preg_match('#^/comprar-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/EstoqueLandingPage.tsx';
+    if (in_array($path, array('/financiamento', '/atendimento-24h', '/move-brasil', '/politica-editorial'), true)) {
+        return 'src/modules/seo/pages/contentSeoPages.tsx';
+    }
+    return null;
+}
+
+function netcar_collect_manifest_files($manifest, $key, &$files, &$seen)
+{
+    if (isset($seen[$key]) || !isset($manifest[$key]) || !is_array($manifest[$key])) return;
+    $seen[$key] = true;
+    $entry = $manifest[$key];
+    if (!empty($entry['file']) && is_string($entry['file'])) {
+        $files[] = $entry['file'];
+    }
+    if (!empty($entry['imports']) && is_array($entry['imports'])) {
+        foreach ($entry['imports'] as $dependency) {
+            netcar_collect_manifest_files($manifest, $dependency, $files, $seen);
+        }
+    }
+}
+
+function netcar_resolve_manifest_key($manifest, $entryKey)
+{
+    if (isset($manifest[$entryKey])) return $entryKey;
+
+    $expectedName = pathinfo($entryKey, PATHINFO_FILENAME);
+    foreach ($manifest as $key => $entry) {
+        if (!is_array($entry)) continue;
+        if (isset($entry['src']) && $entry['src'] === $entryKey) return $key;
+        if (isset($entry['name']) && $entry['name'] === $expectedName) return $key;
+    }
+    return null;
+}
+
+function netcar_route_modulepreloads($path)
+{
+    $entryKey = netcar_route_manifest_entry($path);
+    $manifestFile = __DIR__ . '/.vite/manifest.json';
+    if ($entryKey === null || !is_readable($manifestFile)) return '';
+    $manifest = json_decode((string) @file_get_contents($manifestFile), true);
+    if (!is_array($manifest)) return '';
+    $resolvedKey = netcar_resolve_manifest_key($manifest, $entryKey);
+    if ($resolvedKey === null) return '';
+
+    $files = array();
+    $seen = array();
+    netcar_collect_manifest_files($manifest, $resolvedKey, $files, $seen);
+    $tags = array();
+    foreach (array_unique($files) as $file) {
+        if (!preg_match('/\.js$/', $file)) continue;
+        $tags[] = '<link rel="modulepreload" crossorigin href="/'
+            . htmlspecialchars(ltrim($file, '/'), ENT_QUOTES, 'UTF-8')
+            . '">';
+    }
+    return implode("\n  ", $tags);
+}
+
 /**
  * Replica a normalização do frontend (normalizeImageUrl em site.ts):
  * "./imagens/banner/x.jpg" -> "/imagens/banner/x.jpg" (root-relative resolve
@@ -355,6 +581,36 @@ if (!netcar_is_valid_spa_route($path)) {
 $html = netcar_apply_route_meta($html, netcar_route_meta($path));
 $isHome = $path === '/';
 
+$modulePreloads = netcar_route_modulepreloads($path);
+$stockBootstrapScript = netcar_route_uses_stock_bootstrap($path)
+    ? netcar_stock_bootstrap_script()
+    : null;
+
+$criticalImageByPath = array(
+    '/sobre' => array(
+        'src' => '/img.php?src=%2Fimages%2Floja1.webp&amp;w=640',
+        'srcset' => '/img.php?src=%2Fimages%2Floja1.webp&amp;w=320 320w, /img.php?src=%2Fimages%2Floja1.webp&amp;w=480 480w, /img.php?src=%2Fimages%2Floja1.webp&amp;w=640 640w',
+        'sizes' => '(max-width: 767px) 70vw, 320px',
+    ),
+);
+if (isset($criticalImageByPath[$path])) {
+    $criticalImage = $criticalImageByPath[$path];
+    $html = str_replace(
+        '</head>',
+        "  <link rel=\"preload\" as=\"image\" href=\"{$criticalImage['src']}\" imagesrcset=\"{$criticalImage['srcset']}\" imagesizes=\"{$criticalImage['sizes']}\" fetchpriority=\"high\">\n  </head>",
+        $html
+    );
+}
+
+$stockCriticalPreload = netcar_stock_critical_preload($path);
+if ($stockCriticalPreload !== '') {
+    $html = str_replace('</head>', "  {$stockCriticalPreload}\n  </head>", $html);
+}
+$stockInitialLcp = netcar_stock_initial_lcp($path);
+if ($stockInitialLcp !== '') {
+    $html = str_replace('<div id="netcar-initial-lcp"></div>', '<div id="netcar-initial-lcp">' . $stockInitialLcp . '</div>', $html);
+}
+
 if ($isHome) {
     $bannerUrl = netcar_get_active_banner_url();
     $hasActiveBanner = $bannerUrl !== null;
@@ -403,6 +659,15 @@ if ($isHome) {
             . '" sizes="100vw" alt="Carro seminovo em destaque" width="1600" height="900" loading="eager" decoding="async" fetchpriority="high"></div>';
         $html = str_replace('<div id="netcar-initial-lcp"></div>', $initialHero, $html);
     }
+}
+
+// Imagens críticas aparecem antes dos preloads de JS e do JSON de estoque.
+// Isso dá ao navegador a primeira oportunidade de rede para baixar o LCP.
+if ($modulePreloads !== '') {
+    $html = str_replace('</head>', "  {$modulePreloads}\n  </head>", $html);
+}
+if ($stockBootstrapScript !== null) {
+    $html = str_replace('</head>', "  {$stockBootstrapScript}\n  </head>", $html);
 }
 
 header('Content-Type: text/html; charset=UTF-8');

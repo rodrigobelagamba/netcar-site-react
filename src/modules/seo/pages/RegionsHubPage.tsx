@@ -7,7 +7,7 @@ import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas"
 import { RegionalStockPreview } from "@/modules/seo/components/RegionalStockPreview";
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
-import { Localizacao } from "@/design-system/components/layout/Localizacao";
+import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 
@@ -180,7 +180,7 @@ export function RegionsHubPage() {
 
       <div className="w-full bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="container-main space-y-8">
-          <Localizacao />
+          <LazyLocalizacao />
           <IanBot />
         </div>
       </div>

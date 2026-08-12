@@ -1,6 +1,7 @@
 import { formatWhatsAppNumber } from "@/lib/formatters";
 
 export const SITE_WHATSAPP_PREFIX = "Estava olhando o site da Netcar e";
+export const DEFAULT_SALES_WHATSAPP = "5551997293118";
 
 /** Prefixo padrão para identificar leads vindos do site (filtro no WhatsApp). */
 export function siteWhatsAppMessage(body: string): string {

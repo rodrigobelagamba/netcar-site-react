@@ -1,6 +1,10 @@
 import { MessageCircle, Calculator, Bot, Sparkles } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { buildWhatsAppUrl, homeWhatsAppMessages } from "@/lib/whatsappMessages";
+import {
+  buildWhatsAppUrl,
+  DEFAULT_SALES_WHATSAPP,
+  homeWhatsAppMessages,
+} from "@/lib/whatsappMessages";
 
 interface SeminovosWhatsAppHelpPanelProps {
   /** Mensagem já montada com filtros ativos (quando houver). */
@@ -16,11 +20,10 @@ export function SeminovosWhatsAppHelpPanel({
 }: SeminovosWhatsAppHelpPanelProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const messages = homeWhatsAppMessages();
+  const whatsappNumber = whatsapp?.numero || DEFAULT_SALES_WHATSAPP;
 
-  if (!whatsapp?.numero) return null;
-
-  const financeHref = buildWhatsAppUrl(whatsapp.numero, messages.simulateFinance);
-  const ianHref = buildWhatsAppUrl(whatsapp.numero, messages.talkToIan);
+  const financeHref = buildWhatsAppUrl(whatsappNumber, messages.simulateFinance);
+  const ianHref = buildWhatsAppUrl(whatsappNumber, messages.talkToIan);
 
   const primaryLabel = hasFilters
     ? "Receber opções no WhatsApp"

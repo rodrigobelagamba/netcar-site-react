@@ -25,6 +25,7 @@ export default defineConfig({
   build: {
     outDir: "dist",
     assetsDir: "assets",
+    manifest: true,
     sourcemap: process.env.NODE_ENV === "development",
     minify: "esbuild",
     chunkSizeWarningLimit: 600,

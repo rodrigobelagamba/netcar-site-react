@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { 
   Phone, 
   Mail, 
@@ -85,25 +84,15 @@ export function ContatoPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Hero */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-fg mb-4">Fale Conosco</h1>
           <p className="text-muted-foreground text-lg max-w-md mx-auto">
             Escolha a melhor forma de entrar em contato
           </p>
-        </motion.div>
+        </div>
 
         {/* Quick Contact Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-wrap justify-center gap-4 mb-16"
-        >
+        <div className="flex flex-wrap justify-center gap-4 mb-16">
           <a
             href={getWhatsAppLink()}
             target="_blank"
@@ -128,18 +117,13 @@ export function ContatoPage() {
             <Mail className="w-5 h-5 text-muted-foreground" />
             E-mail
           </a>
-        </motion.div>
+        </div>
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Form - Takes 2 columns */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:col-span-2 bg-bg rounded-3xl p-6 md:p-8 shadow-sm"
-          >
+          <div className="lg:col-span-2 bg-bg rounded-3xl p-6 md:p-8 shadow-sm">
             <h2 className="text-2xl font-bold text-fg mb-1">Envie uma mensagem</h2>
             <p className="text-muted-foreground mb-5">Responderemos o mais breve possível</p>
             
@@ -228,15 +212,10 @@ export function ContatoPage() {
                 Enviar mensagem
               </button>
             </form>
-          </motion.div>
+          </div>
 
           {/* Sidebar */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="space-y-6"
-          >
+          <div className="space-y-6">
             {/* Lojas */}
             <div className="bg-bg rounded-3xl p-8 shadow-sm">
               <div className="flex items-center gap-3 mb-6">
@@ -328,7 +307,7 @@ export function ContatoPage() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 

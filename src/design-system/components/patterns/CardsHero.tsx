@@ -1,5 +1,4 @@
 import { MessageCircle, Plus } from "lucide-react";
-import { motion } from "framer-motion";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
@@ -36,7 +35,6 @@ export function CardsHero({
   showPriceComparison = false,
   year,
   delay = 0,
-  fastAnimation = false,
   onClick,
   whatsAppHref,
   tradeInHref,
@@ -339,32 +337,8 @@ export function CardsHero({
     </div>
   );
 
-  // Efeito original para os primeiros cards (com whileInView)
-  if (!fastAnimation) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: delay * 0.1 }}
-        viewport={{ once: true }}
-        className={`${
-          compact
-            ? "pt-12 h-full"
-            : "pt-24 md:pt-32 h-full short1600:pt-20"
-        } ${onClick ? 'cursor-pointer' : ''}`}
-        onClick={onClick}
-      >
-        {content}
-      </motion.div>
-    );
-  }
-
-  // Efeito rápido para os demais cards
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2, delay: delay * 0.05 }}
+    <div
       className={`${
         compact
           ? "pt-12 h-full"
@@ -373,6 +347,6 @@ export function CardsHero({
       onClick={onClick}
     >
       {content}
-    </motion.div>
+    </div>
   );
 }

@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { motion, AnimatePresence } from "framer-motion";
 
 export interface AutocompleteSelectOption {
   value: string;
@@ -182,14 +181,9 @@ export function AutocompleteSelect({
           </div>
         </div>
 
-        <AnimatePresence>
-          {isOpen && (
-            <motion.ul
+        {isOpen && (
+            <ul
               ref={listRef}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
               className={cn(
                 "absolute z-50 w-full mt-1 max-h-60 overflow-auto",
                 "bg-bg border border-border rounded-lg shadow-lg",
@@ -217,11 +211,9 @@ export function AutocompleteSelect({
                   </li>
                 ))
               )}
-            </motion.ul>
-          )}
-        </AnimatePresence>
+            </ul>
+        )}
       </div>
     </div>
   );
 }
-

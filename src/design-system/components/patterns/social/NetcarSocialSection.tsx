@@ -11,7 +11,7 @@ const qaSideBySide = import.meta.env.VITE_SOCIAL_QA_SIDE_BY_SIDE === "true";
 
 function NetcarSocialContent() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current) return;

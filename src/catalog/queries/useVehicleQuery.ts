@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { fetchVehicleBySlug, type Vehicle } from "../endpoints/vehicles";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
+import { getBootstrapVehicle } from "@/lib/stockBootstrap";
 
 /** Reusa carro já carregado no estoque — evita tela "Carregando detalhes". */
 function findVehicleInListCache(
@@ -30,14 +32,28 @@ function isVehicleGone(error: unknown): boolean {
 
 export function useVehicleQuery(slug: string) {
   const queryClient = useQueryClient();
+  const bootstrapVehicle = getBootstrapVehicle(slug);
 
-  return useQuery({
+  const result = useQuery({
     queryKey: ["vehicle", slug],
     queryFn: () => fetchVehicleBySlug(slug),
     enabled: !!slug,
+    initialData: bootstrapVehicle,
+    initialDataUpdatedAt: bootstrapVehicle ? Date.now() : undefined,
+    refetchOnMount: bootstrapVehicle ? false : undefined,
     placeholderData: () => findVehicleInListCache(queryClient, slug),
     // Sem isso, o link antigo de um carro vendido deixava o visitante uns 7s
     // olhando skeleton enquanto o react-query repetia o 404 três vezes.
     retry: (failureCount, error) => !isVehicleGone(error) && failureCount < 2,
   });
+
+  useEffect(() => {
+    if (!slug || !bootstrapVehicle) return;
+    const timer = window.setTimeout(() => {
+      void result.refetch();
+    }, 12_000);
+    return () => window.clearTimeout(timer);
+  }, [bootstrapVehicle, result.refetch, slug]);
+
+  return result;
 }
