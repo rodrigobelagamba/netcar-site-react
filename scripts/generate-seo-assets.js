@@ -10,6 +10,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
 import { fetchVehicleSitemapUrls, generateVehicleSlug } from "./lib/vehicle-sitemap-urls.js";
+import { readFreshSeoStockCache } from "./lib/seo-stock-cache.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
@@ -17,6 +18,9 @@ const publicDir = join(rootDir, "public");
 const seoStaticDir = join(publicDir, "seo-static");
 
 const SITE = "https://www.netcarmultimarcas.com.br";
+const STOCK_API_URL =
+  process.env.NETCAR_SEO_STOCK_API_URL ||
+  `${SITE}/api/v1/veiculos.php?limit=500`;
 const WHATSAPP_IAN = "5551997293118";
 const today = new Date().toISOString().slice(0, 10);
 
@@ -261,7 +265,7 @@ function renderSections(sections) {
 // nem geram link interno para as fichas.
 async function fetchStock() {
   try {
-    const res = await fetch(`${SITE}/api/v1/veiculos.php?limit=500`, {
+    const res = await fetch(STOCK_API_URL, {
       headers: { Accept: "application/json" },
       signal: AbortSignal.timeout(20000),
     });
@@ -270,7 +274,17 @@ async function fetchStock() {
     if (!json.success || !Array.isArray(json.data)) throw new Error("resposta inválida");
     return json.data.filter((vehicle) => Number(vehicle.valor) > 0);
   } catch (error) {
-    console.warn(`Aviso: estoque indisponível (${error.message}); vitrines ficam sem carros.`);
+    const cached = readFreshSeoStockCache(rootDir);
+    if (cached?.vehicles.length) {
+      const ageMinutes = Math.max(0, Math.round(cached.ageMs / 60000));
+      console.warn(
+        `Aviso: estoque indisponível (${error.message}); usando cache de ${ageMinutes} min com ${cached.vehicles.length} veículos.`,
+      );
+      return cached.vehicles;
+    }
+    console.warn(
+      `Aviso: estoque indisponível (${error.message}) e cache recente ausente; validação interromperá o build.`,
+    );
     return [];
   }
 }
