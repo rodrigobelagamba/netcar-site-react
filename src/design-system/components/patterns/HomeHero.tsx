@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, Maximize2, MessageCircle } from "lucide-react";
 import { Button } from "@/design-system/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatPrice, formatYear } from "@/lib/formatters";
@@ -11,6 +11,7 @@ import {
   homeWhatsAppMessages,
 } from "@/lib/whatsappMessages";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
+import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
@@ -40,6 +41,20 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
   const { data: whatsapp } = useWhatsAppQuery();
+
+  useEffect(() => {
+    if (vehicles.length <= 1) return;
+
+    const timer = window.setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % vehicles.length);
+    }, 12000);
+
+    return () => window.clearInterval(timer);
+  }, [vehicles.length]);
+
+  useEffect(() => {
+    setCurrentIndex((prev) => (prev < vehicles.length ? prev : 0));
+  }, [vehicles.length]);
   
   if (!vehicles || vehicles.length === 0) {
     return null;
@@ -88,7 +103,9 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
       ? vehicle.preco_com_troca
       : undefined;
   const showPriceComparison =
-    tradePriceValue !== undefined && tradePriceValue !== vehicle.price;
+    SHOW_CAMPAIGN_STAMP &&
+    tradePriceValue !== undefined &&
+    tradePriceValue > vehicle.price;
   const previousPriceFormatted = showPriceComparison
     ? sanitizeFormattedPrice(vehicle.preco_com_troca_formatado) || formatPrice(tradePriceValue!)
     : "";

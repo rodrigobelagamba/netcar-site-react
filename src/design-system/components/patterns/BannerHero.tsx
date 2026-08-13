@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Banner } from "@/catalog/endpoints/site";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
@@ -9,6 +9,20 @@ interface BannerHeroProps {
 
 export function BannerHero({ banners }: BannerHeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (banners.length <= 1) return;
+
+    const timer = window.setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % banners.length);
+    }, 6000);
+
+    return () => window.clearInterval(timer);
+  }, [banners.length]);
+
+  useEffect(() => {
+    setCurrentIndex((prev) => (prev < banners.length ? prev : 0));
+  }, [banners.length]);
 
   if (!banners || banners.length === 0) {
     return null;

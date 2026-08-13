@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { formatPrice } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
+import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 
 export interface HeroVehicle {
   id: string;
@@ -95,7 +96,9 @@ export function Hero({ vehicles }: HeroProps) {
       ? vehicle.preco_com_troca
       : undefined;
   const showPriceComparison =
-    tradePriceValue !== undefined && tradePriceValue !== vehicle.price;
+    SHOW_CAMPAIGN_STAMP &&
+    tradePriceValue !== undefined &&
+    tradePriceValue > vehicle.price;
   const previousPriceFormatted = showPriceComparison
     ? sanitizeFormattedPrice(vehicle.preco_com_troca_formatado) || formatPrice(tradePriceValue!)
     : "";
@@ -297,4 +300,3 @@ export function Hero({ vehicles }: HeroProps) {
     </div>
   );
 }
-

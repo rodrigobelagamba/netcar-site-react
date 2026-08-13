@@ -9,6 +9,7 @@ import {
 } from "@/lib/whatsappMessages";
 import { CardsHero } from "./CardsHero";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
+import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 
 export type VehicleFocusPayload = {
   id: string;
@@ -121,7 +122,9 @@ export function VehicleCard({
     typeof price === "number" && Number.isFinite(price) ? price : 0;
 
   const shouldShowPriceComparison =
-    tradePriceValue !== undefined && tradePriceValue !== basePriceValue;
+    SHOW_CAMPAIGN_STAMP &&
+    tradePriceValue !== undefined &&
+    tradePriceValue > basePriceValue;
 
   // Quando houver diferença, mostra:
   // De: preço com troca (riscado)

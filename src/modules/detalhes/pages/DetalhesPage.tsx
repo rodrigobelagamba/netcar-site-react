@@ -1480,7 +1480,10 @@ export function DetalhesPage() {
     const tradePrice =
       typeof vehicle.preco_com_troca === "number" ? vehicle.preco_com_troca : undefined;
     const showPriceComparison =
-      tradePrice !== undefined && Number.isFinite(tradePrice) && tradePrice !== basePrice;
+      SHOW_CAMPAIGN_STAMP &&
+      tradePrice !== undefined &&
+      Number.isFinite(tradePrice) &&
+      tradePrice > basePrice;
 
     return {
       marca: vehicle.marca || vehicle.name?.split(" ")[0] || "",
