@@ -103,7 +103,7 @@ export function CompraPage() {
                       width={320}
                       height={320}
                       loading="eager"
-                      decoding="async"
+                      decoding="sync"
                       fetchPriority="high"
                       className="w-full h-full rounded-full object-cover"
                       onError={(e) => {

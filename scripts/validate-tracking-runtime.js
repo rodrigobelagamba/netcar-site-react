@@ -39,8 +39,9 @@ const context = {
   dataLayer: [],
   document: {
     referrer: "",
+    readyState: "loading",
     getElementsByTagName: () => [firstScript],
-    createElement: () => ({ async: false, src: "" }),
+    createElement: () => ({ async: false, src: "", onerror: undefined }),
     querySelector: () => null,
     head: {
       appendChild(node) {
@@ -85,10 +86,15 @@ assert(
   "PageView inicial do Meta não entrou na fila",
 );
 assert(
-  typeof idleCallback === "function",
-  "carregamento adiado não foi agendado",
+  typeof listeners.get("load") === "function",
+  "carregamento adiado não aguardou o load",
 );
 
+listeners.get("load")();
+assert(
+  typeof idleCallback === "function",
+  "carregamento adiado não foi agendado após o load",
+);
 idleCallback();
 
 const sources = insertedScripts.map((script) => script.src);
@@ -97,8 +103,8 @@ assert(
   "GTM não foi carregado",
 );
 assert(
-  sources.includes("https://www.googletagmanager.com/gtag/js?id=G-MGPNBDNQ9G"),
-  "GA4 direto não foi carregado",
+  !sources.includes("https://www.googletagmanager.com/gtag/js?id=G-MGPNBDNQ9G"),
+  "GA4 direto duplicou o GA4 já administrado pelo GTM",
 );
 assert(
   sources.includes("https://connect.facebook.net/en_US/fbevents.js"),
@@ -118,6 +124,25 @@ assert(
   "bootstrap duplicou as bibliotecas de monitoramento",
 );
 
+const gtmScript = insertedScripts.find((script) =>
+  script.src.includes("gtm.js?id=GTM-M8MZRTL9"),
+);
+assert(typeof gtmScript?.onerror === "function", "fallback do GA4 ausente no GTM");
+gtmScript.onerror();
+assert(
+  insertedScripts.some(
+    (script) =>
+      script.src === "https://www.googletagmanager.com/gtag/js?id=G-MGPNBDNQ9G",
+  ),
+  "GA4 direto não carregou quando o GTM falhou",
+);
+const fallbackScriptCount = insertedScripts.length;
+gtmScript.onerror();
+assert(
+  insertedScripts.length === fallbackScriptCount,
+  "fallback do GA4 carregou mais de uma vez",
+);
+
 console.log(
-  "Tags validadas em runtime: GTM, GA4 e Meta carregam uma vez e preservam as filas.",
+  "Tags validadas em runtime: GTM e Meta carregam uma vez; GA4 direto fica como fallback sem duplicação.",
 );

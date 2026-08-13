@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-landings.js && node scripts/validate-regional-seo.js && node scripts/validate-blog-intent.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && node scripts/validate-generated-seo.js && node scripts/validate-server-routing.js && node scripts/validate-tracking-runtime.js && node scripts/generate-whatsapp-catalog-feed.js && tsc && vite build && node scripts/copy-social-php.js",
+    "build": "node scripts/generate-landings.js && node scripts/validate-regional-seo.js && node scripts/validate-blog-intent.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && node scripts/validate-generated-seo.js && node scripts/validate-server-routing.js && node scripts/validate-tracking-runtime.js && node scripts/generate-whatsapp-catalog-feed.js && tsc && vite build && node scripts/defer-built-css.js && node scripts/copy-social-php.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "generate-landings": "node scripts/generate-landings.js",
     "generate-blog": "node scripts/generate-blog.js",
@@ -34,7 +34,6 @@
     "@tanstack/react-query": "^5.17.0",
     "@tanstack/react-router": "^1.153.1",
     "@types/react-slick": "^0.23.13",
-    "axios": "^1.19.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "embla-carousel-react": "^8.0.0",

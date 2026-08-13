@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "@/design-system/components/utils/StaticMotion";
 import { useAboutTextQuery, useCountersQuery } from "@/catalog/queries/useSiteQuery";
 import { useAddressQuery, usePhoneQuery, useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { Link } from "@tanstack/react-router";
@@ -136,7 +136,7 @@ export function SobrePage() {
                       width={640}
                       height={640}
                       loading="eager"
-                      decoding="async"
+                      decoding="sync"
                       fetchPriority="high"
                       className="w-full h-full rounded-full object-cover"
                       onError={(e) => {

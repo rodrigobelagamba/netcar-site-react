@@ -11,7 +11,7 @@ import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
+import { VehicleCardStatic } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
 import { ChevronDown, Filter, MessageCircle } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
@@ -123,6 +123,7 @@ export function SeminovosPage() {
   });
   const { data: stockData } = useAllStockDataQuery();
   const { data: whatsapp } = useWhatsAppQuery();
+  const whatsAppNumber = whatsapp?.numero || DEFAULT_SALES_WHATSAPP;
   const { searchTerm } = useSearchContext();
 
   const hasFilterParams = useMemo(() => {
@@ -399,7 +400,6 @@ export function SeminovosPage() {
 
   // Monta mensagem WhatsApp com filtros ativos
   const seminovosWhatsAppHref = useMemo(() => {
-    const whatsappNumber = whatsapp?.numero || DEFAULT_SALES_WHATSAPP;
     const parts: string[] = [];
     if (search.marca) parts.push(`marca ${search.marca}`);
     if (search.modelo) parts.push(`modelo ${search.modelo}`);
@@ -418,18 +418,18 @@ export function SeminovosPage() {
     }
     if (!parts.length) {
       return buildWhatsAppUrl(
-        whatsappNumber,
+        whatsAppNumber,
         homeWhatsAppMessages().vehicleInterest,
       );
     }
     return buildWhatsAppUrl(
-      whatsappNumber,
+      whatsAppNumber,
       siteWhatsAppMessage(
         `quero help pra achar um seminovo com: ${parts.join(", ")}.`,
       ),
     );
   }, [
-    whatsapp?.numero,
+    whatsAppNumber,
     search.marca,
     search.modelo,
     search.categoria,
@@ -646,7 +646,7 @@ export function SeminovosPage() {
             >
               {visibleVehicles.map((vehicle, index) => (
                 <Fragment key={vehicle.id}>
-                  <VehicleCard
+                  <VehicleCardStatic
                     id={vehicle.id}
                     name={vehicle.modelo || vehicle.name}
                     price={vehicle.price || 0}
@@ -666,6 +666,7 @@ export function SeminovosPage() {
                     eagerImage
                     showWhatsAppInterest
                     whatsAppSource="seminovos_grid"
+                    whatsAppNumber={whatsAppNumber}
                     compact={stockLayout.compact}
                   />
                   {showMidGridBanner && index + 1 === midGridBreak && (

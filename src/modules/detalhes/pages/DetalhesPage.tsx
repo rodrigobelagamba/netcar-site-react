@@ -1937,7 +1937,7 @@ export function DetalhesPage() {
                 width={1600}
                 height={900}
                 loading="eager"
-                decoding="async"
+                decoding="sync"
                 fetchPriority="high"
                 className={`w-full h-full lg:h-auto max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
                 onError={(e) => {

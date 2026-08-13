@@ -50,6 +50,7 @@ export function CardsHero({
   // `delay` é o índice do card na lista. Os primeiros ficam acima da dobra e
   // costumam ser o elemento de LCP — carregar preguiçosamente atrasa a métrica.
   const isAboveTheFold = delay < (compact ? 4 : 5);
+  const deferOffscreenPaint = !isAboveTheFold;
   const content = (
     <div
       className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center h-full ${
@@ -93,8 +94,10 @@ export function CardsHero({
             width={960}
             height={640}
             loading={isAboveTheFold || eagerImage ? "eager" : "lazy"}
-            fetchPriority={delay === 0 ? "high" : "auto"}
-            decoding="async"
+            fetchPriority={
+              delay === 0 ? "high" : deferOffscreenPaint ? "low" : "auto"
+            }
+            decoding={delay === 0 ? "sync" : "async"}
             className={`!border-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-2 drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] ${isSold ? "grayscale-[0.25]" : ""}`}
           />
           {isSold && (

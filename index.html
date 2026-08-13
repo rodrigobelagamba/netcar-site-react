@@ -77,6 +77,17 @@
         }
       })();
 
+      function loadDirectGa4Fallback() {
+        if (window.__netcarDirectGaLoaded) return;
+        window.__netcarDirectGaLoaded = true;
+        var ga = document.createElement("script");
+        ga.async = true;
+        ga.src = "https://www.googletagmanager.com/gtag/js?id=G-MGPNBDNQ9G";
+        document.head.appendChild(ga);
+        gtag("js", new Date());
+        gtag("config", "G-MGPNBDNQ9G", { send_page_view: false });
+      }
+
       function loadDeferredAnalytics() {
         if (window.__netcarAnalyticsLoaded) return;
         window.__netcarAnalyticsLoaded = true;
@@ -89,15 +100,9 @@
             dl = l != "dataLayer" ? "&l=" + l : "";
           j.async = true;
           j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+          j.onerror = loadDirectGa4Fallback;
           f.parentNode.insertBefore(j, f);
         })(window, document, "script", "dataLayer", "GTM-M8MZRTL9");
-
-        var ga = document.createElement("script");
-        ga.async = true;
-        ga.src = "https://www.googletagmanager.com/gtag/js?id=G-MGPNBDNQ9G";
-        document.head.appendChild(ga);
-        gtag("js", new Date());
-        gtag("config", "G-MGPNBDNQ9G", { send_page_view: false });
 
         if (
           !document.querySelector(
@@ -129,11 +134,21 @@
         window.addEventListener(name, onFirstInteraction, listenerOpts);
       });
 
-      if ("requestIdleCallback" in window) {
-        requestIdleCallback(loadDeferredAnalytics, { timeout: 3500 });
+      // A fila de eventos existe desde o primeiro byte. As bibliotecas pesadas
+      // entram no primeiro gesto do cliente ou no primeiro ocioso APÓS o load,
+      // sem competir com o LCP. Cliques de conversão continuam imediatos.
+      function scheduleDeferredAnalytics() {
+        if ("requestIdleCallback" in window) {
+          requestIdleCallback(loadDeferredAnalytics, { timeout: 2500 });
+        } else {
+          setTimeout(loadDeferredAnalytics, 1200);
+        }
+      }
+      if (document.readyState === "complete") {
+        scheduleDeferredAnalytics();
       } else {
-        window.addEventListener("load", function () {
-          setTimeout(loadDeferredAnalytics, 1500);
+        window.addEventListener("load", scheduleDeferredAnalytics, {
+          once: true,
         });
       }
     </script>

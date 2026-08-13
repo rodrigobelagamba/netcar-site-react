@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "@/design-system/components/utils/StaticMotion";
 import { Banknote } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { buildWhatsAppUrl, quickSellWhatsAppMessage } from "@/lib/whatsappMessages";

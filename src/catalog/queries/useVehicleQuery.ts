@@ -3,8 +3,8 @@ import {
   useQueryClient,
   type QueryClient,
 } from "@tanstack/react-query";
-import { isAxiosError } from "axios";
 import { fetchVehicleBySlug, type Vehicle } from "../endpoints/vehicles";
+import { isHttpRequestError } from "../axios-instance";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
 import { getBootstrapVehicle } from "@/lib/stockBootstrap";
 
@@ -29,7 +29,7 @@ function findVehicleInListCache(
 
 /** Carro que saiu do estoque: a API responde 404 e insistir não muda nada. */
 function isVehicleGone(error: unknown): boolean {
-  if (isAxiosError(error)) {
+  if (isHttpRequestError(error)) {
     return error.response?.status === 404;
   }
   return error instanceof Error && error.message === "Vehicle not found";

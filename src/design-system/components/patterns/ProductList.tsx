@@ -1,13 +1,15 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-  VehicleCard,
+  VehicleCardStatic,
   type VehicleCardProps,
 } from "./VehicleCard";
 import { Button } from "../ui/button";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import {
   useStockFocusObserver,
   type VehicleFocusHandler,
 } from "@/hooks/useStockFocusObserver";
+import { DEFAULT_SALES_WHATSAPP } from "@/lib/whatsappMessages";
 
 interface ProductListProps {
   vehicles: VehicleCardProps[];
@@ -48,6 +50,25 @@ function EmptyState() {
   );
 }
 
+function getCompactLayout() {
+  return typeof window !== "undefined" && window.innerWidth < 768;
+}
+
+/** Renderiza apenas o grid que o usuário realmente vê, inclusive ao redimensionar. */
+function useCompactLayout() {
+  const [compact, setCompact] = useState(getCompactLayout);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const update = () => setCompact(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return compact;
+}
+
 export function ProductList({
   vehicles,
   isLoading,
@@ -57,6 +78,9 @@ export function ProductList({
   scrollFocusPaused = false,
 }: ProductListProps) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const compact = useCompactLayout();
+  const { data: whatsapp } = useWhatsAppQuery();
+  const whatsAppNumber = whatsapp?.numero || DEFAULT_SALES_WHATSAPP;
   useStockFocusObserver(
     rootRef,
     isLoading ? undefined : onVehicleFocus,
@@ -66,18 +90,18 @@ export function ProductList({
 
   if (isLoading) {
     return (
-      <>
-        <div className="md:hidden grid grid-cols-2 items-stretch gap-2">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <SkeletonCard key={i} compact />
-          ))}
-        </div>
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8 short1600:gap-5" style={{ overflow: 'visible' }}>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <SkeletonCard key={i} />
-          ))}
-        </div>
-      </>
+      <div
+        className={
+          compact
+            ? "grid grid-cols-2 items-stretch gap-2"
+            : "grid grid-cols-2 gap-8 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 short1600:gap-5"
+        }
+        style={{ overflow: "visible" }}
+      >
+        {Array.from({ length: compact ? 6 : 8 }).map((_, i) => (
+          <SkeletonCard key={i} compact={compact} />
+        ))}
+      </div>
     );
   }
 
@@ -89,30 +113,26 @@ export function ProductList({
 
   return (
     <div ref={rootRef}>
-      <div className="md:hidden grid grid-cols-2 items-stretch gap-2">
+      <div
+        className={
+          compact
+            ? "grid grid-cols-2 items-stretch gap-2"
+            : "grid grid-cols-2 gap-8 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 short1600:gap-5"
+        }
+        style={{ overflow: "visible" }}
+      >
         {vehicles.map((vehicle, index) => (
-          <VehicleCard
+          <VehicleCardStatic
             key={vehicle.id}
             {...vehicle}
             delay={index}
             showWhatsAppInterest={showWhatsAppInterest}
             whatsAppSource={whatsAppSource}
+            whatsAppNumber={whatsAppNumber}
             enableFocusTracking={trackFocus}
             onVehicleFocus={onVehicleFocus}
-            compact
-            fastAnimation
-          />
-        ))}
-      </div>
-
-      <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 gap-8 short1600:gap-5" style={{ overflow: 'visible' }}>
-        {vehicles.map((vehicle, index) => (
-          <VehicleCard
-            key={vehicle.id}
-            {...vehicle}
-            delay={index}
-            showWhatsAppInterest={showWhatsAppInterest}
-            whatsAppSource={whatsAppSource}
+            compact={compact}
+            fastAnimation={compact}
           />
         ))}
       </div>

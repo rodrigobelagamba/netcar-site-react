@@ -391,7 +391,7 @@ function netcar_stock_initial_lcp($path)
         . '" srcset="' . implode(', ', $srcset)
         . '" sizes="' . $sizes
         . '" alt="' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8')
-        . '" width="1600" height="900" loading="eager" decoding="async" fetchpriority="high"'
+        . '" width="1600" height="900" loading="eager" decoding="sync" fetchpriority="high"'
         . $style . '>';
 }
 

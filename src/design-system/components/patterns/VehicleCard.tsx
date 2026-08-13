@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { formatPrice, formatYear, formatKm } from "@/lib/formatters";
@@ -44,6 +45,8 @@ export interface VehicleCardProps {
   eagerImage?: boolean;
   showWhatsAppInterest?: boolean;
   whatsAppSource?: string;
+  /** Número já resolvido pelo componente da lista, evitando uma query por card. */
+  whatsAppNumber?: string;
   compact?: boolean;
   /** Marca o card pra sticky contextual (scroll / visibilidade). */
   enableFocusTracking?: boolean;
@@ -53,7 +56,7 @@ export interface VehicleCardProps {
   ) => void;
 }
 
-export function VehicleCard({
+export const VehicleCardStatic = memo(function VehicleCardStatic({
   id,
   name,
   price,
@@ -74,13 +77,12 @@ export function VehicleCard({
   eagerImage = false,
   showWhatsAppInterest = false,
   whatsAppSource = "home_destaques",
+  whatsAppNumber = DEFAULT_SALES_WHATSAPP,
   compact = false,
   enableFocusTracking = false,
   onVehicleFocus,
 }: VehicleCardProps) {
   const navigate = useNavigate();
-  const { data: whatsapp } = useWhatsAppQuery();
-  const whatsappNumber = whatsapp?.numero || DEFAULT_SALES_WHATSAPP;
 
   // Cards compactos usam a miniatura; cards desktop precisam da capa maior para
   // não ampliar o arquivo *_small.png (200 px) em uma área de quase 300 px.
@@ -185,7 +187,7 @@ export function VehicleCard({
   const whatsAppHref =
     showWhatsAppInterest && !isSold
       ? buildWhatsAppUrl(
-          whatsappNumber,
+          whatsAppNumber,
           vehicleWhatsAppMessages(vehicleLabel).info,
         )
       : undefined;
@@ -193,14 +195,14 @@ export function VehicleCard({
   const tradeInHref =
     showWhatsAppInterest && !isSold
       ? buildWhatsAppUrl(
-          whatsappNumber,
+          whatsAppNumber,
           vehicleWhatsAppMessages(vehicleLabel, tradeModelLabel).trade,
         )
       : undefined;
   const financeHref =
     showWhatsAppInterest && !isSold
       ? buildWhatsAppUrl(
-          whatsappNumber,
+          whatsAppNumber,
           vehicleWhatsAppMessages(vehicleLabel).finance,
         )
       : undefined;
@@ -247,5 +249,21 @@ export function VehicleCard({
     >
       {card}
     </div>
+  );
+});
+
+/**
+ * Compatibilidade para usos isolados do card. Listas devem resolver o número
+ * uma vez e usar `VehicleCardStatic`, evitando dezenas de observers e renders.
+ */
+export function VehicleCard(props: VehicleCardProps) {
+  const { data: whatsapp } = useWhatsAppQuery();
+  return (
+    <VehicleCardStatic
+      {...props}
+      whatsAppNumber={
+        props.whatsAppNumber || whatsapp?.numero || DEFAULT_SALES_WHATSAPP
+      }
+    />
   );
 }
