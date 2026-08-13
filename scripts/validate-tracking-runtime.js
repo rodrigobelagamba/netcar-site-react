@@ -22,6 +22,8 @@ const insertedScripts = [];
 const listeners = new Map();
 const storage = new Map();
 let idleCallback;
+let timeoutCallback;
+let timeoutDelay;
 
 const firstScript = {
   parentNode: {
@@ -62,7 +64,12 @@ const context = {
   requestIdleCallback(callback) {
     idleCallback = callback;
   },
-  setTimeout() {},
+  setTimeout(callback, delay) {
+    timeoutCallback = callback;
+    timeoutDelay = delay;
+    return 1;
+  },
+  clearTimeout() {},
 };
 context.window = context;
 
@@ -92,8 +99,14 @@ assert(
 
 listeners.get("load")();
 assert(
+  typeof timeoutCallback === "function" && timeoutDelay >= 7000,
+  "tags não respeitam a janela crítica após o load",
+);
+assert(insertedScripts.length === 0, "tags carregaram durante a primeira pintura");
+timeoutCallback();
+assert(
   typeof idleCallback === "function",
-  "carregamento adiado não foi agendado após o load",
+  "carregamento ocioso não foi agendado após a janela crítica",
 );
 idleCallback();
 

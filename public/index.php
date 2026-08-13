@@ -308,7 +308,10 @@ function netcar_stock_critical_vehicle($path)
         return isset($vehicles[0]) && is_array($vehicles[0]) ? $vehicles[0] : null;
     }
 
-    if (preg_match('#/([0-9]+)$#', (string) $path, $matches)) {
+    // URLs canônicas terminam em "-19888"; a rota curta "/veiculo/19888"
+    // também continua válida. Sem o hífen aqui, o shell inicial ficava vazio
+    // justamente nas URLs publicadas e o Safari mostrava só header + rodapé.
+    if (preg_match('#(?:/|-)([0-9]+)$#', (string) $path, $matches)) {
         foreach ($vehicles as $vehicle) {
             if (is_array($vehicle) && isset($vehicle['id']) && (string) $vehicle['id'] === $matches[1]) {
                 return $vehicle;

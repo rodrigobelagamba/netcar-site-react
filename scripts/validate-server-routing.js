@@ -77,6 +77,10 @@ expect(
   "preload do estoque não está priorizado no início do head",
 );
 expect(
+  controller.includes("preg_match('#(?:/|-)([0-9]+)$#'"),
+  "shell do veículo não reconhece o ID no slug canônico com hífen",
+);
+expect(
   controller.includes("str_replace('</body>', \"  {$stockBootstrapScript}"),
   "JSON do estoque voltou a bloquear a descoberta da imagem no head",
 );
