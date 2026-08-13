@@ -1882,15 +1882,11 @@ export function DetalhesPage() {
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
         <div
           className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
-                        lg:w-[70vw] lg:top-[-3rem] lg:right-[-15%]
-                        xl:w-[70vw] xl:top-[-10rem] xl:right-[-5rem]
-                        2xl:w-[70vw] 2xl:top-[-15rem] 2xl:right-[-25rem]
-                        3xl:w-[70vw] 3xl:top-[-15rem] 3xl:right-[-30rem]
-                        4xl:w-[70vw] 4xl:top-[-20rem] 4xl:right-[-30rem]
-                        5xl:w-[70vw] 5xl:top-[-35rem] 5xl:right-[-30rem]"
+                        lg:w-[65vw] lg:h-[calc(100dvh-5rem)] lg:top-0 lg:right-0
+                        xl:w-[64vw] 2xl:w-[62vw] 3xl:w-[60vw]"
         >
           {mainImage && (
-            <div className="w-full h-[300px] sm:h-[400px] lg:h-auto flex items-center lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible">
+            <div className="w-full h-[300px] sm:h-[400px] lg:h-full flex items-center justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-3 sm:p-5 lg:p-4 xl:p-6">
               {isSold && (
                 <div
                   aria-hidden="true"
@@ -1918,7 +1914,7 @@ export function DetalhesPage() {
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
-                className={`w-full h-full lg:h-auto max-w-full object-contain ${isSold ? "grayscale-[0.25]" : ""}`}
+                className={`w-full h-full max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}

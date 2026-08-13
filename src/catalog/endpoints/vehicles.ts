@@ -154,24 +154,24 @@ export interface VehiclesQuery {
  */
 function normalizeImageUrl(url: string): string {
   if (!url) return "";
-  
+
   // Remove prefixos relativos como .\/ ou ./
   let normalized = url.replace(/^\.\\?\/+/, "").replace(/\\/g, "/");
-  
+
   // Se já é uma URL completa, retorna como está
   if (normalized.startsWith("http://") || normalized.startsWith("https://")) {
     return normalized;
   }
-  
+
   // Remove espaços e caracteres especiais do nome do arquivo
   normalized = normalized.trim();
-  
+
   // Se começa com /, adiciona o domínio base
   if (normalized.startsWith("/")) {
     const baseDomain = config.apiBaseUrl.replace("/api/v1", "");
     return `${baseDomain}${normalized}`;
   }
-  
+
   // Caso contrário, adiciona o caminho base completo
   const baseDomain = config.apiBaseUrl.replace("/api/v1", "");
   return `${baseDomain}/${normalized}`;
@@ -199,79 +199,79 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
   try {
     // Constrói os parâmetros da query string
     const params = new URLSearchParams();
-    
+
     // Montadora/Marca
     if (query?.montadora) {
       params.append("montadora", query.montadora);
     } else if (query?.marca) {
       params.append("montadora", query.marca);
     }
-    
+
     // Modelo
     if (query?.modelo) {
       params.append("modelo", query.modelo);
     }
-    
+
     // Preço
     if (query?.valor_min !== undefined) {
       params.append("valor_min", String(query.valor_min));
     } else if (query?.precoMin !== undefined) {
       params.append("valor_min", String(query.precoMin));
     }
-    
+
     if (query?.valor_max !== undefined) {
       params.append("valor_max", String(query.valor_max));
     } else if (query?.precoMax !== undefined) {
       params.append("valor_max", String(query.precoMax));
     }
-    
+
     // Ano
     if (query?.ano_min !== undefined) {
       params.append("ano_min", String(query.ano_min));
     } else if (query?.anoMin !== undefined) {
       params.append("ano_min", String(query.anoMin));
     }
-    
+
     if (query?.ano_max !== undefined) {
       params.append("ano_max", String(query.ano_max));
     } else if (query?.anoMax !== undefined) {
       params.append("ano_max", String(query.anoMax));
     }
-    
+
     // Filtros adicionais
     if (query?.cambio) {
       params.append("cambio", query.cambio);
     }
-    
+
     if (query?.combustivel) {
       params.append("combustivel", query.combustivel);
     }
-    
+
     if (query?.motor) {
       params.append("motor", query.motor);
     }
-    
+
     if (query?.cor) {
       params.append("cor", query.cor);
     }
-    
+
     if (query?.categoria) {
       params.append("categoria", query.categoria);
     }
-    
+
     // Opcionais
     if (query?.opcional) {
       params.append("opcional", query.opcional);
     }
-    
+
     if (query?.opcionais) {
       params.append("opcionais", query.opcionais);
     }
-    
+
     // Paginação - padrão de 100 por página se não especificado
     const limit = query?.limit !== undefined ? query.limit : 100;
     params.append("limit", String(limit));
-    
+
     if (query?.offset !== undefined) {
       params.append("offset", String(query.offset));
     }
@@ -284,22 +284,29 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
       return [];
     }
 
+    // A API também devolve vendidos com valor 0. A carga estática já os exclui;
+    // manter a mesma regra evita que eles apareçam e reorganizem a vitrine no
+    // refetch em segundo plano.
+    const availableVehicles = response.data.data.filter(
+      (apiVehicle) => Number(apiVehicle.valor) > 0,
+    );
+
     // Mapeia os dados da API para a interface Vehicle
-    const vehicles: Vehicle[] = response.data.data.map((apiVehicle) => {
+    const vehicles: Vehicle[] = availableVehicles.map((apiVehicle) => {
       // Normaliza as URLs das imagens thumbnails (para cards)
-      const thumbUrls = apiVehicle.imagens?.thumb?.length 
-        ? apiVehicle.imagens.thumb 
-        : apiVehicle.imagens?.full?.length 
-        ? apiVehicle.imagens.full 
-        : [];
+      const thumbUrls = apiVehicle.imagens?.thumb?.length
+        ? apiVehicle.imagens.thumb
+        : apiVehicle.imagens?.full?.length
+          ? apiVehicle.imagens.full
+          : [];
       const normalizedThumbs = thumbUrls.map(normalizeImageUrl);
-      
+
       // Normaliza as URLs das imagens em alta resolução (para galeria)
-      const fullUrls = apiVehicle.imagens?.full?.length 
-        ? apiVehicle.imagens.full 
-        : apiVehicle.imagens?.thumb?.length 
-        ? apiVehicle.imagens.thumb 
-        : [];
+      const fullUrls = apiVehicle.imagens?.full?.length
+        ? apiVehicle.imagens.full
+        : apiVehicle.imagens?.thumb?.length
+          ? apiVehicle.imagens.thumb
+          : [];
       const normalizedFullImages = fullUrls.map(normalizeImageUrl);
 
       const { pdf, pdf_url: pdfUrl } = resolveVehiclePdf(apiVehicle);
@@ -308,11 +315,19 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
       let imagensSite: VehicleImagesSite | undefined;
       if (apiVehicle.imagens_site) {
         imagensSite = {
-          capa: apiVehicle.imagens_site.capa ? normalizeImageUrl(apiVehicle.imagens_site.capa) : null,
-          capa_thumb: apiVehicle.imagens_site.capa_thumb ? normalizeImageUrl(apiVehicle.imagens_site.capa_thumb) : null,
-          capa_opengraph: apiVehicle.imagens_site.capa_opengraph ? normalizeImageUrl(apiVehicle.imagens_site.capa_opengraph) : null,
-          galeria: apiVehicle.imagens_site.galeria?.map(normalizeImageUrl) || [],
-          tem_fotos: apiVehicle.imagens_site.tem_fotos ?? apiVehicle.have_galery, // Usa tem_fotos da API ou fallback para have_galery
+          capa: apiVehicle.imagens_site.capa
+            ? normalizeImageUrl(apiVehicle.imagens_site.capa)
+            : null,
+          capa_thumb: apiVehicle.imagens_site.capa_thumb
+            ? normalizeImageUrl(apiVehicle.imagens_site.capa_thumb)
+            : null,
+          capa_opengraph: apiVehicle.imagens_site.capa_opengraph
+            ? normalizeImageUrl(apiVehicle.imagens_site.capa_opengraph)
+            : null,
+          galeria:
+            apiVehicle.imagens_site.galeria?.map(normalizeImageUrl) || [],
+          tem_fotos:
+            apiVehicle.imagens_site.tem_fotos ?? apiVehicle.have_galery, // Usa tem_fotos da API ou fallback para have_galery
         };
       }
 
@@ -341,8 +356,16 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         valor_formatado: apiVehicle.valor_formatado,
         preco_com_troca_formatado: apiVehicle.preco_com_troca_formatado,
         categoria: apiVehicle.categoria,
-        opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
-        diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
+        opcionais:
+          apiVehicle.opcionais?.map((opt) => ({
+            tag: opt.tag,
+            descricao: opt.descricao,
+          })) || [],
+        diferenciais:
+          apiVehicle.diferenciais?.map((diff) => ({
+            tag: diff.tag,
+            descricao: diff.descricao,
+          })) || [],
         pdf,
         pdf_url: pdfUrl,
         destaque: apiVehicle.destaque,
@@ -360,38 +383,48 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
 export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
   try {
     const response = await axiosInstance.get<ApiVehicleResponse>(
-      `${config.apiBaseUrl}/veiculos/id/${id}`
+      `${config.apiBaseUrl}/veiculos/id/${id}`,
     );
 
-    if (!response.data.success || !response.data.data || response.data.data.length === 0) {
+    if (
+      !response.data.success ||
+      !response.data.data ||
+      response.data.data.length === 0
+    ) {
       throw new Error("Vehicle not found");
     }
 
     const apiVehicle = response.data.data[0];
 
     // Normaliza as URLs das imagens thumbnails (para cards e miniaturas)
-    const thumbUrls = apiVehicle.imagens?.thumb?.length 
-      ? apiVehicle.imagens.thumb 
-      : apiVehicle.imagens?.full?.length 
-      ? apiVehicle.imagens.full 
-      : [];
+    const thumbUrls = apiVehicle.imagens?.thumb?.length
+      ? apiVehicle.imagens.thumb
+      : apiVehicle.imagens?.full?.length
+        ? apiVehicle.imagens.full
+        : [];
     const normalizedThumbs = thumbUrls.map(normalizeImageUrl);
-    
+
     // Normaliza as URLs das imagens em alta resolução (para galeria)
-    const fullUrls = apiVehicle.imagens?.full?.length 
-      ? apiVehicle.imagens.full 
-      : apiVehicle.imagens?.thumb?.length 
-      ? apiVehicle.imagens.thumb 
-      : [];
+    const fullUrls = apiVehicle.imagens?.full?.length
+      ? apiVehicle.imagens.full
+      : apiVehicle.imagens?.thumb?.length
+        ? apiVehicle.imagens.thumb
+        : [];
     const normalizedFullImages = fullUrls.map(normalizeImageUrl);
 
     // Normaliza imagens_site se existir
     let imagensSite: VehicleImagesSite | undefined;
     if (apiVehicle.imagens_site) {
       imagensSite = {
-        capa: apiVehicle.imagens_site.capa ? normalizeImageUrl(apiVehicle.imagens_site.capa) : null,
-        capa_thumb: apiVehicle.imagens_site.capa_thumb ? normalizeImageUrl(apiVehicle.imagens_site.capa_thumb) : null,
-        capa_opengraph: apiVehicle.imagens_site.capa_opengraph ? normalizeImageUrl(apiVehicle.imagens_site.capa_opengraph) : null,
+        capa: apiVehicle.imagens_site.capa
+          ? normalizeImageUrl(apiVehicle.imagens_site.capa)
+          : null,
+        capa_thumb: apiVehicle.imagens_site.capa_thumb
+          ? normalizeImageUrl(apiVehicle.imagens_site.capa_thumb)
+          : null,
+        capa_opengraph: apiVehicle.imagens_site.capa_opengraph
+          ? normalizeImageUrl(apiVehicle.imagens_site.capa_opengraph)
+          : null,
         galeria: apiVehicle.imagens_site.galeria?.map(normalizeImageUrl) || [],
         tem_fotos: apiVehicle.imagens_site.tem_fotos ?? apiVehicle.have_galery, // Usa tem_fotos da API ou fallback para have_galery
       };
@@ -425,27 +458,35 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       valor_formatado: apiVehicle.valor_formatado,
       preco_com_troca_formatado: apiVehicle.preco_com_troca_formatado,
       categoria: apiVehicle.categoria,
-      opcionais: apiVehicle.opcionais?.map((opt) => ({ tag: opt.tag, descricao: opt.descricao })) || [],
-      diferenciais: apiVehicle.diferenciais?.map((diff) => ({ tag: diff.tag, descricao: diff.descricao })) || [],
+      opcionais:
+        apiVehicle.opcionais?.map((opt) => ({
+          tag: opt.tag,
+          descricao: opt.descricao,
+        })) || [],
+      diferenciais:
+        apiVehicle.diferenciais?.map((diff) => ({
+          tag: diff.tag,
+          descricao: diff.descricao,
+        })) || [],
       pdf,
       pdf_url: pdfUrl,
       destaque: apiVehicle.destaque,
       promocao: apiVehicle.promocao,
     };
-    } catch (error) {
-      console.error("Error fetching vehicle by ID:", error);
-      throw error;
-    }
+  } catch (error) {
+    console.error("Error fetching vehicle by ID:", error);
+    throw error;
   }
+}
 
 export async function fetchVehicleBySlug(slug: string): Promise<Vehicle> {
   // Extrai o ID do slug (suporta formato amigável ou apenas ID)
   const vehicleId = extractVehicleIdFromSlug(slug);
-  
+
   if (!vehicleId) {
     throw new Error(`ID do veículo não encontrado no slug: ${slug}`);
   }
-  
+
   // Busca o veículo por ID
   return fetchVehicleById(vehicleId);
 }
@@ -470,7 +511,7 @@ export interface ApiOpcionaisResponse {
 export async function fetchOpcionais(): Promise<Optional[]> {
   try {
     const response = await axiosInstance.get<ApiOpcionaisResponse>(
-      `${config.apiBaseUrl}/veiculos.php?action=opcionais`
+      `${config.apiBaseUrl}/veiculos.php?action=opcionais`,
     );
 
     if (!response.data.success || !response.data.data) {

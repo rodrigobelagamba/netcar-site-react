@@ -1,4 +1,12 @@
-import { useState, useMemo, useEffect, useRef, Fragment, lazy, Suspense } from "react";
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useRef,
+  Fragment,
+  lazy,
+  Suspense,
+} from "react";
 import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
@@ -27,31 +35,47 @@ const SearchBar = lazy(() =>
   })),
 );
 
-/** Colunas do grid desktop — espelha Tailwind md/lg/xl/2xl do showroom. */
-function useDesktopStockColumns(): number {
-  const [cols, setCols] = useState(2);
+type StockLayout = {
+  compact: boolean;
+  columns: number;
+};
+
+/** Espelha os breakpoints Tailwind do showroom sem alterar o grid após a pintura inicial. */
+function getStockLayout(): StockLayout {
+  if (typeof window === "undefined") return { compact: false, columns: 4 };
+
+  const width = window.innerWidth;
+  if (width >= 1536) return { compact: false, columns: 5 };
+  if (width >= 1280) return { compact: false, columns: 4 };
+  if (width >= 1024) return { compact: false, columns: 3 };
+  if (width >= 768) return { compact: false, columns: 2 };
+  return { compact: true, columns: 2 };
+}
+
+function useStockLayout(): StockLayout {
+  const [layout, setLayout] = useState<StockLayout>(getStockLayout);
 
   useEffect(() => {
     const update = () => {
-      const w = window.innerWidth;
-      if (w >= 1536) setCols(5);
-      else if (w >= 1280) setCols(4);
-      else if (w >= 1024) setCols(3);
-      else setCols(2);
+      const next = getStockLayout();
+      setLayout((current) =>
+        current.compact === next.compact && current.columns === next.columns
+          ? current
+          : next,
+      );
     };
-    update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  return cols;
+  return layout;
 }
 
 export function SeminovosPage() {
   const search = useSearch({ from: "/seminovos" });
   const navigate = useNavigate();
-  const desktopCols = useDesktopStockColumns();
-  
+  const stockLayout = useStockLayout();
+
   // Mapeia os parâmetros de busca para o formato esperado pela API
   const vehiclesQuery = useMemo(() => {
     const query: {
@@ -65,7 +89,7 @@ export function SeminovosPage() {
       cor?: string;
       categoria?: string;
     } = {};
-    
+
     // Só adiciona campos que têm valores definidos
     if (search.marca) query.marca = search.marca;
     if (search.modelo) query.modelo = search.modelo;
@@ -79,11 +103,21 @@ export function SeminovosPage() {
       // Garante que categoria está em maiúsculas (como a API espera)
       query.categoria = search.categoria.toUpperCase();
     }
-    
+
     // Retorna o objeto mesmo se vazio (para buscar todos os veículos)
     return query;
-  }, [search.marca, search.modelo, search.precoMin, search.precoMax, search.anoMin, search.anoMax, search.cambio, search.cor, search.categoria]);
-  
+  }, [
+    search.marca,
+    search.modelo,
+    search.precoMin,
+    search.precoMax,
+    search.anoMin,
+    search.anoMax,
+    search.cambio,
+    search.cor,
+    search.categoria,
+  ]);
+
   const { data: vehicles, isLoading } = useVehiclesQuery(vehiclesQuery);
   const { data: stockData } = useAllStockDataQuery();
   const { data: whatsapp } = useWhatsAppQuery();
@@ -95,14 +129,14 @@ export function SeminovosPage() {
     }
     return Boolean(
       search.marca ||
-        search.modelo ||
-        search.precoMin ||
-        search.precoMax ||
-        search.anoMin ||
-        search.anoMax ||
-        search.cambio ||
-        search.cor ||
-        search.categoria,
+      search.modelo ||
+      search.precoMin ||
+      search.precoMax ||
+      search.anoMin ||
+      search.anoMax ||
+      search.cambio ||
+      search.cor ||
+      search.categoria,
     );
   }, [
     search.marca,
@@ -151,7 +185,7 @@ export function SeminovosPage() {
       clearTimeout(t2);
     };
   }, [isLoading, vehicles]);
-  
+
   // Extrai dados do stockData (agora são arrays simples)
   const brands = stockData?.enterprises || [];
   const years = stockData?.years || [];
@@ -174,7 +208,13 @@ export function SeminovosPage() {
     setAnoMax(search.anoMax || "");
     setPrecoMin(search.precoMin || "");
     setPrecoMax(search.precoMax || "");
-  }, [search.marca, search.anoMin, search.anoMax, search.precoMin, search.precoMax]);
+  }, [
+    search.marca,
+    search.anoMin,
+    search.anoMax,
+    search.precoMin,
+    search.precoMax,
+  ]);
 
   // Aplica filtros
   const handleFilter = () => {
@@ -273,7 +313,7 @@ export function SeminovosPage() {
         ].filter(Boolean);
 
         return searchFields.some((field) =>
-          String(field).toLowerCase().includes(searchLower)
+          String(field).toLowerCase().includes(searchLower),
         );
       });
     }
@@ -327,47 +367,43 @@ export function SeminovosPage() {
     [filteredAndSortedVehicles, visibleCount],
   );
 
-  // Banner WA no meio do grid: só depois de 2 linhas completas (evita buraco à direita).
-  const desktopMidBreak = desktopCols * 2;
-  const showDesktopMidBanner =
-    visibleVehicles.length > desktopMidBreak + desktopCols;
-  const desktopVehiclesBefore = showDesktopMidBanner
-    ? visibleVehicles.slice(0, desktopMidBreak)
-    : visibleVehicles;
-  const desktopVehiclesAfter = showDesktopMidBanner
-    ? visibleVehicles.slice(desktopMidBreak)
-    : [];
+  // Banner WA depois de 3 linhas no mobile e 2 linhas no desktop.
+  const midGridBreak = stockLayout.compact ? 6 : stockLayout.columns * 2;
+  const showMidGridBanner =
+    visibleVehicles.length > midGridBreak + stockLayout.columns;
 
   // Anos para o dropdown (do mais recente para o mais antigo)
   const sortedYears = useMemo(() => {
     if (!years || years.length === 0) return [];
     // Converte todos para números e ordena do mais recente para o mais antigo
     return [...years]
-      .map(y => typeof y === 'string' ? parseInt(y, 10) : y)
-      .filter(y => !isNaN(y))
+      .map((y) => (typeof y === "string" ? parseInt(y, 10) : y))
+      .filter((y) => !isNaN(y))
       .sort((a, b) => b - a);
   }, [years]);
 
   // Prepara opções para os componentes AutocompleteSelect
   const brandOptions = useMemo(() => {
-    return brands.map(brand => ({ value: brand, label: brand }));
+    return brands.map((brand) => ({ value: brand, label: brand }));
   }, [brands]);
 
   const yearOptions = useMemo(() => {
-    return sortedYears.map(year => ({ value: String(year), label: String(year) }));
+    return sortedYears.map((year) => ({
+      value: String(year),
+      label: String(year),
+    }));
   }, [sortedYears]);
-  
+
   // Valores mínimos e máximos para os inputs de preço
   const minPrice = useMemo(() => {
     if (!priceRanges || priceRanges.length === 0) return 0;
     return Math.min(...priceRanges);
   }, [priceRanges]);
-  
+
   const maxPrice = useMemo(() => {
     if (!priceRanges || priceRanges.length === 0) return 0;
     return Math.max(...priceRanges);
   }, [priceRanges]);
-
 
   // Monta mensagem WhatsApp com filtros ativos
   const seminovosWhatsAppHref = useMemo(() => {
@@ -417,29 +453,29 @@ export function SeminovosPage() {
     <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-6">
       {/* SearchBar - Fixada logo abaixo do Header, apenas Mobile, controlada por estado */}
       {isSearchBarVisible && (
-          <div className="md:hidden fixed top-16 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-lg">
-            <Suspense fallback={null}>
-              <SearchBar onAction={() => setIsSearchBarVisible(false)} />
-            </Suspense>
-          </div>
+        <div className="md:hidden fixed top-16 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-lg">
+          <Suspense fallback={null}>
+            <SearchBar onAction={() => setIsSearchBarVisible(false)} />
+          </Suspense>
+        </div>
       )}
-      
+
       {/* Espaçamento para compensar Header (64px) + SearchBar fixa (~180px) no mobile, apenas quando visível */}
       {isSearchBarVisible && <div className="md:hidden h-[244px]"></div>}
-      
+
       {/* Botão Filtrar Fixo - Apenas Mobile */}
       <div className="md:hidden fixed bottom-6 left-4 z-[51]">
         <button
           onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
           className="px-5 py-3.5 rounded-full bg-fg text-white shadow-lg hover:bg-fg/90 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 font-semibold"
-          style={{ backgroundColor: '#00283C' }}
+          style={{ backgroundColor: "#00283C" }}
           aria-label="Filtrar"
         >
           <Filter className="w-5 h-5" />
           <span>Filtrar</span>
         </button>
       </div>
-      
+
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
         {/* Filtros em Card Minimalista - Desktop */}
         <div className="hidden md:block bg-bg rounded-2xl shadow-sm p-5 mb-8">
@@ -460,7 +496,9 @@ export function SeminovosPage() {
           <div className="flex flex-wrap items-end gap-6">
             {/* Marca */}
             <div className="flex-1 min-w-[140px]">
-              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Marca</label>
+              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                Marca
+              </label>
               <AutocompleteSelect
                 options={brandOptions}
                 value={marca}
@@ -472,7 +510,9 @@ export function SeminovosPage() {
 
             {/* Ano mínimo */}
             <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Ano de</label>
+              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                Ano de
+              </label>
               <AutocompleteSelect
                 options={yearOptions}
                 value={anoMin}
@@ -484,7 +524,9 @@ export function SeminovosPage() {
 
             {/* Ano máximo */}
             <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Ano até</label>
+              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                Ano até
+              </label>
               <AutocompleteSelect
                 options={yearOptions}
                 value={anoMax}
@@ -496,24 +538,36 @@ export function SeminovosPage() {
 
             {/* Valor de */}
             <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Valor de</label>
+              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                Valor de
+              </label>
               <input
                 type="text"
                 value={precoMin}
                 onChange={(e) => setPrecoMin(e.target.value)}
-                placeholder={minPrice > 0 ? `R$ ${minPrice.toLocaleString('pt-BR')}` : "R$ 0"}
+                placeholder={
+                  minPrice > 0
+                    ? `R$ ${minPrice.toLocaleString("pt-BR")}`
+                    : "R$ 0"
+                }
                 className="w-full border-0 border-b border-border rounded-none bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:outline-none focus:border-primary"
               />
             </div>
 
             {/* Valor até */}
             <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Valor até</label>
+              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                Valor até
+              </label>
               <input
                 type="text"
                 value={precoMax}
                 onChange={(e) => setPrecoMax(e.target.value)}
-                placeholder={maxPrice > 0 ? `R$ ${maxPrice.toLocaleString('pt-BR')}` : "R$ 500.000"}
+                placeholder={
+                  maxPrice > 0
+                    ? `R$ ${maxPrice.toLocaleString("pt-BR")}`
+                    : "R$ 500.000"
+                }
                 className="w-full border-0 border-b border-border rounded-none bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:outline-none focus:border-primary"
               />
             </div>
@@ -533,12 +587,16 @@ export function SeminovosPage() {
           <div>
             <h1 className="text-2xl font-bold text-fg">Seminovos</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              {filteredAndSortedVehicles.length} veículo{filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado{filteredAndSortedVehicles.length !== 1 ? "s" : ""}
+              {filteredAndSortedVehicles.length} veículo
+              {filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado
+              {filteredAndSortedVehicles.length !== 1 ? "s" : ""}
             </p>
           </div>
           {/* Ordenação - Ocultar no mobile (está no modal) */}
           <div className="hidden md:flex items-center gap-2">
-            <span className="text-xs font-medium text-muted-foreground uppercase">Ordenar por</span>
+            <span className="text-xs font-medium text-muted-foreground uppercase">
+              Ordenar por
+            </span>
             <div className="relative">
               <select
                 value={sortBy}
@@ -569,8 +627,12 @@ export function SeminovosPage() {
         ) : filteredAndSortedVehicles.length === 0 ? (
           <div className="text-center py-12 space-y-4">
             <div>
-              <p className="text-fg text-lg font-semibold mb-2">Nenhum veículo encontrado</p>
-              <p className="text-muted-foreground">Tente ajustar os filtros — ou peça opções no WhatsApp.</p>
+              <p className="text-fg text-lg font-semibold mb-2">
+                Nenhum veículo encontrado
+              </p>
+              <p className="text-muted-foreground">
+                Tente ajustar os filtros — ou peça opções no WhatsApp.
+              </p>
             </div>
             <a
               href={seminovosWhatsAppHref}
@@ -586,7 +648,10 @@ export function SeminovosPage() {
           </div>
         ) : (
           <>
-            <div className="md:hidden grid grid-cols-2 items-stretch gap-2" style={{ overflow: "visible" }}>
+            <div
+              className="grid grid-cols-2 items-stretch gap-2 md:gap-6 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4 xl:gap-10 2xl:grid-cols-5"
+              style={{ overflow: "visible" }}
+            >
               {visibleVehicles.map((vehicle, index) => (
                 <Fragment key={vehicle.id}>
                   <VehicleCard
@@ -595,7 +660,9 @@ export function SeminovosPage() {
                     price={vehicle.price || 0}
                     valor_formatado={vehicle.valor_formatado}
                     preco_com_troca={vehicle.preco_com_troca}
-                    preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
+                    preco_com_troca_formatado={
+                      vehicle.preco_com_troca_formatado
+                    }
                     year={vehicle.year || new Date().getFullYear()}
                     km={vehicle.km || 0}
                     images={vehicle.images || vehicle.fotos || []}
@@ -603,92 +670,30 @@ export function SeminovosPage() {
                     marca={vehicle.marca}
                     modelo={vehicle.modelo}
                     delay={index}
-                    fastAnimation
+                    fastAnimation={index >= midGridBreak}
                     showWhatsAppInterest
                     whatsAppSource="seminovos_grid"
-                    compact
+                    compact={stockLayout.compact}
                   />
-                  {index === 5 && filteredAndSortedVehicles.length > 8 && (
-                    <SeminovosWhatsAppHelpPanel
-                      stockHelpHref={seminovosWhatsAppHref}
-                      hasFilters={hasFilterParams}
-                      variant="inline"
-                    />
+                  {showMidGridBanner && index + 1 === midGridBreak && (
+                    <div className="col-span-full my-2 md:my-0">
+                      <SeminovosWhatsAppHelpPanel
+                        stockHelpHref={seminovosWhatsAppHref}
+                        hasFilters={hasFilterParams}
+                        variant="inline"
+                      />
+                    </div>
                   )}
                 </Fragment>
               ))}
-            </div>
-
-            <div className="hidden md:contents">
-              <div
-                className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10"
-                style={{ overflow: "visible" }}
-              >
-                {desktopVehiclesBefore.map((vehicle, index) => (
-                  <VehicleCard
-                    key={vehicle.id}
-                    id={vehicle.id}
-                    name={vehicle.modelo || vehicle.name}
-                    price={vehicle.price || 0}
-                    valor_formatado={vehicle.valor_formatado}
-                    preco_com_troca={vehicle.preco_com_troca}
-                    preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
-                    year={vehicle.year || new Date().getFullYear()}
-                    km={vehicle.km || 0}
-                    images={vehicle.images || vehicle.fotos || []}
-                    imagens_site={vehicle.imagens_site}
-                    marca={vehicle.marca}
-                    modelo={vehicle.modelo}
-                    delay={index}
-                    fastAnimation={index >= 8}
-                    showWhatsAppInterest
-                    whatsAppSource="seminovos_grid"
-                  />
-                ))}
-              </div>
-              {showDesktopMidBanner && (
-                <div className="hidden md:block my-6">
-                  <SeminovosWhatsAppHelpPanel
-                    stockHelpHref={seminovosWhatsAppHref}
-                    hasFilters={hasFilterParams}
-                    variant="inline"
-                  />
-                </div>
-              )}
-              {desktopVehiclesAfter.length > 0 && (
-                <div
-                  className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-5 4xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10"
-                  style={{ overflow: "visible" }}
-                >
-                  {desktopVehiclesAfter.map((vehicle, index) => (
-                    <VehicleCard
-                      key={vehicle.id}
-                      id={vehicle.id}
-                      name={vehicle.modelo || vehicle.name}
-                      price={vehicle.price || 0}
-                      valor_formatado={vehicle.valor_formatado}
-                      preco_com_troca={vehicle.preco_com_troca}
-                      preco_com_troca_formatado={vehicle.preco_com_troca_formatado}
-                      year={vehicle.year || new Date().getFullYear()}
-                      km={vehicle.km || 0}
-                      images={vehicle.images || vehicle.fotos || []}
-                      imagens_site={vehicle.imagens_site}
-                      marca={vehicle.marca}
-                      modelo={vehicle.modelo}
-                      delay={desktopMidBreak + index}
-                      fastAnimation
-                      showWhatsAppInterest
-                      whatsAppSource="seminovos_grid"
-                    />
-                  ))}
-                </div>
-              )}
             </div>
             {visibleCount < filteredAndSortedVehicles.length && (
               <div className="mt-10 flex justify-center">
                 <button
                   type="button"
-                  onClick={() => setVisibleCount((count) => count + STOCK_PAGE_SIZE)}
+                  onClick={() =>
+                    setVisibleCount((count) => count + STOCK_PAGE_SIZE)
+                  }
                   className="rounded-full border border-tertiary/40 bg-white px-7 py-3 text-sm font-bold text-tertiary shadow-sm transition hover:border-tertiary hover:bg-tertiary/5"
                 >
                   Carregar mais veículos
@@ -705,7 +710,6 @@ export function SeminovosPage() {
           <IanBot />
         </div>
       </div>
-
     </main>
   );
 }
