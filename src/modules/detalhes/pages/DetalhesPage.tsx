@@ -1882,8 +1882,9 @@ export function DetalhesPage() {
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
         <div
           className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
-                        lg:w-[65vw] lg:h-[calc(100dvh-5rem)] lg:top-0 lg:right-0
-                        xl:w-[64vw] 2xl:w-[62vw] 3xl:w-[60vw]"
+                        lg:w-[65vw] lg:h-[calc(100dvh-5rem)] lg:top-[-2rem] lg:right-0
+                        xl:w-[64vw] xl:top-[-6rem]
+                        2xl:w-[62vw] 2xl:top-[-8rem] 3xl:w-[60vw]"
         >
           {mainImage && (
             <div className="w-full h-[300px] sm:h-[400px] lg:h-full flex items-center justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-3 sm:p-5 lg:p-4 xl:p-6">
