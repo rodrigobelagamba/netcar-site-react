@@ -164,11 +164,21 @@ export function SeminovosPage() {
   useEffect(() => {
     if (isLoading || !vehicles || scrollRestored.current) return;
 
-    const saved = sessionStorage.getItem("showroom-scroll");
+    let saved: string | null = null;
+    try {
+      saved = sessionStorage.getItem("showroom-scroll");
+    } catch {
+      scrollRestored.current = true;
+      return;
+    }
     if (!saved) return;
 
     scrollRestored.current = true;
-    sessionStorage.removeItem("showroom-scroll");
+    try {
+      sessionStorage.removeItem("showroom-scroll");
+    } catch {
+      // O valor já foi lido; a restauração pode continuar normalmente.
+    }
 
     const pos = Number(saved);
     const restore = () => window.scrollTo({ top: pos, behavior: "instant" });
@@ -199,9 +209,7 @@ export function SeminovosPage() {
   const [precoMax, setPrecoMax] = useState(search.precoMax || "");
   const [sortBy, setSortBy] = useState<SortOption>("az");
   const [visibleCount, setVisibleCount] = useState(STOCK_PAGE_SIZE);
-  const [autoLoadStock, setAutoLoadStock] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-  const loadMoreSentinelRef = useRef<HTMLDivElement>(null);
 
   // Sincroniza estados locais com parâmetros da URL quando mudam
   useEffect(() => {
@@ -350,7 +358,6 @@ export function SeminovosPage() {
 
   useEffect(() => {
     setVisibleCount(STOCK_PAGE_SIZE);
-    setAutoLoadStock(false);
   }, [
     sortBy,
     searchTerm,
@@ -369,50 +376,6 @@ export function SeminovosPage() {
     () => filteredAndSortedVehicles.slice(0, visibleCount),
     [filteredAndSortedVehicles, visibleCount],
   );
-
-  // Mantém o primeiro render leve para o PageSpeed. Ao chegar perto do fim do
-  // primeiro lote, inicia uma sequência que completa o estoque sem exigir que
-  // a pessoa encontre novamente o final móvel da grade.
-  useEffect(() => {
-    if (
-      autoLoadStock ||
-      visibleCount >= filteredAndSortedVehicles.length
-    ) return;
-
-    const sentinel = loadMoreSentinelRef.current;
-    if (!sentinel) return;
-
-    if (typeof IntersectionObserver === "undefined") {
-      setAutoLoadStock(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
-        setAutoLoadStock(true);
-      },
-      { rootMargin: "1200px 0px" },
-    );
-
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [autoLoadStock, filteredAndSortedVehicles.length, visibleCount]);
-
-  useEffect(() => {
-    if (!autoLoadStock || visibleCount >= filteredAndSortedVehicles.length) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      setVisibleCount((count) =>
-        Math.min(count + STOCK_PAGE_SIZE, filteredAndSortedVehicles.length),
-      );
-    }, 120);
-
-    return () => window.clearTimeout(timer);
-  }, [autoLoadStock, filteredAndSortedVehicles.length, visibleCount]);
 
   // Banner WA depois de 3 linhas no mobile e 2 linhas no desktop.
   const midGridBreak = stockLayout.compact ? 6 : stockLayout.columns * 2;
@@ -735,11 +698,17 @@ export function SeminovosPage() {
               ))}
             </div>
             {visibleCount < filteredAndSortedVehicles.length && (
-              <div
-                ref={loadMoreSentinelRef}
-                className="h-px w-full"
-                aria-hidden="true"
-              />
+              <div className="mt-10 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setVisibleCount((count) => count + STOCK_PAGE_SIZE)
+                  }
+                  className="rounded-full border border-tertiary/40 bg-white px-7 py-3 text-sm font-bold text-tertiary shadow-sm transition hover:border-tertiary hover:bg-tertiary/5"
+                >
+                  Carregar mais veículos
+                </button>
+              </div>
             )}
           </>
         )}

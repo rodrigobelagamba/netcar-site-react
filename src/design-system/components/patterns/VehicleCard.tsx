@@ -163,7 +163,12 @@ export function VehicleCard({
 
   const handleClick = () => {
     emitFocus();
-    sessionStorage.setItem("showroom-scroll", String(window.scrollY));
+    try {
+      sessionStorage.setItem("showroom-scroll", String(window.scrollY));
+    } catch {
+      // A navegação não pode falhar quando o Safari bloquear o storage.
+    }
+    window.scrollTo({ top: 0, behavior: "instant" });
 
     const slug = generateVehicleSlug({
       modelo: modelo || name,
