@@ -4,7 +4,7 @@ import {
   Outlet,
 } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useLayoutEffect } from "react";
 import { lazyWithRetry } from "@/lib/lazyWithRetry";
 import { Header } from "@/design-system/components/layout/Header";
 import { LazyFooter } from "@/design-system/components/layout/LazyFooter";
@@ -223,8 +223,18 @@ function RootComponent() {
     select: (state) => state.location,
   });
 
-  // Scroll para o topo quando a rota mudar
+  // A SPA controla a posição: o navegador não deve reaplicar o scroll da rota
+  // anterior depois que o conteúdo assíncrono terminar de montar.
   useEffect(() => {
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    return () => {
+      window.history.scrollRestoration = previous;
+    };
+  }, []);
+
+  // Scroll para o topo antes de pintar a nova rota.
+  useLayoutEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [location.pathname]);
 

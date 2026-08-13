@@ -1537,6 +1537,13 @@ export function DetalhesPage() {
     isPending,
   } = useVehicleQuery(slug);
 
+  // A troca do placeholder pelos dados reais altera bastante a altura da rota.
+  // Reafirma o topo nesse momento para impedir o scroll anchoring do navegador.
+  useLayoutEffect(() => {
+    if (!vehicle || isPlaceholderData) return;
+    window.scrollTo(0, 0);
+  }, [slug, vehicle?.id, isPlaceholderData]);
+
   const officialSlug = useMemo(() => {
     if (!vehicle) return "";
     return generateVehicleSlug({

@@ -199,6 +199,7 @@ export function SeminovosPage() {
   const [precoMax, setPrecoMax] = useState(search.precoMax || "");
   const [sortBy, setSortBy] = useState<SortOption>("az");
   const [visibleCount, setVisibleCount] = useState(STOCK_PAGE_SIZE);
+  const [autoLoadStock, setAutoLoadStock] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
   const loadMoreSentinelRef = useRef<HTMLDivElement>(null);
 
@@ -349,6 +350,7 @@ export function SeminovosPage() {
 
   useEffect(() => {
     setVisibleCount(STOCK_PAGE_SIZE);
+    setAutoLoadStock(false);
   }, [
     sortBy,
     searchTerm,
@@ -368,16 +370,20 @@ export function SeminovosPage() {
     [filteredAndSortedVehicles, visibleCount],
   );
 
-  // Mantém o primeiro render leve para o PageSpeed, mas libera os próximos
-  // lotes automaticamente conforme o visitante se aproxima do fim da grade.
+  // Mantém o primeiro render leve para o PageSpeed. Ao chegar perto do fim do
+  // primeiro lote, inicia uma sequência que completa o estoque sem exigir que
+  // a pessoa encontre novamente o final móvel da grade.
   useEffect(() => {
-    if (visibleCount >= filteredAndSortedVehicles.length) return;
+    if (
+      autoLoadStock ||
+      visibleCount >= filteredAndSortedVehicles.length
+    ) return;
 
     const sentinel = loadMoreSentinelRef.current;
     if (!sentinel) return;
 
     if (typeof IntersectionObserver === "undefined") {
-      setVisibleCount(filteredAndSortedVehicles.length);
+      setAutoLoadStock(true);
       return;
     }
 
@@ -385,16 +391,28 @@ export function SeminovosPage() {
       ([entry]) => {
         if (!entry.isIntersecting) return;
         observer.disconnect();
-        setVisibleCount((count) =>
-          Math.min(count + STOCK_PAGE_SIZE, filteredAndSortedVehicles.length),
-        );
+        setAutoLoadStock(true);
       },
       { rootMargin: "1200px 0px" },
     );
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [filteredAndSortedVehicles.length, visibleCount]);
+  }, [autoLoadStock, filteredAndSortedVehicles.length, visibleCount]);
+
+  useEffect(() => {
+    if (!autoLoadStock || visibleCount >= filteredAndSortedVehicles.length) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setVisibleCount((count) =>
+        Math.min(count + STOCK_PAGE_SIZE, filteredAndSortedVehicles.length),
+      );
+    }, 120);
+
+    return () => window.clearTimeout(timer);
+  }, [autoLoadStock, filteredAndSortedVehicles.length, visibleCount]);
 
   // Banner WA depois de 3 linhas no mobile e 2 linhas no desktop.
   const midGridBreak = stockLayout.compact ? 6 : stockLayout.columns * 2;
