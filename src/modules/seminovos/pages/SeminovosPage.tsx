@@ -28,7 +28,6 @@ import { trackStockFilterApply } from "@/lib/analytics";
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
-const STOCK_PAGE_SIZE = 16;
 const SearchBar = lazy(() =>
   import("@/design-system/components/patterns/SearchBar").then((module) => ({
     default: module.SearchBar,
@@ -208,7 +207,6 @@ export function SeminovosPage() {
   const [precoMin, setPrecoMin] = useState(search.precoMin || "");
   const [precoMax, setPrecoMax] = useState(search.precoMax || "");
   const [sortBy, setSortBy] = useState<SortOption>("az");
-  const [visibleCount, setVisibleCount] = useState(STOCK_PAGE_SIZE);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
   // Sincroniza estados locais com parâmetros da URL quando mudam
@@ -356,26 +354,7 @@ export function SeminovosPage() {
     return filtered;
   }, [vehicles, sortBy, searchTerm, search.categoria]);
 
-  useEffect(() => {
-    setVisibleCount(STOCK_PAGE_SIZE);
-  }, [
-    sortBy,
-    searchTerm,
-    search.marca,
-    search.modelo,
-    search.precoMin,
-    search.precoMax,
-    search.anoMin,
-    search.anoMax,
-    search.cambio,
-    search.cor,
-    search.categoria,
-  ]);
-
-  const visibleVehicles = useMemo(
-    () => filteredAndSortedVehicles.slice(0, visibleCount),
-    [filteredAndSortedVehicles, visibleCount],
-  );
+  const visibleVehicles = filteredAndSortedVehicles;
 
   // Banner WA depois de 3 linhas no mobile e 2 linhas no desktop.
   const midGridBreak = stockLayout.compact ? 6 : stockLayout.columns * 2;
@@ -697,19 +676,6 @@ export function SeminovosPage() {
                 </Fragment>
               ))}
             </div>
-            {visibleCount < filteredAndSortedVehicles.length && (
-              <div className="mt-10 flex justify-center">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setVisibleCount(filteredAndSortedVehicles.length)
-                  }
-                  className="rounded-full border border-tertiary/40 bg-white px-7 py-3 text-sm font-bold text-tertiary shadow-sm transition hover:border-tertiary hover:bg-tertiary/5"
-                >
-                  Carregar todos os veículos
-                </button>
-              </div>
-            )}
           </>
         )}
       </div>
