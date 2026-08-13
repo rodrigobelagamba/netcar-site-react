@@ -63,8 +63,8 @@ expect(
   "variantes leves do LCP da Home ausentes",
 );
 expect(
-  controller.includes("array_slice($vehicles, 0, 20)"),
-  "bootstrap enxuto da Home ausente",
+  !controller.includes("array_slice($vehicles, 0, 20)"),
+  "Home ainda trunca o bootstrap e causa salto de 20 para o estoque completo",
 );
 expect(
   controller.includes("netcar_prepend_critical_head_markup($html, $preload)"),

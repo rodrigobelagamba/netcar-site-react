@@ -285,25 +285,6 @@ function netcar_stock_bootstrap_script($path)
         return null;
     }
 
-    // A Home usa no máximo 4 carros no hero e 15 nos destaques. Não bloquear
-    // o primeiro paint com os 60+ veículos completos; a API revalida depois.
-    if ($path === '/') {
-        $vehicles = array_values(array_filter($value['vehicles'], function ($vehicle) {
-            return is_array($vehicle)
-                && !empty($vehicle['price'])
-                && isset($vehicle['imagens_site']['tem_fotos'])
-                && intval($vehicle['imagens_site']['tem_fotos']) !== 0;
-        }));
-        usort($vehicles, function ($left, $right) {
-            $highlight = intval(isset($right['destaque']) ? $right['destaque'] : 0)
-                - intval(isset($left['destaque']) ? $left['destaque'] : 0);
-            if ($highlight !== 0) return $highlight;
-            return intval(isset($right['id']) ? $right['id'] : 0)
-                - intval(isset($left['id']) ? $left['id'] : 0);
-        });
-        $value['vehicles'] = array_slice($vehicles, 0, 20);
-    }
-
     return '<script>window.__NETCAR_STOCK__='
         . json_encode($value, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
         . ';</script>';

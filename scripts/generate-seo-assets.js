@@ -265,14 +265,38 @@ function renderSections(sections) {
 // nem geram link interno para as fichas.
 async function fetchStock() {
   try {
-    const res = await fetch(STOCK_API_URL, {
-      headers: { Accept: "application/json" },
-      signal: AbortSignal.timeout(20000),
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    if (!json.success || !Array.isArray(json.data)) throw new Error("resposta inválida");
-    return json.data.filter((vehicle) => Number(vehicle.valor) > 0);
+    const apiUrl = new URL(STOCK_API_URL);
+    const pageSize = Math.max(Number(apiUrl.searchParams.get("limit")) || 0, 500);
+    const vehicles = [];
+    const seenIds = new Set();
+    let offset = 0;
+
+    while (true) {
+      apiUrl.searchParams.set("limit", String(pageSize));
+      apiUrl.searchParams.set("offset", String(offset));
+      const res = await fetch(apiUrl, {
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(20000),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      if (!json.success || !Array.isArray(json.data)) throw new Error("resposta inválida");
+
+      const page = json.data;
+      let added = 0;
+      for (const vehicle of page) {
+        const id = String(vehicle.id);
+        if (seenIds.has(id)) continue;
+        seenIds.add(id);
+        vehicles.push(vehicle);
+        added += 1;
+      }
+
+      if (page.length < pageSize || added === 0) break;
+      offset += page.length;
+    }
+
+    return vehicles.filter((vehicle) => Number(vehicle.valor) > 0);
   } catch (error) {
     const cached = readFreshSeoStockCache(rootDir);
     if (cached?.vehicles.length) {
