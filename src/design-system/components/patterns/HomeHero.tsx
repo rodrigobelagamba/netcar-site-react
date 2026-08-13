@@ -1,8 +1,15 @@
-import { ChevronLeft, ChevronRight, Maximize2, MessageCircle } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  MessageCircle,
+} from "lucide-react";
 import { Button } from "@/design-system/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
+import { prefetchVehicleDetails } from "@/catalog/queries/useVehicleQuery";
 import { formatPrice, formatYear } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
 import {
@@ -14,6 +21,8 @@ import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
+const SWIPE_THRESHOLD_PX = 45;
+const TAP_THRESHOLD_PX = 10;
 
 export interface HomeHeroVehicle {
   id: string;
@@ -39,7 +48,13 @@ interface HomeHeroProps {
 
 export function HomeHero({ vehicles }: HomeHeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const pointerStart = useRef<{
+    pointerId: number;
+    x: number;
+    y: number;
+  } | null>(null);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { data: whatsapp } = useWhatsAppQuery();
 
   useEffect(() => {
@@ -50,12 +65,12 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
     }, 12000);
 
     return () => window.clearInterval(timer);
-  }, [vehicles.length]);
+  }, [currentIndex, vehicles.length]);
 
   useEffect(() => {
     setCurrentIndex((prev) => (prev < vehicles.length ? prev : 0));
   }, [vehicles.length]);
-  
+
   if (!vehicles || vehicles.length === 0) {
     return null;
   }
@@ -65,41 +80,90 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
   const next = () => {
     setCurrentIndex((prev) => (prev + 1) % vehicles.length);
   };
-  
+
   const prev = () => {
     setCurrentIndex((prev) => (prev - 1 + vehicles.length) % vehicles.length);
   };
 
-  const handleViewDetails = () => {
-    const slug = generateVehicleSlug({
-      modelo: vehicle.modelo || vehicle.model,
-      marca: vehicle.marca || vehicle.brand,
-      year: vehicle.year,
-      placa: vehicle.placa,
-      id: vehicle.id,
-    });
-    navigate({ to: `/veiculo/${slug}` });
+  const vehicleSlug = generateVehicleSlug({
+    modelo: vehicle.modelo || vehicle.model,
+    marca: vehicle.marca || vehicle.brand,
+    year: vehicle.year,
+    placa: vehicle.placa,
+    id: vehicle.id,
+  });
+
+  const preloadDetails = () => {
+    void import("@/modules/detalhes/pages/DetalhesPage");
+    void prefetchVehicleDetails(queryClient, vehicleSlug);
   };
 
-  const heroVehicleLabel = [vehicle.marca || vehicle.brand, vehicle.modelo || vehicle.model, vehicle.year]
+  const handleViewDetails = () => {
+    preloadDetails();
+    navigate({ to: `/veiculo/${vehicleSlug}` });
+  };
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!event.isPrimary) return;
+    preloadDetails();
+    pointerStart.current = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+    };
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    const start = pointerStart.current;
+    pointerStart.current = null;
+    if (!start || start.pointerId !== event.pointerId) return;
+
+    const deltaX = event.clientX - start.x;
+    const deltaY = event.clientY - start.y;
+    const horizontalDistance = Math.abs(deltaX);
+    const verticalDistance = Math.abs(deltaY);
+
+    if (
+      horizontalDistance >= SWIPE_THRESHOLD_PX &&
+      horizontalDistance > verticalDistance
+    ) {
+      if (deltaX < 0) next();
+      else prev();
+      return;
+    }
+
+    if (
+      horizontalDistance < TAP_THRESHOLD_PX &&
+      verticalDistance < TAP_THRESHOLD_PX
+    ) {
+      handleViewDetails();
+    }
+  };
+
+  const heroVehicleLabel = [
+    vehicle.marca || vehicle.brand,
+    vehicle.modelo || vehicle.model,
+    vehicle.year,
+  ]
     .filter(Boolean)
     .join(" ");
-  const heroWhatsAppHref =
-    heroVehicleLabel
-      ? buildWhatsAppUrl(
-          whatsapp?.numero || DEFAULT_SALES_WHATSAPP,
-          homeWhatsAppMessages({
-            vehicleLabel: heroVehicleLabel,
-          }).vehicleInterest,
-        )
-      : undefined;
+  const heroWhatsAppHref = heroVehicleLabel
+    ? buildWhatsAppUrl(
+        whatsapp?.numero || DEFAULT_SALES_WHATSAPP,
+        homeWhatsAppMessages({
+          vehicleLabel: heroVehicleLabel,
+        }).vehicleInterest,
+      )
+    : undefined;
 
   const sanitizeFormattedPrice = (formatted?: string) =>
     formatted ? formatted.replace(/<[^>]*>/g, "") : "";
   const priceFormatted =
-    sanitizeFormattedPrice(vehicle.valor_formatado) || formatPrice(vehicle.price);
+    sanitizeFormattedPrice(vehicle.valor_formatado) ||
+    formatPrice(vehicle.price);
   const tradePriceValue =
-    typeof vehicle.preco_com_troca === "number" && Number.isFinite(vehicle.preco_com_troca)
+    typeof vehicle.preco_com_troca === "number" &&
+    Number.isFinite(vehicle.preco_com_troca)
       ? vehicle.preco_com_troca
       : undefined;
   const showPriceComparison =
@@ -107,219 +171,273 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
     tradePriceValue !== undefined &&
     tradePriceValue > vehicle.price;
   const previousPriceFormatted = showPriceComparison
-    ? sanitizeFormattedPrice(vehicle.preco_com_troca_formatado) || formatPrice(tradePriceValue!)
+    ? sanitizeFormattedPrice(vehicle.preco_com_troca_formatado) ||
+      formatPrice(tradePriceValue!)
     : "";
   const yearFormatted = formatYear(vehicle.year);
   const tag = vehicle.tag || vehicle.combustivel || "";
-  
+
   // Extrai apenas o primeiro nome do modelo para o texto de fundo (ex: "COMPASS" ao invés de "COMPASS LIMITED")
-  const primeiroNomeModelo = vehicle.model ? vehicle.model.trim().split(/\s+/)[0].toUpperCase() : "";
+  const primeiroNomeModelo = vehicle.model
+    ? vehicle.model.trim().split(/\s+/)[0].toUpperCase()
+    : "";
 
   return (
     <div className="relative w-full bg-[#F6F6F6] overflow-hidden max-w-full min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
-      
       {/* Background Typography */}
+      <div
+        key={vehicle.id}
+        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+        style={{ opacity: 0.04, transform: "scale(1.2)" }}
+      >
         <div
-          key={vehicle.id}
-          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-          style={{ opacity: 0.04, transform: "scale(1.2)" }}
+          aria-hidden="true"
+          className="text-[25vw] md:text-[32vw] font-black tracking-tighter whitespace-nowrap leading-none text-center overflow-hidden max-w-full w-full"
+          style={{ color: "#00283C" }}
         >
-          <div
-            aria-hidden="true"
-            className="text-[25vw] md:text-[32vw] font-black tracking-tighter whitespace-nowrap leading-none text-center overflow-hidden max-w-full w-full"
-            style={{ color: '#00283C' }}
-          >
-            {primeiroNomeModelo}
-          </div>
+          {primeiroNomeModelo}
         </div>
+      </div>
 
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">
-        
         {/* Brand Label */}
         <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
+          <div key={`${vehicle.id}-brand`} className="flex items-center gap-3">
             <div
-              key={`${vehicle.id}-brand`}
-              className="flex items-center gap-3"
+              className="h-[1px] w-8 md:w-12"
+              style={{ backgroundColor: "rgba(0, 40, 60, 0.2)" }}
+            />
+            <span
+              className="text-[14px] md:text-[16px] font-bold uppercase tracking-[0.5em] whitespace-nowrap"
+              style={{ color: "#00283C" }}
             >
-              <div className="h-[1px] w-8 md:w-12" style={{ backgroundColor: 'rgba(0, 40, 60, 0.2)' }} />
-              <span className="text-[14px] md:text-[16px] font-bold uppercase tracking-[0.5em] whitespace-nowrap" style={{ color: '#00283C' }}>{vehicle.brand}</span>
-              <div className="h-[1px] w-8 md:w-12" style={{ backgroundColor: 'rgba(0, 40, 60, 0.2)' }} />
-            </div>
+              {vehicle.brand}
+            </span>
+            <div
+              className="h-[1px] w-8 md:w-12"
+              style={{ backgroundColor: "rgba(0, 40, 60, 0.2)" }}
+            />
+          </div>
         </div>
 
         <div className="relative w-full container-main flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
           {/* Main Car Image - MAXIMIZED SIZE */}
+          <div
+            key={`${vehicle.id}-image`}
+            className="absolute inset-0 flex touch-pan-y items-center justify-center cursor-grab active:cursor-grabbing"
+            onPointerEnter={(event) => {
+              if (event.pointerType === "mouse") preloadDetails();
+            }}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={() => {
+              pointerStart.current = null;
+            }}
+            aria-label="Arraste para trocar o veículo ou toque para ver os detalhes"
+          >
             <div
-              key={`${vehicle.id}-image`}
-              className="absolute inset-0 flex items-center justify-center cursor-grab active:cursor-grabbing touch-none"
-              onPointerDown={(e) => {
-                (e.currentTarget as any)._dragStartX = e.clientX;
-                (e.currentTarget as any)._dragStartY = e.clientY;
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-[72%] h-10 w-[78%] -translate-x-1/2 rounded-[50%] md:top-[76%] md:h-14 md:w-[68%]"
+              style={{
+                background:
+                  "radial-gradient(ellipse at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.08) 44%, rgba(0, 0, 0, 0) 74%)",
               }}
-              onPointerUp={(e) => {
-                const dx = Math.abs(e.clientX - ((e.currentTarget as any)._dragStartX || 0));
-                const dy = Math.abs(e.clientY - ((e.currentTarget as any)._dragStartY || 0));
-                if (dx < 10 && dy < 10) handleViewDetails();
-              }}
-            >
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute left-1/2 top-[72%] h-10 w-[78%] -translate-x-1/2 rounded-[50%] md:top-[76%] md:h-14 md:w-[68%]"
-                style={{
-                  background:
-                    "radial-gradient(ellipse at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.08) 44%, rgba(0, 0, 0, 0) 74%)",
-                }}
-              />
-              <img 
-                src={optimizeStockImage(vehicle.image || CAR_COVERED_PLACEHOLDER_URL, 960)}
-                srcSet={stockImageSrcSet(vehicle.image, [480, 640, 768, 960, 1280])}
-                sizes="(max-width: 767px) 50vw, 70vw"
-                alt={vehicle.model}
-                width={1280}
-                height={960}
-                loading={currentIndex === 0 ? "eager" : "lazy"}
-                decoding={currentIndex === 0 ? "sync" : "async"}
-                {...(currentIndex === 0 && { fetchPriority: "high" as const })}
-                className="relative z-10 w-full h-auto hover:scale-[1.02] transition-transform duration-700 ease-out max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125 cursor-pointer"
-                draggable={false}
-              />
-            </div>
+            />
+            <img
+              src={optimizeStockImage(
+                vehicle.image || CAR_COVERED_PLACEHOLDER_URL,
+                960,
+              )}
+              srcSet={stockImageSrcSet(
+                vehicle.image,
+                [480, 640, 768, 960, 1280],
+              )}
+              sizes="(max-width: 767px) 50vw, 70vw"
+              alt={vehicle.model}
+              width={1280}
+              height={960}
+              loading={currentIndex === 0 ? "eager" : "lazy"}
+              decoding={currentIndex === 0 ? "sync" : "async"}
+              {...(currentIndex === 0 && { fetchPriority: "high" as const })}
+              className="relative z-10 w-full h-auto hover:scale-[1.02] transition-transform duration-700 ease-out max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125 cursor-pointer"
+              draggable={false}
+            />
+          </div>
         </div>
 
         {/* Info Bar */}
         <div className="relative w-full max-w-5xl h-[300px] md:h-[150px] mx-4 mt-8 md:mt-24 z-20">
+          <div
+            key={`${vehicle.id}-info`}
+            className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 w-full bg-white/70 backdrop-blur-2xl rounded-2xl md:rounded-2xl overflow-hidden border border-white/50 shadow-2xl"
+          >
             <div
-              key={`${vehicle.id}-info`}
-              className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 w-full bg-white/70 backdrop-blur-2xl rounded-2xl md:rounded-2xl overflow-hidden border border-white/50 shadow-2xl"
+              className="p-3 md:p-4 lg:p-8 flex flex-col justify-center items-center text-white h-full"
+              style={{ backgroundColor: "#00283C" }}
             >
-              <div className="p-3 md:p-4 lg:p-8 flex flex-col justify-center items-center text-white h-full" style={{ backgroundColor: '#00283C' }}>
-                <span className="text-[8px] md:text-[10px] uppercase tracking-widest opacity-60 mb-0.5 md:mb-1 font-bold">{vehicle.model}</span>
-                <div className="flex items-center gap-2 md:gap-3 flex-wrap justify-center">
-                  <span className="text-base md:text-xl lg:text-2xl font-bold whitespace-nowrap">{yearFormatted}</span>
-                  {tag && (
-                    <>
-                      <span className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full shrink-0" style={{ backgroundColor: '#5CD29D' }} />
-                      <span className="text-base md:text-xl lg:text-2xl font-bold text-gray-400 whitespace-nowrap">{tag}</span>
-                    </>
-                  )}
-                </div>
-                <div className="mt-1 md:mt-2 lg:mt-4">
-                  {showPriceComparison ? (
-                    <div className="flex flex-col items-center">
-                      <span className="text-[15px] md:text-base font-semibold text-gray-300">
-                        De: <span className="line-through">{previousPriceFormatted}</span>
+              <span className="text-[8px] md:text-[10px] uppercase tracking-widest opacity-60 mb-0.5 md:mb-1 font-bold">
+                {vehicle.model}
+              </span>
+              <div className="flex items-center gap-2 md:gap-3 flex-wrap justify-center">
+                <span className="text-base md:text-xl lg:text-2xl font-bold whitespace-nowrap">
+                  {yearFormatted}
+                </span>
+                {tag && (
+                  <>
+                    <span
+                      className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full shrink-0"
+                      style={{ backgroundColor: "#5CD29D" }}
+                    />
+                    <span className="text-base md:text-xl lg:text-2xl font-bold text-gray-400 whitespace-nowrap">
+                      {tag}
+                    </span>
+                  </>
+                )}
+              </div>
+              <div className="mt-1 md:mt-2 lg:mt-4">
+                {showPriceComparison ? (
+                  <div className="flex flex-col items-center">
+                    <span className="text-[15px] md:text-base font-semibold text-gray-300">
+                      De:{" "}
+                      <span className="line-through">
+                        {previousPriceFormatted}
                       </span>
-                      <span className="text-[11px] md:text-xs font-semibold uppercase text-gray-400 leading-none">
-                        Para:
-                      </span>
-                      <span className="text-xl md:text-2xl lg:text-3xl font-black whitespace-nowrap" style={{ color: '#5CD29D' }}>
-                        {priceFormatted}
-                      </span>
-                    </div>
-                  ) : (
-                    <span className="text-xl md:text-2xl lg:text-3xl font-black whitespace-nowrap" style={{ color: '#5CD29D' }}>
+                    </span>
+                    <span className="text-[11px] md:text-xs font-semibold uppercase text-gray-400 leading-none">
+                      Para:
+                    </span>
+                    <span
+                      className="text-xl md:text-2xl lg:text-3xl font-black whitespace-nowrap"
+                      style={{ color: "#5CD29D" }}
+                    >
                       {priceFormatted}
                     </span>
-                  )}
-                </div>
-              </div>
-              
-              <div 
-                className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center border-y md:border-y-0 md:border-x border-black/5 hover:bg-white/40 transition-colors cursor-pointer group h-full"
-                onClick={handleViewDetails}
-              >
-                <Maximize2 className="w-5 h-5 md:w-6 lg:w-8 md:h-6 lg:h-8 mb-0.5 md:mb-2 transition-colors group-hover:text-secondary" style={{ color: '#00283C' }} />
-                <span className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest text-center transition-colors group-hover:text-primary" style={{ color: '#365565' }}>Ver Fotos</span>
-              </div>
-
-              <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center hover:bg-white/40 transition-colors group h-full">
-                <div className="flex items-center gap-2 mb-0.5 md:mb-2 justify-center">
-                  <div
-                    className="w-3 h-3 md:w-3.5 lg:w-4 md:h-3.5 lg:h-4 rounded-full flex items-center justify-center shrink-0 animate-pulse"
-                    style={{ border: '2px solid #5CD29D' }}
-                  >
-                    <div className="w-1.5 h-1.5 md:w-1.5 lg:w-2 md:h-1.5 lg:h-2 rounded-full shadow-[0_0_12px_rgba(92,210,157,1)]" style={{ backgroundColor: '#5CD29D' }} />
                   </div>
-                  <span
-                    className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap"
-                    style={{ color: '#0B6B4B' }}
-                  >
-                    Vistoriado
-                  </span>
-                </div>
-                {heroWhatsAppHref ? (
-                  <a
-                    href={heroWhatsAppHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-wa-source="home_hero"
-                    data-wa-intent="vehicle_interest"
-                    data-wa-vehicle-id={vehicle.id}
-                    data-wa-vehicle-name={heroVehicleLabel}
-                    className="inline-flex items-center gap-1 font-black text-xs md:text-sm lg:text-base whitespace-nowrap text-[#087A37] hover:text-[#075E54]"
-                  >
-                    <MessageCircle className="h-4 w-4" />
-                    TENHO INTERESSE
-                  </a>
                 ) : (
-                  <Button 
-                    variant="ghost" 
-                    className="font-black hover:text-secondary p-0 h-auto text-xs md:text-sm lg:text-base whitespace-nowrap"
-                    style={{ color: '#00283C' }}
-                    onClick={handleViewDetails}
+                  <span
+                    className="text-xl md:text-2xl lg:text-3xl font-black whitespace-nowrap"
+                    style={{ color: "#5CD29D" }}
                   >
-                    QUERO ESTE CARRO
-                  </Button>
+                    {priceFormatted}
+                  </span>
                 )}
               </div>
             </div>
+
+            <div
+              className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center border-y md:border-y-0 md:border-x border-black/5 hover:bg-white/40 transition-colors cursor-pointer group h-full"
+              onClick={handleViewDetails}
+            >
+              <Maximize2
+                className="w-5 h-5 md:w-6 lg:w-8 md:h-6 lg:h-8 mb-0.5 md:mb-2 transition-colors group-hover:text-secondary"
+                style={{ color: "#00283C" }}
+              />
+              <span
+                className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest text-center transition-colors group-hover:text-primary"
+                style={{ color: "#365565" }}
+              >
+                Ver Fotos
+              </span>
+            </div>
+
+            <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center hover:bg-white/40 transition-colors group h-full">
+              <div className="flex items-center gap-2 mb-0.5 md:mb-2 justify-center">
+                <div
+                  className="w-3 h-3 md:w-3.5 lg:w-4 md:h-3.5 lg:h-4 rounded-full flex items-center justify-center shrink-0 animate-pulse"
+                  style={{ border: "2px solid #5CD29D" }}
+                >
+                  <div
+                    className="w-1.5 h-1.5 md:w-1.5 lg:w-2 md:h-1.5 lg:h-2 rounded-full shadow-[0_0_12px_rgba(92,210,157,1)]"
+                    style={{ backgroundColor: "#5CD29D" }}
+                  />
+                </div>
+                <span
+                  className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap"
+                  style={{ color: "#0B6B4B" }}
+                >
+                  Vistoriado
+                </span>
+              </div>
+              {heroWhatsAppHref ? (
+                <a
+                  href={heroWhatsAppHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-wa-source="home_hero"
+                  data-wa-intent="vehicle_interest"
+                  data-wa-vehicle-id={vehicle.id}
+                  data-wa-vehicle-name={heroVehicleLabel}
+                  className="inline-flex items-center gap-1 font-black text-xs md:text-sm lg:text-base whitespace-nowrap text-[#087A37] hover:text-[#075E54]"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  TENHO INTERESSE
+                </a>
+              ) : (
+                <Button
+                  variant="ghost"
+                  className="font-black hover:text-secondary p-0 h-auto text-xs md:text-sm lg:text-base whitespace-nowrap"
+                  style={{ color: "#00283C" }}
+                  onClick={handleViewDetails}
+                >
+                  QUERO ESTE CARRO
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Navigation - Hidden on Mobile */}
-        <div 
-          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-4 group cursor-pointer z-30" 
+        <div
+          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-4 group cursor-pointer z-30"
           onClick={prev}
         >
-          <div 
+          <div
             className="w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-md transition-all shadow-xl"
-            style={{ border: '1px solid rgba(0, 40, 60, 0.05)' }}
+            style={{ border: "1px solid rgba(0, 40, 60, 0.05)" }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#00283C';
-              const icon = e.currentTarget.querySelector('svg');
-              if (icon) icon.style.color = 'white';
+              e.currentTarget.style.backgroundColor = "#00283C";
+              const icon = e.currentTarget.querySelector("svg");
+              if (icon) icon.style.color = "white";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-              const icon = e.currentTarget.querySelector('svg');
-              if (icon) icon.style.color = '#00283C';
+              e.currentTarget.style.backgroundColor =
+                "rgba(255, 255, 255, 0.1)";
+              const icon = e.currentTarget.querySelector("svg");
+              if (icon) icon.style.color = "#00283C";
             }}
           >
-            <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 transition-colors" style={{ color: '#00283C' }} />
+            <ChevronLeft
+              className="w-6 h-6 md:w-8 md:h-8 transition-colors"
+              style={{ color: "#00283C" }}
+            />
           </div>
         </div>
 
-        <div 
-          className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-4 group cursor-pointer z-30" 
+        <div
+          className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-4 group cursor-pointer z-30"
           onClick={next}
         >
-          <div 
+          <div
             className="w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-md transition-all shadow-xl"
-            style={{ border: '1px solid rgba(0, 40, 60, 0.05)' }}
+            style={{ border: "1px solid rgba(0, 40, 60, 0.05)" }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#00283C';
-              const icon = e.currentTarget.querySelector('svg');
-              if (icon) icon.style.color = 'white';
+              e.currentTarget.style.backgroundColor = "#00283C";
+              const icon = e.currentTarget.querySelector("svg");
+              if (icon) icon.style.color = "white";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-              const icon = e.currentTarget.querySelector('svg');
-              if (icon) icon.style.color = '#00283C';
+              e.currentTarget.style.backgroundColor =
+                "rgba(255, 255, 255, 0.1)";
+              const icon = e.currentTarget.querySelector("svg");
+              if (icon) icon.style.color = "#00283C";
             }}
           >
-            <ChevronRight className="w-6 h-6 md:w-8 md:h-8 transition-colors" style={{ color: '#00283C' }} />
+            <ChevronRight
+              className="w-6 h-6 md:w-8 md:h-8 transition-colors"
+              style={{ color: "#00283C" }}
+            />
           </div>
         </div>
-
       </div>
     </div>
   );

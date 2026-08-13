@@ -1,5 +1,8 @@
-import { useEffect } from "react";
-import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useQueryClient,
+  type QueryClient,
+} from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { fetchVehicleBySlug, type Vehicle } from "../endpoints/vehicles";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
@@ -13,7 +16,9 @@ function findVehicleInListCache(
   const id = extractVehicleIdFromSlug(slug);
   if (!id) return undefined;
 
-  const entries = queryClient.getQueriesData<Vehicle[]>({ queryKey: ["vehicles"] });
+  const entries = queryClient.getQueriesData<Vehicle[]>({
+    queryKey: ["vehicles"],
+  });
   for (const [, list] of entries) {
     if (!Array.isArray(list)) continue;
     const found = list.find((vehicle) => String(vehicle.id) === String(id));
@@ -30,30 +35,54 @@ function isVehicleGone(error: unknown): boolean {
   return error instanceof Error && error.message === "Vehicle not found";
 }
 
+const vehicleQueryKey = (slug: string) => ["vehicle", slug] as const;
+
+/** Antecipação por intenção (hover/toque) sem bloquear a navegação. */
+export function prefetchVehicleDetails(queryClient: QueryClient, slug: string) {
+  if (!slug) return Promise.resolve();
+  return queryClient.prefetchQuery({
+    queryKey: vehicleQueryKey(slug),
+    queryFn: () => fetchVehicleBySlug(slug),
+    staleTime: 60_000,
+  });
+}
+
 export function useVehicleQuery(slug: string) {
   const queryClient = useQueryClient();
   const bootstrapVehicle = getBootstrapVehicle(slug);
+  const exactCachedVehicle = queryClient.getQueryData<Vehicle>(
+    vehicleQueryKey(slug),
+  );
+  const listCachedVehicle = findVehicleInListCache(queryClient, slug);
+  const richListVehicle = listCachedVehicle?.imagens_site?.galeria?.length
+    ? listCachedVehicle
+    : undefined;
+  const initialVehicle =
+    exactCachedVehicle ??
+    richListVehicle ??
+    bootstrapVehicle ??
+    listCachedVehicle;
+  const hasCompleteInitialVehicle = Boolean(
+    initialVehicle?.imagens_site?.galeria?.length ||
+    initialVehicle?.fullImages?.length,
+  );
 
-  const result = useQuery({
-    queryKey: ["vehicle", slug],
+  return useQuery({
+    queryKey: vehicleQueryKey(slug),
     queryFn: () => fetchVehicleBySlug(slug),
     enabled: !!slug,
-    initialData: bootstrapVehicle,
-    initialDataUpdatedAt: bootstrapVehicle ? Date.now() : undefined,
-    refetchOnMount: bootstrapVehicle ? false : undefined,
+    initialData: initialVehicle,
+    initialDataUpdatedAt: initialVehicle
+      ? hasCompleteInitialVehicle
+        ? Date.now()
+        : 0
+      : undefined,
+    // A capa resumida abre instantaneamente; a galeria completa chega em background.
+    refetchOnMount: hasCompleteInitialVehicle ? false : "always",
+    staleTime: 60_000,
     placeholderData: () => findVehicleInListCache(queryClient, slug),
     // Sem isso, o link antigo de um carro vendido deixava o visitante uns 7s
     // olhando skeleton enquanto o react-query repetia o 404 três vezes.
     retry: (failureCount, error) => !isVehicleGone(error) && failureCount < 2,
   });
-
-  useEffect(() => {
-    if (!slug || !bootstrapVehicle) return;
-    const timer = window.setTimeout(() => {
-      void result.refetch();
-    }, 12_000);
-    return () => window.clearTimeout(timer);
-  }, [bootstrapVehicle, result.refetch, slug]);
-
-  return result;
 }

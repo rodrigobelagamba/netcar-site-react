@@ -51,6 +51,7 @@ declare global {
     gtag?: (...args: unknown[]) => void;
     fbq?: (...args: unknown[]) => void;
     __netcarAnalyticsInit?: boolean;
+    __netcarMetaLastPagePath?: string;
   }
 }
 
@@ -72,7 +73,10 @@ export function inferPageType(pagePath: string): AnalyticsPageType {
     return "regional_hub";
   }
   if (pathname.startsWith("/vender-carro-")) return "city_sell";
-  if (pathname.startsWith("/seminovos-") && pathname !== "/seminovos-automaticos") {
+  if (
+    pathname.startsWith("/seminovos-") &&
+    pathname !== "/seminovos-automaticos"
+  ) {
     return "city_buy";
   }
   if (pathname.startsWith("/comprar-")) return "brand_landing";
@@ -103,7 +107,10 @@ let lastWhatsAppTrackAt = 0;
 
 function shouldSkipDuplicateWhatsAppTrack(key: string): boolean {
   const now = Date.now();
-  if (key === lastWhatsAppTrackKey && now - lastWhatsAppTrackAt < WA_CLICK_DEDUP_MS) {
+  if (
+    key === lastWhatsAppTrackKey &&
+    now - lastWhatsAppTrackAt < WA_CLICK_DEDUP_MS
+  ) {
     return true;
   }
   lastWhatsAppTrackKey = key;
@@ -161,8 +168,10 @@ export function trackHomeScrollDepth(depthPercent: number): void {
 
 export function trackPageView(path?: string, title?: string): void {
   const pagePath = path ?? getPagePath();
-  const pageTitle = title ?? (typeof document !== "undefined" ? document.title : "");
-  const pageLocation = typeof window !== "undefined" ? window.location.href : "";
+  const pageTitle =
+    title ?? (typeof document !== "undefined" ? document.title : "");
+  const pageLocation =
+    typeof window !== "undefined" ? window.location.href : "";
   const pageType = inferPageType(pagePath);
   const regionalDimensions = getRegionalDimensions(pagePath);
 
@@ -193,12 +202,28 @@ export function trackPageView(path?: string, title?: string): void {
       ...regionalDimensions,
     });
   }
+
+  // O Pixel base registra a Home no HTML. Em navegação SPA, registra só a rota nova.
+  if (
+    typeof window.fbq === "function" &&
+    window.__netcarMetaLastPagePath !== pagePath
+  ) {
+    window.fbq("track", "PageView");
+    window.__netcarMetaLastPagePath = pagePath;
+  }
 }
 
 /** Evento para CTAs de páginas regionais e landings de estoque. */
-export function trackRegionalCtaClick(action: string, pagePath = getPagePath()): void {
+export function trackRegionalCtaClick(
+  action: string,
+  pagePath = getPagePath(),
+): void {
   const pageType = inferPageType(pagePath);
-  if (!["city_buy", "city_sell", "regional_hub", "brand_landing"].includes(pageType)) {
+  if (
+    !["city_buy", "city_sell", "regional_hub", "brand_landing"].includes(
+      pageType,
+    )
+  ) {
     return;
   }
 
@@ -314,9 +339,11 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
   pushDataLayer({
     event: "whatsapp_click",
     wa_ads_conversion: true,
+    wa_event_id: `wa_${waRef}`,
     wa_source: params.source,
     wa_intent: params.intent ?? "general",
-    wa_vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
+    wa_vehicle_id:
+      params.vehicleId != null ? String(params.vehicleId) : undefined,
     wa_vehicle_name: params.vehicleName,
     wa_page_type: inferPageType(pagePath),
     wa_ref: waRef,
@@ -333,9 +360,11 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
     window.gtag("event", "whatsapp_click", {
       send_to: GA4_MEASUREMENT_ID,
       wa_ads_conversion: false,
+      wa_event_id: `wa_${waRef}`,
       wa_source: params.source,
       wa_intent: params.intent ?? "general",
-      wa_vehicle_id: params.vehicleId != null ? String(params.vehicleId) : undefined,
+      wa_vehicle_id:
+        params.vehicleId != null ? String(params.vehicleId) : undefined,
       wa_vehicle_name: params.vehicleName,
       wa_page_type: inferPageType(pagePath),
       wa_ref: waRef,
@@ -347,9 +376,22 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
   }
 
   if (typeof window.fbq === "function") {
+    const metaParams = {
+      content_name: "whatsapp",
+      content_category: params.intent ?? "general",
+      content_ids:
+        params.vehicleId != null ? [String(params.vehicleId)] : undefined,
+      content_type: params.vehicleId != null ? "vehicle" : undefined,
+      source: params.source,
+      wa_ref: waRef,
+    };
+    window.fbq("track", "Contact", metaParams, { eventID: `wa_${waRef}` });
     window.fbq("trackCustom", "WhatsAppClick", {
       source: params.source,
       intent: params.intent ?? "general",
+      vehicle_id:
+        params.vehicleId != null ? String(params.vehicleId) : undefined,
+      wa_ref: waRef,
     });
   }
 }
@@ -363,7 +405,9 @@ export function openWhatsApp(url: string, params: WhatsAppClickParams): void {
 function inferSourceFromElement(el: HTMLElement): WhatsAppClickSource {
   const tagged = el.closest("[data-wa-source]");
   if (tagged) {
-    return (tagged.getAttribute("data-wa-source") as WhatsAppClickSource) || "link";
+    return (
+      (tagged.getAttribute("data-wa-source") as WhatsAppClickSource) || "link"
+    );
   }
   if (el.closest("header")) return "header";
   if (el.closest("footer")) return "footer";
@@ -393,7 +437,11 @@ export function initAnalytics(): void {
           phoneNumber: href.replace(/^tel:/, ""),
           source:
             anchor.getAttribute("data-phone-source") ??
-            (anchor.closest("header") ? "header" : anchor.closest("footer") ? "footer" : "content"),
+            (anchor.closest("header")
+              ? "header"
+              : anchor.closest("footer")
+                ? "footer"
+                : "content"),
         });
         return;
       }

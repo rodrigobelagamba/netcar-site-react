@@ -31,6 +31,13 @@ interface StoredTrafficRef {
   gclid?: string;
   gbraid?: string;
   wbraid?: string;
+  fbclid?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  landingPage?: string;
+  referrer?: string;
   ts: number;
 }
 
@@ -65,36 +72,71 @@ function writeStored(ref: StoredTrafficRef): void {
   }
 }
 
+function attributionContext(): Pick<
+  StoredTrafficRef,
+  "landingPage" | "referrer"
+> {
+  let referrer = "";
+  try {
+    const parsed = document.referrer ? new URL(document.referrer) : null;
+    referrer = parsed ? `${parsed.origin}${parsed.pathname}`.slice(0, 300) : "";
+  } catch {
+    referrer = "";
+  }
+  return {
+    landingPage: window.location.pathname.slice(0, 200),
+    referrer: referrer || undefined,
+  };
+}
+
 function detectFromUrl(): StoredTrafficRef | null {
   const params = new URLSearchParams(window.location.search);
   const utmSource = params.get("utm_source")?.toLowerCase() ?? "";
   const utmMedium = params.get("utm_medium")?.toLowerCase() ?? "";
   const campaignRaw = params.get("utm_campaign") ?? "";
-  const campaign = campaignRaw ? sanitizeToken(campaignRaw) : undefined;
+  const campaign = campaignRaw ? sanitizeToken(campaignRaw, 80) : undefined;
+  const utm = {
+    utmSource: utmSource ? sanitizeToken(utmSource, 40) : undefined,
+    utmMedium: utmMedium ? sanitizeToken(utmMedium, 40) : undefined,
+    utmContent: params.get("utm_content")?.slice(0, 120) || undefined,
+    utmTerm: params.get("utm_term")?.slice(0, 120) || undefined,
+    ...attributionContext(),
+  };
 
   const gclid = params.get("gclid") ?? undefined;
   const gbraid = params.get("gbraid") ?? undefined;
   const wbraid = params.get("wbraid") ?? undefined;
   if (gclid || gbraid || wbraid) {
-    return { src: "GADS", campaign, gclid, gbraid, wbraid, ts: Date.now() };
+    return {
+      src: "GADS",
+      campaign,
+      gclid,
+      gbraid,
+      wbraid,
+      ...utm,
+      ts: Date.now(),
+    };
   }
-  if (params.get("fbclid")) {
-    return { src: "META", campaign, ts: Date.now() };
+  const fbclid = params.get("fbclid") ?? undefined;
+  if (fbclid) {
+    return { src: "META", campaign, fbclid, ...utm, ts: Date.now() };
   }
   if (utmSource) {
     if (/facebook|instagram|^fb$|^ig$|meta/.test(utmSource)) {
-      return { src: "META", campaign, ts: Date.now() };
+      return { src: "META", campaign, ...utm, ts: Date.now() };
     }
     if (/google/.test(utmSource)) {
       return {
         src: /cpc|paid|ads/.test(utmMedium) ? "GADS" : "GORG",
         campaign,
+        ...utm,
         ts: Date.now(),
       };
     }
     return {
       src: sanitizeToken(utmSource, 10).toUpperCase() || "REF",
       campaign,
+      ...utm,
       ts: Date.now(),
     };
   }
@@ -111,11 +153,12 @@ function detectFromReferrer(): StoredTrafficRef | null {
     return null;
   }
   if (!host || host === window.location.hostname) return null;
-  if (/google\./.test(host)) return { src: "GORG", ts: Date.now() };
+  const context = attributionContext();
+  if (/google\./.test(host)) return { src: "GORG", ...context, ts: Date.now() };
   if (/facebook\.|instagram\.|fb\.com|t\.co|tiktok\./.test(host)) {
-    return { src: "SOCIAL", ts: Date.now() };
+    return { src: "SOCIAL", ...context, ts: Date.now() };
   }
-  return { src: "REF", ts: Date.now() };
+  return { src: "REF", ...context, ts: Date.now() };
 }
 
 /**
@@ -141,9 +184,14 @@ export function captureTrafficSource(): void {
 }
 
 /** Origem atual (pra eventos GA4). */
-export function getTrafficSource(): { src: TrafficSourceCode; campaign?: string } {
+export function getTrafficSource(): {
+  src: TrafficSourceCode;
+  campaign?: string;
+} {
   const stored = typeof window !== "undefined" ? readStored() : null;
-  return stored ? { src: stored.src, campaign: stored.campaign } : { src: "DIR" };
+  return stored
+    ? { src: stored.src, campaign: stored.campaign }
+    : { src: "DIR" };
 }
 
 /** Letra da fonte usada como prefixo do código. */
@@ -208,6 +256,13 @@ export function logWaClick(code: string): void {
       gclid: ref?.gclid ?? "",
       gbraid: ref?.gbraid ?? "",
       wbraid: ref?.wbraid ?? "",
+      fbclid: ref?.fbclid ?? "",
+      utm_source: ref?.utmSource ?? "",
+      utm_medium: ref?.utmMedium ?? "",
+      utm_content: ref?.utmContent ?? "",
+      utm_term: ref?.utmTerm ?? "",
+      landing_page: ref?.landingPage ?? "",
+      referrer: ref?.referrer ?? "",
       page: window.location.pathname.slice(0, 200),
       ts: Math.floor(Date.now() / 1000),
     });

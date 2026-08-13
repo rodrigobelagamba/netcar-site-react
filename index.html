@@ -4,20 +4,40 @@
     <meta charset="UTF-8" />
     <!-- Antes do preload responsivo: sem isto o Chrome assume viewport de 980px. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <link rel="preconnect" href="https://www.netcarmultimarcas.com.br" crossorigin />
+
+    <link
+      rel="preconnect"
+      href="https://www.netcarmultimarcas.com.br"
+      crossorigin
+    />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://connect.facebook.net" />
-    
+
     <!-- GTM + GA4 direto (fallback) + Meta. GA4 direto evita GA4 zerado se tag GTM falhar. -->
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag() {
+        dataLayer.push(arguments);
+      }
       window.gtag = gtag;
-      window.fbq = window.fbq || function () {
-        (window.fbq.q = window.fbq.q || []).push(arguments);
-      };
-      window._fbq = window._fbq || window.fbq;
+
+      // Fila oficial do Meta: preserva eventos até o script adiado carregar.
+      !(function (f, n) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod
+            ? n.callMethod.apply(n, arguments)
+            : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = "2.0";
+        n.queue = [];
+      })(window);
+      fbq("init", "367657940934075");
+      fbq("track", "PageView");
+      window.__netcarMetaLastPagePath = location.pathname + location.search;
 
       (function () {
         try {
@@ -33,47 +53,71 @@
           ];
           var src = "";
           for (var i = 0; i < map.length; i++) {
-            if (map[i][0].test(ref)) { src = map[i][1]; break; }
+            if (map[i][0].test(ref)) {
+              src = map[i][1];
+              break;
+            }
           }
-          var um = location.search.match(/[?&]utm_source=(chatgpt|perplexity|gemini|claude|copilot)[^&]*/i);
-          if (!src && um) { src = um[1].charAt(0).toUpperCase() + um[1].slice(1); }
+          var um = location.search.match(
+            /[?&]utm_source=(chatgpt|perplexity|gemini|claude|copilot)[^&]*/i,
+          );
+          if (!src && um) {
+            src = um[1].charAt(0).toUpperCase() + um[1].slice(1);
+          }
           if (src && !sessionStorage.getItem("ai_ref_tracked")) {
             sessionStorage.setItem("ai_ref_tracked", "1");
-            window.dataLayer.push({ event: "ai_referral", ai_source: src, ai_referrer: ref });
+            window.dataLayer.push({
+              event: "ai_referral",
+              ai_source: src,
+              ai_referrer: ref,
+            });
           }
-        } catch (e) { /* noop */ }
+        } catch (e) {
+          /* noop */
+        }
       })();
 
       function loadDeferredAnalytics() {
         if (window.__netcarAnalyticsLoaded) return;
         window.__netcarAnalyticsLoaded = true;
 
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-M8MZRTL9');
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != "dataLayer" ? "&l=" + l : "";
+          j.async = true;
+          j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, "script", "dataLayer", "GTM-M8MZRTL9");
 
-        var ga = document.createElement('script');
+        var ga = document.createElement("script");
         ga.async = true;
-        ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-MGPNBDNQ9G';
+        ga.src = "https://www.googletagmanager.com/gtag/js?id=G-MGPNBDNQ9G";
         document.head.appendChild(ga);
-        gtag('js', new Date());
-        gtag('config', 'G-MGPNBDNQ9G', { send_page_view: false });
+        gtag("js", new Date());
+        gtag("config", "G-MGPNBDNQ9G", { send_page_view: false });
 
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '367657940934075');
-        fbq('track', 'PageView');
+        if (
+          !document.querySelector(
+            'script[src*="connect.facebook.net/en_US/fbevents.js"]',
+          )
+        ) {
+          var meta = document.createElement("script");
+          meta.async = true;
+          meta.src = "https://connect.facebook.net/en_US/fbevents.js";
+          document.head.appendChild(meta);
+        }
       }
 
-      var interactionEvents = ['scroll', 'click', 'touchstart', 'keydown', 'pointerdown'];
+      var interactionEvents = [
+        "scroll",
+        "click",
+        "touchstart",
+        "keydown",
+        "pointerdown",
+      ];
       function onFirstInteraction() {
         loadDeferredAnalytics();
         interactionEvents.forEach(function (name) {
@@ -85,15 +129,15 @@
         window.addEventListener(name, onFirstInteraction, listenerOpts);
       });
 
-      if ('requestIdleCallback' in window) {
+      if ("requestIdleCallback" in window) {
         requestIdleCallback(loadDeferredAnalytics, { timeout: 3500 });
       } else {
-        window.addEventListener('load', function () {
+        window.addEventListener("load", function () {
           setTimeout(loadDeferredAnalytics, 1500);
         });
       }
     </script>
-    
+
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -103,173 +147,284 @@
 
     <!-- Shell mínimo do primeiro paint; o React o substitui ao montar. -->
     <style>
-      #netcar-initial-shell{box-sizing:border-box;display:flex;min-height:100vh;flex-direction:column;background:#f6f6f6;color:#00283c;font-family:Arial,sans-serif}
-      #netcar-initial-shell header{display:flex;height:64px;align-items:center;justify-content:space-between;background:#fff;padding:0 20px}
-      #netcar-initial-shell strong{font-size:18px}
-      #netcar-initial-shell main{display:grid;flex:1;place-content:center;overflow:hidden;padding:24px;text-align:center}
-      #netcar-initial-lcp{display:flex;width:min(100vw,1280px);min-height:45vh;align-items:center;justify-content:center}
-      #netcar-initial-lcp img{display:block;width:100%;height:auto;max-height:55vh;object-fit:contain;transform:scale(1.4)}
-      #netcar-initial-lcp img.netcar-initial-banner{max-height:none;transform:none}
-      @media (min-width:768px){#netcar-initial-lcp{min-height:60vh}#netcar-initial-lcp img{max-height:75vh;transform:scale(1.25)}}
-      #netcar-initial-shell p{color:#52616b}
-      #netcar-initial-shell nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:16px}
-      #netcar-initial-shell a{border:1px solid #00283c;border-radius:999px;color:#00283c;font-weight:700;padding:10px 16px;text-decoration:none}
-      #netcar-initial-shell a:first-child{background:#087a37;border-color:#087a37;color:#fff}
+      #netcar-initial-shell {
+        box-sizing: border-box;
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+        background: #f6f6f6;
+        color: #00283c;
+        font-family: Arial, sans-serif;
+      }
+      #netcar-initial-shell header {
+        display: flex;
+        height: 64px;
+        align-items: center;
+        justify-content: space-between;
+        background: #fff;
+        padding: 0 20px;
+      }
+      #netcar-initial-shell strong {
+        font-size: 18px;
+      }
+      #netcar-initial-shell main {
+        display: grid;
+        flex: 1;
+        place-content: center;
+        overflow: hidden;
+        padding: 24px;
+        text-align: center;
+      }
+      #netcar-initial-lcp {
+        display: flex;
+        width: min(100vw, 1280px);
+        min-height: 45vh;
+        align-items: center;
+        justify-content: center;
+      }
+      #netcar-initial-lcp img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 55vh;
+        object-fit: contain;
+        transform: scale(1.4);
+      }
+      #netcar-initial-lcp img.netcar-initial-banner {
+        max-height: none;
+        transform: none;
+      }
+      @media (min-width: 768px) {
+        #netcar-initial-lcp {
+          min-height: 60vh;
+        }
+        #netcar-initial-lcp img {
+          max-height: 75vh;
+          transform: scale(1.25);
+        }
+      }
+      #netcar-initial-shell p {
+        color: #52616b;
+      }
+      #netcar-initial-shell nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      #netcar-initial-shell a {
+        border: 1px solid #00283c;
+        border-radius: 999px;
+        color: #00283c;
+        font-weight: 700;
+        padding: 10px 16px;
+        text-decoration: none;
+      }
+      #netcar-initial-shell a:first-child {
+        background: #087a37;
+        border-color: #087a37;
+        color: #fff;
+      }
     </style>
-    
+
     <!-- Meta tags padrão (atualizadas dinamicamente pelo React em cada rota) -->
-    <meta name="description" content="Encontre carros seminovos em Esteio, com estoque selecionado, financiamento, garantia e o pós-venda Nethelp. Consulte a equipe da Netcar." />
+    <meta
+      name="description"
+      content="Encontre carros seminovos em Esteio, com estoque selecionado, financiamento, garantia e o pós-venda Nethelp. Consulte a equipe da Netcar."
+    />
     <link rel="canonical" href="https://www.netcarmultimarcas.com.br/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Netcar Multimarcas" />
     <meta property="og:locale" content="pt_BR" />
-    <meta property="og:title" content="Seminovos em Esteio/RS | Netcar Multimarcas" />
-    <meta property="og:description" content="Seminovos vistoriados com garantia e financiamento em Esteio/RS. 2 lojas na Av. Presidente Vargas." />
+    <meta
+      property="og:title"
+      content="Seminovos em Esteio/RS | Netcar Multimarcas"
+    />
+    <meta
+      property="og:description"
+      content="Seminovos vistoriados com garantia e financiamento em Esteio/RS. 2 lojas na Av. Presidente Vargas."
+    />
     <meta property="og:url" content="https://www.netcarmultimarcas.com.br/" />
-    <meta property="og:image" content="https://www.netcarmultimarcas.com.br/images/loja1.jpg" />
+    <meta
+      property="og:image"
+      content="https://www.netcarmultimarcas.com.br/images/loja1.jpg"
+    />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Seminovos em Esteio/RS | Netcar Multimarcas" />
-    <meta name="twitter:description" content="Seminovos vistoriados com garantia e financiamento em Esteio/RS. 2 lojas na Av. Presidente Vargas." />
-    <meta name="twitter:image" content="https://www.netcarmultimarcas.com.br/images/loja1.jpg" />
+    <meta
+      name="twitter:title"
+      content="Seminovos em Esteio/RS | Netcar Multimarcas"
+    />
+    <meta
+      name="twitter:description"
+      content="Seminovos vistoriados com garantia e financiamento em Esteio/RS. 2 lojas na Av. Presidente Vargas."
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.netcarmultimarcas.com.br/images/loja1.jpg"
+    />
 
     <title>Carros Seminovos em Esteio | Netcar Multimarcas</title>
 
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "AutoDealer",
-      "@id": "https://www.netcarmultimarcas.com.br/#organization",
-      "name": "Netcar Multimarcas",
-      "alternateName": "Netcar Veículos",
-      "legalName": "Netcar Veículos Ltda",
-      "foundingDate": "1997",
-      "description": "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.",
-      "url": "https://www.netcarmultimarcas.com.br",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.netcarmultimarcas.com.br/images/Logotipo7_1768863597989.png"
-      },
-      "image": [
-        "https://www.netcarmultimarcas.com.br/images/loja1.jpg",
-        "https://www.netcarmultimarcas.com.br/images/loja2.jpg"
-      ],
-      "telephone": "+55-51-3473-7900",
-      "email": "contato@netcarmultimarcas.com.br",
-      "address": [
-        {
-          "@type": "PostalAddress",
-          "name": "Matriz",
-          "streetAddress": "Av. Presidente Vargas, 740",
-          "addressLocality": "Esteio",
-          "addressRegion": "RS",
-          "postalCode": "93260-048",
-          "addressCountry": "BR"
+      {
+        "@context": "https://schema.org",
+        "@type": "AutoDealer",
+        "@id": "https://www.netcarmultimarcas.com.br/#organization",
+        "name": "Netcar Multimarcas",
+        "alternateName": "Netcar Veículos",
+        "legalName": "Netcar Veículos Ltda",
+        "foundingDate": "1997",
+        "description": "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.",
+        "url": "https://www.netcarmultimarcas.com.br",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.netcarmultimarcas.com.br/images/Logotipo7_1768863597989.png"
         },
-        {
-          "@type": "PostalAddress",
-          "name": "Filial",
-          "streetAddress": "Av. Presidente Vargas, 1106",
-          "addressLocality": "Esteio",
-          "addressRegion": "RS",
-          "postalCode": "93260-001",
-          "addressCountry": "BR"
-        }
-      ],
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "-29.837920",
-        "longitude": "-51.170236"
-      },
-      "areaServed": [
-        {"@type": "City", "name": "Esteio"},
-        {"@type": "City", "name": "Canoas"},
-        {"@type": "City", "name": "Sapucaia do Sul"},
-        {"@type": "City", "name": "São Leopoldo"},
-        {"@type": "City", "name": "Novo Hamburgo"},
-        {"@type": "City", "name": "Gravataí"},
-        {"@type": "City", "name": "Cachoeirinha"},
-        {"@type": "City", "name": "Porto Alegre"},
-        {"@type": "City", "name": "Alvorada"},
-        {"@type": "City", "name": "Viamão"},
-        {"@type": "City", "name": "Guaíba"},
-        {"@type": "City", "name": "Campo Bom"},
-        {"@type": "City", "name": "Estância Velha"},
-        {"@type": "City", "name": "Montenegro"},
-        {"@type": "City", "name": "Taquara"},
-        {"@type": "City", "name": "Igrejinha"},
-        {"@type": "City", "name": "Gramado"},
-        {"@type": "City", "name": "Caxias do Sul"},
-        {"@type": "City", "name": "Bento Gonçalves"},
-        {"@type": "AdministrativeArea", "name": "Região Metropolitana de Porto Alegre"}
-      ],
-      "openingHoursSpecification": [
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "opens": "09:00",
-          "closes": "18:00"
+        "image": [
+          "https://www.netcarmultimarcas.com.br/images/loja1.jpg",
+          "https://www.netcarmultimarcas.com.br/images/loja2.jpg"
+        ],
+        "telephone": "+55-51-3473-7900",
+        "email": "contato@netcarmultimarcas.com.br",
+        "address": [
+          {
+            "@type": "PostalAddress",
+            "name": "Matriz",
+            "streetAddress": "Av. Presidente Vargas, 740",
+            "addressLocality": "Esteio",
+            "addressRegion": "RS",
+            "postalCode": "93260-048",
+            "addressCountry": "BR"
+          },
+          {
+            "@type": "PostalAddress",
+            "name": "Filial",
+            "streetAddress": "Av. Presidente Vargas, 1106",
+            "addressLocality": "Esteio",
+            "addressRegion": "RS",
+            "postalCode": "93260-001",
+            "addressCountry": "BR"
+          }
+        ],
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "-29.837920",
+          "longitude": "-51.170236"
         },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": "Saturday",
-          "opens": "09:00",
-          "closes": "16:30"
-        }
-      ],
-      "sameAs": [
-        "https://www.instagram.com/netcar_rc",
-        "https://www.facebook.com/NetcarRC"
-      ]
-    }
+        "areaServed": [
+          { "@type": "City", "name": "Esteio" },
+          { "@type": "City", "name": "Canoas" },
+          { "@type": "City", "name": "Sapucaia do Sul" },
+          { "@type": "City", "name": "São Leopoldo" },
+          { "@type": "City", "name": "Novo Hamburgo" },
+          { "@type": "City", "name": "Gravataí" },
+          { "@type": "City", "name": "Cachoeirinha" },
+          { "@type": "City", "name": "Porto Alegre" },
+          { "@type": "City", "name": "Alvorada" },
+          { "@type": "City", "name": "Viamão" },
+          { "@type": "City", "name": "Guaíba" },
+          { "@type": "City", "name": "Campo Bom" },
+          { "@type": "City", "name": "Estância Velha" },
+          { "@type": "City", "name": "Montenegro" },
+          { "@type": "City", "name": "Taquara" },
+          { "@type": "City", "name": "Igrejinha" },
+          { "@type": "City", "name": "Gramado" },
+          { "@type": "City", "name": "Caxias do Sul" },
+          { "@type": "City", "name": "Bento Gonçalves" },
+          {
+            "@type": "AdministrativeArea",
+            "name": "Região Metropolitana de Porto Alegre"
+          }
+        ],
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday"
+            ],
+            "opens": "09:00",
+            "closes": "18:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "Saturday",
+            "opens": "09:00",
+            "closes": "16:30"
+          }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/netcar_rc",
+          "https://www.facebook.com/NetcarRC"
+        ]
+      }
     </script>
 
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "@id": "https://www.netcarmultimarcas.com.br/#website",
-      "url": "https://www.netcarmultimarcas.com.br",
-      "name": "Netcar Multimarcas",
-      "publisher": { "@id": "https://www.netcarmultimarcas.com.br/#organization" },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://www.netcarmultimarcas.com.br/seminovos?modelo={search_term_string}"
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://www.netcarmultimarcas.com.br/#website",
+        "url": "https://www.netcarmultimarcas.com.br",
+        "name": "Netcar Multimarcas",
+        "publisher": {
+          "@id": "https://www.netcarmultimarcas.com.br/#organization"
         },
-        "query-input": "required name=search_term_string"
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://www.netcarmultimarcas.com.br/seminovos?modelo={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
       }
-    }
     </script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe title="Google Tag Manager" src="https://www.googletagmanager.com/ns.html?id=GTM-M8MZRTL9"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript
+      ><iframe
+        title="Google Tag Manager"
+        src="https://www.googletagmanager.com/ns.html?id=GTM-M8MZRTL9"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <noscript>
       <img
         alt=""
         height="1"
         width="1"
-        style="display:none"
+        style="display: none"
         src="https://www.facebook.com/tr?id=367657940934075&ev=PageView&noscript=1"
       />
     </noscript>
-    
+
     <div id="root">
       <div id="netcar-initial-shell">
-        <header><strong>Netcar Multimarcas</strong><span>Esteio/RS</span></header>
+        <header>
+          <strong>Netcar Multimarcas</strong><span>Esteio/RS</span>
+        </header>
         <main>
           <div>
             <div id="netcar-initial-lcp"></div>
             <p>Seminovos com procedência em Esteio/RS.</p>
             <nav aria-label="Contato rápido">
-              <a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es.">WhatsApp</a>
+              <a
+                href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es."
+                >WhatsApp</a
+              >
               <a href="tel:+555134737900">Ligar para a loja</a>
               <a href="/seminovos">Ver seminovos</a>
             </nav>
