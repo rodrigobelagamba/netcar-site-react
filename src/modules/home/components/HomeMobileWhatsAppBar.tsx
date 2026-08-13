@@ -1,10 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import {
-  buildWhatsAppUrl,
-  homeWhatsAppMessages,
-} from "@/lib/whatsappMessages";
+import { buildWhatsAppUrl, homeWhatsAppMessages } from "@/lib/whatsappMessages";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { FloatingPortal } from "@/components/FloatingPortal";
 
@@ -37,7 +34,7 @@ export function HomeMobileWhatsAppBar({
   return (
     <FloatingPortal>
       <div className="pointer-events-none fixed inset-x-0 bottom-2 z-[60] flex justify-center px-2 md:bottom-3 md:px-3">
-        <div className="pointer-events-auto w-full max-w-[22rem] rounded-xl border border-[#25D366]/30 bg-white/95 px-2 py-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.14)] backdrop-blur-md md:max-w-sm md:rounded-2xl md:px-3 md:py-2.5 md:shadow-[0_12px_36px_rgba(0,0,0,0.16)]">
+        <div className="pointer-events-auto w-full max-w-[22rem] rounded-xl border border-[#25D366]/30 bg-white/95 px-2 py-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.14)] md:max-w-sm md:rounded-2xl md:px-3 md:py-2.5 md:shadow-[0_12px_36px_rgba(0,0,0,0.16)] md:backdrop-blur-md">
           <p className="mb-1 hidden text-center text-[10px] font-semibold uppercase tracking-wide text-[#00283C]/70 md:mb-1.5 md:block">
             Atendimento 24h no WhatsApp
           </p>

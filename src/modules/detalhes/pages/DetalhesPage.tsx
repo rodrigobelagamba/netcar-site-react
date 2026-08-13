@@ -1,5 +1,13 @@
-import { useParams, useLocation, Link, useNavigate } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "@/design-system/components/utils/StaticMotion";
+import {
+  useParams,
+  useLocation,
+  Link,
+  useNavigate,
+} from "@tanstack/react-router";
+import {
+  motion,
+  AnimatePresence,
+} from "@/design-system/components/utils/StaticMotion";
 import {
   MessageCircleMore,
   X,
@@ -39,7 +47,11 @@ import {
   resolveIcheckProtocol,
 } from "@/lib/icheck-protocol";
 import { canonicalUrl } from "@/lib/seo";
-import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
+import {
+  optimizeStockImage,
+  stockGalleryPreviewSource,
+  stockImageSrcSet,
+} from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
 import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
@@ -60,9 +72,11 @@ const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
 
 const FabricaDeValor = React.lazy(() =>
-  import("@/design-system/components/patterns/FabricaDeValor").then((module) => ({
-    default: module.FabricaDeValor,
-  })),
+  import("@/design-system/components/patterns/FabricaDeValor").then(
+    (module) => ({
+      default: module.FabricaDeValor,
+    }),
+  ),
 );
 const NetcarSocialSection = React.lazy(() =>
   import("@/design-system/components/patterns/social/NetcarSocialSection").then(
@@ -91,7 +105,10 @@ function Badge({ text, variant }: Badge) {
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+      transition={{
+        duration: ANIMATION_DURATION.normal,
+        ease: ANIMATION_EASING,
+      }}
       className="rounded-[45px] flex items-center uppercase font-bold tracking-wide text-white info-badge"
       style={{ backgroundColor: BADGE_COLORS[variant] }}
     >
@@ -163,27 +180,36 @@ function CTAButton({
         className={`absolute inset-0 ${hoverBgColor} rounded-[65px]`}
         initial={{ opacity: 0 }}
         animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
+        transition={{
+          duration: ANIMATION_DURATION.fast,
+          ease: ANIMATION_EASING,
+        }}
       />
 
       <div className="relative flex items-center h-full">
         <div className="relative overflow-hidden h-full flex items-center">
-            <motion.span
-              className={`${restingTextColor} whitespace-nowrap relative z-10`}
-              initial={{ y: 0, opacity: 1 }}
-              animate={{ y: isHovered ? -40 : 0, opacity: isHovered ? 0 : 1 }}
-              transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
-            >
-              {text}
-            </motion.span>
-            <motion.span
-              className="text-white whitespace-nowrap absolute left-0 top-0 h-full flex items-center z-10 info-contact-button"
-              initial={{ y: 40, opacity: 0 }}
-              animate={{ y: isHovered ? 0 : 40, opacity: isHovered ? 1 : 0 }}
-              transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
-            >
-              {text}
-            </motion.span>
+          <motion.span
+            className={`${restingTextColor} whitespace-nowrap relative z-10`}
+            initial={{ y: 0, opacity: 1 }}
+            animate={{ y: isHovered ? -40 : 0, opacity: isHovered ? 0 : 1 }}
+            transition={{
+              duration: ANIMATION_DURATION.fast,
+              ease: ANIMATION_EASING,
+            }}
+          >
+            {text}
+          </motion.span>
+          <motion.span
+            className="text-white whitespace-nowrap absolute left-0 top-0 h-full flex items-center z-10 info-contact-button"
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: isHovered ? 0 : 40, opacity: isHovered ? 1 : 0 }}
+            transition={{
+              duration: ANIMATION_DURATION.fast,
+              ease: ANIMATION_EASING,
+            }}
+          >
+            {text}
+          </motion.span>
         </div>
 
         {Icon && (
@@ -209,7 +235,9 @@ function CTAButton({
         rel="noopener noreferrer"
         data-wa-source={waSource}
         data-wa-intent={waIntent}
-        data-wa-vehicle-id={waVehicleId != null ? String(waVehicleId) : undefined}
+        data-wa-vehicle-id={
+          waVehicleId != null ? String(waVehicleId) : undefined
+        }
         data-wa-vehicle-name={waVehicleName}
         className={sharedClassName}
       >
@@ -383,8 +411,12 @@ function TradeInTextLink({
       data-wa-vehicle-name={modeloCompleto}
       className={`inline-flex items-center gap-1.5 font-bold text-[#00283C] transition-colors hover:text-[#5CD29D] ${compact ? "text-xs" : "text-sm"} ${className}`}
     >
-      <ArrowLeftRight className={compact ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4 shrink-0"} />
-      <span className="underline underline-offset-4">Tenho carro na troca deste</span>
+      <ArrowLeftRight
+        className={compact ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4 shrink-0"}
+      />
+      <span className="underline underline-offset-4">
+        Tenho carro na troca deste
+      </span>
     </a>
   );
 }
@@ -480,7 +512,6 @@ function DetalheFloatingWhatsApp({
   );
 }
 
-
 interface AccordionItemProps {
   title: string;
   children: React.ReactNode;
@@ -499,7 +530,10 @@ function AccordionItem({
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+      transition={{
+        duration: ANIMATION_DURATION.normal,
+        ease: ANIMATION_EASING,
+      }}
       className={`mb-1 rounded-xl border-b border-[#00283C]/[0.08] px-1 pb-4 transition-colors ${
         isOpen ? "border-[#00283C]/15" : ""
       }`}
@@ -513,7 +547,10 @@ function AccordionItem({
         </h3>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
+          transition={{
+            duration: ANIMATION_DURATION.fast,
+            ease: ANIMATION_EASING,
+          }}
           className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#00283C]/[0.05] text-[#00283C]/70 transition-colors group-hover:bg-[#00283C]/[0.08]"
         >
           <ChevronDown className="h-4 w-4" />
@@ -527,7 +564,10 @@ function AccordionItem({
           opacity: isOpen ? 1 : 0,
           marginTop: isOpen ? 16 : 0,
         }}
-        transition={{ duration: ANIMATION_DURATION.fast, ease: ANIMATION_EASING }}
+        transition={{
+          duration: ANIMATION_DURATION.fast,
+          ease: ANIMATION_EASING,
+        }}
         className="overflow-hidden"
       >
         {children}
@@ -573,11 +613,18 @@ function OptionalItem({ text }: OptionalItemProps) {
   return (
     <div className="flex items-center gap-2">
       <div className="h-6 w-6 flex-shrink-0 text-primary">
-        <svg className="block size-full" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+        <svg
+          className="block size-full"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
           <path d="M10 17V7L15 12L10 17Z" fill="currentColor" />
         </svg>
       </div>
-      <span className="text-[14px] leading-[29px] text-fg sm:text-[15px]">{text}</span>
+      <span className="text-[14px] leading-[29px] text-fg sm:text-[15px]">
+        {text}
+      </span>
     </div>
   );
 }
@@ -630,7 +677,9 @@ function WhatsAppQuickAction({
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366]/15 text-[#128C7E]">
           <Icon className="h-4 w-4" />
         </span>
-        <span className="text-left text-[13px] font-semibold leading-tight text-fg">{label}</span>
+        <span className="text-left text-[13px] font-semibold leading-tight text-fg">
+          {label}
+        </span>
       </div>
     );
   }
@@ -679,7 +728,9 @@ function SidebarActionCard({
       : "border-[#00283C]/10 text-[#00283C]/80";
 
   return (
-    <div className={`relative flex flex-col items-center overflow-hidden rounded-[1.35rem] border p-6 ring-1 ring-inset ring-white/60 transition-shadow duration-300 hover:shadow-[0_12px_32px_rgba(0,40,60,0.1)] sm:p-8 ${styles}`}>
+    <div
+      className={`relative flex flex-col items-center overflow-hidden rounded-[1.35rem] border p-6 ring-1 ring-inset ring-white/60 transition-shadow duration-300 hover:shadow-[0_12px_32px_rgba(0,40,60,0.1)] sm:p-8 ${styles}`}
+    >
       {variant === "trust" ? (
         <>
           <motion.div
@@ -693,15 +744,24 @@ function SidebarActionCard({
             aria-hidden="true"
             className="pointer-events-none absolute -bottom-12 -left-8 h-28 w-28 rounded-full bg-primary/20 blur-3xl"
             animate={{ opacity: [0.2, 0.45, 0.2], scale: [1, 1.12, 1] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.8,
+            }}
           />
         </>
       ) : null}
 
-      <span className={`relative mb-4 inline-flex items-center rounded-full border bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] shadow-[0_1px_2px_rgba(0,40,60,0.04)] ${badgeClass}`}>
+      <span
+        className={`relative mb-4 inline-flex items-center rounded-full border bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] shadow-[0_1px_2px_rgba(0,40,60,0.04)] ${badgeClass}`}
+      >
         {badge}
       </span>
-      <div className="relative flex w-full flex-col items-center">{children}</div>
+      <div className="relative flex w-full flex-col items-center">
+        {children}
+      </div>
     </div>
   );
 }
@@ -792,13 +852,14 @@ function CTASidebar({
   const vehicleLabel = modeloCompleto || "veículo";
   const whatsappReady = Boolean(whatsapp?.numero);
   const vehicleMessages = vehicleWhatsAppMessages(vehicleLabel, modeloCompleto);
-  const primaryWhatsAppHref = whatsappReady && isSold
-    ? getWhatsAppLink(
-        siteWhatsAppMessage(
-          `o ${vehicleLabel} que eu vi no site já foi vendido. Quero opções parecidas disponíveis.`,
-        ),
-      )
-    : undefined;
+  const primaryWhatsAppHref =
+    whatsappReady && isSold
+      ? getWhatsAppLink(
+          siteWhatsAppMessage(
+            `o ${vehicleLabel} que eu vi no site já foi vendido. Quero opções parecidas disponíveis.`,
+          ),
+        )
+      : undefined;
 
   const whatsappActions = [
     {
@@ -837,7 +898,10 @@ function CTASidebar({
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+          transition={{
+            duration: ANIMATION_DURATION.normal,
+            ease: ANIMATION_EASING,
+          }}
         >
           <button
             type="button"
@@ -853,7 +917,11 @@ function CTASidebar({
               aria-hidden="true"
               className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-secondary/25 blur-2xl"
               animate={{ opacity: [0.35, 0.7, 0.35], scale: [1, 1.1, 1] }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{
+                duration: 4.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             />
             <span className="relative mb-3 inline-block text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">
               i-CHECK Netcar
@@ -1063,6 +1131,8 @@ interface GalleryItemProps {
 }
 
 function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
+  const previewSource = stockGalleryPreviewSource(image);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -1078,8 +1148,8 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
     >
       <div className="relative w-full h-full">
         <img
-          src={optimizeStockImage(image, 640)}
-          srcSet={stockImageSrcSet(image, [320, 480, 640, 768, 960])}
+          src={optimizeStockImage(previewSource, 640)}
+          srcSet={stockImageSrcSet(previewSource, [320, 480, 640, 768, 960])}
           sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
           alt={alt}
           width={1920}
@@ -1087,8 +1157,15 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
           loading="lazy"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = "none";
+          onError={(event) => {
+            const target = event.currentTarget;
+            if (target.dataset.originalFallback === "true") {
+              target.style.display = "none";
+              return;
+            }
+            target.dataset.originalFallback = "true";
+            target.removeAttribute("srcset");
+            target.src = image;
           }}
         />
         {/* Overlay on hover */}
@@ -1097,7 +1174,6 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
     </motion.div>
   );
 }
-
 
 function medianPrice(prices: number[]): number {
   if (prices.length === 0) return 0;
@@ -1150,10 +1226,8 @@ function RelatedVehiclesSection({
       .split(/\s+/)[0];
 
     const sameMarcaCat = available.filter((v) => {
-      const sameMarca =
-        marcaKey && (v.marca || "").toUpperCase() === marcaKey;
-      const sameCat =
-        catKey && (v.categoria || "").toUpperCase() === catKey;
+      const sameMarca = marcaKey && (v.marca || "").toUpperCase() === marcaKey;
+      const sameCat = catKey && (v.categoria || "").toUpperCase() === catKey;
       return sameMarca && sameCat;
     });
     const sameMarca = available.filter(
@@ -1181,8 +1255,10 @@ function RelatedVehiclesSection({
             ),
           );
 
-    const minPrice = referencePrice > 0 ? referencePrice * (1 - priceRangeRatio) : 0;
-    const maxPrice = referencePrice > 0 ? referencePrice * (1 + priceRangeRatio) : Infinity;
+    const minPrice =
+      referencePrice > 0 ? referencePrice * (1 - priceRangeRatio) : 0;
+    const maxPrice =
+      referencePrice > 0 ? referencePrice * (1 + priceRangeRatio) : Infinity;
 
     const scored = available
       .map((v) => {
@@ -1209,7 +1285,10 @@ function RelatedVehiclesSection({
         if (sameModelFamily) score += 40;
         if (inPriceRange) score += 35;
         score += Math.max(0, 24 - yearDiff * 4);
-        score += Math.max(0, 20 - Math.min(20, priceDiff / Math.max(referencePrice, 1) * 20));
+        score += Math.max(
+          0,
+          20 - Math.min(20, (priceDiff / Math.max(referencePrice, 1)) * 20),
+        );
 
         return {
           ...v,
@@ -1234,10 +1313,13 @@ function RelatedVehiclesSection({
       });
 
     const preferred = isSold
-      ? scored.filter((v) => v.inPriceRange || v.sameMarcaMatch || v.sameCatMatch)
+      ? scored.filter(
+          (v) => v.inPriceRange || v.sameMarcaMatch || v.sameCatMatch,
+        )
       : scored;
 
-    const pool = preferred.length >= Math.min(4, maxRelatedVehicles) ? preferred : scored;
+    const pool =
+      preferred.length >= Math.min(4, maxRelatedVehicles) ? preferred : scored;
 
     return pool.slice(0, maxRelatedVehicles).map((vehicle) => ({
       id: String(vehicle.id),
@@ -1280,17 +1362,27 @@ function RelatedVehiclesSection({
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+          transition={{
+            duration: ANIMATION_DURATION.normal,
+            ease: ANIMATION_EASING,
+          }}
           className="mb-8 sm:mb-10 lg:mb-12"
         >
           <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex items-center gap-3">
               <div className="h-[26px] w-[26px] sm:h-[28px] sm:w-[28px] lg:h-[30px] lg:w-[30px]">
-                <img src={icon1} alt="" aria-hidden="true" className="block size-full" />
+                <img
+                  src={icon1}
+                  alt=""
+                  aria-hidden="true"
+                  className="block size-full"
+                />
               </div>
               <div>
                 <h2 className="section-heading">
-                  {isSold ? "Opções parecidas no estoque" : "Você também pode gostar"}
+                  {isSold
+                    ? "Opções parecidas no estoque"
+                    : "Você também pode gostar"}
                 </h2>
                 {isSold && (
                   <p className="mt-1 text-sm text-muted-foreground">
@@ -1316,13 +1408,14 @@ function RelatedVehiclesSection({
         <ProductList
           vehicles={relatedVehicleCards}
           showWhatsAppInterest
-          whatsAppSource={isSold ? "detalhe_vendido_similares" : "detalhe_relacionados"}
+          whatsAppSource={
+            isSold ? "detalhe_vendido_similares" : "detalhe_relacionados"
+          }
         />
       </div>
     </section>
   );
 }
-
 
 function PriceWithShimmer({
   price,
@@ -1350,7 +1443,11 @@ function PriceWithShimmer({
       {showComparison && previousPrice ? (
         <div className="flex flex-col items-start gap-1">
           <p className="text-fg/70 text-[16px] font-semibold leading-none whitespace-nowrap">
-            De: <span className="line-through" dangerouslySetInnerHTML={{ __html: previousPrice }} />
+            De:{" "}
+            <span
+              className="line-through"
+              dangerouslySetInnerHTML={{ __html: previousPrice }}
+            />
           </p>
           <span className="text-fg/60 text-[11px] font-semibold uppercase leading-none whitespace-nowrap">
             Para:
@@ -1419,7 +1516,12 @@ export function DetalhesPage() {
   const navigate = useNavigate();
   const slug = paramSlug || location.pathname.replace(/^\/veiculo\//, "") || "";
 
-  const { data: vehicle, isPlaceholderData, error, isPending } = useVehicleQuery(slug);
+  const {
+    data: vehicle,
+    isPlaceholderData,
+    error,
+    isPending,
+  } = useVehicleQuery(slug);
 
   const officialSlug = useMemo(() => {
     if (!vehicle) return "";
@@ -1449,21 +1551,23 @@ export function DetalhesPage() {
     trackViewItem({
       vehicleId: vehicle.id,
       vehicleName:
-        [vehicle.marca, vehicle.modelo, vehicle.year].filter(Boolean).join(" ") ||
-        vehicle.name,
+        [vehicle.marca, vehicle.modelo, vehicle.year]
+          .filter(Boolean)
+          .join(" ") || vehicle.name,
       price: vehicle.price,
     });
   }, [vehicle, isPlaceholderData]);
-  
+
   // Busca o anúncio (campo GPT) separadamente usando o novo endpoint
   const { data: anuncio } = useAnuncioQuery(vehicle?.id);
-  
+
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
 
   const vehicleData = useMemo(() => {
     if (!vehicle) return null;
-    
+
     // Formata ano fabricação / ano modelo
     let yearDisplay = "";
     if (vehicle.anoFabricacao && vehicle.year) {
@@ -1473,12 +1577,14 @@ export function DetalhesPage() {
       // Se só tem ano modelo, mostra apenas ele
       yearDisplay = String(vehicle.year);
     }
-    
+
     const sanitizeFormattedPrice = (formatted?: string) =>
       formatted ? formatted.replace(/<[^>]*>/g, "") : "";
     const basePrice = Number(vehicle.price) || 0;
     const tradePrice =
-      typeof vehicle.preco_com_troca === "number" ? vehicle.preco_com_troca : undefined;
+      typeof vehicle.preco_com_troca === "number"
+        ? vehicle.preco_com_troca
+        : undefined;
     const showPriceComparison =
       SHOW_CAMPAIGN_STAMP &&
       tradePrice !== undefined &&
@@ -1514,43 +1620,48 @@ export function DetalhesPage() {
   const motor = vehicle?.motor || "";
   const potencia = vehicle?.potencia || "";
   const images = vehicleData?.images || [];
-  
+
   // Formata motor com potência se disponível (ex: "1.0/240hp" ou "1.0")
-  const motorFormatado = motor && potencia 
-    ? `${motor} / ${potencia}hp` 
-    : motor || "";
-  
+  const motorFormatado =
+    motor && potencia ? `${motor} / ${potencia}hp` : motor || "";
+
   // PRIORIDADE 1: Usa imagens_site.galeria se disponível, senão filtra AVIF das imagens
   const avifImages = useMemo(() => {
-    if (vehicle?.imagens_site?.galeria && vehicle.imagens_site.galeria.length > 0) {
+    if (
+      vehicle?.imagens_site?.galeria &&
+      vehicle.imagens_site.galeria.length > 0
+    ) {
       return vehicle.imagens_site.galeria;
     }
     // FALLBACK: Comportamento anterior - filtra apenas imagens AVIF
     return images.filter(
       (img) =>
         img &&
-        (img.toLowerCase().endsWith(".avif") || img.toLowerCase().includes(".avif"))
+        (img.toLowerCase().endsWith(".avif") ||
+          img.toLowerCase().includes(".avif")),
     );
   }, [images, vehicle?.imagens_site?.galeria]);
-  
+
   // PRIORIDADE 1: Usa imagens_site.capa se disponível
   const mainImage = useMemo(() => {
     if (vehicle?.imagens_site?.capa) {
       return vehicle.imagens_site.capa;
     }
-    
+
     // FALLBACK: Comportamento anterior
     if (!images.length) return CAR_COVERED_PLACEHOLDER_URL;
 
     const pngImages = images.filter(
       (img) =>
         img &&
-        (img.toLowerCase().endsWith(".png") || img.toLowerCase().includes(".png"))
+        (img.toLowerCase().endsWith(".png") ||
+          img.toLowerCase().includes(".png")),
     );
 
     const firstPng = pngImages[0];
-    const isProblematic =
-      firstPng?.toLowerCase().includes(PROBLEMATIC_IMAGE_PATTERN);
+    const isProblematic = firstPng
+      ?.toLowerCase()
+      .includes(PROBLEMATIC_IMAGE_PATTERN);
 
     return pngImages.length > 0 && !isProblematic && firstPng
       ? firstPng
@@ -1561,65 +1672,74 @@ export function DetalhesPage() {
   // USA APENAS imagens_site.capa_opengraph (sem fallback)
   const absoluteImageUrl = useMemo(() => {
     if (!vehicle) return "";
-    
+
     // USA APENAS imagens_site.capa_opengraph (sem fallback)
     if (!vehicle.imagens_site?.capa_opengraph) return "";
-    
+
     let imageToUse = vehicle.imagens_site.capa_opengraph;
-    
+
     // Se a imagem estiver em 'small/', substitui por 'big/' para garantir imagem grande
     // Isso garante que a imagem apareça grande em cima no WhatsApp/Facebook
-    if (imageToUse.includes('/small/')) {
-      imageToUse = imageToUse.replace('/small/', '/big/');
+    if (imageToUse.includes("/small/")) {
+      imageToUse = imageToUse.replace("/small/", "/big/");
     }
-    
+
     // Função para codificar apenas espaços e caracteres especiais (sem dupla codificação)
     const encodeImagePath = (path: string): string => {
       // Se já contém % (já está codificada), não codifica novamente
-      if (path.includes('%')) {
+      if (path.includes("%")) {
         return path;
       }
-      
+
       // Se já é URL absoluta, codifica apenas espaços e caracteres especiais
       if (path.startsWith("http://") || path.startsWith("https://")) {
         try {
           const url = new URL(path);
           // Codifica apenas espaços e caracteres especiais no pathname
           url.pathname = url.pathname
-            .replace(/ /g, '%20')
-            .replace(/\(/g, '%28')
-            .replace(/\)/g, '%29');
+            .replace(/ /g, "%20")
+            .replace(/\(/g, "%28")
+            .replace(/\)/g, "%29");
           return url.toString();
         } catch {
-          return path.replace(/ /g, '%20').replace(/\(/g, '%28').replace(/\)/g, '%29');
+          return path
+            .replace(/ /g, "%20")
+            .replace(/\(/g, "%28")
+            .replace(/\)/g, "%29");
         }
       }
-      
+
       // Para caminhos relativos, codifica apenas espaços e caracteres especiais
       return path
-        .replace(/ /g, '%20')
-        .replace(/\(/g, '%28')
-        .replace(/\)/g, '%29');
+        .replace(/ /g, "%20")
+        .replace(/\(/g, "%28")
+        .replace(/\)/g, "%29");
     };
-    
+
     // Codifica o caminho da imagem (especialmente espaços no nome do arquivo)
     const encodedImage = encodeImagePath(imageToUse);
-    
+
     // Se já é URL absoluta, retorna como está (já codificada)
-    if (encodedImage.startsWith("http://") || encodedImage.startsWith("https://")) {
+    if (
+      encodedImage.startsWith("http://") ||
+      encodedImage.startsWith("https://")
+    ) {
       return encodedImage;
     }
-    
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://www.netcarmultimarcas.com.br";
-    
+
+    const baseUrl =
+      typeof window !== "undefined"
+        ? window.location.origin
+        : "https://www.netcarmultimarcas.com.br";
+
     // Se começa com /, adiciona apenas o domínio
     if (encodedImage.startsWith("/")) {
       return `${baseUrl}${encodedImage}`;
     }
-    
+
     // Se contém ./ no início, remove e adiciona domínio
     const cleanedImage = encodedImage.replace(/^\.\/+/, "");
-    
+
     // Adiciona domínio e barra inicial
     return `${baseUrl}/${cleanedImage}`;
   }, [vehicle]);
@@ -1670,12 +1790,18 @@ export function DetalhesPage() {
       title: pageTitle,
       description,
       image: absoluteImageUrl,
-      url: friendlyUrl || (typeof window !== "undefined" ? `${window.location.origin}${window.location.pathname}` : ""),
+      url:
+        friendlyUrl ||
+        (typeof window !== "undefined"
+          ? `${window.location.origin}${window.location.pathname}`
+          : ""),
       type: "article" as const,
       imageWidth: 1200,
       imageHeight: 900,
       productBrand: "Netcar Multimarcas",
-      productAvailability: isSold ? ("out of stock" as const) : ("in stock" as const),
+      productAvailability: isSold
+        ? ("out of stock" as const)
+        : ("in stock" as const),
       productCondition: "used_like_new" as const,
       productPriceAmount: vehicle.price || 0,
       productPriceCurrency: "BRL" as const,
@@ -1692,7 +1818,7 @@ export function DetalhesPage() {
       description: "Seminovos com garantia na Netcar Multimarcas, Esteio/RS.",
       image: "",
       url: "",
-    }
+    },
   );
 
   // Com placeholder do estoque, `vehicle` já existe → pula tela intermediária.
@@ -1749,16 +1875,20 @@ export function DetalhesPage() {
         />
       )}
       {/* Hero Section */}
-      <section className="w-full py-0 pt-0 lg:pt-0 pb-0 relative overflow-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)] 
-      xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[95vh] 4xl:min-h-[75vh]">
+      <section
+        className="w-full py-0 pt-0 lg:pt-0 pb-0 relative overflow-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)]
+      xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[95vh] 4xl:min-h-[75vh]"
+      >
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
-        <div className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
+        <div
+          className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
                         lg:w-[70vw] lg:top-[-3rem] lg:right-[-15%]
                         xl:w-[70vw] xl:top-[-10rem] xl:right-[-5rem]
                         2xl:w-[70vw] 2xl:top-[-15rem] 2xl:right-[-25rem]
                         3xl:w-[70vw] 3xl:top-[-15rem] 3xl:right-[-30rem]
                         4xl:w-[70vw] 4xl:top-[-20rem] 4xl:right-[-30rem]
-                        5xl:w-[70vw] 5xl:top-[-35rem] 5xl:right-[-30rem]">
+                        5xl:w-[70vw] 5xl:top-[-35rem] 5xl:right-[-30rem]"
+        >
           {mainImage && (
             <div className="w-full h-[300px] sm:h-[400px] lg:h-auto flex items-center lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible">
               {isSold && (
@@ -1782,7 +1912,7 @@ export function DetalhesPage() {
                 src={optimizeStockImage(mainImage, 960)}
                 srcSet={stockImageSrcSet(mainImage, [480, 640, 768, 960, 1280])}
                 sizes="(max-width: 1023px) 100vw, 70vw"
-                alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Frente - Netcar Multimarcas`}
+                alt={`${marca} ${modeloCompleto} ${vehicle.year || ""} - Frente - Netcar Multimarcas`}
                 width={1600}
                 height={900}
                 loading="eager"
@@ -1803,7 +1933,10 @@ export function DetalhesPage() {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: ANIMATION_DURATION.slow, ease: ANIMATION_EASING }}
+            transition={{
+              duration: ANIMATION_DURATION.slow,
+              ease: ANIMATION_EASING,
+            }}
             className="w-full lg:absolute 
             lg:w-[25%] lg:left-[10%] lg:top-[20%]
             xl:w-[25%] xl:left-[5rem] xl:top-[1rem]
@@ -1929,29 +2062,40 @@ export function DetalhesPage() {
             </div>
           </motion.div>
         </div>
-
       </section>
 
       {/* Gallery Section */}
       {avifImages.length > 0 && (
         <section className="w-full py-8 sm:py-12 lg:py-16">
-          <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          </div>
+          <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16"></div>
           {/* Grid Container - Ocupa toda a largura sem padding */}
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8 gap-1 sm:gap-2">
-            {avifImages.map((image, index) => (
-              <GalleryItem
-                key={index}
-                image={image}
-                index={index}
-                alt={`${marca} ${modeloCompleto} ${vehicle.year || ''} - Foto ${index + 1} - Netcar Multimarcas`}
-                onClick={() => {
-                  setLightboxIndex(index);
-                  setLightboxOpen(true);
-                }}
-              />
-            ))}
+            {avifImages
+              .slice(0, showAllPhotos ? avifImages.length : 6)
+              .map((image, index) => (
+                <GalleryItem
+                  key={index}
+                  image={image}
+                  index={index}
+                  alt={`${marca} ${modeloCompleto} ${vehicle.year || ""} - Foto ${index + 1} - Netcar Multimarcas`}
+                  onClick={() => {
+                    setLightboxIndex(index);
+                    setLightboxOpen(true);
+                  }}
+                />
+              ))}
           </div>
+          {!showAllPhotos && avifImages.length > 6 && (
+            <div className="flex justify-center px-4 pt-6">
+              <button
+                type="button"
+                onClick={() => setShowAllPhotos(true)}
+                className="rounded-full bg-[#00283C] px-7 py-3 text-sm font-black uppercase tracking-wide text-white transition-colors hover:bg-[#00435a]"
+              >
+                Ver todas as {avifImages.length} fotos
+              </button>
+            </div>
+          )}
         </section>
       )}
 
@@ -1966,12 +2110,14 @@ export function DetalhesPage() {
       )}
 
       {/* Details Section */}
-      <DetailsSection
-        vehicle={vehicle}
-        anuncio={anuncio || null}
-        isSold={isSold}
-        pageSlug={slug}
-      />
+      <DeferredRender minHeight={900} rootMargin="700px">
+        <DetailsSection
+          vehicle={vehicle}
+          anuncio={anuncio || null}
+          isSold={isSold}
+          pageSlug={slug}
+        />
+      </DeferredRender>
 
       {/* Fábrica de Valor Section */}
       <section className="w-full pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16 bg-surface">
@@ -1985,15 +2131,17 @@ export function DetalhesPage() {
       </section>
 
       {/* Related Vehicles Section */}
-      <RelatedVehiclesSection 
-        currentVehicleId={String(vehicle.id)} 
-        currentCategory={vehicle.categoria}
-        currentPrice={vehicle.price}
-        currentMarca={vehicle.marca}
-        currentYear={vehicle.year}
-        currentModelo={vehicle.modelo || vehicle.name}
-        isSold={isSold}
-      />
+      <DeferredRender minHeight={600} rootMargin="500px">
+        <RelatedVehiclesSection
+          currentVehicleId={String(vehicle.id)}
+          currentCategory={vehicle.categoria}
+          currentPrice={vehicle.price}
+          currentMarca={vehicle.marca}
+          currentYear={vehicle.year}
+          currentModelo={vehicle.modelo || vehicle.name}
+          isSold={isSold}
+        />
+      </DeferredRender>
 
       {/* Social Embeds Section (deve ser a última sessão) */}
       <DeferredRender minHeight={800}>
@@ -2043,11 +2191,12 @@ function DetailsSection({
   const gptContent = useMemo(() => parseGptContent(anuncio || null), [anuncio]);
 
   // Formata ano para especificações técnicas
-  const anoDisplay = anoFabricacao && year 
-    ? `${anoFabricacao} / ${year}` 
-    : year 
-    ? String(year) 
-    : "";
+  const anoDisplay =
+    anoFabricacao && year
+      ? `${anoFabricacao} / ${year}`
+      : year
+        ? String(year)
+        : "";
 
   const specifications = [
     anoDisplay && { label: "Ano:", value: anoDisplay },
@@ -2065,14 +2214,14 @@ function DetailsSection({
 
   // Mapeamento de tags para pesos (peso menor = maior prioridade)
   const OPTIONAL_PRIORITY_MAP: Record<string, number> = {
-    "sete_lugares": 1,           // 7 Lugares
-    "teto_panoramico": 2,        // Teto Panorâmico
-    "teto_solar": 3,             // Teto Solar (somente se panorâmico não estiver presente)
-    "multimidia": 4,             // Central Multimídia
-    "bancos_de_couro": 5,       // Bancos em Couro
-    "piloto_adaptativo": 6,      // Piloto Automático Adaptativo
-    "piloto_automatico": 7,     // Piloto Automático (somente se adaptativo não estiver presente)
-    "botao": 8,                  // Botão de Partida
+    sete_lugares: 1, // 7 Lugares
+    teto_panoramico: 2, // Teto Panorâmico
+    teto_solar: 3, // Teto Solar (somente se panorâmico não estiver presente)
+    multimidia: 4, // Central Multimídia
+    bancos_de_couro: 5, // Bancos em Couro
+    piloto_adaptativo: 6, // Piloto Automático Adaptativo
+    piloto_automatico: 7, // Piloto Automático (somente se adaptativo não estiver presente)
+    botao: 8, // Botão de Partida
   };
 
   // Peso padrão para opcionais não listados
@@ -2080,7 +2229,7 @@ function DetailsSection({
 
   // Função para ordenar opcionais por prioridade usando tags
   const sortOptionals = (
-    optionals: Array<{ tag?: string; descricao?: string } | string>
+    optionals: Array<{ tag?: string; descricao?: string } | string>,
   ): Array<{ tag?: string; descricao?: string } | string> => {
     // Converte para formato padronizado
     const normalizedOptionals = optionals.map((op) => {
@@ -2092,16 +2241,19 @@ function DetailsSection({
 
     // Verifica se existe teto solar panorâmico na lista
     const hasPanoramicSunroof = normalizedOptionals.some(
-      (opt) => opt.tag === "teto_panoramico"
+      (opt) => opt.tag === "teto_panoramico",
     );
 
     // Verifica se existe piloto automático adaptativo na lista
     const hasAdaptiveCruise = normalizedOptionals.some(
-      (opt) => opt.tag === "piloto_adaptativo"
+      (opt) => opt.tag === "piloto_adaptativo",
     );
 
     // Função para obter o peso de um opcional usando a tag
-    const getPriority = (optional: { tag: string; descricao: string }): number => {
+    const getPriority = (optional: {
+      tag: string;
+      descricao: string;
+    }): number => {
       const tag = optional.tag.toLowerCase().trim();
 
       // Verifica se a tag está no mapeamento de prioridades
@@ -2109,12 +2261,16 @@ function DetailsSection({
         // Casos especiais com lógica condicional
         if (tag === "teto_solar") {
           // Teto solar só tem peso 3 se não houver panorâmico
-          return hasPanoramicSunroof ? DEFAULT_PRIORITY : OPTIONAL_PRIORITY_MAP[tag];
+          return hasPanoramicSunroof
+            ? DEFAULT_PRIORITY
+            : OPTIONAL_PRIORITY_MAP[tag];
         }
 
         if (tag === "piloto_automatico") {
           // Piloto automático só tem peso 7 se não houver adaptativo
-          return hasAdaptiveCruise ? DEFAULT_PRIORITY : OPTIONAL_PRIORITY_MAP[tag];
+          return hasAdaptiveCruise
+            ? DEFAULT_PRIORITY
+            : OPTIONAL_PRIORITY_MAP[tag];
         }
 
         // Para os outros, retorna o peso direto do mapa
@@ -2141,7 +2297,9 @@ function DetailsSection({
   // Extrai opcionais do veículo (pode ser string ou objeto com tag/descricao)
   const rawOptionals =
     vehicle.opcionais?.map((op: any) =>
-      typeof op === "string" ? op : { tag: op.tag || "", descricao: op.descricao || op.nome || "" }
+      typeof op === "string"
+        ? op
+        : { tag: op.tag || "", descricao: op.descricao || op.nome || "" },
     ) || [];
 
   // Aplica ordenação por prioridade usando tags
@@ -2149,7 +2307,7 @@ function DetailsSection({
 
   // Converte de volta para strings (descrição) para renderização
   const optionals = sortedOptionals.map((op) =>
-    typeof op === "string" ? op : op.descricao || ""
+    typeof op === "string" ? op : op.descricao || "",
   );
 
   const SpecIcon = ({ className }: { className?: string }) => (
@@ -2174,7 +2332,10 @@ function DetailsSection({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+              transition={{
+                duration: ANIMATION_DURATION.normal,
+                ease: ANIMATION_EASING,
+              }}
               className="mb-10 flex items-start gap-3"
             >
               <SpecIcon className="mt-1 h-[36px] w-[36px] flex-shrink-0 sm:h-[40px] sm:w-[40px] lg:h-[42px] lg:w-[42px]" />
@@ -2193,7 +2354,10 @@ function DetailsSection({
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+              transition={{
+                duration: ANIMATION_DURATION.normal,
+                ease: ANIMATION_EASING,
+              }}
               className="mb-12"
             >
               <div className="mb-6 flex items-center gap-3 border-b border-primary/70 pb-4">
@@ -2219,7 +2383,10 @@ function DetailsSection({
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+                transition={{
+                  duration: ANIMATION_DURATION.normal,
+                  ease: ANIMATION_EASING,
+                }}
                 className="mb-12"
               >
                 <div className="mb-6 flex items-center gap-3 border-b border-primary/70 pb-4">
@@ -2266,53 +2433,63 @@ function DetailsSection({
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: ANIMATION_DURATION.normal, ease: ANIMATION_EASING }}
+                transition={{
+                  duration: ANIMATION_DURATION.normal,
+                  ease: ANIMATION_EASING,
+                }}
                 className="section-text mb-8"
               >
-                {gptContent?.apresentacao ? (
-                  gptContent.apresentacao
-                ) : (
-                  `O novo ${marca} ${modeloCompleto} é a escolha perfeita para quem
+                {gptContent?.apresentacao
+                  ? gptContent.apresentacao
+                  : `O novo ${marca} ${modeloCompleto} é a escolha perfeita para quem
                 busca um veículo versátil, ideal para famílias modernas e
                 aventureiros urbanos. Com um design atrativo e sofisticado, este
                 modelo não só parece bom, mas também oferece uma experiência de
                 condução excepcional, graças às suas características técnicas
-                avançadas e conforto superior.`
-                )}
+                avançadas e conforto superior.`}
               </motion.p>
             )}
 
             {/* Accordion Sections */}
             <div className="space-y-2">
               {gptContent && gptContent.accordions.length > 0 ? (
-                gptContent.accordions.map((accordion: AccordionSection, index: number) => (
-                  <AccordionItem
-                    key={index}
-                    title={accordion.title}
-                    defaultOpen={index === 0}
-                  >
-                    {typeof accordion.content === "object" && accordion.content !== null && "itens" in accordion.content ? (
-                      <>
-                        {accordion.content.introducao && (
-                          <p className="section-text mb-4">
-                            {accordion.content.introducao}
-                          </p>
-                        )}
-                        {accordion.content.itens.length > 0 && (
-                          <ul className="ml-5 list-outside list-disc space-y-2 text-[14px] leading-[26px] text-fg sm:text-[15px]">
-                            {accordion.content.itens.map((item, itemIndex) => (
-                              <li key={itemIndex} className="pl-2">
-                                {item.label && <strong>{item.label}</strong>} {item.texto}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </>
-                    ) : (
-                      <p className="section-text">{accordion.content}</p>
-                    )}
-                  </AccordionItem>
-                ))
+                gptContent.accordions.map(
+                  (accordion: AccordionSection, index: number) => (
+                    <AccordionItem
+                      key={index}
+                      title={accordion.title}
+                      defaultOpen={index === 0}
+                    >
+                      {typeof accordion.content === "object" &&
+                      accordion.content !== null &&
+                      "itens" in accordion.content ? (
+                        <>
+                          {accordion.content.introducao && (
+                            <p className="section-text mb-4">
+                              {accordion.content.introducao}
+                            </p>
+                          )}
+                          {accordion.content.itens.length > 0 && (
+                            <ul className="ml-5 list-outside list-disc space-y-2 text-[14px] leading-[26px] text-fg sm:text-[15px]">
+                              {accordion.content.itens.map(
+                                (item, itemIndex) => (
+                                  <li key={itemIndex} className="pl-2">
+                                    {item.label && (
+                                      <strong>{item.label}</strong>
+                                    )}{" "}
+                                    {item.texto}
+                                  </li>
+                                ),
+                              )}
+                            </ul>
+                          )}
+                        </>
+                      ) : (
+                        <p className="section-text">{accordion.content}</p>
+                      )}
+                    </AccordionItem>
+                  ),
+                )
               ) : (
                 <>
                   <AccordionItem
@@ -2320,9 +2497,9 @@ function DetailsSection({
                     defaultOpen={true}
                   >
                     <p className="section-text mb-4">
-                      O {modeloCompleto} é projetado para proporcionar uma jornada
-                      suave e eficiente. Entre os destaques técnicos, este modelo
-                      inclui:
+                      O {modeloCompleto} é projetado para proporcionar uma
+                      jornada suave e eficiente. Entre os destaques técnicos,
+                      este modelo inclui:
                     </p>
                     <ul className="section-text ml-5 list-outside list-disc space-y-2">
                       <li className="pl-2">
@@ -2330,8 +2507,8 @@ function DetailsSection({
                         desempenho e eficiência energética.
                       </li>
                       <li className="pl-2">
-                        Câmbio {vehicle.cambio?.toLowerCase() || "automático"} que
-                        garante trocas suaves e ágeis.
+                        Câmbio {vehicle.cambio?.toLowerCase() || "automático"}{" "}
+                        que garante trocas suaves e ágeis.
                       </li>
                       <li className="pl-2">
                         Direção elétrica que proporciona um manuseio preciso e
@@ -2353,8 +2530,8 @@ function DetailsSection({
 
                   <AccordionItem title="Recursos avançados de segurança">
                     <p className="text-[14px] leading-[26px] text-fg sm:text-[15px]">
-                      Sistema completo de segurança com múltiplos air bags, controle
-                      de estabilidade e muito mais.
+                      Sistema completo de segurança com múltiplos air bags,
+                      controle de estabilidade e muito mais.
                     </p>
                   </AccordionItem>
 

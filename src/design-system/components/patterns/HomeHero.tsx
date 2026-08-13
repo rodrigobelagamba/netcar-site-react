@@ -105,7 +105,6 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!event.isPrimary) return;
-    preloadDetails();
     pointerStart.current = {
       pointerId: event.pointerId,
       x: event.clientX,

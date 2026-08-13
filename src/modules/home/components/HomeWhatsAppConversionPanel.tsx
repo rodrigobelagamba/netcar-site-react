@@ -41,7 +41,9 @@ function vehicleImage(vehicle?: Vehicle): string {
 
 function vehicleLabel(vehicle?: Vehicle): string {
   if (!vehicle) return "seminovo";
-  return [vehicle.marca, vehicle.modelo, vehicle.year].filter(Boolean).join(" ");
+  return [vehicle.marca, vehicle.modelo, vehicle.year]
+    .filter(Boolean)
+    .join(" ");
 }
 
 function vehiclePrice(vehicle?: Vehicle): string {
@@ -100,11 +102,11 @@ export function HomeWhatsAppConversionPanel({
 
   return (
     <section className="relative overflow-hidden bg-[#00283C] px-4 py-4 md:py-6 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-      <div className="pointer-events-none absolute -left-20 top-0 h-56 w-56 rounded-full bg-[#5CD29D]/20 blur-3xl" />
-      <div className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+      <div className="pointer-events-none absolute -left-20 top-0 hidden h-56 w-56 rounded-full bg-[#5CD29D]/20 blur-3xl md:block" />
+      <div className="pointer-events-none absolute -right-16 bottom-0 hidden h-64 w-64 rounded-full bg-white/10 blur-3xl md:block" />
 
       <div className="container-main relative grid gap-4 md:gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-white shadow-2xl backdrop-blur md:p-7 lg:p-8">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-white shadow-2xl md:backdrop-blur md:p-7 lg:p-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#5CD29D]/30 bg-[#5CD29D]/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#5CD29D]">
             <MessageCircle className="h-4 w-4" />
             <span className="md:hidden">Atendimento 24h</span>
@@ -134,8 +136,8 @@ export function HomeWhatsAppConversionPanel({
           {/* Chips — só desktop (md+), igual master */}
           <div className="mt-5 hidden gap-3 text-sm font-semibold text-white/90 md:grid md:grid-cols-2 lg:grid-cols-4">
             <div className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-3">
-              <MapPin className="h-4 w-4 shrink-0 text-[#5CD29D]" />
-              2 lojas Esteio
+              <MapPin className="h-4 w-4 shrink-0 text-[#5CD29D]" />2 lojas
+              Esteio
             </div>
             <div className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-3">
               <ShieldCheck className="h-4 w-4 shrink-0 text-[#5CD29D]" />

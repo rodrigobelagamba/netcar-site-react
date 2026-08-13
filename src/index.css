@@ -38,64 +38,70 @@
     overflow-x: hidden;
     background-color: hsl(var(--color-muted));
   }
-  
+
   /* Garante que containers principais respeitem a largura APENAS em telas pequenas */
   @media (max-width: 393px) {
-    html, body {
+    html,
+    body {
       max-width: 393px;
       overflow-x: hidden;
       width: 100%;
       position: relative;
     }
-    
+
     /* Previne overflow em elementos com viewport width apenas em telas pequenas */
     [class*="vw"] {
       max-width: 393px !important;
     }
-    
+
     /* Específico para textos grandes com viewport width apenas em telas pequenas */
-    h1[class*="vw"], h2[class*="vw"], h3[class*="vw"] {
+    h1[class*="vw"],
+    h2[class*="vw"],
+    h3[class*="vw"] {
       font-size: clamp(1.5rem, 25vw, 393px) !important;
       max-width: 100%;
       overflow: hidden;
     }
-    
+
     /* Garante que elementos com whitespace-nowrap não causem overflow apenas em telas pequenas */
     .whitespace-nowrap {
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 100%;
     }
-    
+
     /* Previne overflow em imagens apenas em telas pequenas */
-    img:not(.social-story-cover), picture, video {
+    img:not(.social-story-cover),
+    picture,
+    video {
       max-width: 100% !important;
       height: auto;
     }
-    
+
     /* Garante que elementos absolutos não saiam da tela apenas em telas pequenas */
     /* Aplica apenas em elementos que realmente estão causando overflow */
     [class*="absolute"][class*="right-[-"] {
       right: 0 !important;
       max-width: 393px;
     }
-    
+
     /* Previne overflow em elementos com right negativo apenas em telas pequenas */
     [class*="right-[-"] {
       right: 0 !important;
     }
-    
+
     /* Garante que seções não ultrapassem a largura apenas em telas pequenas */
-    section, main {
+    section,
+    main {
       max-width: 100%;
       box-sizing: border-box;
     }
-    
+
     /* Previne overflow em elementos com transform apenas em telas pequenas */
     [class*="translate"][class*="right-[-"] {
       max-width: 100%;
     }
-    
+
     /* Container main específico para telas pequenas */
     .container-main {
       max-width: 393px;
@@ -104,7 +110,7 @@
       width: 100%;
       box-sizing: border-box;
     }
-    
+
     /* Garante que modais fixos respeitem a largura máxima */
     [class*="fixed"][class*="bottom-0"] {
       max-width: 393px !important;
@@ -113,9 +119,11 @@
       width: 100% !important;
       box-sizing: border-box !important;
     }
-    
+
     /* Garante que overlays de modal respeitem a largura */
-    [class*="fixed"][class*="inset-0"]:not(.story-viewer-modal):not(.review-detail-modal) {
+    [class*="fixed"][class*="inset-0"]:not(.story-viewer-modal):not(
+        .review-detail-modal
+      ) {
       max-width: 393px !important;
       width: 100% !important;
     }
@@ -137,7 +145,7 @@
       max-width: 100%;
       box-sizing: border-box;
     }
-    
+
     /* Garante que inputs e selects dentro de modais respeitem a largura */
     [class*="fixed"][class*="bottom-0"] input,
     [class*="fixed"][class*="bottom-0"] select,
@@ -500,7 +508,7 @@
 
   @media (min-width: 2560px) {
     .info-price {
-      font-size: 5.0em;
+      font-size: 5em;
     }
   }
 
@@ -539,7 +547,8 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    transition: background-position 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    transition:
+      background-position 0.8s cubic-bezier(0.4, 0, 0.2, 1),
       transform 0.3s ease;
   }
 
@@ -917,7 +926,7 @@
   .fslightbox-container .fslightbox-slide-container {
     max-width: 393px !important;
   }
-  
+
   .fslightbox-container img,
   .fslightbox-slide img,
   .fslightbox-slide-detect img,
@@ -926,7 +935,6 @@
     min-width: auto !important;
   }
 }
-
 
 /* Button Text Shimmer — brilho passa no texto e repete */
 @keyframes button-text-shimmer {
@@ -939,14 +947,14 @@
 }
 
 .button-text-shimmer {
-  color: #00283C;
+  color: #00283c;
   background-image: linear-gradient(
     90deg,
-    #00283C 0%,
-    #00283C 35%,
+    #00283c 0%,
+    #00283c 35%,
     #ffffff 50%,
-    #00283C 65%,
-    #00283C 100%
+    #00283c 65%,
+    #00283c 100%
   );
   background-size: 200% 100%;
   background-position: 200% 0;
@@ -971,17 +979,17 @@ button:hover > .button-text-shimmer {
   animation: button-text-shimmer 2.2s linear infinite !important;
   background-image: linear-gradient(
     90deg,
-    #00283C 0%,
-    #00283C 35%,
+    #00283c 0%,
+    #00283c 35%,
     #ffffff 50%,
-    #00283C 65%,
-    #00283C 100%
+    #00283c 65%,
+    #00283c 100%
   ) !important;
   background-size: 200% 100% !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  color: #00283C !important;
+  color: #00283c !important;
 }
 
 /* Brilho em botão escuro (texto branco + flash verde) */
@@ -1018,4 +1026,20 @@ button:hover > .button-text-shimmer-on-dark {
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   color: #ffffff !important;
+}
+
+/* Background-position repintava o texto sem parar no celular. O brilho é um
+   detalhe visual de desktop; no mobile o texto estático reduz trabalho de
+   pintura e deixa os CTAs mais legíveis. */
+@media (max-width: 767px) {
+  .button-text-shimmer,
+  .button-text-shimmer-on-dark,
+  button:hover > .button-text-shimmer,
+  button:hover > .button-text-shimmer-on-dark {
+    animation: none !important;
+    background-image: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: currentColor !important;
+  }
 }
