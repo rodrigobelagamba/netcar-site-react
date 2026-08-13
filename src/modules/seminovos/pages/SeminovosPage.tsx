@@ -702,11 +702,11 @@ export function SeminovosPage() {
                 <button
                   type="button"
                   onClick={() =>
-                    setVisibleCount((count) => count + STOCK_PAGE_SIZE)
+                    setVisibleCount(filteredAndSortedVehicles.length)
                   }
                   className="rounded-full border border-tertiary/40 bg-white px-7 py-3 text-sm font-bold text-tertiary shadow-sm transition hover:border-tertiary hover:bg-tertiary/5"
                 >
-                  Carregar mais veículos
+                  Carregar todos os veículos
                 </button>
               </div>
             )}
