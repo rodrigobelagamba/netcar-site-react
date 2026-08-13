@@ -21,7 +21,7 @@ import {
   Image as ImageIcon,
   LucideIcon,
 } from "lucide-react";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useLayoutEffect } from "react";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
@@ -1516,6 +1516,20 @@ export function DetalhesPage() {
   const navigate = useNavigate();
   const slug = paramSlug || location.pathname.replace(/^\/veiculo\//, "") || "";
 
+  // A mesma página React é reutilizada ao trocar de veículo. Reinicia o scroll
+  // de forma síncrona para o novo anúncio nunca herdar a posição do anterior.
+  useLayoutEffect(() => {
+    const scrollToTop = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    scrollToTop();
+    const frame = window.requestAnimationFrame(scrollToTop);
+    return () => window.cancelAnimationFrame(frame);
+  }, [slug]);
+
   const {
     data: vehicle,
     isPlaceholderData,
@@ -1882,12 +1896,15 @@ export function DetalhesPage() {
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
         <div
           className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
-                        lg:w-[65vw] lg:h-[calc(100dvh-5rem)] lg:top-[-2rem] lg:right-0
-                        xl:w-[64vw] xl:top-[-6rem]
-                        2xl:w-[62vw] 2xl:top-[-8rem] 3xl:w-[60vw]"
+                        lg:w-[70vw] lg:top-[-3rem] lg:right-0
+                        xl:top-[-10rem]
+                        2xl:top-[-15rem]
+                        3xl:top-[-15rem]
+                        4xl:top-[-20rem]
+                        5xl:top-[-35rem]"
         >
           {mainImage && (
-            <div className="w-full h-[300px] sm:h-[400px] lg:h-full flex items-center justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-3 sm:p-5 lg:p-4 xl:p-6">
+            <div className="w-full h-[300px] sm:h-[400px] lg:h-auto flex items-center lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-3 sm:p-5 lg:p-0">
               {isSold && (
                 <div
                   aria-hidden="true"
@@ -1915,7 +1932,7 @@ export function DetalhesPage() {
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
-                className={`w-full h-full max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
+                className={`w-full h-full lg:h-auto max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}

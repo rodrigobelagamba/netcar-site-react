@@ -200,6 +200,7 @@ export function SeminovosPage() {
   const [sortBy, setSortBy] = useState<SortOption>("az");
   const [visibleCount, setVisibleCount] = useState(STOCK_PAGE_SIZE);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
+  const loadMoreSentinelRef = useRef<HTMLDivElement>(null);
 
   // Sincroniza estados locais com parâmetros da URL quando mudam
   useEffect(() => {
@@ -366,6 +367,34 @@ export function SeminovosPage() {
     () => filteredAndSortedVehicles.slice(0, visibleCount),
     [filteredAndSortedVehicles, visibleCount],
   );
+
+  // Mantém o primeiro render leve para o PageSpeed, mas libera os próximos
+  // lotes automaticamente conforme o visitante se aproxima do fim da grade.
+  useEffect(() => {
+    if (visibleCount >= filteredAndSortedVehicles.length) return;
+
+    const sentinel = loadMoreSentinelRef.current;
+    if (!sentinel) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setVisibleCount(filteredAndSortedVehicles.length);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        setVisibleCount((count) =>
+          Math.min(count + STOCK_PAGE_SIZE, filteredAndSortedVehicles.length),
+        );
+      },
+      { rootMargin: "1200px 0px" },
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [filteredAndSortedVehicles.length, visibleCount]);
 
   // Banner WA depois de 3 linhas no mobile e 2 linhas no desktop.
   const midGridBreak = stockLayout.compact ? 6 : stockLayout.columns * 2;
@@ -688,17 +717,11 @@ export function SeminovosPage() {
               ))}
             </div>
             {visibleCount < filteredAndSortedVehicles.length && (
-              <div className="mt-10 flex justify-center">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setVisibleCount((count) => count + STOCK_PAGE_SIZE)
-                  }
-                  className="rounded-full border border-tertiary/40 bg-white px-7 py-3 text-sm font-bold text-tertiary shadow-sm transition hover:border-tertiary hover:bg-tertiary/5"
-                >
-                  Carregar mais veículos
-                </button>
-              </div>
+              <div
+                ref={loadMoreSentinelRef}
+                className="h-px w-full"
+                aria-hidden="true"
+              />
             )}
           </>
         )}
