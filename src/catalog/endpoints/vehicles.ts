@@ -147,6 +147,7 @@ export interface VehiclesQuery {
   opcionais?: string; // Múltiplas tags separadas por vírgula
   limit?: number; // Número máximo de resultados
   offset?: number; // Número de registros para pular
+  fetchAll?: boolean; // Percorre todas as páginas até obter o estoque completo
 }
 
 /**
@@ -268,26 +269,59 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
       params.append("opcionais", query.opcionais);
     }
 
-    // Paginação - padrão de 100 por página se não especificado
-    const limit = query?.limit !== undefined ? query.limit : 100;
-    params.append("limit", String(limit));
+    const fetchPage = async (limit: number, offset: number) => {
+      const pageParams = new URLSearchParams(params);
+      pageParams.set("limit", String(limit));
+      pageParams.set("offset", String(offset));
+      const url = `${config.apiBaseUrl}/veiculos.php?${pageParams.toString()}`;
+      return axiosInstance.get<ApiVehicleResponse>(url);
+    };
 
-    if (query?.offset !== undefined) {
-      params.append("offset", String(query.offset));
-    }
-
-    const url = `${config.apiBaseUrl}/veiculos.php${params.toString() ? `?${params.toString()}` : ""}`;
-    const response = await axiosInstance.get<ApiVehicleResponse>(url);
+    const requestedLimit = query?.limit !== undefined ? query.limit : 100;
+    const requestedOffset = query?.offset ?? 0;
+    const pageSize = query?.fetchAll ? 500 : requestedLimit;
+    const response = await fetchPage(pageSize, requestedOffset);
 
     if (!response.data.success || !response.data.data) {
       console.warn("API retornou sem sucesso ou sem dados");
       return [];
     }
 
+    let apiVehicles = response.data.data;
+
+    if (query?.fetchAll) {
+      const seenVehicleIds = new Set(apiVehicles.map((vehicle) => String(vehicle.id)));
+      let currentPage = response.data.data;
+      let nextOffset = requestedOffset + apiVehicles.length;
+
+      // A API pode limitar internamente o tamanho de cada página. Avança pela
+      // quantidade realmente recebida até a primeira página incompleta. O
+      // `total_results` informa apenas o tamanho da página, não o total do XML.
+      while (currentPage.length === pageSize) {
+        const pageResponse = await fetchPage(pageSize, nextOffset);
+        const pageVehicles = pageResponse.data?.data;
+        if (!pageResponse.data?.success || !Array.isArray(pageVehicles) || pageVehicles.length === 0) {
+          break;
+        }
+
+        const newVehicles = pageVehicles.filter((vehicle) => {
+          const id = String(vehicle.id);
+          if (seenVehicleIds.has(id)) return false;
+          seenVehicleIds.add(id);
+          return true;
+        });
+        if (newVehicles.length === 0) break;
+
+        apiVehicles = apiVehicles.concat(newVehicles);
+        currentPage = pageVehicles;
+        nextOffset += pageVehicles.length;
+      }
+    }
+
     // A API também devolve vendidos com valor 0. A carga estática já os exclui;
     // manter a mesma regra evita que eles apareçam e reorganizem a vitrine no
     // refetch em segundo plano.
-    const availableVehicles = response.data.data.filter(
+    const availableVehicles = apiVehicles.filter(
       (apiVehicle) => Number(apiVehicle.valor) > 0,
     );
 

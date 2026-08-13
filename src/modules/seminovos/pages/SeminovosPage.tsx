@@ -87,7 +87,8 @@ export function SeminovosPage() {
       cambio?: string;
       cor?: string;
       categoria?: string;
-    } = {};
+      fetchAll: boolean;
+    } = { fetchAll: true };
 
     // Só adiciona campos que têm valores definidos
     if (search.marca) query.marca = search.marca;
@@ -117,7 +118,9 @@ export function SeminovosPage() {
     search.categoria,
   ]);
 
-  const { data: vehicles, isLoading } = useVehiclesQuery(vehiclesQuery);
+  const { data: vehicles, isLoading } = useVehiclesQuery(vehiclesQuery, {
+    refreshImmediately: true,
+  });
   const { data: stockData } = useAllStockDataQuery();
   const { data: whatsapp } = useWhatsAppQuery();
   const { searchTerm } = useSearchContext();
@@ -660,6 +663,7 @@ export function SeminovosPage() {
                     modelo={vehicle.modelo}
                     delay={index}
                     fastAnimation={index >= midGridBreak}
+                    eagerImage
                     showWhatsAppInterest
                     whatsAppSource="seminovos_grid"
                     compact={stockLayout.compact}

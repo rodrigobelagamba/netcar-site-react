@@ -5,7 +5,7 @@ import { getBootstrapVehicles } from "@/lib/stockBootstrap";
 
 export function useVehiclesQuery(
   query?: VehiclesQuery,
-  options?: { enabled?: boolean }
+  options?: { enabled?: boolean; refreshImmediately?: boolean }
 ) {
   // Cria uma chave de query estável baseada nos valores do objeto
   // Isso garante que mudanças em qualquer campo (incluindo categoria) sejam detectadas
@@ -25,6 +25,7 @@ export function useVehiclesQuery(
     if (query.categoria) key.push("categoria", query.categoria);
     if (query.opcional) key.push("opcional", query.opcional);
     if (query.opcionais) key.push("opcionais", query.opcionais);
+    if (query.fetchAll) key.push("fetchAll", 1);
     
     return key;
   }, [
@@ -39,6 +40,7 @@ export function useVehiclesQuery(
     query?.categoria,
     query?.opcional,
     query?.opcionais,
+    query?.fetchAll,
   ]);
 
   const bootstrapVehicles = useMemo(
@@ -51,17 +53,30 @@ export function useVehiclesQuery(
     staleTime: 1000 * 60 * 5, // 5 minutos
     initialData: bootstrapVehicles,
     initialDataUpdatedAt: bootstrapVehicles ? Date.now() : undefined,
-    refetchOnMount: bootstrapVehicles ? false : undefined,
+    refetchOnMount: bootstrapVehicles
+      ? options?.refreshImmediately
+        ? "always"
+        : false
+      : undefined,
     enabled: options?.enabled ?? true,
   });
 
   useEffect(() => {
-    if (!bootstrapVehicles || options?.enabled === false) return;
+    if (
+      !bootstrapVehicles ||
+      options?.enabled === false ||
+      options?.refreshImmediately
+    ) return;
     const timer = window.setTimeout(() => {
       void result.refetch();
     }, 15_000);
     return () => window.clearTimeout(timer);
-  }, [bootstrapVehicles, options?.enabled, result.refetch]);
+  }, [
+    bootstrapVehicles,
+    options?.enabled,
+    options?.refreshImmediately,
+    result.refetch,
+  ]);
 
   return result;
 }

@@ -41,6 +41,7 @@ export interface VehicleCardProps {
   cambio?: string;
   delay?: number;
   fastAnimation?: boolean;
+  eagerImage?: boolean;
   showWhatsAppInterest?: boolean;
   whatsAppSource?: string;
   compact?: boolean;
@@ -70,6 +71,7 @@ export function VehicleCard({
   cambio,
   delay = 0,
   fastAnimation = false,
+  eagerImage = false,
   showWhatsAppInterest = false,
   whatsAppSource = "home_destaques",
   compact = false,
@@ -217,6 +219,7 @@ export function VehicleCard({
       showPriceComparison={shouldShowPriceComparison}
       delay={delay}
       fastAnimation={fastAnimation}
+      eagerImage={eagerImage}
       onClick={handleClick}
       whatsAppHref={whatsAppHref}
       tradeInHref={tradeInHref}

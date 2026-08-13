@@ -15,6 +15,7 @@ interface CardsHeroProps {
   showPriceComparison?: boolean;
   delay?: number;
   fastAnimation?: boolean;
+  eagerImage?: boolean;
   onClick?: () => void;
   whatsAppHref?: string;
   tradeInHref?: string;
@@ -35,6 +36,7 @@ export function CardsHero({
   showPriceComparison = false,
   year,
   delay = 0,
+  eagerImage = false,
   onClick,
   whatsAppHref,
   tradeInHref,
@@ -90,7 +92,7 @@ export function CardsHero({
             alt={`${brand} ${model}`.trim() || "Veículo seminovo"}
             width={960}
             height={640}
-            loading={isAboveTheFold ? "eager" : "lazy"}
+            loading={isAboveTheFold || eagerImage ? "eager" : "lazy"}
             fetchPriority={delay === 0 ? "high" : "auto"}
             decoding="async"
             className={`!border-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-2 drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] ${isSold ? "grayscale-[0.25]" : ""}`}
