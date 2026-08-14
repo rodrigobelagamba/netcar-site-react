@@ -9,11 +9,10 @@ import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSign
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
-import { emptySeminovosSearch } from "@/lib/seminovos-search";
 
 const regionalGroups = cityPages.reduce<Record<string, typeof cityPages>>(
   (groups, city) => {
-    const region = city.regionName ?? "Grande Porto Alegre e Vale dos Sinos";
+    const region = city.regionName;
     groups[region] = [...(groups[region] ?? []), city];
     return groups;
   },
@@ -22,9 +21,9 @@ const regionalGroups = cityPages.reduce<Record<string, typeof cityPages>>(
 
 export function RegionsHubPage() {
   useMetaTags({
-    title: "Regiões atendidas | Netcar Multimarcas Esteio",
+    title: "Seminovos na região de Porto Alegre e Serra | Netcar",
     description:
-      "Seminovos com troca, parcelamento e despachante. Atendimento na Grande Porto Alegre, Vales e Serra. Lojas em Esteio. WhatsApp 24h.",
+      "Consulte seminovos e pré-avaliação para cidades da Grande Porto Alegre, Vale dos Sinos, Paranhana e Serra Gaúcha. Lojas Netcar somente em Esteio.",
     url: "https://www.netcarmultimarcas.com.br/regioes-atendidas",
   });
 
@@ -34,22 +33,19 @@ export function RegionsHubPage() {
       "@type": "CollectionPage",
       name: "Regiões atendidas pela Netcar Multimarcas",
       url: "https://www.netcarmultimarcas.com.br/regioes-atendidas",
-      about: {
-        "@type": "AutoDealer",
-        name: "Netcar Multimarcas",
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: "Av. Presidente Vargas",
-          addressLocality: "Esteio",
-          addressRegion: "RS",
-          addressCountry: "BR",
+      about: { "@id": "https://www.netcarmultimarcas.com.br/#organization" },
+      hasPart: cityPages.flatMap((city) => [
+        {
+          "@type": "CollectionPage",
+          name: city.h1,
+          url: `https://www.netcarmultimarcas.com.br/seminovos-${city.slug}`,
         },
-      },
-      hasPart: cityPages.map((city) => ({
-        "@type": "WebPage",
-        name: city.h1,
-        url: `https://www.netcarmultimarcas.com.br/seminovos-${city.slug}`,
-      })),
+        {
+          "@type": "WebPage",
+          name: city.sell.h1,
+          url: `https://www.netcarmultimarcas.com.br/vender-carro-${city.slug}`,
+        },
+      ]),
     };
 
     document.querySelector('script[data-schema="regions-hub"]')?.remove();
@@ -80,7 +76,10 @@ export function RegionsHubPage() {
 
       <RegionalTrustSignals />
 
-      <RegionalStockPreview title="Carros da loja disponíveis agora" limit={8} />
+      <RegionalStockPreview
+        title="Carros da loja disponíveis agora"
+        limit={8}
+      />
 
       <section className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
@@ -146,20 +145,13 @@ export function RegionsHubPage() {
                     </p>
                     <div className="mt-5 flex flex-wrap gap-4 text-sm font-semibold">
                       <Link
-                        to="/seminovos"
-                        search={emptySeminovosSearch}
-                        data-regional-action={`city_stock_${city.slug}`}
-                        className="inline-flex items-center gap-1 text-primary hover:underline"
-                      >
-                        Ver estoque <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
-                      <Link
                         to="/seminovos-{$citySlug}"
                         params={{ citySlug: city.slug }}
                         data-regional-action={`city_buy_${city.slug}`}
-                        className="text-primary hover:underline"
+                        className="inline-flex items-center gap-1 text-primary hover:underline"
                       >
-                        Página da cidade
+                        Seminovos perto de {city.name}{" "}
+                        <ArrowRight className="h-3.5 w-3.5" />
                       </Link>
                       <Link
                         to="/vender-carro-{$citySlug}"

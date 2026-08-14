@@ -1,28 +1,26 @@
 import { useState } from "react";
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Send,
-  MessageCircle,
-  Clock
-} from "lucide-react";
+import { Phone, Mail, MapPin, Send, MessageCircle, Clock } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
-import { 
+import {
   usePhoneQuery,
   useAddressQuery,
   useWhatsAppQuery,
-  useScheduleQuery
+  useScheduleQuery,
 } from "@/catalog";
-import { buildWhatsAppUrl, contactFormWhatsAppMessage, resolveSiteWhatsAppMessage } from "@/lib/whatsappMessages";
+import {
+  buildWhatsAppUrl,
+  contactFormWhatsAppMessage,
+  resolveSiteWhatsAppMessage,
+} from "@/lib/whatsappMessages";
 import { openWhatsApp, trackContactFormSubmit } from "@/lib/analytics";
+import { buildLojaMapsUrl } from "@/lib/formatters";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 
 export function ContatoPage() {
   useDefaultMetaTags(
     "Contato · 2 Lojas em Esteio/RS",
-    "WhatsApp (51) 99729-3118. Av. Presidente Vargas 740 e 1106, Esteio/RS. Netcar Multimarcas."
+    "WhatsApp (51) 99729-3118. Av. Presidente Vargas 740 e 1106, Esteio/RS. Netcar Multimarcas.",
   );
 
   const [formData, setFormData] = useState({
@@ -30,7 +28,7 @@ export function ContatoPage() {
     email: "",
     telefone: "",
     assunto: "",
-    mensagem: ""
+    mensagem: "",
   });
 
   const { data: phoneLoja1 } = usePhoneQuery("Loja1");
@@ -41,6 +39,10 @@ export function ContatoPage() {
   const { data: schedule } = useScheduleQuery();
   const loja1Phone = phoneLoja1?.telefone || "5134737900";
   const loja2Phone = phoneLoja2?.telefone || "5130333900";
+  const loja1Address =
+    addressLoja1?.address || "Av. Presidente Vargas, 740 - Centro - Esteio/RS";
+  const loja2Address =
+    addressLoja2?.address || "Av. Presidente Vargas, 1106 - Centro - Esteio/RS";
 
   const formatPhone = (phone?: string) => {
     if (!phone) return "";
@@ -70,7 +72,9 @@ export function ContatoPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!whatsapp?.numero) {
-      alert("WhatsApp não disponível no momento. Por favor, tente novamente mais tarde.");
+      alert(
+        "WhatsApp não disponível no momento. Por favor, tente novamente mais tarde.",
+      );
       return;
     }
     const message = contactFormWhatsAppMessage(formData);
@@ -82,10 +86,11 @@ export function ContatoPage() {
   return (
     <main className="flex-1 pt-16 pb-24 overflow-x-hidden max-w-full bg-surface">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Hero */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-fg mb-4">Fale Conosco</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-fg mb-4">
+            Fale Conosco
+          </h1>
           <p className="text-muted-foreground text-lg max-w-md mx-auto">
             Escolha a melhor forma de entrar em contato
           </p>
@@ -121,16 +126,24 @@ export function ContatoPage() {
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
           {/* Form - Takes 2 columns */}
           <div className="lg:col-span-2 bg-bg rounded-3xl p-6 md:p-8 shadow-sm">
-            <h2 className="text-2xl font-bold text-fg mb-1">Envie uma mensagem</h2>
-            <p className="text-muted-foreground mb-5">Responderemos o mais breve possível</p>
-            
+            <h2 className="text-2xl font-bold text-fg mb-1">
+              Envie uma mensagem
+            </h2>
+            <p className="text-muted-foreground mb-5">
+              Responderemos o mais breve possível
+            </p>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="contact-name" className="block text-sm font-medium text-fg mb-2">Nome</label>
+                  <label
+                    htmlFor="contact-name"
+                    className="block text-sm font-medium text-fg mb-2"
+                  >
+                    Nome
+                  </label>
                   <input
                     id="contact-name"
                     name="name"
@@ -138,13 +151,20 @@ export function ContatoPage() {
                     type="text"
                     required
                     value={formData.nome}
-                    onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, nome: e.target.value })
+                    }
                     className="w-full bg-surface border-0 rounded-xl px-5 py-4 text-fg placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
                     placeholder="Seu nome completo"
                   />
                 </div>
                 <div>
-                  <label htmlFor="contact-phone" className="block text-sm font-medium text-fg mb-2">Telefone</label>
+                  <label
+                    htmlFor="contact-phone"
+                    className="block text-sm font-medium text-fg mb-2"
+                  >
+                    Telefone
+                  </label>
                   <input
                     id="contact-phone"
                     name="phone"
@@ -153,7 +173,9 @@ export function ContatoPage() {
                     type="tel"
                     required
                     value={formData.telefone}
-                    onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, telefone: e.target.value })
+                    }
                     className="w-full bg-surface border-0 rounded-xl px-5 py-4 text-fg placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
                     placeholder="(00) 00000-0000"
                   />
@@ -161,7 +183,12 @@ export function ContatoPage() {
               </div>
 
               <div>
-                <label htmlFor="contact-email" className="block text-sm font-medium text-fg mb-2">E-mail</label>
+                <label
+                  htmlFor="contact-email"
+                  className="block text-sm font-medium text-fg mb-2"
+                >
+                  E-mail
+                </label>
                 <input
                   id="contact-email"
                   name="email"
@@ -169,14 +196,21 @@ export function ContatoPage() {
                   type="email"
                   required
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   className="w-full bg-gray-50 border-0 rounded-xl px-5 py-4 text-fg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
                   placeholder="seu@email.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="contact-subject" className="block text-sm font-medium text-fg mb-2">Assunto</label>
+                <label
+                  htmlFor="contact-subject"
+                  className="block text-sm font-medium text-fg mb-2"
+                >
+                  Assunto
+                </label>
                 <input
                   id="contact-subject"
                   name="subject"
@@ -184,21 +218,30 @@ export function ContatoPage() {
                   type="text"
                   required
                   value={formData.assunto}
-                  onChange={(e) => setFormData({ ...formData, assunto: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, assunto: e.target.value })
+                  }
                   className="w-full bg-gray-50 border-0 rounded-xl px-5 py-4 text-fg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
                   placeholder="Sobre o que deseja falar?"
                 />
               </div>
 
               <div>
-                <label htmlFor="contact-message" className="block text-sm font-medium text-fg mb-2">Mensagem</label>
+                <label
+                  htmlFor="contact-message"
+                  className="block text-sm font-medium text-fg mb-2"
+                >
+                  Mensagem
+                </label>
                 <textarea
                   id="contact-message"
                   name="message"
                   required
                   rows={3}
                   value={formData.mensagem}
-                  onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, mensagem: e.target.value })
+                  }
                   className="w-full bg-gray-50 border-0 rounded-xl px-5 py-4 text-fg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all resize-none"
                   placeholder="Escreva sua mensagem..."
                 />
@@ -224,20 +267,24 @@ export function ContatoPage() {
                 </div>
                 <h3 className="text-lg font-bold text-fg">Nossas Lojas</h3>
               </div>
-              
+
               <div className="space-y-6">
-                {addressLoja1?.address && (
-                  <div>
+                <div id="loja-1" className="scroll-mt-28">
                   <a
-                    href="https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
+                    href={buildLojaMapsUrl("Loja1")}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block group"
                   >
-                    <p className="font-semibold text-fg group-hover:text-primary transition-colors">Loja 1</p>
-                    <p className="text-muted-foreground text-sm" dangerouslySetInnerHTML={{
-                      __html: addressLoja1.address.replace(/ - /g, "<br/>")
-                    }} />
+                    <p className="font-semibold text-fg group-hover:text-primary transition-colors">
+                      Loja 1
+                    </p>
+                    <p
+                      className="text-muted-foreground text-sm"
+                      dangerouslySetInnerHTML={{
+                        __html: loja1Address.replace(/ - /g, "<br/>"),
+                      }}
+                    />
                   </a>
                   {loja1Phone && (
                     <a
@@ -248,23 +295,26 @@ export function ContatoPage() {
                       {formatPhone(loja1Phone)}
                     </a>
                   )}
-                  </div>
-                )}
+                </div>
 
                 <div className="h-px bg-border" />
 
-                {addressLoja2?.address && (
-                  <div>
+                <div id="loja-2" className="scroll-mt-28">
                   <a
-                    href="https://maps.app.goo.gl/i8uHquE8tNMfoTHr9"
+                    href={buildLojaMapsUrl("Loja2")}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block group"
                   >
-                    <p className="font-semibold text-fg group-hover:text-primary transition-colors">Loja 2</p>
-                    <p className="text-muted-foreground text-sm" dangerouslySetInnerHTML={{
-                      __html: addressLoja2.address.replace(/ - /g, "<br/>")
-                    }} />
+                    <p className="font-semibold text-fg group-hover:text-primary transition-colors">
+                      Loja 2
+                    </p>
+                    <p
+                      className="text-muted-foreground text-sm"
+                      dangerouslySetInnerHTML={{
+                        __html: loja2Address.replace(/ - /g, "<br/>"),
+                      }}
+                    />
                   </a>
                   {loja2Phone && (
                     <a
@@ -275,8 +325,7 @@ export function ContatoPage() {
                       {formatPhone(loja2Phone)}
                     </a>
                   )}
-                  </div>
-                )}
+                </div>
               </div>
             </div>
 
@@ -288,22 +337,30 @@ export function ContatoPage() {
                 </div>
                 <h3 className="text-lg font-bold text-fg">Horários</h3>
               </div>
-              
+
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Seg a Sex</span>
-                  <span className="font-semibold text-primary">{schedule?.dias_semana || "9h às 18h"}</span>
+                  <span className="font-semibold text-primary">
+                    {schedule?.dias_semana || "9h às 18h"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Sábado</span>
-                  <span className="font-semibold text-amber-500">{schedule?.sabado || "9h às 16h30"}</span>
+                  <span className="font-semibold text-amber-500">
+                    {schedule?.sabado || "9h às 16h30"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Jan-Fev (Sáb)</span>
-                  <span className="font-semibold text-amber-500">9h às 13h30</span>
+                  <span className="font-semibold text-amber-500">
+                    9h às 13h30
+                  </span>
                 </div>
                 <div className="pt-4 mt-4 border-t border-border">
-                  <p className="text-muted-foreground text-center text-xs">Não fechamos ao meio-dia</p>
+                  <p className="text-muted-foreground text-center text-xs">
+                    Não fechamos ao meio-dia
+                  </p>
                 </div>
               </div>
             </div>

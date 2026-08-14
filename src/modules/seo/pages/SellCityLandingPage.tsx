@@ -1,12 +1,5 @@
 import { Link, useParams } from "@tanstack/react-router";
-import {
-  Camera,
-  ClipboardCheck,
-  Clock,
-  MapPin,
-  Store,
-} from "lucide-react";
-import { useEffect } from "react";
+import { Camera, ClipboardCheck, Clock, MapPin, Store } from "lucide-react";
 import { getCityPage } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
@@ -18,6 +11,8 @@ import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas"
 import { RegionalStockPreview } from "@/modules/seo/components/RegionalStockPreview";
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
+import { RegionalBreadcrumbs } from "@/modules/seo/components/RegionalBreadcrumbs";
+import { useRegionalPageSchema } from "@/modules/seo/useRegionalPageSchema";
 
 export function SellCityLandingPage() {
   const { citySlug } = useParams({ from: "/vender-carro-{$citySlug}" });
@@ -27,33 +22,12 @@ export function SellCityLandingPage() {
   useMetaTags({
     title: sell?.title,
     description: sell?.description,
-    url: city ? `https://www.netcarmultimarcas.com.br/vender-carro-${city.slug}` : undefined,
+    url: city
+      ? `https://www.netcarmultimarcas.com.br/vender-carro-${city.slug}`
+      : undefined,
+    robots: city && sell ? undefined : "noindex, nofollow",
   });
-
-  useEffect(() => {
-    if (!sell) return;
-
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: sell.faq.map((item) => ({
-        "@type": "Question",
-        name: item.q,
-        acceptedAnswer: { "@type": "Answer", text: item.a },
-      })),
-    };
-
-    document.querySelector('script[data-schema="sell-city-faq"]')?.remove();
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.setAttribute("data-schema", "sell-city-faq");
-    script.textContent = JSON.stringify(schema);
-    document.head.appendChild(script);
-
-    return () => {
-      document.querySelector('script[data-schema="sell-city-faq"]')?.remove();
-    };
-  }, [sell]);
+  useRegionalPageSchema(city, "sell");
 
   if (!city || !sell) {
     return <NotFoundRedirect />;
@@ -61,6 +35,7 @@ export function SellCityLandingPage() {
 
   return (
     <main className="flex-1 overflow-x-hidden max-w-full bg-white">
+      <RegionalBreadcrumbs cityName={city.name} variant="sell" />
       <RegionalSeoHero
         eyebrow="Netcar compra · usado na troca ou à vista"
         title={sell.h1}
@@ -85,6 +60,10 @@ export function SellCityLandingPage() {
               {paragraph}
             </p>
           ))}
+          <p className="rounded-xl border border-secondary/15 bg-secondary/5 p-4 text-sm leading-relaxed text-gray-600">
+            <strong className="text-fg">Referência para a vistoria:</strong>{" "}
+            {city.routeNote}
+          </p>
         </div>
         <RegionalActionCtas
           className="mt-8"
@@ -116,7 +95,9 @@ export function SellCityLandingPage() {
           <div className="grid gap-4 md:grid-cols-3">
             <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
               <Camera className="mb-3 h-5 w-5 text-secondary" />
-              <h3 className="mb-2 font-semibold text-fg">1. Envie dados reais</h3>
+              <h3 className="mb-2 font-semibold text-fg">
+                1. Envie dados reais
+              </h3>
               <p className="text-sm leading-relaxed text-gray-600">
                 Modelo, versão, ano, km, fotos, avarias e saldo de financiamento
                 ajudam no primeiro filtro.
@@ -124,7 +105,9 @@ export function SellCityLandingPage() {
             </article>
             <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
               <ClipboardCheck className="mb-3 h-5 w-5 text-secondary" />
-              <h3 className="mb-2 font-semibold text-fg">2. Receba orientação</h3>
+              <h3 className="mb-2 font-semibold text-fg">
+                2. Receba orientação
+              </h3>
               <p className="text-sm leading-relaxed text-gray-600">
                 Pré-avaliação indica se vale avançar. Não é proposta final nem
                 garantia de compra.
@@ -150,7 +133,10 @@ export function SellCityLandingPage() {
           <QuickSellForm cityName={city.name} />
           <p className="mt-4 text-center text-sm text-gray-500">
             Sem unidade ou ponto de coleta em {city.name}.{" "}
-            <Link to="/regioes-atendidas" className="font-semibold text-secondary hover:underline">
+            <Link
+              to="/regioes-atendidas"
+              className="font-semibold text-secondary hover:underline"
+            >
               Consulte regiões atendidas
             </Link>
             .
@@ -162,12 +148,19 @@ export function SellCityLandingPage() {
 
       <section className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">
-          <h2 className="text-2xl font-bold text-fg mb-6">Dúvidas de quem quer vender</h2>
+          <h2 className="text-2xl font-bold text-fg mb-6">
+            Dúvidas de quem quer vender
+          </h2>
           <div className="space-y-4">
             {sell.faq.map((item) => (
-              <div key={item.q} className="rounded-2xl bg-white p-5 shadow-sm border border-gray-100">
+              <div
+                key={item.q}
+                className="rounded-2xl bg-white p-5 shadow-sm border border-gray-100"
+              >
                 <h3 className="font-semibold text-fg mb-2">{item.q}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.a}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {item.a}
+                </p>
               </div>
             ))}
           </div>

@@ -1,126 +1,144 @@
 import { useEffect } from "react";
-import { useAddressQuery, usePhoneQuery } from "@/catalog/queries/useSiteQuery";
 import { cityPages } from "@/data/seo";
+import { CANONICAL_ORIGIN } from "@/lib/seo";
+
+const openingHours = [
+  {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    opens: "09:00",
+    closes: "18:00",
+  },
+  {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: "Saturday",
+    opens: "09:00",
+    closes: "16:30",
+  },
+];
 
 /**
- * Componente que adiciona Schema.org AutoDealer no head do documento
- * Busca dados da API quando disponível, usa valores padrão como fallback
+ * Publica uma entidade institucional e uma entidade LocalBusiness por loja.
+ * Endereços distintos no mesmo AutoDealer confundem qual ficha local representa
+ * cada unidade; por isso cada endereço tem @id, NAP e coordenadas próprios.
  */
 export function SchemaOrg() {
-  const { data: addressLoja1 } = useAddressQuery("Loja1");
-  const { data: addressLoja2 } = useAddressQuery("Loja2");
-  const { data: phoneLoja1 } = usePhoneQuery("Loja1");
-
   useEffect(() => {
-    // Não renderiza schema se não houver dados da API
-    if (!addressLoja1?.address || !addressLoja2?.address || !phoneLoja1?.telefone) {
-      return;
-    }
-
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://www.netcarmultimarcas.com.br";
-
-    // Usa apenas dados da API
-    const address1 = {
-      streetAddress: addressLoja1.address,
-      addressLocality: "Esteio",
-      addressRegion: "RS",
-      postalCode: "93260-048",
-    };
-
-    const address2 = {
-      streetAddress: addressLoja2.address,
-      addressLocality: "Esteio",
-      addressRegion: "RS",
-      postalCode: "93260-001",
-    };
-
-    const phone = phoneLoja1.telefone;
-    // Remove caracteres não numéricos e formata para E.164
-    const phoneFormatted = phone.replace(/\D/g, "");
-    const phoneE164 = phoneFormatted.length >= 10 
-      ? `+55-${phoneFormatted.slice(0, 2)}-${phoneFormatted.slice(2)}`
-      : "+55-51-3473-7900";
+    const baseUrl = CANONICAL_ORIGIN;
+    const logoId = `${baseUrl}/#logo`;
+    const organizationId = `${baseUrl}/#organization`;
+    const loja1Id = `${baseUrl}/#loja-1`;
+    const loja2Id = `${baseUrl}/#loja-2`;
+    const areaServed = [
+      { "@type": "City", name: "Esteio" },
+      ...cityPages.map((city) => ({ "@type": "City", name: city.name })),
+      {
+        "@type": "AdministrativeArea",
+        name: "Região Metropolitana de Porto Alegre",
+      },
+    ];
 
     const schema = {
       "@context": "https://schema.org",
-      "@type": "AutoDealer",
-      "@id": `${baseUrl}/#organization`,
-      "name": "Netcar Multimarcas",
-      "alternateName": "Netcar Veículos",
-      "legalName": "Netcar Veículos Ltda",
-      "foundingDate": "1997",
-      "description": "Loja de seminovos em Esteio/RS desde 1997. Carros com garantia, vistoriados e financiamento facilitado.",
-      "url": baseUrl,
-      "logo": {
-        "@type": "ImageObject",
-        "url": `${baseUrl}/images/Logotipo7_1768863597989.png`,
-        "width": 300,
-        "height": 100
-      },
-      "image": [
-        `${baseUrl}/images/loja1.jpg`,
-        `${baseUrl}/images/loja2.jpg`
-      ],
-      "telephone": phoneE164,
-      "email": "contato@netcarmultimarcas.com.br",
-      "address": [
+      "@graph": [
         {
-          "@type": "PostalAddress",
-          "name": "Loja 1",
-          "streetAddress": address1.streetAddress,
-          "addressLocality": address1.addressLocality,
-          "addressRegion": address1.addressRegion,
-          "postalCode": address1.postalCode,
-          "addressCountry": "BR"
+          "@type": "Organization",
+          "@id": organizationId,
+          name: "Netcar Multimarcas",
+          alternateName: "Netcar Veículos",
+          legalName: "R&C Veículos Ltda",
+          taxID: "02.237.969/0001-06",
+          foundingDate: "1997",
+          description:
+            "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.",
+          url: baseUrl,
+          logo: {
+            "@type": "ImageObject",
+            "@id": logoId,
+            url: `${baseUrl}/images/Logotipo7_1768863597989.png`,
+            width: 300,
+            height: 100,
+          },
+          brand: {
+            "@type": "Brand",
+            "@id": `${baseUrl}/#brand`,
+            name: "Netcar Multimarcas",
+            logo: { "@id": logoId },
+          },
+          image: [`${baseUrl}/images/loja1.jpg`, `${baseUrl}/images/loja2.jpg`],
+          email: "contato@netcarmultimarcas.com.br",
+          areaServed,
+          subOrganization: [{ "@id": loja1Id }, { "@id": loja2Id }],
+          sameAs: [
+            "https://www.instagram.com/netcar_rc",
+            "https://www.facebook.com/NetcarRC",
+          ],
         },
         {
-          "@type": "PostalAddress",
-          "name": "Loja 2",
-          "streetAddress": address2.streetAddress,
-          "addressLocality": address2.addressLocality,
-          "addressRegion": address2.addressRegion,
-          "postalCode": address2.postalCode,
-          "addressCountry": "BR"
-        }
-      ],
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "-29.837920",
-        "longitude": "-51.170236"
-      },
-      "openingHoursSpecification": [
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "opens": "09:00",
-          "closes": "18:00"
+          "@type": "AutoDealer",
+          "@id": loja1Id,
+          name: "Netcar Multimarcas - Loja 1",
+          branchCode: "Loja1",
+          url: `${baseUrl}/contato#loja-1`,
+          image: `${baseUrl}/images/loja1.jpg`,
+          logo: { "@id": logoId },
+          telephone: "+55-51-3473-7900",
+          email: "contato@netcarmultimarcas.com.br",
+          parentOrganization: { "@id": organizationId },
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Av. Presidente Vargas, 740",
+            addressLocality: "Esteio",
+            addressRegion: "RS",
+            postalCode: "93260-048",
+            addressCountry: "BR",
+          },
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: -29.8380385,
+            longitude: -51.1702399,
+          },
+          hasMap: "https://maps.google.com/maps?cid=9144067949621682127",
+          openingHoursSpecification: openingHours,
+          priceRange: "R$ 40.000 - R$ 300.000",
         },
         {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": "Saturday",
-          "opens": "09:00",
-          "closes": "16:30"
-        }
+          "@type": "AutoDealer",
+          "@id": loja2Id,
+          name: "Netcar Multimarcas - Loja 2",
+          branchCode: "Loja2",
+          url: `${baseUrl}/contato#loja-2`,
+          image: `${baseUrl}/images/loja2.jpg`,
+          logo: { "@id": logoId },
+          telephone: "+55-51-3033-3900",
+          email: "contato@netcarmultimarcas.com.br",
+          parentOrganization: { "@id": organizationId },
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Av. Presidente Vargas, 1106",
+            addressLocality: "Esteio",
+            addressRegion: "RS",
+            postalCode: "93260-001",
+            addressCountry: "BR",
+          },
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: -29.8411446,
+            longitude: -51.1721442,
+          },
+          hasMap: "https://maps.google.com/maps?cid=10839197980729051544",
+          openingHoursSpecification: openingHours,
+          priceRange: "R$ 40.000 - R$ 300.000",
+        },
       ],
-      "priceRange": "R$ 40.000 - R$ 300.000",
-      "areaServed": [
-        { "@type": "City", "name": "Esteio" },
-        ...cityPages.map((city) => ({ "@type": "City", "name": city.name })),
-        { "@type": "AdministrativeArea", "name": "Região Metropolitana de Porto Alegre" }
-      ],
-      "sameAs": [
-        "https://www.instagram.com/netcar_rc",
-        "https://www.facebook.com/NetcarRC"
-      ]
     };
 
-    // Remove script existente se houver
-    const existingScript = document.querySelector('script[type="application/ld+json"][data-schema="organization"]');
-    if (existingScript) {
-      existingScript.remove();
-    }
+    document
+      .querySelector(
+        'script[type="application/ld+json"][data-schema="organization"]',
+      )
+      ?.remove();
 
-    // Cria novo script
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.setAttribute("data-schema", "organization");
@@ -128,12 +146,13 @@ export function SchemaOrg() {
     document.head.appendChild(script);
 
     return () => {
-      const scriptToRemove = document.querySelector('script[type="application/ld+json"][data-schema="organization"]');
-      if (scriptToRemove) {
-        scriptToRemove.remove();
-      }
+      document
+        .querySelector(
+          'script[type="application/ld+json"][data-schema="organization"]',
+        )
+        ?.remove();
     };
-  }, [addressLoja1, addressLoja2, phoneLoja1]);
+  }, []);
 
   return null;
 }

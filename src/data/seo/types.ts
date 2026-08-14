@@ -50,11 +50,15 @@ export interface CitySellSeo {
 export interface CitySeoPage {
   slug: string;
   name: string;
-  regionName?: string;
+  regionName: string;
   distanceKm: number;
   travelTime: string;
-  routeNote?: string;
-  visitPlanning?: string;
+  routeNote: string;
+  visitPlanning: string;
+  /** Cidades geograficamente relacionadas. Evita malha regional all-to-all. */
+  relatedSlugs: string[];
+  /** Mercados próximos que podem receber um link curto no rodapé global. */
+  priorityMarket?: boolean;
   title: string;
   description: string;
   h1: string;

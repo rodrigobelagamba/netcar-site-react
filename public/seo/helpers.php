@@ -9,9 +9,8 @@ function seo_h($value)
 }
 
 /**
- * Schema.org AutoDealer (LocalBusiness) para as páginas servidas a crawlers.
- * Mantém os mesmos dados do index.html (NAP, geo, horários) e acrescenta
- * foundingDate e alternateName. Sem AggregateRating/reviews.
+ * Entidade institucional e uma entidade AutoDealer por endereço físico.
+ * Mantém o mesmo grafo do index.html e da aplicação. Sem ratings inventados.
  */
 function seo_org_schema()
 {
@@ -32,66 +31,121 @@ function seo_org_schema()
         'name' => 'Região Metropolitana de Porto Alegre',
     ];
 
+    $openingHours = [
+        [
+            '@type' => 'OpeningHoursSpecification',
+            'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            'opens' => '09:00',
+            'closes' => '18:00',
+        ],
+        [
+            '@type' => 'OpeningHoursSpecification',
+            'dayOfWeek' => 'Saturday',
+            'opens' => '09:00',
+            'closes' => '16:30',
+        ],
+    ];
+    $organizationId = SEO_SITE_URL . '/#organization';
+    $loja1Id = SEO_SITE_URL . '/#loja-1';
+    $loja2Id = SEO_SITE_URL . '/#loja-2';
+    $logoId = SEO_SITE_URL . '/#logo';
+
     $schema = [
         '@context' => 'https://schema.org',
-        '@type' => 'AutoDealer',
-        '@id' => SEO_SITE_URL . '/#organization',
-        'name' => 'Netcar Multimarcas',
-        'alternateName' => 'Netcar Veículos',
-        'legalName' => 'Netcar Veículos Ltda',
-        'foundingDate' => '1997',
-        'description' => 'Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.',
-        'url' => SEO_SITE_URL,
-        'logo' => [
-            '@type' => 'ImageObject',
-            'url' => SEO_SITE_URL . '/images/Logotipo7_1768863597989.png',
-        ],
-        'image' => [
-            SEO_SITE_URL . '/images/loja1.jpg',
-            SEO_SITE_URL . '/images/loja2.jpg',
-        ],
-        'telephone' => '+55-51-3473-7900',
-        'email' => 'contato@netcarmultimarcas.com.br',
-        'address' => [
+        '@graph' => [
             [
-                '@type' => 'PostalAddress',
-                'name' => 'Matriz',
-                'streetAddress' => 'Av. Presidente Vargas, 740',
-                'addressLocality' => 'Esteio',
-                'addressRegion' => 'RS',
-                'postalCode' => '93260-048',
-                'addressCountry' => 'BR',
+                '@type' => 'Organization',
+                '@id' => $organizationId,
+                'name' => 'Netcar Multimarcas',
+                'alternateName' => 'Netcar Veículos',
+                'legalName' => 'R&C Veículos Ltda',
+                'taxID' => '02.237.969/0001-06',
+                'foundingDate' => '1997',
+                'description' => 'Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.',
+                'url' => SEO_SITE_URL,
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    '@id' => $logoId,
+                    'url' => SEO_SITE_URL . '/images/Logotipo7_1768863597989.png',
+                ],
+                'brand' => [
+                    '@type' => 'Brand',
+                    '@id' => SEO_SITE_URL . '/#brand',
+                    'name' => 'Netcar Multimarcas',
+                    'logo' => ['@id' => $logoId],
+                ],
+                'image' => [
+                    SEO_SITE_URL . '/images/loja1.jpg',
+                    SEO_SITE_URL . '/images/loja2.jpg',
+                ],
+                'email' => 'contato@netcarmultimarcas.com.br',
+                'areaServed' => $areaServed,
+                'subOrganization' => [
+                    ['@id' => $loja1Id],
+                    ['@id' => $loja2Id],
+                ],
+                'sameAs' => [
+                    'https://www.instagram.com/netcar_rc',
+                    'https://www.facebook.com/NetcarRC',
+                ],
             ],
             [
-                '@type' => 'PostalAddress',
-                'name' => 'Filial',
-                'streetAddress' => 'Av. Presidente Vargas, 1106',
-                'addressLocality' => 'Esteio',
-                'addressRegion' => 'RS',
-                'postalCode' => '93260-001',
-                'addressCountry' => 'BR',
+                '@type' => 'AutoDealer',
+                '@id' => $loja1Id,
+                'name' => 'Netcar Multimarcas - Loja 1',
+                'branchCode' => 'Loja1',
+                'url' => SEO_SITE_URL . '/contato#loja-1',
+                'image' => SEO_SITE_URL . '/images/loja1.jpg',
+                'logo' => ['@id' => $logoId],
+                'telephone' => '+55-51-3473-7900',
+                'email' => 'contato@netcarmultimarcas.com.br',
+                'parentOrganization' => ['@id' => $organizationId],
+                'address' => [
+                    '@type' => 'PostalAddress',
+                    'streetAddress' => 'Av. Presidente Vargas, 740',
+                    'addressLocality' => 'Esteio',
+                    'addressRegion' => 'RS',
+                    'postalCode' => '93260-048',
+                    'addressCountry' => 'BR',
+                ],
+                'geo' => [
+                    '@type' => 'GeoCoordinates',
+                    'latitude' => -29.8380385,
+                    'longitude' => -51.1702399,
+                ],
+                'hasMap' => 'https://maps.google.com/maps?cid=9144067949621682127',
+                'openingHoursSpecification' => $openingHours,
+                'priceRange' => 'R$ 40.000 - R$ 300.000',
             ],
-        ],
-        'geo' => [
-            '@type' => 'GeoCoordinates',
-            'latitude' => '-29.837920',
-            'longitude' => '-51.170236',
-        ],
-        'openingHoursSpecification' => [
             [
-                '@type' => 'OpeningHoursSpecification',
-                'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-                'opens' => '09:00',
-                'closes' => '18:00',
-            ],
-            [
-                '@type' => 'OpeningHoursSpecification',
-                'dayOfWeek' => 'Saturday',
-                'opens' => '09:00',
-                'closes' => '16:30',
+                '@type' => 'AutoDealer',
+                '@id' => $loja2Id,
+                'name' => 'Netcar Multimarcas - Loja 2',
+                'branchCode' => 'Loja2',
+                'url' => SEO_SITE_URL . '/contato#loja-2',
+                'image' => SEO_SITE_URL . '/images/loja2.jpg',
+                'logo' => ['@id' => $logoId],
+                'telephone' => '+55-51-3033-3900',
+                'email' => 'contato@netcarmultimarcas.com.br',
+                'parentOrganization' => ['@id' => $organizationId],
+                'address' => [
+                    '@type' => 'PostalAddress',
+                    'streetAddress' => 'Av. Presidente Vargas, 1106',
+                    'addressLocality' => 'Esteio',
+                    'addressRegion' => 'RS',
+                    'postalCode' => '93260-001',
+                    'addressCountry' => 'BR',
+                ],
+                'geo' => [
+                    '@type' => 'GeoCoordinates',
+                    'latitude' => -29.8411446,
+                    'longitude' => -51.1721442,
+                ],
+                'hasMap' => 'https://maps.google.com/maps?cid=10839197980729051544',
+                'openingHoursSpecification' => $openingHours,
+                'priceRange' => 'R$ 40.000 - R$ 300.000',
             ],
         ],
-        'areaServed' => $areaServed,
     ];
 
     return json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

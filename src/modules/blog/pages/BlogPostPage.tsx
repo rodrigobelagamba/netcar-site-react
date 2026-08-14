@@ -16,8 +16,11 @@ export function BlogPostPage() {
   useMetaTags({
     title: post?.title,
     description: post?.description,
-    url: post ? `https://www.netcarmultimarcas.com.br/blog/${post.slug}` : undefined,
+    url: post
+      ? `https://www.netcarmultimarcas.com.br/blog/${post.slug}`
+      : undefined,
     type: "article",
+    robots: post ? undefined : "noindex, nofollow",
   });
 
   useEffect(() => {

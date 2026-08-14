@@ -107,17 +107,37 @@ function humanizeVehicleSlug($slug) {
         : ucwords($s);
 }
 
-// A API respondeu que o veículo não existe mais (vendido e removido do estoque)?
-// Antes o código fazia header('Location: /veiculo/{id}') para "deixar o React
-// resolver" — mas o .htaccess manda todo bot de volta para este mesmo arquivo,
-// gerando 302 infinito. Agora: 410 com página de vendido; 503 se a API cair.
-// Só 200 e 404 são respostas confiáveis da API. Qualquer outra coisa (timeout,
-// 5xx, 429) é instabilidade: devolver 410 nesse caso derrubaria carro à venda.
-$apiAuthoritative = ($response !== false && ($httpCode === 200 || $httpCode === 404));
-$data = $apiAuthoritative ? json_decode($response, true) : null;
-$vehicleMissing = !$data || empty($data['success']) || empty($data['data']);
+// Há somente três estados seguros:
+// - 200 + JSON válido + success=true + veículo: ficha encontrada;
+// - 404 + JSON válido + success=false: ausência confirmada pela API;
+// - qualquer outra combinação: falha transitória ou contrato inválido.
+// Em especial, um 200 vazio/malformado nunca pode virar 410 e retirar do índice
+// um carro que ainda pode estar à venda.
+$data = null;
+$jsonValid = false;
+if ($response !== false && is_string($response) && trim($response) !== '') {
+    $data = json_decode($response, true);
+    $jsonValid = json_last_error() === JSON_ERROR_NONE && is_array($data);
+}
 
-if (!$apiAuthoritative) {
+$vehicleFound = (
+    $httpCode === 200
+    && $jsonValid
+    && isset($data['success'])
+    && $data['success'] === true
+    && isset($data['data'])
+    && is_array($data['data'])
+    && isset($data['data'][0])
+    && is_array($data['data'][0])
+);
+$vehicleMissing = (
+    $httpCode === 404
+    && $jsonValid
+    && array_key_exists('success', $data)
+    && $data['success'] === false
+);
+
+if (!$vehicleFound && !$vehicleMissing) {
     // Falha transitória: 503 mantém a URL no índice e pede nova tentativa.
     http_response_code(503);
     header('Retry-After: 3600');

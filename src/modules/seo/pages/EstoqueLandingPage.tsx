@@ -35,6 +35,7 @@ export function EstoqueLandingPage() {
     url: landing
       ? `https://www.netcarmultimarcas.com.br/comprar-${landing.slug}`
       : undefined,
+    robots: landing ? undefined : "noindex, nofollow",
   });
 
   useEffect(() => {
@@ -154,12 +155,19 @@ export function EstoqueLandingPage() {
 
       <section className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">
-          <h2 className="text-2xl font-bold text-fg mb-6">Perguntas frequentes</h2>
+          <h2 className="text-2xl font-bold text-fg mb-6">
+            Perguntas frequentes
+          </h2>
           <div className="space-y-4">
             {landing.faq.map((item) => (
-              <div key={item.q} className="rounded-2xl bg-white p-5 shadow-sm border border-gray-100">
+              <div
+                key={item.q}
+                className="rounded-2xl bg-white p-5 shadow-sm border border-gray-100"
+              >
                 <h3 className="font-semibold text-fg mb-2">{item.q}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.a}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {item.a}
+                </p>
               </div>
             ))}
           </div>

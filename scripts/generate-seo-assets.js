@@ -9,7 +9,10 @@ import { readFileSync, mkdirSync, readdirSync, unlinkSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
-import { fetchVehicleSitemapUrls, generateVehicleSlug } from "./lib/vehicle-sitemap-urls.js";
+import {
+  fetchVehicleSitemapUrls,
+  generateVehicleSlug,
+} from "./lib/vehicle-sitemap-urls.js";
 import { readFreshSeoStockCache } from "./lib/seo-stock-cache.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -39,12 +42,16 @@ function siteWhatsAppMessage(body) {
 }
 
 function cityWhatsAppLink(cityName) {
-  const text = siteWhatsAppMessage(`moro em ${cityName} e estou procurando um seminovo.`);
+  const text = siteWhatsAppMessage(
+    `moro em ${cityName} e estou procurando um seminovo.`,
+  );
   return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
 }
 
 function landingWhatsAppLink(name) {
-  const text = siteWhatsAppMessage(`estou procurando um ${name} seminovo em Esteio.`);
+  const text = siteWhatsAppMessage(
+    `estou procurando um ${name} seminovo em Esteio.`,
+  );
   return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
 }
 
@@ -53,16 +60,20 @@ function landingWhatsAppLink(name) {
 try {
   const envFile = readFileSync(join(rootDir, ".env.production"), "utf-8");
   const apiBaseMatch = envFile.match(/^VITE_API_BASE_URL=(.+)$/m);
-  const apiBaseUrl = apiBaseMatch ? apiBaseMatch[1].trim().replace(/^["']|["']$/g, "") : "";
+  const apiBaseUrl = apiBaseMatch
+    ? apiBaseMatch[1].trim().replace(/^["']|["']$/g, "")
+    : "";
   if (apiBaseUrl) {
     writeTextFile(
       join(publicDir, "netcar-config.php"),
-      `<?php\n// Gerado no build a partir de .env.production — nao editar manualmente.\ndefine('NETCAR_API_BASE_URL', '${apiBaseUrl.replace(/'/g, "\\'")}');\n`
+      `<?php\n// Gerado no build a partir de .env.production — nao editar manualmente.\ndefine('NETCAR_API_BASE_URL', '${apiBaseUrl.replace(/'/g, "\\'")}');\n`,
     );
     console.log(`netcar-config.php gerado (API: ${apiBaseUrl})`);
   }
 } catch {
-  console.warn("Aviso: .env.production não encontrado; netcar-config.php não gerado.");
+  console.warn(
+    "Aviso: .env.production não encontrado; netcar-config.php não gerado.",
+  );
 }
 
 // Quem assina o blog. Antes o author era a própria Netcar Multimarcas, o que
@@ -81,63 +92,113 @@ function formatDateBr(isoDate) {
   return `${day}/${month}/${year}`;
 }
 
-// AutoDealer (LocalBusiness) — mesmos dados de seo_org_schema() em public/seo/helpers.php.
-// Sem AggregateRating/reviews.
-const ORG_SCHEMA = {
-  "@context": "https://schema.org",
-  "@type": "AutoDealer",
+// Entidade institucional + um LocalBusiness por endereço físico. Mantém o
+// mesmo grafo de seo_org_schema() e do JSON-LD inicial em index.html.
+const OPENING_HOURS_SCHEMA = [
+  {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    opens: "09:00",
+    closes: "18:00",
+  },
+  {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: "Saturday",
+    opens: "09:00",
+    closes: "16:30",
+  },
+];
+
+const ORG_ROOT_SCHEMA = {
+  "@type": "Organization",
   "@id": `${SITE}/#organization`,
   name: "Netcar Multimarcas",
   alternateName: "Netcar Veículos",
-  legalName: "Netcar Veículos Ltda",
+  legalName: "R&C Veículos Ltda",
+  taxID: "02.237.969/0001-06",
   foundingDate: "1997",
   description:
     "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.",
   url: SITE,
   logo: {
     "@type": "ImageObject",
+    "@id": `${SITE}/#logo`,
     url: `${SITE}/images/Logotipo7_1768863597989.png`,
   },
-  image: [`${SITE}/images/loja1.jpg`, `${SITE}/images/loja2.jpg`],
-  telephone: "+55-51-3473-7900",
-  email: "contato@netcarmultimarcas.com.br",
-  address: [
-    {
-      "@type": "PostalAddress",
-      name: "Matriz",
-      streetAddress: "Av. Presidente Vargas, 740",
-      addressLocality: "Esteio",
-      addressRegion: "RS",
-      postalCode: "93260-048",
-      addressCountry: "BR",
-    },
-    {
-      "@type": "PostalAddress",
-      name: "Filial",
-      streetAddress: "Av. Presidente Vargas, 1106",
-      addressLocality: "Esteio",
-      addressRegion: "RS",
-      postalCode: "93260-001",
-      addressCountry: "BR",
-    },
-  ],
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: "-29.837920",
-    longitude: "-51.170236",
+  brand: {
+    "@type": "Brand",
+    "@id": `${SITE}/#brand`,
+    name: "Netcar Multimarcas",
+    logo: { "@id": `${SITE}/#logo` },
   },
-  openingHoursSpecification: [
+  image: [`${SITE}/images/loja1.jpg`, `${SITE}/images/loja2.jpg`],
+  email: "contato@netcarmultimarcas.com.br",
+  subOrganization: [{ "@id": `${SITE}/#loja-1` }, { "@id": `${SITE}/#loja-2` }],
+  sameAs: [
+    "https://www.instagram.com/netcar_rc",
+    "https://www.facebook.com/NetcarRC",
+  ],
+};
+
+const ORG_SCHEMA = {
+  "@context": "https://schema.org",
+  "@graph": [
+    ORG_ROOT_SCHEMA,
     {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "18:00",
+      "@type": "AutoDealer",
+      "@id": `${SITE}/#loja-1`,
+      name: "Netcar Multimarcas - Loja 1",
+      branchCode: "Loja1",
+      url: `${SITE}/contato#loja-1`,
+      image: `${SITE}/images/loja1.jpg`,
+      logo: { "@id": `${SITE}/#logo` },
+      telephone: "+55-51-3473-7900",
+      email: "contato@netcarmultimarcas.com.br",
+      parentOrganization: { "@id": `${SITE}/#organization` },
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Av. Presidente Vargas, 740",
+        addressLocality: "Esteio",
+        addressRegion: "RS",
+        postalCode: "93260-048",
+        addressCountry: "BR",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: -29.8380385,
+        longitude: -51.1702399,
+      },
+      hasMap: "https://maps.google.com/maps?cid=9144067949621682127",
+      openingHoursSpecification: OPENING_HOURS_SCHEMA,
+      priceRange: "R$ 40.000 - R$ 300.000",
     },
     {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Saturday",
-      opens: "09:00",
-      closes: "16:30",
+      "@type": "AutoDealer",
+      "@id": `${SITE}/#loja-2`,
+      name: "Netcar Multimarcas - Loja 2",
+      branchCode: "Loja2",
+      url: `${SITE}/contato#loja-2`,
+      image: `${SITE}/images/loja2.jpg`,
+      logo: { "@id": `${SITE}/#logo` },
+      telephone: "+55-51-3033-3900",
+      email: "contato@netcarmultimarcas.com.br",
+      parentOrganization: { "@id": `${SITE}/#organization` },
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Av. Presidente Vargas, 1106",
+        addressLocality: "Esteio",
+        addressRegion: "RS",
+        postalCode: "93260-001",
+        addressCountry: "BR",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: -29.8411446,
+        longitude: -51.1721442,
+      },
+      hasMap: "https://maps.google.com/maps?cid=10839197980729051544",
+      openingHoursSpecification: OPENING_HOURS_SCHEMA,
+      priceRange: "R$ 40.000 - R$ 300.000",
     },
   ],
 };
@@ -156,10 +217,11 @@ function faqSchema(faq) {
 
 // Trilha Home > seção > página. Ajuda o Google a entender a hierarquia e pode
 // renderizar breadcrumb no resultado no lugar da URL crua.
-function breadcrumbSchema(items) {
+function breadcrumbSchema(items, id) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    ...(id ? { "@id": id } : {}),
     itemListElement: items.map((item, i) => ({
       "@type": "ListItem",
       position: i + 1,
@@ -169,15 +231,59 @@ function breadcrumbSchema(items) {
   };
 }
 
+function regionalPageSchema(city, variant, canonical) {
+  const isBuy = variant === "buy";
+  const page = isBuy ? city : city.sell;
+  return {
+    "@context": "https://schema.org",
+    "@type": isBuy ? "CollectionPage" : "WebPage",
+    "@id": `${canonical}#webpage`,
+    url: canonical,
+    name: page.h1,
+    description: page.description,
+    inLanguage: "pt-BR",
+    isPartOf: {
+      "@type": "CollectionPage",
+      "@id": `${SITE}/regioes-atendidas#webpage`,
+      url: `${SITE}/regioes-atendidas`,
+      name: "Regiões atendidas pela Netcar",
+    },
+    breadcrumb: { "@id": `${canonical}#breadcrumb` },
+    mainEntity: { "@id": `${canonical}#service` },
+  };
+}
+
+function regionalServiceSchema(city, variant, canonical) {
+  const isBuy = variant === "buy";
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${canonical}#service`,
+    name: isBuy
+      ? `Atendimento para compra de seminovos para ${city.name}`
+      : `Pré-avaliação de carro para clientes de ${city.name}`,
+    serviceType: isBuy
+      ? "Pesquisa online e atendimento para compra presencial de carro seminovo"
+      : "Pré-avaliação remota e compra presencial de veículo usado",
+    areaServed: { "@type": "City", name: city.name },
+    provider: { "@id": `${SITE}/#organization` },
+    availableChannel: {
+      "@type": "ServiceChannel",
+      serviceUrl: canonical,
+      availableLanguage: "pt-BR",
+    },
+  };
+}
+
 const HOME_CRUMB = { name: "Home", url: SITE };
 
 const manualBlogPosts = JSON.parse(
-  readFileSync(join(rootDir, "src/data/seo/blog-posts.json"), "utf-8")
+  readFileSync(join(rootDir, "src/data/seo/blog-posts.json"), "utf-8"),
 );
 let autoBlogPosts = [];
 try {
   autoBlogPosts = JSON.parse(
-    readFileSync(join(rootDir, "src/data/seo/blog-auto.json"), "utf-8")
+    readFileSync(join(rootDir, "src/data/seo/blog-auto.json"), "utf-8"),
   );
 } catch {
   /* sem posts automáticos ainda */
@@ -185,12 +291,14 @@ try {
 // Manuais têm prioridade no slug
 const blogPosts = [
   ...manualBlogPosts,
-  ...autoBlogPosts.filter((a) => !manualBlogPosts.some((m) => m.slug === a.slug)),
+  ...autoBlogPosts.filter(
+    (a) => !manualBlogPosts.some((m) => m.slug === a.slug),
+  ),
 ];
 const cities = JSON.parse(
-  readFileSync(join(rootDir, "src/data/seo/cities.json"), "utf-8")
+  readFileSync(join(rootDir, "src/data/seo/cities.json"), "utf-8"),
 );
-ORG_SCHEMA.areaServed = [
+ORG_ROOT_SCHEMA.areaServed = [
   { "@type": "City", name: "Esteio" },
   ...cities.map((city) => ({ "@type": "City", name: city.name })),
   {
@@ -200,20 +308,26 @@ ORG_SCHEMA.areaServed = [
 ];
 writeTextFile(
   join(publicDir, "seo", "cities.json"),
-  `${JSON.stringify(cities.map((city) => city.name), null, 2)}\n`
+  `${JSON.stringify(
+    cities.map((city) => city.name),
+    null,
+    2,
+  )}\n`,
 );
 let landings = [];
 try {
   landings = JSON.parse(
-    readFileSync(join(rootDir, "src/data/seo/landings.json"), "utf-8")
+    readFileSync(join(rootDir, "src/data/seo/landings.json"), "utf-8"),
   );
 } catch {
-  console.warn("Aviso: landings.json não encontrado; landings de marca/categoria ignoradas.");
+  console.warn(
+    "Aviso: landings.json não encontrado; landings de marca/categoria ignoradas.",
+  );
 }
 let contentPages = [];
 try {
   contentPages = JSON.parse(
-    readFileSync(join(rootDir, "src/data/seo/content-pages.json"), "utf-8")
+    readFileSync(join(rootDir, "src/data/seo/content-pages.json"), "utf-8"),
   );
 } catch {
   console.warn("Aviso: content-pages.json não encontrado.");
@@ -245,12 +359,19 @@ function renderSections(sections) {
       if (section.type === "cars" && section.cars) {
         return `<div class="blog-cars">${section.cars
           .map((car) => {
-            const specs = [car.ano, car.km, car.cambio].filter(Boolean).map(escapeHtml).join(" &middot; ");
+            const specs = [car.ano, car.km, car.cambio]
+              .filter(Boolean)
+              .map(escapeHtml)
+              .join(" &middot; ");
             const img = car.img
               ? `<img src="${escapeHtml(car.img)}" alt="${escapeHtml(car.modelo)}" loading="lazy" />`
               : "";
-            const preco = car.preco ? `<strong>${escapeHtml(car.preco)}</strong>` : "";
-            const selo = car.destaque ? `<span class="selo">${escapeHtml(car.destaque)}</span>` : "";
+            const preco = car.preco
+              ? `<strong>${escapeHtml(car.preco)}</strong>`
+              : "";
+            const selo = car.destaque
+              ? `<span class="selo">${escapeHtml(car.destaque)}</span>`
+              : "";
             return `<a class="blog-car" href="${escapeHtml(car.url)}">${img}<span class="blog-car__info"><b>${escapeHtml(car.modelo)}</b><small>${specs}</small>${preco}${selo}</span></a>`;
           })
           .join("")}</div>`;
@@ -266,7 +387,10 @@ function renderSections(sections) {
 async function fetchStock() {
   try {
     const apiUrl = new URL(STOCK_API_URL);
-    const pageSize = Math.max(Number(apiUrl.searchParams.get("limit")) || 0, 500);
+    const pageSize = Math.max(
+      Number(apiUrl.searchParams.get("limit")) || 0,
+      500,
+    );
     const vehicles = [];
     const seenIds = new Set();
     let offset = 0;
@@ -280,7 +404,8 @@ async function fetchStock() {
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
-      if (!json.success || !Array.isArray(json.data)) throw new Error("resposta inválida");
+      if (!json.success || !Array.isArray(json.data))
+        throw new Error("resposta inválida");
 
       const page = json.data;
       let added = 0;
@@ -317,7 +442,10 @@ const stock = await fetchStock();
 
 function normalizeBootstrapImage(raw) {
   if (!raw) return "";
-  const value = String(raw).trim().replace(/\\/g, "/").replace(/^\.\/+/, "");
+  const value = String(raw)
+    .trim()
+    .replace(/\\/g, "/")
+    .replace(/^\.\/+/, "");
   if (/^https?:\/\//i.test(value)) return value.replace(/^http:/i, "https:");
   return `${SITE}/${value.replace(/^\/+/, "")}`;
 }
@@ -339,7 +467,9 @@ const stockBootstrap = stock.map((vehicle) => {
     price: Number(vehicle.valor || 0),
     preco_com_troca: Number(vehicle.preco_com_troca || 0),
     year: Number(vehicle.ano || 0),
-    anoFabricacao: vehicle.ano_fabricacao ? Number(vehicle.ano_fabricacao) : undefined,
+    anoFabricacao: vehicle.ano_fabricacao
+      ? Number(vehicle.ano_fabricacao)
+      : undefined,
     km: Number(vehicle.km || 0),
     images: thumb,
     imagens_site: {
@@ -369,7 +499,9 @@ const stockBootstrap = stock.map((vehicle) => {
     opcionais: [],
     diferenciais: [],
     pdf: vehicle.pdf ? String(vehicle.pdf) : undefined,
-    pdf_url: vehicle.pdf_url ? normalizeBootstrapImage(vehicle.pdf_url) : undefined,
+    pdf_url: vehicle.pdf_url
+      ? normalizeBootstrapImage(vehicle.pdf_url)
+      : undefined,
     destaque: Number(vehicle.destaque || 0),
     promocao: Number(vehicle.promocao || 0),
   };
@@ -393,8 +525,12 @@ function hasHomePhoto(vehicle) {
 
 function normalizeHomeImage(raw) {
   if (!raw) return "";
-  const normalized = String(raw).trim().replace(/\\/g, "/").replace(/^\.\/+/, "");
-  if (/^https?:\/\//i.test(normalized)) return normalized.replace(/^http:/i, "https:");
+  const normalized = String(raw)
+    .trim()
+    .replace(/\\/g, "/")
+    .replace(/^\.\/+/, "");
+  if (/^https?:\/\//i.test(normalized))
+    return normalized.replace(/^http:/i, "https:");
   return `/${normalized.replace(/^\/+/, "")}`;
 }
 
@@ -403,15 +539,21 @@ function normalizeHomeImage(raw) {
 const orderedHomeStock = stock.filter(hasHomePhoto).sort(byHomePriority);
 const featuredHomeVehicle = orderedHomeStock[0];
 const homeHeroVehicle = orderedHomeStock
-  .filter((vehicle) => String(vehicle.id) !== String(featuredHomeVehicle?.id || ""))
+  .filter(
+    (vehicle) => String(vehicle.id) !== String(featuredHomeVehicle?.id || ""),
+  )
   .filter((vehicle) => Number(vehicle.valor) > 80000)
-  .filter((vehicle) => /\.png(?:$|[?#])/i.test(String(vehicle?.imagens_site?.capa || "")))[0];
+  .filter((vehicle) =>
+    /\.png(?:$|[?#])/i.test(String(vehicle?.imagens_site?.capa || "")),
+  )[0];
 const homeLcp = homeHeroVehicle
   ? {
       id: String(homeHeroVehicle.id),
       image: normalizeHomeImage(homeHeroVehicle.imagens_site.capa),
       brand: String(homeHeroVehicle.marca || "").trim(),
-      model: String(homeHeroVehicle.modelo || homeHeroVehicle.name || "").trim(),
+      model: String(
+        homeHeroVehicle.modelo || homeHeroVehicle.name || "",
+      ).trim(),
       year: Number(homeHeroVehicle.ano || homeHeroVehicle.year || 0),
       price: Number(homeHeroVehicle.valor || homeHeroVehicle.price || 0),
       valor_formatado: String(homeHeroVehicle.valor_formatado || "").trim(),
@@ -431,17 +573,21 @@ const homeLcp = homeHeroVehicle
   : null;
 writeTextFile(
   join(publicDir, "seo", "home-lcp.json"),
-  `${JSON.stringify(homeLcp, null, 2)}\n`
+  `${JSON.stringify(homeLcp, null, 2)}\n`,
 );
 
 function titleCase(text) {
   return String(text || "")
     .toLowerCase()
-    .replace(/(^|[\s-])(\p{L})/gu, (_, sep, letter) => sep + letter.toUpperCase());
+    .replace(
+      /(^|[\s-])(\p{L})/gu,
+      (_, sep, letter) => sep + letter.toUpperCase(),
+    );
 }
 
 // Carro sem foto cadastrada recebe um banner genérico do CMS no lugar da capa.
-const isBannerPlaceholder = (path) => /\/imagens\/banner\//i.test(String(path || ""));
+const isBannerPlaceholder = (path) =>
+  /\/imagens\/banner\//i.test(String(path || ""));
 
 function vehicleCardImage(vehicle) {
   const raw = [
@@ -466,24 +612,27 @@ function vehicleDisplayName(vehicle) {
   if (modelo && marca && modelo.toUpperCase().startsWith(marca.toUpperCase())) {
     modelo = modelo.slice(marca.length).trim();
   }
-  return [titleCase(marca), titleCase(modelo), vehicle.ano].filter(Boolean).join(" ");
+  return [titleCase(marca), titleCase(modelo), vehicle.ano]
+    .filter(Boolean)
+    .join(" ");
 }
 
 /** Vitrine de estoque em HTML, reaproveitando os cards de carro do blog. */
-function stockShowcase({ heading, vehicles, limit = 8, offset = 0, ctaLabel, ctaHref }) {
+function stockShowcase({ heading, vehicles, limit = 8, ctaLabel, ctaHref }) {
   if (!vehicles.length) return "";
   // Carro com foto real na frente: vitrine sem imagem converte muito pior.
   const ordered = [
     ...vehicles.filter((vehicle) => vehicleCardImage(vehicle)),
     ...vehicles.filter((vehicle) => !vehicleCardImage(vehicle)),
   ];
-  const start = ordered.length ? offset % ordered.length : 0;
-  const rotated = [...ordered.slice(start), ...ordered.slice(0, start)];
-  const cars = rotated.slice(0, limit).map((vehicle) => ({
+  const cars = ordered.slice(0, limit).map((vehicle) => ({
     modelo: vehicleDisplayName(vehicle),
     url: `${SITE}/veiculo/${generateVehicleSlug(vehicle)}`,
     ano: vehicle.ano ? String(vehicle.ano) : "",
-    km: Number(vehicle.km) > 0 ? `${Number(vehicle.km).toLocaleString("pt-BR")} km` : "",
+    km:
+      Number(vehicle.km) > 0
+        ? `${Number(vehicle.km).toLocaleString("pt-BR")} km`
+        : "",
     cambio: vehicle.cambio ? titleCase(vehicle.cambio) : "",
     preco: `R$ ${Number(vehicle.valor).toLocaleString("pt-BR")}`,
     img: vehicleCardImage(vehicle),
@@ -496,13 +645,20 @@ function stockShowcase({ heading, vehicles, limit = 8, offset = 0, ctaLabel, cta
       ${cta}`;
 }
 
-function pageShell({ title, description, canonical, body, schemas = [], ogImage }) {
+function pageShell({
+  title,
+  description,
+  canonical,
+  body,
+  schemas = [],
+  ogImage,
+}) {
   const schemaTags = schemas.length
     ? "\n" +
       schemas
         .map(
           (schema) =>
-            `  <script type="application/ld+json">${JSON.stringify(schema)}</script>`
+            `  <script type="application/ld+json">${JSON.stringify(schema)}</script>`,
         )
         .join("\n")
     : "";
@@ -511,6 +667,7 @@ function pageShell({ title, description, canonical, body, schemas = [], ogImage 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}" />
   <link rel="canonical" href="${canonical}" />
@@ -566,6 +723,27 @@ function writeSeoPage(filePath, canonical, content) {
 }
 
 const regionsHubCanonical = `${SITE}/regioes-atendidas`;
+const regionalGroups = cities.reduce((groups, city) => {
+  groups[city.regionName] = [...(groups[city.regionName] || []), city];
+  return groups;
+}, {});
+const regionsHubLinks = Object.entries(regionalGroups)
+  .map(
+    ([region, regionCities]) => `<section>
+      <h2>${escapeHtml(region)}</h2>
+      <ul>${regionCities
+        .map(
+          (city) => `<li>
+            <strong>${escapeHtml(city.name)}</strong> — cerca de ${city.distanceKm} km, ${escapeHtml(city.travelTime)}:
+            <a href="${SITE}/seminovos-${city.slug}">seminovos perto de ${escapeHtml(city.name)}</a>
+            ·
+            <a href="${SITE}/vender-carro-${city.slug}">vender carro em ${escapeHtml(city.name)}</a>
+          </li>`,
+        )
+        .join("")}</ul>
+    </section>`,
+  )
+  .join("");
 const regionsHubBody = `
   <article>
     <h1>Seminovos para Grande Porto Alegre, Vales e Serra Gaúcha</h1>
@@ -578,37 +756,90 @@ const regionsHubBody = `
       <li>Confirme disponibilidade e agenda antes de ir a Esteio.</li>
     </ol>
     <h2>Cidades atendidas</h2>
-    <ul>
-      ${cities
-        .map(
-          (city) =>
-            `<li><a href="${SITE}/seminovos-${city.slug}">${escapeHtml(city.name)}</a> — cerca de ${city.distanceKm} km, ${escapeHtml(city.travelTime)}</li>`
-        )
-        .join("")}
-    </ul>
+    ${regionsHubLinks}
     <p><a href="${SITE}/seminovos">Ver estoque atual</a> · <a href="${SITE}/compra">Pré-avaliar meu carro</a></p>
   </article>`;
 writeSeoPage(
   join(seoStaticDir, "regions-hub.html"),
   regionsHubCanonical,
   pageShell({
-    title: "Regiões atendidas | Netcar Multimarcas Esteio",
+    title: "Seminovos na região de Porto Alegre e Serra | Netcar",
     description:
-      "Consulte seminovos e pré-avaliação para cidades da Grande Porto Alegre, Vale do Paranhana e Serra Gaúcha. Lojas Netcar somente em Esteio.",
+      "Consulte seminovos e pré-avaliação para cidades da Grande Porto Alegre, Vale dos Sinos, Paranhana e Serra Gaúcha. Lojas Netcar somente em Esteio.",
     canonical: regionsHubCanonical,
     body: regionsHubBody,
-    schemas: [ORG_SCHEMA],
-  })
+    schemas: [
+      ORG_SCHEMA,
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": `${regionsHubCanonical}#webpage`,
+        url: regionsHubCanonical,
+        name: "Regiões atendidas pela Netcar Multimarcas",
+        description:
+          "Seminovos e pré-avaliação para cidades da Grande Porto Alegre, Vales e Serra Gaúcha, com lojas físicas em Esteio.",
+        hasPart: cities.flatMap((city) => [
+          {
+            "@type": "CollectionPage",
+            url: `${SITE}/seminovos-${city.slug}`,
+            name: city.h1,
+          },
+          {
+            "@type": "WebPage",
+            url: `${SITE}/vender-carro-${city.slug}`,
+            name: city.sell.h1,
+          },
+        ]),
+      },
+      breadcrumbSchema([
+        HOME_CRUMB,
+        { name: "Regiões atendidas", url: regionsHubCanonical },
+      ]),
+    ],
+  }),
 );
 
 // Palavras-chave do slug para achar posts relacionados. Stopwords de intenção
 // (seminovo, esteio, 2026) não distinguem nada — o que liga dois posts é o
 // assunto (financiamento, troca, suv, documento).
 const POST_STOPWORDS = new Set([
-  "seminovo", "seminovos", "usado", "usados", "esteio", "rs", "2026", "2025",
-  "carro", "carros", "netcar", "como", "qual", "quanto", "custa", "vale",
-  "pena", "guia", "completo", "grande", "porto", "alegre", "regiao", "o", "a",
-  "de", "do", "da", "em", "e", "ou", "para", "com", "um", "uma", "no", "na",
+  "seminovo",
+  "seminovos",
+  "usado",
+  "usados",
+  "esteio",
+  "rs",
+  "2026",
+  "2025",
+  "carro",
+  "carros",
+  "netcar",
+  "como",
+  "qual",
+  "quanto",
+  "custa",
+  "vale",
+  "pena",
+  "guia",
+  "completo",
+  "grande",
+  "porto",
+  "alegre",
+  "regiao",
+  "o",
+  "a",
+  "de",
+  "do",
+  "da",
+  "em",
+  "e",
+  "ou",
+  "para",
+  "com",
+  "um",
+  "uma",
+  "no",
+  "na",
 ]);
 
 function postKeywords(text) {
@@ -624,7 +855,10 @@ function postKeywords(text) {
 // próprio). Usa slug + título e, se mesmo assim não houver par, completa com
 // os posts mais recentes — link interno fraco é melhor que nenhum.
 function relatedPosts(current, all, limit = 3) {
-  const currentKw = new Set([...postKeywords(current.slug), ...postKeywords(current.title)]);
+  const currentKw = new Set([
+    ...postKeywords(current.slug),
+    ...postKeywords(current.title),
+  ]);
   const scored = all
     .filter((p) => p.slug !== current.slug)
     .map((p) => {
@@ -632,7 +866,11 @@ function relatedPosts(current, all, limit = 3) {
       const shared = [...currentKw].filter((w) => kw.has(w)).length;
       return { post: p, score: shared };
     })
-    .sort((a, b) => b.score - a.score || b.post.publishedAt.localeCompare(a.post.publishedAt));
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        b.post.publishedAt.localeCompare(a.post.publishedAt),
+    );
   const strong = scored.filter((r) => r.score > 0).map((r) => r.post);
   if (strong.length >= limit) return strong.slice(0, limit);
   const strongSlugs = new Set(strong.map((p) => p.slug));
@@ -653,7 +891,9 @@ function postCoverImage(post, fallbackStock) {
     }
   }
   const firstWithImg = fallbackStock.find((v) => vehicleCardImage(v));
-  return firstWithImg ? vehicleCardImage(firstWithImg) : `${SITE}/images/loja1.jpg`;
+  return firstWithImg
+    ? vehicleCardImage(firstWithImg)
+    : `${SITE}/images/loja1.jpg`;
 }
 
 for (const post of blogPosts) {
@@ -663,12 +903,17 @@ for (const post of blogPosts) {
   const related = relatedPosts(post, blogPosts);
   const relatedHtml = related.length
     ? `<nav aria-label="Leia também"><h2>Leia também</h2><ul>${related
-        .map((r) => `<li><a href="${SITE}/blog/${r.slug}">${escapeHtml(r.title)}</a></li>`)
+        .map(
+          (r) =>
+            `<li><a href="${SITE}/blog/${r.slug}">${escapeHtml(r.title)}</a></li>`,
+        )
         .join("")}</ul></nav>`
     : "";
   const byline = `
       <p>Por <a href="${SITE}/politica-editorial">${EDITORIAL_AUTHOR.name}</a> · Publicado em ${formatDateBr(post.publishedAt)}${
-        updatedAt !== post.publishedAt ? ` · Atualizado em ${formatDateBr(updatedAt)}` : ""
+        updatedAt !== post.publishedAt
+          ? ` · Atualizado em ${formatDateBr(updatedAt)}`
+          : ""
       } · ${post.readMinutes} min de leitura</p>`;
   const body = `
     <article>
@@ -718,54 +963,57 @@ for (const post of blogPosts) {
         ]),
       ],
       ogImage: cover,
-    })
+    }),
   );
 }
 
 function relatedCitiesHtml(currentSlug) {
-  const links = cities
-    .filter((c) => c.slug !== currentSlug)
+  const current = cities.find((city) => city.slug === currentSlug);
+  const citiesBySlug = new Map(cities.map((city) => [city.slug, city]));
+  const links = (current?.relatedSlugs || [])
+    .map((slug) => citiesBySlug.get(slug))
+    .filter(Boolean)
     .map(
       (c) =>
-        `<li><a href="${SITE}/seminovos-${c.slug}">Seminovos perto de ${escapeHtml(c.name)}</a></li>`
+        `<li><a href="${SITE}/seminovos-${c.slug}">Seminovos perto de ${escapeHtml(c.name)}</a></li>`,
     )
     .join("");
-  return `<nav aria-label="Seminovos em outras cidades"><h2>Seminovos em outras cidades</h2><p><a href="${SITE}/regioes-atendidas">Ver todas as regiões atendidas</a></p><ul>${links}</ul></nav>`;
+  return `<nav aria-label="Seminovos em outras regiões atendidas"><h2>Seminovos em outras regiões atendidas</h2><p><a href="${SITE}/vender-carro-${current.slug}">Vender carro em ${escapeHtml(current.name)}</a> · <a href="${SITE}/regioes-atendidas">Ver todas as regiões atendidas</a></p><ul>${links}</ul></nav>`;
 }
 
 function relatedSellCitiesHtml(currentSlug) {
-  const links = cities
-    .filter((c) => c.slug !== currentSlug && c.sell)
+  const current = cities.find((city) => city.slug === currentSlug);
+  const citiesBySlug = new Map(cities.map((city) => [city.slug, city]));
+  const links = (current?.relatedSlugs || [])
+    .map((slug) => citiesBySlug.get(slug))
+    .filter((city) => city?.sell)
     .map(
       (c) =>
-        `<li><a href="${SITE}/vender-carro-${c.slug}">Vender carro em ${escapeHtml(c.name)}</a></li>`
+        `<li><a href="${SITE}/vender-carro-${c.slug}">Vender carro em ${escapeHtml(c.name)}</a></li>`,
     )
     .join("");
-  return `<nav aria-label="Vender carro em outras cidades"><h2>Vender carro em outras cidades</h2><p><a href="${SITE}/regioes-atendidas">Ver todas as regiões atendidas</a></p><ul>${links}</ul></nav>`;
+  return `<nav aria-label="Vender carro em outras regiões atendidas"><h2>Vender carro em outras regiões atendidas</h2><p><a href="${SITE}/seminovos-${current.slug}">Ver seminovos perto de ${escapeHtml(current.name)}</a> · <a href="${SITE}/regioes-atendidas">Ver todas as regiões atendidas</a></p><ul>${links}</ul></nav>`;
 }
 
-for (const [cityIndex, city] of cities.entries()) {
+for (const city of cities) {
   const canonical = `${SITE}/seminovos-${city.slug}`;
   const faqHtml = city.faq
-    .map(
-      (item) =>
-        `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`
-    )
+    .map((item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`)
     .join("");
   const paragraphs = city.paragraphs
     .map((p) => `<p>${escapeHtml(p)}</p>`)
     .join("");
   const body = `
+    <nav aria-label="Navegação estrutural"><ol><li><a href="${SITE}/">Home</a></li><li><a href="${SITE}/regioes-atendidas">Regiões atendidas</a></li><li>Seminovos perto de ${escapeHtml(city.name)}</li></ol></nav>
     <article>
       <h1>${escapeHtml(city.h1)}</h1>
       <p>${escapeHtml(city.intro)}</p>
       ${paragraphs}
       ${city.routeNote ? `<p><strong>Referência de trajeto:</strong> ${escapeHtml(city.routeNote)}</p>` : ""}
       ${stockShowcase({
-        heading: `Seminovos em estoque agora para quem é de ${city.name}`,
+        heading: `Seminovos para quem vem de ${city.name}`,
         vehicles: stock,
         limit: 8,
-        offset: cityIndex * 3,
         ctaLabel: "Ver todo o estoque de seminovos",
         ctaHref: `${SITE}/seminovos`,
       })}
@@ -794,29 +1042,38 @@ for (const [cityIndex, city] of cities.entries()) {
       body,
       schemas: [
         ORG_SCHEMA,
+        regionalPageSchema(city, "buy", canonical),
+        regionalServiceSchema(city, "buy", canonical),
         faqSchema(city.faq),
-        breadcrumbSchema([
-          HOME_CRUMB,
-          { name: "Regiões atendidas", url: `${SITE}/regioes-atendidas` },
-          { name: city.name, url: canonical },
-        ]),
+        breadcrumbSchema(
+          [
+            HOME_CRUMB,
+            { name: "Regiões atendidas", url: `${SITE}/regioes-atendidas` },
+            { name: `Seminovos perto de ${city.name}`, url: canonical },
+          ],
+          `${canonical}#breadcrumb`,
+        ),
       ],
-    })
+    }),
   );
 
   if (city.sell) {
     const sellCanonical = `${SITE}/vender-carro-${city.slug}`;
     const sellFaqHtml = city.sell.faq
-      .map((item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`)
+      .map(
+        (item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`,
+      )
       .join("");
     const sellParagraphs = city.sell.paragraphs
       .map((p) => `<p>${escapeHtml(p)}</p>`)
       .join("");
     const sellBody = `
+    <nav aria-label="Navegação estrutural"><ol><li><a href="${SITE}/">Home</a></li><li><a href="${SITE}/regioes-atendidas">Regiões atendidas</a></li><li>Vender carro em ${escapeHtml(city.name)}</li></ol></nav>
     <article>
       <h1>${escapeHtml(city.sell.h1)}</h1>
       <p>${escapeHtml(city.sell.intro)}</p>
       ${sellParagraphs}
+      <p><strong>Referência para a vistoria:</strong> ${escapeHtml(city.routeNote)}</p>
       <h2>Pré-avaliação remota, vistoria em Esteio</h2>
       <ol>
         <li>Envie modelo, versão, ano, quilometragem, fotos e histórico.</li>
@@ -827,8 +1084,7 @@ for (const [cityIndex, city] of cities.entries()) {
       ${stockShowcase({
         heading: `Seminovos disponíveis para usar seu carro na troca`,
         vehicles: stock,
-        limit: 4,
-        offset: cityIndex * 2,
+        limit: 8,
         ctaLabel: "Ver todo o estoque para troca",
         ctaHref: `${SITE}/seminovos`,
       })}
@@ -846,14 +1102,19 @@ for (const [cityIndex, city] of cities.entries()) {
         body: sellBody,
         schemas: [
           ORG_SCHEMA,
+          regionalPageSchema(city, "sell", sellCanonical),
+          regionalServiceSchema(city, "sell", sellCanonical),
           faqSchema(city.sell.faq),
-          breadcrumbSchema([
-            HOME_CRUMB,
-            { name: "Vender meu carro", url: `${SITE}/compra` },
-            { name: city.name, url: sellCanonical },
-          ]),
+          breadcrumbSchema(
+            [
+              HOME_CRUMB,
+              { name: "Regiões atendidas", url: `${SITE}/regioes-atendidas` },
+              { name: `Vender carro em ${city.name}`, url: sellCanonical },
+            ],
+            `${sellCanonical}#breadcrumb`,
+          ),
         ],
-      })
+      }),
     );
   }
 }
@@ -864,7 +1125,7 @@ function relatedLandingsHtml(currentSlug) {
     .filter((l) => l.slug !== currentSlug)
     .map(
       (l) =>
-        `<li><a href="${SITE}/comprar-${l.slug}">${escapeHtml(l.h1)}</a></li>`
+        `<li><a href="${SITE}/comprar-${l.slug}">${escapeHtml(l.h1)}</a></li>`,
     )
     .join("");
   if (!links) return "";
@@ -921,7 +1182,7 @@ for (const landing of landings) {
           { name: landing.name, url: canonical },
         ]),
       ],
-    })
+    }),
   );
 }
 
@@ -931,8 +1192,10 @@ function renderContentSections(sections) {
     .map((s) => {
       if (s.type === "h2") return `<h2>${escapeHtml(s.text)}</h2>`;
       if (s.type === "p") return `<p>${escapeHtml(s.text)}</p>`;
-      if (s.type === "ul" && s.items) return `<ul>${s.items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`;
-      if (s.type === "ol" && s.items) return `<ol>${s.items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ol>`;
+      if (s.type === "ul" && s.items)
+        return `<ul>${s.items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`;
+      if (s.type === "ol" && s.items)
+        return `<ol>${s.items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ol>`;
       return "";
     })
     .join("\n");
@@ -945,7 +1208,9 @@ for (const page of contentPages) {
     .join("");
   const pageStock = page.stock
     ? stock.filter((vehicle) =>
-        new RegExp(page.stock.match, "i").test(String(vehicle[page.stock.field] || "")),
+        new RegExp(page.stock.match, "i").test(
+          String(vehicle[page.stock.field] || ""),
+        ),
       )
     : [];
   const body = `
@@ -976,7 +1241,7 @@ for (const page of contentPages) {
         faqSchema(page.faq || []),
         breadcrumbSchema([HOME_CRUMB, { name: page.h1, url: canonical }]),
       ],
-    })
+    }),
   );
 }
 
@@ -1003,7 +1268,9 @@ const staticPages = [
 // e grava o sitemap local com os veículos da API — usamos esse como fonte primária.
 // Fallback: sitemap em produção (sem isso, o upload apagaria as URLs de veículo indexadas).
 function extractVehicleUrls(xml) {
-  const matches = [...xml.matchAll(/<loc>(https?:\/\/[^<]*\/veiculo\/[^<]+)<\/loc>/g)];
+  const matches = [
+    ...xml.matchAll(/<loc>(https?:\/\/[^<]*\/veiculo\/[^<]+)<\/loc>/g),
+  ];
   return matches.map((m) => m[1]);
 }
 
@@ -1012,7 +1279,9 @@ async function getVehicleUrls() {
     const apiUrls = await fetchVehicleSitemapUrls();
     if (apiUrls.length > 0) return apiUrls;
   } catch (error) {
-    console.warn(`Aviso: API de veículos indisponível (${error.message}); tentando sitemap local.`);
+    console.warn(
+      `Aviso: API de veículos indisponível (${error.message}); tentando sitemap local.`,
+    );
   }
 
   try {
@@ -1025,7 +1294,9 @@ async function getVehicleUrls() {
 
   let productionUrls = [];
   try {
-    const res = await fetch(`${SITE}/sitemap.xml`, { signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`${SITE}/sitemap.xml`, {
+      signal: AbortSignal.timeout(8000),
+    });
     if (res.ok) {
       productionUrls = extractVehicleUrls(await res.text());
     }
@@ -1045,7 +1316,9 @@ async function getVehicleUrls() {
 
 function parseSitemapLastmods(xml) {
   const map = new Map();
-  for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>\s*\n\s*<lastmod>([^<]+)<\/lastmod>/g)) {
+  for (const match of xml.matchAll(
+    /<loc>([^<]+)<\/loc>\s*\n\s*<lastmod>([^<]+)<\/lastmod>/g,
+  )) {
     map.set(match[1], match[2]);
   }
   return map;
@@ -1086,7 +1359,9 @@ const urls = [
 
 let previousLastmods = new Map();
 try {
-  previousLastmods = parseSitemapLastmods(readFileSync(join(publicDir, "sitemap.xml"), "utf-8"));
+  previousLastmods = parseSitemapLastmods(
+    readFileSync(join(publicDir, "sitemap.xml"), "utf-8"),
+  );
 } catch {
   // sem sitemap anterior
 }
@@ -1100,7 +1375,7 @@ ${urls
     <lastmod>${changedSeoUrls.has(url.loc) ? today : (previousLastmods.get(url.loc) ?? today)}</lastmod>
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority}</priority>
-  </url>`
+  </url>`,
   )
   .join("\n")}
 </urlset>
@@ -1116,12 +1391,14 @@ const expectedFiles = new Set([
   "regions-hub.html",
   ...blogPosts.map((post) => `blog-${post.slug}.html`),
   ...cities.map((city) => `city-${city.slug}.html`),
-  ...cities.filter((city) => city.sell).map((city) => `sell-city-${city.slug}.html`),
+  ...cities
+    .filter((city) => city.sell)
+    .map((city) => `sell-city-${city.slug}.html`),
   ...landings.map((landing) => `landing-${landing.slug}.html`),
   ...contentPages.map((page) => `page-${page.slug}.html`),
 ]);
 const orphans = readdirSync(seoStaticDir).filter(
-  (file) => file.endsWith(".html") && !expectedFiles.has(file)
+  (file) => file.endsWith(".html") && !expectedFiles.has(file),
 );
 for (const file of orphans) {
   unlinkSync(join(seoStaticDir, file));
@@ -1134,27 +1411,31 @@ for (const file of orphans) {
 // do SPA — soft 404 no fim de um 301. Avisa antes que isso aconteça calado.
 const landingSlugs = new Set(landings.map((landing) => landing.slug));
 const redirectTargets = new Set();
-for (const [, pattern, target] of readFileSync(join(publicDir, ".htaccess"), "utf-8").matchAll(
-  /^\s*RewriteRule\s+(\S+)\s+\/comprar-(\S+)\s/gm
-)) {
+for (const [, pattern, target] of readFileSync(
+  join(publicDir, ".htaccess"),
+  "utf-8",
+).matchAll(/^\s*RewriteRule\s+(\S+)\s+\/comprar-(\S+)\s/gm)) {
   if (target === "$1") {
     // Destino vem do grupo de captura da origem: /comprar-$1 com ^blog/(a|b|c)-…
     const group = pattern.match(/\(([^)]+)\)/);
-    if (group) for (const slug of group[1].split("|")) redirectTargets.add(slug);
+    if (group)
+      for (const slug of group[1].split("|")) redirectTargets.add(slug);
   } else {
     redirectTargets.add(target);
   }
 }
-const brokenTargets = [...redirectTargets].filter((slug) => !landingSlugs.has(slug));
+const brokenTargets = [...redirectTargets].filter(
+  (slug) => !landingSlugs.has(slug),
+);
 if (brokenTargets.length > 0) {
   console.warn(
     `Aviso: 301 em .htaccess aponta para landing inexistente: ${brokenTargets
       .map((slug) => `/comprar-${slug}`)
-      .join(", ")}. Redirecionar para /seminovos enquanto não houver estoque.`
+      .join(", ")}. Redirecionar para /seminovos enquanto não houver estoque.`,
   );
 }
 
 const sellPages = cities.filter((city) => city.sell).length;
 console.log(
-  `SEO assets gerados: ${blogPosts.length} posts, ${cities.length} cidades compra, ${sellPages} cidades venda, ${landings.length} landings marca/categoria, ${contentPages.length} páginas de conteúdo, ${vehicleUrls.length} veículos preservados, sitemap com ${urls.length} URLs`
+  `SEO assets gerados: ${blogPosts.length} posts, ${cities.length} cidades compra, ${sellPages} cidades venda, ${landings.length} landings marca/categoria, ${contentPages.length} páginas de conteúdo, ${vehicleUrls.length} veículos preservados, sitemap com ${urls.length} URLs`,
 );

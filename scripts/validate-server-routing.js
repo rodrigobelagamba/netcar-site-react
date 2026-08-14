@@ -12,6 +12,12 @@ const controller = read("public/index.php");
 const initialHtml = read("index.html");
 const analytics = read("src/lib/analytics.ts");
 const waTracking = read("src/lib/waTracking.ts");
+const vehiclesEndpoint = read("src/catalog/endpoints/vehicles.ts");
+const vehicleSeoRenderer = read("public/detalhe-veiculo.php");
+const fetchVehiclesSource = vehiclesEndpoint.slice(
+  vehiclesEndpoint.indexOf("export async function fetchVehicles("),
+  vehiclesEndpoint.indexOf("export async function fetchVehicleById("),
+);
 const errors = [];
 
 function expect(condition, message) {
@@ -124,7 +130,8 @@ expect(initialHtml.includes("GTM-M8MZRTL9"), "container GTM ausente");
 expect(initialHtml.includes("G-MGPNBDNQ9G"), "medição GA4 ausente");
 expect(initialHtml.includes("367657940934075"), "Meta Pixel ausente");
 expect(
-  /n\.queue\s*=\s*\[\]/.test(initialHtml) && initialHtml.includes("fbevents.js"),
+  /n\.queue\s*=\s*\[\]/.test(initialHtml) &&
+    initialHtml.includes("fbevents.js"),
   "fila/carregador oficial do Meta Pixel ausente",
 );
 expect(
@@ -148,6 +155,27 @@ expect(
     waTracking.includes("fbclid: ref?.fbclid") &&
     waTracking.includes("gclid: ref?.gclid"),
   "join Evolution/código/click IDs foi alterado",
+);
+expect(
+  vehiclesEndpoint.includes(
+    'throw new Error("API de veículos retornou uma resposta inválida")',
+  ) &&
+    vehiclesEndpoint.includes(
+      'throw new Error("API de veículos retornou uma página inválida")',
+    ) &&
+    fetchVehiclesSource.includes("throw error;") &&
+    !fetchVehiclesSource.includes("return [];"),
+  "falha da API voltou a apagar o bootstrap/último estoque como lista vazia",
+);
+expect(
+  vehicleSeoRenderer.includes(
+    "json_last_error() === JSON_ERROR_NONE && is_array($data)",
+  ) &&
+    vehicleSeoRenderer.includes("$vehicleFound = (") &&
+    vehicleSeoRenderer.includes("$vehicleMissing = (") &&
+    vehicleSeoRenderer.includes("$httpCode === 404") &&
+    vehicleSeoRenderer.includes("if (!$vehicleFound && !$vehicleMissing)"),
+  "renderer de veículo não separa JSON inválido (503) de ausência confirmada (410)",
 );
 
 for (const path of ["public/404.html", "public/410.html"]) {

@@ -1,17 +1,23 @@
 import { Link } from "@tanstack/react-router";
-import { cityPages } from "@/data/seo";
+import { getCityPage, getRelatedCityPages } from "@/data/seo";
 
 type RelatedCitiesNavProps = {
   currentSlug: string;
   variant: "buy" | "sell";
 };
 
-export function RelatedCitiesNav({ currentSlug, variant }: RelatedCitiesNavProps) {
-  const others = cityPages.filter((c) => c.slug !== currentSlug);
-  if (others.length === 0) return null;
+export function RelatedCitiesNav({
+  currentSlug,
+  variant,
+}: RelatedCitiesNavProps) {
+  const current = getCityPage(currentSlug);
+  const related = getRelatedCityPages(currentSlug);
+  if (!current || related.length === 0) return null;
 
   const heading =
-    variant === "buy" ? "Seminovos em outras cidades" : "Vender carro em outras cidades";
+    variant === "buy"
+      ? "Seminovos em outras regiões atendidas"
+      : "Vender carro em outras regiões atendidas";
 
   return (
     <section className="pb-12">
@@ -25,8 +31,27 @@ export function RelatedCitiesNav({ currentSlug, variant }: RelatedCitiesNavProps
             Ver todas as regiões
           </Link>
         </div>
+        <p className="mb-4 text-sm text-muted-foreground">
+          {variant === "buy" ? (
+            <Link
+              to="/vender-carro-{$citySlug}"
+              params={{ citySlug: current.slug }}
+              className="font-semibold text-secondary hover:underline"
+            >
+              Vender carro em {current.name}
+            </Link>
+          ) : (
+            <Link
+              to="/seminovos-{$citySlug}"
+              params={{ citySlug: current.slug }}
+              className="font-semibold text-primary hover:underline"
+            >
+              Ver seminovos perto de {current.name}
+            </Link>
+          )}
+        </p>
         <ul className="flex flex-wrap gap-x-4 gap-y-2">
-          {others.map((city) => (
+          {related.map((city) => (
             <li key={`${variant}-${city.slug}`}>
               {variant === "buy" ? (
                 <Link

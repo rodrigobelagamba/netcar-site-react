@@ -2,73 +2,122 @@
   {
     "slug": "canoas",
     "name": "Canoas",
+    "regionName": "BR-116 e Vale dos Sinos",
     "distanceKm": 12,
     "travelTime": "20 min",
-    "title": "Seminovos perto de Canoas | Netcar Multimarcas Esteio",
+    "routeNote": "O acesso mais comum segue pela BR-116 em direção a Esteio. O tempo varia conforme o bairro de saída, obras e horários de pico.",
+    "visitPlanning": "Selecione os carros no estoque online, confirme a disponibilidade e marque o atendimento antes de seguir pela BR-116 até as lojas de Esteio.",
+    "relatedSlugs": [
+      "sapucaia-do-sul",
+      "cachoeirinha",
+      "porto-alegre",
+      "sao-leopoldo"
+    ],
+    "priorityMarket": true,
+    "title": "Seminovos perto de Canoas: estoque e preços | Netcar",
     "description": "Procurando seminovo perto de Canoas? Netcar em Esteio fica a 12 km. Estoque multimarcas, financiamento e garantia. Agende visita ou simule pelo WhatsApp.",
     "h1": "Seminovos perto de Canoas",
     "intro": "Moradores de Canoas encontram na Netcar, em Esteio, um showroom com estoque variado a poucos minutos de carro — sem precisar cruzar Porto Alegre.",
     "paragraphs": [
-      "A Av. Presidente Vargas concentra as duas unidades da Netcar, com fácil acesso pela BR-116. Muitos clientes de Canoas vêm simular financiamento, fazer test drive e levar o carro da troca no mesmo dia.",
+      "A Av. Presidente Vargas concentra as duas unidades da Netcar, com acesso pela BR-116. Na visita é possível simular financiamento, fazer test drive e apresentar o carro da troca no mesmo atendimento.",
       "Trabalhamos com hatch, sedan, SUV e picape — todos passando pela Fábrica de Valor antes de irem para a vitrine. Financiamento em até 60x, troca com carro financiado e atendimento pelo iAN no WhatsApp."
     ],
     "faq": [
-      { "q": "Quanto tempo de Canoas até a Netcar?", "a": "Cerca de 20 minutos de carro, dependendo do bairro e do horário." },
-      { "q": "Posso agendar visita vindo de Canoas?", "a": "Sim. Chame no WhatsApp e o consultor reserva horário e separa modelos do seu interesse." }
+      {
+        "q": "Quanto tempo de Canoas até a Netcar?",
+        "a": "Cerca de 20 minutos de carro, dependendo do bairro e do horário."
+      },
+      {
+        "q": "Posso agendar visita vindo de Canoas?",
+        "a": "Sim. Chame no WhatsApp e o consultor reserva horário e separa modelos do seu interesse."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Canoas | Netcar compra seu usado",
-      "description": "Quer vender seu carro em Canoas? A Netcar compra em Esteio, a 12 km. Avaliação justa, pagamento rápido e aceita carro financiado.",
-      "h1": "Vender carro em Canoas — a Netcar compra",
-      "intro": "Morador de Canoas que quer vender sem anunciar em classificados encontra na Netcar avaliação transparente e pagamento ágil em Esteio, pertinho.",
+      "title": "Vender carro em Canoas: pré-avaliação online | Netcar",
+      "description": "Quer vender seu carro em Canoas? Comece pela pré-avaliação online da Netcar; vistoria, proposta final e pagamento são feitos em Esteio.",
+      "h1": "Vender carro em Canoas com pré-avaliação online",
+      "intro": "Quem está em Canoas pode começar a venda sem anúncio em classificados: envie os dados à Netcar e viaje a Esteio somente após o alinhamento inicial.",
       "paragraphs": [
         "Mande modelo, ano e km pelo WhatsApp. O iAN ou um consultor retorna com orientação e agenda avaliação presencial se fizer sentido.",
         "Compramos para revenda no nosso estoque — inclusive carro com parcela em aberto, mediante quitação na troca ou venda direta."
       ],
       "faq": [
-        { "q": "Preciso ir até Esteio para vender?", "a": "A avaliação presencial é na loja. O primeiro contato e envio de fotos pode ser 100% pelo WhatsApp." },
-        { "q": "Compram carro financiado de Canoas?", "a": "Sim. Informe saldo devedor e enviamos proposta de quitação + valor líquido para você." }
+        {
+          "q": "Preciso ir até Esteio para vender?",
+          "a": "A avaliação presencial é na loja. O primeiro contato e envio de fotos pode ser 100% pelo WhatsApp."
+        },
+        {
+          "q": "Compram carro financiado de Canoas?",
+          "a": "Sim. Informe saldo devedor e enviamos proposta de quitação + valor líquido para você."
+        }
       ]
     }
   },
   {
     "slug": "sapucaia-do-sul",
     "name": "Sapucaia do Sul",
+    "regionName": "BR-116 e Vale dos Sinos",
     "distanceKm": 8,
     "travelTime": "15 min",
-    "title": "Seminovos perto de Sapucaia do Sul | Netcar Esteio",
+    "routeNote": "Sapucaia do Sul e Esteio são vizinhas, com acesso pela BR-116 e vias locais. Consulte a navegação em tempo real antes de sair.",
+    "visitPlanning": "Confirme os veículos escolhidos pelo WhatsApp e organize test drive, avaliação da troca e simulação para a mesma visita em Esteio.",
+    "relatedSlugs": ["canoas", "sao-leopoldo", "novo-hamburgo", "cachoeirinha"],
+    "priorityMarket": true,
+    "title": "Seminovos perto de Sapucaia do Sul: estoque | Netcar",
     "description": "Seminovos revisados perto de Sapucaia do Sul. Netcar Multimarcas em Esteio, a 8 km. Financiamento facilitado e troca de usado.",
     "h1": "Seminovos perto de Sapucaia do Sul",
     "intro": "Sapucaia do Sul e Esteio são cidades vizinhas — ideal para quem quer ver carro pessoalmente sem longo deslocamento.",
     "paragraphs": [
-      "A Netcar atende Sapucaia do Sul há anos com estoque multimarcas, processo de preparação dos veículos e equipe de consultores na loja.",
+      "A Netcar oferece estoque multimarcas, processo de preparação dos veículos e atendimento presencial nas lojas de Esteio.",
       "Se você busca seminovo automático, SUV para família ou primeiro carro com parcela leve, vale comparar opções no showroom antes de decidir."
     ],
     "faq": [
-      { "q": "A Netcar entrega em Sapucaia do Sul?", "a": "A retirada é na loja em Esteio. Consulte o consultor sobre logística no dia da negociação." },
-      { "q": "Aceitam troca de carro de Sapucaia?", "a": "Sim, mediante avaliação. Aceitamos troca inclusive com financiamento em aberto." }
+      {
+        "q": "A Netcar entrega em Sapucaia do Sul?",
+        "a": "A retirada é na loja em Esteio. Consulte o consultor sobre logística no dia da negociação."
+      },
+      {
+        "q": "Aceitam troca de carro de Sapucaia?",
+        "a": "Sim, mediante avaliação. Aceitamos troca inclusive com financiamento em aberto."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Sapucaia do Sul | Netcar compra",
+      "title": "Vender carro em Sapucaia do Sul: pré-avaliação | Netcar",
       "description": "Venda seu carro usado em Sapucaia do Sul. Netcar em Esteio compra com avaliação rápida — a 8 km. Mesmo financiado.",
-      "h1": "Vender carro em Sapucaia — Netcar compra",
-      "intro": "Sapucaia e Esteio são vizinhas. Vender para a Netcar evita negociação com desconhecido e acelera o pagamento.",
+      "h1": "Vender carro em Sapucaia do Sul — comece online",
+      "intro": "Sapucaia do Sul e Esteio são vizinhas. O processo começa online e a vistoria presencial ocorre nas lojas da Netcar em Esteio.",
       "paragraphs": [
         "Avaliamos nacional até 7 anos, origem RS, sem passagem por leilão. Critérios claros antes de você se deslocar.",
         "Quer só vender e receber na conta? Fazemos. Quer trocar por seminovo? O valor do seu entra na negociação."
       ],
       "faq": [
-        { "q": "Quanto tempo leva a avaliação?", "a": "Primeira resposta pelo WhatsApp em minutos. Vistoria na loja conforme agenda do dia." },
-        { "q": "Pagamento é na hora?", "a": "Após conferência e documentação ok, transferência conforme combinado na proposta." }
+        {
+          "q": "Quanto tempo leva a avaliação?",
+          "a": "O primeiro contato é feito pelo WhatsApp. A vistoria presencial depende da agenda e da conferência dos dados enviados."
+        },
+        {
+          "q": "Pagamento é na hora?",
+          "a": "Após conferência e documentação ok, transferência conforme combinado na proposta."
+        }
       ]
     }
   },
   {
     "slug": "sao-leopoldo",
     "name": "São Leopoldo",
+    "regionName": "BR-116 e Vale dos Sinos",
     "distanceKm": 18,
     "travelTime": "25 min",
-    "title": "Seminovos perto de São Leopoldo | Netcar Multimarcas",
+    "routeNote": "O trajeto costuma seguir pela BR-116 em direção a Esteio. Obras e movimento nos acessos podem alterar o tempo estimado.",
+    "visitPlanning": "Compare versões e preços no site, confirme os carros escolhidos e combine um horário para concentrar test drive e negociação em Esteio.",
+    "relatedSlugs": [
+      "sapucaia-do-sul",
+      "novo-hamburgo",
+      "canoas",
+      "estancia-velha"
+    ],
+    "priorityMarket": true,
+    "title": "Seminovos perto de São Leopoldo: estoque e preços | Netcar",
     "description": "Compre seminovo com garantia perto de São Leopoldo. Netcar em Esteio/RS — estoque atualizado, laudo e financiamento.",
     "h1": "Seminovos perto de São Leopoldo",
     "intro": "Clientes de São Leopoldo escolhem a Netcar pela combinação de estoque, transparência na negociação e pós-venda com NetHelp.",
@@ -77,11 +126,17 @@
       "Cada veículo passa por conferência técnica antes da vitrine. Isso reduz risco na compra e dá mais segurança para quem vem de outra cidade da região."
     ],
     "faq": [
-      { "q": "Vale a pena ir de São Leopoldo até Esteio?", "a": "Para quem quer ver o carro, fazer test drive e fechar financiamento no mesmo lugar, o deslocamento costuma compensar." },
-      { "q": "Tem seminovos automáticos no estoque?", "a": "Sim. Veja a página de automáticos ou filtre no showroom online." }
+      {
+        "q": "Vale a pena ir de São Leopoldo até Esteio?",
+        "a": "Para quem quer ver o carro, fazer test drive e fechar financiamento no mesmo lugar, o deslocamento costuma compensar."
+      },
+      {
+        "q": "Tem seminovos automáticos no estoque?",
+        "a": "Sim. Veja a página de automáticos ou filtre no showroom online."
+      }
     ],
     "sell": {
-      "title": "Vender carro em São Leopoldo | Netcar Multimarcas",
+      "title": "Vender carro em São Leopoldo: pré-avaliação online | Netcar",
       "description": "Netcar compra seu carro usado — clientes de São Leopoldo avaliam em Esteio. Troca, venda direta ou carro financiado.",
       "h1": "Vender carro em São Leopoldo",
       "intro": "Quem está em São Leopoldo e quer valor justo sem ficar meses com anúncio online pode vender direto para a Netcar.",
@@ -90,49 +145,82 @@
         "Se o plano é trocar de carro, quitamos financiamento do usado e você escolhe seminovo no mesmo lugar."
       ],
       "faq": [
-        { "q": "Aceitam qualquer marca?", "a": "Trabalhamos com fabricação nacional dentro dos critérios da loja. Consulte pelo WhatsApp com modelo e ano." },
-        { "q": "E se eu só quiser vender, sem comprar outro?", "a": "Compramos para estoque. Pagamento via transferência após acordo e vistoria." }
+        {
+          "q": "Aceitam qualquer marca?",
+          "a": "Trabalhamos com fabricação nacional dentro dos critérios da loja. Consulte pelo WhatsApp com modelo e ano."
+        },
+        {
+          "q": "E se eu só quiser vender, sem comprar outro?",
+          "a": "Compramos para estoque. Pagamento via transferência após acordo e vistoria."
+        }
       ]
     }
   },
   {
     "slug": "novo-hamburgo",
     "name": "Novo Hamburgo",
+    "regionName": "Vale dos Sinos",
     "distanceKm": 22,
     "travelTime": "30 min",
+    "routeNote": "A ligação com Esteio costuma ser feita pela BR-116. O tempo depende do ponto de saída e do fluxo no Vale dos Sinos.",
+    "visitPlanning": "Monte uma lista curta no estoque online, envie os dados da troca e confirme disponibilidade e horário antes de seguir para Esteio.",
+    "relatedSlugs": [
+      "sao-leopoldo",
+      "campo-bom",
+      "estancia-velha",
+      "sapucaia-do-sul"
+    ],
+    "priorityMarket": true,
     "title": "Seminovos perto de Novo Hamburgo: estoque e preços | Netcar",
     "description": "Confira seminovos com fotos, preços e km na Netcar em Esteio, a cerca de 30 min de Novo Hamburgo. Financiamento, troca e garantia.",
     "h1": "Carros seminovos perto de Novo Hamburgo",
-    "intro": "Novo Hamburgo e a Serra Gaúcha estão a uma meia hora de Esteio — distância curta para quem busca loja com processo claro e estoque grande.",
+    "intro": "Novo Hamburgo fica a cerca de meia hora de Esteio em condições normais — distância viável para quem busca uma loja com processo claro e estoque variado.",
     "paragraphs": [
       "Na Netcar você encontra marcas como Volkswagen, Hyundai, Jeep, Fiat, Chevrolet e mais — com preparação antes da venda e suporte depois da entrega.",
       "Simule pelo WhatsApp antes de vir. O consultor pode separar 2 ou 3 carros do seu perfil para otimizar a visita."
     ],
     "faq": [
-      { "q": "Como funciona a entrada?", "a": "A entrada costuma ficar entre 20% e 30% do valor e pode ser parcelada em até 10x sem juros. Simule pelo WhatsApp para uma resposta objetiva, sujeita a análise de crédito." },
-      { "q": "Como funciona a garantia?", "a": "Cada seminovo segue política da loja e itens conferidos na Fábrica de Valor. O consultor detalha na proposta." }
+      {
+        "q": "Como funciona a entrada?",
+        "a": "O valor de entrada e as condições variam conforme veículo, instituição financeira e análise de crédito. Solicite uma simulação atualizada antes da visita."
+      },
+      {
+        "q": "Como funciona a garantia?",
+        "a": "Cada seminovo segue política da loja e itens conferidos na Fábrica de Valor. O consultor detalha na proposta."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Novo Hamburgo | Netcar compra usado",
+      "title": "Vender carro em Novo Hamburgo: pré-avaliação | Netcar",
       "description": "Vender carro usado em Novo Hamburgo? Netcar em Esteio compra com avaliação profissional. Troca facilitada e carro financiado aceito.",
-      "h1": "Vender carro em Novo Hamburgo — Netcar compra",
-      "intro": "Clientes da Serra e NH usam a Netcar para vender com segurança — loja estruturada, contrato e pagamento organizado.",
+      "h1": "Vender carro em Novo Hamburgo com pré-avaliação",
+      "intro": "Quem está em Novo Hamburgo pode enviar os dados do carro antes do deslocamento e seguir para Esteio somente se houver interesse na vistoria.",
       "paragraphs": [
         "Evite risco de venda particular. A Netcar assume burocracia e paga conforme avaliação alinhada ao mercado regional.",
         "Traga fotos, km e opcionais pelo WhatsApp. Consultor estima faixa antes da visita."
       ],
       "faq": [
-        { "q": "Vale o deslocamento de NH até Esteio?", "a": "Quem busca proposta séria e pagamento sem surpresa costuma preferir loja a anúncio avulso." },
-        { "q": "O veículo tem alienação ou pendência documental?", "a": "Envie a documentação pelo WhatsApp. Avaliamos caso a caso na compra do usado — isso não significa financiamento para negativados." }
+        {
+          "q": "Vale o deslocamento de NH até Esteio?",
+          "a": "Quem busca proposta séria e pagamento sem surpresa costuma preferir loja a anúncio avulso."
+        },
+        {
+          "q": "O veículo tem alienação ou pendência documental?",
+          "a": "Envie a documentação pelo WhatsApp. Avaliamos caso a caso na compra do usado — isso não significa financiamento para negativados."
+        }
       ]
     }
   },
   {
     "slug": "gravatai",
     "name": "Gravataí",
+    "regionName": "Grande Porto Alegre",
     "distanceKm": 25,
     "travelTime": "35 min",
-    "title": "Seminovos perto de Gravataí | Netcar Multimarcas",
+    "routeNote": "Conforme o bairro, o trajeto pode combinar acessos à BR-290, RS-118 e BR-116. Trânsito metropolitano altera o tempo de viagem.",
+    "visitPlanning": "Confirme disponibilidade, envie os dados do usado e combine o horário antes de sair de Gravataí para as lojas em Esteio.",
+    "relatedSlugs": ["cachoeirinha", "alvorada", "porto-alegre", "canoas"],
+    "priorityMarket": true,
+    "title": "Seminovos perto de Gravataí: estoque e preços | Netcar",
     "description": "Seminovos revisados para moradores de Gravataí. Netcar em Esteio/RS com showroom, financiamento e troca facilitada.",
     "h1": "Seminovos perto de Gravataí",
     "intro": "Quem mora em Gravataí e quer fugir do trânsito de POA encontra em Esteio uma alternativa sólida de compra de seminovo.",
@@ -141,11 +229,17 @@
       "Financiamento, troca com usado financiado e compra de usado pela loja — tudo no mesmo endereço na Av. Presidente Vargas."
     ],
     "faq": [
-      { "q": "Qual o melhor horário para visitar vindo de Gravataí?", "a": "Agende com o consultor. Sábado até 16h30 a loja também atende." },
-      { "q": "Posso ver o estoque online antes?", "a": "Sim, em netcarmultimarcas.com.br/seminovos — e depois confirme disponibilidade no WhatsApp." }
+      {
+        "q": "Qual o melhor horário para visitar vindo de Gravataí?",
+        "a": "Agende com o consultor. Sábado até 16h30 a loja também atende."
+      },
+      {
+        "q": "Posso ver o estoque online antes?",
+        "a": "Sim, em netcarmultimarcas.com.br/seminovos — e depois confirme disponibilidade no WhatsApp."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Gravataí | Netcar Multimarcas Esteio",
+      "title": "Vender carro em Gravataí: pré-avaliação online | Netcar",
       "description": "Quer vender carro em Gravataí? A Netcar compra em Esteio. Avaliação gratuita, aceita financiado e pagamento transparente.",
       "h1": "Vender carro em Gravataí",
       "intro": "Gravataí → Esteio em cerca de 35 min. Vender para revenda estruturada costuma ser mais rápido que esperar comprador avulso.",
@@ -154,16 +248,27 @@
         "Financiamento em aberto não impede negociação: calculamos quitação e valor líquido para você."
       ],
       "faq": [
-        { "q": "Quais carros não compram?", "a": "Não compramos leilão, fora dos critérios de ano/origem ou em condição incompatível com nosso estoque." },
-        { "q": "Posso avaliar antes de ir?", "a": "Sim, início pelo WhatsApp com dados e fotos do veículo." }
+        {
+          "q": "Quais carros não compram?",
+          "a": "Não compramos leilão, fora dos critérios de ano/origem ou em condição incompatível com nosso estoque."
+        },
+        {
+          "q": "Posso avaliar antes de ir?",
+          "a": "Sim, início pelo WhatsApp com dados e fotos do veículo."
+        }
       ]
     }
   },
   {
     "slug": "cachoeirinha",
     "name": "Cachoeirinha",
+    "regionName": "Grande Porto Alegre",
     "distanceKm": 15,
     "travelTime": "22 min",
+    "routeNote": "O acesso a Esteio varia conforme o bairro e pode usar vias locais de Canoas e a BR-116. Consulte o trânsito antes do deslocamento.",
+    "visitPlanning": "Escolha os veículos no site e agende a visita para comparar carros, fazer test drive e avaliar a troca no mesmo atendimento em Esteio.",
+    "relatedSlugs": ["canoas", "gravatai", "porto-alegre", "alvorada"],
+    "priorityMarket": true,
     "title": "Seminovos perto de Cachoeirinha: fotos e preços | Netcar",
     "description": "Confira seminovos com fotos, preços e km na Netcar em Esteio, a cerca de 22 min de Cachoeirinha. Financiamento, troca e garantia.",
     "h1": "Carros seminovos perto de Cachoeirinha",
@@ -173,62 +278,95 @@
       "Processo transparente, NetHelp no pós-venda e pedido de avaliação Google após a entrega — sinais de loja que quer recomendação, não só venda."
     ],
     "faq": [
-      { "q": "Tem estacionamento na loja?", "a": "Sim, nas unidades da Av. Presidente Vargas em Esteio." },
-      { "q": "Atendem pelo WhatsApp antes da visita?", "a": "Sim, pelo iAN e pelos consultores humanos." }
+      {
+        "q": "Tem estacionamento na loja?",
+        "a": "Sim, nas unidades da Av. Presidente Vargas em Esteio."
+      },
+      {
+        "q": "Atendem pelo WhatsApp antes da visita?",
+        "a": "Sim, pelo iAN e pelos consultores humanos."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Cachoeirinha | Netcar compra",
+      "title": "Vender carro em Cachoeirinha: pré-avaliação | Netcar",
       "description": "Vender carro usado em Cachoeirinha? Netcar em Esteio, a 15 km. Compramos seu veículo — quitado ou financiado.",
-      "h1": "Vender carro em Cachoeirinha — Netcar compra",
+      "h1": "Vender carro em Cachoeirinha com pré-avaliação",
       "intro": "De Cachoeirinha até a Netcar são poucos minutos. Quem quer liquidez sem exposição em marketplace encontra fluxo simples aqui.",
       "paragraphs": [
         "Avaliação com critérios objetivos: ano, km, estado, histórico. Proposta explicada antes de fechar.",
         "Troca ou venda pura — você escolhe. Consultor conduz documentação e prazos."
       ],
       "faq": [
-        { "q": "Preciso limpar ou preparar o carro?", "a": "Entregue como usa no dia a dia. Vistoria considera estado real." },
-        { "q": "Compram para troca imediata?", "a": "Sim. Valor do usado abate do seminovo escolhido no estoque." }
+        {
+          "q": "Preciso limpar ou preparar o carro?",
+          "a": "Entregue como usa no dia a dia. Vistoria considera estado real."
+        },
+        {
+          "q": "Compram para troca imediata?",
+          "a": "Sim. Valor do usado abate do seminovo escolhido no estoque."
+        }
       ]
     }
   },
   {
     "slug": "porto-alegre",
     "name": "Porto Alegre",
+    "regionName": "Grande Porto Alegre",
     "distanceKm": 20,
     "travelTime": "30 min",
+    "routeNote": "A saída pela BR-116 costuma ser a referência para chegar a Esteio; o tempo muda bastante conforme o bairro, obras e horário.",
+    "visitPlanning": "Confira fotos e preços, confirme os carros selecionados e marque um horário para concentrar test drive, simulação e avaliação da troca.",
+    "relatedSlugs": ["canoas", "cachoeirinha", "gravatai", "guaiba"],
+    "priorityMarket": true,
     "title": "Seminovos perto de Porto Alegre: fotos e preços | Netcar",
     "description": "Confira carros seminovos com fotos, preços e km na Netcar em Esteio, a cerca de 30 min de Porto Alegre. Financiamento, troca e garantia.",
     "h1": "Carros seminovos perto de Porto Alegre",
-    "intro": "Quem mora em Porto Alegre — especialmente zona norte — chega na Netcar em Esteio em meia hora pela BR-116, fugindo do trânsito e dos preços da capital.",
+    "intro": "Quem mora em Porto Alegre — especialmente na zona norte — pode comparar o estoque online e planejar o deslocamento até as lojas da Netcar em Esteio pela BR-116.",
     "paragraphs": [
-      "Loja de rua na região metropolitana costuma ter custo menor que showroom de capital — e isso aparece no preço final do carro. Na Netcar, o estoque multimarcas é preparado pela Fábrica de Valor antes de ir pra vitrine.",
-      "Muitos clientes de Porto Alegre fecham a visita no mesmo dia: test drive, simulação de financiamento em até 60x e avaliação do usado na troca, tudo na mesma loja."
+      "Na Netcar, o estoque multimarcas é preparado pela Fábrica de Valor antes de ir para a vitrine, com fotos, quilometragem e preços disponíveis para comparação no site.",
+      "Uma visita planejada pode reunir test drive, simulação de financiamento e avaliação do usado na troca. As condições dependem da análise e da negociação na loja."
     ],
     "faq": [
-      { "q": "Compensa sair de Porto Alegre para comprar em Esteio?", "a": "Para quem compara preço e quer negociar pessoalmente, o deslocamento de 30 minutos costuma se pagar." },
-      { "q": "Tem como ver o estoque antes de ir?", "a": "Sim, todo o estoque está no site com fotos e preço. Dá pra reservar a visita pelo WhatsApp." }
+      {
+        "q": "Compensa sair de Porto Alegre para comprar em Esteio?",
+        "a": "Compare o estoque e as condições antes de sair. Se houver veículos compatíveis, confirme a visita para fazer test drive e negociar presencialmente."
+      },
+      {
+        "q": "Tem como ver o estoque antes de ir?",
+        "a": "Sim, todo o estoque está no site com fotos e preço. Dá pra reservar a visita pelo WhatsApp."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Porto Alegre | Netcar compra",
+      "title": "Vender carro em Porto Alegre: pré-avaliação online | Netcar",
       "description": "Quer vender seu carro em Porto Alegre sem anúncio e sem visita de estranho? A Netcar compra em Esteio, a 30 min. Mesmo financiado.",
-      "h1": "Vender carro em Porto Alegre — a Netcar compra",
-      "intro": "Vender carro na capital por conta própria significa anúncio, curioso e risco. A 30 minutos dali, a Netcar avalia e paga sem essa exposição.",
+      "h1": "Vender carro em Porto Alegre com pré-avaliação online",
+      "intro": "Quem quer vender carro em Porto Alegre pode enviar dados e fotos primeiro; a vistoria e a proposta final acontecem nas lojas da Netcar em Esteio.",
       "paragraphs": [
-        "Primeiro contato 100% pelo WhatsApp: modelo, ano e km. Retorno rápido com orientação de valor antes de você se deslocar.",
+        "O primeiro contato pode ser feito pelo WhatsApp com modelo, ano, quilometragem e fotos. A equipe analisa os dados antes de você se deslocar.",
         "Compramos nacionais de até 7 anos, origem RS, sem passagem por leilão — inclusive com financiamento em aberto, mediante quitação."
       ],
       "faq": [
-        { "q": "Vale a pena ir até Esteio só para vender?", "a": "A primeira avaliação sai pelo WhatsApp. Você só se desloca se a proposta fizer sentido." },
-        { "q": "Em quanto tempo recebo o pagamento?", "a": "Após vistoria e documentação ok, transferência conforme combinado — normalmente em até 72h." }
+        {
+          "q": "Vale a pena ir até Esteio só para vender?",
+          "a": "A primeira avaliação sai pelo WhatsApp. Você só se desloca se a proposta fizer sentido."
+        },
+        {
+          "q": "Em quanto tempo recebo o pagamento?",
+          "a": "O prazo é informado na proposta e depende da vistoria, da documentação e das condições acertadas na negociação."
+        }
       ]
     }
   },
   {
     "slug": "alvorada",
     "name": "Alvorada",
+    "regionName": "Grande Porto Alegre",
     "distanceKm": 25,
     "travelTime": "35 min",
-    "title": "Seminovos perto de Alvorada | Netcar Multimarcas",
+    "routeNote": "A rota até Esteio pode variar entre acessos metropolitanos à BR-290 e à BR-116. Use a navegação em tempo real para definir o melhor caminho.",
+    "visitPlanning": "Adiante a seleção, a simulação e os dados da troca pelo site e WhatsApp; depois confirme o atendimento presencial em Esteio.",
+    "relatedSlugs": ["gravatai", "cachoeirinha", "viamao", "porto-alegre"],
+    "title": "Seminovos perto de Alvorada: estoque e preços | Netcar",
     "description": "Procurando seminovo perto de Alvorada? Netcar em Esteio: estoque multimarcas revisado, financiamento facilitado e troca com avaliação na hora.",
     "h1": "Seminovos perto de Alvorada",
     "intro": "De Alvorada até a Netcar em Esteio são cerca de 35 minutos — caminho direto pra quem busca seminovo revisado com loja física e negociação presencial.",
@@ -237,62 +375,94 @@
       "Todo veículo passa pela Fábrica de Valor antes da vitrine. Financiamento em até 60x e aceite de troca, inclusive com parcela em aberto."
     ],
     "faq": [
-      { "q": "Qual o melhor caminho de Alvorada até a loja?", "a": "Pela Free-Way sentido Porto Alegre e BR-116 sentido Esteio. As duas lojas ficam na Av. Presidente Vargas." },
-      { "q": "Consigo simular financiamento antes de ir?", "a": "Sim. Pelo WhatsApp o consultor adianta simulação com seus dados básicos." }
+      {
+        "q": "Qual o melhor caminho de Alvorada até a loja?",
+        "a": "Pela Free-Way sentido Porto Alegre e BR-116 sentido Esteio. As duas lojas ficam na Av. Presidente Vargas."
+      },
+      {
+        "q": "Consigo simular financiamento antes de ir?",
+        "a": "Sim. Pelo WhatsApp o consultor adianta simulação com seus dados básicos."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Alvorada | Netcar compra seu usado",
+      "title": "Vender carro em Alvorada: pré-avaliação online | Netcar",
       "description": "Venda seu carro usado em Alvorada sem dor de cabeça. Netcar compra em Esteio com avaliação transparente. Aceita financiado.",
-      "h1": "Vender carro em Alvorada — Netcar compra",
+      "h1": "Vender carro em Alvorada com pré-avaliação online",
       "intro": "Morador de Alvorada que quer vender rápido, sem anunciar em site de classificados, resolve pelo WhatsApp e fecha na loja em Esteio.",
       "paragraphs": [
         "Mande modelo, ano e km que retornamos com orientação de valor. Vistoria presencial só quando a conversa avança.",
         "Quer trocar em vez de vender? O valor do seu usado entra como entrada no seminovo escolhido."
       ],
       "faq": [
-        { "q": "Compram carro com financiamento em aberto?", "a": "Sim. Informe o saldo devedor e montamos proposta de quitação mais o valor líquido." },
-        { "q": "A avaliação tem custo?", "a": "Não. Avaliação e proposta são gratuitas e sem compromisso." }
+        {
+          "q": "Compram carro com financiamento em aberto?",
+          "a": "Sim. Informe o saldo devedor e montamos proposta de quitação mais o valor líquido."
+        },
+        {
+          "q": "A avaliação tem custo?",
+          "a": "Não. Avaliação e proposta são gratuitas e sem compromisso."
+        }
       ]
     }
   },
   {
     "slug": "viamao",
     "name": "Viamão",
+    "regionName": "Grande Porto Alegre",
     "distanceKm": 35,
     "travelTime": "45 min",
+    "routeNote": "O percurso depende do bairro de origem e pode passar por acessos à RS-040, BR-290 e BR-116. Trânsito e obras afetam a estimativa.",
+    "visitPlanning": "Use os filtros para reduzir a lista, confirme cada veículo e agende a visita antes de atravessar a região metropolitana até Esteio.",
+    "relatedSlugs": ["alvorada", "porto-alegre", "gravatai", "guaiba"],
     "title": "Seminovos perto de Viamão: estoque, fotos e preços | Netcar",
     "description": "Confira seminovos com fotos, preços e km na Netcar em Esteio, a cerca de 45 min de Viamão. Financiamento, troca e garantia.",
     "h1": "Carros seminovos perto de Viamão",
-    "intro": "Viamão tem poucas lojas grandes de seminovos — muita gente da cidade já atravessa a região metropolitana pra comprar. A Netcar em Esteio é parada que vale o trajeto.",
+    "intro": "Quem está em Viamão pode ampliar a comparação de seminovos usando o estoque online da Netcar e planejar uma visita presencial às lojas em Esteio.",
     "paragraphs": [
       "Em vez de rodar várias lojas pequenas, você compara dezenas de carros multimarcas num lugar só, com consultor e test drive na hora.",
       "Estoque atualizado no site com preço real. Dá pra filtrar por faixa de parcela, câmbio automático ou categoria antes de sair de casa."
     ],
     "faq": [
-      { "q": "Quanto tempo de Viamão até a Netcar?", "a": "Em torno de 45 minutos, dependendo do bairro e do trânsito na Free-Way." },
-      { "q": "Posso agendar test drive antes?", "a": "Sim. Pelo WhatsApp o consultor separa o carro pro horário da sua visita." }
+      {
+        "q": "Quanto tempo de Viamão até a Netcar?",
+        "a": "Em torno de 45 minutos, dependendo do bairro e do trânsito na Free-Way."
+      },
+      {
+        "q": "Posso agendar test drive antes?",
+        "a": "Sim. Pelo WhatsApp o consultor separa o carro pro horário da sua visita."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Viamão | Netcar compra",
-      "description": "Quer vender seu carro em Viamão? A Netcar compra com avaliação justa e pagamento ágil em Esteio. Aceita carro financiado.",
-      "h1": "Vender carro em Viamão — Netcar compra",
+      "title": "Vender carro em Viamão: pré-avaliação online | Netcar",
+      "description": "Quer vender seu carro em Viamão? Envie os dados para pré-avaliação da Netcar; vistoria e proposta final são feitas em Esteio.",
+      "h1": "Vender carro em Viamão com pré-avaliação online",
       "intro": "Vender por conta própria em Viamão significa receber estranho em casa. Na Netcar, a negociação acontece em loja estabelecida desde 1997.",
       "paragraphs": [
         "Começa pelo WhatsApp: modelo, ano, km e fotos. A primeira orientação de valor sai sem você sair de casa.",
         "Critérios claros: nacionais até 7 anos, origem RS, sem leilão. Se encaixar, agenda vistoria e a proposta final sai no mesmo dia."
       ],
       "faq": [
-        { "q": "Fazem busca do veículo em Viamão?", "a": "A vistoria é na loja em Esteio. O deslocamento só acontece com proposta pré-alinhada pelo WhatsApp." },
-        { "q": "Posso usar o valor na troca?", "a": "Sim. Maioria dos clientes usa o usado como entrada num seminovo do estoque." }
+        {
+          "q": "Fazem busca do veículo em Viamão?",
+          "a": "A vistoria é na loja em Esteio. O deslocamento só acontece com proposta pré-alinhada pelo WhatsApp."
+        },
+        {
+          "q": "Posso usar o valor na troca?",
+          "a": "Sim. Maioria dos clientes usa o usado como entrada num seminovo do estoque."
+        }
       ]
     }
   },
   {
     "slug": "guaiba",
     "name": "Guaíba",
+    "regionName": "Grande Porto Alegre",
     "distanceKm": 45,
     "travelTime": "50 min",
-    "title": "Seminovos perto de Guaíba | Netcar Multimarcas",
+    "routeNote": "O trajeto costuma usar a travessia do Guaíba e a BR-116 até Esteio. Trânsito na ponte e nos acessos metropolitanos altera o tempo.",
+    "visitPlanning": "Confirme os carros e o horário pelo WhatsApp antes de atravessar a ponte; assim, a visita pode concentrar comparação, test drive e negociação.",
+    "relatedSlugs": ["porto-alegre", "canoas", "cachoeirinha", "alvorada"],
+    "title": "Seminovos perto de Guaíba: estoque e preços | Netcar",
     "description": "Seminovos revisados para quem mora em Guaíba. Netcar em Esteio: estoque multimarcas, garantia e financiamento facilitado.",
     "h1": "Seminovos perto de Guaíba",
     "intro": "De Guaíba até Esteio é caminho direto pela ponte e BR-116. Pra quem quer mais opção de seminovo do que a cidade oferece, a Netcar concentra estoque multimarcas em duas lojas.",
@@ -301,29 +471,50 @@
       "Pra não ir à toa: veja o estoque no site, escolha 2 ou 3 candidatos e avise pelo WhatsApp — o consultor deixa os carros separados pra sua visita."
     ],
     "faq": [
-      { "q": "A Netcar atende cliente de Guaíba?", "a": "Sim, atendemos toda a região metropolitana. Vários clientes vêm de Guaíba e fecham na primeira visita." },
-      { "q": "Dá pra resolver financiamento no mesmo dia?", "a": "Na maioria dos casos sim — simulação, aprovação e contrato saem na própria loja." }
+      {
+        "q": "A Netcar atende cliente de Guaíba?",
+        "a": "Sim. O atendimento pode começar pelo site e WhatsApp; test drive e fechamento acontecem nas lojas em Esteio."
+      },
+      {
+        "q": "Dá pra resolver financiamento no mesmo dia?",
+        "a": "Na maioria dos casos sim — simulação, aprovação e contrato saem na própria loja."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Guaíba | Netcar compra seu usado",
-      "description": "Venda seu carro usado em Guaíba para a Netcar. Avaliação transparente em Esteio, pagamento ágil. Compramos mesmo financiado.",
-      "h1": "Vender carro em Guaíba — Netcar compra",
+      "title": "Vender carro em Guaíba: pré-avaliação online | Netcar",
+      "description": "Comece a venda do seu carro em Guaíba com pré-avaliação online. Vistoria, proposta final e documentação são tratadas na Netcar em Esteio.",
+      "h1": "Vender carro em Guaíba com pré-avaliação online",
       "intro": "Quem está em Guaíba não precisa esperar comprador aparecer em anúncio. A Netcar compra direto, com critérios claros e pagamento combinado.",
       "paragraphs": [
         "Tudo começa no WhatsApp: dados do carro e fotos. Você recebe orientação de valor antes de decidir atravessar a ponte.",
         "Compramos para o nosso próprio estoque — nacionais até 7 anos, origem RS, sem passagem por leilão. Financiado entra com proposta de quitação."
       ],
       "faq": [
-        { "q": "Preciso ir duas vezes até Esteio?", "a": "Não. Com a conversa alinhada pelo WhatsApp, vistoria e fechamento saem na mesma visita." },
-        { "q": "O pagamento é seguro?", "a": "Transferência bancária com documentação conferida — sem dinheiro vivo nem intermediário." }
+        {
+          "q": "Preciso ir duas vezes até Esteio?",
+          "a": "Não. Com a conversa alinhada pelo WhatsApp, vistoria e fechamento saem na mesma visita."
+        },
+        {
+          "q": "O pagamento é seguro?",
+          "a": "Transferência bancária com documentação conferida — sem dinheiro vivo nem intermediário."
+        }
       ]
     }
   },
   {
     "slug": "campo-bom",
     "name": "Campo Bom",
+    "regionName": "Vale dos Sinos",
     "distanceKm": 35,
     "travelTime": "35 min",
+    "routeNote": "O trajeto costuma usar a RS-239 e a BR-116 em direção a Esteio. Movimento no Vale dos Sinos pode ampliar o tempo previsto.",
+    "visitPlanning": "Filtre o estoque, confirme disponibilidade e organize test drive e avaliação da troca antes de sair de Campo Bom.",
+    "relatedSlugs": [
+      "novo-hamburgo",
+      "estancia-velha",
+      "sao-leopoldo",
+      "taquara"
+    ],
     "title": "Seminovos perto de Campo Bom: estoque e preços | Netcar",
     "description": "Confira seminovos com fotos, preços e km na Netcar em Esteio, a cerca de 35 min de Campo Bom. Estoque atualizado, troca e financiamento.",
     "h1": "Carros seminovos perto de Campo Bom",
@@ -333,62 +524,94 @@
       "Test drive, simulação em até 60x e avaliação do usado na troca acontecem na mesma visita — sem precisar voltar outro dia."
     ],
     "faq": [
-      { "q": "Qual o caminho de Campo Bom até a loja?", "a": "BR-116 sentido Porto Alegre, saída Esteio. As duas lojas ficam na Av. Presidente Vargas." },
-      { "q": "O estoque do site está atualizado?", "a": "Sim, o site reflete o estoque real das lojas com fotos e preços." }
+      {
+        "q": "Qual o caminho de Campo Bom até a loja?",
+        "a": "BR-116 sentido Porto Alegre, saída Esteio. As duas lojas ficam na Av. Presidente Vargas."
+      },
+      {
+        "q": "O estoque do site está atualizado?",
+        "a": "Sim, o site reflete o estoque real das lojas com fotos e preços."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Campo Bom | Netcar compra",
+      "title": "Vender carro em Campo Bom: pré-avaliação online | Netcar",
       "description": "Quer vender seu carro em Campo Bom? Netcar compra para o próprio estoque. Avaliação justa em Esteio, aceita financiado.",
-      "h1": "Vender carro em Campo Bom — Netcar compra",
-      "intro": "Do Vale dos Sinos até a Netcar é descida direta pela BR-116. Venda sem anúncio, sem visita de desconhecido e com pagamento combinado em loja.",
+      "h1": "Vender carro em Campo Bom com pré-avaliação online",
+      "intro": "Quem está em Campo Bom pode iniciar pelo WhatsApp, evitar visitas de desconhecidos e agendar a vistoria nas lojas da Netcar em Esteio.",
       "paragraphs": [
         "Manda modelo, ano e km no WhatsApp. Se o carro encaixa nos critérios, você já desce com proposta pré-alinhada.",
         "Aceitamos carro com financiamento em aberto: quitamos o saldo e acertamos a diferença — na venda ou na troca por um seminovo."
       ],
       "faq": [
-        { "q": "Compram carros de trabalho e picapes?", "a": "Sim, desde que nacionais, até 7 anos, origem RS e sem passagem por leilão." },
-        { "q": "Quanto tempo leva o processo todo?", "a": "Com documentação em dia, vistoria e fechamento saem na mesma visita." }
+        {
+          "q": "Compram carros de trabalho e picapes?",
+          "a": "Sim, desde que nacionais, até 7 anos, origem RS e sem passagem por leilão."
+        },
+        {
+          "q": "Quanto tempo leva o processo todo?",
+          "a": "Com documentação em dia, vistoria e fechamento saem na mesma visita."
+        }
       ]
     }
   },
   {
     "slug": "estancia-velha",
     "name": "Estância Velha",
+    "regionName": "Vale dos Sinos",
     "distanceKm": 30,
     "travelTime": "30 min",
-    "title": "Seminovos perto de Estância Velha | Netcar Esteio",
+    "routeNote": "A BR-116 é a principal referência para o deslocamento até Esteio. O tempo varia com o ponto de saída e o fluxo regional.",
+    "visitPlanning": "Compare modelos e condições online, confirme os carros escolhidos e agende a visita presencial às lojas em Esteio.",
+    "relatedSlugs": ["novo-hamburgo", "campo-bom", "sao-leopoldo", "taquara"],
+    "title": "Seminovos perto de Estância Velha: estoque | Netcar",
     "description": "Seminovos revisados perto de Estância Velha. Netcar Multimarcas em Esteio: Fábrica de Valor, financiamento e troca com avaliação na hora.",
     "h1": "Seminovos perto de Estância Velha",
-    "intro": "De Estância Velha até a Netcar em Esteio são cerca de 30 minutos. Pra quem quer mais opção do que as lojas locais oferecem, é o trajeto com melhor custo-benefício.",
+    "intro": "De Estância Velha até a Netcar em Esteio são cerca de 30 minutos em condições normais. O estoque online ajuda a decidir quais carros justificam a visita.",
     "paragraphs": [
       "Estoque multimarcas com carro de entrada, SUV de família e picape — todos preparados pela Fábrica de Valor antes de ir pra vitrine.",
       "Atendimento começa pelo iAN no WhatsApp: conte o que procura e a faixa de parcela, e chegue na loja com os candidatos separados."
     ],
     "faq": [
-      { "q": "Atendem sábado?", "a": "Sim. Confirme o horário da sua visita pelo WhatsApp para garantir consultor disponível." },
-      { "q": "Fazem avaliação do meu usado na mesma visita?", "a": "Sim, a avaliação pra troca sai na hora, junto com a simulação do financiamento." }
+      {
+        "q": "Atendem sábado?",
+        "a": "Sim. Confirme o horário da sua visita pelo WhatsApp para garantir consultor disponível."
+      },
+      {
+        "q": "Fazem avaliação do meu usado na mesma visita?",
+        "a": "Sim, a avaliação pra troca sai na hora, junto com a simulação do financiamento."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Estância Velha | Netcar compra",
-      "description": "Venda seu carro usado em Estância Velha para a Netcar. Avaliação transparente, pagamento ágil, aceita financiado. Loja em Esteio.",
-      "h1": "Vender carro em Estância Velha — Netcar compra",
+      "title": "Vender carro em Estância Velha: pré-avaliação | Netcar",
+      "description": "Pré-avalie online seu carro em Estância Velha. A Netcar confere o veículo, apresenta a proposta final e trata a documentação em Esteio.",
+      "h1": "Vender carro em Estância Velha com pré-avaliação",
       "intro": "Sem anúncio, sem estranho no portão: quem quer vender em Estância Velha resolve pelo WhatsApp e fecha em loja estabelecida desde 1997.",
       "paragraphs": [
         "Envie modelo, ano, km e fotos. A primeira orientação de valor sai rápido e sem compromisso.",
         "Se preferir trocar, o valor do usado vira entrada num seminovo do estoque — uma negociação só, na mesma visita."
       ],
       "faq": [
-        { "q": "Quais carros vocês compram?", "a": "Nacionais até 7 anos, origem RS, sem passagem por leilão — quitados ou financiados." },
-        { "q": "Como funciona com carro financiado?", "a": "Informamos proposta de quitação do saldo e o valor líquido que sobra pra você." }
+        {
+          "q": "Quais carros vocês compram?",
+          "a": "Nacionais até 7 anos, origem RS, sem passagem por leilão — quitados ou financiados."
+        },
+        {
+          "q": "Como funciona com carro financiado?",
+          "a": "Informamos proposta de quitação do saldo e o valor líquido que sobra pra você."
+        }
       ]
     }
   },
   {
     "slug": "montenegro",
     "name": "Montenegro",
+    "regionName": "Vale do Caí",
     "distanceKm": 45,
     "travelTime": "45 min",
-    "title": "Seminovos perto de Montenegro | Netcar Multimarcas",
+    "routeNote": "A ligação costuma passar pela BR-386 e depois pela BR-116 até Esteio. Obras, pedágios e trânsito podem alterar o percurso.",
+    "visitPlanning": "Faça a seleção e a simulação remotamente, confirme os veículos e concentre test drive e negociação em uma visita agendada a Esteio.",
+    "relatedSlugs": ["canoas", "novo-hamburgo", "campo-bom", "caxias-do-sul"],
+    "title": "Seminovos perto de Montenegro: estoque e preços | Netcar",
     "description": "Seminovos com garantia perto de Montenegro. Netcar em Esteio: 2 lojas multimarcas, financiamento em até 60x e troca facilitada.",
     "h1": "Seminovos perto de Montenegro",
     "intro": "Montenegro fica a ~45 minutos de Esteio pela BR-386 e BR-116. Pra quem busca seminovo revisado com variedade real de marcas, a Netcar concentra o estoque que falta na região.",
@@ -397,21 +620,33 @@
       "Antes de pegar a estrada, filtre o estoque no site e avise pelo WhatsApp: o consultor separa os carros e adianta a simulação de financiamento."
     ],
     "faq": [
-      { "q": "Compensa ir de Montenegro até Esteio?", "a": "Pra comparar vários carros revisados num lugar só e fechar negócio no mesmo dia, o trajeto costuma compensar." },
-      { "q": "Posso adiantar a negociação pelo WhatsApp?", "a": "Sim — simulação, avaliação prévia do seu usado e reserva de visita saem pelo WhatsApp." }
+      {
+        "q": "Compensa ir de Montenegro até Esteio?",
+        "a": "Pra comparar vários carros revisados num lugar só e fechar negócio no mesmo dia, o trajeto costuma compensar."
+      },
+      {
+        "q": "Posso adiantar a negociação pelo WhatsApp?",
+        "a": "Sim — simulação, avaliação prévia do seu usado e reserva de visita saem pelo WhatsApp."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Montenegro | Netcar compra",
+      "title": "Vender carro em Montenegro: pré-avaliação online | Netcar",
       "description": "Quer vender seu carro em Montenegro? A Netcar compra para o estoque próprio. Avaliação justa em Esteio, aceita financiado.",
-      "h1": "Vender carro em Montenegro — Netcar compra",
-      "intro": "Vender pra Netcar evita anúncio, negociação com desconhecido e visita em casa. Todo o início é pelo WhatsApp, sem deslocamento.",
+      "h1": "Vender carro em Montenegro com pré-avaliação online",
+      "intro": "Quem quer vender carro em Montenegro pode enviar dados e fotos à Netcar pelo WhatsApp antes de agendar a vistoria presencial em Esteio.",
       "paragraphs": [
         "Mande modelo, ano, km e fotos do carro. Retornamos com orientação de valor e, se encaixar, você agenda a vistoria em Esteio.",
         "Compramos nacionais até 7 anos, origem RS, sem leilão. Carro financiado entra com proposta de quitação do saldo."
       ],
       "faq": [
-        { "q": "A proposta vale por quanto tempo?", "a": "A orientação inicial vale enquanto o mercado não muda; a proposta final é confirmada na vistoria." },
-        { "q": "Pagam à vista?", "a": "Pagamento via transferência após vistoria e conferência de documentação, no prazo combinado." }
+        {
+          "q": "A proposta vale por quanto tempo?",
+          "a": "A orientação inicial vale enquanto o mercado não muda; a proposta final é confirmada na vistoria."
+        },
+        {
+          "q": "Pagam à vista?",
+          "a": "Pagamento via transferência após vistoria e conferência de documentação, no prazo combinado."
+        }
       ]
     }
   },
@@ -423,7 +658,8 @@
     "travelTime": "1h15 a 1h30",
     "routeNote": "O trajeto costuma seguir pela RS-239 até o Vale dos Sinos e depois pela BR-116 até Esteio; horário de pico pode aumentar o tempo.",
     "visitPlanning": "Consulte estoque e disponibilidade no site, envie dados da troca para uma pré-avaliação e marque a visita às lojas da Av. Presidente Vargas, em Esteio.",
-    "title": "Seminovos para Taquara | Estoque Netcar em Esteio",
+    "relatedSlugs": ["igrejinha", "campo-bom", "novo-hamburgo", "gramado"],
+    "title": "Seminovos para Taquara: estoque online | Netcar",
     "description": "Para quem busca seminovo em Taquara: veja estoque e preços da Netcar, negocie à distância e planeje visita à loja física em Esteio.",
     "h1": "Seminovos para quem mora em Taquara",
     "intro": "Quem sai de Taquara para comparar carros na região metropolitana pode fazer boa parte da seleção antes de pegar a estrada: estoque, fotos e preços ficam disponíveis no site da Netcar.",
@@ -432,21 +668,33 @@
       "A Netcar não possui loja em Taquara. O atendimento remoto serve para filtrar modelos, estimar financiamento e adiantar dados do usado; conferência final, test drive e assinatura acontecem nas unidades da Av. Presidente Vargas, em Esteio."
     ],
     "faq": [
-      { "q": "Quanto tempo leva de Taquara até a Netcar?", "a": "Em condições normais, cerca de 1h15 a 1h30 de carro. Trânsito na RS-239 e na BR-116 pode alterar o percurso." },
-      { "q": "Como evitar uma viagem sem o carro disponível?", "a": "Confira o estoque no site e confirme a disponibilidade com a equipe antes de sair. Também é possível adiantar simulação e dados da troca." }
+      {
+        "q": "Quanto tempo leva de Taquara até a Netcar?",
+        "a": "Em condições normais, cerca de 1h15 a 1h30 de carro. Trânsito na RS-239 e na BR-116 pode alterar o percurso."
+      },
+      {
+        "q": "Como evitar uma viagem sem o carro disponível?",
+        "a": "Confira o estoque no site e confirme a disponibilidade com a equipe antes de sair. Também é possível adiantar simulação e dados da troca."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Taquara | Pré-avaliação Netcar",
+      "title": "Vender carro em Taquara: pré-avaliação online | Netcar",
       "description": "Envie dados do seu carro em Taquara para pré-avaliação. Se houver interesse, agende vistoria presencial da Netcar em Esteio.",
       "h1": "Vender carro em Taquara com pré-avaliação",
-      "intro": "Para não percorrer cerca de 75 km sem alinhamento, o processo começa à distância e só avança para vistoria em Esteio quando veículo e expectativa de negociação fizerem sentido.",
+      "intro": "Para quem quer vender carro em Taquara sem percorrer cerca de 75 km sem alinhamento, o processo começa à distância e só avança para vistoria em Esteio quando fizer sentido.",
       "paragraphs": [
         "Informe modelo, ano, quilometragem, versão, histórico e fotos. A equipe verifica se o carro atende aos critérios de compra e dá uma orientação inicial, que não substitui a vistoria.",
         "A Netcar não mantém ponto de avaliação em Taquara e não promete retirada local. A proposta final depende da conferência do veículo e dos documentos nas lojas da Av. Presidente Vargas, em Esteio."
       ],
       "faq": [
-        { "q": "A Netcar avalia o carro em Taquara?", "a": "A pré-avaliação pode começar remotamente. Vistoria e proposta final são presenciais em Esteio." },
-        { "q": "Posso aproveitar a visita para escolher outro carro?", "a": "Sim. Consulte o estoque antes e informe quais modelos quer comparar para organizar avaliação do usado e test drive na mesma visita." }
+        {
+          "q": "A Netcar avalia o carro em Taquara?",
+          "a": "A pré-avaliação pode começar remotamente. Vistoria e proposta final são presenciais em Esteio."
+        },
+        {
+          "q": "Posso aproveitar a visita para escolher outro carro?",
+          "a": "Sim. Consulte o estoque antes e informe quais modelos quer comparar para organizar avaliação do usado e test drive na mesma visita."
+        }
       ]
     }
   },
@@ -458,7 +706,8 @@
     "travelTime": "1h25 a 1h45",
     "routeNote": "A rota mais comum passa pela RS-115 e RS-239, seguindo pelo Vale dos Sinos até a BR-116 em direção a Esteio.",
     "visitPlanning": "Escolha opções no showroom online, compare parcelas e confirme a agenda antes do deslocamento do Vale do Paranhana até Esteio.",
-    "title": "Seminovos para Igrejinha | Netcar Multimarcas",
+    "relatedSlugs": ["taquara", "gramado", "campo-bom", "novo-hamburgo"],
+    "title": "Seminovos para Igrejinha: estoque online | Netcar",
     "description": "Compare seminovos saindo de Igrejinha: estoque online, negociação prévia e visita planejada à Netcar na Av. Presidente Vargas, Esteio.",
     "h1": "Seminovos para clientes de Igrejinha",
     "intro": "Em Igrejinha, onde deslocamentos pelo Vale do Paranhana fazem parte da busca por mais variedade, o showroom online ajuda a comparar versões e faixas de preço sem rodar por várias lojas.",
@@ -467,21 +716,33 @@
       "As únicas lojas físicas da Netcar ficam em Esteio, na Av. Presidente Vargas. Atendimento remoto pode adiantar proposta de financiamento e pré-avaliação da troca; a visita serve para conferir o carro, dirigir e validar a negociação."
     ],
     "faq": [
-      { "q": "Existe unidade da Netcar em Igrejinha?", "a": "Não. As unidades físicas ficam somente na Av. Presidente Vargas, em Esteio." },
-      { "q": "Consigo deixar financiamento encaminhado antes da visita?", "a": "É possível adiantar uma simulação e os dados necessários. Aprovação, condições finais e contrato dependem da análise e da negociação." }
+      {
+        "q": "Existe unidade da Netcar em Igrejinha?",
+        "a": "Não. As unidades físicas ficam somente na Av. Presidente Vargas, em Esteio."
+      },
+      {
+        "q": "Consigo deixar financiamento encaminhado antes da visita?",
+        "a": "É possível adiantar uma simulação e os dados necessários. Aprovação, condições finais e contrato dependem da análise e da negociação."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Igrejinha | Netcar pré-avalia",
+      "title": "Vender carro em Igrejinha: pré-avaliação online | Netcar",
       "description": "Comece a venda do seu carro em Igrejinha com pré-avaliação remota. Vistoria e proposta final são feitas na Netcar em Esteio.",
-      "h1": "Venda de carro para quem está em Igrejinha",
+      "h1": "Vender carro em Igrejinha com pré-avaliação online",
       "intro": "O primeiro filtro acontece sem sair de Igrejinha: dados completos e fotos ajudam a saber se o veículo se encaixa no estoque antes de marcar vistoria.",
       "paragraphs": [
         "A orientação remota considera ano, versão, quilometragem, estado aparente e histórico informado. Diferenças identificadas presencialmente podem mudar ou impedir a proposta.",
         "Se houver alinhamento, a vistoria é agendada em Esteio. Não há endereço, equipe de compra ou promessa de coleta da Netcar em Igrejinha."
       ],
       "faq": [
-        { "q": "Fotos garantem o valor final?", "a": "Não. Fotos apoiam a pré-avaliação; valor final depende da vistoria física, histórico e documentação." },
-        { "q": "Carro financiado pode ser analisado?", "a": "Sim. Informe saldo devedor. Eventual compra depende das condições de quitação e da aprovação final do veículo." }
+        {
+          "q": "Fotos garantem o valor final?",
+          "a": "Não. Fotos apoiam a pré-avaliação; valor final depende da vistoria física, histórico e documentação."
+        },
+        {
+          "q": "Carro financiado pode ser analisado?",
+          "a": "Sim. Informe saldo devedor. Eventual compra depende das condições de quitação e da aprovação final do veículo."
+        }
       ]
     }
   },
@@ -493,7 +754,13 @@
     "travelTime": "1h50 a 2h20",
     "routeNote": "O percurso costuma descer pela RS-115, conectar à RS-239 e seguir pela BR-116; clima, movimento turístico e horários de pico afetam o tempo.",
     "visitPlanning": "Use o estoque online para montar uma lista curta, peça simulação e pré-avaliação da troca, depois confirme a visita presencial em Esteio.",
-    "title": "Seminovos para Gramado | Planeje visita à Netcar",
+    "relatedSlugs": [
+      "igrejinha",
+      "taquara",
+      "caxias-do-sul",
+      "bento-goncalves"
+    ],
+    "title": "Seminovos para Gramado: estoque online | Netcar",
     "description": "Veja seminovos para quem está em Gramado. Compare estoque e negocie antes de visitar as lojas Netcar em Esteio, a cerca de 110 km.",
     "h1": "Seminovos para quem está em Gramado",
     "intro": "A distância entre Gramado e Esteio pede uma compra organizada. O site permite começar por preço, versão e disponibilidade para que a viagem seja dedicada aos carros que realmente entraram na seleção.",
@@ -502,21 +769,33 @@
       "A Netcar atende remotamente, mas sua estrutura física está somente na Av. Presidente Vargas, em Esteio. Fotos, simulação e negociação inicial reduzem incertezas; inspeção, test drive e fechamento continuam presenciais."
     ],
     "faq": [
-      { "q": "A Netcar entrega carros em Gramado?", "a": "A página não oferece promessa de entrega. Retirada e eventual logística devem ser tratadas na negociação, cuja referência física é a loja em Esteio." },
-      { "q": "Posso comparar mais de um veículo na mesma visita?", "a": "Sim, desde que estejam disponíveis. Envie sua lista antes de viajar para a equipe confirmar cada opção." }
+      {
+        "q": "A Netcar entrega carros em Gramado?",
+        "a": "A página não oferece promessa de entrega. Retirada e eventual logística devem ser tratadas na negociação, cuja referência física é a loja em Esteio."
+      },
+      {
+        "q": "Posso comparar mais de um veículo na mesma visita?",
+        "a": "Sim, desde que estejam disponíveis. Envie sua lista antes de viajar para a equipe confirmar cada opção."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Gramado | Avaliação Netcar Esteio",
+      "title": "Vender carro em Gramado: pré-avaliação online | Netcar",
       "description": "Pré-avalie remotamente seu carro em Gramado e viaje só após alinhamento. Vistoria e proposta final da Netcar ocorrem em Esteio.",
-      "h1": "Como vender seu carro saindo de Gramado",
-      "intro": "Com um trajeto próximo de duas horas, faz sentido separar pré-avaliação e vistoria: primeiro dados e fotos; depois, se houver interesse, conferência presencial em Esteio.",
+      "h1": "Vender carro em Gramado com pré-avaliação online",
+      "intro": "Para vender carro em Gramado com um trajeto próximo de duas horas, separe pré-avaliação e vistoria: primeiro dados e fotos; depois, se houver interesse, conferência em Esteio.",
       "paragraphs": [
         "Envie imagens externas, internas, painel, pneus e eventuais avarias, além de versão, ano, km e informações de financiamento. Quanto melhor o material, mais útil será a orientação inicial.",
         "Não existe unidade ou avaliador fixo da Netcar em Gramado. Proposta definitiva e documentação dependem de visita à Av. Presidente Vargas, em Esteio."
       ],
       "faq": [
-        { "q": "Preciso viajar para receber uma primeira resposta?", "a": "Não. O enquadramento inicial pode ser feito a distância. Viaje apenas após confirmar interesse e agenda de vistoria." },
-        { "q": "A pré-avaliação obriga a venda?", "a": "Não. Ela serve para orientar os próximos passos; ambas as partes decidem depois da vistoria e da proposta final." }
+        {
+          "q": "Preciso viajar para receber uma primeira resposta?",
+          "a": "Não. O enquadramento inicial pode ser feito a distância. Viaje apenas após confirmar interesse e agenda de vistoria."
+        },
+        {
+          "q": "A pré-avaliação obriga a venda?",
+          "a": "Não. Ela serve para orientar os próximos passos; ambas as partes decidem depois da vistoria e da proposta final."
+        }
       ]
     }
   },
@@ -528,7 +807,13 @@
     "travelTime": "1h45 a 2h15",
     "routeNote": "A ligação costuma usar a BR-116 e a RS-122; serra, obras e fluxo de caminhões podem ampliar o tempo de viagem.",
     "visitPlanning": "Filtre estoque e preço no site, envie documentação básica para simulação e confirme os carros antes de descer a Serra até Esteio.",
-    "title": "Seminovos para Caxias do Sul | Estoque em Esteio",
+    "relatedSlugs": [
+      "bento-goncalves",
+      "gramado",
+      "novo-hamburgo",
+      "montenegro"
+    ],
+    "title": "Seminovos para Caxias do Sul: estoque online | Netcar",
     "description": "Clientes de Caxias do Sul podem comparar estoque da Netcar, adiantar negociação e visitar as lojas em Esteio com horário planejado.",
     "h1": "Seminovos para clientes de Caxias do Sul",
     "intro": "Caxias do Sul tem mercado automotivo amplo, mas comparar com estoque da região metropolitana pode revelar outras versões e faixas de preço. Na Netcar, essa comparação começa pelo site.",
@@ -537,21 +822,33 @@
       "Não há filial da Netcar em Caxias do Sul. As lojas ficam na Av. Presidente Vargas, em Esteio; atendimento remoto adianta simulação e troca, enquanto vistoria do usado, test drive e contratação são presenciais."
     ],
     "faq": [
-      { "q": "Qual a distância de Caxias do Sul até a Netcar?", "a": "A referência é cerca de 115 km, com viagem normalmente entre 1h45 e 2h15. Condições da serra podem alterar bastante o tempo." },
-      { "q": "O preço visto no site pode ser confirmado antes de viajar?", "a": "Consulte a página do veículo e confirme disponibilidade e condições com a equipe. Estoque tem rotatividade." }
+      {
+        "q": "Qual a distância de Caxias do Sul até a Netcar?",
+        "a": "A referência é cerca de 115 km, com viagem normalmente entre 1h45 e 2h15. Condições da serra podem alterar bastante o tempo."
+      },
+      {
+        "q": "O preço visto no site pode ser confirmado antes de viajar?",
+        "a": "Consulte a página do veículo e confirme disponibilidade e condições com a equipe. Estoque tem rotatividade."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Caxias do Sul | Netcar Esteio",
+      "title": "Vender carro em Caxias do Sul: pré-avaliação | Netcar",
       "description": "Envie dados do carro em Caxias do Sul para pré-avaliação. Vistoria e proposta final da Netcar acontecem presencialmente em Esteio.",
-      "h1": "Pré-avaliação de carro em Caxias do Sul",
-      "intro": "Quem está na Serra pode evitar deslocamento prematuro: a equipe primeiro analisa informações e imagens e informa se vale agendar a avaliação física.",
+      "h1": "Vender carro em Caxias do Sul com pré-avaliação",
+      "intro": "Quem quer vender carro em Caxias do Sul pode evitar deslocamento prematuro: a equipe primeiro analisa informações e imagens antes de agendar a avaliação física.",
       "paragraphs": [
         "Além de modelo, versão, ano e km, informe histórico de manutenção, pneus, avarias e saldo de financiamento. Esses dados ajudam a reduzir diferenças entre expectativa e vistoria.",
         "A Netcar não possui operação de compra em Caxias do Sul. Se houver avanço, o veículo é conferido em Esteio e somente então pode receber proposta definitiva."
       ],
       "faq": [
-        { "q": "A Netcar busca o veículo em Caxias do Sul?", "a": "Não há promessa de coleta. O fluxo informado é pré-avaliação remota e vistoria presencial na loja em Esteio." },
-        { "q": "Posso usar o carro como entrada?", "a": "Sim, se aprovado na vistoria. O valor final pode entrar na negociação de um veículo disponível no estoque." }
+        {
+          "q": "A Netcar busca o veículo em Caxias do Sul?",
+          "a": "Não há promessa de coleta. O fluxo informado é pré-avaliação remota e vistoria presencial na loja em Esteio."
+        },
+        {
+          "q": "Posso usar o carro como entrada?",
+          "a": "Sim, se aprovado na vistoria. O valor final pode entrar na negociação de um veículo disponível no estoque."
+        }
       ]
     }
   },
@@ -563,7 +860,8 @@
     "travelTime": "2h a 2h30",
     "routeNote": "A viagem pode combinar RS-453, RS-122 e BR-116; pista de serra, clima e fluxo regional influenciam o tempo.",
     "visitPlanning": "Compare estoque e condições de troca remotamente e agende uma visita concentrada para ver veículos, fazer test drive e concluir análise em Esteio.",
-    "title": "Seminovos para Bento Gonçalves | Netcar Esteio",
+    "relatedSlugs": ["caxias-do-sul", "gramado", "montenegro", "novo-hamburgo"],
+    "title": "Seminovos para Bento Gonçalves: estoque online | Netcar",
     "description": "Pesquise seminovos saindo de Bento Gonçalves. Estoque online e negociação prévia antes da visita presencial à Netcar em Esteio.",
     "h1": "Seminovos para Bento Gonçalves",
     "intro": "Para quem está em Bento Gonçalves, ampliar a pesquisa até a região metropolitana exige critério. A Netcar publica estoque para você eliminar opções fora do perfil antes de enfrentar o trajeto.",
@@ -572,21 +870,33 @@
       "Toda estrutura física da Netcar fica em Esteio, na Av. Presidente Vargas. Contato remoto permite discutir entrada, financiamento e pré-avaliação; não representa loja local, entrega garantida nem compra sem vistoria."
     ],
     "faq": [
-      { "q": "Há loja da Netcar em Bento Gonçalves?", "a": "Não. A Netcar possui lojas físicas somente em Esteio." },
-      { "q": "O que devo adiantar antes da viagem?", "a": "Selecione veículos no site, confirme disponibilidade, envie dados para simulação e, se houver troca, fotos e informações completas do usado." }
+      {
+        "q": "Há loja da Netcar em Bento Gonçalves?",
+        "a": "Não. A Netcar possui lojas físicas somente em Esteio."
+      },
+      {
+        "q": "O que devo adiantar antes da viagem?",
+        "a": "Selecione veículos no site, confirme disponibilidade, envie dados para simulação e, se houver troca, fotos e informações completas do usado."
+      }
     ],
     "sell": {
-      "title": "Vender carro em Bento Gonçalves | Pré-avaliação",
+      "title": "Vender carro em Bento Gonçalves: pré-avaliação | Netcar",
       "description": "Comece remotamente a avaliação do seu carro em Bento Gonçalves. Proposta final e vistoria da Netcar são presenciais em Esteio.",
       "h1": "Vender carro saindo de Bento Gonçalves",
-      "intro": "A pré-avaliação organiza um possível negócio antes da viagem: a equipe confere enquadramento do veículo e você decide se compensa agendar a vistoria em Esteio.",
+      "intro": "Para vender carro em Bento Gonçalves, a pré-avaliação organiza o possível negócio antes da viagem e ajuda a decidir se vale agendar a vistoria em Esteio.",
       "paragraphs": [
         "Envie fotos nítidas, versão exata, ano, quilometragem, histórico e detalhes de avarias. Se houver financiamento, inclua saldo para que a conversa considere a quitação.",
         "A avaliação final não ocorre em Bento Gonçalves. Ela depende da inspeção do carro e documentos na Av. Presidente Vargas, em Esteio, sem garantia prévia de compra."
       ],
       "faq": [
-        { "q": "A orientação remota já é uma proposta?", "a": "Não. É uma referência condicionada ao estado real, histórico e documentação verificados presencialmente." },
-        { "q": "Consigo vistoriar e escolher outro carro no mesmo dia?", "a": "É possível planejar ambos na mesma visita, desde que agenda e disponibilidade do estoque sejam confirmadas antes." }
+        {
+          "q": "A orientação remota já é uma proposta?",
+          "a": "Não. É uma referência condicionada ao estado real, histórico e documentação verificados presencialmente."
+        },
+        {
+          "q": "Consigo vistoriar e escolher outro carro no mesmo dia?",
+          "a": "É possível planejar ambos na mesma visita, desde que agenda e disponibilidade do estoque sejam confirmadas antes."
+        }
       ]
     }
   }

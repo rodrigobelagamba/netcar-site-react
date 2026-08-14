@@ -282,15 +282,16 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
     const pageSize = query?.fetchAll ? 500 : requestedLimit;
     const response = await fetchPage(pageSize, requestedOffset);
 
-    if (!response.data.success || !response.data.data) {
-      console.warn("API retornou sem sucesso ou sem dados");
-      return [];
+    if (response.data?.success !== true || !Array.isArray(response.data.data)) {
+      throw new Error("API de veículos retornou uma resposta inválida");
     }
 
     let apiVehicles = response.data.data;
 
     if (query?.fetchAll) {
-      const seenVehicleIds = new Set(apiVehicles.map((vehicle) => String(vehicle.id)));
+      const seenVehicleIds = new Set(
+        apiVehicles.map((vehicle) => String(vehicle.id)),
+      );
       let currentPage = response.data.data;
       let nextOffset = requestedOffset + apiVehicles.length;
 
@@ -300,7 +301,13 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
       while (currentPage.length === pageSize) {
         const pageResponse = await fetchPage(pageSize, nextOffset);
         const pageVehicles = pageResponse.data?.data;
-        if (!pageResponse.data?.success || !Array.isArray(pageVehicles) || pageVehicles.length === 0) {
+        if (
+          pageResponse.data?.success !== true ||
+          !Array.isArray(pageVehicles)
+        ) {
+          throw new Error("API de veículos retornou uma página inválida");
+        }
+        if (pageVehicles.length === 0) {
           break;
         }
 
@@ -410,7 +417,9 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
     return vehicles;
   } catch (error) {
     console.error("Erro ao buscar veículos:", error);
-    return [];
+    // React Query preserva `initialData`/último resultado bem-sucedido quando
+    // um refetch falha. Resolver a falha como [] apagava o bootstrap do estoque.
+    throw error;
   }
 }
 

@@ -1818,7 +1818,7 @@ export function DetalhesPage() {
       type: "article" as const,
       imageWidth: 1200,
       imageHeight: 900,
-      productBrand: "Netcar Multimarcas",
+      productBrand: marca,
       productAvailability: isSold
         ? ("out of stock" as const)
         : ("in stock" as const),
@@ -1838,6 +1838,7 @@ export function DetalhesPage() {
       description: "Seminovos com garantia na Netcar Multimarcas, Esteio/RS.",
       image: "",
       url: "",
+      robots: !vehicle && (error || !isPending) ? "noindex, follow" : undefined,
     },
   );
 

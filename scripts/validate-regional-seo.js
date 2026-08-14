@@ -19,18 +19,51 @@ const requiredNewCities = [
 
 const errors = [];
 const slugs = new Set();
-const titles = new Set();
-const descriptions = new Set();
-const headings = new Set();
+const normalizedFields = new Map();
+
+function normalize(value) {
+  return String(value || "")
+    .toLocaleLowerCase("pt-BR")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+function registerUnique(value, label) {
+  const normalized = normalize(value);
+  const previous = normalizedFields.get(normalized);
+  if (previous) errors.push(`${label}: conteúdo duplicado de ${previous}`);
+  else normalizedFields.set(normalized, label);
+}
 
 const similarityStopWords = new Set([
-  "para", "com", "uma", "das", "dos", "que", "por", "seu", "sua", "sem",
-  "netcar", "esteio", "seminovo", "seminovos", "carro", "carros", "vender",
+  "para",
+  "com",
+  "uma",
+  "das",
+  "dos",
+  "que",
+  "por",
+  "seu",
+  "sua",
+  "sem",
+  "netcar",
+  "esteio",
+  "seminovo",
+  "seminovos",
+  "carro",
+  "carros",
+  "vender",
 ]);
 
 function contentTokens(city, mode) {
   const data = mode === "sell" ? city.sell : city;
   const faq = (data?.faq || []).flatMap((item) => [item.q, item.a]);
+  const cityTokens = new Set(
+    cities.flatMap((item) => normalize(item.name).split(" ")),
+  );
   return new Set(
     [data?.intro, ...(data?.paragraphs || []), ...faq]
       .filter(Boolean)
@@ -39,7 +72,12 @@ function contentTokens(city, mode) {
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .split(/[^a-z0-9]+/)
-      .filter((word) => word.length > 2 && !similarityStopWords.has(word)),
+      .filter(
+        (word) =>
+          word.length > 2 &&
+          !similarityStopWords.has(word) &&
+          !cityTokens.has(word),
+      ),
   );
 }
 
@@ -52,7 +90,8 @@ function jaccardSimilarity(left, right) {
 for (const city of cities) {
   const prefix = city.slug || city.name || "cidade sem identificação";
 
-  if (!city.slug || !city.name) errors.push(`${prefix}: slug/name obrigatórios`);
+  if (!city.slug || !city.name)
+    errors.push(`${prefix}: slug/name obrigatórios`);
   if (slugs.has(city.slug)) errors.push(`${prefix}: slug duplicado`);
   slugs.add(city.slug);
 
@@ -60,6 +99,11 @@ for (const city of cities) {
     errors.push(`${prefix}: distanceKm inválido`);
   }
   if (!city.travelTime) errors.push(`${prefix}: travelTime obrigatório`);
+  if (!city.regionName || !city.routeNote || !city.visitPlanning) {
+    errors.push(
+      `${prefix}: região, rota e planejamento de visita obrigatórios`,
+    );
+  }
   if (!city.title || !city.description || !city.h1 || !city.intro) {
     errors.push(`${prefix}: metadados/copy de compra incompletos`);
   }
@@ -82,18 +126,120 @@ for (const city of cities) {
     errors.push(`${prefix}: bloco de venda incompleto`);
   }
 
-  if (titles.has(city.title)) errors.push(`${prefix}: title duplicado`);
-  titles.add(city.title);
-  if (descriptions.has(city.description)) {
-    errors.push(`${prefix}: description duplicada`);
+  for (const [field, value] of [
+    ["title compra", city.title],
+    ["description compra", city.description],
+    ["H1 compra", city.h1],
+    ["title venda", city.sell?.title],
+    ["description venda", city.sell?.description],
+    ["H1 venda", city.sell?.h1],
+  ]) {
+    registerUnique(value, `${prefix}: ${field}`);
   }
-  descriptions.add(city.description);
-  if (headings.has(city.h1)) errors.push(`${prefix}: h1 duplicado`);
-  headings.add(city.h1);
+
+  const cityName = normalize(city.name);
+  for (const [field, value] of [
+    ["title compra", city.title],
+    ["description compra", city.description],
+    ["H1 compra", city.h1],
+    ["intro compra", city.intro],
+    ["title venda", city.sell?.title],
+    ["description venda", city.sell?.description],
+    ["H1 venda", city.sell?.h1],
+    ["intro venda", city.sell?.intro],
+  ]) {
+    if (!normalize(value).includes(cityName)) {
+      errors.push(
+        `${prefix}: ${field} precisa citar o nome completo da cidade`,
+      );
+    }
+  }
+
+  if (!/seminov/i.test(city.title) || !/seminov/i.test(city.h1)) {
+    errors.push(
+      `${prefix}: title/H1 de compra precisam declarar intenção de seminovos`,
+    );
+  }
+  if (
+    !/vender carro/i.test(city.sell?.title) ||
+    !/vender carro/i.test(city.sell?.h1)
+  ) {
+    errors.push(
+      `${prefix}: title/H1 de venda precisam declarar intenção de vender carro`,
+    );
+  }
+  for (const [field, value] of [
+    ["title compra", city.title],
+    ["title venda", city.sell?.title],
+  ]) {
+    if (!String(value).endsWith("| Netcar")) {
+      errors.push(`${prefix}: ${field} deve terminar em | Netcar`);
+    }
+    if (String(value).length < 35 || String(value).length > 65) {
+      errors.push(`${prefix}: ${field} fora da faixa de 35–65 caracteres`);
+    }
+  }
+  for (const [field, value] of [
+    ["H1 compra", city.h1],
+    ["H1 venda", city.sell?.h1],
+  ]) {
+    if (/netcar|esteio/i.test(String(value))) {
+      errors.push(`${prefix}: ${field} não deve disputar marca/Esteio`);
+    }
+  }
+  if (/netcar(?: multimarcas)? esteio|netcar em esteio/i.test(city.title)) {
+    errors.push(
+      `${prefix}: title de compra mistura intenção regional com Netcar Esteio`,
+    );
+  }
+  if (
+    /netcar(?: multimarcas)? esteio|netcar em esteio/i.test(
+      city.sell?.title || "",
+    )
+  ) {
+    errors.push(
+      `${prefix}: title de venda mistura intenção regional com Netcar Esteio`,
+    );
+  }
+
+  if (
+    !Array.isArray(city.relatedSlugs) ||
+    city.relatedSlugs.length < 2 ||
+    city.relatedSlugs.length > 4
+  ) {
+    errors.push(`${prefix}: relatedSlugs precisa ter de 2 a 4 cidades`);
+  } else {
+    const related = new Set(city.relatedSlugs);
+    if (related.size !== city.relatedSlugs.length) {
+      errors.push(`${prefix}: relatedSlugs contém duplicata`);
+    }
+    if (related.has(city.slug))
+      errors.push(`${prefix}: relatedSlugs contém a própria cidade`);
+  }
 
   const serialized = JSON.stringify(city);
   if (/Get[uú]lio Vargas/i.test(serialized)) {
     errors.push(`${prefix}: endereço incorreto; usar Av. Presidente Vargas`);
+  }
+  if (
+    /em minutos|at[eé] 72h|melhor custo-benef[ií]cio|preços da capital|poucas lojas|20%\s*e\s*30%/i.test(
+      serialized,
+    )
+  ) {
+    errors.push(`${prefix}: afirmação comercial/local sem comprovação`);
+  }
+}
+
+const priorityMarkets = cities.filter((city) => city.priorityMarket);
+if (priorityMarkets.length < 4 || priorityMarkets.length > 8) {
+  errors.push("priorityMarket deve selecionar entre 4 e 8 cidades próximas");
+}
+
+for (const city of cities) {
+  for (const relatedSlug of city.relatedSlugs || []) {
+    if (!slugs.has(relatedSlug)) {
+      errors.push(`${city.slug}: relatedSlug inexistente: ${relatedSlug}`);
+    }
   }
 }
 

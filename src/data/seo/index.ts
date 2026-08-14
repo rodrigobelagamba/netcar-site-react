@@ -14,12 +14,16 @@ import type {
 // Manuais têm prioridade: se houver slug repetido, o manual vence.
 const manualPosts = blogPostsJson as BlogPost[];
 const autoPosts = (blogAutoJson as BlogPost[]).filter(
-  (auto) => !manualPosts.some((m) => m.slug === auto.slug)
+  (auto) => !manualPosts.some((m) => m.slug === auto.slug),
 );
 export const blogPosts: BlogPost[] = [...manualPosts, ...autoPosts];
 export const cityPages = citiesJson as CitySeoPage[];
 export const landingPages = landingsJson as LandingSeoPage[];
 export const contentPages = contentPagesJson as ContentSeoPage[];
+
+export const priorityCityPages = cityPages.filter(
+  (city) => city.priorityMarket,
+);
 
 export function getContentPage(slug: string): ContentSeoPage | undefined {
   return contentPages.find((p) => p.slug === slug);
@@ -31,6 +35,16 @@ export function getBlogPost(slug: string): BlogPost | undefined {
 
 export function getCityPage(slug: string): CitySeoPage | undefined {
   return cityPages.find((city) => city.slug === slug);
+}
+
+export function getRelatedCityPages(slug: string): CitySeoPage[] {
+  const city = getCityPage(slug);
+  if (!city) return [];
+
+  const bySlug = new Map(cityPages.map((item) => [item.slug, item]));
+  return city.relatedSlugs
+    .map((relatedSlug) => bySlug.get(relatedSlug))
+    .filter((related): related is CitySeoPage => Boolean(related));
 }
 
 export function getLandingPage(slug: string): LandingSeoPage | undefined {
