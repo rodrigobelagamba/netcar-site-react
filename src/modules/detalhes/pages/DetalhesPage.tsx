@@ -1150,7 +1150,7 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
         <img
           src={optimizeStockImage(previewSource, 640)}
           srcSet={stockImageSrcSet(previewSource, [320, 480, 640, 768, 960])}
-          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, (max-width: 1535px) 25vw, (max-width: 1919px) 20vw, (max-width: 2559px) 17vw, (max-width: 3839px) 14vw, 13vw"
           alt={alt}
           width={1920}
           height={1441}
@@ -1584,7 +1584,6 @@ export function DetalhesPage() {
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const [showAllPhotos, setShowAllPhotos] = useState(false);
 
   const vehicleData = useMemo(() => {
     if (!vehicle) return null;
@@ -2091,32 +2090,19 @@ export function DetalhesPage() {
           <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16"></div>
           {/* Grid Container - Ocupa toda a largura sem padding */}
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8 gap-1 sm:gap-2">
-            {avifImages
-              .slice(0, showAllPhotos ? avifImages.length : 6)
-              .map((image, index) => (
-                <GalleryItem
-                  key={index}
-                  image={image}
-                  index={index}
-                  alt={`${marca} ${modeloCompleto} ${vehicle.year || ""} - Foto ${index + 1} - Netcar Multimarcas`}
-                  onClick={() => {
-                    setLightboxIndex(index);
-                    setLightboxOpen(true);
-                  }}
-                />
-              ))}
+            {avifImages.map((image, index) => (
+              <GalleryItem
+                key={index}
+                image={image}
+                index={index}
+                alt={`${marca} ${modeloCompleto} ${vehicle.year || ""} - Foto ${index + 1} - Netcar Multimarcas`}
+                onClick={() => {
+                  setLightboxIndex(index);
+                  setLightboxOpen(true);
+                }}
+              />
+            ))}
           </div>
-          {!showAllPhotos && avifImages.length > 6 && (
-            <div className="flex justify-center px-4 pt-6">
-              <button
-                type="button"
-                onClick={() => setShowAllPhotos(true)}
-                className="rounded-full bg-[#00283C] px-7 py-3 text-sm font-black uppercase tracking-wide text-white transition-colors hover:bg-[#00435a]"
-              >
-                Ver todas as {avifImages.length} fotos
-              </button>
-            </div>
-          )}
         </section>
       )}
 
