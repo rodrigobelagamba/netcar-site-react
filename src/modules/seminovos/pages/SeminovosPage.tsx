@@ -2,6 +2,7 @@ import {
   useState,
   useMemo,
   useEffect,
+  useLayoutEffect,
   useRef,
   Fragment,
   lazy,
@@ -118,7 +119,11 @@ export function SeminovosPage() {
     search.categoria,
   ]);
 
-  const { data: vehicles, isLoading } = useVehiclesQuery(vehiclesQuery, {
+  const {
+    data: vehicles,
+    isLoading,
+    isFetching: isRefreshingVehicles,
+  } = useVehiclesQuery(vehiclesQuery, {
     refreshImmediately: true,
   });
   const { data: stockData } = useAllStockDataQuery();
@@ -162,42 +167,97 @@ export function SeminovosPage() {
     },
   );
 
-  const scrollRestored = useRef(false);
+  type ShowroomReturnState = {
+    vehicleId?: string;
+    scrollY: number;
+    cardViewportTop?: number;
+    savedAt?: number;
+  };
 
-  useEffect(() => {
-    if (isLoading || !vehicles || scrollRestored.current) return;
+  const showroomReturnRef = useRef<ShowroomReturnState | null | undefined>(
+    undefined,
+  );
+  const scrollRestoreComplete = useRef(false);
 
-    let saved: string | null = null;
-    try {
-      saved = sessionStorage.getItem("showroom-scroll");
-    } catch {
-      scrollRestored.current = true;
+  // Restaura pelo card, não só por pixels. O efeito pode rodar com o cache
+  // inicial e novamente após o XML completo, sem trabalho algum numa visita nova.
+  useLayoutEffect(() => {
+    if (scrollRestoreComplete.current || isLoading || !vehicles) return;
+
+    if (showroomReturnRef.current === undefined) {
+      try {
+        const raw = sessionStorage.getItem("showroom-return");
+        const legacy = sessionStorage.getItem("showroom-scroll");
+
+        if (raw) {
+          const parsed = JSON.parse(raw) as ShowroomReturnState;
+          const expired =
+            parsed.savedAt && Date.now() - parsed.savedAt > 30 * 60 * 1000;
+          showroomReturnRef.current = expired ? null : parsed;
+        } else if (legacy && Number.isFinite(Number(legacy))) {
+          showroomReturnRef.current = { scrollY: Number(legacy) };
+        } else {
+          showroomReturnRef.current = null;
+        }
+      } catch {
+        showroomReturnRef.current = null;
+      }
+    }
+
+    const saved = showroomReturnRef.current;
+    if (!saved) {
+      scrollRestoreComplete.current = true;
       return;
     }
-    if (!saved) return;
 
-    scrollRestored.current = true;
-    try {
-      sessionStorage.removeItem("showroom-scroll");
-    } catch {
-      // O valor já foi lido; a restauração pode continuar normalmente.
+    const restore = () => {
+      let top = saved.scrollY;
+      if (saved.vehicleId) {
+        const selector = `[data-showroom-vehicle-id="${CSS.escape(saved.vehicleId)}"]`;
+        const card = document.querySelector<HTMLElement>(selector);
+        if (card) {
+          top =
+            window.scrollY +
+            card.getBoundingClientRect().top -
+            (saved.cardViewportTop ?? 0);
+        }
+      }
+      window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
+    };
+
+    // O frame ocorre depois do scrollTo(0) global da troca de rota.
+    let followUpFrame = 0;
+    const frame = requestAnimationFrame(() => {
+      restore();
+      followUpFrame = requestAnimationFrame(restore);
+    });
+
+    // Enquanto a API atualiza o bootstrap, mantém o estado para uma segunda
+    // restauração. Só consome a chave quando o XML terminou de chegar.
+    if (!isRefreshingVehicles) {
+      const finalTimer = window.setTimeout(() => {
+        restore();
+        scrollRestoreComplete.current = true;
+        try {
+          sessionStorage.removeItem("showroom-return");
+          sessionStorage.removeItem("showroom-scroll");
+        } catch {
+          // A posição já foi aplicada; storage indisponível não afeta a tela.
+        }
+      }, 120);
+
+      return () => {
+        cancelAnimationFrame(frame);
+        cancelAnimationFrame(followUpFrame);
+        clearTimeout(finalTimer);
+      };
     }
 
-    const pos = Number(saved);
-    const restore = () => window.scrollTo({ top: pos, behavior: "instant" });
-
-    // Executa várias vezes para vencer a corrida com o scrollTo(0) do routes
-    // e a animação de transição do Framer Motion (200ms)
-    restore();
-    requestAnimationFrame(restore);
-    const t1 = setTimeout(restore, 100);
-    const t2 = setTimeout(restore, 300);
-
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
+      cancelAnimationFrame(frame);
+      cancelAnimationFrame(followUpFrame);
     };
-  }, [isLoading, vehicles]);
+  }, [isLoading, isRefreshingVehicles, vehicles, vehicles?.length]);
 
   // Extrai dados do stockData (agora são arrays simples)
   const brands = stockData?.enterprises || [];
@@ -668,6 +728,7 @@ export function SeminovosPage() {
                     whatsAppSource="seminovos_grid"
                     whatsAppNumber={whatsAppNumber}
                     compact={stockLayout.compact}
+                    preserveShowroomPosition
                   />
                   {showMidGridBanner && index + 1 === midGridBreak && (
                     <div className="col-span-full my-2 md:my-0">

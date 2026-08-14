@@ -3,6 +3,7 @@ import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
 interface CardsHeroProps {
+  vehicleId?: string;
   image: string;
   brand: string;
   model: string;
@@ -28,6 +29,7 @@ interface CardsHeroProps {
 }
 
 export function CardsHero({
+  vehicleId,
   image,
   brand,
   model,
@@ -393,6 +395,7 @@ export function CardsHero({
 
   return (
     <div
+      data-showroom-vehicle-id={vehicleId}
       className={`${
         compact ? "pt-12 h-full" : "pt-24 md:pt-32 h-full short1600:pt-20"
       } ${onClick ? "cursor-pointer" : ""}`}

@@ -48,6 +48,8 @@ export interface VehicleCardProps {
   /** Número já resolvido pelo componente da lista, evitando uma query por card. */
   whatsAppNumber?: string;
   compact?: boolean;
+  /** Preserva o ponto exato do showroom ao abrir a ficha do veículo. */
+  preserveShowroomPosition?: boolean;
   /** Marca o card pra sticky contextual (scroll / visibilidade). */
   enableFocusTracking?: boolean;
   onVehicleFocus?: (
@@ -79,6 +81,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   whatsAppSource = "home_destaques",
   whatsAppNumber = DEFAULT_SALES_WHATSAPP,
   compact = false,
+  preserveShowroomPosition = false,
   enableFocusTracking = false,
   onVehicleFocus,
 }: VehicleCardProps) {
@@ -167,10 +170,22 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
 
   const handleClick = () => {
     emitFocus();
-    try {
-      sessionStorage.setItem("showroom-scroll", String(window.scrollY));
-    } catch {
-      // A navegação não pode falhar quando o Safari bloquear o storage.
+    if (preserveShowroomPosition) {
+      try {
+        const selector = `[data-showroom-vehicle-id="${CSS.escape(String(id))}"]`;
+        const card = document.querySelector<HTMLElement>(selector);
+        sessionStorage.setItem(
+          "showroom-return",
+          JSON.stringify({
+            vehicleId: String(id),
+            scrollY: window.scrollY,
+            cardViewportTop: card?.getBoundingClientRect().top ?? 0,
+            savedAt: Date.now(),
+          }),
+        );
+      } catch {
+        // A navegação não pode falhar quando o Safari bloquear o storage.
+      }
     }
     window.scrollTo({ top: 0, behavior: "instant" });
 
@@ -209,6 +224,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
 
   const card = (
     <CardsHero
+      vehicleId={id}
       image={mainImage}
       brand={brand}
       model={model}
