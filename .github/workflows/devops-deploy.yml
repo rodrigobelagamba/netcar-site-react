@@ -90,3 +90,15 @@ jobs:
             echo "health check falhou"
             docker logs netcar-devops --tail 50 || true
             exit 1
+
+      - name: Build and deploy production site
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEVOPS_VPS_HOST }}
+          username: ${{ secrets.DEVOPS_VPS_USER }}
+          key: ${{ secrets.DEVOPS_VPS_SSH_KEY }}
+          command_timeout: 30m
+          script_stop: true
+          script: |
+            set -euo pipefail
+            docker exec netcar-devops npm run deploy:local
