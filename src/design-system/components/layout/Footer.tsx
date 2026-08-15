@@ -9,7 +9,7 @@ import {
   useScheduleQuery,
 } from "@/catalog";
 import { formatWhatsAppNumber, buildLojaMapsUrl } from "@/lib/formatters";
-import { landingPages, priorityCityPages } from "@/data/seo";
+import { priorityCityPages, priorityLandingPages } from "@/data/seo";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
@@ -372,13 +372,13 @@ export function Footer() {
         </div>
 
         {/* Seminovos por marca/categoria (gerado do estoque real) */}
-        {landingPages.length > 0 && (
+        {priorityLandingPages.length > 0 && (
           <div className="border-t border-border pt-6 pb-2">
             <h2 className="text-[10px] font-bold text-muted-foreground mb-4 uppercase tracking-widest">
-              Seminovos por marca e categoria
+              Seminovos por modelo, perfil e orçamento
             </h2>
             <ul className="flex flex-wrap gap-x-5 gap-y-2">
-              {landingPages.map((landing) => (
+              {priorityLandingPages.map((landing) => (
                 <li key={landing.slug}>
                   <Link
                     to="/comprar-{$landingSlug}"

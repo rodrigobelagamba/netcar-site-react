@@ -1,7 +1,7 @@
 import { Car, Search, X, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
-import { useNavigate, useLocation } from "@tanstack/react-router";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
@@ -24,7 +24,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // Obtém os search params da URL (funciona em qualquer rota)
   const searchParams = new URLSearchParams(location.search);
   const search = {
@@ -33,12 +33,13 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     categoria: searchParams.get("categoria") || undefined,
     cor: searchParams.get("cor") || undefined,
     cambio: searchParams.get("cambio") || undefined,
+    combustivel: searchParams.get("combustivel") || undefined,
     precoMin: searchParams.get("precoMin") || undefined,
     precoMax: searchParams.get("precoMax") || undefined,
     anoMin: searchParams.get("anoMin") || undefined,
     anoMax: searchParams.get("anoMax") || undefined,
   };
-  
+
   const { data: vehicles } = useVehiclesQuery();
   const { data: stockData } = useAllStockDataQuery();
   const { data: whatsapp } = useWhatsAppQuery();
@@ -50,6 +51,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     if (search.modelo) parts.push(`modelo ${search.modelo}`);
     if (search.categoria) parts.push(`categoria ${search.categoria}`);
     if (search.cambio) parts.push(`câmbio ${search.cambio}`);
+    if (search.combustivel) parts.push(`combustível ${search.combustivel}`);
     if (search.cor) parts.push(`cor ${search.cor}`);
     if (search.precoMin || search.precoMax) {
       const min = search.precoMin ? `R$ ${search.precoMin}` : "—";
@@ -66,6 +68,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     search.modelo,
     search.categoria,
     search.cambio,
+    search.combustivel,
     search.cor,
     search.precoMin,
     search.precoMax,
@@ -74,22 +77,27 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
   // Gera sugestões baseadas na query
   const filteredSuggestions = useMemo<SearchSuggestion[]>(() => {
     if (!searchQuery || searchQuery.length === 0) return [];
-    
+
     const lowerQuery = searchQuery.toLowerCase();
     const suggestions: SearchSuggestion[] = [];
 
     // 1. Busca por marca/modelo nos veículos
     if (vehicles && vehicles.length > 0) {
       const vehicleMatches = vehicles
-        .filter(vehicle => {
+        .filter((vehicle) => {
           const marca = vehicle.marca?.toLowerCase() || "";
           const modelo = vehicle.modelo?.toLowerCase() || "";
           const name = vehicle.name?.toLowerCase() || "";
           const fullName = `${marca} ${modelo}`.toLowerCase();
-          return marca.includes(lowerQuery) || modelo.includes(lowerQuery) || name.includes(lowerQuery) || fullName.includes(lowerQuery);
+          return (
+            marca.includes(lowerQuery) ||
+            modelo.includes(lowerQuery) ||
+            name.includes(lowerQuery) ||
+            fullName.includes(lowerQuery)
+          );
         })
         .slice(0, 5)
-        .map(vehicle => ({
+        .map((vehicle) => ({
           type: "Veículo",
           text: `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name || ""}`.trim(),
           detail: vehicle.year?.toString() || "",
@@ -107,7 +115,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       const fuels = stockData.fuels || [];
 
       // Marcas
-      brands.forEach(brand => {
+      brands.forEach((brand) => {
         if (brand && brand.toLowerCase().includes(lowerQuery)) {
           suggestions.push({
             type: "Filtro",
@@ -118,7 +126,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       });
 
       // Cores
-      colors.forEach(color => {
+      colors.forEach((color) => {
         if (color && color.toLowerCase().includes(lowerQuery)) {
           suggestions.push({
             type: "Filtro",
@@ -129,7 +137,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       });
 
       // Câmbios
-      transmissions.forEach(transmission => {
+      transmissions.forEach((transmission) => {
         if (transmission && transmission.toLowerCase().includes(lowerQuery)) {
           suggestions.push({
             type: "Filtro",
@@ -140,7 +148,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       });
 
       // Combustíveis
-      fuels.forEach(fuel => {
+      fuels.forEach((fuel) => {
         if (fuel && fuel.toLowerCase().includes(lowerQuery)) {
           suggestions.push({
             type: "Filtro",
@@ -164,11 +172,11 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       for (const pattern of patterns) {
         const match = cleaned.match(pattern);
         if (match) {
-          let value = parseInt(match[1].replace(/\./g, ''));
+          let value = parseInt(match[1].replace(/\./g, ""));
           if (!isNaN(value)) {
-            if (cleaned.includes('k') || cleaned.includes('mil')) {
+            if (cleaned.includes("k") || cleaned.includes("mil")) {
               value *= 1000;
-            } else if (match[1].includes('.') || match[1].length >= 4) {
+            } else if (match[1].includes(".") || match[1].length >= 4) {
               // Já está correto
             } else if (value > 50 && value < 1000) {
               value *= 1000;
@@ -193,22 +201,29 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
         const valueStr = match[1] || match[0];
         const priceValue = parsePriceForSuggestions(valueStr);
         if (priceValue !== null) {
-          if (lowerQuery.includes('até') || lowerQuery.includes('menor') || lowerQuery.includes('abaixo')) {
+          if (
+            lowerQuery.includes("até") ||
+            lowerQuery.includes("menor") ||
+            lowerQuery.includes("abaixo")
+          ) {
             suggestions.push({
               type: "Filtro",
-              text: `Até R$ ${priceValue.toLocaleString('pt-BR')}`,
+              text: `Até R$ ${priceValue.toLocaleString("pt-BR")}`,
               detail: "Faixa de Preço",
             });
-          } else if (lowerQuery.includes('maior') || lowerQuery.includes('acima')) {
+          } else if (
+            lowerQuery.includes("maior") ||
+            lowerQuery.includes("acima")
+          ) {
             suggestions.push({
               type: "Filtro",
-              text: `Acima de R$ ${priceValue.toLocaleString('pt-BR')}`,
+              text: `Acima de R$ ${priceValue.toLocaleString("pt-BR")}`,
               detail: "Faixa de Preço",
             });
           } else {
             suggestions.push({
               type: "Filtro",
-              text: `Até R$ ${priceValue.toLocaleString('pt-BR')}`,
+              text: `Até R$ ${priceValue.toLocaleString("pt-BR")}`,
               detail: "Faixa de Preço",
             });
           }
@@ -218,8 +233,12 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     }
 
     // Remove duplicatas e limita a 6 sugestões
-    const uniqueSuggestions = suggestions.filter((suggestion, index, self) =>
-      index === self.findIndex(s => s.text === suggestion.text && s.type === suggestion.type)
+    const uniqueSuggestions = suggestions.filter(
+      (suggestion, index, self) =>
+        index ===
+        self.findIndex(
+          (s) => s.text === suggestion.text && s.type === suggestion.type,
+        ),
     );
 
     return uniqueSuggestions.slice(0, 6);
@@ -228,7 +247,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
   // Formata os filtros ativos para exibição
   const activeFiltersText = useMemo(() => {
     const filters: string[] = [];
-    
+
     if (search?.marca) {
       filters.push(`Marca: ${search.marca}`);
     }
@@ -244,11 +263,18 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     if (search?.cambio) {
       filters.push(`Câmbio: ${search.cambio}`);
     }
+    if (search?.combustivel) {
+      filters.push("Combustível: " + search.combustivel);
+    }
     if (search?.precoMin) {
-      filters.push(`Preço min: R$ ${parseInt(search.precoMin).toLocaleString('pt-BR')}`);
+      filters.push(
+        `Preço min: R$ ${parseInt(search.precoMin).toLocaleString("pt-BR")}`,
+      );
     }
     if (search?.precoMax) {
-      filters.push(`Preço max: R$ ${parseInt(search.precoMax).toLocaleString('pt-BR')}`);
+      filters.push(
+        `Preço max: R$ ${parseInt(search.precoMax).toLocaleString("pt-BR")}`,
+      );
     }
     if (search?.anoMin) {
       filters.push(`Ano min: ${search.anoMin}`);
@@ -256,7 +282,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     if (search?.anoMax) {
       filters.push(`Ano max: ${search.anoMax}`);
     }
-    
+
     return filters.length > 0 ? filters.join(" • ") : "";
   }, [search]);
 
@@ -272,6 +298,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
         anoMin: undefined,
         anoMax: undefined,
         cambio: undefined,
+        combustivel: undefined,
         cor: undefined,
         categoria: undefined,
       },
@@ -288,6 +315,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       search?.categoria ||
       search?.cor ||
       search?.cambio ||
+      search?.combustivel ||
       search?.precoMin ||
       search?.precoMax ||
       search?.anoMin ||
@@ -298,10 +326,10 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
   // Função helper para parsear valores monetários
   const parsePriceValue = (input: string): number | null => {
     if (!input) return null;
-    
+
     // Remove espaços e caracteres especiais, mantém números e k/mil
     const cleaned = input.toLowerCase().trim();
-    
+
     // Padrões: "100k", "100mil", "100 mil", "100.000", "100000"
     // Regex melhorada para capturar diferentes formatos
     const patterns = [
@@ -318,14 +346,14 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     for (const pattern of patterns) {
       const match = cleaned.match(pattern);
       if (match) {
-        let value = parseInt(match[1].replace(/\./g, '')); // Remove pontos de milhar
+        let value = parseInt(match[1].replace(/\./g, "")); // Remove pontos de milhar
         if (!isNaN(value)) {
           // Se tem k ou mil no texto original, multiplica por 1000
-          if (cleaned.includes('k') || cleaned.includes('mil')) {
+          if (cleaned.includes("k") || cleaned.includes("mil")) {
             value *= 1000;
           }
           // Se o número tem 4+ dígitos ou tem pontos, já está em milhares
-          else if (match[1].includes('.') || match[1].length >= 4) {
+          else if (match[1].includes(".") || match[1].length >= 4) {
             // Já está correto
           }
           // Se é um número pequeno (1-3 dígitos) e não tem k/mil, assume milhares se > 50
@@ -336,7 +364,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
         }
       }
     }
-    
+
     return null;
   };
 
@@ -352,6 +380,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       anoMin: string | undefined;
       anoMax: string | undefined;
       cambio: string | undefined;
+      combustivel: string | undefined;
       cor: string | undefined;
       categoria: string | undefined;
     } = {
@@ -362,6 +391,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       anoMin: undefined,
       anoMax: undefined,
       cambio: undefined,
+      combustivel: undefined,
       cor: undefined,
       categoria: undefined,
     };
@@ -370,12 +400,15 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     if (stockData?.enterprises) {
       const brands = stockData.enterprises || [];
       const queryWords = query.split(/\s+/);
-      
+
       // Tenta encontrar uma marca no início da query
       for (const brand of brands) {
         if (!brand) continue;
         const brandLower = brand.toLowerCase();
-        if (queryWords[0] === brandLower || query.startsWith(brandLower + " ")) {
+        if (
+          queryWords[0] === brandLower ||
+          query.startsWith(brandLower + " ")
+        ) {
           searchParams.marca = brand;
           // O resto pode ser o modelo
           const remainingQuery = query.replace(brandLower, "").trim();
@@ -409,11 +442,19 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       if (match) {
         const valueStr = match[1] || match[0];
         priceValue = parsePriceValue(valueStr);
-        
+
         if (priceValue !== null) {
-          if (query.includes('até') || query.includes('menor') || query.includes('abaixo')) {
+          if (
+            query.includes("até") ||
+            query.includes("menor") ||
+            query.includes("abaixo")
+          ) {
             isMaxPrice = true;
-          } else if (query.includes('acima') || query.includes('maior') || query.includes('mais')) {
+          } else if (
+            query.includes("acima") ||
+            query.includes("maior") ||
+            query.includes("mais")
+          ) {
             isMinPrice = true;
           } else {
             // Se não tem prefixo, assume "até" por padrão
@@ -441,7 +482,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       } else if (isMinPrice) {
         searchParams.precoMin = priceValue.toString();
       }
-      
+
       // Se detectou um preço, não filtra por marca/modelo
       // Navega diretamente com os filtros de preço
       navigate({
@@ -453,12 +494,12 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
 
     // Detecta categoria (SUV, Sedan, Hatch, etc.)
     const categoriaKeywords = {
-      'suv': 'SUV',
-      'sedan': 'SEDAN',
-      'hatch': 'HATCH',
-      'hatchback': 'HATCH',
-      'pickup': 'PICKUP',
-      'picape': 'PICKUP',
+      suv: "SUV",
+      sedan: "SEDAN",
+      hatch: "HATCH",
+      hatchback: "HATCH",
+      pickup: "PICKUP",
+      picape: "PICKUP",
     };
 
     for (const [keyword, categoriaValue] of Object.entries(categoriaKeywords)) {
@@ -475,9 +516,9 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
 
     // Detecta tipo de câmbio (Automático ou Manual)
     const cambioKeywords = {
-      'automático': 'AUTOMATICO',
-      'automatico': 'AUTOMATICO',
-      'manual': 'MANUAL',
+      automático: "AUTOMATICO",
+      automatico: "AUTOMATICO",
+      manual: "MANUAL",
     };
 
     for (const [keyword, cambioValue] of Object.entries(cambioKeywords)) {
@@ -494,12 +535,14 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
 
     // Detecta cor (verifica se corresponde a alguma cor conhecida)
     if (stockData?.colors && stockData.colors.length > 0) {
-      const matchedColor = stockData.colors.find(color => {
+      const matchedColor = stockData.colors.find((color) => {
         if (!color) return false;
         const colorLower = color.toLowerCase();
         const queryLower = query.toLowerCase();
         // Verifica se a query contém a cor ou se a cor contém a query
-        return colorLower.includes(queryLower) || queryLower.includes(colorLower);
+        return (
+          colorLower.includes(queryLower) || queryLower.includes(colorLower)
+        );
       });
 
       if (matchedColor) {
@@ -517,14 +560,17 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     // Só executa se não detectou um preço, câmbio ou cor
     if (stockData?.enterprises && !searchParams.marca) {
       const brands = stockData.enterprises || [];
-      const queryWords = query.split(/\s+/).filter(w => w.length > 0);
-      
+      const queryWords = query.split(/\s+/).filter((w) => w.length > 0);
+
       // Tenta encontrar uma marca no início da query
       for (const brand of brands) {
         if (!brand) continue;
         const brandLower = brand.toLowerCase();
         // Verifica se a query começa com a marca
-        if (queryWords.length >= 2 && (queryWords[0] === brandLower || query.startsWith(brandLower + " "))) {
+        if (
+          queryWords.length >= 2 &&
+          (queryWords[0] === brandLower || query.startsWith(brandLower + " "))
+        ) {
           searchParams.marca = brand;
           // O resto pode ser o modelo
           const remainingQuery = query.replace(brandLower, "").trim();
@@ -545,8 +591,11 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     // Detecta apenas marca (verifica se corresponde a alguma marca conhecida)
     // Só executa se não detectou marca+modelo, preço, câmbio ou cor
     if (stockData?.enterprises && !searchParams.marca) {
-      const matchedBrand = stockData.enterprises.find(brand => 
-        brand && (brand.toLowerCase().includes(query) || query.includes(brand.toLowerCase()))
+      const matchedBrand = stockData.enterprises.find(
+        (brand) =>
+          brand &&
+          (brand.toLowerCase().includes(query) ||
+            query.includes(brand.toLowerCase())),
       );
       if (matchedBrand) {
         searchParams.marca = matchedBrand;
@@ -563,7 +612,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       to: "/seminovos",
       search: searchParams,
     });
-    
+
     // Fecha a SearchBar se houver callback
     onAction?.();
   };
@@ -595,10 +644,11 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       onAction?.();
     } else if (suggestion.detail === "Câmbio") {
       // Se for uma sugestão de câmbio, navega diretamente
-      const cambioValue = suggestion.text.toLowerCase().includes('automático') || 
-                          suggestion.text.toLowerCase().includes('automatico') 
-                          ? 'AUTOMATICO' 
-                          : 'MANUAL';
+      const cambioValue =
+        suggestion.text.toLowerCase().includes("automático") ||
+        suggestion.text.toLowerCase().includes("automatico")
+          ? "AUTOMATICO"
+          : "MANUAL";
       navigate({
         to: "/seminovos",
         search: {
@@ -614,7 +664,28 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
         },
       });
       onAction?.();
-    } else if (suggestion.type === "Veículo" && suggestion.marca && suggestion.modelo) {
+    } else if (suggestion.detail === "Combustível") {
+      navigate({
+        to: "/seminovos",
+        search: {
+          marca: undefined,
+          modelo: undefined,
+          precoMin: undefined,
+          precoMax: undefined,
+          anoMin: undefined,
+          anoMax: undefined,
+          cambio: undefined,
+          combustivel: suggestion.text,
+          cor: undefined,
+          categoria: undefined,
+        },
+      });
+      onAction?.();
+    } else if (
+      suggestion.type === "Veículo" &&
+      suggestion.marca &&
+      suggestion.modelo
+    ) {
       // Se for uma sugestão de veículo com marca e modelo, navega diretamente
       navigate({
         to: "/seminovos",
@@ -650,7 +721,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       onAction?.();
     } else {
       // Para outras sugestões, apenas atualiza o campo de busca
-      const cleanText = suggestion.text.replace(/.*: /, '');
+      const cleanText = suggestion.text.replace(/.*: /, "");
       setSearchQuery(cleanText);
     }
   };
@@ -673,7 +744,10 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
         },
       });
       onAction?.();
-    } else if (filterValue.toLowerCase() === "automático" || filterValue.toLowerCase() === "automatico") {
+    } else if (
+      filterValue.toLowerCase() === "automático" ||
+      filterValue.toLowerCase() === "automatico"
+    ) {
       // Define filtro de câmbio automático
       navigate({
         to: "/seminovos",
@@ -711,9 +785,12 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
       // Verifica se é uma cor conhecida
       const filterLower = filterValue.toLowerCase();
       if (stockData?.colors) {
-        const matchedColor = stockData.colors.find(color => {
+        const matchedColor = stockData.colors.find((color) => {
           if (!color) return false;
-          return color.toLowerCase() === filterLower || filterLower === color.toLowerCase();
+          return (
+            color.toLowerCase() === filterLower ||
+            filterLower === color.toLowerCase()
+          );
         });
 
         if (matchedColor) {
@@ -741,65 +818,114 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     }
   };
 
-  const quickFilters = [
-    "Até R$ 100k",
-    "Automático",
-    "SUV",
-    "Prata",
-  ];
+  const quickFilters = ["Até R$ 100k", "Automático", "SUV", "Prata"];
 
   return (
     <section className="relative z-30 pt-2 md:pt-12 container mx-auto px-4 pb-2 md:pb-0 py-2">
       {/* Quick Filters - Apenas Mobile, acima da barra de busca */}
       <div className="md:hidden flex flex-wrap justify-center gap-3 mb-3">
-        {quickFilters.map((filter) => (
-          <button 
-            key={filter} 
-            onClick={() => handleQuickFilterClick(filter)}
-            className="px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-gray-100 text-[11px] font-bold uppercase tracking-widest text-[#365565] hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 active:scale-95"
-          >
-            {filter}
-          </button>
-        ))}
+        {quickFilters.map((filter) => {
+          const className =
+            "px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-gray-100 text-[11px] font-bold uppercase tracking-widest text-[#365565] hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 active:scale-95";
+          if (filter === "Até R$ 100k") {
+            return (
+              <Link
+                key={filter}
+                to="/comprar-{$landingSlug}"
+                params={{ landingSlug: "carros-ate-100-mil" }}
+                onClick={onAction}
+                className={className}
+              >
+                {filter}
+              </Link>
+            );
+          }
+          if (filter === "Automático") {
+            return (
+              <Link
+                key={filter}
+                to="/seminovos-automaticos"
+                onClick={onAction}
+                className={className}
+              >
+                {filter}
+              </Link>
+            );
+          }
+          if (filter === "SUV") {
+            return (
+              <Link
+                key={filter}
+                to="/comprar-{$landingSlug}"
+                params={{ landingSlug: "suv" }}
+                onClick={onAction}
+                className={className}
+              >
+                {filter}
+              </Link>
+            );
+          }
+          return (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => handleQuickFilterClick(filter)}
+              className={className}
+            >
+              {filter}
+            </button>
+          );
+        })}
       </div>
-      
+
       <div className="bg-white/80 backdrop-blur-2xl rounded-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] p-3 md:p-4 border border-white/50 max-w-5xl mx-auto flex flex-col md:flex-row gap-2 items-center relative">
         <div className="relative flex-1 w-full group">
-          <div className="absolute left-6 top-1/2 -translate-y-1/2 transition-colors group-focus-within:text-secondary z-10" style={{ color: 'rgba(0, 40, 60, 0.3)' }}>
+          <div
+            className="absolute left-6 top-1/2 -translate-y-1/2 transition-colors group-focus-within:text-secondary z-10"
+            style={{ color: "rgba(0, 40, 60, 0.3)" }}
+          >
             <Car className="w-6 h-6" />
           </div>
-          
+
           {/* Mostra filtros ativos quando não está focado e não há texto digitado */}
           {!isFocused && !searchQuery && hasActiveFilters && (
             <div className="absolute left-16 right-12 top-1/2 -translate-y-1/2 text-sm text-primary/60 truncate pointer-events-none">
               {activeFiltersText}
             </div>
           )}
-          
-          <input 
-            type="text" 
+
+          <input
+            type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setTimeout(() => setIsFocused(false), 200)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && filteredSuggestions.length > 0) {
+              if (e.key === "Enter" && filteredSuggestions.length > 0) {
                 // Se houver sugestões, seleciona a primeira
                 handleSuggestionClick(filteredSuggestions[0]);
-              } else if (e.key === 'Enter') {
+              } else if (e.key === "Enter") {
                 // Se não houver sugestões, tenta buscar
                 handleSearch();
               }
             }}
-            placeholder={hasActiveFilters && !isFocused ? "" : "Busque por marca, modelo, cor, câmbio, valor..."}
+            placeholder={
+              hasActiveFilters && !isFocused
+                ? ""
+                : "Busque por marca, modelo, cor, câmbio, valor..."
+            }
             className={`w-full bg-gray-50/50 border-none rounded-2xl py-6 pl-16 text-lg font-medium placeholder:text-primary/20 focus:ring-2 transition-all outline-none ${
-              hasActiveFilters && !isFocused && !searchQuery ? 'pr-20' : 'pr-6 md:pr-16'
+              hasActiveFilters && !isFocused && !searchQuery
+                ? "pr-20"
+                : "pr-6 md:pr-16"
             }`}
-            style={{ 
-              '--tw-ring-color': 'rgba(92, 210, 157, 0.2)',
-            } as React.CSSProperties & { '--tw-ring-color': string }}
+            style={
+              {
+                "--tw-ring-color": "rgba(92, 210, 157, 0.2)",
+              } as React.CSSProperties & { "--tw-ring-color": string }
+            }
           />
-          
+
           {/* Botão para limpar filtros */}
           {hasActiveFilters && (
             <button
@@ -811,82 +937,91 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
               <X className="w-5 h-5 text-primary/60 hover:text-primary" />
             </button>
           )}
-          
+
           {/* Live Search Results Dropdown */}
           <AnimatePresence>
-            {isFocused && searchQuery.length > 0 && filteredSuggestions.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 py-2"
-              >
-                <div className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-50 mb-1">Sugestões Inteligentes</div>
-                {filteredSuggestions.map((suggestion, index) => (
-                  <div
-                    key={index}
-                    className="px-6 py-3 hover:bg-gray-50 cursor-pointer flex items-center justify-between gap-3 group transition-colors"
-                    onClick={() => handleSuggestionClick(suggestion)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div 
-                        className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          suggestion.type === 'Veículo' 
-                            ? 'bg-primary/10' 
-                            : 'bg-secondary/20'
-                        }`}
-                        style={{ 
-                          color: suggestion.type === 'Veículo' ? '#00283C' : '#5CD29D' 
-                        }}
-                      >
-                        {suggestion.type === 'Veículo' ? (
-                          <Car className="w-4 h-4" />
-                        ) : (
-                          <Search className="w-4 h-4" />
-                        )}
-                      </div>
-                      <div>
-                        <span 
-                          className="text-gray-700 font-bold block transition-colors"
-                          style={{ color: '#374151' }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.color = '#00283C';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.color = '#374151';
+            {isFocused &&
+              searchQuery.length > 0 &&
+              filteredSuggestions.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 py-2"
+                >
+                  <div className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-50 mb-1">
+                    Sugestões Inteligentes
+                  </div>
+                  {filteredSuggestions.map((suggestion, index) => (
+                    <div
+                      key={index}
+                      className="px-6 py-3 hover:bg-gray-50 cursor-pointer flex items-center justify-between gap-3 group transition-colors"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                            suggestion.type === "Veículo"
+                              ? "bg-primary/10"
+                              : "bg-secondary/20"
+                          }`}
+                          style={{
+                            color:
+                              suggestion.type === "Veículo"
+                                ? "#00283C"
+                                : "#5CD29D",
                           }}
                         >
-                          {suggestion.text}
-                        </span>
-                        <span className="text-xs text-gray-400 font-medium">{suggestion.detail}</span>
+                          {suggestion.type === "Veículo" ? (
+                            <Car className="w-4 h-4" />
+                          ) : (
+                            <Search className="w-4 h-4" />
+                          )}
+                        </div>
+                        <div>
+                          <span
+                            className="text-gray-700 font-bold block transition-colors"
+                            style={{ color: "#374151" }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = "#00283C";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = "#374151";
+                            }}
+                          >
+                            {suggestion.text}
+                          </span>
+                          <span className="text-xs text-gray-400 font-medium">
+                            {suggestion.detail}
+                          </span>
+                        </div>
+                      </div>
+                      <div
+                        className="text-[10px] font-bold uppercase tracking-wider transition-colors"
+                        style={{ color: "#D1D5DB" }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = "#5CD29D";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = "#D1D5DB";
+                        }}
+                      >
+                        {suggestion.type}
                       </div>
                     </div>
-                    <div 
-                      className="text-[10px] font-bold uppercase tracking-wider transition-colors"
-                      style={{ color: '#D1D5DB' }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = '#5CD29D';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = '#D1D5DB';
-                      }}
-                    >
-                      {suggestion.type}
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            )}
+                  ))}
+                </motion.div>
+              )}
           </AnimatePresence>
         </div>
       </div>
-      
+
       {/* Quick Filters - Desktop, abaixo da barra de busca */}
       <div className="hidden md:flex flex-wrap justify-center gap-3 mt-6">
         {quickFilters.map((filter) => (
-          <button 
-            key={filter} 
+          <button
+            key={filter}
             onClick={() => handleQuickFilterClick(filter)}
             className="px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-gray-100 text-[11px] font-bold uppercase tracking-widest text-[#365565] hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 active:scale-95"
           >

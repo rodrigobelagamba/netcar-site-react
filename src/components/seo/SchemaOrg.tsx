@@ -1,6 +1,9 @@
 import { useEffect } from "react";
-import { cityPages } from "@/data/seo";
+import citiesJson from "@/data/seo/cities.json";
+import type { CitySeoPage } from "@/data/seo/types";
 import { CANONICAL_ORIGIN } from "@/lib/seo";
+
+const cityPages = citiesJson as CitySeoPage[];
 
 const openingHours = [
   {

@@ -25,6 +25,12 @@ const STATIC_PAGES = [
   { loc: "/contato", changefreq: "monthly", priority: "0.8" },
   { loc: "/compra", changefreq: "monthly", priority: "0.7" },
   { loc: "/blog", changefreq: "weekly", priority: "0.6" },
+  { loc: "/comparar", changefreq: "weekly", priority: "0.8" },
+  { loc: "/seminovos-automaticos", changefreq: "weekly", priority: "0.8" },
+  { loc: "/financiamento", changefreq: "monthly", priority: "0.8" },
+  { loc: "/move-brasil", changefreq: "weekly", priority: "0.8" },
+  { loc: "/atendimento-24h", changefreq: "monthly", priority: "0.7" },
+  { loc: "/politica-editorial", changefreq: "yearly", priority: "0.4" },
 ];
 
 function escapeXml(value) {
@@ -37,10 +43,7 @@ function escapeXml(value) {
 }
 
 function buildUrlEntry(loc, changefreq, priority, lastmod) {
-  const lines = [
-    "  <url>",
-    `    <loc>${escapeXml(loc)}</loc>`,
-  ];
+  const lines = ["  <url>", `    <loc>${escapeXml(loc)}</loc>`];
   if (lastmod) lines.push(`    <lastmod>${lastmod}</lastmod>`);
   lines.push(`    <changefreq>${changefreq}</changefreq>`);
   lines.push(`    <priority>${priority}</priority>`);
@@ -55,7 +58,9 @@ async function fetchAvailableVehicles() {
 
 function parseSitemapLastmods(xml) {
   const map = new Map();
-  for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>\s*\n\s*<lastmod>([^<]+)<\/lastmod>/g)) {
+  for (const match of xml.matchAll(
+    /<loc>([^<]+)<\/loc>\s*\n\s*<lastmod>([^<]+)<\/lastmod>/g,
+  )) {
     map.set(match[1], match[2]);
   }
   return map;
@@ -64,15 +69,30 @@ function parseSitemapLastmods(xml) {
 async function main() {
   console.log("Gerando sitemap.xml...");
   const cities = JSON.parse(
-    readFileSync(join(rootDir, "src", "data", "seo", "cities.json"), "utf-8")
+    readFileSync(join(rootDir, "src", "data", "seo", "cities.json"), "utf-8"),
   );
+  let landings = [];
+  try {
+    landings = JSON.parse(
+      readFileSync(
+        join(rootDir, "src", "data", "seo", "landings.json"),
+        "utf-8",
+      ),
+    ).filter((landing) => landing.indexable);
+  } catch {
+    console.warn(
+      "  Aviso: landings.json indisponível; sitemap inicial sem landings transacionais.",
+    );
+  }
 
   let vehicleUrls = [];
   try {
     vehicleUrls = await fetchAvailableVehicles();
     console.log(`  ${vehicleUrls.length} veículos disponíveis encontrados`);
   } catch (error) {
-    console.warn(`  Aviso: não foi possível buscar veículos (${error.message}). Sitemap terá só páginas estáticas.`);
+    console.warn(
+      `  Aviso: não foi possível buscar veículos (${error.message}). Sitemap terá só páginas estáticas.`,
+    );
   }
 
   const today = new Date().toISOString().split("T")[0];
@@ -93,11 +113,20 @@ async function main() {
   }
 
   for (const city of cities) {
-    for (const path of [`/seminovos-${city.slug}`, `/vender-carro-${city.slug}`]) {
+    for (const path of [
+      `/seminovos-${city.slug}`,
+      `/vender-carro-${city.slug}`,
+    ]) {
       const loc = `${SITE_URL}${path}`;
       const lastmod = previousLastmods.get(loc) ?? today;
       entries.push(buildUrlEntry(loc, "weekly", "0.8", lastmod));
     }
+  }
+
+  for (const landing of landings) {
+    const loc = `${SITE_URL}/comprar-${landing.slug}`;
+    const lastmod = previousLastmods.get(loc) ?? today;
+    entries.push(buildUrlEntry(loc, "weekly", "0.8", lastmod));
   }
 
   for (const vehicle of vehicleUrls) {
@@ -116,7 +145,7 @@ async function main() {
 
   const wrote = writeTextFile(outputPath, xml);
   console.log(
-    `  ${wrote ? "Salvo" : "Sem alterações"} em ${outputPath} (${STATIC_PAGES.length + cities.length * 2 + vehicleUrls.length} URLs)`
+    `  ${wrote ? "Salvo" : "Sem alterações"} em ${outputPath} (${STATIC_PAGES.length + cities.length * 2 + landings.length + vehicleUrls.length} URLs)`,
   );
 }
 

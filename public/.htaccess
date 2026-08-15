@@ -292,7 +292,7 @@ ErrorDocument 410 /410.html
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/page-$1.html -f
-  RewriteRule ^(financiamento|atendimento-24h|move-brasil|seminovos-automaticos|politica-editorial)/?$ seo-static/page-$1.html [L]
+  RewriteRule ^(financiamento|atendimento-24h|move-brasil|seminovos-automaticos|politica-editorial|comparar)/?$ seo-static/page-$1.html [L]
 
   # 404 real para padrões SEO sem página correspondente. Sem isso, um slug
   # inválido (ex.: /blog/foo-bar, /comprar-moto, /seminovos-atlantis) caía no

@@ -9,7 +9,7 @@ import { CANONICAL_ORIGIN, canonicalUrl } from "@/lib/seo";
 export function useDefaultMetaTags(
   title?: string,
   description?: string,
-  options?: { canonicalPath?: string; robots?: string }
+  options?: { canonicalPath?: string; robots?: string },
 ) {
   const { data: bannersLoja1 } = useBannersLoja1Query();
 
@@ -20,25 +20,29 @@ export function useDefaultMetaTags(
       : typeof window !== "undefined"
         ? canonicalUrl(window.location.pathname)
         : CANONICAL_ORIGIN;
-    
+
     // Busca imagem da fachada ou primeira imagem da loja
     const getStoreImage = () => {
       if (!bannersLoja1 || bannersLoja1.length === 0) {
         return `${baseUrl}/images/loja1.jpg`;
       }
-      
+
       const fachada = bannersLoja1.find(
-        (banner) => banner.titulo?.toLowerCase() === "fachada"
+        (banner) => banner.titulo?.toLowerCase() === "fachada",
       );
-      
-      return fachada?.imagem || bannersLoja1[0]?.imagem || `${baseUrl}/images/loja1.jpg`;
+
+      return (
+        fachada?.imagem ||
+        bannersLoja1[0]?.imagem ||
+        `${baseUrl}/images/loja1.jpg`
+      );
     };
 
     const storeImage = getStoreImage();
-    const absoluteImageUrl = storeImage.startsWith("http") 
-      ? storeImage 
-      : storeImage.startsWith("/") 
-        ? `${baseUrl}${storeImage}` 
+    const absoluteImageUrl = storeImage.startsWith("http")
+      ? storeImage
+      : storeImage.startsWith("/")
+        ? `${baseUrl}${storeImage}`
         : `${baseUrl}/${storeImage}`;
 
     const defaultTitle = "Netcar Multimarcas";
@@ -49,22 +53,28 @@ export function useDefaultMetaTags(
     document.title = title ? `Netcar - ${title}` : defaultTitle;
 
     // Função auxiliar para atualizar ou criar meta tag
-    const updateMetaTag = (property: string, content: string, isProperty = true) => {
+    const updateMetaTag = (
+      property: string,
+      content: string,
+      isProperty = true,
+    ) => {
       const attribute = isProperty ? "property" : "name";
-      let element = document.querySelector(`meta[${attribute}="${property}"]`) as HTMLMetaElement;
-      
+      let element = document.querySelector(
+        `meta[${attribute}="${property}"]`,
+      ) as HTMLMetaElement;
+
       if (!element) {
         element = document.createElement("meta");
         element.setAttribute(attribute, property);
         document.head.appendChild(element);
       }
-      
+
       element.setAttribute("content", content);
     };
 
     // Meta tags básicas
     updateMetaTag("description", description || defaultDescription, false);
-    
+
     // Open Graph tags
     updateMetaTag("og:title", title ? `Netcar - ${title}` : defaultTitle);
     updateMetaTag("og:description", description || defaultDescription);
@@ -76,12 +86,22 @@ export function useDefaultMetaTags(
 
     // Twitter Card tags
     updateMetaTag("twitter:card", "summary_large_image", false);
-    updateMetaTag("twitter:title", title ? `Netcar - ${title}` : defaultTitle, false);
-    updateMetaTag("twitter:description", description || defaultDescription, false);
+    updateMetaTag(
+      "twitter:title",
+      title ? `Netcar - ${title}` : defaultTitle,
+      false,
+    );
+    updateMetaTag(
+      "twitter:description",
+      description || defaultDescription,
+      false,
+    );
     updateMetaTag("twitter:image", absoluteImageUrl, false);
 
     // Canonical URL
-    let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    let canonicalLink = document.querySelector(
+      'link[rel="canonical"]',
+    ) as HTMLLinkElement;
     if (!canonicalLink) {
       canonicalLink = document.createElement("link");
       canonicalLink.setAttribute("rel", "canonical");
@@ -89,13 +109,16 @@ export function useDefaultMetaTags(
     }
     canonicalLink.setAttribute("href", currentUrl);
 
-    if (options?.robots) {
-      updateMetaTag("robots", options.robots, false);
-    } else {
-      const robotsTag = document.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
-      if (robotsTag) robotsTag.remove();
-    }
-  }, [title, description, bannersLoja1, options?.canonicalPath, options?.robots]);
+    updateMetaTag(
+      "robots",
+      options?.robots || "index, follow, max-image-preview:large",
+      false,
+    );
+  }, [
+    title,
+    description,
+    bannersLoja1,
+    options?.canonicalPath,
+    options?.robots,
+  ]);
 }
-
-

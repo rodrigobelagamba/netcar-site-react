@@ -76,6 +76,7 @@ function netcar_static_route_file($path)
         '/move-brasil' => 'page-move-brasil.html',
         '/seminovos-automaticos' => 'page-seminovos-automaticos.html',
         '/politica-editorial' => 'page-politica-editorial.html',
+        '/comparar' => 'page-comparar.html',
     ];
 
     $file = isset($exact[$path]) ? $exact[$path] : null;
@@ -137,8 +138,8 @@ function netcar_fixed_route_meta()
             'canonical' => 'https://www.netcarmultimarcas.com.br/blog',
         ],
         '/comparar' => [
-            'title' => 'Comparar Seminovos | Netcar Multimarcas',
-            'description' => 'Compare lado a lado preço, ano, quilometragem e características dos seminovos disponíveis na Netcar em Esteio/RS.',
+            'title' => 'Comparar carros seminovos lado a lado | Netcar',
+            'description' => 'Compare até 4 carros seminovos lado a lado: preço, ano, câmbio, motor e características. Use o estoque atual da Netcar em Esteio/RS.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/comparar',
         ],
     ];
@@ -193,6 +194,7 @@ function netcar_extract_static_meta($file)
         'description' => '#<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']\s*/?>#is',
         'canonical' => '#<link\s+rel=["\']canonical["\']\s+href=["\'](.*?)["\']\s*/?>#is',
         'image' => '#<meta\s+property=["\']og:image["\']\s+content=["\'](.*?)["\']\s*/?>#is',
+        'robots' => '#<meta\s+name=["\']robots["\']\s+content=["\'](.*?)["\']\s*/?>#is',
     ];
     $meta = [];
     foreach ($patterns as $key => $pattern) {
@@ -224,10 +226,12 @@ function netcar_apply_route_meta($html, $meta)
     $description = htmlspecialchars($meta['description'], ENT_QUOTES, 'UTF-8');
     $canonical = htmlspecialchars($meta['canonical'], ENT_QUOTES, 'UTF-8');
     $image = htmlspecialchars(isset($meta['image']) ? $meta['image'] : 'https://www.netcarmultimarcas.com.br/images/loja1.jpg', ENT_QUOTES, 'UTF-8');
+    $robots = htmlspecialchars(isset($meta['robots']) ? $meta['robots'] : 'index, follow, max-image-preview:large', ENT_QUOTES, 'UTF-8');
 
     $replacements = [
         '#<title>.*?</title>#is' => '<title>' . $title . '</title>',
         '#<meta\s+name="description"[^>]*>#i' => '<meta name="description" content="' . $description . '" />',
+        '#<meta\s+name="robots"[^>]*>#i' => '<meta name="robots" content="' . $robots . '" />',
         '#<link\s+rel="canonical"[^>]*>#i' => '<link rel="canonical" href="' . $canonical . '" />',
         '#<meta\s+property="og:title"[^>]*>#i' => '<meta property="og:title" content="' . $title . '" />',
         '#<meta\s+property="og:description"[^>]*>#i' => '<meta property="og:description" content="' . $description . '" />',

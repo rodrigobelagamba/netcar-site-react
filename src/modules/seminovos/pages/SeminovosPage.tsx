@@ -26,6 +26,7 @@ import {
   siteWhatsAppMessage,
 } from "@/lib/whatsappMessages";
 import { trackStockFilterApply } from "@/lib/analytics";
+import { resolvedVehicleCategory } from "@/lib/vehicleCategory";
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
 
 type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
@@ -86,6 +87,7 @@ export function SeminovosPage() {
       anoMin?: string;
       anoMax?: string;
       cambio?: string;
+      combustivel?: string;
       cor?: string;
       categoria?: string;
       fetchAll: boolean;
@@ -99,11 +101,10 @@ export function SeminovosPage() {
     if (search.anoMin) query.anoMin = search.anoMin;
     if (search.anoMax) query.anoMax = search.anoMax;
     if (search.cambio) query.cambio = search.cambio;
+    if (search.combustivel) query.combustivel = search.combustivel;
     if (search.cor) query.cor = search.cor;
-    if (search.categoria) {
-      // Garante que categoria está em maiúsculas (como a API espera)
-      query.categoria = search.categoria.toUpperCase();
-    }
+    // Categoria é aplicada localmente após baixar o XML completo. A fonte traz
+    // alguns SUVs/sedãs classificados como hatch; filtrar na API os perderia.
 
     // Retorna o objeto mesmo se vazio (para buscar todos os veículos)
     return query;
@@ -115,6 +116,7 @@ export function SeminovosPage() {
     search.anoMin,
     search.anoMax,
     search.cambio,
+    search.combustivel,
     search.cor,
     search.categoria,
   ]);
@@ -143,6 +145,7 @@ export function SeminovosPage() {
       search.anoMin ||
       search.anoMax ||
       search.cambio ||
+      search.combustivel ||
       search.cor ||
       search.categoria,
     );
@@ -154,6 +157,7 @@ export function SeminovosPage() {
     search.anoMin,
     search.anoMax,
     search.cambio,
+    search.combustivel,
     search.cor,
     search.categoria,
   ]);
@@ -298,6 +302,7 @@ export function SeminovosPage() {
         precoMin: precoMin || undefined,
         precoMax: precoMax || undefined,
         categoria: search.categoria || undefined,
+        combustivel: search.combustivel || undefined,
       },
       resultCount: filteredAndSortedVehicles.length,
     });
@@ -311,6 +316,7 @@ export function SeminovosPage() {
         anoMin: anoMin || undefined,
         anoMax: anoMax || undefined,
         cambio: undefined,
+        combustivel: search.combustivel || undefined,
         cor: undefined,
         categoria: search.categoria || undefined, // Preserva categoria da URL
       },
@@ -334,6 +340,7 @@ export function SeminovosPage() {
         anoMin: undefined,
         anoMax: undefined,
         cambio: undefined,
+        combustivel: undefined,
         cor: undefined,
         categoria: search.categoria || undefined, // Preserva categoria da URL
       },
@@ -348,8 +355,9 @@ export function SeminovosPage() {
     if (anoMax) count++;
     if (precoMin) count++;
     if (precoMax) count++;
+    if (search.combustivel) count++;
     return count;
-  }, [marca, anoMin, anoMax, precoMin, precoMax]);
+  }, [marca, anoMin, anoMax, precoMin, precoMax, search.combustivel]);
 
   // Filtra e ordena veículos
   const filteredAndSortedVehicles = useMemo(() => {
@@ -361,9 +369,23 @@ export function SeminovosPage() {
     if (search.categoria) {
       const categoriaUpper = search.categoria.toUpperCase();
       filtered = filtered.filter((vehicle) => {
-        const vehicleCategoria = vehicle.categoria?.toUpperCase();
+        const vehicleCategoria = resolvedVehicleCategory(vehicle);
         return vehicleCategoria === categoriaUpper;
       });
+    }
+
+    if (search.combustivel) {
+      const combustivel = search.combustivel
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toUpperCase();
+      filtered = filtered.filter(
+        (vehicle) =>
+          String(vehicle.combustivel || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toUpperCase() === combustivel,
+      );
     }
 
     // Filtro de busca local (por conteúdo dos cards)
@@ -416,7 +438,7 @@ export function SeminovosPage() {
     });
 
     return filtered;
-  }, [vehicles, sortBy, searchTerm, search.categoria]);
+  }, [vehicles, sortBy, searchTerm, search.categoria, search.combustivel]);
 
   const visibleVehicles = filteredAndSortedVehicles;
 
@@ -465,6 +487,7 @@ export function SeminovosPage() {
     if (search.modelo) parts.push(`modelo ${search.modelo}`);
     if (search.categoria) parts.push(`categoria ${search.categoria}`);
     if (search.cambio) parts.push(`câmbio ${search.cambio}`);
+    if (search.combustivel) parts.push(`combustível ${search.combustivel}`);
     if (search.cor) parts.push(`cor ${search.cor}`);
     if (search.precoMin || search.precoMax) {
       const min = search.precoMin ? `R$ ${search.precoMin}` : "—";
@@ -494,6 +517,7 @@ export function SeminovosPage() {
     search.modelo,
     search.categoria,
     search.cambio,
+    search.combustivel,
     search.cor,
     search.precoMin,
     search.precoMax,

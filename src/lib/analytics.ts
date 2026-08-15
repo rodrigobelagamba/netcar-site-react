@@ -42,6 +42,7 @@ export type AnalyticsPageType =
   | "city_sell"
   | "regional_hub"
   | "brand_landing"
+  | "comparison"
   | "vehicle_detail"
   | "other";
 
@@ -80,6 +81,7 @@ export function inferPageType(pagePath: string): AnalyticsPageType {
     return "city_buy";
   }
   if (pathname.startsWith("/comprar-")) return "brand_landing";
+  if (pathname === "/comparar") return "comparison";
   if (pathname === "/") return "home";
   if (pathname.startsWith("/contato")) return "contact";
   return "other";
@@ -96,7 +98,18 @@ function getRegionalDimensions(pagePath: string): Record<string, string> {
     return { regional_city_slug: pathname.replace("/vender-carro-", "") };
   }
   if (pageType === "brand_landing") {
-    return { landing_slug: pathname.replace("/comprar-", "") };
+    const landingSlug = pathname.replace("/comprar-", "");
+    const landingType =
+      landingSlug === "hibridos"
+        ? "hybrid"
+        : /^(carros-|automaticos-|suv-ate-)/.test(landingSlug)
+          ? "price"
+          : /^(jeep-compass|honda-hr-v|volkswagen-t-cross|chevrolet-tracker|volkswagen-nivus|hyundai-creta|nissan-kicks|jeep-renegade)$/.test(
+                landingSlug,
+              )
+            ? "model"
+            : "brand_or_category";
+    return { landing_slug: landingSlug, landing_type: landingType };
   }
   return {};
 }
@@ -156,6 +169,32 @@ export function trackStockFilterApply(params: {
     filters: params.filters,
     result_count: params.resultCount,
   });
+}
+
+/** Interações do comparador são sinais de consideração, nunca conversões Ads. */
+export function trackCompareInteraction(params: {
+  action: "select" | "remove" | "preset" | "view_details";
+  vehicleIds: Array<string | number>;
+  vehicleNames?: string[];
+  preset?: string;
+}): void {
+  pushDataLayer({
+    event: `compare_vehicle_${params.action}`,
+    compare_action: params.action,
+    vehicle_ids: params.vehicleIds.map(String),
+    vehicle_names: params.vehicleNames,
+    comparison_preset: params.preset,
+    compare_count: params.vehicleIds.length,
+  });
+
+  if (params.vehicleIds.length >= 2) {
+    pushDataLayer({
+      event: "comparison_ready",
+      vehicle_ids: params.vehicleIds.map(String),
+      vehicle_names: params.vehicleNames,
+      compare_count: params.vehicleIds.length,
+    });
+  }
 }
 
 /** Evento GA4: scroll 50% na Home (engajamento). */

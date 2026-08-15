@@ -87,13 +87,29 @@ export interface ContentSeoPage {
 // Landing de marca/categoria gerada automaticamente a partir do estoque real
 // (scripts/generate-landings.js). filterKey/filterValue alimentam a busca
 // de veículos na página, garantindo conteúdo único (o estoque de verdade).
+export interface LandingSeoFilters {
+  marca?: string;
+  /** Busca parcial no nome do modelo (ex.: "HRV" encontra todas as versões). */
+  modelo?: string;
+  categoria?: string;
+  cambio?: string;
+  combustivel?: string;
+  precoMin?: number;
+  precoMax?: number;
+}
+
 export interface LandingSeoPage {
   slug: string;
-  type: "marca" | "categoria";
+  type: "marca" | "categoria" | "modelo" | "faixa" | "combustivel";
   name: string;
   count: number;
-  filterKey: "marca" | "categoria" | "cambio";
-  filterValue: string;
+  /** Página sem oferta real permanece útil, mas fica fora do índice. */
+  indexable: boolean;
+  /** Seleção curta para o rodapé global. */
+  footerPriority: boolean;
+  filters: LandingSeoFilters;
+  /** Malha curta e editorial; evita ligar todas as landings entre si. */
+  relatedSlugs: string[];
   title: string;
   description: string;
   h1: string;

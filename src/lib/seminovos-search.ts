@@ -6,6 +6,7 @@ export const emptySeminovosSearch = {
   anoMin: undefined,
   anoMax: undefined,
   cambio: undefined,
+  combustivel: undefined,
   cor: undefined,
   categoria: undefined,
 } as const;

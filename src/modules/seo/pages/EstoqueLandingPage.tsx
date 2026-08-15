@@ -1,7 +1,11 @@
 import { Link, useParams } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useMemo } from "react";
-import { getLandingPage } from "@/data/seo";
+import {
+  getLandingPage,
+  getRelatedLandingPages,
+  matchesLandingFilters,
+} from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
@@ -9,24 +13,39 @@ import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizac
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
-import { isAvailableHomeStockVehicle } from "@/lib/homeStock";
 import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
+import { generateVehicleSlug } from "@/lib/slug";
 
 export function EstoqueLandingPage() {
   const { landingSlug } = useParams({ from: "/comprar-{$landingSlug}" });
   const landing = getLandingPage(landingSlug);
 
-  const vehiclesQuery = landing
-    ? { ...emptySeminovosSearch, [landing.filterKey]: landing.filterValue }
-    : undefined;
-  const { data: vehicles, isLoading } = useVehiclesQuery(vehiclesQuery, {
-    enabled: !!landing,
-  });
+  const { data: vehicles, isLoading } = useVehiclesQuery(
+    { fetchAll: true },
+    {
+      enabled: !!landing,
+    },
+  );
   const availableVehicles = useMemo(
-    () => (vehicles ?? []).filter(isAvailableHomeStockVehicle),
-    [vehicles],
+    () =>
+      landing
+        ? (vehicles ?? []).filter(
+            (vehicle) =>
+              Number(vehicle.price || 0) > 0 &&
+              matchesLandingFilters(vehicle, landing.filters),
+          )
+        : [],
+    [landing, vehicles],
+  );
+  const visibleVehicles = useMemo(
+    () => availableVehicles.slice(0, 12),
+    [availableVehicles],
+  );
+  const relatedLandings = useMemo(
+    () => (landing ? getRelatedLandingPages(landing.slug) : []),
+    [landing],
   );
 
   useMetaTags({
@@ -35,13 +54,13 @@ export function EstoqueLandingPage() {
     url: landing
       ? `https://www.netcarmultimarcas.com.br/comprar-${landing.slug}`
       : undefined,
-    robots: landing ? undefined : "noindex, nofollow",
+    robots: landing?.indexable ? undefined : "noindex, follow",
   });
 
   useEffect(() => {
     if (!landing) return;
 
-    const schema = {
+    const faqSchema = {
       "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: landing.faq.map((item) => ({
@@ -51,17 +70,42 @@ export function EstoqueLandingPage() {
       })),
     };
 
-    document.querySelector('script[data-schema="landing-faq"]')?.remove();
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.setAttribute("data-schema", "landing-faq");
-    script.textContent = JSON.stringify(schema);
-    document.head.appendChild(script);
+    const pageSchema = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": `https://www.netcarmultimarcas.com.br/comprar-${landing.slug}#webpage`,
+      url: `https://www.netcarmultimarcas.com.br/comprar-${landing.slug}`,
+      name: landing.h1,
+      description: landing.description,
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: availableVehicles.length,
+        itemListElement: visibleVehicles.map((vehicle, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          url: `https://www.netcarmultimarcas.com.br/veiculo/${generateVehicleSlug(vehicle)}`,
+          name: `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name}`.trim(),
+        })),
+      },
+    };
+
+    for (const [key, schema] of [
+      ["landing-page", pageSchema],
+      ["landing-faq", faqSchema],
+    ] as const) {
+      document.querySelector(`script[data-schema="${key}"]`)?.remove();
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.setAttribute("data-schema", key);
+      script.textContent = JSON.stringify(schema);
+      document.head.appendChild(script);
+    }
 
     return () => {
       document.querySelector('script[data-schema="landing-faq"]')?.remove();
+      document.querySelector('script[data-schema="landing-page"]')?.remove();
     };
-  }, [landing]);
+  }, [availableVehicles, landing, visibleVehicles]);
 
   if (!landing) {
     return <NotFoundRedirect />;
@@ -69,7 +113,19 @@ export function EstoqueLandingPage() {
 
   const showroomSearch = {
     ...emptySeminovosSearch,
-    [landing.filterKey]: landing.filterValue,
+    marca: landing.filters.marca,
+    modelo: landing.filters.modelo,
+    precoMin:
+      landing.filters.precoMin !== undefined
+        ? String(landing.filters.precoMin)
+        : undefined,
+    precoMax:
+      landing.filters.precoMax !== undefined
+        ? String(landing.filters.precoMax)
+        : undefined,
+    cambio: landing.filters.cambio,
+    combustivel: landing.filters.combustivel,
+    categoria: landing.filters.categoria,
   } as typeof emptySeminovosSearch;
 
   return (
@@ -88,7 +144,7 @@ export function EstoqueLandingPage() {
         </div>
         <RegionalActionCtas
           className="mt-8"
-          waText={`estou procurando um ${landing.name} seminovo em Esteio.`}
+          waText={`estou procurando ${landing.name.toLowerCase()} em Esteio.`}
           stockSearch={showroomSearch}
           stockLabel={`Ver ${landing.name} nos seminovos`}
           primary="whatsapp"
@@ -100,14 +156,14 @@ export function EstoqueLandingPage() {
       <section className="pb-12">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <h2 className="text-2xl font-bold text-fg mb-6">
-            {landing.name} disponíveis agora
+            {landing.name}: {availableVehicles.length} disponíveis agora
           </h2>
 
           {isLoading ? (
             <p className="text-gray-500">Carregando estoque...</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {availableVehicles.map((vehicle, index) => (
+              {visibleVehicles.map((vehicle, index) => (
                 <VehicleCard
                   key={vehicle.id}
                   id={vehicle.id}
@@ -135,7 +191,7 @@ export function EstoqueLandingPage() {
             </p>
           )}
 
-          {!isLoading && (
+          {!isLoading && availableVehicles.length > 0 && (
             <div className="mt-10 flex justify-center">
               <Link
                 to="/seminovos"
@@ -152,6 +208,37 @@ export function EstoqueLandingPage() {
           )}
         </div>
       </section>
+
+      {relatedLandings.length > 0 && (
+        <section className="pb-16">
+          <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+            <h2 className="mb-5 text-2xl font-bold text-fg">
+              Compare outras opções do estoque
+            </h2>
+            <nav
+              aria-label="Outras seleções de seminovos"
+              className="flex flex-wrap gap-3"
+            >
+              {relatedLandings.map((related) => (
+                <Link
+                  key={related.slug}
+                  to="/comprar-{$landingSlug}"
+                  params={{ landingSlug: related.slug }}
+                  className="rounded-full border border-[#00283C]/15 bg-[#F3F5F6] px-5 py-3 text-sm font-bold text-[#00283C] transition-colors hover:bg-white hover:text-primary"
+                >
+                  {related.name}
+                </Link>
+              ))}
+              <Link
+                to="/comparar"
+                className="rounded-full bg-[#00283C] px-5 py-3 text-sm font-bold text-white hover:bg-[#00435a]"
+              >
+                Comparar carros lado a lado
+              </Link>
+            </nav>
+          </div>
+        </section>
+      )}
 
       <section className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">

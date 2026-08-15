@@ -55,6 +55,13 @@ function landingWhatsAppLink(name) {
   return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
 }
 
+function comparatorWhatsAppLink() {
+  const text = siteWhatsAppMessage(
+    "quero ajuda para comparar os seminovos que escolhi.",
+  );
+  return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
+}
+
 // Gera config PHP a partir do .env.production, para o index.php não duplicar
 // a URL da API. O .env não vai para o servidor; este arquivo gerado vai.
 try {
@@ -324,6 +331,10 @@ try {
     "Aviso: landings.json não encontrado; landings de marca/categoria ignoradas.",
   );
 }
+writeTextFile(
+  join(publicDir, "seo", "landings.json"),
+  `${JSON.stringify(landings, null, 2)}\n`,
+);
 let contentPages = [];
 try {
   contentPages = JSON.parse(
@@ -439,6 +450,70 @@ async function fetchStock() {
 }
 
 const stock = await fetchStock();
+
+function normalizedFilterValue(value) {
+  return String(value || "")
+    .trim()
+    .toLocaleUpperCase("pt-BR")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+function compactFilterValue(value) {
+  return normalizedFilterValue(value).replace(/\s+/g, "");
+}
+
+function resolvedVehicleCategory(vehicle) {
+  const brand = normalizedFilterValue(vehicle.marca);
+  const model = normalizedFilterValue(vehicle.modelo || vehicle.name);
+  if (/\b(RENEGADE|KICKS)\b/.test(model)) return "SUV";
+  if (brand === "HONDA" && /^CITY\b/.test(model) && !/\bHATCH\b/.test(model)) {
+    return "SEDAN";
+  }
+  return normalizedFilterValue(vehicle.categoria);
+}
+
+/** Mantém exatamente o mesmo contrato de filtros da landing React. */
+function matchesLandingFilters(vehicle, filters = {}) {
+  const price = Number(vehicle.valor || vehicle.price || 0);
+  if (
+    filters.marca &&
+    normalizedFilterValue(vehicle.marca) !==
+      normalizedFilterValue(filters.marca)
+  )
+    return false;
+  if (
+    filters.modelo &&
+    !compactFilterValue(vehicle.modelo).includes(
+      compactFilterValue(filters.modelo),
+    )
+  )
+    return false;
+  if (
+    filters.categoria &&
+    resolvedVehicleCategory(vehicle) !==
+      normalizedFilterValue(filters.categoria)
+  )
+    return false;
+  if (
+    filters.cambio &&
+    normalizedFilterValue(vehicle.cambio) !==
+      normalizedFilterValue(filters.cambio)
+  )
+    return false;
+  if (
+    filters.combustivel &&
+    normalizedFilterValue(vehicle.combustivel) !==
+      normalizedFilterValue(filters.combustivel)
+  )
+    return false;
+  if (filters.precoMin !== undefined && price < filters.precoMin) return false;
+  if (filters.precoMax !== undefined && price > filters.precoMax) return false;
+  return price > 0;
+}
 
 function normalizeBootstrapImage(raw) {
   if (!raw) return "";
@@ -617,14 +692,18 @@ function vehicleDisplayName(vehicle) {
     .join(" ");
 }
 
+function showcaseVehicleOrder(vehicles) {
+  return [
+    ...vehicles.filter((vehicle) => vehicleCardImage(vehicle)),
+    ...vehicles.filter((vehicle) => !vehicleCardImage(vehicle)),
+  ];
+}
+
 /** Vitrine de estoque em HTML, reaproveitando os cards de carro do blog. */
 function stockShowcase({ heading, vehicles, limit = 8, ctaLabel, ctaHref }) {
   if (!vehicles.length) return "";
   // Carro com foto real na frente: vitrine sem imagem converte muito pior.
-  const ordered = [
-    ...vehicles.filter((vehicle) => vehicleCardImage(vehicle)),
-    ...vehicles.filter((vehicle) => !vehicleCardImage(vehicle)),
-  ];
+  const ordered = showcaseVehicleOrder(vehicles);
   const cars = ordered.slice(0, limit).map((vehicle) => ({
     modelo: vehicleDisplayName(vehicle),
     url: `${SITE}/veiculo/${generateVehicleSlug(vehicle)}`,
@@ -645,6 +724,29 @@ function stockShowcase({ heading, vehicles, limit = 8, ctaLabel, ctaHref }) {
       ${cta}`;
 }
 
+function landingCollectionSchema(landing, canonical, vehicles) {
+  const ordered = showcaseVehicleOrder(vehicles);
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${canonical}#webpage`,
+    url: canonical,
+    name: landing.h1,
+    description: landing.description,
+    inLanguage: "pt-BR",
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: vehicles.length,
+      itemListElement: ordered.slice(0, 12).map((vehicle, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${SITE}/veiculo/${generateVehicleSlug(vehicle)}`,
+        name: vehicleDisplayName(vehicle),
+      })),
+    },
+  };
+}
+
 function pageShell({
   title,
   description,
@@ -652,6 +754,7 @@ function pageShell({
   body,
   schemas = [],
   ogImage,
+  robots = "index, follow, max-image-preview:large",
 }) {
   const schemaTags = schemas.length
     ? "\n" +
@@ -667,7 +770,7 @@ function pageShell({
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="robots" content="${escapeHtml(robots)}" />
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}" />
   <link rel="canonical" href="${canonical}" />
@@ -1028,7 +1131,7 @@ for (const city of cities) {
       <p>
         <a href="${SITE}/seminovos">Ver estoque</a>
         ·
-        <a href="${cityWhatsAppLink(city.name)}">Falar com consultor · 24/7</a>
+        <a href="${cityWhatsAppLink(city.name)}">Falar com o iAN · 24/7</a>
       </p>
       ${relatedCitiesHtml(city.slug)}
     </article>`;
@@ -1121,8 +1224,11 @@ for (const city of cities) {
 
 // Landings de marca/categoria (HTML estático p/ crawler) — geradas do estoque real.
 function relatedLandingsHtml(currentSlug) {
-  const links = landings
-    .filter((l) => l.slug !== currentSlug)
+  const current = landings.find((landing) => landing.slug === currentSlug);
+  const bySlug = new Map(landings.map((landing) => [landing.slug, landing]));
+  const links = (current?.relatedSlugs || [])
+    .map((slug) => bySlug.get(slug))
+    .filter((landing) => landing?.indexable)
     .map(
       (l) =>
         `<li><a href="${SITE}/comprar-${l.slug}">${escapeHtml(l.h1)}</a></li>`,
@@ -1140,28 +1246,29 @@ for (const landing of landings) {
   const paragraphs = landing.paragraphs
     .map((p) => `<p>${escapeHtml(p)}</p>`)
     .join("");
-  const landingStock = stock.filter(
-    (vehicle) =>
-      String(vehicle[landing.filterKey] || "").toUpperCase() ===
-      String(landing.filterValue || "").toUpperCase(),
+  const landingStock = stock.filter((vehicle) =>
+    matchesLandingFilters(vehicle, landing.filters),
   );
-  const body = `
-    <article>
-      <h1>${escapeHtml(landing.h1)}</h1>
-      <p>${escapeHtml(landing.intro)}</p>
-      ${paragraphs}
-      ${stockShowcase({
+  const availability = landingStock.length
+    ? stockShowcase({
         heading: `${landing.name} em estoque agora na Netcar`,
         vehicles: landingStock,
         limit: 12,
         ctaLabel: "Ver todo o estoque de seminovos",
         ctaHref: `${SITE}/seminovos`,
-      })}
+      })
+    : `<h2>Estoque em atualização</h2><p>Não há uma unidade deste recorte anunciada agora. Veja as seleções relacionadas ou fale com a Netcar para receber alternativas reais do estoque.</p>`;
+  const body = `
+    <article>
+      <h1>${escapeHtml(landing.h1)}</h1>
+      <p>${escapeHtml(landing.intro)}</p>
+      ${paragraphs}
+      ${availability}
       ${faqHtml}
       <p>
         <a href="${SITE}/seminovos">Ver estoque completo</a>
         ·
-        <a href="${landingWhatsAppLink(landing.name)}">Falar com consultor · 24/7</a>
+        <a href="${landingWhatsAppLink(landing.name)}">Falar com o iAN · 24/7</a>
       </p>
       ${relatedLandingsHtml(landing.slug)}
     </article>`;
@@ -1175,6 +1282,7 @@ for (const landing of landings) {
       body,
       schemas: [
         ORG_SCHEMA,
+        landingCollectionSchema(landing, canonical, landingStock),
         faqSchema(landing.faq),
         breadcrumbSchema([
           HOME_CRUMB,
@@ -1182,9 +1290,147 @@ for (const landing of landings) {
           { name: landing.name, url: canonical },
         ]),
       ],
+      robots: landing.indexable
+        ? "index, follow, max-image-preview:large"
+        : "noindex, follow, max-image-preview:large",
     }),
   );
 }
+
+const comparatorCanonical = `${SITE}/comparar`;
+const comparatorTitle = "Comparar carros seminovos lado a lado | Netcar";
+const comparatorDescription =
+  "Compare até 4 carros seminovos lado a lado: preço, ano, câmbio, motor e características. Use o estoque atual da Netcar em Esteio/RS.";
+const comparisonDefinitions = [
+  ["Jeep Compass", "JEEP", "COMPASS", "Honda HR-V", "HONDA", "HRV"],
+  [
+    "Chevrolet Tracker",
+    "CHEVROLET",
+    "TRACKER",
+    "Hyundai Creta",
+    "HYUNDAI",
+    "CRETA",
+  ],
+  [
+    "Volkswagen Nivus",
+    "VOLKSWAGEN",
+    "NIVUS",
+    "Fiat Fastback",
+    "FIAT",
+    "FASTBACK",
+  ],
+  [
+    "Volkswagen Tera",
+    "VOLKSWAGEN",
+    "TERA",
+    "Volkswagen T-Cross",
+    "VOLKSWAGEN",
+    "T CROSS",
+  ],
+];
+
+function closestPricePair(left, right) {
+  let best = null;
+  for (const a of left) {
+    for (const b of right) {
+      const difference = Math.abs(Number(a.valor || 0) - Number(b.valor || 0));
+      if (!best || difference < best.difference) best = { a, b, difference };
+    }
+  }
+  return best;
+}
+
+const comparisonExamples = comparisonDefinitions
+  .map(
+    ([leftName, leftBrand, leftModel, rightName, rightBrand, rightModel]) => {
+      const left = stock.filter((vehicle) =>
+        matchesLandingFilters(vehicle, { marca: leftBrand, modelo: leftModel }),
+      );
+      const right = stock.filter((vehicle) =>
+        matchesLandingFilters(vehicle, {
+          marca: rightBrand,
+          modelo: rightModel,
+        }),
+      );
+      const pair = closestPricePair(left, right);
+      return pair ? { leftName, rightName, ...pair } : null;
+    },
+  )
+  .filter(Boolean);
+
+const comparisonExamplesHtml = comparisonExamples.length
+  ? `<ul>${comparisonExamples
+      .map(
+        ({ leftName, rightName, a, b }) =>
+          `<li><strong>${escapeHtml(leftName)} x ${escapeHtml(rightName)}</strong>: <a href="${SITE}/veiculo/${generateVehicleSlug(a)}">${escapeHtml(vehicleDisplayName(a))}</a> e <a href="${SITE}/veiculo/${generateVehicleSlug(b)}">${escapeHtml(vehicleDisplayName(b))}</a></li>`,
+      )
+      .join("")}</ul>`
+  : "<p>Escolha dois veículos do estoque atual para começar a comparação.</p>";
+const comparatorBody = `
+  <nav aria-label="Navegação estrutural"><ol><li><a href="${SITE}/">Home</a></li><li><a href="${SITE}/seminovos">Seminovos</a></li><li>Comparar carros</li></ol></nav>
+  <article>
+    <h1>Comparar carros seminovos lado a lado</h1>
+    <p>Escolha de dois a quatro veículos disponíveis e veja preço, ano, câmbio, motor, combustível, potência, portas, cor e categoria na mesma tela.</p>
+    <h2>Comparações com carros do estoque atual</h2>
+    ${comparisonExamplesHtml}
+    <h2>Como usar o comparador</h2>
+    <ol>
+      <li>Busque uma marca ou um modelo e selecione o primeiro carro.</li>
+      <li>Adicione outros veículos que resolvam o mesmo tipo de uso.</li>
+      <li>Compare ficha e preço; depois abra os detalhes e confirme a disponibilidade.</li>
+    </ol>
+    ${stockShowcase({
+      heading: "Carros disponíveis para comparar agora",
+      vehicles: stock,
+      limit: 10,
+      ctaLabel: "Abrir o comparador interativo",
+      ctaHref: comparatorCanonical,
+    })}
+    <p><a href="${SITE}/seminovos">Ver estoque completo</a> · <a href="${comparatorWhatsAppLink()}">Pedir ajuda para comparar</a></p>
+  </article>`;
+writeSeoPage(
+  join(seoStaticDir, "page-comparar.html"),
+  comparatorCanonical,
+  pageShell({
+    title: comparatorTitle,
+    description: comparatorDescription,
+    canonical: comparatorCanonical,
+    body: comparatorBody,
+    schemas: [
+      ORG_SCHEMA,
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": `${comparatorCanonical}#webpage`,
+        url: comparatorCanonical,
+        name: "Comparar carros seminovos lado a lado",
+        description: comparatorDescription,
+        mainEntity: { "@id": `${comparatorCanonical}#app` },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "@id": `${comparatorCanonical}#app`,
+        name: "Comparador de seminovos Netcar",
+        url: comparatorCanonical,
+        applicationCategory: "ShoppingApplication",
+        operatingSystem: "Qualquer navegador",
+        isAccessibleForFree: true,
+        featureList: [
+          "Comparar até quatro seminovos",
+          "Preço e ano lado a lado",
+          "Câmbio, motor e combustível",
+          "Link para a ficha de cada veículo",
+        ],
+      },
+      breadcrumbSchema([
+        HOME_CRUMB,
+        { name: "Seminovos", url: `${SITE}/seminovos` },
+        { name: "Comparar carros", url: comparatorCanonical },
+      ]),
+    ],
+  }),
+);
 
 // Páginas de conteúdo SEO (financiamento, atendimento) — HTML estático p/ crawler
 function renderContentSections(sections) {
@@ -1350,11 +1596,13 @@ const urls = [
       priority: "0.8",
       changefreq: "weekly",
     })),
-  ...landings.map((landing) => ({
-    loc: `${SITE}/comprar-${landing.slug}`,
-    priority: "0.8",
-    changefreq: "weekly",
-  })),
+  ...landings
+    .filter((landing) => landing.indexable)
+    .map((landing) => ({
+      loc: `${SITE}/comprar-${landing.slug}`,
+      priority: "0.8",
+      changefreq: "weekly",
+    })),
 ];
 
 let previousLastmods = new Map();
@@ -1389,6 +1637,7 @@ writeTextFile(join(publicDir, "sitemap.xml"), sitemap);
 // blog-ford e blog-ix35-gl depois que os posts saíram do JSON.
 const expectedFiles = new Set([
   "regions-hub.html",
+  "page-comparar.html",
   ...blogPosts.map((post) => `blog-${post.slug}.html`),
   ...cities.map((city) => `city-${city.slug}.html`),
   ...cities

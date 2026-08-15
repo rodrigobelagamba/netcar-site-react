@@ -19,7 +19,18 @@ function allBootstrapVehicles(): Vehicle[] | undefined {
 }
 
 function normalized(value: unknown): string {
-  return String(value || "").trim().toLocaleUpperCase("pt-BR");
+  return String(value || "")
+    .trim()
+    .toLocaleUpperCase("pt-BR")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+function compact(value: unknown): string {
+  return normalized(value).replace(/\s+/g, "");
 }
 
 function numericFilter(value: unknown): number | undefined {
@@ -29,7 +40,9 @@ function numericFilter(value: unknown): number | undefined {
   return Number.isFinite(number) ? number : undefined;
 }
 
-export function getBootstrapVehicles(query?: VehiclesQuery): Vehicle[] | undefined {
+export function getBootstrapVehicles(
+  query?: VehiclesQuery,
+): Vehicle[] | undefined {
   const vehicles = allBootstrapVehicles();
   if (!vehicles) return undefined;
   if (!query) return vehicles;
@@ -50,9 +63,14 @@ export function getBootstrapVehicles(query?: VehiclesQuery): Vehicle[] | undefin
     const price = Number(vehicle.price || 0);
     const year = Number(vehicle.year || 0);
     if (brand && normalized(vehicle.marca) !== brand) return false;
-    if (model && !normalized(vehicle.modelo || vehicle.name).includes(model)) return false;
+    if (
+      model &&
+      !compact(vehicle.modelo || vehicle.name).includes(compact(model))
+    )
+      return false;
     if (category && normalized(vehicle.categoria) !== category) return false;
-    if (transmission && normalized(vehicle.cambio) !== transmission) return false;
+    if (transmission && normalized(vehicle.cambio) !== transmission)
+      return false;
     if (color && normalized(vehicle.cor) !== color) return false;
     if (fuel && normalized(vehicle.combustivel) !== fuel) return false;
     if (engine && normalized(vehicle.motor) !== engine) return false;
@@ -67,5 +85,7 @@ export function getBootstrapVehicles(query?: VehiclesQuery): Vehicle[] | undefin
 export function getBootstrapVehicle(slug: string): Vehicle | undefined {
   const id = extractVehicleIdFromSlug(slug);
   if (!id) return undefined;
-  return allBootstrapVehicles()?.find((vehicle) => String(vehicle.id) === String(id));
+  return allBootstrapVehicles()?.find(
+    (vehicle) => String(vehicle.id) === String(id),
+  );
 }

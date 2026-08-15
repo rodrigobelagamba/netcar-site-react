@@ -107,6 +107,39 @@ function humanizeVehicleSlug($slug) {
         : ucwords($s);
 }
 
+/** Hub permanente do modelo, gerado no mesmo build a partir do estoque. */
+function netcarVehicleModelLanding($vehicle) {
+    $file = __DIR__ . '/seo/landings.json';
+    if (!is_readable($file) || !is_array($vehicle)) return null;
+    $landings = json_decode((string) @file_get_contents($file), true);
+    if (!is_array($landings)) return null;
+    $brand = strtoupper(trim(isset($vehicle['marca']) ? (string) $vehicle['marca'] : ''));
+    $model = strtoupper(trim(isset($vehicle['modelo']) ? (string) $vehicle['modelo'] : ''));
+    $modelCompact = preg_replace('/[^A-Z0-9]/', '', $model);
+    foreach ($landings as $landing) {
+        if (
+            !is_array($landing) ||
+            ($landing['type'] ?? '') !== 'modelo' ||
+            empty($landing['indexable'])
+        ) continue;
+        $filters = isset($landing['filters']) && is_array($landing['filters'])
+            ? $landing['filters']
+            : array();
+        $wantedBrand = strtoupper(trim(isset($filters['marca']) ? (string) $filters['marca'] : ''));
+        $wantedModel = strtoupper(trim(isset($filters['modelo']) ? (string) $filters['modelo'] : ''));
+        $wantedModelCompact = preg_replace('/[^A-Z0-9]/', '', $wantedModel);
+        if (
+            $wantedBrand !== '' &&
+            $wantedModelCompact !== '' &&
+            $brand === $wantedBrand &&
+            strpos($modelCompact, $wantedModelCompact) !== false
+        ) {
+            return $landing;
+        }
+    }
+    return null;
+}
+
 // Há somente três estados seguros:
 // - 200 + JSON válido + success=true + veículo: ficha encontrada;
 // - 404 + JSON válido + success=false: ausência confirmada pela API;
@@ -195,6 +228,7 @@ if ($vehicleMissing) {
 }
 
 $vehicle = $data['data'][0];
+$modelLanding = netcarVehicleModelLanding($vehicle);
 
 // Prepara dados para meta tags
 $marca = isset($vehicle['marca']) ? $vehicle['marca'] : '';
@@ -799,6 +833,10 @@ if ($placa) {
         <h2>Continue navegando</h2>
         <ul>
             <li><a href="<?php echo htmlspecialchars($redirectUrl, ENT_QUOTES, 'UTF-8'); ?>">Ficha completa com todas as fotos</a></li>
+            <?php if (is_array($modelLanding) && !empty($modelLanding['slug']) && !empty($modelLanding['name'])): ?>
+            <li><a href="/comprar-<?php echo rawurlencode((string) $modelLanding['slug']); ?>">Ver outros <?php echo htmlspecialchars((string) $modelLanding['name'], ENT_QUOTES, 'UTF-8'); ?></a></li>
+            <?php endif; ?>
+            <li><a href="/comparar">Comparar carros seminovos lado a lado</a></li>
             <li><a href="/seminovos">Estoque completo de seminovos</a></li>
             <li><a href="/seminovos-automaticos">Seminovos automáticos</a></li>
             <li><a href="/financiamento">Financiamento de seminovos</a></li>

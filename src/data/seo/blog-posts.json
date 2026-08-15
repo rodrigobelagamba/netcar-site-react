@@ -651,8 +651,8 @@
         "text": "Comece pelo estoque atualizado. Filtre SUVs na sua faixa e fale com o consultor só depois de escolher dois ou três exemplares concretos."
       }
     ],
-    "ctaLabel": "Ver SUVs no estoque",
-    "ctaHref": "/seminovos"
+    "ctaLabel": "Ver SUVs até R$ 100 mil",
+    "ctaHref": "/comprar-suv-ate-100-mil"
   },
   {
     "slug": "seminovo-hibrido-vale-a-pena-esteio",
@@ -724,8 +724,8 @@
         "text": "Se o perfil de uso combina, o próximo passo é simples: ver as opções híbridas no estoque, escolher a shortlist e agendar test drive em Esteio."
       }
     ],
-    "ctaLabel": "Ver opções no estoque",
-    "ctaHref": "/seminovos"
+    "ctaLabel": "Ver híbridos no estoque",
+    "ctaHref": "/comprar-hibridos"
   },
   {
     "slug": "mobilidade-urbana-seminovo-grande-poa",

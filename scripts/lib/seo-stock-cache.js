@@ -18,7 +18,10 @@ function publicVehicle(vehicle) {
     valor: vehicle.valor,
     km: vehicle.km,
     cambio: vehicle.cambio,
+    combustivel: vehicle.combustivel,
     categoria: vehicle.categoria,
+    placa: vehicle.placa,
+    link: vehicle.link,
     destaque: vehicle.destaque,
     imagens: {
       thumb: Array.isArray(vehicle?.imagens?.thumb)

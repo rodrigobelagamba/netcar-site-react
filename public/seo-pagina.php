@@ -6,6 +6,48 @@
 
 require_once __DIR__ . '/seo/helpers.php';
 
+function netcar_render_demand_links($limit = null)
+{
+    $file = __DIR__ . '/seo/landings.json';
+    $items = is_readable($file)
+        ? json_decode((string) @file_get_contents($file), true)
+        : array();
+    echo '<ul>';
+    echo '<li><a href="' . SEO_SITE_URL . '/comparar">Comparar carros seminovos lado a lado</a></li>';
+    echo '<li><a href="' . SEO_SITE_URL . '/seminovos-automaticos">Seminovos automáticos</a></li>';
+    $rendered = 0;
+    if (is_array($items)) {
+        $typeOrder = array('modelo' => 0, 'faixa' => 1, 'combustivel' => 2, 'categoria' => 3, 'marca' => 4);
+        usort($items, function ($left, $right) use ($typeOrder) {
+            $leftType = isset($left['type']) ? (string) $left['type'] : '';
+            $rightType = isset($right['type']) ? (string) $right['type'] : '';
+            $leftOrder = isset($typeOrder[$leftType]) ? $typeOrder[$leftType] : 99;
+            $rightOrder = isset($typeOrder[$rightType]) ? $typeOrder[$rightType] : 99;
+            if ($leftOrder !== $rightOrder) return $leftOrder <=> $rightOrder;
+            $leftPriority = empty($left['footerPriority']) ? 1 : 0;
+            $rightPriority = empty($right['footerPriority']) ? 1 : 0;
+            if ($leftPriority !== $rightPriority) return $leftPriority <=> $rightPriority;
+            return strcmp((string) ($left['name'] ?? ''), (string) ($right['name'] ?? ''));
+        });
+        foreach ($items as $landing) {
+            if (
+                ($limit !== null && $rendered >= $limit) ||
+                empty($landing['indexable']) ||
+                empty($landing['slug']) ||
+                empty($landing['name'])
+            ) {
+                continue;
+            }
+            echo '<li><a href="' . SEO_SITE_URL . '/comprar-'
+                . rawurlencode((string) $landing['slug']) . '">'
+                . htmlspecialchars((string) $landing['name'], ENT_QUOTES, 'UTF-8')
+                . '</a></li>';
+            $rendered++;
+        }
+    }
+    echo '</ul>';
+}
+
 $page = seo_resolve_page();
 if ($page === null) {
     header('Location: /');
@@ -26,6 +68,8 @@ switch ($page) {
         echo '<h2>Destaques do estoque</h2>';
         seo_render_vehicle_list($vehicles, 12);
         echo '<p><a href="' . SEO_SITE_URL . '/seminovos">Ver todos os seminovos disponíveis</a></p>';
+        echo '<h2>Encontre por modelo, perfil ou orçamento</h2>';
+        netcar_render_demand_links(14);
         echo '<h2>Atendimento regional</h2>';
         echo '<p>Consulte estoque e pré-avaliação antes de viajar. As lojas físicas ficam somente na Av. Presidente Vargas, em Esteio.</p>';
         echo '<p><a href="' . SEO_SITE_URL . '/regioes-atendidas">Ver regiões atendidas</a></p>';
@@ -49,6 +93,8 @@ switch ($page) {
         echo '<p class="intro">Estoque atualizado de seminovos na Netcar Multimarcas. Veículos vistoriados, com garantia e financiamento. ';
         echo count($vehicles) . ' veículos disponíveis.</p>';
         seo_render_vehicle_list($vehicles);
+        echo '<h2>Outras formas de encontrar seu carro</h2>';
+        netcar_render_demand_links();
         break;
 
     case 'sobre':

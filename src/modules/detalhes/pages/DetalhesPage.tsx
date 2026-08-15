@@ -58,6 +58,7 @@ import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { parseGptContent, AccordionSection } from "@/lib/parseGptContent";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
+import { landingPages, matchesLandingFilters } from "@/data/seo";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -1537,6 +1538,19 @@ export function DetalhesPage() {
     isPending,
   } = useVehicleQuery(slug);
 
+  const modelLanding = useMemo(
+    () =>
+      vehicle
+        ? landingPages.find(
+            (landing) =>
+              landing.type === "modelo" &&
+              landing.indexable &&
+              matchesLandingFilters(vehicle, landing.filters),
+          )
+        : undefined,
+    [vehicle],
+  );
+
   // A troca do placeholder pelos dados reais altera bastante a altura da rota.
   // Reafirma o topo nesse momento para impedir o scroll anchoring do navegador.
   useLayoutEffect(() => {
@@ -2137,6 +2151,29 @@ export function DetalhesPage() {
           </DeferredRender>
         </div>
       </section>
+
+      {modelLanding && (
+        <section className="pb-10 sm:pb-12">
+          <div className="container-main flex flex-wrap items-center gap-3 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+            <span className="text-sm font-semibold text-muted-foreground">
+              Continue pesquisando:
+            </span>
+            <Link
+              to="/comprar-{$landingSlug}"
+              params={{ landingSlug: modelLanding.slug }}
+              className="rounded-full border border-[#00283C]/15 bg-white px-4 py-2 text-sm font-bold text-[#00283C] hover:border-primary hover:text-primary"
+            >
+              Ver outros {modelLanding.name}
+            </Link>
+            <Link
+              to="/comparar"
+              className="rounded-full bg-[#00283C] px-4 py-2 text-sm font-bold text-white hover:bg-[#00435a]"
+            >
+              Comparar carros lado a lado
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* Related Vehicles Section */}
       <DeferredRender minHeight={600} rootMargin="500px">

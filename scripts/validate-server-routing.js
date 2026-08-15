@@ -14,6 +14,13 @@ const analytics = read("src/lib/analytics.ts");
 const waTracking = read("src/lib/waTracking.ts");
 const vehiclesEndpoint = read("src/catalog/endpoints/vehicles.ts");
 const vehicleSeoRenderer = read("public/detalhe-veiculo.php");
+const crawlerPageRenderer = read("public/seo-pagina.php");
+const vehicleQueryHook = read("src/catalog/queries/useVehiclesQuery.ts");
+const landingFilters = read("src/data/seo/index.ts");
+const compareTrackingSource = analytics.slice(
+  analytics.indexOf("export function trackCompareInteraction("),
+  analytics.indexOf("/** Evento GA4: scroll 50%"),
+);
 const fetchVehiclesSource = vehiclesEndpoint.slice(
   vehiclesEndpoint.indexOf("export async function fetchVehicles("),
   vehiclesEndpoint.indexOf("export async function fetchVehicleById("),
@@ -55,6 +62,16 @@ expect(
 expect(
   controller.includes("netcar_apply_route_meta"),
   "metadados por rota não são aplicados ao HTML comum",
+);
+expect(
+  controller.includes("'/comparar' => 'page-comparar.html'") &&
+    controller.includes("src/modules/seo/pages/ComparadorPage.tsx"),
+  "comparador não está ligado ao HTML estático e ao chunk React",
+);
+expect(
+  htaccess.includes("politica-editorial|comparar") &&
+    htaccess.includes("seo-static/page-$1.html"),
+  "crawler não recebe o HTML estático do comparador",
 );
 expect(
   controller.includes("imagesrcset="),
@@ -126,6 +143,12 @@ expect(
   initialHtml.includes("https://wa.me/5551997293118"),
   "WhatsApp ausente do HTML inicial",
 );
+expect(
+  initialHtml.includes(
+    '<meta name="robots" content="index, follow, max-image-preview:large"',
+  ),
+  "meta robots indexável ausente do HTML inicial",
+);
 expect(initialHtml.includes("GTM-M8MZRTL9"), "container GTM ausente");
 expect(initialHtml.includes("G-MGPNBDNQ9G"), "medição GA4 ausente");
 expect(initialHtml.includes("367657940934075"), "Meta Pixel ausente");
@@ -150,11 +173,42 @@ expect(
   "eventos Meta de contato pelo WhatsApp ausentes",
 );
 expect(
+  analytics.includes('| "comparison"') &&
+    analytics.includes('pathname === "/comparar"') &&
+    analytics.includes("landing_type"),
+  "dimensões de comparador/modelo/faixa ausentes do rastreamento",
+);
+expect(
+  compareTrackingSource.includes("compare_vehicle_") &&
+    compareTrackingSource.includes('event: "comparison_ready"') &&
+    !compareTrackingSource.includes("whatsapp_click") &&
+    !compareTrackingSource.includes("wa_ads_conversion") &&
+    !compareTrackingSource.includes("fbq("),
+  "interações do comparador precisam ser informativas, sem conversão Ads/Meta",
+);
+expect(
   waTracking.includes("getOrCreateClickCode") &&
     waTracking.includes("appendWaRefToUrl") &&
     waTracking.includes("fbclid: ref?.fbclid") &&
     waTracking.includes("gclid: ref?.gclid"),
   "join Evolution/código/click IDs foi alterado",
+);
+for (const queryField of ["combustivel", "motor", "limit", "offset"]) {
+  expect(
+    vehicleQueryHook.includes(`query?.${queryField}`) &&
+      vehicleQueryHook.includes(`key.push("${queryField}"`),
+    `queryKey do estoque ignora ${queryField}`,
+  );
+}
+expect(
+  landingFilters.includes("function compact(") &&
+    landingFilters.includes("matchesLandingFilters"),
+  "filtro único de landings não normaliza aliases de modelo",
+);
+expect(
+  crawlerPageRenderer.includes("netcar_render_demand_links") &&
+    crawlerPageRenderer.includes("/comparar"),
+  "Home/estoque do crawler sem links para demanda e comparador",
 );
 expect(
   vehiclesEndpoint.includes(
@@ -176,6 +230,11 @@ expect(
     vehicleSeoRenderer.includes("$httpCode === 404") &&
     vehicleSeoRenderer.includes("if (!$vehicleFound && !$vehicleMissing)"),
   "renderer de veículo não separa JSON inválido (503) de ausência confirmada (410)",
+);
+expect(
+  vehicleSeoRenderer.includes("function netcarVehicleModelLanding") &&
+    vehicleSeoRenderer.includes("empty($landing['indexable'])"),
+  "ficha estática liga para hub de modelo noindex",
 );
 
 for (const path of ["public/404.html", "public/410.html"]) {
@@ -208,6 +267,8 @@ for (const path of [
   "public/seo-static/regions-hub.html",
   "public/seo-static/city-porto-alegre.html",
   "public/seo-static/blog-seminovos-em-esteio-guia-completo.html",
+  "public/seo-static/page-comparar.html",
+  "public/seo/landings.json",
 ]) {
   expect(existsSync(join(root, path)), `${path} não foi gerado`);
 }
@@ -218,4 +279,6 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("Roteamento validado: 404/410, legado, metadados, LCP e contatos.");
+console.log(
+  "Roteamento validado: 404/410, legado, metadados, demanda, comparador, tracking, LCP e contatos.",
+);
