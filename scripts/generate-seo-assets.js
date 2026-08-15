@@ -432,9 +432,9 @@ async function fetchStock() {
       offset += page.length;
     }
 
-    return vehicles.filter((vehicle) => Number(vehicle.valor) > 0);
+    return vehicles;
   } catch (error) {
-    const cached = readFreshSeoStockCache(rootDir);
+    const cached = readFreshSeoStockCache(rootDir, { includeSold: true });
     if (cached?.vehicles.length) {
       const ageMinutes = Math.max(0, Math.round(cached.ageMs / 60000));
       console.warn(
@@ -449,7 +449,15 @@ async function fetchStock() {
   }
 }
 
-const stock = await fetchStock();
+const completeStock = await fetchStock();
+// Todas as vitrines SEO continuam transacionais. O conjunto completo existe
+// apenas para o showroom humano de /seminovos e nunca alimenta sitemap,
+// landings, Home, comparador ou feeds.
+const stock = completeStock.filter((vehicle) => Number(vehicle.valor) > 0);
+const showroomStock = [
+  ...stock,
+  ...completeStock.filter((vehicle) => Number(vehicle.valor) <= 0),
+];
 
 function normalizedFilterValue(value) {
   return String(value || "")
@@ -529,7 +537,7 @@ function normalizeBootstrapImage(raw) {
 // campos usados no primeiro paint elimina a espera pela API sem expor chassi,
 // Renavam ou observações administrativas. O React atualiza os detalhes depois,
 // fora da janela crítica do LCP.
-const stockBootstrap = stock.map((vehicle) => {
+function toBootstrapVehicle(vehicle) {
   const thumb = Array.isArray(vehicle?.imagens?.thumb)
     ? vehicle.imagens.thumb.slice(0, 1).map(normalizeBootstrapImage)
     : [];
@@ -580,11 +588,18 @@ const stockBootstrap = stock.map((vehicle) => {
     destaque: Number(vehicle.destaque || 0),
     promocao: Number(vehicle.promocao || 0),
   };
-});
+}
+
+const stockBootstrap = stock.map(toBootstrapVehicle);
+const showroomStockBootstrap = showroomStock.map(toBootstrapVehicle);
 
 writeTextFile(
   join(publicDir, "seo", "stock-bootstrap.json"),
-  `${JSON.stringify({ generatedAt: new Date().toISOString(), vehicles: stockBootstrap })}\n`,
+  `${JSON.stringify({
+    generatedAt: new Date().toISOString(),
+    vehicles: stockBootstrap,
+    showroomVehicles: showroomStockBootstrap,
+  })}\n`,
 );
 
 function byHomePriority(a, b) {
@@ -595,7 +610,12 @@ function byHomePriority(a, b) {
 
 function hasHomePhoto(vehicle) {
   const temFotos = vehicle?.imagens_site?.tem_fotos;
-  return Number(vehicle?.valor) > 0 && temFotos !== 0 && temFotos !== undefined;
+  return (
+    Number(vehicle?.valor) > 0 &&
+    temFotos !== 0 &&
+    temFotos !== undefined &&
+    temFotos !== null
+  );
 }
 
 function normalizeHomeImage(raw) {

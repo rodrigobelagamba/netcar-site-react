@@ -27,9 +27,12 @@ import {
 } from "@/lib/whatsappMessages";
 import { trackStockFilterApply } from "@/lib/analytics";
 import { resolvedVehicleCategory } from "@/lib/vehicleCategory";
+import {
+  sortShowroomVehicles,
+  type ShowroomSortOption,
+} from "@/lib/showroomStock";
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
 
-type SortOption = "az" | "za" | "preco-asc" | "preco-desc";
 const SearchBar = lazy(() =>
   import("@/design-system/components/patterns/SearchBar").then((module) => ({
     default: module.SearchBar,
@@ -91,7 +94,8 @@ export function SeminovosPage() {
       cor?: string;
       categoria?: string;
       fetchAll: boolean;
-    } = { fetchAll: true };
+      includeSold: boolean;
+    } = { fetchAll: true, includeSold: true };
 
     // Só adiciona campos que têm valores definidos
     if (search.marca) query.marca = search.marca;
@@ -274,7 +278,7 @@ export function SeminovosPage() {
   const [anoMax, setAnoMax] = useState(search.anoMax || "");
   const [precoMin, setPrecoMin] = useState(search.precoMin || "");
   const [precoMax, setPrecoMax] = useState(search.precoMax || "");
-  const [sortBy, setSortBy] = useState<SortOption>("az");
+  const [sortBy, setSortBy] = useState<ShowroomSortOption>("az");
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
   // Sincroniza estados locais com parâmetros da URL quando mudam
@@ -412,32 +416,7 @@ export function SeminovosPage() {
       });
     }
 
-    // Ordenação
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case "az":
-          // Ordena por modelo (A-Z)
-          const modeloA = (a.modelo || a.name || "").toLowerCase();
-          const modeloB = (b.modelo || b.name || "").toLowerCase();
-          return modeloA.localeCompare(modeloB);
-        case "za":
-          // Ordena por modelo (Z-A)
-          const modeloZA = (a.modelo || a.name || "").toLowerCase();
-          const modeloZB = (b.modelo || b.name || "").toLowerCase();
-          return modeloZB.localeCompare(modeloZA);
-        case "preco-asc":
-          return (a.price || 0) - (b.price || 0);
-        case "preco-desc":
-          return (b.price || 0) - (a.price || 0);
-        default:
-          // Por padrão, ordena alfabeticamente por modelo (A-Z)
-          const defaultModeloA = (a.modelo || a.name || "").toLowerCase();
-          const defaultModeloB = (b.modelo || b.name || "").toLowerCase();
-          return defaultModeloA.localeCompare(defaultModeloB);
-      }
-    });
-
-    return filtered;
+    return sortShowroomVehicles(filtered, sortBy);
   }, [vehicles, sortBy, searchTerm, search.categoria, search.combustivel]);
 
   const visibleVehicles = filteredAndSortedVehicles;
@@ -676,7 +655,9 @@ export function SeminovosPage() {
             <div className="relative">
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                onChange={(e) =>
+                  setSortBy(e.target.value as ShowroomSortOption)
+                }
                 className="appearance-none rounded-lg border-0 bg-surface px-4 py-2 pr-8 text-sm text-fg focus:outline-none focus:ring-1 focus:ring-primary/20"
               >
                 <option value="az">A &gt; Z</option>
@@ -747,7 +728,6 @@ export function SeminovosPage() {
                     modelo={vehicle.modelo}
                     delay={index}
                     fastAnimation={index >= midGridBreak}
-                    eagerImage
                     showWhatsAppInterest
                     whatsAppSource="seminovos_grid"
                     whatsAppNumber={whatsAppNumber}

@@ -17,6 +17,11 @@ const vehicleSeoRenderer = read("public/detalhe-veiculo.php");
 const crawlerPageRenderer = read("public/seo-pagina.php");
 const vehicleQueryHook = read("src/catalog/queries/useVehiclesQuery.ts");
 const landingFilters = read("src/data/seo/index.ts");
+const homePage = read("src/modules/home/pages/HomePage.tsx");
+const homeStock = read("src/lib/homeStock.ts");
+const showroomPage = read("src/modules/seminovos/pages/SeminovosPage.tsx");
+const stockBootstrap = read("src/lib/stockBootstrap.ts");
+const seoAssets = read("scripts/generate-seo-assets.js");
 const compareTrackingSource = analytics.slice(
   analytics.indexOf("export function trackCompareInteraction("),
   analytics.indexOf("/** Evento GA4: scroll 50%"),
@@ -108,6 +113,27 @@ expect(
   "JSON do estoque voltou a bloquear a descoberta da imagem no head",
 );
 expect(
+  controller.includes("$path === '/seminovos'") &&
+    controller.includes("$value['showroomVehicles']") &&
+    controller.includes("'scope' => $path === '/seminovos' ? 'showroom' : 'available'") &&
+    controller.includes("'vehicles' => $vehicles"),
+  "showroom completo não está isolado na rota /seminovos",
+);
+expect(
+  vehiclesEndpoint.includes("includeSold?: boolean") &&
+    fetchVehiclesSource.includes("query?.includeSold") &&
+    vehicleQueryHook.includes('key.push("includeSold", 1)') &&
+    stockBootstrap.includes("query?.includeSold") &&
+    stockBootstrap.includes('bootstrap?.scope !== "showroom"'),
+  "contrato includeSold não está isolado na API, cache e query key",
+);
+expect(
+  showroomPage.includes("includeSold: true") &&
+    showroomPage.includes("sortShowroomVehicles(filtered, sortBy)") &&
+    !showroomPage.includes("eagerImage"),
+  "showroom não inclui vendidos no fim ou voltou a baixar imagens offscreen imediatamente",
+);
+expect(
   controller.includes("home-lcp.json"),
   "fallback de LCP gerado no build ausente",
 );
@@ -118,6 +144,43 @@ expect(
 expect(
   controller.includes("__NETCAR_HOME_HERO__"),
   "dados iniciais do hero não são entregues ao React",
+);
+expect(
+  controller.includes("function netcar_daily_home_lcp()") &&
+    controller.includes("new DateTimeZone('America/Sao_Paulo')") &&
+    controller.includes("$rotationDay = $localDay + 1") &&
+    controller.includes("$rotationDay % count($candidates)") &&
+    controller.includes("array_slice($candidates, 0, 4)"),
+  "primeiro carro da Home não usa rotação diária determinística",
+);
+expect(
+  controller.includes(
+    "return netcar_home_lcp_from_vehicle($candidates[$selectedIndex])",
+  ) &&
+    controller.includes("$daily = netcar_daily_home_lcp()") &&
+    controller.includes("if ($daily !== null)"),
+  "rotação diária da Home não tem payload único ou fallback do build",
+);
+expect(
+  controller.includes("json_encode($buildHomeLcp['id']") &&
+    controller.includes("json_encode($buildHomeLcp['hero']") &&
+    controller.includes("$bannerUrl = $buildHomeLcp['image'];"),
+  "ID, dados e imagem preloaded do hero não vêm da mesma seleção",
+);
+expect(
+  homePage.includes("initialHeroVehicle?.id") &&
+    homePage.includes(
+      "filtered.some((vehicle) => vehicle.id === preferredHeroId)",
+    ) &&
+    !homePage.includes("Math.random()") &&
+    !homeStock.includes("Math.random()"),
+  "React voltou a sortear o hero e pode divergir do preload do servidor",
+);
+expect(
+  homeStock.includes("temFotos === null") &&
+    homePage.includes("temFotos === null") &&
+    seoAssets.includes("temFotos !== null"),
+  "contrato de foto da Home diverge entre PHP, React e gerador",
 );
 expect(
   controller.includes("__NETCAR_HOME_HAS_ACTIVE_BANNER__"),

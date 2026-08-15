@@ -221,7 +221,8 @@ export function HomePage() {
         if (!price || isNaN(price) || price <= 80000) return false;
         
         const temFotos = vehicle.imagens_site?.tem_fotos;
-        if (temFotos === 0 || temFotos === undefined) return false;
+        if (temFotos === 0 || temFotos === undefined || temFotos === null)
+          return false;
 
         if (!isPngUrl(vehicle.imagens_site?.capa)) return false;
 

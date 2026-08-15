@@ -148,6 +148,8 @@ export interface VehiclesQuery {
   limit?: number; // Número máximo de resultados
   offset?: number; // Número de registros para pular
   fetchAll?: boolean; // Percorre todas as páginas até obter o estoque completo
+  /** Inclui registros vendidos (valor <= 0). Uso exclusivo da vitrine /seminovos. */
+  includeSold?: boolean;
 }
 
 /**
@@ -325,15 +327,15 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
       }
     }
 
-    // A API também devolve vendidos com valor 0. A carga estática já os exclui;
-    // manter a mesma regra evita que eles apareçam e reorganizem a vitrine no
-    // refetch em segundo plano.
-    const availableVehicles = apiVehicles.filter(
-      (apiVehicle) => Number(apiVehicle.valor) > 0,
-    );
+    // A API também devolve vendidos com valor 0. Eles só entram quando a rota
+    // de showroom solicita explicitamente; todos os demais consumidores
+    // (Home, comparador, landings e previews) continuam disponíveis-only.
+    const scopedVehicles = query?.includeSold
+      ? apiVehicles
+      : apiVehicles.filter((apiVehicle) => Number(apiVehicle.valor) > 0);
 
     // Mapeia os dados da API para a interface Vehicle
-    const vehicles: Vehicle[] = availableVehicles.map((apiVehicle) => {
+    const vehicles: Vehicle[] = scopedVehicles.map((apiVehicle) => {
       // Normaliza as URLs das imagens thumbnails (para cards)
       const thumbUrls = apiVehicle.imagens?.thumb?.length
         ? apiVehicle.imagens.thumb

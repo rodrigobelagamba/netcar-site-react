@@ -7,7 +7,8 @@ export function isAvailableHomeStockVehicle(vehicle: Vehicle): boolean {
   if (!price || Number.isNaN(price) || price <= 0) return false;
 
   const temFotos = vehicle.imagens_site?.tem_fotos;
-  if (temFotos === 0 || temFotos === undefined) return false;
+  if (temFotos === 0 || temFotos === undefined || temFotos === null)
+    return false;
 
   return true;
 }

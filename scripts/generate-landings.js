@@ -775,7 +775,7 @@ async function fetchVehicles() {
   const json = await res.json();
   if (!json.success || !Array.isArray(json.data))
     throw new Error("resposta inválida");
-  return json.data.filter((v) => Number(v.valor) > 0);
+  return json.data;
 }
 
 function tally(vehicles, field) {
@@ -794,8 +794,9 @@ function tally(vehicles, field) {
 async function main() {
   let vehicles;
   try {
-    vehicles = await fetchVehicles();
-    writeSeoStockCache(rootDir, vehicles);
+    const allVehicles = await fetchVehicles();
+    writeSeoStockCache(rootDir, allVehicles);
+    vehicles = allVehicles.filter((vehicle) => Number(vehicle.valor) > 0);
   } catch (err) {
     try {
       const previous = JSON.parse(readFileSync(OUT, "utf-8"));

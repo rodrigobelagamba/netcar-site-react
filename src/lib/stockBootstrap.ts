@@ -3,6 +3,7 @@ import { extractVehicleIdFromSlug } from "@/lib/slug";
 
 type StockBootstrap = {
   generatedAt?: string;
+  scope?: "available" | "showroom";
   vehicles?: Vehicle[];
 };
 
@@ -43,9 +44,21 @@ function numericFilter(value: unknown): number | undefined {
 export function getBootstrapVehicles(
   query?: VehiclesQuery,
 ): Vehicle[] | undefined {
+  const bootstrap =
+    typeof window === "undefined" ? undefined : window.__NETCAR_STOCK__;
   const vehicles = allBootstrapVehicles();
   if (!vehicles) return undefined;
-  if (!query) return vehicles;
+  // Em navegação SPA, o bootstrap permanece sendo o da primeira rota. Nunca
+  // trate a coleção active-only da Home/ficha como showroom completo: isso
+  // causaria um primeiro paint parcial seguido do salto para todos os carros.
+  if (query?.includeSold && bootstrap?.scope !== "showroom") return undefined;
+  // O PHP injeta o showroom completo apenas em /seminovos. Ainda assim, hooks
+  // compartilhados nessa rota (Header/SearchBar) precisam continuar vendo só
+  // disponíveis, salvo quando includeSold é solicitado explicitamente.
+  const scopedVehicles = query?.includeSold
+    ? vehicles
+    : vehicles.filter((vehicle) => Number(vehicle.price) > 0);
+  if (!query) return scopedVehicles;
 
   const brand = normalized(query.montadora || query.marca);
   const model = normalized(query.modelo);
@@ -59,7 +72,7 @@ export function getBootstrapVehicles(
   const minYear = numericFilter(query.ano_min ?? query.anoMin);
   const maxYear = numericFilter(query.ano_max ?? query.anoMax);
 
-  return vehicles.filter((vehicle) => {
+  return scopedVehicles.filter((vehicle) => {
     const price = Number(vehicle.price || 0);
     const year = Number(vehicle.year || 0);
     if (brand && normalized(vehicle.marca) !== brand) return false;

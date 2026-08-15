@@ -40,6 +40,7 @@ export function useVehiclesQuery(
     if (query.limit !== undefined) key.push("limit", query.limit);
     if (query.offset !== undefined) key.push("offset", query.offset);
     if (query.fetchAll) key.push("fetchAll", 1);
+    if (query.includeSold) key.push("includeSold", 1);
 
     return key;
   }, [
@@ -64,6 +65,7 @@ export function useVehiclesQuery(
     query?.limit,
     query?.offset,
     query?.fetchAll,
+    query?.includeSold,
   ]);
 
   const bootstrapVehicles = useMemo(

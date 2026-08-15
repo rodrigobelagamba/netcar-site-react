@@ -15,10 +15,19 @@ function publicVehicle(vehicle) {
     marca: vehicle.marca,
     modelo: vehicle.modelo,
     ano: vehicle.ano,
+    ano_fabricacao: vehicle.ano_fabricacao,
     valor: vehicle.valor,
+    valor_formatado: vehicle.valor_formatado,
+    preco_com_troca: vehicle.preco_com_troca,
+    preco_com_troca_formatado: vehicle.preco_com_troca_formatado,
     km: vehicle.km,
+    cor: vehicle.cor,
+    motor: vehicle.motor,
     cambio: vehicle.cambio,
     combustivel: vehicle.combustivel,
+    potencia: vehicle.potencia,
+    portas: vehicle.portas,
+    lugares: vehicle.lugares,
     categoria: vehicle.categoria,
     placa: vehicle.placa,
     link: vehicle.link,
@@ -55,7 +64,7 @@ export function writeSeoStockCache(rootDir, vehicles) {
   );
 }
 
-export function readFreshSeoStockCache(rootDir) {
+export function readFreshSeoStockCache(rootDir, { includeSold = false } = {}) {
   try {
     const cached = JSON.parse(readFileSync(cachePath(rootDir), "utf8"));
     const generatedAt = Date.parse(cached?.generatedAt || "");
@@ -71,7 +80,9 @@ export function readFreshSeoStockCache(rootDir) {
     }
     return {
       ageMs,
-      vehicles: cached.vehicles.filter((vehicle) => Number(vehicle.valor) > 0),
+      vehicles: includeSold
+        ? cached.vehicles
+        : cached.vehicles.filter((vehicle) => Number(vehicle.valor) > 0),
     };
   } catch {
     return null;

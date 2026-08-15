@@ -289,8 +289,25 @@ function netcar_stock_bootstrap_script($path)
         return null;
     }
 
+    // Somente o showroom recebe também os registros vendidos. Nas demais
+    // rotas injetamos apenas o array disponível, sem carregar nem expor a
+    // coleção completa no HTML.
+    $vehicles = $value['vehicles'];
+    if (
+        $path === '/seminovos'
+        && !empty($value['showroomVehicles'])
+        && is_array($value['showroomVehicles'])
+    ) {
+        $vehicles = $value['showroomVehicles'];
+    }
+    $payload = array(
+        'generatedAt' => isset($value['generatedAt']) ? $value['generatedAt'] : null,
+        'scope' => $path === '/seminovos' ? 'showroom' : 'available',
+        'vehicles' => $vehicles,
+    );
+
     return '<script>window.__NETCAR_STOCK__='
-        . json_encode($value, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
+        . json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
         . ';</script>';
 }
 
@@ -551,8 +568,140 @@ function netcar_get_active_banner_url()
     return $url;
 }
 
+/**
+ * Converte um veículo do bootstrap no único payload usado pelo preload, pelo
+ * shell inicial e pelo React. Ter uma só origem impede o primeiro paint de
+ * baixar um carro e a hidratação abrir outro.
+ */
+function netcar_home_lcp_from_vehicle($vehicle)
+{
+    if (!is_array($vehicle) || empty($vehicle['id'])) {
+        return null;
+    }
+    $siteImages = isset($vehicle['imagens_site']) && is_array($vehicle['imagens_site'])
+        ? $vehicle['imagens_site']
+        : array();
+    $rawImage = isset($siteImages['capa']) ? $siteImages['capa'] : null;
+    $image = netcar_normalize_banner_path($rawImage);
+    $brand = isset($vehicle['marca']) ? trim((string) $vehicle['marca']) : '';
+    $model = isset($vehicle['modelo']) ? trim((string) $vehicle['modelo']) : '';
+    $year = isset($vehicle['year']) ? (int) $vehicle['year'] : (isset($vehicle['ano']) ? (int) $vehicle['ano'] : 0);
+    $price = isset($vehicle['price']) ? (float) $vehicle['price'] : (isset($vehicle['valor']) ? (float) $vehicle['valor'] : 0);
+    if ($image === null || $brand === '' || $model === '' || $year <= 0 || $price <= 0) {
+        return null;
+    }
+
+    $hero = array(
+        'id' => (string) $vehicle['id'],
+        'brand' => $brand,
+        'model' => $model,
+        'year' => $year,
+        'price' => $price,
+        'image' => $image,
+    );
+    foreach (array(
+        'valor_formatado',
+        'preco_com_troca_formatado',
+        'marca',
+        'modelo',
+        'placa',
+        'combustivel',
+        'cambio',
+    ) as $field) {
+        if (isset($vehicle[$field]) && $vehicle[$field] !== '') {
+            $hero[$field] = trim((string) $vehicle[$field]);
+        }
+    }
+    if (isset($vehicle['preco_com_troca']) && is_numeric($vehicle['preco_com_troca'])) {
+        $hero['preco_com_troca'] = (float) $vehicle['preco_com_troca'];
+    }
+    $tag = trim(
+        (isset($vehicle['combustivel']) ? (string) $vehicle['combustivel'] : '')
+        . ' '
+        . (isset($vehicle['motor']) ? (string) $vehicle['motor'] : '')
+    );
+    if ($tag !== '') {
+        $hero['tag'] = $tag;
+    }
+
+    return array('id' => (string) $vehicle['id'], 'image' => $image, 'hero' => $hero);
+}
+
+/** Mesmo contrato de disponibilidade/prioridade usado por homeStock.ts. */
+function netcar_daily_home_lcp()
+{
+    $stock = netcar_stock_bootstrap_value();
+    if (!is_array($stock) || empty($stock['vehicles']) || !is_array($stock['vehicles'])) {
+        return null;
+    }
+
+    $available = array_values(array_filter($stock['vehicles'], function ($vehicle) {
+        if (!is_array($vehicle)) return false;
+        $price = isset($vehicle['price']) ? (float) $vehicle['price'] : 0;
+        $siteImages = isset($vehicle['imagens_site']) && is_array($vehicle['imagens_site'])
+            ? $vehicle['imagens_site']
+            : array();
+        return $price > 0
+            && array_key_exists('tem_fotos', $siteImages)
+            && $siteImages['tem_fotos'] !== null
+            && (int) $siteImages['tem_fotos'] !== 0;
+    }));
+    if (empty($available)) {
+        return null;
+    }
+
+    usort($available, function ($left, $right) {
+        $leftFeatured = isset($left['destaque']) && (int) $left['destaque'] === 1 ? 1 : 0;
+        $rightFeatured = isset($right['destaque']) && (int) $right['destaque'] === 1 ? 1 : 0;
+        if ($leftFeatured !== $rightFeatured) {
+            return $rightFeatured - $leftFeatured;
+        }
+        return (isset($right['id']) ? (int) $right['id'] : 0)
+            - (isset($left['id']) ? (int) $left['id'] : 0);
+    });
+
+    // O primeiro da ordem alimenta o card de destaque abaixo do banner e não se
+    // repete no hero. Os quatro seguintes preservam o conjunto atual do carrossel.
+    $featuredId = isset($available[0]['id']) ? (string) $available[0]['id'] : '';
+    $candidates = array_values(array_filter($available, function ($vehicle) use ($featuredId) {
+        $siteImages = isset($vehicle['imagens_site']) && is_array($vehicle['imagens_site'])
+            ? $vehicle['imagens_site']
+            : array();
+        $cover = isset($siteImages['capa']) ? (string) $siteImages['capa'] : '';
+        return isset($vehicle['id'])
+            && (string) $vehicle['id'] !== $featuredId
+            && isset($vehicle['price'])
+            && (float) $vehicle['price'] > 80000
+            && stripos($cover, '.png') !== false;
+    }));
+    $candidates = array_slice($candidates, 0, 4);
+    if (empty($candidates)) {
+        return null;
+    }
+
+    // Dia local convertido em número monotônico: mesmo índice durante todo o
+    // dia em São Paulo (e para todas as réplicas/cache), próximo índice amanhã.
+    try {
+        $now = new DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo'));
+        $localDay = intdiv($now->getTimestamp() + $now->getOffset(), 86400);
+    } catch (Exception $error) {
+        $localDay = intdiv(time() - 10800, 86400);
+    }
+    // O deslocamento evita que o primeiro dia deste release repita o Cruze,
+    // sem introduzir aleatoriedade entre HTML, preload e hidratação.
+    $rotationDay = $localDay + 1;
+    $selectedIndex = (($rotationDay % count($candidates)) + count($candidates)) % count($candidates);
+    return netcar_home_lcp_from_vehicle($candidates[$selectedIndex]);
+}
+
 function netcar_get_build_home_lcp()
 {
+    $daily = netcar_daily_home_lcp();
+    if ($daily !== null) {
+        return $daily;
+    }
+
+    // Fallback do build para bootstrap ausente/inválido ou estoque sem candidato.
     $file = __DIR__ . '/seo/home-lcp.json';
     if (!is_readable($file)) {
         return null;
