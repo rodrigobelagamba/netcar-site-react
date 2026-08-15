@@ -65,15 +65,25 @@ const sortFixture = [
   fixture("sold-z", "Zeta vendido", 0),
   fixture("active-b", "Beta ativo", 120000),
   fixture("sold-a", "Alfa vendido", 0),
-  fixture("active-a", "Alfa ativo", 90000),
+  fixture("active-c", "Charlie ativo", 90000),
 ];
 
-for (const sortBy of ["az", "za", "preco-asc", "preco-desc"] as const) {
-  const sorted = sortShowroomVehicles(sortFixture, sortBy);
+const expectedSorts = {
+  az: ["sold-a", "active-b", "active-c", "sold-z"],
+  za: ["sold-z", "active-c", "active-b", "sold-a"],
+  "preco-asc": ["active-c", "active-b", "sold-a", "sold-z"],
+  "preco-desc": ["active-b", "active-c", "sold-a", "sold-z"],
+} as const;
+
+for (const [sortBy, expectedIds] of Object.entries(expectedSorts)) {
+  const sorted = sortShowroomVehicles(
+    sortFixture,
+    sortBy as keyof typeof expectedSorts,
+  );
   assert.deepEqual(
-    sorted.map((vehicle) => Number(vehicle.price) <= 0),
-    [false, false, true, true],
-    `${sortBy}: vendido saiu do fim`,
+    sorted.map((vehicle) => vehicle.id),
+    expectedIds,
+    `${sortBy}: ordem do showroom divergiu`,
   );
 }
 

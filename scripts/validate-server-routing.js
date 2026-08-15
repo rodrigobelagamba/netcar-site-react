@@ -131,7 +131,22 @@ expect(
   showroomPage.includes("includeSold: true") &&
     showroomPage.includes("sortShowroomVehicles(filtered, sortBy)") &&
     !showroomPage.includes("eagerImage"),
-  "showroom não inclui vendidos no fim ou voltou a baixar imagens offscreen imediatamente",
+  "showroom não inclui vendidos ou voltou a baixar imagens offscreen imediatamente",
+);
+expect(
+  read("src/lib/showroomStock.ts").includes('case "az"') &&
+    read("src/lib/showroomStock.ts").includes("compareModel(left, right)") &&
+    !read("src/lib/showroomStock.ts").includes("leftSold !== rightSold"),
+  "vendidos voltaram a ser empurrados para o fim da ordem alfabética",
+);
+expect(
+  read("src/design-system/components/patterns/VehicleCard.tsx").includes(
+    "onClick={handleClick}",
+  ) &&
+    read("src/design-system/components/patterns/VehicleCard.tsx").includes(
+      "navigate({ to: `/veiculo/${slug}` })",
+    ),
+  "card vendido perdeu a navegação para sua ficha",
 );
 expect(
   controller.includes("home-lcp.json"),
