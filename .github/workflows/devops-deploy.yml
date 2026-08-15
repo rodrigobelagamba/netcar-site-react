@@ -101,4 +101,4 @@ jobs:
           script_stop: true
           script: |
             set -euo pipefail
-            docker exec netcar-devops npm run deploy:local
+            docker exec -w /workspace netcar-devops npm run deploy:local
