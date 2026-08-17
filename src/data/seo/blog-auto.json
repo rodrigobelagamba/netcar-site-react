@@ -4,7 +4,7 @@
     "title": "Seminovos em Grande Porto Alegre: estoque e procedência",
     "description": "Como comparar estoque real e procedência ao buscar seminovo em Porto Alegre, Canoas, Gravataí, Cachoeirinha.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-07-13",
+    "updatedAt": "2026-08-17",
     "readMinutes": 7,
     "sections": [
       {
@@ -39,7 +39,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 134.900,00",
+            "preco": "R$ 132.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -114,7 +114,7 @@
     "title": "Comprar seminovo à distância: roteiro para Litoral Norte RS",
     "description": "Como filtrar estoque, conferir procedência e organizar a visita saindo de Tramandaí, Capão da Canoa, Osório.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-07-13",
+    "updatedAt": "2026-08-17",
     "readMinutes": 7,
     "sections": [
       {
@@ -149,7 +149,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 134.900,00",
+            "preco": "R$ 132.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -220,7 +220,7 @@
     "title": "Carro pra família seminovo: espaço sem estourar orçamento",
     "description": "Carro pra família: espaço, segurança e custo — com opções reais no estoque Netcar em Esteio.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-07-13",
+    "updatedAt": "2026-08-17",
     "readMinutes": 6,
     "sections": [
       {
@@ -266,7 +266,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 134.900,00",
+            "preco": "R$ 132.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -311,7 +311,7 @@
     "title": "Carro usado com poucos km: o que checar",
     "description": "Seminovo baixa km em Esteio: como ler odômetro, preço e procedência com estoque real.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-07-13",
+    "updatedAt": "2026-08-17",
     "readMinutes": 6,
     "sections": [
       {
@@ -357,7 +357,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 134.900,00",
+            "preco": "R$ 132.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -398,7 +398,7 @@
     "title": "Hatch seminovo pra cidade: econômico e prático",
     "description": "Hatch e compacto seminovo pra cidade: consumo, manobra e opções no estoque Netcar.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-07-13",
+    "updatedAt": "2026-08-17",
     "readMinutes": 6,
     "sections": [
       {
@@ -441,6 +441,17 @@
         "type": "cars",
         "cars": [
           {
+            "modelo": "Volkswagen Polo Highline",
+            "ano": "2023/2024",
+            "km": "30.627 km",
+            "preco": "R$ 99.900,00",
+            "cambio": "Automatico",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/polo-highline-2024-jch-xx93-19955",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+          },
+          {
             "modelo": "Fiat Argo Drive",
             "ano": "2023/2024",
             "km": "32.500 km",
@@ -450,17 +461,6 @@
             "destaque": "Eleito Melhor Compra",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/argo-drive-2024-jcl-xx85-19687",
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/28032026ARGO%20DRIVE%20JCL5B85CAPA.png"
-          },
-          {
-            "modelo": "Fiat Cronos Drive",
-            "ano": "2024/2025",
-            "km": "39.102 km",
-            "preco": "R$ 88.900,00",
-            "cambio": "Manual",
-            "combustivel": "Flex",
-            "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/cronos-drive-2025-jcw-xx18-19915",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/27052026CRONOS%20DRIVE%20JCW2F18CAPA.png"
           }
         ]
       },
@@ -489,7 +489,7 @@
     "title": "Carro pra viagem no RS: o que levar na shortlist",
     "description": "Seminovo pra viagem e Serra Gaúcha: conforto, estabilidade e estoque real em Esteio.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-07-13",
+    "updatedAt": "2026-08-17",
     "readMinutes": 6,
     "sections": [
       {
@@ -535,7 +535,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 134.900,00",
+            "preco": "R$ 132.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -576,7 +576,7 @@
     "title": "Quanto custa um seminovo em Esteio em 2026? Guia de preços reais",
     "description": "Faixas de preço por perfil de comprador, o que inclui o valor e exemplos do estoque Netcar — sem tabela genérica.",
     "publishedAt": "2026-06-23",
-    "updatedAt": "2026-06-23",
+    "updatedAt": "2026-08-17",
     "readMinutes": 6,
     "sections": [
       {
@@ -623,7 +623,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 134.900,00",
+            "preco": "R$ 132.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -834,7 +834,7 @@
     "title": "Automático ou manual no seminovo? Comparativo técnico",
     "description": "Consumo, manutenção, revenda e conforto — lado a lado. Automáticos revisados no estoque Netcar.",
     "publishedAt": "2026-06-03",
-    "updatedAt": "2026-06-03",
+    "updatedAt": "2026-08-17",
     "readMinutes": 6,
     "sections": [
       {
@@ -890,7 +890,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 134.900,00",
+            "preco": "R$ 132.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
