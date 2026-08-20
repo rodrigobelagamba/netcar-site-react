@@ -8,16 +8,20 @@
  * disponíveis quando o estoque gira, mas ficam noindex até recuperarem oferta.
  *
  * Roda no build ANTES de generate-seo-assets.js (que gera o HTML estático
- * para crawlers e o sitemap). Se a API falhar, só preserva um manifesto
- * anterior completo; em clone/build novo a falha interrompe a publicação.
+ * para crawlers e o sitemap). Se a API falhar, regenera pelo mesmo cache
+ * recente de estoque usado pelos assets estáticos. Sem API nem cache recente,
+ * a falha interrompe a publicação para não misturar fotografias do estoque.
  *
  * Uso: node scripts/generate-landings.js
  */
 
-import { readFileSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import { writeSeoStockCache } from "./lib/seo-stock-cache.js";
+import {
+  readFreshSeoStockCache,
+  writeSeoStockCache,
+} from "./lib/seo-stock-cache.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
@@ -798,27 +802,17 @@ async function main() {
     writeSeoStockCache(rootDir, allVehicles);
     vehicles = allVehicles.filter((vehicle) => Number(vehicle.valor) > 0);
   } catch (err) {
-    try {
-      const previous = JSON.parse(readFileSync(OUT, "utf-8"));
-      const slugs = new Set(previous.map((landing) => landing.slug));
-      const requiredPermanentSlugs = [
-        ...BRAND_HUBS.map(slugify),
-        ...CATEGORY_HUBS.map(slugify),
-        ...MODEL_HUBS.map((model) => model.slug),
-        ...STOCK_CUTS.map((cut) => cut.slug),
-        "hibridos",
-      ];
-      if (requiredPermanentSlugs.every((slug) => slugs.has(slug))) {
-        console.warn(
-          `Aviso: API indisponível (${err.message}). Manifesto anterior completo preservado.`,
-        );
-        return;
-      }
-    } catch {
-      // Sem manifesto anterior seguro: o build deve falhar, não publicar vazio.
+    const cached = readFreshSeoStockCache(rootDir);
+    if (!cached?.vehicles.length) {
+      throw new Error(
+        `API indisponível (${err.message}) e cache recente de estoque ausente; build interrompido para evitar contagens divergentes`,
+      );
     }
-    throw new Error(
-      `API indisponível (${err.message}) e manifesto anterior completo ausente`,
+
+    const ageMinutes = Math.max(0, Math.round(cached.ageMs / 60000));
+    vehicles = cached.vehicles.filter((vehicle) => Number(vehicle.valor) > 0);
+    console.warn(
+      `Aviso: API indisponível (${err.message}); landings regeneradas pelo cache de ${ageMinutes} min com ${vehicles.length} veículos ativos.`,
     );
   }
 
