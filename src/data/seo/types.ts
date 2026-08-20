@@ -62,6 +62,8 @@ export interface CitySeoPage {
   title: string;
   description: string;
   h1: string;
+  /** H2 editorial específico da cidade; evita landings regionais genéricas. */
+  contentHeading?: string;
   intro: string;
   paragraphs: string[];
   faq: CityFaq[];

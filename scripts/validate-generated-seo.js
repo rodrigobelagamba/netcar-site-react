@@ -37,6 +37,13 @@ const locationSource = readFileSync(
 );
 const errors = [];
 const canonicals = new Set();
+const tractionRecoverySlugs = new Set([
+  "canoas",
+  "sao-leopoldo",
+  "gravatai",
+  "cachoeirinha",
+  "estancia-velha",
+]);
 const organizationId = `${site}/#organization`;
 const expectedDealers = {
   [`${site}/#loja-1`]: {
@@ -371,6 +378,19 @@ function validatePage({
   }
 
   const hrefs = anchorHrefs(html);
+  if (variant === "buy" && tractionRecoverySlugs.has(city.slug)) {
+    if (
+      occurrences(html, `<h2>${escapeHtml(city.contentHeading || "")}</h2>`) !==
+      1
+    ) {
+      errors.push(`${label}: H2 editorial de recuperação ausente`);
+    }
+    for (const path of ["/comparar", "/financiamento", "/compra"]) {
+      if (!hrefs.includes(`${site}${path}`)) {
+        errors.push(`${label}: atalho contextual ausente para ${path}`);
+      }
+    }
+  }
   const relatedPrefix = `${site}/${variant === "buy" ? "seminovos" : "vender-carro"}-`;
   const relatedHrefs = hrefs.filter((href) => href.startsWith(relatedPrefix));
   const expectedRelated = city.relatedSlugs.map(
@@ -963,6 +983,7 @@ for (const slug of [
   "cachoeirinha",
   "gravatai",
   "porto-alegre",
+  "estancia-velha",
 ]) {
   if (!crawlerHome.includes(`/seminovos-${slug}`)) {
     errors.push(`home do crawler sem prioridade regional para ${slug}`);

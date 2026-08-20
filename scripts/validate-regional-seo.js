@@ -16,6 +16,13 @@ const requiredNewCities = [
   "caxias-do-sul",
   "bento-goncalves",
 ];
+const tractionRecoverySlugs = new Set([
+  "canoas",
+  "sao-leopoldo",
+  "gravatai",
+  "cachoeirinha",
+  "estancia-velha",
+]);
 
 const errors = [];
 const slugs = new Set();
@@ -112,6 +119,36 @@ for (const city of cities) {
   }
   if (!Array.isArray(city.faq) || city.faq.length < 2) {
     errors.push(`${prefix}: mínimo de 2 FAQs de compra`);
+  }
+  if (tractionRecoverySlugs.has(city.slug)) {
+    if (
+      !city.contentHeading ||
+      !normalize(city.contentHeading).includes(normalize(city.name))
+    ) {
+      errors.push(
+        `${prefix}: recuperação regional exige H2 editorial com a cidade`,
+      );
+    }
+    if (city.paragraphs.length < 4 || city.faq.length < 4) {
+      errors.push(
+        `${prefix}: recuperação regional exige 4 parágrafos e 4 FAQs`,
+      );
+    }
+    if (
+      String(city.description).length < 135 ||
+      String(city.description).length > 165
+    ) {
+      errors.push(
+        `${prefix}: description de recuperação deve ter 135–165 caracteres`,
+      );
+    }
+    if (
+      !normalize(city.title).startsWith(`seminovos ${normalize(city.name)}`)
+    ) {
+      errors.push(
+        `${prefix}: title de recuperação deve começar por Seminovos + cidade`,
+      );
+    }
   }
   if (
     !city.sell?.title ||

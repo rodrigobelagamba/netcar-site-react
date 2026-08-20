@@ -81,6 +81,7 @@ switch ($page) {
         echo '<li><a href="' . SEO_SITE_URL . '/seminovos-cachoeirinha">Seminovos para Cachoeirinha</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/seminovos-gravatai">Seminovos para Gravataí</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/seminovos-porto-alegre">Seminovos para Porto Alegre</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-estancia-velha">Seminovos para Estância Velha</a></li>';
         echo '</ul>';
         break;
 

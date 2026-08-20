@@ -74,11 +74,53 @@ export function CityLandingPage() {
         }
       >
         <div className="mt-6 space-y-4">
+          <h2 className="text-xl font-bold text-fg">
+            {city.contentHeading ??
+              `Como comparar seminovos saindo de ${city.name}`}
+          </h2>
           {city.paragraphs.map((paragraph) => (
             <p key={paragraph} className="text-gray-600 leading-relaxed">
               {paragraph}
             </p>
           ))}
+          {city.contentHeading && (
+            <nav
+              aria-label={`Atalhos para pesquisar seminovos em ${city.name}`}
+              className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
+            >
+              <h3 className="font-semibold text-fg">
+                Compare antes de organizar a visita
+              </h3>
+              <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold">
+                <li>
+                  <Link
+                    to="/seminovos"
+                    className="text-primary hover:underline"
+                  >
+                    Estoque atual
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/comparar" className="text-primary hover:underline">
+                    Comparar carros
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/financiamento"
+                    className="text-primary hover:underline"
+                  >
+                    Entender o financiamento
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/compra" className="text-secondary hover:underline">
+                    Avaliar meu usado
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          )}
           {city.routeNote && (
             <p className="rounded-xl border border-primary/10 bg-primary/5 p-4 text-sm leading-relaxed text-gray-600">
               <strong className="text-fg">Referência de trajeto:</strong>{" "}

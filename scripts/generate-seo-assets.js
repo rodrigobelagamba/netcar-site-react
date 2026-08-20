@@ -1131,7 +1131,21 @@ for (const city of cities) {
     <article>
       <h1>${escapeHtml(city.h1)}</h1>
       <p>${escapeHtml(city.intro)}</p>
+      <h2>${escapeHtml(city.contentHeading || `Como comparar seminovos saindo de ${city.name}`)}</h2>
       ${paragraphs}
+      ${
+        city.contentHeading
+          ? `<nav aria-label="Atalhos para pesquisar seminovos em ${escapeHtml(city.name)}">
+        <h3>Compare antes de organizar a visita</h3>
+        <ul>
+          <li><a href="${SITE}/seminovos">Estoque atual</a></li>
+          <li><a href="${SITE}/comparar">Comparar carros</a></li>
+          <li><a href="${SITE}/financiamento">Entender o financiamento</a></li>
+          <li><a href="${SITE}/compra">Avaliar meu usado</a></li>
+        </ul>
+      </nav>`
+          : ""
+      }
       ${city.routeNote ? `<p><strong>Referência de trajeto:</strong> ${escapeHtml(city.routeNote)}</p>` : ""}
       ${stockShowcase({
         heading: `Seminovos para quem vem de ${city.name}`,
