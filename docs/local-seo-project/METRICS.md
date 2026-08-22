@@ -36,6 +36,39 @@ Configuração aplicada em 21/08/2026:
 
 No GA4, analisar sessões e eventos com campanha `gbp_esteio`, comparando a dimensão de conteúdo manual do anúncio (`utm_content`) entre `loja_1` e `loja_2`. Para WhatsApp, o rastreamento próprio do site também registra `utm_content`, permitindo relacionar o clique à unidade de origem sem tratar as lojas como funis comerciais independentes.
 
+## GA4: linha de base de 25/07 a 21/08/2026
+
+| Indicador | Resultado | Leitura correta |
+|---|---:|---|
+| Sessões totais | 16.407 | todos os canais |
+| Sessões de Organic Search | 919 | 5,6% das sessões |
+| Sessões orgânicas engajadas | 707 | taxa de 76,93% |
+| `whatsapp_click` total | 3.085 | contato iniciado, não venda |
+| `whatsapp_click` de Organic Search | 69 | atribuído ao canal da sessão |
+| Visualizações das páginas regionais com `seminovos-` | 118 | inclui cidades prioritárias, outras cidades e `/seminovos-automaticos` |
+| Visualizações orgânicas das páginas regionais | 19 | volume ainda muito baixo |
+
+O relatório completo separa canal, cidade geográfica estimada e caminho da página: `BASELINE-GA4-2026-07-25-A-2026-08-21.md`. A dimensão por título não deve ser usada na rotina porque alterações históricas de título fragmentam uma mesma URL.
+
+Em 22/08/2026 foi criada a dimensão personalizada de evento `Cidade regional`, ligada ao parâmetro `regional_city_slug` que o site já envia. Ela permitirá agrupar eventos futuros pela cidade-alvo da página sem depender apenas da geografia estimada do IP. Não é retroativa e não exigiu deploy.
+
+## GSC: páginas locais em 90 dias
+
+Janela comum: 21/05/2026 a 20/08/2026, Pesquisa Web.
+
+| Cidade/página | Cliques | Impressões | Posição média agregada | Observação |
+|---|---:|---:|---:|---|
+| Esteio | N/D | N/D | N/D | Home e estoque não foram isolados nesta coleta de páginas locais |
+| Sapucaia do Sul | 2 | 941 | 2,2 | 99,7% das impressões visíveis eram de marca |
+| Canoas | 2 | 835 | 3,9 | 97,5% das impressões visíveis eram de marca |
+| São Leopoldo | 1 | 341 | 9,1 | 60 impressões genéricas visíveis |
+| Nova Santa Rita | N/D | N/D | N/D | piloto publicado após a janela |
+| Cachoeirinha | 0 | 1.370 | 2,1 | 98,9% das impressões visíveis eram de marca |
+| Gravataí | 0 | 196 | 12,3 | 65 impressões comerciais locais visíveis |
+| Porto Alegre | 9 | 1.917 | 4,0 | 98,7% das impressões visíveis eram de marca |
+
+Posição média agregada não será tratada como ranking genérico local quando a página for exibida majoritariamente para a própria marca.
+
 ## Placar principal
 
 | Métrica | Fonte | Frequência | Corte | Responsável |

@@ -21,6 +21,7 @@ Anúncios podem ser avaliados separadamente para gerar demanda imediata, mas nã
 - [Sprint 01](./SPRINT-01.md)
 - [Métricas](./METRICS.md)
 - [Linha de base GBP de 90 dias](./BASELINE-GBP-90D-2026-08-18.md)
+- [Linha de base GA4 por cidade, canal e página](./BASELINE-GA4-2026-07-25-A-2026-08-21.md)
 - [Decisões](./DECISIONS.md)
 - [Estado legível por máquina](./project.json)
 

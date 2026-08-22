@@ -1,0 +1,45 @@
+coleta_inicio,coleta_fim,timezone,periodo_inicio,periodo_fim,relatorio,recorte,dimensao,valor_dimensao,metrica,valor,unidade,observacao
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Aquisição de tráfego,todos os usuários,Grupo principal de canais da sessão,Total,Sessões,16407,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Aquisição de tráfego,todos os usuários,Grupo principal de canais da sessão,Organic Search,Sessões,919,contagem,5.6% do total
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Aquisição de tráfego,todos os usuários,Grupo principal de canais da sessão,Organic Search,Sessões engajadas,707,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Aquisição de tráfego,todos os usuários,Grupo principal de canais da sessão,Organic Search,Taxa de engajamento,76.93,percentual,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Aquisição de tráfego,todos os usuários,Grupo principal de canais da sessão,Organic Search,Tempo médio de engajamento por sessão,130,segundos,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Aquisição de tráfego,todos os usuários,Grupo principal de canais da sessão,Organic Search,whatsapp_click,69,evento principal,seletor de eventos principais em whatsapp_click
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Porto Alegre,Usuários ativos,5404,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Porto Alegre,whatsapp_click,2490,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Porto Alegre,Usuários ativos,167,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Porto Alegre,whatsapp_click,24,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Esteio,Usuários ativos,1075,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Esteio,whatsapp_click,118,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Esteio,Usuários ativos,101,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Esteio,whatsapp_click,15,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Canoas,Usuários ativos,933,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Canoas,whatsapp_click,124,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Canoas,Usuários ativos,43,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Canoas,whatsapp_click,2,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Sao Leopoldo,Usuários ativos,528,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Sao Leopoldo,whatsapp_click,63,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Sao Leopoldo,Usuários ativos,32,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Sao Leopoldo,whatsapp_click,3,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Gravatai,Usuários ativos,251,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Gravatai,whatsapp_click,12,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Gravatai,Usuários ativos,20,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Gravatai,whatsapp_click,0,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Cachoeirinha,Usuários ativos,172,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Cachoeirinha,whatsapp_click,26,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Cachoeirinha,Usuários ativos,6,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,Organic Search,Cidade,Cachoeirinha,whatsapp_click,0,evento principal,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Sapucaia,Correspondência exata,sem linha,N/D,busca retornou não há dados disponíveis
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Detalhes demográficos,todos os usuários,Cidade,Nova Santa Rita,Correspondência exata,sem linha,N/D,busca retornou não há dados disponíveis
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,todos os usuários,Caminho da página,/seminovos-sapucaia-do-sul,Visualizações,43,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,Organic Search,Caminho da página,/seminovos-sapucaia-do-sul,Visualizações,5,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,todos os usuários,Caminho da página,/seminovos-canoas,Visualizações,12,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,Organic Search,Caminho da página,/seminovos-canoas,Visualizações,0,contagem,sem linha no filtro orgânico
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,todos os usuários,Caminho da página,/seminovos-sao-leopoldo,Visualizações,3,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,Organic Search,Caminho da página,/seminovos-sao-leopoldo,Visualizações,0,contagem,sem linha no filtro orgânico
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,todos os usuários,Caminho da página,/seminovos-cachoeirinha,Visualizações,4,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,Organic Search,Caminho da página,/seminovos-cachoeirinha,Visualizações,0,contagem,sem linha no filtro orgânico
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,todos os usuários,Caminho da página,/seminovos-gravatai,Visualizações,1,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,Organic Search,Caminho da página,/seminovos-gravatai,Visualizações,0,contagem,sem linha no filtro orgânico
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,todos os usuários,Caminho da página,/seminovos-porto-alegre,Visualizações,8,contagem,
+2026-08-22 14:50,2026-08-22 15:26,America/Sao_Paulo,2026-07-25,2026-08-21,Páginas e telas,Organic Search,Caminho da página,/seminovos-porto-alegre,Visualizações,3,contagem,
