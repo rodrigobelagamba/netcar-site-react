@@ -66,6 +66,18 @@ O piloto do commit `57dde08` foi validado no servidor público entre 12:45 e 12:
 
 O teste em tempo real do Search Console confirmou que as duas URLs estão disponíveis para o Google, podem ser indexadas e contêm breadcrumb válido. A indexação das duas páginas foi solicitada, e o Google confirmou a entrada de ambas na fila de rastreamento prioritário.
 
+## Cachoeirinha
+
+A correção do commit `813a0e3` foi validada no servidor público entre 13:10 e 13:15:
+
+- `/seminovos-cachoeirinha` e `/vender-carro-cachoeirinha` responderam HTTP 200;
+- as duas URLs aparecem no sitemap público;
+- title, description e canonical correspondem ao conteúdo implementado;
+- a página de compra preserva a distância conservadora de cerca de 15 km, o estoque real e a ausência de loja na cidade;
+- a página de venda preserva a pré-avaliação remota e a vistoria presencial em Esteio.
+
+O teste em tempo real do Search Console confirmou que as duas URLs estão disponíveis para o Google, podem ser indexadas e contêm breadcrumb válido. A indexação das duas páginas foi solicitada, e o Google confirmou a entrada de ambas na fila de rastreamento prioritário.
+
 ## Entidades das lojas
 
 O HTML inicial contém duas entidades `AutoDealer` distintas:

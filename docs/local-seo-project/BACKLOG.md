@@ -23,7 +23,7 @@ O estado operacional fica em `project.json`. Esta visão explica o resultado esp
 | CIT-001 | P2 | Esteio/Sapucaia/Canoas/São Leopoldo/Nova Santa Rita/Cachoeirinha | Conquistar citações locais legítimas | backlog | lista de parceiros | menções indexáveis e coerentes, sem compra de link artificial |
 | INT-001 | P2 | Regional | Interligar cidades, modelos e estoque | backlog | páginas revisadas | links úteis por intenção e sem páginas órfãs |
 | NSR-001 | P1 | Nova Santa Rita | Publicar e medir página-piloto local | em andamento | medição 60–90 dias | compra e venda validadas em produção e enviadas à fila de indexação em 22/08; acompanhar tração |
-| CCH-001 | P1 | Cachoeirinha | Reforçar página para consultas comerciais genéricas | em andamento | deploy, novo rastreamento e prova local | 1.370 impressões e zero clique em 3 meses; consultas locais entre posições 30,8 e 35 |
+| CCH-001 | P1 | Cachoeirinha | Reforçar página para consultas comerciais genéricas | em andamento | nova medição e prova local | produção validada e indexação solicitada em 22/08; repetir GSC em 14–28 dias |
 | EXP-001 | P3 | Gravataí/Porto Alegre | Reavaliar expansão | backlog | resultado das fases 1–3 | prioridade recalculada com dados atuais |
 
 ## Convenção de estados
