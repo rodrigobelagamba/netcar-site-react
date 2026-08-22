@@ -452,47 +452,68 @@
     "slug": "porto-alegre",
     "name": "Porto Alegre",
     "regionName": "Grande Porto Alegre",
-    "distanceKm": 20,
-    "travelTime": "30 min",
-    "routeNote": "A saída pela BR-116 costuma ser a referência para chegar a Esteio; o tempo muda bastante conforme o bairro, obras e horário.",
-    "visitPlanning": "Confira fotos e preços, confirme os carros selecionados e marque um horário para concentrar test drive, simulação e avaliação da troca.",
+    "distanceKm": 28,
+    "travelTime": "30–50 min",
+    "routeNote": "A referência entre o Centro Histórico e a Loja 1 é de aproximadamente 28 km pela BR-116. O ponto de saída, o trânsito e as obras podem alterar bastante o trajeto.",
+    "visitPlanning": "Selecione os veículos no estoque online, confirme a disponibilidade e combine o atendimento antes de sair de Porto Alegre para as lojas em Esteio.",
     "relatedSlugs": ["canoas", "cachoeirinha", "gravatai", "guaiba"],
     "priorityMarket": true,
-    "title": "Seminovos perto de Porto Alegre: fotos e preços | Netcar",
-    "description": "Confira carros seminovos com fotos, preços e km na Netcar em Esteio, a cerca de 30 min de Porto Alegre. Financiamento, troca e garantia.",
-    "h1": "Carros seminovos perto de Porto Alegre",
-    "intro": "Quem mora em Porto Alegre — especialmente na zona norte — pode comparar o estoque online e planejar o deslocamento até as lojas da Netcar em Esteio pela BR-116.",
+    "title": "Seminovos Porto Alegre: estoque perto | Netcar",
+    "description": "Compare carros seminovos saindo de Porto Alegre no estoque da Netcar em Esteio, a cerca de 28 km do Centro Histórico. Veja fotos, preços, troca e financiamento.",
+    "h1": "Carros seminovos para quem está em Porto Alegre",
+    "contentHeading": "Como planejar a compra saindo de Porto Alegre",
+    "intro": "Quem está em Porto Alegre pode filtrar o estoque compartilhado das duas lojas da Netcar e organizar uma visita a Esteio somente depois de confirmar os veículos de interesse.",
     "paragraphs": [
-      "Na Netcar, o estoque multimarcas é preparado pela Fábrica de Valor antes de ir para a vitrine, com fotos, quilometragem e preços disponíveis para comparação no site.",
-      "Uma visita planejada pode reunir test drive, simulação de financiamento e avaliação do usado na troca. As condições dependem da análise e da negociação na loja."
+      "O catálogo informa fotos, preço, ano, versão e quilometragem para comparar opções sem atravessar a região metropolitana no início da pesquisa. Como o estoque muda, os carros escolhidos devem ser reconfirmados no dia.",
+      "Do Centro Histórico até a Av. Presidente Vargas, 740, o Google Maps indicou cerca de 28 km pela BR-116. Esse é apenas um ponto de referência: uma saída da zona norte ou de outro bairro produz distância e tempo diferentes.",
+      "Antes da visita, o WhatsApp permite organizar o test drive, iniciar uma simulação sujeita à análise de crédito e encaminhar dados do usado. Entrada parcelada no cartão pode ser consultada conforme a negociação.",
+      "A Netcar não tem endereço em Porto Alegre. O atendimento presencial ocorre nos números 740 e 1106 da Av. Presidente Vargas, em Esteio, com estoque e equipes integrados, despachante credenciado e suporte Nethelp durante a garantia legal."
     ],
     "faq": [
       {
-        "q": "Compensa sair de Porto Alegre para comprar em Esteio?",
-        "a": "Compare o estoque e as condições antes de sair. Se houver veículos compatíveis, confirme a visita para fazer test drive e negociar presencialmente."
+        "q": "A Netcar possui loja em Porto Alegre?",
+        "a": "Não. As duas lojas físicas ficam em Esteio, na Av. Presidente Vargas, 740 e 1106. A página ajuda moradores de Porto Alegre a pesquisar o estoque antes do deslocamento."
       },
       {
-        "q": "Tem como ver o estoque antes de ir?",
-        "a": "Sim, todo o estoque está no site com fotos e preço. Dá pra reservar a visita pelo WhatsApp."
+        "q": "Qual é a distância de Porto Alegre até a Netcar?",
+        "a": "A referência do Centro Histórico até a Loja 1 é de aproximadamente 28 km. Consulte a rota no momento da visita, pois bairro, trânsito e obras alteram o tempo."
+      },
+      {
+        "q": "Como evitar uma viagem sem encontrar o carro escolhido?",
+        "a": "Abra o anúncio no estoque e confirme a disponibilidade pelo WhatsApp no mesmo dia. Também é possível combinar o horário do test drive."
+      },
+      {
+        "q": "Posso financiar, trocar meu usado ou parcelar a entrada?",
+        "a": "A equipe pode simular financiamento, avaliar o usado e consultar entrada parcelada no cartão. Valores, taxas, prazos e aprovação dependem da proposta e da análise de crédito."
       }
     ],
     "sell": {
       "title": "Vender carro em Porto Alegre: pré-avaliação online | Netcar",
-      "description": "Quer vender seu carro em Porto Alegre sem anúncio e sem visita de estranho? A Netcar compra em Esteio, a 30 min. Mesmo financiado.",
+      "description": "Comece a vender seu carro em Porto Alegre pelo WhatsApp. A vistoria e a proposta final acontecem nas lojas da Netcar em Esteio, a cerca de 28 km.",
       "h1": "Vender carro em Porto Alegre com pré-avaliação online",
-      "intro": "Quem quer vender carro em Porto Alegre pode enviar dados e fotos primeiro; a vistoria e a proposta final acontecem nas lojas da Netcar em Esteio.",
+      "intro": "Para não sair de Porto Alegre sem um primeiro alinhamento, envie as informações e as fotos do veículo pelo WhatsApp; valor e condições finais dependem da vistoria presencial em Esteio.",
       "paragraphs": [
-        "O primeiro contato pode ser feito pelo WhatsApp com modelo, ano, quilometragem e fotos. A equipe analisa os dados antes de você se deslocar.",
-        "Compramos nacionais de até 7 anos, origem RS, sem passagem por leilão — inclusive com financiamento em aberto, mediante quitação."
+        "Informe modelo, versão, ano, quilometragem, conservação e eventual financiamento. Imagens externas, internas e do painel ajudam a preparar o atendimento, mas não representam uma oferta definitiva.",
+        "A conferência em Esteio considera o estado do automóvel, o histórico, a documentação e as condições de mercado. A proposta só é apresentada depois dessa verificação.",
+        "Se houver saldo financiado, a equipe apura a quitação e separa esse valor do montante líquido da negociação. A viabilidade depende dos números confirmados e do aceite do proprietário.",
+        "A venda pode ser direta ou envolver um veículo do estoque. As duas unidades trabalham de forma integrada, e o despachante credenciado auxilia nas etapas documentais previstas na negociação."
       ],
       "faq": [
         {
-          "q": "Vale a pena ir até Esteio só para vender?",
-          "a": "A primeira avaliação sai pelo WhatsApp. Você só se desloca se a proposta fizer sentido."
+          "q": "O que devo enviar antes de sair de Porto Alegre?",
+          "a": "Envie modelo, versão, ano, quilometragem, fotos atuais e informe se existe financiamento. Esses dados permitem organizar a vistoria, mas não garantem valor."
         },
         {
-          "q": "Em quanto tempo recebo o pagamento?",
-          "a": "O prazo é informado na proposta e depende da vistoria, da documentação e das condições acertadas na negociação."
+          "q": "A pré-avaliação pelo WhatsApp é uma proposta final?",
+          "a": "Não. A conversa remota é uma triagem. O preço e as condições definitivas dependem do veículo e da documentação conferidos presencialmente."
+        },
+        {
+          "q": "É possível avaliar um carro ainda financiado?",
+          "a": "Sim. A equipe confere o saldo para quitação e calcula o valor líquido da negociação. A operação depende da vistoria e das condições confirmadas."
+        },
+        {
+          "q": "Onde é feita a vistoria para clientes de Porto Alegre?",
+          "a": "A vistoria ocorre nas lojas da Av. Presidente Vargas, 740 e 1106, em Esteio. A Netcar não mantém unidade física em Porto Alegre."
         }
       ]
     }

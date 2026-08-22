@@ -10,7 +10,8 @@
     "São Leopoldo": ["Newton Multimarcas", "Billy Motors", "Select Drive Veículos", "Sinoscar Chevrolet", "Premium Veículos", "Local Veículos"],
     "Nova Santa Rita": ["Webmotors", "OLX", "Seminovos Carburgo", "Mobiauto"],
     "Cachoeirinha": ["Senna RS Motors", "Elite dos Carros", "Ribeiro Veículos", "Cia do Automóvel Cachoeirinha"],
-    "Gravataí": ["Portocar Seminovos", "Localiza Seminovos", "SRV Automarcas", "Lucraf Veículos", "Romscar", "Planeta Veículos"]
+    "Gravataí": ["Portocar Seminovos", "Localiza Seminovos", "SRV Automarcas", "Lucraf Veículos", "Romscar", "Planeta Veículos"],
+    "Porto Alegre": ["Webmotors", "Mercado Livre", "OLX", "iCarros", "Cia do Carro", "Find Motors"]
   },
   "allowedStatuses": ["backlog", "ready", "in_progress", "blocked", "verify_production", "done"],
   "tasks": [
@@ -57,7 +58,7 @@
     {
       "id": "MEAS-001",
       "title": "Criar linha de base recorrente por cidade e canal",
-      "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí"],
+      "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí", "Porto Alegre"],
       "priority": "P0",
       "status": "in_progress",
       "owner": "Codex + Netcar",
@@ -225,13 +226,23 @@
       "acceptance": ["Consulta seminovos em Gravataí medida separadamente da marca", "Conteúdo factual publicado", "Nenhuma alegação de endereço em Gravataí"]
     },
     {
+      "id": "POA-001",
+      "title": "Corrigir distância e qualificar a página de Porto Alegre",
+      "cities": ["Porto Alegre"],
+      "priority": "P2",
+      "status": "verify_production",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Deploy", "Novo rastreamento", "Leads e vendas por cidade"],
+      "acceptance": ["Distância factual e origem explícita", "Conteúdo útil sem alegar endereço em Porto Alegre", "Produção validada e nova medição após 28–60 dias"]
+    },
+    {
       "id": "EXP-001",
       "title": "Reavaliar as demais cidades",
       "cities": ["Porto Alegre"],
       "priority": "P3",
-      "status": "backlog",
+      "status": "in_progress",
       "owner": "Codex + Netcar",
-      "dependencies": ["Resultados das fases iniciais"],
+      "dependencies": ["GA4, CRM e nova janela do GSC"],
       "acceptance": ["Prioridade recalculada com dados atuais de visibilidade, leads e vendas"]
     }
   ]

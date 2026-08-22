@@ -8,7 +8,7 @@ O estado operacional fica em `project.json`. Esta visão explica o resultado esp
 | TECH-001 | P0 | Todas | Confirmar 301/410 e metadados em produção | concluído | nenhuma | 200/301/404/410, canonicals e `noindex` validados no servidor em 22/08/2026 |
 | ENTITY-001 | P0 | Esteio | Confirmar schema das duas lojas em produção | concluído | nenhuma | duas entidades `AutoDealer`, CEPs, telefones e CIDs confirmados em produção em 22/08/2026 |
 | GBP-001 | P0 | Esteio | Auditar integralmente os dois perfis | em andamento | campos internos dos perfis | categorias, serviços, produtos, fotos e NAP documentados |
-| MEAS-001 | P0 | Esteio/Sapucaia/Canoas/São Leopoldo/Nova Santa Rita/Cachoeirinha/Gravataí | Criar linha de base recorrente | em andamento | GSC, GA4 e CRM | GBP de 90 dias arquivado; demais canais pendentes |
+| MEAS-001 | P0 | Esteio/Sapucaia/Canoas/São Leopoldo/Nova Santa Rita/Cachoeirinha/Gravataí/Porto Alegre | Criar linha de base recorrente | em andamento | GSC, GA4 e CRM | GBP de 90 dias arquivado; demais canais pendentes |
 | GBP-002 | P1 | Esteio | Criar URLs UTM específicas por loja | concluído | GBP-001 | URLs salvas e reconfirmadas nos dois perfis em 21/08/2026 |
 | GBP-003 | P1 | Esteio | Explicar a operação integrada nos dois perfis | concluído | texto aprovado | descrições salvas e reabertas para conferência em 21/08/2026 |
 | GBP-004 | P1 | Esteio | Cadastrar serviços permanentes nos dois perfis | verificar produção | revisão do Google | seis serviços enviados igualmente; “Despachante credenciado” reconfirmado nos dois editores em 22/08/2026; confirmar publicação pública |
@@ -25,7 +25,8 @@ O estado operacional fica em `project.json`. Esta visão explica o resultado esp
 | NSR-001 | P1 | Nova Santa Rita | Publicar e medir página-piloto local | em andamento | medição 60–90 dias | compra e venda validadas em produção e enviadas à fila de indexação em 22/08; acompanhar tração |
 | CCH-001 | P1 | Cachoeirinha | Reforçar página para consultas comerciais genéricas | em andamento | nova medição e prova local | produção validada e indexação solicitada em 22/08; repetir GSC em 14–28 dias |
 | GRA-001 | P1 | Gravataí | Reforçar página para consultas de seminovos | em andamento | nova medição e prova local | produção validada e indexação solicitada em 22/08; repetir GSC em 14–28 dias |
-| EXP-001 | P3 | Porto Alegre | Reavaliar expansão | backlog | resultado das fases 1–3 | prioridade recalculada com dados atuais |
+| POA-001 | P2 | Porto Alegre | Corrigir distância e qualificar a página sem ampliar prioridade | verificar produção | deploy e novo rastreamento | conteúdo factual publicado e nova medição em 28–60 dias |
+| EXP-001 | P3 | Porto Alegre | Reavaliar expansão | em andamento | GA4, CRM e nova janela do GSC | GSC atual indica médio prazo; confirmar com leads e vendas |
 
 ## Convenção de estados
 
