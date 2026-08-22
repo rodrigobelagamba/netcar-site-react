@@ -9,8 +9,8 @@ const benefits = [
   },
   {
     icon: CreditCard,
-    title: "Cartão de crédito em até 21x",
-    desc: "Opção de parcelamento no cartão, conforme disponibilidade e análise.",
+    title: "Entrada parcelada no cartão",
+    desc: "A entrada pode ser parcelada no cartão de crédito, conforme disponibilidade e análise.",
   },
   {
     icon: RefreshCw,

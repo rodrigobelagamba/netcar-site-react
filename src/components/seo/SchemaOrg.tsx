@@ -93,7 +93,7 @@ export function SchemaOrg() {
             streetAddress: "Av. Presidente Vargas, 740",
             addressLocality: "Esteio",
             addressRegion: "RS",
-            postalCode: "93260-048",
+            postalCode: "93260-490",
             addressCountry: "BR",
           },
           geo: {
@@ -121,7 +121,7 @@ export function SchemaOrg() {
             streetAddress: "Av. Presidente Vargas, 1106",
             addressLocality: "Esteio",
             addressRegion: "RS",
-            postalCode: "93260-001",
+            postalCode: "93260-048",
             addressCountry: "BR",
           },
           geo: {

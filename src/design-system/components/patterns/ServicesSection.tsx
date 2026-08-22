@@ -24,7 +24,7 @@ export function ServicesSection() {
     {
       title: "Financiamento",
       image: "/images/financing.webp",
-      desc: "Financiamento em até 60x ou cartão em até 21x. Compare bancos e financeiras parceiras — sujeito à análise.",
+      desc: "A entrada pode ser parcelada no cartão de crédito, conforme disponibilidade e análise. O saldo pode ser financiado em até 60x.",
       cta: "Comparar Condições",
       message: "quero simular um financiamento e comparar condições entre os bancos e financeiras parceiras.",
       objectPosition: "30% center",
@@ -32,7 +32,7 @@ export function ServicesSection() {
     {
       title: "Venda seu Veículo",
       image: "/images/vehicle-evaluation.webp",
-      desc: "Avaliamos seu veículo na troca. Documentação com despachante credenciado até o DETRAN.",
+      desc: "Avaliamos seu veículo na troca e cuidamos da documentação com despachante credenciado.",
       cta: "Avaliar Carro",
       message: "tenho interesse em vender meu carro para a Netcar.",
       objectPosition: "center 25%",

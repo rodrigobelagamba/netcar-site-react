@@ -370,7 +370,8 @@ export function HomePage() {
             <span className="hidden md:inline">
               Aceitamos seu carro na troca — inclusive com financiamento em
               aberto, mediante avaliação. Dá pra financiar em até 60x ou
-              parcelar no cartão em até 21x. Documentação com despachante e
+              parcelar a entrada no cartão, conforme disponibilidade e análise.
+              Documentação com despachante credenciado e
               atendimento no WhatsApp o dia todo, pra você tirar dúvida sem
               compromisso.
             </span>

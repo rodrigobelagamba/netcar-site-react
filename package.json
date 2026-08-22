@@ -21,6 +21,8 @@
     "seo:validate-blog": "node scripts/validate-blog-intent.js",
     "catalog:whatsapp": "node scripts/generate-whatsapp-catalog-feed.js",
     "report:icheck": "tsx scripts/generate-icheck-report.mjs",
+    "local-seo:status": "node scripts/local-seo-status.mjs",
+    "local-seo:validate": "node scripts/local-seo-status.mjs --validate",
     "preview": "vite preview",
     "deploy:local": "node scripts/deploy-local.js",
     "deploy:dist": "node scripts/deploy-dist.js",

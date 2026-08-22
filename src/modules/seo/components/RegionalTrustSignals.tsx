@@ -54,14 +54,14 @@ export function RegionalTrustSignals({
     {
       key: "finance",
       icon: CreditCard,
-      title: "Parcelamento facilitado",
-      text: "Financiamento em até 60x ou cartão em até 21x. Compare bancos e financeiras parceiras.",
+      title: "Entrada parcelada no cartão",
+      text: "A entrada pode ser parcelada no cartão de crédito, conforme disponibilidade e análise. O saldo pode ser financiado em até 60x.",
     },
     {
       key: "docs",
       icon: FileCheck2,
       title: "Despachante credenciado",
-      text: "Documentação até o DETRAN com suporte da loja. Menos burocracia na hora de transferir.",
+      text: "A Netcar cuida da documentação e da transferência com despachante credenciado. Menos burocracia na compra.",
     },
     {
       key: "google",

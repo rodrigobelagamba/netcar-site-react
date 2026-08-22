@@ -1,0 +1,204 @@
+{
+  "name": "Netcar — Crescimento Local Orgânico",
+  "version": 1,
+  "updatedAt": "2026-08-22",
+  "canonicalRepository": "netcar-organic-demand",
+  "paidMediaRequired": false,
+  "priorityCities": ["Esteio", "Sapucaia do Sul", "Canoas"],
+  "monitoredCompetitors": {
+    "Canoas": ["R2 Motors", "Dotto Veículos", "Star", "Base Veículos", "Boqueirão Veículos", "Macrosinos Veículos"]
+  },
+  "allowedStatuses": ["backlog", "ready", "in_progress", "blocked", "verify_production", "done"],
+  "tasks": [
+    {
+      "id": "PROJ-001",
+      "title": "Estruturar o projeto contínuo de SEO local",
+      "cities": ["Todas"],
+      "priority": "P0",
+      "status": "done",
+      "owner": "Codex",
+      "dependencies": [],
+      "acceptance": ["Roadmap, backlog, métricas, decisões e Sprint 01 versionados", "Validador local aprovado"]
+    },
+    {
+      "id": "TECH-001",
+      "title": "Validar 301, 410, metadados e canonicals em produção",
+      "cities": ["Todas"],
+      "priority": "P0",
+      "status": "verify_production",
+      "owner": "Codex",
+      "dependencies": ["deploy atual acessível"],
+      "acceptance": ["Status HTTP e HTML das URLs críticas registrados com data", "Nenhuma divergência entre código e produção"]
+    },
+    {
+      "id": "ENTITY-001",
+      "title": "Validar as duas entidades AutoDealer em produção",
+      "cities": ["Esteio"],
+      "priority": "P0",
+      "status": "in_progress",
+      "owner": "Codex + Netcar",
+      "dependencies": ["URLs públicas dos dois perfis"],
+      "acceptance": ["Duas lojas válidas e distintas", "NAP consistente entre perfil, página e schema"]
+    },
+    {
+      "id": "GBP-001",
+      "title": "Auditar integralmente os dois Perfis da Empresa",
+      "cities": ["Esteio"],
+      "priority": "P0",
+      "status": "in_progress",
+      "owner": "Codex + Netcar",
+      "dependencies": ["URLs públicas dos dois perfis"],
+      "acceptance": ["Categorias, serviços, produtos, fotos, horários, links e NAP documentados", "Diferenças entre as lojas confirmadas"]
+    },
+    {
+      "id": "MEAS-001",
+      "title": "Criar linha de base recorrente por cidade e canal",
+      "cities": ["Esteio", "Sapucaia do Sul", "Canoas"],
+      "priority": "P0",
+      "status": "in_progress",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Exportações de GBP, GSC, GA4 e leads quando disponíveis"],
+      "acceptance": ["Mapas, Map Pack e orgânico separados", "Fontes, data, localização e limitações registradas"]
+    },
+    {
+      "id": "GBP-002",
+      "title": "Criar URLs UTM específicas por loja",
+      "cities": ["Esteio"],
+      "priority": "P1",
+      "status": "done",
+      "owner": "Codex + Netcar",
+      "dependencies": ["GBP-001"],
+      "acceptance": ["Cliques de cada loja distinguíveis no GA4 e no CRM", "Parâmetros documentados e consistentes"]
+    },
+    {
+      "id": "GBP-003",
+      "title": "Explicar a operação integrada nos dois perfis",
+      "cities": ["Esteio"],
+      "priority": "P1",
+      "status": "done",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Texto aprovado pela Netcar"],
+      "acceptance": ["As duas descrições explicam estoque, equipe e atendimento integrados", "Cada descrição mantém o endereço correto da unidade"]
+    },
+    {
+      "id": "GBP-004",
+      "title": "Cadastrar serviços permanentes nos dois perfis",
+      "cities": ["Esteio"],
+      "priority": "P1",
+      "status": "verify_production",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Aprovação dos nomes e textos dos serviços"],
+      "acceptance": ["Os dois perfis exibem os mesmos serviços permanentes e comprovados", "Nenhum serviço contém promessa, preço ou condição imprecisa"]
+    },
+    {
+      "id": "STORE-001",
+      "title": "Reavaliar página própria para a Loja 1",
+      "cities": ["Esteio"],
+      "priority": "P3",
+      "status": "backlog",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Mudança operacional futura que justifique página própria"],
+      "acceptance": ["Criar somente se houver utilidade própria comprovada", "Não sugerir estoque ou operação independente inexistente"]
+    },
+    {
+      "id": "STORE-002",
+      "title": "Reavaliar página própria para a Loja 2",
+      "cities": ["Esteio"],
+      "priority": "P3",
+      "status": "backlog",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Mudança operacional futura que justifique página própria"],
+      "acceptance": ["Criar somente se houver utilidade própria comprovada", "Não sugerir estoque ou operação independente inexistente"]
+    },
+    {
+      "id": "REV-001",
+      "title": "Implantar rotina ética e contínua de avaliações",
+      "cities": ["Regional"],
+      "priority": "P1",
+      "status": "backlog",
+      "owner": "Netcar + Codex",
+      "dependencies": ["Processo atual de atendimento e pós-venda"],
+      "acceptance": ["Pedido enviado a todos os clientes elegíveis", "Cadência e origem registradas", "Sem review gating"]
+    },
+    {
+      "id": "PERF-001",
+      "title": "Corrigir o primeiro lote de gargalos de LCP e INP",
+      "cities": ["Todas"],
+      "priority": "P1",
+      "status": "ready",
+      "owner": "Codex",
+      "dependencies": ["Medição por template"],
+      "acceptance": ["Antes e depois registrados", "Build e fluxos de conversão sem regressão"]
+    },
+    {
+      "id": "SAP-001",
+      "title": "Reforçar a página de Sapucaia com utilidade e prova local",
+      "cities": ["Sapucaia do Sul"],
+      "priority": "P1",
+      "status": "backlog",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Bairros, rotas, depoimentos e dados reais de atendimento"],
+      "acceptance": ["Informações locais exclusivas", "Estoque real e conversão rastreável", "Nenhuma alegação sem evidência"]
+    },
+    {
+      "id": "CAN-001",
+      "title": "Reforçar a página de Canoas com utilidade e prova local",
+      "cities": ["Canoas"],
+      "priority": "P1",
+      "status": "in_progress",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Deploy", "Novo rastreamento", "Depoimentos ou dados reais de atendimento"],
+      "acceptance": ["Informações locais exclusivas", "Estoque real e conversão rastreável", "Nenhuma alegação sem evidência"]
+    },
+    {
+      "id": "CAN-002",
+      "title": "Monitorar R2 Motors, Dotto e líderes observados em Canoas",
+      "cities": ["Canoas"],
+      "priority": "P1",
+      "status": "in_progress",
+      "owner": "Codex",
+      "dependencies": ["URLs públicas dos perfis e sites"],
+      "acceptance": ["Linha de base mensal por termo e canal", "Evidências e mudanças relevantes registradas"]
+    },
+    {
+      "id": "CIT-001",
+      "title": "Conquistar citações locais legítimas",
+      "cities": ["Esteio", "Sapucaia do Sul", "Canoas"],
+      "priority": "P2",
+      "status": "backlog",
+      "owner": "Netcar + Codex",
+      "dependencies": ["Parceiros, ações ou pautas reais"],
+      "acceptance": ["Menções indexáveis e coerentes", "URL, cidade e natureza da relação registradas"]
+    },
+    {
+      "id": "INT-001",
+      "title": "Interligar páginas de cidades, modelos e estoque",
+      "cities": ["Regional"],
+      "priority": "P2",
+      "status": "backlog",
+      "owner": "Codex",
+      "dependencies": ["Páginas regionais revisadas"],
+      "acceptance": ["Links úteis por intenção de compra", "Nenhuma página prioritária órfã"]
+    },
+    {
+      "id": "NSR-001",
+      "title": "Validar a demanda de Nova Santa Rita antes de ampliar",
+      "cities": ["Nova Santa Rita"],
+      "priority": "P2",
+      "status": "backlog",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Dados de GSC e CRM de 60 a 90 dias"],
+      "acceptance": ["Decisão registrada com impressões, leads, vendas e esforço estimado"]
+    },
+    {
+      "id": "EXP-001",
+      "title": "Reavaliar as demais cidades",
+      "cities": ["São Leopoldo", "Cachoeirinha", "Gravataí", "Porto Alegre"],
+      "priority": "P3",
+      "status": "backlog",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Resultados das fases iniciais"],
+      "acceptance": ["Prioridade recalculada com dados atuais de visibilidade, leads e vendas"]
+    }
+  ]
+}
