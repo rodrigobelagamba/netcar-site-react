@@ -230,9 +230,9 @@
       "title": "Corrigir distância e qualificar a página de Porto Alegre",
       "cities": ["Porto Alegre"],
       "priority": "P2",
-      "status": "verify_production",
+      "status": "in_progress",
       "owner": "Codex + Netcar",
-      "dependencies": ["Deploy", "Novo rastreamento", "Leads e vendas por cidade"],
+      "dependencies": ["Nova medição do GSC", "Leads e vendas por cidade"],
       "acceptance": ["Distância factual e origem explícita", "Conteúdo útil sem alegar endereço em Porto Alegre", "Produção validada e nova medição após 28–60 dias"]
     },
     {

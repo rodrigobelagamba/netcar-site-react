@@ -1,8 +1,8 @@
 # Validação de produção — deploy de 22/08/2026
 
-Coleta: 22/08/2026, entre 10:50 e 10:55 (America/Sao_Paulo).
+Coletas: 22/08/2026, entre 10:50 e 13:54 (America/Sao_Paulo).
 
-Commit publicado na `master`: `c5076bc`.
+Primeiro commit da sequência: `c5076bc`. Último commit funcional validado na `master`: `4ab2ae2`.
 
 ## Respostas HTTP
 
@@ -89,6 +89,18 @@ A correção do commit `ea2df6f` foi validada no servidor público entre 13:28 e
 - a página de venda preserva a pré-avaliação remota e a vistoria presencial em Esteio.
 
 O teste em tempo real do Search Console confirmou que as duas URLs estão disponíveis para o Google, podem ser indexadas e contêm breadcrumb válido. A indexação das duas páginas foi solicitada, e o Google confirmou a entrada de ambas na fila de rastreamento prioritário.
+
+## Porto Alegre
+
+A correção do commit `4ab2ae2` foi validada no servidor público entre 13:50 e 13:54:
+
+- `/seminovos-porto-alegre` e `/vender-carro-porto-alegre` responderam HTTP 200;
+- as duas URLs aparecem no sitemap público;
+- title, description e canonical correspondem ao conteúdo implementado;
+- a página de compra usa a referência factual de cerca de 28 km do Centro Histórico à Loja 1 e declara que a Netcar não possui endereço em Porto Alegre;
+- a página de venda preserva a triagem remota, a vistoria presencial em Esteio e o despachante credenciado.
+
+O teste em tempo real do Search Console foi concluído às 13:53 para a página de compra e às 13:54 para a página de venda. O Google informou que ambas estão disponíveis e podem ser indexadas, com um breadcrumb válido em cada página. As duas URLs foram adicionadas à fila de rastreamento prioritário.
 
 ## Entidades das lojas
 

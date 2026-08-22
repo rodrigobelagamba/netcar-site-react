@@ -25,7 +25,7 @@ O estado operacional fica em `project.json`. Esta visão explica o resultado esp
 | NSR-001 | P1 | Nova Santa Rita | Publicar e medir página-piloto local | em andamento | medição 60–90 dias | compra e venda validadas em produção e enviadas à fila de indexação em 22/08; acompanhar tração |
 | CCH-001 | P1 | Cachoeirinha | Reforçar página para consultas comerciais genéricas | em andamento | nova medição e prova local | produção validada e indexação solicitada em 22/08; repetir GSC em 14–28 dias |
 | GRA-001 | P1 | Gravataí | Reforçar página para consultas de seminovos | em andamento | nova medição e prova local | produção validada e indexação solicitada em 22/08; repetir GSC em 14–28 dias |
-| POA-001 | P2 | Porto Alegre | Corrigir distância e qualificar a página sem ampliar prioridade | verificar produção | deploy e novo rastreamento | conteúdo factual publicado e nova medição em 28–60 dias |
+| POA-001 | P2 | Porto Alegre | Corrigir distância e qualificar a página sem ampliar prioridade | em andamento | nova medição, leads e vendas | produção validada e indexação solicitada em 22/08; medir em 28–60 dias |
 | EXP-001 | P3 | Porto Alegre | Reavaliar expansão | em andamento | GA4, CRM e nova janela do GSC | GSC atual indica médio prazo; confirmar com leads e vendas |
 
 ## Convenção de estados
