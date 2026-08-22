@@ -8,7 +8,7 @@ O estado operacional fica em `project.json`. Esta visão explica o resultado esp
 | TECH-001 | P0 | Todas | Confirmar 301/410 e metadados em produção | concluído | nenhuma | 200/301/404/410, canonicals e `noindex` validados no servidor em 22/08/2026 |
 | ENTITY-001 | P0 | Esteio | Confirmar schema das duas lojas em produção | concluído | nenhuma | duas entidades `AutoDealer`, CEPs, telefones e CIDs confirmados em produção em 22/08/2026 |
 | GBP-001 | P0 | Esteio | Auditar integralmente os dois perfis | em andamento | campos internos dos perfis | categorias, serviços, produtos, fotos e NAP documentados |
-| MEAS-001 | P0 | Esteio/Sapucaia/Canoas/São Leopoldo/Nova Santa Rita | Criar linha de base recorrente | em andamento | GSC, GA4 e CRM | GBP de 90 dias arquivado; demais canais pendentes |
+| MEAS-001 | P0 | Esteio/Sapucaia/Canoas/São Leopoldo/Nova Santa Rita/Cachoeirinha | Criar linha de base recorrente | em andamento | GSC, GA4 e CRM | GBP de 90 dias arquivado; demais canais pendentes |
 | GBP-002 | P1 | Esteio | Criar URLs UTM específicas por loja | concluído | GBP-001 | URLs salvas e reconfirmadas nos dois perfis em 21/08/2026 |
 | GBP-003 | P1 | Esteio | Explicar a operação integrada nos dois perfis | concluído | texto aprovado | descrições salvas e reabertas para conferência em 21/08/2026 |
 | GBP-004 | P1 | Esteio | Cadastrar serviços permanentes nos dois perfis | verificar produção | revisão do Google | seis serviços enviados igualmente; “Despachante credenciado” reconfirmado nos dois editores em 22/08/2026; confirmar publicação pública |
@@ -20,10 +20,11 @@ O estado operacional fica em `project.json`. Esta visão explica o resultado esp
 | CAN-001 | P1 | Canoas | Reforçar página local com utilidade e prova real | em andamento | nova medição e materiais locais | produção validada e indexação solicitada em 22/08; aguardar 14–28 dias e prova autorizada |
 | CAN-002 | P1 | Canoas | Monitorar R2 Motors, Dotto e líderes observados | em andamento | repetição mensal no mesmo ponto | perfis e sites registrados em 21/08; primeira fotografia de 8 termos em Search, Map Pack e Maps registrada em 22/08 |
 | SLP-001 | P1 | São Leopoldo | Reforçar página para consultas genéricas locais | em andamento | nova medição e prova local | produção validada e indexação solicitada em 22/08; aguardar 14–28 dias |
-| CIT-001 | P2 | Esteio/Sapucaia/Canoas/São Leopoldo/Nova Santa Rita | Conquistar citações locais legítimas | backlog | lista de parceiros | menções indexáveis e coerentes, sem compra de link artificial |
+| CIT-001 | P2 | Esteio/Sapucaia/Canoas/São Leopoldo/Nova Santa Rita/Cachoeirinha | Conquistar citações locais legítimas | backlog | lista de parceiros | menções indexáveis e coerentes, sem compra de link artificial |
 | INT-001 | P2 | Regional | Interligar cidades, modelos e estoque | backlog | páginas revisadas | links úteis por intenção e sem páginas órfãs |
-| NSR-001 | P1 | Nova Santa Rita | Publicar e medir página-piloto local | verificar produção | deploy e medição 60–90 dias | GSC sem tração prévia; autocomplete e distância de 15,5 km justificam teste controlado |
-| EXP-001 | P3 | Cachoeirinha/Gravataí/Porto Alegre | Reavaliar expansão | backlog | resultado das fases 1–3 | prioridade recalculada com dados atuais |
+| NSR-001 | P1 | Nova Santa Rita | Publicar e medir página-piloto local | em andamento | medição 60–90 dias | compra e venda validadas em produção e enviadas à fila de indexação em 22/08; acompanhar tração |
+| CCH-001 | P1 | Cachoeirinha | Reforçar página para consultas comerciais genéricas | em andamento | deploy, novo rastreamento e prova local | 1.370 impressões e zero clique em 3 meses; consultas locais entre posições 30,8 e 35 |
+| EXP-001 | P3 | Gravataí/Porto Alegre | Reavaliar expansão | backlog | resultado das fases 1–3 | prioridade recalculada com dados atuais |
 
 ## Convenção de estados
 

@@ -378,16 +378,16 @@
     "visitPlanning": "Escolha os veículos no site e agende a visita para comparar carros, fazer test drive e avaliar a troca no mesmo atendimento em Esteio.",
     "relatedSlugs": ["canoas", "gravatai", "porto-alegre", "alvorada"],
     "priorityMarket": true,
-    "title": "Seminovos Cachoeirinha: estoque e preços | Netcar",
-    "description": "Compare carros seminovos para Cachoeirinha no estoque da Netcar em Esteio. Veja fotos, preços e km, simule financiamento e confirme a visita.",
-    "h1": "Carros seminovos para Cachoeirinha: veja o estoque",
-    "contentHeading": "Estoque e atendimento para quem pesquisa em Cachoeirinha",
-    "intro": "Quem procura carros seminovos em Cachoeirinha pode consultar o estoque da Netcar em Esteio e resolver as primeiras dúvidas antes de sair de casa.",
+    "title": "Seminovos Cachoeirinha: carros à venda perto | Netcar",
+    "description": "Veja carros seminovos à venda para Cachoeirinha no estoque da Netcar em Esteio, a cerca de 15 km. Fotos, preços, troca e financiamento.",
+    "h1": "Carros seminovos à venda para Cachoeirinha",
+    "contentHeading": "Revenda de veículos perto de Cachoeirinha com estoque real",
+    "intro": "Quem pesquisa carros à venda em Cachoeirinha pode comparar o estoque real das duas lojas da Netcar em Esteio, a cerca de 15 km, antes de organizar a visita.",
     "paragraphs": [
       "Fotos, preço, ano, quilometragem e versão ficam disponíveis no site para você comparar hatch, sedan, SUV e picape. O estoque muda conforme as negociações, então confirme os finalistas antes do deslocamento.",
       "A rota até Esteio depende do bairro de saída e pode passar por vias locais de Canoas e pela BR-116. Planejar o horário ajuda a reunir comparação, test drive e avaliação da troca na mesma visita.",
-      "O WhatsApp permite adiantar a simulação sujeita à análise de crédito, tirar dúvidas sobre documentação e enviar os dados do usado. A conferência do carro e as condições finais são presenciais.",
-      "A Netcar não possui unidade em Cachoeirinha. As duas lojas ficam na Av. Presidente Vargas, em Esteio, e o endereço é informado antes do agendamento."
+      "Pelo WhatsApp, é possível confirmar o veículo, adiantar a simulação sujeita à análise de crédito e enviar os dados do usado. A Netcar também oferece entrada parcelada no cartão, conforme as condições da negociação.",
+      "A Netcar não possui unidade em Cachoeirinha. As lojas da Av. Presidente Vargas, 740 e 1106, em Esteio, trabalham com estoque e equipe integrados, despachante credenciado e suporte Nethelp durante a garantia legal."
     ],
     "faq": [
       {
@@ -399,22 +399,24 @@
         "a": "Sim. Consulte a página do veículo e confirme a disponibilidade pelo WhatsApp antes de organizar a visita."
       },
       {
-        "q": "Tem como avaliar meu usado no mesmo atendimento?",
-        "a": "Sim. Envie os dados previamente e leve o carro para a vistoria presencial e a proposta final."
+        "q": "Posso financiar, dar meu usado na troca ou parcelar a entrada?",
+        "a": "É possível simular financiamento, avaliar o usado e consultar entrada parcelada no cartão. Taxas, valores, prazo e aprovação dependem da proposta e da análise de crédito."
       },
       {
         "q": "Onde ficam as duas lojas?",
-        "a": "As duas unidades ficam na Av. Presidente Vargas, números 740 e 1106, em Esteio."
+        "a": "As duas unidades ficam na Av. Presidente Vargas, números 740 e 1106, em Esteio, e operam com o mesmo estoque e atendimento integrados."
       }
     ],
     "sell": {
       "title": "Vender carro em Cachoeirinha: pré-avaliação | Netcar",
-      "description": "Vender carro usado em Cachoeirinha? Netcar em Esteio, a 15 km. Compramos seu veículo — quitado ou financiado.",
+      "description": "Quer vender seu carro em Cachoeirinha? Faça a pré-avaliação e leve o veículo à Netcar em Esteio, a cerca de 15 km. Quitado ou financiado.",
       "h1": "Vender carro em Cachoeirinha com pré-avaliação",
-      "intro": "De Cachoeirinha até a Netcar são poucos minutos. Quem quer liquidez sem exposição em marketplace encontra fluxo simples aqui.",
+      "intro": "Quem está em Cachoeirinha pode iniciar a pré-avaliação pelo WhatsApp e levar o veículo às lojas da Netcar em Esteio, a cerca de 15 km, para vistoria e proposta final.",
       "paragraphs": [
-        "Avaliação com critérios objetivos: ano, km, estado, histórico. Proposta explicada antes de fechar.",
-        "Troca ou venda pura — você escolhe. Consultor conduz documentação e prazos."
+        "Envie modelo, ano, quilometragem, fotos e informações sobre o financiamento, quando houver. Essa etapa organiza o atendimento, mas não substitui a vistoria presencial.",
+        "A avaliação considera estado de conservação, histórico, documentação e condições de mercado. O valor final só é apresentado depois da conferência do veículo.",
+        "Carro com financiamento em aberto também pode ser avaliado. A equipe confere o saldo de quitação e explica o valor líquido antes da decisão.",
+        "A negociação pode ser uma venda direta ou envolver um seminovo do estoque. As duas lojas em Esteio trabalham de forma integrada e contam com despachante credenciado."
       ],
       "faq": [
         {
@@ -422,8 +424,16 @@
           "a": "Entregue como usa no dia a dia. Vistoria considera estado real."
         },
         {
-          "q": "Compram para troca imediata?",
-          "a": "Sim. Valor do usado abate do seminovo escolhido no estoque."
+          "q": "Posso vender um carro financiado?",
+          "a": "O veículo pode ser avaliado mesmo com financiamento em aberto. A viabilidade depende da quitação e das condições confirmadas na proposta."
+        },
+        {
+          "q": "A pré-avaliação pelo WhatsApp já garante o valor?",
+          "a": "Não. Ela ajuda a organizar dados e fotos; a proposta final depende da vistoria presencial e da conferência da documentação."
+        },
+        {
+          "q": "Preciso ir a uma loja em Cachoeirinha?",
+          "a": "A Netcar não possui unidade em Cachoeirinha. A vistoria acontece nas lojas da Av. Presidente Vargas, 740 e 1106, em Esteio."
         }
       ]
     }

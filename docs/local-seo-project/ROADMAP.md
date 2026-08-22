@@ -33,7 +33,8 @@ Saída: relevância orgânica regional e sinais externos reais, sem simular pres
 
 - validar Nova Santa Rita antes de investir, usando impressões, leads e vendas reais;
 - avançar para São Leopoldo quando Sapucaia demonstrar tração;
-- manter Gravataí, Cachoeirinha e Porto Alegre em monitoramento até existir evidência de retorno suficiente;
+- reforçar Cachoeirinha com base nas consultas comerciais já observadas e medir a resposta;
+- manter Gravataí e Porto Alegre em monitoramento até existir evidência de retorno suficiente;
 - repetir a coleta competitiva e recalibrar prioridades.
 
 Saída: expansão baseada em demanda comprovada, não em quantidade de páginas.
