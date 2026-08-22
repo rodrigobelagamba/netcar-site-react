@@ -13,6 +13,7 @@ import { RegionalStockPreview } from "@/modules/seo/components/RegionalStockPrev
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 import { RegionalBreadcrumbs } from "@/modules/seo/components/RegionalBreadcrumbs";
+import { RegionalInventoryNav } from "@/modules/seo/components/RegionalCrossLinks";
 import { useRegionalPageSchema } from "@/modules/seo/useRegionalPageSchema";
 
 export function CityLandingPage() {
@@ -142,6 +143,8 @@ export function CityLandingPage() {
         title={`Seminovos para quem vem de ${city.name}`}
         limit={8}
       />
+
+      <RegionalInventoryNav cityName={city.name} />
 
       <section ref={trustSectionRef} className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">

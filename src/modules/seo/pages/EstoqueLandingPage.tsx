@@ -16,6 +16,7 @@ import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
+import { NearbyMarketsNav } from "@/modules/seo/components/RegionalCrossLinks";
 import { generateVehicleSlug } from "@/lib/slug";
 
 export function EstoqueLandingPage() {
@@ -239,6 +240,8 @@ export function EstoqueLandingPage() {
           </div>
         </section>
       )}
+
+      <NearbyMarketsNav selectionName={landing.name} />
 
       <section className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">

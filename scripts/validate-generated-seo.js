@@ -21,6 +21,23 @@ const contentPages = JSON.parse(
 const landings = JSON.parse(
   readFileSync(join(root, "src/data/seo/landings.json"), "utf8"),
 );
+const regionalInventorySlugs = [
+  "suv",
+  "hatch",
+  "automaticos-ate-100-mil",
+  "carros-ate-100-mil",
+  "jeep-compass",
+  "honda-hr-v",
+];
+const expectedRegionalInventoryHrefs = regionalInventorySlugs
+  .map((slug) => landings.find((landing) => landing.slug === slug))
+  .filter((landing) => landing?.indexable && landing.count > 0)
+  .map((landing) => `${site}/comprar-${landing.slug}`);
+const expectedNearbyMarketHrefs = cities
+  .filter((city) => city.priorityMarket)
+  .sort((left, right) => left.distanceKm - right.distanceKm)
+  .slice(0, 4)
+  .map((city) => `${site}/seminovos-${city.slug}`);
 const sitemap = readFileSync(join(root, "public/sitemap.xml"), "utf8");
 const crawlerHome = readFileSync(join(root, "public/seo-pagina.php"), "utf8");
 const footerSource = readFileSync(
@@ -378,6 +395,17 @@ function validatePage({
   }
 
   const hrefs = anchorHrefs(html);
+  if (variant === "buy") {
+    const inventoryHrefs = hrefs.filter((href) =>
+      href.startsWith(`${site}/comprar-`),
+    );
+    if (
+      JSON.stringify(inventoryHrefs) !==
+      JSON.stringify(expectedRegionalInventoryHrefs)
+    ) {
+      errors.push(`${label}: seleções de estoque regional incompletas`);
+    }
+  }
   if (variant === "buy" && tractionRecoverySlugs.has(city.slug)) {
     if (
       occurrences(html, `<h2>${escapeHtml(city.contentHeading || "")}</h2>`) !==
@@ -728,6 +756,15 @@ function validateDemandLanding(landing) {
   }
   if (relatedHrefs.includes(canonical)) {
     errors.push(`${label}: landing aponta para si mesma`);
+  }
+  const nearbyMarketHrefs = hrefs.filter((href) =>
+    href.startsWith(`${site}/seminovos-`),
+  );
+  if (
+    JSON.stringify(nearbyMarketHrefs) !==
+    JSON.stringify(expectedNearbyMarketHrefs)
+  ) {
+    errors.push(`${label}: mercados regionais próximos incompletos`);
   }
 
   const sitemapCount = occurrences(sitemap, `<loc>${canonical}</loc>`);

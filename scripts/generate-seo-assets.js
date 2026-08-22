@@ -1118,6 +1118,42 @@ function relatedSellCitiesHtml(currentSlug) {
   return `<nav aria-label="Vender carro em outras regiões atendidas"><h2>Vender carro em outras regiões atendidas</h2><p><a href="${SITE}/seminovos-${current.slug}">Ver seminovos perto de ${escapeHtml(current.name)}</a> · <a href="${SITE}/regioes-atendidas">Ver todas as regiões atendidas</a></p><ul>${links}</ul></nav>`;
 }
 
+const regionalInventorySlugs = [
+  "suv",
+  "hatch",
+  "automaticos-ate-100-mil",
+  "carros-ate-100-mil",
+  "jeep-compass",
+  "honda-hr-v",
+];
+
+function regionalInventoryHtml(cityName) {
+  const links = regionalInventorySlugs
+    .map((slug) => landings.find((landing) => landing.slug === slug))
+    .filter((landing) => landing?.indexable && landing.count > 0)
+    .map(
+      (landing) =>
+        `<li><a href="${SITE}/comprar-${landing.slug}">${escapeHtml(landing.name)} — ${landing.count} no estoque</a></li>`,
+    )
+    .join("");
+  if (!links) return "";
+  return `<nav aria-label="Seleções de seminovos para ${escapeHtml(cityName)}"><h2>Escolha o tipo de carro antes de sair de ${escapeHtml(cityName)}</h2><p>Compare categoria, faixa de preço ou modelo no estoque real e confirme a disponibilidade antes da visita às lojas de Esteio.</p><ul>${links}</ul></nav>`;
+}
+
+function nearbyMarketsHtml(landingName) {
+  const links = cities
+    .filter((city) => city.priorityMarket)
+    .sort((left, right) => left.distanceKm - right.distanceKm)
+    .slice(0, 4)
+    .map(
+      (city) =>
+        `<li><a href="${SITE}/seminovos-${city.slug}">Rota e atendimento para ${escapeHtml(city.name)}</a></li>`,
+    )
+    .join("");
+  if (!links) return "";
+  return `<nav aria-label="Atendimento regional para ${escapeHtml(landingName)}"><h2>Planeje a visita para ver ${escapeHtml(landingName)}</h2><p>O estoque e as duas lojas ficam em Esteio. Consulte distância, rota e atendimento antes de se deslocar.</p><ul>${links}</ul></nav>`;
+}
+
 for (const city of cities) {
   const canonical = `${SITE}/seminovos-${city.slug}`;
   const faqHtml = city.faq
@@ -1154,6 +1190,7 @@ for (const city of cities) {
         ctaLabel: "Ver todo o estoque de seminovos",
         ctaHref: `${SITE}/seminovos`,
       })}
+      ${regionalInventoryHtml(city.name)}
       <h2>Da pesquisa à visita em Esteio</h2>
       <ol>
         <li>Consulte fotos, preços e versões no estoque online.</li>
@@ -1305,6 +1342,7 @@ for (const landing of landings) {
         <a href="${landingWhatsAppLink(landing.name)}">Falar com o iAN · 24/7</a>
       </p>
       ${relatedLandingsHtml(landing.slug)}
+      ${nearbyMarketsHtml(landing.name)}
     </article>`;
   writeSeoPage(
     join(seoStaticDir, `landing-${landing.slug}.html`),

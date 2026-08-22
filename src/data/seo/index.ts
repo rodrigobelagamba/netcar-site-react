@@ -30,6 +30,27 @@ export const priorityCityPages = cityPages.filter(
   (city) => city.priorityMarket,
 );
 
+const regionalInventorySlugs = [
+  "suv",
+  "hatch",
+  "automaticos-ate-100-mil",
+  "carros-ate-100-mil",
+  "jeep-compass",
+  "honda-hr-v",
+] as const;
+
+/** Seleções úteis nas páginas locais; só entram quando há estoque indexável. */
+export const regionalInventoryPages = regionalInventorySlugs
+  .map((slug) => landingPages.find((landing) => landing.slug === slug))
+  .filter((landing): landing is LandingSeoPage =>
+    Boolean(landing?.indexable && landing.count > 0),
+  );
+
+/** Mercados prioritários mais próximos das lojas, sem criar malha all-to-all. */
+export const nearbyPriorityCityPages = [...priorityCityPages]
+  .sort((left, right) => left.distanceKm - right.distanceKm)
+  .slice(0, 4);
+
 export function getContentPage(slug: string): ContentSeoPage | undefined {
   return contentPages.find((p) => p.slug === slug);
 }

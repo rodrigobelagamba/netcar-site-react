@@ -180,7 +180,7 @@
       "title": "Padronizar e conquistar citações locais legítimas",
       "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí"],
       "priority": "P2",
-      "status": "in_progress",
+      "status": "backlog",
       "owner": "Netcar + Codex",
       "dependencies": ["Acesso administrativo a Facebook, Instagram e Linktree", "Parceiros, ações ou pautas reais"],
       "acceptance": ["Citações controláveis com NAP coerente", "Menções indexáveis e coerentes", "URL, cidade e natureza da relação registradas"]
@@ -190,10 +190,10 @@
       "title": "Interligar páginas de cidades, modelos e estoque",
       "cities": ["Regional"],
       "priority": "P2",
-      "status": "backlog",
+      "status": "verify_production",
       "owner": "Codex",
-      "dependencies": ["Páginas regionais revisadas"],
-      "acceptance": ["Links úteis por intenção de compra", "Nenhuma página prioritária órfã"]
+      "dependencies": ["Deploy da master"],
+      "acceptance": ["Páginas de cidades ligam para seleções com estoque real", "Páginas de modelos ligam para mercados prioritários próximos", "Links presentes no React e no HTML entregue a crawlers", "Nenhuma página prioritária órfã"]
     },
     {
       "id": "NSR-001",
