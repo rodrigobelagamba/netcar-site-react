@@ -112,3 +112,16 @@ O HTML inicial contém duas entidades `AutoDealer` distintas:
 | Loja 2 | Av. Presidente Vargas, 1106, Esteio/RS | 93260-048 | (51) 3033-3900 | `10839197980729051544` |
 
 Evidência: **comprovado no servidor público, na versão renderizada e no teste em tempo real do Search Console**.
+
+## Interligação entre cidades, modelos e estoque
+
+O deploy do commit de implementação `5dee421` foi validado em produção entre 15:13 e 15:15:
+
+- `/seminovos-canoas`, `/seminovos-sapucaia-do-sul`, `/comprar-suv` e `/comprar-honda-hr-v` responderam HTTP 200 com canonical próprio;
+- o HTML entregue ao Googlebot nas páginas locais contém seis seleções com estoque real: SUV, hatch, automáticos até R$ 100 mil, carros até R$ 100 mil, Jeep Compass e Honda HR-V;
+- as páginas transacionais contêm links para Sapucaia do Sul, Canoas, Cachoeirinha e Nova Santa Rita, os quatro mercados prioritários mais próximos;
+- na página renderizada de Canoas, o bloco e os seis links ficaram visíveis;
+- o clique em SUV abriu `/comprar-suv`, onde o bloco regional e os quatro destinos apareceram corretamente;
+- nenhum erro foi registrado no console durante o fluxo testado.
+
+Evidência: **comprovado no HTML público para crawler e na navegação renderizada ao usuário**.

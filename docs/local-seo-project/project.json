@@ -190,9 +190,9 @@
       "title": "Interligar páginas de cidades, modelos e estoque",
       "cities": ["Regional"],
       "priority": "P2",
-      "status": "verify_production",
+      "status": "done",
       "owner": "Codex",
-      "dependencies": ["Deploy da master"],
+      "dependencies": [],
       "acceptance": ["Páginas de cidades ligam para seleções com estoque real", "Páginas de modelos ligam para mercados prioritários próximos", "Links presentes no React e no HTML entregue a crawlers", "Nenhuma página prioritária órfã"]
     },
     {
