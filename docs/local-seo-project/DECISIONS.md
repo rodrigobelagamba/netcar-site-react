@@ -34,3 +34,4 @@
 | D-030 | Considerar o deploy de Cachoeirinha validado e solicitar novo rastreamento. | As páginas de compra e venda responderam 200, passaram no teste em tempo real e entraram na fila prioritária de indexação. | 22/08/2026 |
 | D-031 | Elevar Gravataí para a próxima frente prioritária, apesar da distância maior. | A consulta `seminovos em Gravataí` gerou 61 impressões na posição média 24,6; 42,5% das impressões visíveis são de consultas comerciais locais. | 22/08/2026 |
 | D-032 | Manter transparência de endereço e usar 23 km como referência de Gravataí. | O Google Maps mediu 22,9 km e cerca de 25 minutos do Centro à Loja 1 via RS-118; o tempo varia e não deve ser prometido. | 22/08/2026 |
+| D-033 | Considerar o deploy de Gravataí validado e solicitar novo rastreamento. | As páginas de compra e venda responderam 200, passaram no teste em tempo real e entraram na fila prioritária de indexação. | 22/08/2026 |

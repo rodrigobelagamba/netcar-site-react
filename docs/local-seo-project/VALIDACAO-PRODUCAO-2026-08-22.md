@@ -78,6 +78,18 @@ A correção do commit `813a0e3` foi validada no servidor público entre 13:10 e
 
 O teste em tempo real do Search Console confirmou que as duas URLs estão disponíveis para o Google, podem ser indexadas e contêm breadcrumb válido. A indexação das duas páginas foi solicitada, e o Google confirmou a entrada de ambas na fila de rastreamento prioritário.
 
+## Gravataí
+
+A correção do commit `ea2df6f` foi validada no servidor público entre 13:28 e 13:32:
+
+- `/seminovos-gravatai` e `/vender-carro-gravatai` responderam HTTP 200;
+- as duas URLs aparecem no sitemap público;
+- title, description e canonical correspondem ao conteúdo implementado;
+- a página de compra preserva a referência de cerca de 23 km pela RS-118, o estoque real e a ausência de loja na cidade;
+- a página de venda preserva a pré-avaliação remota e a vistoria presencial em Esteio.
+
+O teste em tempo real do Search Console confirmou que as duas URLs estão disponíveis para o Google, podem ser indexadas e contêm breadcrumb válido. A indexação das duas páginas foi solicitada, e o Google confirmou a entrada de ambas na fila de rastreamento prioritário.
+
 ## Entidades das lojas
 
 O HTML inicial contém duas entidades `AutoDealer` distintas:
