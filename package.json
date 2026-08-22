@@ -23,6 +23,8 @@
     "report:icheck": "tsx scripts/generate-icheck-report.mjs",
     "local-seo:status": "node scripts/local-seo-status.mjs",
     "local-seo:validate": "node scripts/local-seo-status.mjs --validate",
+    "local-seo:gbp-photos": "node scripts/gbp-photo-routine.mjs",
+    "local-seo:gbp-photos:validate": "node scripts/gbp-photo-routine.mjs --validate",
     "preview": "vite preview",
     "deploy:local": "node scripts/deploy-local.js",
     "deploy:dist": "node scripts/deploy-dist.js",

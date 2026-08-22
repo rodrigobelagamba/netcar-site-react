@@ -20,6 +20,8 @@ Anúncios podem ser avaliados separadamente para gerar demanda imediata, mas nã
 - [Roadmap](./ROADMAP.md)
 - [Sprint 01](./SPRINT-01.md)
 - [Métricas](./METRICS.md)
+- [Rotina semanal de fotos e medição do GBP](./ROTINA-FOTOS-GBP-2026-08.md)
+- [Autoridade local de Canoas](./AUTORIDADE-LOCAL-CANOAS-2026-08-22.md)
 - [Linha de base GBP de 90 dias](./BASELINE-GBP-90D-2026-08-18.md)
 - [Linha de base GA4 por cidade, canal e página](./BASELINE-GA4-2026-07-25-A-2026-08-21.md)
 - [Medição de Maps e Map Pack em cinco cidades](./RANKING-5-CIDADES-2026-08-22.md)

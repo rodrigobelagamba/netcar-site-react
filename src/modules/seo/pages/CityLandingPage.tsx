@@ -14,6 +14,7 @@ import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSign
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 import { RegionalBreadcrumbs } from "@/modules/seo/components/RegionalBreadcrumbs";
 import { RegionalInventoryNav } from "@/modules/seo/components/RegionalCrossLinks";
+import { RegionalVisitPlanner } from "@/modules/seo/components/RegionalVisitPlanner";
 import { useRegionalPageSchema } from "@/modules/seo/useRegionalPageSchema";
 
 export function CityLandingPage() {
@@ -145,6 +146,8 @@ export function CityLandingPage() {
       />
 
       <RegionalInventoryNav cityName={city.name} />
+
+      <RegionalVisitPlanner cityName={city.name} origins={city.routeOrigins} />
 
       <section ref={trustSectionRef} className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">

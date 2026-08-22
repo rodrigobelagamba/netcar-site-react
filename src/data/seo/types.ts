@@ -38,6 +38,14 @@ export interface CityFaq {
   a: string;
 }
 
+export interface CityRouteOrigin {
+  /** Identificador estável usado também na medição de clique da rota. */
+  id: string;
+  label: string;
+  /** Origem textual enviada ao Google Maps; não representa localização exata. */
+  query: string;
+}
+
 export interface CitySellSeo {
   title: string;
   description: string;
@@ -54,6 +62,8 @@ export interface CitySeoPage {
   distanceKm: number;
   travelTime: string;
   routeNote: string;
+  /** Pontos públicos de referência para uma rota útil, sem geolocalização do usuário. */
+  routeOrigins?: CityRouteOrigin[];
   visitPlanning: string;
   /** Cidades geograficamente relacionadas. Evita malha regional all-to-all. */
   relatedSlugs: string[];

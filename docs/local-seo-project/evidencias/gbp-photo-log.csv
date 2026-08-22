@@ -1,0 +1,5 @@
+data;horario;unidade;perfil;asset_id;media_bank_id;arquivo;estado_google;revisao;observacao
+2026-08-22;16:35;loja1;Netcar Multimarcas - Loja 1;L1-04;loja_20260815_121325_fe43b112;loja/_quarantine/loja1/2026-08-15/imagem_do_codex_14_de_ago_de_2026_18_17_52_fe43b1128b.png;aceito;manual;foto interna do showroom
+2026-08-22;16:35;loja1;Netcar Multimarcas - Loja 1;L1-11;loja_20260815_121325_20c100a4;loja/_quarantine/loja1/2026-08-15/imagem_do_codex_15_de_ago_de_2026_09_29_59_20c100a449.png;aceito;manual;visao geral interna
+2026-08-22;17:05;loja2;Netcar Multimarcas - Loja 2;L2-14;loja_20260815_121326_a2583231;loja/_quarantine/loja2/2026-08-15/imagem_do_codex_15_de_ago_de_2026_11_29_16_a2583231c3.png;pendente;manual;foto interna do showroom
+2026-08-22;17:05;loja2;Netcar Multimarcas - Loja 2;L2-07;loja_20260815_121326_599c92fb;loja/loja2/2026-08-15/imagem_do_codex_15_de_ago_de_2026_09_42_11_599c92fbdd.png;pendente;qa_a;recepcao e escritorio

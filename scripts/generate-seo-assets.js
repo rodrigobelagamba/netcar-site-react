@@ -1140,6 +1140,44 @@ function regionalInventoryHtml(cityName) {
   return `<nav aria-label="Seleções de seminovos para ${escapeHtml(cityName)}"><h2>Escolha o tipo de carro antes de sair de ${escapeHtml(cityName)}</h2><p>Compare categoria, faixa de preço ou modelo no estoque real e confirme a disponibilidade antes da visita às lojas de Esteio.</p><ul>${links}</ul></nav>`;
 }
 
+const ROUTE_STORES = [
+  {
+    name: "Loja 1",
+    address: "Av. Presidente Vargas, 740, Centro, Esteio, RS",
+  },
+  {
+    name: "Loja 2",
+    address: "Av. Presidente Vargas, 1106, Centro, Esteio, RS",
+  },
+];
+
+function directionsUrl(origin, destination) {
+  return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&travelmode=driving`;
+}
+
+function routePlannerHtml(city) {
+  if (!Array.isArray(city.routeOrigins) || city.routeOrigins.length === 0) {
+    return "";
+  }
+
+  const origins = city.routeOrigins
+    .map((origin) => {
+      const storeLinks = ROUTE_STORES.map(
+        (store) =>
+          `<a href="${escapeHtml(directionsUrl(origin.query, store.address))}">Abrir rota até a ${escapeHtml(store.name)}</a>`,
+      ).join(" · ");
+      return `<li><strong>${escapeHtml(origin.label)}:</strong> ${storeLinks}</li>`;
+    })
+    .join("");
+
+  return `<section aria-labelledby="planejador-visita-titulo">
+    <h2 id="planejador-visita-titulo">Planeje a visita saindo de ${escapeHtml(city.name)}</h2>
+    <p>Escolha um ponto de saída de referência. O Google Maps abre o trajeto até cada loja; ajuste o endereço inicial no aplicativo para obter uma estimativa exata.</p>
+    <ul>${origins}</ul>
+    <p>As duas lojas ficam somente em Esteio, a cerca de 400 m uma da outra, e trabalham com estoque, vendedores e atendimento integrados. Confirme a disponibilidade e onde estão os carros escolhidos antes de sair.</p>
+  </section>`;
+}
+
 function nearbyMarketsHtml(landingName) {
   const links = cities
     .filter((city) => city.priorityMarket)
@@ -1191,6 +1229,7 @@ for (const city of cities) {
         ctaHref: `${SITE}/seminovos`,
       })}
       ${regionalInventoryHtml(city.name)}
+      ${routePlannerHtml(city)}
       <h2>Da pesquisa à visita em Esteio</h2>
       <ol>
         <li>Consulte fotos, preços e versões no estoque online.</li>

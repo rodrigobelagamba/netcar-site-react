@@ -111,6 +111,22 @@ for (const city of cities) {
       `${prefix}: região, rota e planejamento de visita obrigatórios`,
     );
   }
+  if (city.routeOrigins !== undefined) {
+    if (!Array.isArray(city.routeOrigins) || city.routeOrigins.length < 2) {
+      errors.push(`${prefix}: routeOrigins exige ao menos 2 pontos de saída`);
+    } else {
+      const originIds = new Set();
+      for (const origin of city.routeOrigins) {
+        if (!origin?.id || !origin?.label || !origin?.query) {
+          errors.push(`${prefix}: ponto de saída incompleto em routeOrigins`);
+        }
+        if (originIds.has(origin?.id)) {
+          errors.push(`${prefix}: id duplicado em routeOrigins (${origin.id})`);
+        }
+        originIds.add(origin?.id);
+      }
+    }
+  }
   if (!city.title || !city.description || !city.h1 || !city.intro) {
     errors.push(`${prefix}: metadados/copy de compra incompletos`);
   }

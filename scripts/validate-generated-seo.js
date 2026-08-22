@@ -441,6 +441,28 @@ function validatePage({
   ) {
     errors.push(`${label}: aviso de lojas somente em Esteio ausente`);
   }
+  if (variant === "buy" && city.routeOrigins?.length) {
+    if (!html.includes(`Planeje a visita saindo de ${escapeHtml(city.name)}`)) {
+      errors.push(`${label}: planejador de visita ausente no HTML estático`);
+    }
+    const routeCount = occurrences(
+      html,
+      "https://www.google.com/maps/dir/?api=1&amp;origin=",
+    );
+    const expectedRouteCount = city.routeOrigins.length * 2;
+    if (routeCount !== expectedRouteCount) {
+      errors.push(
+        `${label}: esperado ${expectedRouteCount} links de rota no HTML estático; encontrado ${routeCount}`,
+      );
+    }
+    for (const origin of city.routeOrigins) {
+      if (!html.includes(`<strong>${escapeHtml(origin.label)}:</strong>`)) {
+        errors.push(
+          `${label}: origem ${origin.label} ausente no planejador estático`,
+        );
+      }
+    }
+  }
   if (
     variant === "sell" &&
     !html.includes(

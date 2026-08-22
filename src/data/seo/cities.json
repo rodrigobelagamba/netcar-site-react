@@ -6,6 +6,28 @@
     "distanceKm": 12,
     "travelTime": "20 min",
     "routeNote": "O acesso mais comum segue pela BR-116 em direção a Esteio. O tempo varia conforme o bairro de saída, obras e horários de pico.",
+    "routeOrigins": [
+      {
+        "id": "centro",
+        "label": "Centro",
+        "query": "Centro, Canoas, RS"
+      },
+      {
+        "id": "niteroi",
+        "label": "Niterói",
+        "query": "Niterói, Canoas, RS"
+      },
+      {
+        "id": "mathias_velho",
+        "label": "Mathias Velho",
+        "query": "Mathias Velho, Canoas, RS"
+      },
+      {
+        "id": "marechal_rondon",
+        "label": "Marechal Rondon",
+        "query": "Marechal Rondon, Canoas, RS"
+      }
+    ],
     "visitPlanning": "Selecione os carros no estoque online, confirme a disponibilidade e marque o atendimento antes de seguir pela BR-116 até as lojas de Esteio.",
     "relatedSlugs": [
       "sapucaia-do-sul",

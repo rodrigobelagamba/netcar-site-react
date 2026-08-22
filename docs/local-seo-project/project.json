@@ -4,17 +4,70 @@
   "updatedAt": "2026-08-22",
   "canonicalRepository": "netcar-organic-demand",
   "paidMediaRequired": false,
-  "priorityCities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí"],
+  "priorityCities": [
+    "Esteio",
+    "Sapucaia do Sul",
+    "Canoas",
+    "São Leopoldo",
+    "Nova Santa Rita",
+    "Cachoeirinha",
+    "Gravataí"
+  ],
   "monitoredCompetitors": {
-    "Esteio": ["Alusi Multimarcas", "Telmo Multimarcas", "ALX Veículos", "L&M VEÍCULOS | TITAN MULTIMARCAS"],
-    "Canoas": ["R2 Motors", "Dotto Veículos", "Star", "Base Veículos", "Boqueirão Veículos", "Macrosinos Veículos"],
-    "São Leopoldo": ["Premium Veículos", "Foccus Veículos", "Seminovos Movida", "Select Drive Veículos", "R2 Motors (anunciante)"],
-    "Nova Santa Rita": ["GP Veículos", "Coxilha Veículos", "Mecasul Mercedes-Benz", "R2 Motors (anunciante)"],
-    "Cachoeirinha": ["Ribeiro Veículos", "A1 Multimarcas", "Elite dos Carros", "R2 Motors (anunciante)"],
-    "Gravataí": ["João Veículos", "Savauto Veículos", "65 Automóveis", "R2 Motors (anunciante)"],
-    "Porto Alegre": ["Tipo Veículos", "Nakar Veículos", "Rispoli Veículos", "Varney Automóveis"]
+    "Esteio": [
+      "Alusi Multimarcas",
+      "Telmo Multimarcas",
+      "ALX Veículos",
+      "L&M VEÍCULOS | TITAN MULTIMARCAS"
+    ],
+    "Canoas": [
+      "R2 Motors",
+      "Dotto Veículos",
+      "Star",
+      "Base Veículos",
+      "Boqueirão Veículos",
+      "Macrosinos Veículos"
+    ],
+    "São Leopoldo": [
+      "Premium Veículos",
+      "Foccus Veículos",
+      "Seminovos Movida",
+      "Select Drive Veículos",
+      "R2 Motors (anunciante)"
+    ],
+    "Nova Santa Rita": [
+      "GP Veículos",
+      "Coxilha Veículos",
+      "Mecasul Mercedes-Benz",
+      "R2 Motors (anunciante)"
+    ],
+    "Cachoeirinha": [
+      "Ribeiro Veículos",
+      "A1 Multimarcas",
+      "Elite dos Carros",
+      "R2 Motors (anunciante)"
+    ],
+    "Gravataí": [
+      "João Veículos",
+      "Savauto Veículos",
+      "65 Automóveis",
+      "R2 Motors (anunciante)"
+    ],
+    "Porto Alegre": [
+      "Tipo Veículos",
+      "Nakar Veículos",
+      "Rispoli Veículos",
+      "Varney Automóveis"
+    ]
   },
-  "allowedStatuses": ["backlog", "ready", "in_progress", "blocked", "verify_production", "done"],
+  "allowedStatuses": [
+    "backlog",
+    "ready",
+    "in_progress",
+    "blocked",
+    "verify_production",
+    "done"
+  ],
   "tasks": [
     {
       "id": "PROJ-001",
@@ -24,7 +77,10 @@
       "status": "done",
       "owner": "Codex",
       "dependencies": [],
-      "acceptance": ["Roadmap, backlog, métricas, decisões e Sprint 01 versionados", "Validador local aprovado"]
+      "acceptance": [
+        "Roadmap, backlog, métricas, decisões e Sprint 01 versionados",
+        "Validador local aprovado"
+      ]
     },
     {
       "id": "TECH-001",
@@ -34,7 +90,10 @@
       "status": "done",
       "owner": "Codex",
       "dependencies": ["deploy atual acessível"],
-      "acceptance": ["Status HTTP e HTML das URLs críticas registrados com data", "Nenhuma divergência entre código e produção"]
+      "acceptance": [
+        "Status HTTP e HTML das URLs críticas registrados com data",
+        "Nenhuma divergência entre código e produção"
+      ]
     },
     {
       "id": "ENTITY-001",
@@ -44,7 +103,10 @@
       "status": "done",
       "owner": "Codex + Netcar",
       "dependencies": ["URLs públicas dos dois perfis"],
-      "acceptance": ["Duas lojas válidas e distintas", "NAP consistente entre perfil, página e schema"]
+      "acceptance": [
+        "Duas lojas válidas e distintas",
+        "NAP consistente entre perfil, página e schema"
+      ]
     },
     {
       "id": "GBP-001",
@@ -54,17 +116,34 @@
       "status": "done",
       "owner": "Codex + Netcar",
       "dependencies": ["URLs públicas dos dois perfis"],
-      "acceptance": ["Categorias, serviços, produtos, fotos, horários, links e NAP documentados", "Diferenças entre as lojas confirmadas"]
+      "acceptance": [
+        "Categorias, serviços, produtos, fotos, horários, links e NAP documentados",
+        "Diferenças entre as lojas confirmadas"
+      ]
     },
     {
       "id": "MEAS-001",
       "title": "Criar linha de base recorrente por cidade e canal",
-      "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí", "Porto Alegre"],
+      "cities": [
+        "Esteio",
+        "Sapucaia do Sul",
+        "Canoas",
+        "São Leopoldo",
+        "Nova Santa Rita",
+        "Cachoeirinha",
+        "Gravataí",
+        "Porto Alegre"
+      ],
       "priority": "P0",
       "status": "in_progress",
       "owner": "Codex + Netcar",
-      "dependencies": ["Exportações de GBP, GSC, GA4 e leads quando disponíveis"],
-      "acceptance": ["Mapas, Map Pack e orgânico separados", "Fontes, data, localização e limitações registradas"]
+      "dependencies": [
+        "Exportações de GBP, GSC, GA4 e leads quando disponíveis"
+      ],
+      "acceptance": [
+        "Mapas, Map Pack e orgânico separados",
+        "Fontes, data, localização e limitações registradas"
+      ]
     },
     {
       "id": "GBP-002",
@@ -74,7 +153,10 @@
       "status": "done",
       "owner": "Codex + Netcar",
       "dependencies": ["GBP-001"],
-      "acceptance": ["Cliques de cada loja distinguíveis no GA4 e no CRM", "Parâmetros documentados e consistentes"]
+      "acceptance": [
+        "Cliques de cada loja distinguíveis no GA4 e no CRM",
+        "Parâmetros documentados e consistentes"
+      ]
     },
     {
       "id": "GBP-003",
@@ -84,7 +166,10 @@
       "status": "done",
       "owner": "Codex + Netcar",
       "dependencies": ["Texto aprovado pela Netcar"],
-      "acceptance": ["As duas descrições explicam estoque, equipe e atendimento integrados", "Cada descrição mantém o endereço correto da unidade"]
+      "acceptance": [
+        "As duas descrições explicam estoque, equipe e atendimento integrados",
+        "Cada descrição mantém o endereço correto da unidade"
+      ]
     },
     {
       "id": "GBP-004",
@@ -94,7 +179,27 @@
       "status": "done",
       "owner": "Codex + Netcar",
       "dependencies": ["Aprovação dos nomes e textos dos serviços"],
-      "acceptance": ["Os dois perfis exibem os mesmos serviços permanentes e comprovados", "Nenhum serviço contém promessa, preço ou condição imprecisa"]
+      "acceptance": [
+        "Os dois perfis exibem os mesmos serviços permanentes e comprovados",
+        "Nenhum serviço contém promessa, preço ou condição imprecisa"
+      ]
+    },
+    {
+      "id": "GBP-005",
+      "title": "Manter fotos próprias e recentes por unidade",
+      "cities": ["Esteio"],
+      "priority": "P1",
+      "status": "in_progress",
+      "owner": "Codex + Netcar",
+      "dependencies": [
+        "Banco do cronograma disponível",
+        "Revisão visual antes de cada publicação"
+      ],
+      "acceptance": [
+        "Uma ou duas fotos novas por perfil em quatro ciclos semanais",
+        "Unidade e estado do Google registrados no histórico",
+        "Nenhuma foto duplicada entre os perfis"
+      ]
     },
     {
       "id": "EST-001",
@@ -103,8 +208,15 @@
       "priority": "P1",
       "status": "in_progress",
       "owner": "Codex + Netcar",
-      "dependencies": ["Repetição semanal no mesmo ponto e horário", "Fotos recentes e próprias de cada unidade"],
-      "acceptance": ["Oito consultas repetidas semanalmente por 30 dias", "Loja selecionada no Maps e no Pack registrada separadamente", "Nenhum perfil legítimo mesclado, fechado ou duplicado"]
+      "dependencies": [
+        "Repetição semanal no mesmo ponto e horário",
+        "Fotos recentes e próprias de cada unidade"
+      ],
+      "acceptance": [
+        "Oito consultas repetidas semanalmente por 30 dias",
+        "Loja selecionada no Maps e no Pack registrada separadamente",
+        "Nenhum perfil legítimo mesclado, fechado ou duplicado"
+      ]
     },
     {
       "id": "STORE-001",
@@ -113,8 +225,13 @@
       "priority": "P3",
       "status": "backlog",
       "owner": "Codex + Netcar",
-      "dependencies": ["Mudança operacional futura que justifique página própria"],
-      "acceptance": ["Criar somente se houver utilidade própria comprovada", "Não sugerir estoque ou operação independente inexistente"]
+      "dependencies": [
+        "Mudança operacional futura que justifique página própria"
+      ],
+      "acceptance": [
+        "Criar somente se houver utilidade própria comprovada",
+        "Não sugerir estoque ou operação independente inexistente"
+      ]
     },
     {
       "id": "STORE-002",
@@ -123,8 +240,13 @@
       "priority": "P3",
       "status": "backlog",
       "owner": "Codex + Netcar",
-      "dependencies": ["Mudança operacional futura que justifique página própria"],
-      "acceptance": ["Criar somente se houver utilidade própria comprovada", "Não sugerir estoque ou operação independente inexistente"]
+      "dependencies": [
+        "Mudança operacional futura que justifique página própria"
+      ],
+      "acceptance": [
+        "Criar somente se houver utilidade própria comprovada",
+        "Não sugerir estoque ou operação independente inexistente"
+      ]
     },
     {
       "id": "REV-001",
@@ -134,7 +256,11 @@
       "status": "done",
       "owner": "Netcar + Codex",
       "dependencies": ["Processo atual de atendimento e pós-venda"],
-      "acceptance": ["Pedido enviado a todos os clientes elegíveis", "Cadência e origem registradas", "Sem review gating"]
+      "acceptance": [
+        "Pedido enviado a todos os clientes elegíveis",
+        "Cadência e origem registradas",
+        "Sem review gating"
+      ]
     },
     {
       "id": "PERF-001",
@@ -144,7 +270,10 @@
       "status": "verify_production",
       "owner": "Codex",
       "dependencies": ["Medição por template"],
-      "acceptance": ["Antes e depois registrados", "Build e fluxos de conversão sem regressão"]
+      "acceptance": [
+        "Antes e depois registrados",
+        "Build e fluxos de conversão sem regressão"
+      ]
     },
     {
       "id": "SAP-001",
@@ -153,18 +282,31 @@
       "priority": "P1",
       "status": "in_progress",
       "owner": "Codex + Netcar",
-      "dependencies": ["Bairros, rotas, depoimentos e dados reais de atendimento"],
-      "acceptance": ["Informações locais exclusivas", "Estoque real e conversão rastreável", "Nenhuma alegação sem evidência"]
+      "dependencies": [
+        "Bairros, rotas, depoimentos e dados reais de atendimento"
+      ],
+      "acceptance": [
+        "Informações locais exclusivas",
+        "Estoque real e conversão rastreável",
+        "Nenhuma alegação sem evidência"
+      ]
     },
     {
       "id": "CAN-001",
-      "title": "Reforçar a página de Canoas com utilidade e prova local",
+      "title": "Reforçar a página de Canoas com utilidade e conversão rastreável",
       "cities": ["Canoas"],
       "priority": "P1",
-      "status": "in_progress",
+      "status": "verify_production",
       "owner": "Codex + Netcar",
-      "dependencies": ["Deploy", "Novo rastreamento", "Depoimentos ou dados reais de atendimento"],
-      "acceptance": ["Informações locais exclusivas", "Estoque real e conversão rastreável", "Nenhuma alegação sem evidência"]
+      "dependencies": [
+        "Deploy do planejador de visita",
+        "Conferência pública dos links de rota"
+      ],
+      "acceptance": [
+        "Rotas por região e loja funcionam",
+        "Cliques identificam origem e unidade",
+        "Nenhuma alegação de endereço ou cliente em Canoas"
+      ]
     },
     {
       "id": "CAN-002",
@@ -174,7 +316,27 @@
       "status": "in_progress",
       "owner": "Codex",
       "dependencies": ["URLs públicas dos perfis e sites"],
-      "acceptance": ["Linha de base mensal por termo e canal", "Evidências e mudanças relevantes registradas"]
+      "acceptance": [
+        "Linha de base mensal por termo e canal",
+        "Evidências e mudanças relevantes registradas"
+      ]
+    },
+    {
+      "id": "CAN-003",
+      "title": "Distribuir a página de Canoas nos dois Perfis com URLs próprias",
+      "cities": ["Canoas"],
+      "priority": "P1",
+      "status": "ready",
+      "owner": "Codex + Netcar",
+      "dependencies": [
+        "Deploy e conferência pública do planejador",
+        "Acesso aos dois Perfis da Empresa"
+      ],
+      "acceptance": [
+        "Uma publicação gratuita por perfil com foto da própria unidade",
+        "UTM distingue Loja 1 e Loja 2",
+        "Nenhuma alegação de endereço ou entrega em Canoas"
+      ]
     },
     {
       "id": "SLP-001",
@@ -184,17 +346,36 @@
       "status": "in_progress",
       "owner": "Codex + Netcar",
       "dependencies": ["Nova medição", "Prova real de atendimento local"],
-      "acceptance": ["Consultas genéricas medidas separadamente da marca", "Conteúdo útil e factual", "Nenhuma alegação de endereço em São Leopoldo"]
+      "acceptance": [
+        "Consultas genéricas medidas separadamente da marca",
+        "Conteúdo útil e factual",
+        "Nenhuma alegação de endereço em São Leopoldo"
+      ]
     },
     {
       "id": "CIT-001",
       "title": "Padronizar e conquistar citações locais legítimas",
-      "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí"],
+      "cities": [
+        "Esteio",
+        "Sapucaia do Sul",
+        "Canoas",
+        "São Leopoldo",
+        "Nova Santa Rita",
+        "Cachoeirinha",
+        "Gravataí"
+      ],
       "priority": "P2",
       "status": "backlog",
       "owner": "Netcar + Codex",
-      "dependencies": ["Acesso administrativo a Facebook, Instagram e Linktree", "Parceiros, ações ou pautas reais"],
-      "acceptance": ["Citações controláveis com NAP coerente", "Menções indexáveis e coerentes", "URL, cidade e natureza da relação registradas"]
+      "dependencies": [
+        "Acesso administrativo a Facebook, Instagram e Linktree",
+        "Parceiros, ações ou pautas reais"
+      ],
+      "acceptance": [
+        "Citações controláveis com NAP coerente",
+        "Menções indexáveis e coerentes",
+        "URL, cidade e natureza da relação registradas"
+      ]
     },
     {
       "id": "INT-001",
@@ -204,7 +385,12 @@
       "status": "done",
       "owner": "Codex",
       "dependencies": [],
-      "acceptance": ["Páginas de cidades ligam para seleções com estoque real", "Páginas de modelos ligam para mercados prioritários próximos", "Links presentes no React e no HTML entregue a crawlers", "Nenhuma página prioritária órfã"]
+      "acceptance": [
+        "Páginas de cidades ligam para seleções com estoque real",
+        "Páginas de modelos ligam para mercados prioritários próximos",
+        "Links presentes no React e no HTML entregue a crawlers",
+        "Nenhuma página prioritária órfã"
+      ]
     },
     {
       "id": "NSR-001",
@@ -213,8 +399,16 @@
       "priority": "P1",
       "status": "in_progress",
       "owner": "Codex + Netcar",
-      "dependencies": ["Deploy", "Indexação", "Medição de GSC e leads por 60 a 90 dias"],
-      "acceptance": ["Página-piloto factual publicada", "Impressões, leads e vendas revistos após a janela", "Prioridade mantida somente se houver tração"]
+      "dependencies": [
+        "Deploy",
+        "Indexação",
+        "Medição de GSC e leads por 60 a 90 dias"
+      ],
+      "acceptance": [
+        "Página-piloto factual publicada",
+        "Impressões, leads e vendas revistos após a janela",
+        "Prioridade mantida somente se houver tração"
+      ]
     },
     {
       "id": "CCH-001",
@@ -223,8 +417,16 @@
       "priority": "P1",
       "status": "in_progress",
       "owner": "Codex + Netcar",
-      "dependencies": ["Deploy", "Novo rastreamento", "Prova real de atendimento local"],
-      "acceptance": ["Consultas genéricas medidas separadamente da marca", "Conteúdo factual publicado", "Nenhuma alegação de endereço em Cachoeirinha"]
+      "dependencies": [
+        "Deploy",
+        "Novo rastreamento",
+        "Prova real de atendimento local"
+      ],
+      "acceptance": [
+        "Consultas genéricas medidas separadamente da marca",
+        "Conteúdo factual publicado",
+        "Nenhuma alegação de endereço em Cachoeirinha"
+      ]
     },
     {
       "id": "GRA-001",
@@ -233,8 +435,16 @@
       "priority": "P1",
       "status": "in_progress",
       "owner": "Codex + Netcar",
-      "dependencies": ["Deploy", "Novo rastreamento", "Prova real de atendimento local"],
-      "acceptance": ["Consulta seminovos em Gravataí medida separadamente da marca", "Conteúdo factual publicado", "Nenhuma alegação de endereço em Gravataí"]
+      "dependencies": [
+        "Deploy",
+        "Novo rastreamento",
+        "Prova real de atendimento local"
+      ],
+      "acceptance": [
+        "Consulta seminovos em Gravataí medida separadamente da marca",
+        "Conteúdo factual publicado",
+        "Nenhuma alegação de endereço em Gravataí"
+      ]
     },
     {
       "id": "POA-001",
@@ -244,7 +454,11 @@
       "status": "in_progress",
       "owner": "Codex + Netcar",
       "dependencies": ["Nova medição do GSC", "Leads e vendas por cidade"],
-      "acceptance": ["Distância factual e origem explícita", "Conteúdo útil sem alegar endereço em Porto Alegre", "Produção validada e nova medição após 28–60 dias"]
+      "acceptance": [
+        "Distância factual e origem explícita",
+        "Conteúdo útil sem alegar endereço em Porto Alegre",
+        "Produção validada e nova medição após 28–60 dias"
+      ]
     },
     {
       "id": "EXP-001",
@@ -254,7 +468,9 @@
       "status": "in_progress",
       "owner": "Codex + Netcar",
       "dependencies": ["GA4, CRM e nova janela do GSC"],
-      "acceptance": ["Prioridade recalculada com dados atuais de visibilidade, leads e vendas"]
+      "acceptance": [
+        "Prioridade recalculada com dados atuais de visibilidade, leads e vendas"
+      ]
     }
   ]
 }
