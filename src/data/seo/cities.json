@@ -128,10 +128,10 @@
     "slug": "sao-leopoldo",
     "name": "São Leopoldo",
     "regionName": "BR-116 e Vale dos Sinos",
-    "distanceKm": 18,
-    "travelTime": "25 min",
-    "routeNote": "O trajeto costuma seguir pela BR-116 em direção a Esteio. Obras e movimento nos acessos podem alterar o tempo estimado.",
-    "visitPlanning": "Compare versões e preços no site, confirme os carros escolhidos e combine um horário para concentrar test drive e negociação em Esteio.",
+    "distanceKm": 16,
+    "travelTime": "20 min",
+    "routeNote": "A referência parte do Centro de São Leopoldo e segue pela BR-116 até a Loja 1. O percurso é de aproximadamente 16 km, mas o tempo muda conforme trânsito, obras e bairro de saída.",
+    "visitPlanning": "Separe dois ou três carros no site, confirme em qual ponto de Esteio cada um está e combine um horário para concentrar demonstração, test drive e negociação.",
     "relatedSlugs": [
       "sapucaia-do-sul",
       "novo-hamburgo",
@@ -139,33 +139,33 @@
       "estancia-velha"
     ],
     "priorityMarket": true,
-    "title": "Seminovos São Leopoldo: estoque e preços | Netcar",
-    "description": "Compare carros seminovos para São Leopoldo no estoque da Netcar em Esteio. Veja fotos, preços e km, simule financiamento e agende o test drive.",
-    "h1": "Carros seminovos para São Leopoldo: veja o estoque",
-    "contentHeading": "O que conferir antes de sair de São Leopoldo",
-    "intro": "A página para São Leopoldo mostra carros que estão no estoque da Netcar em Esteio, com informações para comparar opções antes de pegar a BR-116.",
+    "title": "Seminovos São Leopoldo: revenda e estoque perto | Netcar",
+    "description": "Compare carros seminovos para São Leopoldo na revenda Netcar em Esteio, a cerca de 16 km. Veja estoque, preços, financiamento, troca e test drive.",
+    "h1": "Revenda de carros seminovos para São Leopoldo: estoque perto",
+    "contentHeading": "Como comparar revendas e seminovos saindo de São Leopoldo",
+    "intro": "Quem procura uma revenda de carros em São Leopoldo pode comparar o estoque real da Netcar antes de seguir até as lojas de Esteio, a cerca de 16 km do Centro.",
     "paragraphs": [
-      "Comece por preço, ano, quilometragem, câmbio e fotos. Quem procura seminovos em São Leopoldo pode filtrar hatch, sedan, SUV e picape sem depender de uma lista genérica de modelos.",
-      "Os veículos anunciados passam pela Fábrica de Valor antes da vitrine. A disponibilidade muda com as vendas, por isso vale confirmar os carros escolhidos antes de sair do Centro, Scharlau, Feitoria ou de outro bairro.",
-      "O primeiro atendimento pode reunir simulação de financiamento, dúvidas sobre documentação e envio dos dados do usado. Test drive, vistoria da troca e fechamento são presenciais nas lojas de Esteio.",
-      "A Netcar não possui unidade em São Leopoldo. O endereço correto das duas lojas é a Av. Presidente Vargas, em Esteio, e o trajeto costuma usar a BR-116."
+      "Use preço, ano, quilometragem, câmbio e carroceria para reduzir a pesquisa. Os anúncios exibem automóveis disponíveis no catálogo da Netcar, não uma lista genérica criada apenas para mencionar a cidade.",
+      "Quem parte do Centro, Scharlau, Feitoria, Rio Branco, Cristo Rei ou Duque de Caxias pode salvar os candidatos e confirmar a disponibilidade pelo WhatsApp. Isso evita percorrer a BR-116 para encontrar um modelo já negociado.",
+      "As duas unidades de Esteio compartilham estoque, equipe e atendimento. Se os carros escolhidos estiverem em pontos diferentes da Av. Presidente Vargas, o vendedor pode organizar a visualização durante a mesma visita.",
+      "Financiamento, entrada parcelada no cartão e dados do usado podem ser tratados inicialmente a distância. A documentação é conduzida com despachante credenciado, e o Nethelp atende veículos dentro do período de garantia legal."
     ],
     "faq": [
       {
-        "q": "A Netcar tem loja de seminovos em São Leopoldo?",
-        "a": "Não. A Netcar atende clientes de São Leopoldo, mas suas duas lojas físicas ficam em Esteio."
+        "q": "A Netcar é uma revenda localizada em São Leopoldo?",
+        "a": "Não. A Netcar atende moradores da cidade, mas seus dois endereços físicos ficam na Av. Presidente Vargas, em Esteio."
       },
       {
-        "q": "Quanto tempo leva de São Leopoldo até a Netcar?",
-        "a": "A referência é cerca de 25 minutos, dependendo do bairro, do horário e das condições da BR-116."
+        "q": "Qual é a distância do Centro de São Leopoldo até a Netcar?",
+        "a": "A referência é aproximadamente 16 km e cerca de 20 minutos até a Loja 1. O tempo varia conforme trânsito, obras e ponto de partida."
       },
       {
-        "q": "Como saber se o seminovo ainda está disponível?",
-        "a": "Consulte o estoque online e confirme pelo WhatsApp antes do deslocamento, porque os veículos podem ser negociados ao longo do dia."
+        "q": "O estoque da Loja 1 e da Loja 2 é separado?",
+        "a": "Não para fins de atendimento. A operação é integrada, e a equipe pode conduzir o cliente entre os dois pontos conforme os carros escolhidos."
       },
       {
-        "q": "Posso levar meu usado para avaliação?",
-        "a": "Sim. Envie os dados e fotos antes; a avaliação e a proposta final acontecem presencialmente em Esteio."
+        "q": "O que pode ser adiantado antes da visita?",
+        "a": "Confirmação do estoque, dúvidas, simulação de financiamento e dados iniciais do usado. Test drive, vistoria e proposta definitiva são presenciais."
       }
     ],
     "sell": {

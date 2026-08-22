@@ -4,9 +4,10 @@
   "updatedAt": "2026-08-22",
   "canonicalRepository": "netcar-organic-demand",
   "paidMediaRequired": false,
-  "priorityCities": ["Esteio", "Sapucaia do Sul", "Canoas"],
+  "priorityCities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo"],
   "monitoredCompetitors": {
-    "Canoas": ["R2 Motors", "Dotto Veículos", "Star", "Base Veículos", "Boqueirão Veículos", "Macrosinos Veículos"]
+    "Canoas": ["R2 Motors", "Dotto Veículos", "Star", "Base Veículos", "Boqueirão Veículos", "Macrosinos Veículos"],
+    "São Leopoldo": ["Newton Multimarcas", "Billy Motors", "Select Drive Veículos", "Sinoscar Chevrolet", "Premium Veículos", "Local Veículos"]
   },
   "allowedStatuses": ["backlog", "ready", "in_progress", "blocked", "verify_production", "done"],
   "tasks": [
@@ -53,7 +54,7 @@
     {
       "id": "MEAS-001",
       "title": "Criar linha de base recorrente por cidade e canal",
-      "cities": ["Esteio", "Sapucaia do Sul", "Canoas"],
+      "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo"],
       "priority": "P0",
       "status": "in_progress",
       "owner": "Codex + Netcar",
@@ -161,9 +162,19 @@
       "acceptance": ["Linha de base mensal por termo e canal", "Evidências e mudanças relevantes registradas"]
     },
     {
+      "id": "SLP-001",
+      "title": "Reforçar a página de São Leopoldo para consultas genéricas locais",
+      "cities": ["São Leopoldo"],
+      "priority": "P1",
+      "status": "in_progress",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Deploy", "Novo rastreamento", "Prova real de atendimento local"],
+      "acceptance": ["Consultas genéricas medidas separadamente da marca", "Conteúdo útil e factual", "Nenhuma alegação de endereço em São Leopoldo"]
+    },
+    {
       "id": "CIT-001",
       "title": "Conquistar citações locais legítimas",
-      "cities": ["Esteio", "Sapucaia do Sul", "Canoas"],
+      "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo"],
       "priority": "P2",
       "status": "backlog",
       "owner": "Netcar + Codex",
@@ -193,7 +204,7 @@
     {
       "id": "EXP-001",
       "title": "Reavaliar as demais cidades",
-      "cities": ["São Leopoldo", "Cachoeirinha", "Gravataí", "Porto Alegre"],
+      "cities": ["Cachoeirinha", "Gravataí", "Porto Alegre"],
       "priority": "P3",
       "status": "backlog",
       "owner": "Codex + Netcar",

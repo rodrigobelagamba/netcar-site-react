@@ -30,6 +30,18 @@ Commit publicado na `master`: `c5076bc`.
 
 O Search Console executou o teste em tempo real às 10:55 e informou que o URL está disponível para o Google e pode ser indexado. Em seguida, a indexação foi solicitada; o Google confirmou a entrada na fila de rastreamento prioritário.
 
+## Sapucaia do Sul
+
+A correção do commit `7907295` foi validada no servidor público às 11:14:
+
+- resposta HTTP 200;
+- title, description, canonical e H1 correspondem ao código publicado;
+- conteúdo renderizado inclui bairros, referência de distância, quatro parágrafos e quatro FAQs;
+- estoque real, entrada parcelada no cartão e despachante credenciado foram preservados;
+- a página declara de forma explícita que a Netcar não possui endereço em Sapucaia do Sul.
+
+O teste em tempo real do Search Console informou que o URL está disponível para o Google, pode ser indexado e contém um breadcrumb válido. A indexação foi solicitada e o Google confirmou a inclusão na fila de rastreamento prioritário.
+
 ## Entidades das lojas
 
 O HTML inicial contém duas entidades `AutoDealer` distintas:
