@@ -12,6 +12,7 @@ O estado operacional fica em `project.json`. Esta visão explica o resultado esp
 | GBP-002 | P1 | Esteio | Criar URLs UTM específicas por loja | concluído | GBP-001 | URLs salvas e reconfirmadas nos dois perfis em 21/08/2026 |
 | GBP-003 | P1 | Esteio | Explicar a operação integrada nos dois perfis | concluído | texto aprovado | descrições salvas e reabertas para conferência em 21/08/2026 |
 | GBP-004 | P1 | Esteio | Cadastrar serviços permanentes nos dois perfis | concluído | nenhuma | os mesmos seis serviços aparecem nos dois editores; Maps não renderiza a lista personalizada |
+| EST-001 | P1 | Esteio | Defender o Map Pack e verificar filtragem entre as unidades | em andamento | repetição semanal com ponto e horário fixos; fotos próprias por unidade | rechecagem atual: 4/8 no Pack e 7/8 no Maps; registrar por 30 dias qual perfil é selecionado sem mesclar ou fechar unidade |
 | STORE-001 | P3 | Esteio | Reavaliar página própria da Loja 1 | backlog | mudança operacional futura | criar somente se existir utilidade própria comprovada |
 | STORE-002 | P3 | Esteio | Reavaliar página própria da Loja 2 | backlog | mudança operacional futura | criar somente se existir utilidade própria comprovada |
 | REV-001 | P1 | Regional | Implantar rotina ética de avaliações | concluído | acompanhamento semanal | links oficiais validados, processo existente padronizado e linha de base de 30/60/90 dias registrada em 22/08/2026 |

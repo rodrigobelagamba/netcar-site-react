@@ -15,6 +15,8 @@ Saída: infraestrutura existente confirmada e painel inicial confiável.
 - criar URLs rastreáveis por loja e alinhar páginas de destino;
 - estruturar páginas úteis para Loja 1 e Loja 2, condicionadas à confirmação das diferenças operacionais reais;
 - implantar rotina ética e contínua de solicitação de avaliações;
+- repetir semanalmente as oito consultas de Esteio e registrar a alternância entre Loja 1 e Loja 2 antes de qualquer nova mudança estrutural;
+- manter fotos recentes e próprias de cada endereço, começando pela Loja 2;
 - corrigir os maiores gargalos de LCP e INP nas páginas prioritárias.
 
 Saída: entidades locais mais claras, melhor mensuração e maior capacidade de disputar o Top 3.

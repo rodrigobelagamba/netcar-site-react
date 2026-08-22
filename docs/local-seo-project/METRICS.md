@@ -75,13 +75,14 @@ Coleta em nível de cidade, sem coordenada GPS central fixa. A fotografia não s
 
 | Cidade | Consultas com Map Pack | Netcar no Top 3 do Pack | Netcar no Maps observado | Líder principal |
 |---|---:|---:|---:|---|
+| Esteio — rechecagem às 16h05 | 8/8 | 4/8 | 7/8 | Alusi: 8/8 no Pack e 8/8 no Maps; Netcar média 1,50 no Pack quando visível |
 | São Leopoldo | 6/8 | 0/8 | 0/8 | Premium Veículos: 6/6 no Pack e 8/8 no Maps |
 | Nova Santa Rita | 7/8 | 0/8 | 0/8 | GP e Coxilha: 7/7 no Pack e 8/8 no Maps |
 | Cachoeirinha | 3/8 | 0/8 | 0/8 | Ribeiro e A1: 3/3 no Pack; Ribeiro, A1 e Elite 7/8 no Maps |
 | Gravataí | 8/8 | 0/8 | 0/8 | João Veículos: 8/8 no Pack e 8/8 no Maps |
 | Porto Alegre | 8/8 | 0/8 | 0/8 | Tipo Veículos: 8/8 no Pack e 8/8 no Maps |
 
-Detalhamento por palavra-chave, anúncios separados e perfis: `RANKING-5-CIDADES-2026-08-22.md`.
+Detalhamento por palavra-chave, anúncios separados e perfis: `RANKING-ESTEIO-2026-08-22.md` e `RANKING-5-CIDADES-2026-08-22.md`. O 0/8 de Esteio observado em 21/08 permanece como fotografia histórica; a rechecagem de 22/08 é o retrato atual e não prova, isoladamente, que uma alteração específica causou a diferença.
 
 ## Placar principal
 

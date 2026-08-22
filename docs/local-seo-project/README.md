@@ -24,6 +24,8 @@ Anúncios podem ser avaliados separadamente para gerar demanda imediata, mas nã
 - [Linha de base GA4 por cidade, canal e página](./BASELINE-GA4-2026-07-25-A-2026-08-21.md)
 - [Medição de Maps e Map Pack em cinco cidades](./RANKING-5-CIDADES-2026-08-22.md)
 - [Evidência estruturada das 40 consultas](./evidencias/ranking-maps-map-pack-5-cidades-2026-08-22.json)
+- [Diagnóstico de ranking local em Esteio](./RANKING-ESTEIO-2026-08-22.md)
+- [Evidência estruturada das 8 consultas de Esteio](./evidencias/ranking-esteio-2026-08-22.json)
 - [Decisões](./DECISIONS.md)
 - [Estado legível por máquina](./project.json)
 

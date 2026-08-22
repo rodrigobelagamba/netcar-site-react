@@ -1,0 +1,176 @@
+{
+  "collectedAt": "2026-08-22T16:05:00-03:00",
+  "auditCompletedAt": "2026-08-22T16:15:00-03:00",
+  "city": "Esteio",
+  "regionHeader": "Esteio, RS",
+  "device": "desktop",
+  "session": "authenticated",
+  "locationMethod": "city-level simulation confirmed by Google region header; no fixed GPS coordinate",
+  "centerReference": {
+    "latitude": -29.8456843,
+    "longitude": -51.166382,
+    "source": "https://www.google.com/maps/place/Centro,+Esteio+-+RS/"
+  },
+  "limitations": [
+    "Single principal snapshot per query; not a geo-grid.",
+    "Local results can vary by exact location, device, history, time and ad rotation.",
+    "A repeated query changed Netcar from position 3 to 2 within minutes.",
+    "Sponsored results were excluded from organic positions."
+  ],
+  "summary": {
+    "queries": 8,
+    "netcarMapPackTop3Appearances": 4,
+    "netcarMapPackAverageWhenVisible": 1.5,
+    "netcarMapsTop4Appearances": 7,
+    "netcarMapsBestProfileAverageWhenVisible": 1.71,
+    "observableTraditionalOrganicQueries": 7,
+    "netcarTraditionalOrganicAppearances": 7,
+    "netcarTraditionalOrganicAverage": 1.57
+  },
+  "queries": [
+    {
+      "keyword": "loja de carros em Esteio",
+      "searchUrl": "https://www.google.com/search?q=loja+de+carros+em+Esteio",
+      "mapPack": ["Alusi Multimarcas", "Telmo Multimarcas", "ALX Veículos"],
+      "netcarMapPackPosition": null,
+      "mapsOrganicTop4": ["Alusi Multimarcas", "Netcar Multimarcas - Loja 1", "ALX Veículos", "L&M VEÍCULOS | TITAN MULTIMARCAS"],
+      "netcarMapsBestPosition": 2,
+      "netcarTraditionalOrganicPosition": 1
+    },
+    {
+      "keyword": "revenda de veículos em Esteio",
+      "searchUrl": "https://www.google.com/search?q=revenda+de+ve%C3%ADculos+em+Esteio",
+      "mapPack": ["L&M VEÍCULOS | TITAN MULTIMARCAS", "ALX Veículos", "Alusi Multimarcas"],
+      "netcarMapPackPosition": null,
+      "mapsOrganicTop4": ["Alusi Multimarcas", "ALX Veículos", "L&M VEÍCULOS | TITAN MULTIMARCAS", "KAR Multimarcas"],
+      "netcarMapsBestPosition": null,
+      "netcarTraditionalOrganicPosition": 1
+    },
+    {
+      "keyword": "carros seminovos em Esteio",
+      "searchUrl": "https://www.google.com/search?q=carros+seminovos+em+Esteio",
+      "mapPack": ["Alusi Multimarcas", "Telmo Multimarcas", "L&M VEÍCULOS | TITAN MULTIMARCAS"],
+      "netcarMapPackPosition": null,
+      "mapsOrganicTop4": ["Alusi Multimarcas", "Netcar Multimarcas - Loja 2", "ALX Veículos", "Netcar Multimarcas - Loja 1"],
+      "netcarMapsBestPosition": 2,
+      "netcarTraditionalOrganicPosition": 1
+    },
+    {
+      "keyword": "carros usados em Esteio",
+      "searchUrl": "https://www.google.com/search?q=carros+usados+em+Esteio",
+      "mapPack": ["Alusi Multimarcas", "Netcar Multimarcas - Loja 1", "Telmo Multimarcas"],
+      "netcarMapPackPosition": 2,
+      "mapsOrganicTop4": ["Alusi Multimarcas", "Netcar Multimarcas - Loja 2", "ALX Veículos", "Netcar Multimarcas - Loja 1"],
+      "netcarMapsBestPosition": 2,
+      "netcarTraditionalOrganicPosition": 3
+    },
+    {
+      "keyword": "comprar carro em Esteio",
+      "searchUrl": "https://www.google.com/search?q=comprar+carro+em+Esteio",
+      "mapPack": ["Netcar Multimarcas - Loja 1", "Point Car Compra-Vende-Troca", "Alusi Multimarcas"],
+      "netcarMapPackPosition": 1,
+      "mapsOrganicTop4": ["Netcar Multimarcas - Loja 2", "Alusi Multimarcas", "Monteiro Veículos", "ALX Veículos"],
+      "netcarMapsBestPosition": 1,
+      "netcarTraditionalOrganicPosition": 3
+    },
+    {
+      "keyword": "veículos seminovos em Esteio",
+      "searchUrl": "https://www.google.com/search?q=ve%C3%ADculos+seminovos+em+Esteio",
+      "mapPack": ["Alusi Multimarcas", "Netcar Multimarcas - Loja 1", "Automac Veículos"],
+      "netcarMapPackPosition": 2,
+      "mapsOrganicTop4": ["Alusi Multimarcas", "Netcar Multimarcas - Loja 2", "Netcar Multimarcas - Loja 1", "ALX Veículos"],
+      "netcarMapsBestPosition": 2,
+      "netcarTraditionalOrganicPosition": 1
+    },
+    {
+      "keyword": "loja de veículos em Esteio",
+      "searchUrl": "https://www.google.com/search?q=loja+de+ve%C3%ADculos+em+Esteio",
+      "mapPack": ["Alusi Multimarcas", "Telmo Multimarcas", "L&M VEÍCULOS | TITAN MULTIMARCAS"],
+      "netcarMapPackPosition": null,
+      "mapsOrganicTop4": ["Alusi Multimarcas", "Netcar Multimarcas - Loja 1", "ALX Veículos", "L&M VEÍCULOS | TITAN MULTIMARCAS"],
+      "netcarMapsBestPosition": 2,
+      "netcarTraditionalOrganicPosition": 1
+    },
+    {
+      "keyword": "carros à venda em Esteio",
+      "searchUrl": "https://www.google.com/search?q=carros+%C3%A0+venda+em+Esteio",
+      "mapPack": ["Netcar Multimarcas - Loja 1", "ALX Veículos", "Alusi Multimarcas"],
+      "netcarMapPackPosition": 1,
+      "mapsOrganicTop4": ["Netcar Multimarcas - Loja 2", "Alusi Multimarcas", "Monteiro Veículos", "ALX Veículos"],
+      "netcarMapsBestPosition": 1,
+      "netcarTraditionalOrganicPosition": null
+    }
+  ],
+  "profiles": [
+    {
+      "name": "Netcar Multimarcas - Loja 1",
+      "address": "Av. Presidente Vargas, 740, Esteio/RS, 93260-490",
+      "phone": "(51) 3473-7900",
+      "primaryCategory": "Revendedora de carros usados",
+      "rating": 4.8,
+      "reviews": 514,
+      "newReviewsApprox": {"days30": 6, "days60": 15, "days90": 17},
+      "straightLineKmToCenter": 0.93,
+      "observedRouteKmToCenter": 1.4,
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=Netcar%20Multimarcas%20Loja%201%20Esteio"
+    },
+    {
+      "name": "Netcar Multimarcas - Loja 2",
+      "address": "Av. Presidente Vargas, 1106, Esteio/RS, 93260-048",
+      "phone": "(51) 3033-3900",
+      "primaryCategory": "Revendedora de carros usados",
+      "rating": 4.9,
+      "reviews": 355,
+      "newReviewsApprox": {"days30": 4, "days60": 5, "days90": 8},
+      "straightLineKmToCenter": 0.75,
+      "observedRouteKmToCenter": 1.0,
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=Netcar%20Multimarcas%20Loja%202%20Esteio"
+    },
+    {
+      "name": "Alusi Multimarcas",
+      "address": "Av. Presidente Vargas, 1507, Centro, Esteio/RS",
+      "website": "http://www.alusimultimarcas.com.br/",
+      "primaryCategory": "Revendedora de carros usados",
+      "rating": 4.9,
+      "reviews": 111,
+      "newReviewsObserved": {"days30": 0, "days60": 0, "days90": 0},
+      "straightLineKmToCenter": 0.73,
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=Alusi%20Multimarcas%20Esteio"
+    },
+    {
+      "name": "Telmo Multimarcas",
+      "address": "Av. Presidente Vargas, 234, Parque Tamandaré, Esteio/RS, 93260-454",
+      "primaryCategory": "Revendedora de carros usados",
+      "rating": 4.7,
+      "reviews": 316,
+      "newReviewsObservedLowerBound": {"days30": 6, "days60": 9, "days90": 9},
+      "observedRouteKmToCenter": 1.9,
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=Telmo%20Multimarcas%20Esteio"
+    },
+    {
+      "name": "ALX Veículos",
+      "address": "Av. Presidente Vargas, 820, São Sebastião, Esteio/RS, 93265-226",
+      "primaryCategory": "Revendedora de carros usados",
+      "rating": 4.8,
+      "reviews": 218,
+      "newReviewsObservedLowerBound": {"days30": 8, "days60": 8, "days90": 8},
+      "straightLineKmToCenter": 0.86,
+      "observedRouteKmToCenter": 1.3,
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=ALX%20Ve%C3%ADculos%20Esteio"
+    },
+    {
+      "name": "L&M VEÍCULOS | TITAN MULTIMARCAS",
+      "address": "R. Senador Salgado Filho, 617, Esteio/RS",
+      "primaryCategory": "Revendedora de carros usados",
+      "rating": 4.8,
+      "reviews": 152,
+      "straightLineKmToCenter": 0.35,
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=L%26M%20VE%C3%8DCULOS%20TITAN%20MULTIMARCAS%20Esteio"
+    }
+  ],
+  "paidObservation": {
+    "netcarSponsoredMapsAppearances": 8,
+    "organicImpact": "Excluded from organic ranking; paid placement does not cause organic Map Pack position.",
+    "recommendation": "No additional paid budget required for the organic project."
+  }
+}

@@ -6,6 +6,7 @@
   "paidMediaRequired": false,
   "priorityCities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí"],
   "monitoredCompetitors": {
+    "Esteio": ["Alusi Multimarcas", "Telmo Multimarcas", "ALX Veículos", "L&M VEÍCULOS | TITAN MULTIMARCAS"],
     "Canoas": ["R2 Motors", "Dotto Veículos", "Star", "Base Veículos", "Boqueirão Veículos", "Macrosinos Veículos"],
     "São Leopoldo": ["Premium Veículos", "Foccus Veículos", "Seminovos Movida", "Select Drive Veículos", "R2 Motors (anunciante)"],
     "Nova Santa Rita": ["GP Veículos", "Coxilha Veículos", "Mecasul Mercedes-Benz", "R2 Motors (anunciante)"],
@@ -94,6 +95,16 @@
       "owner": "Codex + Netcar",
       "dependencies": ["Aprovação dos nomes e textos dos serviços"],
       "acceptance": ["Os dois perfis exibem os mesmos serviços permanentes e comprovados", "Nenhum serviço contém promessa, preço ou condição imprecisa"]
+    },
+    {
+      "id": "EST-001",
+      "title": "Defender o Map Pack de Esteio e verificar filtragem entre as unidades",
+      "cities": ["Esteio"],
+      "priority": "P1",
+      "status": "in_progress",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Repetição semanal no mesmo ponto e horário", "Fotos recentes e próprias de cada unidade"],
+      "acceptance": ["Oito consultas repetidas semanalmente por 30 dias", "Loja selecionada no Maps e no Pack registrada separadamente", "Nenhum perfil legítimo mesclado, fechado ou duplicado"]
     },
     {
       "id": "STORE-001",
