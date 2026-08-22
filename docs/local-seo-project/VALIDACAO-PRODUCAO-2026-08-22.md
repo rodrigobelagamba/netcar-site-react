@@ -42,6 +42,18 @@ A correção do commit `7907295` foi validada no servidor público às 11:14:
 
 O teste em tempo real do Search Console informou que o URL está disponível para o Google, pode ser indexado e contém um breadcrumb válido. A indexação foi solicitada e o Google confirmou a inclusão na fila de rastreamento prioritário.
 
+## São Leopoldo
+
+A correção do commit `cd78b2e` foi validada no servidor público às 11:39:
+
+- resposta HTTP 200;
+- title, description, canonical e H1 correspondem ao código publicado;
+- distância de 16 km, rota, bairros, operação integrada e quatro FAQs aparecem na versão renderizada;
+- estoque real, entrada parcelada no cartão, despachante credenciado e Nethelp foram preservados;
+- a página declara que os endereços físicos ficam somente em Esteio.
+
+O teste em tempo real do Search Console confirmou que o URL está disponível para o Google, pode ser indexado e contém um breadcrumb válido. A indexação foi solicitada, e o Google confirmou a fila de rastreamento prioritário.
+
 ## Entidades das lojas
 
 O HTML inicial contém duas entidades `AutoDealer` distintas:

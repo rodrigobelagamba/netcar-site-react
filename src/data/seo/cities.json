@@ -65,6 +65,71 @@
     }
   },
   {
+    "slug": "nova-santa-rita",
+    "name": "Nova Santa Rita",
+    "regionName": "BR-386 e Região Metropolitana",
+    "distanceKm": 16,
+    "travelTime": "20 min",
+    "routeNote": "A referência parte da região central de Nova Santa Rita e segue pela BR-386 até a Loja 1. O percurso é de aproximadamente 16 km, sujeito ao trânsito e ao ponto de saída.",
+    "visitPlanning": "Escolha os carros no catálogo, confirme em qual unidade de Esteio eles estão e combine o atendimento antes de seguir pela BR-386.",
+    "relatedSlugs": [
+      "canoas",
+      "porto-alegre",
+      "cachoeirinha",
+      "sapucaia-do-sul"
+    ],
+    "priorityMarket": true,
+    "title": "Seminovos Nova Santa Rita: estoque perto | Netcar",
+    "description": "Compare carros seminovos para Nova Santa Rita no estoque real da Netcar em Esteio, a cerca de 16 km. Veja preços, fotos, financiamento e troca.",
+    "h1": "Carros seminovos para Nova Santa Rita: estoque perto",
+    "contentHeading": "Como pesquisar seminovos saindo de Nova Santa Rita",
+    "intro": "Quem mora em Nova Santa Rita pode pesquisar o estoque real da Netcar e organizar a visita às lojas de Esteio, a aproximadamente 16 km da região central.",
+    "paragraphs": [
+      "Comece definindo faixa de preço, carroceria, câmbio e ano. Cada anúncio apresenta fotos, quilometragem e versão para reduzir a seleção antes de entrar na BR-386.",
+      "Salve dois ou três candidatos e envie os links pelo WhatsApp. A equipe confirma se continuam disponíveis e informa em qual ponto da Av. Presidente Vargas cada automóvel está naquele momento.",
+      "As lojas 1 e 2 trabalham como uma operação integrada: estoque, vendedores e atendimento são compartilhados. Quando os modelos escolhidos estão em endereços diferentes, a visita pode ser organizada para conhecer ambos.",
+      "A Netcar não possui unidade em Nova Santa Rita. Os dois endereços físicos ficam em Esteio; distância e tempo servem como referência e devem ser recalculados conforme o local de saída e as condições da BR-386."
+    ],
+    "faq": [
+      {
+        "q": "A Netcar possui loja em Nova Santa Rita?",
+        "a": "Não. A Netcar atende moradores da cidade, mas suas duas lojas físicas ficam na Av. Presidente Vargas, em Esteio."
+      },
+      {
+        "q": "Qual é a distância de Nova Santa Rita até a Loja 1?",
+        "a": "A referência é aproximadamente 16 km e cerca de 20 minutos desde a região central. O resultado varia conforme trânsito e ponto de partida."
+      },
+      {
+        "q": "Como saber em qual loja está o carro escolhido?",
+        "a": "Envie o link do anúncio pelo WhatsApp antes da visita. A equipe confirma a disponibilidade e o ponto físico em que o veículo está."
+      },
+      {
+        "q": "Posso iniciar financiamento e troca sem sair de Nova Santa Rita?",
+        "a": "Sim. A simulação e o envio inicial de dados podem começar pelo WhatsApp. Condições finais, test drive e vistoria do usado são presenciais."
+      }
+    ],
+    "sell": {
+      "title": "Vender carro em Nova Santa Rita: pré-avaliação | Netcar",
+      "description": "Comece a vender seu carro em Nova Santa Rita pelo WhatsApp da Netcar. A vistoria e a proposta definitiva são realizadas nas lojas de Esteio.",
+      "h1": "Vender carro em Nova Santa Rita com pré-avaliação",
+      "intro": "Moradores de Nova Santa Rita podem enviar dados e fotos antes de percorrer a BR-386 para a vistoria presencial em Esteio.",
+      "paragraphs": [
+        "Informe modelo, ano, quilometragem, versão, fotos e eventual saldo devedor. Esses dados orientam a triagem, mas não substituem a inspeção do automóvel.",
+        "A proposta definitiva depende da vistoria e da documentação. Se houver acordo, a negociação pode ser somente de venda ou integrar a troca por outro veículo do estoque."
+      ],
+      "faq": [
+        {
+          "q": "A avaliação do carro é feita em Nova Santa Rita?",
+          "a": "Não. O envio inicial de informações é remoto, mas vistoria e proposta definitiva acontecem nas lojas da Netcar em Esteio."
+        },
+        {
+          "q": "Posso enviar um carro ainda financiado?",
+          "a": "Sim. Informe o saldo devedor na pré-avaliação. A viabilidade e os valores dependem da análise do contrato, da vistoria e da proposta final."
+        }
+      ]
+    }
+  },
+  {
     "slug": "sapucaia-do-sul",
     "name": "Sapucaia do Sul",
     "regionName": "BR-116 e Vale dos Sinos",
@@ -618,7 +683,7 @@
     "routeNote": "A BR-116 é a principal referência para o deslocamento até Esteio. O tempo varia com o ponto de saída e o fluxo regional.",
     "visitPlanning": "Compare modelos e condições online, confirme os carros escolhidos e agende a visita presencial às lojas em Esteio.",
     "relatedSlugs": ["novo-hamburgo", "campo-bom", "sao-leopoldo", "taquara"],
-    "priorityMarket": true,
+    "priorityMarket": false,
     "title": "Seminovos Estância Velha: estoque e preços | Netcar",
     "description": "Veja carros seminovos para Estância Velha no estoque da Netcar em Esteio. Compare fotos, preços e km, simule financiamento e organize a visita.",
     "h1": "Carros seminovos para Estância Velha: veja o estoque",
