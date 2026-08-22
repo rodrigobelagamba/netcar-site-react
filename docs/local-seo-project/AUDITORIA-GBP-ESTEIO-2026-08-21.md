@@ -150,10 +150,12 @@ Como o Instagram já estava presente, nenhuma alteração redundante foi enviada
 
 As descrições foram atualizadas para explicar a operação integrada sem sugerir estoques ou estruturas comerciais independentes. Depois de salvar, cada texto foi reaberto no editor autenticado e conferido integralmente.
 
-- Loja 1: `Netcar Multimarcas é uma revenda de veículos seminovos e usados em Esteio/RS, com atuação desde 1997. Esta unidade fica na Av. Presidente Vargas, 740. Nossas duas lojas estão na mesma avenida, a cerca de 400 m, e funcionam de forma integrada: estoque, equipe e atendimento são compartilhados, e qualquer veículo pode ser apresentado ou negociado em ambas. Trabalhamos com veículos selecionados, financiamento, avaliação do usado na troca, garantia de até 2 anos e pós-venda Nethelp.`
-- Loja 2: `Netcar Multimarcas é uma revenda de veículos seminovos e usados em Esteio/RS, com atuação desde 1997. Esta unidade fica na Av. Presidente Vargas, 1106. Nossas duas lojas estão na mesma avenida, a cerca de 400 m, e funcionam de forma integrada: estoque, equipe e atendimento são compartilhados, e qualquer veículo pode ser apresentado ou negociado em ambas. Trabalhamos com veículos selecionados, financiamento, avaliação do usado na troca, garantia de até 2 anos e pós-venda Nethelp.`
+- Loja 1: `Netcar Multimarcas é uma revenda de veículos seminovos e usados em Esteio/RS, com atuação desde 1997. Esta unidade fica na Av. Presidente Vargas, 740. Nossas duas lojas estão na mesma avenida, a cerca de 400 m, e funcionam de forma integrada: estoque, equipe e atendimento são compartilhados, e qualquer veículo pode ser apresentado ou negociado em ambas. Trabalhamos com veículos selecionados, financiamento, avaliação do usado na troca, entrada parcelada no cartão, despachante credenciado e pós-venda Nethelp.`
+- Loja 2: `Netcar Multimarcas é uma revenda de veículos seminovos e usados em Esteio/RS, com atuação desde 1997. Esta unidade fica na Av. Presidente Vargas, 1106. Nossas duas lojas estão na mesma avenida, a cerca de 400 m, e funcionam de forma integrada: estoque, equipe e atendimento são compartilhados, e qualquer veículo pode ser apresentado ou negociado em ambas. Trabalhamos com veículos selecionados, financiamento, avaliação do usado na troca, entrada parcelada no cartão, despachante credenciado e pós-venda Nethelp.`
 
-Evidência: **comprovado no editor autenticado dos dois Perfis da Empresa em 21/08/2026**. A exibição pública pode depender do processamento e da propagação do Google.
+Em 22/08/2026, a expressão `garantia de até 2 anos`, ainda visível nas descrições públicas, foi removida dos dois perfis conforme orientação da Netcar. Os textos acima foram salvos e reabertos nos dois editores autenticados. A superfície pública pode manter a versão anterior enquanto o Google processa a atualização.
+
+Evidência: **comprovado nos editores autenticados dos dois Perfis da Empresa em 22/08/2026**.
 
 ### URLs de site com identificação por perfil
 
@@ -196,7 +198,33 @@ Segundo a documentação atual do Google, produtos podem ser adicionados manualm
 
 Em 22/08/2026, “Despachante próprio” foi renomeado para “Despachante credenciado” nos dois editores autenticados, por orientação da Netcar; o novo nome foi reaberto e confirmado em ambos.
 
-Evidência: **comprovado nos dois editores autenticados em 21 e 22/08/2026; publicação pública ainda pendente de aprovação do Google**.
+Evidência: **comprovado nos dois editores autenticados em 21 e 22/08/2026**.
+
+## Validação pública e editorial de 22/08/2026
+
+Coleta: 22/08/2026, 13:57–14:16 (America/Sao_Paulo), no Google Maps e nos editores autenticados.
+
+| Campo | Loja 1 | Loja 2 | Evidência |
+|---|---|---|---|
+| Nome público | Netcar Multimarcas - Loja 1 | Netcar Multimarcas - Loja 2 | comprovado no Maps |
+| Categoria pública | Revendedora de carros usados | Revendedora de carros usados | comprovado no Maps |
+| Categoria adicional | Concessionária | Concessionária | comprovado no editor |
+| Nota e avaliações | 4,8 e 514 | 4,9 e 355 | comprovado no Maps |
+| Endereço | Av. Pres. Vargas, 740, CEP 93260-490 | Av. Pres. Vargas, 1106, CEP 93260-048 | comprovado no Maps e editor |
+| Telefone principal | (51) 3473-7900 | (51) 3033-3900 | comprovado no Maps |
+| Site | UTM `loja_1` | UTM `loja_2` | comprovado no Maps e editor |
+| WhatsApp/agendamento | (51) 99729-3118 | (51) 99729-3118 | comprovado no Maps e editor |
+| Horário | seg.–sex. 9h–18h; sáb. 9h–16h30 | igual | comprovado no Maps e editor |
+| Foto mais recente indicada | 2 dias | 29 dias | comprovado no Maps |
+| Postagem visível | publicada no mesmo dia | publicada no mesmo dia | comprovado no Maps |
+| Serviços personalizados | os seis itens cadastrados | os mesmos seis itens cadastrados | comprovado no editor |
+| Produtos manuais | nenhum | nenhum | comprovado na auditoria anterior; decisão mantida |
+
+Os seis serviços aparecem integralmente nos dois editores, sob a categoria principal, sem aviso de revisão ou rejeição. O Google Maps não criou uma seção pública com os nomes personalizados; exibe o link compartilhado de produtos e serviços para `/seminovos` e os atributos gerais `Compras na loja`, `Entrega` e `Produtos usados`. A ausência da lista nessa superfície é uma escolha de apresentação do Google e não invalida o cadastro comprovado.
+
+Na Loja 2, o resumo do perfil ainda sugere adicionar redes sociais e o Maps não mostra a seção pública de perfis. A abertura do formulário confirmou, porém, os três endereços preenchidos corretamente: X, Facebook e Instagram. Nenhum cadastro duplicado foi enviado.
+
+A busca administrativa também exibiu um resultado patrocinado da própria Netcar com `gad_campaignid=12642940447`. Isso é forte evidência de campanha ativa, mas não altera a decisão de que anúncios não são necessários para executar o projeto orgânico.
 
 ## Contexto operacional confirmado
 
