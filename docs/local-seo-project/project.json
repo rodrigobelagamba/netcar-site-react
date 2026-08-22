@@ -120,7 +120,7 @@
       "title": "Implantar rotina ética e contínua de avaliações",
       "cities": ["Regional"],
       "priority": "P1",
-      "status": "backlog",
+      "status": "done",
       "owner": "Netcar + Codex",
       "dependencies": ["Processo atual de atendimento e pós-venda"],
       "acceptance": ["Pedido enviado a todos os clientes elegíveis", "Cadência e origem registradas", "Sem review gating"]

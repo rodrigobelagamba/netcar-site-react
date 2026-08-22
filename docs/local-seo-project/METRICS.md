@@ -15,6 +15,16 @@ Outros indicadores iniciais:
 - Core Web Vitals de campo: avaliação reprovada, com LCP aproximado de 3,8 s, INP de 348 ms e CLS de 0,01;
 - fora de Esteio, a ausência de endereço físico é uma limitação estrutural para Maps/Map Pack e não pode ser eliminada apenas com páginas locais.
 
+## Avaliações: linha de base de 22/08/2026
+
+| Perfil | Nota | Total | Novas em até 30 dias | Novas em até 60 dias | Novas em até 90 dias |
+|---|---:|---:|---:|---:|---:|
+| Loja 1 | 4,8 | 514 | 6 | 15 | 17 |
+| Loja 2 | 4,9 | 355 | 4 | 5 | 8 |
+| Marca | — | 869 | 10 | 20 | 25 |
+
+As janelas são aproximações baseadas nas datas relativas do Google Maps. Avaliações marcadas como editadas foram excluídas desses totais, porque podem ter sido publicadas originalmente fora da janela. A medição recorrente deve usar a variação semanal dos totais por perfil. Procedimento e links oficiais: `ROTINA-AVALIACOES-2026-08-22.md`.
+
 ## Identificação dos acessos vindos dos perfis
 
 Configuração aplicada em 21/08/2026:

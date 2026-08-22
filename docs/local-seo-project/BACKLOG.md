@@ -14,7 +14,7 @@ O estado operacional fica em `project.json`. Esta visão explica o resultado esp
 | GBP-004 | P1 | Esteio | Cadastrar serviços permanentes nos dois perfis | concluído | nenhuma | os mesmos seis serviços aparecem nos dois editores; Maps não renderiza a lista personalizada |
 | STORE-001 | P3 | Esteio | Reavaliar página própria da Loja 1 | backlog | mudança operacional futura | criar somente se existir utilidade própria comprovada |
 | STORE-002 | P3 | Esteio | Reavaliar página própria da Loja 2 | backlog | mudança operacional futura | criar somente se existir utilidade própria comprovada |
-| REV-001 | P1 | Regional | Implantar rotina ética de avaliações | backlog | processo de atendimento | cadência registrada, sem seleção indevida de clientes |
+| REV-001 | P1 | Regional | Implantar rotina ética de avaliações | concluído | acompanhamento semanal | links oficiais validados, processo existente padronizado e linha de base de 30/60/90 dias registrada em 22/08/2026 |
 | PERF-001 | P1 | Todas | Corrigir o primeiro lote de LCP/INP | verificar produção | janela de campo de 28 dias | Lighthouse pós-deploy: Home 100 mobile/desktop e Canoas 98 mobile; aguardar Core Web Vitals |
 | SAP-001 | P1 | Sapucaia | Reforçar página local com utilidade e prova real | em andamento | nova medição e prova autorizada | produção validada e indexação solicitada em 22/08; aguardar 14–28 dias e prova local |
 | CAN-001 | P1 | Canoas | Reforçar página local com utilidade e prova real | em andamento | nova medição e materiais locais | produção validada e indexação solicitada em 22/08; aguardar 14–28 dias e prova autorizada |
