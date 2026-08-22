@@ -4,12 +4,13 @@
   "updatedAt": "2026-08-22",
   "canonicalRepository": "netcar-organic-demand",
   "paidMediaRequired": false,
-  "priorityCities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha"],
+  "priorityCities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí"],
   "monitoredCompetitors": {
     "Canoas": ["R2 Motors", "Dotto Veículos", "Star", "Base Veículos", "Boqueirão Veículos", "Macrosinos Veículos"],
     "São Leopoldo": ["Newton Multimarcas", "Billy Motors", "Select Drive Veículos", "Sinoscar Chevrolet", "Premium Veículos", "Local Veículos"],
     "Nova Santa Rita": ["Webmotors", "OLX", "Seminovos Carburgo", "Mobiauto"],
-    "Cachoeirinha": ["Senna RS Motors", "Elite dos Carros", "Ribeiro Veículos", "Cia do Automóvel Cachoeirinha"]
+    "Cachoeirinha": ["Senna RS Motors", "Elite dos Carros", "Ribeiro Veículos", "Cia do Automóvel Cachoeirinha"],
+    "Gravataí": ["Portocar Seminovos", "Localiza Seminovos", "SRV Automarcas", "Lucraf Veículos", "Romscar", "Planeta Veículos"]
   },
   "allowedStatuses": ["backlog", "ready", "in_progress", "blocked", "verify_production", "done"],
   "tasks": [
@@ -56,7 +57,7 @@
     {
       "id": "MEAS-001",
       "title": "Criar linha de base recorrente por cidade e canal",
-      "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha"],
+      "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí"],
       "priority": "P0",
       "status": "in_progress",
       "owner": "Codex + Netcar",
@@ -176,7 +177,7 @@
     {
       "id": "CIT-001",
       "title": "Conquistar citações locais legítimas",
-      "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha"],
+      "cities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí"],
       "priority": "P2",
       "status": "backlog",
       "owner": "Netcar + Codex",
@@ -214,9 +215,19 @@
       "acceptance": ["Consultas genéricas medidas separadamente da marca", "Conteúdo factual publicado", "Nenhuma alegação de endereço em Cachoeirinha"]
     },
     {
+      "id": "GRA-001",
+      "title": "Reforçar Gravataí para consultas de seminovos",
+      "cities": ["Gravataí"],
+      "priority": "P1",
+      "status": "in_progress",
+      "owner": "Codex + Netcar",
+      "dependencies": ["Deploy", "Novo rastreamento", "Prova real de atendimento local"],
+      "acceptance": ["Consulta seminovos em Gravataí medida separadamente da marca", "Conteúdo factual publicado", "Nenhuma alegação de endereço em Gravataí"]
+    },
+    {
       "id": "EXP-001",
       "title": "Reavaliar as demais cidades",
-      "cities": ["Gravataí", "Porto Alegre"],
+      "cities": ["Porto Alegre"],
       "priority": "P3",
       "status": "backlog",
       "owner": "Codex + Netcar",

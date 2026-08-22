@@ -312,22 +312,22 @@
     "slug": "gravatai",
     "name": "Gravataí",
     "regionName": "Grande Porto Alegre",
-    "distanceKm": 25,
-    "travelTime": "35 min",
-    "routeNote": "Conforme o bairro, o trajeto pode combinar acessos à BR-290, RS-118 e BR-116. Trânsito metropolitano altera o tempo de viagem.",
+    "distanceKm": 23,
+    "travelTime": "25–35 min",
+    "routeNote": "A referência saindo do Centro usa a RS-118 e tem cerca de 23 km. O trajeto e o tempo mudam conforme o bairro, o trânsito e eventuais obras.",
     "visitPlanning": "Confirme disponibilidade, envie os dados do usado e combine o horário antes de sair de Gravataí para as lojas em Esteio.",
     "relatedSlugs": ["cachoeirinha", "alvorada", "porto-alegre", "canoas"],
     "priorityMarket": true,
-    "title": "Seminovos Gravataí: fotos, preços e estoque | Netcar",
-    "description": "Veja carros seminovos para Gravataí no estoque da Netcar em Esteio. Compare fotos, preços e km, simule financiamento e confirme a visita.",
-    "h1": "Carros seminovos para Gravataí: compare antes de sair",
-    "contentHeading": "Como planejar a busca por seminovos saindo de Gravataí",
-    "intro": "Quem pesquisa carros seminovos em Gravataí pode comparar o estoque real da Netcar em Esteio e adiantar a negociação antes do deslocamento pela região metropolitana.",
+    "title": "Seminovos Gravataí: carros à venda perto | Netcar",
+    "description": "Compare online carros seminovos para Gravataí na Netcar em Esteio, a cerca de 23 km. Fotos, preços, troca, entrada parcelada e financiamento.",
+    "h1": "Carros seminovos à venda para Gravataí",
+    "contentHeading": "Seminovos perto de Gravataí com estoque real",
+    "intro": "Para quem mora em Gravataí, a Netcar reúne em Esteio o estoque real das duas unidades e permite montar uma lista de carros antes de percorrer os cerca de 23 km até a Loja 1.",
     "paragraphs": [
-      "A página apresenta os veículos disponíveis com fotos, preço, ano, quilometragem e versão. Isso ajuda quem sai do Centro, Parque dos Anjos, Morada do Vale ou de outros bairros a escolher quais carros realmente merecem uma visita.",
-      "O trajeto até Esteio varia conforme o ponto de saída e pode combinar RS-118, BR-290 e BR-116. Como o trânsito muda bastante, confirme o estoque e o horário de atendimento antes de iniciar a viagem.",
-      "Pelo WhatsApp, você pode pedir simulação sujeita à análise de crédito e enviar dados do usado para uma orientação inicial. A vistoria da troca, o test drive e a negociação final acontecem nas lojas de Esteio.",
-      "A Netcar não possui unidade em Gravataí. As duas lojas ficam na Av. Presidente Vargas, em Esteio, e os carros anunciados passam pela Fábrica de Valor antes da vitrine."
+      "A consulta começa pelo catálogo: cada anúncio mostra fotos, preço, ano, quilometragem e versão. Moradores do Centro, Parque dos Anjos, Morada do Vale e demais bairros podem selecionar os veículos que fazem sentido antes da saída.",
+      "A referência entre o Centro de Gravataí e a Av. Presidente Vargas, 740, é de aproximadamente 23 km pela RS-118. O tempo pode variar bastante, por isso a disponibilidade e o horário devem ser reconfirmados no dia.",
+      "Antes de percorrer o trajeto, o WhatsApp ajuda a reservar o atendimento, iniciar a simulação sujeita à análise de crédito e encaminhar os dados do usado. Entrada parcelada no cartão pode ser consultada conforme a proposta.",
+      "O atendimento presencial acontece em Esteio; não existe unidade da Netcar em Gravataí. Os pontos 740 e 1106 operam juntos, com Fábrica de Valor, despachante credenciado e suporte Nethelp durante a garantia legal."
     ],
     "faq": [
       {
@@ -339,8 +339,8 @@
         "a": "Abra o veículo no estoque online e fale pelo WhatsApp para confirmar disponibilidade e organizar o test drive."
       },
       {
-        "q": "É possível simular o financiamento antes da visita?",
-        "a": "Sim. A simulação pode começar remotamente, mas valores, entrada, taxa e aprovação dependem da análise de crédito e da proposta vigente."
+        "q": "Posso financiar, dar meu usado na troca ou parcelar a entrada?",
+        "a": "É possível simular financiamento, avaliar o usado e consultar entrada parcelada no cartão. Taxas, valores, prazo e aprovação dependem da proposta e da análise de crédito."
       },
       {
         "q": "Aceitam carro financiado na troca?",
@@ -349,21 +349,31 @@
     ],
     "sell": {
       "title": "Vender carro em Gravataí: pré-avaliação online | Netcar",
-      "description": "Quer vender carro em Gravataí? A Netcar compra em Esteio. Avaliação gratuita, aceita financiado e pagamento transparente.",
-      "h1": "Vender carro em Gravataí",
-      "intro": "Gravataí → Esteio em cerca de 35 min. Vender para revenda estruturada costuma ser mais rápido que esperar comprador avulso.",
+      "description": "Quer vender seu carro em Gravataí? Faça a pré-avaliação e leve o veículo à Netcar em Esteio, a cerca de 23 km. Quitado ou financiado.",
+      "h1": "Vender carro em Gravataí com pré-avaliação",
+      "intro": "Para reduzir uma viagem desnecessária de Gravataí a Esteio, a avaliação começa com informações e fotos pelo WhatsApp; a confirmação do valor ocorre somente após a vistoria presencial.",
       "paragraphs": [
-        "Netcar compra para preparar e revender com Fábrica de Valor — por isso a avaliação é técnica e de mercado, não chute.",
-        "Financiamento em aberto não impede negociação: calculamos quitação e valor líquido para você."
+        "No primeiro contato, informe modelo, ano, quilometragem, versão e condição do veículo. Fotos externas e internas ajudam a equipe a organizar a visita, sem transformar essa conversa em oferta garantida.",
+        "Na chegada a Esteio, são conferidos conservação, histórico, documentação e condições de mercado. Somente depois dessa etapa a Netcar apresenta a proposta para aceite ou recusa do proprietário.",
+        "Quando há financiamento em aberto, o saldo de quitação entra no cálculo. A proposta separa esse compromisso do valor líquido para que a decisão seja tomada com os números conferidos.",
+        "O proprietário pode optar pela venda direta ou usar o automóvel em uma troca. As equipes dos números 740 e 1106 compartilham o atendimento e contam com despachante credenciado."
       ],
       "faq": [
         {
-          "q": "Quais carros não compram?",
-          "a": "Não compramos leilão, fora dos critérios de ano/origem ou em condição incompatível com nosso estoque."
+          "q": "O que devo enviar para iniciar a avaliação em Gravataí?",
+          "a": "Informe modelo, versão, ano, quilometragem, estado geral, financiamento pendente e envie fotos atuais pelo WhatsApp."
         },
         {
-          "q": "Posso avaliar antes de ir?",
-          "a": "Sim, início pelo WhatsApp com dados e fotos do veículo."
+          "q": "Como funciona quando o carro ainda está financiado?",
+          "a": "A equipe confere o saldo para quitação e calcula o valor líquido. A negociação depende desses números e da vistoria."
+        },
+        {
+          "q": "A conversa pelo WhatsApp garante a proposta?",
+          "a": "Não. O contato remoto organiza o atendimento, mas preço e condições finais exigem inspeção presencial e documentação conferida."
+        },
+        {
+          "q": "Onde acontece a vistoria para quem vem de Gravataí?",
+          "a": "Nas lojas da Av. Presidente Vargas, 740 e 1106, em Esteio. A Netcar não mantém ponto físico em Gravataí."
         }
       ]
     }
