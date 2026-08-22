@@ -70,26 +70,37 @@
     "regionName": "BR-116 e Vale dos Sinos",
     "distanceKm": 8,
     "travelTime": "15 min",
-    "routeNote": "Sapucaia do Sul e Esteio são vizinhas, com acesso pela BR-116 e vias locais. Consulte a navegação em tempo real antes de sair.",
+    "routeNote": "A referência de cerca de 8 km considera a região central. O acesso pode seguir pela BR-116 ou por vias locais, e o tempo muda conforme o bairro de saída, as obras e o trânsito.",
     "visitPlanning": "Confirme os veículos escolhidos pelo WhatsApp e organize test drive, avaliação da troca e simulação para a mesma visita em Esteio.",
     "relatedSlugs": ["canoas", "sao-leopoldo", "novo-hamburgo", "cachoeirinha"],
     "priorityMarket": true,
-    "title": "Seminovos perto de Sapucaia do Sul: estoque | Netcar",
-    "description": "Seminovos revisados perto de Sapucaia do Sul. Netcar Multimarcas em Esteio, a 8 km. Financiamento facilitado e troca de usado.",
-    "h1": "Seminovos perto de Sapucaia do Sul",
-    "intro": "Sapucaia do Sul e Esteio são cidades vizinhas — ideal para quem quer ver carro pessoalmente sem longo deslocamento.",
+    "title": "Carros seminovos perto de Sapucaia do Sul | Netcar",
+    "description": "Compare carros seminovos para Sapucaia do Sul no estoque real da Netcar, em Esteio, a cerca de 8 km. Veja fotos, preços, financiamento e troca.",
+    "h1": "Carros seminovos para Sapucaia do Sul: estoque perto da cidade",
+    "contentHeading": "Como comparar carros seminovos saindo de Sapucaia do Sul",
+    "intro": "Moradores de Sapucaia do Sul estão ao lado das unidades da Netcar em Esteio. Esta página concentra o catálogo e os recursos necessários para planejar uma visita objetiva.",
     "paragraphs": [
-      "A Netcar oferece estoque multimarcas, processo de preparação dos veículos e atendimento presencial nas lojas de Esteio.",
-      "Se você busca seminovo automático, SUV para família ou primeiro carro com parcela leve, vale comparar opções no showroom antes de decidir."
+      "Quem parte do Centro, Capão da Cruz, Cohab, Lomba da Palmeira, Nova Sapucaia, Pasqualini, Sete ou Vargas pode filtrar o catálogo por carroceria, câmbio e faixa de preço. Cada anúncio informa ano, quilometragem e imagens do automóvel.",
+      "Use o comparador para colocar os candidatos lado a lado e reduzir a seleção. Depois, confirme quais modelos continuam no pátio e agende um horário para concentrar demonstração, test drive e conversa comercial no mesmo atendimento.",
+      "Se outro veículo fará parte do negócio, adiante pelo WhatsApp modelo, ano, quilometragem, fotos e eventual saldo devedor. A pré-análise reduz etapas, mas o valor definitivo depende da vistoria presencial e da documentação.",
+      "Não existe endereço comercial da Netcar em Sapucaia do Sul. Os dois pontos físicos ficam na Av. Presidente Vargas, em Esteio; os 8 km e 15 minutos são estimativas a partir da região central, não promessas para todos os bairros."
     ],
     "faq": [
       {
-        "q": "A Netcar entrega em Sapucaia do Sul?",
-        "a": "A retirada é na loja em Esteio. Consulte o consultor sobre logística no dia da negociação."
+        "q": "A Netcar tem endereço em Sapucaia do Sul?",
+        "a": "Não. Os pontos físicos ficam na Av. Presidente Vargas, 740 e 1106, em Esteio."
       },
       {
-        "q": "Aceitam troca de carro de Sapucaia?",
-        "a": "Sim, mediante avaliação. Aceitamos troca inclusive com financiamento em aberto."
+        "q": "A estimativa de 8 km vale para todos os bairros?",
+        "a": "Não. Ela parte da região central e serve apenas como referência. Consulte a navegação para calcular a rota a partir do seu endereço."
+      },
+      {
+        "q": "Como evitar o deslocamento se o modelo já tiver sido vendido?",
+        "a": "Envie o link ou o nome do automóvel pelo WhatsApp e confirme a presença no pátio antes de sair. O catálogo muda com a entrada e a venda de veículos."
+      },
+      {
+        "q": "É possível iniciar a troca à distância?",
+        "a": "Sim. Dados e fotos ajudam na pré-análise, inclusive quando existe financiamento em aberto. A proposta definitiva ocorre após vistoria e conferência documental."
       }
     ],
     "sell": {

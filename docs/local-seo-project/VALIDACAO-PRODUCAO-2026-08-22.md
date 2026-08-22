@@ -1,0 +1,42 @@
+# Validação de produção — deploy de 22/08/2026
+
+Coleta: 22/08/2026, entre 10:50 e 10:55 (America/Sao_Paulo).
+
+Commit publicado na `master`: `c5076bc`.
+
+## Respostas HTTP
+
+| URL | Resultado observado | Aceite |
+|---|---:|---|
+| `/` | 200 | aprovado |
+| `/seminovos` | 200 | aprovado |
+| `/seminovos-canoas` | 200 | aprovado |
+| `/noticias.php` | 301 para `/blog` | aprovado |
+| `/equipe.php` | 301 para `/sobre` | aprovado |
+| `/backend/Netcar` | 410 | aprovado |
+| `/cliente.php?id=1` | 410 | aprovado |
+| `/ficha-cadastral.php?id=1` | 410 | aprovado |
+| `/pagina-que-nao-existe-netcar` | 404 com `noindex, follow` | aprovado |
+| `/sitemap.xml` | 200, 154 URLs | aprovado |
+
+## Canoas
+
+- title: `Seminovos Canoas: fotos, preços e estoque | Netcar`;
+- description: estoque em Esteio, referência de cerca de 12 km, fotos, preços, financiamento e troca;
+- canonical: a própria URL com HTTPS e `www`;
+- H1: `Carros seminovos para Canoas: estoque perto da cidade`;
+- conteúdo renderizado confirmou `Entrada parcelada no cartão` e `Despachante credenciado`;
+- estoque real e transparência sobre a ausência de loja em Canoas foram preservados.
+
+O Search Console executou o teste em tempo real às 10:55 e informou que o URL está disponível para o Google e pode ser indexado. Em seguida, a indexação foi solicitada; o Google confirmou a entrada na fila de rastreamento prioritário.
+
+## Entidades das lojas
+
+O HTML inicial contém duas entidades `AutoDealer` distintas:
+
+| Loja | Endereço | CEP | Telefone | CID do Maps |
+|---|---|---|---|---|
+| Loja 1 | Av. Presidente Vargas, 740, Esteio/RS | 93260-490 | (51) 3473-7900 | `9144067949621682127` |
+| Loja 2 | Av. Presidente Vargas, 1106, Esteio/RS | 93260-048 | (51) 3033-3900 | `10839197980729051544` |
+
+Evidência: **comprovado no servidor público, na versão renderizada e no teste em tempo real do Search Console**.

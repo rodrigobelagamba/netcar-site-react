@@ -25,7 +25,7 @@
       "title": "Validar 301, 410, metadados e canonicals em produção",
       "cities": ["Todas"],
       "priority": "P0",
-      "status": "verify_production",
+      "status": "done",
       "owner": "Codex",
       "dependencies": ["deploy atual acessível"],
       "acceptance": ["Status HTTP e HTML das URLs críticas registrados com data", "Nenhuma divergência entre código e produção"]
@@ -35,7 +35,7 @@
       "title": "Validar as duas entidades AutoDealer em produção",
       "cities": ["Esteio"],
       "priority": "P0",
-      "status": "in_progress",
+      "status": "done",
       "owner": "Codex + Netcar",
       "dependencies": ["URLs públicas dos dois perfis"],
       "acceptance": ["Duas lojas válidas e distintas", "NAP consistente entre perfil, página e schema"]
@@ -125,7 +125,7 @@
       "title": "Corrigir o primeiro lote de gargalos de LCP e INP",
       "cities": ["Todas"],
       "priority": "P1",
-      "status": "ready",
+      "status": "verify_production",
       "owner": "Codex",
       "dependencies": ["Medição por template"],
       "acceptance": ["Antes e depois registrados", "Build e fluxos de conversão sem regressão"]
@@ -135,7 +135,7 @@
       "title": "Reforçar a página de Sapucaia com utilidade e prova local",
       "cities": ["Sapucaia do Sul"],
       "priority": "P1",
-      "status": "backlog",
+      "status": "in_progress",
       "owner": "Codex + Netcar",
       "dependencies": ["Bairros, rotas, depoimentos e dados reais de atendimento"],
       "acceptance": ["Informações locais exclusivas", "Estoque real e conversão rastreável", "Nenhuma alegação sem evidência"]
