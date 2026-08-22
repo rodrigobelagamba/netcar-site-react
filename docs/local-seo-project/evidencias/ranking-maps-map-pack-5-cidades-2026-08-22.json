@@ -1,0 +1,3078 @@
+{
+  "metadata": {
+    "collectedDate": "2026-08-22",
+    "collectedStart": "15:33",
+    "collectedEnd": "15:48",
+    "timezone": "America/Sao_Paulo",
+    "device": "desktop",
+    "locationSimulation": "Consulta com nome explícito da cidade; região confirmada no cabeçalho da Pesquisa quando o Map Pack apareceu. Sem coordenada GPS fixa de centro.",
+    "surfaces": [
+      "Google Search Map Pack",
+      "Google Maps"
+    ],
+    "organicTraditional": "Não coletado neste arquivo; consultar diagnósticos GSC individuais.",
+    "limitations": [
+      "Fotografia única por consulta",
+      "Não é geo-grid",
+      "Resultados patrocinados separados",
+      "Ausência significa não observado no recorte carregado"
+    ]
+  },
+  "rows": [
+    {
+      "city": "São Leopoldo",
+      "query": "loja de carros em São Leopoldo",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=loja%20de%20carros%20em%20S%C3%A3o%20Leopoldo",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=loja%20de%20carros%20em%20S%C3%A3o%20Leopoldo",
+      "searchRegion": "São Leopoldo, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+        "Cia Motors Drive | Revenda de Carros São Leopoldo - RS",
+        "Foccus Veiculos São Leopoldo"
+      ],
+      "packSponsored": [
+        "San Marino Multimarcas"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.7712901!4d-51.1341177!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "137",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 165"
+        },
+        {
+          "name": "Select Drive Veículos | Revenda de Carros | São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Select+Drive+Ve%C3%ADculos+%7C+Revenda+de+Carros+%7C+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x95196996aa78d2b9:0x5b83980f4c1e47b1!8m2!3d-29.7713353!4d-51.134059!16s%2Fg%2F11xn1rh0cn!19sChIJudJ4qpZpGZURsUceTA-Yg1s?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "16",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 179"
+        },
+        {
+          "name": "Doctor Multimarcas",
+          "url": "https://www.google.com/maps/place/Doctor+Multimarcas/data=!4m7!3m6!1s0x951968e32f0f1681:0x7e6c09875a69fb49!8m2!3d-29.7858373!4d-51.1406758!16s%2Fg%2F11hzfybcm6!19sChIJgRYPL-NoGZURSftpWocJbH4?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "414",
+          "category": "Concessionária",
+          "address": "R. Cap. Fabre, Bairro - N 39"
+        },
+        {
+          "name": "Auto Maxx Multimarcas",
+          "url": "https://www.google.com/maps/place/Auto+Maxx+Multimarcas/data=!4m7!3m6!1s0x95196905ce93e039:0x76ab946be8bc68af!8m2!3d-29.7711389!4d-51.1336429!16s%2Fg%2F11f3c9ynd4!19sChIJOeCTzgVpGZURr2i86GuUq3Y?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "3,9",
+          "reviews": "68",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 192"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Audi Top Car Porto Alegre",
+          "url": "https://www.google.com/maps/place/Audi+Top+Car+Porto+Alegre/data=!4m7!3m6!1s0x951979ef693291bf:0x6852bb41aecb051e!8m2!3d-30.002479!4d-51.191507!16s%2Fg%2F1tfsp4sb!19sChIJv5Eyae95GZURHgXLrkG7Umg?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,4",
+          "reviews": "337",
+          "category": "Concessionária Audi",
+          "address": "724 Avenida Ceará"
+        },
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:45:44"
+    },
+    {
+      "city": "São Leopoldo",
+      "query": "revenda de veículos em São Leopoldo",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=revenda%20de%20ve%C3%ADculos%20em%20S%C3%A3o%20Leopoldo",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=revenda%20de%20ve%C3%ADculos%20em%20S%C3%A3o%20Leopoldo",
+      "searchRegion": "São Leopoldo, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+        "Doctor Multimarcas",
+        "Select Drive Veículos | Revenda de Carros | São Leopoldo - RS"
+      ],
+      "packSponsored": [
+        "San Marino Multimarcas"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.7712901!4d-51.1341177!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "137",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 165"
+        },
+        {
+          "name": "Select Drive Veículos | Revenda de Carros | São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Select+Drive+Ve%C3%ADculos+%7C+Revenda+de+Carros+%7C+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x95196996aa78d2b9:0x5b83980f4c1e47b1!8m2!3d-29.7713353!4d-51.134059!16s%2Fg%2F11xn1rh0cn!19sChIJudJ4qpZpGZURsUceTA-Yg1s?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "16",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 179"
+        },
+        {
+          "name": "Foccus Veiculos São Leopoldo",
+          "url": "https://www.google.com/maps/place/Foccus+Veiculos+S%C3%A3o+Leopoldo/data=!4m7!3m6!1s0x951969aa162d01c1:0x54385801f88606e9!8m2!3d-29.7715847!4d-51.133318!16s%2Fg%2F1td7d9rb!19sChIJwQEtFqppGZUR6QaG-AFYOFQ?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "110",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 232"
+        },
+        {
+          "name": "Formula Motors",
+          "url": "https://www.google.com/maps/place/Formula+Motors/data=!4m7!3m6!1s0x9519697eb7809315:0x15007c5cdcf94bd9!8m2!3d-29.7747725!4d-51.130739!16s%2Fg%2F11rxvttvdp!19sChIJFZOAt35pGZUR2Uv53Fx8ABU?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "54",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 573"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.77129!4d-51.134118!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "135",
+          "category": "Revendedora de carros usados",
+          "address": "165 Avenida São Borja"
+        },
+        {
+          "name": "Diamond Veículos",
+          "url": "https://www.google.com/maps/place/Diamond+Ve%C3%ADculos/data=!4m7!3m6!1s0x951975ddb84abe83:0x5cfd21848c49d90e!8m2!3d-30.010372!4d-51.089142!16s%2Fg%2F11b8c3w140!19sChIJg75KuN11GZURDtlJjIQh_Vw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "917",
+          "category": "Revendedora de carros usados",
+          "address": "421 Avenida Presidente Getúlio Vargas"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:45:45"
+    },
+    {
+      "city": "São Leopoldo",
+      "query": "carros seminovos em São Leopoldo",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20seminovos%20em%20S%C3%A3o%20Leopoldo",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20seminovos%20em%20S%C3%A3o%20Leopoldo",
+      "searchRegion": null,
+      "packPresent": false,
+      "packOrganicTop3": [],
+      "packSponsored": [],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Seminovos Movida",
+          "url": "https://www.google.com/maps/place/Seminovos+Movida/data=!4m7!3m6!1s0x9519685faec1a4d3:0x70dff01086490f7e!8m2!3d-29.7789646!4d-51.1560076!16s%2Fg%2F11csb0gfd8!19sChIJ06TBrl9oGZURfg9JhhDw33A?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "510",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Getúlio Vargas, BR116, 2232"
+        },
+        {
+          "name": "Localiza Seminovos",
+          "url": "https://www.google.com/maps/place/Localiza+Seminovos/data=!4m7!3m6!1s0x9519429288fa4797:0x824ce23640205ac5!8m2!3d-29.7344186!4d-51.1503006!16s%2Fg%2F11b6dkfdnj!19sChIJl0f6iJJCGZURxVogQDbiTII?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,5",
+          "reviews": "456",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Sen. Salgado Filho, 2792 - Quadra 995"
+        },
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.7712901!4d-51.1341177!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "137",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 165"
+        },
+        {
+          "name": "Seminovos Carburgo",
+          "url": "https://www.google.com/maps/place/Seminovos+Carburgo/data=!4m7!3m6!1s0x9519685fc18a715b:0x212ed93e9f45c4b2!8m2!3d-29.7798898!4d-51.1569313!16s%2Fg%2F11bwyxxh9j!19sChIJW3GKwV9oGZURssRFnz7ZLiE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "3,9",
+          "reviews": "40",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Getúlio Vargas, 2362"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "San Marino Multimarcas",
+          "url": "https://www.google.com/maps/place/San+Marino+Multimarcas/data=!4m7!3m6!1s0x951973cdce7522b3:0x8392c65fbb4a0523!8m2!3d-29.930472!4d-51.06522!16s%2Fg%2F11ys35jbd2!19sChIJsyJ1zs1zGZURIwVKu1_GkoM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "16",
+          "category": "Concessionária",
+          "address": null
+        },
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.77129!4d-51.134118!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "135",
+          "category": "Revendedora de carros usados",
+          "address": "165 Avenida São Borja"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:45:47"
+    },
+    {
+      "city": "São Leopoldo",
+      "query": "carros usados em São Leopoldo",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20usados%20em%20S%C3%A3o%20Leopoldo",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20usados%20em%20S%C3%A3o%20Leopoldo",
+      "searchRegion": "São Leopoldo, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+        "Seminovos Movida",
+        "Doctor Multimarcas"
+      ],
+      "packSponsored": [
+        "San Marino Multimarcas"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.7712901!4d-51.1341177!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "137",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 165"
+        },
+        {
+          "name": "Foccus Veiculos São Leopoldo",
+          "url": "https://www.google.com/maps/place/Foccus+Veiculos+S%C3%A3o+Leopoldo/data=!4m7!3m6!1s0x951969aa162d01c1:0x54385801f88606e9!8m2!3d-29.7715847!4d-51.133318!16s%2Fg%2F1td7d9rb!19sChIJwQEtFqppGZUR6QaG-AFYOFQ?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "110",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 232"
+        },
+        {
+          "name": "Seminovos Movida",
+          "url": "https://www.google.com/maps/place/Seminovos+Movida/data=!4m7!3m6!1s0x9519685faec1a4d3:0x70dff01086490f7e!8m2!3d-29.7789646!4d-51.1560076!16s%2Fg%2F11csb0gfd8!19sChIJ06TBrl9oGZURfg9JhhDw33A?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "510",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Getúlio Vargas, BR116, 2232"
+        },
+        {
+          "name": "Formula Motors",
+          "url": "https://www.google.com/maps/place/Formula+Motors/data=!4m7!3m6!1s0x9519697eb7809315:0x15007c5cdcf94bd9!8m2!3d-29.7747725!4d-51.130739!16s%2Fg%2F11rxvttvdp!19sChIJFZOAt35pGZUR2Uv53Fx8ABU?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "54",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 573"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Diamond Veículos",
+          "url": "https://www.google.com/maps/place/Diamond+Ve%C3%ADculos/data=!4m7!3m6!1s0x951975ddb84abe83:0x5cfd21848c49d90e!8m2!3d-30.010372!4d-51.089142!16s%2Fg%2F11b8c3w140!19sChIJg75KuN11GZURDtlJjIQh_Vw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "917",
+          "category": "Revendedora de carros usados",
+          "address": "421 Avenida Presidente Getúlio Vargas"
+        },
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.77129!4d-51.134118!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "135",
+          "category": "Revendedora de carros usados",
+          "address": "165 Avenida São Borja"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:45:48"
+    },
+    {
+      "city": "São Leopoldo",
+      "query": "comprar carro em São Leopoldo",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=comprar%20carro%20em%20S%C3%A3o%20Leopoldo",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=comprar%20carro%20em%20S%C3%A3o%20Leopoldo",
+      "searchRegion": "São Leopoldo, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Seminovos Movida",
+        "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+        "Formula Motors"
+      ],
+      "packSponsored": [
+        "Ford Amazon - Concessionária em Novo Hamburgo"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.7712901!4d-51.1341177!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "137",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 165"
+        },
+        {
+          "name": "Foccus Veiculos São Leopoldo",
+          "url": "https://www.google.com/maps/place/Foccus+Veiculos+S%C3%A3o+Leopoldo/data=!4m7!3m6!1s0x951969aa162d01c1:0x54385801f88606e9!8m2!3d-29.7715847!4d-51.133318!16s%2Fg%2F1td7d9rb!19sChIJwQEtFqppGZUR6QaG-AFYOFQ?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "110",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 232"
+        },
+        {
+          "name": "Seminovos Movida",
+          "url": "https://www.google.com/maps/place/Seminovos+Movida/data=!4m7!3m6!1s0x9519685faec1a4d3:0x70dff01086490f7e!8m2!3d-29.7789646!4d-51.1560076!16s%2Fg%2F11csb0gfd8!19sChIJ06TBrl9oGZURfg9JhhDw33A?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "510",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Getúlio Vargas, BR116, 2232"
+        },
+        {
+          "name": "Formula Motors",
+          "url": "https://www.google.com/maps/place/Formula+Motors/data=!4m7!3m6!1s0x9519697eb7809315:0x15007c5cdcf94bd9!8m2!3d-29.7747725!4d-51.130739!16s%2Fg%2F11rxvttvdp!19sChIJFZOAt35pGZUR2Uv53Fx8ABU?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "54",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 573"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.77129!4d-51.134118!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "135",
+          "category": "Revendedora de carros usados",
+          "address": "165 Avenida São Borja"
+        },
+        {
+          "name": "Ford Amazon - Concessionária em Novo Hamburgo",
+          "url": "https://www.google.com/maps/place/Ford+Amazon+-+Concession%C3%A1ria+em+Novo+Hamburgo/data=!4m7!3m6!1s0x951942f1cfc1522b:0x22d0fd9e76f8ea95!8m2!3d-29.691366!4d-51.143953!16s%2Fg%2F11bw_79qzj!19sChIJK1LBz_FCGZURler4dp790CI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,3",
+          "reviews": "841",
+          "category": "Concessionária Ford",
+          "address": "2838 BR-116"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:45:50"
+    },
+    {
+      "city": "São Leopoldo",
+      "query": "veículos seminovos em São Leopoldo",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=ve%C3%ADculos%20seminovos%20em%20S%C3%A3o%20Leopoldo",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=ve%C3%ADculos%20seminovos%20em%20S%C3%A3o%20Leopoldo",
+      "searchRegion": null,
+      "packPresent": false,
+      "packOrganicTop3": [],
+      "packSponsored": [],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Seminovos Movida",
+          "url": "https://www.google.com/maps/place/Seminovos+Movida/data=!4m7!3m6!1s0x9519685faec1a4d3:0x70dff01086490f7e!8m2!3d-29.7789646!4d-51.1560076!16s%2Fg%2F11csb0gfd8!19sChIJ06TBrl9oGZURfg9JhhDw33A?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "510",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Getúlio Vargas, BR116, 2232"
+        },
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.7712901!4d-51.1341177!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "137",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 165"
+        },
+        {
+          "name": "Localiza Seminovos",
+          "url": "https://www.google.com/maps/place/Localiza+Seminovos/data=!4m7!3m6!1s0x9519429288fa4797:0x824ce23640205ac5!8m2!3d-29.7344186!4d-51.1503006!16s%2Fg%2F11b6dkfdnj!19sChIJl0f6iJJCGZURxVogQDbiTII?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,5",
+          "reviews": "456",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Sen. Salgado Filho, 2792 - Quadra 995"
+        },
+        {
+          "name": "Chevrolet Sinoscar São Leopoldo",
+          "url": "https://www.google.com/maps/place/Chevrolet+Sinoscar+S%C3%A3o+Leopoldo/data=!4m7!3m6!1s0x951968600c17f35b:0xefea4213c5309f8b!8m2!3d-29.780935!4d-51.1594374!16s%2Fg%2F11f308rvt6!19sChIJW_MXDGBoGZURi58wxRNC6u8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,5",
+          "reviews": "1.403",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Getúlio Vargas, 2555"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.77129!4d-51.134118!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "135",
+          "category": "Revendedora de carros usados",
+          "address": "165 Avenida São Borja"
+        },
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:45:52"
+    },
+    {
+      "city": "São Leopoldo",
+      "query": "loja de veículos em São Leopoldo",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=loja%20de%20ve%C3%ADculos%20em%20S%C3%A3o%20Leopoldo",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=loja%20de%20ve%C3%ADculos%20em%20S%C3%A3o%20Leopoldo",
+      "searchRegion": "São Leopoldo, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+        "Select Drive Veículos | Revenda de Carros | São Leopoldo - RS",
+        "Auto Maxx Multimarcas"
+      ],
+      "packSponsored": [
+        "Diamond Veículos"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.7712901!4d-51.1341177!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "137",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 165"
+        },
+        {
+          "name": "Foccus Veiculos São Leopoldo",
+          "url": "https://www.google.com/maps/place/Foccus+Veiculos+S%C3%A3o+Leopoldo/data=!4m7!3m6!1s0x951969aa162d01c1:0x54385801f88606e9!8m2!3d-29.7715847!4d-51.133318!16s%2Fg%2F1td7d9rb!19sChIJwQEtFqppGZUR6QaG-AFYOFQ?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "110",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 232"
+        },
+        {
+          "name": "Cia Motors Drive | Revenda de Carros São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Cia+Motors+Drive+%7C+Revenda+de+Carros+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969066683d689:0xb05b08ff3c6a2ea3!8m2!3d-29.7745963!4d-51.1308459!16s%2Fg%2F11bw7dc785!19sChIJidaDZgZpGZURoy5qPP8IW7A?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "155",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 593"
+        },
+        {
+          "name": "Empório Multimarcas | Revenda de carros em São Leopoldo",
+          "url": "https://www.google.com/maps/place/Emp%C3%B3rio+Multimarcas+%7C+Revenda+de+carros+em+S%C3%A3o+Leopoldo/data=!4m7!3m6!1s0x9519437f69af1181:0x90e5dc6aa68d8d9d!8m2!3d-29.7229485!4d-51.1482941!16s%2Fg%2F11l1f73798!19sChIJgRGvaX9DGZURnY2Npmrc5ZA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "75",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Arnaldo Pereira da Silva, 4031"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Audi Top Car Porto Alegre",
+          "url": "https://www.google.com/maps/place/Audi+Top+Car+Porto+Alegre/data=!4m7!3m6!1s0x951979ef693291bf:0x6852bb41aecb051e!8m2!3d-30.002479!4d-51.191507!16s%2Fg%2F1tfsp4sb!19sChIJv5Eyae95GZURHgXLrkG7Umg?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,4",
+          "reviews": "337",
+          "category": "Concessionária Audi",
+          "address": "724 Avenida Ceará"
+        },
+        {
+          "name": "Elite Car - Veiculos Seminovos",
+          "url": "https://www.google.com/maps/place/Elite+Car+-+Veiculos+Seminovos/data=!4m7!3m6!1s0x951943538dcfd0b5:0xd946793480ada764!8m2!3d-29.65982!4d-51.144363!16s%2Fg%2F11fvjmzz28!19sChIJtdDPjVNDGZURZKetgDR5Rtk?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "253",
+          "category": "Revendedora de carros usados",
+          "address": "1144 BR-116"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:45:53"
+    },
+    {
+      "city": "São Leopoldo",
+      "query": "carros à venda em São Leopoldo",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20%C3%A0%20venda%20em%20S%C3%A3o%20Leopoldo",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20%C3%A0%20venda%20em%20S%C3%A3o%20Leopoldo",
+      "searchRegion": "São Leopoldo, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+        "Foccus Veiculos São Leopoldo",
+        "Auto Maxx Multimarcas"
+      ],
+      "packSponsored": [
+        "Ford Amazon - Concessionária em Novo Hamburgo"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.7712901!4d-51.1341177!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "137",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 165"
+        },
+        {
+          "name": "Foccus Veiculos São Leopoldo",
+          "url": "https://www.google.com/maps/place/Foccus+Veiculos+S%C3%A3o+Leopoldo/data=!4m7!3m6!1s0x951969aa162d01c1:0x54385801f88606e9!8m2!3d-29.7715847!4d-51.133318!16s%2Fg%2F1td7d9rb!19sChIJwQEtFqppGZUR6QaG-AFYOFQ?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "110",
+          "category": "Revendedora de carros usados",
+          "address": "Av. São Borja, 232"
+        },
+        {
+          "name": "Localiza Seminovos",
+          "url": "https://www.google.com/maps/place/Localiza+Seminovos/data=!4m7!3m6!1s0x9519429288fa4797:0x824ce23640205ac5!8m2!3d-29.7344186!4d-51.1503006!16s%2Fg%2F11b6dkfdnj!19sChIJl0f6iJJCGZURxVogQDbiTII?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,5",
+          "reviews": "456",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Sen. Salgado Filho, 2792 - Quadra 995"
+        },
+        {
+          "name": "Seminovos Movida",
+          "url": "https://www.google.com/maps/place/Seminovos+Movida/data=!4m7!3m6!1s0x9519685faec1a4d3:0x70dff01086490f7e!8m2!3d-29.7789646!4d-51.1560076!16s%2Fg%2F11csb0gfd8!19sChIJ06TBrl9oGZURfg9JhhDw33A?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "510",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Getúlio Vargas, BR116, 2232"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Premium Veículos | Revenda de Carros em São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Premium+Ve%C3%ADculos+%7C+Revenda+de+Carros+em+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969aa4ed270b9:0x56aacff9d8affab4!8m2!3d-29.77129!4d-51.134118!16s%2Fg%2F11ckqs75l3!19sChIJuXDSTqppGZURtPqv2PnPqlY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "135",
+          "category": "Revendedora de carros usados",
+          "address": "165 Avenida São Borja"
+        },
+        {
+          "name": "Cia Motors Drive | Revenda de Carros São Leopoldo - RS",
+          "url": "https://www.google.com/maps/place/Cia+Motors+Drive+%7C+Revenda+de+Carros+S%C3%A3o+Leopoldo+-+RS/data=!4m7!3m6!1s0x951969066683d689:0xb05b08ff3c6a2ea3!8m2!3d-29.774596!4d-51.130846!16s%2Fg%2F11bw7dc785!19sChIJidaDZgZpGZURoy5qPP8IW7A?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,7",
+          "reviews": "155",
+          "category": "Revendedora de carros usados",
+          "address": "593 Avenida São Borja"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:45:55"
+    },
+    {
+      "city": "Nova Santa Rita",
+      "query": "loja de carros em Nova Santa Rita",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=loja%20de%20carros%20em%20Nova%20Santa%20Rita",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=loja%20de%20carros%20em%20Nova%20Santa%20Rita",
+      "searchRegion": "Nova Santa Rita, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "GP Veículos",
+        "Coxilha Veículos"
+      ],
+      "packSponsored": [
+        "R2 Motors"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "GP Veículos",
+          "url": "https://www.google.com/maps/place/GP+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519613252baf483:0x1fcfd4c3a1fb1d0a!8m2!3d-29.8502558!4d-51.2719149!16s%2Fg%2F11lnm_lrrg!19sChIJg_S6UjJhGZURCh37ocPUzx8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "5",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 228"
+        },
+        {
+          "name": "Pestana Leilões Nova Santa Rita/RS | Leilão de Veículos Retomados e Sinistrados",
+          "url": "https://www.google.com/maps/place/Pestana+Leil%C3%B5es+Nova+Santa+Rita%2FRS+%7C+Leil%C3%A3o+de+Ve%C3%ADculos+Retomados+e+Sinistrados/data=!4m7!3m6!1s0x9519646bbd8467ff:0x3db0696ce081c1f9!8m2!3d-29.8299614!4d-51.3129584!16s%2Fg%2F11bvt8mzf9!19sChIJ_2eEvWtkGZUR-cGB4GxpsD0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,0",
+          "reviews": "936",
+          "category": "Leilão de automóveis",
+          "address": "Rod. Gov. Leonel de Moura Brizola, 87"
+        },
+        {
+          "name": "Coxilha Veículos",
+          "url": "https://www.google.com/maps/place/Coxilha+Ve%C3%ADculos/data=!4m7!3m6!1s0x951961a9730d1171:0xa615577a86428a19!8m2!3d-29.8561677!4d-51.2737468!16s%2Fg%2F11l5cjh35m!19sChIJcRENc6lhGZURGYpChnpXFaY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "2",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 947"
+        },
+        {
+          "name": "Spa Auto Car Nova Santa Rita",
+          "url": "https://www.google.com/maps/place/Spa+Auto+Car+Nova+Santa+Rita/data=!4m7!3m6!1s0x9519640028a8c1bb:0xcc6f48326da7b5a6!8m2!3d-29.8448916!4d-51.2699599!16s%2Fg%2F11g6xp4pwj!19sChIJu8GoKABkGZURprWnbTJIb8w?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "34",
+          "category": "Serviço de restauração de automóveis",
+          "address": "Av. Santa Rita, 322"
+        },
+        {
+          "name": "Mecasul Mercedes-Benz - Nova Santa Rita",
+          "url": "https://www.google.com/maps/place/Mecasul+Mercedes-Benz+-+Nova+Santa+Rita/data=!4m7!3m6!1s0x9519615015114645:0xb029e98fe5ad3368!8m2!3d-29.8619511!4d-51.257538!16s%2Fg%2F12hkbrh2v!19sChIJRUYRFVBhGZURaDOt5Y_pKbA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "406",
+          "category": "Concessionária Mercedes-Benz",
+          "address": "BR-386, Km 437 - 2229"
+        },
+        {
+          "name": "Wagner Multimarcas",
+          "url": "https://www.google.com/maps/place/Wagner+Multimarcas/data=!4m7!3m6!1s0x95196594235305e7:0x923f54818976010b!8m2!3d-29.8832032!4d-51.27747!16s%2Fg%2F11yv073csb!19sChIJ5wVTI5RlGZURCwF2iYFUP5I?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "2",
+          "category": "Oficina mecânica",
+          "address": "Av. Getúlio Vargas, 4088"
+        },
+        {
+          "name": "Markus Auto Peças",
+          "url": "https://www.google.com/maps/place/Markus+Auto+Pe%C3%A7as/data=!4m7!3m6!1s0x9519638bf4132b5f:0xaff0c6348b3cf73f!8m2!3d-29.8814169!4d-51.2560516!16s%2Fg%2F1thx9swk!19sChIJXysT9ItjGZURP_c8izTG8K8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "102",
+          "category": "Loja de autopeças",
+          "address": "Av. Getúlio Vargas, 1816"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 7,
+      "mapsCollectedAt": "2026-08-22 15:45:56"
+    },
+    {
+      "city": "Nova Santa Rita",
+      "query": "revenda de veículos em Nova Santa Rita",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=revenda%20de%20ve%C3%ADculos%20em%20Nova%20Santa%20Rita",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=revenda%20de%20ve%C3%ADculos%20em%20Nova%20Santa%20Rita",
+      "searchRegion": "Nova Santa Rita, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "GP Veículos",
+        "Coxilha Veículos",
+        "Filla Comércio de Veículos"
+      ],
+      "packSponsored": [
+        "Diamond Veículos"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "GP Veículos",
+          "url": "https://www.google.com/maps/place/GP+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519613252baf483:0x1fcfd4c3a1fb1d0a!8m2!3d-29.8502558!4d-51.2719149!16s%2Fg%2F11lnm_lrrg!19sChIJg_S6UjJhGZURCh37ocPUzx8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "5",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 228"
+        },
+        {
+          "name": "Filla Comércio de Veículos",
+          "url": "https://www.google.com/maps/place/Filla+Com%C3%A9rcio+de+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519645bf0c8adcb:0x44541b9598b5cd3d!8m2!3d-29.847657!4d-51.2719089!16s%2Fg%2F11b6hw86f9!19sChIJy63I8FtkGZURPc21mJUbVEQ?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,0",
+          "reviews": "22",
+          "category": "Concessionária",
+          "address": "BR-386"
+        },
+        {
+          "name": "Coxilha Veículos",
+          "url": "https://www.google.com/maps/place/Coxilha+Ve%C3%ADculos/data=!4m7!3m6!1s0x951961a9730d1171:0xa615577a86428a19!8m2!3d-29.8561677!4d-51.2737468!16s%2Fg%2F11l5cjh35m!19sChIJcRENc6lhGZURGYpChnpXFaY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "2",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 947"
+        },
+        {
+          "name": "Mecasul Mercedes-Benz - Nova Santa Rita",
+          "url": "https://www.google.com/maps/place/Mecasul+Mercedes-Benz+-+Nova+Santa+Rita/data=!4m7!3m6!1s0x9519615015114645:0xb029e98fe5ad3368!8m2!3d-29.8619511!4d-51.257538!16s%2Fg%2F12hkbrh2v!19sChIJRUYRFVBhGZURaDOt5Y_pKbA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "406",
+          "category": "Concessionária Mercedes-Benz",
+          "address": "BR-386, Km 437 - 2229"
+        },
+        {
+          "name": "Gáspuro Comércio de Gás - Revenda Liquigás",
+          "url": "https://www.google.com/maps/place/G%C3%A1spuro+Com%C3%A9rcio+de+G%C3%A1s+-+Revenda+Liquig%C3%A1s/data=!4m7!3m6!1s0x9519615bd262df35:0x7cb62c342f64b5b4!8m2!3d-29.8552721!4d-51.2747956!16s%2Fg%2F1tdm4x5p!19sChIJNd9i0lthGZURtLVkLzQstnw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "41",
+          "category": "Companhia de gás",
+          "address": "R. Hélio Fraga de Moraes Sarmento, 61"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 5,
+      "mapsCollectedAt": "2026-08-22 15:45:58"
+    },
+    {
+      "city": "Nova Santa Rita",
+      "query": "carros seminovos em Nova Santa Rita",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20seminovos%20em%20Nova%20Santa%20Rita",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20seminovos%20em%20Nova%20Santa%20Rita",
+      "searchRegion": null,
+      "packPresent": false,
+      "packOrganicTop3": [],
+      "packSponsored": [],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "GP Veículos",
+          "url": "https://www.google.com/maps/place/GP+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519613252baf483:0x1fcfd4c3a1fb1d0a!8m2!3d-29.8502558!4d-51.2719149!16s%2Fg%2F11lnm_lrrg!19sChIJg_S6UjJhGZURCh37ocPUzx8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "5",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 228"
+        },
+        {
+          "name": "Coxilha Veículos",
+          "url": "https://www.google.com/maps/place/Coxilha+Ve%C3%ADculos/data=!4m7!3m6!1s0x951961a9730d1171:0xa615577a86428a19!8m2!3d-29.8561677!4d-51.2737468!16s%2Fg%2F11l5cjh35m!19sChIJcRENc6lhGZURGYpChnpXFaY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "2",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 947"
+        },
+        {
+          "name": "Mecasul Mercedes-Benz - Nova Santa Rita",
+          "url": "https://www.google.com/maps/place/Mecasul+Mercedes-Benz+-+Nova+Santa+Rita/data=!4m7!3m6!1s0x9519615015114645:0xb029e98fe5ad3368!8m2!3d-29.8619511!4d-51.257538!16s%2Fg%2F12hkbrh2v!19sChIJRUYRFVBhGZURaDOt5Y_pKbA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "406",
+          "category": "Concessionária Mercedes-Benz",
+          "address": "BR-386, Km 437 - 2229"
+        },
+        {
+          "name": "Savar Caminhões Usados",
+          "url": "https://www.google.com/maps/place/Savar+Caminh%C3%B5es+Usados/data=!4m7!3m6!1s0x9519619c135960ed:0x5651c744cc99564b!8m2!3d-29.8473175!4d-51.2728264!16s%2Fg%2F11ntrz5rzw!19sChIJ7WBZE5xhGZURS1aZzETHUVY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": null,
+          "reviews": null,
+          "category": "Nenhuma avaliação",
+          "address": "BR-386, Km 437 - 2229 - km 437"
+        }
+      ],
+      "mapsSponsored": [],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:45:59"
+    },
+    {
+      "city": "Nova Santa Rita",
+      "query": "carros usados em Nova Santa Rita",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20usados%20em%20Nova%20Santa%20Rita",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20usados%20em%20Nova%20Santa%20Rita",
+      "searchRegion": "Nova Santa Rita, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "GP Veículos",
+        "Coxilha Veículos"
+      ],
+      "packSponsored": [
+        "Diamond Veículos"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "GP Veículos",
+          "url": "https://www.google.com/maps/place/GP+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519613252baf483:0x1fcfd4c3a1fb1d0a!8m2!3d-29.8502558!4d-51.2719149!16s%2Fg%2F11lnm_lrrg!19sChIJg_S6UjJhGZURCh37ocPUzx8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "5",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 228"
+        },
+        {
+          "name": "Coxilha Veículos",
+          "url": "https://www.google.com/maps/place/Coxilha+Ve%C3%ADculos/data=!4m7!3m6!1s0x951961a9730d1171:0xa615577a86428a19!8m2!3d-29.8561677!4d-51.2737468!16s%2Fg%2F11l5cjh35m!19sChIJcRENc6lhGZURGYpChnpXFaY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "2",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 947"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 2,
+      "mapsCollectedAt": "2026-08-22 15:46:01"
+    },
+    {
+      "city": "Nova Santa Rita",
+      "query": "comprar carro em Nova Santa Rita",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=comprar%20carro%20em%20Nova%20Santa%20Rita",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=comprar%20carro%20em%20Nova%20Santa%20Rita",
+      "searchRegion": "Nova Santa Rita, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "GP Veículos",
+        "Coxilha Veículos",
+        "Tipo Veículos"
+      ],
+      "packSponsored": [
+        "Savauto Veículos"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "GP Veículos",
+          "url": "https://www.google.com/maps/place/GP+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519613252baf483:0x1fcfd4c3a1fb1d0a!8m2!3d-29.8502558!4d-51.2719149!16s%2Fg%2F11lnm_lrrg!19sChIJg_S6UjJhGZURCh37ocPUzx8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "5",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 228"
+        },
+        {
+          "name": "Coxilha Veículos",
+          "url": "https://www.google.com/maps/place/Coxilha+Ve%C3%ADculos/data=!4m7!3m6!1s0x951961a9730d1171:0xa615577a86428a19!8m2!3d-29.8561677!4d-51.2737468!16s%2Fg%2F11l5cjh35m!19sChIJcRENc6lhGZURGYpChnpXFaY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "2",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 947"
+        },
+        {
+          "name": "CRVA - Centro de Registro de Veículos Automotores",
+          "url": "https://www.google.com/maps/place/CRVA+-+Centro+de+Registro+de+Ve%C3%ADculos+Automotores/data=!4m7!3m6!1s0x9519615ae18fc1b9:0x92c5a039ba9a114c!8m2!3d-29.8533292!4d-51.2762038!16s%2Fg%2F11cknw47lv!19sChIJucGP4VphGZURTBGaujmgxZI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,1",
+          "reviews": "139",
+          "category": "Departamento de trânsito",
+          "address": "521, R. Waldemar Vicente da Costa, 262"
+        },
+        {
+          "name": "Pestana Leilões Nova Santa Rita/RS | Leilão de Veículos Retomados e Sinistrados",
+          "url": "https://www.google.com/maps/place/Pestana+Leil%C3%B5es+Nova+Santa+Rita%2FRS+%7C+Leil%C3%A3o+de+Ve%C3%ADculos+Retomados+e+Sinistrados/data=!4m7!3m6!1s0x9519646bbd8467ff:0x3db0696ce081c1f9!8m2!3d-29.8299614!4d-51.3129584!16s%2Fg%2F11bvt8mzf9!19sChIJ_2eEvWtkGZUR-cGB4GxpsD0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,0",
+          "reviews": "936",
+          "category": "Leilão de automóveis",
+          "address": "Rod. Gov. Leonel de Moura Brizola, 87"
+        },
+        {
+          "name": "Spa Auto Car Nova Santa Rita",
+          "url": "https://www.google.com/maps/place/Spa+Auto+Car+Nova+Santa+Rita/data=!4m7!3m6!1s0x9519640028a8c1bb:0xcc6f48326da7b5a6!8m2!3d-29.8448916!4d-51.2699599!16s%2Fg%2F11g6xp4pwj!19sChIJu8GoKABkGZURprWnbTJIb8w?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "34",
+          "category": "Serviço de restauração de automóveis",
+          "address": "Av. Santa Rita, 322"
+        },
+        {
+          "name": "Igor Auto Peças",
+          "url": "https://www.google.com/maps/place/Igor+Auto+Pe%C3%A7as/data=!4m7!3m6!1s0x9519633e3a98fb63:0x770c044bbe753c17!8m2!3d-29.8835134!4d-51.281317!16s%2Fg%2F11f8jk8pjd!19sChIJY_uYOj5jGZURFzx1vksEDHc?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "57",
+          "category": "Loja de autopeças",
+          "address": "R. Timbaúva, 39"
+        },
+        {
+          "name": "Padrão Studio, higienização, polimento em Nova Santa Rita",
+          "url": "https://www.google.com/maps/place/Padr%C3%A3o+Studio,+higieniza%C3%A7%C3%A3o,+polimento+em+Nova+Santa+Rita/data=!4m7!3m6!1s0x951965c1331d9107:0xd9c9e27e4778563!8m2!3d-29.8782307!4d-51.2471164!16s%2Fg%2F11v9s61921!19sChIJB5EdM8FlGZURY4V35CeenA0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "62",
+          "category": "Serviço de limpeza completa de automóveis",
+          "address": "R. da Igreja, 511"
+        },
+        {
+          "name": "Películas Tavares",
+          "url": "https://www.google.com/maps/place/Pel%C3%ADculas+Tavares/data=!4m7!3m6!1s0x9519637b59f2b565:0x2311c774796d6807!8m2!3d-29.8822386!4d-51.2515847!16s%2Fg%2F11v6xrgsx7!19sChIJZbXyWXtjGZURB2hteXTHESM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "15",
+          "category": "Loja de acessórios automotivos",
+          "address": "Av. Getúlio Vargas, 1345"
+        }
+      ],
+      "mapsSponsored": [],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 8,
+      "mapsCollectedAt": "2026-08-22 15:46:02"
+    },
+    {
+      "city": "Nova Santa Rita",
+      "query": "veículos seminovos em Nova Santa Rita",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=ve%C3%ADculos%20seminovos%20em%20Nova%20Santa%20Rita",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=ve%C3%ADculos%20seminovos%20em%20Nova%20Santa%20Rita",
+      "searchRegion": "Nova Santa Rita, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "GP Veículos",
+        "Coxilha Veículos",
+        "Mecasul Mercedes-Benz - Nova Santa Rita"
+      ],
+      "packSponsored": [
+        "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "GP Veículos",
+          "url": "https://www.google.com/maps/place/GP+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519613252baf483:0x1fcfd4c3a1fb1d0a!8m2!3d-29.8502558!4d-51.2719149!16s%2Fg%2F11lnm_lrrg!19sChIJg_S6UjJhGZURCh37ocPUzx8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "5",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 228"
+        },
+        {
+          "name": "Coxilha Veículos",
+          "url": "https://www.google.com/maps/place/Coxilha+Ve%C3%ADculos/data=!4m7!3m6!1s0x951961a9730d1171:0xa615577a86428a19!8m2!3d-29.8561677!4d-51.2737468!16s%2Fg%2F11l5cjh35m!19sChIJcRENc6lhGZURGYpChnpXFaY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "2",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 947"
+        },
+        {
+          "name": "Mecasul Mercedes-Benz - Nova Santa Rita",
+          "url": "https://www.google.com/maps/place/Mecasul+Mercedes-Benz+-+Nova+Santa+Rita/data=!4m7!3m6!1s0x9519615015114645:0xb029e98fe5ad3368!8m2!3d-29.8619511!4d-51.257538!16s%2Fg%2F12hkbrh2v!19sChIJRUYRFVBhGZURaDOt5Y_pKbA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "406",
+          "category": "Concessionária Mercedes-Benz",
+          "address": "BR-386, Km 437 - 2229"
+        },
+        {
+          "name": "Pestana Leilões Nova Santa Rita/RS | Leilão de Veículos Retomados e Sinistrados",
+          "url": "https://www.google.com/maps/place/Pestana+Leil%C3%B5es+Nova+Santa+Rita%2FRS+%7C+Leil%C3%A3o+de+Ve%C3%ADculos+Retomados+e+Sinistrados/data=!4m7!3m6!1s0x9519646bbd8467ff:0x3db0696ce081c1f9!8m2!3d-29.8299614!4d-51.3129584!16s%2Fg%2F11bvt8mzf9!19sChIJ_2eEvWtkGZUR-cGB4GxpsD0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,0",
+          "reviews": "936",
+          "category": "Leilão de automóveis",
+          "address": "Rod. Gov. Leonel de Moura Brizola, 87"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        },
+        {
+          "name": "Netcar Multimarcas - Loja 1",
+          "url": "https://www.google.com/maps/place/Netcar+Multimarcas+-+Loja+1/data=!4m7!3m6!1s0x95196f5b3d251a49:0x7ee6415a533c1fcf!8m2!3d-29.838084!4d-51.17015!16s%2Fg%2F1tw1f_hq!19sChIJSRolPVtvGZURzx88U1pB5n4?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,8",
+          "reviews": "512",
+          "category": "Revendedora de carros usados",
+          "address": "740 Avenida Presidente Vargas"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:04"
+    },
+    {
+      "city": "Nova Santa Rita",
+      "query": "loja de veículos em Nova Santa Rita",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=loja%20de%20ve%C3%ADculos%20em%20Nova%20Santa%20Rita",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=loja%20de%20ve%C3%ADculos%20em%20Nova%20Santa%20Rita",
+      "searchRegion": "Nova Santa Rita, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "GP Veículos",
+        "Coxilha Veículos",
+        "Outlet kids"
+      ],
+      "packSponsored": [
+        "R2 Motors"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "GP Veículos",
+          "url": "https://www.google.com/maps/place/GP+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519613252baf483:0x1fcfd4c3a1fb1d0a!8m2!3d-29.8502558!4d-51.2719149!16s%2Fg%2F11lnm_lrrg!19sChIJg_S6UjJhGZURCh37ocPUzx8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "5",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 228"
+        },
+        {
+          "name": "Coxilha Veículos",
+          "url": "https://www.google.com/maps/place/Coxilha+Ve%C3%ADculos/data=!4m7!3m6!1s0x951961a9730d1171:0xa615577a86428a19!8m2!3d-29.8561677!4d-51.2737468!16s%2Fg%2F11l5cjh35m!19sChIJcRENc6lhGZURGYpChnpXFaY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "2",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 947"
+        },
+        {
+          "name": "CRVA - Centro de Registro de Veículos Automotores",
+          "url": "https://www.google.com/maps/place/CRVA+-+Centro+de+Registro+de+Ve%C3%ADculos+Automotores/data=!4m7!3m6!1s0x9519615ae18fc1b9:0x92c5a039ba9a114c!8m2!3d-29.8533292!4d-51.2762038!16s%2Fg%2F11cknw47lv!19sChIJucGP4VphGZURTBGaujmgxZI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,1",
+          "reviews": "139",
+          "category": "Departamento de trânsito",
+          "address": "521, R. Waldemar Vicente da Costa, 262"
+        },
+        {
+          "name": "Spa Auto Car Nova Santa Rita",
+          "url": "https://www.google.com/maps/place/Spa+Auto+Car+Nova+Santa+Rita/data=!4m7!3m6!1s0x9519640028a8c1bb:0xcc6f48326da7b5a6!8m2!3d-29.8448916!4d-51.2699599!16s%2Fg%2F11g6xp4pwj!19sChIJu8GoKABkGZURprWnbTJIb8w?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "34",
+          "category": "Serviço de restauração de automóveis",
+          "address": "Av. Santa Rita, 322"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        },
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771a1dc29e1d:0xadf6ea2faf70e11e!8m2!3d-29.998396!4d-51.147123!16s%2Fg%2F1pp2vh348!19sChIJHZ7CHRp3GZURHuFwry_q9q0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "6.879",
+          "category": "Revendedora de carros usados",
+          "address": "5757 Avenida Sertório"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:48:54"
+    },
+    {
+      "city": "Nova Santa Rita",
+      "query": "carros à venda em Nova Santa Rita",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20%C3%A0%20venda%20em%20Nova%20Santa%20Rita",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20%C3%A0%20venda%20em%20Nova%20Santa%20Rita",
+      "searchRegion": "Nova Santa Rita, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "GP Veículos",
+        "Coxilha Veículos"
+      ],
+      "packSponsored": [
+        "Savauto Veículos"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "GP Veículos",
+          "url": "https://www.google.com/maps/place/GP+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519613252baf483:0x1fcfd4c3a1fb1d0a!8m2!3d-29.8502558!4d-51.2719149!16s%2Fg%2F11lnm_lrrg!19sChIJg_S6UjJhGZURCh37ocPUzx8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "5",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 228"
+        },
+        {
+          "name": "Coxilha Veículos",
+          "url": "https://www.google.com/maps/place/Coxilha+Ve%C3%ADculos/data=!4m7!3m6!1s0x951961a9730d1171:0xa615577a86428a19!8m2!3d-29.8561677!4d-51.2737468!16s%2Fg%2F11l5cjh35m!19sChIJcRENc6lhGZURGYpChnpXFaY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "2",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Santa Rita, 947"
+        },
+        {
+          "name": "Pestana Leilões Nova Santa Rita/RS | Leilão de Veículos Retomados e Sinistrados",
+          "url": "https://www.google.com/maps/place/Pestana+Leil%C3%B5es+Nova+Santa+Rita%2FRS+%7C+Leil%C3%A3o+de+Ve%C3%ADculos+Retomados+e+Sinistrados/data=!4m7!3m6!1s0x9519646bbd8467ff:0x3db0696ce081c1f9!8m2!3d-29.8299614!4d-51.3129584!16s%2Fg%2F11bvt8mzf9!19sChIJ_2eEvWtkGZUR-cGB4GxpsD0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,0",
+          "reviews": "936",
+          "category": "Leilão de automóveis",
+          "address": "Rod. Gov. Leonel de Moura Brizola, 87"
+        },
+        {
+          "name": "CRVA - Centro de Registro de Veículos Automotores",
+          "url": "https://www.google.com/maps/place/CRVA+-+Centro+de+Registro+de+Ve%C3%ADculos+Automotores/data=!4m7!3m6!1s0x9519615ae18fc1b9:0x92c5a039ba9a114c!8m2!3d-29.8533292!4d-51.2762038!16s%2Fg%2F11cknw47lv!19sChIJucGP4VphGZURTBGaujmgxZI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,1",
+          "reviews": "139",
+          "category": "Departamento de trânsito",
+          "address": "521, R. Waldemar Vicente da Costa, 262"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Audi Top Car Porto Alegre",
+          "url": "https://www.google.com/maps/place/Audi+Top+Car+Porto+Alegre/data=!4m7!3m6!1s0x951979ef693291bf:0x6852bb41aecb051e!8m2!3d-30.002479!4d-51.191507!16s%2Fg%2F1tfsp4sb!19sChIJv5Eyae95GZURHgXLrkG7Umg?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,4",
+          "reviews": "337",
+          "category": "Concessionária Audi",
+          "address": "724 Avenida Ceará"
+        },
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:07"
+    },
+    {
+      "city": "Cachoeirinha",
+      "query": "loja de carros em Cachoeirinha",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=loja%20de%20carros%20em%20Cachoeirinha",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=loja%20de%20carros%20em%20Cachoeirinha",
+      "searchRegion": null,
+      "packPresent": false,
+      "packOrganicTop3": [],
+      "packSponsored": [],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Elite dos Carros",
+          "url": "https://www.google.com/maps/place/Elite+dos+Carros/data=!4m7!3m6!1s0x9519774afc26623f:0x13e5c8f7e515251a!8m2!3d-29.9394794!4d-51.0856463!16s%2Fg%2F11fd45xb27!19sChIJP2Im_Ep3GZURGiUV5ffI5RM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "302",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3238"
+        },
+        {
+          "name": "A1 Multimarcas",
+          "url": "https://www.google.com/maps/place/A1+Multimarcas/data=!4m7!3m6!1s0x951973f1eb72a6ef:0x2fa71ba14d0cccc0!8m2!3d-29.9325338!4d-51.0783133!16s%2Fg%2F11gm9nd9jh!19sChIJ76Zy6_FzGZURwMwMTaEbpy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "254",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 4350"
+        },
+        {
+          "name": "Ribeiro Veículos / Cachoeirinha/rs",
+          "url": "https://www.google.com/maps/place/Ribeiro+Ve%C3%ADculos+%2F+Cachoeirinha%2Frs/data=!4m7!3m6!1s0x951973e586f36463:0x713e6e49460628ab!8m2!3d-29.9394545!4d-51.0854624!16s%2Fg%2F11bwg2c3zq!19sChIJY2TzhuVzGZURqygGRkluPnE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "65",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3248"
+        },
+        {
+          "name": "Cia do Automóvel Cachoeirinha",
+          "url": "https://www.google.com/maps/place/Cia+do+Autom%C3%B3vel+Cachoeirinha/data=!4m7!3m6!1s0x9519714db7546111:0x738cdf6d77cb486d!8m2!3d-29.9569055!4d-51.1084488!16s%2Fg%2F1tgnn7f3!19sChIJEWFUt01xGZURbUjLd23fjHM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "124",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 347"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Montreal Multi Car",
+          "url": "https://www.google.com/maps/place/Montreal+Multi+Car/data=!4m7!3m6!1s0x95197701ed87cfff:0xfb4c29636f24262a!8m2!3d-30.006026!4d-51.139875!16s%2Fg%2F1tff_n__!19sChIJ_8-H7QF3GZURKiYkb2MpTPs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,3",
+          "reviews": "1.243",
+          "category": "Revendedora de carros usados",
+          "address": "4822 Avenida Assis Brasil"
+        },
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:08"
+    },
+    {
+      "city": "Cachoeirinha",
+      "query": "revenda de veículos em Cachoeirinha",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=revenda%20de%20ve%C3%ADculos%20em%20Cachoeirinha",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=revenda%20de%20ve%C3%ADculos%20em%20Cachoeirinha",
+      "searchRegion": "Cachoeirinha, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Ribeiro Veículos / Cachoeirinha/rs",
+        "Millenium Veículos",
+        "A1 Multimarcas"
+      ],
+      "packSponsored": [
+        "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Elite dos Carros",
+          "url": "https://www.google.com/maps/place/Elite+dos+Carros/data=!4m7!3m6!1s0x9519774afc26623f:0x13e5c8f7e515251a!8m2!3d-29.9394794!4d-51.0856463!16s%2Fg%2F11fd45xb27!19sChIJP2Im_Ep3GZURGiUV5ffI5RM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "302",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3238"
+        },
+        {
+          "name": "Sul Veículos",
+          "url": "https://www.google.com/maps/place/Sul+Ve%C3%ADculos/data=!4m7!3m6!1s0x951973e4cf8a360b:0x2722dabc812d09b3!8m2!3d-29.9433429!4d-51.0890575!16s%2Fg%2F11c2nk3d1w!19sChIJCzaKz-RzGZURswktgbzaIic?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "123",
+          "category": "Concessionária",
+          "address": "Av. Gen. Flores da Cunha, 2678"
+        },
+        {
+          "name": "Ribeiro Veículos / Cachoeirinha/rs",
+          "url": "https://www.google.com/maps/place/Ribeiro+Ve%C3%ADculos+%2F+Cachoeirinha%2Frs/data=!4m7!3m6!1s0x951973e586f36463:0x713e6e49460628ab!8m2!3d-29.9394545!4d-51.0854624!16s%2Fg%2F11bwg2c3zq!19sChIJY2TzhuVzGZURqygGRkluPnE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "65",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3248"
+        },
+        {
+          "name": "A1 Multimarcas",
+          "url": "https://www.google.com/maps/place/A1+Multimarcas/data=!4m7!3m6!1s0x951973f1eb72a6ef:0x2fa71ba14d0cccc0!8m2!3d-29.9325338!4d-51.0783133!16s%2Fg%2F11gm9nd9jh!19sChIJ76Zy6_FzGZURwMwMTaEbpy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "254",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 4350"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771a1dc29e1d:0xadf6ea2faf70e11e!8m2!3d-29.998396!4d-51.147123!16s%2Fg%2F1pp2vh348!19sChIJHZ7CHRp3GZURHuFwry_q9q0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "6.879",
+          "category": "Revendedora de carros usados",
+          "address": "5757 Avenida Sertório"
+        },
+        {
+          "name": "Diamond Veículos",
+          "url": "https://www.google.com/maps/place/Diamond+Ve%C3%ADculos/data=!4m7!3m6!1s0x951975ddb84abe83:0x5cfd21848c49d90e!8m2!3d-30.010372!4d-51.089142!16s%2Fg%2F11b8c3w140!19sChIJg75KuN11GZURDtlJjIQh_Vw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "917",
+          "category": "Revendedora de carros usados",
+          "address": "421 Avenida Presidente Getúlio Vargas"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:48:54"
+    },
+    {
+      "city": "Cachoeirinha",
+      "query": "carros seminovos em Cachoeirinha",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20seminovos%20em%20Cachoeirinha",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20seminovos%20em%20Cachoeirinha",
+      "searchRegion": null,
+      "packPresent": false,
+      "packOrganicTop3": [],
+      "packSponsored": [],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Ribeiro Veículos / Cachoeirinha/rs",
+          "url": "https://www.google.com/maps/place/Ribeiro+Ve%C3%ADculos+%2F+Cachoeirinha%2Frs/data=!4m7!3m6!1s0x951973e586f36463:0x713e6e49460628ab!8m2!3d-29.9394545!4d-51.0854624!16s%2Fg%2F11bwg2c3zq!19sChIJY2TzhuVzGZURqygGRkluPnE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "65",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3248"
+        },
+        {
+          "name": "A1 Multimarcas",
+          "url": "https://www.google.com/maps/place/A1+Multimarcas/data=!4m7!3m6!1s0x951973f1eb72a6ef:0x2fa71ba14d0cccc0!8m2!3d-29.9325338!4d-51.0783133!16s%2Fg%2F11gm9nd9jh!19sChIJ76Zy6_FzGZURwMwMTaEbpy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "254",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 4350"
+        },
+        {
+          "name": "57 MULTIMARCAS",
+          "url": "https://www.google.com/maps/place/57+MULTIMARCAS/data=!4m7!3m6!1s0x9519730061b55e13:0xb145cdcb760938d4!8m2!3d-29.938068!4d-51.082799!16s%2Fg%2F11m754l03b!19sChIJE161YQBzGZUR1DgJdsvNRbE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "49",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3590"
+        },
+        {
+          "name": "Elite dos Carros",
+          "url": "https://www.google.com/maps/place/Elite+dos+Carros/data=!4m7!3m6!1s0x9519774afc26623f:0x13e5c8f7e515251a!8m2!3d-29.9394794!4d-51.0856463!16s%2Fg%2F11fd45xb27!19sChIJP2Im_Ep3GZURGiUV5ffI5RM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "302",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3238"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "Diamond Veículos",
+          "url": "https://www.google.com/maps/place/Diamond+Ve%C3%ADculos/data=!4m7!3m6!1s0x951975ddb84abe83:0x5cfd21848c49d90e!8m2!3d-30.010372!4d-51.089142!16s%2Fg%2F11b8c3w140!19sChIJg75KuN11GZURDtlJjIQh_Vw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "917",
+          "category": "Revendedora de carros usados",
+          "address": "421 Avenida Presidente Getúlio Vargas"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:12"
+    },
+    {
+      "city": "Cachoeirinha",
+      "query": "carros usados em Cachoeirinha",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20usados%20em%20Cachoeirinha",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20usados%20em%20Cachoeirinha",
+      "searchRegion": "Cachoeirinha, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Ribeiro Veículos / Cachoeirinha/rs",
+        "A1 Multimarcas",
+        "Cia do Automóvel Cachoeirinha"
+      ],
+      "packSponsored": [
+        "Savauto Veículos"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Ribeiro Veículos / Cachoeirinha/rs",
+          "url": "https://www.google.com/maps/place/Ribeiro+Ve%C3%ADculos+%2F+Cachoeirinha%2Frs/data=!4m7!3m6!1s0x951973e586f36463:0x713e6e49460628ab!8m2!3d-29.9394545!4d-51.0854624!16s%2Fg%2F11bwg2c3zq!19sChIJY2TzhuVzGZURqygGRkluPnE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "65",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3248"
+        },
+        {
+          "name": "Elite dos Carros",
+          "url": "https://www.google.com/maps/place/Elite+dos+Carros/data=!4m7!3m6!1s0x9519774afc26623f:0x13e5c8f7e515251a!8m2!3d-29.9394794!4d-51.0856463!16s%2Fg%2F11fd45xb27!19sChIJP2Im_Ep3GZURGiUV5ffI5RM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "302",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3238"
+        },
+        {
+          "name": "Cia do Automóvel Cachoeirinha",
+          "url": "https://www.google.com/maps/place/Cia+do+Autom%C3%B3vel+Cachoeirinha/data=!4m7!3m6!1s0x9519714db7546111:0x738cdf6d77cb486d!8m2!3d-29.9569055!4d-51.1084488!16s%2Fg%2F1tgnn7f3!19sChIJEWFUt01xGZURbUjLd23fjHM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "124",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 347"
+        },
+        {
+          "name": "A1 Multimarcas",
+          "url": "https://www.google.com/maps/place/A1+Multimarcas/data=!4m7!3m6!1s0x951973f1eb72a6ef:0x2fa71ba14d0cccc0!8m2!3d-29.9325338!4d-51.0783133!16s%2Fg%2F11gm9nd9jh!19sChIJ76Zy6_FzGZURwMwMTaEbpy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "254",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 4350"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771a1dc29e1d:0xadf6ea2faf70e11e!8m2!3d-29.998396!4d-51.147123!16s%2Fg%2F1pp2vh348!19sChIJHZ7CHRp3GZURHuFwry_q9q0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "6.879",
+          "category": "Revendedora de carros usados",
+          "address": "5757 Avenida Sertório"
+        },
+        {
+          "name": "Diamond Veículos",
+          "url": "https://www.google.com/maps/place/Diamond+Ve%C3%ADculos/data=!4m7!3m6!1s0x951975ddb84abe83:0x5cfd21848c49d90e!8m2!3d-30.010372!4d-51.089142!16s%2Fg%2F11b8c3w140!19sChIJg75KuN11GZURDtlJjIQh_Vw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "917",
+          "category": "Revendedora de carros usados",
+          "address": "421 Avenida Presidente Getúlio Vargas"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:14"
+    },
+    {
+      "city": "Cachoeirinha",
+      "query": "comprar carro em Cachoeirinha",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=comprar%20carro%20em%20Cachoeirinha",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=comprar%20carro%20em%20Cachoeirinha",
+      "searchRegion": null,
+      "packPresent": false,
+      "packOrganicTop3": [],
+      "packSponsored": [],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Ribeiro Veículos / Cachoeirinha/rs",
+          "url": "https://www.google.com/maps/place/Ribeiro+Ve%C3%ADculos+%2F+Cachoeirinha%2Frs/data=!4m7!3m6!1s0x951973e586f36463:0x713e6e49460628ab!8m2!3d-29.9394545!4d-51.0854624!16s%2Fg%2F11bwg2c3zq!19sChIJY2TzhuVzGZURqygGRkluPnE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "65",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3248"
+        },
+        {
+          "name": "Auto Vale Veículos",
+          "url": "https://www.google.com/maps/place/Auto+Vale+Ve%C3%ADculos/data=!4m7!3m6!1s0x951973fb01609ea9:0xcd014b0bbf6a9e50!8m2!3d-29.9333837!4d-51.078828!16s%2Fg%2F11z68_80yr!19sChIJqZ5gAftzGZURUJ5qvwtLAc0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "80",
+          "category": "Concessionária",
+          "address": "Av. Gen. Flores da Cunha, 4246"
+        },
+        {
+          "name": "Millenium Veículos",
+          "url": "https://www.google.com/maps/place/Millenium+Ve%C3%ADculos/data=!4m7!3m6!1s0x951973ef703eb549:0x49958eb23d06ce75!8m2!3d-29.9389691!4d-51.0846367!16s%2Fg%2F11byp84b8v!19sChIJSbU-cO9zGZURdc4GPbKOlUk?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "103",
+          "category": "Concessionária",
+          "address": "Av. Gen. Flores da Cunha, 3380"
+        },
+        {
+          "name": "A1 Multimarcas",
+          "url": "https://www.google.com/maps/place/A1+Multimarcas/data=!4m7!3m6!1s0x951973f1eb72a6ef:0x2fa71ba14d0cccc0!8m2!3d-29.9325338!4d-51.0783133!16s%2Fg%2F11gm9nd9jh!19sChIJ76Zy6_FzGZURwMwMTaEbpy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "254",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 4350"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Montreal Multi Car",
+          "url": "https://www.google.com/maps/place/Montreal+Multi+Car/data=!4m7!3m6!1s0x95197701ed87cfff:0xfb4c29636f24262a!8m2!3d-30.006026!4d-51.139875!16s%2Fg%2F1tff_n__!19sChIJ_8-H7QF3GZURKiYkb2MpTPs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,3",
+          "reviews": "1.243",
+          "category": "Revendedora de carros usados",
+          "address": "4822 Avenida Assis Brasil"
+        },
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771a1dc29e1d:0xadf6ea2faf70e11e!8m2!3d-29.998396!4d-51.147123!16s%2Fg%2F1pp2vh348!19sChIJHZ7CHRp3GZURHuFwry_q9q0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "6.879",
+          "category": "Revendedora de carros usados",
+          "address": "5757 Avenida Sertório"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:15"
+    },
+    {
+      "city": "Cachoeirinha",
+      "query": "veículos seminovos em Cachoeirinha",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=ve%C3%ADculos%20seminovos%20em%20Cachoeirinha",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=ve%C3%ADculos%20seminovos%20em%20Cachoeirinha",
+      "searchRegion": null,
+      "packPresent": false,
+      "packOrganicTop3": [],
+      "packSponsored": [],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Ribeiro Veículos / Cachoeirinha/rs",
+          "url": "https://www.google.com/maps/place/Ribeiro+Ve%C3%ADculos+%2F+Cachoeirinha%2Frs/data=!4m7!3m6!1s0x951973e586f36463:0x713e6e49460628ab!8m2!3d-29.9394545!4d-51.0854624!16s%2Fg%2F11bwg2c3zq!19sChIJY2TzhuVzGZURqygGRkluPnE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "65",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3248"
+        },
+        {
+          "name": "A1 Multimarcas",
+          "url": "https://www.google.com/maps/place/A1+Multimarcas/data=!4m7!3m6!1s0x951973f1eb72a6ef:0x2fa71ba14d0cccc0!8m2!3d-29.9325338!4d-51.0783133!16s%2Fg%2F11gm9nd9jh!19sChIJ76Zy6_FzGZURwMwMTaEbpy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "254",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 4350"
+        },
+        {
+          "name": "Elite dos Carros",
+          "url": "https://www.google.com/maps/place/Elite+dos+Carros/data=!4m7!3m6!1s0x9519774afc26623f:0x13e5c8f7e515251a!8m2!3d-29.9394794!4d-51.0856463!16s%2Fg%2F11fd45xb27!19sChIJP2Im_Ep3GZURGiUV5ffI5RM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "302",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3238"
+        },
+        {
+          "name": "FRESH VEÍCULOS'S",
+          "url": "https://www.google.com/maps/place/FRESH+VE%C3%8DCULOS%27S/data=!4m7!3m6!1s0x951973ebb70798f9:0xafdf51756043a5a8!8m2!3d-29.9330109!4d-51.0786685!16s%2Fg%2F11ddwx35fr!19sChIJ-ZgHt-tzGZURqKVDYHVR368?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,9",
+          "reviews": "123",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 4266"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771a1dc29e1d:0xadf6ea2faf70e11e!8m2!3d-29.998396!4d-51.147123!16s%2Fg%2F1pp2vh348!19sChIJHZ7CHRp3GZURHuFwry_q9q0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "6.879",
+          "category": "Revendedora de carros usados",
+          "address": "5757 Avenida Sertório"
+        },
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:17"
+    },
+    {
+      "city": "Cachoeirinha",
+      "query": "loja de veículos em Cachoeirinha",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=loja%20de%20ve%C3%ADculos%20em%20Cachoeirinha",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=loja%20de%20ve%C3%ADculos%20em%20Cachoeirinha",
+      "searchRegion": null,
+      "packPresent": false,
+      "packOrganicTop3": [],
+      "packSponsored": [],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Elite dos Carros",
+          "url": "https://www.google.com/maps/place/Elite+dos+Carros/data=!4m7!3m6!1s0x9519774afc26623f:0x13e5c8f7e515251a!8m2!3d-29.9394794!4d-51.0856463!16s%2Fg%2F11fd45xb27!19sChIJP2Im_Ep3GZURGiUV5ffI5RM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "302",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3238"
+        },
+        {
+          "name": "A1 Multimarcas",
+          "url": "https://www.google.com/maps/place/A1+Multimarcas/data=!4m7!3m6!1s0x951973f1eb72a6ef:0x2fa71ba14d0cccc0!8m2!3d-29.9325338!4d-51.0783133!16s%2Fg%2F11gm9nd9jh!19sChIJ76Zy6_FzGZURwMwMTaEbpy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "254",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 4350"
+        },
+        {
+          "name": "Sul Veículos",
+          "url": "https://www.google.com/maps/place/Sul+Ve%C3%ADculos/data=!4m7!3m6!1s0x951973e4cf8a360b:0x2722dabc812d09b3!8m2!3d-29.9433429!4d-51.0890575!16s%2Fg%2F11c2nk3d1w!19sChIJCzaKz-RzGZURswktgbzaIic?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "123",
+          "category": "Concessionária",
+          "address": "Av. Gen. Flores da Cunha, 2678"
+        },
+        {
+          "name": "Formula 3",
+          "url": "https://www.google.com/maps/place/Formula+3/data=!4m7!3m6!1s0x951973eee2d8bb99:0xb60b608a67420f8c!8m2!3d-29.9383404!4d-51.0833758!16s%2Fg%2F1tdr9b_m!19sChIJmbvY4u5zGZURjA9CZ4pgC7Y?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,5",
+          "reviews": "228",
+          "category": "Revendedora de carros usados",
+          "address": "Veículo Usado - Av. Gen. Flores da Cunha, 3550"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        },
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771a1dc29e1d:0xadf6ea2faf70e11e!8m2!3d-29.998396!4d-51.147123!16s%2Fg%2F1pp2vh348!19sChIJHZ7CHRp3GZURHuFwry_q9q0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "6.879",
+          "category": "Revendedora de carros usados",
+          "address": "5757 Avenida Sertório"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:18"
+    },
+    {
+      "city": "Cachoeirinha",
+      "query": "carros à venda em Cachoeirinha",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20%C3%A0%20venda%20em%20Cachoeirinha",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20%C3%A0%20venda%20em%20Cachoeirinha",
+      "searchRegion": "Cachoeirinha, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Ribeiro Veículos / Cachoeirinha/rs",
+        "Millenium Veículos",
+        "A1 Multimarcas"
+      ],
+      "packSponsored": [
+        "Montreal Multi Car"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Ribeiro Veículos / Cachoeirinha/rs",
+          "url": "https://www.google.com/maps/place/Ribeiro+Ve%C3%ADculos+%2F+Cachoeirinha%2Frs/data=!4m7!3m6!1s0x951973e586f36463:0x713e6e49460628ab!8m2!3d-29.9394545!4d-51.0854624!16s%2Fg%2F11bwg2c3zq!19sChIJY2TzhuVzGZURqygGRkluPnE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "65",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3248"
+        },
+        {
+          "name": "Elite dos Carros",
+          "url": "https://www.google.com/maps/place/Elite+dos+Carros/data=!4m7!3m6!1s0x9519774afc26623f:0x13e5c8f7e515251a!8m2!3d-29.9394794!4d-51.0856463!16s%2Fg%2F11fd45xb27!19sChIJP2Im_Ep3GZURGiUV5ffI5RM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "5,0",
+          "reviews": "302",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 3238"
+        },
+        {
+          "name": "Silveira Veiculos",
+          "url": "https://www.google.com/maps/place/Silveira+Veiculos/data=!4m7!3m6!1s0x951973fc81782b1f:0x1839067cbe3d76a!8m2!3d-29.9456656!4d-51.0903698!16s%2Fg%2F1tc_gf4n!19sChIJHyt4gfxzGZURatfjy2eQgwE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "92",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Gen. Flores da Cunha, 2430"
+        },
+        {
+          "name": "Sul Veículos",
+          "url": "https://www.google.com/maps/place/Sul+Ve%C3%ADculos/data=!4m7!3m6!1s0x951973e4cf8a360b:0x2722dabc812d09b3!8m2!3d-29.9433429!4d-51.0890575!16s%2Fg%2F11c2nk3d1w!19sChIJCzaKz-RzGZURswktgbzaIic?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "123",
+          "category": "Concessionária de veículos motorizados",
+          "address": "Av. Gen. Flores da Cunha, 2678"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Montreal Multi Car",
+          "url": "https://www.google.com/maps/place/Montreal+Multi+Car/data=!4m7!3m6!1s0x95197701ed87cfff:0xfb4c29636f24262a!8m2!3d-30.006026!4d-51.139875!16s%2Fg%2F1tff_n__!19sChIJ_8-H7QF3GZURKiYkb2MpTPs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,3",
+          "reviews": "1.243",
+          "category": "Revendedora de carros usados",
+          "address": "4822 Avenida Assis Brasil"
+        },
+        {
+          "name": "Diamond Veículos",
+          "url": "https://www.google.com/maps/place/Diamond+Ve%C3%ADculos/data=!4m7!3m6!1s0x951975ddb84abe83:0x5cfd21848c49d90e!8m2!3d-30.010372!4d-51.089142!16s%2Fg%2F11b8c3w140!19sChIJg75KuN11GZURDtlJjIQh_Vw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "917",
+          "category": "Revendedora de carros usados",
+          "address": "421 Avenida Presidente Getúlio Vargas"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:20"
+    },
+    {
+      "city": "Gravataí",
+      "query": "loja de carros em Gravataí",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=loja%20de%20carros%20em%20Gravata%C3%AD",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=loja%20de%20carros%20em%20Gravata%C3%AD",
+      "searchRegion": "Gravataí, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "65 Automóveis",
+        "João Veículos - Revenda de carros em Gravataí | RS",
+        "Lenon veículos"
+      ],
+      "packSponsored": [
+        "Montreal Multi Car"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "João Veículos - Revenda de carros em Gravataí | RS",
+          "url": "https://www.google.com/maps/place/Jo%C3%A3o+Ve%C3%ADculos+-+Revenda+de+carros+em+Gravata%C3%AD+%7C+RS/data=!4m7!3m6!1s0x95197362d1b85a59:0xc640c41a427a3379!8m2!3d-29.935527!4d-51.0429492!16s%2Fg%2F1vd77260!19sChIJWVq40WJzGZUReTN6QhrEQMY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "286",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4880"
+        },
+        {
+          "name": "65 Automóveis",
+          "url": "https://www.google.com/maps/place/65+Autom%C3%B3veis/data=!4m7!3m6!1s0x95190b57af34ea07:0x7bbec5f2e256c7ef!8m2!3d-29.9357409!4d-51.0378999!16s%2Fg%2F11cltvj5xx!19sChIJB-o0r1cLGZUR78dW4vLFvns?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "117",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4367"
+        },
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x951976e4ff2e4bb7:0xeb608d9c65fa4da1!8m2!3d-29.9343308!4d-51.0518043!16s%2Fg%2F1ptyj7st4!19sChIJt0su_-R2GZURoU36ZZyNYOs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "2.225",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 5730"
+        },
+        {
+          "name": "Automotive Multimarcas - loja de carros seminovos - revenda de usados em Gravataí",
+          "url": "https://www.google.com/maps/place/Automotive+Multimarcas+-+loja+de+carros+seminovos+-+revenda+de+usados+em+Gravata%C3%AD/data=!4m7!3m6!1s0x951974ad357854c9:0x1a10c3810ac5db06!8m2!3d-29.9336505!4d-51.0555869!16s%2Fg%2F11j1j6fh83!19sChIJyVR4Na10GZURBtvFCoHDEBo?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "123",
+          "category": "Concessionária",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 6110"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "Montreal Multi Car",
+          "url": "https://www.google.com/maps/place/Montreal+Multi+Car/data=!4m7!3m6!1s0x95197701ed87cfff:0xfb4c29636f24262a!8m2!3d-30.006026!4d-51.139875!16s%2Fg%2F1tff_n__!19sChIJ_8-H7QF3GZURKiYkb2MpTPs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,3",
+          "reviews": "1.243",
+          "category": "Revendedora de carros usados",
+          "address": "4822 Avenida Assis Brasil"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:29"
+    },
+    {
+      "city": "Gravataí",
+      "query": "revenda de veículos em Gravataí",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=revenda%20de%20ve%C3%ADculos%20em%20Gravata%C3%AD",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=revenda%20de%20ve%C3%ADculos%20em%20Gravata%C3%AD",
+      "searchRegion": "Gravataí, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "João Veículos - Revenda de carros em Gravataí | RS",
+        "65 Automóveis",
+        "Automotive Multimarcas - loja de carros seminovos - revenda de usados em Gravataí"
+      ],
+      "packSponsored": [
+        "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "João Veículos - Revenda de carros em Gravataí | RS",
+          "url": "https://www.google.com/maps/place/Jo%C3%A3o+Ve%C3%ADculos+-+Revenda+de+carros+em+Gravata%C3%AD+%7C+RS/data=!4m7!3m6!1s0x95197362d1b85a59:0xc640c41a427a3379!8m2!3d-29.935527!4d-51.0429492!16s%2Fg%2F1vd77260!19sChIJWVq40WJzGZUReTN6QhrEQMY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "286",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4880"
+        },
+        {
+          "name": "Automotive Multimarcas - loja de carros seminovos - revenda de usados em Gravataí",
+          "url": "https://www.google.com/maps/place/Automotive+Multimarcas+-+loja+de+carros+seminovos+-+revenda+de+usados+em+Gravata%C3%AD/data=!4m7!3m6!1s0x951974ad357854c9:0x1a10c3810ac5db06!8m2!3d-29.9336505!4d-51.0555869!16s%2Fg%2F11j1j6fh83!19sChIJyVR4Na10GZURBtvFCoHDEBo?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "123",
+          "category": "Concessionária",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 6110"
+        },
+        {
+          "name": "JR Veiculos",
+          "url": "https://www.google.com/maps/place/JR+Veiculos/data=!4m7!3m6!1s0x9519739b5c002e87:0x5185fc47dd33c4db!8m2!3d-29.9345598!4d-51.0504384!16s%2Fg%2F11clwpzw0h!19sChIJhy4AXJtzGZUR28Qz3Uf8hVE?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "98",
+          "category": "Concessionária",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 5580"
+        },
+        {
+          "name": "Witt Veículos",
+          "url": "https://www.google.com/maps/place/Witt+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197362739cc145:0xa212bc557bf9108d!8m2!3d-29.9357565!4d-51.039893!16s%2Fg%2F11hcj2dg2h!19sChIJRcGcc2JzGZURjRD5e1W8EqI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "404",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4565"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:31"
+    },
+    {
+      "city": "Gravataí",
+      "query": "carros seminovos em Gravataí",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20seminovos%20em%20Gravata%C3%AD",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20seminovos%20em%20Gravata%C3%AD",
+      "searchRegion": "Gravataí, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "João Veículos - Revenda de carros em Gravataí | RS",
+        "Savauto Veículos",
+        "Witt Veículos"
+      ],
+      "packSponsored": [
+        "Montreal Multi Car"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x951976e4ff2e4bb7:0xeb608d9c65fa4da1!8m2!3d-29.9343308!4d-51.0518043!16s%2Fg%2F1ptyj7st4!19sChIJt0su_-R2GZURoU36ZZyNYOs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "2.225",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 5730"
+        },
+        {
+          "name": "Localiza Seminovos",
+          "url": "https://www.google.com/maps/place/Localiza+Seminovos/data=!4m7!3m6!1s0x95197396b4e0502b:0x330f54910b522906!8m2!3d-29.9316926!4d-51.0679174!16s%2Fg%2F11c71czntn!19sChIJK1DgtJZzGZURBilSC5FUDzM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "258",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 7286"
+        },
+        {
+          "name": "João Veículos - Revenda de carros em Gravataí | RS",
+          "url": "https://www.google.com/maps/place/Jo%C3%A3o+Ve%C3%ADculos+-+Revenda+de+carros+em+Gravata%C3%AD+%7C+RS/data=!4m7!3m6!1s0x95197362d1b85a59:0xc640c41a427a3379!8m2!3d-29.935527!4d-51.0429492!16s%2Fg%2F1vd77260!19sChIJWVq40WJzGZUReTN6QhrEQMY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "286",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4880"
+        },
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - GRAVATAÍ",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+GRAVATA%C3%8D/data=!4m7!3m6!1s0x9519731b6db23557:0x381b840e4cc027b9!8m2!3d-29.9309665!4d-51.0667516!16s%2Fg%2F11rhzgbrjq!19sChIJVzWybRtzGZURuSfATA6EGzg?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "179",
+          "category": "Agente comercial de carros",
+          "address": null
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "San Marino Multimarcas",
+          "url": "https://www.google.com/maps/place/San+Marino+Multimarcas/data=!4m7!3m6!1s0x951973cdce7522b3:0x8392c65fbb4a0523!8m2!3d-29.930472!4d-51.06522!16s%2Fg%2F11ys35jbd2!19sChIJsyJ1zs1zGZURIwVKu1_GkoM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "16",
+          "category": "Concessionária",
+          "address": null
+        },
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:32"
+    },
+    {
+      "city": "Gravataí",
+      "query": "carros usados em Gravataí",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20usados%20em%20Gravata%C3%AD",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20usados%20em%20Gravata%C3%AD",
+      "searchRegion": "Gravataí, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "João Veículos - Revenda de carros em Gravataí | RS",
+        "65 Automóveis",
+        "Savauto Veículos"
+      ],
+      "packSponsored": [
+        "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "João Veículos - Revenda de carros em Gravataí | RS",
+          "url": "https://www.google.com/maps/place/Jo%C3%A3o+Ve%C3%ADculos+-+Revenda+de+carros+em+Gravata%C3%AD+%7C+RS/data=!4m7!3m6!1s0x95197362d1b85a59:0xc640c41a427a3379!8m2!3d-29.935527!4d-51.0429492!16s%2Fg%2F1vd77260!19sChIJWVq40WJzGZUReTN6QhrEQMY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "286",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4880"
+        },
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x951976e4ff2e4bb7:0xeb608d9c65fa4da1!8m2!3d-29.9343308!4d-51.0518043!16s%2Fg%2F1ptyj7st4!19sChIJt0su_-R2GZURoU36ZZyNYOs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "2.225",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 5730"
+        },
+        {
+          "name": "65 Automóveis",
+          "url": "https://www.google.com/maps/place/65+Autom%C3%B3veis/data=!4m7!3m6!1s0x95190b57af34ea07:0x7bbec5f2e256c7ef!8m2!3d-29.9357409!4d-51.0378999!16s%2Fg%2F11cltvj5xx!19sChIJB-o0r1cLGZUR78dW4vLFvns?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "117",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4367"
+        },
+        {
+          "name": "Witt Veículos",
+          "url": "https://www.google.com/maps/place/Witt+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197362739cc145:0xa212bc557bf9108d!8m2!3d-29.9357565!4d-51.039893!16s%2Fg%2F11hcj2dg2h!19sChIJRcGcc2JzGZURjRD5e1W8EqI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "404",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4565"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:34"
+    },
+    {
+      "city": "Gravataí",
+      "query": "comprar carro em Gravataí",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=comprar%20carro%20em%20Gravata%C3%AD",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=comprar%20carro%20em%20Gravata%C3%AD",
+      "searchRegion": "Gravataí, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Savauto Veículos",
+        "65 Automóveis",
+        "João Veículos - Revenda de carros em Gravataí | RS"
+      ],
+      "packSponsored": [
+        "Montreal Multi Car"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "João Veículos - Revenda de carros em Gravataí | RS",
+          "url": "https://www.google.com/maps/place/Jo%C3%A3o+Ve%C3%ADculos+-+Revenda+de+carros+em+Gravata%C3%AD+%7C+RS/data=!4m7!3m6!1s0x95197362d1b85a59:0xc640c41a427a3379!8m2!3d-29.935527!4d-51.0429492!16s%2Fg%2F1vd77260!19sChIJWVq40WJzGZUReTN6QhrEQMY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "286",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4880"
+        },
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x951976e4ff2e4bb7:0xeb608d9c65fa4da1!8m2!3d-29.9343308!4d-51.0518043!16s%2Fg%2F1ptyj7st4!19sChIJt0su_-R2GZURoU36ZZyNYOs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "2.225",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 5730"
+        },
+        {
+          "name": "65 Automóveis",
+          "url": "https://www.google.com/maps/place/65+Autom%C3%B3veis/data=!4m7!3m6!1s0x95190b57af34ea07:0x7bbec5f2e256c7ef!8m2!3d-29.9357409!4d-51.0378999!16s%2Fg%2F11cltvj5xx!19sChIJB-o0r1cLGZUR78dW4vLFvns?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "117",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4367"
+        },
+        {
+          "name": "Automotive Multimarcas - loja de carros seminovos - revenda de usados em Gravataí",
+          "url": "https://www.google.com/maps/place/Automotive+Multimarcas+-+loja+de+carros+seminovos+-+revenda+de+usados+em+Gravata%C3%AD/data=!4m7!3m6!1s0x951974ad357854c9:0x1a10c3810ac5db06!8m2!3d-29.9336505!4d-51.0555869!16s%2Fg%2F11j1j6fh83!19sChIJyVR4Na10GZURBtvFCoHDEBo?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "123",
+          "category": "Concessionária",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 6110"
+        },
+        {
+          "name": "Pacheco Veiculos",
+          "url": "https://www.google.com/maps/place/Pacheco+Veiculos/data=!4m7!3m6!1s0x951974a02d1bb16f:0xf02208c2a0c5137!8m2!3d-29.9359974!4d-51.0327185!16s%2Fg%2F11f_1pg4qk!19sChIJb7EbLaB0GZURN1EMKowgAg8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "95",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 3866"
+        },
+        {
+          "name": "Witt Veículos",
+          "url": "https://www.google.com/maps/place/Witt+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197362739cc145:0xa212bc557bf9108d!8m2!3d-29.9357565!4d-51.039893!16s%2Fg%2F11hcj2dg2h!19sChIJRcGcc2JzGZURjRD5e1W8EqI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "404",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4565"
+        }
+      ],
+      "mapsSponsored": [],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 6,
+      "mapsCollectedAt": "2026-08-22 15:46:35"
+    },
+    {
+      "city": "Gravataí",
+      "query": "veículos seminovos em Gravataí",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=ve%C3%ADculos%20seminovos%20em%20Gravata%C3%AD",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=ve%C3%ADculos%20seminovos%20em%20Gravata%C3%AD",
+      "searchRegion": "Gravataí, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Savauto Veículos",
+        "João Veículos - Revenda de carros em Gravataí | RS",
+        "65 Automóveis"
+      ],
+      "packSponsored": [
+        "Montreal Multi Car"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x951976e4ff2e4bb7:0xeb608d9c65fa4da1!8m2!3d-29.9343308!4d-51.0518043!16s%2Fg%2F1ptyj7st4!19sChIJt0su_-R2GZURoU36ZZyNYOs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "2.225",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 5730"
+        },
+        {
+          "name": "Localiza Seminovos",
+          "url": "https://www.google.com/maps/place/Localiza+Seminovos/data=!4m7!3m6!1s0x95197396b4e0502b:0x330f54910b522906!8m2!3d-29.9316926!4d-51.0679174!16s%2Fg%2F11c71czntn!19sChIJK1DgtJZzGZURBilSC5FUDzM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "258",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 7286"
+        },
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - GRAVATAÍ",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+GRAVATA%C3%8D/data=!4m7!3m6!1s0x9519731b6db23557:0x381b840e4cc027b9!8m2!3d-29.9309665!4d-51.0667516!16s%2Fg%2F11rhzgbrjq!19sChIJVzWybRtzGZURuSfATA6EGzg?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,8",
+          "reviews": "179",
+          "category": "Agente comercial de carros",
+          "address": null
+        },
+        {
+          "name": "João Veículos - Revenda de carros em Gravataí | RS",
+          "url": "https://www.google.com/maps/place/Jo%C3%A3o+Ve%C3%ADculos+-+Revenda+de+carros+em+Gravata%C3%AD+%7C+RS/data=!4m7!3m6!1s0x95197362d1b85a59:0xc640c41a427a3379!8m2!3d-29.935527!4d-51.0429492!16s%2Fg%2F1vd77260!19sChIJWVq40WJzGZUReTN6QhrEQMY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "286",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4880"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "San Marino Multimarcas",
+          "url": "https://www.google.com/maps/place/San+Marino+Multimarcas/data=!4m7!3m6!1s0x951973cdce7522b3:0x8392c65fbb4a0523!8m2!3d-29.930472!4d-51.06522!16s%2Fg%2F11ys35jbd2!19sChIJsyJ1zs1zGZURIwVKu1_GkoM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "16",
+          "category": "Concessionária",
+          "address": null
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:37"
+    },
+    {
+      "city": "Gravataí",
+      "query": "loja de veículos em Gravataí",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=loja%20de%20ve%C3%ADculos%20em%20Gravata%C3%AD",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=loja%20de%20ve%C3%ADculos%20em%20Gravata%C3%AD",
+      "searchRegion": "Gravataí, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "65 Automóveis",
+        "João Veículos - Revenda de carros em Gravataí | RS",
+        "Lenon veículos"
+      ],
+      "packSponsored": [
+        "Montreal Multi Car"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x951976e4ff2e4bb7:0xeb608d9c65fa4da1!8m2!3d-29.9343308!4d-51.0518043!16s%2Fg%2F1ptyj7st4!19sChIJt0su_-R2GZURoU36ZZyNYOs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "2.225",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 5730"
+        },
+        {
+          "name": "João Veículos - Revenda de carros em Gravataí | RS",
+          "url": "https://www.google.com/maps/place/Jo%C3%A3o+Ve%C3%ADculos+-+Revenda+de+carros+em+Gravata%C3%AD+%7C+RS/data=!4m7!3m6!1s0x95197362d1b85a59:0xc640c41a427a3379!8m2!3d-29.935527!4d-51.0429492!16s%2Fg%2F1vd77260!19sChIJWVq40WJzGZUReTN6QhrEQMY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "286",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4880"
+        },
+        {
+          "name": "65 Automóveis",
+          "url": "https://www.google.com/maps/place/65+Autom%C3%B3veis/data=!4m7!3m6!1s0x95190b57af34ea07:0x7bbec5f2e256c7ef!8m2!3d-29.9357409!4d-51.0378999!16s%2Fg%2F11cltvj5xx!19sChIJB-o0r1cLGZUR78dW4vLFvns?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "117",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4367"
+        },
+        {
+          "name": "Automotive Multimarcas - loja de carros seminovos - revenda de usados em Gravataí",
+          "url": "https://www.google.com/maps/place/Automotive+Multimarcas+-+loja+de+carros+seminovos+-+revenda+de+usados+em+Gravata%C3%AD/data=!4m7!3m6!1s0x951974ad357854c9:0x1a10c3810ac5db06!8m2!3d-29.9336505!4d-51.0555869!16s%2Fg%2F11j1j6fh83!19sChIJyVR4Na10GZURBtvFCoHDEBo?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "123",
+          "category": "Concessionária",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 6110"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "R2 Motors",
+          "url": "https://www.google.com/maps/place/R2+Motors/data=!4m7!3m6!1s0x95197101b9f5770d:0x901e124258ee23d7!8m2!3d-29.905375!4d-51.159706!16s%2Fg%2F11w1x2_t0l!19sChIJDXf1uQFxGZUR1yPuWEISHpA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,9",
+          "reviews": "201",
+          "category": "Revendedora de carros usados",
+          "address": "1645 Avenida Boqueirão"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:48:54"
+    },
+    {
+      "city": "Gravataí",
+      "query": "carros à venda em Gravataí",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20%C3%A0%20venda%20em%20Gravata%C3%AD",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20%C3%A0%20venda%20em%20Gravata%C3%AD",
+      "searchRegion": "Gravataí, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "João Veículos - Revenda de carros em Gravataí | RS",
+        "Savauto Veículos",
+        "65 Automóveis"
+      ],
+      "packSponsored": [
+        "Montreal Multi Car"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "João Veículos - Revenda de carros em Gravataí | RS",
+          "url": "https://www.google.com/maps/place/Jo%C3%A3o+Ve%C3%ADculos+-+Revenda+de+carros+em+Gravata%C3%AD+%7C+RS/data=!4m7!3m6!1s0x95197362d1b85a59:0xc640c41a427a3379!8m2!3d-29.935527!4d-51.0429492!16s%2Fg%2F1vd77260!19sChIJWVq40WJzGZUReTN6QhrEQMY?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "286",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4880"
+        },
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x951976e4ff2e4bb7:0xeb608d9c65fa4da1!8m2!3d-29.9343308!4d-51.0518043!16s%2Fg%2F1ptyj7st4!19sChIJt0su_-R2GZURoU36ZZyNYOs?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "2.225",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 5730"
+        },
+        {
+          "name": "Witt Veículos",
+          "url": "https://www.google.com/maps/place/Witt+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197362739cc145:0xa212bc557bf9108d!8m2!3d-29.9357565!4d-51.039893!16s%2Fg%2F11hcj2dg2h!19sChIJRcGcc2JzGZURjRD5e1W8EqI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "404",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4565"
+        },
+        {
+          "name": "65 Automóveis",
+          "url": "https://www.google.com/maps/place/65+Autom%C3%B3veis/data=!4m7!3m6!1s0x95190b57af34ea07:0x7bbec5f2e256c7ef!8m2!3d-29.9357409!4d-51.0378999!16s%2Fg%2F11cltvj5xx!19sChIJB-o0r1cLGZUR78dW4vLFvns?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "117",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Dorival Cândido Luz de Oliveira, 4367"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Abaixo da Fipe RS",
+          "url": "https://www.google.com/maps/place/Abaixo+da+Fipe+RS/data=!4m7!3m6!1s0x951975460f294279:0x7ee47b348c14f8b6!8m2!3d-29.935972!4d-51.026008!16s%2Fg%2F11z8r2nvx2!19sChIJeUIpD0Z1GZURtvgUjDR75H4?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,8",
+          "reviews": "11",
+          "category": "Revendedora de carros usados",
+          "address": "49 Rua 15 de Novembro"
+        },
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:40"
+    },
+    {
+      "city": "Porto Alegre",
+      "query": "loja de carros em Porto Alegre",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=loja%20de%20carros%20em%20Porto%20Alegre",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=loja%20de%20carros%20em%20Porto%20Alegre",
+      "searchRegion": "Porto Alegre, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Tipo Veículos",
+        "Nakar Veículos",
+        "Plus Veículos"
+      ],
+      "packSponsored": [
+        "Montreal Multi Car"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Tipo Veículos",
+          "url": "https://www.google.com/maps/place/Tipo+Ve%C3%ADculos/data=!4m7!3m6!1s0x951978167885dff5:0x2f3bdebd2da4597c!8m2!3d-30.0511809!4d-51.1951386!16s%2Fg%2F1txy3hs1!19sChIJ9d-FeBZ4GZURfFmkLb3eOy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "2.129",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 3849"
+        },
+        {
+          "name": "Varney Automóveis",
+          "url": "https://www.google.com/maps/place/Varney+Autom%C3%B3veis/data=!4m7!3m6!1s0x951977a4434e86d3:0x43eb10c7fb8bfdb!8m2!3d-30.0211446!4d-51.1515388!16s%2Fg%2F1trtwh5l!19sChIJ04ZOQ6R3GZUR27-4fwyxPgQ?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "238",
+          "category": "Revendedora de carros usados",
+          "address": "Av. do Forte, 1192"
+        },
+        {
+          "name": "Bom Carro Veículos",
+          "url": "https://www.google.com/maps/place/Bom+Carro+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197845949638a5:0xd0e6289c5f6603aa!8m2!3d-30.0437765!4d-51.2036175!16s%2Fg%2F1tkrmzc9!19sChIJpTiWlEV4GZURqgNmX5wo5tA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "220",
+          "category": "Concessionária",
+          "address": "Av. Ipiranga, 2427"
+        },
+        {
+          "name": "4.1 Veículos",
+          "url": "https://www.google.com/maps/place/4.1+Ve%C3%ADculos/data=!4m7!3m6!1s0x951978464c3098c9:0xea3ab258b508f6b0!8m2!3d-30.0437571!4d-51.2032574!16s%2Fg%2F1ptypgqz7!19sChIJyZgwTEZ4GZURsPYItViyOuo?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "3,6",
+          "reviews": "173",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 2475"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "Audi Top Car Porto Alegre",
+          "url": "https://www.google.com/maps/place/Audi+Top+Car+Porto+Alegre/data=!4m7!3m6!1s0x951979ef693291bf:0x6852bb41aecb051e!8m2!3d-30.002479!4d-51.191507!16s%2Fg%2F1tfsp4sb!19sChIJv5Eyae95GZURHgXLrkG7Umg?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,4",
+          "reviews": "337",
+          "category": "Concessionária Audi",
+          "address": "724 Avenida Ceará"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:42"
+    },
+    {
+      "city": "Porto Alegre",
+      "query": "revenda de veículos em Porto Alegre",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=revenda%20de%20ve%C3%ADculos%20em%20Porto%20Alegre",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=revenda%20de%20ve%C3%ADculos%20em%20Porto%20Alegre",
+      "searchRegion": "Porto Alegre, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Tipo Veículos",
+        "Bom Carro Veículos",
+        "Rispoli Veículos"
+      ],
+      "packSponsored": [
+        "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Tipo Veículos",
+          "url": "https://www.google.com/maps/place/Tipo+Ve%C3%ADculos/data=!4m7!3m6!1s0x951978167885dff5:0x2f3bdebd2da4597c!8m2!3d-30.0511809!4d-51.1951386!16s%2Fg%2F1txy3hs1!19sChIJ9d-FeBZ4GZURfFmkLb3eOy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "2.129",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 3849"
+        },
+        {
+          "name": "Rispoli Veículos",
+          "url": "https://www.google.com/maps/place/Rispoli+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197818bf67e03d:0x9c35f9f403c3cc2f!8m2!3d-30.0547787!4d-51.1894722!16s%2Fg%2F1tf7t96_!19sChIJPeBnvxh4GZURL8zDA_T5NZw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,5",
+          "reviews": "818",
+          "category": "Revendedora de carros usados",
+          "address": "R. Barão do Amazonas, 1265"
+        },
+        {
+          "name": "Nakar Veículos",
+          "url": "https://www.google.com/maps/place/Nakar+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771717a86417:0xbc4a5855fc52caac!8m2!3d-29.9988791!4d-51.160064!16s%2Fg%2F1tm89m09!19sChIJF2SoFxd3GZURrMpS_FVYSrw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "1.345",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Sertório, 4450"
+        },
+        {
+          "name": "Bom Carro Veículos",
+          "url": "https://www.google.com/maps/place/Bom+Carro+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197845949638a5:0xd0e6289c5f6603aa!8m2!3d-30.0437765!4d-51.2036175!16s%2Fg%2F1tkrmzc9!19sChIJpTiWlEV4GZURqgNmX5wo5tA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "220",
+          "category": "Concessionária",
+          "address": "Av. Ipiranga, 2427"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "Audi Top Car Porto Alegre",
+          "url": "https://www.google.com/maps/place/Audi+Top+Car+Porto+Alegre/data=!4m7!3m6!1s0x951979ef693291bf:0x6852bb41aecb051e!8m2!3d-30.002479!4d-51.191507!16s%2Fg%2F1tfsp4sb!19sChIJv5Eyae95GZURHgXLrkG7Umg?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,4",
+          "reviews": "337",
+          "category": "Concessionária Audi",
+          "address": "724 Avenida Ceará"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:43"
+    },
+    {
+      "city": "Porto Alegre",
+      "query": "carros seminovos em Porto Alegre",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20seminovos%20em%20Porto%20Alegre",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20seminovos%20em%20Porto%20Alegre",
+      "searchRegion": "Porto Alegre, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Nakar Veículos",
+        "Tipo Veículos",
+        "Rispoli Veículos"
+      ],
+      "packSponsored": [
+        "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Tipo Veículos",
+          "url": "https://www.google.com/maps/place/Tipo+Ve%C3%ADculos/data=!4m7!3m6!1s0x951978167885dff5:0x2f3bdebd2da4597c!8m2!3d-30.0511809!4d-51.1951386!16s%2Fg%2F1txy3hs1!19sChIJ9d-FeBZ4GZURfFmkLb3eOy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "2.129",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 3849"
+        },
+        {
+          "name": "Nakar Veículos",
+          "url": "https://www.google.com/maps/place/Nakar+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771717a86417:0xbc4a5855fc52caac!8m2!3d-29.9988791!4d-51.160064!16s%2Fg%2F1tm89m09!19sChIJF2SoFxd3GZURrMpS_FVYSrw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "1.345",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Sertório, 4450"
+        },
+        {
+          "name": "Localiza Seminovos",
+          "url": "https://www.google.com/maps/place/Localiza+Seminovos/data=!4m7!3m6!1s0x9519771693916821:0x5f0a04d9f93243ab!8m2!3d-29.9984983!4d-51.1522713!16s%2Fg%2F1hhvt3w9s!19sChIJIWiRkxZ3GZURq0My-dkECl8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,2",
+          "reviews": "528",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Sertório, 5335"
+        },
+        {
+          "name": "Seminovos Movida",
+          "url": "https://www.google.com/maps/place/Seminovos+Movida/data=!4m7!3m6!1s0x9519785ab62bffff:0x226cee7e2d7ad30!8m2!3d-30.0460457!4d-51.2112157!16s%2Fg%2F11c209vx_v!19sChIJ__8rtlp4GZURMK3X4ufOJgI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,2",
+          "reviews": "249",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 1600"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "Super AutoBR Ford | Tarso",
+          "url": "https://www.google.com/maps/place/Super+AutoBR+Ford+%7C+Tarso/data=!4m7!3m6!1s0x951977f351ef30c5:0x7220c4be37450128!8m2!3d-30.04182!4d-51.173868!16s%2Fg%2F1tcxwdls!19sChIJxTDvUfN3GZURKAFFN77EIHI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,2",
+          "reviews": "1.272",
+          "category": "Concessionária Ford",
+          "address": "399 Avenida Senador Tarso Dutra"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:45"
+    },
+    {
+      "city": "Porto Alegre",
+      "query": "carros usados em Porto Alegre",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20usados%20em%20Porto%20Alegre",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20usados%20em%20Porto%20Alegre",
+      "searchRegion": "Porto Alegre, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Tipo Veículos",
+        "Rispoli Veículos",
+        "Nakar Veículos"
+      ],
+      "packSponsored": [
+        "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Tipo Veículos",
+          "url": "https://www.google.com/maps/place/Tipo+Ve%C3%ADculos/data=!4m7!3m6!1s0x951978167885dff5:0x2f3bdebd2da4597c!8m2!3d-30.0511809!4d-51.1951386!16s%2Fg%2F1txy3hs1!19sChIJ9d-FeBZ4GZURfFmkLb3eOy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "2.129",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 3849"
+        },
+        {
+          "name": "Rispoli Veículos",
+          "url": "https://www.google.com/maps/place/Rispoli+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197818bf67e03d:0x9c35f9f403c3cc2f!8m2!3d-30.0547787!4d-51.1894722!16s%2Fg%2F1tf7t96_!19sChIJPeBnvxh4GZURL8zDA_T5NZw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,5",
+          "reviews": "818",
+          "category": "Revendedora de carros usados",
+          "address": "R. Barão do Amazonas, 1265"
+        },
+        {
+          "name": "Nakar Veículos",
+          "url": "https://www.google.com/maps/place/Nakar+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771717a86417:0xbc4a5855fc52caac!8m2!3d-29.9988791!4d-51.160064!16s%2Fg%2F1tm89m09!19sChIJF2SoFxd3GZURrMpS_FVYSrw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "1.345",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Sertório, 4450"
+        },
+        {
+          "name": "Idealiza Automóveis",
+          "url": "https://www.google.com/maps/place/Idealiza+Autom%C3%B3veis/data=!4m7!3m6!1s0x95197804d803905d:0x7eb0e010332bba62!8m2!3d-30.0446868!4d-51.199712!16s%2Fg%2F11dyzdmyh9!19sChIJXZAD2AR4GZURYrorMxDgsH4?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "677",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 2807"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "Super AutoBR Ford | Tarso",
+          "url": "https://www.google.com/maps/place/Super+AutoBR+Ford+%7C+Tarso/data=!4m7!3m6!1s0x951977f351ef30c5:0x7220c4be37450128!8m2!3d-30.04182!4d-51.173868!16s%2Fg%2F1tcxwdls!19sChIJxTDvUfN3GZURKAFFN77EIHI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,2",
+          "reviews": "1.272",
+          "category": "Concessionária Ford",
+          "address": "399 Avenida Senador Tarso Dutra"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:47"
+    },
+    {
+      "city": "Porto Alegre",
+      "query": "comprar carro em Porto Alegre",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=comprar%20carro%20em%20Porto%20Alegre",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=comprar%20carro%20em%20Porto%20Alegre",
+      "searchRegion": "Porto Alegre, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Tipo Veículos",
+        "Varney Automóveis",
+        "Rispoli Veículos"
+      ],
+      "packSponsored": [
+        "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Tipo Veículos",
+          "url": "https://www.google.com/maps/place/Tipo+Ve%C3%ADculos/data=!4m7!3m6!1s0x951978167885dff5:0x2f3bdebd2da4597c!8m2!3d-30.0511809!4d-51.1951386!16s%2Fg%2F1txy3hs1!19sChIJ9d-FeBZ4GZURfFmkLb3eOy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "2.129",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 3849"
+        },
+        {
+          "name": "Varney Automóveis",
+          "url": "https://www.google.com/maps/place/Varney+Autom%C3%B3veis/data=!4m7!3m6!1s0x951977a4434e86d3:0x43eb10c7fb8bfdb!8m2!3d-30.0211446!4d-51.1515388!16s%2Fg%2F1trtwh5l!19sChIJ04ZOQ6R3GZUR27-4fwyxPgQ?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "238",
+          "category": "Revendedora de carros usados",
+          "address": "Av. do Forte, 1192"
+        },
+        {
+          "name": "Rispoli Veículos",
+          "url": "https://www.google.com/maps/place/Rispoli+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197818bf67e03d:0x9c35f9f403c3cc2f!8m2!3d-30.0547787!4d-51.1894722!16s%2Fg%2F1tf7t96_!19sChIJPeBnvxh4GZURL8zDA_T5NZw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,5",
+          "reviews": "818",
+          "category": "Revendedora de carros usados",
+          "address": "R. Barão do Amazonas, 1265"
+        },
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771a1dc29e1d:0xadf6ea2faf70e11e!8m2!3d-29.998396!4d-51.1471232!16s%2Fg%2F1pp2vh348!19sChIJHZ7CHRp3GZURHuFwry_q9q0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "6.880",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Sertório, 5757"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "Audi Top Car Porto Alegre",
+          "url": "https://www.google.com/maps/place/Audi+Top+Car+Porto+Alegre/data=!4m7!3m6!1s0x951979ef693291bf:0x6852bb41aecb051e!8m2!3d-30.002479!4d-51.191507!16s%2Fg%2F1tfsp4sb!19sChIJv5Eyae95GZURHgXLrkG7Umg?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,4",
+          "reviews": "337",
+          "category": "Concessionária Audi",
+          "address": "724 Avenida Ceará"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:48"
+    },
+    {
+      "city": "Porto Alegre",
+      "query": "veículos seminovos em Porto Alegre",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=ve%C3%ADculos%20seminovos%20em%20Porto%20Alegre",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=ve%C3%ADculos%20seminovos%20em%20Porto%20Alegre",
+      "searchRegion": "Porto Alegre, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Nakar Veículos",
+        "Tipo Veículos",
+        "Varney Automóveis"
+      ],
+      "packSponsored": [
+        "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Nakar Veículos",
+          "url": "https://www.google.com/maps/place/Nakar+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771717a86417:0xbc4a5855fc52caac!8m2!3d-29.9988791!4d-51.160064!16s%2Fg%2F1tm89m09!19sChIJF2SoFxd3GZURrMpS_FVYSrw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "1.345",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Sertório, 4450"
+        },
+        {
+          "name": "Tipo Veículos",
+          "url": "https://www.google.com/maps/place/Tipo+Ve%C3%ADculos/data=!4m7!3m6!1s0x951978167885dff5:0x2f3bdebd2da4597c!8m2!3d-30.0511809!4d-51.1951386!16s%2Fg%2F1txy3hs1!19sChIJ9d-FeBZ4GZURfFmkLb3eOy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "2.129",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 3849"
+        },
+        {
+          "name": "Localiza Seminovos",
+          "url": "https://www.google.com/maps/place/Localiza+Seminovos/data=!4m7!3m6!1s0x9519771693916821:0x5f0a04d9f93243ab!8m2!3d-29.9984983!4d-51.1522713!16s%2Fg%2F1hhvt3w9s!19sChIJIWiRkxZ3GZURq0My-dkECl8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,2",
+          "reviews": "528",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Sertório, 5335"
+        },
+        {
+          "name": "Seminovos Movida",
+          "url": "https://www.google.com/maps/place/Seminovos+Movida/data=!4m7!3m6!1s0x9519785ab62bffff:0x226cee7e2d7ad30!8m2!3d-30.0460457!4d-51.2112157!16s%2Fg%2F11c209vx_v!19sChIJ__8rtlp4GZURMK3X4ufOJgI?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,2",
+          "reviews": "249",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 1600"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771a1dc29e1d:0xadf6ea2faf70e11e!8m2!3d-29.998396!4d-51.147123!16s%2Fg%2F1pp2vh348!19sChIJHZ7CHRp3GZURHuFwry_q9q0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "6.879",
+          "category": "Revendedora de carros usados",
+          "address": "5757 Avenida Sertório"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:50"
+    },
+    {
+      "city": "Porto Alegre",
+      "query": "loja de veículos em Porto Alegre",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=loja%20de%20ve%C3%ADculos%20em%20Porto%20Alegre",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=loja%20de%20ve%C3%ADculos%20em%20Porto%20Alegre",
+      "searchRegion": "Porto Alegre, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Tipo Veículos",
+        "Rispoli Veículos",
+        "Varney Automóveis"
+      ],
+      "packSponsored": [],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Tipo Veículos",
+          "url": "https://www.google.com/maps/place/Tipo+Ve%C3%ADculos/data=!4m7!3m6!1s0x951978167885dff5:0x2f3bdebd2da4597c!8m2!3d-30.0511809!4d-51.1951386!16s%2Fg%2F1txy3hs1!19sChIJ9d-FeBZ4GZURfFmkLb3eOy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "2.129",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 3849"
+        },
+        {
+          "name": "Rispoli Veículos",
+          "url": "https://www.google.com/maps/place/Rispoli+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197818bf67e03d:0x9c35f9f403c3cc2f!8m2!3d-30.0547787!4d-51.1894722!16s%2Fg%2F1tf7t96_!19sChIJPeBnvxh4GZURL8zDA_T5NZw?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,5",
+          "reviews": "818",
+          "category": "Revendedora de carros usados",
+          "address": "R. Barão do Amazonas, 1265"
+        },
+        {
+          "name": "Varney Automóveis",
+          "url": "https://www.google.com/maps/place/Varney+Autom%C3%B3veis/data=!4m7!3m6!1s0x951977a4434e86d3:0x43eb10c7fb8bfdb!8m2!3d-30.0211446!4d-51.1515388!16s%2Fg%2F1trtwh5l!19sChIJ04ZOQ6R3GZUR27-4fwyxPgQ?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "238",
+          "category": "Revendedora de carros usados",
+          "address": "Av. do Forte, 1192"
+        },
+        {
+          "name": "Bom Carro Veículos",
+          "url": "https://www.google.com/maps/place/Bom+Carro+Ve%C3%ADculos/data=!4m7!3m6!1s0x95197845949638a5:0xd0e6289c5f6603aa!8m2!3d-30.0437765!4d-51.2036175!16s%2Fg%2F1tkrmzc9!19sChIJpTiWlEV4GZURqgNmX5wo5tA?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "220",
+          "category": "Concessionária",
+          "address": "Av. Ipiranga, 2427"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        },
+        {
+          "name": "Audi Top Car Porto Alegre",
+          "url": "https://www.google.com/maps/place/Audi+Top+Car+Porto+Alegre/data=!4m7!3m6!1s0x951979ef693291bf:0x6852bb41aecb051e!8m2!3d-30.002479!4d-51.191507!16s%2Fg%2F1tfsp4sb!19sChIJv5Eyae95GZURHgXLrkG7Umg?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,4",
+          "reviews": "337",
+          "category": "Concessionária Audi",
+          "address": "724 Avenida Ceará"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:48:54"
+    },
+    {
+      "city": "Porto Alegre",
+      "query": "carros à venda em Porto Alegre",
+      "searchUrl": "https://www.google.com/search?hl=pt-BR&q=carros%20%C3%A0%20venda%20em%20Porto%20Alegre",
+      "mapsUrl": "https://www.google.com/maps?hl=pt-BR&q=carros%20%C3%A0%20venda%20em%20Porto%20Alegre",
+      "searchRegion": "Porto Alegre, RS",
+      "packPresent": true,
+      "packOrganicTop3": [
+        "Tipo Veículos",
+        "Varney Automóveis",
+        "Idealiza Automóveis"
+      ],
+      "packSponsored": [
+        "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA"
+      ],
+      "netcarInPackObserved": false,
+      "mapsOrganicObserved": [
+        {
+          "name": "Tipo Veículos",
+          "url": "https://www.google.com/maps/place/Tipo+Ve%C3%ADculos/data=!4m7!3m6!1s0x951978167885dff5:0x2f3bdebd2da4597c!8m2!3d-30.0511809!4d-51.1951386!16s%2Fg%2F1txy3hs1!19sChIJ9d-FeBZ4GZURfFmkLb3eOy8?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,3",
+          "reviews": "2.129",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 3849"
+        },
+        {
+          "name": "Varney Automóveis",
+          "url": "https://www.google.com/maps/place/Varney+Autom%C3%B3veis/data=!4m7!3m6!1s0x951977a4434e86d3:0x43eb10c7fb8bfdb!8m2!3d-30.0211446!4d-51.1515388!16s%2Fg%2F1trtwh5l!19sChIJ04ZOQ6R3GZUR27-4fwyxPgQ?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,4",
+          "reviews": "238",
+          "category": "Revendedora de carros usados",
+          "address": "Av. do Forte, 1192"
+        },
+        {
+          "name": "CARMULTI VEICULOS",
+          "url": "https://www.google.com/maps/place/CARMULTI+VEICULOS/data=!4m7!3m6!1s0x9519770738388a61:0xd31c68d92d1025ec!8m2!3d-29.9984047!4d-51.1365951!16s%2Fg%2F11fszh3htl!19sChIJYYo4OAd3GZUR7CUQLdloHNM?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,7",
+          "reviews": "359",
+          "category": "Concessionária",
+          "address": "Av. Sertório, 7013"
+        },
+        {
+          "name": "Idealiza Automóveis",
+          "url": "https://www.google.com/maps/place/Idealiza+Autom%C3%B3veis/data=!4m7!3m6!1s0x95197804d803905d:0x7eb0e010332bba62!8m2!3d-30.0446868!4d-51.199712!16s%2Fg%2F11dyzdmyh9!19sChIJXZAD2AR4GZURYrorMxDgsH4?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": false,
+          "rating": "4,6",
+          "reviews": "677",
+          "category": "Revendedora de carros usados",
+          "address": "Av. Ipiranga, 2807"
+        }
+      ],
+      "mapsSponsored": [
+        {
+          "name": "Savauto Veículos",
+          "url": "https://www.google.com/maps/place/Savauto+Ve%C3%ADculos/data=!4m7!3m6!1s0x9519771a1dc29e1d:0xadf6ea2faf70e11e!8m2!3d-29.998396!4d-51.147123!16s%2Fg%2F1pp2vh348!19sChIJHZ7CHRp3GZURHuFwry_q9q0?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "6.879",
+          "category": "Revendedora de carros usados",
+          "address": "5757 Avenida Sertório"
+        },
+        {
+          "name": "GRUPO SERVOPA SEMINOVOS - AV IPIRANGA",
+          "url": "https://www.google.com/maps/place/GRUPO+SERVOPA+SEMINOVOS+-+AV+IPIRANGA/data=!4m7!3m6!1s0x951979d0876a4617:0xa935f3d7359a24b0!8m2!3d-30.05789!4d-51.182805!16s%2Fg%2F11gjjgl6fl!19sChIJF0Zqh9B5GZURsCSaNdfzNak?authuser=0&hl=pt-BR&g_ep=EgoyMDI2MDgxOS4wIJJjKgBIAVAD&rclk=1",
+          "sponsored": true,
+          "rating": "4,6",
+          "reviews": "160",
+          "category": "Revendedora de carros usados",
+          "address": "5570 Avenida Ipiranga"
+        }
+      ],
+      "netcarMapsOrganicPosition": null,
+      "mapsOrganicCountObserved": 4,
+      "mapsCollectedAt": "2026-08-22 15:46:53"
+    }
+  ]
+}

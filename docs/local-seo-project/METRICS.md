@@ -69,6 +69,20 @@ Janela comum: 21/05/2026 a 20/08/2026, Pesquisa Web.
 
 Posição média agregada não será tratada como ranking genérico local quando a página for exibida majoritariamente para a própria marca.
 
+## Maps e Map Pack: complemento de 22/08/2026
+
+Coleta em nível de cidade, sem coordenada GPS central fixa. A fotografia não substitui geo-grid. “0/8” significa ausência entre o Top 3 não patrocinado do Pack ou os primeiros resultados orgânicos carregados no Maps.
+
+| Cidade | Consultas com Map Pack | Netcar no Top 3 do Pack | Netcar no Maps observado | Líder principal |
+|---|---:|---:|---:|---|
+| São Leopoldo | 6/8 | 0/8 | 0/8 | Premium Veículos: 6/6 no Pack e 8/8 no Maps |
+| Nova Santa Rita | 7/8 | 0/8 | 0/8 | GP e Coxilha: 7/7 no Pack e 8/8 no Maps |
+| Cachoeirinha | 3/8 | 0/8 | 0/8 | Ribeiro e A1: 3/3 no Pack; Ribeiro, A1 e Elite 7/8 no Maps |
+| Gravataí | 8/8 | 0/8 | 0/8 | João Veículos: 8/8 no Pack e 8/8 no Maps |
+| Porto Alegre | 8/8 | 0/8 | 0/8 | Tipo Veículos: 8/8 no Pack e 8/8 no Maps |
+
+Detalhamento por palavra-chave, anúncios separados e perfis: `RANKING-5-CIDADES-2026-08-22.md`.
+
 ## Placar principal
 
 | Métrica | Fonte | Frequência | Corte | Responsável |

@@ -8,7 +8,7 @@ O estado operacional fica em `project.json`. Esta visão explica o resultado esp
 | TECH-001 | P0 | Todas | Confirmar 301/410 e metadados em produção | concluído | nenhuma | 200/301/404/410, canonicals e `noindex` validados no servidor em 22/08/2026 |
 | ENTITY-001 | P0 | Esteio | Confirmar schema das duas lojas em produção | concluído | nenhuma | duas entidades `AutoDealer`, CEPs, telefones e CIDs confirmados em produção em 22/08/2026 |
 | GBP-001 | P0 | Esteio | Auditar integralmente os dois perfis | concluído | nenhuma | campos internos e públicos conferidos nos dois perfis em 22/08/2026 |
-| MEAS-001 | P0 | Esteio/Sapucaia/Canoas/São Leopoldo/Nova Santa Rita/Cachoeirinha/Gravataí/Porto Alegre | Criar linha de base recorrente | em andamento | CRM e geo-grid completo | GBP, GSC e GA4 arquivados; faltam leads/vendas por município e Maps/Map Pack recorrente nas oito cidades |
+| MEAS-001 | P0 | Esteio/Sapucaia/Canoas/São Leopoldo/Nova Santa Rita/Cachoeirinha/Gravataí/Porto Alegre | Criar linha de base recorrente | em andamento | geo-grid completo; CRM adiado pela Netcar | GBP, GSC, GA4 e fotografia de Maps/Map Pack nas oito cidades arquivados; falta tornar a medição recorrente e fixar coordenadas |
 | GBP-002 | P1 | Esteio | Criar URLs UTM específicas por loja | concluído | GBP-001 | URLs salvas e reconfirmadas nos dois perfis em 21/08/2026 |
 | GBP-003 | P1 | Esteio | Explicar a operação integrada nos dois perfis | concluído | texto aprovado | descrições salvas e reabertas para conferência em 21/08/2026 |
 | GBP-004 | P1 | Esteio | Cadastrar serviços permanentes nos dois perfis | concluído | nenhuma | os mesmos seis serviços aparecem nos dois editores; Maps não renderiza a lista personalizada |

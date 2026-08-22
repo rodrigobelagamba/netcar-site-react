@@ -7,11 +7,11 @@
   "priorityCities": ["Esteio", "Sapucaia do Sul", "Canoas", "São Leopoldo", "Nova Santa Rita", "Cachoeirinha", "Gravataí"],
   "monitoredCompetitors": {
     "Canoas": ["R2 Motors", "Dotto Veículos", "Star", "Base Veículos", "Boqueirão Veículos", "Macrosinos Veículos"],
-    "São Leopoldo": ["Newton Multimarcas", "Billy Motors", "Select Drive Veículos", "Sinoscar Chevrolet", "Premium Veículos", "Local Veículos"],
-    "Nova Santa Rita": ["Webmotors", "OLX", "Seminovos Carburgo", "Mobiauto"],
-    "Cachoeirinha": ["Senna RS Motors", "Elite dos Carros", "Ribeiro Veículos", "Cia do Automóvel Cachoeirinha"],
-    "Gravataí": ["Portocar Seminovos", "Localiza Seminovos", "SRV Automarcas", "Lucraf Veículos", "Romscar", "Planeta Veículos"],
-    "Porto Alegre": ["Webmotors", "Mercado Livre", "OLX", "iCarros", "Cia do Carro", "Find Motors"]
+    "São Leopoldo": ["Premium Veículos", "Foccus Veículos", "Seminovos Movida", "Select Drive Veículos", "R2 Motors (anunciante)"],
+    "Nova Santa Rita": ["GP Veículos", "Coxilha Veículos", "Mecasul Mercedes-Benz", "R2 Motors (anunciante)"],
+    "Cachoeirinha": ["Ribeiro Veículos", "A1 Multimarcas", "Elite dos Carros", "R2 Motors (anunciante)"],
+    "Gravataí": ["João Veículos", "Savauto Veículos", "65 Automóveis", "R2 Motors (anunciante)"],
+    "Porto Alegre": ["Tipo Veículos", "Nakar Veículos", "Rispoli Veículos", "Varney Automóveis"]
   },
   "allowedStatuses": ["backlog", "ready", "in_progress", "blocked", "verify_production", "done"],
   "tasks": [
