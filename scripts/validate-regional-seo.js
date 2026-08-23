@@ -18,6 +18,7 @@ const requiredNewCities = [
 ];
 const tractionRecoverySlugs = new Set([
   "canoas",
+  "sapucaia-do-sul",
   "sao-leopoldo",
   "gravatai",
   "cachoeirinha",

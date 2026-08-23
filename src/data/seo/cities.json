@@ -157,18 +157,40 @@
     "regionName": "BR-116 e Vale dos Sinos",
     "distanceKm": 8,
     "travelTime": "15 min",
-    "routeNote": "A referência de cerca de 8 km considera a região central. O acesso pode seguir pela BR-116 ou por vias locais, e o tempo muda conforme o bairro de saída, as obras e o trânsito.",
+    "routeNote": "A referência de cerca de 8 km considera a região central. O acesso a Esteio pode seguir pela BR-116 ou por vias locais; confira o trajeto atualizado a partir do seu bairro antes de sair.",
+    "routeOrigins": [
+      {
+        "id": "centro",
+        "label": "Centro",
+        "query": "Centro, Sapucaia do Sul, RS"
+      },
+      {
+        "id": "capao_da_cruz",
+        "label": "Capão da Cruz",
+        "query": "Capão da Cruz, Sapucaia do Sul, RS"
+      },
+      {
+        "id": "nova_sapucaia",
+        "label": "Nova Sapucaia",
+        "query": "Nova Sapucaia, Sapucaia do Sul, RS"
+      },
+      {
+        "id": "pasqualini",
+        "label": "Pasqualini",
+        "query": "Pasqualini, Sapucaia do Sul, RS"
+      }
+    ],
     "visitPlanning": "Confirme os veículos escolhidos pelo WhatsApp e organize test drive, avaliação da troca e simulação para a mesma visita em Esteio.",
     "relatedSlugs": ["canoas", "sao-leopoldo", "novo-hamburgo", "cachoeirinha"],
     "priorityMarket": true,
-    "title": "Carros seminovos perto de Sapucaia do Sul | Netcar",
-    "description": "Compare carros seminovos para Sapucaia do Sul no estoque real da Netcar, em Esteio, a cerca de 8 km. Veja fotos, preços, financiamento e troca.",
+    "title": "Seminovos Sapucaia do Sul: estoque perto | Netcar",
+    "description": "Compare seminovos para Sapucaia do Sul no estoque real da Netcar, em Esteio, a cerca de 8 km. Veja fotos, preços, financiamento, troca e rotas.",
     "h1": "Carros seminovos para Sapucaia do Sul: estoque perto da cidade",
     "contentHeading": "Como comparar carros seminovos saindo de Sapucaia do Sul",
     "intro": "Moradores de Sapucaia do Sul estão ao lado das unidades da Netcar em Esteio. Esta página concentra o catálogo e os recursos necessários para planejar uma visita objetiva.",
     "paragraphs": [
       "Quem parte do Centro, Capão da Cruz, Cohab, Lomba da Palmeira, Nova Sapucaia, Pasqualini, Sete ou Vargas pode filtrar o catálogo por carroceria, câmbio e faixa de preço. Cada anúncio informa ano, quilometragem e imagens do automóvel.",
-      "Use o comparador para colocar os candidatos lado a lado e reduzir a seleção. Depois, confirme quais modelos continuam no pátio e agende um horário para concentrar demonstração, test drive e conversa comercial no mesmo atendimento.",
+      "Use o comparador para colocar os candidatos lado a lado e reduzir a seleção. Na seção de rotas, escolha Centro, Capão da Cruz, Nova Sapucaia ou Pasqualini para abrir o trajeto atualizado até cada loja.",
       "Se outro veículo fará parte do negócio, adiante pelo WhatsApp modelo, ano, quilometragem, fotos e eventual saldo devedor. A pré-análise reduz etapas, mas o valor definitivo depende da vistoria presencial e da documentação.",
       "Não existe endereço comercial da Netcar em Sapucaia do Sul. Os dois pontos físicos ficam na Av. Presidente Vargas, em Esteio; os 8 km e 15 minutos são estimativas a partir da região central, não promessas para todos os bairros."
     ],
