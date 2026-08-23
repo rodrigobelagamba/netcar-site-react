@@ -92,7 +92,29 @@
     "regionName": "BR-386 e Região Metropolitana",
     "distanceKm": 16,
     "travelTime": "20 min",
-    "routeNote": "A referência parte da região central de Nova Santa Rita e segue pela BR-386 até a Loja 1. O percurso é de aproximadamente 16 km, sujeito ao trânsito e ao ponto de saída.",
+    "routeNote": "A referência de aproximadamente 16 km parte da região central de Nova Santa Rita. Escolha abaixo um ponto de saída para abrir o trajeto atualizado até cada loja em Esteio.",
+    "routeOrigins": [
+      {
+        "id": "centro",
+        "label": "Centro",
+        "query": "Centro, Nova Santa Rita, RS"
+      },
+      {
+        "id": "berto_cirio",
+        "label": "Berto Círio",
+        "query": "Berto Círio, Nova Santa Rita, RS"
+      },
+      {
+        "id": "morretes",
+        "label": "Morretes",
+        "query": "Morretes, Nova Santa Rita, RS"
+      },
+      {
+        "id": "pedreira",
+        "label": "Pedreira",
+        "query": "Pedreira, Nova Santa Rita, RS"
+      }
+    ],
     "visitPlanning": "Escolha os carros no catálogo, confirme em qual unidade de Esteio eles estão e combine o atendimento antes de seguir pela BR-386.",
     "relatedSlugs": [
       "canoas",
@@ -108,7 +130,7 @@
     "intro": "Quem mora em Nova Santa Rita pode pesquisar o estoque real da Netcar e organizar a visita às lojas de Esteio, a aproximadamente 16 km da região central.",
     "paragraphs": [
       "Comece definindo faixa de preço, carroceria, câmbio e ano. Cada anúncio apresenta fotos, quilometragem e versão para reduzir a seleção antes de entrar na BR-386.",
-      "Salve dois ou três candidatos e envie os links pelo WhatsApp. A equipe confirma se continuam disponíveis e informa em qual ponto da Av. Presidente Vargas cada automóvel está naquele momento.",
+      "Quem parte do Centro, Berto Círio, Morretes ou Pedreira pode escolher sua região na seção de rotas e abrir o trajeto atualizado até cada loja. Antes de sair, salve dois ou três candidatos e confirme a disponibilidade pelo WhatsApp.",
       "As lojas 1 e 2 trabalham como uma operação integrada: estoque, vendedores e atendimento são compartilhados. Quando os modelos escolhidos estão em endereços diferentes, a visita pode ser organizada para conhecer ambos.",
       "A Netcar não possui unidade em Nova Santa Rita. Os dois endereços físicos ficam em Esteio; distância e tempo servem como referência e devem ser recalculados conforme o local de saída e as condições da BR-386."
     ],
