@@ -402,7 +402,29 @@
     "regionName": "Grande Porto Alegre",
     "distanceKm": 23,
     "travelTime": "25–35 min",
-    "routeNote": "A referência saindo do Centro usa a RS-118 e tem cerca de 23 km. O trajeto e o tempo mudam conforme o bairro, o trânsito e eventuais obras.",
+    "routeNote": "A referência de cerca de 23 km parte do Centro de Gravataí. Como o município é extenso, escolha abaixo uma região para abrir o trajeto atualizado até cada loja em Esteio.",
+    "routeOrigins": [
+      {
+        "id": "centro",
+        "label": "Centro",
+        "query": "Centro, Gravataí, RS"
+      },
+      {
+        "id": "parque_dos_anjos",
+        "label": "Parque dos Anjos",
+        "query": "Parque dos Anjos, Gravataí, RS"
+      },
+      {
+        "id": "morada_do_vale",
+        "label": "Morada do Vale",
+        "query": "Morada do Vale, Gravataí, RS"
+      },
+      {
+        "id": "barnabe",
+        "label": "Barnabé",
+        "query": "Barnabé, Gravataí, RS"
+      }
+    ],
     "visitPlanning": "Confirme disponibilidade, envie os dados do usado e combine o horário antes de sair de Gravataí para as lojas em Esteio.",
     "relatedSlugs": ["cachoeirinha", "alvorada", "porto-alegre", "canoas"],
     "priorityMarket": true,
@@ -412,7 +434,7 @@
     "contentHeading": "Seminovos perto de Gravataí com estoque real",
     "intro": "Para quem mora em Gravataí, a Netcar reúne em Esteio o estoque real das duas unidades e permite montar uma lista de carros antes de percorrer os cerca de 23 km até a Loja 1.",
     "paragraphs": [
-      "A consulta começa pelo catálogo: cada anúncio mostra fotos, preço, ano, quilometragem e versão. Moradores do Centro, Parque dos Anjos, Morada do Vale e demais bairros podem selecionar os veículos que fazem sentido antes da saída.",
+      "A consulta começa pelo catálogo: cada anúncio mostra fotos, preço, ano, quilometragem e versão. Quem parte do Centro, Parque dos Anjos, Morada do Vale ou Barnabé pode escolher sua região na seção de rotas e abrir o trajeto até cada loja.",
       "A referência entre o Centro de Gravataí e a Av. Presidente Vargas, 740, é de aproximadamente 23 km pela RS-118. O tempo pode variar bastante, por isso a disponibilidade e o horário devem ser reconfirmados no dia.",
       "Antes de percorrer o trajeto, o WhatsApp ajuda a reservar o atendimento, iniciar a simulação sujeita à análise de crédito e encaminhar os dados do usado. Entrada parcelada no cartão pode ser consultada conforme a proposta.",
       "O atendimento presencial acontece em Esteio; não existe unidade da Netcar em Gravataí. Os pontos 740 e 1106 operam juntos, com Fábrica de Valor, despachante credenciado e suporte Nethelp durante a garantia legal."
