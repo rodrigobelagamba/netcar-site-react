@@ -56,7 +56,7 @@ export function CityLandingPage() {
   }
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full bg-white">
+    <main className="flex-1 overflow-x-hidden max-w-full bg-white pt-16 sm:pt-0">
       <RegionalBreadcrumbs cityName={city.name} variant="buy" />
       <RegionalSeoHero
         eyebrow={city.regionName ?? "Atendimento regional"}
