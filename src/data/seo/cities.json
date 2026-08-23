@@ -472,7 +472,29 @@
     "regionName": "Grande Porto Alegre",
     "distanceKm": 15,
     "travelTime": "22 min",
-    "routeNote": "O acesso a Esteio varia conforme o bairro e pode usar vias locais de Canoas e a BR-116. Consulte o trânsito antes do deslocamento.",
+    "routeNote": "O acesso a Esteio varia conforme a região de Cachoeirinha e pode usar vias locais de Canoas e a BR-116. Escolha abaixo um ponto de saída para abrir o trajeto atualizado.",
+    "routeOrigins": [
+      {
+        "id": "vila_cachoeirinha",
+        "label": "Vila Cachoeirinha",
+        "query": "Vila Cachoeirinha, Cachoeirinha, RS"
+      },
+      {
+        "id": "vila_eunice",
+        "label": "Vila Eunice",
+        "query": "Vila Eunice, Cachoeirinha, RS"
+      },
+      {
+        "id": "parque_da_matriz",
+        "label": "Parque da Matriz",
+        "query": "Parque da Matriz, Cachoeirinha, RS"
+      },
+      {
+        "id": "jardim_do_bosque",
+        "label": "Jardim do Bosque",
+        "query": "Jardim do Bosque, Cachoeirinha, RS"
+      }
+    ],
     "visitPlanning": "Escolha os veículos no site e agende a visita para comparar carros, fazer test drive e avaliar a troca no mesmo atendimento em Esteio.",
     "relatedSlugs": ["canoas", "gravatai", "porto-alegre", "alvorada"],
     "priorityMarket": true,
@@ -483,7 +505,7 @@
     "intro": "Quem pesquisa carros à venda em Cachoeirinha pode comparar o estoque real das duas lojas da Netcar em Esteio, a cerca de 15 km, antes de organizar a visita.",
     "paragraphs": [
       "Fotos, preço, ano, quilometragem e versão ficam disponíveis no site para você comparar hatch, sedan, SUV e picape. O estoque muda conforme as negociações, então confirme os finalistas antes do deslocamento.",
-      "A rota até Esteio depende do bairro de saída e pode passar por vias locais de Canoas e pela BR-116. Planejar o horário ajuda a reunir comparação, test drive e avaliação da troca na mesma visita.",
+      "Quem parte da Vila Cachoeirinha, Vila Eunice, Parque da Matriz ou Jardim do Bosque pode escolher a região na seção de rotas e abrir o trajeto atualizado até cada loja. Planejar o horário ajuda a reunir comparação, test drive e avaliação da troca na mesma visita.",
       "Pelo WhatsApp, é possível confirmar o veículo, adiantar a simulação sujeita à análise de crédito e enviar os dados do usado. A Netcar também oferece entrada parcelada no cartão, conforme as condições da negociação.",
       "A Netcar não possui unidade em Cachoeirinha. As lojas da Av. Presidente Vargas, 740 e 1106, em Esteio, trabalham com estoque e equipe integrados, despachante credenciado e suporte Nethelp durante a garantia legal."
     ],
