@@ -23,6 +23,7 @@ const tractionRecoverySlugs = new Set([
   "sao-leopoldo",
   "gravatai",
   "cachoeirinha",
+  "porto-alegre",
   "estancia-velha",
 ]);
 

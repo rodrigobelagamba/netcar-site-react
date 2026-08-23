@@ -586,7 +586,29 @@
     "regionName": "Grande Porto Alegre",
     "distanceKm": 28,
     "travelTime": "30–50 min",
-    "routeNote": "A referência entre o Centro Histórico e a Loja 1 é de aproximadamente 28 km pela BR-116. O ponto de saída, o trânsito e as obras podem alterar bastante o trajeto.",
+    "routeNote": "A referência de aproximadamente 28 km parte do Centro Histórico. Como Porto Alegre é extensa, escolha abaixo uma região para abrir o trajeto atualizado até cada loja em Esteio.",
+    "routeOrigins": [
+      {
+        "id": "centro_historico",
+        "label": "Centro Histórico",
+        "query": "Centro Histórico, Porto Alegre, RS"
+      },
+      {
+        "id": "sarandi",
+        "label": "Sarandi",
+        "query": "Sarandi, Porto Alegre, RS"
+      },
+      {
+        "id": "passo_da_areia",
+        "label": "Passo d'Areia",
+        "query": "Passo d'Areia, Porto Alegre, RS"
+      },
+      {
+        "id": "menino_deus",
+        "label": "Menino Deus",
+        "query": "Menino Deus, Porto Alegre, RS"
+      }
+    ],
     "visitPlanning": "Selecione os veículos no estoque online, confirme a disponibilidade e combine o atendimento antes de sair de Porto Alegre para as lojas em Esteio.",
     "relatedSlugs": ["canoas", "cachoeirinha", "gravatai", "guaiba"],
     "priorityMarket": true,
@@ -597,7 +619,7 @@
     "intro": "Quem está em Porto Alegre pode filtrar o estoque compartilhado das duas lojas da Netcar e organizar uma visita a Esteio somente depois de confirmar os veículos de interesse.",
     "paragraphs": [
       "O catálogo informa fotos, preço, ano, versão e quilometragem para comparar opções sem atravessar a região metropolitana no início da pesquisa. Como o estoque muda, os carros escolhidos devem ser reconfirmados no dia.",
-      "Do Centro Histórico até a Av. Presidente Vargas, 740, o Google Maps indicou cerca de 28 km pela BR-116. Esse é apenas um ponto de referência: uma saída da zona norte ou de outro bairro produz distância e tempo diferentes.",
+      "Do Centro Histórico até a Av. Presidente Vargas, 740, a referência é de cerca de 28 km. Quem parte de Sarandi, Passo d'Areia ou Menino Deus pode escolher sua região na seção de rotas e comparar o trajeto atualizado até cada loja.",
       "Antes da visita, o WhatsApp permite organizar o test drive, iniciar uma simulação sujeita à análise de crédito e encaminhar dados do usado. Entrada parcelada no cartão pode ser consultada conforme a negociação.",
       "A Netcar não tem endereço em Porto Alegre. O atendimento presencial ocorre nos números 740 e 1106 da Av. Presidente Vargas, em Esteio, com estoque e equipes integrados, despachante credenciado e suporte Nethelp durante a garantia legal."
     ],
