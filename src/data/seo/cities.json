@@ -239,7 +239,29 @@
     "regionName": "BR-116 e Vale dos Sinos",
     "distanceKm": 16,
     "travelTime": "20 min",
-    "routeNote": "A referência parte do Centro de São Leopoldo e segue pela BR-116 até a Loja 1. O percurso é de aproximadamente 16 km, mas o tempo muda conforme trânsito, obras e bairro de saída.",
+    "routeNote": "A referência de aproximadamente 16 km parte do Centro de São Leopoldo. Escolha abaixo uma região da cidade para abrir no Google Maps o trajeto atualizado até cada loja em Esteio.",
+    "routeOrigins": [
+      {
+        "id": "centro",
+        "label": "Centro",
+        "query": "Centro, São Leopoldo, RS"
+      },
+      {
+        "id": "scharlau",
+        "label": "Scharlau",
+        "query": "Scharlau, São Leopoldo, RS"
+      },
+      {
+        "id": "feitoria",
+        "label": "Feitoria",
+        "query": "Feitoria, São Leopoldo, RS"
+      },
+      {
+        "id": "rio_branco",
+        "label": "Rio Branco",
+        "query": "Rio Branco, São Leopoldo, RS"
+      }
+    ],
     "visitPlanning": "Separe dois ou três carros no site, confirme em qual ponto de Esteio cada um está e combine um horário para concentrar demonstração, test drive e negociação.",
     "relatedSlugs": [
       "sapucaia-do-sul",
@@ -255,7 +277,7 @@
     "intro": "Quem procura uma revenda de carros em São Leopoldo pode comparar o estoque real da Netcar antes de seguir até as lojas de Esteio, a cerca de 16 km do Centro.",
     "paragraphs": [
       "Use preço, ano, quilometragem, câmbio e carroceria para reduzir a pesquisa. Os anúncios exibem automóveis disponíveis no catálogo da Netcar, não uma lista genérica criada apenas para mencionar a cidade.",
-      "Quem parte do Centro, Scharlau, Feitoria, Rio Branco, Cristo Rei ou Duque de Caxias pode salvar os candidatos e confirmar a disponibilidade pelo WhatsApp. Isso evita percorrer a BR-116 para encontrar um modelo já negociado.",
+      "Quem parte do Centro, Scharlau, Feitoria ou Rio Branco pode escolher sua região na seção de rotas e abrir o trajeto atualizado até cada loja. Antes de sair, salve os candidatos e confirme a disponibilidade pelo WhatsApp.",
       "As duas unidades de Esteio compartilham estoque, equipe e atendimento. Se os carros escolhidos estiverem em pontos diferentes da Av. Presidente Vargas, o vendedor pode organizar a visualização durante a mesma visita.",
       "Financiamento, entrada parcelada no cartão e dados do usado podem ser tratados inicialmente a distância. A documentação é conduzida com despachante credenciado, e o Nethelp atende veículos dentro do período de garantia legal."
     ],
