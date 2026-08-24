@@ -65,17 +65,16 @@ export function RegionalActionCtas({
   sellCitySlug,
   stockSearch = emptySeminovosSearch,
   stockLabel = "Ver estoque",
-  stockSubtitle = "Fotos, preço e km reais",
-  waSubtitle = "Atendimento rápido · 24h",
-  sellSubtitle = "Troca ou venda · avaliação",
+  stockSubtitle = "Fotos, preço e km do anúncio",
+  waSubtitle = "Fale sobre um carro do estoque",
+  sellSubtitle = "Envie os dados para avaliação",
   primary = "whatsapp",
   className = "",
 }: RegionalActionCtasProps) {
   const { data: whatsapp } = useWhatsAppQuery();
-  const waHref =
-    whatsapp?.numero
-      ? buildWhatsAppUrl(whatsapp.numero, siteWhatsAppMessage(waText))
-      : "#";
+  const waHref = whatsapp?.numero
+    ? buildWhatsAppUrl(whatsapp.numero, siteWhatsAppMessage(waText))
+    : "#";
 
   const stockBtn = cn(
     "inline-flex min-h-[64px] items-center justify-center gap-2.5 rounded-2xl px-5 py-3.5 transition-all active:scale-[0.98] sm:min-w-[200px] sm:flex-1",

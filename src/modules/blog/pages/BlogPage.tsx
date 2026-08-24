@@ -8,20 +8,24 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 export function BlogPage() {
   useDefaultMetaTags(
     "Blog de Seminovos",
-    "Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre."
+    "Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre.",
   );
 
   const sortedPosts = [...blogPosts].sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
   );
 
   return (
-    <main className="flex-1 pt-8 pb-16 overflow-x-hidden max-w-full">
+    <main className="flex-1 pb-16 pt-24 md:pt-10 overflow-x-hidden max-w-full">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-fg mb-2">Blog Netcar</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-fg mb-2">
+            Blog Netcar
+          </h1>
           <p className="text-gray-500 max-w-2xl">
-            Conteúdo próprio sobre seminovos, financiamento e compra inteligente na Grande Porto Alegre.
+            Respostas para dúvidas sobre compra, troca e financiamento de
+            seminovos na Grande Porto Alegre.
           </p>
         </div>
 
@@ -37,7 +41,9 @@ export function BlogPage() {
                   <div className="flex items-center gap-3 text-xs text-gray-400 mb-3">
                     <span className="inline-flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5" />
-                      {new Date(`${post.publishedAt}T12:00:00`).toLocaleDateString("pt-BR")}
+                      {new Date(
+                        `${post.publishedAt}T12:00:00`,
+                      ).toLocaleDateString("pt-BR")}
                     </span>
                     <span className="inline-flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" />

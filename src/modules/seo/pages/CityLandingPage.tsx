@@ -78,7 +78,7 @@ export function CityLandingPage() {
         <div className="mt-6 space-y-4">
           <h2 className="text-xl font-bold text-fg">
             {city.contentHeading ??
-              `Como comparar seminovos saindo de ${city.name}`}
+              `O que vale conferir antes de sair de ${city.name}`}
           </h2>
           {city.paragraphs.map((paragraph) => (
             <p key={paragraph} className="text-gray-600 leading-relaxed">
@@ -91,7 +91,7 @@ export function CityLandingPage() {
               className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
             >
               <h3 className="font-semibold text-fg">
-                Compare antes de organizar a visita
+                Abra o estoque antes de sair
               </h3>
               <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold">
                 <li>
@@ -152,32 +152,30 @@ export function CityLandingPage() {
       <section ref={trustSectionRef} className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <h2 className="mb-6 text-2xl font-bold text-fg">
-            Da pesquisa à visita em Esteio
+            Escolha primeiro. Depois organize a visita.
           </h2>
           <div className="grid gap-4 md:grid-cols-3">
             <article className="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-gray-50/80 p-5 shadow-sm">
               <Search className="mb-3 h-5 w-5 text-primary" />
-              <h3 className="mb-2 font-semibold text-fg">
-                1. Pesquise no site
-              </h3>
+              <h3 className="mb-2 font-semibold text-fg">1. Escolha no site</h3>
               <p className="text-sm leading-relaxed text-gray-600">
-                Compare estoque, fotos, preços e versões. Site é ponto de
-                partida antes de conversar com equipe.
+                Veja estoque, fotos, preços e versões antes de falar com a
+                equipe.
               </p>
             </article>
             <article className="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-gray-50/80 p-5 shadow-sm">
               <Car className="mb-3 h-5 w-5 text-primary" />
               <h3 className="mb-2 font-semibold text-fg">
-                2. Adiante negociação
+                2. Confirme pelo WhatsApp
               </h3>
               <p className="text-sm leading-relaxed text-gray-600">
-                Troca do usado, simulação de parcelamento e dúvidas no WhatsApp
-                podem começar remotamente. Condições finais na loja.
+                Envie os dados do usado, peça uma simulação e tire dúvidas pelo
+                WhatsApp. As condições finais são confirmadas na loja.
               </p>
             </article>
             <article className="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-gray-50/80 p-5 shadow-sm">
               <CalendarCheck className="mb-3 h-5 w-5 text-primary" />
-              <h3 className="mb-2 font-semibold text-fg">3. Confirme visita</h3>
+              <h3 className="mb-2 font-semibold text-fg">3. Venha ver</h3>
               <p className="text-sm leading-relaxed text-gray-600">
                 {city.visitPlanning ??
                   "Confirme disponibilidade e visite as lojas da Av. Presidente Vargas, em Esteio, para test drive, despachante e fechamento."}
@@ -185,7 +183,7 @@ export function CityLandingPage() {
             </article>
           </div>
           <p className="mt-5 text-sm text-gray-500">
-            Netcar possui lojas físicas somente em Esteio.{" "}
+            A Netcar tem lojas físicas somente em Esteio.{" "}
             <Link
               to="/regioes-atendidas"
               className="font-semibold text-primary hover:underline"

@@ -60,41 +60,50 @@ export function ContentSeoPage({ page }: { page: ContentSeoPageData }) {
 
       <section className="pb-14">
         <div className="container-main max-w-3xl px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-            {page.sections.map((section, idx) => {
-              if (section.type === "h2") {
-                return (
-                  <h2 key={idx} className="text-xl md:text-2xl font-bold text-fg mt-8 mb-3">
-                    {section.text}
-                  </h2>
-                );
-              }
-              if (section.type === "p") {
-                return (
-                  <p key={idx} className="text-gray-600 leading-relaxed mb-4">
-                    {section.text}
-                  </p>
-                );
-              }
-              if (section.type === "ul" && section.items) {
-                return (
-                  <ul key={idx} className="list-disc pl-5 space-y-2 text-gray-600 mb-4">
-                    {section.items.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                );
-              }
-              if (section.type === "ol" && section.items) {
-                return (
-                  <ol key={idx} className="list-decimal pl-5 space-y-2 text-gray-600 mb-4">
-                    {section.items.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ol>
-                );
-              }
-              return null;
-            })}
+          {page.sections.map((section, idx) => {
+            if (section.type === "h2") {
+              return (
+                <h2
+                  key={idx}
+                  className="text-xl md:text-2xl font-bold text-fg mt-8 mb-3"
+                >
+                  {section.text}
+                </h2>
+              );
+            }
+            if (section.type === "p") {
+              return (
+                <p key={idx} className="text-gray-600 leading-relaxed mb-4">
+                  {section.text}
+                </p>
+              );
+            }
+            if (section.type === "ul" && section.items) {
+              return (
+                <ul
+                  key={idx}
+                  className="list-disc pl-5 space-y-2 text-gray-600 mb-4"
+                >
+                  {section.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              );
+            }
+            if (section.type === "ol" && section.items) {
+              return (
+                <ol
+                  key={idx}
+                  className="list-decimal pl-5 space-y-2 text-gray-600 mb-4"
+                >
+                  {section.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ol>
+              );
+            }
+            return null;
+          })}
 
           {page.faq.length > 0 && (
             <>
@@ -108,7 +117,9 @@ export function ContentSeoPage({ page }: { page: ContentSeoPageData }) {
                     className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
                   >
                     <h3 className="mb-2 font-semibold text-fg">{item.q}</h3>
-                    <p className="text-sm leading-relaxed text-gray-600">{item.a}</p>
+                    <p className="text-sm leading-relaxed text-gray-600">
+                      {item.a}
+                    </p>
                   </div>
                 ))}
               </div>

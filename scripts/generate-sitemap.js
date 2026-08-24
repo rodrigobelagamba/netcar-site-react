@@ -22,6 +22,11 @@ const STATIC_PAGES = [
   { loc: "/seminovos", changefreq: "daily", priority: "0.9" },
   { loc: "/regioes-atendidas", changefreq: "monthly", priority: "0.85" },
   { loc: "/sobre", changefreq: "monthly", priority: "0.8" },
+  {
+    loc: "/como-selecionamos-nossos-carros",
+    changefreq: "monthly",
+    priority: "0.85",
+  },
   { loc: "/contato", changefreq: "monthly", priority: "0.8" },
   { loc: "/compra", changefreq: "monthly", priority: "0.7" },
   { loc: "/blog", changefreq: "weekly", priority: "0.6" },

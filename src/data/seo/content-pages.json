@@ -4,7 +4,7 @@
     "title": "Financiamento de seminovos em Esteio/RS | Netcar Multimarcas",
     "description": "Compare condições de financiamento para seminovos em diversos bancos e financeiras parceiras da Netcar, em Esteio/RS. Opções sujeitas à análise de crédito.",
     "h1": "Financiamento de seminovos em Esteio/RS",
-    "intro": "Na Netcar você compara condições de financiamento em diversos bancos e financeiras parceiras para buscar a melhor opção disponível para seu perfil. Simule pelo WhatsApp com o iAN antes de ir à loja. Todas as condições dependem da análise de crédito.",
+    "intro": "A Netcar envia a simulação para bancos e financeiras parceiras e apresenta as condições que forem aprovadas. Taxa, entrada e prazo dependem da análise de crédito. Você pode começar pelo WhatsApp antes de ir à loja.",
     "waText": "quero simular o financiamento de um seminovo e comparar condições entre os bancos e financeiras parceiras.",
     "ctaLabel": "Comparar financiamento no WhatsApp",
     "secondLabel": "Ver estoque",
@@ -32,7 +32,7 @@
       },
       {
         "type": "p",
-        "text": "Consultamos bancos e financeiras parceiras para buscar a melhor taxa disponível para o seu perfil, em vez de depender de uma única instituição. Você compara as propostas aprovadas e escolhe a opção que cabe no seu orçamento. Toda proposta depende de análise de crédito — não há aprovação garantida."
+        "text": "Consultamos bancos e financeiras parceiras e apresentamos as condições que forem aprovadas para o seu perfil. Taxa, entrada e prazo variam conforme a análise de crédito de cada instituição."
       },
       {
         "type": "h2",
@@ -52,7 +52,7 @@
           "Escolha o seminovo no estoque online ou com ajuda do consultor",
           "Envie RG, CPF, comprovante de renda e de endereço pelo WhatsApp",
           "Receba e compare as condições aprovadas pelos bancos e financeiras parceiras (sujeito a análise)",
-          "Aprovou? Retire o carro na loja em Esteio"
+          "Se decidir fechar, confira os documentos e combine a entrega na loja de Esteio"
         ]
       },
       {
@@ -91,7 +91,7 @@
       },
       {
         "q": "Como vocês buscam uma boa taxa?",
-        "a": "Consultamos diversos bancos e financeiras parceiras e comparamos as condições aprovadas para buscar a melhor opção disponível para o seu perfil."
+        "a": "Consultamos bancos e financeiras parceiras e apresentamos as condições que forem aprovadas. Compare taxa, entrada, prazo e custo total antes de decidir."
       },
       {
         "q": "Posso usar meu carro como entrada?",
@@ -102,9 +102,9 @@
   {
     "slug": "atendimento-24h",
     "title": "Atendimento 24h com o iAN | Netcar Multimarcas Esteio",
-    "description": "Atendimento 24 horas por dia, 7 dias por semana, com o iAN — o assistente da Netcar no WhatsApp. Tire dúvidas, veja estoque, simule financiamento e avalie seu usado a qualquer hora.",
-    "h1": "Atendimento 24/7 com o iAN, da Netcar",
-    "intro": "Comprar carro não tem hora. Por isso a Netcar tem o iAN, nosso atendente no WhatsApp disponível 24 horas por dia, 7 dias por semana. Ele responde dúvidas, mostra o estoque, inicia sua simulação de financiamento e organiza a avaliação do seu usado — a qualquer momento.",
+    "description": "O WhatsApp da Netcar recebe mensagens 24 horas por dia com o iAN. Consulte o estoque, envie dados para simulação ou troca e continue com a equipe no horário comercial.",
+    "h1": "Comece o atendimento pelo WhatsApp a qualquer hora",
+    "intro": "O iAN recebe sua mensagem no WhatsApp 24 horas por dia. Você pode informar o carro que procura, a faixa de preço, os dados do usado e o que deseja simular. Quando for preciso negociar ou confirmar uma condição, a equipe continua o atendimento no horário comercial.",
     "waText": "quero atendimento agora.",
     "ctaLabel": "Falar com o iAN agora",
     "secondLabel": "Ver estoque",
@@ -112,24 +112,24 @@
     "sections": [
       {
         "type": "h2",
-        "text": "Atendimento a qualquer hora"
+        "text": "Mensagem recebida a qualquer hora"
       },
       {
         "type": "p",
-        "text": "De madrugada, no fim de semana ou no intervalo do trabalho: o iAN responde na hora pelo WhatsApp. Você não precisa esperar o horário comercial para tirar uma dúvida ou reservar a visita."
+        "text": "Você pode começar a conversa de madrugada, no fim de semana ou no intervalo do trabalho. O iAN coleta as informações iniciais; atendimento humano e confirmação de condições ocorrem no horário comercial."
       },
       {
         "type": "h2",
-        "text": "O que o iAN resolve"
+        "text": "O que você pode adiantar com o iAN"
       },
       {
         "type": "ul",
         "items": [
-          "Mostra os carros do estoque conforme o que você procura",
-          "Inicia a simulação de financiamento e pede os documentos certos",
-          "Organiza a avaliação do seu usado para troca",
-          "Agenda visita e test drive nas lojas de Esteio",
-          "Encaminha você para um consultor humano quando precisar"
+          "Informar o tipo de carro e a faixa de preço que procura",
+          "Enviar os dados iniciais para uma simulação de financiamento",
+          "Enviar modelo, ano e quilometragem do usado para troca",
+          "Pedir uma visita ou um test-drive nas lojas de Esteio",
+          "Deixar a conversa organizada para a equipe continuar"
         ]
       },
       {
@@ -138,21 +138,21 @@
       },
       {
         "type": "p",
-        "text": "Mande modelo, ano, quilometragem e fotos do seu carro pelo WhatsApp. O iAN inicia a avaliação na hora e um consultor retorna com a orientação de valor — sem você precisar sair de casa."
+        "text": "Envie modelo, ano, quilometragem e fotos pelo WhatsApp. Esses dados iniciam a conversa; a proposta depende da vistoria presencial, da documentação e do interesse da loja no veículo."
       },
       {
         "type": "h2",
-        "text": "Humano quando você quiser"
+        "text": "A equipe assume quando for preciso"
       },
       {
         "type": "p",
-        "text": "O iAN agiliza o começo, mas quem fecha negócio é gente de verdade. A qualquer momento você fala com um consultor da Netcar para conduzir a negociação com calma e segurança."
+        "text": "O iAN organiza o primeiro contato. A negociação, a confirmação de valores e o fechamento são feitos pela equipe da Netcar no horário comercial."
       }
     ],
     "faq": [
       {
         "q": "O atendimento é realmente 24 horas?",
-        "a": "Sim. O iAN responde no WhatsApp 24 horas por dia, 7 dias por semana. Atendimento humano ocorre no horário comercial das lojas."
+        "a": "O WhatsApp recebe mensagens 24 horas por dia com o iAN. Atendimento humano, negociação e confirmação de condições ocorrem no horário comercial das lojas."
       },
       {
         "q": "O iAN é um robô?",
@@ -160,7 +160,7 @@
       },
       {
         "q": "Consigo avaliar meu carro pelo WhatsApp?",
-        "a": "Sim. Envie modelo, ano, km e fotos; a avaliação começa na hora e um consultor retorna com a orientação de valor."
+        "a": "Você pode enviar modelo, ano, km e fotos pelo WhatsApp. A proposta final depende da vistoria presencial, dos documentos e da análise da loja."
       }
     ]
   },
@@ -272,9 +272,9 @@
   {
     "slug": "seminovos-automaticos",
     "title": "Seminovos automáticos em Esteio/RS | Netcar Multimarcas",
-    "description": "Carros seminovos com câmbio automático e CVT revisados em Esteio/RS. Veja o estoque, simule financiamento e dê seu usado na troca na Netcar Multimarcas.",
+    "description": "Veja os seminovos automáticos e CVT disponíveis na Netcar, em Esteio/RS. Consulte fotos, preço, km, troca e financiamento.",
     "h1": "Seminovos automáticos em Esteio/RS",
-    "intro": "Conforto no trânsito, praticidade no dia a dia e melhor revenda: o câmbio automático deixou de ser luxo e virou o preferido de quem roda todo dia entre Esteio, Canoas, Sapucaia do Sul e Porto Alegre. Na Netcar Multimarcas você encontra automáticos e CVT revisados pela Fábrica de Valor, com laudo de vistoria, garantia e financiamento comparado entre bancos parceiros.",
+    "intro": "Esta página reúne os automáticos e CVT disponíveis nas duas lojas da Netcar, em Esteio. Confira fotos, ano, quilometragem, versão e preço antes de falar com a equipe sobre troca ou financiamento.",
     "waText": "estou procurando um seminovo automático em Esteio.",
     "ctaLabel": "Ver automáticos no WhatsApp",
     "secondLabel": "Ver estoque completo de seminovos",
@@ -292,10 +292,10 @@
       {
         "type": "ul",
         "items": [
-          "Menos desgaste no trânsito da BR-116 e da Av. Presidente Vargas, em Esteio",
-          "Direção mais leve para quem enfrenta congestionamento diário até Porto Alegre",
-          "Revenda mais rápida: automático tem procura maior no mercado de usados",
-          "Opções de 6 marchas, CVT e automatizado, cada uma com um perfil de uso"
+          "Menos trocas de marcha no trânsito urbano",
+          "Modelos com câmbio automático convencional, CVT ou automatizado",
+          "Consumo e manutenção variam conforme o conjunto mecânico e o histórico de uso",
+          "O test-drive ajuda a comparar o funcionamento entre modelos"
         ]
       },
       {
@@ -304,7 +304,7 @@
       },
       {
         "type": "p",
-        "text": "O automático convencional (conversor de torque) é o mais comum em SUVs e sedãs e costuma ser o mais robusto. O CVT trabalha sem trocas perceptíveis e rende bem em cidade, sendo comum em modelos como HR-V, Kicks e Civic. O automatizado de embreagem simples é mais econômico na compra, porém tem trocas mais lentas. Na loja, o consultor explica qual combina com o seu trajeto."
+        "text": "Automático convencional, CVT e automatizado funcionam de maneiras diferentes. Antes de escolher, confira a versão exata, o plano de manutenção indicado pela fabricante e faça o test-drive. A equipe mostra quais tipos estão disponíveis no estoque."
       },
       {
         "type": "h2",
@@ -312,7 +312,7 @@
       },
       {
         "type": "p",
-        "text": "Todo seminovo automático passa pela nossa Fábrica de Valor: avaliação mecânica, verificação do funcionamento do câmbio em rodagem, troca de fluidos quando necessário e correção de itens antes de o carro entrar no estoque. Você recebe laudo de vistoria e garantia — e pode consultar o histórico do veículo antes de fechar."
+        "text": "O carro passa pela Fábrica de Valor antes de ir para a vitrine, incluindo avaliação de rodagem e do funcionamento do câmbio. Consulte na página do veículo os documentos e o i-CHECK, quando disponível, e confirme com a equipe o que foi feito naquela unidade."
       },
       {
         "type": "h2",
@@ -320,7 +320,7 @@
       },
       {
         "type": "p",
-        "text": "Automático bem cuidado é confiável. O ponto que exige atenção é a troca do fluido no intervalo indicado pelo fabricante e evitar reboque com as rodas de tração no chão. Por isso verificamos o câmbio em rodagem antes de anunciar o carro e orientamos o cliente sobre o plano de manutenção na entrega."
+        "text": "O custo depende do modelo, do tipo de câmbio e do histórico de manutenção. Verifique os intervalos de troca de fluido definidos pela fabricante, faça o test-drive e pergunte à equipe quais informações estão disponíveis sobre o carro escolhido."
       },
       {
         "type": "h2",
@@ -336,7 +336,7 @@
       },
       {
         "type": "p",
-        "text": "Nossas duas lojas ficam na Av. Presidente Vargas, em Esteio/RS, a poucos minutos de Sapucaia do Sul, Canoas, São Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha, Alvorada, Viamão e Porto Alegre. Também atendemos compradores de Caxias do Sul, Gramado, Taquara e Igrejinha, com envio de vídeos e laudo pelo WhatsApp antes da viagem."
+        "text": "As duas lojas ficam na Av. Presidente Vargas, em Esteio/RS. Quem vem de outra cidade pode conferir o estoque no site e pedir fotos ou vídeos pelo WhatsApp antes de organizar a visita."
       }
     ],
     "faq": [
@@ -346,11 +346,11 @@
       },
       {
         "q": "Automático gasta mais combustível que manual?",
-        "a": "Nos modelos atuais a diferença é pequena, e no trânsito urbano o automático moderno costuma empatar ou até levar vantagem. O consumo real depende mais do motor e do seu trajeto do que do tipo de câmbio."
+        "a": "Não há uma regra única. O consumo muda conforme o motor, o tipo de câmbio, o peso do carro e o trajeto. Compare os dados oficiais da versão escolhida e observe o consumo no seu uso diário."
       },
       {
         "q": "O câmbio automático tem garantia?",
-        "a": "Sim. Os seminovos da Netcar saem com garantia e laudo de vistoria. As condições e a cobertura são apresentadas por escrito antes do fechamento."
+        "a": "As condições e a cobertura da garantia são apresentadas na negociação. Consulte também os documentos e o i-CHECK na página do veículo, quando disponível."
       },
       {
         "q": "Consigo financiar um automático dando meu carro na troca?",
@@ -358,7 +358,82 @@
       },
       {
         "q": "Vocês vendem para quem mora em outra cidade?",
-        "a": "Sim. Atendemos a Grande Porto Alegre, o Vale dos Sinos, o Vale do Caí, a Serra e o Litoral Norte. Enviamos vídeos, fotos e o laudo pelo WhatsApp antes de você se deslocar até Esteio."
+        "a": "Sim. As lojas ficam em Esteio, mas você pode consultar o estoque e pedir fotos ou vídeos pelo WhatsApp antes de se deslocar."
+      }
+    ]
+  },
+  {
+    "slug": "como-selecionamos-nossos-carros",
+    "title": "Como selecionamos nossos carros | Netcar Multimarcas",
+    "description": "Conheça os critérios da Netcar: veículos selecionados no RS, sem origem de locadora, análise do histórico disponível e preparação antes da vitrine.",
+    "h1": "Nem todo carro entra na Netcar",
+    "intro": "Antes de anunciar, a gente olha de onde o carro veio, o histórico que está disponível e o tipo de uso que teve. Nosso estoque de revenda é comprado no RS e não tem carro de locadora.",
+    "waText": "quero encontrar um seminovo e entender a origem e a preparação do veículo.",
+    "ctaLabel": "Falar sobre um seminovo",
+    "secondLabel": "Ver estoque disponível",
+    "secondHref": "/seminovos",
+    "sections": [
+      {
+        "type": "h2",
+        "text": "Primeiro a gente escolhe o carro. Depois anuncia."
+      },
+      {
+        "type": "p",
+        "text": "Parece óbvio, mas não é só comprar qualquer carro e colocar uma placa de preço. Se a origem e as informações disponíveis não ajudam a entender o veículo, ele não combina com o estoque que a Netcar quer vender."
+      },
+      {
+        "type": "h2",
+        "text": "Compramos no Rio Grande do Sul"
+      },
+      {
+        "type": "p",
+        "text": "O estoque que compramos para revender vem do RS. Assim, trabalhamos dentro do mercado que conhecemos e conseguimos avaliar melhor as informações disponíveis."
+      },
+      {
+        "type": "h2",
+        "text": "Carro de locadora não entra"
+      },
+      {
+        "type": "p",
+        "text": "A Netcar não compra carro de locadora para revender. É uma escolha ligada ao tipo de uso que aceitamos para o nosso estoque."
+      },
+      {
+        "type": "h2",
+        "text": "Conferimos o que está disponível e preparamos o carro"
+      },
+      {
+        "type": "p",
+        "text": "O histórico, as consultas e os documentos disponíveis ajudam a decidir se o carro entra ou não. Depois de comprado, ele passa pela avaliação e pela preparação da Netcar antes de ir para a vitrine."
+      },
+      {
+        "type": "h2",
+        "text": "Na página e na loja"
+      },
+      {
+        "type": "p",
+        "text": "Mostramos as informações disponíveis, deixamos o i-CHECK acessível quando houver e explicamos as condições da venda antes do fechamento."
+      }
+    ],
+    "faq": [
+      {
+        "q": "A Netcar vende veículos provenientes de locadoras?",
+        "a": "Não. Carro de locadora não entra no estoque que a Netcar compra para revender."
+      },
+      {
+        "q": "Os veículos da Netcar são comprados no Rio Grande do Sul?",
+        "a": "Sim. O estoque que a Netcar compra para revender vem do Rio Grande do Sul. Durante o atendimento, a equipe explica as informações disponíveis sobre o carro escolhido."
+      },
+      {
+        "q": "Isso significa que um seminovo nunca terá problemas?",
+        "a": "Não. Seminovo não é carro zero e pode precisar de manutenção no futuro. A seleção e a preparação ajudam, mas não são promessa de risco zero. A garantia e as condições da venda são explicadas antes do fechamento."
+      },
+      {
+        "q": "Consigo consultar o histórico do carro antes de comprar?",
+        "a": "Sim. Quando o veículo possui i-CHECK, o laudo fica disponível na própria página do carro e pode ser aberto e baixado em PDF. O consultor também apresenta as demais consultas e os documentos disponíveis para aquele veículo."
+      },
+      {
+        "q": "As duas lojas possuem estoques separados?",
+        "a": "Não. As duas lojas ficam na Avenida Presidente Vargas, em Esteio, e trabalham com o mesmo estoque integrado. Um vendedor pode acompanhar você nos veículos disponíveis em qualquer uma das unidades."
       }
     ]
   },
@@ -427,7 +502,7 @@
     "faq": [
       {
         "q": "Os artigos do blog são escritos por inteligência artificial?",
-        "a": "Parte deles é montada automaticamente a partir do estoque real da loja, com apoio de ferramenta de geração de texto. Todos seguem as regras editoriais desta página e a curadoria é da equipe da Netcar. Artigos sobre financiamento, avaliação e documentação são escritos e conferidos por quem faz isso no dia a dia."
+        "a": "Parte deles é montada automaticamente a partir do estoque real da loja, com apoio de ferramenta de geração de texto. Todos seguem as regras editoriais desta página e são revisados pela equipe da Netcar. Artigos sobre financiamento, avaliação e documentação são escritos e conferidos por quem faz isso no dia a dia."
       },
       {
         "q": "Os preços e carros citados nos artigos estão disponíveis agora?",

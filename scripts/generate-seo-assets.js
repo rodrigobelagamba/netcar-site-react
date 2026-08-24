@@ -1607,6 +1607,11 @@ const staticPages = [
   { path: "/seminovos", priority: "0.9", changefreq: "daily" },
   { path: "/regioes-atendidas", priority: "0.85", changefreq: "monthly" },
   { path: "/sobre", priority: "0.8", changefreq: "monthly" },
+  {
+    path: "/como-selecionamos-nossos-carros",
+    priority: "0.85",
+    changefreq: "monthly",
+  },
   { path: "/contato", priority: "0.8", changefreq: "monthly" },
   { path: "/compra", priority: "0.85", changefreq: "weekly" },
   { path: "/blog", priority: "0.8", changefreq: "weekly" },

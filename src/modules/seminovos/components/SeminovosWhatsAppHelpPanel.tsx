@@ -22,12 +22,15 @@ export function SeminovosWhatsAppHelpPanel({
   const messages = homeWhatsAppMessages();
   const whatsappNumber = whatsapp?.numero || DEFAULT_SALES_WHATSAPP;
 
-  const financeHref = buildWhatsAppUrl(whatsappNumber, messages.simulateFinance);
+  const financeHref = buildWhatsAppUrl(
+    whatsappNumber,
+    messages.simulateFinance,
+  );
   const ianHref = buildWhatsAppUrl(whatsappNumber, messages.talkToIan);
 
   const primaryLabel = hasFilters
     ? "Receber opções no WhatsApp"
-    : "Quero ajuda pra escolher";
+    : "Quero ajuda para escolher";
 
   if (variant === "inline") {
     return (
@@ -38,7 +41,8 @@ export function SeminovosWhatsAppHelpPanel({
               Ainda em dúvida?
             </p>
             <p className="mt-1 text-sm font-black leading-snug sm:text-base">
-              Manda o que procura — a gente responde no WhatsApp com opções do estoque.
+              Manda o que procura — a gente responde no WhatsApp com opções do
+              estoque.
             </p>
           </div>
           <a
@@ -64,17 +68,17 @@ export function SeminovosWhatsAppHelpPanel({
         <div className="max-w-2xl">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[#5CD29D]/30 bg-[#5CD29D]/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#5CD29D]">
             <Sparkles className="h-3.5 w-3.5" />
-            Atendimento 24h · estoque
+            Atendimento pelo WhatsApp
           </span>
           <h2 className="mt-3 text-xl font-black leading-tight sm:text-2xl">
             {hasFilters
-              ? "Filtrou e não achou o ideal? Pedimos opções no WhatsApp."
-              : "Olhou o estoque e ficou na dúvida? Fala com a Netcar agora."}
+              ? "Filtrou e não encontrou? Envie seus filtros pelo WhatsApp."
+              : "Ficou em dúvida entre os carros do estoque?"}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-white/75 sm:text-base">
             {hasFilters
-              ? "Seus filtros vão na mensagem. Respondemos com opções parecidas do estoque."
-              : "Não achou o carro certo? Peça opções do estoque pelo WhatsApp, respondemos 24h/7."}
+              ? "Seus filtros já vão na mensagem para a equipe consultar opções parecidas."
+              : "Diga o que procura. A mensagem pode ser enviada a qualquer hora; a equipe continua o atendimento no horário comercial."}
           </p>
         </div>
 

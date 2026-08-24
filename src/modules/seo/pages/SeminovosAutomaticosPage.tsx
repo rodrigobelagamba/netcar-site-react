@@ -13,7 +13,9 @@ import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSign
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 
 export function SeminovosAutomaticosPage() {
-  const { data: vehicles, isLoading } = useVehiclesQuery({ cambio: "Automatico" });
+  const { data: vehicles, isLoading } = useVehiclesQuery({
+    cambio: "Automatico",
+  });
   const availableVehicles = useMemo(
     () => (vehicles ?? []).filter(isAvailableHomeStockVehicle),
     [vehicles],
@@ -21,7 +23,7 @@ export function SeminovosAutomaticosPage() {
 
   useDefaultMetaTags(
     "Seminovos Automáticos em Esteio",
-    "Seminovos automáticos e CVT revisados em Esteio/RS. Troca, parcelamento e despachante. Financiamento facilitado na Netcar."
+    "Veja os carros automáticos e CVT disponíveis na Netcar, em Esteio/RS. Consulte fotos, preço, km, troca e financiamento.",
   );
 
   return (
@@ -29,7 +31,7 @@ export function SeminovosAutomaticosPage() {
       <RegionalSeoHero
         eyebrow="Câmbio automático · Esteio/RS"
         title="Seminovos automáticos em Esteio"
-        intro="Conforto no trânsito, praticidade no dia a dia e melhor revenda. Automáticos e CVT revisados pela Fábrica de Valor — com troca, parcelamento e despachante."
+        intro="Veja os automáticos e CVT disponíveis nas duas lojas da Netcar. Confira fotos, preço e quilometragem antes de falar sobre troca ou financiamento."
       >
         <RegionalActionCtas
           className="mt-8"
@@ -84,7 +86,9 @@ export function SeminovosAutomaticosPage() {
                 data-regional-action="view_stock_more"
                 className="inline-flex w-full max-w-md items-center justify-center gap-2.5 rounded-full bg-[#00283C] px-8 py-4 text-base font-black uppercase tracking-wider text-white shadow-[0_12px_32px_rgba(0,40,60,0.28)] transition-all hover:bg-[#00435a] hover:shadow-[0_16px_40px_rgba(0,40,60,0.34)] active:scale-[0.98] sm:w-auto"
               >
-                <span className="button-text-shimmer-on-dark">Ver mais carros</span>
+                <span className="button-text-shimmer-on-dark">
+                  Ver mais carros
+                </span>
                 <ArrowRight className="h-5 w-5" />
               </Link>
             </div>

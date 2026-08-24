@@ -65,7 +65,7 @@ export function RegionsHubPage() {
       <RegionalSeoHero
         eyebrow="Atendimento regional · loja em Esteio"
         title="Seminovos para Grande Porto Alegre, Vales e Serra Gaúcha"
-        intro="Veja o estoque real, fale no WhatsApp ou venda seu usado. Aceitamos troca, parcelamos e cuidamos da documentação com despachante. Test drive e fechamento nas lojas da Av. Presidente Vargas."
+        intro="Veja o estoque antes de sair da sua cidade, confirme os carros pelo WhatsApp e envie os dados do usado ou da simulação. Test-drive, vistoria e fechamento acontecem nas lojas da Av. Presidente Vargas, em Esteio."
       >
         <RegionalActionCtas
           className="mt-8"
@@ -84,24 +84,24 @@ export function RegionsHubPage() {
       <section className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <h2 className="mb-6 text-2xl font-bold text-fg">
-            Como planejar atendimento fora de Esteio
+            Antes de sair da sua cidade
           </h2>
           <div className="grid gap-4 md:grid-cols-3">
             {[
               {
                 icon: Search,
                 title: "1. Veja o estoque",
-                text: "Filtre modelos, confira fotos, km e preço. Separe opções antes do contato.",
+                text: "Filtre modelos, confira fotos, km e preço. Separe os carros que quer conhecer.",
               },
               {
                 icon: Clock,
                 title: "2. Fale no WhatsApp",
-                text: "Tire dúvida, simule parcelamento ou envie dados do usado para troca.",
+                text: "Confirme os carros, tire dúvidas e envie os dados do usado, se houver troca.",
               },
               {
                 icon: Store,
                 title: "3. Confirme visita",
-                text: "Cheque disponibilidade e agenda. Loja, test drive, despachante e fechamento em Esteio.",
+                text: "Combine o horário. Test-drive, avaliação e fechamento acontecem em Esteio.",
               },
             ].map(({ icon: Icon, title, text }) => (
               <article

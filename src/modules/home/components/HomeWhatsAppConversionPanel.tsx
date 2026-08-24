@@ -9,6 +9,7 @@ import {
   Sparkles,
   Gauge,
   Bot,
+  FileCheck,
 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
@@ -109,27 +110,22 @@ export function HomeWhatsAppConversionPanel({
         <div className="rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-white shadow-2xl md:backdrop-blur md:p-7 lg:p-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#5CD29D]/30 bg-[#5CD29D]/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#5CD29D]">
             <MessageCircle className="h-4 w-4" />
-            <span className="md:hidden">Atendimento 24h</span>
-            <span className="hidden md:inline">
-              Atendimento 24h · iAN + consultor
-            </span>
+            <span className="md:hidden">Fale pelo WhatsApp</span>
+            <span className="hidden md:inline">Atendimento pelo WhatsApp</span>
           </span>
 
           <h1 className="mt-3 text-2xl font-black leading-tight md:mt-4 md:text-4xl lg:text-[2.75rem]">
             <span className="md:hidden">Seminovos em Esteio/RS</span>
-            <span className="hidden md:inline">
-              Seminovos em Esteio/RS com garantia
-            </span>
+            <span className="hidden md:inline">Seminovos em Esteio/RS</span>
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/78 md:mt-3 md:text-lg">
             <span className="md:hidden">
               Veja o estoque ou chame no WhatsApp — mensagem pronta.
             </span>
             <span className="hidden md:inline">
-              Encontre seu seminovo no estoque e fale com a Netcar em um clique.
-              Diga qual carro te interessou, peça opções parecidas ou compare
-              financiamento em bancos e financeiras parceiras. A mensagem já vai
-              pronta no WhatsApp — condições sujeitas à análise.
+              Escolha um carro do estoque ou diga o que procura. No WhatsApp
+              você também pode enviar os dados da troca e iniciar uma simulação
+              de financiamento, sujeita à análise.
             </span>
           </p>
 
@@ -145,11 +141,11 @@ export function HomeWhatsAppConversionPanel({
             </div>
             <div className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-3">
               <Clock className="h-4 w-4 shrink-0 text-[#5CD29D]" />
-              Atendimento 24h, 7 dias
+              Mensagem recebida 24h
             </div>
             <div className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-3">
-              <Bot className="h-4 w-4 shrink-0 text-[#5CD29D]" />
-              Nethelp pós-venda
+              <FileCheck className="h-4 w-4 shrink-0 text-[#5CD29D]" />
+              Despachante credenciado
             </div>
           </div>
 
@@ -201,7 +197,7 @@ export function HomeWhatsAppConversionPanel({
               }`}
             >
               <MessageCircle className="h-5 w-5" />
-              Tenho interesse neste carro
+              Tenho interesse neste
             </a>
             <button
               type="button"
@@ -241,7 +237,7 @@ export function HomeWhatsAppConversionPanel({
               className={quickActionClass}
             >
               <Gauge className="h-4 w-4 text-[#5CD29D]" />
-              Saber sobre a KM
+              Confirmar quilometragem
             </a>
             <a
               href={similarHref}
@@ -264,7 +260,7 @@ export function HomeWhatsAppConversionPanel({
               className={quickActionClass}
             >
               <Bot className="h-4 w-4 text-[#5CD29D]" />
-              Falar com a iAN
+              Falar com o iAN
             </a>
           </div>
         </div>
@@ -327,7 +323,7 @@ export function HomeWhatsAppConversionPanel({
           <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                Até 60x · cartão 21x · troca
+                Até 60x · entrada no cartão · troca
               </span>
               <p className="text-2xl font-black text-[#00283C]">
                 {price || "Consulte"}

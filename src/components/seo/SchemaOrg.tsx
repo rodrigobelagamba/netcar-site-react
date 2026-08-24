@@ -53,7 +53,7 @@ export function SchemaOrg() {
           taxID: "02.237.969/0001-06",
           foundingDate: "1997",
           description:
-            "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.",
+            "Loja de seminovos em Esteio/RS. Duas lojas integradas na Av. Presidente Vargas, estoque online, financiamento, troca e compra de usados.",
           url: baseUrl,
           logo: {
             "@type": "ImageObject",

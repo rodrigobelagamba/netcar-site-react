@@ -37,17 +37,16 @@ export function RegionalTrustSignals({
 }: RegionalTrustSignalsProps) {
   const { data } = useGoogleReviewsQuery();
   const summary = data?.summary;
-  const rating = summary?.rating ?? 4.9;
   const totalCount = summary?.totalCount;
   const placeUrl = summary?.placeUrl;
-  const ratingLabel = rating.toFixed(1).replace(".", ",");
+  const ratingLabel = summary?.rating.toFixed(1).replace(".", ",");
 
   const items: TrustItem[] = [
     {
       key: "trade",
       icon: ArrowLeftRight,
       title: "Aceitamos seu usado na troca",
-      text: "Avaliação justa do seu carro para abater no seminovo. Mesmo financiado — sujeito à análise.",
+      text: "Envie os dados do seu carro e combine a vistoria em Esteio. Veículos financiados também podem ser avaliados.",
       href: "/compra",
       linkLabel: "Avaliar usado",
     },
@@ -61,15 +60,16 @@ export function RegionalTrustSignals({
       key: "docs",
       icon: FileCheck2,
       title: "Despachante credenciado",
-      text: "A Netcar cuida da documentação e da transferência com despachante credenciado. Menos burocracia na compra.",
+      text: "A documentação e a transferência são conduzidas com despachante credenciado.",
     },
     {
       key: "google",
       icon: Star,
-      title: "Alto índice de satisfação no Google",
-      text: totalCount
-        ? `${ratingLabel} de 5 com ${totalCount.toLocaleString("pt-BR")} avaliações — quem compra recomenda.`
-        : `${ratingLabel} de 5 no Google — quem compra recomenda a Netcar.`,
+      title: "Avaliações publicadas no Google",
+      text:
+        summary && totalCount
+          ? `${ratingLabel} de 5 com ${totalCount.toLocaleString("pt-BR")} avaliações publicadas.`
+          : "Consulte as notas e os comentários publicados pelos clientes no Google.",
       externalHref: placeUrl,
       google: true,
       ratingLabel,
@@ -141,14 +141,14 @@ export function RegionalTrustSignals({
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="mb-6 max-w-2xl">
           <span className="mb-2 block text-xs font-semibold uppercase tracking-widest text-primary">
-            Por que a Netcar
+            Dá para começar de casa
           </span>
           <h2 className="text-2xl font-bold text-fg md:text-3xl">
-            Troca, parcelamento, despachante e reputação no Google
+            O que pode ser resolvido antes da visita
           </h2>
           <p className="mt-2 text-gray-600">
-            Mesma experiência de loja física em Esteio — do primeiro WhatsApp ao
-            carro transferido.
+            As duas lojas ficam em Esteio. Pelo site e pelo WhatsApp você pode
+            consultar o estoque, enviar os dados da troca e iniciar a simulação.
           </p>
         </div>
         {grid}

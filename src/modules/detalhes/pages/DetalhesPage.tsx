@@ -933,7 +933,7 @@ function CTASidebar({
               className="relative mx-auto mb-3 h-[112px] w-[112px] object-contain drop-shadow-md transition duration-300 group-hover:scale-[1.04]"
             />
             <span className="relative mb-1 block text-[15px] font-extrabold uppercase tracking-[0.1em] text-[#1B5E20]">
-              Histórico aprovado
+              Consulta disponível
             </span>
             <span className="relative mb-3 block text-[12px] leading-snug text-[#00283C]/70">
               Consulta informativa com fotos e histórico DEKRA / CheckAuto
@@ -1812,7 +1812,7 @@ export function DetalhesPage() {
     const priceText = vehicle.valor_formatado?.replace(/<[^>]*>/g, "") || "";
     const description = isSold
       ? `${marca} ${modeloCompleto} ${vehicle.year || ""} — veículo vendido. Confira seminovos similares na Netcar Multimarcas, Esteio/RS.`.trim()
-      : `${marca} ${modeloCompleto} ${vehicle.year || ""} seminovo por ${priceText}, ${vehicle.km?.toLocaleString("pt-BR") || 0} km, em Esteio/RS. Vistoriado, com garantia Netcar.`.trim();
+      : `${marca} ${modeloCompleto} ${vehicle.year || ""} por ${priceText}, com ${vehicle.km?.toLocaleString("pt-BR") || 0} km, na Netcar em Esteio/RS. Veja fotos, ficha e opcionais.`.trim();
 
     const pageTitle = isSold
       ? `${ogTitle} - Vendido | Netcar Esteio/RS`
@@ -1849,7 +1849,8 @@ export function DetalhesPage() {
   useMetaTags(
     metaTags || {
       title: "Veículo",
-      description: "Seminovos com garantia na Netcar Multimarcas, Esteio/RS.",
+      description:
+        "Veja fotos, preço e ficha dos seminovos da Netcar em Esteio/RS.",
       image: "",
       url: "",
       robots: !vehicle && (error || !isPending) ? "noindex, follow" : undefined,
@@ -1879,7 +1880,7 @@ export function DetalhesPage() {
     ? []
     : [
         ...(hasIcheckSeal
-          ? [{ text: "ICHECK APROVADO", variant: "icheck" as const }]
+          ? [{ text: "i-CHECK DISPONÍVEL", variant: "icheck" as const }]
           : []),
         ...(hasDiferencial("garantia_fabrica")
           ? [{ text: "Garantia de Fábrica", variant: "garantia" as const }]
@@ -2088,9 +2089,8 @@ export function DetalhesPage() {
                 />
                 {!isSold && (
                   <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">
-                    Compare condições em diversos bancos e financeiras parceiras
-                    para buscar a melhor opção disponível para seu perfil.
-                    Sujeito à análise.
+                    Consulte as condições aprovadas por bancos e financeiras
+                    parceiras. Taxa, entrada e prazo dependem da análise.
                   </p>
                 )}
               </div>

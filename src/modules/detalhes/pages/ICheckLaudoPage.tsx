@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "@tanstack/react-router";
-import { Printer, Download, ArrowLeft, Check, AlertTriangle } from "lucide-react";
+import {
+  Printer,
+  Download,
+  ArrowLeft,
+  Check,
+  AlertTriangle,
+} from "lucide-react";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { maskPlate } from "@/lib/slug";
 import { resolveIcheckProtocol } from "@/lib/icheck-protocol";
@@ -271,7 +277,7 @@ export function ICheckLaudoPage() {
           <header className="border-b border-[#E4EAEF] px-4 py-5 print:break-inside-avoid sm:px-8">
             <div className="mb-3 flex items-center justify-between gap-3">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#5A6B73]">
-                Histórico atestado via
+                Histórico consultado via
               </p>
               <img
                 src="/brand/netcar.png"
@@ -299,8 +305,8 @@ export function ICheckLaudoPage() {
                 Autoridade DEKRA — líder global em inspeção veicular
               </p>
               <p className="mt-1.5 text-[11px] leading-relaxed text-[#5A6B73] sm:text-xs">
-                A <strong className="font-bold text-[#00283C]">DEKRA</strong> é a
-                maior empresa de inspeção veicular do mundo e líder global em
+                A <strong className="font-bold text-[#00283C]">DEKRA</strong> é
+                a maior empresa de inspeção veicular do mundo e líder global em
                 testes, vistorias e certificações. Fundada na Alemanha em 1925.
                 Histórico consultado via CheckAuto, uma empresa DEKRA.
               </p>
@@ -313,8 +319,8 @@ export function ICheckLaudoPage() {
                 {title}
               </h1>
               <p className="mt-1 text-sm text-[#5A6B73]">
-                Dossiê com fotos, ficha técnica e histórico CheckAuto/DEKRA —
-                transparência Netcar na sua compra.
+                Consulta disponível para este veículo, com fotos, ficha técnica
+                e dados CheckAuto/DEKRA.
               </p>
               <p className="mt-2 text-xs leading-relaxed text-[#5A6B73]">
                 Esta consulta não tem caráter de laudo técnico. Não constitui
@@ -327,7 +333,7 @@ export function ICheckLaudoPage() {
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2E7D32] text-white">
                   <Check className="h-3.5 w-3.5" strokeWidth={3} />
                 </span>
-                Histórico aprovado
+                Resultado da consulta
               </p>
               <p className="mt-1 text-xs text-[#5A6B73]">
                 Consulta às bases CheckAuto / DEKRA — sem registros graves nos
@@ -420,7 +426,10 @@ export function ICheckLaudoPage() {
                 Dados do veículo
               </h2>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                <Spec label="Marca / modelo" value={`${vehicle.marca} ${vehicle.modelo}`} />
+                <Spec
+                  label="Marca / modelo"
+                  value={`${vehicle.marca} ${vehicle.modelo}`}
+                />
                 <Spec label="Ano" value={yearLabel} />
                 <Spec
                   label="Placa"
@@ -484,7 +493,10 @@ export function ICheckLaudoPage() {
                             }`}
                           >
                             {alienacao ? (
-                              <AlertTriangle className="h-3.5 w-3.5" strokeWidth={3} />
+                              <AlertTriangle
+                                className="h-3.5 w-3.5"
+                                strokeWidth={3}
+                              />
                             ) : (
                               <Check className="h-3.5 w-3.5" strokeWidth={3} />
                             )}
@@ -551,10 +563,10 @@ export function ICheckLaudoPage() {
                         Há apontamento relevante no histórico
                       </p>
                       <p className="mt-2 text-sm leading-relaxed text-[#5A6B73]">
-                        Bancos e seguradoras costumam analisar caso a caso quando
-                        existe registro de leilão, sinistro ou roubo/furto.
-                        A Netcar orienta confirmar a situação com a instituição
-                        antes de fechar crédito ou apólice.
+                        Bancos e seguradoras costumam analisar caso a caso
+                        quando existe registro de leilão, sinistro ou
+                        roubo/furto. A Netcar orienta confirmar a situação com a
+                        instituição antes de fechar crédito ou apólice.
                       </p>
                     </div>
                   </section>
@@ -573,15 +585,15 @@ export function ICheckLaudoPage() {
                       <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2E7D32] text-white">
                         <Check className="h-3.5 w-3.5" strokeWidth={3} />
                       </span>
-                      Veículo apto a crédito e seguro
+                      Sem apontamentos nos itens consultados
                     </p>
                     <p className="mt-3 text-sm leading-relaxed text-[#00283C]/85">
                       De acordo com as bases consultadas, não foram encontrados
-                      registros de leilão, sinistro com perda total ou ocorrência
-                      de roubo/furto. A ausência desses apontamentos pode
-                      contribuir positivamente para análises de financiamento e
-                      contratação de seguro, observadas as políticas e critérios
-                      de cada instituição.
+                      registros de leilão, sinistro com perda total ou
+                      ocorrência de roubo/furto. A ausência desses apontamentos
+                      pode contribuir positivamente para análises de
+                      financiamento e contratação de seguro, observadas as
+                      políticas e critérios de cada instituição.
                     </p>
                     {hasAlienacao ? (
                       <div className="mt-3 rounded-xl bg-[#FFF8E1] px-3 py-3 ring-1 ring-inset ring-[#F59E0B]/45">
@@ -589,17 +601,16 @@ export function ICheckLaudoPage() {
                           Sobre a alienação fiduciária
                         </p>
                         <p className="mt-1.5 text-sm leading-relaxed text-[#78350F]/90">
-                          Consta vínculo com instituição financeira (veículo
-                          financiado). Não impede a compra: na transferência, o
-                          gravame é quitado/baixado com o banco. Seguradoras e
-                          financeiras costumam aceitar o bem após regularização
-                          do financiamento.
+                          Consta vínculo com instituição financeira. A quitação
+                          e a baixa do gravame devem ser tratadas com o banco
+                          dentro da negociação. Crédito e seguro continuam
+                          sujeitos às regras de cada instituição.
                         </p>
                       </div>
                     ) : (
                       <p className="mt-3 text-xs leading-relaxed text-[#5A6B73]">
-                        Histórico limpo nos itens críticos — perfil compatível
-                        com produtos de crédito e proteção veicular do mercado.
+                        Crédito e seguro dependem da análise e das regras de
+                        cada instituição.
                       </p>
                     )}
                   </div>
@@ -645,11 +656,11 @@ export function ICheckLaudoPage() {
 
             <section className="rounded-2xl border border-[#5CD29D] bg-[#F3FBF7] px-4 py-4">
               <h2 className="text-sm font-extrabold uppercase tracking-[0.08em] text-[#00283C]">
-                Confiança garantida pela Netcar
+                Informação conferida pela Netcar
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-[#5A6B73]">
-                A Netcar atesta a curadoria deste seminovo e que o histórico acima
-                foi obtido via consulta CheckAuto/DEKRA. Complemente sempre com a
+                As informações acima foram obtidas na consulta CheckAuto/DEKRA
+                disponível para este veículo. Use este material junto com a
                 avaliação presencial e a documentação do Detran.
               </p>
             </section>
@@ -659,11 +670,14 @@ export function ICheckLaudoPage() {
                 Natureza desta consulta — não é laudo técnico
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-[#5A6B73]">
-                Esta consulta <strong className="font-bold text-[#00283C]">não tem
-                caráter de laudo técnico</strong>. É um dossiê informativo de
-                procedência e histórico (bases CheckAuto/DEKRA), com fotos e ficha
-                do seminovo. Não substitui vistoria cautelar, laudo de engenharia,
-                perícia estrutural nem inspeção veicular presencial.
+                Esta consulta{" "}
+                <strong className="font-bold text-[#00283C]">
+                  não tem caráter de laudo técnico
+                </strong>
+                . É um dossiê informativo de procedência e histórico (bases
+                CheckAuto/DEKRA), com fotos e ficha do seminovo. Não substitui
+                vistoria cautelar, laudo de engenharia, perícia estrutural nem
+                inspeção veicular presencial.
               </p>
             </section>
           </div>
@@ -671,7 +685,9 @@ export function ICheckLaudoPage() {
           <footer className="flex flex-col gap-1 border-t border-[#E4EAEF] px-5 py-4 text-[11px] text-[#5A6B73] sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <span>Netcar Multimarcas · i-CHECK</span>
             <span className="truncate">
-              {typeof window !== "undefined" ? window.location.href : `/laudo/${slug}`}
+              {typeof window !== "undefined"
+                ? window.location.href
+                : `/laudo/${slug}`}
             </span>
           </footer>
         </div>

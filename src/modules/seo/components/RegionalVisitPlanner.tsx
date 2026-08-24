@@ -48,18 +48,17 @@ export function RegionalVisitPlanner({
               </span>
               <div>
                 <p className="text-sm font-bold uppercase tracking-wider text-primary">
-                  Rota útil e transparente
+                  Saindo de {cityName}
                 </p>
                 <h2
                   id="planejador-visita-titulo"
                   className="mt-1 text-2xl font-bold text-fg"
                 >
-                  Planeje a visita saindo de {cityName}
+                  Rotas de {cityName} até as duas lojas
                 </h2>
                 <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-600 sm:text-base">
-                  Escolha um ponto de saída de referência. O Google Maps abre o
-                  trajeto atualizado até cada loja; ajuste o endereço inicial no
-                  aplicativo para obter uma estimativa exata.
+                  Escolha uma região de saída para abrir o trajeto até cada
+                  loja. No Google Maps, ajuste o endereço inicial se precisar.
                 </p>
               </div>
             </div>

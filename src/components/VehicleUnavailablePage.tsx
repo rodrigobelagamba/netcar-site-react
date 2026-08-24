@@ -52,11 +52,13 @@ export function VehicleUnavailablePage() {
             Fora de estoque
           </p>
           <h1 className="mt-3 text-3xl font-black leading-tight text-[#00283C] sm:text-4xl">
-            {nome ? `${nome} já foi vendido` : "Este veículo não está mais disponível"}
+            {nome
+              ? `${nome} já foi vendido`
+              : "Este veículo não está mais disponível"}
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-            Nosso estoque muda toda semana. Provavelmente temos opções parecidas
-            disponíveis agora nas duas lojas da Av. Presidente Vargas, em Esteio.
+            Veja o estoque atual para conferir se há uma opção parecida nas duas
+            lojas da Av. Presidente Vargas, em Esteio.
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">

@@ -4,7 +4,10 @@ import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizac
 import { DeferredRender } from "@/design-system/components/layout/DeferredRender";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
-import { HomeHero, HomeHeroVehicle } from "@/design-system/components/patterns/HomeHero";
+import {
+  HomeHero,
+  HomeHeroVehicle,
+} from "@/design-system/components/patterns/HomeHero";
 import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { HomeWhatsAppConversionPanel } from "../components/HomeWhatsAppConversionPanel";
 import { HomeMobileWhatsAppBar } from "../components/HomeMobileWhatsAppBar";
@@ -31,13 +34,20 @@ const SearchBar = lazy(() =>
 );
 
 const ServicesSection = lazy(() =>
-  import("@/design-system/components/patterns/ServicesSection").then((module) => ({
-    default: module.ServicesSection,
-  })),
+  import("@/design-system/components/patterns/ServicesSection").then(
+    (module) => ({
+      default: module.ServicesSection,
+    }),
+  ),
 );
 const HomePurchaseBenefits = lazy(() =>
   import("../components/HomePurchaseBenefits").then((module) => ({
     default: module.HomePurchaseBenefits,
+  })),
+);
+const HomeSelectionPromise = lazy(() =>
+  import("../components/HomeSelectionPromise").then((module) => ({
+    default: module.HomeSelectionPromise,
   })),
 );
 const DNASection = lazy(() =>
@@ -169,7 +179,7 @@ export function HomePage() {
   const isLoadingHero = isLoadingBanners
     ? !canRenderInitialVehicle
     : showVehiclesHero && isLoadingVehicles && initialHeroVehicle === null;
-  
+
   const [columnsPerRow, setColumnsPerRow] = useState(4);
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -190,16 +200,16 @@ export function HomePage() {
         setColumnsPerRow(1);
       }
     };
-    
+
     updateColumns();
-    window.addEventListener('resize', updateColumns);
-    return () => window.removeEventListener('resize', updateColumns);
+    window.addEventListener("resize", updateColumns);
+    return () => window.removeEventListener("resize", updateColumns);
   }, []);
 
   useDefaultMetaTags(
     "Carros Seminovos em Esteio",
-    "Encontre carros seminovos em Esteio, com estoque selecionado, financiamento, garantia e o pós-venda Nethelp. Consulte a equipe da Netcar.",
-    { canonicalPath: "/" }
+    "Veja carros seminovos nas duas lojas integradas da Netcar em Esteio. Consulte fotos, preços, troca, financiamento e i-CHECK quando disponível.",
+    { canonicalPath: "/" },
   );
 
   const featuredVehicle = useMemo(
@@ -213,21 +223,23 @@ export function HomePage() {
     const isPngUrl = (img?: string | null): img is string =>
       !!img && img.toLowerCase().includes(".png");
 
-    const filtered = sortHomeStockVehicles(vehicles)
-      .filter(vehicle => {
-        if (featuredVehicle && vehicle.id === featuredVehicle.id) return false;
+    const filtered = sortHomeStockVehicles(vehicles).filter((vehicle) => {
+      if (featuredVehicle && vehicle.id === featuredVehicle.id) return false;
 
-        const price = typeof vehicle.price === 'number' ? vehicle.price : Number(vehicle.price);
-        if (!price || isNaN(price) || price <= 80000) return false;
-        
-        const temFotos = vehicle.imagens_site?.tem_fotos;
-        if (temFotos === 0 || temFotos === undefined || temFotos === null)
-          return false;
+      const price =
+        typeof vehicle.price === "number"
+          ? vehicle.price
+          : Number(vehicle.price);
+      if (!price || isNaN(price) || price <= 80000) return false;
 
-        if (!isPngUrl(vehicle.imagens_site?.capa)) return false;
+      const temFotos = vehicle.imagens_site?.tem_fotos;
+      if (temFotos === 0 || temFotos === undefined || temFotos === null)
+        return false;
 
-        return true;
-      });
+      if (!isPngUrl(vehicle.imagens_site?.capa)) return false;
+
+      return true;
+    });
 
     const preferredHeroId =
       initialHeroVehicle?.id ||
@@ -235,42 +247,42 @@ export function HomePage() {
         ? (window as HomeBootstrapWindow).__NETCAR_HOME_LCP_ID__
         : undefined);
     const ordered =
-      preferredHeroId && filtered.some((vehicle) => vehicle.id === preferredHeroId)
+      preferredHeroId &&
+      filtered.some((vehicle) => vehicle.id === preferredHeroId)
         ? [
             ...filtered.filter((vehicle) => vehicle.id === preferredHeroId),
             ...filtered.filter((vehicle) => vehicle.id !== preferredHeroId),
           ]
         : filtered;
 
-    return ordered.slice(0, 4)
-      .map(vehicle => {
-        const mainImage = vehicle.imagens_site?.capa
-          ? vehicle.imagens_site.capa
-          : CAR_COVERED_PLACEHOLDER_URL;
-        
-        const tagParts = [];
-        if (vehicle.combustivel) tagParts.push(vehicle.combustivel);
-        if (vehicle.motor) tagParts.push(vehicle.motor);
-        const tag = tagParts.join(' ');
+    return ordered.slice(0, 4).map((vehicle) => {
+      const mainImage = vehicle.imagens_site?.capa
+        ? vehicle.imagens_site.capa
+        : CAR_COVERED_PLACEHOLDER_URL;
 
-        return {
-          id: vehicle.id,
-          brand: vehicle.marca || vehicle.name?.split(' ')[0] || '',
-          model: vehicle.modelo || vehicle.name || '',
-          year: vehicle.year,
-          price: vehicle.price,
-          valor_formatado: vehicle.valor_formatado,
-          preco_com_troca: vehicle.preco_com_troca,
-          preco_com_troca_formatado: vehicle.preco_com_troca_formatado,
-          image: mainImage,
-          tag: tag || undefined,
-          marca: vehicle.marca,
-          modelo: vehicle.modelo,
-          placa: vehicle.placa,
-          combustivel: vehicle.combustivel,
-          cambio: vehicle.cambio,
-        };
-      });
+      const tagParts = [];
+      if (vehicle.combustivel) tagParts.push(vehicle.combustivel);
+      if (vehicle.motor) tagParts.push(vehicle.motor);
+      const tag = tagParts.join(" ");
+
+      return {
+        id: vehicle.id,
+        brand: vehicle.marca || vehicle.name?.split(" ")[0] || "",
+        model: vehicle.modelo || vehicle.name || "",
+        year: vehicle.year,
+        price: vehicle.price,
+        valor_formatado: vehicle.valor_formatado,
+        preco_com_troca: vehicle.preco_com_troca,
+        preco_com_troca_formatado: vehicle.preco_com_troca_formatado,
+        image: mainImage,
+        tag: tag || undefined,
+        marca: vehicle.marca,
+        modelo: vehicle.modelo,
+        placa: vehicle.placa,
+        combustivel: vehicle.combustivel,
+        cambio: vehicle.cambio,
+      };
+    });
   }, [vehicles, featuredVehicle, initialHeroVehicle]);
 
   const displayedHeroVehicles = useMemo(
@@ -301,21 +313,21 @@ export function HomePage() {
     );
   }, [vehicles, columnsPerRow, featuredVehicle]);
 
-
-  const goToStock = () => navigate({
-    to: "/seminovos",
-    search: {
-      marca: undefined,
-      modelo: undefined,
-      precoMin: undefined,
-      precoMax: undefined,
-      anoMin: undefined,
-      anoMax: undefined,
-      cambio: undefined,
-      cor: undefined,
-      categoria: undefined,
-    },
-  });
+  const goToStock = () =>
+    navigate({
+      to: "/seminovos",
+      search: {
+        marca: undefined,
+        modelo: undefined,
+        precoMin: undefined,
+        precoMax: undefined,
+        anoMin: undefined,
+        anoMax: undefined,
+        cambio: undefined,
+        cor: undefined,
+        categoria: undefined,
+      },
+    });
 
   // GA4: scroll 50% na Home (engajamento)
   useEffect(() => {
@@ -366,14 +378,14 @@ export function HomePage() {
             Destaques do estoque
           </h2>
           <p className="mt-2 max-w-2xl text-sm font-medium text-gray-600 md:text-lg">
-            <span className="md:hidden">Escolha um carro e fale no WhatsApp.</span>
+            <span className="md:hidden">
+              Escolha um carro e fale no WhatsApp.
+            </span>
             <span className="hidden md:inline">
-              Aceitamos seu carro na troca — inclusive com financiamento em
-              aberto, mediante avaliação. Dá pra financiar em até 60x ou
-              parcelar a entrada no cartão, conforme disponibilidade e análise.
-              Documentação com despachante credenciado e
-              atendimento no WhatsApp o dia todo, pra você tirar dúvida sem
-              compromisso.
+              Quer trocar de carro? Avaliamos seu usado, mesmo financiado,
+              simulamos opções em até 60x e cuidamos da transferência com
+              despachante credenciado. A entrada pode ser parcelada no cartão,
+              conforme análise.
             </span>
           </p>
         </div>
@@ -393,12 +405,18 @@ export function HomePage() {
             className="inline-flex w-full max-w-md shrink-0 items-center justify-center gap-2.5 rounded-full bg-[#00283C] px-8 py-4 text-base font-black uppercase tracking-wider text-white shadow-[0_12px_32px_rgba(0,40,60,0.28)] transition-all hover:bg-[#00435a] hover:shadow-[0_16px_40px_rgba(0,40,60,0.34)] active:scale-[0.98] sm:w-auto"
           >
             <span className="button-text-shimmer-on-dark">
-              Ver todos no estoque
+              Ver estoque completo
             </span>
             <ArrowRight className="h-5 w-5" />
           </button>
         </div>
       </section>
+
+      <DeferredRender minHeight={520} rootMargin="300px">
+        <Suspense fallback={null}>
+          <HomeSelectionPromise />
+        </Suspense>
+      </DeferredRender>
 
       <DeferredRender minHeight={480}>
         <Suspense fallback={null}>
@@ -431,10 +449,7 @@ export function HomePage() {
         </div>
       </div>
 
-      <HomeMobileWhatsAppBar
-        visible
-        sourceCold="home_sticky_cold"
-      />
+      <HomeMobileWhatsAppBar visible sourceCold="home_sticky_cold" />
     </main>
   );
 }

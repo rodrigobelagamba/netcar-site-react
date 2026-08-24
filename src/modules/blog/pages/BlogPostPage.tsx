@@ -68,7 +68,7 @@ export function BlogPostPage() {
   }
 
   return (
-    <main className="flex-1 pt-8 pb-16 overflow-x-hidden max-w-full">
+    <main className="flex-1 pb-16 pt-24 md:pt-10 overflow-x-hidden max-w-full">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 12 }}

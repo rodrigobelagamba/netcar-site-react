@@ -18,23 +18,30 @@ export function CompraPage() {
   const getIanWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
     const message = isCompramosAlias
-      ? siteWhatsAppMessage("quero avaliar meu carro para venda ou troca na Netcar.")
+      ? siteWhatsAppMessage(
+          "quero avaliar meu carro para venda ou troca na Netcar.",
+        )
       : siteWhatsAppMessage("gostaria de vender meu carro para a Netcar.");
     return buildWhatsAppUrl(whatsapp.numero, message);
   };
 
   useDefaultMetaTags(
-    isCompramosAlias ? "Compramos Seu Carro Usado" : "Netcar Compra — Venda seu Carro",
     isCompramosAlias
-      ? "Quer vender ou trocar seu carro? A Netcar compra mesmo financiado. Avaliação rápida em Esteio/RS e região metropolitana."
-      : "A Netcar compra seu carro usado com avaliação justa e pagamento ágil. Esteio, Canoas, Sapucaia e Grande POA. Mesmo financiado."
+      ? "Compramos Seu Carro Usado"
+      : "Netcar Compra — Venda seu Carro",
+    isCompramosAlias
+      ? "Quer vender ou trocar seu carro? A Netcar avalia veículos financiados em Esteio/RS. A proposta depende da vistoria e dos documentos."
+      : "Venda ou troque seu carro na Netcar, em Esteio. Aceitamos veículos financiados, sujeitos à avaliação presencial e à análise dos documentos.",
   );
 
   const requirements = [
     { icon: Calendar, text: "Até 7 anos de uso" },
     { icon: Car, text: "Fabricação nacional" },
     { icon: MapPin, text: "Veículos de origem do Rio Grande do Sul" },
-    { icon: AlertCircle, text: "Não compramos veículos com passagem por leilão" },
+    {
+      icon: AlertCircle,
+      text: "Não compramos veículos com passagem por leilão",
+    },
   ];
 
   return (
@@ -45,7 +52,7 @@ export function CompraPage() {
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-secondary/8 rounded-full blur-3xl" />
         </div>
-        
+
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -55,17 +62,21 @@ export function CompraPage() {
               <h1 className="text-3xl md:text-4xl lg:text-[48px] font-bold leading-tight mb-5 text-fg">
                 {isCompramosAlias
                   ? "Compramos seu carro — mesmo financiado"
-                  : "Quer vender seu carro de forma rápida e segura?"}
+                  : "Quer vender ou trocar seu carro?"}
               </h1>
               <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-4">
-                A Netcar compra seu veículo com processo simples e transparente — valores alinhados ao mercado, sem anúncio e sem negociação com desconhecido.
+                Você envia os dados, traz o veículo para avaliação e recebe uma
+                proposta da Netcar. Se houver financiamento em aberto,
+                calculamos a quitação dentro da negociação.
               </p>
               {isCompramosAlias && (
                 <p className="text-fg font-medium text-base md:text-lg leading-relaxed mb-6 rounded-xl bg-secondary/10 border border-secondary/20 px-4 py-3">
-                  Seu carro ainda tem parcela? A gente quita o financiamento e você troca por um seminovo — ou recebe o valor na conta se quiser só vender.
+                  Seu carro ainda tem parcelas? Informe o saldo devedor. A
+                  equipe calcula a quitação e mostra quanto fica disponível para
+                  a troca ou para a venda.
                 </p>
               )}
-              
+
               <div className="flex flex-wrap items-center gap-4">
                 <a
                   href={getIanWhatsAppLink()}
@@ -76,17 +87,21 @@ export function CompraPage() {
                   className={cn(
                     "inline-flex items-center gap-3 px-6 py-3.5 rounded-full font-semibold",
                     "bg-secondary text-white shadow-lg transition-all",
-                    "hover:opacity-90 hover:shadow-xl hover:-translate-y-0.5"
+                    "hover:opacity-90 hover:shadow-xl hover:-translate-y-0.5",
                   )}
                 >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  <svg
+                    className="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                   </svg>
-                  Fale com iAN
+                  Começar pelo WhatsApp
                 </a>
                 <span className="text-muted-foreground text-sm flex items-center gap-2">
                   <span className="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
-                  Resposta instantânea
+                  Envie os dados quando preferir
                 </span>
               </div>
             </div>
@@ -95,9 +110,12 @@ export function CompraPage() {
               <div className="relative">
                 <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 p-2">
                   <div className="w-full h-full rounded-full bg-white p-2 shadow-xl">
-                    <img 
+                    <img
                       src={optimizeStockImage("/images/ian.webp", 640)}
-                      srcSet={stockImageSrcSet("/images/ian.webp", [320, 480, 640])}
+                      srcSet={stockImageSrcSet(
+                        "/images/ian.webp",
+                        [320, 480, 640],
+                      )}
                       sizes="(max-width: 767px) 256px, 320px"
                       alt="iAN - Assistente Virtual"
                       width={320}
@@ -107,14 +125,17 @@ export function CompraPage() {
                       fetchPriority="high"
                       className="w-full h-full rounded-full object-cover"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://ui-avatars.com/api/?name=iAN&background=6cbe9d&color=fff&size=320&bold=true";
+                        (e.target as HTMLImageElement).src =
+                          "https://ui-avatars.com/api/?name=iAN&background=6cbe9d&color=fff&size=320&bold=true";
                       }}
                     />
                   </div>
                 </div>
                 <div className="absolute bottom-4 right-4 bg-white rounded-full px-4 py-2 shadow-lg border border-gray-100 flex items-center gap-2">
                   <div className="w-3 h-3 bg-secondary rounded-full animate-pulse" />
-                  <span className="text-sm font-medium text-fg">iAN Online</span>
+                  <span className="text-sm font-medium text-fg">
+                    iAN Online
+                  </span>
                 </div>
               </div>
             </div>
@@ -130,14 +151,20 @@ export function CompraPage() {
 
       <section className="py-12 md:py-16 bg-[#fafafa] border-y border-gray-100">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">
-          <h2 className="text-2xl font-bold text-fg mb-4">Como funciona a venda ou troca</h2>
+          <h2 className="text-2xl font-bold text-fg mb-4">
+            Como funciona a venda ou troca
+          </h2>
           <ol className="list-decimal pl-5 space-y-2 text-muted-foreground mb-6">
             <li>Conte modelo, ano, km e se ainda tem financiamento</li>
-            <li>Receba avaliação com critérios claros</li>
-            <li>Fechou? Pagamento via transferência ou valor na troca por seminovo</li>
+            <li>Traga o veículo e os documentos para a avaliação presencial</li>
+            <li>
+              Se houver acordo, escolha entre vender ou usar o valor na troca
+            </li>
           </ol>
           <p className="text-sm text-muted-foreground">
-            Atendemos vendedores de Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha e região metropolitana de Porto Alegre.
+            Atendemos vendedores de Esteio, Canoas, Sapucaia do Sul, São
+            Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha e região
+            metropolitana de Porto Alegre.
           </p>
         </div>
       </section>
@@ -146,16 +173,40 @@ export function CompraPage() {
       <section className="py-16 md:py-24">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-[32px] font-bold mb-3">Por que vender com a NETCAR?</h2>
-            <p className="text-muted-foreground">Simplificamos todo o processo para você.</p>
+            <h2 className="text-2xl md:text-[32px] font-bold mb-3">
+              O que a Netcar resolve na negociação
+            </h2>
+            <p className="text-muted-foreground">
+              Venda direta ou troca por um carro do estoque.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[
-              { number: "01", title: "Rápido", description: "Sem anúncios, fotos ou negociações demoradas." },
-              { number: "02", title: "Transparente", description: "Avaliação justa com critérios claros e objetivos." },
-              { number: "03", title: "Ágil", description: "Transferência em até 72h após confirmação." },
-              { number: "04", title: "Justo", description: "Pagamos o valor real do seu veículo." },
+              {
+                number: "01",
+                title: "Sem anúncio particular",
+                description:
+                  "Você negocia diretamente com a loja, sem receber visitas de desconhecidos.",
+              },
+              {
+                number: "02",
+                title: "Avaliação explicada",
+                description:
+                  "Estado do carro, versão, quilometragem e mercado entram na análise.",
+              },
+              {
+                number: "03",
+                title: "Financiamento em aberto",
+                description:
+                  "O saldo para quitação pode ser calculado dentro da negociação.",
+              },
+              {
+                number: "04",
+                title: "Venda ou troca",
+                description:
+                  "Você pode receber uma proposta de compra ou usar o valor em outro carro.",
+              },
             ].map((item, index) => (
               <div
                 key={index}
@@ -183,10 +234,15 @@ export function CompraPage() {
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">Critérios</span>
-              <h2 className="text-2xl md:text-[32px] font-bold mb-4">Quais veículos compramos?</h2>
+              <span className="text-primary text-xs font-semibold uppercase tracking-widest mb-3 block">
+                Critérios
+              </span>
+              <h2 className="text-2xl md:text-[32px] font-bold mb-4">
+                Quais veículos compramos?
+              </h2>
               <p className="text-muted-foreground mb-8">
-                Para garantir a qualidade do nosso estoque e a satisfação dos nossos clientes, trabalhamos com critérios específicos na aquisição de veículos.
+                Estes são os critérios iniciais. A compra depende da avaliação
+                do carro, da documentação e do interesse da loja naquele modelo.
               </p>
 
               <div className="space-y-4">
@@ -195,10 +251,12 @@ export function CompraPage() {
                     key={index}
                     className="flex items-center gap-4 py-3 border-b border-gray-200 last:border-0"
                   >
-                    <req.icon className={cn(
-                      "w-5 h-5 flex-shrink-0",
-                      index === 3 ? "text-orange-500" : "text-primary"
-                    )} />
+                    <req.icon
+                      className={cn(
+                        "w-5 h-5 flex-shrink-0",
+                        index === 3 ? "text-orange-500" : "text-primary",
+                      )}
+                    />
                     <span className="text-fg font-medium">{req.text}</span>
                   </div>
                 ))}
@@ -210,7 +268,7 @@ export function CompraPage() {
                 <div className="text-center mb-6">
                   <div className="relative w-20 h-20 mx-auto mb-4">
                     <div className="w-20 h-20 rounded-full bg-white p-1 shadow-lg border border-gray-100">
-                      <img 
+                      <img
                         src={optimizeStockImage("/images/ian.webp", 200)}
                         width={80}
                         height={80}
@@ -219,7 +277,8 @@ export function CompraPage() {
                         alt="iAN - Assistente Virtual"
                         className="w-full h-full rounded-full object-cover"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = "https://ui-avatars.com/api/?name=iAN&background=6cbe9d&color=fff&size=128&bold=true";
+                          (e.target as HTMLImageElement).src =
+                            "https://ui-avatars.com/api/?name=iAN&background=6cbe9d&color=fff&size=128&bold=true";
                         }}
                       />
                     </div>
@@ -227,9 +286,12 @@ export function CompraPage() {
                       <div className="w-3 h-3 bg-secondary rounded-full animate-pulse ring-2 ring-white" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-fg mb-2">Fale com iAN</h3>
+                  <h3 className="text-xl font-bold text-fg mb-2">
+                    Começar avaliação pelo WhatsApp
+                  </h3>
                   <p className="text-muted-foreground text-sm">
-                    Nosso assistente virtual está pronto para avaliar seu veículo e dar uma proposta.
+                    Envie modelo, ano e quilometragem. A equipe usa esses dados
+                    para iniciar a avaliação e combinar a vistoria.
                   </p>
                 </div>
 
@@ -242,18 +304,22 @@ export function CompraPage() {
                   className={cn(
                     "w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-semibold",
                     "bg-secondary text-white transition-all",
-                    "hover:opacity-90 hover:shadow-lg"
+                    "hover:opacity-90 hover:shadow-lg",
                   )}
                 >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  <svg
+                    className="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                   </svg>
                   Conversar com iAN
                 </a>
 
                 <p className="text-center text-muted-foreground text-xs mt-4 flex items-center justify-center gap-2">
                   <span className="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
-                  Online agora
+                  Você pode enviar a mensagem a qualquer hora
                 </p>
               </div>
             </div>
@@ -266,10 +332,11 @@ export function CompraPage() {
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="text-center">
             <h3 className="text-3xl md:text-4xl font-bold mb-4 text-fg">
-              Venda seu carro com tranquilidade
+              Quer saber se o seu carro se encaixa?
             </h3>
             <p className="text-muted-foreground mb-8 text-lg max-w-xl mx-auto">
-              Fale com iAN agora mesmo e descubra quanto vale o seu veículo. Processo rápido, seguro e sem complicações.
+              Envie os dados pelo WhatsApp. A proposta final depende da vistoria
+              e da conferência dos documentos na loja.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <a
@@ -281,17 +348,17 @@ export function CompraPage() {
                 className={cn(
                   "px-8 py-4 rounded-full font-semibold text-lg",
                   "bg-primary text-white transition-all",
-                  "hover:bg-primary/90 hover:shadow-lg"
+                  "hover:bg-primary/90 hover:shadow-lg",
                 )}
               >
-                Fale com iAN
+                Enviar dados pelo WhatsApp
               </a>
               <a
                 href="/contato"
                 className={cn(
                   "px-8 py-4 rounded-full font-semibold text-lg",
                   "text-primary underline underline-offset-4 transition-all",
-                  "hover:text-primary/80"
+                  "hover:text-primary/80",
                 )}
               >
                 Visitar a loja

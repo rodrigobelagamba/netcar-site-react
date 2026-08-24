@@ -43,6 +43,7 @@ export type AnalyticsPageType =
   | "regional_hub"
   | "brand_landing"
   | "comparison"
+  | "selection_process"
   | "vehicle_detail"
   | "other";
 
@@ -82,6 +83,9 @@ export function inferPageType(pagePath: string): AnalyticsPageType {
   }
   if (pathname.startsWith("/comprar-")) return "brand_landing";
   if (pathname === "/comparar") return "comparison";
+  if (pathname === "/como-selecionamos-nossos-carros") {
+    return "selection_process";
+  }
   if (pathname === "/") return "home";
   if (pathname.startsWith("/contato")) return "contact";
   return "other";
@@ -325,6 +329,22 @@ export function trackTrustSectionView(
     page_type: inferPageType(pagePath),
     page_path: pagePath,
     ...getRegionalDimensions(pagePath),
+    ...getTrafficDimensions(),
+  });
+}
+
+/** Mede se a nova proposta de confiança leva o cliente ao estoque ou contato. */
+export function trackSelectionCampaignCta(
+  action: "learn_process" | "view_stock" | "whatsapp",
+  placement: "home" | "campaign_hero" | "campaign_final",
+  pagePath = getPagePath(),
+): void {
+  pushDataLayer({
+    event: "selection_campaign_cta",
+    selection_action: action,
+    selection_placement: placement,
+    page_type: inferPageType(pagePath),
+    page_path: pagePath,
     ...getTrafficDimensions(),
   });
 }

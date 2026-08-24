@@ -240,7 +240,7 @@ export function CardsHero({
                 className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4 short1600:h-3.5 short1600:w-3.5"}`}
               />
               <span className={compact ? undefined : "short1600:hidden"}>
-                {compact ? "Tenho interesse" : "Tenho interesse neste carro"}
+                {compact ? "Tenho interesse" : "Tenho interesse neste"}
               </span>
               {!compact ? (
                 <span className="hidden short1600:inline">Tenho interesse</span>

@@ -11,9 +11,9 @@ export function RegionalInventoryNav({ cityName }: { cityName: string }) {
           Escolha o tipo de carro antes de sair de {cityName}
         </h2>
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-600">
-          Estas seleções usam o estoque real da Netcar. Compare categoria, faixa
-          de preço ou modelo e confirme a disponibilidade antes da visita às
-          lojas de Esteio.
+          Estas seleções usam o estoque atual da Netcar. Compare categoria,
+          faixa de preço ou modelo e confirme a disponibilidade antes da visita
+          às lojas de Esteio.
         </p>
         <nav
           aria-label={`Seleções de seminovos para ${cityName}`}

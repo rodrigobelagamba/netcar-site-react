@@ -259,64 +259,63 @@ function stockProfile(vehicles, filters) {
 // forma próprias. Se entrar marca nova, o índice recicla (index % length) e a
 // similaridade volta a subir — sinal para escrever mais uma redação.
 const MARCA_INTROS = [
+  (n, p) => `Veja os ${n} disponíveis nas duas lojas da Netcar, em Esteio.`,
   (n, p) =>
-    `Quem procura ${n} usado na região metropolitana encontra na Netcar, em Esteio, unidades revisadas para ver de perto.`,
+    `Esta página reúne os ${n} anunciados no estoque da Netcar em Esteio.`,
   (n, p) =>
-    `Comprar um ${n} seminovo com procedência evita surpresa depois. A Netcar mantém ${n} revisados em Esteio.`,
+    `Compare ano, versão, quilometragem e preço dos ${n} disponíveis na Netcar.`,
   (n, p) =>
-    `Saindo de Porto Alegre ou Canoas, dá para conferir ${n} seminovos em Esteio sem perder o dia.`,
+    `Consulte aqui os ${n} que estão anunciados nas lojas da Netcar em Esteio.`,
   (n, p) =>
-    `Na Netcar, em Esteio, o estoque de ${n} seminovos é revisado e está pronto para visita.`,
+    `Quem procura ${n} usado na região pode começar pelo estoque online da Netcar.`,
   (n, p) =>
-    `Para quem busca ${n} usado perto de Porto Alegre, a Netcar concentra opções revisadas em Esteio.`,
+    `Confira fotos, preço e ficha dos ${n} disponíveis na Netcar, em Esteio.`,
   (n, p) =>
-    `O estoque de ${n} da Netcar, em Esteio, reúne seminovos revisados para quem vem da região metropolitana.`,
+    `Abra os anúncios dos ${n}, compare as unidades e confirme a disponibilidade antes da visita.`,
   (n, p) =>
-    `Ver um ${n} seminovo de perto antes de decidir é o que a Netcar oferece em Esteio, com estoque revisado.`,
+    `O estoque de ${n} das duas lojas da Netcar aparece reunido nesta página.`,
   (n, p) =>
-    `A Netcar mantém em Esteio um estoque de ${n} seminovos revisados, a poucos minutos de Porto Alegre.`,
-  (n, p) =>
-    `Se você procura ${n} usado com procedência na Grande Porto Alegre, a Netcar em Esteio tem opções revisadas.`,
+    `Veja quais ${n} estão disponíveis hoje na Netcar e compare cada anúncio.`,
 ];
 const MARCA_PARAGRAFOS = [
   (n, p) =>
-    `O estoque de ${n} vai de ${p.minPrice} a ${p.maxPrice}, com modelos de ${p.minYear} a ${p.maxYear}. Vale comparar exemplar com exemplar: quilometragem, versão e histórico pesam mais que o preço isolado. Cada unidade passa por checklist técnico, e você simula financiamento em até 60x e avalia a troca na mesma visita.`,
+    `Os ${n} anunciados vão de ${p.minPrice} a ${p.maxPrice}, com anos entre ${p.minYear} e ${p.maxYear}. Abra cada ficha para comparar versão, quilometragem, fotos e itens disponíveis.`,
   (n, p) =>
-    `Há ${n} de ${p.minYear} a ${p.maxYear}, com preços entre ${p.minPrice} e ${p.maxPrice}. Antes de ser anunciado, cada carro passa por mais de 60 verificações. O financiamento em até 60x e a avaliação do seu usado na troca saem na hora.`,
+    `Há ${n} de ${p.minYear} a ${p.maxYear}, com preços entre ${p.minPrice} e ${p.maxPrice}. Os veículos passam pela Fábrica de Valor antes da vitrine.`,
   (n, p) =>
-    `Os preços dos ${n} em estoque partem de ${p.minPrice} e chegam a ${p.maxPrice}, cobrindo os anos ${p.minYear} a ${p.maxYear}. Como km, versão e estado mudam de um exemplar para outro, a visita com os carros separados ajuda a decidir. Financiamento em até 60x e troca com avaliação completam a negociação.`,
+    `Os preços dos ${n} em estoque partem de ${p.minPrice} e chegam a ${p.maxPrice}, cobrindo os anos ${p.minYear} a ${p.maxYear}. Quilometragem, versão e itens variam de uma unidade para outra.`,
   (n, p) =>
-    `De ${p.minYear} a ${p.maxYear}, os ${n} disponíveis custam entre ${p.minPrice} e ${p.maxPrice}. Cada um passa por mais de 60 verificações antes da vitrine. Financiamento em até 60x e avaliação da troca acontecem na hora.`,
+    `De ${p.minYear} a ${p.maxYear}, os ${n} disponíveis custam entre ${p.minPrice} e ${p.maxPrice}. Cada carro passa pela rotina de preparação da Netcar antes da vitrine.`,
   (n, p) =>
-    `Entre ${p.minPrice} e ${p.maxPrice}, há ${n} de ${p.minYear} a ${p.maxYear} no pátio. Quilometragem, versão e estado variam, então comparar exemplar com exemplar vale a visita. Financiamento em até 60x e troca com avaliação completam a negociação.`,
+    `Entre ${p.minPrice} e ${p.maxPrice}, há ${n} de ${p.minYear} a ${p.maxYear} anunciados. Compare as fichas e confirme os finalistas antes de ir à loja.`,
   (n, p) =>
-    `Os ${n} em estoque custam de ${p.minPrice} a ${p.maxPrice} e são de ${p.minYear} a ${p.maxYear}. Cada unidade é revisada antes de ser anunciada. Você simula o financiamento em até 60x e avalia seu usado na troca na mesma visita.`,
+    `Os ${n} em estoque custam de ${p.minPrice} a ${p.maxPrice} e são de ${p.minYear} a ${p.maxYear}. Fotos, versão e quilometragem aparecem em cada anúncio.`,
   (n, p) =>
-    `Com modelos de ${p.minYear} a ${p.maxYear} e preços de ${p.minPrice} a ${p.maxPrice}, os ${n} disponíveis passam por checklist técnico antes da vitrine. O financiamento em até 60x e a avaliação da troca saem na hora.`,
+    `Com anos de ${p.minYear} a ${p.maxYear} e preços de ${p.minPrice} a ${p.maxPrice}, os ${n} disponíveis podem ser comparados pela ficha de cada unidade.`,
   (n, p) =>
-    `Do mais acessível ao mais equipado, os ${n} vão de ${p.minPrice} a ${p.maxPrice}, de ${p.minYear} a ${p.maxYear}. Cada carro é revisado antes de ser anunciado. Financiamento em até 60x e troca com avaliação completam a negociação.`,
+    `Os ${n} vão de ${p.minPrice} a ${p.maxPrice}, com anos entre ${p.minYear} e ${p.maxYear}. Use as fotos e os dados do anúncio para montar sua lista.`,
   (n, p) =>
-    `O pátio tem ${n} de ${p.minYear} a ${p.maxYear}, com preços entre ${p.minPrice} e ${p.maxPrice}. Antes da vitrine, cada um passa por mais de 60 verificações. Financiamento em até 60x e avaliação do usado na troca acontecem na hora.`,
+    `O estoque tem ${n} de ${p.minYear} a ${p.maxYear}, com preços entre ${p.minPrice} e ${p.maxPrice}. Confirme pelo WhatsApp os carros que deseja conhecer.`,
 ];
 const MARCA_FECHO = [
   (n) =>
-    `Atendemos Esteio, Canoas, Sapucaia do Sul, São Leopoldo e Gravataí. Fale com o iAN no WhatsApp, diga o ${n} e a faixa de parcela, e chegue com os carros separados.`,
+    `Fale pelo WhatsApp, diga qual ${n} chamou sua atenção e confirme a disponibilidade antes de visitar as lojas em Esteio.`,
   (n) =>
-    `A loja fica na Av. Presidente Vargas, em Esteio, e recebe clientes de toda a Grande Porto Alegre. Chame o iAN no WhatsApp, informe o ${n} e a parcela que cabe no bolso, e a visita já sai com as opções na sua frente.`,
+    `As duas lojas ficam na Av. Presidente Vargas, em Esteio. Envie o link do ${n} pelo WhatsApp para continuar o atendimento.`,
   (n) =>
-    `Pelo WhatsApp, o iAN anota o ${n} que você quer e a parcela ideal, e deixa os carros separados antes de você sair de casa — seja de Esteio, Canoas, São Leopoldo ou Gravataí.`,
+    `Informe pelo WhatsApp qual ${n} procura, a faixa de preço e se tem usado na troca. A equipe confirma os próximos passos.`,
   (n) =>
-    `A Netcar tem duas unidades na Av. Presidente Vargas, em Esteio, e atende a região metropolitana. Escreva para o iAN no WhatsApp com o ${n} e a parcela que você quer, e os carros ficam prontos para a visita.`,
+    `A Netcar tem duas unidades na Av. Presidente Vargas, em Esteio. Confirme o ${n} escolhido antes de organizar a visita.`,
   (n) =>
-    `Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Gravataí: a loja recebe clientes de toda a região. No WhatsApp, o iAN separa os ${n} que combinam com a parcela que você informou.`,
+    `Quem vem de outra cidade pode enviar o link do ${n}, pedir uma simulação e confirmar onde o carro está antes de sair.`,
   (n) =>
-    `A loja fica em Esteio e atende a Grande Porto Alegre. Pelo WhatsApp, o iAN anota o ${n} e a parcela ideal, e deixa os carros separados para a sua visita.`,
+    `O atendimento presencial é em Esteio. Pelo WhatsApp, você pode consultar o ${n}, a troca e uma simulação antes da visita.`,
   (n) =>
-    `Quem vem de Canoas, Sapucaia do Sul ou São Leopoldo encontra a Netcar na Av. Presidente Vargas. Chame o iAN no WhatsApp, diga o ${n} e a parcela, e a visita já sai com as opções separadas.`,
+    `Antes de ir à Av. Presidente Vargas, envie pelo WhatsApp o ${n} que deseja conhecer e confirme a disponibilidade.`,
   (n) =>
-    `A Netcar recebe clientes de Esteio, Canoas, São Leopoldo e Gravataí. No WhatsApp, o iAN separa os ${n} que cabem na parcela que você informou, antes de você sair de casa.`,
+    `Diga pelo WhatsApp qual ${n} procura e a faixa de preço. A equipe consulta o estoque e continua a conversa.`,
   (n) =>
-    `Duas unidades na Av. Presidente Vargas, em Esteio, atendem a região metropolitana. Escreva para o iAN no WhatsApp com o ${n} e a parcela, e os carros ficam prontos para a visita.`,
+    `O estoque das duas lojas aparece junto no site. Confirme pelo WhatsApp em qual unidade está o ${n} escolhido.`,
 ];
 
 // A variante vem da POSIÇÃO da marca no ranking de estoque, não de hash do
@@ -357,7 +356,7 @@ function marcaLanding(name, count, profile, variantIndex) {
     relatedSlugs: [],
     title: `${nice} usados e seminovos em Esteio/RS | Netcar Multimarcas`,
     description: hasStock
-      ? `${nice} seminovos revisados em Esteio/RS na Netcar. Estoque com procedência, financiamento em até 60x e troca com avaliação na hora. Veja os ${nice} disponíveis.`
+      ? `Veja os ${nice} seminovos disponíveis na Netcar em Esteio/RS. Compare fotos, ano, km e preço e consulte troca ou financiamento.`
       : `${nice} seminovos na Netcar em Esteio/RS. Acompanhe novas entradas e compare modelos, marcas e faixas de preço disponíveis no estoque.`,
     h1: `${nice} seminovos em Esteio/RS`,
     intro,
@@ -372,11 +371,11 @@ function marcaLanding(name, count, profile, variantIndex) {
               },
               {
                 q: `Posso financiar um ${nice} usado na Netcar?`,
-                a: `Sim, com financiamento em até 60x e simulação na hora. Aceitamos troca, inclusive de carro com financiamento em aberto, mediante avaliação.`,
+                a: `Sim. A simulação pode ser iniciada pelo WhatsApp e o prazo pode chegar a 60x, sempre sujeito à análise. O usado também pode ser avaliado na troca.`,
               },
               {
                 q: `Os ${nice} passam por revisão antes da venda?`,
-                a: `Todos os seminovos passam pela Fábrica de Valor, com mais de 60 itens técnicos verificados, e contam com pós-venda NetHelp.`,
+                a: `Todos os seminovos passam pela Fábrica de Valor, com mais de 60 itens técnicos e funcionais verificados antes da vitrine.`,
               },
             ],
             [
@@ -386,11 +385,11 @@ function marcaLanding(name, count, profile, variantIndex) {
               },
               {
                 q: `Dá para dar meu carro na troca de um ${nice}?`,
-                a: `Sim. Avaliamos seu usado na hora e o valor entra na negociação, inclusive se ainda houver financiamento em aberto, mediante análise.`,
+                a: `Sim. A proposta depende da vistoria do usado. Se houver financiamento em aberto, o saldo para quitação entra no cálculo.`,
               },
               {
                 q: `O ${nice} é revisado antes de ser vendido?`,
-                a: `Sim. Cada seminovo passa pela Fábrica de Valor, que confere mais de 60 itens, e sai com pós-venda NetHelp.`,
+                a: `Sim. Cada seminovo passa pela Fábrica de Valor, que confere mais de 60 itens antes de o carro ir para a vitrine.`,
               },
             ],
             [
@@ -404,7 +403,7 @@ function marcaLanding(name, count, profile, variantIndex) {
               },
               {
                 q: `O que é a Fábrica de Valor?`,
-                a: `É o processo de preparação da Netcar: mais de 60 itens técnicos e funcionais verificados antes de o carro ir para a vitrine, com pós-venda NetHelp.`,
+                a: `É o processo de preparação da Netcar: mais de 60 itens técnicos e funcionais são verificados antes de o carro ir para a vitrine.`,
               },
             ],
             [
@@ -414,11 +413,11 @@ function marcaLanding(name, count, profile, variantIndex) {
               },
               {
                 q: `Posso trocar meu carro num ${nice}?`,
-                a: `Sim. Avaliamos seu usado na hora e o valor entra na negociação, inclusive com financiamento em aberto, mediante análise.`,
+                a: `Sim. O valor depende da vistoria. Carros com financiamento em aberto também podem ser analisados, com o saldo de quitação incluído na negociação.`,
               },
               {
                 q: `O ${nice} é revisado antes da venda?`,
-                a: `Sim. Todo seminovo passa pela Fábrica de Valor, que confere mais de 60 itens, e sai com pós-venda NetHelp.`,
+                a: `Sim. Todo seminovo passa pela Fábrica de Valor, que confere mais de 60 itens antes da vitrine.`,
               },
             ],
             [
@@ -432,7 +431,7 @@ function marcaLanding(name, count, profile, variantIndex) {
               },
               {
                 q: `O que a Fábrica de Valor verifica?`,
-                a: `Mais de 60 itens técnicos e funcionais antes de o carro ir para a vitrine, com pós-venda NetHelp.`,
+                a: `Mais de 60 itens técnicos e funcionais antes de o carro ir para a vitrine.`,
               },
             ],
             [
@@ -442,11 +441,11 @@ function marcaLanding(name, count, profile, variantIndex) {
               },
               {
                 q: `Como financiar um ${nice} usado?`,
-                a: `Com financiamento em até 60x e simulação na hora. Aceitamos troca, inclusive com financiamento em aberto, mediante avaliação.`,
+                a: `A simulação pode ser iniciada pelo WhatsApp e o prazo pode chegar a 60x, sujeito à análise. O usado também pode ser avaliado na troca.`,
               },
               {
                 q: `Os ${nice} são revisados?`,
-                a: `Todos passam pela Fábrica de Valor, com mais de 60 itens verificados, e têm pós-venda NetHelp.`,
+                a: `Todos passam pela Fábrica de Valor, com mais de 60 itens verificados antes da vitrine.`,
               },
             ],
             [
@@ -456,11 +455,11 @@ function marcaLanding(name, count, profile, variantIndex) {
               },
               {
                 q: `Dá para dar meu usado na troca de um ${nice}?`,
-                a: `Sim. Avaliamos seu carro na hora e o valor entra na negociação, inclusive com financiamento em aberto, mediante análise.`,
+                a: `Sim. O valor entra na negociação depois da vistoria. Se houver financiamento em aberto, o saldo para quitação é considerado.`,
               },
               {
                 q: `O ${nice} passa por revisão?`,
-                a: `Sim. Cada seminovo passa pela Fábrica de Valor, que confere mais de 60 itens, e sai com pós-venda NetHelp.`,
+                a: `Sim. Cada seminovo passa pela Fábrica de Valor, que confere mais de 60 itens antes da vitrine.`,
               },
             ],
             [
@@ -474,7 +473,7 @@ function marcaLanding(name, count, profile, variantIndex) {
               },
               {
                 q: `O que é a Fábrica de Valor da Netcar?`,
-                a: `O processo de preparação que verifica mais de 60 itens técnicos e funcionais antes de o carro ir para a vitrine, com pós-venda NetHelp.`,
+                a: `É o processo de preparação que verifica mais de 60 itens técnicos e funcionais antes de o carro ir para a vitrine.`,
               },
             ],
             [
@@ -484,11 +483,11 @@ function marcaLanding(name, count, profile, variantIndex) {
               },
               {
                 q: `Posso trocar meu carro por um ${nice}?`,
-                a: `Sim. Avaliamos seu usado na hora e o valor entra na negociação, inclusive com financiamento em aberto, mediante análise.`,
+                a: `Sim. O valor depende da vistoria. Se houver financiamento em aberto, o saldo para quitação entra na negociação.`,
               },
               {
                 q: `O ${nice} é inspecionado antes da venda?`,
-                a: `Sim. Todo seminovo passa pela Fábrica de Valor, com mais de 60 itens verificados, e tem pós-venda NetHelp.`,
+                a: `Sim. Todo seminovo passa pela Fábrica de Valor, com mais de 60 itens verificados antes da vitrine.`,
               },
             ],
           ],
@@ -513,19 +512,19 @@ function marcaLanding(name, count, profile, variantIndex) {
 
 const CATEGORIA_INTROS = [
   (l, p) =>
-    `Escolher um ${l} seminovo fica mais fácil quando o estoque está num lugar só. A Netcar concentra ${l} multimarcas revisados em Esteio, na Av. Presidente Vargas, perto de Porto Alegre.`,
+    `Veja os ${l} disponíveis no estoque das duas lojas da Netcar em Esteio.`,
   (l, p) =>
-    `Um ${l} seminovo com procedência começa por um estoque confiável. Em Esteio, a Netcar reúne ${l} que passaram pela Fábrica de Valor, com acesso pela BR-116.`,
+    `Esta página reúne os ${l} anunciados pela Netcar, com fotos, preço e ficha de cada unidade.`,
   (l, p) =>
-    `Para quem está em Porto Alegre ou na região, ver ${l} seminovos em Esteio evita rodar de loja em loja. A Netcar mantém o estoque revisado na Av. Presidente Vargas.`,
+    `Compare os ${l} do estoque por ano, preço, quilometragem e versão antes de visitar a loja.`,
 ];
 const CATEGORIA_PARAGRAFOS = [
   (l, p) =>
-    `A seleção reúne ${l} de ${p.minPrice} a ${p.maxPrice}, de ${p.minYear} a ${p.maxYear}. Todos passam por checklist técnico antes da vitrine. Compare modelos, simule financiamento em até 60x e avalie seu usado na troca.`,
+    `A seleção reúne ${l} de ${p.minPrice} a ${p.maxPrice}, com anos entre ${p.minYear} e ${p.maxYear}. Abra as fichas para comparar fotos, versão e quilometragem.`,
   (l, p) =>
-    `O estoque de ${l} vai de ${p.minPrice} a ${p.maxPrice} e cobre anos de ${p.minYear} a ${p.maxYear}. Cada unidade é revisada antes de ser anunciada. Financiamento em até 60x e avaliação da troca saem na hora.`,
+    `O estoque de ${l} vai de ${p.minPrice} a ${p.maxPrice} e cobre anos de ${p.minYear} a ${p.maxYear}. Cada unidade passa pela preparação da Netcar antes da vitrine.`,
   (l, p) =>
-    `Entre os ${l} disponíveis, os preços partem de ${p.minPrice} e chegam a ${p.maxPrice}, com modelos de ${p.minYear} a ${p.maxYear}. O que diferencia um de outro é km, versão e estado — a visita com os carros separados resolve. Financiamento em até 60x e troca com avaliação completam a negociação.`,
+    `Entre os ${l} disponíveis, os preços partem de ${p.minPrice} e chegam a ${p.maxPrice}, com anos entre ${p.minYear} e ${p.maxYear}. Compare os anúncios e confirme os finalistas pelo WhatsApp.`,
 ];
 
 function categoriaLanding(name, count, profile, variantIndex) {
@@ -544,7 +543,7 @@ function categoriaLanding(name, count, profile, variantIndex) {
         pickVariant(MARCA_FECHO, variantIndex)(lower),
       ]
     : [
-        `No nosso estoque você encontra ${lower} de várias marcas e faixas de preço, todos com checklist técnico antes da vitrine. Compare modelos, simule financiamento em até 60x e avalie seu usado na troca.`,
+        `No estoque você encontra ${lower} de diferentes marcas e faixas de preço. Compare os anúncios e confirme a disponibilidade antes da visita.`,
         pickVariant(MARCA_FECHO, variantIndex)(lower),
       ];
   return {
@@ -558,7 +557,7 @@ function categoriaLanding(name, count, profile, variantIndex) {
     relatedSlugs: [],
     title: `${nice} seminovos em Esteio/RS | Netcar Multimarcas`,
     description: hasStock
-      ? `${nice} seminovos revisados em Esteio/RS na Netcar. Estoque multimarcas com procedência, financiamento facilitado e troca. Veja os ${lower} disponíveis.`
+      ? `Veja os ${lower} seminovos disponíveis na Netcar em Esteio/RS. Compare fotos, ano, km e preço e consulte troca ou financiamento.`
       : `${nice} seminovos na Netcar em Esteio/RS. Acompanhe novas entradas e compare categorias, modelos e faixas de preço disponíveis no estoque.`,
     h1: `${nice} seminovos em Esteio/RS`,
     intro,
@@ -572,11 +571,11 @@ function categoriaLanding(name, count, profile, variantIndex) {
       },
       {
         q: `Dá para financiar um ${lower} usado?`,
-        a: `Sim, com financiamento em até 60x e simulação na hora. Aceitamos troca, inclusive carro financiado, mediante avaliação.`,
+        a: `Sim. A simulação pode ser iniciada pelo WhatsApp e o prazo pode chegar a 60x, sujeito à análise. O usado também pode ser avaliado na troca.`,
       },
       {
         q: `Os ${lower} são revisados?`,
-        a: `Sim. Todo seminovo passa pela Fábrica de Valor, com mais de 60 itens verificados, e tem pós-venda NetHelp.`,
+        a: `Sim. Todo seminovo passa pela Fábrica de Valor, com mais de 60 itens verificados antes da vitrine.`,
       },
     ],
   };

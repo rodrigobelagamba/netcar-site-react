@@ -31,7 +31,9 @@ export function vehicleWhatsAppMessages(
   modeloCompleto?: string,
 ) {
   return {
-    info: siteWhatsAppMessage(`quero mais informações sobre o ${vehicleLabel}.`),
+    info: siteWhatsAppMessage(
+      `quero mais informações sobre o ${vehicleLabel}.`,
+    ),
     finance: siteWhatsAppMessage(
       `quero simular o financiamento do ${vehicleLabel} e comparar condições entre os bancos e financeiras parceiras.`,
     ),
@@ -76,9 +78,7 @@ export function quickSellWhatsAppMessage(details: {
   km?: string;
   cityName?: string;
 }): string {
-  const lines = [
-    siteWhatsAppMessage("quero avaliar meu carro para venda:"),
-  ];
+  const lines = [siteWhatsAppMessage("quero avaliar meu carro para venda:")];
   if (details.modelo?.trim()) lines.push(`Modelo: ${details.modelo.trim()}`);
   if (details.ano?.trim()) lines.push(`Ano: ${details.ano.trim()}`);
   if (details.km?.trim()) lines.push(`KM: ${details.km.trim()}`);
@@ -87,15 +87,15 @@ export function quickSellWhatsAppMessage(details: {
 }
 
 /** Mensagens de conversão da Home e curadoria de estoque. */
-export function homeWhatsAppMessages(options?: {
-  vehicleLabel?: string;
-}) {
+export function homeWhatsAppMessages(options?: { vehicleLabel?: string }) {
   const label = options?.vehicleLabel?.trim();
 
   return {
     vehicleInterest: label
       ? siteWhatsAppMessage(`tenho interesse no ${label}.`)
-      : siteWhatsAppMessage("quero ajuda para escolher um seminovo do estoque."),
+      : siteWhatsAppMessage(
+          "quero ajuda para escolher um seminovo do estoque.",
+        ),
     simulateFinance: siteWhatsAppMessage(
       label
         ? `quero simular entrada e parcelas do ${label}, comparando condições entre os bancos e financeiras parceiras.`
@@ -107,7 +107,7 @@ export function homeWhatsAppMessages(options?: {
         : "quero receber opções de seminovos parecidos com meu perfil.",
     ),
     talkToIan: siteWhatsAppMessage(
-      "quero falar com a IA da Netcar para me ajudar a escolher um carro.",
+      "quero falar com o assistente iAN para me ajudar a procurar um carro.",
     ),
     visitStore: siteWhatsAppMessage(
       "quero agendar uma visita na loja de Esteio para ver seminovos.",

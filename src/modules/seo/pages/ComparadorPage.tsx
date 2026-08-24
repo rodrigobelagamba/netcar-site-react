@@ -182,9 +182,9 @@ export function ComparadorPage() {
   return (
     <main className="flex-1 overflow-x-hidden max-w-full bg-white">
       <RegionalSeoHero
-        eyebrow="Ferramenta de escolha"
+        eyebrow="Estoque atual"
         title="Comparar carros seminovos lado a lado"
-        intro={`Escolha de 2 a ${MAX_COMPARE} carros do estoque e compare preço, ano, câmbio e itens. Depois avance com troca, parcelamento ou WhatsApp.`}
+        intro={`Escolha de 2 a ${MAX_COMPARE} carros do estoque e compare preço, ano, câmbio, motor e outros dados da ficha na mesma tela.`}
       >
         <RegionalActionCtas
           className="mt-8"
@@ -218,8 +218,8 @@ export function ComparadorPage() {
                   Comparações rápidas com o estoque atual
                 </h2>
                 <p className="mt-1 text-sm text-gray-600">
-                  Selecionamos exemplares de preço próximo para a comparação
-                  ficar útil.
+                  Cada atalho escolhe dois carros de preço próximo que estão no
+                  estoque.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   {presets.map((preset) => (

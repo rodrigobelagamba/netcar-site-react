@@ -117,6 +117,11 @@ const RegionsHubPage = lazyWithRetry(() =>
     default: m.RegionsHubPage,
   })),
 );
+const ComoSelecionamosPage = lazyWithRetry(() =>
+  import("@/modules/procedencia/pages/ComoSelecionamosPage").then((m) => ({
+    default: m.ComoSelecionamosPage,
+  })),
+);
 
 // Mensagem do WhatsApp contextual por rota: lead chega no iAN já qualificado
 function getContextualMessage(pathname: string): string {
@@ -168,6 +173,11 @@ function getContextualMessage(pathname: string): string {
   }
   if (pathname === "/comparar") {
     return siteWhatsAppMessage("quero ajuda para comparar alguns seminovos.");
+  }
+  if (pathname === "/como-selecionamos-nossos-carros") {
+    return siteWhatsAppMessage(
+      "quero encontrar um seminovo e entender a origem e a preparação do veículo.",
+    );
   }
   if (pathname === "/seminovos-automaticos") {
     return siteWhatsAppMessage("estou procurando um seminovo automático.");
@@ -472,6 +482,12 @@ const regionsHubRoute = createRoute({
   component: RegionsHubPage,
 });
 
+const comoSelecionamosRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/como-selecionamos-nossos-carros",
+  component: ComoSelecionamosPage,
+});
+
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   seminovosRoute,
@@ -494,6 +510,7 @@ export const routeTree = rootRoute.addChildren([
   politicaEditorialRoute,
   comparadorRoute,
   regionsHubRoute,
+  comoSelecionamosRoute,
 ]);
 
 // O router será criado dinamicamente no RouterProvider

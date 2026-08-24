@@ -23,7 +23,8 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isMobileAutocompleteOpen, setIsMobileAutocompleteOpen] = useState(false);
+  const [isMobileAutocompleteOpen, setIsMobileAutocompleteOpen] =
+    useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
@@ -129,25 +130,36 @@ export function Header() {
   useEffect(() => {
     const prevPathname = prevPathnameRef.current;
     const currentPathname = location.pathname;
-    
+
     // Só limpa se saiu da página de seminovos (estava em /seminovos e agora não está mais)
     // E se o menu mobile e busca desktop estão fechados
     if (
-      prevPathname === "/seminovos" && 
-      currentPathname !== "/seminovos" && 
-      searchTerm && 
-      !isMobileMenuOpen && 
+      prevPathname === "/seminovos" &&
+      currentPathname !== "/seminovos" &&
+      searchTerm &&
+      !isMobileMenuOpen &&
       !isSearchOpen
     ) {
       setSearchTerm("");
     }
-    
+
     prevPathnameRef.current = currentPathname;
-  }, [location.pathname, searchTerm, isMobileMenuOpen, isSearchOpen, setSearchTerm]);
+  }, [
+    location.pathname,
+    searchTerm,
+    isMobileMenuOpen,
+    isSearchOpen,
+    setSearchTerm,
+  ]);
 
   // Gera sugestões de autocomplete baseadas em Marca Modelo Ano Cor
   const vehicleSuggestions = useMemo<VehicleSuggestion[]>(() => {
-    if (!vehicles || vehicles.length === 0 || !searchTerm || searchTerm.length < 2) {
+    if (
+      !vehicles ||
+      vehicles.length === 0 ||
+      !searchTerm ||
+      searchTerm.length < 2
+    ) {
       return [];
     }
 
@@ -159,7 +171,13 @@ export function Header() {
 
     vehicles.forEach((vehicle) => {
       // Só processa se tiver todos os dados necessários
-      if (!vehicle.marca || !vehicle.modelo || !vehicle.year || !vehicle.cor || !vehicle.id) {
+      if (
+        !vehicle.marca ||
+        !vehicle.modelo ||
+        !vehicle.year ||
+        !vehicle.cor ||
+        !vehicle.id
+      ) {
         return;
       }
 
@@ -205,12 +223,16 @@ export function Header() {
       const bModelo = b.modelo.toLowerCase();
 
       // Se a busca começa com marca, prioriza
-      if (aMarca.startsWith(lowerQuery) && !bMarca.startsWith(lowerQuery)) return -1;
-      if (!aMarca.startsWith(lowerQuery) && bMarca.startsWith(lowerQuery)) return 1;
+      if (aMarca.startsWith(lowerQuery) && !bMarca.startsWith(lowerQuery))
+        return -1;
+      if (!aMarca.startsWith(lowerQuery) && bMarca.startsWith(lowerQuery))
+        return 1;
 
       // Se a busca começa com modelo, prioriza
-      if (aModelo.startsWith(lowerQuery) && !bModelo.startsWith(lowerQuery)) return -1;
-      if (!aModelo.startsWith(lowerQuery) && bModelo.startsWith(lowerQuery)) return 1;
+      if (aModelo.startsWith(lowerQuery) && !bModelo.startsWith(lowerQuery))
+        return -1;
+      if (!aModelo.startsWith(lowerQuery) && bModelo.startsWith(lowerQuery))
+        return 1;
 
       return 0;
     });
@@ -235,7 +257,7 @@ export function Header() {
       placa: suggestion.placa,
       id: suggestion.id,
     });
-    
+
     navigate({ to: `/veiculo/${slug}` });
     setIsMobileMenuOpen(false);
     setIsMobileAutocompleteOpen(false);
@@ -243,7 +265,9 @@ export function Header() {
   };
 
   // Handler para quando o usuário pressionar teclas no campo de busca desktop
-  const handleDesktopSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleDesktopSearchKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Enter" && searchTerm.trim()) {
       // Se está na página showroom, apenas atualiza os filtros
       if (location.pathname === "/seminovos") {
@@ -286,9 +310,15 @@ export function Header() {
   };
 
   // Handler para quando o usuário pressionar teclas no campo de busca mobile
-  const handleMobileSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleMobileSearchKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Enter") {
-      if (vehicleSuggestions.length > 0 && highlightedIndex >= 0 && highlightedIndex < vehicleSuggestions.length) {
+      if (
+        vehicleSuggestions.length > 0 &&
+        highlightedIndex >= 0 &&
+        highlightedIndex < vehicleSuggestions.length
+      ) {
         // Se há sugestões e uma está destacada, seleciona ela
         handleSuggestionSelect(vehicleSuggestions[highlightedIndex]);
       } else if (searchTerm.trim()) {
@@ -315,7 +345,7 @@ export function Header() {
       if (vehicleSuggestions.length > 0) {
         setIsMobileAutocompleteOpen(true);
         setHighlightedIndex((prev) =>
-          prev < vehicleSuggestions.length - 1 ? prev + 1 : prev
+          prev < vehicleSuggestions.length - 1 ? prev + 1 : prev,
         );
       }
     } else if (e.key === "ArrowUp") {
@@ -342,7 +372,8 @@ export function Header() {
 
     if (isMobileAutocompleteOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isMobileAutocompleteOpen]);
 
@@ -355,6 +386,7 @@ export function Header() {
   };
 
   const menuLinks = [
+    { to: "/como-selecionamos-nossos-carros", label: "Por que Netcar" },
     { to: "/sobre", label: "Sobre" },
     { to: "/seminovos", label: "Seminovos", search: emptySeminovosSearch },
     { to: "/comparar", label: "Comparar" },
@@ -362,7 +394,11 @@ export function Header() {
     { to: "/regioes-atendidas", label: "Regiões" },
     { to: "/blog", label: "Atualidades" },
     { to: "/contato", label: "Contato" },
-    { to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9", label: "Localização", external: true },
+    {
+      to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9",
+      label: "Localização",
+      external: true,
+    },
   ];
 
   const resetShowroomNav = () => {
@@ -373,8 +409,8 @@ export function Header() {
 
   return (
     <>
-      <header 
-        className={`fixed top-0 left-0 right-0 overflow-x-hidden max-w-full isolate ${isMobileMenuOpen ? 'z-[75]' : 'z-50'}`}
+      <header
+        className={`fixed top-0 left-0 right-0 overflow-x-hidden max-w-full isolate ${isMobileMenuOpen ? "z-[75]" : "z-50"}`}
       >
         {/* Fundo branco ao scroll — opacity (não clipPath): Safari iOS fantasma/duplicava o logo */}
         <div
@@ -384,8 +420,8 @@ export function Header() {
             boxShadow: isMobileMenuOpen
               ? "none"
               : isScrolled
-              ? "0 0 30px rgba(0,0,0,.35)"
-              : "none",
+                ? "0 0 30px rgba(0,0,0,.35)"
+                : "none",
             transition: "opacity 0.2s ease, box-shadow 0.2s ease",
           }}
         />
@@ -393,7 +429,11 @@ export function Header() {
         <div className="container mx-auto relative flex h-16 items-center justify-between px-4">
           {/* Logo + nav desktop só em xl+ (abaixo: hambúrguer — evita overlap com Buscar/telefone) */}
           <div className="relative z-10 flex items-center xl:absolute xl:left-1/2 xl:top-1/2 xl:-translate-x-1/2 xl:-translate-y-1/2 xl:gap-5 2xl:gap-8">
-            <Link to="/" aria-label="Netcar - Página inicial" className="flex-shrink-0">
+            <Link
+              to="/"
+              aria-label="Netcar - Página inicial"
+              className="flex-shrink-0"
+            >
               <img
                 src={logoNetcar}
                 alt="Netcar Multimarcas"
@@ -404,10 +444,18 @@ export function Header() {
               />
             </Link>
 
-            <nav className="hidden xl:flex items-center gap-3 2xl:gap-5 flex-shrink-0" aria-label="Menu principal">
+            <nav
+              className="hidden xl:flex items-center gap-3 2xl:gap-5 flex-shrink-0"
+              aria-label="Menu principal"
+            >
               {menuLinks.map((link) => {
-                const linkClassName = "group relative text-[13px] 2xl:text-[14px] text-fg overflow-hidden h-[22px] flex items-center whitespace-nowrap";
-                
+                const isSeminovos = link.to === "/seminovos";
+                const linkClassName = `group relative flex items-center overflow-hidden whitespace-nowrap text-[13px] 2xl:text-[14px] ${
+                  isSeminovos
+                    ? "h-[22px] font-black uppercase text-[#087A37]"
+                    : "h-[22px] text-fg"
+                }`;
+
                 if (link.external) {
                   return (
                     <a
@@ -422,13 +470,16 @@ export function Header() {
                         {link.label}
                       </span>
                       {/* Texto que sobe no hover */}
-                      <span aria-hidden="true" className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                      <span
+                        aria-hidden="true"
+                        className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full"
+                      >
                         {link.label}
                       </span>
                     </a>
                   );
                 }
-                
+
                 return (
                   <Link
                     key={link.to}
@@ -442,7 +493,10 @@ export function Header() {
                       {link.label}
                     </span>
                     {/* Texto que sobe no hover */}
-                    <span aria-hidden="true" className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                    <span
+                      aria-hidden="true"
+                      className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full"
+                    >
                       {link.label}
                     </span>
                   </Link>
@@ -458,41 +512,41 @@ export function Header() {
           <div className="relative z-10 hidden xl:flex items-center gap-3 2xl:gap-4">
             {/* Campo de Busca */}
             {isSearchOpen ? (
-                <div className="w-[250px] overflow-hidden bg-white rounded-md shadow-lg px-3 py-2 relative z-[100]">
-                  <div className="flex items-center gap-2 border-b border-border pb-1">
-                    <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                    <input
-                      ref={searchInputRef}
-                      type="text"
-                      value={searchTerm}
-                      onChange={(e) => handleSearch(e.target.value)}
-                      onKeyDown={handleDesktopSearchKeyDown}
-                      placeholder="Buscar veículo..."
-                      className="flex-1 bg-transparent border-0 outline-none text-sm text-fg placeholder:text-muted-foreground"
-                      onBlur={() => {
-                        if (!searchTerm.trim()) {
-                          setIsSearchOpen(false);
-                        }
-                      }}
-                    />
-                    <button
-                      onClick={toggleSearch}
-                      className="text-muted-foreground hover:text-fg transition-colors flex-shrink-0"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
+              <div className="w-[250px] overflow-hidden bg-white rounded-md shadow-lg px-3 py-2 relative z-[100]">
+                <div className="flex items-center gap-2 border-b border-border pb-1">
+                  <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    onKeyDown={handleDesktopSearchKeyDown}
+                    placeholder="Buscar veículo..."
+                    className="flex-1 bg-transparent border-0 outline-none text-sm text-fg placeholder:text-muted-foreground"
+                    onBlur={() => {
+                      if (!searchTerm.trim()) {
+                        setIsSearchOpen(false);
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={toggleSearch}
+                    className="text-muted-foreground hover:text-fg transition-colors flex-shrink-0"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
-              ) : (
-                <button
-                  onClick={toggleSearch}
-                  className="flex items-center gap-2 hover:text-primary transition-colors"
-                  aria-label="Buscar"
-                >
-                  <Search className="w-4 h-4" />
-                  <span className="hidden 2xl:inline">Buscar</span>
-                </button>
-              )}
+              </div>
+            ) : (
+              <button
+                onClick={toggleSearch}
+                className="flex items-center gap-2 hover:text-primary transition-colors"
+                aria-label="Buscar"
+              >
+                <Search className="w-4 h-4" />
+                <span className="hidden 2xl:inline">Buscar</span>
+              </button>
+            )}
             {whatsapp?.numero && (
               <a
                 href={getWhatsAppLink()}
@@ -504,7 +558,9 @@ export function Header() {
                 aria-label={formatPhone(whatsapp.numero)}
               >
                 <Phone className="w-4 h-4 shrink-0" />
-                <span className="hidden 2xl:inline">{formatPhone(whatsapp.numero)}</span>
+                <span className="hidden 2xl:inline">
+                  {formatPhone(whatsapp.numero)}
+                </span>
               </a>
             )}
           </div>
@@ -526,121 +582,125 @@ export function Header() {
 
       {/* Menu Mobile Overlay */}
       {isMobileMenuOpen && (
-          <>
-            {/* Fundo colorido com fade-in - cobre toda a tela incluindo header */}
-            <div
-              className="fixed inset-0 z-[60] bg-green-dark"
-              onClick={() => setIsMobileMenuOpen(false)}
-            />
+        <>
+          {/* Fundo colorido com fade-in - cobre toda a tela incluindo header */}
+          <div
+            className="fixed inset-0 z-[60] bg-green-dark"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
 
-            {/* Menu centralizado com animação */}
-            <div
-              className="fixed inset-0 z-[70] flex items-center justify-center"
+          {/* Menu centralizado com animação */}
+          <div className="fixed inset-0 z-[70] flex items-center justify-center">
+            <nav
+              className="flex flex-col items-center gap-6"
+              aria-label="Menu mobile"
             >
-              <nav className="flex flex-col items-center gap-6" aria-label="Menu mobile">
-                {/* Campo de Busca Mobile com Autocomplete */}
-                <div
-                  className="w-full max-w-xs px-4 relative"
-                  onClick={(e) => e.stopPropagation()}
-                  ref={mobileAutocompleteRef}
-                >
-                  <div className="flex items-center gap-2 border-b border-white/30 pb-2 relative">
-                    <Search className="w-5 h-5 text-white flex-shrink-0" />
-                    <input
-                      ref={mobileSearchInputRef}
-                      type="text"
-                      value={searchTerm}
-                      onChange={(e) => handleSearch(e.target.value)}
-                      onKeyDown={handleMobileSearchKeyDown}
-                      onFocus={() => {
-                        if (searchTerm.length >= 2) {
-                          setIsMobileAutocompleteOpen(true);
-                        }
-                      }}
-                      placeholder="Buscar por marca, modelo, ano ou cor..."
-                      className="flex-1 bg-transparent border-0 outline-none text-white text-lg placeholder:text-white/70"
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  </div>
-
-                  {/* Dropdown de Autocomplete */}
-                  {isMobileAutocompleteOpen && vehicleSuggestions.length > 0 && (
-                      <div
-                        className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-[80] max-h-64 overflow-y-auto"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {vehicleSuggestions.map((suggestion, index) => (
-                          <div
-                            key={suggestion.id}
-                            onClick={() => handleSuggestionSelect(suggestion)}
-                            className={`px-4 py-3 cursor-pointer transition-colors ${
-                              highlightedIndex === index
-                                ? "bg-primary/10"
-                                : "hover:bg-gray-50"
-                            }`}
-                            onMouseEnter={() => setHighlightedIndex(index)}
-                          >
-                            <div className="text-sm font-medium text-gray-900">
-                              {suggestion.displayText}
-                            </div>
-                            <div className="text-xs text-gray-500 mt-0.5">
-                              {suggestion.marca} • {suggestion.ano} • {suggestion.cor}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+              {/* Campo de Busca Mobile com Autocomplete */}
+              <div
+                className="w-full max-w-xs px-4 relative"
+                onClick={(e) => e.stopPropagation()}
+                ref={mobileAutocompleteRef}
+              >
+                <div className="flex items-center gap-2 border-b border-white/30 pb-2 relative">
+                  <Search className="w-5 h-5 text-white flex-shrink-0" />
+                  <input
+                    ref={mobileSearchInputRef}
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    onKeyDown={handleMobileSearchKeyDown}
+                    onFocus={() => {
+                      if (searchTerm.length >= 2) {
+                        setIsMobileAutocompleteOpen(true);
+                      }
+                    }}
+                    placeholder="Buscar por marca, modelo, ano ou cor..."
+                    className="flex-1 bg-transparent border-0 outline-none text-white text-lg placeholder:text-white/70"
+                    onClick={(e) => e.stopPropagation()}
+                  />
                 </div>
-                
-                {menuLinks.map((link) => (
+
+                {/* Dropdown de Autocomplete */}
+                {isMobileAutocompleteOpen && vehicleSuggestions.length > 0 && (
                   <div
-                    key={link.to}
+                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-[80] max-h-64 overflow-y-auto"
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    {link.external ? (
-                      <a
-                        href={link.to}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-white text-xl"
-                        onClick={() => setIsMobileMenuOpen(false)}
+                    {vehicleSuggestions.map((suggestion, index) => (
+                      <div
+                        key={suggestion.id}
+                        onClick={() => handleSuggestionSelect(suggestion)}
+                        className={`px-4 py-3 cursor-pointer transition-colors ${
+                          highlightedIndex === index
+                            ? "bg-primary/10"
+                            : "hover:bg-gray-50"
+                        }`}
+                        onMouseEnter={() => setHighlightedIndex(index)}
                       >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        to={link.to}
-                        search={"search" in link ? link.search : undefined}
-                        className="text-white text-xl"
-                        onClick={() => {
-                          if ("search" in link) resetShowroomNav();
-                          else setIsMobileMenuOpen(false);
-                        }}
-                      >
-                        {link.label}
-                      </Link>
-                    )}
-                  </div>
-                ))}
-                {whatsapp?.numero && (
-                  <div>
-                    <a
-                      href={getWhatsAppLink()}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-wa-source="header"
-                      data-wa-intent="mobile_menu_contact"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="inline-flex items-center gap-2"
-                    >
-                      <Phone className="w-5 h-5 shrink-0" />
-                      <span>{formatPhone(whatsapp.numero)}</span>
-                    </a>
+                        <div className="text-sm font-medium text-gray-900">
+                          {suggestion.displayText}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-0.5">
+                          {suggestion.marca} • {suggestion.ano} •{" "}
+                          {suggestion.cor}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
-              </nav>
-            </div>
-          </>
-        )}
+              </div>
+
+              {menuLinks.map((link) => (
+                <div key={link.to}>
+                  {link.external ? (
+                    <a
+                      href={link.to}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white text-xl"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.to}
+                      search={"search" in link ? link.search : undefined}
+                      className={
+                        link.to === "/seminovos"
+                          ? "text-xl font-black uppercase text-white"
+                          : "text-white text-xl"
+                      }
+                      onClick={() => {
+                        if ("search" in link) resetShowroomNav();
+                        else setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </div>
+              ))}
+              {whatsapp?.numero && (
+                <div>
+                  <a
+                    href={getWhatsAppLink()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-wa-source="header"
+                    data-wa-intent="mobile_menu_contact"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="inline-flex items-center gap-2"
+                  >
+                    <Phone className="w-5 h-5 shrink-0" />
+                    <span>{formatPhone(whatsapp.numero)}</span>
+                  </a>
+                </div>
+              )}
+            </nav>
+          </div>
+        </>
+      )}
     </>
   );
 }

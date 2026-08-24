@@ -90,13 +90,13 @@ export function SellCityLandingPage() {
       <section className="pb-12">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <h2 className="mb-6 text-2xl font-bold text-fg">
-            Pré-avaliação remota, vistoria em Esteio
+            Comece pelo WhatsApp e conclua a avaliação em Esteio
           </h2>
           <div className="grid gap-4 md:grid-cols-3">
             <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
               <Camera className="mb-3 h-5 w-5 text-secondary" />
               <h3 className="mb-2 font-semibold text-fg">
-                1. Envie dados reais
+                1. Envie os dados do carro
               </h3>
               <p className="text-sm leading-relaxed text-gray-600">
                 Modelo, versão, ano, km, fotos, avarias e saldo de financiamento
@@ -109,13 +109,15 @@ export function SellCityLandingPage() {
                 2. Receba orientação
               </h3>
               <p className="text-sm leading-relaxed text-gray-600">
-                Pré-avaliação indica se vale avançar. Não é proposta final nem
-                garantia de compra.
+                A equipe confere as informações e orienta a próxima etapa. A
+                proposta depende da vistoria presencial.
               </p>
             </article>
             <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
               <Store className="mb-3 h-5 w-5 text-secondary" />
-              <h3 className="mb-2 font-semibold text-fg">3. Agende vistoria</h3>
+              <h3 className="mb-2 font-semibold text-fg">
+                3. Traga para vistoria
+              </h3>
               <p className="text-sm leading-relaxed text-gray-600">
                 Conferência do carro, documentos e proposta final acontecem nas
                 lojas da Av. Presidente Vargas, somente em Esteio.

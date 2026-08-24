@@ -24,7 +24,7 @@
   {
     "slug": "tabela-fipe-como-usar-negociacao",
     "keyword": "tabela fipe carro usado",
-    "titleHint": "Tabela FIPE: como usar de verdade na hora de comprar ou vender",
+    "titleHint": "Tabela FIPE: como usar na hora de comprar ou vender",
     "intent": "venda",
     "status": "pendente"
   },
@@ -95,7 +95,13 @@
     "titleHint": "Comprar seminovo à distância na Grande Porto Alegre: roteiro seguro",
     "intent": "compra",
     "region": "Grande Porto Alegre",
-    "cities": ["Canoas", "Sapucaia do Sul", "São Leopoldo", "Novo Hamburgo", "Gravataí"],
+    "cities": [
+      "Canoas",
+      "Sapucaia do Sul",
+      "São Leopoldo",
+      "Novo Hamburgo",
+      "Gravataí"
+    ],
     "asset": "guia-negociacao-remota",
     "status": "publicado"
   },

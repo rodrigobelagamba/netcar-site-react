@@ -89,10 +89,10 @@ export function ContatoPage() {
         {/* Hero */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-fg mb-4">
-            Fale Conosco
+            Fale com a Netcar
           </h1>
           <p className="text-muted-foreground text-lg max-w-md mx-auto">
-            Escolha a melhor forma de entrar em contato
+            Use o WhatsApp, ligue para uma das lojas ou envie sua mensagem.
           </p>
         </div>
 
@@ -132,7 +132,7 @@ export function ContatoPage() {
               Envie uma mensagem
             </h2>
             <p className="text-muted-foreground mb-5">
-              Responderemos o mais breve possível
+              Ao enviar, abrimos o WhatsApp com os dados preenchidos.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">

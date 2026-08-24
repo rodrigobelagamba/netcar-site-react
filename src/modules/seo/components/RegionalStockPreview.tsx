@@ -51,7 +51,7 @@ export function RegionalStockPreview({
       <div className="container-main relative px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="mb-6">
           <span className="mb-1 block text-xs font-semibold uppercase tracking-widest text-primary">
-            Estoque real
+            Estoque atualizado
           </span>
           <h2 className="text-2xl font-bold text-fg md:text-3xl">{title}</h2>
         </div>

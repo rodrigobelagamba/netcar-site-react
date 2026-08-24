@@ -77,6 +77,7 @@ function netcar_static_route_file($path)
         '/seminovos-automaticos' => 'page-seminovos-automaticos.html',
         '/politica-editorial' => 'page-politica-editorial.html',
         '/comparar' => 'page-comparar.html',
+        '/como-selecionamos-nossos-carros' => 'page-como-selecionamos-nossos-carros.html',
     ];
 
     $file = isset($exact[$path]) ? $exact[$path] : null;
@@ -435,6 +436,7 @@ function netcar_route_manifest_entry($path)
     if ($path === '/seminovos-automaticos') return 'src/modules/seo/pages/SeminovosAutomaticosPage.tsx';
     if ($path === '/comparar') return 'src/modules/seo/pages/ComparadorPage.tsx';
     if ($path === '/regioes-atendidas') return 'src/modules/seo/pages/RegionsHubPage.tsx';
+    if ($path === '/como-selecionamos-nossos-carros') return 'src/modules/procedencia/pages/ComoSelecionamosPage.tsx';
     if (preg_match('#^/seminovos-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/CityLandingPage.tsx';
     if (preg_match('#^/vender-carro-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/SellCityLandingPage.tsx';
     if (preg_match('#^/comprar-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/EstoqueLandingPage.tsx';

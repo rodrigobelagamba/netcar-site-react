@@ -15,6 +15,7 @@ import logoNetcar from "@/assets/images/logo-netcar.png";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
 const menuLinks = [
+  { to: "/como-selecionamos-nossos-carros", label: "Por que Netcar" },
   { to: "/sobre", label: "Sobre" },
   { to: "/seminovos", label: "Seminovos", search: emptySeminovosSearch },
   { to: "/comparar", label: "Comparar seminovos" },
@@ -152,7 +153,7 @@ export function Footer() {
                 <span className="font-bold text-sm text-primary">Nethelp</span>
               </div>
               <p className="text-xs leading-snug opacity-90">
-                Suporte exclusivo para veículos em período de garantia legal.
+                Canal para registrar e acompanhar demandas de pós-venda.
               </p>
             </a>
           </div>
@@ -395,10 +396,9 @@ export function Footer() {
 
         <div className="border-t border-border pt-6 pb-4">
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Netcar Multimarcas — seminovos revisados e compra de usados em
-            Esteio/RS. Atendimento remoto para Grande Porto Alegre, Vale do
-            Paranhana e Serra Gaúcha; lojas físicas somente na Av. Presidente
-            Vargas, em Esteio.
+            Netcar Multimarcas — duas lojas integradas e estoque de seminovos em
+            Esteio/RS. O atendimento pode começar pelo site ou WhatsApp; as
+            lojas físicas ficam somente na Av. Presidente Vargas, em Esteio.
           </p>
         </div>
 
