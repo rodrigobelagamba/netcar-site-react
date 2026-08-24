@@ -4,7 +4,7 @@
     "title": "Seminovos em Grande Porto Alegre: estoque e procedência",
     "description": "Como comparar estoque real e procedência ao buscar seminovo em Porto Alegre, Canoas, Gravataí, Cachoeirinha.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-17",
+    "updatedAt": "2026-08-24",
     "readMinutes": 7,
     "sections": [
       {
@@ -39,7 +39,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 132.900,00",
+            "preco": "R$ 129.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -50,7 +50,7 @@
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
             "km": "7.800 km",
-            "preco": "R$ 149.900,00",
+            "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -114,7 +114,7 @@
     "title": "Comprar seminovo à distância: roteiro para Litoral Norte RS",
     "description": "Como filtrar estoque, conferir procedência e organizar a visita saindo de Tramandaí, Capão da Canoa, Osório.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-17",
+    "updatedAt": "2026-08-24",
     "readMinutes": 7,
     "sections": [
       {
@@ -149,7 +149,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 132.900,00",
+            "preco": "R$ 129.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -160,7 +160,7 @@
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
             "km": "7.800 km",
-            "preco": "R$ 149.900,00",
+            "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -220,7 +220,7 @@
     "title": "Carro pra família seminovo: espaço sem estourar orçamento",
     "description": "Carro pra família: espaço, segurança e custo — com opções reais no estoque Netcar em Esteio.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-17",
+    "updatedAt": "2026-08-24",
     "readMinutes": 6,
     "sections": [
       {
@@ -266,7 +266,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 132.900,00",
+            "preco": "R$ 129.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -277,7 +277,7 @@
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
             "km": "7.800 km",
-            "preco": "R$ 149.900,00",
+            "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -311,7 +311,7 @@
     "title": "Carro usado com poucos km: o que checar",
     "description": "Seminovo baixa km em Esteio: como ler odômetro, preço e procedência com estoque real.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-17",
+    "updatedAt": "2026-08-24",
     "readMinutes": 6,
     "sections": [
       {
@@ -357,7 +357,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 132.900,00",
+            "preco": "R$ 129.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -368,7 +368,7 @@
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
             "km": "7.800 km",
-            "preco": "R$ 149.900,00",
+            "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -398,7 +398,7 @@
     "title": "Hatch seminovo pra cidade: econômico e prático",
     "description": "Hatch e compacto seminovo pra cidade: consumo, manobra e opções no estoque Netcar.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-17",
+    "updatedAt": "2026-08-24",
     "readMinutes": 6,
     "sections": [
       {
@@ -441,6 +441,17 @@
         "type": "cars",
         "cars": [
           {
+            "modelo": "Volkswagen Polo Track First Edition",
+            "ano": "2023",
+            "km": "25.131 km",
+            "preco": "R$ 81.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/polo-track-first-edition-2023-jcp-xx22-19978",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+          },
+          {
             "modelo": "Volkswagen Polo Highline",
             "ano": "2023/2024",
             "km": "30.627 km",
@@ -449,18 +460,7 @@
             "combustivel": "Flex",
             "destaque": "Baixa KM",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/polo-highline-2024-jch-xx93-19955",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
-          },
-          {
-            "modelo": "Fiat Argo Drive",
-            "ano": "2023/2024",
-            "km": "32.500 km",
-            "preco": "R$ 86.900,00",
-            "cambio": "Automatico",
-            "combustivel": "Flex",
-            "destaque": "Eleito Melhor Compra",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/argo-drive-2024-jcl-xx85-19687",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/28032026ARGO%20DRIVE%20JCL5B85CAPA.png"
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/17082026POLO%20HIGHLINE%20JCH5D93CAPA.png"
           }
         ]
       },
@@ -489,7 +489,7 @@
     "title": "Carro pra viagem no RS: o que levar na shortlist",
     "description": "Seminovo pra viagem e Serra Gaúcha: conforto, estabilidade e estoque real em Esteio.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-17",
+    "updatedAt": "2026-08-24",
     "readMinutes": 6,
     "sections": [
       {
@@ -535,7 +535,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 132.900,00",
+            "preco": "R$ 129.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -546,7 +546,7 @@
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
             "km": "7.800 km",
-            "preco": "R$ 149.900,00",
+            "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -576,7 +576,7 @@
     "title": "Quanto custa um seminovo em Esteio em 2026? Guia de preços reais",
     "description": "Faixas de preço por perfil de comprador, o que inclui o valor e exemplos do estoque Netcar — sem tabela genérica.",
     "publishedAt": "2026-06-23",
-    "updatedAt": "2026-08-17",
+    "updatedAt": "2026-08-24",
     "readMinutes": 6,
     "sections": [
       {
@@ -590,7 +590,7 @@
       {
         "type": "ul",
         "items": [
-          "Entrada (primeiro carro, uso urbano): a partir de R$ 47.900",
+          "Entrada (primeiro carro, uso urbano): a partir de R$ 52.900",
           "Intermediário (melhor custo-benefício): faixa central do estoque",
           "Premium (SUV, pickup, seminovo recente): até R$ 205.900"
         ]
@@ -623,7 +623,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 132.900,00",
+            "preco": "R$ 129.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -634,7 +634,7 @@
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
             "km": "7.800 km",
-            "preco": "R$ 149.900,00",
+            "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -677,7 +677,7 @@
     "title": "Comprando o primeiro carro usado: o que ninguém te avisou",
     "description": "Primeiro carro: orçamento real, modelos seguros, financiamento e opções de entrada no estoque Netcar, Esteio.",
     "publishedAt": "2026-06-23",
-    "updatedAt": "2026-08-10",
+    "updatedAt": "2026-08-24",
     "readMinutes": 6,
     "sections": [
       {
@@ -728,18 +728,18 @@
             "combustivel": "Flex",
             "destaque": "Baixa KM",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/fox-xtreme-2020-izw-xx17-19952",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/14082026FOX%20XTREME%20IZW6D17CAPA.png"
           },
           {
-            "modelo": "Kia Picanto Ex",
-            "ano": "2012",
-            "km": "80.000 km",
-            "preco": "R$ 47.900,00",
+            "modelo": "Hyundai Hb20s Premium",
+            "ano": "2016",
+            "km": "92.300 km",
+            "preco": "R$ 68.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
-            "destaque": "Manual Proprietário e Chave Reserva",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/picanto-ex-2012-isv-xx76-19785",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/18062026picanto%20ex%20ISV8276CAPA.png"
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/hb20s-premium-2016-ixd-xx52-19945",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/07082026hb20%20s%20premium%20IXD9H52CAPA.png"
           }
         ]
       },
@@ -834,7 +834,7 @@
     "title": "Automático ou manual no seminovo? Comparativo técnico",
     "description": "Consumo, manutenção, revenda e conforto — lado a lado. Automáticos revisados no estoque Netcar.",
     "publishedAt": "2026-06-03",
-    "updatedAt": "2026-08-17",
+    "updatedAt": "2026-08-24",
     "readMinutes": 6,
     "sections": [
       {
@@ -890,7 +890,7 @@
             "modelo": "Volkswagen Tera High Turbo",
             "ano": "2025/2026",
             "km": "6.700 km",
-            "preco": "R$ 132.900,00",
+            "preco": "R$ 129.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
@@ -901,7 +901,7 @@
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
             "km": "7.800 km",
-            "preco": "R$ 149.900,00",
+            "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
