@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-landings.js && node scripts/validate-regional-seo.js && node scripts/validate-blog-intent.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsx scripts/validate-demand-runtime.ts && tsx scripts/validate-showroom-runtime.ts && node scripts/validate-generated-seo.js && node scripts/validate-server-routing.js && node scripts/validate-tracking-runtime.js && node scripts/generate-whatsapp-catalog-feed.js && tsc && vite build && node scripts/defer-built-css.js && node scripts/copy-social-php.js",
+    "build": "node scripts/generate-landings.js && node scripts/validate-regional-seo.js && node scripts/validate-blog-intent.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsx scripts/validate-demand-runtime.ts && tsx scripts/validate-showroom-runtime.ts && node scripts/validate-generated-seo.js && node scripts/validate-server-routing.js && node scripts/validate-tracking-runtime.js && tsx scripts/validate-gbp-attribution.ts && node scripts/generate-whatsapp-catalog-feed.js && tsc && vite build && node scripts/defer-built-css.js && node scripts/copy-social-php.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "generate-landings": "node scripts/generate-landings.js",
     "generate-blog": "node scripts/generate-blog.js",
@@ -18,6 +18,7 @@
     "stock:validate-showroom": "tsx scripts/validate-showroom-runtime.ts",
     "seo:validate-server": "node scripts/validate-server-routing.js",
     "tracking:validate": "node scripts/validate-tracking-runtime.js",
+    "tracking:validate:gbp": "tsx scripts/validate-gbp-attribution.ts",
     "seo:validate-blog": "node scripts/validate-blog-intent.js",
     "catalog:whatsapp": "node scripts/generate-whatsapp-catalog-feed.js",
     "report:icheck": "tsx scripts/generate-icheck-report.mjs",

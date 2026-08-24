@@ -183,14 +183,29 @@ export function captureTrafficSource(): void {
   if (fromReferrer) writeStored(fromReferrer);
 }
 
-/** Origem atual (pra eventos GA4). */
-export function getTrafficSource(): {
+export interface TrafficSourceContext {
   src: TrafficSourceCode;
   campaign?: string;
-} {
+  utmSource?: string;
+  utmMedium?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  landingPage?: string;
+}
+
+/** Origem atual (pra eventos GA4 e atribuição própria). */
+export function getTrafficSource(): TrafficSourceContext {
   const stored = typeof window !== "undefined" ? readStored() : null;
   return stored
-    ? { src: stored.src, campaign: stored.campaign }
+    ? {
+        src: stored.src,
+        campaign: stored.campaign,
+        utmSource: stored.utmSource,
+        utmMedium: stored.utmMedium,
+        utmContent: stored.utmContent,
+        utmTerm: stored.utmTerm,
+        landingPage: stored.landingPage,
+      }
     : { src: "DIR" };
 }
 

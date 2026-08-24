@@ -114,6 +114,30 @@ function getRegionalDimensions(pagePath: string): Record<string, string> {
   return {};
 }
 
+function getTrafficDimensions(): Record<string, string> {
+  const traffic = getTrafficSource();
+  const campaign = traffic.campaign ?? "";
+  const content = traffic.utmContent ?? "";
+  let gbpProfile = "";
+
+  if (/^gbp(?:-|$)/.test(campaign)) {
+    if (/(?:^|[_-])loja[_-]?1(?:[_-]|$)/i.test(content)) {
+      gbpProfile = "loja_1";
+    } else if (/(?:^|[_-])loja[_-]?2(?:[_-]|$)/i.test(content)) {
+      gbpProfile = "loja_2";
+    }
+  }
+
+  return {
+    traffic_source: traffic.src,
+    traffic_campaign: campaign,
+    traffic_utm_source: traffic.utmSource ?? "",
+    traffic_medium: traffic.utmMedium ?? "",
+    traffic_content: content,
+    gbp_profile: gbpProfile,
+  };
+}
+
 const WA_CLICK_DEDUP_MS = 400;
 let lastWhatsAppTrackKey = "";
 let lastWhatsAppTrackAt = 0;
@@ -213,6 +237,7 @@ export function trackPageView(path?: string, title?: string): void {
     typeof window !== "undefined" ? window.location.href : "";
   const pageType = inferPageType(pagePath);
   const regionalDimensions = getRegionalDimensions(pagePath);
+  const trafficDimensions = getTrafficDimensions();
 
   pushDataLayer({
     event: "virtual_page_view",
@@ -221,6 +246,7 @@ export function trackPageView(path?: string, title?: string): void {
     page_location: pageLocation,
     page_type: pageType,
     ...regionalDimensions,
+    ...trafficDimensions,
   });
 
   if (["city_buy", "city_sell", "regional_hub"].includes(pageType)) {
@@ -229,6 +255,7 @@ export function trackPageView(path?: string, title?: string): void {
       page_type: pageType,
       page_path: pagePath,
       ...regionalDimensions,
+      ...trafficDimensions,
     });
   }
 
@@ -239,6 +266,7 @@ export function trackPageView(path?: string, title?: string): void {
       page_location: pageLocation,
       page_type: pageType,
       ...regionalDimensions,
+      ...trafficDimensions,
     });
   }
 
@@ -272,6 +300,7 @@ export function trackRegionalCtaClick(
     page_type: pageType,
     page_path: pagePath,
     ...getRegionalDimensions(pagePath),
+    ...getTrafficDimensions(),
   });
 
   if (action.includes("stock") || action.startsWith("city_buy_")) {
@@ -281,6 +310,7 @@ export function trackRegionalCtaClick(
       page_type: pageType,
       page_path: pagePath,
       ...getRegionalDimensions(pagePath),
+      ...getTrafficDimensions(),
     });
   }
 }
@@ -295,6 +325,7 @@ export function trackTrustSectionView(
     page_type: inferPageType(pagePath),
     page_path: pagePath,
     ...getRegionalDimensions(pagePath),
+    ...getTrafficDimensions(),
   });
 }
 
@@ -309,6 +340,7 @@ export function trackSellEvaluation(
     page_type: inferPageType(pagePath),
     page_path: pagePath,
     ...getRegionalDimensions(pagePath),
+    ...getTrafficDimensions(),
   });
 
   if (stage === "completed") {
@@ -318,6 +350,7 @@ export function trackSellEvaluation(
       city_name: cityName,
       page_path: pagePath,
       ...getRegionalDimensions(pagePath),
+      ...getTrafficDimensions(),
     });
   }
 }
@@ -328,16 +361,14 @@ export function trackPhoneClick(params: {
   pagePath?: string;
 }): void {
   const pagePath = params.pagePath ?? getPagePath();
-  const traffic = getTrafficSource();
   pushDataLayer({
     event: "phone_click",
     phone_number: params.phoneNumber,
     phone_source: params.source ?? "link",
     page_type: inferPageType(pagePath),
-    traffic_source: traffic.src,
-    traffic_campaign: traffic.campaign,
     page_path: pagePath,
     ...getRegionalDimensions(pagePath),
+    ...getTrafficDimensions(),
   });
   if (typeof window.fbq === "function") {
     window.fbq("track", "Contact", { content_name: "phone_call" });
@@ -345,19 +376,18 @@ export function trackPhoneClick(params: {
 }
 
 export function trackContactFormSubmit(pagePath = getPagePath()): void {
-  const traffic = getTrafficSource();
   pushDataLayer({
     event: "contact_form_submit",
     form_destination: "whatsapp",
     page_type: inferPageType(pagePath),
-    traffic_source: traffic.src,
-    traffic_campaign: traffic.campaign,
     page_path: pagePath,
+    ...getTrafficDimensions(),
   });
   pushDataLayer({
     event: "generate_lead",
     lead_type: "contact_form",
     page_path: pagePath,
+    ...getTrafficDimensions(),
   });
 }
 
@@ -372,7 +402,6 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
 
   if (shouldSkipDuplicateWhatsAppTrack(dedupKey)) return;
 
-  const traffic = getTrafficSource();
   const waRef = getOrCreateClickCode();
 
   pushDataLayer({
@@ -386,10 +415,9 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
     wa_vehicle_name: params.vehicleName,
     wa_page_type: inferPageType(pagePath),
     wa_ref: waRef,
-    traffic_source: traffic.src,
-    traffic_campaign: traffic.campaign,
     page_path: pagePath,
     ...getRegionalDimensions(pagePath),
+    ...getTrafficDimensions(),
   });
 
   // Data Layer v2 persiste valores entre eventos. O false explícito é essencial:
@@ -407,10 +435,9 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
       wa_vehicle_name: params.vehicleName,
       wa_page_type: inferPageType(pagePath),
       wa_ref: waRef,
-      traffic_source: traffic.src,
-      traffic_campaign: traffic.campaign,
       page_path: pagePath,
       ...getRegionalDimensions(pagePath),
+      ...getTrafficDimensions(),
     });
   }
 
