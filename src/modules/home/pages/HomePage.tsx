@@ -416,13 +416,11 @@ export function HomePage() {
         </DeferredRender>
       </div>
 
-      <div className="hidden md:block">
-        <DeferredRender minHeight={800}>
-          <Suspense fallback={null}>
-            <NetcarSocialSection />
-          </Suspense>
-        </DeferredRender>
-      </div>
+      <DeferredRender minHeight={800}>
+        <Suspense fallback={null}>
+          <NetcarSocialSection />
+        </Suspense>
+      </DeferredRender>
 
       <div className="w-full space-y-8 bg-muted px-4 py-8 font-sans text-muted-foreground antialiased sm:px-6 md:py-8 lg:px-8 xl:px-12 2xl:px-16">
         <div className="container-main space-y-8">

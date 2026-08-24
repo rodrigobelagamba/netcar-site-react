@@ -6,11 +6,9 @@ export interface StoryCarouselLayout {
   flexBasis: string;
 }
 
-function layoutForWidth(viewportWidth: number, storyCount: number): StoryCarouselLayout {
-  const count = Math.max(storyCount, 1);
+function layoutForWidth(viewportWidth: number): StoryCarouselLayout {
   const gap = viewportWidth >= 992 ? 10 : 20;
-  const maxPerView = viewportWidth >= 992 ? 5 : viewportWidth >= 768 ? 3 : 2.15;
-  const perView = Math.min(count, maxPerView);
+  const perView = viewportWidth >= 992 ? 5 : viewportWidth >= 768 ? 3 : 2.15;
   const gapCount = Math.max(0, Math.ceil(perView) - 1);
   const flexBasis = `calc((100% - ${gapCount * gap}px) / ${perView})`;
 
@@ -22,7 +20,7 @@ export function useStoryCarouselLayout(
   storyCount: number
 ): StoryCarouselLayout {
   const [layout, setLayout] = useState<StoryCarouselLayout>(() =>
-    layoutForWidth(typeof window !== "undefined" ? window.innerWidth : 1024, storyCount)
+    layoutForWidth(typeof window !== "undefined" ? window.innerWidth : 1024)
   );
 
   useEffect(() => {
@@ -32,7 +30,7 @@ export function useStoryCarouselLayout(
     if (!viewport) return;
 
     const update = () => {
-      const next = layoutForWidth(viewport.clientWidth, storyCount);
+      const next = layoutForWidth(viewport.clientWidth);
       setLayout((prev) => {
         if (prev.gap === next.gap && prev.flexBasis === next.flexBasis) return prev;
         return next;
