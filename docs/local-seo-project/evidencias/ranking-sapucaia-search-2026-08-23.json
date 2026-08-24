@@ -1,0 +1,119 @@
+{
+  "metadata": {
+    "collectedDate": "2026-08-23",
+    "collectedStart": "22:58",
+    "collectedEnd": "23:10",
+    "timezone": "America/Sao_Paulo",
+    "device": "desktop",
+    "surface": "Google Search",
+    "queryLocation": "Termo com Sapucaia do Sul; rodape da Pesquisa indicou Esteio, RS, por IP ou atividade anterior",
+    "centerSimulation": false,
+    "limitations": [
+      "O Google Search nao foi simulado a partir de uma coordenada fixa no centro de Sapucaia do Sul.",
+      "A coleta representa uma fotografia por consulta e pode variar por localizacao, dispositivo, historico, horario e rotacao de anuncios.",
+      "Resultados patrocinados foram separados do Top 3 organico do Map Pack.",
+      "A ultima consulta foi recuperada do historico da aba apos reinicio tecnico e depois confirmada antes de um bloqueio temporario de trafego incomum."
+    ]
+  },
+  "rows": [
+    {
+      "query": "loja de carros em Sapucaia do Sul",
+      "mapPackOrganicTop3": ["Avenida Veiculos", "Vip Motors", "Sul Veiculos"],
+      "mapPackSponsored": ["Netcar Multimarcas - Loja 1"],
+      "netcarMapPackOrganicPosition": null,
+      "netcarTraditionalOrganicPosition": null
+    },
+    {
+      "query": "revenda de veiculos em Sapucaia do Sul",
+      "mapPackOrganicTop3": ["Sul Veiculos", "Ponto 1 Veiculos", "Classic Veiculos"],
+      "mapPackSponsored": ["Netcar Multimarcas - Loja 1"],
+      "netcarMapPackOrganicPosition": null,
+      "netcarTraditionalOrganicPosition": 7
+    },
+    {
+      "query": "carros seminovos em Sapucaia do Sul",
+      "mapPackOrganicTop3": ["Sul Veiculos", "Avenida Veiculos", "Ponto 1 Veiculos"],
+      "mapPackSponsored": [],
+      "netcarMapPackOrganicPosition": null,
+      "netcarTraditionalOrganicPosition": null
+    },
+    {
+      "query": "carros usados em Sapucaia do Sul",
+      "mapPackOrganicTop3": ["Avenida Veiculos", "Sul Veiculos", "Prisma Veiculos"],
+      "mapPackSponsored": [],
+      "netcarMapPackOrganicPosition": null,
+      "netcarTraditionalOrganicPosition": null
+    },
+    {
+      "query": "comprar carro em Sapucaia do Sul",
+      "mapPackOrganicTop3": ["Sul Veiculos", "Avenida Veiculos", "Baixinho Automoveis"],
+      "mapPackSponsored": [],
+      "searchSponsored": ["Netcar Multimarcas"],
+      "netcarMapPackOrganicPosition": null,
+      "netcarTraditionalOrganicPosition": null
+    },
+    {
+      "query": "veiculos seminovos em Sapucaia do Sul",
+      "mapPackOrganicTop3": ["Sul Veiculos", "Avenida Veiculos", "Doctor Multimarcas"],
+      "mapPackSponsored": [],
+      "netcarMapPackOrganicPosition": null,
+      "netcarTraditionalOrganicPosition": null
+    },
+    {
+      "query": "loja de veiculos em Sapucaia do Sul",
+      "mapPackOrganicTop3": ["Sul Veiculos", "Ponto 1 Veiculos", "Vip Motors"],
+      "mapPackSponsored": [],
+      "netcarMapPackOrganicPosition": null,
+      "netcarTraditionalOrganicPosition": null
+    },
+    {
+      "query": "carros a venda em Sapucaia do Sul",
+      "mapPackOrganicTop3": ["Avenida Veiculos", "Sul Veiculos", "Baixinho Automoveis"],
+      "mapPackSponsored": ["Netcar Multimarcas - Loja 1"],
+      "netcarMapPackOrganicPosition": null,
+      "netcarTraditionalOrganicPosition": null
+    }
+  ],
+  "observedProfiles": [
+    {
+      "name": "Sul Veiculos",
+      "address": "Av. Sapucaia, 40, Sapucaia do Sul/RS",
+      "primaryCategory": "Concessionaria",
+      "rating": 4.9,
+      "reviews": 21,
+      "mapPackTop3Appearances": 8
+    },
+    {
+      "name": "Avenida Veiculos",
+      "address": "Av. Joao Pereira de Vargas, 132, Sapucaia do Sul/RS",
+      "primaryCategory": "Revendedora de carros usados",
+      "rating": 4.4,
+      "reviews": 33,
+      "mapPackTop3Appearances": 6
+    },
+    {
+      "name": "Ponto 1 Veiculos",
+      "address": "Av. Sapucaia, 1168, Sapucaia do Sul/RS",
+      "primaryCategory": "Revendedora de carros usados",
+      "rating": 4.6,
+      "reviews": 67,
+      "mapPackTop3Appearances": 3
+    },
+    {
+      "name": "Vip Motors",
+      "address": "Av. Sapucaia, 830, Sapucaia do Sul/RS",
+      "primaryCategory": "Revendedora de carros usados",
+      "rating": 4.3,
+      "reviews": 169,
+      "mapPackTop3Appearances": 2
+    },
+    {
+      "name": "Baixinho Automoveis",
+      "address": "Av. Sapucaia, 1504, Sapucaia do Sul/RS",
+      "primaryCategory": "Revendedora de carros usados",
+      "rating": 4.4,
+      "reviews": 106,
+      "mapPackTop3Appearances": 2
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "collectedDate": "2026-08-23",
+    "collectedStart": "22:18",
+    "collectedEnd": "22:35",
+    "timezone": "America/Sao_Paulo",
+    "surface": "Google Maps",
+    "device": "desktop",
+    "zoom": "13z",
+    "termsPerCity": 8,
+    "terms": [
+      "loja de carros",
+      "revenda de veiculos",
+      "carros seminovos",
+      "carros usados",
+      "comprar carro",
+      "veiculos seminovos",
+      "loja de veiculos",
+      "carros a venda"
+    ],
+    "method": "Consulta com o nome explicito da cidade e mapa aberto nas coordenadas centrais registradas.",
+    "limitations": [
+      "Fotografia unica por termo e ponto; nao e uma grade geografica.",
+      "Resultados podem variar por horario, dispositivo, historico e rotacao de anuncios.",
+      "Posicoes organicas excluem itens marcados como patrocinados."
+    ]
+  },
+  "cities": [
+    {
+      "city": "Esteio",
+      "center": {"latitude": -29.8614, "longitude": -51.1797},
+      "netcarOrganicAppearances": 7,
+      "netcarOrganicPositions": [3, null, 5, 4, 4, 5, 3, 4],
+      "netcarSponsoredAppearances": 8,
+      "leaders": [
+        {"name": "Monteiro Veiculos", "top3Appearances": 8, "firstPlaces": 8},
+        {"name": "Alusi Multimarcas", "top3Appearances": 7},
+        {"name": "L&M VEICULOS | TITAN MULTIMARCAS", "top3Appearances": 4},
+        {"name": "ALX Veiculos", "top3Appearances": 3}
+      ]
+    },
+    {
+      "city": "Sapucaia do Sul",
+      "center": {"latitude": -29.8385, "longitude": -51.1469},
+      "netcarOrganicAppearances": 0,
+      "netcarOrganicPositions": [null, null, null, null, null, null, null, null],
+      "netcarSponsoredAppearances": 5,
+      "leaders": [
+        {"name": "Sul Veiculos", "top3Appearances": 8, "firstPlaces": 6},
+        {"name": "Ponto 1 Veiculos", "top3Appearances": 6, "firstPlaces": 2},
+        {"name": "Prisma Veiculos", "top3Appearances": 3}
+      ]
+    },
+    {
+      "city": "Canoas",
+      "center": {"latitude": -29.9177, "longitude": -51.1847},
+      "netcarOrganicAppearances": 0,
+      "netcarOrganicPositions": [null, null, null, null, null, null, null, null],
+      "netcarSponsoredAppearances": 0,
+      "leaders": [
+        {"name": "Boqueirao Veiculos", "top3Appearances": 6, "firstPlaces": 3},
+        {"name": "Star", "top3Appearances": 6, "firstPlaces": 0},
+        {"name": "Betiolo Veiculos", "top3Appearances": 3},
+        {"name": "Fabinho Veiculos", "top3Appearances": 3},
+        {"name": "Andi Multimarcas", "top3Appearances": 2}
+      ]
+    },
+    {
+      "city": "Sao Leopoldo",
+      "center": {"latitude": -29.7604, "longitude": -51.1472},
+      "netcarOrganicAppearances": 0,
+      "netcarOrganicPositions": [null, null, null, null, null, null, null, null],
+      "netcarSponsoredAppearances": 0,
+      "leaders": [
+        {"name": "Premium Veiculos", "top3Appearances": 8, "firstPlaces": 8},
+        {"name": "Foccus Veiculos", "top3Appearances": 7},
+        {"name": "Cia Motors", "top3Appearances": 6}
+      ]
+    },
+    {
+      "city": "Nova Santa Rita",
+      "center": {"latitude": -29.8525, "longitude": -51.2833},
+      "netcarOrganicAppearances": 0,
+      "netcarOrganicPositions": [null, null, null, null, null, null, null, null],
+      "netcarSponsoredAppearances": 0,
+      "leaders": [
+        {"name": "GP Veiculos", "top3Appearances": 8, "firstPlaces": 7},
+        {"name": "Coxilha Veiculos", "top3Appearances": 7, "firstPlaces": 1}
+      ],
+      "otherSponsoredObservation": "R2 Motors apareceu como patrocinada em duas consultas."
+    },
+    {
+      "city": "Cachoeirinha",
+      "center": {"latitude": -29.9511, "longitude": -51.0939},
+      "netcarOrganicAppearances": 0,
+      "netcarOrganicPositions": [null, null, null, null, null, null, null, null],
+      "netcarSponsoredAppearances": 0,
+      "leaders": [
+        {"name": "Elite dos Carros", "top3Appearances": 8, "firstPlaces": 7},
+        {"name": "Sul Veiculos", "top3Appearances": 6, "firstPlaces": 1},
+        {"name": "57 Multimarcas", "top3Appearances": 3}
+      ]
+    },
+    {
+      "city": "Gravatai",
+      "center": {"latitude": -29.9442, "longitude": -50.9919},
+      "netcarOrganicAppearances": 0,
+      "netcarOrganicPositions": [null, null, null, null, null, null, null, null],
+      "netcarSponsoredAppearances": 0,
+      "leaders": [
+        {"name": "Joao Veiculos", "top3Appearances": 8, "firstPlaces": 2},
+        {"name": "Witt Veiculos", "top3Appearances": 6, "firstPlaces": 3},
+        {"name": "Automotive Multimarcas", "top3Appearances": 3, "firstPlaces": 1}
+      ]
+    },
+    {
+      "city": "Porto Alegre",
+      "center": {"latitude": -30.0346, "longitude": -51.2177},
+      "netcarOrganicAppearances": 0,
+      "netcarOrganicPositions": [null, null, null, null, null, null, null, null],
+      "netcarSponsoredAppearances": 0,
+      "leaders": [
+        {"name": "Tiaraju Veiculos", "top3Appearances": 7, "firstPlaces": 6},
+        {"name": "Tipo Veiculos", "top3Appearances": 6, "firstPlaces": 2},
+        {"name": "Carmulti", "top3Appearances": 4}
+      ]
+    }
+  ]
+}

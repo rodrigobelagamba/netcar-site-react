@@ -14,6 +14,9 @@ Anúncios podem ser avaliados separadamente para gerar demanda imediata, mas nã
 
 ## Fontes de verdade
 
+- [Relatório final consolidado — 23/08/2026](./RELATORIO-FINAL-SEO-LOCAL-2026-08-23.md)
+- [Maps nos centros das oito cidades — 23/08/2026](./evidencias/ranking-maps-centros-8-cidades-2026-08-23.json)
+- [Map Pack e orgânico de Sapucaia — 23/08/2026](./evidencias/ranking-sapucaia-search-2026-08-23.json)
 - [Relatório de SEO local](../../../outputs/netcar-local-seo-2026-08-21/relatorio-seo-local-netcar-2026-08-21.md)
 - [Planilha de dados](../../../outputs/netcar-local-seo-2026-08-21/netcar-seo-local-dados-2026-08-21.xlsx)
 - [Backlog](./BACKLOG.md)
