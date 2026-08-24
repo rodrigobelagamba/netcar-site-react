@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import type { StoryGroup } from "@/social/types";
+import logoNetcar from "@/assets/images/logo-netcar.png";
 
 interface StoryPreviewCardProps {
   story: StoryGroup;
@@ -17,6 +19,14 @@ export function StoryPreviewCard({
   flexBasis,
   onClick,
 }: StoryPreviewCardProps) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    setImageLoaded(false);
+    setImageFailed(false);
+  }, [story.coverImage]);
+
   return (
     <div
       role="button"
@@ -33,15 +43,35 @@ export function StoryPreviewCard({
       aria-label={`Abrir story ${story.title}`}
     >
       <div className="social-story-card relative w-full overflow-hidden rounded-[10px] border border-[#d6dae4] shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
-        <div className="social-story-card__media relative w-full">
+        <div className="social-story-card__media relative w-full bg-gray-100">
+          {!imageLoaded && !imageFailed && (
+            <div className="absolute inset-0 animate-pulse bg-gray-100" aria-hidden />
+          )}
           <img
             src={story.coverImage}
             alt={story.title}
-            className="social-story-cover"
+            className={`social-story-cover transition-opacity duration-200 ${
+              imageLoaded && !imageFailed ? "opacity-100" : "opacity-0"
+            }`}
             loading={priority ? "eager" : "lazy"}
             decoding="async"
             fetchPriority={priority ? "high" : "auto"}
+            referrerPolicy="no-referrer"
+            onLoad={() => {
+              setImageLoaded(true);
+              setImageFailed(false);
+            }}
+            onError={() => {
+              setImageLoaded(false);
+              setImageFailed(true);
+            }}
           />
+          {imageFailed && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-[#f4f8f8] to-[#e8f1f2] px-4 text-center">
+              <img src={logoNetcar} alt="" className="h-auto w-20 opacity-80" />
+              <span className="text-xs font-semibold text-primary">Story da Netcar</span>
+            </div>
+          )}
         </div>
 
         {/* Só faixa superior leve p/ legibilidade do @user — sem película no card inteiro */}

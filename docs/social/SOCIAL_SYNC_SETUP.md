@@ -33,6 +33,7 @@ Copie `docs/social/` para `/social/v1/` no KingHost (ou use `dist/social/v1/` ap
 | `sync-social.php` | Cron — puxa dados |
 | `google-reviews.php` | API pública reviews |
 | `stories.php` | API pública stories |
+| `story-media.php` | proxy/cache local para imagens e vídeos dos Stories |
 | `data/` | cache + seeds |
 
 ---
@@ -126,6 +127,7 @@ Base: `VITE_SOCIAL_API_BASE_URL` (padrão `https://www.netcarmultimarcas.com.br/
 
 - `GET /social/v1/google-reviews.php?page=N&limit=21` — paginação "Carregar mais"
 - `GET /social/v1/stories.php?action=list` — stories ativos
+- `GET /social/v1/story-media.php?url=...` — mídia do Instagram servida pelo domínio Netcar
 - Fallback local: `/data/*.seed.json` se cache indisponível
 
 **EmbedSocial pode ser removido** após primeiro sync OK.

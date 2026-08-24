@@ -23,6 +23,7 @@ mkdirSync(join(dest, 'data/cache'), { recursive: true });
 const files = [
   'google-reviews.php',
   'stories.php',
+  'story-media.php',
   'social-oauth.php',
   'sync-social.php',
   'outscraper-sync.php',

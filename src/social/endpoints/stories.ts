@@ -2,13 +2,34 @@ import { axiosInstance } from "@/catalog/axios-instance";
 import { socialConfig, siteOriginFromApiBase } from "../config";
 import type { StoriesResponse, StoryGroup } from "../types";
 
+function shouldProxyStoryMedia(url: string): boolean {
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    return (
+      host === "cdninstagram.com" ||
+      host.endsWith(".cdninstagram.com") ||
+      host === "fbcdn.net" ||
+      host.endsWith(".fbcdn.net")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function proxyStoryMediaUrl(url: string): string {
+  if (!shouldProxyStoryMedia(url)) return url;
+
+  const apiBase = socialConfig.baseUrl.replace(/\/$/, "");
+  return `${apiBase}/story-media.php?url=${encodeURIComponent(url)}`;
+}
+
 function normalizeMediaUrl(url?: string): string | undefined {
   if (!url) return undefined;
 
   let normalized = url.replace(/^\.\\?\/+/, "").replace(/\\/g, "/").trim();
 
   if (normalized.startsWith("http://") || normalized.startsWith("https://")) {
-    return normalized;
+    return proxyStoryMediaUrl(normalized);
   }
 
   const baseDomain = siteOriginFromApiBase(socialConfig.baseUrl);
