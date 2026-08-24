@@ -296,7 +296,7 @@
       "title": "Reforçar a página de Canoas com utilidade e conversão rastreável",
       "cities": ["Canoas"],
       "priority": "P1",
-      "status": "verify_production",
+      "status": "done",
       "owner": "Codex + Netcar",
       "dependencies": [
         "Deploy do planejador de visita",

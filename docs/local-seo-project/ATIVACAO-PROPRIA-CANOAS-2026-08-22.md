@@ -69,3 +69,16 @@ Usar foto recente da respectiva unidade. Não usar foto de entrega como prova de
 ## Limite da estratégia
 
 Esta ativação melhora utilidade, relevância orgânica, distribuição e medição. Ela não cria backlink externo e não elimina a vantagem de proximidade de concorrentes com endereço em Canoas. Não há base para prometer ganho de posição no Map Pack.
+
+## Validação em produção — 24/08/2026
+
+A versão pública de `https://www.netcarmultimarcas.com.br/seminovos-canoas` foi conferida após o deploy do commit `db42b83`:
+
+- navegador mobile em `393 × 852`: página renderizada, estoque real e planejador visíveis;
+- quatro seletores funcionais: Centro, Niterói, Mathias Velho e Marechal Rondon;
+- cada origem gera uma rota distinta para a Loja 1 e outra para a Loja 2;
+- ao selecionar Niterói, os links apontaram para os números 740 e 1106 e registraram `route_loja_1_from_niteroi` e `route_loja_2_from_niteroi`;
+- HTML servido ao Googlebot: HTTP 200, canonical próprio, quatro origens, dois endereços e oito links de rota;
+- a página manteve explícito que a Netcar não possui loja em Canoas e que as duas unidades ficam em Esteio.
+
+Com essas evidências, `CAN-001` passa de `verify_production` para `done`. A etapa seguinte é medir uso e descoberta em 7, 14 e 28 dias; não é necessário novo conteúdo antes dessa janela.
