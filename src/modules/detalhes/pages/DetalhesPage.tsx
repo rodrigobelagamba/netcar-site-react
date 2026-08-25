@@ -2111,8 +2111,10 @@ export function DetalhesPage() {
                       Seleção Netcar
                     </p>
                     <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                      Comprado no RS, sem origem de locadora e preparado pela
-                      nossa equipe antes de chegar à vitrine.
+                      Comprado no RS e sem origem de locadora. Não trabalhamos
+                      com veículos com passagem por leilão, sinistro, furto ou
+                      roubo. Antes de ir para a vitrine, cada carro passa pela
+                      preparação da nossa equipe.
                     </p>
                     <Link
                       to="/como-selecionamos-nossos-carros"
