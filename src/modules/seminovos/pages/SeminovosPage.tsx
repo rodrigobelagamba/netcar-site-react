@@ -8,13 +8,13 @@ import {
   lazy,
   Suspense,
 } from "react";
-import { useSearch, useNavigate } from "@tanstack/react-router";
+import { Link, useSearch, useNavigate } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { VehicleCardStatic } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
-import { ChevronDown, Filter, MessageCircle } from "lucide-react";
+import { ChevronDown, Filter, MessageCircle, ShieldCheck } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { useSearchContext } from "@/contexts/SearchContext";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
@@ -646,6 +646,20 @@ export function SeminovosPage() {
               {filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado
               {filteredAndSortedVehicles.length !== 1 ? "s" : ""}
             </p>
+            <div className="mt-2 flex max-w-3xl flex-wrap items-center gap-x-1.5 gap-y-1 text-[11px] font-semibold leading-relaxed text-muted-foreground sm:text-xs">
+              <ShieldCheck
+                className="h-4 w-4 shrink-0 text-primary"
+                aria-hidden="true"
+              />
+              <span className="font-black text-fg">Seleção Netcar:</span>
+              <span>origem RS, sem locadora, leilão, sinistro, furto ou roubo.</span>
+              <Link
+                to="/como-selecionamos-nossos-carros"
+                className="font-black text-primary underline decoration-primary/25 underline-offset-4 hover:text-fg"
+              >
+                Entenda
+              </Link>
+            </div>
           </div>
           {/* Ordenação - Ocultar no mobile (está no modal) */}
           <div className="hidden md:flex items-center gap-2">

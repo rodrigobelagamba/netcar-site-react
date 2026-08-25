@@ -8,9 +8,12 @@ import {
 } from "@/lib/analytics";
 
 const trustPoints = [
-  { icon: MapPin, label: "Estoque comprado no RS" },
-  { icon: ShieldCheck, label: "Sem carros de locadora" },
-  { icon: FileSearch, label: "Informações disponíveis avaliadas" },
+  { icon: MapPin, label: "Comprados no RS" },
+  { icon: ShieldCheck, label: "Sem origem de locadora" },
+  {
+    icon: FileSearch,
+    label: "Sem leilão, sinistro, furto ou roubo",
+  },
 ] as const;
 
 export function HomeSelectionPromise() {
@@ -51,9 +54,10 @@ export function HomeSelectionPromise() {
             Nem todo carro entra na Netcar.
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
-            Antes de anunciar, a gente olha de onde o carro veio, o histórico
-            que está disponível e o tipo de uso que teve. Nosso estoque de
-            revenda é comprado no RS e não tem carro de locadora.
+            Na compra de um seminovo, preço e aparência não contam toda a
+            história. Origem e registros anteriores podem pesar no seguro, no
+            financiamento e numa futura revenda. Nosso estoque é comprado no RS
+            e não tem veículos de locadora, leilão, sinistro, furto ou roubo.
           </p>
 
           <div className="mt-7 flex flex-wrap gap-2.5">
@@ -77,7 +81,7 @@ export function HomeSelectionPromise() {
               onClick={() => trackSelectionCampaignCta("learn_process", "home")}
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#5CD29D] px-6 py-3 text-sm font-black text-[#00283C] transition hover:bg-[#76deb0] active:scale-[0.98]"
             >
-              Veja como escolhemos
+              Entenda por que isso importa
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
             <Link

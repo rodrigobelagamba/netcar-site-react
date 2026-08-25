@@ -31,7 +31,13 @@ const selectionSteps = [
     label: "NOSSA ESCOLHA",
     icon: ShieldCheck,
     title: "Carro de locadora não entra",
-    text: "A Netcar não compra carro de locadora para revender. É uma escolha ligada ao tipo de uso que aceitamos para o nosso estoque.",
+    text: "Carro de locadora não é automaticamente um carro ruim. Mas pode concentrar muitos quilômetros em pouco tempo, passar por vários motoristas e ter revisões feitas fora da rede autorizada. Como nem sempre conseguimos reconstituir esse uso por completo, preferimos não comprar para revenda.",
+  },
+  {
+    label: "REGRA DE ESTOQUE",
+    icon: ShieldCheck,
+    title: "Leilão, sinistro, furto ou roubo: não entra",
+    text: "A Netcar não compra para revenda veículos com passagem por leilão, registro de sinistro ou recuperação de furto ou roubo. Essa regra existe para não levar esse histórico adiante para o cliente.",
   },
   {
     label: "NA CONFERÊNCIA",
@@ -44,6 +50,29 @@ const selectionSteps = [
     icon: Wrench,
     title: "Preparamos antes de vender",
     text: "Depois de comprado, o carro passa pela avaliação e pela preparação da Netcar antes de ir para a vitrine e chegar ao cliente.",
+  },
+] as const;
+
+const futureImpactCards = [
+  {
+    icon: Building2,
+    title: "Na hora de revender",
+    text: "Passagem por leilão, sinistro ou recuperação de furto ou roubo pode afastar compradores, prolongar a negociação e reduzir as ofertas pelo carro. É um risco que a Netcar prefere não repassar ao cliente.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Na hora de fazer o seguro",
+    text: "Cada seguradora faz sua própria análise e pode aceitar ou recusar o risco. Quando aceita, coberturas e indenização seguem a proposta e a apólice, inclusive o percentual contratado sobre a tabela de referência.",
+  },
+  {
+    icon: FileSearch,
+    title: "Na hora de financiar",
+    text: "Dano de média monta gera restrição administrativa e exige reparo, CSV e vistoria para regularização. Mesmo depois, a anotação continua no cadastro. Conforme a política da financeira, o veículo pode não ser aceito como garantia.",
+  },
+  {
+    icon: Wrench,
+    title: "Na revenda de um ex-locadora",
+    text: "Uso intenso, vários condutores e manutenção interna ou fora da concessionária não provam falta de cuidado. Mas podem dificultar a comprovação das revisões e pesar no valor e na facilidade de uma futura venda.",
   },
 ] as const;
 
@@ -68,7 +97,15 @@ const customerBenefits = [
 const faq = [
   {
     q: "A Netcar vende veículos provenientes de locadoras?",
-    a: "Não. Carro de locadora não entra no estoque que a Netcar compra para revender.",
+    a: "Não. Carro de locadora não entra no estoque que a Netcar compra para revender. É uma decisão preventiva: esses veículos podem concentrar muita quilometragem em pouco tempo, passar por vários motoristas e ter um histórico de revisões mais difícil de comprovar. Isso não significa que todo carro de locadora seja ruim, mas pode pesar numa futura revenda.",
+  },
+  {
+    q: "A Netcar vende carros de leilão, sinistrados ou recuperados de furto e roubo?",
+    a: "Não. A Netcar não compra para revenda veículos com passagem por leilão, registro de sinistro ou recuperação de furto ou roubo.",
+  },
+  {
+    q: "Por que esse histórico pode atrapalhar depois?",
+    a: "Porque ele pode reduzir o número de compradores e o valor aceito numa futura negociação. Seguro e financiamento também passam pela análise de cada empresa: a seguradora pode aceitar ou recusar o risco, e a financeira pode não aceitar o veículo como garantia. Não é uma consequência automática em todos os casos, mas é uma dificuldade que a Netcar prefere não repassar ao cliente.",
   },
   {
     q: "Os veículos da Netcar são comprados no Rio Grande do Sul?",
@@ -101,7 +138,7 @@ export function ComoSelecionamosPage() {
   useMetaTags({
     title: "Como selecionamos nossos carros | Netcar Multimarcas",
     description:
-      "Conheça os critérios da Netcar: veículos selecionados no RS, sem origem de locadora, análise do histórico disponível e preparação antes da vitrine.",
+      "Conheça os critérios da Netcar: veículos comprados no RS, sem origem de locadora e sem passagem por leilão, sinistro, furto ou roubo.",
     url: `${CANONICAL_ORIGIN}${canonicalPath}`,
     image: `${CANONICAL_ORIGIN}/images/loja1.jpg`,
   });
@@ -117,7 +154,7 @@ export function ComoSelecionamosPage() {
           url: canonical,
           name: "Como a Netcar seleciona seus carros",
           description:
-            "Critérios de seleção, análise e preparação dos veículos da Netcar Multimarcas.",
+            "Critérios de origem, histórico, seleção e preparação dos veículos da Netcar Multimarcas.",
           inLanguage: "pt-BR",
           isPartOf: { "@id": `${CANONICAL_ORIGIN}/#website` },
           about: { "@id": `${CANONICAL_ORIGIN}/#organization` },
@@ -191,7 +228,9 @@ export function ComoSelecionamosPage() {
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-gray-600 md:text-xl">
               Antes de anunciar, a gente olha de onde o carro veio, o histórico
               que está disponível e o tipo de uso que teve. Nosso estoque de
-              revenda é comprado no RS e não tem carro de locadora.
+              revenda é comprado no RS. Não compramos veículos de locadora, com
+              passagem por leilão, registro de sinistro ou recuperação de furto
+              ou roubo.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -298,6 +337,75 @@ export function ComoSelecionamosPage() {
         </div>
       </section>
 
+      <section className="border-y border-[#0B8F92]/10 bg-[#F3F8F8] py-14 md:py-20">
+        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="max-w-4xl">
+            <span className="text-xs font-black uppercase tracking-[0.18em] text-[#007B86]">
+              Pensando no próximo passo
+            </span>
+            <h2 className="mt-4 text-3xl font-black leading-tight tracking-[-0.03em] text-[#00283C] md:text-4xl">
+              O carro pode estar regular. O histórico continua contando.
+            </h2>
+            <p className="mt-5 max-w-3xl text-base leading-relaxed text-gray-600 md:text-lg">
+              Alguns veículos podem voltar a circular depois de regularizados.
+              Isso não apaga o que aconteceu. Na próxima venda, no seguro ou no
+              financiamento, esse histórico pode ser analisado novamente.
+            </p>
+          </div>
+
+          <div className="mt-9 grid gap-4 md:grid-cols-2">
+            {futureImpactCards.map((impact) => (
+              <article
+                key={impact.title}
+                className="rounded-3xl border border-[#0B8F92]/15 bg-white p-6 shadow-sm sm:p-7"
+              >
+                <impact.icon
+                  className="h-7 w-7 text-[#008C79]"
+                  aria-hidden="true"
+                />
+                <h3 className="mt-5 text-xl font-black text-[#00283C]">
+                  {impact.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-base">
+                  {impact.text}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-6 rounded-3xl bg-[#00283C] p-6 text-white sm:p-8">
+            <p className="text-base font-bold leading-relaxed sm:text-lg">
+              Por isso nossa decisão é simples: se o histórico pode criar uma
+              dificuldade importante para o cliente depois, esse carro não entra
+              no estoque que compramos para revender.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-white/70">
+              Seguro e financiamento dependem da análise e das regras de cada
+              empresa. A Netcar não promete aprovação; trabalha para evitar
+              origens e restrições que podem dificultá-la.
+            </p>
+            <div className="mt-5 flex flex-col gap-2 text-sm font-bold text-[#72D8A9] sm:flex-row sm:gap-5">
+              <a
+                href="https://www.gov.br/transportes/pt-br/pt-br/assuntos/transito/conteudo-contran/resolucoes/Resolucao8102020.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-white/30 underline-offset-4 hover:text-white"
+              >
+                Regra do CONTRAN sobre média monta
+              </a>
+              <a
+                href="https://www.gov.br/susep/pt-br/copy_of_planos-e-produtos/seguros/seguro-de-automoveis"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-white/30 underline-offset-4 hover:text-white"
+              >
+                Orientações da SUSEP sobre seguro de automóvel
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-[#00283C] py-14 text-white md:py-20">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="max-w-3xl">
@@ -356,6 +464,7 @@ export function ComoSelecionamosPage() {
           <ul className="mt-7 space-y-4">
             {[
               "Qual é a origem informada deste veículo?",
+              "Há registro de leilão, sinistro, média monta, furto ou roubo?",
               "Quais documentos, consultas ou laudos estão disponíveis?",
               "O que foi avaliado e preparado antes da venda?",
               "Quais são as condições de garantia desta negociação?",

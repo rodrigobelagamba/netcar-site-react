@@ -161,6 +161,10 @@ export function SobrePage() {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CheckCircle2 className="w-5 h-5 text-primary" />
+                  <span>Sem leilão, sinistro, furto ou roubo</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
                   <span>Duas lojas integradas</span>
                 </div>
               </div>
@@ -218,15 +222,21 @@ export function SobrePage() {
               Nem todo carro entra no estoque
             </h2>
             <p className="text-muted-foreground mb-6 leading-relaxed max-w-3xl">
-              Antes de anunciar, avaliamos de onde o carro veio, o histórico
-              disponível e o tipo de uso. O estoque comprado para revenda vem do
-              Rio Grande do Sul e não inclui veículos de locadora.
+              Na compra de um seminovo, preço e aparência não contam toda a
+              história. Origem e registros anteriores podem pesar no seguro, no
+              financiamento e numa futura revenda. O estoque comprado para
+              revenda vem do Rio Grande do Sul e não inclui veículos de
+              locadora, leilão, sinistro, furto ou roubo.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 {
                   icon: CheckCircle2,
-                  text: "Origem e histórico disponível conferidos",
+                  text: "Comprados no RS e sem origem de locadora",
+                },
+                {
+                  icon: CheckCircle2,
+                  text: "Sem leilão, sinistro, furto ou roubo",
                 },
                 {
                   icon: CheckCircle2,
@@ -235,10 +245,6 @@ export function SobrePage() {
                 {
                   icon: CheckCircle2,
                   text: "i-CHECK na página quando disponível",
-                },
-                {
-                  icon: CheckCircle2,
-                  text: "Duas lojas com estoque e equipe integrados",
                 },
               ].map((item, idx) => (
                 <div key={idx} className="flex items-start gap-3 group">

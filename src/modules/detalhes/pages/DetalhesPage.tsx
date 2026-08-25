@@ -2110,17 +2110,19 @@ export function DetalhesPage() {
                     <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-primary">
                       Seleção Netcar
                     </p>
+                    <p className="mt-1 text-sm font-black leading-snug text-fg">
+                      Este carro atende aos critérios da Netcar.
+                    </p>
                     <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                      Comprado no RS e sem origem de locadora. Não trabalhamos
-                      com veículos com passagem por leilão, sinistro, furto ou
-                      roubo. Antes de ir para a vitrine, cada carro passa pela
-                      preparação da nossa equipe.
+                      Comprado no RS, sem origem de locadora e sem passagem por
+                      leilão, sinistro, furto ou roubo. Depois, passa pela
+                      preparação da nossa equipe antes de ir para a vitrine.
                     </p>
                     <Link
                       to="/como-selecionamos-nossos-carros"
                       className="mt-1.5 inline-block text-xs font-semibold text-fg underline decoration-border underline-offset-4 transition-colors hover:text-primary"
                     >
-                      Como selecionamos nossos carros
+                      Veja como escolhemos o estoque
                     </Link>
                   </div>
                 )}

@@ -365,9 +365,9 @@
   {
     "slug": "como-selecionamos-nossos-carros",
     "title": "Como selecionamos nossos carros | Netcar Multimarcas",
-    "description": "Conheça os critérios da Netcar: veículos selecionados no RS, sem origem de locadora, análise do histórico disponível e preparação antes da vitrine.",
+    "description": "Conheça os critérios da Netcar: veículos comprados no RS, sem origem de locadora e sem passagem por leilão, sinistro, furto ou roubo.",
     "h1": "Nem todo carro entra na Netcar",
-    "intro": "Antes de anunciar, a gente olha de onde o carro veio, o histórico que está disponível e o tipo de uso que teve. Nosso estoque de revenda é comprado no RS e não tem carro de locadora.",
+    "intro": "Antes de anunciar, a gente olha de onde o carro veio, o histórico disponível e o tipo de uso. Nosso estoque de revenda é comprado no RS e não tem veículos de locadora, leilão, sinistro, furto ou roubo.",
     "waText": "quero encontrar um seminovo e entender a origem e a preparação do veículo.",
     "ctaLabel": "Falar sobre um seminovo",
     "secondLabel": "Ver estoque disponível",
@@ -395,7 +395,23 @@
       },
       {
         "type": "p",
-        "text": "A Netcar não compra carro de locadora para revender. É uma escolha ligada ao tipo de uso que aceitamos para o nosso estoque."
+        "text": "Carro de locadora não é automaticamente um carro ruim. Mas pode concentrar muitos quilômetros em pouco tempo, passar por vários motoristas e ter revisões feitas fora da rede autorizada. Como nem sempre conseguimos reconstituir esse uso por completo, preferimos não comprar para revenda."
+      },
+      {
+        "type": "h2",
+        "text": "Leilão, sinistro, furto ou roubo: não entra"
+      },
+      {
+        "type": "p",
+        "text": "A Netcar não compra para revenda veículos com passagem por leilão, registro de sinistro ou recuperação de furto ou roubo. Esse histórico pode pesar no seguro, no financiamento e numa futura revenda."
+      },
+      {
+        "type": "h2",
+        "text": "O carro pode estar regular. O histórico continua contando."
+      },
+      {
+        "type": "p",
+        "text": "Dano de média monta exige regularização e permanece anotado no cadastro. Seguro e financiamento dependem da análise de cada empresa, e o veículo pode não ser aceito. Na revenda, esses históricos também podem reduzir o número de compradores e o valor das ofertas."
       },
       {
         "type": "h2",
@@ -417,7 +433,15 @@
     "faq": [
       {
         "q": "A Netcar vende veículos provenientes de locadoras?",
-        "a": "Não. Carro de locadora não entra no estoque que a Netcar compra para revender."
+        "a": "Não. Carro de locadora não entra no estoque que a Netcar compra para revender. É uma decisão preventiva: o uso e as revisões podem ser mais difíceis de reconstituir e essa origem pode pesar numa futura revenda."
+      },
+      {
+        "q": "A Netcar vende carros de leilão, sinistrados ou recuperados de furto e roubo?",
+        "a": "Não. A Netcar não compra para revenda veículos com passagem por leilão, registro de sinistro ou recuperação de furto ou roubo."
+      },
+      {
+        "q": "Por que esse histórico pode atrapalhar depois?",
+        "a": "Porque ele pode reduzir o número de compradores e o valor aceito numa futura negociação. Seguro e financiamento também dependem da análise de cada empresa. Não é uma consequência automática em todos os casos, mas é uma dificuldade que a Netcar prefere não repassar ao cliente."
       },
       {
         "q": "Os veículos da Netcar são comprados no Rio Grande do Sul?",
