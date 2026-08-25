@@ -12,6 +12,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 const site = "https://www.netcarmultimarcas.com.br";
+const expectedEmail = "contato@netcarmultimarcas.com.br";
 const cities = JSON.parse(
   readFileSync(join(root, "src/data/seo/cities.json"), "utf8"),
 );
@@ -157,9 +158,10 @@ function validateOrganizationGraph(nodes, label) {
   if (
     rootOrganization.url !== site ||
     rootOrganization.legalName !== "R&C Veículos Ltda" ||
-    rootOrganization.taxID !== "02.237.969/0001-06"
+    rootOrganization.taxID !== "02.237.969/0001-06" ||
+    rootOrganization.email !== expectedEmail
   ) {
-    errors.push(`${label}: entidade legal/CNPJ da Organization divergente`);
+    errors.push(`${label}: entidade legal/CNPJ/e-mail da Organization divergente`);
   }
   if (
     rootOrganization.logo?.["@id"] !== `${site}/#logo` ||
@@ -216,6 +218,7 @@ function validateOrganizationGraph(nodes, label) {
       dealer.url !== expected.url ||
       dealer.branchCode !== expected.branchCode ||
       dealer.telephone !== expected.telephone ||
+      dealer.email !== expectedEmail ||
       dealer.hasMap !== expected.hasMap ||
       dealer.parentOrganization?.["@id"] !== organizationId
     ) {
@@ -254,6 +257,15 @@ function validateOrganizationGraph(nodes, label) {
     ) {
       errors.push(`${label}: horários de ${expected.branchCode} divergentes`);
     }
+  }
+
+  if (
+    contactSource.includes("contato@netcar-rc.com.br") ||
+    crawlerHome.includes("contato@netcar-rc.com.br") ||
+    !contactSource.includes(`mailto:${expectedEmail}`) ||
+    !crawlerHome.includes(`mailto:${expectedEmail}`)
+  ) {
+    errors.push(`${label}: e-mail antigo ou contato oficial ausente nas superfícies`);
   }
 
   for (const node of nodes) {

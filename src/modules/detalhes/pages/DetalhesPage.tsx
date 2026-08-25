@@ -71,6 +71,7 @@ const ANIMATION_DURATION = {
 // Constantes de imagem
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
+const LOW_MILEAGE_HIGHLIGHT_THRESHOLD_KM = 10_000;
 
 const FabricaDeValor = React.lazy(() =>
   import("@/design-system/components/patterns/FabricaDeValor").then(
@@ -85,7 +86,12 @@ const NetcarSocialSection = React.lazy(() =>
   ),
 );
 
-type BadgeVariant = "icheck" | "garantia" | "baixa-km" | "green-dark";
+type BadgeVariant =
+  | "oportunidade"
+  | "icheck"
+  | "garantia"
+  | "baixa-km"
+  | "green-dark";
 
 interface Badge {
   text: string;
@@ -94,6 +100,7 @@ interface Badge {
 
 /** Cores pill (screenshot selos). */
 const BADGE_COLORS: Record<BadgeVariant, string> = {
+  oportunidade: "#C99124",
   icheck: "#59C897",
   garantia: "#69BDCD",
   "baixa-km": "#004C5C",
@@ -416,7 +423,7 @@ function TradeInTextLink({
         className={compact ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4 shrink-0"}
       />
       <span className="underline underline-offset-4">
-        Tenho carro na troca deste
+        Tenho um usado na troca
       </span>
     </a>
   );
@@ -1875,21 +1882,32 @@ export function DetalhesPage() {
   const hasDiferencial = (tag: string) =>
     diferenciais.some((diff) => diff.tag === tag);
   const hasIcheckSeal = Boolean(vehicle?.pdf_url || vehicle?.pdf);
+  const isCommercialHighlight =
+    Number(vehicle?.km) > 0 &&
+    Number(vehicle.km) < LOW_MILEAGE_HIGHLIGHT_THRESHOLD_KM;
 
   const badges: Badge[] = isSold
     ? []
     : [
-        ...(hasIcheckSeal
-          ? [{ text: "i-CHECK DISPONÍVEL", variant: "icheck" as const }]
+        ...(isCommercialHighlight && vehicle.km
+          ? [
+              {
+                text: `APENAS ${vehicle.km.toLocaleString("pt-BR")} KM`,
+                variant: "oportunidade" as const,
+              },
+            ]
           : []),
         ...(hasDiferencial("garantia_fabrica")
           ? [{ text: "Garantia de Fábrica", variant: "garantia" as const }]
           : []),
-        ...(hasDiferencial("baixa_km")
-          ? [{ text: "Baixa KM", variant: "baixa-km" as const }]
-          : []),
         ...(hasDiferencial("unico_dono")
           ? [{ text: "Único Dono", variant: "green-dark" as const }]
+          : []),
+        ...(hasDiferencial("baixa_km") && !isCommercialHighlight
+          ? [{ text: "Baixa KM", variant: "baixa-km" as const }]
+          : []),
+        ...(hasIcheckSeal
+          ? [{ text: "i-CHECK DISPONÍVEL", variant: "icheck" as const }]
           : []),
       ];
 
@@ -2088,7 +2106,24 @@ export function DetalhesPage() {
                   priceLabel={price.replace(/<[^>]*>/g, "") || undefined}
                 />
                 {!isSold && (
-                  <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">
+                  <div className="mt-4 border-l-2 border-primary pl-3 text-left">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-primary">
+                      Seleção Netcar
+                    </p>
+                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                      Comprado no RS, sem origem de locadora e preparado pela
+                      nossa equipe antes de chegar à vitrine.
+                    </p>
+                    <Link
+                      to="/como-selecionamos-nossos-carros"
+                      className="mt-1.5 inline-block text-xs font-semibold text-fg underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+                    >
+                      Como selecionamos nossos carros
+                    </Link>
+                  </div>
+                )}
+                {!isSold && (
+                  <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
                     Consulte as condições aprovadas por bancos e financeiras
                     parceiras. Taxa, entrada e prazo dependem da análise.
                   </p>
