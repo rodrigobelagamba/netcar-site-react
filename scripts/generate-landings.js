@@ -8,9 +8,9 @@
  * disponíveis quando o estoque gira, mas ficam noindex até recuperarem oferta.
  *
  * Roda no build ANTES de generate-seo-assets.js (que gera o HTML estático
- * para crawlers e o sitemap). Se a API falhar, regenera pelo mesmo cache
- * recente de estoque usado pelos assets estáticos. Sem API nem cache recente,
- * a falha interrompe a publicação para não misturar fotografias do estoque.
+ * para crawlers e o sitemap). Se a API falhar, usa primeiro o cache efêmero e
+ * depois o último manifesto completo versionado. Sem nenhuma fonte válida, a
+ * falha interrompe a publicação para não misturar fotografias do estoque.
  *
  * Uso: node scripts/generate-landings.js
  */
@@ -20,6 +20,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import {
   readFreshSeoStockCache,
+  readVersionedSeoStock,
   writeSeoStockCache,
 } from "./lib/seo-stock-cache.js";
 
@@ -801,17 +802,22 @@ async function main() {
     writeSeoStockCache(rootDir, allVehicles);
     vehicles = allVehicles.filter((vehicle) => Number(vehicle.valor) > 0);
   } catch (err) {
-    const cached = readFreshSeoStockCache(rootDir);
+    const cached =
+      readFreshSeoStockCache(rootDir) ?? readVersionedSeoStock(rootDir);
     if (!cached?.vehicles.length) {
       throw new Error(
-        `API indisponível (${err.message}) e cache recente de estoque ausente; build interrompido para evitar contagens divergentes`,
+        `API indisponível (${err.message}) e estoque de contingência válido ausente; build interrompido para evitar contagens divergentes`,
       );
     }
 
     const ageMinutes = Math.max(0, Math.round(cached.ageMs / 60000));
+    const sourceLabel =
+      cached.source === "versioned-bootstrap"
+        ? "manifesto versionado"
+        : "cache efêmero";
     vehicles = cached.vehicles.filter((vehicle) => Number(vehicle.valor) > 0);
     console.warn(
-      `Aviso: API indisponível (${err.message}); landings regeneradas pelo cache de ${ageMinutes} min com ${vehicles.length} veículos ativos.`,
+      `Aviso: API indisponível (${err.message}); landings regeneradas pelo ${sourceLabel} de ${ageMinutes} min com ${vehicles.length} veículos ativos.`,
     );
   }
 

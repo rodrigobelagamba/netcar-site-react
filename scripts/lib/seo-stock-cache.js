@@ -2,9 +2,14 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 const MAX_CACHE_AGE_MS = 30 * 60 * 1000;
+const MAX_VERSIONED_STOCK_AGE_MS = 14 * 24 * 60 * 60 * 1000;
 
 function cachePath(rootDir) {
   return join(rootDir, ".devops", "seo-stock-cache.json");
+}
+
+function versionedStockPath(rootDir) {
+  return join(rootDir, "public", "seo", "stock-bootstrap.json");
 }
 
 // Mantém somente os campos públicos usados nas vitrines SEO. Assim o cache não
@@ -80,9 +85,69 @@ export function readFreshSeoStockCache(rootDir, { includeSold = false } = {}) {
     }
     return {
       ageMs,
+      source: "runtime-cache",
       vehicles: includeSold
         ? cached.vehicles
         : cached.vehicles.filter((vehicle) => Number(vehicle.valor) > 0),
+    };
+  } catch {
+    return null;
+  }
+}
+
+function versionedVehicleToApiShape(vehicle) {
+  return {
+    ...vehicle,
+    ano: vehicle.ano ?? vehicle.year,
+    ano_fabricacao: vehicle.ano_fabricacao ?? vehicle.anoFabricacao,
+    valor: vehicle.valor ?? vehicle.price ?? 0,
+    link: vehicle.link ?? vehicle.slug,
+    imagens: vehicle.imagens ?? {
+      thumb: Array.isArray(vehicle.images) ? vehicle.images.slice(0, 1) : [],
+      full: [],
+    },
+  };
+}
+
+/**
+ * Último estoque completo versionado pelo build anterior. Ele só entra quando
+ * a API e o cache efêmero falham, e expira para não perpetuar um catálogo
+ * antigo silenciosamente.
+ */
+export function readVersionedSeoStock(
+  rootDir,
+  { includeSold = false } = {},
+) {
+  try {
+    const stock = JSON.parse(readFileSync(versionedStockPath(rootDir), "utf8"));
+    const generatedAt = Date.parse(stock?.generatedAt || "");
+    const ageMs = Date.now() - generatedAt;
+    const sourceVehicles =
+      includeSold && Array.isArray(stock?.showroomVehicles)
+        ? stock.showroomVehicles
+        : stock?.vehicles;
+
+    if (
+      !Number.isFinite(generatedAt) ||
+      ageMs < 0 ||
+      ageMs > MAX_VERSIONED_STOCK_AGE_MS ||
+      !Array.isArray(sourceVehicles) ||
+      sourceVehicles.length === 0
+    ) {
+      return null;
+    }
+
+    const vehicles = sourceVehicles
+      .filter((vehicle) => vehicle?.id && vehicle?.marca && vehicle?.modelo)
+      .map(versionedVehicleToApiShape);
+    if (vehicles.length === 0) return null;
+
+    return {
+      ageMs,
+      source: "versioned-bootstrap",
+      vehicles: includeSold
+        ? vehicles
+        : vehicles.filter((vehicle) => Number(vehicle.valor) > 0),
     };
   } catch {
     return null;

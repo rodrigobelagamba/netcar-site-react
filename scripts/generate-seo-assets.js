@@ -13,7 +13,10 @@ import {
   fetchVehicleSitemapUrls,
   generateVehicleSlug,
 } from "./lib/vehicle-sitemap-urls.js";
-import { readFreshSeoStockCache } from "./lib/seo-stock-cache.js";
+import {
+  readFreshSeoStockCache,
+  readVersionedSeoStock,
+} from "./lib/seo-stock-cache.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
@@ -434,16 +437,22 @@ async function fetchStock() {
 
     return vehicles;
   } catch (error) {
-    const cached = readFreshSeoStockCache(rootDir, { includeSold: true });
+    const cached =
+      readFreshSeoStockCache(rootDir, { includeSold: true }) ??
+      readVersionedSeoStock(rootDir, { includeSold: true });
     if (cached?.vehicles.length) {
       const ageMinutes = Math.max(0, Math.round(cached.ageMs / 60000));
+      const sourceLabel =
+        cached.source === "versioned-bootstrap"
+          ? "manifesto versionado"
+          : "cache efêmero";
       console.warn(
-        `Aviso: estoque indisponível (${error.message}); usando cache de ${ageMinutes} min com ${cached.vehicles.length} veículos.`,
+        `Aviso: estoque indisponível (${error.message}); usando ${sourceLabel} de ${ageMinutes} min com ${cached.vehicles.length} veículos.`,
       );
       return cached.vehicles;
     }
     console.warn(
-      `Aviso: estoque indisponível (${error.message}) e cache recente ausente; validação interromperá o build.`,
+      `Aviso: estoque indisponível (${error.message}) e estoque de contingência válido ausente; validação interromperá o build.`,
     );
     return [];
   }
