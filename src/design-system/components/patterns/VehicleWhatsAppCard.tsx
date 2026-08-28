@@ -41,7 +41,7 @@ export function VehicleWhatsAppCard({
           <p className="truncate text-xs font-black leading-tight text-[#00283C] md:text-sm">
             {vehicle.label}
           </p>
-          <p className="truncate text-xs font-black text-[#5CD29D] md:text-sm">
+          <p className="truncate text-xs font-black text-[#087A37] md:text-sm">
             {vehicle.priceLabel}
           </p>
         </div>

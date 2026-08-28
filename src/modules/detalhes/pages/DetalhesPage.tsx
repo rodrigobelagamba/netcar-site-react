@@ -59,6 +59,12 @@ import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { parseGptContent, AccordionSection } from "@/lib/parseGptContent";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { landingPages, matchesLandingFilters } from "@/data/seo";
+import {
+  buildVehicleHighlights,
+  cleanOptionalDescription,
+  normalizeVehicleFeatureTag,
+  type VehicleHighlightsPresentation,
+} from "@/modules/detalhes/lib/vehicleHighlights";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -100,9 +106,9 @@ interface Badge {
 
 /** Cores pill (screenshot selos). */
 const BADGE_COLORS: Record<BadgeVariant, string> = {
-  oportunidade: "#C99124",
-  icheck: "#59C897",
-  garantia: "#69BDCD",
+  oportunidade: "#8A5E00",
+  icheck: "#087A37",
+  garantia: "#23747C",
   "baixa-km": "#004C5C",
   "green-dark": "#00363B",
 };
@@ -456,7 +462,7 @@ function DetalheFloatingWhatsApp({
   if (isSold) {
     return (
       <FloatingPortal>
-        <div className="pointer-events-none fixed inset-x-0 bottom-3 z-[60] flex justify-center px-3">
+        <div className="pointer-events-none fixed inset-x-0 bottom-3 z-[60] flex justify-center px-3 lg:hidden">
           <div className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[#00283C]/15 bg-white/95 px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.16)] backdrop-blur-md">
             <p className="mb-2 text-center text-sm font-black text-[#00283C]">
               Este seminovo já foi vendido
@@ -501,7 +507,7 @@ function DetalheFloatingWhatsApp({
 
   return (
     <FloatingPortal>
-      <div className="pointer-events-none fixed inset-x-0 bottom-2 z-[60] flex justify-center px-2 md:bottom-3 md:px-3">
+      <div className="pointer-events-none fixed inset-x-0 bottom-2 z-[60] flex justify-center px-2 md:bottom-3 md:px-3 lg:hidden">
         <div className="pointer-events-auto w-full max-w-[22rem] md:max-w-sm">
           <VehicleWhatsAppCard
             vehicle={{
@@ -547,10 +553,12 @@ function AccordionItem({
       }`}
     >
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
         className="group flex w-full items-center justify-between rounded-lg py-1 text-left transition-colors hover:bg-[#00283C]/[0.02]"
       >
-        <h3 className="pr-4 text-[17px] font-medium text-primary sm:text-[18px] lg:text-[19px]">
+        <h3 className="pr-4 text-[17px] font-medium text-[#23747C] sm:text-[18px] lg:text-[19px]">
           {title}
         </h3>
         <motion.div
@@ -576,6 +584,7 @@ function AccordionItem({
           duration: ANIMATION_DURATION.fast,
           ease: ANIMATION_EASING,
         }}
+        style={{ display: isOpen ? "block" : "none" }}
         className="overflow-hidden"
       >
         {children}
@@ -601,14 +610,14 @@ function SpecBadge({ label, value, index = 0 }: SpecBadgeProps) {
         delay: index * 0.04,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className="flex min-h-[34px] items-center justify-center whitespace-nowrap rounded-full border border-[#00283C]/[0.08] bg-[#00283C]/[0.03] px-4 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
+      className="flex min-h-[72px] flex-col items-start justify-center rounded-xl border border-[#00283C]/[0.08] bg-white px-4 py-3 shadow-[0_4px_16px_rgba(0,40,60,0.035)]"
     >
-      <p className="text-[13px] font-medium uppercase tracking-wide text-[#00283C]/90 sm:text-[14px] lg:text-[15px]">
-        <span className="font-semibold text-[#00283C]">{label} </span>
-        <span className="font-normal normal-case tracking-normal text-[#00283C]/80">
-          {value}
-        </span>
-      </p>
+      <span className="text-[9px] font-black uppercase tracking-[0.16em] text-[#23747C]">
+        {label.replace(/:$/, "")}
+      </span>
+      <span className="mt-1 text-[15px] font-black leading-tight text-[#00283C] sm:text-[16px]">
+        {value}
+      </span>
     </motion.div>
   );
 }
@@ -619,8 +628,8 @@ interface OptionalItemProps {
 
 function OptionalItem({ text }: OptionalItemProps) {
   return (
-    <div className="flex items-center gap-2">
-      <div className="h-6 w-6 flex-shrink-0 text-primary">
+    <div className="flex min-h-10 items-center gap-2.5 py-1.5">
+      <div className="h-4 w-4 flex-shrink-0 text-[#23747C]">
         <svg
           className="block size-full"
           fill="none"
@@ -630,7 +639,7 @@ function OptionalItem({ text }: OptionalItemProps) {
           <path d="M10 17V7L15 12L10 17Z" fill="currentColor" />
         </svg>
       </div>
-      <span className="text-[14px] leading-[29px] text-fg sm:text-[15px]">
+      <span className="text-[13px] leading-5 text-fg sm:text-[14px]">
         {text}
       </span>
     </div>
@@ -681,8 +690,8 @@ function WhatsAppQuickAction({
 }) {
   if (disabled || href === "#") {
     return (
-      <div className="flex items-center gap-3 rounded-2xl border border-[#00283C]/[0.06] bg-[#F7F9FA] px-3 py-3 opacity-50">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366]/15 text-[#128C7E]">
+      <div className="flex items-center gap-3 rounded-xl border border-[#00283C]/[0.07] bg-[#F7F9FA] px-3 py-2.5 opacity-50">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#087A37]/10 text-[#087A37]">
           <Icon className="h-4 w-4" />
         </span>
         <span className="text-left text-[13px] font-semibold leading-tight text-fg">
@@ -703,9 +712,9 @@ function WhatsAppQuickAction({
       data-wa-vehicle-name={vehicleName}
       whileHover={{ scale: 1.01, y: -1 }}
       whileTap={{ scale: 0.98 }}
-      className="group flex items-center gap-3 rounded-2xl border border-[#00283C]/[0.06] bg-[#FAFCFB] px-3 py-3 shadow-[0_1px_2px_rgba(0,40,60,0.04)] transition-all hover:border-[#25D366]/35 hover:bg-[#25D366]/[0.06] hover:shadow-[0_4px_14px_rgba(37,211,102,0.12)]"
+      className="group flex items-center gap-3 rounded-xl border border-[#00283C]/[0.07] bg-[#FAFCFB] px-3 py-2.5 transition-colors hover:border-[#087A37]/25 hover:bg-[#087A37]/[0.04]"
     >
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#087A37] text-white shadow-[0_3px_10px_rgba(8,122,55,0.28)] transition-transform group-hover:scale-105">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#087A37] text-white transition-transform group-hover:scale-105">
         <Icon className="h-4 w-4" />
       </span>
       <span className="text-left text-[13px] font-semibold leading-tight text-[#00283C] group-hover:text-green-dark">
@@ -727,47 +736,21 @@ function SidebarActionCard({
 }) {
   const styles =
     variant === "trust"
-      ? "border-secondary/25 bg-gradient-to-br from-secondary/[0.14] via-white to-[#F7FBFA] shadow-[0_8px_28px_rgba(108,190,157,0.14)]"
-      : "border-[#00283C]/[0.07] bg-white shadow-[0_6px_24px_rgba(0,40,60,0.06)]";
+      ? "border-[#087A37]/15 bg-white"
+      : "border-[#00283C]/[0.08] bg-white";
 
-  const badgeClass =
-    variant === "trust"
-      ? "border-secondary/25 text-secondary"
-      : "border-[#00283C]/10 text-[#00283C]/80";
+  const badgeClass = variant === "trust" ? "text-[#087A37]" : "text-[#365463]";
 
   return (
     <div
-      className={`relative flex flex-col items-center overflow-hidden rounded-[1.35rem] border p-6 ring-1 ring-inset ring-white/60 transition-shadow duration-300 hover:shadow-[0_12px_32px_rgba(0,40,60,0.1)] sm:p-8 ${styles}`}
+      className={`relative flex flex-col items-start overflow-hidden rounded-2xl border p-5 shadow-[0_8px_24px_rgba(0,40,60,0.045)] ${styles}`}
     >
-      {variant === "trust" ? (
-        <>
-          <motion.div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full blur-3xl"
-            style={{ backgroundColor: "rgba(108,190,157,0.35)" }}
-            animate={{ opacity: [0.35, 0.65, 0.35], scale: [1, 1.08, 1] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            aria-hidden="true"
-            className="pointer-events-none absolute -bottom-12 -left-8 h-28 w-28 rounded-full bg-primary/20 blur-3xl"
-            animate={{ opacity: [0.2, 0.45, 0.2], scale: [1, 1.12, 1] }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 0.8,
-            }}
-          />
-        </>
-      ) : null}
-
       <span
-        className={`relative mb-4 inline-flex items-center rounded-full border bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] shadow-[0_1px_2px_rgba(0,40,60,0.04)] ${badgeClass}`}
+        className={`relative mb-3 inline-flex items-center text-[10px] font-black uppercase tracking-[0.16em] ${badgeClass}`}
       >
         {badge}
       </span>
-      <div className="relative flex w-full flex-col items-center">
+      <div className="relative flex w-full flex-col items-start">
         {children}
       </div>
     </div>
@@ -900,7 +883,7 @@ function CTASidebar({
   const showIcheckCta = Boolean(hasPDF) && !isSold;
 
   return (
-    <div className="space-y-4 lg:space-y-6">
+    <div className="space-y-3">
       {showIcheckCta && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -914,51 +897,48 @@ function CTASidebar({
           <button
             type="button"
             onClick={handleOpenLaudo}
-            className="group relative w-full overflow-hidden rounded-[1.35rem] bg-gradient-to-br from-[#E7F8F0] via-white to-[#F7FBFA] px-6 py-6 text-center shadow-[0_10px_32px_rgba(46,125,50,0.16)] ring-1 ring-inset ring-secondary/15 transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(46,125,50,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 sm:px-8 sm:py-7"
+            className="group w-full rounded-2xl border border-[#087A37]/15 bg-white p-5 text-left shadow-[0_8px_24px_rgba(0,40,60,0.045)] transition-colors hover:border-[#087A37]/30 hover:bg-[#087A37]/[0.025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087A37]/30"
             aria-label={
               protocoloConsulta
                 ? `Abrir laudo i-CHECK, ConsultaID ${protocoloConsulta}`
                 : "Abrir laudo i-CHECK em nova aba"
             }
           >
-            <motion.div
-              aria-hidden="true"
-              className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-secondary/25 blur-2xl"
-              animate={{ opacity: [0.35, 0.7, 0.35], scale: [1, 1.1, 1] }}
-              transition={{
-                duration: 4.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-            <span className="relative mb-3 inline-block text-[11px] font-bold uppercase tracking-[0.18em] text-secondary">
-              i-CHECK Netcar
-            </span>
-            <img
-              src="/brand/checkauto-dekra.png"
-              alt="DEKRA CheckAuto"
-              className="relative mx-auto mb-3 h-[112px] w-[112px] object-contain drop-shadow-md transition duration-300 group-hover:scale-[1.04]"
-            />
-            <span className="relative mb-1 block text-[15px] font-extrabold uppercase tracking-[0.1em] text-[#1B5E20]">
-              Consulta disponível
-            </span>
-            <span className="relative mb-3 block text-[12px] leading-snug text-[#00283C]/70">
-              Consulta informativa com fotos e histórico DEKRA / CheckAuto
+            <span className="flex w-full items-center gap-3">
+              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#EAF7F0]">
+                <img
+                  src="/brand/checkauto-dekra.png"
+                  alt="DEKRA CheckAuto"
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                  decoding="async"
+                  className="h-12 w-12 object-contain"
+                />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-[#087A37]">
+                  i-CHECK Netcar
+                </span>
+                <span className="mt-0.5 block text-[16px] font-black text-[#00283C]">
+                  Histórico disponível
+                </span>
+                <span className="mt-0.5 block text-[12px] leading-snug text-muted-foreground">
+                  Fotos e consulta DEKRA / CheckAuto
+                </span>
+              </span>
+              <ArrowRight className="h-5 w-5 shrink-0 text-[#087A37] transition-transform group-hover:translate-x-0.5" />
             </span>
             {protocoloConsulta ? (
-              <span className="relative mb-4 flex w-full flex-col items-center gap-0.5 rounded-xl border border-[#2E7D32]/30 bg-white/85 px-3 py-2.5">
+              <span className="mt-4 flex w-full items-center justify-between border-t border-[#00283C]/[0.08] pt-3">
                 <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#5A6B73]">
                   ConsultaID
                 </span>
-                <span className="text-[18px] font-black tabular-nums tracking-[0.08em] text-[#00283C]">
+                <span className="text-[14px] font-black tabular-nums tracking-[0.08em] text-[#00283C]">
                   {protocoloConsulta}
                 </span>
               </span>
             ) : null}
-            <span className="relative inline-flex items-center gap-2 rounded-full bg-secondary px-5 py-2.5 text-[12px] font-bold uppercase tracking-[0.08em] text-white shadow-sm transition group-hover:bg-[#1B5E20]">
-              Ver laudo
-              <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-            </span>
           </button>
         </motion.div>
       )}
@@ -1010,14 +990,14 @@ function CTASidebar({
             </>
           ) : (
             <>
-              <h3 className="mb-2 text-center text-[18px] font-bold text-[#00283C] sm:text-[20px]">
-                Outras formas de falar conosco
+              <h3 className="mb-1 text-left text-[18px] font-black text-[#00283C]">
+                Como prefere falar?
               </h3>
-              <p className="mb-4 max-w-[300px] text-center text-sm text-muted-foreground">
-                Financiamento, visita, troca ou mais fotos — escolha abaixo.
+              <p className="mb-4 text-left text-[13px] leading-relaxed text-muted-foreground">
+                Escolha o assunto e já abra a conversa certa no WhatsApp.
               </p>
 
-              <div className="grid w-full max-w-[300px] grid-cols-1 gap-2">
+              <div className="grid w-full grid-cols-1 gap-2">
                 {whatsappActions.map((action) => (
                   <WhatsAppQuickAction
                     key={action.label}
@@ -1461,7 +1441,7 @@ function PriceWithShimmer({
             Para:
           </span>
           <p
-            className={`font-bold whitespace-nowrap cursor-pointer text-secondary leading-tight info-price info-price-shimmer ${
+            className={`font-bold whitespace-nowrap cursor-pointer text-[#087A37] leading-tight info-price info-price-shimmer ${
               isHovered ? "info-price-shimmer-hover" : ""
             }`}
             onMouseEnter={() => setIsHovered(true)}
@@ -1471,7 +1451,7 @@ function PriceWithShimmer({
         </div>
       ) : (
         <p
-          className={`font-bold whitespace-nowrap cursor-pointer text-secondary leading-tight info-price info-price-shimmer ${
+          className={`font-bold whitespace-nowrap cursor-pointer text-[#087A37] leading-tight info-price info-price-shimmer ${
             isHovered ? "info-price-shimmer-hover" : ""
           }`}
           onMouseEnter={() => setIsHovered(true)}
@@ -1910,7 +1890,6 @@ export function DetalhesPage() {
           ? [{ text: "i-CHECK DISPONÍVEL", variant: "icheck" as const }]
           : []),
       ];
-
   return (
     <main className="overflow-x-hidden max-w-full pb-40">
       {vehicle && (
@@ -1929,10 +1908,7 @@ export function DetalhesPage() {
         />
       )}
       {/* Hero Section */}
-      <section
-        className="w-full py-0 pt-0 lg:pt-0 pb-0 relative overflow-hidden max-w-full min-h-[calc(100vh+8vh)] lg:min-h-[calc(100vh+3vh)]
-      xl:min-h-[calc(100vh+1vh)] 2xl:min-h-[95vh] 4xl:min-h-[75vh]"
-      >
+      <section className="relative w-full max-w-full overflow-hidden py-0 pb-0 pt-0 lg:min-h-[820px] lg:pt-0 xl:min-h-[820px] 2xl:min-h-[830px] 3xl:min-h-[850px] 4xl:min-h-[1200px] 5xl:min-h-[1500px] 6xl:min-h-[1900px]">
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
         <div
           className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
@@ -1940,7 +1916,7 @@ export function DetalhesPage() {
                         xl:top-[-10rem]
                         2xl:top-[-15rem]
                         3xl:top-[-15rem]
-                        4xl:top-[-20rem]
+                        4xl:w-[58vw] 4xl:top-[-20rem]
                         5xl:top-[-35rem]"
         >
           {mainImage && (
@@ -2107,7 +2083,7 @@ export function DetalhesPage() {
                 />
                 {!isSold && (
                   <div className="mt-4 border-l-2 border-primary pl-3 text-left">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-primary">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#23747C]">
                       Seleção Netcar
                     </p>
                     <p className="mt-1 text-sm font-black leading-snug text-fg">
@@ -2251,6 +2227,93 @@ export function DetalhesPage() {
   );
 }
 
+function VehicleDifferentialHighlights({
+  modelo,
+  presentation,
+}: {
+  modelo: string;
+  presentation: VehicleHighlightsPresentation;
+}) {
+  const featuredHighlight = presentation.highlights.find(
+    (highlight) => highlight.metric,
+  );
+  const regularHighlights = presentation.highlights.filter(
+    (highlight) => !highlight.metric,
+  );
+
+  if (presentation.highlights.length === 0) return null;
+
+  return (
+    <motion.section
+      aria-labelledby="vehicle-differentials-title"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: ANIMATION_DURATION.normal,
+        ease: ANIMATION_EASING,
+      }}
+      className="mt-2"
+    >
+      <div className="max-w-2xl">
+        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#23747C]">
+          Diferenciais do modelo
+        </p>
+        <h3
+          id="vehicle-differentials-title"
+          className="mt-1 text-2xl font-black tracking-[-0.025em] text-[#00283C] sm:text-3xl"
+        >
+          O que vale notar neste {modelo}
+        </h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
+          Os recursos mais relevantes deste carro, explicados pelo benefício.
+        </p>
+      </div>
+
+      {featuredHighlight?.metric && (
+        <article className="mt-6 grid gap-3 rounded-2xl border border-primary/20 bg-primary/[0.05] px-5 py-5 sm:grid-cols-[150px_1fr] sm:items-center sm:gap-6 sm:px-6">
+          <div className="text-4xl font-black tracking-[-0.04em] text-[#00283C] sm:text-5xl">
+            {featuredHighlight.metric.value}{" "}
+            <span className="text-2xl sm:text-3xl">
+              {featuredHighlight.metric.unit}
+            </span>
+          </div>
+          <div>
+            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#23747C]">
+              {featuredHighlight.category}
+            </p>
+            <h4 className="mt-1 text-lg font-black leading-snug text-[#00283C] sm:text-xl">
+              {featuredHighlight.title}
+            </h4>
+            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+              {featuredHighlight.description}
+            </p>
+          </div>
+        </article>
+      )}
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        {regularHighlights.map((highlight) => (
+          <article
+            key={highlight.id}
+            className="rounded-2xl border border-[#00283C]/10 bg-white px-5 py-4"
+          >
+            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#23747C]">
+              {highlight.category}
+            </p>
+            <h4 className="mt-1.5 text-base font-black leading-snug text-[#00283C] sm:text-lg">
+              {highlight.title}
+            </h4>
+            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+              {highlight.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </motion.section>
+  );
+}
+
 interface DetailsSectionProps {
   vehicle: any;
   anuncio?: string | null;
@@ -2266,13 +2329,20 @@ function DetailsSection({
 }: DetailsSectionProps) {
   const [showMoreOptionals, setShowMoreOptionals] = useState(false);
 
-  const marca = vehicle.marca || vehicle.name?.split(" ")[0] || "";
   const modeloCompleto = vehicle.modelo || vehicle.name || "";
   const year = vehicle.year || 0;
   const anoFabricacao = vehicle.anoFabricacao;
 
   // Parse do conteúdo do anúncio (vem do endpoint separado)
   const gptContent = useMemo(() => parseGptContent(anuncio || null), [anuncio]);
+  const highlightPresentation = useMemo(
+    () => buildVehicleHighlights(vehicle, anuncio),
+    [vehicle, anuncio],
+  );
+
+  useEffect(() => {
+    setShowMoreOptionals(false);
+  }, [vehicle.id]);
 
   // Formata ano para especificações técnicas
   const anoDisplay =
@@ -2389,10 +2459,28 @@ function DetailsSection({
   // Aplica ordenação por prioridade usando tags
   const sortedOptionals = sortOptionals(rawOptionals);
 
-  // Converte de volta para strings (descrição) para renderização
-  const optionals = sortedOptionals.map((op) =>
-    typeof op === "string" ? op : op.descricao || "",
-  );
+  // Limpa pequenas inconsistências do XML, remove duplicações e evita repetir
+  // na lista os recursos que já foram explicados nos cards de diferenciação.
+  const seenOptionals = new Set<string>();
+  const displayedOptionals = sortedOptionals
+    .map((op) => ({
+      tag: normalizeVehicleFeatureTag(
+        typeof op === "string" ? "" : op.tag || "",
+      ),
+      description: cleanOptionalDescription(
+        typeof op === "string" ? op : op.descricao || "",
+      ),
+    }))
+    .filter(({ tag, description }) => {
+      const key = description
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+      if (!description || seenOptionals.has(key)) return false;
+      seenOptionals.add(key);
+      return !highlightPresentation.explainedTags.has(tag);
+    })
+    .map(({ description }) => description);
 
   const SpecIcon = ({ className }: { className?: string }) => (
     <div
@@ -2411,28 +2499,6 @@ function DetailsSection({
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_410px] lg:gap-10">
           {/* Main Content */}
           <div className="order-1 lg:order-1">
-            {/* Título */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: ANIMATION_DURATION.normal,
-                ease: ANIMATION_EASING,
-              }}
-              className="mb-10 flex items-start gap-3"
-            >
-              <SpecIcon className="mt-1 h-[36px] w-[36px] flex-shrink-0 sm:h-[40px] sm:w-[40px] lg:h-[42px] lg:w-[42px]" />
-              <div>
-                <h2 className="mb-1 text-[18px] font-medium text-fg sm:text-[20px] lg:text-[22px]">
-                  {marca} {modeloCompleto} {year}
-                </h2>
-                <p className="text-[16px] font-light text-primary sm:text-[18px] lg:text-[22px]">
-                  Conquiste a cidade com estilo, tecnologia e conforto.
-                </p>
-              </div>
-            </motion.div>
-
             {/* Especificações */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
@@ -2442,14 +2508,21 @@ function DetailsSection({
                 duration: ANIMATION_DURATION.normal,
                 ease: ANIMATION_EASING,
               }}
-              className="mb-12"
+              className="mb-10"
             >
-              <div className="mb-6 flex items-center gap-3 border-b border-primary/70 pb-4">
+              <div className="mb-5 flex items-center gap-3 border-b border-primary/40 pb-4">
                 <SpecIcon />
-                <h2 className="section-heading">Especificações</h2>
+                <div>
+                  <h2 className="text-[17px] font-black text-[#00283C] sm:text-[18px] lg:text-[19px]">
+                    Resumo técnico
+                  </h2>
+                  <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+                    Os dados objetivos deste veículo.
+                  </p>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
                 {specifications.map((spec, index) => (
                   <SpecBadge
                     key={index}
@@ -2461,8 +2534,13 @@ function DetailsSection({
               </div>
             </motion.div>
 
-            {/* Opcionais */}
-            {optionals.length > 0 && (
+            <VehicleDifferentialHighlights
+              modelo={modeloCompleto}
+              presentation={highlightPresentation}
+            />
+
+            {/* Opcionais secundários */}
+            {displayedOptionals.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -2471,16 +2549,23 @@ function DetailsSection({
                   duration: ANIMATION_DURATION.normal,
                   ease: ANIMATION_EASING,
                 }}
-                className="mb-12"
+                className="mt-12"
               >
-                <div className="mb-6 flex items-center gap-3 border-b border-primary/70 pb-4">
+                <div className="mb-5 flex items-center gap-3 border-b border-primary/40 pb-4">
                   <SpecIcon />
-                  <h2 className="section-heading">Opcionais</h2>
+                  <div>
+                    <h2 className="text-[17px] font-black text-[#00283C] sm:text-[18px] lg:text-[19px]">
+                      Outros opcionais
+                    </h2>
+                    <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+                      A lista completa informada no cadastro deste carro.
+                    </p>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {optionals
-                    .slice(0, showMoreOptionals ? optionals.length : 15)
+                <div className="grid grid-cols-1 gap-x-6 rounded-2xl border border-[#00283C]/[0.08] bg-white px-4 py-3 sm:grid-cols-2 sm:px-5 lg:grid-cols-3">
+                  {displayedOptionals
+                    .slice(0, showMoreOptionals ? displayedOptionals.length : 9)
                     .map((optional: string, index: number) => (
                       <motion.div
                         key={index}
@@ -2497,144 +2582,75 @@ function DetailsSection({
                     ))}
                 </div>
 
-                {!showMoreOptionals && optionals.length > 15 && (
-                  <motion.button
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    onClick={() => setShowMoreOptionals(true)}
-                    className="mt-4 text-[14px] font-bold text-primary underline transition-colors hover:text-primary/80 sm:text-[15px]"
+                {displayedOptionals.length > 9 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowMoreOptionals((current) => !current)}
+                    aria-expanded={showMoreOptionals}
+                    className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-[#23747C]/25 bg-white px-4 py-2 text-[13px] font-bold text-[#175F67] transition-colors hover:bg-[#23747C]/[0.05] sm:text-[14px]"
                   >
-                    Carregar mais informações [+]
-                  </motion.button>
+                    {showMoreOptionals
+                      ? "Mostrar menos"
+                      : `Ver todos os ${displayedOptionals.length} opcionais`}
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform ${showMoreOptionals ? "rotate-180" : ""}`}
+                    />
+                  </button>
                 )}
               </motion.div>
             )}
 
-            {/* Introdução */}
-            {(gptContent?.apresentacao || !gptContent) && (
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: ANIMATION_DURATION.normal,
-                  ease: ANIMATION_EASING,
-                }}
-                className="section-text mb-8"
-              >
-                {gptContent?.apresentacao
-                  ? gptContent.apresentacao
-                  : `O novo ${marca} ${modeloCompleto} é a escolha perfeita para quem
-                busca um veículo versátil, ideal para famílias modernas e
-                aventureiros urbanos. Com um design atrativo e sofisticado, este
-                modelo não só parece bom, mas também oferece uma experiência de
-                condução excepcional, graças às suas características técnicas
-                avançadas e conforto superior.`}
-              </motion.p>
-            )}
-
-            {/* Accordion Sections */}
-            <div className="space-y-2">
-              {gptContent && gptContent.accordions.length > 0 ? (
-                gptContent.accordions.map(
-                  (accordion: AccordionSection, index: number) => (
-                    <AccordionItem
-                      key={index}
-                      title={accordion.title}
-                      defaultOpen={index === 0}
-                    >
-                      {typeof accordion.content === "object" &&
-                      accordion.content !== null &&
-                      "itens" in accordion.content ? (
-                        <>
-                          {accordion.content.introducao && (
-                            <p className="section-text mb-4">
-                              {accordion.content.introducao}
-                            </p>
-                          )}
-                          {accordion.content.itens.length > 0 && (
-                            <ul className="ml-5 list-outside list-disc space-y-2 text-[14px] leading-[26px] text-fg sm:text-[15px]">
-                              {accordion.content.itens.map(
-                                (item, itemIndex) => (
-                                  <li key={itemIndex} className="pl-2">
-                                    {item.label && (
-                                      <strong>{item.label}</strong>
-                                    )}{" "}
-                                    {item.texto}
-                                  </li>
-                                ),
+            {/* O texto que chega da API é preservado, mas fica recolhido para a
+                página não repetir de imediato o que os cards já explicam. */}
+            {gptContent && (
+              <div className="mt-8">
+                <AccordionItem title="Ver descrição completa deste veículo">
+                  {gptContent.apresentacao && (
+                    <p className="section-text mb-6">
+                      {gptContent.apresentacao}
+                    </p>
+                  )}
+                  <div className="space-y-6">
+                    {gptContent.accordions.map(
+                      (accordion: AccordionSection, index: number) => (
+                        <div key={`${accordion.title}-${index}`}>
+                          <h4 className="mb-2 text-[16px] font-bold text-[#23747C] sm:text-[18px]">
+                            {accordion.title}
+                          </h4>
+                          {typeof accordion.content === "object" &&
+                          accordion.content !== null &&
+                          "itens" in accordion.content ? (
+                            <>
+                              {accordion.content.introducao && (
+                                <p className="section-text mb-3">
+                                  {accordion.content.introducao}
+                                </p>
                               )}
-                            </ul>
+                              {accordion.content.itens.length > 0 && (
+                                <ul className="ml-5 list-outside list-disc space-y-2 text-[14px] leading-[26px] text-fg sm:text-[15px]">
+                                  {accordion.content.itens.map(
+                                    (item, itemIndex) => (
+                                      <li key={itemIndex} className="pl-2">
+                                        {item.label && (
+                                          <strong>{item.label}</strong>
+                                        )}{" "}
+                                        {item.texto}
+                                      </li>
+                                    ),
+                                  )}
+                                </ul>
+                              )}
+                            </>
+                          ) : (
+                            <p className="section-text">{accordion.content}</p>
                           )}
-                        </>
-                      ) : (
-                        <p className="section-text">{accordion.content}</p>
-                      )}
-                    </AccordionItem>
-                  ),
-                )
-              ) : (
-                <>
-                  <AccordionItem
-                    title="Diferenciais técnicos que destacam o modelo"
-                    defaultOpen={true}
-                  >
-                    <p className="section-text mb-4">
-                      O {modeloCompleto} é projetado para proporcionar uma
-                      jornada suave e eficiente. Entre os destaques técnicos,
-                      este modelo inclui:
-                    </p>
-                    <ul className="section-text ml-5 list-outside list-disc space-y-2">
-                      <li className="pl-2">
-                        Motor {vehicle.motor || "potente"} que oferece excelente
-                        desempenho e eficiência energética.
-                      </li>
-                      <li className="pl-2">
-                        Câmbio {vehicle.cambio?.toLowerCase() || "automático"}{" "}
-                        que garante trocas suaves e ágeis.
-                      </li>
-                      <li className="pl-2">
-                        Direção elétrica que proporciona um manuseio preciso e
-                        facilita a condução em espaços apertados.
-                      </li>
-                      <li className="pl-2">
-                        Suspensão otimizada que melhora o conforto em diferentes
-                        tipos de terreno.
-                      </li>
-                    </ul>
-                  </AccordionItem>
-
-                  <AccordionItem title="Tecnologia e conforto a bordo">
-                    <p className="text-[14px] leading-[26px] text-fg sm:text-[15px]">
-                      Equipado com as mais recentes tecnologias para garantir
-                      conforto e conectividade durante toda a jornada.
-                    </p>
-                  </AccordionItem>
-
-                  <AccordionItem title="Recursos avançados de segurança">
-                    <p className="text-[14px] leading-[26px] text-fg sm:text-[15px]">
-                      Sistema completo de segurança com múltiplos air bags,
-                      controle de estabilidade e muito mais.
-                    </p>
-                  </AccordionItem>
-
-                  <AccordionItem title="Espaço e capacidade">
-                    <p className="text-[14px] leading-[26px] text-fg sm:text-[15px]">
-                      Amplo espaço interno para passageiros e bagagens, perfeito
-                      para viagens longas.
-                    </p>
-                  </AccordionItem>
-
-                  <AccordionItem title="Por que optar pelo modelo?">
-                    <p className="text-[14px] leading-[26px] text-fg sm:text-[15px]">
-                      Combinação perfeita de design, tecnologia, conforto e
-                      economia, ideal para seu dia a dia.
-                    </p>
-                  </AccordionItem>
-                </>
-              )}
-            </div>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                </AccordionItem>
+              </div>
+            )}
           </div>
 
           {/* Sticky Sidebar */}

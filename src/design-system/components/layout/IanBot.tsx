@@ -55,9 +55,9 @@ export function IanBot() {
           {/* Texto */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <h3 className="text-[28px] md:text-[32px] font-bold tracking-tight text-fg">
+              <h2 className="text-[28px] md:text-[32px] font-bold tracking-tight text-fg">
                 Olá, eu sou o iAN!
-              </h3>
+              </h2>
               <span className="text-[24px]">👋</span>
             </div>
             <p className="text-gray-500 text-[16px] md:text-[18px] font-medium leading-relaxed max-w-[500px]">

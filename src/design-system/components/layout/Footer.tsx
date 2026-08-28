@@ -170,7 +170,6 @@ export function Footer() {
                   href={buildLojaMapsUrl("Loja1")}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Abrir localização da Loja 1 (Matriz) no Google Maps"
                   title="Abrir no Google Maps"
                   className="block cursor-pointer hover:opacity-95 transition-opacity"
                 >
@@ -227,7 +226,6 @@ export function Footer() {
                   href={buildLojaMapsUrl("Loja2")}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Abrir localização da Loja 2 (Filial) no Google Maps"
                   title="Abrir no Google Maps"
                   className="block cursor-pointer hover:opacity-95 transition-opacity"
                 >
