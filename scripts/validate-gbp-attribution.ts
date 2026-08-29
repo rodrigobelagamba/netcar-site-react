@@ -13,6 +13,7 @@ import {
 
 const storage = new Map<string, string>();
 const dataLayer: Record<string, unknown>[] = [];
+const gtagCalls: unknown[][] = [];
 const location = {
   pathname: "/seminovos-canoas",
   search:
@@ -35,6 +36,7 @@ Object.assign(globalThis, {
   window: {
     dataLayer,
     location,
+    gtag: (...args: unknown[]) => gtagCalls.push(args),
   },
 });
 
@@ -75,6 +77,25 @@ for (const eventName of [
   assert.equal(event.traffic_content, "loja_1_post");
   assert.equal(event.gbp_profile, "loja_1");
 }
+
+for (const eventName of [
+  "regional_landing_view",
+  "regional_cta_click",
+  "whatsapp_click",
+]) {
+  assert(
+    gtagCalls.some(
+      (call) => call[0] === "event" && call[1] === eventName,
+    ),
+    `${eventName} não chegou à fila direta do GA4`,
+  );
+}
+
+const regionalCtaEvent = dataLayer.find(
+  (item) => item.event === "regional_cta_click",
+);
+assert(regionalCtaEvent, "regional_cta_click não foi enviado");
+assert.equal(regionalCtaEvent.regional_action, "whatsapp");
 
 location.pathname = "/seminovos-sapucaia-do-sul";
 location.search =

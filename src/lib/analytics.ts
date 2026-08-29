@@ -165,6 +165,25 @@ export function pushDataLayer(payload: Record<string, unknown>): void {
   window.dataLayer.push(payload);
 }
 
+/**
+ * Mantém o evento disponível no Data Layer e também o envia ao GA4.
+ * O container atual não encaminha automaticamente os eventos comerciais
+ * personalizados; sem este envio eles existem no site, mas não nos relatórios.
+ */
+function trackBusinessEvent(
+  eventName: string,
+  payload: Record<string, unknown>,
+): void {
+  pushDataLayer({ event: eventName, ...payload });
+
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", eventName, {
+      send_to: GA4_MEASUREMENT_ID,
+      ...payload,
+    });
+  }
+}
+
 /** Evento GA4: visualização de página de veículo (funil Browse → Detalhe → WA). */
 export function trackViewItem(params: {
   vehicleId: string | number;
@@ -172,8 +191,7 @@ export function trackViewItem(params: {
   price?: number;
   currency?: string;
 }): void {
-  pushDataLayer({
-    event: "view_item",
+  trackBusinessEvent("view_item", {
     ecommerce: {
       items: [
         {
@@ -192,8 +210,7 @@ export function trackStockFilterApply(params: {
   filters: Record<string, string | undefined>;
   resultCount: number;
 }): void {
-  pushDataLayer({
-    event: "stock_filter_apply",
+  trackBusinessEvent("stock_filter_apply", {
     filters: params.filters,
     result_count: params.resultCount,
   });
@@ -206,8 +223,7 @@ export function trackCompareInteraction(params: {
   vehicleNames?: string[];
   preset?: string;
 }): void {
-  pushDataLayer({
-    event: `compare_vehicle_${params.action}`,
+  trackBusinessEvent(`compare_vehicle_${params.action}`, {
     compare_action: params.action,
     vehicle_ids: params.vehicleIds.map(String),
     vehicle_names: params.vehicleNames,
@@ -216,8 +232,7 @@ export function trackCompareInteraction(params: {
   });
 
   if (params.vehicleIds.length >= 2) {
-    pushDataLayer({
-      event: "comparison_ready",
+    trackBusinessEvent("comparison_ready", {
       vehicle_ids: params.vehicleIds.map(String),
       vehicle_names: params.vehicleNames,
       compare_count: params.vehicleIds.length,
@@ -227,8 +242,7 @@ export function trackCompareInteraction(params: {
 
 /** Evento GA4: scroll 50% na Home (engajamento). */
 export function trackHomeScrollDepth(depthPercent: number): void {
-  pushDataLayer({
-    event: "scroll_depth_home",
+  trackBusinessEvent("scroll_depth_home", {
     scroll_depth_percent: depthPercent,
   });
 }
@@ -254,8 +268,7 @@ export function trackPageView(path?: string, title?: string): void {
   });
 
   if (["city_buy", "city_sell", "regional_hub"].includes(pageType)) {
-    pushDataLayer({
-      event: "regional_landing_view",
+    trackBusinessEvent("regional_landing_view", {
       page_type: pageType,
       page_path: pagePath,
       ...regionalDimensions,
@@ -298,8 +311,7 @@ export function trackRegionalCtaClick(
     return;
   }
 
-  pushDataLayer({
-    event: "regional_cta_click",
+  trackBusinessEvent("regional_cta_click", {
     regional_action: action,
     page_type: pageType,
     page_path: pagePath,
@@ -308,8 +320,7 @@ export function trackRegionalCtaClick(
   });
 
   if (action.includes("stock") || action.startsWith("city_buy_")) {
-    pushDataLayer({
-      event: "regional_stock_click",
+    trackBusinessEvent("regional_stock_click", {
       regional_action: action,
       page_type: pageType,
       page_path: pagePath,
@@ -323,8 +334,7 @@ export function trackTrustSectionView(
   section: string,
   pagePath = getPagePath(),
 ): void {
-  pushDataLayer({
-    event: "trust_section_view",
+  trackBusinessEvent("trust_section_view", {
     trust_section: section,
     page_type: inferPageType(pagePath),
     page_path: pagePath,
@@ -339,8 +349,7 @@ export function trackSelectionCampaignCta(
   placement: "home" | "campaign_hero" | "campaign_final",
   pagePath = getPagePath(),
 ): void {
-  pushDataLayer({
-    event: "selection_campaign_cta",
+  trackBusinessEvent("selection_campaign_cta", {
     selection_action: action,
     selection_placement: placement,
     page_type: inferPageType(pagePath),
@@ -354,8 +363,7 @@ export function trackSellEvaluation(
   cityName?: string,
   pagePath = getPagePath(),
 ): void {
-  pushDataLayer({
-    event: `sell_evaluation_${stage}`,
+  trackBusinessEvent(`sell_evaluation_${stage}`, {
     city_name: cityName,
     page_type: inferPageType(pagePath),
     page_path: pagePath,
@@ -364,8 +372,7 @@ export function trackSellEvaluation(
   });
 
   if (stage === "completed") {
-    pushDataLayer({
-      event: "generate_lead",
+    trackBusinessEvent("generate_lead", {
       lead_type: "sell_evaluation",
       city_name: cityName,
       page_path: pagePath,
@@ -381,8 +388,7 @@ export function trackPhoneClick(params: {
   pagePath?: string;
 }): void {
   const pagePath = params.pagePath ?? getPagePath();
-  pushDataLayer({
-    event: "phone_click",
+  trackBusinessEvent("phone_click", {
     phone_number: params.phoneNumber,
     phone_source: params.source ?? "link",
     page_type: inferPageType(pagePath),
@@ -396,15 +402,13 @@ export function trackPhoneClick(params: {
 }
 
 export function trackContactFormSubmit(pagePath = getPagePath()): void {
-  pushDataLayer({
-    event: "contact_form_submit",
+  trackBusinessEvent("contact_form_submit", {
     form_destination: "whatsapp",
     page_type: inferPageType(pagePath),
     page_path: pagePath,
     ...getTrafficDimensions(),
   });
-  pushDataLayer({
-    event: "generate_lead",
+  trackBusinessEvent("generate_lead", {
     lead_type: "contact_form",
     page_path: pagePath,
     ...getTrafficDimensions(),

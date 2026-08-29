@@ -27,6 +27,7 @@ import {
 } from "@/lib/whatsappMessages";
 import { trackStockFilterApply } from "@/lib/analytics";
 import { resolvedVehicleCategory } from "@/lib/vehicleCategory";
+import { landingPages } from "@/data/seo";
 import {
   sortShowroomVehicles,
   type ShowroomSortOption,
@@ -42,6 +43,12 @@ const SearchBar = lazy(() =>
 type StockLayout = {
   compact: boolean;
   columns: number;
+};
+
+const stockCategoryLabels: Record<string, string> = {
+  suv: "SUVs",
+  hatch: "Hatches",
+  sedan: "Sedãs",
 };
 
 /** Espelha os breakpoints Tailwind do showroom sem alterar o grid após a pintura inicial. */
@@ -167,8 +174,8 @@ export function SeminovosPage() {
   ]);
 
   useDefaultMetaTags(
-    "Carros Seminovos à Venda em Esteio/RS",
-    "Confira o estoque de seminovos da Netcar em Esteio. Filtre por marca, modelo, ano, preço, câmbio e categoria.",
+    "Carros Seminovos e Usados em Esteio/RS",
+    "Veja carros seminovos e usados à venda na Netcar em Esteio/RS. Consulte fotos, preço e ano dos veículos disponíveis.",
     {
       canonicalPath: "/seminovos",
       robots: hasFilterParams ? "noindex, follow" : undefined,
@@ -638,9 +645,11 @@ export function SeminovosPage() {
         </div>
 
         {/* Header com Título e Ordenação */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-3">
           <div>
-            <h1 className="text-2xl font-bold text-fg">Seminovos</h1>
+            <h1 className="text-2xl font-bold text-fg">
+              Carros seminovos e usados
+            </h1>
             <p className="text-sm text-muted-foreground mt-1">
               {filteredAndSortedVehicles.length} veículo
               {filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado
@@ -683,6 +692,38 @@ export function SeminovosPage() {
             </div>
           </div>
         </div>
+
+        {!hasFilterParams && (
+          <div className="mb-5 space-y-3">
+            <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+              Estoque disponível nas duas lojas da Netcar, na Av. Presidente
+              Vargas, em Esteio. Veja fotos, preço e ano antes de escolher.
+            </p>
+            <nav
+              aria-label="Atalhos do estoque"
+              className="flex flex-wrap gap-2"
+            >
+              {landingPages
+                .filter((landing) => landing.type === "categoria")
+                .map((landing) => (
+                  <Link
+                    key={landing.slug}
+                    to="/comprar-{$landingSlug}"
+                    params={{ landingSlug: landing.slug }}
+                    className="rounded-full border border-[#00283C]/15 bg-white px-3.5 py-2 text-xs font-bold text-[#00283C] transition-colors hover:border-[#008C95]/40 hover:text-[#007A83]"
+                  >
+                    {stockCategoryLabels[landing.slug] || landing.name}
+                  </Link>
+                ))}
+              <Link
+                to="/seminovos-automaticos"
+                className="rounded-full border border-[#00283C]/15 bg-white px-3.5 py-2 text-xs font-bold text-[#00283C] transition-colors hover:border-[#008C95]/40 hover:text-[#007A83]"
+              >
+                Automáticos
+              </Link>
+            </nav>
+          </div>
+        )}
 
         <SeminovosWhatsAppHelpPanel
           stockHelpHref={seminovosWhatsAppHref}

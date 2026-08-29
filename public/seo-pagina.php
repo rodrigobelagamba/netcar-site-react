@@ -86,12 +86,12 @@ switch ($page) {
         break;
 
     case 'seminovos':
-        $title = 'Carros Seminovos à Venda em Esteio/RS | Netcar Multimarcas';
-        $description = 'Confira o estoque de seminovos da Netcar em Esteio. Filtre por marca, modelo, ano e preço. Vistoriados e com garantia.';
+        $title = 'Carros Seminovos e Usados em Esteio/RS | Netcar Multimarcas';
+        $description = 'Veja carros seminovos e usados à venda na Netcar em Esteio/RS. Consulte fotos, preço e ano dos veículos disponíveis.';
         $canonical = SEO_SITE_URL . '/seminovos';
         seo_render_head($title, $description, $canonical);
-        echo '<h1>Carros Seminovos à Venda em Esteio/RS</h1>';
-        echo '<p class="intro">Estoque atualizado de seminovos na Netcar Multimarcas. Veículos vistoriados, com garantia e financiamento. ';
+        echo '<h1>Carros seminovos e usados em Esteio/RS</h1>';
+        echo '<p class="intro">Estoque disponível nas duas lojas da Netcar, na Av. Presidente Vargas, em Esteio. Veja fotos, preço e ano. ';
         echo count($vehicles) . ' veículos disponíveis.</p>';
         seo_render_vehicle_list($vehicles);
         echo '<h2>Outras formas de encontrar seu carro</h2>';

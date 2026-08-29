@@ -257,8 +257,8 @@ expect(
   "dimensões de comparador/modelo/faixa ausentes do rastreamento",
 );
 expect(
-  compareTrackingSource.includes("compare_vehicle_") &&
-    compareTrackingSource.includes('event: "comparison_ready"') &&
+  compareTrackingSource.includes("trackBusinessEvent(`compare_vehicle_") &&
+    compareTrackingSource.includes('trackBusinessEvent("comparison_ready"') &&
     !compareTrackingSource.includes("whatsapp_click") &&
     !compareTrackingSource.includes("wa_ads_conversion") &&
     !compareTrackingSource.includes("fbq("),

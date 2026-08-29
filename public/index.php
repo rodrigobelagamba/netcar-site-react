@@ -114,8 +114,8 @@ function netcar_fixed_route_meta()
             'canonical' => 'https://www.netcarmultimarcas.com.br/',
         ],
         '/seminovos' => [
-            'title' => 'Carros Seminovos à Venda em Esteio/RS | Netcar Multimarcas',
-            'description' => 'Confira o estoque de seminovos da Netcar em Esteio. Filtre por marca, modelo, ano e preço. Vistoriados e com garantia.',
+            'title' => 'Carros Seminovos e Usados em Esteio/RS | Netcar Multimarcas',
+            'description' => 'Veja carros seminovos e usados à venda na Netcar em Esteio/RS. Consulte fotos, preço e ano dos veículos disponíveis.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/seminovos',
         ],
         '/sobre' => [
