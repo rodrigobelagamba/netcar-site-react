@@ -19,7 +19,7 @@ export interface VehicleHighlightsPresentation {
 
 type HighlightVehicle = Pick<
   Vehicle,
-  "id" | "modelo" | "opcionais" | "diferenciais"
+  "id" | "modelo" | "year" | "opcionais" | "diferenciais"
 >;
 
 interface HighlightCandidate extends VehicleHighlight {
@@ -34,6 +34,39 @@ const MAX_REGULAR_HIGHLIGHTS = 4;
 const VERIFIED_TRUNK_CAPACITY_BY_VEHICLE_ID: Record<string, number> = {
   "19884": 600,
 };
+
+interface TrunkCapacityAssociation {
+  modelPattern: RegExp;
+  yearMin: number;
+  yearMax: number;
+  capacity: number;
+}
+
+// Capacidades já presentes em anúncios do estoque são reaproveitadas apenas
+// entre carros da mesma família e geração. O recorte por ano evita, por
+// exemplo, aplicar os 437 L da HR-V antiga às versões da geração atual.
+const VERIFIED_TRUNK_CAPACITY_ASSOCIATIONS: TrunkCapacityAssociation[] = [
+  { modelPattern: /\bargo\b/, yearMin: 2018, yearMax: 2025, capacity: 300 },
+  { modelPattern: /\bix35\b/, yearMin: 2011, yearMax: 2022, capacity: 591 },
+  { modelPattern: /\bcronos\b/, yearMin: 2018, yearMax: 2025, capacity: 525 },
+  { modelPattern: /\bcreta\b/, yearMin: 2017, yearMax: 2021, capacity: 431 },
+  { modelPattern: /\bhrv\b/, yearMin: 2016, yearMax: 2021, capacity: 437 },
+  { modelPattern: /\btracker\b/, yearMin: 2021, yearMax: 2025, capacity: 393 },
+  { modelPattern: /\bt cross\b/, yearMin: 2020, yearMax: 2025, capacity: 373 },
+  { modelPattern: /\bnivus\b/, yearMin: 2021, yearMax: 2025, capacity: 415 },
+  {
+    modelPattern: /\bcompass\b.*\bt270\b/,
+    yearMin: 2022,
+    yearMax: 2025,
+    capacity: 410,
+  },
+  {
+    modelPattern: /\bfastback\b/,
+    yearMin: 2023,
+    yearMax: 2025,
+    capacity: 600,
+  },
+];
 
 function normalizeText(value: string): string {
   return value
@@ -79,7 +112,7 @@ function decodeAnuncio(value?: string | null): string {
 
 function extractTrunkCapacity(
   anuncio: string | null | undefined,
-  vehicleId: string,
+  vehicle: HighlightVehicle,
 ): number | null {
   const decoded = decodeAnuncio(anuncio).replace(/\*+/g, "");
   const patterns = [
@@ -94,7 +127,19 @@ function extractTrunkCapacity(
     if (capacity >= 100 && capacity <= 1_500) return capacity;
   }
 
-  return VERIFIED_TRUNK_CAPACITY_BY_VEHICLE_ID[vehicleId] || null;
+  const exactCapacity =
+    VERIFIED_TRUNK_CAPACITY_BY_VEHICLE_ID[String(vehicle.id)];
+  if (exactCapacity) return exactCapacity;
+
+  const model = normalizeText(vehicle.modelo || "");
+  const year = Number(vehicle.year || 0);
+  const association = VERIFIED_TRUNK_CAPACITY_ASSOCIATIONS.find(
+    (rule) =>
+      rule.modelPattern.test(model) &&
+      year >= rule.yearMin &&
+      year <= rule.yearMax,
+  );
+  return association?.capacity || null;
 }
 
 function createCandidate(
@@ -486,7 +531,7 @@ export function buildVehicleHighlights(
     if (selected.length === MAX_REGULAR_HIGHLIGHTS) break;
   }
 
-  const trunkCapacity = extractTrunkCapacity(anuncio, String(vehicle.id));
+  const trunkCapacity = extractTrunkCapacity(anuncio, vehicle);
   const highlights: VehicleHighlight[] = trunkCapacity
     ? [
         {
