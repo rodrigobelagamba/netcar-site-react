@@ -368,10 +368,12 @@ export function trackSelectionCampaignCta(
 export function trackSellEvaluation(
   stage: "start" | "completed",
   cityName?: string,
+  evaluationType?: "direct_purchase" | "trade_in",
   pagePath = getPagePath(),
 ): void {
   trackBusinessEvent(`sell_evaluation_${stage}`, {
     city_name: cityName,
+    evaluation_type: evaluationType,
     page_type: inferPageType(pagePath),
     page_path: pagePath,
     ...getRegionalDimensions(pagePath),
@@ -382,6 +384,7 @@ export function trackSellEvaluation(
     trackBusinessEvent("generate_lead", {
       lead_type: "sell_evaluation",
       city_name: cityName,
+      evaluation_type: evaluationType,
       page_path: pagePath,
       ...getRegionalDimensions(pagePath),
       ...getTrafficDimensions(),

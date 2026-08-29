@@ -5,13 +5,17 @@ import { useMetaTags } from "@/hooks/useMetaTags";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
-import { QuickSellForm } from "@/components/QuickSellForm";
+import {
+  PurchaseCriteriaCard,
+  QuickSellForm,
+} from "@/components/QuickSellForm";
 import { RelatedCitiesNav } from "@/modules/seo/components/RelatedCitiesNav";
 import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
 import { RegionalStockPreview } from "@/modules/seo/components/RegionalStockPreview";
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 import { RegionalBreadcrumbs } from "@/modules/seo/components/RegionalBreadcrumbs";
+import { RegionalVisitPlanner } from "@/modules/seo/components/RegionalVisitPlanner";
 import { useRegionalPageSchema } from "@/modules/seo/useRegionalPageSchema";
 
 export function SellCityLandingPage() {
@@ -64,10 +68,12 @@ export function SellCityLandingPage() {
             <strong className="text-fg">Referência para a vistoria:</strong>{" "}
             {city.routeNote}
           </p>
+          <PurchaseCriteriaCard />
         </div>
         <RegionalActionCtas
           className="mt-8"
           waText={`moro em ${city.name} e quero vender meu carro para a Netcar.`}
+          waSubtitle="Envie os dados e tire suas dúvidas"
           sellTo="/compra"
           primary="whatsapp"
         />
@@ -132,7 +138,7 @@ export function SellCityLandingPage() {
           id="pre-avaliacao"
           className="container-main scroll-mt-28 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl"
         >
-          <QuickSellForm cityName={city.name} />
+          <QuickSellForm cityName={city.name} showCriteria={false} />
           <p className="mt-4 text-center text-sm text-gray-500">
             Sem unidade ou ponto de coleta em {city.name}.{" "}
             <Link
@@ -145,6 +151,12 @@ export function SellCityLandingPage() {
           </p>
         </div>
       </section>
+
+      <RegionalVisitPlanner
+        cityName={city.name}
+        origins={city.routeOrigins}
+        intent="sell"
+      />
 
       <RelatedCitiesNav currentSlug={city.slug} variant="sell" />
 

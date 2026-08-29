@@ -240,7 +240,7 @@
       "h1": "Vender carro em Sapucaia do Sul — comece online",
       "intro": "Sapucaia do Sul e Esteio são vizinhas. O processo começa online e a vistoria presencial ocorre nas lojas da Netcar em Esteio.",
       "paragraphs": [
-        "A Netcar avalia veículos nacionais com até 7 anos, origem no RS e sem passagem por leilão. A compra depende da vistoria e dos documentos.",
+        "Na compra direta, a Netcar trabalha com carros de no máximo 6 anos, até 80.000 km, primeiro emplacamento no RS e sem leilão, sinistro, furto, roubo ou origem de locadora. Na troca, esses limites não se aplicam.",
         "Você pode vender o carro ou usar o valor aprovado na troca por um seminovo do estoque."
       ],
       "faq": [
@@ -333,7 +333,7 @@
       "faq": [
         {
           "q": "Aceitam qualquer marca?",
-          "a": "Trabalhamos com fabricação nacional dentro dos critérios da loja. Consulte pelo WhatsApp com modelo e ano."
+          "a": "A marca, sozinha, não define a avaliação. Na compra direta, o carro precisa atender aos limites de idade, quilometragem, primeiro emplacamento e histórico informados na página. Na troca, esses limites não se aplicam."
         },
         {
           "q": "E se eu só quiser vender, sem comprar outro?",
@@ -349,6 +349,28 @@
     "distanceKm": 22,
     "travelTime": "30 min",
     "routeNote": "A ligação com Esteio costuma ser feita pela BR-116. O tempo depende do ponto de saída e do fluxo no Vale dos Sinos.",
+    "routeOrigins": [
+      {
+        "id": "fenac",
+        "label": "Fenac",
+        "query": "Fenac, Novo Hamburgo, RS"
+      },
+      {
+        "id": "bourbon_estacao",
+        "label": "Bourbon / Estação",
+        "query": "Bourbon Shopping Novo Hamburgo, RS"
+      },
+      {
+        "id": "centro_calcadao",
+        "label": "Centro / Calçadão",
+        "query": "Calçadão Osvaldo Cruz, Novo Hamburgo, RS"
+      },
+      {
+        "id": "hamburgo_velho",
+        "label": "Hamburgo Velho",
+        "query": "Feevale Campus I, Novo Hamburgo, RS"
+      }
+    ],
     "visitPlanning": "Monte uma lista curta no estoque online, envie os dados da troca e confirme disponibilidade e horário antes de seguir para Esteio.",
     "relatedSlugs": [
       "sao-leopoldo",
@@ -363,7 +385,9 @@
     "intro": "O estoque online reúne os carros das duas lojas da Netcar. Assim, dá para escolher as opções antes de sair de Novo Hamburgo pela BR-116.",
     "paragraphs": [
       "O site mostra as marcas e os modelos disponíveis naquele momento, com fotos, ano, quilometragem, versão e preço.",
-      "Antes de sair, confirme os carros pelo WhatsApp e envie os dados do usado ou da simulação que deseja fazer."
+      "Antes de sair, confirme os carros pelo WhatsApp e envie os dados do usado ou da simulação que deseja fazer.",
+      "Quem parte da região da Fenac, do Centro, do Bourbon ou de Hamburgo Velho pode escolher um ponto de saída e abrir a rota até cada loja em Esteio.",
+      "A Netcar não possui loja em Novo Hamburgo. As duas unidades ficam na Av. Presidente Vargas, em Esteio, e trabalham com o mesmo estoque e atendimento integrados."
     ],
     "faq": [
       {
@@ -373,6 +397,14 @@
       {
         "q": "Como funciona a garantia?",
         "a": "Cada seminovo segue política da loja e itens conferidos na Fábrica de Valor. O consultor detalha na proposta."
+      },
+      {
+        "q": "A Netcar possui loja em Novo Hamburgo?",
+        "a": "Não. As duas lojas físicas ficam em Esteio. Esta página ajuda quem está em Novo Hamburgo a consultar o estoque e planejar a visita."
+      },
+      {
+        "q": "Posso enviar os dados do meu usado antes da visita?",
+        "a": "Sim. Envie modelo, ano, quilometragem e fotos pelo WhatsApp. A proposta final depende da vistoria presencial em Esteio."
       }
     ],
     "sell": {
@@ -382,17 +414,27 @@
       "intro": "Quem está em Novo Hamburgo pode enviar os dados do carro antes do deslocamento e seguir para Esteio somente se houver interesse na vistoria.",
       "paragraphs": [
         "A negociação é feita diretamente com a loja, sem a necessidade de anunciar o carro por conta própria.",
-        "Envie fotos, modelo, ano e quilometragem pelo WhatsApp. A proposta final depende da vistoria em Esteio."
+        "Envie fotos, modelo, ano e quilometragem pelo WhatsApp. A proposta final depende da vistoria em Esteio.",
+        "Se o carro ainda estiver financiado, informe o saldo aproximado. A equipe confere a quitação e o valor líquido antes do fechamento.",
+        "A Netcar não possui unidade em Novo Hamburgo. A vistoria e a conferência dos documentos são feitas nas lojas da Av. Presidente Vargas, em Esteio."
       ],
       "faq": [
         {
           "q": "Vale o deslocamento de NH até Esteio?",
           "a": "A referência é cerca de 22 km e 30 minutos. Envie os dados primeiro e agende a vistoria somente se o processo fizer sentido para você."
         },
-        {
-          "q": "O veículo tem alienação ou pendência documental?",
-          "a": "Envie a documentação pelo WhatsApp. Avaliamos caso a caso na compra do usado — isso não significa financiamento para negativados."
-        }
+      {
+        "q": "O veículo tem alienação ou pendência documental?",
+        "a": "Envie a documentação pelo WhatsApp. A equipe verifica a situação antes da vistoria; a compra depende da possibilidade de quitação ou regularização."
+      },
+      {
+        "q": "Posso vender sem comprar outro carro?",
+        "a": "Sim. A Netcar também avalia a compra direta para o estoque, sem obrigar o proprietário a escolher outro veículo."
+      },
+      {
+        "q": "Onde acontece a vistoria para quem vem de Novo Hamburgo?",
+        "a": "Nas lojas da Av. Presidente Vargas, 740 e 1106, em Esteio. O primeiro contato pode ser feito pelo WhatsApp antes do deslocamento."
+      }
       ]
     }
   },
@@ -754,7 +796,7 @@
       "intro": "Quem está em Viamão pode enviar dados e fotos antes de agendar a vistoria nas lojas da Netcar em Esteio.",
       "paragraphs": [
         "Comece pelo WhatsApp com modelo, ano, quilometragem e fotos. A conversa inicial não é uma proposta final.",
-        "A Netcar avalia nacionais com até 7 anos, origem RS e sem passagem por leilão. A compra depende da vistoria e da documentação."
+        "Na compra direta, a Netcar trabalha com carros de no máximo 6 anos, até 80.000 km, primeiro emplacamento no RS e sem leilão, sinistro, furto, roubo ou origem de locadora. Na troca, esses limites não se aplicam."
       ],
       "faq": [
         {
@@ -802,7 +844,7 @@
       "intro": "Quem está em Guaíba pode negociar diretamente com a Netcar, sem precisar anunciar o carro por conta própria.",
       "paragraphs": [
         "Envie os dados e as fotos pelo WhatsApp antes de decidir atravessar a ponte. A proposta final depende da vistoria.",
-        "Compramos para o nosso próprio estoque — nacionais até 7 anos, origem RS, sem passagem por leilão. Financiado entra com proposta de quitação."
+        "Na compra direta para o estoque, trabalhamos com carros de no máximo 6 anos, até 80.000 km, primeiro emplacamento no RS e sem leilão, sinistro, furto, roubo ou origem de locadora. Na troca, esses limites não se aplicam."
       ],
       "faq": [
         {
@@ -860,7 +902,7 @@
       "faq": [
         {
           "q": "Compram carros de trabalho e picapes?",
-          "a": "Sim, desde que nacionais, até 7 anos, origem RS e sem passagem por leilão."
+          "a": "Na compra direta, o veículo precisa ter no máximo 6 anos, até 80.000 km, primeiro emplacamento no RS e não pode ter origem de locadora nem passagem por leilão, sinistro, furto ou roubo. Na troca, esses limites não se aplicam."
         },
         {
           "q": "Quanto tempo leva o processo todo?",
@@ -920,7 +962,7 @@
       "faq": [
         {
           "q": "Quais carros vocês compram?",
-          "a": "Nacionais até 7 anos, origem RS, sem passagem por leilão — quitados ou financiados."
+          "a": "Na compra direta, carros de no máximo 6 anos, até 80.000 km, primeiro emplacamento no RS e sem origem de locadora ou passagem por leilão, sinistro, furto ou roubo. Financiados podem ser avaliados. Na troca, esses limites não se aplicam."
         },
         {
           "q": "Como funciona com carro financiado?",
@@ -963,7 +1005,7 @@
       "intro": "Quem quer vender carro em Montenegro pode enviar dados e fotos à Netcar pelo WhatsApp antes de agendar a vistoria presencial em Esteio.",
       "paragraphs": [
         "Mande modelo, ano, km e fotos do carro. A equipe verifica os critérios iniciais e, se houver interesse, combina a vistoria em Esteio.",
-        "Compramos nacionais até 7 anos, origem RS, sem leilão. Em carro financiado, a quitação entra no cálculo da proposta final."
+        "Na compra direta, trabalhamos com carros de no máximo 6 anos, até 80.000 km, primeiro emplacamento no RS e sem origem de locadora ou passagem por leilão, sinistro, furto ou roubo. Na troca, esses limites não se aplicam."
       ],
       "faq": [
         {

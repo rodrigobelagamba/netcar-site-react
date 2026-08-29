@@ -1,6 +1,12 @@
 import { useRouterState } from "@tanstack/react-router";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
-import { Car, MapPin, Calendar, AlertCircle } from "lucide-react";
+import {
+  MapPin,
+  Calendar,
+  Gauge,
+  AlertCircle,
+  ShieldCheck,
+} from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
@@ -35,12 +41,13 @@ export function CompraPage() {
   );
 
   const requirements = [
-    { icon: Calendar, text: "Até 7 anos de uso" },
-    { icon: Car, text: "Fabricação nacional" },
-    { icon: MapPin, text: "Veículos de origem do Rio Grande do Sul" },
+    { icon: Calendar, text: "No máximo 6 anos de uso" },
+    { icon: Gauge, text: "Até 80.000 km rodados" },
+    { icon: MapPin, text: "Primeiro emplacamento no Rio Grande do Sul" },
+    { icon: ShieldCheck, text: "Sem origem de locadora" },
     {
       icon: AlertCircle,
-      text: "Não compramos veículos com passagem por leilão",
+      text: "Sem passagem por leilão, sinistro, furto ou roubo",
     },
   ];
 
@@ -238,7 +245,7 @@ export function CompraPage() {
                 Critérios
               </span>
               <h2 className="text-2xl md:text-[32px] font-bold mb-4">
-                Quais veículos compramos?
+                Quais veículos compramos diretamente?
               </h2>
               <p className="text-muted-foreground mb-8">
                 Estes são os critérios iniciais. A compra depende da avaliação
@@ -254,13 +261,20 @@ export function CompraPage() {
                     <req.icon
                       className={cn(
                         "w-5 h-5 flex-shrink-0",
-                        index === 3 ? "text-orange-500" : "text-primary",
+                        index === requirements.length - 1
+                          ? "text-orange-500"
+                          : "text-primary",
                       )}
                     />
                     <span className="text-fg font-medium">{req.text}</span>
                   </div>
                 ))}
               </div>
+              <p className="mt-6 rounded-xl border border-secondary/20 bg-secondary/10 p-4 text-sm leading-relaxed text-fg">
+                <strong>Na troca, esses limites não se aplicam.</strong> O seu
+                carro pode ser avaliado como parte da negociação, conforme
+                vistoria e documentação.
+              </p>
             </div>
 
             <div className="relative">

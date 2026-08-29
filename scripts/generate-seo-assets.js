@@ -1164,7 +1164,7 @@ function directionsUrl(origin, destination) {
   return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&travelmode=driving`;
 }
 
-function routePlannerHtml(city) {
+function routePlannerHtml(city, intent = "buy") {
   if (!Array.isArray(city.routeOrigins) || city.routeOrigins.length === 0) {
     return "";
   }
@@ -1179,11 +1179,22 @@ function routePlannerHtml(city) {
     })
     .join("");
 
+  const isSell = intent === "sell";
+  const heading = isSell
+    ? `Rotas de ${escapeHtml(city.name)} até as lojas em Esteio`
+    : `Planeje a visita saindo de ${escapeHtml(city.name)}`;
+  const intro = isSell
+    ? "Escolha um ponto de saída e abra a rota até cada loja. Antes de sair, envie os dados do carro pelo WhatsApp e combine a vistoria."
+    : "Escolha um ponto de saída de referência. O Google Maps abre o trajeto até cada loja; ajuste o endereço inicial no aplicativo para obter uma estimativa exata.";
+  const note = isSell
+    ? "A vistoria é feita nas lojas de Esteio. As duas unidades ficam a cerca de 400 m uma da outra e trabalham com a mesma equipe e estrutura. O valor final depende da avaliação presencial."
+    : "As duas lojas ficam somente em Esteio, a cerca de 400 m uma da outra, e trabalham com estoque, vendedores e atendimento integrados. Confirme a disponibilidade e onde estão os carros escolhidos antes de sair.";
+
   return `<section aria-labelledby="planejador-visita-titulo">
-    <h2 id="planejador-visita-titulo">Planeje a visita saindo de ${escapeHtml(city.name)}</h2>
-    <p>Escolha um ponto de saída de referência. O Google Maps abre o trajeto até cada loja; ajuste o endereço inicial no aplicativo para obter uma estimativa exata.</p>
+    <h2 id="planejador-visita-titulo">${heading}</h2>
+    <p>${intro}</p>
     <ul>${origins}</ul>
-    <p>As duas lojas ficam somente em Esteio, a cerca de 400 m uma da outra, e trabalham com estoque, vendedores e atendimento integrados. Confirme a disponibilidade e onde estão os carros escolhidos antes de sair.</p>
+    <p>${note}</p>
   </section>`;
 }
 
@@ -1295,6 +1306,16 @@ for (const city of cities) {
       <h1>${escapeHtml(city.sell.h1)}</h1>
       <p>${escapeHtml(city.sell.intro)}</p>
       ${sellParagraphs}
+      <h2>Critérios para a Netcar comprar o seu carro</h2>
+      <ul>
+        <li>No máximo 6 anos de uso.</li>
+        <li>Até 80.000 km rodados.</li>
+        <li>Primeiro emplacamento no Rio Grande do Sul.</li>
+        <li>Sem origem de locadora.</li>
+        <li>Sem passagem por leilão, sinistro, furto ou roubo.</li>
+      </ul>
+      <p>Carro financiado pode ser avaliado; o saldo para quitação entra na negociação. Atender aos critérios permite iniciar a análise, mas não garante a compra.</p>
+      <p><strong>Vai usar o carro na troca?</strong> Esses limites não se aplicam. O veículo pode ser avaliado dentro da negociação, conforme vistoria e documentação.</p>
       <p><strong>Referência para a vistoria:</strong> ${escapeHtml(city.routeNote)}</p>
       <h2>Pré-avaliação remota, vistoria em Esteio</h2>
       <ol>
@@ -1310,6 +1331,7 @@ for (const city of cities) {
         ctaLabel: "Ver todo o estoque para troca",
         ctaHref: `${SITE}/seminovos`,
       })}
+      ${routePlannerHtml(city, "sell")}
       ${sellFaqHtml}
       <p><a href="${SITE}/compra">Iniciar pré-avaliação</a> · <a href="${SITE}/seminovos">Ver estoque para troca</a></p>
       ${relatedSellCitiesHtml(city.slug)}

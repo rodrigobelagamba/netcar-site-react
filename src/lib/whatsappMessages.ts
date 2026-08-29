@@ -77,8 +77,17 @@ export function quickSellWhatsAppMessage(details: {
   ano?: string;
   km?: string;
   cityName?: string;
+  evaluationType?: "direct_purchase" | "trade_in";
 }): string {
-  const lines = [siteWhatsAppMessage("quero avaliar meu carro para venda:")];
+  const isTrade = details.evaluationType === "trade_in";
+  const lines = [
+    siteWhatsAppMessage(
+      isTrade
+        ? "quero avaliar meu carro para usar na troca:"
+        : "quero avaliar meu carro para venda direta à Netcar:",
+    ),
+    `Negociação: ${isTrade ? "Usar na troca" : "Venda direta à Netcar"}`,
+  ];
   if (details.modelo?.trim()) lines.push(`Modelo: ${details.modelo.trim()}`);
   if (details.ano?.trim()) lines.push(`Ano: ${details.ano.trim()}`);
   if (details.km?.trim()) lines.push(`KM: ${details.km.trim()}`);

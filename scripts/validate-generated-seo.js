@@ -453,8 +453,12 @@ function validatePage({
   ) {
     errors.push(`${label}: aviso de lojas somente em Esteio ausente`);
   }
-  if (variant === "buy" && city.routeOrigins?.length) {
-    if (!html.includes(`Planeje a visita saindo de ${escapeHtml(city.name)}`)) {
+  if (city.routeOrigins?.length) {
+    const routeHeading =
+      variant === "sell"
+        ? `Rotas de ${escapeHtml(city.name)} até as lojas em Esteio`
+        : `Planeje a visita saindo de ${escapeHtml(city.name)}`;
+    if (!html.includes(routeHeading)) {
       errors.push(`${label}: planejador de visita ausente no HTML estático`);
     }
     const routeCount = occurrences(
@@ -482,6 +486,18 @@ function validatePage({
     )
   ) {
     errors.push(`${label}: aviso de ausência de unidade na cidade ausente`);
+  }
+  if (
+    variant === "sell" &&
+    (!html.includes("Critérios para a Netcar comprar o seu carro") ||
+      !html.includes("No máximo 6 anos de uso") ||
+      !html.includes("Até 80.000 km rodados") ||
+      !html.includes("Primeiro emplacamento no Rio Grande do Sul") ||
+      !html.includes("Sem origem de locadora") ||
+      !html.includes("Sem passagem por leilão, sinistro, furto ou roubo") ||
+      !html.includes("Esses limites não se aplicam"))
+  ) {
+    errors.push(`${label}: critérios de compra ausentes ou incompletos`);
   }
 
   const sitemapEntry = `<loc>${canonical}</loc>`;

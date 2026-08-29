@@ -1,33 +1,86 @@
 import { useRef, useState } from "react";
 import { motion } from "@/design-system/components/utils/StaticMotion";
-import { Banknote } from "lucide-react";
+import { Banknote, CheckCircle2 } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import {
   buildWhatsAppUrl,
   quickSellWhatsAppMessage,
 } from "@/lib/whatsappMessages";
 import { openWhatsApp, trackSellEvaluation } from "@/lib/analytics";
+import { cn } from "@/lib/cn";
 
 interface QuickSellFormProps {
   /** Cidade de origem do lead, quando a página é uma landing de cidade */
   cityName?: string;
+  /** Evita repetir os critérios quando a página já os apresenta antes do formulário. */
+  showCriteria?: boolean;
+}
+
+const purchaseCriteria = [
+  "No máximo 6 anos de uso",
+  "Até 80.000 km rodados",
+  "Primeiro emplacamento no Rio Grande do Sul",
+  "Sem origem de locadora",
+  "Sem leilão, sinistro, furto ou roubo",
+] as const;
+
+export function PurchaseCriteriaCard({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "rounded-xl border border-primary/15 bg-primary/[0.04] p-4",
+        className,
+      )}
+    >
+      <p className="text-sm font-bold text-fg">
+        Para a Netcar comprar o seu carro
+      </p>
+      <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+        {purchaseCriteria.map((criterion) => (
+          <li
+            key={criterion}
+            className="flex items-start gap-2 text-sm leading-relaxed text-gray-600"
+          >
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
+            <span>{criterion}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-3 border-t border-primary/10 pt-3 text-xs leading-relaxed text-gray-500">
+        Carro financiado pode ser avaliado; o saldo para quitação entra na
+        negociação. Atender aos critérios permite iniciar a análise, mas não
+        garante a compra.
+      </p>
+      <p className="mt-3 rounded-lg bg-secondary/10 px-3 py-2 text-sm leading-relaxed text-fg">
+        <strong>Vai usar o carro na troca?</strong> Esses limites não se aplicam.
+        O veículo pode ser avaliado dentro da negociação, conforme vistoria e
+        documentação.
+      </p>
+    </div>
+  );
 }
 
 /**
  * Formulário de 3 campos que abre o WhatsApp com a avaliação pré-preenchida.
  * Zero backend: o lead cai direto na conversa do iAN com contexto completo.
  */
-export function QuickSellForm({ cityName }: QuickSellFormProps) {
+export function QuickSellForm({
+  cityName,
+  showCriteria = true,
+}: QuickSellFormProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const [modelo, setModelo] = useState("");
   const [ano, setAno] = useState("");
   const [km, setKm] = useState("");
+  const [evaluationType, setEvaluationType] = useState<
+    "direct_purchase" | "trade_in"
+  >("direct_purchase");
   const startedRef = useRef(false);
 
   const trackStart = () => {
     if (startedRef.current) return;
     startedRef.current = true;
-    trackSellEvaluation("start", cityName);
+    trackSellEvaluation("start", cityName, evaluationType);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -39,9 +92,10 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
       ano,
       km,
       cityName,
+      evaluationType,
     });
     const url = buildWhatsAppUrl(whatsapp.numero, message);
-    trackSellEvaluation("completed", cityName);
+    trackSellEvaluation("completed", cityName, evaluationType);
     openWhatsApp(url, {
       source: "form",
       intent: "sell_evaluation",
@@ -73,6 +127,63 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
         Modelo, ano e quilometragem já deixam a conversa pronta no WhatsApp.
         Fotos e documentos podem ser enviados na sequência.
       </p>
+
+      <fieldset className="mb-5">
+        <legend className="mb-2 text-sm font-bold text-fg">
+          O que você pretende fazer?
+        </legend>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {[
+            {
+              value: "direct_purchase" as const,
+              label: "Vender para a Netcar",
+              description: "Receber uma proposta de compra",
+            },
+            {
+              value: "trade_in" as const,
+              label: "Usar o carro na troca",
+              description: "Avaliar junto com outro seminovo",
+            },
+          ].map((option) => {
+            const selected = evaluationType === option.value;
+            return (
+              <label
+                key={option.value}
+                className={cn(
+                  "cursor-pointer rounded-xl border px-4 py-3 transition-colors",
+                  selected
+                    ? "border-secondary bg-secondary/10 text-fg"
+                    : "border-gray-200 bg-white text-gray-600 hover:border-secondary/40",
+                )}
+              >
+                <input
+                  type="radio"
+                  name="evaluation-type"
+                  value={option.value}
+                  checked={selected}
+                  onChange={() => setEvaluationType(option.value)}
+                  className="sr-only"
+                />
+                <span className="block text-sm font-bold">{option.label}</span>
+                <span className="mt-0.5 block text-xs opacity-70">
+                  {option.description}
+                </span>
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
+
+      {showCriteria && evaluationType === "direct_purchase" && (
+        <PurchaseCriteriaCard className="mb-5" />
+      )}
+      {evaluationType === "trade_in" && (
+        <p className="mb-5 rounded-xl border border-secondary/20 bg-secondary/10 p-4 text-sm leading-relaxed text-fg">
+          Na troca, os limites de idade, quilometragem, primeiro emplacamento e
+          histórico da compra direta não se aplicam. O veículo será avaliado na
+          negociação, conforme vistoria e documentação.
+        </p>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
         <input
@@ -127,8 +238,8 @@ export function QuickSellForm({ cityName }: QuickSellFormProps) {
       </button>
 
       <p className="text-xs text-gray-400 mt-3 text-center">
-        Compramos nacionais até 7 anos, origem RS, sem passagem por leilão.
-        Aceitamos financiados.
+        A proposta final depende da vistoria, dos documentos e do interesse da
+        loja no veículo.
       </p>
     </motion.form>
   );
