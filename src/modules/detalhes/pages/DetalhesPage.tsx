@@ -491,7 +491,7 @@ function DetalheFloatingWhatsApp({
   if (isSold) {
     return (
       <FloatingPortal>
-        <div className="pointer-events-none fixed inset-x-0 bottom-3 z-[60] flex justify-center px-3 lg:hidden">
+        <div className="pointer-events-none fixed inset-x-0 bottom-3 z-[60] flex justify-center px-3">
           <div className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[#00283C]/15 bg-white/95 px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.16)] backdrop-blur-md">
             <p className="mb-2 text-center text-sm font-black text-[#00283C]">
               Este seminovo já foi vendido
@@ -536,7 +536,7 @@ function DetalheFloatingWhatsApp({
 
   return (
     <FloatingPortal>
-      <div className="pointer-events-none fixed inset-x-0 bottom-2 z-[60] flex justify-center px-2 md:bottom-3 md:px-3 lg:hidden">
+      <div className="pointer-events-none fixed inset-x-0 bottom-2 z-[60] flex justify-center px-2 md:bottom-3 md:px-3">
         <div className="pointer-events-auto w-full max-w-[22rem] md:max-w-sm">
           <VehicleWhatsAppCard
             vehicle={{
