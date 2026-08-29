@@ -216,6 +216,31 @@ export function trackStockFilterApply(params: {
   });
 }
 
+/** Caminhos usados para continuar a pesquisa a partir da ficha do carro. */
+export function trackVehicleDiscoveryClick(params: {
+  source: "comparison_block" | "breadcrumb";
+  targetType:
+    | "inventory"
+    | "marca"
+    | "modelo"
+    | "categoria"
+    | "faixa"
+    | "combustivel";
+  targetSlug: string;
+  targetName: string;
+  vehicleId: string | number;
+  vehicleName: string;
+}): void {
+  trackBusinessEvent("vehicle_discovery_click", {
+    discovery_source: params.source,
+    discovery_target_type: params.targetType,
+    discovery_target_slug: params.targetSlug,
+    discovery_target_name: params.targetName,
+    vehicle_id: String(params.vehicleId),
+    vehicle_name: params.vehicleName,
+  });
+}
+
 /** Interações do comparador são sinais de consideração, nunca conversões Ads. */
 export function trackCompareInteraction(params: {
   action:

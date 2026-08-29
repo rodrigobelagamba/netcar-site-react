@@ -13,6 +13,7 @@ interface VehicleSchemaOrgProps {
   price: number;
   placa?: string;
   isSold?: boolean;
+  brandLandingSlug?: string;
 }
 
 /**
@@ -31,6 +32,7 @@ export function VehicleSchemaOrg({
   price,
   placa,
   isSold = false,
+  brandLandingSlug,
 }: VehicleSchemaOrgProps) {
   useEffect(() => {
     const baseUrl = CANONICAL_ORIGIN;
@@ -126,6 +128,52 @@ export function VehicleSchemaOrg({
     script.textContent = JSON.stringify(schema, null, 2);
     document.head.appendChild(script);
 
+    const breadcrumbItems = [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Início",
+        item: `${baseUrl}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Seminovos",
+        item: `${baseUrl}/seminovos`,
+      },
+      ...(brandLandingSlug
+        ? [
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: marca,
+              item: `${baseUrl}/comprar-${brandLandingSlug}`,
+            },
+          ]
+        : []),
+      {
+        "@type": "ListItem",
+        position: brandLandingSlug ? 4 : 3,
+        name: vehicleName,
+        item: currentUrl,
+      },
+    ];
+
+    const breadcrumbScript = document.createElement("script");
+    breadcrumbScript.type = "application/ld+json";
+    breadcrumbScript.setAttribute("data-schema", "vehicle-breadcrumbs");
+    breadcrumbScript.textContent = JSON.stringify(
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "@id": `${currentUrl}#breadcrumb`,
+        itemListElement: breadcrumbItems,
+      },
+      null,
+      2,
+    );
+    document.head.appendChild(breadcrumbScript);
+
     return () => {
       const scriptToRemove = document.querySelector(
         'script[type="application/ld+json"][data-schema="vehicle"]',
@@ -133,6 +181,11 @@ export function VehicleSchemaOrg({
       if (scriptToRemove) {
         scriptToRemove.remove();
       }
+      document
+        .querySelector(
+          'script[type="application/ld+json"][data-schema="vehicle-breadcrumbs"]',
+        )
+        ?.remove();
     };
   }, [
     marca,
@@ -146,6 +199,7 @@ export function VehicleSchemaOrg({
     price,
     placa,
     isSold,
+    brandLandingSlug,
   ]);
 
   return null;

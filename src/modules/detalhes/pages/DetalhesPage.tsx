@@ -33,6 +33,7 @@ import {
 } from "@/lib/whatsappMessages";
 import {
   trackCompareInteraction,
+  trackVehicleDiscoveryClick,
   trackViewItem,
   type WhatsAppClickSource,
 } from "@/lib/analytics";
@@ -1581,17 +1582,59 @@ export function DetalhesPage() {
     isPending,
   } = useVehicleQuery(slug);
 
-  const modelLanding = useMemo(
-    () =>
-      vehicle
-        ? landingPages.find(
-            (landing) =>
-              landing.type === "modelo" &&
-              landing.indexable &&
-              matchesLandingFilters(vehicle, landing.filters),
-          )
-        : undefined,
-    [vehicle],
+  const vehicleDiscoveryLandings = useMemo(() => {
+    if (!vehicle) return [];
+
+    const matching = landingPages.filter(
+      (landing) =>
+        landing.indexable &&
+        landing.count > 1 &&
+        matchesLandingFilters(vehicle, landing.filters),
+    );
+
+    const firstOfType = (type: (typeof landingPages)[number]["type"]) =>
+      matching.find((landing) => landing.type === type);
+
+    const priceLanding = matching
+      .filter((landing) => landing.type === "faixa")
+      .sort((left, right) => {
+        const leftMin = left.filters.precoMin ?? 0;
+        const leftMax = left.filters.precoMax ?? Number.POSITIVE_INFINITY;
+        const rightMin = right.filters.precoMin ?? 0;
+        const rightMax = right.filters.precoMax ?? Number.POSITIVE_INFINITY;
+        return leftMax - leftMin - (rightMax - rightMin);
+      })[0];
+
+    return [
+      firstOfType("modelo"),
+      firstOfType("marca"),
+      firstOfType("categoria"),
+      priceLanding,
+    ].filter(
+      (landing): landing is (typeof landingPages)[number] => Boolean(landing),
+    );
+  }, [vehicle]);
+
+  const discoveryLabel = (landing: (typeof landingPages)[number]) => {
+    if (landing.type === "modelo" || landing.type === "marca") {
+      return `Outros ${landing.name}`;
+    }
+
+    if (landing.type === "categoria") {
+      const categoryLabels: Record<string, string> = {
+        suv: "Outros SUVs",
+        hatch: "Outros hatches",
+        sedan: "Outros sedãs",
+      };
+      return categoryLabels[landing.slug] || `Outros ${landing.name}`;
+    }
+
+    const priceLabel = landing.name.replace(/^Carros\s+/i, "");
+    return `${priceLabel.charAt(0).toUpperCase()}${priceLabel.slice(1)}`;
+  };
+
+  const brandLanding = vehicleDiscoveryLandings.find(
+    (landing) => landing.type === "marca",
   );
 
   // A troca do placeholder pelos dados reais altera bastante a altura da rota.
@@ -1961,8 +2004,77 @@ export function DetalhesPage() {
           price={vehicle.price || 0}
           placa={vehicle.placa}
           isSold={isSold}
+          brandLandingSlug={brandLanding?.slug}
         />
       )}
+      <nav
+        aria-label="Navegação estrutural"
+        className="border-b border-slate-100 bg-white"
+      >
+        <ol className="container-main flex items-center gap-1.5 overflow-hidden px-4 py-3 text-xs text-muted-foreground sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <li className="shrink-0">
+            <Link to="/" className="transition-colors hover:text-primary">
+              Início
+            </Link>
+          </li>
+          <li aria-hidden className="shrink-0">
+            <ChevronRight className="h-3.5 w-3.5" />
+          </li>
+          <li className="shrink-0">
+            <Link
+              to="/seminovos"
+              onClick={() =>
+                trackVehicleDiscoveryClick({
+                  source: "breadcrumb",
+                  targetType: "inventory",
+                  targetSlug: "seminovos",
+                  targetName: "Seminovos",
+                  vehicleId: vehicle.id,
+                  vehicleName: vehicleLabel,
+                })
+              }
+              className="transition-colors hover:text-primary"
+            >
+              Seminovos
+            </Link>
+          </li>
+          {brandLanding && (
+            <>
+              <li aria-hidden className="shrink-0">
+                <ChevronRight className="h-3.5 w-3.5" />
+              </li>
+              <li className="shrink-0">
+                <Link
+                  to="/comprar-{$landingSlug}"
+                  params={{ landingSlug: brandLanding.slug }}
+                  onClick={() =>
+                    trackVehicleDiscoveryClick({
+                      source: "breadcrumb",
+                      targetType: "marca",
+                      targetSlug: brandLanding.slug,
+                      targetName: brandLanding.name,
+                      vehicleId: vehicle.id,
+                      vehicleName: vehicleLabel,
+                    })
+                  }
+                  className="transition-colors hover:text-primary"
+                >
+                  {brandLanding.name}
+                </Link>
+              </li>
+            </>
+          )}
+          <li aria-hidden className="shrink-0">
+            <ChevronRight className="h-3.5 w-3.5" />
+          </li>
+          <li
+            aria-current="page"
+            className="min-w-0 truncate font-semibold text-[#00283C]"
+          >
+            {modeloCompleto}
+          </li>
+        </ol>
+      </nav>
       {/* Hero Section */}
       <section className="relative w-full max-w-full overflow-hidden py-0 pb-0 pt-0 lg:min-h-[820px] lg:pt-0 xl:min-h-[820px] 2xl:min-h-[830px] 3xl:min-h-[850px] 4xl:min-h-[1200px] 5xl:min-h-[1500px] 6xl:min-h-[1900px]">
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
@@ -2223,33 +2335,64 @@ export function DetalhesPage() {
         </div>
       </section>
 
-      {modelLanding && (
-        <section className="pb-10 sm:pb-12">
-          <div className="container-main flex flex-wrap items-center gap-3 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-            <span className="text-sm font-semibold text-muted-foreground">
-              Continue pesquisando:
-            </span>
-            <Link
-              to="/comprar-{$landingSlug}"
-              params={{ landingSlug: modelLanding.slug }}
-              className="rounded-full border border-[#00283C]/15 bg-white px-4 py-2 text-sm font-bold text-[#00283C] hover:border-primary hover:text-primary"
-            >
-              Ver outros {modelLanding.name}
-            </Link>
-            <Link
-              to="/comparar"
-              search={{ veiculo: String(vehicle.id) }}
-              onClick={() =>
-                trackCompareInteraction({
-                  action: "from_vehicle",
-                  vehicleIds: [vehicle.id],
-                  vehicleNames: [vehicleLabel],
-                })
-              }
-              className="rounded-full bg-[#00283C] px-4 py-2 text-sm font-bold text-white hover:bg-[#00435a]"
-            >
-              Comparar carros lado a lado
-            </Link>
+      {vehicleDiscoveryLandings.length > 0 && (
+        <section className="pt-8 pb-10 sm:pt-10 sm:pb-12">
+          <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+            <div className="grid gap-5 rounded-3xl border border-[#00283C]/10 bg-white px-5 py-5 shadow-[0_12px_35px_rgba(0,40,60,0.06)] sm:px-6 sm:py-6 lg:grid-cols-[minmax(250px,0.75fr)_minmax(0,1.6fr)] lg:items-center lg:gap-8">
+              <div className="flex items-start gap-3.5">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#E8F8F4] text-[#087A6A]">
+                  <ArrowLeftRight className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#087A6A]">
+                    Outras opções
+                  </p>
+                  <h2 className="mt-1 text-xl font-black leading-tight text-[#00283C]">
+                    Continue comparando
+                  </h2>
+                  <p className="mt-1.5 text-sm leading-relaxed text-[#536273]">
+                    Veja carros parecidos sem começar a busca de novo.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2.5 lg:justify-end">
+                {vehicleDiscoveryLandings.map((landing) => (
+                  <Link
+                    key={landing.slug}
+                    to="/comprar-{$landingSlug}"
+                    params={{ landingSlug: landing.slug }}
+                    onClick={() =>
+                      trackVehicleDiscoveryClick({
+                        source: "comparison_block",
+                        targetType: landing.type,
+                        targetSlug: landing.slug,
+                        targetName: landing.name,
+                        vehicleId: vehicle.id,
+                        vehicleName: vehicleLabel,
+                      })
+                    }
+                    className="rounded-full border border-[#00283C]/15 bg-[#F8FAFA] px-4 py-2.5 text-sm font-bold text-[#00283C] transition-all hover:-translate-y-0.5 hover:border-[#087A6A] hover:bg-[#F0FBF8] hover:text-[#087A6A]"
+                  >
+                    {discoveryLabel(landing)}
+                  </Link>
+                ))}
+                <Link
+                  to="/comparar"
+                  search={{ veiculo: String(vehicle.id) }}
+                  onClick={() =>
+                    trackCompareInteraction({
+                      action: "from_vehicle",
+                      vehicleIds: [vehicle.id],
+                      vehicleNames: [vehicleLabel],
+                    })
+                  }
+                  className="rounded-full bg-[#00283C] px-4 py-2.5 text-sm font-bold text-white shadow-[0_7px_18px_rgba(0,40,60,0.18)] transition-all hover:-translate-y-0.5 hover:bg-[#00435a]"
+                >
+                  Comparar lado a lado
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       )}

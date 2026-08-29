@@ -265,6 +265,13 @@ expect(
   "interações do comparador precisam ser informativas, sem conversão Ads/Meta",
 );
 expect(
+  analytics.includes("export function trackVehicleDiscoveryClick") &&
+    analytics.includes('trackBusinessEvent("vehicle_discovery_click"') &&
+    analytics.includes("discovery_target_type") &&
+    analytics.includes("discovery_source"),
+  "atalhos da ficha não registram a descoberta de marca/categoria/faixa",
+);
+expect(
   waTracking.includes("getOrCreateClickCode") &&
     waTracking.includes("appendWaRefToUrl") &&
     waTracking.includes("fbclid: ref?.fbclid") &&
@@ -310,9 +317,10 @@ expect(
   "renderer de veículo não separa JSON inválido (503) de ausência confirmada (410)",
 );
 expect(
-  vehicleSeoRenderer.includes("function netcarVehicleModelLanding") &&
-    vehicleSeoRenderer.includes("empty($landing['indexable'])"),
-  "ficha estática liga para hub de modelo noindex",
+  vehicleSeoRenderer.includes("function netcarVehicleDiscoveryLandings") &&
+    vehicleSeoRenderer.includes("empty($landing['indexable'])") &&
+    vehicleSeoRenderer.includes("intval($landing['count'] ?? 0) <= 1"),
+  "ficha estática liga para landing sem estoque indexável",
 );
 
 for (const path of ["public/404.html", "public/410.html"]) {

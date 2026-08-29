@@ -107,37 +107,83 @@ function humanizeVehicleSlug($slug) {
         : ucwords($s);
 }
 
-/** Hub permanente do modelo, gerado no mesmo build a partir do estoque. */
-function netcarVehicleModelLanding($vehicle) {
+function netcarNormalizeLandingValue($value) {
+    $value = strtoupper(trim((string) $value));
+    if (function_exists('iconv')) {
+        $ascii = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
+        if ($ascii !== false) $value = $ascii;
+    }
+    return trim(preg_replace('/[^A-Z0-9]+/', ' ', $value));
+}
+
+function netcarVehicleMatchesLanding($vehicle, $filters) {
+    if (!is_array($vehicle) || !is_array($filters)) return false;
+
+    $brand = netcarNormalizeLandingValue($vehicle['marca'] ?? '');
+    $model = str_replace(' ', '', netcarNormalizeLandingValue($vehicle['modelo'] ?? ''));
+    $category = netcarNormalizeLandingValue($vehicle['categoria'] ?? '');
+    $gearbox = netcarNormalizeLandingValue($vehicle['cambio'] ?? '');
+    $fuel = netcarNormalizeLandingValue($vehicle['combustivel'] ?? '');
+    $price = floatval($vehicle['valor'] ?? 0);
+
+    if (isset($filters['marca']) && $brand !== netcarNormalizeLandingValue($filters['marca'])) return false;
+    if (isset($filters['modelo'])) {
+        $wantedModel = str_replace(' ', '', netcarNormalizeLandingValue($filters['modelo']));
+        if ($wantedModel === '' || strpos($model, $wantedModel) === false) return false;
+    }
+    if (isset($filters['categoria']) && $category !== netcarNormalizeLandingValue($filters['categoria'])) return false;
+    if (isset($filters['cambio']) && $gearbox !== netcarNormalizeLandingValue($filters['cambio'])) return false;
+    if (isset($filters['combustivel']) && $fuel !== netcarNormalizeLandingValue($filters['combustivel'])) return false;
+    if (isset($filters['precoMin']) && $price < floatval($filters['precoMin'])) return false;
+    if (isset($filters['precoMax']) && $price > floatval($filters['precoMax'])) return false;
+    return true;
+}
+
+/** Atalhos comerciais da ficha para páginas que têm outras ofertas reais. */
+function netcarVehicleDiscoveryLandings($vehicle) {
     $file = __DIR__ . '/seo/landings.json';
-    if (!is_readable($file) || !is_array($vehicle)) return null;
+    if (!is_readable($file) || !is_array($vehicle)) return array();
     $landings = json_decode((string) @file_get_contents($file), true);
-    if (!is_array($landings)) return null;
-    $brand = strtoupper(trim(isset($vehicle['marca']) ? (string) $vehicle['marca'] : ''));
-    $model = strtoupper(trim(isset($vehicle['modelo']) ? (string) $vehicle['modelo'] : ''));
-    $modelCompact = preg_replace('/[^A-Z0-9]/', '', $model);
+    if (!is_array($landings)) return array();
+
+    $matching = array();
     foreach ($landings as $landing) {
         if (
             !is_array($landing) ||
-            ($landing['type'] ?? '') !== 'modelo' ||
-            empty($landing['indexable'])
+            empty($landing['indexable']) ||
+            intval($landing['count'] ?? 0) <= 1
         ) continue;
         $filters = isset($landing['filters']) && is_array($landing['filters'])
             ? $landing['filters']
             : array();
-        $wantedBrand = strtoupper(trim(isset($filters['marca']) ? (string) $filters['marca'] : ''));
-        $wantedModel = strtoupper(trim(isset($filters['modelo']) ? (string) $filters['modelo'] : ''));
-        $wantedModelCompact = preg_replace('/[^A-Z0-9]/', '', $wantedModel);
-        if (
-            $wantedBrand !== '' &&
-            $wantedModelCompact !== '' &&
-            $brand === $wantedBrand &&
-            strpos($modelCompact, $wantedModelCompact) !== false
-        ) {
-            return $landing;
+        if (netcarVehicleMatchesLanding($vehicle, $filters)) $matching[] = $landing;
+    }
+
+    $selected = array();
+    foreach (array('modelo', 'marca', 'categoria') as $type) {
+        foreach ($matching as $landing) {
+            if (($landing['type'] ?? '') === $type) {
+                $selected[] = $landing;
+                break;
+            }
         }
     }
-    return null;
+
+    $priceLandings = array_values(array_filter($matching, function($landing) {
+        return ($landing['type'] ?? '') === 'faixa';
+    }));
+    usort($priceLandings, function($left, $right) {
+        $leftFilters = $left['filters'] ?? array();
+        $rightFilters = $right['filters'] ?? array();
+        $leftWidth = floatval($leftFilters['precoMax'] ?? PHP_INT_MAX) - floatval($leftFilters['precoMin'] ?? 0);
+        $rightWidth = floatval($rightFilters['precoMax'] ?? PHP_INT_MAX) - floatval($rightFilters['precoMin'] ?? 0);
+        return $leftWidth <=> $rightWidth;
+    });
+    if (!empty($priceLandings)) {
+        $selected[] = $priceLandings[0];
+    }
+
+    return $selected;
 }
 
 // Há somente três estados seguros:
@@ -228,7 +274,14 @@ if ($vehicleMissing) {
 }
 
 $vehicle = $data['data'][0];
-$modelLanding = netcarVehicleModelLanding($vehicle);
+$discoveryLandings = netcarVehicleDiscoveryLandings($vehicle);
+$brandLanding = null;
+foreach ($discoveryLandings as $candidateLanding) {
+    if (($candidateLanding['type'] ?? '') === 'marca') {
+        $brandLanding = $candidateLanding;
+        break;
+    }
+}
 
 // Prepara dados para meta tags
 $marca = isset($vehicle['marca']) ? $vehicle['marca'] : '';
@@ -747,6 +800,40 @@ if ($placa) {
       <?php endif; ?>
     }
     </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "@id": "<?php echo htmlspecialchars($pageUrl, ENT_QUOTES, 'UTF-8'); ?>#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Início",
+          "item": "https://www.netcarmultimarcas.com.br/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Seminovos",
+          "item": "https://www.netcarmultimarcas.com.br/seminovos"
+        }<?php if (is_array($brandLanding) && !empty($brandLanding['slug'])): ?>,
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "<?php echo htmlspecialchars((string) $brandLanding['name'], ENT_QUOTES, 'UTF-8'); ?>",
+          "item": "https://www.netcarmultimarcas.com.br/comprar-<?php echo rawurlencode((string) $brandLanding['slug']); ?>"
+        }<?php endif; ?>,
+        {
+          "@type": "ListItem",
+          "position": <?php echo is_array($brandLanding) ? 4 : 3; ?>,
+          "name": "<?php echo htmlspecialchars($vehicleName, ENT_QUOTES, 'UTF-8'); ?>",
+          "item": "<?php echo htmlspecialchars($pageUrl, ENT_QUOTES, 'UTF-8'); ?>"
+        }
+      ]
+    }
+    </script>
     
     <?php if (!$isBot): ?>
     <!-- Redireciona para React app após carregar meta tags (apenas para usuários normais) -->
@@ -773,6 +860,14 @@ if ($placa) {
     <!-- Bot/crawler: conteúdo real da ficha (antes eram 4 linhas, tratadas como
          página vazia pelo Google) + links internos para estoque e cidades. -->
     <div style="padding: 20px; font-family: Arial, sans-serif;">
+        <nav aria-label="Navegação estrutural">
+            <a href="/">Início</a> &rsaquo;
+            <a href="/seminovos">Seminovos</a> &rsaquo;
+            <?php if (is_array($brandLanding) && !empty($brandLanding['slug'])): ?>
+            <a href="/comprar-<?php echo rawurlencode((string) $brandLanding['slug']); ?>"><?php echo htmlspecialchars((string) $brandLanding['name'], ENT_QUOTES, 'UTF-8'); ?></a> &rsaquo;
+            <?php endif; ?>
+            <span><?php echo htmlspecialchars($vehicleName, ENT_QUOTES, 'UTF-8'); ?></span>
+        </nav>
         <h1><?php echo htmlspecialchars($vehicleName, ENT_QUOTES, 'UTF-8'); ?></h1>
         <?php if ($isSold): ?>
         <p><strong>Este veículo já foi vendido.</strong> Veja abaixo outras opções
@@ -833,9 +928,9 @@ if ($placa) {
         <h2>Continue navegando</h2>
         <ul>
             <li><a href="<?php echo htmlspecialchars($redirectUrl, ENT_QUOTES, 'UTF-8'); ?>">Ficha completa com todas as fotos</a></li>
-            <?php if (is_array($modelLanding) && !empty($modelLanding['slug']) && !empty($modelLanding['name'])): ?>
-            <li><a href="/comprar-<?php echo rawurlencode((string) $modelLanding['slug']); ?>">Ver outros <?php echo htmlspecialchars((string) $modelLanding['name'], ENT_QUOTES, 'UTF-8'); ?></a></li>
-            <?php endif; ?>
+            <?php foreach ($discoveryLandings as $landing): ?>
+            <li><a href="/comprar-<?php echo rawurlencode((string) $landing['slug']); ?>">Ver <?php echo htmlspecialchars((string) $landing['name'], ENT_QUOTES, 'UTF-8'); ?></a></li>
+            <?php endforeach; ?>
             <li><a href="/comparar">Comparar carros seminovos lado a lado</a></li>
             <li><a href="/seminovos">Estoque completo de seminovos</a></li>
             <li><a href="/seminovos-automaticos">Seminovos automáticos</a></li>
