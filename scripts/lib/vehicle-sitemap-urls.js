@@ -1,5 +1,7 @@
 const SITE_URL = "https://www.netcarmultimarcas.com.br";
-const API_URL = `${SITE_URL}/api/v1/veiculos.php?limit=500`;
+const API_URL =
+  process.env.NETCAR_VEHICLE_SITEMAP_API_URL ||
+  `${SITE_URL}/api/v1/veiculos.php?limit=500`;
 
 function maskPlate(placa) {
   if (!placa) return "";

@@ -1663,6 +1663,16 @@ async function getVehicleUrls() {
     // sem sitemap local; tenta produção
   }
 
+  const stockUrls = stock
+    .filter((vehicle) => vehicle?.id && vehicle?.modelo)
+    .map((vehicle) => `${SITE}/veiculo/${generateVehicleSlug(vehicle)}`);
+  if (stockUrls.length > 0) {
+    console.warn(
+      `Aviso: sitemap sem veículos; preservando ${stockUrls.length} URLs pelo estoque de contingência.`,
+    );
+    return stockUrls;
+  }
+
   let productionUrls = [];
   try {
     const res = await fetch(`${SITE}/sitemap.xml`, {
