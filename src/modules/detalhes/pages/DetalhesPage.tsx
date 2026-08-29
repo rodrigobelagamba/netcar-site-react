@@ -79,6 +79,35 @@ const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
 const LOW_MILEAGE_HIGHLIGHT_THRESHOLD_KM = 10_000;
 
+type EngineVehicle = {
+  modelo?: string;
+  name?: string;
+  motor?: string;
+  opcionais?: Array<{ tag?: string; descricao?: string } | string>;
+};
+
+function hasTurboEngine(vehicle?: EngineVehicle | null): boolean {
+  if (!vehicle) return false;
+
+  const vehicleName = `${vehicle.modelo || ""} ${vehicle.name || ""}`;
+  if (/\bturbo\b/i.test(vehicleName)) return true;
+
+  return (vehicle.opcionais || []).some((optional) => {
+    const value =
+      typeof optional === "string"
+        ? optional
+        : `${optional.tag || ""} ${optional.descricao || ""}`;
+    return normalizeVehicleFeatureTag(value).includes("motor_turbo");
+  });
+}
+
+function formatEngineDisplacement(vehicle?: EngineVehicle | null): string {
+  const displacement = String(vehicle?.motor || "").trim();
+  if (!displacement || !hasTurboEngine(vehicle)) return displacement;
+  if (/\bturbo\b/i.test(displacement)) return displacement;
+  return `${displacement} TURBO`;
+}
+
 const FabricaDeValor = React.lazy(() =>
   import("@/design-system/components/patterns/FabricaDeValor").then(
     (module) => ({
@@ -1638,7 +1667,7 @@ export function DetalhesPage() {
   const year = vehicleData?.year || "";
   const combustivel = vehicleData?.combustivel || "";
   const cambio = vehicleData?.cambio || "";
-  const motor = vehicle?.motor || "";
+  const motor = formatEngineDisplacement(vehicle);
   const potencia = vehicle?.potencia || "";
   const images = vehicleData?.images || [];
 
@@ -2357,7 +2386,10 @@ function DetailsSection({
     vehicle.cor && { label: "Cor:", value: vehicle.cor },
     vehicle.portas && { label: "Portas:", value: `${vehicle.portas}` },
     vehicle.placa && { label: "Placa:", value: maskPlate(vehicle.placa) },
-    vehicle.motor && { label: "Motor:", value: vehicle.motor },
+    vehicle.motor && {
+      label: "Motor:",
+      value: formatEngineDisplacement(vehicle),
+    },
     vehicle.potencia && { label: "Potência:", value: `${vehicle.potencia} cv` },
     vehicle.combustivel && {
       label: "Combustível:",
