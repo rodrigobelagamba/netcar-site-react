@@ -282,7 +282,7 @@ function RootComponent() {
   const isLaudoPage = location.pathname.startsWith("/laudo/");
 
   return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
+    <div className="flex min-h-screen max-w-full flex-col overflow-x-clip">
       <a
         href="#conteudo-principal"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[10000] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-white focus:outline-none"
@@ -297,13 +297,13 @@ function RootComponent() {
         </div>
       ) : null}
       <div
-        className={`relative flex-1 overflow-x-hidden max-w-full print:min-h-0 print:pt-0 ${
+        className={`relative max-w-full flex-1 overflow-x-clip print:min-h-0 print:pt-0 ${
           isLaudoPage ? "min-h-[100dvh] pt-0" : "min-h-[100dvh] pt-0 sm:pt-20"
         }`}
       >
         <div
           key={location.pathname}
-          className="h-full overflow-x-hidden max-w-full"
+          className="h-full max-w-full overflow-x-clip"
           id="conteudo-principal"
           tabIndex={-1}
         >

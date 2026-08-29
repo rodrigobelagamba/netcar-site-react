@@ -1481,7 +1481,7 @@ function LoadingVehicleDetail({ slug }: { slug: string }) {
   const modeloCompleto = vehicleLabelFromSlug(slug) || "Seminovo";
 
   return (
-    <main className="max-w-full overflow-x-hidden pb-40" aria-busy="true">
+    <main className="max-w-full overflow-x-clip pb-40" aria-busy="true">
       <section className="relative w-full min-h-[70vh] overflow-hidden py-8 lg:py-12">
         <div className="container-main grid grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div className="order-2 space-y-4 lg:order-1">
@@ -1891,7 +1891,7 @@ export function DetalhesPage() {
           : []),
       ];
   return (
-    <main className="overflow-x-hidden max-w-full pb-40">
+    <main className="max-w-full overflow-x-clip pb-40">
       {vehicle && (
         <VehicleSchemaOrg
           marca={marca}
@@ -2654,7 +2654,7 @@ function DetailsSection({
           </div>
 
           {/* Sticky Sidebar */}
-          <div className="order-2 lg:sticky lg:top-8 lg:self-start">
+          <div className="order-2 lg:sticky lg:top-24 lg:self-start">
             <CTASidebar
               vehicle={vehicle}
               modeloCompleto={modeloCompleto}
