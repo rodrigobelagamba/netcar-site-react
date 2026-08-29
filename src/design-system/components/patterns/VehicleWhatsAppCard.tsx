@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { ArrowLeftRight, MessageCircle } from "lucide-react";
 import type { VehicleFocusPayload } from "./VehicleCard";
 import { optimizeStockImage } from "@/lib/images";
 
@@ -6,8 +6,11 @@ interface VehicleWhatsAppCardProps {
   vehicle: VehicleFocusPayload;
   href: string;
   source: string;
+  tradeHref?: string;
+  tradeSource?: string;
   eyebrow?: string;
   ctaLabel?: string;
+  tradeCtaLabel?: string;
   className?: string;
 }
 
@@ -16,8 +19,11 @@ export function VehicleWhatsAppCard({
   vehicle,
   href,
   source,
+  tradeHref,
+  tradeSource = `${source}_trade`,
   eyebrow = "Último que você viu",
   ctaLabel = "Falar deste carro",
+  tradeCtaLabel = "Avaliar meu carro na troca deste",
   className = "",
 }: VehicleWhatsAppCardProps) {
   return (
@@ -46,19 +52,36 @@ export function VehicleWhatsAppCard({
           </p>
         </div>
       </div>
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-wa-source={source}
-        data-wa-intent="vehicle_inquiry"
-        data-wa-vehicle-id={vehicle.id}
-        data-wa-vehicle-name={vehicle.label}
-        className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#087A37] px-3 py-2 text-xs font-black text-white shadow-[0_4px_12px_rgba(8,122,55,0.28)] transition-colors hover:bg-[#075E54] md:gap-2 md:rounded-xl md:px-4 md:py-2.5 md:text-sm md:shadow-[0_6px_18px_rgba(8,122,55,0.30)]"
-      >
-        <MessageCircle className="h-3.5 w-3.5 md:h-4 md:w-4" />
-        {ctaLabel}
-      </a>
+      <div className={tradeHref ? "grid grid-cols-2 gap-1.5 md:gap-2" : ""}>
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-wa-source={source}
+          data-wa-intent="vehicle_inquiry"
+          data-wa-vehicle-id={vehicle.id}
+          data-wa-vehicle-name={vehicle.label}
+          className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg bg-[#087A37] px-2 py-2 text-center text-[11px] font-black leading-tight text-white shadow-[0_4px_12px_rgba(8,122,55,0.28)] transition-colors hover:bg-[#075E54] md:min-h-12 md:gap-2 md:rounded-xl md:px-3 md:py-2.5 md:text-xs md:shadow-[0_6px_18px_rgba(8,122,55,0.30)]"
+        >
+          <MessageCircle className="h-3.5 w-3.5 shrink-0 md:h-4 md:w-4" />
+          <span>{ctaLabel}</span>
+        </a>
+        {tradeHref && (
+          <a
+            href={tradeHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-wa-source={tradeSource}
+            data-wa-intent="trade_in"
+            data-wa-vehicle-id={vehicle.id}
+            data-wa-vehicle-name={vehicle.label}
+            className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg bg-[#00283C] px-2 py-2 text-center text-[11px] font-black leading-tight text-white shadow-[0_4px_12px_rgba(0,40,60,0.22)] transition-colors hover:bg-[#00435A] md:min-h-12 md:gap-2 md:rounded-xl md:px-3 md:py-2.5 md:text-xs"
+          >
+            <ArrowLeftRight className="h-3.5 w-3.5 shrink-0 md:h-4 md:w-4" />
+            <span>{tradeCtaLabel}</span>
+          </a>
+        )}
+      </div>
     </div>
   );
 }

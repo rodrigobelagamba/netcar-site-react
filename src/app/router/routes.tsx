@@ -470,10 +470,17 @@ const politicaEditorialRoute = createRoute({
   component: PoliticaEditorialPage,
 });
 
+type ComparadorRouteSearch = {
+  veiculo?: string;
+};
+
 const comparadorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/comparar",
   component: ComparadorPage,
+  validateSearch: (search: Record<string, unknown>): ComparadorRouteSearch => ({
+    veiculo: (search.veiculo as string) || undefined,
+  }),
 });
 
 const regionsHubRoute = createRoute({

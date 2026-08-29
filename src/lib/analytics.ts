@@ -218,7 +218,14 @@ export function trackStockFilterApply(params: {
 
 /** Interações do comparador são sinais de consideração, nunca conversões Ads. */
 export function trackCompareInteraction(params: {
-  action: "select" | "remove" | "preset" | "view_details";
+  action:
+    | "select"
+    | "remove"
+    | "preset"
+    | "view_details"
+    | "whatsapp"
+    | "from_vehicle"
+    | "preselect";
   vehicleIds: Array<string | number>;
   vehicleNames?: string[];
   preset?: string;

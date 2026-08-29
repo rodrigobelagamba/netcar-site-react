@@ -1497,7 +1497,7 @@ const comparatorBody = `
     <ol>
       <li>Busque uma marca ou um modelo e selecione o primeiro carro.</li>
       <li>Adicione outros veículos que resolvam o mesmo tipo de uso.</li>
-      <li>Compare ficha e preço; depois abra os detalhes e confirme a disponibilidade.</li>
+      <li>Compare ficha e preço; depois abra os detalhes ou envie a comparação pronta para a equipe da Netcar.</li>
     </ol>
     ${stockShowcase({
       heading: "Carros disponíveis para comparar agora",

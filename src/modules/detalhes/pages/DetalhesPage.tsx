@@ -31,8 +31,11 @@ import {
   siteWhatsAppMessage,
   vehicleWhatsAppMessages,
 } from "@/lib/whatsappMessages";
-import type { WhatsAppClickSource } from "@/lib/analytics";
-import { trackViewItem } from "@/lib/analytics";
+import {
+  trackCompareInteraction,
+  trackViewItem,
+  type WhatsAppClickSource,
+} from "@/lib/analytics";
 import icon1 from "@/assets/images/icon-1.svg";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
 import type { VehicleCardProps } from "@/design-system/components/patterns/VehicleCard";
@@ -416,12 +419,33 @@ function ContactButton({
         </div>
       ) : null}
 
-      <TradeInTextLink
-        href={tradeHref}
-        modeloCompleto={modeloCompleto}
-        vehicleId={vehicleId}
-        className="justify-center text-center"
-      />
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+        <TradeInTextLink
+          href={tradeHref}
+          modeloCompleto={modeloCompleto}
+          vehicleId={vehicleId}
+          className="justify-center text-center"
+        />
+        {vehicleId != null && (
+          <Link
+            to="/comparar"
+            search={{ veiculo: String(vehicleId) }}
+            onClick={() =>
+              trackCompareInteraction({
+                action: "from_vehicle",
+                vehicleIds: [vehicleId],
+                vehicleNames: [label],
+              })
+            }
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#00283C] transition-colors hover:text-[#5CD29D]"
+          >
+            <span className="underline underline-offset-4">
+              Comparar com outro carro
+            </span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        )}
+      </div>
     </div>
   );
 }
@@ -532,6 +556,7 @@ function DetalheFloatingWhatsApp({
   if (!ready || vehicleId == null || !priceLabel) return null;
 
   const href = buildWhatsAppUrl(whatsapp!.numero, messages.info);
+  const tradeHref = buildWhatsAppUrl(whatsapp!.numero, messages.trade);
   const cardImage = image || "/images/semcapa.webp";
 
   return (
@@ -547,6 +572,8 @@ function DetalheFloatingWhatsApp({
             }}
             href={href}
             source="detalhe_sticky"
+            tradeHref={tradeHref}
+            tradeSource="detalhe_sticky_trade"
             eyebrow="Este carro"
           />
         </div>
@@ -2211,6 +2238,14 @@ export function DetalhesPage() {
             </Link>
             <Link
               to="/comparar"
+              search={{ veiculo: String(vehicle.id) }}
+              onClick={() =>
+                trackCompareInteraction({
+                  action: "from_vehicle",
+                  vehicleIds: [vehicle.id],
+                  vehicleNames: [vehicleLabel],
+                })
+              }
               className="rounded-full bg-[#00283C] px-4 py-2 text-sm font-bold text-white hover:bg-[#00435a]"
             >
               Comparar carros lado a lado

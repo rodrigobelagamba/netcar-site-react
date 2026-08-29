@@ -1,18 +1,27 @@
-import { useMemo, useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Check, Plus, X, Car } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useSearch } from "@tanstack/react-router";
+import {
+  ArrowRight,
+  ArrowUp,
+  Car,
+  Check,
+  MessageCircle,
+  Plus,
+  X,
+} from "lucide-react";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
-import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 import { trackCompareInteraction } from "@/lib/analytics";
 import { generateVehicleSlug } from "@/lib/slug";
 import { resolvedVehicleCategory } from "@/lib/vehicleCategory";
+import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import {
   optimizeStockImage,
   stockGalleryPreviewSource,
@@ -84,8 +93,12 @@ function fmtPrice(vehicle: Vehicle) {
 
 export function ComparadorPage() {
   const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 500 });
+  const { data: whatsapp } = useWhatsAppQuery();
+  const { veiculo: initialVehicleId } = useSearch({ from: "/comparar" });
   const [selected, setSelected] = useState<string[]>([]);
   const [query, setQuery] = useState("");
+  const comparisonRef = useRef<HTMLDivElement>(null);
+  const trackedPreselectionRef = useRef<string | null>(null);
 
   useMetaTags({
     title: "Comparar carros seminovos lado a lado | Netcar",
@@ -106,6 +119,31 @@ export function ComparadorPage() {
       `${v.marca || ""} ${v.modelo || ""}`.toLowerCase().includes(q),
     );
   }, [list, query]);
+
+  useEffect(() => {
+    const vehicleId = String(initialVehicleId || "").trim();
+    if (!vehicleId || list.length === 0) return;
+
+    const vehicle = list.find((item) => String(item.id) === vehicleId);
+    if (!vehicle) return;
+
+    setSelected((current) =>
+      current.includes(vehicleId)
+        ? current
+        : [vehicleId, ...current].slice(0, MAX_COMPARE),
+    );
+
+    if (trackedPreselectionRef.current !== vehicleId) {
+      trackedPreselectionRef.current = vehicleId;
+      trackCompareInteraction({
+        action: "preselect",
+        vehicleIds: [vehicleId],
+        vehicleNames: [
+          `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name}`.trim(),
+        ],
+      });
+    }
+  }, [initialVehicleId, list]);
 
   const presets = useMemo(
     () =>
@@ -131,6 +169,27 @@ export function ComparadorPage() {
   const chosen: Vehicle[] = selected
     .map((id) => list.find((v) => v.id === id))
     .filter((v): v is Vehicle => !!v);
+
+  const comparisonNames = chosen.map((vehicle) =>
+    `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name} ${vehicle.year || ""}`
+      .trim()
+      .replace(/\s+/g, " "),
+  );
+  const comparisonWhatsAppUrl = whatsapp?.numero
+    ? buildWhatsAppUrl(
+        whatsapp.numero,
+        siteWhatsAppMessage(
+          `comparei ${comparisonNames.join(" x ")} e quero ajuda para escolher entre eles`,
+        ),
+      )
+    : "#";
+
+  function showComparison() {
+    comparisonRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
 
   function toggle(id: string) {
     const isRemoving = selected.includes(id);
@@ -182,22 +241,14 @@ export function ComparadorPage() {
   return (
     <main className="flex-1 overflow-x-hidden max-w-full bg-white">
       <RegionalSeoHero
-        eyebrow="Estoque atual"
-        title="Comparar carros seminovos lado a lado"
-        intro={`Escolha de 2 a ${MAX_COMPARE} carros do estoque e compare preço, ano, câmbio, motor e outros dados da ficha na mesma tela.`}
-      >
-        <RegionalActionCtas
-          className="mt-8"
-          waText="vim pelo comparador e quero ajuda para escolher um seminovo."
-          primary="whatsapp"
-        />
-      </RegionalSeoHero>
-
-      <RegionalTrustSignals />
+        eyebrow="Comparador Netcar"
+        title="Compare os carros que você está considerando"
+        intro={`Escolha de 2 a ${MAX_COMPARE} carros do estoque para ver preço, ano, câmbio e motor na mesma tela. Se ficar em dúvida, envie a comparação pronta para a nossa equipe.`}
+      />
 
       <section className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <div className="mb-8 min-h-[260px] rounded-2xl border border-gray-200 bg-[#F7FAFA] p-5 sm:min-h-[160px] sm:p-6">
+          <div className="mb-8 rounded-2xl border border-gray-200 bg-[#F7FAFA] p-5 sm:p-6">
             {isLoading ? (
               <div aria-live="polite" aria-busy="true">
                 <div className="h-6 w-72 max-w-full animate-pulse rounded bg-gray-200" />
@@ -215,11 +266,10 @@ export function ComparadorPage() {
             ) : presets.length > 0 ? (
               <>
                 <h2 className="text-lg font-bold text-fg">
-                  Comparações rápidas com o estoque atual
+                  Comece por uma comparação pronta
                 </h2>
                 <p className="mt-1 text-sm text-gray-600">
-                  Cada atalho escolhe dois carros de preço próximo que estão no
-                  estoque.
+                  Os pares abaixo usam carros disponíveis e de preço próximo.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   {presets.map((preset) => (
@@ -249,72 +299,130 @@ export function ComparadorPage() {
 
           {/* Tabela comparativa */}
           {chosen.length > 0 && (
-            <div className="mb-10 overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr>
-                    <th className="text-left p-4 w-32 align-bottom text-gray-500 font-medium">
-                      Comparando {chosen.length}
-                    </th>
-                    {chosen.map((v) => (
-                      <th
-                        key={v.id}
-                        className="text-left p-4 min-w-[160px] align-bottom"
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <span className="font-bold text-fg leading-snug">
-                            {v.marca} {v.modelo}
-                          </span>
-                          <button
-                            onClick={() => toggle(v.id)}
-                            aria-label="Remover do comparativo"
-                            className="text-gray-400 hover:text-red-500 shrink-0"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
+            <div
+              ref={comparisonRef}
+              className="mb-10 scroll-mt-28 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_16px_44px_rgba(0,40,60,0.08)]"
+            >
+              <div className="flex flex-col gap-2 border-b border-gray-100 bg-[#00283C] px-5 py-4 text-white sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#5CD29D]">
+                    Sua comparação
+                  </p>
+                  <h2 className="mt-1 text-xl font-black">
+                    {chosen.length === 1
+                      ? "Escolha mais um carro"
+                      : `${chosen.length} carros lado a lado`}
+                  </h2>
+                </div>
+                {chosen.length >= 2 && (
+                  <span className="text-sm font-semibold text-white/75">
+                    Compare os dados e abra a ficha para ver fotos e opcionais.
+                  </span>
+                )}
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="sticky left-0 z-10 w-32 min-w-32 bg-white p-4 text-left align-bottom font-medium text-gray-500">
+                        Item
                       </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.map((row) => (
-                    <tr key={row.label} className="border-t border-gray-100">
-                      <td className="p-4 font-medium text-gray-500">
-                        {row.label}
-                      </td>
                       {chosen.map((v) => (
-                        <td key={v.id} className="p-4 text-fg">
-                          {row.get(v)}
+                        <th
+                          key={v.id}
+                          className="text-left p-4 min-w-[160px] align-bottom"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <span className="font-bold text-fg leading-snug">
+                              {v.marca} {v.modelo}
+                            </span>
+                            <button
+                              onClick={() => toggle(v.id)}
+                              aria-label="Remover do comparativo"
+                              className="text-gray-400 hover:text-red-500 shrink-0"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((row) => (
+                      <tr key={row.label} className="border-t border-gray-100">
+                        <td className="sticky left-0 z-10 bg-white p-4 font-medium text-gray-500">
+                          {row.label}
+                        </td>
+                        {chosen.map((v) => (
+                          <td key={v.id} className="p-4 text-fg">
+                            {row.get(v)}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                    <tr className="border-t border-gray-100">
+                      <td className="p-4" />
+                      {chosen.map((v) => (
+                        <td key={v.id} className="p-4">
+                          <Link
+                            to="/veiculo/$slug"
+                            params={{ slug: generateVehicleSlug(v) }}
+                            onClick={() =>
+                              trackCompareInteraction({
+                                action: "view_details",
+                                vehicleIds: [v.id],
+                                vehicleNames: [
+                                  `${v.marca || ""} ${v.modelo || v.name}`.trim(),
+                                ],
+                              })
+                            }
+                            className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-white text-xs font-semibold hover:bg-primary/90"
+                          >
+                            Ver detalhes
+                          </Link>
                         </td>
                       ))}
                     </tr>
-                  ))}
-                  <tr className="border-t border-gray-100">
-                    <td className="p-4" />
-                    {chosen.map((v) => (
-                      <td key={v.id} className="p-4">
-                        <Link
-                          to="/veiculo/$slug"
-                          params={{ slug: generateVehicleSlug(v) }}
-                          onClick={() =>
-                            trackCompareInteraction({
-                              action: "view_details",
-                              vehicleIds: [v.id],
-                              vehicleNames: [
-                                `${v.marca || ""} ${v.modelo || v.name}`.trim(),
-                              ],
-                            })
-                          }
-                          className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-white text-xs font-semibold hover:bg-primary/90"
-                        >
-                          Ver detalhes
-                        </Link>
-                      </td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
+
+              {chosen.length >= 2 && (
+                <div className="border-t border-gray-100 bg-[#F7FAFA] p-5 sm:p-6">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="max-w-xl">
+                      <h3 className="text-lg font-black text-[#00283C]">
+                        Quer ajuda para decidir?
+                      </h3>
+                      <p className="mt-1 text-sm leading-relaxed text-gray-600">
+                        A mensagem já leva os carros que você comparou. Nossa
+                        equipe pode explicar as diferenças e confirmar quais
+                        continuam disponíveis.
+                      </p>
+                    </div>
+                    <a
+                      href={comparisonWhatsAppUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-wa-source="comparison"
+                      data-wa-intent="comparison_help"
+                      onClick={() =>
+                        trackCompareInteraction({
+                          action: "whatsapp",
+                          vehicleIds: chosen.map((vehicle) => vehicle.id),
+                          vehicleNames: comparisonNames,
+                        })
+                      }
+                      className="inline-flex min-h-14 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#087A37] px-5 py-3 font-black text-white shadow-[0_10px_28px_rgba(8,122,55,0.25)] transition-colors hover:bg-[#075E54]"
+                    >
+                      <MessageCircle className="h-5 w-5" />
+                      Quero ajuda para escolher
+                      <ArrowRight className="h-4 w-4" />
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -326,10 +434,25 @@ export function ComparadorPage() {
 
           {/* Seleção */}
           <div className="mb-5 flex items-center justify-between gap-4 flex-wrap">
-            <h2 className="text-xl font-bold text-fg">
-              Escolha os carros{" "}
-              {selected.length > 0 && `(${selected.length}/${MAX_COMPARE})`}
-            </h2>
+            <div>
+              <h2 className="text-xl font-bold text-fg">
+                Escolha os carros{" "}
+                {selected.length > 0 && `(${selected.length}/${MAX_COMPARE})`}
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                Toque nos carros que você quer colocar lado a lado.
+              </p>
+            </div>
+            {selected.length >= 2 && (
+              <button
+                type="button"
+                onClick={showComparison}
+                className="inline-flex items-center gap-2 rounded-xl bg-[#00283C] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#00435a]"
+              >
+                Ver comparação
+                <ArrowUp className="h-4 w-4" />
+              </button>
+            )}
             <input
               type="search"
               value={query}
@@ -446,6 +569,8 @@ export function ComparadorPage() {
           </div>
         </div>
       </section>
+
+      <RegionalTrustSignals />
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
         <div className="container-main space-y-8">
