@@ -606,7 +606,71 @@ function testOfflinePipelineContract(): void {
   );
 }
 
+function resolvePythonRuntime(): string | null {
+  const probeEnv = { ...process.env };
+  delete probeEnv.PYTHONHOME;
+  delete probeEnv.PYTHONPATH;
+  delete probeEnv.PYTHONTZPATH;
+  const configured = process.env.ATTRIBUTION_PYTHON?.trim();
+  const candidates = [...new Set([configured, "python3", "python"])].filter(
+    (candidate): candidate is string => Boolean(candidate),
+  );
+
+  for (const candidate of candidates) {
+    const probe = spawnSync(
+      candidate,
+      [
+        "-c",
+        "import sys; raise SystemExit(0 if sys.version_info >= (3, 9) else 1)",
+      ],
+      { env: probeEnv, stdio: "ignore" },
+    );
+    if (probe.status === 0) return candidate;
+  }
+  return null;
+}
+
+function offlineFixtureEnv(fixtureDir: string): NodeJS.ProcessEnv {
+  const env = { ...process.env };
+  const privatePrefixes = [
+    "ATTRIBUTION_",
+    "NETCAR_ATTRIBUTION_",
+    "EVO_",
+    "EVOLUTION_",
+    "WA_LOG_",
+    "CRM_",
+    "ERP_",
+    "PG_",
+    "MYSQL_",
+    "GOOGLE_ADS_",
+    "META_",
+  ];
+  for (const key of Object.keys(env)) {
+    if (privatePrefixes.some((prefix) => key.startsWith(prefix))) {
+      delete env[key];
+    }
+  }
+  delete env.PYTHONHOME;
+  delete env.PYTHONPATH;
+  delete env.PYTHONTZPATH;
+
+  return {
+    ...env,
+    ATTRIBUTION_DATA_DIR: fixtureDir,
+    ATTRIBUTION_SOURCE_TIMEZONE: "America/Sao_Paulo",
+    NETCAR_ATTRIBUTION_ENV_FILE: join(fixtureDir, "sem-segredos.env"),
+  };
+}
+
 function testOfflinePipelineRuntime(): void {
+  const pythonRuntime = resolvePythonRuntime();
+  if (!pythonRuntime) {
+    console.warn(
+      "Aviso: Python 3.9+ indisponível; fixture runtime da atribuição offline ignorada no build frontend.",
+    );
+    return;
+  }
+
   const fixtureDir = mkdtempSync(join(tmpdir(), "netcar-attribution-test-"));
   const evolutionCsv = join(fixtureDir, "evolution.csv");
   const clickLog = join(fixtureDir, "wa_clicks_log.jsonl");
@@ -614,6 +678,7 @@ function testOfflinePipelineRuntime(): void {
   const salesCsv = join(fixtureDir, "sales.csv");
   const outputCsv = join(fixtureDir, "output.csv");
   const auditJson = join(fixtureDir, "audit.json");
+  const conversionsCsv = join(fixtureDir, "confirmed.csv");
   const clickId = `nc_${"a".repeat(32)}`;
   const waRef = "G2345678";
 
@@ -662,7 +727,7 @@ function testOfflinePipelineRuntime(): void {
     );
 
     const result = spawnSync(
-      "python3",
+      pythonRuntime,
       [
         join(root, "scripts/atribuicao_enrich.py"),
         "--evolution-csv",
@@ -677,21 +742,30 @@ function testOfflinePipelineRuntime(): void {
         outputCsv,
         "--audit-output",
         auditJson,
+        "--confirmed-conversions-output",
+        conversionsCsv,
         "--skip-databases",
       ],
       {
         cwd: root,
         encoding: "utf8",
-        env: {
-          ...process.env,
-          ATTRIBUTION_DATA_DIR: fixtureDir,
-          NETCAR_ATTRIBUTION_ENV_FILE: join(fixtureDir, "sem-segredos.env"),
-        },
+        env: offlineFixtureEnv(fixtureDir),
       },
     );
+    const failureDetail = [
+      result.error
+        ? `${(result.error as NodeJS.ErrnoException).code || "spawn"}: ${result.error.message}`
+        : "",
+      result.signal ? `sinal ${result.signal}` : "",
+      result.stderr?.trim(),
+      result.stdout?.trim(),
+      result.status === null ? "processo não iniciou" : "",
+    ]
+      .filter(Boolean)
+      .join(" | ");
     assert(
       result.status === 0,
-      `pipeline offline falhou com fixtures: ${result.stderr || result.stdout}`,
+      `pipeline offline falhou com fixtures: ${failureDetail || `status ${result.status}`}`,
     );
 
     const output = readFileSync(outputCsv, "utf8");

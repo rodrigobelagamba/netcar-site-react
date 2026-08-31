@@ -8,7 +8,7 @@ COPY client ./client
 RUN npm run build
 
 FROM node:20-alpine
-RUN apk add --no-cache git openssh-client tar
+RUN apk add --no-cache git openssh-client python3 tar tzdata
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
