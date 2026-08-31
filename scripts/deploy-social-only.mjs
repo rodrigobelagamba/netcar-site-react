@@ -434,6 +434,82 @@ async function runPublisherDryRun({ config, pin, port, remoteRoot, phpBin }) {
   }
 }
 
+async function runPublisherControl({
+  config,
+  pin,
+  port,
+  remoteRoot,
+  phpBin,
+  action,
+}) {
+  if (
+    !["activate", "pause"].includes(action) ||
+    process.argv.includes("--apply") ||
+    argValue("--files") !== ""
+  ) {
+    throw new Error("Controle do publicador recebeu parametros incompatíveis.");
+  }
+
+  const pinnedHosts = await materializeKnownHosts(pin, config.SSH_HOST, port);
+  const destination = `${config.SSH_USER}@${config.SSH_HOST}`;
+  const portArgs = port === 22 ? [] : ["-p", String(port)];
+  const controlScript = readFileSync(
+    resolve(root, "scripts/social-publisher-control.php"),
+    "utf8",
+  );
+  const socialRoot = pathPosix.join(remoteRoot, "social/v1");
+  const commonSshArgs = [
+    "-i",
+    config.SSH_KEY_PATH,
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "IdentitiesOnly=yes",
+    "-o",
+    "StrictHostKeyChecking=yes",
+    "-o",
+    `UserKnownHostsFile=${pinnedHosts.path}`,
+    "-o",
+    "ConnectTimeout=15",
+    "-o",
+    "LogLevel=ERROR",
+  ];
+
+  try {
+    const stdout = await run(
+      "ssh",
+      [
+        ...commonSshArgs,
+        ...portArgs,
+        destination,
+        `${quote(phpBin)} -- ${quote(socialRoot)} ${quote(action)}`,
+      ],
+      { input: controlScript },
+    );
+    let result;
+    try {
+      result = JSON.parse(stdout);
+    } catch {
+      throw new Error(
+        "Controle remoto do publicador nao devolveu JSON valido.",
+      );
+    }
+    if (
+      result?.success !== true ||
+      result?.action !== action ||
+      result?.enabled !== (action === "activate") ||
+      (action === "activate" && result?.created !== 0)
+    ) {
+      throw new Error(
+        "Controle remoto do publicador nao confirmou o estado pedido.",
+      );
+    }
+    console.log(JSON.stringify(result, null, 2));
+  } finally {
+    pinnedHosts.cleanup();
+  }
+}
+
 function buildTransactionScript({
   selected,
   remoteRoot,
@@ -618,8 +694,24 @@ async function main() {
     throw new Error("SSH_PHP_BIN invalido.");
   }
 
-  if (process.argv.includes("--publisher-dry-run")) {
+  const publisherDryRun = process.argv.includes("--publisher-dry-run");
+  const publisherControl = argValue("--publisher-control");
+  if (publisherDryRun && publisherControl !== "") {
+    throw new Error("Escolha apenas uma operacao do publicador por execucao.");
+  }
+  if (publisherDryRun) {
     await runPublisherDryRun({ config, pin, port, remoteRoot, phpBin });
+    return;
+  }
+  if (publisherControl !== "") {
+    await runPublisherControl({
+      config,
+      pin,
+      port,
+      remoteRoot,
+      phpBin,
+      action: publisherControl,
+    });
     return;
   }
 

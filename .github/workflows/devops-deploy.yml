@@ -13,6 +13,8 @@ on:
         options:
           - none
           - publisher-dry-run
+          - publisher-activate
+          - publisher-pause
           - plan
           - guard
           - full
@@ -62,7 +64,7 @@ jobs:
               *[!a-zA-Z0-9._/-]*|"") echo "Ref invalida: $TARGET_REF"; exit 1 ;;
             esac
             case "$SOCIAL_MODE" in
-              none|publisher-dry-run|plan|guard|full) ;;
+              none|publisher-dry-run|publisher-activate|publisher-pause|plan|guard|full) ;;
               *) echo "Modo social invalido: $SOCIAL_MODE"; exit 1 ;;
             esac
 
@@ -158,6 +160,18 @@ jobs:
                   --identity /root/.ssh/id_netcar \
                   --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}" \
                   --publisher-dry-run
+              elif [ "$SOCIAL_MODE" = "publisher-activate" ]; then
+                docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
+                  --env-file /workspace/.env.local \
+                  --identity /root/.ssh/id_netcar \
+                  --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}" \
+                  --publisher-control activate
+              elif [ "$SOCIAL_MODE" = "publisher-pause" ]; then
+                docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
+                  --env-file /workspace/.env.local \
+                  --identity /root/.ssh/id_netcar \
+                  --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}" \
+                  --publisher-control pause
               elif [ "$SOCIAL_MODE" = "plan" ]; then
                 docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
                   --env-file /workspace/.env.local \

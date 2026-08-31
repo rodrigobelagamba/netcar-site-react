@@ -233,6 +233,13 @@ $publisher = new InstagramGbpPublisher(
     new GooglePostsStateStore($publisherStatePath)
 );
 
+$dryRun = $publisher->sync(true);
+expectTrue($dryRun['dryRun'] === true, 'Dry-run deve se identificar explicitamente.');
+expectTrue($dryRun['created'] === 0, 'Dry-run nao pode reportar criacao.');
+expectTrue($fakeGoogle->createCalls === 0, 'Dry-run nao pode executar POST no Google.');
+expectTrue($fakeMediaCache->cacheCalls === 0, 'Dry-run nao pode baixar ou gravar midia.');
+expectTrue(!is_file($publisherStatePath), 'Dry-run nao pode gravar estado operacional.');
+
 $firstRun = $publisher->sync(false);
 expectTrue($firstRun['created'] === 2, 'Primeira execucao deve criar um post por loja.');
 expectTrue($fakeGoogle->createCalls === 2, 'Google deve receber exatamente duas criacoes.');
