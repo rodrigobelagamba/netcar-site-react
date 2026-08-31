@@ -1656,6 +1656,7 @@ const staticPages = [
   // Não vende nada, mas é a página que o blog cita como autor e onde o processo
   // editorial fica explícito. Precisa ser rastreável para valer como sinal.
   { path: "/politica-editorial", priority: "0.4", changefreq: "yearly" },
+  { path: "/privacidade", priority: "0.3", changefreq: "yearly" },
 ];
 
 // Preserva URLs de veículos no sitemap. No build, generate-sitemap.js roda antes

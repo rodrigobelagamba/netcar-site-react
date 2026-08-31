@@ -22,6 +22,28 @@
       }
       window.gtag = gtag;
 
+      // Consent Mode v2: nenhum cookie de medição ou publicidade é liberado
+      // antes da escolha do visitante. O GTM pode carregar em modo negado para
+      // enviar somente sinais sem cookie e permitir modelagem agregada.
+      var NETCAR_PRIVACY_KEY = "nc_privacy_consent_v1";
+      var storedPrivacyChoice = "";
+      try {
+        storedPrivacyChoice = localStorage.getItem(NETCAR_PRIVACY_KEY) || "";
+      } catch (e) {
+        storedPrivacyChoice = "";
+      }
+      window.__netcarPrivacyConsent = storedPrivacyChoice;
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        functionality_storage: "granted",
+        security_storage: "granted",
+        wait_for_update: 500,
+      });
+      gtag("set", "ads_data_redaction", true);
+
       // Fila oficial do Meta: preserva eventos até o script adiado carregar.
       !(function (f, n) {
         if (f.fbq) return;
@@ -36,11 +58,43 @@
         n.version = "2.0";
         n.queue = [];
       })(window);
-      fbq("init", "367657940934075");
-      fbq("track", "PageView");
-      window.__netcarMetaLastPagePath = location.pathname + location.search;
+      fbq("consent", "revoke");
 
-      (function () {
+      function updatePrivacyConsent(choice, persist) {
+        var granted = choice === "accepted";
+        window.__netcarPrivacyConsent = granted ? "accepted" : "essential";
+        if (persist) {
+          try {
+            localStorage.setItem(
+              NETCAR_PRIVACY_KEY,
+              window.__netcarPrivacyConsent,
+            );
+            if (!granted) localStorage.removeItem("nc_traffic_ref");
+          } catch (e) {
+            /* armazenamento bloqueado: aplica a escolha só nesta página */
+          }
+        }
+        gtag("consent", "update", {
+          ad_storage: granted ? "granted" : "denied",
+          ad_user_data: granted ? "granted" : "denied",
+          ad_personalization: granted ? "granted" : "denied",
+          analytics_storage: granted ? "granted" : "denied",
+        });
+        fbq("consent", granted ? "grant" : "revoke");
+        if (granted) {
+          trackAiReferral();
+          if (window.__netcarAnalyticsLoaded) loadMetaPixel();
+        }
+      }
+      window.netcarSetPrivacyConsent = function (choice) {
+        updatePrivacyConsent(choice, true);
+      };
+      if (storedPrivacyChoice === "accepted") {
+        updatePrivacyConsent("accepted", false);
+      }
+
+      function trackAiReferral() {
+        if (window.__netcarPrivacyConsent !== "accepted") return;
         try {
           var ref = document.referrer || "";
           var map = [
@@ -76,7 +130,8 @@
         } catch (e) {
           /* noop */
         }
-      })();
+      }
+      trackAiReferral();
 
       function loadDirectGa4Fallback() {
         if (window.__netcarDirectGaLoaded) return;
@@ -87,6 +142,29 @@
         document.head.appendChild(ga);
         gtag("js", new Date());
         gtag("config", "G-MGPNBDNQ9G", { send_page_view: false });
+      }
+
+      function loadMetaPixel() {
+        if (
+          window.__netcarPrivacyConsent !== "accepted" ||
+          window.__netcarMetaLoaded
+        ) {
+          return;
+        }
+        window.__netcarMetaLoaded = true;
+        fbq("init", "367657940934075");
+        fbq("track", "PageView");
+        window.__netcarMetaLastPagePath = location.pathname + location.search;
+        if (
+          !document.querySelector(
+            'script[src*="connect.facebook.net/en_US/fbevents.js"]',
+          )
+        ) {
+          var meta = document.createElement("script");
+          meta.async = true;
+          meta.src = "https://connect.facebook.net/en_US/fbevents.js";
+          document.head.appendChild(meta);
+        }
       }
 
       function loadDeferredAnalytics() {
@@ -105,16 +183,7 @@
           f.parentNode.insertBefore(j, f);
         })(window, document, "script", "dataLayer", "GTM-M8MZRTL9");
 
-        if (
-          !document.querySelector(
-            'script[src*="connect.facebook.net/en_US/fbevents.js"]',
-          )
-        ) {
-          var meta = document.createElement("script");
-          meta.async = true;
-          meta.src = "https://connect.facebook.net/en_US/fbevents.js";
-          document.head.appendChild(meta);
-        }
+        loadMetaPixel();
       }
 
       var interactionEvents = [

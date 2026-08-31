@@ -13,6 +13,7 @@ import { priorityCityPages, priorityLandingPages } from "@/data/seo";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
+import { openPrivacyPreferences } from "@/components/PrivacyConsent";
 
 const menuLinks = [
   { to: "/como-selecionamos-nossos-carros", label: "Por que Netcar" },
@@ -104,6 +105,8 @@ export function Footer() {
                     whatsapp.link ||
                     `https://wa.me/${formatWhatsAppNumber(whatsapp.numero)}`
                   }
+                  data-wa-source="footer_sales"
+                  data-wa-intent="sales_contact"
                   className="text-base text-[#00616A] font-bold hover:underline"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -144,6 +147,9 @@ export function Footer() {
               href="https://wa.me/5551995109169?text=Olá!%20Preciso%20de%20suporte%20Nethelp."
               target="_blank"
               rel="noopener noreferrer"
+              data-wa-source="footer_nethelp"
+              data-wa-intent="post_sale_support"
+              data-wa-conversion="support"
               className="bg-gradient-to-b from-tertiary to-blue-dark rounded-xl p-4 text-white shadow-md hover:-translate-y-0.5 transition-transform duration-300"
             >
               <div className="flex items-center gap-2 mb-1.5">
@@ -402,15 +408,32 @@ export function Footer() {
 
         {/* Texto Legal */}
         <div className="border-t border-border pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <p className="text-[10px] text-muted-foreground leading-relaxed flex-1">
-            <span className="font-bold block mb-1">
-              R&C VEÍCULOS LTDA - CNPJ: 02.237.969/0001-06
-            </span>
-            Política de Reserva: devido à grande rotatividade de nosso estoque e
-            dinâmica da nossa equipe comercial, informamos que só será aceita
-            reserva de veículo mediante pagamento de sinal de negócio e aceite
-            do Termo de Sinal de Negócio.
-          </p>
+          <div className="flex-1">
+            <p className="text-[10px] text-muted-foreground leading-relaxed">
+              <span className="font-bold block mb-1">
+                R&C VEÍCULOS LTDA - CNPJ: 02.237.969/0001-06
+              </span>
+              Política de Reserva: devido à grande rotatividade de nosso estoque e
+              dinâmica da nossa equipe comercial, informamos que só será aceita
+              reserva de veículo mediante pagamento de sinal de negócio e aceite
+              do Termo de Sinal de Negócio.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-[#00616A]">
+              <a
+                href="/privacidade"
+                className="underline underline-offset-2 hover:text-primary"
+              >
+                Privacidade e cookies
+              </a>
+              <button
+                type="button"
+                onClick={openPrivacyPreferences}
+                className="underline underline-offset-2 hover:text-primary"
+              >
+                Alterar preferências
+              </button>
+            </div>
+          </div>
 
           <a
             href="https://app.zapsign.com.br/verificar/sustentabilidade/netcar"

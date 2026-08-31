@@ -17,6 +17,7 @@ import { PageLoader } from "@/components/layout/PageLoader";
 import citiesJson from "@/data/seo/cities.json";
 import type { CitySeoPage } from "@/data/seo/types";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
+import { PrivacyConsent } from "@/components/PrivacyConsent";
 
 const contextualCityPages = citiesJson as CitySeoPage[];
 const getContextualCityPage = (slug: string) =>
@@ -105,6 +106,11 @@ const MoveBrasilPage = lazyWithRetry(() =>
 const PoliticaEditorialPage = lazyWithRetry(() =>
   import("@/modules/seo/pages/contentSeoPages").then((m) => ({
     default: m.PoliticaEditorialPage,
+  })),
+);
+const PrivacyPage = lazyWithRetry(() =>
+  import("@/modules/legal/pages/PrivacyPage").then((m) => ({
+    default: m.PrivacyPage,
   })),
 );
 const ComparadorPage = lazyWithRetry(() =>
@@ -318,6 +324,7 @@ function RootComponent() {
           <WhatsAppButton />
         </div>
       ) : null}
+      <PrivacyConsent showPersistentControl={isLaudoPage} />
     </div>
   );
 }
@@ -470,6 +477,12 @@ const politicaEditorialRoute = createRoute({
   component: PoliticaEditorialPage,
 });
 
+const privacyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/privacidade",
+  component: PrivacyPage,
+});
+
 type ComparadorRouteSearch = {
   veiculo?: string;
 };
@@ -515,6 +528,7 @@ export const routeTree = rootRoute.addChildren([
   atendimento24hRoute,
   moveBrasilRoute,
   politicaEditorialRoute,
+  privacyRoute,
   comparadorRoute,
   regionsHubRoute,
   comoSelecionamosRoute,

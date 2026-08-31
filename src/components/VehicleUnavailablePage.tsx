@@ -75,6 +75,9 @@ export function VehicleUnavailablePage() {
                 href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-wa-source="vehicle_unavailable"
+                data-wa-intent="similar_vehicle"
+                data-wa-vehicle-name={nome || undefined}
                 className="inline-flex w-full items-center justify-center gap-2.5 rounded-full border-2 border-[#00283C] px-8 py-4 text-base font-black uppercase tracking-wider text-[#00283C] transition-all hover:bg-[#00283C] hover:text-white active:scale-[0.98] sm:w-auto"
               >
                 <MessageCircle className="h-5 w-5" />

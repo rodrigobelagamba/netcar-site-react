@@ -74,6 +74,8 @@ export function IanBot() {
             href={getIanWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
+            data-wa-source="ian_section"
+            data-wa-intent="talk_to_ian"
             className="relative overflow-hidden group flex items-center gap-4 bg-[#00363B] hover:bg-[#005B66] text-white font-bold text-[16px] md:text-[18px] px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             {/* Efeito Espelhamento (Shimmer) */}

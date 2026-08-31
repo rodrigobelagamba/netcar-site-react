@@ -1,150 +1,288 @@
 #!/usr/bin/env python3
-"""
-Snapshot diario campanhas ativas Meta + Google — Netcar
-========================================================
-Grava por dia: campanha, status, orcamento/dia, gasto do dia, impressoes.
-Saida: docs/campanhas_ativas_historico.csv (append, dedupe por data+plataforma+id)
+"""Snapshot privado e portavel de campanhas Meta/Google ativas."""
 
-Fontes:
-  Meta   -> ~/data/netcar/.env (META_ACCESS_TOKEN, META_AD_ACCOUNT)
-  Google -> AutoADS-cloud-clean/autoads-analyst/google-ads.yaml (OAuth)
+from __future__ import annotations
 
-Uso:
-    python3 scripts/campanhas_snapshot.py
-"""
-import csv, json, os, re, urllib.parse, urllib.request
-from datetime import date, timedelta
-from pathlib import Path
+import csv
+import datetime as dt
+import json
+import os
+import sys
+import tempfile
+import urllib.error
+import urllib.parse
+import urllib.request
 
-ROOT = Path("/Users/marcelomarchis/Library/CloudStorage/Dropbox/DEPTO. TI/SITE REACT")
-OUT = ROOT / "docs" / "campanhas_ativas_historico.csv"
-META_ENV = Path.home() / "data" / "netcar" / ".env"
-GOOGLE_YAML = Path("/Users/marcelomarchis/AutoADS-cloud-clean/autoads-analyst/google-ads.yaml")
-GADS_VER = "v22"
-HOJE = date.today().isoformat()
-ONTEM = (date.today() - timedelta(days=1)).isoformat()
-
-
-def _get(url, headers=None):
-    req = urllib.request.Request(url, headers=headers or {})
-    return json.load(urllib.request.urlopen(req, timeout=40))
+from offline_config import (
+    ConfigError,
+    chmod_private,
+    env_int,
+    load_env_file,
+    private_path,
+    redact_text,
+    required_env,
+)
 
 
-def _post(url, payload, headers):
-    req = urllib.request.Request(url, data=json.dumps(payload).encode(),
-                                 method="POST", headers=headers)
-    return json.load(urllib.request.urlopen(req, timeout=40))
+load_env_file()
+OUT = private_path("CAMPAIGN_SNAPSHOT_OUTPUT_CSV", "campanhas_ativas_historico.csv")
+RETENTION_DAYS = env_int("CAMPAIGN_SNAPSHOT_RETENTION_DAYS", 730, minimum=1)
+META_GRAPH_VERSION = os.environ.get("META_GRAPH_VERSION", "v22.0").strip()
+GOOGLE_ADS_API_VERSION = os.environ.get("GOOGLE_ADS_API_VERSION", "v22").strip()
+TODAY = dt.date.today()
+YESTERDAY = TODAY - dt.timedelta(days=1)
+FIELDS = (
+    "data",
+    "plataforma",
+    "id",
+    "campanha",
+    "status",
+    "orcamento_dia",
+    "gasto_ontem",
+    "impressoes_ontem",
+)
 
 
-def _meta_env(k):
-    return next(l.split("=", 1)[1].strip() for l in META_ENV.read_text().splitlines()
-                if l.startswith(k + "="))
+def _json_request(
+    url: str,
+    *,
+    headers: dict[str, str] | None = None,
+    body: bytes | None = None,
+    timeout: int = 40,
+) -> object:
+    request = urllib.request.Request(
+        url,
+        data=body,
+        method="POST" if body is not None else "GET",
+        headers=headers or {},
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return json.load(response)
 
 
-def meta_rows():
-    tok = _meta_env("META_ACCESS_TOKEN")
-    acc = _meta_env("META_AD_ACCOUNT")
-    if not acc.startswith("act_"):
-        acc = "act_" + acc
-    base = f"https://graph.facebook.com/v21.0/{acc}"
-    camps = _get(f"{base}/campaigns?fields=id,name,status,effective_status,daily_budget&limit=200&access_token={tok}").get("data", [])
-    ins = {}
+def _meta_get(path: str, params: dict[str, object], token: str) -> dict:
+    query = urllib.parse.urlencode(params)
+    url = f"https://graph.facebook.com/{META_GRAPH_VERSION}/{path}?{query}"
+    value = _json_request(
+        url,
+        headers={"Authorization": f"Bearer {token}", "Accept": "application/json"},
+    )
+    if not isinstance(value, dict):
+        raise RuntimeError("Meta retornou payload inesperado")
+    return value
+
+
+def meta_rows() -> list[dict]:
+    token = required_env("META_ACCESS_TOKEN")
+    account = required_env("META_AD_ACCOUNT")
+    if not account.startswith("act_"):
+        account = "act_" + account
+    account = urllib.parse.quote(account, safe="_")
+    campaigns = _meta_get(
+        f"{account}/campaigns",
+        {
+            "fields": "id,name,status,effective_status,daily_budget",
+            "limit": 500,
+        },
+        token,
+    ).get("data", [])
+    insights = _meta_get(
+        f"{account}/insights",
+        {
+            "level": "campaign",
+            "fields": "campaign_id,spend,impressions",
+            "time_range": json.dumps(
+                {"since": YESTERDAY.isoformat(), "until": YESTERDAY.isoformat()},
+                separators=(",", ":"),
+            ),
+            "limit": 500,
+        },
+        token,
+    ).get("data", [])
+    insights_by_id = {
+        str(row.get("campaign_id")): row
+        for row in insights
+        if isinstance(row, dict) and row.get("campaign_id") is not None
+    }
+    rows: list[dict] = []
+    for campaign in campaigns:
+        if not isinstance(campaign, dict):
+            continue
+        if campaign.get("effective_status") not in ("ACTIVE", "PAUSED"):
+            continue
+        campaign_id = str(campaign.get("id") or "")
+        metrics = insights_by_id.get(campaign_id, {})
+        rows.append(
+            {
+                "data": TODAY.isoformat(),
+                "plataforma": "meta",
+                "id": campaign_id,
+                "campanha": campaign.get("name", ""),
+                "status": campaign.get("effective_status", ""),
+                "orcamento_dia": round(int(campaign.get("daily_budget") or 0) / 100, 2),
+                "gasto_ontem": metrics.get("spend", ""),
+                "impressoes_ontem": metrics.get("impressions", ""),
+            }
+        )
+    return rows
+
+
+def _google_access_token() -> str:
+    form = urllib.parse.urlencode(
+        {
+            "client_id": required_env("GOOGLE_ADS_CLIENT_ID"),
+            "client_secret": required_env("GOOGLE_ADS_CLIENT_SECRET"),
+            "refresh_token": required_env("GOOGLE_ADS_REFRESH_TOKEN"),
+            "grant_type": "refresh_token",
+        }
+    ).encode("utf-8")
+    payload = _json_request(
+        "https://oauth2.googleapis.com/token",
+        body=form,
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        timeout=30,
+    )
+    if not isinstance(payload, dict) or not payload.get("access_token"):
+        raise RuntimeError("Google OAuth nao retornou access_token")
+    return str(payload["access_token"])
+
+
+def _google_search(query: str, token: str) -> list[dict]:
+    customer_id = required_env("GOOGLE_ADS_CUSTOMER_ID").replace("-", "")
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "developer-token": required_env("GOOGLE_ADS_DEVELOPER_TOKEN"),
+        "Content-Type": "application/json",
+    }
+    login_customer = os.environ.get("GOOGLE_ADS_LOGIN_CUSTOMER_ID", "").replace("-", "").strip()
+    if login_customer:
+        headers["login-customer-id"] = login_customer
+    url = (
+        f"https://googleads.googleapis.com/{GOOGLE_ADS_API_VERSION}/customers/"
+        f"{urllib.parse.quote(customer_id, safe='')}/googleAds:searchStream"
+    )
+    payload = _json_request(
+        url,
+        headers=headers,
+        body=json.dumps({"query": query}).encode("utf-8"),
+    )
+    if not isinstance(payload, list):
+        raise RuntimeError("Google Ads retornou payload inesperado")
+    return [
+        row
+        for batch in payload
+        if isinstance(batch, dict)
+        for row in batch.get("results", [])
+        if isinstance(row, dict)
+    ]
+
+
+def google_rows() -> list[dict]:
+    token = _google_access_token()
+    metrics_query = (
+        "SELECT campaign.id, campaign.name, campaign.status, "
+        "campaign_budget.amount_micros, metrics.cost_micros, metrics.impressions "
+        f"FROM campaign WHERE segments.date = '{YESTERDAY.isoformat()}'"
+    )
+    metrics = {
+        str(row.get("campaign", {}).get("id")): row
+        for row in _google_search(metrics_query, token)
+    }
+    campaigns = _google_search(
+        "SELECT campaign.id, campaign.name, campaign.status, "
+        "campaign_budget.amount_micros FROM campaign",
+        token,
+    )
+    rows: list[dict] = []
+    for row in campaigns:
+        campaign = row.get("campaign") or {}
+        if campaign.get("status") not in ("ENABLED", "PAUSED"):
+            continue
+        campaign_id = str(campaign.get("id") or "")
+        budget = row.get("campaignBudget") or {}
+        campaign_metrics = (metrics.get(campaign_id) or {}).get("metrics") or {}
+        rows.append(
+            {
+                "data": TODAY.isoformat(),
+                "plataforma": "google",
+                "id": campaign_id,
+                "campanha": campaign.get("name", ""),
+                "status": campaign.get("status", ""),
+                "orcamento_dia": round(int(budget.get("amountMicros") or 0) / 1_000_000, 2),
+                "gasto_ontem": round(
+                    int(campaign_metrics.get("costMicros") or 0) / 1_000_000, 2
+                ),
+                "impressoes_ontem": campaign_metrics.get("impressions", 0),
+            }
+        )
+    return rows
+
+
+def _read_existing() -> list[dict]:
+    if not OUT.exists():
+        return []
+    with OUT.open(encoding="utf-8-sig", newline="") as handle:
+        return [dict(row) for row in csv.DictReader(handle)]
+
+
+def _write_atomic(rows: list[dict]) -> None:
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    fd, temp_name = tempfile.mkstemp(prefix=f".{OUT.name}.", dir=str(OUT.parent))
     try:
-        r = _get(f"{base}/insights?level=campaign&fields=campaign_id,spend,impressions&time_range={{\"since\":\"{ONTEM}\",\"until\":\"{ONTEM}\"}}&limit=200&access_token={tok}")
-        ins = {x["campaign_id"]: x for x in r.get("data", [])}
+        with os.fdopen(fd, "w", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(handle, fieldnames=FIELDS, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(rows)
+        os.chmod(temp_name, 0o600)
+        os.replace(temp_name, OUT)
+        chmod_private(OUT)
     except Exception:
-        pass
-    rows = []
-    for c in camps:
-        if c.get("effective_status") not in ("ACTIVE", "PAUSED"):
+        try:
+            os.unlink(temp_name)
+        except OSError:
+            pass
+        raise
+
+
+def main() -> int:
+    requested = {
+        value.strip().lower()
+        for value in os.environ.get("CAMPAIGN_SNAPSHOT_PLATFORMS", "meta,google").split(",")
+        if value.strip()
+    }
+    unknown = requested - {"meta", "google"}
+    if not requested or unknown:
+        raise ConfigError("CAMPAIGN_SNAPSHOT_PLATFORMS deve conter meta e/ou google")
+
+    incoming: list[dict] = []
+    if "meta" in requested:
+        rows = meta_rows()
+        incoming.extend(rows)
+        print(f"meta: {len(rows)} campanhas")
+    if "google" in requested:
+        rows = google_rows()
+        incoming.extend(rows)
+        print(f"google: {len(rows)} campanhas")
+
+    cutoff = TODAY - dt.timedelta(days=RETENTION_DAYS)
+    merged: dict[tuple[str, str, str], dict] = {}
+    for row in [*_read_existing(), *incoming]:
+        try:
+            row_date = dt.date.fromisoformat(str(row.get("data") or ""))
+        except ValueError:
             continue
-        i = ins.get(c["id"], {})
-        rows.append({
-            "data": HOJE, "plataforma": "meta", "id": c["id"],
-            "campanha": c.get("name", ""), "status": c.get("effective_status", ""),
-            "orcamento_dia": round(int(c.get("daily_budget", 0)) / 100, 2),
-            "gasto_ontem": i.get("spend", ""), "impressoes_ontem": i.get("impressions", ""),
-        })
-    return rows
-
-
-def _google_creds():
-    t = GOOGLE_YAML.read_text()
-    return dict(re.findall(r'^(\w+):\s*"?([^"\n]+?)"?\s*$', t, re.M))
-
-
-def _google_token(y):
-    data = urllib.parse.urlencode({"client_id": y["client_id"], "client_secret": y["client_secret"],
-                                   "refresh_token": y["refresh_token"], "grant_type": "refresh_token"}).encode()
-    return json.load(urllib.request.urlopen(
-        urllib.request.Request("https://oauth2.googleapis.com/token", data=data), timeout=30))["access_token"]
-
-
-def google_rows():
-    y = _google_creds()
-    at = _google_token(y)
-    hdr = {"Authorization": f"Bearer {at}", "developer-token": y["developer_token"],
-           "Content-Type": "application/json"}
-    cid = y["client_customer_id"].replace("-", "")
-    url = f"https://googleads.googleapis.com/{GADS_VER}/customers/{cid}/googleAds:searchStream"
-    q = ("SELECT campaign.id, campaign.name, campaign.status, "
-         "campaign_budget.amount_micros, metrics.cost_micros, metrics.impressions "
-         f"FROM campaign WHERE segments.date = '{ONTEM}'")
-    resp = _post(url, {"query": q}, hdr)
-    res = [x for b in resp for x in b.get("results", [])]
-    by_id = {x["campaign"]["id"]: x for x in res}
-    # campanhas sem impressao ontem nao vem no metrics — busca lista completa
-    q2 = "SELECT campaign.id, campaign.name, campaign.status, campaign_budget.amount_micros FROM campaign"
-    resp2 = _post(url, {"query": q2}, hdr)
-    res2 = [x for b in resp2 for x in b.get("results", [])]
-    rows = []
-    for x in res2:
-        c = x.get("campaign", {})
-        if c.get("status") not in ("ENABLED", "PAUSED"):
-            continue
-        b = x.get("campaignBudget", {})
-        m = by_id.get(c["id"], {}).get("metrics", {})
-        rows.append({
-            "data": HOJE, "plataforma": "google", "id": c["id"],
-            "campanha": c.get("name", ""), "status": c.get("status", ""),
-            "orcamento_dia": round(int(b.get("amountMicros", 0)) / 1e6, 2),
-            "gasto_ontem": round(int(m.get("costMicros", 0)) / 1e6, 2) if m else 0,
-            "impressoes_ontem": m.get("impressions", 0) if m else 0,
-        })
-    return rows
-
-
-def main():
-    rows = []
-    try:
-        m = meta_rows()
-        rows += m
-        print(f"meta: {len(m)} campanhas")
-    except Exception as e:
-        print(f"meta ERRO: {type(e).__name__} {e}")
-    try:
-        g = google_rows()
-        rows += g
-        print(f"google: {len(g)} campanhas")
-    except Exception as e:
-        print(f"google ERRO: {type(e).__name__} {e}")
-
-    fields = ["data", "plataforma", "id", "campanha", "status",
-              "orcamento_dia", "gasto_ontem", "impressoes_ontem"]
-    existing = []
-    if OUT.exists():
-        existing = list(csv.DictReader(open(OUT, encoding="utf-8")))
-    seen = {(r["data"], r["plataforma"], r["id"]) for r in existing}
-    novas = [r for r in rows if (r["data"], r["plataforma"], str(r["id"])) not in seen]
-    todos = existing + novas
-    with open(OUT, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=fields)
-        w.writeheader()
-        for r in todos:
-            w.writerow({k: r.get(k, "") for k in fields})
-    print(f"novas hoje: {len(novas)} | total historico: {len(todos)}")
-    print(f"CSV: {OUT}")
+        if row_date >= cutoff:
+            key = (row_date.isoformat(), str(row.get("plataforma")), str(row.get("id")))
+            merged[key] = {field: row.get(field, "") for field in FIELDS}
+    output = [merged[key] for key in sorted(merged)]
+    _write_atomic(output)
+    print(f"novas hoje: {len(incoming)} | total historico: {len(output)} | CSV: {OUT}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        sys.exit(main())
+    except (ConfigError, RuntimeError, urllib.error.URLError, json.JSONDecodeError) as exc:
+        print(f"erro: {redact_text(exc)}", file=sys.stderr)
+        sys.exit(1)

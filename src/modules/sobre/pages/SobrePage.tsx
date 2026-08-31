@@ -705,6 +705,8 @@ export function SobrePage() {
                     href={whatsapp.link}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-wa-source="about_sales"
+                    data-wa-intent="sales_contact"
                     className={cn(
                       "px-7 py-3.5 rounded-full font-semibold",
                       "text-primary underline underline-offset-4 transition-all",

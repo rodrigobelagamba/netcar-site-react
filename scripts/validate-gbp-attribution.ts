@@ -1,10 +1,7 @@
 #!/usr/bin/env tsx
 
 import assert from "node:assert/strict";
-import {
-  captureTrafficSource,
-  getTrafficSource,
-} from "../src/lib/waTracking";
+import { captureTrafficSource, getTrafficSource } from "../src/lib/waTracking";
 import {
   trackPageView,
   trackRegionalCtaClick,
@@ -18,8 +15,7 @@ const location = {
   pathname: "/seminovos-canoas",
   search:
     "?utm_source=google&utm_medium=organic&utm_campaign=gbp_canoas&utm_content=loja_1_post",
-  href:
-    "https://www.netcarmultimarcas.com.br/seminovos-canoas?utm_source=google&utm_medium=organic&utm_campaign=gbp_canoas&utm_content=loja_1_post",
+  href: "https://www.netcarmultimarcas.com.br/seminovos-canoas?utm_source=google&utm_medium=organic&utm_campaign=gbp_canoas&utm_content=loja_1_post",
 };
 
 Object.assign(globalThis, {
@@ -36,6 +32,7 @@ Object.assign(globalThis, {
   window: {
     dataLayer,
     location,
+    __netcarPrivacyConsent: "accepted",
     gtag: (...args: unknown[]) => gtagCalls.push(args),
   },
 });
@@ -78,18 +75,40 @@ for (const eventName of [
   assert.equal(event.gbp_profile, "loja_1");
 }
 
-for (const eventName of [
-  "regional_landing_view",
-  "regional_cta_click",
-  "whatsapp_click",
-]) {
+for (const eventName of ["regional_landing_view", "regional_cta_click"]) {
   assert(
-    gtagCalls.some(
-      (call) => call[0] === "event" && call[1] === eventName,
-    ),
+    gtagCalls.some((call) => call[0] === "event" && call[1] === eventName),
     `${eventName} não chegou à fila direta do GA4`,
   );
 }
+
+assert.equal(
+  dataLayer.filter((item) => item.event === "whatsapp_click").length,
+  1,
+  "whatsapp_click regional deve entrar uma única vez no GTM",
+);
+assert.equal(
+  gtagCalls.filter(
+    (call) => call[0] === "event" && call[1] === "whatsapp_click",
+  ).length,
+  1,
+  "whatsapp_click regional não chegou uma única vez ao GA4 direto",
+);
+
+const regionalWaDataLayer = dataLayer.find(
+  (item) => item.event === "whatsapp_click",
+);
+const regionalWaGtag = gtagCalls.find(
+  (call) => call[0] === "event" && call[1] === "whatsapp_click",
+)?.[2] as Record<string, unknown> | undefined;
+assert(
+  regionalWaDataLayer && regionalWaGtag,
+  "identidade WhatsApp regional ausente",
+);
+assert.equal(regionalWaDataLayer.click_id, regionalWaGtag.click_id);
+assert.equal(regionalWaDataLayer.wa_event_id, regionalWaGtag.wa_event_id);
+assert.equal(regionalWaDataLayer.wa_ads_conversion, true);
+assert.equal(regionalWaGtag.wa_ads_conversion, false);
 
 const regionalCtaEvent = dataLayer.find(
   (item) => item.event === "regional_cta_click",

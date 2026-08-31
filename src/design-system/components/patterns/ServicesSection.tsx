@@ -9,6 +9,7 @@ interface Service {
   desc: string;
   cta: string;
   message: string;
+  intent: "simulate_finance" | "sell_evaluation";
   objectPosition?: string;
 }
 
@@ -28,6 +29,7 @@ export function ServicesSection() {
       cta: "Simular financiamento",
       message:
         "quero simular um financiamento e comparar condições entre os bancos e financeiras parceiras.",
+      intent: "simulate_finance",
       objectPosition: "30% center",
     },
     {
@@ -36,6 +38,7 @@ export function ServicesSection() {
       desc: "Avaliamos seu veículo na troca e cuidamos da documentação com despachante credenciado.",
       cta: "Avaliar meu carro",
       message: "tenho interesse em vender meu carro para a Netcar.",
+      intent: "sell_evaluation",
       objectPosition: "center 25%",
     },
   ];
@@ -49,6 +52,8 @@ export function ServicesSection() {
             href={getWhatsAppLink(service.message)}
             target="_blank"
             rel="noopener noreferrer"
+            data-wa-source="home_service"
+            data-wa-intent={service.intent}
             whileHover={{ y: -12 }}
             className="group relative block h-[220px] cursor-pointer overflow-hidden rounded-[24px] shadow-xl !border-0 md:h-[500px] md:rounded-[32px] md:shadow-2xl"
             style={{ border: "none" }}

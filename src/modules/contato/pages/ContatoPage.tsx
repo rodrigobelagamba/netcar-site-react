@@ -102,6 +102,8 @@ export function ContatoPage() {
             href={getWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
+            data-wa-source="contact_page"
+            data-wa-intent="sales_contact"
             className="inline-flex items-center gap-3 bg-bg text-fg px-8 py-4 rounded-full font-semibold hover:bg-surface transition-colors shadow-lg"
           >
             <MessageCircle className="w-5 h-5 text-secondary" />

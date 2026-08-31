@@ -1,19 +1,51 @@
 /**
  * Rastreio de origem para conversas de WhatsApp.
  *
- * Captura gclid/fbclid/UTM (30d, last non-direct). No clique WA gera código
- * curto e discreto anexado ao fim da mensagem, ex.:
+ * Captura gclid/fbclid/UTM (30d, last non-direct). No clique WA gera uma
+ * identidade forte para o join digital e uma referência curta legível na
+ * mensagem, ex.:
  *
- *   ...quero mais informações sobre o Tiggo 7 Pro 2023 - (M48217).
+ *   ...quero mais informações sobre o Tiggo 7 Pro 2023 - (M7KQ4X9P).
  *
  * 1ª letra = fonte (M Meta, G Google Ads, O orgânico, S social, R referral,
- * D direto, U outro). 5 dígitos identificam o clique (join no beacon/GA4).
- * Campanha NÃO vai na mensagem: fica em traffic_campaign (UTM / ID Meta)
- * e no Google Ads via gclid. Parser aceita legado `(X999)` e novo `(X99999)`.
+ * D direto, U outro). A referência curta usa Base32 Crockford e preserva a
+ * leitura humana; o parser aceita também os formatos legados. O
+ * `click_id` é a chave canônica no GA4/dataLayer/log próprio.
  */
 
 const STORAGE_KEY = "nc_traffic_ref";
 const TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 dias
+let inMemoryTrafficRef: StoredTrafficRef | null = null;
+
+declare global {
+  interface Window {
+    __netcarPrivacyConsent?: string;
+  }
+}
+
+export type PrivacyConsentState = "accepted" | "essential" | "unset";
+
+export function getPrivacyConsentState(): PrivacyConsentState {
+  if (typeof window === "undefined") return "unset";
+  if (window.__netcarPrivacyConsent === "accepted") return "accepted";
+  if (window.__netcarPrivacyConsent) return "essential";
+  return "unset";
+}
+
+function canPersistAttribution(): boolean {
+  return getPrivacyConsentState() === "accepted";
+}
+
+/** Remove a atribuicao opcional da memoria e do navegador. */
+export function clearTrafficAttribution(): void {
+  inMemoryTrafficRef = null;
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // armazenamento bloqueado: a copia em memoria ja foi descartada
+  }
+}
 
 /** Códigos curtos de fonte de tráfego. */
 export type TrafficSourceCode =
@@ -52,12 +84,17 @@ function sanitizeToken(value: string, maxLen = 24): string {
     .slice(0, maxLen);
 }
 
-function readStored(): StoredTrafficRef | null {
+function isFresh(ref: StoredTrafficRef): boolean {
+  return Boolean(ref.src) && Date.now() - ref.ts <= TTL_MS;
+}
+
+function readPersistentStorage(): StoredTrafficRef | null {
+  if (!canPersistAttribution()) return null;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as StoredTrafficRef;
-    if (!parsed.src || Date.now() - parsed.ts > TTL_MS) return null;
+    if (!isFresh(parsed)) return null;
     return parsed;
   } catch {
     return null;
@@ -65,11 +102,29 @@ function readStored(): StoredTrafficRef | null {
 }
 
 function writeStored(ref: StoredTrafficRef): void {
+  inMemoryTrafficRef = ref;
+  if (!canPersistAttribution()) return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(ref));
   } catch {
-    // storage cheio/bloqueado: rastreio degrada pra DIR, sem quebrar o site
+    // storage cheio/bloqueado: mantém a sessão, sem quebrar o site
   }
+}
+
+/**
+ * Antes do consentimento, atribuição existe só em memória. Quando há opt-in,
+ * a próxima leitura promove esse contexto para a persistência de 30 dias.
+ */
+function readStored(): StoredTrafficRef | null {
+  if (inMemoryTrafficRef && isFresh(inMemoryTrafficRef)) {
+    if (canPersistAttribution()) writeStored(inMemoryTrafficRef);
+    return inMemoryTrafficRef;
+  }
+  inMemoryTrafficRef = null;
+
+  const persisted = readPersistentStorage();
+  if (persisted) inMemoryTrafficRef = persisted;
+  return persisted;
 }
 
 function attributionContext(): Pick<
@@ -191,22 +246,35 @@ export interface TrafficSourceContext {
   utmContent?: string;
   utmTerm?: string;
   landingPage?: string;
+  referrer?: string;
+  gclid?: string;
+  gbraid?: string;
+  wbraid?: string;
+  fbclid?: string;
 }
 
 /** Origem atual (pra eventos GA4 e atribuição própria). */
 export function getTrafficSource(): TrafficSourceContext {
+  // A origem pode ser mantida transitoriamente em memoria ate a escolha, mas
+  // nao e exposta a eventos, URLs ou logs sem consentimento de medicao.
+  if (getPrivacyConsentState() !== "accepted") return { src: "DIR" };
   const stored = typeof window !== "undefined" ? readStored() : null;
-  return stored
-    ? {
-        src: stored.src,
-        campaign: stored.campaign,
-        utmSource: stored.utmSource,
-        utmMedium: stored.utmMedium,
-        utmContent: stored.utmContent,
-        utmTerm: stored.utmTerm,
-        landingPage: stored.landingPage,
-      }
-    : { src: "DIR" };
+  if (!stored) return { src: "DIR" };
+  const context: TrafficSourceContext = {
+    src: stored.src,
+    campaign: stored.campaign,
+    utmSource: stored.utmSource,
+    utmMedium: stored.utmMedium,
+    utmContent: stored.utmContent,
+    utmTerm: stored.utmTerm,
+    landingPage: stored.landingPage,
+  };
+  if (stored.referrer) context.referrer = stored.referrer;
+  if (stored.gclid) context.gclid = stored.gclid;
+  if (stored.gbraid) context.gbraid = stored.gbraid;
+  if (stored.wbraid) context.wbraid = stored.wbraid;
+  if (stored.fbclid) context.fbclid = stored.fbclid;
+  return context;
 }
 
 /** Letra da fonte usada como prefixo do código. */
@@ -229,28 +297,58 @@ function sourceLetter(src: TrafficSourceCode): string {
   }
 }
 
-const CLICK_CODE_TTL_MS = 3000;
+export interface WhatsAppClickIdentity {
+  /** Chave canônica, aleatória criptograficamente, para GA4 e o log próprio. */
+  clickId: string;
+  /** Referência curta preservada na mensagem para compatibilidade legada. */
+  waRef: string;
+}
 
-let currentClickCode = "";
-let currentClickCodeAt = 0;
+function secureRandomBytes(length: number): Uint8Array {
+  const bytes = new Uint8Array(length);
+  if (globalThis.crypto?.getRandomValues) {
+    globalThis.crypto.getRandomValues(bytes);
+    return bytes;
+  }
 
-/** 5 dígitos (00000–99999) → 100k combinações por letra (antes: 900). */
-function randomDigits5(): string {
-  return String(Math.floor(Math.random() * 100_000)).padStart(5, "0");
+  // Fallback apenas para navegadores muito antigos; os ambientes atuais usam
+  // Web Crypto. Nunca reutiliza uma identidade entre cliques.
+  for (let index = 0; index < length; index += 1) {
+    bytes[index] = Math.floor(Math.random() * 256);
+  }
+  return bytes;
+}
+
+function randomHex(length: number): string {
+  return [...secureRandomBytes(length)]
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+// Base32 legível: evita 0/1/I/O; L e U completam os 32 símbolos.
+const CROCKFORD_BASE32 = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+
+function randomCrockford(length: number): string {
+  return [...secureRandomBytes(length)]
+    .map((byte) => CROCKFORD_BASE32[byte & 31])
+    .join("");
 }
 
 /**
- * Código do clique, ex. "M48217" (1 letra da fonte + 5 dígitos).
- * Mesmo clique → mesmo código na mensagem WA e no evento GA4 (janela 3s).
+ * Cria uma identidade nova por gesto. Quem inicia o gesto a passa tanto para
+ * a telemetria quanto para a URL WA; não há janela temporal que una cliques
+ * distintos por acidente.
  */
+export function createWhatsAppClickIdentity(): WhatsAppClickIdentity {
+  return {
+    clickId: `nc_${randomHex(16)}`,
+    waRef: `${sourceLetter(getTrafficSource().src)}${randomCrockford(7)}`,
+  };
+}
+
+/** @deprecated Use createWhatsAppClickIdentity().waRef no mesmo gesto. */
 export function getOrCreateClickCode(): string {
-  const now = Date.now();
-  if (currentClickCode && now - currentClickCodeAt < CLICK_CODE_TTL_MS) {
-    return currentClickCode;
-  }
-  currentClickCode = `${sourceLetter(getTrafficSource().src)}${randomDigits5()}`;
-  currentClickCodeAt = now;
-  return currentClickCode;
+  return createWhatsAppClickIdentity().waRef;
 }
 
 const WA_LOG_ENDPOINT = "https://wa.netcarmultimarcas.com.br/";
@@ -260,12 +358,25 @@ const WA_LOG_ENDPOINT = "https://wa.netcarmultimarcas.com.br/";
  * no servidor. É o que liga o código da mensagem à campanha Google/Meta
  * sem expor nada na mensagem. Falha aqui nunca quebra o clique.
  */
-export function logWaClick(code: string): void {
+export function logWaClick(
+  identity: WhatsAppClickIdentity | string,
+  context: Record<string, unknown> = {},
+): void {
   if (typeof window === "undefined" || typeof navigator === "undefined") return;
+  // O log proprio e medicao opcional. O WhatsApp continua funcionando quando
+  // o visitante escolhe apenas os recursos essenciais.
+  if (getPrivacyConsentState() !== "accepted") return;
   try {
     const ref = readStored();
+    const click =
+      typeof identity === "string"
+        ? { clickId: "", waRef: identity }
+        : identity;
     const body = JSON.stringify({
-      code,
+      // `code` é mantido para o consumidor legado do log.
+      code: click.waRef,
+      wa_ref: click.waRef,
+      click_id: click.clickId,
       src: ref?.src ?? "DIR",
       campaign: ref?.campaign ?? "",
       gclid: ref?.gclid ?? "",
@@ -279,15 +390,18 @@ export function logWaClick(code: string): void {
       landing_page: ref?.landingPage ?? "",
       referrer: ref?.referrer ?? "",
       page: window.location.pathname.slice(0, 200),
+      privacy_consent: getPrivacyConsentState(),
       ts: Math.floor(Date.now() / 1000),
+      ...context,
     });
     // text/plain evita preflight CORS; servidor aceita JSON no body do mesmo jeito
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(
-        WA_LOG_ENDPOINT,
-        new Blob([body], { type: "text/plain" }),
-      );
-    } else {
+    const deliveredWithBeacon = navigator.sendBeacon
+      ? navigator.sendBeacon(
+          WA_LOG_ENDPOINT,
+          new Blob([body], { type: "text/plain" }),
+        )
+      : false;
+    if (!deliveredWithBeacon) {
       void fetch(WA_LOG_ENDPOINT, {
         method: "POST",
         body,
@@ -302,27 +416,58 @@ export function logWaClick(code: string): void {
 }
 
 const WA_URL_PATTERN = /wa\.me|api\.whatsapp\.com/i;
-/** Já tem código novo (M48217) ou legado (M482 / M4 / M4T7X). */
-const CODE_IN_TEXT_PATTERN = /\(\s*[A-Z](?:\d{1,5}|[A-Z2-9]{4})\s*\)/;
+/** Referências válidas sempre começam por uma das fontes emitidas pela Netcar. */
+const CODE_IN_TEXT_PATTERN =
+  /\(\s*[MGODSRU](?:[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{7}|\d{1,5}|[A-Z2-9]{4})\s*\)/;
+const CODE_AT_END_PATTERN =
+  /\s*-\s*\(\s*[MGODSRU](?:[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{7}|\d{1,5}|[A-Z2-9]{4})\s*\)\.?\s*$/;
 
-/**
- * Anexa ` - (M48217).` ao fim da mensagem pré-preenchida.
- * Idempotente. Cliente vê letra + 5 dígitos entre parênteses.
- */
-export function appendWaRefToUrl(url: string): string {
+function stripWaRefFromUrl(url: string): string {
   if (!url || !WA_URL_PATTERN.test(url)) return url;
   try {
     const parsed = new URL(url);
     const currentText = parsed.searchParams.get("text") ?? "";
-    if (CODE_IN_TEXT_PATTERN.test(currentText)) return url;
+    if (!CODE_IN_TEXT_PATTERN.test(currentText)) return url;
 
-    const code = getOrCreateClickCode();
-    logWaClick(code);
-    const trimmed = currentText.trimEnd();
-    const base = trimmed.replace(/\.+$/, "").trimEnd();
-    const newText = base
-      ? `${base} - (${code}).`
-      : `Olá! Vim pelo site - (${code}).`;
+    const withoutSuffix = currentText.replace(CODE_AT_END_PATTERN, "").trimEnd();
+    const withoutCode = withoutSuffix
+      .replace(CODE_IN_TEXT_PATTERN, "")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+    const cleanText = withoutCode
+      ? `${withoutCode.replace(/\.+$/, "")}.`
+      : withoutCode;
+    parsed.searchParams.set("text", cleanText);
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * Anexa ` - (M7KQ4X9P).` ao fim da mensagem pré-preenchida. A identidade deve
+ * ser a mesma usada no evento do gesto; sem ela, uma nova é criada somente
+ * para esta chamada, sem reutilização temporal.
+ */
+export function appendWaRefToUrl(
+  url: string,
+  identity?: WhatsAppClickIdentity,
+): string {
+  if (!url || !WA_URL_PATTERN.test(url)) return url;
+  if (getPrivacyConsentState() !== "accepted") return stripWaRefFromUrl(url);
+  try {
+    const resolvedIdentity = identity ?? createWhatsAppClickIdentity();
+    const parsed = new URL(url);
+    const currentText = parsed.searchParams.get("text") ?? "";
+    const newText = CODE_IN_TEXT_PATTERN.test(currentText)
+      ? currentText.replace(CODE_IN_TEXT_PATTERN, `(${resolvedIdentity.waRef})`)
+      : (() => {
+          const trimmed = currentText.trimEnd();
+          const base = trimmed.replace(/\.+$/, "").trimEnd();
+          return base
+            ? `${base} - (${resolvedIdentity.waRef}).`
+            : `Olá! Vim pelo site - (${resolvedIdentity.waRef}).`;
+        })();
 
     parsed.searchParams.set("text", newText);
     return parsed.toString();

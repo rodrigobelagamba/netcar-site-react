@@ -18,6 +18,19 @@ output/
 .env.production
 # Apenas o exemplo fica no repositório
 !.env.example
+.env.attribution
+!.env.attribution.example
+
+# Atribuicao offline: contem telefone, JID, mensagens, IDs de anuncio e venda.
+.local/
+scripts/.evolution_checkpoint.json
+scripts/.wa_clicks_state.json
+scripts/.ad_map.json
+docs/atribuicao_whatsapp_leads*.csv
+docs/conversoes_confirmadas*.csv
+docs/campanhas_ativas_historico.csv
+docs/wa_clicks_log.jsonl
+docs/auditoria_ian/
 
 # Gerado no build a partir do .env.production
 public/netcar-config.php

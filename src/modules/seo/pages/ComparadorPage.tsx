@@ -18,7 +18,10 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
-import { trackCompareInteraction } from "@/lib/analytics";
+import {
+  resetComparisonTracking,
+  trackCompareInteraction,
+} from "@/lib/analytics";
 import { generateVehicleSlug } from "@/lib/slug";
 import { resolvedVehicleCategory } from "@/lib/vehicleCategory";
 import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
@@ -99,6 +102,10 @@ export function ComparadorPage() {
   const [query, setQuery] = useState("");
   const comparisonRef = useRef<HTMLDivElement>(null);
   const trackedPreselectionRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    resetComparisonTracking();
+  }, []);
 
   useMetaTags({
     title: "Comparar carros lado a lado | Preço e ficha | Netcar",

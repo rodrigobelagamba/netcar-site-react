@@ -1,14 +1,16 @@
 /**
- * Analytics helpers — dataLayer para GTM/Ads + GA4 direto só em page view.
- * whatsapp_click: objeto com wa_ads_conversion=true dispara Ads.
- * gtag direto envia ao GA4 com wa_ads_conversion=false para não repetir Ads.
+ * Analytics helpers — dataLayer alimenta GTM/Ads e eventos comerciais também
+ * seguem diretamente ao GA4 quando o container publicado não possui tag GA4.
  */
 
 import {
   appendWaRefToUrl,
   captureTrafficSource,
-  getOrCreateClickCode,
+  createWhatsAppClickIdentity,
   getTrafficSource,
+  getPrivacyConsentState,
+  logWaClick,
+  type WhatsAppClickIdentity,
 } from "@/lib/waTracking";
 
 export const GA4_MEASUREMENT_ID = "G-MGPNBDNQ9G";
@@ -25,7 +27,8 @@ export type WhatsAppClickSource =
   | "landing"
   | "contato"
   | "link"
-  | "other";
+  | "other"
+  | string;
 
 export interface WhatsAppClickParams {
   source: WhatsAppClickSource;
@@ -33,6 +36,10 @@ export interface WhatsAppClickParams {
   vehicleId?: string | number;
   vehicleName?: string;
   pagePath?: string;
+  /** `support` nunca é conversão comercial, Ads ou Meta Contact. */
+  conversion?: "commercial" | "support";
+  /** Uso interno para manter a identidade única no mesmo gesto. */
+  clickIdentity?: WhatsAppClickIdentity;
 }
 
 export type AnalyticsPageType =
@@ -45,6 +52,15 @@ export type AnalyticsPageType =
   | "comparison"
   | "selection_process"
   | "vehicle_detail"
+  | "vehicle_report"
+  | "inventory"
+  | "sell"
+  | "financing"
+  | "service"
+  | "blog"
+  | "blog_post"
+  | "about"
+  | "legal"
   | "other";
 
 declare global {
@@ -54,6 +70,9 @@ declare global {
     fbq?: (...args: unknown[]) => void;
     __netcarAnalyticsInit?: boolean;
     __netcarMetaLastPagePath?: string;
+    __netcarDirectGaLoaded?: boolean;
+    __netcarPrivacyConsent?: string;
+    __netcarMetaLoaded?: boolean;
   }
 }
 
@@ -63,9 +82,20 @@ function getPagePath(): string {
     : "/";
 }
 
+/** Meta não possui o Consent Mode nativo do Google. Só enviamos após opt-in e
+ * depois de o loader marcar o Pixel como pronto, evitando eventos na fila. */
+function canSendMetaEvent(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    window.__netcarPrivacyConsent === "accepted" &&
+    window.__netcarMetaLoaded === true
+  );
+}
+
 export function inferPageType(pagePath: string): AnalyticsPageType {
   const pathname = pagePath.split(/[?#]/, 1)[0].replace(/\/+$/, "") || "/";
   if (pathname.startsWith("/veiculo/")) return "vehicle_detail";
+  if (pathname.startsWith("/laudo/")) return "vehicle_report";
   if (
     pathname.includes("regiao-metropolitana") ||
     pathname === "/regioes-atendidas" ||
@@ -88,6 +118,22 @@ export function inferPageType(pagePath: string): AnalyticsPageType {
   }
   if (pathname === "/") return "home";
   if (pathname.startsWith("/contato")) return "contact";
+  if (pathname === "/seminovos" || pathname === "/seminovos-automaticos") {
+    return "inventory";
+  }
+  if (
+    ["/compra", "/compramos-seu-usado", "/vender-meu-carro"].includes(pathname)
+  ) {
+    return "sell";
+  }
+  if (pathname === "/financiamento") return "financing";
+  if (["/atendimento-24h", "/move-brasil"].includes(pathname)) {
+    return "service";
+  }
+  if (pathname === "/blog") return "blog";
+  if (pathname.startsWith("/blog/")) return "blog_post";
+  if (pathname.startsWith("/sobre")) return "about";
+  if (pathname === "/privacidade") return "legal";
   return "other";
 }
 
@@ -118,7 +164,7 @@ function getRegionalDimensions(pagePath: string): Record<string, string> {
   return {};
 }
 
-function getTrafficDimensions(): Record<string, string> {
+export function getTrafficDimensions(): Record<string, string> {
   const traffic = getTrafficSource();
   const campaign = traffic.campaign ?? "";
   const content = traffic.utmContent ?? "";
@@ -138,25 +184,16 @@ function getTrafficDimensions(): Record<string, string> {
     traffic_utm_source: traffic.utmSource ?? "",
     traffic_medium: traffic.utmMedium ?? "",
     traffic_content: content,
+    traffic_utm_term: traffic.utmTerm ?? "",
+    traffic_landing_page: traffic.landingPage ?? "",
+    traffic_referrer: traffic.referrer ?? "",
+    traffic_gclid: traffic.gclid ?? "",
+    traffic_gbraid: traffic.gbraid ?? "",
+    traffic_wbraid: traffic.wbraid ?? "",
+    traffic_fbclid: traffic.fbclid ?? "",
+    privacy_consent: getPrivacyConsentState(),
     gbp_profile: gbpProfile,
   };
-}
-
-const WA_CLICK_DEDUP_MS = 400;
-let lastWhatsAppTrackKey = "";
-let lastWhatsAppTrackAt = 0;
-
-function shouldSkipDuplicateWhatsAppTrack(key: string): boolean {
-  const now = Date.now();
-  if (
-    key === lastWhatsAppTrackKey &&
-    now - lastWhatsAppTrackAt < WA_CLICK_DEDUP_MS
-  ) {
-    return true;
-  }
-  lastWhatsAppTrackKey = key;
-  lastWhatsAppTrackAt = now;
-  return false;
 }
 
 export function pushDataLayer(payload: Record<string, unknown>): void {
@@ -203,6 +240,9 @@ export function trackViewItem(params: {
       ],
     },
   });
+  // O dataLayer v2 mantém valores entre pushes. Limpar só depois do evento
+  // permite que a tag de view_item leia os itens, sem vazá-los ao próximo CTA.
+  pushDataLayer({ ecommerce: null });
 }
 
 /** Evento GA4: usuário aplicou filtro no estoque. */
@@ -241,6 +281,13 @@ export function trackVehicleDiscoveryClick(params: {
   });
 }
 
+let comparisonIsReady = false;
+
+/** Reinicia o marco quando uma nova tela do comparador e aberta. */
+export function resetComparisonTracking(): void {
+  comparisonIsReady = false;
+}
+
 /** Interações do comparador são sinais de consideração, nunca conversões Ads. */
 export function trackCompareInteraction(params: {
   action:
@@ -263,12 +310,18 @@ export function trackCompareInteraction(params: {
     compare_count: params.vehicleIds.length,
   });
 
-  if (params.vehicleIds.length >= 2) {
-    trackBusinessEvent("comparison_ready", {
-      vehicle_ids: params.vehicleIds.map(String),
-      vehicle_names: params.vehicleNames,
-      compare_count: params.vehicleIds.length,
-    });
+  // "Pronto" é um marco de funil, não cada interação após haver dois carros.
+  // Só ações que alteram a seleção podem mudar esse estado.
+  if (["select", "remove", "preset", "preselect"].includes(params.action)) {
+    const isReady = params.vehicleIds.length >= 2;
+    if (isReady && !comparisonIsReady) {
+      trackBusinessEvent("comparison_ready", {
+        vehicle_ids: params.vehicleIds.map(String),
+        vehicle_names: params.vehicleNames,
+        compare_count: params.vehicleIds.length,
+      });
+    }
+    comparisonIsReady = isReady;
   }
 }
 
@@ -321,6 +374,7 @@ export function trackPageView(path?: string, title?: string): void {
 
   // O Pixel base registra a Home no HTML. Em navegação SPA, registra só a rota nova.
   if (
+    canSendMetaEvent() &&
     typeof window.fbq === "function" &&
     window.__netcarMetaLastPagePath !== pagePath
   ) {
@@ -406,7 +460,17 @@ export function trackSellEvaluation(
   });
 
   if (stage === "completed") {
-    trackBusinessEvent("generate_lead", {
+    trackBusinessEvent("form_submit", {
+      form_name: "sell_evaluation",
+      form_destination: "whatsapp",
+      city_name: cityName,
+      evaluation_type: evaluationType,
+      page_type: inferPageType(pagePath),
+      page_path: pagePath,
+      ...getRegionalDimensions(pagePath),
+      ...getTrafficDimensions(),
+    });
+    trackBusinessEvent("lead_intent", {
       lead_type: "sell_evaluation",
       city_name: cityName,
       evaluation_type: evaluationType,
@@ -431,7 +495,7 @@ export function trackPhoneClick(params: {
     ...getRegionalDimensions(pagePath),
     ...getTrafficDimensions(),
   });
-  if (typeof window.fbq === "function") {
+  if (canSendMetaEvent() && typeof window.fbq === "function") {
     window.fbq("track", "Contact", { content_name: "phone_call" });
   }
 }
@@ -443,88 +507,201 @@ export function trackContactFormSubmit(pagePath = getPagePath()): void {
     page_path: pagePath,
     ...getTrafficDimensions(),
   });
-  trackBusinessEvent("generate_lead", {
+  trackBusinessEvent("form_submit", {
+    form_name: "contact",
+    form_destination: "whatsapp",
+    page_type: inferPageType(pagePath),
+    page_path: pagePath,
+    ...getTrafficDimensions(),
+  });
+  trackBusinessEvent("lead_intent", {
     lead_type: "contact_form",
+    form_destination: "whatsapp",
+    page_type: inferPageType(pagePath),
     page_path: pagePath,
     ...getTrafficDimensions(),
   });
 }
 
-export function trackWhatsAppClick(params: WhatsAppClickParams): void {
+/**
+ * `generate_lead` é reservado a um lead confirmado pelo CRM/backend. O
+ * front-end não deve inferi-lo apenas porque abriu uma conversa no WhatsApp.
+ */
+export function trackConfirmedLead(params: {
+  leadId: string;
+  leadType: string;
+  pagePath?: string;
+  clickId?: string;
+  waRef?: string;
+}): void {
   const pagePath = params.pagePath ?? getPagePath();
-  const dedupKey = [
-    pagePath,
-    params.source,
-    params.intent ?? "general",
-    params.vehicleId ?? "",
-  ].join("|");
-
-  if (shouldSkipDuplicateWhatsAppTrack(dedupKey)) return;
-
-  const waRef = getOrCreateClickCode();
-
-  pushDataLayer({
-    event: "whatsapp_click",
-    wa_ads_conversion: true,
-    wa_event_id: `wa_${waRef}`,
-    wa_source: params.source,
-    wa_intent: params.intent ?? "general",
-    wa_vehicle_id:
-      params.vehicleId != null ? String(params.vehicleId) : undefined,
-    wa_vehicle_name: params.vehicleName,
-    wa_page_type: inferPageType(pagePath),
-    wa_ref: waRef,
+  trackBusinessEvent("generate_lead", {
+    lead_id: params.leadId,
+    lead_type: params.leadType,
+    click_id: params.clickId,
+    wa_ref: params.waRef,
+    page_type: inferPageType(pagePath),
     page_path: pagePath,
     ...getRegionalDimensions(pagePath),
     ...getTrafficDimensions(),
   });
+}
 
-  // Data Layer v2 persiste valores entre eventos. O false explícito é essencial:
-  // limpa o estado antes do gtag; sem isso, ele herdaria true e repetiria Ads.
-  if (typeof window.gtag === "function") {
-    pushDataLayer({ wa_ads_conversion: false });
-    window.gtag("event", "whatsapp_click", {
-      send_to: GA4_MEASUREMENT_ID,
-      wa_ads_conversion: false,
-      wa_event_id: `wa_${waRef}`,
-      wa_source: params.source,
-      wa_intent: params.intent ?? "general",
-      wa_vehicle_id:
-        params.vehicleId != null ? String(params.vehicleId) : undefined,
-      wa_vehicle_name: params.vehicleName,
-      wa_page_type: inferPageType(pagePath),
-      wa_ref: waRef,
-      page_path: pagePath,
-      ...getRegionalDimensions(pagePath),
-      ...getTrafficDimensions(),
+function normalizeAnalyticsToken(value: string, fallback: string): string {
+  const normalized = value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+  return normalized || fallback;
+}
+
+function normalizeWhatsAppSource(source: string): string {
+  const raw = normalizeAnalyticsToken(source, "content_link");
+  if (raw === "hero") return "vehicle_hero";
+  if (raw.startsWith("detalhe_vendido")) return "vehicle_unavailable";
+  if (raw.startsWith("detalhe_trade")) return "vehicle_trade";
+  if (raw.startsWith("sidebar_")) return "vehicle_sidebar";
+  if (raw.startsWith("seminovos_")) return "inventory";
+  if (raw === "link") return "content_link";
+  return raw;
+}
+
+function getWhatsAppPayload(
+  params: WhatsAppClickParams,
+  identity: WhatsAppClickIdentity | undefined,
+  conversion: "commercial" | "support",
+): Record<string, unknown> {
+  const pagePath = params.pagePath ?? getPagePath();
+  const sourceRaw = params.source || "link";
+  const intentRaw = params.intent ?? "general";
+  return {
+    ...(identity
+      ? {
+          click_id: identity.clickId,
+          wa_ref: identity.waRef,
+          wa_event_id: `wa_${identity.clickId}`,
+        }
+      : {}),
+    wa_source: normalizeWhatsAppSource(sourceRaw),
+    wa_source_raw: sourceRaw,
+    wa_intent: normalizeAnalyticsToken(intentRaw, "general"),
+    wa_intent_raw: intentRaw,
+    wa_conversion: conversion,
+    wa_vehicle_id:
+      params.vehicleId != null ? String(params.vehicleId) : undefined,
+    wa_vehicle_name: params.vehicleName,
+    wa_page_type: inferPageType(pagePath),
+    page_path: pagePath,
+    ...getRegionalDimensions(pagePath),
+    ...(identity
+      ? getTrafficDimensions()
+      : { privacy_consent: getPrivacyConsentState() }),
+  };
+}
+
+const emittedClickIds = new Set<string>();
+
+/**
+ * Um mesmo handler pode passar pelo componente e pela delegação global. A
+ * identidade pertence ao gesto, então deduplicamos apenas o mesmo click_id no
+ * mesmo turno de execução — nunca cliques distintos por janela de tempo.
+ */
+function reserveClickIdentity(clickId: string): boolean {
+  if (emittedClickIds.has(clickId)) return false;
+  emittedClickIds.add(clickId);
+  const release = () => emittedClickIds.delete(clickId);
+  if (typeof queueMicrotask === "function") queueMicrotask(release);
+  else setTimeout(release, 0);
+  return true;
+}
+
+/**
+ * Mede uma abertura de WhatsApp. O dataLayer comercial mantém o contrato do
+ * Google Ads/GTM; a chamada direta de GA4 conserva a medição quando o container
+ * não tiver tag de evento GA4. Ambos compartilham o mesmo event_id/click_id.
+ */
+export function trackWhatsAppClick(params: WhatsAppClickParams): void {
+  const hasMeasurementConsent = getPrivacyConsentState() === "accepted";
+  const identity = hasMeasurementConsent
+    ? (params.clickIdentity ?? createWhatsAppClickIdentity())
+    : undefined;
+  if (identity && !reserveClickIdentity(identity.clickId)) return;
+  const conversion = params.conversion ?? "commercial";
+  const payload = getWhatsAppPayload(params, identity, conversion);
+
+  if (identity) {
+    logWaClick(identity, {
+      event_name:
+        conversion === "support" ? "whatsapp_support_click" : "whatsapp_click",
+      ...payload,
     });
   }
 
-  if (typeof window.fbq === "function") {
+  if (conversion === "support") {
+    pushDataLayer({ event: "whatsapp_support_click", ...payload });
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "whatsapp_support_click", {
+        send_to: GA4_MEASUREMENT_ID,
+        ...payload,
+      });
+    }
+    return;
+  }
+
+  pushDataLayer({
+    event: "whatsapp_click",
+    ...payload,
+    wa_ads_conversion: true,
+  });
+  // Evita que o flag de conversão Ads vaze para o próximo evento GTM.
+  pushDataLayer({ wa_ads_conversion: false });
+
+  if (typeof window.gtag === "function") {
+    window.gtag("event", "whatsapp_click", {
+      send_to: GA4_MEASUREMENT_ID,
+      ...payload,
+      wa_ads_conversion: false,
+    });
+  }
+
+  if (identity && canSendMetaEvent() && typeof window.fbq === "function") {
     const metaParams = {
       content_name: "whatsapp",
-      content_category: params.intent ?? "general",
+      content_category: payload.wa_intent,
       content_ids:
         params.vehicleId != null ? [String(params.vehicleId)] : undefined,
       content_type: params.vehicleId != null ? "vehicle" : undefined,
-      source: params.source,
-      wa_ref: waRef,
+      source: payload.wa_source,
+      wa_ref: identity.waRef,
+      click_id: identity.clickId,
     };
-    window.fbq("track", "Contact", metaParams, { eventID: `wa_${waRef}` });
+    window.fbq("track", "Contact", metaParams, {
+      eventID: `wa_${identity.clickId}`,
+    });
     window.fbq("trackCustom", "WhatsAppClick", {
-      source: params.source,
-      intent: params.intent ?? "general",
+      source: payload.wa_source,
+      intent: payload.wa_intent,
       vehicle_id:
         params.vehicleId != null ? String(params.vehicleId) : undefined,
-      wa_ref: waRef,
+      wa_ref: identity.waRef,
+      click_id: identity.clickId,
     });
   }
 }
 
 export function openWhatsApp(url: string, params: WhatsAppClickParams): void {
   if (!url || url === "#") return;
-  trackWhatsAppClick(params);
-  window.open(appendWaRefToUrl(url), "_blank", "noopener,noreferrer");
+  const clickIdentity =
+    getPrivacyConsentState() === "accepted"
+      ? createWhatsAppClickIdentity()
+      : undefined;
+  trackWhatsAppClick({ ...params, clickIdentity });
+  window.open(
+    appendWaRefToUrl(url, clickIdentity),
+    "_blank",
+    "noopener,noreferrer",
+  );
 }
 
 function inferSourceFromElement(el: HTMLElement): WhatsAppClickSource {
@@ -538,6 +715,36 @@ function inferSourceFromElement(el: HTMLElement): WhatsAppClickSource {
   if (el.closest("footer")) return "footer";
   if (el.closest("#conteudo-principal")) return "link";
   return "link";
+}
+
+/**
+ * Contrato para CTAs não comerciais: `data-wa-conversion="support"`.
+ * Também protege o Nethelp existente até que seus componentes recebam o
+ * atributo. Esses cliques continuam observáveis, mas nunca chegam a Ads ou
+ * Meta Contact.
+ */
+function inferWhatsAppConversionFromElement(
+  el: HTMLAnchorElement,
+): "commercial" | "support" {
+  const explicit = el
+    .closest("[data-wa-conversion]")
+    ?.getAttribute("data-wa-conversion")
+    ?.trim()
+    .toLowerCase();
+  if (["support", "non_commercial", "false", "0"].includes(explicit ?? "")) {
+    return "support";
+  }
+
+  const href = el.href || "";
+  const intent = el.getAttribute("data-wa-intent") ?? "";
+  const label = el.textContent ?? "";
+  if (
+    /5551995109169/.test(href.replace(/\D/g, "")) ||
+    /support|suporte|nethelp/i.test(`${intent} ${label}`)
+  ) {
+    return "support";
+  }
+  return "commercial";
 }
 
 /** Delegação global: captura cliques em links wa.me (GTM link trigger falha no SPA). */
@@ -571,14 +778,20 @@ export function initAnalytics(): void {
         return;
       }
       if (!/wa\.me|api\.whatsapp\.com/i.test(href)) return;
-      // Anexa (M482) no text antes do navegador seguir o link.
-      anchor.href = appendWaRefToUrl(href);
+      const clickIdentity =
+        getPrivacyConsentState() === "accepted"
+          ? createWhatsAppClickIdentity()
+          : undefined;
       trackWhatsAppClick({
         source: inferSourceFromElement(anchor),
         intent: anchor.getAttribute("data-wa-intent") ?? "link_click",
         vehicleId: anchor.getAttribute("data-wa-vehicle-id") ?? undefined,
         vehicleName: anchor.getAttribute("data-wa-vehicle-name") ?? undefined,
+        conversion: inferWhatsAppConversionFromElement(anchor),
+        clickIdentity,
       });
+      // Anexa a referência curta da mesma identidade antes da navegação.
+      anchor.href = appendWaRefToUrl(href, clickIdentity);
     },
     true,
   );

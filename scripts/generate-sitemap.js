@@ -36,6 +36,7 @@ const STATIC_PAGES = [
   { loc: "/move-brasil", changefreq: "weekly", priority: "0.8" },
   { loc: "/atendimento-24h", changefreq: "monthly", priority: "0.7" },
   { loc: "/politica-editorial", changefreq: "yearly", priority: "0.4" },
+  { loc: "/privacidade", changefreq: "yearly", priority: "0.3" },
 ];
 
 function escapeXml(value) {

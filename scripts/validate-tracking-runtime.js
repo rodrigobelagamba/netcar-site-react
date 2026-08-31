@@ -40,7 +40,7 @@ const context = {
   location: { pathname: "/", search: "" },
   dataLayer: [],
   document: {
-    referrer: "",
+    referrer: "https://chatgpt.com/",
     readyState: "loading",
     getElementsByTagName: () => [firstScript],
     createElement: () => ({ async: false, src: "", onerror: undefined }),
@@ -54,6 +54,11 @@ const context = {
   sessionStorage: {
     getItem: (key) => storage.get(key) ?? null,
     setItem: (key, value) => storage.set(key, String(value)),
+  },
+  localStorage: {
+    getItem: (key) => storage.get(key) ?? null,
+    setItem: (key, value) => storage.set(key, String(value)),
+    removeItem: (key) => storage.delete(key),
   },
   addEventListener(name, callback) {
     listeners.set(name, callback);
@@ -82,15 +87,20 @@ function assert(condition, message) {
 assert(typeof context.fbq === "function", "fila fbq não foi criada");
 assert(
   context.fbq.queue.some(
-    (event) => event[0] === "init" && event[1] === "367657940934075",
+    (event) => event[0] === "consent" && event[1] === "revoke",
   ),
-  "Meta Pixel não foi inicializado",
+  "Meta Pixel não iniciou com consentimento revogado",
 );
 assert(
-  context.fbq.queue.some(
-    (event) => event[0] === "track" && event[1] === "PageView",
+  !context.fbq.queue.some(
+    (event) => event[0] === "init" || event[0] === "track",
   ),
-  "PageView inicial do Meta não entrou na fila",
+  "Meta inicializou ou mediu PageView antes do consentimento",
+);
+assert(
+  !context.dataLayer.some((event) => event?.event === "ai_referral") &&
+    !storage.has("ai_ref_tracked"),
+  "referencia de IA foi medida ou persistida antes do consentimento",
 );
 assert(
   typeof listeners.get("load") === "function",
@@ -102,7 +112,10 @@ assert(
   typeof timeoutCallback === "function" && timeoutDelay >= 7000,
   "tags não respeitam a janela crítica após o load",
 );
-assert(insertedScripts.length === 0, "tags carregaram durante a primeira pintura");
+assert(
+  insertedScripts.length === 0,
+  "tags carregaram durante a primeira pintura",
+);
 timeoutCallback();
 assert(
   typeof idleCallback === "function",
@@ -110,7 +123,7 @@ assert(
 );
 idleCallback();
 
-const sources = insertedScripts.map((script) => script.src);
+let sources = insertedScripts.map((script) => script.src);
 assert(
   sources.some((src) => src.includes("gtm.js?id=GTM-M8MZRTL9")),
   "GTM não foi carregado",
@@ -120,14 +133,53 @@ assert(
   "GA4 direto duplicou o GA4 já administrado pelo GTM",
 );
 assert(
-  sources.includes("https://connect.facebook.net/en_US/fbevents.js"),
-  "biblioteca do Meta Pixel não foi carregada",
+  !sources.includes("https://connect.facebook.net/en_US/fbevents.js"),
+  "biblioteca do Meta Pixel carregou antes do consentimento",
 );
 assert(
   context.dataLayer.some(
     (event) => event?.event === "gtm.js" && event["gtm.start"],
   ),
   "evento inicial do GTM ausente",
+);
+
+assert(
+  typeof context.netcarSetPrivacyConsent === "function",
+  "controle de consentimento não foi exposto para a interface",
+);
+context.netcarSetPrivacyConsent("accepted");
+sources = insertedScripts.map((script) => script.src);
+assert(
+  storage.get("nc_privacy_consent_v1") === "accepted",
+  "aceite de privacidade não foi persistido",
+);
+assert(
+  context.dataLayer.some(
+    (event) => event?.event === "ai_referral" && event.ai_source === "ChatGPT",
+  ) && storage.get("ai_ref_tracked") === "1",
+  "referencia de IA não foi medida depois do consentimento",
+);
+assert(
+  context.fbq.queue.some(
+    (event) => event[0] === "consent" && event[1] === "grant",
+  ),
+  "consentimento do Meta não foi concedido após aceite",
+);
+assert(
+  context.fbq.queue.filter(
+    (event) => event[0] === "init" && event[1] === "367657940934075",
+  ).length === 1,
+  "Meta Pixel não inicializou exatamente uma vez após aceite",
+);
+assert(
+  context.fbq.queue.filter(
+    (event) => event[0] === "track" && event[1] === "PageView",
+  ).length === 1,
+  "PageView do Meta não entrou exatamente uma vez após aceite",
+);
+assert(
+  sources.includes("https://connect.facebook.net/en_US/fbevents.js"),
+  "biblioteca do Meta Pixel não carregou após consentimento",
 );
 
 const scriptCount = insertedScripts.length;
@@ -140,7 +192,10 @@ assert(
 const gtmScript = insertedScripts.find((script) =>
   script.src.includes("gtm.js?id=GTM-M8MZRTL9"),
 );
-assert(typeof gtmScript?.onerror === "function", "fallback do GA4 ausente no GTM");
+assert(
+  typeof gtmScript?.onerror === "function",
+  "fallback do GA4 ausente no GTM",
+);
 gtmScript.onerror();
 assert(
   insertedScripts.some(
@@ -157,5 +212,5 @@ assert(
 );
 
 console.log(
-  "Tags validadas em runtime: GTM e Meta carregam uma vez; GA4 direto fica como fallback sem duplicação.",
+  "Tags validadas em runtime: consentimento bloqueia Meta até o aceite, GTM carrega uma vez e GA4 direto fica como fallback.",
 );

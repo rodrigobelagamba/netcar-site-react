@@ -1,0 +1,149 @@
+import { useEffect, useRef, useState } from "react";
+import { ShieldCheck } from "lucide-react";
+import { clearTrafficAttribution } from "@/lib/waTracking";
+
+const PRIVACY_STORAGE_KEY = "nc_privacy_consent_v1";
+const OPEN_PRIVACY_EVENT = "netcar:open-privacy-preferences";
+
+declare global {
+  interface Window {
+    netcarSetPrivacyConsent?: (choice: "accepted" | "essential") => void;
+  }
+}
+
+function hasStoredChoice(): boolean {
+  try {
+    return ["accepted", "essential"].includes(
+      localStorage.getItem(PRIVACY_STORAGE_KEY) ?? "",
+    );
+  } catch {
+    return false;
+  }
+}
+
+export function openPrivacyPreferences(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event(OPEN_PRIVACY_EVENT));
+}
+
+export function PrivacyConsent({
+  showPersistentControl = false,
+}: {
+  showPersistentControl?: boolean;
+}) {
+  const [open, setOpen] = useState(() => !hasStoredChoice());
+  const dialogRef = useRef<HTMLElement>(null);
+  const persistentButtonRef = useRef<HTMLButtonElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const reopen = () => {
+      returnFocusRef.current =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
+      setOpen(true);
+    };
+    window.addEventListener(OPEN_PRIVACY_EVENT, reopen);
+    return () => window.removeEventListener(OPEN_PRIVACY_EVENT, reopen);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const frame = window.requestAnimationFrame(() => {
+      dialogRef.current?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [open]);
+
+  const reopenFromPersistentControl = () => {
+    returnFocusRef.current = persistentButtonRef.current;
+    setOpen(true);
+  };
+
+  const choose = (choice: "accepted" | "essential") => {
+    if (choice === "essential") clearTrafficAttribution();
+    window.netcarSetPrivacyConsent?.(choice);
+    setOpen(false);
+    window.requestAnimationFrame(() => {
+      const previous = returnFocusRef.current;
+      const target = previous?.isConnected
+        ? previous
+        : persistentButtonRef.current;
+      target?.focus({ preventScroll: true });
+      returnFocusRef.current = null;
+    });
+  };
+
+  if (!open) {
+    return showPersistentControl ? (
+      <button
+        ref={persistentButtonRef}
+        type="button"
+        onClick={reopenFromPersistentControl}
+        className="print:hidden fixed bottom-3 right-3 z-[10020] inline-flex items-center gap-2 rounded-full border border-[#00283C]/15 bg-white px-4 py-2.5 text-sm font-bold text-[#00283C] shadow-lg"
+      >
+        <ShieldCheck className="h-4 w-4 text-[#00616A]" aria-hidden="true" />
+        Privacidade
+      </button>
+    ) : null;
+  }
+
+  return (
+    <aside
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="privacy-consent-title"
+      aria-describedby="privacy-consent-description"
+      tabIndex={-1}
+      className="print:hidden fixed inset-x-3 bottom-3 z-[10020] mx-auto max-w-3xl rounded-2xl border border-[#00283C]/10 bg-white p-4 shadow-[0_20px_60px_rgba(0,40,60,0.24)] sm:p-5"
+    >
+      <div className="flex items-start gap-3">
+        <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#5CD29D]/15 text-[#00616A]">
+          <ShieldCheck className="h-5 w-5" aria-hidden="true" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <h2
+            id="privacy-consent-title"
+            className="text-base font-black text-[#00283C]"
+          >
+            Sua privacidade no site da Netcar
+          </h2>
+          <p
+            id="privacy-consent-description"
+            className="mt-1 text-sm leading-relaxed text-slate-600"
+          >
+            Usamos recursos de medição e publicidade do Google e da Meta para
+            entender páginas e campanhas e personalizar anúncios. Você pode
+            permitir esses recursos ou manter apenas o necessário para o site
+            funcionar.{" "}
+            <a
+              href="/privacidade"
+              className="font-semibold text-[#00616A] underline underline-offset-2"
+            >
+              Entenda como tratamos os dados
+            </a>
+            .
+          </p>
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              onClick={() => choose("essential")}
+              className="rounded-full border border-[#00283C]/20 px-5 py-2.5 text-sm font-bold text-[#00283C] transition-colors hover:bg-slate-50"
+            >
+              Somente essenciais
+            </button>
+            <button
+              type="button"
+              onClick={() => choose("accepted")}
+              className="rounded-full bg-[#087A37] px-5 py-2.5 text-sm font-black text-white transition-colors hover:bg-[#075E54]"
+            >
+              Permitir medição e publicidade
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
