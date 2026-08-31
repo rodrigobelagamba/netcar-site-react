@@ -143,6 +143,11 @@ function netcar_fixed_route_meta()
             'description' => 'Escolha de 2 a 4 carros do estoque e compare preço, ano, câmbio, motor e outros dados na mesma tela. Abra as fichas e veja qual combina mais com você.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/comparar',
         ],
+        '/privacidade' => [
+            'title' => 'Privacidade e cookies | Netcar Multimarcas',
+            'description' => 'Saiba como a Netcar utiliza dados, cookies e recursos de medição e como alterar suas preferências de privacidade.',
+            'canonical' => 'https://www.netcarmultimarcas.com.br/privacidade',
+        ],
     ];
 }
 
@@ -435,6 +440,7 @@ function netcar_route_manifest_entry($path)
     if (preg_match('#^/blog/#', (string) $path)) return 'src/modules/blog/pages/BlogPostPage.tsx';
     if ($path === '/seminovos-automaticos') return 'src/modules/seo/pages/SeminovosAutomaticosPage.tsx';
     if ($path === '/comparar') return 'src/modules/seo/pages/ComparadorPage.tsx';
+    if ($path === '/privacidade') return 'src/modules/legal/pages/PrivacyPage.tsx';
     if ($path === '/regioes-atendidas') return 'src/modules/seo/pages/RegionsHubPage.tsx';
     if ($path === '/como-selecionamos-nossos-carros') return 'src/modules/procedencia/pages/ComoSelecionamosPage.tsx';
     if (preg_match('#^/seminovos-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/CityLandingPage.tsx';

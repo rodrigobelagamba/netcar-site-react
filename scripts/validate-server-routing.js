@@ -74,6 +74,11 @@ expect(
   "comparador não está ligado ao HTML estático e ao chunk React",
 );
 expect(
+  controller.includes("'/privacidade' => [") &&
+    controller.includes("src/modules/legal/pages/PrivacyPage.tsx"),
+  "privacidade não está registrada como rota válida no servidor",
+);
+expect(
   htaccess.includes("politica-editorial|comparar") &&
     htaccess.includes("seo-static/page-$1.html"),
   "crawler não recebe o HTML estático do comparador",
