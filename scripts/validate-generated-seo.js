@@ -908,10 +908,10 @@ for (const url of expectedDemandUrls) {
 function validateComparator() {
   const label = "comparar";
   const canonical = `${site}/comparar`;
-  const title = "Comparar carros seminovos lado a lado | Netcar";
+  const title = "Comparar carros lado a lado | Preço e ficha | Netcar";
   const description =
-    "Compare até 4 carros seminovos lado a lado: preço, ano, câmbio, motor e características. Use o estoque atual da Netcar em Esteio/RS.";
-  const h1 = "Comparar carros seminovos lado a lado";
+    "Escolha de 2 a 4 carros do estoque e compare preço, ano, câmbio, motor e outros dados na mesma tela. Abra as fichas e veja qual combina mais com você.";
+  const h1 = "Compare carros lado a lado";
   let html;
   try {
     html = readFileSync(

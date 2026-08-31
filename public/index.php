@@ -139,8 +139,8 @@ function netcar_fixed_route_meta()
             'canonical' => 'https://www.netcarmultimarcas.com.br/blog',
         ],
         '/comparar' => [
-            'title' => 'Comparar carros seminovos lado a lado | Netcar',
-            'description' => 'Compare até 4 carros seminovos lado a lado: preço, ano, câmbio, motor e características. Use o estoque atual da Netcar em Esteio/RS.',
+            'title' => 'Comparar carros lado a lado | Preço e ficha | Netcar',
+            'description' => 'Escolha de 2 a 4 carros do estoque e compare preço, ano, câmbio, motor e outros dados na mesma tela. Abra as fichas e veja qual combina mais com você.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/comparar',
         ],
     ];

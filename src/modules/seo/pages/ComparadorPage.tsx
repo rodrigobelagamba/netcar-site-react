@@ -101,9 +101,9 @@ export function ComparadorPage() {
   const trackedPreselectionRef = useRef<string | null>(null);
 
   useMetaTags({
-    title: "Comparar carros seminovos lado a lado | Netcar",
+    title: "Comparar carros lado a lado | Preço e ficha | Netcar",
     description:
-      "Compare até 4 carros seminovos lado a lado: preço, ano, câmbio, motor e características. Use o estoque atual da Netcar em Esteio/RS.",
+      "Escolha de 2 a 4 carros do estoque e compare preço, ano, câmbio, motor e outros dados na mesma tela. Abra as fichas e veja qual combina mais com você.",
     url: "https://www.netcarmultimarcas.com.br/comparar",
   });
 
@@ -242,8 +242,24 @@ export function ComparadorPage() {
     <main className="flex-1 overflow-x-hidden max-w-full bg-white">
       <RegionalSeoHero
         eyebrow="Comparador Netcar"
-        title="Compare os carros que você está considerando"
-        intro={`Escolha de 2 a ${MAX_COMPARE} carros do estoque para ver preço, ano, câmbio e motor na mesma tela. Se ficar em dúvida, envie a comparação pronta para a nossa equipe.`}
+        title="Compare carros lado a lado"
+        intro={`Escolha de 2 a ${MAX_COMPARE} carros do estoque e veja preço, ano, câmbio, motor e outros dados na mesma tela. Depois, abra as fichas ou peça ajuda para decidir.`}
+        badges={
+          <>
+            {[
+              "1. Escolha os carros",
+              "2. Veja as diferenças",
+              "3. Abra a ficha",
+            ].map((step) => (
+              <span
+                key={step}
+                className="rounded-full border border-[#00283C]/10 bg-white px-4 py-2 text-sm font-bold text-[#00283C] shadow-sm"
+              >
+                {step}
+              </span>
+            ))}
+          </>
+        }
       />
 
       <section className="pb-16">
@@ -266,10 +282,11 @@ export function ComparadorPage() {
             ) : presets.length > 0 ? (
               <>
                 <h2 className="text-lg font-bold text-fg">
-                  Comece por uma comparação pronta
+                  Comece com dois carros
                 </h2>
                 <p className="mt-1 text-sm text-gray-600">
-                  Os pares abaixo usam carros disponíveis e de preço próximo.
+                  Escolha um dos pares prontos ou monte a sua própria
+                  comparação logo abaixo.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   {presets.map((preset) => (
@@ -436,11 +453,14 @@ export function ComparadorPage() {
           <div className="mb-5 flex items-center justify-between gap-4 flex-wrap">
             <div>
               <h2 className="text-xl font-bold text-fg">
-                Escolha os carros{" "}
+                {presets.length > 0
+                  ? "Ou monte a sua comparação"
+                  : "Escolha os carros"}{" "}
                 {selected.length > 0 && `(${selected.length}/${MAX_COMPARE})`}
               </h2>
               <p className="mt-1 text-sm text-gray-500">
-                Toque nos carros que você quer colocar lado a lado.
+                Busque por marca ou modelo e selecione de 2 a {MAX_COMPARE}
+                carros.
               </p>
             </div>
             {selected.length >= 2 && (

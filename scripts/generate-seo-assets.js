@@ -1440,9 +1440,10 @@ for (const landing of landings) {
 }
 
 const comparatorCanonical = `${SITE}/comparar`;
-const comparatorTitle = "Comparar carros seminovos lado a lado | Netcar";
+const comparatorTitle =
+  "Comparar carros lado a lado | Preço e ficha | Netcar";
 const comparatorDescription =
-  "Compare até 4 carros seminovos lado a lado: preço, ano, câmbio, motor e características. Use o estoque atual da Netcar em Esteio/RS.";
+  "Escolha de 2 a 4 carros do estoque e compare preço, ano, câmbio, motor e outros dados na mesma tela. Abra as fichas e veja qual combina mais com você.";
 const comparisonDefinitions = [
   ["Jeep Compass", "JEEP", "COMPASS", "Honda HR-V", "HONDA", "HRV"],
   [
@@ -1511,8 +1512,8 @@ const comparisonExamplesHtml = comparisonExamples.length
 const comparatorBody = `
   <nav aria-label="Navegação estrutural"><ol><li><a href="${SITE}/">Home</a></li><li><a href="${SITE}/seminovos">Seminovos</a></li><li>Comparar carros</li></ol></nav>
   <article>
-    <h1>Comparar carros seminovos lado a lado</h1>
-    <p>Escolha de dois a quatro veículos disponíveis e veja preço, ano, câmbio, motor, combustível, potência, portas, cor e categoria na mesma tela.</p>
+    <h1>Compare carros lado a lado</h1>
+    <p>Escolha de dois a quatro carros disponíveis e veja preço, ano, câmbio, motor, combustível, potência, portas, cor e categoria na mesma tela.</p>
     <h2>Comparações com carros do estoque atual</h2>
     ${comparisonExamplesHtml}
     <h2>Como usar o comparador</h2>
@@ -1545,7 +1546,7 @@ writeSeoPage(
         "@type": "WebPage",
         "@id": `${comparatorCanonical}#webpage`,
         url: comparatorCanonical,
-        name: "Comparar carros seminovos lado a lado",
+        name: "Compare carros lado a lado",
         description: comparatorDescription,
         mainEntity: { "@id": `${comparatorCanonical}#app` },
       },
