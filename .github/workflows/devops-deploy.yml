@@ -4,6 +4,16 @@ on:
   push:
     branches: [main, master]
   workflow_dispatch:
+    inputs:
+      deploy_social:
+        description: "Deploy parcial da integracao social"
+        required: true
+        default: "none"
+        type: choice
+        options:
+          - none
+          - guard
+          - full
 
 jobs:
   deploy:
@@ -19,10 +29,14 @@ jobs:
 
       - name: Sync VPS and refresh panel if needed
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          TARGET_REF: ${{ github.ref_name }}
+          SOCIAL_MODE: ${{ github.event.inputs.deploy_social || 'none' }}
         with:
           host: ${{ secrets.DEVOPS_VPS_HOST }}
           username: ${{ secrets.DEVOPS_VPS_USER }}
           key: ${{ secrets.DEVOPS_VPS_SSH_KEY }}
+          envs: TARGET_REF,SOCIAL_MODE
           # false: com true o drone-ssh abortava no meio do if/else multilinha
           # logo após o git reset (exit 1 sem echo). O script já tem set -euo pipefail.
           script_stop: false
@@ -34,11 +48,19 @@ jobs:
             git config --global --add safe.directory "$REPO_DIR" || true
             git config --global --add safe.directory "$REPO_DIR/dist" || true
 
+            case "$TARGET_REF" in
+              *[!a-zA-Z0-9._/-]*|"") echo "Ref invalida: $TARGET_REF"; exit 1 ;;
+            esac
+            case "$SOCIAL_MODE" in
+              none|guard|full) ;;
+              *) echo "Modo social invalido: $SOCIAL_MODE"; exit 1 ;;
+            esac
+
             BEFORE="$(git rev-parse HEAD)"
             echo "BEFORE=$BEFORE"
             if git remote get-url origin >/dev/null 2>&1; then
               git fetch --all --prune
-              git reset --hard origin/master || git reset --hard origin/main
+              git reset --hard "origin/$TARGET_REF"
             else
               echo "origin ausente — mantendo cópia local"
             fi
@@ -79,14 +101,49 @@ jobs:
             fi
 
             docker compose ps || true
+            HEALTH_OK=0
             for i in 1 2 3 4 5 6 7 8 9 10; do
               if curl -fsS "http://127.0.0.1:3090/api/health"; then
                 echo
                 echo "health ok"
-                exit 0
+                HEALTH_OK=1
+                break
               fi
               sleep 2
             done
-            echo "health check falhou"
-            docker logs netcar-devops --tail 50 || true
-            exit 1
+            if [ "$HEALTH_OK" != "1" ]; then
+              echo "health check falhou"
+              docker logs netcar-devops --tail 50 || true
+              exit 1
+            fi
+
+            if [ "$SOCIAL_MODE" != "none" ]; then
+              echo "Validando PHP social antes do deploy parcial..."
+              docker run --rm -v "$REPO_DIR:/app:ro" -w /app php:8.2-cli-alpine sh -lc \
+                'find docs/social -name "*.php" -type f -print0 | xargs -0 -n1 php -l >/tmp/php-lint.log && { [ ! -f docs/social/tests/InstagramGbpSyncTest.php ] || php docs/social/tests/InstagramGbpSyncTest.php; }'
+
+              if [ "$SOCIAL_MODE" = "guard" ]; then
+                docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
+                  --env-file /workspace/.env.local \
+                  --identity /root/.ssh/id_netcar \
+                  --files data/.htaccess \
+                  --apply
+              else
+                docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
+                  --env-file /workspace/.env.local \
+                  --identity /root/.ssh/id_netcar \
+                  --apply
+              fi
+
+              TOKEN_STATUS="$(curl -sS -o /dev/null -w '%{http_code}' -I 'https://www.netcarmultimarcas.com.br/social/v1/data/cache/social-tokens.json')"
+              if [ "$TOKEN_STATUS" = "200" ]; then
+                echo "Falha: pasta data continua publica"
+                exit 1
+              fi
+              echo "Pasta data protegida (HTTP $TOKEN_STATUS)"
+            fi
+
+            # Um dispatch pode executar codigo de uma branch sem deixar a VPS presa nela.
+            if [ "$TARGET_REF" != "master" ] && [ "$TARGET_REF" != "main" ]; then
+              git reset --hard origin/master || git reset --hard origin/main
+            fi
