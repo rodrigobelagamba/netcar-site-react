@@ -613,10 +613,10 @@ export function SeminovosPage() {
 
   const visibleVehicles = filteredAndSortedVehicles;
 
-  // Ajuda compacta só depois que o usuário já viu de 6 a 8 carros.
+  // Insere a ajuda depois de duas linhas completas, sem abrir lacunas no grid.
   const midGridBreak = stockLayout.compact
     ? 6
-    : Math.min(stockLayout.columns * 2, 8);
+    : stockLayout.columns * 2;
   const showMidGridBanner =
     visibleVehicles.length > midGridBreak + stockLayout.columns;
 

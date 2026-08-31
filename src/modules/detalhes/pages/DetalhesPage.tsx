@@ -2136,7 +2136,7 @@ export function DetalhesPage() {
                         xl:top-[-10rem]
                         2xl:top-[-15rem]
                         3xl:top-[-15rem]
-                        4xl:w-[58vw] 4xl:top-[-20rem]
+                        4xl:w-[58vw] 4xl:top-[-15rem] 4xl:right-[3vw]
                         5xl:top-[-35rem]"
         >
           {mainImage && (
