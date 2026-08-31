@@ -267,6 +267,7 @@ function buildTransactionScript({
   backupRoot,
   release,
   phpBin,
+  healthUrls,
 }) {
   const publicRoot = pathPosix.join(remoteRoot, "social/v1");
   const pendingPaths = selected.map(
@@ -342,6 +343,13 @@ function buildTransactionScript({
     )
     .join("\n");
 
+  const postDeployHealth = healthUrls
+    .map(
+      (url) =>
+        `curl -fsS --connect-timeout 10 --max-time 30 ${quote(url)} >/dev/null`,
+    )
+    .join("\n");
+
   return [
     "set -eu",
     "umask 077",
@@ -380,6 +388,8 @@ function buildTransactionScript({
     "COMMIT_STARTED=1",
     replace,
     postDeployLint,
+    healthUrls.length > 0 ? "command -v curl >/dev/null 2>&1" : "",
+    postDeployHealth,
     "COMMIT_STARTED=0",
     `rm -rf ${quote(stageRoot)}`,
     "trap - 0 1 2 15",
@@ -473,6 +483,16 @@ async function main() {
     .slice(0, 14)}-${randomBytes(4).toString("hex")}`;
   const stageRoot = `.netcar-social-deploys/staging/${release}`;
   const backupRoot = `.netcar-social-backups/${release}`;
+  const lockRoot = ".netcar-social-deploy.lock";
+  const isFullRelease =
+    selected.length === manifest.length &&
+    manifest.every((relative) => selected.includes(relative));
+  const healthUrls = isFullRelease
+    ? [
+        "https://www.netcarmultimarcas.com.br/social/v1/stories.php",
+        "https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=1",
+      ]
+    : [];
   const transactionScript = buildTransactionScript({
     selected,
     remoteRoot,
@@ -480,6 +500,7 @@ async function main() {
     backupRoot,
     release,
     phpBin,
+    healthUrls,
   });
   await run("sh", ["-n"], { input: transactionScript });
   const pinnedHosts = await materializeKnownHosts(pin, config.SSH_HOST, port);
@@ -505,7 +526,42 @@ async function main() {
     run("ssh", [...commonSshArgs, ...portArgs, destination, command]);
 
   let stageCreated = false;
+  let remoteLockAcquired = false;
   try {
+    await ssh(
+      [
+        "set -eu",
+        `if ! mkdir ${quote(lockRoot)}; then`,
+        '  echo "Outro deploy social ja possui o lock remoto." >&2',
+        "  exit 1",
+        "fi",
+        `if ! printf '%s\\n' ${quote(release)} > ${quote(pathPosix.join(lockRoot, "owner"))}; then`,
+        `  rmdir ${quote(lockRoot)} || true`,
+        "  exit 1",
+        "fi",
+      ].join("\n"),
+    );
+    remoteLockAcquired = true;
+
+    const protectedParents = [
+      remoteRoot,
+      pathPosix.join(remoteRoot, "social"),
+      pathPosix.join(remoteRoot, "social/v1"),
+      ...selected.map((relative) =>
+        pathPosix.dirname(pathPosix.join(remoteRoot, "social/v1", relative)),
+      ),
+    ];
+    await ssh(
+      [
+        "set -eu",
+        ...[...new Set(protectedParents)].map(
+          (directory) =>
+            `if [ -L ${quote(directory)} ]; then echo ${quote(`Diretorio remoto nao pode ser symlink: ${directory}`)} >&2; exit 1; fi`,
+        ),
+        `test -d ${quote(pathPosix.join(remoteRoot, "social/v1"))}`,
+      ].join("\n"),
+    );
+
     const stageDirectories = [
       ...new Set(
         selected.map((relative) =>
@@ -576,6 +632,23 @@ async function main() {
     }
     throw error;
   } finally {
+    if (remoteLockAcquired) {
+      try {
+        await ssh(
+          [
+            "set -eu",
+            `test -d ${quote(lockRoot)} && test ! -L ${quote(lockRoot)}`,
+            `test "$(cat ${quote(pathPosix.join(lockRoot, "owner"))})" = ${quote(release)}`,
+            `rm -f ${quote(pathPosix.join(lockRoot, "owner"))}`,
+            `rmdir ${quote(lockRoot)}`,
+          ].join("\n"),
+        );
+      } catch (lockError) {
+        console.error(
+          `Aviso: lock remoto preservado para revisao: ${lockError.message}`,
+        );
+      }
+    }
     pinnedHosts.cleanup();
   }
 }

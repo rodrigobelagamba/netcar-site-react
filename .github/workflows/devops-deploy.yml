@@ -16,6 +16,10 @@ on:
           - guard
           - full
 
+concurrency:
+  group: netcar-devops-deploy
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -58,17 +62,6 @@ jobs:
               *) echo "Modo social invalido: $SOCIAL_MODE"; exit 1 ;;
             esac
 
-            BEFORE="$(git rev-parse HEAD)"
-            echo "BEFORE=$BEFORE"
-            if git remote get-url origin >/dev/null 2>&1; then
-              git fetch --all --prune
-              git reset --hard "origin/$TARGET_REF"
-            else
-              echo "origin ausente — mantendo cópia local"
-            fi
-            AFTER="$(git rev-parse HEAD)"
-            echo "AFTER=$AFTER"
-
             # Dispatches de uma branch usam o codigo daquela branch, mas nunca
             # deixam a copia operacional da VPS presa nela, inclusive em erro.
             RESTORE_DEFAULT=0
@@ -88,6 +81,17 @@ jobs:
               exit "$rc"
             }
             trap restore_checkout EXIT
+
+            BEFORE="$(git rev-parse HEAD)"
+            echo "BEFORE=$BEFORE"
+            if git remote get-url origin >/dev/null 2>&1; then
+              git fetch --all --prune
+              git reset --hard "origin/$TARGET_REF"
+            else
+              echo "origin ausente — mantendo cópia local"
+            fi
+            AFTER="$(git rev-parse HEAD)"
+            echo "AFTER=$AFTER"
 
             NEED_REBUILD=0
             if [ "$BEFORE" = "$AFTER" ]; then
