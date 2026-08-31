@@ -260,6 +260,180 @@ async function materializeKnownHosts(pin, host, port) {
   }
 }
 
+async function runPublisherDryRun({ config, pin, port, remoteRoot, phpBin }) {
+  if (process.argv.includes("--apply") || argValue("--files") !== "") {
+    throw new Error(
+      "--publisher-dry-run nao pode ser combinado com --apply ou --files.",
+    );
+  }
+
+  const pinnedHosts = await materializeKnownHosts(pin, config.SSH_HOST, port);
+  const destination = `${config.SSH_USER}@${config.SSH_HOST}`;
+  const portArgs = port === 22 ? [] : ["-p", String(port)];
+  const commonSshArgs = [
+    "-i",
+    config.SSH_KEY_PATH,
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "IdentitiesOnly=yes",
+    "-o",
+    "StrictHostKeyChecking=yes",
+    "-o",
+    `UserKnownHostsFile=${pinnedHosts.path}`,
+    "-o",
+    "ConnectTimeout=15",
+    "-o",
+    "LogLevel=ERROR",
+  ];
+
+  try {
+    const syncPath = pathPosix.join(remoteRoot, "social/v1/sync-social.php");
+    const phpCode = [
+      '$_GET["posts_only"] = "1";',
+      '$_GET["dry_run"] = "1";',
+      `require ${JSON.stringify(syncPath)};`,
+    ].join(" ");
+    const stdout = await run("ssh", [
+      ...commonSshArgs,
+      ...portArgs,
+      destination,
+      `${quote(phpBin)} -r ${quote(phpCode)}`,
+    ]);
+
+    let result;
+    try {
+      result = JSON.parse(stdout);
+    } catch {
+      throw new Error("Dry-run remoto nao devolveu JSON valido.");
+    }
+
+    const posts = result?.posts;
+    if (
+      result?.success !== true ||
+      !posts ||
+      posts.success !== true ||
+      posts.dryRun !== true ||
+      posts.created !== 0
+    ) {
+      throw new Error(
+        "Dry-run remoto nao confirmou execucao segura sem criacao.",
+      );
+    }
+
+    const expectedLocations = new Map([
+      ["loja_1", "11161331340741727452"],
+      ["loja_2", "17013442122163034193"],
+    ]);
+    const locations = Array.isArray(posts.locations) ? posts.locations : [];
+    const returnedSlugs = new Set(
+      locations.map((location) => String(location?.slug ?? "")),
+    );
+    const returnedIds = new Set(
+      locations.map((location) => String(location?.id ?? "")),
+    );
+    if (
+      locations.length !== expectedLocations.size ||
+      returnedSlugs.size !== expectedLocations.size ||
+      returnedIds.size !== expectedLocations.size ||
+      locations.some(
+        (location) =>
+          expectedLocations.get(String(location?.slug ?? "")) !==
+          String(location?.id ?? ""),
+      )
+    ) {
+      throw new Error(
+        "Dry-run nao encontrou exatamente as duas locations Netcar.",
+      );
+    }
+
+    const items = Array.isArray(posts.items) ? posts.items : [];
+    if (items.length !== Number(posts.eligibleMedia ?? 0) * 2) {
+      throw new Error(
+        "Dry-run nao gerou exatamente dois destinos por post elegivel.",
+      );
+    }
+
+    const mediaLocations = new Map();
+    const safeItems = items.map((item) => {
+      const slug = String(item?.location ?? "");
+      const mediaId = String(item?.instagramMediaId ?? "");
+      const destinationKind = String(item?.destinationKind ?? "");
+      if (
+        mediaId === "" ||
+        !expectedLocations.has(slug) ||
+        item?.action !== "would_create" ||
+        !["vehicle", "fallback"].includes(destinationKind)
+      ) {
+        throw new Error("Dry-run retornou location ou acao inesperada.");
+      }
+      const slugs = mediaLocations.get(mediaId) ?? new Set();
+      if (slugs.has(slug)) {
+        throw new Error("Dry-run repetiu a mesma location para um post.");
+      }
+      slugs.add(slug);
+      mediaLocations.set(mediaId, slugs);
+      let tracked;
+      try {
+        tracked = new URL(String(item?.trackedUrl ?? ""));
+      } catch {
+        throw new Error("Dry-run retornou CTA invalido.");
+      }
+      if (
+        tracked.protocol !== "https:" ||
+        !["netcarmultimarcas.com.br", "www.netcarmultimarcas.com.br"].includes(
+          tracked.hostname,
+        ) ||
+        tracked.searchParams.get("utm_source") !== "google_business_profile" ||
+        tracked.searchParams.get("utm_medium") !== "organic_social" ||
+        tracked.searchParams.get("utm_campaign") !== "instagram_replica" ||
+        !String(tracked.searchParams.get("utm_content") ?? "").endsWith(
+          `_${slug}`,
+        )
+      ) {
+        throw new Error(
+          "Dry-run retornou CTA fora do dominio ou sem atribuicao esperada.",
+        );
+      }
+
+      return {
+        instagramMediaId: mediaId,
+        publishedAt: String(item.publishedAt ?? ""),
+        location: slug,
+        destinationKind,
+        trackedUrl: tracked.toString(),
+        action: item.action,
+      };
+    });
+    if (
+      [...mediaLocations.values()].some(
+        (slugs) => slugs.size !== expectedLocations.size,
+      )
+    ) {
+      throw new Error("Dry-run nao confirmou as duas lojas em cada post.");
+    }
+
+    console.log(
+      JSON.stringify(
+        {
+          success: true,
+          enabled: posts.enabled === true,
+          dryRun: true,
+          notBefore: posts.notBefore,
+          feedChecked: posts.feedChecked,
+          eligibleMedia: posts.eligibleMedia,
+          locations,
+          items: safeItems,
+        },
+        null,
+        2,
+      ),
+    );
+  } finally {
+    pinnedHosts.cleanup();
+  }
+}
+
 function buildTransactionScript({
   selected,
   remoteRoot,
@@ -442,6 +616,11 @@ async function main() {
     phpBin.includes("..")
   ) {
     throw new Error("SSH_PHP_BIN invalido.");
+  }
+
+  if (process.argv.includes("--publisher-dry-run")) {
+    await runPublisherDryRun({ config, pin, port, remoteRoot, phpBin });
+    return;
   }
 
   const selectedArg = argValue("--files");

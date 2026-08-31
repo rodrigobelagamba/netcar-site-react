@@ -12,6 +12,7 @@ on:
         type: choice
         options:
           - none
+          - publisher-dry-run
           - plan
           - guard
           - full
@@ -61,7 +62,7 @@ jobs:
               *[!a-zA-Z0-9._/-]*|"") echo "Ref invalida: $TARGET_REF"; exit 1 ;;
             esac
             case "$SOCIAL_MODE" in
-              none|plan|guard|full) ;;
+              none|publisher-dry-run|plan|guard|full) ;;
               *) echo "Modo social invalido: $SOCIAL_MODE"; exit 1 ;;
             esac
 
@@ -151,7 +152,13 @@ jobs:
               docker run --rm -v "$REPO_DIR:/app:ro" -w /app php:8.2-cli-alpine sh -lc \
                 'find docs/social -name "*.php" -type f -print0 | xargs -0 -n1 php -l >/tmp/php-lint.log && { [ ! -f docs/social/tests/InstagramGbpSyncTest.php ] || php docs/social/tests/InstagramGbpSyncTest.php; }'
 
-              if [ "$SOCIAL_MODE" = "plan" ]; then
+              if [ "$SOCIAL_MODE" = "publisher-dry-run" ]; then
+                docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
+                  --env-file /workspace/.env.local \
+                  --identity /root/.ssh/id_netcar \
+                  --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}" \
+                  --publisher-dry-run
+              elif [ "$SOCIAL_MODE" = "plan" ]; then
                 docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
                   --env-file /workspace/.env.local \
                   --identity /root/.ssh/id_netcar \
