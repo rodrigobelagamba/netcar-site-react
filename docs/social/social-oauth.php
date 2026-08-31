@@ -11,9 +11,34 @@ declare(strict_types=1);
 require_once __DIR__ . '/lib/bootstrap.php';
 
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
 
-$provider = $_GET['provider'] ?? '';
-$action = $_GET['action'] ?? 'status';
+$provider = is_string($_GET['provider'] ?? null) ? $_GET['provider'] : '';
+$action = is_string($_GET['action'] ?? null) ? $_GET['action'] : 'status';
+$requireAdmin = static function (): void {
+    $authorization = '';
+    foreach (['HTTP_AUTHORIZATION', 'REDIRECT_HTTP_AUTHORIZATION'] as $headerName) {
+        if (is_string($_SERVER[$headerName] ?? null) && trim($_SERVER[$headerName]) !== '') {
+            $authorization = trim((string) $_SERVER[$headerName]);
+            break;
+        }
+    }
+
+    $providedKey = '';
+    if (stripos($authorization, 'Bearer ') === 0) {
+        $providedKey = trim(substr($authorization, 7));
+    } elseif (is_string($_POST['key'] ?? null)) {
+        // Compatibilidade com o formulario administrativo existente.
+        $providedKey = (string) $_POST['key'];
+    }
+
+    $expectedKey = (string) SocialEnv::get('oauth.admin_secret', '');
+    if ($expectedKey === '' || !hash_equals($expectedKey, $providedKey)) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Forbidden'], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+};
 
 try {
     if ($action === 'status') {
@@ -25,12 +50,8 @@ try {
             ],
             'meta' => [
                 'connected' => $tokens->hasMetaAccessToken(),
-                'ig_user_id' => $tokens->get('meta')['ig_user_id'] ?? null,
             ],
-            'connect_urls' => [
-                'google' => '/social/v1/social-oauth.php?provider=google&action=connect',
-                'meta' => '/social/v1/social-oauth.php?provider=meta&action=connect',
-            ],
+            'oauthProtected' => true,
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
     }
@@ -39,14 +60,23 @@ try {
         $oauth = new GoogleOAuth();
 
         if ($action === 'connect') {
-            header('Location: ' . $oauth->getAuthUrl());
+            if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+                http_response_code(405);
+                header('Allow: POST');
+                echo json_encode(['success' => false, 'message' => 'Use POST autenticado.'], JSON_UNESCAPED_UNICODE);
+                exit;
+            }
+            $requireAdmin();
+            $state = (new OAuthStateStore())->issue('google');
+            header('Location: ' . $oauth->getAuthUrl($state), true, 303);
             exit;
         }
 
         if ($action === 'callback') {
-            $code = $_GET['code'] ?? '';
-            if ($code === '') {
-                throw new RuntimeException('Parâmetro code ausente');
+            $code = is_string($_GET['code'] ?? null) ? $_GET['code'] : '';
+            $state = is_string($_GET['state'] ?? null) ? $_GET['state'] : '';
+            if ($code === '' || !(new OAuthStateStore())->consume($state, 'google')) {
+                throw new RuntimeException('Callback Google invalido ou expirado.');
             }
             $oauth->handleCallback($code);
             echo json_encode([
@@ -61,14 +91,23 @@ try {
         $oauth = new MetaOAuth();
 
         if ($action === 'connect') {
-            header('Location: ' . $oauth->getAuthUrl());
+            if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+                http_response_code(405);
+                header('Allow: POST');
+                echo json_encode(['success' => false, 'message' => 'Use POST autenticado.'], JSON_UNESCAPED_UNICODE);
+                exit;
+            }
+            $requireAdmin();
+            $state = (new OAuthStateStore())->issue('meta');
+            header('Location: ' . $oauth->getAuthUrl($state), true, 303);
             exit;
         }
 
         if ($action === 'callback') {
-            $code = $_GET['code'] ?? '';
-            if ($code === '') {
-                throw new RuntimeException('Parâmetro code ausente');
+            $code = is_string($_GET['code'] ?? null) ? $_GET['code'] : '';
+            $state = is_string($_GET['state'] ?? null) ? $_GET['state'] : '';
+            if ($code === '' || !(new OAuthStateStore())->consume($state, 'meta')) {
+                throw new RuntimeException('Callback Meta invalido ou expirado.');
             }
             $oauth->handleCallback($code);
             echo json_encode([
@@ -85,9 +124,10 @@ try {
         'message' => 'Use provider=google|meta e action=connect|callback|status',
     ], JSON_UNESCAPED_UNICODE);
 } catch (Throwable $e) {
+    error_log('Netcar social OAuth error: ' . get_class($e) . ': ' . $e->getMessage());
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => $e->getMessage(),
+        'message' => 'Falha ao concluir a conexao OAuth. Consulte o log do servidor.',
     ], JSON_UNESCAPED_UNICODE);
 }

@@ -12,6 +12,7 @@ on:
         type: choice
         options:
           - none
+          - plan
           - guard
           - full
 
@@ -32,11 +33,12 @@ jobs:
         env:
           TARGET_REF: ${{ github.ref_name }}
           SOCIAL_MODE: ${{ github.event.inputs.deploy_social || 'none' }}
+          SOCIAL_HOST_FINGERPRINT: ${{ secrets.KINGHOST_SSH_HOST_FINGERPRINT }}
         with:
           host: ${{ secrets.DEVOPS_VPS_HOST }}
           username: ${{ secrets.DEVOPS_VPS_USER }}
           key: ${{ secrets.DEVOPS_VPS_SSH_KEY }}
-          envs: TARGET_REF,SOCIAL_MODE
+          envs: TARGET_REF,SOCIAL_MODE,SOCIAL_HOST_FINGERPRINT
           # false: com true o drone-ssh abortava no meio do if/else multilinha
           # logo após o git reset (exit 1 sem echo). O script já tem set -euo pipefail.
           script_stop: false
@@ -52,7 +54,7 @@ jobs:
               *[!a-zA-Z0-9._/-]*|"") echo "Ref invalida: $TARGET_REF"; exit 1 ;;
             esac
             case "$SOCIAL_MODE" in
-              none|guard|full) ;;
+              none|plan|guard|full) ;;
               *) echo "Modo social invalido: $SOCIAL_MODE"; exit 1 ;;
             esac
 
@@ -66,6 +68,26 @@ jobs:
             fi
             AFTER="$(git rev-parse HEAD)"
             echo "AFTER=$AFTER"
+
+            # Dispatches de uma branch usam o codigo daquela branch, mas nunca
+            # deixam a copia operacional da VPS presa nela, inclusive em erro.
+            RESTORE_DEFAULT=0
+            if [ "$TARGET_REF" != "master" ] && [ "$TARGET_REF" != "main" ]; then
+              RESTORE_DEFAULT=1
+            fi
+            restore_checkout() {
+              rc=$?
+              trap - EXIT
+              if [ "$RESTORE_DEFAULT" = "1" ]; then
+                set +e
+                cd "$REPO_DIR"
+                git reset --hard origin/master || git reset --hard origin/main
+                restore_rc=$?
+                if [ "$rc" -eq 0 ] && [ "$restore_rc" -ne 0 ]; then rc=$restore_rc; fi
+              fi
+              exit "$rc"
+            }
+            trap restore_checkout EXIT
 
             NEED_REBUILD=0
             if [ "$BEFORE" = "$AFTER" ]; then
@@ -122,16 +144,23 @@ jobs:
               docker run --rm -v "$REPO_DIR:/app:ro" -w /app php:8.2-cli-alpine sh -lc \
                 'find docs/social -name "*.php" -type f -print0 | xargs -0 -n1 php -l >/tmp/php-lint.log && { [ ! -f docs/social/tests/InstagramGbpSyncTest.php ] || php docs/social/tests/InstagramGbpSyncTest.php; }'
 
-              if [ "$SOCIAL_MODE" = "guard" ]; then
+              if [ "$SOCIAL_MODE" = "plan" ]; then
                 docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
                   --env-file /workspace/.env.local \
                   --identity /root/.ssh/id_netcar \
+                  --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}"
+              elif [ "$SOCIAL_MODE" = "guard" ]; then
+                docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
+                  --env-file /workspace/.env.local \
+                  --identity /root/.ssh/id_netcar \
+                  --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}" \
                   --files data/.htaccess \
                   --apply
               else
                 docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
                   --env-file /workspace/.env.local \
                   --identity /root/.ssh/id_netcar \
+                  --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}" \
                   --apply
               fi
 
@@ -141,9 +170,4 @@ jobs:
                 exit 1
               fi
               echo "Pasta data protegida (HTTP $TOKEN_STATUS)"
-            fi
-
-            # Um dispatch pode executar codigo de uma branch sem deixar a VPS presa nela.
-            if [ "$TARGET_REF" != "master" ] && [ "$TARGET_REF" != "main" ]; then
-              git reset --hard origin/master || git reset --hard origin/main
             fi

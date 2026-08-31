@@ -11,7 +11,7 @@ final class GoogleOAuth
         $this->tokens = $tokens ?? new TokenStore();
     }
 
-    public function getAuthUrl(): string
+    public function getAuthUrl(?string $state = null): string
     {
         $params = http_build_query([
             'client_id' => SocialEnv::get('google.client_id'),
@@ -20,6 +20,7 @@ final class GoogleOAuth
             'scope' => 'https://www.googleapis.com/auth/business.manage',
             'access_type' => 'offline',
             'prompt' => 'consent',
+            'state' => $state,
         ]);
 
         return 'https://accounts.google.com/o/oauth2/v2/auth?' . $params;

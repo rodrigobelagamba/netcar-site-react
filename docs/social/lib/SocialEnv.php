@@ -13,6 +13,7 @@ final class SocialEnv
         }
 
         $candidates = [
+            self::defaultPrivateDataDir() . '/social-config.php',
             __DIR__ . '/../social-config.php',
             __DIR__ . '/../data/social-config.php',
         ];
@@ -20,15 +21,16 @@ final class SocialEnv
         foreach ($candidates as $path) {
             if (is_file($path)) {
                 $loaded = require $path;
-                if (is_array($loaded)) {
-                    self::$config = $loaded;
-                    return self::$config;
+                if (!is_array($loaded)) {
+                    throw new RuntimeException('Arquivo de configuracao social invalido: ' . $path);
                 }
+                self::$config = $loaded;
+                return self::$config;
             }
         }
 
         throw new RuntimeException(
-            'social-config.php não encontrado. Copie social-config.example.php e preencha as credenciais.'
+            'social-config.php não encontrado no diretorio privado nem no local legado.'
         );
     }
 
@@ -60,5 +62,39 @@ final class SocialEnv
             mkdir($dir, 0755, true);
         }
         return $dir;
+    }
+
+    /** Dados secretos/operacionais fora de /www. */
+    public static function privateDataDir(): string
+    {
+        $configured = self::get('private_data_dir', '');
+        $dir = trim((string) $configured);
+        if ($dir === '') {
+            // Producao: /home/USUARIO/www/social/v1/lib -> /home/USUARIO/.netcar-social
+            $dir = self::defaultPrivateDataDir();
+        }
+
+        if (strpos($dir, '/') !== 0 || preg_match('#(?:^|/)\.\.(?:/|$)#', $dir)) {
+            throw new RuntimeException('private_data_dir deve ser um caminho absoluto e sem traversal.');
+        }
+
+        if (!is_dir($dir) && !mkdir($dir, 0700, true) && !is_dir($dir)) {
+            throw new RuntimeException('Diretorio privado da integracao social indisponivel.');
+        }
+        $realDir = realpath($dir);
+        $realWebRoot = realpath(dirname(__DIR__, 3));
+        if ($realDir === false
+            || ($realWebRoot !== false
+                && ($realDir === $realWebRoot || strpos($realDir, $realWebRoot . DIRECTORY_SEPARATOR) === 0))
+        ) {
+            throw new RuntimeException('private_data_dir deve ficar fora do document root.');
+        }
+        @chmod($dir, 0700);
+        return $realDir;
+    }
+
+    private static function defaultPrivateDataDir(): string
+    {
+        return dirname(__DIR__, 4) . '/.netcar-social';
     }
 }

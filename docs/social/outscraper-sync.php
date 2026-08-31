@@ -9,13 +9,12 @@ declare(strict_types=1);
  * cache que sync-social.php: data/cache/google-reviews.json
  * React não muda nada — google-reviews.php continua servindo.
  *
- * Uso:
- *   GET /social/v1/outscraper-sync.php?key=SYNC_SECRET            (10 reviews/loja)
- *   GET /social/v1/outscraper-sync.php?key=SYNC_SECRET&limit=20   (import inicial)
- *   php outscraper-sync.php [limit]                               (CLI)
+ * Uso recomendado:
+ *   php outscraper-sync.php [limit]                               (CLI/cron)
+ *   curl -H "Authorization: Bearer ..." .../outscraper-sync.php  (HTTP)
  *
  * Cron sugerido (1x/dia, ~600 reviews/mês com limit=10 — ajustar p/ free tier 500):
- *   0 7 * * * curl -s "https://www.netcarmultimarcas.com.br/social/v1/outscraper-sync.php?key=SECRET&limit=8"
+ *   0 7 * * * php /home/USUARIO/www/social/v1/outscraper-sync.php 8
  *
  * Config em social-config.php:
  *   'outscraper' => [
@@ -27,22 +26,34 @@ declare(strict_types=1);
  *   ],
  */
 
+require_once __DIR__ . '/lib/bootstrap.php';
+
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
 
-$configFile = __DIR__ . '/social-config.php';
-$config = is_file($configFile) ? require $configFile : [];
-
-$syncSecret = $config['sync']['secret'] ?? '';
-$apiKey = $config['outscraper']['api_key'] ?? '';
-$queries = $config['outscraper']['queries'] ?? [
+$syncSecret = (string) SocialEnv::get('sync.secret', '');
+$apiKey = (string) SocialEnv::get('outscraper.api_key', '');
+$queries = SocialEnv::get('outscraper.queries', [
     'ChIJSRolPVtvGZURzx88U1pB5n4', // Loja 1
     'ChIJq78McFxvGZURmIl8iyKRbJY', // Loja 2
-];
+]);
+if (!is_array($queries)) {
+    $queries = [];
+}
 
 $isCli = PHP_SAPI === 'cli';
 
 if (!$isCli) {
-    $key = (string) ($_GET['key'] ?? '');
+    $authorization = '';
+    foreach (['HTTP_AUTHORIZATION', 'REDIRECT_HTTP_AUTHORIZATION'] as $headerName) {
+        if (is_string($_SERVER[$headerName] ?? null) && trim($_SERVER[$headerName]) !== '') {
+            $authorization = trim((string) $_SERVER[$headerName]);
+            break;
+        }
+    }
+    $key = stripos($authorization, 'Bearer ') === 0
+        ? trim(substr($authorization, 7))
+        : (string) ($_GET['key'] ?? ''); // compatibilidade temporaria com cron legado
     if ($syncSecret === '' || !hash_equals($syncSecret, $key)) {
         http_response_code(403);
         echo json_encode(['success' => false, 'message' => 'Chave inválida']);
@@ -60,8 +71,8 @@ $limit = $isCli
     ? max(1, min(100, (int) ($argv[1] ?? 10)))
     : max(1, min(100, (int) ($_GET['limit'] ?? 10)));
 
-$dataDir = __DIR__ . '/data';
-$cacheDir = $dataDir . '/cache';
+$dataDir = SocialEnv::dataDir();
+$cacheDir = SocialEnv::cacheDir();
 $cacheFile = $cacheDir . '/google-reviews.json';
 $backupFile = $cacheDir . '/google-reviews.backup.json';
 $seedFile = $dataDir . '/google-reviews.seed.json';

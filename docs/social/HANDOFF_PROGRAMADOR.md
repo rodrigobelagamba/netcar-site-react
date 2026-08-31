@@ -1,180 +1,126 @@
-# Handoff — Widgets sociais Netcar (sem EmbedSocial)
+# Handoff — integração social Netcar
 
-**Branch:** `feat/netcar-social-widgets`  
-**Objetivo:** Google Reviews (2 lojas GBP) + Instagram Stories via APIs oficiais, cache PHP KingHost, widgets React.
+**Objetivo:** Google Reviews, Instagram Stories e réplica Instagram → dois perfis Google Business Profile (GBP), usando APIs oficiais e sem Zapier.
 
----
+## Regra de segurança
 
-## O que já está pronto (nesta branch)
+- Código público: `/home/USUARIO/www/social/v1/`.
+- Configuração, tokens OAuth e estado operacional: `/home/USUARIO/.netcar-social/`.
+- Nunca colocar `social-config.php`, `social-tokens.json` ou segredos em `/www`, `dist/`, Git ou URLs.
+- Diretório privado com permissão `0700`; arquivos privados com `0600`.
 
-| Área | Status |
-|------|--------|
-| Widgets React (`NetcarGoogleReviewsSection`, `NetcarStoriesSection`) | ✅ |
-| Paginação "Carregar mais" (21 reviews por página) | ✅ |
-| Endpoints PHP (`google-reviews.php`, `stories.php`, `social-oauth.php`, `sync-social.php`) | ✅ |
-| Lib PHP Google + Meta/Instagram | ✅ |
-| Build copia PHP → `dist/social/v1/` (`scripts/copy-social-php.js`) | ✅ |
-| Flag `VITE_USE_NETCAR_SOCIAL=true` (`.env.example`) | ✅ |
-| Credenciais OAuth preparadas localmente (ver abaixo) | ✅ arquivo local, não versionado |
+## Deploy seguro
 
----
+1. Faça build e envie somente código, bibliotecas, endpoints e assets:
 
-## O que o programador DEVE fazer (ordem)
+   ```bash
+   npm run build
+   ```
 
-### 1. Merge / checkout
+   O build gera `dist/social/v1/`, mas não deve incluir `social-config.php`, tokens nem estado privado.
 
-```bash
-git fetch origin
-git checkout feat/netcar-social-widgets
-```
+2. No KingHost, prepare a configuração fora do webroot:
 
-### 2. Criar `social-config.php` no servidor (NÃO commitar)
+   ```bash
+   install -d -m 700 /home/USUARIO/.netcar-social
+   test -e /home/USUARIO/.netcar-social/social-config.php || \
+     install -m 600 \
+       /home/USUARIO/www/social/v1/social-config.example.php \
+       /home/USUARIO/.netcar-social/social-config.php
+   ```
 
-Copiar template e preencher secrets (obter `client_secret` / `app_secret` / `sync.secret` com gestor TI ou Meta/Google Console):
+3. Edite `/home/USUARIO/.netcar-social/social-config.php` e preencha:
 
-```bash
-cp docs/social/social-config.example.php docs/social/social-config.php
-```
+   - `sync.secret`: segredo do cron/sync;
+   - `oauth.admin_secret`: outro segredo forte, diferente de `sync.secret`;
+   - credenciais Google e Meta;
+   - `google_posts.locations` com exatamente as duas lojas:
 
-**IDs já definidos (públicos):**
+     ```php
+     'locations' => [
+         'loja_1' => '11161331340741727452',
+         'loja_2' => '17013442122163034193',
+     ],
+     ```
 
-| Campo | Valor |
-|-------|--------|
-| Google GCP project | `fabled-skein-484500-g7` (My Project 62332) |
-| Google OAuth Client ID | `796541076133-rtjj5ibs0m04rfs5ae7o59eik4pao963.apps.googleusercontent.com` |
-| Google redirect URI | `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=google&action=callback` |
-| Meta app | **AutoAds Analyst** — App ID `1864158561129535` |
-| Meta redirect URI | `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=meta&action=callback` (já cadastrado no app) |
-| Instagram username | `netcar_rc` |
-| Instagram Graph user_id | `17841402339444396` |
+   Mantenha o publicador inicialmente assim:
 
-**Secrets:** `google.client_secret`, `meta.app_secret`, `sync.secret` → **nunca** no Git. Gestor tem cópia local de `social-config.php` pronta para deploy.
+   ```php
+   'enabled' => false,
+   'not_before' => '',
+   ```
 
-**Google Cloud — conferir antes do deploy:**
-- APIs ativas: My Business Account Management, My Business Business Information, Google My Business API
-- OAuth consent com escopo `https://www.googleapis.com/auth/business.manage`
-- Redirect URI de produção cadastrado no OAuth Client
+4. Confirme que o endpoint executa PHP:
 
-**Meta — app já configurado:**
-- Produtos: Login Facebook, Instagram Graph API, API Marketing
-- Modo **desenvolvimento** (OAuth ok para admins/testadores do app)
+   ```bash
+   curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?action=status'
+   ```
 
-### 3. Build + deploy KingHost
+## Conectar Google e Meta
 
-```bash
-# .env.production com VITE_USE_NETCAR_SOCIAL=true
-npm run build
-```
-
-O build gera `dist/` incluindo `dist/social/v1/` (PHP + lib). Se existir `social-config.php` local, é copiado automaticamente.
-
-**Deploy FTP** (`.env.local` na raiz do projeto):
-
-```env
-FTP_SERVER=...
-FTP_USERNAME=...
-FTP_PASSWORD=...
-FTP_SERVER_DIR=/www/
-```
+`action=connect` aceita somente `POST` autenticado com `oauth.admin_secret`. Não coloque o segredo na query string. No terminal, leia-o sem eco e obtenha a URL de redirecionamento:
 
 ```bash
-npm run deploy:local
+read -rs NETCAR_OAUTH_ADMIN_SECRET
+curl -sS -X POST \
+  -H "Authorization: Bearer ${NETCAR_OAUTH_ADMIN_SECRET}" \
+  -D - -o /dev/null \
+  'https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=google&action=connect'
+unset NETCAR_OAUTH_ADMIN_SECRET
 ```
 
-**Manual:** subir conteúdo de `dist/social/v1/` para `/www/social/v1/` no KingHost. Garantir que PHP executa nessa pasta (não cair no fallback SPA do React).
+Abra no navegador o valor do cabeçalho `Location` e conclua o login. Repita com `provider=meta`. Os callbacks usam `state` de uso único. Depois confirme apenas os booleanos de conexão no endpoint `action=status`.
 
-**Validar após deploy:**
+Os tokens são gravados em `/home/USUARIO/.netcar-social/social-tokens.json`, nunca em `data/cache/` público.
+
+## Sync e cron
+
+Prefira CLI, que não exige segredo na linha de comando:
 
 ```bash
-curl -s "https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?action=status"
-# esperado: JSON (não HTML 404)
+php /home/USUARIO/www/social/v1/sync-social.php
 ```
 
-### 4. OAuth — conectar contas (1x, browser admin)
-
-Logado como **Owner/Manager** das 2 lojas Google e admin da Page/Instagram Netcar:
-
-1. Google:  
-   `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=google&action=connect`
-
-2. Meta/Instagram:  
-   `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=meta&action=connect`
-
-3. Status:  
-   `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?action=status`  
-   → `google.connected: true`, `meta.connected: true`
-
-Tokens gravados em `data/cache/social-tokens.json` no servidor (não versionar).
-
-### 5. Primeiro sync
+Quando o cron precisar selecionar uma rotina via HTTP, use `Authorization: Bearer`:
 
 ```bash
-curl -s "https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?key=SEU_SYNC_SECRET"
+curl -fsS \
+  -H "Authorization: Bearer ${NETCAR_SYNC_SECRET}" \
+  'https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?reviews_only=1'
+
+curl -fsS \
+  -H "Authorization: Bearer ${NETCAR_SYNC_SECRET}" \
+  'https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?stories_only=1'
 ```
 
-Resposta esperada: `reviews.count`, `stories.count`, `success: true`.
+Armazene `NETCAR_SYNC_SECRET` em arquivo ou wrapper privado `0600`; não o grave na URL. Frequências sugeridas: reviews duas vezes ao dia e Stories a cada 15 minutos.
 
-### 6. Cron KingHost
+## Ativar Instagram → GBP
 
-```cron
-# Reviews — 2x/dia (Loja 1 + Loja 2 agregadas)
-0 6,18 * * * curl -s "https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?key=SEU_SYNC_SECRET&reviews_only=1"
+1. Com `enabled=false`, rode o dry-run:
 
-# Stories — 15 min (expiram em 24h)
-*/15 * * * * curl -s "https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?key=SEU_SYNC_SECRET&stories_only=1"
-```
+   ```bash
+   curl -fsS \
+     -H "Authorization: Bearer ${NETCAR_SYNC_SECRET}" \
+     'https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?posts_only=1&dry_run=1'
+   ```
 
-### 7. Testes finais
+2. Confirme no resultado as duas locations exatas e nenhum post antigo inesperado.
+3. Somente no momento da virada, defina `enabled=true` e `not_before` com timestamp ISO 8601 atual. O horário precisa ser recente; isso impede replay do histórico.
+4. Valide a primeira publicação natural nos dois perfis. Só então pause os Zaps antigos; não os exclua durante a transição.
+
+O arquivo opcional `/home/USUARIO/.netcar-social/google-posts-settings.json` pode sobrescrever apenas `enabled` e `not_before`, sem alterar credenciais.
+
+## Verificações finais
 
 ```bash
-# Reviews paginados
-curl -s "https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=21"
-
-# Stories
-curl -s "https://www.netcarmultimarcas.com.br/social/v1/stories.php?action=list"
+curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=21'
+curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/stories.php?action=list'
 ```
 
-**Site:**
-- Home e Detalhes: seção reviews + stories
-- Botão "Carregar mais" carrega página 2, 3…
-- Sem EmbedSocial no fetch (flag `VITE_USE_NETCAR_SOCIAL=true`)
+- OAuth conectado para Google e Meta.
+- Reviews e Stories atualizados.
+- Publicador desabilitado até o handover, depois ativo somente com `not_before` recente.
+- Nenhum arquivo privado acessível por HTTP.
 
-### 8. Limpeza (após sync OK)
-
-- Remover scripts EmbedSocial do HTML se ainda existirem
-- Opcional: remover `public/embedsocial-bridge.php` e adapters legados
-- Confirmar `.env.production` com `VITE_USE_NETCAR_SOCIAL=true` no deploy do front
-
----
-
-## Arquivos importantes
-
-| Caminho | Função |
-|---------|--------|
-| `docs/social/` | Fonte PHP (copiada no build) |
-| `docs/social/SOCIAL_SYNC_SETUP.md` | Detalhes técnicos OAuth |
-| `docs/social-design-spec.md` | Spec visual vs EmbedSocial |
-| `src/design-system/components/patterns/social/` | Componentes UI |
-| `src/social/endpoints/googleReviews.ts` | Fetch reviews |
-| `src/social/endpoints/stories.ts` | Fetch stories |
-| `scripts/copy-social-php.js` | Copia PHP no build |
-
----
-
-## Troubleshooting
-
-| Sintoma | Causa provável |
-|---------|----------------|
-| `/social/v1/*.php` retorna HTML (index React) | PHP não deployado ou `.htaccess` roteando tudo pro SPA |
-| Google OAuth 403 / API error | Business Profile API não aprovada ou conta sem Manager das lojas |
-| Meta "ig_user_id ausente" | Page Facebook sem `@netcar_rc` vinculado como Business |
-| Stories vazio | Nenhum story ativo nas últimas 24h (normal) |
-| Reviews só de 1 loja | Conta OAuth sem acesso à 2ª location; ver `google.location_names` no config |
-
----
-
-## Contato / credenciais
-
-Solicitar ao gestor TI cópia de `social-config.php` (com secrets) ou valores de `client_secret`, `app_secret` e `sync.secret` por canal seguro.
-
-Documentação completa: [`SOCIAL_SYNC_SETUP.md`](./SOCIAL_SYNC_SETUP.md)
+Detalhes: [`SOCIAL_SYNC_SETUP.md`](./SOCIAL_SYNC_SETUP.md).

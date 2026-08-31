@@ -13,7 +13,7 @@ final class MetaOAuth
         $this->graphVersion = SocialEnv::get('meta.graph_version', 'v21.0');
     }
 
-    public function getAuthUrl(): string
+    public function getAuthUrl(?string $state = null): string
     {
         $scopes = [
             'instagram_basic',
@@ -26,6 +26,7 @@ final class MetaOAuth
             'redirect_uri' => SocialEnv::get('meta.redirect_uri'),
             'scope' => implode(',', $scopes),
             'response_type' => 'code',
+            'state' => $state,
         ]);
 
         return 'https://www.facebook.com/' . $this->graphVersion . '/dialog/oauth?' . $params;

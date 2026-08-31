@@ -44,9 +44,14 @@ src/data/seo/landings.json
 
 # Social sync — credenciais e tokens (KingHost)
 docs/social/social-config.php
+docs/social/data/social-config.php
 docs/social/data/cache/social-tokens.json
 docs/social/data/cache/google-reviews.json
 docs/social/data/cache/stories.json
+docs/social/data/cache/instagram-gbp-posts.json
+docs/social/data/cache/instagram-gbp-posts.json.lock
+docs/social/data/google-posts-settings.json
+docs/social/data/media/instagram-posts/
 
 # Logs
 *.log

@@ -1,133 +1,137 @@
-# Social Sync — Google Reviews + Instagram (sem EmbedSocial)
+# Social Sync — Google Reviews, Instagram e GBP
 
-> **Handoff para deploy:** leia primeiro [`HANDOFF_PROGRAMADOR.md`](./HANDOFF_PROGRAMADOR.md) — checklist do que o programador deve fazer na branch `feat/netcar-social-widgets`.
-
-Substitui EmbedSocial por **APIs oficiais** + cache PHP no KingHost.
+Integração sem EmbedSocial e sem Zapier, baseada nas APIs oficiais do Google e da Meta.
 
 ## Arquitetura
 
+```text
+Google Business Profile API ─┐
+Instagram Graph API ─────────┼─> sync-social.php (cron)
+                             │
+                             ├─> cache público de Reviews/Stories
+                             └─> Local Posts nas duas locations GBP
+
+/home/USUARIO/.netcar-social/
+  social-config.php
+  social-tokens.json
+  oauth-states.json
+  instagram-gbp-posts.json
+  google-posts-settings.json (opcional)
 ```
-Google Business Profile API ──┐
-                              ├── sync-social.php (cron)
-Instagram Graph API ──────────┘
-              ↓
-   data/cache/google-reviews.json
-   data/cache/stories.json
-              ↓
-   google-reviews.php / stories.php  →  React
-```
 
----
+Somente caches sem credenciais podem permanecer em `/home/USUARIO/www/social/v1/data/`. Configuração, tokens e estado operacional ficam fora do document root.
 
-## 1. Deploy dos arquivos PHP
+## 1. Subir o código
 
-Copie `docs/social/` para `/social/v1/` no KingHost (ou use `dist/social/v1/` após o build).
+Após o build, envie o conteúdo de `dist/social/v1/` para `/home/USUARIO/www/social/v1/`. Confirme antes do upload que o diretório gerado não contém `social-config.php`, tokens ou arquivos de estado.
 
-**PHP 7.4+** no servidor (KingHost dedicada). O código não usa sintaxe exclusiva do PHP 8.
+Requisitos: PHP 7.4+ e HTTPS. Preserve a proteção de `data/.htaccess`.
 
-| Arquivo | Função |
-|---------|--------|
-| `lib/*` | Clientes Google/Meta |
-| `social-config.php` | Credenciais (copiar do `.example`) |
-| `social-oauth.php` | Conectar Google + Instagram |
-| `sync-social.php` | Cron — puxa dados |
-| `google-reviews.php` | API pública reviews |
-| `stories.php` | API pública stories |
-| `story-media.php` | proxy/cache local para imagens e vídeos dos Stories |
-| `data/` | cache + seeds |
-
----
-
-## 2. Google Cloud (Reviews — 2 lojas)
-
-1. Crie projeto em [Google Cloud Console](https://console.cloud.google.com/)
-2. Ative billing (grátis na prática para este uso)
-3. Solicite acesso **Business Profile API** ([formulário Google](https://developers.google.com/my-business/content/prereqs))
-4. Crie credenciais **OAuth 2.0 Web**:
-   - Redirect URI: `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=google&action=callback`
-5. Copie `client_id` e `client_secret` para `social-config.php`
-
-**Conta Google:** use login **Owner/Manager** das **duas lojas** (Loja 1 + Loja 2 Esteio).
-
----
-
-## 3. Meta / Instagram (@netcar_rc)
-
-1. Crie app em [developers.facebook.com](https://developers.facebook.com/)
-2. Tipo **Business**
-3. Adicione produto **Instagram Graph API**
-4. Vincule **Página Facebook** ↔ **@netcar_rc** (Business/Creator)
-5. OAuth redirect: `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=meta&action=callback`
-6. Copie `app_id` e `app_secret` para `social-config.php`
-
----
-
-## 4. Configurar `social-config.php`
+## 2. Criar a configuração privada
 
 ```bash
-cp social-config.example.php social-config.php
-# Edite com credenciais reais + sync.secret forte
+install -d -m 700 /home/USUARIO/.netcar-social
+test -e /home/USUARIO/.netcar-social/social-config.php || \
+  install -m 600 \
+    /home/USUARIO/www/social/v1/social-config.example.php \
+    /home/USUARIO/.netcar-social/social-config.php
 ```
 
----
+Edite o arquivo privado com:
 
-## 5. Obter tokens (1x — login manual)
+- `sync.secret` para sync/cron;
+- `oauth.admin_secret` distinto para iniciar OAuth;
+- `google.client_id`, `google.client_secret` e redirect URI;
+- `meta.app_id`, `meta.app_secret` e redirect URI;
+- `google_posts.locations` contendo exatamente dois slugs e dois IDs únicos.
 
-Abra no browser (logado como admin):
+O caminho padrão privado já é `/home/USUARIO/.netcar-social`. Não crie cópia real da configuração em `/www` ou `dist`.
 
-```
-https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=google&action=connect
-https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=meta&action=connect
-```
+## 3. Google e Meta
 
-Verificar status:
+Google:
 
-```
-https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?action=status
-```
+- habilite My Business Account Management, Business Information e Google My Business API;
+- use uma conta Owner/Manager das duas lojas;
+- autorize o escopo `https://www.googleapis.com/auth/business.manage`;
+- cadastre o callback `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=google&action=callback`.
 
-Tokens salvos em `data/cache/social-tokens.json` (não versionar).
+Meta:
 
----
+- use app Business com Instagram Graph API;
+- vincule a Página Facebook ao perfil profissional `@netcar_rc`;
+- cadastre o callback `https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=meta&action=callback`.
 
-## 6. Primeiro sync
+## 4. OAuth protegido
+
+O status é público e retorna somente estado de conexão. O início de OAuth exige `POST` e `Authorization: Bearer <oauth.admin_secret>`:
 
 ```bash
-php sync-social.php
-# ou HTTP:
-curl "https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?key=SEU_SYNC_SECRET"
+read -rs NETCAR_OAUTH_ADMIN_SECRET
+curl -sS -X POST \
+  -H "Authorization: Bearer ${NETCAR_OAUTH_ADMIN_SECRET}" \
+  -D - -o /dev/null \
+  'https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?provider=google&action=connect'
+unset NETCAR_OAUTH_ADMIN_SECRET
 ```
 
----
+Abra o `Location` retornado no navegador e repita com `provider=meta`. Nunca envie `oauth.admin_secret` por query string e não reutilize `sync.secret` para essa função.
 
-## 7. Cron KingHost
+Tokens ficam em `/home/USUARIO/.netcar-social/social-tokens.json`, com permissão `0600`.
 
-```cron
-# Reviews — 2x/dia
-0 6,18 * * * curl -s "https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?key=SECRET&reviews_only=1"
+## 5. Sync
 
-# Stories — a cada 15 min (expiram em 24h)
-*/15 * * * * curl -s "https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?key=SECRET&stories_only=1"
-```
-
----
-
-## 8. Testar API
+CLI é a opção preferida:
 
 ```bash
-curl "https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=21"
-curl "https://www.netcarmultimarcas.com.br/social/v1/stories.php?action=list"
+php /home/USUARIO/www/social/v1/sync-social.php
 ```
 
----
+Para execução HTTP, envie o segredo no cabeçalho:
 
-## O que o React usa
+```bash
+curl -fsS \
+  -H "Authorization: Bearer ${NETCAR_SYNC_SECRET}" \
+  'https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?stories_only=1'
+```
 
-Base: `VITE_SOCIAL_API_BASE_URL` (padrão `https://www.netcarmultimarcas.com.br/social/v1`)
+Use reviews duas vezes ao dia e Stories a cada 15 minutos. O sync de Stories também verifica posts; enquanto o publicador estiver desabilitado, ele apenas informa `skipped`.
 
-- `GET /social/v1/google-reviews.php?page=N&limit=21` — paginação "Carregar mais"
-- `GET /social/v1/stories.php?action=list` — stories ativos
-- `GET /social/v1/story-media.php?url=...` — mídia do Instagram servida pelo domínio Netcar
-- Fallback local: `/data/*.seed.json` se cache indisponível
+## 6. Réplica Instagram → dois perfis GBP
 
-**EmbedSocial pode ser removido** após primeiro sync OK.
+Configuração inicial obrigatória:
+
+```php
+'google_posts' => [
+    'enabled' => false,
+    'not_before' => '',
+    'locations' => [
+        'loja_1' => '11161331340741727452',
+        'loja_2' => '17013442122163034193',
+    ],
+],
+```
+
+O cliente recusa configuração diferente de exatamente duas locations únicas. Antes de ativar:
+
+```bash
+curl -fsS \
+  -H "Authorization: Bearer ${NETCAR_SYNC_SECRET}" \
+  'https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?posts_only=1&dry_run=1'
+```
+
+No handover, defina `enabled=true` e um `not_before` ISO 8601 atual, dentro da janela recente de ativação. Isso evita republicar posts antigos. Valide a primeira publicação nas duas lojas antes de pausar o Zapier.
+
+## 7. APIs públicas
+
+```bash
+curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=21'
+curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/stories.php?action=list'
+```
+
+- `GET /google-reviews.php?page=N&limit=21`: reviews paginados.
+- `GET /stories.php?action=list`: Stories ativos.
+- `GET /story-media.php?url=...`: mídia servida pelo domínio Netcar.
+- `GET /instagram-post-media.php?...`: mídia validada dos Local Posts.
+
+Nenhum desses endpoints deve expor credenciais ou tokens.
