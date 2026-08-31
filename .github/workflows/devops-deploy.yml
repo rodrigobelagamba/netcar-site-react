@@ -12,6 +12,7 @@ on:
         type: choice
         options:
           - none
+          - authorize-key
           - key-info
           - plan
           - guard
@@ -21,8 +22,32 @@ concurrency:
   group: netcar-devops-deploy
   cancel-in-progress: false
 
+permissions:
+  contents: read
+
 jobs:
+  authorize-key:
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_social == 'authorize-key'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts --omit=dev
+      - name: Authorize pinned deployment key
+        env:
+          KINGHOST_SSH_HOST: ftp.web-ded-151245a.kinghost.net
+          KINGHOST_SSH_USER: netcarmultimarcas
+          KINGHOST_SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          KINGHOST_SSH_HOST_FINGERPRINT: ${{ secrets.KINGHOST_SSH_HOST_FINGERPRINT }}
+          KINGHOST_DEPLOY_PUBLIC_KEY: ${{ vars.KINGHOST_DEPLOY_PUBLIC_KEY }}
+        run: node scripts/authorize-social-deploy-key.mjs
+
   deploy:
+    if: github.event.inputs.deploy_social != 'authorize-key'
     runs-on: ubuntu-latest
     steps:
       - name: Check deploy secrets
