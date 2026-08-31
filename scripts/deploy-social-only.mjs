@@ -97,21 +97,22 @@ function safeRelativePath(value) {
 }
 
 function safeRemoteRoot(value, label) {
-  const candidate = String(value ?? "");
+  const raw = String(value ?? "");
+  const candidate = raw.endsWith("/") ? raw.slice(0, -1) : raw;
   const segments = candidate.split("/");
   if (
     candidate === "" ||
-    candidate !== candidate.trim() ||
+    raw !== raw.trim() ||
+    raw.endsWith("//") ||
     candidate.includes("\\") ||
     candidate.startsWith("/") ||
-    candidate.endsWith("/") ||
     !/^[a-zA-Z0-9._/-]+$/.test(candidate) ||
     segments.some(
       (segment) => segment === "" || segment === "." || segment === "..",
     )
   ) {
     throw new Error(
-      `${label} deve ser um caminho relativo estrito, sem '.', '..' ou barras nas pontas.`,
+      `${label} deve ser um caminho relativo estrito, sem '.', '..' ou barras duplicadas.`,
     );
   }
   return candidate;
