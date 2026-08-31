@@ -33,8 +33,8 @@ interface HomeWhatsAppConversionPanelProps {
 
 function vehicleImage(vehicle?: Vehicle): string {
   return (
-    vehicle?.imagens_site?.capa_thumb ||
     vehicle?.imagens_site?.capa ||
+    vehicle?.imagens_site?.capa_thumb ||
     vehicle?.images?.[0] ||
     CAR_COVERED_PLACEHOLDER_URL
   );
@@ -284,7 +284,7 @@ export function HomeWhatsAppConversionPanel({
           <button
             type="button"
             onClick={goToFeaturedVehicle}
-            className="mt-4 block w-full overflow-hidden rounded-2xl bg-[#F6F6F6] p-2 transition-transform hover:scale-[1.01]"
+            className="mt-4 block h-56 w-full overflow-hidden rounded-2xl bg-transparent p-0 transition-transform hover:scale-[1.01] md:h-64"
           >
             <img
               src={optimizeStockImage(image, 768)}
@@ -293,7 +293,7 @@ export function HomeWhatsAppConversionPanel({
               alt={label}
               width={960}
               height={640}
-              className="mx-auto h-56 w-full object-contain drop-shadow-[0_24px_28px_rgba(0,0,0,0.16)] md:h-64"
+              className="mx-auto h-full w-full origin-bottom scale-[1.35] object-contain drop-shadow-[0_24px_28px_rgba(0,0,0,0.16)]"
               loading="eager"
               decoding="async"
             />
