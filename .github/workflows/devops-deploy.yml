@@ -36,7 +36,7 @@ jobs:
           node-version: "20"
           cache: npm
       - name: Install runtime dependencies
-        run: npm ci --ignore-scripts --omit=dev
+        run: npm ci --ignore-scripts
       - name: Authorize pinned deployment key
         env:
           KINGHOST_SSH_HOST: ftp.web-ded-151245a.kinghost.net
