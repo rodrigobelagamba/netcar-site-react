@@ -97,51 +97,51 @@ export function PrivacyConsent({
       aria-labelledby="privacy-consent-title"
       aria-describedby="privacy-consent-description"
       tabIndex={-1}
-      className="print:hidden fixed inset-x-3 bottom-3 z-[10020] mx-auto max-w-3xl rounded-2xl border border-[#00283C]/10 bg-white p-4 shadow-[0_20px_60px_rgba(0,40,60,0.24)] sm:p-5"
+      className="print:hidden fixed inset-x-2 bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-[10020] mx-auto max-w-5xl rounded-xl border border-[#00283C]/10 bg-white p-3 shadow-[0_14px_36px_rgba(0,40,60,0.2)] sm:inset-x-4 sm:bottom-4 sm:px-4 sm:py-3"
     >
-      <div className="flex items-start gap-3">
-        <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#5CD29D]/15 text-[#00616A]">
-          <ShieldCheck className="h-5 w-5" aria-hidden="true" />
-        </span>
-        <div className="min-w-0 flex-1">
-          <h2
-            id="privacy-consent-title"
-            className="text-base font-black text-[#00283C]"
-          >
-            Sua privacidade no site da Netcar
-          </h2>
-          <p
-            id="privacy-consent-description"
-            className="mt-1 text-sm leading-relaxed text-slate-600"
-          >
-            Usamos recursos de medição e publicidade do Google e da Meta para
-            entender páginas e campanhas e personalizar anúncios. Você pode
-            permitir esses recursos ou manter apenas o necessário para o site
-            funcionar.{" "}
-            <a
-              href="/privacidade"
-              className="font-semibold text-[#00616A] underline underline-offset-2"
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-start gap-2.5 sm:items-center">
+          <span className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#5CD29D]/15 text-[#00616A] sm:flex">
+            <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+          </span>
+          <div className="min-w-0">
+            <h2
+              id="privacy-consent-title"
+              className="text-sm font-black leading-tight text-[#00283C]"
             >
-              Entenda como tratamos os dados
-            </a>
-            .
-          </p>
-          <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
-            <button
-              type="button"
-              onClick={() => choose("essential")}
-              className="rounded-full border border-[#00283C]/20 px-5 py-2.5 text-sm font-bold text-[#00283C] transition-colors hover:bg-slate-50"
+              Privacidade e cookies
+            </h2>
+            <p
+              id="privacy-consent-description"
+              className="mt-0.5 text-xs leading-snug text-slate-600 sm:text-[13px]"
             >
-              Somente essenciais
-            </button>
-            <button
-              type="button"
-              onClick={() => choose("accepted")}
-              className="rounded-full bg-[#087A37] px-5 py-2.5 text-sm font-black text-white transition-colors hover:bg-[#075E54]"
-            >
-              Permitir medição e publicidade
-            </button>
+              Google e Meta usam cookies opcionais para medir campanhas e
+              personalizar anúncios. Você escolhe.{" "}
+              <a
+                href="/privacidade"
+                className="font-semibold text-[#00616A] underline underline-offset-2"
+              >
+                Saiba mais
+              </a>
+              .
+            </p>
           </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:shrink-0">
+          <button
+            type="button"
+            onClick={() => choose("essential")}
+            className="min-h-11 rounded-full border border-[#00283C]/20 px-3 py-2 text-xs font-bold text-[#00283C] transition-colors hover:bg-slate-50 sm:px-4 sm:text-sm"
+          >
+            Só essenciais
+          </button>
+          <button
+            type="button"
+            onClick={() => choose("accepted")}
+            className="min-h-11 rounded-full bg-[#087A37] px-3 py-2 text-xs font-black text-white transition-colors hover:bg-[#075E54] sm:px-4 sm:text-sm"
+          >
+            Aceitar opcionais
+          </button>
         </div>
       </div>
     </aside>
