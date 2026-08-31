@@ -12,8 +12,6 @@ on:
         type: choice
         options:
           - none
-          - authorize-key
-          - key-info
           - plan
           - guard
           - full
@@ -43,13 +41,11 @@ jobs:
           TARGET_REF: ${{ github.ref_name }}
           SOCIAL_MODE: ${{ github.event.inputs.deploy_social || 'none' }}
           SOCIAL_HOST_FINGERPRINT: ${{ secrets.KINGHOST_SSH_HOST_FINGERPRINT }}
-          KINGHOST_SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-          KINGHOST_DEPLOY_PUBLIC_KEY: ${{ vars.KINGHOST_DEPLOY_PUBLIC_KEY }}
         with:
           host: ${{ secrets.DEVOPS_VPS_HOST }}
           username: ${{ secrets.DEVOPS_VPS_USER }}
           key: ${{ secrets.DEVOPS_VPS_SSH_KEY }}
-          envs: TARGET_REF,SOCIAL_MODE,SOCIAL_HOST_FINGERPRINT,KINGHOST_SSH_PASSWORD,KINGHOST_DEPLOY_PUBLIC_KEY
+          envs: TARGET_REF,SOCIAL_MODE,SOCIAL_HOST_FINGERPRINT
           # false: com true o drone-ssh abortava no meio do if/else multilinha
           # logo após o git reset (exit 1 sem echo). O script já tem set -euo pipefail.
           script_stop: false
@@ -65,7 +61,7 @@ jobs:
               *[!a-zA-Z0-9._/-]*|"") echo "Ref invalida: $TARGET_REF"; exit 1 ;;
             esac
             case "$SOCIAL_MODE" in
-              none|authorize-key|key-info|plan|guard|full) ;;
+              none|plan|guard|full) ;;
               *) echo "Modo social invalido: $SOCIAL_MODE"; exit 1 ;;
             esac
 
@@ -151,71 +147,45 @@ jobs:
             fi
 
             if [ "$SOCIAL_MODE" != "none" ]; then
-              if [ "$SOCIAL_MODE" = "authorize-key" ]; then
-                docker run --rm \
-                  -e KINGHOST_SSH_HOST=ftp.web-ded-151245a.kinghost.net \
-                  -e KINGHOST_SSH_USER=netcarmultimarcas \
-                  -e KINGHOST_SSH_PASSWORD \
-                  -e KINGHOST_SSH_HOST_FINGERPRINT="$SOCIAL_HOST_FINGERPRINT" \
-                  -e KINGHOST_DEPLOY_PUBLIC_KEY \
-                  -v "$REPO_DIR:/workspace:ro" \
-                  node:20-alpine sh -lc '
-                    set -eu
-                    mkdir -p /tmp/authorizer/scripts
-                    cp /workspace/package.json /workspace/package-lock.json /tmp/authorizer/
-                    cp /workspace/scripts/authorize-social-deploy-key.mjs /tmp/authorizer/scripts/
-                    cd /tmp/authorizer
-                    npm ci --ignore-scripts --no-audit --no-fund >/dev/null
-                    node scripts/authorize-social-deploy-key.mjs
-                  '
+              echo "Validando PHP social antes do deploy parcial..."
+              docker run --rm -v "$REPO_DIR:/app:ro" -w /app php:8.2-cli-alpine sh -lc \
+                'find docs/social -name "*.php" -type f -print0 | xargs -0 -n1 php -l >/tmp/php-lint.log && { [ ! -f docs/social/tests/InstagramGbpSyncTest.php ] || php docs/social/tests/InstagramGbpSyncTest.php; }'
+
+              if [ "$SOCIAL_MODE" = "plan" ]; then
+                docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
+                  --env-file /workspace/.env.local \
+                  --identity /root/.ssh/id_netcar \
+                  --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}"
+              elif [ "$SOCIAL_MODE" = "guard" ]; then
+                docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
+                  --env-file /workspace/.env.local \
+                  --identity /root/.ssh/id_netcar \
+                  --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}" \
+                  --files data/.htaccess \
+                  --apply
               else
-                echo "Validando PHP social antes do deploy parcial..."
-                docker run --rm -v "$REPO_DIR:/app:ro" -w /app php:8.2-cli-alpine sh -lc \
-                  'find docs/social -name "*.php" -type f -print0 | xargs -0 -n1 php -l >/tmp/php-lint.log && { [ ! -f docs/social/tests/InstagramGbpSyncTest.php ] || php docs/social/tests/InstagramGbpSyncTest.php; }'
+                docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
+                  --env-file /workspace/.env.local \
+                  --identity /root/.ssh/id_netcar \
+                  --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}" \
+                  --apply
+              fi
 
-                if [ "$SOCIAL_MODE" = "key-info" ]; then
-                  DEPLOY_PUBLIC_KEY="$(docker exec netcar-devops ssh-keygen -y -f /root/.ssh/id_netcar)"
-                  case "$DEPLOY_PUBLIC_KEY" in
-                    ssh-ed25519\ *|ssh-rsa\ *|ecdsa-sha2-nistp256\ *) ;;
-                    *) echo "Falha: chave publica de deploy invalida"; exit 1 ;;
-                  esac
-                  echo "KINGHOST_DEPLOY_PUBLIC_KEY=$DEPLOY_PUBLIC_KEY"
-                elif [ "$SOCIAL_MODE" = "plan" ]; then
-                  docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
-                    --env-file /workspace/.env.local \
-                    --identity /root/.ssh/id_netcar \
-                    --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}"
-                elif [ "$SOCIAL_MODE" = "guard" ]; then
-                  docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
-                    --env-file /workspace/.env.local \
-                    --identity /root/.ssh/id_netcar \
-                    --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}" \
-                    --files data/.htaccess \
-                    --apply
-                else
-                  docker exec -w /workspace netcar-devops node scripts/deploy-social-only.mjs \
-                    --env-file /workspace/.env.local \
-                    --identity /root/.ssh/id_netcar \
-                    --host-fingerprint "${SOCIAL_HOST_FINGERPRINT:-}" \
-                    --apply
-                fi
+              TOKEN_STATUS="$(curl -sS -o /dev/null -w '%{http_code}' -I 'https://www.netcarmultimarcas.com.br/social/v1/data/cache/social-tokens.json')"
+              if [ "$TOKEN_STATUS" = "200" ]; then
+                echo "Falha: pasta data continua publica"
+                exit 1
+              fi
+              echo "Pasta data protegida (HTTP $TOKEN_STATUS)"
 
-                TOKEN_STATUS="$(curl -sS -o /dev/null -w '%{http_code}' -I 'https://www.netcarmultimarcas.com.br/social/v1/data/cache/social-tokens.json')"
-                if [ "$TOKEN_STATUS" = "200" ]; then
-                  echo "Falha: pasta data continua publica"
-                  exit 1
-                fi
-                echo "Pasta data protegida (HTTP $TOKEN_STATUS)"
-
-                if [ "$SOCIAL_MODE" = "full" ]; then
-                  curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/stories.php' >/dev/null
-                  curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=1' >/dev/null
-                  OAUTH_STATUS="$(curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?action=status')"
-                  case "$OAUTH_STATUS" in
-                    *'"google":{"connected":true}'*'"meta":{"connected":true}'*) ;;
-                    *) echo "Falha: tokens sociais nao migraram/conectaram corretamente"; exit 1 ;;
-                  esac
-                  echo "Endpoints sociais e migracao privada de tokens validados"
-                fi
+              if [ "$SOCIAL_MODE" = "full" ]; then
+                curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/stories.php' >/dev/null
+                curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=1' >/dev/null
+                OAUTH_STATUS="$(curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?action=status')"
+                case "$OAUTH_STATUS" in
+                  *'"google":{"connected":true}'*'"meta":{"connected":true}'*) ;;
+                  *) echo "Falha: tokens sociais nao migraram/conectaram corretamente"; exit 1 ;;
+                esac
+                echo "Endpoints sociais e migracao privada de tokens validados"
               fi
             fi
