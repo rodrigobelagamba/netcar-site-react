@@ -75,7 +75,7 @@ DEFAULT_CONFIRMED_CONVERSIONS_CSV = private_path(
 
 STRONG_CLICK_ID_RE = re.compile(r"^nc_[0-9a-f]{32}$", re.I)
 NEW_WA_REF_RE = re.compile(r"^[MGODSRU][23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{7}$", re.I)
-LEGACY_WA_REF_RE = re.compile(r"^[MGODSRU](?:\d{3,5}|[A-Z2-9]{4})$", re.I)
+LEGACY_WA_REF_RE = re.compile(r"^[MGODSRU](?:\d{1,5}|[A-Z2-9]{4})$", re.I)
 SECRET_FIELD_RE = re.compile(
     r"(?:^|_)(?:password|passwd|secret|api_?key|access_?token|database_?url|connection_?string)(?:$|_)",
     re.I,
@@ -1098,6 +1098,29 @@ def build_audit(
     def counts(field: str) -> dict[str, int]:
         return dict(sorted(Counter(str(row.get(field) or "none") for row in output).items()))
 
+    def latest_iso(
+        rows: Sequence[dict], getter: Callable[[dict], dt.datetime | None]
+    ) -> str:
+        values = [value for row in rows if (value := getter(row)) is not None]
+        return max(values).isoformat().replace("+00:00", "Z") if values else ""
+
+    lead_refs = [
+        normalize_wa_ref(first_value(row, "wa_ref", "codigo_site", "code"))
+        for row in leads
+    ]
+    click_refs = [
+        normalize_wa_ref(first_value(row, "wa_ref", "code", "codigo_site"))
+        for row in clicks
+    ]
+    lead_click_ids = [
+        normalize_click_id(first_value(row, "click_id", "wa_click_id", "event_id"))
+        for row in leads
+    ]
+    click_ids = [
+        normalize_click_id(first_value(row, "click_id", "wa_click_id", "event_id"))
+        for row in clicks
+    ]
+
     coverage = source_coverage or {
         "clicks": "provided",
         "crm": "provided",
@@ -1108,7 +1131,7 @@ def build_audit(
     ]
 
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
         "input_counts": {
             "evolution_leads": len(leads),
@@ -1136,6 +1159,30 @@ def build_audit(
             "click": sum(1 for row in output if row.get("click_match_confidence") != "none"),
             "crm": sum(1 for row in output if row.get("crm_matched") == "1"),
             "sale": sum(1 for row in output if row.get("virou_venda") == "1"),
+        },
+        "identity_coverage": {
+            "evolution_leads_with_wa_ref": sum(bool(value) for value in lead_refs),
+            "evolution_leads_with_new_wa_ref": sum(
+                bool(NEW_WA_REF_RE.fullmatch(value)) for value in lead_refs
+            ),
+            "evolution_leads_with_click_id": sum(
+                bool(value) for value in lead_click_ids
+            ),
+            "site_clicks_with_wa_ref": sum(bool(value) for value in click_refs),
+            "site_clicks_with_new_wa_ref": sum(
+                bool(NEW_WA_REF_RE.fullmatch(value)) for value in click_refs
+            ),
+            "site_clicks_with_legacy_wa_ref": sum(
+                bool(LEGACY_WA_REF_RE.fullmatch(value)) for value in click_refs
+            ),
+            "site_clicks_with_click_id": sum(bool(value) for value in click_ids),
+            "site_clicks_with_strong_click_id": sum(
+                bool(STRONG_CLICK_ID_RE.fullmatch(value)) for value in click_ids
+            ),
+        },
+        "freshness": {
+            "latest_evolution_lead_at": latest_iso(leads, lead_time),
+            "latest_site_click_at": latest_iso(clicks, click_time),
         },
         "confirmed_conversion_export": {
             "rows": sum(1 for row in output if row.get("virou_venda") == "1"),

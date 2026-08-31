@@ -751,7 +751,7 @@ export function SeminovosPage() {
                 <option value="ano-desc">Mais novos (ano)</option>
                 <option value="preco-asc">Menor preço</option>
                 <option value="preco-desc">Maior preço</option>
-                <option value="az">Marca / modelo A–Z</option>
+                <option value="az">Modelo A–Z</option>
               </select>
               <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             </div>

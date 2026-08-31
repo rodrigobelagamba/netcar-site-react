@@ -24,6 +24,7 @@ import { fileURLToPath } from "node:url";
 
 import {
   inferPageType,
+  initAnalytics,
   trackCompareInteraction,
   trackConfirmedLead,
   trackContactFormSubmit,
@@ -54,6 +55,46 @@ const storage = new Map<string, string>();
 const beacons: Array<{ url: string; body: Blob }> = [];
 const gtagCalls: unknown[][] = [];
 const fbqCalls: unknown[][] = [];
+let delegatedClickListener: ((event: { target: unknown }) => void) | undefined;
+
+class FakeHtmlAnchorElement {
+  href: string;
+  textContent: string;
+  private readonly attributes = new Map<string, string>();
+
+  constructor(
+    href: string,
+    attributes: Record<string, string> = {},
+    textContent = "",
+  ) {
+    this.href = href;
+    this.textContent = textContent;
+    for (const [key, value] of Object.entries(attributes)) {
+      this.attributes.set(key, value);
+    }
+  }
+
+  getAttribute(name: string): string | null {
+    return this.attributes.get(name) ?? null;
+  }
+
+  closest(selector: string): FakeHtmlAnchorElement | null {
+    if (selector === "a[href]") return this;
+    if (
+      selector === "[data-wa-source]" &&
+      this.attributes.has("data-wa-source")
+    ) {
+      return this;
+    }
+    if (
+      selector === "[data-wa-conversion]" &&
+      this.attributes.has("data-wa-conversion")
+    ) {
+      return this;
+    }
+    return null;
+  }
+}
 
 const fakeWindow = {
   location: {
@@ -66,6 +107,7 @@ const fakeWindow = {
   __netcarDirectGaLoaded: false,
   __netcarPrivacyConsent: "accepted",
   __netcarMetaLoaded: true,
+  __netcarAnalyticsInit: false,
   gtag: (...args: unknown[]) => gtagCalls.push(args),
   fbq: (...args: unknown[]) => fbqCalls.push(args),
   open: () => null,
@@ -76,11 +118,26 @@ Object.defineProperty(globalThis, "window", {
   configurable: true,
   writable: true,
 });
+Object.defineProperty(globalThis, "Element", {
+  value: FakeHtmlAnchorElement,
+  configurable: true,
+  writable: true,
+});
+Object.defineProperty(globalThis, "HTMLAnchorElement", {
+  value: FakeHtmlAnchorElement,
+  configurable: true,
+  writable: true,
+});
 Object.defineProperty(globalThis, "document", {
   value: {
     referrer: "",
     title: "Veículo teste",
-    addEventListener: () => undefined,
+    addEventListener: (
+      name: string,
+      listener: (event: { target: unknown }) => void,
+    ) => {
+      if (name === "click") delegatedClickListener = listener;
+    },
   },
   configurable: true,
   writable: true,
@@ -192,6 +249,51 @@ async function testClickLogContext(): Promise<void> {
   assert(
     payload.wa_source === "vehicle_sidebar" && payload.wa_intent === "trade_in",
     "o log próprio perdeu o contexto do CTA",
+  );
+}
+
+async function testDelegatedWhatsAppLinkTransaction(): Promise<void> {
+  resetTelemetry();
+  fakeWindow.__netcarAnalyticsInit = false;
+  delegatedClickListener = undefined;
+  initAnalytics();
+  assert(
+    delegatedClickListener,
+    "a delegação global não registrou o handler de clique",
+  );
+
+  const anchor = new FakeHtmlAnchorElement(
+    "https://wa.me/5551997293118?text=Quero%20mais%20informa%C3%A7%C3%B5es%20sobre%20o%20Kicks.",
+    {
+      "data-wa-source": "detalhe_sticky",
+      "data-wa-intent": "vehicle_inquiry",
+      "data-wa-vehicle-id": "19857",
+      "data-wa-vehicle-name": "Kicks Sense Turbo",
+    },
+    "Falar deste carro",
+  );
+  delegatedClickListener({ target: anchor });
+
+  const message = new URL(anchor.href).searchParams.get("text") ?? "";
+  const marker = message.match(
+    /\(([MGODSRU][23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{7})\)/,
+  )?.[1];
+  assert(marker, "o clique delegado saiu do site sem wa_ref na mensagem");
+  assert(beacons.length === 1, "o clique delegado não chegou ao log próprio");
+
+  const payload = JSON.parse(await beacons[0].body.text()) as Record<
+    string,
+    unknown
+  >;
+  assert(
+    payload.wa_ref === marker &&
+      /^nc_[a-f0-9]{32}$/.test(String(payload.click_id)),
+    "mensagem e log próprio não compartilharam a mesma identidade",
+  );
+  const [event] = dataLayerEvents("whatsapp_click");
+  assert(
+    event?.wa_ref === marker && event?.click_id === payload.click_id,
+    "mensagem, dataLayer e log próprio divergiram no mesmo gesto",
   );
 }
 
@@ -795,14 +897,21 @@ function testOfflinePipelineRuntime(): void {
     );
 
     const audit = JSON.parse(readFileSync(auditJson, "utf8")) as {
+      schema_version?: number;
       input_counts?: Record<string, number>;
       matched_totals?: Record<string, number>;
+      identity_coverage?: Record<string, number>;
+      freshness?: Record<string, string>;
     };
     assert(
-      audit.input_counts?.site_clicks === 1 &&
+      audit.schema_version === 3 &&
+        audit.input_counts?.site_clicks === 1 &&
         audit.matched_totals?.click === 1 &&
         audit.matched_totals?.crm === 1 &&
-        audit.matched_totals?.sale === 1,
+        audit.matched_totals?.sale === 1 &&
+        audit.identity_coverage?.site_clicks_with_strong_click_id === 1 &&
+        audit.identity_coverage?.evolution_leads_with_new_wa_ref === 1 &&
+        audit.freshness?.latest_evolution_lead_at === "2026-08-31T10:00:00Z",
       "auditoria offline não comprovou o caminho clique → CRM → venda",
     );
   } finally {
@@ -813,6 +922,7 @@ function testOfflinePipelineRuntime(): void {
 async function main(): Promise<void> {
   testStrongClickIdentity();
   await testClickLogContext();
+  await testDelegatedWhatsAppLinkTransaction();
   testSingleWhatsAppEmission();
   testSupportIsNotAConversion();
   testPrivacyChoiceClearsAndBlocksAttribution();

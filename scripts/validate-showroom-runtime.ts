@@ -99,6 +99,17 @@ for (const [sortBy, expectedIds] of Object.entries(expectedSorts)) {
   );
 }
 
+const alphabeticalByModel = [
+  Object.assign(fixture("song", "Song Pro", 169900), { marca: "BYD" }),
+  Object.assign(fixture("argo", "Argo Drive", 86900), { marca: "FIAT" }),
+  Object.assign(fixture("captur", "Captur Zen", 72900), { marca: "RENAULT" }),
+];
+assert.deepEqual(
+  sortShowroomVehicles(alphabeticalByModel, "az").map((vehicle) => vehicle.id),
+  ["argo", "captur", "song"],
+  "ordem A–Z priorizou a marca em vez do nome do modelo",
+);
+
 const curatedFastback = fixture("19884", "Fastback Impetus", 122900);
 curatedFastback.km = 9500;
 curatedFastback.imagens_site = {

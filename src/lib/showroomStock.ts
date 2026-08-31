@@ -2,17 +2,38 @@ import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { getVehicleMerchandisingPriority } from "@/lib/vehicleMerchandising";
 
 export type ShowroomSortOption =
-  "recomendados" | "ano-desc" | "az" | "preco-asc" | "preco-desc";
+  | "recomendados"
+  | "ano-desc"
+  | "az"
+  | "preco-asc"
+  | "preco-desc";
 
 function vehicleModel(vehicle: Vehicle): string {
-  return [vehicle.marca, vehicle.modelo || vehicle.name]
-    .filter(Boolean)
-    .join(" ")
-    .toLocaleLowerCase("pt-BR");
+  const brand = String(vehicle.marca || "").trim();
+  const explicitModel = String(vehicle.modelo || "").trim();
+  const fallbackName = String(vehicle.name || "").trim();
+  const model =
+    explicitModel ||
+    (brand &&
+    fallbackName
+      .toLocaleLowerCase("pt-BR")
+      .startsWith(brand.toLocaleLowerCase("pt-BR"))
+      ? fallbackName.slice(brand.length).trim()
+      : fallbackName);
+  return model.toLocaleLowerCase("pt-BR");
 }
 
 function compareModel(left: Vehicle, right: Vehicle): number {
-  return vehicleModel(left).localeCompare(vehicleModel(right), "pt-BR");
+  const modelDiff = vehicleModel(left).localeCompare(
+    vehicleModel(right),
+    "pt-BR",
+    { numeric: true },
+  );
+  if (modelDiff) return modelDiff;
+  return String(left.marca || "").localeCompare(
+    String(right.marca || ""),
+    "pt-BR",
+  );
 }
 
 function isSold(vehicle: Vehicle): boolean {

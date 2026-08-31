@@ -85,6 +85,25 @@ com sucesso, marca a fonte como `skipped_unavailable` e
 Um snapshot CSV explicitamente fornecido ainda pode ser usado mesmo com a consulta
 ao banco correspondente desativada.
 
+### Receptor versionado no VPS
+
+O código canônico do receptor é `scripts/vps/wa-log-server.py`; no servidor ele
+é instalado como `/opt/wa-log/server.py` e executado pelo container `wa-log`.
+Antes de substituir o arquivo, valide-o em um container temporário, faça backup
+com data/hora e só então reinicie ou recrie o container. O receptor atual:
+
+- aceita o `wa_ref` Crockford e os formatos legados;
+- valida e persiste `click_id`, `wa_ref` e contexto comercial allowlisted;
+- não persiste mensagem livre nem telefone;
+- aceita leitura autenticada por `Authorization: Bearer` ou
+  `X-WA-Log-Token`; query token só é aceito quando
+  `WA_LOG_ALLOW_QUERY_TOKEN=1` também está habilitado no receptor;
+- restringe CORS aos dois domínios de produção.
+
+Depois de atualizar o receptor, mantenha `WA_LOG_ALLOW_QUERY_TOKEN=0`. Se o token
+já apareceu em arquivo ou histórico Git, rotacione-o no container e no ambiente
+privado do pipeline; não basta apagar a ocorrência antiga.
+
 ## 4. Contrato de reconciliação
 
 A prioridade é:
@@ -96,7 +115,7 @@ A prioridade é:
 
 O `wa_ref` novo aceita uma letra de origem (`M`, `G`, `O`, `D`, `S`, `R` ou `U`)
 e sete caracteres Crockford `23456789ABCDEFGHJKLMNPQRSTUVWXYZ`. Formatos legados
-de 3–5 dígitos ou quatro alfanuméricos continuam legíveis. A Evolution nunca
+de 1–5 dígitos ou quatro alfanuméricos continuam legíveis. A Evolution nunca
 inventa `click_id` copiando `wa_ref`: o identificador forte só aparece após o
 match com o log próprio.
 
@@ -104,6 +123,20 @@ Cada linha inclui métodos, número de candidatos, delta temporal e confiança p
 etapa, além de `match_method` e `confidence` ponta a ponta. Etapas ausentes reduzem
 a confiança total. Um `click_id` não padronizado só casa dentro da janela. Venda
 por fallback temporal nunca pode anteceder o lead.
+
+O resumo `atribuicao_whatsapp_audit.json` separa também a cobertura das
+identidades (`identity_coverage`) e a data mais recente de cada fonte
+(`freshness`). Isso evita interpretar todo o histórico como falha da versão
+atual: cliques legados sem `click_id` e conversas anteriores ao deploy continuam
+no período de retenção, mas não comprovam nem invalidam o contrato novo.
+
+Para aceitar um deploy de atribuição em produção, faça um único teste controlado
+com consentimento de medição: abra uma ficha, clique no WhatsApp e envie a
+mensagem predefinida sem retirar a referência final. Depois rode o pipeline e
+confirme no JSON, sem expor a mensagem ou o telefone, que aumentaram
+`site_clicks_with_strong_click_id`, `evolution_leads_with_new_wa_ref` e
+`matched_totals.click`. Os testes sintéticos protegem o código; esse teste
+controlado comprova a integração real com o aplicativo e a Evolution.
 
 `traffic_source` descreve aquisição (`utm_source`, mídia etc.); `wa_source`
 descreve o marcador/origem observado no WhatsApp. Eles permanecem separados.
@@ -123,6 +156,10 @@ Em falha parcial, sessões válidas e checkpoint são gravados; se a taxa supera
 limite configurado, o processo também termina com erro para alertar a operação.
 As contagens agregadas (`queued`, `succeeded`, `failed`, taxa, limite e estado do
 checkpoint) ficam em `evolution_attribution_audit.json`, sem telefone ou JID.
+
+Cada número do WhatsApp deve apontar para sua própria instância Evolution e usar
+um checkpoint separado. Misturar o número comercial com o Nethelp produz um
+relatório tecnicamente válido, mas mede conversas do funil errado.
 
 Datas ISO sem timezone são interpretadas em `ATTRIBUTION_SOURCE_TIMEZONE`
 (`America/Sao_Paulo` por padrão); epochs são UTC. Telefones fixos não recebem o

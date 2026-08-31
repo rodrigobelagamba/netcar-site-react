@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import csv
 import datetime as dt
+import importlib.util
 import json
 import os
 import stat
@@ -35,6 +36,12 @@ import evolution_attribution as evolution  # noqa: E402
 import offline_config as config  # noqa: E402
 import wa_clicks_sync as clicks_sync  # noqa: E402
 
+WA_LOG_SERVER_PATH = SCRIPT_DIR / "vps" / "wa-log-server.py"
+WA_LOG_SPEC = importlib.util.spec_from_file_location("wa_log_server", WA_LOG_SERVER_PATH)
+assert WA_LOG_SPEC and WA_LOG_SPEC.loader
+wa_log_server = importlib.util.module_from_spec(WA_LOG_SPEC)
+WA_LOG_SPEC.loader.exec_module(wa_log_server)
+
 
 class FakeResponse:
     def __init__(self, payload: object):
@@ -51,6 +58,85 @@ class FakeResponse:
 
 
 class OfflineAttributionTests(unittest.TestCase):
+    def test_wa_log_server_accepts_strong_identity_and_context(self):
+        click_id = "nc_0123456789abcdef0123456789abcdef"
+        record = wa_log_server.build_record(
+            {
+                "code": "G2345678",
+                "wa_ref": "G2345678",
+                "click_id": click_id,
+                "traffic_source": "Google Ads",
+                "traffic_campaign": "estoque-rs",
+                "wa_source": "vehicle_sidebar",
+                "wa_intent": "vehicle_inquiry",
+                "wa_vehicle_id": "19884",
+                "wa_vehicle_name": "Fiat Fastback",
+                "page_path": "/veiculo/fastback",
+                "privacy_consent": "accepted",
+                "free_form_message": "não deve ser persistida",
+                "ts": 1_788_170_400,
+            },
+            now=1_788_170_400,
+        )
+        self.assertEqual(record["wa_ref"], "G2345678")
+        self.assertEqual(record["click_id"], click_id)
+        self.assertEqual(record["campaign"], "estoque-rs")
+        self.assertEqual(record["wa_vehicle_id"], "19884")
+        self.assertNotIn("free_form_message", record)
+
+    def test_wa_log_server_keeps_all_supported_legacy_refs(self):
+        for wa_ref in ("G1", "M12345", "O2A4Z"):
+            with self.subTest(wa_ref=wa_ref):
+                record = wa_log_server.build_record(
+                    {"code": wa_ref, "ts": 1_788_170_400},
+                    now=1_788_170_400,
+                )
+                self.assertEqual(record["wa_ref"], wa_ref)
+
+    def test_wa_log_server_rejects_malformed_identity(self):
+        with self.assertRaises(ValueError):
+            wa_log_server.build_record(
+                {"wa_ref": "X2345678", "ts": 1_788_170_400},
+                now=1_788_170_400,
+            )
+        with self.assertRaises(ValueError):
+            wa_log_server.build_record(
+                {
+                    "code": "G2345678",
+                    "wa_ref": "M2345678",
+                    "ts": 1_788_170_400,
+                },
+                now=1_788_170_400,
+            )
+        with self.assertRaises(ValueError):
+            wa_log_server.build_record(
+                {
+                    "wa_ref": "G2345678",
+                    "click_id": "nc_invalido",
+                    "ts": 1_788_170_400,
+                },
+                now=1_788_170_400,
+            )
+
+    def test_wa_log_server_disables_query_token_by_default(self):
+        class FakeHandler:
+            headers: dict[str, str] = {}
+
+        previous = wa_log_server.ALLOW_QUERY_TOKEN
+        try:
+            wa_log_server.ALLOW_QUERY_TOKEN = False
+            self.assertEqual(
+                wa_log_server.supplied_token(FakeHandler(), {"token": ["legacy"]}),
+                "",
+            )
+            wa_log_server.ALLOW_QUERY_TOKEN = True
+            self.assertEqual(
+                wa_log_server.supplied_token(FakeHandler(), {"token": ["legacy"]}),
+                "legacy",
+            )
+        finally:
+            wa_log_server.ALLOW_QUERY_TOKEN = previous
+
     def test_phone_types_do_not_collide(self):
         fixed = enrich.normalize_phone("(51) 3333-4444")
         modern_mobile = enrich.normalize_phone("(51) 99888-7777")
@@ -480,27 +566,29 @@ class OfflineAttributionTests(unittest.TestCase):
 
     def test_output_audit_and_confirmed_export_contract(self):
         click_id = "nc_" + "d" * 32
+        leads = [
+            {
+                "telefone": "51999999999",
+                "jid": "x@s.whatsapp.net",
+                "primeiro_contato": "2026-08-31T10:00:00Z",
+                "wa_ref": "G2345678",
+                "click_id": click_id,
+                "wa_source": "Google Ads",
+            }
+        ]
+        clicks = [
+            {
+                "ts": "2026-08-31T09:59:00Z",
+                "click_id": click_id,
+                "wa_ref": "G2345678",
+                "utm_source": "google",
+                "source": "vehicle_sidebar",
+                "gclid": "gclid-synthetic",
+            }
+        ]
         output = enrich.enrich_rows(
-            [
-                {
-                    "telefone": "51999999999",
-                    "jid": "x@s.whatsapp.net",
-                    "primeiro_contato": "2026-08-31T10:00:00Z",
-                    "wa_ref": "G2345678",
-                    "click_id": click_id,
-                    "wa_source": "Google Ads",
-                }
-            ],
-            [
-                {
-                    "ts": "2026-08-31T09:59:00Z",
-                    "click_id": click_id,
-                    "wa_ref": "G2345678",
-                    "utm_source": "google",
-                    "source": "vehicle_sidebar",
-                    "gclid": "gclid-synthetic",
-                }
-            ],
+            leads,
+            clicks,
             [
                 {
                     "deal_id": "deal-1",
@@ -523,7 +611,18 @@ class OfflineAttributionTests(unittest.TestCase):
         self.assertEqual(row["wa_source"], "vehicle_sidebar")
         self.assertEqual(row["crm_matched"], "1")
         self.assertEqual(row["no_crm"], "0")
-        audit = enrich.build_audit([], [], [], [], output)
+        audit = enrich.build_audit(leads, clicks, [], [], output)
+        self.assertEqual(audit["schema_version"], 3)
+        self.assertEqual(
+            audit["identity_coverage"]["evolution_leads_with_new_wa_ref"], 1
+        )
+        self.assertEqual(
+            audit["identity_coverage"]["site_clicks_with_strong_click_id"], 1
+        )
+        self.assertEqual(
+            audit["freshness"]["latest_evolution_lead_at"],
+            "2026-08-31T10:00:00Z",
+        )
         self.assertTrue(audit["privacy"]["contains_pii"])
         self.assertFalse(audit["privacy"]["summary_contains_raw_pii"])
         conversions = enrich.confirmed_conversions(output)

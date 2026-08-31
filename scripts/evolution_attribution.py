@@ -63,9 +63,9 @@ BACKFILL_ADS = "--backfill-ads" in sys.argv  # reprocessa chats CTWA sem ad_id s
 _since = next((a.split("=", 1)[1] for a in sys.argv if a.startswith("--since=")), None)
 SINCE = datetime.datetime.strptime(_since, "%Y-%m-%d") if _since else None
 
-# Novo: fonte + 7 Crockford Base32. Legados: 3–5 digitos ou 4 alfanumericos.
+# Novo: fonte + 7 Crockford Base32. Legados: 1–5 digitos ou 4 alfanumericos.
 CROCKFORD_7 = r"[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{7}"
-WA_REF_PATTERN = rf"[MGODSRU](?:{CROCKFORD_7}|\d{{3,5}}|[A-Z2-9]{{4}})"
+WA_REF_PATTERN = rf"[MGODSRU](?:{CROCKFORD_7}|\d{{1,5}}|[A-Z2-9]{{4}})"
 CODPAT = re.compile(rf"\(({WA_REF_PATTERN})\)", re.I)
 LETRA = {
     "M": "Meta (via site)",
