@@ -158,7 +158,6 @@ async function main() {
     "trap 'rm -f \"$PENDING\"' 0 1 2 15",
     'if [ -f "$AUTHORIZED" ]; then',
     '  cp -p "$AUTHORIZED" "$BACKUP"',
-    '  cmp -s "$AUTHORIZED" "$BACKUP"',
     '  cp -p "$AUTHORIZED" "$PENDING"',
     "else",
     '  : > "$PENDING"',
