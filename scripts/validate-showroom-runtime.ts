@@ -68,9 +68,14 @@ const sortFixture = [
   fixture("active-c", "Charlie ativo", 90000),
 ];
 
+sortFixture[1].destaque = 1;
+sortFixture[1].year = 2024;
+sortFixture[3].promocao = 1;
+
 const expectedSorts = {
+  recomendados: ["active-b", "active-c", "sold-a", "sold-z"],
+  "ano-desc": ["active-c", "active-b", "sold-a", "sold-z"],
   az: ["sold-a", "active-b", "active-c", "sold-z"],
-  za: ["sold-z", "active-c", "active-b", "sold-a"],
   "preco-asc": ["active-c", "active-b", "sold-a", "sold-z"],
   "preco-desc": ["active-b", "active-c", "sold-a", "sold-z"],
 } as const;

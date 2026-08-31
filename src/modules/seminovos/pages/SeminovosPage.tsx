@@ -5,8 +5,6 @@ import {
   useLayoutEffect,
   useRef,
   Fragment,
-  lazy,
-  Suspense,
 } from "react";
 import { Link, useSearch, useNavigate } from "@tanstack/react-router";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
@@ -34,12 +32,6 @@ import {
 } from "@/lib/showroomStock";
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
 
-const SearchBar = lazy(() =>
-  import("@/design-system/components/patterns/SearchBar").then((module) => ({
-    default: module.SearchBar,
-  })),
-);
-
 type StockLayout = {
   compact: boolean;
   columns: number;
@@ -50,6 +42,58 @@ const stockCategoryLabels: Record<string, string> = {
   hatch: "Hatches",
   sedan: "Sedãs",
 };
+
+const vehicleCategoryLabels: Record<string, string> = {
+  SUV: "SUV",
+  HATCH: "Hatch",
+  SEDAN: "Sedã",
+  PICKUP: "Picape",
+  PICAPE: "Picape",
+  UTILITARIO: "Utilitário",
+  MINIVAN: "Minivan",
+  COUPE: "Cupê",
+};
+
+function toSelectOptions(values: Array<string | null | undefined>) {
+  return [
+    ...new Set(
+      values.map((value) => String(value || "").trim()).filter(Boolean),
+    ),
+  ]
+    .sort((left, right) => left.localeCompare(right, "pt-BR"))
+    .map((value) => ({ value, label: value }));
+}
+
+type StockFilterValues = Record<
+  | "marca"
+  | "modelo"
+  | "precoMin"
+  | "precoMax"
+  | "anoMin"
+  | "anoMax"
+  | "cambio"
+  | "combustivel"
+  | "cor"
+  | "categoria",
+  string | undefined
+>;
+
+function stockFilterSignature(filters: StockFilterValues): string {
+  return [
+    filters.marca,
+    filters.modelo,
+    filters.precoMin,
+    filters.precoMax,
+    filters.anoMin,
+    filters.anoMax,
+    filters.cambio,
+    filters.combustivel,
+    filters.cor,
+    filters.categoria,
+  ]
+    .map((value) => value || "")
+    .join("\u001f");
+}
 
 /** Espelha os breakpoints Tailwind do showroom sem alterar o grid após a pintura inicial. */
 function getStockLayout(): StockLayout {
@@ -276,71 +320,87 @@ export function SeminovosPage() {
 
   // Extrai dados do stockData (agora são arrays simples)
   const brands = stockData?.enterprises || [];
+  const models = stockData?.cars || [];
   const years = stockData?.years || [];
+  const colors = stockData?.colors || [];
+  const fuels = stockData?.fuels || [];
+  const transmissions = stockData?.transmissions || [];
   const priceRanges = stockData?.prices || [];
 
   // Estados dos filtros
   const [marca, setMarca] = useState(search.marca || "");
+  const [modelo, setModelo] = useState(search.modelo || "");
   const [anoMin, setAnoMin] = useState(search.anoMin || "");
   const [anoMax, setAnoMax] = useState(search.anoMax || "");
   const [precoMin, setPrecoMin] = useState(search.precoMin || "");
   const [precoMax, setPrecoMax] = useState(search.precoMax || "");
-  const [sortBy, setSortBy] = useState<ShowroomSortOption>("az");
-  const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
+  const [categoria, setCategoria] = useState(search.categoria || "");
+  const [cambio, setCambio] = useState(search.cambio || "");
+  const [combustivel, setCombustivel] = useState(search.combustivel || "");
+  const [cor, setCor] = useState(search.cor || "");
+  const [sortBy, setSortBy] = useState<ShowroomSortOption>("recomendados");
+  const [areFiltersVisible, setAreFiltersVisible] = useState(false);
+  const pendingFilterTrackingRef = useRef<string | null>(null);
 
   // Sincroniza estados locais com parâmetros da URL quando mudam
   useEffect(() => {
     setMarca(search.marca || "");
+    setModelo(search.modelo || "");
     setAnoMin(search.anoMin || "");
     setAnoMax(search.anoMax || "");
     setPrecoMin(search.precoMin || "");
     setPrecoMax(search.precoMax || "");
+    setCategoria(search.categoria || "");
+    setCambio(search.cambio || "");
+    setCombustivel(search.combustivel || "");
+    setCor(search.cor || "");
   }, [
     search.marca,
+    search.modelo,
     search.anoMin,
     search.anoMax,
     search.precoMin,
     search.precoMax,
+    search.categoria,
+    search.cambio,
+    search.combustivel,
+    search.cor,
   ]);
 
   // Aplica filtros
   const handleFilter = () => {
-    trackStockFilterApply({
-      filters: {
-        marca: marca || undefined,
-        anoMin: anoMin || undefined,
-        anoMax: anoMax || undefined,
-        precoMin: precoMin || undefined,
-        precoMax: precoMax || undefined,
-        categoria: search.categoria || undefined,
-        combustivel: search.combustivel || undefined,
-      },
-      resultCount: filteredAndSortedVehicles.length,
-    });
+    const nextFilters: StockFilterValues = {
+      marca: marca || undefined,
+      modelo: modelo || undefined,
+      precoMin: precoMin || undefined,
+      precoMax: precoMax || undefined,
+      anoMin: anoMin || undefined,
+      anoMax: anoMax || undefined,
+      cambio: cambio || undefined,
+      combustivel: combustivel || undefined,
+      cor: cor || undefined,
+      categoria: categoria || undefined,
+    };
+    pendingFilterTrackingRef.current = stockFilterSignature(nextFilters);
     navigate({
       to: "/seminovos",
-      search: {
-        marca: marca || undefined,
-        modelo: undefined,
-        precoMin: precoMin || undefined,
-        precoMax: precoMax || undefined,
-        anoMin: anoMin || undefined,
-        anoMax: anoMax || undefined,
-        cambio: undefined,
-        combustivel: search.combustivel || undefined,
-        cor: undefined,
-        categoria: search.categoria || undefined, // Preserva categoria da URL
-      },
+      search: nextFilters,
     });
+    setAreFiltersVisible(false);
   };
 
   // Limpa todos os filtros
   const handleClearFilters = () => {
     setMarca("");
+    setModelo("");
     setAnoMin("");
     setAnoMax("");
     setPrecoMin("");
     setPrecoMax("");
+    setCategoria("");
+    setCambio("");
+    setCombustivel("");
+    setCor("");
     navigate({
       to: "/seminovos",
       search: {
@@ -353,22 +413,101 @@ export function SeminovosPage() {
         cambio: undefined,
         combustivel: undefined,
         cor: undefined,
-        categoria: search.categoria || undefined, // Preserva categoria da URL
+        categoria: undefined,
       },
     });
+    setAreFiltersVisible(false);
   };
 
-  // Conta quantos filtros estão ativos
-  const activeFiltersCount = useMemo(() => {
+  // Mantém separado o que está sendo editado do que já foi aplicado na URL.
+  const draftFiltersCount = useMemo(() => {
     let count = 0;
     if (marca) count++;
+    if (modelo) count++;
     if (anoMin) count++;
     if (anoMax) count++;
     if (precoMin) count++;
     if (precoMax) count++;
-    if (search.combustivel) count++;
+    if (categoria) count++;
+    if (cambio) count++;
+    if (combustivel) count++;
+    if (cor) count++;
     return count;
-  }, [marca, anoMin, anoMax, precoMin, precoMax, search.combustivel]);
+  }, [
+    marca,
+    modelo,
+    anoMin,
+    anoMax,
+    precoMin,
+    precoMax,
+    categoria,
+    cambio,
+    combustivel,
+    cor,
+  ]);
+
+  const appliedFiltersCount = useMemo(() => {
+    return [
+      search.marca,
+      search.modelo,
+      search.anoMin,
+      search.anoMax,
+      search.precoMin,
+      search.precoMax,
+      search.categoria,
+      search.cambio,
+      search.combustivel,
+      search.cor,
+    ].filter(Boolean).length;
+  }, [
+    search.marca,
+    search.modelo,
+    search.anoMin,
+    search.anoMax,
+    search.precoMin,
+    search.precoMax,
+    search.categoria,
+    search.cambio,
+    search.combustivel,
+    search.cor,
+  ]);
+
+  const visibleFiltersCount = areFiltersVisible
+    ? draftFiltersCount
+    : appliedFiltersCount;
+
+  const activeFilterLabels = useMemo(() => {
+    const labels: string[] = [];
+    if (search.marca) labels.push(search.marca);
+    if (search.modelo) labels.push(search.modelo);
+    if (search.categoria) {
+      labels.push(
+        vehicleCategoryLabels[search.categoria.toUpperCase()] ||
+          search.categoria,
+      );
+    }
+    if (search.cambio) labels.push(search.cambio);
+    if (search.combustivel) labels.push(search.combustivel);
+    if (search.cor) labels.push(search.cor);
+    if (search.anoMin || search.anoMax) {
+      labels.push(`Ano ${search.anoMin || "…"}–${search.anoMax || "…"}`);
+    }
+    if (search.precoMin || search.precoMax) {
+      labels.push(`R$ ${search.precoMin || "…"}–${search.precoMax || "…"}`);
+    }
+    return labels;
+  }, [
+    search.marca,
+    search.modelo,
+    search.categoria,
+    search.cambio,
+    search.combustivel,
+    search.cor,
+    search.anoMin,
+    search.anoMax,
+    search.precoMin,
+    search.precoMax,
+  ]);
 
   // Filtra e ordena veículos
   const filteredAndSortedVehicles = useMemo(() => {
@@ -426,10 +565,58 @@ export function SeminovosPage() {
     return sortShowroomVehicles(filtered, sortBy);
   }, [vehicles, sortBy, searchTerm, search.categoria, search.combustivel]);
 
+  // Registra a quantidade somente quando a URL e a consulta já refletem os
+  // filtros recém-aplicados, evitando enviar a contagem do resultado anterior.
+  useEffect(() => {
+    const appliedFilters: StockFilterValues = {
+      marca: search.marca,
+      modelo: search.modelo,
+      precoMin: search.precoMin,
+      precoMax: search.precoMax,
+      anoMin: search.anoMin,
+      anoMax: search.anoMax,
+      cambio: search.cambio,
+      combustivel: search.combustivel,
+      cor: search.cor,
+      categoria: search.categoria,
+    };
+    const signature = stockFilterSignature(appliedFilters);
+
+    if (
+      pendingFilterTrackingRef.current !== signature ||
+      isLoading ||
+      isRefreshingVehicles
+    ) {
+      return;
+    }
+
+    pendingFilterTrackingRef.current = null;
+    trackStockFilterApply({
+      filters: appliedFilters,
+      resultCount: filteredAndSortedVehicles.length,
+    });
+  }, [
+    filteredAndSortedVehicles.length,
+    isLoading,
+    isRefreshingVehicles,
+    search.marca,
+    search.modelo,
+    search.precoMin,
+    search.precoMax,
+    search.anoMin,
+    search.anoMax,
+    search.cambio,
+    search.combustivel,
+    search.cor,
+    search.categoria,
+  ]);
+
   const visibleVehicles = filteredAndSortedVehicles;
 
-  // Banner WA depois de 3 linhas no mobile e 2 linhas no desktop.
-  const midGridBreak = stockLayout.compact ? 6 : stockLayout.columns * 2;
+  // Ajuda compacta só depois que o usuário já viu de 6 a 8 carros.
+  const midGridBreak = stockLayout.compact
+    ? 6
+    : Math.min(stockLayout.columns * 2, 8);
   const showMidGridBanner =
     visibleVehicles.length > midGridBreak + stockLayout.columns;
 
@@ -445,8 +632,27 @@ export function SeminovosPage() {
 
   // Prepara opções para os componentes AutocompleteSelect
   const brandOptions = useMemo(() => {
-    return brands.map((brand) => ({ value: brand, label: brand }));
+    return toSelectOptions(brands);
   }, [brands]);
+
+  const modelOptions = useMemo(() => toSelectOptions(models), [models]);
+  const colorOptions = useMemo(() => toSelectOptions(colors), [colors]);
+  const fuelOptions = useMemo(() => toSelectOptions(fuels), [fuels]);
+  const transmissionOptions = useMemo(
+    () => toSelectOptions(transmissions),
+    [transmissions],
+  );
+  const categoryOptions = useMemo(() => {
+    const categories = (vehicles || []).map((vehicle) =>
+      resolvedVehicleCategory(vehicle),
+    );
+    return [...new Set(categories.filter(Boolean))]
+      .sort((left, right) => left.localeCompare(right, "pt-BR"))
+      .map((value) => ({
+        value,
+        label: vehicleCategoryLabels[value] || value,
+      }));
+  }, [vehicles]);
 
   const yearOptions = useMemo(() => {
     return sortedYears.map((year) => ({
@@ -513,41 +719,82 @@ export function SeminovosPage() {
 
   return (
     <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-6">
-      {/* SearchBar - Fixada logo abaixo do Header, apenas Mobile, controlada por estado */}
-      {isSearchBarVisible && (
-        <div className="md:hidden fixed top-16 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-lg">
-          <Suspense fallback={null}>
-            <SearchBar onAction={() => setIsSearchBarVisible(false)} />
-          </Suspense>
-        </div>
-      )}
-
-      {/* Espaçamento para compensar Header (64px) + SearchBar fixa (~180px) no mobile, apenas quando visível */}
-      {isSearchBarVisible && <div className="md:hidden h-[244px]"></div>}
-
-      {/* Botão Filtrar Fixo - Apenas Mobile */}
-      <div className="md:hidden fixed bottom-6 left-4 z-[51]">
-        <button
-          onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
-          className="px-5 py-3.5 rounded-full bg-fg text-white shadow-lg hover:bg-fg/90 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 font-semibold"
-          style={{ backgroundColor: "#00283C" }}
-          aria-label="Filtrar"
-        >
-          <Filter className="w-5 h-5" />
-          <span>Filtrar</span>
-        </button>
-      </div>
-
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-[#00283C]/10 bg-white p-2 shadow-sm">
+          <button
+            type="button"
+            onClick={() => setAreFiltersVisible((visible) => !visible)}
+            aria-expanded={areFiltersVisible}
+            aria-controls="stock-filters"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#00283C] px-4 text-sm font-bold text-white"
+          >
+            <Filter className="h-4 w-4" />
+            Filtros
+            {visibleFiltersCount > 0 && (
+              <span className="rounded-full bg-white px-1.5 py-0.5 text-xs text-[#00283C]">
+                {visibleFiltersCount}
+              </span>
+            )}
+          </button>
+          <label className="flex min-w-0 items-center gap-2">
+            <span className="hidden text-xs font-bold uppercase text-muted-foreground sm:inline">
+              Ordenar por
+            </span>
+            <span className="sr-only">Ordenar veículos</span>
+            <div className="relative min-w-0">
+              <select
+                value={sortBy}
+                onChange={(event) =>
+                  setSortBy(event.target.value as ShowroomSortOption)
+                }
+                className="min-h-11 max-w-[190px] appearance-none rounded-lg bg-surface px-3 pr-8 text-sm font-semibold text-fg focus:outline-none focus:ring-2 focus:ring-primary/20"
+              >
+                <option value="recomendados">Recomendados</option>
+                <option value="ano-desc">Mais novos (ano)</option>
+                <option value="preco-asc">Menor preço</option>
+                <option value="preco-desc">Maior preço</option>
+                <option value="az">Marca / modelo A–Z</option>
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            </div>
+          </label>
+        </div>
+
+        {activeFilterLabels.length > 0 ? (
+          <div
+            className="mb-4 flex flex-wrap items-center gap-2"
+            aria-label="Filtros ativos"
+          >
+            {activeFilterLabels.map((label, index) => (
+              <span
+                key={`${label}-${index}`}
+                className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-bold text-fg"
+              >
+                {label}
+              </span>
+            ))}
+            <button
+              type="button"
+              onClick={handleClearFilters}
+              className="min-h-9 px-2 text-xs font-black text-primary underline underline-offset-4"
+            >
+              Limpar todos
+            </button>
+          </div>
+        ) : null}
+
         {/* Filtros em Card Minimalista - Desktop */}
-        <div className="hidden md:block bg-bg rounded-2xl shadow-sm p-5 mb-8">
+        <div
+          id="stock-filters"
+          className={`${areFiltersVisible ? "block" : "hidden"} bg-bg rounded-2xl border border-[#00283C]/10 shadow-sm p-5 mb-6`}
+        >
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-fg">Filtros</h2>
             <button
               onClick={handleClearFilters}
-              disabled={activeFiltersCount === 0}
+              disabled={draftFiltersCount === 0}
               className={`text-xs font-medium uppercase tracking-wider transition-colors ${
-                activeFiltersCount > 0
+                draftFiltersCount > 0
                   ? "text-primary hover:text-primary/80 cursor-pointer"
                   : "text-muted-foreground cursor-not-allowed opacity-50"
               }`}
@@ -558,7 +805,7 @@ export function SeminovosPage() {
           <div className="flex flex-wrap items-end gap-6">
             {/* Marca */}
             <div className="flex-1 min-w-[140px]">
-              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 Marca
               </label>
               <AutocompleteSelect
@@ -570,9 +817,69 @@ export function SeminovosPage() {
               />
             </div>
 
+            <div className="flex-1 min-w-[170px]">
+              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Modelo
+              </label>
+              <AutocompleteSelect
+                options={modelOptions}
+                value={modelo}
+                onChange={setModelo}
+                placeholder="Selecione"
+              />
+            </div>
+
+            <div className="flex-1 min-w-[140px]">
+              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Carroceria
+              </label>
+              <AutocompleteSelect
+                options={categoryOptions}
+                value={categoria}
+                onChange={setCategoria}
+                placeholder="Selecione"
+              />
+            </div>
+
+            <div className="flex-1 min-w-[140px]">
+              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Câmbio
+              </label>
+              <AutocompleteSelect
+                options={transmissionOptions}
+                value={cambio}
+                onChange={setCambio}
+                placeholder="Selecione"
+              />
+            </div>
+
+            <div className="flex-1 min-w-[140px]">
+              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Combustível
+              </label>
+              <AutocompleteSelect
+                options={fuelOptions}
+                value={combustivel}
+                onChange={setCombustivel}
+                placeholder="Selecione"
+              />
+            </div>
+
+            <div className="flex-1 min-w-[140px]">
+              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Cor
+              </label>
+              <AutocompleteSelect
+                options={colorOptions}
+                value={cor}
+                onChange={setCor}
+                placeholder="Selecione"
+              />
+            </div>
+
             {/* Ano mínimo */}
             <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 Ano de
               </label>
               <AutocompleteSelect
@@ -586,7 +893,7 @@ export function SeminovosPage() {
 
             {/* Ano máximo */}
             <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 Ano até
               </label>
               <AutocompleteSelect
@@ -600,7 +907,7 @@ export function SeminovosPage() {
 
             {/* Valor de */}
             <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 Valor de
               </label>
               <input
@@ -618,7 +925,7 @@ export function SeminovosPage() {
 
             {/* Valor até */}
             <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 Valor até
               </label>
               <input
@@ -661,34 +968,15 @@ export function SeminovosPage() {
                 aria-hidden="true"
               />
               <span className="font-black text-fg">Seleção Netcar:</span>
-              <span>origem RS, sem locadora, leilão, sinistro, furto ou roubo.</span>
+              <span>
+                origem RS, sem locadora, leilão, sinistro, furto ou roubo.
+              </span>
               <Link
                 to="/como-selecionamos-nossos-carros"
                 className="font-black text-primary underline decoration-primary/25 underline-offset-4 hover:text-fg"
               >
                 Entenda
               </Link>
-            </div>
-          </div>
-          {/* Ordenação - Ocultar no mobile (está no modal) */}
-          <div className="hidden md:flex items-center gap-2">
-            <span className="text-xs font-medium text-muted-foreground uppercase">
-              Ordenar por
-            </span>
-            <div className="relative">
-              <select
-                value={sortBy}
-                onChange={(e) =>
-                  setSortBy(e.target.value as ShowroomSortOption)
-                }
-                className="appearance-none rounded-lg border-0 bg-surface px-4 py-2 pr-8 text-sm text-fg focus:outline-none focus:ring-1 focus:ring-primary/20"
-              >
-                <option value="az">A &gt; Z</option>
-                <option value="za">Z &gt; A</option>
-                <option value="preco-asc">Menor preço</option>
-                <option value="preco-desc">Maior preço</option>
-              </select>
-              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
             </div>
           </div>
         </div>
@@ -724,12 +1012,6 @@ export function SeminovosPage() {
             </nav>
           </div>
         )}
-
-        <SeminovosWhatsAppHelpPanel
-          stockHelpHref={seminovosWhatsAppHref}
-          hasFilters={hasFilterParams}
-          variant="banner"
-        />
 
         {/* Grid de Veículos */}
         {isLoading ? (
@@ -781,6 +1063,8 @@ export function SeminovosPage() {
                     imagens_site={vehicle.imagens_site}
                     marca={vehicle.marca}
                     modelo={vehicle.modelo}
+                    combustivel={vehicle.combustivel}
+                    cambio={vehicle.cambio}
                     delay={index}
                     fastAnimation={index >= midGridBreak}
                     showWhatsAppInterest

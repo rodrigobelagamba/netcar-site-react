@@ -37,7 +37,7 @@ export function AutocompleteSelect({
 
   // Filtra opções baseado no termo de busca
   const filteredOptions = options.filter((option) =>
-    option.label.toLowerCase().includes(searchTerm.toLowerCase())
+    option.label.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // Reset highlighted index quando filtros mudam
@@ -64,7 +64,9 @@ export function AutocompleteSelect({
   // Scroll para o item destacado
   useEffect(() => {
     if (isOpen && listRef.current && highlightedIndex >= 0) {
-      const highlightedElement = listRef.current.children[highlightedIndex] as HTMLElement;
+      const highlightedElement = listRef.current.children[
+        highlightedIndex
+      ] as HTMLElement;
       if (highlightedElement) {
         highlightedElement.scrollIntoView({
           behavior: "smooth",
@@ -101,7 +103,7 @@ export function AutocompleteSelect({
       case "ArrowDown":
         e.preventDefault();
         setHighlightedIndex((prev) =>
-          prev < filteredOptions.length - 1 ? prev + 1 : prev
+          prev < filteredOptions.length - 1 ? prev + 1 : prev,
         );
         break;
       case "ArrowUp":
@@ -124,20 +126,20 @@ export function AutocompleteSelect({
   };
 
   return (
-    <div ref={containerRef} className={cn("relative", className)}>
+    <div ref={containerRef} className={cn("relative min-w-0", className)}>
       {label && (
         <label className="mb-1 block text-xs font-medium text-fg uppercase">
           {label}
         </label>
       )}
-      <div className="relative group">
+      <div className="relative min-w-0 group">
         <div
           className={cn(
-            "w-full border-0 border-b border-gray-200 bg-transparent px-0 py-2 pr-6",
+            "w-full min-w-0 border-0 border-b border-gray-200 bg-transparent px-0 py-2 pr-6",
             "text-sm text-fg transition-all duration-200",
             "hover:border-primary/50",
             "focus-within:border-primary",
-            "cursor-text flex items-center"
+            "cursor-text flex items-center",
           )}
           onClick={() => {
             setIsOpen(true);
@@ -156,8 +158,8 @@ export function AutocompleteSelect({
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             className={cn(
-              "flex-1 bg-transparent outline-none",
-              "placeholder:text-muted-foreground"
+              "min-w-0 flex-1 bg-transparent outline-none",
+              "placeholder:text-muted-foreground",
             )}
           />
           <div className="flex items-center gap-1 ml-2">
@@ -175,43 +177,44 @@ export function AutocompleteSelect({
               className={cn(
                 "w-4 h-4 text-muted-foreground pointer-events-none transition-transform duration-200",
                 isOpen && "rotate-180",
-                "group-hover:text-primary"
+                "group-hover:text-primary",
               )}
             />
           </div>
         </div>
 
         {isOpen && (
-            <ul
-              ref={listRef}
-              className={cn(
-                "absolute z-50 w-full mt-1 max-h-60 overflow-auto",
-                "bg-bg border border-border rounded-lg shadow-lg",
-                "py-1"
-              )}
-            >
-              {filteredOptions.length === 0 ? (
-                <li className="px-4 py-2 text-sm text-muted-foreground text-center">
-                  {emptyMessage}
+          <ul
+            ref={listRef}
+            className={cn(
+              "absolute z-50 w-full mt-1 max-h-60 overflow-auto",
+              "bg-bg border border-border rounded-lg shadow-lg",
+              "py-1",
+            )}
+          >
+            {filteredOptions.length === 0 ? (
+              <li className="px-4 py-2 text-sm text-muted-foreground text-center">
+                {emptyMessage}
+              </li>
+            ) : (
+              filteredOptions.map((option, index) => (
+                <li
+                  key={option.value}
+                  onClick={() => handleSelect(option.value)}
+                  className={cn(
+                    "px-4 py-2 text-sm cursor-pointer transition-colors",
+                    "hover:bg-surface-alt",
+                    value === option.value &&
+                      "bg-primary/10 text-primary font-medium",
+                    highlightedIndex === index && "bg-surface-alt",
+                  )}
+                  onMouseEnter={() => setHighlightedIndex(index)}
+                >
+                  {option.label}
                 </li>
-              ) : (
-                filteredOptions.map((option, index) => (
-                  <li
-                    key={option.value}
-                    onClick={() => handleSelect(option.value)}
-                    className={cn(
-                      "px-4 py-2 text-sm cursor-pointer transition-colors",
-                      "hover:bg-surface-alt",
-                      value === option.value && "bg-primary/10 text-primary font-medium",
-                      highlightedIndex === index && "bg-surface-alt"
-                    )}
-                    onMouseEnter={() => setHighlightedIndex(index)}
-                  >
-                    {option.label}
-                  </li>
-                ))
-              )}
-            </ul>
+              ))
+            )}
+          </ul>
         )}
       </div>
     </div>

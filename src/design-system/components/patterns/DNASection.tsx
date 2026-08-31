@@ -38,7 +38,7 @@ export function DNASection() {
                 className="font-bold tracking-[0.2em] uppercase text-xs opacity-90 !border-0"
                 style={{ color: "#5CD29D", border: "none" }}
               >
-                Diferenciais Netcar
+                Por que a Netcar?
               </span>
               <div
                 className="w-12 h-[2px] !border-0"
@@ -57,12 +57,12 @@ export function DNASection() {
               className="text-5xl md:text-7xl font-black font-sans tracking-tighter relative z-10 !border-0"
               style={{ color: "#00283C", border: "none" }}
             >
-              Preço e aparência não contam{" "}
+              Nosso{" "}
               <span
                 className="relative inline-block !border-0"
                 style={{ color: "#5CD29D", border: "none" }}
               >
-                toda a história.
+                DNA
                 {/* Underline decoration */}
                 <motion.div
                   initial={{ width: 0 }}
@@ -104,15 +104,16 @@ export function DNASection() {
             >
               <div className="space-y-6">
                 <p className="font-medium !border-0">
-                  Um preço atraente resolve a compra de hoje. Origem, histórico
-                  e preparação ajudam a evitar dificuldades depois.
+                  Comprar um carro é uma decisão importante. Envolve
+                  expectativa, confiança e a certeza de estar fazendo a escolha
+                  certa.
                 </p>
 
                 <p
                   className="font-bold text-xl md:text-2xl !border-0"
                   style={{ color: "#00283C" }}
                 >
-                  Por isso, nem todo carro entra na Netcar.
+                  É por isso que, na Netcar, cada detalhe importa.
                 </p>
               </div>
 
@@ -131,13 +132,14 @@ export function DNASection() {
                   className="font-bold text-xl flex items-center gap-2"
                   style={{ color: "#00283C" }}
                 >
-                  Origem que aceitamos
+                  Cuidado em cada etapa
                 </h3>
 
                 <p className="font-medium !border-0 text-base">
-                  O estoque comprado para revenda vem do Rio Grande do Sul. Não
-                  compramos veículos de locadora, leilão, sinistro ou recuperados
-                  de furto e roubo.
+                  A gente cuida de todo o processo com atenção, critério e
+                  responsabilidade — do administrativo ao atendimento, da
+                  avaliação à entrega. Nada é tratado como simples quando o
+                  impacto é grande na vida de quem compra.
                 </p>
               </div>
 
@@ -156,17 +158,21 @@ export function DNASection() {
                   className="font-bold text-xl flex items-center gap-2"
                   style={{ color: "#00283C" }}
                 >
-                  Informação e preparação
+                  Garantia real
                 </h3>
 
                 <p className="font-medium !border-0 text-base">
-                  Quando disponível, o i-CHECK fica na própria página do carro.
-                  Antes da vitrine, cada veículo também passa pela{" "}
+                  Criamos a{" "}
                   <span className="font-bold" style={{ color: "#5CD29D" }}>
                     Fábrica de Valor
                   </span>
-                  , com mais de 60 itens verificados conforme a necessidade de
-                  cada unidade.
+                  , nosso processo exclusivo de preparação, com mais de 60 itens
+                  verificados. E esse cuidado não termina na entrega: com o{" "}
+                  <span className="font-bold" style={{ color: "#5CD29D" }}>
+                    NetHelp
+                  </span>
+                  , nosso serviço exclusivo de pós-venda, o cliente conta com
+                  suporte funcional e de segurança.
                 </p>
               </div>
             </motion.div>
@@ -192,13 +198,15 @@ export function DNASection() {
                   className="font-bold text-xl flex items-center gap-2"
                   style={{ color: "#00283C" }}
                 >
-                  Por que o histórico importa
+                  Tecnologia no DNA
                 </h3>
 
                 <p className="font-medium !border-0 text-base">
-                  Histórico de leilão, sinistro ou locadora pode pesar no seguro,
-                  no financiamento e no valor de revenda. A seleção existe para
-                  não repassar essa possível dificuldade ao cliente.
+                  A tecnologia faz parte do nosso DNA. Trabalhamos com processos
+                  digitais, sistemas próprios e presença ativa nos principais
+                  canais, conectando atendimento humano com tecnologia que
+                  simplifica, organiza e traz mais clareza para toda a jornada
+                  de compra.
                 </p>
               </div>
 
@@ -217,13 +225,13 @@ export function DNASection() {
                   className="font-bold text-xl flex items-center gap-2"
                   style={{ color: "#00283C" }}
                 >
-                  Estrutura que continua aqui
+                  Transparência na prática
                 </h3>
 
                 <p className="font-medium !border-0 text-base">
-                  São duas lojas integradas em Esteio, a mesma equipe e o mesmo
-                  estoque. Depois da entrega, o Nethelp registra e acompanha as
-                  demandas conforme a garantia e as condições da negociação.
+                  Aqui, transparência não é discurso. É prática. <br />A gente
+                  escuta, aprende com cada cliente e evolui todos os dias,
+                  ajustando processos e melhorando a experiência.
                 </p>
               </div>
 
@@ -244,9 +252,9 @@ export function DNASection() {
                   className="text-2xl font-serif italic leading-relaxed mb-4 !border-0"
                   style={{ color: "#00283C", border: "none" }}
                 >
-                  &quot;Critério na compra, informação na venda e preparação antes da{" "}
+                  &quot;Na Netcar, vender carros faz parte do que fazemos.{" "}
                   <br />
-                  entrega.&quot;
+                  Cuidar das pessoas é o que nos move.&quot;
                 </p>
 
                 <div className="flex flex-col gap-1">

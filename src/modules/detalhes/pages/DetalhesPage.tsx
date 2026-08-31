@@ -21,7 +21,13 @@ import {
   Image as ImageIcon,
   LucideIcon,
 } from "lucide-react";
-import React, { useState, useMemo, useEffect, useLayoutEffect } from "react";
+import React, {
+  useState,
+  useMemo,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
@@ -394,10 +400,20 @@ function ContactButton({
     );
   }
 
-  // Card WA fica flutuante (DetalheFloatingWhatsApp). Aqui só troca + fallback sem foto.
+  // No mobile o CTA começa em fluxo; depois vira flutuante ao sair pelo topo.
+  // No desktop, DetalheFloatingWhatsApp mantém o card sempre disponível.
   return (
     <div className="flex w-full flex-col items-center gap-2.5">
-      {!identifiedVehicle && href ? (
+      {identifiedVehicle && href ? (
+        <div className="w-full md:hidden">
+          <VehicleWhatsAppCard
+            vehicle={identifiedVehicle}
+            href={href}
+            source="hero_mobile"
+            eyebrow="Este carro"
+          />
+        </div>
+      ) : href ? (
         <div className="w-full">
           <WhatsAppPulseRing>
             <CTAButton
@@ -496,6 +512,7 @@ interface DetalheFloatingWhatsAppProps {
   isSold?: boolean;
   vehicleLabel?: string;
   image?: string;
+  mobileVisible?: boolean;
 }
 
 /** Sticky flutuante com carro identificado — substitui bolinha iAN no detalhe. */
@@ -506,6 +523,7 @@ function DetalheFloatingWhatsApp({
   isSold = false,
   vehicleLabel,
   image,
+  mobileVisible = false,
 }: DetalheFloatingWhatsAppProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const label = vehicleLabel || modeloCompleto || "veículo";
@@ -516,7 +534,9 @@ function DetalheFloatingWhatsApp({
   if (isSold) {
     return (
       <FloatingPortal>
-        <div className="pointer-events-none fixed inset-x-0 bottom-3 z-[60] flex justify-center px-3">
+        <div
+          className={`pointer-events-none fixed inset-x-0 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[60] justify-center px-3 md:bottom-3 md:flex ${mobileVisible ? "flex" : "hidden"}`}
+        >
           <div className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[#00283C]/15 bg-white/95 px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.16)] backdrop-blur-md">
             <p className="mb-2 text-center text-sm font-black text-[#00283C]">
               Este seminovo já foi vendido
@@ -562,7 +582,9 @@ function DetalheFloatingWhatsApp({
 
   return (
     <FloatingPortal>
-      <div className="pointer-events-none fixed inset-x-0 bottom-2 z-[60] flex justify-center px-2 md:bottom-3 md:px-3">
+      <div
+        className={`pointer-events-none fixed inset-x-0 bottom-[calc(0.5rem+env(safe-area-inset-bottom))] z-[60] justify-center px-2 md:bottom-3 md:flex md:px-3 ${mobileVisible ? "flex" : "hidden"}`}
+      >
         <div className="pointer-events-auto w-full max-w-[22rem] md:max-w-sm">
           <VehicleWhatsAppCard
             vehicle={{
@@ -1538,7 +1560,10 @@ function LoadingVehicleDetail({ slug }: { slug: string }) {
   const modeloCompleto = vehicleLabelFromSlug(slug) || "Seminovo";
 
   return (
-    <main className="max-w-full overflow-x-clip pb-40" aria-busy="true">
+    <main
+      className="max-w-full overflow-x-clip pb-40 pt-16 md:pt-0"
+      aria-busy="true"
+    >
       <section className="relative w-full min-h-[70vh] overflow-hidden py-8 lg:py-12">
         <div className="container-main grid grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div className="order-2 space-y-4 lg:order-1">
@@ -1610,8 +1635,8 @@ export function DetalhesPage() {
       firstOfType("marca"),
       firstOfType("categoria"),
       priceLanding,
-    ].filter(
-      (landing): landing is (typeof landingPages)[number] => Boolean(landing),
+    ].filter((landing): landing is (typeof landingPages)[number] =>
+      Boolean(landing),
     );
   }, [vehicle]);
 
@@ -1684,6 +1709,33 @@ export function DetalhesPage() {
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const primaryCtaRef = useRef<HTMLDivElement>(null);
+  const [isPrimaryCtaPastHeader, setIsPrimaryCtaPastHeader] = useState(false);
+
+  // No mobile, o card flutuante só entra depois que o CTA principal sai pelo
+  // topo. Assim ele não encobre preço e links enquanto o usuário avalia o carro.
+  useEffect(() => {
+    if (!vehicle) {
+      setIsPrimaryCtaPastHeader(false);
+      return;
+    }
+
+    const updateFloatingCta = () => {
+      const primaryCta = primaryCtaRef.current;
+      setIsPrimaryCtaPastHeader(
+        Boolean(primaryCta && primaryCta.getBoundingClientRect().bottom < 64),
+      );
+    };
+
+    updateFloatingCta();
+    window.addEventListener("scroll", updateFloatingCta, { passive: true });
+    window.addEventListener("resize", updateFloatingCta);
+
+    return () => {
+      window.removeEventListener("scroll", updateFloatingCta);
+      window.removeEventListener("resize", updateFloatingCta);
+    };
+  }, [vehicle?.id]);
 
   const vehicleData = useMemo(() => {
     if (!vehicle) return null;
@@ -1990,7 +2042,7 @@ export function DetalhesPage() {
           : []),
       ];
   return (
-    <main className="max-w-full overflow-x-clip pb-40">
+    <main className="max-w-full overflow-x-clip pb-[calc(10rem+env(safe-area-inset-bottom))] pt-16 md:pt-0">
       {vehicle && (
         <VehicleSchemaOrg
           marca={marca}
@@ -2240,7 +2292,7 @@ export function DetalhesPage() {
                   />
                 </div>
               )}
-              <div className="w-full">
+              <div ref={primaryCtaRef} className="w-full">
                 <ContactButton
                   modeloCompleto={modeloCompleto}
                   vehicleId={vehicle?.id}
@@ -2429,6 +2481,7 @@ export function DetalhesPage() {
         isSold={isSold}
         vehicleLabel={vehicleLabel}
         image={mainImage}
+        mobileVisible={isPrimaryCtaPastHeader}
       />
     </main>
   );

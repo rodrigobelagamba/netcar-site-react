@@ -37,6 +37,7 @@ export function CardsHero({
   previousPrice,
   showPriceComparison = false,
   year,
+  transmission,
   delay = 0,
   eagerImage = false,
   onClick,
@@ -127,14 +128,14 @@ export function CardsHero({
       <div
         className={`!border-0 w-full flex flex-col items-start text-left flex-1 ${
           compact
-            ? "pt-16 space-y-1.5"
+            ? "pt-16 space-y-2"
             : "pt-28 md:pt-32 space-y-4 short1600:pt-24 short1600:space-y-2"
         }`}
       >
         <span
           className={`!border-0 bg-[#00283C] text-white hover:bg-[#00283C] rounded-md font-bold tracking-widest uppercase w-fit inline-block ${
             compact
-              ? "px-2 py-0.5 text-[8px]"
+              ? "px-2 py-0.5 text-[10px]"
               : "px-3 py-1 text-[10px] short1600:px-2.5 short1600:py-0.5 short1600:text-[9px]"
           }`}
         >
@@ -146,7 +147,7 @@ export function CardsHero({
           <h3
             className={`!border-0 font-bold leading-snug ${
               compact
-                ? "line-clamp-2 min-h-[2.35rem] text-[11px]"
+                ? "line-clamp-2 min-h-[2.65rem] text-sm"
                 : "text-[17px] short1600:line-clamp-2 short1600:text-[15px]"
             }`}
             style={{ color: "#00283C" }}
@@ -154,9 +155,9 @@ export function CardsHero({
             {model}
           </h3>
           <p
-            className={`!border-0 text-gray-400 font-medium ${compact ? "text-[10px]" : "text-base short1600:text-sm"}`}
+            className={`!border-0 font-semibold text-gray-500 ${compact ? "line-clamp-1 text-xs" : "text-base short1600:text-sm"}`}
           >
-            {year}
+            {compact ? [year, transmission].filter(Boolean).join(" · ") : year}
           </p>
         </div>
 
@@ -201,7 +202,7 @@ export function CardsHero({
             ) : (
               <p
                 className={`!border-0 font-bold font-sans tracking-tight leading-tight ${
-                  compact ? "text-sm" : "text-[24px] short1600:text-xl"
+                  compact ? "text-[17px]" : "text-[24px] short1600:text-xl"
                 }`}
                 style={{ color: "#0B6B4B" }}
               >
@@ -214,7 +215,7 @@ export function CardsHero({
             <div
               className={`!border-0 box-border flex w-full min-w-0 items-center justify-center rounded-full border border-[#00283C]/15 bg-[#F3F5F6] font-bold text-[#00283C] ${
                 compact
-                  ? "h-9 px-3 text-[9px]"
+                  ? "h-11 px-3 text-xs"
                   : "h-10 px-4 text-[12px] short1600:h-9 short1600:px-3 short1600:text-[11px]"
               }`}
             >
@@ -232,7 +233,7 @@ export function CardsHero({
               onClick={(e) => e.stopPropagation()}
               className={`!border-0 inline-flex w-full items-center justify-center gap-1 rounded-full bg-[#087A37] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#075E54] ${
                 compact
-                  ? "h-9 px-2 text-[9px] tracking-normal whitespace-nowrap"
+                  ? "h-11 px-2 text-[11px] tracking-normal whitespace-nowrap"
                   : "h-10 px-3 text-[11px] tracking-wide short1600:h-9 short1600:text-[10px] short1600:whitespace-nowrap"
               }`}
             >
@@ -272,7 +273,7 @@ export function CardsHero({
           compact &&
           whatsAppHref &&
           (tradeInHref || financeHref) ? (
-            <div className="flex items-center justify-center gap-1 text-[9px] font-bold leading-none">
+            <div className="flex items-stretch justify-center gap-1 text-[10px] font-bold leading-none">
               {tradeInHref ? (
                 <a
                   href={tradeInHref}
@@ -283,7 +284,7 @@ export function CardsHero({
                   data-wa-vehicle-id={whatsAppVehicleId}
                   data-wa-vehicle-name={whatsAppVehicleName}
                   onClick={(e) => e.stopPropagation()}
-                  className="inline-flex min-h-6 items-center px-1 text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#0B6B4B]"
+                  className="inline-flex min-h-9 flex-1 items-center justify-center px-1 text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#0B6B4B]"
                 >
                   Troca →
                 </a>
@@ -303,7 +304,7 @@ export function CardsHero({
                   data-wa-vehicle-id={whatsAppVehicleId}
                   data-wa-vehicle-name={whatsAppVehicleName}
                   onClick={(e) => e.stopPropagation()}
-                  className="inline-flex min-h-6 items-center px-1 text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#0B6B4B]"
+                  className="inline-flex min-h-9 flex-1 items-center justify-center px-1 text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#0B6B4B]"
                 >
                   Simular →
                 </a>
