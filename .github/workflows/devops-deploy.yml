@@ -170,4 +170,15 @@ jobs:
                 exit 1
               fi
               echo "Pasta data protegida (HTTP $TOKEN_STATUS)"
+
+              if [ "$SOCIAL_MODE" = "full" ]; then
+                curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/stories.php' >/dev/null
+                curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=1' >/dev/null
+                OAUTH_STATUS="$(curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/social-oauth.php?action=status')"
+                case "$OAUTH_STATUS" in
+                  *'"google":{"connected":true}'*'"meta":{"connected":true}'*) ;;
+                  *) echo "Falha: tokens sociais nao migraram/conectaram corretamente"; exit 1 ;;
+                esac
+                echo "Endpoints sociais e migracao privada de tokens validados"
+              fi
             fi
