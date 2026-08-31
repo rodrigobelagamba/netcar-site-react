@@ -20,6 +20,7 @@ import {
   ArrowRight,
   Image as ImageIcon,
   LucideIcon,
+  Check,
 } from "lucide-react";
 import React, {
   useState,
@@ -75,6 +76,7 @@ import {
   normalizeVehicleFeatureTag,
   type VehicleHighlightsPresentation,
 } from "@/modules/detalhes/lib/vehicleHighlights";
+import { getVehicleMerchandising } from "@/lib/vehicleMerchandising";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -1402,6 +1404,11 @@ function RelatedVehiclesSection({
       marca: vehicle.marca,
       modelo: vehicle.modelo,
       placa: vehicle.placa,
+      combustivel: vehicle.combustivel,
+      cambio: vehicle.cambio,
+      potencia: vehicle.potencia,
+      pdf: vehicle.pdf,
+      pdf_url: vehicle.pdf_url,
     }));
   }, [
     vehicles,
@@ -2013,34 +2020,42 @@ export function DetalhesPage() {
   const hasDiferencial = (tag: string) =>
     diferenciais.some((diff) => diff.tag === tag);
   const hasIcheckSeal = Boolean(vehicle?.pdf_url || vehicle?.pdf);
+  const merchandising = getVehicleMerchandising(vehicle);
   const isCommercialHighlight =
     Number(vehicle?.km) > 0 &&
     Number(vehicle.km) < LOW_MILEAGE_HIGHLIGHT_THRESHOLD_KM;
 
-  const badges: Badge[] = isSold
-    ? []
-    : [
-        ...(isCommercialHighlight && vehicle.km
-          ? [
-              {
-                text: `APENAS ${vehicle.km.toLocaleString("pt-BR")} KM`,
-                variant: "oportunidade" as const,
-              },
-            ]
-          : []),
-        ...(hasDiferencial("garantia_fabrica")
-          ? [{ text: "Garantia de Fábrica", variant: "garantia" as const }]
-          : []),
-        ...(hasDiferencial("unico_dono")
-          ? [{ text: "Único Dono", variant: "green-dark" as const }]
-          : []),
-        ...(hasDiferencial("baixa_km") && !isCommercialHighlight
-          ? [{ text: "Baixa KM", variant: "baixa-km" as const }]
-          : []),
-        ...(hasIcheckSeal
-          ? [{ text: "i-CHECK DISPONÍVEL", variant: "icheck" as const }]
-          : []),
-      ];
+  const badges: Badge[] = (
+    isSold
+      ? []
+      : [
+          ...(merchandising?.detailLabel
+            ? [
+                {
+                  text: merchandising.detailLabel,
+                  variant: "green-dark" as const,
+                },
+              ]
+            : []),
+          ...(isCommercialHighlight && vehicle.km
+            ? [
+                {
+                  text: `APENAS ${vehicle.km.toLocaleString("pt-BR")} KM`,
+                  variant: "oportunidade" as const,
+                },
+              ]
+            : []),
+          ...(hasDiferencial("garantia_fabrica")
+            ? [{ text: "Garantia de Fábrica", variant: "garantia" as const }]
+            : []),
+          ...(hasDiferencial("unico_dono")
+            ? [{ text: "Único Dono", variant: "green-dark" as const }]
+            : []),
+          ...(hasIcheckSeal
+            ? [{ text: "i-CHECK DISPONÍVEL", variant: "icheck" as const }]
+            : []),
+        ]
+  ).slice(0, 4);
   return (
     <main className="max-w-full overflow-x-clip pb-[calc(10rem+env(safe-area-inset-bottom))] pt-16 md:pt-0">
       {vehicle && (
@@ -2302,23 +2317,34 @@ export function DetalhesPage() {
                   priceLabel={price.replace(/<[^>]*>/g, "") || undefined}
                 />
                 {!isSold && (
-                  <div className="mt-4 border-l-2 border-primary pl-3 text-left">
+                  <div className="mt-4 rounded-2xl border border-[#23747C]/20 bg-[#F7FBFA] p-3.5 text-left shadow-[0_8px_24px_rgba(0,40,60,0.04)]">
                     <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#23747C]">
                       Seleção Netcar
                     </p>
                     <p className="mt-1 text-sm font-black leading-snug text-fg">
                       Este carro atende aos critérios da Netcar.
                     </p>
-                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                      Comprado no RS, sem origem de locadora e sem passagem por
-                      leilão, sinistro, furto ou roubo. Depois, passa pela
-                      preparação da nossa equipe antes de ir para a vitrine.
-                    </p>
+                    <div className="mt-3 grid grid-cols-1 gap-1.5 text-[11px] font-semibold leading-snug text-[#365565] sm:grid-cols-2">
+                      {[
+                        "Comprado no RS",
+                        "Sem origem de locadora",
+                        "Sem leilão, sinistro, furto ou roubo",
+                        "Preparado antes da vitrine",
+                      ].map((item) => (
+                        <span
+                          key={item}
+                          className="flex items-start gap-1.5 rounded-xl bg-white px-2.5 py-2"
+                        >
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#087A37]" />
+                          {item}
+                        </span>
+                      ))}
+                    </div>
                     <Link
                       to="/como-selecionamos-nossos-carros"
-                      className="mt-1.5 inline-block text-xs font-semibold text-fg underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+                      className="mt-2.5 inline-block text-xs font-bold text-[#075E54] underline decoration-[#075E54]/30 underline-offset-4 transition-colors hover:text-primary"
                     >
-                      Veja como escolhemos o estoque
+                      Entenda como selecionamos
                     </Link>
                   </div>
                 )}

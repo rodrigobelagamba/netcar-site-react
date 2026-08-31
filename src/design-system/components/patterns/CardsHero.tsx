@@ -1,4 +1,4 @@
-import { MessageCircle, Plus } from "lucide-react";
+import { MessageCircle, Plus, ShieldCheck } from "lucide-react";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
@@ -11,6 +11,9 @@ interface CardsHeroProps {
   fuel: string;
   transmission: string;
   mileage: string;
+  marketingBadge?: string;
+  warrantyBadge?: string;
+  proofBadge?: string;
   price: string;
   previousPrice?: string;
   showPriceComparison?: boolean;
@@ -38,6 +41,9 @@ export function CardsHero({
   showPriceComparison = false,
   year,
   transmission,
+  marketingBadge,
+  warrantyBadge,
+  proofBadge,
   delay = 0,
   eagerImage = false,
   onClick,
@@ -132,15 +138,63 @@ export function CardsHero({
             : "pt-28 md:pt-32 space-y-4 short1600:pt-24 short1600:space-y-2"
         }`}
       >
-        <span
-          className={`!border-0 bg-[#00283C] text-white hover:bg-[#00283C] rounded-md font-bold tracking-widest uppercase w-fit inline-block ${
-            compact
-              ? "px-2 py-0.5 text-[10px]"
-              : "px-3 py-1 text-[10px] short1600:px-2.5 short1600:py-0.5 short1600:text-[9px]"
-          }`}
-        >
-          {brand}
-        </span>
+        {(marketingBadge || warrantyBadge) && (
+          <div
+            className={`!border-0 flex min-h-[1.5rem] w-full flex-wrap items-center gap-1 overflow-hidden ${
+              compact ? "mb-0.5" : "mb-1 short1600:mb-0.5"
+            }`}
+            aria-label="Destaque deste veículo"
+          >
+            {marketingBadge && (
+              <span
+                className={`max-w-full truncate rounded-full bg-[#E5F8F4] font-black uppercase tracking-wide text-[#075E54] ${
+                  compact
+                    ? "px-2 py-1 text-[9px]"
+                    : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
+                }`}
+                title={marketingBadge}
+              >
+                {marketingBadge}
+              </span>
+            )}
+            {warrantyBadge && (
+              <span
+                className={`inline-flex max-w-full items-center gap-1 rounded-full bg-[#00283C] font-black uppercase tracking-wide text-white ${
+                  compact
+                    ? "px-2 py-1 text-[9px]"
+                    : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
+                }`}
+                title={warrantyBadge}
+              >
+                <ShieldCheck className="h-3 w-3 shrink-0" aria-hidden="true" />
+                <span className="truncate">{warrantyBadge}</span>
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="!border-0 flex min-h-[1.5rem] w-full items-center gap-1.5 overflow-hidden">
+          <span
+            className={`!border-0 bg-[#00283C] text-white hover:bg-[#00283C] rounded-md font-bold tracking-widest uppercase w-fit inline-block ${
+              compact
+                ? "px-2 py-0.5 text-[10px]"
+                : "px-3 py-1 text-[10px] short1600:px-2.5 short1600:py-0.5 short1600:text-[9px]"
+            }`}
+          >
+            {brand}
+          </span>
+          {proofBadge && (
+            <span
+              className={`shrink-0 rounded-full border border-[#087A37]/25 bg-white font-extrabold uppercase tracking-wide text-[#087A37] ${
+                compact
+                  ? "px-1.5 py-1 text-[9px]"
+                  : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
+              }`}
+            >
+              {proofBadge}
+            </span>
+          )}
+        </div>
 
         {/* Model and Year - Left aligned */}
         <div className="!border-0 space-y-0.5 w-full">

@@ -40,6 +40,7 @@ export interface HomeHeroVehicle {
   placa?: string;
   combustivel?: string;
   cambio?: string;
+  proofLabel?: string;
 }
 
 interface HomeHeroProps {
@@ -354,7 +355,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                   className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap"
                   style={{ color: "#0B6B4B" }}
                 >
-                  Vistoriado
+                  {vehicle.proofLabel || "Critérios Netcar"}
                 </span>
               </div>
               {heroWhatsAppHref ? (

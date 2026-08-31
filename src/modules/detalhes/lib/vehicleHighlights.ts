@@ -19,7 +19,7 @@ export interface VehicleHighlightsPresentation {
 
 type HighlightVehicle = Pick<
   Vehicle,
-  "id" | "modelo" | "year" | "opcionais" | "diferenciais"
+  "id" | "modelo" | "year" | "km" | "opcionais" | "diferenciais"
 >;
 
 interface HighlightCandidate extends VehicleHighlight {
@@ -175,6 +175,9 @@ export function buildVehicleHighlights(
     );
   const hasDifferential = (...tags: string[]) =>
     tags.some((tag) => differentialTags.has(tag));
+  const mileage = Number(vehicle.km);
+  const hasVerifiedLowMileage =
+    Number.isFinite(mileage) && mileage > 0 && mileage < 25_000;
 
   const candidates: HighlightCandidate[] = [];
   const add = (
@@ -470,7 +473,7 @@ export function buildVehicleHighlights(
     sourceTags: [],
   });
 
-  add(hasDifferential("baixa_km"), {
+  add(hasVerifiedLowMileage, {
     id: "low-mileage",
     priority: 60,
     category: "Uso",

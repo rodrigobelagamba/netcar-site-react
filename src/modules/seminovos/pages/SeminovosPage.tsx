@@ -338,7 +338,7 @@ export function SeminovosPage() {
   const [cambio, setCambio] = useState(search.cambio || "");
   const [combustivel, setCombustivel] = useState(search.combustivel || "");
   const [cor, setCor] = useState(search.cor || "");
-  const [sortBy, setSortBy] = useState<ShowroomSortOption>("recomendados");
+  const [sortBy, setSortBy] = useState<ShowroomSortOption>("az");
   const [areFiltersVisible, setAreFiltersVisible] = useState(false);
   const pendingFilterTrackingRef = useRef<string | null>(null);
 
@@ -614,9 +614,7 @@ export function SeminovosPage() {
   const visibleVehicles = filteredAndSortedVehicles;
 
   // Insere a ajuda depois de duas linhas completas, sem abrir lacunas no grid.
-  const midGridBreak = stockLayout.compact
-    ? 6
-    : stockLayout.columns * 2;
+  const midGridBreak = stockLayout.compact ? 6 : stockLayout.columns * 2;
   const showMidGridBanner =
     visibleVehicles.length > midGridBreak + stockLayout.columns;
 
@@ -1065,6 +1063,10 @@ export function SeminovosPage() {
                     modelo={vehicle.modelo}
                     combustivel={vehicle.combustivel}
                     cambio={vehicle.cambio}
+                    potencia={vehicle.potencia}
+                    pdf={vehicle.pdf}
+                    pdf_url={vehicle.pdf_url}
+                    diferenciais={vehicle.diferenciais}
                     delay={index}
                     fastAnimation={index >= midGridBreak}
                     showWhatsAppInterest

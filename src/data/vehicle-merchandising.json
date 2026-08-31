@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "id": "19884",
+      "priority": 500,
+      "cardTemplate": "APENAS {km} KM",
+      "heroTemplate": "{km} KM",
+      "detailTemplate": null
+    },
+    {
+      "id": "19587",
+      "priority": 400,
+      "cardTemplate": "ANO {year} • {km} KM",
+      "heroTemplate": "{km} KM",
+      "detailTemplate": null
+    },
+    {
+      "id": "19924",
+      "priority": 300,
+      "cardTemplate": "HÍBRIDO • {km} KM",
+      "heroTemplate": "HÍBRIDO",
+      "detailTemplate": "HÍBRIDO • {power} CV"
+    },
+    {
+      "id": "19903",
+      "priority": 200,
+      "cardTemplate": "{power} CV",
+      "heroTemplate": "{power} CV",
+      "detailTemplate": "{power} CV"
+    },
+    {
+      "id": "19948",
+      "priority": 100,
+      "cardTemplate": "{power} CV",
+      "heroTemplate": "{power} CV",
+      "detailTemplate": null
+    }
+  ]
+}

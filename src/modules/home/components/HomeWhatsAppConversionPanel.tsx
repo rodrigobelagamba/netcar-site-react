@@ -23,6 +23,7 @@ import {
   vehicleWhatsAppMessages,
 } from "@/lib/whatsappMessages";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
+import { getVehicleMerchandising } from "@/lib/vehicleMerchandising";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
@@ -62,6 +63,9 @@ export function HomeWhatsAppConversionPanel({
   const label = vehicleLabel(featuredVehicle);
   const image = vehicleImage(featuredVehicle);
   const price = vehiclePrice(featuredVehicle);
+  const featuredReason = featuredVehicle
+    ? getVehicleMerchandising(featuredVehicle)?.cardLabel
+    : undefined;
   const homeMessages = homeWhatsAppMessages({
     vehicleLabel: label,
   });
@@ -270,7 +274,7 @@ export function HomeWhatsAppConversionPanel({
           <div className="flex items-center justify-between gap-3">
             <div>
               <span className="text-xs font-black uppercase tracking-[0.18em] text-[#128C7E]">
-                Destaque do estoque
+                {featuredReason || "Destaque do estoque"}
               </span>
               <h2 className="mt-1 text-2xl font-black leading-tight text-[#00283C]">
                 {label}

@@ -20,6 +20,10 @@ import {
   sortHomeStockVehicles,
 } from "@/lib/homeStock";
 import { trackHomeScrollDepth } from "@/lib/analytics";
+import {
+  getVehicleMerchandising,
+  hasVehicleIcheck,
+} from "@/lib/vehicleMerchandising";
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
 const ProductList = lazy(() =>
@@ -260,6 +264,7 @@ export function HomePage() {
         ? vehicle.imagens_site.capa
         : CAR_COVERED_PLACEHOLDER_URL;
 
+      const merchandising = getVehicleMerchandising(vehicle);
       const tagParts = [];
       if (vehicle.combustivel) tagParts.push(vehicle.combustivel);
       if (vehicle.motor) tagParts.push(vehicle.motor);
@@ -275,7 +280,10 @@ export function HomePage() {
         preco_com_troca: vehicle.preco_com_troca,
         preco_com_troca_formatado: vehicle.preco_com_troca_formatado,
         image: mainImage,
-        tag: tag || undefined,
+        tag: merchandising?.heroLabel || tag || undefined,
+        proofLabel: hasVehicleIcheck(vehicle)
+          ? "i-CHECK disponível"
+          : "Critérios Netcar",
         marca: vehicle.marca,
         modelo: vehicle.modelo,
         placa: vehicle.placa,

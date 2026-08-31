@@ -25,6 +25,87 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
 const publicDir = join(rootDir, "public");
 const seoStaticDir = join(publicDir, "seo-static");
+const merchandisingConfig = JSON.parse(
+  readFileSync(
+    join(rootDir, "src", "data", "vehicle-merchandising.json"),
+    "utf8",
+  ),
+);
+const merchandisingProfiles = new Map(
+  (merchandisingConfig.profiles || []).map((profile) => [
+    String(profile.id),
+    profile,
+  ]),
+);
+const minimumManualMerchandisingPriority = Math.min(
+  ...(merchandisingConfig.profiles || [])
+    .map((profile) => Number(profile.priority))
+    .filter((priority) => Number.isFinite(priority) && priority > 0),
+);
+
+function automaticLowMileagePriority(km) {
+  const rawPriority = 25 + Math.round((25_000 - km) / 1_000);
+  const manualCeiling = Number.isFinite(minimumManualMerchandisingPriority)
+    ? Math.max(1, minimumManualMerchandisingPriority - 1)
+    : rawPriority;
+  return Math.min(rawPriority, manualCeiling);
+}
+
+function merchandisingInteger(value) {
+  if (value === null || value === undefined || String(value).trim() === "") {
+    return "";
+  }
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0
+    ? Math.round(number).toLocaleString("pt-BR")
+    : "";
+}
+
+function resolveMerchandisingTemplate(template, vehicle) {
+  if (!template) return undefined;
+  const values = {
+    km: merchandisingInteger(vehicle?.km),
+    year: merchandisingInteger(vehicle?.ano ?? vehicle?.year).replace(
+      /\./g,
+      "",
+    ),
+    power: merchandisingInteger(vehicle?.potencia),
+  };
+  const keys = Array.from(
+    String(template).matchAll(/\{(km|year|power)\}/g),
+    (match) => match[1],
+  );
+  if (keys.some((key) => !values[key])) return undefined;
+  const resolved = String(template).replace(
+    /\{(km|year|power)\}/g,
+    (_, key) => values[key],
+  );
+  if (/\{[^}]+\}/.test(resolved)) return undefined;
+  return resolved.replace(/\s+/g, " ").trim() || undefined;
+}
+
+function resolveVehicleMerchandising(vehicle) {
+  const profile = merchandisingProfiles.get(String(vehicle?.id || ""));
+  if (!profile) {
+    const km = Number(vehicle?.km);
+    const lowMileagePriority =
+      Number.isFinite(km) && km > 0 && km < 25_000
+        ? automaticLowMileagePriority(km)
+        : 0;
+    return {
+      priority: lowMileagePriority,
+      cardLabel:
+        lowMileagePriority > 0
+          ? `APENAS ${Math.round(km).toLocaleString("pt-BR")} KM`
+          : undefined,
+    };
+  }
+  return {
+    priority: Number(profile.priority || 0),
+    cardLabel: resolveMerchandisingTemplate(profile.cardTemplate, vehicle),
+    heroLabel: resolveMerchandisingTemplate(profile.heroTemplate, vehicle),
+  };
+}
 
 const SITE = "https://www.netcarmultimarcas.com.br";
 const STOCK_API_URL =
@@ -561,6 +642,7 @@ function toBootstrapVehicle(vehicle) {
     ? vehicle.imagens.thumb.slice(0, 1).map(normalizeBootstrapImage)
     : [];
   const siteImages = vehicle?.imagens_site || {};
+  const merchandising = resolveVehicleMerchandising(vehicle);
 
   return {
     id: String(vehicle.id),
@@ -599,13 +681,32 @@ function toBootstrapVehicle(vehicle) {
     preco_com_troca_formatado: String(vehicle.preco_com_troca_formatado || ""),
     categoria: String(vehicle.categoria || ""),
     opcionais: [],
-    diferenciais: [],
+    diferenciais: (Array.isArray(vehicle.diferenciais)
+      ? vehicle.diferenciais
+      : []
+    )
+      .filter((differential) =>
+        ["garantia_fabrica", "unico_dono"].includes(
+          String(differential?.tag || ""),
+        ),
+      )
+      .map((differential) => ({
+        tag: String(differential.tag || ""),
+        descricao: String(differential.descricao || ""),
+      })),
     pdf: vehicle.pdf ? String(vehicle.pdf) : undefined,
     pdf_url: vehicle.pdf_url
       ? normalizeBootstrapImage(vehicle.pdf_url)
       : undefined,
     destaque: Number(vehicle.destaque || 0),
     promocao: Number(vehicle.promocao || 0),
+    ...(merchandising.priority > 0
+      ? {
+          merchandising_priority: merchandising.priority,
+          merchandising_card_label: merchandising.cardLabel,
+          merchandising_hero_label: merchandising.heroLabel,
+        }
+      : {}),
   };
 }
 
@@ -624,6 +725,10 @@ writeTextFile(
 function byHomePriority(a, b) {
   const destaqueDiff = Number(b?.destaque === 1) - Number(a?.destaque === 1);
   if (destaqueDiff !== 0) return destaqueDiff;
+  const merchandisingDiff =
+    resolveVehicleMerchandising(b).priority -
+    resolveVehicleMerchandising(a).priority;
+  if (merchandisingDiff !== 0) return merchandisingDiff;
   return (Number(b?.id) || 0) - (Number(a?.id) || 0);
 }
 
@@ -675,9 +780,15 @@ const homeLcp = homeHeroVehicle
       preco_com_troca_formatado: String(
         homeHeroVehicle.preco_com_troca_formatado || "",
       ).trim(),
-      tag: [homeHeroVehicle.combustivel, homeHeroVehicle.motor]
-        .filter(Boolean)
-        .join(" "),
+      tag:
+        resolveVehicleMerchandising(homeHeroVehicle).heroLabel ||
+        [homeHeroVehicle.combustivel, homeHeroVehicle.motor]
+          .filter(Boolean)
+          .join(" "),
+      proofLabel:
+        homeHeroVehicle.pdf || homeHeroVehicle.pdf_url
+          ? "i-CHECK disponível"
+          : "Critérios Netcar",
       marca: String(homeHeroVehicle.marca || "").trim(),
       modelo: String(homeHeroVehicle.modelo || "").trim(),
       placa: String(homeHeroVehicle.placa || "").trim(),

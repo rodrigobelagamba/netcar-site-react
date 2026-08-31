@@ -623,14 +623,22 @@ function netcar_home_lcp_from_vehicle($vehicle)
     if (isset($vehicle['preco_com_troca']) && is_numeric($vehicle['preco_com_troca'])) {
         $hero['preco_com_troca'] = (float) $vehicle['preco_com_troca'];
     }
-    $tag = trim(
-        (isset($vehicle['combustivel']) ? (string) $vehicle['combustivel'] : '')
-        . ' '
-        . (isset($vehicle['motor']) ? (string) $vehicle['motor'] : '')
-    );
+    $tag = isset($vehicle['merchandising_hero_label'])
+        ? trim((string) $vehicle['merchandising_hero_label'])
+        : '';
+    if ($tag === '') {
+        $tag = trim(
+            (isset($vehicle['combustivel']) ? (string) $vehicle['combustivel'] : '')
+            . ' '
+            . (isset($vehicle['motor']) ? (string) $vehicle['motor'] : '')
+        );
+    }
     if ($tag !== '') {
         $hero['tag'] = $tag;
     }
+    $hero['proofLabel'] = !empty($vehicle['pdf']) || !empty($vehicle['pdf_url'])
+        ? 'i-CHECK disponível'
+        : 'Critérios Netcar';
 
     return array('id' => (string) $vehicle['id'], 'image' => $image, 'hero' => $hero);
 }
@@ -663,6 +671,15 @@ function netcar_daily_home_lcp()
         $rightFeatured = isset($right['destaque']) && (int) $right['destaque'] === 1 ? 1 : 0;
         if ($leftFeatured !== $rightFeatured) {
             return $rightFeatured - $leftFeatured;
+        }
+        $leftMerchandising = isset($left['merchandising_priority'])
+            ? (int) $left['merchandising_priority']
+            : 0;
+        $rightMerchandising = isset($right['merchandising_priority'])
+            ? (int) $right['merchandising_priority']
+            : 0;
+        if ($leftMerchandising !== $rightMerchandising) {
+            return $rightMerchandising - $leftMerchandising;
         }
         return (isset($right['id']) ? (int) $right['id'] : 0)
             - (isset($left['id']) ? (int) $left['id'] : 0);
@@ -748,6 +765,7 @@ function netcar_get_build_home_lcp()
         'placa',
         'combustivel',
         'cambio',
+        'proofLabel',
     ) as $field) {
         if (isset($value[$field]) && $value[$field] !== '') {
             $hero[$field] = trim((string) $value[$field]);

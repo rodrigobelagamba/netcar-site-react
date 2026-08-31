@@ -178,6 +178,10 @@ export function EstoqueLandingPage() {
                   marca={vehicle.marca}
                   modelo={vehicle.modelo}
                   placa={vehicle.placa}
+                  potencia={vehicle.potencia}
+                  pdf={vehicle.pdf}
+                  pdf_url={vehicle.pdf_url}
+                  diferenciais={vehicle.diferenciais}
                   showWhatsAppInterest
                   whatsAppSource="estoque_landing"
                   delay={index}

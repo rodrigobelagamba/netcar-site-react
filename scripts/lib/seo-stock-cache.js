@@ -4,6 +4,23 @@ import { dirname, join } from "node:path";
 const MAX_CACHE_AGE_MS = 30 * 60 * 1000;
 const MAX_VERSIONED_STOCK_AGE_MS = 14 * 24 * 60 * 60 * 1000;
 const MAX_BUILD_SNAPSHOT_AGE_MS = 15 * 60 * 1000;
+const PUBLIC_DIFFERENTIAL_TAGS = new Set([
+  "garantia_fabrica",
+  "unico_dono",
+]);
+
+function publicDifferentials(vehicle) {
+  if (!Array.isArray(vehicle?.diferenciais)) return [];
+
+  return vehicle.diferenciais
+    .filter((differential) =>
+      PUBLIC_DIFFERENTIAL_TAGS.has(String(differential?.tag || "")),
+    )
+    .map((differential) => ({
+      tag: String(differential.tag || ""),
+      descricao: String(differential.descricao || ""),
+    }));
+}
 
 function cachePath(rootDir) {
   return join(rootDir, ".devops", "seo-stock-cache.json");
@@ -19,7 +36,7 @@ function buildSnapshotPath(rootDir) {
 
 // Mantém somente os campos públicos usados nas vitrines SEO. Assim o cache não
 // replica chassi, Renavam ou outros dados administrativos retornados pela API.
-function publicVehicle(vehicle) {
+export function publicVehicle(vehicle) {
   return {
     id: vehicle.id,
     marca: vehicle.marca,
@@ -39,6 +56,10 @@ function publicVehicle(vehicle) {
     portas: vehicle.portas,
     lugares: vehicle.lugares,
     categoria: vehicle.categoria,
+    // O snapshot alimenta o bootstrap do primeiro paint. Preserva somente os
+    // diferenciais que a vitrine exibe; os demais dados comerciais da API não
+    // precisam ser replicados no cache público do build.
+    diferenciais: publicDifferentials(vehicle),
     placa: vehicle.placa,
     link: vehicle.link,
     destaque: vehicle.destaque,

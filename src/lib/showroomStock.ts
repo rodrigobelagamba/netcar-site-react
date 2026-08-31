@@ -1,14 +1,14 @@
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
+import { getVehicleMerchandisingPriority } from "@/lib/vehicleMerchandising";
 
 export type ShowroomSortOption =
-  | "recomendados"
-  | "ano-desc"
-  | "az"
-  | "preco-asc"
-  | "preco-desc";
+  "recomendados" | "ano-desc" | "az" | "preco-asc" | "preco-desc";
 
 function vehicleModel(vehicle: Vehicle): string {
-  return (vehicle.modelo || vehicle.name || "").toLocaleLowerCase("pt-BR");
+  return [vehicle.marca, vehicle.modelo || vehicle.name]
+    .filter(Boolean)
+    .join(" ")
+    .toLocaleLowerCase("pt-BR");
 }
 
 function compareModel(left: Vehicle, right: Vehicle): number {
@@ -21,7 +21,11 @@ function isSold(vehicle: Vehicle): boolean {
 }
 
 function recommendationScore(vehicle: Vehicle): number {
-  return Number(vehicle.destaque === 1) * 2 + Number(vehicle.promocao === 1);
+  return (
+    Number(vehicle.destaque === 1) * 20_000 +
+    Number(vehicle.promocao === 1) * 10_000 +
+    getVehicleMerchandisingPriority(vehicle)
+  );
 }
 
 function compareNumericIdDesc(left: Vehicle, right: Vehicle): number {

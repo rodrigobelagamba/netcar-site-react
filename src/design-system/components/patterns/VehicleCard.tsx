@@ -11,6 +11,12 @@ import {
 import { CardsHero } from "./CardsHero";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
+import {
+  getVehicleMerchandising,
+  getVehicleLowMileageCardLabel,
+  hasVehicleFactoryWarranty,
+  hasVehicleIcheck,
+} from "@/lib/vehicleMerchandising";
 
 export type VehicleFocusPayload = {
   id: string;
@@ -40,6 +46,10 @@ export interface VehicleCardProps {
   placa?: string;
   combustivel?: string;
   cambio?: string;
+  potencia?: string;
+  pdf?: string;
+  pdf_url?: string;
+  diferenciais?: Array<{ tag: string; descricao: string }>;
   delay?: number;
   fastAnimation?: boolean;
   eagerImage?: boolean;
@@ -74,6 +84,10 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   placa,
   combustivel,
   cambio,
+  potencia,
+  pdf,
+  pdf_url,
+  diferenciais,
   delay = 0,
   fastAnimation = false,
   eagerImage = false,
@@ -154,6 +168,16 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   const transmission = cambio || "";
   const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
   const isSold = !price || price <= 0;
+  const merchandising = getVehicleMerchandising({
+    id,
+    km,
+    year,
+    potencia,
+  });
+  const hasIcheck = hasVehicleIcheck({ pdf, pdf_url });
+  const hasFactoryWarranty = hasVehicleFactoryWarranty({ diferenciais });
+  const cardMarketingBadge =
+    merchandising?.cardLabel || getVehicleLowMileageCardLabel({ km });
 
   const emitFocus = () => {
     if (!onVehicleFocus || isSold) return;
@@ -232,6 +256,11 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
       fuel={fuel}
       transmission={transmission}
       mileage={mileageFormatted}
+      marketingBadge={isSold ? undefined : cardMarketingBadge}
+      warrantyBadge={
+        isSold || !hasFactoryWarranty ? undefined : "GARANTIA DE FÁBRICA"
+      }
+      proofBadge={isSold || !hasIcheck ? undefined : "i-CHECK"}
       price={priceFormatted}
       previousPrice={previousPriceFormatted}
       showPriceComparison={shouldShowPriceComparison}
