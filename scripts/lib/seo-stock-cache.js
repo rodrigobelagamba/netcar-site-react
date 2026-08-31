@@ -1,8 +1,9 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 const MAX_CACHE_AGE_MS = 30 * 60 * 1000;
 const MAX_VERSIONED_STOCK_AGE_MS = 14 * 24 * 60 * 60 * 1000;
+const MAX_BUILD_SNAPSHOT_AGE_MS = 15 * 60 * 1000;
 
 function cachePath(rootDir) {
   return join(rootDir, ".devops", "seo-stock-cache.json");
@@ -10,6 +11,10 @@ function cachePath(rootDir) {
 
 function versionedStockPath(rootDir) {
   return join(rootDir, "public", "seo", "stock-bootstrap.json");
+}
+
+function buildSnapshotPath(rootDir) {
+  return join(rootDir, ".devops", "seo-build-stock.json");
 }
 
 // Mantém somente os campos públicos usados nas vitrines SEO. Assim o cache não
@@ -37,6 +42,9 @@ function publicVehicle(vehicle) {
     placa: vehicle.placa,
     link: vehicle.link,
     destaque: vehicle.destaque,
+    promocao: vehicle.promocao,
+    pdf: vehicle.pdf,
+    pdf_url: vehicle.pdf_url,
     imagens: {
       thumb: Array.isArray(vehicle?.imagens?.thumb)
         ? vehicle.imagens.thumb.slice(0, 1)
@@ -45,6 +53,7 @@ function publicVehicle(vehicle) {
     imagens_site: vehicle?.imagens_site
       ? {
           capa: vehicle.imagens_site.capa,
+          capa_thumb: vehicle.imagens_site.capa_thumb,
           capa_opengraph: vehicle.imagens_site.capa_opengraph,
           tem_fotos: vehicle.imagens_site.tem_fotos,
         }
@@ -67,6 +76,75 @@ export function writeSeoStockCache(rootDir, vehicles) {
     )}\n`,
     "utf8",
   );
+}
+
+/**
+ * Congela a fonte escolhida no início do build. Os geradores seguintes usam
+ * este mesmo retrato, evitando misturar um fallback antigo com uma API que se
+ * recuperou (ou mudou) alguns segundos depois.
+ */
+export function writeSeoBuildStockSnapshot(
+  rootDir,
+  vehicles,
+  { source = "unknown", sourceAgeMs = 0 } = {},
+) {
+  const file = buildSnapshotPath(rootDir);
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(
+    file,
+    `${JSON.stringify(
+      {
+        createdAt: new Date().toISOString(),
+        source,
+        sourceAgeMs: Number.isFinite(sourceAgeMs) ? sourceAgeMs : 0,
+        vehicles: vehicles.map(publicVehicle),
+      },
+      null,
+      2,
+    )}\n`,
+    "utf8",
+  );
+}
+
+export function readSeoBuildStockSnapshot(
+  rootDir,
+  { includeSold = false } = {},
+) {
+  try {
+    const snapshot = JSON.parse(
+      readFileSync(buildSnapshotPath(rootDir), "utf8"),
+    );
+    const createdAt = Date.parse(snapshot?.createdAt || "");
+    const ageMs = Date.now() - createdAt;
+    if (
+      !Number.isFinite(createdAt) ||
+      ageMs < 0 ||
+      ageMs > MAX_BUILD_SNAPSHOT_AGE_MS ||
+      !Array.isArray(snapshot?.vehicles) ||
+      snapshot.vehicles.length === 0
+    ) {
+      return null;
+    }
+
+    return {
+      ageMs,
+      source: snapshot.source || "unknown",
+      sourceAgeMs: Number(snapshot.sourceAgeMs || 0),
+      vehicles: includeSold
+        ? snapshot.vehicles
+        : snapshot.vehicles.filter((vehicle) => Number(vehicle.valor) > 0),
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function clearSeoBuildStockSnapshot(rootDir) {
+  try {
+    unlinkSync(buildSnapshotPath(rootDir));
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
+  }
 }
 
 export function readFreshSeoStockCache(rootDir, { includeSold = false } = {}) {
@@ -114,10 +192,7 @@ function versionedVehicleToApiShape(vehicle) {
  * a API e o cache efêmero falham, e expira para não perpetuar um catálogo
  * antigo silenciosamente.
  */
-export function readVersionedSeoStock(
-  rootDir,
-  { includeSold = false } = {},
-) {
+export function readVersionedSeoStock(rootDir, { includeSold = false } = {}) {
   try {
     const stock = JSON.parse(readFileSync(versionedStockPath(rootDir), "utf8"));
     const generatedAt = Date.parse(stock?.generatedAt || "");

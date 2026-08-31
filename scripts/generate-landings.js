@@ -21,6 +21,7 @@ import { fileURLToPath } from "url";
 import {
   readFreshSeoStockCache,
   readVersionedSeoStock,
+  writeSeoBuildStockSnapshot,
   writeSeoStockCache,
 } from "./lib/seo-stock-cache.js";
 
@@ -774,12 +775,31 @@ function assignRelatedSlugs(landings) {
 }
 
 async function fetchVehicles() {
-  const res = await fetch(API_URL, { headers: { Accept: "application/json" } });
-  if (!res.ok) throw new Error(`API HTTP ${res.status}`);
-  const json = await res.json();
-  if (!json.success || !Array.isArray(json.data))
-    throw new Error("resposta inválida");
-  return json.data;
+  let lastError;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      const res = await fetch(API_URL, {
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(20000),
+      });
+      if (!res.ok) throw new Error(`API HTTP ${res.status}`);
+      const json = await res.json();
+      if (
+        !json.success ||
+        !Array.isArray(json.data) ||
+        json.data.length === 0
+      ) {
+        throw new Error("resposta inválida");
+      }
+      return json.data;
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) {
+        await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
+      }
+    }
+  }
+  throw lastError;
 }
 
 function tally(vehicles, field) {
@@ -796,14 +816,16 @@ function tally(vehicles, field) {
 }
 
 async function main() {
-  let vehicles;
+  let allVehicles;
+  let snapshotSource = "api";
+  let snapshotSourceAgeMs = 0;
   try {
-    const allVehicles = await fetchVehicles();
+    allVehicles = await fetchVehicles();
     writeSeoStockCache(rootDir, allVehicles);
-    vehicles = allVehicles.filter((vehicle) => Number(vehicle.valor) > 0);
   } catch (err) {
     const cached =
-      readFreshSeoStockCache(rootDir) ?? readVersionedSeoStock(rootDir);
+      readFreshSeoStockCache(rootDir, { includeSold: true }) ??
+      readVersionedSeoStock(rootDir, { includeSold: true });
     if (!cached?.vehicles.length) {
       throw new Error(
         `API indisponível (${err.message}) e estoque de contingência válido ausente; build interrompido para evitar contagens divergentes`,
@@ -815,11 +837,22 @@ async function main() {
       cached.source === "versioned-bootstrap"
         ? "manifesto versionado"
         : "cache efêmero";
-    vehicles = cached.vehicles.filter((vehicle) => Number(vehicle.valor) > 0);
+    allVehicles = cached.vehicles;
+    snapshotSource = cached.source;
+    snapshotSourceAgeMs = cached.ageMs;
+    const activeCount = allVehicles.filter(
+      (vehicle) => Number(vehicle.valor) > 0,
+    ).length;
     console.warn(
-      `Aviso: API indisponível (${err.message}); landings regeneradas pelo ${sourceLabel} de ${ageMinutes} min com ${vehicles.length} veículos ativos.`,
+      `Aviso: API indisponível (${err.message}); landings regeneradas pelo ${sourceLabel} de ${ageMinutes} min com ${activeCount} veículos ativos.`,
     );
   }
+
+  writeSeoBuildStockSnapshot(rootDir, allVehicles, {
+    source: snapshotSource,
+    sourceAgeMs: snapshotSourceAgeMs,
+  });
+  const vehicles = allVehicles.filter((vehicle) => Number(vehicle.valor) > 0);
 
   const landings = [];
   const seen = new Set();

@@ -12,9 +12,12 @@ import { writeTextFile } from "./lib/write-text-file.js";
 import {
   fetchVehicleSitemapUrls,
   generateVehicleSlug,
+  vehicleSitemapUrlsFromVehicles,
 } from "./lib/vehicle-sitemap-urls.js";
 import {
+  clearSeoBuildStockSnapshot,
   readFreshSeoStockCache,
+  readSeoBuildStockSnapshot,
   readVersionedSeoStock,
 } from "./lib/seo-stock-cache.js";
 
@@ -399,6 +402,13 @@ function renderSections(sections) {
 // páginas que o crawler recebe falam da cidade mas não mostram nenhum carro —
 // nem geram link interno para as fichas.
 async function fetchStock() {
+  const buildSnapshot = readSeoBuildStockSnapshot(rootDir, {
+    includeSold: true,
+  });
+  if (buildSnapshot?.vehicles.length) {
+    return buildSnapshot.vehicles;
+  }
+
   try {
     const apiUrl = new URL(STOCK_API_URL);
     const pageSize = Math.max(
@@ -1440,8 +1450,7 @@ for (const landing of landings) {
 }
 
 const comparatorCanonical = `${SITE}/comparar`;
-const comparatorTitle =
-  "Comparar carros lado a lado | Preço e ficha | Netcar";
+const comparatorTitle = "Comparar carros lado a lado | Preço e ficha | Netcar";
 const comparatorDescription =
   "Escolha de 2 a 4 carros do estoque e compare preço, ano, câmbio, motor e outros dados na mesma tela. Abra as fichas e veja qual combina mais com você.";
 const comparisonDefinitions = [
@@ -1670,6 +1679,9 @@ function extractVehicleUrls(xml) {
 }
 
 async function getVehicleUrls() {
+  const stockUrls = vehicleSitemapUrlsFromVehicles(stock);
+  if (stockUrls.length > 0) return stockUrls;
+
   try {
     const apiUrls = await fetchVehicleSitemapUrls();
     if (apiUrls.length > 0) return apiUrls;
@@ -1685,16 +1697,6 @@ async function getVehicleUrls() {
     if (localUrls.length > 0) return localUrls;
   } catch {
     // sem sitemap local; tenta produção
-  }
-
-  const stockUrls = stock
-    .filter((vehicle) => vehicle?.id && vehicle?.modelo)
-    .map((vehicle) => `${SITE}/veiculo/${generateVehicleSlug(vehicle)}`);
-  if (stockUrls.length > 0) {
-    console.warn(
-      `Aviso: sitemap sem veículos; preservando ${stockUrls.length} URLs pelo estoque de contingência.`,
-    );
-    return stockUrls;
   }
 
   let productionUrls = [];
@@ -1847,3 +1849,4 @@ const sellPages = cities.filter((city) => city.sell).length;
 console.log(
   `SEO assets gerados: ${blogPosts.length} posts, ${cities.length} cidades compra, ${sellPages} cidades venda, ${landings.length} landings marca/categoria, ${contentPages.length} páginas de conteúdo, ${vehicleUrls.length} veículos preservados, sitemap com ${urls.length} URLs`,
 );
+clearSeoBuildStockSnapshot(rootDir);

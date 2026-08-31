@@ -10,7 +10,11 @@ import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
-import { fetchVehicleSitemapUrls } from "./lib/vehicle-sitemap-urls.js";
+import {
+  fetchVehicleSitemapUrls,
+  vehicleSitemapUrlsFromVehicles,
+} from "./lib/vehicle-sitemap-urls.js";
+import { readSeoBuildStockSnapshot } from "./lib/seo-stock-cache.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
@@ -58,7 +62,10 @@ function buildUrlEntry(loc, changefreq, priority, lastmod) {
 }
 
 async function fetchAvailableVehicles() {
-  const urls = await fetchVehicleSitemapUrls();
+  const snapshot = readSeoBuildStockSnapshot(rootDir);
+  const urls = snapshot?.vehicles.length
+    ? vehicleSitemapUrlsFromVehicles(snapshot.vehicles)
+    : await fetchVehicleSitemapUrls();
   return urls.map((loc) => ({ loc }));
 }
 

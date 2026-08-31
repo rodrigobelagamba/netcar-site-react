@@ -9,7 +9,8 @@ function maskPlate(placa) {
   if (clean.length < 5) return clean.toLowerCase();
   const prefix = clean.substring(0, 3);
   const digits = clean.match(/\d/g);
-  const suffix = digits && digits.length >= 2 ? digits.slice(-2).join("") : clean.slice(-2);
+  const suffix =
+    digits && digits.length >= 2 ? digits.slice(-2).join("") : clean.slice(-2);
   return `${prefix.toLowerCase()}-xx${suffix}`;
 }
 
@@ -18,7 +19,10 @@ export function generateVehicleSlug(vehicle) {
 
   if (vehicle.modelo) {
     let modelo = vehicle.modelo.trim();
-    if (vehicle.marca && modelo.toLowerCase().startsWith(vehicle.marca.toLowerCase())) {
+    if (
+      vehicle.marca &&
+      modelo.toLowerCase().startsWith(vehicle.marca.toLowerCase())
+    ) {
       modelo = modelo.substring(vehicle.marca.length).trim();
     }
     const modeloSlug = modelo
@@ -42,6 +46,12 @@ export function generateVehicleSlug(vehicle) {
   return parts.join("-");
 }
 
+export function vehicleSitemapUrlsFromVehicles(vehicles) {
+  return vehicles
+    .filter((vehicle) => Number(vehicle.valor || vehicle.price || 0) > 0)
+    .map((vehicle) => `${SITE_URL}/veiculo/${generateVehicleSlug(vehicle)}`);
+}
+
 async function fetchOnce() {
   const response = await fetch(API_URL, {
     headers: { Accept: "application/json" },
@@ -57,9 +67,7 @@ async function fetchOnce() {
     throw new Error("Resposta da API inválida");
   }
 
-  return json.data
-    .filter((vehicle) => Number(vehicle.valor) > 0)
-    .map((vehicle) => `${SITE_URL}/veiculo/${generateVehicleSlug(vehicle)}`);
+  return vehicleSitemapUrlsFromVehicles(json.data);
 }
 
 /**
