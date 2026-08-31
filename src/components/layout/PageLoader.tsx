@@ -65,12 +65,12 @@ function routeCriticalImage(): CriticalImage | null {
 export function PageLoader() {
   const critical = routeCriticalImage();
   if (!critical) {
-    return <div className="min-h-[50vh]" aria-hidden="true" />;
+    return <div className="min-h-[calc(100dvh-5rem)]" aria-hidden="true" />;
   }
 
   return (
     <div
-      className="flex min-h-[50vh] items-start justify-center overflow-hidden bg-gray-50"
+      className="flex min-h-[calc(100dvh-5rem)] items-start justify-center overflow-hidden bg-gray-50"
       aria-hidden="true"
     >
       <img

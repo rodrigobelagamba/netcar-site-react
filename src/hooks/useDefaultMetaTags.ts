@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useBannersLoja1Query } from "@/catalog/queries/useSiteQuery";
 import { CANONICAL_ORIGIN, canonicalUrl } from "@/lib/seo";
 
 /**
@@ -11,8 +10,6 @@ export function useDefaultMetaTags(
   description?: string,
   options?: { canonicalPath?: string; robots?: string },
 ) {
-  const { data: bannersLoja1 } = useBannersLoja1Query();
-
   useEffect(() => {
     const baseUrl = CANONICAL_ORIGIN;
     const currentUrl = options?.canonicalPath
@@ -21,24 +18,9 @@ export function useDefaultMetaTags(
         ? canonicalUrl(window.location.pathname)
         : CANONICAL_ORIGIN;
 
-    // Busca imagem da fachada ou primeira imagem da loja
-    const getStoreImage = () => {
-      if (!bannersLoja1 || bannersLoja1.length === 0) {
-        return `${baseUrl}/images/loja1.jpg`;
-      }
-
-      const fachada = bannersLoja1.find(
-        (banner) => banner.titulo?.toLowerCase() === "fachada",
-      );
-
-      return (
-        fachada?.imagem ||
-        bannersLoja1[0]?.imagem ||
-        `${baseUrl}/images/loja1.jpg`
-      );
-    };
-
-    const storeImage = getStoreImage();
+    // O PHP já entrega o OG correto no acesso direto. Em navegação SPA, usa a
+    // fachada estável sem abrir uma requisição de banners durante o LCP.
+    const storeImage = `${baseUrl}/images/loja1.jpg`;
     const absoluteImageUrl = storeImage.startsWith("http")
       ? storeImage
       : storeImage.startsWith("/")
@@ -117,7 +99,6 @@ export function useDefaultMetaTags(
   }, [
     title,
     description,
-    bannersLoja1,
     options?.canonicalPath,
     options?.robots,
   ]);

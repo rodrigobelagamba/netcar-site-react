@@ -10,10 +10,21 @@ window.addEventListener("vite:preloadError", (event) => {
   recoverFromChunkLoadError();
 });
 
-initAnalytics();
+async function startApplication() {
+  if (import.meta.env.DEV) {
+    const { installDevelopmentBootstrap } = await import(
+      "@/lib/developmentBootstrap"
+    );
+    await installDevelopmentBootstrap();
+  }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+  initAnalytics();
+
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  );
+}
+
+void startApplication();
