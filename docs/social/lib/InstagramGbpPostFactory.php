@@ -18,11 +18,22 @@ final class InstagramGbpPostFactory
         return self::normalizeAllowedUrl((string) $matches[1], true);
     }
 
-    public static function destinationUrl(string $caption, string $fallbackUrl): array
+    public static function destinationUrl(
+        string $caption,
+        string $fallbackUrl,
+        ?string $resolvedVehicleUrl = null
+    ): array
     {
         $vehicleUrl = self::extractVehicleUrl($caption);
         if ($vehicleUrl !== null) {
-            return ['url' => $vehicleUrl, 'kind' => 'vehicle'];
+            return ['url' => $vehicleUrl, 'kind' => 'vehicle', 'source' => 'caption_url'];
+        }
+
+        if ($resolvedVehicleUrl !== null) {
+            $resolved = self::normalizeAllowedUrl($resolvedVehicleUrl, true);
+            if ($resolved !== null) {
+                return ['url' => $resolved, 'kind' => 'vehicle', 'source' => 'stock_reference'];
+            }
         }
 
         $fallback = self::normalizeAllowedUrl($fallbackUrl, false);
@@ -30,7 +41,7 @@ final class InstagramGbpPostFactory
             throw new RuntimeException('google_posts.fallback_url deve apontar para o dominio oficial da Netcar.');
         }
 
-        return ['url' => $fallback, 'kind' => 'fallback'];
+        return ['url' => $fallback, 'kind' => 'fallback', 'source' => 'fallback'];
     }
 
     public static function marker(string $mediaId, string $locationSlug): string
@@ -74,6 +85,13 @@ final class InstagramGbpPostFactory
             "\n",
             trim($caption)
         );
+        $clean = preg_replace(
+            '/(?<![a-z0-9_])#netcar[0-9]{4,}(?![a-z0-9_])/iu',
+            '',
+            (string) $clean
+        );
+        $clean = preg_replace('/[ \t]+(?=\R|$)/u', '', (string) $clean);
+        $clean = preg_replace('/(?<=\S)[ \t]{2,}(?=\S)/u', ' ', (string) $clean);
         $clean = trim((string) preg_replace('/\n{3,}/', "\n\n", (string) $clean));
 
         if ($clean === '') {
@@ -87,17 +105,38 @@ final class InstagramGbpPostFactory
         return rtrim(self::utf8Substring($clean, 1500));
     }
 
-    public static function payload(array $media, array $location, string $mediaUrl, string $fallbackUrl): array
+    public static function payload(
+        array $media,
+        array $location,
+        string $mediaUrl,
+        string $fallbackUrl,
+        ?string $resolvedVehicleUrl = null,
+        ?string $resolutionReason = null
+    ): array
     {
         $caption = (string) ($media['caption'] ?? '');
         $mediaId = (string) ($media['id'] ?? '');
         $slug = (string) ($location['slug'] ?? '');
-        $destination = self::destinationUrl($caption, $fallbackUrl);
+        $destination = self::destinationUrl($caption, $fallbackUrl, $resolvedVehicleUrl);
         $marker = self::marker($mediaId, $slug);
+        $destinationReason = $destination['source'] === 'fallback'
+            ? ($resolutionReason ?? 'fallback')
+            : $destination['source'];
+        $warningReasons = [
+            'stock_api_unavailable',
+            'vehicle_reference_ambiguous',
+            'vehicle_not_active',
+            'stock_record_ambiguous',
+        ];
 
         return [
             'marker' => $marker,
             'destinationKind' => $destination['kind'],
+            'destinationSource' => $destination['source'],
+            'destinationReason' => $destinationReason,
+            'destinationWarning' => in_array($destinationReason, $warningReasons, true)
+                ? $destinationReason
+                : null,
             'trackedUrl' => self::trackedUrl($destination['url'], $marker),
             'googlePayload' => [
                 'languageCode' => 'pt-BR',

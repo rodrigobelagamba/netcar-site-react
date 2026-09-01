@@ -14,6 +14,7 @@ require_once __DIR__ . '/InstagramStoriesClient.php';
 require_once __DIR__ . '/InstagramFeedClient.php';
 require_once __DIR__ . '/GoogleLocalPostsClient.php';
 require_once __DIR__ . '/InstagramPostMediaCache.php';
+require_once __DIR__ . '/VehicleDestinationResolver.php';
 require_once __DIR__ . '/InstagramGbpPostFactory.php';
 require_once __DIR__ . '/GooglePostsStateStore.php';
 require_once __DIR__ . '/InstagramGbpPublisher.php';

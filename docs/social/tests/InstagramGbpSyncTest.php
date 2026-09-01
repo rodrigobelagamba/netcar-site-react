@@ -33,6 +33,90 @@ $fallback = InstagramGbpPostFactory::destinationUrl(
 );
 expectTrue($fallback['kind'] === 'fallback', 'Post sem veiculo deve continuar sendo replicado com fallback seguro.');
 
+$cleanVehicleCaption = "🚗 NISSAN KICKS S 1.6 2019/2020 — *R$ 76.900,00*\n\nChama no WhatsApp do perfil.\n\n#nissankicks #netcar #netcar19299";
+$stockFixture = [
+    [
+        'id' => '19299',
+        'marca' => 'NISSAN',
+        'modelo' => 'KICKS S',
+        'ano' => 2020,
+        'valor' => 76900,
+        'placa' => 'IZN2I88',
+    ],
+    [
+        'id' => '19979',
+        'marca' => 'CHEVROLET',
+        'modelo' => 'CRUZE LT HB',
+        'ano' => 2014,
+        'valor' => 0,
+        'placa' => 'JCA4J56',
+    ],
+];
+$resolvedFromStock = NetcarStockVehicleDestinationResolver::resolveFromVehicles(
+    $cleanVehicleCaption,
+    $stockFixture
+);
+expectTrue(
+    $resolvedFromStock === 'https://www.netcarmultimarcas.com.br/veiculo/kicks-s-2020-izn-xx88-19299',
+    'Referencia limpa do AutoADS deve resolver a unidade exata no estoque oficial.'
+);
+$resolvedDestination = InstagramGbpPostFactory::destinationUrl(
+    $cleanVehicleCaption,
+    'https://www.netcarmultimarcas.com.br/seminovos',
+    $resolvedFromStock
+);
+expectTrue(
+    $resolvedDestination['kind'] === 'vehicle' && $resolvedDestination['source'] === 'stock_reference',
+    'CTA resolvido pelo estoque deve continuar apontando para a ficha do carro.'
+);
+expectTrue(
+    strpos(InstagramGbpPostFactory::summary($cleanVehicleCaption), '#netcar19299') === false,
+    'Referencia tecnica nao deve aparecer no texto publico do Google.'
+);
+
+$similarStock = array_merge($stockFixture, [[
+    'id' => '29999',
+    'marca' => 'NISSAN',
+    'modelo' => 'KICKS S',
+    'ano' => 2020,
+    'valor' => 76900,
+    'placa' => 'ABC1D23',
+]]);
+expectTrue(
+    NetcarStockVehicleDestinationResolver::resolveFromVehicles($cleanVehicleCaption, $similarStock) === $resolvedFromStock,
+    'Outro carro equivalente nao pode sequestrar a referencia exata do anuncio.'
+);
+expectTrue(
+    NetcarStockVehicleDestinationResolver::resolveFromVehicles(
+        'CRUZE LT HB 2014 #netcar19979',
+        $stockFixture
+    ) === null,
+    'Referencia de carro vendido deve cair no fallback.'
+);
+expectTrue(
+    NetcarStockVehicleDestinationResolver::resolveFromVehicles(
+        'Comparativo #netcar19299 #netcar29999',
+        $similarStock
+    ) === null,
+    'Post com mais de uma referencia deve cair no fallback.'
+);
+$ambiguousResolution = NetcarStockVehicleDestinationResolver::resolveDetailedFromVehicles(
+    'Comparativo #netcar19299 #netcar29999',
+    $similarStock
+);
+expectTrue(
+    $ambiguousResolution['url'] === null
+        && $ambiguousResolution['reason'] === 'vehicle_reference_ambiguous',
+    'Fallback deve explicar quando a legenda contem referencias conflitantes.'
+);
+expectTrue(
+    NetcarStockVehicleDestinationResolver::resolveFromVehicles(
+        'Post institucional sem preco nem veiculo',
+        $stockFixture
+    ) === null,
+    'Post institucional nao pode ser confundido com anuncio de veiculo.'
+);
+
 $tracked = InstagramGbpPostFactory::trackedUrl(
     'https://www.netcarmultimarcas.com.br/veiculo/carro-123?origem=instagram#detalhes',
     'ig_123_loja_1'
@@ -199,6 +283,20 @@ final class FakeInstagramPostMediaCache extends InstagramPostMediaCache
     }
 }
 
+final class FakeVehicleDestinationResolver implements VehicleDestinationResolver
+{
+    public int $resolveCalls = 0;
+
+    public function resolve(string $caption): array
+    {
+        $this->resolveCalls++;
+        return [
+            'url' => 'https://www.netcarmultimarcas.com.br/veiculo/kicks-s-2020-izn-xx88-19299',
+            'reason' => 'stock_reference',
+        ];
+    }
+}
+
 $socialConfigProperty = new ReflectionProperty(SocialEnv::class, 'config');
 $socialConfigProperty->setAccessible(true);
 $privateDataDir = sys_get_temp_dir() . '/netcar-gbp-private-' . getmypid();
@@ -231,6 +329,33 @@ $publisher = new InstagramGbpPublisher(
     $fakeGoogle,
     $fakeMediaCache,
     new GooglePostsStateStore($publisherStatePath)
+);
+
+$cleanResolver = new FakeVehicleDestinationResolver();
+$cleanPublisher = new InstagramGbpPublisher(
+    new FakeInstagramFeedClient([[
+        'id' => '18008888888888888',
+        'caption' => $cleanVehicleCaption,
+        'mediaType' => 'IMAGE',
+        'mediaUrl' => 'https://scontent.cdninstagram.com/clean-example.jpg',
+        'thumbnailUrl' => '',
+        'permalink' => 'https://www.instagram.com/p/clean-test/',
+        'publishedAt' => gmdate('c'),
+    ]]),
+    $fakeGoogle,
+    $fakeMediaCache,
+    new GooglePostsStateStore(sys_get_temp_dir() . '/netcar-gbp-clean-' . getmypid() . '.json'),
+    $cleanResolver
+);
+$cleanDryRun = $cleanPublisher->sync(true);
+expectTrue($cleanResolver->resolveCalls === 1, 'Veiculo deve ser resolvido uma vez por post, nao uma vez por loja.');
+expectTrue(
+    count($cleanDryRun['items']) === 2
+        && $cleanDryRun['items'][0]['destinationSource'] === 'stock_reference'
+        && $cleanDryRun['items'][0]['destinationReason'] === 'stock_reference'
+        && $cleanDryRun['items'][0]['destinationWarning'] === null
+        && strpos($cleanDryRun['items'][0]['trackedUrl'], '/veiculo/kicks-s-2020-izn-xx88-19299') !== false,
+    'Dry-run deve mostrar o CTA direto mesmo quando a legenda do Instagram nao contem URL.'
 );
 
 $dryRun = $publisher->sync(true);

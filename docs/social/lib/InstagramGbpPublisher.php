@@ -18,17 +18,20 @@ final class InstagramGbpPublisher
     private GoogleLocalPostsClient $google;
     private InstagramPostMediaCache $mediaCache;
     private GooglePostsStateStore $stateStore;
+    private VehicleDestinationResolver $vehicleResolver;
 
     public function __construct(
         ?InstagramFeedClient $instagram = null,
         ?GoogleLocalPostsClient $google = null,
         ?InstagramPostMediaCache $mediaCache = null,
-        ?GooglePostsStateStore $stateStore = null
+        ?GooglePostsStateStore $stateStore = null,
+        ?VehicleDestinationResolver $vehicleResolver = null
     ) {
         $this->instagram = $instagram ?? new InstagramFeedClient();
         $this->google = $google ?? new GoogleLocalPostsClient();
         $this->mediaCache = $mediaCache ?? new InstagramPostMediaCache();
         $this->stateStore = $stateStore ?? new GooglePostsStateStore();
+        $this->vehicleResolver = $vehicleResolver ?? new NetcarStockVehicleDestinationResolver();
     }
 
     public function sync(bool $dryRun = false): array
@@ -52,12 +55,15 @@ final class InstagramGbpPublisher
             $locations = $this->google->listTargetLocations($settings['locations']);
             $result = $this->baseResult(true, $enabled, $notBefore, $media, $locations);
             foreach ($media as $item) {
+                $vehicleResolution = $this->vehicleResolution($item);
                 foreach ($locations as $location) {
                     $preview = InstagramGbpPostFactory::payload(
                         $item,
                         $location,
                         $this->mediaCache->publicUrl((string) $item['id']),
-                        (string) $settings['fallback_url']
+                        (string) $settings['fallback_url'],
+                        $vehicleResolution['url'],
+                        $vehicleResolution['reason']
                     );
                     $result['items'][] = [
                         'instagramMediaId' => $item['id'],
@@ -65,6 +71,9 @@ final class InstagramGbpPublisher
                         'publishedAt' => $item['publishedAt'],
                         'location' => $location['slug'],
                         'destinationKind' => $preview['destinationKind'],
+                        'destinationSource' => $preview['destinationSource'],
+                        'destinationReason' => $preview['destinationReason'],
+                        'destinationWarning' => $preview['destinationWarning'],
                         'trackedUrl' => $preview['trackedUrl'],
                         'summary' => $preview['googlePayload']['summary'],
                         'mediaUrl' => $preview['googlePayload']['media'][0]['sourceUrl'],
@@ -328,6 +337,7 @@ final class InstagramGbpPublisher
         }
 
         $stableMediaUrl = null;
+        $vehicleResolution = $this->vehicleResolution($media);
         foreach ($locations as $location) {
             $slug = (string) $location['slug'];
             $entry = $state['posts'][$mediaId]['locations'][$slug] ?? [];
@@ -361,7 +371,9 @@ final class InstagramGbpPublisher
                     $media,
                     $location,
                     $this->mediaCache->publicUrl($mediaId),
-                    (string) $settings['fallback_url']
+                    (string) $settings['fallback_url'],
+                    $vehicleResolution['url'],
+                    $vehicleResolution['reason']
                 );
 
                 if (!empty($entry['googlePostName'])) {
@@ -412,12 +424,17 @@ final class InstagramGbpPublisher
                     $media,
                     $location,
                     $stableMediaUrl,
-                    (string) $settings['fallback_url']
+                    (string) $settings['fallback_url'],
+                    $vehicleResolution['url'],
+                    $vehicleResolution['reason']
                 );
 
                 $entry['status'] = 'submitting';
                 $entry['marker'] = $post['marker'];
                 $entry['destinationKind'] = $post['destinationKind'];
+                $entry['destinationSource'] = $post['destinationSource'];
+                $entry['destinationReason'] = $post['destinationReason'];
+                $entry['destinationWarning'] = $post['destinationWarning'];
                 $entry['trackedUrl'] = $post['trackedUrl'];
                 $entry['lastAttemptAt'] = gmdate('c');
                 $entry['attempts'] = (int) ($entry['attempts'] ?? 0) + 1;
@@ -433,6 +450,9 @@ final class InstagramGbpPublisher
                     'instagramMediaId' => $mediaId,
                     'location' => $slug,
                     'destinationKind' => $post['destinationKind'],
+                    'destinationSource' => $post['destinationSource'],
+                    'destinationReason' => $post['destinationReason'],
+                    'destinationWarning' => $post['destinationWarning'],
                     'trackedUrl' => $post['trackedUrl'],
                     'googlePostName' => $remote['name'] ?? null,
                     'googleState' => $remote['state'] ?? null,
@@ -460,6 +480,16 @@ final class InstagramGbpPublisher
                 ];
             }
         }
+    }
+
+    /** @return array{url:?string,reason:string} */
+    private function vehicleResolution(array $media): array
+    {
+        $caption = (string) ($media['caption'] ?? '');
+        if (InstagramGbpPostFactory::extractVehicleUrl($caption) !== null) {
+            return ['url' => null, 'reason' => 'caption_url'];
+        }
+        return $this->vehicleResolver->resolve($caption);
     }
 
     private function successfulEntry(array $entry, array $remote, string $source): array

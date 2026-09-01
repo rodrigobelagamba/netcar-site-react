@@ -38,6 +38,7 @@ return [
         'not_before' => '', // Ex.: 2026-09-01T00:00:00-03:00
         'max_feed_items' => 500,
         'fallback_url' => 'https://www.netcarmultimarcas.com.br/seminovos',
+        'stock_api_url' => 'https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500',
         'locations' => [
             'loja_1' => '11161331340741727452',
             'loja_2' => '17013442122163034193',

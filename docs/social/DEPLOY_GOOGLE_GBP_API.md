@@ -30,6 +30,7 @@ Em `social-config.php`, confirme o OAuth client do projeto e as duas locations e
 'google_posts' => [
     'enabled' => false,
     'not_before' => '',
+    'stock_api_url' => 'https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500',
     'locations' => [
         'loja_1' => '11161331340741727452',
         'loja_2' => '17013442122163034193',
@@ -67,7 +68,7 @@ curl -fsS \
   'https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?posts_only=1&dry_run=1'
 ```
 
-Confirme as duas lojas e o destino dos CTAs. No momento da virada, defina `enabled=true` e `not_before` com horário ISO 8601 atual. Um `not_before` ausente, inválido ou antigo bloqueia a ativação para evitar replay. Pause o Zapier somente após uma publicação natural aparecer corretamente nos dois perfis.
+Confirme as duas lojas e o destino dos CTAs. `destinationSource=caption_url` indica uma URL explícita na legenda; `stock_reference` indica que a referência `#netcar<ID>` identificou uma única unidade ainda ativa no estoque. Sem referência exata ou com carro vendido, o publicador usa `/seminovos` e informa `fallback` em vez de inferir pela copy. No momento da virada, defina `enabled=true` e `not_before` com horário ISO 8601 atual. Um `not_before` ausente, inválido ou antigo bloqueia a ativação para evitar replay. Pause o Zapier somente após uma publicação natural aparecer corretamente nos dois perfis.
 
 ## Diagnóstico
 

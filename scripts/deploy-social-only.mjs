@@ -38,6 +38,7 @@ const manifest = [
   "lib/InstagramFeedClient.php",
   "lib/GoogleLocalPostsClient.php",
   "lib/InstagramPostMediaCache.php",
+  "lib/VehicleDestinationResolver.php",
   "lib/InstagramGbpPostFactory.php",
   "lib/GooglePostsStateStore.php",
   "lib/InstagramGbpPublisher.php",
@@ -359,11 +360,15 @@ async function runPublisherDryRun({ config, pin, port, remoteRoot, phpBin }) {
       const slug = String(item?.location ?? "");
       const mediaId = String(item?.instagramMediaId ?? "");
       const destinationKind = String(item?.destinationKind ?? "");
+      const destinationSource = String(item?.destinationSource ?? "");
       if (
         mediaId === "" ||
         !expectedLocations.has(slug) ||
         item?.action !== "would_create" ||
-        !["vehicle", "fallback"].includes(destinationKind)
+        !["vehicle", "fallback"].includes(destinationKind) ||
+        (destinationKind === "vehicle" &&
+          !["caption_url", "stock_reference"].includes(destinationSource)) ||
+        (destinationKind === "fallback" && destinationSource !== "fallback")
       ) {
         throw new Error("Dry-run retornou location ou acao inesperada.");
       }
@@ -401,6 +406,7 @@ async function runPublisherDryRun({ config, pin, port, remoteRoot, phpBin }) {
         publishedAt: String(item.publishedAt ?? ""),
         location: slug,
         destinationKind,
+        destinationSource,
         trackedUrl: tracked.toString(),
         action: item.action,
       };
