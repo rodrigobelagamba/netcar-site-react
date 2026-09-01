@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 final class SocialSyncRunner
 {
-    public function run(bool $reviews = true, bool $stories = true): array
+    public function run(bool $reviews = true, bool $stories = true, bool $posts = false, bool $dryRun = false): array
     {
         $result = [
             'success' => true,
             'syncedAt' => gmdate('c'),
             'reviews' => null,
             'stories' => null,
+            'posts' => null,
             'errors' => [],
         ];
 
@@ -38,6 +39,18 @@ final class SocialSyncRunner
             } catch (Throwable $e) {
                 $result['success'] = false;
                 $result['errors']['stories'] = $e->getMessage();
+            }
+        }
+
+        if ($posts) {
+            try {
+                $result['posts'] = (new InstagramGbpPublisher())->sync($dryRun);
+                if (empty($result['posts']['success'])) {
+                    $result['success'] = false;
+                }
+            } catch (Throwable $e) {
+                $result['success'] = false;
+                $result['errors']['posts'] = $e->getMessage();
             }
         }
 

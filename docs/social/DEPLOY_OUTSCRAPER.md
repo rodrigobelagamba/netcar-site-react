@@ -1,64 +1,77 @@
-# Deploy — Outscraper Sync (Google Reviews, plano B)
+# Deploy — Outscraper Sync (fallback de Reviews)
 
-**Contexto:** GBP API segue sem aprovação (caso `0-6283000041138`). Enquanto isso,
-reviews entram via Outscraper. React e `google-reviews.php` **não mudam** —
-o script grava o mesmo cache que o `sync-social.php` gravaria.
+Use o Outscraper somente enquanto a GBP API oficial de Reviews não estiver disponível. Ele grava o mesmo cache consumido por `google-reviews.php` e não controla a publicação Instagram → GBP.
 
-## O que subir (KingHost, via FTP)
+## Subir o código
 
-| Arquivo no repo | Destino no servidor |
-|-----------------|---------------------|
-| `docs/social/outscraper-sync.php` | `/www/social/v1/outscraper-sync.php` |
+Envie somente `docs/social/outscraper-sync.php` para:
 
-## Editar no servidor
+```text
+/home/USUARIO/www/social/v1/outscraper-sync.php
+```
 
-`/www/social/v1/social-config.php` — adicionar bloco antes de `'meta' =>`:
+Não envie configuração, API key ou tokens junto com o código.
+
+## Configurar fora do webroot
+
+Edite `/home/USUARIO/.netcar-social/social-config.php` (`0600`) e adicione:
 
 ```php
-// Plano B — reviews via Outscraper enquanto GBP API não aprova
 'outscraper' => [
-    'api_key' => 'PEGAR_COM_MARCELO', // não versionar
+    'api_key' => 'OBTER_POR_CANAL_SEGURO',
     'queries' => [
-        'ChIJSRolPVtvGZURzx88U1pB5n4', // Loja 1 — Av. Pres. Vargas 740
-        'ChIJq78McFxvGZURmIl8iyKRbJY', // Loja 2 — Av. Pres. Vargas 1106
+        'ChIJSRolPVtvGZURzx88U1pB5n4', // Loja 1
+        'ChIJq78McFxvGZURmIl8iyKRbJY', // Loja 2
     ],
 ],
 ```
 
-## Validar (depois do upload)
+O diretório `/home/USUARIO/.netcar-social` deve ter permissão `0700`. Nunca mantenha `social-config.php` em `/www`, `dist` ou Git.
+
+## Validar
+
+Prefira CLI, sem segredo em URL:
 
 ```bash
-# Import inicial — 20 reviews/loja (roda 1x)
-curl "https://www.netcarmultimarcas.com.br/social/v1/outscraper-sync.php?key=SYNC_SECRET&limit=20"
-# Esperado: {"success":true,"fetched":40,...}
-
-# Site servindo cache novo
-curl "https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=3"
-# Esperado: stale:false, syncedAt preenchido, reviews recentes no topo
+php /home/USUARIO/www/social/v1/outscraper-sync.php 20
 ```
 
-`SYNC_SECRET` = `sync.secret` do `social-config.php`.
+Se for necessário testar por HTTP, use `Authorization: Bearer`:
+
+```bash
+curl -fsS \
+  -H "Authorization: Bearer ${NETCAR_SYNC_SECRET}" \
+  'https://www.netcarmultimarcas.com.br/social/v1/outscraper-sync.php?limit=20'
+```
+
+Depois valide o cache público:
+
+```bash
+curl -fsS 'https://www.netcarmultimarcas.com.br/social/v1/google-reviews.php?page=1&limit=3'
+```
 
 ## Cron
 
-Agendar em **cron externa** (ex.: VPS ou serviço de cron HTTP) — diário, 7 reviews/loja
-(~430/mês, dentro do free tier de 500 do Outscraper). Nada a fazer no KingHost.
+Agende no servidor por CLI; assim nenhuma credencial aparece em URL:
 
 ```cron
-0 7 * * * curl -s "https://www.netcarmultimarcas.com.br/social/v1/outscraper-sync.php?key=SYNC_SECRET&limit=7"
+0 7 * * * php /home/USUARIO/www/social/v1/outscraper-sync.php 7
 ```
 
-## Quando GBP API aprovar
+Com duas lojas e limite 7, estime o consumo antes de depender de um plano gratuito.
 
-1. Rodar `sync-social.php?key=...&reviews_only=1` → se `success:true`, API oficial ok
-2. Remover cron da VPS (`crontab -e` → linha outscraper-sync)
-3. (Opcional) remover `outscraper-sync.php` e bloco `outscraper` do config
+## Retorno à GBP API oficial
 
-## Detalhes técnicos
+1. Rode o sync oficial por CLI ou com Bearer e `reviews_only=1`.
+2. Confirme `success: true` e ausência de `errors.reviews`.
+3. Remova o cron do Outscraper.
+4. Opcionalmente remova o endpoint e o bloco `outscraper` do arquivo privado.
 
-- Merge incremental: novos reviews entram no topo, antigos preservados
-- Dedupe por `id` e por assinatura autor+texto (não duplica reviews legados)
-- Reviews sem texto e sem foto são ignorados (card vazio)
-- Avatares normalizados para 120px (padrão do seed)
-- Backup automático: `google-reviews.backup.json` antes de cada gravação
-- Testado local (PHP 7.4 Docker) contra API real: fotos e avatares HTTP 200
+O fallback não altera `google_posts`. O publicador deve continuar com `enabled=false` até um dry-run confirmar exatamente as duas locations; na virada, use `enabled=true` e `not_before` recente.
+
+## Comportamento
+
+- Merge incremental e deduplicação de reviews.
+- Backup de `google-reviews.json` antes da gravação.
+- Reviews sem conteúdo útil são ignorados.
+- O React e `google-reviews.php` permanecem inalterados.

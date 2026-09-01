@@ -3,13 +3,18 @@
 declare(strict_types=1);
 
 /**
- * Copie para social-config.php e preencha.
- * NÃO versionar social-config.php nem data/cache/social-tokens.json
+ * Em producao, copie para /home/USUARIO/.netcar-social/social-config.php e preencha.
+ * NÃO versionar social-config.php nem qualquer token/cache privado.
  */
 return [
     // Segredo para proteger sync-social.php via HTTP/cron
     'sync' => [
         'secret' => 'TROQUE_POR_UM_SECRET_FORTE',
+    ],
+
+    // Pode ser diferente do segredo do cron; protege o inicio dos fluxos OAuth.
+    'oauth' => [
+        'admin_secret' => 'TROQUE_POR_OUTRO_SECRET_FORTE',
     ],
 
     'google' => [
@@ -24,6 +29,19 @@ return [
         //     'accounts/123/locations/456',
         //     'accounts/123/locations/789',
         // ],
+    ],
+
+    // Replica gratuita Instagram -> Google Business Profile (sem Zapier).
+    // A ativacao live exige enabled=true E not_before explicito.
+    'google_posts' => [
+        'enabled' => false,
+        'not_before' => '', // Ex.: 2026-09-01T00:00:00-03:00
+        'max_feed_items' => 500,
+        'fallback_url' => 'https://www.netcarmultimarcas.com.br/seminovos',
+        'locations' => [
+            'loja_1' => '11161331340741727452',
+            'loja_2' => '17013442122163034193',
+        ],
     ],
 
     // Plano B — reviews via Outscraper enquanto GBP API não aprova
