@@ -297,6 +297,14 @@ final class FakeVehicleDestinationResolver implements VehicleDestinationResolver
     }
 }
 
+final class UnavailableVehicleDestinationResolver implements VehicleDestinationResolver
+{
+    public function resolve(string $caption): array
+    {
+        return ['url' => null, 'reason' => 'stock_api_unavailable'];
+    }
+}
+
 $socialConfigProperty = new ReflectionProperty(SocialEnv::class, 'config');
 $socialConfigProperty->setAccessible(true);
 $privateDataDir = sys_get_temp_dir() . '/netcar-gbp-private-' . getmypid();
@@ -364,6 +372,40 @@ expectTrue($dryRun['created'] === 0, 'Dry-run nao pode reportar criacao.');
 expectTrue($fakeGoogle->createCalls === 0, 'Dry-run nao pode executar POST no Google.');
 expectTrue($fakeMediaCache->cacheCalls === 0, 'Dry-run nao pode baixar ou gravar midia.');
 expectTrue(!is_file($publisherStatePath), 'Dry-run nao pode gravar estado operacional.');
+
+$unavailableStatePath = sys_get_temp_dir() . '/netcar-gbp-unavailable-' . getmypid() . '.json';
+$unavailableCreateCalls = $fakeGoogle->createCalls;
+$unavailableCacheCalls = $fakeMediaCache->cacheCalls;
+$unavailablePublisher = new InstagramGbpPublisher(
+    new FakeInstagramFeedClient([[
+        'id' => '18007777777777777',
+        'caption' => $cleanVehicleCaption,
+        'mediaType' => 'IMAGE',
+        'mediaUrl' => 'https://scontent.cdninstagram.com/unavailable-example.jpg',
+        'thumbnailUrl' => '',
+        'permalink' => 'https://www.instagram.com/p/unavailable-test/',
+        'publishedAt' => gmdate('c'),
+    ]]),
+    $fakeGoogle,
+    $fakeMediaCache,
+    new GooglePostsStateStore($unavailableStatePath),
+    new UnavailableVehicleDestinationResolver()
+);
+$unavailableRun = $unavailablePublisher->sync(false);
+expectTrue(
+    $unavailableRun['created'] === 0 && count($unavailableRun['errors']) === 2,
+    'API de estoque indisponivel deve adiar as duas lojas sem publicar fallback definitivo.'
+);
+expectTrue(
+    $fakeGoogle->createCalls === $unavailableCreateCalls,
+    'Falha temporaria do estoque nao pode criar post no Google.'
+);
+expectTrue(
+    $fakeMediaCache->cacheCalls === $unavailableCacheCalls,
+    'Falha temporaria do estoque nao deve baixar midia antes da nova tentativa.'
+);
+@unlink($unavailableStatePath);
+@unlink($unavailableStatePath . '.lock');
 
 $firstRun = $publisher->sync(false);
 expectTrue($firstRun['created'] === 2, 'Primeira execucao deve criar um post por loja.');

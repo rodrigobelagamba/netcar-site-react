@@ -41,8 +41,8 @@ const manifest = [
   "lib/VehicleDestinationResolver.php",
   "lib/InstagramGbpPostFactory.php",
   "lib/GooglePostsStateStore.php",
-  "lib/InstagramGbpPublisher.php",
   "lib/bootstrap.php",
+  "lib/InstagramGbpPublisher.php",
   "lib/SocialSyncRunner.php",
   "social-config.example.php",
   "social-oauth.php",
@@ -534,7 +534,8 @@ function buildTransactionScript({
     .map((path) => `  rm -f ${quote(path)} || CLEANUP_RC=1`)
     .join("\n");
 
-  const rollback = selected
+  const rollback = [...selected]
+    .reverse()
     .map((relative) => {
       const target = pathPosix.join(publicRoot, relative);
       const backup = pathPosix.join(backupRoot, "files", relative);

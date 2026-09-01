@@ -367,6 +367,12 @@ final class InstagramGbpPublisher
 
             $attemptRecorded = false;
             try {
+                if ($vehicleResolution['reason'] === 'stock_api_unavailable') {
+                    throw new RuntimeException(
+                        'Estoque temporariamente indisponivel; CTA sera resolvido em nova tentativa.'
+                    );
+                }
+
                 $preview = InstagramGbpPostFactory::payload(
                     $media,
                     $location,
