@@ -7,6 +7,7 @@ import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { generateVehicleSlug } from "@/lib/slug";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
+import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 interface VehicleSuggestion {
@@ -31,6 +32,7 @@ export function Header() {
   const mobileAutocompleteRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const isSeptemberCampaignActive = useSeptemberCampaignActive();
   const { data: whatsapp } = useWhatsAppQuery();
   const { searchTerm, setSearchTerm } = useSearchContext();
   const { data: vehicles } = useVehiclesQuery(undefined, {
@@ -406,10 +408,11 @@ export function Header() {
     setIsSearchOpen(false);
     setIsMobileMenuOpen(false);
   };
-  // Home mobile (< md) abre em fundo escuro (HomeMobileFirstScreen), com ou
-  // sem campanha; logo e hambúrguer ficam brancos até rolar.
   const useLightMobileHeader =
-    location.pathname === "/" && !isScrolled && !isMobileMenuOpen;
+    isSeptemberCampaignActive &&
+    location.pathname === "/" &&
+    !isScrolled &&
+    !isMobileMenuOpen;
 
   return (
     <>
@@ -441,7 +444,7 @@ export function Header() {
               <img
                 src={logoNetcar}
                 alt="Netcar Multimarcas"
-                className={`h-8 w-auto transition-[filter] duration-200 ${useLightMobileHeader ? "brightness-0 invert md:brightness-100 md:invert-0" : ""}`}
+                className={`h-8 w-auto transition-[filter] duration-200 ${useLightMobileHeader ? "brightness-0 invert sm:brightness-100 sm:invert-0" : ""}`}
                 width={149}
                 height={38}
                 decoding="async"
@@ -571,7 +574,7 @@ export function Header() {
 
           {/* Hambúrguer — mobile, tablet e desktop abaixo de xl */}
           <button
-            className={`relative z-10 p-2 transition-colors xl:hidden ${useLightMobileHeader ? "text-white md:text-fg" : "text-fg"}`}
+            className={`relative z-10 p-2 transition-colors xl:hidden ${useLightMobileHeader ? "text-white sm:text-fg" : "text-fg"}`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
           >

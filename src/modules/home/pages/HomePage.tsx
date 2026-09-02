@@ -11,23 +11,18 @@ import {
 import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { HomeWhatsAppConversionPanel } from "../components/HomeWhatsAppConversionPanel";
 import { HomeMobileWhatsAppBar } from "../components/HomeMobileWhatsAppBar";
-import { HomeMobileFirstScreen } from "../components/HomeMobileFirstScreen";
 import { HomeRegionsNav } from "../components/HomeRegionsNav";
 import { lazy, Suspense, useMemo, useEffect, useState, useRef } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import {
-  isAvailableHomeStockVehicle,
   pickFeaturedHomeVehicle,
   pickHomeHighlightVehicles,
   sortHomeStockVehicles,
 } from "@/lib/homeStock";
 import { trackHomeScrollDepth } from "@/lib/analytics";
 import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
-import {
-  SeptemberCampaignBanner,
-  SeptemberCampaignMobileStrip,
-} from "@/features/september-campaign/SeptemberCampaignBanner";
+import { SeptemberCampaignBanner } from "@/features/september-campaign/SeptemberCampaignBanner";
 import {
   getVehicleMerchandising,
   hasVehicleIcheck,
@@ -336,27 +331,12 @@ export function HomePage() {
         ? HOME_HIGHLIGHTS_MOBILE
         : columnsPerRow * HOME_HIGHLIGHTS_DESKTOP_ROWS;
 
-    // Mobile: os 3 primeiros já aparecem na primeira tela — não repetir.
-    const excludeIds =
-      columnsPerRow === 1
-        ? sortHomeStockVehicles(vehicles)
-            .slice(0, 3)
-            .map((vehicle) => vehicle.id)
-        : featuredVehicle
-          ? [featuredVehicle.id]
-          : [];
-
-    return pickHomeHighlightVehicles(vehicles, limit, excludeIds);
+    return pickHomeHighlightVehicles(
+      vehicles,
+      limit,
+      featuredVehicle ? [featuredVehicle.id] : [],
+    );
   }, [vehicles, columnsPerRow, featuredVehicle]);
-
-  const mobileFirstScreenVehicles = useMemo(
-    () => (vehicles ? sortHomeStockVehicles(vehicles) : []),
-    [vehicles],
-  );
-  const totalAvailable = useMemo(
-    () => (vehicles ? vehicles.filter(isAvailableHomeStockVehicle).length : 0),
-    [vehicles],
-  );
 
   const goToStock = () =>
     navigate({
@@ -396,46 +376,29 @@ export function HomePage() {
   return (
     <main className="flex-1 overflow-x-hidden max-w-full">
       <div ref={heroRef}>
-        {/* Mobile (< md): busca + 3 carros + 1 WhatsApp na primeira tela. */}
-        <HomeMobileFirstScreen
-          vehicles={mobileFirstScreenVehicles}
-          totalAvailable={totalAvailable}
-          isLoading={isLoadingVehicles}
-        />
-        {isSeptemberCampaignActive && (
-          <div className="md:hidden">
-            <SeptemberCampaignMobileStrip />
-          </div>
-        )}
-
-        {/* Desktop/tablet: hero segue igual. */}
-        <div className="hidden md:block">
-          {isSeptemberCampaignActive ? (
-            <SeptemberCampaignBanner placement="home" />
-          ) : isLoadingHero ? (
-            <HomeHeroSkeleton />
-          ) : showBanners ? (
-            <BannerHero banners={banners!} />
-          ) : displayedHeroVehicles.length > 0 ? (
-            <HomeHero vehicles={displayedHeroVehicles} />
-          ) : null}
-        </div>
+        {isSeptemberCampaignActive ? (
+          <SeptemberCampaignBanner placement="home" />
+        ) : isLoadingHero ? (
+          <HomeHeroSkeleton />
+        ) : showBanners ? (
+          <BannerHero banners={banners!} />
+        ) : displayedHeroVehicles.length > 0 ? (
+          <HomeHero vehicles={displayedHeroVehicles} />
+        ) : null}
       </div>
 
-      <div className="hidden md:block">
+      <div className={isSeptemberCampaignActive ? "hidden sm:block" : ""}>
         <HomeWhatsAppConversionPanel
           featuredVehicle={featuredVehicle}
           onViewStock={goToStock}
         />
       </div>
 
-      <div className="hidden md:block">
-        <DeferredRender minHeight={96} rootMargin="100px">
-          <Suspense fallback={null}>
-            <SearchBar />
-          </Suspense>
-        </DeferredRender>
-      </div>
+      <DeferredRender minHeight={96} rootMargin="100px">
+        <Suspense fallback={null}>
+          <SearchBar />
+        </Suspense>
+      </DeferredRender>
 
       {/* Estoque sobe na rolagem: prioridade no mobile */}
       <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 md:py-12">
@@ -519,7 +482,7 @@ export function HomePage() {
 
       <HomeMobileWhatsAppBar
         visible
-        hideOnMobile={isHeroVisible}
+        hideOnMobile={isSeptemberCampaignActive && isHeroVisible}
         sourceCold="home_sticky_cold"
       />
     </main>

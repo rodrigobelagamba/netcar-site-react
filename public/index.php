@@ -888,17 +888,19 @@ if ($isHome) {
         $bannerUrl = $buildHomeLcp['image'];
     }
     if ($campaignActive) {
-        // Mobile (< 768px) não mostra mais o poster/vídeo na primeira tela: o
-        // React renderiza busca + carros. O shell mobile é só texto, igual ao
-        // topo escuro da primeira tela, pra não piscar imagem e depois sumir.
         $campaignImage = '/images/campaigns/acelerou-levou/banner.jpg';
+        $campaignPoster = '/images/campaigns/acelerou-levou/video-poster.jpg';
         $preload = '<link rel="preload" as="image" href="'
             . $campaignImage
-            . '" media="(min-width: 768px)" fetchpriority="high" />';
+            . '" media="(min-width: 640px)" fetchpriority="high" />'
+            . "\n    "
+            . '<link rel="preload" as="image" href="'
+            . $campaignPoster
+            . '" media="(max-width: 639px)" fetchpriority="high" />';
         $html = netcar_prepend_critical_head_markup($html, $preload);
-        $initialHero = '<div id="netcar-initial-lcp" class="netcar-initial-campaign-shell">'
-            . '<div class="netcar-initial-mobile-hero"><p class="netcar-initial-mobile-title">Seminovos em Esteio/RS</p><p>Preço na tela, troca aceita e até 60x. Fale direto no WhatsApp.</p></div>'
-            . '<picture class="netcar-initial-campaign-media"><img src="'
+        $initialHero = '<div id="netcar-initial-lcp" class="netcar-initial-campaign-shell"><picture class="netcar-initial-campaign-media"><source media="(max-width: 639px)" srcset="'
+            . $campaignPoster
+            . '"><img src="'
             . $campaignImage
             . '" alt="Acelerou, Levou. Campanha de setembro da Netcar" width="1280" height="418" loading="eager" decoding="sync" fetchpriority="high" class="netcar-initial-banner"></picture></div>';
         $html = str_replace('<div id="netcar-initial-lcp"></div>', $initialHero, $html);

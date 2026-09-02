@@ -211,93 +211,6 @@ function MobileCampaignVideo() {
   );
 }
 
-/**
- * Faixa compacta pra Home mobile: substitui o hero de vídeo, que empurrava
- * busca, carros e WhatsApp pra fora da primeira tela. Vídeo abre sob demanda.
- */
-export function SeptemberCampaignMobileStrip() {
-  const { isActive, countdown } = useSeptemberCampaign();
-  const [videoOpen, setVideoOpen] = useState(false);
-
-  if (!isActive) return null;
-
-  return (
-    <section
-      aria-label="Campanha Acelerou, Levou"
-      className="relative overflow-hidden bg-[#003541] px-4 py-3 text-white"
-    >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(circle at 85% 20%, rgba(208,223,148,.18), transparent 35%), linear-gradient(120deg, rgba(0,91,102,.55), transparent 60%)",
-        }}
-      />
-      <div className="relative flex items-center gap-3">
-        <div className="w-[84px] shrink-0 rounded-lg bg-white px-2 py-1.5 shadow-md">
-          <img
-            src={SEPTEMBER_CAMPAIGN.assets.logo}
-            alt="Acelerou, Levou. Netcar"
-            width={1404}
-            height={338}
-            loading="lazy"
-            decoding="async"
-            className="h-auto w-full"
-          />
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-bold leading-snug text-white/90">
-            Transferência + tanque cheio · 1ª parcela em novembro · entrada em
-            até 10x*
-          </p>
-          <div className="mt-1">
-            <MobileCountdown countdown={countdown} />
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={() => {
-            if (!videoOpen) {
-              trackSeptemberCampaignInteraction("play_video", "home");
-            }
-            setVideoOpen((open) => !open);
-          }}
-          aria-expanded={videoOpen}
-          aria-label={
-            videoOpen ? "Fechar vídeo da campanha" : "Assistir vídeo da campanha"
-          }
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#D0DF94] text-[#003D48] shadow-lg active:scale-95"
-        >
-          <Play className="ml-0.5 h-4 w-4 fill-current" aria-hidden="true" />
-        </button>
-      </div>
-      {videoOpen && (
-        <div className="relative mt-3">
-          <div className="mx-auto aspect-[9/16] w-[min(64vw,232px)]">
-            <video
-              autoPlay
-              controls
-              playsInline
-              preload="metadata"
-              poster={SEPTEMBER_CAMPAIGN.assets.videoPoster}
-              onEnded={() => setVideoOpen(false)}
-              className="h-full w-full rounded-[1.2rem] bg-black object-cover ring-1 ring-white/20"
-              aria-label="Vídeo da campanha Acelerou, Levou"
-            >
-              <source src={SEPTEMBER_CAMPAIGN.assets.video} type="video/mp4" />
-            </video>
-          </div>
-        </div>
-      )}
-      <p className="relative mt-2 text-[10px] leading-snug text-white/60">
-        *Até 30/09. Veículos participantes, disponibilidade e crédito sujeito à
-        aprovação.
-      </p>
-    </section>
-  );
-}
-
 export function SeptemberCampaignBanner({
   placement,
   vehicleId,
@@ -343,9 +256,9 @@ export function SeptemberCampaignBanner({
               "radial-gradient(circle at 14% 12%, rgba(29,151,159,.28), transparent 35%), radial-gradient(circle at 88% 72%, rgba(208,223,148,.16), transparent 32%), linear-gradient(135deg, #003A47 0%, #001D28 68%, #07151B 100%)",
           }}
         />
-        <h2 id="acelerou-levou-home-title" className="sr-only">
+        <h1 id="acelerou-levou-home-title" className="sr-only">
           Acelerou, Levou: campanha de setembro da Netcar
-        </h2>
+        </h1>
 
         <div className="container-main relative grid gap-0 px-4 py-4 sm:gap-7 sm:px-6 sm:py-8 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-center lg:gap-9 lg:px-8 lg:py-10 xl:grid-cols-[minmax(0,1fr)_290px] xl:px-12 2xl:px-16">
           <div className="min-w-0">
