@@ -69,6 +69,9 @@ import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { parseGptContent, AccordionSection } from "@/lib/parseGptContent";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
+import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
+import { SEPTEMBER_CAMPAIGN } from "@/features/september-campaign/campaign";
+import { SeptemberCampaignBanner } from "@/features/september-campaign/SeptemberCampaignBanner";
 import { landingPages, matchesLandingFilters } from "@/data/seo";
 import {
   buildVehicleHighlights,
@@ -1589,6 +1592,7 @@ function LoadingVehicleDetail({ slug }: { slug: string }) {
 
 export function DetalhesPage() {
   const { slug: paramSlug } = useParams({ from: "/veiculo/$slug" });
+  const isSeptemberCampaignActive = useSeptemberCampaignActive();
   const location = useLocation();
   const navigate = useNavigate();
   const slug = paramSlug || location.pathname.replace(/^\/veiculo\//, "") || "";
@@ -1765,7 +1769,7 @@ export function DetalhesPage() {
         ? vehicle.preco_com_troca
         : undefined;
     const showPriceComparison =
-      SHOW_CAMPAIGN_STAMP &&
+      (isSeptemberCampaignActive || SHOW_CAMPAIGN_STAMP) &&
       tradePrice !== undefined &&
       Number.isFinite(tradePrice) &&
       tradePrice > basePrice;
@@ -1786,7 +1790,7 @@ export function DetalhesPage() {
       cambio: vehicle.cambio || "",
       images: vehicle.fullImages || vehicle.fotos || vehicle.images || [],
     };
-  }, [vehicle]);
+  }, [vehicle, isSeptemberCampaignActive]);
 
   const marca = vehicleData?.marca || "";
   const modeloCompleto = vehicleData?.modeloCompleto || "";
@@ -2142,6 +2146,13 @@ export function DetalhesPage() {
           </li>
         </ol>
       </nav>
+      {!isSold && (
+        <SeptemberCampaignBanner
+          placement="vehicle"
+          vehicleId={vehicle.id}
+          vehicleLabel={vehicleLabel}
+        />
+      )}
       {/* Hero Section */}
       <section className="relative w-full max-w-full overflow-hidden py-0 pb-0 pt-0 lg:min-h-[820px] lg:pt-0 xl:min-h-[820px] 2xl:min-h-[830px] 3xl:min-h-[850px] 4xl:min-h-[1200px] 5xl:min-h-[1500px] 6xl:min-h-[1900px]">
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
@@ -2166,13 +2177,26 @@ export function DetalhesPage() {
                   </span>
                 </div>
               )}
-              {SHOW_CAMPAIGN_STAMP && !isSold && (
-                <img
-                  src="/selos/selo_campanha.png"
-                  alt="Selo de campanha"
-                  className="absolute bottom-[6%] right-[10%] sm:bottom-[8%] sm:right-[14%] w-20 sm:w-24 h-auto z-50 pointer-events-none select-none"
-                />
-              )}
+              {(isSeptemberCampaignActive || SHOW_CAMPAIGN_STAMP) &&
+                !isSold && (
+                  <img
+                    src={
+                      isSeptemberCampaignActive
+                        ? SEPTEMBER_CAMPAIGN.assets.logo
+                        : "/selos/selo_campanha.png"
+                    }
+                    alt={
+                      isSeptemberCampaignActive
+                        ? "Acelerou, Levou"
+                        : "Selo de campanha"
+                    }
+                    className={
+                      isSeptemberCampaignActive
+                        ? "absolute bottom-[5%] right-[5%] z-50 h-auto w-36 rounded-lg bg-white/95 p-2 shadow-xl sm:bottom-[8%] sm:right-[10%] sm:w-48 pointer-events-none select-none"
+                        : "absolute bottom-[6%] right-[10%] z-50 h-auto w-20 sm:bottom-[8%] sm:right-[14%] sm:w-24 pointer-events-none select-none"
+                    }
+                  />
+                )}
               <img
                 src={optimizeStockImage(mainImage, 960)}
                 srcSet={stockImageSrcSet(mainImage, [480, 640, 768, 960, 1280])}

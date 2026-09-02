@@ -19,6 +19,7 @@ import {
 } from "@/lib/whatsappMessages";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
+import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const SWIPE_THRESHOLD_PX = 45;
@@ -57,6 +58,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data: whatsapp } = useWhatsAppQuery();
+  const isSeptemberCampaignActive = useSeptemberCampaignActive();
 
   useEffect(() => {
     if (vehicles.length <= 1) return;
@@ -167,7 +169,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
       ? vehicle.preco_com_troca
       : undefined;
   const showPriceComparison =
-    SHOW_CAMPAIGN_STAMP &&
+    (isSeptemberCampaignActive || SHOW_CAMPAIGN_STAMP) &&
     tradePriceValue !== undefined &&
     tradePriceValue > vehicle.price;
   const previousPriceFormatted = showPriceComparison

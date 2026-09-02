@@ -11,6 +11,7 @@ import {
 import { CardsHero } from "./CardsHero";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
+import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
 import {
   getVehicleMerchandising,
   getVehicleLowMileageCardLabel,
@@ -100,6 +101,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   onVehicleFocus,
 }: VehicleCardProps) {
   const navigate = useNavigate();
+  const isSeptemberCampaignActive = useSeptemberCampaignActive();
 
   // Cards compactos usam a miniatura; cards desktop precisam da capa maior para
   // não ampliar o arquivo *_small.png (200 px) em uma área de quase 300 px.
@@ -147,7 +149,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
     typeof price === "number" && Number.isFinite(price) ? price : 0;
 
   const shouldShowPriceComparison =
-    SHOW_CAMPAIGN_STAMP &&
+    (isSeptemberCampaignActive || SHOW_CAMPAIGN_STAMP) &&
     tradePriceValue !== undefined &&
     tradePriceValue > basePriceValue;
 

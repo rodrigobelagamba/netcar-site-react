@@ -1,5 +1,7 @@
 import { MessageCircle, Plus, ShieldCheck } from "lucide-react";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
+import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
+import { SEPTEMBER_CAMPAIGN } from "@/features/september-campaign/campaign";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
 interface CardsHeroProps {
@@ -56,6 +58,8 @@ export function CardsHero({
   compact = false,
   isSold = false,
 }: CardsHeroProps) {
+  const isSeptemberCampaignActive = useSeptemberCampaignActive();
+  const showCampaignStamp = isSeptemberCampaignActive || SHOW_CAMPAIGN_STAMP;
   // `delay` é o índice do card na lista. Os primeiros ficam acima da dobra e
   // costumam ser o elemento de LCP — carregar preguiçosamente atrasa a métrica.
   const isAboveTheFold = delay < (compact ? 4 : 5);
@@ -70,14 +74,26 @@ export function CardsHero({
       style={{ border: "1px solid rgba(229, 231, 235, 0.5)" }}
     >
       {/* Selo em formato de carimbo */}
-      {SHOW_CAMPAIGN_STAMP && !isSold && (
+      {showCampaignStamp && !isSold && (
         <img
-          src="/selos/selo_campanha.png"
-          alt="Selo de campanha"
-          className={`absolute z-20 pointer-events-none select-none h-auto ${
-            compact
-              ? "top-16 right-2 md:top-16 md:right-3 w-20 md:w-24"
-              : "top-16 right-2 md:top-16 md:right-3 w-20 md:w-24 short1600:top-14 short1600:right-3 short1600:w-20"
+          src={
+            isSeptemberCampaignActive
+              ? SEPTEMBER_CAMPAIGN.assets.logo
+              : "/selos/selo_campanha.png"
+          }
+          alt={
+            isSeptemberCampaignActive ? "Acelerou, Levou" : "Selo de campanha"
+          }
+          className={`absolute z-20 h-auto pointer-events-none select-none ${
+            isSeptemberCampaignActive
+              ? `rounded-md bg-white/95 p-1.5 shadow-lg ${
+                  compact
+                    ? "top-14 right-1.5 w-24 md:top-16 md:right-3 md:w-32"
+                    : "top-14 right-2 w-28 md:top-16 md:right-3 md:w-36 short1600:top-14 short1600:right-3 short1600:w-28"
+                }`
+              : compact
+                ? "top-16 right-2 w-20 md:top-16 md:right-3 md:w-24"
+                : "top-16 right-2 w-20 md:top-16 md:right-3 md:w-24 short1600:top-14 short1600:right-3 short1600:w-20"
           }`}
         />
       )}

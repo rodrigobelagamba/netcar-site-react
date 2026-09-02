@@ -20,6 +20,8 @@ import {
   sortHomeStockVehicles,
 } from "@/lib/homeStock";
 import { trackHomeScrollDepth } from "@/lib/analytics";
+import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
+import { SeptemberCampaignBanner } from "@/features/september-campaign/SeptemberCampaignBanner";
 import {
   getVehicleMerchandising,
   hasVehicleIcheck,
@@ -171,6 +173,7 @@ function HomeHeroSkeleton() {
 export function HomePage() {
   const { data: vehicles, isLoading: isLoadingVehicles } = useVehiclesQuery();
   const { data: banners, isLoading: isLoadingBanners } = useBannersQuery();
+  const isSeptemberCampaignActive = useSeptemberCampaignActive();
   const navigate = useNavigate();
   const initialHeroVehicle = useMemo(readInitialHomeHeroVehicle, []);
   const initialBannerState = useMemo(readInitialBannerState, []);
@@ -359,7 +362,9 @@ export function HomePage() {
   return (
     <main className="flex-1 overflow-x-hidden max-w-full pb-36 md:pb-0">
       <div ref={heroRef}>
-        {isLoadingHero ? (
+        {isSeptemberCampaignActive ? (
+          <SeptemberCampaignBanner placement="home" />
+        ) : isLoadingHero ? (
           <HomeHeroSkeleton />
         ) : showBanners ? (
           <BannerHero banners={banners!} />

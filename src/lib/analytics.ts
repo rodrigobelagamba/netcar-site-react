@@ -444,6 +444,24 @@ export function trackSelectionCampaignCta(
   });
 }
 
+/** Mede a campanha comercial temporária sem misturá-la à campanha de procedência. */
+export function trackSeptemberCampaignInteraction(
+  action: "view" | "view_stock" | "whatsapp" | "play_video",
+  placement: "home" | "inventory" | "vehicle",
+  vehicleId?: string | number,
+  pagePath = getPagePath(),
+): void {
+  trackBusinessEvent("promotional_campaign_interaction", {
+    campaign_id: "acelerou-levou-2026-09",
+    campaign_action: action,
+    campaign_placement: placement,
+    page_type: inferPageType(pagePath),
+    page_path: pagePath,
+    ...(vehicleId !== undefined ? { vehicle_id: String(vehicleId) } : {}),
+    ...getTrafficDimensions(),
+  });
+}
+
 export function trackSellEvaluation(
   stage: "start" | "completed",
   cityName?: string,

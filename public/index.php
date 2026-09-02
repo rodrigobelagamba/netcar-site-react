@@ -24,6 +24,48 @@ define('NETCAR_BANNER_FAIL_TTL', 60);     // não martelar a API quando ela falh
 define('NETCAR_BANNER_HTTP_TIMEOUT', 0.20); // fail-fast: manifesto de build cobre a imagem se a API demorar
 
 /**
+ * Campanha visível durante todo setembro no horário de Brasília.
+ * O fim é exclusivo: 01/10 às 00h o HTML normal volta sem novo deploy.
+ */
+function netcar_september_campaign_active()
+{
+    try {
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $now = new DateTimeImmutable('now', $timezone);
+        $startsAt = new DateTimeImmutable('2026-09-01 00:00:00', $timezone);
+        $endsAt = new DateTimeImmutable('2026-10-01 00:00:00', $timezone);
+        return $now >= $startsAt && $now < $endsAt;
+    } catch (Exception $error) {
+        return false;
+    }
+}
+
+/**
+ * Segundos até a próxima troca de estado da campanha. Usado para impedir que
+ * o cache compartilhado mantenha o HTML antigo depois do início ou do fim.
+ */
+function netcar_september_campaign_seconds_until_transition()
+{
+    try {
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $now = new DateTimeImmutable('now', $timezone);
+        $startsAt = new DateTimeImmutable('2026-09-01 00:00:00', $timezone);
+        $endsAt = new DateTimeImmutable('2026-10-01 00:00:00', $timezone);
+
+        if ($now < $startsAt) {
+            return max(0, $startsAt->getTimestamp() - $now->getTimestamp());
+        }
+        if ($now < $endsAt) {
+            return max(0, $endsAt->getTimestamp() - $now->getTimestamp());
+        }
+    } catch (Exception $error) {
+        return null;
+    }
+
+    return null;
+}
+
+/**
  * Coloca o preload crítico no início do head, logo após o viewport.
  * Inserir perto de </head> faz o navegador descobrir a imagem somente depois
  * dos bundles, CSS e dados inline, desperdiçando boa parte do benefício.
@@ -824,11 +866,14 @@ if ($stockInitialLcp !== '') {
 }
 
 if ($isHome) {
-    $bannerUrl = netcar_get_active_banner_url();
+    $campaignActive = netcar_september_campaign_active();
+    $bannerUrl = $campaignActive
+        ? '/images/campaigns/acelerou-levou/banner.jpg'
+        : netcar_get_active_banner_url();
     $hasActiveBanner = $bannerUrl !== null;
-    $buildHomeLcp = netcar_get_build_home_lcp();
+    $buildHomeLcp = $campaignActive ? null : netcar_get_build_home_lcp();
     $bannerStateScript = '<script>window.__NETCAR_HOME_HAS_ACTIVE_BANNER__='
-        . ($hasActiveBanner ? 'true' : 'false')
+        . ($hasActiveBanner && !$campaignActive ? 'true' : 'false')
         . ';</script>';
     $html = str_replace('</head>', "  {$bannerStateScript}\n  </head>", $html);
     if ($buildHomeLcp !== null) {
@@ -842,7 +887,24 @@ if ($isHome) {
     if ($bannerUrl === null && $buildHomeLcp !== null) {
         $bannerUrl = $buildHomeLcp['image'];
     }
-    if ($bannerUrl !== null) {
+    if ($campaignActive) {
+        $campaignImage = '/images/campaigns/acelerou-levou/banner.jpg';
+        $campaignLogo = '/images/campaigns/acelerou-levou/logo.png';
+        $preload = '<link rel="preload" as="image" href="'
+            . $campaignImage
+            . '" media="(min-width: 640px)" fetchpriority="high" />'
+            . "\n    "
+            . '<link rel="preload" as="image" href="'
+            . $campaignLogo
+            . '" media="(max-width: 639px)" fetchpriority="high" />';
+        $html = netcar_prepend_critical_head_markup($html, $preload);
+        $initialHero = '<div id="netcar-initial-lcp"><picture><source media="(max-width: 639px)" srcset="'
+            . $campaignLogo
+            . '"><img src="'
+            . $campaignImage
+            . '" alt="Acelerou, Levou. Campanha de setembro da Netcar" width="1280" height="418" loading="eager" decoding="sync" fetchpriority="high" class="netcar-initial-banner"></picture></div>';
+        $html = str_replace('<div id="netcar-initial-lcp"></div>', $initialHero, $html);
+    } elseif ($bannerUrl !== null) {
         // Precisa ser a mesma lista usada pelo componente React. Se o browser
         // escolher outra largura no preload, ele baixa a imagem duas vezes.
         $imageWidths = $hasActiveBanner
@@ -894,5 +956,21 @@ if ($stockBootstrapScript !== null) {
 header('Content-Type: text/html; charset=UTF-8');
 // O HTML é público e não personalizado. Permite cache de borda curto e
 // revalidação, reduzindo TTFB sem congelar estoque ou metadados.
-header('Cache-Control: public, max-age=60, s-maxage=300, stale-while-revalidate=60');
+$browserMaxAge = 60;
+$sharedMaxAge = 300;
+$staleWhileRevalidate = 60;
+$secondsUntilCampaignTransition = netcar_september_campaign_seconds_until_transition();
+if ($secondsUntilCampaignTransition !== null && $secondsUntilCampaignTransition <= 360) {
+    $browserMaxAge = min($browserMaxAge, $secondsUntilCampaignTransition);
+    $sharedMaxAge = min($sharedMaxAge, $secondsUntilCampaignTransition);
+    $staleWhileRevalidate = min(
+        $staleWhileRevalidate,
+        max(0, $secondsUntilCampaignTransition - $sharedMaxAge)
+    );
+}
+header(
+    'Cache-Control: public, max-age=' . $browserMaxAge
+    . ', s-maxage=' . $sharedMaxAge
+    . ', stale-while-revalidate=' . $staleWhileRevalidate
+);
 echo $html;

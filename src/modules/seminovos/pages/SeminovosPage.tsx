@@ -31,6 +31,7 @@ import {
   type ShowroomSortOption,
 } from "@/lib/showroomStock";
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
+import { SeptemberCampaignBanner } from "@/features/september-campaign/SeptemberCampaignBanner";
 
 type StockLayout = {
   compact: boolean;
@@ -718,6 +719,7 @@ export function SeminovosPage() {
   return (
     <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-6">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
+        <SeptemberCampaignBanner placement="inventory" />
         <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-[#00283C]/10 bg-white p-2 shadow-sm">
           <button
             type="button"
