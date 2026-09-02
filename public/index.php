@@ -889,17 +889,17 @@ if ($isHome) {
     }
     if ($campaignActive) {
         $campaignImage = '/images/campaigns/acelerou-levou/banner.jpg';
-        $campaignLogo = '/images/campaigns/acelerou-levou/logo.png';
+        $campaignPoster = '/images/campaigns/acelerou-levou/video-poster.jpg';
         $preload = '<link rel="preload" as="image" href="'
             . $campaignImage
             . '" media="(min-width: 640px)" fetchpriority="high" />'
             . "\n    "
             . '<link rel="preload" as="image" href="'
-            . $campaignLogo
+            . $campaignPoster
             . '" media="(max-width: 639px)" fetchpriority="high" />';
         $html = netcar_prepend_critical_head_markup($html, $preload);
-        $initialHero = '<div id="netcar-initial-lcp"><picture><source media="(max-width: 639px)" srcset="'
-            . $campaignLogo
+        $initialHero = '<div id="netcar-initial-lcp" class="netcar-initial-campaign-shell"><picture class="netcar-initial-campaign-media"><source media="(max-width: 639px)" srcset="'
+            . $campaignPoster
             . '"><img src="'
             . $campaignImage
             . '" alt="Acelerou, Levou. Campanha de setembro da Netcar" width="1280" height="418" loading="eager" decoding="sync" fetchpriority="high" class="netcar-initial-banner"></picture></div>';

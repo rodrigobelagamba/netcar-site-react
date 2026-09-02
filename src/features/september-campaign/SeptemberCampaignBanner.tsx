@@ -36,6 +36,13 @@ const benefits = [
   "Entrada em até 10x",
 ];
 
+const mobileBenefits = [
+  "Transferência por nossa conta",
+  "Tanque cheio",
+  "1ª parcela em novembro",
+  "Entrada em até 10x*",
+];
+
 function Countdown({
   countdown,
   compact = false,
@@ -86,7 +93,50 @@ function Countdown({
   );
 }
 
-function CampaignVideo({ placement }: { placement: CampaignPlacement }) {
+function MobileCountdown({
+  countdown,
+  showLabel = false,
+}: {
+  countdown: CampaignCountdown;
+  showLabel?: boolean;
+}) {
+  const shortLabel =
+    countdown.days > 0
+      ? `${countdown.days}d ${countdown.hours}h restantes`
+      : `${countdown.hours}h ${countdown.minutes}min restantes`;
+
+  return (
+    <div
+      role="timer"
+      aria-live="off"
+      aria-label={`A campanha termina em ${campaignCountdownLabel(countdown)}`}
+      className="flex min-w-0 items-center gap-2"
+    >
+      <CalendarClock
+        className="h-4 w-4 shrink-0 text-[#D0DF94]"
+        aria-hidden="true"
+      />
+      {showLabel && (
+        <span className="shrink-0 text-[9px] font-black uppercase tracking-[0.12em] text-white/55">
+          Termina em
+        </span>
+      )}
+      <strong className="ml-auto truncate text-xs font-black tabular-nums text-white">
+        {shortLabel}
+      </strong>
+    </div>
+  );
+}
+
+function CampaignVideo({
+  placement,
+  compact = false,
+  eager = false,
+}: {
+  placement: CampaignPlacement;
+  compact?: boolean;
+  eager?: boolean;
+}) {
   const [playing, setPlaying] = useState(false);
 
   if (playing) {
@@ -98,7 +148,7 @@ function CampaignVideo({ placement }: { placement: CampaignPlacement }) {
         preload="metadata"
         poster={SEPTEMBER_CAMPAIGN.assets.videoPoster}
         onEnded={() => setPlaying(false)}
-        className="h-full w-full rounded-[1.35rem] bg-black object-cover"
+        className={`h-full w-full bg-black object-cover ring-1 ring-white/20 ${compact ? "rounded-[1.4rem] shadow-[0_24px_55px_rgba(0,0,0,0.34)]" : "rounded-[1.35rem]"}`}
         aria-label="Vídeo da campanha Acelerou, Levou"
       >
         <source src={SEPTEMBER_CAMPAIGN.assets.video} type="video/mp4" />
@@ -114,7 +164,7 @@ function CampaignVideo({ placement }: { placement: CampaignPlacement }) {
         trackSeptemberCampaignInteraction("play_video", placement);
         setPlaying(true);
       }}
-      className="group relative h-full w-full overflow-hidden rounded-[1.35rem] bg-black text-left shadow-[0_24px_60px_rgba(0,0,0,0.34)] ring-1 ring-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D0DF94]"
+      className={`group relative h-full w-full overflow-hidden bg-black text-left shadow-[0_24px_60px_rgba(0,0,0,0.34)] ring-1 ring-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D0DF94] ${compact ? "rounded-[1.4rem]" : "rounded-[1.35rem]"}`}
       aria-label="Assistir ao vídeo da campanha Acelerou, Levou"
     >
       <img
@@ -122,16 +172,20 @@ function CampaignVideo({ placement }: { placement: CampaignPlacement }) {
         alt=""
         width={576}
         height={1024}
-        loading="lazy"
-        decoding="async"
+        loading={eager ? "eager" : "lazy"}
+        decoding={eager ? "sync" : "async"}
         className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02] group-hover:brightness-90"
       />
-      <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent px-4 pb-4 pt-16 text-white">
-        <span className="flex items-center gap-3">
+      <span
+        className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent text-white ${compact ? "px-3 pb-3 pt-14" : "px-4 pb-4 pt-16"}`}
+      >
+        <span
+          className={`flex items-center gap-3 ${compact ? "justify-center" : ""}`}
+        >
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#D0DF94] text-[#003D48] shadow-lg transition-transform group-hover:scale-105">
             <Play className="ml-0.5 h-5 w-5 fill-current" aria-hidden="true" />
           </span>
-          <span>
+          <span className={compact ? "sr-only" : ""}>
             <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[#D0DF94]">
               29 segundos
             </span>
@@ -142,6 +196,16 @@ function CampaignVideo({ placement }: { placement: CampaignPlacement }) {
         </span>
       </span>
     </button>
+  );
+}
+
+function MobileCampaignVideo() {
+  return (
+    <div className="sm:hidden">
+      <div className="mx-auto aspect-[9/16] w-[min(64vw,232px)]">
+        <CampaignVideo placement="home" compact eager />
+      </div>
+    </div>
   );
 }
 
@@ -193,7 +257,7 @@ export function SeptemberCampaignBanner({
           Acelerou, Levou: campanha de setembro da Netcar
         </h1>
 
-        <div className="container-main relative grid gap-7 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-center lg:gap-9 lg:px-8 lg:py-10 xl:grid-cols-[minmax(0,1fr)_290px] xl:px-12 2xl:px-16">
+        <div className="container-main relative grid gap-0 px-4 py-4 sm:gap-7 sm:px-6 sm:py-8 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-center lg:gap-9 lg:px-8 lg:py-10 xl:grid-cols-[minmax(0,1fr)_290px] xl:px-12 2xl:px-16">
           <div className="min-w-0">
             <div className="hidden overflow-hidden rounded-[1.5rem] border border-white/15 bg-black/20 shadow-[0_24px_70px_rgba(0,0,0,0.25)] sm:block">
               <img
@@ -203,28 +267,13 @@ export function SeptemberCampaignBanner({
                 height={418}
                 loading="eager"
                 decoding="sync"
-                fetchPriority="high"
                 className="h-auto w-full"
               />
             </div>
 
-            <div className="rounded-[1.5rem] border border-white/15 bg-white px-4 py-5 text-center shadow-[0_20px_55px_rgba(0,0,0,0.28)] sm:hidden">
-              <img
-                src={SEPTEMBER_CAMPAIGN.assets.logo}
-                alt="Acelerou, Levou. Netcar"
-                width={1404}
-                height={338}
-                loading="eager"
-                decoding="sync"
-                fetchPriority="high"
-                className="mx-auto h-auto w-full max-w-[315px]"
-              />
-              <p className="mt-3 text-sm font-black uppercase tracking-[0.12em] text-[#003D48]">
-                Comece o segundo semestre acelerando
-              </p>
-            </div>
+            <MobileCampaignVideo />
 
-            <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="mt-5 hidden grid-cols-4 gap-2 sm:grid">
               {benefits.map((benefit) => (
                 <div
                   key={benefit}
@@ -238,7 +287,23 @@ export function SeptemberCampaignBanner({
               ))}
             </div>
 
-            <div className="mt-5 grid gap-4 sm:grid-cols-[minmax(0,390px)_minmax(260px,1fr)] sm:items-end">
+            <div className="mt-2 flex items-center gap-2 rounded-xl border border-white/10 bg-black/10 p-2 sm:hidden">
+              <div className="min-w-0 flex-1 px-1">
+                <MobileCountdown countdown={countdown} />
+              </div>
+              <Link
+                to="/seminovos"
+                onClick={() =>
+                  trackSeptemberCampaignInteraction("view_stock", "home")
+                }
+                className="inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#D0DF94] px-3 text-[11px] font-black text-[#003D48] shadow-[0_10px_24px_rgba(208,223,148,0.16)] transition active:scale-[0.98]"
+              >
+                Ver ofertas
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+              </Link>
+            </div>
+
+            <div className="mt-5 hidden gap-4 sm:grid sm:grid-cols-[minmax(0,390px)_minmax(260px,1fr)] sm:items-end">
               <Countdown countdown={countdown} />
               <div className="grid gap-2 sm:grid-cols-2">
                 <Link
@@ -268,14 +333,17 @@ export function SeptemberCampaignBanner({
               </div>
             </div>
 
-            <p className="mt-3 text-[10px] leading-relaxed text-white/55 sm:text-xs">
+            <p className="mt-2 px-2 text-center text-[10px] font-medium leading-[1.45] text-white/70 sm:hidden">
+              Válida até 30/09. Consulte condições e veículos participantes.
+            </p>
+            <p className="mt-3 hidden text-xs leading-relaxed text-white/55 sm:block">
               Válida até 30/09/2026. Benefícios, financiamento e veículos
               participantes sujeitos às condições da campanha, disponibilidade e
               aprovação de crédito. Consulte a equipe.
             </p>
           </div>
 
-          <div className="mx-auto aspect-[9/16] w-full max-w-[220px] lg:max-w-none">
+          <div className="mx-auto hidden aspect-[9/16] w-full max-w-[220px] sm:block lg:max-w-none">
             <CampaignVideo placement="home" />
           </div>
         </div>
@@ -288,7 +356,7 @@ export function SeptemberCampaignBanner({
   return (
     <section
       aria-label="Campanha Acelerou, Levou"
-      className={`${isVehicle ? "container-main px-4 py-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16" : "mb-5"}`}
+      className={`${isVehicle ? "container-main px-4 py-2 sm:px-6 sm:py-4 lg:px-8 xl:px-12 2xl:px-16" : "mb-3 sm:mb-5"}`}
     >
       <div className="relative overflow-hidden rounded-2xl border border-[#D0DF94]/35 bg-[#003541] text-white shadow-[0_16px_45px_rgba(0,40,60,0.16)]">
         <div
@@ -299,7 +367,85 @@ export function SeptemberCampaignBanner({
               "radial-gradient(circle at 80% 10%, rgba(208,223,148,.18), transparent 32%), linear-gradient(120deg, rgba(0,91,102,.55), transparent 58%)",
           }}
         />
-        <div className="relative grid gap-4 p-4 sm:p-5 lg:grid-cols-[290px_minmax(0,1fr)_300px_auto] lg:items-center lg:gap-5">
+
+        <div className="relative p-4 sm:hidden">
+          <div className="flex items-center gap-3">
+            <div className="w-[92px] shrink-0 rounded-xl bg-white px-2.5 py-2.5 shadow-lg">
+              <img
+                src={SEPTEMBER_CAMPAIGN.assets.logo}
+                alt="Acelerou, Levou. Netcar"
+                width={1404}
+                height={338}
+                loading="eager"
+                decoding="async"
+                className="h-auto w-full"
+              />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#D0DF94]">
+                Até 30/09
+              </p>
+              <h2 className="mt-1 text-base font-black leading-tight">
+                {isVehicle ? "Condições neste carro" : "Condições de setembro"}
+              </h2>
+              <p className="mt-1 text-[10px] leading-snug text-white/65">
+                Benefícios para veículos participantes
+              </p>
+            </div>
+          </div>
+
+          <div
+            className="mt-4 grid grid-cols-2 overflow-hidden rounded-xl border border-white/10 bg-black/10"
+            aria-label="Condições da campanha"
+          >
+            {mobileBenefits.map((benefit, index) => (
+              <div
+                key={benefit}
+                className={`flex min-h-12 items-center gap-2 px-2.5 py-2.5 text-[10px] font-bold leading-snug text-white/90 ${
+                  index % 2 === 0 ? "border-r border-white/10" : ""
+                } ${index < 2 ? "border-b border-white/10" : ""}`}
+              >
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#D0DF94] text-[#003D48]">
+                  <Check className="h-3 w-3" aria-hidden="true" />
+                </span>
+                <span>{benefit}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto] gap-2 border-t border-white/10 pt-3">
+            <div className="flex min-w-0 items-center px-1">
+              <MobileCountdown countdown={countdown} />
+            </div>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Consultar condições da campanha no WhatsApp"
+              data-wa-source={`campaign_${placement}`}
+              data-wa-intent="acelerou_levou"
+              data-wa-vehicle-id={vehicleId ? String(vehicleId) : undefined}
+              data-wa-vehicle-name={vehicleLabel}
+              onClick={() =>
+                trackSeptemberCampaignInteraction(
+                  "whatsapp",
+                  placement,
+                  vehicleId,
+                )
+              }
+              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-[#D0DF94] px-3.5 text-[11px] font-black text-[#003D48] shadow-md transition active:scale-[0.98]"
+            >
+              <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
+              Consultar
+            </a>
+          </div>
+          <p className="mt-2 text-[10px] leading-snug text-white/70">
+            *Consulte veículos participantes e disponibilidade. Crédito sujeito
+            à aprovação.
+          </p>
+        </div>
+
+        <div className="relative hidden gap-4 p-5 sm:grid lg:grid-cols-[290px_minmax(0,1fr)_300px_auto] lg:items-center lg:gap-5">
           <div className="hidden overflow-hidden rounded-xl border border-white/10 bg-black/20 lg:block">
             <img
               src={SEPTEMBER_CAMPAIGN.assets.banner}
@@ -361,7 +507,7 @@ export function SeptemberCampaignBanner({
             Quero aproveitar
           </a>
         </div>
-        <p className="relative border-t border-white/10 px-4 py-2 text-[9px] leading-relaxed text-white/55 sm:px-5 sm:text-[10px]">
+        <p className="relative hidden border-t border-white/10 px-5 py-2 text-[10px] leading-relaxed text-white/55 sm:block">
           *Até 30/09/2026. Consulte condições, veículos participantes,
           disponibilidade e aprovação de crédito.
         </p>

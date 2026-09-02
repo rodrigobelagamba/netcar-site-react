@@ -2192,7 +2192,7 @@ export function DetalhesPage() {
                     }
                     className={
                       isSeptemberCampaignActive
-                        ? "absolute bottom-[5%] right-[5%] z-50 h-auto w-36 rounded-lg bg-white/95 p-2 shadow-xl sm:bottom-[8%] sm:right-[10%] sm:w-48 pointer-events-none select-none"
+                        ? "pointer-events-none absolute z-50 hidden h-auto rounded-lg bg-white/95 shadow-xl select-none sm:bottom-[8%] sm:right-[10%] sm:block sm:w-48 sm:p-2"
                         : "absolute bottom-[6%] right-[10%] z-50 h-auto w-20 sm:bottom-[8%] sm:right-[14%] sm:w-24 pointer-events-none select-none"
                     }
                   />

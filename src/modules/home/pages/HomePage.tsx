@@ -189,6 +189,19 @@ export function HomePage() {
 
   const [columnsPerRow, setColumnsPerRow] = useState(4);
   const heroRef = useRef<HTMLDivElement>(null);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsHeroVisible(entry.isIntersecting),
+      { threshold: 0.01 },
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const updateColumns = () => {
@@ -373,10 +386,12 @@ export function HomePage() {
         ) : null}
       </div>
 
-      <HomeWhatsAppConversionPanel
-        featuredVehicle={featuredVehicle}
-        onViewStock={goToStock}
-      />
+      <div className={isSeptemberCampaignActive ? "hidden sm:block" : ""}>
+        <HomeWhatsAppConversionPanel
+          featuredVehicle={featuredVehicle}
+          onViewStock={goToStock}
+        />
+      </div>
 
       <DeferredRender minHeight={96} rootMargin="100px">
         <Suspense fallback={null}>
@@ -462,7 +477,11 @@ export function HomePage() {
         </div>
       </div>
 
-      <HomeMobileWhatsAppBar visible sourceCold="home_sticky_cold" />
+      <HomeMobileWhatsAppBar
+        visible
+        hideOnMobile={isSeptemberCampaignActive && isHeroVisible}
+        sourceCold="home_sticky_cold"
+      />
     </main>
   );
 }

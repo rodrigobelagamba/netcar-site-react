@@ -7,6 +7,7 @@ import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { generateVehicleSlug } from "@/lib/slug";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
+import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 interface VehicleSuggestion {
@@ -31,6 +32,7 @@ export function Header() {
   const mobileAutocompleteRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const isSeptemberCampaignActive = useSeptemberCampaignActive();
   const { data: whatsapp } = useWhatsAppQuery();
   const { searchTerm, setSearchTerm } = useSearchContext();
   const { data: vehicles } = useVehiclesQuery(undefined, {
@@ -406,6 +408,11 @@ export function Header() {
     setIsSearchOpen(false);
     setIsMobileMenuOpen(false);
   };
+  const useLightMobileHeader =
+    isSeptemberCampaignActive &&
+    location.pathname === "/" &&
+    !isScrolled &&
+    !isMobileMenuOpen;
 
   return (
     <>
@@ -437,7 +444,7 @@ export function Header() {
               <img
                 src={logoNetcar}
                 alt="Netcar Multimarcas"
-                className="h-8 w-auto"
+                className={`h-8 w-auto transition-[filter] duration-200 ${useLightMobileHeader ? "brightness-0 invert sm:brightness-100 sm:invert-0" : ""}`}
                 width={149}
                 height={38}
                 decoding="async"
@@ -509,7 +516,7 @@ export function Header() {
           <div className="hidden xl:block flex-1" aria-hidden="true" />
 
           {/* Botões à direita - Desktop (xl+) */}
-          <div className="relative z-10 hidden xl:flex items-center gap-3 2xl:gap-4">
+          <div className="relative z-10 hidden items-center gap-3 xl:flex 2xl:gap-4">
             {/* Campo de Busca */}
             {isSearchOpen ? (
               <div className="w-[250px] overflow-hidden bg-white rounded-md shadow-lg px-3 py-2 relative z-[100]">
@@ -567,7 +574,7 @@ export function Header() {
 
           {/* Hambúrguer — mobile, tablet e desktop abaixo de xl */}
           <button
-            className="xl:hidden p-2 relative z-10"
+            className={`relative z-10 p-2 transition-colors xl:hidden ${useLightMobileHeader ? "text-white sm:text-fg" : "text-fg"}`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
           >

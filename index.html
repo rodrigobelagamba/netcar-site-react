@@ -278,6 +278,20 @@
         max-height: none;
         transform: none;
       }
+      @media (max-width: 639px) {
+        #netcar-initial-lcp.netcar-initial-campaign-shell
+          picture.netcar-initial-campaign-media {
+          width: min(64vw, 232px);
+        }
+        #netcar-initial-lcp.netcar-initial-campaign-shell
+          img.netcar-initial-banner {
+          box-sizing: border-box;
+          aspect-ratio: 9 / 16;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 22px;
+          object-fit: cover;
+        }
+      }
       @media (min-width: 768px) {
         #netcar-initial-lcp {
           min-height: 60vh;

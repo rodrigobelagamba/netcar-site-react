@@ -86,10 +86,10 @@ export function CardsHero({
           }
           className={`absolute z-20 h-auto pointer-events-none select-none ${
             isSeptemberCampaignActive
-              ? `rounded-md bg-white/95 p-1.5 shadow-lg ${
+              ? `hidden rounded-md bg-white/95 p-1.5 shadow-lg sm:block ${
                   compact
-                    ? "top-14 right-1.5 w-24 md:top-16 md:right-3 md:w-32"
-                    : "top-14 right-2 w-28 md:top-16 md:right-3 md:w-36 short1600:top-14 short1600:right-3 short1600:w-28"
+                    ? "sm:top-14 sm:right-1.5 sm:w-24 md:top-16 md:right-3 md:w-32"
+                    : "sm:top-14 sm:right-2 sm:w-28 md:top-16 md:right-3 md:w-36 short1600:top-14 short1600:right-3 short1600:w-28"
                 }`
               : compact
                 ? "top-16 right-2 w-20 md:top-16 md:right-3 md:w-24"
@@ -154,6 +154,25 @@ export function CardsHero({
             : "pt-28 md:pt-32 space-y-4 short1600:pt-24 short1600:space-y-2"
         }`}
       >
+        {isSeptemberCampaignActive && !isSold && (
+          <div
+            className="flex min-h-5 w-full items-center justify-end sm:hidden"
+            aria-hidden="true"
+          >
+            <span className="inline-flex rounded-md border border-[#D0DF94]/60 bg-[#F8FAF0] px-1.5 py-0.5 shadow-sm">
+              <img
+                src={SEPTEMBER_CAMPAIGN.assets.logo}
+                alt=""
+                width={1404}
+                height={338}
+                loading="lazy"
+                decoding="async"
+                className={`h-auto ${compact ? "w-12" : "w-14"}`}
+              />
+            </span>
+          </div>
+        )}
+
         {(marketingBadge || warrantyBadge) && (
           <div
             className={`!border-0 flex min-h-[1.5rem] w-full flex-wrap items-center gap-1 overflow-hidden ${
