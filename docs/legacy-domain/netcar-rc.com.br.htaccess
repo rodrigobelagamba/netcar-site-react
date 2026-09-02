@@ -1,0 +1,21 @@
+# .htaccess pra pasta do domínio legado netcar-rc.com.br na KingHost.
+#
+# Situação atual (02/09/2026): http(s)://netcar-rc.com.br responde 200 com
+# <meta http-equiv="refresh" content="0;url=http://netcarmultimarcas.com.br/">
+# e qualquer rota interna dá 404. Meta refresh não transfere autoridade e
+# ainda faz 2 saltos (http sem www -> https://www).
+#
+# Como aplicar (uma das duas opções):
+#   A) Painel KingHost > Domínios > netcar-rc.com.br > apontar pra mesma pasta
+#      do site principal. O public/.htaccess do site já trata o host e faz o
+#      301 sozinho. Este arquivo fica só como referência.
+#   B) Manter pasta separada: apagar o index.html com meta refresh e subir este
+#      arquivo como .htaccess na raiz da pasta do netcar-rc.com.br.
+#
+# Teste depois:
+#   curl -sI https://www.netcar-rc.com.br/qualquer-coisa | head -3
+#   -> HTTP/1.1 301 ... Location: https://www.netcarmultimarcas.com.br/qualquer-coisa
+
+RewriteEngine On
+RewriteCond %{HTTP_HOST} (^|\.)netcar-rc\.com\.br$ [NC]
+RewriteRule ^ https://www.netcarmultimarcas.com.br%{REQUEST_URI} [R=301,L]

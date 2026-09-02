@@ -43,24 +43,25 @@ export function HomeSelectionPromise() {
       className="container-main px-4 pb-10 sm:px-6 md:pb-16 lg:px-8 xl:px-12 2xl:px-16"
     >
       <div className="relative isolate overflow-hidden rounded-[28px] bg-[#00283C] text-white shadow-[0_22px_70px_rgba(0,40,60,0.2)] lg:grid lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="relative z-10 px-6 py-9 sm:px-9 md:py-12 lg:px-12 lg:py-14">
+        {/* Mobile: título + 3 critérios + 1 CTA. Texto longo, foto e 2º botão só a partir de sm. */}
+        <div className="relative z-10 px-5 py-6 sm:px-9 sm:py-9 md:py-12 lg:px-12 lg:py-14">
           <span className="text-xs font-black uppercase tracking-[0.2em] text-[#5CD29D]">
             Como escolhemos o estoque
           </span>
           <h2
             id="criterio-netcar-title"
-            className="mt-4 max-w-3xl text-3xl font-black leading-[1.06] tracking-[-0.03em] sm:text-4xl lg:text-5xl"
+            className="mt-2 max-w-3xl text-2xl font-black leading-[1.06] tracking-[-0.03em] sm:mt-4 sm:text-4xl lg:text-5xl"
           >
             Nem todo carro entra na Netcar.
           </h2>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
+          <p className="mt-5 hidden max-w-2xl text-base leading-relaxed text-white/80 sm:block sm:text-lg">
             Na compra de um seminovo, preço e aparência não contam toda a
             história. Origem e registros anteriores podem pesar no seguro, no
             financiamento e numa futura revenda. Nosso estoque é comprado no RS
             e não tem veículos de locadora, leilão, sinistro, furto ou roubo.
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-2.5">
+          <div className="mt-4 flex flex-wrap gap-2 sm:mt-7 sm:gap-2.5">
             {trustPoints.map((point) => (
               <span
                 key={point.label}
@@ -75,7 +76,7 @@ export function HomeSelectionPromise() {
             ))}
           </div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-5 flex flex-col gap-3 sm:mt-8 sm:flex-row">
             <Link
               to="/como-selecionamos-nossos-carros"
               onClick={() => trackSelectionCampaignCta("learn_process", "home")}
@@ -88,14 +89,14 @@ export function HomeSelectionPromise() {
               to="/seminovos"
               search={emptySeminovosSearch}
               onClick={() => trackSelectionCampaignCta("view_stock", "home")}
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/30 px-6 py-3 text-sm font-bold text-white transition hover:border-white/60 hover:bg-white/10 active:scale-[0.98]"
+              className="hidden min-h-12 items-center justify-center rounded-full border border-white/30 px-6 py-3 text-sm font-bold text-white transition hover:border-white/60 hover:bg-white/10 active:scale-[0.98] sm:inline-flex"
             >
               Ver estoque disponível
             </Link>
           </div>
         </div>
 
-        <div className="relative min-h-[260px] overflow-hidden sm:min-h-[340px] lg:min-h-full">
+        <div className="relative hidden min-h-[260px] overflow-hidden sm:block sm:min-h-[340px] lg:min-h-full">
           <img
             src="/images/loja1.webp"
             alt="Fachada da Loja 1 da Netcar Multimarcas em Esteio"

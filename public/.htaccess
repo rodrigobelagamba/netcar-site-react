@@ -116,6 +116,13 @@ ErrorDocument 410 /410.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
   
+  # Domínio legado netcar-rc.com.br (com ou sem www): 301 pra URL equivalente
+  # no canônico. Hoje ele serve um <meta refresh> pra http:// sem www, que
+  # não passa autoridade e ainda gera dois saltos. Vale quando o domínio
+  # legado apontar pra esta pasta no painel da KingHost.
+  RewriteCond %{HTTP_HOST} (^|\.)netcar-rc\.com\.br$ [NC]
+  RewriteRule ^ https://www.netcarmultimarcas.com.br%{REQUEST_URI} [R=301,L]
+
   # HTTPS canônico (http -> https://www)
   RewriteCond %{HTTPS} off [OR]
   RewriteCond %{HTTP_HOST} !^www\. [NC]
@@ -164,7 +171,7 @@ ErrorDocument 410 /410.html
 
   # Cidade no formato legado com barra (/seminovos/canoas) caía no shell do SPA
   # e virava soft 404. O canônico é /seminovos-{cidade}.
-  RewriteRule ^seminovos/(alvorada|bento-goncalves|cachoeirinha|campo-bom|canoas|caxias-do-sul|estancia-velha|gramado|gravatai|guaiba|igrejinha|montenegro|novo-hamburgo|porto-alegre|sao-leopoldo|sapucaia-do-sul|taquara|viamao)/?$ /seminovos-$1 [R=301,L,QSD,NC]
+  RewriteRule ^seminovos/(alvorada|bento-goncalves|cachoeirinha|campo-bom|canoas|caxias-do-sul|estancia-velha|gramado|gravatai|guaiba|igrejinha|montenegro|nova-santa-rita|novo-hamburgo|porto-alegre|sao-leopoldo|sapucaia-do-sul|taquara|viamao)/?$ /seminovos-$1 [R=301,L,QSD,NC]
   # Qualquer outro /seminovos/algo sem extensão volta para a listagem.
   # A checagem de ponto preserva arquivos reais da pasta legada seminovos/.
   RewriteCond %{REQUEST_URI} !\.

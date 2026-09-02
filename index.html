@@ -278,18 +278,49 @@
         max-height: none;
         transform: none;
       }
-      @media (max-width: 639px) {
-        #netcar-initial-lcp.netcar-initial-campaign-shell
-          picture.netcar-initial-campaign-media {
-          width: min(64vw, 232px);
+      /* Campanha: mobile mostra só o topo escuro em texto (igual à primeira
+         tela do React); a imagem fica para tablet/desktop. */
+      .netcar-initial-mobile-hero {
+        display: none;
+      }
+      @media (max-width: 767px) {
+        #netcar-initial-shell main {
+          place-content: start;
+          padding: 0;
+        }
+        #netcar-initial-lcp.netcar-initial-campaign-shell {
+          width: 100vw;
+          min-height: 0;
+          display: block;
         }
         #netcar-initial-lcp.netcar-initial-campaign-shell
-          img.netcar-initial-banner {
+          picture.netcar-initial-campaign-media {
+          display: none;
+        }
+        .netcar-initial-mobile-hero {
+          display: block;
           box-sizing: border-box;
-          aspect-ratio: 9 / 16;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 22px;
-          object-fit: cover;
+          width: 100%;
+          background: #00283c;
+          color: #fff;
+          text-align: left;
+          padding: 76px 16px 32px;
+          margin-bottom: 16px;
+        }
+        #netcar-initial-shell .netcar-initial-mobile-title {
+          margin: 0;
+          color: #fff;
+          font-size: 1.4rem;
+          line-height: 1.25;
+          font-weight: 900;
+        }
+        #netcar-initial-shell
+          .netcar-initial-mobile-hero
+          p:not(.netcar-initial-mobile-title) {
+          margin: 4px 0 0;
+          font-size: 13px;
+          font-weight: 500;
+          color: rgba(255, 255, 255, 0.75);
         }
       }
       @media (min-width: 768px) {

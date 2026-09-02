@@ -76,6 +76,7 @@ switch ($page) {
         echo '<ul>';
         echo '<li><a href="' . SEO_SITE_URL . '/seminovos-canoas">Seminovos para Canoas</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/seminovos-sapucaia-do-sul">Seminovos para Sapucaia do Sul</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/seminovos-nova-santa-rita">Seminovos para Nova Santa Rita</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/seminovos-sao-leopoldo">Seminovos para São Leopoldo</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/seminovos-novo-hamburgo">Seminovos para Novo Hamburgo</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/seminovos-cachoeirinha">Seminovos para Cachoeirinha</a></li>';
