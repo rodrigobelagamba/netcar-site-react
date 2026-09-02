@@ -89,60 +89,46 @@ export function PrivacyConsent({
     ) : null;
   }
 
+  // Uma linha só. Mobile: faixa fina colada no header (rodapé cobria preço e
+  // WhatsApp). Tablet/desktop: pílula pequena no canto inferior direito.
   return (
     <aside
       ref={dialogRef}
       role="dialog"
       aria-modal="false"
-      aria-labelledby="privacy-consent-title"
+      aria-label="Cookies"
       aria-describedby="privacy-consent-description"
       tabIndex={-1}
-      className="print:hidden fixed inset-x-2 bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-[10020] mx-auto max-w-5xl rounded-xl border border-[#00283C]/10 bg-white p-3 shadow-[0_14px_36px_rgba(0,40,60,0.2)] sm:inset-x-4 sm:bottom-4 sm:px-4 sm:py-3"
+      className="print:hidden fixed inset-x-0 top-16 z-[10020] flex items-center gap-2 border-b border-[#00283C]/10 bg-white px-3 py-1.5 shadow-[0_6px_18px_rgba(0,40,60,0.1)] sm:inset-x-auto sm:bottom-4 sm:right-4 sm:top-auto sm:rounded-full sm:border sm:py-1.5 sm:pl-4 sm:pr-1.5 sm:shadow-[0_10px_28px_rgba(0,40,60,0.18)]"
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex min-w-0 items-start gap-2.5 sm:items-center">
-          <span className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#5CD29D]/15 text-[#00616A] sm:flex">
-            <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-          </span>
-          <div className="min-w-0">
-            <h2
-              id="privacy-consent-title"
-              className="text-sm font-black leading-tight text-[#00283C]"
-            >
-              Privacidade e cookies
-            </h2>
-            <p
-              id="privacy-consent-description"
-              className="mt-0.5 text-xs leading-snug text-slate-600 sm:text-[13px]"
-            >
-              Google e Meta usam cookies opcionais para medir campanhas e
-              personalizar anúncios. Você escolhe.{" "}
-              <a
-                href="/privacidade"
-                className="font-semibold text-[#00616A] underline underline-offset-2"
-              >
-                Saiba mais
-              </a>
-              .
-            </p>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-2 sm:flex sm:shrink-0">
-          <button
-            type="button"
-            onClick={() => choose("essential")}
-            className="min-h-11 rounded-full border border-[#00283C]/20 px-3 py-2 text-xs font-bold text-[#00283C] transition-colors hover:bg-slate-50 sm:px-4 sm:text-sm"
-          >
-            Só essenciais
-          </button>
-          <button
-            type="button"
-            onClick={() => choose("accepted")}
-            className="min-h-11 rounded-full bg-[#087A37] px-3 py-2 text-xs font-black text-white transition-colors hover:bg-[#075E54] sm:px-4 sm:text-sm"
-          >
-            Aceitar opcionais
-          </button>
-        </div>
+      <p
+        id="privacy-consent-description"
+        className="min-w-0 flex-1 truncate text-[11px] leading-none text-slate-600 sm:flex-none sm:text-xs"
+      >
+        <span className="hidden sm:inline">Cookies p/ medir campanhas. </span>
+        <span className="sm:hidden">Cookies: </span>
+        <a
+          href="/privacidade"
+          className="font-semibold text-[#00616A] underline underline-offset-2"
+        >
+          Saiba mais
+        </a>
+      </p>
+      <div className="flex shrink-0 gap-1">
+        <button
+          type="button"
+          onClick={() => choose("essential")}
+          className="h-7 rounded-full border border-[#00283C]/20 px-2 text-[11px] font-bold text-[#00283C] transition-colors hover:bg-slate-50 sm:text-xs"
+        >
+          Só essenciais
+        </button>
+        <button
+          type="button"
+          onClick={() => choose("accepted")}
+          className="h-7 rounded-full bg-[#087A37] px-2.5 text-[11px] font-black text-white transition-colors hover:bg-[#075E54] sm:text-xs"
+        >
+          Aceitar
+        </button>
       </div>
     </aside>
   );

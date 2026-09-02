@@ -37,7 +37,9 @@ import {
   buildWhatsAppUrl,
   siteWhatsAppMessage,
   vehicleWhatsAppMessages,
+  type VehicleWhatsAppRef,
 } from "@/lib/whatsappMessages";
+import { vehicleWhatsAppRef } from "@/lib/vehicleWhatsAppRef";
 import {
   trackCompareInteraction,
   trackVehicleDiscoveryClick,
@@ -48,6 +50,7 @@ import icon1 from "@/assets/images/icon-1.svg";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
 import type { VehicleCardProps } from "@/design-system/components/patterns/VehicleCard";
 import { VehicleWhatsAppCard } from "@/design-system/components/patterns/VehicleWhatsAppCard";
+import { GoogleRatingBadge } from "@/design-system/components/patterns/social/GoogleRatingBadge";
 import { FloatingPortal } from "@/components/FloatingPortal";
 import { DeferredRender } from "@/design-system/components/layout/DeferredRender";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
@@ -130,12 +133,6 @@ const FabricaDeValor = React.lazy(() =>
     }),
   ),
 );
-const NetcarSocialSection = React.lazy(() =>
-  import("@/design-system/components/patterns/social/NetcarSocialSection").then(
-    (module) => ({ default: module.NetcarSocialSection }),
-  ),
-);
-
 type BadgeVariant =
   | "oportunidade"
   | "icheck"
@@ -322,8 +319,7 @@ interface ContactButtonProps {
   vehicleId?: string | number;
   isSold?: boolean;
   vehicleLabel?: string;
-  image?: string;
-  priceLabel?: string;
+  waRef?: VehicleWhatsAppRef;
 }
 
 function ContactButton({
@@ -331,12 +327,11 @@ function ContactButton({
   vehicleId,
   isSold = false,
   vehicleLabel,
-  image,
-  priceLabel,
+  waRef,
 }: ContactButtonProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const label = vehicleLabel || modeloCompleto || "veículo";
-  const messages = vehicleWhatsAppMessages(label, modeloCompleto);
+  const messages = vehicleWhatsAppMessages(label, modeloCompleto, waRef);
   const href = whatsapp?.numero
     ? buildWhatsAppUrl(whatsapp.numero, messages.info)
     : undefined;
@@ -351,16 +346,6 @@ function ContactButton({
         ),
       )
     : undefined;
-
-  const identifiedVehicle =
-    image && priceLabel && vehicleId != null
-      ? {
-          id: String(vehicleId),
-          label,
-          priceLabel,
-          image,
-        }
-      : null;
 
   if (isSold) {
     return (
@@ -405,24 +390,15 @@ function ContactButton({
     );
   }
 
-  // No mobile o CTA começa em fluxo; depois vira flutuante ao sair pelo topo.
-  // No desktop, DetalheFloatingWhatsApp mantém o card sempre disponível.
+  // Um botão largo em fluxo. O card com miniatura + preço fica só no sticky
+  // (DetalheFloatingWhatsApp), quando o carro já saiu da tela.
   return (
     <div className="flex w-full flex-col items-center gap-2.5">
-      {identifiedVehicle && href ? (
-        <div className="w-full md:hidden">
-          <VehicleWhatsAppCard
-            vehicle={identifiedVehicle}
-            href={href}
-            source="hero_mobile"
-            eyebrow="Este carro"
-          />
-        </div>
-      ) : href ? (
+      {href && (
         <div className="w-full">
           <WhatsAppPulseRing>
             <CTAButton
-              text="Chamar no WhatsApp"
+              text="Falar deste carro no WhatsApp"
               icon={MessageCircleMore}
               borderColor="border-[#25D366]"
               textColor="text-white"
@@ -439,14 +415,14 @@ function ContactButton({
             />
           </WhatsAppPulseRing>
         </div>
-      ) : null}
+      )}
 
-      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+      <div className="grid w-full grid-cols-2 gap-2">
         <TradeInTextLink
           href={tradeHref}
           modeloCompleto={modeloCompleto}
           vehicleId={vehicleId}
-          className="justify-center text-center"
+          pill
         />
         {vehicleId != null && (
           <Link
@@ -459,11 +435,9 @@ function ContactButton({
                 vehicleNames: [label],
               })
             }
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#00283C] transition-colors hover:text-[#5CD29D]"
+            className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#00283C]/15 bg-white px-3 text-[13px] font-bold text-[#00283C] transition-colors hover:border-[#00283C]/40"
           >
-            <span className="underline underline-offset-4">
-              Comparar com outro carro
-            </span>
+            Comparar
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         )}
@@ -478,6 +452,8 @@ interface TradeInTextLinkProps {
   vehicleId?: string | number;
   className?: string;
   compact?: boolean;
+  /** Botão secundário em pílula (hero); default é link de texto. */
+  pill?: boolean;
 }
 
 function TradeInTextLink({
@@ -486,8 +462,13 @@ function TradeInTextLink({
   vehicleId,
   className = "",
   compact = false,
+  pill = false,
 }: TradeInTextLinkProps) {
   if (!href) return null;
+
+  const pillClass =
+    "inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#00283C]/15 bg-white px-3 text-[13px] font-bold text-[#00283C] transition-colors hover:border-[#00283C]/40";
+  const textClass = `inline-flex items-center gap-1.5 font-bold text-[#00283C] transition-colors hover:text-[#5CD29D] ${compact ? "text-xs" : "text-sm"}`;
 
   return (
     <a
@@ -498,14 +479,18 @@ function TradeInTextLink({
       data-wa-intent="trade_in"
       data-wa-vehicle-id={vehicleId}
       data-wa-vehicle-name={modeloCompleto}
-      className={`inline-flex items-center gap-1.5 font-bold text-[#00283C] transition-colors hover:text-[#5CD29D] ${compact ? "text-xs" : "text-sm"} ${className}`}
+      className={`${pill ? pillClass : textClass} ${className}`}
     >
       <ArrowLeftRight
-        className={compact ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4 shrink-0"}
+        className={compact || pill ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4 shrink-0"}
       />
-      <span className="underline underline-offset-4">
-        Tenho um usado na troca
-      </span>
+      {pill ? (
+        "Usado na troca"
+      ) : (
+        <span className="underline underline-offset-4">
+          Tenho um usado na troca
+        </span>
+      )}
     </a>
   );
 }
@@ -518,6 +503,7 @@ interface DetalheFloatingWhatsAppProps {
   vehicleLabel?: string;
   image?: string;
   mobileVisible?: boolean;
+  waRef?: VehicleWhatsAppRef;
 }
 
 /** Sticky flutuante com carro identificado — substitui bolinha iAN no detalhe. */
@@ -529,10 +515,11 @@ function DetalheFloatingWhatsApp({
   vehicleLabel,
   image,
   mobileVisible = false,
+  waRef,
 }: DetalheFloatingWhatsAppProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const label = vehicleLabel || modeloCompleto || "veículo";
-  const messages = vehicleWhatsAppMessages(label, modeloCompleto);
+  const messages = vehicleWhatsAppMessages(label, modeloCompleto, waRef);
   const ready = Boolean(whatsapp?.numero);
   const priceLabel = price.replace(/<[^>]*>/g, "");
 
@@ -926,7 +913,11 @@ function CTASidebar({
 
   const vehicleLabel = modeloCompleto || "veículo";
   const whatsappReady = Boolean(whatsapp?.numero);
-  const vehicleMessages = vehicleWhatsAppMessages(vehicleLabel, modeloCompleto);
+  const vehicleMessages = vehicleWhatsAppMessages(
+    vehicleLabel,
+    modeloCompleto,
+    vehicle ? vehicleWhatsAppRef(vehicle) : undefined,
+  );
   const primaryWhatsAppHref =
     whatsappReady && isSold
       ? getWhatsAppLink(
@@ -1247,6 +1238,95 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
   );
 }
 
+/**
+ * Mobile: fotos em carrossel horizontal com swipe + contador. Empilhadas em
+ * 1 coluna eram 13 × 293px = 4,6 telas antes da ficha técnica.
+ */
+function MobileGalleryCarousel({
+  images,
+  altBase,
+  onOpen,
+}: {
+  images: string[];
+  altBase: string;
+  onOpen: (index: number) => void;
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let frame = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const slide = track.firstElementChild as HTMLElement | null;
+        const step = slide ? slide.offsetWidth + 8 : track.clientWidth;
+        setCurrent(
+          Math.min(images.length - 1, Math.round(track.scrollLeft / step)),
+        );
+      });
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      track.removeEventListener("scroll", onScroll);
+    };
+  }, [images.length]);
+
+  return (
+    <div className="relative">
+      <div
+        ref={trackRef}
+        className="flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        aria-label={`Fotos do ${altBase}`}
+      >
+        {images.map((image, index) => {
+          const previewSource = stockGalleryPreviewSource(image);
+          return (
+            <button
+              key={index}
+              type="button"
+              onClick={() => onOpen(index)}
+              aria-label={`Abrir foto ${index + 1} de ${images.length}`}
+              className="relative aspect-[4/3] w-[86vw] shrink-0 snap-center overflow-hidden rounded-2xl bg-gray-200"
+            >
+              <img
+                src={optimizeStockImage(previewSource, 640)}
+                srcSet={stockImageSrcSet(previewSource, [480, 640, 960])}
+                sizes="86vw"
+                alt={`${altBase} - Foto ${index + 1} - Netcar Multimarcas`}
+                width={1920}
+                height={1441}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover"
+                onError={(event) => {
+                  const target = event.currentTarget;
+                  if (target.dataset.originalFallback === "true") {
+                    target.style.display = "none";
+                    return;
+                  }
+                  target.dataset.originalFallback = "true";
+                  target.removeAttribute("srcset");
+                  target.src = image;
+                }}
+              />
+            </button>
+          );
+        })}
+      </div>
+      <p
+        className="pointer-events-none absolute right-7 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-bold text-white"
+        aria-live="polite"
+      >
+        {current + 1}/{images.length}
+      </p>
+    </div>
+  );
+}
+
 function medianPrice(prices: number[]): number {
   if (prices.length === 0) return 0;
   const sorted = [...prices].sort((a, b) => a - b);
@@ -1482,13 +1562,9 @@ function RelatedVehiclesSection({
           <div className="h-[1px] w-full bg-primary" />
         </motion.div>
 
-        <ProductList
-          vehicles={relatedVehicleCards}
-          showWhatsAppInterest
-          whatsAppSource={
-            isSold ? "detalhe_vendido_similares" : "detalhe_relacionados"
-          }
-        />
+        {/* Sem WhatsApp aqui: eram 3 botões × 4 cards (12 dos 28 links WA da
+            ficha). Quem quer outro carro abre a ficha dele e fala de lá. */}
+        <ProductList vehicles={relatedVehicleCards} />
       </div>
     </section>
   );
@@ -2018,6 +2094,7 @@ export function DetalhesPage() {
   const vehicleLabel = [marca, modeloCompleto, vehicle.year]
     .filter(Boolean)
     .join(" ");
+  const waRef = vehicleWhatsAppRef(vehicle);
 
   // Badges (só selos de dados reais — sem Retire hoje / Vistoriado genérico)
   const diferenciais = vehicle?.diferenciais ?? [];
@@ -2146,12 +2223,15 @@ export function DetalhesPage() {
           </li>
         </ol>
       </nav>
+      {/* Mobile: campanha desce pra depois do preço/CTA (ver abaixo do hero). */}
       {!isSold && (
-        <SeptemberCampaignBanner
-          placement="vehicle"
-          vehicleId={vehicle.id}
-          vehicleLabel={vehicleLabel}
-        />
+        <div className="hidden sm:block">
+          <SeptemberCampaignBanner
+            placement="vehicle"
+            vehicleId={vehicle.id}
+            vehicleLabel={vehicleLabel}
+          />
+        </div>
       )}
       {/* Hero Section */}
       <section className="relative w-full max-w-full overflow-hidden py-0 pb-0 pt-0 lg:min-h-[820px] lg:pt-0 xl:min-h-[820px] 2xl:min-h-[830px] 3xl:min-h-[850px] 4xl:min-h-[1200px] 5xl:min-h-[1500px] 6xl:min-h-[1900px]">
@@ -2166,7 +2246,7 @@ export function DetalhesPage() {
                         5xl:top-[-35rem]"
         >
           {mainImage && (
-            <div className="w-full h-[300px] sm:h-[400px] lg:h-auto flex items-center lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-3 sm:p-5 lg:p-0">
+            <div className="w-full h-[240px] sm:h-[400px] lg:h-auto flex items-center lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
               {isSold && (
                 <div
                   aria-hidden="true"
@@ -2262,14 +2342,16 @@ export function DetalhesPage() {
                 delay: 0.2,
                 ease: [0.25, 0.1, 0.25, 1],
               }}
-              className="text-fg font-bold leading-[1.15] mb-6 sm:mb-8 max-w-full  break-words info-model"
+              className="text-fg font-bold leading-[1.15] mb-3 sm:mb-8 max-w-full  break-words info-model"
             >
               {modeloCompleto}
             </motion.h1>
 
+            {/* Mobile: preço + WhatsApp sobem pra primeira tela; badges/ficha ficam abaixo (order-*). */}
+
             {/* Badges */}
             {badges.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">
+              <div className="order-3 sm:order-none mt-4 sm:mt-0 flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">
                 {badges.map((badge, idx) => (
                   <Badge key={idx} {...badge} />
                 ))}
@@ -2277,7 +2359,7 @@ export function DetalhesPage() {
             )}
 
             {/* Details Grid - Melhorado */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-border/60">
+            <div className="order-4 sm:order-none grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-border/60">
               {year && (
                 <div className="flex flex-col">
                   <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
@@ -2321,14 +2403,15 @@ export function DetalhesPage() {
             </div>
 
             {/* Price & CTA - Melhorado */}
-            <div className="flex flex-col items-center gap-3 w-full">
+            <div className="order-1 sm:order-none flex flex-col items-center gap-3 w-full">
               {!isSold && (
-                <div className="w-full flex justify-center items-center">
+                <div className="flex w-full flex-col items-center">
                   <PriceWithShimmer
                     price={price}
                     previousPrice={previousPrice}
                     showComparison={showPriceComparison}
                   />
+                  <GoogleRatingBadge className="-mt-1 mb-1" />
                 </div>
               )}
               <div ref={primaryCtaRef} className="w-full">
@@ -2337,9 +2420,13 @@ export function DetalhesPage() {
                   vehicleId={vehicle?.id}
                   isSold={isSold}
                   vehicleLabel={vehicleLabel}
-                  image={mainImage}
-                  priceLabel={price.replace(/<[^>]*>/g, "") || undefined}
+                  waRef={waRef}
                 />
+              </div>
+            </div>
+
+            <div className="order-5 sm:order-none w-full">
+              <div className="w-full">
                 {!isSold && (
                   <div className="mt-4 rounded-2xl border border-[#23747C]/20 bg-[#F7FBFA] p-3.5 text-left shadow-[0_8px_24px_rgba(0,40,60,0.04)]">
                     <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#23747C]">
@@ -2384,12 +2471,32 @@ export function DetalhesPage() {
         </div>
       </section>
 
+      {!isSold && (
+        <div className="sm:hidden">
+          <SeptemberCampaignBanner
+            placement="vehicle"
+            vehicleId={vehicle.id}
+            vehicleLabel={vehicleLabel}
+            trackView={false}
+          />
+        </div>
+      )}
+
       {/* Gallery Section */}
       {avifImages.length > 0 && (
-        <section className="w-full py-8 sm:py-12 lg:py-16">
-          <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16"></div>
+        <section className="w-full py-6 sm:py-12 lg:py-16">
+          <div className="sm:hidden">
+            <MobileGalleryCarousel
+              images={avifImages}
+              altBase={`${marca} ${modeloCompleto} ${vehicle.year || ""}`.trim()}
+              onOpen={(index) => {
+                setLightboxIndex(index);
+                setLightboxOpen(true);
+              }}
+            />
+          </div>
           {/* Grid Container - Ocupa toda a largura sem padding */}
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8 gap-1 sm:gap-2">
+          <div className="hidden w-full grid-cols-1 gap-1 sm:grid sm:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8">
             {avifImages.map((image, index) => (
               <GalleryItem
                 key={index}
@@ -2512,13 +2619,6 @@ export function DetalhesPage() {
         />
       </DeferredRender>
 
-      {/* Social Embeds Section (deve ser a última sessão) */}
-      <DeferredRender minHeight={800}>
-        <React.Suspense fallback={null}>
-          <NetcarSocialSection />
-        </React.Suspense>
-      </DeferredRender>
-
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
         <LazyLocalizacao />
         <IanBot />
@@ -2532,6 +2632,7 @@ export function DetalhesPage() {
         vehicleLabel={vehicleLabel}
         image={mainImage}
         mobileVisible={isPrimaryCtaPastHeader}
+        waRef={waRef}
       />
     </main>
   );

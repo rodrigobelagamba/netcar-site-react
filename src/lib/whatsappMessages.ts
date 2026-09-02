@@ -26,31 +26,45 @@ export function buildWhatsAppUrl(numero: string, message: string): string {
   return `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
 }
 
+export type VehicleWhatsAppRef = {
+  placa?: string;
+};
+
+/**
+ * Anexa a placa (mascarada, a mesma da URL) à mensagem. Sem isso o vendedor
+ * recebe só "Corolla 2022" e precisa perguntar qual dos Corollas.
+ * O código de rastreio ` - (X...)` é anexado depois, no clique, por
+ * appendWaRefToUrl — esta função não mexe nele.
+ */
+export function withVehicleRef(
+  message: string,
+  ref?: VehicleWhatsAppRef,
+): string {
+  const placa = ref?.placa?.trim();
+  if (!placa) return message;
+  return `${message}\nPlaca: ${placa.toUpperCase()}`;
+}
+
 export function vehicleWhatsAppMessages(
   vehicleLabel: string,
   modeloCompleto?: string,
+  ref?: VehicleWhatsAppRef,
 ) {
+  const msg = (body: string) => withVehicleRef(siteWhatsAppMessage(body), ref);
+
   return {
-    info: siteWhatsAppMessage(
-      `quero mais informações sobre o ${vehicleLabel}.`,
-    ),
-    finance: siteWhatsAppMessage(
+    info: msg(`quero mais informações sobre o ${vehicleLabel}.`),
+    finance: msg(
       `quero simular o financiamento do ${vehicleLabel} e comparar condições entre os bancos e financeiras parceiras.`,
     ),
-    visit: siteWhatsAppMessage(
-      `quero agendar uma visita para ver o ${vehicleLabel}.`,
-    ),
-    trade: siteWhatsAppMessage(
+    visit: msg(`quero agendar uma visita para ver o ${vehicleLabel}.`),
+    trade: msg(
       modeloCompleto
         ? `quero avaliar meu carro na troca do ${modeloCompleto}.`
         : "quero avaliar meu carro na troca.",
     ),
-    photos: siteWhatsAppMessage(
-      `quero ver mais fotos ou vídeo do ${vehicleLabel}.`,
-    ),
-    km: siteWhatsAppMessage(
-      `quero saber mais sobre a quilometragem do ${vehicleLabel}.`,
-    ),
+    photos: msg(`quero ver mais fotos ou vídeo do ${vehicleLabel}.`),
+    km: msg(`quero saber mais sobre a quilometragem do ${vehicleLabel}.`),
   };
 }
 

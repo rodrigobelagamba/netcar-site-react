@@ -8,6 +8,7 @@ import {
   DEFAULT_SALES_WHATSAPP,
   vehicleWhatsAppMessages,
 } from "@/lib/whatsappMessages";
+import { vehicleWhatsAppRef } from "@/lib/vehicleWhatsAppRef";
 import { CardsHero } from "./CardsHero";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
@@ -225,28 +226,24 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
     navigate({ to: `/veiculo/${slug}` });
   };
 
-  const whatsAppHref =
-    showWhatsAppInterest && !isSold
-      ? buildWhatsAppUrl(
-          whatsAppNumber,
-          vehicleWhatsAppMessages(vehicleLabel).info,
-        )
-      : undefined;
   const tradeModelLabel = model || name;
-  const tradeInHref =
+  const waMessages =
     showWhatsAppInterest && !isSold
-      ? buildWhatsAppUrl(
-          whatsAppNumber,
-          vehicleWhatsAppMessages(vehicleLabel, tradeModelLabel).trade,
+      ? vehicleWhatsAppMessages(
+          vehicleLabel,
+          tradeModelLabel,
+          vehicleWhatsAppRef({ placa }),
         )
       : undefined;
-  const financeHref =
-    showWhatsAppInterest && !isSold
-      ? buildWhatsAppUrl(
-          whatsAppNumber,
-          vehicleWhatsAppMessages(vehicleLabel).finance,
-        )
-      : undefined;
+  const whatsAppHref = waMessages
+    ? buildWhatsAppUrl(whatsAppNumber, waMessages.info)
+    : undefined;
+  const tradeInHref = waMessages
+    ? buildWhatsAppUrl(whatsAppNumber, waMessages.trade)
+    : undefined;
+  const financeHref = waMessages
+    ? buildWhatsAppUrl(whatsAppNumber, waMessages.finance)
+    : undefined;
 
   const card = (
     <CardsHero
