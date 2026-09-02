@@ -287,20 +287,27 @@ export function SeptemberCampaignBanner({
               ))}
             </div>
 
-            <div className="mt-2 flex items-center gap-2 rounded-xl border border-white/10 bg-black/10 p-2 sm:hidden">
-              <div className="min-w-0 flex-1 px-1">
-                <MobileCountdown countdown={countdown} />
+            <div className="mt-2 rounded-xl border border-white/10 bg-black/10 p-2 sm:hidden">
+              <p className="px-1 pb-2 text-[10px] font-semibold leading-[1.45] text-white/80">
+                <strong className="text-[#D0DF94]">Condições:</strong>{" "}
+                transferência + tanque cheio • 1ª parcela em novembro • entrada
+                em até 10x*
+              </p>
+              <div className="flex items-center gap-2 border-t border-white/10 pt-2">
+                <div className="min-w-0 flex-1 px-1">
+                  <MobileCountdown countdown={countdown} />
+                </div>
+                <Link
+                  to="/seminovos"
+                  onClick={() =>
+                    trackSeptemberCampaignInteraction("view_stock", "home")
+                  }
+                  className="inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#D0DF94] px-3 text-[11px] font-black text-[#003D48] shadow-[0_10px_24px_rgba(208,223,148,0.16)] transition active:scale-[0.98]"
+                >
+                  Ver ofertas
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                </Link>
               </div>
-              <Link
-                to="/seminovos"
-                onClick={() =>
-                  trackSeptemberCampaignInteraction("view_stock", "home")
-                }
-                className="inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#D0DF94] px-3 text-[11px] font-black text-[#003D48] shadow-[0_10px_24px_rgba(208,223,148,0.16)] transition active:scale-[0.98]"
-              >
-                Ver ofertas
-                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-              </Link>
             </div>
 
             <div className="mt-5 hidden gap-4 sm:grid sm:grid-cols-[minmax(0,390px)_minmax(260px,1fr)] sm:items-end">
@@ -334,7 +341,8 @@ export function SeptemberCampaignBanner({
             </div>
 
             <p className="mt-2 px-2 text-center text-[10px] font-medium leading-[1.45] text-white/70 sm:hidden">
-              Válida até 30/09. Consulte condições e veículos participantes.
+              *Entrada parcelada sujeita à aprovação de crédito. Consulte
+              veículos participantes e disponibilidade. Válida até 30/09.
             </p>
             <p className="mt-3 hidden text-xs leading-relaxed text-white/55 sm:block">
               Válida até 30/09/2026. Benefícios, financiamento e veículos
