@@ -398,7 +398,7 @@ function ContactButton({
         <div className="w-full">
           <WhatsAppPulseRing>
             <CTAButton
-              text="Falar deste carro no WhatsApp"
+              text="Falar deste carro"
               icon={MessageCircleMore}
               borderColor="border-[#25D366]"
               textColor="text-white"
@@ -417,7 +417,7 @@ function ContactButton({
         </div>
       )}
 
-      <div className="grid w-full grid-cols-2 gap-2">
+      <div className="flex w-full gap-2 [&>*]:flex-1">
         <TradeInTextLink
           href={tradeHref}
           modeloCompleto={modeloCompleto}
@@ -1647,7 +1647,7 @@ function LoadingVehicleDetail({ slug }: { slug: string }) {
 
   return (
     <main
-      className="max-w-full overflow-x-clip pb-40 pt-16 md:pt-0"
+      className="max-w-full overflow-x-clip pt-16 md:pt-0"
       aria-busy="true"
     >
       <section className="relative w-full min-h-[70vh] overflow-hidden py-8 lg:py-12">
@@ -2138,7 +2138,7 @@ export function DetalhesPage() {
         ]
   ).slice(0, 4);
   return (
-    <main className="max-w-full overflow-x-clip pb-[calc(10rem+env(safe-area-inset-bottom))] pt-16 md:pt-0">
+    <main className="max-w-full overflow-x-clip pt-16 md:pt-0">
       {vehicle && (
         <VehicleSchemaOrg
           marca={marca}
@@ -2411,7 +2411,7 @@ export function DetalhesPage() {
                     previousPrice={previousPrice}
                     showComparison={showPriceComparison}
                   />
-                  <GoogleRatingBadge className="-mt-1 mb-1" />
+                  <GoogleRatingBadge className="mb-1" />
                 </div>
               )}
               <div ref={primaryCtaRef} className="w-full">

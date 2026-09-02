@@ -394,7 +394,7 @@ export function HomePage() {
   }, []);
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full pb-36 md:pb-0">
+    <main className="flex-1 overflow-x-hidden max-w-full">
       <div ref={heroRef}>
         {/* Mobile (< md): busca + 3 carros + 1 WhatsApp na primeira tela. */}
         <HomeMobileFirstScreen

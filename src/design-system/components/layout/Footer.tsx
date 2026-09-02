@@ -79,8 +79,10 @@ export function Footer() {
     return `tel:+${digits.startsWith("55") ? digits : `55${digits}`}`;
   };
 
+  // Mobile: reserva no fim da página pra barra fixa de WhatsApp (home/ficha)
+  // não cobrir o rodapé. Antes ficava no <main> e virava buraco antes do footer.
   return (
-    <footer className="w-full font-sans antialiased text-muted-foreground bg-muted py-0 px-4 md:px-8">
+    <footer className="w-full font-sans antialiased text-muted-foreground bg-muted px-4 pt-0 pb-[calc(6rem+env(safe-area-inset-bottom))] md:px-8 md:pb-0">
       <section className="container-main w-full bg-white rounded-[32px] shadow-sm border border-white pt-10 pb-8 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[220px_1fr_140px_120px] gap-x-10 gap-y-10 mb-10">
           {/* Coluna 1: Contato & Nethelp */}
