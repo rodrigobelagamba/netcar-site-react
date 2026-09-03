@@ -104,8 +104,8 @@ export function CardsHero({
             isSeptemberCampaignActive
               ? `rounded-md bg-white/95 shadow-lg ${
                   compact
-                    ? "right-2 top-2 w-14 p-1 sm:top-14 sm:right-1.5 sm:w-24 sm:p-1.5 md:top-16 md:right-3 md:w-32"
-                    : "hidden p-1.5 sm:block sm:top-14 sm:right-2 sm:w-28 md:top-16 md:right-3 md:w-36 short1600:top-14 short1600:right-3 short1600:w-28"
+                    ? "right-2 top-11 w-14 p-1 sm:right-1.5 sm:top-10 sm:w-24 sm:p-1.5 md:right-3 md:w-32"
+                    : "hidden p-1.5 sm:block sm:right-2 sm:top-[86px] sm:w-28 md:right-3 md:top-[102px] md:w-36 short1600:right-3 short1600:top-[74px] short1600:w-28"
                 }`
               : compact
                 ? "top-16 right-2 w-20 md:top-16 md:right-3 md:w-24"

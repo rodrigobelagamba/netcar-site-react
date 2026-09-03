@@ -167,7 +167,8 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   const brand = marca || "";
   const model = modelo || name;
   const yearFormatted = formatYear(year);
-  const mileageFormatted = formatKm(km);
+  // Km no card só até 40 mil: acima disso não é argumento de venda.
+  const mileageFormatted = km > 0 && km <= 40_000 ? formatKm(km) : "";
   const fuel = combustivel || "";
   const transmission = cambio || "";
   const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
