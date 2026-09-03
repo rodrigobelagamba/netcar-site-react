@@ -1,4 +1,4 @@
-import { MessageCircle, Plus, ShieldCheck } from "lucide-react";
+import { Camera, MessageCircle, ShieldCheck } from "lucide-react";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
 import { SEPTEMBER_CAMPAIGN } from "@/features/september-campaign/campaign";
@@ -32,6 +32,10 @@ interface CardsHeroProps {
   whatsAppSource?: string;
   compact?: boolean;
   isSold?: boolean;
+  /** Total de fotos: mostra pílula "N fotos" sobre a imagem. */
+  photoCount?: number;
+  /** Abertura da ficha pelo botão "Ver carro" (o card em si já navega). */
+  onOpen?: (via: "button") => void;
 }
 
 export function CardsHero({
@@ -58,6 +62,8 @@ export function CardsHero({
   whatsAppSource = "home_destaques",
   compact = false,
   isSold = false,
+  photoCount,
+  onOpen,
 }: CardsHeroProps) {
   const isSeptemberCampaignActive = useSeptemberCampaignActive();
   const showCampaignStamp = isSeptemberCampaignActive || SHOW_CAMPAIGN_STAMP;
@@ -106,6 +112,21 @@ export function CardsHero({
                 : "top-16 right-2 w-20 md:top-16 md:right-3 md:w-24 short1600:top-14 short1600:right-3 short1600:w-20"
           }`}
         />
+      )}
+
+      {/* Contador de fotos: sinaliza que tem galeria atrás da foto */}
+      {!isSold && photoCount != null && photoCount > 1 && (
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none absolute z-20 inline-flex items-center gap-1 rounded-full bg-black/55 font-bold text-white backdrop-blur-sm ${
+            compact
+              ? "left-2 top-2 px-1.5 py-0.5 text-[10px]"
+              : "left-3 top-14 px-2 py-1 text-[11px] md:top-16 short1600:top-14"
+          }`}
+        >
+          <Camera className="h-3 w-3" />
+          {photoCount} fotos
+        </span>
       )}
 
       {/* Floating Image Section */}
@@ -301,57 +322,55 @@ export function CardsHero({
             <div
               className={`!border-0 box-border flex w-full min-w-0 items-center justify-center rounded-full border border-[#00283C]/15 bg-[#F3F5F6] font-bold text-[#00283C] ${
                 compact
-                  ? "h-11 px-3 text-xs"
+                  ? "h-10 px-3 text-xs"
                   : "h-10 px-4 text-[12px] short1600:h-9 short1600:px-3 short1600:text-[11px]"
               }`}
             >
               Ver detalhes
             </div>
-          ) : whatsAppHref ? (
-            <a
-              href={whatsAppHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source={whatsAppSource}
-              data-wa-intent="vehicle_inquiry"
-              data-wa-vehicle-id={whatsAppVehicleId}
-              data-wa-vehicle-name={whatsAppVehicleName}
-              onClick={(e) => e.stopPropagation()}
-              className={`!border-0 inline-flex w-full items-center justify-center gap-1 rounded-full bg-[#087A37] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#075E54] ${
-                compact
-                  ? "h-10 px-2 text-[11px] tracking-normal whitespace-nowrap"
-                  : "h-10 px-3 text-[11px] tracking-wide short1600:h-9 short1600:text-[10px] short1600:whitespace-nowrap"
-              }`}
-            >
-              <MessageCircle
-                className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4 short1600:h-3.5 short1600:w-3.5"}`}
-              />
-              <span className={compact ? undefined : "short1600:hidden"}>
-                {compact ? "Tenho interesse" : "Tenho interesse neste"}
-              </span>
-              {!compact ? (
-                <span className="hidden short1600:inline">Tenho interesse</span>
-              ) : null}
-            </a>
           ) : (
-            <button
-              className="!border-0 h-10 w-10 short1600:h-9 short1600:w-9 rounded-full transition-all duration-300 shadow-lg group/btn flex items-center justify-center shrink-0"
-              style={{
-                backgroundColor: "#00283C",
-                color: "white",
-                outline: "none",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#5CD29D";
-                e.currentTarget.style.color = "#00283C";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#00283C";
-                e.currentTarget.style.color = "white";
-              }}
-            >
-              <Plus className="h-5 w-5 group-hover/btn:rotate-90 transition-transform duration-300" />
-            </button>
+            /* "Ver carro" sempre; WhatsApp divide a linha quando existir.
+               Muita gente não sabe que a foto é clicável. */
+            <div className="!border-0 flex w-full min-w-0 items-stretch gap-1.5">
+              <button
+                type="button"
+                data-card-action="ver_carro"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpen?.("button");
+                }}
+                className={`!border-0 inline-flex min-w-0 flex-1 items-center justify-center gap-1 rounded-full border border-[#00283C] bg-white font-black uppercase text-[#00283C] transition-colors hover:bg-[#00283C] hover:text-white ${
+                  compact
+                    ? "h-10 px-2 text-[11px] tracking-normal whitespace-nowrap"
+                    : "h-10 px-3 text-[11px] tracking-wide short1600:h-9 short1600:text-[10px] short1600:whitespace-nowrap"
+                }`}
+              >
+                Ver carro
+              </button>
+              {whatsAppHref && (
+                <a
+                  href={whatsAppHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Falar deste carro no WhatsApp"
+                  data-wa-source={whatsAppSource}
+                  data-wa-intent="vehicle_inquiry"
+                  data-wa-vehicle-id={whatsAppVehicleId}
+                  data-wa-vehicle-name={whatsAppVehicleName}
+                  onClick={(e) => e.stopPropagation()}
+                  className={`!border-0 inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-[#087A37] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#075E54] ${
+                    compact
+                      ? "h-10 w-10"
+                      : "h-10 px-3 text-[11px] tracking-wide short1600:h-9 short1600:px-2.5 short1600:text-[10px]"
+                  }`}
+                >
+                  <MessageCircle
+                    className={`shrink-0 ${compact ? "h-4 w-4" : "h-4 w-4 short1600:h-3.5 short1600:w-3.5"}`}
+                  />
+                  {!compact && <span>WhatsApp</span>}
+                </a>
+              )}
+            </div>
           )}
 
           {/* Desktop normal: textos longos; short1600: linha compacta */}

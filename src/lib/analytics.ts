@@ -281,6 +281,21 @@ export function trackVehicleDiscoveryClick(params: {
   });
 }
 
+/** Abertura da ficha a partir do card: botão "Ver carro" vs clique na foto/card. */
+export function trackVehicleCardOpen(params: {
+  via: "button" | "card";
+  vehicleId: string | number;
+  vehicleName: string;
+  source: string;
+}): void {
+  trackBusinessEvent("vehicle_card_open", {
+    open_via: params.via,
+    card_source: params.source,
+    vehicle_id: String(params.vehicleId),
+    vehicle_name: params.vehicleName,
+  });
+}
+
 let comparisonIsReady = false;
 
 /** Reinicia o marco quando uma nova tela do comparador e aberta. */

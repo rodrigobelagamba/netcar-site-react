@@ -9,6 +9,7 @@ import {
   vehicleWhatsAppMessages,
 } from "@/lib/whatsappMessages";
 import { vehicleWhatsAppRef } from "@/lib/vehicleWhatsAppRef";
+import { trackVehicleCardOpen } from "@/lib/analytics";
 import { CardsHero } from "./CardsHero";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
@@ -195,8 +196,14 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
     );
   };
 
-  const handleClick = () => {
+  const openVehicle = (via: "button" | "card") => {
     emitFocus();
+    trackVehicleCardOpen({
+      via,
+      vehicleId: id,
+      vehicleName: vehicleLabel,
+      source: whatsAppSource,
+    });
     if (preserveShowroomPosition) {
       try {
         const selector = `[data-showroom-vehicle-id="${CSS.escape(String(id))}"]`;
@@ -225,6 +232,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
     });
     navigate({ to: `/veiculo/${slug}` });
   };
+  const handleClick = () => openVehicle("card");
 
   const tradeModelLabel = model || name;
   const waMessages =
@@ -275,6 +283,8 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
       whatsAppSource={whatsAppSource}
       compact={compact}
       isSold={isSold}
+      photoCount={imagens_site?.galeria?.length || images.length}
+      onOpen={openVehicle}
     />
   );
 
