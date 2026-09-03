@@ -656,20 +656,19 @@ function reserveClickIdentity(clickId: string): boolean {
  */
 export function trackWhatsAppClick(params: WhatsAppClickParams): void {
   const hasMeasurementConsent = getPrivacyConsentState() === "accepted";
-  const identity = hasMeasurementConsent
-    ? (params.clickIdentity ?? createWhatsAppClickIdentity())
-    : undefined;
-  if (identity && !reserveClickIdentity(identity.clickId)) return;
+  const clickIdentity = params.clickIdentity ?? createWhatsAppClickIdentity();
+  if (!reserveClickIdentity(clickIdentity.clickId)) return;
+  // Sem consentimento, GA4/GTM/Meta ficam anônimos (Consent Mode). O log
+  // próprio recebe só a referência do gesto para ligar a conversa ao carro.
+  const identity = hasMeasurementConsent ? clickIdentity : undefined;
   const conversion = params.conversion ?? "commercial";
   const payload = getWhatsAppPayload(params, identity, conversion);
 
-  if (identity) {
-    logWaClick(identity, {
-      event_name:
-        conversion === "support" ? "whatsapp_support_click" : "whatsapp_click",
-      ...payload,
-    });
-  }
+  logWaClick(clickIdentity, {
+    event_name:
+      conversion === "support" ? "whatsapp_support_click" : "whatsapp_click",
+    ...payload,
+  });
 
   if (conversion === "support") {
     pushDataLayer({ event: "whatsapp_support_click", ...payload });
@@ -725,10 +724,7 @@ export function trackWhatsAppClick(params: WhatsAppClickParams): void {
 
 export function openWhatsApp(url: string, params: WhatsAppClickParams): void {
   if (!url || url === "#") return;
-  const clickIdentity =
-    getPrivacyConsentState() === "accepted"
-      ? createWhatsAppClickIdentity()
-      : undefined;
+  const clickIdentity = createWhatsAppClickIdentity();
   trackWhatsAppClick({ ...params, clickIdentity });
   window.open(
     appendWaRefToUrl(url, clickIdentity),
@@ -811,10 +807,7 @@ export function initAnalytics(): void {
         return;
       }
       if (!/wa\.me|api\.whatsapp\.com/i.test(href)) return;
-      const clickIdentity =
-        getPrivacyConsentState() === "accepted"
-          ? createWhatsAppClickIdentity()
-          : undefined;
+      const clickIdentity = createWhatsAppClickIdentity();
       trackWhatsAppClick({
         source: inferSourceFromElement(anchor),
         intent: anchor.getAttribute("data-wa-intent") ?? "link_click",

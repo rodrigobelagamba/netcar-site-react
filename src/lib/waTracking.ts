@@ -253,6 +253,15 @@ export interface TrafficSourceContext {
   fbclid?: string;
 }
 
+/**
+ * Categoria da origem (META/GADS/DIR...), sem clids nem UTMs. Vale só para a
+ * navegação atual quando não há consentimento: nada é persistido.
+ */
+function currentSourceCode(): TrafficSourceCode {
+  const stored = typeof window !== "undefined" ? readStored() : null;
+  return stored?.src ?? "DIR";
+}
+
 /** Origem atual (pra eventos GA4 e atribuição própria). */
 export function getTrafficSource(): TrafficSourceContext {
   // A origem pode ser mantida transitoriamente em memoria ate a escolha, mas
@@ -342,7 +351,7 @@ function randomCrockford(length: number): string {
 export function createWhatsAppClickIdentity(): WhatsAppClickIdentity {
   return {
     clickId: `nc_${randomHex(16)}`,
-    waRef: `${sourceLetter(getTrafficSource().src)}${randomCrockford(7)}`,
+    waRef: `${sourceLetter(currentSourceCode())}${randomCrockford(7)}`,
   };
 }
 
@@ -357,17 +366,20 @@ const WA_LOG_ENDPOINT = "https://wa.netcarmultimarcas.com.br/";
  * Log próprio do clique WA (fire-and-forget): grava wa_ref + gclid/utm
  * no servidor. É o que liga o código da mensagem à campanha Google/Meta
  * sem expor nada na mensagem. Falha aqui nunca quebra o clique.
+ *
+ * Sem consentimento de medição vai só o mínimo operacional: a referência
+ * aleatória do gesto, a página/veículo e a categoria da origem. Nenhum clid,
+ * UTM ou referrer sai do navegador nesse caso.
  */
 export function logWaClick(
   identity: WhatsAppClickIdentity | string,
   context: Record<string, unknown> = {},
 ): void {
   if (typeof window === "undefined" || typeof navigator === "undefined") return;
-  // O log proprio e medicao opcional. O WhatsApp continua funcionando quando
-  // o visitante escolhe apenas os recursos essenciais.
-  if (getPrivacyConsentState() !== "accepted") return;
   try {
+    const consent = getPrivacyConsentState();
     const ref = readStored();
+    const measured = consent === "accepted" ? ref : null;
     const click =
       typeof identity === "string"
         ? { clickId: "", waRef: identity }
@@ -378,19 +390,19 @@ export function logWaClick(
       wa_ref: click.waRef,
       click_id: click.clickId,
       src: ref?.src ?? "DIR",
-      campaign: ref?.campaign ?? "",
-      gclid: ref?.gclid ?? "",
-      gbraid: ref?.gbraid ?? "",
-      wbraid: ref?.wbraid ?? "",
-      fbclid: ref?.fbclid ?? "",
-      utm_source: ref?.utmSource ?? "",
-      utm_medium: ref?.utmMedium ?? "",
-      utm_content: ref?.utmContent ?? "",
-      utm_term: ref?.utmTerm ?? "",
-      landing_page: ref?.landingPage ?? "",
-      referrer: ref?.referrer ?? "",
+      campaign: measured?.campaign ?? "",
+      gclid: measured?.gclid ?? "",
+      gbraid: measured?.gbraid ?? "",
+      wbraid: measured?.wbraid ?? "",
+      fbclid: measured?.fbclid ?? "",
+      utm_source: measured?.utmSource ?? "",
+      utm_medium: measured?.utmMedium ?? "",
+      utm_content: measured?.utmContent ?? "",
+      utm_term: measured?.utmTerm ?? "",
+      landing_page: measured?.landingPage ?? "",
+      referrer: measured?.referrer ?? "",
       page: window.location.pathname.slice(0, 200),
-      privacy_consent: getPrivacyConsentState(),
+      privacy_consent: consent,
       ts: Math.floor(Date.now() / 1000),
       ...context,
     });
@@ -419,42 +431,19 @@ const WA_URL_PATTERN = /wa\.me|api\.whatsapp\.com/i;
 /** Referências válidas sempre começam por uma das fontes emitidas pela Netcar. */
 const CODE_IN_TEXT_PATTERN =
   /\(\s*[MGODSRU](?:[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{7}|\d{1,5}|[A-Z2-9]{4})\s*\)/;
-const CODE_AT_END_PATTERN =
-  /\s*-\s*\(\s*[MGODSRU](?:[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{7}|\d{1,5}|[A-Z2-9]{4})\s*\)\.?\s*$/;
-
-function stripWaRefFromUrl(url: string): string {
-  if (!url || !WA_URL_PATTERN.test(url)) return url;
-  try {
-    const parsed = new URL(url);
-    const currentText = parsed.searchParams.get("text") ?? "";
-    if (!CODE_IN_TEXT_PATTERN.test(currentText)) return url;
-
-    const withoutSuffix = currentText.replace(CODE_AT_END_PATTERN, "").trimEnd();
-    const withoutCode = withoutSuffix
-      .replace(CODE_IN_TEXT_PATTERN, "")
-      .replace(/\s{2,}/g, " ")
-      .trim();
-    const cleanText = withoutCode
-      ? `${withoutCode.replace(/\.+$/, "")}.`
-      : withoutCode;
-    parsed.searchParams.set("text", cleanText);
-    return parsed.toString();
-  } catch {
-    return url;
-  }
-}
 
 /**
  * Anexa ` - (M7KQ4X9P).` ao fim da mensagem pré-preenchida. A identidade deve
  * ser a mesma usada no evento do gesto; sem ela, uma nova é criada somente
- * para esta chamada, sem reutilização temporal.
+ * para esta chamada, sem reutilização temporal. A referência é aleatória e
+ * não carrega dado pessoal, por isso vai independente do consentimento: é o
+ * que liga a conversa ao carro/página que o cliente pediu.
  */
 export function appendWaRefToUrl(
   url: string,
   identity?: WhatsAppClickIdentity,
 ): string {
   if (!url || !WA_URL_PATTERN.test(url)) return url;
-  if (getPrivacyConsentState() !== "accepted") return stripWaRefFromUrl(url);
   try {
     const resolvedIdentity = identity ?? createWhatsAppClickIdentity();
     const parsed = new URL(url);

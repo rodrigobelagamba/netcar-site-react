@@ -9,17 +9,22 @@ mensuração. O estado inicial é negado para `analytics_storage`, `ad_storage`,
 - `accepted`: libera armazenamento de medição e publicidade e permite o Meta
   Pixel.
 - `essential`: mantém os quatro estados de consentimento negados e não carrega
-  o Meta Pixel. A origem em memória/localStorage é descartada e o clique não é
-  enviado ao log próprio de campanhas.
+  o Meta Pixel. A origem em memória/localStorage é descartada. O clique ainda
+  gera a referência aleatória `(M7KQ4X9P)` na mensagem e um registro mínimo no
+  log próprio (referência, página/veículo, categoria da origem), sem gclid,
+  fbclid, UTM, referrer ou página de entrada.
 
 A escolha fica em `nc_privacy_consent_v1`. O botão **Preferências de
 privacidade**, no rodapé, reabre o painel e permite alterá-la.
 
 Sem consentimento, a origem de tráfego pode existir apenas em memória durante a
-navegação atual para que a escolha ainda possa ser aplicada, mas ela não é
-exposta nos eventos nem no link de WhatsApp. A persistência de 30 dias é
-permitida somente depois da aceitação. Se o visitante escolhe apenas o
-essencial, a memória é apagada.
+navegação atual. Os identificadores (gclid, fbclid, UTM, referrer) não são
+expostos nos eventos GA4/GTM nem enviados ao log próprio; só a categoria
+(Meta, Google, direto) vira a primeira letra da referência do WhatsApp. A
+referência em si é aleatória por gesto e não identifica a pessoa: ela existe
+para o vendedor saber qual carro/página originou a conversa. A persistência
+de 30 dias é permitida somente depois da aceitação. Se o visitante escolhe
+apenas o essencial, a memória é apagada.
 
 A página pública `/privacidade`, também vinculada no painel e no rodapé,
 explica dados, finalidades, fornecedores, retenção, controles e canal de contato.

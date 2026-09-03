@@ -279,8 +279,8 @@ expect(
 expect(
   waTracking.includes("getOrCreateClickCode") &&
     waTracking.includes("appendWaRefToUrl") &&
-    waTracking.includes("fbclid: ref?.fbclid") &&
-    waTracking.includes("gclid: ref?.gclid"),
+    waTracking.includes("fbclid: measured?.fbclid") &&
+    waTracking.includes("gclid: measured?.gclid"),
   "join Evolution/código/click IDs foi alterado",
 );
 for (const queryField of ["combustivel", "motor", "limit", "offset"]) {
