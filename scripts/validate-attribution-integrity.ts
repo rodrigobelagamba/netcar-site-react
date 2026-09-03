@@ -390,7 +390,7 @@ function testSupportIsNotAConversion(): void {
   );
 }
 
-function testPrivacyChoiceClearsAndBlocksAttribution(): void {
+async function testPrivacyChoiceClearsAndBlocksAttribution(): Promise<void> {
   resetTelemetry();
   fakeWindow.__netcarPrivacyConsent = "accepted";
   fakeWindow.location.search = "?utm_source=instagram&utm_medium=social";
@@ -406,11 +406,57 @@ function testPrivacyChoiceClearsAndBlocksAttribution(): void {
     getTrafficSource().src === "DIR" && !storage.has("nc_traffic_ref"),
     "Somente essenciais preservou origem/clids em memoria ou localStorage",
   );
-  logWaClick(createWhatsAppClickIdentity(), { wa_source: "privacy_test" });
+
+  // Sem consentimento a origem em memoria pode existir (visita atual), mas o
+  // log proprio recebe apenas a referencia do gesto + categoria, sem clids.
+  fakeWindow.location.search =
+    "?gclid=privacy-gclid&utm_source=google&utm_medium=cpc&utm_campaign=priv&utm_term=kw";
+  captureTrafficSource();
   assert(
-    beacons.length === 0,
-    "log proprio recebeu identificadores sem consentimento de medicao",
+    !storage.has("nc_traffic_ref"),
+    "origem foi persistida em localStorage sem consentimento",
   );
+  const essentialIdentity = createWhatsAppClickIdentity();
+  assert(
+    /^G[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{7}$/.test(essentialIdentity.waRef),
+    "wa_ref sem consentimento perdeu a letra da categoria de origem",
+  );
+  logWaClick(essentialIdentity, { wa_source: "privacy_test" });
+  assert(
+    beacons.length === 1,
+    "clique sem consentimento deixou de chegar ao log proprio",
+  );
+  const essentialPayload = JSON.parse(await beacons[0].body.text()) as Record<
+    string,
+    unknown
+  >;
+  assert(
+    essentialPayload.wa_ref === essentialIdentity.waRef &&
+      essentialPayload.click_id === essentialIdentity.clickId &&
+      essentialPayload.src === "GADS" &&
+      essentialPayload.privacy_consent === "essential",
+    "log sem consentimento perdeu referencia/categoria do gesto",
+  );
+  for (const field of [
+    "gclid",
+    "gbraid",
+    "wbraid",
+    "fbclid",
+    "campaign",
+    "utm_source",
+    "utm_medium",
+    "utm_content",
+    "utm_term",
+    "landing_page",
+    "referrer",
+  ]) {
+    assert(
+      essentialPayload[field] === "",
+      `log proprio expôs ${field} sem consentimento de medicao`,
+    );
+  }
+  clearTrafficAttribution();
+  resetTelemetry();
 
   const ignoredIdentity = createWhatsAppClickIdentity();
   trackWhatsAppClick({
@@ -418,6 +464,10 @@ function testPrivacyChoiceClearsAndBlocksAttribution(): void {
     intent: "vehicle_inquiry",
     clickIdentity: ignoredIdentity,
   });
+  assert(
+    beacons.length === 1,
+    "clique cookieless nao chegou ao log proprio",
+  );
   const anonymousEvent = dataLayerEvents("whatsapp_click")[0];
   assert(anonymousEvent, "clique cookieless deixou de ser observavel");
   for (const field of [
@@ -447,10 +497,10 @@ function testPrivacyChoiceClearsAndBlocksAttribution(): void {
     "https://wa.me/5551999999999?text=Tenho%20interesse%20-%20(G12345).";
   const anonymousUrl = appendWaRefToUrl(originalUrl, ignoredIdentity);
   assert(
-    !/\([MGODSRU][A-Z0-9]+\)/.test(
-      new URL(anonymousUrl).searchParams.get("text") ?? "",
+    (new URL(anonymousUrl).searchParams.get("text") ?? "").includes(
+      `(${ignoredIdentity.waRef})`,
     ),
-    "mensagem do WhatsApp preservou referência sem consentimento",
+    "mensagem do WhatsApp perdeu a referência do gesto sem consentimento",
   );
 
   fakeWindow.__netcarPrivacyConsent = "accepted";
@@ -925,7 +975,7 @@ async function main(): Promise<void> {
   await testDelegatedWhatsAppLinkTransaction();
   testSingleWhatsAppEmission();
   testSupportIsNotAConversion();
-  testPrivacyChoiceClearsAndBlocksAttribution();
+  await testPrivacyChoiceClearsAndBlocksAttribution();
   testLeadIntentBoundary();
   testPageTypes();
   testEcommerceCleanup();

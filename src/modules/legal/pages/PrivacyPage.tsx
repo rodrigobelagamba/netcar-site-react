@@ -7,7 +7,8 @@ const sections = [
     title: "Quais dados o site pode tratar",
     paragraphs: [
       "Para o site funcionar e permanecer seguro, tratamos informações técnicas necessárias, como endereço IP, data e hora, rota acessada e registros de erro ou segurança.",
-      "Quando você permite a medição, também podemos registrar a página de entrada, origem da visita, parâmetros de campanha, páginas vistas e interações com botões. Em um clique para o WhatsApp, geramos identificadores próprios para evitar contagens repetidas e relacionar aquele clique à conversa e, quando houver registro nos sistemas da Netcar, ao atendimento ou à venda.",
+      "Em um clique para o WhatsApp, geramos um código aleatório que vai na mensagem, junto da página ou veículo consultado. Ele não identifica você; serve para a equipe saber sobre qual carro é a conversa, evitar contagens repetidas e, quando houver registro nos sistemas da Netcar, relacionar o atendimento ou a venda.",
+      "Quando você permite a medição, também podemos registrar a página de entrada, origem da visita, parâmetros de campanha (como gclid, fbclid e UTM), páginas vistas e interações com botões, e associar esses dados ao código do clique.",
       "Se você preencher um formulário ou iniciar uma conversa, os dados que enviar passam a ser tratados para responder ao pedido, avaliar um veículo, preparar uma proposta ou dar continuidade ao atendimento.",
     ],
   },
