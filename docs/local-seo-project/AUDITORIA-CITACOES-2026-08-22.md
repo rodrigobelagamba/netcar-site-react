@@ -165,6 +165,16 @@ Assunto: `Correção de cadastro — Netcar Multimarcas (Esteio/RS) — cad_id22
 5. Webmotors: renomear loja.
 6. Listamais e ListaTudo: enviar os textos acima.
 
+### Execução 03/09 via conta marcelo@netcarmultimarcas.com.br
+
+- **GBP**: 2 lojas confirmadas (Loja 1 fid 9144067949621682127, Loja 2 fid 10839197980729051544). Coleção de produtos "Nossos Carros Seminovos" já ativa. GBP **não tem import CSV** de produtos e cada item exige upload de foto (não aceita URL) — mass-add por automação foi descartado (frágil, baixo ROI, estoque gira). `docs/local-seo-project/gbp-produtos.csv` fica disponível pra add manual de carros-herói, se quiserem.
+- **GSC**: propriedade `sc-domain:netcarmultimarcas.com.br` acessível pela conta. Amostragem de landings (`/seminovos-canoas`, `/seminovos-nova-santa-rita`, `/seminovos-bento-goncalves`) = todas "O URL está no Google" (indexadas). Reindex manual não é necessário e gastaria a cota diária. Property total: 308 indexadas / 3.590 não indexadas (maioria = fichas de veículo já vendidas/rotacionadas, esperado).
+- **netcar-rc.com.br**: roda em docroot separado (index.html 2016, `meta refresh` pra http não-www). FTP `netcarmultimarcas` só alcança `www/` do site principal — não dá pra trocar o meta refresh por 301 sem o FTP/painel daquele domínio.
+
+### Páginas de proximidade — avaliação
+
+Ideia de páginas por empresa/convênio: **não recomendado**. Sem oferta real vira thin content, usa nome de marca alheia e tem volume de busca ~0. A proximidade já está coberta pelas city pages (distância, tempo, rota BR-116, bairros em `routeOrigins`). O lever real de "quem trabalha perto" é **operação comercial** (feirão no estacionamento da empresa, avaliação do usado no horário de almoço), não nova URL.
+
 ## Conclusão e confiança
 
 - AutoCarro ativo coerente: **comprovado**;
