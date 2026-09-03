@@ -120,8 +120,8 @@ export function CardsHero({
           aria-hidden="true"
           className={`pointer-events-none absolute z-20 inline-flex items-center gap-1 rounded-full bg-black/55 font-bold text-white backdrop-blur-sm ${
             compact
-              ? "left-2 top-2 px-1.5 py-0.5 text-[10px]"
-              : "left-3 top-14 px-2 py-1 text-[11px] md:top-16 short1600:top-14"
+              ? "left-2 top-11 px-1.5 py-0.5 text-[10px]"
+              : "left-3 top-24 px-2 py-1 text-[11px] md:top-28 short1600:top-20"
           }`}
         >
           <Camera className="h-3 w-3" />
@@ -339,7 +339,7 @@ export function CardsHero({
                   e.stopPropagation();
                   onOpen?.("button");
                 }}
-                className={`!border-0 inline-flex min-w-0 flex-1 items-center justify-center gap-1 rounded-full border border-[#00283C] bg-white font-black uppercase text-[#00283C] transition-colors hover:bg-[#00283C] hover:text-white ${
+                className={`!border-0 inline-flex min-w-0 flex-1 items-center justify-center gap-1 rounded-full bg-[#00283C] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#003d5c] ${
                   compact
                     ? "h-10 px-2 text-[11px] tracking-normal whitespace-nowrap"
                     : "h-10 px-3 text-[11px] tracking-wide short1600:h-9 short1600:text-[10px] short1600:whitespace-nowrap"
