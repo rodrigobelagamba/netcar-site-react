@@ -59,8 +59,10 @@ export function ServicesSection() {
             style={{ border: "none" }}
           >
             {/* Gradient Overlay */}
+            {/* Mobile: card baixo (220px), texto cai em cima dos rostos — gradiente
+                mais fechado pra garantir leitura. Desktop mantém o suave. */}
             <div
-              className="absolute inset-0 bg-gradient-to-t from-[#001524] via-[#001524]/10 to-transparent z-10 opacity-70 !border-0"
+              className="absolute inset-0 z-10 bg-gradient-to-t from-[#001524] via-[#001524]/75 to-[#001524]/20 !border-0 md:via-[#001524]/10 md:to-transparent md:opacity-70"
               style={{ border: "none" }}
             />
 
@@ -83,7 +85,7 @@ export function ServicesSection() {
             />
 
             <div
-              className="absolute inset-0 z-20 p-8 md:p-10 flex flex-col justify-end items-start text-left pb-12 !border-0"
+              className="absolute inset-0 z-20 flex flex-col items-start justify-end p-5 pb-6 text-left !border-0 md:p-10 md:pb-12"
               style={{ border: "none" }}
             >
               <div
@@ -106,7 +108,7 @@ export function ServicesSection() {
                   </h3>
                 </div>
                 <p
-                  className="text-white/80 text-sm md:text-base leading-relaxed max-w-[280px] font-medium !border-0"
+                  className="max-w-[280px] text-sm font-medium leading-relaxed text-white !border-0 md:text-base md:text-white/80"
                   style={{ border: "none" }}
                 >
                   {service.desc}

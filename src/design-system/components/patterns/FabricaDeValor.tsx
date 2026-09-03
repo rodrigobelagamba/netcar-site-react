@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // Caminhos das imagens no public
 const fabrica1 = "/images/fabrica/1.gif";
@@ -9,15 +8,6 @@ const fabrica3 = "/images/fabrica/3.gif";
 const fabrica4 = "/images/fabrica/4.gif";
 const fabrica5 = "/images/fabrica/5.gif";
 const fabrica6 = "/images/fabrica/6.gif";
-
-const fabricaMb01 = "/images/fabrica-mb/01.png";
-const fabricaMb02 = "/images/fabrica-mb/02.png";
-const fabricaMb03_1 = "/images/fabrica-mb/03_1.png";
-const fabricaMb03_2 = "/images/fabrica-mb/03_2.png";
-const fabricaMb03_3 = "/images/fabrica-mb/03_3.png";
-const fabricaMb04 = "/images/fabrica-mb/04.png";
-const fabricaMb05 = "/images/fabrica-mb/05.png";
-const fabricaMb06 = "/images/fabrica-mb/06.png";
 
 interface Category {
   id: number;
@@ -30,20 +20,8 @@ interface Category {
   }>;
 }
 
-interface MobileItem {
-  image: string;
-  desc: string;
-}
-
-interface MobileSection {
-  title: string;
-  numero: string;
-  items: MobileItem[];
-}
-
 export const FabricaDeValor = () => {
   const [activeTab, setActiveTab] = useState(0);
-  const [activeMobileTab, setActiveMobileTab] = useState(0);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [indicatorLeft, setIndicatorLeft] = useState(0);
 
@@ -142,73 +120,6 @@ export const FabricaDeValor = () => {
           desc: "Revisão dos itens de segurança (iluminação, sinalização, calibragem)",
         },
         { desc: "Posicionamento para entrega" },
-      ],
-    },
-  ];
-
-  // Dados para mobile
-  const mobileData: MobileSection[] = [
-    {
-      title: "Avaliação Inicial",
-      numero: "01",
-      items: [
-        {
-          image: fabricaMb01,
-          desc: "Especificações técnicas do veículo (ano, modelo, motorização, versão)",
-        },
-        {
-          image: fabricaMb01,
-          desc: "Configuração do modelo avaliado (opcionais e acessórios)",
-        },
-        { image: fabricaMb01, desc: "Histórico de revisões" },
-      ],
-    },
-    {
-      title: "Análise Técnica",
-      numero: "02",
-      items: [
-        { image: fabricaMb02, desc: "Avaliação de rodagem e dirigibilidade" },
-        { image: fabricaMb02, desc: "Avaliação mecânica" },
-      ],
-    },
-    {
-      title: "Análise Externa",
-      numero: "03",
-      items: [
-        {
-          image: fabricaMb03_1,
-          desc: "Revitalização da pintura e espelhamento",
-        },
-        { image: fabricaMb03_2, desc: "Higienização geral" },
-        { image: fabricaMb03_3, desc: "Revisão dos pneus" },
-      ],
-    },
-    {
-      title: "Análise Interna",
-      numero: "04",
-      items: [
-        { image: fabricaMb04, desc: "Higienização" },
-        { image: fabricaMb04, desc: "Acabamento interno" },
-        { image: fabricaMb04, desc: "Funcionalidade e acessórios" },
-      ],
-    },
-    {
-      title: "Revisão de showroom",
-      numero: "05",
-      items: [
-        { image: fabricaMb05, desc: "Verificação dos serviços realizados" },
-        { image: fabricaMb05, desc: "Posicionamento em showroom" },
-      ],
-    },
-    {
-      title: "Preparação para entrega",
-      numero: "06",
-      items: [
-        {
-          image: fabricaMb06,
-          desc: "Revisão dos itens de segurança (iluminação, sinalização, calibragem)",
-        },
-        { image: fabricaMb06, desc: "Posicionamento para entrega" },
       ],
     },
   ];
@@ -334,121 +245,36 @@ export const FabricaDeValor = () => {
         </div>
       </div>
 
-      {/* GALERIA PARA MOBILE */}
-      <div className="lg:hidden w-full">
-        {/* Barra de título no topo */}
-        <div className="bg-primary py-6 w-full">
-          <div className="flex items-center justify-center max-w-full mx-auto px-8">
-            <span className="text-white text-sm font-semibold tracking-wider uppercase whitespace-nowrap">
-              {mobileData[activeMobileTab].title.toUpperCase()}
-            </span>
-          </div>
+      {/* MOBILE: lista compacta das 6 etapas (sem carrossel, sem número gigante) */}
+      <div className="w-full lg:hidden">
+        <div className="mb-4">
+          <p className="text-[11px] font-black uppercase tracking-[0.18em] text-primary">
+            i-CHECK Netcar
+          </p>
+          <h3 className="mt-1 text-lg font-black leading-tight text-[#00283C]">
+            Como este carro foi preparado
+          </h3>
+          <p className="mt-1 text-sm text-gray-600">
+            6 etapas antes de entrar na vitrine.
+          </p>
         </div>
-
-        {/* Conteúdo principal */}
-        <div className="relative flex items-center justify-center min-h-[60vh] py-12 px-4 bg-[rgb(247,247,247)]">
-          {/* Seta esquerda */}
-          <button
-            onClick={() =>
-              setActiveMobileTab((prev) =>
-                prev === 0 ? mobileData.length - 1 : prev - 1,
-              )
-            }
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-primary text-white border-none flex items-center justify-center cursor-pointer z-10 transition-all duration-300 hover:bg-primary/90 active:scale-95 shadow-md"
-            aria-label="Anterior"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-
-          {/* Conteúdo central */}
-          <motion.div
-            className="flex-1 flex flex-col items-center justify-center max-w-full px-16 cursor-grab touch-pan-y active:cursor-grabbing sm:px-12"
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.2}
-            onDragEnd={(_event, info) => {
-              const threshold = 50;
-              if (info.offset.x > threshold) {
-                setActiveMobileTab((prev) =>
-                  prev === 0 ? mobileData.length - 1 : prev - 1,
-                );
-              } else if (info.offset.x < -threshold) {
-                setActiveMobileTab((prev) =>
-                  prev === mobileData.length - 1 ? 0 : prev + 1,
-                );
-              }
-            }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeMobileTab}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-                className="w-full flex flex-col items-center justify-center"
-              >
-                {/* Número grande centralizado */}
-                <div className="text-[8rem] font-bold text-gray leading-none mb-12 text-center sm:text-[6rem] sm:mb-8">
-                  {mobileData[activeMobileTab].numero}
-                </div>
-
-                {/* Lista de itens */}
-                <div className="flex flex-col gap-6 w-full max-w-[500px] items-start">
-                  {mobileData[activeMobileTab].items.map((item, itemIndex) => (
-                    <motion.div
-                      key={itemIndex}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: itemIndex * 0.1, duration: 0.3 }}
-                      className="flex items-center gap-4 w-full"
-                    >
-                      <div className="w-10 h-10 min-w-[40px] rounded-full bg-primary text-white flex items-center justify-center flex-shrink-0">
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          />
-                          <path
-                            d="M8 12L11 15L16 9"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </div>
-                      <span className="text-base text-gray leading-relaxed text-left sm:text-sm">
-                        {item.desc}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-
-          {/* Seta direita */}
-          <button
-            onClick={() =>
-              setActiveMobileTab((prev) =>
-                prev === mobileData.length - 1 ? 0 : prev + 1,
-              )
-            }
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-primary text-white border-none flex items-center justify-center cursor-pointer z-10 transition-all duration-300 hover:bg-primary/90 active:scale-95 shadow-md"
-            aria-label="Próximo"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </div>
+        <ol className="divide-y divide-[#00283C]/10 overflow-hidden rounded-2xl border border-[#00283C]/10 bg-white">
+          {categories.map((category) => (
+            <li key={category.id} className="flex items-start gap-3 px-4 py-3">
+              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-black text-white">
+                {category.numero}
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-bold leading-tight text-[#00283C]">
+                  {category.name}
+                </p>
+                <p className="mt-0.5 text-[13px] leading-snug text-gray-600">
+                  {category.items.map((item) => item.desc).join(" · ")}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
     </>
   );

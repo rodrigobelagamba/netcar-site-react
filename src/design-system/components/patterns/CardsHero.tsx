@@ -13,6 +13,7 @@ interface CardsHeroProps {
   fuel: string;
   transmission: string;
   mileage: string;
+  /** Ignorado: cards mostram sempre os mesmos campos. Mantido pra compatibilidade. */
   marketingBadge?: string;
   warrantyBadge?: string;
   proofBadge?: string;
@@ -43,7 +44,7 @@ export function CardsHero({
   showPriceComparison = false,
   year,
   transmission,
-  marketingBadge,
+  mileage,
   warrantyBadge,
   proofBadge,
   delay = 0,
@@ -64,6 +65,15 @@ export function CardsHero({
   // costumam ser o elemento de LCP — carregar preguiçosamente atrasa a métrica.
   const isAboveTheFold = delay < (compact ? 4 : 5);
   const deferOffscreenPaint = !isAboveTheFold;
+  // Linha de specs igual em todo card: ano · km · câmbio.
+  const shortTransmission = /autom/i.test(transmission)
+    ? "Aut."
+    : /manual/i.test(transmission)
+      ? "Man."
+      : transmission;
+  const specsLine = [year, mileage, shortTransmission]
+    .filter(Boolean)
+    .join(" · ");
   const content = (
     <div
       className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center h-full ${
@@ -86,10 +96,10 @@ export function CardsHero({
           }
           className={`absolute z-20 h-auto pointer-events-none select-none ${
             isSeptemberCampaignActive
-              ? `hidden rounded-md bg-white/95 p-1.5 shadow-lg sm:block ${
+              ? `rounded-md bg-white/95 shadow-lg ${
                   compact
-                    ? "sm:top-14 sm:right-1.5 sm:w-24 md:top-16 md:right-3 md:w-32"
-                    : "sm:top-14 sm:right-2 sm:w-28 md:top-16 md:right-3 md:w-36 short1600:top-14 short1600:right-3 short1600:w-28"
+                    ? "right-2 top-2 w-14 p-1 sm:top-14 sm:right-1.5 sm:w-24 sm:p-1.5 md:top-16 md:right-3 md:w-32"
+                    : "hidden p-1.5 sm:block sm:top-14 sm:right-2 sm:w-28 md:top-16 md:right-3 md:w-36 short1600:top-14 short1600:right-3 short1600:w-28"
                 }`
               : compact
                 ? "top-16 right-2 w-20 md:top-16 md:right-3 md:w-24"
@@ -154,7 +164,7 @@ export function CardsHero({
             : "pt-28 md:pt-32 space-y-4 short1600:pt-24 short1600:space-y-2"
         }`}
       >
-        {isSeptemberCampaignActive && !isSold && (
+        {isSeptemberCampaignActive && !isSold && !compact && (
           <div
             className="flex min-h-5 w-full items-center justify-end sm:hidden"
             aria-hidden="true"
@@ -173,80 +183,67 @@ export function CardsHero({
           </div>
         )}
 
-        {(marketingBadge || warrantyBadge) && (
-          <div
-            className={`!border-0 flex min-h-[1.5rem] w-full flex-wrap items-center gap-1 overflow-hidden ${
-              compact ? "mb-0.5" : "mb-1 short1600:mb-0.5"
-            }`}
-            aria-label="Destaque deste veículo"
-          >
-            {marketingBadge && (
-              <span
-                className={`max-w-full truncate rounded-full bg-[#E5F8F4] font-black uppercase tracking-wide text-[#075E54] ${
-                  compact
-                    ? "px-2 py-1 text-[9px]"
-                    : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
-                }`}
-                title={marketingBadge}
-              >
-                {marketingBadge}
-              </span>
-            )}
-            {warrantyBadge && (
-              <span
-                className={`inline-flex max-w-full items-center gap-1 rounded-full bg-[#00283C] font-black uppercase tracking-wide text-white ${
-                  compact
-                    ? "px-2 py-1 text-[9px]"
-                    : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
-                }`}
-                title={warrantyBadge}
-              >
-                <ShieldCheck className="h-3 w-3 shrink-0" aria-hidden="true" />
-                <span className="truncate">{warrantyBadge}</span>
-              </span>
-            )}
-          </div>
-        )}
-
-        <div className="!border-0 flex min-h-[1.5rem] w-full items-center gap-1.5 overflow-hidden">
-          <span
-            className={`!border-0 bg-[#00283C] text-white hover:bg-[#00283C] rounded-md font-bold tracking-widest uppercase w-fit inline-block ${
-              compact
-                ? "px-2 py-0.5 text-[10px]"
-                : "px-3 py-1 text-[10px] short1600:px-2.5 short1600:py-0.5 short1600:text-[9px]"
-            }`}
-          >
-            {brand}
-          </span>
+        {/* Mesma estrutura em todo card: selos fixos, título, marca · ano · km · câmbio.
+            Sem selo de marketing variável ("150 CV", "ano · km") pra não desalinhar.
+            No compact a marca vai pra linha de specs (3 pílulas não cabem em 2 colunas). */}
+        <div
+          className={`!border-0 flex w-full flex-nowrap items-center overflow-hidden ${
+            compact ? "min-h-[1.5rem] gap-1" : "min-h-[1.75rem] gap-1.5"
+          }`}
+        >
+          {!compact && (
+            <span className="!border-0 inline-block w-fit shrink-0 rounded-md bg-[#00283C] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white short1600:px-2.5 short1600:py-0.5 short1600:text-[9px]">
+              {brand}
+            </span>
+          )}
           {proofBadge && (
             <span
               className={`shrink-0 rounded-full border border-[#087A37]/25 bg-white font-extrabold uppercase tracking-wide text-[#087A37] ${
                 compact
-                  ? "px-1.5 py-1 text-[9px]"
+                  ? "px-1.5 py-0.5 text-[9px]"
                   : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
               }`}
             >
               {proofBadge}
             </span>
           )}
+          {warrantyBadge && (
+            <span
+              className={`inline-flex shrink-0 items-center gap-1 rounded-full bg-[#E5F8F4] font-black uppercase tracking-wide text-[#075E54] ${
+                compact
+                  ? "px-1.5 py-0.5 text-[9px]"
+                  : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
+              }`}
+              title={warrantyBadge}
+            >
+              <ShieldCheck className="h-3 w-3 shrink-0" aria-hidden="true" />
+              Garantia
+            </span>
+          )}
         </div>
 
-        {/* Model and Year - Left aligned */}
-        <div className="!border-0 space-y-0.5 w-full">
+        <div className="!border-0 w-full space-y-0.5">
+          {compact && brand && (
+            <p className="!border-0 line-clamp-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+              {brand}
+            </p>
+          )}
           <h3
-            className={`!border-0 font-bold leading-snug ${
+            className={`!border-0 line-clamp-2 font-bold leading-snug ${
               compact
-                ? "line-clamp-2 min-h-[2.65rem] text-sm"
-                : "text-[17px] short1600:line-clamp-2 short1600:text-[15px]"
+                ? "min-h-[2.5rem] text-sm"
+                : "min-h-[3rem] text-[17px] short1600:min-h-[2.6rem] short1600:text-[15px]"
             }`}
             style={{ color: "#00283C" }}
           >
             {model}
           </h3>
           <p
-            className={`!border-0 font-semibold text-gray-500 ${compact ? "line-clamp-1 text-xs" : "text-base short1600:text-sm"}`}
+            className={`!border-0 line-clamp-1 font-semibold text-gray-500 ${
+              compact ? "text-[11px]" : "text-sm short1600:text-xs"
+            }`}
           >
-            {compact ? [year, transmission].filter(Boolean).join(" · ") : year}
+            {specsLine}
           </p>
         </div>
 
@@ -322,7 +319,7 @@ export function CardsHero({
               onClick={(e) => e.stopPropagation()}
               className={`!border-0 inline-flex w-full items-center justify-center gap-1 rounded-full bg-[#087A37] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#075E54] ${
                 compact
-                  ? "h-11 px-2 text-[11px] tracking-normal whitespace-nowrap"
+                  ? "h-10 px-2 text-[11px] tracking-normal whitespace-nowrap"
                   : "h-10 px-3 text-[11px] tracking-wide short1600:h-9 short1600:text-[10px] short1600:whitespace-nowrap"
               }`}
             >
@@ -356,50 +353,6 @@ export function CardsHero({
               <Plus className="h-5 w-5 group-hover/btn:rotate-90 transition-transform duration-300" />
             </button>
           )}
-
-          {/* Mobile compact: links curtos */}
-          {!isSold &&
-          compact &&
-          whatsAppHref &&
-          (tradeInHref || financeHref) ? (
-            <div className="flex items-stretch justify-center gap-1 text-[10px] font-bold leading-none">
-              {tradeInHref ? (
-                <a
-                  href={tradeInHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-wa-source={`${whatsAppSource}_trade`}
-                  data-wa-intent="trade_in"
-                  data-wa-vehicle-id={whatsAppVehicleId}
-                  data-wa-vehicle-name={whatsAppVehicleName}
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex min-h-9 flex-1 items-center justify-center px-1 text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#0B6B4B]"
-                >
-                  Troca →
-                </a>
-              ) : null}
-              {tradeInHref && financeHref ? (
-                <span className="text-gray-300" aria-hidden="true">
-                  ·
-                </span>
-              ) : null}
-              {financeHref ? (
-                <a
-                  href={financeHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-wa-source={`${whatsAppSource}_finance`}
-                  data-wa-intent="simulate_finance"
-                  data-wa-vehicle-id={whatsAppVehicleId}
-                  data-wa-vehicle-name={whatsAppVehicleName}
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex min-h-9 flex-1 items-center justify-center px-1 text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#0B6B4B]"
-                >
-                  Simular →
-                </a>
-              ) : null}
-            </div>
-          ) : null}
 
           {/* Desktop normal: textos longos; short1600: linha compacta */}
           {!compact ? (
