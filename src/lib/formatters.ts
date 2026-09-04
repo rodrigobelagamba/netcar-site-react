@@ -74,6 +74,15 @@ export function formatKm(value: number): string {
   }).format(value) + " km";
 }
 
+/**
+ * Km arredondada pra dezena de milhar ("30 mil km"), pro card não precisar
+ * do número exato. Abaixo de 10 mil mantém exato: ali cada km é argumento.
+ */
+export function formatKmApprox(value: number): string {
+  if (value < 10_000) return formatKm(value);
+  return `${Math.round(value / 10_000) * 10} mil km`;
+}
+
 export function formatYear(value: number): string {
   return value.toString();
 }
