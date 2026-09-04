@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { formatPrice, formatYear, formatKm } from "@/lib/formatters";
+import { formatPrice, formatYear, formatKmApprox } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
 import {
   buildWhatsAppUrl,
@@ -19,6 +19,9 @@ import {
   getVehicleLowMileageCardLabel,
   hasVehicleFactoryWarranty,
   hasVehicleIcheck,
+  hasVehicleLowAnnualMileage,
+  LOW_ANNUAL_MILEAGE_CARD_LABEL,
+  LOW_ANNUAL_MILEAGE_CARD_LABEL_COMPACT,
 } from "@/lib/vehicleMerchandising";
 
 export type VehicleFocusPayload = {
@@ -37,6 +40,8 @@ export interface VehicleCardProps {
   name: string;
   price: number;
   year: number;
+  /** Ano de fabricação: base do cálculo de km/ano (o `year` é o ano-modelo). */
+  anoFabricacao?: number;
   km: number;
   images: string[];
   imagens_site?: VehicleImagesSite;
@@ -76,6 +81,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   name,
   price,
   year,
+  anoFabricacao,
   km,
   images,
   imagens_site,
@@ -167,8 +173,16 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   const brand = marca || "";
   const model = modelo || name;
   const yearFormatted = formatYear(year);
-  // Km no card só até 40 mil: acima disso não é argumento de venda.
-  const mileageFormatted = km > 0 && km <= 40_000 ? formatKm(km) : "";
+  // Km no card só até 90 mil: acima disso não é argumento de venda.
+  const mileageFormatted = km > 0 && km < 90_000 ? formatKmApprox(km) : "";
+  // Acima de 90 mil, o chamariz é o uso por ano (pelo ano de fabricação),
+  // em pílula ao lado dos specs, sem expor a km total.
+  const mileageBadge =
+    !mileageFormatted && hasVehicleLowAnnualMileage({ km, anoFabricacao, year })
+      ? compact
+        ? LOW_ANNUAL_MILEAGE_CARD_LABEL_COMPACT
+        : LOW_ANNUAL_MILEAGE_CARD_LABEL
+      : undefined;
   const fuel = combustivel || "";
   const transmission = cambio || "";
   const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
@@ -264,6 +278,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
       fuel={fuel}
       transmission={transmission}
       mileage={mileageFormatted}
+      mileageBadge={isSold ? undefined : mileageBadge}
       marketingBadge={isSold ? undefined : cardMarketingBadge}
       warrantyBadge={
         isSold || !hasFactoryWarranty ? undefined : "GARANTIA DE FÁBRICA"

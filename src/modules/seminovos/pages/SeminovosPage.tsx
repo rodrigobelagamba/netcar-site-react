@@ -1058,6 +1058,7 @@ export function SeminovosPage() {
                       vehicle.preco_com_troca_formatado
                     }
                     year={vehicle.year || new Date().getFullYear()}
+                    anoFabricacao={vehicle.anoFabricacao}
                     km={vehicle.km || 0}
                     images={vehicle.images || vehicle.fotos || []}
                     imagens_site={vehicle.imagens_site}

@@ -172,6 +172,7 @@ export function EstoqueLandingPage() {
                   price={vehicle.price || 0}
                   valor_formatado={vehicle.valor_formatado}
                   year={vehicle.year || new Date().getFullYear()}
+                  anoFabricacao={vehicle.anoFabricacao}
                   km={vehicle.km || 0}
                   images={vehicle.images || vehicle.fotos || []}
                   imagens_site={vehicle.imagens_site}

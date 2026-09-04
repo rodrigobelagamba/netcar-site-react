@@ -4,6 +4,9 @@ import { useSeptemberCampaignActive } from "@/features/september-campaign/Campai
 import { SEPTEMBER_CAMPAIGN } from "@/features/september-campaign/campaign";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
+const MILEAGE_BADGE_TITLE =
+  "Rodou menos de 10 mil km por ano — bem abaixo da média de uso";
+
 interface CardsHeroProps {
   vehicleId?: string;
   image: string;
@@ -13,6 +16,8 @@ interface CardsHeroProps {
   fuel: string;
   transmission: string;
   mileage: string;
+  /** Pílula ao lado dos specs quando a km fica oculta mas o uso anual é baixo. */
+  mileageBadge?: string;
   /** Ignorado: cards mostram sempre os mesmos campos. Mantido pra compatibilidade. */
   marketingBadge?: string;
   warrantyBadge?: string;
@@ -49,6 +54,7 @@ export function CardsHero({
   year,
   transmission,
   mileage,
+  mileageBadge,
   warrantyBadge,
   proofBadge,
   delay = 0,
@@ -241,6 +247,15 @@ export function CardsHero({
               Garantia
             </span>
           )}
+          {/* Compact: pílula de km/ano sobe pra linha de selos (a de specs não cabe em 2 colunas). */}
+          {compact && mileageBadge && (
+            <span
+              className="shrink-0 rounded-full bg-[#004C5C] px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wide text-white"
+              title={MILEAGE_BADGE_TITLE}
+            >
+              {mileageBadge}
+            </span>
+          )}
         </div>
 
         <div className="!border-0 w-full space-y-0.5">
@@ -259,13 +274,27 @@ export function CardsHero({
           >
             {model}
           </h3>
-          <p
-            className={`!border-0 line-clamp-1 font-semibold text-gray-500 ${
-              compact ? "text-[11px]" : "text-sm short1600:text-xs"
+          <div
+            className={`!border-0 flex w-full min-w-0 flex-nowrap items-center overflow-hidden ${
+              compact ? "gap-1.5" : "gap-2"
             }`}
           >
-            {specsLine}
-          </p>
+            <p
+              className={`!border-0 shrink-0 font-semibold text-gray-500 ${
+                compact ? "text-[11px]" : "text-sm short1600:text-xs"
+              }`}
+            >
+              {specsLine}
+            </p>
+            {!compact && mileageBadge && (
+              <span
+                className="inline-flex shrink-0 items-center rounded-full bg-[#004C5C] px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-white short1600:px-2 short1600:text-[9px]"
+                title={MILEAGE_BADGE_TITLE}
+              >
+                {mileageBadge}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Price and Action — altura reservada pra alinhar CTA entre cards */}

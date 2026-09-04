@@ -126,6 +126,41 @@ export function getVehicleLowMileageCardLabel(
   return `APENAS ${Math.round(km).toLocaleString("pt-BR")} KM`;
 }
 
+/**
+ * Média brasileira de uso fica em ~12–15 mil km/ano. Abaixo de 10 mil/ano a
+ * afirmação "bem abaixo da média" é verdadeira sem precisar mostrar a km.
+ */
+export const LOW_ANNUAL_MILEAGE_THRESHOLD_KM = 10_000;
+export const LOW_ANNUAL_MILEAGE_CARD_LABEL = "Baixa km p/ ano";
+/** Card compacto (2 colunas no mobile) não cabe o rótulo completo ao lado do i-CHECK. */
+export const LOW_ANNUAL_MILEAGE_CARD_LABEL_COMPACT = "Baixa km/ano";
+export const LOW_ANNUAL_MILEAGE_DETAIL_LABEL = "Menos de 10 mil km por ano";
+
+/**
+ * Km por ano de uso, contado pelo ano de fabricação (não pelo ano-modelo).
+ * Sem ano de fabricação cai no ano-modelo, que é igual ou maior — resultado
+ * fica conservador. Carro com menos de um ano completo não entra.
+ */
+export function getVehicleAnnualMileage(
+  vehicle: Pick<Vehicle, "km" | "anoFabricacao" | "year">,
+  referenceYear = new Date().getFullYear(),
+): number | undefined {
+  const km = Number(vehicle.km);
+  const manufactureYear = Number(vehicle.anoFabricacao || vehicle.year);
+  if (!Number.isFinite(km) || km <= 0) return undefined;
+  if (!Number.isFinite(manufactureYear) || manufactureYear <= 0) return undefined;
+  const yearsInUse = referenceYear - manufactureYear;
+  if (yearsInUse < 1) return undefined;
+  return km / yearsInUse;
+}
+
+export function hasVehicleLowAnnualMileage(
+  vehicle: Pick<Vehicle, "km" | "anoFabricacao" | "year">,
+): boolean {
+  const perYear = getVehicleAnnualMileage(vehicle);
+  return perYear !== undefined && perYear < LOW_ANNUAL_MILEAGE_THRESHOLD_KM;
+}
+
 export function hasVehicleFactoryWarranty(
   vehicle: Pick<Vehicle, "diferenciais">,
 ): boolean {

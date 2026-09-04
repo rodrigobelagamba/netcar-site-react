@@ -82,7 +82,11 @@ import {
   normalizeVehicleFeatureTag,
   type VehicleHighlightsPresentation,
 } from "@/modules/detalhes/lib/vehicleHighlights";
-import { getVehicleMerchandising } from "@/lib/vehicleMerchandising";
+import {
+  getVehicleMerchandising,
+  hasVehicleLowAnnualMileage,
+  LOW_ANNUAL_MILEAGE_DETAIL_LABEL,
+} from "@/lib/vehicleMerchandising";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -2105,6 +2109,9 @@ export function DetalhesPage() {
   const isCommercialHighlight =
     Number(vehicle?.km) > 0 &&
     Number(vehicle.km) < LOW_MILEAGE_HIGHLIGHT_THRESHOLD_KM;
+  // Sem "APENAS X KM", o argumento vira uso por ano (ano de fabricação), sem expor a km.
+  const isLowAnnualMileage =
+    !isCommercialHighlight && hasVehicleLowAnnualMileage(vehicle);
 
   const badges: Badge[] = (
     isSold
@@ -2123,6 +2130,14 @@ export function DetalhesPage() {
                 {
                   text: `APENAS ${vehicle.km.toLocaleString("pt-BR")} KM`,
                   variant: "oportunidade" as const,
+                },
+              ]
+            : []),
+          ...(isLowAnnualMileage
+            ? [
+                {
+                  text: LOW_ANNUAL_MILEAGE_DETAIL_LABEL,
+                  variant: "baixa-km" as const,
                 },
               ]
             : []),
