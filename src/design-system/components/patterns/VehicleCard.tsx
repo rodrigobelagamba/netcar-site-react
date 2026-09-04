@@ -19,6 +19,8 @@ import {
   getVehicleLowMileageCardLabel,
   hasVehicleFactoryWarranty,
   hasVehicleIcheck,
+  hasVehicleLowAnnualMileage,
+  LOW_ANNUAL_MILEAGE_CARD_LABEL,
 } from "@/lib/vehicleMerchandising";
 
 export type VehicleFocusPayload = {
@@ -37,6 +39,8 @@ export interface VehicleCardProps {
   name: string;
   price: number;
   year: number;
+  /** Ano de fabricação: base do cálculo de km/ano (o `year` é o ano-modelo). */
+  anoFabricacao?: number;
   km: number;
   images: string[];
   imagens_site?: VehicleImagesSite;
@@ -76,6 +80,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   name,
   price,
   year,
+  anoFabricacao,
   km,
   images,
   imagens_site,
@@ -168,7 +173,14 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   const model = modelo || name;
   const yearFormatted = formatYear(year);
   // Km no card só até 40 mil: acima disso não é argumento de venda.
-  const mileageFormatted = km > 0 && km <= 40_000 ? formatKm(km) : "";
+  // Acima de 40 mil, o chamariz é o uso por ano (pelo ano de fabricação),
+  // sem expor a km total.
+  const mileageFormatted =
+    km > 0 && km <= 40_000
+      ? formatKm(km)
+      : hasVehicleLowAnnualMileage({ km, anoFabricacao, year })
+        ? LOW_ANNUAL_MILEAGE_CARD_LABEL
+        : "";
   const fuel = combustivel || "";
   const transmission = cambio || "";
   const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
