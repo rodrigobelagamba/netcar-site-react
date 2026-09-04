@@ -173,9 +173,9 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   const brand = marca || "";
   const model = modelo || name;
   const yearFormatted = formatYear(year);
-  // Km no card só até 40 mil: acima disso não é argumento de venda.
-  const mileageFormatted = km > 0 && km <= 40_000 ? formatKm(km) : "";
-  // Acima de 40 mil, o chamariz é o uso por ano (pelo ano de fabricação),
+  // Km no card só até 90 mil: acima disso não é argumento de venda.
+  const mileageFormatted = km > 0 && km < 90_000 ? formatKm(km) : "";
+  // Acima de 90 mil, o chamariz é o uso por ano (pelo ano de fabricação),
   // em pílula ao lado dos specs, sem expor a km total.
   const mileageBadge =
     !mileageFormatted && hasVehicleLowAnnualMileage({ km, anoFabricacao, year })
