@@ -21,6 +21,7 @@ import {
   hasVehicleIcheck,
   hasVehicleLowAnnualMileage,
   LOW_ANNUAL_MILEAGE_CARD_LABEL,
+  LOW_ANNUAL_MILEAGE_CARD_LABEL_COMPACT,
 } from "@/lib/vehicleMerchandising";
 
 export type VehicleFocusPayload = {
@@ -173,14 +174,15 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   const model = modelo || name;
   const yearFormatted = formatYear(year);
   // Km no card só até 40 mil: acima disso não é argumento de venda.
+  const mileageFormatted = km > 0 && km <= 40_000 ? formatKm(km) : "";
   // Acima de 40 mil, o chamariz é o uso por ano (pelo ano de fabricação),
-  // sem expor a km total.
-  const mileageFormatted =
-    km > 0 && km <= 40_000
-      ? formatKm(km)
-      : hasVehicleLowAnnualMileage({ km, anoFabricacao, year })
-        ? LOW_ANNUAL_MILEAGE_CARD_LABEL
-        : "";
+  // em pílula ao lado dos specs, sem expor a km total.
+  const mileageBadge =
+    !mileageFormatted && hasVehicleLowAnnualMileage({ km, anoFabricacao, year })
+      ? compact
+        ? LOW_ANNUAL_MILEAGE_CARD_LABEL_COMPACT
+        : LOW_ANNUAL_MILEAGE_CARD_LABEL
+      : undefined;
   const fuel = combustivel || "";
   const transmission = cambio || "";
   const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
@@ -276,6 +278,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
       fuel={fuel}
       transmission={transmission}
       mileage={mileageFormatted}
+      mileageBadge={isSold ? undefined : mileageBadge}
       marketingBadge={isSold ? undefined : cardMarketingBadge}
       warrantyBadge={
         isSold || !hasFactoryWarranty ? undefined : "GARANTIA DE FÁBRICA"

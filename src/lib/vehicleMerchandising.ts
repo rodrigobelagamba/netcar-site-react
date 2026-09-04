@@ -131,7 +131,9 @@ export function getVehicleLowMileageCardLabel(
  * afirmação "bem abaixo da média" é verdadeira sem precisar mostrar a km.
  */
 export const LOW_ANNUAL_MILEAGE_THRESHOLD_KM = 10_000;
-export const LOW_ANNUAL_MILEAGE_CARD_LABEL = "< 10 mil km/ano";
+export const LOW_ANNUAL_MILEAGE_CARD_LABEL = "Baixa km p/ ano";
+/** Card compacto (2 colunas no mobile) não cabe o rótulo completo ao lado do i-CHECK. */
+export const LOW_ANNUAL_MILEAGE_CARD_LABEL_COMPACT = "Baixa km/ano";
 export const LOW_ANNUAL_MILEAGE_DETAIL_LABEL = "Menos de 10 mil km por ano";
 
 /**
