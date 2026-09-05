@@ -113,6 +113,7 @@ function netcar_static_route_file($path)
 {
     $exact = [
         '/regioes-atendidas' => 'regions-hub.html',
+        '/expointer-esteio' => 'page-expointer-esteio.html',
         '/financiamento' => 'page-financiamento.html',
         '/atendimento-24h' => 'page-atendimento-24h.html',
         '/move-brasil' => 'page-move-brasil.html',
@@ -301,6 +302,7 @@ function netcar_route_uses_stock_bootstrap($path)
     return $path === '/'
         || $path === '/seminovos'
         || $path === '/regioes-atendidas'
+        || $path === '/expointer-esteio'
         || in_array($path, array('/financiamento', '/atendimento-24h', '/move-brasil'), true)
         || preg_match('#^/veiculo/#', (string) $path)
         || preg_match('#^/seminovos-[a-z0-9-]+$#', (string) $path)
@@ -484,6 +486,7 @@ function netcar_route_manifest_entry($path)
     if ($path === '/comparar') return 'src/modules/seo/pages/ComparadorPage.tsx';
     if ($path === '/privacidade') return 'src/modules/legal/pages/PrivacyPage.tsx';
     if ($path === '/regioes-atendidas') return 'src/modules/seo/pages/RegionsHubPage.tsx';
+    if ($path === '/expointer-esteio') return 'src/modules/seo/pages/ExpointerPage.tsx';
     if ($path === '/como-selecionamos-nossos-carros') return 'src/modules/procedencia/pages/ComoSelecionamosPage.tsx';
     if (preg_match('#^/seminovos-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/CityLandingPage.tsx';
     if (preg_match('#^/vender-carro-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/SellCityLandingPage.tsx';

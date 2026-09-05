@@ -1,0 +1,70 @@
+{
+  "slug": "expointer-esteio",
+  "title": "Expointer em Esteio: conheça os seminovos da Netcar",
+  "description": "Vai à Expointer em Esteio? Consulte os seminovos da Netcar, veja como chegar às duas lojas e converse sobre seu usado na troca antes da visita.",
+  "h1": "Vai à Expointer e está pensando em trocar de carro?",
+  "intro": "Aproveite a viagem a Esteio para conhecer o estoque da Netcar. Veja os carros no site, escolha os que interessam e combine uma visita às nossas lojas.",
+  "event": {
+    "edition": "Expointer 2026",
+    "dates": "29 de agosto a 6 de setembro de 2026",
+    "hours": "Visitação da feira: das 8h às 20h",
+    "venue": "Parque de Exposições Assis Brasil, Esteio/RS",
+    "officialUrl": "https://www.expointer.rs.gov.br/",
+    "accessUrl": "https://www.estado.rs.gov.br/saiba-as-rotas-e-os-meios-de-transporte-para-chegar-a-expointer-2026",
+    "checkedAt": "2026-09-05"
+  },
+  "stockHeading": "Veja quais carros você quer conhecer",
+  "stockLabel": "Ver todos os seminovos",
+  "tradeLabel": "Avaliar meu usado na troca",
+  "tradeMessage": "quero avaliar meu usado na troca de um seminovo. Conheci a loja pela página da Expointer.",
+  "visitMessage": "quero combinar uma visita às lojas em Esteio. Vi a página da Expointer e gostaria de confirmar o horário e a disponibilidade dos carros.",
+  "benefits": [
+    {
+      "title": "Duas lojas, um só estoque",
+      "text": "A Netcar está em Esteio desde 1997. As duas lojas da Av. Presidente Vargas trabalham juntas: você pode conhecer carros das duas unidades no mesmo atendimento."
+    },
+    {
+      "title": "Procedência faz parte da escolha",
+      "text": "Compramos nossos carros no RS e não trabalhamos com veículos de locadora ou com passagem por leilão, sinistro, furto ou roubo. Nas fichas que têm i-CHECK, você pode consultar o laudo pelo próprio site."
+    },
+    {
+      "title": "Já tem um carro para trocar?",
+      "text": "Envie modelo, ano e fotos pelo WhatsApp para começar a conversa. A equipe orienta a avaliação do usado e, se precisar, a simulação do financiamento. A proposta depende da avaliação e da análise."
+    }
+  ],
+  "visitHeading": "Do Parque Assis Brasil até a Netcar",
+  "visitIntro": "Antes de sair do parque, confirme o horário de atendimento e em qual loja estão os carros que você quer ver. Os links abaixo abrem o trajeto no Google Maps; ajuste o ponto de saída conforme o portão utilizado.",
+  "origin": "Parque de Exposições Assis Brasil, Esteio, RS",
+  "stores": [
+    {
+      "id": "loja_1",
+      "name": "Loja 1",
+      "address": "Av. Presidente Vargas, 740, Centro, Esteio, RS"
+    },
+    {
+      "id": "loja_2",
+      "name": "Loja 2",
+      "address": "Av. Presidente Vargas, 1106, Centro, Esteio, RS"
+    }
+  ],
+  "hoursNote": "O horário da feira é diferente do atendimento da Netcar. Combine sua visita com a equipe, especialmente em domingos e feriados.",
+  "locationNote": "O atendimento da Netcar acontece nas lojas da Av. Presidente Vargas, fora do parque. As duas unidades ficam a cerca de 400 m uma da outra e compartilham estoque e atendimento.",
+  "faq": [
+    {
+      "q": "A Netcar atende dentro da Expointer?",
+      "a": "O atendimento apresentado nesta página é nas duas lojas da Netcar, na Av. Presidente Vargas, 740 e 1106, em Esteio. Confirme com a equipe onde está o carro que você quer conhecer."
+    },
+    {
+      "q": "Posso adiantar a troca do meu carro antes de ir a Esteio?",
+      "a": "Sim. Envie modelo, ano, fotos e informações do seu usado pelo WhatsApp. Se houver financiamento em aberto, informe também o saldo devedor. A proposta final depende da avaliação do veículo."
+    },
+    {
+      "q": "Como consultar o histórico do seminovo?",
+      "a": "Abra a ficha do carro no estoque. Quando houver i-CHECK, a consulta e o download do laudo ficam na própria página. A equipe também pode apresentar os documentos e as consultas disponíveis para aquele veículo."
+    },
+    {
+      "q": "A visita às lojas precisa acontecer durante a feira?",
+      "a": "Não. Você pode consultar o estoque e combinar uma visita em outra data. As lojas atendem em Esteio ao longo do ano; confirme o horário pelo WhatsApp antes de viajar."
+    }
+  ]
+}

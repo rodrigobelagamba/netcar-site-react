@@ -76,6 +76,13 @@ export function RegionsHubPage() {
 
       <RegionalTrustSignals />
 
+      <div className="container-main px-4 pb-8 sm:px-6 lg:px-8">
+        <Link to="/expointer-esteio" className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-primary hover:underline">
+          Vai à Expointer? Planeje sua visita à Netcar em Esteio
+          <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+        </Link>
+      </div>
+
       <RegionalStockPreview
         title="Carros da loja disponíveis agora"
         limit={8}

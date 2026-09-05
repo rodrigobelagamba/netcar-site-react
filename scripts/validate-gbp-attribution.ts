@@ -135,6 +135,31 @@ assert.equal(sapucaiaEvent.regional_city_slug, "sapucaia-do-sul");
 assert.equal(sapucaiaEvent.gbp_profile, "loja_2");
 assert.equal(sapucaiaEvent.traffic_content, "loja_2_post");
 
+dataLayer.length = 0;
+trackPageView("/expointer-esteio");
+trackRegionalCtaClick("expointer_view_stock", "/expointer-esteio");
+trackRegionalCtaClick("expointer_route_loja_1", "/expointer-esteio");
+trackRegionalCtaClick("expointer_route_loja_2", "/expointer-esteio");
+assert.equal(
+  dataLayer.filter((row) => row.event === "regional_landing_view").length,
+  1,
+);
+assert.equal(
+  dataLayer.filter((row) => row.event === "regional_cta_click").length,
+  3,
+);
+assert.equal(
+  dataLayer.filter((row) => row.event === "regional_stock_click").length,
+  1,
+);
+for (const row of dataLayer.filter(
+  (item) => item.event === "regional_cta_click",
+)) {
+  assert.equal(row.page_type, "event_landing");
+  assert.equal(row.regional_city_slug, "esteio");
+  assert.equal(row.landing_slug, "expointer-esteio");
+}
+
 console.log(
   "Atribuição GBP validada: cidade, campanha e Loja 1/Loja 2 seguem até os eventos regionais e de WhatsApp.",
 );

@@ -25,6 +25,7 @@ const STATIC_PAGES = [
   { loc: "/", changefreq: "daily", priority: "1.0" },
   { loc: "/seminovos", changefreq: "daily", priority: "0.9" },
   { loc: "/regioes-atendidas", changefreq: "monthly", priority: "0.85" },
+  { loc: "/expointer-esteio", changefreq: "monthly", priority: "0.6" },
   { loc: "/sobre", changefreq: "monthly", priority: "0.8" },
   {
     loc: "/como-selecionamos-nossos-carros",

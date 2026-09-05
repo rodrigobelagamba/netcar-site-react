@@ -74,6 +74,14 @@ expect(
   "comparador não está ligado ao HTML estático e ao chunk React",
 );
 expect(
+  controller.includes("'/expointer-esteio' => 'page-expointer-esteio.html'") &&
+    controller.includes("src/modules/seo/pages/ExpointerPage.tsx") &&
+    controller.includes("|| $path === '/expointer-esteio'") &&
+    htaccess.includes("|expointer-esteio)") &&
+    existsSync(join(root, "public/seo-static/page-expointer-esteio.html")),
+  "Expointer sem rota no servidor, regra para crawler ou HTML gerado",
+);
+expect(
   controller.includes("'/privacidade' => [") &&
     controller.includes("src/modules/legal/pages/PrivacyPage.tsx"),
   "privacidade não está registrada como rota válida no servidor",
@@ -120,7 +128,9 @@ expect(
 expect(
   controller.includes("$path === '/seminovos'") &&
     controller.includes("$value['showroomVehicles']") &&
-    controller.includes("'scope' => $path === '/seminovos' ? 'showroom' : 'available'") &&
+    controller.includes(
+      "'scope' => $path === '/seminovos' ? 'showroom' : 'available'",
+    ) &&
     controller.includes("'vehicles' => $vehicles"),
   "showroom completo não está isolado na rota /seminovos",
 );

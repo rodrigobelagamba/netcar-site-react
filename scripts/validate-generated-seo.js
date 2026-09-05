@@ -161,7 +161,9 @@ function validateOrganizationGraph(nodes, label) {
     rootOrganization.taxID !== "02.237.969/0001-06" ||
     rootOrganization.email !== expectedEmail
   ) {
-    errors.push(`${label}: entidade legal/CNPJ/e-mail da Organization divergente`);
+    errors.push(
+      `${label}: entidade legal/CNPJ/e-mail da Organization divergente`,
+    );
   }
   if (
     rootOrganization.logo?.["@id"] !== `${site}/#logo` ||
@@ -265,7 +267,9 @@ function validateOrganizationGraph(nodes, label) {
     !contactSource.includes(`mailto:${expectedEmail}`) ||
     !crawlerHome.includes(`mailto:${expectedEmail}`)
   ) {
-    errors.push(`${label}: e-mail antigo ou contato oficial ausente nas superfícies`);
+    errors.push(
+      `${label}: e-mail antigo ou contato oficial ausente nas superfícies`,
+    );
   }
 
   for (const node of nodes) {
@@ -1081,6 +1085,64 @@ for (const match of sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(match[1])) {
     errors.push(`lastmod inválido no sitemap: ${match[1]}`);
   }
+}
+
+const expointer = JSON.parse(
+  readFileSync(join(root, "src/data/seo/expointer.json"), "utf8"),
+);
+const expointerHtml = readFileSync(
+  join(root, "public/seo-static/page-expointer-esteio.html"),
+  "utf8",
+);
+const expointerUrl = `${site}/${expointer.slug}`;
+for (const value of [
+  expointer.title,
+  expointer.description,
+  expointer.h1,
+  expointer.intro,
+  expointer.event.dates,
+  expointer.event.hours,
+  expointer.hoursNote,
+  expointer.locationNote,
+  ...expointer.benefits.flatMap((item) => [item.title, item.text]),
+  ...expointer.faq.flatMap((item) => [item.q, item.a]),
+]) {
+  if (!expointerHtml.includes(escapeHtml(value))) {
+    errors.push(`Expointer: conteúdo da fonte ausente no HTML: ${value}`);
+  }
+}
+if (
+  occurrences(expointerHtml, "<h1") !== 1 ||
+  !expointerHtml.includes(`rel="canonical" href="${expointerUrl}"`)
+) {
+  errors.push("Expointer: H1 único ou canonical ausente");
+}
+if (
+  occurrences(sitemap, `<loc>${expointerUrl}</loc>`) !== 1 ||
+  !hubHrefs.includes(expointerUrl)
+) {
+  errors.push("Expointer: sitemap ou link de descoberta no hub ausente");
+}
+const expointerHrefs = anchorHrefs(expointerHtml).map((href) =>
+  href.replace(/&amp;/g, "&"),
+);
+for (const officialUrl of [
+  expointer.event.officialUrl,
+  expointer.event.accessUrl,
+]) {
+  if (!expointerHrefs.includes(officialUrl))
+    errors.push(`Expointer: fonte oficial ausente ${officialUrl}`);
+}
+for (const store of expointer.stores) {
+  const expectedRoute = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(expointer.origin)}&destination=${encodeURIComponent(store.address)}&travelmode=driving`;
+  if (!expointerHrefs.includes(expectedRoute))
+    errors.push(`Expointer: rota ausente para ${store.name}`);
+}
+const expointerSchemas = parsedSchemas(expointerHtml, "Expointer");
+if (JSON.stringify(expointerSchemas).includes('"@type":"Event"')) {
+  errors.push(
+    "Expointer: página da loja não deve declarar organização do evento",
+  );
 }
 
 if (errors.length) {

@@ -108,6 +108,9 @@ function resolveVehicleMerchandising(vehicle) {
 }
 
 const SITE = "https://www.netcarmultimarcas.com.br";
+const expointerPage = JSON.parse(
+  readFileSync(join(rootDir, "src/data/seo/expointer.json"), "utf8"),
+);
 const STOCK_API_URL =
   process.env.NETCAR_SEO_STOCK_API_URL ||
   `${SITE}/api/v1/veiculos.php?limit=500`;
@@ -1011,6 +1014,7 @@ const regionsHubBody = `
     <h2>Cidades atendidas</h2>
     ${regionsHubLinks}
     <p><a href="${SITE}/seminovos">Ver estoque atual</a> · <a href="${SITE}/compra">Pré-avaliar meu carro</a></p>
+    <p><a href="${SITE}/expointer-esteio">Vai à Expointer? Planeje sua visita à Netcar em Esteio</a></p>
   </article>`;
 writeSeoPage(
   join(seoStaticDir, "regions-hub.html"),
@@ -1695,6 +1699,72 @@ writeSeoPage(
   }),
 );
 
+// Mesma fonte da página React: datas identificadas por edição, sem simular
+// participação na feira ou publicar uma oferta que expira no fim do evento.
+const expointerCanonical = `${SITE}/${expointerPage.slug}`;
+const expointerContact = (body) =>
+  `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(siteWhatsAppMessage(body))}`;
+const expointerBody = `
+  <nav aria-label="Navegação estrutural"><ol><li><a href="${SITE}/">Início</a></li><li>Expointer em Esteio</li></ol></nav>
+  <article>
+    <h1>${escapeHtml(expointerPage.h1)}</h1>
+    <p>${escapeHtml(expointerPage.intro)}</p>
+    <p><a href="${SITE}/seminovos">${escapeHtml(expointerPage.stockLabel)}</a> · <a href="${escapeHtml(expointerContact(expointerPage.tradeMessage))}">${escapeHtml(expointerPage.tradeLabel)}</a></p>
+    <aside aria-label="Calendário da Expointer">
+      <h2>${escapeHtml(expointerPage.event.edition)}</h2>
+      <p>${escapeHtml(expointerPage.event.dates)}</p>
+      <p>${escapeHtml(expointerPage.event.venue)} · ${escapeHtml(expointerPage.event.hours)}</p>
+      <p><a href="${expointerPage.event.officialUrl}">Datas e programação no site oficial</a></p>
+      <p>${escapeHtml(expointerPage.hoursNote)}</p>
+    </aside>
+    ${stockShowcase({ heading: expointerPage.stockHeading, vehicles: stock, limit: 8, ctaHref: `${SITE}/seminovos`, ctaLabel: expointerPage.stockLabel })}
+    <h2>O que você encontra na Netcar</h2>
+    ${expointerPage.benefits.map((benefit) => `<h3>${escapeHtml(benefit.title)}</h3><p>${escapeHtml(benefit.text)}</p>`).join("\n")}
+    <p><a href="${SITE}/como-selecionamos-nossos-carros">Como selecionamos nossos carros</a></p>
+    <section id="visita">
+      <h2>${escapeHtml(expointerPage.visitHeading)}</h2>
+      <p>${escapeHtml(expointerPage.visitIntro)}</p>
+      ${expointerPage.stores
+        .map((store) => {
+          const route = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(expointerPage.origin)}&destination=${encodeURIComponent(store.address)}&travelmode=driving`;
+          return `<h3>${escapeHtml(store.name)}</h3><p>${escapeHtml(store.address)}</p><p><a href="${escapeHtml(route)}">Rota do parque à ${escapeHtml(store.name)}</a></p>`;
+        })
+        .join("\n")}
+      <p>${escapeHtml(expointerPage.locationNote)}</p>
+      <p><a href="${escapeHtml(expointerContact(expointerPage.visitMessage))}">Combinar minha visita</a> · <a href="${SITE}/contato">Consultar atendimento das lojas</a></p>
+      <p><a href="${expointerPage.event.accessUrl}">Acessos à Expointer 2026: orientação oficial</a></p>
+    </section>
+    <h2>Para organizar sua visita</h2>
+    ${expointerPage.faq.map((item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`).join("\n")}
+  </article>`;
+writeSeoPage(
+  join(seoStaticDir, "page-expointer-esteio.html"),
+  expointerCanonical,
+  pageShell({
+    title: expointerPage.title,
+    description: expointerPage.description,
+    canonical: expointerCanonical,
+    body: expointerBody,
+    schemas: [
+      ORG_SCHEMA,
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": `${expointerCanonical}#webpage`,
+        url: expointerCanonical,
+        name: expointerPage.title,
+        description: expointerPage.description,
+        inLanguage: "pt-BR",
+        about: { "@id": `${SITE}/#organization` },
+      },
+      breadcrumbSchema([
+        HOME_CRUMB,
+        { name: "Expointer em Esteio", url: expointerCanonical },
+      ]),
+    ],
+  }),
+);
+
 // Páginas de conteúdo SEO (financiamento, atendimento) — HTML estático p/ crawler
 function renderContentSections(sections) {
   return sections
@@ -1758,6 +1828,7 @@ const staticPages = [
   { path: "/", priority: "1.0", changefreq: "daily" },
   { path: "/seminovos", priority: "0.9", changefreq: "daily" },
   { path: "/regioes-atendidas", priority: "0.85", changefreq: "monthly" },
+  { path: "/expointer-esteio", priority: "0.6", changefreq: "monthly" },
   { path: "/sobre", priority: "0.8", changefreq: "monthly" },
   {
     path: "/como-selecionamos-nossos-carros",
@@ -1910,6 +1981,7 @@ writeTextFile(join(publicDir, "sitemap.xml"), sitemap);
 const expectedFiles = new Set([
   "regions-hub.html",
   "page-comparar.html",
+  "page-expointer-esteio.html",
   ...blogPosts.map((post) => `blog-${post.slug}.html`),
   ...cities.map((city) => `city-${city.slug}.html`),
   ...cities

@@ -574,6 +574,7 @@ function testPageTypes(): void {
     ["/seminovos-canoas", "city_buy"],
     ["/vender-carro-canoas", "city_sell"],
     ["/comprar-suv", "brand_landing"],
+    ["/expointer-esteio", "event_landing"],
   ];
   for (const [route, expected] of cases) {
     assert(

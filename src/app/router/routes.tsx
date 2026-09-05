@@ -123,6 +123,11 @@ const RegionsHubPage = lazyWithRetry(() =>
     default: m.RegionsHubPage,
   })),
 );
+const ExpointerPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/ExpointerPage").then((m) => ({
+    default: m.ExpointerPage,
+  })),
+);
 const ComoSelecionamosPage = lazyWithRetry(() =>
   import("@/modules/procedencia/pages/ComoSelecionamosPage").then((m) => ({
     default: m.ComoSelecionamosPage,
@@ -131,6 +136,11 @@ const ComoSelecionamosPage = lazyWithRetry(() =>
 
 // Mensagem do WhatsApp contextual por rota: lead chega no iAN já qualificado
 function getContextualMessage(pathname: string): string {
+  if (pathname === "/expointer-esteio") {
+    return siteWhatsAppMessage(
+      "quero conhecer os seminovos da Netcar em Esteio. Vi a página da Expointer.",
+    );
+  }
   if (pathname.startsWith("/vender-carro-")) {
     const city = getContextualCityPage(pathname.replace("/vender-carro-", ""));
     if (city) {
@@ -502,6 +512,12 @@ const regionsHubRoute = createRoute({
   component: RegionsHubPage,
 });
 
+const expointerRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/expointer-esteio",
+  component: ExpointerPage,
+});
+
 const comoSelecionamosRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/como-selecionamos-nossos-carros",
@@ -531,6 +547,7 @@ export const routeTree = rootRoute.addChildren([
   privacyRoute,
   comparadorRoute,
   regionsHubRoute,
+  expointerRoute,
   comoSelecionamosRoute,
 ]);
 

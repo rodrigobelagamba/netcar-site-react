@@ -48,6 +48,7 @@ export type AnalyticsPageType =
   | "city_buy"
   | "city_sell"
   | "regional_hub"
+  | "event_landing"
   | "brand_landing"
   | "comparison"
   | "selection_process"
@@ -94,6 +95,7 @@ function canSendMetaEvent(): boolean {
 
 export function inferPageType(pagePath: string): AnalyticsPageType {
   const pathname = pagePath.split(/[?#]/, 1)[0].replace(/\/+$/, "") || "/";
+  if (pathname === "/expointer-esteio") return "event_landing";
   if (pathname.startsWith("/veiculo/")) return "vehicle_detail";
   if (pathname.startsWith("/laudo/")) return "vehicle_report";
   if (
@@ -141,6 +143,9 @@ function getRegionalDimensions(pagePath: string): Record<string, string> {
   const pathname = pagePath.split(/[?#]/, 1)[0].replace(/\/+$/, "") || "/";
   const pageType = inferPageType(pathname);
 
+  if (pageType === "event_landing") {
+    return { regional_city_slug: "esteio", landing_slug: "expointer-esteio" };
+  }
   if (pageType === "city_buy") {
     return { regional_city_slug: pathname.replace("/seminovos-", "") };
   }
@@ -367,7 +372,11 @@ export function trackPageView(path?: string, title?: string): void {
     ...trafficDimensions,
   });
 
-  if (["city_buy", "city_sell", "regional_hub"].includes(pageType)) {
+  if (
+    ["city_buy", "city_sell", "regional_hub", "event_landing"].includes(
+      pageType,
+    )
+  ) {
     trackBusinessEvent("regional_landing_view", {
       page_type: pageType,
       page_path: pagePath,
@@ -405,9 +414,13 @@ export function trackRegionalCtaClick(
 ): void {
   const pageType = inferPageType(pagePath);
   if (
-    !["city_buy", "city_sell", "regional_hub", "brand_landing"].includes(
-      pageType,
-    )
+    ![
+      "city_buy",
+      "city_sell",
+      "regional_hub",
+      "brand_landing",
+      "event_landing",
+    ].includes(pageType)
   ) {
     return;
   }
