@@ -6,7 +6,28 @@ Coleta: 05/09/2026. Verificações públicas regionais entre aproximadamente 19h
 
 A base técnica das páginas regionais está acessível. O maior ajuste imediato é facilitar a decisão do cliente: mostrar o estoque e o contato antes de textos longos e levar quem quer vender diretamente à pré-avaliação. Isso é uma oportunidade de conversão; não foi medida perda de vendas causada pelo layout.
 
-Nesta entrega foi implementada somente a nova `/expointer-esteio`, com ligação no hub de regiões, estoque real, troca, visita e rotas até os dois endereços de Esteio. As mudanças regionais abaixo são recomendações para a próxima etapa; não foram aplicadas em massa.
+Na primeira entrega foi implementada a nova `/expointer-esteio`, com ligação no hub de regiões, estoque real, troca, visita e rotas até os dois endereços de Esteio. Depois da aprovação do usuário, os oito ajustes regionais desta auditoria foram implementados nos templates das 38 páginas e nos textos das 19 cidades. A publicação dessa segunda entrega depende de um novo deploy; a coleta pública abaixo continua sendo a referência anterior aos ajustes.
+
+### Implementação regional — segunda entrega
+
+- Compra: CTA principal de estoque e WhatsApp logo após a introdução; oito veículos antes dos parágrafos locais, bloco curto de seleção com link ao processo da Netcar e informações de rota preservadas.
+- Venda: botão `Pedir avaliação do meu carro` abre `#pre-avaliacao` na própria página. Formulário antes do estoque de troca, com cidade no contexto do contato. Critérios aparecem para compra direta; a opção de troca explicita que esses limites não se aplicam.
+- Contato: número comercial de fallback nos CTAs, formulário e cabeçalho quando a API não fornece telefone. Intenção inicial do formulário corrigida quando o primeiro clique é em troca; botão de envio com contraste maior. O clique de abertura do WhatsApp não comprova mensagem enviada, atendimento nem venda.
+- Rotas: as 11 cidades sem bairros cadastrados passam a usar `Cidade, RS` como origem ajustável, até cada uma das duas lojas de Esteio. Os pontos específicos das outras oito cidades foram mantidos.
+- Texto: removidos filtro inexistente de km em Alvorada, minutos fixos nos metadados, reserva implícita em São Leopoldo/Igrejinha e fechamento simplificado em Gramado. Mantidas as referências locais e as condições de vistoria, crédito e garantia, sem ampliar Nethelp.
+- React e HTML para crawler usam os mesmos dados de cidade e seleção. URLs, canonical, endereços físicos, critérios de compra direta e ordenação do showroom não foram alterados.
+- Validação automática ampliada para detectar ausência de rotas, destinos incorretos, CTAs sem telefone, âncora sem destino, estoque antes da pré-avaliação e divergência da seleção. Em Porto Alegre, corrigida também a leitura de URLs com apóstrofo (`Passo d'Areia`) no validador.
+
+Após o deploy desta segunda entrega, repetir a conferência pública das páginas prioritárias. A revisão editorial e técnica não demonstra aumento de posição ou de conversão; esse efeito ainda precisa ser medido.
+
+### Testes da segunda entrega
+
+- `npm run build`: concluído, incluindo os validadores de SEO regional/HTML, roteamento, estoque, campanha, consentimento, atribuição, TypeScript e Vite. Os avisos de dependências/estilos/bundle existentes não impediram o build. Configuração privada de produção não foi copiada; publicar pelo fluxo habitual com a configuração do servidor.
+- Novo `npm run seo:validate-regional-contact`: quatro estados da API, compra direta e troca, eventos de início sem duplicação, recuperação do telefone, contatos desktop/mobile e destinos dos botões. Execução isolada, sem enviar mensagens reais.
+- HTML gerado: 38 páginas com rotas até os dois endereços; conteúdo local, canonical e critérios de compra/troca preservados. Não equivale a inspeção de indexação no Search Console.
+- Navegador: Canoas (compra e venda) em 390×844, Alvorada com origem de rota por cidade, Gravataí em 1366×900 e Novo Hamburgo no preview compilado. Sem overflow horizontal nas amostras verificadas; âncora de pré-avaliação sem sobreposição com o cabeçalho; seleção da troca remove os limites de compra direta.
+- No servidor de desenvolvimento, observados avisos preexistentes de `fetchPriority` e erro de React Refresh/`StaticMotion`. Eles não se reproduziram como erro da aplicação no preview compilado de venda em Novo Hamburgo. Não foram alteradas essas bibliotecas nesta entrega.
+- PHP/Apache continuam sem runtime local: a validação final das respostas públicas e do deploy depende da publicação no servidor.
 
 ## O que foi verificado
 

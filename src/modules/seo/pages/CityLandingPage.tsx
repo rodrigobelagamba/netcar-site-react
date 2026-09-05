@@ -15,6 +15,7 @@ import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 import { RegionalBreadcrumbs } from "@/modules/seo/components/RegionalBreadcrumbs";
 import { RegionalInventoryNav } from "@/modules/seo/components/RegionalCrossLinks";
 import { RegionalVisitPlanner } from "@/modules/seo/components/RegionalVisitPlanner";
+import { RegionalSelectionNote } from "@/modules/seo/components/RegionalSelectionNote";
 import { useRegionalPageSchema } from "@/modules/seo/useRegionalPageSchema";
 
 export function CityLandingPage() {
@@ -70,82 +71,96 @@ export function CityLandingPage() {
             </span>
             <span className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm text-gray-600 shadow-sm ring-1 ring-black/5">
               <Clock className="h-4 w-4 text-primary" />
-              {city.travelTime} de carro
+              Cerca de {city.travelTime} de carro
             </span>
           </>
         }
       >
-        <div className="mt-6 space-y-4">
-          <h2 className="text-xl font-bold text-fg">
-            {city.contentHeading ??
-              `O que vale conferir antes de sair de ${city.name}`}
-          </h2>
-          {city.paragraphs.map((paragraph) => (
-            <p key={paragraph} className="text-gray-600 leading-relaxed">
-              {paragraph}
-            </p>
-          ))}
-          {city.contentHeading && (
-            <nav
-              aria-label={`Atalhos para pesquisar seminovos em ${city.name}`}
-              className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
-            >
-              <h3 className="font-semibold text-fg">
-                Abra o estoque antes de sair
-              </h3>
-              <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold">
-                <li>
-                  <Link
-                    to="/seminovos"
-                    className="text-primary hover:underline"
-                  >
-                    Estoque atual
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/comparar" className="text-primary hover:underline">
-                    Comparar carros
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/financiamento"
-                    className="text-primary hover:underline"
-                  >
-                    Entender o financiamento
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/compra" className="text-secondary hover:underline">
-                    Avaliar meu usado
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          )}
-          {city.routeNote && (
-            <p className="rounded-xl border border-primary/10 bg-primary/5 p-4 text-sm leading-relaxed text-gray-600">
-              <strong className="text-fg">Referência de trajeto:</strong>{" "}
-              {city.routeNote}
-            </p>
-          )}
-        </div>
         <RegionalActionCtas
           className="mt-8"
           waText={`moro em ${city.name} e estou procurando um seminovo.`}
           sellCitySlug={city.slug}
-          primary="whatsapp"
+          primary="stock"
         />
       </RegionalSeoHero>
-
-      <RegionalTrustSignals />
 
       <RegionalStockPreview
         title={`Seminovos para quem vem de ${city.name}`}
         limit={8}
       />
 
+      <RegionalSelectionNote />
       <RegionalInventoryNav cityName={city.name} />
+      <RegionalTrustSignals />
+
+      <section className="pb-12" aria-labelledby="regional-city-details">
+        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="max-w-3xl space-y-4">
+            <h2
+              id="regional-city-details"
+              className="text-2xl font-bold text-fg"
+            >
+              {city.contentHeading ??
+                `O que vale conferir antes de sair de ${city.name}`}
+            </h2>
+            {city.paragraphs.map((paragraph) => (
+              <p key={paragraph} className="text-gray-600 leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
+            {city.contentHeading && (
+              <nav
+                aria-label={`Atalhos para pesquisar seminovos em ${city.name}`}
+                className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
+              >
+                <h3 className="font-semibold text-fg">
+                  Abra o estoque antes de sair
+                </h3>
+                <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold">
+                  <li>
+                    <Link
+                      to="/seminovos"
+                      className="text-primary hover:underline"
+                    >
+                      Estoque atual
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/comparar"
+                      className="text-primary hover:underline"
+                    >
+                      Comparar carros
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/financiamento"
+                      className="text-primary hover:underline"
+                    >
+                      Entender o financiamento
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/compra"
+                      className="text-secondary hover:underline"
+                    >
+                      Avaliar meu usado
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+            )}
+            {city.routeNote && (
+              <p className="rounded-xl border border-primary/10 bg-primary/5 p-4 text-sm leading-relaxed text-gray-600">
+                <strong className="text-fg">Referência de trajeto:</strong>{" "}
+                {city.routeNote}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
 
       <RegionalVisitPlanner cityName={city.name} origins={city.routeOrigins} />
 

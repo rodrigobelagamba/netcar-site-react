@@ -111,6 +111,9 @@ const SITE = "https://www.netcarmultimarcas.com.br";
 const expointerPage = JSON.parse(
   readFileSync(join(rootDir, "src/data/seo/expointer.json"), "utf8"),
 );
+const regionalSelection = JSON.parse(
+  readFileSync(join(rootDir, "src/data/seo/regional-selection.json"), "utf8"),
+);
 const STOCK_API_URL =
   process.env.NETCAR_SEO_STOCK_API_URL ||
   `${SITE}/api/v1/veiculos.php?limit=500`;
@@ -131,9 +134,11 @@ function siteWhatsAppMessage(body) {
   return `${SITE_WHATSAPP_PREFIX} ${normalized.endsWith(".") ? normalized : `${normalized}.`}`;
 }
 
-function cityWhatsAppLink(cityName) {
+function cityWhatsAppLink(cityName, intent = "buy") {
   const text = siteWhatsAppMessage(
-    `moro em ${cityName} e estou procurando um seminovo.`,
+    intent === "sell"
+      ? `moro em ${cityName} e quero vender meu carro para a Netcar.`
+      : `moro em ${cityName} e estou procurando um seminovo.`,
   );
   return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
 }
@@ -1290,15 +1295,14 @@ function directionsUrl(origin, destination) {
 }
 
 function routePlannerHtml(city, intent = "buy") {
-  if (!Array.isArray(city.routeOrigins) || city.routeOrigins.length === 0) {
-    return "";
-  }
-
-  const origins = city.routeOrigins
+  const routeOrigins = city.routeOrigins?.length
+    ? city.routeOrigins
+    : [{ id: "city", label: city.name, query: `${city.name}, RS` }];
+  const origins = routeOrigins
     .map((origin) => {
       const storeLinks = ROUTE_STORES.map(
         (store) =>
-          `<a href="${escapeHtml(directionsUrl(origin.query, store.address))}">Abrir rota até a ${escapeHtml(store.name)}</a>`,
+          `<a href="${escapeHtml(directionsUrl(origin.query, store.address))}">Rota até a ${escapeHtml(store.name)}</a>`,
       ).join(" · ");
       return `<li><strong>${escapeHtml(origin.label)}:</strong> ${storeLinks}</li>`;
     })
@@ -1307,10 +1311,10 @@ function routePlannerHtml(city, intent = "buy") {
   const isSell = intent === "sell";
   const heading = isSell
     ? `Rotas de ${escapeHtml(city.name)} até as lojas em Esteio`
-    : `Planeje a visita saindo de ${escapeHtml(city.name)}`;
+    : `Rotas de ${escapeHtml(city.name)} até as duas lojas`;
   const intro = isSell
-    ? "Escolha um ponto de saída e abra a rota até cada loja. Antes de sair, envie os dados do carro pelo WhatsApp e combine a vistoria."
-    : "Escolha um ponto de saída de referência. O Google Maps abre o trajeto até cada loja; ajuste o endereço inicial no aplicativo para obter uma estimativa exata.";
+    ? "Abra o trajeto até cada loja e ajuste o endereço de saída no Google Maps. Antes de sair, envie os dados do carro pelo WhatsApp e combine a vistoria."
+    : "Escolha uma origem de referência e abra o trajeto até cada loja. No Google Maps, ajuste o endereço de saída para consultar o caminho e a estimativa de viagem.";
   const note = isSell
     ? "A vistoria é feita nas lojas de Esteio. As duas unidades ficam a cerca de 400 m uma da outra e trabalham com a mesma equipe e estrutura. O valor final depende da avaliação presencial."
     : "As duas lojas ficam somente em Esteio, a cerca de 400 m uma da outra, e trabalham com estoque, vendedores e atendimento integrados. Confirme a disponibilidade e onde estão os carros escolhidos antes de sair.";
@@ -1350,6 +1354,25 @@ for (const city of cities) {
     <article>
       <h1>${escapeHtml(city.h1)}</h1>
       <p>${escapeHtml(city.intro)}</p>
+      <p data-regional-ctas>
+        <a href="${SITE}/seminovos" data-regional-action="view_stock">Ver estoque</a>
+        ·
+        <a href="${cityWhatsAppLink(city.name)}" data-wa-source="landing" data-wa-intent="regional_help" data-regional-action="whatsapp">Falar com a Netcar</a>
+      </p>
+      <section id="estoque-regional">
+        ${stockShowcase({
+          heading: `Seminovos para quem vem de ${city.name}`,
+          vehicles: stock,
+          limit: 8,
+          ctaLabel: "Ver todo o estoque de seminovos",
+          ctaHref: `${SITE}/seminovos`,
+        })}
+      </section>
+      <section aria-labelledby="selecao-regional-titulo">
+        <h2 id="selecao-regional-titulo">${escapeHtml(regionalSelection.heading)}</h2>
+        <p>${escapeHtml(regionalSelection.text)}</p>
+        <p><a href="${SITE}${escapeHtml(regionalSelection.href)}">${escapeHtml(regionalSelection.linkLabel)}</a></p>
+      </section>
       <h2>${escapeHtml(city.contentHeading || `Como comparar seminovos saindo de ${city.name}`)}</h2>
       ${paragraphs}
       ${
@@ -1366,13 +1389,6 @@ for (const city of cities) {
           : ""
       }
       ${city.routeNote ? `<p><strong>Referência de trajeto:</strong> ${escapeHtml(city.routeNote)}</p>` : ""}
-      ${stockShowcase({
-        heading: `Seminovos para quem vem de ${city.name}`,
-        vehicles: stock,
-        limit: 8,
-        ctaLabel: "Ver todo o estoque de seminovos",
-        ctaHref: `${SITE}/seminovos`,
-      })}
       ${regionalInventoryHtml(city.name)}
       ${routePlannerHtml(city)}
       <h2>Da pesquisa à visita em Esteio</h2>
@@ -1386,7 +1402,7 @@ for (const city of cities) {
       <p>
         <a href="${SITE}/seminovos">Ver estoque</a>
         ·
-        <a href="${cityWhatsAppLink(city.name)}">Falar com o iAN · 24/7</a>
+        <a href="${cityWhatsAppLink(city.name)}" data-wa-source="landing" data-wa-intent="regional_help">Falar com a Netcar</a>
       </p>
       ${relatedCitiesHtml(city.slug)}
     </article>`;
@@ -1430,17 +1446,30 @@ for (const city of cities) {
     <article>
       <h1>${escapeHtml(city.sell.h1)}</h1>
       <p>${escapeHtml(city.sell.intro)}</p>
+      <p data-regional-ctas>
+        <a href="#pre-avaliacao" data-regional-action="sell_evaluation">Pedir avaliação do meu carro</a>
+        ·
+        <a href="${cityWhatsAppLink(city.name, "sell")}" data-wa-source="landing" data-wa-intent="regional_help" data-regional-action="whatsapp">Falar com a Netcar</a>
+        ·
+        <a href="${SITE}/seminovos" data-regional-action="view_stock">Ver estoque para troca</a>
+      </p>
+      <section id="pre-avaliacao" aria-labelledby="pre-avaliacao-titulo">
+        <h2 id="pre-avaliacao-titulo">Envie os dados do seu carro</h2>
+        <p>Modelo, ano e quilometragem já deixam a conversa pronta no WhatsApp. Fotos e documentos podem ser enviados na sequência.</p>
+        <h3>Critérios para a Netcar comprar o seu carro</h3>
+        <ul>
+          <li>No máximo 6 anos de uso.</li>
+          <li>Até 80.000 km rodados.</li>
+          <li>Primeiro emplacamento no Rio Grande do Sul.</li>
+          <li>Sem origem de locadora.</li>
+          <li>Sem passagem por leilão, sinistro, furto ou roubo.</li>
+        </ul>
+        <p>Carro financiado pode ser avaliado; o saldo para quitação entra na negociação. Atender aos critérios permite iniciar a análise, mas não garante a compra.</p>
+        <p><strong>Vai usar o carro na troca?</strong> Esses limites não se aplicam. O veículo pode ser avaliado dentro da negociação, conforme vistoria e documentação.</p>
+        <p><a href="${cityWhatsAppLink(city.name, "sell")}" data-wa-source="form" data-wa-intent="sell_evaluation">Enviar dados no WhatsApp</a></p>
+        <p>A proposta final depende da vistoria, dos documentos e do interesse da loja no veículo.</p>
+      </section>
       ${sellParagraphs}
-      <h2>Critérios para a Netcar comprar o seu carro</h2>
-      <ul>
-        <li>No máximo 6 anos de uso.</li>
-        <li>Até 80.000 km rodados.</li>
-        <li>Primeiro emplacamento no Rio Grande do Sul.</li>
-        <li>Sem origem de locadora.</li>
-        <li>Sem passagem por leilão, sinistro, furto ou roubo.</li>
-      </ul>
-      <p>Carro financiado pode ser avaliado; o saldo para quitação entra na negociação. Atender aos critérios permite iniciar a análise, mas não garante a compra.</p>
-      <p><strong>Vai usar o carro na troca?</strong> Esses limites não se aplicam. O veículo pode ser avaliado dentro da negociação, conforme vistoria e documentação.</p>
       <p><strong>Referência para a vistoria:</strong> ${escapeHtml(city.routeNote)}</p>
       <h2>Pré-avaliação remota, vistoria em Esteio</h2>
       <ol>
@@ -1449,16 +1478,18 @@ for (const city of cities) {
         <li>Agende vistoria e conferência documental na Av. Presidente Vargas, em Esteio.</li>
       </ol>
       <p>A Netcar não possui unidade ou ponto de coleta em ${escapeHtml(city.name)}.</p>
-      ${stockShowcase({
-        heading: `Seminovos disponíveis para usar seu carro na troca`,
-        vehicles: stock,
-        limit: 8,
-        ctaLabel: "Ver todo o estoque para troca",
-        ctaHref: `${SITE}/seminovos`,
-      })}
+      <section id="estoque-regional">
+        ${stockShowcase({
+          heading: `Seminovos disponíveis para usar seu carro na troca`,
+          vehicles: stock,
+          limit: 8,
+          ctaLabel: "Ver todo o estoque para troca",
+          ctaHref: `${SITE}/seminovos`,
+        })}
+      </section>
       ${routePlannerHtml(city, "sell")}
       ${sellFaqHtml}
-      <p><a href="${SITE}/compra">Iniciar pré-avaliação</a> · <a href="${SITE}/seminovos">Ver estoque para troca</a></p>
+      <p><a href="#pre-avaliacao" data-regional-action="sell_evaluation">Pedir avaliação do meu carro</a> · <a href="${SITE}/seminovos">Ver estoque para troca</a></p>
       ${relatedSellCitiesHtml(city.slug)}
     </article>`;
     writeSeoPage(

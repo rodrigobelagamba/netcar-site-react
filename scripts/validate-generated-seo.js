@@ -16,6 +16,9 @@ const expectedEmail = "contato@netcarmultimarcas.com.br";
 const cities = JSON.parse(
   readFileSync(join(root, "src/data/seo/cities.json"), "utf8"),
 );
+const regionalSelection = JSON.parse(
+  readFileSync(join(root, "src/data/seo/regional-selection.json"), "utf8"),
+);
 const contentPages = JSON.parse(
   readFileSync(join(root, "src/data/seo/content-pages.json"), "utf8"),
 );
@@ -55,6 +58,36 @@ const locationSource = readFileSync(
 );
 const errors = [];
 const canonicals = new Set();
+const expectedRegionalSlugs = [
+  "canoas",
+  "nova-santa-rita",
+  "sapucaia-do-sul",
+  "sao-leopoldo",
+  "novo-hamburgo",
+  "gravatai",
+  "cachoeirinha",
+  "porto-alegre",
+  "alvorada",
+  "viamao",
+  "guaiba",
+  "campo-bom",
+  "estancia-velha",
+  "montenegro",
+  "taquara",
+  "igrejinha",
+  "gramado",
+  "caxias-do-sul",
+  "bento-goncalves",
+];
+if (
+  JSON.stringify(cities.map((city) => city.slug).sort()) !==
+    JSON.stringify([...expectedRegionalSlugs].sort()) ||
+  cities.filter((city) => city.sell).length !== expectedRegionalSlugs.length
+) {
+  errors.push(
+    "Páginas regionais: preservar as 19 cidades e suas 38 URLs de compra/venda",
+  );
+}
 const tractionRecoverySlugs = new Set([
   "canoas",
   "sao-leopoldo",
@@ -99,7 +132,7 @@ function occurrences(text, value) {
 }
 
 function attributeValue(tag, name) {
-  return tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, "i"))?.[1] || "";
+  return tag.match(new RegExp(`\\b${name}=(["'])(.*?)\\1`, "i"))?.[2] || "";
 }
 
 function parsedSchemas(html, label) {
@@ -139,9 +172,198 @@ function schemaTypes(schemas) {
 }
 
 function anchorHrefs(html) {
-  return [...html.matchAll(/<a\s+[^>]*href=["']([^"']+)["'][^>]*>/gi)].map(
-    (match) => match[1],
+  return [...html.matchAll(/<a\s+[^>]*href=(["'])(.*?)\1[^>]*>/gi)].map(
+    (match) => match[2],
   );
+}
+
+function validateRegionalExperience(html, city, variant, label) {
+  const body = html.match(/<main>([\s\S]*?)<\/main>/i)?.[1] || "";
+  const ctas = body.match(/<p data-regional-ctas>([\s\S]*?)<\/p>/)?.[0] || "";
+  const stockSection =
+    body.match(/<section id="estoque-regional">([\s\S]*?)<\/section>/)?.[0] ||
+    "";
+  const intro = variant === "sell" ? city.sell.intro : city.intro;
+  const introPosition = body.indexOf(`<p>${escapeHtml(intro)}</p>`);
+  const ctaPosition = ctas ? body.indexOf(ctas) : -1;
+  const stockPosition = stockSection ? body.indexOf(stockSection) : -1;
+  if (
+    introPosition < 0 ||
+    ctaPosition <= introPosition ||
+    stockPosition <= ctaPosition ||
+    occurrences(body, "data-regional-ctas") !== 1 ||
+    occurrences(body, 'id="estoque-regional"') !== 1
+  ) {
+    errors.push(
+      `${label}: introdução, CTAs e estoque precisam aparecer nessa ordem`,
+    );
+  }
+  const stockHrefs = anchorHrefs(stockSection).filter((href) =>
+    href.startsWith(`${site}/veiculo/`),
+  );
+  if (stockHrefs.length < 1 || stockHrefs.length > 8) {
+    errors.push(
+      `${label}: vitrine regional precisa ter de 1 a 8 veículos reais`,
+    );
+  }
+  if (
+    !ctas.includes("Falar com a Netcar") ||
+    /Falar com o iAN|24\/7/.test(ctas)
+  ) {
+    errors.push(`${label}: CTA regional deve usar atendimento da Netcar`);
+  }
+
+  const paragraphs =
+    variant === "sell" ? city.sell.paragraphs : city.paragraphs;
+  const paragraphPositions = paragraphs.map((paragraph) =>
+    body.indexOf(`<p>${escapeHtml(paragraph)}</p>`),
+  );
+  if (paragraphPositions.some((position) => position < 0)) {
+    errors.push(`${label}: conteúdo original da cidade ausente`);
+  }
+  if (city.routeNote && !body.includes(escapeHtml(city.routeNote))) {
+    errors.push(`${label}: referência de trajeto da cidade ausente`);
+  }
+
+  if (variant === "buy") {
+    const selection =
+      body.match(
+        /<section aria-labelledby="selecao-regional-titulo">([\s\S]*?)<\/section>/,
+      )?.[0] || "";
+    const selectionPosition = selection ? body.indexOf(selection) : -1;
+    if (
+      !selection.includes(escapeHtml(regionalSelection.heading)) ||
+      !selection.includes(escapeHtml(regionalSelection.text)) ||
+      !selection.includes(escapeHtml(regionalSelection.linkLabel)) ||
+      !anchorHrefs(selection).includes(`${site}${regionalSelection.href}`)
+    ) {
+      errors.push(`${label}: seleção Netcar diverge do conteúdo compartilhado`);
+    }
+    if (
+      selectionPosition <= stockPosition ||
+      paragraphPositions.some((position) => position <= selectionPosition)
+    ) {
+      errors.push(
+        `${label}: estoque e seleção devem preceder os textos da cidade`,
+      );
+    }
+    if (!anchorHrefs(ctas).includes(`${site}/seminovos`)) {
+      errors.push(`${label}: estoque precisa estar nos CTAs iniciais`);
+    }
+  } else {
+    const evaluation =
+      body.match(
+        /<section id="pre-avaliacao"[^>]*>([\s\S]*?)<\/section>/,
+      )?.[0] || "";
+    const evaluationPosition = evaluation ? body.indexOf(evaluation) : -1;
+    if (
+      !ctas.includes('href="#pre-avaliacao"') ||
+      !ctas.includes("Pedir avaliação do meu carro") ||
+      occurrences(body, 'id="pre-avaliacao"') !== 1 ||
+      evaluationPosition <= ctaPosition ||
+      evaluationPosition >= stockPosition ||
+      paragraphPositions.some((position) => position <= evaluationPosition)
+    ) {
+      errors.push(
+        `${label}: CTA e pré-avaliação local devem preceder conteúdo e estoque de troca`,
+      );
+    }
+    for (const criterion of [
+      "Critérios para a Netcar comprar o seu carro",
+      "No máximo 6 anos de uso",
+      "Até 80.000 km rodados",
+      "Primeiro emplacamento no Rio Grande do Sul",
+      "Sem origem de locadora",
+      "Sem passagem por leilão, sinistro, furto ou roubo",
+      "Vai usar o carro na troca?",
+      "Esses limites não se aplicam",
+      "conforme vistoria e documentação",
+    ]) {
+      if (!evaluation.includes(criterion)) {
+        errors.push(
+          `${label}: pré-avaliação sem critério ou distinção de troca: ${criterion}`,
+        );
+      }
+    }
+    const contactTag =
+      evaluation.match(
+        /<a\s+[^>]*data-wa-intent="sell_evaluation"[^>]*>/,
+      )?.[0] || "";
+    const contactHref = attributeValue(contactTag, "href").replace(
+      /&amp;/g,
+      "&",
+    );
+    let message = "";
+    try {
+      const contactUrl = new URL(contactHref);
+      if (
+        contactUrl.origin === "https://wa.me" &&
+        /^\/\d{12,13}$/.test(contactUrl.pathname)
+      ) {
+        message = contactUrl.searchParams.get("text") || "";
+      }
+    } catch {
+      // A mensagem vazia abaixo também reprova hrefs ausentes ou inválidos.
+    }
+    if (
+      !message.includes(city.name) ||
+      !message.includes("quero vender meu carro para a Netcar")
+    ) {
+      errors.push(
+        `${label}: contato de pré-avaliação precisa manter cidade e intenção de venda`,
+      );
+    }
+  }
+
+  const routeOrigins = city.routeOrigins?.length
+    ? city.routeOrigins
+    : [{ id: "city", label: city.name, query: `${city.name}, RS` }];
+  const planner =
+    body.match(
+      /<section aria-labelledby="planejador-visita-titulo">([\s\S]*?)<\/section>/,
+    )?.[0] || "";
+  const routeHrefs = anchorHrefs(planner).map((href) =>
+    href.replace(/&amp;/g, "&"),
+  );
+  if (routeHrefs.length !== routeOrigins.length * 2) {
+    errors.push(`${label}: planejador precisa ligar cada origem às duas lojas`);
+  }
+  const stores = [
+    {
+      name: "Loja 1",
+      address: "Av. Presidente Vargas, 740, Centro, Esteio, RS",
+    },
+    {
+      name: "Loja 2",
+      address: "Av. Presidente Vargas, 1106, Centro, Esteio, RS",
+    },
+  ];
+  for (const origin of routeOrigins) {
+    if (!planner.includes(`<strong>${escapeHtml(origin.label)}:</strong>`)) {
+      errors.push(
+        `${label}: origem ${origin.label} ausente no planejador estático`,
+      );
+    }
+    for (const store of stores) {
+      const expectedRoute = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin.query)}&destination=${encodeURIComponent(store.address)}&travelmode=driving`;
+      if (!routeHrefs.includes(expectedRoute)) {
+        errors.push(
+          `${label}: rota incorreta de ${origin.label} para ${store.name}`,
+        );
+      }
+      if (!planner.includes(`>Rota até a ${store.name}</a>`)) {
+        errors.push(`${label}: rótulo de rota deve identificar ${store.name}`);
+      }
+    }
+  }
+  if (
+    !planner.includes("Google Maps") ||
+    !planner.includes("ajuste o endereço de saída")
+  ) {
+    errors.push(
+      `${label}: planejador deve orientar ajuste da origem no Google Maps`,
+    );
+  }
 }
 
 function validateOrganizationGraph(nodes, label) {
@@ -457,32 +679,7 @@ function validatePage({
   ) {
     errors.push(`${label}: aviso de lojas somente em Esteio ausente`);
   }
-  if (city.routeOrigins?.length) {
-    const routeHeading =
-      variant === "sell"
-        ? `Rotas de ${escapeHtml(city.name)} até as lojas em Esteio`
-        : `Planeje a visita saindo de ${escapeHtml(city.name)}`;
-    if (!html.includes(routeHeading)) {
-      errors.push(`${label}: planejador de visita ausente no HTML estático`);
-    }
-    const routeCount = occurrences(
-      html,
-      "https://www.google.com/maps/dir/?api=1&amp;origin=",
-    );
-    const expectedRouteCount = city.routeOrigins.length * 2;
-    if (routeCount !== expectedRouteCount) {
-      errors.push(
-        `${label}: esperado ${expectedRouteCount} links de rota no HTML estático; encontrado ${routeCount}`,
-      );
-    }
-    for (const origin of city.routeOrigins) {
-      if (!html.includes(`<strong>${escapeHtml(origin.label)}:</strong>`)) {
-        errors.push(
-          `${label}: origem ${origin.label} ausente no planejador estático`,
-        );
-      }
-    }
-  }
+  validateRegionalExperience(html, city, variant, label);
   if (
     variant === "sell" &&
     !html.includes(
@@ -490,18 +687,6 @@ function validatePage({
     )
   ) {
     errors.push(`${label}: aviso de ausência de unidade na cidade ausente`);
-  }
-  if (
-    variant === "sell" &&
-    (!html.includes("Critérios para a Netcar comprar o seu carro") ||
-      !html.includes("No máximo 6 anos de uso") ||
-      !html.includes("Até 80.000 km rodados") ||
-      !html.includes("Primeiro emplacamento no Rio Grande do Sul") ||
-      !html.includes("Sem origem de locadora") ||
-      !html.includes("Sem passagem por leilão, sinistro, furto ou roubo") ||
-      !html.includes("Esses limites não se aplicam"))
-  ) {
-    errors.push(`${label}: critérios de compra ausentes ou incompletos`);
   }
 
   const sitemapEntry = `<loc>${canonical}</loc>`;

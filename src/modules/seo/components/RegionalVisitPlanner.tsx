@@ -30,14 +30,14 @@ export function RegionalVisitPlanner({
   origins,
   intent = "buy",
 }: RegionalVisitPlannerProps) {
-  const [selectedOriginId, setSelectedOriginId] = useState(
-    origins?.[0]?.id ?? "",
-  );
-
-  if (!origins?.length) return null;
+  const routeOrigins = origins?.length
+    ? origins
+    : [{ id: "city", label: cityName, query: `${cityName}, RS` }];
+  const [selectedOriginId, setSelectedOriginId] = useState(routeOrigins[0].id);
 
   const selectedOrigin =
-    origins.find((origin) => origin.id === selectedOriginId) ?? origins[0];
+    routeOrigins.find((origin) => origin.id === selectedOriginId) ??
+    routeOrigins[0];
   const isSell = intent === "sell";
 
   return (
@@ -63,18 +63,18 @@ export function RegionalVisitPlanner({
                 </h2>
                 <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-600 sm:text-base">
                   {isSell
-                    ? "Escolha a região mais próxima e abra o caminho até cada loja. Antes de sair, envie os dados do carro pelo WhatsApp e combine a vistoria."
-                    : "Escolha uma região de saída para abrir o trajeto até cada loja. No Google Maps, ajuste o endereço inicial se precisar."}
+                    ? "Abra o trajeto até cada loja e ajuste o endereço de saída no Google Maps. Antes de sair, envie os dados do carro pelo WhatsApp e combine a vistoria."
+                    : "Escolha uma origem de referência e abra o trajeto até cada loja. No Google Maps, ajuste o endereço de saída para consultar o caminho e a estimativa de viagem."}
                 </p>
               </div>
             </div>
 
             <fieldset className="mt-6">
               <legend className="text-sm font-semibold text-fg">
-                De qual região de {cityName} você pretende sair?
+                Origem da rota
               </legend>
               <div className="mt-3 flex flex-wrap gap-2">
-                {origins.map((origin) => {
+                {routeOrigins.map((origin) => {
                   const active = origin.id === selectedOrigin.id;
                   return (
                     <button
@@ -123,7 +123,7 @@ export function RegionalVisitPlanner({
                     data-regional-action={`route_${store.id}_from_${selectedOrigin.id}`}
                     className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#00283C] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#00435a]"
                   >
-                    {isSell ? "Traçar rota saindo do" : "Abrir rota do"} {selectedOrigin.label}
+                    Rota até a {store.name}
                     <ExternalLink className="h-4 w-4" aria-hidden="true" />
                   </a>
                 </article>

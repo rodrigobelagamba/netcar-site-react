@@ -4,6 +4,7 @@ import { Banknote, CheckCircle2 } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import {
   buildWhatsAppUrl,
+  DEFAULT_SALES_WHATSAPP,
   quickSellWhatsAppMessage,
 } from "@/lib/whatsappMessages";
 import { openWhatsApp, trackSellEvaluation } from "@/lib/analytics";
@@ -77,15 +78,14 @@ export function QuickSellForm({
   >("direct_purchase");
   const startedRef = useRef(false);
 
-  const trackStart = () => {
+  const trackStart = (intent = evaluationType) => {
     if (startedRef.current) return;
     startedRef.current = true;
-    trackSellEvaluation("start", cityName, evaluationType);
+    trackSellEvaluation("start", cityName, intent);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!whatsapp?.numero) return;
 
     const message = quickSellWhatsAppMessage({
       modelo,
@@ -94,7 +94,10 @@ export function QuickSellForm({
       cityName,
       evaluationType,
     });
-    const url = buildWhatsAppUrl(whatsapp.numero, message);
+    const url = buildWhatsAppUrl(
+      whatsapp?.numero?.trim() || DEFAULT_SALES_WHATSAPP,
+      message,
+    );
     trackSellEvaluation("completed", cityName, evaluationType);
     openWhatsApp(url, {
       source: "form",
@@ -112,7 +115,16 @@ export function QuickSellForm({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       onSubmit={handleSubmit}
-      onFocusCapture={trackStart}
+      onFocusCapture={(event: React.FocusEvent<HTMLFormElement>) => {
+        const target = event.target;
+        const intent =
+          target instanceof HTMLInputElement &&
+          target.name === "evaluation-type" &&
+          (target.value === "direct_purchase" || target.value === "trade_in")
+            ? target.value
+            : evaluationType;
+        trackStart(intent);
+      }}
       className="rounded-2xl bg-white p-6 shadow-md border border-gray-100"
     >
       <div className="flex items-center gap-3 mb-1">
@@ -161,7 +173,10 @@ export function QuickSellForm({
                   name="evaluation-type"
                   value={option.value}
                   checked={selected}
-                  onChange={() => setEvaluationType(option.value)}
+                  onChange={() => {
+                    setEvaluationType(option.value);
+                    trackStart(option.value);
+                  }}
                   className="sr-only"
                 />
                 <span className="block text-sm font-bold">{option.label}</span>
@@ -224,7 +239,7 @@ export function QuickSellForm({
 
       <button
         type="submit"
-        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-5 py-3.5 text-white font-semibold hover:opacity-90 transition-opacity"
+        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#087A37] px-5 py-3.5 text-white font-semibold hover:bg-[#075E54] transition-colors"
       >
         <svg
           className="w-5 h-5"

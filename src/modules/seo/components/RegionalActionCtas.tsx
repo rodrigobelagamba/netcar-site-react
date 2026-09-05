@@ -1,7 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Banknote, Car, MessageCircle } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
+import {
+  buildWhatsAppUrl,
+  DEFAULT_SALES_WHATSAPP,
+  siteWhatsAppMessage,
+} from "@/lib/whatsappMessages";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { cn } from "@/lib/cn";
 
@@ -15,6 +19,9 @@ type RegionalActionCtasProps = {
   waText: string;
   sellTo?: "/compra" | "/compramos-seu-usado";
   sellCitySlug?: string;
+  /** ID da seção local, sem #; quando definido, tem prioridade sobre as rotas. */
+  sellAnchor?: string;
+  sellLabel?: string;
   stockSearch?: StockSearch;
   stockLabel?: string;
   stockSubtitle?: string;
@@ -63,6 +70,8 @@ export function RegionalActionCtas({
   waText,
   sellTo = "/compra",
   sellCitySlug,
+  sellAnchor,
+  sellLabel = "Vender meu carro",
   stockSearch = emptySeminovosSearch,
   stockLabel = "Ver estoque",
   stockSubtitle = "Fotos, preço e km do anúncio",
@@ -72,9 +81,10 @@ export function RegionalActionCtas({
   className = "",
 }: RegionalActionCtasProps) {
   const { data: whatsapp } = useWhatsAppQuery();
-  const waHref = whatsapp?.numero
-    ? buildWhatsAppUrl(whatsapp.numero, siteWhatsAppMessage(waText))
-    : "#";
+  const waHref = buildWhatsAppUrl(
+    whatsapp?.numero?.trim() || DEFAULT_SALES_WHATSAPP,
+    siteWhatsAppMessage(waText),
+  );
 
   const stockBtn = cn(
     "inline-flex min-h-[64px] items-center justify-center gap-2.5 rounded-2xl px-5 py-3.5 transition-all active:scale-[0.98] sm:min-w-[200px] sm:flex-1",
@@ -100,13 +110,14 @@ export function RegionalActionCtas({
   const sellInner = (
     <CtaContent
       icon={Banknote}
-      title="Vender meu carro"
+      title={sellLabel}
       subtitle={sellSubtitle}
     />
   );
 
   const stockLink = (
     <Link
+      key="stock"
       to="/seminovos"
       search={stockSearch}
       data-regional-action="view_stock"
@@ -123,6 +134,7 @@ export function RegionalActionCtas({
 
   const waLink = (
     <a
+      key="whatsapp"
       href={waHref}
       target="_blank"
       rel="noopener noreferrer"
@@ -133,15 +145,25 @@ export function RegionalActionCtas({
     >
       <CtaContent
         icon={MessageCircle}
-        title="WhatsApp"
+        title="Falar com a Netcar"
         subtitle={waSubtitle}
         dark
       />
     </a>
   );
 
-  const sellLink = sellCitySlug ? (
+  const sellLink = sellAnchor ? (
+    <a
+      key="sell"
+      href={`#${sellAnchor}`}
+      data-regional-action="sell_evaluation"
+      className={sellBtn}
+    >
+      {sellInner}
+    </a>
+  ) : sellCitySlug ? (
     <Link
+      key="sell"
       to="/vender-carro-{$citySlug}"
       params={{ citySlug: sellCitySlug }}
       data-regional-action="sell_city"
@@ -151,6 +173,7 @@ export function RegionalActionCtas({
     </Link>
   ) : (
     <Link
+      key="sell"
       to={sellTo}
       data-regional-action="sell_evaluation"
       className={sellBtn}

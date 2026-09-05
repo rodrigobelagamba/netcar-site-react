@@ -5,10 +5,7 @@ import { useMetaTags } from "@/hooks/useMetaTags";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
-import {
-  PurchaseCriteriaCard,
-  QuickSellForm,
-} from "@/components/QuickSellForm";
+import { QuickSellForm } from "@/components/QuickSellForm";
 import { RelatedCitiesNav } from "@/modules/seo/components/RelatedCitiesNav";
 import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
 import { RegionalStockPreview } from "@/modules/seo/components/RegionalStockPreview";
@@ -41,7 +38,7 @@ export function SellCityLandingPage() {
     <main className="flex-1 overflow-x-hidden max-w-full bg-white pt-16 sm:pt-0">
       <RegionalBreadcrumbs cityName={city.name} variant="sell" />
       <RegionalSeoHero
-        eyebrow="Netcar compra · usado na troca ou à vista"
+        eyebrow="Venda seu carro para a Netcar"
         title={sell.h1}
         intro={sell.intro}
         accent="secondary"
@@ -53,45 +50,68 @@ export function SellCityLandingPage() {
             </span>
             <span className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm text-gray-600 shadow-sm ring-1 ring-black/5">
               <Clock className="h-4 w-4 text-secondary" />
-              {city.travelTime} de carro
+              Cerca de {city.travelTime} de carro
             </span>
           </>
         }
       >
-        <div className="mt-6 space-y-4">
-          {sell.paragraphs.map((paragraph) => (
-            <p key={paragraph} className="leading-relaxed text-gray-600">
-              {paragraph}
-            </p>
-          ))}
-          <p className="rounded-xl border border-secondary/15 bg-secondary/5 p-4 text-sm leading-relaxed text-gray-600">
-            <strong className="text-fg">Referência para a vistoria:</strong>{" "}
-            {city.routeNote}
-          </p>
-          <PurchaseCriteriaCard />
-        </div>
         <RegionalActionCtas
           className="mt-8"
           waText={`moro em ${city.name} e quero vender meu carro para a Netcar.`}
           waSubtitle="Envie os dados e tire suas dúvidas"
-          sellTo="/compra"
-          primary="whatsapp"
+          sellAnchor="pre-avaliacao"
+          sellLabel="Pedir avaliação do meu carro"
+          stockLabel="Ver carros para troca"
+          primary="sell"
         />
-        <a
-          href="#pre-avaliacao"
-          className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:underline"
-        >
-          <ClipboardCheck className="h-4 w-4" />
-          Ir para o formulário de pré-avaliação
-        </a>
       </RegionalSeoHero>
 
-      <RegionalTrustSignals />
+      <section className="pb-12" aria-labelledby="regional-evaluation-title">
+        <div
+          id="pre-avaliacao"
+          className="container-main scroll-mt-28 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl"
+        >
+          <h2
+            id="regional-evaluation-title"
+            className="mb-5 text-2xl font-bold text-fg"
+          >
+            Peça uma avaliação antes de sair de {city.name}
+          </h2>
+          <QuickSellForm cityName={city.name} />
+          <p className="mt-4 text-center text-sm text-gray-500">
+            Atendimento inicial pelo WhatsApp e vistoria nas lojas de Esteio.{" "}
+            <Link
+              to="/regioes-atendidas"
+              className="font-semibold text-primary hover:underline"
+            >
+              Consulte regiões atendidas
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
 
-      <RegionalStockPreview
-        title="Estoque para quem quer trocar de carro"
-        limit={8}
-      />
+      <section className="pb-12" aria-labelledby="regional-sell-details">
+        <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="max-w-3xl space-y-4">
+            <h2
+              id="regional-sell-details"
+              className="text-2xl font-bold text-fg"
+            >
+              Como vender seu carro saindo de {city.name}
+            </h2>
+            {sell.paragraphs.map((paragraph) => (
+              <p key={paragraph} className="leading-relaxed text-gray-600">
+                {paragraph}
+              </p>
+            ))}
+            <p className="rounded-xl border border-secondary/15 bg-secondary/5 p-4 text-sm leading-relaxed text-gray-600">
+              <strong className="text-fg">Referência para a vistoria:</strong>{" "}
+              {city.routeNote}
+            </p>
+          </div>
+        </div>
+      </section>
 
       <section className="pb-12">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
@@ -105,8 +125,8 @@ export function SellCityLandingPage() {
                 1. Envie os dados do carro
               </h3>
               <p className="text-sm leading-relaxed text-gray-600">
-                Modelo, versão, ano, km, fotos, avarias e saldo de financiamento
-                ajudam no primeiro filtro.
+                Informe modelo, versão, ano e km. Na conversa, envie as fotos e
+                conte sobre a manutenção e o financiamento, se houver.
               </p>
             </article>
             <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
@@ -133,24 +153,12 @@ export function SellCityLandingPage() {
         </div>
       </section>
 
-      <section className="pb-12">
-        <div
-          id="pre-avaliacao"
-          className="container-main scroll-mt-28 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl"
-        >
-          <QuickSellForm cityName={city.name} showCriteria={false} />
-          <p className="mt-4 text-center text-sm text-gray-500">
-            Sem unidade ou ponto de coleta em {city.name}.{" "}
-            <Link
-              to="/regioes-atendidas"
-              className="font-semibold text-secondary hover:underline"
-            >
-              Consulte regiões atendidas
-            </Link>
-            .
-          </p>
-        </div>
-      </section>
+      <RegionalTrustSignals />
+
+      <RegionalStockPreview
+        title="Estoque para quem quer trocar de carro"
+        limit={8}
+      />
 
       <RegionalVisitPlanner
         cityName={city.name}

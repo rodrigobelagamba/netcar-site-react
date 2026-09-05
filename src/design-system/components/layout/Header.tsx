@@ -4,7 +4,11 @@ import { Search, Phone, Menu, X } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useSearchContext } from "@/contexts/SearchContext";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
-import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
+import {
+  buildWhatsAppUrl,
+  DEFAULT_SALES_WHATSAPP,
+  siteWhatsAppMessage,
+} from "@/lib/whatsappMessages";
 import { generateVehicleSlug } from "@/lib/slug";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
@@ -34,6 +38,7 @@ export function Header() {
   const location = useLocation();
   const isSeptemberCampaignActive = useSeptemberCampaignActive();
   const { data: whatsapp } = useWhatsAppQuery();
+  const whatsappNumber = whatsapp?.numero?.trim() || DEFAULT_SALES_WHATSAPP;
   const { searchTerm, setSearchTerm } = useSearchContext();
   const { data: vehicles } = useVehiclesQuery(undefined, {
     enabled: isSearchOpen || isMobileMenuOpen,
@@ -43,7 +48,8 @@ export function Header() {
   const formatPhone = (phone?: string) => {
     if (!phone) return "";
     // Remove caracteres não numéricos e formata
-    const cleaned = phone.replace(/\D/g, "");
+    const digits = phone.replace(/\D/g, "");
+    const cleaned = /^55\d{10,11}$/.test(digits) ? digits.slice(2) : digits;
     if (cleaned.length === 11) {
       return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
     }
@@ -55,9 +61,8 @@ export function Header() {
 
   // Gera link do WhatsApp (mensagem curta fixa — facilita qualificação no iAN)
   const getWhatsAppLink = () => {
-    if (!whatsapp?.numero) return "#";
     return buildWhatsAppUrl(
-      whatsapp.numero,
+      whatsappNumber,
       siteWhatsAppMessage("quero falar com a Netcar sobre seminovos."),
     );
   };
@@ -554,22 +559,20 @@ export function Header() {
                 <span className="hidden 2xl:inline">Buscar</span>
               </button>
             )}
-            {whatsapp?.numero && (
-              <a
-                href={getWhatsAppLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-wa-source="header"
-                data-wa-intent="header_contact"
-                className="inline-flex items-center gap-2 hover:text-primary transition-colors"
-                aria-label={formatPhone(whatsapp.numero)}
-              >
-                <Phone className="w-4 h-4 shrink-0" />
-                <span className="hidden 2xl:inline">
-                  {formatPhone(whatsapp.numero)}
-                </span>
-              </a>
-            )}
+            <a
+              href={getWhatsAppLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-wa-source="header"
+              data-wa-intent="header_contact"
+              className="inline-flex items-center gap-2 hover:text-primary transition-colors"
+              aria-label={formatPhone(whatsappNumber)}
+            >
+              <Phone className="w-4 h-4 shrink-0" />
+              <span className="hidden 2xl:inline">
+                {formatPhone(whatsappNumber)}
+              </span>
+            </a>
           </div>
 
           {/* Hambúrguer — mobile, tablet e desktop abaixo de xl */}
@@ -688,22 +691,20 @@ export function Header() {
                   )}
                 </div>
               ))}
-              {whatsapp?.numero && (
-                <div>
-                  <a
-                    href={getWhatsAppLink()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-wa-source="header"
-                    data-wa-intent="mobile_menu_contact"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="inline-flex items-center gap-2"
-                  >
-                    <Phone className="w-5 h-5 shrink-0" />
-                    <span>{formatPhone(whatsapp.numero)}</span>
-                  </a>
-                </div>
-              )}
+              <div>
+                <a
+                  href={getWhatsAppLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-wa-source="header"
+                  data-wa-intent="mobile_menu_contact"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="inline-flex items-center gap-2"
+                >
+                  <Phone className="w-5 h-5 shrink-0" />
+                  <span>{formatPhone(whatsappNumber)}</span>
+                </a>
+              </div>
             </nav>
           </div>
         </>
