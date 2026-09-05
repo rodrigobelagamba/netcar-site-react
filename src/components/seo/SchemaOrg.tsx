@@ -48,7 +48,9 @@ export function SchemaOrg() {
           "@type": "Organization",
           "@id": organizationId,
           name: "Netcar Multimarcas",
-          alternateName: "Netcar Veículos",
+          // Nomes que o público e perfis antigos usam; ajuda o Google a
+          // juntar "Netcar RC" (Facebook, domínio antigo) a esta entidade.
+          alternateName: ["Netcar Esteio", "Netcar RC", "Netcar Veículos"],
           legalName: "R&C Veículos Ltda",
           taxID: "02.237.969/0001-06",
           foundingDate: "1997",
@@ -75,6 +77,10 @@ export function SchemaOrg() {
           sameAs: [
             "https://www.instagram.com/netcar_rc",
             "https://www.facebook.com/NetcarRC",
+            "https://www.linkedin.com/company/netcar-multimarcas",
+            "https://maps.google.com/maps?cid=9144067949621682127",
+            "https://maps.google.com/maps?cid=10839197980729051544",
+            "https://napista.com.br/busca/carro/vendedor-netcar_multimarcas_02230106",
           ],
         },
         {

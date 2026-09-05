@@ -118,6 +118,63 @@ Solicitação recomendada para o cadastro existente, sem criar duplicata:
 - não comprar pacotes de links ou cadastros automáticos em centenas de diretórios;
 - não tratar a presença de uma inconsistência como causa comprovada do ranking.
 
+## Adendo 03/09/2026 — novas fontes e execução
+
+Nova varredura pública em 03/09/2026. Nenhum item da matriz original foi executado até esta data (todos dependiam de login). Fontes novas encontradas:
+
+| Fonte | Situação observada | Divergência | Ação | Canal | Estado |
+|---|---|---|---|---|---|
+| [Mobiauto](https://www.mobiauto.com.br/comprar/estoque/netcar-rc-veiculos-ltda-17341) | `Netcar Veículos Ltda`, **0 veículos**, texto com nº 740 + telefone (051) 3500-7338, bloco de endereço com nº 1106 e CEP 93260-490 (CEP da Loja 1 no nº da Loja 2) | perfil morto com telefone antigo e NAP misturado; cliente que chega vê loja "sem estoque" | reativar com feed de estoque **ou** pedir remoção do perfil. Não deixar vazio | login lojista Mobiauto / suporte | pendente de login |
+| [Listamais](https://www.listamais.com.br/local/cad_idDDQffDZ/netcar-multimarcas-loja-de-carro-em-esteio-rs) | nº 1106, logradouro `Avenida Presidente Vargas Pres`, CEP 93260-000, sem bairro | CEP genérico e logradouro duplicado | formulário "Sugerir edição" preenchido em 03/09 com os dados corretos; envio bloqueado por reCAPTCHA de imagem | e-mail `atendimento@listamais.com.br` (texto abaixo) | pendente de envio manual |
+| [ListaTudo](https://listatudo.com.br/rio-grande-do-sul/porto-alegre-e-regiao/esteio/carros-e-outros-veiculos/compra-venda-e-aluguel/revendedores-e-pecas-para-automoveis-importados/netcar-multimarcas/) | nº 1106, Centro, **CEP 93260-454**, categoria "Revendedores e Peças para Automóveis Importados" | CEP errado e categoria errada | pedir correção para CEP 93260-048 e categoria "Revendedora de carros usados/seminovos" | formulário de contato da página | pendente |
+| [Diário Cidade — CNPJ 02.237.969](https://www.diariocidade.com/rs/esteio/guia/netcar-rc-veiculos-02237969000106/) | `Netcar-rc Veiculos`, nº 740, Tamandaré, CEP 93260-490, (51) 3473-7900 | só o nome fantasia antigo; NAP correto | baixa prioridade; agregador de Receita Federal, sem canal de edição confiável | — | sem ação |
+| [Diário Cidade — CNPJ 12.999.974](https://www.diariocidade.com/rs/esteio/guia/netcar-multimarcas-12999974000100/) | nº 1106, CEP 93260-003, telefone (51) 9974-0881 | CNPJ baixado em 12/2025; telefone desconhecido | não solicitar reativação. Se o diretório oferecer "empresa encerrada", marcar | — | sem ação |
+| [NaPista](https://napista.com.br/busca/carro/vendedor-netcar_multimarcas_02230106) | `Netcar Multimarcas`, nº 1106, Centro; estoque ativo (6 ofertas 2025) | nenhuma | manter | — | conferido |
+| [Webmotors](https://www.webmotors.com.br/carros/rs/loja.netcarrc-veiculos-ltda-3468461) | slug da loja ainda é `netcarrc-veiculos-ltda` | nome da loja no portal segue a razão social antiga | pedir ao gerente de conta Webmotors renomear a loja para `Netcar Multimarcas` (o slug pode não mudar) | atendimento lojista Webmotors | pendente |
+| [Facebook](https://www.facebook.com/NetcarRC) | nome `Netcar RC`, e-mail público `contato@netcar-rc.com.br` | além do telefone (item original), o **nome** e o **e-mail** estão na marca antiga | renomear página para `Netcar Multimarcas`, e-mail para `contato@netcarmultimarcas.com.br`. A URL `/NetcarRC` pode ficar | login Meta Business | pendente de login |
+
+### Site (executado em 03/09)
+
+`SchemaOrg.tsx`: `alternateName` passou a listar `Netcar Esteio`, `Netcar RC` e `Netcar Veículos`; `sameAs` ganhou LinkedIn, as duas fichas do Maps (cid) e a loja na NaPista. Objetivo: o Google juntar os perfis com nome antigo à mesma entidade. Entra no próximo deploy.
+
+### E-mail pronto — Listamais
+
+Para: `atendimento@listamais.com.br`
+Assunto: `Correção de cadastro — Netcar Multimarcas (Esteio/RS) — cad_id2283326`
+
+> Olá. Sou responsável pela Netcar Multimarcas e peço correção do cadastro https://www.listamais.com.br/local/cad_idDDQffDZ/netcar-multimarcas-loja-de-carro-em-esteio-rs:
+>
+> - Nome: Netcar Multimarcas - Loja 2
+> - Endereço: Avenida Presidente Vargas, 1106 — Centro — Esteio/RS — CEP 93260-048 (hoje consta "Avenida Presidente Vargas Pres" e CEP 93260-000)
+> - Telefone: (51) 3033-3900 · WhatsApp: (51) 99729-3118
+> - E-mail: contato@netcarmultimarcas.com.br
+> - Site: https://www.netcarmultimarcas.com.br
+>
+> Obrigado.
+
+### E-mail pronto — ListaTudo (formulário da página)
+
+> Correção de cadastro: CEP correto é 93260-048 (consta 93260-454). Categoria correta: revenda de carros seminovos/usados (não "importados"). Telefone (51) 3033-3900, site https://www.netcarmultimarcas.com.br. Responsável: Netcar Multimarcas, contato@netcarmultimarcas.com.br.
+
+### Ordem sugerida de execução (30 min com os logins)
+
+1. Facebook: nome, e-mail e telefone do nº 740 (item 1 original + adendo).
+2. Instagram: linha de endereço sem CEP único.
+3. Linktree: título e links (estrutura já definida acima).
+4. Mobiauto: reativar estoque ou remover perfil.
+5. Webmotors: renomear loja.
+6. Listamais e ListaTudo: enviar os textos acima.
+
+### Execução 03/09 via conta marcelo@netcarmultimarcas.com.br
+
+- **GBP**: 2 lojas confirmadas (Loja 1 fid 9144067949621682127, Loja 2 fid 10839197980729051544). Coleção de produtos "Nossos Carros Seminovos" já ativa. GBP **não tem import CSV** de produtos e cada item exige upload de foto (não aceita URL) — mass-add por automação foi descartado (frágil, baixo ROI, estoque gira). `docs/local-seo-project/gbp-produtos.csv` fica disponível pra add manual de carros-herói, se quiserem.
+- **GSC**: propriedade `sc-domain:netcarmultimarcas.com.br` acessível pela conta. Amostragem de landings (`/seminovos-canoas`, `/seminovos-nova-santa-rita`, `/seminovos-bento-goncalves`) = todas "O URL está no Google" (indexadas). Reindex manual não é necessário e gastaria a cota diária. Property total: 308 indexadas / 3.590 não indexadas (maioria = fichas de veículo já vendidas/rotacionadas, esperado).
+- **netcar-rc.com.br**: roda em docroot separado (index.html 2016, `meta refresh` pra http não-www). FTP `netcarmultimarcas` só alcança `www/` do site principal — não dá pra trocar o meta refresh por 301 sem o FTP/painel daquele domínio.
+
+### Páginas de proximidade — avaliação
+
+Ideia de páginas por empresa/convênio: **não recomendado**. Sem oferta real vira thin content, usa nome de marca alheia e tem volume de busca ~0. A proximidade já está coberta pelas city pages (distância, tempo, rota BR-116, bairros em `routeOrigins`). O lever real de "quem trabalha perto" é **operação comercial** (feirão no estacionamento da empresa, avaliação do usado no horário de almoço), não nova URL.
+
 ## Conclusão e confiança
 
 - AutoCarro ativo coerente: **comprovado**;
