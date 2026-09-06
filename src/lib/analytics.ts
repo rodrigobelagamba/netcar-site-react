@@ -301,6 +301,17 @@ export function trackVehicleCardOpen(params: {
   });
 }
 
+/** Clique para abrir um vídeo externo; não equivale a reprodução nem a lead. */
+export function trackVehicleVideoClick(vehicleId: string): void {
+  if (getPrivacyConsentState() !== "accepted") return;
+  trackBusinessEvent("vehicle_video_click", {
+    vehicle_id: vehicleId,
+    video_provider: "instagram",
+    video_placement: "vehicle_gallery",
+    page_type: "vehicle_detail",
+  });
+}
+
 let comparisonIsReady = false;
 
 /** Reinicia o marco quando uma nova tela do comparador e aberta. */

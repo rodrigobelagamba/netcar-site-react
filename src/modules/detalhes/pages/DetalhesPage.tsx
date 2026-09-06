@@ -43,6 +43,7 @@ import { vehicleWhatsAppRef } from "@/lib/vehicleWhatsAppRef";
 import {
   trackCompareInteraction,
   trackVehicleDiscoveryClick,
+  trackVehicleVideoClick,
   trackViewItem,
   type WhatsAppClickSource,
 } from "@/lib/analytics";
@@ -87,6 +88,8 @@ import {
   hasVehicleLowAnnualMileage,
   LOW_ANNUAL_MILEAGE_DETAIL_LABEL,
 } from "@/lib/vehicleMerchandising";
+import { VehicleVideoLink } from "../components/VehicleVideoLink";
+import { getVehicleInstagramVideo } from "../lib/vehicleInstagramVideos";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -2095,6 +2098,9 @@ export function DetalhesPage() {
   }
 
   const isSold = !vehicle.price || vehicle.price <= 0;
+  const instagramVideo = isSold
+    ? undefined
+    : getVehicleInstagramVideo(String(vehicle.id));
   const vehicleLabel = [marca, modeloCompleto, vehicle.year]
     .filter(Boolean)
     .join(" ");
@@ -2500,6 +2506,20 @@ export function DetalhesPage() {
       {/* Gallery Section */}
       {avifImages.length > 0 && (
         <section className="w-full py-6 sm:py-12 lg:py-16">
+          {instagramVideo && (
+            <div
+              id="video-do-carro"
+              className="mb-4 flex scroll-mt-28 justify-center px-4 sm:mb-5"
+            >
+              <VehicleVideoLink
+                permalink={instagramVideo.permalink}
+                vehicleName={vehicleLabel}
+                displayModel={instagramVideo.displayModel}
+                coverImage={instagramVideo.coverImage}
+                onOpen={() => trackVehicleVideoClick(String(vehicle.id))}
+              />
+            </div>
+          )}
           <div className="sm:hidden">
             <MobileGalleryCarousel
               images={avifImages}
