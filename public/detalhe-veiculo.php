@@ -408,8 +408,9 @@ $vehicleName = !empty($nomeParts) ? implode(' ', $nomeParts) : 'Seminovo';
 $precoCurto = intval($preco) > 0 ? 'R$ ' . number_format($preco, 0, ',', '.') : '';
 $kmCurto = '';
 if ($km > 0) {
-    $kmCurto = $km >= 1000
-        ? number_format($km / 1000, 0, ',', '.') . ' mil km'
+    // Mesma apresentação dos cards: exato abaixo de 10 mil; depois, até uma casa decimal.
+    $kmCurto = $km >= 10000
+        ? rtrim(rtrim(number_format($km / 1000, 1, ',', '.'), '0'), ',') . ' mil km'
         : number_format($km, 0, ',', '.') . ' km';
 }
 
