@@ -75,15 +75,12 @@ export function formatKm(value: number): string {
 }
 
 /**
- * Km em milhares com até uma casa decimal ("25 mil km", "25,5 mil km").
+ * Km em milhares inteiros, sempre para baixo (25.999 = "25 mil km").
  * Abaixo de 10 mil mantém exato: ali cada km é argumento.
  */
 export function formatKmApprox(value: number): string {
   if (value < 10_000) return formatKm(value);
-  const thousands = new Intl.NumberFormat("pt-BR", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 1,
-  }).format(value / 1_000);
+  const thousands = Math.floor(value / 1_000).toLocaleString("pt-BR");
   return `${thousands} mil km`;
 }
 
