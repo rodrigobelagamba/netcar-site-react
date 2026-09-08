@@ -6,6 +6,7 @@ import type { Vehicle } from "../src/catalog/endpoints/vehicles";
 import { getBootstrapVehicles } from "../src/lib/stockBootstrap";
 import { sortShowroomVehicles } from "../src/lib/showroomStock";
 import { sortHomeStockVehicles } from "../src/lib/homeStock";
+import { formatKm, formatKmApprox } from "../src/lib/formatters";
 import {
   getVehicleLowMileageCardLabel,
   getVehicleMerchandising,
@@ -17,6 +18,25 @@ type StockManifest = {
   vehicles?: Vehicle[];
   showroomVehicles?: Vehicle[];
 };
+
+// Regressão: a abreviação mantém centenas de km, sem saltar para dezenas de mil.
+const mileageLabels: Array<[number, string]> = [
+  [9_385, "9.385 km"],
+  [9_999, "9.999 km"],
+  [10_000, "10 mil km"],
+  [13_340, "13,3 mil km"],
+  [19_076, "19,1 mil km"],
+  [25_000, "25 mil km"],
+  [25_131, "25,1 mil km"],
+  [25_500, "25,5 mil km"],
+  [25_950, "26 mil km"],
+  [75_000, "75 mil km"],
+  [89_949, "89,9 mil km"],
+];
+for (const [km, expected] of mileageLabels) {
+  assert.equal(formatKmApprox(km), expected, `abreviação incorreta para ${km} km`);
+}
+assert.equal(formatKm(25_131), "25.131 km", "quilometragem exata foi alterada");
 
 const manifest = JSON.parse(
   readFileSync(
