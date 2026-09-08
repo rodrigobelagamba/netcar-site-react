@@ -233,6 +233,14 @@ ErrorDocument 410 /410.html
   # Sem isso, /admin/ e /sistema/ caem no index.php React (bug após remoção do -d abaixo).
   RewriteRule ^(admin|sistema|api)(/|$) - [L]
 
+  # Página da vaga: HTML completo para candidatos e buscadores, antes do SPA.
+  RewriteRule ^vagas/consultor-vendas-seminovos/candidatura/?$ vagas/consultor-vendas-seminovos/candidatura.php [L]
+  RewriteRule ^vagas/consultor-vendas-seminovos/enviar/?$ vagas/consultor-vendas-seminovos/enviar.php [L]
+  RewriteCond %{THE_REQUEST} \s/+vagas/consultor-vendas-seminovos/index\.html[\s?] [NC]
+  RewriteRule ^vagas/consultor-vendas-seminovos/index\.html$ /vagas/consultor-vendas-seminovos/ [R=301,L]
+  RewriteRule ^vagas/consultor-vendas-seminovos$ /vagas/consultor-vendas-seminovos/ [R=301,L]
+  RewriteRule ^vagas/consultor-vendas-seminovos/$ vagas/consultor-vendas-seminovos/index.html [L]
+
   # Primeiro: servir só arquivos reais (-f).
   # NÃO usar -d genérico: o docroot de produção ainda tem pastas legadas
   # (seminovos/, veiculo/, etc.) que interceptavam a URL e mandavam para not-found.html.

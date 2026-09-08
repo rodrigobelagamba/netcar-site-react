@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Netcar Perfil Comportamental</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Inter',sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+        .topbar{background:linear-gradient(135deg,#0f1923,#1a2836);color:#fff;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+        .topbar h1{font-size:1.1rem;font-weight:700}
+        .topbar h1 span{color:#6cc4ca}
+        .topbar .stats{display:flex;gap:1rem;font-size:.8rem}
+        .topbar .stat{background:rgba(108,196,202,.15);padding:.3rem .8rem;border-radius:6px;color:#6cc4ca;font-weight:600}
+        .container{max-width:1100px;margin:0 auto;padding:1rem}
+        .login-box{max-width:360px;margin:4rem auto;background:#fff;border-radius:12px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+        .login-box h2{margin-bottom:1rem;font-size:1.2rem}
+        .login-box input{width:100%;padding:.7rem 1rem;border:1.5px solid #e2e8f0;border-radius:8px;font-size:1rem;margin-bottom:.75rem;font-family:inherit}
+        .login-box button{width:100%;padding:.75rem;background:#6cc4ca;color:#0f1923;border:none;border-radius:8px;font-weight:700;font-size:.95rem;cursor:pointer;font-family:inherit}
+        .filters{display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap}
+        .filters select,.filters input{padding:.5rem .75rem;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.85rem;font-family:inherit;background:#fff}
+        table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+        th{background:#f8fafc;padding:.7rem .75rem;text-align:left;font-size:.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #e2e8f0;white-space:nowrap}
+        td{padding:.65rem .75rem;border-bottom:1px solid #f1f5f9;font-size:.85rem;vertical-align:middle}
+        tr:last-child td{border-bottom:none}
+        tr:hover td{background:#f8fafc}
+        .badge-profile{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.7rem;font-weight:700;color:#fff}
+        .badge-profile.shark{background:#ef4444}
+        .badge-profile.wolf{background:#3b82f6}
+        .badge-profile.cat{background:#10b981}
+        .badge-profile.eagle{background:#8b5cf6}
+        .badge-raio{display:inline-block;padding:.1rem .4rem;border-radius:4px;font-size:.7rem;font-weight:600}
+        .badge-raio.ok{background:#ecfdf5;color:#065f46}
+        .badge-raio.fora{background:#fef2f2;color:#991b1b}
+        .badge-raio.nd{background:#f1f5f9;color:#64748b}
+        .badge-exp{display:inline-block;padding:.1rem .4rem;border-radius:4px;font-size:.68rem;font-weight:600}
+        .badge-exp.muita{background:#ecfdf5;color:#065f46}
+        .badge-exp.media{background:#eff6ff;color:#1e40af}
+        .badge-exp.pouca{background:#fef3c7;color:#92400e}
+        .badge-exp.nenhuma{background:#f1f5f9;color:#64748b}
+        .btn-detail{background:none;border:1px solid #e2e8f0;padding:.25rem .5rem;border-radius:6px;cursor:pointer;font-size:.75rem;font-family:inherit;color:#6cc4ca;font-weight:600}
+        .btn-detail:hover{background:rgba(108,196,202,.08)}
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem}
+        .modal{background:#fff;border-radius:12px;max-width:720px;width:100%;max-height:90vh;overflow-y:auto;padding:1.5rem;position:relative}
+        .modal h2{font-size:1.1rem;margin-bottom:1rem}
+        .modal .close{position:absolute;top:.75rem;right:.75rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#64748b}
+        .modal .row{display:grid;grid-template-columns:140px 1fr;gap:.25rem;margin-bottom:.5rem;font-size:.85rem}
+        .modal .row .lbl{font-weight:600;color:#64748b}
+        .modal .section-title{font-size:.9rem;font-weight:700;margin:1rem 0 .5rem;color:#0f1923;display:flex;align-items:center;gap:.4rem}
+        .modal .profile-bars{margin:.5rem 0}
+        .modal .pbar{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+        .modal .pbar .name{width:70px;font-size:.8rem;font-weight:600}
+        .modal .pbar .track{flex:1;height:8px;background:#f1f5f9;border-radius:50px;overflow:hidden}
+        .modal .pbar .fill{height:100%;border-radius:50px}
+        .modal .pbar .pct{width:40px;font-size:.8rem;font-weight:700;text-align:right}
+        .modal .btn-wpp{display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .8rem;background:#25d366;color:#fff;border:none;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;text-decoration:none;margin-top:.5rem}
+        .empty{text-align:center;padding:3rem;color:#94a3b8;font-size:.9rem}
+        .hidden{display:none}
+        @media(max-width:700px){
+            .filters{flex-direction:column}
+            table{font-size:.78rem}
+            th,td{padding:.5rem}
+            .modal{margin:.5rem}
+            .modal .row{grid-template-columns:100px 1fr}
+        }
+    </style>
+</head>
+<body>
+
+<form class="login-box" id="loginForm">
+    <h2>Acesso aos candidatos</h2>
+    <p style="font-size:.85rem;color:#64748b;margin-bottom:1rem">Informe a chave de acesso da equipe Netcar para consultar candidaturas e currículos.</p>
+    <label for="adminKey">Chave de acesso</label>
+    <input id="adminKey" type="password" required autocomplete="current-password">
+    <button type="submit" id="loginButton">Entrar</button>
+    <p id="loginError" role="alert" style="color:#991b1b;margin-top:.75rem;font-size:.85rem"></p>
+</form>
+<div id="adminPage" class="hidden">
+    <div class="topbar">
+        <h1>Net<span>car</span> — Candidatos</h1>
+        <div class="stats"><button type="button" onclick="logout()">Sair</button>
+            <div class="stat" id="statTotal">Total: 0</div>
+            <div class="stat" id="statRaio">No raio: 0</div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="filters">
+            <select id="filterProfile" onchange="applyFilters()">
+                <option value="">Todos os perfis</option>
+                <option value="Tubarão">🦈 Tubarão</option>
+                <option value="Lobo">🐺 Lobo</option>
+                <option value="Gato">🐱 Gato</option>
+                <option value="Águia">🦅 Águia</option>
+            </select>
+            <select id="filterRaio" onchange="applyFilters()">
+                <option value="">Raio: Todos</option>
+                <option value="sim">✅ Dentro do raio</option>
+                <option value="nao">❌ Fora do raio</option>
+            </select>
+            <select id="filterExp" onchange="applyFilters()">
+                <option value="">Experiência: Todas</option>
+                <option value="muita">Muita (3+ anos)</option>
+                <option value="media">Média (1-3 anos)</option>
+                <option value="pouca">Pouca (< 1 ano)</option>
+                <option value="nenhuma">Nenhuma</option>
+            </select>
+            <input type="text" id="filterSearch" placeholder="Buscar por nome..." oninput="applyFilters()">
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Idade</th>
+                    <th>Perfil</th>
+                    <th>%</th>
+                    <th>Exp.</th>
+                    <th>Cidade</th>
+                    <th>Raio</th>
+                    <th>Data</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        <div class="empty hidden" id="emptyMsg">Nenhum resultado encontrado.</div>
+    </div>
+</div>
+
+<div class="modal-overlay hidden" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+let allResults = [];
+let adminToken = '';
+const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+function escapeRecord(value) {
+    if (typeof value === 'string') return escapeHtml(value);
+    if (Array.isArray(value)) return value.map(escapeRecord);
+    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, escapeRecord(item)]));
+    return value;
+}
+function safeProfileUrl(value) {
+    if (!value) return '';
+    try { const url = new URL(value.startsWith('http') ? value : 'https://' + value); return ['http:', 'https:'].includes(url.protocol) ? escapeHtml(url.href) : ''; } catch { return ''; }
+}
+function logout() {
+    adminToken = '';
+    allResults = [];
+    document.getElementById('tableBody').innerHTML = '';
+    document.getElementById('modalContent').innerHTML = '';
+    document.getElementById('adminPage').classList.add('hidden');
+    document.getElementById('loginForm').classList.remove('hidden');
+    closeModal();
+    document.getElementById('adminKey').focus();
+}
+async function adminFetch(path) {
+    const response = await fetch(path, { headers:{Authorization:'Bearer ' + adminToken}, cache:'no-store' });
+    if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        if (response.status === 401) logout();
+        throw new Error(body?.error || 'Não foi possível consultar os dados. Tente novamente.');
+    }
+    return response;
+}
+document.getElementById('loginForm').addEventListener('submit', async event => {
+    event.preventDefault();
+    const button = document.getElementById('loginButton');
+    const error = document.getElementById('loginError');
+    adminToken = document.getElementById('adminKey').value;
+    button.disabled = true;
+    error.textContent = '';
+    try {
+        await loadResults();
+        document.getElementById('adminKey').value = '';
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('adminPage').classList.remove('hidden');
+        const id = new URLSearchParams(location.search).get('id');
+        if (id) await showDetail(id);
+    } catch (err) { adminToken = ''; error.textContent = err.message; }
+    finally { button.disabled = false; }
+});
+
+const profileCls = {'Tubarão':'shark','Lobo':'wolf','Gato':'cat','Águia':'eagle'};
+const profileEmoji = {'Tubarão':'🦈','Lobo':'🐺','Gato':'🐱','Águia':'🦅'};
+
+async function loadResults() {
+    const items = [];
+    let cursor = '';
+    do {
+        const response = await adminFetch('/api/results' + (cursor ? '?cursor=' + encodeURIComponent(cursor) : ''));
+        items.push(...await response.json());
+        cursor = response.headers.get('X-Next-Cursor') || '';
+    } while (cursor);
+    allResults = items.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+    renderTable(allResults);
+}
+
+function renderTable(data) {
+    const tb = document.getElementById('tableBody');
+    document.getElementById('statTotal').textContent = 'Total: ' + data.length;
+    document.getElementById('statRaio').textContent = 'No raio: ' + data.filter(r=>r.dentro_raio===true).length;
+
+    if (data.length === 0) {
+        tb.innerHTML = '';
+        document.getElementById('emptyMsg').classList.remove('hidden');
+        return;
+    }
+    document.getElementById('emptyMsg').classList.add('hidden');
+
+    tb.innerHTML = data.map(raw => {
+        const r = escapeRecord(raw);
+        const cls = profileCls[r.dominante] || '';
+        const emoji = profileEmoji[r.dominante] || '';
+        const dt = r.timestamp ? new Date(r.timestamp).toLocaleDateString('pt-BR') : '-';
+        const raio = r.dentro_raio === true ? '<span class="badge-raio ok">✅</span>' :
+                     r.dentro_raio === false ? '<span class="badge-raio fora">❌</span>' :
+                     '<span class="badge-raio nd">-</span>';
+        const exp = r.experiencia_vendas || '-';
+        const expCls = exp === 'muita' ? 'muita' : exp === 'media' ? 'media' : exp === 'pouca' ? 'pouca' : 'nenhuma';
+        return `<tr>
+            <td><strong>${r.nome||'-'}</strong></td>
+            <td>${r.idade||'-'}</td>
+            <td><span class="badge-profile ${cls}">${emoji} ${r.dominante||'-'}</span></td>
+            <td><strong>${r.dominante_pct||0}%</strong></td>
+            <td><span class="badge-exp ${expCls}">${exp}</span></td>
+            <td>${r.cidade||'-'}</td>
+            <td>${raio}</td>
+            <td>${dt}</td>
+            <td><button class="btn-detail" onclick="showDetail('${r.id}')">Ver</button></td>
+        </tr>`;
+    }).join('');
+}
+
+function applyFilters() {
+    let data = [...allResults];
+    const prof = document.getElementById('filterProfile').value;
+    const raio = document.getElementById('filterRaio').value;
+    const exp = document.getElementById('filterExp').value;
+    const search = document.getElementById('filterSearch').value.toLowerCase();
+    if (prof) data = data.filter(r => r.dominante === prof);
+    if (raio === 'sim') data = data.filter(r => r.dentro_raio === true);
+    if (raio === 'nao') data = data.filter(r => r.dentro_raio === false);
+    if (exp) data = data.filter(r => r.experiencia_vendas === exp);
+    if (search) data = data.filter(r => (r.nome||'').toLowerCase().includes(search));
+    renderTable(data);
+}
+
+async function showDetail(id) {
+    try {
+        const res = await adminFetch(`/api/results?action=detail&id=${encodeURIComponent(id)}`);
+        const raw = await res.json();
+        const d = escapeRecord(raw);
+        const linkedinUrl = safeProfileUrl(raw.linkedin);
+
+        const bars = ['A','O','C','I'].map(l => {
+            const names = {A:'Tubarão',O:'Lobo',C:'Gato',I:'Águia'};
+            const colors = {A:'#ef4444',O:'#3b82f6',C:'#10b981',I:'#8b5cf6'};
+            const pct = Math.min(100, Math.max(0, Number(d.percentuais?.[l]) || 0));
+            return `<div class="pbar"><span class="name">${names[l]}</span><div class="track"><div class="fill" style="width:${pct}%;background:${colors[l]}"></div></div><span class="pct" style="color:${colors[l]}">${pct}%</span></div>`;
+        }).join('');
+
+        const raioTxt = d.dentro_raio === true ? '✅ Dentro do raio' + (d.distancia_km ? ` (${d.distancia_km} km)` : '') :
+                        d.dentro_raio === false ? '❌ Fora do raio' + (d.distancia_km ? ` (${d.distancia_km} km)` : '') : 'N/D';
+
+        const expLabels = {nenhuma:'Nenhuma',pouca:'Pouca (< 1 ano)',media:'Média (1-3 anos)',muita:'Muita (3+ anos)'};
+        const horLabels = {integral:'Integral (seg-sex + sáb)',comercial:'Comercial (seg-sex)',meio:'Meio período',flexivel:'Flexível'};
+        const metaLabels = {amo:'Ama metas',ok:'Tranquilo com metas',prefiro_sem:'Prefere sem pressão'};
+
+        const wppPhone = (d.telefone||'').replace(/\D/g,'');
+        const wppLink = wppPhone.length >= 10 ? `https://wa.me/55${wppPhone.replace(/^55/,'')}` : '';
+
+        const profileInfo = {
+            'Tubarão': {
+                color:'#ef4444',
+                titulo:'🦈 TUBARÃO — Fazer rápido (Ação)',
+                desc:'Vendedor nato de seminovos. Vai atrás do cliente, não espera ele chegar. Fecha negócio rápido, faz follow-up agressivo e não tem medo de objeção. É o perfil que mais converte.',
+                pros:['Fechador — transforma lead em venda rápido','Proativo — busca o cliente, liga, persegue a venda','Movido por metas e comissão — quanto mais desafiador, melhor','Resolve objeções na hora, não deixa o cliente "pensar"','Ideal para giro alto de estoque de seminovos'],
+                contras:['Pode atropelar o processo (financiamento, documentação)','Relacionamento superficial — foca no fechamento, não no pós-venda','Pode criar conflitos com colegas por ser competitivo demais','Impaciente com clientes indecisos — pode perder vendas consultivas','Precisa de gestão firme para manter a qualidade do atendimento'],
+                gestao:'Dê metas agressivas, comissão escalonada e liberdade para agir. Cobre qualidade no processo (checklist obrigatório). Deixe competir.'
+            },
+            'Lobo': {
+                color:'#3b82f6',
+                titulo:'🐺 LOBO — Fazer certo (Organização)',
+                desc:'Vendedor metódico e confiável. Conhece cada detalhe do carro, domina ficha técnica, laudo, procedência. Passa segurança para o cliente — fundamental em seminovos onde confiança é tudo.',
+                pros:['Extremamente organizado — controla pipeline, follow-up agendado, nada escapa','Domina detalhes técnicos — motor, km, histórico, laudo cautelar','Passa credibilidade e confiança — fundamental para seminovos','Excelente no pós-venda — cliente volta e indica','Cumpre processos e regras da loja fielmente'],
+                contras:['Lento para fechar — quer todos os detalhes antes de avançar','Pode travar com mudanças de preço ou condições de última hora','Dificuldade em improvisar quando o cliente quer algo fora do padrão','Não é o melhor em abordagem fria ou prospecção ativa','Pode perder vendas por excesso de cautela e burocracia'],
+                gestao:'Dê processos claros, ferramentas organizadas e tempo. Use como referência de qualidade. Não pressione demais no curto prazo — entrega volume no médio prazo com consistência.'
+            },
+            'Gato': {
+                color:'#10b981',
+                titulo:'🐱 GATO — Fazer junto (Comunicação)',
+                desc:'Vendedor relacional. Cria vínculo com o cliente, entende a família, o momento de vida. Excelente em venda consultiva de seminovos onde o cliente precisa sentir confiança e acolhimento.',
+                pros:['Relacionamento forte — o cliente compra dele, não da loja','Ótimo com famílias e casais indecisos — ouve, entende, acolhe','Gera indicações naturalmente — carteira orgânica de clientes','Excelente em pós-venda e retenção','Bom em vendas de maior valor agregado (garantia, acessórios, seguro)'],
+                contras:['Pode ser lento para fechar — prioriza relacionamento acima do resultado','Dificuldade com metas agressivas — não gosta de pressão','Pode evitar confronto e deixar objeções sem resposta','Tende a dar descontos para agradar em vez de defender a margem','Não é o melhor em prospecção fria ou abordagem agressiva'],
+                gestao:'Valorize a carteira de clientes dele. Dê metas de indicação e recompra. Não coloque em competição direta — rende mais em ambiente colaborativo.'
+            },
+            'Águia': {
+                color:'#8b5cf6',
+                titulo:'🦅 ÁGUIA — Fazer diferente (Idealização)',
+                desc:'Vendedor criativo e inovador. Pensa fora da caixa, cria estratégias diferentes para atrair clientes, usa redes sociais e tecnologia. Bom para inovar processos de venda de seminovos.',
+                pros:['Criativo nas abordagens — usa Instagram, vídeos, stories para vender','Antecipa tendências — sabe quais carros vão girar antes dos outros','Flexível — se adapta a diferentes perfis de clientes facilmente','Bom em vendas digitais e leads online','Traz ideias novas para a equipe e marketing da loja'],
+                contras:['Pode se dispersar — começa várias negociações, fecha poucas','Impaciente com processos repetitivos e burocracia','Dificuldade com rotina e horários fixos','Pode prometer coisas ao cliente que a loja não consegue entregar','Menos consistente — tem picos altos e baixos de vendas'],
+                gestao:'Dê projetos especiais (campanhas, redes sociais, captação de leads). Não amarre em rotina rígida. Combine com um Lobo para garantir execução. Use a criatividade a favor da loja.'
+            }
+        };
+
+        const pi = profileInfo[d.dominante] || profileInfo['Tubarão'];
+        const sorted = Object.entries(d.percentuais || {}).sort((a,b) => b[1] - a[1]);
+        const nameMap = {I:'Águia',C:'Gato',O:'Lobo',A:'Tubarão'};
+        const secondKey = sorted.length > 1 ? nameMap[sorted[1][0]] : null;
+        const secondPct = sorted.length > 1 ? sorted[1][1] : 0;
+        const secondInfo = secondKey ? profileInfo[secondKey] : null;
+
+        document.getElementById('modalContent').innerHTML = `
+            <button class="close" onclick="closeModal()">&times;</button>
+            <h2>${profileEmoji[d.dominante]||''} ${d.nome}</h2>
+
+            <div class="section-title">👤 Dados Pessoais</div>
+            <div class="row"><span class="lbl">Idade</span><span>${d.idade||'-'}</span></div>
+            <div class="row"><span class="lbl">E-mail</span><span>${d.email||'-'}</span></div>
+            <div class="row"><span class="lbl">Telefone</span><span>${d.telefone||'-'} ${wppLink ? `<a href="${wppLink}" target="_blank" style="color:#25d366;font-size:.75rem">[WhatsApp]</a>` : ''}</span></div>
+            <div class="row"><span class="lbl">Instagram</span><span>${d.instagram||'-'}</span></div>
+            <div class="row"><span class="lbl">LinkedIn</span><span>${linkedinUrl ? '<a href="'+linkedinUrl+'" target="_blank" rel="noopener noreferrer" style="color:#005b66">'+d.linkedin+'</a>' : '-'}</span></div>
+            <div class="row"><span class="lbl">Endereço</span><span>${d.endereco_completo || [d.rua,d.numero_complemento,d.bairro,d.cidade,d.estado].filter(Boolean).join(', ') || '-'}</span></div>
+            <div class="row"><span class="lbl">CEP</span><span>${d.cep||'-'}</span></div>
+            <div class="row"><span class="lbl">Raio Esteio</span><span>${raioTxt}</span></div>
+
+            <div class="section-title">🚗 Sobre a Vaga</div>
+            <div class="row"><span class="lbl">Exp. Vendas</span><span>${expLabels[d.experiencia_vendas]||d.experiencia_vendas||'-'}</span></div>
+            <div class="row"><span class="lbl">Veículos</span><span>${d.vendeu_veiculos==='sim'?'Sim, já trabalhou':'Não, mas tem interesse'}</span></div>
+            <div class="row"><span class="lbl">Horário</span><span>${horLabels[d.horario]||d.horario||'-'}</span></div>
+            <div class="row"><span class="lbl">CNH</span><span>${d.cnh==='sim'?'Sim':d.cnh==='processo'?'Em processo':'Não'}</span></div>
+            <div class="row"><span class="lbl">Metas</span><span style="white-space:pre-wrap;overflow-wrap:anywhere">${metaLabels[d.metas]||d.metas||'-'}</span></div>
+
+            <div class="section-title">📎 Currículo</div>
+            <div class="row"><span class="lbl">Arquivo</span><span style="overflow-wrap:anywhere">${d.curriculo ? d.curriculo.name + ' · ' + Math.ceil(d.curriculo.size / 1024) + ' KB' : 'Não anexado'}</span></div>
+            ${d.curriculo ? '<button type="button" class="btn-detail" style="color:#005b66;min-height:44px" id="downloadResume">Baixar currículo</button><p id="downloadError" role="alert" style="color:#991b1b;font-size:.8rem"></p>' : ''}
+
+            <div class="section-title">📊 Perfil Comportamental</div>
+            <div class="profile-bars">${bars}</div>
+            <div class="row"><span class="lbl">Dominante</span><span><strong>${d.dominante} (${d.dominante_pct}%)</strong></span></div>
+            <div class="row"><span class="lbl">Scores</span><span>I=${d.scores?.I||0} C=${d.scores?.C||0} O=${d.scores?.O||0} A=${d.scores?.A||0}</span></div>
+            <div class="row"><span class="lbl">Data</span><span>${d.timestamp ? new Date(d.timestamp).toLocaleString('pt-BR') : '-'}</span></div>
+
+            <hr style="margin:1rem 0;border:none;border-top:1px solid #e2e8f0">
+
+            <div style="background:${pi.color}10;border:1.5px solid ${pi.color}30;border-radius:10px;padding:1rem;margin-bottom:.75rem">
+                <h3 style="font-size:.9rem;color:${pi.color};margin-bottom:.5rem">${pi.titulo}</h3>
+                <p style="font-size:.82rem;color:#1e293b;line-height:1.5;margin-bottom:.75rem">${pi.desc}</p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+                    <div>
+                        <p style="font-size:.72rem;font-weight:700;color:#065f46;margin-bottom:.3rem">✅ PRÓS p/ seminovos</p>
+                        <ul style="font-size:.75rem;color:#1e293b;padding-left:1rem;line-height:1.6;margin:0">${pi.pros.map(p=>'<li>'+p+'</li>').join('')}</ul>
+                    </div>
+                    <div>
+                        <p style="font-size:.72rem;font-weight:700;color:#991b1b;margin-bottom:.3rem">⚠️ CONTRAS p/ seminovos</p>
+                        <ul style="font-size:.75rem;color:#1e293b;padding-left:1rem;line-height:1.6;margin:0">${pi.contras.map(c=>'<li>'+c+'</li>').join('')}</ul>
+                    </div>
+                </div>
+                <p style="font-size:.78rem;color:#1e293b;margin-top:.75rem;padding-top:.6rem;border-top:1px solid ${pi.color}20"><strong>💡 Como gerir:</strong> ${pi.gestao}</p>
+            </div>
+
+            ${secondInfo && secondPct >= 20 ? `
+            <div style="background:${secondInfo.color}08;border:1px solid ${secondInfo.color}20;border-radius:10px;padding:.85rem;margin-bottom:.5rem">
+                <h4 style="font-size:.8rem;color:${secondInfo.color};margin-bottom:.3rem">${secondInfo.titulo} (perfil secundário — ${secondPct}%)</h4>
+                <p style="font-size:.78rem;color:#64748b;line-height:1.45;margin-bottom:.5rem">${secondInfo.desc}</p>
+                <details style="font-size:.75rem;color:#1e293b">
+                    <summary style="cursor:pointer;font-weight:600;color:${secondInfo.color}">Ver prós e contras do perfil secundário</summary>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem">
+                        <div><p style="font-size:.7rem;font-weight:700;color:#065f46;margin-bottom:.2rem">✅ Prós</p><ul style="padding-left:1rem;line-height:1.5;margin:0">${secondInfo.pros.map(p=>'<li>'+p+'</li>').join('')}</ul></div>
+                        <div><p style="font-size:.7rem;font-weight:700;color:#991b1b;margin-bottom:.2rem">⚠️ Contras</p><ul style="padding-left:1rem;line-height:1.5;margin:0">${secondInfo.contras.map(c=>'<li>'+c+'</li>').join('')}</ul></div>
+                    </div>
+                </details>
+            </div>` : ''}
+        `;
+        document.getElementById('modalOverlay').classList.remove('hidden');
+        document.getElementById('downloadResume')?.addEventListener('click', async event => {
+            const button = event.currentTarget;
+            button.disabled = true;
+            document.getElementById('downloadError').textContent = '';
+            try {
+                const response = await adminFetch('/api/curriculum?id=' + encodeURIComponent(id));
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = raw.curriculo.name;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                setTimeout(() => URL.revokeObjectURL(url), 60000);
+            } catch (error) { const target = document.getElementById('downloadError'); if (target) target.textContent = error.message; }
+            finally { button.disabled = false; }
+        });
+    } catch(e) { document.getElementById('loginError').textContent = e.message; }
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.add('hidden'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+</script>
+</body>
+</html>

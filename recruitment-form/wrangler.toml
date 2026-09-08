@@ -1,0 +1,7 @@
+name = "questionario-perfil"
+compatibility_date = "2026-03-03"
+pages_build_output_dir = "dist"
+
+[[kv_namespaces]]
+binding = "PERFIL_KV"
+id = "e9b798ff15c84f7aa2b52c37e5e60d09"

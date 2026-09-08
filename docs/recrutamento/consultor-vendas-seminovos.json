@@ -1,0 +1,31 @@
+{
+  "@context": "https://schema.org",
+  "@type": "JobPosting",
+  "title": "Consultor de Vendas de Veículos Seminovos",
+  "description": "<p>A Netcar Veículos busca vendedor(a) experiente para o time de seminovos.</p><p>Esteio/RS — presencial, tempo integral, CLT. Uma vaga.</p><h2>Perfil obrigatório</h2><ul><li>Experiência comprovada em vendas de veículos novos ou seminovos.</li><li>Carteira ativa de clientes.</li><li>Foco em metas e resultados.</li><li>Energia, pique e vontade de crescer.</li><li>Residir em Esteio, Canoas, Gravataí, Sapucaia do Sul, São Leopoldo ou região e ter disponibilidade para trabalhar presencialmente em Esteio.</li></ul><p>Esta vaga não é destinada a quem está começando em vendas, procura estágio ou primeiro emprego.</p><h2>O que oferecemos</h2><ul><li>Remuneração fixa + comissões agressivas.</li><li>Estrutura para quem quer vender.</li><li>Estoque selecionado e giro rápido.</li><li>Ótima reputação de mercado.</li><li>Tradição e experiência no mercado.</li><li>Carteira de clientes da revenda.</li><li>Contratação CLT em tempo integral.</li></ul><p>Candidatura exclusivamente pelo formulário da Netcar, pelo botão desta página.</p>",
+  "datePosted": "2026-09-01",
+  "employmentType": "FULL_TIME",
+  "identifier": {
+    "@type": "PropertyValue",
+    "name": "Netcar Veículos",
+    "value": "netcar-consultor-seminovos-2026-01"
+  },
+  "hiringOrganization": {
+    "@type": "Organization",
+    "name": "Netcar Veículos",
+    "legalName": "R. & C. VEICULOS LTDA",
+    "sameAs": "https://www.netcarmultimarcas.com.br/",
+    "logo": "https://www.netcarmultimarcas.com.br/brand/netcar.png"
+  },
+  "jobLocation": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Av. Presidente Vargas, 1106",
+      "addressLocality": "Esteio",
+      "addressRegion": "RS",
+      "addressCountry": "BR"
+    }
+  },
+  "url": "https://www.netcarmultimarcas.com.br/vagas/consultor-vendas-seminovos/"
+}

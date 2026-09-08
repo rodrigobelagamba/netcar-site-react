@@ -963,6 +963,7 @@ function pageShell({
   </header>
   <main>${body}</main>
   <footer>
+    <p><a href="${SITE}/vagas/consultor-vendas-seminovos/">Trabalhe conosco</a></p>
     <p>Netcar Multimarcas — Av. Presidente Vargas, 740 e 1106, Esteio/RS</p>
     <p><a href="tel:+555134737900">Ligar: (51) 3473-7900</a> · <a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es.">WhatsApp: (51) 99729-3118</a></p>
   </footer>
@@ -1867,6 +1868,7 @@ const staticPages = [
     changefreq: "monthly",
   },
   { path: "/contato", priority: "0.8", changefreq: "monthly" },
+  { path: "/vagas/consultor-vendas-seminovos/", priority: "0.7", changefreq: "weekly" },
   { path: "/compra", priority: "0.85", changefreq: "weekly" },
   { path: "/blog", priority: "0.8", changefreq: "weekly" },
   // Páginas de intenção (antes fora do sitemap)
