@@ -314,6 +314,14 @@ export function Footer() {
                   )}
                 </li>
               ))}
+              <li>
+                <a
+                  href="/vagas/consultor-vendas-seminovos/"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Trabalhe conosco
+                </a>
+              </li>
             </ul>
           </div>
 

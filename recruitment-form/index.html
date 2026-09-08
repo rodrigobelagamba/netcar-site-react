@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaga Consultor de Vendas — Netcar Multimarcas</title>
+    <meta name="description" content="A Netcar está contratando! Vaga para Consultor de Vendas em Esteio/RS. Comissão agressiva e ambiente de alta performance.">
+    <meta property="og:title" content="Vaga: Consultor de Vendas — Netcar Multimarcas">
+    <meta property="og:description" content="Buscamos vendedores com garra e atitude. Candidate-se agora e faça parte do time Netcar!">
+    <meta name="theme-color" content="#0f1923">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{
+            --pri:#6cc4ca;--pri-dk:#4ba8ae;--pri-lt:rgba(108,196,202,.12);
+            --dark:#0f1923;--dark2:#1a2836;--dark3:#243342;
+            --accent:#f59e0b;--bg:#f4f7fa;--card:#fff;
+            --txt:#1e293b;--muted:#64748b;--border:#e2e8f0;
+            --ok:#10b981;--err:#ef4444;--warn:#f59e0b;
+            --shark:#ef4444;--wolf:#3b82f6;--cat:#10b981;--eagle:#8b5cf6;
+            --r:12px;--sh:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
+        }
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+        .hero{background:var(--dark);color:#fff;padding:2.5rem 1.25rem 2rem;text-align:center;position:relative;overflow:hidden}
+        .hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(108,196,202,.15),rgba(15,25,35,.9));pointer-events:none}
+        .hero-logo{font-size:1.8rem;font-weight:900;letter-spacing:-1px;position:relative;margin-bottom:.2rem}
+        .hero-logo span{color:var(--pri)}
+        .hero-sub{font-size:.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--pri);font-weight:700;position:relative;margin-bottom:1rem}
+        .hero h1{font-size:clamp(1.2rem,5vw,1.7rem);font-weight:800;position:relative;margin-bottom:.5rem}
+        .hero p{font-size:.88rem;opacity:.8;max-width:480px;margin:0 auto;position:relative}
+        .hero-badges{display:flex;justify-content:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap;position:relative}
+        .hero-badge{background:rgba(108,196,202,.15);border:1px solid rgba(108,196,202,.3);color:var(--pri);padding:.3rem .7rem;border-radius:50px;font-size:.7rem;font-weight:600}
+
+        .prog-wrap{position:sticky;top:0;z-index:100;background:var(--dark2);padding:.5rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+        .prog-inner{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:.75rem}
+        .prog-track{flex:1;height:6px;background:var(--dark3);border-radius:50px;overflow:hidden}
+        .prog-fill{height:100%;background:linear-gradient(90deg,var(--pri),var(--accent));border-radius:50px;transition:width .4s ease;width:0%}
+        .prog-txt{font-size:.72rem;font-weight:700;color:var(--pri);white-space:nowrap}
+        .prog-msg{font-size:.65rem;color:rgba(255,255,255,.5);display:none}
+
+        .container{max-width:640px;margin:0 auto;padding:1rem}
+        .sec-title{font-size:1rem;font-weight:700;color:var(--dark);margin:1.5rem 0 .75rem;display:flex;align-items:center;gap:.5rem}
+        .sec-title .ic{width:26px;height:26px;background:var(--pri-lt);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+
+        .card{background:var(--card);border-radius:var(--r);padding:1.25rem;box-shadow:var(--sh);margin-bottom:.75rem;border:1.5px solid var(--border);transition:border-color .2s}
+        .card.answered{border-left:3px solid var(--ok)}
+        .card.unanswered-highlight{border-color:var(--err);animation:shake .4s ease}
+        @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+
+        .fg{margin-bottom:.9rem}.fg:last-child{margin-bottom:0}
+        .fg label{display:block;font-weight:600;font-size:.8rem;margin-bottom:.3rem}
+        .fg .req{color:var(--err)}
+        .fg input,.fg select,.fg textarea{width:100%;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;font-size:16px;font-family:inherit;transition:border-color .2s,box-shadow .2s;background:var(--bg);-webkit-appearance:none}
+        .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-lt)}
+        .fg input.error{border-color:var(--err)}
+        .fg input.valid{border-color:var(--ok)}
+        .fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%2364748b'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:2rem}
+        .f-err{color:var(--err);font-size:.73rem;margin-top:.2rem;display:none}
+        .row2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+
+        .cep-status{margin-top:.4rem;padding:.45rem .7rem;border-radius:8px;font-size:.78rem;font-weight:600;display:none;align-items:center;gap:.4rem}
+        .cep-status.ok{display:flex;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+        .cep-status.warn{display:flex;background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+        .cep-status.err{display:flex;background:#fef2f2;color:#991b1b;border:1px solid #fca5a5}
+        .cep-status.loading{display:flex;background:#f0f9ff;color:#1e40af;border:1px solid #93c5fd}
+
+        .motivation-card{background:linear-gradient(135deg,var(--dark),var(--dark2));color:#fff;border-radius:var(--r);padding:1.25rem;margin-bottom:.75rem;text-align:center;border:1px solid rgba(108,196,202,.2)}
+        .motivation-card .emoji{font-size:2rem;margin-bottom:.4rem}
+        .motivation-card h3{font-size:.95rem;font-weight:700;color:var(--pri);margin-bottom:.25rem}
+        .motivation-card p{font-size:.8rem;opacity:.7}
+
+        .q-header{font-weight:600;font-size:.9rem;margin-bottom:.6rem;display:flex;gap:.5rem;align-items:flex-start}
+        .q-num{background:var(--dark);color:var(--pri);min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0}
+        .opts{display:flex;flex-direction:column;gap:.4rem}
+        .opt{display:flex;align-items:center;padding:.7rem .85rem;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;gap:.65rem;min-height:48px;-webkit-tap-highlight-color:transparent}
+        .opt:active{transform:scale(.98)}
+        .opt:hover{background:var(--pri-lt);border-color:var(--pri)}
+        .opt input[type="radio"]{display:none}
+        .opt .rc{width:20px;height:20px;border:2px solid #cbd5e1;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+        .opt .rc::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--pri);transform:scale(0);transition:transform .15s}
+        .opt input:checked~.rc{border-color:var(--pri)}
+        .opt input:checked~.rc::after{transform:scale(1)}
+        .opt input:checked~.ot{font-weight:600;color:var(--pri-dk)}
+        .ot{font-size:.85rem;color:var(--txt);line-height:1.4}
+
+        .btn-sub{width:100%;padding:1rem;background:linear-gradient(135deg,var(--pri),var(--pri-dk));color:var(--dark);border:none;border-radius:var(--r);font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;margin-top:1.25rem;font-family:inherit;-webkit-tap-highlight-color:transparent;letter-spacing:-.3px}
+        .btn-sub:hover{box-shadow:0 6px 20px rgba(108,196,202,.4);transform:translateY(-1px)}
+        .btn-sub:active{transform:scale(.98)}
+        .btn-sub:disabled{opacity:.6;cursor:not-allowed;transform:none}
+        .disc{text-align:center;font-size:.7rem;color:var(--muted);margin-top:.75rem}
+
+        #results-page{display:none}
+        .res-hero{background:var(--dark);color:#fff;padding:2rem 1.25rem;text-align:center;position:relative;overflow:hidden}
+        .res-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(108,196,202,.1),transparent)}
+        .res-hero h1{font-size:1.5rem;margin-bottom:.4rem;position:relative}
+        .res-hero p{position:relative;opacity:.8}
+        .res-hero .chk{width:56px;height:56px;background:rgba(108,196,202,.2);border:2px solid var(--pri);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;font-size:1.8rem;position:relative;animation:popIn .5s ease}
+        @keyframes popIn{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .res-card{background:var(--card);border-radius:var(--r);padding:1.25rem;box-shadow:var(--sh);margin-bottom:.75rem;border:1px solid var(--border);animation:fadeUp .5s ease}
+        .res-card h3{font-size:.95rem;margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem}
+        .footer{text-align:center;padding:1.5rem;font-size:.7rem;color:var(--muted)}
+        .footer a{color:var(--pri-dk);text-decoration:none}
+
+        .tip-wrap{position:relative;display:inline-flex;align-items:center;gap:.35rem}
+        .tip-icon{width:16px;height:16px;background:var(--dark3);color:var(--pri);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;cursor:help;flex-shrink:0;line-height:1;border:1px solid rgba(108,196,202,.3);transition:background .2s}
+        .tip-icon:hover,.tip-icon:focus{background:var(--pri);color:var(--dark);outline:none}
+        .tip-bubble{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;font-size:.72rem;font-weight:400;line-height:1.45;padding:.55rem .75rem;border-radius:8px;white-space:normal;width:max-content;max-width:260px;box-shadow:0 4px 16px rgba(0,0,0,.25);opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;z-index:200;pointer-events:none}
+        .tip-bubble::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--dark)}
+        .tip-icon:hover+.tip-bubble,.tip-icon:focus+.tip-bubble,.tip-bubble:hover{opacity:1;visibility:visible;pointer-events:auto}
+        @media(max-width:480px){.tip-bubble{left:0;transform:none;max-width:220px}.tip-bubble::after{left:8px;transform:none}}
+        .tip-tag{display:inline-block;padding:0 .3rem;border-radius:3px;font-size:.6rem;font-weight:700;letter-spacing:.3px;margin-left:.2rem}
+        .tip-tag.obr{background:rgba(239,68,68,.15);color:#ef4444}
+        .tip-tag.opc{background:rgba(108,196,202,.15);color:var(--pri)}
+
+        .hero-logo-img{height:50px;position:relative;margin-bottom:.4rem}
+        .field-help{font-size:.8rem;color:var(--muted);margin:.4rem 0 .65rem;line-height:1.5}
+        .fg textarea{resize:vertical;min-height:120px;line-height:1.55}
+        .fg textarea.error{border-color:var(--err)}
+        .upload-box{border:2px dashed #83bbc0;border-radius:12px;padding:1rem;background:#f2f9f9}
+        .fg input[type="file"]{padding:.6rem;background:#fff;font-size:.85rem;max-width:100%;cursor:pointer}
+        input[type="file"]::file-selector-button{font:600 .8rem 'Inter',sans-serif;color:#00363b;background:#d9eeee;border:0;border-radius:6px;padding:.7rem;margin-right:.6rem;cursor:pointer}
+        .file-selected{margin-top:.75rem;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.8rem;overflow-wrap:anywhere}
+        .file-selected[hidden]{display:none}
+        .btn-remove{background:white;border:1px solid #b5cdd0;color:#005b66;font:600 .8rem 'Inter',sans-serif;padding:.65rem .8rem;border-radius:7px;cursor:pointer;flex-shrink:0;min-height:44px}
+        .submit-error{margin-top:1rem;padding:1rem;border:1px solid #fca5a5;background:#fff1f2;border-radius:10px;color:#991b1b;font-size:.85rem}
+        .submit-status{text-align:center;font-size:.85rem;color:#005b66;margin-top:.7rem}
+        .preview-note{padding:.55rem 1rem;background:#e3f2f3;color:#00363b;text-align:center;font-size:.8rem}
+        button:focus-visible,input[type="file"]:focus-visible{outline:3px solid #005b66;outline-offset:3px}
+    </style>
+</head>
+<body>
+
+
+<div id="form-page">
+    <div class="hero">
+        <img src="logo-netcar.png" alt="Netcar Multimarcas" class="hero-logo-img">
+        <div class="hero-sub">Multimarcas · Esteio/RS</div>
+        <h1>Consultor de Vendas de Veículos Seminovos</h1>
+        <p>Buscamos um vendedor com garra, atitude e fome de resultado. Se você é movido por desafios e metas, essa vaga é pra você.</p>
+        <div class="hero-badges">
+            <div class="hero-badge">🚀 5 min para preencher</div>
+            <div class="hero-badge">💰 Comissão agressiva</div>
+            <div class="hero-badge">📱 100% online</div>
+        </div>
+    </div>
+
+    <div class="prog-wrap">
+        <div class="prog-inner">
+            <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+            <div class="prog-txt" id="progTxt">0 / 25</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <form id="profileForm" novalidate>
+
+            <div class="motivation-card">
+                <div class="emoji">🔥</div>
+                <h3>Estamos contratando vendedores!</h3>
+                <p>Experiência comprovada em vendas de veículos e carteira ativa de clientes são requisitos obrigatórios. Buscamos foco em metas, iniciativa e vontade de crescer.</p>
+            </div>
+
+            <div class="sec-title"><div class="ic">👤</div> Sobre Você</div>
+            <div class="card" id="personalCard">
+                <div class="fg">
+                    <label class="tip-wrap">Nome Completo <span class="req">*</span>
+                        <span class="tip-icon" tabindex="0">?</span>
+                        <span class="tip-bubble">Informe seu nome completo como consta em documentos. <span class="tip-tag obr">Obrigatório</span></span>
+                    </label>
+                    <input type="text" id="fName" required placeholder="Seu nome completo" autocomplete="name">
+                    <div class="f-err" id="errName">Preencha o seu nome.</div>
+                </div>
+                <div class="row2">
+                    <div class="fg">
+                        <label class="tip-wrap">Idade <span class="req">*</span>
+                            <span class="tip-icon" tabindex="0">?</span>
+                            <span class="tip-bubble">Sua idade atual. Mínimo 18 anos. <span class="tip-tag obr">Obrigatório</span></span>
+                        </label>
+                        <input type="number" id="fAge" required placeholder="Ex: 28" min="18" max="99" inputmode="numeric">
+                        <div class="f-err" id="errAge">Idade mínima: 18 anos.</div>
+                    </div>
+                    <div class="fg">
+                        <label class="tip-wrap">Telefone / WhatsApp <span class="req">*</span>
+                            <span class="tip-icon" tabindex="0">?</span>
+                            <span class="tip-bubble">Número com DDD para contato. Preferência WhatsApp. <span class="tip-tag obr">Obrigatório</span></span>
+                        </label>
+                        <input type="tel" id="fPhone" required placeholder="(51) 99999-0000" inputmode="tel" autocomplete="tel">
+                        <div class="f-err" id="errPhone">Informe seu telefone.</div>
+                    </div>
+                </div>
+                <div class="fg">
+                    <label class="tip-wrap">E-mail <span class="req">*</span>
+                        <span class="tip-icon" tabindex="0">?</span>
+                        <span class="tip-bubble">Seu melhor e-mail para receber comunicações sobre o processo seletivo. <span class="tip-tag obr">Obrigatório</span></span>
+                    </label>
+                    <input type="email" id="fEmail" required placeholder="seu@email.com" inputmode="email" autocomplete="email">
+                    <div class="f-err" id="errEmail">Insira um e-mail válido.</div>
+                </div>
+                <div class="fg">
+                    <label class="tip-wrap">CEP <span class="req">*</span>
+                        <span class="tip-icon" tabindex="0">?</span>
+                        <span class="tip-bubble">Seu CEP residencial. A rua, bairro e cidade serão preenchidos automaticamente. Validamos proximidade com Esteio/RS. <span class="tip-tag obr">Obrigatório</span></span>
+                    </label>
+                    <input type="text" id="fCep" required placeholder="00000-000" maxlength="9" inputmode="numeric" autocomplete="postal-code">
+                    <div class="f-err" id="errCep">Informe seu CEP.</div>
+                    <div class="cep-status" id="cepStatus"></div>
+                </div>
+                <div id="addrFields" style="display:none">
+                    <div class="fg">
+                        <label class="tip-wrap">Rua
+                            <span class="tip-icon" tabindex="0">?</span>
+                            <span class="tip-bubble">Preenchido automaticamente pelo CEP. <span class="tip-tag opc">Automático</span></span>
+                        </label>
+                        <input type="text" id="fStreet" readonly tabindex="-1" style="background:#f1f5f9;color:var(--muted)">
+                    </div>
+                    <div class="row2">
+                        <div class="fg">
+                            <label class="tip-wrap">Bairro
+                                <span class="tip-icon" tabindex="0">?</span>
+                                <span class="tip-bubble">Preenchido automaticamente pelo CEP. <span class="tip-tag opc">Automático</span></span>
+                            </label>
+                            <input type="text" id="fNeighborhood" readonly tabindex="-1" style="background:#f1f5f9;color:var(--muted)">
+                        </div>
+                        <div class="fg">
+                            <label class="tip-wrap">Cidade / UF
+                                <span class="tip-icon" tabindex="0">?</span>
+                                <span class="tip-bubble">Preenchido automaticamente pelo CEP. <span class="tip-tag opc">Automático</span></span>
+                            </label>
+                            <input type="text" id="fCity" readonly tabindex="-1" style="background:#f1f5f9;color:var(--muted)">
+                        </div>
+                    </div>
+                    <div class="fg">
+                        <label class="tip-wrap">Número / Complemento
+                            <span class="tip-icon" tabindex="0">?</span>
+                            <span class="tip-bubble">Número da casa/apto e complemento se houver. <span class="tip-tag opc">Opcional</span></span>
+                        </label>
+                        <input type="text" id="fNumber" placeholder="Nº e complemento (opcional)">
+                    </div>
+                </div>
+                <div class="row2">
+                    <div class="fg">
+                        <label class="tip-wrap">Instagram
+                            <span class="tip-icon" tabindex="0">?</span>
+                            <span class="tip-bubble">Seu perfil do Instagram. Ajuda a conhecer melhor o candidato. <span class="tip-tag opc">Opcional</span></span>
+                        </label>
+                        <input type="text" id="fInstagram" placeholder="@seuperfil">
+                    </div>
+                    <div class="fg">
+                        <label class="tip-wrap">LinkedIn
+                            <span class="tip-icon" tabindex="0">?</span>
+                            <span class="tip-bubble">URL do seu perfil LinkedIn. Facilita a análise profissional. <span class="tip-tag opc">Opcional</span></span>
+                        </label>
+                        <input type="text" id="fLinkedin" placeholder="linkedin.com/in/...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- MINI-TESTE VENDAS -->
+            <div class="sec-title"><div class="ic">🚗</div> Sobre a Vaga</div>
+            <div class="card" id="vagaCard">
+                <div class="fg">
+                    <label class="tip-wrap">Experiência com vendas <span class="req">*</span>
+                        <span class="tip-icon" tabindex="0">?</span>
+                        <span class="tip-bubble">Quanto tempo você já trabalhou com vendas em qualquer segmento (loja, televendas, externas, etc). <span class="tip-tag obr">Obrigatório</span></span>
+                    </label>
+                    <select id="fExp" required>
+                        <option value="">Selecione...</option>
+                        <option value="nenhuma">Nenhuma — estou começando agora</option>
+                        <option value="pouca">Pouca — menos de 1 ano</option>
+                        <option value="media">Média — 1 a 3 anos</option>
+                        <option value="muita">Muita — mais de 3 anos</option>
+                    </select>
+                    <div class="f-err" id="errExp">Selecione sua experiência.</div>
+                </div>
+                <div class="fg">
+                    <label class="tip-wrap">Já trabalhou com venda de veículos? <span class="req">*</span>
+                        <span class="tip-icon" tabindex="0">?</span>
+                        <span class="tip-bubble">Se já teve experiência especificamente em concessionárias, lojas de veículos ou similares. <span class="tip-tag obr">Obrigatório</span></span>
+                    </label>
+                    <select id="fVeiculos" required>
+                        <option value="">Selecione...</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não, mas tenho interesse</option>
+                    </select>
+                    <div class="f-err" id="errVeiculos">Selecione uma opção.</div>
+                </div>
+                <div class="fg">
+                    <label class="tip-wrap">Disponibilidade de horário <span class="req">*</span>
+                        <span class="tip-icon" tabindex="0">?</span>
+                        <span class="tip-bubble">A vaga exige disponibilidade. Selecione o horário que melhor se encaixa na sua rotina. <span class="tip-tag obr">Obrigatório</span></span>
+                    </label>
+                    <select id="fHorario" required>
+                        <option value="">Selecione...</option>
+                        <option value="integral">Integral (seg a sex + sáb de manhã)</option>
+                        <option value="comercial">Comercial (seg a sex)</option>
+                        <option value="meio">Meio período</option>
+                        <option value="flexivel">Horário flexível / negociável</option>
+                    </select>
+                    <div class="f-err" id="errHorario">Selecione sua disponibilidade.</div>
+                </div>
+                <div class="fg">
+                    <label class="tip-wrap">Possui CNH? <span class="req">*</span>
+                        <span class="tip-icon" tabindex="0">?</span>
+                        <span class="tip-bubble">Carteira Nacional de Habilitação. Importante para test-drives e movimentação de veículos. <span class="tip-tag obr">Obrigatório</span></span>
+                    </label>
+                    <select id="fCnh" required>
+                        <option value="">Selecione...</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não</option>
+                        <option value="processo">Em processo</option>
+                    </select>
+                    <div class="f-err" id="errCnh">Selecione uma opção.</div>
+                </div>
+                <div class="fg">
+                    <label for="fMetas">Conte um resultado que você alcançou com metas de vendas <span class="req">*</span></label>
+                    <p class="field-help" id="metasHelp">Qual era sua meta, em qual período e qual foi o resultado? Se possível, informe a quantidade de veículos vendidos.</p>
+                    <textarea id="fMetas" required rows="4" minlength="20" maxlength="1000" aria-describedby="metasHelp errMetas" placeholder="Descreva sua meta, o período e o resultado alcançado."></textarea>
+                    <div class="f-err" id="errMetas">Conte um resultado com um pouco mais de detalhe (mínimo de 20 caracteres).</div>
+                </div>
+            </div>
+
+            <div class="sec-title" id="curriculoTitulo"><div class="ic" aria-hidden="true">📎</div> Seu currículo <span style="font-size:.75rem;font-weight:500;color:var(--muted)">(opcional)</span></div>
+            <div class="card" id="curriculoCard">
+                <div class="fg">
+                    <label for="fCurriculo">Quer anexar seu currículo?</label>
+                    <p class="field-help" id="curriculoHelp">Envie um arquivo PDF, DOC ou DOCX de até 5 MB. Você também pode se candidatar sem anexar um currículo.</p>
+                    <div class="upload-box">
+                        <input type="file" id="fCurriculo" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-describedby="curriculoHelp errCurriculo" aria-labelledby="curriculoTitulo">
+                        <div class="file-selected" id="curriculoSelected" hidden><span id="curriculoName" role="status"></span><button class="btn-remove" id="removeCurriculo" type="button">Remover</button></div>
+                    </div>
+                    <div class="f-err" id="errCurriculo" role="alert"></div>
+                    <p class="field-help">O arquivo será enviado junto com sua candidatura e ficará disponível para a equipe de seleção.</p>
+                </div>
+            </div>
+
+            <!-- QUESTIONÁRIO 25 PERGUNTAS -->
+            <div class="motivation-card">
+                <div class="emoji">🧠</div>
+                <h3>Quase lá! Agora um teste rápido</h3>
+                <p>25 perguntas para entendermos melhor o seu perfil profissional. Não existe resposta certa ou errada — seja sincero!</p>
+            </div>
+
+            <div class="sec-title"><div class="ic">📝</div> Teste de Perfil — 25 Perguntas</div>
+            <div id="questionsContainer"></div>
+
+            <button type="submit" class="btn-sub" id="submitBtn">
+                <span id="btnText">Enviar minha candidatura</span>
+            </button>
+            <p class="submit-status" id="submitStatus" role="status" aria-live="polite"></p>
+            <div class="submit-error" id="submitError" role="alert" tabindex="-1" hidden></div>
+            <p class="disc">🔒 Dados confidenciais — uso exclusivo no processo seletivo Netcar.</p>
+        </form>
+    </div>
+</div>
+
+<!-- ======= AGRADECIMENTO ======= -->
+<div id="results-page">
+    <div class="res-hero">
+        <div class="chk">✓</div>
+        <h1>Candidatura Recebida!</h1>
+        <p>Obrigado, <strong id="resName"></strong>!</p>
+    </div>
+    <div class="container">
+        <div class="res-card" style="text-align:center">
+            <div style="font-size:3rem;margin-bottom:.5rem">🎉</div>
+            <h3 style="justify-content:center;font-size:1.1rem;margin-bottom:.75rem">Sua avaliação foi enviada com sucesso!</h3>
+            <p style="font-size:.9rem;color:var(--txt);margin-bottom:1rem;line-height:1.6">
+                Agradecemos seu interesse em fazer parte do time <strong>Netcar</strong>.<br>
+                Sua candidatura será analisada pela nossa equipe.
+            </p>
+            <div style="background:var(--pri-lt);border:1.5px solid rgba(108,196,202,.3);border-radius:var(--r);padding:1rem;margin-bottom:1rem">
+                <p style="font-size:.85rem;color:var(--dark);font-weight:600;margin-bottom:.3rem">📲 Próximos passos</p>
+                <p style="font-size:.82rem;color:var(--txt);line-height:1.5">
+                    Caso seu perfil seja selecionado, entraremos em contato pelo <strong>WhatsApp</strong> cadastrado para agendar a <strong>segunda etapa</strong> do processo seletivo.
+                </p>
+            </div>
+            <p style="font-size:.78rem;color:var(--muted);line-height:1.5">
+                Fique atento ao seu WhatsApp nos próximos dias.<br>
+                Boa sorte! 🍀
+            </p>
+        </div>
+        <div class="footer">
+            <img src="logo-netcar.png" alt="Netcar" style="height:30px;margin-bottom:.4rem;opacity:.7"><br>
+            <a href="https://www.netcarmultimarcas.com.br" target="_blank">netcarmultimarcas.com.br</a>
+        </div>
+    </div>
+</div>
+
+<script>
+const API_URL = '/api/submit';
+const ESTEIO = {lat:-29.8614,lng:-51.1797};
+const RAIO_KM = 25;
+const MAX_CURRICULO_BYTES = 5 * 1024 * 1024;
+let submitting = false;
+
+const CIDADES_RAIO = ['esteio','canoas','sapucaia do sul','sao leopoldo','são leopoldo','novo hamburgo','cachoeirinha','gravatai','gravataí'];
+
+const QS=[
+{q:"Eu sou...",o:[{l:"I",t:"Idealista, criativo e visionário"},{l:"C",t:"Divertido, espiritual e benéfico"},{l:"O",t:"Confiável, meticuloso e previsível"},{l:"A",t:"Focado, determinado e persistente"}]},
+{q:"Eu gosto de...",o:[{l:"A",t:"Ser piloto"},{l:"C",t:"Conversar com os passageiros"},{l:"O",t:"Planejar a viagem"},{l:"I",t:"Explorar novas rotas"}]},
+{q:"Se você quiser se dar bem comigo...",o:[{l:"I",t:"Me dê liberdade"},{l:"O",t:"Me deixe saber sua expectativa"},{l:"A",t:"Lidere, siga ou saia do caminho"},{l:"C",t:"Seja amigável, carinhoso e compreensivo"}]},
+{q:"Para conseguir obter bons resultados é preciso...",o:[{l:"I",t:"Ter incertezas"},{l:"O",t:"Controlar o essencial"},{l:"C",t:"Diversão e celebração"},{l:"A",t:"Planejar e obter recursos"}]},
+{q:"Eu me divirto quando...",o:[{l:"A",t:"Estou me exercitando"},{l:"I",t:"Tenho novidades"},{l:"C",t:"Estou com outros"},{l:"O",t:"Determino as regras"}]},
+{q:"Eu penso que...",o:[{l:"C",t:"Unidos venceremos, divididos perderemos"},{l:"A",t:"O ataque é melhor que a defesa"},{l:"I",t:"É bom ser manso, mas andar com um porrete"},{l:"O",t:"Um homem prevenido vale por dois"}]},
+{q:"Minha preocupação é...",o:[{l:"I",t:"Gerar a ideia global"},{l:"C",t:"Fazer com que as pessoas gostem"},{l:"O",t:"Fazer com que funcione"},{l:"A",t:"Fazer com que aconteça"}]},
+{q:"Eu prefiro...",o:[{l:"I",t:"Perguntas a respostas"},{l:"O",t:"Ter todos os detalhes"},{l:"A",t:"Vantagens a meu favor"},{l:"C",t:"Que todos tenham a chance de ser ouvido"}]},
+{q:"Eu gosto de...",o:[{l:"A",t:"Fazer progresso"},{l:"C",t:"Construir memórias"},{l:"O",t:"Fazer sentido"},{l:"I",t:"Tornar as pessoas confortáveis"}]},
+{q:"Eu gosto de chegar...",o:[{l:"A",t:"Na frente"},{l:"C",t:"Junto"},{l:"O",t:"Na hora"},{l:"I",t:"Em outro lugar"}]},
+{q:"Um ótimo dia para mim é quando...",o:[{l:"A",t:"Consigo fazer muitas coisas"},{l:"C",t:"Me divirto com meus amigos"},{l:"O",t:"Tudo segue conforme planejado"},{l:"I",t:"Desfruto de coisas novas e estimulantes"}]},
+{q:"Eu vejo a morte como...",o:[{l:"I",t:"Uma grande aventura misteriosa"},{l:"C",t:"Oportunidade para rever os falecidos"},{l:"O",t:"Um modo de receber recompensas"},{l:"A",t:"Algo que sempre chega muito cedo"}]},
+{q:"Minha filosofia de vida é...",o:[{l:"A",t:"Há ganhadores e perdedores, e eu acredito ser um ganhador"},{l:"C",t:"Para eu ganhar, ninguém precisa perder"},{l:"O",t:"Para ganhar é preciso seguir as regras"},{l:"I",t:"Para ganhar, é necessário inventar novas regras"}]},
+{q:"Eu sempre gostei de...",o:[{l:"I",t:"Explorar"},{l:"O",t:"Evitar surpresas"},{l:"A",t:"Focalizar a meta"},{l:"C",t:"Realizar uma abordagem natural"}]},
+{q:"Eu gosto de mudanças se...",o:[{l:"A",t:"Me der uma vantagem competitiva"},{l:"C",t:"For divertido e puder ser compartilhado"},{l:"I",t:"Me der mais liberdade e variedade"},{l:"O",t:"Melhorar ou me der mais controle"}]},
+{q:"Não existe nada de errado em...",o:[{l:"A",t:"Se colocar na frente"},{l:"C",t:"Colocar os outros na frente"},{l:"I",t:"Mudar de ideia"},{l:"O",t:"Ser consistente"}]},
+{q:"Eu gosto de buscar conselhos de...",o:[{l:"A",t:"Pessoas bem sucedidas"},{l:"C",t:"Anciões e conselheiros"},{l:"O",t:"Autoridades no assunto"},{l:"I",t:"Lugares, os mais estranhos"}]},
+{q:"Meu lema é...",o:[{l:"I",t:"Fazer o que precisa ser feito"},{l:"O",t:"Fazer bem feito"},{l:"C",t:"Fazer junto com o grupo"},{l:"A",t:"Simplesmente fazer"}]},
+{q:"Eu gosto de...",o:[{l:"I",t:"Complexidade, mesmo se confuso"},{l:"O",t:"Ordem e sistematização"},{l:"C",t:"Calor humano e animação"},{l:"A",t:"Coisas claras e simples"}]},
+{q:"Tempo para mim é...",o:[{l:"A",t:"Algo que detesto desperdiçar"},{l:"C",t:"Um grande ciclo"},{l:"O",t:"Uma flecha que leva ao inevitável"},{l:"I",t:"Irrelevante"}]},
+{q:"Se eu fosse bilionário...",o:[{l:"C",t:"Faria doações para muitas entidades"},{l:"O",t:"Criaria uma poupança avantajada"},{l:"I",t:"Faria o que desse na cabeça"},{l:"A",t:"Exibiria bastante com algumas pessoas"}]},
+{q:"Eu acredito que...",o:[{l:"A",t:"O destino é mais importante que a jornada"},{l:"C",t:"A jornada é mais importante que o destino"},{l:"O",t:"Um centavo economizado é um centavo ganho"},{l:"I",t:"Bastam um navio e uma estrela para navegar"}]},
+{q:"Eu acredito também que...",o:[{l:"A",t:"Aquele que hesita está perdido"},{l:"O",t:"De grão em grão a galinha enche o papo"},{l:"C",t:"O que vai, volta"},{l:"I",t:"Um sorriso ou uma careta é o mesmo para quem é cego"}]},
+{q:"Eu acredito ainda que...",o:[{l:"O",t:"É melhor prudência do que arrependimento"},{l:"I",t:"A autoridade deve ser desafiada"},{l:"A",t:"Ganhar é fundamental"},{l:"C",t:"O coletivo é mais importante do que o individual"}]},
+{q:"Eu penso que...",o:[{l:"I",t:"Não é fácil ficar encurralado"},{l:"O",t:"É preferível olhar, antes de pular"},{l:"C",t:"Duas cabeças pensam melhor do que uma"},{l:"A",t:"Se você não tem condições de competir, não compita"}]}
+];
+
+const PROFILES={
+A:{animal:"Tubarão",emoji:"🦈",cls:"shark",beh:"Fazer rápido (Atitude/Ação)",traits:"Senso de urgência, iniciativa, prático, impulsivo, vencer desafios, aqui e agora, autossuficiente.",str:"Ação, fazer acontecer, eliminar burocracia, motivação.",val:"Resultado"},
+O:{animal:"Lobo",emoji:"🐺",cls:"wolf",beh:"Fazer certo (Organização)",traits:"Detalhista, organizado, estrategista, pontual, conservador, previsível.",str:"Organização, consistência, qualidade, lealdade, regras e responsabilidades.",val:"Ordem e controle"},
+C:{animal:"Gato",emoji:"🐱",cls:"cat",beh:"Fazer junto (Comunicação)",traits:"Sensível, relacionamentos, time, tradicional, busca harmonia, delega autoridade.",str:"Comunicação, harmonia, cultura de equipe, comunicação aberta.",val:"Felicidade e igualdade"},
+I:{animal:"Águia",emoji:"🦅",cls:"eagle",beh:"Fazer diferente (Idealização)",traits:"Criativo, intuitivo, foco no futuro, curioso, informal e flexível.",str:"Idealização, provocar mudanças, antecipar o futuro, criatividade.",val:"Criatividade e liberdade"}
+};
+
+// === CEP ===
+let cepData=null;
+function maskCep(v){v=v.replace(/\D/g,'');if(v.length>5)v=v.slice(0,5)+'-'+v.slice(5,8);return v}
+document.getElementById('fCep').addEventListener('input',function(){this.value=maskCep(this.value);const c=this.value.replace(/\D/g,'');if(c.length===8)fetchCep(c);else{setCepStatus('','');document.getElementById('addrFields').style.display='none';cepData=null}});
+function setCepStatus(c,h){const e=document.getElementById('cepStatus');e.className='cep-status '+c;e.innerHTML=h}
+async function fetchCep(cep){
+    setCepStatus('loading','⏳ Buscando endereço...');
+    try{
+        const[vc,ba]=await Promise.allSettled([fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r=>r.json()),fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`).then(r=>r.json())]);
+        const v=vc.status==='fulfilled'?vc.value:null,b=ba.status==='fulfilled'?ba.value:null;
+        if(v&&v.erro){setCepStatus('err','❌ CEP não encontrado.');return}
+        const city=v?.localidade||b?.city||'',nb=v?.bairro||b?.neighborhood||'',st=v?.uf||b?.state||'',street=v?.logradouro||b?.street||'',comp=v?.complemento||'';
+        document.getElementById('fStreet').value=street+(comp?' ('+comp+')':'');
+        document.getElementById('fCity').value=city+(st?' / '+st:'');
+        document.getElementById('fNeighborhood').value=nb;
+        document.getElementById('addrFields').style.display='';
+        let dist=null;const co=b?.location?.coordinates;
+        if(co&&co.latitude&&co.longitude){dist=haversine(ESTEIO.lat,ESTEIO.lng,parseFloat(co.latitude),parseFloat(co.longitude))}
+        if(dist!==null){
+            cepData={cep,city,neighborhood:nb,state:st,street,lat:parseFloat(co.latitude),lng:parseFloat(co.longitude),distKm:Math.round(dist*10)/10};
+            if(dist<=RAIO_KM){setCepStatus('ok',`✅ Região válida — ${cepData.distKm} km de Esteio`);document.getElementById('fCep').classList.remove('error');document.getElementById('fCep').classList.add('valid')}
+            else{setCepStatus('warn',`⚠️ Fora da região — ${cepData.distKm} km de Esteio (máx. ${RAIO_KM} km)`);document.getElementById('fCep').classList.remove('valid')}
+        }else{
+            const cn=city.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');const inR=CIDADES_RAIO.some(c=>cn.includes(c));
+            cepData={cep,city,neighborhood:nb,state:st,street,lat:null,lng:null,distKm:inR?0:null};
+            if(inR){setCepStatus('ok',`✅ Região válida — ${city}`);document.getElementById('fCep').classList.add('valid')}
+            else{setCepStatus('warn',`⚠️ Não confirmado se está no raio de ${RAIO_KM} km de Esteio.`)}
+        }
+    }catch(e){setCepStatus('err','❌ Erro ao buscar CEP.')}
+}
+function haversine(a,b,c,d){const R=6371,r=e=>e*Math.PI/180,dL=r(c-a),dO=r(d-b),x=Math.sin(dL/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(dO/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
+
+// === PHONE MASK ===
+document.getElementById('fPhone').addEventListener('input',function(){let v=this.value.replace(/\D/g,'');if(v.length>11)v=v.slice(0,11);if(v.length>6)v='('+v.slice(0,2)+') '+v.slice(2,7)+'-'+v.slice(7);else if(v.length>2)v='('+v.slice(0,2)+') '+v.slice(2);this.value=v});
+
+// === INSTAGRAM MASK ===
+document.getElementById('fInstagram').addEventListener('input',function(){let v=this.value.replace(/\s/g,'');if(v&&!v.startsWith('@'))v='@'+v;this.value=v});
+
+// === RENDER QUESTIONS ===
+function renderQuestions(){const c=document.getElementById('questionsContainer');QS.forEach((q,i)=>{const d=document.createElement('div');d.className='card';d.id='q-'+i;d.innerHTML=`<div class="q-header"><div class="q-num">${i+1}</div><span>${q.q}</span></div><div class="opts">${q.o.map(o=>`<label class="opt"><input type="radio" name="q${i}" value="${o.l}" onchange="onAns(${i})"><span class="rc"></span><span class="ot">${o.t}</span></label>`).join('')}</div>`;c.appendChild(d)})}
+function onAns(i){document.getElementById('q-'+i).classList.add('answered');document.getElementById('q-'+i).classList.remove('unanswered-highlight');updateProg()}
+function updateProg(){const n=document.querySelectorAll('.card.answered').length;const p=Math.round(n/25*100);document.getElementById('progFill').style.width=p+'%';document.getElementById('progTxt').textContent=n+' / 25'}
+
+// === CURRÍCULO OPCIONAL ===
+const resumeInput = document.getElementById('fCurriculo');
+function validateResume() {
+    const file = resumeInput.files[0];
+    const error = document.getElementById('errCurriculo');
+    let message = '';
+    if (file && !/\.(pdf|doc|docx)$/i.test(file.name)) message = 'Escolha um arquivo PDF, DOC ou DOCX.';
+    else if (file && (!file.size || file.size > MAX_CURRICULO_BYTES)) message = 'O arquivo precisa ter conteúdo e no máximo 5 MB.';
+    error.textContent = message;
+    error.style.display = message ? 'block' : 'none';
+    resumeInput.setAttribute('aria-invalid', String(Boolean(message)));
+    document.getElementById('curriculoSelected').hidden = !file;
+    document.getElementById('curriculoName').textContent = file ? file.name + ' · ' + (file.size < 1024 * 1024 ? Math.ceil(file.size / 1024) + ' KB' : (file.size / 1024 / 1024).toFixed(1) + ' MB') : '';
+    return !message;
+}
+resumeInput.addEventListener('change', validateResume);
+document.getElementById('removeCurriculo').addEventListener('click', function() {
+    resumeInput.value = '';
+    validateResume();
+    resumeInput.focus();
+});
+function readResume(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve({ name: file.name, type: file.type, size: file.size, base64: String(reader.result).split(',')[1] });
+        reader.onerror = () => reject(new Error('Não foi possível ler o currículo. Selecione o arquivo novamente ou remova o anexo.'));
+        reader.readAsDataURL(file);
+    });
+}
+
+// === VALIDATION ===
+document.getElementById('profileForm').addEventListener('submit',function(e){
+    e.preventDefault();if(submitting)return;let ok=true;
+    if(!validateResume()){resumeInput.focus();return;}
+    [{id:'fName',err:'errName',t:v=>v.trim().length>=2},{id:'fAge',err:'errAge',t:v=>{const n=parseInt(v);return n>=18&&n<=99}},{id:'fPhone',err:'errPhone',t:v=>v.replace(/\D/g,'').length>=10},{id:'fEmail',err:'errEmail',t:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},{id:'fCep',err:'errCep',t:v=>v.replace(/\D/g,'').length===8}].forEach(c=>{const i=document.getElementById(c.id),e=document.getElementById(c.err);if(!c.t(i.value)){i.classList.add('error');e.style.display='block';ok=false}else{i.classList.remove('error');e.style.display='none'}});
+    [{id:'fExp',err:'errExp'},{id:'fVeiculos',err:'errVeiculos'},{id:'fHorario',err:'errHorario'},{id:'fCnh',err:'errCnh'}].forEach(c=>{const i=document.getElementById(c.id),e=document.getElementById(c.err);if(!i.value){i.classList.add('error');e.style.display='block';ok=false}else{i.classList.remove('error');e.style.display='none'}});
+    const metas=document.getElementById('fMetas');
+    if(metas.value.trim().length<20){document.getElementById('errMetas').style.display='block';metas.classList.add('error');metas.focus();return;}
+    document.getElementById('errMetas').style.display='none';metas.classList.remove('error');
+    let un=[];QS.forEach((_,i)=>{if(!document.querySelector(`input[name="q${i}"]:checked`))un.push(i)});
+    if(un.length>0){ok=false;un.forEach(i=>document.getElementById('q-'+i).classList.add('unanswered-highlight'));document.getElementById('q-'+un[0]).scrollIntoView({behavior:'smooth',block:'center'});return}
+    if(!ok){document.getElementById('personalCard').scrollIntoView({behavior:'smooth',block:'start'});return}
+    calculate();
+});
+
+// === CALCULATE ===
+function calculate(){
+    const scores={I:0,C:0,O:0,A:0},answers=[];
+    QS.forEach((_,i)=>{const s=document.querySelector(`input[name="q${i}"]:checked`);if(s){scores[s.value]++;answers.push(s.value)}});
+    const pcts={};for(const k in scores)pcts[k]=Math.round((scores[k]/25)*100);
+    const sorted=Object.entries(pcts).sort((a,b)=>b[1]-a[1]),dom=sorted[0][0];
+    saveResults(scores,pcts,dom,answers);
+}
+
+function showResults(){
+    document.getElementById('form-page').style.display='none';document.getElementById('results-page').style.display='block';
+    document.getElementById('resName').textContent=document.getElementById('fName').value;
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// === SAVE + NOTIFY ===
+async function saveResults(scores,pcts,dom,answers){
+    if (submitting) return;
+    submitting = true;
+    const button = document.getElementById('submitBtn');
+    const error = document.getElementById('submitError');
+    const status = document.getElementById('submitStatus');
+    button.disabled = true;
+    error.hidden = true;
+    error.textContent = '';
+    document.getElementById('btnText').textContent = 'Enviando candidatura…';
+    status.textContent = 'Aguarde a confirmação de recebimento. Mantenha esta página aberta.';
+    const selectedFile = resumeInput.files[0];
+    const dp=PROFILES[dom];
+    const data={
+        nome:document.getElementById('fName').value,
+        idade:parseInt(document.getElementById('fAge').value),
+        email:document.getElementById('fEmail').value,
+        telefone:document.getElementById('fPhone').value,
+        instagram:document.getElementById('fInstagram').value||null,
+        linkedin:document.getElementById('fLinkedin').value||null,
+        cep:cepData?.cep||document.getElementById('fCep').value.replace(/\D/g,''),
+        rua:cepData?.street||'',
+        numero_complemento:document.getElementById('fNumber')?.value||'',
+        bairro:cepData?.neighborhood||'',
+        cidade:cepData?.city||'',
+        estado:cepData?.state||'',
+        endereco_completo:[cepData?.street,document.getElementById('fNumber')?.value,cepData?.neighborhood,cepData?.city,cepData?.state].filter(Boolean).join(', '),
+        distancia_km:cepData?.distKm||null,
+        dentro_raio:cepData?.distKm!=null?cepData.distKm<=RAIO_KM:null,
+        experiencia_vendas:document.getElementById('fExp').value,
+        vendeu_veiculos:document.getElementById('fVeiculos').value,
+        horario:document.getElementById('fHorario').value,
+        cnh:document.getElementById('fCnh').value,
+        metas:document.getElementById('fMetas').value.trim(),
+        metas_formato:'resultado_vendas_v1',
+        scores,percentuais:pcts,
+        dominante:dp.animal,dominante_pct:pcts[dom],
+        respostas:answers,timestamp:new Date().toISOString()
+    };
+    let timer;
+    try {
+        if (selectedFile) data.curriculo = await readResume(selectedFile);
+        const controller = new AbortController();
+        timer = setTimeout(() => controller.abort(), 45000);
+        const response = await fetch(API_URL, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(data), signal:controller.signal
+        });
+        const result = await response.json().catch(() => null);
+        if (!response.ok || result?.success !== true || !result?.id) {
+            throw new Error(result?.error || 'Não foi possível confirmar o recebimento. Tente enviar novamente.');
+        }
+        showResults();
+    } catch (e) {
+        error.textContent = e.name === 'AbortError'
+            ? 'O envio demorou mais que o esperado e não foi possível confirmar o recebimento. Suas respostas continuam nesta página. Tente novamente.'
+            : (e instanceof TypeError ? 'Não foi possível conectar. Confira sua internet e tente novamente. Suas respostas continuam nesta página.' : e.message);
+        error.hidden = false;
+        error.focus();
+    } finally {
+        clearTimeout(timer);
+        submitting = false;
+        button.disabled = false;
+        document.getElementById('btnText').textContent = 'Enviar minha candidatura';
+        status.textContent = '';
+    }
+}
+
+renderQuestions();
+</script>
+</body>
+</html>

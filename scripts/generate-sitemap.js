@@ -33,6 +33,7 @@ const STATIC_PAGES = [
     priority: "0.85",
   },
   { loc: "/contato", changefreq: "monthly", priority: "0.8" },
+  { loc: "/vagas/consultor-vendas-seminovos/", changefreq: "weekly", priority: "0.7" },
   { loc: "/compra", changefreq: "monthly", priority: "0.7" },
   { loc: "/blog", changefreq: "weekly", priority: "0.6" },
   { loc: "/comparar", changefreq: "weekly", priority: "0.8" },
