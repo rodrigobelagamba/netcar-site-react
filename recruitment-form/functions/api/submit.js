@@ -1,4 +1,5 @@
 import { InputError, readLimitedJson, validateCurriculum } from '../../lib/curriculum.js';
+import { adminLink } from '../../lib/admin-auth.js';
 
 const ALLOWED_FIELDS = ['nome','idade','email','telefone','instagram','linkedin','cep','rua','numero_complemento','bairro','cidade','estado','endereco_completo','distancia_km','dentro_raio','experiencia_vendas','vendeu_veiculos','horario','cnh','metas','metas_formato','scores','percentuais','dominante','dominante_pct','respostas','timestamp'];
 
@@ -50,6 +51,7 @@ export async function onRequestPost(context) {
 
 async function sendNotifications(env, data, id) {
     const result = { whatsapp: null, email: null };
+    const link = adminLink(env, id);
     const raioTxt = data.dentro_raio === true
         ? 'Dentro do raio (' + (data.distancia_km || '?') + ' km)'
         : data.dentro_raio === false
@@ -60,7 +62,6 @@ async function sendNotifications(env, data, id) {
     if (env.CALLMEBOT_APIKEY) {
         try {
             const phone = env.CALLMEBOT_PHONE || '5551998879281';
-            const link = 'https://questionario-perfil.pages.dev/admin.html?id=' + id;
             const parts = [
                 'NOVO CANDIDATO NETCAR',
                 '',
@@ -123,7 +124,7 @@ async function sendNotifications(env, data, id) {
       <tr><td style="padding:4px 0;color:#64748b"><strong>Metas:</strong></td><td>${safe.metas || '-'}</td></tr>
     </table>
     <div style="margin-top:15px;text-align:center">
-      <a href="https://questionario-perfil.pages.dev/admin.html?id=${id}" style="display:inline-block;padding:10px 24px;background:#6cc4ca;color:#0f1923;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">Ver no Painel</a>
+      <a href="${escape(link)}" style="display:inline-block;padding:10px 24px;background:#6cc4ca;color:#0f1923;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">Ver no Painel</a>
     </div>
   </div>
 </div>`;
