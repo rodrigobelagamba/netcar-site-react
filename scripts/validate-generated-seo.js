@@ -16,6 +16,12 @@ const expectedEmail = "contato@netcarmultimarcas.com.br";
 const cities = JSON.parse(
   readFileSync(join(root, "src/data/seo/cities.json"), "utf8"),
 );
+const regionalFocus = JSON.parse(
+  readFileSync(join(root, "src/data/seo/regional-focus.json"), "utf8"),
+);
+const regionalFocusSlugs = Array.isArray(regionalFocus.citySlugs)
+  ? regionalFocus.citySlugs
+  : [];
 const regionalSelection = JSON.parse(
   readFileSync(join(root, "src/data/seo/regional-selection.json"), "utf8"),
 );
@@ -25,23 +31,16 @@ const contentPages = JSON.parse(
 const landings = JSON.parse(
   readFileSync(join(root, "src/data/seo/landings.json"), "utf8"),
 );
-const regionalInventorySlugs = [
-  "suv",
-  "hatch",
-  "automaticos-ate-100-mil",
-  "carros-ate-100-mil",
-  "jeep-compass",
-  "honda-hr-v",
-];
+const regionalInventorySlugs = Array.isArray(regionalFocus.inventorySlugs)
+  ? regionalFocus.inventorySlugs
+  : [];
 const expectedRegionalInventoryHrefs = regionalInventorySlugs
   .map((slug) => landings.find((landing) => landing.slug === slug))
   .filter((landing) => landing?.indexable && landing.count > 0)
   .map((landing) => `${site}/comprar-${landing.slug}`);
-const expectedNearbyMarketHrefs = cities
-  .filter((city) => city.priorityMarket)
-  .sort((left, right) => left.distanceKm - right.distanceKm)
-  .slice(0, 4)
-  .map((city) => `${site}/seminovos-${city.slug}`);
+const expectedNearbyMarketHrefs = regionalFocusSlugs.map(
+  (slug) => `${site}/seminovos-${slug}`,
+);
 const sitemap = readFileSync(join(root, "public/sitemap.xml"), "utf8");
 const crawlerHome = readFileSync(join(root, "public/seo-pagina.php"), "utf8");
 const footerSource = readFileSync(
@@ -57,6 +56,28 @@ const locationSource = readFileSync(
   "utf8",
 );
 const errors = [];
+if (
+  regionalInventorySlugs.length === 0 ||
+  new Set(regionalInventorySlugs).size !== regionalInventorySlugs.length
+) {
+  errors.push("regional-focus: seleções de estoque devem existir e ser únicas");
+}
+for (const slug of regionalInventorySlugs) {
+  if (!landings.some((landing) => landing.slug === slug)) {
+    errors.push(`regional-focus: seleção de estoque desconhecida (${slug})`);
+  }
+}
+if (
+  regionalFocusSlugs.length !== 4 ||
+  new Set(regionalFocusSlugs).size !== 4
+) {
+  errors.push("Foco regional: configurar exatamente 4 cidades únicas");
+}
+for (const slug of regionalFocusSlugs) {
+  if (!cities.some((city) => city.slug === slug)) {
+    errors.push(`Foco regional: cidade inexistente ${String(slug)}`);
+  }
+}
 const canonicals = new Set();
 const expectedRegionalSlugs = [
   "canoas",
