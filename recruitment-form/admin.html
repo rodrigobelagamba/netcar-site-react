@@ -16,7 +16,6 @@
         .container{max-width:1100px;margin:0 auto;padding:1rem}
         .login-box{max-width:360px;margin:4rem auto;background:#fff;border-radius:12px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,.08)}
         .login-box h2{margin-bottom:1rem;font-size:1.2rem}
-        .login-box input{width:100%;padding:.7rem 1rem;border:1.5px solid #e2e8f0;border-radius:8px;font-size:1rem;margin-bottom:.75rem;font-family:inherit}
         .login-box button{width:100%;padding:.75rem;background:#6cc4ca;color:#0f1923;border:none;border-radius:8px;font-weight:700;font-size:.95rem;cursor:pointer;font-family:inherit}
         .filters{display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap}
         .filters select,.filters input{padding:.5rem .75rem;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.85rem;font-family:inherit;background:#fff}
@@ -68,14 +67,11 @@
 </head>
 <body>
 
-<form class="login-box" id="loginForm">
-    <h2>Acesso aos candidatos</h2>
-    <p style="font-size:.85rem;color:#64748b;margin-bottom:1rem">Informe a chave de acesso da equipe Netcar para consultar candidaturas e currículos.</p>
-    <label for="adminKey">Chave de acesso</label>
-    <input id="adminKey" type="password" required autocomplete="current-password">
-    <button type="submit" id="loginButton">Entrar</button>
-    <p id="loginError" role="alert" style="color:#991b1b;margin-top:.75rem;font-size:.85rem"></p>
-</form>
+<div class="login-box" id="accessStatus" role="status">
+    <h2>Candidatos Netcar</h2>
+    <p id="accessMessage" style="font-size:.85rem;color:#64748b;line-height:1.5;margin-bottom:1rem">Abrindo o painel…</p>
+    <button type="button" id="retryAccess" class="hidden" onclick="openAdmin()">Tentar novamente</button>
+</div>
 <div id="adminPage" class="hidden">
     <div class="topbar">
         <h1>Net<span>car</span> — Candidatos</h1>
@@ -85,6 +81,7 @@
         </div>
     </div>
     <div class="container">
+        <p id="panelError" role="alert" style="color:#991b1b;margin-bottom:.75rem;font-size:.85rem"></p>
         <div class="filters">
             <select id="filterProfile" onchange="applyFilters()">
                 <option value="">Todos os perfis</option>
@@ -133,7 +130,6 @@
 
 <script>
 let allResults = [];
-let adminToken = '';
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 function escapeRecord(value) {
     if (typeof value === 'string') return escapeHtml(value);
@@ -145,42 +141,62 @@ function safeProfileUrl(value) {
     if (!value) return '';
     try { const url = new URL(value.startsWith('http') ? value : 'https://' + value); return ['http:', 'https:'].includes(url.protocol) ? escapeHtml(url.href) : ''; } catch { return ''; }
 }
-function logout() {
-    adminToken = '';
+function clearPanel(message) {
     allResults = [];
     document.getElementById('tableBody').innerHTML = '';
     document.getElementById('modalContent').innerHTML = '';
     document.getElementById('adminPage').classList.add('hidden');
-    document.getElementById('loginForm').classList.remove('hidden');
+    document.getElementById('accessStatus').classList.remove('hidden');
+    document.getElementById('accessMessage').textContent = message;
     closeModal();
-    document.getElementById('adminKey').focus();
+}
+async function logout() {
+    try {
+        const response = await fetch('/api/admin-session', { method:'DELETE', credentials:'same-origin', cache:'no-store' });
+        if (!response.ok) throw new Error('Não foi possível sair. Tente novamente.');
+        clearPanel('Você saiu do painel. Para voltar, abra o link privado da equipe Netcar.');
+        document.getElementById('retryAccess').classList.add('hidden');
+    } catch (error) { document.getElementById('panelError').textContent = error.message; }
 }
 async function adminFetch(path) {
-    const response = await fetch(path, { headers:{Authorization:'Bearer ' + adminToken}, cache:'no-store' });
+    const response = await fetch(path, { credentials:'same-origin', cache:'no-store' });
     if (!response.ok) {
         const body = await response.json().catch(() => null);
-        if (response.status === 401) logout();
-        throw new Error(body?.error || 'Não foi possível consultar os dados. Tente novamente.');
+        const error = new Error(body?.error || 'Não foi possível consultar os dados. Tente novamente.');
+        error.status = response.status;
+        if (response.status === 401) clearPanel(error.message);
+        throw error;
     }
     return response;
 }
-document.getElementById('loginForm').addEventListener('submit', async event => {
-    event.preventDefault();
-    const button = document.getElementById('loginButton');
-    const error = document.getElementById('loginError');
-    adminToken = document.getElementById('adminKey').value;
-    button.disabled = true;
-    error.textContent = '';
+async function openAdmin() {
+    const retry = document.getElementById('retryAccess');
+    retry.classList.add('hidden');
+    document.getElementById('accessMessage').textContent = 'Abrindo o painel…';
     try {
+        const access = new URLSearchParams(location.hash.slice(1)).get('acesso');
+        if (access) {
+            const response = await fetch('/api/admin-session', { method:'POST', credentials:'same-origin', cache:'no-store', headers:{ Authorization:'Bearer ' + access } });
+            if (!response.ok) {
+                const body = await response.json().catch(() => null);
+                const error = new Error(body?.error || 'Não foi possível abrir o painel. Tente novamente.');
+                error.status = response.status;
+                throw error;
+            }
+            // A credencial do link não fica na barra de endereço nem no armazenamento JavaScript.
+            history.replaceState(null, '', location.pathname + location.search);
+        }
         await loadResults();
-        document.getElementById('adminKey').value = '';
-        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('accessStatus').classList.add('hidden');
         document.getElementById('adminPage').classList.remove('hidden');
+        document.getElementById('panelError').textContent = '';
         const id = new URLSearchParams(location.search).get('id');
         if (id) await showDetail(id);
-    } catch (err) { adminToken = ''; error.textContent = err.message; }
-    finally { button.disabled = false; }
-});
+    } catch (error) {
+        clearPanel(error.message);
+        if (error.status !== 401) retry.classList.remove('hidden');
+    }
+}
 
 const profileCls = {'Tubarão':'shark','Lobo':'wolf','Gato':'cat','Águia':'eagle'};
 const profileEmoji = {'Tubarão':'🦈','Lobo':'🐺','Gato':'🐱','Águia':'🦅'};
@@ -394,11 +410,12 @@ async function showDetail(id) {
             } catch (error) { const target = document.getElementById('downloadError'); if (target) target.textContent = error.message; }
             finally { button.disabled = false; }
         });
-    } catch(e) { document.getElementById('loginError').textContent = e.message; }
+    } catch(e) { document.getElementById('panelError').textContent = e.message; }
 }
 
 function closeModal() { document.getElementById('modalOverlay').classList.add('hidden'); }
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+openAdmin();
 </script>
 </body>
 </html>

@@ -9,7 +9,9 @@ Consultor de Vendas de Veículos Seminovos, Esteio/RS. Publicação autorizada p
 - JSON preserva compatibilidade com proxies PHP. Base64 existe somente no transporte; o backend valida tamanho e formato e salva binário em `curriculum:<id>`, separado de `result:<id>` no KV existente.
 - Confirmação somente após persistência. Erros preservam as respostas na página; não se grava candidatura ou currículo em localStorage.
 - Painel com listagem paginada, escape de dados e download autenticado como anexo.
-- Autenticação reaproveita `ADMIN_KEY`, segredo já existente no Cloudflare Pages. `ADMIN_TOKEN` é aceito como alternativa de configuração; sem segredo o painel fica fechado. A chave digitada fica apenas em memória, nunca na URL.
+- Painel abre pelo link privado da equipe, sem digitação de chave. `ADMIN_LINK_KEY` é uma credencial independente, aleatória (32 bytes ou mais em base64url), enviada no fragmento `#acesso=...` e trocada por sessão de 30 dias em cookie HttpOnly/Secure/SameSite=Strict. Após a troca, o fragmento é removido. Nenhuma credencial é gravada em localStorage/sessionStorage ou no HTML público.
+- Notificações usam o mesmo link privado com `id` para abrir o candidato. Links antigos com apenas `id` funcionam depois de abrir o link privado no mesmo navegador; o ID retornado ao candidato nunca autentica o painel.
+- `ADMIN_KEY` existente (ou `ADMIN_TOKEN`) continua aceito via Bearer. APIs sem sessão/credencial válida permanecem fechadas, incluindo currículos. Rotacionar `ADMIN_LINK_KEY` revoga links e sessões anteriores; Sair remove o cookie do navegador.
 - Notificações existentes ocorrem em segundo plano após salvar. A configuração de produção consultada tem CallMeBot; e-mail via Resend depende de configuração adicional que não foi criada nesta entrega.
 
 ## Desenvolvimento e publicação
@@ -24,7 +26,7 @@ Deploy na conta e projeto existentes:
 CLOUDFLARE_ACCOUNT_ID=11edc212d8f0ae41b9594f87b2724ea4 npx wrangler pages deploy dist --project-name questionario-perfil --branch main
 ```
 
-Preservar `PERFIL_KV`, `ADMIN_KEY`, `CALLMEBOT_APIKEY` e `CALLMEBOT_PHONE`. Não expor segredos em código, mensagens ou logs. O endpoint legado aberto `test-notify.js` não faz parte desta versão.
+Preservar `PERFIL_KV`, `ADMIN_KEY`, `ADMIN_LINK_KEY`, `CALLMEBOT_APIKEY` e `CALLMEBOT_PHONE`. Não expor segredos em código ou logs. O link privado deve ser entregue somente à equipe responsável pelas candidaturas, nunca publicado em anúncios. O endpoint legado aberto `test-notify.js` não faz parte desta versão.
 
 ## Integração no site
 
