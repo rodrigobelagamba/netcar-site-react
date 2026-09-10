@@ -1,6 +1,7 @@
 import blogPostsJson from "./blog-posts.json";
 import blogAutoJson from "./blog-auto.json";
 import citiesJson from "./cities.json";
+import regionalFocusJson from "./regional-focus.json";
 import landingsJson from "./landings.json";
 import contentPagesJson from "./content-pages.json";
 import type {
@@ -30,14 +31,7 @@ export const priorityCityPages = cityPages.filter(
   (city) => city.priorityMarket,
 );
 
-const regionalInventorySlugs = [
-  "suv",
-  "hatch",
-  "automaticos-ate-100-mil",
-  "carros-ate-100-mil",
-  "jeep-compass",
-  "honda-hr-v",
-] as const;
+const regionalInventorySlugs = regionalFocusJson.inventorySlugs;
 
 /** Seleções úteis nas páginas locais; só entram quando há estoque indexável. */
 export const regionalInventoryPages = regionalInventorySlugs
@@ -46,10 +40,10 @@ export const regionalInventoryPages = regionalInventorySlugs
     Boolean(landing?.indexable && landing.count > 0),
   );
 
-/** Mercados prioritários mais próximos das lojas, sem criar malha all-to-all. */
-export const nearbyPriorityCityPages = [...priorityCityPages]
-  .sort((left, right) => left.distanceKm - right.distanceKm)
-  .slice(0, 4);
+/** Foco de aquisição regional compartilhado com o HTML dos hubs de estoque. */
+export const nearbyPriorityCityPages = regionalFocusJson.citySlugs
+  .map((slug) => cityPages.find((city) => city.slug === slug))
+  .filter((city): city is CitySeoPage => Boolean(city));
 
 export function getContentPage(slug: string): ContentSeoPage | undefined {
   return contentPages.find((p) => p.slug === slug);

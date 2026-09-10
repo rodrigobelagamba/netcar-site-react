@@ -1,0 +1,18 @@
+{
+  "citySlugs": [
+    "canoas",
+    "sapucaia-do-sul",
+    "sao-leopoldo",
+    "gravatai"
+  ],
+  "inventorySlugs": [
+    "suv",
+    "hatch",
+    "automaticos-ate-100-mil",
+    "carros-ate-100-mil",
+    "jeep-compass",
+    "honda-hr-v",
+    "volkswagen-t-cross",
+    "nissan-kicks"
+  ]
+}

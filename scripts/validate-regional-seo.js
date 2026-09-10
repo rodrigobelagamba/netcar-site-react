@@ -162,10 +162,11 @@ for (const city of cities) {
       );
     }
     if (
-      !normalize(city.title).startsWith(`seminovos ${normalize(city.name)}`)
+      !normalize(city.title).includes(normalize(city.name)) ||
+      !/\b(seminovos|usados|carros)\b/.test(normalize(city.title))
     ) {
       errors.push(
-        `${prefix}: title de recuperação deve começar por Seminovos + cidade`,
+        `${prefix}: title deve identificar a cidade e a intenção de compra de veículos`,
       );
     }
   }

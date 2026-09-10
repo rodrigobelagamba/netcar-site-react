@@ -400,6 +400,10 @@ const blogPosts = [
 const cities = JSON.parse(
   readFileSync(join(rootDir, "src/data/seo/cities.json"), "utf-8"),
 );
+const regionalFocus = JSON.parse(
+  readFileSync(join(rootDir, "src/data/seo/regional-focus.json"), "utf-8"),
+);
+const regionalFocusSlugs = regionalFocus.citySlugs;
 ORG_ROOT_SCHEMA.areaServed = [
   { "@type": "City", name: "Esteio" },
   ...cities.map((city) => ({ "@type": "City", name: city.name })),
@@ -1258,14 +1262,7 @@ function relatedSellCitiesHtml(currentSlug) {
   return `<nav aria-label="Vender carro em outras regiões atendidas"><h2>Vender carro em outras regiões atendidas</h2><p><a href="${SITE}/seminovos-${current.slug}">Ver seminovos perto de ${escapeHtml(current.name)}</a> · <a href="${SITE}/regioes-atendidas">Ver todas as regiões atendidas</a></p><ul>${links}</ul></nav>`;
 }
 
-const regionalInventorySlugs = [
-  "suv",
-  "hatch",
-  "automaticos-ate-100-mil",
-  "carros-ate-100-mil",
-  "jeep-compass",
-  "honda-hr-v",
-];
+const regionalInventorySlugs = regionalFocus.inventorySlugs;
 
 function regionalInventoryHtml(cityName) {
   const links = regionalInventorySlugs
@@ -1329,10 +1326,9 @@ function routePlannerHtml(city, intent = "buy") {
 }
 
 function nearbyMarketsHtml(landingName) {
-  const links = cities
-    .filter((city) => city.priorityMarket)
-    .sort((left, right) => left.distanceKm - right.distanceKm)
-    .slice(0, 4)
+  const links = regionalFocusSlugs
+    .map((slug) => cities.find((city) => city.slug === slug))
+    .filter(Boolean)
     .map(
       (city) =>
         `<li><a href="${SITE}/seminovos-${city.slug}">Rota e atendimento para ${escapeHtml(city.name)}</a></li>`,
