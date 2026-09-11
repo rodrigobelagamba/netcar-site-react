@@ -89,7 +89,9 @@ import {
   LOW_ANNUAL_MILEAGE_DETAIL_LABEL,
 } from "@/lib/vehicleMerchandising";
 import { VehicleVideoLink } from "../components/VehicleVideoLink";
-import { getVehicleInstagramVideo } from "../lib/vehicleInstagramVideos";
+import { selectVehicleInstagramVideo } from "../lib/vehicleInstagramVideos";
+import { useVehicleVideosQuery } from "../queries/useVehicleVideosQuery";
+import { vehicleVideosForDisplay } from "../lib/vehicleVideosResponse";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -1700,6 +1702,7 @@ export function DetalhesPage() {
     error,
     isPending,
   } = useVehicleQuery(slug);
+  const vehicleVideosQuery = useVehicleVideosQuery(Boolean(vehicle && vehicle.price > 0));
 
   const vehicleDiscoveryLandings = useMemo(() => {
     if (!vehicle) return [];
@@ -2098,9 +2101,11 @@ export function DetalhesPage() {
   }
 
   const isSold = !vehicle.price || vehicle.price <= 0;
-  const instagramVideo = isSold
-    ? undefined
-    : getVehicleInstagramVideo(String(vehicle.id));
+  const instagramVideo = selectVehicleInstagramVideo(
+    String(vehicle.id),
+    vehicle.price,
+    vehicleVideosForDisplay(vehicleVideosQuery.data, vehicleVideosQuery.isError),
+  );
   const vehicleLabel = [marca, modeloCompleto, vehicle.year]
     .filter(Boolean)
     .join(" ");

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Sync social — Google Reviews + Instagram Stories + Instagram -> GBP
+ * Sync social — Google Reviews + Instagram Stories + videos dos carros + Instagram -> GBP
  *
  * CLI:  php sync-social.php
  * HTTP: curl -H "Authorization: Bearer ..." https://.../sync-social.php
@@ -45,11 +45,18 @@ if (!$isCli) {
 $reviewsOnly = isset($_GET['reviews_only']);
 $storiesOnly = isset($_GET['stories_only']);
 $postsOnly = isset($_GET['posts_only']);
-$dryRun = isset($_GET['dry_run']) && $_GET['dry_run'] !== '0';
+$vehicleVideosOnly = isset($_GET['vehicle_videos_only']) || ($isCli && in_array('--vehicle-videos-only', $argv ?? [], true));
+$dryRun = (isset($_GET['dry_run']) && $_GET['dry_run'] !== '0') || ($isCli && in_array('--dry-run', $argv ?? [], true));
 
 try {
     $runner = new SocialSyncRunner();
-    if ($postsOnly) {
+    if ($vehicleVideosOnly) {
+        // Primeiro preenchimento pode baixar varias capas. CLI nao tem limite de execucao.
+        if (!$isCli) {
+            @set_time_limit(300);
+        }
+        $result = $runner->run(false, false, false, $dryRun, true);
+    } elseif ($postsOnly) {
         $result = $runner->run(false, false, true, $dryRun);
     } elseif ($reviewsOnly) {
         $result = $runner->run(true, false, false, $dryRun);

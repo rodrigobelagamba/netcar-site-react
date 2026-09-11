@@ -7,11 +7,13 @@ export interface VehicleInstagramVideo {
   coverImage?: string;
   /** Conferência manual da unidade e da publicação, não apenas do modelo. */
   verifiedAt: string;
+  /** Preço do estoque no momento da sincronização automática, em reais. */
+  stockPrice?: number;
 }
 
 /**
  * Publicações conferidas por unidade, nunca apenas pelo modelo.
- * Novos vínculos ainda são manuais; ver docs/vehicle-videos.md.
+ * Reserva local durante indisponibilidade da API; novos vínculos vêm da sincronização.
  * Fonte da expansão: feed público @netcar_rc, 05/09/2026 (Brasília),
  * com #netcar<ID>/URL exata e estoque ativo conferidos para cada entrada.
  */
@@ -87,7 +89,7 @@ export const vehicleInstagramVideos: readonly VehicleInstagramVideo[] = [
 ];
 
 export function normalizeVehicleVideoCover(value?: string): string | undefined {
-  return value && /^\/images\/vehicle-videos\/[A-Za-z0-9_-]+\.(?:webp|jpe?g|png)$(?![\s\S])/.test(value)
+  return value && /^(?:\/images\/vehicle-videos\/[A-Za-z0-9_-]+\.(?:webp|jpe?g|png)|\/social\/v1\/instagram-post-media\.php\?id=[0-9]+)$(?![\s\S])/.test(value)
     ? value
     : undefined;
 }
@@ -131,4 +133,19 @@ export function getVehicleInstagramVideo(
   if (matches.length !== 1 || !matches[0].verifiedAt) return undefined;
   const permalink = normalizeInstagramVideoUrl(matches[0].permalink);
   return permalink ? { ...matches[0], permalink } : undefined;
+}
+
+/** Uma resposta vazia da API é definitiva; só falhas usam a reserva local. */
+export function selectVehicleInstagramVideo(
+  vehicleId: string,
+  price: number,
+  remoteVideos?: readonly VehicleInstagramVideo[],
+): VehicleInstagramVideo | undefined {
+  if (!Number.isFinite(price) || price <= 0) return undefined;
+  const video = getVehicleInstagramVideo(vehicleId, remoteVideos);
+  if (video?.stockPrice !== undefined &&
+      Math.round(video.stockPrice * 100) !== Math.round(price * 100)) {
+    return undefined;
+  }
+  return video;
 }

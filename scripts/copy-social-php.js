@@ -31,6 +31,7 @@ const files = [
   "outscraper-sync.php",
   "review-media.php",
   "instagram-post-media.php",
+  "vehicle-videos.php",
   "social-config.example.php",
 ];
 

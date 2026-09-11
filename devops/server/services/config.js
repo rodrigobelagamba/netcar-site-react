@@ -47,6 +47,9 @@ export const NPM_ALLOWLIST = [
   'generate-sitemap',
   'seo:generate',
   'catalog:whatsapp',
+  'social:sync-vehicle-videos',
+  'social:sync-vehicle-videos:dry-run',
+  'social:vehicle-videos-status',
   'lint',
 ];
 

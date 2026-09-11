@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 final class SocialSyncRunner
 {
-    public function run(bool $reviews = true, bool $stories = true, bool $posts = false, bool $dryRun = false): array
+    public function run(bool $reviews = true, bool $stories = true, bool $posts = false, bool $dryRun = false, ?bool $vehicleVideos = null): array
     {
         $result = [
             'success' => true,
@@ -12,6 +12,7 @@ final class SocialSyncRunner
             'reviews' => null,
             'stories' => null,
             'posts' => null,
+            'vehicleVideos' => null,
             'errors' => [],
         ];
 
@@ -39,6 +40,17 @@ final class SocialSyncRunner
             } catch (Throwable $e) {
                 $result['success'] = false;
                 $result['errors']['stories'] = $e->getMessage();
+            }
+        }
+
+        // O cron de stories ja existente tambem atualiza os vinculos dos carros.
+        // Erros sao isolados para nao impedir stories nem publicacoes GBP.
+        if ($vehicleVideos ?? $stories) {
+            try {
+                $result['vehicleVideos'] = (new VehicleVideoSync())->sync($dryRun);
+            } catch (Throwable $e) {
+                $result['success'] = false;
+                $result['errors']['vehicleVideos'] = $e->getMessage();
             }
         }
 
