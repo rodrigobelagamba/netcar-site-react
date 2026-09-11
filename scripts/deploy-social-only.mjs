@@ -39,6 +39,7 @@ const manifest = [
   "lib/GoogleLocalPostsClient.php",
   "lib/InstagramPostMediaCache.php",
   "lib/VehicleDestinationResolver.php",
+  "lib/VehicleVideoSync.php",
   "lib/InstagramGbpPostFactory.php",
   "lib/GooglePostsStateStore.php",
   "lib/bootstrap.php",
@@ -48,6 +49,7 @@ const manifest = [
   "social-oauth.php",
   "outscraper-sync.php",
   "instagram-post-media.php",
+  "vehicle-videos.php",
   "sync-social.php",
 ];
 

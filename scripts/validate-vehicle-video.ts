@@ -10,6 +10,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import * as icons from "lucide-react";
 import ts from "typescript";
 import * as videos from "../src/modules/detalhes/lib/vehicleInstagramVideos";
+import { parseVehicleVideosResponse, vehicleVideosForDisplay } from "../src/modules/detalhes/lib/vehicleVideosResponse";
 
 const {
   normalizeInstagramVideoUrl,
@@ -19,6 +20,8 @@ const {
 const canonical = "https://www.instagram.com/reel/Video_123-a/";
 const incoming = `${canonical}?utm_source=site&igsh=private#caption`;
 const localCover = "/images/vehicle-videos/test-unit_001.webp";
+const syncedCover = "/social/v1/instagram-post-media.php?id=180000000001";
+assert.equal(normalizeVehicleVideoCover(syncedCover), syncedCover);
 
 for (const extension of ["webp", "jpg", "jpeg", "png"]) {
   const cover = `/images/vehicle-videos/Test-unit_001.${extension}`;
@@ -49,6 +52,12 @@ const rejectedCovers = [
   ` ${localCover}`,
   `${localCover} `,
   `${localCover}\n`,
+  `${syncedCover}&url=https://example.test`,
+  `${syncedCover}#extra`,
+  `${syncedCover}\n`,
+  "/social/v1/instagram-post-media.php?id=../secret",
+  "/social/v1/instagram-post-media.php?id=abc",
+  `https://www.netcarmultimarcas.com.br${syncedCover}`,
 ];
 for (const cover of rejectedCovers) {
   assert.equal(normalizeVehicleVideoCover(cover), undefined, String(cover));
@@ -98,6 +107,32 @@ const verified: videos.VehicleInstagramVideo = {
   permalink: incoming,
   verifiedAt: "2026-09-05",
 };
+
+const syncedAt = new Date().toISOString();
+const remoteVideo = {
+  vehicleId: "19978", permalink: canonical, verifiedAt: syncedAt,
+  coverImage: syncedCover, stockPrice: 81900, displayModel: "Polo",
+};
+const response = { success: true, syncedAt, stale: false, videos: [remoteVideo] };
+const parsed = parseVehicleVideosResponse(response);
+assert.deepEqual(parsed.videos, [remoteVideo]);
+assert.deepEqual(vehicleVideosForDisplay(parsed, true), [remoteVideo], "Falha de refetch conserva o último sucesso recente");
+assert.deepEqual(vehicleVideosForDisplay(parsed, true, Date.parse(syncedAt) + 49 * 60 * 60 * 1000), [], "Falha de refetch não conserva vídeos além de48h");
+assert.equal(vehicleVideosForDisplay(undefined, true), undefined, "Sem cache após falha permite reserva");
+assert.deepEqual(vehicleVideosForDisplay(undefined, false), [], "Carregamento não mostra cadastro antigo antes da resposta");
+assert.equal(videos.selectVehicleInstagramVideo("19978", 81900, parsed.videos)?.permalink, canonical);
+assert.equal(videos.selectVehicleInstagramVideo("19978", 80900, parsed.videos), undefined, "Preço mudou entre sincronizações");
+assert.equal(videos.selectVehicleInstagramVideo("19978", 0, parsed.videos), undefined, "Vendido não mostra vídeo");
+assert.equal(videos.selectVehicleInstagramVideo("19739", 89900, []), undefined, "API vazia não repõe cadastro antigo");
+assert.ok(videos.selectVehicleInstagramVideo("19739", 89900), "Reserva manual durante falha da API");
+assert.equal(parseVehicleVideosResponse({ ...response, videos: [remoteVideo, remoteVideo] }).videos.length, 0, "Unidade ambígua não aparece");
+assert.equal(parseVehicleVideosResponse({ ...response, videos: [remoteVideo, { ...remoteVideo, vehicleId: "19979" }] }).videos.length, 0, "Um Reel não pode representar dois carros");
+assert.equal(parseVehicleVideosResponse({ ...response, videos: [{ ...remoteVideo, permalink: "https://example.test/reel/123" }] }).videos.length, 0);
+assert.equal(parseVehicleVideosResponse({ ...response, videos: [{ ...remoteVideo, stockPrice: "81900" }] }).videos.length, 0);
+assert.equal(parseVehicleVideosResponse({ ...response, videos: [{ ...remoteVideo, coverImage: "https://www.instagram.com/capa.jpg" }] }).videos[0]?.coverImage, undefined);
+assert.equal(parseVehicleVideosResponse({ ...response, syncedAt: new Date(Date.now() - 49 * 60 * 60 * 1000).toISOString() }).videos.length, 0, "Cache expirado não mantém vínculos indefinidamente");
+assert.throws(() => parseVehicleVideosResponse({ success: false }));
+assert.throws(() => parseVehicleVideosResponse({ ...response, videos: null }));
 const fixture = [verified, { ...verified, vehicleId: "test-unit-002" }];
 assert.deepEqual(getVehicleInstagramVideo("test-unit-001", fixture), {
   ...verified,

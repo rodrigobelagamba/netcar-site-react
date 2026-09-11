@@ -19,3 +19,9 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
+      - name: Validate vehicle video synchronization
+        run: |
+          find docs/social -name '*.php' -type f -print0 | xargs -0 -n1 php -l
+          php docs/social/tests/VehicleVideoSyncTest.php
+          php docs/social/tests/InstagramGbpSyncTest.php
+          php docs/social/tests/InstagramGbpHardeningTest.php
