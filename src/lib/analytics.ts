@@ -292,13 +292,111 @@ export function trackVehicleCardOpen(params: {
   vehicleId: string | number;
   vehicleName: string;
   source: string;
+  articleContext?: BlogDiscoveryContext;
 }): void {
   trackBusinessEvent("vehicle_card_open", {
     open_via: params.via,
     card_source: params.source,
     vehicle_id: String(params.vehicleId),
     vehicle_name: params.vehicleName,
+    ...(params.articleContext
+      ? getBlogDiscoveryDimensions(params.articleContext)
+      : {}),
   });
+}
+
+interface BlogDiscoveryContext {
+  articleSlug: string;
+  placement: "vehicle_card" | "article_cta";
+  targetPath: string;
+}
+
+function getBlogDiscoveryDimensions(
+  context: BlogDiscoveryContext,
+): Record<string, string> {
+  return {
+    ...getTrafficDimensions(),
+    article_slug: context.articleSlug,
+    article_placement: context.placement,
+    target_path: context.targetPath,
+    page_path: `/blog/${context.articleSlug}`,
+    page_type: "blog_post",
+  };
+}
+
+/** Navegação editorial é consideração, não contato ou conversão comercial. */
+export function trackBlogDiscoveryClick(params: {
+  articleSlug: string;
+  placement: BlogDiscoveryContext["placement"];
+  targetHref: string;
+  vehicleName?: string;
+}): void {
+  if (getPrivacyConsentState() !== "accepted") return;
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(params.articleSlug)) return;
+
+  let target: URL;
+  try {
+    const current = new URL(window.location.href);
+    target = new URL(params.targetHref, current);
+    if (
+      !["http:", "https:"].includes(target.protocol) ||
+      target.username ||
+      target.password ||
+      (target.origin !== current.origin &&
+        !["netcarmultimarcas.com.br", "www.netcarmultimarcas.com.br"].includes(
+          target.hostname,
+        ))
+    ) {
+      return;
+    }
+  } catch {
+    return;
+  }
+
+  // Só rotas públicas; não enviar buscas, fragmentos ou dados digitados na URL.
+  const targetPath = target.pathname.replace(/\/+$/, "") || "/";
+  if (!/^\/[a-z0-9/-]*$/.test(targetPath)) return;
+  const pageType = inferPageType(targetPath);
+  const articleContext: BlogDiscoveryContext = {
+    articleSlug: params.articleSlug,
+    placement: params.placement,
+    targetPath,
+  };
+
+  if (pageType === "vehicle_detail") {
+    const vehicleId = targetPath.match(
+      /^\/veiculo\/(?:[a-z0-9]+-)*([1-9]\d*)$/,
+    )?.[1];
+    if (!vehicleId) return;
+    // O artigo usa um card próprio: manter uma única abertura no evento comum.
+    trackVehicleCardOpen({
+      via: "card",
+      vehicleId,
+      vehicleName: params.vehicleName ?? "",
+      source: "blog_article",
+      articleContext,
+    });
+    return;
+  }
+
+  if (
+    [
+      "inventory",
+      "brand_landing",
+      "comparison",
+      "city_buy",
+      "regional_hub",
+      "sell",
+      "city_sell",
+      "financing",
+      "selection_process",
+    ].includes(pageType)
+  ) {
+    trackBusinessEvent(
+      "blog_discovery_click",
+      getBlogDiscoveryDimensions(articleContext),
+    );
+  }
 }
 
 /** Clique para abrir um vídeo externo; não equivale a reprodução nem a lead. */

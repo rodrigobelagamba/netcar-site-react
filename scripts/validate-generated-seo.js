@@ -1072,7 +1072,35 @@ for (const landing of landings) validateDemandLanding(landing);
 const landingBySlug = new Map(
   landings.map((landing) => [landing.slug, landing]),
 );
+
+function validateBrandModelDiscovery(landing) {
+  if (landing.type !== "marca") return;
+
+  const ownModelSlugs = new Set(
+    landings
+      .filter(
+        (candidate) =>
+          candidate.type === "modelo" &&
+          candidate.indexable &&
+          normalizedSeoText(candidate.filters.marca) ===
+            normalizedSeoText(landing.filters.marca),
+      )
+      .map((candidate) => candidate.slug),
+  );
+  const expectedSlots = Math.min(4, ownModelSlugs.size);
+  const firstLinks = (landing.relatedSlugs || []).slice(0, expectedSlots);
+  if (
+    firstLinks.length !== expectedSlots ||
+    firstLinks.some((slug) => !ownModelSlugs.has(slug))
+  ) {
+    errors.push(
+      `comprar-${landing.slug}: modelos da própria marca com estoque indexável devem preceder alternativas`,
+    );
+  }
+}
+
 for (const landing of landings) {
+  validateBrandModelDiscovery(landing);
   for (const relatedSlug of landing.relatedSlugs || []) {
     const related = landingBySlug.get(relatedSlug);
     if (!related || !related.indexable) {
