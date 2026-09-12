@@ -775,6 +775,20 @@ function assignRelatedSlugs(landings) {
 
   for (const landing of landings) {
     const candidates = [];
+    // Quem escolheu uma marca encontra primeiro os modelos dela em estoque.
+    // Os pares de marcas e recortes abaixo continuam preenchendo os demais links.
+    if (landing.type === "marca") {
+      candidates.push(
+        ...indexable
+          .filter(
+            (candidate) =>
+              candidate.type === "modelo" &&
+              normalized(candidate.filters.marca) ===
+                normalized(landing.filters.marca),
+          )
+          .map((candidate) => candidate.slug),
+      );
+    }
     if (landing.filters.marca) candidates.push(slugify(landing.filters.marca));
     if (landing.filters.categoria === "SUV" || landing.type === "modelo") {
       candidates.push("suv");

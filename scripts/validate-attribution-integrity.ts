@@ -25,6 +25,7 @@ import { fileURLToPath } from "node:url";
 import {
   inferPageType,
   initAnalytics,
+  trackBlogDiscoveryClick,
   trackCompareInteraction,
   trackConfirmedLead,
   trackContactFormSubmit,
@@ -600,6 +601,112 @@ function testEcommerceCleanup(): void {
   );
 }
 
+function testBlogDiscoveryAttribution(): void {
+  const articleSlug = "como-escolher-suv";
+  const targetPath = "/veiculo/creta-prestige-2018-iyo-xx70-19868";
+  const originalLocation = { ...fakeWindow.location };
+  const originalConsent = fakeWindow.__netcarPrivacyConsent;
+  const click = (targetHref: string, placement: "vehicle_card" | "article_cta") =>
+    trackBlogDiscoveryClick({
+      articleSlug,
+      placement,
+      targetHref,
+      vehicleName: "Hyundai Creta Prestige",
+    });
+
+  for (const consent of ["", "essential"]) {
+    resetTelemetry();
+    fakeWindow.__netcarPrivacyConsent = consent;
+    click(targetPath, "vehicle_card");
+    click("/comprar-suv", "article_cta");
+    assert(
+      fakeWindow.dataLayer.length === 0 && gtagCalls.length === 0,
+      "navegação do artigo foi medida sem consentimento opcional",
+    );
+  }
+
+  fakeWindow.__netcarPrivacyConsent = "accepted";
+  clearTrafficAttribution();
+  Object.assign(fakeWindow.location, {
+    pathname: `/blog/${articleSlug}`,
+    search: "?utm_source=google&utm_medium=organic&email=nao-enviar@example.com",
+    href: `https://www.netcarmultimarcas.com.br/blog/${articleSlug}?utm_source=google&utm_medium=organic&email=nao-enviar@example.com`,
+  });
+  captureTrafficSource();
+  const originalTraffic = JSON.stringify(getTrafficSource());
+
+  resetTelemetry();
+  click(
+    `https://netcarmultimarcas.com.br${targetPath}?email=nao-enviar@example.com#telefone`,
+    "vehicle_card",
+  );
+  const card = dataLayerEvents("vehicle_card_open");
+  assert(
+    card.length === 1 && gtagEvents("vehicle_card_open").length === 1 &&
+      dataLayerEvents("blog_discovery_click").length === 0,
+    "card editorial não reutilizou uma única emissão de vehicle_card_open",
+  );
+  assert(
+    card[0].vehicle_id === "19868" && card[0].card_source === "blog_article" &&
+      card[0].article_slug === articleSlug &&
+      card[0].article_placement === "vehicle_card" &&
+      card[0].target_path === targetPath,
+    "abertura editorial perdeu artigo, exemplar, posição ou destino",
+  );
+
+  click("/comprar-suv?email=nao-enviar@example.com#telefone", "article_cta");
+  const selection = dataLayerEvents("blog_discovery_click");
+  assert(
+    selection.length === 1 && gtagEvents("blog_discovery_click").length === 1 &&
+      selection[0].article_placement === "article_cta" &&
+      selection[0].target_path === "/comprar-suv",
+    "CTA do artigo não chegou uma única vez ao GA4 com destino limpo",
+  );
+  for (const event of [...card, ...selection]) {
+    assert(
+      event.page_path === `/blog/${articleSlug}` &&
+        event.page_type === "blog_post" &&
+        event.traffic_source === "GORG" &&
+        event.traffic_landing_page === `/blog/${articleSlug}`,
+      "navegação do artigo perdeu contexto ou atribuição orgânica original",
+    );
+    assert(
+      !JSON.stringify(event).includes("nao-enviar@example.com") &&
+        !JSON.stringify(event).includes("#telefone"),
+      "navegação editorial enviou query ou fragmento com dado pessoal",
+    );
+  }
+  assert(
+    JSON.stringify(getTrafficSource()) === originalTraffic,
+    "clique interno do artigo sobrescreveu a origem de aquisição",
+  );
+  assert(
+    fakeWindow.dataLayer.length === 2 && fbqCalls.length === 0 &&
+      beacons.length === 0,
+    "navegação editorial gerou contato, conversão ou log adicional",
+  );
+
+  resetTelemetry();
+  for (const target of [
+    "https://wa.me/5551997293118?text=mensagem",
+    "https://outro-site.example/comprar-suv",
+    "https://pessoa@example.com/comprar-suv",
+    "mailto:pessoa@example.com",
+    "/privacidade",
+    "/veiculo/sem-identificador",
+  ]) {
+    click(target, "article_cta");
+  }
+  assert(
+    fakeWindow.dataLayer.length === 0 && gtagCalls.length === 0,
+    "rastreamento editorial capturou contato, destino externo ou ficha inválida",
+  );
+
+  Object.assign(fakeWindow.location, originalLocation);
+  fakeWindow.__netcarPrivacyConsent = originalConsent;
+  clearTrafficAttribution();
+}
+
 function testComparisonReadyTransition(): void {
   resetTelemetry();
   const compare = (
@@ -980,6 +1087,7 @@ async function main(): Promise<void> {
   testLeadIntentBoundary();
   testPageTypes();
   testEcommerceCleanup();
+  testBlogDiscoveryAttribution();
   testComparisonReadyTransition();
   testWhatsAppCtaContext();
   testNoHardcodedSecretsOrInsecureEvolution();

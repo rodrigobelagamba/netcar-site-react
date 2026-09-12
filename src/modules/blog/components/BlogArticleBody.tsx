@@ -1,8 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import type { BlogPost, BlogSection } from "@/data/seo/types";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
+import { trackBlogDiscoveryClick } from "@/lib/analytics";
 
-function renderSection(section: BlogSection, index: number) {
+function renderSection(
+  section: BlogSection,
+  index: number,
+  articleSlug: string,
+) {
   if (section.type === "h2" && section.text) {
     return (
       <h2
@@ -52,6 +57,14 @@ function renderSection(section: BlogSection, index: number) {
           <a
             key={car.url}
             href={car.url}
+            onClick={() =>
+              trackBlogDiscoveryClick({
+                articleSlug,
+                placement: "vehicle_card",
+                targetHref: car.url,
+                vehicleName: car.modelo,
+              })
+            }
             className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
           >
             {car.img ? (
@@ -133,7 +146,9 @@ export function BlogArticleBody({ post }: BlogArticleBodyProps) {
       </header>
 
       <div className="prose-netcar">
-        {post.sections.map((section, index) => renderSection(section, index))}
+        {post.sections.map((section, index) =>
+          renderSection(section, index, post.slug),
+        )}
       </div>
 
       <div className="mt-10 p-6 rounded-2xl bg-primary/5 border border-primary/10">
@@ -142,6 +157,13 @@ export function BlogArticleBody({ post }: BlogArticleBodyProps) {
           to={post.ctaHref === "/seminovos" ? "/seminovos" : post.ctaHref}
           search={
             post.ctaHref === "/seminovos" ? emptySeminovosSearch : undefined
+          }
+          onClick={() =>
+            trackBlogDiscoveryClick({
+              articleSlug: post.slug,
+              placement: "article_cta",
+              targetHref: post.ctaHref,
+            })
           }
           className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-white font-semibold hover:bg-primary/90 transition-colors"
         >

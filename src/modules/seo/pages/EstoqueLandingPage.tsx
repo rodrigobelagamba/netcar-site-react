@@ -230,6 +230,7 @@ export function EstoqueLandingPage() {
                   key={related.slug}
                   to="/comprar-{$landingSlug}"
                   params={{ landingSlug: related.slug }}
+                  data-regional-action={`related_selection_${related.slug}`}
                   className="rounded-full border border-[#00283C]/15 bg-[#F3F5F6] px-5 py-3 text-sm font-bold text-[#00283C] transition-colors hover:bg-white hover:text-primary"
                 >
                   {related.name}
