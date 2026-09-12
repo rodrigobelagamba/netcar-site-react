@@ -796,6 +796,10 @@ const permanentDemandContracts = {
     type: "faixa",
     filters: { precoMax: 80000 },
   },
+  "automaticos-ate-80-mil": {
+    type: "faixa",
+    filters: { cambio: "AUTOMATICO", precoMax: 80000 },
+  },
   "carros-ate-100-mil": {
     type: "faixa",
     filters: { precoMax: 100000 },
