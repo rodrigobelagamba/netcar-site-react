@@ -22,6 +22,8 @@ O contexto do artigo usa três parâmetros de evento:
 aquisição existente é preservada; uma navegação interna não ganha UTMs novas.
 Os cards próprios do blog reutilizam o evento de abertura de ficha, sem emitir
 um segundo evento de descoberta para o mesmo gesto.
+Fichas da Netcar abrem pelo roteador interno para preservar a fila de medição
+durante a navegação; links externos mantêm o comportamento nativo do navegador.
 
 A nova medição do blog exige consentimento aceito. Os links relacionados usam
 o fluxo regional existente, sob o Consent Mode do site. Não há alteração do
