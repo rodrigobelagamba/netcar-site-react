@@ -139,6 +139,26 @@ const STOCK_CUTS = [
     h1: "Seminovos de R$ 100 mil a R$ 150 mil",
     intent: "um seminovo de R$ 100 mil a R$ 150 mil",
   },
+  {
+    slug: "automaticos-ate-80-mil",
+    name: "Automáticos até R$ 80 mil",
+    filters: { cambio: "AUTOMATICO", precoMax: 80000 },
+    title: "Carros automáticos usados até R$ 80 mil | Netcar em Esteio",
+    h1: "Carros automáticos usados até R$ 80 mil",
+    intent: "um carro automático usado até R$ 80 mil",
+    intro: "Compare carros automáticos usados à venda até R$ 80 mil nas duas lojas da Netcar, em Esteio. Escolha pelo preço total, versão e quilometragem e confirme o exemplar antes da visita.",
+    guide: "Ao procurar carros automáticos baratos, compare opções dentro do seu orçamento junto com o histórico de manutenção, os equipamentos e o tipo de câmbio de cada versão. Esta seleção considera o preço anunciado do veículo inteiro, e não apenas a entrada ou a parcela.",
+    faq: [
+      {
+        q: "Todos os carros desta seleção são automáticos e custam até R$ 80 mil?",
+        a: "Sim. A seleção aplica os dois critérios ao estoque publicado: câmbio automático e preço anunciado de até R$ 80 mil. Abra a ficha para conferir a versão, as características do câmbio e a disponibilidade atual.",
+      },
+      {
+        q: "Como escolher um automático com preço acessível?",
+        a: "Comece pelo valor total que pretende investir e compare ano, quilometragem, manutenção e equipamentos. Nas fichas, confira os detalhes dos exemplares que cabem no orçamento e combine a visita para conhecer o carro antes de decidir.",
+      },
+    ],
+  },
 ];
 
 function titleCase(s) {
@@ -653,6 +673,7 @@ function priceLanding(config, vehicles, variantIndex) {
     footerPriority:
       hasStock &&
       [
+        "automaticos-ate-80-mil",
         "carros-ate-100-mil",
         "automaticos-ate-100-mil",
         "suv-ate-100-mil",
@@ -666,15 +687,19 @@ function priceLanding(config, vehicles, variantIndex) {
       : `${config.h1} na Netcar, em Esteio/RS. Acompanhe novas entradas e veja alternativas reais do estoque por preço, perfil e categoria.`,
     h1: config.h1,
     intro: hasStock
-      ? openings[variantIndex % openings.length]
-      : "Esta seleção é permanente, mas ainda não reúne opções suficientes para entrar no índice. Consulte alternativas reais do estoque e acompanhe novas entradas.",
+      ? config.intro || openings[variantIndex % openings.length]
+      : profile.count > 0
+        ? "No momento, esta seleção tem poucas opções disponíveis. Consulte os veículos anunciados e as seleções relacionadas ou fale com a equipe sobre o que procura."
+        : "No momento, não há opções anunciadas neste recorte. Veja as seleções relacionadas ou fale com a equipe sobre o carro que procura.",
     paragraphs: [
       hasStock
         ? `Os veículos deste recorte vão de ${profile.minPrice} a ${profile.maxPrice} e de ${profile.minYear} a ${profile.maxYear}. Compare o custo total, a versão e o histórico — não apenas a parcela.`
-        : "O estoque é rotativo. Enquanto este recorte não tiver variedade suficiente, use as seleções relacionadas para comparar alternativas disponíveis sem inventar oferta.",
+        : "O estoque é rotativo. Use as seleções relacionadas para comparar outras opções de preço, câmbio ou categoria e confirme a disponibilidade antes da visita.",
+      ...(config.guide ? [config.guide] : []),
       `Escolha candidatos concretos, use o comparador lado a lado e confirme a disponibilidade. Entrada, prazo e parcela dependem do perfil e da análise de crédito dos bancos e financeiras parceiras.`,
     ],
     faq: [
+      ...(config.faq || []),
       {
         q: `Quantos ${config.name.toLowerCase()} estão disponíveis?`,
         a: `Esta página reúne os veículos que atendem ao recorte. O número e os preços acompanham o estoque publicado pela Netcar.`,
@@ -737,6 +762,7 @@ function assignRelatedSlugs(landings) {
   const indexable = landings.filter((landing) => landing.indexable);
   const available = new Set(indexable.map((landing) => landing.slug));
   const highIntent = [
+    "automaticos-ate-80-mil",
     "carros-ate-100-mil",
     "automaticos-ate-100-mil",
     "suv-ate-100-mil",

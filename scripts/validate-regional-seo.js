@@ -212,9 +212,9 @@ for (const city of cities) {
     }
   }
 
-  if (!/seminov/i.test(city.title) || !/seminov/i.test(city.h1)) {
+  if (!/(seminov|carros usados)/i.test(city.title) || !/(seminov|carros usados)/i.test(city.h1)) {
     errors.push(
-      `${prefix}: title/H1 de compra precisam declarar intenção de seminovos`,
+      `${prefix}: title/H1 de compra precisam declarar intenção de carros usados ou seminovos`,
     );
   }
   if (
