@@ -21,6 +21,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, relative } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { getBlogVehicleTarget } from "../src/lib/blogNavigation";
 
 import {
   inferPageType,
@@ -601,6 +602,47 @@ function testEcommerceCleanup(): void {
   );
 }
 
+function testBlogVehicleNavigation(): void {
+  const slug = "creta-prestige-2018-iyo-xx70-19868";
+  for (const href of [
+    `/veiculo/${slug}`,
+    `https://www.netcarmultimarcas.com.br/veiculo/${slug}`,
+    `https://netcarmultimarcas.com.br/veiculo/${slug}/`,
+    `//www.netcarmultimarcas.com.br/veiculo/${slug}`,
+  ]) {
+    const target = getBlogVehicleTarget(href);
+    assert(
+      target?.slug === slug && Object.keys(target.search).length === 0 &&
+        target.hash === "",
+      "ficha interna não foi normalizada para a rota SPA com o mesmo exemplar",
+    );
+  }
+
+  const legacy = getBlogVehicleTarget("/veiculo/19868?origem=blog#fotos");
+  assert(
+    legacy?.slug === "19868" && legacy.search.origem === "blog" &&
+      legacy.hash === "fotos",
+    "navegação editorial perdeu ID legado, busca ou fragmento do destino",
+  );
+
+  for (const href of [
+    `https://outro-site.example/veiculo/${slug}`,
+    `https://www.netcarmultimarcas.com.br.outro-site.example/veiculo/${slug}`,
+    `https://pessoa@www.netcarmultimarcas.com.br/veiculo/${slug}`,
+    `https://www.netcarmultimarcas.com.br:8443/veiculo/${slug}`,
+    "/veiculo/creta-sem-id",
+    "/veiculo/0",
+    "/comprar-suv",
+    "mailto:pessoa@example.com",
+    "https://wa.me/5551997293118",
+  ]) {
+    assert(
+      getBlogVehicleTarget(href) === null,
+      `link externo ou fora da rota foi indevidamente convertido em SPA: ${href}`,
+    );
+  }
+}
+
 function testBlogDiscoveryAttribution(): void {
   const articleSlug = "como-escolher-suv";
   const targetPath = "/veiculo/creta-prestige-2018-iyo-xx70-19868";
@@ -1087,6 +1129,7 @@ async function main(): Promise<void> {
   testLeadIntentBoundary();
   testPageTypes();
   testEcommerceCleanup();
+  testBlogVehicleNavigation();
   testBlogDiscoveryAttribution();
   testComparisonReadyTransition();
   testWhatsAppCtaContext();

@@ -1,7 +1,48 @@
 import { Link } from "@tanstack/react-router";
-import type { BlogPost, BlogSection } from "@/data/seo/types";
+import type { ReactNode } from "react";
+import type { BlogCar, BlogPost, BlogSection } from "@/data/seo/types";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { trackBlogDiscoveryClick } from "@/lib/analytics";
+import { getBlogVehicleTarget } from "@/lib/blogNavigation";
+
+function BlogVehicleLink({
+  car,
+  articleSlug,
+  children,
+}: {
+  car: BlogCar;
+  articleSlug: string;
+  children: ReactNode;
+}) {
+  const target = getBlogVehicleTarget(car.url);
+  const props = {
+    className:
+      "group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl",
+    onClick: () =>
+      trackBlogDiscoveryClick({
+        articleSlug,
+        placement: "vehicle_card",
+        targetHref: car.url,
+        vehicleName: car.modelo,
+      }),
+  };
+
+  return target ? (
+    <Link
+      to="/veiculo/$slug"
+      params={{ slug: target.slug }}
+      search={target.search}
+      hash={target.hash}
+      {...props}
+    >
+      {children}
+    </Link>
+  ) : (
+    <a href={car.url} {...props}>
+      {children}
+    </a>
+  );
+}
 
 function renderSection(
   section: BlogSection,
@@ -54,18 +95,10 @@ function renderSection(
     return (
       <div key={index} className="not-prose my-8 grid gap-5 sm:grid-cols-2">
         {section.cars.map((car) => (
-          <a
+          <BlogVehicleLink
             key={car.url}
-            href={car.url}
-            onClick={() =>
-              trackBlogDiscoveryClick({
-                articleSlug,
-                placement: "vehicle_card",
-                targetHref: car.url,
-                vehicleName: car.modelo,
-              })
-            }
-            className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+            car={car}
+            articleSlug={articleSlug}
           >
             {car.img ? (
               <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
@@ -101,7 +134,7 @@ function renderSection(
                 </span>
               </div>
             </div>
-          </a>
+          </BlogVehicleLink>
         ))}
       </div>
     );
