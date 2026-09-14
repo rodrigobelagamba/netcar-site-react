@@ -270,6 +270,164 @@ test("sync preserves original PDFs, checks current hash before reuse and removes
   }
 });
 
+test("PDF sync recovers transient transport, timeout and temporary HTTP failures within three attempts", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "icheck-retry-"));
+  const pdf = await certificate([
+    "Sem Registro",
+    "Sem Registro",
+    "Sem Registro",
+    "Sem Registro",
+  ]);
+  const transport = () =>
+    Object.assign(new TypeError("fetch failed"), {
+      cause: { code: "ECONNRESET" },
+    });
+  const interruptedBody = () =>
+    new Response(
+      new ReadableStream({
+        start(controller) {
+          controller.error(
+            Object.assign(new TypeError("terminated"), {
+              cause: { code: "UND_ERR_SOCKET" },
+            }),
+          );
+        },
+      }),
+    );
+  const scenarios = [
+    { name: "single transport reset", failures: [transport] },
+    {
+      name: "reset followed by interrupted stream",
+      failures: [transport, interruptedBody],
+    },
+    {
+      name: "timeout",
+      failures: [() => new DOMException("timed out", "TimeoutError")],
+    },
+    {
+      name: "request timeout then rate limit",
+      failures: [
+        () => new Response(null, { status: 408 }),
+        () => new Response(null, { status: 429 }),
+      ],
+    },
+    {
+      name: "temporary server failures",
+      failures: [
+        () => new Response(null, { status: 500 }),
+        () => new Response(null, { status: 503 }),
+      ],
+    },
+  ];
+  try {
+    for (const scenario of scenarios) {
+      let calls = 0;
+      const summary = await syncMetadata({
+        inventory: [vehicle],
+        outputDir: dir,
+        fetchImpl: async () => {
+          const failure = scenario.failures[calls++]?.();
+          if (failure instanceof Error) throw failure;
+          return failure || new Response(pdf);
+        },
+      });
+      assert.equal(calls, scenario.failures.length + 1, scenario.name);
+      assert.equal(summary.unavailable, 0, scenario.name);
+      const metadata = JSON.parse(readFileSync(join(dir, reference.metaName)));
+      assert.equal(metadata.source, "checkauto-pdf", scenario.name);
+      assert.equal(metadata.allClear, true, scenario.name);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("PDF retry exhaustion clears previous results and permanent certificate failures are not retried", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "icheck-retry-failure-"));
+  const pdf = await certificate([
+    "Sem Registro",
+    "Sem Registro",
+    "Sem Registro",
+    "Sem Registro",
+  ]);
+  const scenarios = [
+    {
+      name: "transport exhausted",
+      response: () =>
+        Object.assign(new TypeError("fetch failed"), {
+          cause: { code: "ECONNRESET" },
+        }),
+      count: 3,
+      error: "source_unavailable",
+    },
+    {
+      name: "HTTP retries exhausted",
+      response: () => new Response(null, { status: 503 }),
+      count: 3,
+      error: "http_503",
+    },
+    {
+      name: "not found",
+      response: () => new Response(null, { status: 404 }),
+      count: 1,
+      error: "http_404",
+    },
+    {
+      name: "invalid PDF",
+      response: () => new Response("<?php unexpected_attachment();"),
+      count: 1,
+      error: "invalid_pdf",
+    },
+    {
+      name: "oversized PDF",
+      response: () =>
+        new Response(pdf, {
+          headers: { "content-length": String(16 * 1024 * 1024) },
+        }),
+      count: 1,
+      error: "pdf_too_large",
+    },
+    {
+      name: "wrong identity",
+      response: () => new Response(pdf),
+      vehicle: { ...vehicle, placa: "DEF1D23" },
+      count: 1,
+      error: "identity_mismatch",
+    },
+  ];
+  try {
+    for (const scenario of scenarios) {
+      await syncMetadata({
+        inventory: [vehicle],
+        outputDir: dir,
+        fetchImpl: async () => new Response(pdf),
+      });
+      let calls = 0;
+      const summary = await syncMetadata({
+        inventory: [scenario.vehicle || vehicle],
+        outputDir: dir,
+        fetchImpl: async () => {
+          calls++;
+          const response = scenario.response();
+          if (response instanceof Error) throw response;
+          return response;
+        },
+      });
+      assert.equal(calls, scenario.count, scenario.name);
+      assert.equal(summary.unavailable, 1, scenario.name);
+      const metadata = JSON.parse(readFileSync(join(dir, reference.metaName)));
+      assert.equal(metadata.errorCode, scenario.error, scenario.name);
+      assert.equal(metadata.source, "unavailable", scenario.name);
+      assert(
+        metadata.history.every((item) => item.status === null && !item.clear),
+        scenario.name,
+      );
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("API inventory pagination requests 500 and refuses a stalled/incomplete listing", async () => {
   const calls = [];
   const fetchImpl = async (url) => {
