@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19948",
+  "placa": "JAU2E70",
+  "pdf": "CheckAuto_JAU2E70_1320.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "793e283e6af795e6e3fbe3f8b131b588601ceeae269aef84036c3058bbe55d16",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JAU2E70_1320.pdf",
+  "dataHoraConsulta": "31/07/2026 13:20:24",
+  "issuedAt": "31/07/2026 13:20:24",
+  "consultaId": null,
+  "tipoChave": "Placa: JAU-XX70",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JAU-XX70",
+    "chassiMasked": "9BWCH6XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.756Z"
+}

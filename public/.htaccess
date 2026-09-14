@@ -115,6 +115,10 @@ ErrorDocument 410 /410.html
 # Rewrite Rules para SPA
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # Certificados nunca são código executável, mesmo com uma segunda extensão.
+  # Mantém o arquivo suspeito preservado, mas impede seu acesso público.
+  RewriteRule ^arquivos/autocheck/.*\.(php[0-9]*|phtml|phar|badext)(\.|$) - [F,L,NC]
   
   # Domínio legado netcar-rc.com.br (com ou sem www): 301 pra URL equivalente
   # no canônico. Hoje ele serve um <meta refresh> pra http:// sem www, que

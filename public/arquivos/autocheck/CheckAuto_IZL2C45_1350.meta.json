@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "20000",
+  "placa": "IZL2C45",
+  "pdf": "CheckAuto_IZL2C45_1350.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "0e0cc5bd55884009368e43878f8de751770516d6980d41a2d9329115c7477d09",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_IZL2C45_1350.pdf",
+  "dataHoraConsulta": "02/09/2026 13:50:35",
+  "issuedAt": "02/09/2026 13:50:35",
+  "consultaId": null,
+  "tipoChave": "Placa: IZL-XX45",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "IZL-XX45",
+    "chassiMasked": "93YRHAXXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.703Z"
+}

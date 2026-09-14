@@ -1,0 +1,59 @@
+name: Sync i-CHECK consultation results
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "Publicar frontend i-CHECK validado junto dos metadados"
+        required: true
+        type: boolean
+        default: false
+
+concurrency:
+  group: netcar-devops-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Sync through the existing deployment environment
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          SSH_HOST_FINGERPRINT: ${{ secrets.KINGHOST_SSH_HOST_FINGERPRINT }}
+          RELEASE_ICHECK: ${{ github.event.inputs.release || 'false' }}
+          EXPECTED_SHA: ${{ github.sha }}
+        with:
+          host: ${{ secrets.DEVOPS_VPS_HOST }}
+          username: ${{ secrets.DEVOPS_VPS_USER }}
+          key: ${{ secrets.DEVOPS_VPS_SSH_KEY }}
+          envs: SSH_HOST_FINGERPRINT,RELEASE_ICHECK,EXPECTED_SHA
+          command_timeout: 25m
+          script: |
+            set -euo pipefail
+            cd /opt/netcar-site-react
+            git fetch origin master
+            # Jobs de branch não podem substituir o checkout operacional.
+            test "$EXPECTED_SHA" = "$(git rev-parse origin/master)"
+            test "$EXPECTED_SHA" = "$(git rev-parse HEAD)"
+            case "$RELEASE_ICHECK" in true|false) ;; *) exit 1 ;; esac
+            if [ "$RELEASE_ICHECK" = true ]; then
+              docker exec -w /workspace netcar-devops npm ci --include=dev
+              docker exec -w /workspace netcar-devops npm run icheck:validate
+              docker exec -w /workspace netcar-devops npm run build
+              docker exec -w /workspace -e SSH_HOST_FINGERPRINT="$SSH_HOST_FINGERPRINT" -e SSH_KEY_PATH=/root/.ssh/id_netcar netcar-devops \
+                node scripts/deploy-icheck-release.mjs --directory=dist --env-file=.env.local
+            else
+              docker exec -w /workspace -e SSH_HOST_FINGERPRINT="$SSH_HOST_FINGERPRINT" -e SSH_KEY_PATH=/root/.ssh/id_netcar netcar-devops sh -ec '
+                output_dir=$(mktemp -d /tmp/icheck-metadata.XXXXXX)
+                trap '\''rm -rf "$output_dir"'\'' EXIT
+                node scripts/sync-icheck-metadata.mjs --output-dir="$output_dir"
+                node scripts/publish-icheck-metadata.mjs --directory="$output_dir" --env-file=.env.local
+              '
+            fi

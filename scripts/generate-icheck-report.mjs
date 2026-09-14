@@ -9,36 +9,29 @@
  *   npm run report:icheck -- --placa=JDB4D51 --xml=/path/placa.xml
  */
 
-import {
-  mkdirSync,
-  writeFileSync,
-  existsSync,
-  readFileSync,
-  readdirSync,
-} from "node:fs";
+import { mkdirSync, writeFileSync, existsSync, readFileSync } from "node:fs";
 import { dirname, join, extname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import React from "react";
 import { pdf } from "@react-pdf/renderer";
-import { parseCheckAutoPdf } from "./lib/parse-checkauto-pdf.mjs";
+import {
+  parseCheckAutoPdf,
+  classifyCertificateStatus,
+} from "./lib/parse-checkauto-pdf.mjs";
 import { parseCheckAutoDossier } from "./lib/parse-checkauto-xml.mjs";
 import { summarizeDossier } from "./lib/icheck-dossier-summary.mjs";
+import {
+  resolveCertificateReference,
+  certificateMatchesVehicle,
+  dossierMatchesCertificate,
+  dossierSectionsForDisplay,
+  buildCertificateMetadata,
+} from "./sync-icheck-metadata.mjs";
 import { loadDeployEnv, uploadIcheckPdf } from "./lib/upload-icheck-pdf.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
-
-/** Dump Dropbox Automacar = fonte da verdade do certificado CheckAuto. */
-const AUTOMACAR_SITE_ROOT =
-  process.env.AUTOMACAR_SITE_ROOT ||
-  (existsSync(
-    "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite",
-  )
-    ? "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite"
-    : join(rootDir, "..", "..", "AUTOMACAR", "ArquivosSite"));
-const AUTOMACAR_PRIMARY_DUMP =
-  process.env.AUTOMACAR_PRIMARY_DUMP || "AutomacarSite_20260626_091800";
 
 // Carrega .env.local se existir (sem dependência dotenv)
 function loadEnvFile(path) {
@@ -85,8 +78,10 @@ function parseArgs(argv) {
     else if (arg === "--deploy") out.deploy = true;
     else if (arg.startsWith("--id=")) out.id = arg.slice(5).trim();
     else if (arg.startsWith("--placa=")) out.placa = arg.slice(8).trim();
-    else if (arg.startsWith("--xml=")) out.xml = arg.slice("--xml=".length).trim();
-    else if (arg.startsWith("--pdf=")) out.pdf = arg.slice("--pdf=".length).trim();
+    else if (arg.startsWith("--xml="))
+      out.xml = arg.slice("--xml=".length).trim();
+    else if (arg.startsWith("--pdf="))
+      out.pdf = arg.slice("--pdf=".length).trim();
   }
   return out;
 }
@@ -114,84 +109,6 @@ function resolveCheckAutoXmlPath(placa, explicitPath) {
   return null;
 }
 
-/**
- * PDF oficial CheckAuto na pasta AutomacarSite (Dropbox).
- * Ordem: dump primário por nome → primário por placa → outros dumps (mais novo primeiro).
- */
-function resolveOfficialAutomacarPdf(pdfName, placa) {
-  const root = AUTOMACAR_SITE_ROOT;
-  if (!existsSync(root)) return null;
-
-  const dumps = readdirSync(root)
-    .filter((d) => d.startsWith("AutomacarSite_"))
-    .sort()
-    .reverse();
-  const primary = AUTOMACAR_PRIMARY_DUMP;
-  const ordered = [
-    primary,
-    ...dumps.filter((d) => d !== primary),
-  ].filter((d) => existsSync(join(root, d)));
-
-  const wantName = pdfName ? basename(String(pdfName)) : null;
-  const wantPlaca = cleanPlaca(placa);
-
-  // 1) nome exato no dump primário
-  if (wantName) {
-    const exactPrimary = join(root, primary, wantName);
-    if (existsSync(exactPrimary)) {
-      return { path: exactPrimary, dump: primary, match: "name-primary" };
-    }
-  }
-
-  // 2) placa no dump primário (qualquer HHMM)
-  if (wantPlaca) {
-    const primaryDir = join(root, primary);
-    if (existsSync(primaryDir)) {
-      const hit = readdirSync(primaryDir).find((f) =>
-        new RegExp(`^CheckAuto_${wantPlaca}_\\d+\\.pdf$`, "i").test(f),
-      );
-      if (hit) {
-        return {
-          path: join(primaryDir, hit),
-          dump: primary,
-          match: "placa-primary",
-          pdfName: hit,
-        };
-      }
-    }
-  }
-
-  // 3) nome exato em qualquer dump (mais novo primeiro)
-  if (wantName) {
-    for (const dump of ordered) {
-      const p = join(root, dump, wantName);
-      if (existsSync(p)) {
-        return { path: p, dump, match: "name-other" };
-      }
-    }
-  }
-
-  // 4) placa em qualquer dump (mais novo primeiro)
-  if (wantPlaca) {
-    for (const dump of ordered) {
-      const dir = join(root, dump);
-      const hit = readdirSync(dir).find((f) =>
-        new RegExp(`^CheckAuto_${wantPlaca}_\\d+\\.pdf$`, "i").test(f),
-      );
-      if (hit) {
-        return {
-          path: join(dir, hit),
-          dump,
-          match: "placa-other",
-          pdfName: hit,
-        };
-      }
-    }
-  }
-
-  return null;
-}
-
 function maskPlate(placa) {
   const clean = String(placa || "")
     .replace(/[^a-zA-Z0-9]/g, "")
@@ -211,7 +128,9 @@ function maskTipoChave(tipoChave) {
 }
 
 function maskChassi(chassi) {
-  const clean = String(chassi || "").toUpperCase().replace(/\s+/g, "");
+  const clean = String(chassi || "")
+    .toUpperCase()
+    .replace(/\s+/g, "");
   if (clean.length < 8) return clean || "—";
   return `${clean.slice(0, 5)}${"X".repeat(Math.max(0, clean.length - 8))}${clean.slice(-3)}`;
 }
@@ -251,7 +170,9 @@ async function fetchVehicleById(id) {
 }
 
 async function findVehicleIdByPlaca(placa) {
-  const clean = String(placa).replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+  const clean = String(placa)
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .toUpperCase();
   const url = `${API_BASE.replace(/\/$/, "")}/veiculos.php?limit=500`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`API lista ${res.status}`);
@@ -270,19 +191,10 @@ async function findVehicleIdByPlaca(placa) {
 function ensureJpeg(localPath, cacheDir, basename) {
   const outPath = join(cacheDir, `${basename}.jpg`);
   try {
-    // Converte + limita largura — PDF leve o bastante pra overwrite no host
+    // Converte e limita largura para reduzir o resumo derivado.
     execFileSync(
       "sips",
-      [
-        "-s",
-        "format",
-        "jpeg",
-        "-Z",
-        "1400",
-        localPath,
-        "--out",
-        outPath,
-      ],
+      ["-s", "format", "jpeg", "-Z", "1400", localPath, "--out", outPath],
       { stdio: "ignore" },
     );
     return existsSync(outPath) ? outPath : null;
@@ -322,9 +234,8 @@ async function main() {
     process.exit(args.help ? 0 : 1);
   }
 
-  const { ICheckReportDocument } = await import(
-    "../src/reports/icheck/ICheckReportDocument.tsx"
-  );
+  const { ICheckReportDocument } =
+    await import("../src/reports/icheck/ICheckReportDocument.tsx");
 
   let vehicleId = args.id;
   let vehicle = null;
@@ -353,8 +264,9 @@ async function main() {
     vehicle = await fetchVehicleById(vehicleId);
   } else if (dossier?.ok && dossier.vehicleHint) {
     const hint = dossier.vehicleHint;
-    const [marca, ...modeloParts] = String(hint.marcaModelo || "VEICULO CHECKAUTO")
-      .split("/");
+    const [marca, ...modeloParts] = String(
+      hint.marcaModelo || "VEICULO CHECKAUTO",
+    ).split("/");
     vehicle = {
       id: `xml-${cleanPlaca(hint.placa) || "preview"}`,
       placa: hint.placa,
@@ -373,7 +285,9 @@ async function main() {
       pdf: `CheckAuto_${cleanPlaca(hint.placa) || "preview"}.pdf`,
     };
     vehicleId = vehicle.id;
-    console.log(`Preview XML → ${vehicle.marca} ${vehicle.modelo} (${vehicle.placa})`);
+    console.log(
+      `Preview XML → ${vehicle.marca} ${vehicle.modelo} (${vehicle.placa})`,
+    );
   } else {
     throw new Error("Informe --id, --placa ou --xml=");
   }
@@ -383,10 +297,26 @@ async function main() {
     vehicle.pdf ||
     `CheckAuto_${String(vehicle.placa || vehicleId).replace(/[^a-zA-Z0-9]/g, "")}.pdf`
   ).replace(/^.*\//, "");
-  const pdfRel = `arquivos/autocheck/${pdfName}`;
-  const pdfUrl = absUrl(pdfRel);
+  const sourceReference =
+    vehicle.pdf || args.pdf
+      ? resolveCertificateReference(
+          {
+            ...vehicle,
+            pdf: pdfName,
+            pdf_url: `arquivos/autocheck/${pdfName}`,
+          },
+          SITE_ORIGIN,
+        )
+      : null;
+  const pdfUrl = sourceReference?.url || null;
 
-  const cacheDir = join(rootDir, "output", "icheck", "cache", String(vehicleId));
+  const cacheDir = join(
+    rootDir,
+    "output",
+    "icheck",
+    "cache",
+    String(vehicleId),
+  );
   const outDir = join(rootDir, "output", "icheck");
   mkdirSync(cacheDir, { recursive: true });
   mkdirSync(outDir, { recursive: true });
@@ -402,62 +332,24 @@ async function main() {
     dataHoraConsulta: null,
     tipoChave: null,
   };
-  let sourceKind = null; // automacar | remote | local-fallback
-
-  // 1) FONTE DA VERDADE: PDF oficial AutomacarSite (Dropbox)
-  const official = resolveOfficialAutomacarPdf(pdfName, vehicle.placa);
   let sourceBuf = null;
-  let sourceLabel = null;
-  if (official?.path) {
-    sourceBuf = readFileSync(official.path);
-    sourceLabel = official.path;
-    sourceKind = "automacar";
-    if (official.pdfName && official.pdfName !== pdfName) {
-      console.log(
-        `   PDF Automacar por placa: ${official.pdfName} (API tinha ${pdfName})`,
-      );
-    }
-    console.log(
-      `Fonte oficial Automacar (${official.match}): ${official.dump}/${basename(official.path)}`,
-    );
-  } else {
-    console.warn(
-      `   Sem PDF em AutomacarSite para ${pdfName || vehicle.placa} — fallback remoto/local`,
-    );
-  }
-
-  // 2) Fallback: remoto site / cópias locais (só se Automacar não tiver)
-  if (!sourceBuf) {
-    console.log(`Baixando CheckAuto: ${pdfUrl}`);
-    if (pdfUrl) {
-      try {
-        const res = await fetch(pdfUrl);
-        if (res.ok) {
-          sourceBuf = Buffer.from(await res.arrayBuffer());
-          sourceLabel = pdfUrl;
-          sourceKind = "remote";
-        } else {
-          console.warn(`   Remoto indisponível (${res.status})`);
-        }
-      } catch (err) {
-        console.warn(`   Remoto falhou: ${err.message || err}`);
-      }
-    }
-    const localFallback = [
-      join(rootDir, "public", "arquivos", "autocheck", pdfName),
-      join(rootDir, "arquivos", "autocheck", pdfName),
-    ];
-    const looksLikeNetcarRebuild = sourceBuf && sourceBuf.length > 400_000;
-    if (!sourceBuf || looksLikeNetcarRebuild) {
-      for (const candidate of localFallback) {
-        if (!existsSync(candidate)) continue;
-        const localBuf = readFileSync(candidate);
-        if (!sourceBuf || (looksLikeNetcarRebuild && localBuf.length < sourceBuf.length)) {
-          sourceBuf = localBuf;
-          sourceLabel = candidate;
-          sourceKind = "local-fallback";
-        }
-      }
+  if (pdfUrl) {
+    console.log(`Baixando certificado associado: ${pdfUrl}`);
+    try {
+      const response = await fetch(pdfUrl, {
+        redirect: "error",
+        signal: AbortSignal.timeout(45000),
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const buffer = Buffer.from(await response.arrayBuffer());
+      if (
+        buffer.subarray(0, 5).toString("ascii") !== "%PDF-" ||
+        buffer.length > 15 * 1024 * 1024
+      )
+        throw new Error("PDF inválido");
+      sourceBuf = buffer;
+    } catch (error) {
+      console.warn(`   Certificado indisponível: ${error.message}`);
     }
   }
 
@@ -465,64 +357,52 @@ async function main() {
     checkautoLocal = join(cacheDir, "source-checkauto.pdf");
     writeFileSync(checkautoLocal, sourceBuf);
     historyParse = await parseCheckAutoPdf(sourceBuf);
-    console.log(`   Fonte: ${sourceLabel} (${(sourceBuf.length / 1024).toFixed(0)} KB)`);
+    if (!certificateMatchesVehicle(historyParse, vehicle))
+      throw new Error("Certificado não corresponde à placa/chassi do veículo");
+    console.log(
+      `   Fonte: ${pdfUrl} (${(sourceBuf.length / 1024).toFixed(0)} KB)`,
+    );
     console.log(
       historyParse.available
         ? `   Histórico parseado (${historyParse.allClear ? "limpo" : "com detalhes"})`
         : "   Histórico não parseado — marcará indisponível",
     );
   } else {
-    console.warn("   CheckAuto indisponível (Automacar/remoto/local)");
+    console.warn("   Certificado associado indisponível");
   }
 
-  // XML NÃO é fonte da verdade. Só enriquece se data bater com PDF Automacar/oficial.
+  // XML só enriquece um PDF quando identidade e data indicam a mesma consulta.
   const xmlPath = resolveCheckAutoXmlPath(vehicle.placa, args.xml);
   let xmlTrustedForProtocol = false;
-  let xmlConflictIgnored = false;
   if (xmlPath) {
     dossier = parseCheckAutoDossier(xmlPath);
     console.log(`XML CheckAuto: ${xmlPath}`);
     const pdfDate = historyParse.dataHoraConsulta || historyParse.issuedAt;
     const xmlDate = dossier.protocol?.dataHoraConsulta || null;
-    xmlTrustedForProtocol = Boolean(
-      sourceKind === "automacar"
-        ? xmlDate && pdfDate && xmlDate === pdfDate
-        : xmlDate && (!pdfDate || xmlDate === pdfDate),
-    );
-
-    if (pdfDate && xmlDate && pdfDate !== xmlDate) {
-      xmlConflictIgnored = true;
+    xmlTrustedForProtocol =
+      dossierMatchesCertificate(dossier, historyParse, vehicle) ||
+      (String(vehicleId).startsWith("xml-") && dossier.ok);
+    if (!xmlTrustedForProtocol) {
       console.warn(
-        `   AVISO: XML (${xmlDate}) ≠ PDF oficial (${pdfDate}). Usando data/histórico do PDF. ConsultaID do XML ignorado.`,
+        "   XML ignorado: identidade ou data não correspondem ao certificado associado.",
       );
+    } else {
+      const fromXmlOnly = String(vehicleId).startsWith("xml-");
+      historyParse = {
+        ...historyParse,
+        dataHoraConsulta: pdfDate || (fromXmlOnly ? xmlDate : null),
+        issuedAt: pdfDate || (fromXmlOnly ? xmlDate : null),
+        consultaId:
+          historyParse.consultaId || dossier.protocol?.consultaId || null,
+        tipoChave:
+          historyParse.tipoChave || dossier.protocol?.tipoChave || null,
+        history: fromXmlOnly ? dossier.history : historyParse.history,
+        available: fromXmlOnly ? dossier.available : historyParse.available,
+        allClear: fromXmlOnly
+          ? dossier.allClear
+          : historyParse.allClear && dossier.allClear,
+      };
     }
-
-    historyParse = {
-      ...historyParse,
-      // Data: PDF oficial primeiro
-      dataHoraConsulta: pdfDate || xmlDate || null,
-      issuedAt: pdfDate || xmlDate || historyParse.issuedAt,
-      // ConsultaID só se XML for da mesma consulta do PDF (ou se não houver data no PDF)
-      consultaId: xmlTrustedForProtocol
-        ? dossier.protocol?.consultaId || historyParse.consultaId
-        : historyParse.consultaId || null,
-      tipoChave:
-        historyParse.tipoChave ||
-        (xmlTrustedForProtocol ? dossier.protocol?.tipoChave : null) ||
-        dossier.protocol?.tipoChave ||
-        null,
-      // Histórico certificado: PDF primeiro quando parseou
-      history:
-        historyParse.available && historyParse.history?.length
-          ? historyParse.history
-          : dossier.history?.length
-            ? dossier.history
-            : historyParse.history,
-      available: historyParse.available || dossier.available,
-      allClear: historyParse.available
-        ? historyParse.allClear
-        : dossier.allClear,
-    };
     if (historyParse.consultaId) {
       console.log(`   Protocolo ConsultaID ${historyParse.consultaId}`);
     }
@@ -536,7 +416,7 @@ async function main() {
   }
 
   if (!historyParse.tipoChave && vehicle.placa) {
-    historyParse.tipoChave = `Placa: ${maskPlate(vehicle.placa)} UF: RS`;
+    historyParse.tipoChave = `Placa: ${maskPlate(vehicle.placa)}`;
   } else if (historyParse.tipoChave) {
     historyParse.tipoChave = maskTipoChave(historyParse.tipoChave);
   }
@@ -546,57 +426,27 @@ async function main() {
       ? summarizeDossier(dossier.sections)
       : { history: [], highlights: [] };
 
-  /** Cards do certificado PDF (fonte oficial quando XML é antigo/truncado). */
-  function pdfHistoryForWeb(items = []) {
-    return (items || [])
-      .filter((h) => h?.status)
-      .map((h) => {
-        const status = String(h.status);
-        const clear =
-          /^sem\s*registro/i.test(status) || /^consultado\.?$/i.test(status);
-        // Alienação = aviso amarelo (CheckAuto), não alerta grave vermelho
-        const warn = /aliena/i.test(status);
-        const alert =
-          !clear &&
-          !warn &&
-          /roubo|furto|leil[aã]o|sinistro|bloqueio|restri|com\s*registro/i.test(
-            status,
-          );
-        return {
-          key: h.key,
-          label: h.label,
-          hint:
-            h.key === "estaduais"
-              ? "Situação no DETRAN / gravames"
-              : h.key === "leilao"
-                ? "Remarketing e leilão"
-                : h.key === "sinistro"
-                  ? "Perda total / sinistro"
-                  : h.key === "roubo"
-                    ? "Bases de roubo e furto"
-                    : "",
-          status,
-          clear: clear && !warn,
-          riskLevel: alert ? "alert" : warn ? "warn" : "ok",
-        };
-      });
+  const certificateHistory = (historyParse.history || []).map((item) => ({
+    ...item,
+    ...classifyCertificateStatus(item.status),
+  }));
+  const webHistory = certificateHistory.length
+    ? certificateHistory
+    : HISTORY_FALLBACK();
+  const webHighlights = dossierSummary.highlights || [];
+
+  function HISTORY_FALLBACK() {
+    return [
+      ["leilao", "Leilão"],
+      ["sinistro", "Sinistro / Perda"],
+      ["roubo", "Roubo / Furto"],
+      ["estaduais", "Informações Estaduais"],
+    ].map(([key, label]) => ({
+      key,
+      label,
+      ...classifyCertificateStatus(null),
+    }));
   }
-
-  const certificateHistory = pdfHistoryForWeb(historyParse.history);
-  const webHistory =
-    certificateHistory.length > 0
-      ? certificateHistory
-      : dossierSummary.history.length > 0
-        ? dossierSummary.history
-        : [];
-
-  const webHighlights =
-    certificateHistory.length > 0
-      ? certificateHistory
-          .filter((h) => h.status)
-          .slice(0, 4)
-          .map((h) => ({ label: h.label, value: h.status }))
-      : dossierSummary.highlights;
 
   // Prefer imagens_site (fundo cinza + logo Netcar); AVIF/PNG → JPEG via sips
   const galeria = (
@@ -676,10 +526,16 @@ async function main() {
       { label: "Cor", value: vehicle.cor || "—" },
       { label: "Km", value: vehicle.km != null ? String(vehicle.km) : "—" },
       { label: "Motor", value: vehicle.motor || "—" },
-      { label: "Potência", value: vehicle.potencia ? `${vehicle.potencia} cv` : "—" },
+      {
+        label: "Potência",
+        value: vehicle.potencia ? `${vehicle.potencia} cv` : "—",
+      },
       { label: "Combustível", value: vehicle.combustivel || "—" },
       { label: "Câmbio", value: vehicle.cambio || "—" },
-      { label: "Portas", value: vehicle.portas != null ? String(vehicle.portas) : "—" },
+      {
+        label: "Portas",
+        value: vehicle.portas != null ? String(vehicle.portas) : "—",
+      },
     ].filter((s) => s.value && s.value !== "—"),
     optionals: (vehicle.opcionais || [])
       .map((o) => (typeof o === "string" ? o : o.descricao || o.nome || ""))
@@ -688,20 +544,23 @@ async function main() {
       webHistory.length > 0
         ? webHistory
         : [
-              { key: "leilao", label: "Leilão", status: null },
-              { key: "sinistro", label: "Sinistro / Perda", status: null },
-              { key: "roubo", label: "Roubo / Furto", status: null },
-              { key: "estaduais", label: "Informações Estaduais", status: null },
-            ],
-    historyAvailable: Boolean(
-      historyParse.available || webHistory.length || dossierSummary.history.length,
+            { key: "leilao", label: "Leilão", status: null },
+            { key: "sinistro", label: "Sinistro / Perda", status: null },
+            { key: "roubo", label: "Roubo / Furto", status: null },
+            { key: "estaduais", label: "Informações Estaduais", status: null },
+          ],
+    historyAvailable: webHistory.some(
+      (item) => item.status && item.riskLevel !== "unavailable",
     ),
     allClear: Boolean(
-      historyParse.available
-        ? historyParse.allClear
-        : webHistory.length > 0 && webHistory.every((h) => h.clear),
+      historyParse.allClear && webHistory.every((item) => item.clear),
     ),
+    sourcePdfUrl: pdfUrl || undefined,
+    sourceLabel: pdfUrl ? "Certificado CheckAuto / DEKRA associado" : undefined,
     consultationHighlights: webHighlights,
+    consultationSections: xmlTrustedForProtocol
+      ? dossierSectionsForDisplay(dossier?.sections)
+      : [],
   };
 
   console.log("Gerando PDF…");
@@ -710,7 +569,10 @@ async function main() {
   let buffer;
   if (Buffer.isBuffer(streamOrBuffer)) {
     buffer = streamOrBuffer;
-  } else if (streamOrBuffer && typeof streamOrBuffer[Symbol.asyncIterator] === "function") {
+  } else if (
+    streamOrBuffer &&
+    typeof streamOrBuffer[Symbol.asyncIterator] === "function"
+  ) {
     const chunks = [];
     for await (const chunk of streamOrBuffer) chunks.push(chunk);
     buffer = Buffer.concat(chunks);
@@ -722,61 +584,41 @@ async function main() {
     buffer = Buffer.from(await blob.arrayBuffer());
   }
 
-  const outName = pdfName.endsWith(".pdf") ? pdfName : `${pdfName}.pdf`;
+  // Derived documents always have their own filename. The associated source PDF is immutable here.
+  const outName = `Netcar_iCheck_${vehicleId}_${maskPlate(vehicle.placa).replace(/[^a-zA-Z0-9]/g, "")}.pdf`;
+  if (outName === pdfName)
+    throw new Error("Nome do resumo coincide com o certificado original");
   const outPath = join(outDir, outName);
   writeFileSync(outPath, buffer);
   console.log(`OK → ${outPath} (${(buffer.length / 1024).toFixed(0)} KB)`);
 
-  // cópia com nome amigável
-  const friendly = join(
-    outDir,
-    `Netcar_iCheck_${vehicleId}_${maskPlate(vehicle.placa).replace(/[^a-zA-Z0-9]/g, "")}.pdf`,
-  );
-  writeFileSync(friendly, buffer);
-  console.log(`OK → ${friendly}`);
-
-  // Copia pro public/ p/ overwrite no deploy:local (mesmo path do host)
-  const publicAutocheck = join(rootDir, "public", "arquivos", "autocheck");
-  mkdirSync(publicAutocheck, { recursive: true });
-  writeFileSync(join(publicAutocheck, outName), buffer);
-  console.log(`OK → public/arquivos/autocheck/${outName}`);
-
-  const dataHoraMeta =
-    historyParse.dataHoraConsulta || historyParse.issuedAt || null;
-  const protocoloMatch = String(dataHoraMeta || "").match(
-    /(\d{2})\/(\d{2})\/(\d{4})/,
-  );
-  // MMDDYYYY (americano): 22/12/2023 → 12222023
-  const protocoloConsulta = protocoloMatch
-    ? `${protocoloMatch[2]}${protocoloMatch[1]}${protocoloMatch[3]}`
-    : null;
-
-  const meta = {
-    vehicleId: String(vehicleId),
-    placa: cleanPlaca(vehicle.placa),
-    consultaId: historyParse.consultaId || null,
-    dataHoraConsulta: dataHoraMeta,
-    protocoloConsulta,
-    tipoChave: historyParse.tipoChave || null,
-    history: webHistory,
-    consultationHighlights: webHighlights,
-    source:
-      sourceKind === "automacar"
-        ? "automacar-pdf"
-        : historyParse.available && certificateHistory.length > 0
-          ? "checkauto-pdf"
-          : xmlTrustedForProtocol
-            ? "checkauto-xml"
-            : "partial",
-    sourcePath: sourceLabel || null,
-    pdf: outName,
-    updatedAt: new Date().toISOString(),
-  };
-  const metaName = outName.replace(/\.pdf$/i, ".meta.json");
-  const metaPath = join(outDir, metaName);
-  writeFileSync(metaPath, JSON.stringify(meta, null, 2));
-  writeFileSync(join(publicAutocheck, metaName), JSON.stringify(meta, null, 2));
-  console.log(`OK → public/arquivos/autocheck/${metaName}`);
+  let metaPath = null;
+  let metaName = null;
+  if (
+    sourceReference &&
+    sourceBuf &&
+    historyParse.ok &&
+    certificateMatchesVehicle(historyParse, vehicle)
+  ) {
+    const parsedSource = await parseCheckAutoPdf(sourceBuf);
+    const meta = buildCertificateMetadata(
+      vehicle,
+      sourceReference,
+      sourceBuf,
+      parsedSource,
+      xmlTrustedForProtocol ? dossier : null,
+    );
+    metaName = sourceReference.metaName;
+    metaPath = join(outDir, metaName);
+    writeFileSync(metaPath, `${JSON.stringify(meta, null, 2)}\n`);
+    const publicAutocheck = join(rootDir, "public", "arquivos", "autocheck");
+    mkdirSync(publicAutocheck, { recursive: true });
+    writeFileSync(
+      join(publicAutocheck, metaName),
+      `${JSON.stringify(meta, null, 2)}\n`,
+    );
+    console.log(`OK → public/arquivos/autocheck/${metaName}`);
+  }
 
   if (args.deploy) {
     const deploy = loadDeployEnv(process.env);
@@ -784,17 +626,19 @@ async function main() {
       localPath: outPath,
       remoteFileName: outName,
       ...deploy,
-      onProgress: (msg) => console.log(msg),
+      onProgress: (message) => console.log(message),
     });
-    await uploadIcheckPdf({
-      localPath: metaPath,
-      remoteFileName: metaName,
-      ...deploy,
-      onProgress: (msg) => console.log(msg),
-    });
-  } else {
-    console.log("Dica: adicione --deploy para sobrescrever no servidor (com .bak).");
-  }
+    if (metaPath && metaName)
+      await uploadIcheckPdf({
+        localPath: metaPath,
+        remoteFileName: metaName,
+        ...deploy,
+        onProgress: (message) => console.log(message),
+      });
+  } else
+    console.log(
+      "Resumo salvo em output/icheck. --deploy publica o resumo separado e os metadados.",
+    );
 }
 
 main().catch((err) => {

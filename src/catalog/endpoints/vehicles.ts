@@ -1,6 +1,7 @@
 import { axiosInstance } from "../axios-instance";
 import { config } from "../config";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
+import { resolveIcheckAttachment } from "@/lib/icheckMetadata";
 
 export interface VehicleImagesSite {
   capa: string | null;
@@ -40,6 +41,7 @@ export interface Vehicle {
   diferenciais?: Array<{ tag: string; descricao: string }>; // Opcionais do tipo Piado (diferenciais)
   pdf?: string; // Nome do arquivo PDF
   pdf_url?: string; // URL relativa do PDF
+  icheckAttachmentInvalid?: boolean; // Anexo rejeitado: não anunciar como certificado
   fotos?: string[]; // Deprecated - usar fullImages ao invés
   destaque?: number;
   promocao?: number;
@@ -180,22 +182,18 @@ function normalizeImageUrl(url: string): string {
   return `${baseDomain}/${normalized}`;
 }
 
-/**
- * Presença i-CHECK = campo pdf/pdf_url da API (mesmo sinal do sistema Automacar).
- * Sem fallback de mapa local — "Adicionar Arquivo" no admin ⇒ sem CTA no site.
- */
+/** A document CTA requires an actual PDF URL from the catalog's attachment area. */
 function resolveVehiclePdf(apiVehicle: {
   pdf?: string | null;
   pdf_url?: string | null;
-}): { pdf?: string; pdf_url?: string } {
+}): { pdf?: string; pdf_url?: string; icheckAttachmentInvalid?: boolean } {
   if (!apiVehicle.pdf && !apiVehicle.pdf_url) return {};
-  const pdfUrl = apiVehicle.pdf_url
-    ? normalizeImageUrl(apiVehicle.pdf_url)
-    : normalizeImageUrl(`arquivos/autocheck/${apiVehicle.pdf}`);
-  return {
+  const attachment = resolveIcheckAttachment({
     pdf: apiVehicle.pdf || undefined,
-    pdf_url: pdfUrl,
-  };
+    pdf_url: apiVehicle.pdf_url || undefined,
+  });
+  if (!attachment) return { icheckAttachmentInvalid: true };
+  return { pdf: attachment.filename, pdf_url: attachment.url };
 }
 
 export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
@@ -352,7 +350,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
           : [];
       const normalizedFullImages = fullUrls.map(normalizeImageUrl);
 
-      const { pdf, pdf_url: pdfUrl } = resolveVehiclePdf(apiVehicle);
+      const pdfAttachment = resolveVehiclePdf(apiVehicle);
 
       // Normaliza imagens_site se existir
       let imagensSite: VehicleImagesSite | undefined;
@@ -409,8 +407,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
             tag: diff.tag,
             descricao: diff.descricao,
           })) || [],
-        pdf,
-        pdf_url: pdfUrl,
+        ...pdfAttachment,
         destaque: apiVehicle.destaque,
         promocao: apiVehicle.promocao,
       };
@@ -475,7 +472,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       };
     }
 
-    const { pdf, pdf_url: pdfUrl } = resolveVehiclePdf(apiVehicle);
+    const pdfAttachment = resolveVehiclePdf(apiVehicle);
 
     // Mapeia os dados da API para a interface Vehicle
     return {
@@ -513,8 +510,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
           tag: diff.tag,
           descricao: diff.descricao,
         })) || [],
-      pdf,
-      pdf_url: pdfUrl,
+      ...pdfAttachment,
       destaque: apiVehicle.destaque,
       promocao: apiVehicle.promocao,
     };

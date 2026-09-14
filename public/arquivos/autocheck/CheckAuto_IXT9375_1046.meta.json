@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19965",
+  "placa": "IXT9375",
+  "pdf": "CheckAuto_IXT9375_1046.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "548b4a6a7b6bac469680e6bff776fe391c73be0a46f0319243c28d112fec9c8d",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_IXT9375_1046.pdf",
+  "dataHoraConsulta": "13/08/2026 10:46:31",
+  "issuedAt": "13/08/2026 10:46:31",
+  "consultaId": null,
+  "tipoChave": "Placa: IXT-XX75",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "IXT-XX75",
+    "chassiMasked": "9BGKS4XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.687Z"
+}

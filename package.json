@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-landings.js && node scripts/validate-regional-seo.js && node scripts/validate-blog-intent.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsx scripts/validate-demand-runtime.ts && tsx scripts/validate-showroom-runtime.ts && npm run stock:validate-video && tsx scripts/validate-september-campaign.ts && node scripts/validate-generated-seo.js && node scripts/validate-server-routing.js && node scripts/validate-tracking-runtime.js && tsx scripts/validate-attribution-integrity.ts && tsx scripts/validate-gbp-attribution.ts && tsx scripts/validate-regional-contact-runtime.ts && node scripts/generate-whatsapp-catalog-feed.js && tsc && vite build && node scripts/defer-built-css.js && node scripts/copy-social-php.js",
+    "build": "node scripts/sync-icheck-metadata.mjs && node scripts/generate-landings.js && node scripts/validate-regional-seo.js && node scripts/validate-blog-intent.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsx scripts/validate-demand-runtime.ts && tsx scripts/validate-showroom-runtime.ts && npm run stock:validate-video && tsx scripts/validate-september-campaign.ts && node scripts/validate-generated-seo.js && node scripts/validate-server-routing.js && node scripts/validate-tracking-runtime.js && tsx scripts/validate-attribution-integrity.ts && tsx scripts/validate-gbp-attribution.ts && tsx scripts/validate-regional-contact-runtime.ts && node scripts/generate-whatsapp-catalog-feed.js && tsc && vite build && node scripts/defer-built-css.js && node scripts/copy-social-php.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "generate-landings": "node scripts/generate-landings.js",
     "generate-blog": "node scripts/generate-blog.js",
@@ -41,7 +41,10 @@
     "deploy:ssh-setup": "node scripts/ssh-setup.js",
     "deploy:local:win": "scripts\\deploy-local.bat",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "icheck:sync": "node scripts/sync-icheck-metadata.mjs",
+    "icheck:validate": "node --test scripts/tests/icheck-ingestion.test.mjs scripts/validate-icheck-publication.test.mjs && tsx --test src/lib/icheckMetadata.test.ts && tsx scripts/validate-icheck-pdf.ts",
+    "icheck:publish": "node scripts/publish-icheck-metadata.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
@@ -50,6 +53,7 @@
     "@tanstack/react-query": "^5.17.0",
     "@tanstack/react-router": "^1.153.1",
     "@types/react-slick": "^0.23.13",
+    "buffer": "^6.0.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "embla-carousel-react": "^8.0.0",

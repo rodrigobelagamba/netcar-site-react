@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "20004",
+  "placa": "JBI3A29",
+  "pdf": "CheckAuto_JBI3A29_1223.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "da1b027b22298b8af28ec471c11ebf05a9224119beb953fcfe1755c7fe8044f0",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JBI3A29_1223.pdf",
+  "dataHoraConsulta": "05/09/2026 11:32:08",
+  "issuedAt": "05/09/2026 11:32:08",
+  "consultaId": null,
+  "tipoChave": "Placa: JBI-XX29",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JBI-XX29",
+    "chassiMasked": "9BGEB6XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.697Z"
+}

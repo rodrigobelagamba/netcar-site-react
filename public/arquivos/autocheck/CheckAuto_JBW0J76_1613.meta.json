@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19953",
+  "placa": "JBW0J76",
+  "pdf": "CheckAuto_JBW0J76_1613.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "a2edcc197c2ff4b4d41940e04fb919ee5dc075fbf2132c6c247a9e143bf8f0fa",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JBW0J76_1613.pdf",
+  "dataHoraConsulta": "03/08/2026 17:09:34",
+  "issuedAt": "03/08/2026 17:09:34",
+  "consultaId": null,
+  "tipoChave": "Placa: JBW-XX76",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JBW-XX76",
+    "chassiMasked": "95PBDKXXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.671Z"
+}

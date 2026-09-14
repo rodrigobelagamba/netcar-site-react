@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19978",
+  "placa": "JCP2F22",
+  "pdf": "CheckAuto_JCP2F22_1611.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "305005720359e295da79d282987713aeb88534c3a7a5d550f7155e420ae34bb2",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JCP2F22_1611.pdf",
+  "dataHoraConsulta": "17/08/2026 10:12:01",
+  "issuedAt": "17/08/2026 10:12:01",
+  "consultaId": null,
+  "tipoChave": "Placa: JCP-XX22",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JCP-XX22",
+    "chassiMasked": "9BWAG5XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "INF Alienacao Fidu",
+      "clear": false,
+      "riskLevel": "warn"
+    }
+  ],
+  "available": true,
+  "allClear": false,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "INF Alienacao Fidu"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.711Z"
+}

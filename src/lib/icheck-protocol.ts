@@ -1,23 +1,28 @@
-/**
- * Protocolo i-CHECK Netcar = data da consulta em MMDDYYYY (formato americano).
- * Ex.: 22/12/2023 09:16:59 → "12222023"
- */
+/** A consultation date is not a provider protocol. Kept for old callers. */
 export function icheckProtocolFromDate(
-  dataHora: string | null | undefined,
-): string | null {
-  if (!dataHora) return null;
-  const match = String(dataHora).match(/(\d{2})\/(\d{2})\/(\d{4})/);
-  if (!match) return null;
-  const [, day, month, year] = match;
-  return `${month}${day}${year}`;
+  _dataHora: string | null | undefined,
+): null {
+  return null;
 }
 
-/** Aceita só MMDDYYYY (8 dígitos); senão recalcula pela data. */
+/** Reject the old date-derived identifiers; preserve actual provider identifiers. */
 export function resolveIcheckProtocol(
   protocoloConsulta: string | null | undefined,
   dataHora: string | null | undefined,
 ): string | null {
-  const fromMeta = String(protocoloConsulta || "").trim();
-  if (/^\d{8}$/.test(fromMeta)) return fromMeta;
-  return icheckProtocolFromDate(dataHora);
+  const value = String(protocoloConsulta || "").trim();
+  if (!value || !/^[a-zA-Z0-9][a-zA-Z0-9._/-]{2,79}$/.test(value)) return null;
+  const match = String(dataHora || "").match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+  if (match) {
+    const [, day, month, year] = match;
+    if (
+      [
+        `${month}${day}${year}`,
+        `${day}${month}${year}`,
+        `${year}${month}${day}`,
+      ].includes(value)
+    )
+      return null;
+  }
+  return value;
 }

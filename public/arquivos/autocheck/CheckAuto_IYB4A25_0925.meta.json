@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19962",
+  "placa": "IYB4A25",
+  "pdf": "CheckAuto_IYB4A25_0925.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "65187f4d8c49457c854311d72ecf7cc0820942682254a6f223d567fabd68ab6b",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_IYB4A25_0925.pdf",
+  "dataHoraConsulta": "07/08/2026 16:17:09",
+  "issuedAt": "07/08/2026 16:17:09",
+  "consultaId": null,
+  "tipoChave": "Placa: IYB-XX25",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "IYB-XX25",
+    "chassiMasked": "93YRHAXXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "INF Alienacao Fidu",
+      "clear": false,
+      "riskLevel": "warn"
+    }
+  ],
+  "available": true,
+  "allClear": false,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "INF Alienacao Fidu"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.700Z"
+}

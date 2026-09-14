@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19924",
+  "placa": "JDJ5H09",
+  "pdf": "CheckAuto_JDJ5H09_0946.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "acf5a6fe2653608e0d022fbc174f5137664d56b1eb5b8eae8bf04e3fd6000f60",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JDJ5H09_0946.pdf",
+  "dataHoraConsulta": "15/07/2026 09:45:59",
+  "issuedAt": "15/07/2026 09:45:59",
+  "consultaId": null,
+  "tipoChave": "Placa: JDJ-XX09",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JDJ-XX09",
+    "chassiMasked": "LC0C74XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.795Z"
+}

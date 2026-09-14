@@ -57,10 +57,7 @@ import { DeferredRender } from "@/design-system/components/layout/DeferredRender
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { generateVehicleSlug, maskPlate } from "@/lib/slug";
-import {
-  icheckProtocolFromDate,
-  resolveIcheckProtocol,
-} from "@/lib/icheck-protocol";
+import { loadIcheckMetadata } from "@/lib/icheckMetadata";
 import { canonicalUrl } from "@/lib/seo";
 import {
   optimizeStockImage,
@@ -87,6 +84,7 @@ import {
   getVehicleMerchandising,
   hasVehicleLowAnnualMileage,
   LOW_ANNUAL_MILEAGE_DETAIL_LABEL,
+  hasVehicleIcheck,
 } from "@/lib/vehicleMerchandising";
 import { VehicleVideoLink } from "../components/VehicleVideoLink";
 import { selectVehicleInstagramVideo } from "../lib/vehicleInstagramVideos";
@@ -844,64 +842,23 @@ function CTASidebar({
   pageSlug,
 }: CTASidebarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
-  const [dataHoraConsulta, setDataHoraConsulta] = useState<string | null>(null);
-  const [consultaIdMeta, setConsultaIdMeta] = useState<string | null>(null);
-  const protocoloConsulta =
-    consultaIdMeta || icheckProtocolFromDate(dataHoraConsulta);
+  const [protocoloConsulta, setProtocoloConsulta] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
-    // Meta só a partir do PDF da API (Automacar) — sem mapa local.
-    const pdfFromVehicle =
-      vehicle?.pdf ||
-      (vehicle?.pdf_url ? String(vehicle.pdf_url).split("/").pop() : "") ||
-      "";
-    if (!pdfFromVehicle) {
-      setDataHoraConsulta(null);
-      setConsultaIdMeta(null);
-      return;
-    }
-
-    const metaName = String(pdfFromVehicle)
-      .replace(/^.*\//, "")
-      .replace(/\.pdf$/i, ".meta.json");
-
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch(`/arquivos/autocheck/${metaName}`, {
-          cache: "no-store",
-        });
-        if (!res.ok) {
-          if (!cancelled) {
-            setDataHoraConsulta(null);
-            setConsultaIdMeta(null);
-          }
-          return;
-        }
-        const json = await res.json();
-        if (cancelled) return;
-        const data =
-          json?.dataHoraConsulta != null
-            ? String(json.dataHoraConsulta).trim()
-            : "";
-        const fromMeta =
-          json?.protocoloConsulta != null
-            ? String(json.protocoloConsulta).trim()
-            : "";
-        setDataHoraConsulta(data || null);
-        setConsultaIdMeta(resolveIcheckProtocol(fromMeta, data) || null);
-      } catch {
-        if (!cancelled) {
-          setDataHoraConsulta(null);
-          setConsultaIdMeta(null);
-        }
+    setProtocoloConsulta(null);
+    if (!vehicle) return;
+    const controller = new AbortController();
+    void loadIcheckMetadata(vehicle, controller.signal).then(({ protocol }) => {
+      if (!controller.signal.aborted) {
+        setProtocoloConsulta(
+          protocol?.consultaId || protocol?.protocoloConsulta || null,
+        );
       }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [vehicle?.pdf, vehicle?.pdf_url]);
+    });
+    return () => controller.abort();
+  }, [vehicle?.id, vehicle?.placa, vehicle?.pdf, vehicle?.pdf_url]);
 
   const handleOpenLaudo = () => {
     // pageSlug da rota tem o ID no fim; vehicle.slug da API é link legado .html sem ID
@@ -963,7 +920,7 @@ function CTASidebar({
     },
   ];
 
-  const hasPDF = vehicle?.pdf_url || vehicle?.pdf;
+  const hasPDF = vehicle ? hasVehicleIcheck(vehicle) : false;
   const showIcheckCta = Boolean(hasPDF) && !isSold;
 
   return (
@@ -2115,7 +2072,7 @@ export function DetalhesPage() {
   const diferenciais = vehicle?.diferenciais ?? [];
   const hasDiferencial = (tag: string) =>
     diferenciais.some((diff) => diff.tag === tag);
-  const hasIcheckSeal = Boolean(vehicle?.pdf_url || vehicle?.pdf);
+  const hasIcheckSeal = vehicle ? hasVehicleIcheck(vehicle) : false;
   const merchandising = getVehicleMerchandising(vehicle);
   const isCommercialHighlight =
     Number(vehicle?.km) > 0 &&
