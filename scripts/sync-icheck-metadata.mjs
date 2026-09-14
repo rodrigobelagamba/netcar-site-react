@@ -231,14 +231,44 @@ function unavailableMetadata(
   };
 }
 
-async function fetchPdf(reference, fetchImpl) {
+function retryableDownloadError(error) {
+  if (error.retryable === true) return true;
+  if (["TimeoutError", "AbortError"].includes(error.name)) return true;
+  const code = error.cause?.code || error.code;
+  return [
+    "ECONNRESET",
+    "ECONNREFUSED",
+    "ETIMEDOUT",
+    "EAI_AGAIN",
+    "ENOTFOUND",
+    "ENETUNREACH",
+    "EHOSTUNREACH",
+    "EPIPE",
+    "UND_ERR_SOCKET",
+    "UND_ERR_CONNECT_TIMEOUT",
+    "UND_ERR_HEADERS_TIMEOUT",
+    "UND_ERR_BODY_TIMEOUT",
+  ].includes(code);
+}
+
+async function fetchPdfAttempt(reference, fetchImpl) {
   const response = await fetchImpl(reference.url, {
     redirect: "error",
     signal: AbortSignal.timeout(45000),
   });
-  if (!response.ok) throw new Error(`http_${response.status}`);
-  if (Number(response.headers.get("content-length")) > 15 * 1024 * 1024)
+  if (!response.ok) {
+    await response.body?.cancel().catch(() => {});
+    throw Object.assign(new Error(`http_${response.status}`), {
+      retryable:
+        response.status === 408 ||
+        response.status === 429 ||
+        (response.status >= 500 && response.status <= 599),
+    });
+  }
+  if (Number(response.headers.get("content-length")) > 15 * 1024 * 1024) {
+    await response.body?.cancel().catch(() => {});
     throw new Error("pdf_too_large");
+  }
   const reader = response.body?.getReader();
   let buffer;
   if (reader) {
@@ -249,16 +279,30 @@ async function fetchPdf(reference, fetchImpl) {
       if (done) break;
       size += value.byteLength;
       if (size > 15 * 1024 * 1024) {
-        await reader.cancel();
+        await reader.cancel().catch(() => {});
         throw new Error("pdf_too_large");
       }
       chunks.push(Buffer.from(value));
     }
     buffer = Buffer.concat(chunks);
   } else buffer = Buffer.from(await response.arrayBuffer());
+  if (buffer.length > 15 * 1024 * 1024) throw new Error("pdf_too_large");
   if (buffer.subarray(0, 5).toString("ascii") !== "%PDF-")
     throw new Error("invalid_pdf");
   return buffer;
+}
+
+async function fetchPdf(reference, fetchImpl) {
+  // Fetch/stream failures can be transient on a reused socket. Only retry transport
+  // errors and temporary HTTP responses; invalid certificates remain unavailable.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      return await fetchPdfAttempt(reference, fetchImpl);
+    } catch (error) {
+      if (attempt === 2 || !retryableDownloadError(error)) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 250 * 2 ** attempt));
+    }
+  }
 }
 
 export async function fetchInventory({
