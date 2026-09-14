@@ -89,18 +89,45 @@ const fixture: ICheckReportData = {
   netcarLogoPath: logo,
   galleryPhotos: photos,
 };
-const cases: Array<{ name: string; data: ICheckReportData; expected: string }> =
-  [
-    {
-      name: "clear",
-      data: fixture,
-      expected: "Sem registros nos itens consultados",
+const cases: Array<{
+  name: string;
+  data: ICheckReportData;
+  expected: string;
+  approved: boolean;
+  financingNotice?: boolean;
+}> = [
+  {
+    name: "clear",
+    data: fixture,
+    expected: "Sem registros nos itens consultados",
+    approved: true,
+  },
+  {
+    name: "warning",
+    data: {
+      ...fixture,
+      history: clearHistory.map((item) =>
+        item.key === "estaduais"
+          ? {
+              ...item,
+              status: "INF Alienacao Fidu",
+              clear: false,
+              riskLevel: "warn",
+            }
+          : item,
+      ),
     },
-    {
-      name: "warning",
-      data: {
-        ...fixture,
-        history: clearHistory.map((item) =>
+    expected: "Alienação fiduciária informada",
+    approved: true,
+    financingNotice: true,
+  },
+  {
+    name: "financing-missing",
+    data: {
+      ...fixture,
+      history: clearHistory
+        .filter((item) => item.key !== "roubo")
+        .map((item) =>
           item.key === "estaduais"
             ? {
                 ...item,
@@ -110,67 +137,90 @@ const cases: Array<{ name: string; data: ICheckReportData; expected: string }> =
               }
             : item,
         ),
-      },
-      expected: "Consulta com observação",
     },
-    {
-      name: "alert",
-      data: {
-        ...fixture,
-        history: clearHistory.map((item) =>
-          item.key === "leilao"
-            ? {
-                ...item,
-                status: "Com Registro de Leilão",
-                clear: false,
-                riskLevel: "alert",
-              }
-            : item,
-        ),
-      },
-      expected: "Consulta com apontamento",
+    expected: "Resultado indisponível",
+    approved: false,
+  },
+  {
+    name: "financing-restriction",
+    data: {
+      ...fixture,
+      history: clearHistory.map((item) =>
+        item.key === "estaduais"
+          ? {
+              ...item,
+              status: "INF Alienacao Fidu; Restrição judicial",
+              clear: false,
+              riskLevel: "warn",
+            }
+          : item,
+      ),
     },
-    {
-      name: "missing",
-      data: {
-        ...fixture,
-        history: [],
-        dataHoraConsulta: undefined,
-        issuedAt: "",
-        galleryPhotos: [],
-        optionals: [],
-      },
-      expected: "Resultados indisponíveis",
+    expected: "INF Alienacao Fidu; Restrição judicial",
+    approved: false,
+  },
+  {
+    name: "alert",
+    data: {
+      ...fixture,
+      history: clearHistory.map((item) =>
+        item.key === "leilao"
+          ? {
+              ...item,
+              status: "Com Registro de Leilão",
+              clear: false,
+              riskLevel: "alert",
+            }
+          : item,
+      ),
     },
-    {
-      name: "partial",
-      data: {
-        ...fixture,
-        history: clearHistory.slice(0, 2),
-        galleryPhotos: [],
-        optionals: [],
-      },
-      expected: "Resultados parciais",
+    expected: "Consulta com apontamento",
+    approved: false,
+  },
+  {
+    name: "missing",
+    data: {
+      ...fixture,
+      history: [],
+      dataHoraConsulta: undefined,
+      issuedAt: "",
+      galleryPhotos: [],
+      optionals: [],
     },
-    {
-      name: "multipage",
-      data: {
-        ...fixture,
-        dataHoraConsulta: "04/04/2024 10:12:00",
-        consultaId: "REAL-123456",
-        consultationSections: [
-          {
-            title: "Retornos individuais adicionais",
-            items: Array.from({ length: 80 }, (_, index) => ({
-              label: `Consulta detalhada ${index + 1}`,
-              value: `Retorno ${index + 1}: informação integral de exemplo para verificar paginação, legibilidade e preservação dos resultados adicionais sem omitir o último item.`,
-            })),
-          },
-        ],
-      },
-      expected: "Consulta detalhada 80",
+    expected: "Resultados indisponíveis",
+    approved: false,
+  },
+  {
+    name: "partial",
+    data: {
+      ...fixture,
+      history: clearHistory.slice(0, 2),
+      galleryPhotos: [],
+      optionals: [],
     },
-  ];
+    expected: "Resultados parciais",
+    approved: false,
+  },
+  {
+    name: "multipage",
+    data: {
+      ...fixture,
+      dataHoraConsulta: "04/04/2024 10:12:00",
+      consultaId: "REAL-123456",
+      consultationSections: [
+        {
+          title: "Retornos individuais adicionais",
+          items: Array.from({ length: 80 }, (_, index) => ({
+            label: `Consulta detalhada ${index + 1}`,
+            value: `Retorno ${index + 1}: informação integral de exemplo para verificar paginação, legibilidade e preservação dos resultados adicionais sem omitir o último item.`,
+          })),
+        },
+      ],
+    },
+    expected: "Consulta detalhada 80",
+    approved: true,
+  },
+];
 const results = [];
 for (const sample of cases) {
   const buffer = await renderToBuffer(
@@ -196,8 +246,15 @@ for (const sample of cases) {
     );
     assert.equal(
       /^APROVADO$/m.test(text.pages[0].text),
-      sample.name === "clear" || sample.name === "multipage",
-      `${sample.name}: approval badge must appear only for complete clear results`,
+      sample.approved,
+      `${sample.name}: unexpected approval badge`,
+    );
+    assert.equal(
+      text.text
+        .replace(/\s+/g, " ")
+        .includes("Alienação fiduciária: confirme a situação atual do gravame"),
+      Boolean(sample.financingNotice),
+      `${sample.name}: unexpected financing notice`,
     );
     assert.ok(text.pages[0].text.includes("Consultas individuais"));
     assert.ok(text.text.includes("Relatório i-CHECK Netcar"));

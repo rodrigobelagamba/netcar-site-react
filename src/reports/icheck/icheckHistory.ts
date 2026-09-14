@@ -104,6 +104,7 @@ export function normalizeHistoryItems(
 
 export type ICheckHistorySummary = {
   level: "clear" | "warning" | "alert" | "incomplete" | "unavailable";
+  approved: boolean;
   title: string;
   description: string;
 };
@@ -116,18 +117,47 @@ export function getHistorySummary(
   if (history.some(({ riskLevel }) => riskLevel === "alert"))
     return {
       level: "alert",
+      approved: false,
       title: "Consulta com apontamento",
       description: `Há apontamento nesta consulta. Confira os resultados individuais e a data da consulta.${missing ? " Há também resultados indisponíveis." : ""}`,
     };
-  if (history.some(({ riskLevel }) => riskLevel === "warn"))
+  if (history.some(({ riskLevel }) => riskLevel === "warn")) {
+    // Financing may be approved commercially without clearing the source warning.
+    // Match only a standalone financing return, never mixed or unknown restrictions.
+    const onlyFinancing = history.every((item) => {
+      if (item.clear) return true;
+      const normalized = String(item.status || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+      return (
+        item.key === "estaduais" &&
+        item.riskLevel === "warn" &&
+        /^(?:INF )?ALIENACAO FIDU(?:CIARIA)?(?: ATIVA)?(?: \(VEICULO FINANCIADO\))?\.?$/i.test(
+          normalized,
+        )
+      );
+    });
+    if (onlyFinancing)
+      return {
+        level: "warning",
+        approved: true,
+        title: "Alienação fiduciária informada",
+        description:
+          "Leilão, sinistro e roubo/furto sem registros na data da consulta.",
+      };
     return {
       level: "warning",
+      approved: false,
       title: "Consulta com observação",
       description: `Há observação nesta consulta. Confira os resultados individuais e a data da consulta.${missing ? " Há também resultados indisponíveis." : ""}`,
     };
+  }
   if (history.every(({ riskLevel }) => riskLevel === "unknown"))
     return {
       level: "unavailable",
+      approved: false,
       title: "Resultados indisponíveis",
       description:
         "Não foi possível apresentar os resultados individuais desta consulta. A ausência de dados não indica ausência de registros.",
@@ -135,12 +165,14 @@ export function getHistorySummary(
   if (missing)
     return {
       level: "incomplete",
+      approved: false,
       title: "Resultados parciais",
       description:
         "Parte dos resultados está indisponível. Não é possível concluir sobre os itens sem informação.",
     };
   return {
     level: "clear",
+    approved: true,
     title: "Sem registros nos itens consultados",
     description:
       "Os quatro grupos consultados estão sem registro na data indicada. Veja abaixo o resultado de cada grupo.",
