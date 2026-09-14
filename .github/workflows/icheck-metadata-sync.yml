@@ -10,6 +10,11 @@ on:
         required: true
         type: boolean
         default: false
+      diagnose:
+        description: "Verificar a conexão de publicação sem alterar arquivos"
+        required: true
+        type: boolean
+        default: false
 
 concurrency:
   group: netcar-devops-deploy
@@ -28,12 +33,13 @@ jobs:
         env:
           SSH_HOST_FINGERPRINT: ${{ secrets.KINGHOST_SSH_HOST_FINGERPRINT }}
           RELEASE_ICHECK: ${{ github.event.inputs.release || 'false' }}
+          DIAGNOSE_ICHECK: ${{ github.event.inputs.diagnose || 'false' }}
           EXPECTED_SHA: ${{ github.sha }}
         with:
           host: ${{ secrets.DEVOPS_VPS_HOST }}
           username: ${{ secrets.DEVOPS_VPS_USER }}
           key: ${{ secrets.DEVOPS_VPS_SSH_KEY }}
-          envs: SSH_HOST_FINGERPRINT,RELEASE_ICHECK,EXPECTED_SHA
+          envs: SSH_HOST_FINGERPRINT,RELEASE_ICHECK,DIAGNOSE_ICHECK,EXPECTED_SHA
           command_timeout: 25m
           script: |
             set -euo pipefail
@@ -43,8 +49,14 @@ jobs:
             test "$EXPECTED_SHA" = "$(git rev-parse origin/master)"
             test "$EXPECTED_SHA" = "$(git rev-parse HEAD)"
             case "$RELEASE_ICHECK" in true|false) ;; *) exit 1 ;; esac
-            if [ "$RELEASE_ICHECK" = true ]; then
+            case "$DIAGNOSE_ICHECK" in true|false) ;; *) exit 1 ;; esac
+            if [ "$DIAGNOSE_ICHECK" = true ]; then
+              docker exec -w /workspace -e SSH_HOST_FINGERPRINT="$SSH_HOST_FINGERPRINT" -e SSH_KEY_PATH=/root/.ssh/id_netcar netcar-devops \
+                node scripts/deploy-icheck-release.mjs --check-connection --env-file=.env.local
+            elif [ "$RELEASE_ICHECK" = true ]; then
               docker exec -w /workspace netcar-devops npm ci --include=dev
+              docker exec -w /workspace -e SSH_HOST_FINGERPRINT="$SSH_HOST_FINGERPRINT" -e SSH_KEY_PATH=/root/.ssh/id_netcar netcar-devops \
+                node scripts/deploy-icheck-release.mjs --check-connection --env-file=.env.local
               docker exec -w /workspace netcar-devops npm run icheck:validate
               docker exec -w /workspace netcar-devops npm run build
               docker exec -w /workspace -e SSH_HOST_FINGERPRINT="$SSH_HOST_FINGERPRINT" -e SSH_KEY_PATH=/root/.ssh/id_netcar netcar-devops \
