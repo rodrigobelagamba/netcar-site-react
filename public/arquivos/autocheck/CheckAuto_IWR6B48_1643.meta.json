@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "20003",
+  "placa": "IWR6B48",
+  "pdf": "CheckAuto_IWR6B48_1643.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "831605715e37374a101258f888fc8ecb1b2666b92d3df0a045ad795a6e59b8c3",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_IWR6B48_1643.pdf",
+  "dataHoraConsulta": "04/09/2026 16:00:15",
+  "issuedAt": "04/09/2026 16:00:15",
+  "consultaId": null,
+  "tipoChave": "Placa: IWR-XX48",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "IWR-XX48",
+    "chassiMasked": "9BGPB6XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.690Z"
+}

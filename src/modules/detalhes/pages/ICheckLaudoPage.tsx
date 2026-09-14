@@ -6,10 +6,11 @@ import {
   ArrowLeft,
   Check,
   AlertTriangle,
+  Info,
+  ExternalLink,
 } from "lucide-react";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { maskPlate } from "@/lib/slug";
-import { resolveIcheckProtocol } from "@/lib/icheck-protocol";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
@@ -19,53 +20,39 @@ import {
 } from "@/reports/icheck/downloadICheckReportPdf";
 import {
   formatHistoryStatus,
+  getHistorySummary,
   isAlienacaoFiduciaria,
-  isClearHistoryStatus,
   normalizeHistoryItems,
-  type ICheckHistoryItem,
 } from "@/reports/icheck/icheckHistory";
+import {
+  getConsultationAgeDays,
+  loadIcheckMetadata,
+  resolveIcheckAttachment,
+  type ICheckMetadataResult,
+} from "@/lib/icheckMetadata";
 
-type CheckAutoProtocolMeta = {
-  consultaId?: string | null;
-  dataHoraConsulta?: string | null;
-  protocoloConsulta?: string | null;
-  tipoChave?: string | null;
-  history?: ICheckHistoryItem[];
-  consultationHighlights?: Array<{ label: string; value: string }>;
+const summaryStyles = {
+  clear: "border-[#2E7D32]/40 bg-[#E8F7EF] text-[#1B5E20]",
+  warning: "border-[#F59E0B]/50 bg-[#FFF8E1] text-[#92400E]",
+  alert: "border-[#B91C1C]/40 bg-[#FEF2F2] text-[#991B1B]",
+  incomplete: "border-[#64748B]/30 bg-[#F1F5F9] text-[#334155]",
+  unavailable: "border-[#64748B]/30 bg-[#F1F5F9] text-[#334155]",
 };
 
 function Spec({
   label,
   value,
-  warn = false,
 }: {
   label: string;
   value?: string | number | null;
-  warn?: boolean;
 }) {
   if (value == null || value === "" || value === "—") return null;
   return (
-    <div
-      className={`rounded-xl px-3 py-2 ring-1 ring-inset ${
-        warn
-          ? "bg-[#FFF8E1] ring-[#F59E0B]/55"
-          : "bg-[#F5F8F9] ring-transparent"
-      }`}
-    >
-      <p
-        className={`text-[10px] font-semibold uppercase tracking-[0.12em] ${
-          warn ? "text-[#92400E]" : "text-[#5A6B73]"
-        }`}
-      >
+    <div className="rounded-xl bg-[#F5F8F9] px-3 py-2">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#5A6B73]">
         {label}
       </p>
-      <p
-        className={`text-sm font-bold ${
-          warn ? "text-[#B45309]" : "text-[#00283C]"
-        }`}
-      >
-        {String(value)}
-      </p>
+      <p className="text-sm font-bold text-[#00283C]">{String(value)}</p>
     </div>
   );
 }
@@ -73,124 +60,64 @@ function Spec({
 export function ICheckLaudoPage() {
   const { slug } = useParams({ from: "/laudo/$slug" });
   const { data: vehicle, isLoading, isError } = useVehicleQuery(slug);
-  const [protocol, setProtocol] = useState<CheckAutoProtocolMeta | null>(null);
-  const [protocolReady, setProtocolReady] = useState(false);
+  const [loaded, setLoaded] = useState<{
+    key: string;
+    result: ICheckMetadataResult;
+  } | null>(null);
   const [savingPdf, setSavingPdf] = useState(false);
-
+  const identityKey = vehicle
+    ? JSON.stringify([
+        vehicle.id,
+        vehicle.placa,
+        vehicle.pdf,
+        vehicle.pdf_url,
+        vehicle.icheckAttachmentInvalid,
+      ])
+    : "";
   const title = vehicle
     ? `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name || ""} ${vehicle.year || ""}`.trim()
-    : "Laudo i-CHECK";
+    : "Consulta i-CHECK";
 
   useMetaTags({
-    title: vehicle ? `Laudo i-CHECK — ${title}` : "Laudo i-CHECK",
+    title: vehicle ? `Consulta i-CHECK — ${title}` : "Consulta i-CHECK",
     description:
-      "Consulta i-CHECK Netcar com fotos, ficha e histórico CheckAuto/DEKRA. Não tem caráter de laudo técnico nem vistoria cautelar.",
+      "Resultados do certificado CheckAuto/DEKRA anexado e dados do estoque Netcar. Não substitui laudo técnico ou vistoria cautelar.",
     robots: "noindex, nofollow",
   });
 
   useEffect(() => {
-    if (!vehicle) {
-      setProtocol(null);
-      setProtocolReady(false);
-      return;
-    }
-    setProtocolReady(false);
-    // Meta só do PDF da API (Automacar) — sem mapa local.
-    const pdfFromVehicle =
-      vehicle.pdf || vehicle.pdf_url?.split("/").pop() || "";
-    const placa = String(vehicle.placa || "")
-      .replace(/[^a-zA-Z0-9]/g, "")
-      .toUpperCase();
-    if (!pdfFromVehicle) {
-      setProtocol(null);
-      setProtocolReady(true);
-      return;
-    }
+    if (!vehicle) return;
+    const controller = new AbortController();
+    void loadIcheckMetadata(vehicle, controller.signal).then((result) => {
+      if (!controller.signal.aborted) setLoaded({ key: identityKey, result });
+    });
+    return () => controller.abort();
+  }, [identityKey]);
 
-    const metaName = String(pdfFromVehicle)
-      .replace(/^.*\//, "")
-      .replace(/\.pdf$/i, ".meta.json");
-
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch(
-          `/arquivos/autocheck/${metaName}?v=${Date.now()}`,
-          { cache: "no-store" },
-        );
-        if (!res.ok) {
-          if (!cancelled) {
-            setProtocol({
-              consultaId: null,
-              dataHoraConsulta: null,
-              tipoChave: placa ? `Placa: ${maskPlate(placa)} UF: RS` : null,
-            });
-            setProtocolReady(true);
-          }
-          return;
-        }
-        const json = (await res.json()) as CheckAutoProtocolMeta;
-        if (cancelled) return;
-        setProtocol(json);
-        setProtocolReady(true);
-      } catch {
-        if (!cancelled) {
-          setProtocol({
-            consultaId: null,
-            dataHoraConsulta: null,
-            tipoChave: placa ? `Placa: ${maskPlate(placa)} UF: RS` : null,
-          });
-          setProtocolReady(true);
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [vehicle?.pdf, vehicle?.pdf_url, vehicle?.placa]);
-  if (isLoading && !vehicle) {
+  if (isLoading && !vehicle)
     return (
       <div className="flex min-h-[50vh] items-center justify-center text-[#00283C]/70">
-        Carregando laudo…
+        Carregando consulta…
       </div>
     );
-  }
-
-  if (isError || !vehicle) {
-    return <VehicleUnavailablePage />;
-  }
-
-  if (!protocolReady) {
+  if (isError || !vehicle) return <VehicleUnavailablePage />;
+  if (!loaded || loaded.key !== identityKey)
     return (
       <div className="flex min-h-[50vh] items-center justify-center text-[#00283C]/70">
-        Carregando laudo…
+        Carregando resultados da consulta…
       </div>
     );
-  }
 
-  const hasApiPdf = Boolean(vehicle.pdf || vehicle.pdf_url);
-  if (!hasApiPdf) {
-    return (
-      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 px-4 text-center">
-        <p className="text-[17px] font-bold text-[#00283C]">
-          Consulta i-CHECK indisponível
-        </p>
-        <p className="max-w-md text-sm text-[#00283C]/70">
-          Este veículo não tem laudo i-CHECK anexado no estoque.
-        </p>
-        <Link
-          to="/veiculo/$slug"
-          params={{ slug }}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#00283C]/80 transition hover:text-[#00283C]"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Voltar ao veículo
-        </Link>
-      </div>
-    );
-  }
-
+  const { protocol, status } = loaded.result;
+  const attachment = resolveIcheckAttachment(vehicle);
+  const history = normalizeHistoryItems(protocol?.history);
+  const summary = getHistorySummary(history);
+  const consultaId = protocol?.consultaId || protocol?.protocoloConsulta;
+  const consultationAge = getConsultationAgeDays(protocol?.dataHoraConsulta);
+  const isOldConsultation = consultationAge !== null && consultationAge > 180;
+  const hasAlienacao = history.some((item) =>
+    isAlienacaoFiduciaria(item.status),
+  );
   const gallery = (
     vehicle.imagens_site?.galeria?.length
       ? vehicle.imagens_site.galeria
@@ -200,22 +127,37 @@ export function ICheckLaudoPage() {
   )
     .filter(Boolean)
     .slice(0, 9) as string[];
-
-  // Galeria site = fundo cinza + logo Netcar (não usar capa PNG sem tratamento)
-  const heroA = gallery[0] || vehicle.imagens_site?.capa;
-  const heroB = gallery[1] || gallery[0];
   const yearLabel =
     vehicle.anoFabricacao && vehicle.year
       ? `${vehicle.anoFabricacao} / ${vehicle.year}`
       : String(vehicle.year || vehicle.anoFabricacao || "—");
-
   const optionals = (vehicle.opcionais || [])
-    .map((o) => (typeof o === "string" ? o : o.descricao || o.tag || ""))
-    .filter(Boolean)
-    .slice(0, 28);
-
-  /** Imprimir = HTML on-screen. Salvar PDF = react-pdf Netcar (não CheckAuto estático). */
-  const handlePrint = () => window.print();
+    .map((item) =>
+      typeof item === "string" ? item : item.descricao || item.tag || "",
+    )
+    .filter(Boolean);
+  const detailSections =
+    protocol?.consultationSections?.filter((section) => section.items.length) ||
+    [];
+  const highlights = (protocol?.consultationHighlights || []).filter(
+    (detail) =>
+      !history.some(
+        (item) =>
+          item.label.toLocaleLowerCase("pt-BR") ===
+            detail.label.toLocaleLowerCase("pt-BR") &&
+          item.status === detail.value,
+      ),
+  );
+  const missingMessage =
+    vehicle.icheckAttachmentInvalid || status === "invalid_attachment"
+      ? "O anexo cadastrado não é um certificado PDF válido. Os resultados ficam indisponíveis até a correção do arquivo."
+      : status === "no_pdf"
+        ? "Este veículo não tem certificado PDF anexado no estoque."
+        : status === "invalid_metadata"
+          ? "Não foi possível validar a associação dos resultados a este veículo e ao certificado anexado."
+          : status === "unavailable"
+            ? "Os resultados do certificado não puderam ser carregados. Você pode consultar o documento anexado."
+            : null;
 
   const handleSavePdf = async () => {
     if (savingPdf) return;
@@ -225,9 +167,12 @@ export function ICheckLaudoPage() {
       const platePart = vehicle.placa
         ? vehicle.placa.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()
         : slug;
-      await downloadICheckReportPdf(data, `i-CHECK-${platePart}.pdf`);
-    } catch (err) {
-      console.error("[i-CHECK] falha ao gerar PDF", err);
+      await downloadICheckReportPdf(
+        data,
+        `Resumo-Netcar-i-CHECK-${platePart}.pdf`,
+      );
+    } catch (error) {
+      console.error("[i-CHECK] falha ao gerar resumo PDF", error);
       window.alert("Não foi possível gerar o PDF. Tente novamente.");
     } finally {
       setSavingPdf(false);
@@ -236,33 +181,41 @@ export function ICheckLaudoPage() {
 
   return (
     <div className="min-h-[100dvh] bg-[#F3F6F8] print:bg-white print:[print-color-adjust:exact] print:[-webkit-print-color-adjust:exact]">
-      {/* Barra de ações — documento isolado, some na impressão */}
-      <div className="sticky top-0 z-30 border-b border-[#00283C]/08 bg-white/95 print:hidden">
+      <div className="sticky top-0 z-30 border-b border-[#00283C]/10 bg-white/95 print:hidden">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3 px-4 py-3">
           <Link
             to="/veiculo/$slug"
             params={{ slug }}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#00283C]/80 transition hover:text-[#00283C]"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#00283C]/80"
           >
             <ArrowLeft className="h-4 w-4" />
-            Fechar
+            Voltar ao veículo
           </Link>
           <div className="flex flex-wrap items-center gap-2">
+            {attachment ? (
+              <a
+                href={attachment.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-[#00283C]/25 bg-white px-3 py-2 text-xs font-bold text-[#00283C]"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                Ver certificado anexado
+              </a>
+            ) : null}
             <button
               type="button"
               onClick={() => void handleSavePdf()}
               disabled={savingPdf}
-              title="Baixa PDF Netcar i-CHECK (mesmo dossiê da tela)"
-              className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-secondary shadow-sm transition hover:border-secondary hover:bg-[#E8F7EF] disabled:cursor-wait disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary disabled:cursor-wait disabled:opacity-60"
             >
-              <Download className="h-3.5 w-3.5" strokeWidth={2.5} />
-              {savingPdf ? "Gerando…" : "Salvar PDF"}
+              <Download className="h-3.5 w-3.5" />
+              {savingPdf ? "Gerando…" : "Baixar resumo Netcar"}
             </button>
             <button
               type="button"
-              onClick={handlePrint}
-              title="Imprime o laudo exibido nesta página"
-              className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-white shadow-sm transition hover:bg-[#1B5E20]"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-2 text-xs font-bold text-white"
             >
               <Printer className="h-3.5 w-3.5" />
               Imprimir
@@ -271,164 +224,235 @@ export function ICheckLaudoPage() {
         </div>
       </div>
 
-      <article className="mx-auto max-w-3xl px-4 py-6 print:max-w-none print:px-2 print:py-0 sm:py-8">
-        <div className="overflow-hidden rounded-[1.5rem] bg-white shadow-[0_12px_40px_rgba(0,40,60,0.08)] print:rounded-none print:shadow-none">
-          {/* Header — DEKRA em destaque (mobile empilhado, sem overlap) */}
-          <header className="border-b border-[#E4EAEF] px-4 py-5 print:break-inside-avoid sm:px-8">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#5A6B73]">
-                Histórico consultado via
-              </p>
-              <img
-                src="/brand/netcar.png"
-                alt="Netcar"
-                className="h-5 w-auto max-w-[72px] shrink-0 object-contain object-right opacity-90 sm:h-6 sm:max-w-[88px]"
-              />
-            </div>
-
-            <div className="flex flex-col items-center text-center">
+      <article className="mx-auto max-w-3xl px-4 py-6 print:max-w-none print:px-2 print:py-0">
+        <div className="overflow-hidden rounded-3xl bg-white shadow-[0_12px_40px_rgba(0,40,60,0.08)] print:rounded-none print:shadow-none">
+          <header className="flex items-center justify-between gap-4 border-b border-[#E4EAEF] px-5 py-4 sm:px-8">
+            <div className="flex items-center gap-3">
               <img
                 src="/brand/checkauto-dekra.png"
                 alt="DEKRA CheckAuto"
-                className="h-40 w-40 object-contain sm:h-48 sm:w-48"
+                className="h-16 w-16 object-contain"
               />
-              <p className="mt-2 text-base font-extrabold uppercase tracking-[0.1em] text-[#1B5E20]">
-                DEKRA · CheckAuto
-              </p>
-              <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#5A6B73]">
-                Relatório i-CHECK do seminovo
-              </p>
+              <div>
+                <p className="text-sm font-extrabold text-[#00283C]">
+                  i-CHECK Netcar
+                </p>
+                <p className="text-xs text-[#5A6B73]">
+                  Certificado e resultados da consulta
+                </p>
+              </div>
             </div>
-
-            <div className="mt-4 rounded-xl border border-[#5CD29D]/50 bg-[#F3FBF7] px-3 py-3 sm:px-4">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.1em] text-[#1B5E20] sm:text-[11px]">
-                Autoridade DEKRA — líder global em inspeção veicular
-              </p>
-              <p className="mt-1.5 text-[11px] leading-relaxed text-[#5A6B73] sm:text-xs">
-                A <strong className="font-bold text-[#00283C]">DEKRA</strong> é
-                a maior empresa de inspeção veicular do mundo e líder global em
-                testes, vistorias e certificações. Fundada na Alemanha em 1925.
-                Histórico consultado via CheckAuto, uma empresa DEKRA.
-              </p>
-            </div>
+            <img
+              src="/brand/netcar.png"
+              alt="Netcar"
+              className="h-6 w-auto max-w-[88px] object-contain"
+            />
           </header>
 
-          <div className="space-y-6 px-5 py-6 print:space-y-4 sm:px-8 sm:py-8">
+          <div className="space-y-6 px-5 py-6 print:space-y-4 sm:px-8">
             <div className="print:break-inside-avoid">
-              <h1 className="text-2xl font-extrabold uppercase tracking-tight text-[#00283C] sm:text-[28px]">
+              <h1 className="text-2xl font-extrabold uppercase tracking-tight text-[#00283C]">
                 {title}
               </h1>
               <p className="mt-1 text-sm text-[#5A6B73]">
-                Consulta disponível para este veículo, com fotos, ficha técnica
-                e dados CheckAuto/DEKRA.
-              </p>
-              <p className="mt-2 text-xs leading-relaxed text-[#5A6B73]">
-                Esta consulta não tem caráter de laudo técnico. Não constitui
-                vistoria cautelar nem laudo estrutural/pericial.
+                Placa{" "}
+                {vehicle.placa ? maskPlate(vehicle.placa) : "não informada"} ·
+                Dados do estoque Netcar
               </p>
             </div>
 
-            <div className="rounded-2xl border-2 border-[#2E7D32] bg-[#E8F7EF] px-4 py-4 text-center print:break-inside-avoid">
-              <p className="inline-flex items-center gap-2 text-base font-extrabold uppercase tracking-[0.12em] text-[#1B5E20] sm:text-lg">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2E7D32] text-white">
-                  <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                </span>
-                Resultado da consulta
+            <section
+              aria-label="Resultado da consulta"
+              className={`rounded-2xl border-2 px-4 py-4 print:break-inside-avoid ${summaryStyles[summary.level]}`}
+            >
+              <h2 className="flex items-center gap-2 text-base font-extrabold">
+                {summary.level === "clear" ? (
+                  <Check className="h-5 w-5 shrink-0" />
+                ) : summary.level === "warning" || summary.level === "alert" ? (
+                  <AlertTriangle className="h-5 w-5 shrink-0" />
+                ) : (
+                  <Info className="h-5 w-5 shrink-0" />
+                )}
+                {summary.title}
+              </h2>
+              <p className="mt-1 text-sm leading-relaxed">
+                {summary.description}
               </p>
-              <p className="mt-1 text-xs text-[#5A6B73]">
-                Consulta às bases CheckAuto / DEKRA — sem registros graves nos
-                itens abaixo
-              </p>
-            </div>
+              {missingMessage ? (
+                <p className="mt-2 text-sm font-medium">{missingMessage}</p>
+              ) : null}
+            </section>
 
-            {(() => {
-              const protocoloNetcar = resolveIcheckProtocol(
-                protocol?.protocoloConsulta,
-                protocol?.dataHoraConsulta,
-              );
-              if (
-                !protocol?.dataHoraConsulta &&
-                !protocoloNetcar &&
-                !protocol?.tipoChave
-              ) {
-                return null;
-              }
-              return (
-                <section className="rounded-2xl border-2 border-[#2E7D32]/45 bg-[#E8F7EF] px-4 py-4 shadow-[0_8px_24px_rgba(46,125,50,0.12)] print:break-inside-avoid print:shadow-none">
-                  <h2 className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#1B5E20]">
-                    Consulta CheckAuto / DEKRA
-                  </h2>
-                  <dl className="mt-3 space-y-2">
-                    {protocol?.dataHoraConsulta ? (
-                      <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
-                        <dt className="w-28 shrink-0 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#5A6B73]">
-                          Data / hora
-                        </dt>
-                        <dd className="text-sm font-bold tabular-nums text-[#00283C]">
-                          {protocol.dataHoraConsulta}
-                        </dd>
+            <section className="print:break-inside-avoid">
+              <h2 className="mb-3 text-sm font-extrabold uppercase tracking-wide text-[#00283C]">
+                Resultados individuais do certificado
+              </h2>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {history.map((item, index) => {
+                  const level =
+                    item.riskLevel === "alert"
+                      ? "alert"
+                      : item.riskLevel === "warn"
+                        ? "warning"
+                        : item.clear
+                          ? "clear"
+                          : "unavailable";
+                  return (
+                    <div
+                      key={`${item.key}-${index}`}
+                      className={`flex items-start gap-3 rounded-xl border px-3 py-3 print:break-inside-avoid ${summaryStyles[level]}`}
+                    >
+                      {level === "clear" ? (
+                        <Check className="mt-0.5 h-5 w-5 shrink-0" />
+                      ) : level === "warning" || level === "alert" ? (
+                        <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
+                      ) : (
+                        <Info className="mt-0.5 h-5 w-5 shrink-0" />
+                      )}
+                      <div className="min-w-0">
+                        <h3 className="text-sm font-bold text-[#00283C]">
+                          {item.label}
+                        </h3>
+                        <p className="mt-0.5 text-sm font-bold">
+                          {formatHistoryStatus(item.status)}
+                        </p>
+                        {item.hint ? (
+                          <p className="mt-1 text-xs leading-relaxed text-[#5A6B73]">
+                            {item.hint}
+                          </p>
+                        ) : null}
                       </div>
-                    ) : null}
-                    {protocoloNetcar ? (
-                      <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
-                        <dt className="w-28 shrink-0 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#5A6B73]">
-                          ConsultaID
-                        </dt>
-                        <dd className="text-sm font-bold tabular-nums tracking-wide text-[#00283C]">
-                          {protocoloNetcar}
-                        </dd>
-                      </div>
-                    ) : null}
-                    {protocol?.tipoChave || vehicle.placa ? (
-                      <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
-                        <dt className="w-28 shrink-0 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#5A6B73]">
-                          Chave
-                        </dt>
-                        <dd className="text-sm font-bold text-[#00283C]">
-                          {vehicle.placa
-                            ? `Placa: ${maskPlate(vehicle.placa)} UF: RS`
-                            : String(protocol?.tipoChave || "").replace(
-                                /Placa:\s*[A-Z0-9-]+/i,
-                                (m) => {
-                                  const raw = m.replace(/^Placa:\s*/i, "");
-                                  return `Placa: ${maskPlate(raw)}`;
-                                },
-                              )}
-                        </dd>
-                      </div>
-                    ) : null}
-                  </dl>
-                </section>
-              );
-            })()}
-
-            {(heroA || heroB) && (
-              <div className="grid grid-cols-2 gap-2 print:gap-1.5">
-                {heroA ? (
-                  <img
-                    src={optimizeStockImage(heroA, 900) || heroA}
-                    alt={`${title} — foto 1`}
-                    className="aspect-[4/3] w-full rounded-xl object-cover"
-                  />
-                ) : null}
-                {heroB ? (
-                  <img
-                    src={optimizeStockImage(heroB, 900) || heroB}
-                    alt={`${title} — foto 2`}
-                    className="aspect-[4/3] w-full rounded-xl object-cover"
-                  />
-                ) : null}
+                    </div>
+                  );
+                })}
               </div>
+              <p className="mt-3 text-xs leading-relaxed text-[#5A6B73]">
+                {summary.level === "unavailable"
+                  ? "Os grupos acima estão sem resultados disponíveis."
+                  : "Os resultados disponíveis reproduzem as informações do documento associado."}{" "}
+                Resultado indisponível significa que a informação não pôde ser
+                apresentada.
+              </p>
+            </section>
+
+            <section className="rounded-2xl border border-[#E4EAEF] px-4 py-4 print:break-inside-avoid">
+              <h2 className="text-xs font-extrabold uppercase tracking-wide text-[#00283C]">
+                Fonte e data da consulta
+              </h2>
+              <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+                <div>
+                  <dt className="text-xs text-[#5A6B73]">
+                    Data / hora no documento
+                  </dt>
+                  <dd className="font-bold text-[#00283C]">
+                    {protocol?.dataHoraConsulta || "Indisponível"}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-[#5A6B73]">Fonte</dt>
+                  <dd className="font-bold text-[#00283C]">
+                    {protocol?.sourceLabel ||
+                      (attachment
+                        ? "Certificado anexado; resultados não validados"
+                        : "Nenhum certificado válido disponível")}
+                  </dd>
+                </div>
+                {consultaId ? (
+                  <div>
+                    <dt className="text-xs text-[#5A6B73]">
+                      Protocolo do fornecedor
+                    </dt>
+                    <dd className="font-bold text-[#00283C]">{consultaId}</dd>
+                  </div>
+                ) : null}
+                {protocol?.tipoChave ? (
+                  <div>
+                    <dt className="text-xs text-[#5A6B73]">Identificação</dt>
+                    <dd className="font-bold text-[#00283C]">
+                      {protocol.tipoChave}
+                    </dd>
+                  </div>
+                ) : null}
+              </dl>
+              <p className="mt-3 text-xs leading-relaxed text-[#5A6B73]">
+                Os resultados refletem a data indicada no documento. A
+                publicação deste resumo não realiza uma nova consulta às bases.
+              </p>
+              {isOldConsultation ? (
+                <p className="mt-3 rounded-lg bg-[#FFF8E1] px-3 py-2 text-sm font-semibold text-[#92400E]">
+                  Consulta realizada há mais de 180 dias. Confirme a situação
+                  atual com a Netcar.
+                </p>
+              ) : null}
+              {hasAlienacao ? (
+                <p className="mt-3 rounded-lg bg-[#FFF8E1] px-3 py-2 text-sm leading-relaxed text-[#92400E]">
+                  O certificado registra alienação fiduciária na data da
+                  consulta. Confirme a situação atual e a baixa do gravame com a
+                  Netcar.
+                </p>
+              ) : null}
+            </section>
+
+            {highlights.length ? (
+              <section>
+                <h2 className="mb-3 text-sm font-extrabold text-[#00283C]">
+                  Informações adicionais da consulta
+                </h2>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {highlights.map((item, index) => (
+                    <Spec
+                      key={`${item.label}-${index}`}
+                      label={item.label}
+                      value={item.value}
+                    />
+                  ))}
+                </div>
+              </section>
+            ) : null}
+            {detailSections.length ? (
+              <section className="space-y-3">
+                <h2 className="text-sm font-extrabold text-[#00283C]">
+                  Detalhamento das consultas disponíveis
+                </h2>
+                {detailSections.map((section, index) => (
+                  <details
+                    key={`${section.title}-${index}`}
+                    className="rounded-xl border border-[#E4EAEF] p-3"
+                    open
+                  >
+                    <summary className="cursor-pointer text-sm font-bold text-[#00283C]">
+                      {section.title}
+                    </summary>
+                    <dl className="mt-3 space-y-3">
+                      {section.items.map((item, itemIndex) => (
+                        <div key={`${item.label}-${itemIndex}`}>
+                          <dt className="text-xs text-[#5A6B73]">
+                            {item.label}
+                          </dt>
+                          <dd className="whitespace-pre-wrap break-words text-sm text-[#00283C]">
+                            {item.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </details>
+                ))}
+              </section>
+            ) : (
+              <p className="rounded-xl bg-[#F1F5F9] px-4 py-3 text-sm leading-relaxed text-[#475569]">
+                O detalhamento completo de cada base DEKRA não está disponível
+                neste resumo.
+              </p>
             )}
 
             <section>
               <h2 className="mb-3 rounded-md bg-[#00283C] px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white">
-                Dados do veículo
+                Dados do estoque Netcar
               </h2>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 <Spec
                   label="Marca / modelo"
-                  value={`${vehicle.marca} ${vehicle.modelo}`}
+                  value={`${vehicle.marca || ""} ${vehicle.modelo || vehicle.name || ""}`.trim()}
                 />
                 <Spec label="Ano" value={yearLabel} />
                 <Spec
@@ -452,194 +476,33 @@ export function ICheckLaudoPage() {
                   value={vehicle.potencia ? `${vehicle.potencia} cv` : null}
                 />
               </div>
+              <p className="mt-2 text-xs text-[#5A6B73]">
+                Ficha, quilometragem, opcionais e fotos informados pelo estoque
+                Netcar.
+              </p>
             </section>
-
-            {(() => {
-              const historyCards = normalizeHistoryItems(protocol?.history);
-              if (!historyCards.length) return null;
-              return (
-                <section>
-                  <h2 className="mb-3 rounded-md bg-[#00283C] px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white">
-                    Histórico do veículo
-                  </h2>
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    {historyCards.map((item) => {
-                      const statusLabel = formatHistoryStatus(item.status);
-                      const alienacao =
-                        item.riskLevel === "warn" ||
-                        isAlienacaoFiduciaria(item.status);
-                      const isAlert = !alienacao && item.riskLevel === "alert";
-                      const clear = !alienacao && !isAlert;
-                      return (
-                        <div
-                          key={item.key}
-                          className={`flex items-start gap-3 rounded-xl px-3 py-3 ring-1 ring-inset ${
-                            alienacao
-                              ? "bg-[#FFF8E1] ring-[#F59E0B]/55"
-                              : clear
-                                ? "bg-[#E8F7EF] ring-[#2E7D32]/25"
-                                : isAlert
-                                  ? "bg-[#FEF2F2] ring-[#B91C1C]/25"
-                                  : "bg-[#F5F8F9] ring-[#00283C]/10"
-                          }`}
-                        >
-                          <span
-                            className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white ${
-                              alienacao
-                                ? "bg-[#F59E0B]"
-                                : isAlert
-                                  ? "bg-[#B91C1C]"
-                                  : "bg-[#2E7D32]"
-                            }`}
-                          >
-                            {alienacao ? (
-                              <AlertTriangle
-                                className="h-3.5 w-3.5"
-                                strokeWidth={3}
-                              />
-                            ) : (
-                              <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                            )}
-                          </span>
-                          <div className="min-w-0">
-                            <p className="text-sm font-bold text-[#00283C]">
-                              {item.label}
-                            </p>
-                            <p
-                              className={`mt-0.5 text-sm font-extrabold tracking-[0.04em] ${
-                                alienacao
-                                  ? "normal-case text-[#B45309]"
-                                  : clear
-                                    ? "uppercase tracking-[0.06em] text-[#1B5E20]"
-                                    : isAlert
-                                      ? "uppercase tracking-[0.06em] text-[#B91C1C]"
-                                      : "text-[#00283C]"
-                              }`}
-                            >
-                              {statusLabel}
-                            </p>
-                            {item.hint ? (
-                              <p className="mt-0.5 text-[11px] text-[#5A6B73]/80">
-                                {item.hint}
-                              </p>
-                            ) : null}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </section>
-              );
-            })()}
-
-            {(() => {
-              const history = normalizeHistoryItems(protocol?.history);
-              if (!history.length) return null;
-
-              const hasAlienacao = history.some((item) =>
-                isAlienacaoFiduciaria(item.status),
-              );
-              const hasGraveAlert = history.some((item) => {
-                if (isAlienacaoFiduciaria(item.status)) return false;
-                if (item.riskLevel === "alert") return true;
-                const s = String(item.status || "");
-                return (
-                  /com\s*registro|consta\s+registro|ocorr[eê]ncia/i.test(s) &&
-                  !isClearHistoryStatus(s)
-                );
-              });
-              const cleanCore = history
-                .filter((item) => !isAlienacaoFiduciaria(item.status))
-                .every((item) => item.riskLevel !== "alert");
-
-              if (hasGraveAlert) {
-                return (
-                  <section>
-                    <h2 className="mb-3 rounded-md bg-[#00283C] px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white">
-                      Leitura para financiamento e seguro
-                    </h2>
-                    <div className="rounded-2xl border border-[#B91C1C]/25 bg-[#FEF2F2] px-4 py-4">
-                      <p className="text-sm font-extrabold text-[#991B1B]">
-                        Há apontamento relevante no histórico
-                      </p>
-                      <p className="mt-2 text-sm leading-relaxed text-[#5A6B73]">
-                        Bancos e seguradoras costumam analisar caso a caso
-                        quando existe registro de leilão, sinistro ou
-                        roubo/furto. A Netcar orienta confirmar a situação com a
-                        instituição antes de fechar crédito ou apólice.
-                      </p>
-                    </div>
-                  </section>
-                );
-              }
-
-              if (!cleanCore && !hasAlienacao) return null;
-
-              return (
-                <section>
-                  <h2 className="mb-3 rounded-md bg-[#00283C] px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white">
-                    Leitura para financiamento e seguro
-                  </h2>
-                  <div className="rounded-2xl border border-[#2E7D32]/30 bg-[#F3FBF7] px-4 py-4">
-                    <p className="inline-flex items-center gap-2 text-sm font-extrabold uppercase tracking-[0.08em] text-[#1B5E20]">
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2E7D32] text-white">
-                        <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                      </span>
-                      Sem apontamentos nos itens consultados
-                    </p>
-                    <p className="mt-3 text-sm leading-relaxed text-[#00283C]/85">
-                      De acordo com as bases consultadas, não foram encontrados
-                      registros de leilão, sinistro com perda total ou
-                      ocorrência de roubo/furto. A ausência desses apontamentos
-                      pode contribuir positivamente para análises de
-                      financiamento e contratação de seguro, observadas as
-                      políticas e critérios de cada instituição.
-                    </p>
-                    {hasAlienacao ? (
-                      <div className="mt-3 rounded-xl bg-[#FFF8E1] px-3 py-3 ring-1 ring-inset ring-[#F59E0B]/45">
-                        <p className="text-xs font-extrabold uppercase tracking-[0.1em] text-[#92400E]">
-                          Sobre a alienação fiduciária
-                        </p>
-                        <p className="mt-1.5 text-sm leading-relaxed text-[#78350F]/90">
-                          Consta vínculo com instituição financeira. A quitação
-                          e a baixa do gravame devem ser tratadas com o banco
-                          dentro da negociação. Crédito e seguro continuam
-                          sujeitos às regras de cada instituição.
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="mt-3 text-xs leading-relaxed text-[#5A6B73]">
-                        Crédito e seguro dependem da análise e das regras de
-                        cada instituição.
-                      </p>
-                    )}
-                  </div>
-                </section>
-              );
-            })()}
-
-            {gallery.length > 0 ? (
+            {gallery.length ? (
               <section>
-                <h2 className="mb-3 rounded-md bg-[#00283C] px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white">
+                <h2 className="mb-3 text-sm font-extrabold text-[#00283C]">
                   Fotos do seminovo na Netcar
                 </h2>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {gallery.map((src, index) => (
                     <img
                       key={`${src}-${index}`}
                       src={optimizeStockImage(src, 600) || src}
-                      alt={`${title} — galeria ${index + 1}`}
+                      alt={`${title} — foto ${index + 1}`}
                       className="aspect-[4/3] w-full rounded-lg object-cover"
+                      loading="lazy"
                     />
                   ))}
                 </div>
               </section>
             ) : null}
-
-            {optionals.length > 0 ? (
+            {optionals.length ? (
               <section>
-                <h2 className="mb-3 rounded-md bg-[#00283C] px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white">
-                  Opcionais em destaque
+                <h2 className="mb-3 text-sm font-extrabold text-[#00283C]">
+                  Opcionais informados pela Netcar
                 </h2>
                 <div className="flex flex-wrap gap-1.5">
                   {optionals.map((item) => (
@@ -653,42 +516,23 @@ export function ICheckLaudoPage() {
                 </div>
               </section>
             ) : null}
-
-            <section className="rounded-2xl border border-[#5CD29D] bg-[#F3FBF7] px-4 py-4">
-              <h2 className="text-sm font-extrabold uppercase tracking-[0.08em] text-[#00283C]">
-                Informação conferida pela Netcar
+            <section className="rounded-xl bg-[#F1F5F9] px-4 py-4">
+              <h2 className="text-xs font-extrabold text-[#00283C]">
+                Sobre este resumo
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-[#5A6B73]">
-                As informações acima foram obtidas na consulta CheckAuto/DEKRA
-                disponível para este veículo. Use este material junto com a
-                avaliação presencial e a documentação do Detran.
-              </p>
-            </section>
-
-            <section className="rounded-2xl bg-[#FFF8E8] px-4 py-4">
-              <h2 className="text-xs font-extrabold uppercase tracking-[0.08em] text-[#00283C]">
-                Natureza desta consulta — não é laudo técnico
-              </h2>
-              <p className="mt-2 text-xs leading-relaxed text-[#5A6B73]">
-                Esta consulta{" "}
-                <strong className="font-bold text-[#00283C]">
-                  não tem caráter de laudo técnico
-                </strong>
-                . É um dossiê informativo de procedência e histórico (bases
-                CheckAuto/DEKRA), com fotos e ficha do seminovo. Não substitui
-                vistoria cautelar, laudo de engenharia, perícia estrutural nem
-                inspeção veicular presencial.
+                O resumo Netcar reúne informações do estoque e apresenta
+                resultados do histórico quando disponíveis.
+                {attachment
+                  ? " O botão “Ver certificado anexado” abre o documento de origem."
+                  : ""}{" "}
+                A consulta de histórico não substitui vistoria cautelar, laudo
+                técnico ou inspeção presencial.
               </p>
             </section>
           </div>
-
-          <footer className="flex flex-col gap-1 border-t border-[#E4EAEF] px-5 py-4 text-[11px] text-[#5A6B73] sm:flex-row sm:items-center sm:justify-between sm:px-8">
-            <span>Netcar Multimarcas · i-CHECK</span>
-            <span className="truncate">
-              {typeof window !== "undefined"
-                ? window.location.href
-                : `/laudo/${slug}`}
-            </span>
+          <footer className="border-t border-[#E4EAEF] px-5 py-4 text-[11px] text-[#5A6B73] sm:px-8">
+            Netcar Multimarcas · Resumo i-CHECK
           </footer>
         </div>
       </article>

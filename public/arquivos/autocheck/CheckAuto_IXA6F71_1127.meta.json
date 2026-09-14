@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19985",
+  "placa": "IXA6F71",
+  "pdf": "CheckAuto_IXA6F71_1127.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "ce0bc3b07f89d9bc9cedd9505a2631df53996effbc747a783cc0d1afc4b4536c",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_IXA6F71_1127.pdf",
+  "dataHoraConsulta": "06/12/2025 10:21:31",
+  "issuedAt": "06/12/2025 10:21:31",
+  "consultaId": null,
+  "tipoChave": "Placa: IXA-XX71",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "IXA-XX71",
+    "chassiMasked": "9BHBG5XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Alienação Fiduciária Ativa (Veículo Financiado)",
+      "clear": false,
+      "riskLevel": "warn"
+    }
+  ],
+  "available": true,
+  "allClear": false,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Alienação Fiduciária Ativa (Veículo Financiado)"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.680Z"
+}

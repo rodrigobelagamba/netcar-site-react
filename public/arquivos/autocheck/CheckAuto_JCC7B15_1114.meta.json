@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19906",
+  "placa": "JCC7B15",
+  "pdf": "CheckAuto_JCC7B15_1114.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "08e836816b4db2d9498426c0337099472fe08d682b5364f1540edb3341a5f67a",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JCC7B15_1114.pdf",
+  "dataHoraConsulta": "02/07/2026 11:14:29",
+  "issuedAt": "02/07/2026 11:14:29",
+  "consultaId": null,
+  "tipoChave": "Placa: JCC-XX15",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JCC-XX15",
+    "chassiMasked": "935035XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.747Z"
+}

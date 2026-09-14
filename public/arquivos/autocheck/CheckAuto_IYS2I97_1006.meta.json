@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19931",
+  "placa": "IYS2I97",
+  "pdf": "CheckAuto_IYS2I97_1006.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "d171a0853c1db4213772892012856614eba8a84de2dc79f1a7c8595c9881657a",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_IYS2I97_1006.pdf",
+  "dataHoraConsulta": "24/11/2025 12:22:34",
+  "issuedAt": "24/11/2025 12:22:34",
+  "consultaId": null,
+  "tipoChave": "Placa: IYS-XX97",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "IYS-XX97",
+    "chassiMasked": "VF3M45XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.651Z"
+}

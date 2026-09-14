@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19993",
+  "placa": "JAB1H72",
+  "pdf": "CheckAuto_JAB1H72_0908.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "44e4885c040b1d09792c48c436cb6374e62dfe38a7c749ff4b4a816e95aa5099",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JAB1H72_0908.pdf",
+  "dataHoraConsulta": "31/08/2026 09:08:29",
+  "issuedAt": "31/08/2026 09:08:29",
+  "consultaId": null,
+  "tipoChave": "Placa: JAB-XX72",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JAB-XX72",
+    "chassiMasked": "8AGBB6XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.734Z"
+}

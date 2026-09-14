@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19987",
+  "placa": "IWQ2G41",
+  "pdf": "CheckAuto_IWQ2G41_1436.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "fb8eba240d85b5093f6bb680ff3ccef37c39c3fa19b55cc511a95acdf6200102",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_IWQ2G41_1436.pdf",
+  "dataHoraConsulta": "06/02/2024 14:07:18",
+  "issuedAt": "06/02/2024 14:07:18",
+  "consultaId": null,
+  "tipoChave": "Placa: IWQ-XX41",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "IWQ-XX41",
+    "chassiMasked": "9BHBH5XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.664Z"
+}

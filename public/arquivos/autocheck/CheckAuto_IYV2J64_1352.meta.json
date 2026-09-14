@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19958",
+  "placa": "IYV2J64",
+  "pdf": "CheckAuto_IYV2J64_1352.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "a8fe6da0286d5588552a7dbbb431cb848f502fbfccf49f06d8953c433b604e87",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_IYV2J64_1352.pdf",
+  "dataHoraConsulta": "05/08/2026 13:52:49",
+  "issuedAt": "05/08/2026 13:52:49",
+  "consultaId": null,
+  "tipoChave": "Placa: IYV-XX64",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "IYV-XX64",
+    "chassiMasked": "95PJV8XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.728Z"
+}

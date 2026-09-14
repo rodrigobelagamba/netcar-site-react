@@ -1,14 +1,26 @@
 {
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
   "vehicleId": "19857",
   "placa": "TQU9E34",
-  "consultaId": null,
+  "pdf": "CheckAuto_TQU9E34_1105.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "ba4a527776ea40e57e8ef5f50fdbe98b77578a931c76c744140934dd629e885d",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_TQU9E34_1105.pdf",
   "dataHoraConsulta": "02/06/2026 11:05:47",
-  "tipoChave": "Placa: TQU-XX34 UF: RS",
+  "issuedAt": "02/06/2026 11:05:47",
+  "consultaId": null,
+  "tipoChave": "Placa: TQU-XX34",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "TQU-XX34",
+    "chassiMasked": "94DFAAXXXXXXXXX"
+  },
   "history": [
     {
       "key": "leilao",
       "label": "Leilão",
-      "hint": "Remarketing e leilão",
       "status": "Sem Registro",
       "clear": true,
       "riskLevel": "ok"
@@ -16,7 +28,6 @@
     {
       "key": "sinistro",
       "label": "Sinistro / Perda",
-      "hint": "Perda total / sinistro",
       "status": "Sem Registro",
       "clear": true,
       "riskLevel": "ok"
@@ -24,7 +35,6 @@
     {
       "key": "roubo",
       "label": "Roubo / Furto",
-      "hint": "Bases de roubo e furto",
       "status": "Sem Registro",
       "clear": true,
       "riskLevel": "ok"
@@ -32,12 +42,13 @@
     {
       "key": "estaduais",
       "label": "Informações Estaduais",
-      "hint": "Situação no DETRAN / gravames",
       "status": "Sem Registro",
       "clear": true,
       "riskLevel": "ok"
     }
   ],
+  "available": true,
+  "allClear": true,
   "consultationHighlights": [
     {
       "label": "Leilão",
@@ -56,9 +67,7 @@
       "value": "Sem Registro"
     }
   ],
-  "source": "automacar-pdf",
-  "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260626_091800/CheckAuto_TQU9E34_1105.pdf",
-  "pdf": "CheckAuto_TQU9E34_1105.pdf",
-  "updatedAt": "2026-07-18T19:51:38.336Z",
-  "protocoloConsulta": "06022026"
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.784Z"
 }

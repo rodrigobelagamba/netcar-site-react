@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "20005",
+  "placa": "IWT5234",
+  "pdf": "CheckAuto_IWT5234_1450.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "53a91d4cb6c7f67969cc357a0d8d8cad6133ddfa3847660ecc63acb99a8d741a",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_IWT5234_1450.pdf",
+  "dataHoraConsulta": "29/08/2026 11:43:04",
+  "issuedAt": "29/08/2026 11:43:04",
+  "consultaId": null,
+  "tipoChave": "Placa: IWT-XX34",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "IWT-XX34",
+    "chassiMasked": "94DFFUXXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.675Z"
+}

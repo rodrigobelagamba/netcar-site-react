@@ -1,4 +1,5 @@
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
+import { resolveIcheckAttachment } from "./icheckMetadata";
 import merchandisingConfig from "@/data/vehicle-merchandising.json";
 
 type MerchandisingTemplate = string | null;
@@ -174,5 +175,5 @@ export function hasVehicleFactoryWarranty(
 export function hasVehicleIcheck(
   vehicle: Pick<Vehicle, "pdf" | "pdf_url">,
 ): boolean {
-  return Boolean(vehicle.pdf || vehicle.pdf_url);
+  return Boolean(resolveIcheckAttachment(vehicle));
 }

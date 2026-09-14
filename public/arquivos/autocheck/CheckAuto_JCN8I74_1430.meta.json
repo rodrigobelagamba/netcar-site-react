@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19854",
+  "placa": "JCN8I74",
+  "pdf": "CheckAuto_JCN8I74_1430.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "d3daa03a8881b053fa9eb987dc62bd0147f0c9a57b80444296998c2d18a1248e",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JCN8I74_1430.pdf",
+  "dataHoraConsulta": "01/06/2026 10:23:11",
+  "issuedAt": "01/06/2026 10:23:11",
+  "consultaId": null,
+  "tipoChave": "Placa: JCN-XX74",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JCN-XX74",
+    "chassiMasked": "93HRV3XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.786Z"
+}

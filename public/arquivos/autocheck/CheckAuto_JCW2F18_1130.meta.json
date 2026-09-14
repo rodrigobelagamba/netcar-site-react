@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19915",
+  "placa": "JCW2F18",
+  "pdf": "CheckAuto_JCW2F18_1130.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "82a8cbc6c1de771ae1c1b0722e267780eafe62962bd2c40824276bf212ff47e0",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JCW2F18_1130.pdf",
+  "dataHoraConsulta": "07/05/2026 11:28:56",
+  "issuedAt": "07/05/2026 11:28:56",
+  "consultaId": null,
+  "tipoChave": "Placa: JCW-XX18",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JCW-XX18",
+    "chassiMasked": "8AP359XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.722Z"
+}

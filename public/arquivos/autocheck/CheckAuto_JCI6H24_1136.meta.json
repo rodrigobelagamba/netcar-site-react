@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
+  "vehicleId": "19946",
+  "placa": "JCI6H24",
+  "pdf": "CheckAuto_JCI6H24_1136.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "7d28b1a11ef203d620f1babfb02203c99a18911d05e766ddaa8aaa966420622a",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JCI6H24_1136.pdf",
+  "dataHoraConsulta": "30/07/2026 11:36:55",
+  "issuedAt": "30/07/2026 11:36:55",
+  "consultaId": null,
+  "tipoChave": "Placa: JCI-XX24",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JCI-XX24",
+    "chassiMasked": "988226XXXXXXXXX"
+  },
+  "history": [
+    {
+      "key": "leilao",
+      "label": "Leilão",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "sinistro",
+      "label": "Sinistro / Perda",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "roubo",
+      "label": "Roubo / Furto",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    },
+    {
+      "key": "estaduais",
+      "label": "Informações Estaduais",
+      "status": "Sem Registro",
+      "clear": true,
+      "riskLevel": "ok"
+    }
+  ],
+  "available": true,
+  "allClear": true,
+  "consultationHighlights": [
+    {
+      "label": "Leilão",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Sinistro / Perda",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Roubo / Furto",
+      "value": "Sem Registro"
+    },
+    {
+      "label": "Informações Estaduais",
+      "value": "Sem Registro"
+    }
+  ],
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.766Z"
+}

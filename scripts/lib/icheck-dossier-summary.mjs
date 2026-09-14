@@ -1,6 +1,6 @@
 /**
  * Compacta dossiê CheckAuto pro layout i-CHECK de 3 páginas.
- * Itens indisponíveis são omitidos (não aparecem como card cinza).
+ * Mantém indisponibilidade e apontamentos; uma consulta concluída não significa ausência de registros.
  */
 
 function fieldValue(section, label) {
@@ -16,9 +16,7 @@ function isUnavailable(section, status) {
  * @returns {{ history: Array<{key,label,status,hint,clear,riskLevel}>, highlights: Array<{label,value}> }}
  */
 export function summarizeDossier(sections = []) {
-  const byKey = Object.fromEntries(
-    (sections || []).map((s) => [s.key, s]),
-  );
+  const byKey = Object.fromEntries((sections || []).map((s) => [s.key, s]));
 
   const history = [
     {
@@ -56,18 +54,20 @@ export function summarizeDossier(sections = []) {
       const section = byKey[item.key];
       if (!section) return null;
       const status = section.riskLabel || "";
-      if (isUnavailable(section, status)) return null;
 
-      // Verde = consulta ok / sem registro / info encontrada.
-      // Vermelho só riskLevel "alert" do parser (ocorrência/leilão real).
-      // Indisponível já foi filtrado acima (não aparece).
-      const alert = section.riskLevel === "alert";
-
+      const unavailable = isUnavailable(section, status);
+      const riskLevel = unavailable
+        ? "unavailable"
+        : section.riskLevel === "alert"
+          ? "alert"
+          : section.riskLevel === "ok"
+            ? "ok"
+            : "warn";
       return {
         ...item,
-        status,
-        clear: !alert,
-        riskLevel: alert ? "alert" : "ok",
+        status: unavailable ? null : status,
+        clear: riskLevel === "ok",
+        riskLevel,
       };
     })
     .filter(Boolean);
@@ -115,7 +115,9 @@ export function summarizeDossier(sections = []) {
     !isUnavailable(leilao, leilao?.riskLabel)
       ? { label: "Leilão", value: leilao?.riskLabel || "" }
       : null,
-  ].filter((h) => h && h.value && h.value !== "—" && !/indispon[ií]vel/i.test(h.value));
+  ].filter(
+    (h) => h && h.value && h.value !== "—" && !/indispon[ií]vel/i.test(h.value),
+  );
 
-  return { history, highlights };
+  return { history, highlights, sections };
 }

@@ -1,27 +1,43 @@
+import React from "react";
 import {
   Document,
   Page,
   View,
   Text,
   Image,
+  Link,
   StyleSheet,
 } from "@react-pdf/renderer";
-import { icheckProtocolFromDate } from "../../lib/icheck-protocol";
 import {
-  formatHistoryStatus,
-  isAlienacaoFiduciaria,
-  isClearHistoryStatus,
+  getHistorySummary,
+  normalizeHistoryItems,
   type ICheckHistoryItem,
 } from "./icheckHistory";
+import { getConsultationAgeDays } from "../../lib/icheckMetadata";
 
 const NAVY = "#00283C";
-const MINT = "#5CD29D";
-const GREEN = "#2E7D32";
-const AMBER = "#F59E0B";
-const AMBER_TEXT = "#B45309";
 const MUTED = "#5A6B73";
-const LINE = "#E4EAEF";
+const LINE = "#DFE7EB";
 const SOFT = "#F5F8F9";
+const PALETTES = {
+  clear: {
+    color: "#246B36",
+    backgroundColor: "#EDF8F0",
+    borderColor: "#9DCDA9",
+  },
+  warning: {
+    color: "#87521A",
+    backgroundColor: "#FFF7E6",
+    borderColor: "#E4BE78",
+  },
+  alert: {
+    color: "#A12B2B",
+    backgroundColor: "#FEF0F0",
+    borderColor: "#E3AAAA",
+  },
+  incomplete: { color: "#536570", backgroundColor: SOFT, borderColor: LINE },
+  unavailable: { color: "#536570", backgroundColor: SOFT, borderColor: LINE },
+};
 
 const styles = StyleSheet.create({
   page: {
@@ -29,409 +45,102 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: NAVY,
     paddingTop: 28,
-    paddingBottom: 36,
-    paddingHorizontal: 28,
+    paddingBottom: 48,
+    paddingHorizontal: 32,
     backgroundColor: "#FFFFFF",
   },
-  headerTop: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8,
-  },
-  headerCenter: {
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  partnerBadge: { width: 140, height: 140, objectFit: "contain" },
-  dekraLogo: { width: 160, height: 36, objectFit: "contain" },
-  checkautoLogo: { width: 110, height: 22, objectFit: "contain", marginTop: 2 },
-  netcarLogo: { width: 72, height: 18, objectFit: "contain" },
-  partnerFallback: { fontSize: 14, fontFamily: "Helvetica-Bold", color: GREEN },
-  partnerTitle: {
-    fontSize: 11,
-    fontFamily: "Helvetica-Bold",
-    color: GREEN,
-    textTransform: "uppercase",
-    letterSpacing: 1.0,
-    marginTop: 4,
-  },
-  eyebrow: {
-    fontSize: 8,
-    letterSpacing: 1.1,
-    color: MUTED,
-    textTransform: "uppercase",
-  },
-  reportTag: {
-    fontSize: 8,
-    letterSpacing: 1.0,
-    color: MUTED,
-    textTransform: "uppercase",
-    marginTop: 2,
-  },
-  authorityBox: {
-    backgroundColor: "#F3FBF7",
-    borderWidth: 1,
-    borderColor: MINT,
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    marginBottom: 12,
-  },
-  financeBox: {
-    borderWidth: 1,
-    borderColor: "#2E7D324D",
-    backgroundColor: "#F3FBF7",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 12,
-  },
-  financeBoxAlert: {
-    borderWidth: 1,
-    borderColor: "#B91C1C40",
-    backgroundColor: "#FEF2F2",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 12,
-  },
-  financeTitle: {
-    fontSize: 10,
-    fontFamily: "Helvetica-Bold",
-    color: GREEN,
-    textTransform: "uppercase",
-    letterSpacing: 0.6,
-    marginBottom: 4,
-  },
-  financeTitleAlert: {
-    fontSize: 10,
-    fontFamily: "Helvetica-Bold",
-    color: "#991B1B",
-    marginBottom: 4,
-  },
-  financeBody: { fontSize: 8, color: NAVY, lineHeight: 1.4 },
-  financeAlienacao: {
-    marginTop: 6,
-    backgroundColor: "#FFF8E1",
-    borderWidth: 1,
-    borderColor: "#F59E0B73",
-    borderRadius: 6,
-    padding: 7,
-  },
-  financeAlienacaoTitle: {
-    fontSize: 7.5,
-    fontFamily: "Helvetica-Bold",
-    color: "#92400E",
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-    marginBottom: 2,
-  },
-  financeAlienacaoBody: {
-    fontSize: 7.5,
-    color: "#78350F",
-    lineHeight: 1.35,
-  },
-  authorityTitle: {
-    fontSize: 8,
-    fontFamily: "Helvetica-Bold",
-    color: GREEN,
-    marginBottom: 3,
-    letterSpacing: 0.4,
-  },
-  authorityBody: {
-    fontSize: 7.5,
-    color: MUTED,
-    lineHeight: 1.35,
-  },
-  title: {
-    fontSize: 16,
-    fontFamily: "Helvetica-Bold",
-    color: NAVY,
-    marginBottom: 2,
-  },
-  subtitle: { fontSize: 8, color: MUTED, maxWidth: 280 },
-  statusBanner: {
-    backgroundColor: SOFT,
-    borderWidth: 1,
-    borderColor: MINT,
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    marginBottom: 12,
-    alignItems: "center",
-  },
-  statusBannerApproved: {
-    backgroundColor: "#E8F7EF",
-    borderWidth: 2,
-    borderColor: GREEN,
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    marginBottom: 12,
-    alignItems: "center",
-  },
-  statusBannerApprovedTitle: {
-    fontSize: 15,
-    fontFamily: "Helvetica-Bold",
-    color: GREEN,
-    textAlign: "center",
-    letterSpacing: 1.4,
-  },
-  statusBannerApprovedSub: {
-    fontSize: 8,
-    color: MUTED,
-    textAlign: "center",
-    marginTop: 3,
-    letterSpacing: 0.3,
-  },
-  protocolBox: {
-    backgroundColor: "#E8F7EF",
-    borderWidth: 2,
-    borderColor: "#2E7D3273",
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    marginTop: 8,
-  },
-  protocolTitle: {
-    fontSize: 7.5,
-    fontFamily: "Helvetica-Bold",
-    color: GREEN,
-    letterSpacing: 0.8,
-    textTransform: "uppercase",
-    marginBottom: 6,
-  },
-  protocolGrid: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  protocolCell: { flex: 1 },
-  protocolLabel: {
-    fontSize: 7,
-    color: MUTED,
-    textTransform: "uppercase",
-    letterSpacing: 0.3,
-    marginBottom: 1,
-  },
-  protocolValue: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: NAVY,
-  },
-  protocolValueMono: {
-    fontSize: 11,
-    fontFamily: "Helvetica-Bold",
-    color: NAVY,
-    letterSpacing: 0.6,
-  },
-  historyHint: {
-    fontSize: 6.5,
-    color: MUTED,
-    marginTop: 1,
-  },
-  statusBannerText: {
-    fontSize: 11,
-    fontFamily: "Helvetica-Bold",
-    color: GREEN,
-    textAlign: "center",
-    letterSpacing: 0.6,
-  },
-  statusBannerMuted: {
-    fontSize: 11,
-    fontFamily: "Helvetica-Bold",
-    color: MUTED,
-    textAlign: "center",
-  },
-  heroRow: { flexDirection: "row", gap: 8, marginBottom: 12 },
-  heroImg: {
-    flex: 1,
-    height: 150,
-    borderRadius: 8,
-    objectFit: "cover",
-    backgroundColor: SOFT,
-  },
-  sectionTitle: {
-    fontSize: 10,
-    fontFamily: "Helvetica-Bold",
-    color: "#FFFFFF",
-    backgroundColor: NAVY,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    marginBottom: 8,
-  },
-  idGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    borderWidth: 1,
-    borderColor: LINE,
-    borderRadius: 8,
-    marginBottom: 12,
-    overflow: "hidden",
-  },
-  idCell: {
-    width: "50%",
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingBottom: 12,
+    marginBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: LINE,
   },
-  idLabel: {
-    fontSize: 7,
-    color: MUTED,
-    textTransform: "uppercase",
-    letterSpacing: 0.6,
-    marginBottom: 2,
-  },
-  idValue: { fontSize: 9, fontFamily: "Helvetica-Bold", color: NAVY },
-  historyGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 6,
-    marginBottom: 10,
-  },
-  historyCard: {
-    width: "48.5%",
-    borderWidth: 1,
-    borderColor: LINE,
-    borderRadius: 8,
-    padding: 8,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    backgroundColor: SOFT,
-  },
-  checkIcon: { width: 14, height: 14 },
-  historyLabel: { fontSize: 8, fontFamily: "Helvetica-Bold", color: NAVY },
-  historyStatus: { fontSize: 8, color: MUTED },
-  historyStatusOk: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: GREEN,
-    textTransform: "uppercase",
-  },
-  historyStatusAlert: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: "#B91C1C",
-    textTransform: "uppercase",
-  },
-  historyStatusWarn: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: AMBER_TEXT,
-  },
-  historyCardWarn: {
-    backgroundColor: "#FFF8E1",
-    borderColor: "#F59E0B",
-  },
-  footer: {
-    position: "absolute",
-    bottom: 16,
-    left: 28,
-    right: 28,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderTopWidth: 1,
-    borderTopColor: LINE,
-    paddingTop: 6,
-  },
-  footerText: { fontSize: 7, color: MUTED },
-  galleryGrid: { flexDirection: "row", flexWrap: "wrap", gap: 6 },
-  galleryImg: {
-    width: "32%",
-    height: 120,
-    borderRadius: 6,
-    objectFit: "cover",
-    backgroundColor: SOFT,
-    marginBottom: 4,
-  },
-  specGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 6,
-    marginBottom: 12,
-  },
-  specPill: {
-    borderWidth: 1,
-    borderColor: LINE,
-    borderRadius: 12,
-    paddingVertical: 5,
-    paddingHorizontal: 9,
-    backgroundColor: SOFT,
-  },
-  specText: { fontSize: 8, color: NAVY },
-  chipRow: { flexDirection: "row", flexWrap: "wrap", gap: 5, marginBottom: 12 },
-  chip: {
-    borderWidth: 1,
-    borderColor: LINE,
-    borderRadius: 6,
-    paddingVertical: 4,
-    paddingHorizontal: 7,
-  },
-  chipText: { fontSize: 7.5, color: NAVY },
-  trustBox: {
-    borderWidth: 1,
-    borderColor: MINT,
-    backgroundColor: "#F3FBF7",
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 12,
-  },
-  trustTitle: {
+  netcarLogo: { width: 88, height: 22, objectFit: "contain" },
+  brandName: { fontFamily: "Helvetica-Bold", fontSize: 13, color: NAVY },
+  eyebrow: { fontSize: 7, color: MUTED, letterSpacing: 0.8, marginBottom: 3 },
+  headerTitle: { fontSize: 12, fontFamily: "Helvetica-Bold", color: NAVY },
+  title: { fontSize: 17, fontFamily: "Helvetica-Bold", marginBottom: 4 },
+  subtitle: { fontSize: 8, color: MUTED, lineHeight: 1.4, marginBottom: 12 },
+  banner: { borderWidth: 1, borderRadius: 7, padding: 12, marginBottom: 12 },
+  bannerTitle: { fontSize: 12, fontFamily: "Helvetica-Bold", marginBottom: 4 },
+  bannerBody: { fontSize: 8.5, lineHeight: 1.4 },
+  sectionTitle: {
     fontSize: 10,
     fontFamily: "Helvetica-Bold",
-    color: NAVY,
-    marginBottom: 4,
-  },
-  trustBody: { fontSize: 8, color: MUTED, lineHeight: 1.4 },
-  disclaimerBox: {
-    backgroundColor: "#FFF8E8",
-    borderRadius: 8,
-    paddingVertical: 9,
-    paddingHorizontal: 11,
-    marginBottom: 12,
-  },
-  disclaimerTitle: {
-    fontSize: 8,
-    fontFamily: "Helvetica-Bold",
-    color: NAVY,
-    marginBottom: 3,
-    letterSpacing: 0.4,
-  },
-  disclaimerBody: { fontSize: 7.5, color: MUTED, lineHeight: 1.35 },
-  notesTitle: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: NAVY,
-    marginBottom: 6,
-  },
-  noteItem: {
-    flexDirection: "row",
-    gap: 6,
+    marginTop: 6,
     marginBottom: 5,
+    paddingBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: LINE,
   },
-  bullet: {
-    width: 5,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: MINT,
-    marginTop: 3,
-  },
-  noteText: { flex: 1, fontSize: 7.5, color: MUTED, lineHeight: 1.35 },
-  emptyPhoto: {
-    flex: 1,
-    height: 150,
-    borderRadius: 8,
-    backgroundColor: SOFT,
+  source: { fontSize: 7.5, color: MUTED, lineHeight: 1.4, marginBottom: 8 },
+  row: { flexDirection: "row", marginBottom: 6 },
+  half: { width: "50%", paddingRight: 6 },
+  cell: {
     borderWidth: 1,
     borderColor: LINE,
-    alignItems: "center",
-    justifyContent: "center",
+    borderRadius: 5,
+    padding: 8,
   },
+  label: { fontSize: 7, color: MUTED, marginBottom: 3 },
+  value: { fontSize: 8.5, fontFamily: "Helvetica-Bold", lineHeight: 1.35 },
+  historyStatus: {
+    fontSize: 10,
+    fontFamily: "Helvetica-Bold",
+    lineHeight: 1.3,
+  },
+  hint: { fontSize: 7.5, color: MUTED, marginTop: 4, lineHeight: 1.35 },
+  note: {
+    backgroundColor: SOFT,
+    borderRadius: 6,
+    padding: 10,
+    marginTop: 6,
+    marginBottom: 10,
+  },
+  body: { fontSize: 8, color: MUTED, lineHeight: 1.45 },
+  link: {
+    fontSize: 8,
+    color: "#126346",
+    marginTop: 5,
+    textDecoration: "underline",
+  },
+  detailRow: {
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: LINE,
+  },
+  detailValue: { fontSize: 8, lineHeight: 1.4 },
+  galleryCell: { width: "33.333%", paddingRight: 6 },
+  photo: {
+    width: "100%",
+    height: 96,
+    objectFit: "cover",
+    borderRadius: 5,
+    backgroundColor: SOFT,
+  },
+  optionals: { fontSize: 7.5, lineHeight: 1.4, color: NAVY },
+  footer: {
+    position: "absolute",
+    bottom: 20,
+    left: 32,
+    right: 32,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 6,
+    borderTopWidth: 1,
+    borderTopColor: LINE,
+  },
+  footerText: { fontSize: 7, color: MUTED },
 });
 
 export type { ICheckHistoryItem };
+export type ICheckConsultationSection = {
+  title: string;
+  items: Array<{ label: string; value: string }>;
+};
 
 export type ICheckReportData = {
   vehicleName: string;
@@ -446,525 +155,318 @@ export type ICheckReportData = {
   motor: string;
   chassiMasked: string;
   issuedAt: string;
-  /** Protocolo CheckAuto — veracidade da consulta */
+  /** Identificador real retornado pela fonte; nunca derivado da data. */
   consultaId?: string;
   dataHoraConsulta?: string;
   tipoChave?: string;
   listingUrl: string;
+  sourcePdfUrl?: string;
+  sourceLabel?: string;
   dekraLogoPath: string;
   checkautoLogoPath: string;
-  partnerLogosPath: string; // fallback combinado
+  partnerLogosPath: string;
   netcarLogoPath: string;
-  checkIconPath: string; // png preferencial (react-pdf)
+  checkIconPath: string;
   heroPhotos: string[];
   galleryPhotos: string[];
+  photosUnavailable?: number;
   specs: Array<{ label: string; value: string }>;
   optionals: string[];
   history: ICheckHistoryItem[];
+  /** Compatibilidade com geração offline; o documento deriva o estado dos itens. */
   historyAvailable: boolean;
   allClear: boolean;
-  /** Destaques curtos da consulta (DETRAN, FIPE, etc.) */
   consultationHighlights?: Array<{ label: string; value: string }>;
+  consultationSections?: ICheckConsultationSection[];
 };
 
-function PageFooter({
-  page,
-  total,
-  listingUrl,
-}: {
-  page: number;
-  total: number;
-  listingUrl: string;
-}) {
+function rows<T>(items: T[], width: number): T[][] {
+  const result: T[][] = [];
+  for (let i = 0; i < items.length; i += width)
+    result.push(items.slice(i, i + width));
+  return result;
+}
+
+function PageFooter({ listingUrl }: { listingUrl: string }) {
   return (
     <View style={styles.footer} fixed>
-      <Text style={styles.footerText}>Netcar Multimarcas · i-CHECK</Text>
-      <Text style={styles.footerText}>{listingUrl}</Text>
-      <Text style={styles.footerText}>
-        Página {page} de {total}
-      </Text>
+      <Text style={styles.footerText}>Netcar Multimarcas · Resumo i-CHECK</Text>
+      <Link src={listingUrl} style={styles.footerText}>
+        Página do veículo
+      </Link>
+      <Text
+        style={styles.footerText}
+        render={({ pageNumber, totalPages }) =>
+          `Página ${pageNumber} de ${totalPages}`
+        }
+      />
     </View>
   );
 }
 
-function Header({
-  data,
-  showAuthority = false,
-}: {
-  data: ICheckReportData;
-  showAuthority?: boolean;
-}) {
-  const hasPartnerBadge = Boolean(data.partnerLogosPath);
-  const hasDekra = Boolean(data.dekraLogoPath);
-  const hasCheckauto = Boolean(data.checkautoLogoPath);
-
+function Header({ data }: { data: ICheckReportData }) {
   return (
-    <View>
-      <View style={styles.headerTop}>
-        <Text style={styles.eyebrow}>Histórico consultado via</Text>
-        {data.netcarLogoPath ? (
-          <Image src={data.netcarLogoPath} style={styles.netcarLogo} />
-        ) : (
-          <Text
-            style={{ fontSize: 11, fontFamily: "Helvetica-Bold", color: NAVY }}
-          >
-            Netcar
-          </Text>
-        )}
-      </View>
-
-      <View style={styles.headerCenter}>
-        {hasPartnerBadge ? (
-          <Image src={data.partnerLogosPath} style={styles.partnerBadge} />
-        ) : (
-          <View style={{ alignItems: "center", gap: 2 }}>
-            {hasDekra ? (
-              <Image src={data.dekraLogoPath} style={styles.dekraLogo} />
-            ) : null}
-            {hasCheckauto ? (
-              <Image
-                src={data.checkautoLogoPath}
-                style={styles.checkautoLogo}
-              />
-            ) : null}
-            {!hasDekra && !hasCheckauto ? (
-              <Text style={styles.partnerFallback}>DEKRA · CheckAuto</Text>
-            ) : null}
-          </View>
-        )}
-        <Text style={styles.partnerTitle}>DEKRA · CheckAuto</Text>
-        <Text style={styles.reportTag}>Relatório i-CHECK do seminovo</Text>
-      </View>
-
-      {showAuthority ? (
-        <View style={styles.authorityBox}>
-          <Text style={styles.authorityTitle}>
-            AUTORIDADE DEKRA — LÍDER GLOBAL EM INSPEÇÃO VEICULAR
-          </Text>
-          <Text style={styles.authorityBody}>
-            A DEKRA é a maior empresa de inspeção veicular do mundo e líder
-            global em testes, vistorias e certificações. Fundada na Alemanha em
-            1925. Histórico consultado via CheckAuto, uma empresa DEKRA.
-          </Text>
-        </View>
-      ) : null}
-    </View>
-  );
-}
-
-/** Mesma regra da tela: bloco "Leitura para financiamento e seguro". */
-function FinancingBlock({ history }: { history: ICheckHistoryItem[] }) {
-  if (!history.length) return null;
-
-  const hasAlienacao = history.some((item) =>
-    isAlienacaoFiduciaria(item.status),
-  );
-  const hasGraveAlert = history.some((item) => {
-    if (isAlienacaoFiduciaria(item.status)) return false;
-    if (item.riskLevel === "alert") return true;
-    const s = String(item.status || "");
-    return (
-      /com\s*registro|consta\s+registro|ocorr[eê]ncia/i.test(s) &&
-      !isClearHistoryStatus(s)
-    );
-  });
-  const cleanCore = history
-    .filter((item) => !isAlienacaoFiduciaria(item.status))
-    .every((item) => item.riskLevel !== "alert");
-
-  if (hasGraveAlert) {
-    return (
+    <View style={styles.header} wrap={false}>
       <View>
-        <Text style={styles.sectionTitle}>
-          LEITURA PARA FINANCIAMENTO E SEGURO
-        </Text>
-        <View style={styles.financeBoxAlert}>
-          <Text style={styles.financeTitleAlert}>
-            Há apontamento relevante no histórico
-          </Text>
-          <Text style={[styles.financeBody, { color: MUTED }]}>
-            Bancos e seguradoras costumam analisar caso a caso quando existe
-            registro de leilão, sinistro ou roubo/furto. A Netcar orienta
-            confirmar a situação com a instituição antes de fechar crédito ou
-            apólice.
-          </Text>
-        </View>
+        <Text style={styles.eyebrow}>NETCAR MULTIMARCAS</Text>
+        <Text style={styles.headerTitle}>Resumo i-CHECK</Text>
       </View>
-    );
-  }
-
-  if (!cleanCore && !hasAlienacao) return null;
-
-  return (
-    <View>
-      <Text style={styles.sectionTitle}>
-        LEITURA PARA FINANCIAMENTO E SEGURO
-      </Text>
-      <View style={styles.financeBox}>
-        <Text style={styles.financeTitle}>
-          Sem apontamentos nos itens consultados
-        </Text>
-        <Text style={styles.financeBody}>
-          De acordo com as bases consultadas, não foram encontrados registros de
-          leilão, sinistro com perda total ou ocorrência de roubo/furto. A
-          ausência desses apontamentos pode contribuir positivamente para
-          análises de financiamento e contratação de seguro, observadas as
-          políticas e critérios de cada instituição.
-        </Text>
-        {hasAlienacao ? (
-          <View style={styles.financeAlienacao}>
-            <Text style={styles.financeAlienacaoTitle}>
-              Sobre a alienação fiduciária
-            </Text>
-            <Text style={styles.financeAlienacaoBody}>
-              Consta vínculo com instituição financeira. A quitação e a baixa do
-              gravame devem ser tratadas com o banco dentro da negociação.
-              Crédito e seguro continuam sujeitos às regras de cada instituição.
-            </Text>
-          </View>
-        ) : (
-          <Text
-            style={{
-              fontSize: 7.5,
-              color: MUTED,
-              marginTop: 5,
-              lineHeight: 1.35,
-            }}
-          >
-            Crédito e seguro dependem da análise e das regras de cada
-            instituição.
-          </Text>
-        )}
-      </View>
+      {data.netcarLogoPath ? (
+        <Image src={data.netcarLogoPath} style={styles.netcarLogo} />
+      ) : (
+        <Text style={styles.brandName}>Netcar</Text>
+      )}
     </View>
+  );
+}
+
+function FieldGrid({
+  items,
+  columns = 2,
+}: {
+  items: Array<{ label: string; value: string }>;
+  columns?: 2 | 3;
+}) {
+  return (
+    <React.Fragment>
+      {rows(items, columns).map((row, index) => (
+        <View key={index} style={styles.row} wrap={false}>
+          {row.map((item, cellIndex) => (
+            <View
+              key={`${item.label}-${cellIndex}`}
+              style={[
+                styles.half,
+                { width: columns === 3 ? "33.333%" : "50%" },
+              ]}
+            >
+              <View style={[styles.cell, columns === 3 ? { padding: 6 } : {}]}>
+                <Text style={styles.label}>{item.label}</Text>
+                <Text style={styles.value}>{item.value}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      ))}
+    </React.Fragment>
   );
 }
 
 export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
-  const history = (data.history || []).filter(
-    (item) => item.status && !/indispon[ií]vel/i.test(item.status),
-  );
-  const potencia = data.specs.find((s) => s.label === "Potência")?.value || "";
-  // Mesmos campos da tela (sem Chassi / Emissão inventados)
-  const vehicleFields = [
-    ["Marca / modelo", `${data.marca} ${data.modelo}`.trim()],
-    ["Ano", data.yearLabel],
-    ["Placa", data.placaMasked],
-    ["Km", data.kmLabel],
-    ["Cor", data.cor],
-    ["Combustível", data.combustivel],
-    ["Câmbio", data.cambio],
-    ["Motor", data.motor],
-    ["Potência", potencia],
-  ].filter(([, value]) => value && value !== "—");
-
-  const dataHora = data.dataHoraConsulta || data.issuedAt || "";
-  const protocoloNetcar =
-    data.consultaId || icheckProtocolFromDate(dataHora) || "";
-  const hasProtocol = Boolean(protocoloNetcar || dataHora || data.tipoChave);
-  const hasPhotos = data.galleryPhotos.length > 0 || data.heroPhotos.length > 0;
-  const hasOptionals = data.optionals.length > 0;
-  const hasPage2 = hasPhotos || hasOptionals;
-
-  const totalPages = 1 + (hasPage2 ? 1 : 0);
-  const heroA = data.heroPhotos[0];
-  const heroB = data.heroPhotos[1] || data.heroPhotos[0];
+  const history = normalizeHistoryItems(data.history);
+  const summary = getHistorySummary(history);
+  const palette = PALETTES[summary.level];
+  const dataHora = data.dataHoraConsulta || data.issuedAt;
+  const ageDays = getConsultationAgeDays(dataHora);
+  const consultationFields = [
+    {
+      label: "Data e hora da consulta na fonte",
+      value: dataHora || "Não informada na fonte",
+    },
+    ...(data.consultaId
+      ? [
+          {
+            label: "Identificador da consulta na fonte",
+            value: data.consultaId,
+          },
+        ]
+      : []),
+    ...(data.tipoChave
+      ? [{ label: "Chave de consulta", value: data.tipoChave }]
+      : []),
+  ];
+  const catalogFields = [
+    {
+      label: "Marca / modelo",
+      value: `${data.marca} ${data.modelo}`.trim() || data.vehicleName,
+    },
+    { label: "Placa do cadastro", value: data.placaMasked },
+    { label: "Ano fabricação / modelo", value: data.yearLabel },
+    { label: "Quilometragem anunciada", value: data.kmLabel },
+    { label: "Cor", value: data.cor },
+    { label: "Combustível", value: data.combustivel },
+    { label: "Câmbio", value: data.cambio },
+    { label: "Motor", value: data.motor },
+    ...data.specs.filter((item) => ["Potência", "Portas"].includes(item.label)),
+  ].filter((item) => item.value && item.value !== "—");
+  const gallery = [
+    ...new Set(
+      data.galleryPhotos.length ? data.galleryPhotos : data.heroPhotos,
+    ),
+  ].slice(0, 9);
+  const hasCatalog =
+    catalogFields.length > 0 || gallery.length > 0 || data.optionals.length > 0;
 
   return (
     <Document
-      title={`i-CHECK ${data.vehicleName}`}
+      title={`Resumo i-CHECK - ${data.vehicleName}`}
       author="Netcar Multimarcas"
-      subject="Relatório de procedência do seminovo"
+      subject="Resumo das consultas disponíveis e dados do anúncio"
     >
-      {/* Página 1 — mesmo fluxo da tela até financiamento */}
-      <Page size="A4" style={styles.page}>
-        <Header data={data} showAuthority />
-        <Text style={styles.title}>{data.vehicleName}</Text>
-        <Text style={styles.subtitle}>
-          Dossiê com fotos, ficha técnica e histórico CheckAuto/DEKRA —
-          transparência Netcar na sua compra.
-        </Text>
-        <Text
-          style={{
-            fontSize: 7.5,
-            color: MUTED,
-            marginTop: 4,
-            marginBottom: 2,
-            maxWidth: 460,
-          }}
-        >
-          Esta consulta não tem caráter de laudo técnico. Não constitui vistoria
-          cautelar nem laudo estrutural/pericial.
-        </Text>
-
-        {/* Tela sempre mostra o banner verde — PDF espelha */}
-        <View style={[styles.statusBannerApproved, { marginTop: 10 }]}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 8,
-            }}
-          >
-            {data.checkIconPath ? (
-              <Image
-                src={data.checkIconPath}
-                style={{ width: 18, height: 18 }}
-              />
-            ) : null}
-            <Text style={styles.statusBannerApprovedTitle}>
-              RESULTADO DA CONSULTA
-            </Text>
-          </View>
-          <Text style={styles.statusBannerApprovedSub}>
-            Consulta às bases CheckAuto / DEKRA — sem registros graves nos itens
-            abaixo
+      <Page size="A4" style={styles.page} wrap>
+        <Header data={data} />
+        <View wrap={false}>
+          <Text style={styles.title}>{data.vehicleName}</Text>
+          <Text style={styles.subtitle}>
+            {data.placaMasked ? `Placa do cadastro: ${data.placaMasked}. ` : ""}
+            {data.sourcePdfUrl || summary.level !== "unavailable"
+              ? "Resultados do documento associado ao veículo."
+              : "Disponibilidade das consultas associadas ao veículo."}
           </Text>
         </View>
-
-        {hasProtocol ? (
-          <View style={styles.protocolBox}>
-            <Text style={styles.protocolTitle}>Consulta CheckAuto / DEKRA</Text>
-            <View style={styles.protocolGrid}>
-              {dataHora ? (
-                <View style={styles.protocolCell}>
-                  <Text style={styles.protocolLabel}>Data / hora</Text>
-                  <Text style={styles.protocolValue}>{dataHora}</Text>
-                </View>
-              ) : null}
-              {protocoloNetcar ? (
-                <View style={styles.protocolCell}>
-                  <Text style={styles.protocolLabel}>ConsultaID</Text>
-                  <Text style={styles.protocolValueMono}>
-                    {protocoloNetcar}
-                  </Text>
-                </View>
-              ) : null}
-              {data.tipoChave ? (
-                <View style={styles.protocolCell}>
-                  <Text style={styles.protocolLabel}>Chave</Text>
-                  <Text style={styles.protocolValue}>{data.tipoChave}</Text>
-                </View>
-              ) : null}
-            </View>
+        <View style={[styles.banner, palette]} wrap={false}>
+          <Text style={styles.bannerTitle}>{summary.title}</Text>
+          <Text style={styles.bannerBody}>{summary.description}</Text>
+        </View>
+        <FieldGrid items={consultationFields} />
+        {ageDays !== null && ageDays > 180 ? (
+          <View
+            style={[
+              styles.note,
+              { backgroundColor: PALETTES.warning.backgroundColor },
+            ]}
+            wrap={false}
+          >
+            <Text style={[styles.body, { color: PALETTES.warning.color }]}>
+              Consulta realizada há mais de 180 dias. Os resultados retratam o
+              documento dessa data; solicite uma consulta atualizada para
+              confirmar a situação.
+            </Text>
           </View>
         ) : null}
-
-        {heroA || heroB ? (
-          <View style={styles.heroRow}>
-            {heroA ? (
-              <Image src={heroA} style={styles.heroImg} />
-            ) : (
-              <View style={styles.emptyPhoto}>
-                <Text style={{ color: MUTED, fontSize: 8 }}>Sem foto</Text>
-              </View>
-            )}
-            {heroB ? <Image src={heroB} style={styles.heroImg} /> : null}
+        <Text style={styles.sectionTitle} minPresenceAhead={85}>
+          Consultas individuais
+        </Text>
+        <Text style={styles.source}>
+          Fonte:{" "}
+          {data.sourceLabel ||
+            (data.sourcePdfUrl || summary.level !== "unavailable"
+              ? "certificado CheckAuto / DEKRA associado"
+              : "nenhum retorno validado disponível")}
+          . Os resultados se referem à data da consulta.
+        </Text>
+        {rows(history, 2).map((row, index) => (
+          <View key={index} style={styles.row} wrap={false}>
+            {row.map((item) => {
+              const itemPalette =
+                item.riskLevel === "alert"
+                  ? PALETTES.alert
+                  : item.riskLevel === "warn"
+                    ? PALETTES.warning
+                    : item.clear
+                      ? PALETTES.clear
+                      : PALETTES.unavailable;
+              return (
+                <View key={item.key} style={styles.half}>
+                  <View style={[styles.cell, itemPalette]}>
+                    <Text style={styles.label}>{item.label}</Text>
+                    <Text style={styles.historyStatus}>
+                      {item.status || "Resultado indisponível"}
+                    </Text>
+                    {item.hint ? (
+                      <Text style={styles.hint}>{item.hint}</Text>
+                    ) : null}
+                  </View>
+                </View>
+              );
+            })}
           </View>
-        ) : null}
-
-        {vehicleFields.length > 0 ? (
+        ))}
+        {(data.consultationHighlights || []).length > 0 ? (
           <>
-            <Text style={styles.sectionTitle}>DADOS DO VEÍCULO</Text>
-            <View style={styles.idGrid}>
-              {vehicleFields.map(([label, value], index, arr) => (
-                <View
-                  key={label}
-                  style={[
-                    styles.idCell,
-                    index >= arr.length - 2 ? { borderBottomWidth: 0 } : {},
-                  ]}
-                >
-                  <Text style={styles.idLabel}>{label}</Text>
-                  <Text style={styles.idValue}>{value}</Text>
+            <Text style={styles.sectionTitle} minPresenceAhead={55}>
+              Outros dados retornados pela consulta
+            </Text>
+            <FieldGrid items={data.consultationHighlights!} />
+          </>
+        ) : null}
+        {(data.consultationSections || []).map((section, sectionIndex) => (
+          <View key={`${section.title}-${sectionIndex}`}>
+            <Text style={styles.sectionTitle} minPresenceAhead={45}>
+              {section.title}
+            </Text>
+            {section.items.map((item, itemIndex) => (
+              <View
+                key={`${item.label}-${itemIndex}`}
+                style={styles.detailRow}
+                wrap={false}
+              >
+                <Text style={styles.label} minPresenceAhead={14}>
+                  {item.label}
+                </Text>
+                <Text style={styles.detailValue}>{item.value}</Text>
+              </View>
+            ))}
+          </View>
+        ))}
+        <View style={styles.note} wrap={false}>
+          <Text style={styles.body}>
+            Este resumo reproduz os resultados disponíveis. Resultado
+            indisponível não equivale a ausência de registro. O certificado
+            resumido apresenta quatro grupos; consultas adicionais só são
+            exibidas quando constam no retorno associado.
+          </Text>
+          {data.sourcePdfUrl ? (
+            <Link src={data.sourcePdfUrl} style={styles.link}>
+              Abrir certificado original CheckAuto / DEKRA
+            </Link>
+          ) : null}
+        </View>
+        <View style={styles.note} wrap={false}>
+          <Text style={styles.body}>
+            A consulta tem caráter informativo e não substitui vistoria cautelar
+            ou laudo técnico. Registros podem mudar após a data informada. Dados
+            do anúncio e fotos, apresentados a seguir quando disponíveis, são
+            fornecidos pelo catálogo Netcar.
+          </Text>
+        </View>
+        <PageFooter listingUrl={data.listingUrl} />
+      </Page>
+      {hasCatalog ? (
+        <Page size="A4" style={styles.page} wrap>
+          <Text style={styles.eyebrow}>CATÁLOGO NETCAR · DADOS DO ANÚNCIO</Text>
+          <Text style={styles.title}>{data.vehicleName}</Text>
+          <Text style={styles.subtitle}>
+            Dados e fotos do catálogo Netcar. Não fazem parte do certificado
+            CheckAuto / DEKRA.
+          </Text>
+          <Text style={styles.sectionTitle} minPresenceAhead={55}>
+            Ficha do anúncio
+          </Text>
+          <FieldGrid items={catalogFields} columns={3} />
+          {gallery.length > 0 ? (
+            <>
+              <Text style={styles.sectionTitle} minPresenceAhead={120}>
+                Fotos do anúncio
+              </Text>
+              {rows(gallery, 3).map((row, index) => (
+                <View key={index} style={styles.row} wrap={false}>
+                  {row.map((src, photoIndex) => (
+                    <View
+                      key={`${index}-${photoIndex}`}
+                      style={styles.galleryCell}
+                    >
+                      <Image src={src} style={styles.photo} />
+                    </View>
+                  ))}
                 </View>
               ))}
-            </View>
-          </>
-        ) : null}
-
-        {history.length > 0 ? (
-          <>
-            <Text style={styles.sectionTitle}>HISTÓRICO DO VEÍCULO</Text>
-            <View style={styles.historyGrid}>
-              {history.map((item) => {
-                const isWarn =
-                  item.riskLevel === "warn" ||
-                  isAlienacaoFiduciaria(item.status);
-                const isAlert =
-                  !isWarn &&
-                  (item.riskLevel === "alert" ||
-                    (item.clear === false &&
-                      !/^consultado\.?$/i.test(String(item.status || "")) &&
-                      !/^sem\s*registro/i.test(String(item.status || ""))));
-                const statusLabel = formatHistoryStatus(item.status);
-                const isOk =
-                  !isWarn && !isAlert && /^nada\s*consta$/i.test(statusLabel);
-                return (
-                  <View
-                    key={item.key}
-                    style={[
-                      styles.historyCard,
-                      isWarn ? styles.historyCardWarn : {},
-                      !isWarn && !isAlert
-                        ? {
-                            backgroundColor: "#E8F7EF",
-                            borderColor: "#2E7D3240",
-                          }
-                        : {},
-                      isAlert
-                        ? {
-                            backgroundColor: "#FEF2F2",
-                            borderColor: "#B91C1C40",
-                          }
-                        : {},
-                    ]}
-                  >
-                    {isOk && data.checkIconPath ? (
-                      <Image
-                        src={data.checkIconPath}
-                        style={styles.checkIcon}
-                      />
-                    ) : (
-                      <View
-                        style={{
-                          width: 14,
-                          height: 14,
-                          borderRadius: 7,
-                          backgroundColor: isWarn
-                            ? AMBER
-                            : isAlert
-                              ? "#B91C1C"
-                              : GREEN,
-                        }}
-                      />
-                    )}
-                    <View style={{ flex: 1 }}>
-                      <Text style={styles.historyLabel}>{item.label}</Text>
-                      <Text
-                        style={
-                          isWarn
-                            ? styles.historyStatusWarn
-                            : isAlert
-                              ? styles.historyStatusAlert
-                              : isOk
-                                ? styles.historyStatusOk
-                                : styles.historyStatus
-                        }
-                      >
-                        {statusLabel}
-                      </Text>
-                      {item.hint ? (
-                        <Text style={styles.historyHint}>{item.hint}</Text>
-                      ) : null}
-                    </View>
-                  </View>
-                );
-              })}
-            </View>
-          </>
-        ) : null}
-
-        <FinancingBlock history={history} />
-
-        {!hasPage2 ? (
-          <>
-            <View style={styles.trustBox}>
-              <Text style={styles.trustTitle}>
-                INFORMAÇÃO CONFERIDA PELA NETCAR
-              </Text>
-              <Text style={styles.trustBody}>
-                As informações acima foram obtidas na consulta CheckAuto/DEKRA
-                disponível para este veículo. Use este material junto com a
-                avaliação presencial e a documentação do Detran.
-              </Text>
-            </View>
-            <View style={styles.disclaimerBox}>
-              <Text style={styles.disclaimerTitle}>
-                NATUREZA DESTA CONSULTA — NÃO É LAUDO TÉCNICO
-              </Text>
-              <Text style={styles.disclaimerBody}>
-                Esta consulta NÃO tem caráter de laudo técnico. É um dossiê
-                informativo de procedência e histórico (bases CheckAuto/DEKRA),
-                com fotos e ficha do seminovo. Não substitui vistoria cautelar,
-                laudo de engenharia, perícia estrutural nem inspeção veicular
-                presencial.
-              </Text>
-            </View>
-          </>
-        ) : null}
-
-        <PageFooter page={1} total={totalPages} listingUrl={data.listingUrl} />
-      </Page>
-
-      {/* Página 2 — galeria + opcionais + disclaimers (ordem da tela) */}
-      {hasPage2 ? (
-        <Page size="A4" style={styles.page}>
-          <Header data={data} />
-          {hasPhotos ? (
-            <>
-              <Text style={styles.sectionTitle}>
-                FOTOS DO SEMINOVO NA NETCAR
-              </Text>
-              <View style={styles.galleryGrid}>
-                {(data.galleryPhotos.length > 0
-                  ? data.galleryPhotos.slice(0, 9)
-                  : data.heroPhotos
-                ).map((src, index) => (
-                  <Image
-                    key={`${src}-${index}`}
-                    src={src}
-                    style={styles.galleryImg}
-                  />
-                ))}
-              </View>
             </>
           ) : null}
-
-          {hasOptionals ? (
-            <>
-              <Text style={[styles.sectionTitle, { marginTop: 10 }]}>
-                OPCIONAIS EM DESTAQUE
-              </Text>
-              <View style={styles.chipRow}>
-                {data.optionals.slice(0, 28).map((item) => (
-                  <View key={item} style={styles.chip}>
-                    <Text style={styles.chipText}>{item}</Text>
-                  </View>
-                ))}
-              </View>
-            </>
+          {data.photosUnavailable ? (
+            <Text style={styles.source}>
+              {data.photosUnavailable} foto(s) não puderam ser incluídas. Veja a
+              galeria completa na página do veículo.
+            </Text>
           ) : null}
-
-          <View style={styles.trustBox}>
-            <Text style={styles.trustTitle}>
-              INFORMAÇÃO CONFERIDA PELA NETCAR
-            </Text>
-            <Text style={styles.trustBody}>
-              As informações acima foram obtidas na consulta CheckAuto/DEKRA
-              disponível para este veículo. Use este material junto com a
-              avaliação presencial e a documentação do Detran.
-            </Text>
-          </View>
-
-          <View style={styles.disclaimerBox}>
-            <Text style={styles.disclaimerTitle}>
-              NATUREZA DESTA CONSULTA — NÃO É LAUDO TÉCNICO
-            </Text>
-            <Text style={styles.disclaimerBody}>
-              Esta consulta NÃO tem caráter de laudo técnico. É um dossiê
-              informativo de procedência e histórico (bases CheckAuto/DEKRA),
-              com fotos e ficha do seminovo. Não substitui vistoria cautelar,
-              laudo de engenharia, perícia estrutural nem inspeção veicular
-              presencial.
-            </Text>
-          </View>
-
-          <PageFooter
-            page={2}
-            total={totalPages}
-            listingUrl={data.listingUrl}
-          />
+          {data.optionals.length > 0 ? (
+            <View wrap={false}>
+              <Text style={styles.sectionTitle} minPresenceAhead={38}>
+                Opcionais anunciados
+              </Text>
+              <Text style={styles.optionals}>{data.optionals.join(" · ")}</Text>
+            </View>
+          ) : null}
+          <PageFooter listingUrl={data.listingUrl} />
         </Page>
       ) : null}
     </Document>

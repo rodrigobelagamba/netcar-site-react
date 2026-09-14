@@ -1,14 +1,26 @@
 {
+  "schemaVersion": 2,
+  "parserVersion": "checkauto-certificate-v2",
   "vehicleId": "19904",
   "placa": "JAX1G72",
-  "consultaId": null,
+  "pdf": "CheckAuto_JAX1G72_1026.pdf",
+  "source": "checkauto-pdf",
+  "sourceSha256": "f4db21899b016eab9a9437319d9cc018c837188b577ea148cd6394986b326551",
+  "sourceUrl": "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JAX1G72_1026.pdf",
   "dataHoraConsulta": "01/07/2026 09:31:35",
-  "tipoChave": "Placa: JAX-XX72 UF: RS",
+  "issuedAt": "01/07/2026 09:31:35",
+  "consultaId": null,
+  "tipoChave": "Placa: JAX-XX72",
+  "identity": {
+    "verified": true,
+    "method": "masked-compatible",
+    "placaMasked": "JAX-XX72",
+    "chassiMasked": "9BGEB7XXXXXXXXX"
+  },
   "history": [
     {
       "key": "leilao",
       "label": "Leilão",
-      "hint": "Remarketing e leilão",
       "status": "Sem Registro",
       "clear": true,
       "riskLevel": "ok"
@@ -16,7 +28,6 @@
     {
       "key": "sinistro",
       "label": "Sinistro / Perda",
-      "hint": "Perda total / sinistro",
       "status": "Sem Registro",
       "clear": true,
       "riskLevel": "ok"
@@ -24,7 +35,6 @@
     {
       "key": "roubo",
       "label": "Roubo / Furto",
-      "hint": "Bases de roubo e furto",
       "status": "Sem Registro",
       "clear": true,
       "riskLevel": "ok"
@@ -32,12 +42,13 @@
     {
       "key": "estaduais",
       "label": "Informações Estaduais",
-      "hint": "Situação no DETRAN / gravames",
       "status": "INF Alienacao Fidu",
       "clear": false,
       "riskLevel": "warn"
     }
   ],
+  "available": true,
+  "allClear": false,
   "consultationHighlights": [
     {
       "label": "Leilão",
@@ -56,9 +67,7 @@
       "value": "INF Alienacao Fidu"
     }
   ],
-  "source": "automacar-pdf",
-  "sourcePath": "/Users/marcelomarchis/Library/CloudStorage/Dropbox/AUTOMACAR/ArquivosSite/AutomacarSite_20260707_091600/CheckAuto_JAX1G72_1026.pdf",
-  "pdf": "CheckAuto_JAX1G72_1026.pdf",
-  "updatedAt": "2026-07-18T19:51:36.165Z",
-  "protocoloConsulta": "07012026"
+  "sections": [],
+  "consultationSections": [],
+  "updatedAt": "2026-09-14T17:09:15.739Z"
 }
