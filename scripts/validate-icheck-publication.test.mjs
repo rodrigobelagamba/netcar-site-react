@@ -3,13 +3,18 @@ import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { createHash } from "node:crypto";
+import { EventEmitter } from "node:events";
 import {
   metadataForPublication,
   deploymentConfiguration,
+  pinnedHostAlgorithms,
+  safeDiagnostic,
 } from "./publish-icheck-metadata.mjs";
 import {
   prepareRelease,
   restoreMutableFiles,
+  checkConnection,
 } from "./deploy-icheck-release.mjs";
 
 const certificate = {
@@ -124,12 +129,11 @@ test("SSH publication fails closed without a pinned destination", () => {
         SSH_PASSWORD: "fixture",
         SSH_KNOWN_HOSTS_PATH: "/nonexistent/fixture",
       }),
-    /Fingerprint/,
+    { code: "PIN_NOT_CONFIGURED" },
   );
-  assert.throws(
-    () => deploymentConfiguration({ SSH_DIR: "../other-site" }),
-    /destino/,
-  );
+  assert.throws(() => deploymentConfiguration({ SSH_DIR: "../other-site" }), {
+    code: "INVALID_CONFIGURATION",
+  });
 });
 
 test("explicit mounted SSH identity takes precedence over a legacy password", () => {
@@ -137,11 +141,15 @@ test("explicit mounted SSH identity takes precedence over a legacy password", ()
   try {
     const keyPath = join(directory, "id_netcar");
     writeFileSync(keyPath, "test-only-key");
-    const configuration = deploymentConfiguration({
-      SSH_HOST_FINGERPRINT: `SHA256:${"A".repeat(43)}`,
-      SSH_KEY_PATH: keyPath,
-      SSH_PASSWORD: "legacy-password",
-    });
+    const hostKey = fixtureHostKey("ssh-rsa");
+    const configuration = deploymentConfiguration(
+      {
+        SSH_HOST_FINGERPRINT: hostKey.pin,
+        SSH_KEY_PATH: keyPath,
+        SSH_PASSWORD: "legacy-password",
+      },
+      { scanHostKeys: () => hostKey.line },
+    );
     assert.equal(configuration.ssh.privateKey.toString(), "test-only-key");
     assert.equal(configuration.ssh.password, undefined);
   } finally {
@@ -206,6 +214,127 @@ test("rollback restores through temporary rename and reports failed public paths
   );
   assert.equal(
     JSON.stringify(failures).includes("private connection details"),
+    false,
+  );
+});
+
+function fixtureHostKey(type, suffix = "fixture") {
+  const length = Buffer.alloc(4);
+  length.writeUInt32BE(Buffer.byteLength(type));
+  const key = Buffer.concat([length, Buffer.from(type), Buffer.from(suffix)]);
+  return {
+    key,
+    pin: `SHA256:${createHash("sha256").update(key).digest("base64").replace(/=+$/, "")}`,
+    line: `fixture.invalid ${type} ${key.toString("base64")}`,
+  };
+}
+
+test("SSH negotiates only the key algorithm matching the trusted fingerprint", () => {
+  const rsa = fixtureHostKey("ssh-rsa");
+  const ed25519 = fixtureHostKey("ssh-ed25519");
+  const scanned = `${ed25519.line}\n${rsa.line}`;
+  assert.deepEqual(pinnedHostAlgorithms(scanned, [rsa.pin]), [
+    "rsa-sha2-512",
+    "rsa-sha2-256",
+    "ssh-rsa",
+  ]);
+  assert.deepEqual(pinnedHostAlgorithms(scanned, [ed25519.pin]), [
+    "ssh-ed25519",
+  ]);
+  assert.throws(
+    () => pinnedHostAlgorithms(scanned, [`SHA256:${"A".repeat(43)}`]),
+    { code: "HOST_KEY_PIN_MISMATCH" },
+  );
+  assert.throws(
+    () =>
+      pinnedHostAlgorithms(rsa.line.replace(" ssh-rsa ", " ssh-ed25519 "), [
+        rsa.pin,
+      ]),
+    { code: "HOST_KEY_PIN_MISMATCH" },
+  );
+  const config = deploymentConfiguration(
+    { SSH_HOST_FINGERPRINT: rsa.pin, SSH_PASSWORD: "fixture" },
+    { scanHostKeys: () => scanned },
+  );
+  assert.deepEqual(config.ssh.algorithms.serverHostKey, [
+    "rsa-sha2-512",
+    "rsa-sha2-256",
+    "ssh-rsa",
+  ]);
+  assert.equal(config.ssh.hostVerifier(rsa.key), true);
+  assert.equal(
+    config.ssh.hostVerifier(ed25519.key),
+    false,
+    "scan discovery never trusts an unpinned key",
+  );
+});
+
+test("connection preflight only opens SSH/SFTP and reads directory metadata", async () => {
+  const calls = [];
+  const sftp = {
+    stat(path, callback) {
+      calls.push(`stat:${path}`);
+      callback(null, { isDirectory: () => true });
+    },
+    end() {
+      calls.push("sftp:end");
+    },
+  };
+  class ClientFixture extends EventEmitter {
+    connect() {
+      calls.push("connect");
+      queueMicrotask(() => this.emit("ready"));
+    }
+    sftp(callback) {
+      calls.push("sftp");
+      callback(null, sftp);
+    }
+    end() {
+      calls.push("end");
+    }
+  }
+  const result = await checkConnection(
+    { ssh: {}, remoteDirectory: "www/arquivos/autocheck" },
+    { createClient: () => new ClientFixture() },
+  );
+  assert.equal(result.success, true);
+  assert.deepEqual(calls, [
+    "connect",
+    "sftp",
+    "stat:www",
+    "stat:www/arquivos/autocheck",
+    "sftp:end",
+    "end",
+  ]);
+});
+
+test("diagnostics distinguish safe connection stages without exposing server error text", () => {
+  const secret = "password=/private/secret";
+  assert.deepEqual(
+    safeDiagnostic(
+      Object.assign(
+        new Error(`All configured authentication methods failed ${secret}`),
+        { icheckStage: "ssh_connect" },
+      ),
+    ),
+    { stage: "ssh_connect", code: "AUTHENTICATION_FAILED" },
+  );
+  assert.deepEqual(
+    safeDiagnostic(
+      Object.assign(new Error(`Host denied (verification failed) ${secret}`), {
+        icheckStage: "ssh_connect",
+      }),
+    ),
+    { stage: "ssh_connect", code: "HOST_KEY_REJECTED" },
+  );
+  assert.deepEqual(
+    safeDiagnostic({ code: 3, message: secret, icheckStage: "sftp_stat" }),
+    { stage: "sftp_stat", code: "SFTP_PERMISSION_DENIED" },
+  );
+  assert.equal(
+    JSON.stringify(
+      safeDiagnostic({ code: secret, icheckStage: secret, message: secret }),
+    ).includes(secret),
     false,
   );
 });
