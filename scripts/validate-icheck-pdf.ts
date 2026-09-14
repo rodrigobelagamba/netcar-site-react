@@ -194,6 +194,11 @@ for (const sample of cases) {
       text.text.includes(sample.expected),
       `${sample.name}: missing expected result`,
     );
+    assert.equal(
+      /^APROVADO$/m.test(text.pages[0].text),
+      sample.name === "clear" || sample.name === "multipage",
+      `${sample.name}: approval badge must appear only for complete clear results`,
+    );
     assert.ok(text.pages[0].text.includes("Consultas individuais"));
     assert.ok(text.text.includes("Relatório i-CHECK Netcar"));
     assert.ok(
