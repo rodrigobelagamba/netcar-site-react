@@ -398,7 +398,7 @@
     "title": "Hatch seminovo para a cidade: o que comparar",
     "description": "Hatch e compacto seminovo para a cidade: consumo, manobra e opções no estoque Netcar.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-31",
+    "updatedAt": "2026-09-14",
     "readMinutes": 6,
     "sections": [
       {
@@ -449,7 +449,7 @@
             "combustivel": "Flex",
             "destaque": "Baixa KM",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/polo-track-first-edition-2023-jcp-xx22-19978",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/11092026polo%20first%20JCP2F22CAPA.png"
           },
           {
             "modelo": "Volkswagen Polo Highline",
@@ -576,7 +576,7 @@
     "title": "Quanto custa um seminovo em Esteio em 2026?",
     "description": "Veja como ano, versão, quilometragem e estado influenciam o preço, com exemplos do estoque da Netcar.",
     "publishedAt": "2026-06-23",
-    "updatedAt": "2026-09-07",
+    "updatedAt": "2026-09-14",
     "readMinutes": 6,
     "sections": [
       {
@@ -590,7 +590,7 @@
       {
         "type": "ul",
         "items": [
-          "Entrada (primeiro carro, uso urbano): a partir de R$ 49.900",
+          "Entrada (primeiro carro, uso urbano): a partir de R$ 44.900",
           "Faixa intermediária: valores entre o menor e o maior preço do estoque",
           "Premium (SUV, pickup, seminovo recente): até R$ 199.900"
         ]
@@ -677,7 +677,7 @@
     "title": "Como escolher o primeiro carro usado",
     "description": "Primeiro carro: como organizar orçamento, uso, seguro, manutenção, financiamento e test drive.",
     "publishedAt": "2026-06-23",
-    "updatedAt": "2026-09-07",
+    "updatedAt": "2026-09-14",
     "readMinutes": 6,
     "sections": [
       {
@@ -731,15 +731,15 @@
             "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
           },
           {
-            "modelo": "Volkswagen Fox Xtreme",
-            "ano": "2019/2020",
-            "km": "67.688 km",
-            "preco": "R$ 69.900,00",
+            "modelo": "Chevrolet Onix Lt",
+            "ano": "2017",
+            "km": "98.858 km",
+            "preco": "R$ 61.900,00",
             "cambio": "Manual",
             "combustivel": "Flex",
-            "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/fox-xtreme-2020-izw-xx17-19952",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/14082026FOX%20XTREME%20IZW6D17CAPA.png"
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/onix-lt-2017-ixt-xx75-19965",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/26082026onix%20lt%20IXT9375CAPA.png"
           }
         ]
       },
