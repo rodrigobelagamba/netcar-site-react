@@ -14,6 +14,7 @@ import {
   type ICheckHistoryItem,
 } from "./icheckHistory";
 import { getConsultationAgeDays } from "../../lib/icheckMetadata";
+import { VEHICLE_EQUIPMENT_NOTICE } from "../../lib/vehicleEquipmentNotice";
 
 const NAVY = "#00283C";
 const MUTED = "#5A6B73";
@@ -101,11 +102,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   body: { fontSize: 8, color: MUTED, lineHeight: 1.45 },
-  link: {
-    fontSize: 8,
-    color: "#126346",
-    marginTop: 5,
-    textDecoration: "underline",
+  consultationNote: { marginBottom: 7 },
+  equipmentNotice: {
+    fontSize: 7.5,
+    lineHeight: 1.4,
+    color: MUTED,
+    marginTop: 7,
   },
   detailRow: {
     paddingVertical: 6,
@@ -160,7 +162,6 @@ export type ICheckReportData = {
   dataHoraConsulta?: string;
   tipoChave?: string;
   listingUrl: string;
-  sourcePdfUrl?: string;
   sourceLabel?: string;
   dekraLogoPath: string;
   checkautoLogoPath: string;
@@ -178,6 +179,7 @@ export type ICheckReportData = {
   allClear: boolean;
   consultationHighlights?: Array<{ label: string; value: string }>;
   consultationSections?: ICheckConsultationSection[];
+  consultationNotes?: string[];
 };
 
 function rows<T>(items: T[], width: number): T[][] {
@@ -190,7 +192,9 @@ function rows<T>(items: T[], width: number): T[][] {
 function PageFooter({ listingUrl }: { listingUrl: string }) {
   return (
     <View style={styles.footer} fixed>
-      <Text style={styles.footerText}>Netcar Multimarcas · Resumo i-CHECK</Text>
+      <Text style={styles.footerText}>
+        Netcar Multimarcas · Relatório i-CHECK
+      </Text>
       <Link src={listingUrl} style={styles.footerText}>
         Página do veículo
       </Link>
@@ -209,7 +213,7 @@ function Header({ data }: { data: ICheckReportData }) {
     <View style={styles.header} wrap={false}>
       <View>
         <Text style={styles.eyebrow}>NETCAR MULTIMARCAS</Text>
-        <Text style={styles.headerTitle}>Resumo i-CHECK</Text>
+        <Text style={styles.headerTitle}>Relatório i-CHECK Netcar</Text>
       </View>
       {data.netcarLogoPath ? (
         <Image src={data.netcarLogoPath} style={styles.netcarLogo} />
@@ -257,21 +261,27 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
   const palette = PALETTES[summary.level];
   const dataHora = data.dataHoraConsulta || data.issuedAt;
   const ageDays = getConsultationAgeDays(dataHora);
+  const consultationNotes = (data.consultationNotes || []).filter((note) =>
+    note.trim(),
+  );
   const consultationFields = [
     {
-      label: "Data e hora da consulta na fonte",
+      label: "Data e hora da consulta",
       value: dataHora || "Não informada na fonte",
     },
     ...(data.consultaId
       ? [
           {
-            label: "Identificador da consulta na fonte",
+            label: "Identificador da consulta",
             value: data.consultaId,
           },
         ]
       : []),
     ...(data.tipoChave
       ? [{ label: "Chave de consulta", value: data.tipoChave }]
+      : []),
+    ...(data.chassiMasked
+      ? [{ label: "Chassi da consulta", value: data.chassiMasked }]
       : []),
   ];
   const catalogFields = [
@@ -298,9 +308,9 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
 
   return (
     <Document
-      title={`Resumo i-CHECK - ${data.vehicleName}`}
+      title={`Relatório i-CHECK Netcar - ${data.vehicleName}`}
       author="Netcar Multimarcas"
-      subject="Resumo das consultas disponíveis e dados do anúncio"
+      subject="Resultados e observações das consultas de histórico e dados do anúncio"
     >
       <Page size="A4" style={styles.page} wrap>
         <Header data={data} />
@@ -308,8 +318,8 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
           <Text style={styles.title}>{data.vehicleName}</Text>
           <Text style={styles.subtitle}>
             {data.placaMasked ? `Placa do cadastro: ${data.placaMasked}. ` : ""}
-            {data.sourcePdfUrl || summary.level !== "unavailable"
-              ? "Resultados do documento associado ao veículo."
+            {summary.level !== "unavailable"
+              ? "Consulta de histórico do veículo apresentada pela Netcar."
               : "Disponibilidade das consultas associadas ao veículo."}
           </Text>
         </View>
@@ -328,7 +338,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
           >
             <Text style={[styles.body, { color: PALETTES.warning.color }]}>
               Consulta realizada há mais de 180 dias. Os resultados retratam o
-              documento dessa data; solicite uma consulta atualizada para
+              histórico dessa data; solicite uma consulta atualizada para
               confirmar a situação.
             </Text>
           </View>
@@ -339,8 +349,8 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
         <Text style={styles.source}>
           Fonte:{" "}
           {data.sourceLabel ||
-            (data.sourcePdfUrl || summary.level !== "unavailable"
-              ? "certificado CheckAuto / DEKRA associado"
+            (summary.level !== "unavailable"
+              ? "Consulta CheckAuto / DEKRA"
               : "nenhum retorno validado disponível")}
           . Os resultados se referem à data da consulta.
         </Text>
@@ -371,6 +381,26 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
             })}
           </View>
         ))}
+        {consultationNotes.length > 0 ? (
+          <View>
+            <Text style={styles.sectionTitle} minPresenceAhead={65}>
+              Observações da consulta
+            </Text>
+            <Text style={styles.source}>
+              Observações explicativas do documento de origem.
+            </Text>
+            {consultationNotes.map((note, index) => (
+              <View key={index} style={styles.consultationNote}>
+                <Text style={styles.body} orphans={3} widows={3}>
+                  <Text style={{ fontFamily: "Helvetica-Bold" }}>
+                    {index + 1}.{" "}
+                  </Text>
+                  {note}
+                </Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
         {(data.consultationHighlights || []).length > 0 ? (
           <>
             <Text style={styles.sectionTitle} minPresenceAhead={55}>
@@ -400,16 +430,11 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
         ))}
         <View style={styles.note} wrap={false}>
           <Text style={styles.body}>
-            Este resumo reproduz os resultados disponíveis. Resultado
-            indisponível não equivale a ausência de registro. O certificado
-            resumido apresenta quatro grupos; consultas adicionais só são
-            exibidas quando constam no retorno associado.
+            Este relatório apresenta os resultados e as observações disponíveis
+            na consulta. Resultado indisponível não equivale à ausência de
+            registro. Dados adicionais são apresentados quando retornados pela
+            consulta.
           </Text>
-          {data.sourcePdfUrl ? (
-            <Link src={data.sourcePdfUrl} style={styles.link}>
-              Abrir certificado original CheckAuto / DEKRA
-            </Link>
-          ) : null}
         </View>
         <View style={styles.note} wrap={false}>
           <Text style={styles.body}>
@@ -426,8 +451,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
           <Text style={styles.eyebrow}>CATÁLOGO NETCAR · DADOS DO ANÚNCIO</Text>
           <Text style={styles.title}>{data.vehicleName}</Text>
           <Text style={styles.subtitle}>
-            Dados e fotos do catálogo Netcar. Não fazem parte do certificado
-            CheckAuto / DEKRA.
+            Dados e fotos fornecidos pelo catálogo Netcar.
           </Text>
           <Text style={styles.sectionTitle} minPresenceAhead={55}>
             Ficha do anúncio
@@ -464,6 +488,9 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
                 Opcionais anunciados
               </Text>
               <Text style={styles.optionals}>{data.optionals.join(" · ")}</Text>
+              <Text style={styles.equipmentNotice}>
+                {VEHICLE_EQUIPMENT_NOTICE}
+              </Text>
             </View>
           ) : null}
           <PageFooter listingUrl={data.listingUrl} />

@@ -19,7 +19,7 @@ import { summarizeDossier } from "./lib/icheck-dossier-summary.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const SITE_ORIGIN = "https://www.netcarmultimarcas.com.br";
-export const PARSER_VERSION = "checkauto-certificate-v2";
+export const PARSER_VERSION = "checkauto-certificate-v3";
 const hash = (buffer) => createHash("sha256").update(buffer).digest("hex");
 export const cleanPlate = (value) =>
   String(value || "")
@@ -179,6 +179,7 @@ export function buildCertificateMetadata(
       chassiMasked: parsed.chassi,
     },
     history: parsed.history,
+    consultationNotes: parsed.consultationNotes || [],
     available: parsed.available,
     allClear: parsed.allClear && (!trusted || dossier.allClear),
     consultationHighlights: [
@@ -222,6 +223,7 @@ function unavailableMetadata(
       chassiMasked: null,
     },
     history: emptyHistory(),
+    consultationNotes: [],
     available: false,
     allClear: false,
     consultationHighlights: [],

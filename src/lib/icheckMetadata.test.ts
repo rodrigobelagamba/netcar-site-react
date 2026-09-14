@@ -316,3 +316,59 @@ test("a rejected catalog attachment retains its invalid status after unsafe URL 
   assert.equal(result.status, "invalid_attachment");
   assert.equal(result.protocol, null);
 });
+
+test("consultation observations and exact date/time survive validation without rewriting", () => {
+  const notes = [
+    "Observação explicativa de origem: alienação fiduciária não equivale a sinistro.",
+    "Data e hora da consulta: 22/07/2026 10:35:29.\nAs informações devem ser lidas conforme a fonte.",
+  ];
+  const result = validateIcheckMetadata(
+    {
+      ...metadata,
+      consultationNotes: notes,
+      identity: { verified: true, chassiMasked: "9BHPC8XXXXXXXXX" },
+    },
+    vehicle,
+  );
+  assert.ok(result);
+  assert.deepEqual(result.consultationNotes, notes);
+  assert.equal(result.dataHoraConsulta, "22/07/2026 10:35:29");
+  assert.equal(result.chassiMasked, "9BHPC8XXXXXXXXX");
+  assert.equal(result.sourceLabel, "Consulta CheckAuto / DEKRA");
+  assert.equal(getHistorySummary(result.history).level, "clear");
+  for (const invalid of [
+    { consultationNotes: [42] },
+    { consultationNotes: ["x".repeat(4001)] },
+    { consultationNotes: Array(41).fill("Nota") },
+    { consultationNotes: ["   "] },
+    { identity: { verified: true, chassiMasked: "9BHPC81ABCD123456" } },
+  ]) {
+    assert.equal(
+      validateIcheckMetadata({ ...metadata, ...invalid }, vehicle),
+      null,
+    );
+  }
+});
+
+test("unavailable metadata accepts an explicitly missing masked chassis", () => {
+  const result = validateIcheckMetadata(
+    {
+      ...metadata,
+      source: "unavailable",
+      available: false,
+      sourceSha256: null,
+      identity: { verified: false, chassiMasked: null },
+      dataHoraConsulta: null,
+      history: clearHistory.map((item) => ({
+        ...item,
+        status: null,
+        clear: false,
+        riskLevel: "unavailable",
+      })),
+    },
+    vehicle,
+  );
+  assert.ok(result);
+  assert.equal(result.chassiMasked, undefined);
+  assert.equal(getHistorySummary(result.history).level, "unavailable");
+});

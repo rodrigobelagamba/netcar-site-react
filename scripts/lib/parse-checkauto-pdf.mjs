@@ -81,6 +81,47 @@ export function extractCertificateHistory(text) {
   });
 }
 
+/** Some certificates store their notes before the heading in PDF content order. */
+export function extractCertificateNotes(text) {
+  const notes = [];
+  let current = [];
+  let inNotes = false;
+  const flush = () => {
+    const note = clean(current.join(" "));
+    if (note && !notes.includes(note)) notes.push(note);
+    current = [];
+  };
+  for (const raw of String(text || "").split(/\r?\n/)) {
+    const line = clean(raw);
+    if (/^(?:CONFIAN[CÇ]A GARANTIDA|A Netcar atesta)/i.test(line)) {
+      flush();
+      break;
+    }
+    if (/^Observa[cç][oõ]es(?: Explicativas)?\s*:?$/i.test(line)) {
+      flush();
+      inNotes = true;
+      continue;
+    }
+    if (
+      /^(?:As informa[cç][oõ]es apresentadas|O relat[oó]rio tem|A exist[eê]ncia de|A aus[eê]ncia de|Como os sistemas)\b/i.test(
+        line,
+      )
+    ) {
+      flush();
+      inNotes = true;
+    }
+    if (!inNotes) continue;
+    if (!line) {
+      flush();
+      continue;
+    }
+    if (/^(?:PAGE \d+|-- \d+ of \d+ --)$/i.test(line)) continue;
+    current.push(line);
+  }
+  flush();
+  return notes;
+}
+
 export function extractCheckAutoProtocol(source) {
   const text = String(source || "");
   const consultaId =
@@ -154,6 +195,7 @@ export async function parseCheckAutoPdf(pdfPathOrBuffer) {
       chassi,
       ...protocol,
       history,
+      consultationNotes: extractCertificateNotes(rawText),
       allClear: history.every((item) => item.clear),
       available,
       pages: result.total,
@@ -174,6 +216,7 @@ export async function parseCheckAutoPdf(pdfPathOrBuffer) {
         label,
         ...classifyCertificateStatus(null),
       })),
+      consultationNotes: [],
       allClear: false,
       available: false,
     };

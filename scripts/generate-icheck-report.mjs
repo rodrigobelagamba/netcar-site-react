@@ -131,7 +131,8 @@ function maskChassi(chassi) {
   const clean = String(chassi || "")
     .toUpperCase()
     .replace(/\s+/g, "");
-  if (clean.length < 8) return clean || "—";
+  if (/X{3,}/.test(clean)) return clean;
+  if (clean.length < 8) return clean;
   return `${clean.slice(0, 5)}${"X".repeat(Math.max(0, clean.length - 8))}${clean.slice(-3)}`;
 }
 
@@ -507,7 +508,8 @@ async function main() {
     combustivel: vehicle.combustivel || "—",
     cambio: vehicle.cambio || "—",
     motor: vehicle.motor || "—",
-    chassiMasked: maskChassi(historyParse.chassi || vehicle.chassi),
+    chassiMasked:
+      historyParse.identity?.chassiMasked || maskChassi(historyParse.chassi),
     issuedAt: historyParse.dataHoraConsulta || historyParse.issuedAt || "",
     consultaId: historyParse.consultaId || "",
     dataHoraConsulta:
@@ -555,9 +557,9 @@ async function main() {
     allClear: Boolean(
       historyParse.allClear && webHistory.every((item) => item.clear),
     ),
-    sourcePdfUrl: pdfUrl || undefined,
-    sourceLabel: pdfUrl ? "Certificado CheckAuto / DEKRA associado" : undefined,
+    sourceLabel: pdfUrl ? "Consulta CheckAuto / DEKRA" : undefined,
     consultationHighlights: webHighlights,
+    consultationNotes: historyParse.consultationNotes || [],
     consultationSections: xmlTrustedForProtocol
       ? dossierSectionsForDisplay(dossier?.sections)
       : [],

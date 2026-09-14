@@ -7,10 +7,10 @@ import {
   Check,
   AlertTriangle,
   Info,
-  ExternalLink,
 } from "lucide-react";
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { maskPlate } from "@/lib/slug";
+import { VEHICLE_EQUIPMENT_NOTICE } from "@/lib/vehicleEquipmentNotice";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
@@ -27,7 +27,6 @@ import {
 import {
   getConsultationAgeDays,
   loadIcheckMetadata,
-  resolveIcheckAttachment,
   type ICheckMetadataResult,
 } from "@/lib/icheckMetadata";
 
@@ -81,7 +80,7 @@ export function ICheckLaudoPage() {
   useMetaTags({
     title: vehicle ? `Consulta i-CHECK — ${title}` : "Consulta i-CHECK",
     description:
-      "Resultados do certificado CheckAuto/DEKRA anexado e dados do estoque Netcar. Não substitui laudo técnico ou vistoria cautelar.",
+      "Relatório i-CHECK Netcar com resultados da consulta CheckAuto/DEKRA e dados do estoque. Não substitui laudo técnico ou vistoria cautelar.",
     robots: "noindex, nofollow",
   });
 
@@ -109,7 +108,6 @@ export function ICheckLaudoPage() {
     );
 
   const { protocol, status } = loaded.result;
-  const attachment = resolveIcheckAttachment(vehicle);
   const history = normalizeHistoryItems(protocol?.history);
   const summary = getHistorySummary(history);
   const consultaId = protocol?.consultaId || protocol?.protocoloConsulta;
@@ -150,13 +148,13 @@ export function ICheckLaudoPage() {
   );
   const missingMessage =
     vehicle.icheckAttachmentInvalid || status === "invalid_attachment"
-      ? "O anexo cadastrado não é um certificado PDF válido. Os resultados ficam indisponíveis até a correção do arquivo."
+      ? "As informações desta consulta estão indisponíveis. Confirme os dados com a Netcar."
       : status === "no_pdf"
-        ? "Este veículo não tem certificado PDF anexado no estoque."
+        ? "A consulta de histórico deste veículo ainda não está disponível."
         : status === "invalid_metadata"
-          ? "Não foi possível validar a associação dos resultados a este veículo e ao certificado anexado."
+          ? "Não foi possível validar as informações desta consulta. Confirme os dados com a Netcar."
           : status === "unavailable"
-            ? "Os resultados do certificado não puderam ser carregados. Você pode consultar o documento anexado."
+            ? "Não foi possível carregar os resultados. Tente novamente ou fale com a Netcar."
             : null;
 
   const handleSavePdf = async () => {
@@ -169,10 +167,10 @@ export function ICheckLaudoPage() {
         : slug;
       await downloadICheckReportPdf(
         data,
-        `Resumo-Netcar-i-CHECK-${platePart}.pdf`,
+        `Relatorio-Netcar-i-CHECK-${platePart}.pdf`,
       );
     } catch (error) {
-      console.error("[i-CHECK] falha ao gerar resumo PDF", error);
+      console.error("[i-CHECK] falha ao gerar relatório PDF", error);
       window.alert("Não foi possível gerar o PDF. Tente novamente.");
     } finally {
       setSavingPdf(false);
@@ -192,30 +190,19 @@ export function ICheckLaudoPage() {
             Voltar ao veículo
           </Link>
           <div className="flex flex-wrap items-center gap-2">
-            {attachment ? (
-              <a
-                href={attachment.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-[#00283C]/25 bg-white px-3 py-2 text-xs font-bold text-[#00283C]"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                Ver certificado anexado
-              </a>
-            ) : null}
             <button
               type="button"
               onClick={() => void handleSavePdf()}
               disabled={savingPdf}
-              className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-white px-3 py-2 text-xs font-bold text-secondary disabled:cursor-wait disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-full border border-[#00283C]/25 bg-white px-3 py-2 text-xs font-bold text-[#00283C] transition-colors hover:border-[#00283C]/50 hover:bg-[#F1F5F9] disabled:cursor-wait disabled:opacity-60"
             >
               <Download className="h-3.5 w-3.5" />
-              {savingPdf ? "Gerando…" : "Baixar resumo Netcar"}
+              {savingPdf ? "Gerando…" : "Baixar relatório Netcar"}
             </button>
             <button
               type="button"
               onClick={() => window.print()}
-              className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-2 text-xs font-bold text-white"
+              className="inline-flex items-center gap-2 rounded-full bg-[#00283C] px-3 py-2 text-xs font-bold text-white"
             >
               <Printer className="h-3.5 w-3.5" />
               Imprimir
@@ -238,7 +225,7 @@ export function ICheckLaudoPage() {
                   i-CHECK Netcar
                 </p>
                 <p className="text-xs text-[#5A6B73]">
-                  Certificado e resultados da consulta
+                  Relatório de histórico do veículo
                 </p>
               </div>
             </div>
@@ -260,6 +247,68 @@ export function ICheckLaudoPage() {
                 Dados do estoque Netcar
               </p>
             </div>
+
+            <section className="rounded-2xl border border-[#E4EAEF] px-4 py-4 print:break-inside-avoid">
+              <h2 className="text-xs font-extrabold uppercase tracking-wide text-[#00283C]">
+                Consulta CheckAuto / DEKRA
+              </h2>
+              <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+                <div>
+                  <dt className="text-xs text-[#5A6B73]">
+                    Data e hora da consulta
+                  </dt>
+                  <dd className="mt-1 text-lg font-extrabold tabular-nums text-[#00283C] sm:text-xl">
+                    {protocol?.dataHoraConsulta || "Indisponível"}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-[#5A6B73]">Fonte</dt>
+                  <dd className="font-bold text-[#00283C]">
+                    {protocol?.sourceLabel || "Indisponível"}
+                  </dd>
+                </div>
+                {consultaId ? (
+                  <div>
+                    <dt className="text-xs text-[#5A6B73]">
+                      Protocolo do fornecedor
+                    </dt>
+                    <dd className="font-bold text-[#00283C]">{consultaId}</dd>
+                  </div>
+                ) : null}
+                {protocol?.chassiMasked ? (
+                  <div>
+                    <dt className="text-xs text-[#5A6B73]">Chassi</dt>
+                    <dd className="font-bold tracking-wide text-[#00283C]">
+                      {protocol.chassiMasked}
+                    </dd>
+                  </div>
+                ) : null}
+                {protocol?.tipoChave ? (
+                  <div>
+                    <dt className="text-xs text-[#5A6B73]">Identificação</dt>
+                    <dd className="font-bold text-[#00283C]">
+                      {protocol.tipoChave}
+                    </dd>
+                  </div>
+                ) : null}
+              </dl>
+              <p className="mt-3 text-xs leading-relaxed text-[#5A6B73]">
+                Os resultados refletem a situação na data e hora indicadas
+                acima.
+              </p>
+              {isOldConsultation ? (
+                <p className="mt-3 rounded-lg bg-[#FFF8E1] px-3 py-2 text-sm font-semibold text-[#92400E]">
+                  Consulta realizada há mais de 180 dias. Confirme a situação
+                  atual com a Netcar.
+                </p>
+              ) : null}
+              {hasAlienacao ? (
+                <p className="mt-3 rounded-lg bg-[#FFF8E1] px-3 py-2 text-sm leading-relaxed text-[#92400E]">
+                  A consulta registra alienação fiduciária na data indicada.
+                  Confirme a situação atual e a baixa do gravame com a Netcar.
+                </p>
+              ) : null}
+            </section>
 
             <section
               aria-label="Resultado da consulta"
@@ -285,7 +334,7 @@ export function ICheckLaudoPage() {
 
             <section className="print:break-inside-avoid">
               <h2 className="mb-3 text-sm font-extrabold uppercase tracking-wide text-[#00283C]">
-                Resultados individuais do certificado
+                Resultados individuais da consulta
               </h2>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {history.map((item, index) => {
@@ -329,68 +378,35 @@ export function ICheckLaudoPage() {
               <p className="mt-3 text-xs leading-relaxed text-[#5A6B73]">
                 {summary.level === "unavailable"
                   ? "Os grupos acima estão sem resultados disponíveis."
-                  : "Os resultados disponíveis reproduzem as informações do documento associado."}{" "}
+                  : "Os resultados disponíveis são apresentados conforme a consulta CheckAuto / DEKRA."}{" "}
                 Resultado indisponível significa que a informação não pôde ser
                 apresentada.
               </p>
             </section>
 
-            <section className="rounded-2xl border border-[#E4EAEF] px-4 py-4 print:break-inside-avoid">
-              <h2 className="text-xs font-extrabold uppercase tracking-wide text-[#00283C]">
-                Fonte e data da consulta
+            <section className="rounded-2xl border border-[#E4EAEF] px-4 py-4">
+              <h2 className="text-sm font-extrabold text-[#00283C]">
+                Observações da consulta
               </h2>
-              <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
-                <div>
-                  <dt className="text-xs text-[#5A6B73]">
-                    Data / hora no documento
-                  </dt>
-                  <dd className="font-bold text-[#00283C]">
-                    {protocol?.dataHoraConsulta || "Indisponível"}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-[#5A6B73]">Fonte</dt>
-                  <dd className="font-bold text-[#00283C]">
-                    {protocol?.sourceLabel ||
-                      (attachment
-                        ? "Certificado anexado; resultados não validados"
-                        : "Nenhum certificado válido disponível")}
-                  </dd>
-                </div>
-                {consultaId ? (
-                  <div>
-                    <dt className="text-xs text-[#5A6B73]">
-                      Protocolo do fornecedor
-                    </dt>
-                    <dd className="font-bold text-[#00283C]">{consultaId}</dd>
-                  </div>
-                ) : null}
-                {protocol?.tipoChave ? (
-                  <div>
-                    <dt className="text-xs text-[#5A6B73]">Identificação</dt>
-                    <dd className="font-bold text-[#00283C]">
-                      {protocol.tipoChave}
-                    </dd>
-                  </div>
-                ) : null}
-              </dl>
-              <p className="mt-3 text-xs leading-relaxed text-[#5A6B73]">
-                Os resultados refletem a data indicada no documento. A
-                publicação deste resumo não realiza uma nova consulta às bases.
+              <p className="mt-1 text-xs text-[#5A6B73]">
+                Observações explicativas do documento de origem
               </p>
-              {isOldConsultation ? (
-                <p className="mt-3 rounded-lg bg-[#FFF8E1] px-3 py-2 text-sm font-semibold text-[#92400E]">
-                  Consulta realizada há mais de 180 dias. Confirme a situação
-                  atual com a Netcar.
+              {protocol?.consultationNotes?.length ? (
+                <div className="mt-3 space-y-3">
+                  {protocol.consultationNotes.map((note, index) => (
+                    <p
+                      key={index}
+                      className="whitespace-pre-wrap break-words text-sm leading-relaxed text-[#475569]"
+                    >
+                      {note}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-2 text-sm text-[#5A6B73]">
+                  Observações não disponíveis para esta consulta.
                 </p>
-              ) : null}
-              {hasAlienacao ? (
-                <p className="mt-3 rounded-lg bg-[#FFF8E1] px-3 py-2 text-sm leading-relaxed text-[#92400E]">
-                  O certificado registra alienação fiduciária na data da
-                  consulta. Confirme a situação atual e a baixa do gravame com a
-                  Netcar.
-                </p>
-              ) : null}
+              )}
             </section>
 
             {highlights.length ? (
@@ -441,7 +457,7 @@ export function ICheckLaudoPage() {
             ) : (
               <p className="rounded-xl bg-[#F1F5F9] px-4 py-3 text-sm leading-relaxed text-[#475569]">
                 O detalhamento completo de cada base DEKRA não está disponível
-                neste resumo.
+                neste relatório.
               </p>
             )}
 
@@ -514,25 +530,25 @@ export function ICheckLaudoPage() {
                     </span>
                   ))}
                 </div>
+                <p className="mt-3 text-xs leading-relaxed text-[#5A6B73]">
+                  {VEHICLE_EQUIPMENT_NOTICE}
+                </p>
               </section>
             ) : null}
             <section className="rounded-xl bg-[#F1F5F9] px-4 py-4">
               <h2 className="text-xs font-extrabold text-[#00283C]">
-                Sobre este resumo
+                Sobre este relatório
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-[#5A6B73]">
-                O resumo Netcar reúne informações do estoque e apresenta
-                resultados do histórico quando disponíveis.
-                {attachment
-                  ? " O botão “Ver certificado anexado” abre o documento de origem."
-                  : ""}{" "}
-                A consulta de histórico não substitui vistoria cautelar, laudo
-                técnico ou inspeção presencial.
+                O relatório Netcar reúne informações do estoque e os resultados
+                disponíveis da consulta CheckAuto / DEKRA. A consulta de
+                histórico não substitui vistoria cautelar, laudo técnico ou
+                inspeção presencial.
               </p>
             </section>
           </div>
           <footer className="border-t border-[#E4EAEF] px-5 py-4 text-[11px] text-[#5A6B73] sm:px-8">
-            Netcar Multimarcas · Resumo i-CHECK
+            Netcar Multimarcas · Relatório i-CHECK
           </footer>
         </div>
       </article>

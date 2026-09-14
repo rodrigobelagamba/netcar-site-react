@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "parserVersion": "checkauto-certificate-v2",
+  "parserVersion": "checkauto-certificate-v3",
   "vehicleId": "19888",
   "placa": "JDB4D51",
   "pdf": "CheckAuto_JDB4D51_1740.pdf",
@@ -47,6 +47,13 @@
       "riskLevel": "ok"
     }
   ],
+  "consultationNotes": [
+    "Como os sistemas estaduais e federais podem ter atualizações em momentos diferentes, é recomendável confirmar eventuais restrições diretamente no Detran estadual para maior segurança.",
+    "A ausência de registros de leilão, perda total, furto ou roubo indica um histórico limpo e sem restrições graves, aumentando a confiabilidade do veículo.",
+    "A existência de Alienação Fiduciária não significa problema legal. Trata-se de um vínculo com instituição financeira (financiamento ativo ou encerrado) que pode ser regularizado na venda com total segurança.",
+    "O relatório tem caráter informativo e preventivo, sendo uma ferramenta complementar à análise presencial do veículo.",
+    "As informações apresentadas neste certificado foram obtidas por meio de consulta a bases públicas e privadas. A CheckAuto/Dekra não edita nem altera os dados, apenas os reproduz conforme constam nos sistemas oficiais."
+  ],
   "available": true,
   "allClear": true,
   "consultationHighlights": [
@@ -69,5 +76,5 @@
   ],
   "sections": [],
   "consultationSections": [],
-  "updatedAt": "2026-09-14T17:09:15.634Z"
+  "updatedAt": "2026-09-14T18:44:14.710Z"
 }

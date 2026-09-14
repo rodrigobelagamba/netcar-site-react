@@ -93,7 +93,17 @@ const metadataSchema = z.object({
     ])
     .optional(),
   available: z.boolean().optional(),
-  identity: z.object({ verified: z.boolean() }).optional(),
+  identity: z
+    .object({
+      verified: z.boolean(),
+      chassiMasked: z
+        .string()
+        .min(8)
+        .max(24)
+        .regex(/^[A-Z0-9]{2,12}[X*]{3,17}$/)
+        .nullish(),
+    })
+    .optional(),
   sourceSha256: z
     .string()
     .regex(/^[a-f0-9]{64}$/i)
@@ -117,6 +127,10 @@ const metadataSchema = z.object({
       }),
     )
     .max(50),
+  consultationNotes: z
+    .array(z.string().min(1).max(4000).regex(/\S/))
+    .max(40)
+    .optional(),
   consultationHighlights: z.array(detailItemSchema).max(100).optional(),
   consultationSections: z.array(detailSectionSchema).max(30).optional(),
 });
@@ -129,9 +143,11 @@ export type CheckAutoProtocolMeta = {
   protocoloConsulta: string | null;
   dataHoraConsulta: string | null;
   tipoChave: string | null;
+  chassiMasked?: string;
   history: ICheckHistoryItem[];
   sourcePdfUrl: string;
   sourceLabel: string;
+  consultationNotes?: string[];
   consultationHighlights?: Array<{ label: string; value: string }>;
   consultationSections?: Array<{
     title: string;
@@ -233,12 +249,11 @@ export function validateIcheckMetadata(
     protocoloConsulta,
     dataHoraConsulta,
     tipoChave: `Placa: ${maskPlate(plate)}${meta.uf ? ` UF: ${meta.uf}` : ""}`,
+    chassiMasked: meta.identity?.chassiMasked ?? undefined,
     history: normalizedHistory,
     sourcePdfUrl: attachment.url,
-    sourceLabel:
-      meta.source === "checkauto-xml"
-        ? "Retorno CheckAuto / DEKRA associado ao certificado"
-        : "Certificado CheckAuto / DEKRA anexado",
+    sourceLabel: "Consulta CheckAuto / DEKRA",
+    consultationNotes: meta.consultationNotes,
     consultationHighlights: meta.consultationHighlights?.filter(
       (detail) =>
         !meta.history.some(
