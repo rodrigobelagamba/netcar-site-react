@@ -302,31 +302,25 @@ export function ICheckLaudoPage() {
                   atual com a Netcar.
                 </p>
               ) : null}
-              {hasAlienacao ? (
-                <p className="mt-3 rounded-lg bg-[#FFF8E1] px-3 py-2 text-sm leading-relaxed text-[#92400E]">
-                  A consulta registra alienação fiduciária na data indicada.
-                  Confirme a situação atual e a baixa do gravame com a Netcar.
-                </p>
-              ) : null}
             </section>
 
             <section
               aria-label="Resultado da consulta"
-              className={`rounded-2xl border-2 px-4 py-4 print:break-inside-avoid ${summaryStyles[summary.level]} ${summary.level === "clear" ? "text-center sm:py-6" : ""}`}
+              className={`rounded-2xl border-2 px-4 py-4 print:break-inside-avoid ${summaryStyles[summary.approved ? "clear" : summary.level]} ${summary.approved ? "text-center sm:py-6" : ""}`}
             >
               <h2
-                className={`flex items-center gap-2 font-extrabold ${summary.level === "clear" ? "justify-center text-3xl tracking-wide sm:gap-3 sm:text-4xl" : "text-base"}`}
+                className={`flex items-center gap-2 font-extrabold ${summary.approved ? "justify-center text-3xl tracking-wide sm:gap-3 sm:text-4xl" : "text-base"}`}
               >
-                {summary.level === "clear" ? (
+                {summary.approved ? (
                   <Check className="h-9 w-9 shrink-0 sm:h-11 sm:w-11" />
                 ) : summary.level === "warning" || summary.level === "alert" ? (
                   <AlertTriangle className="h-5 w-5 shrink-0" />
                 ) : (
                   <Info className="h-5 w-5 shrink-0" />
                 )}
-                {summary.level === "clear" ? "APROVADO" : summary.title}
+                {summary.approved ? "APROVADO" : summary.title}
               </h2>
-              {summary.level === "clear" ? (
+              {summary.approved ? (
                 <p className="mt-2 text-base font-bold">{summary.title}</p>
               ) : null}
               <p className="mt-1 text-sm leading-relaxed">
@@ -334,6 +328,12 @@ export function ICheckLaudoPage() {
               </p>
               {missingMessage ? (
                 <p className="mt-2 text-sm font-medium">{missingMessage}</p>
+              ) : null}
+              {hasAlienacao ? (
+                <p className="mt-3 rounded-lg bg-[#FFF8E1] px-3 py-2 text-sm leading-relaxed text-[#92400E]">
+                  A consulta registra alienação fiduciária na data indicada.
+                  Confirme a situação atual e a baixa do gravame com a Netcar.
+                </p>
               ) : null}
             </section>
 

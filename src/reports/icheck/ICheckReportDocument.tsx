@@ -77,6 +77,14 @@ const styles = StyleSheet.create({
   centered: { textAlign: "center" },
   bannerTitle: { fontSize: 12, fontFamily: "Helvetica-Bold", marginBottom: 4 },
   bannerBody: { fontSize: 8.5, lineHeight: 1.4 },
+  financingNotice: {
+    borderWidth: 1,
+    borderColor: PALETTES.warning.borderColor,
+    backgroundColor: PALETTES.warning.backgroundColor,
+    borderRadius: 6,
+    padding: 8,
+    marginTop: 8,
+  },
   sectionTitle: {
     fontSize: 10,
     fontFamily: "Helvetica-Bold",
@@ -267,7 +275,7 @@ function FieldGrid({
 export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
   const history = normalizeHistoryItems(data.history);
   const summary = getHistorySummary(history);
-  const palette = PALETTES[summary.level];
+  const palette = summary.approved ? PALETTES.clear : PALETTES[summary.level];
   const dataHora = data.dataHoraConsulta || data.issuedAt;
   const ageDays = getConsultationAgeDays(dataHora);
   const consultationNotes = (data.consultationNotes || []).filter((note) =>
@@ -333,25 +341,33 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
           </Text>
         </View>
         <View style={[styles.banner, palette]} wrap={false}>
-          {summary.level === "clear" ? (
+          {summary.approved ? (
             <Text style={styles.approvalTitle}>APROVADO</Text>
           ) : null}
           <Text
             style={[
               styles.bannerTitle,
-              summary.level === "clear" ? styles.centered : {},
+              summary.approved ? styles.centered : {},
             ]}
           >
             {summary.title}
           </Text>
           <Text
-            style={[
-              styles.bannerBody,
-              summary.level === "clear" ? styles.centered : {},
-            ]}
+            style={[styles.bannerBody, summary.approved ? styles.centered : {}]}
           >
             {summary.description}
           </Text>
+          {summary.approved && summary.level === "warning" ? (
+            <View style={styles.financingNotice} wrap={false}>
+              <Text style={[styles.body, { color: PALETTES.warning.color }]}>
+                <Text style={{ fontFamily: "Helvetica-Bold" }}>
+                  Alienação fiduciária:{" "}
+                </Text>
+                confirme a situação atual do gravame e a regularização para a
+                venda com a equipe Netcar.
+              </Text>
+            </View>
+          ) : null}
         </View>
         <FieldGrid items={consultationFields} />
         {ageDays !== null && ageDays > 180 ? (
@@ -461,9 +477,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
             registro. Dados adicionais são apresentados quando retornados pela
             consulta.
           </Text>
-        </View>
-        <View style={styles.note} wrap={false}>
-          <Text style={styles.body}>
+          <Text style={[styles.body, { marginTop: 5 }]}>
             A consulta tem caráter informativo e não substitui vistoria cautelar
             ou laudo técnico. Registros podem mudar após a data informada. Dados
             do anúncio e fotos, apresentados a seguir quando disponíveis, são

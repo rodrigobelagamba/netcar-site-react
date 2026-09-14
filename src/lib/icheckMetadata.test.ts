@@ -86,7 +86,7 @@ test("empty and partial histories retain all four groups without a successful co
   assert.ok(missing.every((item) => !item.clear));
 });
 
-test("alienation, serious records and ambiguous strings never produce false green", () => {
+test("alienation, serious records and ambiguous strings preserve source risk", () => {
   assert.equal(
     getHistorySummary(
       clearHistory.map((item) =>
@@ -128,6 +128,74 @@ test("alienation, serious records and ambiguous strings never produce false gree
   ]);
   assert.equal(warned.level, "warning");
   assert.match(warned.description, /indisponíveis/);
+});
+
+test("approval permits only standalone state financing with every other result clear", () => {
+  const financed = (status: string) =>
+    clearHistory.map((item) =>
+      item.key === "estaduais" ? { ...item, status, riskLevel: "warn" } : item,
+    );
+  for (const status of [
+    "INF Alienacao Fidu",
+    "Alienação Fiduciária Ativa (Veículo Financiado)",
+    "ALIENAÇÃO FIDUCIÁRIA",
+  ]) {
+    const history = financed(status);
+    const summary = getHistorySummary(history);
+    assert.equal(summary.approved, true, status);
+    assert.equal(summary.level, "warning");
+    assert.equal(summary.title, "Alienação fiduciária informada");
+    const state = normalizeHistoryItems(history).find(
+      (item) => item.key === "estaduais",
+    );
+    assert.equal(state?.clear, false);
+    assert.equal(state?.status, status);
+  }
+  const history = financed("INF Alienacao Fidu");
+  const denied = [
+    history.filter((item) => item.key !== "roubo"),
+    history.map((item) =>
+      item.key === "roubo"
+        ? { ...item, status: "Indisponível", riskLevel: "unknown" }
+        : item,
+    ),
+    history.map((item) =>
+      item.key === "leilao"
+        ? { ...item, status: "Com registro de leilão", riskLevel: "alert" }
+        : item,
+    ),
+    history.map((item) =>
+      item.key === "sinistro"
+        ? { ...item, status: "Conferir observação", riskLevel: "warn" }
+        : item,
+    ),
+    ...[
+      "Alienação fiduciária; bloqueio judicial",
+      "Alienação fiduciária e débitos",
+      "Alienação fiduciária: informação pendente",
+      "Outra observação",
+    ].map(financed),
+    history.map((item) =>
+      item.key === "estaduais" ? { ...item, riskLevel: "alert" } : item,
+    ),
+    [
+      ...history,
+      {
+        key: "adicional",
+        label: "Base adicional",
+        status: "Indisponível",
+        riskLevel: "unknown",
+      },
+    ],
+    [],
+  ];
+  for (const entries of denied)
+    assert.equal(
+      getHistorySummary(entries).approved,
+      false,
+      JSON.stringify(entries),
+    );
+  assert.equal(getHistorySummary(clearHistory).approved, true);
 });
 
 test("explicit occurrences are alerts even when legacy metadata says attention", () => {
