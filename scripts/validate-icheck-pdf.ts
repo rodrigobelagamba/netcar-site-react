@@ -11,6 +11,7 @@ import {
 import { buildClientICheckReportData } from "../src/reports/icheck/downloadICheckReportPdf";
 import { ICHECK_HISTORY_GROUPS } from "../src/reports/icheck/icheckHistory";
 import type { Vehicle } from "../src/catalog/endpoints/vehicles";
+import { VEHICLE_EQUIPMENT_NOTICE } from "../src/lib/vehicleEquipmentNotice";
 
 const outputDir = resolve(process.argv[2] || "tmp/pdfs/icheck-validation");
 await mkdir(outputDir, { recursive: true });
@@ -51,8 +52,12 @@ const base = buildClientICheckReportData({
     protocoloConsulta: "07222026",
     consultaId: null,
     history: clearHistory,
-    sourcePdfUrl:
-      "https://www.netcarmultimarcas.com.br/arquivos/autocheck/CheckAuto_JBT8I78_1022.pdf",
+    chassiMasked: "9BHPC8XXXXXXXXX",
+    sourceLabel: "Consulta CheckAuto / DEKRA",
+    consultationNotes: [
+      "As informações da consulta correspondem à data e hora informadas neste relatório.",
+      "Observação explicativa preservada na íntegra, com acentuação, pontuação e todos os seus detalhes.",
+    ],
     consultationHighlights: [
       {
         label: "Observação adicional",
@@ -176,10 +181,12 @@ for (const sample of cases) {
     const text = await parser.getText();
     const info = await parser.getInfo({ parsePageInfo: true });
     assert.ok(
-      info.pages.some((page) =>
-        page.links.some((link) => link.url === sample.data.sourcePdfUrl),
+      info.pages.every((page) =>
+        page.links.every(
+          (link) => !/\/arquivos\/autocheck\/|\.pdf(?:$|[?#])/i.test(link.url),
+        ),
       ),
-      `${sample.name}: original PDF link is missing`,
+      `${sample.name}: customer PDF must not link to the source attachment`,
     );
     await writeFile(resolve(outputDir, `${sample.name}.pdf`), buffer);
     await writeFile(resolve(outputDir, `${sample.name}.txt`), text.text);
@@ -188,6 +195,26 @@ for (const sample of cases) {
       `${sample.name}: missing expected result`,
     );
     assert.ok(text.pages[0].text.includes("Consultas individuais"));
+    assert.ok(text.text.includes("Relatório i-CHECK Netcar"));
+    assert.ok(
+      !/abrir certificado|certificado anexado|consulte o certificado|resumo i-check/i.test(
+        text.text,
+      ),
+    );
+    const normalizedText = text.text.replace(/\s+/g, " ");
+    for (const note of sample.data.consultationNotes || []) {
+      assert.ok(
+        normalizedText.includes(note.replace(/\s+/g, " ")),
+        `${sample.name}: a source observation was changed or omitted`,
+      );
+    }
+    assert.ok(text.text.includes("Observações da consulta"));
+    assert.ok(
+      text.text.includes("Observações explicativas do documento de origem"),
+    );
+    assert.ok(text.pages[0].text.includes("9BHPC8XXXXXXXXX"));
+    if (sample.data.dataHoraConsulta)
+      assert.ok(text.pages[0].text.includes(sample.data.dataHoraConsulta));
     for (const { label } of ICHECK_HISTORY_GROUPS)
       assert.ok(
         text.pages[0].text.includes(label),
@@ -248,11 +275,24 @@ for (const sample of cases) {
         `${sample.name}: expected at most two compact pages, received ${text.total}`,
       );
     }
-    if (sample.data.optionals.length)
+    if (sample.data.optionals.length) {
       assert.ok(
         text.text.includes("Opcional anunciado 56"),
         `${sample.name}: optional list was truncated`,
       );
+      assert.ok(
+        normalizedText.includes(VEHICLE_EQUIPMENT_NOTICE),
+        `${sample.name}: missing equipment notice`,
+      );
+      assert.ok(
+        text.pages.some(
+          (page) =>
+            page.text.includes("Opcionais anunciados") &&
+            page.text.replace(/\s+/g, " ").includes(VEHICLE_EQUIPMENT_NOTICE),
+        ),
+        `${sample.name}: equipment notice must stay with optionals`,
+      );
+    }
     results.push({
       name: sample.name,
       pages: text.total,

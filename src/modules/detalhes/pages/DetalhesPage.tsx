@@ -58,6 +58,7 @@ import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizac
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { generateVehicleSlug, maskPlate } from "@/lib/slug";
 import { loadIcheckMetadata } from "@/lib/icheckMetadata";
+import { VEHICLE_EQUIPMENT_NOTICE } from "@/lib/vehicleEquipmentNotice";
 import { canonicalUrl } from "@/lib/seo";
 import {
   optimizeStockImage,
@@ -3075,6 +3076,13 @@ function DetailsSection({
                   </button>
                 )}
               </motion.div>
+            )}
+
+            {(displayedOptionals.length > 0 ||
+              highlightPresentation.highlights.length > 0) && (
+              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                {VEHICLE_EQUIPMENT_NOTICE}
+              </p>
             )}
 
             {/* O texto que chega da API é preservado, mas fica recolhido para a

@@ -117,13 +117,13 @@ export function getHistorySummary(
     return {
       level: "alert",
       title: "Consulta com apontamento",
-      description: `Há apontamento no documento anexado. Confira os resultados individuais e a data da consulta.${missing ? " Há também resultados indisponíveis." : ""}`,
+      description: `Há apontamento nesta consulta. Confira os resultados individuais e a data da consulta.${missing ? " Há também resultados indisponíveis." : ""}`,
     };
   if (history.some(({ riskLevel }) => riskLevel === "warn"))
     return {
       level: "warning",
       title: "Consulta com observação",
-      description: `Há observação no documento anexado. Confira os resultados individuais e a data da consulta.${missing ? " Há também resultados indisponíveis." : ""}`,
+      description: `Há observação nesta consulta. Confira os resultados individuais e a data da consulta.${missing ? " Há também resultados indisponíveis." : ""}`,
     };
   if (history.every(({ riskLevel }) => riskLevel === "unknown"))
     return {
@@ -137,12 +137,12 @@ export function getHistorySummary(
       level: "incomplete",
       title: "Resultados parciais",
       description:
-        "Parte dos resultados está indisponível. Consulte o certificado anexado; não é possível concluir sobre os itens sem informação.",
+        "Parte dos resultados está indisponível. Não é possível concluir sobre os itens sem informação.",
     };
   return {
     level: "clear",
     title: "Sem registros nos itens consultados",
     description:
-      "Os quatro grupos do certificado estão sem registro na data da consulta. Consulte abaixo o resultado de cada grupo.",
+      "Os quatro grupos consultados estão sem registro na data indicada. Veja abaixo o resultado de cada grupo.",
   };
 }

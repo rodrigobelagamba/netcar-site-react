@@ -15,6 +15,7 @@ import {
   extractCertificateHistory,
   parseCheckAutoPdf,
   extractCheckAutoProtocol,
+  extractCertificateNotes,
 } from "../lib/parse-checkauto-pdf.mjs";
 import { parseCheckAutoDossier } from "../lib/parse-checkauto-xml.mjs";
 import { summarizeDossier } from "../lib/icheck-dossier-summary.mjs";
@@ -97,6 +98,9 @@ test("Node PDF extraction keeps mixed table rows and identifies date/plate", asy
   assert.equal(parsed.ok, true);
   assert.equal(parsed.placa, "ABC-XX23");
   assert.equal(parsed.dataHoraConsulta, "14/09/2026 13:22:10");
+  assert.deepEqual(parsed.consultationNotes, [
+    "Ausência de registro de leilão não substitui vistoria.",
+  ]);
   assert.deepEqual(
     parsed.history.map((item) => item.riskLevel),
     ["ok", "alert", "unavailable", "warn"],
@@ -110,6 +114,26 @@ test("Node PDF extraction keeps mixed table rows and identifies date/plate", asy
   assert.equal(
     (await parseCheckAutoPdf(Buffer.from("<?php echo 'x';"))).ok,
     false,
+  );
+});
+
+test("explanatory notes survive headings before or after their PDF text without copying the sales footer", () => {
+  const notes = [
+    "Como os sistemas estaduais e federais podem ter atualizações em momentos diferentes, é recomendável confirmar eventuais restrições.",
+    "A existência de Alienação Fiduciária não significa problema legal. Trata-se de um vínculo com instituição financeira.",
+  ];
+  const body = `${notes[0].replace("é recomendável", "é\nrecomendável")}\n${notes[1]}`;
+  for (const source of [
+    `Histórico do Veículo\nLeilão Sem Registro\nObservações Explicativas\n${body}\nCONFIANÇA GARANTIDA PELA NETCAR\nA Netcar atesta algo.`,
+    `Histórico do Veículo\nLeilão Sem Registro\n${body}\nObservações Explicativas\nA Netcar atesta algo.\nCONFIANÇA GARANTIDA PELA NETCAR`,
+  ])
+    assert.deepEqual(extractCertificateNotes(source), notes);
+  assert.deepEqual(extractCertificateNotes("Leilão Sem Registro"), []);
+  assert.deepEqual(
+    extractCertificateNotes(
+      "Observações:\nObservação específica do veículo.\n\nConferir junto ao vendedor.",
+    ),
+    ["Observação específica do veículo.", "Conferir junto ao vendedor."],
   );
 });
 

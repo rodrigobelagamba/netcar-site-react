@@ -3,7 +3,6 @@ import { pdf, type DocumentProps } from "@react-pdf/renderer";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { maskPlate } from "@/lib/slug";
 import { CANONICAL_ORIGIN } from "@/lib/seo";
-import { resolveIcheckAttachment } from "@/lib/icheckMetadata";
 import {
   ICheckReportDocument,
   type ICheckReportData,
@@ -23,8 +22,9 @@ type ProtocolMeta = {
   history?: ICheckHistoryItem[];
   consultationHighlights?: Array<{ label: string; value: string }>;
   consultationSections?: ICheckReportData["consultationSections"];
-  sourcePdfUrl?: string;
   sourceLabel?: string;
+  chassiMasked?: string;
+  consultationNotes?: string[];
 };
 
 function siteOrigin(): string {
@@ -116,14 +116,12 @@ export function buildClientICheckReportData(input: {
     combustivel,
     cambio,
     motor,
-    chassiMasked: "",
+    chassiMasked: protocol?.chassiMasked || "",
     issuedAt: dataHora,
     consultaId: consultaId || undefined,
     dataHoraConsulta: dataHora || undefined,
     tipoChave: tipoChave || undefined,
     listingUrl: `${origin}/laudo/${slug}`,
-    sourcePdfUrl:
-      protocol?.sourcePdfUrl || resolveIcheckAttachment(vehicle)?.url,
     sourceLabel: protocol?.sourceLabel,
     dekraLogoPath: brandUrl("dekra.png"),
     checkautoLogoPath: brandUrl("checkauto.png"),
@@ -160,6 +158,7 @@ export function buildClientICheckReportData(input: {
     allClear: summary.level === "clear",
     consultationHighlights: protocol?.consultationHighlights,
     consultationSections: protocol?.consultationSections,
+    consultationNotes: protocol?.consultationNotes,
   };
 }
 
