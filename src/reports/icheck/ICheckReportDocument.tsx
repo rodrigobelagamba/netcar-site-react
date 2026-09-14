@@ -477,9 +477,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
             registro. Dados adicionais são apresentados quando retornados pela
             consulta.
           </Text>
-        </View>
-        <View style={styles.note} wrap={false}>
-          <Text style={styles.body}>
+          <Text style={[styles.body, { marginTop: 5 }]}>
             A consulta tem caráter informativo e não substitui vistoria cautelar
             ou laudo técnico. Registros podem mudar após a data informada. Dados
             do anúncio e fotos, apresentados a seguir quando disponíveis, são
