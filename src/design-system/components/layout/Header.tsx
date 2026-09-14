@@ -457,7 +457,7 @@ export function Header() {
             </Link>
 
             <nav
-              className="hidden xl:flex items-center gap-3 2xl:gap-5 flex-shrink-0"
+              className={`${isSearchOpen ? "hidden 3xl:flex" : "hidden xl:flex"} items-center gap-3 2xl:gap-5 flex-shrink-0`}
               aria-label="Menu principal"
             >
               {menuLinks.map((link) => {
@@ -556,7 +556,7 @@ export function Header() {
                 aria-label="Buscar"
               >
                 <Search className="w-4 h-4" />
-                <span className="hidden 2xl:inline">Buscar</span>
+                <span className="hidden 3xl:inline">Buscar</span>
               </button>
             )}
             <a
@@ -569,7 +569,7 @@ export function Header() {
               aria-label={formatPhone(whatsappNumber)}
             >
               <Phone className="w-4 h-4 shrink-0" />
-              <span className="hidden 2xl:inline">
+              <span className="hidden 3xl:inline">
                 {formatPhone(whatsappNumber)}
               </span>
             </a>
