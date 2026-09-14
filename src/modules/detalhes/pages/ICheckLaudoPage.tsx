@@ -312,18 +312,23 @@ export function ICheckLaudoPage() {
 
             <section
               aria-label="Resultado da consulta"
-              className={`rounded-2xl border-2 px-4 py-4 print:break-inside-avoid ${summaryStyles[summary.level]}`}
+              className={`rounded-2xl border-2 px-4 py-4 print:break-inside-avoid ${summaryStyles[summary.level]} ${summary.level === "clear" ? "text-center sm:py-6" : ""}`}
             >
-              <h2 className="flex items-center gap-2 text-base font-extrabold">
+              <h2
+                className={`flex items-center gap-2 font-extrabold ${summary.level === "clear" ? "justify-center text-3xl tracking-wide sm:gap-3 sm:text-4xl" : "text-base"}`}
+              >
                 {summary.level === "clear" ? (
-                  <Check className="h-5 w-5 shrink-0" />
+                  <Check className="h-9 w-9 shrink-0 sm:h-11 sm:w-11" />
                 ) : summary.level === "warning" || summary.level === "alert" ? (
                   <AlertTriangle className="h-5 w-5 shrink-0" />
                 ) : (
                   <Info className="h-5 w-5 shrink-0" />
                 )}
-                {summary.title}
+                {summary.level === "clear" ? "APROVADO" : summary.title}
               </h2>
+              {summary.level === "clear" ? (
+                <p className="mt-2 text-base font-bold">{summary.title}</p>
+              ) : null}
               <p className="mt-1 text-sm leading-relaxed">
                 {summary.description}
               </p>

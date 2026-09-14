@@ -66,6 +66,15 @@ const styles = StyleSheet.create({
   title: { fontSize: 17, fontFamily: "Helvetica-Bold", marginBottom: 4 },
   subtitle: { fontSize: 8, color: MUTED, lineHeight: 1.4, marginBottom: 12 },
   banner: { borderWidth: 1, borderRadius: 7, padding: 12, marginBottom: 12 },
+  approvalTitle: {
+    fontSize: 30,
+    fontFamily: "Helvetica-Bold",
+    textAlign: "center",
+    color: PALETTES.clear.color,
+    letterSpacing: 1.5,
+    marginBottom: 6,
+  },
+  centered: { textAlign: "center" },
   bannerTitle: { fontSize: 12, fontFamily: "Helvetica-Bold", marginBottom: 4 },
   bannerBody: { fontSize: 8.5, lineHeight: 1.4 },
   sectionTitle: {
@@ -324,8 +333,25 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
           </Text>
         </View>
         <View style={[styles.banner, palette]} wrap={false}>
-          <Text style={styles.bannerTitle}>{summary.title}</Text>
-          <Text style={styles.bannerBody}>{summary.description}</Text>
+          {summary.level === "clear" ? (
+            <Text style={styles.approvalTitle}>APROVADO</Text>
+          ) : null}
+          <Text
+            style={[
+              styles.bannerTitle,
+              summary.level === "clear" ? styles.centered : {},
+            ]}
+          >
+            {summary.title}
+          </Text>
+          <Text
+            style={[
+              styles.bannerBody,
+              summary.level === "clear" ? styles.centered : {},
+            ]}
+          >
+            {summary.description}
+          </Text>
         </View>
         <FieldGrid items={consultationFields} />
         {ageDays !== null && ageDays > 180 ? (
