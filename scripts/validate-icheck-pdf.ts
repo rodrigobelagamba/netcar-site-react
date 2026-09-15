@@ -12,6 +12,10 @@ import { buildClientICheckReportData } from "../src/reports/icheck/downloadIChec
 import { ICHECK_HISTORY_GROUPS } from "../src/reports/icheck/icheckHistory";
 import type { Vehicle } from "../src/catalog/endpoints/vehicles";
 import { VEHICLE_EQUIPMENT_NOTICE } from "../src/lib/vehicleEquipmentNotice";
+import {
+  ICHECK_SOURCE_LABEL,
+  ICHECK_SCOPE_NOTICE,
+} from "../src/reports/icheck/icheckCopy";
 
 const outputDir = resolve(process.argv[2] || "tmp/pdfs/icheck-validation");
 await mkdir(outputDir, { recursive: true });
@@ -87,6 +91,7 @@ const photos = Array.from(
 const fixture: ICheckReportData = {
   ...base,
   netcarLogoPath: logo,
+  partnerLogosPath: resolve("public/brand/checkauto-dekra.png"),
   galleryPhotos: photos,
 };
 const cases: Array<{
@@ -257,13 +262,16 @@ for (const sample of cases) {
       `${sample.name}: unexpected financing notice`,
     );
     assert.ok(text.pages[0].text.includes("Consultas individuais"));
-    assert.ok(text.text.includes("Relatório i-CHECK Netcar"));
+    assert.ok(text.pages[0].text.includes(ICHECK_SOURCE_LABEL));
     assert.ok(
       !/abrir certificado|certificado anexado|consulte o certificado|resumo i-check/i.test(
         text.text,
       ),
     );
     const normalizedText = text.text.replace(/\s+/g, " ");
+    assert.ok(
+      text.pages[0].text.replace(/\s+/g, " ").includes(ICHECK_SCOPE_NOTICE),
+    );
     for (const note of sample.data.consultationNotes || []) {
       assert.ok(
         normalizedText.includes(note.replace(/\s+/g, " ")),

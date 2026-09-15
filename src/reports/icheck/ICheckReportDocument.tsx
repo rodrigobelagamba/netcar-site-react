@@ -14,6 +14,7 @@ import {
   type ICheckHistoryItem,
 } from "./icheckHistory";
 import { VEHICLE_EQUIPMENT_NOTICE } from "../../lib/vehicleEquipmentNotice";
+import { ICHECK_SOURCE_LABEL, ICHECK_SCOPE_NOTICE } from "./icheckCopy";
 
 const NAVY = "#00283C";
 const MUTED = "#5A6B73";
@@ -59,6 +60,12 @@ const styles = StyleSheet.create({
     borderBottomColor: LINE,
   },
   netcarLogo: { width: 88, height: 22, objectFit: "contain" },
+  consultationLogo: {
+    width: 44,
+    height: 44,
+    objectFit: "contain",
+    marginRight: 10,
+  },
   brandName: { fontFamily: "Helvetica-Bold", fontSize: 13, color: NAVY },
   eyebrow: { fontSize: 7, color: MUTED, letterSpacing: 0.8, marginBottom: 3 },
   headerTitle: { fontSize: 12, fontFamily: "Helvetica-Bold", color: NAVY },
@@ -227,9 +234,16 @@ function PageFooter({ listingUrl }: { listingUrl: string }) {
 function Header({ data }: { data: ICheckReportData }) {
   return (
     <View style={styles.header} wrap={false}>
-      <View>
-        <Text style={styles.eyebrow}>NETCAR MULTIMARCAS</Text>
-        <Text style={styles.headerTitle}>Relatório i-CHECK Netcar</Text>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        {data.partnerLogosPath ? (
+          <Image src={data.partnerLogosPath} style={styles.consultationLogo} />
+        ) : null}
+        <View>
+          <Text style={styles.headerTitle}>{ICHECK_SOURCE_LABEL}</Text>
+          <Text style={[styles.eyebrow, { marginTop: 4 }]}>
+            i-CHECK · Certificado de consulta de histórico
+          </Text>
+        </View>
       </View>
       {data.netcarLogoPath ? (
         <Image src={data.netcarLogoPath} style={styles.netcarLogo} />
@@ -323,7 +337,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
 
   return (
     <Document
-      title={`Relatório i-CHECK Netcar - ${data.vehicleName}`}
+      title={`i-CHECK - Consulta DEKRA / CheckAuto - ${data.vehicleName}`}
       author="Netcar Multimarcas"
       subject="Resultados e observações das consultas de histórico e dados do anúncio"
     >
@@ -334,7 +348,7 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
           <Text style={styles.subtitle}>
             {data.placaMasked ? `Placa do cadastro: ${data.placaMasked}. ` : ""}
             {summary.level !== "unavailable"
-              ? "Consulta de histórico do veículo apresentada pela Netcar."
+              ? "Histórico veicular consultado em bases DEKRA / CheckAuto."
               : "Disponibilidade das consultas associadas ao veículo."}
           </Text>
         </View>
@@ -354,6 +368,12 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
             style={[styles.bannerBody, summary.approved ? styles.centered : {}]}
           >
             {summary.description}
+          </Text>
+          <Text style={[styles.bannerBody, { marginTop: 8 }]}>
+            <Text style={{ fontFamily: "Helvetica-Bold" }}>
+              Sobre esta consulta:{" "}
+            </Text>
+            {ICHECK_SCOPE_NOTICE}
           </Text>
           {summary.approved && summary.level === "warning" ? (
             <View style={styles.financingNotice} wrap={false}>
@@ -459,12 +479,6 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
             na consulta. Resultado indisponível não equivale à ausência de
             registro. Dados adicionais são apresentados quando retornados pela
             consulta.
-          </Text>
-          <Text style={[styles.body, { marginTop: 5 }]}>
-            A consulta tem caráter informativo e não substitui vistoria cautelar
-            ou laudo técnico. Registros podem mudar após a data informada. Dados
-            do anúncio e fotos, apresentados a seguir quando disponíveis, são
-            fornecidos pelo catálogo Netcar.
           </Text>
         </View>
         <PageFooter listingUrl={data.listingUrl} />
