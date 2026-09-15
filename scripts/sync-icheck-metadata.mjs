@@ -233,24 +233,69 @@ function unavailableMetadata(
   };
 }
 
+const RETRYABLE_FETCH_CODES = [
+  "ECONNRESET",
+  "ECONNREFUSED",
+  "ETIMEDOUT",
+  "EAI_AGAIN",
+  "ENOTFOUND",
+  "ENETUNREACH",
+  "EHOSTUNREACH",
+  "EPIPE",
+  "UND_ERR_SOCKET",
+  "UND_ERR_CONNECT_TIMEOUT",
+  "UND_ERR_HEADERS_TIMEOUT",
+  "UND_ERR_BODY_TIMEOUT",
+];
+
+function sourceErrorCode(error) {
+  let current = error;
+  for (let depth = 0; current && depth < 5; depth++) {
+    if (typeof current.code === "string") return current.code;
+    current = current.cause || current.errors?.[0];
+  }
+  return null;
+}
+
 function retryableDownloadError(error) {
   if (error.retryable === true) return true;
   if (["TimeoutError", "AbortError"].includes(error.name)) return true;
-  const code = error.cause?.code || error.code;
-  return [
-    "ECONNRESET",
-    "ECONNREFUSED",
-    "ETIMEDOUT",
-    "EAI_AGAIN",
-    "ENOTFOUND",
-    "ENETUNREACH",
-    "EHOSTUNREACH",
-    "EPIPE",
-    "UND_ERR_SOCKET",
-    "UND_ERR_CONNECT_TIMEOUT",
-    "UND_ERR_HEADERS_TIMEOUT",
-    "UND_ERR_BODY_TIMEOUT",
-  ].includes(code);
+  return RETRYABLE_FETCH_CODES.includes(sourceErrorCode(error));
+}
+
+/** Never log raw fetch errors, response bodies, URLs or connection credentials. */
+export function synchronizationDiagnostic(error) {
+  const sourceCode = sourceErrorCode(error);
+  const safeCodes = [
+    ...RETRYABLE_FETCH_CODES,
+    "CERT_HAS_EXPIRED",
+    "DEPTH_ZERO_SELF_SIGNED_CERT",
+    "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+    "UNABLE_TO_GET_ISSUER_CERT_LOCALLY",
+    "ERR_TLS_CERT_ALTNAME_INVALID",
+  ];
+  const safeMessage =
+    /^(?:inventory_http_\d{3}|invalid_inventory|invalid_vehicle_id|inventory_incomplete|inventory_pagination_stalled|inventory_pagination_limit)$/;
+  const code = safeCodes.includes(sourceCode)
+    ? sourceCode
+    : safeMessage.test(error.message)
+      ? error.message
+      : ["TimeoutError", "AbortError"].includes(error.name)
+        ? "request_timeout"
+        : error instanceof SyntaxError
+          ? "invalid_json"
+          : "unknown_error";
+  return {
+    stage:
+      error.icheckStage === "inventory" || safeMessage.test(error.message)
+        ? "inventory"
+        : "synchronization",
+    code,
+    ...(Number.isInteger(error.icheckPage) ? { page: error.icheckPage } : {}),
+    ...(Number.isInteger(error.icheckAttempts)
+      ? { attempts: error.icheckAttempts }
+      : {}),
+  };
 }
 
 async function fetchPdfAttempt(reference, fetchImpl) {
@@ -307,40 +352,78 @@ async function fetchPdf(reference, fetchImpl) {
   }
 }
 
+async function fetchInventoryPage(url, fetchImpl, retryDelay) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const response = await fetchImpl(url.href, {
+        signal: AbortSignal.timeout(45000),
+        redirect: "error",
+      });
+      if (!response.ok) {
+        await response.body?.cancel().catch(() => {});
+        throw Object.assign(new Error(`inventory_http_${response.status}`), {
+          retryable:
+            response.status === 408 ||
+            response.status === 429 ||
+            (response.status >= 500 && response.status <= 599),
+        });
+      }
+      // Reading the body is part of the attempt: a stream can fail after HTTP 200.
+      return await response.json();
+    } catch (caught) {
+      const error =
+        caught instanceof Error
+          ? caught
+          : new Error("inventory_request_failed");
+      Object.assign(error, {
+        icheckStage: "inventory",
+        icheckPage: Number(url.searchParams.get("page")),
+        icheckAttempts: attempt,
+      });
+      if (attempt === 3 || !retryableDownloadError(error)) throw error;
+      await retryDelay(1000 * 2 ** (attempt - 1));
+    }
+  }
+}
+
 export async function fetchInventory({
   api = `${SITE_ORIGIN}/api/v1/veiculos.php`,
   fetchImpl = fetch,
+  retryDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 } = {}) {
   const seen = new Map();
+  let offset = 0;
   for (let page = 1; page <= 100; page++) {
     const url = new URL(api);
     url.searchParams.set("limit", "500");
     url.searchParams.set("page", String(page));
-    url.searchParams.set("offset", String((page - 1) * 500));
-    const response = await fetchImpl(url.href, {
-      signal: AbortSignal.timeout(45000),
-      redirect: "error",
-    });
-    if (!response.ok) throw new Error(`inventory_http_${response.status}`);
-    const payload = await response.json();
-    const rows = Array.isArray(payload) ? payload : payload.data;
-    if (payload.success === false || !Array.isArray(rows))
+    url.searchParams.set("offset", String(offset));
+    const payload = await fetchInventoryPage(url, fetchImpl, retryDelay);
+    const rows = Array.isArray(payload) ? payload : payload?.data;
+    if (payload?.success === false || !Array.isArray(rows))
       throw new Error("invalid_inventory");
     const before = seen.size;
     for (const row of rows) {
-      if (row.id == null) throw new Error("invalid_vehicle_id");
+      if (!row || typeof row !== "object" || row.id == null)
+        throw new Error("invalid_vehicle_id");
       seen.set(String(row.id), row);
     }
-    const total = Number(
-      payload.total_results ?? payload.total ?? payload.pagination?.total,
-    );
-    if (Number.isFinite(total) && total >= 0 && seen.size >= total)
-      return [...seen.values()];
-    if (!rows.length && Number.isFinite(total) && seen.size < total)
+    // This API's total_results counts this page, not the entire inventory.
+    const totalValue = payload.total ?? payload.pagination?.total;
+    const total = totalValue == null ? null : Number(totalValue);
+    if (
+      total !== null &&
+      (totalValue === "" || !Number.isInteger(total) || total < 0)
+    )
+      throw new Error("invalid_inventory");
+    if (total !== null && seen.size >= total) return [...seen.values()];
+    if (!rows.length && total !== null && seen.size < total)
       throw new Error("inventory_incomplete");
-    if (!rows.length || (!Number.isFinite(total) && rows.length < 500))
+    if (rows.length && seen.size === before)
+      throw new Error("inventory_pagination_stalled");
+    if (!rows.length || (total === null && rows.length < 500))
       return [...seen.values()];
-    if (seen.size === before) throw new Error("inventory_pagination_stalled");
+    offset += rows.length;
   }
   throw new Error("inventory_pagination_limit");
 }
@@ -496,6 +579,8 @@ if (
   resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 )
   main().catch((error) => {
-    console.error(`i-CHECK synchronization failed: ${error.message}`);
+    console.error(
+      `i-CHECK synchronization failed: ${JSON.stringify(synchronizationDiagnostic(error))}`,
+    );
     process.exitCode = 1;
   });

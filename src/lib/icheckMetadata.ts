@@ -180,16 +180,6 @@ function consultationDate(value: string): Date | null {
   return date;
 }
 
-export function getConsultationAgeDays(
-  value: string | null | undefined,
-  now = new Date(),
-): number | null {
-  const date = value ? consultationDate(value.trim()) : null;
-  return date
-    ? Math.max(0, Math.floor((now.getTime() - date.getTime()) / 86_400_000))
-    : null;
-}
-
 export function validateIcheckMetadata(
   value: unknown,
   vehicle: MetadataVehicle,

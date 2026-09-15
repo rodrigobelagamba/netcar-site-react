@@ -43,7 +43,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "icheck:sync": "node scripts/sync-icheck-metadata.mjs",
-    "icheck:validate": "node --test scripts/tests/icheck-ingestion.test.mjs scripts/validate-icheck-publication.test.mjs && tsx --test src/lib/icheckMetadata.test.ts && tsx scripts/validate-icheck-pdf.ts",
+    "icheck:validate": "node --test scripts/tests/icheck-*.test.mjs scripts/validate-icheck-publication.test.mjs && tsx --test src/lib/icheckMetadata.test.ts && tsx scripts/validate-icheck-pdf.ts",
     "icheck:publish": "node scripts/publish-icheck-metadata.mjs"
   },
   "dependencies": {
