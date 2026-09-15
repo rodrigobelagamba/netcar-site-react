@@ -11,6 +11,10 @@ import {
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { maskPlate } from "@/lib/slug";
 import { VEHICLE_EQUIPMENT_NOTICE } from "@/lib/vehicleEquipmentNotice";
+import {
+  ICHECK_SOURCE_LABEL,
+  ICHECK_SCOPE_NOTICE,
+} from "@/reports/icheck/icheckCopy";
 import { optimizeStockImage } from "@/lib/images";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
@@ -79,7 +83,7 @@ export function ICheckLaudoPage() {
   useMetaTags({
     title: vehicle ? `Consulta i-CHECK — ${title}` : "Consulta i-CHECK",
     description:
-      "Relatório i-CHECK Netcar com resultados da consulta CheckAuto/DEKRA e dados do estoque. Não substitui laudo técnico ou vistoria cautelar.",
+      "Certificado i-CHECK com resultados da consulta DEKRA / CheckAuto e dados do estoque Netcar. Consulta de histórico, distinta de vistoria física ou laudo cautelar.",
     robots: "noindex, nofollow",
   });
 
@@ -219,10 +223,10 @@ export function ICheckLaudoPage() {
               />
               <div>
                 <p className="text-sm font-extrabold text-[#00283C]">
-                  i-CHECK Netcar
+                  DEKRA / CheckAuto
                 </p>
                 <p className="text-xs text-[#5A6B73]">
-                  Relatório de histórico do veículo
+                  i-CHECK · Certificado de consulta de histórico
                 </p>
               </div>
             </div>
@@ -247,7 +251,7 @@ export function ICheckLaudoPage() {
 
             <section className="rounded-2xl border border-[#E4EAEF] px-4 py-4 print:break-inside-avoid">
               <h2 className="text-xs font-extrabold uppercase tracking-wide text-[#00283C]">
-                Consulta CheckAuto / DEKRA
+                {ICHECK_SOURCE_LABEL}
               </h2>
               <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
                 <div>
@@ -316,6 +320,10 @@ export function ICheckLaudoPage() {
               ) : null}
               <p className="mt-1 text-sm leading-relaxed">
                 {summary.description}
+              </p>
+              <p className="mt-3 border-t border-current/15 pt-3 text-xs leading-relaxed">
+                <strong>Sobre esta consulta: </strong>
+                {ICHECK_SCOPE_NOTICE}
               </p>
               {missingMessage ? (
                 <p className="mt-2 text-sm font-medium">{missingMessage}</p>
@@ -536,10 +544,9 @@ export function ICheckLaudoPage() {
                 Sobre este relatório
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-[#5A6B73]">
-                O relatório Netcar reúne informações do estoque e os resultados
-                disponíveis da consulta CheckAuto / DEKRA. A consulta de
-                histórico não substitui vistoria cautelar, laudo técnico ou
-                inspeção presencial.
+                Relatório elaborado pela Netcar com os resultados e as
+                observações da consulta DEKRA / CheckAuto. Dados do estoque,
+                opcionais e fotos são informados pela Netcar.
               </p>
             </section>
           </div>

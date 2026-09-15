@@ -57,7 +57,9 @@ import { DeferredRender } from "@/design-system/components/layout/DeferredRender
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { generateVehicleSlug, maskPlate } from "@/lib/slug";
-import { loadIcheckMetadata } from "@/lib/icheckMetadata";
+import { useIcheckMetadata } from "@/hooks/useIcheckMetadata";
+import { getHistorySummary } from "@/reports/icheck/icheckHistory";
+import { ICHECK_SOURCE_LABEL } from "@/reports/icheck/icheckCopy";
 import { VEHICLE_EQUIPMENT_NOTICE } from "@/lib/vehicleEquipmentNotice";
 import { canonicalUrl } from "@/lib/seo";
 import {
@@ -490,7 +492,9 @@ function TradeInTextLink({
       className={`${pill ? pillClass : textClass} ${className}`}
     >
       <ArrowLeftRight
-        className={compact || pill ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4 shrink-0"}
+        className={
+          compact || pill ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4 shrink-0"
+        }
       />
       {pill ? (
         "Usado na troca"
@@ -843,23 +847,10 @@ function CTASidebar({
   pageSlug,
 }: CTASidebarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
-  const [protocoloConsulta, setProtocoloConsulta] = useState<string | null>(
-    null,
-  );
-
-  useEffect(() => {
-    setProtocoloConsulta(null);
-    if (!vehicle) return;
-    const controller = new AbortController();
-    void loadIcheckMetadata(vehicle, controller.signal).then(({ protocol }) => {
-      if (!controller.signal.aborted) {
-        setProtocoloConsulta(
-          protocol?.consultaId || protocol?.protocoloConsulta || null,
-        );
-      }
-    });
-    return () => controller.abort();
-  }, [vehicle?.id, vehicle?.placa, vehicle?.pdf, vehicle?.pdf_url]);
+  const { data: icheck } = useIcheckMetadata(vehicle);
+  const protocol = icheck?.protocol;
+  const summary = getHistorySummary(protocol?.history);
+  const protocoloConsulta = protocol?.consultaId || protocol?.protocoloConsulta;
 
   const handleOpenLaudo = () => {
     // pageSlug da rota tem o ID no fim; vehicle.slug da API é link legado .html sem ID
@@ -942,8 +933,8 @@ function CTASidebar({
             className="group w-full rounded-2xl border border-[#087A37]/15 bg-white p-5 text-left shadow-[0_8px_24px_rgba(0,40,60,0.045)] transition-colors hover:border-[#087A37]/30 hover:bg-[#087A37]/[0.025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087A37]/30"
             aria-label={
               protocoloConsulta
-                ? `Abrir laudo i-CHECK, ConsultaID ${protocoloConsulta}`
-                : "Abrir laudo i-CHECK em nova aba"
+                ? `Ver certificado da consulta DEKRA / CheckAuto, ConsultaID ${protocoloConsulta}`
+                : "Ver certificado da consulta DEKRA / CheckAuto em nova aba"
             }
           >
             <span className="flex w-full items-center gap-3">
@@ -960,13 +951,22 @@ function CTASidebar({
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-[#087A37]">
-                  i-CHECK Netcar
+                  {ICHECK_SOURCE_LABEL}
                 </span>
-                <span className="mt-0.5 block text-[16px] font-black text-[#00283C]">
-                  Histórico disponível
+                <span
+                  className={`mt-1 flex items-center gap-1.5 text-[18px] font-black ${summary.approved ? "text-[#087A37]" : "text-[#00283C]"}`}
+                >
+                  {summary.approved ? (
+                    <Check className="h-5 w-5 shrink-0" aria-hidden="true" />
+                  ) : null}
+                  {summary.approved
+                    ? "I-CHECK APROVADO"
+                    : protocol
+                      ? summary.title
+                      : "Consultar histórico"}
                 </span>
                 <span className="mt-0.5 block text-[12px] leading-snug text-muted-foreground">
-                  Fotos e consulta DEKRA / CheckAuto
+                  Ver certificado e resultados da consulta
                 </span>
               </span>
               <ArrowRight className="h-5 w-5 shrink-0 text-[#087A37] transition-transform group-hover:translate-x-0.5" />
@@ -1613,10 +1613,7 @@ function LoadingVehicleDetail({ slug }: { slug: string }) {
   const modeloCompleto = vehicleLabelFromSlug(slug) || "Seminovo";
 
   return (
-    <main
-      className="max-w-full overflow-x-clip pt-16 md:pt-0"
-      aria-busy="true"
-    >
+    <main className="max-w-full overflow-x-clip pt-16 md:pt-0" aria-busy="true">
       <section className="relative w-full min-h-[70vh] overflow-hidden py-8 lg:py-12">
         <div className="container-main grid grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div className="order-2 space-y-4 lg:order-1">
@@ -1660,7 +1657,12 @@ export function DetalhesPage() {
     error,
     isPending,
   } = useVehicleQuery(slug);
-  const vehicleVideosQuery = useVehicleVideosQuery(Boolean(vehicle && vehicle.price > 0));
+  const { data: icheck } = useIcheckMetadata(
+    isPlaceholderData ? undefined : vehicle,
+  );
+  const vehicleVideosQuery = useVehicleVideosQuery(
+    Boolean(vehicle && vehicle.price > 0),
+  );
 
   const vehicleDiscoveryLandings = useMemo(() => {
     if (!vehicle) return [];
@@ -2062,7 +2064,10 @@ export function DetalhesPage() {
   const instagramVideo = selectVehicleInstagramVideo(
     String(vehicle.id),
     vehicle.price,
-    vehicleVideosForDisplay(vehicleVideosQuery.data, vehicleVideosQuery.isError),
+    vehicleVideosForDisplay(
+      vehicleVideosQuery.data,
+      vehicleVideosQuery.isError,
+    ),
   );
   const vehicleLabel = [marca, modeloCompleto, vehicle.year]
     .filter(Boolean)
@@ -2073,7 +2078,7 @@ export function DetalhesPage() {
   const diferenciais = vehicle?.diferenciais ?? [];
   const hasDiferencial = (tag: string) =>
     diferenciais.some((diff) => diff.tag === tag);
-  const hasIcheckSeal = vehicle ? hasVehicleIcheck(vehicle) : false;
+  const hasIcheckSeal = getHistorySummary(icheck?.protocol?.history).approved;
   const merchandising = getVehicleMerchandising(vehicle);
   const isCommercialHighlight =
     Number(vehicle?.km) > 0 &&
@@ -2117,7 +2122,7 @@ export function DetalhesPage() {
             ? [{ text: "Único Dono", variant: "green-dark" as const }]
             : []),
           ...(hasIcheckSeal
-            ? [{ text: "i-CHECK DISPONÍVEL", variant: "icheck" as const }]
+            ? [{ text: "I-CHECK APROVADO", variant: "icheck" as const }]
             : []),
         ]
   ).slice(0, 4);
