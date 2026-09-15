@@ -13,7 +13,6 @@ import {
   normalizeHistoryItems,
   type ICheckHistoryItem,
 } from "./icheckHistory";
-import { getConsultationAgeDays } from "../../lib/icheckMetadata";
 import { VEHICLE_EQUIPMENT_NOTICE } from "../../lib/vehicleEquipmentNotice";
 
 const NAVY = "#00283C";
@@ -277,7 +276,6 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
   const summary = getHistorySummary(history);
   const palette = summary.approved ? PALETTES.clear : PALETTES[summary.level];
   const dataHora = data.dataHoraConsulta || data.issuedAt;
-  const ageDays = getConsultationAgeDays(dataHora);
   const consultationNotes = (data.consultationNotes || []).filter((note) =>
     note.trim(),
   );
@@ -370,21 +368,6 @@ export function ICheckReportDocument({ data }: { data: ICheckReportData }) {
           ) : null}
         </View>
         <FieldGrid items={consultationFields} />
-        {ageDays !== null && ageDays > 180 ? (
-          <View
-            style={[
-              styles.note,
-              { backgroundColor: PALETTES.warning.backgroundColor },
-            ]}
-            wrap={false}
-          >
-            <Text style={[styles.body, { color: PALETTES.warning.color }]}>
-              Consulta realizada há mais de 180 dias. Os resultados retratam o
-              histórico dessa data; solicite uma consulta atualizada para
-              confirmar a situação.
-            </Text>
-          </View>
-        ) : null}
         <Text style={styles.sectionTitle} minPresenceAhead={85}>
           Consultas individuais
         </Text>

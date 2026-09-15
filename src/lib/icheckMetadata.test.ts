@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
-  getConsultationAgeDays,
   loadIcheckMetadata,
   resolveIcheckAttachment,
   validateIcheckMetadata,
@@ -270,17 +269,6 @@ test("dates are explicit and never manufactured into supplier identifiers", () =
   assert.equal(
     resolveIcheckProtocol("36896005", "10/03/2026 11:17:49"),
     "36896005",
-  );
-  assert.equal(
-    getConsultationAgeDays("31/02/2026", new Date("2026-09-14T16:00:00Z")),
-    null,
-  );
-  assert.equal(
-    getConsultationAgeDays(
-      "22/07/2026 10:35:29",
-      new Date("2026-09-14T16:00:00Z"),
-    ),
-    54,
   );
 });
 

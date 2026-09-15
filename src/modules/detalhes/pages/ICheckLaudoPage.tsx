@@ -25,7 +25,6 @@ import {
   normalizeHistoryItems,
 } from "@/reports/icheck/icheckHistory";
 import {
-  getConsultationAgeDays,
   loadIcheckMetadata,
   type ICheckMetadataResult,
 } from "@/lib/icheckMetadata";
@@ -111,8 +110,6 @@ export function ICheckLaudoPage() {
   const history = normalizeHistoryItems(protocol?.history);
   const summary = getHistorySummary(history);
   const consultaId = protocol?.consultaId || protocol?.protocoloConsulta;
-  const consultationAge = getConsultationAgeDays(protocol?.dataHoraConsulta);
-  const isOldConsultation = consultationAge !== null && consultationAge > 180;
   const hasAlienacao = history.some((item) =>
     isAlienacaoFiduciaria(item.status),
   );
@@ -296,12 +293,6 @@ export function ICheckLaudoPage() {
                 Os resultados refletem a situação na data e hora indicadas
                 acima.
               </p>
-              {isOldConsultation ? (
-                <p className="mt-3 rounded-lg bg-[#FFF8E1] px-3 py-2 text-sm font-semibold text-[#92400E]">
-                  Consulta realizada há mais de 180 dias. Confirme a situação
-                  atual com a Netcar.
-                </p>
-              ) : null}
             </section>
 
             <section

@@ -320,7 +320,7 @@ for (const sample of cases) {
     if (sample.name === "multipage") {
       assert.ok(text.total >= 4);
       assert.ok(text.text.includes("REAL-123456"));
-      assert.ok(text.text.includes("há mais de 180 dias"));
+      assert.ok(!text.text.includes("há mais de 180 dias"));
       for (let index = 1; index <= 80; index += 1) {
         assert.ok(
           text.pages.some((page) =>
