@@ -461,12 +461,16 @@ test("API inventory pagination requests 500 and refuses a stalled/incomplete lis
       ok: true,
       json: async () => ({
         data: page === "1" ? [{ id: "1" }, { id: "2" }] : [{ id: "3" }],
-        total_results: 3,
+        total: 3,
       }),
     };
   };
   assert.equal((await fetchInventory({ fetchImpl })).length, 3);
   assert.equal(calls.length, 2);
+  assert.deepEqual(
+    calls.map((url) => new URL(url).searchParams.get("offset")),
+    ["0", "2"],
+  );
   assert(
     calls.every((url) => new URL(url).searchParams.get("limit") === "500"),
   );
@@ -474,11 +478,32 @@ test("API inventory pagination requests 500 and refuses a stalled/incomplete lis
     fetchInventory({
       fetchImpl: async () => ({
         ok: true,
-        json: async () => ({ data: [{ id: "1" }], total_results: 3 }),
+        json: async () => ({ data: [{ id: "1" }], total: 3 }),
       }),
     }),
     /stalled/,
   );
+  await assert.rejects(
+    fetchInventory({
+      fetchImpl: async () => Response.json({ data: [], total: 3 }),
+    }),
+    /incomplete/,
+  );
+});
+
+test("inventory total_results is a page count and does not truncate a 501-vehicle listing", async () => {
+  const inventory = Array.from({ length: 501 }, (_, id) => ({ id }));
+  const offsets = [];
+  const actual = await fetchInventory({
+    fetchImpl: async (url) => {
+      const offset = Number(new URL(url).searchParams.get("offset"));
+      offsets.push(offset);
+      const data = inventory.slice(offset, offset + 500);
+      return Response.json({ success: true, data, total_results: data.length });
+    },
+  });
+  assert.deepEqual(actual, inventory);
+  assert.deepEqual(offsets, [0, 500]);
 });
 
 const audit =
