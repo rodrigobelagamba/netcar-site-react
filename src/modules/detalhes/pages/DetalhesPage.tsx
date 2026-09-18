@@ -1613,7 +1613,7 @@ function LoadingVehicleDetail({ slug }: { slug: string }) {
   const modeloCompleto = vehicleLabelFromSlug(slug) || "Seminovo";
 
   return (
-    <main className="max-w-full overflow-x-clip pt-16 md:pt-0" aria-busy="true">
+    <main className="max-w-full min-w-0 overflow-x-clip pt-16 md:pt-0" aria-busy="true">
       <section className="relative w-full min-h-[70vh] overflow-hidden py-8 lg:py-12">
         <div className="container-main grid grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div className="order-2 space-y-4 lg:order-1">
@@ -2127,7 +2127,7 @@ export function DetalhesPage() {
         ]
   ).slice(0, 4);
   return (
-    <main className="max-w-full overflow-x-clip pt-16 md:pt-0">
+    <main className="max-w-full min-w-0 overflow-x-clip pb-28 pt-16 md:pb-32 md:pt-0">
       {vehicle && (
         <VehicleSchemaOrg
           marca={marca}
@@ -2685,7 +2685,7 @@ function VehicleDifferentialHighlights({
       </div>
 
       {featuredHighlight?.metric && (
-        <article className="mt-6 grid gap-3 rounded-2xl border border-primary/20 bg-primary/[0.05] px-5 py-5 sm:grid-cols-[150px_1fr] sm:items-center sm:gap-6 sm:px-6">
+        <article className="mt-6 grid min-w-0 gap-3 rounded-2xl border border-primary/20 bg-primary/[0.05] px-5 py-5 sm:grid-cols-[minmax(0,150px)_minmax(0,1fr)] sm:items-center sm:gap-6 sm:px-6">
           <div className="text-4xl font-black tracking-[-0.04em] text-[#00283C] sm:text-5xl">
             {featuredHighlight.metric.value}{" "}
             <span className="text-2xl sm:text-3xl">
@@ -2706,11 +2706,11 @@ function VehicleDifferentialHighlights({
         </article>
       )}
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+      <div className="mt-6 grid min-w-0 gap-3 sm:grid-cols-2">
         {regularHighlights.map((highlight) => (
           <article
             key={highlight.id}
-            className="rounded-2xl border border-[#00283C]/10 bg-white px-5 py-4"
+            className="min-w-0 rounded-2xl border border-[#00283C]/10 bg-white px-5 py-4"
           >
             <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#23747C]">
               {highlight.category}
@@ -2979,9 +2979,9 @@ function DetailsSection({
   return (
     <section className="w-full py-8 sm:py-12 lg:py-16">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_410px] lg:gap-10">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,410px)] lg:gap-10">
           {/* Main Content */}
-          <div className="order-1 lg:order-1">
+          <div className="order-1 min-w-0 lg:order-1">
             {/* Especificações */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
@@ -3005,7 +3005,7 @@ function DetailsSection({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
+              <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4">
                 {specifications.map((spec, index) => (
                   <SpecBadge
                     key={index}
@@ -3046,7 +3046,7 @@ function DetailsSection({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-x-6 rounded-2xl border border-[#00283C]/[0.08] bg-white px-4 py-3 sm:grid-cols-2 sm:px-5 lg:grid-cols-3">
+                <div className="grid min-w-0 grid-cols-1 gap-x-6 rounded-2xl border border-[#00283C]/[0.08] bg-white px-4 py-3 sm:grid-cols-2 sm:px-5 lg:grid-cols-3">
                   {displayedOptionals
                     .slice(0, showMoreOptionals ? displayedOptionals.length : 9)
                     .map((optional: string, index: number) => (
@@ -3144,7 +3144,7 @@ function DetailsSection({
           </div>
 
           {/* Sticky Sidebar */}
-          <div className="order-2 lg:sticky lg:top-24 lg:self-start">
+          <div className="order-2 min-w-0 lg:sticky lg:top-24 lg:self-start">
             <CTASidebar
               vehicle={vehicle}
               modeloCompleto={modeloCompleto}

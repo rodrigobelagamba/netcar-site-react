@@ -313,13 +313,13 @@ function RootComponent() {
         </div>
       ) : null}
       <div
-        className={`relative max-w-full flex-1 overflow-x-clip print:min-h-0 print:pt-0 ${
+        className={`relative max-w-full min-w-0 flex-1 print:min-h-0 print:pt-0 ${
           isLaudoPage ? "min-h-[100dvh] pt-0" : "min-h-[100dvh] pt-0 sm:pt-20"
         }`}
       >
         <div
           key={location.pathname}
-          className="h-full max-w-full overflow-x-clip"
+          className="max-w-full min-w-0"
           id="conteudo-principal"
           tabIndex={-1}
         >
