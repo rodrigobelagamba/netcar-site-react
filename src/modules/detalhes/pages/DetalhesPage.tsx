@@ -2223,7 +2223,7 @@ export function DetalhesPage() {
         </div>
       )}
       {/* Hero Section */}
-      <section className="relative w-full max-w-full overflow-hidden py-0 pb-0 pt-0 lg:min-h-[820px] lg:pt-0 xl:min-h-[820px] 2xl:min-h-[830px] 3xl:min-h-[850px] 4xl:min-h-[1200px] 5xl:min-h-[1500px] 6xl:min-h-[1900px]">
+      <section className="relative w-full max-w-full overflow-hidden py-0 pb-8 pt-0 lg:min-h-[820px] lg:pb-12 lg:pt-0 xl:min-h-[820px] 2xl:min-h-[830px] 3xl:min-h-[850px] 4xl:min-h-[1200px] 5xl:min-h-[1500px] 6xl:min-h-[1900px]">
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
         <div
           className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
@@ -2295,16 +2295,7 @@ export function DetalhesPage() {
               duration: ANIMATION_DURATION.slow,
               ease: ANIMATION_EASING,
             }}
-            className="w-full lg:absolute 
-            lg:w-[25%] lg:left-[10%] lg:top-[20%]
-            xl:w-[25%] xl:left-[5rem] xl:top-[1rem]
-            2xl:w-[30%] 2xl:left-[5rem] 2xl:top-[2rem]
-            3xl:w-[30%] 3xl:left-[5rem] 3xl:top-[3rem]
-            4xl:w-[600px] 4xl:left-[-15rem] 4xl:top-[10rem]
-            5xl:w-[50%] 5xl:left-[-50rem] 5xl:top-[20rem] 
-            6xl:w-[65%] 6xl:left-[-70rem] 6xl:top-[25rem] 
-            pt-2 sm:py-6 lg:py-4 lg:py-6 flex flex-col relative lg:relative z-10
-            border border-none"
+            className="relative z-10 flex w-full min-w-0 flex-col pt-2 sm:py-6 lg:w-[32%] lg:max-w-[28rem] lg:pb-6 lg:pt-16 xl:w-[30%] xl:max-w-[32rem] 2xl:w-[32%] 2xl:max-w-[36rem]"
           >
             {/* Brand */}
             <motion.p
