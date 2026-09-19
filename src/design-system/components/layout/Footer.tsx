@@ -18,7 +18,7 @@ import { openPrivacyPreferences } from "@/components/PrivacyConsent";
 const menuLinks = [
   { to: "/como-selecionamos-nossos-carros", label: "Por que Netcar" },
   { to: "/sobre", label: "Sobre" },
-  { to: "/seminovos", label: "Seminovos", search: emptySeminovosSearch },
+  { to: "/seminovos", label: "Estoque", search: emptySeminovosSearch },
   { to: "/comparar", label: "Comparar seminovos" },
   { to: "/financiamento", label: "Financiamento" },
   { to: "/move-brasil", label: "Move Brasil" },
