@@ -395,7 +395,7 @@ export function Header() {
   const menuLinks = [
     { to: "/como-selecionamos-nossos-carros", label: "Por que Netcar" },
     { to: "/sobre", label: "Sobre" },
-    { to: "/seminovos", label: "Seminovos", search: emptySeminovosSearch },
+    { to: "/seminovos", label: "Estoque", search: emptySeminovosSearch },
     { to: "/comparar", label: "Comparar" },
     { to: "/compra", label: "Venda seu carro" },
     { to: "/regioes-atendidas", label: "Regiões" },
