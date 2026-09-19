@@ -51,6 +51,25 @@ assert.deepEqual(getTrafficSource(), {
 
 const canoasPath = `${location.pathname}${location.search}`;
 trackPageView(canoasPath);
+assert.deepEqual(
+  gtagCalls.map((call) => call.slice(0, 2)),
+  [
+    ["config", "G-MGPNBDNQ9G"],
+    ["event", "regional_landing_view"],
+  ],
+  "configuração da página deve preceder o evento regional, sem duplicação",
+);
+const initialPageConfig = gtagCalls[0][2] as Record<string, unknown>;
+assert.equal(initialPageConfig.page_path, canoasPath);
+assert.equal(initialPageConfig.page_location, location.href);
+assert.equal(initialPageConfig.traffic_utm_source, "google");
+assert.equal(initialPageConfig.traffic_medium, "organic");
+assert.equal(initialPageConfig.privacy_consent, "accepted");
+assert.equal(
+  Object.hasOwn(initialPageConfig, "send_page_view"),
+  false,
+  "a ordem não deve alterar a política existente de page_view",
+);
 trackRegionalCtaClick("whatsapp", canoasPath);
 trackWhatsAppClick({
   source: "landing",

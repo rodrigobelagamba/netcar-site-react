@@ -471,6 +471,18 @@ export function trackPageView(path?: string, title?: string): void {
   const regionalDimensions = getRegionalDimensions(pagePath);
   const trafficDimensions = getTrafficDimensions();
 
+  // Configura a página antes dos eventos que dependem do contexto dessa rota.
+  if (typeof window.gtag === "function") {
+    window.gtag("config", GA4_MEASUREMENT_ID, {
+      page_path: pagePath,
+      page_title: pageTitle,
+      page_location: pageLocation,
+      page_type: pageType,
+      ...regionalDimensions,
+      ...trafficDimensions,
+    });
+  }
+
   pushDataLayer({
     event: "virtual_page_view",
     page_path: pagePath,
@@ -489,17 +501,6 @@ export function trackPageView(path?: string, title?: string): void {
     trackBusinessEvent("regional_landing_view", {
       page_type: pageType,
       page_path: pagePath,
-      ...regionalDimensions,
-      ...trafficDimensions,
-    });
-  }
-
-  if (typeof window.gtag === "function") {
-    window.gtag("config", GA4_MEASUREMENT_ID, {
-      page_path: pagePath,
-      page_title: pageTitle,
-      page_location: pageLocation,
-      page_type: pageType,
       ...regionalDimensions,
       ...trafficDimensions,
     });
