@@ -1,32 +1,23 @@
-import blogPostsJson from "./blog-posts.json";
-import blogAutoJson from "./blog-auto.json";
 import citiesJson from "./cities.json";
 import regionalFocusJson from "./regional-focus.json";
 import landingsJson from "./landings.json";
-import contentPagesJson from "./content-pages.json";
 import type {
-  BlogPost,
   CitySeoPage,
   LandingSeoPage,
   LandingSeoFilters,
-  ContentSeoPage,
 } from "./types";
 import { resolvedVehicleCategory } from "@/lib/vehicleCategory";
 
-// Blog = posts manuais + posts auto-publicados (gerados do estoque real).
-// Manuais têm prioridade: se houver slug repetido, o manual vence.
-const manualPosts = blogPostsJson as BlogPost[];
-const autoPosts = (blogAutoJson as BlogPost[]).filter(
-  (auto) => !manualPosts.some((m) => m.slug === auto.slug),
-);
-export const blogPosts: BlogPost[] = [...manualPosts, ...autoPosts];
+// Módulos separados permitem ao build carregar artigos e páginas editoriais
+// somente nas rotas que os usam, preservando a API pública deste arquivo.
+export { blogPosts, getBlogPost } from "./blog";
+export { contentPages, getContentPage } from "./content";
+
 export const cityPages = citiesJson as CitySeoPage[];
 export const landingPages = landingsJson as LandingSeoPage[];
 export const priorityLandingPages = landingPages.filter(
   (landing) => landing.indexable && landing.footerPriority,
 );
-export const contentPages = contentPagesJson as ContentSeoPage[];
-
 export const priorityCityPages = cityPages.filter(
   (city) => city.priorityMarket,
 );
@@ -44,14 +35,6 @@ export const regionalInventoryPages = regionalInventorySlugs
 export const nearbyPriorityCityPages = regionalFocusJson.citySlugs
   .map((slug) => cityPages.find((city) => city.slug === slug))
   .filter((city): city is CitySeoPage => Boolean(city));
-
-export function getContentPage(slug: string): ContentSeoPage | undefined {
-  return contentPages.find((p) => p.slug === slug);
-}
-
-export function getBlogPost(slug: string): BlogPost | undefined {
-  return blogPosts.find((post) => post.slug === slug);
-}
 
 export function getCityPage(slug: string): CitySeoPage | undefined {
   return cityPages.find((city) => city.slug === slug);
