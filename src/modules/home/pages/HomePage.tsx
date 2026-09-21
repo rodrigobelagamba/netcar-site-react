@@ -67,6 +67,11 @@ const NetcarSocialSection = lazy(() =>
     (module) => ({ default: module.NetcarSocialSection }),
   ),
 );
+const HomeCustomerDeliveries = lazy(() =>
+  import("../components/HomeCustomerDeliveries").then((module) => ({
+    default: module.HomeCustomerDeliveries,
+  })),
+);
 
 type InitialHomeLcpImage = {
   src: string;
@@ -464,6 +469,12 @@ export function HomePage() {
           </Suspense>
         </DeferredRender>
       </div>
+
+      <DeferredRender minHeight={360} rootMargin="300px">
+        <Suspense fallback={null}>
+          <HomeCustomerDeliveries />
+        </Suspense>
+      </DeferredRender>
 
       <DeferredRender minHeight={800}>
         <Suspense fallback={null}>
