@@ -236,8 +236,27 @@
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#6cc4ca" />
 
+    <!-- O catálogo não deve pintar o splash da home antes de montar a grade.
+         Sem JavaScript, o shell com contatos continua acessível. -->
+    <script id="netcar-entry-route">
+      if (window.location.pathname.replace(/\/+$/, "") === "/seminovos") {
+        document.documentElement.setAttribute("data-netcar-entry", "stock");
+      }
+    </script>
+
     <!-- Shell mínimo do primeiro paint; o React o substitui ao montar. -->
     <style>
+      html[data-netcar-entry="stock"],
+      html[data-netcar-entry="stock"] body {
+        margin: 0;
+        background: hsl(217 10% 95%);
+      }
+      html[data-netcar-entry="stock"] #root {
+        min-height: 100vh;
+      }
+      html[data-netcar-entry="stock"] #netcar-initial-shell {
+        display: none;
+      }
       #netcar-initial-shell {
         box-sizing: border-box;
         display: flex;
