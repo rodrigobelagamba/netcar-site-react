@@ -114,7 +114,6 @@ export function SobrePage() {
       members: [
         { name: "Filipe", role: "Consultor", image: "/team/filipe.jpg" },
         { name: "Tiago", role: "Consultor", image: "/team/tiago.jpg" },
-        { name: "Bruno", role: "Consultor", image: "/team/bruno.jpg" },
         { name: "Gilnei", role: "Consultor", image: "/team/gilnei.jpg" },
       ],
     },
