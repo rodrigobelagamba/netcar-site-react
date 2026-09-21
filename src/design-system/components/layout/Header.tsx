@@ -396,6 +396,7 @@ export function Header() {
     { to: "/como-selecionamos-nossos-carros", label: "Por que Netcar" },
     { to: "/sobre", label: "Sobre" },
     { to: "/seminovos", label: "Estoque", search: emptySeminovosSearch },
+    { to: "/entregas", label: "Entregas" },
     { to: "/comparar", label: "Comparar" },
     { to: "/compra", label: "Venda seu carro" },
     { to: "/regioes-atendidas", label: "Regiões" },
@@ -600,9 +601,9 @@ export function Header() {
           />
 
           {/* Menu centralizado com animação */}
-          <div className="fixed inset-0 z-[70] flex items-center justify-center">
+          <div className="fixed inset-0 z-[70] overflow-y-auto">
             <nav
-              className="flex flex-col items-center gap-6"
+              className="flex min-h-full flex-col items-center justify-center gap-6 py-20"
               aria-label="Menu mobile"
             >
               {/* Campo de Busca Mobile com Autocomplete */}

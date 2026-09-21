@@ -1,5 +1,14 @@
 # Dependencies
 node_modules/
+/node_modules
+
+# Gallery media is persistent content on the hosting server, not source code.
+# Deploys may update the reviewed seed, never a snapshot of live publications.
+/public/entregas-media/
+/public/entregas-data/*
+!/public/entregas-data/.htaccess
+/docs/entregas-instagram-import-audit.json
+/docs/entregas-marketing-provenance.json
 
 # Build output
 dist/

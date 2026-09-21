@@ -1,4 +1,4 @@
-import { getBootstrapVehicle, getBootstrapVehicles } from "@/lib/stockBootstrap";
+import { getBootstrapVehicle } from "@/lib/stockBootstrap";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
 type CriticalImage = {
@@ -7,7 +7,6 @@ type CriticalImage = {
   sizes: string;
   widths: number[];
   fallbackWidth: number;
-  compact?: boolean;
 };
 
 function routeCriticalImage(): CriticalImage | null {
@@ -27,25 +26,9 @@ function routeCriticalImage(): CriticalImage | null {
     };
   }
 
-  if (pathname === "/seminovos") {
-    const vehicle = [...(getBootstrapVehicles() || [])].sort((left, right) =>
-      String(left.modelo || left.name || "").localeCompare(
-        String(right.modelo || right.name || ""),
-        "pt-BR",
-        { numeric: true },
-      ),
-    )[0];
-    const image = vehicle?.imagens_site?.capa_thumb || vehicle?.imagens_site?.capa || vehicle?.images?.[0];
-    if (!vehicle || !image) return null;
-    return {
-      image,
-      alt: `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name || "seminovo"}`.trim(),
-      sizes: "100vw",
-      widths: [320, 480, 640, 768, 960],
-      fallbackWidth: 640,
-      compact: true,
-    };
-  }
+  // O catálogo é uma grade, não um hero. Um carro isolado neste fallback
+  // reaparecia por um frame entre o shell HTML e a página carregada.
+  if (pathname.replace(/\/+$/, "") === "/seminovos") return null;
 
   if (pathname.startsWith("/veiculo/")) {
     const vehicle = getBootstrapVehicle(pathname.slice("/veiculo/".length));
@@ -83,7 +66,7 @@ export function PageLoader() {
         loading="eager"
         decoding="async"
         fetchPriority="high"
-        className={`h-auto max-h-[55vh] object-contain ${critical.compact ? "w-1/2 md:w-1/4" : "w-full"}`}
+        className="h-auto max-h-[55vh] w-full object-contain"
       />
     </div>
   );

@@ -90,6 +90,7 @@ import {
   hasVehicleIcheck,
 } from "@/lib/vehicleMerchandising";
 import { VehicleVideoLink } from "../components/VehicleVideoLink";
+import { CustomerDeliveriesCallout } from "../components/CustomerDeliveriesCallout";
 import { selectVehicleInstagramVideo } from "../lib/vehicleInstagramVideos";
 import { useVehicleVideosQuery } from "../queries/useVehicleVideosQuery";
 import { vehicleVideosForDisplay } from "../lib/vehicleVideosResponse";
@@ -2403,6 +2404,7 @@ export function DetalhesPage() {
                   waRef={waRef}
                 />
               </div>
+              <CustomerDeliveriesCallout />
             </div>
 
             <div className="order-5 sm:order-none w-full">

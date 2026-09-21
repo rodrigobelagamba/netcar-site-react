@@ -28,6 +28,11 @@ const HomePage = lazyWithRetry(() =>
     default: m.HomePage,
   })),
 );
+const EntregasPage = lazyWithRetry(() =>
+  import("@/modules/entregas/pages/EntregasPage").then((m) => ({
+    default: m.EntregasPage,
+  })),
+);
 const SeminovosPage = lazyWithRetry(() =>
   import("@/modules/seminovos/pages/SeminovosPage").then((m) => ({
     default: m.SeminovosPage,
@@ -350,6 +355,12 @@ const indexRoute = createRoute({
   component: HomePage,
 });
 
+const entregasRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/entregas",
+  component: EntregasPage,
+});
+
 type SeminovosRouteSearch = {
   marca?: string;
   modelo?: string;
@@ -526,6 +537,7 @@ const comoSelecionamosRoute = createRoute({
 
 export const routeTree = rootRoute.addChildren([
   indexRoute,
+  entregasRoute,
   seminovosRoute,
   detalhesRoute,
   icheckLaudoRoute,

@@ -19,6 +19,7 @@ const menuLinks = [
   { to: "/como-selecionamos-nossos-carros", label: "Por que Netcar" },
   { to: "/sobre", label: "Sobre" },
   { to: "/seminovos", label: "Estoque", search: emptySeminovosSearch },
+  { to: "/entregas", label: "Entregas" },
   { to: "/comparar", label: "Comparar seminovos" },
   { to: "/financiamento", label: "Financiamento" },
   { to: "/move-brasil", label: "Move Brasil" },

@@ -166,6 +166,11 @@ function netcar_fixed_route_meta()
             'description' => 'Conheça a Netcar Multimarcas em Esteio/RS: Fábrica de Valor, garantia, Nethelp e duas lojas. Seminovos com procedência desde 1997.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/sobre',
         ],
+        '/entregas' => [
+            'title' => 'Netcar - Entregas de carros e clientes | Esteio/RS',
+            'description' => 'Conheça as entregas de carros da Netcar Multimarcas em Esteio/RS. Explore as fotos por mês e ano, reveja sua entrega e compartilhe esse momento.',
+            'canonical' => 'https://www.netcarmultimarcas.com.br/entregas',
+        ],
         '/contato' => [
             'title' => 'Contato | Netcar Multimarcas — 2 Lojas Esteio',
             'description' => 'WhatsApp (51) 99729-3118. Av. Presidente Vargas 740 e 1106, Esteio/RS.',
@@ -476,6 +481,7 @@ function netcar_route_manifest_entry($path)
     if (preg_match('#^/veiculo/#', (string) $path)) return 'src/modules/detalhes/pages/DetalhesPage.tsx';
     if (preg_match('#^/laudo/#', (string) $path)) return 'src/modules/detalhes/pages/ICheckLaudoPage.tsx';
     if ($path === '/sobre') return 'src/modules/sobre/pages/SobrePage.tsx';
+    if ($path === '/entregas') return 'src/modules/entregas/pages/EntregasPage.tsx';
     if ($path === '/contato') return 'src/modules/contato/pages/ContatoPage.tsx';
     if (in_array($path, array('/compra', '/compramos-seu-usado', '/vender-meu-carro'), true)) {
         return 'src/modules/compra/pages/CompraPage.tsx';
@@ -836,7 +842,25 @@ if (!netcar_is_valid_spa_route($path)) {
     netcar_render_error(404);
 }
 
-$html = netcar_apply_route_meta($html, netcar_route_meta($path));
+$routeMeta = netcar_route_meta($path);
+if ($path === '/entregas') {
+    require_once __DIR__ . '/entregas/v1/seo.php';
+    $entregasPage = entregas_requested_page();
+    try {
+        $entregasItems = entregas_all_deliveries();
+    } catch (Exception $error) {
+        error_log('Entregas HTML: ' . $error->getMessage());
+        header('Retry-After: 60');
+        netcar_render_error(503);
+    }
+    if ($entregasPage === null || $entregasPage > max(1, (int) ceil(count($entregasItems) / 24))) {
+        netcar_render_error(404);
+    }
+    $routeMeta = entregas_page_meta($entregasPage);
+    $html = entregas_inject_initial_html($html, entregas_initial_html($entregasItems, $entregasPage));
+    $html = str_replace('</head>', entregas_collection_schema($entregasItems, $entregasPage) . "\n</head>", $html);
+}
+$html = netcar_apply_route_meta($html, $routeMeta);
 $isHome = $path === '/';
 
 $modulePreloads = netcar_route_modulepreloads($path);

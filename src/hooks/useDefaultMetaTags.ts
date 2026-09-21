@@ -8,7 +8,7 @@ import { CANONICAL_ORIGIN, canonicalUrl } from "@/lib/seo";
 export function useDefaultMetaTags(
   title?: string,
   description?: string,
-  options?: { canonicalPath?: string; robots?: string },
+  options?: { canonicalPath?: string; robots?: string; imagePath?: string },
 ) {
   useEffect(() => {
     const baseUrl = CANONICAL_ORIGIN;
@@ -20,7 +20,7 @@ export function useDefaultMetaTags(
 
     // O PHP já entrega o OG correto no acesso direto. Em navegação SPA, usa a
     // fachada estável sem abrir uma requisição de banners durante o LCP.
-    const storeImage = `${baseUrl}/images/loja1.jpg`;
+    const storeImage = options?.imagePath || `${baseUrl}/images/loja1.jpg`;
     const absoluteImageUrl = storeImage.startsWith("http")
       ? storeImage
       : storeImage.startsWith("/")
@@ -101,5 +101,6 @@ export function useDefaultMetaTags(
     description,
     options?.canonicalPath,
     options?.robots,
+    options?.imagePath,
   ]);
 }

@@ -1,10 +1,69 @@
 import { spawn } from 'child_process';
-import { createWriteStream, readFileSync, statSync, unlinkSync } from 'fs';
+import { createWriteStream, existsSync, readdirSync, readFileSync, statSync, unlinkSync } from 'fs';
 import { tmpdir } from 'os';
-import { join } from 'path';
+import { join, posix } from 'path';
 import { Client } from 'ssh2';
 
-const TAR_EXCLUDES = ['.git', '.gitignore', '.git-commit-msg.txt'];
+// Runtime deliveries belong to the publisher, never to a build or dist rollback.
+const TAR_EXCLUDES = ['.git', '.gitignore', '.git-commit-msg.txt',
+  'entregas-data/live.json', 'entregas-data/.publish.lock',
+  'entregas-data/.entregas-*', 'entregas-media/live'];
+
+export function isDeliveryRuntimePath(path) {
+  const normalized = String(path).replaceAll('\\', '/').replace(/^(\.\/)+/, '');
+  return normalized === 'entregas-data/live.json'
+    || normalized === 'entregas-data/.publish.lock'
+    || normalized.startsWith('entregas-data/.entregas-')
+    || normalized === 'entregas-media/live'
+    || normalized.startsWith('entregas-media/live/');
+}
+
+/** Full-site deployments must retain the already-public /entregas feature. */
+export function assertDeliveryGalleryBuild(localDir) {
+  const fail = (reason) => {
+    throw new Error(`Deploy bloqueado: pacote sem galeria /entregas íntegra (${reason}). Integre a galeria na branch canônica e gere um novo build; um dist antigo não pode remover a página publicada.`);
+  };
+  const read = (name) => {
+    if (typeof name !== 'string' || name.startsWith('/') || name.includes('\\')
+        || posix.normalize(name) !== name || name.startsWith('../')
+        || !existsSync(join(localDir, name)) || !statSync(join(localDir, name)).isFile()) fail(`arquivo ausente ou inválido: ${name}`);
+    return readFileSync(join(localDir, name), 'utf8');
+  };
+  const parse = (name) => {
+    try { return JSON.parse(read(name)); } catch { fail(`JSON inválido: ${name}`); }
+  };
+  const php = read('index.php');
+  if (!/\$path\s*===\s*['"]\/entregas['"]/.test(php)
+      || !php.includes('/entregas/v1/seo.php') || !php.includes('entregas_inject_initial_html')) fail('rota e HTML inicial PHP');
+  if (!read('.htaccess').includes('RewriteRule ^entregas/?$ index.php')) fail('rota Apache');
+  const directoryRules = read('entregas/.htaccess');
+  if (!/DirectorySlash\s+Off/.test(directoryRules) || !directoryRules.includes('AllowNoSlash')
+      || !directoryRules.includes('^/entregas/?$')) fail('rota do diretório /entregas');
+  for (const file of ['lib.php', 'seo.php', 'feed.php', 'publish.php', 'status.php']) read(`entregas/v1/${file}`);
+  const seed = parse('entregas-data/seed.json');
+  if (!Array.isArray(seed?.deliveries) || !seed.deliveries.length
+      || seed.deliveries.some((item) => !item?.id || typeof item.imageUrl !== 'string')) fail('histórico seed vazio ou inválido');
+
+  const manifest = parse('.vite/manifest.json');
+  const galleryKey = 'src/modules/entregas/pages/EntregasPage.tsx';
+  if (!manifest?.['index.html']?.isEntry || !manifest?.[galleryKey]) fail('entrada da galeria no manifest');
+  const html = read('index.html');
+  if (!html.includes(manifest['index.html'].file)) fail('HTML e manifest de builds diferentes');
+  const visited = new Set();
+  const inspect = (key) => {
+    if (visited.has(key)) return;
+    visited.add(key);
+    const entry = manifest[key];
+    if (!entry || typeof entry.file !== 'string') fail(`dependência ausente: ${key}`);
+    read(entry.file);
+    for (const asset of [...(entry.css || []), ...(entry.assets || [])]) read(asset);
+    for (const dependency of [...(entry.imports || []), ...(entry.dynamicImports || [])]) inspect(dependency);
+  };
+  inspect('index.html');
+  if (!visited.has(galleryKey)) fail('galeria desconectada do aplicativo');
+  if (![...visited].some((key) => /['"]\/entregas['"]/.test(read(manifest[key].file)))) fail('rota /entregas no JavaScript');
+  return { deliveries: seed.deliveries.length, chunks: visited.size };
+}
 
 function tarSpawnArgs() {
   return [...TAR_EXCLUDES.flatMap((name) => ['--exclude', name]), '-cf', '-', '.'];
@@ -191,6 +250,24 @@ function uploadViaSftp(sftp, localPath, remotePath, onProgress) {
   });
 }
 
+async function pruneRemoteTeamPhotos(conn, remotePath, localDir, onProgress) {
+  const teamDir = join(localDir, 'team');
+  if (!existsSync(teamDir)) return;
+
+  const keep = readdirSync(teamDir).filter(
+    (name) => statSync(join(teamDir, name)).isFile() && /^[A-Za-z0-9._-]+$/.test(name)
+  );
+  if (!keep.length) return;
+
+  const keepList = keep.join(' ');
+  onProgress?.('   Removendo fotos de equipe que saíram do build…');
+  await execRemote(
+    conn,
+    `cd ${remotePath}/team && for f in *; do [ -f "$f" ] || continue; case " ${keepList} " in *" $f "*) ;; *) rm -f -- "$f" ;; esac; done`,
+    onProgress
+  );
+}
+
 /**
  * Deploy dist/ via SSH com senha (SFTP — estável no Windows, sem travar no stdin).
  */
@@ -202,6 +279,7 @@ export async function deployTarViaSshPassword({
   localDir,
   onProgress,
 }) {
+  assertDeliveryGalleryBuild(localDir);
   const report = (message) => onProgress?.(message);
   const remotePath = String(remoteDir || 'www').replace(/\/$/, '');
   const remoteTarName = `.netcar-deploy-${Date.now()}.tar`;
@@ -240,10 +318,13 @@ export async function deployTarViaSshPassword({
         `tar -C ${remotePath} --no-same-owner --no-same-permissions -xf $HOME/${remoteTarName}`,
         `rm -f $HOME/${remoteTarName}`,
         `chmod 755 ${remotePath}`,
-        `chmod -R a+rX ${remotePath}`,
+        // Never alter live gallery files or permissions while its worker publishes.
+        `find ${remotePath} \\( -path ${remotePath}/entregas-data -o -path ${remotePath}/entregas-media/live \\) -prune -o -exec chmod a+rX {} +`,
       ].join(' && '),
       onProgress
     );
+
+    await pruneRemoteTeamPhotos(conn, remotePath, localDir, onProgress);
 
     report(`   Deploy finalizado (${formatMb(statSync(localTarPath).size)} enviados)`);
   } finally {

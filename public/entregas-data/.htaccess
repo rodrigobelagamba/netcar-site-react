@@ -1,0 +1,8 @@
+Options -Indexes
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow"
+  Header set Cache-Control "public, max-age=30, s-maxage=30"
+</IfModule>

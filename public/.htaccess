@@ -248,6 +248,8 @@ ErrorDocument 410 /410.html
   # Primeiro: servir só arquivos reais (-f).
   # NÃO usar -d genérico: o docroot de produção ainda tem pastas legadas
   # (seminovos/, veiculo/, etc.) que interceptavam a URL e mandavam para not-found.html.
+  # Galeria: a pasta dos endpoints não deve redirecionar a página para /entregas/.
+  RewriteRule ^entregas/?$ index.php [L,QSA]
   RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
 

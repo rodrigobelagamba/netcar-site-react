@@ -14,6 +14,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      "/entregas/v1/feed.php": {
+        target: "https://www.netcarmultimarcas.com.br",
+        changeOrigin: true,
+      },
       "/api/embedsocial-proxy": {
         target: "https://embedsocial.com",
         changeOrigin: true,

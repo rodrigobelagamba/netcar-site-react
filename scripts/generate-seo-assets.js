@@ -1855,6 +1855,7 @@ for (const page of contentPages) {
 const staticPages = [
   { path: "/", priority: "1.0", changefreq: "daily" },
   { path: "/seminovos", priority: "0.9", changefreq: "daily" },
+  { path: "/entregas", priority: "0.7", changefreq: "weekly" },
   { path: "/regioes-atendidas", priority: "0.85", changefreq: "monthly" },
   { path: "/expointer-esteio", priority: "0.6", changefreq: "monthly" },
   { path: "/sobre", priority: "0.8", changefreq: "monthly" },

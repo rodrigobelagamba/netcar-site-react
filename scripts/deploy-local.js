@@ -18,7 +18,7 @@ import {
   writeFileSync,
 } from 'fs';
 import { homedir, tmpdir } from 'os';
-import { join, dirname } from 'path';
+import { join, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 // ssh-deploy importa ssh2; import lazy para o script iniciar mesmo com
 // node_modules desatualizado (o npm ci roda dentro deste script).
@@ -593,7 +593,31 @@ async function deployViaSsh(sshConfig, distPath) {
     shell: true,
     env: { ...process.env, ...ssh.env },
   });
+  pruneRemoteTeamPhotos(sshConfig, remote, remoteDir, distPath);
   log('\n✅ Deploy SSH concluído!', 'green');
+}
+
+function pruneRemoteTeamPhotos(sshConfig, remote, remoteDir, distPath) {
+  const teamDir = join(distPath, 'team');
+  if (!existsSync(teamDir)) return;
+
+  const keep = readdirSync(teamDir)
+    .filter((name) => statSync(join(teamDir, name)).isFile())
+    .filter((name) => /^[A-Za-z0-9._-]+$/.test(name));
+  if (!keep.length) return;
+
+  const keepList = keep.join(' ');
+  const pruneCommand =
+    `cd ${remoteDir}/team && for f in *; do [ -f "\\$f" ] || continue; case " ${keepList} " in *" \\$f "*) ;; *) rm -f -- "\\$f" ;; esac; done`;
+  const pruneSsh = buildSshInvocation(sshConfig, remote, pruneCommand);
+
+  log('   Removendo fotos de equipe que saíram do build...', 'yellow');
+  execSync(pruneSsh.command, {
+    stdio: 'inherit',
+    cwd: rootDir,
+    shell: true,
+    env: { ...process.env, ...pruneSsh.env },
+  });
 }
 
 function getAllDistFiles(dirPath, arrayOfFiles = []) {
@@ -618,6 +642,11 @@ function getAllDistFiles(dirPath, arrayOfFiles = []) {
 }
 
 async function uploadDist(distPath, deployConfig) {
+  // Also checks --from-dist snapshots: rollback must not unpublish /entregas.
+  // Runs before any connection/upload, for both SSH and FTP.
+  const { assertDeliveryGalleryBuild, isDeliveryRuntimePath } = await loadSshDeploy();
+  const gallery = assertDeliveryGalleryBuild(distPath);
+  log(`🛡️  Galeria validada: ${gallery.deliveries} registros; dados ao vivo excluídos do deploy.`, 'green');
   if (deployConfig.method === 'ssh') {
     await deployViaSsh(deployConfig.ssh, distPath);
     return;
@@ -636,7 +665,9 @@ async function uploadDist(distPath, deployConfig) {
       log('✅ Conectado ao servidor FTP', 'green');
       log(`📁 Diretório remoto: ${ftpConfig.serverDir}`, 'blue');
 
-      const allFiles = getAllDistFiles(distPath).sort((a, b) => {
+      const allFiles = getAllDistFiles(distPath)
+        .filter((file) => !isDeliveryRuntimePath(relative(distPath, file)))
+        .sort((a, b) => {
         const aName = a.replace(/\\/g, '/').split('/').pop() || '';
         const bName = b.replace(/\\/g, '/').split('/').pop() || '';
         const deployLast = (name) =>
