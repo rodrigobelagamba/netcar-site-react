@@ -264,3 +264,20 @@ imagens são excluídos explicitamente dos uploads e dos rollbacks de dist.
 Um checkout limpo usa os mesmos endereços públicos de mídia já publicados.
 Para desenvolvimento local, copiar o acervo existente ou apontar a mídia para
 a hospedagem; nunca substituir `live.json` por uma cópia local.
+
+Recuperação ativada às **16:44:37 BRT / 19:44:37 UTC**. Release
+`20260921-entregas-194354-33b02662`, SHA-256
+`33b026628604c971ae6259ebed017751ef7f26faf18be2b0ffb2bbfb0004f58e`.
+Código integrado e publicado em `origin/master`: `caa7056`.
+Pacote incremental de 942.637 bytes: 79 assets e cinco arquivos de entrada.
+Verificação independente: 84 arquivos, 16 assets retidos e cinco backups íntegros;
+backend, configurações e mídia preservados. Galeria, home e Argo responderam200.
+Sitemap preserva as 161 URLs anteriores e acrescenta `/entregas`.
+
+Validação: build completo, TypeScript, ESLint dos arquivos alterados, 13 testes
+de galeria/foco, quatro de preservação de deploy e quatro da correção de pintura
+do estoque. Um checkout sem mídia gera os 1.447 registros; o build antigo sem
+galeria é recusado antes de conectar ao site. VPS canônico confirmado em master
+com o módulo e as guardas. No navegador público em desktop e390px, chamada da
+home com três fotos carregadas e link funcional, chamada no Argo,1.449 registros
+visíveis e as duas fotos automáticas com enquadramento; ampliação móvel verificada.
