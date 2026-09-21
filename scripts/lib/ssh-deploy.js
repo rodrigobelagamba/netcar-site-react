@@ -1,5 +1,5 @@
 import { spawn } from 'child_process';
-import { createWriteStream, readFileSync, statSync, unlinkSync } from 'fs';
+import { createWriteStream, existsSync, readdirSync, readFileSync, statSync, unlinkSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { Client } from 'ssh2';
@@ -191,6 +191,24 @@ function uploadViaSftp(sftp, localPath, remotePath, onProgress) {
   });
 }
 
+async function pruneRemoteTeamPhotos(conn, remotePath, localDir, onProgress) {
+  const teamDir = join(localDir, 'team');
+  if (!existsSync(teamDir)) return;
+
+  const keep = readdirSync(teamDir).filter(
+    (name) => statSync(join(teamDir, name)).isFile() && /^[A-Za-z0-9._-]+$/.test(name)
+  );
+  if (!keep.length) return;
+
+  const keepList = keep.join(' ');
+  onProgress?.('   Removendo fotos de equipe que saíram do build…');
+  await execRemote(
+    conn,
+    `cd ${remotePath}/team && for f in *; do [ -f "$f" ] || continue; case " ${keepList} " in *" $f "*) ;; *) rm -f -- "$f" ;; esac; done`,
+    onProgress
+  );
+}
+
 /**
  * Deploy dist/ via SSH com senha (SFTP — estável no Windows, sem travar no stdin).
  */
@@ -244,6 +262,8 @@ export async function deployTarViaSshPassword({
       ].join(' && '),
       onProgress
     );
+
+    await pruneRemoteTeamPhotos(conn, remotePath, localDir, onProgress);
 
     report(`   Deploy finalizado (${formatMb(statSync(localTarPath).size)} enviados)`);
   } finally {
