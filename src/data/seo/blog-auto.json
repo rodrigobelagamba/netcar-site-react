@@ -398,7 +398,7 @@
     "title": "Hatch seminovo para a cidade: o que comparar",
     "description": "Hatch e compacto seminovo para a cidade: consumo, manobra e opções no estoque Netcar.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-09-14",
+    "updatedAt": "2026-09-21",
     "readMinutes": 6,
     "sections": [
       {
@@ -452,15 +452,15 @@
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/11092026polo%20first%20JCP2F22CAPA.png"
           },
           {
-            "modelo": "Volkswagen Polo Highline",
+            "modelo": "Fiat Argo Drive",
             "ano": "2023/2024",
-            "km": "30.627 km",
-            "preco": "R$ 99.900,00",
+            "km": "32.500 km",
+            "preco": "R$ 86.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
-            "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/polo-highline-2024-jch-xx93-19955",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/17082026POLO%20HIGHLINE%20JCH5D93CAPA.png"
+            "destaque": "Eleito Melhor Compra",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/argo-drive-2024-jcl-xx85-19687",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/28032026ARGO%20DRIVE%20JCL5B85CAPA.png"
           }
         ]
       },
@@ -576,7 +576,7 @@
     "title": "Quanto custa um seminovo em Esteio em 2026?",
     "description": "Veja como ano, versão, quilometragem e estado influenciam o preço, com exemplos do estoque da Netcar.",
     "publishedAt": "2026-06-23",
-    "updatedAt": "2026-09-14",
+    "updatedAt": "2026-09-21",
     "readMinutes": 6,
     "sections": [
       {
@@ -590,9 +590,9 @@
       {
         "type": "ul",
         "items": [
-          "Entrada (primeiro carro, uso urbano): a partir de R$ 44.900",
+          "Entrada (primeiro carro, uso urbano): a partir de R$ 49.900",
           "Faixa intermediária: valores entre o menor e o maior preço do estoque",
-          "Premium (SUV, pickup, seminovo recente): até R$ 199.900"
+          "Premium (SUV, pickup, seminovo recente): até R$ 167.900"
         ]
       },
       {
@@ -677,7 +677,7 @@
     "title": "Como escolher o primeiro carro usado",
     "description": "Primeiro carro: como organizar orçamento, uso, seguro, manutenção, financiamento e test drive.",
     "publishedAt": "2026-06-23",
-    "updatedAt": "2026-09-14",
+    "updatedAt": "2026-09-21",
     "readMinutes": 6,
     "sections": [
       {
@@ -720,26 +720,26 @@
         "type": "cars",
         "cars": [
           {
-            "modelo": "Hyundai Hb20 Comfort",
-            "ano": "2015",
-            "km": "67.039 km",
-            "preco": "R$ 49.900,00",
+            "modelo": "Chevrolet Onix Plus Lt",
+            "ano": "2022/2023",
+            "km": "74.900 km",
+            "preco": "R$ 71.000,00",
             "cambio": "Manual",
             "combustivel": "Flex",
             "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/hb20-comfort-2015-iwo-xx44-19996",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/onix-plus-lt-2023-jbi-xx29-20004",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/18092026onix%20plus%20JBI3A29CAPA.png"
           },
           {
-            "modelo": "Chevrolet Onix Lt",
-            "ano": "2017",
-            "km": "98.858 km",
-            "preco": "R$ 61.900,00",
+            "modelo": "Volkswagen Fox Comfortline",
+            "ano": "2016/2017",
+            "km": "110.000 km",
+            "preco": "R$ 54.900,00",
             "cambio": "Manual",
             "combustivel": "Flex",
             "destaque": "Eleito Melhor Compra",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/onix-lt-2017-ixt-xx75-19965",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/26082026onix%20lt%20IXT9375CAPA.png"
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/fox-comfortline-2017-ixn-xx61-19840",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/23062026FOX%20COMFORTLINE%20IXN6161CAPA.png"
           }
         ]
       },
