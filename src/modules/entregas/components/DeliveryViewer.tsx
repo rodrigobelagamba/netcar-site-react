@@ -618,9 +618,10 @@ export function DeliveryViewer({
                   width: event.currentTarget.naturalWidth,
                   height: event.currentTarget.naturalHeight,
                 };
-                // Reveal the safe group framing directly, without flashing the
-                // narrow full Story first. Unknown framing keeps the original.
-                if (!focusOnPeople()) updateTransform(FIT_PHOTO);
+                // Open every record in full; cropping is only used when the
+                // visitor explicitly chooses to enlarge the photo.
+                focusedGroup.current = false;
+                updateTransform(FIT_PHOTO);
                 setImageState("ready");
               }}
               onError={() => setImageState("error")}
