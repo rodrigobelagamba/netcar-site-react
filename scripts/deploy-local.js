@@ -593,7 +593,31 @@ async function deployViaSsh(sshConfig, distPath) {
     shell: true,
     env: { ...process.env, ...ssh.env },
   });
+  pruneRemoteTeamPhotos(sshConfig, remote, remoteDir, distPath);
   log('\n✅ Deploy SSH concluído!', 'green');
+}
+
+function pruneRemoteTeamPhotos(sshConfig, remote, remoteDir, distPath) {
+  const teamDir = join(distPath, 'team');
+  if (!existsSync(teamDir)) return;
+
+  const keep = readdirSync(teamDir)
+    .filter((name) => statSync(join(teamDir, name)).isFile())
+    .filter((name) => /^[A-Za-z0-9._-]+$/.test(name));
+  if (!keep.length) return;
+
+  const keepList = keep.join(' ');
+  const pruneCommand =
+    `cd ${remoteDir}/team && for f in *; do [ -f "\\$f" ] || continue; case " ${keepList} " in *" \\$f "*) ;; *) rm -f -- "\\$f" ;; esac; done`;
+  const pruneSsh = buildSshInvocation(sshConfig, remote, pruneCommand);
+
+  log('   Removendo fotos de equipe que saíram do build...', 'yellow');
+  execSync(pruneSsh.command, {
+    stdio: 'inherit',
+    cwd: rootDir,
+    shell: true,
+    env: { ...process.env, ...pruneSsh.env },
+  });
 }
 
 function getAllDistFiles(dirPath, arrayOfFiles = []) {
