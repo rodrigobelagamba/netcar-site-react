@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   ArrowDownLeft,
@@ -173,15 +173,7 @@ export function DeliveryViewer({
     });
   };
 
-  const isExpanded =
-    photoTransform.scale > 1 ||
-    photoTransform.x !== 0 ||
-    photoTransform.y !== 0;
-  const expandPhoto = () => {
-    if (isExpanded) {
-      zoomPhoto(1);
-      return;
-    }
+  const focusOnPeople = useCallback(() => {
     const viewport = photoViewportRef.current;
     const focused = focusPhotoCrop(
       focusCrop,
@@ -192,12 +184,22 @@ export function DeliveryViewer({
       },
       usefulPhotoArea(),
     );
-    if (!focused) {
-      zoomPhoto(2.25);
-      return;
-    }
+    if (!focused) return false;
     focusedGroup.current = true;
     updateTransform(focused);
+    return true;
+  }, [focusCrop, updateTransform, usefulPhotoArea]);
+
+  const isExpanded =
+    photoTransform.scale > 1 ||
+    photoTransform.x !== 0 ||
+    photoTransform.y !== 0;
+  const expandPhoto = () => {
+    if (isExpanded) {
+      zoomPhoto(1);
+    } else if (!focusOnPeople()) {
+      zoomPhoto(2.25);
+    }
   };
 
   const pointInPhoto = (point: Point): Point => {
@@ -210,7 +212,7 @@ export function DeliveryViewer({
       : { x: 0, y: 0 };
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const dialog = dialogRef.current;
     const previousFocus =
       document.activeElement instanceof HTMLElement
@@ -227,7 +229,7 @@ export function DeliveryViewer({
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setImageState("loading");
     setShareState("idle");
     setShareMessage("");
@@ -243,12 +245,13 @@ export function DeliveryViewer({
   useEffect(() => {
     const viewport = photoViewportRef.current;
     if (!viewport || typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(() =>
-      updateTransform(transformRef.current),
-    );
+    const observer = new ResizeObserver(() => {
+      if (!focusedGroup.current || !focusOnPeople())
+        updateTransform(transformRef.current);
+    });
     observer.observe(viewport);
     return () => observer.disconnect();
-  }, [updateTransform]);
+  }, [focusOnPeople, updateTransform]);
 
   useEffect(() => {
     if (shareState === "manual") {
@@ -338,7 +341,11 @@ export function DeliveryViewer({
           );
           return;
         }
-        if (event.key.startsWith("Arrow") && transformRef.current.scale > 1) {
+        if (
+          event.key.startsWith("Arrow") &&
+          transformRef.current.scale > 1 &&
+          !focusedGroup.current
+        ) {
           event.preventDefault();
           updateTransform({
             ...transformRef.current,
@@ -438,7 +445,10 @@ export function DeliveryViewer({
             const points = [...pointers.current.values()];
             if (points.length === 1) {
               gesture.current = {
-                mode: transformRef.current.scale > 1 ? "pan" : "swipe",
+                mode:
+                  transformRef.current.scale > 1 && !focusedGroup.current
+                    ? "pan"
+                    : "swipe",
                 start: points[0],
                 transform: transformRef.current,
                 distance: 0,
@@ -532,7 +542,11 @@ export function DeliveryViewer({
                 ) < 30
               ) {
                 zoomPhoto(
-                  transformRef.current.scale > 1 ? 1 : 2.25,
+                  focusedGroup.current
+                    ? Math.min(4, transformRef.current.scale * 1.5)
+                    : transformRef.current.scale > 1
+                      ? 1
+                      : 2.25,
                   pointInPhoto({ x: event.clientX, y: event.clientY }),
                 );
                 lastTap.current = null;
@@ -561,9 +575,11 @@ export function DeliveryViewer({
           }}
         >
           <p id="delivery-viewer-gestures" className="delivery-viewer__sr-only">
-            {photoTransform.scale > 1
-              ? "Foto ampliada. Arraste ou use as setas para mover. Use Foto inteira ou a tecla zero para restaurar."
-              : "Deslize para trocar de foto. Toque duas vezes, faça o gesto de pinça ou use Ampliar para ver os detalhes."}
+            {focusedGroup.current
+              ? "Foto enquadrada nas pessoas. Deslize ou use as setas para trocar de foto. Toque duas vezes ou faça o gesto de pinça para ampliar. Use Foto inteira para ver o registro completo."
+              : photoTransform.scale > 1
+                ? "Foto ampliada. Arraste ou use as setas para mover. Use Foto inteira ou a tecla zero para restaurar."
+                : "Deslize para trocar de foto. Toque duas vezes, faça o gesto de pinça ou use Ampliar para ver os detalhes."}
           </p>
           {imageState === "loading" && (
             <div className="delivery-viewer__image-status" role="status">
@@ -602,8 +618,10 @@ export function DeliveryViewer({
                   width: event.currentTarget.naturalWidth,
                   height: event.currentTarget.naturalHeight,
                 };
+                // Reveal the safe group framing directly, without flashing the
+                // narrow full Story first. Unknown framing keeps the original.
+                if (!focusOnPeople()) updateTransform(FIT_PHOTO);
                 setImageState("ready");
-                updateTransform(FIT_PHOTO);
               }}
               onError={() => setImageState("error")}
               draggable={false}

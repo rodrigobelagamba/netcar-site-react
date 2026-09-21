@@ -59,6 +59,18 @@ test("short mobile screens reserve the actual header and action heights", () => 
   );
 });
 
+test("the desktop opening frame enlarges a Story group without cutting either person", () => {
+  const crop = [0, 0.139737, 0.571429, 0.321429];
+  const image = { width: 2160, height: 3840 };
+  const desktop = { width: 1406, height: 690 };
+  const usable = { x: 12, y: 12, width: 1382, height: 666 };
+  const result = assertGroupFits(crop, image, desktop, usable);
+  const originalWidth = (image.width * desktop.height) / image.height;
+  const groupWidth = crop[2] * originalWidth * result.scale;
+  assert.ok(groupWidth > 650, "the people should fill the tall desktop stage");
+  assert.ok(groupWidth > originalWidth * 1.65, "the opening must be larger than the narrow full Story");
+});
+
 test("focus caps at four and never shrinks below the initial image", () => {
   const tiny = assertGroupFits([0.45, 0.45, 0.1, 0.1], {
     width: 1080,

@@ -400,12 +400,18 @@ export function EntregasPage() {
           </p>
         </div>
 
-        <div className="entregas-period-panel">
+        <div
+          className="entregas-period-panel"
+          role="group"
+          aria-labelledby="entregas-period-title"
+        >
           <div className="entregas-period-heading">
             <CalendarDays size={22} aria-hidden="true" />
             <div>
-              <span>Explore por período</span>
-              <p>Das entregas mais recentes às memórias do acervo.</p>
+              <h3 id="entregas-period-title">Encontre sua foto</h3>
+              <p id="entregas-period-instructions">
+                Escolha o ano e o mês do registro.
+              </p>
             </div>
           </div>
           <div className="entregas-date-filters">
@@ -419,6 +425,7 @@ export function EntregasPage() {
                   resetPage();
                 }}
                 aria-label="Ano do registro"
+                aria-describedby="entregas-period-instructions"
               >
                 <option value="">Todos os anos</option>
                 {years.map((item) => (
@@ -427,7 +434,7 @@ export function EntregasPage() {
                   </option>
                 ))}
               </select>
-              <ChevronDown size={14} aria-hidden="true" />
+              <ChevronDown size={20} aria-hidden="true" />
             </label>
             <label>
               <span>Mês</span>
@@ -438,6 +445,7 @@ export function EntregasPage() {
                   resetPage();
                 }}
                 aria-label="Mês do registro"
+                aria-describedby="entregas-period-instructions"
               >
                 <option value="">Todos os meses</option>
                 {MONTHS.map((item, index) => (
@@ -446,9 +454,13 @@ export function EntregasPage() {
                   </option>
                 ))}
               </select>
-              <ChevronDown size={14} aria-hidden="true" />
+              <ChevronDown size={20} aria-hidden="true" />
             </label>
           </div>
+          <p className="entregas-filter-help">
+            <Check size={16} aria-hidden="true" />
+            As fotos aparecem logo abaixo conforme sua seleção.
+          </p>
         </div>
 
         <div className="entregas-results-bar">

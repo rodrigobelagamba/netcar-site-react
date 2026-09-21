@@ -8,12 +8,7 @@ import {
   ReviewsMasonryGrid,
 } from "./ReviewsMasonryGrid";
 import { ReviewsSummaryHeader } from "./ReviewsSummaryHeader";
-
-/** Perfis do Google Business (com avaliações) de cada loja */
-const LOJA_REVIEWS_URL = {
-  loja1: "https://maps.google.com/maps?cid=9144067949621682127",
-  loja2: "https://maps.google.com/maps?cid=10839197980729051544",
-} as const;
+import { GOOGLE_REVIEW_STORES } from "@/social/googlePlaces";
 
 function ReviewsSkeleton() {
   return (
@@ -72,7 +67,7 @@ export function NetcarGoogleReviewsSection() {
         <p className="text-sm text-[#6B7280]">Veja todas as avaliações no Google</p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <a
-            href={LOJA_REVIEWS_URL.loja1}
+            href={GOOGLE_REVIEW_STORES[0].url}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-[5px] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
@@ -81,7 +76,7 @@ export function NetcarGoogleReviewsSection() {
             Avaliações — Loja 1 (Matriz)
           </a>
           <a
-            href={LOJA_REVIEWS_URL.loja2}
+            href={GOOGLE_REVIEW_STORES[1].url}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-[5px] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
