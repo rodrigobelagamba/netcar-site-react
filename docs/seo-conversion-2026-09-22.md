@@ -1,7 +1,7 @@
 # Conversão e conteúdo rastreável — 22/09/2026
 
-Status: implementado e validado localmente; publicação dos três itens aprovada.
-Push e deploy aguardam confirmação do escopo preexistente em master (ver abaixo).
+Status: implementação `b34c0e4` enviada à master. O usuário aprovou explicitamente
+o conjunto completo, incluindo as alterações preexistentes da galeria e home.
 Base: `master` em `4284f52`. Branch: `codex/seo-conversion-2026-09-22`.
 
 ## Escopo aprovado: itens 1, 2 e 3
@@ -49,9 +49,22 @@ há mudanças de outras tarefas (galeria, avaliações e foto da entrega do Tiag
 home). A comparação do módulo público da galeria confirma equivalência com a
 versão local, ignorando hashes de imports. Não foi possível confirmar a mesma
 equivalência para a home. Um deploy completo da master inclui essas mudanças.
-Não publicar esse conjunto adicional sem esclarecer a aprovação; não reverter
-ou remover mudanças das outras tarefas para contornar o problema.
+O usuário confirmou "sim tudo" e autorizou a publicação conjunta. Nenhuma
+mudança das outras tarefas foi revertida ou removida.
 
-Publicar usando o procedimento do `AGENTS.md` após resolver essa confirmação.
+## Primeira execução e correção operacional
+
+- Workflow de sincronização `35760155951`: sucesso, fonte `b34c0e4` na VPS.
+- Job de deploy `1d09e8e3-a3c2-4373-b8f4-bacb25b2728b`: build e upload passaram;
+  falhou após extrair o pacote porque a hospedagem não permite executar `find`.
+- Build gerado: `f410e31f87dde5c15fdad603f62073e79e047591`.
+- As páginas públicas e os novos assets já responderam HTTP 200. Comparador,
+  landing móvel e conteúdo inicial de `/compra` e `/blog` foram verificados.
+- A correção operacional substitui a varredura remota por operações SFTP sobre
+  os caminhos do próprio build. Não altera restrições do servidor nem toca no
+  diretório de dados ao vivo da galeria. Executar novamente o fluxo oficial e
+  conferir o job/status antes de considerar a publicação encerrada.
+
+Publicar usando o procedimento do `AGENTS.md`.
 Sem promessa de ranking ou aumento de leads: os efeitos precisam ser medidos
 após publicação, separando cliques, contatos e vendas.

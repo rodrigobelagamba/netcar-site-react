@@ -1,5 +1,5 @@
 import { spawn } from 'child_process';
-import { createWriteStream, existsSync, readdirSync, readFileSync, statSync, unlinkSync } from 'fs';
+import { createWriteStream, existsSync, lstatSync, readdirSync, readFileSync, statSync, unlinkSync } from 'fs';
 import { tmpdir } from 'os';
 import { join, posix } from 'path';
 import { Client } from 'ssh2';
@@ -16,6 +16,106 @@ export function isDeliveryRuntimePath(path) {
     || normalized.startsWith('entregas-data/.entregas-')
     || normalized === 'entregas-media/live'
     || normalized.startsWith('entregas-media/live/');
+}
+
+// Permission changes have a narrower scope than uploads: even the delivery
+// seed and directory rules must retain their runtime-managed permissions.
+function excludesBuildPermissions(path) {
+  return path === 'entregas-data' || path.startsWith('entregas-data/')
+    || path === 'entregas-media/live' || path.startsWith('entregas-media/live/')
+    || path.split('/').some((part) => ['.git', '.gitignore', '.git-commit-msg.txt'].includes(part));
+}
+
+function assertRelativeBuildPath(path) {
+  if (typeof path !== 'string' || !path || path.startsWith('/')
+      || /[\\\x00-\x1f\x7f]/.test(path)
+      || path.split('/').some((part) => !part || part === '.' || part === '..')) {
+    throw new Error('Caminho inválido no manifesto de permissões do build');
+  }
+}
+
+/** Snapshot only public build entries, before packing; never traverse runtime. */
+export function collectBuildPermissionTargets(localDir) {
+  if (!lstatSync(localDir).isDirectory()) throw new Error('Diretório do build inválido');
+  const targets = [];
+  const walk = (relativeDir) => {
+    for (const name of readdirSync(join(localDir, relativeDir)).sort()) {
+      const path = relativeDir ? `${relativeDir}/${name}` : name;
+      assertRelativeBuildPath(path);
+      if (excludesBuildPermissions(path)) continue;
+      const stat = lstatSync(join(localDir, path));
+      if (!stat.isDirectory() && !stat.isFile()) {
+        throw new Error(`Entrada não regular no build: ${path}`);
+      }
+      targets.push({ path, directory: stat.isDirectory() });
+      if (stat.isDirectory()) walk(path);
+    }
+  };
+  walk('');
+  return targets;
+}
+
+function sftpCall(sftp, method, ...args) {
+  return new Promise((resolve, reject) => {
+    sftp[method](...args, (error, result) => error ? reject(error) : resolve(result));
+  });
+}
+
+/** Equivalent to chmod a+rX, limited to the validated local build manifest. */
+export async function normalizeBuildPermissions(sftp, remoteDir, targets) {
+  const entries = targets.filter((target) => {
+    assertRelativeBuildPath(target.path);
+    if (typeof target.directory !== 'boolean') throw new Error('Tipo inválido no manifesto de permissões');
+    return !excludesBuildPermissions(target.path);
+  });
+  const byPath = new Map(entries.map((entry) => [entry.path, entry]));
+  if (byPath.size !== entries.length) throw new Error('Caminhos duplicados no manifesto de permissões');
+  for (const entry of entries) {
+    let parent = posix.dirname(entry.path);
+    while (parent !== '.') {
+      if (!byPath.get(parent)?.directory) throw new Error(`Diretório ausente no manifesto: ${parent}`);
+      parent = posix.dirname(parent);
+    }
+  }
+
+  // The configured document root may itself be a hosting-managed symlink.
+  // Resolve it once, then reject symlinks everywhere inside that exact root.
+  const root = await sftpCall(sftp, 'realpath', remoteDir);
+  if (typeof root !== 'string' || !root.startsWith('/') || root === '/'
+      || posix.normalize(root) !== root || /[\\\x00-\x1f\x7f]/.test(root)) {
+    throw new Error('Raiz remota inválida para normalização de permissões');
+  }
+  const rootStat = await sftpCall(sftp, 'lstat', root);
+  if (!rootStat.isDirectory()) throw new Error('Raiz remota não é um diretório');
+
+  const normalize = async ({ path, directory }) => {
+    const remoteFile = posix.join(root, path);
+    const stat = await sftpCall(sftp, 'lstat', remoteFile);
+    if (directory ? !stat.isDirectory() : !stat.isFile()) {
+      throw new Error(`Entrada remota não corresponde ao build: ${path}`);
+    }
+    if (!Number.isInteger(stat.mode)) throw new Error(`Permissões remotas ausentes: ${path}`);
+    const currentMode = stat.mode & 0o7777;
+    const nextMode = currentMode | 0o444 | (directory || (currentMode & 0o111) ? 0o111 : 0);
+    if (nextMode !== currentMode) await sftpCall(sftp, 'chmod', remoteFile, nextMode);
+  };
+
+  // Validate and open parent directories before any child path is accessed.
+  const directories = entries.filter((entry) => entry.directory)
+    .sort((a, b) => a.path.split('/').length - b.path.split('/').length);
+  for (const entry of directories) await normalize(entry);
+
+  const files = entries.filter((entry) => !entry.directory);
+  let next = 0;
+  let failure;
+  await Promise.all(Array.from({ length: Math.min(8, files.length) }, async () => {
+    while (!failure && next < files.length) {
+      const entry = files[next++];
+      try { await normalize(entry); } catch (error) { failure ||= error; }
+    }
+  }));
+  if (failure) throw failure;
+  return entries.length;
 }
 
 /** Full-site deployments must retain the already-public /entregas feature. */
@@ -280,12 +380,14 @@ export async function deployTarViaSshPassword({
   onProgress,
 }) {
   assertDeliveryGalleryBuild(localDir);
+  const permissionTargets = collectBuildPermissionTargets(localDir);
   const report = (message) => onProgress?.(message);
   const remotePath = String(remoteDir || 'www').replace(/\/$/, '');
   const remoteTarName = `.netcar-deploy-${Date.now()}.tar`;
 
   let localTarPath = '';
   let conn;
+  let sftp;
 
   try {
     report('   Gerando pacote local…');
@@ -305,9 +407,8 @@ export async function deployTarViaSshPassword({
     }
 
     report('   Enviando via SFTP…');
-    const sftp = await openSftp(conn);
+    sftp = await openSftp(conn);
     await uploadViaSftp(sftp, localTarPath, remoteTarName, onProgress);
-    sftp.end();
 
     report('   Extraindo no servidor…');
     await execRemote(
@@ -318,16 +419,19 @@ export async function deployTarViaSshPassword({
         `tar -C ${remotePath} --no-same-owner --no-same-permissions -xf $HOME/${remoteTarName}`,
         `rm -f $HOME/${remoteTarName}`,
         `chmod 755 ${remotePath}`,
-        // Never alter live gallery files or permissions while its worker publishes.
-        `find ${remotePath} \\( -path ${remotePath}/entregas-data -o -path ${remotePath}/entregas-media/live \\) -prune -o -exec chmod a+rX {} +`,
       ].join(' && '),
       onProgress
     );
+
+    report('   Ajustando permissões dos arquivos do build via SFTP…');
+    const normalized = await normalizeBuildPermissions(sftp, remotePath, permissionTargets);
+    report(`   Permissões verificadas: ${normalized} arquivos e diretórios do build`);
 
     await pruneRemoteTeamPhotos(conn, remotePath, localDir, onProgress);
 
     report(`   Deploy finalizado (${formatMb(statSync(localTarPath).size)} enviados)`);
   } finally {
+    if (sftp) sftp.end();
     if (localTarPath) {
       try {
         unlinkSync(localTarPath);
