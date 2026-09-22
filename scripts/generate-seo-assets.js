@@ -397,6 +397,24 @@ const blogPosts = [
     (a) => !manualBlogPosts.some((m) => m.slug === a.slug),
   ),
 ];
+// O índice PHP usa os mesmos artigos e a mesma ordem do BlogPage, sem
+// depender do JavaScript nem copiar manualmente uma lista que envelhece.
+writeTextFile(
+  join(publicDir, "seo", "blog-index.json"),
+  `${JSON.stringify(
+    [...blogPosts]
+      .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+      .map(({ slug, title, description, publishedAt, readMinutes }) => ({
+        slug,
+        title,
+        description,
+        publishedAt,
+        readMinutes,
+      })),
+    null,
+    2,
+  )}\n`,
+);
 const cities = JSON.parse(
   readFileSync(join(rootDir, "src/data/seo/cities.json"), "utf-8"),
 );
@@ -862,10 +880,17 @@ function showcaseVehicleOrder(vehicles) {
 }
 
 /** Vitrine de estoque em HTML, reaproveitando os cards de carro do blog. */
-function stockShowcase({ heading, vehicles, limit = 8, ctaLabel, ctaHref }) {
+function stockShowcase({
+  heading,
+  vehicles,
+  limit = 8,
+  ctaLabel,
+  ctaHref,
+  preserveOrder = false,
+}) {
   if (!vehicles.length) return "";
   // Carro com foto real na frente: vitrine sem imagem converte muito pior.
-  const ordered = showcaseVehicleOrder(vehicles);
+  const ordered = preserveOrder ? vehicles : showcaseVehicleOrder(vehicles);
   const cars = ordered.slice(0, limit).map((vehicle) => ({
     modelo: vehicleDisplayName(vehicle),
     url: `${SITE}/veiculo/${generateVehicleSlug(vehicle)}`,
@@ -887,7 +912,7 @@ function stockShowcase({ heading, vehicles, limit = 8, ctaLabel, ctaHref }) {
 }
 
 function landingCollectionSchema(landing, canonical, vehicles) {
-  const ordered = showcaseVehicleOrder(vehicles);
+  const ordered = landingStockOrder(vehicles);
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -1532,6 +1557,45 @@ function relatedLandingsHtml(currentSlug) {
   return `<nav aria-label="Outros seminovos"><h2>Veja também</h2><ul>${links}</ul></nav>`;
 }
 
+// Mesmo critério A–Z da vitrine React; a ordem não depende da presença de foto.
+function landingStockOrder(vehicles) {
+  return [...vehicles].sort((left, right) => {
+    const model = (vehicle) => {
+      const brand = String(vehicle.marca || "").trim();
+      const explicitModel = String(vehicle.modelo || "").trim();
+      const name = String(vehicle.name || "").trim();
+      const value = explicitModel || (brand && name
+        .toLocaleLowerCase("pt-BR")
+        .startsWith(brand.toLocaleLowerCase("pt-BR"))
+        ? name.slice(brand.length).trim()
+        : name);
+      return value.toLocaleLowerCase("pt-BR");
+    };
+    return (
+      model(left).localeCompare(model(right), "pt-BR", { numeric: true }) ||
+      String(left.marca || "").localeCompare(String(right.marca || ""), "pt-BR")
+    );
+  });
+}
+
+function landingStockHref(landing) {
+  const query = new URLSearchParams();
+  for (const key of [
+    "marca",
+    "modelo",
+    "precoMin",
+    "precoMax",
+    "cambio",
+    "combustivel",
+    "categoria",
+  ]) {
+    const value = landing.filters[key];
+    if (value !== undefined && value !== null && value !== "")
+      query.set(key, String(value));
+  }
+  return `${SITE}/seminovos${query.size ? `?${query}` : ""}`;
+}
+
 for (const landing of landings) {
   const canonical = `${SITE}/comprar-${landing.slug}`;
   const faqHtml = landing.faq
@@ -1540,31 +1604,38 @@ for (const landing of landings) {
   const paragraphs = landing.paragraphs
     .map((p) => `<p>${escapeHtml(p)}</p>`)
     .join("");
-  const landingStock = stock.filter((vehicle) =>
-    matchesLandingFilters(vehicle, landing.filters),
+  const landingStock = landingStockOrder(
+    stock.filter((vehicle) => matchesLandingFilters(vehicle, landing.filters)),
   );
   const availability = landingStock.length
     ? stockShowcase({
-        heading: `${landing.name} em estoque agora na Netcar`,
+        heading: "Veículos desta seleção",
         vehicles: landingStock,
         limit: 12,
-        ctaLabel: "Ver todo o estoque de seminovos",
-        ctaHref: `${SITE}/seminovos`,
+        ctaLabel:
+          landingStock.length > 12
+            ? `Ver os ${landingStock.length} veículos desta seleção`
+            : "Ajustar filtros no estoque",
+        ctaHref: escapeHtml(landingStockHref(landing)),
+        preserveOrder: true,
       })
-    : `<h2>Estoque em atualização</h2><p>Não há uma unidade deste recorte anunciada agora. Veja as seleções relacionadas ou fale com a Netcar para receber alternativas reais do estoque.</p>`;
+    : `<h2>Veículos desta seleção</h2><p>Nenhum veículo anunciado nesta seleção no momento.</p><p>Veja outras opções do estoque ou fale com a equipe sobre o carro e a faixa de preço que procura.</p><p><a href="${SITE}/seminovos">Ver estoque completo</a></p>`;
   const body = `
     <article>
       <h1>${escapeHtml(landing.h1)}</h1>
       <p>${escapeHtml(landing.intro)}</p>
-      ${paragraphs}
+      <p><a href="${escapeHtml(landingStockHref(landing))}">Ver seleção completa</a> · <a href="${landingWhatsAppLink(landing.name)}">Falar com a Netcar</a></p>
+      ${landing.type === "faixa" ? "<p>O filtro considera o preço total anunciado do carro.</p>" : ""}
       ${availability}
+      ${relatedLandingsHtml(landing.slug)}
+      <h2>Compare antes de escolher</h2>
+      ${paragraphs}
       ${faqHtml}
       <p>
         <a href="${SITE}/seminovos">Ver estoque completo</a>
         ·
-        <a href="${landingWhatsAppLink(landing.name)}">Falar com o iAN · 24/7</a>
+        <a href="${landingWhatsAppLink(landing.name)}">Falar com a Netcar</a>
       </p>
-      ${relatedLandingsHtml(landing.slug)}
       ${nearbyMarketsHtml(landing.name)}
     </article>`;
   writeSeoPage(
@@ -1865,7 +1936,11 @@ const staticPages = [
     changefreq: "monthly",
   },
   { path: "/contato", priority: "0.8", changefreq: "monthly" },
-  { path: "/vagas/consultor-vendas-seminovos/", priority: "0.7", changefreq: "weekly" },
+  {
+    path: "/vagas/consultor-vendas-seminovos/",
+    priority: "0.7",
+    changefreq: "weekly",
+  },
   { path: "/compra", priority: "0.85", changefreq: "weekly" },
   { path: "/blog", priority: "0.8", changefreq: "weekly" },
   // Páginas de intenção (antes fora do sitemap)

@@ -177,13 +177,13 @@ function netcar_fixed_route_meta()
             'canonical' => 'https://www.netcarmultimarcas.com.br/contato',
         ],
         '/compra' => [
-            'title' => 'Venda seu Carro | Netcar Multimarcas Esteio',
-            'description' => 'Venda seu carro para a Netcar Multimarcas em Esteio/RS. Avaliação gratuita, processo seguro e compra de veículo financiado.',
+            'title' => 'Netcar - Venda ou troque seu carro em Esteio',
+            'description' => 'Venda ou troque seu carro na Netcar, em Esteio. Aceitamos veículos financiados, sujeitos à avaliação presencial e à análise dos documentos.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/compra',
         ],
         '/blog' => [
-            'title' => 'Blog | Netcar Multimarcas',
-            'description' => 'Guias sobre compra, venda, financiamento e manutenção de seminovos com recorte de Esteio e do Rio Grande do Sul.',
+            'title' => 'Netcar - Blog de Seminovos',
+            'description' => 'Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/blog',
         ],
         '/comparar' => [

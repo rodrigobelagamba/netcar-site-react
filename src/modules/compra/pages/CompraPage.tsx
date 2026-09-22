@@ -34,7 +34,7 @@ export function CompraPage() {
   useDefaultMetaTags(
     isCompramosAlias
       ? "Compramos Seu Carro Usado"
-      : "Netcar Compra — Venda seu Carro",
+      : "Venda ou troque seu carro em Esteio",
     isCompramosAlias
       ? "Quer vender ou trocar seu carro? A Netcar avalia veículos financiados em Esteio/RS. A proposta depende da vistoria e dos documentos."
       : "Venda ou troque seu carro na Netcar, em Esteio. Aceitamos veículos financiados, sujeitos à avaliação presencial e à análise dos documentos.",

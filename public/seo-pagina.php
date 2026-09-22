@@ -136,22 +136,60 @@ switch ($page) {
         break;
 
     case 'compra':
-        $title = 'Venda seu Carro | Netcar Multimarcas Esteio';
-        $description = 'Venda seu carro para a Netcar Multimarcas em Esteio/RS. Avaliação gratuita e valores justos.';
+        $title = 'Netcar - Venda ou troque seu carro em Esteio';
+        $description = 'Venda ou troque seu carro na Netcar, em Esteio. Aceitamos veículos financiados, sujeitos à avaliação presencial e à análise dos documentos.';
         $canonical = SEO_SITE_URL . '/compra';
         seo_render_head($title, $description, $canonical);
-        echo '<h1>Venda seu carro para a Netcar</h1>';
-        echo '<p class="intro">Avaliamos e compramos seu veículo em Esteio/RS. Processo rápido, seguro e sem complicações.</p>';
-        echo '<p><a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Quero%20avaliar%20meu%20carro%20para%20venda%20ou%20troca%20na%20Netcar.">Avaliar pelo WhatsApp: (51) 99729-3118</a></p>';
+        echo '<h1>Quer vender ou trocar seu carro?</h1>';
+        echo '<p class="intro">Você envia os dados, traz o veículo para avaliação e recebe uma proposta da Netcar. ';
+        echo 'Se houver financiamento em aberto, calculamos a quitação dentro da negociação.</p>';
+        echo '<h2>Como funciona a venda ou troca</h2>';
+        echo '<ol><li>Conte modelo, ano, km e se ainda tem financiamento</li>';
+        echo '<li>Traga o veículo e os documentos para a avaliação presencial</li>';
+        echo '<li>Se houver acordo, escolha entre vender ou usar o valor na troca</li></ol>';
+        echo '<p>Atendemos vendedores de Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha e região metropolitana de Porto Alegre.</p>';
+        echo '<h2>O que a Netcar resolve na negociação</h2>';
+        echo '<p>Venda direta ou troca por um carro do estoque.</p>';
+        echo '<ul><li><strong>Sem anúncio particular:</strong> Você negocia diretamente com a loja, sem receber visitas de desconhecidos.</li>';
+        echo '<li><strong>Avaliação explicada:</strong> Estado do carro, versão, quilometragem e mercado entram na análise.</li>';
+        echo '<li><strong>Financiamento em aberto:</strong> O saldo para quitação pode ser calculado dentro da negociação.</li>';
+        echo '<li><strong>Venda ou troca:</strong> Você pode receber uma proposta de compra ou usar o valor em outro carro.</li></ul>';
+        echo '<h2>Quais veículos compramos diretamente?</h2>';
+        echo '<p>Estes são os critérios iniciais. A compra depende da avaliação do carro, da documentação e do interesse da loja naquele modelo.</p>';
+        echo '<ul><li>No máximo 6 anos de uso</li><li>Até 80.000 km rodados</li>';
+        echo '<li>Primeiro emplacamento no Rio Grande do Sul</li><li>Sem origem de locadora</li>';
+        echo '<li>Sem passagem por leilão, sinistro, furto ou roubo</li></ul>';
+        echo '<p><strong>Na troca, esses limites não se aplicam.</strong> O seu carro pode ser avaliado como parte da negociação, conforme vistoria e documentação.</p>';
+        echo '<h2>Começar avaliação pelo WhatsApp</h2>';
+        echo '<p>Envie modelo, ano e quilometragem. A equipe usa esses dados para iniciar a avaliação e combinar a vistoria.</p>';
+        $purchaseMessage = 'Estava olhando o site da Netcar e gostaria de vender meu carro para a Netcar.';
+        echo '<p><a href="https://wa.me/5551997293118?text=' . rawurlencode($purchaseMessage) . '">Começar pelo WhatsApp</a></p>';
         break;
 
     case 'blog':
-        $title = 'Blog | Netcar Multimarcas';
-        $description = 'Notícias e dicas sobre seminovos, mercado automotivo e a Netcar Multimarcas em Esteio/RS.';
+        $title = 'Netcar - Blog de Seminovos';
+        $description = 'Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre.';
         $canonical = SEO_SITE_URL . '/blog';
         seo_render_head($title, $description, $canonical);
-        echo '<h1>Blog Netcar Multimarcas</h1>';
-        echo '<p class="intro">Conteúdo sobre seminovos, dicas de compra e novidades da Netcar em Esteio/RS.</p>';
+        echo '<h1>Blog Netcar</h1>';
+        echo '<p class="intro">Respostas para dúvidas sobre compra, troca e financiamento de seminovos na Grande Porto Alegre.</p>';
+        $blogFile = __DIR__ . '/seo/blog-index.json';
+        $posts = is_readable($blogFile) ? json_decode((string) file_get_contents($blogFile), true) : [];
+        if (is_array($posts)) {
+            foreach ($posts as $post) {
+                if (!is_array($post) || empty($post['title']) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', (string) ($post['slug'] ?? ''))) {
+                    continue;
+                }
+                echo '<article><h2><a href="' . SEO_SITE_URL . '/blog/' . rawurlencode($post['slug']) . '">' . seo_h($post['title']) . '</a></h2>';
+                $publishedAt = (string) ($post['publishedAt'] ?? '');
+                if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/D', $publishedAt, $date)) {
+                    echo '<p><time datetime="' . seo_h($publishedAt) . '">' . seo_h($date[3] . '/' . $date[2] . '/' . $date[1]) . '</time>';
+                    if (!empty($post['readMinutes'])) echo ' · ' . (int) $post['readMinutes'] . ' min';
+                    echo '</p>';
+                }
+                echo '<p>' . seo_h($post['description'] ?? '') . '</p></article>';
+            }
+        }
         break;
 }
 

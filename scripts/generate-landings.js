@@ -16,7 +16,7 @@
  */
 
 import { writeFileSync } from "fs";
-import { join, dirname } from "path";
+import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import {
   readFreshSeoStockCache,
@@ -106,6 +106,10 @@ const STOCK_CUTS = [
     title: "Carros seminovos até R$ 80 mil em Esteio/RS | Netcar",
     h1: "Carros seminovos até R$ 80 mil",
     intent: "um seminovo até R$ 80 mil",
+    intro:
+      "Veja os seminovos anunciados por até R$ 80 mil na Netcar, em Esteio. Compare fotos, versões e preço antes de escolher quais carros conhecer.",
+    guide:
+      "Defina quanto pretende investir no carro e abra as fichas das opções que cabem nesse valor. Ano, versão e equipamentos ajudam a decidir entre os modelos da seleção.",
   },
   {
     slug: "carros-ate-100-mil",
@@ -114,6 +118,10 @@ const STOCK_CUTS = [
     title: "Carros seminovos até R$ 100 mil em Esteio/RS | Netcar",
     h1: "Carros seminovos até R$ 100 mil",
     intent: "um seminovo até R$ 100 mil",
+    intro:
+      "Encontre no estoque da Netcar os seminovos com preço anunciado de até R$ 100 mil. Compare os modelos e consulte a troca ou o financiamento do carro que escolher.",
+    guide:
+      "Com um limite de R$ 100 mil, compare o que cada carro oferece pelo preço anunciado. Uma versão mais equipada e um carro de ano mais recente podem ter valores próximos; confira a ficha de cada um.",
   },
   {
     slug: "automaticos-ate-100-mil",
@@ -122,6 +130,10 @@ const STOCK_CUTS = [
     title: "Carros automáticos até R$ 100 mil em Esteio/RS | Netcar",
     h1: "Carros automáticos até R$ 100 mil",
     intent: "um carro automático até R$ 100 mil",
+    intro:
+      "Veja os carros automáticos com preço anunciado de até R$ 100 mil na Netcar, em Esteio. Abra a ficha para conferir a versão, o câmbio e as fotos de cada opção.",
+    guide:
+      "A seleção combina câmbio automático e preço de até R$ 100 mil. Confirme na ficha o tipo de câmbio, o motor e os equipamentos da versão; esses detalhes podem mudar entre carros do mesmo modelo.",
   },
   {
     slug: "suv-ate-100-mil",
@@ -130,6 +142,10 @@ const STOCK_CUTS = [
     title: "SUVs seminovos até R$ 100 mil em Esteio/RS | Netcar",
     h1: "SUVs seminovos até R$ 100 mil",
     intent: "um SUV até R$ 100 mil",
+    intro:
+      "Compare os SUVs anunciados por até R$ 100 mil nas duas lojas da Netcar, em Esteio. Veja preço, versão e fotos para escolher os carros que deseja conhecer.",
+    guide:
+      "Além do preço, confira câmbio, versão e equipamentos dos SUVs que chamaram sua atenção. Na visita, veja se o espaço para passageiros e bagagem atende ao seu uso.",
   },
   {
     slug: "carros-de-100-a-150-mil",
@@ -138,6 +154,10 @@ const STOCK_CUTS = [
     title: "Seminovos de R$ 100 mil a R$ 150 mil em Esteio/RS | Netcar",
     h1: "Seminovos de R$ 100 mil a R$ 150 mil",
     intent: "um seminovo de R$ 100 mil a R$ 150 mil",
+    intro:
+      "Veja os seminovos com preço anunciado entre R$ 100 mil e R$ 150 mil na Netcar. Compare os modelos da seleção e fale com a equipe sobre o carro que escolher.",
+    guide:
+      "Nesta faixa, vale comparar versões e equipamentos junto com o ano do carro. Abra as fichas dos seus favoritos e use o comparador para conferir os dados lado a lado.",
   },
   {
     slug: "automaticos-ate-80-mil",
@@ -146,8 +166,10 @@ const STOCK_CUTS = [
     title: "Carros automáticos usados até R$ 80 mil | Netcar em Esteio",
     h1: "Carros automáticos usados até R$ 80 mil",
     intent: "um carro automático usado até R$ 80 mil",
-    intro: "Compare carros automáticos usados à venda até R$ 80 mil nas duas lojas da Netcar, em Esteio. Escolha pelo preço total, versão e quilometragem e confirme o exemplar antes da visita.",
-    guide: "Ao procurar carros automáticos baratos, compare opções dentro do seu orçamento junto com o histórico de manutenção, os equipamentos e o tipo de câmbio de cada versão. Esta seleção considera o preço anunciado do veículo inteiro, e não apenas a entrada ou a parcela.",
+    intro:
+      "Veja os carros automáticos usados com preço anunciado de até R$ 80 mil na Netcar, em Esteio. Confira as fotos e a versão de cada carro antes de combinar a visita.",
+    guide:
+      "Para escolher um automático até R$ 80 mil, confira o tipo de câmbio e o histórico de manutenção de cada opção. Os equipamentos variam conforme o ano e a versão; abra a ficha e tire as dúvidas sobre o carro que escolher.",
     faq: [
       {
         q: "Todos os carros desta seleção são automáticos e custam até R$ 80 mil?",
@@ -603,16 +625,10 @@ function categoriaLanding(name, count, profile, variantIndex) {
   };
 }
 
-function modelLanding(config, vehicles) {
+export function modelLanding(config, vehicles) {
   const filters = { marca: config.marca, modelo: config.modelo };
   const profile = stockProfile(vehicles, filters);
   const hasStock = profile.count >= MIN_MODELO;
-  const versions = profile.versions.slice(0, 4).map(titleCase).join(", ");
-  const transmissions = profile.transmissions.map(titleCase).join(" e ");
-  const fuels = profile.fuels.map(titleCase).join(" e ");
-  const stockSummary = hasStock
-    ? `${profile.count} opções de ${profile.minYear} a ${profile.maxYear}, entre ${profile.minPrice} e ${profile.maxPrice}; versões atuais: ${versions}`
-    : "estoque que muda conforme entradas e vendas e alternativas do mesmo perfil";
 
   return {
     slug: config.slug,
@@ -624,23 +640,17 @@ function modelLanding(config, vehicles) {
     filters,
     relatedSlugs: [],
     title: `${config.name} seminovo em Esteio/RS: preço e estoque | Netcar`,
-    description: `${config.name} seminovo em Esteio/RS, com preço e estoque atualizados. Compare versões, ano e km; simule financiamento e avalie sua troca na Netcar.`,
+    description: `${config.name} seminovo na Netcar, em Esteio/RS. Consulte os anúncios, compare preço e versão e fale sobre troca ou financiamento.`,
     h1: `${config.name} seminovo em Esteio/RS`,
-    intro: hasStock
-      ? `Compare ${config.name} disponíveis na Netcar sem depender de um anúncio isolado. A seleção reúne ${stockSummary}.`
-      : `Acompanhe nesta página quando um ${config.name} entrar no estoque da Netcar e veja alternativas reais sem perder a referência deste modelo.`,
+    intro: `Veja os anúncios de ${config.name} da Netcar, em Esteio. Confira o preço, as fotos e a versão de cada carro e confirme com a equipe qual deseja conhecer.`,
     paragraphs: [
-      hasStock
-        ? `Nesta seleção, a quilometragem vai de ${Number(profile.minKm).toLocaleString("pt-BR")} a ${Number(profile.maxKm).toLocaleString("pt-BR")} km, com câmbio ${transmissions || "informado em cada ficha"} e combustível ${fuels || "informado em cada ficha"}. Abra os anúncios, compare os exemplares e confirme a disponibilidade antes de visitar as lojas de Esteio.`
-        : `No momento não há uma unidade anunciada. O estoque de seminovos é rotativo; use os atalhos de alternativas ou peça pelo WhatsApp opções de porte e faixa de preço semelhantes.`,
-      `Seu usado pode entrar na troca, inclusive com financiamento em aberto, mediante avaliação. A simulação do saldo em até 60x depende da análise de crédito dos bancos e financeiras parceiras.`,
+      `Ao escolher um ${config.name}, compare ano, versão, motor e equipamentos na ficha de cada unidade. Pelo botão de WhatsApp do anúncio, você pode tirar dúvidas sobre aquele carro e confirmar em qual das duas lojas de Esteio ele está.`,
+      `Seu usado pode entrar na troca, mediante avaliação. Se houver financiamento em aberto, a equipe analisa o saldo de quitação na negociação. Para financiar a compra, entrada, prazo e parcela dependem da análise de crédito.`,
     ],
     faq: [
       {
         q: `Quais versões do ${config.name} estão disponíveis agora?`,
-        a: hasStock
-          ? `As ${profile.count} unidades atuais aparecem nesta página com ano, preço e ficha individual. Como cada seminovo é único, confirme a disponibilidade pelo WhatsApp.`
-          : `Nenhuma unidade está anunciada agora. A página é mantida para você acompanhar novas entradas e encontrar alternativas do mesmo perfil.`,
+        a: `Os anúncios desta seleção mostram a versão, o ano e o preço de cada ${config.name}. A disponibilidade muda com as entradas e vendas; confirme pelo WhatsApp antes da visita. Se a seleção estiver vazia, veja as opções relacionadas ou consulte a equipe.`,
       },
       {
         q: `Posso comparar dois ${config.name} lado a lado?`,
@@ -654,16 +664,9 @@ function modelLanding(config, vehicles) {
   };
 }
 
-function priceLanding(config, vehicles, variantIndex) {
+export function priceLanding(config, vehicles) {
   const profile = stockProfile(vehicles, config.filters);
   const hasStock = profile.count >= MIN_FAIXA;
-  const openings = [
-    `Filtre o orçamento antes da marca: hoje há ${profile.count} opções reais nessa faixa na Netcar, em Esteio.`,
-    `Esta seleção reúne ${profile.count} seminovos do estoque atual para comparar preço, ano e quilometragem sem misturar anúncios fora do orçamento.`,
-    `Quem começa pela faixa de preço encontra aqui ${profile.count} carros disponíveis agora, com fichas e valores atualizados.`,
-    `Do uso urbano ao familiar, há ${profile.count} alternativas dentro deste recorte no estoque atual da Netcar.`,
-    `Compare ${profile.count} seminovos entre ${profile.minPrice} e ${profile.maxPrice}, todos anunciados com preço e ficha individual.`,
-  ];
   return {
     slug: config.slug,
     type: "faixa",
@@ -682,21 +685,15 @@ function priceLanding(config, vehicles, variantIndex) {
     filters: config.filters,
     relatedSlugs: [],
     title: config.title,
-    description: hasStock
-      ? `${config.h1} na Netcar, em Esteio/RS. ${profile.count} opções no estoque atual, com preço, fotos, troca e simulação de financiamento.`
-      : `${config.h1} na Netcar, em Esteio/RS. Acompanhe novas entradas e veja alternativas reais do estoque por preço, perfil e categoria.`,
+    description: `${config.h1} na Netcar, em Esteio/RS. Veja preço total, fotos e ficha dos carros da seleção e consulte troca ou financiamento.`,
     h1: config.h1,
-    intro: hasStock
-      ? config.intro || openings[variantIndex % openings.length]
-      : profile.count > 0
-        ? "No momento, esta seleção tem poucas opções disponíveis. Consulte os veículos anunciados e as seleções relacionadas ou fale com a equipe sobre o que procura."
-        : "No momento, não há opções anunciadas neste recorte. Veja as seleções relacionadas ou fale com a equipe sobre o carro que procura.",
+    intro:
+      config.intro ||
+      `Confira os anúncios de ${config.name.toLowerCase()} da Netcar, em Esteio. Veja o preço e a ficha de cada carro antes de combinar a visita.`,
     paragraphs: [
-      hasStock
-        ? `Os veículos deste recorte vão de ${profile.minPrice} a ${profile.maxPrice} e de ${profile.minYear} a ${profile.maxYear}. Compare o custo total, a versão e o histórico — não apenas a parcela.`
-        : "O estoque é rotativo. Use as seleções relacionadas para comparar outras opções de preço, câmbio ou categoria e confirme a disponibilidade antes da visita.",
+      "O filtro considera o preço total anunciado do carro. Se pretende financiar, a entrada e as parcelas serão calculadas em uma simulação, sujeita à análise de crédito.",
       ...(config.guide ? [config.guide] : []),
-      `Escolha candidatos concretos, use o comparador lado a lado e confirme a disponibilidade. Entrada, prazo e parcela dependem do perfil e da análise de crédito dos bancos e financeiras parceiras.`,
+      "Pelo WhatsApp de cada anúncio, você pode consultar a disponibilidade, pedir uma simulação ou falar sobre seu usado na troca. Confirme em qual das duas lojas de Esteio está o carro antes de sair.",
     ],
     faq: [
       ...(config.faq || []),
@@ -954,8 +951,8 @@ async function main() {
     }
   }
 
-  for (const [index, config] of STOCK_CUTS.entries()) {
-    const landing = priceLanding(config, vehicles, index);
+  for (const config of STOCK_CUTS) {
+    const landing = priceLanding(config, vehicles);
     if (!seen.has(landing.slug)) {
       landings.push(landing);
       seen.add(landing.slug);
@@ -976,7 +973,12 @@ async function main() {
   );
 }
 
-main().catch((err) => {
-  console.error("Erro ao gerar landings:", err);
-  process.exitCode = 1;
-});
+if (
+  process.argv[1] &&
+  resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  main().catch((err) => {
+    console.error("Erro ao gerar landings:", err);
+    process.exitCode = 1;
+  });
+}

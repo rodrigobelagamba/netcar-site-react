@@ -56,6 +56,61 @@ const locationSource = readFileSync(
   "utf8",
 );
 const errors = [];
+// O blog rastreável precisa publicar a mesma coleção visível no React.
+const manualPosts = JSON.parse(
+  readFileSync(join(root, "src/data/seo/blog-posts.json"), "utf8"),
+);
+const autoPosts = JSON.parse(
+  readFileSync(join(root, "src/data/seo/blog-auto.json"), "utf8"),
+);
+const expectedBlogIndex = [
+  ...manualPosts,
+  ...autoPosts.filter(
+    (post) => !manualPosts.some((manual) => manual.slug === post.slug),
+  ),
+]
+  .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+  .map(({ slug, title, description, publishedAt, readMinutes }) => ({
+    slug,
+    title,
+    description,
+    publishedAt,
+    readMinutes,
+  }));
+const blogIndex = JSON.parse(
+  readFileSync(join(root, "public/seo/blog-index.json"), "utf8"),
+);
+if (JSON.stringify(blogIndex) !== JSON.stringify(expectedBlogIndex)) {
+  errors.push(
+    "Blog: índice rastreável diverge da coleção/ordem exibida no React",
+  );
+}
+if (
+  !crawlerHome.includes("/seo/blog-index.json") ||
+  !crawlerHome.includes("rawurlencode($post['slug'])")
+) {
+  errors.push("Blog: renderizador PHP não publica os links do índice gerado");
+}
+const purchaseReact = readFileSync(
+  join(root, "src/modules/compra/pages/CompraPage.tsx"),
+  "utf8",
+);
+for (const text of [
+  "Quais veículos compramos diretamente?",
+  "No máximo 6 anos de uso",
+  "Até 80.000 km rodados",
+  "Primeiro emplacamento no Rio Grande do Sul",
+  "Sem origem de locadora",
+  "Sem passagem por leilão, sinistro, furto ou roubo",
+  "Na troca, esses limites não se aplicam.",
+  "calculamos a quitação dentro da negociação.",
+]) {
+  if (!purchaseReact.includes(text) || !crawlerHome.includes(text)) {
+    errors.push(
+      `Compra: informação aprovada ausente em uma das versões (${text})`,
+    );
+  }
+}
 if (
   regionalInventorySlugs.length === 0 ||
   new Set(regionalInventorySlugs).size !== regionalInventorySlugs.length
@@ -67,10 +122,7 @@ for (const slug of regionalInventorySlugs) {
     errors.push(`regional-focus: seleção de estoque desconhecida (${slug})`);
   }
 }
-if (
-  regionalFocusSlugs.length !== 4 ||
-  new Set(regionalFocusSlugs).size !== 4
-) {
+if (regionalFocusSlugs.length !== 4 || new Set(regionalFocusSlugs).size !== 4) {
   errors.push("Foco regional: configurar exatamente 4 cidades únicas");
 }
 for (const slug of regionalFocusSlugs) {

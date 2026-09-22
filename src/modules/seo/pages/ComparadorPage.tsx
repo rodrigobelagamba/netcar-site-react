@@ -24,7 +24,11 @@ import {
 } from "@/lib/analytics";
 import { generateVehicleSlug } from "@/lib/slug";
 import { resolvedVehicleCategory } from "@/lib/vehicleCategory";
-import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
+import { buildWhatsAppUrl } from "@/lib/whatsappMessages";
+import {
+  comparisonVehicleLabel,
+  comparisonWhatsAppMessage,
+} from "@/lib/comparisonContact";
 import {
   optimizeStockImage,
   stockGalleryPreviewSource,
@@ -177,19 +181,11 @@ export function ComparadorPage() {
     .map((id) => list.find((v) => v.id === id))
     .filter((v): v is Vehicle => !!v);
 
-  const comparisonNames = chosen.map((vehicle) =>
-    `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name} ${vehicle.year || ""}`
-      .trim()
-      .replace(/\s+/g, " "),
-  );
-  const comparisonWhatsAppUrl = whatsapp?.numero
-    ? buildWhatsAppUrl(
-        whatsapp.numero,
-        siteWhatsAppMessage(
-          `comparei ${comparisonNames.join(" x ")} e quero ajuda para escolher entre eles`,
-        ),
-      )
-    : "#";
+  const comparisonNames = chosen.map(comparisonVehicleLabel);
+  const whatsAppNumber = whatsapp?.numero?.trim();
+  const comparisonWhatsAppUrl = whatsAppNumber
+    ? buildWhatsAppUrl(whatsAppNumber, comparisonWhatsAppMessage(chosen))
+    : undefined;
 
   function showComparison() {
     comparisonRef.current?.scrollIntoView({
@@ -292,8 +288,8 @@ export function ComparadorPage() {
                   Comece com dois carros
                 </h2>
                 <p className="mt-1 text-sm text-gray-600">
-                  Escolha um dos pares prontos ou monte a sua própria
-                  comparação logo abaixo.
+                  Escolha um dos pares prontos ou monte a sua própria comparação
+                  logo abaixo.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   {presets.map((preset) => (
@@ -388,23 +384,52 @@ export function ComparadorPage() {
                     <tr className="border-t border-gray-100">
                       <td className="p-4" />
                       {chosen.map((v) => (
-                        <td key={v.id} className="p-4">
-                          <Link
-                            to="/veiculo/$slug"
-                            params={{ slug: generateVehicleSlug(v) }}
-                            onClick={() =>
-                              trackCompareInteraction({
-                                action: "view_details",
-                                vehicleIds: [v.id],
-                                vehicleNames: [
-                                  `${v.marca || ""} ${v.modelo || v.name}`.trim(),
-                                ],
-                              })
-                            }
-                            className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-white text-xs font-semibold hover:bg-primary/90"
-                          >
-                            Ver detalhes
-                          </Link>
+                        <td key={v.id} className="p-4 align-top">
+                          <div className="flex flex-col items-start gap-2">
+                            <Link
+                              to="/veiculo/$slug"
+                              params={{ slug: generateVehicleSlug(v) }}
+                              aria-label={`Ver este carro: ${comparisonVehicleLabel(v)}`}
+                              onClick={() =>
+                                trackCompareInteraction({
+                                  action: "view_details",
+                                  vehicleIds: [v.id],
+                                  vehicleNames: [
+                                    `${v.marca || ""} ${v.modelo || v.name}`.trim(),
+                                  ],
+                                })
+                              }
+                              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-lg bg-primary px-3 py-2 text-white text-xs font-semibold hover:bg-primary/90"
+                            >
+                              Ver este carro
+                            </Link>
+                            {whatsAppNumber && (
+                              <a
+                                href={buildWhatsAppUrl(
+                                  whatsAppNumber,
+                                  comparisonWhatsAppMessage([v]),
+                                )}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={`Falar deste carro: ${comparisonVehicleLabel(v)}`}
+                                data-wa-source="comparison"
+                                data-wa-intent="vehicle_inquiry"
+                                data-wa-vehicle-id={v.id}
+                                data-wa-vehicle-name={comparisonVehicleLabel(v)}
+                                onClick={() =>
+                                  trackCompareInteraction({
+                                    action: "whatsapp",
+                                    vehicleIds: [v.id],
+                                    vehicleNames: [comparisonVehicleLabel(v)],
+                                  })
+                                }
+                                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-[#087A37]/30 px-3 py-2 text-xs font-semibold text-[#087A37] transition-colors hover:bg-[#087A37]/5"
+                              >
+                                <MessageCircle className="h-4 w-4 shrink-0" />
+                                Falar deste carro
+                              </a>
+                            )}
+                          </div>
                         </td>
                       ))}
                     </tr>
@@ -420,30 +445,41 @@ export function ComparadorPage() {
                         Quer ajuda para decidir?
                       </h3>
                       <p className="mt-1 text-sm leading-relaxed text-gray-600">
-                        A mensagem já leva os carros que você comparou. Nossa
-                        equipe pode explicar as diferenças e confirmar quais
-                        continuam disponíveis.
+                        {comparisonWhatsAppUrl &&
+                          "A mensagem já leva a identificação e o link de cada carro. "}
+                        Nossa equipe pode explicar as diferenças e confirmar
+                        quais continuam disponíveis.
                       </p>
                     </div>
-                    <a
-                      href={comparisonWhatsAppUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-wa-source="comparison"
-                      data-wa-intent="comparison_help"
-                      onClick={() =>
-                        trackCompareInteraction({
-                          action: "whatsapp",
-                          vehicleIds: chosen.map((vehicle) => vehicle.id),
-                          vehicleNames: comparisonNames,
-                        })
-                      }
-                      className="inline-flex min-h-14 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#087A37] px-5 py-3 font-black text-white shadow-[0_10px_28px_rgba(8,122,55,0.25)] transition-colors hover:bg-[#075E54]"
-                    >
-                      <MessageCircle className="h-5 w-5" />
-                      Quero ajuda para escolher
-                      <ArrowRight className="h-4 w-4" />
-                    </a>
+                    {comparisonWhatsAppUrl ? (
+                      <a
+                        href={comparisonWhatsAppUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-wa-source="comparison"
+                        data-wa-intent="comparison_help"
+                        onClick={() =>
+                          trackCompareInteraction({
+                            action: "whatsapp",
+                            vehicleIds: chosen.map((vehicle) => vehicle.id),
+                            vehicleNames: comparisonNames,
+                          })
+                        }
+                        className="inline-flex min-h-14 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#087A37] px-5 py-3 font-black text-white shadow-[0_10px_28px_rgba(8,122,55,0.25)] transition-colors hover:bg-[#075E54]"
+                      >
+                        <MessageCircle className="h-5 w-5" />
+                        Quero ajuda para escolher
+                        <ArrowRight className="h-4 w-4" />
+                      </a>
+                    ) : (
+                      <Link
+                        to="/contato"
+                        className="inline-flex min-h-14 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#00283C] px-5 py-3 font-black text-white transition-colors hover:bg-[#00435a]"
+                      >
+                        Ver formas de contato
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    )}
                   </div>
                 </div>
               )}
