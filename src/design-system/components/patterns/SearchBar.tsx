@@ -40,7 +40,10 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     anoMax: searchParams.get("anoMax") || undefined,
   };
 
-  const { data: vehicles } = useVehiclesQuery();
+  const { data: vehicles } = useVehiclesQuery(
+    { fetchAll: true },
+    { enabled: isFocused, refreshImmediately: true },
+  );
   const { data: stockData } = useAllStockDataQuery();
   const { data: whatsapp } = useWhatsAppQuery();
 

@@ -87,17 +87,21 @@ export function useVehiclesQuery(
   });
 
   useEffect(() => {
-    if (
-      !bootstrapVehicles ||
-      options?.enabled === false ||
-      options?.refreshImmediately
-    )
+    if (options?.enabled === false) return;
+    if (options?.refreshImmediately) {
+      // Abrir/reabrir a busca também precisa atualizar um cache ainda "fresco".
+      // refetchOnMount não cobre a transição de enabled: false para true.
+      // Reaproveita a requisição que o React Query já possa ter iniciado.
+      void result.refetch({ cancelRefetch: false });
       return;
+    }
+    if (!bootstrapVehicles) return;
     const timer = window.setTimeout(() => {
       void result.refetch();
     }, 15_000);
     return () => window.clearTimeout(timer);
   }, [
+    queryKey,
     bootstrapVehicles,
     options?.enabled,
     options?.refreshImmediately,

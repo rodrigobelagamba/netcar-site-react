@@ -18,6 +18,8 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run lint
+      - name: Validate stock search refresh
+        run: npm run stock:test-search
       - name: Validate delivery gallery and deployment preservation
         run: |
           node --test scripts/tests/entregas-deploy.test.mjs

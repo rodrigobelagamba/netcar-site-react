@@ -40,9 +40,13 @@ export function Header() {
   const { data: whatsapp } = useWhatsAppQuery();
   const whatsappNumber = whatsapp?.numero?.trim() || DEFAULT_SALES_WHATSAPP;
   const { searchTerm, setSearchTerm } = useSearchContext();
-  const { data: vehicles } = useVehiclesQuery(undefined, {
-    enabled: isSearchOpen || isMobileMenuOpen,
-  });
+  const { data: vehicles } = useVehiclesQuery(
+    { fetchAll: true },
+    {
+      enabled: isSearchOpen || isMobileMenuOpen,
+      refreshImmediately: true,
+    },
+  );
 
   // Formata telefone para exibição
   const formatPhone = (phone?: string) => {
