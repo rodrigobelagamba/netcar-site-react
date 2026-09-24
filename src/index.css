@@ -227,11 +227,6 @@
     border: none;
   }
 
-  /* Tiles entram na paleta: cinza neblina, quadras no apoio #6cbe9d, avenidas no Azul Céu #6cc4ca. Pins ficam de fora. */
-  .lojas-map .leaflet-tile-pane {
-    filter: url("#lojas-map-palette");
-  }
-
   /* Story preview cards — ratio e crop iguais ao EmbedSocial */
   .social-story-card__media {
     padding-top: calc(180% - 6px);

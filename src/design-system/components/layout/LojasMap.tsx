@@ -69,6 +69,10 @@ export function LojasMap({ lojas }: { lojas: LojaMarker[] }) {
         maxZoom: 19,
       }).addTo(map);
 
+      // url(#id) no CSS externo resolve contra o arquivo, não contra a página, e o filtro não pega.
+      const tilePane = map.getPane("tilePane");
+      if (tilePane) tilePane.style.filter = "url(#lojas-map-palette)";
+
       mapRef.current = map;
 
       const resizeTimer = window.setTimeout(() => map.invalidateSize(), 150);
@@ -130,7 +134,7 @@ export function LojasMap({ lojas }: { lojas: LojaMarker[] }) {
   return (
     <>
       {/* Fora do container: o Leaflet apaga o HTML interno ao iniciar. */}
-      <svg className="pointer-events-none absolute h-0 w-0" aria-hidden="true">
+      <svg className="pointer-events-none fixed" style={{ left: -20, top: 0 }} width={8} height={8} aria-hidden="true">
         <filter id="lojas-map-palette" colorInterpolationFilters="sRGB" x="0" y="0" width="100%" height="100%">
           <feColorMatrix
             in="SourceGraphic"
