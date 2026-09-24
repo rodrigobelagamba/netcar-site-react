@@ -11,7 +11,7 @@
     "keyword": "transferência de veículo rs documentos",
     "titleHint": "Documentação na compra de seminovo no RS: passo a passo",
     "intent": "compra",
-    "status": "pendente"
+    "status": "publicado"
   },
   {
     "slug": "primeiro-carro-qual-escolher",
@@ -26,14 +26,14 @@
     "keyword": "tabela fipe carro usado",
     "titleHint": "Tabela FIPE: como usar na hora de comprar ou vender",
     "intent": "venda",
-    "status": "pendente"
+    "status": "publicado"
   },
   {
     "slug": "custos-alem-da-parcela",
     "keyword": "quanto custa manter um carro",
     "titleHint": "Quanto custa manter um carro além da parcela: seguro, IPVA e manutenção",
     "intent": "financiamento",
-    "status": "pendente"
+    "status": "publicado"
   },
   {
     "slug": "como-funciona-avaliacao-usado-na-troca",
@@ -48,7 +48,7 @@
     "keyword": "melhor carro para uber 99",
     "titleHint": "Carro para rodar de aplicativo na Grande POA: o que considerar",
     "intent": "compra",
-    "status": "pendente"
+    "status": "publicado"
   },
   {
     "slug": "consorcio-ou-financiamento-seminovo",
@@ -71,7 +71,7 @@
     "keyword": "quando vale a pena trocar de carro",
     "titleHint": "Quando trocar de carro: 6 sinais de que chegou a hora",
     "intent": "venda",
-    "status": "pendente"
+    "status": "publicado"
   },
   {
     "slug": "carro-automatico-na-cidade-vale-a-pena",
@@ -86,7 +86,7 @@
     "keyword": "hatch ou sedan qual melhor",
     "titleHint": "Hatch ou sedan: qual combina com seu uso",
     "intent": "compra",
-    "status": "pendente",
+    "status": "publicado",
     "reason": "Liberado em 04/08/2026: melhor-hatch e melhor-sedan foram consolidados nas landings. Comparativo hatch vs sedan é intenção informacional, distinta de /comprar-hatch e /comprar-sedan"
   },
   {
@@ -145,7 +145,7 @@
     "region": "Região Metropolitana de Porto Alegre",
     "cities": ["Canoas", "Gravataí", "Cachoeirinha", "Alvorada"],
     "asset": "guia-por-uso",
-    "status": "pendente"
+    "status": "publicado"
   },
   {
     "slug": "carro-financiado-negociacao-remota-rs",
