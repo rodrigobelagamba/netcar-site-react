@@ -15,6 +15,7 @@ import {
   ChevronRight,
   ChevronDown,
   CalendarDays,
+  Gauge,
   Calculator,
   ArrowLeftRight,
   ArrowRight,
@@ -682,9 +683,10 @@ interface SpecBadgeProps {
   label: string;
   value: string;
   index?: number;
+  highlighted?: boolean;
 }
 
-function SpecBadge({ label, value, index = 0 }: SpecBadgeProps) {
+function SpecBadge({ label, value, index = 0, highlighted = false }: SpecBadgeProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -695,12 +697,13 @@ function SpecBadge({ label, value, index = 0 }: SpecBadgeProps) {
         delay: index * 0.04,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className="flex min-h-[72px] flex-col items-start justify-center rounded-xl border border-[#00283C]/[0.08] bg-white px-4 py-3 shadow-[0_4px_16px_rgba(0,40,60,0.035)]"
+      className={`flex min-h-[72px] min-w-0 flex-col items-start justify-center rounded-xl border px-4 py-3 shadow-[0_4px_16px_rgba(0,40,60,0.035)] ${highlighted ? "border-[#23747C]/25 bg-[#e5f3ec]" : "border-[#00283C]/[0.08] bg-white"}`}
     >
-      <span className="text-[9px] font-black uppercase tracking-[0.16em] text-[#23747C]">
+      <span className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#23747C]">
+        {highlighted && <Gauge className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
         {label.replace(/:$/, "")}
       </span>
-      <span className="mt-1 text-[15px] font-black leading-tight text-[#00283C] sm:text-[16px]">
+      <span className={`mt-1 font-black leading-tight ${highlighted ? "text-[18px] text-[#075E54] sm:text-[20px]" : "text-[15px] text-[#00283C] sm:text-[16px]"}`}>
         {value}
       </span>
     </motion.div>
@@ -2355,12 +2358,13 @@ export function DetalhesPage() {
                 </div>
               )}
               {mileageFormatted && (
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
+                <div className="flex min-w-0 flex-col justify-center rounded-xl border border-[#23747C]/25 bg-[#e5f3ec] px-2.5 py-1.5">
+                  <span className="mb-0.5 flex items-center gap-1 font-bold uppercase tracking-wider text-[#23747C] info-label">
+                    <Gauge className="h-[1.2em] w-[1.2em] shrink-0" aria-hidden="true" />
                     Quilometragem
                   </span>
-                  <span className="text-fg font-semibold info-value">
-                    {mileageFormatted}
+                  <span className="text-[#075E54] leading-tight info-value">
+                    <strong className="text-[1.25em] font-black">{mileageFormatted}</strong>
                   </span>
                 </div>
               )}
@@ -3020,6 +3024,7 @@ function DetailsSection({
                     label={spec.label}
                     value={spec.value}
                     index={index}
+                    highlighted={spec.label === "Quilometragem:"}
                   />
                 ))}
               </div>
