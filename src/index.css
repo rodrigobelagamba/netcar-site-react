@@ -227,6 +227,11 @@
     border: none;
   }
 
+  /* OSM Carto satura verde e laranja. Filtro só nos tiles; pin e zoom ficam de fora. */
+  .lojas-map .leaflet-tile-pane {
+    filter: saturate(0.28) brightness(1.06);
+  }
+
   /* Story preview cards — ratio e crop iguais ao EmbedSocial */
   .social-story-card__media {
     padding-top: calc(180% - 6px);

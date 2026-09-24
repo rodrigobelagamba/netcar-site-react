@@ -130,7 +130,7 @@ export function LojasMap({ lojas }: { lojas: LojaMarker[] }) {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full z-0"
+      className="lojas-map w-full h-full z-0"
       role="region"
       aria-label="Mapa das lojas Netcar — clique no pin para abrir no Google Maps"
     />
