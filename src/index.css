@@ -161,7 +161,7 @@
     @apply max-w-[1400px] xl:max-w-[1700px] 2xl:max-w-[1920px] mx-auto;
   }
 
-  /* Pins do mapa de lojas (Leaflet) */
+  /* Pins do mapa de lojas (MapLibre) */
   .lojas-map-marker {
     display: flex;
     flex-direction: column;
@@ -222,9 +222,17 @@
     }
   }
 
-  .leaflet-marker-icon.lojas-map-marker-icon {
-    background: transparent;
+  /* Botão sem centralização vertical: a ponta do pin depende do conteúdo colado no topo. */
+  .lojas-map-marker-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 120px;
+    height: 104px;
+    padding: 0;
     border: none;
+    background: transparent;
+    cursor: pointer;
   }
 
   /* Story preview cards — ratio e crop iguais ao EmbedSocial */

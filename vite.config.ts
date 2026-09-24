@@ -43,11 +43,11 @@ export default defineConfig({
           
           // Bibliotecas grandes específicas primeiro (mais específicas primeiro)
           
-          // Google Maps / Leaflet
+          // Google Maps / MapLibre
           if (
             id.includes("@react-google-maps") ||
             id.includes("/google") ||
-            id.includes("/leaflet/")
+            id.includes("/maplibre-gl/")
           ) {
             return "vendor-maps";
           }
