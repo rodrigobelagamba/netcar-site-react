@@ -61,9 +61,9 @@ export function IanBot() {
               <span className="text-[24px]">👋</span>
             </div>
             <p className="text-gray-500 text-[16px] md:text-[18px] font-medium leading-relaxed max-w-[500px]">
-              Diga o tipo de carro, a faixa de preço e se tem usado na troca. O
-              iAN organiza as informações no WhatsApp e encaminha a conversa
-              para a equipe.
+              Me conta que tipo de carro você procura, a faixa de preço e se tem
+              um veículo na troca. Eu organizo tudo por aqui e encaminho você
+              para a equipe da Netcar.
             </p>
           </div>
         </div>
