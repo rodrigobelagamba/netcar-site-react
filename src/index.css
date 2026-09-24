@@ -227,9 +227,9 @@
     border: none;
   }
 
-  /* OSM Carto satura verde e laranja. Cinza claro só nos tiles; pin e zoom ficam de fora. */
+  /* Tiles entram na paleta: cinza neblina, quadras no apoio #6cbe9d, avenidas no Azul Céu #6cc4ca. Pins ficam de fora. */
   .lojas-map .leaflet-tile-pane {
-    filter: grayscale(1) brightness(1.14) contrast(0.86);
+    filter: url("#lojas-map-palette");
   }
 
   /* Story preview cards — ratio e crop iguais ao EmbedSocial */
