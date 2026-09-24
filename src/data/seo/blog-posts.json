@@ -799,5 +799,498 @@
     ],
     "ctaLabel": "Ver estoque para uso urbano",
     "ctaHref": "/seminovos"
+  },
+  {
+    "slug": "documentacao-compra-seminovo-rs",
+    "title": "Transferência de veículo no RS: documentos",
+    "description": "Documentos da transferência de veículo no RS: o que separar e o que conferir na placa antes de pagar o seminovo em Esteio.",
+    "publishedAt": "2026-09-24",
+    "readMinutes": 6,
+    "ctaLabel": "Ver seminovos no estoque",
+    "ctaHref": "/seminovos",
+    "sections": [
+      {
+        "type": "p",
+        "text": "A transferência de veículo no RS começa pelos documentos e por uma placa sem restrição. CRLV-e, ATPV-e assinada e débitos em dia são o mínimo para o nome mudar no DETRAN. Pagar antes disso deixa o seminovo no papel de outra pessoa."
+      },
+      {
+        "type": "h2",
+        "text": "O que o comprador separa"
+      },
+      {
+        "type": "p",
+        "text": "Leve identidade oficial com CPF, comprovante de endereço recente e CNH válida se for sair dirigindo. Original ajuda no balcão. Cópia só entra se o atendimento pedir. Não invente comprovante em nome de terceiro: se o documento da casa está no cônjuge, pergunte antes o que o protocolo aceita."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Identidade oficial com CPF do comprador",
+          "Comprovante de endereço recente",
+          "CNH dentro da validade, para a retirada",
+          "Pasta com as vias que a loja entregar no dia"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que o vendedor entrega"
+      },
+      {
+        "type": "p",
+        "text": "O carro circula com CRLV-e. A mudança de dono usa a ATPV-e, a autorização eletrônica que substituiu o recibo de papel na maior parte dos casos. Ela costuma ser preenchida no canal digital do DETRAN ou com despachante. O vendedor também registra a comunicação de venda. Prazo e taxa são os que o DETRAN-RS publica na semana da compra. Confirme no site oficial ou no balcão, porque os dois mudam e não dá para cravar número neste texto."
+      },
+      {
+        "type": "p",
+        "text": "Guarde o que comprovar a entrada: protocolo, via da ATPV-e e o combinado sobre quando o CRLV-e sai no seu nome. Enquanto isso não acontece, pergunte qual documento autoriza circular. Multa nesse intervalo se discute com papel, não com print sumido. Se um despachante protocolar, separe taxa do DETRAN e honorário do serviço. São contas diferentes, e o valor do dia está no atendimento — não neste guia."
+      },
+      {
+        "type": "h2",
+        "text": "O que trava mesmo com a papelada pronta"
+      },
+      {
+        "type": "p",
+        "text": "Documento completo não vence bloqueio. A consulta da placa mostra o que ainda segura a transferência."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "IPVA, licenciamento ou multa em aberto",
+          "Gravame de alienação sem baixa da financeira",
+          "Restrição de roubo, busca ou ordem judicial",
+          "Vistoria pedida pelo DETRAN e ainda não feita"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Consultar a placa antes de pagar"
+      },
+      {
+        "type": "p",
+        "text": "Peça débitos e restrições com placa e Renavam. Quem assina a ATPV-e precisa ser quem consta como proprietário. Se existir alienação, a baixa do gravame entra no roteiro antes da retirada, não como pendência para “resolver depois”. Foto do documento no celular não substitui essa leitura."
+      },
+      {
+        "type": "h2",
+        "text": "Comprando em loja, em Esteio"
+      },
+      {
+        "type": "p",
+        "text": "Na visita, pergunte o que já sai protocolado e o que fica com você: quais vias você leva, quem dá entrada no DETRAN e quando o CRLV-e passa ao seu nome. A Netcar fica na Av. Presidente Vargas, em Esteio, desde 1997, e essa conferência cabe na conversa com o consultor. A baixa que oficializa o seu nome continua sendo a do DETRAN."
+      },
+      {
+        "type": "p",
+        "text": "Escolha o seminovo no estoque, separe a lista e leve a dúvida de documentação para a loja. Carro certo com transferência em aberto ainda não é seu."
+      }
+    ]
+  },
+  {
+    "slug": "tabela-fipe-como-usar-negociacao",
+    "title": "Tabela FIPE do carro usado na negociação",
+    "description": "A tabela FIPE do carro usado é referência de negociação, não preço fechado. Veja como ler versão, km e estado na Grande POA.",
+    "publishedAt": "2026-09-24",
+    "readMinutes": 6,
+    "ctaLabel": "Avaliar meu usado",
+    "ctaHref": "/compra",
+    "sections": [
+      {
+        "type": "p",
+        "text": "A tabela FIPE do carro usado é uma média mensal, por marca, modelo, ano e combustível. Ela não descreve a unidade da sua garagem. Na negociação, o número abre a conversa. Versão, quilometragem e estado é que fecham o valor."
+      },
+      {
+        "type": "h2",
+        "text": "O que a média mensal mede"
+      },
+      {
+        "type": "p",
+        "text": "A FIPE pesquisa preços praticados e publica uma referência do mês. Não é anúncio, não é proposta de loja e não é o valor de um carro específico. Duas versões do mesmo nome — uma simples e uma completa — podem parecer iguais na busca e custar diferente na rua. Sem código e versão exatos, a consulta erra o alvo. Tabela do mês passado, salva em print, já pode ter mudado. Consulte de novo na semana da conversa."
+      },
+      {
+        "type": "p",
+        "text": "Um erro comum é comparar o seu usado com o primeiro resultado do nome popular. O código da FIPE segue marca, modelo, ano e combustível. Automático, kit e ano de fabricação fora do que você digitou mudam a linha. Anote o que está no documento, não o apelido que a família usa para o carro."
+      },
+      {
+        "type": "h2",
+        "text": "Por que a oferta não cola no número"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Quilometragem fora do que aquele ano costuma ter",
+          "Pintura, pneu, banco e item de série ou opcional",
+          "Câmbio, quando a ficha da tabela separa ou quando mistura",
+          "Praça: média nacional não é o balcão da Grande Porto Alegre"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Usar a tabela para vender"
+      },
+      {
+        "type": "p",
+        "text": "Trate a FIPE como teto de referência, não como valor que alguém é obrigado a pagar. Anúncio no topo da tabela, com pneu no fim ou km alto, encalha. Anúncio muito abaixo, sem motivo visível, também espanta. Particular, loja e concessionária descontam coisas diferentes: tempo de pátio, garantia de procedência, retrabalho. Por isso dois compradores olham a mesma tabela e oferecem números distintos. Leve modelo, ano, versão e km certos. Foto bonita não substitui ver o carro."
+      },
+      {
+        "type": "h2",
+        "text": "Usar a tabela para comprar"
+      },
+      {
+        "type": "p",
+        "text": "A média também não é um teto que você deve respeitar cegamente. Seminovo com histórico claro e itens em ordem pode ficar acima da tabela e ainda assim caber no uso. Unidade abaixo da tabela, com papel opaco, pede mais pergunta — não pressa para aproveitar. Pergunte o que justifica a diferença: quilometragem, pneu, versão ou só pressa de vender. Diferença sem explicação não é oportunidade."
+      },
+      {
+        "type": "p",
+        "text": "Na Grande Porto Alegre o mesmo modelo aparece em particular, em loja de bairro e em multimarcas. A tabela é uma só. O que muda é procedência, tempo até você poder usar o carro e o quanto de retrabalho vem junto. Coloque isso ao lado do número da FIPE antes de dizer que “está caro” ou “está barato”."
+      },
+      {
+        "type": "h2",
+        "text": "O que levar na avaliação"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Documento do carro e o nome certo da versão",
+          "Quilometragem do dia",
+          "Se existe financiamento em aberto",
+          "A tabela do mês, só como calibração"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Se a ideia é vender ou dar na troca, peça a avaliação na loja em Esteio. A proposta olha a unidade naquele dia. A FIPE só evita chegar no escuro."
+      }
+    ]
+  },
+  {
+    "slug": "custos-alem-da-parcela",
+    "title": "Quanto custa manter um carro além da parcela",
+    "description": "Quanto custa manter um carro além da parcela: combustível, IPVA, seguro e pneu na conta de quem financia seminovo em Esteio.",
+    "publishedAt": "2026-09-24",
+    "readMinutes": 6,
+    "ctaLabel": "Ver financiamento",
+    "ctaHref": "/financiamento",
+    "sections": [
+      {
+        "type": "p",
+        "text": "Quanto custa manter um carro não cabe na parcela. Combustível, IPVA, seguro, pneu e revisão continuam todo mês, financiado ou à vista. Se o boleto já ocupa o limite, o primeiro imprevisto vira atraso."
+      },
+      {
+        "type": "h2",
+        "text": "O boleto não é o mês inteiro"
+      },
+      {
+        "type": "p",
+        "text": "A instituição cobra o veículo. O resto fica com você: posto, licenciamento, seguradora, borracharia e oficina. Some esses itens antes de escolher prazo. Parcela que cabe no papel e mês que não fecha é a mesma decisão mal feita. Faça a conta numa folha simples, com o seu km, não com o exemplo de um vídeo."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Combustível de uma semana típica, multiplicado por quatro",
+          "IPVA e licenciamento diluídos no mês",
+          "Seguro ou a decisão consciente de ficar sem ele",
+          "Reserva de pneu, óleo e uma visita de oficina"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Combustível segue a sua rota"
+      },
+      {
+        "type": "p",
+        "text": "Quem cruza Porto Alegre, Canoas e Esteio todo dia gasta diferente de quem roda pouco no bairro. Anote uma semana real de quilômetros. Aí o porte — hatch, sedan ou SUV — entra com o seu percurso, não com a frase de catálogo."
+      },
+      {
+        "type": "h2",
+        "text": "IPVA, licenciamento e seguro"
+      },
+      {
+        "type": "p",
+        "text": "O IPVA acompanha o valor de mercado e volta todo ano, mesmo com o financiamento em dia. O licenciamento também. O seguro muda com perfil, CEP e modelo: dois carros na mesma faixa podem ter cotações distantes. Na região metropolitana, cote uso só de cidade e uso com estrada antes de assinar. Número que um amigo paga não é a sua cotação. Se decidir ficar sem seguro, assuma o risco de propósito, não por esquecimento."
+      },
+      {
+        "type": "p",
+        "text": "Estacionamento, pedágio na rota de trabalho e lavagem entram para quem usa o carro todo dia. São pequenos ao lado da parcela e grandes somados no ano. Uma linha a mais na folha evita tratar esses gastos como “surpresa”."
+      },
+      {
+        "type": "h2",
+        "text": "Pneu e revisão não esperam o fim do prazo"
+      },
+      {
+        "type": "p",
+        "text": "Pneu, pastilha, óleo e bateria aparecem no meio do contrato. Reserve uma fatia do mês para manutenção mesmo com o carro recém-chegado. Parcela folgada e zero reserva quebram o orçamento do mesmo jeito que parcela alta. Um jogo de pneu na região metropolitana não é detalhe: em carro que roda todo dia, ele volta antes do que a pessoa que só usa no fim de semana imagina."
+      },
+      {
+        "type": "h2",
+        "text": "Qual parcela ainda deixa o mês de pé"
+      },
+      {
+        "type": "p",
+        "text": "Financiamento de seminovo pode ir a 60 meses, com entrada mínima de 20%. Entrada no cartão e o restante da condição passam por análise de crédito. Não há aprovação prometida. Alongar o prazo reduz a parcela e aumenta o total pago. O teste útil é outro: sobra dinheiro para combustível, seguro e um pneu no mesmo mês?"
+      },
+      {
+        "type": "p",
+        "text": "Faça essa conta e só então olhe o estoque. O carro certo é o que o mês inteiro aguenta, não o que a simulação isolada deixa bonito."
+      }
+    ]
+  },
+  {
+    "slug": "carro-para-aplicativo-grande-poa",
+    "title": "Melhor carro para Uber e 99 na Grande POA",
+    "description": "O melhor carro para Uber e 99 na Grande POA aguenta o turno, o consumo e a regra atual do aplicativo. Veja o que priorizar em Esteio.",
+    "publishedAt": "2026-09-24",
+    "readMinutes": 6,
+    "ctaLabel": "Ver opções no estoque",
+    "ctaHref": "/seminovos",
+    "sections": [
+      {
+        "type": "p",
+        "text": "O melhor carro para Uber e 99 não é uma marca campeã. É o que passa muitas horas no trânsito de Porto Alegre, Canoas, Esteio e cidades vizinhas, com manutenção simples e consumo que o turno ainda paga. Ano mínimo e categoria mudam dentro do aplicativo: confirme lá antes de fechar."
+      },
+      {
+        "type": "h2",
+        "text": "O turno é longo"
+      },
+      {
+        "type": "p",
+        "text": "Quem roda de aplicativo senta mais do que passeia. Banco, ar que dá conta do verão gaúcho e visibilidade no anda-e-para pesam mais que roda chamativa. Barulho de vento e suspensão seca cansam no segundo turno, não na volta do quarteirão. O test drive precisa durar o bastante para o corpo opinar. Se possível, repita um trecho que você já faz com passageiro: lombada, viaduto, fila."
+      },
+      {
+        "type": "p",
+        "text": "Conforto aqui não é luxo de catálogo. É encosto que não castiga a lombar, ar que gelar no estacionamento ao sol e painel que você lê sem tirar o olho do trânsito. Itens que só enfeitam e encarecem peça ficam em segundo plano quando a ferramenta de trabalho é o carro."
+      },
+      {
+        "type": "h2",
+        "text": "Corrida também paga oficina"
+      },
+      {
+        "type": "p",
+        "text": "Some o combustível da rota que você já faz e uma reserva mensal de manutenção. Carro econômico na ficha e caro na peça não fecha a semana. Pneu, pastilha e óleo aparecem mais cedo quando o carro roda o dia inteiro. Procure mecânica fácil de atender na região metropolitana, com peça comum. Isso não é ranking de marca: é não ficar parado três dias à espera de um componente raro enquanto o aplicativo continua aberto para os outros."
+      },
+      {
+        "type": "p",
+        "text": "Separe também o que é custo do turno e o que é parcela do carro. Os dois saem do mesmo bolso. Uma parcela agressiva com consumo alto no para-e-anda de Porto Alegre e Canoas pode render menos, no fim do mês, do que uma parcela folgada num carro mais simples de manter."
+      },
+      {
+        "type": "h2",
+        "text": "Mala, categoria e a regra do app"
+      },
+      {
+        "type": "p",
+        "text": "Entrega e corrida com bagagem pedem porta-malas utilizável. Algumas categorias pedem ano, quatro portas ou ar-condicionado. Essas regras são do aplicativo e mudam. Olhe o requisito vigente na sua cidade e só depois filtre o estoque. Comprar no escuro e descobrir que o ano não entra é prejuízo evitável."
+      },
+      {
+        "type": "h2",
+        "text": "Câmbio no congestionamento"
+      },
+      {
+        "type": "p",
+        "text": "Automático cansa menos quem fica o dia parado na BR-116 e nas avenidas. Manual pode caber no bolso e no consumo. Nenhum dos dois é obrigatório. A escolha é do corpo no fim do turno."
+      },
+      {
+        "type": "h2",
+        "text": "Shortlist com a regra já conferida"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Confirme ano e categoria aceitos no aplicativo",
+          "Defina teto já com combustível e manutenção do mês",
+          "Separe duas fichas de porte parecido no estoque",
+          "Faça test drive e só então peça a proposta"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Comece pelo estoque com o filtro do seu turno. Quando existirem dois carros concretos, fale com o consultor. Se quiser adiantar a lista, o iAN atende no WhatsApp."
+      }
+    ]
+  },
+  {
+    "slug": "quando-trocar-de-carro-sinais",
+    "title": "Quando vale a pena trocar de carro",
+    "description": "Quando vale a pena trocar de carro: oficina frequente, rota nova e custo do mês. Sinais para decidir a troca com calma em Esteio.",
+    "publishedAt": "2026-09-24",
+    "readMinutes": 5,
+    "ctaLabel": "Avaliar meu carro na troca",
+    "ctaHref": "/compra",
+    "sections": [
+      {
+        "type": "p",
+        "text": "Quando vale a pena trocar de carro é quando o uso mudou ou o custo de ficar passou o de sair — não quando surgiu um anúncio bonito. Oficina repetida, rota nova e falta de confiança em freio ou pneu são sinais. Vontade de vitrine não é."
+      },
+      {
+        "type": "h2",
+        "text": "A oficina entrou na agenda"
+      },
+      {
+        "type": "p",
+        "text": "Revisão programada faz parte de ter carro. Três voltas no semestre pelo mesmo sintoma mudam a conta. Some óleo, pneu, freio e o que o mecânico já avisou que vem depois. Se essa soma come uma fatia grande do que o usado ainda representa para você, a troca entra na mesa. Não existe percentual mágico. Existe o seu ano: o que já pagou e o que aceita pagar de novo."
+      },
+      {
+        "type": "p",
+        "text": "Separe também o que é desgaste justo do que é gambiarra acumulada. Um jogo de pneu no prazo é manutenção. Um barulho que volta toda vez que você sai da oficina é outro assunto. Leve esse histórico na avaliação, em vez de resumir tudo como “o carro está bom”."
+      },
+      {
+        "type": "h2",
+        "text": "A vida não é mais a do dia da compra"
+      },
+      {
+        "type": "p",
+        "text": "Filho, trabalho em outra cidade, estrada no fim de semana — ou o contrário, passou a rodar só no bairro. O carro pode estar inteiro e mesmo assim errado para a semana atual. Cadeira infantil, ferramenta ou mala de viagem mudam o que “cabe”. Troca boa acompanha a rotina, não o carro do vizinho. Se a rota nova é temporária, talvez baste esperar. Se já virou o normal do ano, insistir no carro antigo só adia a conta."
+      },
+      {
+        "type": "h2",
+        "text": "Você já evita usar o carro"
+      },
+      {
+        "type": "p",
+        "text": "Se a viagem fica para depois porque freio, pneu ou suspensão não passam confiança, o veículo deixou de servir. Na avaliação isso se confere com calma, sem culpar marca nem modelo. Ou o reparo tem orçamento claro, ou a troca é o caminho."
+      },
+      {
+        "type": "h2",
+        "text": "O porte não cabe no mês"
+      },
+      {
+        "type": "p",
+        "text": "Combustível e seguro de um carro maior do que o trajeto pede pesam toda semana. Às vezes a troca é para um porte menor, não para um ano mais novo. O critério é a rota real, em Esteio e na região, não a foto do anúncio. Anote um mês de posto e de seguro antes de decidir que “precisa subir de categoria”. Muita troca boa é lateral: outro carro, mesmo tipo de uso, menos visita à oficina."
+      },
+      {
+        "type": "h2",
+        "text": "Decidir primeiro, papelada depois"
+      },
+      {
+        "type": "p",
+        "text": "Aqui a pergunta é se chegou a hora. Parcela em aberto, quitação e proposta nova são o passo seguinte, com o carro visto na loja. Não misture as duas conversas: primeiro o sim ou o não. Depois a conta."
+      },
+      {
+        "type": "p",
+        "text": "Quando o sim aparecer, peça a avaliação do usado em Esteio. A proposta sai do carro presente, não de uma foto. A loja recebe troca, inclusive com saldo financiado."
+      }
+    ]
+  },
+  {
+    "slug": "hatch-ou-sedan-qual-escolher",
+    "title": "Hatch ou sedan: qual o melhor pro uso",
+    "description": "Hatch ou sedan, qual o melhor para o seu uso? Compare porta-malas, vaga e viagem curta no RS e veja seminovos lado a lado em Esteio.",
+    "publishedAt": "2026-09-24",
+    "readMinutes": 5,
+    "ctaLabel": "Comparar no estoque",
+    "ctaHref": "/seminovos",
+    "sections": [
+      {
+        "type": "p",
+        "text": "Hatch ou sedan, qual o melhor, só aparece quando você diz o que carrega e onde estaciona. Nenhum dos dois vence no geral. O hatch costuma facilitar a cidade. O sedan costuma acomodar mala e banco de trás de outro jeito. O uso escolhe."
+      },
+      {
+        "type": "h2",
+        "text": "Mala e banco de trás"
+      },
+      {
+        "type": "p",
+        "text": "Compra de mercado e mala de cabine cabem nos dois, com folga diferente. Quem leva cadeira infantil olha o acesso ao banco, o cinto e o formato da tampa, não o apelido da carroceria. Sedan abre a tampa e o volume segue o porta-malas. Hatch abre junto com o vão e às vezes acomoda objeto alto que o sedan recusa. Abra os dois e coloque dentro o carrinho, a mala ou as caixas que você realmente leva."
+      },
+      {
+        "type": "p",
+        "text": "Banco traseiro também não se resume a “cabe três”. Pernas de adulto, inclinação do encosto e a coluna central mudam a viagem de vinte minutos entre casa e trabalho. Sente atrás antes de decidir na ficha. Quem só olha a frente escolhe o carro de quem dirige, não o de quem vai junto."
+      },
+      {
+        "type": "h2",
+        "text": "Vaga e garagem"
+      },
+      {
+        "type": "p",
+        "text": "Na região metropolitana, vaga curta e garagem de prédio apertada favorecem quem manobra em menos espaço. Rampa, pilar e portão baixo eliminam carro que parecia certo na foto. Se a sua vaga já é justa, meça comprimento e a folga para abrir a porta. Hatch e sedan compactos podem ficar perto nessa conta. A trena ganha do anúncio. Leve o número na visita, em vez de descobrir no condomínio que o carro novo não entra."
+      },
+      {
+        "type": "h2",
+        "text": "Fim de semana fora"
+      },
+      {
+        "type": "p",
+        "text": "Litoral ou serra com duas pessoas e mala muda a escolha de quem, na semana, só circula entre Canoas e Esteio. Viagem rara não justifica pagar o ano inteiro por um porta-malas de feriado. Viagem frequente faz o sedan deixar de ser excesso."
+      },
+      {
+        "type": "h2",
+        "text": "A mesma faixa, duas carrocerias"
+      },
+      {
+        "type": "p",
+        "text": "Compare um hatch e um sedan de ano e quilometragem parecidos. Olhe versão e equipamento, não só a silhueta. Ar, sensor e multimídia mudam o dia a dia mais do que o desenho da tampa. Os dois podem estar certos. Errado é escolher sem sentar, ou descartar uma carroceria porque alguém disse que “envelheceu”. Na mesma faixa de preço, o que muda a sua semana é espaço, vaga e o que você carrega."
+      },
+      {
+        "type": "h2",
+        "text": "Fechar a comparação no mesmo dia"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Anote o que entra no carro numa semana normal",
+          "Meça a garagem ou a vaga que você usa",
+          "Separe uma ficha de cada carroceria",
+          "Test drive dos dois no mesmo dia, em Esteio"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "No pátio da Av. Presidente Vargas há hatch e sedan no mesmo estoque. Dá para comparar lado a lado e sair com um só, pelo uso."
+      }
+    ]
+  },
+  {
+    "slug": "picape-seminova-regiao-metropolitana-trabalho",
+    "title": "Picape seminova na região metropolitana",
+    "description": "Picape seminova na região metropolitana de Porto Alegre: checklist por trabalho em Canoas, Gravataí, Cachoeirinha e Alvorada.",
+    "publishedAt": "2026-09-24",
+    "readMinutes": 6,
+    "ctaLabel": "Ver picapes no estoque",
+    "ctaHref": "/seminovos",
+    "sections": [
+      {
+        "type": "p",
+        "text": "Picape seminova na região metropolitana de Porto Alegre tem de servir o serviço. Em Canoas, Gravataí, Cachoeirinha e Alvorada o uso muda: material de obra, entrega no trânsito ou carro de trabalho que também leva a família. A caçamba certa é a da sua carga, não a mais alta da vitrine."
+      },
+      {
+        "type": "h2",
+        "text": "A carga escolhe a caçamba"
+      },
+      {
+        "type": "p",
+        "text": "Obra pede caçamba que carregue o que você leva de verdade, com acesso fácil e sem raspar a tampa em toda carga. Entrega urbana pede manobra e consumo no anda-e-para de avenida. Uso misto pede cabine em que dá para passar a semana e caçamba que não exista só de enfeite. Anote peso e volume de um mês normal — saco, ferramenta, peça — antes de olhar anúncio. Altura de roda não carrega cimento."
+      },
+      {
+        "type": "p",
+        "text": "Meça também onde a picape dorme. Garagem de casa, pátio de cliente e vaga de rua na região metropolitana não têm a mesma folga. Capota, santo Antônio e escada atrasam serviço ou ajudam, conforme o que você fecha todo dia. Leve essa restrição para a visita, junto com a lista de carga."
+      },
+      {
+        "type": "h2",
+        "text": "Três rotinas na mesma região"
+      },
+      {
+        "type": "p",
+        "text": "Canoas e o acesso pela BR concentram deslocamento de carga e serviço: o carro pega avenida, pátio e volta carregado. Gravataí puxa rotina de polo industrial — entra em fornecedor e ainda precisa servir de carro de casa no fim do expediente. Cachoeirinha e Alvorada misturam percurso urbano com volume que um passeio compacto não leva, sem virar estrada o dia inteiro. As perguntas são as mesmas para as quatro cidades. A resposta muda com a carga e com o pátio onde você estaciona, não com o nome do município colado no título."
+      },
+      {
+        "type": "h2",
+        "text": "Checklist na unidade"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Cabine simples ou dupla conforme quem viaja no trabalho",
+          "Combustível alinhado ao km do mês, sem tratar diesel ou flex como vilão",
+          "Pneu e suspensão à altura do peso que você declara",
+          "Tração 4x4 só se o terreno do serviço pede. Asfalto da região, na maior parte, não pede"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Porte demais e porte de menos"
+      },
+      {
+        "type": "p",
+        "text": "Picape maior gasta mais e sofre em via apertada, em condomínio e em pátio de cliente. Picape pequena demais dobra viagem quando a carga não fecha numa ida. Leve a medida do que você carrega — comprimento da peça, não só “cabe umas coisas”. Se a dúvida ficar entre duas do estoque, faça os dois test drives com um volume parecido com o da segunda-feira. A escolha aparece no volante, não na ficha."
+      },
+      {
+        "type": "p",
+        "text": "Filtre picapes no estoque em Esteio e confirme a unidade antes de sair de Canoas, Gravataí, Cachoeirinha ou Alvorada. As picapes da casa passam pela Fábrica de Valor antes da vitrine. A escolha continua sendo a do seu serviço."
+      }
+    ]
   }
 ]
