@@ -2543,9 +2543,9 @@ export function DetalhesPage() {
       </DeferredRender>
 
       {/* Fábrica de Valor Section */}
-      <section className="w-full pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16 bg-surface">
+      <section className="w-full py-3 sm:py-4 bg-surface" aria-label="Preparação do veículo">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <DeferredRender minHeight={600}>
+          <DeferredRender minHeight={112}>
             <React.Suspense fallback={null}>
               <FabricaDeValor />
             </React.Suspense>
