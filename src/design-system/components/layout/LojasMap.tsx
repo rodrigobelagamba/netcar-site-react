@@ -15,6 +15,12 @@ const MARKER_COLORS = {
   "amber-500": "#f59e0b",
 } as const;
 
+// O pin ocupa 104px acima da coordenada; sem essa folga no topo a Loja 1 corta.
+const FIT_BOUNDS_OPTIONS: L.FitBoundsOptions = {
+  paddingTopLeft: [48, 128],
+  paddingBottomRight: [48, 48],
+};
+
 function createPinIcon(color: string, label: string, delayPing: boolean) {
   const pingDelayClass = delayPing ? " lojas-map-marker__ping--delayed" : "";
 
@@ -106,7 +112,7 @@ export function LojasMap({ lojas }: { lojas: LojaMarker[] }) {
     }
 
     if (bounds.length >= 2) {
-      map.fitBounds(L.latLngBounds(bounds), { padding: [48, 48] });
+      map.fitBounds(L.latLngBounds(bounds), FIT_BOUNDS_OPTIONS);
     } else if (bounds.length === 1) {
       map.setView(bounds[0], 17);
     }
@@ -114,7 +120,7 @@ export function LojasMap({ lojas }: { lojas: LojaMarker[] }) {
     const resizeTimer = window.setTimeout(() => {
       map.invalidateSize();
       if (bounds.length >= 2) {
-        map.fitBounds(L.latLngBounds(bounds), { padding: [48, 48] });
+        map.fitBounds(L.latLngBounds(bounds), FIT_BOUNDS_OPTIONS);
       }
     }, 150);
 
