@@ -84,6 +84,13 @@ export function formatKmApprox(value: number): string {
   return `${thousands} mil km`;
 }
 
+/** Mesma apresentação da quilometragem na vitrine e na página do carro. */
+export function formatCatalogMileage(value?: number | null): string {
+  return value != null && Number.isFinite(value) && value > 0 && value < 90_000
+    ? formatKmApprox(value)
+    : "";
+}
+
 export function formatYear(value: number): string {
   return value.toString();
 }

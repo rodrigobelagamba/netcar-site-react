@@ -57,6 +57,7 @@ import { DeferredRender } from "@/design-system/components/layout/DeferredRender
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { generateVehicleSlug, maskPlate } from "@/lib/slug";
+import { formatCatalogMileage } from "@/lib/formatters";
 import { useIcheckMetadata } from "@/hooks/useIcheckMetadata";
 import { getHistorySummary } from "@/reports/icheck/icheckHistory";
 import { ICHECK_SOURCE_LABEL } from "@/reports/icheck/icheckCopy";
@@ -2075,6 +2076,8 @@ export function DetalhesPage() {
     .join(" ");
   const waRef = vehicleWhatsAppRef(vehicle);
 
+  const mileageFormatted = formatCatalogMileage(vehicle.km);
+
   // Badges (só selos de dados reais — sem Retire hoje / Vistoriado genérico)
   const diferenciais = vehicle?.diferenciais ?? [];
   const hasDiferencial = (tag: string) =>
@@ -2084,7 +2087,7 @@ export function DetalhesPage() {
   const isCommercialHighlight =
     Number(vehicle?.km) > 0 &&
     Number(vehicle.km) < LOW_MILEAGE_HIGHLIGHT_THRESHOLD_KM;
-  // Sem "APENAS X KM", o argumento vira uso por ano (ano de fabricação), sem expor a km.
+  // Sem "APENAS X KM", o selo destaca o uso por ano (ano de fabricação).
   const isLowAnnualMileage =
     !isCommercialHighlight && hasVehicleLowAnnualMileage(vehicle);
 
@@ -2348,6 +2351,16 @@ export function DetalhesPage() {
                   </span>
                   <span className="text-fg font-semibold info-value">
                     {year}
+                  </span>
+                </div>
+              )}
+              {mileageFormatted && (
+                <div className="flex flex-col">
+                  <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
+                    Quilometragem
+                  </span>
+                  <span className="text-fg font-semibold info-value">
+                    {mileageFormatted}
                   </span>
                 </div>
               )}
@@ -2739,6 +2752,7 @@ function DetailsSection({
   const modeloCompleto = vehicle.modelo || vehicle.name || "";
   const year = vehicle.year || 0;
   const anoFabricacao = vehicle.anoFabricacao;
+  const mileageFormatted = formatCatalogMileage(vehicle.km);
 
   // Parse do conteúdo do anúncio (vem do endpoint separado)
   const gptContent = useMemo(() => parseGptContent(anuncio || null), [anuncio]);
@@ -2761,6 +2775,7 @@ function DetailsSection({
 
   const specifications = [
     anoDisplay && { label: "Ano:", value: anoDisplay },
+    mileageFormatted && { label: "Quilometragem:", value: mileageFormatted },
     vehicle.cor && { label: "Cor:", value: vehicle.cor },
     vehicle.portas && { label: "Portas:", value: `${vehicle.portas}` },
     vehicle.placa && { label: "Placa:", value: maskPlate(vehicle.placa) },
