@@ -227,9 +227,9 @@
     border: none;
   }
 
-  /* OSM Carto satura verde e laranja. Filtro só nos tiles; pin e zoom ficam de fora. */
+  /* OSM Carto satura verde e laranja. Cinza claro só nos tiles; pin e zoom ficam de fora. */
   .lojas-map .leaflet-tile-pane {
-    filter: saturate(0.28) brightness(1.06);
+    filter: grayscale(1) brightness(1.14) contrast(0.86);
   }
 
   /* Story preview cards — ratio e crop iguais ao EmbedSocial */
