@@ -21,6 +21,98 @@ const FIT_BOUNDS_OPTIONS: L.FitBoundsOptions = {
   paddingBottomRight: [48, 48],
 };
 
+const NEUTRAL = 0;
+const ROAD = 1;
+const GREEN = 2;
+const WATER = 3;
+
+const TILE_TONES: ReadonlyArray<readonly [number, number, number]> = [
+  [80, 90, 95], // Cinza Estrada #505a5f
+  [108, 196, 202], // Azul Céu #6cc4ca
+  [108, 190, 157], // Apoio 1 #6cbe9d
+  [0, 91, 102], // Azul Noite #005b66
+];
+
+// Para cada tom, a cor em cada luminosidade: o desenho do OSM continua legível, só muda a cor.
+const TONE_RAMPS = (() => {
+  const ramps = new Uint8ClampedArray(TILE_TONES.length * 256 * 3);
+  TILE_TONES.forEach(([r, g, b], tone) => {
+    const baseL = (Math.max(r, g, b) + Math.min(r, g, b)) / 510;
+    for (let l = 0; l < 256; l += 1) {
+      const target = l / 255;
+      const offset = (tone * 256 + l) * 3;
+      const toWhite = target >= baseL ? (target - baseL) / (1 - baseL) : 0;
+      const toBlack = target < baseL ? target / baseL : 1;
+      ramps[offset] = (r + (255 - r) * toWhite) * toBlack;
+      ramps[offset + 1] = (g + (255 - g) * toWhite) * toBlack;
+      ramps[offset + 2] = (b + (255 - b) * toWhite) * toBlack;
+    }
+  });
+  return ramps;
+})();
+
+// Faixas calibradas nas cores do OSM Carto: vias laranja/amarelo/rosa forte, parques verdes, água azul.
+// Rosa claro de comércio/indústria e bege de prédio têm pouco croma e caem no neutro.
+function toneFor(r: number, g: number, b: number, lightness: number) {
+  const max = Math.max(r, g, b);
+  const chroma = max - Math.min(r, g, b);
+  if (chroma < 30 || lightness < 102) return NEUTRAL;
+
+  let hue: number;
+  if (max === r) hue = (((g - b) / chroma + 6) % 6) * 60;
+  else if (max === g) hue = ((b - r) / chroma + 2) * 60;
+  else hue = ((r - g) / chroma + 4) * 60;
+
+  if (hue >= 20 && hue < 70) return ROAD;
+  if (hue >= 70 && hue < 170) return GREEN;
+  if (hue >= 170 && hue < 230) return WATER;
+  if ((hue >= 330 || hue < 20) && chroma >= 60) return ROAD;
+  return NEUTRAL;
+}
+
+function recolorTile(data: Uint8ClampedArray) {
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    const lightness = (Math.max(r, g, b) + Math.min(r, g, b)) >> 1;
+    const offset = (toneFor(r, g, b, lightness) * 256 + lightness) * 3;
+    data[i] = TONE_RAMPS[offset];
+    data[i + 1] = TONE_RAMPS[offset + 1];
+    data[i + 2] = TONE_RAMPS[offset + 2];
+  }
+}
+
+// Recolore no canvas porque o Safari ignora filtro SVG em camada com transform, e o Leaflet move os tiles com translate3d.
+class PaletteTileLayer extends L.GridLayer {
+  protected createTile(coords: L.Coords, done: L.DoneCallback): HTMLElement {
+    const tile = document.createElement("canvas");
+    const size = this.getTileSize();
+    tile.width = size.x;
+    tile.height = size.y;
+
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => {
+      const context = tile.getContext("2d", { willReadFrequently: true });
+      if (context) {
+        context.drawImage(image, 0, 0, size.x, size.y);
+        try {
+          const pixels = context.getImageData(0, 0, size.x, size.y);
+          recolorTile(pixels.data);
+          context.putImageData(pixels, 0, 0);
+        } catch {
+          // Sem CORS o canvas fica bloqueado para leitura; o tile segue com a cor original.
+        }
+      }
+      done(undefined, tile);
+    };
+    image.onerror = () => done(new Error(`Tile ${coords.z}/${coords.x}/${coords.y} falhou`), tile);
+    image.src = `https://tile.openstreetmap.org/${coords.z}/${coords.x}/${coords.y}.png`;
+    return tile;
+  }
+}
+
 function createPinIcon(color: string, label: string, delayPing: boolean) {
   const pingDelayClass = delayPing ? " lojas-map-marker__ping--delayed" : "";
 
@@ -63,15 +155,11 @@ export function LojasMap({ lojas }: { lojas: LojaMarker[] }) {
         zoomControl: true,
       });
 
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      new PaletteTileLayer({
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         maxZoom: 19,
       }).addTo(map);
-
-      // url(#id) no CSS externo resolve contra o arquivo, não contra a página, e o filtro não pega.
-      const tilePane = map.getPane("tilePane");
-      if (tilePane) tilePane.style.filter = "url(#lojas-map-palette)";
 
       mapRef.current = map;
 
@@ -132,51 +220,11 @@ export function LojasMap({ lojas }: { lojas: LojaMarker[] }) {
   }, [lojas]);
 
   return (
-    <>
-      {/* Fora do container: o Leaflet apaga o HTML interno ao iniciar. */}
-      <svg className="pointer-events-none fixed" style={{ left: -20, top: 0 }} width={8} height={8} aria-hidden="true">
-        <filter id="lojas-map-palette" colorInterpolationFilters="sRGB" x="0" y="0" width="100%" height="100%">
-          <feColorMatrix
-            in="SourceGraphic"
-            type="matrix"
-            result="base"
-            values="0.22 0.48 0.16 0 0.08  0.18 0.46 0.20 0 0.10  0.16 0.42 0.26 0 0.12  0 0 0 1 0"
-          />
-          <feColorMatrix
-            in="SourceGraphic"
-            type="matrix"
-            result="lum"
-            values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.2126 0.7152 0.0722 0 0"
-          />
-          <feComponentTransfer in="lum" result="blockMask">
-            <feFuncA type="table" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 1 0.35 0 0 0" />
-          </feComponentTransfer>
-          <feFlood floodColor="#6cbe9d" floodOpacity="0.38" result="blockPaint" />
-          <feComposite in="blockPaint" in2="blockMask" operator="in" result="blockLayer" />
-          <feColorMatrix
-            in="SourceGraphic"
-            type="matrix"
-            result="roadA"
-            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  2.4 0.2 -2.6 0 -0.2"
-          />
-          <feComponentTransfer in="roadA" result="roadMask">
-            <feFuncA type="linear" slope="1.8" intercept="0" />
-          </feComponentTransfer>
-          <feFlood floodColor="#6cc4ca" floodOpacity="0.82" result="roadPaint" />
-          <feComposite in="roadPaint" in2="roadMask" operator="in" result="roadLayer" />
-          <feMerge>
-            <feMergeNode in="base" />
-            <feMergeNode in="blockLayer" />
-            <feMergeNode in="roadLayer" />
-          </feMerge>
-        </filter>
-      </svg>
-      <div
-        ref={containerRef}
-        className="lojas-map w-full h-full z-0"
-        role="region"
-        aria-label="Mapa das lojas Netcar — clique no pin para abrir no Google Maps"
-      />
-    </>
+    <div
+      ref={containerRef}
+      className="lojas-map w-full h-full z-0"
+      role="region"
+      aria-label="Mapa das lojas Netcar — clique no pin para abrir no Google Maps"
+    />
   );
 }
