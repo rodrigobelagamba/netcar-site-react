@@ -48,7 +48,7 @@ jobs:
         env:
           TARGET_REF: ${{ github.ref_name }}
           SOCIAL_MODE: ${{ github.event.inputs.deploy_social || 'none' }}
-          PUBLISH_SITE: ${{ github.event.inputs.publish_site == true && 'true' || 'false' }}
+          PUBLISH_SITE: ${{ (github.event.inputs.publish_site == true || github.event.inputs.publish_site == 'true') && 'true' || 'false' }}
           SOCIAL_HOST_FINGERPRINT: ${{ secrets.KINGHOST_SSH_HOST_FINGERPRINT }}
         with:
           host: ${{ secrets.DEVOPS_VPS_HOST }}
