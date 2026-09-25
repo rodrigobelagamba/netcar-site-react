@@ -8,13 +8,13 @@ export function CustomerDeliveriesCallout() {
   return (
     <aside
       aria-labelledby="vehicle-deliveries-title"
-      className="w-full"
+      className="h-full w-full"
     >
       <Link
         to="/entregas"
         search={{}}
         hash=""
-        className="group flex w-full items-center gap-3 rounded-2xl border border-[#23747C]/20 bg-[#F0F7F4] p-3 text-left transition-colors hover:border-[#23747C]/40 hover:bg-[#E6F2ED] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#008B95]"
+        className="group flex h-full w-full items-center gap-3 rounded-2xl border border-[#23747C]/20 bg-[#F0F7F4] p-3 text-left transition-colors hover:border-[#23747C]/40 hover:bg-[#E6F2ED] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#008B95] sm:p-4"
       >
         <div
           aria-hidden="true"

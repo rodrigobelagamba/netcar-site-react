@@ -19,6 +19,8 @@ interface ProductListProps {
   onVehicleFocus?: VehicleFocusHandler;
   /** Pausa foco por scroll (ex.: ponteiro no sticky WA). */
   scrollFocusPaused?: boolean;
+  /** 4 colunas até o fim da linha. Evita buraco quando há poucos cards em tela larga. */
+  fitRow?: boolean;
 }
 
 function SkeletonCard({ compact = false }: { compact?: boolean }) {
@@ -69,6 +71,14 @@ function useCompactLayout() {
   return compact;
 }
 
+function gridClass(compact: boolean, fitRow: boolean) {
+  if (compact) return "grid w-full grid-cols-2 items-stretch gap-2";
+  if (fitRow) {
+    return "mx-auto grid w-full grid-cols-2 items-stretch gap-5 lg:grid-cols-4 lg:gap-6 xl:gap-8";
+  }
+  return "grid grid-cols-2 gap-8 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 short1600:gap-5";
+}
+
 export function ProductList({
   vehicles,
   isLoading,
@@ -76,6 +86,7 @@ export function ProductList({
   whatsAppSource = "home_destaques",
   onVehicleFocus,
   scrollFocusPaused = false,
+  fitRow = false,
 }: ProductListProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const compact = useCompactLayout();
@@ -91,11 +102,7 @@ export function ProductList({
   if (isLoading) {
     return (
       <div
-        className={
-          compact
-            ? "grid grid-cols-2 items-stretch gap-2"
-            : "grid grid-cols-2 gap-8 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 short1600:gap-5"
-        }
+        className={gridClass(compact, fitRow)}
         style={{ overflow: "visible" }}
       >
         {Array.from({ length: compact ? 6 : 8 }).map((_, i) => (
@@ -114,11 +121,7 @@ export function ProductList({
   return (
     <div ref={rootRef}>
       <div
-        className={
-          compact
-            ? "grid grid-cols-2 items-stretch gap-2"
-            : "grid grid-cols-2 gap-8 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-5 short1600:gap-5"
-        }
+        className={gridClass(compact, fitRow)}
         style={{ overflow: "visible" }}
       >
         {vehicles.map((vehicle, index) => (
