@@ -2234,15 +2234,15 @@ export function DetalhesPage() {
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
         <div
           className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
-                        lg:w-[62vw] lg:max-w-[1040px] lg:top-0 lg:right-[4vw]
-                        xl:top-[-1rem] xl:w-[58vw] xl:right-[5vw]
-                        2xl:top-[-2rem]
-                        3xl:top-[-2rem]
-                        4xl:w-[48vw] 4xl:top-[-2rem] 4xl:right-[6vw]
-                        5xl:top-[-6rem]"
+                        lg:w-[70vw] lg:top-[-3rem] lg:right-0
+                        xl:top-[-10rem]
+                        2xl:top-[-15rem]
+                        3xl:top-[-15rem]
+                        4xl:w-[58vw] 4xl:top-[-15rem] 4xl:right-[3vw]
+                        5xl:top-[-35rem]"
         >
           {mainImage && (
-            <div className="w-full h-[240px] sm:h-[400px] lg:h-auto flex items-center lg:items-start lg:justify-end justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
+            <div className="w-full h-[240px] sm:h-[400px] lg:h-auto flex items-center lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
               {isSold && (
                 <div
                   aria-hidden="true"
@@ -2283,7 +2283,7 @@ export function DetalhesPage() {
                 loading="eager"
                 decoding="sync"
                 fetchPriority="high"
-                className={`w-full h-full lg:h-auto lg:max-h-[760px] lg:w-auto lg:max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
+                className={`w-full h-full lg:h-auto max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
@@ -2358,7 +2358,7 @@ export function DetalhesPage() {
                 </div>
               )}
               {mileageFormatted && (
-                <div className="flex min-w-0 flex-col justify-end rounded-lg border border-[#23747C]/15 bg-[#e5f3ec] px-2 py-1">
+                <div className="flex w-fit max-w-full flex-col justify-end justify-self-start rounded-lg border border-[#23747C]/15 bg-[#e5f3ec] px-2 py-1">
                   <span className="mb-0.5 flex items-center gap-1 font-medium uppercase tracking-[0.08em] text-[#23747C] info-label">
                     <Gauge className="h-3 w-3 shrink-0" aria-hidden="true" />
                     Quilometragem
