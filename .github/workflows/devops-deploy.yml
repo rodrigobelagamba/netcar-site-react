@@ -18,6 +18,11 @@ on:
           - plan
           - guard
           - full
+      publish_site:
+        description: "Publicar o site na KingHost pelo painel (deploy:local)"
+        required: false
+        default: "false"
+        type: boolean
 
 concurrency:
   group: netcar-devops-deploy
@@ -43,12 +48,14 @@ jobs:
         env:
           TARGET_REF: ${{ github.ref_name }}
           SOCIAL_MODE: ${{ github.event.inputs.deploy_social || 'none' }}
+          PUBLISH_SITE: ${{ github.event.inputs.publish_site == true && 'true' || 'false' }}
           SOCIAL_HOST_FINGERPRINT: ${{ secrets.KINGHOST_SSH_HOST_FINGERPRINT }}
         with:
           host: ${{ secrets.DEVOPS_VPS_HOST }}
           username: ${{ secrets.DEVOPS_VPS_USER }}
           key: ${{ secrets.DEVOPS_VPS_SSH_KEY }}
-          envs: TARGET_REF,SOCIAL_MODE,SOCIAL_HOST_FINGERPRINT
+          command_timeout: 50m
+          envs: TARGET_REF,SOCIAL_MODE,PUBLISH_SITE,SOCIAL_HOST_FINGERPRINT
           # false: com true o drone-ssh abortava no meio do if/else multilinha
           # logo após o git reset (exit 1 sem echo). O script já tem set -euo pipefail.
           script_stop: false
@@ -147,6 +154,46 @@ jobs:
               echo "health check falhou"
               docker logs netcar-devops --tail 50 || true
               exit 1
+            fi
+
+            if [ "$PUBLISH_SITE" = "true" ]; then
+              echo "Disparando deploy:local no painel"
+              TOKEN="$(awk -F= '/^DEVOPS_TOKEN=/{sub(/^[^=]*=/,""); print; exit}' "$SECRETS_DIR/devops.env" | tr -d '\r' | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")"
+              if [ -z "$TOKEN" ]; then
+                echo "DEVOPS_TOKEN ausente em devops.env"
+                exit 1
+              fi
+              umask 077
+              RESP_FILE="$(mktemp)"
+              curl -fsS -X POST "http://127.0.0.1:3090/api/deploy/local" \
+                -H "Authorization: Bearer ${TOKEN}" \
+                -H "Content-Type: application/json" \
+                -d '{}' -o "$RESP_FILE"
+              JOB_ID="$(docker exec -i netcar-devops node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{const j=JSON.parse(s); if(!j.job||!j.job.id) process.exit(1); process.stdout.write(j.job.id)})' < "$RESP_FILE")"
+              rm -f "$RESP_FILE"
+              echo "job=$JOB_ID"
+              STATUS="queued"
+              for _ in $(seq 1 160); do
+                curl -fsS -H "Authorization: Bearer ${TOKEN}" "http://127.0.0.1:3090/api/jobs/${JOB_ID}" -o "$RESP_FILE" || true
+                STATUS="$(docker exec -i netcar-devops node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{try{const j=JSON.parse(s); process.stdout.write((j.job&&j.job.status)||"unknown")}catch{process.stdout.write("unknown")}})' < "$RESP_FILE" || true)"
+                rm -f "$RESP_FILE"
+                echo "status=$STATUS"
+                case "$STATUS" in
+                  succeeded) break ;;
+                  failed|cancelled)
+                    echo "deploy:local falhou ($STATUS)"
+                    unset TOKEN
+                    exit 1
+                    ;;
+                esac
+                sleep 15
+              done
+              unset TOKEN
+              if [ "$STATUS" != "succeeded" ]; then
+                echo "deploy:local nao terminou a tempo (status=$STATUS)"
+                exit 1
+              fi
+              echo "Site publicado"
             fi
 
             if [ "$SOCIAL_MODE" != "none" ]; then
