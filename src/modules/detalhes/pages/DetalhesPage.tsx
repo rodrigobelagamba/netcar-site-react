@@ -1486,7 +1486,7 @@ function RelatedVehiclesSection({
       id="opcoes-parecidas"
       className="scroll-mt-24 w-full py-8 sm:py-12 lg:py-16"
     >
-      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <div className="container-main w-full px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -1536,7 +1536,7 @@ function RelatedVehiclesSection({
 
         {/* Sem WhatsApp aqui: eram 3 botões × 4 cards (12 dos 28 links WA da
             ficha). Quem quer outro carro abre a ficha dele e fala de lá. */}
-        <ProductList vehicles={relatedVehicleCards} />
+        <ProductList vehicles={relatedVehicleCards} fitRow />
       </div>
     </section>
   );
@@ -2346,10 +2346,10 @@ export function DetalhesPage() {
             )}
 
             {/* Details Grid - Melhorado */}
-            <div className="order-4 sm:order-none grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-border/60">
+            <div className="order-4 sm:order-none grid grid-cols-2 items-end gap-x-4 gap-y-2 mb-3 sm:mb-4 pb-3 border-b border-border/60">
               {year && (
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
+                <div className="flex min-w-0 flex-col">
+                  <span className="text-muted-foreground uppercase tracking-[0.08em] mb-0.5 font-medium info-label">
                     Ano
                   </span>
                   <span className="text-fg font-semibold info-value">
@@ -2358,19 +2358,19 @@ export function DetalhesPage() {
                 </div>
               )}
               {mileageFormatted && (
-                <div className="flex min-w-0 flex-col justify-center rounded-xl border border-[#23747C]/25 bg-[#e5f3ec] px-2.5 py-1.5">
-                  <span className="mb-0.5 flex items-center gap-1 font-bold uppercase tracking-wider text-[#23747C] info-label">
-                    <Gauge className="h-[1.2em] w-[1.2em] shrink-0" aria-hidden="true" />
+                <div className="flex min-w-0 flex-col justify-end rounded-lg border border-[#23747C]/15 bg-[#e5f3ec] px-2 py-1">
+                  <span className="mb-0.5 flex items-center gap-1 font-medium uppercase tracking-[0.08em] text-[#23747C] info-label">
+                    <Gauge className="h-3 w-3 shrink-0" aria-hidden="true" />
                     Quilometragem
                   </span>
-                  <span className="text-[#075E54] leading-tight info-value">
-                    <strong className="text-[1.25em] font-black">{mileageFormatted}</strong>
+                  <span className="font-semibold leading-none text-[#075E54] info-value">
+                    {mileageFormatted}
                   </span>
                 </div>
               )}
               {combustivel && (
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
+                <div className="flex min-w-0 flex-col">
+                  <span className="text-muted-foreground uppercase tracking-[0.08em] mb-0.5 font-medium info-label">
                     Combustível
                   </span>
                   <span className="text-fg font-semibold uppercase info-value">
@@ -2379,8 +2379,8 @@ export function DetalhesPage() {
                 </div>
               )}
               {cambio && (
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
+                <div className="flex min-w-0 flex-col">
+                  <span className="text-muted-foreground uppercase tracking-[0.08em] mb-0.5 font-medium info-label">
                     Câmbio
                   </span>
                   <span className="text-fg font-semibold info-value">
@@ -2389,8 +2389,8 @@ export function DetalhesPage() {
                 </div>
               )}
               {motorFormatado && (
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground uppercase tracking-wider mb-0.5 font-medium info-label">
+                <div className="flex min-w-0 flex-col">
+                  <span className="text-muted-foreground uppercase tracking-[0.08em] mb-0.5 font-medium info-label">
                     Motor
                   </span>
                   <span className="text-fg font-semibold info-value">
@@ -2421,50 +2421,12 @@ export function DetalhesPage() {
                   waRef={waRef}
                 />
               </div>
-              <CustomerDeliveriesCallout />
-            </div>
-
-            <div className="order-5 sm:order-none w-full">
-              <div className="w-full">
-                {!isSold && (
-                  <div className="mt-4 rounded-2xl border border-[#23747C]/20 bg-[#F7FBFA] p-3.5 text-left shadow-[0_8px_24px_rgba(0,40,60,0.04)]">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#23747C]">
-                      Seleção Netcar
-                    </p>
-                    <p className="mt-1 text-sm font-black leading-snug text-fg">
-                      Este carro atende aos critérios da Netcar.
-                    </p>
-                    <div className="mt-3 grid grid-cols-1 gap-1.5 text-[11px] font-semibold leading-snug text-[#365565] sm:grid-cols-2">
-                      {[
-                        "Comprado no RS",
-                        "Sem origem de locadora",
-                        "Sem leilão, sinistro, furto ou roubo",
-                        "Preparado antes da vitrine",
-                      ].map((item) => (
-                        <span
-                          key={item}
-                          className="flex items-start gap-1.5 rounded-xl bg-white px-2.5 py-2"
-                        >
-                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#087A37]" />
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                    <Link
-                      to="/como-selecionamos-nossos-carros"
-                      className="mt-2.5 inline-block text-xs font-bold text-[#075E54] underline decoration-[#075E54]/30 underline-offset-4 transition-colors hover:text-primary"
-                    >
-                      Entenda como selecionamos
-                    </Link>
-                  </div>
-                )}
-                {!isSold && (
-                  <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
-                    Consulte as condições aprovadas por bancos e financeiras
-                    parceiras. Taxa, entrada e prazo dependem da análise.
-                  </p>
-                )}
-              </div>
+              {!isSold && (
+                <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
+                  Consulte as condições aprovadas por bancos e financeiras
+                  parceiras. Taxa, entrada e prazo dependem da análise.
+                </p>
+              )}
             </div>
           </motion.div>
         </div>
@@ -2545,6 +2507,44 @@ export function DetalhesPage() {
           pageSlug={slug}
         />
       </DeferredRender>
+
+      <section className="w-full pb-2 pt-6 sm:pt-8" aria-label="Por que este carro">
+        <div className={`container-main grid gap-4 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 ${isSold ? "max-w-xl" : "lg:grid-cols-2 lg:items-stretch"}`}>
+          <CustomerDeliveriesCallout />
+          {!isSold && (
+            <div className="flex h-full flex-col rounded-2xl border border-[#23747C]/20 bg-[#F7FBFA] p-4 text-left shadow-[0_8px_24px_rgba(0,40,60,0.04)] sm:p-5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#23747C]">
+                Seleção Netcar
+              </p>
+              <p className="mt-1 text-sm font-black leading-snug text-fg">
+                Este carro atende aos critérios da Netcar.
+              </p>
+              <div className="mt-3 grid flex-1 grid-cols-1 gap-1.5 text-[11px] font-semibold leading-snug text-[#365565] sm:grid-cols-2">
+                {[
+                  "Comprado no RS",
+                  "Sem origem de locadora",
+                  "Sem leilão, sinistro, furto ou roubo",
+                  "Preparado antes da vitrine",
+                ].map((item) => (
+                  <span
+                    key={item}
+                    className="flex items-start gap-1.5 rounded-xl bg-white px-2.5 py-2"
+                  >
+                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#087A37]" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+              <Link
+                to="/como-selecionamos-nossos-carros"
+                className="mt-3 inline-block text-xs font-bold text-[#075E54] underline decoration-[#075E54]/30 underline-offset-4 transition-colors hover:text-primary"
+              >
+                Entenda como selecionamos
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Fábrica de Valor Section */}
       <section className="w-full py-3 sm:py-4 bg-surface" aria-label="Preparação do veículo">

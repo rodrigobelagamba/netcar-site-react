@@ -369,106 +369,24 @@
   }
 
   .info-label {
-    font-size: 0.7em;
-  }
-
-  @media (min-width: 640px) {
-    .info-label {
-      font-size: 0.5625em;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .info-label {
-      font-size: 0.65625em;
-    }
+    font-size: 11px;
+    line-height: 1.2;
   }
 
   @media (min-width: 1280px) {
     .info-label {
-      font-size: 0.75em;
-    }
-  }
-
-  @media (min-width: 1536px) {
-    .info-label {
-      font-size: 1.096875em;
-    }
-  }
-
-  @media (min-width: 1920px) {
-    .info-label {
-      font-size: 1.4em;
-    }
-  }
-
-  @media (min-width: 2560px) {
-    .info-label {
-      font-size: 1.8em;
-    }
-  }
-
-  @media (min-width: 3840px) {
-    .info-label {
-      font-size: 2.4em;
-    }
-  }
-
-  @media (min-width: 5000px) {
-    .info-label {
-      font-size: 3em;
+      font-size: 12px;
     }
   }
 
   .info-value {
-    font-size: 0.85em;
-  }
-
-  @media (min-width: 640px) {
-    .info-value {
-      font-size: 0.84375em;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .info-value {
-      font-size: 0.984375em;
-    }
+    font-size: 15px;
+    line-height: 1.2;
   }
 
   @media (min-width: 1280px) {
     .info-value {
-      font-size: 1.125em;
-    }
-  }
-
-  @media (min-width: 1536px) {
-    .info-value {
-      font-size: 1.6453125em;
-    }
-  }
-
-  @media (min-width: 1920px) {
-    .info-value {
-      font-size: 1.6em;
-    }
-  }
-
-  @media (min-width: 2560px) {
-    .info-value {
-      font-size: 1.6em;
-    }
-  }
-
-  @media (min-width: 3840px) {
-    .info-value {
-      font-size: 2.6em;
-    }
-  }
-
-  @media (min-width: 5000px) {
-    .info-value {
-      font-size: 2.5em;
+      font-size: 16px;
     }
   }
 
