@@ -14,16 +14,16 @@ export function CustomerDeliveriesCallout() {
         to="/entregas"
         search={{}}
         hash=""
-        className="group flex h-full w-full items-center gap-3 rounded-2xl border border-[#23747C]/20 bg-[#F0F7F4] p-3 text-left transition-colors hover:border-[#23747C]/40 hover:bg-[#E6F2ED] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#008B95] sm:p-4"
+        className="group flex h-full w-full items-center gap-4 rounded-2xl border border-[#23747C]/20 bg-[#F0F7F4] p-4 text-left transition-colors hover:border-[#23747C]/40 hover:bg-[#E6F2ED] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#008B95] sm:gap-5 sm:p-6"
       >
         <div
           aria-hidden="true"
-          className="flex shrink-0 -space-x-3"
+          className="flex shrink-0 -space-x-4"
         >
           {DELIVERY_PHOTOS.map((id) => (
             <div
               key={id}
-              className="h-12 w-12 overflow-hidden rounded-full border-2 border-white bg-[#E6EFEC]"
+              className="h-16 w-16 overflow-hidden rounded-full border-2 border-white bg-[#E6EFEC] sm:h-20 sm:w-20"
             >
               <img
                 src={`/entregas-media/${id}-320.webp`}
@@ -38,18 +38,18 @@ export function CustomerDeliveriesCallout() {
           ))}
         </div>
         <div className="min-w-0">
-          <p className="text-[9px] font-bold uppercase tracking-[0.14em] text-[#23747C]">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#23747C]">
             Clientes Netcar
           </p>
           <h2
             id="vehicle-deliveries-title"
-            className="mt-1 text-sm font-bold leading-snug text-[#00283C]"
+            className="mt-1.5 text-lg font-bold leading-snug text-[#00283C] sm:text-xl"
           >
             Veja quem já escolheu a Netcar
           </h2>
-          <span className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-bold leading-snug text-[#075E54] group-hover:underline">
+          <span className="mt-2 inline-flex items-center gap-1.5 text-sm font-bold leading-snug text-[#075E54] group-hover:underline sm:text-base">
             Conheça nossas entregas
-            <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
           </span>
         </div>
       </Link>

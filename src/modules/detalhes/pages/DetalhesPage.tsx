@@ -2234,15 +2234,15 @@ export function DetalhesPage() {
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
         <div
           className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
-                        lg:w-[70vw] lg:top-[-3rem] lg:right-0
-                        xl:top-[-10rem]
-                        2xl:top-[-15rem]
-                        3xl:top-[-15rem]
-                        4xl:w-[58vw] 4xl:top-[-15rem] 4xl:right-[3vw]
-                        5xl:top-[-35rem]"
+                        lg:w-[62vw] lg:max-w-[1040px] lg:top-0 lg:right-[4vw]
+                        xl:top-[-1rem] xl:w-[58vw] xl:right-[5vw]
+                        2xl:top-[-2rem]
+                        3xl:top-[-2rem]
+                        4xl:w-[48vw] 4xl:top-[-2rem] 4xl:right-[6vw]
+                        5xl:top-[-6rem]"
         >
           {mainImage && (
-            <div className="w-full h-[240px] sm:h-[400px] lg:h-auto flex items-center lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
+            <div className="w-full h-[240px] sm:h-[400px] lg:h-auto flex items-center lg:items-start lg:justify-end justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
               {isSold && (
                 <div
                   aria-hidden="true"
@@ -2283,7 +2283,7 @@ export function DetalhesPage() {
                 loading="eager"
                 decoding="sync"
                 fetchPriority="high"
-                className={`w-full h-full lg:h-auto max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
+                className={`w-full h-full lg:h-auto lg:max-h-[760px] lg:w-auto lg:max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
@@ -2512,14 +2512,14 @@ export function DetalhesPage() {
         <div className={`container-main grid gap-4 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 ${isSold ? "max-w-xl" : "lg:grid-cols-2 lg:items-stretch"}`}>
           <CustomerDeliveriesCallout />
           {!isSold && (
-            <div className="flex h-full flex-col rounded-2xl border border-[#23747C]/20 bg-[#F7FBFA] p-4 text-left shadow-[0_8px_24px_rgba(0,40,60,0.04)] sm:p-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#23747C]">
+            <div className="flex h-full flex-col rounded-2xl border border-[#23747C]/20 bg-[#F7FBFA] p-5 text-left shadow-[0_8px_24px_rgba(0,40,60,0.04)] sm:p-6">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#23747C]">
                 Seleção Netcar
               </p>
-              <p className="mt-1 text-sm font-black leading-snug text-fg">
+              <p className="mt-1.5 text-lg font-black leading-snug text-fg sm:text-xl">
                 Este carro atende aos critérios da Netcar.
               </p>
-              <div className="mt-3 grid flex-1 grid-cols-1 gap-1.5 text-[11px] font-semibold leading-snug text-[#365565] sm:grid-cols-2">
+              <div className="mt-4 grid flex-1 grid-cols-1 gap-2 text-sm font-semibold leading-snug text-[#365565] sm:grid-cols-2">
                 {[
                   "Comprado no RS",
                   "Sem origem de locadora",
@@ -2528,16 +2528,16 @@ export function DetalhesPage() {
                 ].map((item) => (
                   <span
                     key={item}
-                    className="flex items-start gap-1.5 rounded-xl bg-white px-2.5 py-2"
+                    className="flex items-start gap-2 rounded-xl bg-white px-3 py-2.5"
                   >
-                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#087A37]" />
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#087A37]" />
                     {item}
                   </span>
                 ))}
               </div>
               <Link
                 to="/como-selecionamos-nossos-carros"
-                className="mt-3 inline-block text-xs font-bold text-[#075E54] underline decoration-[#075E54]/30 underline-offset-4 transition-colors hover:text-primary"
+                className="mt-4 inline-block text-sm font-bold text-[#075E54] underline decoration-[#075E54]/30 underline-offset-4 transition-colors hover:text-primary"
               >
                 Entenda como selecionamos
               </Link>
