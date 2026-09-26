@@ -24,10 +24,8 @@ jobs:
         run: npx tsx --test scripts/tests/vehicle-whatsapp-card.test.tsx
       - name: Validate vehicle description preview
         run: npx tsx --test scripts/tests/vehicle-description.test.tsx
-      - name: Validate comparison photos, layout and SEO
-        run: |
-          npx tsx --test scripts/tests/comparison-vehicle-image.test.tsx scripts/tests/vehicle-comparison-table.test.tsx scripts/tests/comparison-pages.test.tsx src/lib/comparisonContact.test.ts
-          node --test scripts/tests/comparison-seo.test.mjs scripts/tests/comparison-routing.test.mjs
+      - name: Validate comparison photos and layout
+        run: npx tsx --test scripts/tests/comparison-vehicle-image.test.tsx scripts/tests/vehicle-comparison-table.test.tsx scripts/tests/comparison-pages.test.tsx src/lib/comparisonContact.test.ts
       - name: Validate delivery gallery and deployment preservation
         run: |
           node --test scripts/tests/entregas-deploy.test.mjs
@@ -35,6 +33,10 @@ jobs:
       - name: Validate i-CHECK metadata and reports
         run: npm run icheck:validate
       - run: npm run build
+      - name: Validate generated comparison SEO and routing
+        env:
+          NETCAR_VERIFY_GENERATED_SEO: "1"
+        run: node --test scripts/tests/comparison-seo.test.mjs scripts/tests/comparison-routing.test.mjs
       - name: Validate vehicle video synchronization
         run: |
           find docs/social -name '*.php' -type f -print0 | xargs -0 -n1 php -l
