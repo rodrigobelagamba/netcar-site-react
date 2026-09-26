@@ -22,6 +22,8 @@ jobs:
         run: npm run stock:test-search
       - name: Validate compact vehicle contact bar
         run: npx tsx --test scripts/tests/vehicle-whatsapp-card.test.tsx
+      - name: Validate vehicle description preview
+        run: npx tsx --test scripts/tests/vehicle-description.test.tsx
       - name: Validate delivery gallery and deployment preservation
         run: |
           node --test scripts/tests/entregas-deploy.test.mjs

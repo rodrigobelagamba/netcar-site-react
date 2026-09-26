@@ -73,7 +73,7 @@ import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
 import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
-import { parseGptContent, AccordionSection } from "@/lib/parseGptContent";
+import { parseGptContent } from "@/lib/parseGptContent";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
 import { SEPTEMBER_CAMPAIGN } from "@/features/september-campaign/campaign";
@@ -93,6 +93,7 @@ import {
 } from "@/lib/vehicleMerchandising";
 import { VehicleVideoLink } from "../components/VehicleVideoLink";
 import { CustomerDeliveriesCallout } from "../components/CustomerDeliveriesCallout";
+import { VehicleDescription } from "../components/VehicleDescription";
 import { selectVehicleInstagramVideo } from "../lib/vehicleInstagramVideos";
 import { useVehicleVideosQuery } from "../queries/useVehicleVideosQuery";
 import { vehicleVideosForDisplay } from "../lib/vehicleVideosResponse";
@@ -610,73 +611,6 @@ function DetalheFloatingWhatsApp({
         </div>
       </div>
     </FloatingPortal>
-  );
-}
-
-interface AccordionItemProps {
-  title: string;
-  children: React.ReactNode;
-  defaultOpen?: boolean;
-}
-
-function AccordionItem({
-  title,
-  children,
-  defaultOpen = false,
-}: AccordionItemProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{
-        duration: ANIMATION_DURATION.normal,
-        ease: ANIMATION_EASING,
-      }}
-      className={`mb-1 rounded-xl border-b border-[#00283C]/[0.08] px-1 pb-4 transition-colors ${
-        isOpen ? "border-[#00283C]/15" : ""
-      }`}
-    >
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
-        className="group flex w-full items-center justify-between rounded-lg py-1 text-left transition-colors hover:bg-[#00283C]/[0.02]"
-      >
-        <h3 className="pr-4 text-[17px] font-medium text-[#23747C] sm:text-[18px] lg:text-[19px]">
-          {title}
-        </h3>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{
-            duration: ANIMATION_DURATION.fast,
-            ease: ANIMATION_EASING,
-          }}
-          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#00283C]/[0.05] text-[#00283C]/70 transition-colors group-hover:bg-[#00283C]/[0.08]"
-        >
-          <ChevronDown className="h-4 w-4" />
-        </motion.div>
-      </button>
-
-      <motion.div
-        initial={false}
-        animate={{
-          height: isOpen ? "auto" : 0,
-          opacity: isOpen ? 1 : 0,
-          marginTop: isOpen ? 16 : 0,
-        }}
-        transition={{
-          duration: ANIMATION_DURATION.fast,
-          ease: ANIMATION_EASING,
-        }}
-        style={{ display: isOpen ? "block" : "none" }}
-        className="overflow-hidden"
-      >
-        {children}
-      </motion.div>
-    </motion.div>
   );
 }
 
@@ -2510,14 +2444,14 @@ export function DetalhesPage() {
       </DeferredRender>
 
       <section className="w-full pb-2 pt-6 sm:pt-8" aria-label="Por que este carro">
-        <div className={`container-main grid gap-4 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 ${isSold ? "max-w-xl" : "lg:grid-cols-2 lg:items-stretch"}`}>
+        <div className={`container-main grid items-stretch gap-4 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 ${isSold ? "max-w-xl" : "lg:grid-cols-2"}`}>
           <CustomerDeliveriesCallout />
           {!isSold && (
-            <div className="flex h-full flex-col rounded-2xl border border-[#23747C]/20 bg-[#F7FBFA] p-5 text-left shadow-[0_8px_24px_rgba(0,40,60,0.04)] sm:p-6">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#23747C]">
+            <div className="flex flex-col rounded-2xl border border-[#23747C]/15 bg-[#F7FBFA] p-4 text-left shadow-[0_3px_16px_rgba(0,40,60,0.03)] sm:p-5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#23747C] sm:text-[11px]">
                 Seleção Netcar
               </p>
-              <p className="mt-1.5 text-lg font-black leading-snug text-fg sm:text-xl">
+              <p className="mt-2 text-lg font-bold leading-snug tracking-[-0.02em] text-fg sm:text-xl">
                 Este carro atende aos critérios da Netcar.
               </p>
               <div className="mt-4 grid flex-1 grid-cols-1 gap-2 text-sm font-semibold leading-snug text-[#365565] sm:grid-cols-2">
@@ -2538,7 +2472,7 @@ export function DetalhesPage() {
               </div>
               <Link
                 to="/como-selecionamos-nossos-carros"
-                className="mt-4 inline-block text-sm font-bold text-[#075E54] underline decoration-[#075E54]/30 underline-offset-4 transition-colors hover:text-primary"
+                className="mt-4 inline-block text-sm font-semibold leading-5 text-[#075E54] underline decoration-[#075E54]/30 underline-offset-4 transition-colors hover:text-primary"
               >
                 Entenda como selecionamos
               </Link>
@@ -3104,56 +3038,9 @@ function DetailsSection({
               </p>
             )}
 
-            {/* O texto que chega da API é preservado, mas fica recolhido para a
-                página não repetir de imediato o que os cards já explicam. */}
+            {/* O início do anúncio fica visível; a expansão preserva o texto da API. */}
             {gptContent && (
-              <div className="mt-8">
-                <AccordionItem title="Ver descrição completa deste veículo">
-                  {gptContent.apresentacao && (
-                    <p className="section-text mb-6">
-                      {gptContent.apresentacao}
-                    </p>
-                  )}
-                  <div className="space-y-6">
-                    {gptContent.accordions.map(
-                      (accordion: AccordionSection, index: number) => (
-                        <div key={`${accordion.title}-${index}`}>
-                          <h4 className="mb-2 text-[16px] font-bold text-[#23747C] sm:text-[18px]">
-                            {accordion.title}
-                          </h4>
-                          {typeof accordion.content === "object" &&
-                          accordion.content !== null &&
-                          "itens" in accordion.content ? (
-                            <>
-                              {accordion.content.introducao && (
-                                <p className="section-text mb-3">
-                                  {accordion.content.introducao}
-                                </p>
-                              )}
-                              {accordion.content.itens.length > 0 && (
-                                <ul className="ml-5 list-outside list-disc space-y-2 text-[14px] leading-[26px] text-fg sm:text-[15px]">
-                                  {accordion.content.itens.map(
-                                    (item, itemIndex) => (
-                                      <li key={itemIndex} className="pl-2">
-                                        {item.label && (
-                                          <strong>{item.label}</strong>
-                                        )}{" "}
-                                        {item.texto}
-                                      </li>
-                                    ),
-                                  )}
-                                </ul>
-                              )}
-                            </>
-                          ) : (
-                            <p className="section-text">{accordion.content}</p>
-                          )}
-                        </div>
-                      ),
-                    )}
-                  </div>
-                </AccordionItem>
-              </div>
+              <VehicleDescription key={vehicle.id} content={gptContent} />
             )}
           </div>
 
