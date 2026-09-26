@@ -1295,7 +1295,7 @@ function regionalInventoryHtml(cityName) {
     .filter((landing) => landing?.indexable && landing.count > 0)
     .map(
       (landing) =>
-        `<li><a href="${SITE}/comprar-${landing.slug}">${escapeHtml(landing.name)} — ${landing.count} no estoque</a></li>`,
+        `<li><a href="${SITE}/comprar-${landing.slug}">${escapeHtml(landing.name)}</a></li>`,
     )
     .join("");
   if (!links) return "";
@@ -1377,14 +1377,15 @@ for (const city of cities) {
       <h1>${escapeHtml(city.h1)}</h1>
       <p>${escapeHtml(city.intro)}</p>
       <p data-regional-ctas>
-        <a href="${SITE}/seminovos" data-regional-action="view_stock">Ver estoque</a>
+        <a href="${SITE}/seminovos" data-regional-action="view_stock">Ver carros e preços</a>
         ·
         <a href="${cityWhatsAppLink(city.name)}" data-wa-source="landing" data-wa-intent="regional_help" data-regional-action="whatsapp">Falar com a Netcar</a>
       </p>
       <section id="estoque-regional">
         ${stockShowcase({
           heading: `Seminovos para quem vem de ${city.name}`,
-          vehicles: stock,
+          vehicles: landingStockOrder(stock.filter(hasHomePhoto)),
+          preserveOrder: true,
           limit: 8,
           ctaLabel: "Ver todo o estoque de seminovos",
           ctaHref: `${SITE}/seminovos`,
@@ -1503,7 +1504,8 @@ for (const city of cities) {
       <section id="estoque-regional">
         ${stockShowcase({
           heading: `Seminovos disponíveis para usar seu carro na troca`,
-          vehicles: stock,
+          vehicles: landingStockOrder(stock.filter(hasHomePhoto)),
+          preserveOrder: true,
           limit: 8,
           ctaLabel: "Ver todo o estoque para troca",
           ctaHref: `${SITE}/seminovos`,

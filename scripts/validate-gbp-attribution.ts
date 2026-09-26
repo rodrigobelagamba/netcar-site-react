@@ -1,10 +1,19 @@
 #!/usr/bin/env tsx
 
 import assert from "node:assert/strict";
-import { captureTrafficSource, getTrafficSource } from "../src/lib/waTracking";
+import { readFileSync } from "node:fs";
+import {
+  captureTrafficSource,
+  clearTrafficAttribution,
+  getTrafficSource,
+} from "../src/lib/waTracking";
 import {
   trackPageView,
+  trackCompareInteraction,
   trackRegionalCtaClick,
+  trackStockFilterApply,
+  trackVehicleCardOpen,
+  trackViewItem,
   trackWhatsAppClick,
 } from "../src/lib/analytics";
 
@@ -179,6 +188,198 @@ for (const row of dataLayer.filter(
   assert.equal(row.landing_slug, "expointer-esteio");
 }
 
+function navigate(pathname: string, search = "") {
+  location.pathname = pathname;
+  location.search = search;
+  location.href = `https://www.netcarmultimarcas.com.br${pathname}${search}`;
+  trackPageView(`${pathname}${search}`);
+}
+
+function latestEvent(name: string) {
+  const event = [...dataLayer].reverse().find((row) => row.event === name);
+  assert(event, `Evento ausente: ${name}`);
+  return event;
+}
+
+function effectiveGa4Event(name: string) {
+  let defaults: Record<string, unknown> = {};
+  let result: Record<string, unknown> | undefined;
+  for (const call of gtagCalls) {
+    if (call[0] === "config") {
+      defaults = { ...defaults, ...(call[2] as Record<string, unknown>) };
+    } else if (call[0] === "event" && call[1] === name) {
+      result = { ...defaults, ...(call[2] as Record<string, unknown>) };
+    }
+  }
+  assert(result, `Evento GA4 ausente: ${name}`);
+  return result;
+}
+
+function effectiveDataLayerEvent(name: string) {
+  let defaults: Record<string, unknown> = {};
+  let result: Record<string, unknown> | undefined;
+  for (const row of dataLayer) {
+    defaults = { ...defaults, ...row };
+    if (row.event === name) result = { ...defaults };
+  }
+  assert(result, `Evento Data Layer ausente: ${name}`);
+  return result;
+}
+
+clearTrafficAttribution();
+dataLayer.length = 0;
+gtagCalls.length = 0;
+navigate(
+  "/seminovos-canoas",
+  "?utm_source=google&utm_medium=organic&utm_campaign=gbp_canoas",
+);
+captureTrafficSource();
+trackRegionalCtaClick("view_stock");
+navigate("/seminovos");
+trackStockFilterApply({ filters: { cambio: "AUTOMATICO" }, resultCount: 6 });
+trackVehicleCardOpen({
+  via: "button",
+  vehicleId: "123",
+  vehicleName: "Carro teste",
+  source: "inventory",
+});
+navigate("/veiculo/carro-teste-123");
+trackViewItem({ vehicleId: "123", vehicleName: "Carro teste" });
+trackWhatsAppClick({ source: "hero", vehicleId: "123" });
+
+for (const name of [
+  "regional_stock_click",
+  "stock_filter_apply",
+  "vehicle_card_open",
+  "view_item",
+  "whatsapp_click",
+]) {
+  const rows = dataLayer.filter((row) => row.event === name);
+  assert.equal(rows.length, 1, `${name}: um gesto deve emitir um evento`);
+  assert.equal(rows[0].regional_city_slug, "canoas");
+  assert.equal(rows[0].regional_origin_path, "/seminovos-canoas");
+  assert.equal(rows[0].traffic_landing_page, "/seminovos-canoas");
+  const direct = gtagCalls.filter(
+    (call) => call[0] === "event" && call[1] === name,
+  );
+  assert.equal(direct.length, 1, `${name}: envio direto duplicado/ausente`);
+  const payload = direct[0][2] as Record<string, unknown>;
+  assert.equal(payload.regional_city_slug, rows[0].regional_city_slug);
+  assert.equal(payload.regional_origin_path, rows[0].regional_origin_path);
+}
+assert.equal(latestEvent("vehicle_card_open").page_path, "/seminovos");
+assert.equal(latestEvent("view_item").page_path, "/veiculo/carro-teste-123");
+assert.equal(latestEvent("whatsapp_click").wa_page_type, "vehicle_detail");
+assert.equal(
+  dataLayer.some((row) => ["generate_lead", "purchase"].includes(String(row.event))),
+  false,
+  "navegação/WhatsApp não pode virar lead confirmado ou venda",
+);
+
+// Cidade consultada pode mudar sem reescrever a origem de aquisição.
+navigate("/seminovos-sapucaia-do-sul");
+navigate("/veiculo/carro-teste-123");
+trackWhatsAppClick({ source: "hero", vehicleId: "123" });
+assert.equal(latestEvent("whatsapp_click").regional_city_slug, "sapucaia-do-sul");
+assert.equal(
+  latestEvent("whatsapp_click").regional_origin_path,
+  "/seminovos-sapucaia-do-sul",
+);
+assert.equal(latestEvent("whatsapp_click").traffic_landing_page, "/seminovos-canoas");
+
+// Mesma rota, sem page_view entre a revogação e um evento sem contexto próprio.
+navigate("/comparar");
+const privacySource = readFileSync(
+  new URL("../src/components/PrivacyConsent.tsx", import.meta.url), "utf8",
+);
+assert.ok(
+  privacySource.indexOf("window.netcarSetPrivacyConsent?.(choice)") <
+    privacySource.indexOf('if (choice === "essential") clearTrafficAttribution()'),
+  "a UI precisa aplicar a escolha antes de limpar os defaults de medição",
+);
+window.__netcarPrivacyConsent = "essential";
+const callsBeforeRevocation = gtagCalls.length;
+clearTrafficAttribution();
+const revocationCalls = gtagCalls.slice(callsBeforeRevocation);
+assert.equal(revocationCalls.length, 1);
+assert.equal(revocationCalls[0][0], "config");
+assert.equal(
+  (revocationCalls[0][2] as Record<string, unknown>).update,
+  true,
+  "revogação precisa atualizar os defaults sem page_view adicional",
+);
+trackCompareInteraction({ action: "select", vehicleIds: ["123"] });
+for (const event of [
+  effectiveGa4Event("compare_vehicle_select"),
+  effectiveDataLayerEvent("compare_vehicle_select"),
+]) {
+  assert.equal(event.regional_city_slug, "", "defaults herdaram a cidade revogada");
+  assert.equal(event.regional_origin_path, "", "defaults herdaram a página regional");
+  assert.equal(event.privacy_consent, "essential", "defaults mantiveram o aceite antigo");
+  assert.equal(event.traffic_source, "DIR");
+  for (const key of [
+    "traffic_campaign", "traffic_utm_source", "traffic_medium", "traffic_content",
+    "traffic_utm_term", "traffic_landing_page", "traffic_referrer", "traffic_gclid",
+    "traffic_gbraid", "traffic_wbraid", "traffic_fbclid", "gbp_profile",
+  ]) {
+    assert.equal(event[key], "", `default ${key} não foi apagado`);
+  }
+}
+
+// A jornada também não deve voltar ao navegar ou aceitar novamente.
+navigate("/seminovos");
+trackVehicleCardOpen({
+  via: "card",
+  vehicleId: "123",
+  vehicleName: "Carro teste",
+  source: "inventory",
+});
+trackWhatsAppClick({ source: "hero", vehicleId: "123" });
+for (const name of ["virtual_page_view", "vehicle_card_open", "whatsapp_click"]) {
+  const event = latestEvent(name);
+  assert.equal(event.regional_city_slug, "", `${name}: vazou cidade anterior`);
+  assert.equal(event.regional_origin_path, "", `${name}: vazou jornada anterior`);
+}
+assert.equal(latestEvent("vehicle_card_open").traffic_landing_page, "");
+const essentialPageConfig = [...gtagCalls].reverse().find((call) => call[0] === "config");
+assert.equal((essentialPageConfig?.[2] as Record<string, unknown>).regional_city_slug, "");
+
+// Sem aceite permanece só a cidade da página atual, sem carregar essa história.
+navigate("/seminovos-canoas");
+assert.equal(latestEvent("regional_landing_view").regional_city_slug, "canoas");
+assert.equal(latestEvent("regional_landing_view").regional_origin_path, "");
+navigate("/seminovos");
+window.__netcarPrivacyConsent = "accepted";
+trackWhatsAppClick({ source: "inventory" });
+assert.equal(latestEvent("whatsapp_click").regional_city_slug, "");
+assert.equal(latestEvent("whatsapp_click").regional_origin_path, "");
+assert.equal(storage.has("nc_traffic_ref"), false);
+
+// Interesse direto funciona sem Google/UTM, e o aceite não cria novo storage.
+navigate("/seminovos-nova-santa-rita");
+trackVehicleCardOpen({
+  via: "card",
+  vehicleId: "123",
+  vehicleName: "Carro teste",
+  source: "regional_stock",
+});
+assert.equal(latestEvent("vehicle_card_open").regional_city_slug, "nova-santa-rita");
+assert.equal(latestEvent("vehicle_card_open").page_path, "/seminovos-nova-santa-rita");
+navigate("/veiculo/carro-teste-123");
+trackWhatsAppClick({ source: "hero", vehicleId: "123" });
+assert.equal(latestEvent("whatsapp_click").regional_city_slug, "nova-santa-rita");
+assert.equal(latestEvent("whatsapp_click").traffic_landing_page, "");
+assert.equal(storage.size, 0, "interesse regional não deve persistir no navegador");
+
+// Ainda sem decisão de cookies também não há memória regional entre páginas.
+window.__netcarPrivacyConsent = undefined;
+navigate("/seminovos-canoas");
+navigate("/veiculo/carro-teste-123");
+trackViewItem({ vehicleId: "123", vehicleName: "Carro teste" });
+assert.equal(latestEvent("view_item").regional_city_slug, "");
+assert.equal(latestEvent("view_item").regional_origin_path, "");
+assert.equal(storage.size, 0);
+
 console.log(
-  "Atribuição GBP validada: cidade, campanha e Loja 1/Loja 2 seguem até os eventos regionais e de WhatsApp.",
+  "Atribuição GBP e jornada regional validadas: origem preservada, cidade de interesse até a ficha/WhatsApp, sem duplicação ou persistência extra e com revogação respeitada.",
 );

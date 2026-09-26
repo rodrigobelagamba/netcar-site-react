@@ -14,8 +14,34 @@
  */
 
 const STORAGE_KEY = "nc_traffic_ref";
+export const GA4_MEASUREMENT_ID = "G-MGPNBDNQ9G";
 const TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 dias
 let inMemoryTrafficRef: StoredTrafficRef | null = null;
+let inMemoryRegionalInterest: RegionalInterestContext | null = null;
+
+/** Cidade da página consultada, nunca residência/geolocalização do visitante. */
+export interface RegionalInterestContext {
+  citySlug: string;
+  pagePath: string;
+}
+
+/** Contexto de navegação somente em memória e depois do aceite. */
+export function setRegionalInterestContext(
+  context: RegionalInterestContext,
+): void {
+  if (getPrivacyConsentState() !== "accepted") {
+    inMemoryRegionalInterest = null;
+    return;
+  }
+  inMemoryRegionalInterest = context;
+}
+
+export function getRegionalInterestContext(): RegionalInterestContext | null {
+  if (getPrivacyConsentState() !== "accepted") {
+    inMemoryRegionalInterest = null;
+  }
+  return inMemoryRegionalInterest;
+}
 
 declare global {
   interface Window {
@@ -39,11 +65,41 @@ function canPersistAttribution(): boolean {
 /** Remove a atribuicao opcional da memoria e do navegador. */
 export function clearTrafficAttribution(): void {
   inMemoryTrafficRef = null;
+  inMemoryRegionalInterest = null;
   if (typeof window === "undefined") return;
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch {
     // armazenamento bloqueado: a copia em memoria ja foi descartada
+  }
+
+  // gtag e o modelo do GTM conservam parâmetros entre eventos. Limpar apenas
+  // o storage deixa o próximo evento da mesma rota herdar a origem anterior.
+  const clearedContext = {
+    regional_city_slug: "",
+    regional_origin_path: "",
+    traffic_source: "DIR",
+    traffic_campaign: "",
+    traffic_utm_source: "",
+    traffic_medium: "",
+    traffic_content: "",
+    traffic_utm_term: "",
+    traffic_landing_page: "",
+    traffic_referrer: "",
+    traffic_gclid: "",
+    traffic_gbraid: "",
+    traffic_wbraid: "",
+    traffic_fbclid: "",
+    gbp_profile: "",
+    privacy_consent: getPrivacyConsentState(),
+  };
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push(clearedContext);
+  if (typeof window.gtag === "function") {
+    window.gtag("config", GA4_MEASUREMENT_ID, {
+      ...clearedContext,
+      update: true,
+    });
   }
 }
 

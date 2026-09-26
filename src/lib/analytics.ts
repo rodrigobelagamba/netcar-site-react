@@ -4,16 +4,19 @@
  */
 
 import {
+  GA4_MEASUREMENT_ID,
   appendWaRefToUrl,
   captureTrafficSource,
   createWhatsAppClickIdentity,
   getTrafficSource,
   getPrivacyConsentState,
+  getRegionalInterestContext,
+  setRegionalInterestContext,
   logWaClick,
   type WhatsAppClickIdentity,
 } from "@/lib/waTracking";
 
-export const GA4_MEASUREMENT_ID = "G-MGPNBDNQ9G";
+export { GA4_MEASUREMENT_ID } from "@/lib/waTracking";
 
 export type WhatsAppClickSource =
   | "hero"
@@ -139,7 +142,7 @@ export function inferPageType(pagePath: string): AnalyticsPageType {
   return "other";
 }
 
-function getRegionalDimensions(pagePath: string): Record<string, string> {
+function getLocalRegionalDimensions(pagePath: string): Record<string, string> {
   const pathname = pagePath.split(/[?#]/, 1)[0].replace(/\/+$/, "") || "/";
   const pageType = inferPageType(pathname);
 
@@ -167,6 +170,28 @@ function getRegionalDimensions(pagePath: string): Record<string, string> {
     return { landing_slug: landingSlug, landing_type: landingType };
   }
   return {};
+}
+
+/**
+ * Conserva a cidade de interesse no caminho região → estoque → ficha → contato.
+ * Não usa a atribuição de aquisição (30 dias) para inferir interesse atual.
+ * A memória acaba no reload/aba nova ou na revogação do consentimento.
+ */
+function getRegionalDimensions(pagePath: string): Record<string, string> {
+  const local = getLocalRegionalDimensions(pagePath);
+  if (local.regional_city_slug) {
+    setRegionalInterestContext({
+      citySlug: local.regional_city_slug,
+      pagePath: pagePath.split(/[?#]/, 1)[0].replace(/\/+$/, ""),
+    });
+  }
+  const interest = getRegionalInterestContext();
+  return {
+    // Valores vazios limpam a cidade anterior em gtag/dataLayer na mesma SPA.
+    regional_city_slug: interest?.citySlug ?? "",
+    regional_origin_path: interest?.pagePath ?? "",
+    ...local,
+  };
 }
 
 export function getTrafficDimensions(): Record<string, string> {
@@ -233,7 +258,12 @@ export function trackViewItem(params: {
   price?: number;
   currency?: string;
 }): void {
+  const pagePath = getPagePath();
   trackBusinessEvent("view_item", {
+    page_path: pagePath,
+    page_type: inferPageType(pagePath),
+    ...getRegionalDimensions(pagePath),
+    ...getTrafficDimensions(),
     ecommerce: {
       items: [
         {
@@ -255,7 +285,12 @@ export function trackStockFilterApply(params: {
   filters: Record<string, string | undefined>;
   resultCount: number;
 }): void {
+  const pagePath = getPagePath();
   trackBusinessEvent("stock_filter_apply", {
+    page_path: pagePath,
+    page_type: inferPageType(pagePath),
+    ...getRegionalDimensions(pagePath),
+    ...getTrafficDimensions(),
     filters: params.filters,
     result_count: params.resultCount,
   });
@@ -294,7 +329,12 @@ export function trackVehicleCardOpen(params: {
   source: string;
   articleContext?: BlogDiscoveryContext;
 }): void {
+  const pagePath = getPagePath();
   trackBusinessEvent("vehicle_card_open", {
+    page_path: pagePath,
+    page_type: inferPageType(pagePath),
+    ...getRegionalDimensions(pagePath),
+    ...getTrafficDimensions(),
     open_via: params.via,
     card_source: params.source,
     vehicle_id: String(params.vehicleId),

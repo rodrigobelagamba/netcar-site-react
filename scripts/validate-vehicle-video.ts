@@ -9,6 +9,7 @@ import * as jsxRuntime from "react/jsx-runtime";
 import { renderToStaticMarkup } from "react-dom/server";
 import * as icons from "lucide-react";
 import ts from "typescript";
+import { GA4_MEASUREMENT_ID as productionMeasurementId } from "../src/lib/waTracking";
 import * as videos from "../src/modules/detalhes/lib/vehicleInstagramVideos";
 import { parseVehicleVideosResponse, vehicleVideosForDisplay } from "../src/modules/detalhes/lib/vehicleVideosResponse";
 
@@ -519,6 +520,8 @@ const waDependencies = Object.fromEntries(
     "captureTrafficSource",
     "createWhatsAppClickIdentity",
     "getTrafficSource",
+    "getRegionalInterestContext",
+    "setRegionalInterestContext",
     "logWaClick",
   ].map((name) => [name, forbid(name)]),
 );
@@ -530,6 +533,7 @@ const { trackVehicleVideoClick, GA4_MEASUREMENT_ID } = loadModule<{
   {
     "@/lib/waTracking": {
       ...waDependencies,
+      GA4_MEASUREMENT_ID: productionMeasurementId,
       getPrivacyConsentState: () => consent,
     },
   },
@@ -545,6 +549,12 @@ const { trackVehicleVideoClick, GA4_MEASUREMENT_ID } = loadModule<{
     },
     fetch: forbid("fetch"),
   },
+);
+
+assert.equal(
+  GA4_MEASUREMENT_ID,
+  "G-MGPNBDNQ9G",
+  "O sandbox precisa usar o destino GA4 real, nunca um send_to indefinido",
 );
 
 for (consent of [undefined, "", "pending", "rejected", "denied"]) {

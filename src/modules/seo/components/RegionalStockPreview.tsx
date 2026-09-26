@@ -5,6 +5,7 @@ import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { isAvailableHomeStockVehicle } from "@/lib/homeStock";
+import { sortShowroomVehicles } from "@/lib/showroomStock";
 
 type StockSearch = typeof emptySeminovosSearch;
 
@@ -22,11 +23,23 @@ export function RegionalStockPreview({
   stockSearch = emptySeminovosSearch,
   moreLabel = "Ver mais carros",
 }: RegionalStockPreviewProps) {
-  const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 120 });
+  const {
+    data: vehicles,
+    isLoading,
+    isError,
+    isFetching,
+    refetch,
+  } = useVehiclesQuery({ fetchAll: true }, { refreshImmediately: true });
   const list = useMemo(
-    () => (vehicles ?? []).filter(isAvailableHomeStockVehicle).slice(0, limit),
+    () =>
+      sortShowroomVehicles(
+        (vehicles ?? []).filter(isAvailableHomeStockVehicle),
+        "az",
+      ).slice(0, limit),
     [vehicles, limit],
   );
+  const hasStockData = Array.isArray(vehicles);
+  const waitingForStock = isLoading || (isFetching && list.length === 0);
 
   const moreCarsBtn = (
     <div className="mt-10 flex justify-center">
@@ -51,19 +64,39 @@ export function RegionalStockPreview({
       <div className="container-main relative px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="mb-6">
           <span className="mb-1 block text-xs font-semibold uppercase tracking-widest text-primary">
-            Estoque atualizado
+            Carros do estoque
           </span>
           <h2 className="text-2xl font-bold text-fg md:text-3xl">{title}</h2>
         </div>
 
-        {isLoading ? (
-          <p className="text-gray-500">Carregando estoque...</p>
-        ) : list.length === 0 ? (
-          <>
-            <p className="text-gray-500">Nenhum veículo listado no momento.</p>
-            {moreCarsBtn}
-          </>
-        ) : (
+        {waitingForStock && (
+          <p role="status" className="text-gray-500">
+            Carregando estoque...
+          </p>
+        )}
+
+        {isError && (
+          <div
+            role="status"
+            className="mb-6 rounded-2xl border border-gray-200 bg-gray-50 p-5"
+          >
+            <p className="text-gray-600">
+              {list.length > 0
+                ? "Não foi possível atualizar o estoque. Os anúncios já carregados continuam abaixo; confirme a disponibilidade com a equipe."
+                : "Não foi possível carregar o estoque. Tente novamente ou consulte os carros com a equipe."}
+            </p>
+            <button
+              type="button"
+              onClick={() => void refetch()}
+              disabled={isFetching}
+              className="mt-3 min-h-11 font-semibold text-[#00283C] underline underline-offset-4 disabled:opacity-50"
+            >
+              {isFetching ? "Atualizando estoque..." : "Tentar novamente"}
+            </button>
+          </div>
+        )}
+
+        {list.length > 0 && (
           <>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {list.map((vehicle, index) => (
@@ -91,9 +124,17 @@ export function RegionalStockPreview({
                 />
               ))}
             </div>
-            {moreCarsBtn}
           </>
         )}
+
+        {hasStockData && !isError && !waitingForStock && list.length === 0 && (
+          <p className="text-gray-500">
+            Não há veículos para exibir nesta seleção no momento. Consulte o
+            estoque completo ou fale com a equipe.
+          </p>
+        )}
+
+        {(!waitingForStock || list.length > 0) && moreCarsBtn}
       </div>
     </section>
   );

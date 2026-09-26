@@ -28,9 +28,6 @@ export function RegionalInventoryNav({ cityName }: { cityName: string }) {
               className="rounded-full border border-[#00283C]/15 bg-[#F3F5F6] px-5 py-3 text-sm font-bold text-[#00283C] transition-colors hover:bg-white hover:text-primary"
             >
               {landing.name}
-              <span className="ml-2 font-normal text-gray-500">
-                {landing.count} no estoque
-              </span>
             </Link>
           ))}
         </nav>

@@ -81,6 +81,9 @@ export function CityLandingPage() {
           waText={`moro em ${city.name} e estou procurando um seminovo.`}
           sellCitySlug={city.slug}
           primary="stock"
+          stockLabel="Ver carros e preços"
+          stockSubtitle="Estoque das duas lojas em Esteio"
+          waSubtitle="Consulte compra, troca e financiamento"
         />
       </RegionalSeoHero>
 

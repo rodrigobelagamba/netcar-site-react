@@ -62,8 +62,8 @@ export function PrivacyConsent({
   };
 
   const choose = (choice: "accepted" | "essential") => {
-    if (choice === "essential") clearTrafficAttribution();
     window.netcarSetPrivacyConsent?.(choice);
+    if (choice === "essential") clearTrafficAttribution();
     setOpen(false);
     window.requestAnimationFrame(() => {
       const previous = returnFocusRef.current;

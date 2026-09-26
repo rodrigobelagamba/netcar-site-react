@@ -122,8 +122,19 @@ for (const slug of regionalInventorySlugs) {
     errors.push(`regional-focus: seleção de estoque desconhecida (${slug})`);
   }
 }
-if (regionalFocusSlugs.length !== 4 || new Set(regionalFocusSlugs).size !== 4) {
-  errors.push("Foco regional: configurar exatamente 4 cidades únicas");
+const expectedRegionalFocusSlugs = [
+  "canoas",
+  "sapucaia-do-sul",
+  "nova-santa-rita",
+  "sao-leopoldo",
+  "gravatai",
+];
+if (
+  regionalFocusSlugs.length !== expectedRegionalFocusSlugs.length ||
+  new Set(regionalFocusSlugs).size !== expectedRegionalFocusSlugs.length ||
+  expectedRegionalFocusSlugs.some((slug) => !regionalFocusSlugs.includes(slug))
+) {
+  errors.push("Foco regional: preservar as 5 cidades prioritárias únicas");
 }
 for (const slug of regionalFocusSlugs) {
   if (!cities.some((city) => city.slug === slug)) {
