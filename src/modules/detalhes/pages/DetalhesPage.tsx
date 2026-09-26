@@ -592,7 +592,7 @@ function DetalheFloatingWhatsApp({
       <div
         className={`pointer-events-none fixed inset-x-0 bottom-[calc(0.5rem+env(safe-area-inset-bottom))] z-[60] justify-center px-2 md:bottom-3 md:flex md:px-3 ${mobileVisible ? "flex" : "hidden"}`}
       >
-        <div className="pointer-events-auto w-full max-w-[22rem] md:max-w-sm">
+        <div className="pointer-events-auto w-full max-w-sm md:max-w-[44rem]">
           <VehicleWhatsAppCard
             vehicle={{
               id: String(vehicleId),
@@ -605,6 +605,7 @@ function DetalheFloatingWhatsApp({
             tradeHref={tradeHref}
             tradeSource="detalhe_sticky_trade"
             eyebrow="Este carro"
+            tradeCtaLabel="Avaliar troca"
           />
         </div>
       </div>
