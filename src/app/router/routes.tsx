@@ -118,6 +118,11 @@ const PrivacyPage = lazyWithRetry(() =>
     default: m.PrivacyPage,
   })),
 );
+const ComparisonLandingPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/ComparisonLandingPage").then((m) => ({
+    default: m.ComparisonLandingPage,
+  })),
+);
 const ComparadorPage = lazyWithRetry(() =>
   import("@/modules/seo/pages/ComparadorPage").then((m) => ({
     default: m.ComparadorPage,
@@ -517,6 +522,12 @@ const comparadorRoute = createRoute({
   }),
 });
 
+const comparisonLandingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/comparar/$comparisonSlug",
+  component: ComparisonLandingPage,
+});
+
 const regionsHubRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/regioes-atendidas",
@@ -558,6 +569,7 @@ export const routeTree = rootRoute.addChildren([
   politicaEditorialRoute,
   privacyRoute,
   comparadorRoute,
+  comparisonLandingRoute,
   regionsHubRoute,
   expointerRoute,
   comoSelecionamosRoute,

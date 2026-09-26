@@ -24,6 +24,10 @@ jobs:
         run: npx tsx --test scripts/tests/vehicle-whatsapp-card.test.tsx
       - name: Validate vehicle description preview
         run: npx tsx --test scripts/tests/vehicle-description.test.tsx
+      - name: Validate comparison photos, layout and SEO
+        run: |
+          npx tsx --test scripts/tests/comparison-vehicle-image.test.tsx scripts/tests/vehicle-comparison-table.test.tsx scripts/tests/comparison-pages.test.tsx src/lib/comparisonContact.test.ts
+          node --test scripts/tests/comparison-seo.test.mjs scripts/tests/comparison-routing.test.mjs
       - name: Validate delivery gallery and deployment preservation
         run: |
           node --test scripts/tests/entregas-deploy.test.mjs

@@ -1210,13 +1210,17 @@ for (const url of expectedDemandUrls) {
   }
 }
 
+const comparisonPages = JSON.parse(
+  readFileSync(join(root, "src/data/seo/comparisons.json"), "utf8"),
+);
+
 function validateComparator() {
   const label = "comparar";
   const canonical = `${site}/comparar`;
-  const title = "Comparar carros lado a lado | Preço e ficha | Netcar";
-  const description =
-    "Escolha de 2 a 4 carros do estoque e compare preço, ano, câmbio, motor e outros dados na mesma tela. Abra as fichas e veja qual combina mais com você.";
-  const h1 = "Compare carros lado a lado";
+  const comparison = JSON.parse(
+    readFileSync(join(root, "src/data/seo/comparison.json"), "utf8"),
+  );
+  const { title, description, h1 } = comparison;
   let html;
   try {
     html = readFileSync(
@@ -1229,16 +1233,48 @@ function validateComparator() {
   }
 
   for (const [needle, problem] of [
-    [`<title>${title}</title>`, "title incorreto"],
+    [`<title>${escapeHtml(title)}</title>`, "title incorreto"],
     [
-      `<meta name="description" content="${description}" />`,
+      `<meta name="description" content="${escapeHtml(description)}" />`,
       "description incorreta",
     ],
     [`<link rel="canonical" href="${canonical}" />`, "canonical incorreto"],
     [`<meta property="og:url" content="${canonical}" />`, "og:url incorreto"],
-    [`<h1>${h1}</h1>`, "H1 incorreto"],
+    [`<h1>${escapeHtml(h1)}</h1>`, "H1 incorreto"],
+    [
+      `<p>${escapeHtml(comparison.intro)}</p>`,
+      "introdução divergente do React",
+    ],
+    [
+      `<h2 id="comparison-guide-title">${escapeHtml(comparison.guideTitle)}</h2>`,
+      "título do guia divergente do React",
+    ],
+    [
+      `<p>${escapeHtml(comparison.guideIntro)}</p>`,
+      "introdução do guia divergente do React",
+    ],
   ]) {
     if (occurrences(html, needle) !== 1) errors.push(`${label}: ${problem}`);
+  }
+  if ((html.match(/<h1\b/gi) || []).length !== 1) {
+    errors.push("comparar: a página deve ter um único H1");
+  }
+  for (const criterion of comparison.criteria) {
+    if (
+      !html.includes(`<h3>${escapeHtml(criterion.title)}</h3>`) ||
+      !html.includes(`<p>${escapeHtml(criterion.text)}</p>`)
+    ) {
+      errors.push(`comparar: critério do guia ausente (${criterion.title})`);
+    }
+  }
+  for (const link of comparison.links) {
+    if (
+      !html.includes(
+        `<a href="${site}${escapeHtml(link.path)}">${escapeHtml(link.label)}</a>`,
+      )
+    ) {
+      errors.push(`comparar: link de pesquisa ausente (${link.path})`);
+    }
   }
   const robots = html.match(/<meta\s+name=["']robots["'][^>]*>/gi) || [];
   const robotDirectives =
@@ -1279,6 +1315,12 @@ function validateComparator() {
   if (webpage?.mainEntity?.["@id"] !== `${canonical}#app`) {
     errors.push("comparar: WebPage não referencia o WebApplication");
   }
+  if (webpage?.name !== h1 || webpage?.description !== description) {
+    errors.push("comparar: dados da WebPage divergem do conteúdo visível");
+  }
+  if (types.has("FAQPage")) {
+    errors.push("comparar: FAQPage sem perguntas e respostas visíveis");
+  }
   if (
     anchorHrefs(html).filter((href) => href.startsWith(`${site}/veiculo/`))
       .length < 2
@@ -1288,12 +1330,155 @@ function validateComparator() {
   if (!anchorHrefs(html).includes(`${site}/seminovos`)) {
     errors.push("comparar: link para o estoque ausente");
   }
+  for (const page of comparisonPages) {
+    if (!anchorHrefs(html).includes(`${canonical}/${page.slug}`)) {
+      errors.push(`comparar: link para o guia ausente (${page.slug})`);
+    }
+  }
   if (occurrences(sitemap, `<loc>${canonical}</loc>`) !== 1) {
     errors.push("comparar: URL ausente ou duplicada no sitemap");
   }
 }
 
 validateComparator();
+
+function validateComparisonPages() {
+  const expectedSlugs = [
+    "jeep-compass-x-honda-hr-v",
+    "chevrolet-tracker-x-hyundai-creta",
+    "volkswagen-nivus-x-fiat-fastback",
+    "volkswagen-tera-x-volkswagen-t-cross",
+  ];
+  if (
+    comparisonPages.length !== expectedSlugs.length ||
+    new Set(comparisonPages.map((page) => page.slug)).size !==
+      expectedSlugs.length ||
+    expectedSlugs.some(
+      (slug) => !comparisonPages.some((page) => page.slug === slug),
+    )
+  ) {
+    errors.push(
+      "comparações: preservar os quatro confrontos e seus slugs únicos",
+    );
+  }
+  for (const page of comparisonPages) {
+    const canonical = `${site}/comparar/${page.slug}`;
+    let html;
+    try {
+      html = readFileSync(
+        join(root, `public/seo-static/comparison-${page.slug}.html`),
+        "utf8",
+      );
+    } catch {
+      errors.push(`${page.slug}: HTML da comparação ausente`);
+      continue;
+    }
+    for (const value of [
+      `<title>${escapeHtml(page.title)}</title>`,
+      `<meta name="description" content="${escapeHtml(page.description)}" />`,
+      `<link rel="canonical" href="${canonical}" />`,
+      `<meta property="og:url" content="${canonical}" />`,
+      `<h1>${escapeHtml(page.h1)}</h1>`,
+      `<p>${escapeHtml(page.intro)}</p>`,
+      `<p>${escapeHtml(page.stockNote)}</p>`,
+    ]) {
+      if (occurrences(html, value) !== 1) {
+        errors.push(
+          `${page.slug}: metadado ou conteúdo principal divergente (${value})`,
+        );
+      }
+    }
+    if (
+      occurrences(html, 'rel="canonical"') !== 1 ||
+      (html.match(/<h1\b/gi) || []).length !== 1
+    ) {
+      errors.push(`${page.slug}: preservar H1 e canonical únicos`);
+    }
+    for (const value of [
+      ...page.sections.flatMap((section) => [section.title, section.text]),
+      ...page.checks,
+    ]) {
+      if (!html.includes(escapeHtml(value))) {
+        errors.push(`${page.slug}: conteúdo editorial ausente (${value})`);
+      }
+    }
+    const robots = html.match(/<meta\s+name=["']robots["'][^>]*>/gi) || [];
+    const directives =
+      robots.length === 1
+        ? attributeValue(robots[0], "content")
+            .toLowerCase()
+            .split(",")
+            .map((value) => value.trim())
+        : [];
+    if (
+      !directives.includes("index") ||
+      !directives.includes("follow") ||
+      directives.includes("noindex") ||
+      directives.includes("nofollow")
+    ) {
+      errors.push(
+        `${page.slug}: guia deve permanecer indexável com ou sem estoque`,
+      );
+    }
+    const hrefs = anchorHrefs(html);
+    for (const destination of [
+      `${site}/comparar`,
+      `${site}/seminovos`,
+      ...comparisonPages
+        .filter((other) => other.slug !== page.slug)
+        .map((other) => `${site}/comparar/${other.slug}`),
+    ]) {
+      if (!hrefs.includes(destination)) {
+        errors.push(`${page.slug}: link de navegação ausente (${destination})`);
+      }
+    }
+    const schemas = parsedSchemas(html, page.slug);
+    const nodes = schemas.flatMap((schema) => schemaNodes(schema));
+    const types = schemaTypes(schemas);
+    const webpage = nodes.find((node) => node["@type"] === "WebPage");
+    const breadcrumb = nodes.find((node) => node["@type"] === "BreadcrumbList");
+    if (
+      webpage?.url !== canonical ||
+      webpage?.name !== page.h1 ||
+      webpage?.description !== page.description ||
+      webpage?.isPartOf?.["@id"] !== `${site}/comparar#webpage`
+    ) {
+      errors.push(`${page.slug}: WebPage divergente da comparação publicada`);
+    }
+    if (breadcrumb?.itemListElement?.at(-1)?.item !== canonical) {
+      errors.push(`${page.slug}: breadcrumb deve terminar no confronto atual`);
+    }
+    if (types.has("FAQPage")) {
+      errors.push(`${page.slug}: FAQPage sem perguntas e respostas visíveis`);
+    }
+    validateOrganizationGraph(nodes, page.slug);
+    const stockState = html.match(/data-comparison-stock="([^"]+)"/)?.[1];
+    if (!["complete", "partial", "empty"].includes(stockState)) {
+      errors.push(`${page.slug}: estado da seleção do estoque ausente`);
+    } else if (stockState === "complete") {
+      if (
+        occurrences(html, "data-comparison-vehicle=") !== 2 ||
+        !html.includes("<table>")
+      ) {
+        errors.push(
+          `${page.slug}: par completo precisa de dois carros e tabela`,
+        );
+      }
+    } else if (
+      html.includes("<table>") ||
+      !html.includes("anunciadas para formar este par")
+    ) {
+      errors.push(
+        `${page.slug}: estoque incompleto precisa de nota honesta sem tabela fictícia`,
+      );
+    }
+    if (occurrences(sitemap, `<loc>${canonical}</loc>`) !== 1) {
+      errors.push(`${page.slug}: URL ausente ou duplicada no sitemap`);
+    }
+  }
+}
+
+validateComparisonPages();
 
 const regionsHub = readFileSync(
   join(root, "public/seo-static/regions-hub.html"),
@@ -1453,5 +1638,5 @@ if (errors.length) {
 }
 
 console.log(
-  `SEO gerado válido: ${cities.length} páginas regionais de compra, ${cities.filter((city) => city.sell).length} de venda, ${landings.length} landings transacionais e comparador.`,
+  `SEO gerado válido: ${cities.length} páginas regionais de compra, ${cities.filter((city) => city.sell).length} de venda, ${landings.length} landings transacionais, comparador e ${comparisonPages.length} guias de comparação.`,
 );

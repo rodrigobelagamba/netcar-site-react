@@ -20,6 +20,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
 
 const SITE_URL = "https://www.netcarmultimarcas.com.br";
+const comparisonPages = JSON.parse(
+  readFileSync(join(rootDir, "src/data/seo/comparisons.json"), "utf8"),
+);
 
 const STATIC_PAGES = [
   { loc: "/", changefreq: "daily", priority: "1.0" },
@@ -38,6 +41,11 @@ const STATIC_PAGES = [
   { loc: "/compra", changefreq: "monthly", priority: "0.7" },
   { loc: "/blog", changefreq: "weekly", priority: "0.6" },
   { loc: "/comparar", changefreq: "weekly", priority: "0.8" },
+  ...comparisonPages.map((page) => ({
+    loc: `/comparar/${page.slug}`,
+    changefreq: "weekly",
+    priority: "0.7",
+  })),
   { loc: "/seminovos-automaticos", changefreq: "weekly", priority: "0.8" },
   { loc: "/financiamento", changefreq: "monthly", priority: "0.8" },
   { loc: "/move-brasil", changefreq: "weekly", priority: "0.8" },

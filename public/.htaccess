@@ -308,6 +308,13 @@ ErrorDocument 410 /410.html
   RewriteCond %{DOCUMENT_ROOT}/seo-static/landing-$1.html -f
   RewriteRule ^comprar-([a-z0-9-]+)/?$ seo-static/landing-$1.html [L]
 
+  # Pares permanentes: só o HTML publicado comprova a existência da comparação.
+  # A canônica do documento não inclui queries de seleção ou atribuição.
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
+  RewriteCond %{DOCUMENT_ROOT}/seo-static/comparison-$1.html -f
+  RewriteRule ^comparar/([a-z0-9-]+)/?$ seo-static/comparison-$1.html [L]
+
   # Páginas de conteúdo SEO e institucional para crawlers
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
@@ -320,7 +327,7 @@ ErrorDocument 410 /410.html
   # URL inventada/errada recebe 404. 410 fica reservado ao legado conhecido.
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
-  RewriteRule ^(blog/[^/]+|comprar-[a-z0-9-]+|seminovos-[a-z0-9-]+|vender-carro-[a-z0-9-]+)/?$ - [R=404,L]
+  RewriteRule ^(blog/[^/]+|comparar/[^/]+|comprar-[a-z0-9-]+|seminovos-[a-z0-9-]+|vender-carro-[a-z0-9-]+)/?$ - [R=404,L]
 
   # Sétimo: interceptar /veiculo/{slug} APENAS quando for bot/crawler (meta tags para WhatsApp)
   # Usuários normais acessam diretamente o React app

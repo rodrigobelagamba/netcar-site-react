@@ -1,0 +1,32 @@
+{
+  "title": "Comparar carros seminovos: preço e ficha | Netcar",
+  "description": "Compare de 2 a 4 carros seminovos da Netcar em Esteio/RS. Veja fotos, preço, ano, câmbio e motor lado a lado e abra a ficha de cada veículo.",
+  "h1": "Compare carros seminovos lado a lado",
+  "intro": "Escolha de 2 a 4 carros do estoque da Netcar em Esteio/RS. Compare fotos, preço, ano, câmbio e motor na mesma tela e abra a ficha de cada veículo para conhecer os detalhes.",
+  "guideTitle": "O que olhar ao comparar carros seminovos",
+  "guideIntro": "Comece pelo seu orçamento e pelo uso que o carro terá no dia a dia. A comparação ajuda a escolher quais veículos vale conhecer pessoalmente.",
+  "criteria": [
+    {
+      "title": "Preço e ano",
+      "text": "Compare o valor anunciado e o ano de cada carro. Abra a ficha para conferir a versão e os equipamentos que ajudam a explicar a diferença de preço."
+    },
+    {
+      "title": "Câmbio e motor",
+      "text": "Veja o tipo de câmbio, o motor e o combustível. Pense nos seus trajetos e no que você procura ao dirigir; o test drive ajuda a avaliar cada opção."
+    },
+    {
+      "title": "Ficha e próximo passo",
+      "text": "Confira as fotos e os detalhes dos carros escolhidos. Confirme a disponibilidade com a equipe da Netcar antes de organizar sua visita às lojas de Esteio."
+    }
+  ],
+  "links": [
+    { "label": "SUVs seminovos", "path": "/comprar-suv" },
+    { "label": "Carros automáticos", "path": "/seminovos-automaticos" },
+    { "label": "Hatches seminovos", "path": "/comprar-hatch" },
+    { "label": "Carros até R$ 100 mil", "path": "/comprar-carros-ate-100-mil" },
+    {
+      "label": "Como selecionamos nossos carros",
+      "path": "/como-selecionamos-nossos-carros"
+    }
+  ]
+}

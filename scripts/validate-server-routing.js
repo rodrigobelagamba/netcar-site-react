@@ -74,6 +74,26 @@ expect(
   "comparador não está ligado ao HTML estático e ao chunk React",
 );
 expect(
+  controller.includes("'#^/comparar/([a-z0-9-]+)$#' => 'comparison-%s.html'") &&
+    controller.includes("src/modules/seo/pages/ComparisonLandingPage.tsx") &&
+    controller.includes("|| $path === '/comparar'") &&
+    controller.includes(
+      "|| preg_match('#^/comparar/[a-z0-9-]+$#', (string) $path)",
+    ),
+  "pares do comparador sem HTML estático, chunk próprio ou bootstrap do estoque",
+);
+expect(
+  htaccess.includes(
+    "RewriteCond %{DOCUMENT_ROOT}/seo-static/comparison-$1.html -f",
+  ) &&
+    htaccess.includes(
+      "RewriteRule ^comparar/([a-z0-9-]+)/?$ seo-static/comparison-$1.html [L]",
+    ) &&
+    htaccess.includes("blog/[^/]+|comparar/[^/]+|") &&
+    htaccess.includes("[R=404,L]"),
+  "pares do comparador sem HTML para crawlers ou 404 real para slug ausente",
+);
+expect(
   controller.includes("'/expointer-esteio' => 'page-expointer-esteio.html'") &&
     controller.includes("src/modules/seo/pages/ExpointerPage.tsx") &&
     controller.includes("|| $path === '/expointer-esteio'") &&
@@ -372,6 +392,22 @@ for (const path of [
   "public/seo/landings.json",
 ]) {
   expect(existsSync(join(root, path)), `${path} não foi gerado`);
+}
+
+const comparisonDefinitions = JSON.parse(read("src/data/seo/comparisons.json"));
+for (const comparison of comparisonDefinitions) {
+  const slug = comparison.slug;
+  expect(/^[a-z0-9-]+$/.test(slug), "slug inválido no catálogo de comparações");
+  const path = `public/seo-static/comparison-${slug}.html`;
+  expect(existsSync(join(root, path)), `${path} não foi gerado`);
+  if (existsSync(join(root, path))) {
+    expect(
+      read(path).includes(
+        `rel="canonical" href="https://www.netcarmultimarcas.com.br/comparar/${slug}"`,
+      ),
+      `${path} sem canônica limpa para o par`,
+    );
+  }
 }
 
 if (errors.length) {

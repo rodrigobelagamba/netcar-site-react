@@ -1665,37 +1665,15 @@ for (const landing of landings) {
   );
 }
 
+const comparatorPage = JSON.parse(
+  readFileSync(join(rootDir, "src/data/seo/comparison.json"), "utf8"),
+);
+const comparisonPages = JSON.parse(
+  readFileSync(join(rootDir, "src/data/seo/comparisons.json"), "utf8"),
+);
 const comparatorCanonical = `${SITE}/comparar`;
-const comparatorTitle = "Comparar carros lado a lado | Preço e ficha | Netcar";
-const comparatorDescription =
-  "Escolha de 2 a 4 carros do estoque e compare preço, ano, câmbio, motor e outros dados na mesma tela. Abra as fichas e veja qual combina mais com você.";
-const comparisonDefinitions = [
-  ["Jeep Compass", "JEEP", "COMPASS", "Honda HR-V", "HONDA", "HRV"],
-  [
-    "Chevrolet Tracker",
-    "CHEVROLET",
-    "TRACKER",
-    "Hyundai Creta",
-    "HYUNDAI",
-    "CRETA",
-  ],
-  [
-    "Volkswagen Nivus",
-    "VOLKSWAGEN",
-    "NIVUS",
-    "Fiat Fastback",
-    "FIAT",
-    "FASTBACK",
-  ],
-  [
-    "Volkswagen Tera",
-    "VOLKSWAGEN",
-    "TERA",
-    "Volkswagen T-Cross",
-    "VOLKSWAGEN",
-    "T CROSS",
-  ],
-];
+const comparatorTitle = comparatorPage.title;
+const comparatorDescription = comparatorPage.description;
 
 function closestPricePair(left, right) {
   let best = null;
@@ -1708,22 +1686,36 @@ function closestPricePair(left, right) {
   return best;
 }
 
-const comparisonExamples = comparisonDefinitions
-  .map(
-    ([leftName, leftBrand, leftModel, rightName, rightBrand, rightModel]) => {
-      const left = stock.filter((vehicle) =>
-        matchesLandingFilters(vehicle, { marca: leftBrand, modelo: leftModel }),
-      );
-      const right = stock.filter((vehicle) =>
-        matchesLandingFilters(vehicle, {
-          marca: rightBrand,
-          modelo: rightModel,
-        }),
-      );
-      const pair = closestPricePair(left, right);
-      return pair ? { leftName, rightName, ...pair } : null;
-    },
-  )
+function comparisonStockSelection(page) {
+  const forModel = (model) =>
+    stock.filter((vehicle) =>
+      matchesLandingFilters(vehicle, {
+        marca: model.brand,
+        modelo: model.model,
+      }),
+    );
+  const left = forModel(page.left);
+  const right = forModel(page.right);
+  return { left, right, pair: closestPricePair(left, right) };
+}
+
+function comparisonLinks(currentSlug) {
+  return comparisonPages
+    .filter((page) => page.slug !== currentSlug)
+    .map(
+      (page) =>
+        `<li><a href="${SITE}/comparar/${escapeHtml(page.slug)}">${escapeHtml(page.label)}</a></li>`,
+    )
+    .join("");
+}
+
+const comparisonExamples = comparisonPages
+  .map((page) => {
+    const { pair } = comparisonStockSelection(page);
+    return pair
+      ? { leftName: page.left.label, rightName: page.right.label, ...pair }
+      : null;
+  })
   .filter(Boolean);
 
 const comparisonExamplesHtml = comparisonExamples.length
@@ -1737,8 +1729,12 @@ const comparisonExamplesHtml = comparisonExamples.length
 const comparatorBody = `
   <nav aria-label="Navegação estrutural"><ol><li><a href="${SITE}/">Home</a></li><li><a href="${SITE}/seminovos">Seminovos</a></li><li>Comparar carros</li></ol></nav>
   <article>
-    <h1>Compare carros lado a lado</h1>
-    <p>Escolha de dois a quatro carros disponíveis e veja preço, ano, câmbio, motor, combustível, potência, portas, cor e categoria na mesma tela.</p>
+    <h1>${escapeHtml(comparatorPage.h1)}</h1>
+    <p>${escapeHtml(comparatorPage.intro)}</p>
+    <nav aria-label="Guias de comparação entre modelos">
+      <h2>Compare os modelos que você está pesquisando</h2>
+      <ul>${comparisonLinks()}</ul>
+    </nav>
     <h2>Comparações com carros do estoque atual</h2>
     ${comparisonExamplesHtml}
     <h2>Como usar o comparador</h2>
@@ -1755,6 +1751,22 @@ const comparatorBody = `
       ctaHref: comparatorCanonical,
     })}
     <p><a href="${SITE}/seminovos">Ver estoque completo</a> · <a href="${comparatorWhatsAppLink()}">Pedir ajuda para comparar</a></p>
+    <section aria-labelledby="comparison-guide-title">
+      <h2 id="comparison-guide-title">${escapeHtml(comparatorPage.guideTitle)}</h2>
+      <p>${escapeHtml(comparatorPage.guideIntro)}</p>
+      ${comparatorPage.criteria
+        .map(
+          (criterion) =>
+            `<h3>${escapeHtml(criterion.title)}</h3><p>${escapeHtml(criterion.text)}</p>`,
+        )
+        .join("\n")}
+      <nav aria-label="Continue sua pesquisa de seminovos"><ul>${comparatorPage.links
+        .map(
+          (link) =>
+            `<li><a href="${SITE}${escapeHtml(link.path)}">${escapeHtml(link.label)}</a></li>`,
+        )
+        .join("")}</ul></nav>
+    </section>
   </article>`;
 writeSeoPage(
   join(seoStaticDir, "page-comparar.html"),
@@ -1771,7 +1783,7 @@ writeSeoPage(
         "@type": "WebPage",
         "@id": `${comparatorCanonical}#webpage`,
         url: comparatorCanonical,
-        name: "Compare carros lado a lado",
+        name: comparatorPage.h1,
         description: comparatorDescription,
         mainEntity: { "@id": `${comparatorCanonical}#app` },
       },
@@ -1799,6 +1811,101 @@ writeSeoPage(
     ],
   }),
 );
+
+function comparisonVehicleCard(vehicle) {
+  const name = vehicleDisplayName(vehicle);
+  const image = vehicleCardImage(vehicle);
+  const url = `${SITE}/veiculo/${generateVehicleSlug(vehicle)}`;
+  return `<article data-comparison-vehicle="${escapeHtml(vehicle.id)}">
+    <h3><a href="${url}">${escapeHtml(name)}</a></h3>
+    ${image ? `<a href="${url}"><img src="${escapeHtml(image)}" alt="${escapeHtml(name)}" width="480" height="320" loading="lazy" style="max-width:100%;height:auto;object-fit:contain" /></a>` : "<p>Foto indisponível no momento.</p>"}
+    <p><a href="${url}">Ver ficha de ${escapeHtml(name)}</a></p>
+  </article>`;
+}
+
+function comparisonStockTable(pair) {
+  const vehicles = [pair.a, pair.b];
+  const rows = [
+    [
+      "Preço anunciado",
+      (vehicle) => `R$ ${Number(vehicle.valor).toLocaleString("pt-BR")}`,
+    ],
+    ["Ano", (vehicle) => vehicle.ano],
+    ["Câmbio", (vehicle) => vehicle.cambio],
+    ["Motor", (vehicle) => vehicle.motor],
+    ["Combustível", (vehicle) => vehicle.combustivel],
+    ["Potência", (vehicle) => vehicle.potencia],
+    ["Portas", (vehicle) => vehicle.portas],
+    ["Cor", (vehicle) => vehicle.cor],
+    ["Categoria", (vehicle) => resolvedVehicleCategory(vehicle)],
+  ];
+  return `<div style="overflow-x:auto"><table>
+    <caption>Dados anunciados das unidades selecionadas</caption>
+    <thead><tr><th scope="col">Característica</th>${vehicles.map((vehicle) => `<th scope="col">${escapeHtml(vehicleDisplayName(vehicle))}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map(([label, value]) => `<tr><th scope="row">${escapeHtml(label)}</th>${vehicles.map((vehicle) => `<td>${escapeHtml(value(vehicle) || "Não informado")}</td>`).join("")}</tr>`).join("")}</tbody>
+  </table></div>`;
+}
+
+for (const page of comparisonPages) {
+  const canonical = `${comparatorCanonical}/${page.slug}`;
+  const { left, right, pair } = comparisonStockSelection(page);
+  const vehicles = pair
+    ? [pair.a, pair.b]
+    : [left[0], right[0]].filter(Boolean);
+  const missingModels = [
+    ...(!left.length ? [page.left.label] : []),
+    ...(!right.length ? [page.right.label] : []),
+  ];
+  const stockState = pair ? "complete" : vehicles.length ? "partial" : "empty";
+  const stockHtml = `<section data-comparison-stock="${stockState}" aria-labelledby="comparison-stock-title">
+    <h2 id="comparison-stock-title">Carros do estoque nesta comparação</h2>
+    <p>${escapeHtml(page.stockNote)}</p>
+    ${pair ? "" : `<p>No momento, não há unidades de ${escapeHtml(missingModels.join(" e "))} anunciadas para formar este par. O guia continua disponível para sua pesquisa; consulte o estoque e confirme novas opções com a Netcar.</p>`}
+    ${vehicles.map(comparisonVehicleCard).join("\n")}
+    ${pair ? comparisonStockTable(pair) : ""}
+    <p><a href="${SITE}/seminovos">Consultar o estoque completo</a> · <a href="${comparatorCanonical}">Montar outra comparação</a></p>
+  </section>`;
+  const body = `
+    <nav aria-label="Navegação estrutural"><ol><li><a href="${SITE}/">Início</a></li><li><a href="${comparatorCanonical}">Comparar carros</a></li><li>${escapeHtml(page.label)}</li></ol></nav>
+    <article>
+      <h1>${escapeHtml(page.h1)}</h1>
+      <p>${escapeHtml(page.intro)}</p>
+      ${stockHtml}
+      ${page.sections.map((section) => `<section><h2>${escapeHtml(section.title)}</h2><p>${escapeHtml(section.text)}</p></section>`).join("\n")}
+      <section><h2>O que conferir antes da visita</h2><ul>${page.checks.map((check) => `<li>${escapeHtml(check)}</li>`).join("")}</ul></section>
+      <p><a href="${SITE}/como-selecionamos-nossos-carros">Como selecionamos nossos carros</a></p>
+      <nav aria-label="Outras comparações de seminovos"><h2>Continue comparando</h2><ul>${comparisonLinks(page.slug)}</ul><p><a href="${comparatorCanonical}">Ver todas as comparações</a></p></nav>
+    </article>`;
+  writeSeoPage(
+    join(seoStaticDir, `comparison-${page.slug}.html`),
+    canonical,
+    pageShell({
+      title: page.title,
+      description: page.description,
+      canonical,
+      body,
+      ogImage: vehicles.length ? vehicleCardImage(vehicles[0]) : undefined,
+      schemas: [
+        ORG_SCHEMA,
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "@id": `${canonical}#webpage`,
+          url: canonical,
+          name: page.h1,
+          description: page.description,
+          inLanguage: "pt-BR",
+          isPartOf: { "@id": `${comparatorCanonical}#webpage` },
+        },
+        breadcrumbSchema([
+          HOME_CRUMB,
+          { name: "Comparar carros", url: comparatorCanonical },
+          { name: page.label, url: canonical },
+        ]),
+      ],
+    }),
+  );
+}
 
 // Mesma fonte da página React: datas identificadas por edição, sem simular
 // participação na feira ou publicar uma oferta que expira no fim do evento.
@@ -2024,6 +2131,11 @@ const vehicleUrls = await getVehicleUrls();
 
 const urls = [
   ...staticPages.map((page) => ({ loc: `${SITE}${page.path}`, ...page })),
+  ...comparisonPages.map((page) => ({
+    loc: `${SITE}/comparar/${page.slug}`,
+    priority: "0.7",
+    changefreq: "weekly",
+  })),
   ...vehicleUrls.map((loc) => ({
     loc,
     priority: "0.8",
@@ -2088,6 +2200,7 @@ writeTextFile(join(publicDir, "sitemap.xml"), sitemap);
 const expectedFiles = new Set([
   "regions-hub.html",
   "page-comparar.html",
+  ...comparisonPages.map((page) => `comparison-${page.slug}.html`),
   "page-expointer-esteio.html",
   ...blogPosts.map((post) => `blog-${post.slug}.html`),
   ...cities.map((city) => `city-${city.slug}.html`),

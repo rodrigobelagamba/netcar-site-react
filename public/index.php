@@ -126,6 +126,7 @@ function netcar_static_route_file($path)
     $file = isset($exact[$path]) ? $exact[$path] : null;
     $patterns = [
         '#^/blog/([a-z0-9-]+)$#' => 'blog-%s.html',
+        '#^/comparar/([a-z0-9-]+)$#' => 'comparison-%s.html',
         '#^/seminovos-([a-z0-9-]+)$#' => 'city-%s.html',
         '#^/vender-carro-([a-z0-9-]+)$#' => 'sell-city-%s.html',
         '#^/comprar-([a-z0-9-]+)$#' => 'landing-%s.html',
@@ -306,6 +307,8 @@ function netcar_route_uses_stock_bootstrap($path)
 {
     return $path === '/'
         || $path === '/seminovos'
+        || $path === '/comparar'
+        || preg_match('#^/comparar/[a-z0-9-]+$#', (string) $path)
         || $path === '/regioes-atendidas'
         || $path === '/expointer-esteio'
         || in_array($path, array('/financiamento', '/atendimento-24h', '/move-brasil'), true)
@@ -490,6 +493,7 @@ function netcar_route_manifest_entry($path)
     if (preg_match('#^/blog/#', (string) $path)) return 'src/modules/blog/pages/BlogPostPage.tsx';
     if ($path === '/seminovos-automaticos') return 'src/modules/seo/pages/SeminovosAutomaticosPage.tsx';
     if ($path === '/comparar') return 'src/modules/seo/pages/ComparadorPage.tsx';
+    if (preg_match('#^/comparar/[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/ComparisonLandingPage.tsx';
     if ($path === '/privacidade') return 'src/modules/legal/pages/PrivacyPage.tsx';
     if ($path === '/regioes-atendidas') return 'src/modules/seo/pages/RegionsHubPage.tsx';
     if ($path === '/expointer-esteio') return 'src/modules/seo/pages/ExpointerPage.tsx';
