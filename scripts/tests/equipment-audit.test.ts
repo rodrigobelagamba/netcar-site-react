@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import {
   existsSync,
@@ -14,12 +14,18 @@ import {
   writeFileSync,
 } from "node:fs";
 import { syncBuiltinESMExports } from "node:module";
+import {
+  getDefaultAutoSelectFamily,
+  getDefaultAutoSelectFamilyAttemptTimeout,
+  setDefaultAutoSelectFamilyAttemptTimeout,
+} from "node:net";
 import { hostname, tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { mock, test } from "node:test";
 import {
   buildEquipmentAudit,
+  configureEquipmentAuditNetwork,
   EQUIPMENT_STOCK_URL,
   fetchEquipmentStock,
   parseStockResponse,
@@ -104,6 +110,67 @@ function makeExpiredLock(stateDir: string, temporary = false) {
     writeFileSync(join(lockPath, `${token}.report.tmp`), "interrupted report");
   return lockPath;
 }
+
+test("the auditor gives dual-stack connection attempts 2s without reducing an existing higher timeout", () => {
+  const previous = getDefaultAutoSelectFamilyAttemptTimeout();
+  const familySelection = getDefaultAutoSelectFamily();
+  try {
+    setDefaultAutoSelectFamilyAttemptTimeout(250);
+    configureEquipmentAuditNetwork();
+    assert.equal(getDefaultAutoSelectFamilyAttemptTimeout(), 2_000);
+    assert.equal(getDefaultAutoSelectFamily(), familySelection);
+    setDefaultAutoSelectFamilyAttemptTimeout(5_000);
+    configureEquipmentAuditNetwork();
+    assert.equal(getDefaultAutoSelectFamilyAttemptTimeout(), 5_000);
+    assert.equal(getDefaultAutoSelectFamily(), familySelection);
+  } finally {
+    setDefaultAutoSelectFamilyAttemptTimeout(previous);
+  }
+});
+
+test("importing the auditor leaves the hosting process network policy unchanged", () => {
+  const script = new URL("../audit-vehicle-equipment.ts", import.meta.url).href;
+  const result = spawnSync(process.execPath, [
+    "--import", "tsx", "--input-type=module", "-e",
+    `import assert from 'node:assert/strict';
+     import net from 'node:net';
+     net.setDefaultAutoSelectFamilyAttemptTimeout(250);
+     const family = net.getDefaultAutoSelectFamily();
+     await import(${JSON.stringify(script)});
+     assert.equal(net.getDefaultAutoSelectFamilyAttemptTimeout(), 250);
+     assert.equal(net.getDefaultAutoSelectFamily(), family);`,
+  ], { encoding: "utf8", timeout: 10_000 });
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test("the CLI applies the connection policy before fetching while preserving request safeguards", async () => {
+  await withStateDirectory(async (stateDir) => {
+    const preload = `import assert from 'node:assert/strict';
+      import net from 'node:net';
+      net.setDefaultAutoSelectFamilyAttemptTimeout(250);
+      const family = net.getDefaultAutoSelectFamily();
+      const tlsVerification = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+      globalThis.fetch = async (url, options) => {
+        assert.equal(net.getDefaultAutoSelectFamilyAttemptTimeout(), 2000);
+        assert.equal(net.getDefaultAutoSelectFamily(), family);
+        assert.equal(url, ${JSON.stringify(EQUIPMENT_STOCK_URL)});
+        assert.equal(options.redirect, 'error');
+        assert.ok(options.signal instanceof AbortSignal);
+        assert.equal(options.signal.aborted, false);
+        assert.equal(process.env.NODE_TLS_REJECT_UNAUTHORIZED, tlsVerification);
+        return Response.json(${JSON.stringify(apiResponse([apiVehicle()]))});
+      };`;
+    const result = spawnSync(process.execPath, [
+      "--import", "tsx",
+      "--import", `data:text/javascript,${encodeURIComponent(preload)}`,
+      fileURLToPath(new URL("../audit-vehicle-equipment.ts", import.meta.url)),
+      "--state-dir", stateDir,
+    ], { encoding: "utf8", timeout: 10_000 });
+    assert.equal(result.status, 0, result.stderr);
+    const report = JSON.parse(readFileSync(join(stateDir, "report.json"), "utf8"));
+    assert.equal(report.counts.vehicles, 1);
+  });
+});
 
 test("first audit covers every active fixture vehicle using the shared presentation", () => {
   const input = structuredClone(fixture.vehicles);

@@ -1,4 +1,8 @@
 import { createHash, randomUUID } from "node:crypto";
+import {
+  getDefaultAutoSelectFamilyAttemptTimeout,
+  setDefaultAutoSelectFamilyAttemptTimeout,
+} from "node:net";
 import { hostname } from "node:os";
 import {
   chmodSync,
@@ -412,6 +416,17 @@ export function buildEquipmentAudit(
   };
 }
 
+/** Only the standalone auditor calls this: never change the DevOps server's
+ * network defaults merely by importing this module. Node 20's 250ms family
+ * attempt can discard a viable IPv4 connection before an unreachable IPv6
+ * fallback (nodejs/node#54359). Allow a TCP retry while retaining dual-stack,
+ * certificate verification, the 20s request deadline and bounded retries. */
+export function configureEquipmentAuditNetwork(): void {
+  setDefaultAutoSelectFamilyAttemptTimeout(
+    Math.max(2_000, getDefaultAutoSelectFamilyAttemptTimeout()),
+  );
+}
+
 export async function fetchEquipmentStock(
   fetcher: typeof fetch = fetch,
 ): Promise<EquipmentVehicle[]> {
@@ -728,6 +743,7 @@ if (
       throw new Error(
         "Uso: audit-vehicle-equipment.ts [--state-dir diretório]",
       );
+    configureEquipmentAuditNetwork();
     const report = await runEquipmentAudit(
       args.length ? { stateDir: resolve(args[1]) } : {},
     );

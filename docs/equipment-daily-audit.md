@@ -47,6 +47,8 @@ Todos os pareceres correspondentes ao relatório atual são preservados. O hist�
 
 Falha de rede, resposta parcial, IDs repetidos, equipamentos inválidos ou estoque ativo vazio **não substituem o relatório anterior nem dão baixa nas pendências**. O auditor usa uma trava própria contra processos simultâneos; uma trava desconhecida/malformada deve ser investigada, não apagada indiscriminadamente. O painel também impede que cron e execução manual enfileirem duas auditorias simultâneas.
 
+Somente no subprocesso do auditor, a tentativa de conexão por família de rede tem um piso de 2 segundos, evitando descartes prematuros do Node em redes IPv4/IPv6. O timeout total de 20 segundos por consulta, as três tentativas e a validação HTTPS permanecem. Falhas registram apenas categorias/códigos seguros, nunca o corpo da API ou credenciais.
+
 O volume precisa ser incluído no backup da VPS. Recriar o container preserva o estado; excluir a pasta ou o checkout sem backup perde os pareceres. Arquivos de estado não vão para `public/`, Git ou hospedagem pública. O acesso depende da autenticação já existente do DevOps; o painel ainda usa HTTP e deve ficar restrito à rede confiável até uma migração de TLS aprovada.
 
 ## SEO e limites
