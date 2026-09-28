@@ -81,7 +81,6 @@ import { SeptemberCampaignBanner } from "@/features/september-campaign/September
 import { landingPages, matchesLandingFilters } from "@/data/seo";
 import {
   buildVehicleHighlights,
-  cleanOptionalDescription,
   normalizeVehicleFeatureTag,
   type VehicleHighlightsPresentation,
 } from "@/modules/detalhes/lib/vehicleHighlights";
@@ -1737,15 +1736,8 @@ export function DetalhesPage() {
   const vehicleData = useMemo(() => {
     if (!vehicle) return null;
 
-    // Formata ano fabricação / ano modelo
-    let yearDisplay = "";
-    if (vehicle.anoFabricacao && vehicle.year) {
-      // Se tem ambos, mostra: "2023 / 2024" (ano fabricação / ano modelo)
-      yearDisplay = `${vehicle.anoFabricacao} / ${vehicle.year}`;
-    } else if (vehicle.year) {
-      // Se só tem ano modelo, mostra apenas ele
-      yearDisplay = String(vehicle.year);
-    }
+    // A ficha apresenta somente o ano-modelo, sem alterar o ano de fabricação do cadastro.
+    const yearDisplay = vehicle.year ? String(vehicle.year) : "";
 
     const sanitizeFormattedPrice = (formatted?: string) =>
       formatted ? formatted.replace(/<[^>]*>/g, "") : "";
@@ -2285,7 +2277,7 @@ export function DetalhesPage() {
               {year && (
                 <div className="flex min-w-0 flex-col">
                   <span className="text-muted-foreground uppercase tracking-[0.08em] mb-0.5 font-medium info-label">
-                    Ano
+                    Modelo
                   </span>
                   <span className="text-fg font-semibold info-value">
                     {year}
@@ -2616,7 +2608,7 @@ function VehicleDifferentialHighlights({
     >
       <div className="max-w-2xl">
         <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#23747C]">
-          Diferenciais do modelo
+          Equipamentos deste veículo
         </p>
         <h3
           id="vehicle-differentials-title"
@@ -2625,7 +2617,7 @@ function VehicleDifferentialHighlights({
           O que vale notar neste {modelo}
         </h3>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
-          Os recursos mais relevantes deste carro, explicados pelo benefício.
+          Os equipamentos informados para esta unidade, em ordem de relevância.
         </p>
       </div>
 
@@ -2690,30 +2682,24 @@ function DetailsSection({
 
   const modeloCompleto = vehicle.modelo || vehicle.name || "";
   const year = vehicle.year || 0;
-  const anoFabricacao = vehicle.anoFabricacao;
   const mileageFormatted = formatCatalogMileage(vehicle.km);
 
   // Parse do conteúdo do anúncio (vem do endpoint separado)
   const gptContent = useMemo(() => parseGptContent(anuncio || null), [anuncio]);
   const highlightPresentation = useMemo(
-    () => buildVehicleHighlights(vehicle, anuncio),
-    [vehicle, anuncio],
+    () => buildVehicleHighlights(vehicle),
+    [vehicle],
   );
 
   useEffect(() => {
     setShowMoreOptionals(false);
   }, [vehicle.id]);
 
-  // Formata ano para especificações técnicas
-  const anoDisplay =
-    anoFabricacao && year
-      ? `${anoFabricacao} / ${year}`
-      : year
-        ? String(year)
-        : "";
+  // Mantém o mesmo ano-modelo apresentado no resumo principal.
+  const anoDisplay = year ? String(year) : "";
 
   const specifications = [
-    anoDisplay && { label: "Ano:", value: anoDisplay },
+    anoDisplay && { label: "Modelo:", value: anoDisplay },
     mileageFormatted && { label: "Quilometragem:", value: mileageFormatted },
     vehicle.cor && { label: "Cor:", value: vehicle.cor },
     vehicle.portas && { label: "Portas:", value: `${vehicle.portas}` },
@@ -2730,187 +2716,7 @@ function DetailsSection({
     vehicle.cambio && { label: "Câmbio:", value: vehicle.cambio },
   ].filter(Boolean) as Array<{ label: string; value: string }>;
 
-  // Mapeamento de tags para pesos (peso menor = maior prioridade).
-  // Ordem pensada pelo que decide compra de seminovo; só os 9 primeiros
-  // ficam à mostra sem clicar em "Ver todos".
-  const OPTIONAL_PRIORITY_MAP: Record<string, number> = {
-    sete_lugares: 1, // 7 Lugares
-    teto_panoramico: 2, // Teto Panorâmico
-    teto_solar: 3, // Teto Solar (somente se panorâmico não estiver presente)
-    cambio_automatico: 4, // Câmbio Automático
-    bancos_de_couro: 5, // Bancos em Couro
-    multimidia: 6, // Central Multimídia
-    my_link: 6, // Central MyLINK Chevrolet
-    "sem-_fio": 7, // Android Auto e Apple CarPlay sem fio
-    apple: 8, // Apple CarPlay
-    android: 9, // Android Auto
-    camera_de_re: 10, // Câmera de Ré
-    sensor_de_estacionamento: 11, // Sensor de Estacionamento
-    park_assist: 12, // Park Assist
-    piloto_adaptativo: 13, // Piloto Automático Adaptativo
-    piloto_automatico: 14, // Piloto Automático (somente se adaptativo não estiver presente)
-    chave_inteligente: 15, // Chave Inteligente Keyless
-    botao: 16, // Botão de Partida
-    motor_turbo: 17, // Motor Turbo
-    tracao_awd: 18, // Tração AWD
-    franagem_emergencia: 19, // Frenagem Automática de Emergência
-    alerta_colisao: 20, // Alerta de Colisão Frontal
-    assistencia_faixa: 21, // Assistência de Permanência em Faixa
-    ar_condicionado_dual_zone: 22, // Ar Condicionado Dual Zone
-    ar_condicionado_digital: 23, // Ar Condicionado Digital
-    air_bag_cortina: 24, // Air Bag Cortina
-    air_bag_lateral: 25, // Air Bag Lateral
-    sensor_de_luminosidade: 26, // Faróis Acendimento Auto
-    lanternas_em_led: 27, // Lanternas em LED
-    freio_eletronico: 28, // Freio de Mão Eletrônico
-    auto_hold: 29, // Auto Hold
-    paddle_shift: 30, // Paddle Shift
-    banco_eletrico: 31, // Banco Elétrico
-    banco_com_aquecimento: 32, // Bancos com Aquecimento
-    monitor_pressao: 33, // Monitor Pressão Pneus
-    sensor_de_chuva: 34, // Sensor de Chuva
-    carregador_inducao: 35, // Carregador Indução Celular
-    gps: 36, // Navegação GPS
-    start_stop: 37, // Start Stop
-    rodas_de_liga_leve: 38, // Rodas de Liga Leve
-    isofix: 39, // ISOFIX
-    controle_de_tracao: 40, // Controle de Tração
-    freios_abs: 41, // Freios ABS EBD
-    freios_abs_com_ebd: 41, // Freios ABS
-  };
-
-  // Peso padrão para opcionais não listados
-  const DEFAULT_PRIORITY = 999;
-
-  // Item de série em praticamente todo carro do estoque: continua na lista
-  // completa, mas nunca ocupa a vitrine.
-  const COMMODITY_PRIORITY = 2000;
-  const COMMODITY_TAGS = new Set([
-    "air_bag",
-    "air_bag_duplo",
-    "chave_reserva",
-    "manual",
-    "som_radio",
-    "som_radio_com_usb",
-    "som_radiomp3",
-    "travas_eletricas",
-    "vidros_eletricos",
-    "ar_condicionado",
-    "ar_quente",
-    "bancos_com_regulagem_de_altura",
-    "computador_de_bordo",
-    "desembacador_traseiro",
-    "som_no_volante",
-    "cinto_tres",
-    "volante_regulagem_de_altura",
-    "limpador_traseiro",
-    "retrovisor_eletrico",
-    "direcao_eletrica",
-    "direcao_hidraulica",
-  ]);
-
-  // Função para ordenar opcionais por prioridade usando tags
-  const sortOptionals = (
-    optionals: Array<{ tag?: string; descricao?: string } | string>,
-  ): Array<{ tag?: string; descricao?: string } | string> => {
-    // Converte para formato padronizado
-    const normalizedOptionals = optionals.map((op) => {
-      if (typeof op === "string") {
-        return { tag: "", descricao: op };
-      }
-      return { tag: op.tag || "", descricao: op.descricao || "" };
-    });
-
-    // Verifica se existe teto solar panorâmico na lista
-    const hasPanoramicSunroof = normalizedOptionals.some(
-      (opt) => opt.tag === "teto_panoramico",
-    );
-
-    // Verifica se existe piloto automático adaptativo na lista
-    const hasAdaptiveCruise = normalizedOptionals.some(
-      (opt) => opt.tag === "piloto_adaptativo",
-    );
-
-    // Função para obter o peso de um opcional usando a tag
-    const getPriority = (optional: {
-      tag: string;
-      descricao: string;
-    }): number => {
-      const tag = optional.tag.toLowerCase().trim();
-
-      // Verifica se a tag está no mapeamento de prioridades
-      if (OPTIONAL_PRIORITY_MAP[tag] !== undefined) {
-        // Casos especiais com lógica condicional
-        if (tag === "teto_solar") {
-          // Teto solar só tem peso 3 se não houver panorâmico
-          return hasPanoramicSunroof
-            ? DEFAULT_PRIORITY
-            : OPTIONAL_PRIORITY_MAP[tag];
-        }
-
-        if (tag === "piloto_automatico") {
-          // Piloto automático só tem peso 7 se não houver adaptativo
-          return hasAdaptiveCruise
-            ? DEFAULT_PRIORITY
-            : OPTIONAL_PRIORITY_MAP[tag];
-        }
-
-        // Para os outros, retorna o peso direto do mapa
-        return OPTIONAL_PRIORITY_MAP[tag];
-      }
-
-      if (COMMODITY_TAGS.has(tag)) return COMMODITY_PRIORITY;
-
-      return DEFAULT_PRIORITY;
-    };
-
-    // Ordena por prioridade (menor peso primeiro)
-    return normalizedOptionals.sort((a, b) => {
-      const priorityA = getPriority(a as { tag: string; descricao: string });
-      const priorityB = getPriority(b as { tag: string; descricao: string });
-
-      // Se as prioridades forem iguais, mantém a ordem original
-      if (priorityA === priorityB) {
-        return 0;
-      }
-
-      return priorityA - priorityB;
-    });
-  };
-
-  // Extrai opcionais do veículo (pode ser string ou objeto com tag/descricao)
-  const rawOptionals =
-    vehicle.opcionais?.map((op: any) =>
-      typeof op === "string"
-        ? op
-        : { tag: op.tag || "", descricao: op.descricao || op.nome || "" },
-    ) || [];
-
-  // Aplica ordenação por prioridade usando tags
-  const sortedOptionals = sortOptionals(rawOptionals);
-
-  // Limpa pequenas inconsistências do XML, remove duplicações e evita repetir
-  // na lista os recursos que já foram explicados nos cards de diferenciação.
-  const seenOptionals = new Set<string>();
-  const displayedOptionals = sortedOptionals
-    .map((op) => ({
-      tag: normalizeVehicleFeatureTag(
-        typeof op === "string" ? "" : op.tag || "",
-      ),
-      description: cleanOptionalDescription(
-        typeof op === "string" ? op : op.descricao || "",
-      ),
-    }))
-    .filter(({ tag, description }) => {
-      const key = description
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-      if (!description || seenOptionals.has(key)) return false;
-      seenOptionals.add(key);
-      return !highlightPresentation.explainedTags.has(tag);
-    })
-    .map(({ description }) => description);
+  const displayedOptionals = highlightPresentation.remainingOptionals;
 
   const SpecIcon = ({ className }: { className?: string }) => (
     <div
@@ -2986,10 +2792,10 @@ function DetailsSection({
                   <SpecIcon />
                   <div>
                     <h2 className="text-[17px] font-black text-[#00283C] sm:text-[18px] lg:text-[19px]">
-                      Outros opcionais
+                      Outros equipamentos
                     </h2>
                     <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
-                      A lista completa informada no cadastro deste carro.
+                      Itens do cadastro, organizados por relevância e sem repetições.
                     </p>
                   </div>
                 </div>
@@ -3022,7 +2828,7 @@ function DetailsSection({
                   >
                     {showMoreOptionals
                       ? "Mostrar menos"
-                      : `Ver todos os ${displayedOptionals.length} opcionais`}
+                      : `Ver todos os ${displayedOptionals.length} equipamentos`}
                     <ChevronDown
                       className={`h-4 w-4 transition-transform ${showMoreOptionals ? "rotate-180" : ""}`}
                     />

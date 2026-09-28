@@ -33,9 +33,14 @@ export const config = {
   devopsRoot,
   workspaceRoot: resolveWorkspaceRoot(),
   port: Number(process.env.PORT || 3090),
+  host: process.env.HOST || '0.0.0.0',
   token: process.env.DEVOPS_TOKEN || '',
   jobTimeoutMs: Number(process.env.JOB_TIMEOUT_MS || 45 * 60 * 1000),
   isProd: process.env.NODE_ENV === 'production',
+  // A saved choice in settings.json takes precedence over this initial default.
+  equipmentCronEnabled: process.env.EQUIPMENT_CRON_ENABLED === undefined
+    ? process.env.NODE_ENV === 'production'
+    : process.env.EQUIPMENT_CRON_ENABLED === 'true',
 };
 
 export const NPM_ALLOWLIST = [

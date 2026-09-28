@@ -1,0 +1,39 @@
+{
+  "_comment": "Confirmações do responsável sobre unidades específicas. Não são equipamentos de série por modelo e não alteram o XML/API de origem. Manter um registro ativo por unidade.",
+  "records": [
+    {
+      "id": "netcar-unit-20050-driver-assistance-2026-09-28",
+      "approved": true,
+      "source": "responsible-confirmation",
+      "confirmedAt": "2026-09-28",
+      "claim": "Responsável informou nesta conversa que o Fastback não possui Park Assist nem piloto adaptativo, mas possui assistência de permanência em faixa. Piloto convencional não foi negado.",
+      "match": {
+        "vehicleId": "20050",
+        "brand": "FIAT",
+        "model": "FASTBACK IMPETUS TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "presentTags": ["assistencia_faixa"],
+      "absentTags": ["park_assist", "piloto_adaptativo"]
+    },
+    {
+      "id": "netcar-unit-20051-no-roof-2026-09-28",
+      "approved": true,
+      "source": "responsible-confirmation",
+      "confirmedAt": "2026-09-28",
+      "claim": "Responsável esclareceu nesta conversa: no Civic EXL, a única correção é retirar o teto, pois a unidade não possui teto solar nem panorâmico. A assistência de permanência em faixa foi confirmada somente para o Fastback; não acrescentar esse recurso ao Civic nem alterar seus demais equipamentos.",
+      "match": {
+        "vehicleId": "20051",
+        "brand": "HONDA",
+        "model": "CIVIC EXL",
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "presentTags": [],
+      "absentTags": ["teto_solar", "teto_panoramico"]
+    }
+  ]
+}

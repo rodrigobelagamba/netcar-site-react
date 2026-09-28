@@ -2,6 +2,10 @@ import { axiosInstance } from "../axios-instance";
 import { config } from "../config";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
 import { resolveIcheckAttachment } from "@/lib/icheckMetadata";
+import {
+  mapVehicleOptional,
+  type RawVehicleOptional,
+} from "../lib/mapVehicleOptional";
 
 export interface VehicleImagesSite {
   capa: string | null;
@@ -95,10 +99,7 @@ export interface ApiVehicleResponse {
     observacoes: string | null;
     link: string;
     have_galery: number;
-    opcionais: Array<{
-      tag: string;
-      descricao: string;
-    }>;
+    opcionais: Array<string | RawVehicleOptional>;
     imagens: {
       thumb: string[];
       full: string[];
@@ -398,10 +399,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         preco_com_troca_formatado: apiVehicle.preco_com_troca_formatado,
         categoria: apiVehicle.categoria,
         opcionais:
-          apiVehicle.opcionais?.map((opt) => ({
-            tag: opt.tag,
-            descricao: opt.descricao,
-          })) || [],
+          apiVehicle.opcionais?.map(mapVehicleOptional) || [],
         diferenciais:
           apiVehicle.diferenciais?.map((diff) => ({
             tag: diff.tag,
@@ -501,10 +499,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       preco_com_troca_formatado: apiVehicle.preco_com_troca_formatado,
       categoria: apiVehicle.categoria,
       opcionais:
-        apiVehicle.opcionais?.map((opt) => ({
-          tag: opt.tag,
-          descricao: opt.descricao,
-        })) || [],
+        apiVehicle.opcionais?.map(mapVehicleOptional) || [],
       diferenciais:
         apiVehicle.diferenciais?.map((diff) => ({
           tag: diff.tag,

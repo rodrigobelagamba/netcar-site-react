@@ -8,6 +8,8 @@
  * - detalhe-veiculo.php?slug=compass-serie-s-2022-19526
  */
 
+require_once __DIR__ . '/vehicle-equipment.php';
+
 // Função para extrair ID do slug (mesma lógica do JavaScript)
 function extractVehicleIdFromSlug($slug) {
     if (!$slug || trim($slug) === '') {
@@ -892,23 +894,12 @@ if ($placa) {
         </ul>
 
         <?php
-        $opcionais = [];
-        if (!empty($vehicle['opcionais']) && is_array($vehicle['opcionais'])) {
-            foreach ($vehicle['opcionais'] as $opcional) {
-                $descricao = is_array($opcional)
-                    ? (isset($opcional['descricao']) ? $opcional['descricao'] : '')
-                    : $opcional;
-                $descricao = trim(ltrim((string) $descricao, '.'));
-                if ($descricao !== '') {
-                    $opcionais[] = $descricao;
-                }
-            }
-        }
+        $opcionais = netcarEquipmentDescriptions($vehicle);
         ?>
         <?php if (!empty($opcionais)): ?>
         <h2>Itens e opcionais</h2>
         <ul>
-            <?php foreach (array_slice($opcionais, 0, 30) as $opcional): ?>
+            <?php foreach ($opcionais as $opcional): ?>
             <li><?php echo htmlspecialchars($opcional, ENT_QUOTES, 'UTF-8'); ?></li>
             <?php endforeach; ?>
         </ul>

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import EquipmentPanel from './EquipmentPanel.jsx';
 import {
   api,
   clearStoredToken,
@@ -226,10 +227,9 @@ export default function App() {
             Sair
           </button>
         </div>
-        <h1>Deploys</h1>
+        <h1>Operações do site</h1>
         <p>
-          Gerencie versões versionadas em <code>dist/</code> e rode scripts npm do site sem
-          rebuildar o painel.
+          Gerencie deploys, execute scripts e acompanhe a revisão dos equipamentos do estoque.
         </p>
         <div className="meta">
           {repo ? (
@@ -281,6 +281,8 @@ export default function App() {
           }
         }}
       />
+
+      <EquipmentPanel token={token} onJob={attachJob} busy={busy} activeJob={activeJob} />
 
       <div className="grid grid-main">
         <section className="panel">
@@ -365,7 +367,7 @@ export default function App() {
             </div>
           </section>
 
-          <section className="panel">
+          <section className="panel" id="job-log">
             <h2>Log do job</h2>
             <div className="meta" style={{ marginBottom: '0.75rem' }}>
               {activeJob ? (

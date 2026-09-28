@@ -15,6 +15,7 @@ dist/
 
 # PDF i-CHECK gerado localmente
 output/
+tmp/pdfs/
 
 # Estado local do painel devops (último deploy registrado)
 .devops/
@@ -49,6 +50,7 @@ public/seo-static/
 public/sitemap.xml
 public/seo/landings.json
 public/seo/blog-index.json
+public/seo/vehicle-equipment.json
 public/feeds/*
 src/data/seo/landings.json
 

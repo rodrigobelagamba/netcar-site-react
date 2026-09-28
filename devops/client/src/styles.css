@@ -36,7 +36,8 @@ body {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
@@ -333,4 +334,427 @@ select {
 
 .logout {
   margin-left: auto;
+}
+
+.equipment-panel {
+  margin-bottom: 1.25rem;
+}
+
+.equipment-header,
+.equipment-schedule,
+.equipment-research,
+.equipment-review-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.equipment-header {
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.equipment-eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--deep);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.equipment-panel h2 {
+  margin-bottom: 0.4rem;
+  font-size: 1.5rem;
+}
+
+.equipment-muted {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+p.equipment-muted {
+  margin: 0.3rem 0;
+}
+
+.equipment-header .actions,
+.equipment-review-footer .actions {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.equipment-panel a {
+  color: var(--deep);
+  text-underline-offset: 0.18em;
+}
+
+.equipment-panel a.btn {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.equipment-schedule {
+  background: rgba(108, 196, 202, 0.09);
+  border: 1px solid var(--line);
+  padding: 0.9rem 1rem;
+}
+
+.equipment-schedule strong {
+  color: var(--night);
+  font-size: 0.95rem;
+}
+
+.pill.warn {
+  color: #815707;
+  border-color: rgba(196, 138, 26, 0.4);
+  background: rgba(196, 138, 26, 0.06);
+}
+
+.equipment-notice {
+  color: var(--deep);
+  background: var(--mist);
+  border: 1px solid var(--line);
+  padding: 0.75rem 0.9rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.equipment-run-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.25rem;
+  margin: 1rem 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.equipment-run-status strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.equipment-small-button {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+.equipment-counts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 1.25rem 0;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.equipment-counts > div {
+  padding: 0.85rem 1rem;
+}
+
+.equipment-counts > div + div {
+  border-left: 1px solid var(--line);
+}
+
+.equipment-counts dt {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.equipment-counts dd {
+  margin: 0.15rem 0 0;
+  color: var(--night);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.equipment-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.5fr);
+  align-items: end;
+  gap: 0.75rem;
+}
+
+.equipment-filters label,
+.equipment-review label {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--deep);
+}
+
+.equipment-filters input,
+.equipment-filters select,
+.equipment-review input,
+.equipment-review textarea {
+  min-width: 0;
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  border-radius: 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.equipment-panel :is(button, a, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--deep);
+  outline-offset: 3px;
+}
+
+.equipment-panel .equipment-result-count {
+  margin: 0.75rem 0;
+  font-size: 0.78rem;
+}
+
+.equipment-vehicles {
+  border-top: 1px solid var(--line);
+}
+
+.equipment-vehicle {
+  border-bottom: 1px solid var(--line);
+}
+
+.equipment-vehicle summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0.4rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.equipment-vehicle summary::-webkit-details-marker {
+  display: none;
+}
+
+.equipment-vehicle summary:hover {
+  background: rgba(108, 196, 202, 0.08);
+}
+
+.equipment-vehicle-heading {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+  overflow-wrap: anywhere;
+}
+
+.equipment-vehicle-heading strong {
+  font-size: 0.93rem;
+  color: var(--night);
+}
+
+.equipment-vehicle-heading .equipment-muted {
+  font-size: 0.78rem;
+}
+
+.equipment-badges {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.equipment-expand {
+  margin-left: 0.25rem;
+  color: var(--deep);
+  font-size: 1.25rem;
+}
+
+.equipment-vehicle[open] .equipment-expand {
+  transform: rotate(180deg);
+}
+
+.equipment-vehicle-body {
+  padding: 0.15rem 0.4rem 1.25rem;
+}
+
+.equipment-research {
+  margin-bottom: 0.85rem;
+}
+
+.equipment-research .btn {
+  flex-shrink: 0;
+}
+
+.equipment-findings {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0 0 1rem;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.5);
+  list-style: none;
+}
+
+.equipment-findings li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.equipment-findings .pill {
+  flex-shrink: 0;
+}
+
+.equipment-description-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 1rem 0;
+}
+
+.equipment-panel h4 {
+  margin: 0 0 0.5rem;
+  color: var(--night);
+  font-size: 0.9rem;
+}
+
+.equipment-descriptions h4 span {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.equipment-descriptions ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.equipment-review {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: rgba(232, 244, 245, 0.5);
+  margin-top: 1.15rem;
+}
+
+.equipment-review label {
+  display: block;
+  margin: 0.85rem 0 0.4rem;
+}
+
+.equipment-review label span {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.equipment-review textarea {
+  resize: vertical;
+  min-height: 5.5rem;
+  line-height: 1.5;
+}
+
+.equipment-field-meta {
+  text-align: right;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.equipment-review-footer {
+  align-items: flex-end;
+  margin-top: 1rem;
+}
+
+.equipment-review-footer .equipment-muted {
+  font-size: 0.75rem;
+}
+
+.equipment-review .error-banner {
+  margin: 1rem 0 0;
+}
+
+.equipment-empty {
+  padding: 1.5rem 1rem;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px dashed var(--line);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.equipment-empty strong {
+  color: var(--night);
+}
+
+.equipment-empty p {
+  max-width: 40rem;
+  margin: 0.5rem auto 0;
+}
+
+.equipment-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+@media (max-width: 760px) {
+  .equipment-header,
+  .equipment-review-footer,
+  .equipment-research {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .equipment-filters,
+  .equipment-description-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .equipment-vehicle summary {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .equipment-badges {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .equipment-expand {
+    margin-left: auto;
+  }
+
+  .equipment-schedule {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .equipment-counts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .equipment-counts > div:nth-child(3) {
+    border-left: 0;
+  }
+
+  .equipment-counts > div:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+
+  .equipment-findings li {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .equipment-pagination {
+    justify-content: center;
+  }
 }

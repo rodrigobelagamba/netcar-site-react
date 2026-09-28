@@ -15,6 +15,7 @@ import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import React from "react";
 import { pdf } from "@react-pdf/renderer";
+import { resolveVehicleEquipment } from "../src/lib/vehicleEquipment.ts";
 import {
   parseCheckAutoPdf,
   classifyCertificateStatus,
@@ -539,9 +540,10 @@ async function main() {
         value: vehicle.portas != null ? String(vehicle.portas) : "—",
       },
     ].filter((s) => s.value && s.value !== "—"),
-    optionals: (vehicle.opcionais || [])
-      .map((o) => (typeof o === "string" ? o : o.descricao || o.nome || ""))
-      .filter(Boolean),
+    optionals: resolveVehicleEquipment({
+      ...vehicle,
+      year: vehicle.year || vehicle.ano,
+    }).items.map((item) => item.description),
     history:
       webHistory.length > 0
         ? webHistory

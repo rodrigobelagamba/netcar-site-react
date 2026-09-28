@@ -1,0 +1,946 @@
+{
+  "_comment": "Taxonomia XML/API auditada em 2026-09-28. Maior prioridade vem primeiro. Rótulos do fornecedor são preservados em sourceDescription; tags opacas não provam equipamento além da descrição.",
+  "items": [
+    {
+      "tag": "acionamento",
+      "id": "remote-start",
+      "description": "Acionamento à distância",
+      "priority": 540,
+      "category": "Conveniência",
+      "sourceDescription": "Acionamento à Distância"
+    },
+    {
+      "tag": "air_bag",
+      "id": "airbags",
+      "description": "Airbags",
+      "priority": 290,
+      "category": "Segurança",
+      "sourceDescription": "Air Bag"
+    },
+    {
+      "tag": "air_bag_cortina",
+      "id": "curtain-airbags",
+      "description": "Airbags de cortina",
+      "priority": 800,
+      "category": "Segurança",
+      "benefit": "Bolsas de proteção na região lateral superior da cabine.",
+      "sourceDescription": "Air Bag Cortina"
+    },
+    {
+      "tag": "air_bag_duplo",
+      "id": "airbags-2",
+      "description": "Airbag duplo",
+      "priority": 300,
+      "category": "Segurança",
+      "sourceDescription": "Air Bag Duplo"
+    },
+    {
+      "tag": "air_bag_lateral",
+      "id": "side-airbags",
+      "description": "Airbags laterais",
+      "priority": 790,
+      "category": "Segurança",
+      "benefit": "Bolsas de proteção nas laterais da cabine.",
+      "sourceDescription": "Air Bag Lateral"
+    },
+    {
+      "tag": "alarme",
+      "id": "alarm",
+      "description": "Alarme",
+      "priority": 230,
+      "category": "Segurança",
+      "sourceDescription": "Alarme"
+    },
+    {
+      "tag": "alerta_colisao",
+      "id": "collision-warning",
+      "description": "Alerta de colisão frontal",
+      "priority": 920,
+      "category": "Segurança",
+      "benefit": "Emite um alerta diante de risco de colisão frontal.",
+      "sourceDescription": "Alerta de Colisão Frontal"
+    },
+    {
+      "tag": "android",
+      "id": "android-auto",
+      "description": "Android Auto",
+      "priority": 590,
+      "category": "Conectividade",
+      "benefit": "Integra aplicativos compatíveis do celular à central do carro.",
+      "sourceDescription": "Android Auto"
+    },
+    {
+      "tag": "apple",
+      "id": "apple-carplay",
+      "description": "Apple CarPlay",
+      "priority": 590,
+      "category": "Conectividade",
+      "benefit": "Integra aplicativos compatíveis do iPhone à central do carro.",
+      "sourceDescription": "Apple CarPlay"
+    },
+    {
+      "tag": "ar_condicionado",
+      "id": "air-conditioning",
+      "description": "Ar-condicionado",
+      "priority": 380,
+      "category": "Conforto",
+      "sourceDescription": "Ar Condicionado"
+    },
+    {
+      "tag": "ar_condicionado_digital",
+      "id": "digital-climate",
+      "description": "Ar-condicionado digital",
+      "priority": 640,
+      "category": "Conforto",
+      "benefit": "Ajustes do ar-condicionado em comandos digitais.",
+      "sourceDescription": "Ar Condicionado Digital"
+    },
+    {
+      "tag": "ar_condicionado_dual_zone",
+      "id": "dual-zone-climate",
+      "description": "Ar-condicionado dual zone",
+      "priority": 660,
+      "category": "Conforto",
+      "benefit": "Permite ajustes de temperatura por zona da cabine.",
+      "sourceDescription": "Ar Condicionado Dual Zone"
+    },
+    {
+      "tag": "ar_quente",
+      "id": "heating",
+      "description": "Ar quente",
+      "priority": 140,
+      "category": "Conforto",
+      "sourceDescription": "Ar Quente"
+    },
+    {
+      "tag": "assistencia_faixa",
+      "id": "lane-assist",
+      "description": "Assistência de permanência em faixa",
+      "priority": 895,
+      "category": "Segurança",
+      "benefit": "Auxilia o motorista a manter o carro na faixa.",
+      "sourceDescription": "Assistência de Permanência em Faixa"
+    },
+    {
+      "tag": "auto_hold",
+      "id": "auto-hold",
+      "description": "Auto Hold",
+      "priority": 630,
+      "category": "Conveniência",
+      "benefit": "Mantém o freio aplicado nas paradas, quando o sistema está ativo.",
+      "sourceDescription": "Freio de Mão Auto Hold"
+    },
+    {
+      "tag": "bancos_com_regulagem_de_altura",
+      "id": "seat-height",
+      "description": "Regulagem de altura do banco",
+      "priority": 180,
+      "category": "Conforto",
+      "sourceDescription": "Bancos Reg de Altura"
+    },
+    {
+      "tag": "bancos_de_couro",
+      "id": "leather-seats",
+      "description": "Bancos em couro",
+      "priority": 650,
+      "category": "Conforto",
+      "benefit": "Revestimento em couro nos bancos.",
+      "sourceDescription": "Bancos em Couro"
+    },
+    {
+      "tag": "banco_com_aquecimento",
+      "id": "heated-seats",
+      "description": "Bancos com aquecimento",
+      "priority": 670,
+      "category": "Conforto",
+      "benefit": "Aquecimento integrado aos bancos.",
+      "sourceDescription": "Bancos com Aquecimento"
+    },
+    {
+      "tag": "banco_eletrico",
+      "id": "power-seat",
+      "description": "Banco com ajuste elétrico",
+      "priority": 655,
+      "category": "Conforto",
+      "benefit": "Regulagem da posição do banco por comandos elétricos.",
+      "sourceDescription": "Banco Eletrico"
+    },
+    {
+      "tag": "banco_misto",
+      "id": "mixed-seats",
+      "description": "Bancos com revestimento misto",
+      "priority": 430,
+      "category": "Conforto",
+      "sourceDescription": "Bancos Mistos"
+    },
+    {
+      "tag": "botao",
+      "id": "push-start",
+      "description": "Partida por botão",
+      "priority": 570,
+      "category": "Conveniência",
+      "benefit": "Acionamento da partida por botão.",
+      "sourceDescription": "Botão de Partida"
+    },
+    {
+      "tag": "botao_eco",
+      "id": "eco-mode",
+      "description": "Modo Eco",
+      "priority": 220,
+      "category": "Condução",
+      "sourceDescription": "Botão Eco"
+    },
+    {
+      "tag": "cabine_dupla",
+      "id": "double-cab",
+      "description": "Cabine dupla",
+      "priority": 610,
+      "category": "Versatilidade",
+      "sourceDescription": ".Cabine Dupla"
+    },
+    {
+      "tag": "cabine_estendida",
+      "id": "extended-cab",
+      "description": "Cabine estendida",
+      "priority": 600,
+      "category": "Versatilidade",
+      "sourceDescription": ".Cabine Estendida"
+    },
+    {
+      "tag": "cambio_automatico",
+      "id": "automatic-transmission",
+      "description": "Câmbio automático",
+      "priority": 320,
+      "category": "Condução",
+      "sourceDescription": "Câmbio Automático"
+    },
+    {
+      "tag": "cambio_automatico_6_marchas",
+      "id": "automatic-6",
+      "description": "Câmbio automático de 6 velocidades",
+      "priority": 370,
+      "category": "Condução",
+      "sourceDescription": "Câmbio Automático 6 Velocidades"
+    },
+    {
+      "tag": "cambio_cvt",
+      "id": "cvt-transmission",
+      "description": "Câmbio CVT",
+      "priority": 350,
+      "category": "Condução",
+      "sourceDescription": "Câmbio CVT"
+    },
+    {
+      "tag": "cambio_dsg",
+      "id": "dsg-transmission",
+      "description": "Câmbio DSG",
+      "priority": 360,
+      "category": "Condução",
+      "sourceDescription": "Câmbio DSG"
+    },
+    {
+      "tag": "cambio_dupla_embreagem",
+      "id": "dual-clutch",
+      "description": "Câmbio de dupla embreagem",
+      "priority": 360,
+      "category": "Condução",
+      "sourceDescription": "Cambio Dupla Embreagem"
+    },
+    {
+      "tag": "cambio_manual_6_marchas",
+      "id": "manual-6",
+      "description": "Câmbio manual de 6 velocidades",
+      "priority": 330,
+      "category": "Condução",
+      "sourceDescription": "Câmbio Manual 6 Velocidades"
+    },
+    {
+      "tag": "cambio_nove",
+      "id": "automatic-9",
+      "description": "Câmbio automático de 9 velocidades",
+      "priority": 375,
+      "category": "Condução",
+      "sourceDescription": "Câmbio Automático 9 Velocidades"
+    },
+    {
+      "tag": "cambio_sete",
+      "id": "transmission-7",
+      "description": "Câmbio de 7 marchas",
+      "priority": 345,
+      "category": "Condução",
+      "sourceDescription": "Câmbio 7 Marchas"
+    },
+    {
+      "tag": "camera_de_re",
+      "id": "rear-camera",
+      "description": "Câmera de ré",
+      "priority": 770,
+      "category": "Manobras",
+      "benefit": "Exibe a imagem da área traseira durante a marcha à ré.",
+      "sourceDescription": "Câmera de Ré"
+    },
+    {
+      "tag": "capota_maritima",
+      "id": "bed-cover",
+      "description": "Capota marítima",
+      "priority": 430,
+      "category": "Versatilidade",
+      "sourceDescription": ".Capota Marítima"
+    },
+    {
+      "tag": "carregador_inducao",
+      "id": "wireless-charging",
+      "description": "Carregador de celular por indução",
+      "priority": 620,
+      "category": "Conectividade",
+      "benefit": "Recarga sem cabo para celulares compatíveis.",
+      "sourceDescription": "Carregador Indução Celular"
+    },
+    {
+      "tag": "chave_inteligente",
+      "id": "keyless",
+      "description": "Chave presencial (Keyless)",
+      "priority": 610,
+      "category": "Conveniência",
+      "benefit": "Acesso ao veículo com a chave presencial.",
+      "sourceDescription": "Chave Inteligente Keyless"
+    },
+    {
+      "tag": "chave_reserva",
+      "id": "spare-key",
+      "description": "Chave reserva",
+      "priority": 130,
+      "category": "Documentação",
+      "sourceDescription": "Chave Reserva"
+    },
+    {
+      "tag": "cinto_tres",
+      "id": "three-point-belts",
+      "description": "Cintos de três pontos",
+      "priority": 290,
+      "category": "Segurança",
+      "sourceDescription": "Cinto 3 Pontos"
+    },
+    {
+      "tag": "computador_de_bordo",
+      "id": "trip-computer",
+      "description": "Computador de bordo",
+      "priority": 190,
+      "category": "Condução",
+      "sourceDescription": "Computador de Bordo"
+    },
+    {
+      "tag": "controle_de_tracao",
+      "id": "traction-control",
+      "description": "Controle de tração",
+      "priority": 500,
+      "category": "Segurança",
+      "benefit": "Auxilia o controle da tração nas rodas.",
+      "sourceDescription": ".Controle de Tração"
+    },
+    {
+      "tag": "controle_velocidade",
+      "id": "cruise-control",
+      "description": "Piloto automático",
+      "priority": 675,
+      "category": "Condução",
+      "benefit": "Mantém a velocidade definida pelo motorista.",
+      "sourceDescription": "Controlador de Velocidade"
+    },
+    {
+      "tag": "desembacador_traseiro",
+      "id": "rear-defogger",
+      "description": "Desembaçador traseiro",
+      "priority": 140,
+      "category": "Conveniência",
+      "sourceDescription": "Desembaçador Traseiro"
+    },
+    {
+      "tag": "direcao_eletrica",
+      "id": "electric-steering",
+      "description": "Direção elétrica",
+      "priority": 410,
+      "category": "Condução",
+      "sourceDescription": "Direção Elétrica"
+    },
+    {
+      "tag": "direcao_hidraulica",
+      "id": "hydraulic-steering",
+      "description": "Direção hidráulica",
+      "priority": 300,
+      "category": "Condução",
+      "sourceDescription": "Direção Hidráulica"
+    },
+    {
+      "tag": "escape_esportivo",
+      "id": "sports-exhaust",
+      "description": "Escapamento esportivo",
+      "priority": 290,
+      "category": "Condução",
+      "sourceDescription": "Escapamento Esportivo"
+    },
+    {
+      "tag": "estribo",
+      "id": "running-board",
+      "description": "Estribo",
+      "priority": 280,
+      "category": "Versatilidade",
+      "sourceDescription": ".Estribo"
+    },
+    {
+      "tag": "farois_auxiliares",
+      "id": "auxiliary-headlights",
+      "description": "Faróis auxiliares",
+      "priority": 305,
+      "category": "Iluminação",
+      "sourceDescription": "Faróis Auxiliares"
+    },
+    {
+      "tag": "farois_de_xenon",
+      "id": "xenon-headlights",
+      "description": "Faróis de xenon",
+      "priority": 465,
+      "category": "Iluminação",
+      "sourceDescription": "Faróis de Xenon"
+    },
+    {
+      "tag": "farolete",
+      "id": "fog-lights",
+      "description": "Farolete",
+      "priority": 290,
+      "category": "Iluminação",
+      "sourceDescription": "Farolete"
+    },
+    {
+      "tag": "farol_negro",
+      "id": "black-headlights",
+      "description": "Faróis com máscara negra",
+      "priority": 90,
+      "category": "Acabamento",
+      "sourceDescription": "Farol Máscara Negra"
+    },
+    {
+      "tag": "franagem_emergencia",
+      "id": "automatic-emergency-braking",
+      "description": "Frenagem automática de emergência",
+      "priority": 975,
+      "category": "Segurança",
+      "benefit": "Pode acionar os freios em uma situação de risco detectada pelo sistema.",
+      "sourceDescription": "Frenagem Automático de Emergência"
+    },
+    {
+      "tag": "freios_abs",
+      "id": "abs-ebd",
+      "description": "Freios ABS com EBD",
+      "priority": 380,
+      "category": "Segurança",
+      "benefit": "Frenagem com ABS e distribuição eletrônica da força de frenagem.",
+      "sourceDescription": "Freios ABS EBD"
+    },
+    {
+      "tag": "freios_abs_com_ebd",
+      "id": "abs",
+      "description": "Freios ABS",
+      "priority": 360,
+      "category": "Segurança",
+      "sourceDescription": "Freios ABS"
+    },
+    {
+      "tag": "freio_disco",
+      "id": "disc-brakes",
+      "description": "Freios a disco",
+      "priority": 310,
+      "category": "Segurança",
+      "sourceDescription": "Freio a Disco"
+    },
+    {
+      "tag": "freio_eletronico",
+      "id": "electric-parking-brake",
+      "description": "Freio de estacionamento eletrônico",
+      "priority": 540,
+      "category": "Conveniência",
+      "benefit": "Acionamento do freio de estacionamento por comando elétrico.",
+      "sourceDescription": "Freio de Mão Eletrônico"
+    },
+    {
+      "tag": "gestauto",
+      "id": "gestauto",
+      "description": "Garantia Gestauto",
+      "priority": 100,
+      "category": "Documentação",
+      "sourceDescription": "Garantia Gestauto"
+    },
+    {
+      "tag": "gnv",
+      "id": "gnv",
+      "description": "GNV — gás natural veicular",
+      "priority": 500,
+      "category": "Condução",
+      "sourceDescription": "GNV Gás Natural Veicular"
+    },
+    {
+      "tag": "gps",
+      "id": "navigation",
+      "description": "Navegação GPS",
+      "priority": 490,
+      "category": "Conectividade",
+      "benefit": "Navegação por GPS no sistema do veículo.",
+      "sourceDescription": "Navegação GPS"
+    },
+    {
+      "tag": "indcador_fadiga",
+      "id": "fatigue-warning",
+      "description": "Indicador de fadiga",
+      "priority": 600,
+      "category": "Segurança",
+      "benefit": "Emite avisos de atenção ao motorista.",
+      "sourceDescription": "Indicador de Fadiga"
+    },
+    {
+      "tag": "interface",
+      "id": "interface",
+      "description": "Interface",
+      "priority": 50,
+      "category": "Conectividade",
+      "sourceDescription": "Interface"
+    },
+    {
+      "tag": "isofix",
+      "id": "isofix",
+      "description": "ISOFIX",
+      "priority": 350,
+      "category": "Segurança",
+      "benefit": "Pontos de fixação para cadeirinhas compatíveis.",
+      "sourceDescription": "ISOFIX"
+    },
+    {
+      "tag": "kit_trail",
+      "id": "trail-kit",
+      "description": "Kit Trail",
+      "priority": 80,
+      "category": "Acabamento",
+      "sourceDescription": "Kit Trail"
+    },
+    {
+      "tag": "lanternas_em_led",
+      "id": "led-taillights",
+      "description": "Lanternas em LED",
+      "priority": 470,
+      "category": "Iluminação",
+      "sourceDescription": "Lanternas em LED"
+    },
+    {
+      "tag": "limpador_traseiro",
+      "id": "rear-wiper",
+      "description": "Limpador traseiro",
+      "priority": 130,
+      "category": "Conveniência",
+      "sourceDescription": "Limpador Traseiro"
+    },
+    {
+      "tag": "lona_maritima",
+      "id": "bed-cover",
+      "description": "Capota marítima",
+      "priority": 430,
+      "category": "Versatilidade",
+      "sourceDescription": ".Lona Marítima"
+    },
+    {
+      "tag": "manual",
+      "id": "owner-manual",
+      "description": "Manual do proprietário",
+      "priority": 120,
+      "category": "Documentação",
+      "sourceDescription": "Manual do Proprietário"
+    },
+    {
+      "tag": "media_nav",
+      "id": "medianav",
+      "description": "Central MediaNAV Renault",
+      "priority": 605,
+      "category": "Conectividade",
+      "benefit": "Central multimídia MediaNAV.",
+      "sourceDescription": "Central MediaNAV Renault"
+    },
+    {
+      "tag": "monitor_pressao",
+      "id": "tire-pressure",
+      "description": "Monitor de pressão dos pneus",
+      "priority": 560,
+      "category": "Segurança",
+      "benefit": "Acompanha a pressão dos pneus e informa alterações detectadas.",
+      "sourceDescription": "Monitor Pressão Pneus"
+    },
+    {
+      "tag": "motor_turbo",
+      "id": "turbo",
+      "description": "Motor turbo",
+      "priority": 390,
+      "category": "Condução",
+      "sourceDescription": "Motor Turbo"
+    },
+    {
+      "tag": "multimidia",
+      "id": "multimedia",
+      "description": "Central multimídia",
+      "priority": 580,
+      "category": "Conectividade",
+      "benefit": "Central de entretenimento do veículo.",
+      "sourceDescription": "Central Multimídia"
+    },
+    {
+      "tag": "my_link",
+      "id": "mylink",
+      "description": "Central MyLink Chevrolet",
+      "priority": 605,
+      "category": "Conectividade",
+      "benefit": "Central multimídia MyLink.",
+      "sourceDescription": "Central MyLINK Chevrolet"
+    },
+    {
+      "tag": "oito_marchas",
+      "id": "automatic-8",
+      "description": "Câmbio automático de 8 velocidades",
+      "priority": 372,
+      "category": "Condução",
+      "sourceDescription": "Cambio Automático 8 Velocidades"
+    },
+    {
+      "tag": "on_star",
+      "id": "onstar",
+      "description": "OnStar",
+      "priority": 450,
+      "category": "Conectividade",
+      "benefit": "Sistema OnStar; serviços sujeitos à disponibilidade e contratação.",
+      "sourceDescription": "OnStar (Consierge)"
+    },
+    {
+      "tag": "paddle_shift",
+      "id": "paddle-shift",
+      "description": "Trocas de marcha no volante",
+      "priority": 510,
+      "category": "Condução",
+      "benefit": "Comandos no volante para selecionar as marchas.",
+      "sourceDescription": "Paddle Shift"
+    },
+    {
+      "tag": "park_assist",
+      "id": "park-assist",
+      "description": "Park Assist",
+      "priority": 945,
+      "category": "Manobras",
+      "benefit": "Assistência de direção durante as manobras de estacionamento.",
+      "sourceDescription": "Park Assist (Estaciona Sozinha)"
+    },
+    {
+      "tag": "piloto_adaptativo",
+      "id": "adaptive-cruise-control",
+      "description": "Piloto automático adaptativo (ACC)",
+      "priority": 985,
+      "category": "Segurança",
+      "benefit": "Ajusta a velocidade para acompanhar o veículo à frente, dentro dos limites do sistema.",
+      "sourceDescription": "Piloto Automático Adaptativo"
+    },
+    {
+      "tag": "piloto_automatico",
+      "id": "cruise-control",
+      "description": "Piloto automático",
+      "priority": 675,
+      "category": "Condução",
+      "benefit": "Mantém a velocidade definida pelo motorista.",
+      "sourceDescription": "Piloto Automático"
+    },
+    {
+      "tag": "porta_automatica",
+      "id": "automatic-tailgate",
+      "description": "Abertura automática do porta-malas",
+      "priority": 565,
+      "category": "Conveniência",
+      "benefit": "Abertura automática do porta-malas informada no cadastro.",
+      "sourceDescription": "Porta Malas Abertura Automática"
+    },
+    {
+      "tag": "porta_mala",
+      "id": "automatic-tailgate",
+      "description": "Abertura automática do porta-malas",
+      "priority": 565,
+      "category": "Conveniência",
+      "benefit": "Abertura automática do porta-malas informada no cadastro.",
+      "sourceDescription": "Porta Mala Automático"
+    },
+    {
+      "tag": "porta_malas_eletrico",
+      "id": "electric-tailgate",
+      "description": "Porta-malas elétrico",
+      "priority": 645,
+      "category": "Conveniência",
+      "benefit": "Acionamento elétrico da tampa do porta-malas.",
+      "sourceDescription": "Porta Malas Elétrico"
+    },
+    {
+      "tag": "protetor_de_cacamba",
+      "id": "bed-liner",
+      "description": "Protetor de caçamba",
+      "priority": 290,
+      "category": "Versatilidade",
+      "sourceDescription": ".Protetor de Caçamba"
+    },
+    {
+      "tag": "rebatimento_espelhos",
+      "id": "folding-mirrors",
+      "description": "Retrovisores com rebatimento",
+      "priority": 500,
+      "category": "Conveniência",
+      "benefit": "Recolhimento dos retrovisores.",
+      "sourceDescription": "Recolhimento Espelhos"
+    },
+    {
+      "tag": "reg_altura",
+      "id": "headlight-height",
+      "description": "Regulagem de altura dos faróis",
+      "priority": 220,
+      "category": "Iluminação",
+      "sourceDescription": "Regulagem Altura dos Faróis"
+    },
+    {
+      "tag": "remap_carbase",
+      "id": "carbase-remap",
+      "description": "Remap Carbase",
+      "priority": 80,
+      "category": "Condução",
+      "sourceDescription": "*REMAP CARBASE*"
+    },
+    {
+      "tag": "retrovisor_eletrico",
+      "id": "power-mirrors",
+      "description": "Retrovisores elétricos",
+      "priority": 270,
+      "category": "Conveniência",
+      "sourceDescription": "Retrovisor Elétrico"
+    },
+    {
+      "tag": "rodas_de_liga_leve",
+      "id": "alloy-wheels",
+      "description": "Rodas de liga leve",
+      "priority": 420,
+      "category": "Acabamento",
+      "sourceDescription": "Rodas de Liga Leve"
+    },
+    {
+      "tag": "santo_antonio",
+      "id": "roll-bar",
+      "description": "Santo Antônio",
+      "priority": 280,
+      "category": "Versatilidade",
+      "sourceDescription": ".Santo Antônio"
+    },
+    {
+      "tag": "sem-_fio",
+      "id": "wireless-carplay-android",
+      "description": "Android Auto e Apple CarPlay sem fio",
+      "priority": 625,
+      "category": "Conectividade",
+      "benefit": "Integra celulares compatíveis à central por Android Auto e Apple CarPlay sem cabo.",
+      "sourceDescription": "Android Auto e Apple CarPlay SEM FIO"
+    },
+    {
+      "tag": "sensor_de_chuva",
+      "id": "rain-sensor",
+      "description": "Sensor de chuva",
+      "priority": 465,
+      "category": "Conveniência",
+      "sourceDescription": "Sensor de Chuva"
+    },
+    {
+      "tag": "sensor_de_estacionamento",
+      "id": "parking-sensors",
+      "description": "Sensor de estacionamento",
+      "priority": 560,
+      "category": "Manobras",
+      "benefit": "Avisa sobre obstáculos detectados nas manobras.",
+      "sourceDescription": "Sensor de Estacionamento"
+    },
+    {
+      "tag": "sensor_de_luminosidade",
+      "id": "automatic-headlights",
+      "description": "Acendimento automático dos faróis",
+      "priority": 460,
+      "category": "Iluminação",
+      "sourceDescription": "Faróis Acendimento Auto"
+    },
+    {
+      "tag": "sete_lugares",
+      "id": "seven-seats",
+      "description": "7 lugares",
+      "priority": 955,
+      "category": "Versatilidade",
+      "benefit": "Configuração com sete lugares.",
+      "sourceDescription": "7 Lugares"
+    },
+    {
+      "tag": "som_no_volante",
+      "id": "steering-controls",
+      "description": "Comandos no volante",
+      "priority": 300,
+      "category": "Conveniência",
+      "sourceDescription": "Comandos no Volante"
+    },
+    {
+      "tag": "som_radio",
+      "id": "bluetooth",
+      "description": "Bluetooth",
+      "priority": 330,
+      "category": "Conectividade",
+      "sourceDescription": "Bluetooth"
+    },
+    {
+      "tag": "som_radiomp3",
+      "id": "mp3",
+      "description": "Rádio com MP3",
+      "priority": 170,
+      "category": "Conectividade",
+      "sourceDescription": "Som Rádio MP3"
+    },
+    {
+      "tag": "som_radio_cd",
+      "id": "cd",
+      "description": "Rádio com CD",
+      "priority": 160,
+      "category": "Conectividade",
+      "sourceDescription": "Som Rádio CD"
+    },
+    {
+      "tag": "som_radio_com_usb",
+      "id": "usb",
+      "description": "Rádio com USB",
+      "priority": 250,
+      "category": "Conectividade",
+      "sourceDescription": "Som Rádio USB"
+    },
+    {
+      "tag": "som_radio_dvd",
+      "id": "dvd",
+      "description": "Rádio com DVD",
+      "priority": 165,
+      "category": "Conectividade",
+      "sourceDescription": "Som Rádio DVD"
+    },
+    {
+      "tag": "start_stop",
+      "id": "start-stop",
+      "description": "Start-Stop",
+      "priority": 320,
+      "category": "Condução",
+      "sourceDescription": "Start Stop"
+    },
+    {
+      "tag": "teto_panoramico",
+      "id": "panoramic-roof",
+      "description": "Teto panorâmico",
+      "priority": 780,
+      "category": "Conforto",
+      "benefit": "Área envidraçada panorâmica no teto.",
+      "sourceDescription": "Teto Panorâmico"
+    },
+    {
+      "tag": "teto_solar",
+      "id": "sunroof",
+      "description": "Teto solar",
+      "priority": 775,
+      "category": "Conforto",
+      "benefit": "Entrada de luz natural pelo teto.",
+      "sourceDescription": "Teto Solar"
+    },
+    {
+      "tag": "tilt_down",
+      "id": "tilt-down",
+      "description": "Tilt Down dos retrovisores",
+      "priority": 490,
+      "category": "Manobras",
+      "benefit": "Ajuste do retrovisor ao engatar a ré.",
+      "sourceDescription": "Tilt Down dos Espelhos"
+    },
+    {
+      "tag": "tracao_4x2",
+      "id": "traction-4x2",
+      "description": "Tração 4x2",
+      "priority": 250,
+      "category": "Condução",
+      "sourceDescription": ".Tração 4x2"
+    },
+    {
+      "tag": "tracao_4x4",
+      "id": "traction-4x4",
+      "description": "Tração 4x4",
+      "priority": 815,
+      "category": "Condução",
+      "benefit": "Sistema de tração nas quatro rodas.",
+      "sourceDescription": ".Tração 4x4"
+    },
+    {
+      "tag": "tracao_awd",
+      "id": "traction-awd",
+      "description": "Tração AWD",
+      "priority": 820,
+      "category": "Condução",
+      "benefit": "Sistema de tração integral.",
+      "sourceDescription": ".Tração AWD"
+    },
+    {
+      "tag": "tracao_fwd",
+      "id": "front-wheel-drive",
+      "description": "Tração dianteira",
+      "priority": 240,
+      "category": "Condução",
+      "sourceDescription": ".Tração FWD"
+    },
+    {
+      "tag": "travas_eletricas",
+      "id": "power-locks",
+      "description": "Travas elétricas",
+      "priority": 150,
+      "category": "Conveniência",
+      "sourceDescription": "Travas Elétricas"
+    },
+    {
+      "tag": "tv",
+      "id": "digital-tv",
+      "description": "TV digital",
+      "priority": 180,
+      "category": "Conectividade",
+      "sourceDescription": "TV Digital"
+    },
+    {
+      "tag": "vidros_eletricos",
+      "id": "power-windows",
+      "description": "Vidros elétricos",
+      "priority": 170,
+      "category": "Conveniência",
+      "sourceDescription": "Vidros Elétricos"
+    },
+    {
+      "tag": "vidros_verdes",
+      "id": "mirror-indicators",
+      "description": "Retrovisores com pisca",
+      "priority": 280,
+      "category": "Iluminação",
+      "sourceDescription": "Retrovisor com Pisca"
+    },
+    {
+      "tag": "volante_regulagem_de_altura",
+      "id": "steering-height",
+      "description": "Regulagem de altura do volante",
+      "priority": 160,
+      "category": "Conforto",
+      "sourceDescription": "Volante Reg de Altura"
+    },
+    {
+      "tag": "z360",
+      "id": "z360",
+      "description": "Z360",
+      "priority": 50,
+      "category": "Outros",
+      "sourceDescription": "Z360"
+    }
+  ]
+}

@@ -20,6 +20,21 @@ jobs:
       - run: npm run lint
       - name: Validate stock search refresh
         run: npm run stock:test-search
+      - name: Validate vehicle equipment provenance and ranking
+        run: |
+          php -l public/vehicle-equipment.php
+          php -l public/detalhe-veiculo.php
+          npm run stock:test-equipment
+      - name: Validate model year presentation
+        run: node --test scripts/tests/vehicle-model-year.test.mjs
+      - name: Validate daily equipment audit
+        run: npm run stock:test-equipment-audit
+      - name: Validate DevOps scheduler and equipment management
+        run: |
+          npm --prefix devops ci
+          npm --prefix devops test
+          node --test devops/client/src/equipment.test.js
+          npm --prefix devops run build
       - name: Validate compact vehicle contact bar
         run: npx tsx --test scripts/tests/vehicle-whatsapp-card.test.tsx
       - name: Validate vehicle description preview

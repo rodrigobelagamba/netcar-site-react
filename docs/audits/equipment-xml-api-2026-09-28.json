@@ -1,0 +1,127 @@
+{
+  "checkedAt": "2026-09-28T16:29:34.589Z",
+  "sources": {
+    "xml": "https://www.netcarmultimarcas.com.br/automacar/xml.xml",
+    "api": "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500",
+    "taxonomy": "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?action=opcionais"
+  },
+  "xmlCount": 69,
+  "apiCount": 69,
+  "activeCount": 60,
+  "comparisonScope": "112 catalog tags; exact tag boolean equality; no PII or raw XML retained",
+  "comparedTags": 112,
+  "discrepancyCount": 1,
+  "missingXmlIds": [],
+  "differences": [
+    {
+      "id": "19903",
+      "brand": "VOLKSWAGEN",
+      "model": "T CROSS HIGHLINE TURBO",
+      "year": 2024,
+      "available": true,
+      "xmlFound": true,
+      "discrepancies": [
+        {
+          "tag": "teto_panoramico",
+          "description": "Teto Panorâmico",
+          "xmlValue": "1",
+          "apiPresent": false
+        },
+        {
+          "tag": "teto_solar",
+          "description": "Teto Solar",
+          "xmlValue": "0",
+          "apiPresent": true
+        }
+      ]
+    }
+  ],
+  "target19903": {
+    "xml": {
+      "park_assist": "1",
+      "teto_panoramico": "1",
+      "teto_solar": "0",
+      "air_bag": "1",
+      "air_bag_duplo": "1",
+      "air_bag_lateral": "1",
+      "air_bag_cortina": "1",
+      "cinco_lugares": "1",
+      "sete_lugares": "0"
+    },
+    "api": {
+      "tags": [
+        "air_bag",
+        "air_bag_cortina",
+        "air_bag_duplo",
+        "air_bag_lateral",
+        "android",
+        "apple",
+        "ar_condicionado",
+        "ar_condicionado_digital",
+        "ar_quente",
+        "bancos_com_regulagem_de_altura",
+        "bancos_de_couro",
+        "botao",
+        "cambio_automatico",
+        "camera_de_re",
+        "carregador_inducao",
+        "chave_inteligente",
+        "chave_reserva",
+        "cinto_tres",
+        "computador_de_bordo",
+        "controle_de_tracao",
+        "controle_velocidade",
+        "desembacador_traseiro",
+        "direcao_eletrica",
+        "farolete",
+        "freios_abs",
+        "gps",
+        "indcador_fadiga",
+        "interface",
+        "isofix",
+        "limpador_traseiro",
+        "manual",
+        "monitor_pressao",
+        "motor_turbo",
+        "multimidia",
+        "paddle_shift",
+        "park_assist",
+        "piloto_automatico",
+        "rebatimento_espelhos",
+        "reg_altura",
+        "retrovisor_eletrico",
+        "rodas_de_liga_leve",
+        "sem-_fio",
+        "sensor_de_estacionamento",
+        "sensor_de_luminosidade",
+        "som_no_volante",
+        "som_radio",
+        "som_radio_com_usb",
+        "teto_solar",
+        "tilt_down",
+        "travas_eletricas",
+        "vidros_eletricos",
+        "vidros_verdes",
+        "volante_regulagem_de_altura"
+      ],
+      "airbag": null,
+      "lugares": 0
+    }
+  },
+  "dedicatedFieldSummary": {
+    "nonNullAirbag": 0,
+    "nonzeroPlaces": 0
+  },
+  "sourceHeaders": {
+    "xml": {
+      "lastModified": "Mon, 28 Sep 2026 16:26:27 GMT",
+      "age": null,
+      "cache": "max-age=0"
+    },
+    "api": {
+      "lastModified": null,
+      "age": null,
+      "cache": "max-age=0"
+    }
+  }
+}

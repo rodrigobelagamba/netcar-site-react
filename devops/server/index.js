@@ -9,6 +9,8 @@ import { distRouter } from './routes/dist.js';
 import { deployRouter } from './routes/deploy.js';
 import { npmRouter } from './routes/npm.js';
 import { jobsRouter } from './routes/jobs.js';
+import { equipmentRouter } from './routes/equipment.js';
+import { equipmentService } from './services/equipment.js';
 
 const app = express();
 
@@ -28,6 +30,7 @@ app.use('/api/dist', requireAuth, distRouter);
 app.use('/api/deploy', requireAuth, deployRouter);
 app.use('/api/npm', requireAuth, npmRouter);
 app.use('/api/jobs', requireAuth, jobsRouter);
+app.use('/api/equipment', requireAuth, equipmentRouter);
 
 const clientDist = join(config.devopsRoot, 'client', 'dist');
 if (existsSync(clientDist)) {
@@ -43,7 +46,8 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: err.message || 'Internal error' });
 });
 
-app.listen(config.port, () => {
+app.listen(config.port, config.host, () => {
+  equipmentService.start();
   console.log(`[devops] listening on :${config.port}`);
   console.log(`[devops] workspace: ${config.workspaceRoot}`);
   if (!config.token) {

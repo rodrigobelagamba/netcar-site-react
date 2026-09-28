@@ -61,7 +61,7 @@ function ensureListeners(job) {
 }
 
 /**
- * @param {{ label: string, command: string, args?: string[], cwd?: string, env?: Record<string, string>, meta?: object, onSuccess?: (job: Job) => void }} opts
+ * @param {{ label: string, command: string, args?: string[], cwd?: string, env?: Record<string, string>, meta?: object, onSuccess?: (job: Job) => void, onComplete?: (job: Job) => void }} opts
  */
 export function enqueueJob(opts) {
   const job = {
@@ -73,6 +73,7 @@ export function enqueueJob(opts) {
     env: opts.env || {},
     meta: opts.meta || null,
     onSuccess: opts.onSuccess || null,
+    onComplete: opts.onComplete || null,
     status: /** @type {JobStatus} */ ('queued'),
     log: '',
     createdAt: Date.now(),
@@ -104,6 +105,13 @@ export function listJobs(limit = 20) {
     .sort((a, b) => b.createdAt - a.createdAt)
     .slice(0, limit)
     .map(publicJob);
+}
+
+/** Check every queued/running job, not just the recent dashboard page. */
+export function findActiveJob(kind) {
+  const job = [...jobs.values()].find((entry) =>
+    entry.meta?.kind === kind && (entry.status === 'queued' || entry.status === 'running'));
+  return job ? publicJob(job) : null;
 }
 
 export function subscribeJobLog(id, listener) {
@@ -164,28 +172,18 @@ function runJob(job) {
   child.stdout.on('data', (buf) => appendLog(job, buf.toString('utf-8')));
   child.stderr.on('data', (buf) => appendLog(job, buf.toString('utf-8')));
 
-  child.on('error', (err) => {
-    clearTimeout(timer);
-    job.status = 'failed';
-    job.error = err.message;
-    job.finishedAt = Date.now();
-    appendLog(job, `\n[devops] erro ao iniciar: ${err.message}\n`);
-    activeJobId = null;
-    job.child = null;
-    pump();
-  });
-
-  child.on('close', (code) => {
+  let settled = false;
+  function finish(code, error = null) {
+    // spawn errors also emit close. Completing twice could start parallel jobs.
+    if (settled) return;
+    settled = true;
     clearTimeout(timer);
     job.exitCode = code;
     job.finishedAt = Date.now();
-    job.status = code === 0 ? 'succeeded' : 'failed';
-    if (code !== 0) {
-      job.error = `exit ${code}`;
-    }
-    appendLog(job, `\n[devops] finalizado com código ${code}\n`);
+    job.status = code === 0 && !error ? 'succeeded' : 'failed';
+    job.error = error || (code !== 0 ? `exit ${code}` : null);
 
-    if (code === 0 && typeof job.onSuccess === 'function') {
+    if (job.status === 'succeeded' && typeof job.onSuccess === 'function') {
       try {
         job.onSuccess(job);
       } catch (err) {
@@ -193,10 +191,23 @@ function runJob(job) {
       }
     }
 
+    if (typeof job.onComplete === 'function') {
+      try {
+        job.onComplete(publicJob(job));
+      } catch {
+        appendLog(job, '\n[devops] não foi possível registrar o resultado do job\n');
+      }
+    }
+    appendLog(job, error
+      ? `\n[devops] erro ao iniciar: ${error}\n`
+      : `\n[devops] finalizado com código ${code}\n`);
+
     activeJobId = null;
     job.child = null;
     pump();
-  });
+  }
+  child.on('error', (err) => finish(null, err.message));
+  child.on('close', (code) => finish(code));
 }
 
 export function npmRun(script, extraArgs = [], opts = {}) {

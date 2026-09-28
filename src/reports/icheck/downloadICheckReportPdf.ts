@@ -3,6 +3,7 @@ import { pdf, type DocumentProps } from "@react-pdf/renderer";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { maskPlate } from "@/lib/slug";
 import { CANONICAL_ORIGIN } from "@/lib/seo";
+import { resolveVehicleEquipment } from "@/lib/vehicleEquipment";
 import {
   ICheckReportDocument,
   type ICheckReportData,
@@ -89,9 +90,9 @@ export function buildClientICheckReportData(input: {
   const dataHora = protocol?.dataHoraConsulta || "";
   const consultaId = protocol?.consultaId || "";
 
-  const optionals = (vehicle.opcionais || [])
-    .map((o) => (typeof o === "string" ? o : o.descricao || o.tag || ""))
-    .filter(Boolean);
+  const optionals = resolveVehicleEquipment(vehicle).items.map(
+    (item) => item.description,
+  );
 
   const marca = vehicle.marca || "";
   const modelo = vehicle.modelo || vehicle.name || "";

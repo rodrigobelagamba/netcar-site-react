@@ -12,7 +12,7 @@ export function clearStoredToken() {
   sessionStorage.removeItem(TOKEN_KEY);
 }
 
-async function request(path, { method = 'GET', body, token } = {}) {
+async function request(path, { method = 'GET', body, token, signal } = {}) {
   const headers = {};
   if (token) headers.Authorization = `Bearer ${token}`;
   if (body !== undefined) headers['Content-Type'] = 'application/json';
@@ -21,6 +21,7 @@ async function request(path, { method = 'GET', body, token } = {}) {
     method,
     headers,
     body: body !== undefined ? JSON.stringify(body) : undefined,
+    signal,
   });
 
   const text = await res.text();
@@ -51,6 +52,13 @@ export const api = {
   npmScripts: (token) => request('/api/npm/scripts', { token }),
   npmRun: (token, script) =>
     request('/api/npm/run', { method: 'POST', token, body: { script } }),
+  equipment: (token, signal) => request('/api/equipment', { token, signal }),
+  equipmentRun: (token) =>
+    request('/api/equipment/run', { method: 'POST', token, body: {} }),
+  equipmentSchedule: (token, enabled) =>
+    request('/api/equipment/schedule', { method: 'POST', token, body: { enabled } }),
+  equipmentReview: (token, review) =>
+    request('/api/equipment/reviews', { method: 'POST', token, body: review }),
   job: (token, id) => request(`/api/jobs/${id}`, { token }),
 };
 

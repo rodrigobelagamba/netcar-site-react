@@ -100,3 +100,14 @@ Todas as rotas `/api/*` (exceto `/api/health`) exigem `Authorization: Bearer <DE
 - `GET /api/jobs/:id` / `GET /api/jobs/:id/stream` (SSE)
 
 Jobs rodam em fila serial (um por vez).
+
+## Equipamentos — auditoria diária
+
+A seção **Equipamentos** gerencia a fila de conferência do cadastro. Agenda diária às 07:00 de Brasília, botão de execução manual, pausa/retomada, comparação com o último estoque e pareceres persistentes. Não altera equipamentos nem faz deploy. Em desenvolvimento, a agenda é desabilitada por padrão.
+
+- `GET /api/equipment` — agenda, último relatório e pareceres
+- `POST /api/equipment/run` — auditar agora, na mesma fila serial dos demais jobs
+- `POST /api/equipment/schedule` — `{ "enabled": true }` ou `false`
+- `POST /api/equipment/reviews` — parecer para uma `reviewKey` do relatório atual
+
+Todas as rotas exigem Bearer. Estado privado em `/workspace/.devops/equipment`, persistido no volume do checkout. Marcar revisado registra triagem; não significa equipamento aprovado ou anúncio publicado. Consulte [o procedimento completo](../docs/equipment-daily-audit.md) antes de ativar na VPS.

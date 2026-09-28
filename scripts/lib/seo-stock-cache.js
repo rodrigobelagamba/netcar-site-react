@@ -4,10 +4,7 @@ import { dirname, join } from "node:path";
 const MAX_CACHE_AGE_MS = 30 * 60 * 1000;
 const MAX_VERSIONED_STOCK_AGE_MS = 14 * 24 * 60 * 60 * 1000;
 const MAX_BUILD_SNAPSHOT_AGE_MS = 15 * 60 * 1000;
-const PUBLIC_DIFFERENTIAL_TAGS = new Set([
-  "garantia_fabrica",
-  "unico_dono",
-]);
+const PUBLIC_DIFFERENTIAL_TAGS = new Set(["garantia_fabrica", "unico_dono"]);
 
 function publicDifferentials(vehicle) {
   if (!Array.isArray(vehicle?.diferenciais)) return [];
@@ -34,6 +31,35 @@ function buildSnapshotPath(rootDir) {
   return join(rootDir, ".devops", "seo-build-stock.json");
 }
 
+function publicEquipment(vehicle) {
+  const scalar = (value) =>
+    value == null || ["string", "number", "boolean"].includes(typeof value);
+  const complete =
+    vehicle?.equipmentSourceComplete !== false &&
+    Array.isArray(vehicle?.opcionais) &&
+    vehicle.opcionais.every(
+      (optional) =>
+        typeof optional === "string" ||
+        (optional &&
+          typeof optional === "object" &&
+          !Array.isArray(optional) &&
+          [optional.tag, optional.descricao, optional.nome].every(scalar)),
+    );
+  if (!complete) return { equipmentSourceComplete: false };
+  return {
+    equipmentSourceComplete: true,
+    opcionais: vehicle.opcionais.map((optional) =>
+      typeof optional === "string"
+        ? optional
+        : {
+            tag: optional.tag,
+            descricao: optional.descricao,
+            nome: optional.nome,
+          },
+    ),
+  };
+}
+
 // Mantém somente os campos públicos usados nas vitrines SEO. Assim o cache não
 // replica chassi, Renavam ou outros dados administrativos retornados pela API.
 export function publicVehicle(vehicle) {
@@ -56,6 +82,9 @@ export function publicVehicle(vehicle) {
     portas: vehicle.portas,
     lugares: vehicle.lugares,
     categoria: vehicle.categoria,
+    // Only the private build/cache retains the supplier equipment projection.
+    // The public first-paint bootstrap still deliberately emits opcionais: [].
+    ...publicEquipment(vehicle),
     // O snapshot alimenta o bootstrap do primeiro paint. Preserva somente os
     // diferenciais que a vitrine exibe; os demais dados comerciais da API não
     // precisam ser replicados no cache público do build.
@@ -197,6 +226,8 @@ export function readFreshSeoStockCache(rootDir, { includeSold = false } = {}) {
 function versionedVehicleToApiShape(vehicle) {
   return {
     ...vehicle,
+    // The public bootstrap's empty list means "not loaded", not "no equipment".
+    equipmentSourceComplete: false,
     ano: vehicle.ano ?? vehicle.year,
     ano_fabricacao: vehicle.ano_fabricacao ?? vehicle.anoFabricacao,
     valor: vehicle.valor ?? vehicle.price ?? 0,

@@ -1,0 +1,30 @@
+{
+  "_comment": "Somente pesquisa revisada e fonte oficial da combinação exata. Manuais multiversões não comprovam opcionais. A API/XML original nunca é alterada pelo resolvedor.",
+  "records": [
+    {
+      "id": "vw-nivus-highline-turbo-my2024-automatic-6",
+      "approved": true,
+      "kind": "manufacturer-standard",
+      "equipmentStatus": "standard",
+      "market": "BR",
+      "reviewedAt": "2026-09-28",
+      "sourceUrl": "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-nivus/my24/24C_5B1_NIV_66_manual_de_instrucoes_nivus.pdf",
+      "sourceTitle": "Volkswagen — Manual Nivus MY24, 24C.5B1.NIV.66",
+      "sourcePage": 293,
+      "claim": "A tabela técnica brasileira do motor 1.0 TOTALFLEX TSI identifica transmissão automática de seis marchas, AQ 250. Não se usa a presença de um capítulo genérico como prova de equipamento.",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "NIVUS HIGHLINE TURBO",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "action": {
+        "type": "replace",
+        "fromTag": "cambio_sete",
+        "fromEquipmentId": "transmission-7",
+        "toTag": "cambio_automatico_6_marchas"
+      }
+    }
+  ]
+}

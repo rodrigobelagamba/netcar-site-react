@@ -346,10 +346,14 @@ for (const sample of cases) {
       );
     }
     if (sample.data.optionals.length) {
-      assert.ok(
-        text.text.includes("Opcional anunciado 56"),
-        `${sample.name}: optional list was truncated`,
-      );
+      // Ranking changes line wrapping. Check every resolved item, tolerating
+      // PDF line breaks instead of checking only the old last item on one line.
+      for (const optional of sample.data.optionals) {
+        assert.ok(
+          normalizedText.includes(optional.replace(/\s+/g, " ")),
+          `${sample.name}: optional omitted from PDF: ${optional}`,
+        );
+      }
       assert.ok(
         normalizedText.includes(VEHICLE_EQUIPMENT_NOTICE),
         `${sample.name}: missing equipment notice`,

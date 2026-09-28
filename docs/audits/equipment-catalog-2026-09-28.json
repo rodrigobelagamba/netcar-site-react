@@ -1,0 +1,768 @@
+{
+  "checkedAt": "2026-09-28T16:27:14.479Z",
+  "source": "https://www.netcarmultimarcas.com.br/api/v1",
+  "activeCount": 60,
+  "allCount": 69,
+  "taxonomyCount": 112,
+  "activeTags": 93,
+  "taxonomy": [
+    {
+      "tag": "acionamento",
+      "description": "Acionamento à Distância",
+      "count": 5
+    },
+    {
+      "tag": "air_bag",
+      "description": "Air Bag",
+      "count": 60
+    },
+    {
+      "tag": "air_bag_cortina",
+      "description": "Air Bag Cortina",
+      "count": 34
+    },
+    {
+      "tag": "air_bag_duplo",
+      "description": "Air Bag Duplo",
+      "count": 60
+    },
+    {
+      "tag": "air_bag_lateral",
+      "description": "Air Bag Lateral",
+      "count": 37
+    },
+    {
+      "tag": "alarme",
+      "description": "Alarme",
+      "count": 27
+    },
+    {
+      "tag": "alerta_colisao",
+      "description": "Alerta de Colisão Frontal",
+      "count": 15
+    },
+    {
+      "tag": "android",
+      "description": "Android Auto",
+      "count": 44
+    },
+    {
+      "tag": "apple",
+      "description": "Apple CarPlay",
+      "count": 44
+    },
+    {
+      "tag": "ar_condicionado",
+      "description": "Ar Condicionado",
+      "count": 59
+    },
+    {
+      "tag": "ar_condicionado_digital",
+      "description": "Ar Condicionado Digital",
+      "count": 33
+    },
+    {
+      "tag": "ar_condicionado_dual_zone",
+      "description": "Ar Condicionado Dual Zone",
+      "count": 13
+    },
+    {
+      "tag": "ar_quente",
+      "description": "Ar Quente",
+      "count": 59
+    },
+    {
+      "tag": "assistencia_faixa",
+      "description": "Assistência de Permanência em Faixa",
+      "count": 14
+    },
+    {
+      "tag": "auto_hold",
+      "description": "Freio de Mão Auto Hold",
+      "count": 13
+    },
+    {
+      "tag": "bancos_com_regulagem_de_altura",
+      "description": "Bancos Reg de Altura",
+      "count": 60
+    },
+    {
+      "tag": "bancos_de_couro",
+      "description": "Bancos em Couro",
+      "count": 39
+    },
+    {
+      "tag": "banco_com_aquecimento",
+      "description": "Bancos com Aquecimento",
+      "count": 3
+    },
+    {
+      "tag": "banco_eletrico",
+      "description": "Banco Eletrico",
+      "count": 12
+    },
+    {
+      "tag": "banco_misto",
+      "description": "Bancos Mistos",
+      "count": 0
+    },
+    {
+      "tag": "botao",
+      "description": "Botão de Partida",
+      "count": 39
+    },
+    {
+      "tag": "botao_eco",
+      "description": "Botão Eco",
+      "count": 5
+    },
+    {
+      "tag": "cabine_dupla",
+      "description": ".Cabine Dupla",
+      "count": 1
+    },
+    {
+      "tag": "cabine_estendida",
+      "description": ".Cabine Estendida",
+      "count": 0
+    },
+    {
+      "tag": "cambio_automatico",
+      "description": "Câmbio Automático",
+      "count": 44
+    },
+    {
+      "tag": "cambio_automatico_6_marchas",
+      "description": "Câmbio Automático 6 Velocidades",
+      "count": 2
+    },
+    {
+      "tag": "cambio_cvt",
+      "description": "Câmbio CVT",
+      "count": 9
+    },
+    {
+      "tag": "cambio_dsg",
+      "description": "Câmbio DSG",
+      "count": 0
+    },
+    {
+      "tag": "cambio_dupla_embreagem",
+      "description": "Cambio Dupla Embreagem",
+      "count": 0
+    },
+    {
+      "tag": "cambio_manual_6_marchas",
+      "description": "Câmbio Manual 6 Velocidades",
+      "count": 2
+    },
+    {
+      "tag": "cambio_nove",
+      "description": "Câmbio Automático 9 Velocidades",
+      "count": 1
+    },
+    {
+      "tag": "cambio_sete",
+      "description": "Câmbio 7 Marchas",
+      "count": 1
+    },
+    {
+      "tag": "camera_de_re",
+      "description": "Câmera de Ré",
+      "count": 46
+    },
+    {
+      "tag": "capota_maritima",
+      "description": ".Capota Marítima",
+      "count": 0
+    },
+    {
+      "tag": "carregador_inducao",
+      "description": "Carregador Indução Celular",
+      "count": 13
+    },
+    {
+      "tag": "chave_inteligente",
+      "description": "Chave Inteligente Keyless",
+      "count": 32
+    },
+    {
+      "tag": "chave_reserva",
+      "description": "Chave Reserva",
+      "count": 60
+    },
+    {
+      "tag": "cinto_tres",
+      "description": "Cinto 3 Pontos",
+      "count": 58
+    },
+    {
+      "tag": "computador_de_bordo",
+      "description": "Computador de Bordo",
+      "count": 59
+    },
+    {
+      "tag": "controle_de_tracao",
+      "description": ".Controle de Tração",
+      "count": 50
+    },
+    {
+      "tag": "controle_velocidade",
+      "description": "Controlador de Velocidade",
+      "count": 35
+    },
+    {
+      "tag": "desembacador_traseiro",
+      "description": "Desembaçador Traseiro",
+      "count": 59
+    },
+    {
+      "tag": "direcao_eletrica",
+      "description": "Direção Elétrica",
+      "count": 53
+    },
+    {
+      "tag": "direcao_hidraulica",
+      "description": "Direção Hidráulica",
+      "count": 7
+    },
+    {
+      "tag": "escape_esportivo",
+      "description": "Escapamento Esportivo",
+      "count": 0
+    },
+    {
+      "tag": "estribo",
+      "description": ".Estribo",
+      "count": 0
+    },
+    {
+      "tag": "farois_auxiliares",
+      "description": "Faróis Auxiliares",
+      "count": 8
+    },
+    {
+      "tag": "farois_de_xenon",
+      "description": "Faróis de Xenon",
+      "count": 0
+    },
+    {
+      "tag": "farolete",
+      "description": "Farolete",
+      "count": 25
+    },
+    {
+      "tag": "farol_negro",
+      "description": "Farol Máscara Negra",
+      "count": 3
+    },
+    {
+      "tag": "franagem_emergencia",
+      "description": "Frenagem Automático de Emergência",
+      "count": 13
+    },
+    {
+      "tag": "freios_abs",
+      "description": "Freios ABS EBD",
+      "count": 44
+    },
+    {
+      "tag": "freios_abs_com_ebd",
+      "description": "Freios ABS",
+      "count": 18
+    },
+    {
+      "tag": "freio_disco",
+      "description": "Freio a Disco",
+      "count": 7
+    },
+    {
+      "tag": "freio_eletronico",
+      "description": "Freio de Mão Eletrônico",
+      "count": 20
+    },
+    {
+      "tag": "gestauto",
+      "description": "Garantia Gestauto",
+      "count": 0
+    },
+    {
+      "tag": "gnv",
+      "description": "GNV Gás Natural Veicular",
+      "count": 0
+    },
+    {
+      "tag": "gps",
+      "description": "Navegação GPS",
+      "count": 7
+    },
+    {
+      "tag": "indcador_fadiga",
+      "description": "Indicador de Fadiga",
+      "count": 4
+    },
+    {
+      "tag": "interface",
+      "description": "Interface",
+      "count": 11
+    },
+    {
+      "tag": "isofix",
+      "description": "ISOFIX",
+      "count": 58
+    },
+    {
+      "tag": "kit_trail",
+      "description": "Kit Trail",
+      "count": 0
+    },
+    {
+      "tag": "lanternas_em_led",
+      "description": "Lanternas em LED",
+      "count": 11
+    },
+    {
+      "tag": "limpador_traseiro",
+      "description": "Limpador Traseiro",
+      "count": 50
+    },
+    {
+      "tag": "lona_maritima",
+      "description": ".Lona Marítima",
+      "count": 1
+    },
+    {
+      "tag": "manual",
+      "description": "Manual do Proprietário",
+      "count": 60
+    },
+    {
+      "tag": "media_nav",
+      "description": "Central MediaNAV Renault",
+      "count": 0
+    },
+    {
+      "tag": "monitor_pressao",
+      "description": "Monitor Pressão Pneus",
+      "count": 25
+    },
+    {
+      "tag": "motor_turbo",
+      "description": "Motor Turbo",
+      "count": 32
+    },
+    {
+      "tag": "multimidia",
+      "description": "Central Multimídia",
+      "count": 48
+    },
+    {
+      "tag": "my_link",
+      "description": "Central MyLINK Chevrolet",
+      "count": 9
+    },
+    {
+      "tag": "oito_marchas",
+      "description": "Cambio Automático 8 Velocidades",
+      "count": 0
+    },
+    {
+      "tag": "on_star",
+      "description": "OnStar (Consierge)",
+      "count": 3
+    },
+    {
+      "tag": "paddle_shift",
+      "description": "Paddle Shift",
+      "count": 23
+    },
+    {
+      "tag": "park_assist",
+      "description": "Park Assist (Estaciona Sozinha)",
+      "count": 8
+    },
+    {
+      "tag": "piloto_adaptativo",
+      "description": "Piloto Automático Adaptativo",
+      "count": 6
+    },
+    {
+      "tag": "piloto_automatico",
+      "description": "Piloto Automático",
+      "count": 48
+    },
+    {
+      "tag": "porta_automatica",
+      "description": "Porta Malas Abertura Automática",
+      "count": 2
+    },
+    {
+      "tag": "porta_mala",
+      "description": "Porta Mala Automático",
+      "count": 3
+    },
+    {
+      "tag": "porta_malas_eletrico",
+      "description": "Porta Malas Elétrico",
+      "count": 3
+    },
+    {
+      "tag": "protetor_de_cacamba",
+      "description": ".Protetor de Caçamba",
+      "count": 1
+    },
+    {
+      "tag": "rebatimento_espelhos",
+      "description": "Recolhimento Espelhos",
+      "count": 24
+    },
+    {
+      "tag": "reg_altura",
+      "description": "Regulagem Altura dos Faróis",
+      "count": 16
+    },
+    {
+      "tag": "remap_carbase",
+      "description": "*REMAP CARBASE*",
+      "count": 0
+    },
+    {
+      "tag": "retrovisor_eletrico",
+      "description": "Retrovisor Elétrico",
+      "count": 57
+    },
+    {
+      "tag": "rodas_de_liga_leve",
+      "description": "Rodas de Liga Leve",
+      "count": 55
+    },
+    {
+      "tag": "santo_antonio",
+      "description": ".Santo Antônio",
+      "count": 0
+    },
+    {
+      "tag": "sem-_fio",
+      "description": "Android Auto e Apple CarPlay SEM FIO",
+      "count": 9
+    },
+    {
+      "tag": "sensor_de_chuva",
+      "description": "Sensor de Chuva",
+      "count": 16
+    },
+    {
+      "tag": "sensor_de_estacionamento",
+      "description": "Sensor de Estacionamento",
+      "count": 48
+    },
+    {
+      "tag": "sensor_de_luminosidade",
+      "description": "Faróis Acendimento Auto",
+      "count": 37
+    },
+    {
+      "tag": "sete_lugares",
+      "description": "7 Lugares",
+      "count": 2
+    },
+    {
+      "tag": "som_no_volante",
+      "description": "Comandos no Volante",
+      "count": 59
+    },
+    {
+      "tag": "som_radio",
+      "description": "Bluetooth",
+      "count": 60
+    },
+    {
+      "tag": "som_radiomp3",
+      "description": "Som Rádio MP3",
+      "count": 11
+    },
+    {
+      "tag": "som_radio_cd",
+      "description": "Som Rádio CD",
+      "count": 6
+    },
+    {
+      "tag": "som_radio_com_usb",
+      "description": "Som Rádio USB",
+      "count": 60
+    },
+    {
+      "tag": "som_radio_dvd",
+      "description": "Som Rádio DVD",
+      "count": 0
+    },
+    {
+      "tag": "start_stop",
+      "description": "Start Stop",
+      "count": 14
+    },
+    {
+      "tag": "teto_panoramico",
+      "description": "Teto Panorâmico",
+      "count": 10
+    },
+    {
+      "tag": "teto_solar",
+      "description": "Teto Solar",
+      "count": 10
+    },
+    {
+      "tag": "tilt_down",
+      "description": "Tilt Down dos Espelhos",
+      "count": 16
+    },
+    {
+      "tag": "tracao_4x2",
+      "description": ".Tração 4x2",
+      "count": 2
+    },
+    {
+      "tag": "tracao_4x4",
+      "description": ".Tração 4x4",
+      "count": 0
+    },
+    {
+      "tag": "tracao_awd",
+      "description": ".Tração AWD",
+      "count": 1
+    },
+    {
+      "tag": "tracao_fwd",
+      "description": ".Tração FWD",
+      "count": 5
+    },
+    {
+      "tag": "travas_eletricas",
+      "description": "Travas Elétricas",
+      "count": 60
+    },
+    {
+      "tag": "tv",
+      "description": "TV Digital",
+      "count": 0
+    },
+    {
+      "tag": "vidros_eletricos",
+      "description": "Vidros Elétricos",
+      "count": 60
+    },
+    {
+      "tag": "vidros_verdes",
+      "description": "Retrovisor com Pisca",
+      "count": 43
+    },
+    {
+      "tag": "volante_regulagem_de_altura",
+      "description": "Volante Reg de Altura",
+      "count": 59
+    },
+    {
+      "tag": "z360",
+      "description": "Z360",
+      "count": 0
+    }
+  ],
+  "sensitiveVehicles": [
+    {
+      "id": "20023",
+      "brand": "PEUGEOT",
+      "model": "208 GRIFFE",
+      "year": 2014,
+      "tags": [
+        "teto_panoramico"
+      ]
+    },
+    {
+      "id": "19847",
+      "brand": "CHEVROLET",
+      "model": "ONIX PREMIER 2 TURBO",
+      "year": 2022,
+      "tags": [
+        "park_assist"
+      ]
+    },
+    {
+      "id": "19901",
+      "brand": "CHEVROLET",
+      "model": "TRACKER PREMIER TURBO",
+      "year": 2021,
+      "tags": [
+        "park_assist",
+        "teto_solar"
+      ]
+    },
+    {
+      "id": "20051",
+      "brand": "HONDA",
+      "model": "CIVIC EXL",
+      "year": 2018,
+      "tags": [
+        "teto_solar"
+      ]
+    },
+    {
+      "id": "19963",
+      "brand": "HYUNDAI",
+      "model": "TUCSON TURBO GLS",
+      "year": 2021,
+      "tags": [
+        "teto_panoramico",
+        "teto_solar"
+      ]
+    },
+    {
+      "id": "19750",
+      "brand": "VOLKSWAGEN",
+      "model": "T CROSS HIGHLINE TURBO",
+      "year": 2021,
+      "tags": [
+        "teto_panoramico",
+        "teto_solar"
+      ]
+    },
+    {
+      "id": "20050",
+      "brand": "FIAT",
+      "model": "FASTBACK IMPETUS TURBO",
+      "year": 2025,
+      "tags": [
+        "park_assist",
+        "piloto_adaptativo"
+      ]
+    },
+    {
+      "id": "19788",
+      "brand": "VOLKSWAGEN",
+      "model": "NIVUS HIGHLINE TURBO",
+      "year": 2024,
+      "tags": [
+        "piloto_adaptativo"
+      ]
+    },
+    {
+      "id": "20001",
+      "brand": "CHERY",
+      "model": "TIGGO 5X PRO TURBO",
+      "year": 2025,
+      "tags": [
+        "teto_panoramico"
+      ]
+    },
+    {
+      "id": "19932",
+      "brand": "HYUNDAI",
+      "model": "CRETA NLINE TURBO",
+      "year": 2023,
+      "tags": [
+        "teto_solar"
+      ]
+    },
+    {
+      "id": "19724",
+      "brand": "JEEP",
+      "model": "COMPASS LIMITED T270 TURBO",
+      "year": 2023,
+      "tags": [
+        "park_assist"
+      ]
+    },
+    {
+      "id": "19903",
+      "brand": "VOLKSWAGEN",
+      "model": "T CROSS HIGHLINE TURBO",
+      "year": 2024,
+      "tags": [
+        "park_assist",
+        "teto_solar"
+      ]
+    },
+    {
+      "id": "20027",
+      "brand": "CHERY",
+      "model": "TIGGO 7 PRO HIBRIDA TURBO",
+      "year": 2023,
+      "tags": [
+        "teto_panoramico",
+        "teto_solar"
+      ]
+    },
+    {
+      "id": "19954",
+      "brand": "TOYOTA",
+      "model": "COROLLA CROSS XRX",
+      "year": 2022,
+      "tags": [
+        "teto_panoramico"
+      ]
+    },
+    {
+      "id": "19857",
+      "brand": "NISSAN",
+      "model": "KICKS SENSE TURBO",
+      "year": 2026,
+      "tags": [
+        "piloto_adaptativo"
+      ]
+    },
+    {
+      "id": "20029",
+      "brand": "CHERY",
+      "model": "TIGGO 8 MAX DRIVE TURBO",
+      "year": 2024,
+      "tags": [
+        "piloto_adaptativo",
+        "sete_lugares",
+        "teto_panoramico",
+        "teto_solar"
+      ]
+    },
+    {
+      "id": "19898",
+      "brand": "HONDA",
+      "model": "HRV TOURING TURBO",
+      "year": 2024,
+      "tags": [
+        "piloto_adaptativo"
+      ]
+    },
+    {
+      "id": "19960",
+      "brand": "JEEP",
+      "model": "COMMANDER OVERLAND TURBO",
+      "year": 2023,
+      "tags": [
+        "park_assist",
+        "piloto_adaptativo",
+        "sete_lugares",
+        "teto_panoramico",
+        "teto_solar"
+      ]
+    },
+    {
+      "id": "19779",
+      "brand": "FORD",
+      "model": "TERRITORY TITANIUM TURBO",
+      "year": 2024,
+      "tags": [
+        "park_assist",
+        "teto_panoramico"
+      ]
+    },
+    {
+      "id": "19866",
+      "brand": "JEEP",
+      "model": "COMPASS SERIE S T270 TURBO",
+      "year": 2025,
+      "tags": [
+        "park_assist",
+        "teto_panoramico",
+        "teto_solar"
+      ]
+    }
+  ]
+}

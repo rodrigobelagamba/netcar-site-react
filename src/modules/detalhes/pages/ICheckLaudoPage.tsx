@@ -11,6 +11,7 @@ import {
 import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { maskPlate } from "@/lib/slug";
 import { VEHICLE_EQUIPMENT_NOTICE } from "@/lib/vehicleEquipmentNotice";
+import { resolveVehicleEquipment } from "@/lib/vehicleEquipment";
 import {
   ICHECK_SOURCE_LABEL,
   ICHECK_SCOPE_NOTICE,
@@ -130,11 +131,9 @@ export function ICheckLaudoPage() {
     vehicle.anoFabricacao && vehicle.year
       ? `${vehicle.anoFabricacao} / ${vehicle.year}`
       : String(vehicle.year || vehicle.anoFabricacao || "—");
-  const optionals = (vehicle.opcionais || [])
-    .map((item) =>
-      typeof item === "string" ? item : item.descricao || item.tag || "",
-    )
-    .filter(Boolean);
+  const optionals = resolveVehicleEquipment(vehicle).items.map(
+    (item) => item.description,
+  );
   const detailSections =
     protocol?.consultationSections?.filter((section) => section.items.length) ||
     [];
