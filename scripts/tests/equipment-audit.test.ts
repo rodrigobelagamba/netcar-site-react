@@ -590,7 +590,7 @@ test("metadata write failure does not leave an empty permanent lock", async () =
       fs,
       "writeFileSync",
       (...args: Parameters<typeof writeFileSync>) => {
-        if (String(args[0]).includes(`${join(stateDir, "audit.lock")}/`))
+        if (String(args[0]).startsWith(join(stateDir, ".audit-lock.")))
           throw Object.assign(new Error("Simulated disk full"), {
             code: "ENOSPC",
           });
@@ -673,6 +673,44 @@ test("recovery immediately before commit fences out the expired report writer", 
   });
 });
 
+test("lock publication is atomic and never exposes an empty owner directory", async () => {
+  await withStateDirectory(async (stateDir) => {
+    const originalRename = fs.renameSync;
+    let publications = 0;
+    const replacement = mock.method(
+      fs,
+      "renameSync",
+      (...args: Parameters<typeof fs.renameSync>) => {
+        if (String(args[0]).startsWith(join(stateDir, ".audit-lock."))) {
+          const entries = readdirSync(String(args[0]));
+          assert.equal(entries.length, 1);
+          assert.match(entries[0], /^[a-f0-9-]+\.json$/);
+          assert.equal(
+            JSON.parse(readFileSync(join(String(args[0]), entries[0]), "utf8"))
+              .pid,
+            process.pid,
+          );
+          assert.equal(existsSync(join(stateDir, "audit.lock")), false);
+          publications++;
+        }
+        return originalRename(...args);
+      },
+    );
+    syncBuiltinESMExports();
+    try {
+      await runEquipmentAudit({
+        stateDir,
+        loadStock: async () => fixture.vehicles,
+      });
+      assert.equal(publications, 1);
+      assert.deepEqual(readdirSync(stateDir), ["report.json"]);
+    } finally {
+      replacement.mock.restore();
+      syncBuiltinESMExports();
+    }
+  });
+});
+
 test(
   "simultaneous processes reclaim an orphan without admitting two producers",
   { timeout: 15000 },
@@ -718,20 +756,21 @@ test(
           { stdio: ["ignore", "pipe", "pipe", "ipc"] },
         );
         let ready!: () => void;
-        let attempted!: (kind: string) => void;
+        let attempted!: (attempt: { kind: string; message?: string }) => void;
         const readyPromise = new Promise<void>((resolve) => {
           ready = resolve;
         });
-        const attemptPromise = new Promise<string>((resolve) => {
-          attempted = resolve;
-        });
+        const attemptPromise = new Promise<{ kind: string; message?: string }>(
+          (resolve) => {
+            attempted = resolve;
+          },
+        );
         const exitPromise = new Promise<number | null>((resolve) => {
           child.on("exit", resolve);
         });
         child.on("message", (message: { kind: string }) => {
           if (message.kind === "ready") ready();
-          if (["loaded", "rejected"].includes(message.kind))
-            attempted(message.kind);
+          if (["loaded", "rejected"].includes(message.kind)) attempted(message);
         });
         return { child, readyPromise, attemptPromise, exitPromise };
       });
@@ -741,9 +780,13 @@ test(
         const attempts = await Promise.all(
           children.map((item) => item.attemptPromise),
         );
-        assert.equal(attempts.filter((kind) => kind === "loaded").length, 1);
+        assert.equal(
+          attempts.filter(({ kind }) => kind === "loaded").length,
+          1,
+          JSON.stringify(attempts),
+        );
         for (let index = 0; index < children.length; index++) {
-          if (attempts[index] === "loaded")
+          if (attempts[index].kind === "loaded")
             children[index].child.send("finish");
         }
         assert.deepEqual(
@@ -788,4 +831,70 @@ test("stock fetch retries are bounded and never return remote failure details", 
     return true;
   });
   assert.equal(calls, 3);
+});
+
+test("stock fetch reports only safe classified network, HTTP and validation failures", async () => {
+  const cases: Array<{ fetcher: typeof fetch; expected: RegExp }> = [
+    {
+      fetcher: async () => new Response("PRIVATE_BODY", { status: 503 }),
+      expected: /HTTP 503/,
+    },
+    {
+      fetcher: async () => new Response("PRIVATE_INVALID_JSON"),
+      expected: /não é JSON válido/,
+    },
+    {
+      fetcher: async () =>
+        new Response(
+          JSON.stringify({ success: true, data: [], total_results: 2 }),
+        ),
+      expected: /Estoque incompleto/,
+    },
+    {
+      fetcher: async () => {
+        throw new Error("PRIVATE_OUTER", {
+          cause: Object.assign(new Error("PRIVATE_TLS"), {
+            code: "CERT_HAS_EXPIRED",
+          }),
+        });
+      },
+      expected: /CERT_HAS_EXPIRED/,
+    },
+    {
+      fetcher: async () => {
+        throw Object.assign(new Error("PRIVATE_TIMEOUT"), {
+          name: "TimeoutError",
+        });
+      },
+      expected: /Tempo limite/,
+    },
+    {
+      fetcher: async () => {
+        throw new Error("PRIVATE_OUTER", {
+          cause: new AggregateError([
+            Object.assign(new Error("PRIVATE_IP"), { code: "ENETUNREACH" }),
+          ]),
+        });
+      },
+      expected: /ENETUNREACH/,
+    },
+    {
+      fetcher: async () => {
+        throw new Error("PRIVATE_OUTER", {
+          cause: new Error("unexpected redirect"),
+        });
+      },
+      expected: /Redirecionamento/,
+    },
+  ];
+  await Promise.all(
+    cases.map(async ({ fetcher, expected }) => {
+      await assert.rejects(fetchEquipmentStock(fetcher), (error: unknown) => {
+        assert.ok(error instanceof Error);
+        assert.match(error.message, expected);
+        assert.ok(!error.message.includes("PRIVATE_"));
+        return true;
+      });
+    }),
+  );
 });

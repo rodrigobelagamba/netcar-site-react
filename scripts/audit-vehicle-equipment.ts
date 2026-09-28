@@ -35,6 +35,7 @@ const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MAX_BYTES = 10 * 1024 * 1024;
 const MAX_VEHICLES = 500;
 const RULESET_VERSION = 1;
+class StockInputError extends Error {}
 
 export interface EquipmentAuditFinding {
   code: string;
@@ -80,7 +81,7 @@ const text = (value: unknown) =>
 function shortText(value: unknown): string {
   if (value == null) return "";
   if (typeof value !== "string" || value.length > 400)
-    throw new Error("Campo de equipamento inválido na fonte.");
+    throw new StockInputError("Campo de equipamento inválido na fonte.");
   return text(value);
 }
 
@@ -89,7 +90,9 @@ function shortText(value: unknown): string {
 export function parseStockResponse(payload: unknown): EquipmentVehicle[] {
   const source = payload as Record<string, unknown> | null;
   if (!source || source.success !== true || !Array.isArray(source.data))
-    throw new Error("API de estoque não retornou uma coleção válida.");
+    throw new StockInputError(
+      "API de estoque não retornou uma coleção válida.",
+    );
   const total = Number(source.total_results);
   if (
     !Number.isInteger(total) ||
@@ -98,29 +101,31 @@ export function parseStockResponse(payload: unknown): EquipmentVehicle[] {
     total !== source.data.length ||
     Number(source.offset || 0) !== 0
   )
-    throw new Error(
+    throw new StockInputError(
       "Estoque incompleto ou fora do limite da auditoria; relatório anterior preservado.",
     );
   const ids = new Set<string>();
   const vehicles: EquipmentVehicle[] = [];
   for (const raw of source.data) {
     if (!raw || typeof raw !== "object" || Array.isArray(raw))
-      throw new Error("Veículo inválido na fonte.");
+      throw new StockInputError("Veículo inválido na fonte.");
     const vehicle = raw as Record<string, unknown>;
     const id = String(vehicle.id ?? "");
     if (!/^\d+$/.test(id) || ids.has(id))
-      throw new Error("Estoque com código ausente ou duplicado.");
+      throw new StockInputError("Estoque com código ausente ou duplicado.");
     ids.add(id);
     if (!Array.isArray(vehicle.opcionais) || vehicle.opcionais.length > 300)
-      throw new Error("Lista de equipamentos ausente ou inválida na fonte.");
+      throw new StockInputError(
+        "Lista de equipamentos ausente ou inválida na fonte.",
+      );
     const opcionais = vehicle.opcionais.map((optional: unknown) => {
       if (typeof optional === "string") {
         const tag = shortText(optional);
-        if (!tag) throw new Error("Equipamento vazio na fonte.");
+        if (!tag) throw new StockInputError("Equipamento vazio na fonte.");
         return mapVehicleOptional(tag);
       }
       if (!optional || typeof optional !== "object" || Array.isArray(optional))
-        throw new Error("Equipamento inválido na fonte.");
+        throw new StockInputError("Equipamento inválido na fonte.");
       const item = optional as Record<string, unknown>;
       const mapped = mapVehicleOptional({
         tag: shortText(item.tag),
@@ -128,12 +133,12 @@ export function parseStockResponse(payload: unknown): EquipmentVehicle[] {
         nome: shortText(item.nome),
       });
       if (!mapped.tag && !mapped.descricao)
-        throw new Error("Equipamento vazio na fonte.");
+        throw new StockInputError("Equipamento vazio na fonte.");
       return mapped;
     });
     const price = Number(vehicle.valor);
     if (vehicle.valor == null || !Number.isFinite(price) || price < 0)
-      throw new Error("Situação comercial inválida na fonte.");
+      throw new StockInputError("Situação comercial inválida na fonte.");
     const candidate: EquipmentVehicle = {
       id,
       marca: shortText(vehicle.marca),
@@ -154,7 +159,7 @@ export function parseStockResponse(payload: unknown): EquipmentVehicle[] {
     if (price > 0) vehicles.push(candidate);
   }
   if (!vehicles.length)
-    throw new Error(
+    throw new StockInputError(
       "Nenhum veículo ativo na consulta; relatório anterior preservado.",
     );
   return vehicles;
@@ -419,9 +424,10 @@ export async function fetchEquipmentStock(
         signal: AbortSignal.timeout(20_000),
         headers: { Accept: "application/json", "Cache-Control": "no-cache" },
       });
-      if (!response.ok || !response.body) throw new Error("API indisponível.");
+      if (!response.ok) throw new StockInputError(`HTTP ${response.status}.`);
+      if (!response.body) throw new StockInputError("Resposta sem corpo.");
       if (Number(response.headers.get("content-length")) > MAX_BYTES)
-        throw new Error("Resposta excedeu limite.");
+        throw new StockInputError("Resposta excedeu limite.");
       const reader = response.body.getReader();
       const chunks: Uint8Array[] = [];
       let size = 0;
@@ -430,26 +436,79 @@ export async function fetchEquipmentStock(
           const { done, value } = await reader.read();
           if (done) break;
           size += value.byteLength;
-          if (size > MAX_BYTES) throw new Error("Resposta excedeu limite.");
+          if (size > MAX_BYTES)
+            throw new StockInputError("Resposta excedeu limite.");
           chunks.push(value);
         }
       } finally {
         await reader.cancel();
       }
-      return parseStockResponse(
-        JSON.parse(Buffer.concat(chunks).toString("utf8")),
-      );
-    } catch {
+      let payload: unknown;
+      try {
+        payload = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      } catch {
+        throw new StockInputError("Resposta não é JSON válido.");
+      }
+      return parseStockResponse(payload);
+    } catch (error) {
       // Do not print response bodies, administrative data or arbitrary remote
       // error strings. Failure never replaces the most recent valid report.
       if (attempt === 2)
         throw new Error(
-          "Não foi possível obter estoque completo e válido após 3 tentativas. Relatório anterior preservado.",
+          `Não foi possível obter estoque completo e válido após 3 tentativas. Motivo: ${safeStockFailure(error)} Relatório anterior preservado.`,
         );
       await new Promise((done) => setTimeout(done, 500 * (attempt + 1)));
     }
   }
   throw new Error("Falha ao consultar estoque.");
+}
+
+function safeStockFailure(error: unknown): string {
+  if (error instanceof StockInputError) return error.message;
+  if (
+    error instanceof Error &&
+    ["TimeoutError", "AbortError"].includes(error.name)
+  )
+    return "Tempo limite da consulta excedido.";
+  const safeCodes = new Set([
+    "ENOTFOUND",
+    "EAI_AGAIN",
+    "ECONNREFUSED",
+    "ECONNRESET",
+    "ETIMEDOUT",
+    "ENETUNREACH",
+    "EHOSTUNREACH",
+    "UND_ERR_CONNECT_TIMEOUT",
+    "UND_ERR_HEADERS_TIMEOUT",
+    "UND_ERR_BODY_TIMEOUT",
+    "UND_ERR_SOCKET",
+    "CERT_HAS_EXPIRED",
+    "CERT_NOT_YET_VALID",
+    "DEPTH_ZERO_SELF_SIGNED_CERT",
+    "SELF_SIGNED_CERT_IN_CHAIN",
+    "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+    "UNABLE_TO_GET_ISSUER_CERT_LOCALLY",
+    "ERR_TLS_CERT_ALTNAME_INVALID",
+  ]);
+  const pending: unknown[] = [error];
+  for (let index = 0; index < pending.length && index < 10; index++) {
+    const current = pending[index];
+    if (!current || typeof current !== "object") continue;
+    const record = current as {
+      code?: unknown;
+      cause?: unknown;
+      errors?: unknown;
+      message?: unknown;
+    };
+    if (typeof record.code === "string" && safeCodes.has(record.code))
+      return `Falha de rede (${record.code}).`;
+    if (record.message === "unexpected redirect")
+      return "Redirecionamento da API recusado.";
+    if (record.cause) pending.push(record.cause);
+    if (Array.isArray(record.errors))
+      pending.push(...record.errors.slice(0, 5));
+  }
+  return "Falha de rede ou resposta indisponível.";
 }
 
 const LOCK_MAX_AGE_MS = 10 * 60 * 1000;
@@ -530,6 +589,8 @@ function acquireLock(directory: string) {
   const ownerPath = join(path, ownerName);
   const temporaryName = `${token}.report.tmp`;
   const temporaryPath = join(path, temporaryName);
+  const candidatePath = join(directory, `.audit-lock.${token}`);
+  const candidateOwner = join(candidatePath, ownerName);
   const release = () => {
     try {
       // The token filename itself is exclusive. Never unlink an arbitrary lock
@@ -556,42 +617,58 @@ function acquireLock(directory: string) {
       "A auditoria perdeu a trava de execução; relatório anterior preservado.",
     );
   };
-  for (let attempt = 0; attempt < 2; attempt++) {
+  // Publish an already nonempty directory atomically. mkdir(path) followed by
+  // writing metadata exposed an empty window to competing orphan recoverers.
+  // A rename cannot replace a new owner's nonempty directory.
+  mkdirSync(candidatePath, { mode: 0o700 });
+  try {
+    writeFileSync(
+      candidateOwner,
+      JSON.stringify({
+        pid: process.pid,
+        hostname: hostname(),
+        token,
+        startedAt: new Date().toISOString(),
+      }),
+      { mode: 0o600, flag: "wx" },
+    );
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        if (existsSync(path) && !recoverLock(path))
+          throw new Error(
+            "Já existe uma auditoria em execução ou uma trava que precisa de conferência.",
+          );
+        renameSync(candidatePath, path);
+      } catch (error) {
+        if (!["EEXIST", "ENOTEMPTY"].includes(errorCode(error) || ""))
+          throw error;
+        if (attempt === 0 && recoverLock(path)) continue;
+        throw new Error(
+          "Já existe uma auditoria em execução ou uma trava que precisa de conferência.",
+        );
+      }
+      try {
+        assertOwnership();
+        return { release, assertOwnership, temporaryPath };
+      } catch (error) {
+        release();
+        throw error;
+      }
+    }
+    throw new Error("Não foi possível obter a trava da auditoria.");
+  } finally {
+    // These paths contain our random token; never remove another contender.
     try {
-      mkdirSync(path, { mode: 0o700 });
-    } catch (error) {
-      if (errorCode(error) !== "EEXIST") throw error;
-      if (attempt === 0 && recoverLock(path)) continue;
-      throw new Error(
-        "Já existe uma auditoria em execução ou uma trava que precisa de conferência.",
-      );
+      unlinkSync(candidateOwner);
+    } catch {
+      /* already renamed or absent */
     }
     try {
-      writeFileSync(
-        ownerPath,
-        JSON.stringify({
-          pid: process.pid,
-          hostname: hostname(),
-          token,
-          startedAt: new Date().toISOString(),
-        }),
-        { mode: 0o600, flag: "wx" },
-      );
-      assertOwnership();
-      return { release, assertOwnership, temporaryPath };
-    } catch (error) {
-      release();
-      // If metadata creation failed before creating its file, this fresh empty
-      // directory is ours. rmdir cannot remove another owner's nonempty lock.
-      try {
-        rmdirSync(path);
-      } catch {
-        /* preserve any other owner */
-      }
-      throw error;
+      rmdirSync(candidatePath);
+    } catch {
+      /* already renamed or absent */
     }
   }
-  throw new Error("Não foi possível obter a trava da auditoria.");
 }
 
 export async function runEquipmentAudit({
