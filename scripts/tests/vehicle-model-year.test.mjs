@@ -12,15 +12,27 @@ test("the vehicle summary displays only the model year", () => {
   assert.match(page, /year: yearDisplay/);
 });
 
-test("the technical detail list follows the same model-year-only presentation", () => {
+test("the technical detail list labels manufacturing/model year separately", () => {
   assert.match(page, /const year = vehicle\.year \|\| 0;/);
-  assert.match(page, /const anoDisplay = year \? String\(year\) : "";/);
-  assert.match(page, /anoDisplay && \{ label: "Modelo:", value: anoDisplay \}/);
+  assert.match(page, /anoDisplay && \{ label: "Ano\/modelo:", value: anoDisplay \}/);
 });
 
-test("manufacturing year is neither displayed nor used as model-year fallback on the main page", () => {
-  assert.doesNotMatch(page, /\banoFabricacao\b/);
-});
+// Exercise the actual display expression without mounting this data-heavy page.
+const technicalExpression = page.match(/const anoDisplay =\s*([\s\S]*?);/);
+assert.ok(technicalExpression, "technical year display must exist");
+const technicalYear = new Function("vehicle", "year", `return (${technicalExpression[1]});`);
+
+for (const [name, vehicle, expected] of [
+  ["different years", { anoFabricacao: 2023, year: 2024 }, "2023 / 2024"],
+  ["same years", { anoFabricacao: 2024, year: 2024 }, "2024 / 2024"],
+  ["model year without manufacturing year", { year: 2024 }, "2024"],
+  ["missing model year", { anoFabricacao: 2023 }, ""],
+  ["missing both years", {}, ""],
+]) {
+  test(`technical summary handles ${name} without inventing a year`, () => {
+    assert.equal(technicalYear(vehicle, vehicle.year || 0), expected);
+  });
+}
 
 test("the model year is labeled Modelo rather than Ano", () => {
   assert.match(page, />\s*Modelo\s*<\/span>/);

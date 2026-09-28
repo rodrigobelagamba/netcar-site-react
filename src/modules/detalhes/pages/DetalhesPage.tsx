@@ -2695,11 +2695,16 @@ function DetailsSection({
     setShowMoreOptionals(false);
   }, [vehicle.id]);
 
-  // Mantém o mesmo ano-modelo apresentado no resumo principal.
-  const anoDisplay = year ? String(year) : "";
+  // O resumo técnico detalha fabricação/modelo; o destaque inicial mantém só o modelo.
+  const anoDisplay =
+    vehicle.anoFabricacao && year
+      ? `${vehicle.anoFabricacao} / ${year}`
+      : year
+        ? String(year)
+        : "";
 
   const specifications = [
-    anoDisplay && { label: "Modelo:", value: anoDisplay },
+    anoDisplay && { label: "Ano/modelo:", value: anoDisplay },
     mileageFormatted && { label: "Quilometragem:", value: mileageFormatted },
     vehicle.cor && { label: "Cor:", value: vehicle.cor },
     vehicle.portas && { label: "Portas:", value: `${vehicle.portas}` },
@@ -2711,7 +2716,7 @@ function DetailsSection({
     vehicle.potencia && { label: "Potência:", value: `${vehicle.potencia} cv` },
     vehicle.combustivel && {
       label: "Combustível:",
-      value: vehicle.combustivel,
+      value: vehicle.combustivel.toUpperCase(),
     },
     vehicle.cambio && { label: "Câmbio:", value: vehicle.cambio },
   ].filter(Boolean) as Array<{ label: string; value: string }>;
