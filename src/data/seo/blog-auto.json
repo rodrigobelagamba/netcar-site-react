@@ -4,7 +4,7 @@
     "title": "Seminovos em Grande Porto Alegre: estoque e procedência",
     "description": "Como comparar os carros disponíveis ao buscar seminovo em Porto Alegre, Canoas, Gravataí, Cachoeirinha.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-31",
+    "updatedAt": "2026-09-28",
     "readMinutes": 7,
     "sections": [
       {
@@ -49,7 +49,7 @@
           {
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
-            "km": "7.800 km",
+            "km": "8.500 km",
             "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
@@ -114,7 +114,7 @@
     "title": "Comprar seminovo à distância: roteiro para Litoral Norte RS",
     "description": "Como filtrar o estoque, conferir as informações dos carros e organizar a visita saindo de Tramandaí, Capão da Canoa, Osório.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-31",
+    "updatedAt": "2026-09-28",
     "readMinutes": 7,
     "sections": [
       {
@@ -159,7 +159,7 @@
           {
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
-            "km": "7.800 km",
+            "km": "8.500 km",
             "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
@@ -220,7 +220,7 @@
     "title": "Carro para família: como comparar espaço e orçamento",
     "description": "Carro para família: compare espaço, segurança e custo com opções do estoque Netcar em Esteio.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-31",
+    "updatedAt": "2026-09-28",
     "readMinutes": 6,
     "sections": [
       {
@@ -276,7 +276,7 @@
           {
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
-            "km": "7.800 km",
+            "km": "8.500 km",
             "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
@@ -311,7 +311,7 @@
     "title": "Carro usado com poucos km: o que checar",
     "description": "Seminovo baixa km em Esteio: como comparar odômetro, preço e procedência no estoque atual.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-31",
+    "updatedAt": "2026-09-28",
     "readMinutes": 6,
     "sections": [
       {
@@ -367,7 +367,7 @@
           {
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
-            "km": "7.800 km",
+            "km": "8.500 km",
             "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
@@ -398,7 +398,7 @@
     "title": "Hatch seminovo para a cidade: o que comparar",
     "description": "Hatch e compacto seminovo para a cidade: consumo, manobra e opções no estoque Netcar.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-09-21",
+    "updatedAt": "2026-09-28",
     "readMinutes": 6,
     "sections": [
       {
@@ -441,6 +441,17 @@
         "type": "cars",
         "cars": [
           {
+            "modelo": "Hyundai Hb20 Comfort Plus",
+            "ano": "2024/2025",
+            "km": "12.086 km",
+            "preco": "R$ 75.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/hb20-comfort-plus-2025-jcu-xx96-20030",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+          },
+          {
             "modelo": "Volkswagen Polo Track First Edition",
             "ano": "2023",
             "km": "25.131 km",
@@ -450,17 +461,6 @@
             "destaque": "Baixa KM",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/polo-track-first-edition-2023-jcp-xx22-19978",
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/11092026polo%20first%20JCP2F22CAPA.png"
-          },
-          {
-            "modelo": "Fiat Argo Drive",
-            "ano": "2023/2024",
-            "km": "32.500 km",
-            "preco": "R$ 86.900,00",
-            "cambio": "Automatico",
-            "combustivel": "Flex",
-            "destaque": "Eleito Melhor Compra",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/argo-drive-2024-jcl-xx85-19687",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/28032026ARGO%20DRIVE%20JCL5B85CAPA.png"
           }
         ]
       },
@@ -489,7 +489,7 @@
     "title": "Carro para viagem no RS: o que conferir",
     "description": "Seminovo para viagem e Serra Gaúcha: conforto, estabilidade e opções do estoque em Esteio.",
     "publishedAt": "2026-07-13",
-    "updatedAt": "2026-08-31",
+    "updatedAt": "2026-09-28",
     "readMinutes": 6,
     "sections": [
       {
@@ -545,7 +545,7 @@
           {
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
-            "km": "7.800 km",
+            "km": "8.500 km",
             "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
@@ -576,7 +576,7 @@
     "title": "Quanto custa um seminovo em Esteio em 2026?",
     "description": "Veja como ano, versão, quilometragem e estado influenciam o preço, com exemplos do estoque da Netcar.",
     "publishedAt": "2026-06-23",
-    "updatedAt": "2026-09-21",
+    "updatedAt": "2026-09-28",
     "readMinutes": 6,
     "sections": [
       {
@@ -590,7 +590,7 @@
       {
         "type": "ul",
         "items": [
-          "Entrada (primeiro carro, uso urbano): a partir de R$ 49.900",
+          "Entrada (primeiro carro, uso urbano): a partir de R$ 47.900",
           "Faixa intermediária: valores entre o menor e o maior preço do estoque",
           "Premium (SUV, pickup, seminovo recente): até R$ 167.900"
         ]
@@ -633,7 +633,7 @@
           {
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
-            "km": "7.800 km",
+            "km": "8.500 km",
             "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
@@ -677,7 +677,7 @@
     "title": "Como escolher o primeiro carro usado",
     "description": "Primeiro carro: como organizar orçamento, uso, seguro, manutenção, financiamento e test drive.",
     "publishedAt": "2026-06-23",
-    "updatedAt": "2026-09-21",
+    "updatedAt": "2026-09-28",
     "readMinutes": 6,
     "sections": [
       {
@@ -720,17 +720,6 @@
         "type": "cars",
         "cars": [
           {
-            "modelo": "Chevrolet Onix Plus Lt",
-            "ano": "2022/2023",
-            "km": "74.900 km",
-            "preco": "R$ 71.000,00",
-            "cambio": "Manual",
-            "combustivel": "Flex",
-            "destaque": "Baixa KM",
-            "url": "https://www.netcarmultimarcas.com.br/veiculo/onix-plus-lt-2023-jbi-xx29-20004",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/18092026onix%20plus%20JBI3A29CAPA.png"
-          },
-          {
             "modelo": "Volkswagen Fox Comfortline",
             "ano": "2016/2017",
             "km": "110.000 km",
@@ -740,6 +729,17 @@
             "destaque": "Eleito Melhor Compra",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/fox-comfortline-2017-ixn-xx61-19840",
             "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/23062026FOX%20COMFORTLINE%20IXN6161CAPA.png"
+          },
+          {
+            "modelo": "Hyundai Hb20 Comfort",
+            "ano": "2015/2016",
+            "km": "111.339 km",
+            "preco": "R$ 52.900,00",
+            "cambio": "Manual",
+            "combustivel": "Flex",
+            "destaque": "Baixa KM",
+            "url": "https://www.netcarmultimarcas.com.br/veiculo/hb20-comfort-2016-ixa-xx71-19985",
+            "img": "https://www.netcarmultimarcas.com.br/imagens/veiculos_automacar/08092026HB20%20%20COMFORT%20IXA6F71CAPA.png"
           }
         ]
       },
@@ -834,7 +834,7 @@
     "title": "Automático ou manual no seminovo? Comparativo técnico",
     "description": "Compare funcionamento, manutenção, conforto e uso entre câmbios automático e manual em um seminovo.",
     "publishedAt": "2026-06-03",
-    "updatedAt": "2026-08-31",
+    "updatedAt": "2026-09-28",
     "readMinutes": 6,
     "sections": [
       {
@@ -900,7 +900,7 @@
           {
             "modelo": "Nissan Kicks Sense Turbo",
             "ano": "2025/2026",
-            "km": "7.800 km",
+            "km": "8.500 km",
             "preco": "R$ 147.900,00",
             "cambio": "Automatico",
             "combustivel": "Flex",
