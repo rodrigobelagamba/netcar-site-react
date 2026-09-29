@@ -90,9 +90,6 @@ function createHarness(path: string, apiData: ApiData) {
     "@/contexts/SearchContext": {
       useSearchContext: () => ({ searchTerm: "", setSearchTerm: () => {} }),
     },
-    "@/features/september-campaign/CampaignProvider": {
-      useSeptemberCampaignActive: () => false,
-    },
     "@/lib/slug": { generateVehicleSlug: () => "veiculo-teste" },
     "@/assets/images/logo-netcar.png": "logo-test.png",
   };

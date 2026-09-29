@@ -12,7 +12,7 @@ import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { HomeWhatsAppConversionPanel } from "../components/HomeWhatsAppConversionPanel";
 import { HomeMobileWhatsAppBar } from "../components/HomeMobileWhatsAppBar";
 import { HomeRegionsNav } from "../components/HomeRegionsNav";
-import { lazy, Suspense, useMemo, useEffect, useState, useRef } from "react";
+import { lazy, Suspense, useMemo, useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import {
@@ -21,8 +21,6 @@ import {
   sortHomeStockVehicles,
 } from "@/lib/homeStock";
 import { trackHomeScrollDepth } from "@/lib/analytics";
-import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
-import { SeptemberCampaignBanner } from "@/features/september-campaign/SeptemberCampaignBanner";
 import {
   getVehicleMerchandising,
   hasVehicleIcheck,
@@ -179,7 +177,6 @@ function HomeHeroSkeleton() {
 export function HomePage() {
   const { data: vehicles, isLoading: isLoadingVehicles } = useVehiclesQuery();
   const { data: banners, isLoading: isLoadingBanners } = useBannersQuery();
-  const isSeptemberCampaignActive = useSeptemberCampaignActive();
   const navigate = useNavigate();
   const initialHeroVehicle = useMemo(readInitialHomeHeroVehicle, []);
   const initialBannerState = useMemo(readInitialBannerState, []);
@@ -194,20 +191,6 @@ export function HomePage() {
     : showVehiclesHero && isLoadingVehicles && initialHeroVehicle === null;
 
   const [columnsPerRow, setColumnsPerRow] = useState(4);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [isHeroVisible, setIsHeroVisible] = useState(true);
-
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero || typeof IntersectionObserver === "undefined") return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsHeroVisible(entry.isIntersecting),
-      { threshold: 0.01 },
-    );
-    observer.observe(hero);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const updateColumns = () => {
@@ -380,10 +363,8 @@ export function HomePage() {
 
   return (
     <main className="flex-1 overflow-x-hidden max-w-full">
-      <div ref={heroRef}>
-        {isSeptemberCampaignActive ? (
-          <SeptemberCampaignBanner placement="home" />
-        ) : isLoadingHero ? (
+      <div>
+        {isLoadingHero ? (
           <HomeHeroSkeleton />
         ) : showBanners ? (
           <BannerHero banners={banners!} />
@@ -392,7 +373,7 @@ export function HomePage() {
         ) : null}
       </div>
 
-      <div className={isSeptemberCampaignActive ? "hidden sm:block" : ""}>
+      <div>
         <HomeWhatsAppConversionPanel
           featuredVehicle={featuredVehicle}
           onViewStock={goToStock}
@@ -491,11 +472,7 @@ export function HomePage() {
         </div>
       </div>
 
-      <HomeMobileWhatsAppBar
-        visible
-        hideOnMobile={isSeptemberCampaignActive && isHeroVisible}
-        sourceCold="home_sticky_cold"
-      />
+      <HomeMobileWhatsAppBar visible sourceCold="home_sticky_cold" />
     </main>
   );
 }

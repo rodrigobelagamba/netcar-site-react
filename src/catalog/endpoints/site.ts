@@ -1,5 +1,6 @@
 import { axiosInstance } from "../axios-instance";
 import { config } from "../config";
+import { isActiveSiteBannerImage } from "@/lib/siteBanners";
 
 export interface SiteInfo {
   nome?: string;
@@ -155,10 +156,12 @@ export async function fetchBanners(): Promise<Banner[]> {
       return [];
     }
 
-    return response.data.data.map((banner) => ({
-      ...banner,
-      imagem: normalizeImageUrl(banner.imagem),
-    }));
+    return response.data.data
+      .filter((banner) => isActiveSiteBannerImage(banner.imagem))
+      .map((banner) => ({
+        ...banner,
+        imagem: normalizeImageUrl(banner.imagem),
+      }));
   } catch (error) {
     console.error("Erro ao buscar banners:", error);
     return [];
@@ -179,10 +182,12 @@ export async function fetchBannersLoja1(): Promise<Banner[]> {
       return [];
     }
 
-    return response.data.data.map((banner) => ({
-      ...banner,
-      imagem: normalizeImageUrl(banner.imagem),
-    }));
+    return response.data.data
+      .filter((banner) => isActiveSiteBannerImage(banner.imagem))
+      .map((banner) => ({
+        ...banner,
+        imagem: normalizeImageUrl(banner.imagem),
+      }));
   } catch (error) {
     console.error("Erro ao buscar banners da Loja 1:", error);
     return [];
@@ -203,10 +208,12 @@ export async function fetchBannersLoja2(): Promise<Banner[]> {
       return [];
     }
 
-    return response.data.data.map((banner) => ({
-      ...banner,
-      imagem: normalizeImageUrl(banner.imagem),
-    }));
+    return response.data.data
+      .filter((banner) => isActiveSiteBannerImage(banner.imagem))
+      .map((banner) => ({
+        ...banner,
+        imagem: normalizeImageUrl(banner.imagem),
+      }));
   } catch (error) {
     console.error("Erro ao buscar banners da Loja 2:", error);
     return [];

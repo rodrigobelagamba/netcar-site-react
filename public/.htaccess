@@ -116,6 +116,9 @@ ErrorDocument 410 /410.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Material da campanha encerrada: o deploy não apaga assets antigos na hospedagem.
+  RewriteRule ^images/campaigns/acelerou-levou/ - [G,L,NC]
+
   # Certificados nunca são código executável, mesmo com uma segunda extensão.
   # Mantém o arquivo suspeito preservado, mas impede seu acesso público.
   RewriteRule ^arquivos/autocheck/.*\.(php[0-9]*|phtml|phar|badext)(\.|$) - [F,L,NC]

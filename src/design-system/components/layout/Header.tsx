@@ -11,7 +11,6 @@ import {
 } from "@/lib/whatsappMessages";
 import { generateVehicleSlug } from "@/lib/slug";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
-import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 interface VehicleSuggestion {
@@ -36,7 +35,6 @@ export function Header() {
   const mobileAutocompleteRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const isSeptemberCampaignActive = useSeptemberCampaignActive();
   const { data: whatsapp } = useWhatsAppQuery();
   const whatsappNumber = whatsapp?.numero?.trim() || DEFAULT_SALES_WHATSAPP;
   const { searchTerm, setSearchTerm } = useSearchContext();
@@ -418,11 +416,6 @@ export function Header() {
     setIsSearchOpen(false);
     setIsMobileMenuOpen(false);
   };
-  const useLightMobileHeader =
-    isSeptemberCampaignActive &&
-    location.pathname === "/" &&
-    !isScrolled &&
-    !isMobileMenuOpen;
 
   return (
     <>
@@ -454,7 +447,7 @@ export function Header() {
               <img
                 src={logoNetcar}
                 alt="Netcar Multimarcas"
-                className={`h-8 w-auto transition-[filter] duration-200 ${useLightMobileHeader ? "brightness-0 invert sm:brightness-100 sm:invert-0" : ""}`}
+                className="h-8 w-auto"
                 width={149}
                 height={38}
                 decoding="async"
@@ -582,7 +575,7 @@ export function Header() {
 
           {/* Hambúrguer — mobile, tablet e desktop abaixo de xl */}
           <button
-            className={`relative z-10 p-2 transition-colors xl:hidden ${useLightMobileHeader ? "text-white sm:text-fg" : "text-fg"}`}
+            className="relative z-10 p-2 text-fg transition-colors xl:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
           >

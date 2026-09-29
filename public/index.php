@@ -24,48 +24,6 @@ define('NETCAR_BANNER_FAIL_TTL', 60);     // não martelar a API quando ela falh
 define('NETCAR_BANNER_HTTP_TIMEOUT', 0.20); // fail-fast: manifesto de build cobre a imagem se a API demorar
 
 /**
- * Campanha visível durante todo setembro no horário de Brasília.
- * O fim é exclusivo: 01/10 às 00h o HTML normal volta sem novo deploy.
- */
-function netcar_september_campaign_active()
-{
-    try {
-        $timezone = new DateTimeZone('America/Sao_Paulo');
-        $now = new DateTimeImmutable('now', $timezone);
-        $startsAt = new DateTimeImmutable('2026-09-01 00:00:00', $timezone);
-        $endsAt = new DateTimeImmutable('2026-10-01 00:00:00', $timezone);
-        return $now >= $startsAt && $now < $endsAt;
-    } catch (Exception $error) {
-        return false;
-    }
-}
-
-/**
- * Segundos até a próxima troca de estado da campanha. Usado para impedir que
- * o cache compartilhado mantenha o HTML antigo depois do início ou do fim.
- */
-function netcar_september_campaign_seconds_until_transition()
-{
-    try {
-        $timezone = new DateTimeZone('America/Sao_Paulo');
-        $now = new DateTimeImmutable('now', $timezone);
-        $startsAt = new DateTimeImmutable('2026-09-01 00:00:00', $timezone);
-        $endsAt = new DateTimeImmutable('2026-10-01 00:00:00', $timezone);
-
-        if ($now < $startsAt) {
-            return max(0, $startsAt->getTimestamp() - $now->getTimestamp());
-        }
-        if ($now < $endsAt) {
-            return max(0, $endsAt->getTimestamp() - $now->getTimestamp());
-        }
-    } catch (Exception $error) {
-        return null;
-    }
-
-    return null;
-}
-
-/**
  * Coloca o preload crítico no início do head, logo após o viewport.
  * Inserir perto de </head> faz o navegador descobrir a imagem somente depois
  * dos bundles, CSS e dados inline, desperdiçando boa parte do benefício.
@@ -577,6 +535,17 @@ function netcar_normalize_banner_path($url)
     return '/' . ltrim($normalized, '/');
 }
 
+/** Espelha o filtro do frontend para materiais retirados que a API ainda lista. */
+function netcar_is_retired_banner_image($url)
+{
+    if (!is_string($url)) {
+        return false;
+    }
+    $normalized = str_replace('\\', '/', trim($url));
+    return stripos($normalized, 'NetCar-Banner-0109.jpg') !== false
+        || stripos($normalized, '/images/campaigns/acelerou-levou/') !== false;
+}
+
 function netcar_fetch_banner_url()
 {
     $context = stream_context_create([
@@ -591,10 +560,18 @@ function netcar_fetch_banner_url()
     }
 
     $json = json_decode($body, true);
-    if (!is_array($json) || empty($json['success']) || empty($json['data'][0]['imagem'])) {
+    if (!is_array($json) || empty($json['success']) || !isset($json['data']) || !is_array($json['data'])) {
         return null;
     }
-    return netcar_normalize_banner_path($json['data'][0]['imagem']);
+    foreach ($json['data'] as $banner) {
+        $url = is_array($banner) && isset($banner['imagem'])
+            ? netcar_normalize_banner_path($banner['imagem'])
+            : null;
+        if ($url !== null && !netcar_is_retired_banner_image($url)) {
+            return $url;
+        }
+    }
+    return null;
 }
 
 function netcar_banner_variant($url, $width)
@@ -617,7 +594,12 @@ function netcar_get_active_banner_url()
     if (is_readable($cacheFile)) {
         $cache = json_decode((string) @file_get_contents($cacheFile), true);
         if (is_array($cache) && isset($cache['expires']) && $cache['expires'] > time()) {
-            return isset($cache['url']) && $cache['url'] !== '' ? $cache['url'] : null;
+            $cachedUrl = isset($cache['url']) ? netcar_normalize_banner_path($cache['url']) : null;
+            // Cache anterior ao encerramento pode ainda apontar para a campanha.
+            // Ignorá-lo força a busca do próximo banner válido ou do hero habitual.
+            if (!netcar_is_retired_banner_image($cachedUrl)) {
+                return $cachedUrl;
+            }
         }
     }
 
@@ -897,14 +879,11 @@ if ($stockInitialLcp !== '') {
 }
 
 if ($isHome) {
-    $campaignActive = netcar_september_campaign_active();
-    $bannerUrl = $campaignActive
-        ? '/images/campaigns/acelerou-levou/banner.jpg'
-        : netcar_get_active_banner_url();
+    $bannerUrl = netcar_get_active_banner_url();
     $hasActiveBanner = $bannerUrl !== null;
-    $buildHomeLcp = $campaignActive ? null : netcar_get_build_home_lcp();
+    $buildHomeLcp = netcar_get_build_home_lcp();
     $bannerStateScript = '<script>window.__NETCAR_HOME_HAS_ACTIVE_BANNER__='
-        . ($hasActiveBanner && !$campaignActive ? 'true' : 'false')
+        . ($hasActiveBanner ? 'true' : 'false')
         . ';</script>';
     $html = str_replace('</head>', "  {$bannerStateScript}\n  </head>", $html);
     if ($buildHomeLcp !== null) {
@@ -918,24 +897,7 @@ if ($isHome) {
     if ($bannerUrl === null && $buildHomeLcp !== null) {
         $bannerUrl = $buildHomeLcp['image'];
     }
-    if ($campaignActive) {
-        $campaignImage = '/images/campaigns/acelerou-levou/banner.jpg';
-        $campaignPoster = '/images/campaigns/acelerou-levou/video-poster.jpg';
-        $preload = '<link rel="preload" as="image" href="'
-            . $campaignImage
-            . '" media="(min-width: 640px)" fetchpriority="high" />'
-            . "\n    "
-            . '<link rel="preload" as="image" href="'
-            . $campaignPoster
-            . '" media="(max-width: 639px)" fetchpriority="high" />';
-        $html = netcar_prepend_critical_head_markup($html, $preload);
-        $initialHero = '<div id="netcar-initial-lcp" class="netcar-initial-campaign-shell"><picture class="netcar-initial-campaign-media"><source media="(max-width: 639px)" srcset="'
-            . $campaignPoster
-            . '"><img src="'
-            . $campaignImage
-            . '" alt="Acelerou, Levou. Campanha de setembro da Netcar" width="1280" height="418" loading="eager" decoding="sync" fetchpriority="high" class="netcar-initial-banner"></picture></div>';
-        $html = str_replace('<div id="netcar-initial-lcp"></div>', $initialHero, $html);
-    } elseif ($bannerUrl !== null) {
+    if ($bannerUrl !== null) {
         // Precisa ser a mesma lista usada pelo componente React. Se o browser
         // escolher outra largura no preload, ele baixa a imagem duas vezes.
         $imageWidths = $hasActiveBanner
@@ -990,15 +952,6 @@ header('Content-Type: text/html; charset=UTF-8');
 $browserMaxAge = 60;
 $sharedMaxAge = 300;
 $staleWhileRevalidate = 60;
-$secondsUntilCampaignTransition = netcar_september_campaign_seconds_until_transition();
-if ($secondsUntilCampaignTransition !== null && $secondsUntilCampaignTransition <= 360) {
-    $browserMaxAge = min($browserMaxAge, $secondsUntilCampaignTransition);
-    $sharedMaxAge = min($sharedMaxAge, $secondsUntilCampaignTransition);
-    $staleWhileRevalidate = min(
-        $staleWhileRevalidate,
-        max(0, $secondsUntilCampaignTransition - $sharedMaxAge)
-    );
-}
 header(
     'Cache-Control: public, max-age=' . $browserMaxAge
     . ', s-maxage=' . $sharedMaxAge

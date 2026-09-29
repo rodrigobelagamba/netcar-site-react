@@ -1,7 +1,5 @@
 import { Camera, MessageCircle, ShieldCheck } from "lucide-react";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
-import { useSeptemberCampaignActive } from "@/features/september-campaign/CampaignProvider";
-import { SEPTEMBER_CAMPAIGN } from "@/features/september-campaign/campaign";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
 const MILEAGE_BADGE_TITLE =
@@ -71,8 +69,6 @@ export function CardsHero({
   photoCount,
   onOpen,
 }: CardsHeroProps) {
-  const isSeptemberCampaignActive = useSeptemberCampaignActive();
-  const showCampaignStamp = isSeptemberCampaignActive || SHOW_CAMPAIGN_STAMP;
   // `delay` é o índice do card na lista. Os primeiros ficam acima da dobra e
   // costumam ser o elemento de LCP — carregar preguiçosamente atrasa a métrica.
   const isAboveTheFold = delay < (compact ? 4 : 5);
@@ -96,26 +92,14 @@ export function CardsHero({
       style={{ border: "1px solid rgba(229, 231, 235, 0.5)" }}
     >
       {/* Selo em formato de carimbo */}
-      {showCampaignStamp && !isSold && (
+      {SHOW_CAMPAIGN_STAMP && !isSold && (
         <img
-          src={
-            isSeptemberCampaignActive
-              ? SEPTEMBER_CAMPAIGN.assets.logo
-              : "/selos/selo_campanha.png"
-          }
-          alt={
-            isSeptemberCampaignActive ? "Acelerou, Levou" : "Selo de campanha"
-          }
+          src="/selos/selo_campanha.png"
+          alt="Selo de campanha"
           className={`absolute z-20 h-auto pointer-events-none select-none ${
-            isSeptemberCampaignActive
-              ? `rounded-md bg-white/95 shadow-lg ${
-                  compact
-                    ? "right-2 top-11 w-14 p-1 sm:right-1.5 sm:top-10 sm:w-24 sm:p-1.5 md:right-3 md:w-32"
-                    : "hidden p-1.5 sm:block sm:right-2 sm:top-[86px] sm:w-28 md:right-3 md:top-[102px] md:w-36 short1600:right-3 short1600:top-[74px] short1600:w-28"
-                }`
-              : compact
-                ? "top-16 right-2 w-20 md:top-16 md:right-3 md:w-24"
-                : "top-16 right-2 w-20 md:top-16 md:right-3 md:w-24 short1600:top-14 short1600:right-3 short1600:w-20"
+            compact
+              ? "top-16 right-2 w-20 md:top-16 md:right-3 md:w-24"
+              : "top-16 right-2 w-20 md:top-16 md:right-3 md:w-24 short1600:top-14 short1600:right-3 short1600:w-20"
           }`}
         />
       )}
@@ -191,25 +175,6 @@ export function CardsHero({
             : "pt-28 md:pt-32 space-y-4 short1600:pt-24 short1600:space-y-2"
         }`}
       >
-        {isSeptemberCampaignActive && !isSold && !compact && (
-          <div
-            className="flex min-h-5 w-full items-center justify-end sm:hidden"
-            aria-hidden="true"
-          >
-            <span className="inline-flex rounded-md border border-[#D0DF94]/60 bg-[#F8FAF0] px-1.5 py-0.5 shadow-sm">
-              <img
-                src={SEPTEMBER_CAMPAIGN.assets.logo}
-                alt=""
-                width={1404}
-                height={338}
-                loading="lazy"
-                decoding="async"
-                className={`h-auto ${compact ? "w-12" : "w-14"}`}
-              />
-            </span>
-          </div>
-        )}
-
         {/* Mesma estrutura em todo card: selos fixos, título, marca · ano · km · câmbio.
             Sem selo de marketing variável ("150 CV", "ano · km") pra não desalinhar.
             No compact a marca vai pra linha de specs (3 pílulas não cabem em 2 colunas). */}

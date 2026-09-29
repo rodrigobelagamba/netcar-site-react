@@ -44,6 +44,19 @@ expect(
   htaccess.includes("ErrorDocument 410 /410.html"),
   "ErrorDocument 410 ausente",
 );
+const retiredCampaignRule = "RewriteRule ^images/campaigns/acelerou-levou/ - [G,L,NC]";
+expect(
+  htaccess.includes(retiredCampaignRule) &&
+    htaccess.indexOf(retiredCampaignRule) <
+      htaccess.indexOf("RewriteCond %{REQUEST_FILENAME} -f"),
+  "mídias retiradas precisam retornar 410 antes da regra de arquivos existentes",
+);
+expect(
+  !controller.includes("netcar_september_campaign_active") &&
+    !controller.includes("netcar-initial-campaign-shell") &&
+    !initialHtml.includes("netcar-initial-campaign-shell"),
+  "HTML inicial ainda contém a ativação ou apresentação da campanha encerrada",
+);
 expect(
   /\^noticias\?\\\.\(php\|html\?\)\$ \/blog/.test(htaccess),
   "301 de noticias.php/html ausente",
