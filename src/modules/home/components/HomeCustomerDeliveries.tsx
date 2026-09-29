@@ -27,7 +27,7 @@ export function HomeCustomerDeliveries() {
   return (
     <section
       aria-labelledby="home-deliveries-title"
-      className="container-main px-4 pt-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16"
+      className="container-main px-4 pb-8 pt-4 sm:px-6 md:pb-12 lg:px-8 xl:px-12 2xl:px-16"
     >
       <div className="overflow-hidden rounded-[28px] border border-[#23747C]/15 bg-[#EFF6F1] px-5 py-7 sm:px-9 sm:py-10 lg:grid lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-10 lg:px-12">
         <div className="relative z-20">
