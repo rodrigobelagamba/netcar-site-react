@@ -10,6 +10,10 @@ import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import {
+  getDefaultAutoSelectFamilyAttemptTimeout,
+  setDefaultAutoSelectFamilyAttemptTimeout,
+} from "node:net";
+import {
   HISTORY_ITEMS,
   parseCheckAutoPdf,
   classifyCertificateStatus,
@@ -261,6 +265,17 @@ function retryableDownloadError(error) {
   if (error.retryable === true) return true;
   if (["TimeoutError", "AbortError"].includes(error.name)) return true;
   return RETRYABLE_FETCH_CODES.includes(sourceErrorCode(error));
+}
+
+/** Standalone CLI only: importing the synchronizer must not change its host's
+ * network policy. Node 20's short address-family timeout can abandon a working
+ * IPv4 route before an unreachable IPv6 fallback (nodejs/node#54359). Keep both
+ * families and TLS verification, allowing 2s per attempt without reducing a
+ * higher configured value. The 45s request deadline and retry limits still apply. */
+export function configureIcheckNetwork() {
+  setDefaultAutoSelectFamilyAttemptTimeout(
+    Math.max(2_000, getDefaultAutoSelectFamilyAttemptTimeout()),
+  );
 }
 
 /** Never log raw fetch errors, response bodies, URLs or connection credentials. */
@@ -561,6 +576,7 @@ async function main() {
     : undefined;
   if (payload && !Array.isArray(inventory))
     throw new Error("invalid_inventory");
+  configureIcheckNetwork();
   console.log(
     JSON.stringify(
       await syncMetadata({
