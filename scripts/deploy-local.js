@@ -20,6 +20,7 @@ import {
 import { homedir, tmpdir } from 'os';
 import { join, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
+import { getDefaultAutoSelectFamilyAttemptTimeout, setDefaultAutoSelectFamilyAttemptTimeout } from 'node:net';
 // ssh-deploy importa ssh2; import lazy para o script iniciar mesmo com
 // node_modules desatualizado (o npm ci roda dentro deste script).
 async function loadSshDeploy() {
@@ -929,6 +930,12 @@ async function deploy() {
     process.exit(1);
   }
 }
+
+// ssh2 inherits Node's per-address connection deadline. Allow slow dual-stack
+// routes without changing authentication, retries or the SSH handshake timeout.
+setDefaultAutoSelectFamilyAttemptTimeout(
+  Math.max(2_000, getDefaultAutoSelectFamilyAttemptTimeout()),
+);
 
 const cli = parseCliArgs(process.argv);
 

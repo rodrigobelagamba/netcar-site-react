@@ -22,6 +22,8 @@ jobs:
         run: npm run stock:test-search
       - name: Validate homepage PHP
         run: php -l public/index.php
+      - name: Validate deployment connection policy
+        run: node --test scripts/tests/deploy-network.test.mjs
       - name: Validate vehicle image quarantine and recovery
         run: |
           php -l public/vehicle-images.php
