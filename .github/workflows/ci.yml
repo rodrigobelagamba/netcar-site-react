@@ -39,6 +39,8 @@ jobs:
           npm --prefix devops run build
       - name: Validate compact vehicle contact bar
         run: npx tsx --test scripts/tests/vehicle-whatsapp-card.test.tsx
+      - name: Validate compact home contact bar
+        run: npx tsx --test scripts/tests/home-whatsapp-bar.test.tsx
       - name: Validate vehicle description preview
         run: npx tsx --test scripts/tests/vehicle-description.test.tsx
       - name: Validate comparison photos and layout

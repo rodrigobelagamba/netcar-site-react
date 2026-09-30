@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { useId } from "react";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { buildWhatsAppUrl, homeWhatsAppMessages } from "@/lib/whatsappMessages";
@@ -27,6 +28,7 @@ export function HomeMobileWhatsAppBar({
   sourceCold = "sticky_cold",
 }: HomeMobileWhatsAppBarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
+  const hintId = useId();
 
   if (!visible || !whatsapp?.numero) return null;
 
@@ -37,39 +39,38 @@ export function HomeMobileWhatsAppBar({
   return (
     <FloatingPortal>
       <div
-        className={`pointer-events-none fixed inset-x-0 bottom-2 z-[60] justify-center px-2 md:bottom-3 md:px-3 ${
+        className={`pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] z-[60] justify-center px-2 ${
           hideOnMobile ? "hidden sm:flex" : "flex"
         }`}
       >
-        <div className="pointer-events-auto w-full max-w-[22rem] rounded-xl border border-[#25D366]/30 bg-white/95 px-2 py-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.14)] md:max-w-sm md:rounded-2xl md:px-3 md:py-2.5 md:shadow-[0_12px_36px_rgba(0,0,0,0.16)] md:backdrop-blur-md">
-          <p className="mb-1 hidden text-center text-[10px] font-semibold uppercase tracking-wide text-[#00283C]/70 md:mb-1.5 md:block">
-            Envie sua mensagem a qualquer hora
-          </p>
-          <div className="grid grid-cols-2 gap-1.5 md:gap-2">
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source={sourceCold}
-              data-wa-intent="vehicle_interest"
-              className="flex items-center justify-center gap-1 rounded-lg bg-[#087A37] px-1.5 py-2 text-[11px] font-black leading-none text-white shadow-[0_4px_12px_rgba(8,122,55,0.28)] md:gap-1.5 md:rounded-xl md:px-2 md:py-2.5 md:text-sm md:shadow-[0_6px_18px_rgba(8,122,55,0.30)]"
-            >
-              <MessageCircle className="h-3 w-3 shrink-0 md:h-3.5 md:w-3.5" />
-              <span className="truncate">{coldCtaLabel}</span>
-            </a>
-            <Link
-              to="/seminovos"
-              search={emptySeminovosSearch}
-              className="flex items-center justify-center gap-1 rounded-lg bg-[#00283C] px-1.5 py-2 text-[11px] font-black leading-none text-white shadow-[0_4px_12px_rgba(0,40,60,0.20)] transition-colors hover:bg-[#00435a] md:gap-1.5 md:rounded-xl md:px-2 md:py-2.5 md:text-sm md:shadow-[0_6px_18px_rgba(0,40,60,0.22)]"
-            >
-              <span className="truncate">{stockCtaLabel}</span>
-              <ArrowRight className="h-3 w-3 shrink-0 md:h-3.5 md:w-3.5" />
-            </Link>
-          </div>
-          <p className="mt-1.5 hidden text-center text-[10px] font-medium text-[#00283C]/50 md:block">
+        <nav
+          aria-label="Ações rápidas"
+          aria-describedby={hintId}
+          className="pointer-events-auto grid w-full max-w-[22rem] grid-cols-2 gap-1 rounded-xl border border-[#00283C]/10 bg-white/95 p-1 shadow-[0_3px_12px_rgba(0,40,60,0.10)]"
+        >
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-wa-source={sourceCold}
+            data-wa-intent="vehicle_interest"
+            className="flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-lg bg-[#087A37] px-2 py-2 text-xs font-bold leading-tight text-white transition-colors hover:bg-[#075E54] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#087A37] sm:text-sm"
+          >
+            <MessageCircle aria-hidden="true" className="h-4 w-4 shrink-0" />
+            <span className="truncate">{coldCtaLabel}</span>
+          </a>
+          <Link
+            to="/seminovos"
+            search={emptySeminovosSearch}
+            className="flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-lg bg-[#00283C] px-2 py-2 text-xs font-bold leading-tight text-white transition-colors hover:bg-[#00435a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00283C] sm:text-sm"
+          >
+            <span className="truncate">{stockCtaLabel}</span>
+            <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0" />
+          </Link>
+          <p id={hintId} className="sr-only">
             {coldHint}
           </p>
-        </div>
+        </nav>
       </div>
     </FloatingPortal>
   );
