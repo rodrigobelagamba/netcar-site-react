@@ -51,7 +51,8 @@ function fixture() {
   fixtures.push(directory);
   for (const path of ["seo-static", "seo", ".vite"])
     mkdirSync(join(directory, path));
-  copyFileSync(join(root, "public/index.php"), join(directory, "index.php"));
+  for (const file of ["index.php", "vehicle-images.php", "vehicle-image-exclusions.json"])
+    copyFileSync(join(root, "public", file), join(directory, file));
   copyFileSync(join(root, "index.html"), join(directory, "index.html"));
   copyFileSync(join(root, "public/404.html"), join(directory, "404.html"));
   for (const slug of [null, ...slugs]) {
@@ -105,6 +106,12 @@ function renderPhp(route, directory = fixture()) {
   assert.equal(result.stderr, "");
   return JSON.parse(result.stdout);
 }
+
+test("the controller fixture includes its image-policy dependencies even without PHP", () => {
+  const directory = fixture();
+  for (const file of ["vehicle-images.php", "vehicle-image-exclusions.json"])
+    assert.equal(readFileSync(join(directory, file), "utf8"), read(`public/${file}`));
+});
 
 test("crawler pair routes require their published HTML and precede the real 404 rule", () => {
   const rule =
