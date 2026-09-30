@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/vehicle-images.php';
 /**
  * Serve o index.html do SPA injetando <link rel="preload"> do banner ativo da home.
  * Objetivo: o navegador começa a baixar a imagem do LCP junto com os bundles JS,
@@ -293,6 +294,11 @@ function netcar_stock_bootstrap_value()
     $decoded = json_decode((string) @file_get_contents($file), true);
     if (!is_array($decoded) || empty($decoded['vehicles']) || !is_array($decoded['vehicles'])) {
         return null;
+    }
+    foreach (array('vehicles', 'showroomVehicles') as $key) {
+        if (isset($decoded[$key]) && is_array($decoded[$key])) {
+            $decoded[$key] = array_map('netcarSanitizeVehicleImages', $decoded[$key]);
+        }
     }
     $value = $decoded;
     return $value;

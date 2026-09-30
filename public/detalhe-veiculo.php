@@ -9,6 +9,7 @@
  */
 
 require_once __DIR__ . '/vehicle-equipment.php';
+require_once __DIR__ . '/vehicle-images.php';
 
 // Função para extrair ID do slug (mesma lógica do JavaScript)
 function extractVehicleIdFromSlug($slug) {
@@ -275,7 +276,7 @@ if ($vehicleMissing) {
     exit;
 }
 
-$vehicle = $data['data'][0];
+$vehicle = netcarSanitizeVehicleImages($data['data'][0]);
 $discoveryLandings = netcarVehicleDiscoveryLandings($vehicle);
 $brandLanding = null;
 foreach ($discoveryLandings as $candidateLanding) {

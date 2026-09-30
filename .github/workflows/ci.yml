@@ -22,6 +22,10 @@ jobs:
         run: npm run stock:test-search
       - name: Validate homepage PHP
         run: php -l public/index.php
+      - name: Validate vehicle image quarantine and recovery
+        run: |
+          php -l public/vehicle-images.php
+          node --test scripts/tests/vehicle-image-policy.test.mjs
       - name: Validate vehicle equipment provenance and ranking
         run: |
           php -l public/vehicle-equipment.php

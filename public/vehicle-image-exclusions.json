@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "vehicles": {
+    "20023": {
+      "reason": "Fotos do Creta vinculadas incorretamente ao Peugeot 208; ocultar somente estes arquivos até a exportação trazer as fotos corretas.",
+      "stems": [
+        "26092026CRETA SPORT IZE3C021",
+        "26092026CRETA SPORT IZE3C022",
+        "26092026CRETA SPORT IZE3C023",
+        "26092026CRETA SPORT IZE3C024",
+        "26092026CRETA SPORT IZE3C025",
+        "26092026CRETA SPORT IZE3C026",
+        "26092026CRETA SPORT IZE3C027",
+        "26092026CRETA SPORT IZE3C028",
+        "26092026CRETA SPORT IZE3C029",
+        "26092026CRETA SPORT IZE3C0210",
+        "26092026CRETA SPORT IZE3C0211",
+        "26092026CRETA SPORT IZE3C02CAPA"
+      ]
+    }
+  }
+}

@@ -9,6 +9,7 @@ import { readFileSync, mkdirSync, readdirSync, unlinkSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
+import { sanitizeVehicleImages } from "../src/lib/vehicleImagePolicy.mjs";
 import {
   fetchVehicleSitemapUrls,
   generateVehicleSlug,
@@ -579,7 +580,7 @@ async function fetchStock() {
   }
 }
 
-const completeStock = await fetchStock();
+const completeStock = (await fetchStock()).map(sanitizeVehicleImages);
 // Todas as vitrines SEO continuam transacionais. O conjunto completo existe
 // apenas para o showroom humano de /seminovos e nunca alimenta sitemap,
 // landings, Home, comparador ou feeds.

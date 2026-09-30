@@ -2,6 +2,7 @@ import { axiosInstance } from "../axios-instance";
 import { config } from "../config";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
 import { resolveIcheckAttachment } from "@/lib/icheckMetadata";
+import { sanitizeVehicleImages } from "@/lib/vehicleImagePolicy.mjs";
 import {
   mapVehicleOptional,
   type RawVehicleOptional,
@@ -334,7 +335,8 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
       : apiVehicles.filter((apiVehicle) => Number(apiVehicle.valor) > 0);
 
     // Mapeia os dados da API para a interface Vehicle
-    const vehicles: Vehicle[] = scopedVehicles.map((apiVehicle) => {
+    const vehicles: Vehicle[] = scopedVehicles.map((rawVehicle) => {
+      const apiVehicle = sanitizeVehicleImages(rawVehicle);
       // Normaliza as URLs das imagens thumbnails (para cards)
       const thumbUrls = apiVehicle.imagens?.thumb?.length
         ? apiVehicle.imagens.thumb
@@ -434,7 +436,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       throw new Error("Vehicle not found");
     }
 
-    const apiVehicle = response.data.data[0];
+    const apiVehicle = sanitizeVehicleImages(response.data.data[0]);
 
     // Normaliza as URLs das imagens thumbnails (para cards e miniaturas)
     const thumbUrls = apiVehicle.imagens?.thumb?.length

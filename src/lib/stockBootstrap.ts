@@ -1,5 +1,6 @@
 import type { Vehicle, VehiclesQuery } from "@/catalog/endpoints/vehicles";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
+import { sanitizeVehicleImages } from "@/lib/vehicleImagePolicy.mjs";
 
 type StockBootstrap = {
   generatedAt?: string;
@@ -16,7 +17,7 @@ declare global {
 function allBootstrapVehicles(): Vehicle[] | undefined {
   if (typeof window === "undefined") return undefined;
   const vehicles = window.__NETCAR_STOCK__?.vehicles;
-  return Array.isArray(vehicles) ? vehicles : undefined;
+  return Array.isArray(vehicles) ? vehicles.map(sanitizeVehicleImages) : undefined;
 }
 
 function normalized(value: unknown): string {
