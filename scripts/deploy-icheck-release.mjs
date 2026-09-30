@@ -14,6 +14,7 @@ import { resolve, join, posix } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Client } from "ssh2";
 import {
+  configurePublicationNetwork,
   deploymentConfiguration,
   envFile,
   metadataForPublication,
@@ -244,6 +245,7 @@ export async function deployRelease(bundle, config) {
 }
 
 async function main() {
+  configurePublicationNetwork();
   const args = {};
   for (const argument of process.argv.slice(2)) {
     if (argument === "--check-connection") args.checkConnection = true;

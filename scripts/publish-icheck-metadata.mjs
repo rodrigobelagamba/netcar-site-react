@@ -3,10 +3,23 @@
 import { createHash, randomUUID } from "node:crypto";
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { homedir } from "node:os";
+import {
+  getDefaultAutoSelectFamilyAttemptTimeout,
+  setDefaultAutoSelectFamilyAttemptTimeout,
+} from "node:net";
 import { resolve, join, posix } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { Client } from "ssh2";
+
+// Cada publicador roda em um processo separado do sincronizador. O ssh2 usa
+// sockets do Node: o prazo por endereço também precisa permitir rotas mais lentas.
+// Não altera seleção IPv4/IPv6, autenticação ou verificação da chave do servidor.
+export function configurePublicationNetwork() {
+  setDefaultAutoSelectFamilyAttemptTimeout(
+    Math.max(2_000, getDefaultAutoSelectFamilyAttemptTimeout()),
+  );
+}
 
 export function metadataForPublication(directory) {
   return readdirSync(directory)
@@ -289,6 +302,7 @@ export async function publishMetadata(files, config) {
 }
 
 async function main() {
+  configurePublicationNetwork();
   const args = process.argv.slice(2);
   const options = {};
   for (const arg of args) {
