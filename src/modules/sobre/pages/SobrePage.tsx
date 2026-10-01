@@ -14,6 +14,16 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 import { buildLojaMapsUrl } from "@/lib/formatters";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
+interface TeamMember {
+  name: string;
+  role: string;
+  image: string;
+  imagePosition?: string;
+  imageTransform?: string;
+  imageTransformOrigin?: string;
+  featured?: boolean;
+}
+
 export function SobrePage() {
   const { data: counters } = useCountersQuery("Sobre");
   const { data: addressLoja1 } = useAddressQuery("Loja1");
@@ -86,7 +96,7 @@ export function SobrePage() {
   ];
 
   // Equipe organizada por setor
-  const teamBySector = [
+  const teamBySector: Array<{ sector: string; members: TeamMember[] }> = [
     {
       sector: "Gestão & Administração",
       members: [
@@ -112,9 +122,21 @@ export function SobrePage() {
     {
       sector: "Comercial",
       members: [
+        {
+          name: "Tiago",
+          role: "Consultor",
+          image: "/team/tiago.jpg",
+          featured: true,
+        },
         { name: "Filipe", role: "Consultor", image: "/team/filipe.jpg" },
-        { name: "Tiago", role: "Consultor", image: "/team/tiago.jpg" },
         { name: "Gilnei", role: "Consultor", image: "/team/gilnei.jpg" },
+        {
+          name: "Alexandre",
+          role: "Consultor",
+          image: "/team/alexandre.jpg",
+          imageTransform: "scale(2)",
+          imageTransformOrigin: "82% 32%",
+        },
       ],
     },
     {
@@ -607,11 +629,13 @@ export function SobrePage() {
                 <div
                   className={cn(
                     "grid gap-6 md:gap-8 justify-items-center w-full",
-                    sector.members.length <= 3
-                      ? "grid-cols-2 sm:grid-cols-3 justify-center"
-                      : sector.members.length === 4
-                        ? "grid-cols-2 sm:grid-cols-4 justify-center"
-                        : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 justify-center",
+                    sector.members.some((person) => person.featured)
+                      ? "grid-cols-2 sm:grid-cols-3 max-w-4xl"
+                      : sector.members.length <= 3
+                        ? "grid-cols-2 sm:grid-cols-3 justify-center"
+                        : sector.members.length === 4
+                          ? "grid-cols-2 sm:grid-cols-4 justify-center"
+                          : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 justify-center",
                   )}
                 >
                   {sector.members.map((person, index) => (
@@ -621,9 +645,22 @@ export function SobrePage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.4, delay: index * 0.08 }}
-                      className="group text-center"
+                      className={cn(
+                        "group text-center",
+                        person.featured && "col-span-full",
+                        sector.members.some((member) => member.featured) &&
+                          index === sector.members.length - 1 &&
+                          "col-span-2 sm:col-span-1",
+                      )}
                     >
-                      <div className="relative mb-4 mx-auto w-28 h-28 md:w-32 md:h-32">
+                      <div
+                        className={cn(
+                          "relative mb-4 mx-auto",
+                          person.featured
+                            ? "w-36 h-36 md:w-40 md:h-40"
+                            : "w-28 h-28 md:w-32 md:h-32",
+                        )}
+                      >
                         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         <div className="relative w-full h-full rounded-full overflow-hidden ring-2 ring-white shadow-lg group-hover:ring-primary/30 transition-all duration-300">
                           <img
@@ -636,12 +673,19 @@ export function SobrePage() {
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             style={{
                               objectPosition:
-                                (person as any).imagePosition || "center top",
+                                person.imagePosition || "center top",
+                              transform: person.imageTransform,
+                              transformOrigin: person.imageTransformOrigin,
                             }}
                           />
                         </div>
                       </div>
-                      <h5 className="font-semibold text-fg group-hover:text-primary transition-colors">
+                      <h5
+                        className={cn(
+                          "font-semibold text-fg group-hover:text-primary transition-colors",
+                          person.featured && "text-lg",
+                        )}
+                      >
                         {person.name}
                       </h5>
                       <p className="text-muted-foreground text-sm mt-0.5">
