@@ -116,7 +116,7 @@ export function CompraPage() {
             <div className="hidden lg:flex justify-center lg:justify-end">
               <div className="relative">
                 <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 p-2">
-                  <div className="w-full h-full rounded-full bg-white p-2 shadow-xl">
+                  <div className="aspect-square shrink-0 w-full h-full overflow-hidden rounded-full bg-white p-2 shadow-xl">
                     <img
                       src={optimizeStockImage("/images/ian.webp", 640)}
                       srcSet={stockImageSrcSet(
@@ -130,7 +130,7 @@ export function CompraPage() {
                       loading="eager"
                       decoding="sync"
                       fetchPriority="high"
-                      className="w-full h-full rounded-full object-cover"
+                      className="block w-full h-full rounded-full object-cover"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src =
                           "https://ui-avatars.com/api/?name=iAN&background=6cbe9d&color=fff&size=320&bold=true";
@@ -281,7 +281,7 @@ export function CompraPage() {
               <div className="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-gray-100">
                 <div className="text-center mb-6">
                   <div className="relative w-20 h-20 mx-auto mb-4">
-                    <div className="w-20 h-20 rounded-full bg-white p-1 shadow-lg border border-gray-100">
+                    <div className="aspect-square shrink-0 w-20 h-20 overflow-hidden rounded-full bg-white p-1 shadow-lg border border-gray-100">
                       <img
                         src={optimizeStockImage("/images/ian.webp", 200)}
                         width={80}
@@ -289,7 +289,7 @@ export function CompraPage() {
                         loading="lazy"
                         decoding="async"
                         alt="iAN - Assistente Virtual"
-                        className="w-full h-full rounded-full object-cover"
+                        className="block w-full h-full rounded-full object-cover"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src =
                             "https://ui-avatars.com/api/?name=iAN&background=6cbe9d&color=fff&size=128&bold=true";

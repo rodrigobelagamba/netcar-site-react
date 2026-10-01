@@ -26,6 +26,8 @@ jobs:
         run: |
           npx tsx --test scripts/tests/tablet-stock.test.ts
           node --test scripts/tests/tablet-routing.test.mjs
+      - name: Validate circular portraits and store photos
+        run: node --test scripts/tests/circular-portraits.test.mjs
       - name: Validate deployment connection policy
         run: node --test scripts/tests/deploy-network.test.mjs
       - name: Validate vehicle image quarantine and recovery

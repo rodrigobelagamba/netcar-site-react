@@ -31,7 +31,7 @@ export function IanBot() {
         <div className="flex items-center gap-6">
           {/* Avatar do iAN */}
           <div className="relative flex-shrink-0">
-            <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-white p-1 shadow-lg border border-gray-100">
+            <div className="aspect-square shrink-0 w-24 h-24 md:w-28 md:h-28 overflow-hidden rounded-full bg-white p-1 shadow-lg border border-gray-100">
               <img
                 src={optimizeStockImage("/images/ian.webp", 200)}
                 alt="iAN - Assistente Virtual"
@@ -39,7 +39,7 @@ export function IanBot() {
                 height={112}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full rounded-full object-cover"
+                className="block w-full h-full rounded-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
                     "https://ui-avatars.com/api/?name=iAN&background=6cbe9d&color=fff&size=128&bold=true";

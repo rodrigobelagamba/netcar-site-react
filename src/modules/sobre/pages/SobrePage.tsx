@@ -192,9 +192,9 @@ export function SobrePage() {
             </div>
 
             <div className="flex justify-center lg:justify-end">
-              <div className="relative">
-                <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 p-2">
-                  <div className="w-full h-full rounded-full bg-white p-2 shadow-xl overflow-hidden">
+              <div className="relative shrink-0">
+                <div className="w-64 h-64 md:w-80 md:h-80 aspect-square shrink-0 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 p-2">
+                  <div className="w-full h-full aspect-square rounded-full bg-white p-2 shadow-xl overflow-hidden">
                     <img
                       src={optimizeStockImage(loja1Image, 640)}
                       srcSet={stockImageSrcSet(loja1Image, [320, 480, 640])}
@@ -205,7 +205,7 @@ export function SobrePage() {
                       loading="eager"
                       decoding="sync"
                       fetchPriority="high"
-                      className="w-full h-full rounded-full object-cover"
+                      className="block w-full h-full aspect-square rounded-full object-cover"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src =
                           "/images/loja1.webp";
@@ -377,19 +377,19 @@ export function SobrePage() {
                   }}
                 />
               </div>
-              <div className="absolute -top-6 -right-6 w-40 h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
+              <div className="absolute top-3 right-3 w-28 h-20 sm:-top-6 sm:right-4 sm:w-40 sm:h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <img
-                  src={optimizeStockImage(loja2Image, 320)}
-                  srcSet={stockImageSrcSet(loja2Image, [200, 320])}
-                  sizes="160px"
-                  alt="Miniatura Loja 2"
+                  src={optimizeStockImage(loja1Image, 320)}
+                  srcSet={stockImageSrcSet(loja1Image, [200, 320])}
+                  sizes="(max-width: 639px) 112px, 160px"
+                  alt="Miniatura Loja 1"
                   width={320}
                   height={224}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover transition-opacity duration-500"
                   onError={(e) => {
-                    e.currentTarget.src = "/images/loja2.webp";
+                    e.currentTarget.src = "/images/loja1.webp";
                   }}
                 />
               </div>
@@ -435,19 +435,19 @@ export function SobrePage() {
                   }}
                 />
               </div>
-              <div className="absolute -top-6 -right-6 w-40 h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
+              <div className="absolute top-3 right-3 w-28 h-20 sm:-top-6 sm:right-4 sm:w-40 sm:h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
                 <img
-                  src={optimizeStockImage(loja1Image, 320)}
-                  srcSet={stockImageSrcSet(loja1Image, [200, 320])}
-                  sizes="160px"
-                  alt="Miniatura Loja 1"
+                  src={optimizeStockImage(loja2Image, 320)}
+                  srcSet={stockImageSrcSet(loja2Image, [200, 320])}
+                  sizes="(max-width: 639px) 112px, 160px"
+                  alt="Miniatura Loja 2"
                   width={320}
                   height={224}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover transition-opacity duration-500"
                   onError={(e) => {
-                    e.currentTarget.src = "/images/loja1.webp";
+                    e.currentTarget.src = "/images/loja2.webp";
                   }}
                 />
               </div>

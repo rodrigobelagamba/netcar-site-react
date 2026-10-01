@@ -70,12 +70,12 @@
       max-width: 100%;
     }
 
-    /* Previne overflow em imagens apenas em telas pequenas */
+    /* Limita a largura sem sobrescrever alturas explícitas (avatares/capas).
+       O Preflight já mantém height:auto nas imagens sem altura definida. */
     img:not(.social-story-cover),
     picture,
     video {
       max-width: 100% !important;
-      height: auto;
     }
 
     /* Garante que elementos absolutos não saiam da tela apenas em telas pequenas */
