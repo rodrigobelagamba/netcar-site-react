@@ -209,6 +209,7 @@ export function TabletPage() {
     { fetchAll: true },
     { refreshImmediately: true },
   );
+  const refetchStock = stock.refetch;
   const [filters, setFilters] = useState<TabletFilters>(readFilters);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -243,12 +244,12 @@ export function TabletPage() {
     const timer = window.setInterval(
       () => {
         if (document.visibilityState === "visible" && navigator.onLine)
-          void stock.refetch({ cancelRefetch: false });
+          void refetchStock({ cancelRefetch: false });
       },
       5 * 60 * 1000,
     );
     return () => window.clearInterval(timer);
-  }, [stock.refetch]);
+  }, [refetchStock]);
 
   const updateFilter = (key: keyof TabletFilters, value: string) =>
     setFilters((current) => ({ ...current, [key]: value }));
