@@ -248,6 +248,12 @@ ErrorDocument 410 /410.html
   RewriteRule ^vagas/consultor-vendas-seminovos$ /vagas/consultor-vendas-seminovos/ [R=301,L]
   RewriteRule ^vagas/consultor-vendas-seminovos/$ vagas/consultor-vendas-seminovos/index.html [L]
 
+  # Tablet: interceptar a pasta legada antes de DirectoryIndex e de arquivos reais.
+  # Apenas estas entradas mudam; arquivos e subpastas legados ficam preservados.
+  RewriteRule ^tablet$ /tablet/ [R=302,L]
+  RewriteRule ^tablet/(index\.php|seminovos\.html)$ /tablet/ [R=302,L]
+  RewriteRule ^tablet/$ index.php [L,QSA]
+
   # Primeiro: servir só arquivos reais (-f).
   # NÃO usar -d genérico: o docroot de produção ainda tem pastas legadas
   # (seminovos/, veiculo/, etc.) que interceptavam a URL e mandavam para not-found.html.

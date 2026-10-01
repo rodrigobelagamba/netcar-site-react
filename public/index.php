@@ -121,6 +121,12 @@ function netcar_fixed_route_meta()
             'description' => 'Veja carros seminovos e usados à venda na Netcar em Esteio/RS. Consulte fotos, preço e ano dos veículos disponíveis.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/seminovos',
         ],
+        '/tablet' => [
+            'title' => 'Estoque para atendimento | Netcar',
+            'description' => 'Consulte o estoque Netcar e filtre os carros por preço, ano-modelo e quilometragem durante o atendimento.',
+            'canonical' => 'https://www.netcarmultimarcas.com.br/tablet/',
+            'robots' => 'noindex, follow',
+        ],
         '/sobre' => [
             'title' => 'Sobre a Netcar Multimarcas | Revenda em Esteio',
             'description' => 'Conheça a Netcar Multimarcas em Esteio/RS: Fábrica de Valor, garantia, Nethelp e duas lojas. Seminovos com procedência desde 1997.',
@@ -266,6 +272,7 @@ function netcar_route_uses_stock_bootstrap($path)
 {
     return $path === '/'
         || $path === '/seminovos'
+        || $path === '/tablet'
         || $path === '/comparar'
         || preg_match('#^/comparar/[a-z0-9-]+$#', (string) $path)
         || $path === '/regioes-atendidas'
@@ -445,6 +452,7 @@ function netcar_route_manifest_entry($path)
 {
     if ($path === '/') return 'src/modules/home/pages/HomePage.tsx';
     if ($path === '/seminovos') return 'src/modules/seminovos/pages/SeminovosPage.tsx';
+    if ($path === '/tablet') return 'src/modules/tablet/pages/TabletPage.tsx';
     if (preg_match('#^/veiculo/#', (string) $path)) return 'src/modules/detalhes/pages/DetalhesPage.tsx';
     if (preg_match('#^/laudo/#', (string) $path)) return 'src/modules/detalhes/pages/ICheckLaudoPage.tsx';
     if ($path === '/sobre') return 'src/modules/sobre/pages/SobrePage.tsx';
@@ -835,6 +843,10 @@ if (!netcar_is_valid_spa_route($path)) {
 }
 
 $routeMeta = netcar_route_meta($path);
+// Catálogo de atendimento: acessível no tablet, sem duplicar o estoque no índice.
+if ($path === '/tablet') {
+    header('X-Robots-Tag: noindex, follow');
+}
 if ($path === '/entregas') {
     require_once __DIR__ . '/entregas/v1/seo.php';
     $entregasPage = entregas_requested_page();

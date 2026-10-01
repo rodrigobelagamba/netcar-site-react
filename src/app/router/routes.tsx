@@ -43,6 +43,11 @@ const DetalhesPage = lazyWithRetry(() =>
     default: m.DetalhesPage,
   })),
 );
+const TabletPage = lazyWithRetry(() =>
+  import("@/modules/tablet/pages/TabletPage").then((m) => ({
+    default: m.TabletPage,
+  })),
+);
 const ICheckLaudoPage = lazyWithRetry(() =>
   import("@/modules/detalhes/pages/ICheckLaudoPage").then((m) => ({
     default: m.ICheckLaudoPage,
@@ -306,6 +311,8 @@ function RootComponent() {
   }, [location.pathname, location.search, location.searchStr]);
 
   const isLaudoPage = location.pathname.startsWith("/laudo/");
+  const isTabletPage = /^\/tablet\/?$/.test(location.pathname);
+  const isStandalone = isLaudoPage || isTabletPage;
 
   return (
     <div className="flex min-h-screen max-w-full flex-col overflow-x-clip">
@@ -315,16 +322,16 @@ function RootComponent() {
       >
         Pular para o conteúdo
       </a>
-      {!isLaudoPage ? <SchemaOrg /> : null}
-      {/* Laudo i-CHECK = documento isolado (sem header/footer do site) */}
-      {!isLaudoPage ? (
+      {!isStandalone ? <SchemaOrg /> : null}
+      {/* Laudo e catálogo do tablet têm navegação própria. */}
+      {!isStandalone ? (
         <div className="print:hidden">
           <Header />
         </div>
       ) : null}
       <div
         className={`relative max-w-full min-w-0 flex-1 print:min-h-0 print:pt-0 ${
-          isLaudoPage ? "min-h-[100dvh] pt-0" : "min-h-[100dvh] pt-0 sm:pt-20"
+          isStandalone ? "min-h-[100dvh] pt-0" : "min-h-[100dvh] pt-0 sm:pt-20"
         }`}
       >
         <div
@@ -338,13 +345,13 @@ function RootComponent() {
           </Suspense>
         </div>
       </div>
-      {!isLaudoPage ? (
+      {!isStandalone ? (
         <div className="print:hidden">
           <LazyFooter />
           <WhatsAppButton />
         </div>
       ) : null}
-      <PrivacyConsent showPersistentControl={isLaudoPage} />
+      <PrivacyConsent showPersistentControl={isStandalone} />
     </div>
   );
 }
@@ -405,6 +412,12 @@ const detalhesRoute = createRoute({
   component: DetalhesPage,
   // Removido o loader para evitar problemas em produção
   // O componente usa useParams e useLocation diretamente, que são mais confiáveis
+});
+
+const tabletRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/tablet",
+  component: TabletPage,
 });
 
 const icheckLaudoRoute = createRoute({
@@ -550,6 +563,7 @@ export const routeTree = rootRoute.addChildren([
   indexRoute,
   entregasRoute,
   seminovosRoute,
+  tabletRoute,
   detalhesRoute,
   icheckLaudoRoute,
   sobreRoute,
