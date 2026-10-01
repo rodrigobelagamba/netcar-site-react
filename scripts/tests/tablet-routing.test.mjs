@@ -10,6 +10,7 @@ const root = fileURLToPath(new URL("../../", import.meta.url));
 const read = (path) => readFileSync(join(root, path), "utf8");
 const controller = read("public/index.php");
 const htaccess = read("public/.htaccess");
+const directoryRules = read("public/tablet/.htaccess");
 const entry = "src/modules/tablet/pages/TabletPage.tsx";
 const php = process.env.NETCAR_PHP_BINARY || "php";
 const hasPhp = spawnSync(php, ["-v"], { encoding: "utf8" }).status === 0;
@@ -81,6 +82,22 @@ test("tablet has isolated route metadata, noindex in HTML and HTTP header", () =
   const stockFunction = controller.split("function netcar_stock_bootstrap_script($path)")[1].split("/** Veículo")[0];
   assert.ok(stockFunction.includes("'scope' => $path === '/seminovos' ? 'showroom' : 'available'"));
   assert.ok(!stockFunction.includes("'/tablet'"));
+});
+
+test("legacy tablet directory routes locally when Apache replaces parent rules", () => {
+  assert.match(directoryRules, /RewriteEngine On/);
+  assert.ok(directoryRules.includes("RewriteRule ^$ /index.php [END,QSA]"));
+  const aliasRule = "RewriteRule ^(index\\.php|seminovos\\.html)$ /tablet/ [R=302,L]";
+  assert.ok(directoryRules.includes(aliasRule));
+  assert.ok(directoryRules.includes("RewriteRule ^ https://www.netcarmultimarcas.com.br%{REQUEST_URI} [R=301,L]"));
+  assert.ok(directoryRules.indexOf(aliasRule) < directoryRules.indexOf("RewriteRule ^carrotb-"));
+  // Existing car links and static HTML aliases stay untouched.
+  assert.ok(directoryRules.includes("RewriteRule ^carrotb-(.*)\\.html$ tablet_carro.php?id=$1"));
+  assert.ok(directoryRules.includes("RewriteCond %{REQUEST_FILENAME}\\.html -f"));
+  assert.ok(directoryRules.includes("RewriteRule ^(.*)$ $1.html"));
+  const aliases = new RegExp(aliasRule.split(" ")[1]);
+  for (const path of ["images/car.jpg", "tablet_carro.php", "carrotb-123.html", "index.php/extra"])
+    assert.equal(aliases.test(path), false, path);
 });
 
 test("PHP fixture contains the production dependencies", () => {
