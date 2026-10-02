@@ -29,6 +29,8 @@ export interface HomeHeroVehicle {
   brand: string;
   model: string;
   year: number;
+  km?: number;
+  tem_fotos?: number;
   price: number;
   valor_formatado?: string;
   preco_com_troca?: number;
@@ -76,7 +78,8 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
     return null;
   }
 
-  const vehicle = vehicles[currentIndex];
+  // O estoque pode encolher antes de o efeito acima corrigir o índice.
+  const vehicle = vehicles[currentIndex < vehicles.length ? currentIndex : 0];
 
   const next = () => {
     setCurrentIndex((prev) => (prev + 1) % vehicles.length);

@@ -51,7 +51,7 @@ function fixture() {
   fixtures.push(directory);
   for (const path of ["seo-static", "seo", ".vite"])
     mkdirSync(join(directory, path));
-  for (const file of ["index.php", "vehicle-images.php", "vehicle-image-exclusions.json"])
+  for (const file of ["index.php", "home-hero.php", "vehicle-images.php", "vehicle-image-exclusions.json"])
     copyFileSync(join(root, "public", file), join(directory, file));
   copyFileSync(join(root, "index.html"), join(directory, "index.html"));
   copyFileSync(join(root, "public/404.html"), join(directory, "404.html"));

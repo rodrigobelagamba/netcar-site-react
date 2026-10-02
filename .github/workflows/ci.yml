@@ -21,7 +21,10 @@ jobs:
       - name: Validate stock search refresh
         run: npm run stock:test-search
       - name: Validate homepage PHP
-        run: php -l public/index.php
+        run: |
+          php -l public/index.php
+          php -l public/home-hero.php
+          node --test scripts/tests/home-hero-selection.test.mjs
       - name: Validate tablet catalog filters and routing
         run: |
           npx tsx --test scripts/tests/tablet-stock.test.ts

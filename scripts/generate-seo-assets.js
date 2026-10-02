@@ -11,6 +11,10 @@ import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
 import { sanitizeVehicleImages } from "../src/lib/vehicleImagePolicy.mjs";
 import {
+  homeHeroRotationDay,
+  selectHomeHeroVehicles,
+} from "../src/lib/homeHeroSelection.mjs";
+import {
   fetchVehicleSitemapUrls,
   generateVehicleSlug,
   vehicleSitemapUrlsFromVehicles,
@@ -753,16 +757,6 @@ writeTextFile(
   })}\n`,
 );
 
-function byHomePriority(a, b) {
-  const destaqueDiff = Number(b?.destaque === 1) - Number(a?.destaque === 1);
-  if (destaqueDiff !== 0) return destaqueDiff;
-  const merchandisingDiff =
-    resolveVehicleMerchandising(b).priority -
-    resolveVehicleMerchandising(a).priority;
-  if (merchandisingDiff !== 0) return merchandisingDiff;
-  return (Number(b?.id) || 0) - (Number(a?.id) || 0);
-}
-
 function hasHomePhoto(vehicle) {
   const temFotos = vehicle?.imagens_site?.tem_fotos;
   return (
@@ -784,18 +778,14 @@ function normalizeHomeImage(raw) {
   return `/${normalized.replace(/^\/+/, "")}`;
 }
 
-// Mantém o primeiro carro da Home estável e grava a imagem para o PHP iniciar
-// seu download no HTML, antes de React e da consulta de estoque.
-const orderedHomeStock = stock.filter(hasHomePhoto).sort(byHomePriority);
-const featuredHomeVehicle = orderedHomeStock[0];
-const homeHeroVehicle = orderedHomeStock
-  .filter(
-    (vehicle) => String(vehicle.id) !== String(featuredHomeVehicle?.id || ""),
-  )
-  .filter((vehicle) => Number(vehicle.valor) > 80000)
-  .filter((vehicle) =>
-    /\.png(?:$|[?#])/i.test(String(vehicle?.imagens_site?.capa || "")),
-  )[0];
+// Mesmo corte e rodízio do React/PHP; o manifesto só serve de contingência.
+const homeRotationDay = homeHeroRotationDay();
+const selectedHomeHero = selectHomeHeroVehicles(stockBootstrap, {
+  day: homeRotationDay,
+})[0];
+const homeHeroVehicle = stock.find(
+  (vehicle) => String(vehicle.id) === selectedHomeHero?.id,
+);
 const homeLcp = homeHeroVehicle
   ? {
       id: String(homeHeroVehicle.id),
@@ -806,6 +796,9 @@ const homeLcp = homeHeroVehicle
       ).trim(),
       year: Number(homeHeroVehicle.ano || homeHeroVehicle.year || 0),
       price: Number(homeHeroVehicle.valor || homeHeroVehicle.price || 0),
+      km: Number(homeHeroVehicle.km),
+      tem_fotos: Number(homeHeroVehicle.imagens_site.tem_fotos),
+      day: homeRotationDay,
       valor_formatado: String(homeHeroVehicle.valor_formatado || "").trim(),
       preco_com_troca: Number(homeHeroVehicle.preco_com_troca || 0),
       preco_com_troca_formatado: String(

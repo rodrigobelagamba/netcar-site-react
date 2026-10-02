@@ -25,7 +25,7 @@ function fixture() {
   const directory = mkdtempSync(join(tmpdir(), "netcar-tablet-routing-"));
   fixtures.push(directory);
   for (const folder of ["seo", ".vite"]) mkdirSync(join(directory, folder));
-  for (const name of ["index.php", "vehicle-images.php", "vehicle-image-exclusions.json", "404.html"])
+  for (const name of ["index.php", "home-hero.php", "vehicle-images.php", "vehicle-image-exclusions.json", "404.html"])
     copyFileSync(join(root, "public", name), join(directory, name));
   copyFileSync(join(root, "index.html"), join(directory, "index.html"));
   writeFileSync(join(directory, "seo/stock-bootstrap.json"), JSON.stringify({

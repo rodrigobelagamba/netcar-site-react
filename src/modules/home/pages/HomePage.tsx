@@ -18,8 +18,12 @@ import { ArrowRight } from "lucide-react";
 import {
   pickFeaturedHomeVehicle,
   pickHomeHighlightVehicles,
-  sortHomeStockVehicles,
 } from "@/lib/homeStock";
+import {
+  homeHeroRotationDay,
+  isHomeHeroCandidate,
+  selectHomeHeroVehicles,
+} from "@/lib/homeHeroSelection.mjs";
 import { trackHomeScrollDepth } from "@/lib/analytics";
 import {
   getVehicleMerchandising,
@@ -81,6 +85,7 @@ type HomeBootstrapWindow = Window & {
   __NETCAR_HOME_HERO__?: HomeHeroVehicle;
   __NETCAR_HOME_HAS_ACTIVE_BANNER__?: boolean;
   __NETCAR_HOME_LCP_ID__?: string;
+  __NETCAR_HOME_ROTATION_DAY__?: number;
 };
 
 function readInitialHomeLcpImage(): InitialHomeLcpImage | null {
@@ -103,12 +108,15 @@ function readInitialHomeHeroVehicle(): HomeHeroVehicle | null {
   const vehicle = (window as HomeBootstrapWindow).__NETCAR_HOME_HERO__;
   if (
     !vehicle ||
-    !vehicle.id ||
-    !vehicle.brand ||
-    !vehicle.model ||
-    !vehicle.image ||
-    !Number.isFinite(Number(vehicle.year)) ||
-    !Number.isFinite(Number(vehicle.price))
+    !isHomeHeroCandidate({
+      id: vehicle.id,
+      marca: vehicle.brand,
+      modelo: vehicle.model,
+      price: vehicle.price,
+      year: vehicle.year,
+      km: vehicle.km,
+      imagens_site: { capa: vehicle.image, tem_fotos: vehicle.tem_fotos },
+    })
   ) {
     return null;
   }
@@ -180,6 +188,13 @@ export function HomePage() {
   const navigate = useNavigate();
   const initialHeroVehicle = useMemo(readInitialHomeHeroVehicle, []);
   const initialBannerState = useMemo(readInitialBannerState, []);
+  const rotationDay = useMemo(() => {
+    const serverDay =
+      typeof window !== "undefined"
+        ? (window as HomeBootstrapWindow).__NETCAR_HOME_ROTATION_DAY__
+        : undefined;
+    return Number.isInteger(serverDay) ? serverDay! : homeHeroRotationDay();
+  }, []);
 
   const hasBanners = Boolean(banners && banners.length > 0);
   const showBanners = hasBanners;
@@ -229,42 +244,17 @@ export function HomePage() {
   const heroVehicles: HomeHeroVehicle[] = useMemo(() => {
     if (!vehicles) return [];
 
-    const isPngUrl = (img?: string | null): img is string =>
-      !!img && img.toLowerCase().includes(".png");
-
-    const filtered = sortHomeStockVehicles(vehicles).filter((vehicle) => {
-      if (featuredVehicle && vehicle.id === featuredVehicle.id) return false;
-
-      const price =
-        typeof vehicle.price === "number"
-          ? vehicle.price
-          : Number(vehicle.price);
-      if (!price || isNaN(price) || price <= 80000) return false;
-
-      const temFotos = vehicle.imagens_site?.tem_fotos;
-      if (temFotos === 0 || temFotos === undefined || temFotos === null)
-        return false;
-
-      if (!isPngUrl(vehicle.imagens_site?.capa)) return false;
-
-      return true;
-    });
-
     const preferredHeroId =
       initialHeroVehicle?.id ||
       (typeof window !== "undefined"
         ? (window as HomeBootstrapWindow).__NETCAR_HOME_LCP_ID__
         : undefined);
-    const ordered =
-      preferredHeroId &&
-      filtered.some((vehicle) => vehicle.id === preferredHeroId)
-        ? [
-            ...filtered.filter((vehicle) => vehicle.id === preferredHeroId),
-            ...filtered.filter((vehicle) => vehicle.id !== preferredHeroId),
-          ]
-        : filtered;
+    const selected = selectHomeHeroVehicles(vehicles, {
+      day: rotationDay,
+      preferredId: preferredHeroId,
+    });
 
-    return ordered.slice(0, 4).map((vehicle) => {
+    return selected.map((vehicle) => {
       const mainImage = vehicle.imagens_site?.capa
         ? vehicle.imagens_site.capa
         : CAR_COVERED_PLACEHOLDER_URL;
@@ -280,6 +270,8 @@ export function HomePage() {
         brand: vehicle.marca || vehicle.name?.split(" ")[0] || "",
         model: vehicle.modelo || vehicle.name || "",
         year: vehicle.year,
+        km: vehicle.km,
+        tem_fotos: vehicle.imagens_site?.tem_fotos,
         price: vehicle.price,
         valor_formatado: vehicle.valor_formatado,
         preco_com_troca: vehicle.preco_com_troca,
@@ -296,16 +288,16 @@ export function HomePage() {
         cambio: vehicle.cambio,
       };
     });
-  }, [vehicles, featuredVehicle, initialHeroVehicle]);
+  }, [vehicles, initialHeroVehicle, rotationDay]);
 
   const displayedHeroVehicles = useMemo(
     () =>
       heroVehicles.length > 0
         ? heroVehicles
-        : initialHeroVehicle
+        : vehicles === undefined && initialHeroVehicle
           ? [initialHeroVehicle]
           : [],
-    [heroVehicles, initialHeroVehicle],
+    [heroVehicles, initialHeroVehicle, vehicles],
   );
 
   const HOME_HIGHLIGHTS_MOBILE = 6;

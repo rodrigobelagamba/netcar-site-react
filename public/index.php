@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/vehicle-images.php';
+require_once __DIR__ . '/home-hero.php';
 /**
  * Serve o index.html do SPA injetando <link rel="preload"> do banner ativo da home.
  * Objetivo: o navegador começa a baixar a imagem do LCP junto com os bundles JS,
@@ -299,7 +300,7 @@ function netcar_stock_bootstrap_value()
         return null;
     }
     $decoded = json_decode((string) @file_get_contents($file), true);
-    if (!is_array($decoded) || empty($decoded['vehicles']) || !is_array($decoded['vehicles'])) {
+    if (!is_array($decoded) || !isset($decoded['vehicles']) || !is_array($decoded['vehicles'])) {
         return null;
     }
     foreach (array('vehicles', 'showroomVehicles') as $key) {
@@ -634,7 +635,7 @@ function netcar_get_active_banner_url()
  */
 function netcar_home_lcp_from_vehicle($vehicle)
 {
-    if (!is_array($vehicle) || empty($vehicle['id'])) {
+    if (!netcar_is_home_hero_candidate($vehicle)) {
         return null;
     }
     $siteImages = isset($vehicle['imagens_site']) && is_array($vehicle['imagens_site'])
@@ -656,6 +657,8 @@ function netcar_home_lcp_from_vehicle($vehicle)
         'model' => $model,
         'year' => $year,
         'price' => $price,
+        'km' => (float) $vehicle['km'],
+        'tem_fotos' => (float) $siteImages['tem_fotos'],
         'image' => $image,
     );
     foreach (array(
@@ -694,90 +697,30 @@ function netcar_home_lcp_from_vehicle($vehicle)
     return array('id' => (string) $vehicle['id'], 'image' => $image, 'hero' => $hero);
 }
 
-/** Mesmo contrato de disponibilidade/prioridade usado por homeStock.ts. */
+/** A seleção diária usa todo o estoque que atende aos critérios do banner. */
 function netcar_daily_home_lcp()
 {
     $stock = netcar_stock_bootstrap_value();
-    if (!is_array($stock) || empty($stock['vehicles']) || !is_array($stock['vehicles'])) {
+    if (!is_array($stock) || !isset($stock['vehicles']) || !is_array($stock['vehicles'])) {
         return null;
     }
-
-    $available = array_values(array_filter($stock['vehicles'], function ($vehicle) {
-        if (!is_array($vehicle)) return false;
-        $price = isset($vehicle['price']) ? (float) $vehicle['price'] : 0;
-        $siteImages = isset($vehicle['imagens_site']) && is_array($vehicle['imagens_site'])
-            ? $vehicle['imagens_site']
-            : array();
-        return $price > 0
-            && array_key_exists('tem_fotos', $siteImages)
-            && $siteImages['tem_fotos'] !== null
-            && (int) $siteImages['tem_fotos'] !== 0;
-    }));
-    if (empty($available)) {
-        return null;
-    }
-
-    usort($available, function ($left, $right) {
-        $leftFeatured = isset($left['destaque']) && (int) $left['destaque'] === 1 ? 1 : 0;
-        $rightFeatured = isset($right['destaque']) && (int) $right['destaque'] === 1 ? 1 : 0;
-        if ($leftFeatured !== $rightFeatured) {
-            return $rightFeatured - $leftFeatured;
-        }
-        $leftMerchandising = isset($left['merchandising_priority'])
-            ? (int) $left['merchandising_priority']
-            : 0;
-        $rightMerchandising = isset($right['merchandising_priority'])
-            ? (int) $right['merchandising_priority']
-            : 0;
-        if ($leftMerchandising !== $rightMerchandising) {
-            return $rightMerchandising - $leftMerchandising;
-        }
-        return (isset($right['id']) ? (int) $right['id'] : 0)
-            - (isset($left['id']) ? (int) $left['id'] : 0);
-    });
-
-    // O primeiro da ordem alimenta o card de destaque abaixo do banner e não se
-    // repete no hero. Os quatro seguintes preservam o conjunto atual do carrossel.
-    $featuredId = isset($available[0]['id']) ? (string) $available[0]['id'] : '';
-    $candidates = array_values(array_filter($available, function ($vehicle) use ($featuredId) {
-        $siteImages = isset($vehicle['imagens_site']) && is_array($vehicle['imagens_site'])
-            ? $vehicle['imagens_site']
-            : array();
-        $cover = isset($siteImages['capa']) ? (string) $siteImages['capa'] : '';
-        return isset($vehicle['id'])
-            && (string) $vehicle['id'] !== $featuredId
-            && isset($vehicle['price'])
-            && (float) $vehicle['price'] > 80000
-            && stripos($cover, '.png') !== false;
-    }));
-    $candidates = array_slice($candidates, 0, 4);
-    if (empty($candidates)) {
-        return null;
-    }
-
-    // Dia local convertido em número monotônico: mesmo índice durante todo o
-    // dia em São Paulo (e para todas as réplicas/cache), próximo índice amanhã.
-    try {
-        $now = new DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo'));
-        $localDay = intdiv($now->getTimestamp() + $now->getOffset(), 86400);
-    } catch (Exception $error) {
-        $localDay = intdiv(time() - 10800, 86400);
-    }
-    // O deslocamento evita que o primeiro dia deste release repita o Cruze,
-    // sem introduzir aleatoriedade entre HTML, preload e hidratação.
-    $rotationDay = $localDay + 1;
-    $selectedIndex = (($rotationDay % count($candidates)) + count($candidates)) % count($candidates);
-    return netcar_home_lcp_from_vehicle($candidates[$selectedIndex]);
+    $day = netcar_home_rotation_day();
+    $selected = netcar_select_home_hero_vehicles($stock['vehicles'], $day);
+    if (empty($selected)) return null;
+    $lcp = netcar_home_lcp_from_vehicle($selected[0]);
+    if ($lcp !== null) $lcp['day'] = $day;
+    return $lcp;
 }
 
 function netcar_get_build_home_lcp()
 {
-    $daily = netcar_daily_home_lcp();
-    if ($daily !== null) {
-        return $daily;
+    $stock = netcar_stock_bootstrap_value();
+    if (is_array($stock) && isset($stock['vehicles']) && is_array($stock['vehicles'])) {
+        // Estoque válido sem candidato não pode ressuscitar um manifesto antigo.
+        return netcar_daily_home_lcp();
     }
 
-    // Fallback do build para bootstrap ausente/inválido ou estoque sem candidato.
+    // O manifesto só cobre a ausência do bootstrap e precisa cumprir a regra atual.
     $file = __DIR__ . '/seo/home-lcp.json';
     if (!is_readable($file)) {
         return null;
@@ -791,6 +734,18 @@ function netcar_get_build_home_lcp()
         || empty($value['model'])
         || empty($value['year'])
         || empty($value['price'])
+        || !netcar_is_home_hero_candidate(array(
+            'id' => $value['id'],
+            'marca' => $value['brand'],
+            'modelo' => $value['model'],
+            'year' => $value['year'],
+            'price' => $value['price'],
+            'km' => $value['km'] ?? null,
+            'imagens_site' => array(
+                'capa' => $value['image'],
+                'tem_fotos' => $value['tem_fotos'] ?? null,
+            ),
+        ))
     ) {
         return null;
     }
@@ -805,6 +760,8 @@ function netcar_get_build_home_lcp()
         'model' => trim((string) $value['model']),
         'year' => (int) $value['year'],
         'price' => (float) $value['price'],
+        'km' => (float) $value['km'],
+        'tem_fotos' => (float) $value['tem_fotos'],
         'image' => $image,
     );
     foreach (array(
@@ -826,7 +783,12 @@ function netcar_get_build_home_lcp()
         $hero['preco_com_troca'] = (float) $value['preco_com_troca'];
     }
 
-    return array('id' => (string) $value['id'], 'image' => $image, 'hero' => $hero);
+    return array(
+        'id' => (string) $value['id'],
+        'image' => $image,
+        'hero' => $hero,
+        'day' => netcar_home_rotation_day(),
+    );
 }
 
 $html = @file_get_contents(__DIR__ . '/index.html');
@@ -902,6 +864,8 @@ if ($isHome) {
     $buildHomeLcp = netcar_get_build_home_lcp();
     $bannerStateScript = '<script>window.__NETCAR_HOME_HAS_ACTIVE_BANNER__='
         . ($hasActiveBanner ? 'true' : 'false')
+        . ';window.__NETCAR_HOME_ROTATION_DAY__='
+        . json_encode($buildHomeLcp !== null ? $buildHomeLcp['day'] : netcar_home_rotation_day())
         . ';</script>';
     $html = str_replace('</head>', "  {$bannerStateScript}\n  </head>", $html);
     if ($buildHomeLcp !== null) {

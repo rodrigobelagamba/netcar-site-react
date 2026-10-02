@@ -4,6 +4,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { isHomeHeroCandidate } from "../src/lib/homeHeroSelection.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(join(root, path), "utf8");
@@ -19,6 +20,8 @@ const vehicleQueryHook = read("src/catalog/queries/useVehiclesQuery.ts");
 const landingFilters = read("src/data/seo/index.ts");
 const homePage = read("src/modules/home/pages/HomePage.tsx");
 const homeStock = read("src/lib/homeStock.ts");
+const homeHeroSelection = read("src/lib/homeHeroSelection.mjs");
+const homeHeroPhp = read("public/home-hero.php");
 const showroomPage = read("src/modules/seminovos/pages/SeminovosPage.tsx");
 const stockBootstrap = read("src/lib/stockBootstrap.ts");
 const seoAssets = read("scripts/generate-seo-assets.js");
@@ -44,7 +47,8 @@ expect(
   htaccess.includes("ErrorDocument 410 /410.html"),
   "ErrorDocument 410 ausente",
 );
-const retiredCampaignRule = "RewriteRule ^images/campaigns/acelerou-levou/ - [G,L,NC]";
+const retiredCampaignRule =
+  "RewriteRule ^images/campaigns/acelerou-levou/ - [G,L,NC]";
 expect(
   htaccess.includes(retiredCampaignRule) &&
     htaccess.indexOf(retiredCampaignRule) <
@@ -210,18 +214,17 @@ expect(
 );
 expect(
   controller.includes("function netcar_daily_home_lcp()") &&
-    controller.includes("new DateTimeZone('America/Sao_Paulo')") &&
-    controller.includes("$rotationDay = $localDay + 1") &&
-    controller.includes("$rotationDay % count($candidates)") &&
-    controller.includes("array_slice($candidates, 0, 4)"),
-  "primeiro carro da Home não usa rotação diária determinística",
+    homeHeroPhp.includes("new DateTimeZone('America/Sao_Paulo')") &&
+    controller.includes(
+      "netcar_select_home_hero_vehicles($stock['vehicles'], $day)",
+    ) &&
+    controller.includes("__NETCAR_HOME_ROTATION_DAY__"),
+  "seleção da Home não compartilha o rodízio diário com o servidor",
 );
 expect(
-  controller.includes(
-    "return netcar_home_lcp_from_vehicle($candidates[$selectedIndex])",
-  ) &&
-    controller.includes("$daily = netcar_daily_home_lcp()") &&
-    controller.includes("if ($daily !== null)"),
+  controller.includes("netcar_home_lcp_from_vehicle($selected[0])") &&
+    controller.includes("return netcar_daily_home_lcp()") &&
+    controller.includes("!netcar_is_home_hero_candidate(array("),
   "rotação diária da Home não tem payload único ou fallback do build",
 );
 expect(
@@ -232,16 +235,18 @@ expect(
 );
 expect(
   homePage.includes("initialHeroVehicle?.id") &&
-    homePage.includes(
-      "filtered.some((vehicle) => vehicle.id === preferredHeroId)",
-    ) &&
+    homePage.includes("selectHomeHeroVehicles(vehicles") &&
+    homePage.includes("preferredId: preferredHeroId") &&
+    homePage.includes("vehicles === undefined && initialHeroVehicle") &&
+    !homeHeroSelection.includes("Math.random()") &&
     !homePage.includes("Math.random()") &&
     !homeStock.includes("Math.random()"),
   "React voltou a sortear o hero e pode divergir do preload do servidor",
 );
 expect(
   homeStock.includes("temFotos === null") &&
-    homePage.includes("temFotos === null") &&
+    homePage.includes("isHomeHeroCandidate({") &&
+    seoAssets.includes("selectHomeHeroVehicles(stockBootstrap") &&
     seoAssets.includes("temFotos !== null"),
   "contrato de foto da Home diverge entre PHP, React e gerador",
 );
@@ -389,8 +394,21 @@ expect(
 if (existsSync(join(root, homeLcpManifestPath))) {
   try {
     const manifest = JSON.parse(read(homeLcpManifestPath));
-    for (const field of ["id", "image", "brand", "model", "year", "price"]) {
-      expect(Boolean(manifest?.[field]), `manifesto do LCP sem ${field}`);
+    // Null é válido quando não há estoque elegível. Nunca exigir um carro
+    // fora da política só para preencher o banner.
+    if (manifest !== null) {
+      expect(
+        isHomeHeroCandidate({
+          id: manifest.id,
+          marca: manifest.brand,
+          modelo: manifest.model,
+          year: manifest.year,
+          price: manifest.price,
+          km: manifest.km,
+          imagens_site: { capa: manifest.image, tem_fotos: manifest.tem_fotos },
+        }),
+        "manifesto do LCP fora dos critérios de preço, modelo, km ou foto",
+      );
     }
   } catch {
     errors.push("manifesto do LCP da Home inválido");
