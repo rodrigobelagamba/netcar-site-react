@@ -1283,8 +1283,10 @@ function relatedSellCitiesHtml(currentSlug) {
 
 const regionalInventorySlugs = regionalFocus.inventorySlugs;
 
-function regionalInventoryHtml(cityName) {
+function regionalInventoryHtml(cityName, position = "after-stock") {
+  const introSlugs = new Set(regionalInventorySlugs.slice(0, 4));
   const links = regionalInventorySlugs
+    .filter((slug) => introSlugs.has(slug) === (position === "intro"))
     .map((slug) => landings.find((landing) => landing.slug === slug))
     .filter((landing) => landing?.indexable && landing.count > 0)
     .map(
@@ -1293,6 +1295,9 @@ function regionalInventoryHtml(cityName) {
     )
     .join("");
   if (!links) return "";
+  if (position === "intro") {
+    return `<nav aria-label="Atalhos por preço e categoria para ${escapeHtml(cityName)}"><ul>${links}</ul></nav>`;
+  }
   return `<nav aria-label="Seleções de seminovos para ${escapeHtml(cityName)}"><h2>Escolha o tipo de carro antes de sair de ${escapeHtml(cityName)}</h2><p>Compare categoria, faixa de preço ou modelo no estoque real e confirme a disponibilidade antes da visita às lojas de Esteio.</p><ul>${links}</ul></nav>`;
 }
 
@@ -1370,6 +1375,7 @@ for (const city of cities) {
     <article>
       <h1>${escapeHtml(city.h1)}</h1>
       <p>${escapeHtml(city.intro)}</p>
+      ${regionalInventoryHtml(city.name, "intro")}
       <p data-regional-ctas>
         <a href="${SITE}/seminovos" data-regional-action="view_stock">Ver carros e preços</a>
         ·

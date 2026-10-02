@@ -76,8 +76,9 @@ export function CityLandingPage() {
           </>
         }
       >
+        <RegionalInventoryNav cityName={city.name} position="intro" />
         <RegionalActionCtas
-          className="mt-8"
+          className="mt-6"
           waText={`moro em ${city.name} e estou procurando um seminovo.`}
           sellCitySlug={city.slug}
           primary="stock"

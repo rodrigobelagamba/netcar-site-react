@@ -304,7 +304,7 @@ test("buy and sell crawler previews preserve the same filtered A–Z stock order
   assert.equal(JSON.stringify(crawlerIds), JSON.stringify(runtimeIds));
   assert.deepEqual(runtimeIds, ["7", "1", "2", "3"]);
 
-  const nav = generator.regionalInventoryHtml("Nova Santa Rita");
+  const nav = generator.regionalInventoryHtml("Nova Santa Rita", "intro");
   assert.match(
     nav,
     /href="https:\/\/www.netcarmultimarcas.com.br\/comprar-automaticos-ate-80-mil"/,

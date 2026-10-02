@@ -398,7 +398,7 @@ export function CardsHero({
                     onClick={(e) => e.stopPropagation()}
                     className="!border-0 w-full text-center text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
                   >
-                    Comparar financiamento →
+                    Consultar financiamento →
                   </a>
                 ) : null}
               </div>

@@ -824,7 +824,7 @@ function CTASidebar({
   const whatsappActions = [
     {
       icon: Calculator,
-      label: "Comparar financiamento",
+      label: "Consultar financiamento",
       intent: "simulate_finance",
       message: vehicleMessages.finance,
     },

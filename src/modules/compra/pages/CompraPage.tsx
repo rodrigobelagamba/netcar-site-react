@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import {
@@ -12,22 +13,27 @@ import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
-import { QuickSellForm } from "@/components/QuickSellForm";
+import {
+  QuickSellForm,
+  type SellEvaluationType,
+} from "@/components/QuickSellForm";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 
 export function CompraPage() {
   const { data: whatsapp } = useWhatsAppQuery();
+  const [evaluationType, setEvaluationType] =
+    useState<SellEvaluationType>("direct_purchase");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isCompramosAlias =
     pathname === "/compramos-seu-usado" || pathname === "/vender-meu-carro";
 
   const getIanWhatsAppLink = () => {
     if (!whatsapp?.numero) return "#";
-    const message = isCompramosAlias
-      ? siteWhatsAppMessage(
-          "quero avaliar meu carro para venda ou troca na Netcar.",
-        )
-      : siteWhatsAppMessage("gostaria de vender meu carro para a Netcar.");
+    const message = siteWhatsAppMessage(
+      evaluationType === "trade_in"
+        ? "quero avaliar meu carro para usar na troca."
+        : "gostaria de vender meu carro para a Netcar.",
+    );
     return buildWhatsAppUrl(whatsapp.numero, message);
   };
 
@@ -152,7 +158,7 @@ export function CompraPage() {
 
       <section className="pb-12">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-3xl">
-          <QuickSellForm />
+          <QuickSellForm onEvaluationTypeChange={setEvaluationType} />
         </div>
       </section>
 

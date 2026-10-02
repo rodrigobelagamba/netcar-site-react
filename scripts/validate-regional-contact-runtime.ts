@@ -31,7 +31,7 @@ class InputTarget {
   }
 }
 
-function createHarness(path: string, apiData: ApiData) {
+function createHarness(path: string, apiData: ApiData, routePath = pagePath) {
   const slots: any[] = [];
   let cursor = 0;
   const events: Array<{ stage: string; city: string; intent: Intent }> = [];
@@ -82,7 +82,9 @@ function createHarness(path: string, apiData: ApiData) {
     "@/lib/seminovos-search": { emptySeminovosSearch },
     "@tanstack/react-router": {
       Link: "router-link",
-      useLocation: () => ({ pathname: pagePath }),
+      useLocation: () => ({ pathname: routePath }),
+      useRouterState: ({ select }: Props) =>
+        select({ location: { pathname: routePath } }),
       useNavigate: () => () => {
         throw new Error("Navegação externa inesperada");
       },
@@ -91,6 +93,16 @@ function createHarness(path: string, apiData: ApiData) {
       useSearchContext: () => ({ searchTerm: "", setSearchTerm: () => {} }),
     },
     "@/lib/slug": { generateVehicleSlug: () => "veiculo-teste" },
+    "@/hooks/useDefaultMetaTags": { useDefaultMetaTags: () => {} },
+    "@/design-system/components/layout/LazyLocalizacao": {
+      LazyLocalizacao: "location-preview",
+    },
+    "@/design-system/components/layout/IanBot": { IanBot: "ian-preview" },
+    "@/components/QuickSellForm": { QuickSellForm: "quick-sell-form" },
+    "@/lib/images": {
+      optimizeStockImage: (url: string) => url,
+      stockImageSrcSet: () => "",
+    },
     "@/assets/images/logo-netcar.png": "logo-test.png",
   };
   const source = readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
@@ -113,7 +125,7 @@ function createHarness(path: string, apiData: ApiData) {
         return dependencies[name];
       },
       HTMLInputElement: InputTarget,
-      window: { location: { pathname: pagePath } },
+      window: { location: { pathname: routePath } },
     },
     { filename: path },
   );
@@ -377,6 +389,52 @@ noFocus
 assertWhatsApp(noFocus.opened[0].url, "5551988887777");
 assert.equal(noFocus.events[1].intent, "trade_in");
 
+// A escolha no formulário real também atualiza os três atalhos da página.
+for (const route of ["/compra", "/compramos-seu-usado", "/vender-meu-carro"]) {
+  const data = { numero: "51988887777" };
+  const page = createHarness("src/modules/compra/pages/CompraPage.tsx", data, route);
+  const form = createHarness("src/components/QuickSellForm.tsx", data, route);
+  const renderPage = () => page.render("CompraPage");
+  const renderForm = () =>
+    form.render(
+      "QuickSellForm",
+      find(renderPage(), (element) => element.type === "quick-sell-form").props,
+    );
+
+  const checkLinks = (intent: Intent) => {
+    const links = descendants(renderPage()).filter(
+      (element) =>
+        element.type === "a" && element.props["data-wa-source"] === "form",
+    );
+    assert.equal(links.length, 3, `${route}: atalhos de avaliação ausentes`);
+    for (const link of links) {
+      const message = assertWhatsApp(link.props.href, "5551988887777");
+      if (intent === "trade_in") {
+        assert.match(message, /avaliar meu carro para usar na troca/);
+        assert.doesNotMatch(message, /vender meu carro/);
+      } else {
+        assert.match(message, /vender meu carro para a Netcar/);
+        assert.doesNotMatch(message, /usar na troca/);
+      }
+    }
+  };
+
+  checkLinks("direct_purchase");
+  for (const intent of ["trade_in", "direct_purchase"] as const) {
+    find(
+      renderForm(),
+      (element) => element.type === "input" && element.props.value === intent,
+    ).props.onChange();
+    checkLinks(intent);
+    assert.equal(
+      text(renderForm()).includes("No máximo 6 anos de uso"),
+      intent === "direct_purchase",
+      `${route}: regras de compra direta não acompanharam a escolha`,
+    );
+  }
+  assert.equal(form.opened.length, 0, "Mudar a intenção não deve abrir WhatsApp");
+}
+
 console.log(
-  "Contato regional validado: 4 estados de API, compra/troca, intenção inicial, cabeçalho desktop/mobile e destinos dos CTAs.",
+  "Contato regional validado: 4 estados de API, compra/troca, intenção inicial, cabeçalho desktop/mobile, destinos dos CTAs e sincronia dos atalhos de /compra e aliases.",
 );

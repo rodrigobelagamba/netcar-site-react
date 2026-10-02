@@ -228,7 +228,7 @@ export function HomeWhatsAppConversionPanel({
               className={quickActionClass}
             >
               <Calculator className="h-4 w-4 text-[#5CD29D]" />
-              Comparar financiamento
+              Consultar financiamento
             </a>
             <a
               href={kmHref}

@@ -10,11 +10,15 @@ import {
 import { openWhatsApp, trackSellEvaluation } from "@/lib/analytics";
 import { cn } from "@/lib/cn";
 
+export type SellEvaluationType = "direct_purchase" | "trade_in";
+
 interface QuickSellFormProps {
   /** Cidade de origem do lead, quando a página é uma landing de cidade */
   cityName?: string;
   /** Evita repetir os critérios quando a página já os apresenta antes do formulário. */
   showCriteria?: boolean;
+  /** Mantém os demais atalhos de atendimento da página na intenção escolhida. */
+  onEvaluationTypeChange?: (type: SellEvaluationType) => void;
 }
 
 const purchaseCriteria = [
@@ -68,14 +72,14 @@ export function PurchaseCriteriaCard({ className }: { className?: string }) {
 export function QuickSellForm({
   cityName,
   showCriteria = true,
+  onEvaluationTypeChange,
 }: QuickSellFormProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const [modelo, setModelo] = useState("");
   const [ano, setAno] = useState("");
   const [km, setKm] = useState("");
-  const [evaluationType, setEvaluationType] = useState<
-    "direct_purchase" | "trade_in"
-  >("direct_purchase");
+  const [evaluationType, setEvaluationType] =
+    useState<SellEvaluationType>("direct_purchase");
   const startedRef = useRef(false);
 
   const trackStart = (intent = evaluationType) => {
@@ -175,6 +179,7 @@ export function QuickSellForm({
                   checked={selected}
                   onChange={() => {
                     setEvaluationType(option.value);
+                    onEvaluationTypeChange?.(option.value);
                     trackStart(option.value);
                   }}
                   className="sr-only"

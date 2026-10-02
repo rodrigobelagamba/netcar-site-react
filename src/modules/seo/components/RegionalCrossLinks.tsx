@@ -1,8 +1,44 @@
 import { Link } from "@tanstack/react-router";
 import { nearbyPriorityCityPages, regionalInventoryPages } from "@/data/seo";
+import regionalFocus from "@/data/seo/regional-focus.json";
 
-export function RegionalInventoryNav({ cityName }: { cityName: string }) {
-  if (regionalInventoryPages.length === 0) return null;
+const introInventorySlugs = new Set(regionalFocus.inventorySlugs.slice(0, 4));
+
+export function RegionalInventoryNav({
+  cityName,
+  position = "after-stock",
+}: {
+  cityName: string;
+  position?: "intro" | "after-stock";
+}) {
+  const isIntro = position === "intro";
+  const pages = regionalInventoryPages.filter(
+    (landing) => introInventorySlugs.has(landing.slug) === isIntro,
+  );
+  if (pages.length === 0) return null;
+
+  const links = pages.map((landing) => (
+    <Link
+      key={landing.slug}
+      to="/comprar-{$landingSlug}"
+      params={{ landingSlug: landing.slug }}
+      data-regional-action={`city_inventory_${landing.slug}`}
+      className={`inline-flex min-h-11 items-center rounded-full border border-[#00283C]/15 bg-[#F3F5F6] text-sm font-bold text-[#00283C] transition-colors hover:bg-white hover:text-primary ${isIntro ? "px-3 py-2" : "px-5 py-3"}`}
+    >
+      {landing.name}
+    </Link>
+  ));
+
+  if (isIntro) {
+    return (
+      <nav
+        aria-label={`Atalhos por preço e categoria para ${cityName}`}
+        className="mt-5 flex flex-wrap gap-2"
+      >
+        {links}
+      </nav>
+    );
+  }
 
   return (
     <section className="pb-16">
@@ -19,17 +55,7 @@ export function RegionalInventoryNav({ cityName }: { cityName: string }) {
           aria-label={`Seleções de seminovos para ${cityName}`}
           className="mt-5 flex flex-wrap gap-3"
         >
-          {regionalInventoryPages.map((landing) => (
-            <Link
-              key={landing.slug}
-              to="/comprar-{$landingSlug}"
-              params={{ landingSlug: landing.slug }}
-              data-regional-action={`city_inventory_${landing.slug}`}
-              className="rounded-full border border-[#00283C]/15 bg-[#F3F5F6] px-5 py-3 text-sm font-bold text-[#00283C] transition-colors hover:bg-white hover:text-primary"
-            >
-              {landing.name}
-            </Link>
-          ))}
+          {links}
         </nav>
       </div>
     </section>
