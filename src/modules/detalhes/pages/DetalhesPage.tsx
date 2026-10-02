@@ -1685,19 +1685,6 @@ export function DetalhesPage() {
     });
   }, [vehicle, officialSlug, slug, navigate]);
 
-  // GA4: view_item — só dado real da API (não placeholder do estoque)
-  useEffect(() => {
-    if (!vehicle || isPlaceholderData) return;
-    trackViewItem({
-      vehicleId: vehicle.id,
-      vehicleName:
-        [vehicle.marca, vehicle.modelo, vehicle.year]
-          .filter(Boolean)
-          .join(" ") || vehicle.name,
-      price: vehicle.price,
-    });
-  }, [vehicle, isPlaceholderData]);
-
   // Busca o anúncio (campo GPT) separadamente usando o novo endpoint
   const { data: anuncio } = useAnuncioQuery(vehicle?.id);
 
@@ -1981,6 +1968,20 @@ export function DetalhesPage() {
       robots: !vehicle && (error || !isPending) ? "noindex, follow" : undefined,
     },
   );
+
+  // Depois das metatags: uma ficha em cache não deve herdar o título da
+  // página anterior. Só dado real da API, nunca placeholder do estoque.
+  useEffect(() => {
+    if (!vehicle || isPlaceholderData) return;
+    trackViewItem({
+      vehicleId: vehicle.id,
+      vehicleName:
+        [vehicle.marca, vehicle.modelo, vehicle.year]
+          .filter(Boolean)
+          .join(" ") || vehicle.name,
+      price: vehicle.price,
+    });
+  }, [vehicle, isPlaceholderData]);
 
   // Com placeholder do estoque, `vehicle` já existe → pula tela intermediária.
   if (!vehicle) {
