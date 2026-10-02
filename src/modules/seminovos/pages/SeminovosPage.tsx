@@ -14,7 +14,8 @@ import { VehicleCardStatic } from "@/design-system/components/patterns/VehicleCa
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
 import { ChevronDown, Filter, MessageCircle, ShieldCheck } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
-import { useSearchContext } from "@/contexts/SearchContext";
+import { matchesVehicleSearch } from "@/lib/vehicleSearch";
+import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import {
@@ -31,6 +32,7 @@ import {
   type ShowroomSortOption,
 } from "@/lib/showroomStock";
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
+import { StockSearchField } from "../components/StockSearchField";
 
 type StockLayout = {
   compact: boolean;
@@ -186,13 +188,24 @@ export function SeminovosPage() {
   const { data: stockData } = useAllStockDataQuery();
   const { data: whatsapp } = useWhatsAppQuery();
   const whatsAppNumber = whatsapp?.numero || DEFAULT_SALES_WHATSAPP;
-  const { searchTerm } = useSearchContext();
+
+  // Busca livre fica na URL, sem restringir a consulta da API ao campo modelo.
+  // Digitar só filtra os carros já carregados e não cria uma entrada no histórico.
+  const handleStockSearch = (value: string) => {
+    void navigate({
+      to: "/seminovos",
+      search: (previous) => ({ ...previous, busca: value || undefined }),
+      replace: true,
+      resetScroll: false,
+    });
+  };
 
   const hasFilterParams = useMemo(() => {
     if (typeof window !== "undefined" && window.location.search.length > 1) {
       return true;
     }
     return Boolean(
+      search.busca ||
       search.marca ||
       search.modelo ||
       search.precoMin ||
@@ -205,6 +218,7 @@ export function SeminovosPage() {
       search.categoria,
     );
   }, [
+    search.busca,
     search.marca,
     search.modelo,
     search.precoMin,
@@ -384,7 +398,7 @@ export function SeminovosPage() {
     pendingFilterTrackingRef.current = stockFilterSignature(nextFilters);
     navigate({
       to: "/seminovos",
-      search: nextFilters,
+      search: { ...nextFilters, busca: search.busca },
     });
     setAreFiltersVisible(false);
   };
@@ -403,18 +417,7 @@ export function SeminovosPage() {
     setCor("");
     navigate({
       to: "/seminovos",
-      search: {
-        marca: undefined,
-        modelo: undefined,
-        precoMin: undefined,
-        precoMax: undefined,
-        anoMin: undefined,
-        anoMax: undefined,
-        cambio: undefined,
-        combustivel: undefined,
-        cor: undefined,
-        categoria: undefined,
-      },
+      search: emptySeminovosSearch,
     });
     setAreFiltersVisible(false);
   };
@@ -538,32 +541,14 @@ export function SeminovosPage() {
       );
     }
 
-    // Filtro de busca local (por conteúdo dos cards)
-    if (searchTerm.trim()) {
-      const searchLower = searchTerm.toLowerCase().trim();
-      filtered = filtered.filter((vehicle) => {
-        const searchFields = [
-          vehicle.marca,
-          vehicle.modelo,
-          vehicle.name,
-          vehicle.cor,
-          vehicle.combustivel,
-          vehicle.cambio,
-          vehicle.motor,
-          vehicle.placa,
-          vehicle.year?.toString(),
-          vehicle.price?.toString(),
-          vehicle.valor_formatado,
-        ].filter(Boolean);
-
-        return searchFields.some((field) =>
-          String(field).toLowerCase().includes(searchLower),
-        );
-      });
+    if (search.busca) {
+      filtered = filtered.filter((vehicle) =>
+        matchesVehicleSearch(vehicle, search.busca || ""),
+      );
     }
 
     return sortShowroomVehicles(filtered, sortBy);
-  }, [vehicles, sortBy, searchTerm, search.categoria, search.combustivel]);
+  }, [vehicles, sortBy, search.busca, search.categoria, search.combustivel]);
 
   // Registra a quantidade somente quando a URL e a consulta já refletem os
   // filtros recém-aplicados, evitando enviar a contagem do resultado anterior.
@@ -673,6 +658,7 @@ export function SeminovosPage() {
   // Monta mensagem WhatsApp com filtros ativos
   const seminovosWhatsAppHref = useMemo(() => {
     const parts: string[] = [];
+    if (search.busca?.trim()) parts.push(`busca ${search.busca.trim()}`);
     if (search.marca) parts.push(`marca ${search.marca}`);
     if (search.modelo) parts.push(`modelo ${search.modelo}`);
     if (search.categoria) parts.push(`categoria ${search.categoria}`);
@@ -703,6 +689,7 @@ export function SeminovosPage() {
     );
   }, [
     whatsAppNumber,
+    search.busca,
     search.marca,
     search.modelo,
     search.categoria,
@@ -718,44 +705,50 @@ export function SeminovosPage() {
   return (
     <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-6">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
-        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-[#00283C]/10 bg-white p-2 shadow-sm">
-          <button
-            type="button"
-            onClick={() => setAreFiltersVisible((visible) => !visible)}
-            aria-expanded={areFiltersVisible}
-            aria-controls="stock-filters"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#00283C] px-4 text-sm font-bold text-white"
-          >
-            <Filter className="h-4 w-4" />
-            Filtros
-            {visibleFiltersCount > 0 && (
-              <span className="rounded-full bg-white px-1.5 py-0.5 text-xs text-[#00283C]">
-                {visibleFiltersCount}
+        <div className="mb-4 flex flex-col gap-2 rounded-xl border border-[#00283C]/10 bg-white p-2 shadow-sm lg:flex-row lg:items-center lg:gap-3">
+          <StockSearchField
+            value={search.busca || ""}
+            onChange={handleStockSearch}
+          />
+          <div className="flex items-center justify-between gap-3 lg:shrink-0">
+            <button
+              type="button"
+              onClick={() => setAreFiltersVisible((visible) => !visible)}
+              aria-expanded={areFiltersVisible}
+              aria-controls="stock-filters"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#00283C] px-4 text-sm font-bold text-white"
+            >
+              <Filter className="h-4 w-4" />
+              Filtros
+              {visibleFiltersCount > 0 && (
+                <span className="rounded-full bg-white px-1.5 py-0.5 text-xs text-[#00283C]">
+                  {visibleFiltersCount}
+                </span>
+              )}
+            </button>
+            <label className="flex min-w-0 items-center gap-2">
+              <span className="hidden text-xs font-bold uppercase text-muted-foreground sm:inline">
+                Ordenar por
               </span>
-            )}
-          </button>
-          <label className="flex min-w-0 items-center gap-2">
-            <span className="hidden text-xs font-bold uppercase text-muted-foreground sm:inline">
-              Ordenar por
-            </span>
-            <span className="sr-only">Ordenar veículos</span>
-            <div className="relative min-w-0">
-              <select
-                value={sortBy}
-                onChange={(event) =>
-                  setSortBy(event.target.value as ShowroomSortOption)
-                }
-                className="min-h-11 max-w-[190px] appearance-none rounded-lg bg-surface px-3 pr-8 text-sm font-semibold text-fg focus:outline-none focus:ring-2 focus:ring-primary/20"
-              >
-                <option value="recomendados">Recomendados</option>
-                <option value="ano-desc">Mais novos (ano)</option>
-                <option value="preco-asc">Menor preço</option>
-                <option value="preco-desc">Maior preço</option>
-                <option value="az">Modelo A–Z</option>
-              </select>
-              <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            </div>
-          </label>
+              <span className="sr-only">Ordenar veículos</span>
+              <div className="relative min-w-0">
+                <select
+                  value={sortBy}
+                  onChange={(event) =>
+                    setSortBy(event.target.value as ShowroomSortOption)
+                  }
+                  className="min-h-11 max-w-[190px] appearance-none rounded-lg bg-surface px-3 pr-8 text-sm font-semibold text-fg focus:outline-none focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="recomendados">Recomendados</option>
+                  <option value="ano-desc">Mais novos (ano)</option>
+                  <option value="preco-asc">Menor preço</option>
+                  <option value="preco-desc">Maior preço</option>
+                  <option value="az">Modelo A–Z</option>
+                </select>
+                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              </div>
+            </label>
+          </div>
         </div>
 
         {activeFilterLabels.length > 0 ? (
@@ -955,7 +948,12 @@ export function SeminovosPage() {
             <h1 className="text-2xl font-bold text-fg">
               Carros seminovos e usados
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p
+              className="text-sm text-muted-foreground mt-1"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               {filteredAndSortedVehicles.length} veículo
               {filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado
               {filteredAndSortedVehicles.length !== 1 ? "s" : ""}
@@ -1012,84 +1010,96 @@ export function SeminovosPage() {
         )}
 
         {/* Grid de Veículos */}
-        {isLoading ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">Carregando...</p>
-          </div>
-        ) : filteredAndSortedVehicles.length === 0 ? (
-          <div className="text-center py-12 space-y-4">
-            <div>
-              <p className="text-fg text-lg font-semibold mb-2">
-                Nenhum veículo encontrado
-              </p>
-              <p className="text-muted-foreground">
-                Tente ajustar os filtros — ou peça opções no WhatsApp.
-              </p>
+        <div id="stock-results">
+          {isLoading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Carregando...</p>
             </div>
-            <a
-              href={seminovosWhatsAppHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source="seminovos_empty"
-              data-wa-intent="stock_help"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#087A37] px-5 py-3 text-sm font-black text-white shadow-[0_6px_18px_rgba(8,122,55,0.30)]"
-            >
-              <MessageCircle className="h-4 w-4" />
-              Pedir opções no WhatsApp
-            </a>
-          </div>
-        ) : (
-          <>
-            <div
-              className="grid grid-cols-2 items-stretch gap-2 md:gap-6 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4 xl:gap-10 2xl:grid-cols-5"
-              style={{ overflow: "visible" }}
-            >
-              {visibleVehicles.map((vehicle, index) => (
-                <Fragment key={vehicle.id}>
-                  <VehicleCardStatic
-                    id={vehicle.id}
-                    name={vehicle.modelo || vehicle.name}
-                    price={vehicle.price || 0}
-                    valor_formatado={vehicle.valor_formatado}
-                    preco_com_troca={vehicle.preco_com_troca}
-                    preco_com_troca_formatado={
-                      vehicle.preco_com_troca_formatado
-                    }
-                    year={vehicle.year || new Date().getFullYear()}
-                    anoFabricacao={vehicle.anoFabricacao}
-                    km={vehicle.km || 0}
-                    images={vehicle.images || vehicle.fotos || []}
-                    imagens_site={vehicle.imagens_site}
-                    marca={vehicle.marca}
-                    modelo={vehicle.modelo}
-                    combustivel={vehicle.combustivel}
-                    cambio={vehicle.cambio}
-                    potencia={vehicle.potencia}
-                    pdf={vehicle.pdf}
-                    pdf_url={vehicle.pdf_url}
-                    diferenciais={vehicle.diferenciais}
-                    delay={index}
-                    fastAnimation={index >= midGridBreak}
-                    showWhatsAppInterest
-                    whatsAppSource="seminovos_grid"
-                    whatsAppNumber={whatsAppNumber}
-                    compact={stockLayout.compact}
-                    preserveShowroomPosition
-                  />
-                  {showMidGridBanner && index + 1 === midGridBreak && (
-                    <div className="col-span-full my-2 md:my-0">
-                      <SeminovosWhatsAppHelpPanel
-                        stockHelpHref={seminovosWhatsAppHref}
-                        hasFilters={hasFilterParams}
-                        variant="inline"
-                      />
-                    </div>
-                  )}
-                </Fragment>
-              ))}
+          ) : filteredAndSortedVehicles.length === 0 ? (
+            <div className="text-center py-12 space-y-4">
+              <div>
+                <p className="text-fg text-lg font-semibold mb-2">
+                  Nenhum veículo encontrado
+                </p>
+                <p className="text-muted-foreground">
+                  Tente outra busca ou ajuste os filtros — ou peça opções no
+                  WhatsApp.
+                </p>
+              </div>
+              {hasFilterParams && (
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="block mx-auto min-h-11 px-4 text-sm font-bold text-primary underline underline-offset-4"
+                >
+                  Limpar busca e filtros
+                </button>
+              )}
+              <a
+                href={seminovosWhatsAppHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-wa-source="seminovos_empty"
+                data-wa-intent="stock_help"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#087A37] px-5 py-3 text-sm font-black text-white shadow-[0_6px_18px_rgba(8,122,55,0.30)]"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Pedir opções no WhatsApp
+              </a>
             </div>
-          </>
-        )}
+          ) : (
+            <>
+              <div
+                className="grid grid-cols-2 items-stretch gap-2 md:gap-6 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4 xl:gap-10 2xl:grid-cols-5"
+                style={{ overflow: "visible" }}
+              >
+                {visibleVehicles.map((vehicle, index) => (
+                  <Fragment key={vehicle.id}>
+                    <VehicleCardStatic
+                      id={vehicle.id}
+                      name={vehicle.modelo || vehicle.name}
+                      price={vehicle.price || 0}
+                      valor_formatado={vehicle.valor_formatado}
+                      preco_com_troca={vehicle.preco_com_troca}
+                      preco_com_troca_formatado={
+                        vehicle.preco_com_troca_formatado
+                      }
+                      year={vehicle.year || new Date().getFullYear()}
+                      anoFabricacao={vehicle.anoFabricacao}
+                      km={vehicle.km || 0}
+                      images={vehicle.images || vehicle.fotos || []}
+                      imagens_site={vehicle.imagens_site}
+                      marca={vehicle.marca}
+                      modelo={vehicle.modelo}
+                      combustivel={vehicle.combustivel}
+                      cambio={vehicle.cambio}
+                      potencia={vehicle.potencia}
+                      pdf={vehicle.pdf}
+                      pdf_url={vehicle.pdf_url}
+                      diferenciais={vehicle.diferenciais}
+                      delay={index}
+                      fastAnimation={index >= midGridBreak}
+                      showWhatsAppInterest
+                      whatsAppSource="seminovos_grid"
+                      whatsAppNumber={whatsAppNumber}
+                      compact={stockLayout.compact}
+                      preserveShowroomPosition
+                    />
+                    {showMidGridBanner && index + 1 === midGridBreak && (
+                      <div className="col-span-full my-2 md:my-0">
+                        <SeminovosWhatsAppHelpPanel
+                          stockHelpHref={seminovosWhatsAppHref}
+                          hasFilters={hasFilterParams}
+                          variant="inline"
+                        />
+                      </div>
+                    )}
+                  </Fragment>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">

@@ -1,4 +1,5 @@
 export const emptySeminovosSearch = {
+  busca: undefined,
   marca: undefined,
   modelo: undefined,
   precoMin: undefined,

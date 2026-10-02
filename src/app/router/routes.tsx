@@ -1,6 +1,6 @@
 import { createRootRoute, createRoute, Outlet } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
-import { Suspense, useEffect, useLayoutEffect } from "react";
+import { Suspense, useEffect, useLayoutEffect, useRef } from "react";
 import { lazyWithRetry } from "@/lib/lazyWithRetry";
 import { Header } from "@/design-system/components/layout/Header";
 import { LazyFooter } from "@/design-system/components/layout/LazyFooter";
@@ -300,14 +300,24 @@ function RootComponent() {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [location.pathname]);
 
+  const lastTrackedPageRef = useRef("");
   useEffect(() => {
-    const search =
+    let search =
       typeof location.searchStr === "string"
         ? location.searchStr
         : typeof location.search === "string"
           ? location.search
           : "";
-    trackPageView(`${location.pathname}${search}`);
+    if (location.pathname === "/seminovos") {
+      // Digitar no buscador não representa uma nova visita a cada tecla.
+      const parameters = new URLSearchParams(search);
+      parameters.delete("busca");
+      search = parameters.size ? `?${parameters.toString()}` : "";
+    }
+    const pagePath = `${location.pathname}${search}`;
+    if (lastTrackedPageRef.current === pagePath) return;
+    lastTrackedPageRef.current = pagePath;
+    trackPageView(pagePath);
   }, [location.pathname, location.search, location.searchStr]);
 
   const isLaudoPage = location.pathname.startsWith("/laudo/");
@@ -374,6 +384,7 @@ const entregasRoute = createRoute({
 });
 
 type SeminovosRouteSearch = {
+  busca?: string;
   marca?: string;
   modelo?: string;
   precoMin?: string;
@@ -392,6 +403,10 @@ const seminovosRoute = createRoute({
   component: SeminovosPage,
   validateSearch: (search: Record<string, unknown>): SeminovosRouteSearch => {
     return {
+      busca:
+        typeof search.busca === "string"
+          ? search.busca.slice(0, 120) || undefined
+          : undefined,
       marca: (search.marca as string) || undefined,
       modelo: (search.modelo as string) || undefined,
       precoMin: (search.precoMin as string) || undefined,

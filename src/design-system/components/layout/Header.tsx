@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Link, useNavigate, useLocation } from "@tanstack/react-router";
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  useSearch,
+} from "@tanstack/react-router";
 import { Search, Phone, Menu, X } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useSearchContext } from "@/contexts/SearchContext";
@@ -11,6 +16,10 @@ import {
 } from "@/lib/whatsappMessages";
 import { generateVehicleSlug } from "@/lib/slug";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
+import {
+  matchesVehicleSearch,
+  normalizeVehicleSearch,
+} from "@/lib/vehicleSearch";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
 interface VehicleSuggestion {
@@ -35,6 +44,8 @@ export function Header() {
   const mobileAutocompleteRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const currentStockSearch = useSearch({ strict: false }).busca || "";
+  const desktopSearchTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const { data: whatsapp } = useWhatsAppQuery();
   const whatsappNumber = whatsapp?.numero?.trim() || DEFAULT_SALES_WHATSAPP;
   const { searchTerm, setSearchTerm } = useSearchContext();
@@ -108,30 +119,14 @@ export function Header() {
     }
   }, [isMobileMenuOpen]);
 
-  // Navega para showroom quando digita na busca desktop (com debounce)
+  // Cancela digitações pendentes ao fechar a lupa ou navegar (inclusive Voltar).
   useEffect(() => {
-    // Só navega se a busca desktop está aberta e há pelo menos uma letra
-    if (isSearchOpen && searchTerm.trim().length > 0 && !isMobileMenuOpen) {
-      const timeoutId = setTimeout(() => {
-        navigate({
-          to: "/seminovos",
-          search: {
-            modelo: searchTerm.trim(),
-            marca: undefined,
-            precoMin: undefined,
-            precoMax: undefined,
-            anoMin: undefined,
-            anoMax: undefined,
-            cambio: undefined,
-            cor: undefined,
-            categoria: undefined,
-          },
-        });
-      }, 200); // Debounce de 200ms para evitar navegações excessivas
+    return () => clearTimeout(desktopSearchTimerRef.current);
+  }, [isSearchOpen, location.href]);
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [searchTerm, isSearchOpen, isMobileMenuOpen, navigate]);
+  useEffect(() => {
+    if (isSearchOpen) setSearchTerm(currentStockSearch);
+  }, [currentStockSearch, isSearchOpen, setSearchTerm]);
 
   // Limpa a busca apenas quando realmente sai da página de seminovos
   // Não limpa quando o menu mobile ou busca desktop estão abertos
@@ -172,7 +167,7 @@ export function Header() {
       return [];
     }
 
-    const lowerQuery = searchTerm.toLowerCase().trim();
+    const lowerQuery = normalizeVehicleSearch(searchTerm);
     const suggestions: VehicleSuggestion[] = [];
 
     // Cria um Set para evitar duplicatas baseado no ID do veículo
@@ -195,22 +190,7 @@ export function Header() {
         return;
       }
 
-      const marca = vehicle.marca.toLowerCase();
-      const modelo = vehicle.modelo.toLowerCase();
-      const ano = vehicle.year.toString();
-      const cor = vehicle.cor.toLowerCase();
-
-      // Verifica se a busca corresponde a marca, modelo, ano ou cor
-      const matches =
-        marca.includes(lowerQuery) ||
-        modelo.includes(lowerQuery) ||
-        ano.includes(lowerQuery) ||
-        cor.includes(lowerQuery) ||
-        `${marca} ${modelo}`.includes(lowerQuery) ||
-        `${marca} ${modelo} ${ano}`.includes(lowerQuery) ||
-        `${marca} ${modelo} ${ano} ${cor}`.includes(lowerQuery);
-
-      if (matches) {
+      if (matchesVehicleSearch(vehicle, searchTerm)) {
         seenIds.add(vehicle.id);
         suggestions.push({
           marca: vehicle.marca,
@@ -226,10 +206,10 @@ export function Header() {
 
     // Ordena por relevância (marca primeiro, depois modelo, depois ano)
     suggestions.sort((a, b) => {
-      const aMarca = a.marca.toLowerCase();
-      const bMarca = b.marca.toLowerCase();
-      const aModelo = a.modelo.toLowerCase();
-      const bModelo = b.modelo.toLowerCase();
+      const aMarca = normalizeVehicleSearch(a.marca);
+      const bMarca = normalizeVehicleSearch(b.marca);
+      const aModelo = normalizeVehicleSearch(a.modelo);
+      const bModelo = normalizeVehicleSearch(b.modelo);
 
       // Se a busca começa com marca, prioriza
       if (aMarca.startsWith(lowerQuery) && !bMarca.startsWith(lowerQuery))
@@ -254,6 +234,22 @@ export function Header() {
     setSearchTerm(value);
     setIsMobileAutocompleteOpen(value.length >= 2);
     setHighlightedIndex(0);
+    if (isSearchOpen && !isMobileMenuOpen) {
+      clearTimeout(desktopSearchTimerRef.current);
+      if (value.trim() || location.pathname === "/seminovos") {
+        desktopSearchTimerRef.current = setTimeout(() => {
+          void navigate({
+            to: "/seminovos",
+            search: {
+              ...emptySeminovosSearch,
+              busca: value.trim() || undefined,
+            },
+            replace: location.pathname === "/seminovos",
+            resetScroll: location.pathname !== "/seminovos",
+          });
+        }, 200);
+      }
+    }
   };
 
   // Função para selecionar uma sugestão do autocomplete
@@ -278,43 +274,13 @@ export function Header() {
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === "Enter" && searchTerm.trim()) {
-      // Se está na página showroom, apenas atualiza os filtros
-      if (location.pathname === "/seminovos") {
-        navigate({
-          to: "/seminovos",
-          search: {
-            modelo: searchTerm.trim(),
-            marca: undefined,
-            precoMin: undefined,
-            precoMax: undefined,
-            anoMin: undefined,
-            anoMax: undefined,
-            cambio: undefined,
-            cor: undefined,
-            categoria: undefined,
-          },
-        });
-        setIsSearchOpen(false);
-        setSearchTerm("");
-      } else {
-        // Se não está na página showroom, navega para lá
-        navigate({
-          to: "/seminovos",
-          search: {
-            modelo: searchTerm.trim(),
-            marca: undefined,
-            precoMin: undefined,
-            precoMax: undefined,
-            anoMin: undefined,
-            anoMax: undefined,
-            cambio: undefined,
-            cor: undefined,
-            categoria: undefined,
-          },
-        });
-        setIsSearchOpen(false);
-        setSearchTerm("");
-      }
+      navigate({
+        to: "/seminovos",
+        search: { ...emptySeminovosSearch, busca: searchTerm.trim() },
+        replace: location.pathname === "/seminovos",
+      });
+      setIsSearchOpen(false);
+      setSearchTerm("");
     }
   };
 
@@ -335,15 +301,8 @@ export function Header() {
         navigate({
           to: "/seminovos",
           search: {
-            modelo: searchTerm.trim(),
-            marca: undefined,
-            precoMin: undefined,
-            precoMax: undefined,
-            anoMin: undefined,
-            anoMax: undefined,
-            cambio: undefined,
-            cor: undefined,
-            categoria: undefined,
+            ...emptySeminovosSearch,
+            busca: searchTerm.trim(),
           },
         });
         setIsMobileMenuOpen(false);
@@ -390,7 +349,9 @@ export function Header() {
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
     if (!isSearchOpen) {
-      setSearchTerm("");
+      setSearchTerm(
+        location.pathname === "/seminovos" ? currentStockSearch : "",
+      );
     }
   };
 
@@ -534,9 +495,8 @@ export function Header() {
                     placeholder="Buscar veículo..."
                     className="flex-1 bg-transparent border-0 outline-none text-sm text-fg placeholder:text-muted-foreground"
                     onBlur={() => {
-                      if (!searchTerm.trim()) {
-                        setIsSearchOpen(false);
-                      }
+                      // A busca visível do estoque assume o controle ao receber foco.
+                      setIsSearchOpen(false);
                     }}
                   />
                   <button

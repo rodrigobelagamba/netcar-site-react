@@ -18,7 +18,7 @@
     "seo:validate-data-modules": "tsx scripts/validate-seo-data-modules.ts",
     "seo:validate-demand-runtime": "tsx scripts/validate-demand-runtime.ts",
     "stock:validate-showroom": "tsx scripts/validate-showroom-runtime.ts",
-    "stock:test-search": "node --test scripts/tests/stock-search-refresh.test.mjs",
+    "stock:test-search": "node --test scripts/tests/stock-search-refresh.test.mjs scripts/tests/stock-visible-search.test.mjs",
     "stock:test-equipment": "tsx --test scripts/tests/vehicle-equipment*.test.ts scripts/tests/equipment-seo.test.ts",
     "stock:audit-equipment": "tsx scripts/audit-vehicle-equipment.ts",
     "stock:test-equipment-audit": "tsx --test scripts/tests/equipment-audit.test.ts",

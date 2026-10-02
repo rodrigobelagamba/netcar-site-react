@@ -13,6 +13,7 @@ import * as React from "react";
 import * as jsxRuntime from "react/jsx-runtime";
 import ts from "typescript";
 import * as whatsappMessages from "../src/lib/whatsappMessages";
+import * as vehicleSearch from "../src/lib/vehicleSearch";
 import { cn } from "../src/lib/cn";
 import { emptySeminovosSearch } from "../src/lib/seminovos-search";
 
@@ -72,6 +73,7 @@ function createHarness(path: string, apiData: ApiData, routePath = pagePath) {
       useVehiclesQuery: () => ({ data: [] }),
     },
     "@/lib/whatsappMessages": whatsappMessages,
+    "@/lib/vehicleSearch": vehicleSearch,
     "@/lib/analytics": {
       trackSellEvaluation: (stage: string, city: string, intent: Intent) =>
         events.push({ stage, city, intent }),
@@ -83,6 +85,7 @@ function createHarness(path: string, apiData: ApiData, routePath = pagePath) {
     "@tanstack/react-router": {
       Link: "router-link",
       useLocation: () => ({ pathname: routePath }),
+      useSearch: () => ({}),
       useRouterState: ({ select }: Props) =>
         select({ location: { pathname: routePath } }),
       useNavigate: () => () => {
