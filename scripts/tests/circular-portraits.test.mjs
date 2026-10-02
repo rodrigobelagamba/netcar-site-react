@@ -87,20 +87,56 @@ test("about hero preserves a square image inside its circular frame", () => {
     assert.ok(classes(hero.parent).has(name), name);
 });
 
-test("each store thumbnail uses its own branch in src, srcset, fallback and link", () => {
+test("each store gallery uses its own API group and keeps Maps outside gallery controls", () => {
+  const find = (root, predicate) => {
+    const results = [];
+    const visit = (node) => {
+      if (predicate(node)) results.push(node);
+      ts.forEachChild(node, visit);
+    };
+    visit(root);
+    return results;
+  };
+  const attribute = (node, name) => node.attributes.properties.find(
+    (prop) => ts.isJsxAttribute(prop) && prop.name.getText() === name,
+  )?.initializer;
+
   for (const number of [1, 2]) {
-    const images = findAboutImages(`Miniatura Loja ${number}`);
-    assert.equal(images.length, 1);
-    const [image] = images;
-    const source = image.getText();
-    assert.ok(source.includes(`optimizeStockImage(loja${number}Image, 320)`));
-    assert.ok(source.includes(`stockImageSrcSet(loja${number}Image, [200, 320])`));
-    assert.ok(source.includes(`e.currentTarget.src = "/images/loja${number}.webp"`));
-    assert.ok(classes(image.parent).has("right-3"), "mobile thumbnail stays inside its card");
-    assert.ok(!classes(image.parent).has("-right-6"));
-    let link = image.parent;
-    while (link && !(ts.isJsxElement(link) && link.openingElement.tagName.getText() === "motion.a")) link = link.parent;
-    assert.ok(link);
-    assert.ok(link.openingElement.getText().includes(`buildLojaMapsUrl("Loja${number}")`));
+    const queries = find(about, (node) => ts.isVariableDeclaration(node)
+      && node.initializer && ts.isCallExpression(node.initializer)
+      && node.initializer.expression.getText() === `useBannersLoja${number}Query`);
+    assert.equal(queries.length, 1);
+    const queryData = queries[0].name.elements.find((element) => element.propertyName?.getText() === "data");
+    assert.ok(queryData);
+
+    const builders = find(about, (node) => ts.isCallExpression(node)
+      && node.expression.getText() === "buildStoreGallery"
+      && node.arguments[0]?.text === `Loja${number}`);
+    assert.equal(builders.length, 1);
+    assert.equal(builders[0].arguments[1].getText(), queryData.name.getText());
+    let photoBinding = builders[0].parent;
+    while (photoBinding && !ts.isVariableDeclaration(photoBinding)) photoBinding = photoBinding.parent;
+    assert.ok(photoBinding);
+
+    const galleries = find(about, (node) => ts.isJsxSelfClosingElement(node)
+      && node.tagName.getText() === "StoreGallery"
+      && attribute(node, "name")?.text === `Loja ${number}`);
+    assert.equal(galleries.length, 1);
+    const gallery = galleries[0];
+    assert.equal(attribute(gallery, "photos")?.expression?.getText(), photoBinding.name.getText());
+    let card = gallery.parent;
+    while (card && !(ts.isJsxElement(card) && card.openingElement.tagName.getText() === "motion.article")) {
+      if (ts.isJsxElement(card)) assert.ok(!["a", "motion.a"].includes(card.openingElement.tagName.getText()));
+      card = card.parent;
+    }
+    assert.ok(card, "Gallery is inside its own non-link store card");
+    assert.equal(attribute(card.openingElement, "href"), undefined);
+    const mapsLinks = find(card, (node) => ts.isJsxOpeningElement(node)
+      && node.tagName.getText() === "a"
+      && attribute(node, "href")?.expression?.expression?.getText() === "buildLojaMapsUrl");
+    assert.equal(mapsLinks.length, 1);
+    assert.equal(attribute(mapsLinks[0], "href").expression.arguments[0].text, `Loja${number}`);
+    assert.equal(attribute(mapsLinks[0], "target")?.text, "_blank");
+    assert.equal(attribute(mapsLinks[0], "rel")?.text, "noopener noreferrer");
   }
 });

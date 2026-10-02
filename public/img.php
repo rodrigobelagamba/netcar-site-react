@@ -2,6 +2,7 @@
 /**
  * Resizer de imagens do estoque (LCP fix).
  * Uso: /img.php?src=/imagens/veiculos_automacar/FOO.png&w=1600
+ * Galerias com EXIF: acrescentar &orient=1 para corrigir a orientação JPEG
  * - Só serve arquivos locais em /imagens/ ou /images/ (sem traversal)
  * - Nunca faz upscale (se original <= w, serve original)
  * - WebP otimizado com alpha preservado; cache em disco + headers 1 ano
@@ -10,6 +11,7 @@
 $src = isset($_GET['src']) ? $_GET['src'] : '';
 $w   = isset($_GET['w']) ? (int) $_GET['w'] : 1600;
 $quality = 74;
+$respectOrientation = isset($_GET['orient']) && $_GET['orient'] === '1';
 
 $w = max(200, min($w, 2400));
 
@@ -39,7 +41,8 @@ $cacheDir = $docroot . '/cache/img';
 if (!is_dir($cacheDir)) {
     @mkdir($cacheDir, 0755, true);
 }
-$cacheKey  = md5($src . '|' . $w . '|q' . $quality . '|' . filemtime($file));
+$cacheKey  = md5($src . '|' . $w . '|q' . $quality . '|' . filemtime($file)
+    . ($respectOrientation ? '|orientation-v1' : ''));
 $cacheFile = $cacheDir . '/' . $cacheKey . '.webp';
 
 $serve = function ($path, $type) {
@@ -62,6 +65,36 @@ if ($info === false || !function_exists('imagewebp')) {
 
 list($ow, $oh) = $info;
 
+$flip = 0;
+$rotation = 0;
+if ($respectOrientation && $info[2] === IMAGETYPE_JPEG) {
+    // Sem uma leitura confiável, preservar o EXIF original para o navegador.
+    if (!function_exists('exif_read_data')) {
+        $serve($file, $info['mime']);
+    }
+    $exif = @exif_read_data($file, 'IFD0', true);
+    if ($exif === false) {
+        $serve($file, $info['mime']);
+    }
+    $orientation = isset($exif['IFD0']['Orientation']) ? $exif['IFD0']['Orientation'] : 1;
+    if (!is_int($orientation) || $orientation < 1 || $orientation > 8) {
+        $serve($file, $info['mime']);
+    }
+    // GD usa graus anti-horários. Nas orientações 5/7, espelhar antes de girar.
+    switch ($orientation) {
+        case 2: $flip = IMG_FLIP_HORIZONTAL; break;
+        case 3: $rotation = 180; break;
+        case 4: $flip = IMG_FLIP_VERTICAL; break;
+        case 5: $flip = IMG_FLIP_HORIZONTAL; $rotation = 90; break;
+        case 6: $rotation = 270; break;
+        case 7: $flip = IMG_FLIP_HORIZONTAL; $rotation = 270; break;
+        case 8: $rotation = 90; break;
+    }
+    if (($flip && !function_exists('imageflip')) || ($rotation && !function_exists('imagerotate'))) {
+        $serve($file, $info['mime']);
+    }
+}
+
 switch ($info[2]) {
     case IMAGETYPE_PNG:
         $img = @imagecreatefrompng($file);
@@ -77,6 +110,33 @@ switch ($info[2]) {
 }
 if ($img === false) {
     $serve($file, $info['mime']);
+}
+
+if ($flip || $rotation) {
+    $orientationFailed = false;
+    try {
+        if ($flip && !@imageflip($img, $flip)) {
+            $orientationFailed = true;
+        }
+        if (!$orientationFailed && $rotation) {
+            $rotated = @imagerotate($img, $rotation, 0);
+            if ($rotated === false) {
+                $orientationFailed = true;
+            } else {
+                imagedestroy($img);
+                $img = $rotated;
+            }
+        }
+    } catch (Throwable $error) {
+        $orientationFailed = true;
+    }
+    if ($orientationFailed) {
+        imagedestroy($img);
+        $serve($file, $info['mime']);
+    }
+    // Orientações 5–8 trocam os eixos: calcular tamanho e limite sem upscale depois.
+    $ow = imagesx($img);
+    $oh = imagesy($img);
 }
 
 // Nunca upscale: preserva nitidez do original

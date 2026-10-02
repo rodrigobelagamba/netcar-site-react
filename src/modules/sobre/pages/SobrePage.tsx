@@ -1,18 +1,31 @@
 import { motion } from "@/design-system/components/utils/StaticMotion";
+import { useMemo } from "react";
 import { useCountersQuery } from "@/catalog/queries/useSiteQuery";
 import {
   useAddressQuery,
   usePhoneQuery,
   useWhatsAppQuery,
+  useBannersLoja1Query,
+  useBannersLoja2Query,
 } from "@/catalog/queries/useSiteQuery";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/cn";
 import { useMetaTags } from "@/hooks/useMetaTags";
-import { CheckCircle2, Shield, Award, Users, TrendingUp } from "lucide-react";
+import {
+  CheckCircle2,
+  Shield,
+  Award,
+  Users,
+  TrendingUp,
+  MapPin,
+  ArrowUpRight,
+} from "lucide-react";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { buildLojaMapsUrl } from "@/lib/formatters";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
+import { StoreGallery } from "../components/StoreGallery";
+import { buildStoreGallery } from "../storeGallery";
 
 interface TeamMember {
   name: string;
@@ -31,6 +44,16 @@ export function SobrePage() {
   const { data: phoneLoja1 } = usePhoneQuery("Loja1");
   const { data: phoneLoja2 } = usePhoneQuery("Loja2");
   const { data: whatsapp } = useWhatsAppQuery();
+  const { data: loja1Banners } = useBannersLoja1Query();
+  const { data: loja2Banners } = useBannersLoja2Query();
+  const loja1Photos = useMemo(
+    () => buildStoreGallery("Loja1", loja1Banners),
+    [loja1Banners],
+  );
+  const loja2Photos = useMemo(
+    () => buildStoreGallery("Loja2", loja2Banners),
+    [loja2Banners],
+  );
 
   useMetaTags({
     title: "Sobre a Netcar Multimarcas | Revenda em Esteio",
@@ -39,10 +62,8 @@ export function SobrePage() {
     url: "https://www.netcarmultimarcas.com.br/sobre",
   });
 
-  // Fachadas locais já comprimidas. Evita trocar a imagem principal após a API
-  // responder e impede que o LCP seja atualizado vários segundos depois.
+  // O retrato de abertura continua local e estável, independente da galeria.
   const loja1Image = "/images/loja1.webp";
-  const loja2Image = "/images/loja2.webp";
 
   // Formata endereço
   const formatAddress = (address?: { address?: string }) => {
@@ -343,127 +364,72 @@ export function SobrePage() {
               Nossas lojas
             </h2>
             <p className="text-muted-foreground max-w-2xl">
-              Duas lojas na Av. Presidente Vargas. Se o carro estiver na outra
-              unidade, a equipe organiza para você conhecer.
+              Duas lojas na Av. Presidente Vargas, em Esteio. Um só estoque e
+              uma equipe pronta para ajudar você a escolher seu próximo carro.
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
             {/* Loja 1 */}
-            <motion.a
-              href={buildLojaMapsUrl("Loja1")}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Abrir localização da Loja 1 (Matriz) no Google Maps"
-              title="Abrir no Google Maps"
+            <motion.article
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group flex flex-col cursor-pointer no-underline"
+              className="relative bg-white rounded-[20px] shadow-sm flex flex-col"
             >
-              <div className="relative aspect-video w-full rounded-t-[20px] overflow-hidden bg-gray-100">
-                <img
-                  src={optimizeStockImage(loja1Image, 640)}
-                  srcSet={stockImageSrcSet(loja1Image, [320, 480, 640])}
-                  sizes="(max-width: 767px) 100vw, 50vw"
-                  alt="Fachada da Loja 1"
-                  width={640}
-                  height={360}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/loja1.webp";
-                  }}
-                />
-              </div>
-              <div className="absolute top-3 right-3 w-28 h-20 sm:-top-6 sm:right-4 sm:w-40 sm:h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
-                <img
-                  src={optimizeStockImage(loja1Image, 320)}
-                  srcSet={stockImageSrcSet(loja1Image, [200, 320])}
-                  sizes="(max-width: 639px) 112px, 160px"
-                  alt="Miniatura Loja 1"
-                  width={320}
-                  height={224}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover transition-opacity duration-500"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/loja1.webp";
-                  }}
-                />
-              </div>
+              <StoreGallery name="Loja 1" photos={loja1Photos} />
               <div className="p-6">
                 <h3 className="text-lg font-bold text-fg mb-1">
                   Loja 1 — Centro, Esteio/RS
                 </h3>
                 <p className="text-muted-foreground text-sm mb-3">
-                  {formatAddress(addressLoja1)} — {formatPhone(phoneLoja1)}
+                  {formatAddress(addressLoja1) ||
+                    "Av. Presidente Vargas, 740 — Esteio/RS"}
+                  {formatPhone(phoneLoja1) && <> · {formatPhone(phoneLoja1)}</>}
                 </p>
-                <p className="text-muted-foreground text-sm">
-                  Loja do número 740, integrada ao estoque e à equipe da Loja 2.
-                </p>
+                <a
+                  href={buildLojaMapsUrl("Loja1")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Como chegar à Loja 1 — abrir Google Maps"
+                  className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-fg underline-offset-4 hover:underline"
+                >
+                  <MapPin className="h-4 w-4" aria-hidden="true" /> Como chegar
+                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                </a>
               </div>
-            </motion.a>
+            </motion.article>
 
             {/* Loja 2 */}
-            <motion.a
-              href={buildLojaMapsUrl("Loja2")}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Abrir localização da Loja 2 (Filial) no Google Maps"
-              title="Abrir no Google Maps"
+            <motion.article
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="relative bg-white rounded-[20px] shadow-sm hover:shadow-md transition-all group flex flex-col cursor-pointer no-underline"
+              className="relative bg-white rounded-[20px] shadow-sm flex flex-col"
             >
-              <div className="relative aspect-video w-full rounded-t-[20px] overflow-hidden bg-gray-100">
-                <img
-                  src={optimizeStockImage(loja2Image, 640)}
-                  srcSet={stockImageSrcSet(loja2Image, [320, 480, 640])}
-                  sizes="(max-width: 767px) 100vw, 50vw"
-                  alt="Fachada da Loja 2"
-                  width={640}
-                  height={360}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/loja2.webp";
-                  }}
-                />
-              </div>
-              <div className="absolute top-3 right-3 w-28 h-20 sm:-top-6 sm:right-4 sm:w-40 sm:h-28 rounded-xl overflow-hidden shadow-2xl border-4 border-white z-10">
-                <img
-                  src={optimizeStockImage(loja2Image, 320)}
-                  srcSet={stockImageSrcSet(loja2Image, [200, 320])}
-                  sizes="(max-width: 639px) 112px, 160px"
-                  alt="Miniatura Loja 2"
-                  width={320}
-                  height={224}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover transition-opacity duration-500"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/loja2.webp";
-                  }}
-                />
-              </div>
+              <StoreGallery name="Loja 2" photos={loja2Photos} />
               <div className="p-6">
                 <h3 className="text-lg font-bold text-fg mb-1">
                   Loja 2 — Centro, Esteio/RS
                 </h3>
                 <p className="text-muted-foreground text-sm mb-3">
-                  {formatAddress(addressLoja2)} — {formatPhone(phoneLoja2)}
+                  {formatAddress(addressLoja2) ||
+                    "Av. Presidente Vargas, 1106 — Esteio/RS"}
+                  {formatPhone(phoneLoja2) && <> · {formatPhone(phoneLoja2)}</>}
                 </p>
-                <p className="text-muted-foreground text-sm">
-                  Loja do número 1106, integrada ao estoque e à equipe da Loja
-                  1.
-                </p>
+                <a
+                  href={buildLojaMapsUrl("Loja2")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Como chegar à Loja 2 — abrir Google Maps"
+                  className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-fg underline-offset-4 hover:underline"
+                >
+                  <MapPin className="h-4 w-4" aria-hidden="true" /> Como chegar
+                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                </a>
               </div>
-            </motion.a>
+            </motion.article>
           </div>
         </div>
       </section>
