@@ -240,13 +240,45 @@ export function pushDataLayer(payload: Record<string, unknown>): void {
 function trackBusinessEvent(
   eventName: string,
   payload: Record<string, unknown>,
+  options: { includeContext?: boolean } = {},
 ): void {
-  pushDataLayer({ event: eventName, ...payload });
+  const pagePath =
+    typeof payload.page_path === "string"
+      ? payload.page_path
+      : getPagePath().split(/[?#]/, 1)[0];
+  // Um efeito do filho pode rodar antes do pageview do router. O aceite
+  // também pode mudar sem navegação: não depender dos defaults do último
+  // config para página, cidade de interesse ou atribuição consentida.
+  const eventPayload =
+    options.includeContext === false
+      ? payload
+      : {
+          page_path: pagePath,
+          // Não ampliar a coleta com queries/fragmentos digitados na URL. A
+          // atribuição de campanha continua nos campos consentidos já existentes.
+          page_location:
+            typeof window !== "undefined"
+              ? window.location.href.split(/[?#]/, 1)[0]
+              : "",
+          page_title: typeof document !== "undefined" ? document.title : "",
+          page_type: inferPageType(pagePath),
+          ...getRegionalDimensions(pagePath),
+          ...getTrafficDimensions(),
+          ...payload,
+        };
+  pushDataLayer({ event: eventName, ...eventPayload });
 
   if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    // GTM lê ecommerce.items; gtag exige items/currency/value na raiz.
+    // Preservar o contrato do Data Layer sem enviar o envelope ao GA4.
+    const { ecommerce, ...eventParameters } = eventPayload as Record<
+      string,
+      unknown
+    >;
     window.gtag("event", eventName, {
       send_to: GA4_MEASUREMENT_ID,
-      ...payload,
+      ...eventParameters,
+      ...(ecommerce && typeof ecommerce === "object" ? ecommerce : {}),
     });
   }
 }
@@ -265,12 +297,15 @@ export function trackViewItem(params: {
     ...getRegionalDimensions(pagePath),
     ...getTrafficDimensions(),
     ecommerce: {
+      currency: params.currency ?? "BRL",
+      value: params.price,
       items: [
         {
           item_id: String(params.vehicleId),
           item_name: params.vehicleName,
           price: params.price,
           currency: params.currency ?? "BRL",
+          quantity: 1,
         },
       ],
     },
@@ -442,12 +477,18 @@ export function trackBlogDiscoveryClick(params: {
 /** Clique para abrir um vídeo externo; não equivale a reprodução nem a lead. */
 export function trackVehicleVideoClick(vehicleId: string): void {
   if (getPrivacyConsentState() !== "accepted") return;
-  trackBusinessEvent("vehicle_video_click", {
-    vehicle_id: vehicleId,
-    video_provider: "instagram",
-    video_placement: "vehicle_gallery",
-    page_type: "vehicle_detail",
-  });
+  // Manter o contrato mínimo de vídeo: opt-in, ID do carro e posição do link,
+  // sem ampliar esse evento com atribuição, cookies ou contato comercial.
+  trackBusinessEvent(
+    "vehicle_video_click",
+    {
+      vehicle_id: vehicleId,
+      video_provider: "instagram",
+      video_placement: "vehicle_gallery",
+      page_type: "vehicle_detail",
+    },
+    { includeContext: false },
+  );
 }
 
 let comparisonIsReady = false;

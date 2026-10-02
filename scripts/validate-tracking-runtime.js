@@ -130,7 +130,7 @@ assert(
 );
 assert(
   !sources.includes("https://www.googletagmanager.com/gtag/js?id=G-MGPNBDNQ9G"),
-  "GA4 direto duplicou o GA4 já administrado pelo GTM",
+  "bootstrap inseriu fallback direto sem falha de carregamento do GTM",
 );
 assert(
   !sources.includes("https://connect.facebook.net/en_US/fbevents.js"),
