@@ -7,9 +7,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { afterEach, beforeEach, describe, it } from "node:test";
-import React, { useEffect } from "react";
-import TestRenderer, { act } from "react-test-renderer";
-import { useMetaTags } from "../src/hooks/useMetaTags";
 import {
   GA4_MEASUREMENT_ID,
   resetComparisonTracking,
@@ -26,6 +23,14 @@ import {
   clearTrafficAttribution,
   getTrafficSource,
 } from "../src/lib/waTracking";
+
+// The deploy process inherits NODE_ENV=production, where React disables act.
+// Select the test runtime before importing React or any hook that imports it.
+// This affects only this validator process, not the subsequent production build.
+process.env.NODE_ENV = "test";
+const { default: React, useEffect } = await import("react");
+const { default: TestRenderer, act } = await import("react-test-renderer");
+const { useMetaTags } = await import("../src/hooks/useMetaTags");
 
 type Payload = Record<string, any>;
 type GtagCall = [string, string, Payload?];
