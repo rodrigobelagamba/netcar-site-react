@@ -7,8 +7,15 @@ mais recentes da conta Instagram já conectada à integração social e cruza os
 vídeos com o estoque oficial completo. Usa **ID exato da unidade**, identificado
 por `#netcar<ID>` ou pelo link exato do anúncio na legenda. Não infere pelo modelo.
 
-- O card aparece acima da galeria apenas para uma unidade com preço positivo e
-  associação única, conferida.
+- O vídeo aparece no início da galeria apenas para uma unidade com preço positivo e
+  associação única, conferida, mesmo quando não há fotos na galeria.
+- O início da ficha tem um atalho “Ver vídeo” para a capa em destaque. No
+  desktop, o vídeo ocupa duas colunas e duas linhas junto às fotos; no celular,
+  aparece antes do carrossel de fotos. A capa mantém a fotografia clara, com selo
+  de vídeo e uma faixa inferior azul-petróleo: chamada curta, play em turquesa e
+  destino Instagram. As cores e os cantos seguem o restante do site, sem um
+  painel de texto ao lado nem animação automática para chamar atenção.
+  Esse atalho apenas navega na página e não registra uma abertura do Instagram.
 - A capa é uma imagem local do vídeo daquela unidade. Não há embed, autoplay ou
   carregamento de mídia da Meta antes do clique.
 - O clique abre a publicação no Instagram em outra aba; não é uma reprodução

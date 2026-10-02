@@ -1,4 +1,4 @@
-import { ArrowUpRight, Play } from "lucide-react";
+import { ArrowUpRight, Play, Video } from "lucide-react";
 import {
   normalizeInstagramVideoUrl,
   normalizeVehicleVideoCover,
@@ -27,48 +27,6 @@ export function VehicleVideoLink({
     ? `Veja este ${displayModel.trim()} em vídeo`
     : "Ver vídeo deste carro";
 
-  if (cover) {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onOpen}
-        aria-label={`${title}: ${vehicleName}, no Instagram (abre em outra aba)`}
-        className="group relative isolate block aspect-video w-full max-w-md overflow-hidden rounded-xl bg-[#00283C] text-white ring-1 ring-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#008B95]"
-      >
-        <span
-          className="absolute inset-0"
-          aria-hidden="true"
-        >
-          <img
-            src={cover}
-            alt=""
-            width={640}
-            height={1138}
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 !h-full w-full object-cover object-[center_40%] transition-transform duration-300 motion-safe:group-hover:scale-[1.025]"
-            onError={(event) => { event.currentTarget.hidden = true; }}
-          />
-          <span className="absolute inset-0 bg-gradient-to-t from-[#001820]/95 via-black/10 to-black/5" />
-          <span className="absolute left-1/2 top-[38%] flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/95 text-[#00283C] shadow-md transition-transform motion-safe:group-hover:scale-105 sm:top-[42%]">
-            <Play className="ml-0.5 h-[18px] w-[18px] fill-current" />
-          </span>
-        </span>
-        <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 px-4 pb-4 text-left">
-          <span className="min-w-0 text-sm font-semibold leading-snug text-white sm:text-[15px]">
-            {title}
-          </span>
-          <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium leading-snug text-white/95">
-            No Instagram
-            <ArrowUpRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-          </span>
-        </span>
-      </a>
-    );
-  }
-
   return (
     <a
       href={href}
@@ -76,26 +34,46 @@ export function VehicleVideoLink({
       rel="noopener noreferrer"
       onClick={onOpen}
       aria-label={`${title}: ${vehicleName}, no Instagram (abre em outra aba)`}
-      className="group inline-flex min-h-[52px] max-w-full items-center gap-3 rounded-full border border-[#00283C]/15 bg-white px-4 py-2.5 text-[#00283C] shadow-sm transition-colors hover:border-[#008B95]/50 hover:bg-[#F0FAFA] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#008B95] sm:px-5"
+      className="group relative isolate flex aspect-[6/5] w-full flex-col overflow-hidden rounded-2xl border border-[#00283C]/10 bg-[#00283C] text-white shadow-[0_4px_18px_rgba(0,40,60,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#008B95] sm:h-full sm:aspect-auto sm:min-h-[280px]"
     >
-      <span
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#E8F6F6] text-[#007C86]"
-        aria-hidden="true"
-      >
-        <Play className="ml-0.5 h-3.5 w-3.5 fill-current" />
-      </span>
-      <span className="min-w-0 text-left">
-        <span className="block text-sm font-bold leading-tight sm:text-[15px]">
-          {title}
+      <span className="relative min-h-0 flex-1 overflow-hidden" aria-hidden="true">
+        {cover && (
+          <img
+            src={cover}
+            alt=""
+            width={640}
+            height={1138}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 !h-full w-full object-cover object-[center_42%] transition-transform duration-500 motion-safe:group-hover:scale-[1.025]"
+            onError={(event) => {
+              event.currentTarget.hidden = true;
+            }}
+          />
+        )}
+        <span className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#00283C]/25 to-transparent" />
+        <span className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#00283C] sm:left-4 sm:top-4">
+          <Video className="h-3.5 w-3.5 text-[#23747C]" />
+          Vídeo do carro
         </span>
-        <span className="mt-0.5 block text-[11px] font-medium leading-tight text-[#596C76]">
-          No Instagram
+      </span>
+      <span className="flex shrink-0 items-center justify-between gap-3 border-t border-white/10 px-4 py-4 text-left sm:gap-5 sm:px-5 sm:py-5">
+        <span className="min-w-0">
+          <span className="block text-lg font-bold leading-tight tracking-[-0.02em] text-white sm:text-xl">
+            Ver vídeo deste carro
+          </span>
+          <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-[#B8D5DB] sm:text-xs">
+            No Instagram
+            <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+          </span>
+        </span>
+        <span
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#64C5CB] text-[#00283C] transition-colors group-hover:bg-[#8AD6DA] sm:h-14 sm:w-14"
+          aria-hidden="true"
+        >
+          <Play className="ml-0.5 h-5 w-5 fill-current sm:h-6 sm:w-6" />
         </span>
       </span>
-      <ArrowUpRight
-        className="h-4 w-4 shrink-0 text-[#596C76]"
-        aria-hidden="true"
-      />
     </a>
   );
 }

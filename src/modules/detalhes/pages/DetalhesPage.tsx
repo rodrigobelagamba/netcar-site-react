@@ -22,6 +22,7 @@ import {
   Image as ImageIcon,
   LucideIcon,
   Check,
+  Play,
 } from "lucide-react";
 import React, {
   useState,
@@ -1094,9 +1095,10 @@ interface GalleryItemProps {
   index: number;
   onClick: () => void;
   alt: string;
+  rounded?: boolean;
 }
 
-function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
+function GalleryItem({ image, index, onClick, alt, rounded = false }: GalleryItemProps) {
   const previewSource = stockGalleryPreviewSource(image);
 
   return (
@@ -1109,7 +1111,7 @@ function GalleryItem({ image, index, onClick, alt }: GalleryItemProps) {
         delay: index * 0.04,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className="relative overflow-hidden cursor-pointer bg-gray-200 group aspect-[1920/1441]"
+      className={`relative overflow-hidden cursor-pointer bg-gray-200 group aspect-[1920/1441] ${rounded ? "rounded-xl" : ""}`}
       onClick={onClick}
     >
       <div className="relative w-full h-full">
@@ -2204,20 +2206,40 @@ export function DetalhesPage() {
             }}
             className="relative z-10 flex w-full min-w-0 flex-col pt-2 sm:py-6 lg:w-[32%] lg:max-w-[28rem] lg:pb-6 lg:pt-16 xl:w-[30%] xl:max-w-[32rem] 2xl:w-[32%] 2xl:max-w-[36rem]"
           >
-            {/* Brand */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.8,
-                delay: 0.15,
-                ease: [0.25, 0.1, 0.25, 1],
-              }}
-              className="text-muted-foreground uppercase tracking-[0.15em] font-semibold mb-1 sm:mb-1.5 info-brand"
+            {/* Brand and a direct route to the verified video, when available. */}
+            <div
+              className={
+                instagramVideo
+                  ? "mb-2 flex min-h-10 items-center justify-between gap-3"
+                  : "mb-1 sm:mb-1.5"
+              }
             >
-              {marca}
-            </motion.p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.15,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
+                className="min-w-0 text-muted-foreground uppercase tracking-[0.15em] font-semibold info-brand"
+              >
+                {marca}
+              </motion.p>
+              {instagramVideo && (
+                <a
+                  href="#video-do-carro"
+                  className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full border border-[#23747C]/25 bg-white px-3 py-2 text-xs font-bold text-[#075E64] transition-colors hover:bg-[#E5F3F2] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#008B95]"
+                >
+                  <Play
+                    className="h-3.5 w-3.5 fill-current"
+                    aria-hidden="true"
+                  />
+                  Ver vídeo
+                </a>
+              )}
+            </div>
 
             {/* Model */}
             <motion.h1
@@ -2332,47 +2354,70 @@ export function DetalhesPage() {
         </div>
       </section>
 
-      {/* Gallery Section */}
-      {avifImages.length > 0 && (
-        <section className="w-full py-6 sm:py-12 lg:py-16">
-          {instagramVideo && (
-            <div
-              id="video-do-carro"
-              className="mb-4 flex scroll-mt-28 justify-center px-4 sm:mb-5"
-            >
-              <VehicleVideoLink
-                permalink={instagramVideo.permalink}
-                vehicleName={vehicleLabel}
-                displayModel={instagramVideo.displayModel}
-                coverImage={instagramVideo.coverImage}
-                onOpen={() => trackVehicleVideoClick(String(vehicle.id))}
-              />
-            </div>
-          )}
-          <div className="sm:hidden">
-            <MobileGalleryCarousel
-              images={avifImages}
-              altBase={`${marca} ${modeloCompleto} ${vehicle.year || ""}`.trim()}
-              onOpen={(index) => {
-                setLightboxIndex(index);
-                setLightboxOpen(true);
-              }}
-            />
-          </div>
-          {/* Grid Container - Ocupa toda a largura sem padding */}
-          <div className="hidden w-full grid-cols-1 gap-1 sm:grid sm:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8">
-            {avifImages.map((image, index) => (
-              <GalleryItem
-                key={index}
-                image={image}
-                index={index}
-                alt={`${marca} ${modeloCompleto} ${vehicle.year || ""} - Foto ${index + 1} - Netcar Multimarcas`}
-                onClick={() => {
-                  setLightboxIndex(index);
-                  setLightboxOpen(true);
-                }}
-              />
-            ))}
+      {/* One media gallery: the verified video stays available without photos. */}
+      {(instagramVideo || avifImages.length > 0) && (
+        <section
+          className="w-full py-6 sm:py-12 lg:py-16"
+          aria-label="Fotos e vídeo do veículo"
+        >
+          <div
+            className={
+              instagramVideo
+                ? `grid grid-cols-1 gap-2 sm:gap-3 sm:px-4 lg:px-6 ${avifImages.length > 0 ? "sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8" : "mx-auto max-w-3xl"}`
+                : "contents"
+            }
+          >
+            {instagramVideo && (
+              <section
+                id="video-do-carro"
+                aria-label="Vídeo deste veículo"
+                className={`min-w-0 scroll-mt-24 px-4 sm:px-0 ${avifImages.length > 0 ? "sm:col-span-2 sm:row-span-2" : "sm:aspect-[4/3]"}`}
+              >
+                <VehicleVideoLink
+                  permalink={instagramVideo.permalink}
+                  vehicleName={vehicleLabel}
+                  displayModel={instagramVideo.displayModel}
+                  coverImage={instagramVideo.coverImage}
+                  onOpen={() => trackVehicleVideoClick(String(vehicle.id))}
+                />
+              </section>
+            )}
+            {avifImages.length > 0 && (
+              <>
+                <div className="sm:hidden">
+                  <MobileGalleryCarousel
+                    images={avifImages}
+                    altBase={`${marca} ${modeloCompleto} ${vehicle.year || ""}`.trim()}
+                    onOpen={(index) => {
+                      setLightboxIndex(index);
+                      setLightboxOpen(true);
+                    }}
+                  />
+                </div>
+                {/* Desktop photos share the video grid when one is available. */}
+                <div
+                  className={
+                    instagramVideo
+                      ? "hidden sm:contents"
+                      : "hidden w-full grid-cols-1 gap-1 sm:grid sm:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8"
+                  }
+                >
+                  {avifImages.map((image, index) => (
+                    <GalleryItem
+                      key={index}
+                      image={image}
+                      index={index}
+                      rounded={Boolean(instagramVideo)}
+                      alt={`${marca} ${modeloCompleto} ${vehicle.year || ""} - Foto ${index + 1} - Netcar Multimarcas`}
+                      onClick={() => {
+                        setLightboxIndex(index);
+                        setLightboxOpen(true);
+                      }}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </section>
       )}

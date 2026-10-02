@@ -202,6 +202,21 @@ function loadModule<T>(
   return module.exports as T;
 }
 
+function visibleText(markup: string): string {
+  return markup.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function assertMediaTile(markup: string): void {
+  const text = visibleText(markup);
+  assert.equal((markup.match(/<a\b/g) ?? []).length, 1, "A mídia tem um único destino acionável");
+  assert.doesNotMatch(markup, /<button\b/, "O convite visual não pode criar um botão dentro do link");
+  assert.doesNotMatch(markup, /\brole="heading"|<h[1-6]\b/, "A mídia não deve criar um bloco de título na galeria");
+  assert.equal((text.match(/Ver vídeo deste carro/g) ?? []).length, 1, "A mídia tem um único convite visível para assistir");
+  assert.equal((text.match(/Instagram/gi) ?? []).length, 1, "O destino Instagram aparece uma única vez no texto visível");
+  assert.match(text, /No Instagram/);
+  assert.doesNotMatch(text, /Conheça mais de perto|Apresentação Netcar|Assistir ao vídeo/, "A galeria não deve repetir a apresentação comercial do veículo");
+}
+
 type LinkProps = {
   permalink: string;
   vehicleName: string;
@@ -214,6 +229,7 @@ const { VehicleVideoLink } = loadModule<{
     href: string;
     target: string;
     rel: string;
+    className: string;
     onClick?: () => void;
     "aria-label": string;
     children?: React.ReactNode;
@@ -243,8 +259,9 @@ assert.deepEqual(
 assert.match(link.props["aria-label"], /Carro de teste <script>/);
 assert.match(link.props["aria-label"], /Instagram.*outra aba/);
 const markup = renderToStaticMarkup(link);
-assert.match(markup, /Ver vídeo deste carro/);
-assert.match(markup, /No Instagram/);
+assertMediaTile(markup);
+assert.doesNotMatch(visibleText(markup), /Carro de teste/);
+assert.match(link.props.className, /focus-visible:/);
 assert.doesNotMatch(
   markup,
   /<(?:iframe|video|audio|img|script)\b|\bautoplay\b|\bsrc=/i,
@@ -267,31 +284,37 @@ for (const permalink of rejectedUrls) {
   );
 }
 
-const pillProps = { permalink: canonical, vehicleName: "Teste" };
+const mediaProps = { permalink: canonical, vehicleName: "Teste" };
 for (const coverImage of [undefined, localCover]) {
   const namedLink = VehicleVideoLink({
-    ...pillProps,
+    ...mediaProps,
     coverImage,
     displayModel: " HR-V ",
   });
   assert.ok(namedLink);
-  assert.match(renderToStaticMarkup(namedLink), /Veja este HR-V em vídeo/);
+  const namedMarkup = renderToStaticMarkup(namedLink);
+  assertMediaTile(namedMarkup);
+  assert.doesNotMatch(visibleText(namedMarkup), /\bHR-V\b/, "O modelo continua no nome acessível, sem competir com a imagem");
   assert.match(namedLink.props["aria-label"], /Veja este HR-V em vídeo.*Instagram.*outra aba/);
   const escapedLabel = renderToStaticMarkup(VehicleVideoLink({
-    ...pillProps, coverImage, displayModel: "<script>modelo</script>",
+    ...mediaProps, coverImage, displayModel: "<script>modelo</script>",
   }));
   assert.doesNotMatch(escapedLabel, /<script>/);
   assert.match(escapedLabel, /&lt;script&gt;/);
-  assert.match(renderToStaticMarkup(VehicleVideoLink({
-    ...pillProps, coverImage, displayModel: "   ",
-  })), /Ver vídeo deste carro/);
+  const fallbackLink = VehicleVideoLink({
+    ...mediaProps, coverImage, displayModel: "   ",
+  });
+  assert.ok(fallbackLink);
+  assert.match(fallbackLink.props["aria-label"], /Ver vídeo deste carro/);
+  assertMediaTile(renderToStaticMarkup(fallbackLink));
+  assert.doesNotMatch(visibleText(renderToStaticMarkup(fallbackLink)), /\bTeste\b/);
 }
-const pillMarkup = renderToStaticMarkup(VehicleVideoLink(pillProps));
+const fallbackMarkup = renderToStaticMarkup(VehicleVideoLink(mediaProps));
 for (const coverImage of rejectedCovers) {
   assert.equal(
-    renderToStaticMarkup(VehicleVideoLink({ ...pillProps, coverImage })),
-    pillMarkup,
-    `Capa inválida deve preservar o link compacto: ${String(coverImage)}`,
+    renderToStaticMarkup(VehicleVideoLink({ ...mediaProps, coverImage })),
+    fallbackMarkup,
+    `Capa inválida deve preservar a mídia sem capa: ${String(coverImage)}`,
   );
 }
 
@@ -473,8 +496,11 @@ assert.deepEqual(
 assert.match(coverLink.props["aria-label"], /Carro de teste <script>/);
 assert.match(coverLink.props["aria-label"], /Instagram.*outra aba/);
 const coverMarkup = renderToStaticMarkup(coverLink);
-assert.match(coverMarkup, /Ver vídeo deste carro/);
-assert.match(coverMarkup, /No Instagram/);
+assertMediaTile(coverMarkup);
+assert.doesNotMatch(visibleText(coverMarkup), /Carro de teste/);
+assert.match(coverLink.props.className, /(?:^|\s)w-full(?:\s|$)/);
+assert.doesNotMatch(coverLink.props.className, /(?:^|\s)(?:sm|md|lg):grid-cols-/, "A imagem e o convite devem ocupar uma única mídia, sem coluna de texto ao lado");
+assert.match(coverLink.props.className, /focus-visible:/);
 assert.doesNotMatch(
   coverMarkup,
   /<(?:iframe|video|audio|script|link)\b|\bautoplay\b|\bsrcset=|\bon(?:error|click)=/i,
@@ -500,9 +526,77 @@ assert.equal(failedImage.hidden, true, "Uma capa quebrada deve ser ocultada");
 assert.equal(coverClicks, 0, "Falha da capa não deve disparar analytics de clique");
 assert.equal(coverLink.props.href, canonical, "O link deve continuar disponível sem a capa");
 assert.match(coverLink.props["aria-label"], /Ver vídeo deste carro.*Instagram/);
-assert.match(renderToStaticMarkup(coverLink), /Ver vídeo deste carro/);
+assertMediaTile(renderToStaticMarkup(coverLink));
 coverLink.props.onClick!();
 assert.equal(coverClicks, 1, "O link deve continuar acionável após falha da capa");
+
+// O atalho só navega; a mídia de vídeo divide a galeria sem depender das fotos.
+const detailsPath = "src/modules/detalhes/pages/DetalhesPage.tsx";
+const detailsSource = readFileSync(new URL(`../${detailsPath}`, import.meta.url), "utf8");
+const detailsAst = ts.createSourceFile(detailsPath, detailsSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+const detailsNodes: ts.Node[] = [];
+function collectDetailsNodes(node: ts.Node): void {
+  detailsNodes.push(node);
+  ts.forEachChild(node, collectDetailsNodes);
+}
+collectDetailsNodes(detailsAst);
+function jsxAttribute(node: ts.JsxOpeningLikeElement, name: string): ts.JsxAttribute | undefined {
+  return node.attributes.properties.find((attribute): attribute is ts.JsxAttribute =>
+    ts.isJsxAttribute(attribute) && attribute.name.getText(detailsAst) === name);
+}
+function literalAttribute(node: ts.JsxOpeningLikeElement, name: string): string | undefined {
+  const value = jsxAttribute(node, name)?.initializer;
+  return value && ts.isStringLiteral(value) ? value.text : undefined;
+}
+function hasVideoGate(node: ts.Node): boolean {
+  for (let parent = node.parent; parent; parent = parent.parent) {
+    if (ts.isBinaryExpression(parent) && parent.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken &&
+        parent.left.getText(detailsAst) === "instagramVideo") return true;
+  }
+  return false;
+}
+function enclosingSection(node: ts.Node): ts.JsxElement | undefined {
+  for (let parent = node.parent; parent; parent = parent.parent) {
+    if (ts.isJsxElement(parent) && parent.openingElement.tagName.getText(detailsAst) === "section") {
+      return parent;
+    }
+  }
+  return undefined;
+}
+const videoRegions = detailsNodes.filter((node): node is ts.JsxElement =>
+  ts.isJsxElement(node) && literalAttribute(node.openingElement, "id") === "video-do-carro");
+assert.equal(videoRegions.length, 1, "A página deve ter um único destino para o atalho de vídeo");
+const videoRegion = videoRegions[0];
+assert.ok(hasVideoGate(videoRegion), "A mídia só aparece quando há vídeo verificado para a unidade");
+const photoGate = detailsNodes.find((node): node is ts.BinaryExpression =>
+  ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken &&
+  node.left.getText(detailsAst) === "avifImages.length > 0");
+assert.ok(photoGate, "A galeria mantém sua própria condição de fotos disponíveis");
+assert.ok(videoRegion.end < photoGate.pos, "O vídeo deve aparecer antes e fora da condição de fotos");
+const mediaSection = enclosingSection(videoRegion);
+assert.ok(mediaSection, "A mídia de vídeo deve fazer parte de uma seção da página");
+assert.equal(enclosingSection(photoGate), mediaSection, "Vídeo e fotos devem compartilhar a mesma seção de galeria");
+const mobileCarousels = detailsNodes.filter((node): node is ts.JsxSelfClosingElement =>
+  ts.isJsxSelfClosingElement(node) && node.tagName.getText(detailsAst) === "MobileGalleryCarousel");
+assert.equal(mobileCarousels.length, 1, "A galeria conserva um único carrossel de fotos no celular");
+assert.equal(enclosingSection(mobileCarousels[0]), mediaSection, "O carrossel deve continuar na mesma seção de mídia");
+assert.ok(mobileCarousels[0].pos > videoRegion.end, "No celular, o vídeo deve vir antes do carrossel de fotos");
+const videoShortcuts = detailsNodes.filter((node): node is ts.JsxElement =>
+  ts.isJsxElement(node) && node.openingElement.tagName.getText(detailsAst) === "a" &&
+  literalAttribute(node.openingElement, "href") === "#video-do-carro");
+assert.equal(videoShortcuts.length, 1, "O início do anúncio oferece um atalho para o vídeo");
+const videoShortcut = videoShortcuts[0];
+assert.ok(hasVideoGate(videoShortcut), "Sem vídeo, o anúncio não oferece um atalho vazio");
+assert.ok(videoShortcut.end < videoRegion.pos, "O atalho deve antecipar a mídia de vídeo");
+assert.match(videoShortcut.getText(detailsAst), /Ver vídeo/);
+for (const name of ["onClick", "onOpen", "target"]) {
+  assert.equal(jsxAttribute(videoShortcut.openingElement, name), undefined, "O atalho apenas rola a página, sem medir abertura externa");
+}
+const pageVideoLinks = detailsNodes.filter((node): node is ts.JsxSelfClosingElement =>
+  ts.isJsxSelfClosingElement(node) && node.tagName.getText(detailsAst) === "VehicleVideoLink");
+assert.equal(pageVideoLinks.length, 1, "A unidade mantém uma única mídia principal de vídeo");
+assert.ok(pageVideoLinks[0].pos > videoRegion.pos && pageVideoLinks[0].end < videoRegion.end);
+assert.match(jsxAttribute(pageVideoLinks[0], "onOpen")?.getText(detailsAst) ?? "", /trackVehicleVideoClick\(String\(vehicle\.id\)\)/);
 
 let consent: string | undefined;
 const dataLayer: Record<string, unknown>[] = [];
