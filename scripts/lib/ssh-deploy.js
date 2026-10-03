@@ -5,9 +5,17 @@ import { join, posix } from 'path';
 import { Client } from 'ssh2';
 
 // Runtime deliveries belong to the publisher, never to a build or dist rollback.
+// CheckAuto certificates belong to Automacar: the i-CHECK sync parses the
+// published PDF, so a build copy must never replace it.
 const TAR_EXCLUDES = ['.git', '.gitignore', '.git-commit-msg.txt',
   'entregas-data/live.json', 'entregas-data/.publish.lock',
-  'entregas-data/.entregas-*', 'entregas-media/live'];
+  'entregas-data/.entregas-*', 'entregas-media/live',
+  'arquivos/autocheck/*.pdf'];
+
+export function isCertificatePdfPath(path) {
+  const normalized = String(path).replaceAll('\\', '/').replace(/^(\.\/)+/, '');
+  return /^arquivos\/autocheck\/[^/]+\.pdf$/.test(normalized);
+}
 
 export function isDeliveryRuntimePath(path) {
   const normalized = String(path).replaceAll('\\', '/').replace(/^(\.\/)+/, '');
@@ -23,6 +31,7 @@ export function isDeliveryRuntimePath(path) {
 function excludesBuildPermissions(path) {
   return path === 'entregas-data' || path.startsWith('entregas-data/')
     || path === 'entregas-media/live' || path.startsWith('entregas-media/live/')
+    || isCertificatePdfPath(path)
     || path.split('/').some((part) => ['.git', '.gitignore', '.git-commit-msg.txt'].includes(part));
 }
 
