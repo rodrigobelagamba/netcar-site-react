@@ -78,13 +78,14 @@ jobs:
             # Dispatches de uma branch usam o codigo daquela branch, mas nunca
             # deixam a copia operacional da VPS presa nela, inclusive em erro.
             RESTORE_DEFAULT=0
+            SYNC_STARTED=0
             if [ "$TARGET_REF" != "master" ] && [ "$TARGET_REF" != "main" ]; then
               RESTORE_DEFAULT=1
             fi
             restore_checkout() {
               rc=$?
               trap - EXIT
-              if [ "$RESTORE_DEFAULT" = "1" ]; then
+              if [ "$RESTORE_DEFAULT" = "1" ] && [ "$SYNC_STARTED" = "1" ]; then
                 set +e
                 cd "$REPO_DIR"
                 git reset --hard origin/master || git reset --hard origin/main
@@ -97,8 +98,27 @@ jobs:
 
             BEFORE="$(git rev-parse HEAD)"
             echo "BEFORE=$BEFORE"
+            # Preserve local work before the operational checkout is synchronized.
+            # Backups stay private and outside the repository/public build.
+            if [ -n "$(git status --porcelain)" ]; then
+              umask 077
+              BACKUP_ROOT="/opt/netcar-deploy-backups"
+              mkdir -p "$BACKUP_ROOT"
+              chmod 700 "$BACKUP_ROOT"
+              BACKUP_DIR="$(mktemp -d "$BACKUP_ROOT/pre-sync.XXXXXX")"
+              git rev-parse HEAD > "$BACKUP_DIR/base-commit.txt"
+              git diff --binary HEAD > "$BACKUP_DIR/worktree.patch"
+              git diff --binary --cached > "$BACKUP_DIR/index.patch"
+              git status --porcelain > "$BACKUP_DIR/status.txt"
+              git ls-files --others --exclude-standard -z > "$BACKUP_DIR/untracked.list"
+              if [ -s "$BACKUP_DIR/untracked.list" ]; then
+                tar --null -T "$BACKUP_DIR/untracked.list" -czf "$BACKUP_DIR/untracked.tar.gz"
+              fi
+              echo "Backup privado antes do sync: $BACKUP_DIR"
+            fi
             if git remote get-url origin >/dev/null 2>&1; then
               git fetch --all --prune
+              SYNC_STARTED=1
               git reset --hard "origin/$TARGET_REF"
             else
               echo "origin ausente — mantendo cópia local"

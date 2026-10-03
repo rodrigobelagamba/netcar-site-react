@@ -1,0 +1,1129 @@
+{
+  "reviewId": "warranty-20261003-v2",
+  "reviewedAt": "2026-10-03",
+  "scope": "15 marked units, 13 current API identities; five specifically authorized coverage records for release",
+  "operationalAttestation": "Explicit owner attestation of the team review underlying optional108; actual usage and exact expiry are not asserted",
+  "originArtifacts": [
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/normalization/NORMALIZACAO-FINAL.md",
+      "sha256": "955b3e07c8b51c0c34857fe21d551dced519dcc9cc8f8b08a585a6b067b81acf"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/normalization/normalized-candidates.json",
+      "sha256": "be69521e02b6f1cc307b033965ba316f54ee32c1b5f9b48758f673013de7a3bb"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/normalization/factoryWarrantyMatrix.normalized.pending.json",
+      "sha256": "5d14d59cf31980f470169caab36342f291aab46a6510bba06d901c80d65a2116"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/normalization/coverage-review.json",
+      "sha256": "a7520de21ea53129668c6a4109a238c2ce824a584a6d0d04ab149dec689456a0"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/normalization/public-api-targeted.json",
+      "sha256": "df96501cac59e701cec3e475d401f2c05a95a7473174dfa9f01c7bbe49b27bce"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/review_honda_nissan.json",
+      "sha256": "b460fe00bfb301a27c0d1ae3ae159a78a795cb9e505741ad88d5bff392451551",
+      "unchangedAtCompletion": true
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/review_hyundai.json",
+      "sha256": "675141e23efaecb7ee08f2389bcfedd9411b3eb9a557208a73f230b604c54787",
+      "unchangedAtCompletion": true
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/rules_us_vw.json",
+      "sha256": "1e17e862279f5f35f1b73c051e2744cf1529c42b4d7125fa0ae761f7054190a6",
+      "unchangedAtCompletion": true
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/checkpoint/marked-review.final.json",
+      "sha256": "e5411358c4024fc1128c87c60ed7a7b0caf2c3af66427891f3b2a52054810d03",
+      "unchangedAtCompletion": true
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/checkpoint/evidence/chery-legacy/legacy-findings.json",
+      "sha256": "da976f33249fe00165cc511009b0a2c12e54a61bbf8e2d011fa80b15cb96018c",
+      "unchangedAtCompletion": true
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/checkpoint/evidence/chery-current/evidence.json",
+      "sha256": "ab3c45331be33a4c2236fe92a95ce6049cb778e7034ec0858a500337618c6269",
+      "unchangedAtCompletion": true
+    }
+  ],
+  "approvedLocalContent": [
+    {
+      "vehicleId": "20066",
+      "reviewId": "warranty-20261003-20066",
+      "identity": {
+        "vehicleId": "20066",
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 7 PRO MAX DRIVE TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "termYears": 3,
+      "expectedYear": 2027,
+      "mileageGate": {
+        "kind": "limited",
+        "limitKm": 100000
+      },
+      "commonPolicy": {
+        "kind": "documented-regime-intersection",
+        "reviewId": "warranty-20261003-20066",
+        "basis": "Particular e comercial têm36meses de garantia geral. O limite100.000km é um limite conservador comum; 60meses de motor/transmissão para particular não entram no carimbo básico.",
+        "branches": [
+          {
+            "category": "non-commercial",
+            "condition": "uso não comercial",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "unlimited"
+            },
+            "sourceIds": [
+              "20066-manual-1"
+            ]
+          },
+          {
+            "category": "commercial",
+            "condition": "uso comercial",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "limited",
+              "limitKm": 100000
+            },
+            "sourceIds": [
+              "20066-manual-1"
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "sourceId": "20066-manual-1",
+          "url": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf",
+          "locator": "PDF298 / impressa10-3, item(c); PDF299 / impressa10-4, linhas20–21; PDF326 contracapa; portal /manuais > Tiggo7ProMaxDrive > Manuais2024/2025",
+          "revision": "B09999T7303; Janeiro de2024/1; vínculo oficial2024/2025 confirmado2026-10-03",
+          "verification": {
+            "status": "verified",
+            "documentCode": "B09999T7303",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261003-20066",
+            "reviewedAt": "2026-10-03"
+          }
+        }
+      ],
+      "actualUsageAsserted": false,
+      "coverageReviewDecision": "common_rule_supported"
+    },
+    {
+      "vehicleId": "19994",
+      "reviewId": "warranty-20261003-19994",
+      "identity": {
+        "vehicleId": "19994",
+        "brand": "CHEVROLET",
+        "modelVersion": "ONIX PREMIER PLUS TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "termYears": 3,
+      "expectedYear": 2027,
+      "mileageGate": {
+        "kind": "limited",
+        "limitKm": 100000
+      },
+      "commonPolicy": {
+        "kind": "documented-regime-intersection",
+        "reviewId": "warranty-20261003-19994",
+        "basis": "O manual MY2025 preserva36meses para ambos regimes. A diferença é quilométrica;44.975km está abaixo de100.000. Não inferir PF/PJ nem uso remunerado.",
+        "branches": [
+          {
+            "category": "non-commercial",
+            "condition": "destinatário final PF/PJ sem uso remunerado",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "unlimited"
+            },
+            "sourceIds": [
+              "19994-manual-1"
+            ]
+          },
+          {
+            "category": "commercial",
+            "condition": "PJ em negócio/produção ou PF em transporte remunerado",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "limited",
+              "limitKm": 100000
+            },
+            "sourceIds": [
+              "19994-manual-1"
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "sourceId": "19994-manual-1",
+          "url": "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/onix-plus/01-pdfs/2025/onix-plus-2025-manual-do-propietario.pdf",
+          "locator": "Manual Onix/Onix Plus MY2025, PDF244, cláusula prazo/limite da garantia",
+          "revision": "Manual do Proprietário Onix/Onix Plus MY2025; arquivo onix-plus-2025-manual-do-propietario.pdf",
+          "verification": {
+            "status": "verified",
+            "documentCode": "MY2025",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261003-19994",
+            "reviewedAt": "2026-10-03"
+          }
+        }
+      ],
+      "actualUsageAsserted": false,
+      "coverageReviewDecision": "common_rule_supported"
+    },
+    {
+      "vehicleId": "20038",
+      "reviewId": "warranty-20261003-20038",
+      "identity": {
+        "vehicleId": "20038",
+        "brand": "HYUNDAI",
+        "modelVersion": "HB20 LIMITED",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "termYears": 5,
+      "expectedYear": 2029,
+      "mileageGate": {
+        "kind": "limited",
+        "limitKm": 100000
+      },
+      "commonPolicy": {
+        "kind": "documented-regime-intersection",
+        "reviewId": "warranty-20261003-20038",
+        "basis": "HMB mantém60meses para particular e comercial. O teto comercial100.000km é a interseção conservadora, sem alterar o prazo básico nem declarar uso real.",
+        "branches": [
+          {
+            "category": "non-commercial",
+            "condition": "particular",
+            "scope": "basic-vehicle",
+            "termYears": 5,
+            "mileage": {
+              "kind": "unlimited"
+            },
+            "sourceIds": [
+              "20038-manual-1"
+            ]
+          },
+          {
+            "category": "commercial",
+            "condition": "comercial",
+            "scope": "basic-vehicle",
+            "termYears": 5,
+            "mileage": {
+              "kind": "limited",
+              "limitKm": 100000
+            },
+            "sourceIds": [
+              "20038-manual-1"
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "sourceId": "20038-manual-1",
+          "url": "https://www.hyundai.com.br/content/dam/hmb/download-manuais/Manual_Garantia_HB20_e_Creta_A1XW-PB2308A_Site.pdf",
+          "locator": "Impressas8–10,14,17–18; PDF12–14,18,21–22 (1-based conforme revisão específica review_hyundai.json)",
+          "revision": "A1XW-PB2308A; data editorial expressa não localizada",
+          "verification": {
+            "status": "verified",
+            "documentCode": "A1XW-PB2308A",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261003-20038",
+            "reviewedAt": "2026-10-03"
+          }
+        }
+      ],
+      "actualUsageAsserted": false,
+      "coverageReviewDecision": "common_rule_supported"
+    },
+    {
+      "vehicleId": "19857",
+      "reviewId": "warranty-20261003-19857",
+      "identity": {
+        "vehicleId": "19857",
+        "brand": "NISSAN",
+        "modelVersion": "KICKS SENSE TURBO",
+        "manufactureYear": 2025,
+        "modelYear": 2026
+      },
+      "termYears": 3,
+      "expectedYear": 2028,
+      "mileageGate": {
+        "kind": "limited",
+        "limitKm": 100000
+      },
+      "commonPolicy": {
+        "kind": "documented-regime-intersection",
+        "reviewId": "warranty-20261003-19857",
+        "basis": "O manualNovoKicksMY2026 revisto mantém36meses nos dois ramos documentados(CPF/CNPJ), com teto100.000km noCNPJ.8500km passa o limite comum; não inferir titularidade a partir da versão.",
+        "branches": [
+          {
+            "category": "cpf",
+            "condition": "CPF conforme texto da revisão",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "unlimited"
+            },
+            "sourceIds": [
+              "19857-manual-1"
+            ]
+          },
+          {
+            "category": "cnpj",
+            "condition": "CNPJ conforme texto da revisão",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "limited",
+              "limitKm": 100000
+            },
+            "sourceIds": [
+              "19857-manual-1"
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "sourceId": "19857-manual-1",
+          "url": "https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf",
+          "locator": "Prazo/km10-5 e10-6(PDF392–393); componentes10-7/10-8(PDF394–395); transferência10-9(PDF396); manutenção10-11/10-13(PDF398–400)",
+          "revision": "MPPT-P13C00; Novo Kicks MY2026; arquivo v3; metadados2025-08-08 não tratados como publicação editorial",
+          "verification": {
+            "status": "verified",
+            "documentCode": "MPPT-P13C00",
+            "modelYear": 2026,
+            "reviewId": "warranty-20261003-19857",
+            "reviewedAt": "2026-10-03"
+          }
+        }
+      ],
+      "actualUsageAsserted": false,
+      "coverageReviewDecision": "common_rule_supported"
+    },
+    {
+      "vehicleId": "19587",
+      "reviewId": "warranty-20261003-19587",
+      "identity": {
+        "vehicleId": "19587",
+        "brand": "VOLKSWAGEN",
+        "modelVersion": "TERA HIGH TURBO",
+        "manufactureYear": 2025,
+        "modelYear": 2026
+      },
+      "termYears": 3,
+      "expectedYear": 2028,
+      "mileageGate": {
+        "kind": "unlimited"
+      },
+      "commonPolicy": {
+        "kind": "documented-general-rule",
+        "reviewId": "warranty-20261003-19587",
+        "basis": "ManualTeraMY2026 estabelece3anos sem teto de quilometragem. Nenhum prazo especial por uso foi identificado na revisão existente; uso normal é condição contratual, não prova de propriedade particular.",
+        "branches": [
+          {
+            "category": "general",
+            "condition": "garantia básica, condições normais de uso conforme manualTeraMY2026",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "unlimited"
+            },
+            "sourceIds": [
+              "19587-manual-1"
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "sourceId": "19587-manual-1",
+          "url": "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-tera/Manual_de_instrucoes_Tera_26A.5B1.TER.66.pdf",
+          "locator": "ManualTeraMY2026, PDF240–241, garantia básica e condições",
+          "revision": "26A.5B1.TER.66; ediçãoMY2026; data editorial não informada no artefato",
+          "verification": {
+            "status": "verified",
+            "documentCode": "26A.5B1.TER.66",
+            "modelYear": 2026,
+            "reviewId": "warranty-20261003-19587",
+            "reviewedAt": "2026-10-03"
+          }
+        }
+      ],
+      "actualUsageAsserted": false,
+      "coverageReviewDecision": "generic_model_rule_supported"
+    }
+  ],
+  "currentCatalogSnapshot": [
+    {
+      "id": "19924",
+      "marca": "BYD",
+      "modelo": "SONG PRO GS",
+      "anoFabricacao": 2024,
+      "year": 2025,
+      "km": 9385,
+      "price": 167900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "revisados_concessionaria",
+          "descricao": "Revisados na Concessionária"
+        },
+        {
+          "tag": "super_economico",
+          "descricao": "Super Econômico"
+        },
+        {
+          "tag": "unico_dono",
+          "descricao": "Único Dono"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/19924",
+        "collectedAt": "2026-10-03T22:35:34.660865+00:00"
+      }
+    },
+    {
+      "id": "20066",
+      "marca": "CHERY",
+      "modelo": "TIGGO 7 PRO MAX DRIVE TURBO",
+      "anoFabricacao": 2024,
+      "year": 2025,
+      "km": 36000,
+      "price": 151900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "pneus_novos",
+          "descricao": "Pneus Novos"
+        },
+        {
+          "tag": "revisados_concessionaria",
+          "descricao": "Revisados na Concessionária"
+        },
+        {
+          "tag": "top_linha",
+          "descricao": "Top de Linha"
+        },
+        {
+          "tag": "unico_dono",
+          "descricao": "Único Dono"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20066",
+        "collectedAt": "2026-10-03T22:35:34.661537+00:00"
+      }
+    },
+    {
+      "id": "20029",
+      "marca": "CHERY",
+      "modelo": "TIGGO 8 MAX DRIVE TURBO",
+      "anoFabricacao": 2023,
+      "year": 2024,
+      "km": 38900,
+      "price": 151900,
+      "diferenciais": [
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20029",
+        "collectedAt": "2026-10-03T22:35:34.661665+00:00"
+      }
+    },
+    {
+      "id": "20041",
+      "marca": "CHERY",
+      "modelo": "TIGGO 8 MAX DRIVE TURBO",
+      "anoFabricacao": 2023,
+      "year": 2024,
+      "km": 28240,
+      "price": 151900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "pneus_novos",
+          "descricao": "Pneus Novos"
+        },
+        {
+          "tag": "revisados_concessionaria",
+          "descricao": "Revisados na Concessionária"
+        },
+        {
+          "tag": "super_economico",
+          "descricao": "Super Econômico"
+        },
+        {
+          "tag": "top_linha",
+          "descricao": "Top de Linha"
+        },
+        {
+          "tag": "unico_dono",
+          "descricao": "Único Dono"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20041",
+        "collectedAt": "2026-10-03T22:35:34.661773+00:00"
+      }
+    },
+    {
+      "id": "19994",
+      "marca": "CHEVROLET",
+      "modelo": "ONIX PREMIER PLUS TURBO",
+      "anoFabricacao": 2024,
+      "year": 2025,
+      "km": 44975,
+      "price": 97900,
+      "diferenciais": [
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "pneus_novos",
+          "descricao": "Pneus Novos"
+        },
+        {
+          "tag": "super_economico",
+          "descricao": "Super Econômico"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/19994",
+        "collectedAt": "2026-10-03T22:35:35.141660+00:00"
+      }
+    },
+    {
+      "id": "20049",
+      "marca": "CHEVROLET",
+      "modelo": "TRACKER LT TURBO",
+      "anoFabricacao": 2024,
+      "year": 2025,
+      "km": 24500,
+      "price": 109900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "revisados_concessionaria",
+          "descricao": "Revisados na Concessionária"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20049",
+        "collectedAt": "2026-10-03T22:35:35.174007+00:00"
+      }
+    },
+    {
+      "id": "19779",
+      "marca": "FORD",
+      "modelo": "TERRITORY TITANIUM TURBO",
+      "anoFabricacao": 2023,
+      "year": 2024,
+      "km": 31500,
+      "price": 159900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "pneus_novos",
+          "descricao": "Pneus Novos"
+        },
+        {
+          "tag": "super_economico",
+          "descricao": "Super Econômico"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/19779",
+        "collectedAt": "2026-10-03T22:35:35.185939+00:00"
+      }
+    },
+    {
+      "id": "19854",
+      "marca": "HONDA",
+      "modelo": "HRV ADVANCE TURBO",
+      "anoFabricacao": 2024,
+      "year": 2024,
+      "km": 59000,
+      "price": 149900,
+      "diferenciais": [
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "super_economico",
+          "descricao": "Super Econômico"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/19854",
+        "collectedAt": "2026-10-03T22:35:35.194617+00:00"
+      }
+    },
+    {
+      "id": "19898",
+      "marca": "HONDA",
+      "modelo": "HRV TOURING TURBO",
+      "anoFabricacao": 2023,
+      "year": 2024,
+      "km": 58975,
+      "price": 157900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "pneus_novos",
+          "descricao": "Pneus Novos"
+        },
+        {
+          "tag": "super_economico",
+          "descricao": "Super Econômico"
+        },
+        {
+          "tag": "unico_dono",
+          "descricao": "Único Dono"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/19898",
+        "collectedAt": "2026-10-03T22:35:35.326564+00:00"
+      }
+    },
+    {
+      "id": "20038",
+      "marca": "HYUNDAI",
+      "modelo": "HB20 LIMITED",
+      "anoFabricacao": 2024,
+      "year": 2025,
+      "km": 28785,
+      "price": 81900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "revisados_concessionaria",
+          "descricao": "Revisados na Concessionária"
+        },
+        {
+          "tag": "super_economico",
+          "descricao": "Super Econômico"
+        },
+        {
+          "tag": "unico_dono",
+          "descricao": "Único Dono"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20038",
+        "collectedAt": "2026-10-03T22:35:35.344105+00:00"
+      }
+    },
+    {
+      "id": "19866",
+      "marca": "JEEP",
+      "modelo": "COMPASS SERIE S T270 TURBO",
+      "anoFabricacao": 2024,
+      "year": 2025,
+      "km": 35500,
+      "price": 167900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "pneus_novos",
+          "descricao": "Pneus Novos"
+        },
+        {
+          "tag": "revisados_concessionaria",
+          "descricao": "Revisados na Concessionária"
+        },
+        {
+          "tag": "top_linha",
+          "descricao": "Top de Linha"
+        },
+        {
+          "tag": "unico_dono",
+          "descricao": "Único Dono"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/19866",
+        "collectedAt": "2026-10-03T22:35:35.365106+00:00"
+      }
+    },
+    {
+      "id": "19857",
+      "marca": "NISSAN",
+      "modelo": "KICKS SENSE TURBO",
+      "anoFabricacao": 2025,
+      "year": 2026,
+      "km": 8500,
+      "price": 144900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "pneus_novos",
+          "descricao": "Pneus Novos"
+        },
+        {
+          "tag": "super_economico",
+          "descricao": "Super Econômico"
+        },
+        {
+          "tag": "unico_dono",
+          "descricao": "Único Dono"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/19857",
+        "collectedAt": "2026-10-03T22:35:35.370029+00:00"
+      }
+    },
+    {
+      "id": "19587",
+      "marca": "VOLKSWAGEN",
+      "modelo": "TERA HIGH TURBO",
+      "anoFabricacao": 2025,
+      "year": 2026,
+      "km": 6700,
+      "price": 129900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "pneus_novos",
+          "descricao": "Pneus Novos"
+        },
+        {
+          "tag": "revisados_concessionaria",
+          "descricao": "Revisados na Concessionária"
+        },
+        {
+          "tag": "super_economico",
+          "descricao": "Super Econômico"
+        },
+        {
+          "tag": "unico_dono",
+          "descricao": "Único Dono"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/19587",
+        "collectedAt": "2026-10-03T22:35:35.494555+00:00"
+      }
+    }
+  ],
+  "pendingUnits": [
+    {
+      "vehicleId": "19924",
+      "reasons": [
+        "Confirmar enquadramento não comercial para 6 anos/2030*. Comercial é 2 anos/100.000 km e a estimativa 2026* também exige vencimento confirmado pelo contrato."
+      ],
+      "decision": "needs_use_selection",
+      "siteFlag": "S"
+    },
+    {
+      "vehicleId": "20029",
+      "reasons": [
+        "Vencimento confirmado e não vencido no ano estimado 2026, conforme contrato."
+      ],
+      "decision": "needs_final_year_expiry",
+      "siteFlag": "S"
+    },
+    {
+      "vehicleId": "20041",
+      "reasons": [
+        "Vencimento confirmado e não vencido no ano estimado 2026, conforme contrato."
+      ],
+      "decision": "needs_final_year_expiry",
+      "siteFlag": "S"
+    },
+    {
+      "vehicleId": "20049",
+      "reasons": [
+        "Confirmar se há pacote R8C/R8Z de 12 meses; basta o enquadramento, sem publicar VIN."
+      ],
+      "decision": "needs_package_exception",
+      "siteFlag": "S"
+    },
+    {
+      "vehicleId": "19779",
+      "reasons": [
+        "Vencimento confirmado e não vencido no ano estimado 2026, conforme contrato."
+      ],
+      "decision": "needs_final_year_expiry",
+      "siteFlag": "S"
+    },
+    {
+      "vehicleId": "19854",
+      "reasons": [
+        "Cláusula de garantia/uso do manual HR-V MY2024 ainda não lida. Não aplicar a campanha de 2026 retroativamente."
+      ],
+      "decision": "needs_honda_source_verification",
+      "siteFlag": "S"
+    },
+    {
+      "vehicleId": "19898",
+      "reasons": [
+        "Vencimento confirmado e não vencido no ano estimado 2026, conforme contrato.",
+        "A mesma lacuna de cláusula histórica HR-V MY2024 indicada para 19854 permanece na evidência herdada."
+      ],
+      "decision": "needs_final_year_expiry",
+      "siteFlag": "S"
+    },
+    {
+      "vehicleId": "19866",
+      "reasons": [
+        "Cláusula do limite de km e do regime aplicável no manual Compass MY2025."
+      ],
+      "decision": "needs_contract_km_rule",
+      "siteFlag": "S"
+    },
+    {
+      "vehicleId": "20019",
+      "reasons": [],
+      "decision": "not_in_publication_snapshot",
+      "siteFlag": "N"
+    },
+    {
+      "vehicleId": "20018",
+      "reasons": [],
+      "decision": "not_in_publication_snapshot",
+      "siteFlag": "N"
+    }
+  ],
+  "corrections": [
+    {
+      "vehicleId": "19587",
+      "issue": "normalized-candidates mistakenly carries Honda MY2024 humanPending and decision, and lacks commonPolicy",
+      "resolution": "Used the explicit VW Tera entry in coverage-review.json, rules_us_vw.json and current API evidence; preserved original artifacts",
+      "basis": "documented-general-rule; no invented CPF/CNPJ or commercial branch"
+    }
+  ],
+  "publicationApproved": true,
+  "publicationAuthorization": {
+    "receivedAt": "2026-10-03T23:39:29Z",
+    "source": "Sentinel_795ee63d151c8191a6dff39c0c2cbc8c",
+    "scope": [
+      "20066",
+      "19994",
+      "20038",
+      "19857",
+      "19587"
+    ],
+    "instruction": "Publish only the five reviewed circular stamps; other and newly marked units remain without a stamp.",
+    "baselineSourceCommit": "459931cc2fcb80047820cb38b4c24bd048210cef",
+    "baselineDistCommit": "001c50e7c27c9d56366135e8dc915339f466cd2a"
+  }
+}

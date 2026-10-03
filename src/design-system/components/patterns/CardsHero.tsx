@@ -1,6 +1,12 @@
-import { Camera, MessageCircle, ShieldCheck } from "lucide-react";
+import { Camera, MessageCircle } from "lucide-react";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
+import { isFactoryWarrantyLayoutEnabled } from "@/lib/factoryWarrantyStamp";
+import {
+  FactoryWarrantyBadge,
+  FactoryWarrantyNote,
+  type FactoryWarrantyBadgeProps,
+} from "./FactoryWarrantyBadge";
 
 const MILEAGE_BADGE_TITLE =
   "Rodou menos de 10 mil km por ano — bem abaixo da média de uso";
@@ -18,7 +24,7 @@ interface CardsHeroProps {
   mileageBadge?: string;
   /** Ignorado: cards mostram sempre os mesmos campos. Mantido pra compatibilidade. */
   marketingBadge?: string;
-  warrantyBadge?: string;
+  warrantyStamp?: Omit<FactoryWarrantyBadgeProps, "variant">;
   proofBadge?: string;
   price: string;
   previousPrice?: string;
@@ -53,7 +59,7 @@ export function CardsHero({
   transmission,
   mileage,
   mileageBadge,
-  warrantyBadge,
+  warrantyStamp,
   proofBadge,
   delay = 0,
   eagerImage = false,
@@ -104,6 +110,12 @@ export function CardsHero({
         />
       )}
 
+      {warrantyStamp && (
+        <div className={`pointer-events-none select-none absolute z-20 ${compact ? "right-0 top-12 w-[60px] md:right-1 md:top-16 md:w-[78px]" : "right-1 top-[5.75rem] w-[78px]"}`}>
+          <FactoryWarrantyBadge {...warrantyStamp} variant="card" />
+        </div>
+      )}
+
       {/* Contador de fotos: sinaliza que tem galeria atrás da foto */}
       {!isSold && photoCount != null && photoCount > 1 && (
         <span
@@ -144,7 +156,7 @@ export function CardsHero({
               delay === 0 ? "high" : deferOffscreenPaint ? "low" : "auto"
             }
             decoding={delay === 0 ? "sync" : "async"}
-            className={`!border-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-2 drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] ${isSold ? "grayscale-[0.25]" : ""}`}
+            className={`!border-0 w-full h-full object-contain transition-transform duration-700 ${warrantyStamp ? "" : "group-hover:scale-110 group-hover:-rotate-2"} drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] ${isSold ? "grayscale-[0.25]" : ""}`}
           />
           {isSold && (
             <div
@@ -199,19 +211,6 @@ export function CardsHero({
               {proofBadge}
             </span>
           )}
-          {warrantyBadge && (
-            <span
-              className={`inline-flex shrink-0 items-center gap-1 rounded-full bg-[#E5F8F4] font-black uppercase tracking-wide text-[#075E54] ${
-                compact
-                  ? "px-1.5 py-0.5 text-[9px]"
-                  : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
-              }`}
-              title={warrantyBadge}
-            >
-              <ShieldCheck className="h-3 w-3 shrink-0" aria-hidden="true" />
-              Garantia
-            </span>
-          )}
           {/* Compact: pílula de km/ano sobe pra linha de selos (a de specs não cabe em 2 colunas). */}
           {compact && mileageBadge && (
             <span
@@ -262,9 +261,11 @@ export function CardsHero({
           </div>
         </div>
 
+        {warrantyStamp && <FactoryWarrantyNote compact />}
+
         {/* Price and Action — altura reservada pra alinhar CTA entre cards */}
         <div
-          className={`!border-0 w-full min-w-0 flex flex-col items-stretch mt-auto ${
+          className={`!border-0 w-full min-w-0 flex flex-col items-stretch ${isFactoryWarrantyLayoutEnabled ? "!mt-auto" : "mt-auto"} ${
             compact
               ? "gap-1.5 pt-2"
               : "gap-2 pt-4 short1600:gap-1.5 short1600:pt-2"
