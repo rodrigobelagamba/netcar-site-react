@@ -15,6 +15,7 @@ export interface AutocompleteSelectProps {
   label?: string;
   className?: string;
   emptyMessage?: string;
+  matchesOption?: (label: string, query: string) => boolean;
 }
 
 export function AutocompleteSelect({
@@ -25,6 +26,7 @@ export function AutocompleteSelect({
   label,
   className,
   emptyMessage = "Nenhuma opção encontrada",
+  matchesOption,
 }: AutocompleteSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,7 +39,9 @@ export function AutocompleteSelect({
 
   // Filtra opções baseado no termo de busca
   const filteredOptions = options.filter((option) =>
-    option.label.toLowerCase().includes(searchTerm.toLowerCase()),
+    matchesOption
+      ? matchesOption(option.label, searchTerm)
+      : option.label.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // Reset highlighted index quando filtros mudam

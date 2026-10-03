@@ -19,6 +19,7 @@ import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import {
   matchesVehicleSearch,
   normalizeVehicleSearch,
+  parseVehicleSearch,
 } from "@/lib/vehicleSearch";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 
@@ -38,7 +39,7 @@ export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileAutocompleteOpen, setIsMobileAutocompleteOpen] =
     useState(false);
-  const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
   const mobileAutocompleteRef = useRef<HTMLDivElement>(null);
@@ -168,6 +169,7 @@ export function Header() {
     }
 
     const lowerQuery = normalizeVehicleSearch(searchTerm);
+    const parsedSearch = parseVehicleSearch(searchTerm);
     const suggestions: VehicleSuggestion[] = [];
 
     // Cria um Set para evitar duplicatas baseado no ID do veículo
@@ -190,7 +192,7 @@ export function Header() {
         return;
       }
 
-      if (matchesVehicleSearch(vehicle, searchTerm)) {
+      if (matchesVehicleSearch(vehicle, parsedSearch)) {
         seenIds.add(vehicle.id);
         suggestions.push({
           marca: vehicle.marca,
@@ -233,7 +235,7 @@ export function Header() {
   const handleSearch = (value: string) => {
     setSearchTerm(value);
     setIsMobileAutocompleteOpen(value.length >= 2);
-    setHighlightedIndex(0);
+    setHighlightedIndex(-1);
     if (isSearchOpen && !isMobileMenuOpen) {
       clearTimeout(desktopSearchTimerRef.current);
       if (value.trim() || location.pathname === "/seminovos") {
@@ -289,12 +291,14 @@ export function Header() {
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       if (
+        isMobileAutocompleteOpen &&
         vehicleSuggestions.length > 0 &&
         highlightedIndex >= 0 &&
         highlightedIndex < vehicleSuggestions.length
       ) {
-        // Se há sugestões e uma está destacada, seleciona ela
+        // Only open a car after explicit arrow-key selection, not on typing.
         handleSuggestionSelect(vehicleSuggestions[highlightedIndex]);
       } else if (searchTerm.trim()) {
         // Senão, faz busca normal
@@ -318,10 +322,10 @@ export function Header() {
       }
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : 0));
+      setHighlightedIndex((prev) => (prev > -1 ? prev - 1 : -1));
     } else if (e.key === "Escape") {
       setIsMobileAutocompleteOpen(false);
-      setHighlightedIndex(0);
+      setHighlightedIndex(-1);
     }
   };
 

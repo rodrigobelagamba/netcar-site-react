@@ -6,6 +6,13 @@ import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { buildWhatsAppUrl, siteWhatsAppMessage } from "@/lib/whatsappMessages";
+import { emptySeminovosSearch } from "@/lib/seminovos-search";
+import { matchesVehicleBrand } from "@/lib/vehicleBrand";
+import {
+  matchesVehicleSearch,
+  normalizeVehicleSearch,
+  parseVehicleSearch,
+} from "@/lib/vehicleSearch";
 
 interface SearchSuggestion {
   type: string;
@@ -13,6 +20,7 @@ interface SearchSuggestion {
   detail: string;
   marca?: string;
   modelo?: string;
+  query?: string;
 }
 
 interface SearchBarProps {
@@ -26,8 +34,9 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
   const location = useLocation();
 
   // Obtém os search params da URL (funciona em qualquer rota)
-  const searchParams = new URLSearchParams(location.search);
+  const searchParams = new URLSearchParams(location.searchStr);
   const search = {
+    busca: searchParams.get("busca") || undefined,
     marca: searchParams.get("marca") || undefined,
     modelo: searchParams.get("modelo") || undefined,
     categoria: searchParams.get("categoria") || undefined,
@@ -50,6 +59,9 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
   const notFoundWhatsAppHref = useMemo(() => {
     if (!whatsapp?.numero) return "#";
     const parts: string[] = [];
+    if (searchQuery.trim() || search.busca) {
+      parts.push(`busca por ${searchQuery.trim() || search.busca}`);
+    }
     if (search.marca) parts.push(`marca ${search.marca}`);
     if (search.modelo) parts.push(`modelo ${search.modelo}`);
     if (search.categoria) parts.push(`categoria ${search.categoria}`);
@@ -67,6 +79,8 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     return buildWhatsAppUrl(whatsapp.numero, siteWhatsAppMessage(body));
   }, [
     whatsapp?.numero,
+    searchQuery,
+    search.busca,
     search.marca,
     search.modelo,
     search.categoria,
@@ -79,26 +93,26 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
 
   // Gera sugestões baseadas na query
   const filteredSuggestions = useMemo<SearchSuggestion[]>(() => {
-    if (!searchQuery || searchQuery.length === 0) return [];
+    const query = searchQuery.trim();
+    if (!query) return [];
 
-    const lowerQuery = searchQuery.toLowerCase();
-    const suggestions: SearchSuggestion[] = [];
+    const lowerQuery = normalizeVehicleSearch(query);
+    const parsedQuery = parseVehicleSearch(query);
+    const suggestions: SearchSuggestion[] = [
+      {
+        type: "Busca",
+        text: `Buscar “${query}”`,
+        detail:
+          parsedQuery.labels?.join(" · ") ||
+          "Ver todos os carros que correspondem à sua busca",
+        query,
+      },
+    ];
 
     // 1. Busca por marca/modelo nos veículos
     if (vehicles && vehicles.length > 0) {
       const vehicleMatches = vehicles
-        .filter((vehicle) => {
-          const marca = vehicle.marca?.toLowerCase() || "";
-          const modelo = vehicle.modelo?.toLowerCase() || "";
-          const name = vehicle.name?.toLowerCase() || "";
-          const fullName = `${marca} ${modelo}`.toLowerCase();
-          return (
-            marca.includes(lowerQuery) ||
-            modelo.includes(lowerQuery) ||
-            name.includes(lowerQuery) ||
-            fullName.includes(lowerQuery)
-          );
-        })
+        .filter((vehicle) => matchesVehicleSearch(vehicle, parsedQuery))
         .slice(0, 5)
         .map((vehicle) => ({
           type: "Veículo",
@@ -119,7 +133,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
 
       // Marcas
       brands.forEach((brand) => {
-        if (brand && brand.toLowerCase().includes(lowerQuery)) {
+        if (brand && matchesVehicleBrand(brand, query)) {
           suggestions.push({
             type: "Filtro",
             text: brand,
@@ -130,7 +144,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
 
       // Cores
       colors.forEach((color) => {
-        if (color && color.toLowerCase().includes(lowerQuery)) {
+        if (color && normalizeVehicleSearch(color).includes(lowerQuery)) {
           suggestions.push({
             type: "Filtro",
             text: color,
@@ -141,7 +155,10 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
 
       // Câmbios
       transmissions.forEach((transmission) => {
-        if (transmission && transmission.toLowerCase().includes(lowerQuery)) {
+        if (
+          transmission &&
+          normalizeVehicleSearch(transmission).includes(lowerQuery)
+        ) {
           suggestions.push({
             type: "Filtro",
             text: transmission,
@@ -152,7 +169,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
 
       // Combustíveis
       fuels.forEach((fuel) => {
-        if (fuel && fuel.toLowerCase().includes(lowerQuery)) {
+        if (fuel && normalizeVehicleSearch(fuel).includes(lowerQuery)) {
           suggestions.push({
             type: "Filtro",
             text: fuel,
@@ -160,79 +177,6 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
           });
         }
       });
-    }
-
-    // 3. Faixa de preço - usa a mesma lógica de parsing
-    const parsePriceForSuggestions = (input: string): number | null => {
-      if (!input) return null;
-      const cleaned = input.toLowerCase().trim();
-      const patterns = [
-        /(\d+)\s*(?:k|mil|milh[oõ]es?)/i,
-        /(\d{1,3}(?:\.\d{3})*)/,
-        /(\d{4,})/,
-        /(\d{1,3})/,
-      ];
-      for (const pattern of patterns) {
-        const match = cleaned.match(pattern);
-        if (match) {
-          let value = parseInt(match[1].replace(/\./g, ""));
-          if (!isNaN(value)) {
-            if (cleaned.includes("k") || cleaned.includes("mil")) {
-              value *= 1000;
-            } else if (match[1].includes(".") || match[1].length >= 4) {
-              // Já está correto
-            } else if (value > 50 && value < 1000) {
-              value *= 1000;
-            }
-            return value;
-          }
-        }
-      }
-      return null;
-    };
-
-    const pricePatterns = [
-      /(?:até|menor\s+que|abaixo\s+de|até\s+r\$\s*)\s*(?:r\$\s*)?(.+?)(?:\s|$)/i,
-      /(?:acima\s+de|maior\s+que|mais\s+de)\s*(?:r\$\s*)?(.+?)(?:\s|$)/i,
-      /^(?:r\$\s*)?(.+?)(?:\s*(?:k|mil|milh[oõ]es?))$/i,
-      /^(\d{4,})$/,
-    ];
-
-    for (const pattern of pricePatterns) {
-      const match = lowerQuery.match(pattern);
-      if (match) {
-        const valueStr = match[1] || match[0];
-        const priceValue = parsePriceForSuggestions(valueStr);
-        if (priceValue !== null) {
-          if (
-            lowerQuery.includes("até") ||
-            lowerQuery.includes("menor") ||
-            lowerQuery.includes("abaixo")
-          ) {
-            suggestions.push({
-              type: "Filtro",
-              text: `Até R$ ${priceValue.toLocaleString("pt-BR")}`,
-              detail: "Faixa de Preço",
-            });
-          } else if (
-            lowerQuery.includes("maior") ||
-            lowerQuery.includes("acima")
-          ) {
-            suggestions.push({
-              type: "Filtro",
-              text: `Acima de R$ ${priceValue.toLocaleString("pt-BR")}`,
-              detail: "Faixa de Preço",
-            });
-          } else {
-            suggestions.push({
-              type: "Filtro",
-              text: `Até R$ ${priceValue.toLocaleString("pt-BR")}`,
-              detail: "Faixa de Preço",
-            });
-          }
-          break;
-        }
-      }
     }
 
     // Remove duplicatas e limita a 6 sugestões
@@ -251,6 +195,9 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
   const activeFiltersText = useMemo(() => {
     const filters: string[] = [];
 
+    if (search?.busca) {
+      filters.push(`Busca: ${search.busca}`);
+    }
     if (search?.marca) {
       filters.push(`Marca: ${search.marca}`);
     }
@@ -294,16 +241,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     navigate({
       to: "/seminovos",
       search: {
-        marca: undefined,
-        modelo: undefined,
-        precoMin: undefined,
-        precoMax: undefined,
-        anoMin: undefined,
-        anoMax: undefined,
-        cambio: undefined,
-        combustivel: undefined,
-        cor: undefined,
-        categoria: undefined,
+        ...emptySeminovosSearch,
       },
     });
     setSearchQuery("");
@@ -313,6 +251,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
   // Verifica se há filtros ativos
   const hasActiveFilters = useMemo(() => {
     return !!(
+      search?.busca ||
       search?.marca ||
       search?.modelo ||
       search?.categoria ||
@@ -326,499 +265,62 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
     );
   }, [search]);
 
-  // Função helper para parsear valores monetários
-  const parsePriceValue = (input: string): number | null => {
-    if (!input) return null;
-
-    // Remove espaços e caracteres especiais, mantém números e k/mil
-    const cleaned = input.toLowerCase().trim();
-
-    // Padrões: "100k", "100mil", "100 mil", "100.000", "100000"
-    // Regex melhorada para capturar diferentes formatos
-    const patterns = [
-      // Formato com k ou mil: "100k", "100mil", "100 mil"
-      /(\d+)\s*(?:k|mil|milh[oõ]es?)/i,
-      // Formato com pontos: "100.000", "1.000.000"
-      /(\d{1,3}(?:\.\d{3})*)/,
-      // Formato simples: "100000", "200000"
-      /(\d{4,})/,
-      // Formato simples menor: "100", "200" (pode ser milhares se for contexto de preço)
-      /(\d{1,3})/,
-    ];
-
-    for (const pattern of patterns) {
-      const match = cleaned.match(pattern);
-      if (match) {
-        let value = parseInt(match[1].replace(/\./g, "")); // Remove pontos de milhar
-        if (!isNaN(value)) {
-          // Se tem k ou mil no texto original, multiplica por 1000
-          if (cleaned.includes("k") || cleaned.includes("mil")) {
-            value *= 1000;
-          }
-          // Se o número tem 4+ dígitos ou tem pontos, já está em milhares
-          else if (match[1].includes(".") || match[1].length >= 4) {
-            // Já está correto
-          }
-          // Se é um número pequeno (1-3 dígitos) e não tem k/mil, assume milhares se > 50
-          else if (value > 50 && value < 1000) {
-            value *= 1000;
-          }
-          return value;
-        }
-      }
-    }
-
-    return null;
-  };
-
-  const handleSearch = () => {
-    if (!searchQuery.trim()) return;
-
-    const query = searchQuery.trim().toLowerCase();
-    const searchParams: {
-      marca: string | undefined;
-      modelo: string | undefined;
-      precoMin: string | undefined;
-      precoMax: string | undefined;
-      anoMin: string | undefined;
-      anoMax: string | undefined;
-      cambio: string | undefined;
-      combustivel: string | undefined;
-      cor: string | undefined;
-      categoria: string | undefined;
-    } = {
-      marca: undefined,
-      modelo: undefined,
-      precoMin: undefined,
-      precoMax: undefined,
-      anoMin: undefined,
-      anoMax: undefined,
-      cambio: undefined,
-      combustivel: undefined,
-      cor: undefined,
-      categoria: undefined,
-    };
-
-    // Detecta marca + modelo (ex: "HYUNDAI CRETA", "FORD KA")
-    if (stockData?.enterprises) {
-      const brands = stockData.enterprises || [];
-      const queryWords = query.split(/\s+/);
-
-      // Tenta encontrar uma marca no início da query
-      for (const brand of brands) {
-        if (!brand) continue;
-        const brandLower = brand.toLowerCase();
-        if (
-          queryWords[0] === brandLower ||
-          query.startsWith(brandLower + " ")
-        ) {
-          searchParams.marca = brand;
-          // O resto pode ser o modelo
-          const remainingQuery = query.replace(brandLower, "").trim();
-          if (remainingQuery) {
-            searchParams.modelo = remainingQuery;
-          }
-          break;
-        }
-      }
-    }
-
-    // Detecta faixa de preço com regex melhorada
-    const pricePatterns = [
-      // "até 100k", "menor que 100k", "abaixo de 100k"
-      /(?:até|menor\s+que|abaixo\s+de|até\s+r\$\s*)\s*(?:r\$\s*)?(.+?)(?:\s|$)/i,
-      // "acima de 100k", "maior que 100k"
-      /(?:acima\s+de|maior\s+que|mais\s+de|a\s+partir\s+de)\s*(?:r\$\s*)?(.+?)(?:\s|$)/i,
-      // Apenas números com k/mil no início ou fim
-      /^(?:r\$\s*)?(.+?)(?:\s*(?:k|mil|milh[oõ]es?))$/i,
-      // Números grandes sem prefixo
-      /^(\d{4,})$/,
-    ];
-
-    let priceValue: number | null = null;
-    let isMaxPrice = false;
-    let isMinPrice = false;
-
-    // Tenta detectar padrões de "até" ou "acima de"
-    for (const pattern of pricePatterns) {
-      const match = query.match(pattern);
-      if (match) {
-        const valueStr = match[1] || match[0];
-        priceValue = parsePriceValue(valueStr);
-
-        if (priceValue !== null) {
-          if (
-            query.includes("até") ||
-            query.includes("menor") ||
-            query.includes("abaixo")
-          ) {
-            isMaxPrice = true;
-          } else if (
-            query.includes("acima") ||
-            query.includes("maior") ||
-            query.includes("mais")
-          ) {
-            isMinPrice = true;
-          } else {
-            // Se não tem prefixo, assume "até" por padrão
-            isMaxPrice = true;
-          }
-          break;
-        }
-      }
-    }
-
-    // Se não encontrou padrão específico, tenta parsear o valor diretamente
-    if (priceValue === null) {
-      priceValue = parsePriceValue(query);
-      if (priceValue !== null) {
-        // Se encontrou um valor mas não tem contexto, assume "até"
-        isMaxPrice = true;
-      }
-    }
-
-    // Aplica os filtros de preço
-    if (priceValue !== null) {
-      if (isMaxPrice) {
-        // Para "até", define apenas o valor máximo, sem mínimo
-        searchParams.precoMax = priceValue.toString();
-      } else if (isMinPrice) {
-        searchParams.precoMin = priceValue.toString();
-      }
-
-      // Se detectou um preço, não filtra por marca/modelo
-      // Navega diretamente com os filtros de preço
-      navigate({
-        to: "/seminovos",
-        search: searchParams,
-      });
-      return;
-    }
-
-    // Detecta categoria (SUV, Sedan, Hatch, etc.)
-    const categoriaKeywords = {
-      suv: "SUV",
-      sedan: "SEDAN",
-      hatch: "HATCH",
-      hatchback: "HATCH",
-      pickup: "PICKUP",
-      picape: "PICKUP",
-    };
-
-    for (const [keyword, categoriaValue] of Object.entries(categoriaKeywords)) {
-      if (query.includes(keyword)) {
-        searchParams.categoria = categoriaValue;
-        // Se detectou categoria, navega diretamente sem filtrar por marca/modelo
-        navigate({
-          to: "/seminovos",
-          search: searchParams,
-        });
-        return;
-      }
-    }
-
-    // Detecta tipo de câmbio (Automático ou Manual)
-    const cambioKeywords = {
-      automático: "AUTOMATICO",
-      automatico: "AUTOMATICO",
-      manual: "MANUAL",
-    };
-
-    for (const [keyword, cambioValue] of Object.entries(cambioKeywords)) {
-      if (query.includes(keyword)) {
-        searchParams.cambio = cambioValue;
-        // Se detectou câmbio, navega diretamente sem filtrar por marca/modelo
-        navigate({
-          to: "/seminovos",
-          search: searchParams,
-        });
-        return;
-      }
-    }
-
-    // Detecta cor (verifica se corresponde a alguma cor conhecida)
-    if (stockData?.colors && stockData.colors.length > 0) {
-      const matchedColor = stockData.colors.find((color) => {
-        if (!color) return false;
-        const colorLower = color.toLowerCase();
-        const queryLower = query.toLowerCase();
-        // Verifica se a query contém a cor ou se a cor contém a query
-        return (
-          colorLower.includes(queryLower) || queryLower.includes(colorLower)
-        );
-      });
-
-      if (matchedColor) {
-        searchParams.cor = matchedColor;
-        // Se detectou cor, navega diretamente sem filtrar por marca/modelo
-        navigate({
-          to: "/seminovos",
-          search: searchParams,
-        });
-        return;
-      }
-    }
-
-    // Detecta marca + modelo (ex: "HYUNDAI CRETA", "FORD KA")
-    // Só executa se não detectou um preço, câmbio ou cor
-    if (stockData?.enterprises && !searchParams.marca) {
-      const brands = stockData.enterprises || [];
-      const queryWords = query.split(/\s+/).filter((w) => w.length > 0);
-
-      // Tenta encontrar uma marca no início da query
-      for (const brand of brands) {
-        if (!brand) continue;
-        const brandLower = brand.toLowerCase();
-        // Verifica se a query começa com a marca
-        if (
-          queryWords.length >= 2 &&
-          (queryWords[0] === brandLower || query.startsWith(brandLower + " "))
-        ) {
-          searchParams.marca = brand;
-          // O resto pode ser o modelo
-          const remainingQuery = query.replace(brandLower, "").trim();
-          if (remainingQuery) {
-            searchParams.modelo = remainingQuery;
-          }
-          // Navega com marca e modelo
-          navigate({
-            to: "/seminovos",
-            search: searchParams,
-          });
-          onAction?.();
-          return;
-        }
-      }
-    }
-
-    // Detecta apenas marca (verifica se corresponde a alguma marca conhecida)
-    // Só executa se não detectou marca+modelo, preço, câmbio ou cor
-    if (stockData?.enterprises && !searchParams.marca) {
-      const matchedBrand = stockData.enterprises.find(
-        (brand) =>
-          brand &&
-          (brand.toLowerCase().includes(query) ||
-            query.includes(brand.toLowerCase())),
-      );
-      if (matchedBrand) {
-        searchParams.marca = matchedBrand;
-      } else {
-        // Se não encontrou marca exata, usa como busca geral
-        searchParams.modelo = searchQuery.trim();
-      }
-    } else {
-      searchParams.modelo = searchQuery.trim();
-    }
-
-    // Navega para a página de seminovos com os filtros
+  // A mesma consulta é interpretada na home, na lupa e no estoque.
+  // Passar o texto explicitamente evita ler um estado antigo ao clicar na sugestão.
+  const handleSearch = (value = searchQuery) => {
+    const query = value.trim();
+    if (!query) return;
     navigate({
       to: "/seminovos",
-      search: searchParams,
+      search: { ...emptySeminovosSearch, busca: query },
     });
-
-    // Fecha a SearchBar se houver callback
+    setIsFocused(false);
     onAction?.();
   };
 
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
-    // Se for uma sugestão de preço, executa a busca diretamente
-    if (suggestion.detail === "Faixa de Preço") {
-      setSearchQuery(suggestion.text);
-      // Pequeno delay para garantir que o estado seja atualizado antes da busca
-      setTimeout(() => {
-        handleSearch();
-      }, 0);
-    } else if (suggestion.detail === "Cor") {
-      // Se for uma sugestão de cor, navega diretamente
-      navigate({
-        to: "/seminovos",
-        search: {
-          marca: undefined,
-          modelo: undefined,
-          precoMin: undefined,
-          precoMax: undefined,
-          anoMin: undefined,
-          anoMax: undefined,
-          cambio: undefined,
-          cor: suggestion.text,
-          categoria: undefined,
-        },
-      });
-      onAction?.();
-    } else if (suggestion.detail === "Câmbio") {
-      // Se for uma sugestão de câmbio, navega diretamente
-      const cambioValue =
-        suggestion.text.toLowerCase().includes("automático") ||
-        suggestion.text.toLowerCase().includes("automatico")
-          ? "AUTOMATICO"
-          : "MANUAL";
-      navigate({
-        to: "/seminovos",
-        search: {
-          marca: undefined,
-          modelo: undefined,
-          precoMin: undefined,
-          precoMax: undefined,
-          anoMin: undefined,
-          anoMax: undefined,
-          cambio: cambioValue,
-          cor: undefined,
-          categoria: undefined,
-        },
-      });
-      onAction?.();
-    } else if (suggestion.detail === "Combustível") {
-      navigate({
-        to: "/seminovos",
-        search: {
-          marca: undefined,
-          modelo: undefined,
-          precoMin: undefined,
-          precoMax: undefined,
-          anoMin: undefined,
-          anoMax: undefined,
-          cambio: undefined,
-          combustivel: suggestion.text,
-          cor: undefined,
-          categoria: undefined,
-        },
-      });
-      onAction?.();
-    } else if (
+    if (suggestion.query) {
+      handleSearch(suggestion.query);
+      return;
+    }
+
+    const filters: Partial<
+      Record<
+        "busca" | "marca" | "modelo" | "cor" | "cambio" | "combustivel",
+        string
+      >
+    > = {};
+    if (
       suggestion.type === "Veículo" &&
       suggestion.marca &&
       suggestion.modelo
     ) {
-      // Se for uma sugestão de veículo com marca e modelo, navega diretamente
-      navigate({
-        to: "/seminovos",
-        search: {
-          marca: suggestion.marca,
-          modelo: suggestion.modelo,
-          precoMin: undefined,
-          precoMax: undefined,
-          anoMin: undefined,
-          anoMax: undefined,
-          cambio: undefined,
-          cor: undefined,
-          categoria: undefined,
-        },
-      });
-      onAction?.();
+      filters.marca = suggestion.marca;
+      filters.modelo = suggestion.modelo;
+      filters.busca = searchQuery.trim();
     } else if (suggestion.detail === "Marca") {
-      // Se for apenas uma marca, navega com a marca
-      navigate({
-        to: "/seminovos",
-        search: {
-          marca: suggestion.text,
-          modelo: undefined,
-          precoMin: undefined,
-          precoMax: undefined,
-          anoMin: undefined,
-          anoMax: undefined,
-          cambio: undefined,
-          cor: undefined,
-          categoria: undefined,
-        },
-      });
-      onAction?.();
+      filters.marca = suggestion.text;
+    } else if (suggestion.detail === "Cor") {
+      filters.cor = suggestion.text;
+    } else if (suggestion.detail === "Câmbio") {
+      filters.cambio = suggestion.text;
+    } else if (suggestion.detail === "Combustível") {
+      filters.combustivel = suggestion.text;
     } else {
-      // Para outras sugestões, apenas atualiza o campo de busca
-      const cleanText = suggestion.text.replace(/.*: /, "");
-      setSearchQuery(cleanText);
+      handleSearch(suggestion.text);
+      return;
     }
+
+    navigate({
+      to: "/seminovos",
+      search: { ...emptySeminovosSearch, ...filters },
+    });
+    setIsFocused(false);
+    onAction?.();
   };
 
   const handleQuickFilterClick = (filterValue: string) => {
-    if (filterValue === "Até R$ 100k") {
-      // Define explicitamente o filtro de preço - apenas máximo, sem mínimo
-      navigate({
-        to: "/seminovos",
-        search: {
-          marca: undefined,
-          modelo: undefined,
-          precoMin: undefined,
-          precoMax: "100000",
-          anoMin: undefined,
-          anoMax: undefined,
-          cambio: undefined,
-          cor: undefined,
-          categoria: undefined,
-        },
-      });
-      onAction?.();
-    } else if (
-      filterValue.toLowerCase() === "automático" ||
-      filterValue.toLowerCase() === "automatico"
-    ) {
-      // Define filtro de câmbio automático
-      navigate({
-        to: "/seminovos",
-        search: {
-          marca: undefined,
-          modelo: undefined,
-          precoMin: undefined,
-          precoMax: undefined,
-          anoMin: undefined,
-          anoMax: undefined,
-          cambio: "AUTOMATICO",
-          cor: undefined,
-          categoria: undefined,
-        },
-      });
-      onAction?.();
-    } else if (filterValue.toLowerCase() === "suv") {
-      // Define filtro de categoria SUV
-      navigate({
-        to: "/seminovos",
-        search: {
-          marca: undefined,
-          modelo: undefined,
-          precoMin: undefined,
-          precoMax: undefined,
-          anoMin: undefined,
-          anoMax: undefined,
-          cambio: undefined,
-          cor: undefined,
-          categoria: "SUV",
-        },
-      });
-      onAction?.();
-    } else {
-      // Verifica se é uma cor conhecida
-      const filterLower = filterValue.toLowerCase();
-      if (stockData?.colors) {
-        const matchedColor = stockData.colors.find((color) => {
-          if (!color) return false;
-          return (
-            color.toLowerCase() === filterLower ||
-            filterLower === color.toLowerCase()
-          );
-        });
-
-        if (matchedColor) {
-          navigate({
-            to: "/seminovos",
-            search: {
-              marca: undefined,
-              modelo: undefined,
-              precoMin: undefined,
-              precoMax: undefined,
-              anoMin: undefined,
-              anoMax: undefined,
-              cambio: undefined,
-              cor: matchedColor,
-              categoria: undefined,
-            },
-          });
-          onAction?.();
-          return;
-        }
-      }
-
-      // Para outros filtros, apenas define a query
-      setSearchQuery(filterValue);
-    }
+    handleSearch(filterValue);
   };
 
   const quickFilters = ["Até R$ 100k", "Automático", "SUV", "Prata"];
@@ -899,23 +401,25 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
 
           <input
             type="text"
+            role="searchbox"
+            aria-label="Buscar carros"
+            maxLength={120}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setTimeout(() => setIsFocused(false), 200)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && filteredSuggestions.length > 0) {
-                // Se houver sugestões, seleciona a primeira
-                handleSuggestionClick(filteredSuggestions[0]);
-              } else if (e.key === "Enter") {
-                // Se não houver sugestões, tenta buscar
+              if (e.key === "Enter") {
+                e.preventDefault();
                 handleSearch();
+              } else if (e.key === "Escape") {
+                setIsFocused(false);
               }
             }}
             placeholder={
               hasActiveFilters && !isFocused
                 ? ""
-                : "Busque por marca, modelo, cor, câmbio, valor..."
+                : "Ex.: hatch automático até 100 mil"
             }
             className={`w-full bg-gray-50/50 border-none rounded-2xl py-6 pl-16 text-lg font-medium placeholder:text-primary/20 focus:ring-2 transition-all outline-none ${
               hasActiveFilters && !isFocused && !searchQuery
@@ -957,9 +461,10 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
                     Sugestões Inteligentes
                   </div>
                   {filteredSuggestions.map((suggestion, index) => (
-                    <div
+                    <button
                       key={index}
-                      className="px-6 py-3 hover:bg-gray-50 cursor-pointer flex items-center justify-between gap-3 group transition-colors"
+                      type="button"
+                      className="w-full text-left px-6 py-3 hover:bg-gray-50 cursor-pointer flex items-center justify-between gap-3 group transition-colors"
                       onClick={() => handleSuggestionClick(suggestion)}
                     >
                       <div className="flex items-center gap-3">
@@ -1012,7 +517,7 @@ export function SearchBar({ onAction }: SearchBarProps = {}) {
                       >
                         {suggestion.type}
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </motion.div>
               )}

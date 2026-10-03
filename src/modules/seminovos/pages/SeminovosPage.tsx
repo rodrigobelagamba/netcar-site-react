@@ -14,7 +14,8 @@ import { VehicleCardStatic } from "@/design-system/components/patterns/VehicleCa
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
 import { ChevronDown, Filter, MessageCircle, ShieldCheck } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
-import { matchesVehicleSearch } from "@/lib/vehicleSearch";
+import { matchesVehicleSearch, parseVehicleSearch } from "@/lib/vehicleSearch";
+import { matchesVehicleBrand } from "@/lib/vehicleBrand";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
@@ -33,6 +34,7 @@ import {
 } from "@/lib/showroomStock";
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
 import { StockSearchField } from "../components/StockSearchField";
+import { StockFilterNotice } from "../components/StockFilterNotice";
 
 type StockLayout = {
   compact: boolean;
@@ -512,8 +514,14 @@ export function SeminovosPage() {
     search.precoMax,
   ]);
 
-  // Filtra e ordena veículos
-  const filteredAndSortedVehicles = useMemo(() => {
+  const parsedStockSearch = useMemo(
+    () => parseVehicleSearch(search.busca || ""),
+    [search.busca],
+  );
+
+  // Suggestions must respect applied filters, without filtering out incomplete
+  // free-text fragments before they can be completed.
+  const structuredVehicles = useMemo(() => {
     if (!vehicles) return [];
 
     let filtered = [...vehicles];
@@ -541,14 +549,17 @@ export function SeminovosPage() {
       );
     }
 
-    if (search.busca) {
-      filtered = filtered.filter((vehicle) =>
-        matchesVehicleSearch(vehicle, search.busca || ""),
-      );
-    }
+    return filtered;
+  }, [vehicles, search.categoria, search.combustivel]);
 
+  const filteredAndSortedVehicles = useMemo(() => {
+    const filtered = search.busca
+      ? structuredVehicles.filter((vehicle) =>
+          matchesVehicleSearch(vehicle, parsedStockSearch),
+        )
+      : structuredVehicles;
     return sortShowroomVehicles(filtered, sortBy);
-  }, [vehicles, sortBy, search.busca, search.categoria, search.combustivel]);
+  }, [structuredVehicles, sortBy, search.busca, parsedStockSearch]);
 
   // Registra a quantidade somente quando a URL e a consulta já refletem os
   // filtros recém-aplicados, evitando enviar a contagem do resultado anterior.
@@ -705,12 +716,13 @@ export function SeminovosPage() {
   return (
     <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-6">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
-        <div className="mb-4 flex flex-col gap-2 rounded-xl border border-[#00283C]/10 bg-white p-2 shadow-sm lg:flex-row lg:items-center lg:gap-3">
+        <div className="mb-4 flex flex-col gap-2 rounded-xl border border-[#00283C]/10 bg-white p-2 shadow-sm lg:flex-row lg:items-start lg:gap-3">
           <StockSearchField
             value={search.busca || ""}
             onChange={handleStockSearch}
+            vehicles={structuredVehicles}
           />
-          <div className="flex items-center justify-between gap-3 lg:shrink-0">
+          <div className="flex items-center justify-between gap-3 lg:shrink-0 lg:pt-2">
             <button
               type="button"
               onClick={() => setAreFiltersVisible((visible) => !visible)}
@@ -750,6 +762,13 @@ export function SeminovosPage() {
             </label>
           </div>
         </div>
+
+        <StockFilterNotice
+          active={Boolean(search.busca?.trim()) || appliedFiltersCount > 0}
+          resultCount={filteredAndSortedVehicles.length}
+          updating={isLoading || isRefreshingVehicles}
+          onClear={handleClearFilters}
+        />
 
         {activeFilterLabels.length > 0 ? (
           <div
@@ -801,6 +820,7 @@ export function SeminovosPage() {
               </label>
               <AutocompleteSelect
                 options={brandOptions}
+                matchesOption={matchesVehicleBrand}
                 value={marca}
                 onChange={setMarca}
                 placeholder="Selecione"
