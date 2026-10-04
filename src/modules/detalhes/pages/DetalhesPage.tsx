@@ -2194,10 +2194,7 @@ export function DetalhesPage() {
             </div>
           )}
           {warrantyStamp && (
-            <div className="flex items-center gap-4 px-4 pt-1 sm:px-6 lg:hidden">
-              <div className="min-w-0 flex-1">
-                <FactoryWarrantyNote />
-              </div>
+            <div className="flex justify-end px-4 pt-1 sm:px-6 lg:hidden">
               <div className="w-[84px] shrink-0 sm:w-[112px]">
                 <FactoryWarrantyBadge {...warrantyStamp} variant="hero" />
               </div>
@@ -2208,9 +2205,6 @@ export function DetalhesPage() {
         {warrantyStamp && (
           <div className="absolute bottom-12 right-[4%] z-20 hidden w-[10.5vw] max-w-[164px] lg:block">
             <FactoryWarrantyBadge {...warrantyStamp} variant="hero" />
-            <div className="mt-3">
-              <FactoryWarrantyNote compact />
-            </div>
           </div>
         )}
 
@@ -2372,6 +2366,14 @@ export function DetalhesPage() {
             </div>
           </motion.div>
         </div>
+        {warrantyStamp && (
+          <div
+            className="container-main relative z-10 mt-4 px-4 sm:px-6 lg:absolute lg:bottom-3 lg:left-0 lg:right-0 lg:mt-0 lg:px-8 xl:px-12 2xl:px-16"
+            data-factory-warranty-footer="hero"
+          >
+            <FactoryWarrantyNote compact />
+          </div>
+        )}
       </section>
 
       {/* One media gallery: the verified video stays available without photos. */}
