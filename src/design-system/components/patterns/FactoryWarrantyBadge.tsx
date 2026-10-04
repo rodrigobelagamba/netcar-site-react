@@ -10,7 +10,7 @@ export interface FactoryWarrantyBadgeProps {
   mode: "visual-example" | "verified";
 }
 
-/** Carimbo vetorial; nota em texto HTML ao lado/abaixo da aplicação. */
+/** Carimbo vetorial; nota em texto HTML no rodapé do bloco. */
 export function FactoryWarrantyBadge({
   estimatedEndYear,
   manufacturer,
@@ -30,6 +30,7 @@ export function FactoryWarrantyBadge({
         className={`block h-auto w-full overflow-visible ${round ? "-rotate-[6deg]" : "-rotate-[4deg]"}`}
         role="img"
         aria-label={`Garantia de fábrica até ${estimatedEndYear}*. ${mode === "visual-example" ? "Prévia visual; ano estimado." : "Ano estimado pela fabricação."}`}
+        aria-description={FACTORY_WARRANTY_NOTE}
       >
         {round ? (
           <>

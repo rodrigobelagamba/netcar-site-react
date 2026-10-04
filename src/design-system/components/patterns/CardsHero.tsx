@@ -261,8 +261,6 @@ export function CardsHero({
           </div>
         </div>
 
-        {warrantyStamp && <FactoryWarrantyNote compact />}
-
         {/* Price and Action — altura reservada pra alinhar CTA entre cards */}
         <div
           className={`!border-0 w-full min-w-0 flex flex-col items-stretch ${isFactoryWarrantyLayoutEnabled ? "!mt-auto" : "mt-auto"} ${
@@ -446,6 +444,11 @@ export function CardsHero({
             </>
           ) : null}
         </div>
+        {warrantyStamp && (
+          <div className="mt-3 w-full" data-factory-warranty-footer="card">
+            <FactoryWarrantyNote compact />
+          </div>
+        )}
       </div>
     </div>
   );
