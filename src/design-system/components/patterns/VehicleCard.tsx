@@ -11,12 +11,12 @@ import {
 import { vehicleWhatsAppRef } from "@/lib/vehicleWhatsAppRef";
 import { trackVehicleCardOpen } from "@/lib/analytics";
 import { CardsHero } from "./CardsHero";
+import { factoryWarrantyStampFor } from "@/lib/factoryWarrantyStamp";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import {
   getVehicleMerchandising,
   getVehicleLowMileageCardLabel,
-  hasVehicleFactoryWarranty,
   hasVehicleIcheck,
   hasVehicleLowAnnualMileage,
   LOW_ANNUAL_MILEAGE_CARD_LABEL,
@@ -192,7 +192,6 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
     potencia,
   });
   const hasIcheck = hasVehicleIcheck({ pdf, pdf_url });
-  const hasFactoryWarranty = hasVehicleFactoryWarranty({ diferenciais });
   const cardMarketingBadge =
     merchandising?.cardLabel || getVehicleLowMileageCardLabel({ km });
 
@@ -278,9 +277,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
       mileage={mileageFormatted}
       mileageBadge={isSold ? undefined : mileageBadge}
       marketingBadge={isSold ? undefined : cardMarketingBadge}
-      warrantyBadge={
-        isSold || !hasFactoryWarranty ? undefined : "GARANTIA DE FÁBRICA"
-      }
+      warrantyStamp={factoryWarrantyStampFor({ id, marca, modelo, name, anoFabricacao, year, km, price, diferenciais })}
       proofBadge={isSold || !hasIcheck ? undefined : "i-CHECK"}
       price={priceFormatted}
       previousPrice={previousPriceFormatted}

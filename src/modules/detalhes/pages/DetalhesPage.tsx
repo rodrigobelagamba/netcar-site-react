@@ -1,3 +1,5 @@
+import { FactoryWarrantyBadge, FactoryWarrantyNote } from "@/design-system/components/patterns/FactoryWarrantyBadge";
+import { factoryWarrantyStampFor } from "@/lib/factoryWarrantyStamp";
 import {
   useParams,
   useLocation,
@@ -2006,6 +2008,7 @@ export function DetalhesPage() {
   const waRef = vehicleWhatsAppRef(vehicle);
 
   const mileageFormatted = formatCatalogMileage(vehicle.km);
+  const warrantyStamp = factoryWarrantyStampFor(vehicle);
 
   // Badges (só selos de dados reais — sem Retire hoje / Vistoriado genérico)
   const diferenciais = vehicle?.diferenciais ?? [];
@@ -2047,9 +2050,6 @@ export function DetalhesPage() {
                   variant: "baixa-km" as const,
                 },
               ]
-            : []),
-          ...(hasDiferencial("garantia_fabrica")
-            ? [{ text: "Garantia de Fábrica", variant: "garantia" as const }]
             : []),
           ...(hasDiferencial("unico_dono")
             ? [{ text: "Único Dono", variant: "green-dark" as const }]
@@ -2193,7 +2193,26 @@ export function DetalhesPage() {
               />
             </div>
           )}
+          {warrantyStamp && (
+            <div className="flex items-center gap-4 px-4 pt-1 sm:px-6 lg:hidden">
+              <div className="min-w-0 flex-1">
+                <FactoryWarrantyNote />
+              </div>
+              <div className="w-[84px] shrink-0 sm:w-[112px]">
+                <FactoryWarrantyBadge {...warrantyStamp} variant="hero" />
+              </div>
+            </div>
+          )}
         </div>
+
+        {warrantyStamp && (
+          <div className="absolute bottom-12 right-[4%] z-20 hidden w-[10.5vw] max-w-[164px] lg:block">
+            <FactoryWarrantyBadge {...warrantyStamp} variant="hero" />
+            <div className="mt-3">
+              <FactoryWarrantyNote compact />
+            </div>
+          </div>
+        )}
 
         {/* Left Content - 50% com posicionamento absoluto */}
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative">

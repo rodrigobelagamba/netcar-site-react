@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsx scripts/generate-entregas-feed.ts && node scripts/sync-icheck-metadata.mjs && node scripts/generate-landings.js && tsx scripts/generate-equipment-seo.ts && node scripts/validate-regional-seo.js && node scripts/validate-blog-intent.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsx scripts/validate-seo-data-modules.ts && tsx scripts/validate-demand-runtime.ts && tsx scripts/validate-showroom-runtime.ts && npm run stock:validate-video && tsx --test scripts/tests/site-banners.test.ts && node scripts/validate-generated-seo.js && node scripts/validate-server-routing.js && npm run tracking:validate && tsx scripts/validate-attribution-integrity.ts && tsx scripts/validate-gbp-attribution.ts && tsx scripts/validate-regional-contact-runtime.ts && node scripts/generate-whatsapp-catalog-feed.js && tsc && vite build && node scripts/defer-built-css.js && node scripts/copy-social-php.js && node scripts/validate-entregas-build.mjs",
+    "build": "npm run stock:test-warranty && tsx scripts/generate-entregas-feed.ts && node scripts/sync-icheck-metadata.mjs && node scripts/generate-landings.js && tsx scripts/generate-equipment-seo.ts && node scripts/validate-regional-seo.js && node scripts/validate-blog-intent.js && node scripts/generate-sitemap.js && node scripts/generate-seo-assets.js && tsx scripts/validate-seo-data-modules.ts && tsx scripts/validate-demand-runtime.ts && tsx scripts/validate-showroom-runtime.ts && npm run stock:validate-video && tsx --test scripts/tests/site-banners.test.ts && node scripts/validate-generated-seo.js && node scripts/validate-server-routing.js && npm run tracking:validate && tsx scripts/validate-attribution-integrity.ts && tsx scripts/validate-gbp-attribution.ts && tsx scripts/validate-regional-contact-runtime.ts && node scripts/generate-whatsapp-catalog-feed.js && tsc && vite build && node scripts/defer-built-css.js && node scripts/copy-social-php.js && node scripts/validate-entregas-build.mjs",
     "generate-sitemap": "node scripts/generate-sitemap.js",
     "generate-landings": "node scripts/generate-landings.js",
     "generate-blog": "node scripts/generate-blog.js",
@@ -49,7 +49,8 @@
     "icheck:sync": "node scripts/sync-icheck-metadata.mjs",
     "icheck:validate": "node --test scripts/tests/icheck-*.test.mjs scripts/validate-icheck-publication.test.mjs && tsx --test src/lib/icheckMetadata.test.ts && tsx scripts/validate-icheck-pdf.ts",
     "icheck:publish": "node scripts/publish-icheck-metadata.mjs",
-    "entregas:seed": "tsx scripts/generate-entregas-feed.ts"
+    "entregas:seed": "tsx scripts/generate-entregas-feed.ts",
+    "stock:test-warranty": "node --import tsx --test scripts/tests/factory-warranty.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",

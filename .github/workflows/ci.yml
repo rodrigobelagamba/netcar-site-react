@@ -20,6 +20,8 @@ jobs:
       - run: npm run lint
       - name: Validate stock search refresh
         run: npm run stock:test-search
+      - name: Validate reviewed factory warranty stamps
+        run: npm run stock:test-warranty
       - name: Validate homepage PHP
         run: |
           php -l public/index.php
@@ -66,7 +68,7 @@ jobs:
         run: npx tsx --test scripts/tests/comparison-vehicle-image.test.tsx scripts/tests/vehicle-comparison-table.test.tsx scripts/tests/comparison-pages.test.tsx src/lib/comparisonContact.test.ts
       - name: Validate delivery gallery and deployment preservation
         run: |
-          node --test scripts/tests/entregas-deploy.test.mjs
+          node --test scripts/tests/entregas-deploy.test.mjs scripts/tests/icheck-deploy.test.mjs
           npx tsx --test src/modules/entregas/lib/deliveries.test.ts src/modules/entregas/components/viewerFocus.test.ts
       - name: Validate i-CHECK metadata and reports
         run: npm run icheck:validate
