@@ -21,6 +21,8 @@ jobs:
       - name: Validate stock search refresh
         run: npm run stock:test-search
       - name: Validate reviewed factory warranty stamps
+        env:
+          NODE_ENV: production
         run: npm run stock:test-warranty
       - name: Validate homepage PHP
         run: |
