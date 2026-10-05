@@ -26,6 +26,12 @@ const tiggoPowertrainAudit = JSON.parse(
     "utf8",
   ),
 );
+const tiggo7PowertrainAudit = JSON.parse(
+  readFileSync(
+    resolve(root, "docs/audits/factory-warranty-tiggo7-powertrain-2026-10-05.json"),
+    "utf8",
+  ),
+);
 const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window");
 const originalFetch = globalThis.fetch;
 const OriginalDate = globalThis.Date;
@@ -39,6 +45,11 @@ let CardsHero;
 let fetchVehicles;
 let factoryWarrantyMatrix;
 let factoryWarrantyReviewFingerprint;
+let factoryWarrantyStampFor;
+let factoryTractionBatteryStampFor;
+let factoryPowertrainStampFor;
+let FactoryWarrantyBadge;
+let FactoryWarrantyNote;
 let renderer;
 
 class FixedDate extends OriginalDate {
@@ -53,7 +64,8 @@ class FixedDate extends OriginalDate {
 }
 
 function approvedVehicle(id = "19587") {
-  const snapshot = tiggoPowertrainAudit.publicVehicles.find((vehicle) => vehicle.id === id)
+  const snapshot = tiggo7PowertrainAudit.publicVehicles.find((vehicle) => vehicle.id === id)
+    ?? tiggoPowertrainAudit.publicVehicles.find((vehicle) => vehicle.id === id)
     ?? october5Audit.publicVehicles.find((vehicle) => vehicle.id === id)
     ?? audit.currentCatalogSnapshot.find((vehicle) => vehicle.id === id);
   assert.ok(snapshot, `Missing reviewed catalog fixture ${id}`);
@@ -127,8 +139,16 @@ before(async () => {
   ({ fetchVehicles } = await server.ssrLoadModule(
     "/src/catalog/endpoints/vehicles.ts",
   ));
-  ({ factoryWarrantyMatrix } = await server.ssrLoadModule(
+  ({
+    factoryWarrantyMatrix,
+    factoryWarrantyStampFor,
+    factoryTractionBatteryStampFor,
+    factoryPowertrainStampFor,
+  } = await server.ssrLoadModule(
     "/src/lib/factoryWarrantyStamp.ts",
+  ));
+  ({ FactoryWarrantyBadge, FactoryWarrantyNote } = await server.ssrLoadModule(
+    "/src/design-system/components/patterns/FactoryWarrantyBadge.tsx",
   ));
   ({ factoryWarrantyReviewFingerprint } = await server.ssrLoadModule(
     "/src/lib/factoryWarranty.ts",
@@ -459,7 +479,18 @@ function renderedText(node) {
     : node.children.map(renderedText).join("");
 }
 
-function assertTiggoPowertrain(expected) {
+const tiggo8PowertrainExpectation = {
+  estimatedEndYear: 2028,
+  manualUrl: "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+  manualCode: "B09999T8006",
+};
+const tiggo7PowertrainExpectation = {
+  estimatedEndYear: 2029,
+  manualUrl: "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298",
+  manualCode: "B09999T7303",
+};
+
+function assertTiggoPowertrain(expected, expectation = tiggo8PowertrainExpectation) {
   const badges = renderer.root.findAll(
     (node) => node.type === "div" && node.props["data-factory-warranty-badge"] === "card",
   );
@@ -484,26 +515,29 @@ function assertTiggoPowertrain(expected) {
     return;
   }
 
-  const manualUrl = "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298";
-  assert.equal(hero.powertrainStamp.scope, "powertrain");
-  assert.equal(hero.powertrainStamp.estimatedEndYear, 2028);
-  assert.equal(hero.powertrainStamp.termYears, 5);
-  assert.equal(hero.powertrainStamp.sourceUrl, manualUrl);
+  assertPowertrainPresentation(badges[0], notes[0], hero.powertrainStamp, expectation);
+}
+
+function assertPowertrainPresentation(badge, note, stamp, { estimatedEndYear, manualUrl, manualCode }) {
+  assert.equal(stamp.scope, "powertrain");
+  assert.equal(stamp.estimatedEndYear, estimatedEndYear);
+  assert.equal(stamp.termYears, 5);
+  assert.equal(stamp.sourceUrl, manualUrl);
   assert.equal(
-    badges[0].findByType("svg").props["aria-label"],
-    "Garantia de fábrica de motor e câmbio até 2028*. Ano estimado pela fabricação.",
+    badge.findByType("svg").props["aria-label"],
+    `Garantia de fábrica de motor e câmbio até ${estimatedEndYear}*. Ano estimado pela fabricação.`,
   );
-  const stampText = badges[0].findAllByType("text").map(renderedText).join(" ");
-  assert.match(stampText, /GARANTIA MOTOR E CÂMBIO ATÉ 2028 \*/);
+  const stampText = badge.findAllByType("text").map(renderedText).join(" ");
+  assert.ok(stampText.includes(`GARANTIA MOTOR E CÂMBIO ATÉ ${estimatedEndYear} *`));
   assert.doesNotMatch(stampText, /BATERIA|GARANTIA DE FÁBRICA/);
-  const noteText = renderedText(notes[0]);
+  const noteText = renderedText(note);
   assert.equal(noteText, "*Ano estimado pela fabricação. Prazo original e condições conforme manual da montadora. Consultar manual.");
   assert.doesNotMatch(noteText, /bateria de tração|garantia geral/i);
-  const links = notes[0].findAllByType("a");
+  const links = note.findAllByType("a");
   assert.equal(links.length, 1);
   assert.equal(renderedText(links[0]), "Consultar manual");
   assert.equal(links[0].props.href, manualUrl);
-  assert.equal(links[0].props.title, "Manual B09999T8006");
+  assert.equal(links[0].props.title, `Manual ${manualCode}`);
   assert.equal(links[0].props.target, "_blank");
   assert.deepEqual(links[0].props.rel.split(/\s+/).sort(), ["noopener", "noreferrer"]);
   let stopped = 0;
@@ -511,14 +545,18 @@ function assertTiggoPowertrain(expected) {
   assert.equal(stopped, 1, "Opening the manual must not trigger card navigation");
 }
 
-for (const id of ["20029", "20041"]) {
+for (const [id, expectation] of [
+  ["20029", tiggo8PowertrainExpectation],
+  ["20041", tiggo8PowertrainExpectation],
+  ["20066", tiggo7PowertrainExpectation],
+]) {
   for (const compact of [false, true]) {
     for (const source of ["raw", "API"]) {
-      test(`Tiggo ${id}: reviewed ${source} -> ${compact ? "compact" : "normal"} card shows only motor/câmbio 2028 with the original five-year term`, async () => {
+      test(`Tiggo ${id}: reviewed ${source} -> ${compact ? "compact" : "normal"} card shows only motor/câmbio ${expectation.estimatedEndYear} with the original five-year term`, async () => {
         const base = approvedVehicle(id);
         const raw = source === "API" ? await mappedApiVehicle(id) : base;
         await renderCard(raw, { base, compact });
-        assertTiggoPowertrain(true);
+        assertTiggoPowertrain(true, expectation);
       });
     }
   }
@@ -526,17 +564,17 @@ for (const id of ["20029", "20041"]) {
   for (const [label, changes] of [
     ["sold raw vehicle", { price: 0 }],
     ["new ID", { id: "unreviewed-tiggo-unit" }],
-    ["unapproved Tiggo 7 ID", { id: "20066" }],
+    ["another reviewed Tiggo ID with incompatible identity", { id: id === "20066" ? "20029" : "20066" }],
     ["changed model", { modelo: "TIGGO 7 SPORT" }],
     ["missing FAB", { anoFabricacao: undefined }],
     ["null FAB", { anoFabricacao: null }],
     ["NaN FAB", { anoFabricacao: Number.NaN }],
-    ["changed FAB", { anoFabricacao: 2024 }],
+    ["changed FAB", { anoFabricacao: approvedVehicle(id).anoFabricacao + 1 }],
     ["missing MY", { year: undefined }],
     ["null MY", { year: null }],
     ["zero MY", { year: 0 }],
     ["NaN MY", { year: Number.NaN }],
-    ["changed MY", { year: 2025 }],
+    ["changed MY", { year: approvedVehicle(id).year + 1 }],
     ["missing mileage", { km: undefined }],
     ["null mileage", { km: null }],
     ["NaN mileage", { km: Number.NaN }],
@@ -575,11 +613,11 @@ for (const id of ["20029", "20041"]) {
     ["new ID", { id: "another-api-tiggo-unit" }],
     ["missing FAB", { ano_fabricacao: undefined }],
     ["null FAB", { ano_fabricacao: null }],
-    ["changed FAB", { ano_fabricacao: 2024 }],
+    ["changed FAB", { ano_fabricacao: approvedVehicle(id).anoFabricacao + 1 }],
     ["missing MY", { ano: undefined }],
     ["null MY", { ano: null }],
     ["zero MY", { ano: 0 }],
-    ["changed MY", { ano: 2025 }],
+    ["changed MY", { ano: approvedVehicle(id).year + 1 }],
     ["missing mileage", { km: undefined }],
     ["null mileage", { km: null }],
     ["regressed mileage", { km: approvedVehicle(id).km - 1 }],
@@ -593,3 +631,41 @@ for (const id of ["20029", "20041"]) {
     });
   }
 }
+
+test("Tiggo 7 20066: shared helper -> real hero badge and short note show only motor/câmbio 2029", async () => {
+  const raw = approvedVehicle("20066");
+  const stamp = factoryPowertrainStampFor(raw);
+  assert.ok(stamp);
+  assert.equal(factoryWarrantyStampFor(raw), undefined);
+  assert.equal(factoryTractionBatteryStampFor(raw), undefined);
+
+  // Exercise the same shared helper and presentation components used by the
+  // detail hero. Full DetalhesPage mounting/layout is covered by browser review.
+  await act(async () => {
+    renderer = TestRenderer.create(React.createElement(
+      React.Fragment,
+      null,
+      React.createElement(FactoryWarrantyBadge, { ...stamp, variant: "hero" }),
+      React.createElement(FactoryWarrantyNote, { compact: true, powertrain: stamp }),
+    ));
+  });
+  const badges = renderer.root.findAll(
+    (node) => node.type === "div" && node.props["data-factory-warranty-badge"] === "hero",
+  );
+  assert.equal(badges.length, 1);
+  assert.equal(badges[0].props["data-warranty-scope"], "powertrain");
+  const notes = renderer.root.findAllByType("p");
+  assert.equal(notes.length, 1, "The hero components must not add an external powertrain caption");
+  assert.ok(Object.hasOwn(notes[0].props, "data-factory-warranty-note"));
+  assert.equal(renderer.root.findAll(
+    (node) => node.type === "p" && Object.hasOwn(node.props, "data-powertrain-label"),
+  ).length, 0);
+  assertPowertrainPresentation(badges[0], notes[0], stamp, tiggo7PowertrainExpectation);
+});
+
+test("Tiggo 7 20066: the final estimated year hides the stamp without a confirmed expiry date", async () => {
+  currentNow = OriginalDate.parse("2029-01-01T12:00:00.000Z");
+  const raw = approvedVehicle("20066");
+  await renderCard(raw, { base: raw });
+  assertTiggoPowertrain(false);
+});

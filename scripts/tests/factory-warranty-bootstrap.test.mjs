@@ -14,9 +14,13 @@ import {
 } from "../lib/seo-stock-cache.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const snapshots = JSON.parse(
+const historicalSnapshots = JSON.parse(
   readFileSync(join(root, "docs/audits/factory-warranty-2026-10-03.json"), "utf8"),
 ).currentCatalogSnapshot;
+const tiggo7Snapshots = JSON.parse(
+  readFileSync(join(root, "docs/audits/factory-warranty-tiggo7-powertrain-2026-10-05.json"), "utf8"),
+).publicVehicles;
+const snapshots = [...new Map([...historicalSnapshots, ...tiggo7Snapshots].map((vehicle) => [vehicle.id, vehicle])).values()];
 const OriginalDate = globalThis.Date;
 const originalFetch = globalThis.fetch;
 const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window");
@@ -171,7 +175,6 @@ function versionedSnapshotRoundTrip(vehicle) {
 }
 
 for (const [id, year] of [
-  ["20066", 2027],
   ["19994", 2027],
   ["20038", 2029],
   ["19857", 2028],
@@ -191,21 +194,22 @@ for (const [id, year] of [
   });
 }
 
-for (const id of ["20029", "20041"]) {
+for (const id of ["20029", "20041", "20066"]) {
   test(`${id}: original API, producer and cache preserve only the reviewed powertrain stamp`, () => {
+    const source = catalogVehicle(id);
     const produced = bootstrap(apiVehicle({}, id));
     for (const current of [produced, browserBootstrapVehicle(produced), versionedSnapshotRoundTrip(produced)]) {
       const stamp = factoryPowertrainStampFor(current);
       assert.equal(stamp?.scope, "powertrain");
-      assert.equal(stamp?.estimatedEndYear, 2028);
+      assert.equal(stamp?.estimatedEndYear, source.anoFabricacao + 5);
       assert.equal(factoryWarrantyStampFor(current), undefined);
     }
     for (const patch of [
-      { ano: undefined }, { ano: 2025 }, { ano_fabricacao: undefined }, { ano_fabricacao: 2024 },
+      { ano: undefined }, { ano: source.year + 1 }, { ano_fabricacao: undefined }, { ano_fabricacao: source.anoFabricacao + 1 },
       { km: undefined }, { km: 0 }, { diferenciais: [] }, { id: "another-tiggo-unit" },
     ]) {
       const changed = bootstrap(apiVehicle(patch, id));
-      const presented = { ...changed, year: 2024, anoFabricacao: 2023, km: catalogVehicle(id).km };
+      const presented = { ...changed, year: source.year, anoFabricacao: source.anoFabricacao, km: source.km };
       assert.equal(factoryPowertrainStampFor(presented), undefined, JSON.stringify(patch));
       assert.equal(factoryPowertrainStampFor(versionedSnapshotRoundTrip(presented)), undefined);
     }

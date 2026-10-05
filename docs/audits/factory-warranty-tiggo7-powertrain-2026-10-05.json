@@ -1,0 +1,507 @@
+{
+  "reviewId": "warranty-20261005-tiggo7-powertrain",
+  "reviewedAt": "2026-10-05",
+  "baseSourceCommit": "fbca4f96972723ab1f88a3d7aa5c814a45eba13f",
+  "scope": "Replace only the active display record of Tiggo 7 Pro Max Drive unit 20066: general estimate 2027 becomes one engine-and-transmission stamp estimated 2029. No five-year general coverage, duplicate principal record or automatic fallback.",
+  "changedVehicleIds": [
+    "20066"
+  ],
+  "sourceArtifacts": [
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/tiggo7-powertrain-siteworker-contract.json",
+      "sha256": "3b4d334af456aad333fc85691071836b4dbd29ca371737c7d745ef5238e77c13"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/validated-tiggo7-powertrain-record.json",
+      "sha256": "0d092ae543e5105b950dd93403bd4cfc8513f14c7c9afe00ee43ef0242ae7ec6"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/chery/owner_attestation_20066.json",
+      "sha256": "a7ae05771fa05342c8dec3729247d0862fa3f9e252c5118613446550321c631c"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/chery/tiggo7_20066_powertrain_evidence.json",
+      "sha256": "084eebb82607197d92c8152a4af8515a9945c44bf5fa0cfaf8f1a744bcb3ef15"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/chery/tiggo7-powertrain-review-manifest.json",
+      "sha256": "8386ba35a86a5698c2bdf19feaceb37742606a817479b35d706b534aeb4ce850"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/chery/tiggo7-powertrain-contract-checks.json",
+      "sha256": "aa915aa079321ade546d925796e20e281f709f5bba4a8b816d26ceda23b06d64"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-02/task-3/warranty-tiggo7-powertrain/evidence-20066.json",
+      "sha256": "552681a9b79d66de7c0299d0281244a77cc372e4b682f5765e11b07525f19c93"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-02/task-3/tiggo-caption-fix/current-reviewed.json",
+      "sha256": "9d1a6906f0fb1d8986c2c54b80f831a5a3a690b3120db4a867d8013e157f7867"
+    }
+  ],
+  "validatedContract": {
+    "source": "validated-tiggo7-powertrain-record.json",
+    "preparedAt": "2026-10-05T15:02:16.265Z",
+    "remainingHumanBlockers": [],
+    "recordImport": "Imported the individually approved powertrain record. Added existing runtime powertrainReview metadata binding subtype, unit-use attestation and display label; used the exact page-linked source_line URL. Regenerated the canonical fingerprint only after this bounded integration review. Original source record/fingerprint remain below. No manufacturer term or exact expiry was inferred.",
+    "runtimeCompatibility": "The research contract checked an older checkout without powertrain support. This base already has the reviewed scoped resolver; no engine or UI change is needed.",
+    "newCollection": false
+  },
+  "ownerAttestation": {
+    "vehicleIds": [
+      "20066"
+    ],
+    "vehicleId": "20066",
+    "usage": "private",
+    "evidenceKind": "explicit_unit_specific_owner_attestation_relayed_by_authorized_parent",
+    "assistantQuestionMessageId": "Sentinel_447c78ae93e88191bf97e1b00134ba7b",
+    "questionSummary": "The assistant specifically asked whether Tiggo 7 unit 20066 had non-commercial use.",
+    "userMessageId": "Sentinel_288a06854d888191ba9530283b115526",
+    "relayedUserAnswer": "nao teve uso comercial... pode atualizar",
+    "scope": "Resolves non-commercial use only for unit 20066. Does not establish first-delivery date, exact expiry or manufacturer terms. Earlier attestation of units 20029/20041 was not reused."
+  },
+  "displayReplacement": {
+    "vehicleId": "20066",
+    "mode": "replace-single-display",
+    "maximumActiveBadges": 1,
+    "replacedScope": "basic-vehicle",
+    "replacedEstimatedYear": 2027,
+    "replacementScope": "powertrain",
+    "coverageSubtype": "engine-and-transmission",
+    "replacementEstimatedYear": 2029,
+    "preservePriorReviewAsHistory": true,
+    "priorBasicWarrantyDeclaredExpired": false,
+    "automaticFallbackToPriorGeneralDisplay": false
+  },
+  "officialDocument": {
+    "url": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf",
+    "displaySourceUrl": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298",
+    "portal": "https://caoachery.com.br/manuais",
+    "documentCode": "B09999T7303",
+    "printedEdition": "Janeiro de 2024/1",
+    "sourcePdf": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/checkpoint/tiggo7-original-publico.pdf",
+    "sha256": "298facffd0fedc718719af802f98c88332d655edad34fb6b6d3b947b66751671",
+    "pages": {
+      "termAndTransfer": {
+        "pdf": 298,
+        "printed": "10-3",
+        "clause": "c"
+      },
+      "engineTransmissionTable": {
+        "pdf": 299,
+        "printed": "10-4",
+        "row": 20
+      },
+      "otherComponents": {
+        "pdf": 299,
+        "printed": "10-4",
+        "row": 21
+      },
+      "edition": {
+        "pdf": 326,
+        "printed": "contracapa"
+      }
+    },
+    "portalModelYearMapping": {
+      "portalModelHeading": "TIGGO 7 PRO MAX DRIVE",
+      "expandedYearHeading": "Manuais 2024/2025",
+      "linkText": "Manual do Proprietário",
+      "url": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf",
+      "useForVehicle": "Tiggo 7 Pro Max Drive FAB2024/MY2025",
+      "mappingStatus": "verified_live_official"
+    },
+    "portalMappingVerifiedAt": "2026-10-03T22:18:34.473390+00:00",
+    "sourceLimitations": {
+      "newDownload": false,
+      "note": "No new portal or manual download was performed for this handoff; the mapping is the authorized official-portal record from 2026-10-03."
+    }
+  },
+  "approvedLocalContent": [
+    {
+      "vehicleId": "20066",
+      "recordId": "reviewed-v2-20261005-20066-powertrain",
+      "reviewId": "warranty-20261005-20066-powertrain",
+      "identity": {
+        "vehicleId": "20066",
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 7 PRO MAX DRIVE TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "scope": "powertrain",
+      "powertrainReview": {
+        "coverageSubtype": "engine-and-transmission",
+        "usageAttestationId": "Sentinel_288a06854d888191ba9530283b115526",
+        "displayLabel": "Motor e câmbio"
+      },
+      "termYears": 5,
+      "totalMonths": 60,
+      "additionalMonthsBeyondGeneral": 24,
+      "usage": "private",
+      "reviewedMileageKm": 36000,
+      "mileageGate": {
+        "kind": "unlimited"
+      },
+      "expectedYear": 2029,
+      "confirmedExpiryDate": null,
+      "sources": [
+        {
+          "sourceId": "chery-B09999T7303-20066-powertrain",
+          "url": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298",
+          "locator": "Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.",
+          "revision": "B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "B09999T7303",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261005-20066-powertrain",
+            "reviewedAt": "2026-10-05"
+          }
+        }
+      ],
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20066\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_288a06854d888191ba9530283b115526\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":36000,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T7303-20066-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298\",\"locator\":\"Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.\",\"revision\":\"B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T7303\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+      "generalCoverage": {
+        "termYears": 3,
+        "expectedYear": 2027,
+        "eligibleForGeneralStamp": false,
+        "reason": "Prior display deliberately replaced by this single powertrain approval; general coverage is not declared expired."
+      }
+    }
+  ],
+  "publicVehicles": [
+    {
+      "id": "20066",
+      "marca": "CHERY",
+      "modelo": "TIGGO 7 PRO MAX DRIVE TURBO",
+      "anoFabricacao": 2024,
+      "year": 2025,
+      "km": 36000,
+      "price": 151900,
+      "diferenciais": [
+        {
+          "tag": "baixa_km",
+          "descricao": "Baixa KM"
+        },
+        {
+          "tag": "eleito_melhor_compra",
+          "descricao": "Eleito Melhor Compra"
+        },
+        {
+          "tag": "estepe_novo",
+          "descricao": "Estepe Novo"
+        },
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        },
+        {
+          "tag": "lider_mercado",
+          "descricao": "Líder de Mercado"
+        },
+        {
+          "tag": "manual_chave_reserva",
+          "descricao": "Manual Proprietário e Chave Reserva"
+        },
+        {
+          "tag": "oleo_filtro",
+          "descricao": "Óleo e Filtro Revisados"
+        },
+        {
+          "tag": "pneus_novos",
+          "descricao": "Pneus Novos"
+        },
+        {
+          "tag": "revisados_concessionaria",
+          "descricao": "Revisados na Concessionária"
+        },
+        {
+          "tag": "top_linha",
+          "descricao": "Top de Linha"
+        },
+        {
+          "tag": "unico_dono",
+          "descricao": "Único Dono"
+        }
+      ]
+    }
+  ],
+  "publicApiEvidence": {
+    "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20066",
+    "checkedAt": "2026-10-05T14:43:23.545098+00:00"
+  },
+  "expectedRegistryCounts": {
+    "records": 15,
+    "approvedBasic": 6,
+    "approvedPowertrain": 3,
+    "pendingBasic": 6,
+    "approvedTractionBattery": 1
+  },
+  "remainingPendingVehicleIds": [
+    "19779",
+    "19854",
+    "19898",
+    "19866",
+    "20019",
+    "20018"
+  ],
+  "preservation": {
+    "unchangedRecordCount": 14,
+    "unchangedVehicleIds": [
+      "19924",
+      "20029",
+      "20041",
+      "19994",
+      "20049",
+      "19779",
+      "19854",
+      "19898",
+      "20038",
+      "19866",
+      "20019",
+      "19857",
+      "20018",
+      "19587"
+    ],
+    "unchangedRecordsSha256": "845b8b2d11919ec89e24468a855fd689f64735bf359527566ca8e0a7b775e0ed",
+    "hashMethod": "SHA256 of UTF-8 JSON.stringify(records excluding 20066), preserving baseline array and object order",
+    "historicalAuditsChanged": false,
+    "priorBasicRecord": {
+      "recordId": "reviewed-v2-20261003-20066",
+      "status": "approved",
+      "reviewedAt": "2026-10-03",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261003-20066\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"20066\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-20066\",\"basis\":\"Particular e comercial têm36meses de garantia geral. O limite100.000km é um limite conservador comum; 60meses de motor/transmissão para particular não entram no carimbo básico.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"uso não comercial\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20066-manual-1\"]},{\"category\":\"commercial\",\"condition\":\"uso comercial\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20066-manual-1\"]}]},\"reviewedMileageKm\":36000,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20066-manual-1\",\"url\":\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf\",\"locator\":\"PDF298 / impressa10-3, item(c); PDF299 / impressa10-4, linhas20–21; PDF326 contracapa; portal /manuais > Tiggo7ProMaxDrive > Manuais2024/2025\",\"revision\":\"B09999T7303; Janeiro de2024/1; vínculo oficial2024/2025 confirmado2026-10-03\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T7303\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-20066\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "vehicle": {
+        "vehicleId": "20066",
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 7 PRO MAX DRIVE TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "usage": "unknown",
+      "reviewedMileageKm": 36000,
+      "mileage": {
+        "kind": "limited",
+        "limitKm": 100000
+      },
+      "sources": [
+        {
+          "sourceId": "20066-manual-1",
+          "url": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf",
+          "locator": "PDF298 / impressa10-3, item(c); PDF299 / impressa10-4, linhas20–21; PDF326 contracapa; portal /manuais > Tiggo7ProMaxDrive > Manuais2024/2025",
+          "revision": "B09999T7303; Janeiro de2024/1; vínculo oficial2024/2025 confirmado2026-10-03",
+          "verification": {
+            "status": "verified",
+            "documentCode": "B09999T7303",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261003-20066",
+            "reviewedAt": "2026-10-03"
+          }
+        }
+      ],
+      "commonPolicy": {
+        "kind": "documented-regime-intersection",
+        "reviewId": "warranty-20261003-20066",
+        "basis": "Particular e comercial têm36meses de garantia geral. O limite100.000km é um limite conservador comum; 60meses de motor/transmissão para particular não entram no carimbo básico.",
+        "branches": [
+          {
+            "category": "non-commercial",
+            "condition": "uso não comercial",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "unlimited"
+            },
+            "sourceIds": [
+              "20066-manual-1"
+            ]
+          },
+          {
+            "category": "commercial",
+            "condition": "uso comercial",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "limited",
+              "limitKm": 100000
+            },
+            "sourceIds": [
+              "20066-manual-1"
+            ]
+          }
+        ]
+      }
+    },
+    "priorBasicReviewHistoricalOnly": true,
+    "sourceValidatedRecord": {
+      "recordId": "reviewed-v2-20261005-20066-powertrain",
+      "status": "approved",
+      "reviewedAt": "2026-10-05",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20066\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":36000,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T7303-20066-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf\",\"locator\":\"Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.\",\"revision\":\"B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T7303\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+      "vehicle": {
+        "vehicleId": "20066",
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 7 PRO MAX DRIVE TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "powertrain",
+      "termYears": 5,
+      "usage": "private",
+      "reviewedMileageKm": 36000,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "sources": [
+        {
+          "sourceId": "chery-B09999T7303-20066-powertrain",
+          "url": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf",
+          "locator": "Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.",
+          "revision": "B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "B09999T7303",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261005-20066-powertrain",
+            "reviewedAt": "2026-10-05"
+          }
+        }
+      ]
+    },
+    "sourceAuditFingerprintSha256": "51b467ffdf893c046e9d6906be4c3ca1f1724909276441fdda3e1feafebc148e"
+  },
+  "runtimeReviewBinding": {
+    "algorithm": "factoryWarrantyReviewFingerprint includes powertrainReview for powertrain scope only",
+    "metadata": {
+      "coverageSubtype": "engine-and-transmission",
+      "usageAttestationId": "Sentinel_288a06854d888191ba9530283b115526",
+      "displayLabel": "Motor e câmbio"
+    },
+    "sourcePageFragment": 298,
+    "sourceCoreFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20066\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":36000,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T7303-20066-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf\",\"locator\":\"Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.\",\"revision\":\"B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T7303\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+    "runtimeFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20066\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_288a06854d888191ba9530283b115526\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":36000,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T7303-20066-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298\",\"locator\":\"Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.\",\"revision\":\"B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T7303\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+    "displayPolicyBinding": "Only one active record per ID; prior basic record retained solely in this historical audit. Duplicate active records fail closed. Revocation or invalidation has no fallback."
+  },
+  "timingAndTransfer": {
+    "originalStart": "First delivery of the new vehicle to its original owner, as specified by the manual",
+    "resaleRestartsTerm": false,
+    "actualStartDate": null,
+    "actualExpiryDate": null,
+    "estimate": "FAB2024 + 5 total years = 2029; no day/month invented",
+    "finalYearGate": "In 2029, require confirmed actual unexpired end date; otherwise hide."
+  },
+  "presentation": {
+    "scopeLabel": "Motor e câmbio",
+    "estimatedYear": 2029,
+    "termYears": 5,
+    "footnote": "*Ano estimado pela fabricação. Prazo original e condições conforme manual da montadora.",
+    "sourceLinkText": "Consultar manual",
+    "sourceLinkTitle": "Manual B09999T7303",
+    "sourceUrl": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298",
+    "uiChanged": false,
+    "note": "Deliberate preservation of the exact user-approved PR50 footnote and Consultar manual link. The research contract uses different footnote wording; the user instruction prevails. Both retain an estimated fabrication-based year and the applicable manufacturer manual. No UI change."
+  },
+  "integrationChecks": {
+    "status": "full_local_build_lint_and_browser_checks_passed; publication_pending",
+    "warrantySuite": {
+      "command": "npm run stock:test-warranty",
+      "runs": 1,
+      "tests": 329,
+      "passed": 328,
+      "failed": 1,
+      "failure": "New hero test predicate read Fragment props as an object; product and resolver assertions passed.",
+      "correction": "Predicate now restricts nodes to p before reading data-powertrain-label.",
+      "log": "/Users/marcelomarchis/Documents/Codex/2026-10-02/task-3/warranty-tiggo7-powertrain/warranty-tests.log",
+      "sha256": "6ac9452fd77a957f85bed44a21a26d6ced18971612a3e493eebb781d14912e80"
+    },
+    "correctedHeroTest": {
+      "command": "node --test --test-name-pattern='Tiggo 7 20066: shared helper' scripts/tests/factory-warranty-card.test.mjs",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "fullSuiteRepeated": false,
+      "log": "/Users/marcelomarchis/Documents/Codex/2026-10-02/task-3/warranty-tiggo7-powertrain/hero-targeted-test.log",
+      "sha256": "e1fb2dceba5d7c6d4d6daa5c9a6a232634551bfa247093a8404e449f3700dd2c"
+    },
+    "equipmentAuditSuite": {
+      "command": "node --import tsx --test scripts/tests/equipment-audit.test.ts",
+      "runs": 1,
+      "passed": 46,
+      "failed": 0,
+      "reportedBy": "delegated equipment-audit test owner"
+    },
+    "eslint": {
+      "result": "passed",
+      "runs": 1,
+      "files": [
+        "scripts/tests/factory-warranty.test.ts",
+        "scripts/tests/factory-warranty-card.test.mjs",
+        "scripts/tests/factory-warranty-bootstrap.test.mjs",
+        "scripts/tests/equipment-audit.test.ts"
+      ],
+      "log": "/Users/marcelomarchis/Documents/Codex/2026-10-02/task-3/warranty-tiggo7-powertrain/lint.log",
+      "timing": "Before the final one-line hero test predicate fix; no product code changed afterward."
+    },
+    "diffCheck": "passed before final one-line test fix",
+    "scopeChecks": [
+      "One active record for 20066, powertrain only; basic resolver returns no stamp.",
+      "Other14 records match their baseline serialized SHA256, including both Tiggo8 and BYD general/battery.",
+      "Identity, FAB/MY, km regression, live flag, price, source, review fingerprint, private usage, attestation, duplicate and final-year gates are covered.",
+      "Revoked or invalid powertrain record never falls back to archived general record.",
+      "Raw/API card variants and helper plus real hero Badge/Note are covered; parent owns full DetalhesPage browser check."
+    ],
+    "engineChanged": false,
+    "uiChanged": false,
+    "otherUnitsChanged": false,
+    "commit": false,
+    "push": false,
+    "deploy": false,
+    "nextValidation": "CI and actual production publication/browser verification by siteworker.",
+    "mandatoryFullBuild": {
+      "command": "NODE_ENV=production npm run build",
+      "result": "passed",
+      "warrantyTests": 329,
+      "warrantyPassed": 329,
+      "warrantyFailed": 0,
+      "log": "/Users/marcelomarchis/Documents/Codex/2026-10-02/task-3/tiggo7-powertrain-release/build.log",
+      "sha256": "63dacb91cd0413b32e4b946e36297067a6180a8657aeef7342512ade5b90add0"
+    },
+    "finalLint": {
+      "command": "npm run lint",
+      "result": "passed",
+      "log": "/Users/marcelomarchis/Documents/Codex/2026-10-02/task-3/tiggo7-powertrain-release/lint.log"
+    },
+    "browserChecks": {
+      "total": 58,
+      "reports": [
+        {
+          "file": "local-browser-checks.json",
+          "checkedAt": "2026-10-05T15:13:40.464Z",
+          "checks": 40,
+          "errors": 0
+        },
+        {
+          "file": "responsive-local-browser-checks.json",
+          "checkedAt": "2026-10-05T15:13:20.475Z",
+          "checks": 18,
+          "errors": 0
+        }
+      ],
+      "coverage": "Stock and full detail pages; all9 eligible units and2 ineligible controls at1440/390, three Tiggo at360/768/1024. One explicit scope/year/manual on each Tiggo; general/battery BYD unchanged."
+    }
+  },
+  "limits": [
+    "No new public API, XML or manual collection in this integration; existing authorized snapshots and verified manufacturer evidence were reused.",
+    "Unit-specific owner attestation is not a first-delivery or exact-expiry record.",
+    "No confirmation of factory maintenance history beyond the previously accepted optional-108 operational attestation.",
+    "This is a local reviewed integration; production confirmation belongs to a later authorized release."
+  ]
+}

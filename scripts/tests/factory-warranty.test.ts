@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
@@ -862,6 +863,15 @@ const addendumAudit = JSON.parse(
 const powertrainAudit = JSON.parse(
   readFileSync(new URL("../../docs/audits/factory-warranty-tiggo-powertrain-2026-10-05.json", import.meta.url), "utf8"),
 ) as WarrantyPowertrainAudit;
+const tiggo7Audit = JSON.parse(
+  readFileSync(new URL("../../docs/audits/factory-warranty-tiggo7-powertrain-2026-10-05.json", import.meta.url), "utf8"),
+) as WarrantyPowertrainAudit & {
+  preservation: { unchangedRecordsSha256: string; priorBasicRecord: FactoryWarrantyRecord };
+  displayReplacement: {
+    maximumActiveBadges: number; replacedEstimatedYear: number; replacementEstimatedYear: number;
+    priorBasicWarrantyDeclaredExpired: boolean; automaticFallbackToPriorGeneralDisplay: boolean;
+  };
+};
 const EXPECTED_ORIGINAL_YEARS: Record<string, number> = {
   "20066": 2027,
   "19994": 2027,
@@ -870,13 +880,13 @@ const EXPECTED_ORIGINAL_YEARS: Record<string, number> = {
   "19587": 2028,
 };
 const EXPECTED_LOCAL_YEARS: Record<string, number> = {
-  ...EXPECTED_ORIGINAL_YEARS,
+  ...Object.fromEntries(Object.entries(EXPECTED_ORIGINAL_YEARS).filter(([id]) => id !== "20066")),
   "19924": 2030,
   "20049": 2027,
 };
 const currentCatalogSnapshot = [
   ...new Map(
-    [...localAudit.currentCatalogSnapshot, ...addendumAudit.publicVehicles, ...powertrainAudit.publicVehicles]
+    [...localAudit.currentCatalogSnapshot, ...addendumAudit.publicVehicles, ...powertrainAudit.publicVehicles, ...tiggo7Audit.publicVehicles]
       .map((entry) => [entry.id, entry]),
   ).values(),
 ];
@@ -891,7 +901,7 @@ function localVehicle(id: string): WarrantyCatalogVehicle {
   return result;
 }
 
-test("the authorized release contains seven basic, two powertrain approvals, six pending units and one battery supplement", () => {
+test("the authorized release contains six basic, three powertrain approvals, six pending units and one battery supplement", () => {
   assert.equal(localRegistry.schemaVersion, 2);
   assert.equal(localRegistry.enabled, true);
   assert.equal(localAudit.publicationApproved, true);
@@ -904,7 +914,7 @@ test("the authorized release contains seven basic, two powertrain approvals, six
     approved.map((r) => r.vehicle.vehicleId).sort(),
     Object.keys(EXPECTED_LOCAL_YEARS).sort(),
   );
-  assert.deepEqual(approvedPowertrain.map((r) => r.vehicle.vehicleId).sort(), ["20029", "20041"]);
+  assert.deepEqual(approvedPowertrain.map((r) => r.vehicle.vehicleId).sort(), ["20029", "20041", "20066"]);
   assert.equal(pending.length, 6);
   assert.deepEqual(
     pending.map((r) => r.vehicle.vehicleId).sort(),
@@ -916,6 +926,9 @@ test("the authorized release contains seven basic, two powertrain approvals, six
   assert.deepEqual(powertrainAudit.expectedRegistryCounts, {
     records: 15, approvedBasic: 7, approvedPowertrain: 2, pendingBasic: 6, approvedTractionBattery: 1,
   });
+  assert.deepEqual(tiggo7Audit.expectedRegistryCounts, {
+    records: 15, approvedBasic: 6, approvedPowertrain: 3, pendingBasic: 6, approvedTractionBattery: 1,
+  });
   assert.deepEqual(
     localRegistry.records.filter((record) => record.supplementalCoverages?.length)
       .map((record) => record.vehicle.vehicleId),
@@ -923,13 +936,15 @@ test("the authorized release contains seven basic, two powertrain approvals, six
   );
 });
 
-test("the original five records retain the October3 identity, coverage, sources and approval date", () => {
+test("the October3 approvals remain intact in four active records and the superseded Tiggo7 history", () => {
   assert.deepEqual(
     Object.fromEntries(localAudit.approvedLocalContent.map((r) => [r.vehicleId, r.expectedYear])),
     EXPECTED_ORIGINAL_YEARS,
   );
   for (const evidence of localAudit.approvedLocalContent) {
-    const record = localRegistry.records.find((entry) => entry.vehicle.vehicleId === evidence.vehicleId);
+    const record = evidence.vehicleId === "20066"
+      ? tiggo7Audit.preservation.priorBasicRecord
+      : localRegistry.records.find((entry) => entry.vehicle.vehicleId === evidence.vehicleId);
     assert.ok(record);
     assert.equal(record.status, "approved");
     assert.equal(record.reviewedAt, localAudit.reviewedAt);
@@ -977,7 +992,7 @@ test("the disabled registry returns zero stamps of every scope for all reviewed 
   }
 });
 
-test("the authorized registry yields exactly seven general, two powertrain and one BYD traction-battery stamp", () => {
+test("the authorized registry yields exactly six general, three powertrain and one BYD traction-battery stamp", () => {
   const actual = Object.fromEntries(
     currentCatalogSnapshot.flatMap((entry) => {
       const stamp = resolveFactoryWarranty(entry, enabledLocalRegistry, addendumAudit.reviewedAt);
@@ -998,7 +1013,7 @@ test("the authorized registry yields exactly seven general, two powertrain and o
   );
   assert.deepEqual(actual, EXPECTED_LOCAL_YEARS);
   assert.deepEqual(actualBattery, { "19924": 2032 });
-  assert.deepEqual(actualPowertrain, { "20029": 2028, "20041": 2028 });
+  assert.deepEqual(actualPowertrain, { "20029": 2028, "20041": 2028, "20066": 2029 });
   assert.equal(localRegistry.enabled, true, "Only the specifically approved release is enabled");
 });
 
@@ -1023,7 +1038,7 @@ for (const [id, expectedYear] of Object.entries(EXPECTED_LOCAL_YEARS)) {
   });
 }
 
-for (const id of ["20066", "19994", "20038", "19857", "20049"]) {
+for (const id of ["19994", "20038", "19857", "20049"]) {
   test("real unit " + id + " respects the strict 100,000 km common-policy boundary", () => {
     const current = localVehicle(id);
     assert.equal(
@@ -1205,3 +1220,127 @@ for (const id of ["20029", "20041"]) {
     assert.equal(resolveFactoryPowertrainWarranty(current, matrix(record), "2028-08-01"), undefined);
   });
 }
+
+test("Tiggo7 20066 replaces only its active general display and preserves all other reviewed records", () => {
+  const others = localRegistry.records.filter((record) => record.vehicle.vehicleId !== "20066");
+  assert.equal(others.length, 14);
+  assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), tiggo7Audit.preservation.unchangedRecordsSha256);
+  assert.equal(localRegistry.records.filter((record) => record.vehicle.vehicleId === "20066").length, 1);
+  assert.equal(tiggo7Audit.displayReplacement.maximumActiveBadges, 1);
+  assert.equal(tiggo7Audit.displayReplacement.replacedEstimatedYear, 2027);
+  assert.equal(tiggo7Audit.displayReplacement.replacementEstimatedYear, 2029);
+  assert.equal(tiggo7Audit.displayReplacement.priorBasicWarrantyDeclaredExpired, false);
+  assert.equal(tiggo7Audit.displayReplacement.automaticFallbackToPriorGeneralDisplay, false);
+});
+
+test("Tiggo7 20066 matches its individual private-use attestation and verified model-year manual", () => {
+  const record = localRegistry.records.find((entry) => entry.vehicle.vehicleId === "20066")!;
+  const evidence = tiggo7Audit.approvedLocalContent[0];
+  assert.equal(record.recordId, "reviewed-v2-20261005-20066-powertrain");
+  assert.equal(record.status, "approved");
+  assert.equal(record.reviewedAt, tiggo7Audit.reviewedAt);
+  assert.equal(record.scope, "powertrain");
+  assert.equal(record.usage, "private");
+  assert.equal(record.termYears, 5);
+  assert.equal(record.reviewedMileageKm, 36000);
+  assert.deepEqual(record.vehicle, evidence.identity);
+  assert.deepEqual(record.mileage, { kind: "unlimited" });
+  assert.equal(record.commonPolicy, undefined);
+  assert.equal(record.supplementalCoverages, undefined);
+  assert.equal(record.confirmedExpiryDate, undefined);
+  assert.deepEqual(record.powertrainReview, {
+    coverageSubtype: "engine-and-transmission",
+    usageAttestationId: "Sentinel_288a06854d888191ba9530283b115526",
+    displayLabel: "Motor e câmbio",
+  });
+  assert.deepEqual(record.powertrainReview, evidence.powertrainReview);
+  assert.equal(record.powertrainReview!.usageAttestationId, tiggo7Audit.ownerAttestation.userMessageId);
+  assert.deepEqual(tiggo7Audit.ownerAttestation.vehicleIds, ["20066"]);
+  assert.equal(tiggo7Audit.ownerAttestation.usage, "private");
+  assert.deepEqual(record.sources, evidence.sources);
+  assert.equal(record.sources[0].verification.documentCode, "B09999T7303");
+  assert.equal(record.sources[0].verification.modelYear, 2025);
+  assert.equal(record.sources[0].url, tiggo7Audit.officialDocument.displaySourceUrl);
+  assert.equal(record.sources[0].url, `${tiggo7Audit.officialDocument.url}#page=298`);
+  assert.equal(tiggo7Audit.officialDocument.sha256, "298facffd0fedc718719af802f98c88332d655edad34fb6b6d3b947b66751671");
+  assert.equal(record.approvedFingerprint, evidence.approvedFingerprint);
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(tiggo7Audit.timingAndTransfer.resaleRestartsTerm, false);
+  const stamp = resolveFactoryPowertrainWarranty(localVehicle("20066"), enabledLocalRegistry, tiggo7Audit.reviewedAt);
+  assert.equal(stamp?.scope, "powertrain");
+  assert.equal(stamp?.termYears, 5);
+  assert.equal(stamp?.estimatedEndYear, 2029);
+  assert.equal(stamp?.sourceUrl, record.sources[0].url);
+  assert.equal(stamp?.sourceLabel, "Manual B09999T7303");
+  assert.equal(stamp?.sourceDescription, `${record.sources[0].revision} ${record.sources[0].locator}`);
+  assert.equal(resolveFactoryWarranty(localVehicle("20066"), enabledLocalRegistry, tiggo7Audit.reviewedAt), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(localVehicle("20066"), enabledLocalRegistry, tiggo7Audit.reviewedAt), undefined);
+  assert.equal(resolveFactoryPowertrainWarranty(localVehicle("20066"), enabledLocalRegistry, "2026-10-04"), undefined);
+});
+
+test("Tiggo7 20066 rejects incompatible catalog evidence without imposing the superseded general km cap", () => {
+  const current = localVehicle("20066");
+  for (const patch of [
+    { id: "unreviewed-tiggo7" }, { marca: "OTHER" }, { modelo: "TIGGO 7 SPORT" },
+    { anoFabricacao: 2023 }, { anoFabricacao: undefined }, { year: 2024 }, { year: undefined },
+    { km: 35999 }, { km: NaN }, { km: -1 }, { diferenciais: [] }, { price: 0 }, { price: NaN },
+  ]) {
+    const changed = { ...current, ...patch };
+    assert.equal(resolveFactoryPowertrainWarranty(changed, enabledLocalRegistry, tiggo7Audit.reviewedAt), undefined, JSON.stringify(patch));
+    assert.equal(resolveFactoryWarranty(changed, enabledLocalRegistry, tiggo7Audit.reviewedAt), undefined);
+  }
+  for (const km of [36000, 99999, 100000, 100001]) {
+    assert.equal(resolveFactoryPowertrainWarranty({ ...current, km }, enabledLocalRegistry, tiggo7Audit.reviewedAt)?.estimatedEndYear, 2029);
+  }
+});
+
+test("Tiggo7 invalid or revoked approval never restores its archived general stamp", () => {
+  const current = localVehicle("20066");
+  const approved = localRegistry.records.find((entry) => entry.vehicle.vehicleId === "20066")!;
+  const mutations: Array<(record: FactoryWarrantyRecord) => void> = [
+    (record) => { record.status = "revoked"; },
+    (record) => { record.status = "pending"; },
+    (record) => { record.approvedFingerprint = "tampered"; },
+    (record) => { record.sources[0].url += "&changed=1"; },
+    (record) => { record.sources[0].verification.documentCode = "B09999T8006"; },
+    (record) => { record.sources[0].verification.modelYear = 2024; },
+    (record) => { record.powertrainReview!.usageAttestationId = "another-unit-attestation"; },
+    (record) => { record.powertrainReview!.displayLabel = "Garantia geral"; },
+    (record) => { record.powertrainReview = undefined; },
+    (record) => { record.optionalConfirmed = false; },
+    (record) => { record.conditionsConfirmed = false; },
+  ];
+  for (const mutate of mutations) {
+    const changed = structuredClone(approved);
+    mutate(changed);
+    assert.equal(resolveFactoryPowertrainWarranty(current, matrix(changed), tiggo7Audit.reviewedAt), undefined);
+    assert.equal(resolveFactoryWarranty(current, matrix(changed), tiggo7Audit.reviewedAt), undefined);
+  }
+  for (const usage of ["commercial", "unknown"] as const) {
+    const changed = { ...approved, usage };
+    changed.approvedFingerprint = factoryWarrantyReviewFingerprint(changed);
+    assert.equal(resolveFactoryPowertrainWarranty(current, matrix(changed), tiggo7Audit.reviewedAt), undefined);
+  }
+  for (const duplicate of [approved, tiggo7Audit.preservation.priorBasicRecord]) {
+    const conflicting = matrix(approved, duplicate);
+    assert.equal(resolveFactoryPowertrainWarranty(current, conflicting, tiggo7Audit.reviewedAt), undefined);
+    assert.equal(resolveFactoryWarranty(current, conflicting, tiggo7Audit.reviewedAt), undefined);
+  }
+});
+
+test("Tiggo7 2029 remains an estimate and requires a real unexpired date in its final year", () => {
+  const current = localVehicle("20066");
+  assert.equal(resolveFactoryPowertrainWarranty(current, enabledLocalRegistry, "2028-12-31")?.estimatedEndYear, 2029);
+  for (const date of ["2029-01-01", "2029-12-31", "2030-01-01"]) {
+    assert.equal(resolveFactoryPowertrainWarranty(current, enabledLocalRegistry, date), undefined);
+  }
+  const record = structuredClone(localRegistry.records.find((entry) => entry.vehicle.vehicleId === "20066")!);
+  // Synthetic reviewed date only: no actual expiry is asserted in the real record.
+  record.confirmedExpiryDate = "2029-06-30";
+  record.approvedFingerprint = factoryWarrantyReviewFingerprint(record);
+  assert.equal(resolveFactoryPowertrainWarranty(current, matrix(record), "2029-06-01")?.estimatedEndYear, 2029);
+  assert.equal(resolveFactoryPowertrainWarranty(current, matrix(record), "2029-07-01"), undefined);
+  record.confirmedExpiryDate = "2026-10-04";
+  record.approvedFingerprint = factoryWarrantyReviewFingerprint(record);
+  assert.equal(resolveFactoryPowertrainWarranty(current, matrix(record), tiggo7Audit.reviewedAt), undefined);
+});
