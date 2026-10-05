@@ -25,6 +25,9 @@ interface CardsHeroProps {
   /** Ignorado: cards mostram sempre os mesmos campos. Mantido pra compatibilidade. */
   marketingBadge?: string;
   warrantyStamp?: Omit<FactoryWarrantyBadgeProps, "variant">;
+  tractionBatteryStamp?: Omit<FactoryWarrantyBadgeProps, "variant"> & {
+    scope: "traction-battery";
+  };
   proofBadge?: string;
   price: string;
   previousPrice?: string;
@@ -60,6 +63,7 @@ export function CardsHero({
   mileage,
   mileageBadge,
   warrantyStamp,
+  tractionBatteryStamp,
   proofBadge,
   delay = 0,
   eagerImage = false,
@@ -444,9 +448,19 @@ export function CardsHero({
             </>
           ) : null}
         </div>
-        {warrantyStamp && (
+        {(warrantyStamp || tractionBatteryStamp) && (
           <div className="mt-3 w-full" data-factory-warranty-footer="card">
-            <FactoryWarrantyNote compact />
+            {tractionBatteryStamp && (
+              <div className="mb-2 flex items-center justify-center gap-2">
+                <div className="w-[64px] shrink-0">
+                  <FactoryWarrantyBadge {...tractionBatteryStamp} variant="card" />
+                </div>
+                <span className="max-w-[6rem] text-left text-[10.5px] font-semibold leading-snug text-[#505A5F]">
+                  Bateria de tração
+                </span>
+              </div>
+            )}
+            <FactoryWarrantyNote compact tractionBattery={!!tractionBatteryStamp} />
           </div>
         )}
       </div>

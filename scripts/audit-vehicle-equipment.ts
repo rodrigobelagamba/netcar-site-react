@@ -30,6 +30,12 @@ import {
   type UnitEquipmentConfirmation,
 } from "../src/lib/vehicleEquipment";
 import { mapVehicleOptional } from "../src/catalog/lib/mapVehicleOptional";
+import warrantyRegistry from "../src/data/factoryWarrantyMatrix.json";
+import {
+  resolveFactoryWarranty,
+  resolveFactoryTractionBatteryWarranty,
+  type FactoryWarrantyMatrix,
+} from "../src/lib/factoryWarranty";
 
 // This is an auditor, not an importer or publisher. Never store the API response:
 // it also contains administrative identifiers unrelated to equipment review.
@@ -47,6 +53,36 @@ export interface EquipmentAuditFinding {
   message: string;
 }
 
+/** Minimal, allowlisted source fields for the warranty gate. Kept separate from
+ * equipment normalization; unknown values must never become zero/current year. */
+export interface WarrantyAuditSnapshot {
+  manufactureYear: number | null;
+  modelYear: number | null;
+  mileageKm: number | null;
+  price: number | null;
+  diferenciais: Array<{ tag: string; descricao: string }> | null;
+}
+
+export interface EquipmentAuditInput extends EquipmentVehicle {
+  warrantySnapshot?: WarrantyAuditSnapshot;
+}
+
+export interface EquipmentWarrantyAudit {
+  status: "eligible" | "pending" | "blocked";
+  manufactureYear: number | null;
+  modelYear: number | null;
+  mileageKm: number | null;
+  flagPresent: boolean | null;
+  recordIds: string[];
+  rulesFingerprint: string;
+  supplemental?: {
+    scope: "traction-battery";
+    status: "eligible" | "pending" | "blocked";
+    recordIds: string[];
+    rulesFingerprint: string;
+  };
+}
+
 export interface EquipmentAuditVehicle {
   id: string;
   brand: string;
@@ -61,6 +97,7 @@ export interface EquipmentAuditVehicle {
   displayedDescriptions: string[];
   confirmationIds: string[];
   researchQuery: string;
+  warranty?: EquipmentWarrantyAudit;
 }
 
 export interface EquipmentAuditReport {
@@ -89,9 +126,55 @@ function shortText(value: unknown): string {
   return text(value);
 }
 
+function sourceNumber(value: unknown): number | null {
+  if (
+    (typeof value !== "number" && typeof value !== "string") ||
+    (typeof value === "string" && !value.trim())
+  )
+    return null;
+  const result = Number(value);
+  return Number.isFinite(result) && result >= 0 ? result : null;
+}
+
+function warrantySnapshot(
+  vehicle: Record<string, unknown>,
+): WarrantyAuditSnapshot {
+  // The public adapter passes numeric source types through to the canonical
+  // resolver. Numeric strings must not become stronger evidence in this audit.
+  const originalNumber = (value: unknown) =>
+    typeof value === "number" && Number.isFinite(value) && value >= 0
+      ? value
+      : null;
+  let diferenciais: WarrantyAuditSnapshot["diferenciais"] = null;
+  if (vehicle.diferenciais != null) {
+    if (
+      !Array.isArray(vehicle.diferenciais) ||
+      vehicle.diferenciais.length > 300
+    )
+      throw new StockInputError("Diferenciais inválidos na fonte.");
+    diferenciais = vehicle.diferenciais.map((raw: unknown) => {
+      if (!raw || typeof raw !== "object" || Array.isArray(raw))
+        throw new StockInputError("Diferencial inválido na fonte.");
+      const item = raw as Record<string, unknown>;
+      shortText(item.tag); // Validate size/type without normalizing the gate tag.
+      return {
+        tag: typeof item.tag === "string" ? item.tag : "",
+        descricao: shortText(item.descricao),
+      };
+    });
+  }
+  return {
+    manufactureYear: originalNumber(vehicle.ano_fabricacao),
+    modelYear: originalNumber(vehicle.ano),
+    mileageKm: originalNumber(vehicle.km),
+    price: originalNumber(vehicle.valor),
+    diferenciais,
+  };
+}
+
 /** Reject partial/error data instead of making a failed feed look like an empty
  * stock. All rows, including sold units, are validated before filtering. */
-export function parseStockResponse(payload: unknown): EquipmentVehicle[] {
+export function parseStockResponse(payload: unknown): EquipmentAuditInput[] {
   const source = payload as Record<string, unknown> | null;
   if (!source || source.success !== true || !Array.isArray(source.data))
     throw new StockInputError(
@@ -109,7 +192,7 @@ export function parseStockResponse(payload: unknown): EquipmentVehicle[] {
       "Estoque incompleto ou fora do limite da auditoria; relatório anterior preservado.",
     );
   const ids = new Set<string>();
-  const vehicles: EquipmentVehicle[] = [];
+  const vehicles: EquipmentAuditInput[] = [];
   for (const raw of source.data) {
     if (!raw || typeof raw !== "object" || Array.isArray(raw))
       throw new StockInputError("Veículo inválido na fonte.");
@@ -140,10 +223,10 @@ export function parseStockResponse(payload: unknown): EquipmentVehicle[] {
         throw new StockInputError("Equipamento vazio na fonte.");
       return mapped;
     });
-    const price = Number(vehicle.valor);
-    if (vehicle.valor == null || !Number.isFinite(price) || price < 0)
+    const price = sourceNumber(vehicle.valor);
+    if (price === null)
       throw new StockInputError("Situação comercial inválida na fonte.");
-    const candidate: EquipmentVehicle = {
+    const candidate: EquipmentAuditInput = {
       id,
       marca: shortText(vehicle.marca),
       modelo: shortText(vehicle.modelo),
@@ -159,6 +242,7 @@ export function parseStockResponse(payload: unknown): EquipmentVehicle[] {
           ? vehicle.lugares
           : "",
       opcionais,
+      warrantySnapshot: warrantySnapshot(vehicle),
     };
     if (price > 0) vehicles.push(candidate);
   }
@@ -193,9 +277,10 @@ function confirmationMatches(
 /** Pure report builder. Review keys intentionally ignore stock order, optional
  * order, price, photos and timestamps; changed equipment/rules require review. */
 export function buildEquipmentAudit(
-  vehicles: EquipmentVehicle[],
+  vehicles: EquipmentAuditInput[],
   previous: EquipmentAuditReport | null = null,
   now = new Date().toISOString(),
+  warrantyMatrix: FactoryWarrantyMatrix = warrantyRegistry as FactoryWarrantyMatrix,
 ): EquipmentAuditReport {
   if (!vehicles.length || vehicles.length > MAX_VEHICLES)
     throw new Error("Quantidade de veículos inválida.");
@@ -214,6 +299,10 @@ export function buildEquipmentAudit(
   );
   const reviewed = unitEquipmentConfirmations.filter(
     isApprovedUnitEquipmentConfirmation,
+  );
+  const warrantyResolver = readFileSync(
+    join(rootDir, "src/lib/factoryWarranty.ts"),
+    "utf8",
   );
   const ids = new Set<string>();
   const rows = vehicles.map((vehicle): EquipmentAuditVehicle => {
@@ -235,13 +324,96 @@ export function buildEquipmentAudit(
     const options = mapped
       .map((item) => [text(item.tag), text(item.descricao)])
       .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+    const warrantySource = vehicle.warrantySnapshot;
+    const warrantyRecords = (
+      Array.isArray(warrantyMatrix.records) ? warrantyMatrix.records : []
+    ).filter((record) => record?.vehicle?.vehicleId === id);
+    const supplementalRecords = warrantyRecords.flatMap(
+      (record) => record.supplementalCoverages ?? [],
+    );
+    const flagPresent =
+      warrantySource?.diferenciais == null
+        ? null
+        : warrantySource.diferenciais.some(
+            (item) => item.tag === "garantia_fabrica",
+          );
+    const old = former.get(id);
+    const previouslyFlaggedButUnknown = flagPresent === null && !!old?.warranty;
+    let warranty: EquipmentWarrantyAudit | undefined;
+    if (flagPresent || warrantyRecords.length || previouslyFlaggedButUnknown) {
+      const warrantyVehicle = {
+        id,
+        marca: identity.brand,
+        modelo: identity.model,
+        // NaN is an in-memory sentinel rejected by the canonical resolver.
+        // Persisted/report fields remain explicit nulls, never guessed values.
+        anoFabricacao: warrantySource?.manufactureYear ?? undefined,
+        year: warrantySource?.modelYear ?? NaN,
+        km: warrantySource?.mileageKm ?? NaN,
+        price: warrantySource?.price ?? NaN,
+        diferenciais: warrantySource?.diferenciais ?? undefined,
+      };
+      const stamp = resolveFactoryWarranty(
+        warrantyVehicle,
+        warrantyMatrix,
+        now.slice(0, 10),
+      );
+      warranty = {
+        status: stamp
+          ? "eligible"
+          : !warrantyRecords.length ||
+              (warrantyRecords.length === 1 &&
+                warrantyRecords[0].status === "pending")
+            ? "pending"
+            : "blocked",
+        manufactureYear: warrantySource?.manufactureYear ?? null,
+        modelYear: warrantySource?.modelYear ?? null,
+        mileageKm: warrantySource?.mileageKm ?? null,
+        flagPresent,
+        recordIds: warrantyRecords.map((record) => record.recordId).sort(),
+        rulesFingerprint: hash({
+          schemaVersion: warrantyMatrix.schemaVersion,
+          enabled: warrantyMatrix.enabled,
+          records: [...warrantyRecords].sort((a, b) =>
+            JSON.stringify(a).localeCompare(JSON.stringify(b)),
+          ),
+          resolver: warrantyResolver,
+        }),
+      };
+      if (supplementalRecords.length) {
+        const supplementalStamp = resolveFactoryTractionBatteryWarranty(
+          warrantyVehicle,
+          warrantyMatrix,
+          now.slice(0, 10),
+        );
+        warranty.supplemental = {
+          scope: "traction-battery",
+          status: supplementalStamp
+            ? "eligible"
+            : supplementalRecords.length === 1 &&
+                supplementalRecords[0].status === "pending"
+              ? "pending"
+              : "blocked",
+          recordIds: supplementalRecords
+            .map((record) => record.recordId)
+            .sort(),
+          rulesFingerprint: hash({
+            records: [...supplementalRecords].sort((a, b) =>
+              JSON.stringify(a).localeCompare(JSON.stringify(b)),
+            ),
+          }),
+        };
+      }
+    }
     const reviewKey = hash({
       catalogFingerprint,
       identity,
       seats: vehicle.lugares ?? "",
       options,
+      // Do not change the legacy key for units without a flag or registry entry.
+      // Resolver outcome catches expiry without reopening every calendar day.
+      ...(warranty ? { warranty } : {}),
     });
-    const old = former.get(id);
     const change = !old
       ? "new"
       : old.reviewKey === reviewKey
@@ -254,6 +426,35 @@ export function buildEquipmentAudit(
       severity: EquipmentAuditFinding["severity"],
       message: string,
     ) => findings.push({ code, severity, message });
+
+    if (warranty) {
+      const context = `FAB ${warranty.manufactureYear ?? "não informado"}; ano-modelo ${warranty.modelYear ?? "não informado"}; km ${warranty.mileageKm ?? "não informado"}; tag garantia_fabrica ${warranty.flagPresent === null ? "não informada" : warranty.flagPresent ? "presente" : "ausente"}.`;
+      const boundary =
+        "Revisar equipamentos não aprova garantia nem altera a matriz. A confirmação do opcional 108 e a revisão documental da unidade continuam necessárias.";
+      add(
+        `factory-warranty-${warranty.status}`,
+        warranty.status === "eligible"
+          ? "info"
+          : warranty.status === "pending"
+            ? "medium"
+            : "high",
+        warranty.status === "eligible"
+          ? `Garantia de fábrica: o resolver aceita o registro atual para exibir o carimbo estimado. ${context} ${boundary}`
+          : `Garantia de fábrica ${warranty.status === "pending" ? "pendente de revisão" : "bloqueada pelo resolver"}: sem carimbo. ${!warrantyRecords.length ? "Não há registro específico desta unidade. " : "Conferir identidade, dados atuais, vigência, condições e fontes do registro. "}${context} ${boundary}`,
+      );
+      if (warranty.supplemental) {
+        const supplemental = warranty.supplemental;
+        add(
+          `factory-warranty-traction-battery-${supplemental.status}`,
+          supplemental.status === "eligible"
+            ? "info"
+            : supplemental.status === "pending"
+              ? "medium"
+              : "high",
+          `Garantia específica da bateria de tração ${supplemental.status === "eligible" ? "aceita pelo resolver" : supplemental.status === "pending" ? "pendente de revisão: sem carimbo específico" : "bloqueada pelo resolver: sem carimbo específico"}. Este registro não amplia a garantia geral do veículo. ${context} ${boundary}`,
+        );
+      }
+    }
 
     if (
       !identity.brand ||
@@ -366,6 +567,7 @@ export function buildEquipmentAudit(
       reviewKey,
       change,
       findings,
+      ...(warranty ? { warranty } : {}),
       inventoryDescriptions: [
         ...new Set(
           mapped.map((item) => item.descricao || item.tag).filter(Boolean),
@@ -429,7 +631,7 @@ export function configureEquipmentAuditNetwork(): void {
 
 export async function fetchEquipmentStock(
   fetcher: typeof fetch = fetch,
-): Promise<EquipmentVehicle[]> {
+): Promise<EquipmentAuditInput[]> {
   // The fixed public endpoint cannot be changed to an internal URL by a web form.
   // No credentials or arbitrary URL from the inventory are followed.
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -691,7 +893,7 @@ export async function runEquipmentAudit({
   loadStock = fetchEquipmentStock,
 }: {
   stateDir?: string;
-  loadStock?: () => Promise<EquipmentVehicle[]>;
+  loadStock?: () => Promise<EquipmentAuditInput[]>;
 } = {}): Promise<EquipmentAuditReport> {
   mkdirSync(stateDir, { recursive: true, mode: 0o700 });
   chmodSync(stateDir, 0o700);

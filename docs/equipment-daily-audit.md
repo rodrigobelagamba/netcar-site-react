@@ -5,7 +5,7 @@
 O painel agenda uma auditoria diária às **07:00 em `America/Sao_Paulo`**. Ela usa a mesma fila serial dos jobs de build/deploy, mas **não faz build, deploy, commit nem alterações no XML/API**. A agenda roda dentro do processo do painel na VPS, via `node-cron`, sem depender de um computador pessoal.
 
 1. Consulta a API pública de estoque com timeout, limite de resposta e três tentativas. Aceita somente coleção completa e válida; separa os veículos ativos pelos mesmos preços positivos usados pelo estoque.
-2. Aplica o resolver compartilhado de equipamentos e compara com a última auditoria. Não armazena XML/API integral, placas, chassi, Renavam, fotos, contatos ou credenciais.
+2. Aplica os resolvers compartilhados de equipamentos e garantia e compara com a última auditoria. Não armazena XML/API integral, placas, chassi, Renavam, fotos, contatos ou credenciais.
 3. Gera a fila autenticada **Equipamentos** no DevOps, com cadastro recebido, apresentação resolvida, alertas e busca preparada para pesquisar a versão exata.
 
 Na primeira execução, todos os carros entram como pendentes de conferência. Nas seguintes, os pareceres são reaproveitados enquanto equipamentos, identidade e regras permanecem iguais. Alterar apenas preço, fotos ou ordem dos opcionais não reabre a revisão. Uma alteração relevante gera outra chave, então a revisão anterior não aprova o novo conteúdo. Alterações no catálogo/resolver/evidências também exigem nova conferência.
@@ -18,16 +18,37 @@ Na primeira execução, todos os carros entram como pendentes de conferência. N
 - Identidade de unidade confirmada alterada: a confirmação exata deixa de se aplicar; não transportar para outro carro.
 - Contradições de presença, ausência ou quantidade: conferir a unidade, sem somar categorias de airbags.
 - Correção oficial divergente da origem: conferir a referência e corrigir o cadastro.
+- Garantia marcada sem registro compatível: manter a unidade visível no catálogo sem carimbo e encaminhar a pesquisa para revisão documental.
+- Garantia antes aprovada com identidade, FAB/MY, km, flag ou regra alterada: conferir a nova pendência. Um aumento de km ainda compatível pode reabrir a conferência sem retirar o carimbo; falta de dados, regressão ou teto atingido bloqueiam a cobertura.
+- Bateria de tração: conferir separadamente sua fonte, prazo, limite e elegibilidade. A aprovação de uma garantia geral não aprova automaticamente a bateria, nem a cobertura restrita passa a ser garantia geral.
+
+Para garantia, o parser reutilizado preserva os campos originais mínimos; ano
+ausente não vira ano atual e km ausente não vira zero. Só uma unidade marcada
+ou já presente no registro recebe a revisão adicional de garantia. A chave
+inclui os campos relevantes, as regras daquele ID e o resultado dos gates;
+mudanças de outro veículo não invalidam os pareceres não relacionados.
+Preço positivo diferente, fotos e ordem dos opcionais continuam sem reabrir
+uma conferência. O relatório conserva apenas o resumo sanitizado e hashes.
 
 O botão de pesquisa apenas abre uma consulta com marca, versão, ano-modelo, motor e câmbio. **Não é pesquisa automática de fábrica.** Não há IA acrescentando opcionais ou credenciais de serviços de pesquisa configuradas nesta rotina.
 
 Marcar **Revisado** exige um parecer; a fonte HTTPS é opcional para triagem, mas a comprovação continua obrigatória antes de complementar equipamentos. Esse status registra que alguém tratou a pendência: **não certifica o carro inteiro, não aprova equipamentos novos e não publica nada**. Se a divergência permanece, o alerta continua no relatório, mesmo com parecer registrado. Pode-se reabrir uma revisão.
+
+O mesmo limite vale para garantia: esse botão não altera nem aprova a matriz
+versionada. A incorporação de uma nova cobertura exige registro documental
+compatível, atestes da unidade quando necessários, testes e release autorizado.
 
 Complementos efetivos seguem `docs/vehicle-equipment.md`: confirmação da unidade ou evidência oficial exata, registro versionado, testes e publicação aprovada. Corrigir o ERP/XML evita divergências também nos outros canais da loja.
 
 ## Operação
 
 No painel, usar **Executar agora**, pausar/retomar a agenda, filtrar pendências e registrar pareceres. Falhas e a última execução ficam visíveis. Uma rodada idêntica não apaga pareceres. Ao iniciar depois das 07:00, o painel pode repor a execução perdida naquele dia; a tentativa do dia é persistida para não criar um loop a cada reinício. Após falha, verificar o motivo e usar a execução manual ou aguardar a próxima rodada diária.
+
+A agenda de produção foi conferida em 05/10/2026: 07h de São Paulo. A rotina
+detecta o que a API apresenta na execução; não recebe um evento a cada XML e
+não entrega notificações push. Com a rotina saudável, a fila reflete uma
+alteração disponível na API na rodada diária seguinte, ou numa execução
+manual. A pesquisa documental agendada às 08h/14h no Mac é complementar.
 
 Padrão: agenda habilitada em produção e desabilitada no desenvolvimento. `EQUIPMENT_CRON_ENABLED` permite definir o padrão; a escolha salva no painel prevalece. **Preparar o código localmente não ativa a VPS**: a atualização do painel precisa ser publicada e seu container reiniciado pelo workflow autorizado. Isso não exige nem autoriza publicar alterações pendentes do site.
 

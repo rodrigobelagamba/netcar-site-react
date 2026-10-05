@@ -315,7 +315,7 @@ export function HomePage() {
       vehicles,
       limit,
       featuredVehicle ? [featuredVehicle.id] : [],
-    );
+    ).map((vehicle) => ({ ...vehicle, warrantyVehicle: vehicle }));
   }, [vehicles, columnsPerRow, featuredVehicle]);
 
   const goToStock = () =>

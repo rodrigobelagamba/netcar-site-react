@@ -3,6 +3,7 @@ import { config } from "../config";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
 import { resolveIcheckAttachment } from "@/lib/icheckMetadata";
 import { sanitizeVehicleImages } from "@/lib/vehicleImagePolicy.mjs";
+import type { WarrantyCatalogVehicle } from "@/lib/factoryWarranty";
 import {
   mapVehicleOptional,
   type RawVehicleOptional,
@@ -25,6 +26,8 @@ export interface Vehicle {
   year: number; // Ano modelo
   anoFabricacao?: number; // Ano de fabricação
   km: number;
+  /** Projeção original do bootstrap; null significa origem não comprovada. */
+  factoryWarrantyVehicle?: WarrantyCatalogVehicle | null;
   images: string[]; // Thumbnails (para cards e miniaturas)
   fullImages?: string[]; // Imagens em alta resolução (para galeria)
   imagens_site?: VehicleImagesSite; // Imagens organizadas para uso no site

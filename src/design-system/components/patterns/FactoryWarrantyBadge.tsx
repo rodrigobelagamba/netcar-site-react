@@ -1,11 +1,14 @@
 export const FACTORY_WARRANTY_NOTE =
-  "*Ano estimado pela fabricação. Vencimento exato, cobertura e limite de km conforme manual da montadora.";
+  "*Estimativa pela fabricação e documentação oficial da montadora. Validade, cobertura e km conforme manual do modelo/ano.";
+export const FACTORY_TRACTION_BATTERY_NOTE =
+  "A revenda não reinicia os prazos.";
 
 export interface FactoryWarrantyBadgeProps {
   estimatedEndYear: number;
   manufacturer?: string;
   variant: "card" | "hero";
   design?: "round" | "rectangular";
+  scope?: "basic-vehicle" | "traction-battery";
   /** A apresentação não calcula prazo nem decide a elegibilidade do veículo. */
   mode: "visual-example" | "verified";
 }
@@ -16,21 +19,24 @@ export function FactoryWarrantyBadge({
   manufacturer,
   variant,
   design = "round",
+  scope = "basic-vehicle",
   mode,
 }: FactoryWarrantyBadgeProps) {
   const round = design === "round";
+  const tractionBattery = scope === "traction-battery";
   return (
     <div
       className="w-full text-center text-[#505A5F]"
       data-factory-warranty-badge={variant}
       data-stamp-design={design}
+      data-warranty-scope={scope}
     >
       <svg
         viewBox={round ? "0 0 200 200" : "0 0 200 180"}
         className={`block h-auto w-full overflow-visible ${round ? "-rotate-[6deg]" : "-rotate-[4deg]"}`}
         role="img"
-        aria-label={`Garantia de fábrica até ${estimatedEndYear}*. ${mode === "visual-example" ? "Prévia visual; ano estimado." : "Ano estimado pela fabricação."}`}
-        aria-description={FACTORY_WARRANTY_NOTE}
+        aria-label={`Garantia de fábrica${tractionBattery ? " da bateria de tração" : ""} até ${estimatedEndYear}*. ${mode === "visual-example" ? "Prévia visual; ano estimado." : "Ano estimado pela fabricação."}`}
+        aria-description={`${FACTORY_WARRANTY_NOTE}${tractionBattery ? ` ${FACTORY_TRACTION_BATTERY_NOTE}` : ""}`}
       >
         {round ? (
           <>
@@ -83,19 +89,24 @@ export function FactoryWarrantyBadge({
         >
           <text
             x="100"
-            y={round ? "60" : "47"}
-            fontSize="21"
+            y={tractionBattery ? "42" : round ? "60" : "47"}
+            fontSize={tractionBattery ? "16" : "21"}
             letterSpacing="1.5"
           >
             GARANTIA
           </text>
+          {tractionBattery && (
+            <text x="100" y="63" fontSize="21" letterSpacing="1">
+              BATERIA
+            </text>
+          )}
           <text
             x="100"
-            y={round ? "82" : "70"}
+            y={tractionBattery ? "84" : round ? "82" : "70"}
             fontSize="18"
             letterSpacing="0.7"
           >
-            DE FÁBRICA
+            {tractionBattery ? "DE TRAÇÃO" : "DE FÁBRICA"}
           </text>
           {!round && <path d="M35 82H165" stroke="#6BC4CA" strokeWidth="2" />}
           <text
@@ -147,15 +158,18 @@ export function FactoryWarrantyBadge({
 
 export function FactoryWarrantyNote({
   compact = false,
+  tractionBattery = false,
 }: {
   compact?: boolean;
+  tractionBattery?: boolean;
 }) {
   return (
     <p
-      className={`text-[#505A5F] leading-[1.45] ${compact ? "text-[11px]" : "text-xs"}`}
+      className={`text-[#505A5F] leading-[1.45] ${compact ? "text-[10.5px]" : "text-[11px]"}`}
       data-factory-warranty-note
     >
       {FACTORY_WARRANTY_NOTE}
+      {tractionBattery && <> {FACTORY_TRACTION_BATTERY_NOTE}</>}
     </p>
   );
 }
