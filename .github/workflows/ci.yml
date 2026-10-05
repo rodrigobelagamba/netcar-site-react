@@ -31,7 +31,7 @@ jobs:
           node --test scripts/tests/home-hero-selection.test.mjs
       - name: Validate tablet catalog filters and routing
         run: |
-          npx tsx --test scripts/tests/tablet-stock.test.ts
+          npx tsx --test scripts/tests/tablet-stock.test.ts scripts/tests/vehicle-cover-image.test.ts
           node --test scripts/tests/tablet-routing.test.mjs
       - name: Validate circular portraits and store photos
         run: |

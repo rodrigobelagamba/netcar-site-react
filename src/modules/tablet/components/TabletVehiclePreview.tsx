@@ -1,7 +1,9 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, ExternalLink, X } from "lucide-react";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
+import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
 import { optimizeStockImage, stockGalleryPreviewSource } from "@/lib/images";
+import { resolveVehicleCoverImage, VEHICLE_COVER_PLACEHOLDER } from "@/lib/vehicleCoverImage";
 import { generateVehicleSlug } from "@/lib/slug";
 import "./tabletPreview.css";
 
@@ -10,7 +12,7 @@ interface TabletVehiclePreviewProps {
   onClose: () => void;
 }
 
-const PLACEHOLDER = "/images/semcapa.webp";
+const PLACEHOLDER = VEHICLE_COVER_PLACEHOLDER;
 const currency = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL",
@@ -57,9 +59,15 @@ function PreviewImage({
 }
 
 export default function TabletVehiclePreview({
-  vehicle,
+  vehicle: summaryVehicle,
   onClose,
 }: TabletVehiclePreviewProps) {
+  const detailQuery = useVehicleQuery(generateVehicleSlug(summaryVehicle));
+  const vehicle =
+    detailQuery.data?.id === summaryVehicle.id
+      ? detailQuery.data
+      : summaryVehicle;
+  const cover = resolveVehicleCoverImage(vehicle);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeRef = useRef(onClose);
   const titleId = useId();
@@ -67,22 +75,27 @@ export default function TabletVehiclePreview({
   closeRef.current = onClose;
 
   const photos = useMemo(() => {
-    if (vehicle.imagens_site?.tem_fotos === 0) return [];
     const gallery = vehicle.imagens_site?.galeria?.length
       ? vehicle.imagens_site.galeria
-      : (vehicle.fullImages ?? []);
+      : (vehicle.fullImages ?? vehicle.fotos ?? vehicle.images).filter(
+          (image) => image.toLowerCase().includes(".avif"),
+        );
+    // A supplied cover is shared with the main site; an empty gallery is not
+    // turned into a photograph count merely because a generic banner exists.
+    if (!gallery.length && vehicle.imagens_site?.tem_fotos === 0) return [];
     return Array.from(
       new Set(
-        [vehicle.imagens_site?.capa, ...gallery].filter(
-          (source): source is string => Boolean(source?.trim()),
+        [cover, ...gallery].filter(
+          (source): source is string =>
+            Boolean(source?.trim()) && source !== PLACEHOLDER,
         ),
       ),
     );
-  }, [vehicle]);
+  }, [vehicle, cover]);
 
   const selectedIndex = Math.min(selected, Math.max(0, photos.length - 1));
   const title = vehicle.modelo || vehicle.name;
-  const source = photos[selectedIndex] || PLACEHOLDER;
+  const source = photos[selectedIndex] || cover;
   const detailHref = `/veiculo/${generateVehicleSlug(vehicle)}`;
   const movePhoto = (direction: number) => {
     if (photos.length > 1) {
@@ -243,9 +256,11 @@ export default function TabletVehiclePreview({
             aria-live="polite"
             aria-atomic="true"
           >
-            {photos.length > 0
-              ? `Foto ${selectedIndex + 1} de ${photos.length}`
-              : "Novas fotos em breve"}
+            {detailQuery.isFetching && photos.length <= 1
+              ? "Carregando fotos..."
+              : photos.length > 0
+                ? `Foto ${selectedIndex + 1} de ${photos.length}`
+                : "Galeria de fotos em preparação"}
           </p>
           {photos.length > 1 && (
             <div
