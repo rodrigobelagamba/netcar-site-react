@@ -72,10 +72,10 @@
       ]
     },
     {
-      "recordId": "reviewed-v2-20261003-20066",
+      "recordId": "reviewed-v2-20261005-20066-powertrain",
       "status": "approved",
-      "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261003-20066\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"20066\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-20066\",\"basis\":\"Particular e comercial têm36meses de garantia geral. O limite100.000km é um limite conservador comum; 60meses de motor/transmissão para particular não entram no carimbo básico.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"uso não comercial\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20066-manual-1\"]},{\"category\":\"commercial\",\"condition\":\"uso comercial\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20066-manual-1\"]}]},\"reviewedMileageKm\":36000,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20066-manual-1\",\"url\":\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf\",\"locator\":\"PDF298 / impressa10-3, item(c); PDF299 / impressa10-4, linhas20–21; PDF326 contracapa; portal /manuais > Tiggo7ProMaxDrive > Manuais2024/2025\",\"revision\":\"B09999T7303; Janeiro de2024/1; vínculo oficial2024/2025 confirmado2026-10-03\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T7303\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-20066\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "reviewedAt": "2026-10-05",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20066\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_288a06854d888191ba9530283b115526\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":36000,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T7303-20066-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298\",\"locator\":\"Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.\",\"revision\":\"B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T7303\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
       "vehicle": {
         "vehicleId": "20066",
         "brand": "CHERY",
@@ -86,60 +86,32 @@
       "optionalId": 108,
       "optionalConfirmed": true,
       "conditionsConfirmed": true,
-      "scope": "basic-vehicle",
-      "termYears": 3,
-      "usage": "unknown",
+      "scope": "powertrain",
+      "termYears": 5,
+      "usage": "private",
       "reviewedMileageKm": 36000,
       "mileage": {
-        "kind": "limited",
-        "limitKm": 100000
+        "kind": "unlimited"
       },
       "sources": [
         {
-          "sourceId": "20066-manual-1",
-          "url": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf",
-          "locator": "PDF298 / impressa10-3, item(c); PDF299 / impressa10-4, linhas20–21; PDF326 contracapa; portal /manuais > Tiggo7ProMaxDrive > Manuais2024/2025",
-          "revision": "B09999T7303; Janeiro de2024/1; vínculo oficial2024/2025 confirmado2026-10-03",
+          "sourceId": "chery-B09999T7303-20066-powertrain",
+          "url": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298",
+          "locator": "Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.",
+          "revision": "B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.",
           "verification": {
             "status": "verified",
             "documentCode": "B09999T7303",
             "modelYear": 2025,
-            "reviewId": "warranty-20261003-20066",
-            "reviewedAt": "2026-10-03"
+            "reviewId": "warranty-20261005-20066-powertrain",
+            "reviewedAt": "2026-10-05"
           }
         }
       ],
-      "commonPolicy": {
-        "kind": "documented-regime-intersection",
-        "reviewId": "warranty-20261003-20066",
-        "basis": "Particular e comercial têm36meses de garantia geral. O limite100.000km é um limite conservador comum; 60meses de motor/transmissão para particular não entram no carimbo básico.",
-        "branches": [
-          {
-            "category": "non-commercial",
-            "condition": "uso não comercial",
-            "scope": "basic-vehicle",
-            "termYears": 3,
-            "mileage": {
-              "kind": "unlimited"
-            },
-            "sourceIds": [
-              "20066-manual-1"
-            ]
-          },
-          {
-            "category": "commercial",
-            "condition": "uso comercial",
-            "scope": "basic-vehicle",
-            "termYears": 3,
-            "mileage": {
-              "kind": "limited",
-              "limitKm": 100000
-            },
-            "sourceIds": [
-              "20066-manual-1"
-            ]
-          }
-        ]
+      "powertrainReview": {
+        "coverageSubtype": "engine-and-transmission",
+        "usageAttestationId": "Sentinel_288a06854d888191ba9530283b115526",
+        "displayLabel": "Motor e câmbio"
       }
     },
     {

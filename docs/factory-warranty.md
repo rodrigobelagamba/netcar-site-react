@@ -2,18 +2,23 @@
 
 O visual escolhido é o circular A. A integração usa um único registro principal
 por unidade. A matriz schema2 contém nove registros principais revisados e
-seis pendentes, com `enabled: true`. As cinco unidades autorizadas em 03/10/2026
-às 23:39:29 UTC foram preservadas. Em 05/10 foram incorporados somente BYD19924
-e Tracker20049, após a pesquisa resolver suas condições específicas. A revisão
+seis pendentes, com `enabled: true`: seis coberturas gerais e três de motor e
+câmbio. Das cinco unidades autorizadas em 03/10/2026 às 23:39:29 UTC, quatro
+mantêm seus registros originais; a exibição do Tiggo7 20066 foi substituída
+pela revisão individual de motor e câmbio em 05/10. BYD19924 e Tracker20049
+foram incorporados em 05/10 após a pesquisa resolver suas condições específicas. A revisão
 por unidade, fontes, consultas atuais por ID e hashes da origem estão em
 `docs/audits/factory-warranty-2026-10-03.json` e
 `docs/audits/factory-warranty-2026-10-05.json`. O BYD tem uma cobertura de bateria
 de tração revisada separadamente. Os Tiggo8 20029/20041 têm apenas motor e
 câmbio aprovados, conforme `docs/audits/factory-warranty-tiggo-powertrain-2026-10-05.json`.
+A revisão posterior do Tiggo7 está em
+`docs/audits/factory-warranty-tiggo7-powertrain-2026-10-05.json`; o adendo preserva
+sua revisão geral anterior e confirma que os outros 14 registros não mudaram.
 
 | Unidade | Identidade exata da API | Ano estimado | Critério de exibição |
 | --- | --- | --- | --- |
-| 20066 | TIGGO 7 PRO MAX DRIVE TURBO | 2027* | Geral 3 anos; abaixo de 100.000 km |
+| 20066 | TIGGO 7 PRO MAX DRIVE TURBO — motor e câmbio | 2029* | Prazo original de 5 anos; uso não comercial atestado para a unidade; sem limite de km |
 | 19994 | ONIX PREMIER PLUS TURBO | 2027* | Geral 3 anos; abaixo de 100.000 km |
 | 20038 | HB20 LIMITED | 2029* | Geral 5 anos; abaixo de 100.000 km |
 | 19857 | KICKS SENSE TURBO | 2028* | Geral 3 anos; abaixo de 100.000 km |
@@ -121,8 +126,8 @@ O campo opcional `supplementalCoverages` aceita nesta versão um único registro
 de `scope: traction-battery`, com status, revisão, ateste, uso particular,
 prazo, km, fontes e fingerprint próprios. O fingerprint suplementar também
 vincula a aprovação principal; alterar os dados da unidade exige nova revisão
-da cobertura. O fingerprint principal dos cinco registros originais permanece
-inalterado. Suplemento pendente, duplicado, revogado ou incompatível suprime
+da cobertura. Acrescentar bateria não altera o fingerprint principal. A revisão
+posterior de motor e câmbio do Tiggo7 tem seu próprio fingerprint e histórico. Suplemento pendente, duplicado, revogado ou incompatível suprime
 somente seu selo; duplicidade ou revogação da unidade principal suprime ambos.
 
 `resolveFactoryTractionBatteryWarranty` valida a identidade, flag, fontes e
@@ -138,7 +143,7 @@ principal. A nota explica que a revenda não reinicia os prazos. A aprovação
 do Song Pro19924 não cria regra para todo BYD ou para baterias de outros tipos;
 o prazo não promete substituição gratuita irrestrita nem ausência de desgaste.
 
-### Motor e câmbio dos Tiggo8
+### Motor e câmbio dos Tiggo8 e Tiggo7
 
 Os registros principais dos IDs20029/20041 têm escopo `powertrain`, prazo de
 cinco anos e uso particular confirmado individualmente em 05/10. O resolver
@@ -165,8 +170,24 @@ vencimento real confirmado e ainda vigente.
 O resolver geral continua limitado a `basic-vehicle`: esses dois Tiggo não
 recebem selo geral. A regra geral de três anos/estimativa2026 permanece
 registrada na auditoria como inelegível sem vencimento efetivo comprovado.
-O Tiggo7, os outros seis selos gerais e a bateria BYD permanecem iguais.
-Extensões e bateria genérica continuam sem caminho de selo produtivo.
+Na revisão posterior de 05/10, o Tiggo7 Pro Max Drive 20066 recebeu um único
+registro principal `powertrain`, após o proprietário confirmar individualmente
+que não teve uso comercial. A fonte própria é o manual **B09999T7303**, janeiro
+de 2024/1, ligado pelo portal oficial ao modelo brasileiro2024/2025, páginas
+PDF298/299 (impressas10-3/10-4). O prazo total de cinco anos usa FAB2024 para
+estimar **2029***; a revenda não reinicia esse prazo. Não há data efetiva
+inventada, e em2029 a exibição exigirá vencimento real confirmado e não vencido.
+O fingerprint vincula o ateste `Sentinel_288a06854d888191ba9530283b115526`, o
+subtipo motor/transmissão, o rótulo e o link próprio do manual em `#page=298`.
+
+A revisão geral anterior do Tiggo7, estimada em2027, fica somente no histórico
+do adendo. A substituição de exibição não declara essa garantia geral expirada.
+Revogação, mudança incompatível ou falha da nova revisão ocultam o selo, sem
+reativar automaticamente a revisão geral antiga. Não se acrescenta segundo
+registro principal nem segundo selo para o Tiggo7. A nota curta aprovada e o
+link “Consultar manual” são exatamente os mesmos componentes dos Tiggo8.
+Os outros14 registros, os seis selos gerais restantes e a bateria BYD foram
+preservados. Extensões e bateria genérica continuam sem caminho de selo produtivo.
 
 ## Ano estimado e vigência
 
