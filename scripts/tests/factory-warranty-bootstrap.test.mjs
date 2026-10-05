@@ -24,6 +24,7 @@ const fixedNow = OriginalDate.parse("2026-10-05T12:00:00.000Z");
 let server;
 let toBootstrapVehicle;
 let factoryWarrantyStampFor;
+let factoryPowertrainStampFor;
 let factoryWarrantyMatrix;
 let factoryWarrantyReviewFingerprint;
 let getBootstrapVehicles;
@@ -71,7 +72,7 @@ before(async () => {
       "import.meta.env.VITE_WARRANTY_PREVIEW": JSON.stringify("0"),
     },
   });
-  ({ factoryWarrantyStampFor, factoryWarrantyMatrix } = await server.ssrLoadModule(
+  ({ factoryWarrantyStampFor, factoryPowertrainStampFor, factoryWarrantyMatrix } = await server.ssrLoadModule(
     "/src/lib/factoryWarrantyStamp.ts",
   ));
   ({ factoryWarrantyReviewFingerprint } = await server.ssrLoadModule(
@@ -187,6 +188,32 @@ for (const [id, year] of [
     const cached = versionedSnapshotRoundTrip(produced);
     assert.deepEqual(cached.factoryWarrantyVehicle, produced.factoryWarrantyVehicle);
     assertVerified(cached, year);
+  });
+}
+
+for (const id of ["20029", "20041"]) {
+  test(`${id}: original API, producer and cache preserve only the reviewed powertrain stamp`, () => {
+    const produced = bootstrap(apiVehicle({}, id));
+    for (const current of [produced, browserBootstrapVehicle(produced), versionedSnapshotRoundTrip(produced)]) {
+      const stamp = factoryPowertrainStampFor(current);
+      assert.equal(stamp?.scope, "powertrain");
+      assert.equal(stamp?.estimatedEndYear, 2028);
+      assert.equal(factoryWarrantyStampFor(current), undefined);
+    }
+    for (const patch of [
+      { ano: undefined }, { ano: 2025 }, { ano_fabricacao: undefined }, { ano_fabricacao: 2024 },
+      { km: undefined }, { km: 0 }, { diferenciais: [] }, { id: "another-tiggo-unit" },
+    ]) {
+      const changed = bootstrap(apiVehicle(patch, id));
+      const presented = { ...changed, year: 2024, anoFabricacao: 2023, km: catalogVehicle(id).km };
+      assert.equal(factoryPowertrainStampFor(presented), undefined, JSON.stringify(patch));
+      assert.equal(factoryPowertrainStampFor(versionedSnapshotRoundTrip(presented)), undefined);
+    }
+    for (const projection of [null, undefined, { ...catalogVehicle(id), id: "another-unit" }]) {
+      const presented = { ...produced, factoryWarrantyVehicle: projection };
+      assert.equal(factoryPowertrainStampFor(presented), undefined);
+    }
+    assert.equal(factoryPowertrainStampFor({ ...produced, price: 0 }), undefined);
   });
 }
 

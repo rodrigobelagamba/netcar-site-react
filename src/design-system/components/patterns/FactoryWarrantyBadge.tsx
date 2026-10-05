@@ -8,7 +8,7 @@ export interface FactoryWarrantyBadgeProps {
   manufacturer?: string;
   variant: "card" | "hero";
   design?: "round" | "rectangular";
-  scope?: "basic-vehicle" | "traction-battery";
+  scope?: "basic-vehicle" | "traction-battery" | "powertrain";
   /** A apresentação não calcula prazo nem decide a elegibilidade do veículo. */
   mode: "visual-example" | "verified";
 }
@@ -24,6 +24,8 @@ export function FactoryWarrantyBadge({
 }: FactoryWarrantyBadgeProps) {
   const round = design === "round";
   const tractionBattery = scope === "traction-battery";
+  const powertrain = scope === "powertrain";
+  const restrictedCoverage = tractionBattery || powertrain;
   return (
     <div
       className="w-full text-center text-[#505A5F]"
@@ -35,8 +37,8 @@ export function FactoryWarrantyBadge({
         viewBox={round ? "0 0 200 200" : "0 0 200 180"}
         className={`block h-auto w-full overflow-visible ${round ? "-rotate-[6deg]" : "-rotate-[4deg]"}`}
         role="img"
-        aria-label={`Garantia de fábrica${tractionBattery ? " da bateria de tração" : ""} até ${estimatedEndYear}*. ${mode === "visual-example" ? "Prévia visual; ano estimado." : "Ano estimado pela fabricação."}`}
-        aria-description={`${FACTORY_WARRANTY_NOTE}${tractionBattery ? ` ${FACTORY_TRACTION_BATTERY_NOTE}` : ""}`}
+        aria-label={`Garantia de fábrica${tractionBattery ? " da bateria de tração" : powertrain ? " de motor e câmbio" : ""} até ${estimatedEndYear}*. ${mode === "visual-example" ? "Prévia visual; ano estimado." : "Ano estimado pela fabricação."}`}
+        aria-description={`${FACTORY_WARRANTY_NOTE}${restrictedCoverage ? ` ${FACTORY_TRACTION_BATTERY_NOTE}` : ""}`}
       >
         {round ? (
           <>
@@ -89,24 +91,24 @@ export function FactoryWarrantyBadge({
         >
           <text
             x="100"
-            y={tractionBattery ? "42" : round ? "60" : "47"}
-            fontSize={tractionBattery ? "16" : "21"}
+            y={restrictedCoverage ? "42" : round ? "60" : "47"}
+            fontSize={restrictedCoverage ? "16" : "21"}
             letterSpacing="1.5"
           >
             GARANTIA
           </text>
-          {tractionBattery && (
+          {restrictedCoverage && (
             <text x="100" y="63" fontSize="21" letterSpacing="1">
-              BATERIA
+              {powertrain ? "MOTOR" : "BATERIA"}
             </text>
           )}
           <text
             x="100"
-            y={tractionBattery ? "84" : round ? "82" : "70"}
+            y={restrictedCoverage ? "84" : round ? "82" : "70"}
             fontSize="18"
             letterSpacing="0.7"
           >
-            {tractionBattery ? "DE TRAÇÃO" : "DE FÁBRICA"}
+            {tractionBattery ? "DE TRAÇÃO" : powertrain ? "E CÂMBIO" : "DE FÁBRICA"}
           </text>
           {!round && <path d="M35 82H165" stroke="#6BC4CA" strokeWidth="2" />}
           <text
@@ -159,9 +161,11 @@ export function FactoryWarrantyBadge({
 export function FactoryWarrantyNote({
   compact = false,
   tractionBattery = false,
+  powertrain,
 }: {
   compact?: boolean;
   tractionBattery?: boolean;
+  powertrain?: { termYears: number; sourceUrl: string; sourceLabel: string; sourceDescription: string };
 }) {
   return (
     <p
@@ -170,6 +174,20 @@ export function FactoryWarrantyNote({
     >
       {FACTORY_WARRANTY_NOTE}
       {tractionBattery && <> {FACTORY_TRACTION_BATTERY_NOTE}</>}
+      {powertrain && (
+        <> Prazo original de {powertrain.termYears} anos para motor e câmbio. {FACTORY_TRACTION_BATTERY_NOTE}{" "}
+          <a
+            href={powertrain.sourceUrl}
+            title={powertrain.sourceDescription}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {powertrain.sourceLabel}
+          </a>.
+        </>
+      )}
     </p>
   );
 }

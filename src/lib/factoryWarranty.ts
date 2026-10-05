@@ -56,6 +56,12 @@ export interface FactoryWarrantyRecord {
     | "powertrain"
     | "extension"
     | "unknown";
+  /** Required only for reviewed engine/transmission claims, never inferred. */
+  powertrainReview?: {
+    coverageSubtype: "engine-and-transmission";
+    usageAttestationId: string;
+    displayLabel: "Motor e câmbio";
+  };
   termYears: number;
   /** Actual use stays unknown when a documented commonPolicy is sufficient. */
   usage: "private" | "commercial" | "unknown";
@@ -200,6 +206,9 @@ export function factoryWarrantyReviewFingerprint(
     optionalConfirmed: record.optionalConfirmed,
     conditionsConfirmed: record.conditionsConfirmed,
     scope: record.scope,
+    ...(record.scope === "powertrain"
+      ? { powertrainReview: record.powertrainReview || null }
+      : {}),
     termYears: record.termYears,
     usage: record.usage,
     commonPolicy: record.commonPolicy || null,
@@ -250,7 +259,7 @@ function resolveFactoryWarrantyCoverage(
   vehicle: WarrantyCatalogVehicle,
   matrix: FactoryWarrantyMatrix,
   today: string,
-  expectedScope: "basic-vehicle" | "traction-battery",
+  expectedScope: "basic-vehicle" | "traction-battery" | "powertrain",
   checkCoverageWindow = true,
   expectedReviewFingerprint?: string,
 ) {
@@ -293,8 +302,16 @@ function resolveFactoryWarrantyCoverage(
   )
     return undefined;
   if (
-    expectedScope === "traction-battery" &&
+    expectedScope !== "basic-vehicle" &&
     (record.usage !== "private" || record.commonPolicy !== undefined)
+  )
+    return undefined;
+  if (
+    expectedScope === "powertrain" &&
+    (record.powertrainReview?.coverageSubtype !== "engine-and-transmission" ||
+      record.powertrainReview?.displayLabel !== "Motor e câmbio" ||
+      !nonempty(record.powertrainReview?.usageAttestationId) ||
+      unresolvedText(record.powertrainReview.usageAttestationId))
   )
     return undefined;
   if (
@@ -418,6 +435,28 @@ export function resolveFactoryWarranty(
   today = new Date().toISOString().slice(0, 10),
 ) {
   return resolveFactoryWarrantyCoverage(vehicle, matrix, today, "basic-vehicle");
+}
+
+/** Reviewed engine/transmission coverage only; never a whole-vehicle claim. */
+export function resolveFactoryPowertrainWarranty(
+  vehicle: WarrantyCatalogVehicle,
+  matrix: FactoryWarrantyMatrix,
+  today = new Date().toISOString().slice(0, 10),
+) {
+  const stamp = resolveFactoryWarrantyCoverage(vehicle, matrix, today, "powertrain");
+  if (!stamp) return undefined;
+  const record = matrix.records.find(
+    (entry) => entry?.vehicle?.vehicleId === vehicle.id,
+  )!;
+  const source = record.sources[0];
+  return {
+    ...stamp,
+    scope: "powertrain" as const,
+    termYears: record.termYears,
+    sourceUrl: source.url,
+    sourceLabel: `Manual ${source.verification.documentCode}`,
+    sourceDescription: `${source.revision} ${source.locator}`,
+  };
 }
 
 /** Traction battery only; the primary unit remains the shared approval boundary. */

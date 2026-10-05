@@ -11,7 +11,7 @@ import {
 import { vehicleWhatsAppRef } from "@/lib/vehicleWhatsAppRef";
 import { trackVehicleCardOpen } from "@/lib/analytics";
 import { CardsHero } from "./CardsHero";
-import { factoryWarrantyStampFor, factoryTractionBatteryStampFor } from "@/lib/factoryWarrantyStamp";
+import { factoryWarrantyStampFor, factoryTractionBatteryStampFor, factoryPowertrainStampFor } from "@/lib/factoryWarrantyStamp";
 import type { WarrantyCatalogVehicle } from "@/lib/factoryWarranty";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
@@ -196,6 +196,10 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
     !isSold && warrantyVehicle?.id === id
       ? factoryTractionBatteryStampFor(warrantyVehicle)
       : undefined;
+  const powertrainStamp =
+    !isSold && warrantyVehicle?.id === id
+      ? factoryPowertrainStampFor(warrantyVehicle)
+      : undefined;
   const merchandising = getVehicleMerchandising({
     id,
     km,
@@ -290,6 +294,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
       marketingBadge={isSold ? undefined : cardMarketingBadge}
       warrantyStamp={warrantyStamp}
       tractionBatteryStamp={tractionBatteryStamp}
+      powertrainStamp={powertrainStamp}
       proofBadge={isSold || !hasIcheck ? undefined : "i-CHECK"}
       price={priceFormatted}
       previousPrice={previousPriceFormatted}

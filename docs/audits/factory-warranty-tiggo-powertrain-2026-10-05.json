@@ -1,0 +1,493 @@
+{
+  "reviewId": "warranty-20261005-tiggo-powertrain",
+  "reviewedAt": "2026-10-05",
+  "baseSourceCommit": "642c6106736199e4799bc21f9b2d9e9263162f21",
+  "scope": "Only the engine-and-transmission coverage of Tiggo 8 Max Drive units 20029 and 20041. No approval of five-year general vehicle coverage, no extension to Tiggo 7 20066 or other stock.",
+  "changedVehicleIds": [
+    "20029",
+    "20041"
+  ],
+  "sourceArtifacts": [
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/validation-handoff.json",
+      "sha256": "7170cb42b63cdfe6458d18c6aabcc5535530906649404e99a84c8b075f6a054e"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/validated-tiggo-powertrain-records.json",
+      "sha256": "42d69f820e484aa91726f1e21fddebbad30f6236bbb76ed04027a9593c8b46bb"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/chery/owner_attestation_20029_20041.json",
+      "sha256": "c147d971046edf9c993e54eb4a1fdc643189a481a24ce45492cbc91c9a4ff975"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/chery/parecer_tiggo8_2023_2024.json",
+      "sha256": "3295c0ba61303b2a0579a59370d54744498909eb27eff4e948cebe6c1fc3e19f"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/chery/evidence_manifest.json",
+      "sha256": "a5cfeb2b0546c526be56c84391b65a458dced4c6d3baf6fe31dd4b9aab27bae9"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/tiggo-powertrain-siteworker-contract.json",
+      "sha256": "678bf3150362ed55988b1050e72faf331697c75b73cf15b4f4aa97f34945e0f2"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/chery/powertrain-review-manifests.json",
+      "sha256": "be47442e071416890f9f3c956a9d78ce2d78dfee19985b6aa5a2c99715ede93c"
+    },
+    {
+      "path": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-7/research-2026-10-05/chery/powertrain-contract-checks.json",
+      "sha256": "89b21622ab956d7cd0ccab5a5a38251620f70f569d9bff1b6abc72b1b7296afc"
+    }
+  ],
+  "validatedContract": {
+    "source": "validated-tiggo-powertrain-records.json",
+    "handoffUpdatedAt": "2026-10-05T13:30:18.316538+00:00",
+    "recordImport": "The two individually approved powertrain records were integrated with the explicitly authorized powertrainReview binding (coverage subtype, unit-use attestation reference and display label) and the exact page-linked source URL from source_line. Their canonical fingerprints were regenerated after this bounded review. Original fingerprints and the precise conversion are retained below; term, scope, usage, identity, mileage and source clauses are unchanged.",
+    "newCollection": "Only the two public API ID endpoints were rechecked; no ERP, XML, broad stock or private identifier lookup."
+  },
+  "ownerAttestation": {
+    "vehicleIds": [
+      "20029",
+      "20041"
+    ],
+    "usage": "private",
+    "recordedAt": "2026-10-05T13:30:18.316538+00:00",
+    "evidenceKind": "explicit_owner_attestation_relayed_by_authorized_parent",
+    "questionMessageId": "Sentinel_7df0e2fcc0f88191891141ce9846e090",
+    "userMessageId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
+    "answer": "as tiggos nao tem uso comercial",
+    "scope": "Non-commercial use confirmed only for these two IDs. Existing optional 108 attests prior operational manual, maintenance and condition checks. No original delivery date or exact expiry asserted."
+  },
+  "displayAuthorization": {
+    "messageId": "Sentinel_794274640d188191a2cdcda41d9ce2e0",
+    "instruction": "Owner accepted a stamp with a legible engine-and-transmission scope, relayed by the authorized parent.",
+    "requiredLabel": "Motor e câmbio",
+    "estimatedYear": 2028,
+    "forbiddenInterpretation": "Five years of general vehicle warranty or five new years starting at resale."
+  },
+  "officialDocument": {
+    "url": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf",
+    "portal": "https://caoachery.com.br/manuais",
+    "documentCode": "B09999T8006",
+    "printedEdition": "Janeiro de 2024",
+    "identity": "TIGGO 8 MAX DRIVE",
+    "modelYearMapping": "Registro oficial de 03/10/2026: portal /manuais > card atual TIGGO 8 PRO > Manuais 2023/2024 > Manual do Proprietário aponta a este PDF Max Drive.",
+    "mappingEvidence": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/checkpoint/evidence/chery-legacy/legacy-findings.json",
+    "sourcePdf": "/Users/marcelomarchis/Documents/Codex/2026-10-03/task-8/checkpoint/tiggo8-original-publico.pdf",
+    "sha256": "e77531d0171871d0fe59e70665ba7452702bc0e2e784069fe4c39a867ab1b896",
+    "pages": {
+      "generalAdditionalAndTransfer": {
+        "pdf": 298,
+        "printed": "10-3",
+        "clause": "c"
+      },
+      "components": {
+        "pdf": 299,
+        "printed": "10-4",
+        "rows": [
+          20,
+          21
+        ]
+      },
+      "edition": {
+        "pdf": 326,
+        "printed": "contracapa"
+      }
+    },
+    "sourceLimitations": {
+      "originalPublicPdfCollectedAt": "2026-10-03",
+      "preservedOriginalHashRecheckedAt": "2026-10-05",
+      "researchReopenResult": "Em 05/10/2026, portal retornou HTTP 403 e PDF não acessível pelo web tool; análise feita no original público preservado, hash conferido.",
+      "scope": "This integration verified the preserved original hash and used the validated research; it does not claim a successful new download of the portal or PDF on 2026-10-05.",
+      "metadataCaveat": "Título técnico contém PRO e datas técnicas são de maio/2026; não são a edição impressa nem alteram a identidade visual ou o vínculo de ano registrado."
+    },
+    "displaySourceUrl": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+    "displaySourceText": "Fonte oficial: Manual Tiggo8MaxDrive B09999T8006, janeiro/2024, pp10-3 e10-4."
+  },
+  "approvedLocalContent": [
+    {
+      "vehicleId": "20029",
+      "reviewId": "warranty-20261005-20029-powertrain",
+      "recordId": "reviewed-v2-20261005-20029-powertrain",
+      "identity": {
+        "vehicleId": "20029",
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 8 MAX DRIVE TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024
+      },
+      "scope": "powertrain",
+      "displayScope": "Motor e câmbio",
+      "termYears": 5,
+      "totalMonths": 60,
+      "additionalMonthsBeyondGeneral": 24,
+      "expectedYear": 2028,
+      "usage": "private",
+      "reviewedMileageKm": 38900,
+      "mileageGate": {
+        "kind": "unlimited"
+      },
+      "sources": [
+        {
+          "sourceId": "chery-B09999T8006-20029-powertrain",
+          "url": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+          "locator": "Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.",
+          "revision": "B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "B09999T8006",
+            "modelYear": 2024,
+            "reviewId": "warranty-20261005-20029-powertrain",
+            "reviewedAt": "2026-10-05"
+          }
+        }
+      ],
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20029\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_a25f6c73a8bc81918847dca70dc01c42\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":38900,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T8006-20029-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+      "actualStart": null,
+      "actualExpiry": null,
+      "coverageLimitations": "Only engine and transmission under the manufacturer manual. The extra 24 months do not apply to commercial use, and no other component or whole-vehicle five-year warranty is asserted.",
+      "generalCoverage": {
+        "termYears": 3,
+        "expectedYear": 2026,
+        "confirmedExpiryDate": null,
+        "eligibleForGeneralStamp": false,
+        "reason": "General coverage is in its estimated final year without a confirmed unexpired actual end date; the powertrain record never resolves as basic-vehicle.",
+        "status": "pending",
+        "scope": "basic-vehicle",
+        "auditOnly": true
+      },
+      "powertrainReview": {
+        "coverageSubtype": "engine-and-transmission",
+        "usageAttestationId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
+        "displayLabel": "Motor e câmbio"
+      }
+    },
+    {
+      "vehicleId": "20041",
+      "reviewId": "warranty-20261005-20041-powertrain",
+      "recordId": "reviewed-v2-20261005-20041-powertrain",
+      "identity": {
+        "vehicleId": "20041",
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 8 MAX DRIVE TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024
+      },
+      "scope": "powertrain",
+      "displayScope": "Motor e câmbio",
+      "termYears": 5,
+      "totalMonths": 60,
+      "additionalMonthsBeyondGeneral": 24,
+      "expectedYear": 2028,
+      "usage": "private",
+      "reviewedMileageKm": 28240,
+      "mileageGate": {
+        "kind": "unlimited"
+      },
+      "sources": [
+        {
+          "sourceId": "chery-B09999T8006-20041-powertrain",
+          "url": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+          "locator": "Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.",
+          "revision": "B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "B09999T8006",
+            "modelYear": 2024,
+            "reviewId": "warranty-20261005-20041-powertrain",
+            "reviewedAt": "2026-10-05"
+          }
+        }
+      ],
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20041-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20041\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_a25f6c73a8bc81918847dca70dc01c42\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":28240,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T8006-20041-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20041-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+      "actualStart": null,
+      "actualExpiry": null,
+      "coverageLimitations": "Only engine and transmission under the manufacturer manual. The extra 24 months do not apply to commercial use, and no other component or whole-vehicle five-year warranty is asserted.",
+      "generalCoverage": {
+        "termYears": 3,
+        "expectedYear": 2026,
+        "confirmedExpiryDate": null,
+        "eligibleForGeneralStamp": false,
+        "reason": "General coverage is in its estimated final year without a confirmed unexpired actual end date; the powertrain record never resolves as basic-vehicle.",
+        "status": "pending",
+        "scope": "basic-vehicle",
+        "auditOnly": true
+      },
+      "powertrainReview": {
+        "coverageSubtype": "engine-and-transmission",
+        "usageAttestationId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
+        "displayLabel": "Motor e câmbio"
+      }
+    }
+  ],
+  "publicVehicles": [
+    {
+      "id": "20029",
+      "marca": "CHERY",
+      "modelo": "TIGGO 8 MAX DRIVE TURBO",
+      "anoFabricacao": 2023,
+      "year": 2024,
+      "km": 38900,
+      "price": 151900,
+      "diferenciais": [
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20029",
+        "checkedAt": "2026-10-05T13:30:15.571107+00:00"
+      }
+    },
+    {
+      "id": "20041",
+      "marca": "CHERY",
+      "modelo": "TIGGO 8 MAX DRIVE TURBO",
+      "anoFabricacao": 2023,
+      "year": 2024,
+      "km": 28240,
+      "price": 151900,
+      "diferenciais": [
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        }
+      ],
+      "evidence": {
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20041",
+        "checkedAt": "2026-10-05T13:30:15.697899+00:00"
+      }
+    }
+  ],
+  "timingAndTransfer": {
+    "manufacturerOrigin": "Original delivery as a new vehicle to the first owner.",
+    "transfer": "Warranty rights pass to subsequent owners for the remaining term.",
+    "resaleRestartsTerm": false,
+    "estimateConvention": "Fabrication year 2023 plus the validated total term of five years gives the displayed estimate 2028*. It is not the contractual start or exact expiry date.",
+    "finalEstimatedYearGate": "In 2028, require a confirmed unexpired end date for continued display under the existing rule."
+  },
+  "preservedRecords": {
+    "count": 13,
+    "vehicleIds": [
+      "19924",
+      "20066",
+      "19994",
+      "20049",
+      "19779",
+      "19854",
+      "19898",
+      "20038",
+      "19866",
+      "20019",
+      "19857",
+      "20018",
+      "19587"
+    ],
+    "comparison": "Each preserved record is deep-equal to the base commit and its complete JSON text remains byte-for-byte present; only the two target object texts were replaced.",
+    "previouslyApprovedBasicVehicleIds": [
+      "19924",
+      "20066",
+      "19994",
+      "20049",
+      "20038",
+      "19857",
+      "19587"
+    ],
+    "bydTractionBatteryPreserved": true,
+    "tiggo7Vehicle20066Preserved": true
+  },
+  "expectedRegistryCounts": {
+    "records": 15,
+    "approvedBasic": 7,
+    "approvedPowertrain": 2,
+    "pendingBasic": 6,
+    "approvedTractionBattery": 1
+  },
+  "remainingPendingVehicleIds": [
+    "19779",
+    "19854",
+    "19898",
+    "19866",
+    "20019",
+    "20018"
+  ],
+  "integrationChecks": {
+    "date": "2026-10-05",
+    "other13RecordsPreserved": true,
+    "bothGeneralResolversReturnNoStamp": true,
+    "bothBatteryResolversReturnNoStamp": true,
+    "powertrainResolverValidation": "Both exact public catalog snapshots resolve to scope powertrain and estimated year 2028. General and traction-battery resolvers return no stamp for both Tiggo units. Existing BYD general 2030 and traction-battery 2032 still resolve.",
+    "targetedAssertionsPassed": 166,
+    "negativeCases": "Unreviewed ID; changed or missing identity/years; invalid or regressing km; missing flag; invalid price; pending/revoked/ineligible status; missing attestations; wrong scope or usage; unverified source; fingerprint mismatch including changed source fragment or attestation; duplicate record; missing final-year expiry and expired confirmed date all block. Invalid/missing subtype, display label and usage-attestation metadata, as well as commercial/unknown use, also block after recomputing an otherwise valid fingerprint.",
+    "fullSuiteAndVisualChecks": "Owned by integration task; not claimed by this targeted registry audit.",
+    "integratedFingerprintsMatchResolver": true,
+    "sourceFingerprintConversionAudited": true,
+    "explicitPowertrainReviewBound": true,
+    "pendingBasicCoverageReviewsPreserved": 2,
+    "sourceDisplayVerified": {
+      "sourceLabel": "Manual B09999T8006",
+      "sourceUrl": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+      "sourceDescription": "Uses the reviewed revision and locator; no successful portal reread is asserted."
+    }
+  },
+  "publication": {
+    "productionPublished": false,
+    "scope": "Local matrix and audit only; release verification belongs to the integration task."
+  },
+  "privacy": "Only minimal public catalog fields, source references and scoped owner attestations are retained. No plates, full VIN, customer data or credentials.",
+  "fingerprintUpgrade": {
+    "reviewedAt": "2026-10-05",
+    "authorization": "Parent instruction to bind the approved contract explicitly to the two runtime records; owner usage evidence Sentinel_a25f6c73a8bc81918847dca70dc01c42 and scoped display approval Sentinel_794274640d188191a2cdcda41d9ce2e0.",
+    "algorithm": "factoryWarrantyReviewFingerprint adds powertrainReview conditionally for powertrain scope only. Existing basic and BYD traction-battery fingerprints remain unchanged.",
+    "records": [
+      {
+        "vehicleId": "20029",
+        "originalHandoffFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20029\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":38900,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T8006-20029-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+        "originalHandoffFingerprintSha256": "de5b69b6b60d838cfd834f486c006a33d638ee8ef4d864c9a76c17877ab58f0b",
+        "sourceReviewManifestSha256": "90d40e26e34bb2e4a037ff7255760af72e4a2bed8046cb82cc2df2c9eca69310",
+        "integratedFingerprintSha256": "d2429594368375c235243ec88946a32d8021086fe0dc366ef8efaf2424fe9164",
+        "addedPowertrainReview": {
+          "coverageSubtype": "engine-and-transmission",
+          "usageAttestationId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
+          "displayLabel": "Motor e câmbio"
+        },
+        "sourceUrlConversion": {
+          "from": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf",
+          "to": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+          "basis": "Exact source_line.url supplied by the validated display contract; same document with a page-navigation fragment."
+        },
+        "otherCoverageFieldsUnchanged": true
+      },
+      {
+        "vehicleId": "20041",
+        "originalHandoffFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20041-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20041\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":28240,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T8006-20041-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20041-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+        "originalHandoffFingerprintSha256": "f56b756f5293d36479185cd16ec0db914804f77ec7f428ba216aa3e17a4efa22",
+        "sourceReviewManifestSha256": "2834ea8fb127b90c47ff065f873a51fc28761b2dc39853fae427c1ff2ffd86c7",
+        "integratedFingerprintSha256": "e13f943eeefc0cf885fb303ab42fe3d290ba1d36199d264ce6fe191a1ad46c19",
+        "addedPowertrainReview": {
+          "coverageSubtype": "engine-and-transmission",
+          "usageAttestationId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
+          "displayLabel": "Motor e câmbio"
+        },
+        "sourceUrlConversion": {
+          "from": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf",
+          "to": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+          "basis": "Exact source_line.url supplied by the validated display contract; same document with a page-navigation fragment."
+        },
+        "otherCoverageFieldsUnchanged": true
+      }
+    ]
+  },
+  "pendingBasicCoverages": [
+    {
+      "auditRecordId": "pending-basic-20261005-20029",
+      "vehicleId": "20029",
+      "identity": {
+        "vehicleId": "20029",
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 8 MAX DRIVE TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024
+      },
+      "status": "pending",
+      "reviewedAt": "2026-10-05",
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "usage": "private",
+      "reviewedMileageKm": 38900,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "usageAttestationId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
+      "expectedYear": 2026,
+      "actualStart": null,
+      "confirmedExpiryDate": null,
+      "eligibleForGeneralStamp": false,
+      "approvedFingerprint": null,
+      "sources": [
+        {
+          "sourceId": "chery-B09999T8006-20029-powertrain",
+          "url": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+          "locator": "Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.",
+          "revision": "B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "B09999T8006",
+            "modelYear": 2024,
+            "reviewId": "warranty-20261005-20029-powertrain",
+            "reviewedAt": "2026-10-05"
+          }
+        }
+      ],
+      "pendingReasons": [
+        "The estimated final year is 2026; no confirmed unexpired actual end date was supplied. The non-commercial-use attestation does not resolve original delivery or exact expiry."
+      ],
+      "state": "Audit-only pending basic coverage; not an approved runtime record and not a duplicate vehicle ID in the matrix."
+    },
+    {
+      "auditRecordId": "pending-basic-20261005-20041",
+      "vehicleId": "20041",
+      "identity": {
+        "vehicleId": "20041",
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 8 MAX DRIVE TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024
+      },
+      "status": "pending",
+      "reviewedAt": "2026-10-05",
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "usage": "private",
+      "reviewedMileageKm": 28240,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "usageAttestationId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
+      "expectedYear": 2026,
+      "actualStart": null,
+      "confirmedExpiryDate": null,
+      "eligibleForGeneralStamp": false,
+      "approvedFingerprint": null,
+      "sources": [
+        {
+          "sourceId": "chery-B09999T8006-20041-powertrain",
+          "url": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+          "locator": "Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.",
+          "revision": "B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "B09999T8006",
+            "modelYear": 2024,
+            "reviewId": "warranty-20261005-20041-powertrain",
+            "reviewedAt": "2026-10-05"
+          }
+        }
+      ],
+      "pendingReasons": [
+        "The estimated final year is 2026; no confirmed unexpired actual end date was supplied. The non-commercial-use attestation does not resolve original delivery or exact expiry."
+      ],
+      "state": "Audit-only pending basic coverage; not an approved runtime record and not a duplicate vehicle ID in the matrix."
+    }
+  ],
+  "pendingBasicCoverageHandling": {
+    "count": 2,
+    "vehicleIds": [
+      "20029",
+      "20041"
+    ],
+    "scope": "These two basic-vehicle reviews remain pending separately in this audit. The runtime matrix retains one powertrain record per ID; it never promotes basic coverage or inserts duplicate vehicle IDs.",
+    "registryPendingBasicCount": 6,
+    "auditOnlyPendingBasicCount": 2,
+    "totalUnapprovedBasicCoverageReviews": 8
+  }
+}

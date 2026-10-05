@@ -143,10 +143,10 @@
       }
     },
     {
-      "recordId": "normalized-20261003-20029",
-      "status": "pending",
-      "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"normalized-20261003-20029\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"20029\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":null,\"reviewedMileageKm\":38900,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20029-manual-1\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf\",\"locator\":\"Página impressa 10-3 (PDF 298), cláusula geral/comercial/início/transferência; 10-4 (PDF 299), tabela de peças; contracapa PDF 326, edição\",\"revision\":\"Janeiro/2024; B09999T8006; verificado no PDF público em 2026-10-03\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2024,\"reviewId\":\"warranty-20261003-20029\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "recordId": "reviewed-v2-20261005-20029-powertrain",
+      "status": "approved",
+      "reviewedAt": "2026-10-05",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20029\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_a25f6c73a8bc81918847dca70dc01c42\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":38900,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T8006-20029-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
       "vehicle": {
         "vehicleId": "20029",
         "brand": "CHERY",
@@ -157,35 +157,39 @@
       "optionalId": 108,
       "optionalConfirmed": true,
       "conditionsConfirmed": true,
-      "scope": "basic-vehicle",
-      "termYears": 3,
-      "usage": "unknown",
+      "scope": "powertrain",
+      "termYears": 5,
+      "usage": "private",
       "reviewedMileageKm": 38900,
       "mileage": {
-        "kind": "limited",
-        "limitKm": 100000
+        "kind": "unlimited"
       },
       "sources": [
         {
-          "sourceId": "20029-manual-1",
-          "url": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf",
-          "locator": "Página impressa 10-3 (PDF 298), cláusula geral/comercial/início/transferência; 10-4 (PDF 299), tabela de peças; contracapa PDF 326, edição",
-          "revision": "Janeiro/2024; B09999T8006; verificado no PDF público em 2026-10-03",
+          "sourceId": "chery-B09999T8006-20029-powertrain",
+          "url": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+          "locator": "Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.",
+          "revision": "B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.",
           "verification": {
-            "status": "pending",
-            "documentCode": "",
+            "status": "verified",
+            "documentCode": "B09999T8006",
             "modelYear": 2024,
-            "reviewId": "warranty-20261003-20029",
-            "reviewedAt": "2026-10-03"
+            "reviewId": "warranty-20261005-20029-powertrain",
+            "reviewedAt": "2026-10-05"
           }
         }
-      ]
+      ],
+      "powertrainReview": {
+        "coverageSubtype": "engine-and-transmission",
+        "usageAttestationId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
+        "displayLabel": "Motor e câmbio"
+      }
     },
     {
-      "recordId": "normalized-20261003-20041",
-      "status": "pending",
-      "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"normalized-20261003-20041\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"20041\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":null,\"reviewedMileageKm\":28240,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20041-manual-1\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf\",\"locator\":\"Página impressa 10-3 (PDF 298), cláusula geral/comercial/início/transferência; 10-4 (PDF 299), tabela de peças; contracapa PDF 326, edição\",\"revision\":\"Janeiro/2024; B09999T8006; verificado no PDF público em 2026-10-03\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2024,\"reviewId\":\"warranty-20261003-20041\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "recordId": "reviewed-v2-20261005-20041-powertrain",
+      "status": "approved",
+      "reviewedAt": "2026-10-05",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20041-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20041\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_a25f6c73a8bc81918847dca70dc01c42\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":28240,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T8006-20041-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20041-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
       "vehicle": {
         "vehicleId": "20041",
         "brand": "CHERY",
@@ -196,29 +200,33 @@
       "optionalId": 108,
       "optionalConfirmed": true,
       "conditionsConfirmed": true,
-      "scope": "basic-vehicle",
-      "termYears": 3,
-      "usage": "unknown",
+      "scope": "powertrain",
+      "termYears": 5,
+      "usage": "private",
       "reviewedMileageKm": 28240,
       "mileage": {
-        "kind": "limited",
-        "limitKm": 100000
+        "kind": "unlimited"
       },
       "sources": [
         {
-          "sourceId": "20041-manual-1",
-          "url": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf",
-          "locator": "Página impressa 10-3 (PDF 298), cláusula geral/comercial/início/transferência; 10-4 (PDF 299), tabela de peças; contracapa PDF 326, edição",
-          "revision": "Janeiro/2024; B09999T8006; verificado no PDF público em 2026-10-03",
+          "sourceId": "chery-B09999T8006-20041-powertrain",
+          "url": "https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298",
+          "locator": "Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.",
+          "revision": "B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.",
           "verification": {
-            "status": "pending",
-            "documentCode": "",
+            "status": "verified",
+            "documentCode": "B09999T8006",
             "modelYear": 2024,
-            "reviewId": "warranty-20261003-20041",
-            "reviewedAt": "2026-10-03"
+            "reviewId": "warranty-20261005-20041-powertrain",
+            "reviewedAt": "2026-10-05"
           }
         }
-      ]
+      ],
+      "powertrainReview": {
+        "coverageSubtype": "engine-and-transmission",
+        "usageAttestationId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
+        "displayLabel": "Motor e câmbio"
+      }
     },
     {
       "recordId": "reviewed-v2-20261003-19994",

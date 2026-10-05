@@ -1,5 +1,5 @@
 import { FactoryWarrantyBadge, FactoryWarrantyNote } from "@/design-system/components/patterns/FactoryWarrantyBadge";
-import { factoryWarrantyStampFor, factoryTractionBatteryStampFor } from "@/lib/factoryWarrantyStamp";
+import { factoryWarrantyStampFor, factoryTractionBatteryStampFor, factoryPowertrainStampFor } from "@/lib/factoryWarrantyStamp";
 import {
   useParams,
   useLocation,
@@ -2011,6 +2011,7 @@ export function DetalhesPage() {
   const mileageFormatted = formatCatalogMileage(vehicle.km);
   const warrantyStamp = factoryWarrantyStampFor(vehicle);
   const tractionBatteryStamp = factoryTractionBatteryStampFor(vehicle);
+  const powertrainStamp = factoryPowertrainStampFor(vehicle);
 
   // Badges (só selos de dados reais — sem Retire hoje / Vistoriado genérico)
   const diferenciais = vehicle?.diferenciais ?? [];
@@ -2195,7 +2196,7 @@ export function DetalhesPage() {
               />
             </div>
           )}
-          {(warrantyStamp || tractionBatteryStamp) && (
+          {(warrantyStamp || tractionBatteryStamp || powertrainStamp) && (
             <div className="flex items-start justify-end gap-3 px-4 pt-1 sm:px-6 lg:hidden">
               {warrantyStamp && (
                 <div className="w-[84px] shrink-0 sm:w-[112px]">
@@ -2208,11 +2209,19 @@ export function DetalhesPage() {
                   <p className="mt-1 text-center text-[10.5px] font-semibold leading-snug text-[#505A5F]">Bateria de tração</p>
                 </div>
               )}
+              {powertrainStamp && (
+                <div className="w-[84px] shrink-0 sm:w-[112px]">
+                  <FactoryWarrantyBadge {...powertrainStamp} variant="hero" />
+                  <p className="mt-1 text-center text-[10.5px] font-semibold leading-snug text-[#505A5F]" data-powertrain-label>
+                    Motor e câmbio · {powertrainStamp.termYears} anos de fábrica
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        {(warrantyStamp || tractionBatteryStamp) && (
+        {(warrantyStamp || tractionBatteryStamp || powertrainStamp) && (
           <div className="absolute bottom-12 right-[4%] z-20 hidden items-start gap-4 lg:flex">
             {warrantyStamp && (
               <div className="w-[10.5vw] max-w-[164px]">
@@ -2223,6 +2232,14 @@ export function DetalhesPage() {
               <div className="w-[10.5vw] max-w-[164px]">
                 <FactoryWarrantyBadge {...tractionBatteryStamp} variant="hero" />
                 <p className="mt-1 text-center text-xs font-semibold text-[#505A5F]">Bateria de tração</p>
+              </div>
+            )}
+            {powertrainStamp && (
+              <div className="w-[10.5vw] max-w-[164px]">
+                <FactoryWarrantyBadge {...powertrainStamp} variant="hero" />
+                <p className="mt-1 text-center text-xs font-semibold text-[#505A5F]" data-powertrain-label>
+                  Motor e câmbio · {powertrainStamp.termYears} anos de fábrica
+                </p>
               </div>
             )}
           </div>
@@ -2386,12 +2403,12 @@ export function DetalhesPage() {
             </div>
           </motion.div>
         </div>
-        {(warrantyStamp || tractionBatteryStamp) && (
+        {(warrantyStamp || tractionBatteryStamp || powertrainStamp) && (
           <div
             className="container-main relative z-10 mt-4 px-4 sm:px-6 lg:absolute lg:bottom-3 lg:left-0 lg:right-0 lg:mt-0 lg:px-8 xl:px-12 2xl:px-16"
             data-factory-warranty-footer="hero"
           >
-            <FactoryWarrantyNote compact tractionBattery={!!tractionBatteryStamp} />
+            <FactoryWarrantyNote compact tractionBattery={!!tractionBatteryStamp} powertrain={powertrainStamp} />
           </div>
         )}
       </section>

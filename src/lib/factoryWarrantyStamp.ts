@@ -1,6 +1,7 @@
 import registry from "@/data/factoryWarrantyMatrix.json";
 import {
   resolveFactoryWarranty,
+  resolveFactoryPowertrainWarranty,
   resolveFactoryTractionBatteryWarranty,
   type FactoryWarrantyMatrix,
   type WarrantyCatalogVehicle,
@@ -45,6 +46,13 @@ export function factoryWarrantyStampFor(vehicle: WarrantyStampVehicle) {
   const preview = factoryWarrantyPreviewFor(original, factoryWarrantyMatrix);
   if (preview) return preview;
   return resolveFactoryWarranty(original, factoryWarrantyMatrix);
+}
+
+/** Prazo revisado de motor/câmbio; não substitui a garantia básica do veículo. */
+export function factoryPowertrainStampFor(vehicle: WarrantyStampVehicle) {
+  const original = factoryWarrantyVehicleFor(vehicle);
+  if (!original) return undefined;
+  return resolveFactoryPowertrainWarranty(original, factoryWarrantyMatrix);
 }
 
 /** A cobertura restrita nunca substitui o resultado/rótulo da garantia geral. */
