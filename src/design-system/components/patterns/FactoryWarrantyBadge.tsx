@@ -2,6 +2,8 @@ export const FACTORY_WARRANTY_NOTE =
   "*Estimativa pela fabricação e documentação oficial da montadora. Validade, cobertura e km conforme manual do modelo/ano.";
 export const FACTORY_TRACTION_BATTERY_NOTE =
   "A revenda não reinicia os prazos.";
+export const FACTORY_POWERTRAIN_NOTE =
+  "*Ano estimado pela fabricação. Prazo original e condições conforme manual da montadora.";
 
 export interface FactoryWarrantyBadgeProps {
   estimatedEndYear: number;
@@ -38,7 +40,7 @@ export function FactoryWarrantyBadge({
         className={`block h-auto w-full overflow-visible ${round ? "-rotate-[6deg]" : "-rotate-[4deg]"}`}
         role="img"
         aria-label={`Garantia de fábrica${tractionBattery ? " da bateria de tração" : powertrain ? " de motor e câmbio" : ""} até ${estimatedEndYear}*. ${mode === "visual-example" ? "Prévia visual; ano estimado." : "Ano estimado pela fabricação."}`}
-        aria-description={`${FACTORY_WARRANTY_NOTE}${restrictedCoverage ? ` ${FACTORY_TRACTION_BATTERY_NOTE}` : ""}`}
+        aria-description={powertrain ? FACTORY_POWERTRAIN_NOTE : `${FACTORY_WARRANTY_NOTE}${tractionBattery ? ` ${FACTORY_TRACTION_BATTERY_NOTE}` : ""}`}
       >
         {round ? (
           <>
@@ -172,19 +174,19 @@ export function FactoryWarrantyNote({
       className={`text-[#505A5F] leading-[1.45] ${compact ? "text-[10.5px]" : "text-[11px]"}`}
       data-factory-warranty-note
     >
-      {FACTORY_WARRANTY_NOTE}
+      {powertrain ? FACTORY_POWERTRAIN_NOTE : FACTORY_WARRANTY_NOTE}
       {tractionBattery && <> {FACTORY_TRACTION_BATTERY_NOTE}</>}
       {powertrain && (
-        <> Prazo original de {powertrain.termYears} anos para motor e câmbio. {FACTORY_TRACTION_BATTERY_NOTE}{" "}
+        <>{" "}
           <a
             href={powertrain.sourceUrl}
-            title={powertrain.sourceDescription}
+            title={powertrain.sourceLabel}
             target="_blank"
             rel="noopener noreferrer"
             className="underline underline-offset-2"
             onClick={(event) => event.stopPropagation()}
           >
-            {powertrain.sourceLabel}
+            Consultar manual
           </a>.
         </>
       )}

@@ -459,11 +459,6 @@ export function CardsHero({
         </div>
         {(warrantyStamp || tractionBatteryStamp || powertrainStamp) && (
           <div className="mt-3 w-full" data-factory-warranty-footer="card">
-            {powertrainStamp && (
-              <p className="mb-1 text-[10.5px] font-semibold leading-snug text-[#505A5F]" data-powertrain-label>
-                Motor e câmbio · {powertrainStamp.termYears} anos de fábrica
-              </p>
-            )}
             {tractionBatteryStamp && (
               <div className="mb-2 flex items-center justify-center gap-2">
                 <div className="w-[64px] shrink-0">

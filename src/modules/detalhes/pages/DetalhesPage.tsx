@@ -2212,9 +2212,6 @@ export function DetalhesPage() {
               {powertrainStamp && (
                 <div className="w-[84px] shrink-0 sm:w-[112px]">
                   <FactoryWarrantyBadge {...powertrainStamp} variant="hero" />
-                  <p className="mt-1 text-center text-[10.5px] font-semibold leading-snug text-[#505A5F]" data-powertrain-label>
-                    Motor e câmbio · {powertrainStamp.termYears} anos de fábrica
-                  </p>
                 </div>
               )}
             </div>
@@ -2237,9 +2234,6 @@ export function DetalhesPage() {
             {powertrainStamp && (
               <div className="w-[10.5vw] max-w-[164px]">
                 <FactoryWarrantyBadge {...powertrainStamp} variant="hero" />
-                <p className="mt-1 text-center text-xs font-semibold text-[#505A5F]" data-powertrain-label>
-                  Motor e câmbio · {powertrainStamp.termYears} anos de fábrica
-                </p>
               </div>
             )}
           </div>

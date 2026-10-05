@@ -155,9 +155,10 @@ Tiggo8 Max Drive brasileiro2023/2024. São 36 meses originais mais24 meses
 complementares de motor/transmissão, totalizando60 meses; não são cinco anos
 novos desde a revenda. A fonte e o ateste constam da auditoria versionada.
 
-Um único carimbo circular mostra **Motor e câmbio até2028***. A legenda HTML
-explicita os cinco anos de fábrica; a nota informa o prazo original, que a
-revenda não o reinicia e oferece o link do manual. O valor2028 é a estimativa
+Um único carimbo circular mostra **Motor e câmbio até2028***, sem legenda
+externa repetida. A ressalva curta informa: “*Ano estimado pela fabricação.
+Prazo original e condições conforme manual da montadora.” O link “Consultar
+manual” identifica o documento; detalhes da revisão permanecem na auditoria. O valor2028 é a estimativa
 FAB2023+5, sem inventar uma data efetiva. Em2028, a cobertura também exigirá
 vencimento real confirmado e ainda vigente.
 
