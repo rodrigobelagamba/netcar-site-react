@@ -5,6 +5,7 @@ import {
   factoryWarrantyReviewFingerprint,
   factoryTractionBatteryReviewFingerprint,
   resolveFactoryWarranty,
+  resolveFactoryPowertrainWarranty,
   resolveFactoryTractionBatteryWarranty,
   type FactoryWarrantyTractionBatteryCoverage,
   type FactoryWarrantyRecord,
@@ -136,6 +137,123 @@ for (const scope of ["battery", "traction-battery", "powertrain", "extension", "
       resolve(vehicle, review({ scope, termYears: 10 })),
       undefined,
     ));
+
+const powertrainReview = (patch: Partial<FactoryWarrantyRecord> = {}) =>
+  review({
+    scope: "powertrain", termYears: 5, mileage: { kind: "unlimited" },
+    powertrainReview: {
+      coverageSubtype: "engine-and-transmission",
+      usageAttestationId: "test-unit-private-use-attestation",
+      displayLabel: "Motor e câmbio",
+    },
+    ...patch,
+  });
+const resolvePowertrain = (current = vehicle, record = powertrainReview(), today = TODAY) =>
+  resolveFactoryPowertrainWarranty(current, matrix(record), today);
+
+test("reviewed powertrain returns only its explicit scope and fabrication-based year", () => {
+  const record = powertrainReview();
+  assert.deepEqual(resolvePowertrain(vehicle, record), {
+    estimatedEndYear: 2030, manufacturer: "EXAMPLE", mode: "verified", design: "round", scope: "powertrain",
+    termYears: 5, sourceUrl: "https://manufacturer.example/manual.pdf",
+    sourceLabel: "Manual DOC-MY2026",
+    sourceDescription: "DOC-MY2026; edition 1 Model-year manual, warranty p10",
+  });
+  assert.equal(resolve(vehicle, record), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, matrix(record), TODAY), undefined);
+  // Advancing today's year does not restart five years from the current purchase.
+  assert.equal(resolvePowertrain(vehicle, record, "2029-12-31")?.estimatedEndYear, 2030);
+});
+
+test("powertrain requires private use and rejects other scopes and inferred common policies", () => {
+  for (const usage of ["commercial", "unknown"] as const)
+    assert.equal(resolvePowertrain(vehicle, powertrainReview({ usage })), undefined);
+  for (const scope of ["basic-vehicle", "battery", "traction-battery", "extension", "unknown"] as const)
+    assert.equal(resolvePowertrain(vehicle, powertrainReview({ scope })), undefined);
+  const basicPolicy = commonReview().commonPolicy;
+  assert.equal(resolvePowertrain(vehicle, powertrainReview({ commonPolicy: basicPolicy })), undefined);
+});
+
+test("powertrain validates the exact live identity, flag, sale status and original mileage", () => {
+  for (const patch of [
+    { id: "another-unit" }, { marca: "Other Brand" }, { modelo: "Other Version" },
+    { anoFabricacao: 2024 }, { anoFabricacao: undefined }, { year: 2027 }, { year: NaN },
+    { km: 6699 }, { km: NaN }, { km: -1 }, { diferenciais: [] }, { price: 0 },
+  ]) {
+    assert.equal(resolvePowertrain({ ...vehicle, ...patch }), undefined, JSON.stringify(patch));
+  }
+  assert.equal(resolvePowertrain({ ...vehicle, km: 150000 })?.estimatedEndYear, 2030);
+  const limited = powertrainReview({ mileage: { kind: "limited", limitKm: 100000 } });
+  assert.equal(resolvePowertrain({ ...vehicle, km: 99999 }, limited)?.estimatedEndYear, 2030);
+  assert.equal(resolvePowertrain({ ...vehicle, km: 100000 }, limited), undefined);
+});
+
+test("powertrain cannot use missing approvals, revocations, duplicate units or disabled matrices", () => {
+  const good = powertrainReview();
+  for (const status of ["pending", "revoked", "ineligible"] as const)
+    assert.equal(resolvePowertrain(vehicle, powertrainReview({ status })), undefined);
+  for (const records of [[], [good, good], [good, { ...good, status: "revoked" as const }]])
+    assert.equal(resolveFactoryPowertrainWarranty(vehicle, matrix(...records), TODAY), undefined);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, { ...matrix(good), enabled: false }, TODAY), undefined);
+});
+
+test("powertrain requires verified model-year evidence and operational confirmation even with a fresh fingerprint", () => {
+  const good = powertrainReview();
+  const source = good.sources[0];
+  for (const patch of [
+    { optionalId: 109 }, { optionalConfirmed: false }, { conditionsConfirmed: false },
+    { sources: [] }, { sources: [{ ...source, locator: "pending" }] },
+    { sources: [{ ...source, verification: { ...source.verification, status: "pending" as const } }] },
+    { sources: [{ ...source, verification: { ...source.verification, modelYear: 2027 } }] },
+    { sources: [{ ...source, verification: { ...source.verification, documentCode: "UNRELATED" } }] },
+    { mileage: { kind: "unknown" as const } }, { reviewedMileageKm: 6701 },
+    { termYears: 0 }, { reviewedAt: "2026-10-04" },
+  ]) {
+    assert.equal(resolvePowertrain(vehicle, powertrainReview(patch)), undefined, JSON.stringify(patch));
+  }
+});
+
+test("powertrain alterations require a new reviewed fingerprint", () => {
+  const good = powertrainReview();
+  for (const patch of [
+    { termYears: 6 }, { reviewedMileageKm: 6000 },
+    { mileage: { kind: "limited" as const, limitKm: 200000 } },
+    { sources: [{ ...good.sources[0], locator: "Different coverage p20" }] },
+    { powertrainReview: { ...good.powertrainReview!, usageAttestationId: "different-attestation" } },
+  ]) {
+    assert.equal(resolvePowertrain(vehicle, { ...good, ...patch }), undefined);
+  }
+});
+
+test("powertrain scope, exact display label and explicit use-attestation reference are required and fingerprinted", () => {
+  const good = powertrainReview();
+  for (const metadata of [
+    undefined,
+    {},
+    { ...good.powertrainReview, coverageSubtype: "battery" },
+    { ...good.powertrainReview, coverageSubtype: undefined },
+    { ...good.powertrainReview, displayLabel: "Garantia geral" },
+    { ...good.powertrainReview, displayLabel: undefined },
+    { ...good.powertrainReview, usageAttestationId: "" },
+    { ...good.powertrainReview, usageAttestationId: "   " },
+    { ...good.powertrainReview, usageAttestationId: "pending" },
+    { ...good.powertrainReview, usageAttestationId: undefined },
+  ]) {
+    const powertrainReviewMetadata = metadata as FactoryWarrantyRecord["powertrainReview"];
+    assert.equal(resolvePowertrain(vehicle, { ...good, powertrainReview: powertrainReviewMetadata }), undefined);
+    assert.equal(resolvePowertrain(vehicle, powertrainReview({ powertrainReview: powertrainReviewMetadata })), undefined);
+  }
+  const primary = review();
+  assert.equal(factoryWarrantyReviewFingerprint({ ...primary, powertrainReview: good.powertrainReview }), primary.approvedFingerprint);
+});
+
+test("powertrain final estimated year requires an unexpired confirmed date", () => {
+  assert.equal(resolvePowertrain(vehicle, powertrainReview(), "2030-01-01"), undefined);
+  assert.equal(resolvePowertrain(vehicle, powertrainReview(), "2031-01-01"), undefined);
+  assert.equal(resolvePowertrain(vehicle, powertrainReview({ confirmedExpiryDate: "2030-06-30" }), "2030-06-01")?.estimatedEndYear, 2030);
+  assert.equal(resolvePowertrain(vehicle, powertrainReview({ confirmedExpiryDate: "2030-06-30" }), "2030-07-01"), undefined);
+  assert.equal(resolvePowertrain(vehicle, powertrainReview({ confirmedExpiryDate: "2030-02-30" }), "2030-01-01"), undefined);
+});
 
 function withTractionBattery(
   primary = review(),
@@ -715,6 +833,23 @@ interface WarrantyAddendumAudit {
     pdfPageOneBased?: number;
   }>;
 }
+interface WarrantyPowertrainAudit {
+  reviewedAt: string;
+  approvedLocalContent: Array<WarrantyAudit["approvedLocalContent"][number] & {
+    scope: "powertrain";
+    powertrainReview: FactoryWarrantyRecord["powertrainReview"];
+    generalCoverage: { termYears: number; expectedYear: number; eligibleForGeneralStamp: boolean };
+  }>;
+  publicVehicles: WarrantyCatalogVehicle[];
+  remainingPendingVehicleIds: string[];
+  expectedRegistryCounts: {
+    records: number; approvedBasic: number; approvedPowertrain: number;
+    pendingBasic: number; approvedTractionBattery: number;
+  };
+  ownerAttestation: { vehicleIds: string[]; usage: string; userMessageId: string };
+  officialDocument: { url: string; displaySourceUrl: string; documentCode: string; sha256: string };
+  timingAndTransfer: { resaleRestartsTerm: boolean };
+}
 const localRegistry = JSON.parse(
   readFileSync(new URL("../../src/data/factoryWarrantyMatrix.json", import.meta.url), "utf8"),
 ) as FactoryWarrantyMatrix;
@@ -724,6 +859,9 @@ const localAudit = JSON.parse(
 const addendumAudit = JSON.parse(
   readFileSync(new URL("../../docs/audits/factory-warranty-2026-10-05.json", import.meta.url), "utf8"),
 ) as WarrantyAddendumAudit;
+const powertrainAudit = JSON.parse(
+  readFileSync(new URL("../../docs/audits/factory-warranty-tiggo-powertrain-2026-10-05.json", import.meta.url), "utf8"),
+) as WarrantyPowertrainAudit;
 const EXPECTED_ORIGINAL_YEARS: Record<string, number> = {
   "20066": 2027,
   "19994": 2027,
@@ -738,7 +876,7 @@ const EXPECTED_LOCAL_YEARS: Record<string, number> = {
 };
 const currentCatalogSnapshot = [
   ...new Map(
-    [...localAudit.currentCatalogSnapshot, ...addendumAudit.publicVehicles]
+    [...localAudit.currentCatalogSnapshot, ...addendumAudit.publicVehicles, ...powertrainAudit.publicVehicles]
       .map((entry) => [entry.id, entry]),
   ).values(),
 ];
@@ -753,25 +891,30 @@ function localVehicle(id: string): WarrantyCatalogVehicle {
   return result;
 }
 
-test("the authorized release contains seven basic approvals, eight pending units and one battery supplement", () => {
+test("the authorized release contains seven basic, two powertrain approvals, six pending units and one battery supplement", () => {
   assert.equal(localRegistry.schemaVersion, 2);
   assert.equal(localRegistry.enabled, true);
   assert.equal(localAudit.publicationApproved, true);
   assert.equal(localRegistry.records.length, 15);
   assert.equal(new Set(localRegistry.records.map((r) => r.vehicle.vehicleId)).size, 15);
-  const approved = localRegistry.records.filter((r) => r.status === "approved");
+  const approved = localRegistry.records.filter((r) => r.status === "approved" && r.scope === "basic-vehicle");
+  const approvedPowertrain = localRegistry.records.filter((r) => r.status === "approved" && r.scope === "powertrain");
   const pending = localRegistry.records.filter((r) => r.status === "pending");
   assert.deepEqual(
     approved.map((r) => r.vehicle.vehicleId).sort(),
     Object.keys(EXPECTED_LOCAL_YEARS).sort(),
   );
-  assert.equal(pending.length, 8);
+  assert.deepEqual(approvedPowertrain.map((r) => r.vehicle.vehicleId).sort(), ["20029", "20041"]);
+  assert.equal(pending.length, 6);
   assert.deepEqual(
     pending.map((r) => r.vehicle.vehicleId).sort(),
-    addendumAudit.pendingVehicleIds.slice().sort(),
+    powertrainAudit.remainingPendingVehicleIds.slice().sort(),
   );
   assert.deepEqual(addendumAudit.expectedRegistryCounts, {
     records: 15, approvedBasic: 7, pendingBasic: 8, approvedTractionBattery: 1,
+  });
+  assert.deepEqual(powertrainAudit.expectedRegistryCounts, {
+    records: 15, approvedBasic: 7, approvedPowertrain: 2, pendingBasic: 6, approvedTractionBattery: 1,
   });
   assert.deepEqual(
     localRegistry.records.filter((record) => record.supplementalCoverages?.length)
@@ -824,16 +967,17 @@ test("new approvals match the October5 addendum and remain unavailable before th
   }
 });
 
-test("the disabled registry returns zero general or battery stamps for every reviewed catalog snapshot", () => {
+test("the disabled registry returns zero stamps of every scope for all reviewed catalog snapshots", () => {
   assert.equal(localAudit.currentCatalogSnapshot.length, 13);
   assert.equal(addendumAudit.publicVehicles.length, 2);
   for (const entry of currentCatalogSnapshot) {
     assert.equal(resolveFactoryWarranty(entry, { ...localRegistry, enabled: false }, addendumAudit.reviewedAt), undefined, entry.id);
     assert.equal(resolveFactoryTractionBatteryWarranty(entry, { ...localRegistry, enabled: false }, addendumAudit.reviewedAt), undefined, entry.id);
+    assert.equal(resolveFactoryPowertrainWarranty(entry, { ...localRegistry, enabled: false }, powertrainAudit.reviewedAt), undefined, entry.id);
   }
 });
 
-test("the authorized registry yields exactly seven general stamps and the BYD traction-battery stamp", () => {
+test("the authorized registry yields exactly seven general, two powertrain and one BYD traction-battery stamp", () => {
   const actual = Object.fromEntries(
     currentCatalogSnapshot.flatMap((entry) => {
       const stamp = resolveFactoryWarranty(entry, enabledLocalRegistry, addendumAudit.reviewedAt);
@@ -846,8 +990,15 @@ test("the authorized registry yields exactly seven general stamps and the BYD tr
       return stamp ? [[entry.id, stamp.estimatedEndYear]] : [];
     }),
   );
+  const actualPowertrain = Object.fromEntries(
+    currentCatalogSnapshot.flatMap((entry) => {
+      const stamp = resolveFactoryPowertrainWarranty(entry, enabledLocalRegistry, powertrainAudit.reviewedAt);
+      return stamp ? [[entry.id, stamp.estimatedEndYear]] : [];
+    }),
+  );
   assert.deepEqual(actual, EXPECTED_LOCAL_YEARS);
   assert.deepEqual(actualBattery, { "19924": 2032 });
+  assert.deepEqual(actualPowertrain, { "20029": 2028, "20041": 2028 });
   assert.equal(localRegistry.enabled, true, "Only the specifically approved release is enabled");
 });
 
@@ -986,3 +1137,71 @@ test("real Tracker20049 approval retains the individually resolved exception and
   assert.equal(record.confirmedExpiryDate, undefined);
   assert.equal(record.supplementalCoverages, undefined);
 });
+
+for (const id of ["20029", "20041"]) {
+  test(`real Tiggo${id} matches its reviewed powertrain evidence and never enables general or battery coverage`, () => {
+    const record = localRegistry.records.find((entry) => entry.vehicle.vehicleId === id)!;
+    const evidence = powertrainAudit.approvedLocalContent.find((entry) => entry.vehicleId === id)!;
+    const current = localVehicle(id);
+    assert.equal(record.status, "approved");
+    assert.equal(record.scope, "powertrain");
+    assert.equal(record.usage, "private");
+    assert.equal(record.reviewedAt, powertrainAudit.reviewedAt);
+    assert.equal(record.termYears, 5);
+    assert.equal(record.commonPolicy, undefined);
+    assert.equal(record.supplementalCoverages, undefined);
+    assert.equal(record.confirmedExpiryDate, undefined);
+    assert.deepEqual(record.vehicle, evidence.identity);
+    assert.equal(record.reviewedMileageKm, evidence.reviewedMileageKm);
+    assert.deepEqual(record.mileage, { kind: "unlimited" });
+    assert.deepEqual(record.mileage, evidence.mileageGate);
+    assert.deepEqual(record.sources, evidence.sources);
+    assert.deepEqual(record.powertrainReview, evidence.powertrainReview);
+    assert.equal(record.powertrainReview?.coverageSubtype, "engine-and-transmission");
+    assert.equal(record.powertrainReview?.displayLabel, "Motor e câmbio");
+    assert.equal(record.powertrainReview?.usageAttestationId, powertrainAudit.ownerAttestation.userMessageId);
+    assert.equal(record.sources[0].verification.documentCode, "B09999T8006");
+    assert.equal(record.sources[0].url, powertrainAudit.officialDocument.displaySourceUrl);
+    assert.equal(record.sources[0].url, `${powertrainAudit.officialDocument.url}#page=298`);
+    assert.equal(powertrainAudit.officialDocument.documentCode, "B09999T8006");
+    assert.match(powertrainAudit.officialDocument.sha256, /^[a-f0-9]{64}$/);
+    assert.equal(record.approvedFingerprint, evidence.approvedFingerprint);
+    assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+    assert.equal(powertrainAudit.ownerAttestation.usage, "private");
+    assert.ok(powertrainAudit.ownerAttestation.vehicleIds.includes(id));
+    assert.equal(powertrainAudit.timingAndTransfer.resaleRestartsTerm, false);
+    assert.equal(evidence.generalCoverage.termYears, 3);
+    assert.equal(evidence.generalCoverage.expectedYear, 2026);
+    assert.equal(evidence.generalCoverage.eligibleForGeneralStamp, false);
+    const stamp = resolveFactoryPowertrainWarranty(current, enabledLocalRegistry, powertrainAudit.reviewedAt);
+    assert.equal(stamp?.scope, "powertrain");
+    assert.equal(stamp?.estimatedEndYear, 2028);
+    assert.equal(stamp?.termYears, 5);
+    assert.equal(stamp?.sourceUrl, record.sources[0].url);
+    assert.equal(stamp?.sourceLabel, "Manual B09999T8006");
+    assert.equal(stamp?.sourceDescription, `${record.sources[0].revision} ${record.sources[0].locator}`);
+    assert.equal(resolveFactoryWarranty(current, enabledLocalRegistry, powertrainAudit.reviewedAt), undefined);
+    assert.equal(resolveFactoryTractionBatteryWarranty(current, enabledLocalRegistry, powertrainAudit.reviewedAt), undefined);
+    assert.equal(resolveFactoryPowertrainWarranty(current, enabledLocalRegistry, "2026-10-04"), undefined);
+  });
+
+  test(`real Tiggo${id} invalidates changed catalog fields and blocks final-year estimates without actual expiry`, () => {
+    const current = localVehicle(id);
+    for (const patch of [
+      { id: "unreviewed-tiggo" }, { marca: "OTHER" }, { modelo: "TIGGO 8 PRO" },
+      { anoFabricacao: 2024 }, { year: 2025 }, { km: current.km - 1 }, { km: NaN },
+      { diferenciais: [] }, { price: 0 },
+    ]) {
+      assert.equal(resolveFactoryPowertrainWarranty({ ...current, ...patch }, enabledLocalRegistry, powertrainAudit.reviewedAt), undefined);
+    }
+    assert.equal(resolveFactoryPowertrainWarranty(current, enabledLocalRegistry, "2027-12-31")?.estimatedEndYear, 2028);
+    assert.equal(resolveFactoryPowertrainWarranty(current, enabledLocalRegistry, "2028-01-01"), undefined);
+    assert.equal(resolveFactoryPowertrainWarranty(current, enabledLocalRegistry, "2029-01-01"), undefined);
+    const record = structuredClone(localRegistry.records.find((entry) => entry.vehicle.vehicleId === id)!);
+    // Synthetic fixture: the actual approved unit has no confirmed end date.
+    record.confirmedExpiryDate = "2028-07-31";
+    record.approvedFingerprint = factoryWarrantyReviewFingerprint(record);
+    assert.equal(resolveFactoryPowertrainWarranty(current, matrix(record), "2028-07-01")?.estimatedEndYear, 2028);
+    assert.equal(resolveFactoryPowertrainWarranty(current, matrix(record), "2028-08-01"), undefined);
+  });
+}

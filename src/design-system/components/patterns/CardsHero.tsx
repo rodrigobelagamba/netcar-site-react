@@ -28,6 +28,13 @@ interface CardsHeroProps {
   tractionBatteryStamp?: Omit<FactoryWarrantyBadgeProps, "variant"> & {
     scope: "traction-battery";
   };
+  powertrainStamp?: Omit<FactoryWarrantyBadgeProps, "variant"> & {
+    scope: "powertrain";
+    termYears: number;
+    sourceUrl: string;
+    sourceLabel: string;
+    sourceDescription: string;
+  };
   proofBadge?: string;
   price: string;
   previousPrice?: string;
@@ -64,6 +71,7 @@ export function CardsHero({
   mileageBadge,
   warrantyStamp,
   tractionBatteryStamp,
+  powertrainStamp,
   proofBadge,
   delay = 0,
   eagerImage = false,
@@ -114,9 +122,10 @@ export function CardsHero({
         />
       )}
 
-      {warrantyStamp && (
+      {(warrantyStamp || powertrainStamp) && (
         <div className={`pointer-events-none select-none absolute z-20 ${compact ? "right-0 top-12 w-[60px] md:right-1 md:top-16 md:w-[78px]" : "right-1 top-[5.75rem] w-[78px]"}`}>
-          <FactoryWarrantyBadge {...warrantyStamp} variant="card" />
+          {warrantyStamp && <FactoryWarrantyBadge {...warrantyStamp} variant="card" />}
+          {powertrainStamp && <FactoryWarrantyBadge {...powertrainStamp} variant="card" />}
         </div>
       )}
 
@@ -160,7 +169,7 @@ export function CardsHero({
               delay === 0 ? "high" : deferOffscreenPaint ? "low" : "auto"
             }
             decoding={delay === 0 ? "sync" : "async"}
-            className={`!border-0 w-full h-full object-contain transition-transform duration-700 ${warrantyStamp ? "" : "group-hover:scale-110 group-hover:-rotate-2"} drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] ${isSold ? "grayscale-[0.25]" : ""}`}
+            className={`!border-0 w-full h-full object-contain transition-transform duration-700 ${warrantyStamp || powertrainStamp ? "" : "group-hover:scale-110 group-hover:-rotate-2"} drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] ${isSold ? "grayscale-[0.25]" : ""}`}
           />
           {isSold && (
             <div
@@ -448,8 +457,13 @@ export function CardsHero({
             </>
           ) : null}
         </div>
-        {(warrantyStamp || tractionBatteryStamp) && (
+        {(warrantyStamp || tractionBatteryStamp || powertrainStamp) && (
           <div className="mt-3 w-full" data-factory-warranty-footer="card">
+            {powertrainStamp && (
+              <p className="mb-1 text-[10.5px] font-semibold leading-snug text-[#505A5F]" data-powertrain-label>
+                Motor e câmbio · {powertrainStamp.termYears} anos de fábrica
+              </p>
+            )}
             {tractionBatteryStamp && (
               <div className="mb-2 flex items-center justify-center gap-2">
                 <div className="w-[64px] shrink-0">
@@ -460,7 +474,7 @@ export function CardsHero({
                 </span>
               </div>
             )}
-            <FactoryWarrantyNote compact tractionBattery={!!tractionBatteryStamp} />
+            <FactoryWarrantyNote compact tractionBattery={!!tractionBatteryStamp} powertrain={powertrainStamp} />
           </div>
         )}
       </div>

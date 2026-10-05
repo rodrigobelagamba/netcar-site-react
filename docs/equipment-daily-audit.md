@@ -20,6 +20,7 @@ Na primeira execução, todos os carros entram como pendentes de conferência. N
 - Correção oficial divergente da origem: conferir a referência e corrigir o cadastro.
 - Garantia marcada sem registro compatível: manter a unidade visível no catálogo sem carimbo e encaminhar a pesquisa para revisão documental.
 - Garantia antes aprovada com identidade, FAB/MY, km, flag ou regra alterada: conferir a nova pendência. Um aumento de km ainda compatível pode reabrir a conferência sem retirar o carimbo; falta de dados, regressão ou teto atingido bloqueiam a cobertura.
+- Motor e câmbio: conferir o escopo próprio, prazo original, uso e fonte. Elegibilidade restrita não significa garantia geral; o relatório mantém os resultados separados.
 - Bateria de tração: conferir separadamente sua fonte, prazo, limite e elegibilidade. A aprovação de uma garantia geral não aprova automaticamente a bateria, nem a cobertura restrita passa a ser garantia geral.
 
 Para garantia, o parser reutilizado preserva os campos originais mínimos; ano

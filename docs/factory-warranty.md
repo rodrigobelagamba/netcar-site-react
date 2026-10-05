@@ -1,14 +1,15 @@
 # Carimbo de garantia de fábrica
 
 O visual escolhido é o circular A. A integração usa um único registro principal
-por unidade. A matriz schema2 contém sete registros principais revisados e
-oito pendentes, com `enabled: true`. As cinco unidades autorizadas em 03/10/2026
+por unidade. A matriz schema2 contém nove registros principais revisados e
+seis pendentes, com `enabled: true`. As cinco unidades autorizadas em 03/10/2026
 às 23:39:29 UTC foram preservadas. Em 05/10 foram incorporados somente BYD19924
 e Tracker20049, após a pesquisa resolver suas condições específicas. A revisão
 por unidade, fontes, consultas atuais por ID e hashes da origem estão em
 `docs/audits/factory-warranty-2026-10-03.json` e
 `docs/audits/factory-warranty-2026-10-05.json`. O BYD tem uma cobertura de bateria
-de tração revisada separadamente.
+de tração revisada separadamente. Os Tiggo8 20029/20041 têm apenas motor e
+câmbio aprovados, conforme `docs/audits/factory-warranty-tiggo-powertrain-2026-10-05.json`.
 
 | Unidade | Identidade exata da API | Ano estimado | Critério de exibição |
 | --- | --- | --- | --- |
@@ -20,6 +21,7 @@ de tração revisada separadamente.
 | 19924 | SONG PRO GS | 2030* | Geral 6 anos; uso não comercial confirmado; sem limite |
 | 19924 | SONG PRO GS — bateria de tração | 2032* | Cobertura separada de 8 anos; uso não comercial confirmado; condições e exclusões do manual |
 | 20049 | TRACKER LT TURBO | 2027* | Geral 3 anos; exceção R8C/R8Z excluída para a unidade; abaixo de 100.000 km |
+| 20029 / 20041 | TIGGO 8 MAX DRIVE TURBO — motor e câmbio | 2028* | Prazo original de 5 anos; uso não comercial atestado para ambas; sem limite de km |
 
 ## Regra de exibição
 
@@ -136,11 +138,34 @@ principal. A nota explica que a revenda não reinicia os prazos. A aprovação
 do Song Pro19924 não cria regra para todo BYD ou para baterias de outros tipos;
 o prazo não promete substituição gratuita irrestrita nem ausência de desgaste.
 
-Motor/câmbio, extensões e bateria genérica continuam sem selo produtivo.
-O proprietário aprovou a identificação legível de motor/câmbio junto ao selo
-Tiggo, mas o enquadramento não comercial das unidades ainda não foi confirmado.
-Essa cobertura restrita não vira garantia geral. O Tiggo7 já publicado mantém
-seu prazo geral de três anos; os Tiggo8 permanecem pendentes.
+### Motor e câmbio dos Tiggo8
+
+Os registros principais dos IDs20029/20041 têm escopo `powertrain`, prazo de
+cinco anos e uso particular confirmado individualmente em 05/10. O resolver
+`resolveFactoryPowertrainWarranty` exige uso particular explícito, sem política
+comum, e todos os gates de identidade, fontes, data, km, flag e fingerprint.
+O helper usa os mesmos dados originais do catálogo; não há prazo por marca.
+O fingerprint específico também vincula o subtipo motor/transmissão, a
+referência do ateste individual e o rótulo aprovado; os fingerprints gerais
+não mudam. A matriz mantém um único registro principal por ID; as duas
+pendências gerais ficam separadas na auditoria. Acrescentar outro principal
+do mesmo ID bloqueia todos os seus selos, mesmo com escopo diferente.
+A fonte é o manual B09999T8006, janeiro/2024, páginas10-3/10-4, aplicável ao
+Tiggo8 Max Drive brasileiro2023/2024. São 36 meses originais mais24 meses
+complementares de motor/transmissão, totalizando60 meses; não são cinco anos
+novos desde a revenda. A fonte e o ateste constam da auditoria versionada.
+
+Um único carimbo circular mostra **Motor e câmbio até2028***. A legenda HTML
+explicita os cinco anos de fábrica; a nota informa o prazo original, que a
+revenda não o reinicia e oferece o link do manual. O valor2028 é a estimativa
+FAB2023+5, sem inventar uma data efetiva. Em2028, a cobertura também exigirá
+vencimento real confirmado e ainda vigente.
+
+O resolver geral continua limitado a `basic-vehicle`: esses dois Tiggo não
+recebem selo geral. A regra geral de três anos/estimativa2026 permanece
+registrada na auditoria como inelegível sem vencimento efetivo comprovado.
+O Tiggo7, os outros seis selos gerais e a bateria BYD permanecem iguais.
+Extensões e bateria genérica continuam sem caminho de selo produtivo.
 
 ## Ano estimado e vigência
 

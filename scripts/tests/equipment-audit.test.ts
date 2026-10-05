@@ -39,6 +39,7 @@ import {
 import warrantyRegistry from "../../src/data/factoryWarrantyMatrix.json";
 import {
   resolveFactoryWarranty,
+  resolveFactoryPowertrainWarranty,
   type FactoryWarrantyMatrix,
 } from "../../src/lib/factoryWarranty";
 
@@ -52,9 +53,9 @@ const firstRunAt = "2026-09-28T18:00:00.000Z";
 const secondRunAt = "2026-09-29T18:00:00.000Z";
 const warrantyRunAt = "2026-10-05T12:00:00.000Z";
 
-function warrantyApiVehicle(): Record<string, unknown> {
+function warrantyApiVehicle(id = "20066"): Record<string, unknown> {
   const record = warrantyRegistry.records.find(
-    (item) => item.vehicle.vehicleId === "20066",
+    (item) => item.vehicle.vehicleId === id,
   );
   assert.ok(record);
   return {
@@ -651,6 +652,243 @@ test("eligible warranty findings agree with the real resolver and stable runs ke
   assert.equal(second.vehicles[0].reviewKey, row.reviewKey);
   assert.equal(second.counts.unchanged, 1);
   assert.equal(JSON.stringify(parsed), before);
+});
+
+test("the two Tiggo records are eligible only for motor and transmission without false general alerts", () => {
+  const raw = [warrantyApiVehicle("20029"), warrantyApiVehicle("20041")];
+  const parsed = parseStockResponse(apiResponse(raw));
+  const before = JSON.stringify(warrantyRegistry);
+  const report = buildEquipmentAudit(parsed, null, warrantyRunAt);
+  for (const item of raw) {
+    const catalogVehicle = {
+      id: String(item.id),
+      marca: item.marca,
+      modelo: item.modelo,
+      anoFabricacao: item.ano_fabricacao,
+      year: item.ano,
+      km: item.km,
+      price: item.valor,
+      diferenciais: item.diferenciais,
+    } as Parameters<typeof resolveFactoryWarranty>[0];
+    assert.equal(
+      resolveFactoryWarranty(
+        catalogVehicle,
+        warrantyRegistry as FactoryWarrantyMatrix,
+        warrantyRunAt.slice(0, 10),
+      ),
+      undefined,
+    );
+    assert.equal(
+      resolveFactoryPowertrainWarranty(
+        catalogVehicle,
+        warrantyRegistry as FactoryWarrantyMatrix,
+        warrantyRunAt.slice(0, 10),
+      )?.scope,
+      "powertrain",
+    );
+    const row = report.vehicles.find((vehicle) => vehicle.id === item.id)!;
+    assert.equal(
+      row.warranty?.status,
+      "blocked",
+      "general coverage must stay ineligible",
+    );
+    assert.equal(row.warranty?.powertrain?.status, "eligible");
+    assert.equal(row.warranty?.powertrain?.scope, "powertrain");
+    assert.equal(row.warranty?.powertrain?.estimatedEndYear, 2028);
+    assert.ok(
+      row.findings.some(
+        (finding) =>
+          finding.code === "factory-warranty-general-out-of-scope" &&
+          finding.severity === "info",
+      ),
+    );
+    const scoped = row.findings.find(
+      (finding) => finding.code === "factory-warranty-powertrain-eligible",
+    );
+    assert.equal(scoped?.severity, "info");
+    assert.match(
+      scoped?.message || "",
+      /motor e câmbio.*2028.*não é garantia geral/,
+    );
+    assert.ok(
+      !row.findings.some((finding) =>
+        ["factory-warranty-eligible", "factory-warranty-blocked"].includes(
+          finding.code,
+        ),
+      ),
+    );
+  }
+  assert.equal(report.counts.withAlerts, 0);
+  assert.equal(
+    buildEquipmentAudit(parsed, report, "2026-10-06T12:00:00.000Z").counts
+      .unchanged,
+    2,
+  );
+  assert.equal(JSON.stringify(warrantyRegistry), before);
+});
+
+test("Tiggo scope gates block removed flags, stale identity and mileage without reopening unrelated units", () => {
+  const ids = ["20029", "20041"];
+  const raw = ids.map(warrantyApiVehicle);
+  const first = buildEquipmentAudit(
+    parseStockResponse(apiResponse(raw)),
+    null,
+    warrantyRunAt,
+  );
+  for (const id of ids) {
+    const original = raw.find((item) => item.id === id)!;
+    for (const changes of [
+      { diferenciais: [] },
+      { diferenciais: undefined },
+      { marca: "OTHER" },
+      { modelo: `${original.modelo} PLUS` },
+      { ano_fabricacao: 2022 },
+      { ano: 2025 },
+      { km: Number(original.km) - 1 },
+      { km: undefined },
+    ]) {
+      const changed = raw.map((item) =>
+        item.id === id ? { ...item, ...changes } : item,
+      );
+      const parsed = parseStockResponse(apiResponse(changed));
+      const report = buildEquipmentAudit(parsed, first, warrantyRunAt);
+      const row = report.vehicles.find((item) => item.id === id)!;
+      assert.equal(
+        row.warranty?.powertrain?.status,
+        "blocked",
+        `${id} ${JSON.stringify(changes)}`,
+      );
+      assert.equal(row.warranty?.status, "blocked");
+      assert.ok(
+        row.findings.some(
+          (finding) =>
+            finding.code === "factory-warranty-powertrain-blocked" &&
+            finding.severity === "high",
+        ),
+      );
+      assert.equal(report.counts.changed, 1);
+      assert.equal(report.counts.unchanged, 1);
+      assert.equal(report.counts.withAlerts, 1);
+      assert.equal(
+        buildEquipmentAudit(parsed, report, warrantyRunAt).counts.unchanged,
+        2,
+      );
+    }
+    const moreKm = raw.map((item) =>
+      item.id === id ? { ...item, km: 500000 } : item,
+    );
+    const increased = buildEquipmentAudit(
+      parseStockResponse(apiResponse(moreKm)),
+      first,
+      warrantyRunAt,
+    );
+    assert.equal(
+      increased.vehicles.find((item) => item.id === id)?.warranty?.powertrain
+        ?.status,
+      "eligible",
+      "confirmed unlimited mileage has no invented ceiling",
+    );
+    assert.equal(increased.counts.changed, 1);
+  }
+  const expired = buildEquipmentAudit(
+    parseStockResponse(apiResponse(raw)),
+    first,
+    "2028-01-01T12:00:00.000Z",
+  );
+  assert.equal(expired.counts.changed, 2);
+  assert.equal(expired.counts.withAlerts, 2);
+  assert.ok(
+    expired.vehicles.every(
+      (row) => row.warranty?.powertrain?.status === "blocked",
+    ),
+  );
+});
+
+test("powertrain source changes and conflicting records remain blocked and reopen only their unit", () => {
+  const parsed = parseStockResponse(
+    apiResponse([
+      warrantyApiVehicle("20029"),
+      warrantyApiVehicle("20041"),
+      warrantyApiVehicle("20066"),
+    ]),
+  );
+  const first = buildEquipmentAudit(parsed, null, warrantyRunAt);
+  for (const id of ["20029", "20041"]) {
+    for (const change of [
+      "source",
+      "revoked",
+      "duplicate",
+      "conflicting-scope",
+    ]) {
+      const matrix = structuredClone(warrantyRegistry) as FactoryWarrantyMatrix;
+      const record = matrix.records.find(
+        (entry) => entry.vehicle.vehicleId === id,
+      )!;
+      if (change === "source")
+        record.sources[0].verification.status = "pending";
+      if (change === "revoked") record.status = "revoked";
+      if (change === "duplicate") matrix.records.push(structuredClone(record));
+      if (change === "conflicting-scope")
+        matrix.records.push({
+          ...structuredClone(record),
+          scope: "basic-vehicle",
+        });
+      const report = buildEquipmentAudit(parsed, first, warrantyRunAt, matrix);
+      const row = report.vehicles.find((entry) => entry.id === id)!;
+      assert.equal(
+        row.warranty?.powertrain?.status,
+        "blocked",
+        `${id} ${change}`,
+      );
+      assert.equal(row.warranty?.status, "blocked");
+      assert.ok(
+        row.findings.some(
+          (finding) =>
+            finding.code === "factory-warranty-powertrain-blocked" &&
+            finding.severity === "high",
+        ),
+      );
+      assert.equal(report.counts.changed, 1);
+      assert.equal(report.counts.unchanged, 2);
+      assert.equal(report.counts.withAlerts, 1);
+    }
+  }
+});
+
+test("the registry audit keeps seven general coverages, two powertrain coverages and the BYD battery separate", () => {
+  const report = buildEquipmentAudit(
+    parseStockResponse(
+      apiResponse(
+        warrantyRegistry.records.map((record) =>
+          warrantyApiVehicle(record.vehicle.vehicleId),
+        ),
+      ),
+    ),
+    null,
+    warrantyRunAt,
+  );
+  assert.equal(
+    report.vehicles.filter((row) => row.warranty?.status === "eligible").length,
+    7,
+  );
+  assert.equal(
+    report.vehicles.filter(
+      (row) => row.warranty?.powertrain?.status === "eligible",
+    ).length,
+    2,
+  );
+  assert.equal(
+    report.vehicles.filter(
+      (row) => row.warranty?.supplemental?.status === "eligible",
+    ).length,
+    1,
+  );
+  assert.equal(
+    report.vehicles.find((row) => row.id === "19924")?.warranty?.supplemental
+      ?.scope,
+    "traction-battery",
+  );
+  assert.equal(report.counts.withAlerts, 6);
 });
 
 test("warranty identity, FAB, MY, mileage and flag changes reopen only the candidate", () => {

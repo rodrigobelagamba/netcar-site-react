@@ -33,6 +33,7 @@ import { mapVehicleOptional } from "../src/catalog/lib/mapVehicleOptional";
 import warrantyRegistry from "../src/data/factoryWarrantyMatrix.json";
 import {
   resolveFactoryWarranty,
+  resolveFactoryPowertrainWarranty,
   resolveFactoryTractionBatteryWarranty,
   type FactoryWarrantyMatrix,
 } from "../src/lib/factoryWarranty";
@@ -68,6 +69,7 @@ export interface EquipmentAuditInput extends EquipmentVehicle {
 }
 
 export interface EquipmentWarrantyAudit {
+  /** General vehicle coverage only; an approved scoped record is not enough. */
   status: "eligible" | "pending" | "blocked";
   manufactureYear: number | null;
   modelYear: number | null;
@@ -75,6 +77,12 @@ export interface EquipmentWarrantyAudit {
   flagPresent: boolean | null;
   recordIds: string[];
   rulesFingerprint: string;
+  powertrain?: {
+    scope: "powertrain";
+    status: "eligible" | "pending" | "blocked";
+    recordIds: string[];
+    estimatedEndYear?: number;
+  };
   supplemental?: {
     scope: "traction-battery";
     status: "eligible" | "pending" | "blocked";
@@ -328,6 +336,9 @@ export function buildEquipmentAudit(
     const warrantyRecords = (
       Array.isArray(warrantyMatrix.records) ? warrantyMatrix.records : []
     ).filter((record) => record?.vehicle?.vehicleId === id);
+    const powertrainRecords = warrantyRecords.filter(
+      (record) => record.scope === "powertrain",
+    );
     const supplementalRecords = warrantyRecords.flatMap(
       (record) => record.supplementalCoverages ?? [],
     );
@@ -380,6 +391,26 @@ export function buildEquipmentAudit(
           resolver: warrantyResolver,
         }),
       };
+      if (powertrainRecords.length) {
+        const powertrainStamp = resolveFactoryPowertrainWarranty(
+          warrantyVehicle,
+          warrantyMatrix,
+          now.slice(0, 10),
+        );
+        warranty.powertrain = {
+          scope: "powertrain",
+          status: powertrainStamp
+            ? "eligible"
+            : powertrainRecords.length === 1 &&
+                powertrainRecords[0].status === "pending"
+              ? "pending"
+              : "blocked",
+          recordIds: powertrainRecords.map((record) => record.recordId).sort(),
+          ...(powertrainStamp
+            ? { estimatedEndYear: powertrainStamp.estimatedEndYear }
+            : {}),
+        };
+      }
       if (supplementalRecords.length) {
         const supplementalStamp = resolveFactoryTractionBatteryWarranty(
           warrantyVehicle,
@@ -431,17 +462,36 @@ export function buildEquipmentAudit(
       const context = `FAB ${warranty.manufactureYear ?? "não informado"}; ano-modelo ${warranty.modelYear ?? "não informado"}; km ${warranty.mileageKm ?? "não informado"}; tag garantia_fabrica ${warranty.flagPresent === null ? "não informada" : warranty.flagPresent ? "presente" : "ausente"}.`;
       const boundary =
         "Revisar equipamentos não aprova garantia nem altera a matriz. A confirmação do opcional 108 e a revisão documental da unidade continuam necessárias.";
-      add(
-        `factory-warranty-${warranty.status}`,
-        warranty.status === "eligible"
-          ? "info"
-          : warranty.status === "pending"
-            ? "medium"
-            : "high",
-        warranty.status === "eligible"
-          ? `Garantia de fábrica: o resolver aceita o registro atual para exibir o carimbo estimado. ${context} ${boundary}`
-          : `Garantia de fábrica ${warranty.status === "pending" ? "pendente de revisão" : "bloqueada pelo resolver"}: sem carimbo. ${!warrantyRecords.length ? "Não há registro específico desta unidade. " : "Conferir identidade, dados atuais, vigência, condições e fontes do registro. "}${context} ${boundary}`,
-      );
+      if (warrantyRecords.length === 1 && warranty.powertrain) {
+        add(
+          "factory-warranty-general-out-of-scope",
+          "info",
+          `Este registro trata somente de motor e câmbio e não comprova garantia geral do veículo. ${context} ${boundary}`,
+        );
+      } else
+        add(
+          `factory-warranty-${warranty.status}`,
+          warranty.status === "eligible"
+            ? "info"
+            : warranty.status === "pending"
+              ? "medium"
+              : "high",
+          warranty.status === "eligible"
+            ? `Garantia de fábrica: o resolver aceita o registro atual para exibir o carimbo estimado. ${context} ${boundary}`
+            : `Garantia de fábrica ${warranty.status === "pending" ? "pendente de revisão" : "bloqueada pelo resolver"}: sem carimbo. ${!warrantyRecords.length ? "Não há registro específico desta unidade. " : "Conferir identidade, dados atuais, vigência, condições e fontes do registro. "}${context} ${boundary}`,
+        );
+      if (warranty.powertrain) {
+        const powertrain = warranty.powertrain;
+        add(
+          `factory-warranty-powertrain-${powertrain.status}`,
+          powertrain.status === "eligible"
+            ? "info"
+            : powertrain.status === "pending"
+              ? "medium"
+              : "high",
+          `Garantia específica de motor e câmbio ${powertrain.status === "eligible" ? `aceita pelo resolver, com vigência estimada até ${powertrain.estimatedEndYear}` : powertrain.status === "pending" ? "pendente de revisão: sem carimbo específico" : "bloqueada pelo resolver: sem carimbo específico"}. Esta cobertura não é garantia geral do veículo. ${context} ${boundary}`,
+        );
+      }
       if (warranty.supplemental) {
         const supplemental = warranty.supplemental;
         add(
