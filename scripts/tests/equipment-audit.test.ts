@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { spawn, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import {
@@ -36,6 +36,11 @@ import {
   unitEquipmentConfirmations,
   type EquipmentVehicle,
 } from "../../src/lib/vehicleEquipment";
+import warrantyRegistry from "../../src/data/factoryWarrantyMatrix.json";
+import {
+  resolveFactoryWarranty,
+  type FactoryWarrantyMatrix,
+} from "../../src/lib/factoryWarranty";
 
 const fixture: { vehicles: EquipmentVehicle[] } = JSON.parse(
   readFileSync(
@@ -45,6 +50,29 @@ const fixture: { vehicles: EquipmentVehicle[] } = JSON.parse(
 );
 const firstRunAt = "2026-09-28T18:00:00.000Z";
 const secondRunAt = "2026-09-29T18:00:00.000Z";
+const warrantyRunAt = "2026-10-05T12:00:00.000Z";
+
+function warrantyApiVehicle(): Record<string, unknown> {
+  const record = warrantyRegistry.records.find(
+    (item) => item.vehicle.vehicleId === "20066",
+  );
+  assert.ok(record);
+  return {
+    id: record.vehicle.vehicleId,
+    marca: record.vehicle.brand,
+    modelo: record.vehicle.modelVersion,
+    ano_fabricacao: record.vehicle.manufactureYear,
+    ano: record.vehicle.modelYear,
+    km: record.reviewedMileageKm,
+    valor: 100000,
+    motor: "1.6",
+    cambio: "AUTOMÁTICO",
+    opcionais: [],
+    diferenciais: [
+      { tag: "garantia_fabrica", descricao: "Garantia de fábrica" },
+    ],
+  };
+}
 
 function stockVehicle(id: string): EquipmentVehicle {
   const vehicle = fixture.vehicles.find((item) => String(item.id) === id);
@@ -130,16 +158,23 @@ test("the auditor gives dual-stack connection attempts 2s without reducing an ex
 
 test("importing the auditor leaves the hosting process network policy unchanged", () => {
   const script = new URL("../audit-vehicle-equipment.ts", import.meta.url).href;
-  const result = spawnSync(process.execPath, [
-    "--import", "tsx", "--input-type=module", "-e",
-    `import assert from 'node:assert/strict';
+  const result = spawnSync(
+    process.execPath,
+    [
+      "--import",
+      "tsx",
+      "--input-type=module",
+      "-e",
+      `import assert from 'node:assert/strict';
      import net from 'node:net';
      net.setDefaultAutoSelectFamilyAttemptTimeout(250);
      const family = net.getDefaultAutoSelectFamily();
      await import(${JSON.stringify(script)});
      assert.equal(net.getDefaultAutoSelectFamilyAttemptTimeout(), 250);
      assert.equal(net.getDefaultAutoSelectFamily(), family);`,
-  ], { encoding: "utf8", timeout: 10_000 });
+    ],
+    { encoding: "utf8", timeout: 10_000 },
+  );
   assert.equal(result.status, 0, result.stderr);
 });
 
@@ -160,14 +195,25 @@ test("the CLI applies the connection policy before fetching while preserving req
         assert.equal(process.env.NODE_TLS_REJECT_UNAUTHORIZED, tlsVerification);
         return Response.json(${JSON.stringify(apiResponse([apiVehicle()]))});
       };`;
-    const result = spawnSync(process.execPath, [
-      "--import", "tsx",
-      "--import", `data:text/javascript,${encodeURIComponent(preload)}`,
-      fileURLToPath(new URL("../audit-vehicle-equipment.ts", import.meta.url)),
-      "--state-dir", stateDir,
-    ], { encoding: "utf8", timeout: 10_000 });
+    const result = spawnSync(
+      process.execPath,
+      [
+        "--import",
+        "tsx",
+        "--import",
+        `data:text/javascript,${encodeURIComponent(preload)}`,
+        fileURLToPath(
+          new URL("../audit-vehicle-equipment.ts", import.meta.url),
+        ),
+        "--state-dir",
+        stateDir,
+      ],
+      { encoding: "utf8", timeout: 10_000 },
+    );
     assert.equal(result.status, 0, result.stderr);
-    const report = JSON.parse(readFileSync(join(stateDir, "report.json"), "utf8"));
+    const report = JSON.parse(
+      readFileSync(join(stateDir, "report.json"), "utf8"),
+    );
     assert.equal(report.counts.vehicles, 1);
   });
 });
@@ -417,6 +463,431 @@ test("the API parser filters sold vehicles after validating a complete response"
   assert.throws(() => parseStockResponse(apiResponse([sold])));
 });
 
+test("warranty source fields use a separate allowlisted snapshot without inventing missing data", () => {
+  const raw = {
+    ...warrantyApiVehicle(),
+    placa: "PRIVATE_PLATE_SENTINEL",
+    vin: "PRIVATE_VIN_SENTINEL",
+    diferenciais: [
+      {
+        tag: "garantia_fabrica",
+        descricao: "Garantia de fábrica",
+        placa: "PRIVATE_NESTED_SENTINEL",
+        payload: { token: "PRIVATE_TOKEN_SENTINEL" },
+      },
+    ],
+  };
+  const original = JSON.stringify(raw);
+  const [vehicle] = parseStockResponse(apiResponse([raw]));
+  assert.deepEqual(vehicle.warrantySnapshot, {
+    manufactureYear: 2024,
+    modelYear: 2025,
+    mileageKm: 36000,
+    price: 100000,
+    diferenciais: [
+      { tag: "garantia_fabrica", descricao: "Garantia de fábrica" },
+    ],
+  });
+  assert.equal(JSON.stringify(raw), original);
+  const report = buildEquipmentAudit([vehicle], null, warrantyRunAt);
+  for (const result of [vehicle, report])
+    assert.ok(!JSON.stringify(result).includes("PRIVATE_"));
+  assert.ok(!JSON.stringify(report).includes("warrantySnapshot"));
+
+  for (const missing of [undefined, null, "", " ", false, "invalid"]) {
+    const [parsed] = parseStockResponse(
+      apiResponse([
+        {
+          ...warrantyApiVehicle(),
+          ano_fabricacao: missing,
+          ano: missing,
+          km: missing,
+        },
+      ]),
+    );
+    assert.equal(parsed.warrantySnapshot?.manufactureYear, null);
+    assert.equal(parsed.warrantySnapshot?.modelYear, null);
+    assert.equal(parsed.warrantySnapshot?.mileageKm, null);
+    assert.equal(
+      buildEquipmentAudit([parsed], null, warrantyRunAt).vehicles[0].warranty
+        ?.status,
+      "blocked",
+    );
+  }
+});
+
+test("warranty audit preserves the public gate's rejection of coerced numbers and normalized tags", () => {
+  for (const change of [
+    { ano_fabricacao: "2024" },
+    { ano: "2025" },
+    { km: "36000" },
+    { valor: "100000" },
+    {
+      diferenciais: [
+        { tag: " garantia_fabrica ", descricao: "Garantia de fábrica" },
+      ],
+    },
+  ]) {
+    const raw: Record<string, unknown> = { ...warrantyApiVehicle(), ...change };
+    // Match the public adapter's pass-through values, without Number()/trim().
+    const publicVehicle = {
+      id: String(raw.id),
+      marca: raw.marca,
+      modelo: raw.modelo,
+      anoFabricacao: raw.ano_fabricacao,
+      year: raw.ano,
+      km: raw.km,
+      price: raw.valor,
+      diferenciais: raw.diferenciais,
+    } as unknown as Parameters<typeof resolveFactoryWarranty>[0];
+    assert.equal(
+      resolveFactoryWarranty(
+        publicVehicle,
+        warrantyRegistry as FactoryWarrantyMatrix,
+        warrantyRunAt.slice(0, 10),
+      ),
+      undefined,
+    );
+    const row = buildEquipmentAudit(
+      parseStockResponse(apiResponse([raw])),
+      null,
+      warrantyRunAt,
+    ).vehicles[0];
+    assert.equal(row.warranty?.status, "blocked", JSON.stringify(change));
+  }
+});
+
+test("a newly flagged ID without its own warranty record stays pending and never inherits approval", () => {
+  const before = JSON.stringify(warrantyRegistry);
+  const parsed = parseStockResponse(
+    apiResponse([
+      {
+        ...warrantyApiVehicle(),
+        id: "99999",
+      },
+    ]),
+  );
+  const report = buildEquipmentAudit(parsed, null, warrantyRunAt);
+  const row = report.vehicles[0];
+  assert.equal(row.warranty?.status, "pending");
+  assert.deepEqual(row.warranty?.recordIds, []);
+  const finding = row.findings.find(
+    (item) => item.code === "factory-warranty-pending",
+  );
+  assert.ok(finding);
+  assert.equal(finding.severity, "medium");
+  assert.match(finding.message, /sem carimbo.*Não há registro específico/);
+  assert.match(
+    finding.message,
+    /Revisar equipamentos não aprova garantia nem altera a matriz/,
+  );
+  assert.match(finding.message, /opcional 108.*revisão documental/);
+  assert.equal(JSON.stringify(warrantyRegistry), before);
+});
+
+test("an omitted warranty flag keeps a previous new-unit pending finding until the source is explicit", () => {
+  const raw = { ...warrantyApiVehicle(), id: "99999" };
+  const first = buildEquipmentAudit(
+    parseStockResponse(apiResponse([raw])),
+    null,
+    warrantyRunAt,
+  );
+  for (const diferenciais of [undefined, null]) {
+    const parsed = parseStockResponse(apiResponse([{ ...raw, diferenciais }]));
+    const unknown = buildEquipmentAudit(parsed, first, warrantyRunAt);
+    assert.equal(unknown.vehicles[0].warranty?.status, "pending");
+    assert.equal(unknown.vehicles[0].warranty?.flagPresent, null);
+    assert.ok(
+      unknown.vehicles[0].findings.some(
+        (item) => item.code === "factory-warranty-pending",
+      ),
+    );
+    assert.equal(unknown.counts.changed, 1);
+    assert.equal(
+      buildEquipmentAudit(parsed, unknown, warrantyRunAt).counts.unchanged,
+      1,
+    );
+  }
+  const absent = buildEquipmentAudit(
+    parseStockResponse(apiResponse([{ ...raw, diferenciais: [] }])),
+    first,
+    warrantyRunAt,
+  );
+  assert.equal(absent.vehicles[0].warranty, undefined);
+});
+
+test("eligible warranty findings agree with the real resolver and stable runs keep their key", () => {
+  const raw = warrantyApiVehicle();
+  const parsed = parseStockResponse(apiResponse([raw]));
+  assert.ok(
+    resolveFactoryWarranty(
+      {
+        id: String(raw.id),
+        marca: String(raw.marca),
+        modelo: String(raw.modelo),
+        anoFabricacao: Number(raw.ano_fabricacao),
+        year: Number(raw.ano),
+        km: Number(raw.km),
+        price: Number(raw.valor),
+        diferenciais: [
+          { tag: "garantia_fabrica", descricao: "Garantia de fábrica" },
+        ],
+      },
+      warrantyRegistry as FactoryWarrantyMatrix,
+      warrantyRunAt.slice(0, 10),
+    ),
+  );
+  const before = JSON.stringify(parsed);
+  const first = buildEquipmentAudit(parsed, null, warrantyRunAt);
+  const row = first.vehicles[0];
+  assert.equal(row.warranty?.status, "eligible");
+  assert.ok(
+    row.findings.some(
+      (item) =>
+        item.code === "factory-warranty-eligible" && item.severity === "info",
+    ),
+  );
+  const second = buildEquipmentAudit(parsed, first, "2026-10-06T12:00:00.000Z");
+  assert.equal(second.vehicles[0].reviewKey, row.reviewKey);
+  assert.equal(second.counts.unchanged, 1);
+  assert.equal(JSON.stringify(parsed), before);
+});
+
+test("warranty identity, FAB, MY, mileage and flag changes reopen only the candidate", () => {
+  const raw = warrantyApiVehicle();
+  const ordinary = { ...apiVehicle(), id: "99998", diferenciais: [] };
+  const first = buildEquipmentAudit(
+    parseStockResponse(apiResponse([raw, ordinary])),
+    null,
+    warrantyRunAt,
+  );
+  for (const change of [
+    { marca: "OTHER" },
+    { modelo: `${raw.modelo} PLUS` },
+    { ano_fabricacao: 2023 },
+    { ano: 2026 },
+    { km: 36001 },
+    { km: 100000 },
+    { diferenciais: [] },
+  ]) {
+    const parsed = parseStockResponse(
+      apiResponse([{ ...raw, ...change }, ordinary]),
+    );
+    const next = buildEquipmentAudit(parsed, first, warrantyRunAt);
+    assert.equal(next.counts.changed, 1, JSON.stringify(change));
+    assert.equal(next.counts.unchanged, 1);
+    assert.notEqual(next.vehicles[0].reviewKey, first.vehicles[0].reviewKey);
+    assert.equal(next.vehicles[1].reviewKey, first.vehicles[1].reviewKey);
+    assert.equal(
+      next.vehicles[0].warranty?.status,
+      "km" in change && change.km === 36001 ? "eligible" : "blocked",
+    );
+    const repeated = buildEquipmentAudit(parsed, next, warrantyRunAt);
+    assert.equal(repeated.counts.unchanged, 2);
+  }
+});
+
+test("missing source fields and expired warranty fail conservatively without withdrawing their review finding", () => {
+  const raw = warrantyApiVehicle();
+  const previous = buildEquipmentAudit(
+    parseStockResponse(apiResponse([raw])),
+    null,
+    warrantyRunAt,
+  );
+  for (const key of ["ano_fabricacao", "ano", "km", "diferenciais"] as const) {
+    const incomplete = { ...raw };
+    delete incomplete[key];
+    const report = buildEquipmentAudit(
+      parseStockResponse(apiResponse([incomplete])),
+      previous,
+      warrantyRunAt,
+    );
+    assert.equal(report.vehicles[0].warranty?.status, "blocked", key);
+    assert.equal(report.counts.changed, 1);
+    assert.ok(
+      report.vehicles[0].findings.some(
+        (item) => item.code === "factory-warranty-blocked",
+      ),
+    );
+  }
+  for (const value of [undefined, null, "", false])
+    assert.throws(() =>
+      parseStockResponse(apiResponse([{ ...raw, valor: value }])),
+    );
+  const expired = buildEquipmentAudit(
+    parseStockResponse(apiResponse([raw])),
+    previous,
+    "2027-01-01T12:00:00.000Z",
+  );
+  assert.equal(expired.vehicles[0].warranty?.status, "blocked");
+  assert.equal(expired.counts.changed, 1);
+});
+
+test("relevant warranty rules reopen review while unrelated records and array ordering do not", () => {
+  const parsed = parseStockResponse(apiResponse([warrantyApiVehicle()]));
+  const first = buildEquipmentAudit(parsed, null, warrantyRunAt);
+  for (const mutation of [
+    "disabled",
+    "source",
+    "status",
+    "duplicate",
+  ] as const) {
+    const matrix = structuredClone(warrantyRegistry) as FactoryWarrantyMatrix;
+    const record = matrix.records.find(
+      (item) => item.vehicle.vehicleId === "20066",
+    )!;
+    if (mutation === "disabled") matrix.enabled = false;
+    if (mutation === "source") record.sources[0].revision += " altered";
+    if (mutation === "status") record.status = "revoked";
+    if (mutation === "duplicate") matrix.records.push(structuredClone(record));
+    const next = buildEquipmentAudit(parsed, first, warrantyRunAt, matrix);
+    assert.equal(next.counts.changed, 1, mutation);
+    assert.equal(next.vehicles[0].warranty?.status, "blocked", mutation);
+    assert.equal(
+      buildEquipmentAudit(parsed, next, warrantyRunAt, matrix).counts.unchanged,
+      1,
+    );
+  }
+  const unrelated = structuredClone(warrantyRegistry) as FactoryWarrantyMatrix;
+  unrelated.records.find((item) => item.vehicle.vehicleId !== "20066")!.status =
+    "revoked";
+  unrelated.records.reverse();
+  assert.equal(
+    buildEquipmentAudit(parsed, first, warrantyRunAt, unrelated).counts
+      .unchanged,
+    1,
+  );
+});
+
+test("supplemental traction battery review is explicit and never expands the general warranty", () => {
+  const parsed = parseStockResponse(
+    apiResponse([
+      warrantyApiVehicle(),
+      { ...apiVehicle(), id: "99998", diferenciais: [] },
+    ]),
+  );
+  const first = buildEquipmentAudit(parsed, null, warrantyRunAt);
+  const matrix = structuredClone(warrantyRegistry) as FactoryWarrantyMatrix;
+  const primary = matrix.records.find(
+    (record) => record.vehicle.vehicleId === "20066",
+  )!;
+  // Synthetic pending evidence only: this test never creates an approval.
+  primary.supplementalCoverages = [
+    {
+      recordId: "test-only-traction-battery",
+      status: "pending",
+      reviewedAt: "2026-10-05",
+      approvedFingerprint: "",
+      scope: "traction-battery",
+      conditionsConfirmed: false,
+      termYears: 8,
+      usage: "private",
+      reviewedMileageKm: 36000,
+      mileage: { kind: "unlimited" },
+      sources: [],
+    },
+  ];
+  const before = JSON.stringify(matrix);
+  const pending = buildEquipmentAudit(parsed, first, warrantyRunAt, matrix);
+  const row = pending.vehicles[0];
+  assert.equal(pending.counts.changed, 1);
+  assert.equal(pending.counts.unchanged, 1);
+  assert.equal(row.warranty?.status, "eligible");
+  assert.equal(row.warranty?.supplemental?.scope, "traction-battery");
+  assert.equal(row.warranty?.supplemental?.status, "pending");
+  assert.deepEqual(row.warranty?.supplemental?.recordIds, [
+    "test-only-traction-battery",
+  ]);
+  const finding = row.findings.find(
+    (item) => item.code === "factory-warranty-traction-battery-pending",
+  );
+  assert.ok(finding);
+  assert.match(finding.message, /bateria de tração.*sem carimbo específico/);
+  assert.match(finding.message, /não amplia a garantia geral/);
+  assert.equal(JSON.stringify(matrix), before);
+  assert.equal(
+    buildEquipmentAudit(parsed, pending, warrantyRunAt, matrix).counts
+      .unchanged,
+    2,
+  );
+
+  primary.supplementalCoverages[0].termYears = 7;
+  const altered = buildEquipmentAudit(parsed, pending, warrantyRunAt, matrix);
+  assert.equal(altered.counts.changed, 1);
+  assert.equal(altered.vehicles[0].warranty?.status, "eligible");
+  primary.supplementalCoverages[0].status = "revoked";
+  const blocked = buildEquipmentAudit(parsed, altered, warrantyRunAt, matrix);
+  assert.equal(blocked.counts.changed, 1);
+  assert.equal(blocked.vehicles[0].warranty?.supplemental?.status, "blocked");
+  assert.equal(blocked.vehicles[0].warranty?.status, "eligible");
+  assert.equal(blocked.vehicles[1].reviewKey, first.vehicles[1].reviewKey);
+});
+
+test("positive price, photos and unrelated differential order do not reopen warranty review", () => {
+  const raw = warrantyApiVehicle();
+  const first = buildEquipmentAudit(
+    parseStockResponse(apiResponse([raw])),
+    null,
+    warrantyRunAt,
+  );
+  const changed = {
+    ...raw,
+    valor: 150000,
+    fotos: ["photo-two", "photo-one"],
+    diferenciais: [
+      { tag: "revisado", descricao: "Revisado" },
+      { tag: "garantia_fabrica", descricao: "Descrição atualizada" },
+    ],
+  };
+  assert.equal(
+    buildEquipmentAudit(
+      parseStockResponse(apiResponse([changed])),
+      first,
+      warrantyRunAt,
+    ).counts.unchanged,
+    1,
+  );
+});
+
+test("units without a warranty flag or record preserve the exact legacy review key", () => {
+  const raw = { ...warrantyApiVehicle(), id: "99998", diferenciais: [] };
+  const parsed = parseStockResponse(apiResponse([raw]));
+  const report = buildEquipmentAudit(parsed, null, warrantyRunAt);
+  const row = report.vehicles[0];
+  const legacyKey = createHash("sha256")
+    .update(
+      JSON.stringify({
+        catalogFingerprint: report.catalogFingerprint,
+        identity: {
+          id: row.id,
+          brand: row.brand,
+          model: row.model,
+          modelYear: row.modelYear,
+          engine: row.engine,
+          transmission: row.transmission,
+        },
+        seats: parsed[0].lugares ?? "",
+        options: [],
+      }),
+    )
+    .digest("hex");
+  assert.equal(row.reviewKey, legacyKey);
+  assert.equal(row.warranty, undefined);
+  assert.ok(
+    !row.findings.some((item) => item.code.startsWith("factory-warranty-")),
+  );
+  const matrix = structuredClone(warrantyRegistry) as FactoryWarrantyMatrix;
+  matrix.enabled = false;
+  const changed = parseStockResponse(
+    apiResponse([{ ...raw, ano_fabricacao: 2023, km: 999999, valor: 200000 }]),
+  );
+  assert.equal(
+    buildEquipmentAudit(changed, report, warrantyRunAt, matrix).vehicles[0]
+      .reviewKey,
+    legacyKey,
+  );
+});
+
 test("partial or failed API responses cannot become a successful stock snapshot", () => {
   const data = [apiVehicle()];
   for (const response of [
@@ -520,6 +991,32 @@ test("failed and partial stock loads preserve the last valid report byte for byt
       async () => [],
     ];
     for (const loadStock of invalidLoads) {
+      await assert.rejects(runEquipmentAudit({ stateDir, loadStock }));
+      assert.equal(readFileSync(reportPath, "utf8"), previous);
+      assert.deepEqual(readdirSync(stateDir), ["report.json"]);
+    }
+  });
+});
+
+test("failed warranty source loads preserve the last valid pending report byte for byte", async () => {
+  await withStateDirectory(async (stateDir) => {
+    const pending = { ...warrantyApiVehicle(), id: "99999" };
+    const first = await runEquipmentAudit({
+      stateDir,
+      loadStock: async () => parseStockResponse(apiResponse([pending])),
+    });
+    assert.equal(first.vehicles[0].warranty?.status, "pending");
+    const reportPath = join(stateDir, "report.json");
+    const previous = readFileSync(reportPath, "utf8");
+    for (const loadStock of [
+      async () => {
+        throw new Error("Controlled API failure");
+      },
+      async () =>
+        parseStockResponse(apiResponse([{ ...pending, valor: undefined }])),
+      async () =>
+        parseStockResponse(apiResponse([{ ...pending, diferenciais: [null] }])),
+    ]) {
       await assert.rejects(runEquipmentAudit({ stateDir, loadStock }));
       assert.equal(readFileSync(reportPath, "utf8"), previous);
       assert.deepEqual(readdirSync(stateDir), ["report.json"]);

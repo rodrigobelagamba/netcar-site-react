@@ -1,11 +1,14 @@
 # Carimbo de garantia de fábrica
 
 O visual escolhido é o circular A. A integração usa um único registro principal
-por unidade. A matriz schema2 contém cinco registros de conteúdo revisados e
-dez pendentes, com `enabled: true` após autorização específica recebida em
-03/10/2026 às 23:39:29 UTC para somente essas cinco unidades. A revisão por unidade,
-fontes, consulta atual por ID e hashes da origem estão em
-`docs/audits/factory-warranty-2026-10-03.json`.
+por unidade. A matriz schema2 contém sete registros principais revisados e
+oito pendentes, com `enabled: true`. As cinco unidades autorizadas em 03/10/2026
+às 23:39:29 UTC foram preservadas. Em 05/10 foram incorporados somente BYD19924
+e Tracker20049, após a pesquisa resolver suas condições específicas. A revisão
+por unidade, fontes, consultas atuais por ID e hashes da origem estão em
+`docs/audits/factory-warranty-2026-10-03.json` e
+`docs/audits/factory-warranty-2026-10-05.json`. O BYD tem uma cobertura de bateria
+de tração revisada separadamente.
 
 | Unidade | Identidade exata da API | Ano estimado | Critério de exibição |
 | --- | --- | --- | --- |
@@ -14,6 +17,9 @@ fontes, consulta atual por ID e hashes da origem estão em
 | 20038 | HB20 LIMITED | 2029* | Geral 5 anos; abaixo de 100.000 km |
 | 19857 | KICKS SENSE TURBO | 2028* | Geral 3 anos; abaixo de 100.000 km |
 | 19587 | TERA HIGH TURBO | 2028* | Regra geral 3 anos; sem limite |
+| 19924 | SONG PRO GS | 2030* | Geral 6 anos; uso não comercial confirmado; sem limite |
+| 19924 | SONG PRO GS — bateria de tração | 2032* | Cobertura separada de 8 anos; uso não comercial confirmado; condições e exclusões do manual |
+| 20049 | TRACKER LT TURBO | 2027* | Geral 3 anos; exceção R8C/R8Z excluída para a unidade; abaixo de 100.000 km |
 
 ## Regra de exibição
 
@@ -91,7 +97,7 @@ revisão, ano-modelo aplicável e revisão datada. Textos como “revisão pende
 não são evidência válida, mesmo com fingerprint recalculado. Campos de
 verificação não são prova independente: a revisão documental correspondente
 deve existir no registro de auditoria. O build testa a correspondência entre
-as cinco fontes, políticas e identidades cadastradas e essa revisão.
+fontes, políticas e identidades cadastradas e as revisões documentais.
 
 O fingerprint v2 inclui a política completa e a verificação das fontes;
 fingerprints antigos e matrizes schema1 não são aceitos. Ele não é recalculado
@@ -104,16 +110,49 @@ de origem foram preservados. As duas unidades Honda continuam pendentes pela
 cláusula histórica MY2024; não foram promovidas por uma revisão textual genérica.
 
 A matriz tem um único registro principal por veículo. Não importar várias
-linhas de bateria, motor e veículo como selos separados. O texto geral
-“Garantia de fábrica” aceita apenas `scope: basic-vehicle`. Uma cobertura
-restrita ou extensão ainda não ganha esse título; deve aguardar revisão do
-rótulo e do registro principal, sem substituir a regra apenas pela marca.
+linhas principais de bateria, motor e veículo com o mesmo ID. O texto geral
+“Garantia de fábrica” aceita apenas `scope: basic-vehicle`.
+
+### Bateria de tração separada
+
+O campo opcional `supplementalCoverages` aceita nesta versão um único registro
+de `scope: traction-battery`, com status, revisão, ateste, uso particular,
+prazo, km, fontes e fingerprint próprios. O fingerprint suplementar também
+vincula a aprovação principal; alterar os dados da unidade exige nova revisão
+da cobertura. O fingerprint principal dos cinco registros originais permanece
+inalterado. Suplemento pendente, duplicado, revogado ou incompatível suprime
+somente seu selo; duplicidade ou revogação da unidade principal suprime ambos.
+
+`resolveFactoryTractionBatteryWarranty` valida a identidade, flag, fontes e
+ateste do principal, mas não herda seu prazo final ou teto quilométrico.
+Assim, a garantia geral pode terminar antes da bateria. Cada cobertura exige
+data efetiva confirmada no seu próprio ano final estimado. Ausência de dados,
+regressão de km ou mudança incompatível da unidade bloqueiam ambas.
+
+O retorno da bateria tem escopo obrigatório e um rótulo explícito de **bateria
+de tração** em SVG, texto legível e nome acessível. Na ficha, os selos ficam
+lado a lado; no card, o segundo fica no rodapé para preservar a foto e o selo
+principal. A nota explica que a revenda não reinicia os prazos. A aprovação
+do Song Pro19924 não cria regra para todo BYD ou para baterias de outros tipos;
+o prazo não promete substituição gratuita irrestrita nem ausência de desgaste.
+
+Motor/câmbio, extensões e bateria genérica continuam sem selo produtivo.
+O proprietário aprovou a identificação legível de motor/câmbio junto ao selo
+Tiggo, mas o enquadramento não comercial das unidades ainda não foi confirmado.
+Essa cobertura restrita não vira garantia geral. O Tiggo7 já publicado mantém
+seu prazo geral de três anos; os Tiggo8 permanecem pendentes.
 
 ## Ano estimado e vigência
 
 O ano exibido é fabricação + prazo da unidade revisada, com a nota:
 
-> *Ano estimado pela fabricação. Vencimento exato, cobertura e limite de km conforme manual da montadora.
+> *Estimativa pela fabricação e documentação oficial da montadora. Validade, cobertura e km conforme manual do modelo/ano.
+
+A referência aos documentos oficiais se aplica somente aos registros revisados
+aceitos pelo resolver, com fonte compatível com o modelo/ano. É uma estimativa
+apresentada pela Netcar, não um certificado emitido pela montadora. A nota usa
+10,5 px na aplicação compacta, preserva a cor de contraste e fica no rodapé;
+o desenho circular, o tamanho do selo e sua posição junto à foto não mudam.
 
 Ano-modelo não substitui fabricação. O cálculo não cria uma data31/12.
 Se o ano estimado for anterior ao atual, não exibir. No próprio ano final,
@@ -130,6 +169,13 @@ carimbo sem depender de um Mac conectado ou de um novo build. A coleta/rotina
 read-only pode sugerir registros para revisão; não altera ERP, feed ou matriz
 aprovada automaticamente. Uma nova aprovação da matriz exige versão e release.
 
+Os cards entregam ao gate o objeto original do catálogo, separado dos valores
+de apresentação. Substituir ano ausente pelo ano atual ou km ausente por zero
+para compor a interface nunca serve de evidência para o carimbo. A ausência
+dos dados originais ou um ID diferente do card também bloqueia a exibição.
+Um aumento normal de km, ainda abaixo do teto, mantém o registro elegível;
+regressão, ausência, valor inválido ou chegada ao teto bloqueiam o selo.
+
 ## Validação e publicação pendente
 
 `npm run stock:test-warranty` cobre os cenários de bloqueio e integra o início
@@ -140,7 +186,7 @@ Usa os mesmos registros e todos os bloqueios, inclusive flag, identidade e km.
 O fixture antigo limitado ao ID Tera foi removido. Desabilitar a matriz remove
 todos os carimbos; habilitá-la não aprova registros pendentes nem veículos novos.
 
-Para publicar as cinco unidades revisadas, após aprovação específica de publicação:
+Para publicar os registros revisados, após aprovação específica de publicação:
 
 1. Integrar apenas o delta do carimbo sobre o master vigente. Preservar WIP,
    commits de outras tarefas e proteções atuais de certificados/galeria.
@@ -166,8 +212,9 @@ autorização e o build, isoladamente, não comprovam publicação concluída.
 ## Próximos veículos e revisão periódica
 
 A automação existente “Validar garantias dos veículos” está habilitada para
-08h e 14h em `America/Sao_Paulo`, a partir de 04/10/2026. A consulta de sua
-configuração em 03/10 não mostrou execução anterior. Essa tarefa usa o Mac
+08h e 14h em `America/Sao_Paulo`, a partir de 04/10/2026. Configuração conferida
+em 05/10/2026; o horário da última execução registrado pela automação não
+comprova, isoladamente, conclusão da pesquisa. Essa tarefa usa o Mac
 conectado para coletar e revisar candidatos; não altera cadastro, site, matriz
 nem publica. Falta de Mac impede a rodada de revisão, não desliga o gate do site.
 
@@ -178,3 +225,33 @@ suprime o selo quando o catálogo atualizado é carregado pelo cliente. Isso
 não é promessa de push em tempo real nem de interrupção de uma aba já aberta
 antes do próximo carregamento/refetch. Falha da API preserva o comportamento
 de cache do catálogo; o resolver não consulta ERP diretamente.
+
+### Quando uma mudança fica visível
+
+O recebimento do XML e sua propagação à API são externos a este checkout;
+não há aqui um evento de chegada nem prazo comprovado dessa etapa. Depois
+que a API muda, o estoque usa cache com `staleTime` de cinco minutos, que não
+é um intervalo de polling. O bootstrap agenda uma atualização após 15 segundos;
+busca pode atualizar ao montar/reativar. A ficha usa `staleTime` de um minuto,
+sem atualização periódica. Uma aba já aberta não tem prazo máximo garantido
+para refletir a alteração sem um novo carregamento/refetch aplicável.
+
+A auditoria de Equipamentos da VPS reaproveita a consulta e a fila existentes
+para apresentar pendências de garantia. A agenda conferida em 05/10/2026 roda
+às 07h em `America/Sao_Paulo`; em operação normal, uma alteração já disponível
+na API será examinada na rodada diária seguinte (até cerca de 24 horas), ou
+antes por **Executar agora**. Falhas preservam o relatório anterior e não
+equivalem a nova conferência. A pesquisa documental das 08h/14h tem outra
+função e depende de sua execução no Mac; não é um aviso a cada importação.
+
+Novo ID marcado, mudança de identidade, FAB/MY, km, flag ou regra relevante
+abre uma nova pendência auditável. Alterações de km podem reabrir a conferência
+sem retirar um selo ainda compatível. Marcar a pendência como revisada não
+aprova o registro nem publica um carimbo. O veículo permanece no catálogo
+normalmente; apenas a exibição da garantia depende do gate.
+
+Não existe entrega push dessa fila. Para reduzir a latência ao ritmo de
+duas/três importações diárias, a integração mínima futura seria enfileirar
+a mesma auditoria após o importador existente confirmar uma atualização
+bem-sucedida. O ponto de integração desse importador ainda precisa ser
+identificado; não foi criado coletor, serviço ou credencial adicional.

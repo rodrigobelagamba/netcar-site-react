@@ -9,6 +9,7 @@ import { readFileSync, mkdirSync, readdirSync, unlinkSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
+import { factoryWarrantyCatalogFromApi } from "./lib/factory-warranty-catalog.js";
 import { sanitizeVehicleImages } from "../src/lib/vehicleImagePolicy.mjs";
 import {
   homeHeroRotationDay,
@@ -690,6 +691,7 @@ function toBootstrapVehicle(vehicle) {
       ? Number(vehicle.ano_fabricacao)
       : undefined,
     km: Number(vehicle.km || 0),
+    factoryWarrantyVehicle: factoryWarrantyCatalogFromApi(vehicle),
     images: thumb,
     imagens_site: {
       capa: siteImages.capa ? normalizeBootstrapImage(siteImages.capa) : null,

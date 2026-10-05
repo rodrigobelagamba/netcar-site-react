@@ -237,6 +237,7 @@ export function EstoqueLandingPage() {
                 <VehicleCard
                   key={vehicle.id}
                   id={vehicle.id}
+                  warrantyVehicle={vehicle}
                   name={vehicle.modelo || vehicle.name}
                   price={vehicle.price || 0}
                   valor_formatado={vehicle.valor_formatado}

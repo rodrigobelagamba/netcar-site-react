@@ -3,10 +3,10 @@
   "enabled": true,
   "records": [
     {
-      "recordId": "normalized-20261003-19924",
-      "status": "pending",
-      "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"normalized-20261003-19924\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19924\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"BYD\",\"modelVersion\":\"SONG PRO GS\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":6,\"usage\":\"unknown\",\"commonPolicy\":null,\"reviewedMileageKm\":9385,\"mileage\":{\"kind\":\"unknown\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19924-manual-1\",\"url\":\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\",\"locator\":\"Manual DM_MG_25046, impressão 04/2025, código B4911*66-DM-MG06. Páginas impressas 32 (geral), 33 (origem/transferência), 34 (bateria), 36–37 (uso), 38 (cancelamento). Extraído do relatório TXT recuperado.\",\"revision\":\"DM_MG_25046; impressão 04/2025; B4911*66-DM-MG06; herdado do task7\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-19924\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "recordId": "reviewed-v2-20261005-19924",
+      "status": "approved",
+      "reviewedAt": "2026-10-05",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-19924\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"19924\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"BYD\",\"modelVersion\":\"SONG PRO GS\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":6,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":9385,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19924-manual-general-20261005\",\"url\":\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\",\"locator\":\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressas 32 (prazo geral), 33 (início e transferência), 36–37 (uso e limitações). Edição conferida na contracapa, PDF 46.\",\"revision\":\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"DM_MG_25046\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-19924\",\"reviewedAt\":\"2026-10-05\"}}]}",
       "vehicle": {
         "vehicleId": "19924",
         "brand": "BYD",
@@ -19,24 +19,55 @@
       "conditionsConfirmed": true,
       "scope": "basic-vehicle",
       "termYears": 6,
-      "usage": "unknown",
+      "usage": "private",
       "reviewedMileageKm": 9385,
       "mileage": {
-        "kind": "unknown"
+        "kind": "unlimited"
       },
       "sources": [
         {
-          "sourceId": "19924-manual-1",
+          "sourceId": "19924-manual-general-20261005",
           "url": "https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf",
-          "locator": "Manual DM_MG_25046, impressão 04/2025, código B4911*66-DM-MG06. Páginas impressas 32 (geral), 33 (origem/transferência), 34 (bateria), 36–37 (uso), 38 (cancelamento). Extraído do relatório TXT recuperado.",
-          "revision": "DM_MG_25046; impressão 04/2025; B4911*66-DM-MG06; herdado do task7",
+          "locator": "Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressas 32 (prazo geral), 33 (início e transferência), 36–37 (uso e limitações). Edição conferida na contracapa, PDF 46.",
+          "revision": "DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.",
           "verification": {
-            "status": "pending",
-            "documentCode": "",
+            "status": "verified",
+            "documentCode": "DM_MG_25046",
             "modelYear": 2025,
-            "reviewId": "warranty-20261003-19924",
-            "reviewedAt": "2026-10-03"
+            "reviewId": "warranty-20261005-19924",
+            "reviewedAt": "2026-10-05"
           }
+        }
+      ],
+      "supplementalCoverages": [
+        {
+          "recordId": "reviewed-20261005-19924-traction-battery",
+          "status": "approved",
+          "reviewedAt": "2026-10-05",
+          "approvedFingerprint": "{\"primaryApprovedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261005-19924\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"19924\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"BYD\\\",\\\"modelVersion\\\":\\\"SONG PRO GS\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":6,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":9385,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"19924-manual-general-20261005\\\",\\\"url\\\":\\\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\\\",\\\"locator\\\":\\\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressas 32 (prazo geral), 33 (início e transferência), 36–37 (uso e limitações). Edição conferida na contracapa, PDF 46.\\\",\\\"revision\\\":\\\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"DM_MG_25046\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261005-19924\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\"}}]}\",\"coverage\":{\"recordId\":\"reviewed-20261005-19924-traction-battery\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"19924\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"BYD\",\"modelVersion\":\"SONG PRO GS\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"traction-battery\",\"termYears\":8,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":9385,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19924-manual-traction-battery-20261005\",\"url\":\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\",\"locator\":\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressa 34 (PDF 35), tabela da bateria de tração; impressa 33 (início e transferência); impressas 36–37 (uso, capacidade e limitações).\",\"revision\":\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"DM_MG_25046\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-19924-traction-battery\",\"reviewedAt\":\"2026-10-05\"}}]}}",
+          "scope": "traction-battery",
+          "conditionsConfirmed": true,
+          "termYears": 8,
+          "usage": "private",
+          "reviewedMileageKm": 9385,
+          "mileage": {
+            "kind": "unlimited"
+          },
+          "sources": [
+            {
+              "sourceId": "19924-manual-traction-battery-20261005",
+              "url": "https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf",
+              "locator": "Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressa 34 (PDF 35), tabela da bateria de tração; impressa 33 (início e transferência); impressas 36–37 (uso, capacidade e limitações).",
+              "revision": "DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.",
+              "verification": {
+                "status": "verified",
+                "documentCode": "DM_MG_25046",
+                "modelYear": 2025,
+                "reviewId": "warranty-20261005-19924-traction-battery",
+                "reviewedAt": "2026-10-05"
+              }
+            }
+          ]
         }
       ]
     },
@@ -261,10 +292,10 @@
       }
     },
     {
-      "recordId": "normalized-20261003-20049",
-      "status": "pending",
-      "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"normalized-20261003-20049\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"20049\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHEVROLET\",\"modelVersion\":\"TRACKER LT TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":null,\"reviewedMileageKm\":24500,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20049-manual-1\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/01-pdfs/2025/tracker-2025-manual-do-propietario.pdf\",\"locator\":\"PDF p234, página impressa 232.\",\"revision\":\"Tracker MY2025; herdado do task7\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-20049\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "recordId": "reviewed-v2-20261005-20049",
+      "status": "approved",
+      "reviewedAt": "2026-10-05",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20049\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20049\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHEVROLET\",\"modelVersion\":\"TRACKER LT TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261005-20049\",\"basis\":\"As alíneas A e B têm 36 meses de garantia básica. 100.000 km é o limite conservador comum para exibição; não afirma o uso efetivo nem um teto universal da montadora. A exceção de 12 meses da alínea C foi excluída para o ID 20049 pelo indicador cadastral dirigido registrado na auditoria de 2026-10-05.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"PF ou PJ destinatário final, exceto transporte remunerado; fora da exceção R8C/R8Z\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20049-manual-20261005\"]},{\"category\":\"commercial\",\"condition\":\"PJ em negócio ou produção, ou PF em transporte remunerado; fora da exceção R8C/R8Z\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20049-manual-20261005\"]}]},\"reviewedMileageKm\":24500,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20049-manual-20261005\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/01-pdfs/2025/tracker-2025-manual-do-propietario.pdf\",\"locator\":\"Manual Tracker MY2025: página impressa 232 (PDF 235, contagem a partir de 1), Prazo de Garantia A/B/C; impressa 231 (PDF 234), início e transferência. Exceção R8C/R8Z excluída para esta unidade por classificação dirigida do cadastro existente, revisão warranty-20261005-20049.\",\"revision\":\"52194182; 25,5_CHEV_Tracker_Full_OM_pt_BR_B_BR_52194182_2024OCT18; edição 18/10/2024; MY2025; conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"52194182\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20049\",\"reviewedAt\":\"2026-10-05\"}}]}",
       "vehicle": {
         "vehicleId": "20049",
         "brand": "CHEVROLET",
@@ -285,19 +316,51 @@
       },
       "sources": [
         {
-          "sourceId": "20049-manual-1",
+          "sourceId": "20049-manual-20261005",
           "url": "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/01-pdfs/2025/tracker-2025-manual-do-propietario.pdf",
-          "locator": "PDF p234, página impressa 232.",
-          "revision": "Tracker MY2025; herdado do task7",
+          "locator": "Manual Tracker MY2025: página impressa 232 (PDF 235, contagem a partir de 1), Prazo de Garantia A/B/C; impressa 231 (PDF 234), início e transferência. Exceção R8C/R8Z excluída para esta unidade por classificação dirigida do cadastro existente, revisão warranty-20261005-20049.",
+          "revision": "52194182; 25,5_CHEV_Tracker_Full_OM_pt_BR_B_BR_52194182_2024OCT18; edição 18/10/2024; MY2025; conferido em 2026-10-05.",
           "verification": {
-            "status": "pending",
-            "documentCode": "",
+            "status": "verified",
+            "documentCode": "52194182",
             "modelYear": 2025,
-            "reviewId": "warranty-20261003-20049",
-            "reviewedAt": "2026-10-03"
+            "reviewId": "warranty-20261005-20049",
+            "reviewedAt": "2026-10-05"
           }
         }
-      ]
+      ],
+      "commonPolicy": {
+        "kind": "documented-regime-intersection",
+        "reviewId": "warranty-20261005-20049",
+        "basis": "As alíneas A e B têm 36 meses de garantia básica. 100.000 km é o limite conservador comum para exibição; não afirma o uso efetivo nem um teto universal da montadora. A exceção de 12 meses da alínea C foi excluída para o ID 20049 pelo indicador cadastral dirigido registrado na auditoria de 2026-10-05.",
+        "branches": [
+          {
+            "category": "non-commercial",
+            "condition": "PF ou PJ destinatário final, exceto transporte remunerado; fora da exceção R8C/R8Z",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "unlimited"
+            },
+            "sourceIds": [
+              "20049-manual-20261005"
+            ]
+          },
+          {
+            "category": "commercial",
+            "condition": "PJ em negócio ou produção, ou PF em transporte remunerado; fora da exceção R8C/R8Z",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "limited",
+              "limitKm": 100000
+            },
+            "sourceIds": [
+              "20049-manual-20261005"
+            ]
+          }
+        ]
+      }
     },
     {
       "recordId": "normalized-20261003-19779",

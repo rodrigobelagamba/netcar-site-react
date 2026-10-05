@@ -1,5 +1,6 @@
 import { mkdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
+import { factoryWarrantyCatalogFromApi } from "./factory-warranty-catalog.js";
 
 const MAX_CACHE_AGE_MS = 30 * 60 * 1000;
 const MAX_VERSIONED_STOCK_AGE_MS = 14 * 24 * 60 * 60 * 1000;
@@ -74,6 +75,7 @@ export function publicVehicle(vehicle) {
     preco_com_troca: vehicle.preco_com_troca,
     preco_com_troca_formatado: vehicle.preco_com_troca_formatado,
     km: vehicle.km,
+    factoryWarrantyVehicle: factoryWarrantyCatalogFromApi(vehicle),
     cor: vehicle.cor,
     motor: vehicle.motor,
     cambio: vehicle.cambio,
@@ -226,6 +228,9 @@ export function readFreshSeoStockCache(rootDir, { includeSold = false } = {}) {
 function versionedVehicleToApiShape(vehicle) {
   return {
     ...vehicle,
+    // Manifestos antigos não distinguem km ausente de zero: não reconstruir
+    // evidência da garantia usando os valores de apresentação.
+    factoryWarrantyVehicle: vehicle.factoryWarrantyVehicle ?? null,
     // The public bootstrap's empty list means "not loaded", not "no equipment".
     equipmentSourceComplete: false,
     ano: vehicle.ano ?? vehicle.year,

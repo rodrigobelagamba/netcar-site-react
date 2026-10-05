@@ -17,7 +17,16 @@ declare global {
 function allBootstrapVehicles(): Vehicle[] | undefined {
   if (typeof window === "undefined") return undefined;
   const vehicles = window.__NETCAR_STOCK__?.vehicles;
-  return Array.isArray(vehicles) ? vehicles.map(sanitizeVehicleImages) : undefined;
+  return Array.isArray(vehicles)
+    ? vehicles.map((vehicle) =>
+        sanitizeVehicleImages({
+          ...vehicle,
+          // O bootstrap legado já aplicou fallbacks; não usá-los como origem
+          // comprovada da garantia enquanto a API original não responder.
+          factoryWarrantyVehicle: vehicle.factoryWarrantyVehicle ?? null,
+        }),
+      )
+    : undefined;
 }
 
 function normalized(value: unknown): string {

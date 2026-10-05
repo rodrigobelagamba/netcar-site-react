@@ -11,7 +11,8 @@ import {
 import { vehicleWhatsAppRef } from "@/lib/vehicleWhatsAppRef";
 import { trackVehicleCardOpen } from "@/lib/analytics";
 import { CardsHero } from "./CardsHero";
-import { factoryWarrantyStampFor } from "@/lib/factoryWarrantyStamp";
+import { factoryWarrantyStampFor, factoryTractionBatteryStampFor } from "@/lib/factoryWarrantyStamp";
+import type { WarrantyCatalogVehicle } from "@/lib/factoryWarranty";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import {
@@ -57,6 +58,8 @@ export interface VehicleCardProps {
   pdf?: string;
   pdf_url?: string;
   diferenciais?: Array<{ tag: string; descricao: string }>;
+  /** Dados originais do catálogo, sem fallbacks de apresentação para a garantia. */
+  warrantyVehicle?: WarrantyCatalogVehicle;
   delay?: number;
   fastAnimation?: boolean;
   eagerImage?: boolean;
@@ -95,7 +98,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   potencia,
   pdf,
   pdf_url,
-  diferenciais,
+  warrantyVehicle,
   delay = 0,
   fastAnimation = false,
   eagerImage = false,
@@ -185,6 +188,14 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   const transmission = cambio || "";
   const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
   const isSold = !price || price <= 0;
+  const warrantyStamp =
+    !isSold && warrantyVehicle?.id === id
+      ? factoryWarrantyStampFor(warrantyVehicle)
+      : undefined;
+  const tractionBatteryStamp =
+    !isSold && warrantyVehicle?.id === id
+      ? factoryTractionBatteryStampFor(warrantyVehicle)
+      : undefined;
   const merchandising = getVehicleMerchandising({
     id,
     km,
@@ -277,7 +288,8 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
       mileage={mileageFormatted}
       mileageBadge={isSold ? undefined : mileageBadge}
       marketingBadge={isSold ? undefined : cardMarketingBadge}
-      warrantyStamp={factoryWarrantyStampFor({ id, marca, modelo, name, anoFabricacao, year, km, price, diferenciais })}
+      warrantyStamp={warrantyStamp}
+      tractionBatteryStamp={tractionBatteryStamp}
       proofBadge={isSold || !hasIcheck ? undefined : "i-CHECK"}
       price={priceFormatted}
       previousPrice={previousPriceFormatted}

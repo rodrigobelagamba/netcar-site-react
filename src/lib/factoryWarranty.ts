@@ -49,7 +49,13 @@ export interface FactoryWarrantyRecord {
   optionalId: number;
   optionalConfirmed: boolean;
   conditionsConfirmed: boolean;
-  scope: "basic-vehicle" | "battery" | "powertrain" | "extension" | "unknown";
+  scope:
+    | "basic-vehicle"
+    | "battery"
+    | "traction-battery"
+    | "powertrain"
+    | "extension"
+    | "unknown";
   termYears: number;
   /** Actual use stays unknown when a documented commonPolicy is sufficient. */
   usage: "private" | "commercial" | "unknown";
@@ -57,6 +63,25 @@ export interface FactoryWarrantyRecord {
   reviewedMileageKm: number;
   mileage: WarrantyMileage;
   /** Needed in the estimated final year; this is not inferred from FAB. */
+  confirmedExpiryDate?: string;
+  sources: WarrantySource[];
+  /** Separately reviewed coverage; never participates in the general stamp. */
+  supplementalCoverages?: FactoryWarrantyTractionBatteryCoverage[];
+}
+
+export interface FactoryWarrantyTractionBatteryCoverage {
+  recordId: string;
+  status: "approved" | "pending" | "revoked" | "ineligible";
+  reviewedAt: string;
+  /** Binds this coverage to the approved primary unit and its own evidence. */
+  approvedFingerprint: string;
+  scope: "traction-battery";
+  conditionsConfirmed: boolean;
+  termYears: number;
+  /** This first implementation supports only individually confirmed private use. */
+  usage: "private";
+  reviewedMileageKm: number;
+  mileage: WarrantyMileage;
   confirmedExpiryDate?: string;
   sources: WarrantySource[];
 }
@@ -185,11 +210,49 @@ export function factoryWarrantyReviewFingerprint(
   });
 }
 
-/** No match, stale/incompatible data or uncertainty always means no warranty stamp. */
-export function resolveFactoryWarranty(
+function tractionBatteryAsRecord(
+  primary: FactoryWarrantyRecord,
+  coverage: FactoryWarrantyTractionBatteryCoverage,
+): FactoryWarrantyRecord {
+  return {
+    recordId: coverage.recordId,
+    status: coverage.status,
+    reviewedAt: coverage.reviewedAt,
+    approvedFingerprint: coverage.approvedFingerprint,
+    vehicle: primary.vehicle,
+    optionalId: primary.optionalId,
+    optionalConfirmed: primary.optionalConfirmed,
+    conditionsConfirmed: coverage.conditionsConfirmed,
+    scope: coverage.scope,
+    termYears: coverage.termYears,
+    usage: coverage.usage,
+    reviewedMileageKm: coverage.reviewedMileageKm,
+    mileage: coverage.mileage,
+    confirmedExpiryDate: coverage.confirmedExpiryDate,
+    sources: coverage.sources,
+  };
+}
+
+export function factoryTractionBatteryReviewFingerprint(
+  primary: FactoryWarrantyRecord,
+  coverage: FactoryWarrantyTractionBatteryCoverage,
+): string {
+  return JSON.stringify({
+    primaryApprovedFingerprint: primary.approvedFingerprint,
+    coverage: JSON.parse(
+      factoryWarrantyReviewFingerprint(tractionBatteryAsRecord(primary, coverage)),
+    ),
+  });
+}
+
+/** Internal scope gate; callers cannot turn restricted coverage into a general stamp. */
+function resolveFactoryWarrantyCoverage(
   vehicle: WarrantyCatalogVehicle,
   matrix: FactoryWarrantyMatrix,
-  today = new Date().toISOString().slice(0, 10),
+  today: string,
+  expectedScope: "basic-vehicle" | "traction-battery",
+  checkCoverageWindow = true,
+  expectedReviewFingerprint?: string,
 ) {
   if (
     !matrix ||
@@ -225,8 +288,13 @@ export function resolveFactoryWarranty(
   )
     return undefined;
   if (
-    record.scope !== "basic-vehicle" ||
+    record.scope !== expectedScope ||
     !["private", "commercial", "unknown"].includes(record.usage)
+  )
+    return undefined;
+  if (
+    expectedScope === "traction-battery" &&
+    (record.usage !== "private" || record.commonPolicy !== undefined)
   )
     return undefined;
   if (
@@ -273,7 +341,10 @@ export function resolveFactoryWarranty(
     if (record.usage !== "unknown" || !validCommonPolicy(record))
       return undefined;
   } else if (record.usage === "unknown") return undefined;
-  if (record.approvedFingerprint !== factoryWarrantyReviewFingerprint(record))
+  if (
+    record.approvedFingerprint !==
+    (expectedReviewFingerprint ?? factoryWarrantyReviewFingerprint(record))
+  )
     return undefined;
   const identity = record.vehicle;
   if (
@@ -313,20 +384,24 @@ export function resolveFactoryWarranty(
     record.mileage.kind === "limited" &&
     (!Number.isFinite(record.mileage.limitKm) ||
       record.mileage.limitKm <= 0 ||
-      vehicle.km >= record.mileage.limitKm)
+      (checkCoverageWindow && vehicle.km >= record.mileage.limitKm))
   )
     return undefined;
   const estimatedEndYear = identity.manufactureYear + record.termYears;
   const currentYear = Number(today.slice(0, 4));
-  if (estimatedEndYear < currentYear) return undefined;
+  if (checkCoverageWindow && estimatedEndYear < currentYear) return undefined;
   if (
     record.confirmedExpiryDate &&
     (!validDate(record.confirmedExpiryDate) ||
-      record.confirmedExpiryDate < today)
+      (checkCoverageWindow && record.confirmedExpiryDate < today))
   )
     return undefined;
   // FAB+years cannot identify which month the warranty expires in its final year.
-  if (estimatedEndYear === currentYear && !record.confirmedExpiryDate)
+  if (
+    checkCoverageWindow &&
+    estimatedEndYear === currentYear &&
+    !record.confirmedExpiryDate
+  )
     return undefined;
   return {
     estimatedEndYear,
@@ -334,4 +409,55 @@ export function resolveFactoryWarranty(
     mode: "verified" as const,
     design: "round" as const,
   };
+}
+
+/** No match, stale/incompatible data or uncertainty always means no general stamp. */
+export function resolveFactoryWarranty(
+  vehicle: WarrantyCatalogVehicle,
+  matrix: FactoryWarrantyMatrix,
+  today = new Date().toISOString().slice(0, 10),
+) {
+  return resolveFactoryWarrantyCoverage(vehicle, matrix, today, "basic-vehicle");
+}
+
+/** Traction battery only; the primary unit remains the shared approval boundary. */
+export function resolveFactoryTractionBatteryWarranty(
+  vehicle: WarrantyCatalogVehicle,
+  matrix: FactoryWarrantyMatrix,
+  today = new Date().toISOString().slice(0, 10),
+) {
+  // Validate all primary identity, source, attestation and fingerprint gates.
+  // Its elapsed duration or km cap does not shorten independent battery coverage.
+  if (
+    !resolveFactoryWarrantyCoverage(vehicle, matrix, today, "basic-vehicle", false)
+  )
+    return undefined;
+  const primary = matrix.records.find(
+    (entry) => entry?.vehicle?.vehicleId === vehicle.id,
+  )!;
+  if (primary.usage !== "private" || !Array.isArray(primary.supplementalCoverages))
+    return undefined;
+  // Do not filter by approved status first: a revocation/duplicate must block.
+  const coverages = primary.supplementalCoverages;
+  if (coverages.length !== 1) return undefined;
+  const coverage = coverages[0];
+  if (
+    !coverage ||
+    coverage.scope !== "traction-battery" ||
+    coverage.usage !== "private" ||
+    coverage.reviewedAt < primary.reviewedAt ||
+    coverage.approvedFingerprint !==
+      factoryTractionBatteryReviewFingerprint(primary, coverage)
+  )
+    return undefined;
+  const scopedRecord = tractionBatteryAsRecord(primary, coverage);
+  const stamp = resolveFactoryWarrantyCoverage(
+    vehicle,
+    { ...matrix, records: [scopedRecord] },
+    today,
+    "traction-battery",
+    true,
+    factoryTractionBatteryReviewFingerprint(primary, coverage),
+  );
+  return stamp ? { ...stamp, scope: "traction-battery" as const } : undefined;
 }
