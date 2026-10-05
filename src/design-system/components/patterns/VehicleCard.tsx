@@ -14,6 +14,7 @@ import { CardsHero } from "./CardsHero";
 import { factoryWarrantyStampFor, factoryTractionBatteryStampFor, factoryPowertrainStampFor } from "@/lib/factoryWarrantyStamp";
 import type { WarrantyCatalogVehicle } from "@/lib/factoryWarranty";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
+import { resolveVehicleCoverImage } from "@/lib/vehicleCoverImage";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import {
   getVehicleMerchandising,
@@ -30,10 +31,6 @@ export type VehicleFocusPayload = {
   priceLabel: string;
   image: string;
 };
-
-// URL da imagem de carro coberto usada como fallback quando não houver PNG
-// A imagem está em public/images/semcapa.png
-const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
 export interface VehicleCardProps {
   id: string;
@@ -112,36 +109,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
 }: VehicleCardProps) {
   const navigate = useNavigate();
 
-  // Cards compactos usam a miniatura; cards desktop precisam da capa maior para
-  // não ampliar o arquivo *_small.png (200 px) em uma área de quase 300 px.
-  let mainImage: string = CAR_COVERED_PLACEHOLDER_URL;
-
-  if (compact && imagens_site?.capa_thumb) {
-    mainImage = imagens_site.capa_thumb;
-  } else if (imagens_site?.capa) {
-    mainImage = imagens_site.capa;
-  } else if (imagens_site?.capa_thumb) {
-    mainImage = imagens_site.capa_thumb;
-  } else {
-    // FALLBACK: Comportamento anterior - filtra apenas imagens PNG
-    const pngImages = images.filter(
-      (img) =>
-        img && (img.toLowerCase().endsWith(".png") || img.includes(".png")),
-    );
-
-    // Verifica se a primeira imagem PNG é a imagem específica que deve ser substituída
-    const firstPngImage = pngImages.length > 0 ? pngImages[0] : null;
-    const shouldUsePlaceholder =
-      firstPngImage &&
-      (firstPngImage.includes("271_131072IMG_8213.png") ||
-        firstPngImage.includes("271_131072IMG_8213.PNG"));
-
-    // Se não tiver PNG ou se for a imagem específica, usa a imagem de carro coberto como fallback
-    mainImage =
-      pngImages.length > 0 && !shouldUsePlaceholder
-        ? firstPngImage || CAR_COVERED_PLACEHOLDER_URL
-        : CAR_COVERED_PLACEHOLDER_URL;
-  }
+  const mainImage = resolveVehicleCoverImage({ images, imagens_site }, compact);
 
   const sanitizeFormattedPrice = (formatted?: string) =>
     formatted ? formatted.replace(/<[^>]*>/g, "") : "";

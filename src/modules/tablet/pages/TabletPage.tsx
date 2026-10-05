@@ -12,6 +12,7 @@ import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { formatKm, formatPrice } from "@/lib/formatters";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
+import { resolveVehicleCoverImage, VEHICLE_COVER_PLACEHOLDER } from "@/lib/vehicleCoverImage";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 import TabletVehiclePreview from "../components/TabletVehiclePreview";
 import {
@@ -23,7 +24,7 @@ import {
 import "./tablet.css";
 
 const STORAGE_KEY = "netcar.tablet.filters.v1";
-const PLACEHOLDER = "/images/semcapa.webp";
+const PLACEHOLDER = VEHICLE_COVER_PLACEHOLDER;
 const SORTS: Array<{ value: TabletFilters["sort"]; label: string }> = [
   { value: "price-asc", label: "Menor preço" },
   { value: "price-desc", label: "Maior preço" },
@@ -63,16 +64,6 @@ function optionsFor(vehicles: Vehicle[], field: "marca" | "cambio") {
   ].sort((a, b) => a.localeCompare(b, "pt-BR"));
 }
 
-function coverFor(vehicle: Vehicle): string {
-  if (vehicle.imagens_site?.tem_fotos === 0) return PLACEHOLDER;
-  return (
-    vehicle.imagens_site?.capa ||
-    vehicle.imagens_site?.capa_thumb ||
-    vehicle.images[0] ||
-    PLACEHOLDER
-  );
-}
-
 const TabletCard = memo(function TabletCard({
   vehicle,
   index,
@@ -82,7 +73,10 @@ const TabletCard = memo(function TabletCard({
   index: number;
   onSelect: (id: string) => void;
 }) {
-  const cover = coverFor(vehicle);
+  const cover = resolveVehicleCoverImage(vehicle);
+  const galleryPending =
+    vehicle.imagens_site?.tem_fotos === 0 &&
+    !vehicle.imagens_site?.galeria?.length;
   const [imageAttempt, setImageAttempt] = useState(0);
   useEffect(() => setImageAttempt(0), [cover]);
   const optimizedCover = optimizeStockImage(cover, 640);
@@ -132,9 +126,13 @@ const TabletCard = memo(function TabletCard({
                 setImageAttempt((attempt) => Math.min(attempt + 1, 2));
             }}
           />
-          {source === PLACEHOLDER && (
+          {(source === PLACEHOLDER || galleryPending) && (
             <span className="tablet-photo-pending">
-              {cover === PLACEHOLDER ? "Fotos em preparação" : "Foto indisponível"}
+              {galleryPending
+                ? "Galeria em preparação"
+                : cover === PLACEHOLDER
+                  ? "Fotos em preparação"
+                  : "Foto indisponível"}
             </span>
           )}
           <span className="tablet-card-year">
