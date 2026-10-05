@@ -477,7 +477,7 @@ function assertTiggoPowertrain(expected) {
   const notes = renderer.root.findAll(
     (node) => node.type === "p" && Object.hasOwn(node.props, "data-factory-warranty-note"),
   );
-  assert.equal(captions.length, expected ? 1 : 0);
+  assert.equal(captions.length, 0);
   assert.equal(notes.length, expected ? 1 : 0);
   if (!expected) {
     assert.equal(hero.powertrainStamp, undefined);
@@ -496,20 +496,14 @@ function assertTiggoPowertrain(expected) {
   const stampText = badges[0].findAllByType("text").map(renderedText).join(" ");
   assert.match(stampText, /GARANTIA MOTOR E CÂMBIO ATÉ 2028 \*/);
   assert.doesNotMatch(stampText, /BATERIA|GARANTIA DE FÁBRICA/);
-  assert.equal(renderedText(captions[0]), "Motor e câmbio · 5 anos de fábrica");
   const noteText = renderedText(notes[0]);
-  assert.match(noteText, /Estimativa pela fabricação e documentação oficial da montadora/);
-  assert.match(noteText, /Validade, cobertura e km conforme manual do modelo\/ano/);
-  assert.match(noteText, /Prazo original de 5 anos para motor e câmbio\./);
-  assert.match(noteText, /A revenda não reinicia os prazos\./);
+  assert.equal(noteText, "*Ano estimado pela fabricação. Prazo original e condições conforme manual da montadora. Consultar manual.");
   assert.doesNotMatch(noteText, /bateria de tração|garantia geral/i);
   const links = notes[0].findAllByType("a");
   assert.equal(links.length, 1);
-  assert.equal(renderedText(links[0]), "Manual B09999T8006");
+  assert.equal(renderedText(links[0]), "Consultar manual");
   assert.equal(links[0].props.href, manualUrl);
-  assert.match(links[0].props.title, /B09999T8006/);
-  assert.match(links[0].props.title, /2023\/2024/);
-  assert.match(links[0].props.title, /PDF298/);
+  assert.equal(links[0].props.title, "Manual B09999T8006");
   assert.equal(links[0].props.target, "_blank");
   assert.deepEqual(links[0].props.rel.split(/\s+/).sort(), ["noopener", "noreferrer"]);
   let stopped = 0;
