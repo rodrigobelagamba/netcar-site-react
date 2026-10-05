@@ -565,7 +565,7 @@
     border-color: #78aaa5;
   }
 }
-@media (max-width: 1023px) {
+@media (max-width: 1439px) {
   .tablet-range-inputs input,
   .tablet-select-label select {
     font-size: 16px;
@@ -625,6 +625,54 @@
   }
   .tablet-card-bottom strong {
     font-size: 23px;
+  }
+}
+@media (min-width: 600px) {
+  .tablet-grid {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 12px;
+  }
+  .tablet-card-body {
+    padding: 12px;
+  }
+  .tablet-card-body h3 {
+    font-size: 14px;
+    min-height: 37px;
+  }
+  .tablet-card-specs {
+    margin-bottom: 12px;
+  }
+  .tablet-card-bottom {
+    padding-top: 10px;
+  }
+  .tablet-card-bottom strong {
+    font-size: clamp(17px, 1.4vw, 19px);
+    white-space: nowrap;
+  }
+  .tablet-card-arrow {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 600px) and (max-width: 767px) {
+  .tablet-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tablet-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .tablet-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1280px) and (max-width: 1439px) {
+  .tablet-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
 @media (max-width: 599px) {
