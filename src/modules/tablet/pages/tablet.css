@@ -452,6 +452,13 @@
   margin: 0 0 18px;
   line-height: 1.5;
 }
+.tablet-card-model-year {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--tablet-ink);
+  font-size: 12px;
+  font-weight: 700;
+}
 .tablet-card-bottom {
   margin-top: auto;
   padding-top: 13px;

@@ -83,9 +83,18 @@ const TabletCard = memo(function TabletCard({
   onSelect: (id: string) => void;
 }) {
   const cover = coverFor(vehicle);
-  const [failed, setFailed] = useState(false);
-  useEffect(() => setFailed(false), [cover]);
-  const source = failed ? PLACEHOLDER : cover;
+  const [imageAttempt, setImageAttempt] = useState(0);
+  useEffect(() => setImageAttempt(0), [cover]);
+  const optimizedCover = optimizeStockImage(cover, 640);
+  const source =
+    imageAttempt > 1 || (imageAttempt === 1 && optimizedCover === cover)
+      ? PLACEHOLDER
+      : cover;
+  const useOriginal = imageAttempt === 1;
+  const yearLabel =
+    Number.isInteger(vehicle.year) && vehicle.year > 0
+      ? String(vehicle.year)
+      : "A confirmar";
   const mileage =
     typeof vehicle.km === "number" &&
     Number.isFinite(vehicle.km) &&
@@ -100,15 +109,15 @@ const TabletCard = memo(function TabletCard({
       <button
         className="tablet-card-open"
         onClick={() => onSelect(vehicle.id)}
-        aria-label={`Ver ${vehicle.name}, ${vehicle.year}, ${formatPrice(vehicle.price)}`}
+        aria-label={`Ver ${vehicle.name}, ano-modelo ${yearLabel}, ${formatPrice(vehicle.price)}`}
       >
         <div className="tablet-card-photo">
           <img
             src={
-              source === PLACEHOLDER ? source : optimizeStockImage(source, 640)
+              source === PLACEHOLDER || useOriginal ? source : optimizedCover
             }
             srcSet={
-              source === PLACEHOLDER
+              source === PLACEHOLDER || useOriginal
                 ? undefined
                 : stockImageSrcSet(source, [320, 480, 640, 960])
             }
@@ -118,19 +127,25 @@ const TabletCard = memo(function TabletCard({
             alt={`${vehicle.marca || ""} ${vehicle.modelo || vehicle.name}`.trim()}
             loading={index < 4 ? "eager" : "lazy"}
             decoding="async"
-            onError={() => setFailed(true)}
+            onError={() => {
+              if (source !== PLACEHOLDER)
+                setImageAttempt((attempt) => Math.min(attempt + 1, 2));
+            }}
           />
           {source === PLACEHOLDER && (
-            <span className="tablet-photo-pending">Fotos em preparação</span>
+            <span className="tablet-photo-pending">
+              {cover === PLACEHOLDER ? "Fotos em preparação" : "Foto indisponível"}
+            </span>
           )}
           <span className="tablet-card-year">
-            {vehicle.year > 0 ? vehicle.year : "Modelo a confirmar"}
+            {yearLabel === "A confirmar" ? "Modelo a confirmar" : yearLabel}
           </span>
         </div>
         <div className="tablet-card-body">
           <p className="tablet-eyebrow">{vehicle.marca || "Netcar"}</p>
           <h3>{vehicle.modelo || vehicle.name}</h3>
           <p className="tablet-card-specs">
+            <span className="tablet-card-model-year">Ano-modelo {yearLabel}</span>
             {mileage}
             <span aria-hidden="true"> · </span>
             {transmission}
