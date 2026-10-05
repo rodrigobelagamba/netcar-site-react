@@ -50,7 +50,7 @@
     "icheck:validate": "node --test scripts/tests/icheck-*.test.mjs scripts/validate-icheck-publication.test.mjs && tsx --test src/lib/icheckMetadata.test.ts && tsx scripts/validate-icheck-pdf.ts",
     "icheck:publish": "node scripts/publish-icheck-metadata.mjs",
     "entregas:seed": "tsx scripts/generate-entregas-feed.ts",
-    "stock:test-warranty": "node --import tsx --test scripts/tests/factory-warranty.test.ts scripts/tests/factory-warranty-card.test.mjs scripts/tests/factory-warranty-bootstrap.test.mjs"
+    "stock:test-warranty": "node scripts/test-factory-warranty.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
