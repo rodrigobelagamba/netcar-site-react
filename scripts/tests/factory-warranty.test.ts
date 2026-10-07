@@ -872,6 +872,18 @@ const tiggo7Audit = JSON.parse(
     priorBasicWarrantyDeclaredExpired: boolean; automaticFallbackToPriorGeneralDisplay: boolean;
   };
 };
+const renegadeAudit = JSON.parse(
+  readFileSync(new URL("../../docs/audits/factory-warranty-renegade-20075-2026-10-07.json", import.meta.url), "utf8"),
+) as {
+  reviewedAt: string;
+  approvedLocalContent: WarrantyAudit["approvedLocalContent"];
+  publicVehicles: WarrantyCatalogVehicle[];
+  preservation: { baselineRecordCount: number; baselineRecordIds: string[]; baselineRecordsSha256: string };
+  operationalAttestation: { vehicleId: string; usageConfirmed: string; mileageConfirmed: FactoryWarrantyRecord["mileage"] };
+  officialEvidence: { publicationDate: string; doesNotEstablish: string[] };
+  identityCorrespondence: { xmlModel: string; apiModel: string; notAGeneralAlias: boolean };
+};
+const currentReviewDate = renegadeAudit.reviewedAt;
 const EXPECTED_ORIGINAL_YEARS: Record<string, number> = {
   "20066": 2027,
   "19994": 2027,
@@ -883,10 +895,11 @@ const EXPECTED_LOCAL_YEARS: Record<string, number> = {
   ...Object.fromEntries(Object.entries(EXPECTED_ORIGINAL_YEARS).filter(([id]) => id !== "20066")),
   "19924": 2030,
   "20049": 2027,
+  "20075": 2028,
 };
 const currentCatalogSnapshot = [
   ...new Map(
-    [...localAudit.currentCatalogSnapshot, ...addendumAudit.publicVehicles, ...powertrainAudit.publicVehicles, ...tiggo7Audit.publicVehicles]
+    [...localAudit.currentCatalogSnapshot, ...addendumAudit.publicVehicles, ...powertrainAudit.publicVehicles, ...tiggo7Audit.publicVehicles, ...renegadeAudit.publicVehicles]
       .map((entry) => [entry.id, entry]),
   ).values(),
 ];
@@ -901,12 +914,12 @@ function localVehicle(id: string): WarrantyCatalogVehicle {
   return result;
 }
 
-test("the authorized release contains six basic, three powertrain approvals, six pending units and one battery supplement", () => {
+test("the authorized release contains seven basic, three powertrain approvals, six pending units and one battery supplement", () => {
   assert.equal(localRegistry.schemaVersion, 2);
   assert.equal(localRegistry.enabled, true);
   assert.equal(localAudit.publicationApproved, true);
-  assert.equal(localRegistry.records.length, 15);
-  assert.equal(new Set(localRegistry.records.map((r) => r.vehicle.vehicleId)).size, 15);
+  assert.equal(localRegistry.records.length, 16);
+  assert.equal(new Set(localRegistry.records.map((r) => r.vehicle.vehicleId)).size, 16);
   const approved = localRegistry.records.filter((r) => r.status === "approved" && r.scope === "basic-vehicle");
   const approvedPowertrain = localRegistry.records.filter((r) => r.status === "approved" && r.scope === "powertrain");
   const pending = localRegistry.records.filter((r) => r.status === "pending");
@@ -992,10 +1005,10 @@ test("the disabled registry returns zero stamps of every scope for all reviewed 
   }
 });
 
-test("the authorized registry yields exactly six general, three powertrain and one BYD traction-battery stamp", () => {
+test("the authorized registry yields exactly seven general, three powertrain and one BYD traction-battery stamp", () => {
   const actual = Object.fromEntries(
     currentCatalogSnapshot.flatMap((entry) => {
-      const stamp = resolveFactoryWarranty(entry, enabledLocalRegistry, addendumAudit.reviewedAt);
+      const stamp = resolveFactoryWarranty(entry, enabledLocalRegistry, currentReviewDate);
       return stamp ? [[entry.id, stamp.estimatedEndYear]] : [];
     }),
   );
@@ -1021,7 +1034,7 @@ for (const [id, expectedYear] of Object.entries(EXPECTED_LOCAL_YEARS)) {
   test("real unit " + id + " loses its stamp when the current flag, identity, or sale status changes", () => {
     const current = localVehicle(id);
     assert.equal(
-      resolveFactoryWarranty(current, enabledLocalRegistry, addendumAudit.reviewedAt)?.estimatedEndYear,
+      resolveFactoryWarranty(current, enabledLocalRegistry, currentReviewDate)?.estimatedEndYear,
       expectedYear,
     );
     for (const changed of [
@@ -1031,7 +1044,7 @@ for (const [id, expectedYear] of Object.entries(EXPECTED_LOCAL_YEARS)) {
       { ...current, price: 0 },
     ]) {
       assert.equal(
-        resolveFactoryWarranty(changed, enabledLocalRegistry, addendumAudit.reviewedAt),
+        resolveFactoryWarranty(changed, enabledLocalRegistry, currentReviewDate),
         undefined,
       );
     }
@@ -1222,7 +1235,9 @@ for (const id of ["20029", "20041"]) {
 }
 
 test("Tiggo7 20066 replaces only its active general display and preserves all other reviewed records", () => {
-  const others = localRegistry.records.filter((record) => record.vehicle.vehicleId !== "20066");
+  // Preserve the historical October5 comparison; October7 appends a separate unit.
+  const others = localRegistry.records.filter((record) =>
+    record.vehicle.vehicleId !== "20066" && record.vehicle.vehicleId !== "20075");
   assert.equal(others.length, 14);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), tiggo7Audit.preservation.unchangedRecordsSha256);
   assert.equal(localRegistry.records.filter((record) => record.vehicle.vehicleId === "20066").length, 1);
@@ -1343,4 +1358,101 @@ test("Tiggo7 2029 remains an estimate and requires a real unexpired date in its 
   record.confirmedExpiryDate = "2026-10-04";
   record.approvedFingerprint = factoryWarrantyReviewFingerprint(record);
   assert.equal(resolveFactoryPowertrainWarranty(current, matrix(record), tiggo7Audit.reviewedAt), undefined);
+});
+
+test("Renegade 20075 appends one individual approval and preserves all fifteen prior records", () => {
+  const prior = localRegistry.records.filter((record) => record.vehicle.vehicleId !== "20075");
+  assert.equal(prior.length, 15);
+  assert.equal(renegadeAudit.preservation.baselineRecordCount, 15);
+  assert.deepEqual(prior.map((record) => record.vehicle.vehicleId), renegadeAudit.preservation.baselineRecordIds);
+  assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), renegadeAudit.preservation.baselineRecordsSha256);
+  assert.equal(localRegistry.records.filter((record) => record.vehicle.vehicleId === "20075").length, 1);
+});
+
+test("Renegade 20075 binds the current API identity and separates the official term from the individual km attestation", () => {
+  const record = localRegistry.records.find((entry) => entry.vehicle.vehicleId === "20075")!;
+  const evidence = renegadeAudit.approvedLocalContent[0];
+  assert.deepEqual(record.vehicle, {
+    vehicleId: "20075", brand: "JEEP", modelVersion: "RENEGADE LONGITUDE T270 TURBO",
+    manufactureYear: 2023, modelYear: 2024,
+  });
+  assert.deepEqual(record.vehicle, evidence.identity);
+  assert.equal(record.status, "approved");
+  assert.equal(record.reviewedAt, "2026-10-07");
+  assert.equal(record.scope, "basic-vehicle");
+  assert.equal(record.termYears, 5);
+  assert.equal(record.usage, "private");
+  assert.equal(record.reviewedMileageKm, 62045);
+  assert.deepEqual(record.mileage, { kind: "unlimited" });
+  assert.deepEqual(record.mileage, renegadeAudit.operationalAttestation.mileageConfirmed);
+  assert.equal(renegadeAudit.operationalAttestation.vehicleId, "20075");
+  assert.equal(renegadeAudit.operationalAttestation.usageConfirmed, "private");
+  assert.equal(renegadeAudit.officialEvidence.publicationDate, "2024-04-19");
+  assert.ok(renegadeAudit.officialEvidence.doesNotEstablish.some((item) => /unlimited mileage/.test(item)));
+  assert.equal(renegadeAudit.identityCorrespondence.xmlModel, "RENEGADE LONGITUDE T270");
+  assert.equal(renegadeAudit.identityCorrespondence.apiModel, record.vehicle.modelVersion);
+  assert.equal(renegadeAudit.identityCorrespondence.notAGeneralAlias, true);
+  assert.deepEqual(record.sources, evidence.sources);
+  assert.equal(record.sources[0].verification.modelYear, 2024);
+  assert.equal(record.sources[0].verification.documentCode, "2024-04-19");
+  assert.equal(record.approvedFingerprint, evidence.approvedFingerprint);
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(record.commonPolicy, undefined);
+  assert.equal(record.powertrainReview, undefined);
+  assert.equal(record.supplementalCoverages, undefined);
+  assert.equal(record.confirmedExpiryDate, undefined);
+  assert.equal(resolveFactoryWarranty(localVehicle("20075"), localRegistry, currentReviewDate)?.estimatedEndYear, 2028);
+  assert.equal(resolveFactoryWarranty(localVehicle("20075"), localRegistry, "2026-10-06"), undefined);
+  assert.equal(resolveFactoryPowertrainWarranty(localVehicle("20075"), localRegistry, currentReviewDate), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(localVehicle("20075"), localRegistry, currentReviewDate), undefined);
+});
+
+test("Renegade approval cannot pass to a recycled Citroen ID, XML shorthand, changed years or another unit", () => {
+  const current = localVehicle("20075");
+  for (const patch of [
+    // A simulated recycled ID exercises compound identity; no historical vehicle data is imported.
+    { marca: "CITROEN", modelo: "C3" }, { marca: "CITROEN" },
+    { modelo: "RENEGADE LONGITUDE T270" }, { modelo: "RENEGADE SPORT T270 TURBO" },
+    { id: "unreviewed-renegade" }, { anoFabricacao: 2024 }, { year: 2025 },
+    { anoFabricacao: undefined }, { year: undefined },
+    { km: 62044 }, { km: NaN }, { km: -1 }, { diferenciais: [] }, { price: 0 }, { price: NaN },
+  ]) {
+    assert.equal(resolveFactoryWarranty({ ...current, ...patch }, localRegistry, currentReviewDate), undefined);
+  }
+  for (const km of [62045, 100000, 200000]) {
+    assert.equal(resolveFactoryWarranty({ ...current, km }, localRegistry, currentReviewDate)?.estimatedEndYear, 2028);
+  }
+});
+
+test("Renegade approval still rejects unknown km policy, revocation, missing evidence and duplicate IDs", () => {
+  const current = localVehicle("20075");
+  const approved = localRegistry.records.find((entry) => entry.vehicle.vehicleId === "20075")!;
+  for (const patch of [
+    { status: "pending" }, { status: "revoked" }, { optionalConfirmed: false },
+    { conditionsConfirmed: false }, { approvedFingerprint: "changed" },
+  ] as Array<Partial<FactoryWarrantyRecord>>) {
+    assert.equal(resolveFactoryWarranty(current, matrix({ ...approved, ...patch }), currentReviewDate), undefined);
+  }
+  const unknownMileage = { ...approved, mileage: { kind: "unknown" } } as FactoryWarrantyRecord;
+  unknownMileage.approvedFingerprint = factoryWarrantyReviewFingerprint(unknownMileage);
+  assert.equal(resolveFactoryWarranty(current, matrix(unknownMileage), currentReviewDate), undefined);
+  const unverifiedSource = structuredClone(approved);
+  unverifiedSource.sources[0].verification.status = "pending";
+  unverifiedSource.approvedFingerprint = factoryWarrantyReviewFingerprint(unverifiedSource);
+  assert.equal(resolveFactoryWarranty(current, matrix(unverifiedSource), currentReviewDate), undefined);
+  assert.equal(resolveFactoryWarranty(current, matrix(approved, approved), currentReviewDate), undefined);
+});
+
+test("Renegade 2028 is a fabrication-based estimate and requires confirmed validity in its final year", () => {
+  const current = localVehicle("20075");
+  assert.equal(resolveFactoryWarranty(current, localRegistry, "2027-12-31")?.estimatedEndYear, 2028);
+  for (const date of ["2028-01-01", "2028-12-31", "2029-01-01"]) {
+    assert.equal(resolveFactoryWarranty(current, localRegistry, date), undefined);
+  }
+  const reviewed = structuredClone(localRegistry.records.find((entry) => entry.vehicle.vehicleId === "20075")!);
+  // Synthetic test date only; the real registry deliberately has no exact expiry.
+  reviewed.confirmedExpiryDate = "2028-06-30";
+  reviewed.approvedFingerprint = factoryWarrantyReviewFingerprint(reviewed);
+  assert.equal(resolveFactoryWarranty(current, matrix(reviewed), "2028-06-30")?.estimatedEndYear, 2028);
+  assert.equal(resolveFactoryWarranty(current, matrix(reviewed), "2028-07-01"), undefined);
 });

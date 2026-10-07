@@ -32,6 +32,12 @@ const tiggo7PowertrainAudit = JSON.parse(
     "utf8",
   ),
 );
+const renegadeAudit = JSON.parse(
+  readFileSync(
+    resolve(root, "docs/audits/factory-warranty-renegade-20075-2026-10-07.json"),
+    "utf8",
+  ),
+);
 const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window");
 const originalFetch = globalThis.fetch;
 const OriginalDate = globalThis.Date;
@@ -64,7 +70,8 @@ class FixedDate extends OriginalDate {
 }
 
 function approvedVehicle(id = "19587") {
-  const snapshot = tiggo7PowertrainAudit.publicVehicles.find((vehicle) => vehicle.id === id)
+  const snapshot = renegadeAudit.publicVehicles.find((vehicle) => vehicle.id === id)
+    ?? tiggo7PowertrainAudit.publicVehicles.find((vehicle) => vehicle.id === id)
     ?? tiggoPowertrainAudit.publicVehicles.find((vehicle) => vehicle.id === id)
     ?? october5Audit.publicVehicles.find((vehicle) => vehicle.id === id)
     ?? audit.currentCatalogSnapshot.find((vehicle) => vehicle.id === id);
@@ -218,6 +225,62 @@ function assertStamp(expected) {
     assert.equal(renderer.root.findByType(CardsHero).props.warrantyStamp, undefined);
   }
 }
+
+for (const compact of [false, true]) {
+  for (const source of ["raw", "API"]) {
+    test(`Renegade 20075: ${source} -> ${compact ? "compact" : "normal"} card shows one general 2028 stamp`, async () => {
+      currentNow = OriginalDate.parse(`${renegadeAudit.reviewedAt}T12:00:00Z`);
+      const base = approvedVehicle("20075");
+      const raw = source === "API" ? await mappedApiVehicle("20075") : base;
+      await renderCard(raw, { base, compact });
+      assertStamp(true);
+      const hero = renderer.root.findByType(CardsHero).props;
+      assert.equal(hero.warrantyStamp.estimatedEndYear, 2028);
+      assert.equal(hero.powertrainStamp, undefined);
+      assert.equal(hero.tractionBatteryStamp, undefined);
+    });
+  }
+}
+
+for (const [label, patch] of [
+  ["recycled Citroen identity", { marca: "CITROEN", modelo: "C3" }],
+  ["XML-only model shorthand", { modelo: "RENEGADE LONGITUDE T270" }],
+  ["another unit", { id: "another-renegade" }],
+  ["changed fabrication year", { anoFabricacao: 2024 }],
+  ["missing model year", { year: undefined }],
+  ["regressed mileage", { km: 62044 }],
+  ["missing mileage", { km: undefined }],
+  ["removed warranty flag", { diferenciais: [] }],
+  ["sold raw vehicle", { price: 0 }],
+]) {
+  test(`Renegade 20075: ${label} cannot borrow a valid presentation to display its stamp`, async () => {
+    currentNow = OriginalDate.parse(`${renegadeAudit.reviewedAt}T12:00:00Z`);
+    const base = approvedVehicle("20075");
+    await renderCard({ ...base, ...patch }, { base });
+    assertStamp(false);
+  });
+}
+
+test("Renegade 20075: a recycled Citroen API row is rejected after the real mapper", async () => {
+  currentNow = OriginalDate.parse(`${renegadeAudit.reviewedAt}T12:00:00Z`);
+  const raw = await mappedApiVehicle("20075", { marca: "CITROEN", modelo: "C3" });
+  await renderCard(raw, { base: approvedVehicle("20075") });
+  assertStamp(false);
+});
+
+test("Renegade 20075: sold presentation suppresses a still-available raw unit", async () => {
+  currentNow = OriginalDate.parse(`${renegadeAudit.reviewedAt}T12:00:00Z`);
+  const raw = approvedVehicle("20075");
+  await renderCard(raw, { base: raw, price: 0 });
+  assertStamp(false);
+});
+
+test("Renegade 20075: the card hides the final-year estimate without a confirmed expiry", async () => {
+  currentNow = OriginalDate.parse("2028-01-01T12:00:00Z");
+  const raw = approvedVehicle("20075");
+  await renderCard(raw, { base: raw });
+  assertStamp(false);
+});
 
 for (const id of ["19587", "19857"]) {
   test(`real card displays the production stamp for approved unit ${id}`, async () => {

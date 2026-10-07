@@ -1,0 +1,180 @@
+{
+  "reviewId": "warranty-20261007-20075",
+  "reviewedAt": "2026-10-07",
+  "scope": "One individually reviewed basic-vehicle warranty for Jeep Renegade unit 20075 only.",
+  "baseSourceCommit": "6f9241a30cfe9b95603d95379169008497014812",
+  "approvedLocalContent": [
+    {
+      "vehicleId": "20075",
+      "recordId": "reviewed-v2-20261007-20075",
+      "identity": {
+        "vehicleId": "20075",
+        "brand": "JEEP",
+        "modelVersion": "RENEGADE LONGITUDE T270 TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024
+      },
+      "scope": "basic-vehicle",
+      "termYears": 5,
+      "usage": "private",
+      "reviewedMileageKm": 62045,
+      "mileageGate": {
+        "kind": "unlimited"
+      },
+      "expectedYear": 2028,
+      "sources": [
+        {
+          "sourceId": "jeep-renegade-my2024-term-20240419",
+          "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-anuncia-5-anos-de-garantia-para-todos-os-seus-modelos-produzidos-no-brasil",
+          "locator": "Comunicado de 19/04/2024, parágrafos que incluem todas as versões do Renegade desde o ano-modelo 2024 na garantia de fábrica de cinco anos. Fonte usada para o prazo e a abrangência por ano-modelo.",
+          "revision": "Comunicado Jeep/Stellantis Brasil de 2024-04-19; Renegade MY2024, todas as versões; prazo de cinco anos.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "2024-04-19",
+            "modelYear": 2024,
+            "reviewId": "warranty-20261007-20075",
+            "reviewedAt": "2026-10-07"
+          }
+        }
+      ],
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261007-20075\",\"reviewedAt\":\"2026-10-07\",\"vehicle\":{\"vehicleId\":\"20075\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"JEEP\",\"modelVersion\":\"RENEGADE LONGITUDE T270 TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":62045,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"jeep-renegade-my2024-term-20240419\",\"url\":\"https://www.media.stellantis.com/br-pt/jeep/press/jeep-anuncia-5-anos-de-garantia-para-todos-os-seus-modelos-produzidos-no-brasil\",\"locator\":\"Comunicado de 19/04/2024, parágrafos que incluem todas as versões do Renegade desde o ano-modelo 2024 na garantia de fábrica de cinco anos. Fonte usada para o prazo e a abrangência por ano-modelo.\",\"revision\":\"Comunicado Jeep/Stellantis Brasil de 2024-04-19; Renegade MY2024, todas as versões; prazo de cinco anos.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"2024-04-19\",\"modelYear\":2024,\"reviewId\":\"warranty-20261007-20075\",\"reviewedAt\":\"2026-10-07\"}}]}",
+      "actualStart": null,
+      "confirmedExpiryDate": null
+    }
+  ],
+  "publicVehicles": [
+    {
+      "id": "20075",
+      "marca": "JEEP",
+      "modelo": "RENEGADE LONGITUDE T270 TURBO",
+      "anoFabricacao": 2023,
+      "year": 2024,
+      "km": 62045,
+      "price": 104900,
+      "diferenciais": [
+        {
+          "tag": "garantia_fabrica",
+          "descricao": "Garantia de Fábrica"
+        }
+      ]
+    }
+  ],
+  "officialEvidence": {
+    "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-anuncia-5-anos-de-garantia-para-todos-os-seus-modelos-produzidos-no-brasil",
+    "publisher": "Jeep / Stellantis Brasil",
+    "publicationDate": "2024-04-19",
+    "reviewedAt": "2026-10-07",
+    "documentReference": "Publication date 2024-04-19; not a manufacturer manual code.",
+    "supports": [
+      "Five-year factory-warranty term for all Renegade versions from model year 2024."
+    ],
+    "doesNotEstablish": [
+      "A mileage ceiling or unlimited mileage.",
+      "The transfer terms for this individual vehicle.",
+      "Its first-delivery date or exact expiry."
+    ]
+  },
+  "operationalAttestation": {
+    "vehicleId": "20075",
+    "reviewedAt": "2026-10-07",
+    "basis": "Explicit unit-specific confirmation by the responsible party.",
+    "manualAndMaintenanceConditionsConfirmed": true,
+    "termYearsConfirmed": 5,
+    "usageConfirmed": "private",
+    "mileageConfirmed": {
+      "kind": "unlimited"
+    },
+    "mileageConfirmationAt": "2026-10-07T21:08:00Z",
+    "mileageConfirmationTimePrecision": "minute",
+    "publicationAuthorizedForThisUnit": true,
+    "scope": "The unlimited-mileage and private-use fields rely on this individual operational attestation. They are not attributed to the official announcement and do not create a rule for other Jeep vehicles.",
+    "optionalId": 108,
+    "optionalConfirmationBasis": "The existing unit-specific operational review confirms optional 108 and warranty conditions. Only the public XML/API warranty flag was read in this review; no numeric ERP optional field was queried."
+  },
+  "publicStockEvidence": {
+    "checkedAtUtc": "2026-10-07T20:59:39.147767+00:00",
+    "sources": [
+      {
+        "kind": "XML",
+        "url": "https://www.netcarmultimarcas.com.br/automacar/xml.xml",
+        "observedAtUtc": "2026-10-07T20:59:37.919167+00:00",
+        "bodySha256": "f283d761292ed2df25a206160b7250e5bb3b28ddff7db0e2e7a78bc13df40c09",
+        "matchingCount": 1
+      },
+      {
+        "kind": "API list",
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500&offset=0",
+        "observedAtUtc": "2026-10-07T20:59:39.143481+00:00",
+        "bodySha256": "4a630b4d5fd67118d7e8f117d7e9a20df7d0668fe7c3dbb2b77497a8e921ce24",
+        "matchingCount": 1
+      },
+      {
+        "kind": "API detail",
+        "url": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20075",
+        "observedAtUtc": "2026-10-07T20:59:38.390779+00:00",
+        "bodySha256": "f8a572d1fca55079e6c2db0b221760eb896ec92ece1be0f166fd21ccd43b55ff",
+        "matchingCount": 1
+      }
+    ],
+    "presentInPublicCatalog": true,
+    "positivePrice": true,
+    "warrantyFlagPresent": true,
+    "erpSaleStatusVerified": false,
+    "statusField": null,
+    "limit": "Public presence, positive price and the current warranty flag satisfy the existing catalog gate; no new ERP status requirement or private sale-state claim is introduced."
+  },
+  "identityCorrespondence": {
+    "vehicleId": "20075",
+    "brand": "JEEP",
+    "xmlModel": "RENEGADE LONGITUDE T270",
+    "apiModel": "RENEGADE LONGITUDE T270 TURBO",
+    "manufactureYear": 2023,
+    "modelYear": 2024,
+    "reviewedMileageKm": 62045,
+    "priceBrl": 104900,
+    "basis": "The same unique public ID, brand, fabrication/model years, mileage, price and warranty flag were checked in the XML, API list and API detail. This explicitly reviewed correspondence applies only to this unit.",
+    "notAGeneralAlias": true,
+    "identityReuseRule": "A previous vehicle of another brand, including a Citroën using this ID, cannot inherit this approval. The resolver still requires the full current compound identity."
+  },
+  "timing": {
+    "method": "Fabrication year 2023 plus the individually reviewed five-year term gives the displayed estimate 2028*. No exact day or month is inferred.",
+    "actualStart": null,
+    "confirmedExpiryDate": null,
+    "finalYearRequiresConfirmedUnexpiredDate": true,
+    "resaleDoesNotCreateANewFiveYearTerm": true
+  },
+  "preservation": {
+    "baselineRecordCount": 15,
+    "baselineRecordIds": [
+      "19924",
+      "20066",
+      "20029",
+      "20041",
+      "19994",
+      "20049",
+      "19779",
+      "19854",
+      "19898",
+      "20038",
+      "19866",
+      "20019",
+      "19857",
+      "20018",
+      "19587"
+    ],
+    "baselineRecordsSha256": "9ddc024865face05c67aa1cff24ef29556c9d6121afdd676156700185e3349d4",
+    "comparison": "All 15 prior record objects remain byte-for-byte present and deep-equal. The only matrix change is one appended record for 20075."
+  },
+  "expectedRegistryCounts": {
+    "records": 16,
+    "approvedBasic": 7,
+    "approvedPowertrain": 3,
+    "pendingBasic": 6,
+    "approvedTractionBattery": 1
+  },
+  "privacy": "No personal names, private messages or thread references, plates, VINs, customer data, private filesystem paths or credentials are included.",
+  "publication": {
+    "authorized": true,
+    "executedByThisChange": false
+  }
+}
