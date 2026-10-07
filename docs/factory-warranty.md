@@ -1,8 +1,8 @@
 # Carimbo de garantia de fábrica
 
 O visual escolhido é o circular A. A integração usa um único registro principal
-por unidade. A matriz schema2 contém nove registros principais revisados e
-seis pendentes, com `enabled: true`: seis coberturas gerais e três de motor e
+por unidade. A matriz schema2 contém dez registros principais revisados e
+seis pendentes, com `enabled: true`: sete coberturas gerais e três de motor e
 câmbio. Das cinco unidades autorizadas em 03/10/2026 às 23:39:29 UTC, quatro
 mantêm seus registros originais; a exibição do Tiggo7 20066 foi substituída
 pela revisão individual de motor e câmbio em 05/10. BYD19924 e Tracker20049
@@ -27,6 +27,16 @@ sua revisão geral anterior e confirma que os outros 14 registros não mudaram.
 | 19924 | SONG PRO GS — bateria de tração | 2032* | Cobertura separada de 8 anos; uso não comercial confirmado; condições e exclusões do manual |
 | 20049 | TRACKER LT TURBO | 2027* | Geral 3 anos; exceção R8C/R8Z excluída para a unidade; abaixo de 100.000 km |
 | 20029 / 20041 | TIGGO 8 MAX DRIVE TURBO — motor e câmbio | 2028* | Prazo original de 5 anos; uso não comercial atestado para ambas; sem limite de km |
+| 20075 | RENEGADE LONGITUDE T270 TURBO | 2028* | Geral 5 anos; uso particular e ausência de limite de km atestados especificamente para a unidade |
+
+O Renegade20075 foi incluído em 07/10/2026, preservando os 15 registros anteriores.
+O comunicado oficial Jeep/Stellantis de 19/04/2024 comprova o prazo de cinco
+anos para o Renegade MY2024; uso particular, quilometragem ilimitada e condições
+de manual/manutenção vêm do ateste operacional específico da unidade. Não são
+condições extraídas desse comunicado nem uma regra para outros Jeep. A auditoria
+`docs/audits/factory-warranty-renegade-20075-2026-10-07.json` separa essas fontes
+e registra a correspondência individual entre o nome do XML e o nome completo
+da API. O ano2028 é a estimativa FAB2023+5, sem data exata de vencimento.
 
 ## Regra de exibição
 

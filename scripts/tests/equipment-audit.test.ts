@@ -879,7 +879,7 @@ test("powertrain source changes and conflicting records remain blocked and reope
   }
 });
 
-test("the registry audit keeps six general coverages, three powertrain coverages and the BYD battery separate", () => {
+test("the registry audit keeps seven general coverages, three powertrain coverages and the BYD battery separate", () => {
   const report = buildEquipmentAudit(
     parseStockResponse(
       apiResponse(
@@ -889,11 +889,11 @@ test("the registry audit keeps six general coverages, three powertrain coverages
       ),
     ),
     null,
-    warrantyRunAt,
+    "2026-10-07T12:00:00.000Z",
   );
   assert.equal(
     report.vehicles.filter((row) => row.warranty?.status === "eligible").length,
-    6,
+    7,
   );
   assert.equal(
     report.vehicles.filter(

@@ -782,6 +782,44 @@
           }
         ]
       }
+    },
+    {
+      "recordId": "reviewed-v2-20261007-20075",
+      "status": "approved",
+      "reviewedAt": "2026-10-07",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261007-20075\",\"reviewedAt\":\"2026-10-07\",\"vehicle\":{\"vehicleId\":\"20075\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"JEEP\",\"modelVersion\":\"RENEGADE LONGITUDE T270 TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":62045,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"jeep-renegade-my2024-term-20240419\",\"url\":\"https://www.media.stellantis.com/br-pt/jeep/press/jeep-anuncia-5-anos-de-garantia-para-todos-os-seus-modelos-produzidos-no-brasil\",\"locator\":\"Comunicado de 19/04/2024, parágrafos que incluem todas as versões do Renegade desde o ano-modelo 2024 na garantia de fábrica de cinco anos. Fonte usada para o prazo e a abrangência por ano-modelo.\",\"revision\":\"Comunicado Jeep/Stellantis Brasil de 2024-04-19; Renegade MY2024, todas as versões; prazo de cinco anos.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"2024-04-19\",\"modelYear\":2024,\"reviewId\":\"warranty-20261007-20075\",\"reviewedAt\":\"2026-10-07\"}}]}",
+      "vehicle": {
+        "vehicleId": "20075",
+        "brand": "JEEP",
+        "modelVersion": "RENEGADE LONGITUDE T270 TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "basic-vehicle",
+      "termYears": 5,
+      "usage": "private",
+      "reviewedMileageKm": 62045,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "sources": [
+        {
+          "sourceId": "jeep-renegade-my2024-term-20240419",
+          "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-anuncia-5-anos-de-garantia-para-todos-os-seus-modelos-produzidos-no-brasil",
+          "locator": "Comunicado de 19/04/2024, parágrafos que incluem todas as versões do Renegade desde o ano-modelo 2024 na garantia de fábrica de cinco anos. Fonte usada para o prazo e a abrangência por ano-modelo.",
+          "revision": "Comunicado Jeep/Stellantis Brasil de 2024-04-19; Renegade MY2024, todas as versões; prazo de cinco anos.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "2024-04-19",
+            "modelYear": 2024,
+            "reviewId": "warranty-20261007-20075",
+            "reviewedAt": "2026-10-07"
+          }
+        }
+      ]
     }
   ]
 }
