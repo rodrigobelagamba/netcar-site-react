@@ -152,6 +152,7 @@ type BadgeVariant =
   | "icheck"
   | "garantia"
   | "baixa-km"
+  | "capacidade"
   | "green-dark";
 
 interface Badge {
@@ -165,6 +166,7 @@ const BADGE_COLORS: Record<BadgeVariant, string> = {
   icheck: "#087A37",
   garantia: "#23747C",
   "baixa-km": "#004C5C",
+  capacidade: "#217F88",
   "green-dark": "#00363B",
 };
 
@@ -179,7 +181,13 @@ function Badge({ text, variant }: Badge) {
         ease: ANIMATION_EASING,
       }}
       className="rounded-[45px] flex items-center uppercase font-bold tracking-wide text-white info-badge"
-      style={{ backgroundColor: BADGE_COLORS[variant] }}
+      style={{
+        backgroundColor: BADGE_COLORS[variant],
+        ...(variant === "capacidade" && {
+          color: "#FFFFFF",
+          boxShadow: "inset 0 0 0 1px #1C727A",
+        }),
+      }}
     >
       <span className="whitespace-nowrap">{text}</span>
     </motion.div>
@@ -2034,7 +2042,7 @@ export function DetalhesPage() {
       : [
           ...heroEquipmentLabels.map((text) => ({
             text,
-            variant: "green-dark" as const,
+            variant: "capacidade" as const,
           })),
           ...(merchandising?.detailLabel
             ? [
