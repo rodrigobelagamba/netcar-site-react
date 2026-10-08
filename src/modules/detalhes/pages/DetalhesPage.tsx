@@ -81,6 +81,7 @@ import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { landingPages, matchesLandingFilters } from "@/data/seo";
 import {
   buildVehicleHighlights,
+  getVehicleHeroEquipmentLabels,
   normalizeVehicleFeatureTag,
   type VehicleHighlightsPresentation,
 } from "@/modules/detalhes/lib/vehicleHighlights";
@@ -2025,11 +2026,16 @@ export function DetalhesPage() {
   // Sem "APENAS X KM", o selo destaca o uso por ano (ano de fabricação).
   const isLowAnnualMileage =
     !isCommercialHighlight && hasVehicleLowAnnualMileage(vehicle);
+  const heroEquipmentLabels = getVehicleHeroEquipmentLabels(vehicle);
 
   const badges: Badge[] = (
     isSold
       ? []
       : [
+          ...heroEquipmentLabels.map((text) => ({
+            text,
+            variant: "green-dark" as const,
+          })),
           ...(merchandising?.detailLabel
             ? [
                 {
@@ -2301,11 +2307,14 @@ export function DetalhesPage() {
               {modeloCompleto}
             </motion.h1>
 
-            {/* Mobile: preço + WhatsApp sobem pra primeira tela; badges/ficha ficam abaixo (order-*). */}
+            {/* A capacidade confirmada aparece logo após o nome, inclusive no mobile. */}
 
             {/* Badges */}
             {badges.length > 0 && (
-              <div className="order-3 sm:order-none mt-4 sm:mt-0 flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">
+              <div
+                aria-label="Destaques do veículo"
+                className={`${heroEquipmentLabels.length > 0 ? "order-none mt-0" : "order-3 sm:order-none mt-4 sm:mt-0"} flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5`}
+              >
                 {badges.map((badge, idx) => (
                   <Badge key={idx} {...badge} />
                 ))}

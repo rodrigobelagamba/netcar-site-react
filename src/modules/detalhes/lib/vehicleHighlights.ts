@@ -23,6 +23,15 @@ export interface VehicleHighlightsPresentation {
 export const normalizeVehicleFeatureTag = normalizeEquipmentTag;
 export const cleanOptionalDescription = cleanEquipmentDescription;
 
+/** Promote verified seating capacity without inferring it from model names. */
+export function getVehicleHeroEquipmentLabels(
+  vehicle: EquipmentVehicle,
+): string[] {
+  return resolveVehicleEquipment(vehicle)
+    .items.filter((item) => item.id === "seven-seats")
+    .map((item) => item.description);
+}
+
 /**
  * Cards and list share inventory evidence, ranking and redundancy rules.
  * Marketing copy and similar vehicles are not equipment/specification sources.

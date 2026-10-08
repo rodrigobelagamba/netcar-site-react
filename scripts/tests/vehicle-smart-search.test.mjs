@@ -8,6 +8,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 let server;
 let parseVehicleSearch;
 let matchesVehicleSearch;
+let unitEquipmentConfirmations;
 
 const hatch = {
   id: "hatch",
@@ -53,6 +54,9 @@ before(async () => {
   ({ parseVehicleSearch, matchesVehicleSearch } = await server.ssrLoadModule(
     "/src/lib/vehicleSearch.ts",
   ));
+  ({ unitEquipmentConfirmations } = await server.ssrLoadModule(
+    "/src/lib/vehicleEquipment.ts",
+  ));
 });
 
 after(async () => {
@@ -67,6 +71,193 @@ function expectMatch(vehicle, query, expected = true) {
     `${query} (pre-parsed query)`,
   );
 }
+
+const sevenSeatSuv = {
+  ...suv,
+  id: "20041",
+  marca: "CHERY",
+  modelo: "TIGGO 8 MAX DRIVE TURBO",
+  name: "CHERY TIGGO 8 MAX DRIVE TURBO",
+  cambio: "AUTOMATICO",
+  motor: "1.6",
+  lugares: 0,
+  opcionais: [{ tag: "sete_lugares", descricao: "7 Lugares" }],
+};
+
+test("seat searches understand numbers and written counts without creating price filters", () => {
+  for (const query of [
+    "7 lugares",
+    "sete lugares",
+    "carro com sete lugares",
+    "7 assentos",
+    "SETE ASSENTOS",
+    "7-lugares",
+  ]) {
+    const parsed = parseVehicleSearch(query);
+    assert.deepEqual(parsed.filters, { seats: 7 }, query);
+    assert.deepEqual(parsed.terms, [], query);
+    assert.deepEqual(parsed.labels, ["7 lugares"], query);
+    assert.equal(parsed.invalid, false, query);
+    expectMatch(sevenSeatSuv, query);
+    expectMatch(hatch, query, false);
+  }
+  for (const query of ["7 lugares 5 lugares", "sete assentos e oito lugares"]) {
+    assert.equal(parseVehicleSearch(query).invalid, true, query);
+    expectMatch(sevenSeatSuv, query, false);
+  }
+  expectMatch(sevenSeatSuv, "17 lugares", false);
+});
+
+test("seat filters combine with prices, mileage, category and brand", () => {
+  for (const query of [
+    "suv 7 lugares até 150 mil",
+    "até 150 mil sete lugares",
+    "chery sete lugares até 60 mil km",
+    "7 lugares de 100 a 150 mil",
+  ]) {
+    expectMatch(sevenSeatSuv, query);
+    expectMatch({ ...sevenSeatSuv, opcionais: [], lugares: 5 }, query, false);
+  }
+  assert.deepEqual(parseVehicleSearch("7 lugares até 150 mil").filters, {
+    seats: 7,
+    priceMax: 150_000,
+  });
+  expectMatch(sevenSeatSuv, "sete lugares até 100 mil", false);
+  expectMatch(sevenSeatSuv, "7 lugares até 50 mil km", false);
+  expectMatch(sevenSeatSuv, "hatch sete lugares até 150 mil", false);
+});
+
+test("canonical inventory equipment fills missing or zero seating without inference", () => {
+  for (const lugares of [0, undefined, null]) {
+    for (const optional of [
+      "sete_lugares",
+      "7 Lugares",
+      "Sete lugares",
+      { tag: "sete_lugares", descricao: "7 Lugares" },
+      { nome: "Sete lugares" },
+    ]) {
+      const vehicle = { ...sevenSeatSuv, lugares, opcionais: [optional] };
+      const original = structuredClone(vehicle);
+      expectMatch(vehicle, "7 lugares");
+      expectMatch(vehicle, "5 lugares", false);
+      assert.deepEqual(vehicle, original);
+    }
+    for (const opcionais of [undefined, null, []]) {
+      const vehicle = { ...sevenSeatSuv, lugares, opcionais };
+      expectMatch(vehicle, "7 lugares", false);
+      expectMatch(vehicle, "5 lugares", false);
+    }
+  }
+  expectMatch(
+    { ...sevenSeatSuv, name: "SUV com sete lugares", opcionais: [] },
+    "sete lugares",
+    false,
+  );
+});
+
+test("valid explicit seating counts keep working and invalid counts remain unknown", () => {
+  for (const lugares of [2, 3, 4, 5, 6, 7, 8, 9]) {
+    expectMatch({ ...hatch, lugares }, `${lugares} lugares`);
+    expectMatch(
+      { ...hatch, lugares },
+      `${lugares === 5 ? 7 : 5} lugares`,
+      false,
+    );
+  }
+  for (const lugares of [undefined, null, 0, -1, 5.5, NaN, Infinity, "7"]) {
+    expectMatch({ ...hatch, lugares }, "7 lugares", false);
+    expectMatch({ ...hatch, lugares }, "5 lugares", false);
+  }
+});
+
+test("explicit seven-seat absence wins over stale numeric and optional counts", () => {
+  for (const absence of [
+    "Sem 7 lugares",
+    "Não possui sete lugares",
+    { tag: "sete_lugares", descricao: "Sem 7 lugares" },
+  ]) {
+    for (const lugares of [0, 7]) {
+      for (const opcionais of [
+        [absence],
+        [absence, ...sevenSeatSuv.opcionais],
+        [...sevenSeatSuv.opcionais, absence],
+      ]) {
+        expectMatch(
+          { ...sevenSeatSuv, lugares, opcionais },
+          "7 lugares",
+          false,
+        );
+      }
+    }
+  }
+});
+
+test("contradictory seat counts do not advertise either count without confirmation", () => {
+  for (const vehicle of [
+    { ...sevenSeatSuv, lugares: 5 },
+    {
+      ...sevenSeatSuv,
+      lugares: 7,
+      opcionais: [{ tag: "sete_lugares", descricao: "5 Lugares" }],
+    },
+    { ...sevenSeatSuv, opcionais: ["sete_lugares", "5 lugares"] },
+  ]) {
+    expectMatch(vehicle, "7 lugares", false);
+    expectMatch(vehicle, "5 lugares", false);
+  }
+  expectMatch(
+    {
+      ...sevenSeatSuv,
+      opcionais: [{ tag: "sete_lugares", descricao: "5 Lugares" }],
+    },
+    "7 lugares",
+    false,
+  );
+});
+
+test("exact-unit confirmations override seating inputs but never carry to another car", () => {
+  const confirmation = {
+    id: "test-unit-seating-confirmation",
+    approved: true,
+    source: "responsible-confirmation",
+    confirmedAt: "2026-10-08",
+    claim: "Synthetic unit confirmation for search regression tests only.",
+    match: {
+      vehicleId: sevenSeatSuv.id,
+      brand: sevenSeatSuv.marca,
+      model: sevenSeatSuv.modelo,
+      modelYear: sevenSeatSuv.year,
+      engine: sevenSeatSuv.motor,
+      transmission: sevenSeatSuv.cambio,
+    },
+    presentTags: [],
+    absentTags: ["sete_lugares"],
+  };
+  const count = unitEquipmentConfirmations.length;
+  try {
+    unitEquipmentConfirmations.push(confirmation);
+    expectMatch(sevenSeatSuv, "7 lugares", false);
+    expectMatch(
+      { ...sevenSeatSuv, lugares: 7, opcionais: [] },
+      "7 lugares",
+      false,
+    );
+    expectMatch({ ...sevenSeatSuv, id: "20029" }, "7 lugares");
+
+    confirmation.absentTags = [];
+    confirmation.presentTags = ["sete_lugares"];
+    const staleInventory = {
+      ...sevenSeatSuv,
+      lugares: 5,
+      opcionais: ["Sem 7 lugares"],
+    };
+    expectMatch(staleInventory, "sete lugares");
+    expectMatch(staleInventory, "5 lugares", false);
+    expectMatch({ ...staleInventory, id: "20029" }, "7 lugares", false);
+  } finally {
+    unitEquipmentConfirmations.splice(count);
+  }
+});
 
 test("brand aliases work in both query and catalog, including spaced initials", () => {
   for (const aliases of [

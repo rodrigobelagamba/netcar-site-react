@@ -1,6 +1,7 @@
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { resolvedVehicleCategory } from "./vehicleCategory";
 import { normalizeVehicleBrand } from "./vehicleBrand";
+import { resolveVehicleEquipment } from "./vehicleEquipment";
 import {
   hasVehicleBrandOrigin,
   parseVehicleBrandOrigin,
@@ -95,6 +96,19 @@ const COLOR_LABELS: Record<string, string> = {
   bege: "Bege",
   marrom: "Marrom",
 };
+const SEAT_NUMBERS: Readonly<Record<string, number>> = {
+  dois: 2,
+  tres: 3,
+  quatro: 4,
+  cinco: 5,
+  seis: 6,
+  sete: 7,
+  oito: 8,
+  nove: 9,
+};
+const SEAT_COUNT_PATTERN =
+  "([2-9]|dois|tres|quatro|cinco|seis|sete|oito|nove)[\\s-]*(?:lugares|assentos?)";
+const seatNumber = (value: string) => SEAT_NUMBERS[value] || Number(value);
 const FILLER = new Set([
   "quero",
   "procuro",
@@ -206,8 +220,21 @@ export function parseVehicleSearch(term: string): ParsedVehicleSearch {
     .toLowerCase()
     .replace(/\s+/g, " ")
     .trim();
-  const numeric = parseVehicleSearchNumbers(normalized);
+  let seats: number | undefined;
+  let conflictingSeats = false;
+  // Take seating out before the price/km scanner: its number has its own unit.
+  const withoutSeats = normalized.replace(
+    new RegExp(`\\b${SEAT_COUNT_PATTERN}\\b`, "g"),
+    (_, count: string) => {
+      const next = seatNumber(count);
+      conflictingSeats ||= seats != null && seats !== next;
+      seats = next;
+      return " ";
+    },
+  );
+  const numeric = parseVehicleSearchNumbers(withoutSeats);
   const filters: SearchFilters = numeric.filters;
+  if (seats != null) filters.seats = seats;
   // Store-defined meaning of "barato". Intersect with explicit limits rather
   // than widening a customer's lower budget (e.g. "barato até 50 mil").
   const withoutBudgetAlias = numeric.remaining.replace(
@@ -223,13 +250,6 @@ export function parseVehicleSearch(term: string): ParsedVehicleSearch {
     filters.excludedBrandOrigins = origin.excludedBrandOrigins;
   let remaining = origin.remaining;
 
-  remaining = remaining.replace(
-    /\b([2-9])\s*(?:lugares|assentos)\b/g,
-    (_, count) => {
-      filters.seats = Number(count);
-      return " ";
-    },
-  );
   remaining = remaining
     .replace(
       /\bcambio\s+(?:automatico|automaticos|automatica|automaticas|aut|cvt)\b/g,
@@ -279,14 +299,53 @@ export function parseVehicleSearch(term: string): ParsedVehicleSearch {
     terms,
     filters,
     labels,
-    hints: numeric.hints,
+    hints: conflictingSeats
+      ? [...numeric.hints, "Informe uma única quantidade de lugares."]
+      : numeric.hints,
     invalid:
       numeric.invalid ||
       origin.invalid ||
+      conflictingSeats ||
       (filters.priceMin != null &&
         filters.priceMax != null &&
         filters.priceMin > filters.priceMax),
   };
+}
+
+function resolvedSearchSeats(vehicle: Partial<Vehicle>): number | undefined {
+  const seats =
+    Number.isInteger(vehicle.lugares) &&
+    vehicle.lugares! >= 2 &&
+    vehicle.lugares! <= 9
+      ? vehicle.lugares
+      : undefined;
+  // The feed often leaves lugares=0 while explicitly listing sete_lugares.
+  // Translate only a real numeric seven into a temporary resolver input, so
+  // explicit absences and exact-unit confirmations retain their precedence.
+  const equipment = resolveVehicleEquipment(
+    seats === 7
+      ? {
+          ...vehicle,
+          opcionais: [...(vehicle.opcionais || []), "sete_lugares"],
+        }
+      : vehicle,
+  );
+  const sevenSeats = equipment.items.find((item) => item.id === "seven-seats");
+  if (sevenSeats) {
+    if (sevenSeats.source === "unit-confirmation") return 7;
+    const conflictingDescription = equipment.items.some((item) => {
+      const count = normalizeVehicleSearch(item.description).match(
+        new RegExp(`^${SEAT_COUNT_PATTERN}$`),
+      );
+      return count && seatNumber(count[1]) !== 7;
+    });
+    // Contradictory positive counts need review; don't advertise either one.
+    if ((seats != null && seats !== 7) || conflictingDescription)
+      return undefined;
+    return 7;
+  }
+  // Never default unknown seating to five, or resurrect a rejected seven.
+  return seats === 7 ? undefined : seats;
 }
 
 // One edit/adjacent transposition in long alphabetic words only. Never relax
@@ -381,7 +440,8 @@ export function matchesVehicleSearch(
     !normalizeVehicleSearch(vehicle.cor).startsWith(filters.color)
   )
     return false;
-  if (filters.seats && vehicle.lugares !== filters.seats) return false;
+  if (filters.seats && resolvedSearchSeats(vehicle) !== filters.seats)
+    return false;
   const words = normalizeVehicleSearch(
     [
       vehicle.marca,
