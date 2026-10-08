@@ -190,7 +190,7 @@ function netcar_normalize_image_url(?string $url): string
 
     if (preg_match('#^https?://#i', $normalized)) {
         $absolute = $normalized;
-    } elseif (str_starts_with($normalized, '/')) {
+    } elseif (isset($normalized[0]) && $normalized[0] === '/') {
         $absolute = NETCAR_SITE_URL . $normalized;
     } else {
         $absolute = NETCAR_SITE_URL . '/' . $normalized;
