@@ -961,9 +961,15 @@ test("the registry audit keeps eleven general coverages, three powertrain covera
   // This complete registry fixture also includes Nivus20018, which is absent
   // from the current public catalog; neither it nor Compass19866 was approved.
   assert.deepEqual(
-    report.vehicles.filter((row) => row.warranty?.status === "pending").map((row) => row.id).sort(),
+    warrantyRegistry.records.filter((record) => record.status === "pending").map((record) => record.vehicle.vehicleId).sort(),
     ["19866", "20018"],
   );
+  for (const id of ["19866", "20018"]) {
+    const coverage = report.vehicles.find((row) => row.id === id)!.warranty!;
+    assert.notEqual(coverage.status, "eligible");
+    assert.notEqual(coverage.powertrain?.status, "eligible");
+    assert.notEqual(coverage.supplemental?.status, "eligible");
+  }
   assert.equal(report.counts.withAlerts, 2);
 });
 
