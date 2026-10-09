@@ -714,23 +714,23 @@ export function SeminovosPage() {
   ]);
 
   return (
-    <main className="flex-1 pt-10 overflow-x-hidden max-w-full pb-6">
-      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-6">
-        <div className="mb-4 flex flex-col gap-2 rounded-xl border border-[#00283C]/10 bg-white p-2 shadow-sm lg:flex-row lg:items-start lg:gap-3">
+    <main className="flex-1 pt-16 sm:pt-0 overflow-x-hidden max-w-full pb-6">
+      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-3 sm:py-4">
+        <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start">
           <StockSearchField
             value={search.busca || ""}
             onChange={handleStockSearch}
             vehicles={structuredVehicles}
           />
-          <div className="flex items-center justify-between gap-3 lg:shrink-0 lg:pt-2">
+          <div className="flex items-center justify-between gap-2 sm:shrink-0">
             <button
               type="button"
               onClick={() => setAreFiltersVisible((visible) => !visible)}
               aria-expanded={areFiltersVisible}
               aria-controls="stock-filters"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#00283C] px-4 text-sm font-bold text-white"
+              className="inline-flex min-h-[30px] items-center justify-center gap-1 rounded-md bg-[#00283C] px-2.5 text-xs font-bold text-white sm:min-h-11 sm:gap-2 sm:rounded-lg sm:px-4 sm:text-sm"
             >
-              <Filter className="h-4 w-4" />
+              <Filter className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Filtros
               {visibleFiltersCount > 0 && (
                 <span className="rounded-full bg-white px-1.5 py-0.5 text-xs text-[#00283C]">
@@ -739,9 +739,6 @@ export function SeminovosPage() {
               )}
             </button>
             <label className="flex min-w-0 items-center gap-2">
-              <span className="hidden text-xs font-bold uppercase text-muted-foreground sm:inline">
-                Ordenar por
-              </span>
               <span className="sr-only">Ordenar veículos</span>
               <div className="relative min-w-0">
                 <select
@@ -749,7 +746,7 @@ export function SeminovosPage() {
                   onChange={(event) =>
                     setSortBy(event.target.value as ShowroomSortOption)
                   }
-                  className="min-h-11 max-w-[190px] appearance-none rounded-lg bg-surface px-3 pr-8 text-sm font-semibold text-fg focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="min-h-[30px] max-w-[190px] appearance-none rounded-md border border-[#00283C]/10 bg-white px-2 pr-6 text-xs font-semibold text-fg focus:outline-none focus:ring-2 focus:ring-primary/20 sm:min-h-11 sm:rounded-lg sm:px-3 sm:pr-8 sm:text-sm"
                 >
                   <option value="recomendados">Recomendados</option>
                   <option value="ano-desc">Mais novos (ano)</option>
@@ -757,22 +754,15 @@ export function SeminovosPage() {
                   <option value="preco-desc">Maior preço</option>
                   <option value="az">Modelo A–Z</option>
                 </select>
-                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground sm:right-2 sm:h-4 sm:w-4" />
               </div>
             </label>
           </div>
         </div>
 
-        <StockFilterNotice
-          active={Boolean(search.busca?.trim()) || appliedFiltersCount > 0}
-          resultCount={filteredAndSortedVehicles.length}
-          updating={isLoading || isRefreshingVehicles}
-          onClear={handleClearFilters}
-        />
-
         {activeFilterLabels.length > 0 ? (
           <div
-            className="mb-4 flex flex-wrap items-center gap-2"
+            className="mb-2 flex flex-wrap items-center gap-2"
             aria-label="Filtros ativos"
           >
             {activeFilterLabels.map((label, index) => (
@@ -783,13 +773,6 @@ export function SeminovosPage() {
                 {label}
               </span>
             ))}
-            <button
-              type="button"
-              onClick={handleClearFilters}
-              className="min-h-9 px-2 text-xs font-black text-primary underline underline-offset-4"
-            >
-              Limpar todos
-            </button>
           </div>
         ) : null}
 
@@ -962,72 +945,86 @@ export function SeminovosPage() {
           </div>
         </div>
 
-        {/* Header com Título e Ordenação */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-3">
-          <div>
-            <h1 className="text-2xl font-bold text-fg">
+        <div className="mb-3">
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="min-w-0 text-lg font-bold leading-tight text-fg sm:text-xl">
               Carros seminovos e usados
             </h1>
+            <details className="group relative shrink-0">
+              <summary className="flex min-h-[30px] min-w-[30px] cursor-pointer list-none items-center justify-center gap-1.5 rounded-lg text-xs font-semibold text-[#007A83] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008C95] sm:min-h-11 sm:min-w-11 [&::-webkit-details-marker]:hidden">
+                <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+                <span className="sr-only sm:not-sr-only">Sobre o estoque</span>
+                <ChevronDown
+                  className="h-3 w-3 transition-transform group-open:rotate-180"
+                  aria-hidden="true"
+                />
+              </summary>
+              <div className="absolute right-0 top-full z-20 w-[min(24rem,calc(100vw-2rem))] space-y-3 rounded-xl border border-[#00283C]/10 bg-white p-4 text-sm leading-relaxed text-muted-foreground shadow-lg">
+                <p>
+                  <strong className="text-fg">Seleção Netcar:</strong> origem
+                  RS, sem locadora, leilão, sinistro, furto ou roubo.{" "}
+                  <Link
+                    to="/como-selecionamos-nossos-carros"
+                    className="font-bold text-[#007A83] underline underline-offset-4"
+                  >
+                    Entenda
+                  </Link>
+                </p>
+                <p>
+                  Estoque disponível nas duas lojas da Netcar, na Av. Presidente
+                  Vargas, em Esteio. Veja fotos, preço e ano antes de escolher.
+                </p>
+                <nav
+                  aria-label="Atalhos do estoque"
+                  className="flex flex-wrap gap-2"
+                >
+                  {landingPages
+                    .filter((landing) => landing.type === "categoria")
+                    .map((landing) => (
+                      <Link
+                        key={landing.slug}
+                        to="/comprar-{$landingSlug}"
+                        params={{ landingSlug: landing.slug }}
+                        className="inline-flex min-h-11 items-center rounded-full border border-[#00283C]/15 px-3 text-xs font-bold text-[#00283C] hover:border-[#008C95]/40 hover:text-[#007A83]"
+                      >
+                        {stockCategoryLabels[landing.slug] || landing.name}
+                      </Link>
+                    ))}
+                  <Link
+                    to="/seminovos-automaticos"
+                    className="inline-flex min-h-11 items-center rounded-full border border-[#00283C]/15 px-3 text-xs font-bold text-[#00283C] hover:border-[#008C95]/40 hover:text-[#007A83]"
+                  >
+                    Automáticos
+                  </Link>
+                </nav>
+              </div>
+            </details>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-3">
             <p
-              className="text-sm text-muted-foreground mt-1"
+              className="text-xs text-muted-foreground sm:text-sm"
               role="status"
               aria-live="polite"
               aria-atomic="true"
             >
-              {filteredAndSortedVehicles.length} veículo
-              {filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado
-              {filteredAndSortedVehicles.length !== 1 ? "s" : ""}
+              {isLoading || isRefreshingVehicles ? (
+                "Atualizando estoque…"
+              ) : (
+                <>
+                  {filteredAndSortedVehicles.length} veículo
+                  {filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado
+                  {filteredAndSortedVehicles.length !== 1 ? "s" : ""}
+                </>
+              )}
             </p>
-            <div className="mt-2 flex max-w-3xl flex-wrap items-center gap-x-1.5 gap-y-1 text-[11px] font-semibold leading-relaxed text-muted-foreground sm:text-xs">
-              <ShieldCheck
-                className="h-4 w-4 shrink-0 text-primary"
-                aria-hidden="true"
-              />
-              <span className="font-black text-fg">Seleção Netcar:</span>
-              <span>
-                origem RS, sem locadora, leilão, sinistro, furto ou roubo.
-              </span>
-              <Link
-                to="/como-selecionamos-nossos-carros"
-                className="font-black text-primary underline decoration-primary/25 underline-offset-4 hover:text-fg"
-              >
-                Entenda
-              </Link>
-            </div>
+            <StockFilterNotice
+              active={Boolean(search.busca?.trim()) || appliedFiltersCount > 0}
+              resultCount={filteredAndSortedVehicles.length}
+              updating={isLoading || isRefreshingVehicles}
+              onClear={handleClearFilters}
+            />
           </div>
         </div>
-
-        {!hasFilterParams && (
-          <div className="mb-5 space-y-3">
-            <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              Estoque disponível nas duas lojas da Netcar, na Av. Presidente
-              Vargas, em Esteio. Veja fotos, preço e ano antes de escolher.
-            </p>
-            <nav
-              aria-label="Atalhos do estoque"
-              className="flex flex-wrap gap-2"
-            >
-              {landingPages
-                .filter((landing) => landing.type === "categoria")
-                .map((landing) => (
-                  <Link
-                    key={landing.slug}
-                    to="/comprar-{$landingSlug}"
-                    params={{ landingSlug: landing.slug }}
-                    className="rounded-full border border-[#00283C]/15 bg-white px-3.5 py-2 text-xs font-bold text-[#00283C] transition-colors hover:border-[#008C95]/40 hover:text-[#007A83]"
-                  >
-                    {stockCategoryLabels[landing.slug] || landing.name}
-                  </Link>
-                ))}
-              <Link
-                to="/seminovos-automaticos"
-                className="rounded-full border border-[#00283C]/15 bg-white px-3.5 py-2 text-xs font-bold text-[#00283C] transition-colors hover:border-[#008C95]/40 hover:text-[#007A83]"
-              >
-                Automáticos
-              </Link>
-            </nav>
-          </div>
-        )}
 
         {/* Grid de Veículos */}
         <div id="stock-results">

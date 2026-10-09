@@ -80,16 +80,13 @@ export function StockSearchField({
       }}
       className="min-w-0 flex-1 overflow-hidden rounded-lg border border-[#008C95]/20 bg-[#F3F8F8] transition-colors focus-within:border-[#008C95] focus-within:ring-2 focus-within:ring-[#008C95]/15"
     >
-      <div className="flex items-center gap-3 px-3 py-2">
+      <div className="flex h-11 items-center gap-2 px-3">
         <Search
           className="h-5 w-5 shrink-0 text-[#007A83]"
           aria-hidden="true"
         />
         <div className="min-w-0 flex-1">
-          <label
-            htmlFor="stock-search"
-            className="block text-[10px] font-bold uppercase tracking-[0.12em] text-[#007A83]"
-          >
+          <label htmlFor="stock-search" className="sr-only">
             Buscar no estoque
           </label>
           <input

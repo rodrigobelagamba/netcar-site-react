@@ -24,26 +24,23 @@ export function StockFilterNotice({
   return (
     <section
       aria-label="Estoque filtrado"
-      className="mb-4 flex flex-col gap-2 rounded-xl border border-amber-300 bg-amber-50 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+      className="inline-flex min-w-0 items-center gap-2 text-xs sm:text-sm"
     >
-      <div className="flex min-w-0 items-start gap-2.5">
-        <Filter
-          className="mt-0.5 h-4 w-4 shrink-0 text-amber-800"
-          aria-hidden="true"
-        />
-        <div className="min-w-0">
-          <p className="text-sm font-bold text-[#00283C]">Estoque filtrado — você não está vendo todos os carros</p>
-          <p className="text-xs leading-relaxed text-[#665538]">
-            {summary}
-          </p>
-        </div>
-      </div>
+      <span className="inline-flex shrink-0 items-center gap-1 font-semibold text-amber-800">
+        <Filter className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+        Filtrado
+      </span>
+      <p className="sr-only">
+        Estoque filtrado — você não está vendo todos os carros
+      </p>
+      <p className="sr-only">{summary}</p>
       <button
         type="button"
+        aria-label="Ver todos os veículos do estoque"
         onClick={onClear}
-        className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg border border-amber-300 bg-white px-3 text-sm font-bold text-[#00283C] transition-colors hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2"
+        className="inline-flex min-h-[30px] shrink-0 items-center justify-center rounded px-1 font-bold text-[#007A83] underline decoration-[#007A83]/30 underline-offset-4 transition-colors hover:text-[#00283C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008C95] focus-visible:ring-offset-2 sm:min-h-11"
       >
-        Ver todo o estoque
+        Ver todos
       </button>
     </section>
   );

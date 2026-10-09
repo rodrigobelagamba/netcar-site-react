@@ -74,13 +74,24 @@ test("filtered results describe zero, one and multiple vehicles in the selection
   }
 });
 
-test("the notice explicitly warns that the full inventory is not being shown", async () => {
+test("the visible filter indicator retains the full accessible inventory warning", async () => {
   await renderNotice();
+  assert.ok(
+    renderer.root
+      .findAllByType("span")
+      .some((span) => span.children.includes("Filtrado")),
+  );
+  const warning = renderer.root.findAllByType("p")[0];
   assert.equal(
-    renderer.root.findAllByType("p")[0].children.join(""),
+    warning.children.join(""),
     "Estoque filtrado — você não está vendo todos os carros",
   );
-  assert.doesNotMatch(renderer.root.findByType("section").props.className, /(?:^|\s)(?:\S*:)?hidden(?:\s|$)/);
+  assert.equal(warning.props.className, "sr-only");
+  assert.equal(summary().props.className, "sr-only");
+  assert.doesNotMatch(
+    renderer.root.findByType("section").props.className,
+    /(?:^|\s)(?:\S*:)?hidden(?:\s|$)/,
+  );
 });
 
 test("updating results never announce an empty or stale final count", async () => {
@@ -98,7 +109,8 @@ test("the whole-inventory button runs the reset callback without submitting", as
   let clearCalls = 0;
   await renderNotice({ onClear: () => clearCalls++ });
   const button = renderer.root.findByType("button");
-  assert.equal(button.children.join(""), "Ver todo o estoque");
+  assert.equal(button.children.join(""), "Ver todos");
+  assert.equal(button.props["aria-label"], "Ver todos os veículos do estoque");
   assert.equal(button.props.type, "button");
   await act(async () => button.props.onClick());
   assert.equal(clearCalls, 1);
