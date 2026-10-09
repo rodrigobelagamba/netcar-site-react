@@ -4,6 +4,7 @@ import { extractVehicleIdFromSlug } from "@/lib/slug";
 import { resolveIcheckAttachment } from "@/lib/icheckMetadata";
 import { sanitizeVehicleImages } from "@/lib/vehicleImagePolicy.mjs";
 import type { WarrantyCatalogVehicle } from "@/lib/factoryWarranty";
+import { factoryWarrantyCatalogFromApi } from "@/lib/factoryWarrantyCatalog.js";
 import {
   mapVehicleOptional,
   type RawVehicleOptional,
@@ -26,7 +27,7 @@ export interface Vehicle {
   year: number; // Ano modelo
   anoFabricacao?: number; // Ano de fabricação
   km: number;
-  /** Projeção original do bootstrap; null significa origem não comprovada. */
+  /** Dados originais do gate; nunca incluem identificadores administrativos. */
   factoryWarrantyVehicle?: WarrantyCatalogVehicle | null;
   images: string[]; // Thumbnails (para cards e miniaturas)
   fullImages?: string[]; // Imagens em alta resolução (para galeria)
@@ -279,7 +280,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
       pageParams.set("limit", String(limit));
       pageParams.set("offset", String(offset));
       const url = `${config.apiBaseUrl}/veiculos.php?${pageParams.toString()}`;
-      return axiosInstance.get<ApiVehicleResponse>(url);
+      return axiosInstance.get<ApiVehicleResponse>(url, { cache: "no-store" });
     };
 
     const requestedLimit = query?.limit !== undefined ? query.limit : 100;
@@ -337,6 +338,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
       ? apiVehicles
       : apiVehicles.filter((apiVehicle) => Number(apiVehicle.valor) > 0);
 
+    const observedAt = Date.now();
     // Mapeia os dados da API para a interface Vehicle
     const vehicles: Vehicle[] = scopedVehicles.map((rawVehicle) => {
       const apiVehicle = sanitizeVehicleImages(rawVehicle);
@@ -387,6 +389,9 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         year: apiVehicle.ano, // Ano modelo
         anoFabricacao: apiVehicle.ano_fabricacao || undefined, // Ano de fabricação
         km: apiVehicle.km,
+        factoryWarrantyVehicle: factoryWarrantyCatalogFromApi(rawVehicle, {
+          observedAt,
+        }),
         images: normalizedThumbs, // Thumbnails para cards
         fullImages: normalizedFullImages, // Imagens em alta resolução para galeria
         imagens_site: imagensSite, // Imagens organizadas para uso no site
@@ -429,17 +434,27 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
   try {
     const response = await axiosInstance.get<ApiVehicleResponse>(
       `${config.apiBaseUrl}/veiculos/id/${id}`,
+      { cache: "no-store" },
     );
 
     if (
-      !response.data.success ||
-      !response.data.data ||
+      response.data?.success !== true ||
+      !Array.isArray(response.data.data) ||
       response.data.data.length === 0
     ) {
       throw new Error("Vehicle not found");
     }
 
-    const apiVehicle = sanitizeVehicleImages(response.data.data[0]);
+    if (
+      response.data.data.length !== 1 ||
+      String(response.data.data[0]?.id) !== String(id)
+    ) {
+      throw new Error("API de veículo retornou uma identidade inválida");
+    }
+
+    const rawVehicle = response.data.data[0];
+    const observedAt = Date.now();
+    const apiVehicle = sanitizeVehicleImages(rawVehicle);
 
     // Normaliza as URLs das imagens thumbnails (para cards e miniaturas)
     const thumbUrls = apiVehicle.imagens?.thumb?.length
@@ -487,6 +502,9 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       year: apiVehicle.ano, // Ano modelo
       anoFabricacao: apiVehicle.ano_fabricacao || undefined, // Ano de fabricação
       km: apiVehicle.km,
+      factoryWarrantyVehicle: factoryWarrantyCatalogFromApi(rawVehicle, {
+        observedAt,
+      }),
       images: normalizedThumbs, // Thumbnails para cards
       fullImages: normalizedFullImages, // Imagens em alta resolução para galeria
       imagens_site: imagensSite, // Imagens organizadas para uso no site

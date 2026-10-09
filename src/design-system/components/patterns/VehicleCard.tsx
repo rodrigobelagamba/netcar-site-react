@@ -11,7 +11,7 @@ import {
 import { vehicleWhatsAppRef } from "@/lib/vehicleWhatsAppRef";
 import { trackVehicleCardOpen } from "@/lib/analytics";
 import { CardsHero } from "./CardsHero";
-import { factoryWarrantyStampFor, factoryTractionBatteryStampFor, factoryPowertrainStampFor } from "@/lib/factoryWarrantyStamp";
+import { useFactoryWarrantyStamps } from "@/lib/useFactoryWarrantyStamps";
 import type { WarrantyCatalogVehicle } from "@/lib/factoryWarranty";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 import { resolveVehicleCoverImage } from "@/lib/vehicleCoverImage";
@@ -156,18 +156,8 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   const transmission = cambio || "";
   const vehicleLabel = [brand, model, year].filter(Boolean).join(" ");
   const isSold = !price || price <= 0;
-  const warrantyStamp =
-    !isSold && warrantyVehicle?.id === id
-      ? factoryWarrantyStampFor(warrantyVehicle)
-      : undefined;
-  const tractionBatteryStamp =
-    !isSold && warrantyVehicle?.id === id
-      ? factoryTractionBatteryStampFor(warrantyVehicle)
-      : undefined;
-  const powertrainStamp =
-    !isSold && warrantyVehicle?.id === id
-      ? factoryPowertrainStampFor(warrantyVehicle)
-      : undefined;
+  const { warrantyStamp, tractionBatteryStamp, powertrainStamp } =
+    useFactoryWarrantyStamps(!isSold && warrantyVehicle?.id === id ? warrantyVehicle : undefined);
   const merchandising = getVehicleMerchandising({
     id,
     km,

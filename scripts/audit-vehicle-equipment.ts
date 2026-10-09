@@ -32,11 +32,17 @@ import {
 import { mapVehicleOptional } from "../src/catalog/lib/mapVehicleOptional";
 import warrantyRegistry from "../src/data/factoryWarrantyMatrix.json";
 import {
+  factoryWarrantyToday,
   resolveFactoryWarranty,
   resolveFactoryPowertrainWarranty,
   resolveFactoryTractionBatteryWarranty,
   type FactoryWarrantyMatrix,
 } from "../src/lib/factoryWarranty";
+import {
+  factoryWarrantyInputFingerprint,
+  reconcileFactoryWarrantyVehicle,
+} from "../src/lib/factoryWarrantyReconciliation";
+import { factoryWarrantyCatalogFromApi } from "./lib/factory-warranty-catalog.js";
 
 // This is an auditor, not an importer or publisher. Never store the API response:
 // it also contains administrative identifiers unrelated to equipment review.
@@ -66,6 +72,8 @@ export interface WarrantyAuditSnapshot {
 
 export interface EquipmentAuditInput extends EquipmentVehicle {
   warrantySnapshot?: WarrantyAuditSnapshot;
+  /** Shared safe projection; carries only an opaque unit digest, never a plate/VIN. */
+  warrantyCatalog?: ReturnType<typeof factoryWarrantyCatalogFromApi>;
 }
 
 export interface EquipmentWarrantyAudit {
@@ -77,6 +85,12 @@ export interface EquipmentWarrantyAudit {
   flagPresent: boolean | null;
   recordIds: string[];
   rulesFingerprint: string;
+  reason?: string;
+  ruleId?: string;
+  ruleVersion?: string;
+  ruleFingerprint?: string;
+  inputFingerprint?: string;
+  unitKey?: string;
   powertrain?: {
     scope: "powertrain";
     status: "eligible" | "pending" | "blocked";
@@ -108,6 +122,28 @@ export interface EquipmentAuditVehicle {
   warranty?: EquipmentWarrantyAudit;
 }
 
+export interface WarrantyAuditHistoryEntry {
+  vehicleId: string;
+  unitKey?: string;
+  inventoryPresence: "present" | "unknown-absence";
+  lastSeenAt: string;
+  lastWarranty: EquipmentWarrantyAudit;
+  states: Array<{
+    signature: string;
+    observedAt: string;
+    warranty: EquipmentWarrantyAudit;
+  }>;
+  alertedSignatures: string[];
+}
+
+export interface WarrantyAuditAlert {
+  vehicleId: string;
+  unitKey?: string;
+  signature: string;
+  code: string;
+  reason: string;
+}
+
 export interface EquipmentAuditReport {
   schemaVersion: 1;
   generatedAt: string;
@@ -121,6 +157,10 @@ export interface EquipmentAuditReport {
     withAlerts: number;
   };
   vehicles: EquipmentAuditVehicle[];
+  /** Bounded state transitions per unit, retained when absent from later feeds. */
+  warrantyHistory?: WarrantyAuditHistoryEntry[];
+  /** Only new, relevant warranty issues; timestamps are not deduplication keys. */
+  newWarrantyAlerts?: WarrantyAuditAlert[];
 }
 
 const hash = (value: unknown) =>
@@ -192,7 +232,7 @@ export function parseStockResponse(payload: unknown): EquipmentAuditInput[] {
   if (
     !Number.isInteger(total) ||
     total < 1 ||
-    total > MAX_VEHICLES ||
+    total >= MAX_VEHICLES ||
     total !== source.data.length ||
     Number(source.offset || 0) !== 0
   )
@@ -251,6 +291,7 @@ export function parseStockResponse(payload: unknown): EquipmentAuditInput[] {
           : "",
       opcionais,
       warrantySnapshot: warrantySnapshot(vehicle),
+      warrantyCatalog: factoryWarrantyCatalogFromApi(vehicle),
     };
     if (price > 0) vehicles.push(candidate);
   }
@@ -282,6 +323,167 @@ function confirmationMatches(
   );
 }
 
+const WARRANTY_HISTORY_LIMIT = 20;
+const WARRANTY_ALERT_LIMIT = 64;
+const warrantyHistoryKey = (id: string, warranty: EquipmentWarrantyAudit) =>
+  `${id}:${warranty.unitKey || "identity-unresolved"}`;
+
+function warrantyIssues(vehicle: EquipmentAuditVehicle): WarrantyAuditAlert[] {
+  const warranty = vehicle.warranty;
+  if (!warranty) return [];
+  return vehicle.findings
+    .filter(
+      (finding) =>
+        finding.code.startsWith("factory-warranty-") &&
+        finding.severity !== "info",
+    )
+    .map((finding) => ({
+      vehicleId: vehicle.id,
+      ...(warranty.unitKey ? { unitKey: warranty.unitKey } : {}),
+      // Mileage changing below the same failed rule is not a new issue. The
+      // state history still records every relevant input change separately.
+      signature: hash({
+        id: vehicle.id,
+        unitKey: warranty.unitKey || null,
+        code: finding.code,
+        reason: warranty.reason,
+        rule: warranty.ruleFingerprint,
+        powertrain: warranty.powertrain?.status,
+        supplemental: warranty.supplemental?.status,
+      }),
+      code: finding.code,
+      reason:
+        finding.code === "factory-warranty-mileage-regression"
+          ? "mileage-regressed-since-last-observation"
+          : warranty.reason || finding.code,
+    }));
+}
+
+/** A disappearance is an unknown observation, never a sale or revocation. The
+ * source registry is not mutated; this is the same private audit report ledger. */
+function reconcileWarrantyAuditHistory(
+  rows: EquipmentAuditVehicle[],
+  inputs: EquipmentAuditInput[],
+  previous: EquipmentAuditReport | null,
+  now: string,
+): Pick<EquipmentAuditReport, "warrantyHistory" | "newWarrantyAlerts"> {
+  const ledger = new Map<string, WarrantyAuditHistoryEntry>();
+  for (const entry of previous?.warrantyHistory || []) {
+    ledger.set(warrantyHistoryKey(entry.vehicleId, entry.lastWarranty), {
+      ...entry,
+      lastWarranty: structuredClone(entry.lastWarranty),
+      inventoryPresence: "unknown-absence",
+      states: structuredClone(entry.states || []).slice(
+        -WARRANTY_HISTORY_LIMIT,
+      ),
+      alertedSignatures: [...(entry.alertedSignatures || [])].slice(
+        -WARRANTY_ALERT_LIMIT,
+      ),
+    });
+  }
+  // Migrate a valid report from before history was added without resending all
+  // previously known warranty alerts on the first run of this implementation.
+  for (const row of previous?.vehicles || []) {
+    if (!row.warranty) continue;
+    const key = warrantyHistoryKey(row.id, row.warranty);
+    if (!ledger.has(key))
+      ledger.set(key, {
+        vehicleId: row.id,
+        ...(row.warranty.unitKey ? { unitKey: row.warranty.unitKey } : {}),
+        inventoryPresence: "unknown-absence",
+        lastSeenAt: previous!.generatedAt,
+        lastWarranty: structuredClone(row.warranty),
+        states: [
+          {
+            signature: hash(row.warranty),
+            observedAt: previous!.generatedAt,
+            warranty: structuredClone(row.warranty),
+          },
+        ],
+        alertedSignatures: warrantyIssues(row).map((issue) => issue.signature),
+      });
+  }
+  const newWarrantyAlerts: WarrantyAuditAlert[] = [];
+  const inputById = new Map(inputs.map((input) => [String(input.id), input]));
+  for (const originalRow of rows) {
+    let row = originalRow;
+    // A previously automatic candidate can lose its flag before it has a
+    // persisted manual record. Keep its explicit current state in history,
+    // while preserving the legacy equipment-only row for unmarked inventory.
+    if (!row.warranty) {
+      const input = inputById.get(row.id);
+      const catalog = input?.warrantyCatalog;
+      const snapshot = input?.warrantySnapshot;
+      const key = `${row.id}:${catalog?.unitKey || "identity-unresolved"}`;
+      const prior = ledger.get(key);
+      if (
+        prior &&
+        snapshot?.diferenciais &&
+        !snapshot.diferenciais.some((item) => item.tag === "garantia_fabrica")
+      ) {
+        const warranty: EquipmentWarrantyAudit = {
+          ...prior.lastWarranty,
+          status: "blocked",
+          reason: "warranty-flag-removed",
+          manufactureYear: snapshot.manufactureYear,
+          modelYear: snapshot.modelYear,
+          mileageKm: snapshot.mileageKm,
+          flagPresent: false,
+          inputFingerprint: hash(
+            factoryWarrantyInputFingerprint({
+              id: row.id,
+              unitKey: catalog?.unitKey,
+              marca: row.brand,
+              modelo: row.model,
+              motor: row.engine,
+              cambio: row.transmission,
+              anoFabricacao: snapshot.manufactureYear ?? undefined,
+              year: snapshot.modelYear ?? NaN,
+              km: snapshot.mileageKm ?? NaN,
+              price: snapshot.price ?? NaN,
+              diferenciais: snapshot.diferenciais,
+            }),
+          ),
+        };
+        row = { ...row, warranty };
+      }
+    }
+    if (!row.warranty) continue;
+    const key = warrantyHistoryKey(row.id, row.warranty);
+    const prior = ledger.get(key);
+    const signature = hash(row.warranty);
+    const states = [...(prior?.states || [])];
+    if (states.at(-1)?.signature !== signature)
+      states.push({
+        signature,
+        observedAt: now,
+        warranty: structuredClone(row.warranty),
+      });
+    const alerted = new Set(prior?.alertedSignatures || []);
+    for (const issue of warrantyIssues(row)) {
+      if (!alerted.has(issue.signature)) newWarrantyAlerts.push(issue);
+      alerted.add(issue.signature);
+    }
+    ledger.set(key, {
+      vehicleId: row.id,
+      ...(row.warranty.unitKey ? { unitKey: row.warranty.unitKey } : {}),
+      inventoryPresence: "present",
+      lastSeenAt: now,
+      lastWarranty: structuredClone(row.warranty),
+      states: states.slice(-WARRANTY_HISTORY_LIMIT),
+      alertedSignatures: [...alerted].slice(-WARRANTY_ALERT_LIMIT),
+    });
+  }
+  return {
+    warrantyHistory: [...ledger.values()].sort((a, b) =>
+      warrantyHistoryKey(a.vehicleId, a.lastWarranty).localeCompare(
+        warrantyHistoryKey(b.vehicleId, b.lastWarranty),
+      ),
+    ),
+    newWarrantyAlerts,
+  };
+}
+
 /** Pure report builder. Review keys intentionally ignore stock order, optional
  * order, price, photos and timestamps; changed equipment/rules require review. */
 export function buildEquipmentAudit(
@@ -290,7 +492,7 @@ export function buildEquipmentAudit(
   now = new Date().toISOString(),
   warrantyMatrix: FactoryWarrantyMatrix = warrantyRegistry as FactoryWarrantyMatrix,
 ): EquipmentAuditReport {
-  if (!vehicles.length || vehicles.length > MAX_VEHICLES)
+  if (!vehicles.length || vehicles.length >= MAX_VEHICLES)
     throw new Error("Quantidade de veículos inválida.");
   const catalogFingerprint = hash({
     version: RULESET_VERSION,
@@ -310,6 +512,10 @@ export function buildEquipmentAudit(
   );
   const warrantyResolver = readFileSync(
     join(rootDir, "src/lib/factoryWarranty.ts"),
+    "utf8",
+  );
+  const reconciliationSource = readFileSync(
+    join(rootDir, "src/lib/factoryWarrantyReconciliation.ts"),
     "utf8",
   );
   const ids = new Set<string>();
@@ -333,13 +539,13 @@ export function buildEquipmentAudit(
       .map((item) => [text(item.tag), text(item.descricao)])
       .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
     const warrantySource = vehicle.warrantySnapshot;
-    const warrantyRecords = (
+    let warrantyRecords = (
       Array.isArray(warrantyMatrix.records) ? warrantyMatrix.records : []
     ).filter((record) => record?.vehicle?.vehicleId === id);
-    const powertrainRecords = warrantyRecords.filter(
+    let powertrainRecords = warrantyRecords.filter(
       (record) => record.scope === "powertrain",
     );
-    const supplementalRecords = warrantyRecords.flatMap(
+    let supplementalRecords = warrantyRecords.flatMap(
       (record) => record.supplementalCoverages ?? [],
     );
     const flagPresent =
@@ -356,6 +562,9 @@ export function buildEquipmentAudit(
         id,
         marca: identity.brand,
         modelo: identity.model,
+        motor: identity.engine,
+        cambio: identity.transmission,
+        unitKey: vehicle.warrantyCatalog?.unitKey,
         // NaN is an in-memory sentinel rejected by the canonical resolver.
         // Persisted/report fields remain explicit nulls, never guessed values.
         anoFabricacao: warrantySource?.manufactureYear ?? undefined,
@@ -364,19 +573,46 @@ export function buildEquipmentAudit(
         price: warrantySource?.price ?? NaN,
         diferenciais: warrantySource?.diferenciais ?? undefined,
       };
-      const stamp = resolveFactoryWarranty(
+      const reconciliation = reconcileFactoryWarrantyVehicle(
         warrantyVehicle,
         warrantyMatrix,
-        now.slice(0, 10),
+        factoryWarrantyToday(new Date(now)),
       );
+      const effectiveMatrix = reconciliation.matrix;
+      warrantyRecords = (effectiveMatrix.records || []).filter(
+        (record) => record?.vehicle?.vehicleId === id,
+      );
+      powertrainRecords = warrantyRecords.filter(
+        (record) => record.scope === "powertrain",
+      );
+      supplementalRecords = warrantyRecords.flatMap(
+        (record) => record.supplementalCoverages ?? [],
+      );
+      const stamp = reconciliation.status === "eligible" ? resolveFactoryWarranty(
+        warrantyVehicle,
+        effectiveMatrix,
+        factoryWarrantyToday(new Date(now)),
+      ) : undefined;
       warranty = {
         status: stamp
           ? "eligible"
-          : !warrantyRecords.length ||
-              (warrantyRecords.length === 1 &&
-                warrantyRecords[0].status === "pending")
-            ? "pending"
-            : "blocked",
+          : reconciliation.status === "eligible" ||
+              warrantyRecords.some((record) => record.status === "approved")
+            ? "blocked"
+            : reconciliation.status,
+        reason:
+          !stamp && reconciliation.status === "eligible"
+            ? "canonical-general-gate-rejected"
+            : reconciliation.reason,
+        ...(reconciliation.ruleId ? { ruleId: reconciliation.ruleId } : {}),
+        ...(reconciliation.ruleVersion
+          ? { ruleVersion: reconciliation.ruleVersion }
+          : {}),
+        ruleFingerprint: hash(reconciliation.ruleFingerprint),
+        inputFingerprint: hash(reconciliation.inputFingerprint),
+        ...(warrantyVehicle.unitKey
+          ? { unitKey: warrantyVehicle.unitKey }
+          : {}),
         manufactureYear: warrantySource?.manufactureYear ?? null,
         modelYear: warrantySource?.modelYear ?? null,
         mileageKm: warrantySource?.mileageKm ?? null,
@@ -389,14 +625,16 @@ export function buildEquipmentAudit(
             JSON.stringify(a).localeCompare(JSON.stringify(b)),
           ),
           resolver: warrantyResolver,
+          reconciliation: reconciliationSource,
+          ruleFingerprint: reconciliation.ruleFingerprint,
         }),
       };
       if (powertrainRecords.length) {
-        const powertrainStamp = resolveFactoryPowertrainWarranty(
+        const powertrainStamp = reconciliation.status === "eligible" ? resolveFactoryPowertrainWarranty(
           warrantyVehicle,
-          warrantyMatrix,
-          now.slice(0, 10),
-        );
+          effectiveMatrix,
+          factoryWarrantyToday(new Date(now)),
+        ) : undefined;
         warranty.powertrain = {
           scope: "powertrain",
           status: powertrainStamp
@@ -412,11 +650,11 @@ export function buildEquipmentAudit(
         };
       }
       if (supplementalRecords.length) {
-        const supplementalStamp = resolveFactoryTractionBatteryWarranty(
+        const supplementalStamp = reconciliation.status === "eligible" ? resolveFactoryTractionBatteryWarranty(
           warrantyVehicle,
-          warrantyMatrix,
-          now.slice(0, 10),
-        );
+          effectiveMatrix,
+          factoryWarrantyToday(new Date(now)),
+        ) : undefined;
         warranty.supplemental = {
           scope: "traction-battery",
           status: supplementalStamp
@@ -461,7 +699,7 @@ export function buildEquipmentAudit(
     if (warranty) {
       const context = `FAB ${warranty.manufactureYear ?? "não informado"}; ano-modelo ${warranty.modelYear ?? "não informado"}; km ${warranty.mileageKm ?? "não informado"}; tag garantia_fabrica ${warranty.flagPresent === null ? "não informada" : warranty.flagPresent ? "presente" : "ausente"}.`;
       const boundary =
-        "Revisar equipamentos não aprova garantia nem altera a matriz. A confirmação do opcional 108 e a revisão documental da unidade continuam necessárias.";
+        "Revisar equipamentos não aprova garantia nem altera a matriz. O processamento reutiliza somente regras documentais já aprovadas; bloqueios manuais prevalecem. O opcional 108 representa o ateste da equipe; a revisão documental aprovada define a regra, sem inventar o vencimento real.";
       if (warrantyRecords.length === 1 && warranty.powertrain) {
         add(
           "factory-warranty-general-out-of-scope",
@@ -478,7 +716,7 @@ export function buildEquipmentAudit(
               : "high",
           warranty.status === "eligible"
             ? `Garantia de fábrica: o resolver aceita o registro atual para exibir o carimbo estimado. ${context} ${boundary}`
-            : `Garantia de fábrica ${warranty.status === "pending" ? "pendente de revisão" : "bloqueada pelo resolver"}: sem carimbo. ${!warrantyRecords.length ? "Não há registro específico desta unidade. " : "Conferir identidade, dados atuais, vigência, condições e fontes do registro. "}${context} ${boundary}`,
+            : `Garantia de fábrica ${warranty.status === "pending" ? "pendente de revisão" : "bloqueada pelo resolver"}: sem carimbo. ${!warrantyRecords.length ? "Não há registro específico desta unidade. " : ""}${warranty.reason ? `Motivo: ${warranty.reason}. ` : ""}${context} ${boundary}`,
         );
       if (warranty.powertrain) {
         const powertrain = warranty.powertrain;
@@ -502,6 +740,26 @@ export function buildEquipmentAudit(
               ? "medium"
               : "high",
           `Garantia específica da bateria de tração ${supplemental.status === "eligible" ? "aceita pelo resolver" : supplemental.status === "pending" ? "pendente de revisão: sem carimbo específico" : "bloqueada pelo resolver: sem carimbo específico"}. Este registro não amplia a garantia geral do veículo. ${context} ${boundary}`,
+        );
+      }
+    }
+
+    if (warranty?.unitKey && warranty.mileageKm != null) {
+      const previousWarranty =
+        old?.warranty?.unitKey === warranty.unitKey
+          ? old.warranty
+          : previous?.warrantyHistory?.find(
+              (entry) =>
+                entry.vehicleId === id && entry.unitKey === warranty.unitKey,
+            )?.lastWarranty;
+      if (
+        previousWarranty?.mileageKm != null &&
+        warranty.mileageKm < previousWarranty.mileageKm
+      ) {
+        add(
+          "factory-warranty-mileage-regression",
+          "high",
+          `Quilometragem da mesma unidade reduziu de ${previousWarranty.mileageKm} para ${warranty.mileageKm} km desde a observação anterior. Conferir o cadastro; o histórico não altera o limite aprovado nem inventa expiração.`,
         );
       }
     }
@@ -665,6 +923,7 @@ export function buildEquipmentAudit(
       ).length,
     },
     vehicles: rows,
+    ...reconcileWarrantyAuditHistory(rows, vehicles, previous, now),
   };
 }
 

@@ -51,6 +51,7 @@ public/sitemap.xml
 public/seo/landings.json
 public/seo/blog-index.json
 public/seo/vehicle-equipment.json
+public/seo/factory-warranty-registry.json
 public/feeds/*
 src/data/seo/landings.json
 

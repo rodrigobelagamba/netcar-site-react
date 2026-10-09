@@ -28,7 +28,7 @@ function findVehicleInListCache(
 }
 
 /** Carro que saiu do estoque: a API responde 404 e insistir não muda nada. */
-function isVehicleGone(error: unknown): boolean {
+export function isVehicleGone(error: unknown): boolean {
   if (isHttpRequestError(error)) {
     return error.response?.status === 404;
   }
@@ -77,8 +77,11 @@ export function useVehicleQuery(slug: string) {
         ? Date.now()
         : 0
       : undefined,
-    // A capa resumida abre instantaneamente; a galeria completa chega em background.
-    refetchOnMount: hasCompleteInitialVehicle ? false : "always",
+    // Revalidar a unidade mesmo quando a galeria veio de um cache completo.
+    refetchOnMount: "always",
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
     staleTime: 60_000,
     placeholderData: () => findVehicleInListCache(queryClient, slug),
     // Sem isso, o link antigo de um carro vendido deixava o visitante uns 7s

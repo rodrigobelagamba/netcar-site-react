@@ -46,6 +46,8 @@ export interface FactoryWarrantyRecord {
   /** Canonical reviewed identity/coverage/source snapshot, never a brand default. */
   approvedFingerprint: string;
   vehicle: WarrantyVehicleIdentity;
+  /** Opaque unit identity plus the reviewed mechanical specification. */
+  unitBinding?: { unitKey: string; engine: string; transmission: string };
   optionalId: number;
   optionalConfirmed: boolean;
   conditionsConfirmed: boolean;
@@ -95,11 +97,32 @@ export interface FactoryWarrantyTractionBatteryCoverage {
 export interface FactoryWarrantyMatrix {
   schemaVersion: 2;
   enabled: boolean;
+  /** Production migrations opt in; old isolated fixtures remain readable. */
+  requireUnitBinding?: boolean;
   records: FactoryWarrantyRecord[];
+  automation?: { schemaVersion: 1; rules: FactoryWarrantyAutomationRule[] };
+}
+
+export interface FactoryWarrantyAutomationRule {
+  ruleId: string;
+  version: string;
+  status: "approved" | "pending" | "revoked";
+  templateRecordId: string;
+  match: Omit<WarrantyVehicleIdentity, "vehicleId"> & {
+    engine: string;
+    transmission: string;
+  };
+  /** Only documented common basic-vehicle policies may opt in. */
+  allowNewUnits: boolean;
+  approvedFingerprint: string;
 }
 
 export interface WarrantyCatalogVehicle {
   id: string;
+  unitKey?: string;
+  observedAt?: number;
+  motor?: string;
+  cambio?: string;
   marca?: string;
   modelo?: string;
   name?: string;
@@ -117,6 +140,29 @@ const normalize = (value: string) =>
     .trim()
     .replace(/\s+/g, " ")
     .toUpperCase();
+/** Coverage dates follow the dealership's civil day, including year rollover. */
+export function factoryWarrantyToday(date = new Date()): string {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Sao_Paulo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+      .formatToParts(date)
+      .map((part) => [part.type, part.value]),
+  );
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
+
+function safelyResolve<T>(resolve: () => T): T | undefined {
+  try {
+    return resolve();
+  } catch {
+    return undefined;
+  }
+}
+
 const validDate = (value: string) =>
   /^\d{4}-\d{2}-\d{2}$/.test(value) &&
   Number.isFinite(Date.parse(value)) &&
@@ -166,7 +212,10 @@ function validCommonPolicy(record: FactoryWarrantyRecord): boolean {
     )
   )
     return false;
-  const categories = branches.map((branch) => branch.category).sort().join(",");
+  const categories = branches
+    .map((branch) => branch.category)
+    .sort()
+    .join(",");
   if (policy.kind === "documented-regime-intersection") {
     if (
       branches.length !== 2 ||
@@ -202,6 +251,7 @@ export function factoryWarrantyReviewFingerprint(
       brand: normalize(record.vehicle.brand),
       modelVersion: normalize(record.vehicle.modelVersion),
     },
+    ...(record.unitBinding ? { unitBinding: record.unitBinding } : {}),
     optionalId: record.optionalId,
     optionalConfirmed: record.optionalConfirmed,
     conditionsConfirmed: record.conditionsConfirmed,
@@ -229,6 +279,7 @@ function tractionBatteryAsRecord(
     reviewedAt: coverage.reviewedAt,
     approvedFingerprint: coverage.approvedFingerprint,
     vehicle: primary.vehicle,
+    ...(primary.unitBinding ? { unitBinding: primary.unitBinding } : {}),
     optionalId: primary.optionalId,
     optionalConfirmed: primary.optionalConfirmed,
     conditionsConfirmed: coverage.conditionsConfirmed,
@@ -249,7 +300,9 @@ export function factoryTractionBatteryReviewFingerprint(
   return JSON.stringify({
     primaryApprovedFingerprint: primary.approvedFingerprint,
     coverage: JSON.parse(
-      factoryWarrantyReviewFingerprint(tractionBatteryAsRecord(primary, coverage)),
+      factoryWarrantyReviewFingerprint(
+        tractionBatteryAsRecord(primary, coverage),
+      ),
     ),
   });
 }
@@ -283,6 +336,21 @@ function resolveFactoryWarrantyCoverage(
   );
   if (candidates.length !== 1) return undefined;
   const record = candidates[0];
+  const binding = record.unitBinding;
+  if (matrix.requireUnitBinding === true && !binding) return undefined;
+  if (
+    binding &&
+    (!nonempty(binding.unitKey) ||
+      !/^(?:vin|plate)-sha256:[a-f0-9]{64}$/.test(binding.unitKey) ||
+      !nonempty(binding.engine) ||
+      !nonempty(binding.transmission) ||
+      vehicle.unitKey !== binding.unitKey ||
+      !nonempty(vehicle.motor) ||
+      !nonempty(vehicle.cambio) ||
+      normalize(vehicle.motor) !== normalize(binding.engine) ||
+      normalize(vehicle.cambio) !== normalize(binding.transmission))
+  )
+    return undefined;
   if (
     record.status !== "approved" ||
     !record.recordId ||
@@ -329,7 +397,9 @@ function resolveFactoryWarrantyCoverage(
         unresolvedText(source.revision) ||
         source.verification?.status !== "verified" ||
         !nonempty(source.verification.documentCode) ||
-        !/^[A-Z0-9][A-Z0-9._/-]{2,80}$/i.test(source.verification.documentCode) ||
+        !/^[A-Z0-9][A-Z0-9._/-]{2,80}$/i.test(
+          source.verification.documentCode,
+        ) ||
         !normalize(source.revision).includes(
           normalize(source.verification.documentCode),
         ) ||
@@ -432,71 +502,91 @@ function resolveFactoryWarrantyCoverage(
 export function resolveFactoryWarranty(
   vehicle: WarrantyCatalogVehicle,
   matrix: FactoryWarrantyMatrix,
-  today = new Date().toISOString().slice(0, 10),
+  today = factoryWarrantyToday(),
 ) {
-  return resolveFactoryWarrantyCoverage(vehicle, matrix, today, "basic-vehicle");
+  return safelyResolve(() =>
+    resolveFactoryWarrantyCoverage(vehicle, matrix, today, "basic-vehicle"),
+  );
 }
 
 /** Reviewed engine/transmission coverage only; never a whole-vehicle claim. */
 export function resolveFactoryPowertrainWarranty(
   vehicle: WarrantyCatalogVehicle,
   matrix: FactoryWarrantyMatrix,
-  today = new Date().toISOString().slice(0, 10),
+  today = factoryWarrantyToday(),
 ) {
-  const stamp = resolveFactoryWarrantyCoverage(vehicle, matrix, today, "powertrain");
-  if (!stamp) return undefined;
-  const record = matrix.records.find(
-    (entry) => entry?.vehicle?.vehicleId === vehicle.id,
-  )!;
-  const source = record.sources[0];
-  return {
-    ...stamp,
-    scope: "powertrain" as const,
-    termYears: record.termYears,
-    sourceUrl: source.url,
-    sourceLabel: `Manual ${source.verification.documentCode}`,
-    sourceDescription: `${source.revision} ${source.locator}`,
-  };
+  return safelyResolve(() => {
+    const stamp = resolveFactoryWarrantyCoverage(
+      vehicle,
+      matrix,
+      today,
+      "powertrain",
+    );
+    if (!stamp) return undefined;
+    const record = matrix.records.find(
+      (entry) => entry?.vehicle?.vehicleId === vehicle.id,
+    )!;
+    const source = record.sources[0];
+    return {
+      ...stamp,
+      scope: "powertrain" as const,
+      termYears: record.termYears,
+      sourceUrl: source.url,
+      sourceLabel: `Manual ${source.verification.documentCode}`,
+      sourceDescription: `${source.revision} ${source.locator}`,
+    };
+  });
 }
 
 /** Traction battery only; the primary unit remains the shared approval boundary. */
 export function resolveFactoryTractionBatteryWarranty(
   vehicle: WarrantyCatalogVehicle,
   matrix: FactoryWarrantyMatrix,
-  today = new Date().toISOString().slice(0, 10),
+  today = factoryWarrantyToday(),
 ) {
-  // Validate all primary identity, source, attestation and fingerprint gates.
-  // Its elapsed duration or km cap does not shorten independent battery coverage.
-  if (
-    !resolveFactoryWarrantyCoverage(vehicle, matrix, today, "basic-vehicle", false)
-  )
-    return undefined;
-  const primary = matrix.records.find(
-    (entry) => entry?.vehicle?.vehicleId === vehicle.id,
-  )!;
-  if (primary.usage !== "private" || !Array.isArray(primary.supplementalCoverages))
-    return undefined;
-  // Do not filter by approved status first: a revocation/duplicate must block.
-  const coverages = primary.supplementalCoverages;
-  if (coverages.length !== 1) return undefined;
-  const coverage = coverages[0];
-  if (
-    !coverage ||
-    coverage.scope !== "traction-battery" ||
-    coverage.usage !== "private" ||
-    coverage.reviewedAt < primary.reviewedAt ||
-    coverage.approvedFingerprint !==
-      factoryTractionBatteryReviewFingerprint(primary, coverage)
-  )
-    return undefined;
-  const scopedRecord = tractionBatteryAsRecord(primary, coverage);
-  const stamp = resolveFactoryWarrantyCoverage(
-    vehicle,
-    { ...matrix, records: [scopedRecord] },
-    today,
-    "traction-battery",
-    true,
-    factoryTractionBatteryReviewFingerprint(primary, coverage),
-  );
-  return stamp ? { ...stamp, scope: "traction-battery" as const } : undefined;
+  return safelyResolve(() => {
+    // Validate all primary identity, source, attestation and fingerprint gates.
+    // Its elapsed duration or km cap does not shorten independent battery coverage.
+    if (
+      !resolveFactoryWarrantyCoverage(
+        vehicle,
+        matrix,
+        today,
+        "basic-vehicle",
+        false,
+      )
+    )
+      return undefined;
+    const primary = matrix.records.find(
+      (entry) => entry?.vehicle?.vehicleId === vehicle.id,
+    )!;
+    if (
+      primary.usage !== "private" ||
+      !Array.isArray(primary.supplementalCoverages)
+    )
+      return undefined;
+    // Do not filter by approved status first: a revocation/duplicate must block.
+    const coverages = primary.supplementalCoverages;
+    if (coverages.length !== 1) return undefined;
+    const coverage = coverages[0];
+    if (
+      !coverage ||
+      coverage.scope !== "traction-battery" ||
+      coverage.usage !== "private" ||
+      coverage.reviewedAt < primary.reviewedAt ||
+      coverage.approvedFingerprint !==
+        factoryTractionBatteryReviewFingerprint(primary, coverage)
+    )
+      return undefined;
+    const scopedRecord = tractionBatteryAsRecord(primary, coverage);
+    const stamp = resolveFactoryWarrantyCoverage(
+      vehicle,
+      { ...matrix, records: [scopedRecord] },
+      today,
+      "traction-battery",
+      true,
+      factoryTractionBatteryReviewFingerprint(primary, coverage),
+    );
+    return stamp ? { ...stamp, scope: "traction-battery" as const } : undefined;
+  });
 }

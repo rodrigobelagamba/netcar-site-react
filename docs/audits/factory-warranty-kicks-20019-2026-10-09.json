@@ -1,0 +1,539 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-09",
+  "sourceReview": {
+    "kind": "kicks20019-rule-source-revalidation",
+    "schemaVersion": 1,
+    "reviewedAt": "2026-10-09",
+    "checkedAtSaoPaulo": "2026-10-09T13:31:31.900268-03:00",
+    "sourceCompatibility": "verified_exact_engine_model_year_candidate",
+    "sourceRuleValidated": true,
+    "approvalPerformedByThisAgent": false,
+    "publicationPerformed": false,
+    "vehicle": {
+      "vehicleId": "20019",
+      "brand": "NISSAN",
+      "modelVersion": "KICKS ADVANCE",
+      "manufactureYear": 2025,
+      "modelYear": 2026,
+      "engine": "1.0",
+      "powerCv": 125,
+      "mileageKm": 5100,
+      "optional108ConfirmedFromXmlAndApi": true
+    },
+    "inventoryEvidence": {
+      "xml": {
+        "collectedAtUtc": "2026-10-09T16:31:31.900268+00:00",
+        "source": "https://www.netcarmultimarcas.com.br/automacar/xml.xml",
+        "parser": "EMAIL MKT/build_xml_email.py",
+        "parserSha256": "b8bb804f3dae8eceb289690355114635a6f814762f244c59ec65de01cb9cfe05",
+        "totalXmlElements": 70,
+        "fields": {
+          "codigo_anuncio_revenda": "20019",
+          "marca": "NISSAN",
+          "modelo": "KICKS ADVANCE",
+          "ano_fabricacao": "2025",
+          "ano_modelo": "2026",
+          "quilometragem": "5100",
+          "motor": "1.0",
+          "CV": "125",
+          "cambio": "AUTOMATICO",
+          "combustivel": "BI-COMBUSTIVEL",
+          "warrantyFields": {
+            "garantia_fabrica": "1"
+          },
+          "identityDigest": "7d312dddc9f677bb09e76b5fb1a42eda2c7e9e0aaa55d8df6a59a9e05f340602"
+        }
+      },
+      "api": {
+        "collectedAtUtc": "2026-10-09T16:31:31.900268+00:00",
+        "source": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20019",
+        "httpStatus": 200,
+        "bodySha256": "80d55dcc2201cb80ae781c22cb1960864fbaa74a31b9580e7f8dd376f93a7e64",
+        "headers": {
+          "Date": "Fri, 09 Oct 2026 16:31:32 GMT",
+          "Cache-Control": "max-age=0",
+          "Last-Modified": null,
+          "Age": null
+        },
+        "fields": {
+          "id": "20019",
+          "marca": "NISSAN",
+          "modelo": "KICKS ADVANCE",
+          "ano_fabricacao": 2025,
+          "ano": 2026,
+          "km": 5100,
+          "motor": "1.0",
+          "potencia": "125",
+          "cambio": "AUTOMATICO",
+          "combustivel": "Flex",
+          "diferenciais": [
+            {
+              "tag": "baixa_km",
+              "descricao": "Baixa KM"
+            },
+            {
+              "tag": "eleito_melhor_compra",
+              "descricao": "Eleito Melhor Compra"
+            },
+            {
+              "tag": "estepe_novo",
+              "descricao": "Estepe Novo"
+            },
+            {
+              "tag": "garantia_fabrica",
+              "descricao": "Garantia de Fábrica"
+            },
+            {
+              "tag": "lider_mercado",
+              "descricao": "Líder de Mercado"
+            },
+            {
+              "tag": "manual_chave_reserva",
+              "descricao": "Manual Proprietário e Chave Reserva"
+            },
+            {
+              "tag": "oleo_filtro",
+              "descricao": "Óleo e Filtro Revisados"
+            },
+            {
+              "tag": "pneus_novos",
+              "descricao": "Pneus Novos"
+            },
+            {
+              "tag": "revisados_concessionaria",
+              "descricao": "Revisados na Concessionária"
+            },
+            {
+              "tag": "super_economico",
+              "descricao": "Super Econômico"
+            },
+            {
+              "tag": "unico_dono",
+              "descricao": "Único Dono"
+            }
+          ]
+        }
+      },
+      "independentSourcesAgree": true,
+      "noPersonalIdentifiersWritten": true
+    },
+    "source": {
+      "url": "https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf",
+      "officialIndex": "https://www.nissan.com.br/servicos/manuais/novo-kicks.html",
+      "officialIndexModelYear": 2026,
+      "officialIndexLinkConfirmedWithWeb": true,
+      "publicationCode": "MPPT-P13C00",
+      "publicationCodePdfPage": 420,
+      "fileRevision": "v3",
+      "pages": 420,
+      "consultedAt": "2026-10-09T16:31:31.900268+00:00",
+      "sha256": "e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab",
+      "bytes": 31926340,
+      "sourceDocumentDownloadedFresh": true,
+      "editorialDate": null,
+      "metadataCaveat": "PDF creation/modification 2025-08-08 and HTTP Last-Modified 2026-10-08 are technical metadata, not proven editorial dates.",
+      "locators": {
+        "engine": "9-5, PDF 382",
+        "termAndMileage": "10-5/10-6, PDF 392/393",
+        "components": "10-7/10-8, PDF 394/395",
+        "transfer": "10-9, PDF 396",
+        "maintenance": "10-11/10-13/10-15, PDF 398/400/402"
+      },
+      "shortExcerpts": [
+        {
+          "page": "10-5",
+          "text": "O prazo de garantia é de 36 (trinta e seis) meses*"
+        },
+        {
+          "page": "10-6",
+          "text": "ou 100.000 km, o que ocorrer primeiro"
+        }
+      ],
+      "visualChecks": [
+        "nissan-kicks-my2026-p382.png",
+        "nissan-kicks-my2026-p392.png",
+        "nissan-kicks-my2026-p393.png",
+        "nissan-kicks-my2026-p396.png"
+      ],
+      "cohortSupportingSource": {
+        "url": "https://brazil.nissannews.com/pt-BR/releases/novo-nissan-kicks-fabricado-em-resende-rj-comeca-a-ser-exportado-para-o-paraguai",
+        "publicationDate": "2025-07-08",
+        "consultedAt": "2026-10-09",
+        "supported": "Novo Kicks has Advance trim and 1.0 turbo 125cv motor; technical manual specifies HR10DDT 999cm³."
+      }
+    },
+    "validatedTerms": {
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "termMonths": 36,
+      "startTrigger": "first delivery to original purchaser",
+      "legalMonths": 3,
+      "contractualMonths": 33,
+      "branches": [
+        {
+          "condition": "CPF as documented",
+          "mileage": {
+            "kind": "unlimited"
+          }
+        },
+        {
+          "condition": "CNPJ as documented",
+          "mileage": {
+            "kind": "limited",
+            "limitKm": 100000
+          },
+          "firstOfTimeOrMileage": true
+        }
+      ],
+      "transfer": "Remaining balance transfers to subsequent owners under manual conditions.",
+      "maintenance": "Nissan network and prescribed intervals. Normal base 10,000km/12months, tolerance 1,000km/30days; severe use table applies, including commercial use.",
+      "components": "Battery: free replacement year1; owner pays50% year2/75% year3. A/C refrigerant12months; glass90days. Dealer parts/accessories12months/20,000km; factory optional accessories36months. Wear/exclusions apply.",
+      "separatePrograms": "Nissan Assistance and Protect are not this basic coverage; no extension contract verified."
+    },
+    "operationalAttestations": {
+      "preservedFromPriorApprovedUserContext": true,
+      "basis": {
+        "usage": "private",
+        "basis": "Uso particular padrão e manual/manutenção atestados pela equipe conforme orientação vigente do usuário.",
+        "cpfInferred": false,
+        "newUserConfirmationNeeded": false
+      },
+      "newIndependentDocumentInspectionOfUnit": false,
+      "cpfInferred": false
+    },
+    "proposedExactRule": {
+      "ruleIdCandidate": "nissan-kicks-advance-my2026-hr10ddt-basic-36m-v1",
+      "match": {
+        "brand": "NISSAN",
+        "modelVersion": "KICKS ADVANCE",
+        "manufactureYear": 2025,
+        "modelYear": 2026,
+        "engine": "1.0"
+      },
+      "excluded": "No wildcard Nissan, Kicks family, engine1.6, KicksPlay or other model years. Name remains KICKS ADVANCE; no rename to TURBO. Additional cohorts require separate approval.",
+      "termYears": 3,
+      "scope": "basic-vehicle",
+      "mileagePolicy": {
+        "kind": "common-policy",
+        "sourceBranches": [
+          "CPF unlimited",
+          "CNPJ100000"
+        ],
+        "limitKm": 100000,
+        "eligibility": "km < 100000",
+        "notUniversalManufacturerLimit": true,
+        "doesNotAssertCnpjOrCommercialUse": true
+      },
+      "perUnitPrerequisites": [
+        "stable unit identity",
+        "fresh compatible XML/API fields",
+        "warranty attestation still active",
+        "applicable approved source rule version",
+        "no manual rejection/block",
+        "no mileage regression",
+        "valid time gate"
+      ],
+      "signatureMustInclude": [
+        "stableUnitIdentity",
+        "vehicleId",
+        "brand",
+        "modelVersion",
+        "engine",
+        "manufactureYear",
+        "modelYear",
+        "mileageKm",
+        "warrantyFlag",
+        "ruleId",
+        "ruleVersion",
+        "sourceSha256"
+      ],
+      "currentMileagePasses": true,
+      "currentSourceMatchPasses": true,
+      "currentDateWindowPasses": true,
+      "priorRecordObserved": "normalized-20261003-20019 remains pending using FAQ pending source, mileage0 and unresolved generation; these facts are stale."
+    },
+    "display": {
+      "title": "GARANTIA DE FÁBRICA ATÉ 2028*",
+      "nearbyFootnote": "*Estimativa pela fabricação e documentação oficial da montadora. Validade, cobertura e km conforme manual do modelo/ano.",
+      "formula": "manufactureYear2025 + termYears3",
+      "isEstimate": true,
+      "actualStartDate": null,
+      "actualExpiryDate": null,
+      "actualCoverageConfirmedByResearch": false,
+      "timeGate": "Preserve existing gate: past estimate year blocks; final estimate year requires confirmed unexpired expiry date; known expiry always dominates. Never derive31Dec.",
+      "textCompatibility": "No incompatibility identified with preserved estimate footnote; cannot market all components as fully covered."
+    },
+    "reusedEvidence": [
+      {
+        "path": "review_honda_nissan.json",
+        "sha256": "b460fe00bfb301a27c0d1ae3ae159a78a795cb9e505741ad88d5bff392451551"
+      },
+      {
+        "path": "kicks-20019-new-kicks-candidate-handoff.json",
+        "sha256": "8c4ded27c3e9d891e3098253f1943754c748910381cd059c03c5dbb6c2314883"
+      }
+    ],
+    "limits": [
+      "Research validates model terms and exact current mapping; does not create manufacturer certificate or supply actual delivery date.",
+      "Historical Play1.6 assessment retained only as history, not reused for current1.0 rule.",
+      "Implementation must apply its authorized approval/normalization workflow; this evidence-only subtask did not approve or publish a record."
+    ]
+  },
+  "identityCorrespondence": {
+    "checkedAtUtc": "2026-10-09T17:02:20.004999+00:00",
+    "checkedAtSaoPaulo": "2026-10-09T14:02:20.004999-03:00",
+    "xml": {
+      "source": "https://www.netcarmultimarcas.com.br/automacar/xml.xml",
+      "parser": "build_xml_email.py",
+      "parserSha256": "b8bb804f3dae8eceb289690355114635a6f814762f244c59ec65de01cb9cfe05",
+      "totalElements": 70,
+      "fields": {
+        "id": "20019",
+        "brand": "NISSAN",
+        "modelVersion": "KICKS ADVANCE",
+        "engine": "1.0",
+        "powerCv": "125",
+        "manufactureYear": "2025",
+        "modelYear": "2026",
+        "mileageKm": "5100",
+        "transmission": "AUTOMATICO",
+        "fuel": "BI-COMBUSTIVEL",
+        "warrantyFlag": true
+      },
+      "unitKey": "plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f"
+    },
+    "api": {
+      "source": "https://www.netcarmultimarcas.com.br/api/v1/veiculos/id/20019",
+      "httpStatus": 200,
+      "headers": {
+        "Date": "Fri, 09 Oct 2026 17:02:20 GMT",
+        "Cache-Control": "max-age=0",
+        "Age": null
+      },
+      "bodySha256": "5e9563c10296e39311bd55ddb0850d0946647159ceeb42bfde282357db86c2e3",
+      "fields": {
+        "id": "20019",
+        "brand": "NISSAN",
+        "modelVersion": "KICKS ADVANCE TURBO",
+        "engine": "1.0",
+        "powerCv": "125",
+        "manufactureYear": 2025,
+        "modelYear": 2026,
+        "mileageKm": 5100,
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "warrantyFlag": true
+      },
+      "unitKey": "plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f"
+    },
+    "unitComparison": {
+      "algorithm": "SHA-256 of uppercase full plate with punctuation removed, valid Brazilian complete plate required",
+      "fullPlateKeysPresent": true,
+      "sameOpaquePlateIdentity": true,
+      "sameVehicleId": true,
+      "termsEqual": {
+        "id": true,
+        "brand": true,
+        "engine": true,
+        "powerCv": true,
+        "manufactureYear": true,
+        "modelYear": true,
+        "mileageKm": true,
+        "transmission": true,
+        "warrantyFlag": true
+      },
+      "exactKnownDescriptorPair": true,
+      "rawPersonalIdentifiersPersisted": false
+    },
+    "actions": {
+      "existingParserReused": true,
+      "apiReadOnly": true,
+      "erpChanges": false,
+      "siteChanges": false,
+      "matrixChanges": false,
+      "approvalPerformedByThisAgent": false
+    },
+    "technicalJudgment": {
+      "decision": "accept_exact_per_unit_documentary_correspondence",
+      "basis": "The complete normalized plate digest and vehicle ID agree across XML/API; engine, power, fabrication/model year, mileage, transmission and warranty flag also agree. The exact suffix TURBO describes the 1.0 engine documented by the Brazilian manufacturer for Novo Kicks Advance; it does not indicate a conflicting trim in this evidence.",
+      "inferenceExplicit": "Technical equivalence is an inference from the jointly verified unit identity and official model-generation specifications, not evidence about who edited the API name or which system made that change.",
+      "sourceDataChangesAuthorizedOrMade": false,
+      "newOwnerConfirmationRequiredForThisNarrowTechnicalMapping": false,
+      "approvedPublicIdentityCandidate": {
+        "vehicleId": "20019",
+        "unitKey": "plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f",
+        "brand": "NISSAN",
+        "modelVersion": "KICKS ADVANCE TURBO",
+        "manufactureYear": 2025,
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "reviewedMileageKm": 5100
+      },
+      "observedExactXmlLabel": "KICKS ADVANCE",
+      "observedExactApiLabel": "KICKS ADVANCE TURBO",
+      "aliasScope": "Only documentary correspondence for vehicle20019 with this opaque unit identity and exact verified mechanical/year fields. No brand-wide, model-family or suffix-stripping alias; no guarantee for1.6/Play/otherKicks.",
+      "terms": {
+        "scope": "basic-vehicle",
+        "termYears": 3,
+        "termMonths": 36,
+        "usage": "unknown",
+        "cpfInferred": false,
+        "commonMileagePolicy": "Documented intersection of CPF unlimited and CNPJ100000km; current5100km passes conservative bound. Does not assert CNPJ or commercial use.",
+        "optional108AttestationPreserved": true,
+        "unitConditionsAttestation": "Preserve existing accepted team attestation; this read-only research does not independently certify servicing documents or effective claim coverage.",
+        "actualStartDate": null,
+        "actualExpiryDate": null
+      },
+      "display": {
+        "title": "GARANTIA DE FÁBRICA ATÉ 2028*",
+        "nearbyFootnote": "*Estimativa pela fabricação e documentação oficial da montadora. Validade, cobertura e km conforme manual do modelo/ano.",
+        "formula": "manufactureYear2025 + termYears3",
+        "isEstimate": true,
+        "actualStartDate": null,
+        "actualExpiryDate": null,
+        "actualCoverageConfirmedByResearch": false,
+        "timeGate": "Preserve existing gate: past estimate year blocks; final estimate year requires confirmed unexpired expiry date; known expiry always dominates. Never derive31Dec.",
+        "textCompatibility": "No incompatibility identified with preserved estimate footnote; cannot market all components as fully covered."
+      },
+      "remainingOwnerAmbiguityAboutTrim": null,
+      "mustReevaluate": "Changed opaque identity, engine, power inconsistency, year, model trim, km, flag, rule version or manual block must be re-evaluated before reuse."
+    },
+    "officialDocumentEvidence": {
+      "url": "https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf",
+      "officialIndex": "https://www.nissan.com.br/servicos/manuais/novo-kicks.html",
+      "officialIndexModelYear": 2026,
+      "publicationCode": "MPPT-P13C00",
+      "fileRevision": "v3",
+      "sha256": "e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab",
+      "consultedAt": "2026-10-09T16:31:31.900268+00:00",
+      "editorialDate": null,
+      "metadataCaveat": "PDF creation/modification 2025-08-08 and HTTP Last-Modified 2026-10-08 are technical metadata, not proven editorial dates.",
+      "locators": {
+        "engine": "9-5, PDF 382",
+        "termAndMileage": "10-5/10-6, PDF 392/393",
+        "components": "10-7/10-8, PDF 394/395",
+        "transfer": "10-9, PDF 396",
+        "maintenance": "10-11/10-13/10-15, PDF 398/400/402"
+      },
+      "shortExcerpts": [
+        {
+          "page": "10-5",
+          "text": "O prazo de garantia é de 36 (trinta e seis) meses*"
+        },
+        {
+          "page": "10-6",
+          "text": "ou 100.000 km, o que ocorrer primeiro"
+        }
+      ],
+      "cohortSupportingSource": {
+        "url": "https://brazil.nissannews.com/pt-BR/releases/novo-nissan-kicks-fabricado-em-resende-rj-comeca-a-ser-exportado-para-o-paraguai",
+        "publicationDate": "2025-07-08",
+        "consultedAt": "2026-10-09",
+        "supported": "Novo Kicks has Advance trim and 1.0 turbo 125cv motor; technical manual specifies HR10DDT 999cm³."
+      },
+      "visualVerification": "PDF382/392/393/396 inspected earlier today from freshly downloaded official manual; source artifacts retained in this directory."
+    }
+  },
+  "decision": "Approved exact unit and explicitly matched reusable basic common-policy rule after official-source review; no source-system rename or generic alias.",
+  "approvedRecord": {
+    "recordId": "reviewed-v2-20261009-20019",
+    "status": "approved",
+    "reviewedAt": "2026-10-09",
+    "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261009-20019\",\"reviewedAt\":\"2026-10-09\",\"vehicle\":{\"vehicleId\":\"20019\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS ADVANCE TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261009-20019\",\"basis\":\"Manual brasileiro MY2026:36 meses desde a primeira entrega, CPF sem limite e CNPJ até100.000km. Exibição usa o limite comum conservador, sem inferir titularidade/uso. Flag atual e atestes operacionais anteriores preservados; manutenção e exclusões seguem o manual.\",\"branches\":[{\"category\":\"cpf\",\"condition\":\"CPF conforme manual10-5/10-6\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20019-manual-my2026-v3\"]},{\"category\":\"cnpj\",\"condition\":\"CNPJ:36meses ou100.000km, o que ocorrer primeiro\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20019-manual-my2026-v3\"]}]},\"reviewedMileageKm\":5100,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20019-manual-my2026-v3\",\"url\":\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\",\"locator\":\"Motor HR10DDT 999cm³:9-5(PDF382). Prazo/km:10-5/10-6(PDF392/393). Componentes:10-7/10-8; transferência:10-9; manutenção:10-11/10-13/10-15. Consulta09/10/2026; SHA256 e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab.\",\"revision\":\"MPPT-P13C00; Novo Kicks brasileiro MY2026; arquivo v3; metadados técnicos não tratados como data editorial\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MPPT-P13C00\",\"modelYear\":2026,\"reviewId\":\"warranty-20261009-20019\",\"reviewedAt\":\"2026-10-09\"}}]}",
+    "vehicle": {
+      "vehicleId": "20019",
+      "brand": "NISSAN",
+      "modelVersion": "KICKS ADVANCE TURBO",
+      "manufactureYear": 2025,
+      "modelYear": 2026
+    },
+    "unitBinding": {
+      "unitKey": "plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f",
+      "engine": "1.0",
+      "transmission": "AUTOMATICO"
+    },
+    "optionalId": 108,
+    "optionalConfirmed": true,
+    "conditionsConfirmed": true,
+    "scope": "basic-vehicle",
+    "termYears": 3,
+    "usage": "unknown",
+    "reviewedMileageKm": 5100,
+    "mileage": {
+      "kind": "limited",
+      "limitKm": 100000
+    },
+    "sources": [
+      {
+        "sourceId": "20019-manual-my2026-v3",
+        "url": "https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf",
+        "locator": "Motor HR10DDT 999cm³:9-5(PDF382). Prazo/km:10-5/10-6(PDF392/393). Componentes:10-7/10-8; transferência:10-9; manutenção:10-11/10-13/10-15. Consulta09/10/2026; SHA256 e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab.",
+        "revision": "MPPT-P13C00; Novo Kicks brasileiro MY2026; arquivo v3; metadados técnicos não tratados como data editorial",
+        "verification": {
+          "status": "verified",
+          "documentCode": "MPPT-P13C00",
+          "modelYear": 2026,
+          "reviewId": "warranty-20261009-20019",
+          "reviewedAt": "2026-10-09"
+        }
+      }
+    ],
+    "commonPolicy": {
+      "kind": "documented-regime-intersection",
+      "reviewId": "warranty-20261009-20019",
+      "basis": "Manual brasileiro MY2026:36 meses desde a primeira entrega, CPF sem limite e CNPJ até100.000km. Exibição usa o limite comum conservador, sem inferir titularidade/uso. Flag atual e atestes operacionais anteriores preservados; manutenção e exclusões seguem o manual.",
+      "branches": [
+        {
+          "category": "cpf",
+          "condition": "CPF conforme manual10-5/10-6",
+          "scope": "basic-vehicle",
+          "termYears": 3,
+          "mileage": {
+            "kind": "unlimited"
+          },
+          "sourceIds": [
+            "20019-manual-my2026-v3"
+          ]
+        },
+        {
+          "category": "cnpj",
+          "condition": "CNPJ:36meses ou100.000km, o que ocorrer primeiro",
+          "scope": "basic-vehicle",
+          "termYears": 3,
+          "mileage": {
+            "kind": "limited",
+            "limitKm": 100000
+          },
+          "sourceIds": [
+            "20019-manual-my2026-v3"
+          ]
+        }
+      ]
+    }
+  },
+  "approvedRule": {
+    "ruleId": "nissan-kicks-advance-my2026-hr10ddt-basic",
+    "version": "2026-10-09.1",
+    "status": "approved",
+    "templateRecordId": "reviewed-v2-20261009-20019",
+    "allowNewUnits": true,
+    "match": {
+      "brand": "NISSAN",
+      "modelVersion": "KICKS ADVANCE TURBO",
+      "engine": "1.0",
+      "transmission": "AUTOMATICO",
+      "manufactureYear": 2025,
+      "modelYear": 2026
+    },
+    "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"nissan-kicks-advance-my2026-hr10ddt-basic\",\"version\":\"2026-10-09.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261009-20019\",\"match\":{\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS ADVANCE TURBO\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2025,\"modelYear\":2026},\"allowNewUnits\":true,\"templates\":[{\"recordId\":\"reviewed-v2-20261009-20019\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-09\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261009-20019\\\",\\\"reviewedAt\\\":\\\"2026-10-09\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20019\\\",\\\"manufactureYear\\\":2025,\\\"modelYear\\\":2026,\\\"brand\\\":\\\"NISSAN\\\",\\\"modelVersion\\\":\\\"KICKS ADVANCE TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f\\\",\\\"engine\\\":\\\"1.0\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"usage\\\":\\\"unknown\\\",\\\"commonPolicy\\\":{\\\"kind\\\":\\\"documented-regime-intersection\\\",\\\"reviewId\\\":\\\"warranty-20261009-20019\\\",\\\"basis\\\":\\\"Manual brasileiro MY2026:36 meses desde a primeira entrega, CPF sem limite e CNPJ até100.000km. Exibição usa o limite comum conservador, sem inferir titularidade/uso. Flag atual e atestes operacionais anteriores preservados; manutenção e exclusões seguem o manual.\\\",\\\"branches\\\":[{\\\"category\\\":\\\"cpf\\\",\\\"condition\\\":\\\"CPF conforme manual10-5/10-6\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"sourceIds\\\":[\\\"20019-manual-my2026-v3\\\"]},{\\\"category\\\":\\\"cnpj\\\",\\\"condition\\\":\\\"CNPJ:36meses ou100.000km, o que ocorrer primeiro\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":100000},\\\"sourceIds\\\":[\\\"20019-manual-my2026-v3\\\"]}]},\\\"reviewedMileageKm\\\":5100,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":100000},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"20019-manual-my2026-v3\\\",\\\"url\\\":\\\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\\\",\\\"locator\\\":\\\"Motor HR10DDT 999cm³:9-5(PDF382). Prazo/km:10-5/10-6(PDF392/393). Componentes:10-7/10-8; transferência:10-9; manutenção:10-11/10-13/10-15. Consulta09/10/2026; SHA256 e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab.\\\",\\\"revision\\\":\\\"MPPT-P13C00; Novo Kicks brasileiro MY2026; arquivo v3; metadados técnicos não tratados como data editorial\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"MPPT-P13C00\\\",\\\"modelYear\\\":2026,\\\"reviewId\\\":\\\"warranty-20261009-20019\\\",\\\"reviewedAt\\\":\\\"2026-10-09\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"20019\",\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS ADVANCE TURBO\",\"manufactureYear\":2025,\"modelYear\":2026},\"unitBinding\":{\"unitKey\":\"plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"reviewedMileageKm\":5100,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sources\":[{\"sourceId\":\"20019-manual-my2026-v3\",\"url\":\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\",\"locator\":\"Motor HR10DDT 999cm³:9-5(PDF382). Prazo/km:10-5/10-6(PDF392/393). Componentes:10-7/10-8; transferência:10-9; manutenção:10-11/10-13/10-15. Consulta09/10/2026; SHA256 e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab.\",\"revision\":\"MPPT-P13C00; Novo Kicks brasileiro MY2026; arquivo v3; metadados técnicos não tratados como data editorial\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MPPT-P13C00\",\"modelYear\":2026,\"reviewId\":\"warranty-20261009-20019\",\"reviewedAt\":\"2026-10-09\"}}],\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261009-20019\",\"basis\":\"Manual brasileiro MY2026:36 meses desde a primeira entrega, CPF sem limite e CNPJ até100.000km. Exibição usa o limite comum conservador, sem inferir titularidade/uso. Flag atual e atestes operacionais anteriores preservados; manutenção e exclusões seguem o manual.\",\"branches\":[{\"category\":\"cpf\",\"condition\":\"CPF conforme manual10-5/10-6\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20019-manual-my2026-v3\"]},{\"category\":\"cnpj\",\"condition\":\"CNPJ:36meses ou100.000km, o que ocorrer primeiro\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20019-manual-my2026-v3\"]}]}}]}"
+  },
+  "actualStartDate": null,
+  "actualExpiryDate": null,
+  "estimatedEndYear": 2028,
+  "title": "GARANTIA DE FÁBRICA ATÉ 2028*",
+  "footnote": "*Estimativa pela fabricação e documentação oficial da montadora. Validade, cobertura e km conforme manual do modelo/ano.",
+  "publicationPerformed": false,
+  "proposalHistoryNote": "A proposta inicial conservava o nome observado às13:31. A correspondência individual posterior documentada em identityCorrespondence e a decisão approvedRecord prevalecem nesta revisão; nenhum cadastro foi renomeado."
+}

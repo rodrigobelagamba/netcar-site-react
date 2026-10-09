@@ -21,6 +21,9 @@ const tiggo7Snapshots = JSON.parse(
   readFileSync(join(root, "docs/audits/factory-warranty-tiggo7-powertrain-2026-10-05.json"), "utf8"),
 ).publicVehicles;
 const snapshots = [...new Map([...historicalSnapshots, ...tiggo7Snapshots].map((vehicle) => [vehicle.id, vehicle])).values()];
+const reconciledSnapshots = JSON.parse(
+  readFileSync(join(root, "docs/audits/factory-warranty-reconciliation-2026-10-09.json"), "utf8"),
+).publicVehicles;
 const OriginalDate = globalThis.Date;
 const originalFetch = globalThis.fetch;
 const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window");
@@ -107,16 +110,28 @@ after(async () => {
 
 function catalogVehicle(id = "19587") {
   const vehicle = snapshots.find((entry) => entry.id === id);
+  const binding = reconciledSnapshots.find((entry) => entry.id === id);
   assert.ok(vehicle, `Missing reviewed catalog fixture ${id}`);
-  return structuredClone(vehicle);
+  assert.ok(binding, `Missing reviewed unit binding ${id}`);
+  // Keep historical FAB/MY, mileage and coverage fixtures; only the reviewed
+  // mechanical identity and opaque binding come from the migration evidence.
+  return {
+    ...structuredClone(vehicle),
+    motor: binding.motor,
+    cambio: binding.cambio,
+    unitKey: binding.unitKey,
+    observedAt: fixedNow,
+  };
 }
 
 function apiVehicle(changes = {}, id = "19587") {
   const vehicle = catalogVehicle(id);
-  return {
+  const original = {
     id: vehicle.id,
     marca: vehicle.marca,
     modelo: vehicle.modelo,
+    motor: vehicle.motor,
+    cambio: vehicle.cambio,
     ano: vehicle.year,
     ano_fabricacao: vehicle.anoFabricacao,
     km: vehicle.km,
@@ -126,6 +141,25 @@ function apiVehicle(changes = {}, id = "19587") {
     imagens: { thumb: [], full: [] },
     ...changes,
   };
+  // Legacy bootstrap tests exercise an already allowlisted projection. Actual
+  // VIN/plate hashing is covered by factory-warranty-catalog-adapter.test.mjs;
+  // never reconstruct private identifiers from the reviewed opaque binding.
+  if (!Object.hasOwn(changes, "factoryWarrantyVehicle")) {
+    original.factoryWarrantyVehicle = {
+      ...vehicle,
+      id: original.id,
+      marca: original.marca,
+      modelo: original.modelo,
+      motor: original.motor,
+      cambio: original.cambio,
+      year: original.ano,
+      anoFabricacao: original.ano_fabricacao,
+      km: original.km,
+      price: original.valor,
+      diferenciais: original.diferenciais,
+    };
+  }
+  return original;
 }
 
 const jsonRoundTrip = (value) => JSON.parse(JSON.stringify(value));
@@ -272,11 +306,13 @@ test("producer and snapshot whitelist exclude administrative fields from API and
   };
   const source = apiVehicle({
     ...administrative,
+    chassi: undefined,
     factoryWarrantyVehicle: { ...catalogVehicle(), ...administrative },
   });
   const produced = bootstrap(source);
   assert.deepEqual(Object.keys(produced.factoryWarrantyVehicle).sort(), [
-    "anoFabricacao", "diferenciais", "id", "km", "marca", "modelo", "price", "year",
+    "anoFabricacao", "cambio", "diferenciais", "id", "km", "marca", "modelo",
+    "motor", "observedAt", "price", "unitKey", "year",
   ]);
   assert.doesNotMatch(JSON.stringify(produced), /SYNTHETIC-NOT-PUBLIC|internalTestField|evidence/);
   assertVerified(produced, 2028);

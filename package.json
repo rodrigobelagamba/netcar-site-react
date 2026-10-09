@@ -53,6 +53,7 @@
     "stock:test-warranty": "node scripts/test-factory-warranty.mjs"
   },
   "dependencies": {
+    "@noble/hashes": "^1.8.0",
     "@radix-ui/react-slot": "^1.2.4",
     "@react-google-maps/api": "^2.20.8",
     "@react-pdf/renderer": "^4.5.1",

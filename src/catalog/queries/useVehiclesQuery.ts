@@ -76,6 +76,9 @@ export function useVehiclesQuery(
     queryKey,
     queryFn: () => fetchVehicles(query),
     staleTime: 1000 * 60 * 5, // 5 minutos
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
     initialData: bootstrapVehicles,
     initialDataUpdatedAt: bootstrapVehicles ? Date.now() : undefined,
     refetchOnMount: bootstrapVehicles

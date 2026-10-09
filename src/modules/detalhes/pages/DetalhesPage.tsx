@@ -1,5 +1,5 @@
 import { FactoryWarrantyBadge, FactoryWarrantyNote } from "@/design-system/components/patterns/FactoryWarrantyBadge";
-import { factoryWarrantyStampFor, factoryTractionBatteryStampFor, factoryPowertrainStampFor } from "@/lib/factoryWarrantyStamp";
+import { useFactoryWarrantyStamps } from "@/lib/useFactoryWarrantyStamps";
 import {
   useParams,
   useLocation,
@@ -33,7 +33,7 @@ import React, {
   useLayoutEffect,
   useRef,
 } from "react";
-import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
+import { useVehicleQuery, isVehicleGone } from "@/catalog/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useAnuncioQuery } from "@/catalog/queries/useAnuncioQuery";
@@ -1606,6 +1606,8 @@ export function DetalhesPage() {
     error,
     isPending,
   } = useVehicleQuery(slug);
+  const { warrantyStamp, tractionBatteryStamp, powertrainStamp } =
+    useFactoryWarrantyStamps(isPlaceholderData || isVehicleGone(error) ? undefined : vehicle);
   const { data: icheck } = useIcheckMetadata(
     isPlaceholderData ? undefined : vehicle,
   );
@@ -2018,9 +2020,6 @@ export function DetalhesPage() {
   const waRef = vehicleWhatsAppRef(vehicle);
 
   const mileageFormatted = formatCatalogMileage(vehicle.km);
-  const warrantyStamp = factoryWarrantyStampFor(vehicle);
-  const tractionBatteryStamp = factoryTractionBatteryStampFor(vehicle);
-  const powertrainStamp = factoryPowertrainStampFor(vehicle);
 
   // Badges (só selos de dados reais — sem Retire hoje / Vistoriado genérico)
   const diferenciais = vehicle?.diferenciais ?? [];

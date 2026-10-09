@@ -1,5 +1,12 @@
 # Carimbo de garantia de fábrica
 
+> Atualização de arquitetura em09/10/2026: consultar
+> [Reconciliação de garantias](factory-warranty-reconciliation.md) para identidade
+> estável, regras exatas reutilizáveis, publicação do registro e validade do cache.
+> As aprovações e evidências históricas descritas abaixo permanecem preservadas.
+> A revisão individual da Kicks20019 acrescenta a 11ª aprovação (8 gerais e
+> 3 de motor/câmbio), com 5 pendências remanescentes, conforme a auditoria de09/10.
+
 O visual escolhido é o circular A. A integração usa um único registro principal
 por unidade. A matriz schema2 contém dez registros principais revisados e
 seis pendentes, com `enabled: true`: sete coberturas gerais e três de motor e
@@ -84,8 +91,10 @@ Tipos e função canônica: `src/lib/factoryWarranty.ts`.
 | `approvedFingerprint` | Resultado de `factoryWarrantyReviewFingerprint(record)` após revisão |
 
 O fingerprint é uma serialização canônica legível, não assinatura nem prova
-independente de aprovação. A rotina deve gerá-lo somente depois da revisão;
-o site jamais o regenera para aprovar uma alteração automaticamente.
+independente de aprovação. A revisão técnica individual não é regenerada pelo
+site. Desde09/10, regras documentais explicitamente aprovadas e versionadas podem
+gerar um registro efetivo para uma nova unidade exatamente compatível; a revisão
+da regra permanece a autoridade, conforme o guia de reconciliação.
 IDs, nomes e anos devem usar a identidade exata do catálogo atual. Por exemplo,
 `TERA HIGH` no ERP não deve ser igualado automaticamente a `TERA HIGH TURBO` na
 API. No ID19587 essa correspondência foi explicitamente encerrada pela consulta

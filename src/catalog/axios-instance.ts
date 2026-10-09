@@ -9,6 +9,7 @@ export interface HttpResponse<T> {
 interface HttpGetOptions {
   params?: Record<string, string | number | boolean | null | undefined>;
   validateStatus?: (status: number) => boolean;
+  cache?: RequestCache;
 }
 
 export class HttpRequestError<T = unknown> extends Error {
@@ -48,6 +49,7 @@ async function get<T>(url: string, options: HttpGetOptions = {}): Promise<HttpRe
       method: "GET",
       headers: { Accept: "application/json" },
       signal: controller.signal,
+      ...(options.cache ? { cache: options.cache } : {}),
     });
     const raw = await response.text();
     let data: T;

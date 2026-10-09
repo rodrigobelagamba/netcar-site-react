@@ -10,6 +10,7 @@ import {
   factoryWarrantyPreviewFor,
   isFactoryWarrantyPreviewEnabled,
 } from "./factoryWarrantyPreview";
+import { reconcileFactoryWarrantyVehicle } from "./factoryWarrantyReconciliation";
 
 // Only explicitly reviewed, compatible units can display a warranty.
 export const factoryWarrantyMatrix = registry as FactoryWarrantyMatrix;
@@ -40,24 +41,30 @@ export function factoryWarrantyVehicleFor(vehicle: WarrantyStampVehicle) {
   return original;
 }
 
-export function factoryWarrantyStampFor(vehicle: WarrantyStampVehicle) {
+export function factoryWarrantyStampFor(vehicle: WarrantyStampVehicle, matrix = factoryWarrantyMatrix, today?: string) {
   const original = factoryWarrantyVehicleFor(vehicle);
   if (!original) return undefined;
-  const preview = factoryWarrantyPreviewFor(original, factoryWarrantyMatrix);
+  const preview = factoryWarrantyPreviewFor(original, matrix);
   if (preview) return preview;
-  return resolveFactoryWarranty(original, factoryWarrantyMatrix);
+  const reconciled = reconcileFactoryWarrantyVehicle(original, matrix, today);
+  if (reconciled.status !== "eligible") return undefined;
+  return resolveFactoryWarranty(original, reconciled.matrix, today);
 }
 
 /** Prazo revisado de motor/câmbio; não substitui a garantia básica do veículo. */
-export function factoryPowertrainStampFor(vehicle: WarrantyStampVehicle) {
+export function factoryPowertrainStampFor(vehicle: WarrantyStampVehicle, matrix = factoryWarrantyMatrix, today?: string) {
   const original = factoryWarrantyVehicleFor(vehicle);
   if (!original) return undefined;
-  return resolveFactoryPowertrainWarranty(original, factoryWarrantyMatrix);
+  const reconciled = reconcileFactoryWarrantyVehicle(original, matrix, today);
+  if (reconciled.status !== "eligible") return undefined;
+  return resolveFactoryPowertrainWarranty(original, reconciled.matrix, today);
 }
 
 /** A cobertura restrita nunca substitui o resultado/rótulo da garantia geral. */
-export function factoryTractionBatteryStampFor(vehicle: WarrantyStampVehicle) {
+export function factoryTractionBatteryStampFor(vehicle: WarrantyStampVehicle, matrix = factoryWarrantyMatrix, today?: string) {
   const original = factoryWarrantyVehicleFor(vehicle);
   if (!original) return undefined;
-  return resolveFactoryTractionBatteryWarranty(original, factoryWarrantyMatrix);
+  const reconciled = reconcileFactoryWarrantyVehicle(original, matrix, today);
+  if (reconciled.status !== "eligible") return undefined;
+  return resolveFactoryTractionBatteryWarranty(original, reconciled.matrix, today);
 }

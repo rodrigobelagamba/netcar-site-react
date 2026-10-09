@@ -851,9 +851,11 @@ interface WarrantyPowertrainAudit {
   officialDocument: { url: string; displaySourceUrl: string; documentCode: string; sha256: string };
   timingAndTransfer: { resaleRestartsTerm: boolean };
 }
-const localRegistry = JSON.parse(
-  readFileSync(new URL("../../src/data/factoryWarrantyMatrix.json", import.meta.url), "utf8"),
-) as FactoryWarrantyMatrix;
+// These October 3/5/7 assertions preserve the immutable approved history.
+// The live migration and its stronger identity gates have their own suite.
+const localRegistry = (JSON.parse(
+  readFileSync(new URL("../../docs/audits/factory-warranty-reconciliation-baseline-2026-10-09.json", import.meta.url), "utf8"),
+) as { matrix: FactoryWarrantyMatrix }).matrix;
 const localAudit = JSON.parse(
   readFileSync(new URL("../../docs/audits/factory-warranty-2026-10-03.json", import.meta.url), "utf8"),
 ) as WarrantyAudit;

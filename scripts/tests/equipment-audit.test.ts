@@ -24,7 +24,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { mock, test } from "node:test";
 import {
-  buildEquipmentAudit,
+  buildEquipmentAudit as buildAuditWithMatrix,
   configureEquipmentAuditNetwork,
   EQUIPMENT_STOCK_URL,
   fetchEquipmentStock,
@@ -36,12 +36,40 @@ import {
   unitEquipmentConfirmations,
   type EquipmentVehicle,
 } from "../../src/lib/vehicleEquipment";
-import warrantyRegistry from "../../src/data/factoryWarrantyMatrix.json";
+import warrantyRegistrySeed from "../../src/data/factoryWarrantyMatrix.json";
+import { factoryWarrantyUnitKey } from "../lib/factory-warranty-catalog.js";
 import {
+  factoryWarrantyReviewFingerprint,
+  factoryTractionBatteryReviewFingerprint,
   resolveFactoryWarranty,
   resolveFactoryPowertrainWarranty,
   type FactoryWarrantyMatrix,
 } from "../../src/lib/factoryWarranty";
+
+// Isolated identities keep these historic equipment tests independent of live
+// VIN/plate data while exercising the production binding requirement unchanged.
+const fixtureVin = (id: string) => `9BW${id.padStart(14, "0")}`;
+const warrantyRegistry = structuredClone(
+  warrantyRegistrySeed,
+) as FactoryWarrantyMatrix;
+for (const record of warrantyRegistry.records) {
+  if (record.unitBinding)
+    record.unitBinding.unitKey = factoryWarrantyUnitKey({
+      chassi: fixtureVin(record.vehicle.vehicleId),
+    })!;
+  record.approvedFingerprint = factoryWarrantyReviewFingerprint(record);
+  for (const coverage of record.supplementalCoverages || [])
+    coverage.approvedFingerprint = factoryTractionBatteryReviewFingerprint(
+      record,
+      coverage,
+    );
+}
+const buildEquipmentAudit: typeof buildAuditWithMatrix = (
+  vehicles,
+  previous = null,
+  now,
+  matrix = warrantyRegistry,
+) => buildAuditWithMatrix(vehicles, previous, now, matrix);
 
 const fixture: { vehicles: EquipmentVehicle[] } = JSON.parse(
   readFileSync(
@@ -51,7 +79,7 @@ const fixture: { vehicles: EquipmentVehicle[] } = JSON.parse(
 );
 const firstRunAt = "2026-09-28T18:00:00.000Z";
 const secondRunAt = "2026-09-29T18:00:00.000Z";
-const warrantyRunAt = "2026-10-05T12:00:00.000Z";
+const warrantyRunAt = "2026-10-09T12:00:00.000Z";
 const basicWarrantyId = "20049";
 const powertrainWarrantyIds = ["20029", "20041", "20066"];
 
@@ -68,8 +96,9 @@ function warrantyApiVehicle(id = basicWarrantyId): Record<string, unknown> {
     ano: record.vehicle.modelYear,
     km: record.reviewedMileageKm,
     valor: 100000,
-    motor: "1.6",
-    cambio: "AUTOMÁTICO",
+    chassi: fixtureVin(record.vehicle.vehicleId),
+    motor: record.unitBinding?.engine || "1.6",
+    cambio: record.unitBinding?.transmission || "AUTOMÁTICO",
     opcionais: [],
     diferenciais: [
       { tag: "garantia_fabrica", descricao: "Garantia de fábrica" },
@@ -535,6 +564,9 @@ test("warranty audit preserves the public gate's rejection of coerced numbers an
     // Match the public adapter's pass-through values, without Number()/trim().
     const publicVehicle = {
       id: String(raw.id),
+      unitKey: factoryWarrantyUnitKey(raw),
+      motor: raw.motor,
+      cambio: raw.cambio,
       marca: raw.marca,
       modelo: raw.modelo,
       anoFabricacao: raw.ano_fabricacao,
@@ -567,6 +599,7 @@ test("a newly flagged ID without its own warranty record stays pending and never
       {
         ...warrantyApiVehicle(),
         id: "99999",
+        chassi: fixtureVin("99999"),
       },
     ]),
   );
@@ -589,7 +622,7 @@ test("a newly flagged ID without its own warranty record stays pending and never
 });
 
 test("an omitted warranty flag keeps a previous new-unit pending finding until the source is explicit", () => {
-  const raw = { ...warrantyApiVehicle(), id: "99999" };
+  const raw = { ...warrantyApiVehicle(), id: "99999", chassi: fixtureVin("99999") };
   const first = buildEquipmentAudit(
     parseStockResponse(apiResponse([raw])),
     null,
@@ -626,6 +659,9 @@ test("eligible warranty findings agree with the real resolver and stable runs ke
     resolveFactoryWarranty(
       {
         id: String(raw.id),
+        unitKey: factoryWarrantyUnitKey(raw),
+        motor: String(raw.motor),
+        cambio: String(raw.cambio),
         marca: String(raw.marca),
         modelo: String(raw.modelo),
         anoFabricacao: Number(raw.ano_fabricacao),
@@ -650,7 +686,7 @@ test("eligible warranty findings agree with the real resolver and stable runs ke
         item.code === "factory-warranty-eligible" && item.severity === "info",
     ),
   );
-  const second = buildEquipmentAudit(parsed, first, "2026-10-06T12:00:00.000Z");
+  const second = buildEquipmentAudit(parsed, first, "2026-10-10T12:00:00.000Z");
   assert.equal(second.vehicles[0].reviewKey, row.reviewKey);
   assert.equal(second.counts.unchanged, 1);
   assert.equal(JSON.stringify(parsed), before);
@@ -664,6 +700,9 @@ test("the three Tiggo records are eligible only for motor and transmission witho
   for (const item of raw) {
     const catalogVehicle = {
       id: String(item.id),
+      unitKey: factoryWarrantyUnitKey(item),
+      motor: item.motor,
+      cambio: item.cambio,
       marca: item.marca,
       modelo: item.modelo,
       anoFabricacao: item.ano_fabricacao,
@@ -733,7 +772,7 @@ test("the three Tiggo records are eligible only for motor and transmission witho
   }
   assert.equal(report.counts.withAlerts, 0);
   assert.equal(
-    buildEquipmentAudit(parsed, report, "2026-10-06T12:00:00.000Z").counts
+    buildEquipmentAudit(parsed, report, "2026-10-10T12:00:00.000Z").counts
       .unchanged,
     3,
   );
@@ -879,7 +918,7 @@ test("powertrain source changes and conflicting records remain blocked and reope
   }
 });
 
-test("the registry audit keeps seven general coverages, three powertrain coverages and the BYD battery separate", () => {
+test("the registry audit keeps eight general coverages, three powertrain coverages and the BYD battery separate", () => {
   const report = buildEquipmentAudit(
     parseStockResponse(
       apiResponse(
@@ -889,11 +928,11 @@ test("the registry audit keeps seven general coverages, three powertrain coverag
       ),
     ),
     null,
-    "2026-10-07T12:00:00.000Z",
+    "2026-10-09T12:00:00.000Z",
   );
   assert.equal(
     report.vehicles.filter((row) => row.warranty?.status === "eligible").length,
-    7,
+    8,
   );
   assert.equal(
     report.vehicles.filter(
@@ -912,7 +951,7 @@ test("the registry audit keeps seven general coverages, three powertrain coverag
       ?.scope,
     "traction-battery",
   );
-  assert.equal(report.counts.withAlerts, 6);
+  assert.equal(report.counts.withAlerts, 5);
 });
 
 test("warranty identity, FAB, MY, mileage and flag changes reopen only the candidate", () => {

@@ -6,7 +6,7 @@
       "recordId": "reviewed-v2-20261005-19924",
       "status": "approved",
       "reviewedAt": "2026-10-05",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-19924\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"19924\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"BYD\",\"modelVersion\":\"SONG PRO GS\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":6,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":9385,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19924-manual-general-20261005\",\"url\":\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\",\"locator\":\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressas 32 (prazo geral), 33 (início e transferência), 36–37 (uso e limitações). Edição conferida na contracapa, PDF 46.\",\"revision\":\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"DM_MG_25046\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-19924\",\"reviewedAt\":\"2026-10-05\"}}]}",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-19924\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"19924\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"BYD\",\"modelVersion\":\"SONG PRO GS\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:e66828b1c6ab47281a5d318cf7e9a1f6e3b605806c3b95b449a5c299ed203d27\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":6,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":9385,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19924-manual-general-20261005\",\"url\":\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\",\"locator\":\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressas 32 (prazo geral), 33 (início e transferência), 36–37 (uso e limitações). Edição conferida na contracapa, PDF 46.\",\"revision\":\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"DM_MG_25046\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-19924\",\"reviewedAt\":\"2026-10-05\"}}]}",
       "vehicle": {
         "vehicleId": "19924",
         "brand": "BYD",
@@ -44,7 +44,7 @@
           "recordId": "reviewed-20261005-19924-traction-battery",
           "status": "approved",
           "reviewedAt": "2026-10-05",
-          "approvedFingerprint": "{\"primaryApprovedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261005-19924\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"19924\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"BYD\\\",\\\"modelVersion\\\":\\\"SONG PRO GS\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":6,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":9385,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"19924-manual-general-20261005\\\",\\\"url\\\":\\\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\\\",\\\"locator\\\":\\\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressas 32 (prazo geral), 33 (início e transferência), 36–37 (uso e limitações). Edição conferida na contracapa, PDF 46.\\\",\\\"revision\\\":\\\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"DM_MG_25046\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261005-19924\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\"}}]}\",\"coverage\":{\"recordId\":\"reviewed-20261005-19924-traction-battery\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"19924\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"BYD\",\"modelVersion\":\"SONG PRO GS\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"traction-battery\",\"termYears\":8,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":9385,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19924-manual-traction-battery-20261005\",\"url\":\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\",\"locator\":\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressa 34 (PDF 35), tabela da bateria de tração; impressa 33 (início e transferência); impressas 36–37 (uso, capacidade e limitações).\",\"revision\":\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"DM_MG_25046\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-19924-traction-battery\",\"reviewedAt\":\"2026-10-05\"}}]}}",
+          "approvedFingerprint": "{\"primaryApprovedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261005-19924\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"19924\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"BYD\\\",\\\"modelVersion\\\":\\\"SONG PRO GS\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:e66828b1c6ab47281a5d318cf7e9a1f6e3b605806c3b95b449a5c299ed203d27\\\",\\\"engine\\\":\\\"1.5\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":6,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":9385,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"19924-manual-general-20261005\\\",\\\"url\\\":\\\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\\\",\\\"locator\\\":\\\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressas 32 (prazo geral), 33 (início e transferência), 36–37 (uso e limitações). Edição conferida na contracapa, PDF 46.\\\",\\\"revision\\\":\\\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"DM_MG_25046\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261005-19924\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\"}}]}\",\"coverage\":{\"recordId\":\"reviewed-20261005-19924-traction-battery\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"19924\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"BYD\",\"modelVersion\":\"SONG PRO GS\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:e66828b1c6ab47281a5d318cf7e9a1f6e3b605806c3b95b449a5c299ed203d27\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"traction-battery\",\"termYears\":8,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":9385,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19924-manual-traction-battery-20261005\",\"url\":\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\",\"locator\":\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressa 34 (PDF 35), tabela da bateria de tração; impressa 33 (início e transferência); impressas 36–37 (uso, capacidade e limitações).\",\"revision\":\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"DM_MG_25046\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-19924-traction-battery\",\"reviewedAt\":\"2026-10-05\"}}]}}",
           "scope": "traction-battery",
           "conditionsConfirmed": true,
           "termYears": 8,
@@ -69,13 +69,18 @@
             }
           ]
         }
-      ]
+      ],
+      "unitBinding": {
+        "unitKey": "plate-sha256:e66828b1c6ab47281a5d318cf7e9a1f6e3b605806c3b95b449a5c299ed203d27",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      }
     },
     {
       "recordId": "reviewed-v2-20261005-20066-powertrain",
       "status": "approved",
       "reviewedAt": "2026-10-05",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20066\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_288a06854d888191ba9530283b115526\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":36000,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T7303-20066-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298\",\"locator\":\"Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.\",\"revision\":\"B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T7303\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20066\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:1023fdd4418837451b753923f27b6308dd1befa871dd15b10690c49d12ce9aae\",\"engine\":\"1.6\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_288a06854d888191ba9530283b115526\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":36000,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T7303-20066-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298\",\"locator\":\"Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.\",\"revision\":\"B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T7303\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
       "vehicle": {
         "vehicleId": "20066",
         "brand": "CHERY",
@@ -112,13 +117,18 @@
         "coverageSubtype": "engine-and-transmission",
         "usageAttestationId": "Sentinel_288a06854d888191ba9530283b115526",
         "displayLabel": "Motor e câmbio"
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:1023fdd4418837451b753923f27b6308dd1befa871dd15b10690c49d12ce9aae",
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
       }
     },
     {
       "recordId": "reviewed-v2-20261005-20029-powertrain",
       "status": "approved",
       "reviewedAt": "2026-10-05",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20029\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_a25f6c73a8bc81918847dca70dc01c42\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":38900,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T8006-20029-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20029\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:d5231098ccb79c41d4d3bcfa23e781834b0c2e04178b17d9c9c513bf615a591c\",\"engine\":\"1.6\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_a25f6c73a8bc81918847dca70dc01c42\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":38900,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T8006-20029-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
       "vehicle": {
         "vehicleId": "20029",
         "brand": "CHERY",
@@ -155,13 +165,18 @@
         "coverageSubtype": "engine-and-transmission",
         "usageAttestationId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
         "displayLabel": "Motor e câmbio"
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:d5231098ccb79c41d4d3bcfa23e781834b0c2e04178b17d9c9c513bf615a591c",
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
       }
     },
     {
       "recordId": "reviewed-v2-20261005-20041-powertrain",
       "status": "approved",
       "reviewedAt": "2026-10-05",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20041-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20041\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_a25f6c73a8bc81918847dca70dc01c42\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":28240,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T8006-20041-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20041-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20041-powertrain\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20041\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:dd74fb99abc9cfff31deaac53e7b1010b70ccddbec1ac29e3bcbf39176df8c0b\",\"engine\":\"1.6\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_a25f6c73a8bc81918847dca70dc01c42\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":28240,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T8006-20041-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20041-powertrain\",\"reviewedAt\":\"2026-10-05\"}}]}",
       "vehicle": {
         "vehicleId": "20041",
         "brand": "CHERY",
@@ -198,13 +213,18 @@
         "coverageSubtype": "engine-and-transmission",
         "usageAttestationId": "Sentinel_a25f6c73a8bc81918847dca70dc01c42",
         "displayLabel": "Motor e câmbio"
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:dd74fb99abc9cfff31deaac53e7b1010b70ccddbec1ac29e3bcbf39176df8c0b",
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
       }
     },
     {
       "recordId": "reviewed-v2-20261003-19994",
       "status": "approved",
       "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261003-19994\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19994\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHEVROLET\",\"modelVersion\":\"ONIX PREMIER PLUS TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-19994\",\"basis\":\"O manual MY2025 preserva36meses para ambos regimes. A diferença é quilométrica;44.975km está abaixo de100.000. Não inferir PF/PJ nem uso remunerado.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"destinatário final PF/PJ sem uso remunerado\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"19994-manual-1\"]},{\"category\":\"commercial\",\"condition\":\"PJ em negócio/produção ou PF em transporte remunerado\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"19994-manual-1\"]}]},\"reviewedMileageKm\":44975,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19994-manual-1\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/onix-plus/01-pdfs/2025/onix-plus-2025-manual-do-propietario.pdf\",\"locator\":\"Manual Onix/Onix Plus MY2025, PDF244, cláusula prazo/limite da garantia\",\"revision\":\"Manual do Proprietário Onix/Onix Plus MY2025; arquivo onix-plus-2025-manual-do-propietario.pdf\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MY2025\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-19994\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261003-19994\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19994\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHEVROLET\",\"modelVersion\":\"ONIX PREMIER PLUS TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:5c91521e98fcb8fe92b6636710b563728a6cc4100899d3416eacba1000668c19\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-19994\",\"basis\":\"O manual MY2025 preserva36meses para ambos regimes. A diferença é quilométrica;44.975km está abaixo de100.000. Não inferir PF/PJ nem uso remunerado.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"destinatário final PF/PJ sem uso remunerado\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"19994-manual-1\"]},{\"category\":\"commercial\",\"condition\":\"PJ em negócio/produção ou PF em transporte remunerado\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"19994-manual-1\"]}]},\"reviewedMileageKm\":44975,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19994-manual-1\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/onix-plus/01-pdfs/2025/onix-plus-2025-manual-do-propietario.pdf\",\"locator\":\"Manual Onix/Onix Plus MY2025, PDF244, cláusula prazo/limite da garantia\",\"revision\":\"Manual do Proprietário Onix/Onix Plus MY2025; arquivo onix-plus-2025-manual-do-propietario.pdf\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MY2025\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-19994\",\"reviewedAt\":\"2026-10-03\"}}]}",
       "vehicle": {
         "vehicleId": "19994",
         "brand": "CHEVROLET",
@@ -269,13 +289,18 @@
             ]
           }
         ]
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:5c91521e98fcb8fe92b6636710b563728a6cc4100899d3416eacba1000668c19",
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
       }
     },
     {
       "recordId": "reviewed-v2-20261005-20049",
       "status": "approved",
       "reviewedAt": "2026-10-05",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20049\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20049\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHEVROLET\",\"modelVersion\":\"TRACKER LT TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261005-20049\",\"basis\":\"As alíneas A e B têm 36 meses de garantia básica. 100.000 km é o limite conservador comum para exibição; não afirma o uso efetivo nem um teto universal da montadora. A exceção de 12 meses da alínea C foi excluída para o ID 20049 pelo indicador cadastral dirigido registrado na auditoria de 2026-10-05.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"PF ou PJ destinatário final, exceto transporte remunerado; fora da exceção R8C/R8Z\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20049-manual-20261005\"]},{\"category\":\"commercial\",\"condition\":\"PJ em negócio ou produção, ou PF em transporte remunerado; fora da exceção R8C/R8Z\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20049-manual-20261005\"]}]},\"reviewedMileageKm\":24500,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20049-manual-20261005\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/01-pdfs/2025/tracker-2025-manual-do-propietario.pdf\",\"locator\":\"Manual Tracker MY2025: página impressa 232 (PDF 235, contagem a partir de 1), Prazo de Garantia A/B/C; impressa 231 (PDF 234), início e transferência. Exceção R8C/R8Z excluída para esta unidade por classificação dirigida do cadastro existente, revisão warranty-20261005-20049.\",\"revision\":\"52194182; 25,5_CHEV_Tracker_Full_OM_pt_BR_B_BR_52194182_2024OCT18; edição 18/10/2024; MY2025; conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"52194182\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20049\",\"reviewedAt\":\"2026-10-05\"}}]}",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261005-20049\",\"reviewedAt\":\"2026-10-05\",\"vehicle\":{\"vehicleId\":\"20049\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"CHEVROLET\",\"modelVersion\":\"TRACKER LT TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:5ad07c4c7235185fb1ef28a9a6f519a90a0d9074870f0a85c2a4e61f7496522d\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261005-20049\",\"basis\":\"As alíneas A e B têm 36 meses de garantia básica. 100.000 km é o limite conservador comum para exibição; não afirma o uso efetivo nem um teto universal da montadora. A exceção de 12 meses da alínea C foi excluída para o ID 20049 pelo indicador cadastral dirigido registrado na auditoria de 2026-10-05.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"PF ou PJ destinatário final, exceto transporte remunerado; fora da exceção R8C/R8Z\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20049-manual-20261005\"]},{\"category\":\"commercial\",\"condition\":\"PJ em negócio ou produção, ou PF em transporte remunerado; fora da exceção R8C/R8Z\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20049-manual-20261005\"]}]},\"reviewedMileageKm\":24500,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20049-manual-20261005\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/01-pdfs/2025/tracker-2025-manual-do-propietario.pdf\",\"locator\":\"Manual Tracker MY2025: página impressa 232 (PDF 235, contagem a partir de 1), Prazo de Garantia A/B/C; impressa 231 (PDF 234), início e transferência. Exceção R8C/R8Z excluída para esta unidade por classificação dirigida do cadastro existente, revisão warranty-20261005-20049.\",\"revision\":\"52194182; 25,5_CHEV_Tracker_Full_OM_pt_BR_B_BR_52194182_2024OCT18; edição 18/10/2024; MY2025; conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"52194182\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20049\",\"reviewedAt\":\"2026-10-05\"}}]}",
       "vehicle": {
         "vehicleId": "20049",
         "brand": "CHEVROLET",
@@ -340,6 +365,11 @@
             ]
           }
         ]
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:5ad07c4c7235185fb1ef28a9a6f519a90a0d9074870f0a85c2a4e61f7496522d",
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
       }
     },
     {
@@ -378,7 +408,12 @@
             "reviewedAt": "2026-10-03"
           }
         }
-      ]
+      ],
+      "unitBinding": {
+        "unitKey": "plate-sha256:df20aad6836198a350c5405d9471d7bb207b18c1204442bb2442564aca8dad79",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      }
     },
     {
       "recordId": "normalized-20261003-19854",
@@ -429,7 +464,12 @@
             "reviewedAt": "2026-10-03"
           }
         }
-      ]
+      ],
+      "unitBinding": {
+        "unitKey": "plate-sha256:32165b322dcdcae306a552e25f09545fcecc6a3c2a36b5f3b0eb80190533dd30",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      }
     },
     {
       "recordId": "normalized-20261003-19898",
@@ -467,13 +507,18 @@
             "reviewedAt": "2026-10-03"
           }
         }
-      ]
+      ],
+      "unitBinding": {
+        "unitKey": "plate-sha256:c22dc577e58b7cd8b2bf38dfcbcfc74d27e7a2258200af04823667dcc84d3330",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      }
     },
     {
       "recordId": "reviewed-v2-20261003-20038",
       "status": "approved",
       "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261003-20038\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"20038\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"HYUNDAI\",\"modelVersion\":\"HB20 LIMITED\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-20038\",\"basis\":\"HMB mantém60meses para particular e comercial. O teto comercial100.000km é a interseção conservadora, sem alterar o prazo básico nem declarar uso real.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"particular\",\"scope\":\"basic-vehicle\",\"termYears\":5,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20038-manual-1\"]},{\"category\":\"commercial\",\"condition\":\"comercial\",\"scope\":\"basic-vehicle\",\"termYears\":5,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20038-manual-1\"]}]},\"reviewedMileageKm\":28785,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20038-manual-1\",\"url\":\"https://www.hyundai.com.br/content/dam/hmb/download-manuais/Manual_Garantia_HB20_e_Creta_A1XW-PB2308A_Site.pdf\",\"locator\":\"Impressas8–10,14,17–18; PDF12–14,18,21–22 (1-based conforme revisão específica review_hyundai.json)\",\"revision\":\"A1XW-PB2308A; data editorial expressa não localizada\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"A1XW-PB2308A\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-20038\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261003-20038\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"20038\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"HYUNDAI\",\"modelVersion\":\"HB20 LIMITED\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:d7ccfa3db737cf25c213a1690053aeceeb039f381300934a66d4bafe07b75a5c\",\"engine\":\"1.0\",\"transmission\":\"MANUAL\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-20038\",\"basis\":\"HMB mantém60meses para particular e comercial. O teto comercial100.000km é a interseção conservadora, sem alterar o prazo básico nem declarar uso real.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"particular\",\"scope\":\"basic-vehicle\",\"termYears\":5,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20038-manual-1\"]},{\"category\":\"commercial\",\"condition\":\"comercial\",\"scope\":\"basic-vehicle\",\"termYears\":5,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20038-manual-1\"]}]},\"reviewedMileageKm\":28785,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20038-manual-1\",\"url\":\"https://www.hyundai.com.br/content/dam/hmb/download-manuais/Manual_Garantia_HB20_e_Creta_A1XW-PB2308A_Site.pdf\",\"locator\":\"Impressas8–10,14,17–18; PDF12–14,18,21–22 (1-based conforme revisão específica review_hyundai.json)\",\"revision\":\"A1XW-PB2308A; data editorial expressa não localizada\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"A1XW-PB2308A\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-20038\",\"reviewedAt\":\"2026-10-03\"}}]}",
       "vehicle": {
         "vehicleId": "20038",
         "brand": "HYUNDAI",
@@ -538,6 +583,11 @@
             ]
           }
         ]
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:d7ccfa3db737cf25c213a1690053aeceeb039f381300934a66d4bafe07b75a5c",
+        "engine": "1.0",
+        "transmission": "MANUAL"
       }
     },
     {
@@ -576,19 +626,29 @@
             "reviewedAt": "2026-10-03"
           }
         }
-      ]
+      ],
+      "unitBinding": {
+        "unitKey": "plate-sha256:435d90c576cbd38b7d85002c5fb8a830f72a5665700b25ca55da66522434684c",
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      }
     },
     {
-      "recordId": "normalized-20261003-20019",
-      "status": "pending",
-      "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"normalized-20261003-20019\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"20019\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS ADVANCE\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":null,\"reviewedMileageKm\":0,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20019-manual-1\",\"url\":\"https://www.nissan.com.br/proprietarios/suporte/perguntas-frequentes.html\",\"locator\":\"FAQ Nissan, seção Novo Kicks (Sense/Advance/Exclusive/Platinum). Revisão e correspondência de geração não transcritas.\",\"revision\":\"Data de revisão da FAQ não preservada; pendente\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2026,\"reviewId\":\"warranty-20261003-20019\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "recordId": "reviewed-v2-20261009-20019",
+      "status": "approved",
+      "reviewedAt": "2026-10-09",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261009-20019\",\"reviewedAt\":\"2026-10-09\",\"vehicle\":{\"vehicleId\":\"20019\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS ADVANCE TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261009-20019\",\"basis\":\"Manual brasileiro MY2026:36 meses desde a primeira entrega, CPF sem limite e CNPJ até100.000km. Exibição usa o limite comum conservador, sem inferir titularidade/uso. Flag atual e atestes operacionais anteriores preservados; manutenção e exclusões seguem o manual.\",\"branches\":[{\"category\":\"cpf\",\"condition\":\"CPF conforme manual10-5/10-6\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20019-manual-my2026-v3\"]},{\"category\":\"cnpj\",\"condition\":\"CNPJ:36meses ou100.000km, o que ocorrer primeiro\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20019-manual-my2026-v3\"]}]},\"reviewedMileageKm\":5100,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20019-manual-my2026-v3\",\"url\":\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\",\"locator\":\"Motor HR10DDT 999cm³:9-5(PDF382). Prazo/km:10-5/10-6(PDF392/393). Componentes:10-7/10-8; transferência:10-9; manutenção:10-11/10-13/10-15. Consulta09/10/2026; SHA256 e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab.\",\"revision\":\"MPPT-P13C00; Novo Kicks brasileiro MY2026; arquivo v3; metadados técnicos não tratados como data editorial\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MPPT-P13C00\",\"modelYear\":2026,\"reviewId\":\"warranty-20261009-20019\",\"reviewedAt\":\"2026-10-09\"}}]}",
       "vehicle": {
         "vehicleId": "20019",
         "brand": "NISSAN",
-        "modelVersion": "KICKS ADVANCE",
+        "modelVersion": "KICKS ADVANCE TURBO",
         "manufactureYear": 2025,
         "modelYear": 2026
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f",
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
       },
       "optionalId": 108,
       "optionalConfirmed": true,
@@ -596,32 +656,64 @@
       "scope": "basic-vehicle",
       "termYears": 3,
       "usage": "unknown",
-      "reviewedMileageKm": 0,
+      "reviewedMileageKm": 5100,
       "mileage": {
         "kind": "limited",
         "limitKm": 100000
       },
       "sources": [
         {
-          "sourceId": "20019-manual-1",
-          "url": "https://www.nissan.com.br/proprietarios/suporte/perguntas-frequentes.html",
-          "locator": "FAQ Nissan, seção Novo Kicks (Sense/Advance/Exclusive/Platinum). Revisão e correspondência de geração não transcritas.",
-          "revision": "Data de revisão da FAQ não preservada; pendente",
+          "sourceId": "20019-manual-my2026-v3",
+          "url": "https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf",
+          "locator": "Motor HR10DDT 999cm³:9-5(PDF382). Prazo/km:10-5/10-6(PDF392/393). Componentes:10-7/10-8; transferência:10-9; manutenção:10-11/10-13/10-15. Consulta09/10/2026; SHA256 e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab.",
+          "revision": "MPPT-P13C00; Novo Kicks brasileiro MY2026; arquivo v3; metadados técnicos não tratados como data editorial",
           "verification": {
-            "status": "pending",
-            "documentCode": "",
+            "status": "verified",
+            "documentCode": "MPPT-P13C00",
             "modelYear": 2026,
-            "reviewId": "warranty-20261003-20019",
-            "reviewedAt": "2026-10-03"
+            "reviewId": "warranty-20261009-20019",
+            "reviewedAt": "2026-10-09"
           }
         }
-      ]
+      ],
+      "commonPolicy": {
+        "kind": "documented-regime-intersection",
+        "reviewId": "warranty-20261009-20019",
+        "basis": "Manual brasileiro MY2026:36 meses desde a primeira entrega, CPF sem limite e CNPJ até100.000km. Exibição usa o limite comum conservador, sem inferir titularidade/uso. Flag atual e atestes operacionais anteriores preservados; manutenção e exclusões seguem o manual.",
+        "branches": [
+          {
+            "category": "cpf",
+            "condition": "CPF conforme manual10-5/10-6",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "unlimited"
+            },
+            "sourceIds": [
+              "20019-manual-my2026-v3"
+            ]
+          },
+          {
+            "category": "cnpj",
+            "condition": "CNPJ:36meses ou100.000km, o que ocorrer primeiro",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "limited",
+              "limitKm": 100000
+            },
+            "sourceIds": [
+              "20019-manual-my2026-v3"
+            ]
+          }
+        ]
+      }
     },
     {
       "recordId": "reviewed-v2-20261003-19857",
       "status": "approved",
       "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261003-19857\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19857\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS SENSE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-19857\",\"basis\":\"O manualNovoKicksMY2026 revisto mantém36meses nos dois ramos documentados(CPF/CNPJ), com teto100.000km noCNPJ.8500km passa o limite comum; não inferir titularidade a partir da versão.\",\"branches\":[{\"category\":\"cpf\",\"condition\":\"CPF conforme texto da revisão\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"19857-manual-1\"]},{\"category\":\"cnpj\",\"condition\":\"CNPJ conforme texto da revisão\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"19857-manual-1\"]}]},\"reviewedMileageKm\":8500,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19857-manual-1\",\"url\":\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\",\"locator\":\"Prazo/km10-5 e10-6(PDF392–393); componentes10-7/10-8(PDF394–395); transferência10-9(PDF396); manutenção10-11/10-13(PDF398–400)\",\"revision\":\"MPPT-P13C00; Novo Kicks MY2026; arquivo v3; metadados2025-08-08 não tratados como publicação editorial\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MPPT-P13C00\",\"modelYear\":2026,\"reviewId\":\"warranty-20261003-19857\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261003-19857\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19857\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS SENSE TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:5c2c1a299f027e7a48abb90b81ae99beb86ac64f5b4de3b97feaa2e4d66f40b9\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-19857\",\"basis\":\"O manualNovoKicksMY2026 revisto mantém36meses nos dois ramos documentados(CPF/CNPJ), com teto100.000km noCNPJ.8500km passa o limite comum; não inferir titularidade a partir da versão.\",\"branches\":[{\"category\":\"cpf\",\"condition\":\"CPF conforme texto da revisão\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"19857-manual-1\"]},{\"category\":\"cnpj\",\"condition\":\"CNPJ conforme texto da revisão\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"19857-manual-1\"]}]},\"reviewedMileageKm\":8500,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19857-manual-1\",\"url\":\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\",\"locator\":\"Prazo/km10-5 e10-6(PDF392–393); componentes10-7/10-8(PDF394–395); transferência10-9(PDF396); manutenção10-11/10-13(PDF398–400)\",\"revision\":\"MPPT-P13C00; Novo Kicks MY2026; arquivo v3; metadados2025-08-08 não tratados como publicação editorial\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MPPT-P13C00\",\"modelYear\":2026,\"reviewId\":\"warranty-20261003-19857\",\"reviewedAt\":\"2026-10-03\"}}]}",
       "vehicle": {
         "vehicleId": "19857",
         "brand": "NISSAN",
@@ -686,6 +778,11 @@
             ]
           }
         ]
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:5c2c1a299f027e7a48abb90b81ae99beb86ac64f5b4de3b97feaa2e4d66f40b9",
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
       }
     },
     {
@@ -730,7 +827,7 @@
       "recordId": "reviewed-v2-20261003-19587",
       "status": "approved",
       "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261003-19587\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19587\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"VOLKSWAGEN\",\"modelVersion\":\"TERA HIGH TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-general-rule\",\"reviewId\":\"warranty-20261003-19587\",\"basis\":\"ManualTeraMY2026 estabelece3anos sem teto de quilometragem. Nenhum prazo especial por uso foi identificado na revisão existente; uso normal é condição contratual, não prova de propriedade particular.\",\"branches\":[{\"category\":\"general\",\"condition\":\"garantia básica, condições normais de uso conforme manualTeraMY2026\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"19587-manual-1\"]}]},\"reviewedMileageKm\":6700,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19587-manual-1\",\"url\":\"https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-tera/Manual_de_instrucoes_Tera_26A.5B1.TER.66.pdf\",\"locator\":\"ManualTeraMY2026, PDF240–241, garantia básica e condições\",\"revision\":\"26A.5B1.TER.66; ediçãoMY2026; data editorial não informada no artefato\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"26A.5B1.TER.66\",\"modelYear\":2026,\"reviewId\":\"warranty-20261003-19587\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261003-19587\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19587\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"VOLKSWAGEN\",\"modelVersion\":\"TERA HIGH TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:e68591b3e122e8059fa2dc88c32a633cbba973a19e5c21194d45f782e8828b8f\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-general-rule\",\"reviewId\":\"warranty-20261003-19587\",\"basis\":\"ManualTeraMY2026 estabelece3anos sem teto de quilometragem. Nenhum prazo especial por uso foi identificado na revisão existente; uso normal é condição contratual, não prova de propriedade particular.\",\"branches\":[{\"category\":\"general\",\"condition\":\"garantia básica, condições normais de uso conforme manualTeraMY2026\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"19587-manual-1\"]}]},\"reviewedMileageKm\":6700,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19587-manual-1\",\"url\":\"https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-tera/Manual_de_instrucoes_Tera_26A.5B1.TER.66.pdf\",\"locator\":\"ManualTeraMY2026, PDF240–241, garantia básica e condições\",\"revision\":\"26A.5B1.TER.66; ediçãoMY2026; data editorial não informada no artefato\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"26A.5B1.TER.66\",\"modelYear\":2026,\"reviewId\":\"warranty-20261003-19587\",\"reviewedAt\":\"2026-10-03\"}}]}",
       "vehicle": {
         "vehicleId": "19587",
         "brand": "VOLKSWAGEN",
@@ -781,13 +878,18 @@
             ]
           }
         ]
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:e68591b3e122e8059fa2dc88c32a633cbba973a19e5c21194d45f782e8828b8f",
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
       }
     },
     {
       "recordId": "reviewed-v2-20261007-20075",
       "status": "approved",
       "reviewedAt": "2026-10-07",
-      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261007-20075\",\"reviewedAt\":\"2026-10-07\",\"vehicle\":{\"vehicleId\":\"20075\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"JEEP\",\"modelVersion\":\"RENEGADE LONGITUDE T270 TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":62045,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"jeep-renegade-my2024-term-20240419\",\"url\":\"https://www.media.stellantis.com/br-pt/jeep/press/jeep-anuncia-5-anos-de-garantia-para-todos-os-seus-modelos-produzidos-no-brasil\",\"locator\":\"Comunicado de 19/04/2024, parágrafos que incluem todas as versões do Renegade desde o ano-modelo 2024 na garantia de fábrica de cinco anos. Fonte usada para o prazo e a abrangência por ano-modelo.\",\"revision\":\"Comunicado Jeep/Stellantis Brasil de 2024-04-19; Renegade MY2024, todas as versões; prazo de cinco anos.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"2024-04-19\",\"modelYear\":2024,\"reviewId\":\"warranty-20261007-20075\",\"reviewedAt\":\"2026-10-07\"}}]}",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261007-20075\",\"reviewedAt\":\"2026-10-07\",\"vehicle\":{\"vehicleId\":\"20075\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"JEEP\",\"modelVersion\":\"RENEGADE LONGITUDE T270 TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:02735a36e394c9c736662d68a2daf17fa4a8e773ddea363eaba13b7f1a4b13a4\",\"engine\":\"1.3\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":62045,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"jeep-renegade-my2024-term-20240419\",\"url\":\"https://www.media.stellantis.com/br-pt/jeep/press/jeep-anuncia-5-anos-de-garantia-para-todos-os-seus-modelos-produzidos-no-brasil\",\"locator\":\"Comunicado de 19/04/2024, parágrafos que incluem todas as versões do Renegade desde o ano-modelo 2024 na garantia de fábrica de cinco anos. Fonte usada para o prazo e a abrangência por ano-modelo.\",\"revision\":\"Comunicado Jeep/Stellantis Brasil de 2024-04-19; Renegade MY2024, todas as versões; prazo de cinco anos.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"2024-04-19\",\"modelYear\":2024,\"reviewId\":\"warranty-20261007-20075\",\"reviewedAt\":\"2026-10-07\"}}]}",
       "vehicle": {
         "vehicleId": "20075",
         "brand": "JEEP",
@@ -819,7 +921,98 @@
             "reviewedAt": "2026-10-07"
           }
         }
-      ]
+      ],
+      "unitBinding": {
+        "unitKey": "plate-sha256:02735a36e394c9c736662d68a2daf17fa4a8e773ddea363eaba13b7f1a4b13a4",
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      }
     }
-  ]
+  ],
+  "requireUnitBinding": true,
+  "automation": {
+    "schemaVersion": 1,
+    "rules": [
+      {
+        "ruleId": "documented-19994-exact-variant",
+        "version": "2026-10-09.1",
+        "status": "approved",
+        "templateRecordId": "reviewed-v2-20261003-19994",
+        "allowNewUnits": true,
+        "match": {
+          "brand": "CHEVROLET",
+          "modelVersion": "ONIX PREMIER PLUS TURBO",
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "manufactureYear": 2024,
+          "modelYear": 2025
+        },
+        "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-19994-exact-variant\",\"version\":\"2026-10-09.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261003-19994\",\"match\":{\"brand\":\"CHEVROLET\",\"modelVersion\":\"ONIX PREMIER PLUS TURBO\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2024,\"modelYear\":2025},\"allowNewUnits\":true,\"templates\":[{\"recordId\":\"reviewed-v2-20261003-19994\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-03\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261003-19994\\\",\\\"reviewedAt\\\":\\\"2026-10-03\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"19994\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"CHEVROLET\\\",\\\"modelVersion\\\":\\\"ONIX PREMIER PLUS TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:5c91521e98fcb8fe92b6636710b563728a6cc4100899d3416eacba1000668c19\\\",\\\"engine\\\":\\\"1.0\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"usage\\\":\\\"unknown\\\",\\\"commonPolicy\\\":{\\\"kind\\\":\\\"documented-regime-intersection\\\",\\\"reviewId\\\":\\\"warranty-20261003-19994\\\",\\\"basis\\\":\\\"O manual MY2025 preserva36meses para ambos regimes. A diferença é quilométrica;44.975km está abaixo de100.000. Não inferir PF/PJ nem uso remunerado.\\\",\\\"branches\\\":[{\\\"category\\\":\\\"non-commercial\\\",\\\"condition\\\":\\\"destinatário final PF/PJ sem uso remunerado\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"sourceIds\\\":[\\\"19994-manual-1\\\"]},{\\\"category\\\":\\\"commercial\\\",\\\"condition\\\":\\\"PJ em negócio/produção ou PF em transporte remunerado\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":100000},\\\"sourceIds\\\":[\\\"19994-manual-1\\\"]}]},\\\"reviewedMileageKm\\\":44975,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":100000},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"19994-manual-1\\\",\\\"url\\\":\\\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/onix-plus/01-pdfs/2025/onix-plus-2025-manual-do-propietario.pdf\\\",\\\"locator\\\":\\\"Manual Onix/Onix Plus MY2025, PDF244, cláusula prazo/limite da garantia\\\",\\\"revision\\\":\\\"Manual do Proprietário Onix/Onix Plus MY2025; arquivo onix-plus-2025-manual-do-propietario.pdf\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"MY2025\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261003-19994\\\",\\\"reviewedAt\\\":\\\"2026-10-03\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"19994\",\"brand\":\"CHEVROLET\",\"modelVersion\":\"ONIX PREMIER PLUS TURBO\",\"manufactureYear\":2024,\"modelYear\":2025},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"reviewedMileageKm\":44975,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sources\":[{\"sourceId\":\"19994-manual-1\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/onix-plus/01-pdfs/2025/onix-plus-2025-manual-do-propietario.pdf\",\"locator\":\"Manual Onix/Onix Plus MY2025, PDF244, cláusula prazo/limite da garantia\",\"revision\":\"Manual do Proprietário Onix/Onix Plus MY2025; arquivo onix-plus-2025-manual-do-propietario.pdf\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MY2025\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-19994\",\"reviewedAt\":\"2026-10-03\"}}],\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-19994\",\"basis\":\"O manual MY2025 preserva36meses para ambos regimes. A diferença é quilométrica;44.975km está abaixo de100.000. Não inferir PF/PJ nem uso remunerado.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"destinatário final PF/PJ sem uso remunerado\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"19994-manual-1\"]},{\"category\":\"commercial\",\"condition\":\"PJ em negócio/produção ou PF em transporte remunerado\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"19994-manual-1\"]}]},\"unitBinding\":{\"unitKey\":\"plate-sha256:5c91521e98fcb8fe92b6636710b563728a6cc4100899d3416eacba1000668c19\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"}}]}"
+      },
+      {
+        "ruleId": "documented-20038-exact-variant",
+        "version": "2026-10-09.1",
+        "status": "approved",
+        "templateRecordId": "reviewed-v2-20261003-20038",
+        "allowNewUnits": true,
+        "match": {
+          "brand": "HYUNDAI",
+          "modelVersion": "HB20 LIMITED",
+          "engine": "1.0",
+          "transmission": "MANUAL",
+          "manufactureYear": 2024,
+          "modelYear": 2025
+        },
+        "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-20038-exact-variant\",\"version\":\"2026-10-09.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261003-20038\",\"match\":{\"brand\":\"HYUNDAI\",\"modelVersion\":\"HB20 LIMITED\",\"engine\":\"1.0\",\"transmission\":\"MANUAL\",\"manufactureYear\":2024,\"modelYear\":2025},\"allowNewUnits\":true,\"templates\":[{\"recordId\":\"reviewed-v2-20261003-20038\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-03\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261003-20038\\\",\\\"reviewedAt\\\":\\\"2026-10-03\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20038\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"HYUNDAI\\\",\\\"modelVersion\\\":\\\"HB20 LIMITED\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:d7ccfa3db737cf25c213a1690053aeceeb039f381300934a66d4bafe07b75a5c\\\",\\\"engine\\\":\\\"1.0\\\",\\\"transmission\\\":\\\"MANUAL\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":5,\\\"usage\\\":\\\"unknown\\\",\\\"commonPolicy\\\":{\\\"kind\\\":\\\"documented-regime-intersection\\\",\\\"reviewId\\\":\\\"warranty-20261003-20038\\\",\\\"basis\\\":\\\"HMB mantém60meses para particular e comercial. O teto comercial100.000km é a interseção conservadora, sem alterar o prazo básico nem declarar uso real.\\\",\\\"branches\\\":[{\\\"category\\\":\\\"non-commercial\\\",\\\"condition\\\":\\\"particular\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":5,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"sourceIds\\\":[\\\"20038-manual-1\\\"]},{\\\"category\\\":\\\"commercial\\\",\\\"condition\\\":\\\"comercial\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":5,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":100000},\\\"sourceIds\\\":[\\\"20038-manual-1\\\"]}]},\\\"reviewedMileageKm\\\":28785,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":100000},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"20038-manual-1\\\",\\\"url\\\":\\\"https://www.hyundai.com.br/content/dam/hmb/download-manuais/Manual_Garantia_HB20_e_Creta_A1XW-PB2308A_Site.pdf\\\",\\\"locator\\\":\\\"Impressas8–10,14,17–18; PDF12–14,18,21–22 (1-based conforme revisão específica review_hyundai.json)\\\",\\\"revision\\\":\\\"A1XW-PB2308A; data editorial expressa não localizada\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"A1XW-PB2308A\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261003-20038\\\",\\\"reviewedAt\\\":\\\"2026-10-03\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"20038\",\"brand\":\"HYUNDAI\",\"modelVersion\":\"HB20 LIMITED\",\"manufactureYear\":2024,\"modelYear\":2025},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"unknown\",\"reviewedMileageKm\":28785,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sources\":[{\"sourceId\":\"20038-manual-1\",\"url\":\"https://www.hyundai.com.br/content/dam/hmb/download-manuais/Manual_Garantia_HB20_e_Creta_A1XW-PB2308A_Site.pdf\",\"locator\":\"Impressas8–10,14,17–18; PDF12–14,18,21–22 (1-based conforme revisão específica review_hyundai.json)\",\"revision\":\"A1XW-PB2308A; data editorial expressa não localizada\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"A1XW-PB2308A\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-20038\",\"reviewedAt\":\"2026-10-03\"}}],\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-20038\",\"basis\":\"HMB mantém60meses para particular e comercial. O teto comercial100.000km é a interseção conservadora, sem alterar o prazo básico nem declarar uso real.\",\"branches\":[{\"category\":\"non-commercial\",\"condition\":\"particular\",\"scope\":\"basic-vehicle\",\"termYears\":5,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20038-manual-1\"]},{\"category\":\"commercial\",\"condition\":\"comercial\",\"scope\":\"basic-vehicle\",\"termYears\":5,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20038-manual-1\"]}]},\"unitBinding\":{\"unitKey\":\"plate-sha256:d7ccfa3db737cf25c213a1690053aeceeb039f381300934a66d4bafe07b75a5c\",\"engine\":\"1.0\",\"transmission\":\"MANUAL\"}}]}"
+      },
+      {
+        "ruleId": "documented-19857-exact-variant",
+        "version": "2026-10-09.1",
+        "status": "approved",
+        "templateRecordId": "reviewed-v2-20261003-19857",
+        "allowNewUnits": true,
+        "match": {
+          "brand": "NISSAN",
+          "modelVersion": "KICKS SENSE TURBO",
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "manufactureYear": 2025,
+          "modelYear": 2026
+        },
+        "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-19857-exact-variant\",\"version\":\"2026-10-09.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261003-19857\",\"match\":{\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS SENSE TURBO\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2025,\"modelYear\":2026},\"allowNewUnits\":true,\"templates\":[{\"recordId\":\"reviewed-v2-20261003-19857\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-03\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261003-19857\\\",\\\"reviewedAt\\\":\\\"2026-10-03\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"19857\\\",\\\"manufactureYear\\\":2025,\\\"modelYear\\\":2026,\\\"brand\\\":\\\"NISSAN\\\",\\\"modelVersion\\\":\\\"KICKS SENSE TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:5c2c1a299f027e7a48abb90b81ae99beb86ac64f5b4de3b97feaa2e4d66f40b9\\\",\\\"engine\\\":\\\"1.0\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"usage\\\":\\\"unknown\\\",\\\"commonPolicy\\\":{\\\"kind\\\":\\\"documented-regime-intersection\\\",\\\"reviewId\\\":\\\"warranty-20261003-19857\\\",\\\"basis\\\":\\\"O manualNovoKicksMY2026 revisto mantém36meses nos dois ramos documentados(CPF/CNPJ), com teto100.000km noCNPJ.8500km passa o limite comum; não inferir titularidade a partir da versão.\\\",\\\"branches\\\":[{\\\"category\\\":\\\"cpf\\\",\\\"condition\\\":\\\"CPF conforme texto da revisão\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"sourceIds\\\":[\\\"19857-manual-1\\\"]},{\\\"category\\\":\\\"cnpj\\\",\\\"condition\\\":\\\"CNPJ conforme texto da revisão\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":100000},\\\"sourceIds\\\":[\\\"19857-manual-1\\\"]}]},\\\"reviewedMileageKm\\\":8500,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":100000},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"19857-manual-1\\\",\\\"url\\\":\\\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\\\",\\\"locator\\\":\\\"Prazo/km10-5 e10-6(PDF392–393); componentes10-7/10-8(PDF394–395); transferência10-9(PDF396); manutenção10-11/10-13(PDF398–400)\\\",\\\"revision\\\":\\\"MPPT-P13C00; Novo Kicks MY2026; arquivo v3; metadados2025-08-08 não tratados como publicação editorial\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"MPPT-P13C00\\\",\\\"modelYear\\\":2026,\\\"reviewId\\\":\\\"warranty-20261003-19857\\\",\\\"reviewedAt\\\":\\\"2026-10-03\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"19857\",\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS SENSE TURBO\",\"manufactureYear\":2025,\"modelYear\":2026},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"reviewedMileageKm\":8500,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sources\":[{\"sourceId\":\"19857-manual-1\",\"url\":\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\",\"locator\":\"Prazo/km10-5 e10-6(PDF392–393); componentes10-7/10-8(PDF394–395); transferência10-9(PDF396); manutenção10-11/10-13(PDF398–400)\",\"revision\":\"MPPT-P13C00; Novo Kicks MY2026; arquivo v3; metadados2025-08-08 não tratados como publicação editorial\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MPPT-P13C00\",\"modelYear\":2026,\"reviewId\":\"warranty-20261003-19857\",\"reviewedAt\":\"2026-10-03\"}}],\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261003-19857\",\"basis\":\"O manualNovoKicksMY2026 revisto mantém36meses nos dois ramos documentados(CPF/CNPJ), com teto100.000km noCNPJ.8500km passa o limite comum; não inferir titularidade a partir da versão.\",\"branches\":[{\"category\":\"cpf\",\"condition\":\"CPF conforme texto da revisão\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"19857-manual-1\"]},{\"category\":\"cnpj\",\"condition\":\"CNPJ conforme texto da revisão\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"19857-manual-1\"]}]},\"unitBinding\":{\"unitKey\":\"plate-sha256:5c2c1a299f027e7a48abb90b81ae99beb86ac64f5b4de3b97feaa2e4d66f40b9\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"}}]}"
+      },
+      {
+        "ruleId": "documented-19587-exact-variant",
+        "version": "2026-10-09.1",
+        "status": "approved",
+        "templateRecordId": "reviewed-v2-20261003-19587",
+        "allowNewUnits": true,
+        "match": {
+          "brand": "VOLKSWAGEN",
+          "modelVersion": "TERA HIGH TURBO",
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "manufactureYear": 2025,
+          "modelYear": 2026
+        },
+        "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-19587-exact-variant\",\"version\":\"2026-10-09.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261003-19587\",\"match\":{\"brand\":\"VOLKSWAGEN\",\"modelVersion\":\"TERA HIGH TURBO\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2025,\"modelYear\":2026},\"allowNewUnits\":true,\"templates\":[{\"recordId\":\"reviewed-v2-20261003-19587\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-03\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261003-19587\\\",\\\"reviewedAt\\\":\\\"2026-10-03\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"19587\\\",\\\"manufactureYear\\\":2025,\\\"modelYear\\\":2026,\\\"brand\\\":\\\"VOLKSWAGEN\\\",\\\"modelVersion\\\":\\\"TERA HIGH TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:e68591b3e122e8059fa2dc88c32a633cbba973a19e5c21194d45f782e8828b8f\\\",\\\"engine\\\":\\\"1.0\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"usage\\\":\\\"unknown\\\",\\\"commonPolicy\\\":{\\\"kind\\\":\\\"documented-general-rule\\\",\\\"reviewId\\\":\\\"warranty-20261003-19587\\\",\\\"basis\\\":\\\"ManualTeraMY2026 estabelece3anos sem teto de quilometragem. Nenhum prazo especial por uso foi identificado na revisão existente; uso normal é condição contratual, não prova de propriedade particular.\\\",\\\"branches\\\":[{\\\"category\\\":\\\"general\\\",\\\"condition\\\":\\\"garantia básica, condições normais de uso conforme manualTeraMY2026\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"sourceIds\\\":[\\\"19587-manual-1\\\"]}]},\\\"reviewedMileageKm\\\":6700,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"19587-manual-1\\\",\\\"url\\\":\\\"https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-tera/Manual_de_instrucoes_Tera_26A.5B1.TER.66.pdf\\\",\\\"locator\\\":\\\"ManualTeraMY2026, PDF240–241, garantia básica e condições\\\",\\\"revision\\\":\\\"26A.5B1.TER.66; ediçãoMY2026; data editorial não informada no artefato\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"26A.5B1.TER.66\\\",\\\"modelYear\\\":2026,\\\"reviewId\\\":\\\"warranty-20261003-19587\\\",\\\"reviewedAt\\\":\\\"2026-10-03\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"19587\",\"brand\":\"VOLKSWAGEN\",\"modelVersion\":\"TERA HIGH TURBO\",\"manufactureYear\":2025,\"modelYear\":2026},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"reviewedMileageKm\":6700,\"mileage\":{\"kind\":\"unlimited\"},\"sources\":[{\"sourceId\":\"19587-manual-1\",\"url\":\"https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-tera/Manual_de_instrucoes_Tera_26A.5B1.TER.66.pdf\",\"locator\":\"ManualTeraMY2026, PDF240–241, garantia básica e condições\",\"revision\":\"26A.5B1.TER.66; ediçãoMY2026; data editorial não informada no artefato\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"26A.5B1.TER.66\",\"modelYear\":2026,\"reviewId\":\"warranty-20261003-19587\",\"reviewedAt\":\"2026-10-03\"}}],\"commonPolicy\":{\"kind\":\"documented-general-rule\",\"reviewId\":\"warranty-20261003-19587\",\"basis\":\"ManualTeraMY2026 estabelece3anos sem teto de quilometragem. Nenhum prazo especial por uso foi identificado na revisão existente; uso normal é condição contratual, não prova de propriedade particular.\",\"branches\":[{\"category\":\"general\",\"condition\":\"garantia básica, condições normais de uso conforme manualTeraMY2026\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"19587-manual-1\"]}]},\"unitBinding\":{\"unitKey\":\"plate-sha256:e68591b3e122e8059fa2dc88c32a633cbba973a19e5c21194d45f782e8828b8f\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"}}]}"
+      },
+      {
+        "ruleId": "nissan-kicks-advance-my2026-hr10ddt-basic",
+        "version": "2026-10-09.1",
+        "status": "approved",
+        "templateRecordId": "reviewed-v2-20261009-20019",
+        "allowNewUnits": true,
+        "match": {
+          "brand": "NISSAN",
+          "modelVersion": "KICKS ADVANCE TURBO",
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "manufactureYear": 2025,
+          "modelYear": 2026
+        },
+        "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"nissan-kicks-advance-my2026-hr10ddt-basic\",\"version\":\"2026-10-09.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261009-20019\",\"match\":{\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS ADVANCE TURBO\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2025,\"modelYear\":2026},\"allowNewUnits\":true,\"templates\":[{\"recordId\":\"reviewed-v2-20261009-20019\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-09\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261009-20019\\\",\\\"reviewedAt\\\":\\\"2026-10-09\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20019\\\",\\\"manufactureYear\\\":2025,\\\"modelYear\\\":2026,\\\"brand\\\":\\\"NISSAN\\\",\\\"modelVersion\\\":\\\"KICKS ADVANCE TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f\\\",\\\"engine\\\":\\\"1.0\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"usage\\\":\\\"unknown\\\",\\\"commonPolicy\\\":{\\\"kind\\\":\\\"documented-regime-intersection\\\",\\\"reviewId\\\":\\\"warranty-20261009-20019\\\",\\\"basis\\\":\\\"Manual brasileiro MY2026:36 meses desde a primeira entrega, CPF sem limite e CNPJ até100.000km. Exibição usa o limite comum conservador, sem inferir titularidade/uso. Flag atual e atestes operacionais anteriores preservados; manutenção e exclusões seguem o manual.\\\",\\\"branches\\\":[{\\\"category\\\":\\\"cpf\\\",\\\"condition\\\":\\\"CPF conforme manual10-5/10-6\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"sourceIds\\\":[\\\"20019-manual-my2026-v3\\\"]},{\\\"category\\\":\\\"cnpj\\\",\\\"condition\\\":\\\"CNPJ:36meses ou100.000km, o que ocorrer primeiro\\\",\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":100000},\\\"sourceIds\\\":[\\\"20019-manual-my2026-v3\\\"]}]},\\\"reviewedMileageKm\\\":5100,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":100000},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"20019-manual-my2026-v3\\\",\\\"url\\\":\\\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\\\",\\\"locator\\\":\\\"Motor HR10DDT 999cm³:9-5(PDF382). Prazo/km:10-5/10-6(PDF392/393). Componentes:10-7/10-8; transferência:10-9; manutenção:10-11/10-13/10-15. Consulta09/10/2026; SHA256 e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab.\\\",\\\"revision\\\":\\\"MPPT-P13C00; Novo Kicks brasileiro MY2026; arquivo v3; metadados técnicos não tratados como data editorial\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"MPPT-P13C00\\\",\\\"modelYear\\\":2026,\\\"reviewId\\\":\\\"warranty-20261009-20019\\\",\\\"reviewedAt\\\":\\\"2026-10-09\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"20019\",\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS ADVANCE TURBO\",\"manufactureYear\":2025,\"modelYear\":2026},\"unitBinding\":{\"unitKey\":\"plate-sha256:4cc4fe4bc29f0379a52c0eb96ab1b0ae961a2789d48248828b762b6e9690a27f\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"reviewedMileageKm\":5100,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sources\":[{\"sourceId\":\"20019-manual-my2026-v3\",\"url\":\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\",\"locator\":\"Motor HR10DDT 999cm³:9-5(PDF382). Prazo/km:10-5/10-6(PDF392/393). Componentes:10-7/10-8; transferência:10-9; manutenção:10-11/10-13/10-15. Consulta09/10/2026; SHA256 e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab.\",\"revision\":\"MPPT-P13C00; Novo Kicks brasileiro MY2026; arquivo v3; metadados técnicos não tratados como data editorial\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MPPT-P13C00\",\"modelYear\":2026,\"reviewId\":\"warranty-20261009-20019\",\"reviewedAt\":\"2026-10-09\"}}],\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261009-20019\",\"basis\":\"Manual brasileiro MY2026:36 meses desde a primeira entrega, CPF sem limite e CNPJ até100.000km. Exibição usa o limite comum conservador, sem inferir titularidade/uso. Flag atual e atestes operacionais anteriores preservados; manutenção e exclusões seguem o manual.\",\"branches\":[{\"category\":\"cpf\",\"condition\":\"CPF conforme manual10-5/10-6\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20019-manual-my2026-v3\"]},{\"category\":\"cnpj\",\"condition\":\"CNPJ:36meses ou100.000km, o que ocorrer primeiro\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20019-manual-my2026-v3\"]}]}}]}"
+      }
+    ]
+  }
 }

@@ -5,6 +5,8 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import React from "react";
 import TestRenderer, { act } from "react-test-renderer";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { factoryWarrantyCatalogFromApi } from "../lib/factory-warranty-catalog.js";
 import { createServer } from "vite";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -57,6 +59,9 @@ let factoryPowertrainStampFor;
 let FactoryWarrantyBadge;
 let FactoryWarrantyNote;
 let renderer;
+let queryClient;
+const boundInventory = JSON.parse(readFileSync(resolve(root, "docs/audits/factory-warranty-reconciliation-2026-10-09.json"), "utf8")).publicVehicles;
+const registryResponse = () => new Response(JSON.stringify(factoryWarrantyMatrix), { status: 200, headers: { "Content-Type": "application/json" } });
 
 class FixedDate extends OriginalDate {
   constructor(...args) {
@@ -74,9 +79,11 @@ function approvedVehicle(id = "19587") {
     ?? tiggo7PowertrainAudit.publicVehicles.find((vehicle) => vehicle.id === id)
     ?? tiggoPowertrainAudit.publicVehicles.find((vehicle) => vehicle.id === id)
     ?? october5Audit.publicVehicles.find((vehicle) => vehicle.id === id)
-    ?? audit.currentCatalogSnapshot.find((vehicle) => vehicle.id === id);
+    ?? audit.currentCatalogSnapshot.find((vehicle) => vehicle.id === id)
+    ?? boundInventory.find((vehicle) => vehicle.id === id);
   assert.ok(snapshot, `Missing reviewed catalog fixture ${id}`);
-  return structuredClone(snapshot);
+  const bound = boundInventory.find((entry) => entry.id === id);
+  return { ...structuredClone(snapshot), unitKey: bound?.unitKey, motor: bound?.motor, cambio: bound?.cambio, observedAt: Date.now() };
 }
 
 // Real card, badge, registry and resolver. Only navigation is stubbed: clicking
@@ -165,7 +172,10 @@ before(async () => {
 beforeEach(() => {
   currentNow = fixedNow;
   globalThis.Date = FixedDate;
-  globalThis.fetch = async () => {
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: 0 } } });
+  queryClient.setQueryData(["factory-warranty-registry"], factoryWarrantyMatrix);
+  globalThis.fetch = async (input) => {
+    if (String(input).startsWith("/seo/factory-warranty-registry.json")) return registryResponse();
     throw new Error("Unexpected network request in factory warranty card test");
   };
 });
@@ -173,6 +183,7 @@ beforeEach(() => {
 afterEach(async () => {
   await act(async () => renderer?.unmount());
   renderer = undefined;
+  queryClient?.clear();
   globalThis.Date = OriginalDate;
   for (const timer of windowTimers) clearTimeout(timer);
   windowTimers.clear();
@@ -187,6 +198,7 @@ after(async () => {
 });
 
 async function renderCard(raw, { base = approvedVehicle(), ...overrides } = {}) {
+  queryClient.setQueryData(["factory-warranty-registry"], factoryWarrantyMatrix);
   // Intentionally keep valid presentation fallbacks even when raw data is
   // missing/changed. Passing these values to the gate would recreate the bug.
   const props = {
@@ -204,7 +216,7 @@ async function renderCard(raw, { base = approvedVehicle(), ...overrides } = {}) 
     ...overrides,
   };
   await act(async () => {
-    const element = React.createElement(VehicleCardStatic, props);
+    const element = React.createElement(QueryClientProvider, { client: queryClient }, React.createElement(VehicleCardStatic, props));
     if (renderer) renderer.update(element);
     else renderer = TestRenderer.create(element);
   });
@@ -224,6 +236,47 @@ function assertStamp(expected) {
   } else {
     assert.equal(renderer.root.findByType(CardsHero).props.warrantyStamp, undefined);
   }
+}
+
+for (const id of ["19587", "19924", "20066"]) {
+  for (const decision of ["approved", "pending", "revoked"]) {
+    test(`real card ${id}: known unit under another ${decision} ID blocks all render wrappers`, async () => {
+      const original = factoryWarrantyMatrix.records.find((entry) => entry.vehicle.vehicleId === id);
+      const otherId = structuredClone(original);
+      otherId.recordId = `prior-${id}-${decision}`;
+      otherId.vehicle.vehicleId = `prior-${id}`;
+      otherId.status = decision;
+      factoryWarrantyMatrix.records.push(otherId);
+      try {
+        const vehicle = approvedVehicle(id);
+        assert.equal(factoryWarrantyStampFor(vehicle), undefined);
+        assert.equal(factoryPowertrainStampFor(vehicle), undefined);
+        assert.equal(factoryTractionBatteryStampFor(vehicle), undefined);
+        await renderCard(vehicle, { base: vehicle });
+        assertStamp(false);
+        const hero = renderer.root.findByType(CardsHero).props;
+        assert.equal(hero.powertrainStamp, undefined);
+        assert.equal(hero.tractionBatteryStamp, undefined);
+      } finally {
+        factoryWarrantyMatrix.records.pop();
+      }
+    });
+  }
+}
+
+for (const source of ["raw", "API"]) {
+  test(`Kicks 20019 ${source}: exact current unit shows one general estimated 2028 badge`, async () => {
+    currentNow = OriginalDate.parse("2026-10-09T17:00:00.000Z");
+    const base = approvedVehicle("20019");
+    const current = source === "API" ? await mappedApiVehicle("20019") : base;
+    await renderCard(current, { base });
+    assertStamp(true);
+    const hero = renderer.root.findByType(CardsHero).props;
+    assert.equal(hero.powertrainStamp, undefined);
+    assert.equal(hero.tractionBatteryStamp, undefined);
+    await renderCard({ ...base, motor: "1.6" }, { base });
+    assertStamp(false);
+  });
 }
 
 for (const compact of [false, true]) {
@@ -352,25 +405,27 @@ test("an available presentation cannot repair a sold raw unit", async () => {
 
 function apiVehicle(id, changes) {
   const raw = approvedVehicle(id);
-  return {
-    id: raw.id,
-    marca: raw.marca,
-    modelo: raw.modelo,
-    ano: raw.year,
-    ano_fabricacao: raw.anoFabricacao,
-    km: raw.km,
-    valor: raw.price,
-    diferenciais: raw.diferenciais,
-    opcionais: [],
-    imagens: { thumb: [], full: [] },
-    link: raw.id,
+  const api = {
+    id: raw.id, marca: raw.marca, modelo: raw.modelo,
+    motor: raw.motor, cambio: raw.cambio,
+    ano: raw.year, ano_fabricacao: raw.anoFabricacao,
+    km: raw.km, valor: raw.price, diferenciais: raw.diferenciais,
+    opcionais: [], imagens: { thumb: [], full: [] }, link: raw.id,
     ...changes,
   };
+  // Safe original snapshot instead of real administrative identifiers. Real
+  // VIN/plate extraction is exercised independently by adapter integration tests.
+  api.factoryWarrantyVehicle = {
+    ...factoryWarrantyCatalogFromApi(api, { observedAt: Date.now() }),
+    unitKey: raw.unitKey,
+  };
+  return api;
 }
 
 async function mappedApiVehicle(id, changes, expectedResults = 1) {
   let requests = 0;
   globalThis.fetch = async (input) => {
+    if (String(input).startsWith("/seo/factory-warranty-registry.json")) return registryResponse();
     const url = new URL(String(input));
     assert.equal(url.origin, "https://catalog.test");
     assert.equal(url.pathname, "/api/v1/veiculos.php");
