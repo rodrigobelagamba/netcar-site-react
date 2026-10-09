@@ -116,7 +116,7 @@ function EquipmentVehicle({ vehicle, review, onSave }) {
         <form className="equipment-review" onSubmit={(event) => { event.preventDefault(); save('reviewed'); }}>
           <h4>Registro da revisão</h4>
           <p id={`${fieldsId}-help`} className="equipment-muted">
-            A revisão registra sua análise deste relatório. Não acrescenta equipamentos, não confirma todos os itens de fábrica e não publica o site.
+            A revisão registra sua análise deste relatório. Não acrescenta equipamentos, não confirma todos os itens de fábrica e não publica o site. Não aprova garantias; pendências de garantia continuam abertas.
           </p>
           <label htmlFor={`${fieldsId}-note`}>Nota da revisão <span>(obrigatória para concluir)</span></label>
           <textarea

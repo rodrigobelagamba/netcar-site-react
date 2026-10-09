@@ -29,6 +29,39 @@ test('informational research reminders do not inflate alert counts', () => {
   assert.deepEqual(filterEquipmentVehicles(vehicles, {}, 'alerts').map((vehicle) => vehicle.id), ['200', '300']);
 });
 
+test('reviewing equipment cannot remove unresolved warranty findings from pending', () => {
+  const codes = [
+    'factory-warranty-pending', 'factory-warranty-blocked',
+    'factory-warranty-powertrain-pending', 'factory-warranty-powertrain-blocked',
+    'factory-warranty-traction-battery-pending', 'factory-warranty-traction-battery-blocked',
+    'factory-warranty-mileage-regression',
+  ];
+  const rows = codes.map((code, index) => ({
+    ...vehicles[0], id: String(index), reviewKey: `warranty-${index}`,
+    findings: [{ code, severity: code.endsWith('-pending') ? 'medium' : 'high' }],
+  }));
+  const reviews = Object.fromEntries(rows.map((vehicle) => [vehicle.reviewKey,
+    { status: 'reviewed', note: 'Equipamentos conferidos; garantia ainda sem validação.' }]));
+  assert.deepEqual(filterEquipmentVehicles(rows, reviews, 'pending').map((vehicle) => vehicle.id), rows.map((vehicle) => vehicle.id));
+  assert.deepEqual(equipmentReviewCounts(rows, reviews), {
+    vehicles: rows.length, pending: rows.length, reviewed: rows.length, withAlerts: rows.length,
+  });
+  assert.equal(filterEquipmentVehicles(rows, reviews, 'reviewed').length, rows.length);
+});
+
+test('eligible restricted coverage and informational warranty findings do not reopen an equipment review', () => {
+  const row = {
+    ...vehicles[0], warranty: { status: 'blocked', powertrain: { status: 'eligible' } },
+    findings: [
+      { code: 'factory-warranty-general-out-of-scope', severity: 'info' },
+      { code: 'factory-warranty-powertrain-eligible', severity: 'info' },
+    ],
+  };
+  const reviews = { [row.reviewKey]: { status: 'reviewed', note: 'Cobertura restrita conferida.' } };
+  assert.equal(filterEquipmentVehicles([row], reviews, 'pending').length, 0);
+  assert.deepEqual(equipmentReviewCounts([row], reviews), { vehicles: 1, pending: 0, reviewed: 1, withAlerts: 0 });
+});
+
 test('search handles accents, identity and model year while retaining the selected filter', () => {
   assert.equal(filterEquipmentVehicles(vehicles, {}, 'new', ' CITROEN ')[0]?.id, '100');
   assert.equal(filterEquipmentVehicles(vehicles, {}, 'changed', '2023')[0]?.id, '200');

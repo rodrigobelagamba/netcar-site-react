@@ -3,8 +3,9 @@
 ## Estado desta implementação
 
 Esta alteração implementa a aplicação automática de regras aprovadas e o gate
-de exibição no site. **Não comprova, sozinha, a rotina completa de XML até a
-conferência agendada e o DOM público.** A agenda existente das 08h/14h/18h não foi
+de exibição no site. A versão `6f185e3` foi publicada em 09/10/2026 às 14:30:46 BRT
+e conferida na lista e ficha públicas às 14:31. **Isso ainda não comprova a rotina
+completa de XML até a conferência agendada.** A agenda existente das 08h/14h/18h não foi
 localizada e não foi criada uma segunda automação. O importador XML/PHP não está
 neste repositório; `rodrigobelagamba/netcar-site-api` contém somente o README.
 
@@ -168,9 +169,8 @@ Conferências no navegador em 09/10/2026 (BRT):
 
 As capturas locais antecedem o último reforço do bloqueio de ID, que não altera
 o resultado da Kicks. O build final posterior passou nos mesmos cenários de UI.
-Não houve publicação desta alteração. A latência pública e a presença dos dois
-carimbos após deploy ainda precisam ser medidas; os 60s/5min acima são limites
-do código e dos testes, não uma medição de produção.
+A publicação posterior está registrada abaixo; os 60s/5min acima são limites
+do código e dos testes, não uma medição da latência do importador em produção.
 
 Para a próxima entrada, uma unidade com identidade própria, dados completos,
 flag atual e correspondência exata a uma das cinco regras aprovadas recebe
@@ -180,9 +180,37 @@ histórico e emite somente pendências novas; falta conectar esse processamento
 e a prova visual à automação original das 08h/14h/18h.
 
 Bloqueios remanescentes: identificar o ID/local da automação original; localizar
-o código/disparador do importador para avaliar o hook pós-XML; obter aprovação
-específica desta publicação conforme `AGENTS.md`. Não foi criada outra agenda,
-e não se considera a rotina completa implementada.
+o código/disparador do importador para avaliar o hook pós-XML; conectar o canal
+de notificação ao responsável. Não foi criada outra agenda, e não se considera
+a rotina completa implementada.
+
+## Publicação autorizada e canal de revisão
+
+O responsável autorizou a publicação em 09/10/2026. Commit `6f185e3`, workflow
+`37966351238` concluído, job `ecd6fb88-44db-46b9-9b15-d4638d223c60` concluído às
+14:30:45 BRT; status confirmou fonte correta, nenhuma tarefa ativa e nenhuma
+pendência de build/deploy. Build publicado: `30f2ba431b717982a8b8f3d971d06bd8884a182d`.
+
+- Lista pública `/seminovos?busca=kicks`, 14:31:22 BRT: Advance e Sense com selo
+  2028*, vendido sem selo; captura `public-kicks-after.jpg`.
+- Ficha pública `/veiculo/kicks-advance-turbo-2026-tqr-xx49-20019`, 14:31:39–47 BRT:
+  selo 2028* e ressalva visíveis; captura `public-kicks-detail-after.jpg`.
+- As capturas estão em `output/warranty-routine` da pasta agregadora. Evidência
+  técnica privada em `.devops/warranty-publication.json` e
+  `.devops/warranty-public-assets.json`.
+
+O canal existente é **Painel Netcar → Equipamentos → Pendentes**. O relatório
+mostra o veículo, motivo e fatos atuais; a pessoa pode registrar uma nota e uma
+fonte. Esse parecer não aprova uma garantia e não altera a matriz. Uma pendência
+de garantia continua no filtro Pendentes mesmo após concluir a revisão dos
+equipamentos; testes cobrem os três escopos, regressão de km e ausência de falso
+positivo para motor/câmbio elegível.
+
+Não existe envio automático comprovado por WhatsApp, e-mail, push ou chat.
+`newWarrantyAlerts` e `warrantyHistory` são dados do relatório e ainda não são
+uma caixa de perguntas com notificações. A tarefa paralela de revisão de
+equipamentos prepara sua própria evolução na VPS; não se alterou sua agenda
+nem se presumiu que ela fosse a rotina de garantias das 08h/14h/18h.
 
 ## Publicação e reversão
 

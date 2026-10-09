@@ -9,11 +9,20 @@ export function hasEquipmentAlerts(vehicle) {
   return vehicle.findings?.some(({ severity }) => severity === 'high' || severity === 'medium') || false;
 }
 
+function isReviewPending(vehicle, reviews) {
+  // An equipment note cannot resolve the separate warranty approval gate.
+  // Use actionable findings so an eligible restricted coverage is not treated
+  // as pending merely because general vehicle coverage is out of scope.
+  return reviews[vehicle.reviewKey]?.status !== 'reviewed' ||
+    (vehicle.findings?.some(({ code, severity }) => code?.startsWith('factory-warranty-') &&
+      (severity === 'high' || severity === 'medium')) || false);
+}
+
 export function equipmentReviewCounts(vehicles, reviews = {}) {
   const reviewed = vehicles.filter((vehicle) => reviews[vehicle.reviewKey]?.status === 'reviewed').length;
   return {
     vehicles: vehicles.length,
-    pending: vehicles.length - reviewed,
+    pending: vehicles.filter((vehicle) => isReviewPending(vehicle, reviews)).length,
     reviewed,
     withAlerts: vehicles.filter(hasEquipmentAlerts).length,
   };
@@ -27,7 +36,7 @@ export function filterEquipmentVehicles(vehicles, reviews = {}, filter = 'all', 
   const search = normalizeSearch(query.trim());
   return vehicles.filter((vehicle) => {
     const reviewed = reviews[vehicle.reviewKey]?.status === 'reviewed';
-    if (filter === 'pending' && reviewed) return false;
+    if (filter === 'pending' && !isReviewPending(vehicle, reviews)) return false;
     if (filter === 'reviewed' && !reviewed) return false;
     if (filter === 'alerts' && !hasEquipmentAlerts(vehicle)) return false;
     if ((filter === 'new' || filter === 'changed') && vehicle.change !== filter) return false;
