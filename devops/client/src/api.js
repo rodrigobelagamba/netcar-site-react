@@ -59,6 +59,8 @@ export const api = {
     request('/api/equipment/schedule', { method: 'POST', token, body: { enabled } }),
   equipmentReview: (token, review) =>
     request('/api/equipment/reviews', { method: 'POST', token, body: review }),
+  equipmentResearchDecision: (token, decision) =>
+    request('/api/equipment/research/decisions', { method: 'POST', token, body: decision }),
   job: (token, id) => request(`/api/jobs/${id}`, { token }),
 };
 

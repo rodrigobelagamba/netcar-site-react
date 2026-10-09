@@ -54,6 +54,8 @@ jobs:
         run: node --test scripts/tests/vehicle-model-year.test.mjs
       - name: Validate daily equipment audit
         run: npm run stock:test-equipment-audit
+      - name: Validate equipment discovery and item approval
+        run: npm run stock:test-equipment-review
       - name: Validate DevOps scheduler and equipment management
         run: |
           npm --prefix devops ci

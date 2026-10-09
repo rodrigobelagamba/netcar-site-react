@@ -8,9 +8,10 @@ import {
   isApprovedUnitEquipmentConfirmation,
 } from "../src/lib/vehicleEquipment";
 import { mapVehicleOptional } from "../src/catalog/lib/mapVehicleOptional";
+import { vehiclePhysicalIdentityKey } from "../src/lib/vehiclePhysicalIdentity";
 import { readSeoBuildStockSnapshot } from "./lib/seo-stock-cache.js";
 
-export const EQUIPMENT_SEO_SCHEMA = 2;
+export const EQUIPMENT_SEO_SCHEMA = 3;
 type RawVehicle = Record<string, unknown>;
 export interface EquipmentSeoManifest {
   schemaVersion: number;
@@ -64,8 +65,9 @@ export function equipmentFingerprint(vehicle: RawVehicle): string | null {
   return createHash("sha256")
     .update(
       JSON.stringify([
-        "netcar-equipment-v1",
+        "netcar-equipment-v2",
         ...values.map((value) => encode(value!)),
+        encode(vehiclePhysicalIdentityKey(vehicle.id, vehicle.placa) || ""),
         options,
       ]),
     )
@@ -75,13 +77,14 @@ export function equipmentFingerprint(vehicle: RawVehicle): string | null {
 export function createEquipmentManifest(
   vehicles: RawVehicle[],
   generatedAt = new Date().toISOString(),
+  confirmationRecords: readonly unknown[] = unitEquipmentConfirmations,
 ): EquipmentSeoManifest {
   const manifest: EquipmentSeoManifest = {
     schemaVersion: EQUIPMENT_SEO_SCHEMA,
     generatedAt,
     confirmedVehicleIds: [
       ...new Set(
-        unitEquipmentConfirmations
+        confirmationRecords
           .filter(isApprovedUnitEquipmentConfirmation)
           .map((record) => String(record.match.vehicleId)),
       ),
@@ -94,30 +97,38 @@ export function createEquipmentManifest(
     const fingerprint = equipmentFingerprint(vehicle);
     if (!id || !/^\d+$/.test(id) || !fingerprint) continue;
     const text = (value: unknown) => scalar(value) || "";
-    const resolved = resolveVehicleEquipment({
-      id,
-      marca: text(vehicle.marca),
-      modelo: text(vehicle.modelo),
-      name: `${text(vehicle.marca)} ${text(vehicle.modelo)}`,
-      year: text(vehicle.ano),
-      anoFabricacao: text(vehicle.ano_fabricacao),
-      motor: text(vehicle.motor),
-      cambio: text(vehicle.cambio),
-      lugares: text(vehicle.lugares),
-      opcionais: (
-        vehicle.opcionais as Array<string | Record<string, unknown>>
-      ).map((optional) =>
-        mapVehicleOptional(
-          typeof optional === "string"
-            ? optional
-            : {
-                tag: text(optional.tag),
-                descricao: text(optional.descricao),
-                nome: text(optional.nome),
-              },
+    const resolved = resolveVehicleEquipment(
+      {
+        id,
+        marca: text(vehicle.marca),
+        modelo: text(vehicle.modelo),
+        name: `${text(vehicle.marca)} ${text(vehicle.modelo)}`,
+        year: text(vehicle.ano),
+        anoFabricacao: text(vehicle.ano_fabricacao),
+        physicalIdentityKey: vehiclePhysicalIdentityKey(
+          vehicle.id,
+          vehicle.placa,
         ),
-      ),
-    });
+        motor: text(vehicle.motor),
+        cambio: text(vehicle.cambio),
+        lugares: text(vehicle.lugares),
+        opcionais: (
+          vehicle.opcionais as Array<string | Record<string, unknown>>
+        ).map((optional) =>
+          mapVehicleOptional(
+            typeof optional === "string"
+              ? optional
+              : {
+                  tag: text(optional.tag),
+                  descricao: text(optional.descricao),
+                  nome: text(optional.nome),
+                },
+          ),
+        ),
+      },
+      undefined,
+      confirmationRecords,
+    );
     manifest.vehicles[id] = {
       fingerprint,
       descriptions: resolved.items.map((item) => item.description),

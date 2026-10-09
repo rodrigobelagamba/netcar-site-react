@@ -1,0 +1,135 @@
+[
+  {
+    "vehicleId": "20075",
+    "stockFingerprint": "161111df40cf2698b6d47495d3707ddafc67f97c499a1162360709c1391c5436",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "source-found",
+    "note": "Comunicado BR MY2024 compatível; seis itens série e três Dark Pack opcionais. Presença da unidade/mercado/autorização não confirmados. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": [
+      "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo"
+    ]
+  },
+  {
+    "vehicleId": "20070",
+    "stockFingerprint": "7358f0a757c56d22d13e8da906cd9dd3a2d6873cf08e23b7ab3b71d8395a468b",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "source-found",
+    "note": "Comunicado MY2021 e ficha técnica Longitude 1.8 Flex AT6 compatíveis; candidato seis marchas. Unidade/mercado/autorização não confirmados. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": [
+      "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-e-compass-chegam-a-linha-2021-ainda-mais-completos"
+    ]
+  },
+  {
+    "vehicleId": "19903",
+    "stockFingerprint": "0cfc82204827bdf1c40802303774ed12954a214727406534791c083fa5b5eace",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "source-found",
+    "note": "Manual BR MY24, código24B.5B1.TCR.66, p333/PDF334: tabela específica motor1.4 AQ250 seis marchas. Demais equipamentos não recertificados. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": [
+      "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-t-cross/my24/T-Cross_BR_24B.5B1.TCR_66_LOW.pdf"
+    ]
+  },
+  {
+    "vehicleId": "19587",
+    "stockFingerprint": "84fceb5ce316febe28c105354802ebcbadbca063752ec4d9d345daa0f49fd03d",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "source-found",
+    "note": "FAQ VW consultada09/10/2026 explicita Tera High MY2026 com capacidade conectada de série. Ativação, assinatura e funcionamento da unidade não comprovados. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": [
+      "https://www.vw.com.br/pt/volkswagen/tecnologia/conectividade.html"
+    ]
+  },
+  {
+    "vehicleId": "19857",
+    "stockFingerprint": "be1a1754730965d857751afbc8cbe1f5e62d1aabc478e79aee8b93b1cb6fe80a",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "ambiguous",
+    "note": "Matriz Nissan MY26 Sense1.0DCT classifica funções como série em fabricação/modelo2026/2026; estoque2025/2026. Sete hipóteses entre Sense/Advance permanecem bloqueadas. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": [
+      "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html"
+    ]
+  },
+  {
+    "vehicleId": "20019",
+    "stockFingerprint": "9705d4798541d11a62c5763ee878f9198b51aefffe36b31e430d0934684b57a3",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "ambiguous",
+    "note": "Matriz Nissan MY26 Advance1.0DCT é fabricação/modelo2026/2026; estoque2025/2026. Falta documento que cubra produção2025 e leitura completa da ficha pública. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": [
+      "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html"
+    ]
+  },
+  {
+    "vehicleId": "20050",
+    "stockFingerprint": "48f63108682e70a2c17578fedc5dca93f17d938755db609d24c4b45e312b38b6",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "ambiguous",
+    "note": "Comunicado Fiat híbridos não resolve se o Impetus1.0MY2025 da unidade é T200 convencional ou Hybrid. Triagem documental preservada; não extrapolar. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": [
+      "https://www.media.stellantis.com/br-pt/fiat/press/fiat-apresenta-fastback-e-pulse-hibridos-para-combinar-performance-eficiencia-e-custo-beneficio-e-se-consolidar-como-protagonista-no-futuro-da-mobilidade"
+    ]
+  },
+  {
+    "vehicleId": "20051",
+    "stockFingerprint": "e49da9669c4cda0ae67595d6880ab2c66689ce571c65cb2d6a9b7b58a3daa6c0",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "ambiguous",
+    "note": "Folheto oficial EXL lista HSA, porém MY/data editorial não explícitos; nome/pasta do PDF insuficientes para comprovar MY2018. Triagem preservada. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": [
+      "https://www.honda.com.br/automoveis/sites/hab/files/2019-06/%5BHONDA%5DCampanha%20Civic%202018_Folheto%20EXL_R8%20%281%29.pdf"
+    ]
+  },
+  {
+    "vehicleId": "19924",
+    "stockFingerprint": "ba9ed91a719581bef398a858820385b439735c846c66f51fb567902aab0cf1e3",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "ambiguous",
+    "note": "Lançamento SongPro não declara MY; comunicado seguinte introduz ADAS no MY2026. Não extrapolar para GS2024/2025. Triagem anterior preservada. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": [
+      "https://www.byd.com/br/noticias-byd-brasil/a-familia-cresceu-BYD-Song-Pro-chega-ao-Brasil",
+      "https://www.byd.com/br/noticias-byd-brasil/byd-lanca-dolphin-mini-azul-e-song-pro-com-adas-completo"
+    ]
+  },
+  {
+    "vehicleId": "20069",
+    "stockFingerprint": "76b982673d250afb47a706a9b794e44b0fbcb94381ec22d42b2c1f94d4a11e87",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "ambiguous",
+    "note": "Comunicado Jeep MY2024 foi consultado, mas nome cadastral T270 Turbo omite acabamento; não atribuir pacote da Longitude. Confirmar versão comercial completa. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": [
+      "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo"
+    ]
+  },
+  {
+    "vehicleId": "20073",
+    "stockFingerprint": "e39f4c3a5df26d1dd495e8b1c2ae99b2c4c759fa8824e9e0bdb465585e1d2850",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "no-compatible-source",
+    "note": "Buscas de material oficial WR-V EX MY2018 não obtiveram matriz exata de equipamentos. Documento técnico parcial não acrescenta ao CVT já público; novo WR-V não se aplica. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": []
+  },
+  {
+    "vehicleId": "20066",
+    "stockFingerprint": "08b7bb473fab5168d4e6c2a72368b1aa758db9e93958f891bce6dd441a7d425e",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "no-compatible-source",
+    "note": "Busca oficial Tiggo7ProMaxDrive1.6MY2025 não obteve matriz compatível. Material1.5Hybrid encontrado não se aplica; sem proposta liberada. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": []
+  },
+  {
+    "vehicleId": "20052",
+    "stockFingerprint": "b3c4573f74db2201da9ab0e0016fab616e183053f2e707c6798bd335363acc69",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "no-compatible-source",
+    "note": "Busca oficial CronosDrive1.3MY2025 retornou materiais MY2023/MY2026, insuficientes para funções novas nesta unidade. CVT já público. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": []
+  },
+  {
+    "vehicleId": "20049",
+    "stockFingerprint": "624ab89643965078e7f579f38f46859af71b5115c72c870028ecb23d3d47bfe5",
+    "reviewedAt": "2026-10-09T17:19:11.644Z",
+    "status": "no-compatible-source",
+    "note": "Busca de matriz oficial TrackerLT1.0MY2025 não recuperou documento exato para novo complemento. AT6 já público. Falha de obtenção não prova ausência de equipamento. Vínculo físico associado em 2026-10-09T17:25:33.511Z após conferir identidade e opcionais sem alteração; data da pesquisa original preservada.",
+    "sourceUrls": []
+  }
+]

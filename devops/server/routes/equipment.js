@@ -27,6 +27,9 @@ export function createEquipmentRouter(service = equipmentService) {
       throw new EquipmentError(400, 'Campos de revisão inválidos.');
     res.json({ reviewKey: req.body.reviewKey, review: service.review(req.body) });
   }));
+  router.post('/research/decisions', respond((req, res) => {
+    res.status(202).json({ job: service.decideResearch(req.body) });
+  }));
   return router;
 }
 

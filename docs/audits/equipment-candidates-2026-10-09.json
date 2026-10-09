@@ -1,0 +1,764 @@
+{
+  "schemaVersion": 1,
+  "candidates": [
+    {
+      "identity": {
+        "id": "20075",
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE T270 TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "manufactureYear": 2023
+      },
+      "item": {
+        "key": "automatic-emergency-braking",
+        "label": "Frenagem automática de emergência",
+        "tag": "franagem_emergencia"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo",
+        "title": "Jeep — linha 2024",
+        "date": "2023-06-20",
+        "locator": "Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.",
+        "claim": "Padrão em todas as versões da linha citada.",
+        "match": {
+          "brand": "JEEP",
+          "model": "RENEGADE LONGITUDE T270 TURBO",
+          "modelYear": 2024,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20075",
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE T270 TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "manufactureYear": 2023
+      },
+      "item": {
+        "key": "fatigue-warning",
+        "label": "Indicador de fadiga",
+        "tag": "indcador_fadiga"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo",
+        "title": "Jeep — linha 2024",
+        "date": "2023-06-20",
+        "locator": "Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.",
+        "claim": "Padrão em todas as versões da linha citada.",
+        "match": {
+          "brand": "JEEP",
+          "model": "RENEGADE LONGITUDE T270 TURBO",
+          "modelYear": 2024,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20075",
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE T270 TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "manufactureYear": 2023
+      },
+      "item": {
+        "key": "wireless-carplay-android",
+        "label": "Android Auto e Apple CarPlay sem fio",
+        "tag": "sem-_fio"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo",
+        "title": "Jeep — linha 2024",
+        "date": "2023-06-20",
+        "locator": "Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.",
+        "claim": "Integração sem cabo descrita como padrão.",
+        "match": {
+          "brand": "JEEP",
+          "model": "RENEGADE LONGITUDE T270 TURBO",
+          "modelYear": 2024,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20075",
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE T270 TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "manufactureYear": 2023
+      },
+      "item": {
+        "key": "automatic-6",
+        "label": "Câmbio automático de 6 velocidades",
+        "tag": "cambio_automatico_6_marchas"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo",
+        "title": "Jeep — linha 2024",
+        "date": "2023-06-20",
+        "locator": "Parágrafo sobre transmissões: versões 1.3 Turbo, Sport e Longitude, automático de seis marchas.",
+        "claim": "Longitude identificado com transmissão AT6.",
+        "match": {
+          "brand": "JEEP",
+          "model": "RENEGADE LONGITUDE T270 TURBO",
+          "modelYear": 2024,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20075",
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE T270 TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "manufactureYear": 2023
+      },
+      "item": {
+        "key": "hill-start-assist",
+        "tag": "assistente_partida_rampa",
+        "label": "Assistente de partida em rampa",
+        "reviewedDefinition": {
+          "id": "hill-start-assist",
+          "tag": "assistente_partida_rampa",
+          "sourceDescription": "Assistente de partida em rampa",
+          "description": "Assistente de partida em rampa",
+          "priority": 700,
+          "category": "Condução",
+          "benefit": "Ajuda a manter o veículo parado por instantes ao iniciar uma subida.",
+          "reviewedAt": "2026-10-09",
+          "reviewNote": "Rascunho de taxonomia para revisão; não confirma presença nem autoriza publicação. Jeep, comunicado da linha 2024 de 20/06/2023, lista a função como série.",
+          "aliases": [
+            "Auxílio de partida em rampa",
+            "Hill Start Assist"
+          ]
+        }
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo",
+        "title": "Jeep — linha 2024",
+        "date": "2023-06-20",
+        "locator": "Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.",
+        "claim": "Padrão em todas as versões da linha citada.",
+        "match": {
+          "brand": "JEEP",
+          "model": "RENEGADE LONGITUDE T270 TURBO",
+          "modelYear": 2024,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20075",
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE T270 TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "manufactureYear": 2023
+      },
+      "item": {
+        "key": "led-headlights",
+        "tag": "farois_led",
+        "label": "Faróis de LED",
+        "reviewedDefinition": {
+          "id": "led-headlights",
+          "tag": "farois_led",
+          "sourceDescription": "Faróis de LED",
+          "description": "Faróis de LED",
+          "priority": 700,
+          "category": "Iluminação",
+          "benefit": "Iluminação principal dos faróis com tecnologia LED.",
+          "reviewedAt": "2026-10-09",
+          "reviewNote": "Rascunho de taxonomia para revisão; não confirma presença nem autoriza publicação. Jeep, comunicado da linha 2024 de 20/06/2023, lista faróis Full LED como série.",
+          "aliases": [
+            "Faróis Full LED"
+          ]
+        }
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo",
+        "title": "Jeep — linha 2024",
+        "date": "2023-06-20",
+        "locator": "Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.",
+        "claim": "Padrão em todas as versões da linha citada.",
+        "match": {
+          "brand": "JEEP",
+          "model": "RENEGADE LONGITUDE T270 TURBO",
+          "modelYear": 2024,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20075",
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE T270 TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "manufactureYear": 2023
+      },
+      "item": {
+        "key": "blind-spot",
+        "label": "Alerta de ponto cego",
+        "tag": "alerta_ponto_cego"
+      },
+      "classification": "package",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo",
+        "title": "Jeep — linha 2024",
+        "date": "2023-06-20",
+        "locator": "Parágrafo do pacote opcional Dark Pack da versão Longitude.",
+        "claim": "Conteúdo do pacote opcional Dark Pack.",
+        "match": {
+          "brand": "JEEP",
+          "model": "RENEGADE LONGITUDE T270 TURBO",
+          "modelYear": 2024,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20075",
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE T270 TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "manufactureYear": 2023
+      },
+      "item": {
+        "key": "rain-sensor",
+        "label": "Sensor de chuva",
+        "tag": "sensor_de_chuva"
+      },
+      "classification": "package",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo",
+        "title": "Jeep — linha 2024",
+        "date": "2023-06-20",
+        "locator": "Parágrafo do pacote opcional Dark Pack da versão Longitude.",
+        "claim": "Conteúdo do pacote opcional Dark Pack.",
+        "match": {
+          "brand": "JEEP",
+          "model": "RENEGADE LONGITUDE T270 TURBO",
+          "modelYear": 2024,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20075",
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE T270 TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "manufactureYear": 2023
+      },
+      "item": {
+        "key": "keyless",
+        "label": "Chave presencial (Keyless)",
+        "tag": "chave_inteligente"
+      },
+      "classification": "package",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo",
+        "title": "Jeep — linha 2024",
+        "date": "2023-06-20",
+        "locator": "Parágrafo do pacote opcional Dark Pack da versão Longitude.",
+        "claim": "Conteúdo do pacote opcional Dark Pack.",
+        "match": {
+          "brand": "JEEP",
+          "model": "RENEGADE LONGITUDE T270 TURBO",
+          "modelYear": 2024,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "19903",
+        "brand": "VOLKSWAGEN",
+        "model": "T CROSS HIGHLINE TURBO",
+        "modelYear": 2024,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "manufactureYear": 2023
+      },
+      "item": {
+        "key": "automatic-6",
+        "label": "Câmbio automático de 6 velocidades",
+        "tag": "cambio_automatico_6_marchas"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-t-cross/my24/T-Cross_BR_24B.5B1.TCR_66_LOW.pdf",
+        "title": "Volkswagen — T-Cross MY24, 24B.5B1.TCR.66",
+        "date": "2023-07-21",
+        "locator": "Página impressa 333 / página 334 do PDF: tabela Motor 1.4 TOTALFLEX 110/110 kW–TSI, linha Tipo de transmissão. Colofão na página 356 do PDF: fechamento 21.07.2023; Português Brasil 08.2023.",
+        "claim": "A tabela específica do motor 1.4 TSI indica automático de seis marchas AQ 250.",
+        "match": {
+          "brand": "VOLKSWAGEN",
+          "model": "T CROSS HIGHLINE TURBO",
+          "modelYear": 2024,
+          "engine": "1.4",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20070",
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE",
+        "modelYear": 2021,
+        "engine": "1.8",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2021,
+        "market": "BR"
+      },
+      "item": {
+        "key": "automatic-6",
+        "label": "Câmbio automático de 6 velocidades",
+        "tag": "cambio_automatico_6_marchas"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-e-compass-chegam-a-linha-2021-ainda-mais-completos",
+        "title": "Jeep — Renegade e Compass linha 2021",
+        "date": "2020-07-31",
+        "locator": "Tabela de versões da linha 2021: Renegade Longitude 1.8 Flex AT6. Ficha técnica vinculada na página oficial Renegade MY2021, p. 1, detalha seis marchas.",
+        "claim": "O comunicado da linha 2021 identifica a Longitude 1.8 Flex AT6. A ficha técnica da mesma versão no portal MY2021 confirma seis marchas à frente.",
+        "match": {
+          "brand": "JEEP",
+          "model": "RENEGADE LONGITUDE",
+          "modelYear": 2021,
+          "engine": "1.8",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "19587",
+        "brand": "VOLKSWAGEN",
+        "model": "TERA HIGH TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2025,
+        "market": "BR"
+      },
+      "item": {
+        "key": "vw-native-connectivity",
+        "tag": "conectividade_nativa_vw",
+        "label": "Conectividade nativa Volkswagen",
+        "reviewedDefinition": {
+          "id": "vw-native-connectivity",
+          "tag": "conectividade_nativa_vw",
+          "sourceDescription": "Conectividade nativa Volkswagen",
+          "description": "Conectividade nativa Volkswagen",
+          "priority": 700,
+          "category": "Conectividade",
+          "benefit": "Preparado para serviços conectados Volkswagen, sujeitos a ativação, assinatura e disponibilidade.",
+          "reviewedAt": "2026-10-09",
+          "reviewNote": "Rascunho de taxonomia para revisão; não confirma presença nem autoriza publicação. FAQ oficial VW consultada em 09/10/2026 associa a capacidade à versão Tera High MY2026. Não comprova serviço ativo ou plano transferível.",
+          "aliases": [
+            "Conectividade nativa Volkswagen"
+          ]
+        }
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.vw.com.br/pt/volkswagen/tecnologia/conectividade.html",
+        "title": "Volkswagen — FAQ Conectividade; consulta 09/10/2026, sem data editorial",
+        "date": "2026-10-09",
+        "locator": "FAQ: Quais modelos VW oferecem conectividade nativa? Entrada Tera, ano/modelo 2026, versões Comfort e High. FAQ de assinatura/ativação. Data registrada é de consulta.",
+        "claim": "A FAQ oficial declara capacidade de conectividade nativa de série no Tera High a partir do MY2026. Esta proposta se limita à unidade High MY2026 e à capacidade; não afirma plano ativo, assinatura vigente, gratuidade, Wi-Fi para passageiros ou transferência de cadastro. Conferir funcionamento e ativação na unidade.",
+        "match": {
+          "brand": "VOLKSWAGEN",
+          "model": "TERA HIGH TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "19857",
+        "brand": "NISSAN",
+        "model": "KICKS SENSE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2025,
+        "market": "BR"
+      },
+      "item": {
+        "key": "wireless-carplay-android",
+        "label": "Android Auto e Apple CarPlay sem fio",
+        "tag": "sem-_fio"
+      },
+      "classification": "inference",
+      "evidence": {
+        "url": "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html",
+        "title": "Nissan — Kicks MY26; consulta 09/10/2026, sem data editorial",
+        "date": "2026-10-09",
+        "locator": "Matriz oficial HELIOS.components.c059D: grades[50021-SENSE].versions[P13C-S], equipmentSpecs, customKey 30200-I-065; techSpecs Anodeprodução=2026/2026. Data registrada é de consulta.",
+        "claim": "A matriz lista Android Auto e Apple CarPlay sem fio como Included/SYSTEMATIC/factory na versão correspondente 1.0 turbo DCT. Porém, a matriz descreve fabricação/modelo 2026/2026 e o estoque é 2025/2026. Hipótese, não comprovação para esta unidade; falta matriz de produção 2025/2026 ou confirmação documental específica e conferência física.",
+        "match": {
+          "brand": "NISSAN",
+          "model": "KICKS SENSE TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "19857",
+        "brand": "NISSAN",
+        "model": "KICKS SENSE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2025,
+        "market": "BR"
+      },
+      "item": {
+        "key": "rear-occupant-alert",
+        "tag": "alerta_objetos_banco_traseiro",
+        "label": "Alerta de objetos no banco traseiro",
+        "reviewedDefinition": {
+          "id": "rear-occupant-alert",
+          "tag": "alerta_objetos_banco_traseiro",
+          "sourceDescription": "Alerta de objetos no banco traseiro",
+          "description": "Alerta de objetos no banco traseiro",
+          "priority": 700,
+          "category": "Segurança",
+          "benefit": "Lembrete para conferir o banco traseiro ao sair do veículo.",
+          "reviewedAt": "2026-10-09",
+          "reviewNote": "Rascunho de taxonomia para revisão; não confirma presença nem autoriza publicação. Matriz Nissan Kicks MY26 consultada em 09/10/2026, código 30200-I-551; fonte descreve produção 2026/2026 e aplicação às unidades 2025/2026 permanece incerta.",
+          "aliases": [
+            "Alerta de objetos no banco traseiro"
+          ]
+        }
+      },
+      "classification": "inference",
+      "evidence": {
+        "url": "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html",
+        "title": "Nissan — Kicks MY26; consulta 09/10/2026, sem data editorial",
+        "date": "2026-10-09",
+        "locator": "Matriz oficial HELIOS.components.c059D: grades[50021-SENSE].versions[P13C-S], equipmentSpecs, customKey 30200-I-551; techSpecs Anodeprodução=2026/2026. Data registrada é de consulta.",
+        "claim": "A matriz lista Alerta de objetos no banco traseiro como Included/SYSTEMATIC/factory na versão correspondente 1.0 turbo DCT. Porém, a matriz descreve fabricação/modelo 2026/2026 e o estoque é 2025/2026. Hipótese, não comprovação para esta unidade; falta matriz de produção 2025/2026 ou confirmação documental específica e conferência física.",
+        "match": {
+          "brand": "NISSAN",
+          "model": "KICKS SENSE TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "19857",
+        "brand": "NISSAN",
+        "model": "KICKS SENSE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2025,
+        "market": "BR"
+      },
+      "item": {
+        "key": "rear-emergency-braking",
+        "tag": "frenagem_traseira_pedestres",
+        "label": "Frenagem traseira com detecção de pedestres (RAEB)",
+        "reviewedDefinition": {
+          "id": "rear-emergency-braking",
+          "tag": "frenagem_traseira_pedestres",
+          "sourceDescription": "Frenagem traseira com detecção de pedestres (RAEB)",
+          "description": "Frenagem traseira com detecção de pedestres (RAEB)",
+          "priority": 700,
+          "category": "Segurança",
+          "benefit": "Pode auxiliar na frenagem durante manobras de ré ao detectar risco de colisão, respeitados os limites do sistema.",
+          "reviewedAt": "2026-10-09",
+          "reviewNote": "Rascunho de taxonomia para revisão; não confirma presença nem autoriza publicação. Matriz Nissan Kicks MY26 consultada em 09/10/2026, código 30200-I-552; fonte descreve produção 2026/2026 e aplicação às unidades 2025/2026 permanece incerta.",
+          "aliases": [
+            "Assistente inteligente de frenagem traseira com detecção de pedestres (RAEB)"
+          ]
+        }
+      },
+      "classification": "inference",
+      "evidence": {
+        "url": "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html",
+        "title": "Nissan — Kicks MY26; consulta 09/10/2026, sem data editorial",
+        "date": "2026-10-09",
+        "locator": "Matriz oficial HELIOS.components.c059D: grades[50021-SENSE].versions[P13C-S], equipmentSpecs, customKey 30200-I-552; techSpecs Anodeprodução=2026/2026. Data registrada é de consulta.",
+        "claim": "A matriz lista Frenagem traseira com detecção de pedestres (RAEB) como Included/SYSTEMATIC/factory na versão correspondente 1.0 turbo DCT. Porém, a matriz descreve fabricação/modelo 2026/2026 e o estoque é 2025/2026. Hipótese, não comprovação para esta unidade; falta matriz de produção 2025/2026 ou confirmação documental específica e conferência física.",
+        "match": {
+          "brand": "NISSAN",
+          "model": "KICKS SENSE TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20019",
+        "brand": "NISSAN",
+        "model": "KICKS ADVANCE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2025,
+        "market": "BR"
+      },
+      "item": {
+        "key": "wireless-carplay-android",
+        "label": "Android Auto e Apple CarPlay sem fio",
+        "tag": "sem-_fio"
+      },
+      "classification": "inference",
+      "evidence": {
+        "url": "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html",
+        "title": "Nissan — Kicks MY26; consulta 09/10/2026, sem data editorial",
+        "date": "2026-10-09",
+        "locator": "Matriz oficial HELIOS.components.c059D: grades[50021-ADVANCE].versions[P13C-A], equipmentSpecs, customKey 30200-I-065; techSpecs Anodeprodução=2026/2026. Data registrada é de consulta.",
+        "claim": "A matriz lista Android Auto e Apple CarPlay sem fio como Included/SYSTEMATIC/factory na versão correspondente 1.0 turbo DCT. Porém, a matriz descreve fabricação/modelo 2026/2026 e o estoque é 2025/2026. Hipótese, não comprovação para esta unidade; falta matriz de produção 2025/2026 ou confirmação documental específica e conferência física.",
+        "match": {
+          "brand": "NISSAN",
+          "model": "KICKS ADVANCE TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20019",
+        "brand": "NISSAN",
+        "model": "KICKS ADVANCE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2025,
+        "market": "BR"
+      },
+      "item": {
+        "key": "rear-occupant-alert",
+        "tag": "alerta_objetos_banco_traseiro",
+        "label": "Alerta de objetos no banco traseiro",
+        "reviewedDefinition": {
+          "id": "rear-occupant-alert",
+          "tag": "alerta_objetos_banco_traseiro",
+          "sourceDescription": "Alerta de objetos no banco traseiro",
+          "description": "Alerta de objetos no banco traseiro",
+          "priority": 700,
+          "category": "Segurança",
+          "benefit": "Lembrete para conferir o banco traseiro ao sair do veículo.",
+          "reviewedAt": "2026-10-09",
+          "reviewNote": "Rascunho de taxonomia para revisão; não confirma presença nem autoriza publicação. Matriz Nissan Kicks MY26 consultada em 09/10/2026, código 30200-I-551; fonte descreve produção 2026/2026 e aplicação às unidades 2025/2026 permanece incerta.",
+          "aliases": [
+            "Alerta de objetos no banco traseiro"
+          ]
+        }
+      },
+      "classification": "inference",
+      "evidence": {
+        "url": "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html",
+        "title": "Nissan — Kicks MY26; consulta 09/10/2026, sem data editorial",
+        "date": "2026-10-09",
+        "locator": "Matriz oficial HELIOS.components.c059D: grades[50021-ADVANCE].versions[P13C-A], equipmentSpecs, customKey 30200-I-551; techSpecs Anodeprodução=2026/2026. Data registrada é de consulta.",
+        "claim": "A matriz lista Alerta de objetos no banco traseiro como Included/SYSTEMATIC/factory na versão correspondente 1.0 turbo DCT. Porém, a matriz descreve fabricação/modelo 2026/2026 e o estoque é 2025/2026. Hipótese, não comprovação para esta unidade; falta matriz de produção 2025/2026 ou confirmação documental específica e conferência física.",
+        "match": {
+          "brand": "NISSAN",
+          "model": "KICKS ADVANCE TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20019",
+        "brand": "NISSAN",
+        "model": "KICKS ADVANCE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2025,
+        "market": "BR"
+      },
+      "item": {
+        "key": "rear-emergency-braking",
+        "tag": "frenagem_traseira_pedestres",
+        "label": "Frenagem traseira com detecção de pedestres (RAEB)",
+        "reviewedDefinition": {
+          "id": "rear-emergency-braking",
+          "tag": "frenagem_traseira_pedestres",
+          "sourceDescription": "Frenagem traseira com detecção de pedestres (RAEB)",
+          "description": "Frenagem traseira com detecção de pedestres (RAEB)",
+          "priority": 700,
+          "category": "Segurança",
+          "benefit": "Pode auxiliar na frenagem durante manobras de ré ao detectar risco de colisão, respeitados os limites do sistema.",
+          "reviewedAt": "2026-10-09",
+          "reviewNote": "Rascunho de taxonomia para revisão; não confirma presença nem autoriza publicação. Matriz Nissan Kicks MY26 consultada em 09/10/2026, código 30200-I-552; fonte descreve produção 2026/2026 e aplicação às unidades 2025/2026 permanece incerta.",
+          "aliases": [
+            "Assistente inteligente de frenagem traseira com detecção de pedestres (RAEB)"
+          ]
+        }
+      },
+      "classification": "inference",
+      "evidence": {
+        "url": "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html",
+        "title": "Nissan — Kicks MY26; consulta 09/10/2026, sem data editorial",
+        "date": "2026-10-09",
+        "locator": "Matriz oficial HELIOS.components.c059D: grades[50021-ADVANCE].versions[P13C-A], equipmentSpecs, customKey 30200-I-552; techSpecs Anodeprodução=2026/2026. Data registrada é de consulta.",
+        "claim": "A matriz lista Frenagem traseira com detecção de pedestres (RAEB) como Included/SYSTEMATIC/factory na versão correspondente 1.0 turbo DCT. Porém, a matriz descreve fabricação/modelo 2026/2026 e o estoque é 2025/2026. Hipótese, não comprovação para esta unidade; falta matriz de produção 2025/2026 ou confirmação documental específica e conferência física.",
+        "match": {
+          "brand": "NISSAN",
+          "model": "KICKS ADVANCE TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20019",
+        "brand": "NISSAN",
+        "model": "KICKS ADVANCE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2025,
+        "market": "BR"
+      },
+      "item": {
+        "key": "surround-camera-moving-object-detection",
+        "tag": "visao_360_deteccao_movimento",
+        "label": "Visão 360° com detecção de objetos em movimento",
+        "reviewedDefinition": {
+          "id": "surround-camera-moving-object-detection",
+          "tag": "visao_360_deteccao_movimento",
+          "sourceDescription": "Visão 360° com detecção de objetos em movimento",
+          "description": "Visão 360° com detecção de objetos em movimento",
+          "priority": 700,
+          "category": "Manobras",
+          "benefit": "Ajuda a visualizar o entorno e alerta sobre objetos em movimento durante manobras.",
+          "reviewedAt": "2026-10-09",
+          "reviewNote": "Rascunho de taxonomia para revisão; não confirma presença nem autoriza publicação. Matriz Nissan Kicks Advance MY26 consultada em 09/10/2026, código 0200-I-578; fonte descreve produção 2026/2026 e aplicação à unidade 2025/2026 permanece incerta.",
+          "aliases": [
+            "Visão 360° inteligente e detector de objetos em movimento (AVM/MOD)"
+          ]
+        }
+      },
+      "classification": "inference",
+      "evidence": {
+        "url": "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html",
+        "title": "Nissan — Kicks MY26; consulta 09/10/2026, sem data editorial",
+        "date": "2026-10-09",
+        "locator": "Matriz oficial HELIOS.components.c059D: grades[50021-ADVANCE].versions[P13C-A], equipmentSpecs, customKey 0200-I-578; techSpecs Anodeprodução=2026/2026. Data registrada é de consulta.",
+        "claim": "A matriz lista Visão 360° com detecção de objetos em movimento como Included/SYSTEMATIC/factory na versão correspondente 1.0 turbo DCT. Porém, a matriz descreve fabricação/modelo 2026/2026 e o estoque é 2025/2026. Hipótese, não comprovação para esta unidade; falta matriz de produção 2025/2026 ou confirmação documental específica e conferência física.",
+        "match": {
+          "brand": "NISSAN",
+          "model": "KICKS ADVANCE TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    }
+  ]
+}

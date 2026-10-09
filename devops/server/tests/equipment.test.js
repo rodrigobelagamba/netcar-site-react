@@ -27,7 +27,7 @@ function report(reviewKey = KEY) {
   };
 }
 
-function harness(t, { now = '2026-09-28T09:59:00.000Z', defaultEnabled = false } = {}) {
+function harness(t, { now = '2026-09-28T11:59:00.000Z', defaultEnabled = false } = {}) {
   const workspaceRoot = mkdtempSync(join(tmpdir(), 'netcar-equipment-api-'));
   const stateDir = join(workspaceRoot, '.devops', 'equipment');
   mkdirSync(stateDir, { recursive: true });
@@ -51,7 +51,7 @@ function harness(t, { now = '2026-09-28T09:59:00.000Z', defaultEnabled = false }
       const task = { expression, callback, opts, active: false, destroyed: false,
         start() { this.active = true; }, stop() { this.active = false; },
         destroy() { this.active = false; this.destroyed = true; },
-        getNextRun() { return this.active ? new Date('2026-09-29T10:00:00Z') : null; } };
+        getNextRun() { return this.active ? new Date('2026-09-29T12:00:00Z') : null; } };
       cronTasks.push(task);
       return task;
     },
@@ -73,7 +73,7 @@ function harness(t, { now = '2026-09-28T09:59:00.000Z', defaultEnabled = false }
     complete: (id, status = 'succeeded') => {
       const job = jobs.get(id);
       Object.assign(job, { status, startedAt: date.getTime(), finishedAt: date.getTime(), exitCode: status === 'succeeded' ? 0 : 1 });
-      options[Number(id.split('-')[1]) - 1].onComplete({ ...job });
+      options[Number(id.split('-')[1]) - 1].onComplete?.({ ...job });
     },
   };
 }
@@ -83,18 +83,18 @@ test('daily clock uses São Paulo day and hour, independent of UTC day', () => {
   assert.deepEqual(localAuditTime(new Date('2026-09-28T10:00:00Z')), { day: '2026-09-28', hour: 7 });
 });
 
-test('scheduler starts at 07:00, persists attempts, and deduplicates actual queued/running jobs', (t) => {
+test('scheduler starts at 09:00, persists attempts, and deduplicates actual queued/running jobs', (t) => {
   const h = harness(t, { defaultEnabled: true });
   h.service.start();
   assert.equal(h.options.length, 0);
-  assert.equal(h.cronTasks[0].expression, '0 7 * * *');
+  assert.equal(h.cronTasks[0].expression, '0 9 * * *');
   assert.equal(h.cronTasks[0].opts.timezone, 'America/Sao_Paulo');
   assert.equal(h.cronTasks[0].opts.noOverlap, true);
-  h.setTime('2026-09-28T10:00:00Z');
+  h.setTime('2026-09-28T12:00:00Z');
   const job = h.service.attemptScheduled();
   assert.equal(h.options.length, 1);
-  assert.equal(h.service.getState().schedule.lastAttempt, '2026-09-28T10:00:00.000Z');
-  assert.deepEqual(h.options[0].args, ['--import', 'tsx', 'scripts/audit-vehicle-equipment.ts', '--state-dir', h.stateDir]);
+  assert.equal(h.service.getState().schedule.lastAttempt, '2026-09-28T12:00:00.000Z');
+  assert.deepEqual(h.options[0].args, ['scripts/run-equipment-daily.mjs', '--state-dir', h.stateDir, '--input', join(h.workspaceRoot, 'docs', 'equipment-research-library.json')]);
   assert.equal(h.options[0].cwd, h.workspaceRoot);
   assert.throws(() => h.service.run(), (error) => error.status === 409 && error.job.id === job.id);
   assert.equal(h.service.attemptScheduled(), null);
@@ -106,12 +106,12 @@ test('scheduler starts at 07:00, persists attempts, and deduplicates actual queu
   const restarted = h.createService();
   restarted.start();
   assert.equal(h.options.length, 1, 'same-day restart must not queue again');
-  h.setTime('2026-09-29T10:00:00Z');
+  h.setTime('2026-09-29T12:00:00Z');
   restarted.attemptScheduled();
   assert.equal(h.options.length, 2);
 });
 
-test('startup catches up once after 07:00 and failure preserves the last report', (t) => {
+test('startup catches up once after 09:00 and failure preserves the last report', (t) => {
   const h = harness(t, { defaultEnabled: true, now: '2026-09-28T15:00:00Z' });
   h.saveReport();
   const previous = readFileSync(join(h.stateDir, 'report.json'), 'utf8');
@@ -284,7 +284,7 @@ test('all equipment endpoints require Bearer authentication and validate writes'
     headers: { ...(authenticated ? { Authorization: 'Bearer local-test-token' } : {}), 'Content-Type': 'application/json' },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }),
   });
-  for (const [path, body] of [['', undefined], ['/run', {}], ['/schedule', { enabled: true }], ['/reviews', {}]]) {
+  for (const [path, body] of [['', undefined], ['/run', {}], ['/schedule', { enabled: true }], ['/reviews', {}], ['/research/decisions', {}]]) {
     assert.equal((await request(path, body, false)).status, 401);
   }
   assert.equal(h.options.length, 0);
@@ -303,4 +303,106 @@ test('all equipment endpoints require Bearer authentication and validate writes'
   assert.equal(reviewResponse.status, 200);
   assert.equal((await reviewResponse.json()).review.status, 'reviewed');
   assert.equal((await request('/reviews', { reviewKey: NEW_KEY, status: 'reviewed', note: 'Conferido.' })).status, 409);
+});
+
+function saveResearch(h) {
+  const candidate = { identity: { id: '20050', brand: 'FIAT', model: 'FASTBACK IMPETUS TURBO', manufactureYear: 2024, modelYear: 2025, engine: '1.0', transmission: 'AUTOMATICO', market: 'BR' },
+    item: { key: 'rain-sensor', label: 'Sensor de chuva', tag: 'sensor_de_chuva' }, classification: 'standard',
+    evidence: { url: 'https://www.fiat.com.br/fixture', title: 'Exemplo', date: '2024-01-01', locator: 'p. 1', claim: 'Teste de fonte.' } };
+  writeFileSync(join(h.stateDir, 'research-review.json'), JSON.stringify({ schemaVersion: 1, events: [], revisions: [{ key: KEY, candidate, active: true, status: 'pending', contextBlockers: [] }] }));
+  writeFileSync(join(h.stateDir, 'research-discovery.json'), JSON.stringify({ schemaVersion: 1, observedAt: '2026-09-28T11:00:00Z', snapshotSha256: NEW_KEY,
+    counts: { inventoryCompared: 1, withResearchCandidates: 1, withoutCompatibleSourceRecorded: 0, publicRendered: 0 }, vehicles: [{ id: '20050', identity: candidate.identity, sourceStatus: 'research_candidates_recorded', candidates: [] }] }));
+}
+
+test('research reads dated discovery and item decisions separately from whole-vehicle reviews', (t) => {
+  const h = harness(t); h.saveReport(); saveResearch(h);
+  const state = h.service.getState();
+  assert.equal(state.research.revisions[0].status, 'pending');
+  assert.equal(state.research.discovery.observedAt, '2026-09-28T11:00:00Z');
+  assert.deepEqual(state.reviews, {});
+  writeFileSync(join(h.stateDir, 'research-review.json'), '{broken');
+  assert.match(h.service.getState().research.error, /research-review.json/);
+  assert.equal(h.service.getState().research.discovery, null);
+  assert.equal(h.service.getState().report.vehicles[0].id, '20050');
+  assert.equal(readFileSync(join(h.stateDir, 'research-review.json'), 'utf8'), '{broken');
+});
+
+test('specific item decision enqueues only safe CLI decide and serializes against the audit', (t) => {
+  const h = harness(t); saveResearch(h);
+  const decision = { key: KEY, vehicleId: '20050', itemKey: 'rain-sensor', status: 'authorized', note: 'Responsável confirmou.',
+    present: true, authorizePublication: true, marketConfirmed: true, confirmationReference: 'Conferência do responsável em 28/09',
+    approvedText: { name: 'Sensor de chuva', description: 'Sensor de chuva' } };
+  for (const change of [{ key: NEW_KEY }, { vehicleId: '20051' }, { itemKey: 'other-item' }]) {
+    assert.throws(() => h.service.decideResearch({ ...decision, ...change }), (error) => error.status === 409);
+  }
+  for (const change of [{ present: false }, { authorizePublication: false }, { marketConfirmed: false },
+    { confirmationReference: undefined }, { approvedText: undefined }, { command: 'deploy:local' },
+    { status: 'presence_confirmed' }, { note: '--help' }]) {
+    assert.throws(() => h.service.decideResearch({ ...decision, ...change }), (error) => error.status === 400);
+  }
+  const before = readFileSync(join(h.stateDir, 'research-review.json'), 'utf8');
+  const job = h.service.decideResearch(decision);
+  assert.equal(h.options.length, 1);
+  const args = h.options[0].args;
+  assert.equal(args[3], 'decide');
+  assert.equal(args[args.indexOf('--vehicle-id') + 1], '20050');
+  assert.equal(args[args.indexOf('--item-key') + 1], 'rain-sensor');
+  assert.ok(args.includes('--approved-name')); assert.ok(args.includes('--confirmation-reference'));
+  assert.ok(!args.includes('apply')); assert.ok(!args.includes('deploy'));
+  assert.throws(() => h.service.run(), (error) => error.status === 409 && error.job.id === job.id);
+  assert.throws(() => h.service.decideResearch(decision), (error) => error.status === 409);
+  assert.equal(readFileSync(join(h.stateDir, 'research-review.json'), 'utf8'), before, 'only the CLI may record the decision under its own lock');
+  h.complete(job.id);
+  h.service.run();
+  assert.throws(() => h.service.decideResearch(decision), (error) => error.status === 409);
+});
+
+test('VPS scheduler does not catch up at the retired seven oclock time', (t) => {
+  const h = harness(t, { defaultEnabled: true, now: '2026-09-28T10:00:00Z' });
+  h.service.start();
+  assert.equal(h.options.length, 0);
+  h.setTime('2026-09-28T11:59:59Z');
+  assert.equal(h.service.attemptScheduled(), null);
+  h.setTime('2026-09-28T12:00:00Z');
+  assert.ok(h.service.attemptScheduled());
+  assert.equal(h.cronTasks.length, 1);
+});
+
+
+test('research panel retains valid history beyond 2000 revisions without discarding decisions', (t) => {
+  const h = harness(t);
+  const revisions = Array.from({ length: 2001 }, (_, index) => ({
+    key: (index + 1).toString(16).padStart(64, '0'), active: index === 2000, status: 'excluded',
+    candidate: { identity: { id: '99999', brand: 'FIAT', model: 'SYNTHETIC HISTORY', modelYear: 2025 }, item: { key: 'rain-sensor', label: 'Sensor de chuva' } },
+    decision: { note: 'Historical synthetic refusal', present: true, authorizePublication: false },
+  }));
+  const file = join(h.stateDir, 'research-review.json');
+  const bytes = JSON.stringify({ schemaVersion: 1, revisions, events: [] });
+  writeFileSync(file, bytes);
+  const result = h.service.getState();
+  assert.equal(result.research.error, null);
+  assert.equal(result.research.revisions.length, 1);
+  assert.equal(result.research.revisions[0].key, revisions[2000].key);
+  assert.equal(readFileSync(file, 'utf8'), bytes, 'reader must preserve every historical decision');
+});
+
+
+test('a review crossing 09:00 triggers exactly one scheduled catch-up after completion', (t) => {
+  const h = harness(t, { defaultEnabled: true, now: '2026-09-28T11:59:00Z' });
+  writeFileSync(join(h.stateDir, 'research-review.json'), JSON.stringify({ schemaVersion: 1, events: [], revisions: [{
+    key: KEY, active: true, status: 'pending', candidate: { identity: { id: '99999' }, item: { key: 'rain-sensor' } },
+  }] }));
+  h.service.start();
+  const review = h.service.decideResearch({ key: KEY, vehicleId: '99999', itemKey: 'rain-sensor', status: 'excluded', note: 'Synthetic item-specific refusal' });
+  h.setTime('2026-09-28T12:00:00Z');
+  assert.equal(h.service.attemptScheduled(), null, 'daily job waits for the active review');
+  assert.equal(h.options.length, 1);
+  h.complete(review.id);
+  assert.equal(h.options.length, 2);
+  assert.equal(h.options[1].meta.kind, 'equipment:audit');
+  assert.equal(h.service.getState().schedule.lastAttempt, '2026-09-28T12:00:00.000Z');
+  assert.equal(h.service.attemptScheduled(), null);
+  h.complete('job-2');
+  assert.equal(h.service.attemptScheduled(), null);
+  assert.equal(h.options.length, 2, 'only one daily audit may follow');
 });
