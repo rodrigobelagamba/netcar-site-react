@@ -72,6 +72,8 @@ export interface FactoryWarrantyRecord {
   mileage: WarrantyMileage;
   /** Needed in the estimated final year; this is not inferred from FAB. */
   confirmedExpiryDate?: string;
+  /** Confirmed YYYY-MM only; valid before that month, never expanded to a day. */
+  confirmedExpiryMonth?: string;
   sources: WarrantySource[];
   /** Separately reviewed coverage; never participates in the general stamp. */
   supplementalCoverages?: FactoryWarrantyTractionBatteryCoverage[];
@@ -91,6 +93,7 @@ export interface FactoryWarrantyTractionBatteryCoverage {
   reviewedMileageKm: number;
   mileage: WarrantyMileage;
   confirmedExpiryDate?: string;
+  confirmedExpiryMonth?: string;
   sources: WarrantySource[];
 }
 
@@ -265,6 +268,9 @@ export function factoryWarrantyReviewFingerprint(
     reviewedMileageKm: record.reviewedMileageKm,
     mileage: record.mileage,
     confirmedExpiryDate: record.confirmedExpiryDate || null,
+    ...(record.confirmedExpiryMonth !== undefined
+      ? { confirmedExpiryMonth: record.confirmedExpiryMonth }
+      : {}),
     sources: record.sources,
   });
 }
@@ -289,6 +295,7 @@ function tractionBatteryAsRecord(
     reviewedMileageKm: coverage.reviewedMileageKm,
     mileage: coverage.mileage,
     confirmedExpiryDate: coverage.confirmedExpiryDate,
+    confirmedExpiryMonth: coverage.confirmedExpiryMonth,
     sources: coverage.sources,
   };
 }
@@ -483,11 +490,23 @@ function resolveFactoryWarrantyCoverage(
       (checkCoverageWindow && record.confirmedExpiryDate < today))
   )
     return undefined;
+  // An unknown day cannot establish validity during the confirmed expiry month.
+  // It is safe only before that month; no first/last day is manufactured.
+  if (
+    record.confirmedExpiryMonth !== undefined &&
+    (record.confirmedExpiryDate !== undefined ||
+      typeof record.confirmedExpiryMonth !== "string" ||
+      record.confirmedExpiryMonth.length !== 7 ||
+      !/^\d{4}-(0[1-9]|1[0-2])$/.test(record.confirmedExpiryMonth) ||
+      (checkCoverageWindow && record.confirmedExpiryMonth <= today.slice(0, 7)))
+  )
+    return undefined;
   // FAB+years cannot identify which month the warranty expires in its final year.
   if (
     checkCoverageWindow &&
     estimatedEndYear === currentYear &&
-    !record.confirmedExpiryDate
+    !record.confirmedExpiryDate &&
+    record.confirmedExpiryMonth === undefined
   )
     return undefined;
   return {

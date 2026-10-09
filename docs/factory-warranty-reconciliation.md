@@ -1,5 +1,20 @@
 # Reconciliação de garantias — 09/10/2026
 
+## Vencimento com precisão mensal
+
+`confirmedExpiryMonth: YYYY-MM` preserva uma confirmação individual sem
+inventar dia. O resolver aceita apenas mês futuro, mantendo todos os gates de
+aprovação, identidade, fonte, uso, km e condições. No mês corrente, o motivo é
+`confirmed-expiry-day-required`; no passado, `coverage-expired`. Mês inválido
+ou data+mês simultâneos produzem `confirmed-expiry-invalid`. O fingerprint
+inclui o mês somente quando fornecido, preservando as revisões antigas.
+Regras automáticas não reutilizam templates com vencimento individual.
+
+A revisão dos IDs19779/19854/19898, a autorização de publicação e a distinção
+entre fonte oficial, ateste do proprietário e data desconhecida constam de
+`docs/audits/factory-warranty-month-precision-2026-10-09.json`. A nota pública
+aprovada e as demais coberturas não mudam; Compass19866 continua pendente.
+
 ## Estado desta implementação
 
 Esta alteração implementa a aplicação automática de regras aprovadas e o gate

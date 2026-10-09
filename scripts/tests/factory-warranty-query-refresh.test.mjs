@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { after, afterEach, before, beforeEach, test } from "node:test";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import React from "react";
@@ -7,6 +9,7 @@ import TestRenderer, { act } from "react-test-renderer";
 import { createServer } from "vite";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const cacheDir = mkdtempSync(resolve(tmpdir(), "warranty-query-vite-"));
 const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window");
 const originalFetch = globalThis.fetch;
 const originalSetInterval = globalThis.setInterval;
@@ -71,6 +74,7 @@ before(async () => {
     await import("@tanstack/react-query"));
   server = await createServer({
     root,
+    cacheDir,
     configFile: false,
     appType: "custom",
     server: { middlewareMode: true, hmr: false, ws: false },
@@ -104,6 +108,7 @@ afterEach(async () => {
 
 after(async () => {
   await server?.close();
+  rmSync(cacheDir, { recursive: true, force: true });
   globalThis.fetch = originalFetch;
   globalThis.setInterval = originalSetInterval;
   globalThis.clearInterval = originalClearInterval;

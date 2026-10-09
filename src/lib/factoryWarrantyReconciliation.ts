@@ -142,11 +142,28 @@ function existingReason(
     return "mileage-invalid-or-regressed";
   if (record.mileage.kind === "limited" && vehicle.km >= record.mileage.limitKm)
     return "mileage-limit-reached";
+  if (record.confirmedExpiryMonth !== undefined) {
+    if (
+      record.confirmedExpiryDate !== undefined ||
+      typeof record.confirmedExpiryMonth !== "string" ||
+      record.confirmedExpiryMonth.length !== 7 ||
+      !/^\d{4}-(0[1-9]|1[0-2])$/.test(record.confirmedExpiryMonth)
+    )
+      return "confirmed-expiry-invalid";
+    if (record.confirmedExpiryMonth < today.slice(0, 7))
+      return "coverage-expired";
+    if (record.confirmedExpiryMonth === today.slice(0, 7))
+      return "confirmed-expiry-day-required";
+  }
   if (record.confirmedExpiryDate && record.confirmedExpiryDate < today)
     return "coverage-expired";
   const endYear = record.vehicle.manufactureYear + record.termYears;
   if (endYear < Number(today.slice(0, 4))) return "coverage-expired";
-  if (endYear === Number(today.slice(0, 4)) && !record.confirmedExpiryDate)
+  if (
+    endYear === Number(today.slice(0, 4)) &&
+    !record.confirmedExpiryDate &&
+    record.confirmedExpiryMonth === undefined
+  )
     return "confirmed-expiry-required";
   return "approval-evidence-incompatible";
 }
@@ -277,6 +294,7 @@ function reconcileFactoryWarrantyVehicleUnchecked(
     template.supplementalCoverages !== undefined ||
     template.powertrainReview !== undefined ||
     template.confirmedExpiryDate !== undefined ||
+    template.confirmedExpiryMonth !== undefined ||
     template.approvedFingerprint !== factoryWarrantyReviewFingerprint(template)
   )
     return result("pending", "rule-template-not-reusable", provenance);

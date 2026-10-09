@@ -189,6 +189,33 @@ test("audit concretely resolves a new exact eligible unit using the same runtime
     assert.ok(!JSON.stringify(report).includes(sensitive));
 });
 
+test("the existing audit persists month-boundary review and alerts once without inventing an expiry day", () => {
+  const matrix = fixture();
+  const source = raw({ id: "90001" });
+  const record = matrix.records[0];
+  record.unitBinding!.unitKey = factoryWarrantyCatalogFromApi(source)!.unitKey!;
+  record.confirmedExpiryMonth = "2026-12";
+  approve(matrix);
+  const input = parse([source]);
+  const before = JSON.stringify(matrix);
+  const october = buildEquipmentAudit(input, null, NOW, matrix);
+  assert.equal(october.vehicles[0].warranty?.status, "eligible");
+  assert.equal(october.newWarrantyAlerts?.length, 0);
+  const december = buildEquipmentAudit(input, october, "2026-12-01T03:00:00.000Z", matrix);
+  assert.equal(december.vehicles[0].warranty?.reason, "confirmed-expiry-day-required");
+  assert.equal(december.newWarrantyAlerts?.length, 1);
+  assert.equal(december.newWarrantyAlerts?.[0].reason, "confirmed-expiry-day-required");
+  const restored = JSON.parse(JSON.stringify(december));
+  const repeated = buildEquipmentAudit(input, restored, "2026-12-15T15:00:00.000Z", matrix);
+  assert.equal(repeated.vehicles[0].warranty?.reason, "confirmed-expiry-day-required");
+  assert.equal(repeated.newWarrantyAlerts?.length, 0);
+  assert.equal(repeated.warrantyHistory?.[0].states.length, 2);
+  const january = buildEquipmentAudit(input, repeated, "2027-01-01T03:00:00.000Z", matrix);
+  assert.equal(january.vehicles[0].warranty?.reason, "coverage-expired");
+  assert.equal(JSON.stringify(matrix), before);
+  assert.equal(record.confirmedExpiryDate, undefined);
+});
+
 test("specific incompatible-engine pendency is emitted once and kept after unknown absence", () => {
   const matrix = fixture();
   const changed = parse([raw({ motor: "1.6" })]);
