@@ -20,6 +20,7 @@ const coverage = z.object({
   termYears: z.number().finite(), usage: z.enum(["private", "commercial", "unknown"]),
   reviewedMileageKm: z.number().finite(), mileage, sources: z.array(source).max(100),
   confirmedExpiryDate: z.string().optional(),
+  confirmedExpiryMonth: z.string().optional(),
 }).passthrough();
 const identity = z.object({ brand: z.string(), modelVersion: z.string(), manufactureYear: z.number().finite(), modelYear: z.number().finite() });
 const record = coverage.extend({

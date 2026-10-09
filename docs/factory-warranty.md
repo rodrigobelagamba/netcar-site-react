@@ -1,5 +1,15 @@
 # Carimbo de garantia de fábrica
 
+> Revisão individual de09/10/2026: Territory19779 e HR-V Touring19898 têm
+> vencimento em dezembro2026 atestado pelo proprietário, com precisão mensal;
+> Advance19854 recebeu revisão documental MY2024. Os três selos gerais foram
+> autorizados com a ressalva existente (anos estimados2026/2026/2027).
+> A evidência e os limites estão em
+> [auditoria de precisão mensal](audits/factory-warranty-month-precision-2026-10-09.json).
+> Esta revisão deixa14 unidades aprovadas, incluindo3 de motor/câmbio, e2
+> registros pendentes. O Compass19866 permanece pendente. As contagens e
+> pendências abaixo descrevem as revisões históricas indicadas.
+
 > Atualização de arquitetura em09/10/2026: consultar
 > [Reconciliação de garantias](factory-warranty-reconciliation.md) para identidade
 > estável, regras exatas reutilizáveis, publicação do registro e validade do cache.
@@ -88,6 +98,7 @@ Tipos e função canônica: `src/lib/factoryWarranty.ts`.
 | `reviewedMileageKm`, `mileage` | Km revisado; `limited` com `limitKm`, `unlimited` ou `unknown` |
 | `sources[]` | ID, URL, localização, revisão e verificação estruturada da fonte específica |
 | `confirmedExpiryDate` | Opcional; data efetiva documentada, nunca inferida do FAB |
+| `confirmedExpiryMonth` | Opcional `YYYY-MM`; mês atestado sem inventar dia, válido somente antes desse mês e incompatível com data simultânea |
 | `approvedFingerprint` | Resultado de `factoryWarrantyReviewFingerprint(record)` após revisão |
 
 O fingerprint é uma serialização canônica legível, não assinatura nem prova
@@ -222,9 +233,12 @@ o desenho circular, o tamanho do selo e sua posição junto à foto não mudam.
 
 Ano-modelo não substitui fabricação. O cálculo não cria uma data31/12.
 Se o ano estimado for anterior ao atual, não exibir. No próprio ano final,
-exigir uma data de vencimento confirmada e não vencida; sem isso, não exibir.
+exigir data de vencimento confirmada e não vencida ou mês confirmado ainda
+futuro; sem isso, não exibir. Quando só há mês, a exibição é bloqueada desde
+o primeiro dia desse mês até que o dia efetivo seja revisado. A data e o mês
+simultâneos ou um mês inválido também bloqueiam. Nenhum dia é inferido.
 Uma data de vencimento já vencida sempre bloqueia, inclusive quando o ano
-estimado ainda é futuro.
+estimado ainda é futuro. O mesmo vale para mês passado ou corrente.
 
 ## Novos XMLs e mudanças
 

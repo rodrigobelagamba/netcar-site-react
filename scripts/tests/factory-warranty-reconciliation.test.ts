@@ -288,6 +288,7 @@ test("private use, powertrain, battery and individual expiry are never reusable 
     { scope: "powertrain" as const },
     { supplementalCoverages: [] },
     { confirmedExpiryDate: "2028-10-09" },
+    { confirmedExpiryMonth: "2028-10" },
   ]) {
     const matrix = fixture();
     Object.assign(matrix.records[0], patch);
@@ -477,4 +478,48 @@ test("a confirmed expiry remains valid through its Sao Paulo civil day", () => {
       .reason,
     "coverage-expired",
   );
+});
+
+test("month-only expiry changes status at the start of the confirmed Sao Paulo month", () => {
+  const matrix = fixture();
+  matrix.records[0].confirmedExpiryMonth = "2026-12";
+  approveTemplate(matrix);
+  const vehicle = candidate({ id: "reviewed-unit", unitKey: key("a") });
+  const beforeMonth = factoryWarrantyToday(new Date("2026-12-01T02:59:59.999Z"));
+  const startMonth = factoryWarrantyToday(new Date("2026-12-01T03:00:00.000Z"));
+  assert.equal(beforeMonth, "2026-11-30");
+  assert.equal(startMonth, "2026-12-01");
+  assert.equal(run(vehicle, matrix, beforeMonth).status, "eligible");
+  assert.equal(run(vehicle, matrix, startMonth).reason, "confirmed-expiry-day-required");
+  assert.equal(run(vehicle, matrix, "2026-12-31").reason, "confirmed-expiry-day-required");
+  assert.equal(run(vehicle, matrix, "2027-01-01").reason, "coverage-expired");
+  assert.equal(matrix.records[0].confirmedExpiryDate, undefined);
+});
+
+test("missing, invalid and conflicting expiry evidence are separate review reasons", () => {
+  const vehicle = candidate({ id: "reviewed-unit", unitKey: key("a") });
+  const missing = fixture();
+  assert.equal(run(vehicle, missing, "2028-10-09").reason, "confirmed-expiry-required");
+  for (const patch of [
+    { confirmedExpiryMonth: "2028-13" },
+    { confirmedExpiryMonth: "2028-12", confirmedExpiryDate: "2028-12-20" },
+  ]) {
+    const matrix = fixture();
+    Object.assign(matrix.records[0], patch);
+    approveTemplate(matrix);
+    assert.equal(run(vehicle, matrix, "2028-10-09").reason, "confirmed-expiry-invalid");
+    assert.equal(resolveFactoryWarranty(vehicle, matrix, "2028-10-09"), undefined);
+  }
+});
+
+test("reply notes and month facts do not override the pending manual decision", () => {
+  const matrix = fixture();
+  const record = matrix.records[0];
+  record.status = "pending";
+  record.confirmedExpiryMonth = "2026-12";
+  Reflect.set(record, "notes", "Owner replied: warranty expires December 2026. Reviewed.");
+  approveTemplate(matrix);
+  const vehicle = candidate({ id: "reviewed-unit", unitKey: key("a") });
+  assert.equal(run(vehicle, matrix).reason, "manual-pending");
+  assert.equal(resolveFactoryWarranty(vehicle, matrix, TODAY), undefined);
 });

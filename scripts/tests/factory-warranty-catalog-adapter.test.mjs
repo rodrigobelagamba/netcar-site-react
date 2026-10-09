@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { after, afterEach, before, test } from "node:test";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
@@ -12,6 +14,7 @@ import { factoryWarrantyCatalogFromApi as buildProjection } from "../lib/factory
 
 // Synthetic identifiers only: no real inventory identifiers in these fixtures.
 const VIN = "9BWZZZ377VT004251";
+const cacheDir = mkdtempSync(resolve(tmpdir(), "warranty-catalog-vite-"));
 const OTHER_VIN = "9BWZZZ377VT004252";
 const OBSERVED_AT = 1_800_000_000_000;
 const fixture = (changes = {}) => ({
@@ -222,6 +225,7 @@ before(async () => {
   };
   server = await createServer({
     root,
+    cacheDir,
     configFile: false,
     appType: "custom",
     server: { middlewareMode: true, hmr: false, ws: false },
@@ -235,6 +239,7 @@ afterEach(() => {
 });
 after(async () => {
   await server?.close();
+  rmSync(cacheDir, { recursive: true, force: true });
   globalThis.fetch = originalFetch;
   if (originalWindow)
     Object.defineProperty(globalThis, "window", originalWindow);

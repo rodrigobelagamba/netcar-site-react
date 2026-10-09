@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { after, afterEach, before, beforeEach, test } from "node:test";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { createServer } from "vite";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
@@ -9,21 +10,25 @@ import TestRenderer, { act } from "react-test-renderer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
+const cacheDir = mkdtempSync(resolve(tmpdir(), "warranty-published-vite-"));
 const matrix = JSON.parse(readFileSync(resolve(root, "src/data/factoryWarrantyMatrix.json"), "utf8"));
 const observed = JSON.parse(readFileSync(resolve(root, "docs/audits/factory-warranty-reconciliation-2026-10-09.json"), "utf8")).publicVehicles;
 const originalFetch = globalThis.fetch;
 let server, fetchPublishedWarrantyRegistry, warrantySnapshotIsFresh, useFactoryWarrantyStamps;
+let factoryWarrantyReviewFingerprint, resolveFactoryWarranty;
 let client, renderer, stamps;
 const response = (value = matrix) => new Response(JSON.stringify(value), { status: 200 });
 const vehicle = () => ({ ...observed.find((v) => v.id === "19587"), observedAt: Date.now() });
 
 before(async () => {
-  server = await createServer({ root, configFile: false, envFile: false,
+  server = await createServer({ root, cacheDir, configFile: false, envFile: false,
     appType: "custom", server: { middlewareMode: true, hmr: false, ws: false, watch: null },
     logLevel: "error", resolve: { alias: { "@": resolve(root, "src") } },
     define: { "import.meta.env.DEV": "false", "import.meta.env.VITE_WARRANTY_PREVIEW": JSON.stringify("0") } });
   ({ fetchPublishedWarrantyRegistry, warrantySnapshotIsFresh, useFactoryWarrantyStamps } =
     await server.ssrLoadModule("/src/lib/useFactoryWarrantyStamps.ts"));
+  ({ factoryWarrantyReviewFingerprint, resolveFactoryWarranty } =
+    await server.ssrLoadModule("/src/lib/factoryWarranty.ts"));
 });
 beforeEach(() => {
   globalThis.fetch = async () => response();
@@ -36,7 +41,7 @@ afterEach(async () => {
   client.clear();
   globalThis.fetch = originalFetch;
 });
-after(async () => server?.close());
+after(async () => { await server?.close(); rmSync(cacheDir, { recursive: true, force: true }); });
 function Probe({ current }) { stamps = useFactoryWarrantyStamps(current); return null; }
 async function render(current) {
   await act(async () => {
@@ -56,6 +61,29 @@ test("registry request bypasses HTTP cache and bounds the accepted schema", asyn
     return response();
   };
   assert.deepEqual(await fetchPublishedWarrantyRegistry(), matrix);
+});
+test("month precision persists through the published JSON read without manufacturing a date or approval", async () => {
+  const changed = structuredClone(matrix);
+  const record = changed.records.find((entry) => entry.vehicle.vehicleId === "19587");
+  record.confirmedExpiryMonth = "2028-12";
+  record.approvedFingerprint = factoryWarrantyReviewFingerprint(record);
+  const serialized = JSON.stringify(changed);
+  globalThis.fetch = async () => new Response(serialized, { status: 200 });
+  const restored = await fetchPublishedWarrantyRegistry();
+  assert.deepEqual(restored, changed);
+  const persisted = restored.records.find((entry) => entry.vehicle.vehicleId === "19587");
+  assert.equal(persisted.confirmedExpiryMonth, "2028-12");
+  assert.equal(Object.hasOwn(persisted, "confirmedExpiryDate"), false);
+  assert.equal(persisted.approvedFingerprint, record.approvedFingerprint);
+  assert.equal(resolveFactoryWarranty(vehicle(), restored, "2028-11-30")?.estimatedEndYear, 2028);
+  assert.equal(resolveFactoryWarranty(vehicle(), restored, "2028-12-01"), undefined);
+
+  persisted.status = "pending";
+  persisted.notes = "Reviewed: owner confirmed December 2028.";
+  globalThis.fetch = async () => response(restored);
+  const pending = await fetchPublishedWarrantyRegistry();
+  assert.equal(pending.records.find((entry) => entry.vehicle.vehicleId === "19587").status, "pending");
+  assert.equal(resolveFactoryWarranty(vehicle(), pending, "2028-11-30"), undefined);
 });
 for (const [label, invalid] of [["legacy registry", { ...matrix, requireUnitBinding: false }], ["missing records", { schemaVersion: 2 }], ["wrong schema", { ...matrix, schemaVersion: 3 }]]) {
   test(label + " is rejected instead of renewing the cached approval", async () => {

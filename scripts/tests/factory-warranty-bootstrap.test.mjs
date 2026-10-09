@@ -14,6 +14,7 @@ import {
 } from "../lib/seo-stock-cache.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const cacheDir = mkdtempSync(join(tmpdir(), "warranty-bootstrap-vite-"));
 const historicalSnapshots = JSON.parse(
   readFileSync(join(root, "docs/audits/factory-warranty-2026-10-03.json"), "utf8"),
 ).currentCatalogSnapshot;
@@ -68,6 +69,7 @@ before(async () => {
   );
   server = await createServer({
     root,
+    cacheDir,
     configFile: false,
     envFile: false,
     appType: "custom",
@@ -104,6 +106,7 @@ afterEach(() => {
 
 after(async () => {
   await server?.close();
+  rmSync(cacheDir, { recursive: true, force: true });
   globalThis.Date = OriginalDate;
   globalThis.fetch = originalFetch;
 });

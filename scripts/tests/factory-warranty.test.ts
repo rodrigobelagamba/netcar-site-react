@@ -481,6 +481,111 @@ test("estimated final year needs confirmed unexpired date, not December31 guesse
     undefined,
   );
 });
+
+test("a confirmed future expiry month permits the final-year estimate without creating an exact date", () => {
+  const record = review({ termYears: 1, confirmedExpiryMonth: "2026-12" });
+  const before = JSON.stringify(record);
+  assert.equal(resolve(vehicle, record)?.estimatedEndYear, 2026);
+  assert.equal(resolveFactoryWarranty(vehicle, matrix(record), "2026-11-30")?.estimatedEndYear, 2026);
+  assert.equal(record.confirmedExpiryDate, undefined);
+  assert.equal(JSON.stringify(record), before);
+});
+
+for (const today of ["2026-12-01", "2026-12-15", "2026-12-31", "2027-01-01"]) {
+  test(`month-only December expiry hides on ${today} rather than assuming its last day`, () => {
+    const record = review({ termYears: 1, confirmedExpiryMonth: "2026-12" });
+    assert.equal(resolveFactoryWarranty(vehicle, matrix(record), today), undefined);
+  });
+}
+
+test("an earlier confirmed month overrides a still-future fabrication estimate", () => {
+  for (const confirmedExpiryMonth of ["2026-09", "2026-10"]) {
+    const record = review({ confirmedExpiryMonth });
+    assert.equal(record.vehicle.manufactureYear + record.termYears, 2028);
+    assert.equal(resolve(vehicle, record), undefined);
+  }
+});
+
+test("month precision never changes the displayed manufacture-plus-term estimate", () => {
+  const record = review({ termYears: 1, confirmedExpiryMonth: "2027-02" });
+  assert.equal(resolve(vehicle, record)?.estimatedEndYear, 2026);
+  assert.equal(resolveFactoryWarranty(vehicle, matrix(record), "2027-01-01"), undefined);
+});
+
+test("invalid or ambiguous month evidence fails all scopes even with refreshed fingerprints", () => {
+  const invalid = ["", " ", "2026-1", "2026-00", "2026-13", "2026-12-01", "26-12", "2026/12", " 2026-12", "2026-12 ", "0000-12", null, 202612];
+  for (const month of invalid) {
+    const patch = { confirmedExpiryMonth: month } as Partial<FactoryWarrantyRecord>;
+    assert.equal(resolve(vehicle, review(patch)), undefined, String(month));
+    assert.equal(resolvePowertrain(vehicle, powertrainReview(patch)), undefined, String(month));
+    const battery = withTractionBattery(review(), patch as Partial<FactoryWarrantyTractionBatteryCoverage>);
+    assert.equal(resolveBattery(battery), undefined, String(month));
+  }
+  for (const confirmedExpiryDate of ["2026-12-10", ""]) {
+    const patch = { confirmedExpiryMonth: "2026-12", confirmedExpiryDate };
+    assert.equal(resolve(vehicle, review(patch)), undefined);
+    assert.equal(resolvePowertrain(vehicle, powertrainReview(patch)), undefined);
+    assert.equal(resolveBattery(withTractionBattery(review(), patch)), undefined);
+  }
+});
+
+test("month evidence is fingerprinted and requires an explicit fresh approval", () => {
+  const original = review({ termYears: 1 });
+  const month = { ...original, confirmedExpiryMonth: "2026-12" };
+  assert.notEqual(factoryWarrantyReviewFingerprint(month), original.approvedFingerprint);
+  assert.equal(resolve(vehicle, month), undefined);
+  const approved = review(month);
+  assert.equal(resolve(vehicle, approved)?.estimatedEndYear, 2026);
+  assert.equal(resolve(vehicle, { ...approved, confirmedExpiryMonth: "2027-02" }), undefined);
+  const removed = { ...approved };
+  delete removed.confirmedExpiryMonth;
+  assert.notEqual(factoryWarrantyReviewFingerprint(removed), approved.approvedFingerprint);
+  assert.equal(resolve(vehicle, removed), undefined);
+  // The optional field must not churn approvals that predate month precision.
+  assert.equal(factoryWarrantyReviewFingerprint({ ...original, confirmedExpiryMonth: undefined }), original.approvedFingerprint);
+  const legacyBattery = withTractionBattery();
+  const coverage = legacyBattery.supplementalCoverages![0];
+  assert.equal(factoryTractionBatteryReviewFingerprint(legacyBattery, { ...coverage, confirmedExpiryMonth: undefined }), coverage.approvedFingerprint);
+  assert.notEqual(factoryTractionBatteryReviewFingerprint(legacyBattery, { ...coverage, confirmedExpiryMonth: "2033-12" }), coverage.approvedFingerprint);
+});
+
+test("a month stated in notes cannot approve a pending record or supply a missing expiry field", () => {
+  const pending = review({ status: "pending", termYears: 1, confirmedExpiryMonth: "2026-12" });
+  Reflect.set(pending, "notes", "Owner confirms expiry December 2026; reviewed.");
+  assert.equal(resolve(vehicle, pending), undefined);
+  const notesOnly = review({ termYears: 1 });
+  Reflect.set(notesOnly, "notes", "Approved: warranty expires December 2026.");
+  assert.equal(resolve(vehicle, notesOnly), undefined);
+});
+
+test("future month evidence does not bypass identity, current flag, mileage or verified sources", () => {
+  const record = review({ termYears: 1, confirmedExpiryMonth: "2026-12" });
+  for (const patch of [
+    { modelo: "Different Version" }, { year: 2025 }, { anoFabricacao: undefined },
+    { diferenciais: [] }, { diferenciais: undefined }, { km: undefined },
+    { km: 6699 }, { km: 100000 }, { price: 0 },
+  ]) assert.equal(resolve({ ...vehicle, ...patch } as WarrantyCatalogVehicle, record), undefined, JSON.stringify(patch));
+  for (const patch of [
+    { status: "pending" as const }, { optionalConfirmed: false }, { conditionsConfirmed: false }, { sources: [] },
+  ]) assert.equal(resolve(vehicle, review({ ...record, ...patch })), undefined);
+});
+
+test("powertrain and traction battery apply month precision only to their own coverage", () => {
+  const motor = powertrainReview({ termYears: 1, confirmedExpiryMonth: "2026-12" });
+  assert.equal(resolvePowertrain(vehicle, motor)?.estimatedEndYear, 2026);
+  assert.equal(resolvePowertrain(vehicle, motor, "2026-12-01"), undefined);
+  assert.equal(resolve(vehicle, motor), undefined);
+  assert.equal(resolveBattery(motor), undefined);
+
+  const primary = review({ confirmedExpiryMonth: "2026-10" });
+  const battery = withTractionBattery(primary, { termYears: 1, confirmedExpiryMonth: "2026-12" });
+  assert.equal(resolve(vehicle, battery), undefined);
+  assert.equal(resolveBattery(battery)?.estimatedEndYear, 2026);
+  assert.equal(resolveBattery(battery, vehicle, "2026-12-01"), undefined);
+  const currentBatteryMonth = withTractionBattery(review(), { confirmedExpiryMonth: "2026-10" });
+  assert.equal(resolve(vehicle, currentBatteryMonth)?.estimatedEndYear, 2028);
+  assert.equal(resolveBattery(currentBatteryMonth), undefined);
+});
 test("expired or future-dated reviews, missing sources and sold vehicles cannot show a stamp", () => {
   assert.equal(
     resolve(vehicle, review({ confirmedExpiryDate: "2026-09-01" })),

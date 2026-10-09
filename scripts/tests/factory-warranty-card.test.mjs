@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { after, afterEach, before, beforeEach, test } from "node:test";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import React from "react";
@@ -10,6 +11,7 @@ import { factoryWarrantyCatalogFromApi } from "../lib/factory-warranty-catalog.j
 import { createServer } from "vite";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const cacheDir = mkdtempSync(resolve(tmpdir(), "warranty-card-vite-"));
 const audit = JSON.parse(
   readFileSync(
     resolve(root, "docs/audits/factory-warranty-2026-10-03.json"),
@@ -113,6 +115,7 @@ before(async () => {
   });
   server = await createServer({
     root,
+    cacheDir,
     configFile: false,
     envFile: false,
     appType: "custom",
@@ -191,6 +194,7 @@ afterEach(async () => {
 
 after(async () => {
   await server?.close();
+  rmSync(cacheDir, { recursive: true, force: true });
   globalThis.Date = OriginalDate;
   globalThis.fetch = originalFetch;
   if (originalWindow) Object.defineProperty(globalThis, "window", originalWindow);
@@ -223,7 +227,7 @@ async function renderCard(raw, { base = approvedVehicle(), ...overrides } = {}) 
   assert.equal(renderer.root.findByType(CardsHero).props.year, "2026");
 }
 
-function assertStamp(expected) {
+function assertStamp(expected, year = 2028) {
   const badges = renderer.root.findAll(
     (node) => node.type === "div" && node.props["data-factory-warranty-badge"] === "card",
   );
@@ -231,11 +235,57 @@ function assertStamp(expected) {
   if (expected) {
     assert.equal(
       badges[0].findByType("svg").props["aria-label"],
-      "Garantia de fábrica até 2028*. Ano estimado pela fabricação.",
+      `Garantia de fábrica até ${year}*. Ano estimado pela fabricação.`,
     );
   } else {
     assert.equal(renderer.root.findByType(CardsHero).props.warrantyStamp, undefined);
   }
+}
+
+for (const [id, year] of [["19779", 2026], ["19854", 2027], ["19898", 2026]]) {
+  for (const compact of [false, true]) {
+    test(`authorized ${id}: ${compact ? "compact" : "normal"} card renders only general ${year} with approved footnote`, async () => {
+      currentNow = OriginalDate.parse("2026-10-09T21:00:00.000Z");
+      const current = { ...boundInventory.find((entry) => entry.id === id), observedAt: Date.now() };
+      assert.equal(current.id, id);
+      await renderCard(current, { base: current, compact });
+      assertStamp(true, year);
+      const hero = renderer.root.findByType(CardsHero).props;
+      assert.equal(hero.powertrainStamp, undefined);
+      assert.equal(hero.tractionBatteryStamp, undefined);
+      const notes = renderer.root.findAll((node) => node.type === "p" && Object.hasOwn(node.props, "data-factory-warranty-note"));
+      assert.equal(notes.length, 1);
+      assert.equal(notes[0].children.join(""), "*Estimativa pela fabricação e documentação oficial da montadora. Validade, cobertura e km conforme manual do modelo/ano.");
+    });
+  }
+  test(`authorized ${id}: an owner reply does not bypass revoked/pending decisions in the real card`, async () => {
+    currentNow = OriginalDate.parse("2026-10-09T21:00:00.000Z");
+    const record = factoryWarrantyMatrix.records.find((entry) => entry.vehicle.vehicleId === id);
+    const original = structuredClone(record);
+    const current = { ...boundInventory.find((entry) => entry.id === id), observedAt: Date.now() };
+    try {
+      for (const status of ["pending", "revoked"]) {
+        record.status = status;
+        record.notes = "Owner replied and confirmed; reviewed.";
+        await renderCard(current, { base: current });
+        assertStamp(false);
+      }
+    } finally {
+      delete record.notes;
+      Object.assign(record, original);
+    }
+  });
+}
+
+for (const id of ["19779", "19898"]) {
+  test(`monthly ${id}: December hides the card claim without assuming December31`, async () => {
+    for (const date of ["2026-12-01T03:00:00.000Z", "2026-12-31T15:00:00.000Z"]) {
+      currentNow = OriginalDate.parse(date);
+      const current = { ...boundInventory.find((entry) => entry.id === id), observedAt: Date.now() };
+      await renderCard(current, { base: current });
+      assertStamp(false);
+    }
+  });
 }
 
 for (const id of ["19587", "19924", "20066"]) {

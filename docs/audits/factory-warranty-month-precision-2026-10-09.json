@@ -1,0 +1,377 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-09",
+  "previousSourceCommit": "45829134b5a57f8d3ff2d92a2a8bf34b0f748bd9",
+  "approvedVehicleIds": [
+    "19779",
+    "19854",
+    "19898"
+  ],
+  "authorization": {
+    "requestMessageId": "Sentinel_9bd8e205ed648191a0c077485675ac11",
+    "request": "Publicar Territory e Touring até2026 e Advance até2027, com ressalva; aceitar mês/ano sem inventar dia; Compass permanece aguardando cláusula.",
+    "responseMessageId": "Sentinel_cbf0958dc5a881918c1819f25eee503f",
+    "response": "ta tudo aprovado",
+    "responseDate": "2026-10-09",
+    "responseTimeUtc": "20:38",
+    "timestampPrecision": "minute supplied by delegating parent",
+    "authorizedVehicleIds": [
+      "19779",
+      "19854",
+      "19898"
+    ],
+    "compass19866Authorized": false,
+    "sourceThreadId": "01a118b4-5239-7523-a308-41bdd37580c0"
+  },
+  "scope": "Three individually reviewed basic-vehicle records. Existing rules, other records and coverage scopes remain unchanged.",
+  "monthPrecisionPolicy": {
+    "field": "confirmedExpiryMonth",
+    "format": "YYYY-MM",
+    "futureMonth": "eligible subject to all existing gates",
+    "currentMonth": "no badge until an exact future/current expiry day is reviewed",
+    "pastMonth": "no badge",
+    "inventedDay": false,
+    "dateAndMonthTogether": "rejected",
+    "timezone": "America/Sao_Paulo",
+    "legacyFingerprintPreservedWhenFieldAbsent": true
+  },
+  "records": [
+    {
+      "vehicleId": "19779",
+      "recordId": "reviewed-v2-20261009-19779",
+      "approvedPublication": true,
+      "vehicle": {
+        "vehicleId": "19779",
+        "brand": "FORD",
+        "modelVersion": "TERRITORY TITANIUM TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:df20aad6836198a350c5405d9471d7bb207b18c1204442bb2442564aca8dad79",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedMileageKm": 31500,
+      "termYears": 3,
+      "mileagePolicy": "unlimited",
+      "usage": "private",
+      "scope": "basic-vehicle",
+      "estimatedDisplayYear": 2026,
+      "confirmedExpiryMonth": "2026-12",
+      "confirmedExpiryDate": null,
+      "actualStartDate": null,
+      "sourceVerified": true,
+      "sourceDocumentCode": "fbr-territory-2024-ficha-tecnica-08-2023",
+      "source": {
+        "sourceId": "19779-official-my2024-20261009",
+        "url": "https://www.ford.com.br/content/dam/Ford/website-assets/latam/br/nameplate/2024/nova-territory/pdf/fbr-territory-2024-ficha-tecnica.pdf",
+        "locator": "PDF p.1: GARANTIA e edição08/2023; p.2: Territory2024 Titanium AT1.5EcoBoost.",
+        "revision": "fbr-territory-2024-ficha-tecnica-08-2023; edição Ford08/2023; modelo brasileiroMY2024",
+        "verification": {
+          "status": "verified",
+          "documentCode": "fbr-territory-2024-ficha-tecnica-08-2023",
+          "modelYear": 2024,
+          "reviewId": "warranty-20261009-19779",
+          "reviewedAt": "2026-10-09"
+        }
+      },
+      "sourceCollectionDate": "2026-10-09",
+      "ownerAttestations": {
+        "privateUse": "Prior owner instruction, accepted 08/10/2026; no unknown-to-private inference.",
+        "manualMaintenanceConditions": "Existing team/owner attestation retained; not newly independently audited.",
+        "termAndMileageMessageId": "Sentinel_01469beb96208191a0cff1a932beb8b7",
+        "publicationApprovalMessageId": "Sentinel_cbf0958dc5a881918c1819f25eee503f",
+        "expiryDeclarationMessageId": "Sentinel_c2d59486cd688191989f0b0db96214cf",
+        "expiryScopeConfirmationMessageId": "Sentinel_e284e59840c48191b58769ca4ee169b9",
+        "expiryBasis": "Owner confirmed December2026 for this unit; month precision only; no certificate or exact day supplied."
+      },
+      "officialSourceApplicability": {
+        "modelYear": 2024,
+        "selectorUrl": "https://www.ford.com.br/content/dam/Ford/website-assets/latam/br/nameplate/2024/nova-territory/pdf/fbr-territory-2024-ficha-tecnica.pdf",
+        "rule": "3years unlimitedkm basic vehicle coverage for MY2024 Titanium1.5automatic; Ford current warranty table corroborates model-year row."
+      },
+      "limitations": [
+        "Actual first-delivery date and exact expiry day remain unknown.",
+        "Display year is the already approved manufacture-plus-term estimate with its existing footnote.",
+        "Basic vehicle scope only; battery, wear, assistance and extensions are not granted by this review.",
+        "Exact MY2024 transfer and inception clauses were not independently recovered; do not claim individual transfer eligibility or a restart at resale."
+      ],
+      "previousRecord": {
+        "recordId": "normalized-20261003-19779",
+        "status": "pending",
+        "reviewedAt": "2026-10-03",
+        "approvedFingerprint": "{\"recordId\":\"normalized-20261003-19779\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19779\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"FORD\",\"modelVersion\":\"TERRITORY TITANIUM TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":null,\"reviewedMileageKm\":31500,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19779-manual-1\",\"url\":\"https://www.ford.com.br/servico-ao-cliente/garantia/\",\"locator\":\"Página Garantia, seção Territory 2024.\",\"revision\":\"Página oficial, seção Territory 2024; herdado do task7\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2024,\"reviewId\":\"warranty-20261003-19779\",\"reviewedAt\":\"2026-10-03\"}}]}",
+        "vehicle": {
+          "vehicleId": "19779",
+          "brand": "FORD",
+          "modelVersion": "TERRITORY TITANIUM TURBO",
+          "manufactureYear": 2023,
+          "modelYear": 2024
+        },
+        "optionalId": 108,
+        "optionalConfirmed": true,
+        "conditionsConfirmed": true,
+        "scope": "basic-vehicle",
+        "termYears": 3,
+        "usage": "unknown",
+        "reviewedMileageKm": 31500,
+        "mileage": {
+          "kind": "unlimited"
+        },
+        "sources": [
+          {
+            "sourceId": "19779-manual-1",
+            "url": "https://www.ford.com.br/servico-ao-cliente/garantia/",
+            "locator": "Página Garantia, seção Territory 2024.",
+            "revision": "Página oficial, seção Territory 2024; herdado do task7",
+            "verification": {
+              "status": "pending",
+              "documentCode": "",
+              "modelYear": 2024,
+              "reviewId": "warranty-20261003-19779",
+              "reviewedAt": "2026-10-03"
+            }
+          }
+        ],
+        "unitBinding": {
+          "unitKey": "plate-sha256:df20aad6836198a350c5405d9471d7bb207b18c1204442bb2442564aca8dad79",
+          "engine": "1.5",
+          "transmission": "AUTOMATICO"
+        }
+      }
+    },
+    {
+      "vehicleId": "19854",
+      "recordId": "reviewed-v2-20261009-19854",
+      "approvedPublication": true,
+      "vehicle": {
+        "vehicleId": "19854",
+        "brand": "HONDA",
+        "modelVersion": "HRV ADVANCE TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2024
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:32165b322dcdcae306a552e25f09545fcecc6a3c2a36b5f3b0eb80190533dd30",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedMileageKm": 59000,
+      "termYears": 3,
+      "mileagePolicy": "unlimited",
+      "usage": "private",
+      "scope": "basic-vehicle",
+      "estimatedDisplayYear": 2027,
+      "confirmedExpiryMonth": null,
+      "confirmedExpiryDate": null,
+      "actualStartDate": null,
+      "sourceVerified": true,
+      "sourceDocumentCode": "ManualCompleto2GNAP2DiAP2T",
+      "source": {
+        "sourceId": "19854-official-my2024-20261009",
+        "url": "https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/qr_code/ManualCompleto2GNAP2DiAP2T/10_Garantia_2GN-1.html",
+        "locator": "Manual online ligado pelo seletor oficial Honda HR-V2024; Garantia / Termos de Garantia item1; introdução e itens1.1,2.4,3,4.",
+        "revision": "ManualCompleto2GNAP2DiAP2T; manual online vinculado oficialmente ao HR-V brasileiroMY2024; cláusula lida em09/10/2026",
+        "verification": {
+          "status": "verified",
+          "documentCode": "ManualCompleto2GNAP2DiAP2T",
+          "modelYear": 2024,
+          "reviewId": "warranty-20261009-19854",
+          "reviewedAt": "2026-10-09"
+        }
+      },
+      "sourceCollectionDate": "2026-10-09",
+      "ownerAttestations": {
+        "privateUse": "Prior owner instruction, accepted 08/10/2026; no unknown-to-private inference.",
+        "manualMaintenanceConditions": "Existing team/owner attestation retained; not newly independently audited.",
+        "termAndMileageMessageId": "Sentinel_01469beb96208191a0cff1a932beb8b7",
+        "publicationApprovalMessageId": "Sentinel_cbf0958dc5a881918c1819f25eee503f",
+        "bothHondaVersionsClarificationMessageId": "Sentinel_28ece28d77a48191876853693b8fb19e"
+      },
+      "officialSourceApplicability": {
+        "modelYear": 2024,
+        "selectorUrl": "https://www.honda.com.br/pos-venda/automoveis/automovel/honda-hr-v-2024",
+        "rule": "3years unlimitedkm private/normal use;1year unlimitedkm commercial; original delivery starts term and remaining balance transfers; authorized scheduled maintenance required."
+      },
+      "limitations": [
+        "Actual first-delivery date and exact expiry day remain unknown.",
+        "Display year is the already approved manufacture-plus-term estimate with its existing footnote.",
+        "Basic vehicle scope only; battery, wear, assistance and extensions are not granted by this review.",
+        "Honda MY2024 commercial use has1year rather than3; accepted private use applies individually. Current6year policy is not applied."
+      ],
+      "previousRecord": {
+        "recordId": "normalized-20261003-19854",
+        "status": "pending",
+        "reviewedAt": "2026-10-03",
+        "approvedFingerprint": "{\"recordId\":\"normalized-20261003-19854\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19854\",\"manufactureYear\":2024,\"modelYear\":2024,\"brand\":\"HONDA\",\"modelVersion\":\"HRV ADVANCE TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":null,\"reviewedMileageKm\":59000,\"mileage\":{\"kind\":\"unknown\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19854-manual-1\",\"url\":\"https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/2024-01/WEB%20%28PDF%29_New_HR-V_KM_OM_3P3M0M30_20231219.pdf\",\"locator\":\"Catálogo oficial HR-V >2024; PDF localizado mas conteúdo não extraído no review_honda_nissan.json\",\"revision\":\"Arquivo3P3M0M30_20231219, diretório2024-01; identificação do documento não equivale a cláusula lida\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2024,\"reviewId\":\"warranty-20261003-19854\",\"reviewedAt\":\"2026-10-03\"}},{\"sourceId\":\"19854-manual-2\",\"url\":\"https://www.honda.com.br/automoveis/hrv\",\"locator\":\"Seção Garantia de fábrica;3anos coexistindo com promoção6anos para fabricação2026\",\"revision\":\"Página atual sem edição históricaMY2024 comprovada\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2024,\"reviewId\":\"warranty-20261003-19854\",\"reviewedAt\":\"2026-10-03\"}}]}",
+        "vehicle": {
+          "vehicleId": "19854",
+          "brand": "HONDA",
+          "modelVersion": "HRV ADVANCE TURBO",
+          "manufactureYear": 2024,
+          "modelYear": 2024
+        },
+        "optionalId": 108,
+        "optionalConfirmed": true,
+        "conditionsConfirmed": true,
+        "scope": "basic-vehicle",
+        "termYears": 3,
+        "usage": "unknown",
+        "reviewedMileageKm": 59000,
+        "mileage": {
+          "kind": "unknown"
+        },
+        "sources": [
+          {
+            "sourceId": "19854-manual-1",
+            "url": "https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/2024-01/WEB%20%28PDF%29_New_HR-V_KM_OM_3P3M0M30_20231219.pdf",
+            "locator": "Catálogo oficial HR-V >2024; PDF localizado mas conteúdo não extraído no review_honda_nissan.json",
+            "revision": "Arquivo3P3M0M30_20231219, diretório2024-01; identificação do documento não equivale a cláusula lida",
+            "verification": {
+              "status": "pending",
+              "documentCode": "",
+              "modelYear": 2024,
+              "reviewId": "warranty-20261003-19854",
+              "reviewedAt": "2026-10-03"
+            }
+          },
+          {
+            "sourceId": "19854-manual-2",
+            "url": "https://www.honda.com.br/automoveis/hrv",
+            "locator": "Seção Garantia de fábrica;3anos coexistindo com promoção6anos para fabricação2026",
+            "revision": "Página atual sem edição históricaMY2024 comprovada",
+            "verification": {
+              "status": "pending",
+              "documentCode": "",
+              "modelYear": 2024,
+              "reviewId": "warranty-20261003-19854",
+              "reviewedAt": "2026-10-03"
+            }
+          }
+        ],
+        "unitBinding": {
+          "unitKey": "plate-sha256:32165b322dcdcae306a552e25f09545fcecc6a3c2a36b5f3b0eb80190533dd30",
+          "engine": "1.5",
+          "transmission": "AUTOMATICO"
+        }
+      }
+    },
+    {
+      "vehicleId": "19898",
+      "recordId": "reviewed-v2-20261009-19898",
+      "approvedPublication": true,
+      "vehicle": {
+        "vehicleId": "19898",
+        "brand": "HONDA",
+        "modelVersion": "HRV TOURING TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:c22dc577e58b7cd8b2bf38dfcbcfc74d27e7a2258200af04823667dcc84d3330",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedMileageKm": 58975,
+      "termYears": 3,
+      "mileagePolicy": "unlimited",
+      "usage": "private",
+      "scope": "basic-vehicle",
+      "estimatedDisplayYear": 2026,
+      "confirmedExpiryMonth": "2026-12",
+      "confirmedExpiryDate": null,
+      "actualStartDate": null,
+      "sourceVerified": true,
+      "sourceDocumentCode": "ManualCompleto2GNAP2DiAP2T",
+      "source": {
+        "sourceId": "19898-official-my2024-20261009",
+        "url": "https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/qr_code/ManualCompleto2GNAP2DiAP2T/10_Garantia_2GN-1.html",
+        "locator": "Manual online ligado pelo seletor oficial Honda HR-V2024; Garantia / Termos de Garantia item1; introdução e itens1.1,2.4,3,4.",
+        "revision": "ManualCompleto2GNAP2DiAP2T; manual online vinculado oficialmente ao HR-V brasileiroMY2024; cláusula lida em09/10/2026",
+        "verification": {
+          "status": "verified",
+          "documentCode": "ManualCompleto2GNAP2DiAP2T",
+          "modelYear": 2024,
+          "reviewId": "warranty-20261009-19898",
+          "reviewedAt": "2026-10-09"
+        }
+      },
+      "sourceCollectionDate": "2026-10-09",
+      "ownerAttestations": {
+        "privateUse": "Prior owner instruction, accepted 08/10/2026; no unknown-to-private inference.",
+        "manualMaintenanceConditions": "Existing team/owner attestation retained; not newly independently audited.",
+        "termAndMileageMessageId": "Sentinel_01469beb96208191a0cff1a932beb8b7",
+        "publicationApprovalMessageId": "Sentinel_cbf0958dc5a881918c1819f25eee503f",
+        "bothHondaVersionsClarificationMessageId": "Sentinel_28ece28d77a48191876853693b8fb19e",
+        "expiryDeclarationMessageId": "Sentinel_c2d59486cd688191989f0b0db96214cf",
+        "expiryScopeConfirmationMessageId": "Sentinel_e284e59840c48191b58769ca4ee169b9",
+        "expiryBasis": "Owner confirmed December2026 for this unit; month precision only; no certificate or exact day supplied."
+      },
+      "officialSourceApplicability": {
+        "modelYear": 2024,
+        "selectorUrl": "https://www.honda.com.br/pos-venda/automoveis/automovel/honda-hr-v-2024",
+        "rule": "3years unlimitedkm private/normal use;1year unlimitedkm commercial; original delivery starts term and remaining balance transfers; authorized scheduled maintenance required."
+      },
+      "limitations": [
+        "Actual first-delivery date and exact expiry day remain unknown.",
+        "Display year is the already approved manufacture-plus-term estimate with its existing footnote.",
+        "Basic vehicle scope only; battery, wear, assistance and extensions are not granted by this review.",
+        "Honda MY2024 commercial use has1year rather than3; accepted private use applies individually. Current6year policy is not applied."
+      ],
+      "previousRecord": {
+        "recordId": "normalized-20261003-19898",
+        "status": "pending",
+        "reviewedAt": "2026-10-03",
+        "approvedFingerprint": "{\"recordId\":\"normalized-20261003-19898\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19898\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"HONDA\",\"modelVersion\":\"HRV TOURING TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":null,\"reviewedMileageKm\":58975,\"mileage\":{\"kind\":\"unknown\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19898-manual-1\",\"url\":\"https://www.honda.com.br/automoveis/hrv\",\"locator\":\"Página HR-V: cláusula legado de 3 anos, comparada à página de 6 anos para fabricação 2026+. O artefato não contém revisão histórica formal do termo MY2024.\",\"revision\":\"Revisão histórica MY2024 não preservada; pendente\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2024,\"reviewId\":\"warranty-20261003-19898\",\"reviewedAt\":\"2026-10-03\"}}]}",
+        "vehicle": {
+          "vehicleId": "19898",
+          "brand": "HONDA",
+          "modelVersion": "HRV TOURING TURBO",
+          "manufactureYear": 2023,
+          "modelYear": 2024
+        },
+        "optionalId": 108,
+        "optionalConfirmed": true,
+        "conditionsConfirmed": true,
+        "scope": "basic-vehicle",
+        "termYears": 3,
+        "usage": "unknown",
+        "reviewedMileageKm": 58975,
+        "mileage": {
+          "kind": "unknown"
+        },
+        "sources": [
+          {
+            "sourceId": "19898-manual-1",
+            "url": "https://www.honda.com.br/automoveis/hrv",
+            "locator": "Página HR-V: cláusula legado de 3 anos, comparada à página de 6 anos para fabricação 2026+. O artefato não contém revisão histórica formal do termo MY2024.",
+            "revision": "Revisão histórica MY2024 não preservada; pendente",
+            "verification": {
+              "status": "pending",
+              "documentCode": "",
+              "modelYear": 2024,
+              "reviewId": "warranty-20261003-19898",
+              "reviewedAt": "2026-10-03"
+            }
+          }
+        ],
+        "unitBinding": {
+          "unitKey": "plate-sha256:c22dc577e58b7cd8b2bf38dfcbcfc74d27e7a2258200af04823667dcc84d3330",
+          "engine": "1.5",
+          "transmission": "AUTOMATICO"
+        }
+      }
+    }
+  ],
+  "preservedPendingVehicleIds": [
+    "19866",
+    "20018"
+  ],
+  "displayFootnote": "*Estimativa pela fabricação e documentação oficial da montadora. Validade, cobertura e km conforme manual do modelo/ano.",
+  "limits": [
+    "Publication approval and owner attestations do not constitute independent manufacturer certification of each unit.",
+    "No first-delivery date, exact expiry day, new warranty period on resale, or unrestricted component coverage is inferred.",
+    "No ERP, optional108, feed, price, equipment, contact, or automation change is part of this release."
+  ]
+}

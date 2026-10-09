@@ -66,6 +66,25 @@ const kicksAudit = read(
     };
   };
 };
+const monthAudit = read("../../docs/audits/factory-warranty-month-precision-2026-10-09.json") as {
+  schemaVersion: number;
+  reviewedAt: string;
+  previousSourceCommit: string;
+  approvedVehicleIds: string[];
+  records: Array<{
+    vehicleId: string;
+    recordId: string;
+    approvedPublication: boolean;
+    termYears: number;
+    mileagePolicy: string;
+    usage: string;
+    confirmedExpiryMonth: string | null;
+    sourceVerified: boolean;
+    sourceDocumentCode: string;
+    ownerAttestations: unknown;
+    limitations: unknown;
+  }>;
+};
 const TODAY = migration.observedAt.slice(0, 10);
 const OLD_APPROVED = baseline.matrix.records.filter(
   (record) => record.status === "approved",
@@ -80,6 +99,7 @@ const EXPECTED_BASIC = [
   "20075",
 ];
 const EXPECTED_POWERTRAIN = ["20029", "20041", "20066"];
+const MONTH_RELEASE_IDS = ["19779", "19854", "19898"];
 const oldRecord = (id: string) =>
   baseline.matrix.records.find((record) => record.vehicle.vehicleId === id)!;
 const currentRecord = (id: string) =>
@@ -127,7 +147,7 @@ test("migration baseline is the immutable release captured from c76f883", () => 
 });
 
 for (const prior of baseline.matrix.records.filter(
-  (record) => record.vehicle.vehicleId !== "20019",
+  (record) => record.vehicle.vehicleId !== "20019" && !MONTH_RELEASE_IDS.includes(record.vehicle.vehicleId),
 )) {
   const id = prior.vehicle.vehicleId;
   test(`migration preserves every prior coverage, source, condition and decision for ${id}`, () => {
@@ -376,10 +396,88 @@ test("Kicks 20019 has a separate audited approval while its original pending dec
   );
   assert.equal(
     current.records.filter((record) => record.status === "approved").length,
-    11,
+    14,
   );
   assert.equal(OLD_APPROVED.length, 10);
 });
+
+test("only the three authorized additional units leave pending; Compass stays pending", () => {
+  assert.deepEqual(
+    current.records.filter((record) => record.status === "pending").map((record) => record.vehicle.vehicleId).sort(),
+    ["19866", "20018"],
+  );
+  const compass = currentRecord("19866");
+  assert.deepEqual(beforeBinding(compass), oldRecord("19866"));
+  assert.equal(anyCoverage(observed("19866")), undefined);
+  for (const id of MONTH_RELEASE_IDS) {
+    assert.equal(oldRecord(id).status, "pending", id);
+    const record = currentRecord(id);
+    assert.equal(record.status, "approved", id);
+    assert.equal(record.scope, "basic-vehicle", id);
+    assert.equal(record.termYears, 3, id);
+    assert.equal(record.usage, "private", id);
+    assert.deepEqual(record.mileage, { kind: "unlimited" }, id);
+    assert.ok(record.sources.every((source) => source.verification.status === "verified" && source.verification.modelYear === 2024), id);
+    assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record), id);
+    assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false, id);
+  }
+});
+
+test("the three approvals persist the reviewed source, owner response and explicit publication authority", () => {
+  assert.equal(monthAudit.schemaVersion, 1);
+  assert.equal(monthAudit.reviewedAt, TODAY);
+  assert.equal(monthAudit.previousSourceCommit, "45829134b5a57f8d3ff2d92a2a8bf34b0f748bd9");
+  assert.deepEqual(monthAudit.approvedVehicleIds.slice().sort(), MONTH_RELEASE_IDS);
+  assert.ok(JSON.stringify(monthAudit).includes("Sentinel_cbf0958dc5a881918c1819f25eee503f"));
+  for (const id of MONTH_RELEASE_IDS) {
+    const evidence = monthAudit.records.find((entry) => entry.vehicleId === id);
+    assert.ok(evidence, id);
+    const record = currentRecord(id);
+    assert.equal(evidence.recordId, record.recordId);
+    assert.equal(evidence.approvedPublication, true);
+    assert.equal(evidence.sourceVerified, true);
+    assert.equal(evidence.termYears, record.termYears);
+    assert.equal(evidence.usage, record.usage);
+    assert.equal(evidence.mileagePolicy, record.mileage.kind);
+    assert.equal(evidence.confirmedExpiryMonth, record.confirmedExpiryMonth ?? null);
+    assert.ok(record.sources.some((source) => source.verification.documentCode === evidence.sourceDocumentCode));
+    assert.ok(evidence.ownerAttestations);
+    if (id !== "19854") {
+      const reply = JSON.stringify(evidence.ownerAttestations);
+      assert.ok(reply.includes("Sentinel_c2d59486cd688191989f0b0db96214cf"));
+      assert.ok(reply.includes("Sentinel_e284e59840c48191b58769ca4ee169b9"));
+    }
+  }
+});
+
+for (const [id, year] of [["19779", 2026], ["19898", 2026], ["19854", 2027]] as const) {
+  test(`approved unit ${id} resolves its authorized year without invented original dates`, () => {
+    const record = currentRecord(id);
+    const vehicle = observed(id);
+    assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, TODAY).status, "eligible");
+    assert.equal(resolveFactoryWarranty(vehicle, current, TODAY)?.estimatedEndYear, year);
+    assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, TODAY), undefined);
+    assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, TODAY), undefined);
+    assert.equal(record.confirmedExpiryDate, undefined);
+    assert.equal(Object.hasOwn(record, "actualStartDate"), false);
+    if (year === 2026) {
+      assert.equal(record.confirmedExpiryMonth, "2026-12");
+      assert.equal(resolveFactoryWarranty(vehicle, current, "2026-11-30")?.estimatedEndYear, 2026);
+      assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, "2026-12-01").reason, "confirmed-expiry-day-required");
+      assert.equal(resolveFactoryWarranty(vehicle, current, "2026-12-01"), undefined);
+      assert.equal(resolveFactoryWarranty(vehicle, current, "2027-01-01"), undefined);
+    } else {
+      assert.equal(record.confirmedExpiryMonth, undefined);
+      assert.equal(resolveFactoryWarranty(vehicle, current, "2027-01-01"), undefined);
+    }
+    for (const patch of [
+      { unitKey: keyFor(`other-${id}`) }, { unitKey: undefined },
+      { motor: "other-engine" }, { cambio: "MANUAL" },
+      { modelo: "Different model" }, { year: 2025 }, { anoFabricacao: undefined },
+      { diferenciais: [] }, { km: record.reviewedMileageKm - 1 }, { km: NaN }, { price: 0 },
+    ]) assert.equal(anyCoverage({ ...vehicle, ...patch }), undefined, `${id} ${JSON.stringify(patch)}`);
+  });
+}
 
 test("Kicks 20019 approval binds the verified exact XML/API unit correspondence and Brazilian MY2026 manual", () => {
   const reviewed = kicksAudit.identityCorrespondence;
