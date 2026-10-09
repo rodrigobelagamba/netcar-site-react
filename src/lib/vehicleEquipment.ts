@@ -1,6 +1,7 @@
 import catalogData from "../data/vehicle-equipment-catalog.json";
 import evidenceData from "../data/vehicle-equipment-evidence.json";
 import confirmationData from "../data/vehicle-equipment-confirmations.json";
+import { vehiclePhysicalIdentityKey } from "./vehiclePhysicalIdentity";
 
 export interface EquipmentOptional {
   tag?: string | null;
@@ -15,6 +16,12 @@ export interface EquipmentVehicle {
   name?: string;
   year?: string | number;
   anoFabricacao?: string | number;
+  /** Only populate when actually supplied; a missing feed market stays unknown. */
+  market?: string;
+  /** The existing source identifier is hashed for matching, never returned. */
+  placa?: string;
+  /** Sanitized callers may carry the computed key instead of the identifier. */
+  physicalIdentityKey?: string | null;
   cambio?: string;
   motor?: string;
   lugares?: string | number;
@@ -92,18 +99,35 @@ export const equipmentEvidenceRegistry: readonly EquipmentEvidence[] =
   evidenceData.records as EquipmentEvidence[];
 
 export interface UnitEquipmentConfirmation {
+  /** The existing reviewed records remain legacy; every new review emits v2. */
+  schemaVersion?: 2;
   id: string;
   approved: boolean;
   source: string;
   confirmedAt: string;
   claim: string;
-  match: EquipmentEvidence["match"] & { vehicleId: string };
+  match: EquipmentEvidence["match"] & {
+    vehicleId: string;
+    manufactureYear?: number;
+    market?: "BR";
+    physicalIdentityKey?: string;
+  };
+  marketSource?: "responsible-confirmation";
+  reviewedDefinitions?: ReviewedUnitEquipmentDefinition[];
   presentTags: string[];
   absentTags: string[];
 }
 
+/** A reviewed extension belongs to one confirmation, never the global catalog. */
+export interface ReviewedUnitEquipmentDefinition extends EquipmentDefinition {
+  reviewedAt: string;
+  reviewNote: string;
+  /** Exact synonyms reviewed together; no fuzzy or family-level matching. */
+  aliases?: string[];
+}
+
 export const unitEquipmentConfirmations: readonly UnitEquipmentConfirmation[] =
-  confirmationData.records;
+  confirmationData.records as UnitEquipmentConfirmation[];
 
 export function isApprovedUnitEquipmentConfirmation(
   value: unknown,
@@ -111,6 +135,7 @@ export function isApprovedUnitEquipmentConfirmation(
   if (!value || typeof value !== "object") return false;
   const record = value as Partial<UnitEquipmentConfirmation>;
   if (
+    (record.schemaVersion !== undefined && record.schemaVersion !== 2) ||
     record.approved !== true ||
     record.source !== "responsible-confirmation" ||
     typeof record.id !== "string" ||
@@ -140,24 +165,64 @@ export function isApprovedUnitEquipmentConfirmation(
     )
   )
     return false;
+  if (record.schemaVersion === 2) {
+    if (
+      !Number.isInteger(match.manufactureYear) ||
+      Number(match.manufactureYear) < 1900 ||
+      Number(match.manufactureYear) > 2100 ||
+      match.market !== "BR" ||
+      typeof match.physicalIdentityKey !== "string" ||
+      !/^[a-f0-9]{64}$/.test(match.physicalIdentityKey) ||
+      record.marketSource !== "responsible-confirmation"
+    )
+      return false;
+  } else if (
+    match.manufactureYear !== undefined ||
+    match.market !== undefined ||
+    match.physicalIdentityKey !== undefined ||
+    record.marketSource !== undefined ||
+    record.reviewedDefinitions !== undefined
+  )
+    return false;
+  if (record.reviewedDefinitions !== undefined) {
+    if (
+      !Array.isArray(record.reviewedDefinitions) ||
+      record.reviewedDefinitions.length > 50 ||
+      !record.reviewedDefinitions.every(isReviewedUnitEquipmentDefinition)
+    )
+      return false;
+    const ids = new Set<string>();
+    const labels = new Set<string>();
+    for (const definition of record.reviewedDefinitions) {
+      if (ids.has(definition.id)) return false;
+      ids.add(definition.id);
+      const keys = new Set(unitDefinitionKeys(definition));
+      if ([...keys].some((key) => labels.has(key))) return false;
+      for (const key of keys) labels.add(key);
+    }
+  }
+  const definitionForTag = (tag: string) =>
+    definitionForUnitEquipmentTag(record as UnitEquipmentConfirmation, tag);
   if (
     ![record.presentTags, record.absentTags].every(
       (tags) =>
         Array.isArray(tags) &&
-        tags.every(
-          (tag) => typeof tag === "string" && !!definitionForEquipmentTag(tag),
-        ),
+        tags.every((tag) => typeof tag === "string" && !!definitionForTag(tag)),
     )
   )
     return false;
   const present = record.presentTags!;
   const absent = record.absentTags!;
-  const absentIds = new Set(
-    absent.map((tag) => definitionForEquipmentTag(tag)!.id),
-  );
+  const absentIds = new Set(absent.map((tag) => definitionForTag(tag)!.id));
   return (
     present.length + absent.length > 0 &&
-    !present.some((tag) => absentIds.has(definitionForEquipmentTag(tag)!.id))
+    !present.some((tag) => absentIds.has(definitionForTag(tag)!.id)) &&
+    // Unused definitions cannot quietly introduce aliases into inventory rows.
+    (record.reviewedDefinitions || []).every((definition) =>
+      [...present, ...absent].some(
+        (tag) => definitionForTag(tag)?.id === definition.id,
+      ),
+    )
   );
 }
 
@@ -446,7 +511,7 @@ function definitionForDescription(
   );
 }
 
-function definitionForEquipmentTag(
+export function definitionForEquipmentTag(
   tag: string,
 ): EquipmentDefinition | undefined {
   return (
@@ -456,8 +521,108 @@ function definitionForEquipmentTag(
   );
 }
 
+function unitDefinitionKeys(
+  definition: ReviewedUnitEquipmentDefinition,
+): string[] {
+  return [
+    definition.tag,
+    definition.sourceDescription,
+    definition.description,
+    ...(definition.aliases || []),
+  ].map(normalizeEquipmentTag);
+}
+
+export function isReviewedUnitEquipmentDefinition(
+  value: unknown,
+): value is ReviewedUnitEquipmentDefinition {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const definition = value as Partial<ReviewedUnitEquipmentDefinition>;
+  const allowed = [
+    "id",
+    "tag",
+    "sourceDescription",
+    "description",
+    "priority",
+    "category",
+    "benefit",
+    "reviewedAt",
+    "reviewNote",
+    "aliases",
+  ];
+  const text = (input: unknown, max: number) =>
+    typeof input === "string" &&
+    input.trim().length > 0 &&
+    input.length <= max &&
+    ![...input].some(
+      (character) =>
+        character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127,
+    );
+  if (
+    Object.keys(value).some((key) => !allowed.includes(key)) ||
+    !text(definition.id, 100) ||
+    !/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(definition.id!) ||
+    !text(definition.tag, 100) ||
+    !/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/.test(definition.tag!) ||
+    !text(definition.sourceDescription, 300) ||
+    !text(definition.description, 300) ||
+    !text(definition.reviewNote, 2000) ||
+    !Number.isInteger(definition.priority) ||
+    Number(definition.priority) < 0 ||
+    Number(definition.priority) > 1000 ||
+    ![...equipmentCatalog, ...additionalDefinitions].some(
+      (item) => item.category === definition.category,
+    ) ||
+    (definition.benefit !== undefined && !text(definition.benefit, 500)) ||
+    typeof definition.reviewedAt !== "string" ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(definition.reviewedAt)
+  )
+    return false;
+  const date = new Date(`${definition.reviewedAt}T00:00:00Z`);
+  if (
+    !Number.isFinite(date.getTime()) ||
+    date.toISOString().slice(0, 10) !== definition.reviewedAt
+  )
+    return false;
+  if (
+    definition.aliases !== undefined &&
+    (!Array.isArray(definition.aliases) ||
+      definition.aliases.length > 20 ||
+      !definition.aliases.every((alias) => text(alias, 300)))
+  )
+    return false;
+  // Existing identities and exact known synonyms must retain their semantics.
+  if (
+    /^(?:other-|airbags?-)/.test(definition.id!) ||
+    [...equipmentCatalog, ...additionalDefinitions].some(
+      (item) => item.id === definition.id,
+    ) ||
+    unitDefinitionKeys(definition as ReviewedUnitEquipmentDefinition).some(
+      (key) =>
+        !key ||
+        !!definitionForEquipmentTag(key) ||
+        /^(?:sem_(?!fio(?:_|$))|nao_|ausencia_de_)/.test(key),
+    )
+  )
+    return false;
+  return true;
+}
+
+/** Call only after validating the containing record (or the supplied definition). */
+export function definitionForUnitEquipmentTag(
+  record: Pick<UnitEquipmentConfirmation, "reviewedDefinitions">,
+  tag: string,
+): EquipmentDefinition | undefined {
+  return (
+    definitionForEquipmentTag(tag) ||
+    record.reviewedDefinitions?.find((definition) =>
+      unitDefinitionKeys(definition).includes(normalizeEquipmentTag(tag)),
+    )
+  );
+}
+
 function resolveOptional(
   optional: string | EquipmentOptional,
+  unitDefinitions: ReadonlyMap<string, EquipmentDefinition> = new Map(),
 ): EquipmentItem | undefined {
   const rawTag = typeof optional === "string" ? optional : optional.tag || "";
   const explicitDescription =
@@ -468,10 +633,12 @@ function resolveOptional(
   // A description is stronger evidence than an opaque/legacy tag. In particular,
   // freios_abs_com_ebd actually means ABS in the supplier's current taxonomy.
   const definition = explicitDescription
-    ? definitionForDescription(explicitDescription)
+    ? definitionForDescription(explicitDescription) ||
+      unitDefinitions.get(normalizeEquipmentTag(explicitDescription))
     : equipmentByTag.get(normalizedTag) ||
       additionalByTag.get(normalizedTag) ||
-      definitionForDescription(rawTag);
+      definitionForDescription(rawTag) ||
+      unitDefinitions.get(normalizedTag);
   const description =
     definition?.description ||
     explicitDescription ||
@@ -506,6 +673,54 @@ export function resolveVehicleEquipment(
   items: EquipmentItem[];
   suppressed: EquipmentSuppression[];
 } {
+  const suppliedPhysicalKey =
+    typeof vehicle.physicalIdentityKey === "string" &&
+    /^[a-f0-9]{64}$/.test(vehicle.physicalIdentityKey)
+      ? vehicle.physicalIdentityKey
+      : null;
+  const sourcePhysicalKey =
+    vehicle.placa !== undefined && vehicle.placa !== null
+      ? vehiclePhysicalIdentityKey(vehicle.id, vehicle.placa)
+      : suppliedPhysicalKey;
+  // A present-but-invalid identifier or a contradictory supplied key cannot use
+  // a sanitized fallback to resurrect an earlier unit's confirmation.
+  const physicalKey =
+    vehicle.physicalIdentityKey != null &&
+    vehicle.physicalIdentityKey !== sourcePhysicalKey
+      ? null
+      : sourcePhysicalKey;
+  const matchingConfirmations = unitConfirmations.filter(
+    (record): record is UnitEquipmentConfirmation =>
+      isApprovedUnitEquipmentConfirmation(record) &&
+      String(vehicle.id ?? "") === record.match.vehicleId &&
+      evidenceMatchesVehicle(record, vehicle) &&
+      (record.schemaVersion !== 2 ||
+        (physicalKey !== null &&
+          physicalKey === record.match.physicalIdentityKey &&
+          Number(vehicle.anoFabricacao) === record.match.manufactureYear &&
+          // The responsible person's explicit attestation supplies the market
+          // when the feed does not. Never replace a contradictory supplied market.
+          (!vehicle.market?.trim() ||
+            normalizeEquipmentTag(vehicle.market) === "br"))),
+  );
+  // A concurrent/manual duplicate must be consolidated before new presences
+  // apply. Keep prior legacy corrections and all explicit absences effective.
+  const duplicateReview =
+    matchingConfirmations.length > 1 &&
+    matchingConfirmations.some((record) => record.schemaVersion === 2);
+  const confirmations = duplicateReview
+    ? matchingConfirmations.filter((record) => record.schemaVersion !== 2)
+    : matchingConfirmations;
+  const unitDefinitions = new Map<string, EquipmentDefinition>();
+  for (const record of confirmations) {
+    for (const definition of record.reviewedDefinitions || []) {
+      for (const key of unitDefinitionKeys(definition))
+        unitDefinitions.set(key, definition);
+    }
+  }
+  const scopedDefinition = (tag: string) =>
+    definitionForEquipmentTag(tag) ||
+    unitDefinitions.get(normalizeEquipmentTag(tag));
   const items = new Map<string, EquipmentItem>();
   const suppressed: EquipmentSuppression[] = [];
   const absentTags = new Set<string>();
@@ -525,7 +740,7 @@ export function resolveVehicleEquipment(
     });
   };
   for (const optional of vehicle.opcionais || []) {
-    const item = resolveOptional(optional);
+    const item = resolveOptional(optional, unitDefinitions);
     if (!item) continue;
     const absence = normalizeEquipmentTag(item.description).match(
       /^(?:sem_(?!fio(?:_|$))|nao_(?:possui|tem|disponivel)_?|ausencia_de_)(.*)$/,
@@ -537,7 +752,7 @@ export function resolveVehicleEquipment(
       for (const tag of [item.tag, ...item.sourceTags, absence[1]]) {
         if (!tag) continue;
         absentTags.add(normalizeEquipmentTag(tag));
-        const definition = definitionForEquipmentTag(tag);
+        const definition = scopedDefinition(tag);
         if (definition) {
           absentIds.add(definition.id);
           absentTags.add(normalizeEquipmentTag(definition.tag));
@@ -635,17 +850,20 @@ export function resolveVehicleEquipment(
 
   // A responsible person's confirmation applies only to this exact stock unit,
   // never to all cars of a trim. It outranks stale inventory/manufacturer data.
-  const confirmations = unitConfirmations.filter(
-    (record): record is UnitEquipmentConfirmation =>
-      isApprovedUnitEquipmentConfirmation(record) &&
-      String(vehicle.id ?? "") === record.match.vehicleId &&
-      evidenceMatchesVehicle(record, vehicle),
-  );
   const unitAbsentIds = new Map<string, string[]>();
-  for (const record of confirmations) {
+  for (const record of matchingConfirmations) {
     for (const tag of record.absentTags) {
-      const id = definitionForEquipmentTag(tag)!.id;
-      unitAbsentIds.set(id, [...(unitAbsentIds.get(id) || []), record.id]);
+      const definition = definitionForUnitEquipmentTag(record, tag)!;
+      const ids = [definition.id];
+      if (duplicateReview) {
+        const custom = record.reviewedDefinitions?.find(
+          (entry) => entry.id === definition.id,
+        );
+        if (custom)
+          ids.push(...unitDefinitionKeys(custom).map((key) => `other-${key}`));
+      }
+      for (const id of ids)
+        unitAbsentIds.set(id, [...(unitAbsentIds.get(id) || []), record.id]);
     }
   }
   for (const [id, evidenceIds] of unitAbsentIds) {
@@ -662,7 +880,7 @@ export function resolveVehicleEquipment(
   }
   for (const record of confirmations) {
     for (const tag of record.presentTags) {
-      const definition = definitionForEquipmentTag(tag)!;
+      const definition = definitionForUnitEquipmentTag(record, tag)!;
       // If active confirmations ever conflict, do not advertise the item.
       if (unitAbsentIds.has(definition.id)) continue;
       const existing = items.get(definition.id);

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api } from './api.js';
+import EquipmentResearchPanel from './EquipmentResearchPanel.jsx';
 import {
   REVIEW_NOTE_LIMIT,
   REVIEW_SOURCE_LIMIT,
@@ -259,7 +260,7 @@ export default function EquipmentPanel({ token, onJob, busy = false, activeJob }
     try {
       const enabled = !schedule.enabled;
       await api.equipmentSchedule(token, enabled);
-      setNotice(enabled ? 'Agenda diária ativada para as 7h de Brasília na VPS.' : 'Agenda pausada. Você ainda pode executar a auditoria manualmente.');
+      setNotice(enabled ? 'Agenda diária ativada para as 9h de Brasília na VPS.' : 'Agenda pausada. Você ainda pode executar a auditoria manualmente.');
       await refresh({ silent: true });
     } catch (err) {
       setActionError(err.message);
@@ -278,13 +279,20 @@ export default function EquipmentPanel({ token, onJob, busy = false, activeJob }
     await refresh({ silent: true });
   }
 
+  async function decideResearch(decision) {
+    const result = await api.equipmentResearchDecision(token, decision);
+    onJob(result.job);
+    setNotice(`Decisão específica de #${decision.vehicleId} enviada para registro. Acompanhe o resultado no job.`);
+    await refresh({ silent: true });
+  }
+
   return (
     <section className="panel equipment-panel" aria-labelledby="equipment-title">
       <div className="equipment-header">
         <div>
           <p className="equipment-eyebrow">Conferência do estoque</p>
           <h2 id="equipment-title">Equipamentos</h2>
-          <p className="equipment-muted">Comparação do cadastro (API) com as regras de equipamentos. A pesquisa em fontes oficiais é manual.</p>
+          <p className="equipment-muted">Comparação XML/API, fontes oficiais registradas e revisão específica por unidade.</p>
         </div>
         <div className="actions">
           <button type="button" className="btn btn-ghost" disabled={loading} onClick={() => refresh()}>{loading ? 'Atualizando…' : 'Atualizar'}</button>
@@ -300,7 +308,7 @@ export default function EquipmentPanel({ token, onJob, busy = false, activeJob }
         <div className="equipment-schedule">
           <div>
             <div className="row">
-              <strong>Diário às 7h · Brasília</strong>
+              <strong>Diário às 9h · Brasília</strong>
               <span className={`pill ${schedule.enabled ? 'ok' : ''}`}>{schedule.enabled ? 'Agenda ativa' : 'Agenda pausada'}</span>
             </div>
             <p className="equipment-muted">Executado na VPS · America/Sao_Paulo</p>
@@ -321,6 +329,7 @@ export default function EquipmentPanel({ token, onJob, busy = false, activeJob }
         </div>
       ) : null}
       {job?.status === 'failed' ? <div className="error-banner" role="alert">A última auditoria falhou. {job.error || 'Consulte o log para ver os detalhes.'} {data?.report ? 'O último relatório concluído foi preservado.' : ''}</div> : null}
+      {data ? <EquipmentResearchPanel research={data.research} disabled={busy || jobActive || Boolean(action)} onDecision={decideResearch} /> : null}
       {!data ? <p className="equipment-empty" role="status">{loading ? 'Carregando agenda e relatório…' : 'O relatório não pôde ser carregado. Use “Atualizar” para tentar novamente.'}</p> : !data.report ? (
         <div className="equipment-empty">
           <strong>Nenhuma auditoria concluída ainda.</strong>

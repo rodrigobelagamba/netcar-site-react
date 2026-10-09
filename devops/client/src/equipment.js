@@ -71,3 +71,33 @@ export function equipmentReviewError(status, note, sourceUrl) {
   }
   return '';
 }
+
+export const EQUIPMENT_RESEARCH_STATES = {
+  pending: 'Descoberto / aguardando conferência',
+  presence_confirmed: 'Presença confirmada',
+  authorized: 'Inclusão autorizada',
+  confirmed: 'Confirmação legada — revisar texto',
+  published: 'Publicado e verificado',
+  excluded: 'Não incluir', rejected: 'Não confirmado', deferred: 'Preciso conferir',
+};
+
+export function equipmentResearchDecisionError(decision) {
+  if (!decision.note?.trim() || decision.note.length > 2000) return 'Registre uma nota de até 2.000 caracteres.';
+  if (decision.status === 'presence_confirmed' && !decision.present) return 'Confirme a presença nesta unidade.';
+  if (decision.status === 'authorized') {
+    if (!decision.present || !decision.marketConfirmed || !decision.authorizePublication) return 'Confirme presença, mercado brasileiro e autorização do texto nos campos separados.';
+    if (!decision.confirmationReference?.trim()) return 'Registre a referência da confirmação do responsável.';
+    if (!decision.approvedText?.name?.trim() || !decision.approvedText?.description?.trim()) return 'Informe nome e descrição exatos para publicação.';
+  }
+  if (decision.status !== 'authorized' && decision.authorizePublication) return 'Esta decisão não autoriza publicação.';
+  return '';
+}
+
+export function filterEquipmentResearch(revisions, query = '', status = 'all') {
+  const search = normalizeSearch(query.trim());
+  return revisions.filter((revision) => {
+    if (status !== 'all' && revision.status !== status) return false;
+    const { identity, item } = revision.candidate;
+    return !search || normalizeSearch([identity.id, identity.brand, identity.model, identity.modelYear, item.label].join(' ')).includes(search);
+  });
+}

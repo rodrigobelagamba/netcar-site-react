@@ -489,6 +489,7 @@ p.equipment-muted {
 .equipment-filters input,
 .equipment-filters select,
 .equipment-review input,
+.equipment-review select,
 .equipment-review textarea {
   min-width: 0;
   width: 100%;
@@ -499,6 +500,22 @@ p.equipment-muted {
   border-radius: 0;
   font-size: 0.9rem;
   font-weight: 400;
+}
+
+.equipment-research-queue {
+  margin: 1.5rem 0;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.equipment-research-queue .equipment-vehicle {
+  margin: 0.75rem 0;
+}
+
+.equipment-research-queue input[type="checkbox"] {
+  width: auto;
+  margin-right: 0.5rem;
 }
 
 .equipment-panel :is(button, a, input, select, textarea, summary):focus-visible {

@@ -1,3 +1,4 @@
+import { vehiclePhysicalIdentityKey } from "../src/lib/vehiclePhysicalIdentity";
 import { createHash, randomUUID } from "node:crypto";
 import {
   getDefaultAutoSelectFamilyAttemptTimeout,
@@ -274,8 +275,14 @@ export function parseStockResponse(payload: unknown): EquipmentAuditInput[] {
     const price = sourceNumber(vehicle.valor);
     if (price === null)
       throw new StockInputError("Situação comercial inválida na fonte.");
+    const market = vehicle.market == null || vehicle.market === ""
+      ? undefined : shortText(vehicle.market).toUpperCase();
+    if (market !== undefined && !/^[A-Z]{2}$/.test(market))
+      throw new StockInputError("Mercado explícito inválido na fonte.");
     const candidate: EquipmentAuditInput = {
       id,
+      ...(market !== undefined ? { market } : {}),
+      physicalIdentityKey: vehiclePhysicalIdentityKey(id, vehicle.placa),
       marca: shortText(vehicle.marca),
       modelo: shortText(vehicle.modelo),
       motor: shortText(vehicle.motor),

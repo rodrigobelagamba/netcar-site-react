@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   equipmentResearchUrl,
+  equipmentResearchDecisionError,
+  filterEquipmentResearch,
   equipmentReviewCounts,
   equipmentReviewError,
   filterEquipmentVehicles,
@@ -15,6 +17,29 @@ const vehicles = [
   { id: '200', brand: 'Honda', model: 'Civic', modelYear: '2023', engine: '2.0', reviewKey: 'current-b', change: 'changed', findings: [{ severity: 'high', code: 'unit-source-conflict' }] },
   { id: '300', brand: 'Fiat', model: 'Fastback', modelYear: '2025', engine: '1.0', reviewKey: 'current-c', change: 'unchanged', findings: [{ severity: 'medium', code: 'check-source' }] },
 ];
+
+test('research keeps presence, authorization and refusal as distinct per-item decisions', () => {
+  assert.equal(equipmentResearchDecisionError({ status: 'presence_confirmed', present: true, note: 'Conferido' }), '');
+  assert.match(equipmentResearchDecisionError({ status: 'presence_confirmed', present: true, authorizePublication: true, note: 'Conferido' }), /não autoriza/);
+  const authorization = { status: 'authorized', present: true, authorizePublication: true, marketConfirmed: true,
+    note: 'Aprovado este texto', confirmationReference: 'Responsável', approvedText: { name: 'Item exato', description: 'Item exato' } };
+  assert.equal(equipmentResearchDecisionError(authorization), '');
+  for (const patch of [{ present: false }, { authorizePublication: false }, { marketConfirmed: false },
+    { confirmationReference: '' }, { approvedText: { name: '', description: 'Outro' } }]) {
+    assert.ok(equipmentResearchDecisionError({ ...authorization, ...patch }));
+  }
+  assert.equal(equipmentResearchDecisionError({ status: 'excluded', present: true, note: 'Presente, mas não anunciar' }), '');
+});
+
+test('research filters individual decisions without turning a vehicle review into item approval', () => {
+  const rows = [
+    { key: 'a', status: 'pending', candidate: { identity: { id: '99', brand: 'Citroën', model: 'C4', modelYear: 2024 }, item: { label: 'Sensor de chuva' } } },
+    { key: 'b', status: 'presence_confirmed', candidate: { identity: { id: '99', brand: 'Citroën', model: 'C4', modelYear: 2024 }, item: { label: 'Teto solar' } } },
+  ];
+  assert.deepEqual(filterEquipmentResearch(rows, 'citroen', 'pending').map((row) => row.key), ['a']);
+  assert.deepEqual(filterEquipmentResearch(rows, 'teto', 'all').map((row) => row.key), ['b']);
+  assert.deepEqual(filterEquipmentResearch(rows, '', 'authorized'), []);
+});
 
 test('only reviews of the current report signature count as reviewed', () => {
   const reviews = { 'previous-a': { status: 'reviewed' }, 'current-b': { status: 'reviewed' }, 'current-c': { status: 'pending' } };

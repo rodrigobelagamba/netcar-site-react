@@ -8,12 +8,13 @@ import cron from 'node-cron';
 import { config } from './config.js';
 import { enqueueJob, findActiveJob, getJob } from './runner.js';
 
-export const EQUIPMENT_CRON = '0 7 * * *';
+export const EQUIPMENT_CRON = '0 9 * * *';
 export const EQUIPMENT_TIMEZONE = 'America/Sao_Paulo';
 export const MAX_HISTORICAL_REVIEWS = 1000;
 export const MAX_REVIEW_STATE_BYTES = 8 * 1024 * 1024;
 const MAX_STATE_FILE_BYTES = 10 * 1024 * 1024;
 const JOB_KIND = 'equipment:audit';
+const REVIEW_JOB_KIND = 'equipment:review';
 const HASH = /^[a-f0-9]{64}$/;
 const ACTIVE = new Set(['queued', 'running']);
 
@@ -219,12 +220,41 @@ export function createEquipmentService({
         .filter((vehicle) => Object.hasOwn(saved, vehicle.reviewKey))
         .map((vehicle) => [vehicle.reviewKey, saved[vehicle.reviewKey]]));
     } catch (error) { schedule.error = error.message; }
-    return { schedule, report, reviews };
+    let discovery = null;
+    let researchReviews = [];
+    let researchError = null;
+    try {
+      discovery = readJson('research-discovery.json', null);
+      if (discovery !== null && (discovery.schemaVersion !== 1 || !Number.isFinite(Date.parse(discovery.observedAt)) || !Array.isArray(discovery.vehicles) || !discovery.counts || !HASH.test(discovery.snapshotSha256)))
+        throw new EquipmentError(503, 'Relatório de pesquisa inválido. Preserve o arquivo para investigação.');
+      const ledger = readResearchLedger();
+      researchReviews = ledger.revisions.filter((revision) => revision.active || revision.publication).map((revision) => ({
+        key: revision.key, candidate: revision.candidate, status: revision.status, active: revision.active,
+        contextBlockers: revision.contextBlockers, askedAt: revision.askedAt, answeredAt: revision.answeredAt,
+        decision: revision.decision, publication: revision.publication,
+        invalidatedAt: revision.invalidatedAt, invalidationReason: revision.invalidationReason,
+      }));
+    } catch (error) { researchError = error.message; discovery = null; }
+    return { schedule, report, reviews, research: { discovery, revisions: researchReviews, error: researchError } };
+  }
+
+  function readResearchLedger() {
+    const ledger = readJson('research-review.json', { schemaVersion: 1, revisions: [], events: [] });
+    if (ledger?.schemaVersion !== 1 || !Array.isArray(ledger.revisions) || ledger.revisions.length > 10000 ||
+      !ledger.revisions.every((revision) => revision && HASH.test(revision.key) && typeof revision.active === 'boolean' &&
+        ['pending', 'presence_confirmed', 'authorized', 'published', 'excluded', 'confirmed', 'rejected', 'deferred'].includes(revision.status) &&
+        /^\d{1,20}$/.test(revision.candidate?.identity?.id) && typeof revision.candidate?.item?.key === 'string'))
+      throw new EquipmentError(503, 'Histórico de pesquisa inválido; preserve o arquivo para investigação.');
+    return ledger;
+  }
+
+  function activeEquipmentJob() {
+    return runner.findActiveJob(JOB_KIND) || runner.findActiveJob(REVIEW_JOB_KIND);
   }
 
   function run(reason = 'manual') {
     return withStateLock(() => {
-      const active = runner.findActiveJob(JOB_KIND);
+      const active = activeEquipmentJob();
       if (active) throw new EquipmentError(409, 'Já existe auditoria em execução ou na fila.', active);
       const attemptedAt = clock().toISOString();
       const state = { ...readScheduler(), lastAttempt: attemptedAt, lastJob: null, reason, error: null };
@@ -233,9 +263,9 @@ export function createEquipmentService({
       runtimeError = null;
       try {
         const job = runner.enqueueJob({
-          label: 'Auditoria de equipamentos',
+          label: 'Auditoria e descoberta de equipamentos',
           command: process.execPath,
-          args: ['--import', 'tsx', 'scripts/audit-vehicle-equipment.ts', '--state-dir', stateDir],
+          args: ['scripts/run-equipment-daily.mjs', '--state-dir', stateDir, '--input', join(workspaceRoot, 'docs', 'equipment-research-library.json')],
           cwd: workspaceRoot,
           meta: { kind: JOB_KIND },
           onComplete: (completed) => {
@@ -244,7 +274,7 @@ export function createEquipmentService({
                 ...state,
                 lastJob: publicJobSummary(completed),
                 error: completed.status === 'failed'
-                  ? 'A última auditoria falhou. O relatório anterior foi preservado; consulte o log.' : null,
+                  ? 'A rotina falhou. Os últimos resultados válidos de cada etapa foram preservados; consulte o log e as datas.' : null,
               }));
             } catch {
               runtimeError = 'Não foi possível registrar o resultado da auditoria.';
@@ -265,7 +295,7 @@ export function createEquipmentService({
       if (!readSettings().enabled) return null;
       const state = readScheduler();
       const current = localAuditTime(clock());
-      if (current.hour < 7 || (state.lastAttempt && localAuditTime(new Date(state.lastAttempt)).day === current.day))
+      if (current.hour < 9 || (state.lastAttempt && localAuditTime(new Date(state.lastAttempt)).day === current.day))
         return null;
       return run('scheduled');
     } catch (error) {
@@ -315,6 +345,49 @@ export function createEquipmentService({
     });
   }
 
+  function decideResearch(input) {
+    const allowed = ['key', 'vehicleId', 'itemKey', 'status', 'note', 'present', 'authorizePublication', 'marketConfirmed',
+      'sourceIdentityConfirmed', 'confirmationReference', 'approvedText'];
+    const text = (value, limit) => typeof value === 'string' && value.trim() && value.length <= limit && !value.startsWith('--');
+    if (!input || Array.isArray(input) || Object.keys(input).some((key) => !allowed.includes(key)) ||
+      !HASH.test(input.key) || !/^\d{1,20}$/.test(input.vehicleId) || !/^[a-z0-9][a-z0-9_-]{0,149}$/.test(input.itemKey) ||
+      !['presence_confirmed', 'authorized', 'excluded', 'rejected', 'deferred'].includes(input.status) || !text(input.note, 2000) ||
+      ['present', 'authorizePublication', 'marketConfirmed', 'sourceIdentityConfirmed'].some((key) => input[key] !== undefined && typeof input[key] !== 'boolean'))
+      throw new EquipmentError(400, 'Informe unidade, item, decisão e nota específicos.');
+    if (input.confirmationReference !== undefined && !text(input.confirmationReference, 2000))
+      throw new EquipmentError(400, 'Referência da confirmação inválida.');
+    if (input.approvedText !== undefined && (!input.approvedText || Array.isArray(input.approvedText) ||
+      Object.keys(input.approvedText).some((key) => !['name', 'description'].includes(key)) ||
+      !text(input.approvedText.name, 400) || !text(input.approvedText.description, 2000)))
+      throw new EquipmentError(400, 'Informe o nome e a descrição exatos aprovados.');
+    if (input.status === 'authorized' && (!input.present || !input.authorizePublication || !input.marketConfirmed || !input.confirmationReference || !input.approvedText))
+      throw new EquipmentError(400, 'Autorizar inclusão exige presença, mercado brasileiro, referência e texto exato aprovados separadamente.');
+    if (input.status === 'presence_confirmed' && (!input.present || input.authorizePublication))
+      throw new EquipmentError(400, 'Confirmar presença não autoriza publicação.');
+    if (['excluded', 'rejected', 'deferred'].includes(input.status) && input.authorizePublication)
+      throw new EquipmentError(400, 'Esta decisão não pode autorizar publicação.');
+    return withStateLock(() => {
+      const active = activeEquipmentJob();
+      if (active) throw new EquipmentError(409, 'Uma rotina de equipamentos está em andamento. Aguarde antes de decidir.', active);
+      const revision = readResearchLedger().revisions.find((entry) => entry.key === input.key && entry.active &&
+        entry.candidate.identity.id === input.vehicleId && entry.candidate.item.key === input.itemKey);
+      if (!revision || revision.status === 'published' || revision.invalidatedAt)
+        throw new EquipmentError(409, 'A unidade ou a revisão mudou. Atualize o painel antes de decidir.');
+      const args = ['--import', 'tsx', 'scripts/review-vehicle-equipment.ts', 'decide', '--key', input.key,
+        '--vehicle-id', input.vehicleId, '--item-key', input.itemKey, '--status', input.status, '--note', input.note.trim(), '--state-dir', stateDir];
+      for (const [key, flag] of [['present', '--present'], ['authorizePublication', '--authorize-publication'],
+        ['marketConfirmed', '--confirm-market'], ['sourceIdentityConfirmed', '--confirm-source-identity']]) if (input[key]) args.push(flag);
+      if (input.confirmationReference) args.push('--confirmation-reference', input.confirmationReference.trim());
+      if (input.approvedText) args.push('--approved-name', input.approvedText.name.trim(), '--approved-description', input.approvedText.description.trim());
+      return runner.enqueueJob({ label: `Decisão de equipamento #${input.vehicleId}: ${input.itemKey}`, command: process.execPath,
+        args, cwd: workspaceRoot, meta: { kind: REVIEW_JOB_KIND },
+        // The 09:00 callback may have found this review in progress. Catch up
+        // once after it finishes; lastAttempt and the existing queue dedupe.
+        onComplete: () => { if (started) attemptScheduled(); },
+      });
+    });
+  }
+
   function start() {
     if (started) return;
     started = true;
@@ -353,7 +426,7 @@ export function createEquipmentService({
     started = false;
   }
 
-  return { getState, run, setSchedule, review, start, stop, attemptScheduled };
+  return { getState, run, setSchedule, review, decideResearch, start, stop, attemptScheduled };
 }
 
 export const equipmentService = createEquipmentService();

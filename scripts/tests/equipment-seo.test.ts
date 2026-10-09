@@ -27,6 +27,7 @@ import {
   isApprovedUnitEquipmentConfirmation,
 } from "../../src/lib/vehicleEquipment";
 import { mapVehicleOptional } from "../../src/catalog/lib/mapVehicleOptional";
+import { vehiclePhysicalIdentityKey } from "../../src/lib/vehiclePhysicalIdentity";
 
 const fixture = JSON.parse(
   readFileSync(
@@ -84,7 +85,7 @@ test("approved reviewed IDs survive an absent stock snapshot to block unsafe raw
     ),
   ].sort();
   const empty = createEquipmentManifest([]);
-  assert.equal(empty.schemaVersion, 2);
+  assert.equal(empty.schemaVersion, 3);
   assert.deepEqual(empty.confirmedVehicleIds, expected);
   assert.deepEqual(empty.confirmedVehicleIds, ["20050", "20051"]);
   assert.deepEqual(
@@ -150,6 +151,87 @@ test("fingerprints reject stale equipment, specs, identity and raw optional orde
     null,
   );
   assert.equal(equipmentFingerprint({ ...vehicle, opcionais: [[]] }), null);
+});
+
+test("SEO signatures bind the physical unit without exporting source identifiers", () => {
+  const original = { ...vehicles[0], placa: "ABC1D23" };
+  assert.equal(
+    equipmentFingerprint(original),
+    equipmentFingerprint({ ...original, placa: "abc-1d23" }),
+  );
+  assert.notEqual(
+    equipmentFingerprint(original),
+    equipmentFingerprint({ ...original, placa: "DEF4G56" }),
+  );
+  assert.notEqual(
+    equipmentFingerprint(original),
+    equipmentFingerprint({ ...original, placa: undefined }),
+  );
+  const serialized = JSON.stringify(createEquipmentManifest([original]));
+  assert.ok(!serialized.includes(original.placa));
+  assert.ok(
+    !serialized.includes(
+      vehiclePhysicalIdentityKey(original.id, original.placa)!,
+    ),
+  );
+});
+
+test("SEO v2 confirmations require the same physical unit after import", () => {
+  const vehicle = {
+    id: "99901",
+    marca: "TESTE",
+    modelo: "MODELO EXATO",
+    ano: 2024,
+    ano_fabricacao: 2023,
+    motor: "1.0",
+    cambio: "AUTOMATICO",
+    placa: "ABC1D23",
+    opcionais: [],
+    equipmentSourceComplete: true,
+  };
+  const record = {
+    schemaVersion: 2,
+    id: "synthetic-seo-99901",
+    approved: true,
+    source: "responsible-confirmation",
+    confirmedAt: "2026-10-09",
+    claim: "Confirmação sintética.",
+    marketSource: "responsible-confirmation",
+    match: {
+      vehicleId: "99901",
+      brand: "TESTE",
+      model: "MODELO EXATO",
+      modelYear: 2024,
+      manufactureYear: 2023,
+      engine: "1.0",
+      transmission: "AUTOMATICO",
+      market: "BR",
+      physicalIdentityKey: vehiclePhysicalIdentityKey(
+        vehicle.id,
+        vehicle.placa,
+      ),
+    },
+    presentTags: ["sensor_de_chuva"],
+    absentTags: [],
+  };
+  const manifest = (input: Record<string, unknown>) =>
+    createEquipmentManifest([input], "2026-10-09T15:00:00Z", [record]);
+  assert.deepEqual(manifest(vehicle).vehicles["99901"].descriptions, [
+    "Sensor de chuva",
+  ]);
+  assert.deepEqual(
+    manifest({ ...vehicle, placa: "abc-1d23" }).vehicles["99901"].descriptions,
+    ["Sensor de chuva"],
+  );
+  for (const placa of ["DEF4G56", "", "ABC****", undefined]) {
+    assert.deepEqual(
+      manifest({ ...vehicle, placa }).vehicles["99901"].descriptions,
+      [],
+    );
+    assert.deepEqual(manifest({ ...vehicle, placa }).confirmedVehicleIds, [
+      "99901",
+    ]);
+  }
 });
 
 test("the private stock projection only preserves allowed optional fields and proves completeness", () => {
@@ -327,6 +409,7 @@ test(
         marca: "Ação 😀",
         modelo: "A\u2028B\u2029C/e\u0301",
         motor: "1.0",
+        placa: "abc-1d23",
         opcionais: [
           "😀 /çã",
           {
@@ -461,6 +544,7 @@ test(
       for (const invalid of [
         "not JSON",
         JSON.stringify({ ...manifest, schemaVersion: 1 }),
+        JSON.stringify({ ...manifest, schemaVersion: 2 }),
         JSON.stringify({ ...manifest, confirmedVehicleIds: undefined }),
         JSON.stringify({ ...manifest, confirmedVehicleIds: [20050] }),
         JSON.stringify({ ...manifest, confirmedVehicleIds: ["invalid-id"] }),
@@ -470,6 +554,62 @@ test(
       }
       rmSync(manifestFile);
       assert.deepEqual(runPhp(raw), [[], [], []]);
+    });
+  },
+);
+
+test(
+  "PHP hashes physical identities exactly and rejects same-ID plate reuse",
+  {
+    skip:
+      !hasPhp &&
+      "PHP CLI is not installed; server runtime test remains required",
+  },
+  () => {
+    withDirectory((directory) => {
+      const reviewed = {
+        ...vehicles.find(
+          (vehicle: Record<string, unknown>) => String(vehicle.id) === "20050",
+        ),
+        placa: "ABC1D23",
+      };
+      const manifest = createEquipmentManifest([reviewed]);
+      const manifestFile = resolve(directory, "manifest.json");
+      writeFileSync(manifestFile, JSON.stringify(manifest));
+      const variants = [
+        "ABC1D23",
+        "abc-1d23",
+        " DEF4G56 ",
+        "",
+        null,
+        "ABC****",
+        "ſBC1D23",
+        "ABC\u00a01D23",
+      ];
+      const rows = variants.map((placa) => ({ ...reviewed, placa }));
+      const result = spawnSync(
+        "php",
+        [
+          "-r",
+          'require $argv[1]; $rows=json_decode(stream_get_contents(STDIN),true); echo json_encode(array_map(function($v) use ($argv) { return array("physical"=>netcarEquipmentPhysicalIdentityKey($v),"hash"=>netcarEquipmentFingerprint($v),"items"=>netcarEquipmentDescriptions($v,$argv[2])); },$rows));',
+          phpFile,
+          manifestFile,
+        ],
+        { input: JSON.stringify(rows), encoding: "utf8" },
+      );
+      assert.equal(result.status, 0, result.stderr);
+      const output = JSON.parse(result.stdout);
+      rows.forEach((vehicle, index) => {
+        assert.equal(
+          output[index].physical,
+          vehiclePhysicalIdentityKey(vehicle.id, vehicle.placa),
+        );
+        assert.equal(output[index].hash, equipmentFingerprint(vehicle));
+        assert.deepEqual(
+          output[index].items,
+          index < 2 ? manifest.vehicles[String(vehicle.id)].descriptions : [],
+        );
+      });
     });
   },
 );
