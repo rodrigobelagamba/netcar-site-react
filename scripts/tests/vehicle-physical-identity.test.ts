@@ -4,6 +4,7 @@ import { test } from "node:test";
 import { vehiclePhysicalIdentityKey } from "../../src/lib/vehiclePhysicalIdentity";
 import { parseStockResponse } from "../audit-vehicle-equipment";
 import { snapshotFromStock } from "../lib/equipmentReview";
+import { resolveVehicleEquipment } from "../../src/lib/vehicleEquipment";
 
 const plate = "ABC1D23"; // Synthetic, never a real inventory identifier.
 const expected = createHash("sha256").update("netcar-physical-unit-v1\0" + "99999\0" + plate).digest("hex");
@@ -44,4 +45,25 @@ test("an explicit foreign market survives the API adapter while a missing market
   const unknown = parseStockResponse(payload(vehicle));
   assert.equal(snapshotFromStock(unknown, "2026-10-09T12:00:00Z").vehicles[0].market, null);
   assert.throws(() => parseStockResponse(payload({ ...vehicle, market: "invalid-market" })), /Mercado explícito inválido/);
+});
+
+test("the audited API vehicle preserves fabrication year for a physically bound complement", () => {
+  const vehicle = { id: "99999", marca: "FIAT", modelo: "SYNTHETIC", ano: 2025, ano_fabricacao: 2024, motor: "1.0", cambio: "AUTOMATICO", valor: 1, opcionais: [], placa: plate };
+  const confirmation = {
+    id: "synthetic-audit-unit", schemaVersion: 2, approved: true,
+    source: "responsible-confirmation", marketSource: "responsible-confirmation",
+    confirmedAt: "2026-10-10", claim: "Synthetic explicit presence and publication approval.",
+    match: { vehicleId: "99999", physicalIdentityKey: expected, brand: "FIAT", model: "SYNTHETIC", modelYear: 2025, manufactureYear: 2024, engine: "1.0", transmission: "AUTOMATICO", market: "BR" },
+    presentTags: ["franagem_emergencia"], absentTags: [],
+  };
+  const resolved = (raw: Record<string, unknown>) => {
+    const [stock] = parseStockResponse({ success: true, total_results: 1, offset: 0, data: [raw] });
+    return resolveVehicleEquipment(stock, [], [confirmation]).items;
+  };
+  for (const year of [2024, "2024"]) {
+    assert.equal(resolved({ ...vehicle, ano_fabricacao: year }).find(item => item.id === "automatic-emergency-braking")?.source, "unit-confirmation");
+  }
+  for (const year of [undefined, null, "", 2023]) {
+    assert.equal(resolved({ ...vehicle, ano_fabricacao: year }).some(item => item.id === "automatic-emergency-braking"), false);
+  }
 });

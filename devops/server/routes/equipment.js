@@ -30,6 +30,18 @@ export function createEquipmentRouter(service = equipmentService) {
   router.post('/research/decisions', respond((req, res) => {
     res.status(202).json({ job: service.decideResearch(req.body) });
   }));
+  router.post('/research/prepare', respond((req, res) => {
+    res.status(202).json({ job: service.prepareResearch(req.body) });
+  }));
+  router.get('/research/proposal', respond((_req, res) => {
+    res.set('Cache-Control', 'no-store').json({ proposal: service.getResearchProposal() });
+  }));
+  router.post('/research/apply', respond((req, res) => {
+    res.status(202).json({ job: service.applyResearch(req.body) });
+  }));
+  router.post('/research/publication', respond((req, res) => {
+    res.status(202).json({ job: service.recordResearchPublication(req.body) });
+  }));
   return router;
 }
 

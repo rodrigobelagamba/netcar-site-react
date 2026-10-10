@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { once } from 'node:events';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -284,7 +285,8 @@ test('all equipment endpoints require Bearer authentication and validate writes'
     headers: { ...(authenticated ? { Authorization: 'Bearer local-test-token' } : {}), 'Content-Type': 'application/json' },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }),
   });
-  for (const [path, body] of [['', undefined], ['/run', {}], ['/schedule', { enabled: true }], ['/reviews', {}], ['/research/decisions', {}]]) {
+  for (const [path, body] of [['', undefined], ['/run', {}], ['/schedule', { enabled: true }], ['/reviews', {}], ['/research/decisions', {}],
+    ['/research/prepare', {}], ['/research/proposal', undefined], ['/research/apply', {}], ['/research/publication', {}]]) {
     assert.equal((await request(path, body, false)).status, 401);
   }
   assert.equal(h.options.length, 0);
@@ -405,4 +407,352 @@ test('a review crossing 09:00 triggers exactly one scheduled catch-up after comp
   h.complete('job-2');
   assert.equal(h.service.attemptScheduled(), null);
   assert.equal(h.options.length, 2, 'only one daily audit may follow');
+});
+
+// These fixtures live only inside the temporary harness. The service should
+// enqueue the CLI, never alter the source registry or private ledger itself.
+function canonicalProposalValue(value) {
+  if (Array.isArray(value)) return value.map(canonicalProposalValue);
+  if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort()
+    .map((key) => [key, canonicalProposalValue(value[key])]));
+  return value;
+}
+
+function signResearchProposal(proposal) {
+  const contents = { ...proposal };
+  delete contents.proposalSha256;
+  return { ...contents, proposalSha256: createHash('sha256')
+    .update(JSON.stringify(canonicalProposalValue(contents))).digest('hex') };
+}
+
+function saveResearchOperation(h, { applied = false, status = 'authorized' } = {}) {
+  saveResearch(h);
+  const ledger = JSON.parse(readFileSync(join(h.stateDir, 'research-review.json'), 'utf8'));
+  const revision = ledger.revisions[0];
+  Object.assign(revision, {
+    status, stockFingerprint: 'c'.repeat(64), generation: 1,
+    firstSeenAt: '2026-09-28T11:00:00.000Z', lastSeenAt: '2026-09-28T11:30:00.000Z',
+    answeredAt: '2026-09-28T11:31:00.000Z',
+    decision: { note: 'Confirmação sintética desta unidade e deste item.', present: true,
+      authorizePublication: true, marketConfirmed: true, sourceIdentityConfirmed: false,
+      confirmationReference: 'chat:synthetic:20050:rain-sensor',
+      approvedText: { name: 'Sensor de chuva', description: 'Sensor de chuva' } },
+  });
+  const { id, ...match } = revision.candidate.identity;
+  Object.assign(revision.candidate.evidence, { kind: 'exact-equipment', match });
+  const proposal = signResearchProposal({
+    schemaVersion: 1, proposalOnly: true,
+    generatedAt: '2026-09-28T11:32:00.000Z', snapshotObservedAt: '2026-09-28T11:30:00.000Z',
+    baseSha256: 'd'.repeat(64), decisionSha256: 'e'.repeat(64),
+    includedKeys: [KEY], blocked: [], limitations: ['Synthetic proposal for service regression tests.'],
+    reviewBindings: [{ key: KEY, identity: structuredClone(revision.candidate.identity),
+      stockFingerprint: revision.stockFingerprint, sourceIdentityConfirmed: false }],
+    confirmationDocument: { schemaVersion: 1, records: [{
+      schemaVersion: 2, id: 'synthetic-unit-20050', approved: true,
+      marketSource: 'responsible-confirmation', source: 'responsible-confirmation',
+      confirmedAt: '2026-09-28', claim: 'Synthetic regression record.',
+      match: { ...match, vehicleId: id, physicalIdentityKey: 'f'.repeat(64) },
+      presentTags: ['sensor_de_chuva'], absentTags: [],
+    }] },
+  });
+  if (applied) revision.application = { proposalSha256: proposal.proposalSha256,
+    beforeSha256: proposal.baseSha256, afterSha256: 'f'.repeat(64), appliedAt: '2026-09-28T11:33:00.000Z' };
+  const saveLedger = () => writeFileSync(join(h.stateDir, 'research-review.json'), JSON.stringify(ledger), { mode: 0o600 });
+  const saveProposal = (value = proposal) => writeFileSync(join(h.stateDir, 'research-proposal.json'), JSON.stringify(value), { mode: 0o600 });
+  saveLedger(); saveProposal();
+  return { ledger, revision, proposal, saveLedger, saveProposal };
+}
+
+function publicationInput(overrides = {}) {
+  return { key: KEY, vehicleId: '20050', itemKey: 'rain-sensor', commit: 'a'.repeat(40),
+    publicUrl: 'https://www.netcarmultimarcas.com.br/veiculo/20050',
+    evidenceReference: 'Synthetic DOM proof for unit 20050.',
+    reversalReference: 'Synthetic receipt identifies the exact item to revert.', ...overrides };
+}
+
+test('research prepare accepts only an empty object and enqueues the fixed CLI without changing files', (t) => {
+  const h = harness(t);
+  const fixture = saveResearchOperation(h);
+  const before = readFileSync(join(h.stateDir, 'research-review.json'), 'utf8');
+  for (const input of [undefined, null, [], 'prepare', { command: 'deploy:local' }, { stateDir: '/tmp/other' }, { stock: 'alternate.json' }]) {
+    assert.throws(() => h.service.prepareResearch(input), (error) => error.status === 400);
+  }
+  assert.equal(h.options.length, 0);
+  const job = h.service.prepareResearch({});
+  assert.equal(job.id, 'job-1');
+  assert.equal(h.options[0].command, process.execPath);
+  assert.equal(h.options[0].cwd, h.workspaceRoot);
+  assert.equal(h.options[0].meta.kind, 'equipment:review');
+  assert.deepEqual(h.options[0].args, ['--import', 'tsx', 'scripts/review-vehicle-equipment.ts', 'prepare', '--state-dir', h.stateDir]);
+  assert.equal(readFileSync(join(h.stateDir, 'research-review.json'), 'utf8'), before);
+  assert.deepEqual(h.service.getResearchProposal(), fixture.proposal);
+});
+
+test('research proposal is read only after schema and canonical digest validation', (t) => {
+  const h = harness(t);
+  assert.throws(() => h.service.getResearchProposal(), (error) => error.status === 404);
+  const fixture = saveResearchOperation(h);
+  const reordered = Object.fromEntries(Object.entries(fixture.proposal).reverse());
+  reordered.reviewBindings[0].identity = Object.fromEntries(Object.entries(reordered.reviewBindings[0].identity).reverse());
+  fixture.saveProposal(reordered);
+  assert.deepEqual(h.service.getResearchProposal(), fixture.proposal, 'JSON key order does not change a canonical digest');
+
+  const invalid = [
+    { ...fixture.proposal, proposalSha256: NEW_KEY },
+    { ...fixture.proposal, confirmationDocument: { records: [] } },
+    signResearchProposal({ ...fixture.proposal, schemaVersion: 2 }),
+    signResearchProposal({ ...fixture.proposal, proposalOnly: false }),
+    signResearchProposal({ ...fixture.proposal, generatedAt: 'yesterday' }),
+    signResearchProposal({ ...fixture.proposal, snapshotObservedAt: '2026-09-28' }),
+    signResearchProposal({ ...fixture.proposal, baseSha256: 'd'.repeat(63) }),
+    signResearchProposal({ ...fixture.proposal, decisionSha256: 'E'.repeat(64) }),
+    signResearchProposal({ ...fixture.proposal, includedKeys: [KEY, KEY] }),
+    signResearchProposal({ ...fixture.proposal, includedKeys: ['invalid'] }),
+    signResearchProposal({ ...fixture.proposal, reviewBindings: [] }),
+    signResearchProposal({ ...fixture.proposal, reviewBindings: [fixture.proposal.reviewBindings[0], fixture.proposal.reviewBindings[0]] }),
+    signResearchProposal({ ...fixture.proposal, reviewBindings: [{ ...fixture.proposal.reviewBindings[0], key: NEW_KEY }] }),
+    signResearchProposal({ ...fixture.proposal, reviewBindings: [{ ...fixture.proposal.reviewBindings[0], identity: { id: 'not-a-unit' } }] }),
+    signResearchProposal({ ...fixture.proposal, reviewBindings: [{ ...fixture.proposal.reviewBindings[0], stockFingerprint: 'invalid' }] }),
+    signResearchProposal({ ...fixture.proposal, reviewBindings: [{ ...fixture.proposal.reviewBindings[0], sourceIdentityConfirmed: 'true' }] }),
+    signResearchProposal({ ...fixture.proposal, blocked: {} }),
+    signResearchProposal({ ...fixture.proposal, confirmationDocument: { records: {} } }),
+    signResearchProposal({ ...fixture.proposal, command: 'deploy:local' }),
+  ];
+  for (const [index, proposal] of invalid.entries()) {
+    fixture.saveProposal(proposal);
+    const original = readFileSync(join(h.stateDir, 'research-proposal.json'), 'utf8');
+    assert.throws(() => h.service.getResearchProposal(), (error) => error.status === 503, `invalid proposal ${index}`);
+    assert.equal(readFileSync(join(h.stateDir, 'research-proposal.json'), 'utf8'), original, 'invalid proposal remains available for investigation');
+  }
+  assert.equal(h.options.length, 0);
+});
+
+test('research apply requires the exact current nonempty proposal and preserves the ledger until CLI execution', (t) => {
+  const h = harness(t);
+  assert.throws(() => h.service.applyResearch({ proposalSha256: KEY }), (error) => error.status === 409);
+  const fixture = saveResearchOperation(h);
+  const request = { proposalSha256: fixture.proposal.proposalSha256 };
+  for (const input of [null, [], {}, { proposalSha256: 'invalid' }, { ...request, command: 'deploy:local' }, { ...request, stateDir: '/tmp/other' }]) {
+    assert.throws(() => h.service.applyResearch(input), (error) => error.status === 400);
+  }
+  assert.throws(() => h.service.applyResearch({ proposalSha256: NEW_KEY }), (error) => error.status === 409);
+  const empty = signResearchProposal({ ...fixture.proposal, includedKeys: [], reviewBindings: [] });
+  fixture.saveProposal(empty);
+  assert.throws(() => h.service.applyResearch({ proposalSha256: empty.proposalSha256 }), (error) => error.status === 409);
+  fixture.saveProposal({ ...fixture.proposal, confirmationDocument: { records: [] } });
+  assert.throws(() => h.service.applyResearch(request), (error) => error.status === 503, 'tampered contents cannot be applied using the old hash');
+  fixture.saveProposal();
+  const before = readFileSync(join(h.stateDir, 'research-review.json'), 'utf8');
+  const job = h.service.applyResearch(request);
+  assert.equal(job.id, 'job-1');
+  assert.equal(h.options[0].command, process.execPath);
+  assert.equal(h.options[0].cwd, h.workspaceRoot);
+  assert.equal(h.options[0].meta.kind, 'equipment:review');
+  assert.deepEqual(h.options[0].args, ['--import', 'tsx', 'scripts/review-vehicle-equipment.ts', 'apply',
+    '--proposal-sha256', fixture.proposal.proposalSha256, '--state-dir', h.stateDir]);
+  assert.equal(readFileSync(join(h.stateDir, 'research-review.json'), 'utf8'), before);
+});
+
+test('research apply rejects stale or unapproved revisions and mismatched proposal bindings', (t) => {
+  const h = harness(t);
+  const changes = [
+    (revision) => { revision.active = false; },
+    (revision) => { revision.status = 'presence_confirmed'; },
+    (revision) => { revision.status = 'published'; },
+    (revision) => { revision.invalidatedAt = '2026-09-28T11:34:00.000Z'; },
+    (revision) => { revision.unitAbsentSince = '2026-09-28T11:34:00.000Z'; },
+    (revision) => { revision.supersededBy = NEW_KEY; },
+    (revision) => { revision.key = NEW_KEY; },
+    (revision) => { revision.candidate.identity.id = '20051'; },
+    (revision) => { revision.candidate.identity.modelYear = 2026; },
+    (revision) => { revision.stockFingerprint = NEW_KEY; },
+    (revision) => { revision.decision.sourceIdentityConfirmed = true; },
+    (revision) => { revision.decision.present = false; },
+    (revision) => { revision.decision.authorizePublication = false; },
+    (revision) => { revision.decision.marketConfirmed = false; },
+    (revision) => { revision.decision.present = 'true'; },
+    (revision) => { delete revision.decision.confirmationReference; },
+    (revision) => { delete revision.decision.approvedText; },
+  ];
+  for (const [index, change] of changes.entries()) {
+    const fixture = saveResearchOperation(h);
+    change(fixture.revision); fixture.saveLedger();
+    assert.throws(() => h.service.applyResearch({ proposalSha256: fixture.proposal.proposalSha256 }),
+      (error) => error.status === 409, `changed revision ${index}`);
+  }
+  assert.equal(h.options.length, 0, 'no invalid approval may enter the execution queue');
+});
+
+test('research publication requires exact selectors and existing application evidence', (t) => {
+  const h = harness(t);
+  const input = publicationInput();
+  saveResearchOperation(h);
+  assert.throws(() => h.service.recordResearchPublication(input), (error) => error.status === 409);
+  const changes = [
+    (revision) => { revision.active = false; },
+    (revision) => { revision.status = 'presence_confirmed'; },
+    (revision) => { revision.status = 'excluded'; },
+    (revision) => { revision.invalidatedAt = '2026-09-28T11:34:00.000Z'; },
+    (revision) => { revision.unitAbsentSince = '2026-09-28T11:34:00.000Z'; },
+    (revision) => { revision.supersededBy = NEW_KEY; },
+    (revision) => { revision.decision.authorizePublication = false; },
+    (revision) => { revision.decision.authorizePublication = 'true'; },
+    (revision) => { revision.application.proposalSha256 = 'invalid'; },
+    (revision) => { revision.application.beforeSha256 = 'invalid'; },
+    (revision) => { revision.application.afterSha256 = 'invalid'; },
+    (revision) => { revision.application.appliedAt = 'yesterday'; },
+    (revision) => { revision.application.appliedAt = '2026-09-28'; },
+  ];
+  for (const [index, change] of changes.entries()) {
+    const fixture = saveResearchOperation(h, { applied: true });
+    change(fixture.revision); fixture.saveLedger();
+    assert.throws(() => h.service.recordResearchPublication(input), (error) => error.status === 409, `invalid application ${index}`);
+  }
+  saveResearchOperation(h, { applied: true });
+  for (const change of [{ key: NEW_KEY }, { vehicleId: '20051', publicUrl: 'https://www.netcarmultimarcas.com.br/veiculo/20051' }, { itemKey: 'another-item' }]) {
+    assert.throws(() => h.service.recordResearchPublication({ ...input, ...change }), (error) => error.status === 409);
+  }
+  assert.equal(h.options.length, 0);
+});
+
+test('research publication validates commit, unit URL and bounded references before queueing', (t) => {
+  const h = harness(t);
+  saveResearchOperation(h, { applied: true });
+  const input = publicationInput();
+  for (const value of [null, [], {}, 'record-publication']) {
+    assert.throws(() => h.service.recordResearchPublication(value), (error) => error.status === 400);
+  }
+  for (const change of [
+    { key: 'invalid' }, { vehicleId: 'not-a-unit' }, { itemKey: '--help' },
+    { commit: 'a'.repeat(39) }, { commit: 'A'.repeat(40) }, { commit: 'not-a-commit' },
+    { publicUrl: 'http://www.netcarmultimarcas.com.br/veiculo/20050' },
+    { publicUrl: 'https://example.com/veiculo/20050' },
+    { publicUrl: 'https://www.netcarmultimarcas.com.br/veiculo/20051' },
+    { publicUrl: 'https://token@www.netcarmultimarcas.com.br/veiculo/20050' },
+    { publicUrl: 'https://www.netcarmultimarcas.com.br/veiculo/20050?other=true' },
+    { publicUrl: 'https://www.netcarmultimarcas.com.br/veiculo/20050#other' },
+    { publicUrl: 'https://www.netcarmultimarcas.com.br:444/veiculo/20050' },
+    { evidenceReference: '' }, { evidenceReference: '--help' }, { evidenceReference: 'x'.repeat(2001) },
+    { evidenceReference: 'invalid\u0000reference' }, { reversalReference: ' ' },
+    { reversalReference: '--state-dir' }, { reversalReference: 'x'.repeat(2001) },
+    { command: 'deploy:local' }, { stateDir: '/tmp/other' }, { verifiedAt: '2026-09-28T11:34:00Z' },
+  ]) {
+    assert.throws(() => h.service.recordResearchPublication({ ...input, ...change }), (error) => error.status === 400);
+  }
+  assert.equal(h.options.length, 0);
+  const before = readFileSync(join(h.stateDir, 'research-review.json'), 'utf8');
+  h.service.recordResearchPublication(input);
+  assert.equal(h.options[0].meta.kind, 'equipment:review');
+  assert.equal(h.options[0].command, process.execPath);
+  assert.equal(h.options[0].cwd, h.workspaceRoot);
+  assert.deepEqual(h.options[0].args, ['--import', 'tsx', 'scripts/review-vehicle-equipment.ts', 'record-publication',
+    '--key', input.key, '--vehicle-id', input.vehicleId, '--item-key', input.itemKey,
+    '--commit', input.commit, '--public-url', input.publicUrl, '--evidence-reference', input.evidenceReference,
+    '--reversal-reference', input.reversalReference, '--state-dir', h.stateDir]);
+  assert.equal(readFileSync(join(h.stateDir, 'research-review.json'), 'utf8'), before, 'service must not manufacture a publication receipt');
+});
+
+test('applied confirmed and published revisions can record publication without another equipment authorization', (t) => {
+  const h = harness(t);
+  for (const status of ['confirmed', 'published']) {
+    saveResearchOperation(h, { applied: true, status });
+    const job = h.service.recordResearchPublication(publicationInput());
+    assert.equal(h.options.at(-1).args[3], 'record-publication');
+    h.complete(job.id);
+  }
+  assert.equal(h.options.length, 2);
+});
+
+test('all research operations share the audit and review queue and honor the enqueue lock', (t) => {
+  const h = harness(t);
+  const fixture = saveResearchOperation(h, { applied: true });
+  const operations = [
+    () => h.service.prepareResearch({}),
+    () => h.service.applyResearch({ proposalSha256: fixture.proposal.proposalSha256 }),
+    () => h.service.recordResearchPublication(publicationInput()),
+  ];
+  for (const start of operations) {
+    const job = start();
+    for (const blocked of [...operations, () => h.service.run(), () => h.service.decideResearch({
+      key: KEY, vehicleId: '20050', itemKey: 'rain-sensor', status: 'excluded', note: 'Synthetic refusal.',
+    })]) {
+      assert.throws(blocked, (error) => error.status === 409 && error.job?.id === job.id);
+    }
+    h.jobs.get(job.id).status = 'running';
+    for (const operation of operations) assert.throws(operation, (error) => error.status === 409 && error.job?.id === job.id);
+    h.complete(job.id);
+  }
+  const audit = h.service.run();
+  for (const operation of operations) assert.throws(operation, (error) => error.status === 409 && error.job?.id === audit.id);
+  h.complete(audit.id);
+  const count = h.options.length;
+  writeFileSync(join(h.stateDir, 'enqueue.lock'), 'synthetic existing owner', { mode: 0o600 });
+  for (const operation of operations) assert.throws(operation, (error) => error.status === 409);
+  assert.equal(h.options.length, count);
+});
+
+test('each new research job crossing 09:00 releases one daily catch-up on completion', (t) => {
+  for (const name of ['prepare', 'apply', 'publication']) {
+    const h = harness(t, { defaultEnabled: true, now: '2026-09-28T11:59:00Z' });
+    const fixture = saveResearchOperation(h, { applied: true });
+    h.service.start();
+    const job = name === 'prepare' ? h.service.prepareResearch({})
+      : name === 'apply' ? h.service.applyResearch({ proposalSha256: fixture.proposal.proposalSha256 })
+        : h.service.recordResearchPublication(publicationInput());
+    h.setTime('2026-09-28T12:00:00Z');
+    assert.equal(h.service.attemptScheduled(), null);
+    assert.equal(h.options.length, 1);
+    h.complete(job.id, name === 'prepare' ? 'failed' : 'succeeded');
+    assert.equal(h.options.length, 2, `${name} completion must release the daily audit`);
+    assert.equal(h.options[1].meta.kind, 'equipment:audit');
+    h.complete('job-2');
+    assert.equal(h.service.attemptScheduled(), null);
+    assert.equal(h.options.length, 2);
+  }
+});
+
+test('authenticated research operation routes return proposal or accepted jobs and reject invalid writes', async (t) => {
+  const h = harness(t);
+  const fixture = saveResearchOperation(h, { applied: true });
+  const previousToken = process.env.DEVOPS_TOKEN;
+  process.env.DEVOPS_TOKEN = 'local-test-token';
+  t.after(() => {
+    if (previousToken === undefined) delete process.env.DEVOPS_TOKEN;
+    else process.env.DEVOPS_TOKEN = previousToken;
+  });
+  const app = express();
+  app.use(express.json());
+  app.use('/api/equipment', requireAuth, createEquipmentRouter(h.service));
+  const server = app.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  t.after(() => new Promise((resolve) => { server.closeAllConnections(); server.close(resolve); }));
+  const base = `http://127.0.0.1:${server.address().port}/api/equipment/research`;
+  const request = (path, body) => fetch(`${base}/${path}`, {
+    method: body === undefined ? 'GET' : 'POST',
+    headers: { Authorization: 'Bearer local-test-token', 'Content-Type': 'application/json' },
+    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+  });
+  const response = await request('proposal');
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { proposal: fixture.proposal });
+  for (const [path, body] of [['prepare', { command: 'deploy:local' }], ['apply', {}], ['publication', publicationInput({ command: 'deploy:local' })]]) {
+    assert.equal((await request(path, body)).status, 400);
+  }
+  for (const [path, body] of [['prepare', {}], ['apply', { proposalSha256: fixture.proposal.proposalSha256 }], ['publication', publicationInput()]]) {
+    const accepted = await request(path, body);
+    assert.equal(accepted.status, 202, path);
+    const { job } = await accepted.json();
+    assert.equal(typeof job.id, 'string');
+    const conflict = await request(path, body);
+    assert.equal(conflict.status, 409);
+    assert.equal((await conflict.json()).job.id, job.id);
+    h.complete(job.id);
+  }
+  assert.equal(h.options.length, 3);
+  assert.ok(h.options.every((option) => option.meta.kind === 'equipment:review'));
+  rmSync(join(h.stateDir, 'research-proposal.json'));
+  assert.equal((await request('proposal')).status, 404);
+  fixture.saveProposal({ ...fixture.proposal, proposalSha256: NEW_KEY });
+  assert.equal((await request('proposal')).status, 503);
+  assert.equal(h.options.length, 3);
 });

@@ -291,6 +291,11 @@ export function parseStockResponse(payload: unknown): EquipmentAuditInput[] {
         typeof vehicle.ano === "number" || typeof vehicle.ano === "string"
           ? vehicle.ano
           : "",
+      anoFabricacao:
+        typeof vehicle.ano_fabricacao === "number" ||
+        typeof vehicle.ano_fabricacao === "string"
+          ? vehicle.ano_fabricacao
+          : undefined,
       lugares:
         typeof vehicle.lugares === "number" ||
         typeof vehicle.lugares === "string"
