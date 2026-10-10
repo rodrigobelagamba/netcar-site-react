@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import {
   chmodSync, closeSync, mkdirSync, openSync, readFileSync, renameSync,
   statSync, unlinkSync, writeFileSync,
@@ -17,6 +17,24 @@ const JOB_KIND = 'equipment:audit';
 const REVIEW_JOB_KIND = 'equipment:review';
 const HASH = /^[a-f0-9]{64}$/;
 const ACTIVE = new Set(['queued', 'running']);
+
+const objectFields = (value, allowed) => value !== null && typeof value === 'object' && !Array.isArray(value) &&
+  Object.keys(value).every((key) => allowed.includes(key));
+const boundedText = (value, limit) => typeof value === 'string' && value.trim().length > 0 && value.length <= limit &&
+  !value.trim().startsWith('--') && [...value].every((char) => char.charCodeAt(0) >= 32 && char.charCodeAt(0) !== 127);
+const validInstant = (value) => typeof value === 'string' && value.length <= 40 && /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(Date.parse(value));
+const validHash = (value) => typeof value === 'string' && HASH.test(value);
+const validSelector = (value) => validHash(value.key) && typeof value.vehicleId === 'string' && /^\d{1,20}$/.test(value.vehicleId) &&
+  typeof value.itemKey === 'string' && /^[a-z0-9][a-z0-9_-]{0,149}$/.test(value.itemKey);
+
+// Same canonical JSON ordering as the CLI proposal digest. This checks the
+// private preview at the API boundary; the CLI revalidates stock/base/decisions.
+function canonical(value) {
+  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
+  if (value !== null && typeof value === 'object') return `{${Object.entries(value).sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, entry]) => `${JSON.stringify(key)}:${canonical(entry)}`).join(',')}}`;
+  return JSON.stringify(value);
+}
 
 export class EquipmentError extends Error {
   constructor(status, message, job) {
@@ -252,6 +270,115 @@ export function createEquipmentService({
     return runner.findActiveJob(JOB_KIND) || runner.findActiveJob(REVIEW_JOB_KIND);
   }
 
+  function enqueueResearchCli(label, args) {
+    return runner.enqueueJob({ label, command: process.execPath, args,
+      cwd: workspaceRoot, meta: { kind: REVIEW_JOB_KIND },
+      // A review may overlap 09:00. The existing daily dedupe catches up once.
+      onComplete: () => { if (started) attemptScheduled(); },
+    });
+  }
+
+  function researchOperation(action) {
+    return withStateLock(() => {
+      const active = activeEquipmentJob();
+      if (active) throw new EquipmentError(409, 'Uma rotina de equipamentos está em andamento. Aguarde.', active);
+      return action();
+    });
+  }
+
+  function getResearchProposal() {
+    const proposal = readJson('research-proposal.json', null);
+    if (proposal === null) throw new EquipmentError(404, 'Nenhuma proposta preparada. Execute prepare primeiro.');
+    const fields = ['schemaVersion', 'proposalOnly', 'generatedAt', 'snapshotObservedAt', 'baseSha256', 'includedKeys',
+      'decisionSha256', 'proposalSha256', 'limitations', 'reviewBindings', 'blocked', 'confirmationDocument'];
+    const identity = (value) => objectFields(value, ['id', 'brand', 'model', 'manufactureYear', 'modelYear', 'engine', 'transmission', 'market']) &&
+      typeof value.id === 'string' && /^\d{1,20}$/.test(value.id) && ['brand', 'model', 'engine', 'transmission'].every((key) => boundedText(value[key], 400)) &&
+      value.market === 'BR' && Number.isInteger(value.modelYear) && value.modelYear >= 1900 && value.modelYear <= 2100 &&
+      (value.manufactureYear === undefined || (Number.isInteger(value.manufactureYear) && value.manufactureYear >= 1900 && value.manufactureYear <= 2100));
+    const strings = (value) => Array.isArray(value) && value.length <= 2000 && value.every((entry) => boundedText(entry, 2000));
+    if (!objectFields(proposal, fields) || proposal.schemaVersion !== 1 || proposal.proposalOnly !== true ||
+      !validInstant(proposal.generatedAt) || !validInstant(proposal.snapshotObservedAt) ||
+      !['baseSha256', 'decisionSha256', 'proposalSha256'].every((key) => validHash(proposal[key])) ||
+      !Array.isArray(proposal.includedKeys) || proposal.includedKeys.length > 2000 || !proposal.includedKeys.every(validHash) ||
+      new Set(proposal.includedKeys).size !== proposal.includedKeys.length || !strings(proposal.limitations) ||
+      !Array.isArray(proposal.reviewBindings) || proposal.reviewBindings.length !== proposal.includedKeys.length ||
+      !proposal.reviewBindings.every((binding) => objectFields(binding, ['key', 'identity', 'stockFingerprint', 'sourceIdentityConfirmed']) &&
+        validHash(binding.key) && proposal.includedKeys.includes(binding.key) && identity(binding.identity) &&
+        validHash(binding.stockFingerprint) && typeof binding.sourceIdentityConfirmed === 'boolean') ||
+      new Set(proposal.reviewBindings.map((binding) => binding.key)).size !== proposal.includedKeys.length ||
+      !Array.isArray(proposal.blocked) || proposal.blocked.length > 10000 || !proposal.blocked.every((entry) =>
+        objectFields(entry, ['key', 'reasons', 'itemDraft']) && validHash(entry.key) && strings(entry.reasons) &&
+        (entry.itemDraft === undefined || (objectFields(entry.itemDraft, ['key', 'label', 'proposedTag', 'status']) &&
+          boundedText(entry.itemDraft.key, 150) && boundedText(entry.itemDraft.label, 400) &&
+          entry.itemDraft.proposedTag === null && entry.itemDraft.status === 'taxonomy_review_required'))) ||
+      !proposal.confirmationDocument || typeof proposal.confirmationDocument !== 'object' || Array.isArray(proposal.confirmationDocument) ||
+      !Array.isArray(proposal.confirmationDocument.records) || proposal.confirmationDocument.records.length > 2000)
+      throw new EquipmentError(503, 'Proposta de equipamentos inválida. Preserve o arquivo e prepare novamente.');
+    const { proposalSha256, ...contents } = proposal;
+    if (createHash('sha256').update(canonical(contents)).digest('hex') !== proposalSha256)
+      throw new EquipmentError(503, 'Hash da proposta inválido. Preserve o arquivo e prepare novamente.');
+    return proposal;
+  }
+
+  function prepareResearch(input) {
+    if (!objectFields(input, [])) throw new EquipmentError(400, 'Envie um objeto vazio para preparar a proposta.');
+    return researchOperation(() => enqueueResearchCli('Preparar proposta de equipamentos',
+      ['--import', 'tsx', 'scripts/review-vehicle-equipment.ts', 'prepare', '--state-dir', stateDir]));
+  }
+
+  function applyResearch(input) {
+    if (!objectFields(input, ['proposalSha256']) || !validHash(input.proposalSha256))
+      throw new EquipmentError(400, 'Informe somente o hash exato da proposta revisada.');
+    return researchOperation(() => {
+      let proposal;
+      try { proposal = getResearchProposal(); } catch (error) {
+        if (error.status === 404) throw new EquipmentError(409, 'Prepare e confira uma proposta antes de aplicar.');
+        throw error;
+      }
+      if (proposal.proposalSha256 !== input.proposalSha256 || !proposal.includedKeys.length)
+        throw new EquipmentError(409, 'A proposta mudou ou não contém itens autorizados. Prepare e confira novamente.');
+      const ledger = readResearchLedger();
+      for (const binding of proposal.reviewBindings) {
+        const revision = ledger.revisions.find((entry) => entry.key === binding.key);
+        if (!revision?.active || revision.invalidatedAt || revision.unitAbsentSince || revision.supersededBy ||
+          !['authorized', 'confirmed'].includes(revision.status) || revision.decision?.authorizePublication !== true ||
+          revision.decision?.present !== true || revision.decision?.marketConfirmed !== true ||
+          !boundedText(revision.decision?.confirmationReference, 2000) ||
+          !boundedText(revision.decision?.approvedText?.name, 400) || !boundedText(revision.decision?.approvedText?.description, 2000) ||
+          canonical(revision.candidate.identity) !== canonical(binding.identity) || revision.stockFingerprint !== binding.stockFingerprint ||
+          revision.decision?.sourceIdentityConfirmed !== binding.sourceIdentityConfirmed)
+          throw new EquipmentError(409, 'Uma decisão ou identidade da proposta mudou. Prepare e confira novamente.');
+      }
+      return enqueueResearchCli('Aplicar proposta autorizada de equipamentos',
+        ['--import', 'tsx', 'scripts/review-vehicle-equipment.ts', 'apply', '--proposal-sha256', input.proposalSha256, '--state-dir', stateDir]);
+    });
+  }
+
+  function recordResearchPublication(input) {
+    const fields = ['key', 'vehicleId', 'itemKey', 'commit', 'publicUrl', 'evidenceReference', 'reversalReference'];
+    if (!objectFields(input, fields) || !validSelector(input) || typeof input.commit !== 'string' || !/^[a-f0-9]{40}$/.test(input.commit) ||
+      !boundedText(input.publicUrl, 2048) || !boundedText(input.evidenceReference, 2000) || !boundedText(input.reversalReference, 2000))
+      throw new EquipmentError(400, 'Informe unidade, item, commit completo e referências de publicação e reversão.');
+    try {
+      const url = new URL(input.publicUrl);
+      if (url.protocol !== 'https:' || url.hostname !== 'www.netcarmultimarcas.com.br' || url.port || url.username || url.password ||
+        url.search || url.hash || url.pathname !== `/veiculo/${input.vehicleId}`) throw new Error('Invalid URL');
+    } catch { throw new EquipmentError(400, 'Use a URL HTTPS exata da ficha pública desta unidade.'); }
+    return researchOperation(() => {
+      const revision = readResearchLedger().revisions.find((entry) => entry.key === input.key && entry.active &&
+        entry.candidate.identity.id === input.vehicleId && entry.candidate.item.key === input.itemKey);
+      if (!revision || revision.invalidatedAt || revision.unitAbsentSince || revision.supersededBy ||
+        !['authorized', 'confirmed', 'published'].includes(revision.status) || revision.decision?.authorizePublication !== true ||
+        !revision.application || !['proposalSha256', 'beforeSha256', 'afterSha256'].every((key) => validHash(revision.application[key])) ||
+        !validInstant(revision.application.appliedAt))
+        throw new EquipmentError(409, 'A revisão específica precisa estar autorizada e aplicada antes de registrar publicação.');
+      return enqueueResearchCli(`Registrar publicação de equipamento #${input.vehicleId}: ${input.itemKey}`,
+        ['--import', 'tsx', 'scripts/review-vehicle-equipment.ts', 'record-publication', '--key', input.key,
+          '--vehicle-id', input.vehicleId, '--item-key', input.itemKey, '--commit', input.commit, '--public-url', input.publicUrl,
+          '--evidence-reference', input.evidenceReference.trim(), '--reversal-reference', input.reversalReference.trim(), '--state-dir', stateDir]);
+    });
+  }
+
   function run(reason = 'manual') {
     return withStateLock(() => {
       const active = activeEquipmentJob();
@@ -379,12 +506,7 @@ export function createEquipmentService({
         ['marketConfirmed', '--confirm-market'], ['sourceIdentityConfirmed', '--confirm-source-identity']]) if (input[key]) args.push(flag);
       if (input.confirmationReference) args.push('--confirmation-reference', input.confirmationReference.trim());
       if (input.approvedText) args.push('--approved-name', input.approvedText.name.trim(), '--approved-description', input.approvedText.description.trim());
-      return runner.enqueueJob({ label: `Decisão de equipamento #${input.vehicleId}: ${input.itemKey}`, command: process.execPath,
-        args, cwd: workspaceRoot, meta: { kind: REVIEW_JOB_KIND },
-        // The 09:00 callback may have found this review in progress. Catch up
-        // once after it finishes; lastAttempt and the existing queue dedupe.
-        onComplete: () => { if (started) attemptScheduled(); },
-      });
+      return enqueueResearchCli(`Decisão de equipamento #${input.vehicleId}: ${input.itemKey}`, args);
     });
   }
 
@@ -426,7 +548,8 @@ export function createEquipmentService({
     started = false;
   }
 
-  return { getState, run, setSchedule, review, decideResearch, start, stop, attemptScheduled };
+  return { getState, run, setSchedule, review, decideResearch, prepareResearch, getResearchProposal, applyResearch,
+    recordResearchPublication, start, stop, attemptScheduled };
 }
 
 export const equipmentService = createEquipmentService();

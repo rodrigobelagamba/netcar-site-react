@@ -143,6 +143,38 @@ procedimento DevOps do projeto, acompanhar o job e verificar ficha/HTML/assets.
 referência à prova pública e referência de reversão. Só então marca `published`.
 A reversão é explícita e revisada; não há remoção automática.
 
+### Aplicação e publicação pelo acesso existente ao DevOps
+
+As operações de manutenção abaixo usam a autenticação Bearer já existente em
+`/api/equipment`, a fila serial do painel e as travas do CLI. Não aceitam shell,
+caminhos, flags livres ou campos adicionais; não fazem commit nem deploy.
+
+1. `POST /api/equipment/research/prepare` com `{}` enfileira `prepare` contra o
+   ledger privado e o XML/API atuais. Aguardar o job terminar com sucesso.
+2. `GET /api/equipment/research/proposal` retorna `{ "proposal": ... }`, sem
+   cache, após conferir formato e hash do conteúdo. Conferir `includedKeys`,
+   identidades, texto, documento proposto e bloqueios. Proposta vazia não aplica.
+3. `POST /api/equipment/research/apply` com `{ "proposalSha256": "HASH_EXATO" }`
+   enfileira `apply` somente da proposta existente. O CLI reconfere decisões,
+   identidade física, estoque fresco e bytes da base antes de gravar o registro
+   local da VPS e seu recibo privado. Aguardar o job e conferir o hash resultante.
+4. Levar somente o delta aprovado ao Git, testar e seguir o deploy existente.
+   Quando houver aplicação também em checkout local, os hashes resultantes devem
+   coincidir. Executar a aplicação na VPS **antes** de sincronizar o commit que já
+   contém o item: uma proposta nova bloqueia itens já presentes no registro e não
+   fabrica retroativamente um recibo de aplicação.
+5. Após verificar a ficha pública, `POST /api/equipment/research/publication`
+   recebe exatamente `key`, `vehicleId`, `itemKey`, `commit` (SHA completo de 40
+   caracteres), `publicUrl` (HTTPS da ficha exata), `evidenceReference` e
+   `reversalReference` (até 2.000 caracteres cada). Exige a mesma revisão ativa,
+   autorização e aplicação registrada. O CLI grava a prova e o estado publicado;
+   essa operação não publica arquivos nem substitui a verificação pública.
+
+Conflito de rotina em execução retorna HTTP 409; aguardar o job existente, sem
+repetir ações para contornar a fila. Falha no job não autoriza a próxima etapa.
+Uma proposta anterior pode continuar no disco após falha de `prepare`: conferir
+o job e a data, não interpretar a existência do arquivo como sucesso novo.
+
 ## Persistência e implantação
 
 Todos os estados operacionais ficam em `.devops/equipment/` (700, arquivos 600),
