@@ -87,7 +87,7 @@ test("approved reviewed IDs survive an absent stock snapshot to block unsafe raw
   const empty = createEquipmentManifest([]);
   assert.equal(empty.schemaVersion, 3);
   assert.deepEqual(empty.confirmedVehicleIds, expected);
-  assert.deepEqual(empty.confirmedVehicleIds, ["20050", "20051"]);
+  assert.deepEqual(empty.confirmedVehicleIds, ["20050", "20051", "20075"]);
   assert.deepEqual(
     createEquipmentManifest(vehicles).confirmedVehicleIds,
     expected,
