@@ -580,10 +580,10 @@
       }
     },
     {
-      "recordId": "normalized-20261003-19866",
-      "status": "pending",
-      "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"normalized-20261003-19866\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"19866\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"JEEP\",\"modelVersion\":\"COMPASS SERIE S T270 TURBO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"unknown\",\"commonPolicy\":null,\"reviewedMileageKm\":35500,\"mileage\":{\"kind\":\"unknown\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"19866-manual-1\",\"url\":\"https://www.media.stellantis.com/br-pt/jeep/press/jeep-anuncia-5-anos-de-garantia-para-todos-os-seus-modelos-produzidos-no-brasil\",\"locator\":\"Comunicados oficiais Jeep de 15/04/2024 e 19/04/2024: Compass MY2025, todas as versões. Limite km/uso/transferência não transcritos.\",\"revision\":\"Comunicado oficial 19/04/2024; herdado do task7\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2025,\"reviewId\":\"warranty-20261003-19866\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "recordId": "reviewed-v2-20261010-19866",
+      "status": "approved",
+      "reviewedAt": "2026-10-10",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261010-19866\",\"reviewedAt\":\"2026-10-10\",\"vehicle\":{\"vehicleId\":\"19866\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"JEEP\",\"modelVersion\":\"COMPASS SERIE S T270 TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:435d90c576cbd38b7d85002c5fb8a830f72a5665700b25ca55da66522434684c\",\"engine\":\"1.3\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":35500,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"jeep-compass-my2025-term-20240419\",\"url\":\"https://www.media.stellantis.com/br-pt/jeep/press/jeep-anuncia-5-anos-de-garantia-para-todos-os-seus-modelos-produzidos-no-brasil\",\"locator\":\"Comunicado de 19/04/2024: parágrafo que inclui a linha Compass ano-modelo2025, todas as versões, na garantia de fábrica de cinco anos. Fonte usada para prazo e abrangência por ano-modelo; uso e km atestados pelo responsável.\",\"revision\":\"Comunicado Jeep/Stellantis Brasil de 2024-04-19; Compass MY2025, todas as versões; prazo de cinco anos.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"2024-04-19\",\"modelYear\":2025,\"reviewId\":\"warranty-20261010-19866\",\"reviewedAt\":\"2026-10-10\"}}]}",
       "vehicle": {
         "vehicleId": "19866",
         "brand": "JEEP",
@@ -596,23 +596,23 @@
       "conditionsConfirmed": true,
       "scope": "basic-vehicle",
       "termYears": 5,
-      "usage": "unknown",
+      "usage": "private",
       "reviewedMileageKm": 35500,
       "mileage": {
-        "kind": "unknown"
+        "kind": "unlimited"
       },
       "sources": [
         {
-          "sourceId": "19866-manual-1",
+          "sourceId": "jeep-compass-my2025-term-20240419",
           "url": "https://www.media.stellantis.com/br-pt/jeep/press/jeep-anuncia-5-anos-de-garantia-para-todos-os-seus-modelos-produzidos-no-brasil",
-          "locator": "Comunicados oficiais Jeep de 15/04/2024 e 19/04/2024: Compass MY2025, todas as versões. Limite km/uso/transferência não transcritos.",
-          "revision": "Comunicado oficial 19/04/2024; herdado do task7",
+          "locator": "Comunicado de 19/04/2024: parágrafo que inclui a linha Compass ano-modelo2025, todas as versões, na garantia de fábrica de cinco anos. Fonte usada para prazo e abrangência por ano-modelo; uso e km atestados pelo responsável.",
+          "revision": "Comunicado Jeep/Stellantis Brasil de 2024-04-19; Compass MY2025, todas as versões; prazo de cinco anos.",
           "verification": {
-            "status": "pending",
-            "documentCode": "",
+            "status": "verified",
+            "documentCode": "2024-04-19",
             "modelYear": 2025,
-            "reviewId": "warranty-20261003-19866",
-            "reviewedAt": "2026-10-03"
+            "reviewId": "warranty-20261010-19866",
+            "reviewedAt": "2026-10-10"
           }
         }
       ],
