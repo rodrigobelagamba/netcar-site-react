@@ -48,7 +48,7 @@
       "approved": true,
       "source": "responsible-confirmation",
       "confirmedAt": "2026-10-10",
-      "claim": "Responsável confirmou a presença de Frenagem automática de emergência nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Frenagem automática de emergência; Pode acionar os freios em uma situação de risco detectada pelo sistema..\nResponsável confirmou a presença de Indicador de fadiga nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Indicador de fadiga; Emite avisos de atenção ao motorista..",
+      "claim": "Responsável confirmou a presença de Frenagem automática de emergência nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Frenagem automática de emergência; Pode acionar os freios em uma situação de risco detectada pelo sistema..\nResponsável confirmou a presença de Indicador de fadiga nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Indicador de fadiga; Emite avisos de atenção ao motorista..\nResponsável confirmou a presença de Android Auto e Apple CarPlay sem fio nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Android Auto e Apple CarPlay sem fio; Integra celulares compatíveis à central por Android Auto e Apple CarPlay sem cabo..",
       "schemaVersion": 2,
       "marketSource": "responsible-confirmation",
       "match": {
@@ -64,7 +64,8 @@
       },
       "presentTags": [
         "franagem_emergencia",
-        "indcador_fadiga"
+        "indcador_fadiga",
+        "sem-_fio"
       ],
       "absentTags": []
     }
