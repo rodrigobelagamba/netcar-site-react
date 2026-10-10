@@ -48,7 +48,7 @@
       "approved": true,
       "source": "responsible-confirmation",
       "confirmedAt": "2026-10-10",
-      "claim": "Responsável confirmou a presença de Frenagem automática de emergência nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Frenagem automática de emergência; Pode acionar os freios em uma situação de risco detectada pelo sistema..\nResponsável confirmou a presença de Indicador de fadiga nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Indicador de fadiga; Emite avisos de atenção ao motorista..\nResponsável confirmou a presença de Android Auto e Apple CarPlay sem fio nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Android Auto e Apple CarPlay sem fio; Integra celulares compatíveis à central por Android Auto e Apple CarPlay sem cabo..\nResponsável confirmou a presença de Câmbio automático de 6 velocidades nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo sobre transmissões: versões 1.3 Turbo, Sport e Longitude, automático de seis marchas.). Texto aprovado: Câmbio automático de 6 velocidades; Câmbio automático de 6 velocidades.",
+      "claim": "Responsável confirmou a presença de Frenagem automática de emergência nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Frenagem automática de emergência; Pode acionar os freios em uma situação de risco detectada pelo sistema..\nResponsável confirmou a presença de Indicador de fadiga nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Indicador de fadiga; Emite avisos de atenção ao motorista..\nResponsável confirmou a presença de Android Auto e Apple CarPlay sem fio nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Android Auto e Apple CarPlay sem fio; Integra celulares compatíveis à central por Android Auto e Apple CarPlay sem cabo..\nResponsável confirmou a presença de Câmbio automático de 6 velocidades nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo sobre transmissões: versões 1.3 Turbo, Sport e Longitude, automático de seis marchas.). Texto aprovado: Câmbio automático de 6 velocidades; Câmbio automático de 6 velocidades.\nResponsável confirmou a presença de Assistente de partida em rampa nesta unidade e autorizou sua publicação em 2026-10-10; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-chega-com-sua-linha-2024-e-versao-longitude-ganha-pacote-exclusivo (2023-06-20, Parágrafo de equipamentos de série de todos os modelos da linha 2024, antes do pacote Dark Pack.). Texto aprovado: Assistente de partida em rampa; Ajuda a manter o veículo parado por instantes ao iniciar uma subida..\nResponsável corrigiu expressamente em 2026-10-10 que os Renegades anunciados no site não possuem Park Assist. A inspeção dos três anúncios ativos identificou a indicação incorreta somente nesta unidade; suprimir Park Assist e seu benefício nesta unidade, preservando os demais equipamentos confirmados.",
       "schemaVersion": 2,
       "marketSource": "responsible-confirmation",
       "match": {
@@ -66,9 +66,29 @@
         "franagem_emergencia",
         "indcador_fadiga",
         "sem-_fio",
-        "cambio_automatico_6_marchas"
+        "cambio_automatico_6_marchas",
+        "assistente_partida_rampa"
       ],
-      "absentTags": []
+      "absentTags": [
+        "park_assist"
+      ],
+      "reviewedDefinitions": [
+        {
+          "id": "hill-start-assist",
+          "tag": "assistente_partida_rampa",
+          "sourceDescription": "Assistente de partida em rampa",
+          "description": "Assistente de partida em rampa",
+          "priority": 700,
+          "category": "Condução",
+          "benefit": "Ajuda a manter o veículo parado por instantes ao iniciar uma subida.",
+          "reviewedAt": "2026-10-09",
+          "reviewNote": "Rascunho de taxonomia para revisão; não confirma presença nem autoriza publicação. Jeep, comunicado da linha 2024 de 20/06/2023, lista a função como série.",
+          "aliases": [
+            "Auxílio de partida em rampa",
+            "Hill Start Assist"
+          ]
+        }
+      ]
     }
   ]
 }
