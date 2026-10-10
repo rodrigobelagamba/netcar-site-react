@@ -918,7 +918,7 @@ test("powertrain source changes and conflicting records remain blocked and reope
   }
 });
 
-test("the registry audit keeps eleven general coverages, three powertrain coverages and the BYD battery separate", () => {
+test("the registry audit keeps twelve general coverages, three powertrain coverages and the BYD battery separate", () => {
   const report = buildEquipmentAudit(
     parseStockResponse(
       apiResponse(
@@ -928,7 +928,7 @@ test("the registry audit keeps eleven general coverages, three powertrain covera
       ),
     ),
     null,
-    "2026-10-09T12:00:00.000Z",
+    "2026-10-10T12:00:00.000Z",
   );
   const general = report.vehicles.filter(
     (row) => row.warranty?.status === "eligible",
@@ -940,14 +940,14 @@ test("the registry audit keeps eleven general coverages, three powertrain covera
     (row) => row.warranty?.supplemental?.status === "eligible",
   );
   assert.deepEqual(general.map((row) => row.id).sort(), [
-    "19587", "19779", "19854", "19857", "19898", "19924", "19994",
+    "19587", "19779", "19854", "19857", "19866", "19898", "19924", "19994",
     "20019", "20038", "20049", "20075",
   ]);
   assert.deepEqual(powertrain.map((row) => row.id).sort(), powertrainWarrantyIds);
   assert.deepEqual(battery.map((row) => row.id), ["19924"]);
-  assert.equal(general.length + powertrain.length + battery.length, 15);
-  assert.equal(new Set([...general, ...powertrain, ...battery].map((row) => row.id)).size, 14);
-  for (const id of ["19779", "19854", "19898"]) {
+  assert.equal(general.length + powertrain.length + battery.length, 16);
+  assert.equal(new Set([...general, ...powertrain, ...battery].map((row) => row.id)).size, 15);
+  for (const id of ["19779", "19854", "19898", "19866"]) {
     const coverage = report.vehicles.find((row) => row.id === id)!.warranty!;
     assert.equal(coverage.status, "eligible");
     assert.notEqual(coverage.powertrain?.status, "eligible");
@@ -959,18 +959,18 @@ test("the registry audit keeps eleven general coverages, three powertrain covera
     "traction-battery",
   );
   // This complete registry fixture also includes Nivus20018, which is absent
-  // from the current public catalog; neither it nor Compass19866 was approved.
+  // from the current public catalog and remains unapproved.
   assert.deepEqual(
     warrantyRegistry.records.filter((record) => record.status === "pending").map((record) => record.vehicle.vehicleId).sort(),
-    ["19866", "20018"],
+    ["20018"],
   );
-  for (const id of ["19866", "20018"]) {
+  for (const id of ["20018"]) {
     const coverage = report.vehicles.find((row) => row.id === id)!.warranty!;
     assert.notEqual(coverage.status, "eligible");
     assert.notEqual(coverage.powertrain?.status, "eligible");
     assert.notEqual(coverage.supplemental?.status, "eligible");
   }
-  assert.equal(report.counts.withAlerts, 2);
+  assert.equal(report.counts.withAlerts, 1);
 });
 
 test("warranty identity, FAB, MY, mileage and flag changes reopen only the candidate", () => {
