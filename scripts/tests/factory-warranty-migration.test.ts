@@ -29,6 +29,48 @@ const baseline = read(
 const current = read(
   "../../src/data/factoryWarrantyMatrix.json",
 ) as FactoryWarrantyMatrix;
+const compassAudit = read("../../docs/audits/factory-warranty-compass-19866-2026-10-10.json");
+
+test("confirmed Compass displays its five-year general stamp without approving other Jeep units", () => {
+  const record = current.records.find((entry) => entry.vehicle.vehicleId === "19866")!;
+  const vehicle = compassAudit.publicVehicle as WarrantyCatalogVehicle;
+  const date = "2026-10-10";
+  assert.deepEqual(record, compassAudit.approvedRecord);
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(record.status, "approved");
+  assert.equal(record.usage, "private");
+  assert.deepEqual(record.mileage, { kind: "unlimited" });
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, date).status, "eligible");
+  assert.equal(resolveFactoryWarranty(vehicle, current, date)?.estimatedEndYear, 2029);
+  assert.equal(resolveFactoryWarranty({ ...vehicle, km: 150000 }, current, date)?.estimatedEndYear, 2029);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, date), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, date), undefined);
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2029-01-01"), undefined);
+  for (const patch of [
+    { price: 0 }, { diferenciais: [] }, { unitKey: undefined },
+    { motor: "2.0" }, { year: 2024 }, { km: record.reviewedMileageKm - 1 },
+    { id: "different-compass" },
+  ]) {
+    const changed = { ...vehicle, ...patch };
+    const decision = reconcileFactoryWarrantyVehicle(changed, current, date);
+    assert.notEqual(decision.status, "eligible");
+    assert.equal(resolveFactoryWarranty(changed, decision.matrix, date), undefined);
+  }
+  assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
+});
+
+test("Compass release preserves all other records and separates owner confirmation from official evidence", () => {
+  const others = current.records.filter((entry) => entry.vehicle.vehicleId !== "19866");
+  assert.equal(others.length, compassAudit.preservation.otherRecordCount);
+  assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), compassAudit.preservation.otherRecordsSha256);
+  assert.equal(compassAudit.ownerAttestations.publicationAuthorized, true);
+  assert.equal(compassAudit.ownerAttestations.usageIsEstablishedNetcarPolicy, true);
+  assert.equal(compassAudit.previousRecord.status, "pending");
+  assert.equal(compassAudit.timing.actualStartDate, null);
+  assert.equal(compassAudit.timing.confirmedExpiryDate, null);
+  assert.equal(compassAudit.timing.resaleRestartsTerm, false);
+  assert.equal(compassAudit.approvedRecord.sources[0].verification.modelYear, 2025);
+});
 const migration = read(
   "../../docs/audits/factory-warranty-reconciliation-2026-10-09.json",
 ) as {
@@ -147,7 +189,7 @@ test("migration baseline is the immutable release captured from c76f883", () => 
 });
 
 for (const prior of baseline.matrix.records.filter(
-  (record) => record.vehicle.vehicleId !== "20019" && !MONTH_RELEASE_IDS.includes(record.vehicle.vehicleId),
+  (record) => !["20019", "19866"].includes(record.vehicle.vehicleId) && !MONTH_RELEASE_IDS.includes(record.vehicle.vehicleId),
 )) {
   const id = prior.vehicle.vehicleId;
   test(`migration preserves every prior coverage, source, condition and decision for ${id}`, () => {
@@ -396,19 +438,16 @@ test("Kicks 20019 has a separate audited approval while its original pending dec
   );
   assert.equal(
     current.records.filter((record) => record.status === "approved").length,
-    14,
+    15,
   );
   assert.equal(OLD_APPROVED.length, 10);
 });
 
-test("only the three authorized additional units leave pending; Compass stays pending", () => {
+test("later approved units leave pending while absent Nivus remains pending", () => {
   assert.deepEqual(
     current.records.filter((record) => record.status === "pending").map((record) => record.vehicle.vehicleId).sort(),
-    ["19866", "20018"],
+    ["20018"],
   );
-  const compass = currentRecord("19866");
-  assert.deepEqual(beforeBinding(compass), oldRecord("19866"));
-  assert.equal(anyCoverage(observed("19866")), undefined);
   for (const id of MONTH_RELEASE_IDS) {
     assert.equal(oldRecord(id).status, "pending", id);
     const record = currentRecord(id);

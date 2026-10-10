@@ -1,5 +1,20 @@
 # Carimbo de garantia de fábrica
 
+> Revisão de10/10/2026: Compass19866 aprovado para garantia geral até2029*,
+> com uso particular e quilometragem ilimitada confirmados pelo responsável.
+> O prazo de5 anos para MY2025 foi conferido no comunicado oficial Jeep de
+> 19/04/2024. A revisão segue o mesmo fundamento do Renegade20075: fonte oficial
+> para o prazo e ateste operacional para as condições individuais. A evidência
+> e os limites estão na [auditoria do Compass](audits/factory-warranty-compass-19866-2026-10-10.json).
+> São15 unidades aprovadas, com16 selos contando a bateria BYD. O único registro
+> ainda pendente é o Nivus20018, ausente do estoque público consultado.
+
+O uso particular já foi confirmado pelo responsável como regra de compra da
+Netcar e não deve ser perguntado novamente em cada revisão. Confirmações aceitas
+devem ser incorporadas à revisão efetiva e publicadas quando autorizado;
+salvar apenas uma nota não libera o carimbo. A política de km depende do modelo
+e da confirmação aplicável, sem propagar a ausência de limite entre marcas.
+
 > Revisão individual de09/10/2026: Territory19779 e HR-V Touring19898 têm
 > vencimento em dezembro2026 atestado pelo proprietário, com precisão mensal;
 > Advance19854 recebeu revisão documental MY2024. Os três selos gerais foram
