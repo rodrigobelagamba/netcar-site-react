@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api } from './api.js';
 import EquipmentResearchPanel from './EquipmentResearchPanel.jsx';
+import WeeklyEquipmentPanel from './WeeklyEquipmentPanel.jsx';
 import {
   REVIEW_NOTE_LIMIT,
   REVIEW_SOURCE_LIMIT,
@@ -238,7 +239,7 @@ export default function EquipmentPanel({ token, onJob, busy = false, activeJob }
     try {
       const result = await api.equipmentRun(token);
       onJob(result.job);
-      setNotice('Auditoria iniciada. Acompanhe a execução no log do job.');
+      setNotice('Auditoria iniciada, incluindo a conferência das fichas públicas. Acompanhe a execução no log do job.');
       await refresh({ silent: true });
     } catch (err) {
       if (err.status === 409 && err.data?.job) {
@@ -260,7 +261,7 @@ export default function EquipmentPanel({ token, onJob, busy = false, activeJob }
     try {
       const enabled = !schedule.enabled;
       await api.equipmentSchedule(token, enabled);
-      setNotice(enabled ? 'Agenda diária ativada para as 9h de Brasília na VPS.' : 'Agenda pausada. Você ainda pode executar a auditoria manualmente.');
+      setNotice(enabled ? 'Agenda ativada na VPS: cadastro diário às 9h e fichas públicas às segundas, no mesmo horário.' : 'Agenda pausada. Você ainda pode executar a auditoria manualmente.');
       await refresh({ silent: true });
     } catch (err) {
       setActionError(err.message);
@@ -329,6 +330,7 @@ export default function EquipmentPanel({ token, onJob, busy = false, activeJob }
         </div>
       ) : null}
       {job?.status === 'failed' ? <div className="error-banner" role="alert">A última auditoria falhou. {job.error || 'Consulte o log para ver os detalhes.'} {data?.report ? 'O último relatório concluído foi preservado.' : ''}</div> : null}
+      {data ? <WeeklyEquipmentPanel publicCheck={data.publicCheck} enabled={Boolean(schedule?.enabled)} /> : null}
       {data ? <EquipmentResearchPanel research={data.research} disabled={busy || jobActive || Boolean(action)} onDecision={decideResearch} /> : null}
       {!data ? <p className="equipment-empty" role="status">{loading ? 'Carregando agenda e relatório…' : 'O relatório não pôde ser carregado. Use “Atualizar” para tentar novamente.'}</p> : !data.report ? (
         <div className="equipment-empty">

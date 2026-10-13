@@ -221,6 +221,60 @@ export function createEquipmentService({
     };
   }
 
+  function readPublicCheck() {
+    let state = null;
+    let report = null;
+    let partial = null;
+    const errors = [];
+    const optionalInstant = (value) => value === null || validInstant(value);
+    try {
+      const saved = readJson('public-check-state.json', null);
+      if (saved !== null) {
+        if (saved.schemaVersion !== 1 || !['running', 'succeeded', 'failed'].includes(saved.status) ||
+          !optionalInstant(saved.lastAttempt) || !optionalInstant(saved.lastSuccess) || !optionalInstant(saved.nextRun) ||
+          !(saved.period === null || boundedText(saved.period, 64)) ||
+          !(saved.error === null || boundedText(saved.error, 2000)))
+          throw new EquipmentError(503, 'Estado da conferência semanal inválido; preserve o arquivo para investigação.');
+        // Return only the public audit contract, never arbitrary private fields.
+        state = Object.fromEntries(['schemaVersion', 'lastAttempt', 'lastSuccess', 'period', 'status', 'error', 'nextRun']
+          .map((key) => [key, saved[key]]));
+        if (state.status === 'running' && !activeEquipmentJob()) state = {
+          ...state, status: 'failed',
+          error: 'A conferência foi interrompida e não há execução ativa. Use Executar agora para refazer a leitura das fichas.',
+        };
+      }
+    } catch (error) { errors.push(error.message); }
+    function readPublicReport(name) {
+      const saved = readJson(name, null);
+      if (saved !== null) {
+        const counts = saved.counts;
+        const statuses = ['passed', 'divergent', 'inconclusive'];
+        if (saved.schemaVersion !== 1 || !validInstant(saved.generatedAt) || !counts ||
+          !['vehicles', ...statuses].every((key) => Number.isSafeInteger(counts[key]) && counts[key] >= 0 && counts[key] <= 500) ||
+          !Array.isArray(saved.vehicles) || saved.vehicles.length !== counts.vehicles ||
+          counts.vehicles !== statuses.reduce((total, key) => total + counts[key], 0) ||
+          new Set(saved.vehicles.map((vehicle) => vehicle?.vehicleId)).size !== saved.vehicles.length ||
+          !saved.vehicles.every((vehicle) => vehicle && typeof vehicle.vehicleId === 'string' && /^\d{1,20}$/.test(vehicle.vehicleId) &&
+            vehicle.publicUrl === `https://www.netcarmultimarcas.com.br/veiculo/${vehicle.vehicleId}` &&
+            boundedText(vehicle.model, 400) && statuses.includes(vehicle.status) &&
+            Array.isArray(vehicle.differences) && vehicle.differences.length <= 1000 &&
+            vehicle.differences.every((difference) => boundedText(difference, 2000))) ||
+          !statuses.every((status) => counts[status] === saved.vehicles.filter((vehicle) => vehicle.status === status).length))
+          throw new EquipmentError(503, 'Relatório da conferência semanal inválido; preserve o arquivo e execute novamente.');
+        return {
+          schemaVersion: saved.schemaVersion, generatedAt: saved.generatedAt,
+          counts: Object.fromEntries(['vehicles', ...statuses].map((key) => [key, counts[key]])),
+          vehicles: saved.vehicles.map((vehicle) => Object.fromEntries(
+            ['vehicleId', 'publicUrl', 'model', 'status', 'differences'].map((key) => [key, vehicle[key]]))),
+        };
+      }
+      return null;
+    }
+    try { report = readPublicReport('public-check-report.json'); } catch (error) { errors.push(error.message); }
+    try { partial = readPublicReport('public-check-partial.json'); } catch (error) { errors.push(error.message); }
+    return { state, report, partial, error: errors.length ? errors.join(' ') : null };
+  }
+
   function getState() {
     let schedule;
     try { schedule = getSchedule(); } catch (error) {
@@ -253,7 +307,8 @@ export function createEquipmentService({
         invalidatedAt: revision.invalidatedAt, invalidationReason: revision.invalidationReason,
       }));
     } catch (error) { researchError = error.message; discovery = null; }
-    return { schedule, report, reviews, research: { discovery, revisions: researchReviews, error: researchError } };
+    return { schedule, report, reviews, research: { discovery, revisions: researchReviews, error: researchError },
+      publicCheck: readPublicCheck() };
   }
 
   function readResearchLedger() {
@@ -392,7 +447,8 @@ export function createEquipmentService({
         const job = runner.enqueueJob({
           label: 'Auditoria e descoberta de equipamentos',
           command: process.execPath,
-          args: ['scripts/run-equipment-daily.mjs', '--state-dir', stateDir, '--input', join(workspaceRoot, 'docs', 'equipment-research-library.json')],
+          args: ['scripts/run-equipment-daily.mjs', '--state-dir', stateDir, '--input', join(workspaceRoot, 'docs', 'equipment-research-library.json'),
+            ...(reason === 'manual' ? ['--force-public'] : [])],
           cwd: workspaceRoot,
           meta: { kind: JOB_KIND },
           onComplete: (completed) => {
