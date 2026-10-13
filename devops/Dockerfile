@@ -8,7 +8,7 @@ COPY client ./client
 RUN npm run build
 
 FROM node:20-alpine
-RUN apk add --no-cache git openssh-client python3 tar tzdata
+RUN apk add --no-cache git openssh-client python3 tar tzdata chromium nss freetype harfbuzz font-freefont
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
@@ -23,6 +23,8 @@ RUN chmod +x /app/docker-entrypoint.sh
 ENV NODE_ENV=production
 ENV PORT=3090
 ENV WORKSPACE_ROOT=/workspace
+ENV NODE_PATH=/app/node_modules
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 EXPOSE 3090
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

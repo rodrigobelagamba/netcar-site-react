@@ -5,8 +5,8 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-/** One existing runner job, two read/review stages. No shell, build or publish. */
-export async function runEquipmentDaily({ stateDir, input, execute = executeNode, workspaceRoot = root, pathExists = existsSync }) {
+/** One existing runner job; the public stage owns its weekly gate. No publishing. */
+export async function runEquipmentDaily({ stateDir, input, forcePublic = false, execute = executeNode, workspaceRoot = root, pathExists = existsSync }) {
   await execute(['--import', 'tsx', 'scripts/audit-vehicle-equipment.ts', '--state-dir', stateDir], workspaceRoot);
   const discover = ['--import', 'tsx', 'scripts/review-vehicle-equipment.ts', 'discover', '--input', input,
     '--expand-exact-matches', '--state-dir', stateDir];
@@ -18,6 +18,8 @@ export async function runEquipmentDaily({ stateDir, input, execute = executeNode
     if (!pathExists(join(stateDir, privateFile))) discover.push(flag, join(workspaceRoot, 'docs', 'audits', seed));
   }
   await execute(discover, workspaceRoot);
+  await execute(['--import', 'tsx', 'scripts/audit-equipment-public.ts', '--state-dir', stateDir,
+    ...(forcePublic ? ['--force'] : [])], workspaceRoot);
 }
 
 async function executeNode(args, cwd) {
@@ -38,11 +40,12 @@ async function executeNode(args, cwd) {
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
-  if (args.length !== 4 || args[0] !== '--state-dir' || args[2] !== '--input' || !args[1] || !args[3]) {
-    process.stderr.write('Informe --state-dir DIRETORIO --input BIBLIOTECA.\n');
+  if (![4, 5].includes(args.length) || args[0] !== '--state-dir' || args[2] !== '--input' || !args[1] || !args[3] ||
+    (args.length === 5 && args[4] !== '--force-public')) {
+    process.stderr.write('Informe --state-dir DIRETORIO --input BIBLIOTECA [--force-public].\n');
     process.exitCode = 1;
   } else {
-    runEquipmentDaily({ stateDir: resolve(args[1]), input: resolve(args[3]) }).catch((error) => {
+    runEquipmentDaily({ stateDir: resolve(args[1]), input: resolve(args[3]), forcePublic: args[4] === '--force-public' }).catch((error) => {
       process.stderr.write(`${error.message}\n`);
       process.exitCode = 1;
     });

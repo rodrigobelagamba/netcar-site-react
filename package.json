@@ -24,6 +24,7 @@
     "stock:review-equipment": "node --import tsx scripts/review-vehicle-equipment.ts",
     "stock:test-equipment-review": "node --import tsx --test scripts/tests/equipment-review*.test.ts scripts/tests/equipment-discovery.test.ts scripts/tests/equipment-source-watch.test.ts scripts/tests/vehicle-physical-identity.test.ts",
     "stock:test-equipment-audit": "tsx --test scripts/tests/equipment-audit.test.ts",
+    "stock:test-equipment-public": "tsx --test scripts/tests/equipment-public-check.test.ts",
     "stock:validate-video": "tsx scripts/validate-vehicle-video.ts",
     "social:sync-vehicle-videos": "node scripts/sync-vehicle-videos-remote.mjs",
     "social:sync-vehicle-videos:dry-run": "node scripts/sync-vehicle-videos-remote.mjs --dry-run",

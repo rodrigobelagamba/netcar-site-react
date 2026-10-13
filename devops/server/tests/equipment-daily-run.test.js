@@ -5,11 +5,11 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { runEquipmentDaily } from '../../../scripts/run-equipment-daily.mjs';
 
-test('daily job audits then discovers through fixed CLI commands without publishing', async () => {
+test('daily job audits, discovers and checks the public weekly gate through fixed commands', async () => {
   const calls = [];
   await runEquipmentDaily({ stateDir: '/workspace/.devops/equipment', input: '/workspace/docs/equipment-research-library.json', workspaceRoot: '/workspace',
     execute: async (args, cwd) => { calls.push({ args, cwd }); } });
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 3);
   assert.equal(calls[0].args[2], 'scripts/audit-vehicle-equipment.ts');
   assert.equal(calls[1].args[2], 'scripts/review-vehicle-equipment.ts');
   assert.equal(calls[1].args[3], 'discover');
@@ -17,7 +17,17 @@ test('daily job audits then discovers through fixed CLI commands without publish
   assert.ok(calls[1].args.includes('--research-progress'));
   assert.ok(calls[1].args.includes('--public-observations'));
   assert.equal(calls[1].cwd, '/workspace');
+  assert.deepEqual(calls[2], { args: ['--import', 'tsx', 'scripts/audit-equipment-public.ts', '--state-dir', '/workspace/.devops/equipment'], cwd: '/workspace' });
   assert.ok(!calls.some(({ args }) => args.some((value) => /^(?:apply|deploy|build|decide|publish)/.test(value))));
+});
+
+test('manual audit forces only the public check, keeping discovery and review safeguards', async () => {
+  const calls = [];
+  await runEquipmentDaily({ stateDir: '/private', input: '/library.json', forcePublic: true,
+    execute: async (args) => calls.push(args) });
+  assert.equal(calls.length, 3);
+  assert.ok(!calls[0].includes('--force') && !calls[1].includes('--force'));
+  assert.deepEqual(calls[2], ['--import', 'tsx', 'scripts/audit-equipment-public.ts', '--state-dir', '/private', '--force']);
 });
 
 test('bootstrap evidence never replaces existing private research or public observations', async () => {
@@ -55,4 +65,22 @@ test('discovery failure fails the combined job while retaining each last success
   } }), /research failed/);
   assert.equal(readFileSync(audit, 'utf8'), 'current valid audit');
   assert.equal(readFileSync(discovery, 'utf8'), 'previous discovery');
+});
+
+test('public check failure preserves completed source reports and review decisions', async (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'equipment-daily-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const reviews = join(dir, 'reviews.json');
+  writeFileSync(reviews, '{"reviewed":"preserve"}');
+  let stages = 0;
+  await assert.rejects(runEquipmentDaily({ stateDir: dir, input: '/library.json', execute: async (args) => {
+    stages++;
+    if (args[2] === 'scripts/audit-vehicle-equipment.ts') writeFileSync(join(dir, 'report.json'), 'valid audit');
+    else if (args[2] === 'scripts/review-vehicle-equipment.ts') writeFileSync(join(dir, 'research-stock.json'), 'valid source snapshot');
+    else throw new Error('public check incomplete');
+  } }), /public check incomplete/);
+  assert.equal(stages, 3);
+  assert.equal(readFileSync(join(dir, 'report.json'), 'utf8'), 'valid audit');
+  assert.equal(readFileSync(join(dir, 'research-stock.json'), 'utf8'), 'valid source snapshot');
+  assert.equal(readFileSync(reviews, 'utf8'), '{"reviewed":"preserve"}');
 });

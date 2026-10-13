@@ -127,6 +127,96 @@ test('startup catches up once after 09:00 and failure preserves the last report'
   assert.equal(h.options.length, 1, 'failure must not create a restart retry loop');
 });
 
+test('manual run forces public verification while scheduled jobs retain its weekly gate', (t) => {
+  const h = harness(t, { now: '2026-10-13T18:00:00Z' });
+  h.service.run();
+  assert.equal(h.options.length, 1);
+  assert.equal(h.options[0].args.at(-1), '--force-public');
+  h.complete('job-1');
+  h.service.run('scheduled');
+  assert.ok(!h.options[1].args.includes('--force-public'));
+  assert.ok(h.options.every((job) => job.meta.kind === 'equipment:audit'));
+  assert.equal(h.cronTasks.length, 0, 'manual verification does not create another scheduler');
+});
+
+function publicCheckReport({ generatedAt = '2026-10-12T12:03:00.000Z', status = 'passed', differences = [] } = {}) {
+  return { schemaVersion: 1, generatedAt,
+    counts: { vehicles: 1, passed: Number(status === 'passed'), divergent: Number(status === 'divergent'), inconclusive: Number(status === 'inconclusive') },
+    vehicles: [{ vehicleId: '20075', publicUrl: 'https://www.netcarmultimarcas.com.br/veiculo/20075',
+      model: 'Jeep Renegade Longitude', status, differences }],
+  };
+}
+
+test('weekly state exposes the last complete result separately from a failed partial attempt', (t) => {
+  const h = harness(t);
+  h.saveReport();
+  h.service.review({ reviewKey: KEY, status: 'reviewed', note: 'Decisão anterior preservada.' });
+  const reviewsBefore = readFileSync(join(h.stateDir, 'reviews.json'), 'utf8');
+  const complete = publicCheckReport();
+  const partial = publicCheckReport({ generatedAt: '2026-10-13T12:04:00.000Z', status: 'inconclusive', differences: ['A ficha não respondeu dentro do prazo.'] });
+  writeFileSync(join(h.stateDir, 'public-check-report.json'), JSON.stringify(complete));
+  writeFileSync(join(h.stateDir, 'public-check-partial.json'), JSON.stringify(partial));
+  writeFileSync(join(h.stateDir, 'public-check-state.json'), JSON.stringify({ schemaVersion: 1,
+    lastAttempt: '2026-10-13T12:00:00.000Z', lastSuccess: complete.generatedAt, period: '2026-10-12',
+    status: 'failed', error: 'Uma ficha inconclusiva; relatório anterior preservado.', nextRun: '2026-10-19T12:00:00.000Z',
+    privateUnexpectedField: 'never expose',
+  }));
+  const result = h.service.getState();
+  assert.deepEqual(result.publicCheck.report, complete);
+  assert.deepEqual(result.publicCheck.partial, partial);
+  assert.equal(result.publicCheck.state.status, 'failed');
+  assert.equal(result.publicCheck.state.lastSuccess, complete.generatedAt);
+  assert.equal(result.publicCheck.state.nextRun, '2026-10-19T12:00:00.000Z');
+  assert.equal(result.publicCheck.state.privateUnexpectedField, undefined);
+  assert.equal(result.publicCheck.error, null);
+  assert.equal(result.reviews[KEY].status, 'reviewed');
+  assert.equal(readFileSync(join(h.stateDir, 'reviews.json'), 'utf8'), reviewsBefore);
+  assert.equal(h.options.length, 0, 'reading a weekly result must never execute or publish');
+});
+
+test('weekly reports reject incomplete data, unsafe links and mismatched totals without touching files', (t) => {
+  const h = harness(t);
+  h.saveReport();
+  for (const patch of [
+    (value) => { value.counts.vehicles = 2; },
+    (value) => { value.vehicles[0].publicUrl = 'https://user:secret@example.com/vehicle'; },
+    (value) => { value.vehicles[0].differences = [null]; },
+    (value) => { value.generatedAt = 'yesterday'; },
+    (value) => { value.vehicles[0].status = 'published'; },
+  ]) {
+    const value = publicCheckReport(); patch(value);
+    const source = JSON.stringify(value);
+    writeFileSync(join(h.stateDir, 'public-check-report.json'), source);
+    const result = h.service.getState();
+    assert.equal(result.publicCheck.report, null);
+    assert.match(result.publicCheck.error, /inválido/);
+    assert.equal(result.report.vehicles[0].id, '20050', 'a corrupt weekly report does not hide daily findings');
+    assert.equal(readFileSync(join(h.stateDir, 'public-check-report.json'), 'utf8'), source);
+  }
+});
+
+test('interrupted weekly check is not displayed as running forever and manual retry remains available', (t) => {
+  const h = harness(t, { defaultEnabled: true, now: '2026-10-13T15:00:00Z' });
+  h.service.start();
+  const source = JSON.stringify({ schemaVersion: 1, lastAttempt: '2026-10-13T15:00:00.000Z',
+    lastSuccess: '2026-10-12T12:04:00.000Z', period: '2026-10-12', status: 'running', error: null,
+    nextRun: '2026-10-19T12:00:00.000Z' });
+  writeFileSync(join(h.stateDir, 'public-check-state.json'), source);
+  assert.equal(h.service.getState().publicCheck.state.status, 'running');
+  h.service.stop(); h.jobs.clear();
+  const restarted = h.createService(); restarted.start();
+  const state = restarted.getState().publicCheck.state;
+  assert.equal(state.status, 'failed');
+  assert.match(state.error, /interrompida/);
+  assert.equal(state.lastSuccess, '2026-10-12T12:04:00.000Z');
+  assert.equal(h.options.length, 1, 'restart does not silently duplicate the interrupted attempt');
+  assert.equal(readFileSync(join(h.stateDir, 'public-check-state.json'), 'utf8'), source, 'read projection preserves the source state');
+  restarted.run();
+  assert.equal(h.options.length, 2);
+  assert.equal(h.options[1].args.at(-1), '--force-public');
+  assert.equal(restarted.getState().publicCheck.state.status, 'running');
+});
+
 test('interrupted persisted job is reported failed and is not duplicated after restart', (t) => {
   const h = harness(t, { defaultEnabled: true, now: '2026-09-28T15:00:00Z' });
   h.service.start();
