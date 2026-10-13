@@ -1,0 +1,233 @@
+{
+  "source": "Sanitized XML/API reconciliation observed 2026-10-13; current-xml-api-resolver.json. Only relevant existing positive optional rows retained. No raw physical identifier, contact, image, price or announcement text.",
+  "vehicles": [
+    {
+      "id": "19687",
+      "marca": "FIAT",
+      "modelo": "ARGO DRIVE",
+      "year": 2024,
+      "anoFabricacao": 2023,
+      "motor": "1.3",
+      "cambio": "AUTOMATICO",
+      "opcionais": [
+        {
+          "tag": "ar_condicionado",
+          "descricao": "Ar Condicionado",
+          "xmlFlag": true,
+          "xmlTag": "ar_condicionado"
+        },
+        {
+          "tag": "cambio_automatico",
+          "descricao": "Câmbio Automático",
+          "xmlFlag": true,
+          "xmlTag": "cambio_automatico"
+        },
+        {
+          "tag": "cambio_cvt",
+          "descricao": "Câmbio CVT",
+          "xmlFlag": true,
+          "xmlTag": "cambio_cvt"
+        },
+        {
+          "tag": "direcao_eletrica",
+          "descricao": "Direção Elétrica",
+          "xmlFlag": true,
+          "xmlTag": "direcao_eletrica"
+        }
+      ]
+    },
+    {
+      "id": "19653",
+      "marca": "HYUNDAI",
+      "modelo": "IX35 GL",
+      "year": 2018,
+      "anoFabricacao": 2017,
+      "motor": "2.0",
+      "cambio": "AUTOMATICO",
+      "opcionais": [
+        {
+          "tag": "ar_condicionado",
+          "descricao": "Ar Condicionado",
+          "xmlFlag": true,
+          "xmlTag": "ar_condicionado"
+        },
+        {
+          "tag": "ar_condicionado_digital",
+          "descricao": "Ar Condicionado Digital",
+          "xmlFlag": true,
+          "xmlTag": "ar_condicionado_digital"
+        },
+        {
+          "tag": "bancos_de_couro",
+          "descricao": "Bancos em Couro",
+          "xmlFlag": true,
+          "xmlTag": "bancos_de_couro"
+        },
+        {
+          "tag": "cambio_automatico",
+          "descricao": "Câmbio Automático",
+          "xmlFlag": true,
+          "xmlTag": "cambio_automatico"
+        },
+        {
+          "tag": "direcao_hidraulica",
+          "descricao": "Direção Hidráulica",
+          "xmlFlag": true,
+          "xmlTag": "direcao_hidraulica"
+        }
+      ]
+    },
+    {
+      "id": "19854",
+      "marca": "HONDA",
+      "modelo": "HRV ADVANCE TURBO",
+      "year": 2024,
+      "anoFabricacao": 2024,
+      "motor": "1.5",
+      "cambio": "AUTOMATICO",
+      "opcionais": [
+        {
+          "tag": "ar_condicionado",
+          "descricao": "Ar Condicionado",
+          "xmlFlag": true,
+          "xmlTag": "ar_condicionado"
+        },
+        {
+          "tag": "ar_condicionado_digital",
+          "descricao": "Ar Condicionado Digital",
+          "xmlFlag": true,
+          "xmlTag": "ar_condicionado_digital"
+        },
+        {
+          "tag": "bancos_de_couro",
+          "descricao": "Bancos em Couro",
+          "xmlFlag": true,
+          "xmlTag": "bancos_de_couro"
+        },
+        {
+          "tag": "cambio_cvt",
+          "descricao": "Câmbio CVT",
+          "xmlFlag": true,
+          "xmlTag": "cambio_cvt"
+        }
+      ]
+    },
+    {
+      "id": "19750",
+      "marca": "VOLKSWAGEN",
+      "modelo": "T CROSS HIGHLINE TURBO",
+      "year": 2021,
+      "anoFabricacao": 2020,
+      "motor": "1.4",
+      "cambio": "AUTOMATICO",
+      "opcionais": [
+        {
+          "tag": "ar_condicionado",
+          "descricao": "Ar Condicionado",
+          "xmlFlag": true,
+          "xmlTag": "ar_condicionado"
+        },
+        {
+          "tag": "ar_condicionado_digital",
+          "descricao": "Ar Condicionado Digital",
+          "xmlFlag": true,
+          "xmlTag": "ar_condicionado_digital"
+        },
+        {
+          "tag": "cambio_automatico",
+          "descricao": "Câmbio Automático",
+          "xmlFlag": true,
+          "xmlTag": "cambio_automatico"
+        }
+      ]
+    },
+    {
+      "id": "19898",
+      "marca": "HONDA",
+      "modelo": "HRV TOURING TURBO",
+      "year": 2024,
+      "anoFabricacao": 2023,
+      "motor": "1.5",
+      "cambio": "AUTOMATICO",
+      "opcionais": [
+        {
+          "tag": "ar_condicionado",
+          "descricao": "Ar Condicionado",
+          "xmlFlag": true,
+          "xmlTag": "ar_condicionado"
+        },
+        {
+          "tag": "ar_condicionado_digital",
+          "descricao": "Ar Condicionado Digital",
+          "xmlFlag": true,
+          "xmlTag": "ar_condicionado_digital"
+        },
+        {
+          "tag": "cambio_cvt",
+          "descricao": "Câmbio CVT",
+          "xmlFlag": true,
+          "xmlTag": "cambio_cvt"
+        }
+      ]
+    },
+    {
+      "id": "20075",
+      "marca": "JEEP",
+      "modelo": "RENEGADE LONGITUDE T270 TURBO",
+      "year": 2024,
+      "anoFabricacao": 2023,
+      "motor": "1.3",
+      "cambio": "AUTOMATICO",
+      "opcionais": [
+        {
+          "tag": "android",
+          "descricao": "Android Auto",
+          "xmlFlag": true,
+          "xmlTag": "android"
+        },
+        {
+          "tag": "apple",
+          "descricao": "Apple CarPlay",
+          "xmlFlag": true,
+          "xmlTag": "apple"
+        },
+        {
+          "tag": "cambio_automatico",
+          "descricao": "Câmbio Automático",
+          "xmlFlag": true,
+          "xmlTag": "cambio_automatico"
+        },
+        {
+          "tag": "park_assist",
+          "descricao": "Park Assist (Estaciona Sozinha)",
+          "xmlFlag": true,
+          "xmlTag": "park_assist"
+        }
+      ],
+      "physicalIdentityKey": "e45e69df94bd4e01b092fd9ee4d391f3722e8270254776b92f1dfd2ebf5d54bf"
+    },
+    {
+      "id": "19788",
+      "marca": "VOLKSWAGEN",
+      "modelo": "NIVUS HIGHLINE TURBO",
+      "year": 2024,
+      "anoFabricacao": 2024,
+      "motor": "1.0",
+      "cambio": "AUTOMATICO",
+      "opcionais": [
+        {
+          "tag": "cambio_automatico",
+          "descricao": "Câmbio Automático",
+          "xmlFlag": true,
+          "xmlTag": "cambio_automatico"
+        },
+        {
+          "tag": "cambio_sete",
+          "descricao": "Câmbio 7 Marchas",
+          "xmlFlag": true,
+          "xmlTag": "cambio_sete"
+        }
+      ]
+    }
+  ]
+}

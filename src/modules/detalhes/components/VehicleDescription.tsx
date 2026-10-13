@@ -11,7 +11,7 @@ function isListContent(
   return typeof content === "object" && content !== null && "itens" in content;
 }
 
-/** Mostra o início do anúncio cadastrado, sem resumir nem reescrever o texto. */
+/** Mostra a descrição derivada do cadastro com expansão acessível. */
 export function VehicleDescription({ content }: { content: ParsedGptContent }) {
   const [expanded, setExpanded] = useState(false);
   const contentId = useId();

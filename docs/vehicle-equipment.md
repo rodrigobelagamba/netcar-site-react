@@ -10,6 +10,16 @@ Itens já explicados nos destaques não se repetem na lista. Câmbio automático
 
 Descrições explícitas têm precedência sobre tags legadas. Desconhecidos continuam visíveis, no final, sem benefícios inventados. Não converter sensores em Park Assist, controlador de velocidade em ACC, multimídia em CarPlay sem fio, nem teto panorâmico em teto com abertura.
 
+A seção “Descrição do veículo” também usa o cadastro atual: identidade, motor,
+combustível e câmbio vêm dos campos estruturados; equipamentos vêm exclusivamente
+de `resolveVehicleEquipment`, inclusive as correções já aprovadas por unidade.
+`buildVehicleDescription` não recebe o texto livre de `anuncio.php`. A releitura de
+13/10/2026 encontrou nele afirmações sem respaldo e contradições com o XML; filtrar
+algumas frases deixaria outras alegações sem conferência. O endpoint e o ERP
+permanecem intactos. Todas as fichas passam a apresentar uma descrição baseada
+nesses dados, mesmo quando não havia anúncio livre. Alterações no cadastro se
+refletem na descrição ao atualizar a ficha, sem nova geração de texto por modelo.
+
 ## Pesquisa obrigatória antes de complementar um cadastro
 
 1. Identificar marca, modelo, **versão**, motor, mercado brasileiro e **ano-modelo**, não apenas fabricação ou data da notícia.

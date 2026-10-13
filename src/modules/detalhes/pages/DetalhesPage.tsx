@@ -36,7 +36,6 @@ import React, {
 import { useVehicleQuery, isVehicleGone } from "@/catalog/queries/useVehicleQuery";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
-import { useAnuncioQuery } from "@/catalog/queries/useAnuncioQuery";
 import {
   buildWhatsAppUrl,
   siteWhatsAppMessage,
@@ -76,7 +75,7 @@ import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
 import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
-import { parseGptContent } from "@/lib/parseGptContent";
+import { buildVehicleDescription } from "../lib/vehicleDescription";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { landingPages, matchesLandingFilters } from "@/data/seo";
 import {
@@ -1699,9 +1698,6 @@ export function DetalhesPage() {
     });
   }, [vehicle, officialSlug, slug, navigate]);
 
-  // Busca o anúncio (campo GPT) separadamente usando o novo endpoint
-  const { data: anuncio } = useAnuncioQuery(vehicle?.id);
-
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const primaryCtaRef = useRef<HTMLDivElement>(null);
@@ -2505,7 +2501,6 @@ export function DetalhesPage() {
       <DeferredRender minHeight={900} rootMargin="700px">
         <DetailsSection
           vehicle={vehicle}
-          anuncio={anuncio || null}
           isSold={isSold}
           pageSlug={slug}
         />
@@ -2743,14 +2738,12 @@ function VehicleDifferentialHighlights({
 
 interface DetailsSectionProps {
   vehicle: any;
-  anuncio?: string | null;
   isSold?: boolean;
   pageSlug?: string;
 }
 
 function DetailsSection({
   vehicle,
-  anuncio,
   isSold = false,
   pageSlug,
 }: DetailsSectionProps) {
@@ -2760,8 +2753,7 @@ function DetailsSection({
   const year = vehicle.year || 0;
   const mileageFormatted = formatCatalogMileage(vehicle.km);
 
-  // Parse do conteúdo do anúncio (vem do endpoint separado)
-  const gptContent = useMemo(() => parseGptContent(anuncio || null), [anuncio]);
+  const description = useMemo(() => buildVehicleDescription(vehicle), [vehicle]);
   const highlightPresentation = useMemo(
     () => buildVehicleHighlights(vehicle),
     [vehicle],
@@ -2925,9 +2917,9 @@ function DetailsSection({
               </p>
             )}
 
-            {/* O início do anúncio fica visível; a expansão preserva o texto da API. */}
-            {gptContent && (
-              <VehicleDescription key={vehicle.id} content={gptContent} />
+            {/* A descrição acompanha os mesmos dados conferidos da ficha. */}
+            {description && (
+              <VehicleDescription key={vehicle.id} content={description} />
             )}
           </div>
 
