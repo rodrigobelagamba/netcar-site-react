@@ -25,6 +25,8 @@ try {
         'url' => 'https://www.netcarmultimarcas.com.br/entregas#foto=' . rawurlencode($id)), $result), $result['action'] === 'created' ? 201 : 200);
 } catch (InvalidArgumentException $error) {
     entregas_json_response(array('ok' => false, 'error' => $error->getMessage()), 422);
+} catch (EntregasPublishConflict $error) {
+    entregas_json_response(array('ok' => false, 'error' => $error->getMessage()), 409);
 } catch (Throwable $error) {
     error_log('Entregas publish: ' . $error->getMessage());
     entregas_json_response(array('ok' => false, 'error' => 'Publication temporarily unavailable; retry the same delivery_id'), 503);

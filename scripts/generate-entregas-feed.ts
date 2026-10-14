@@ -7,7 +7,7 @@ import { deliveries } from "../src/modules/entregas/lib/deliveries";
 const directory = fileURLToPath(new URL("../public/entregas-data/", import.meta.url));
 await mkdir(directory, { recursive: true });
 const target = `${directory}/seed.json`;
-const fields = ["id", "name", "imageUrl", "previewImageUrl", "previewSrcSet", "imagePosition", "date", "year", "month", "caption", "source", "publishedAt", "sourceUrl", "sourceLabel"];
+const fields = ["id", "name", "imageUrl", "previewImageUrl", "previewSrcSet", "imagePosition", "imageKind", "cardCrop", "photoCrop", "date", "year", "month", "caption", "source", "publishedAt", "sourceUrl", "sourceLabel"];
 const clean = deliveries.map((delivery) => Object.fromEntries(
   Object.entries(delivery).filter(([field]) => fields.includes(field)),
 ));

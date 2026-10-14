@@ -5,6 +5,9 @@ import duplicateMappings from "../data/delivery-duplicates.json";
 
 /** Normalized [left, top, width, height] in the complete original image. */
 export type DeliveryCardCrop = readonly [number, number, number, number];
+export type DeliveryImageKind = "photo" | "story_card";
+export type DeliveryLayout = "pessoas" | "inteira";
+export const DEFAULT_DELIVERY_LAYOUT: DeliveryLayout = "pessoas";
 
 export interface Delivery {
   id: string;
@@ -17,7 +20,11 @@ export interface Delivery {
   /** Card focal point; the viewer always shows the whole photo. */
   imagePosition?: string;
   /** Automatically calculated group framing; the original image stays intact. */
-  cardCrop?: DeliveryCardCrop;
+  cardCrop?: DeliveryCardCrop | null;
+  /** Thumbnail framing measured on this native photo, never on its Story artwork. */
+  photoCrop?: DeliveryCardCrop | null;
+  /** Native delivery photos must never inherit framing from older Story cards. */
+  imageKind?: DeliveryImageKind;
   /** Archive record or source publication date, not a verified delivery/purchase date. */
   date: string | null;
   year: string | null;
@@ -96,13 +103,20 @@ function parseCardCrop(value: unknown): DeliveryCardCrop | undefined {
   if (
     !Array.isArray(value) ||
     value.length !== 4 ||
-    !value.every((coordinate) => typeof coordinate === "number" && Number.isFinite(coordinate))
+    !value.every(
+      (coordinate) =>
+        typeof coordinate === "number" && Number.isFinite(coordinate),
+    )
   )
     return undefined;
   const [left, top, width, height] = value;
   if (
-    left < 0 || top < 0 || width <= 0 || height <= 0 ||
-    left + width > 1.000001 || top + height > 1.000001
+    left < 0 ||
+    top < 0 ||
+    width <= 0 ||
+    height <= 0 ||
+    left + width > 1.000001 ||
+    top + height > 1.000001
   )
     return undefined;
   return [left, top, width, height];
@@ -112,7 +126,20 @@ export function deliveryCardCrop(
   item: Delivery,
   archiveCrops: Readonly<Record<string, readonly number[]>>,
 ): readonly number[] | undefined {
+  if (item.imageKind === "photo" || item.cardCrop === null) return undefined;
   return item.cardCrop ?? archiveCrops[item.id];
+}
+
+/** Thumbnails frame the group; opening a native photo still shows the full image. */
+export function deliveryGridCardCrop(
+  item: Delivery,
+  archiveCrops: Readonly<Record<string, readonly number[]>>,
+  layout: DeliveryLayout = DEFAULT_DELIVERY_LAYOUT,
+): readonly number[] | undefined {
+  if (layout !== "pessoas") return undefined;
+  return item.imageKind === "photo"
+    ? parseCardCrop(item.photoCrop)
+    : deliveryCardCrop(item, archiveCrops);
 }
 
 export function parsePublishedDeliveries(value: unknown): Delivery[] {
@@ -128,7 +155,10 @@ export function parsePublishedDeliveries(value: unknown): Delivery[] {
       typeof item.date !== "string" ||
       !/^\d{4}-\d{2}-\d{2}$/.test(item.date) ||
       typeof item.publishedAt !== "string" ||
-      !Number.isFinite(Date.parse(item.publishedAt))
+      !Number.isFinite(Date.parse(item.publishedAt)) ||
+      (item.imageKind !== undefined &&
+        item.imageKind !== "photo" &&
+        item.imageKind !== "story_card")
     )
       throw new Error("Invalid publication record");
     const result: Delivery = {
@@ -140,6 +170,7 @@ export function parsePublishedDeliveries(value: unknown): Delivery[] {
       month: item.date.slice(5, 7),
       source: "marketing",
       publishedAt: item.publishedAt,
+      imageKind: item.imageKind ?? "story_card",
     };
     if (
       typeof item.previewImageUrl === "string" &&
@@ -160,8 +191,15 @@ export function parsePublishedDeliveries(value: unknown): Delivery[] {
       /^center \d{1,3}%$/.test(item.imagePosition)
     )
       result.imagePosition = item.imagePosition;
-    const cardCrop = parseCardCrop(item.cardCrop);
-    if (cardCrop) result.cardCrop = cardCrop;
+    if (result.imageKind === "photo" || item.cardCrop === null) {
+      result.cardCrop = null;
+    } else {
+      const cardCrop = parseCardCrop(item.cardCrop);
+      if (cardCrop) result.cardCrop = cardCrop;
+    }
+    if (result.imageKind === "photo") {
+      result.photoCrop = parseCardCrop(item.photoCrop) ?? null;
+    }
     return result;
   });
 }

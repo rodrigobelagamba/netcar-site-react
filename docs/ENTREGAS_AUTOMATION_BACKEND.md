@@ -1,8 +1,9 @@
 # Publicação automática de entregas
 
-O site recebe o card final aprovado pelo fluxo do marketing, após a confirmação
-da publicação no Instagram. O bot é responsável por manter uma fila persistente
-e repetir somente o envio ao site se houver falha.
+O site recebe a imagem aprovada pelo fluxo do marketing, após a confirmação da
+publicação no Instagram. O contrato distingue fotos de entrega de cards dos
+Stories; uma foto não deve herdar o zoom calculado para a arte. O bot é responsável
+por manter uma fila persistente e repetir somente o envio ao site se houver falha.
 
 ## Contrato
 
@@ -17,14 +18,37 @@ e repetir somente o envio ao site se houver falha.
 - `metadata.instagram_media_id`: alternativa quando não houver `delivery_id`.
 - `metadata.published_at`: data confirmada da publicação, ISO 8601 com timezone,
   por exemplo `2026-09-21T13:00:00Z`. O mês e dia exibidos usam America/Sao_Paulo.
+- `metadata.image_kind`: `photo` para a foto de entrega sem arte dos Stories ou
+  `story_card` para o formato legado. Outros valores (incluindo `null`) são
+  recusados. O feed devolve `imageKind`. Imagens antigas sem o campo continuam
+  `story_card`; retries dos mesmos bytes sem o campo preservam o tipo existente.
+  Uma imagem nova sem o campo usa o padrão legado. O remetente de fotos nativas
+  deve sempre informar `photo`, inclusive nas correções e repetições.
 - `metadata.card_crop`: opcional, `null` ou `[x, y, largura, altura]`, números
   normalizados de 0 a 1 sobre o **card final completo**, com origem no canto
   superior esquerdo. O retângulo precisa caber na imagem e ser quadrado em
   pixels (tolerância de 1 pixel). O feed devolve essa tupla como `cardCrop`.
   Omitir preserva o enquadramento anterior quando a imagem é idêntica; `null`
   restaura a foto inteira. Corrigir a imagem sem novo crop descarta o antigo.
+  Para `photo`, o backend sempre grava/devolve `cardCrop: null`, mesmo quando um
+  remetente antigo repete os mesmos bytes com um crop. O frontend também ignora
+  recortes estáticos para esse tipo.
+- `metadata.photo_crop`: enquadramento exclusivo da **foto nativa protegida**,
+  com as mesmas validações de limites e proporção quadrada de `card_crop`.
+  O feed devolve `photoCrop`; não é aproveitado de uma arte dos Stories.
+  Omissão preserva apenas o enquadramento dos mesmos bytes; nova imagem sem
+  recorte válido volta ao quadro completo. `null` remove o enquadramento.
+  A galeria inicia em **Mais perto**, usando esse recorte só na miniatura.
+  Ao abrir a foto nativa, a imagem aparece inteira. **Foto inteira** continua
+  disponível também na grade; ausência de recorte seguro não força zoom central.
 - Outros textos não são persistidos: nome, placa, legenda livre e dados de venda
   não fazem parte desse contrato público.
+- Correções históricas podem enviar `metadata.expected_content_sha256`: hash
+  SHA-256 do arquivo anteriormente recebido. A comparação ocorre sob a trava de
+  publicação; alvo ausente, conteúdo diferente ou mudança de data retorna 409
+  sem alterar dados. Após uma resposta perdida, repetir a mesma correção só
+  retorna `unchanged` se imagem, enquadramento, tipo e data já forem idênticos.
+  A precondição não é persistida nem utilizada pelo fluxo normal de novas fotos.
 
 Resposta 201 na primeira publicação; 200 para atualização ou repetição:
 
@@ -38,6 +62,9 @@ Resposta 201 na primeira publicação; 200 para atualização ou repetição:
     "id": "delivery-...",
     "name": "",
     "source": "marketing",
+    "imageKind": "photo",
+    "cardCrop": null,
+    "photoCrop": null,
     "date": "2026-09-21",
     "year": "2026",
     "month": "09",
@@ -52,10 +79,14 @@ Resposta 201 na primeira publicação; 200 para atualização ou repetição:
 Uma correção enviada com o mesmo `delivery_id` preserva o link individual.
 Bytes idênticos enviados com outro ID são reunidos em uma única foto.
 Imagens corrigidas recebem nomes imutáveis novos para não ficarem presas no cache.
-Alterar apenas `card_crop` preserva ID, data e todos os arquivos WebP existentes;
+Alterar apenas `card_crop` ou `photo_crop` preserva ID, data e os arquivos WebP;
 uma repetição com o mesmo enquadramento retorna `unchanged`.
+Alterar `image_kind` nos mesmos bytes também preserva arquivos e links. A troca
+de card por foto deve usar o mesmo `delivery_id` e `published_at`; as novas
+variantes ganham outro hash e não reaproveitam o enquadramento da arte antiga.
 
 Erros: 400 formulário incompleto, 401 token incorreto, 405 método inválido,
+409 conflito de correção histórica (inspecionar antes de repetir),
 413 corpo acima do limite, 422 imagem/metadados inválidos e 503 indisponibilidade
 temporária. O bot deve manter o mesmo ID nas tentativas, repetir falhas de rede/503
 e registrar as demais para correção. Uma falha no site não deve republicar o Story.
@@ -117,13 +148,14 @@ arquivos temporários isolados. Não publica fotos reais nem altera o feed do si
 
 ## Enquadramento automático do bot
 
-O worker `stories/delivery_gallery_sync.py` analisa a cópia durável do card final
-antes do primeiro POST ao site. `stories/delivery_gallery_crop.py` usa apenas
+Ao criar um novo job fotográfico, `stories/delivery_gallery_sync.py` analisa os
+bytes da foto protegida, após verificar o vínculo com a arte aprovada. O crop é
+congelado antes do primeiro POST ao site. `stories/delivery_gallery_crop.py` usa apenas
 detecção de caixas de rostos; não identifica pessoas e não guarda nomes,
 embeddings ou as caixas individuais. A outbox guarda somente a tupla pública,
 versão do algoritmo, hash do modelo e motivo da decisão. Retentativas reutilizam
-a decisão e os mesmos bytes; a aprovação/publicação no Instagram não executa o
-detector nem depende dele.
+a decisão e os mesmos bytes. Jobs antigos sem `photo_crop` não são reenquadrados
+automaticamente, e registros `sent` não são modificados.
 
 - `opencv-python-headless==4.13.0.92` está nos dois requirements do bot. O modelo
   oficial YuNet 2023mar e a licença MIT estão em `stories/models/`, incluídos pelo
@@ -136,10 +168,12 @@ detector nem depende dele.
   mantêm a foto completa. O recorte inclui margem de cabeça/ombros e limita a
   aproximação a 1,75×. Rostos ocultos ou não detectados continuam sendo uma
   limitação; a foto original fica sempre disponível.
-- O frontend aplica a tupla apenas na apresentação e em Ampliar. O HTML inicial
-  sem JavaScript e a opção de foto inteira preservam a imagem completa.
+- Nas fotos nativas, frontend e HTML inicial aplicam `photoCrop` apenas à
+  miniatura. O visualizador abre a foto completa, sem modificar os arquivos.
+  `cardCrop` continua reservado às artes legadas; nunca passa de um tipo ao outro.
 
-Para revisar uma entrega **já publicada**, no runtime do bot:
+Comando legado para revisar enquadramento de uma arte antiga (não modifica jobs
+fotográficos v2 nem registros em revisão):
 
 ```sh
 python -m stories.delivery_gallery_sync --refresh-crop delivery-<40 caracteres hexadecimais da outbox>

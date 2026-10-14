@@ -530,7 +530,9 @@
 }
 .entregas-card-photo .entregas-photo-crop {
   position: absolute;
-  max-width: none;
+  /* Cropped images intentionally exceed their clipped frame. Override the
+     global mobile image cap or the group is squeezed and the frame left blank. */
+  max-width: none !important;
   object-fit: fill;
 }
 .entregas-grid-inteira .entregas-card-photo img,
@@ -538,7 +540,7 @@
   object-fit: contain;
 }
 @media (hover: hover) {
-  .entregas-grid-pessoas .entregas-card:hover .entregas-card-frame {
+  .entregas-grid-pessoas .entregas-card:hover .entregas-card-frame-cropped {
     transform: scale(1.025);
   }
 }

@@ -17,12 +17,15 @@ import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import {
   deliveries,
+  DEFAULT_DELIVERY_LAYOUT,
   deliveryCardCrop,
+  deliveryGridCardCrop,
   filterDeliveries,
   mergePublishedDeliveries,
   parsePublishedDeliveries,
   resolveDeliveryId,
   type Delivery,
+  type DeliveryLayout,
 } from "../lib/deliveries";
 import { DeliveryViewer } from "../components/DeliveryViewer";
 import cardCropData from "../data/delivery-card-crops.json";
@@ -113,9 +116,11 @@ function DeliveryPhoto({
               left: `${(-100 * crop[0]) / crop[2]}%`,
               top: `${(-100 * crop[1]) / crop[3]}%`,
             }
-          : item.imagePosition
-            ? { objectPosition: item.imagePosition }
-            : undefined
+          : item.imageKind === "photo"
+            ? { objectPosition: "center" }
+            : item.imagePosition
+              ? { objectPosition: item.imagePosition }
+              : undefined
       }
       src={
         original
@@ -171,7 +176,7 @@ export function EntregasPage() {
   );
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
-  const [layout, setLayout] = useState<"pessoas" | "inteira">("pessoas");
+  const [layout, setLayout] = useState<DeliveryLayout>(DEFAULT_DELIVERY_LAYOUT);
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
   const [activeId, setActiveId] = useState<string | null>(readPhotoId);
   const yearRef = useRef<HTMLSelectElement>(null);
@@ -525,47 +530,45 @@ export function EntregasPage() {
 
         {displayed.length > 0 ? (
           <div className={`entregas-grid entregas-grid-${layout}`}>
-            {displayed.map((item, index) => (
-              <button
-                key={item.id}
-                type="button"
-                className="entregas-card"
-                onClick={() => openPhoto(item.id)}
-                aria-label={`Abrir foto: ${item.name || "Entrega Netcar"}. ${monthLabel(item)}`}
-              >
-                <div className="entregas-card-photo">
-                  <span className="entregas-card-frame">
-                    <DeliveryPhoto
-                      item={item}
-                      eager={index < 3}
-                      crop={
-                        layout === "pessoas"
-                          ? deliveryCardCrop(item, cardCrops)
-                          : undefined
-                      }
-                      className={
-                        !deliveryCardCrop(item, cardCrops)
-                          ? "entregas-photo-uncropped"
-                          : ""
-                      }
-                    />
-                  </span>
-                  <span className="entregas-card-open">
-                    <ArrowUpRight size={18} />
-                  </span>
-                  <span className="entregas-card-photo-label">
-                    <Images size={13} /> Ver esse momento
-                  </span>
-                </div>
-                <div className="entregas-card-copy">
-                  <div>
-                    <h3>{item.name || "Uma nova conquista"}</h3>
-                    <p>{monthLabel(item)}</p>
+            {displayed.map((item, index) => {
+              const crop = deliveryGridCardCrop(item, cardCrops, layout);
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="entregas-card"
+                  onClick={() => openPhoto(item.id)}
+                  aria-label={`Abrir foto: ${item.name || "Entrega Netcar"}. ${monthLabel(item)}`}
+                >
+                  <div className="entregas-card-photo">
+                    <span
+                      className={`entregas-card-frame${crop ? " entregas-card-frame-cropped" : ""}`}
+                    >
+                      <DeliveryPhoto
+                        key={item.imageUrl}
+                        item={item}
+                        eager={index < 3}
+                        crop={crop}
+                        className={crop ? "" : "entregas-photo-uncropped"}
+                      />
+                    </span>
+                    <span className="entregas-card-open">
+                      <ArrowUpRight size={18} />
+                    </span>
+                    <span className="entregas-card-photo-label">
+                      <Images size={13} /> Ver esse momento
+                    </span>
                   </div>
-                  <Heart size={17} aria-hidden="true" />
-                </div>
-              </button>
-            ))}
+                  <div className="entregas-card-copy">
+                    <div>
+                      <h3>{item.name || "Uma nova conquista"}</h3>
+                      <p>{monthLabel(item)}</p>
+                    </div>
+                    <Heart size={17} aria-hidden="true" />
+                  </div>
+                </button>
+              );
+            })}
           </div>
         ) : (
           <div className="entregas-empty">

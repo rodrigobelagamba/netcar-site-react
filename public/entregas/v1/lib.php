@@ -1,6 +1,8 @@
 <?php
 /** Shared delivery feed and publishing primitives. No network requests. */
 
+class EntregasPublishConflict extends RuntimeException {}
+
 function entregas_public_root()
 {
     return dirname(__DIR__, 2);
@@ -39,8 +41,14 @@ function entregas_public_delivery($delivery)
 {
     $allowed = array('id', 'name', 'imageUrl', 'previewImageUrl', 'previewSrcSet',
         'imagePosition', 'date', 'year', 'month', 'caption', 'source', 'publishedAt',
-        'sourceUrl', 'sourceLabel', 'cardCrop');
-    return array_intersect_key($delivery, array_flip($allowed));
+        'sourceUrl', 'sourceLabel', 'cardCrop', 'photoCrop', 'imageKind');
+    $public = array_intersect_key($delivery, array_flip($allowed));
+    $public['imageKind'] = isset($delivery['imageKind']) ? $delivery['imageKind'] : 'story_card';
+    if ($public['imageKind'] === 'photo') {
+        $public['cardCrop'] = null;
+    }
+    $public['photoCrop'] = entregas_safe_photo_crop($delivery);
+    return $public;
 }
 
 function entregas_sort($items)
@@ -169,27 +177,79 @@ function entregas_directory_writable($path)
     return is_dir($path) && is_writable($path);
 }
 
-function entregas_validate_card_crop($crop)
+function entregas_validate_crop($crop, $field)
 {
     if ($crop === null) {
         return null;
     }
     if (!is_array($crop) || array_keys($crop) !== array(0, 1, 2, 3)) {
-        throw new InvalidArgumentException('card_crop must be null or [x, y, width, height]');
+        throw new InvalidArgumentException($field . ' must be null or [x, y, width, height]');
     }
     foreach ($crop as $value) {
         if ((!is_int($value) && !is_float($value)) || !is_finite((float) $value) || $value < 0 || $value > 1) {
-            throw new InvalidArgumentException('card_crop coordinates must be finite numbers between 0 and 1');
+            throw new InvalidArgumentException($field . ' coordinates must be finite numbers between 0 and 1');
         }
     }
     if ($crop[2] <= 0 || $crop[3] <= 0 || $crop[0] + $crop[2] > 1.000001 || $crop[1] + $crop[3] > 1.000001) {
-        throw new InvalidArgumentException('card_crop must fit inside the complete image');
+        throw new InvalidArgumentException($field . ' must fit inside the complete image');
     }
     $rounded = array_map(function ($value) { return round((float) $value, 6); }, $crop);
     if ($rounded[2] <= 0 || $rounded[3] <= 0) {
-        throw new InvalidArgumentException('card_crop dimensions are too small');
+        throw new InvalidArgumentException($field . ' dimensions are too small');
     }
     return $rounded;
+}
+
+function entregas_validate_card_crop($crop)
+{
+    return entregas_validate_crop($crop, 'card_crop');
+}
+
+function entregas_validate_crop_pixels($crop, $width, $height, $field)
+{
+    if ($crop !== null && (min($crop[2] * $width, $crop[3] * $height) < 1
+        || abs($crop[2] * $width - $crop[3] * $height) > 1)) {
+        throw new InvalidArgumentException($field . ' must describe a square in image pixels');
+    }
+    return $crop;
+}
+
+/** A stored photo crop is usable only with its own validated image dimensions. */
+function entregas_safe_photo_crop($delivery)
+{
+    if (!isset($delivery['imageKind']) || $delivery['imageKind'] !== 'photo'
+        || !isset($delivery['photoCrop'], $delivery['imageWidth'], $delivery['imageHeight'])
+        || !is_int($delivery['imageWidth']) || !is_int($delivery['imageHeight'])
+        || min($delivery['imageWidth'], $delivery['imageHeight']) < 32
+        || max($delivery['imageWidth'], $delivery['imageHeight']) > 8192
+        || $delivery['imageWidth'] * $delivery['imageHeight'] > 16000000) {
+        return null;
+    }
+    try {
+        return entregas_validate_crop_pixels(entregas_validate_crop($delivery['photoCrop'], 'photo_crop'),
+            $delivery['imageWidth'], $delivery['imageHeight'], 'photo_crop');
+    } catch (InvalidArgumentException $error) {
+        return null;
+    }
+}
+
+/** Never carry coordinates across image bytes or between photo and Story spaces. */
+function entregas_resolve_framing($fields, $previous, $sameImage, $info)
+{
+    $previousKind = $previous && isset($previous['imageKind']) ? $previous['imageKind'] : 'story_card';
+    $kind = isset($fields['imageKind']) ? $fields['imageKind'] : ($sameImage ? $previousKind : 'story_card');
+    if ($kind !== 'photo' && isset($fields['photoCrop'])) {
+        throw new InvalidArgumentException('photo_crop requires image_kind photo');
+    }
+    $sameSpace = $sameImage && $kind === $previousKind;
+    $fields['imageKind'] = $kind;
+    $fields['cardCrop'] = $kind === 'photo' ? null : (array_key_exists('cardCrop', $fields)
+        ? $fields['cardCrop'] : ($sameSpace && isset($previous['cardCrop']) ? $previous['cardCrop'] : null));
+    $fields['photoCrop'] = $kind !== 'photo' ? null : (array_key_exists('photoCrop', $fields)
+        ? $fields['photoCrop'] : ($sameSpace ? entregas_safe_photo_crop($previous) : null));
+    $fields['imageWidth'] = $info[0];
+    $fields['imageHeight'] = $info[1];
+    return $fields;
 }
 
 function entregas_validate_metadata($metadata)
@@ -228,9 +288,27 @@ function entregas_validate_metadata($metadata)
         'year' => $localDate->format('Y'),
         'month' => $localDate->format('m'),
     );
+    if (array_key_exists('expected_content_sha256', $metadata)) {
+        if (!is_string($metadata['expected_content_sha256']) || !preg_match('/^[a-f0-9]{64}$/D', $metadata['expected_content_sha256'])) {
+            throw new InvalidArgumentException('expected_content_sha256 must be a lowercase SHA-256 digest');
+        }
+        $fields['expectedContentSha256'] = $metadata['expected_content_sha256'];
+    }
+    if (array_key_exists('image_kind', $metadata)) {
+        if (!is_string($metadata['image_kind']) || !in_array($metadata['image_kind'], array('photo', 'story_card'), true)) {
+            throw new InvalidArgumentException('image_kind must be photo or story_card');
+        }
+        $fields['imageKind'] = $metadata['image_kind'];
+    }
     // Missing means preserve an existing crop for unchanged bytes; explicit null resets it.
     if (array_key_exists('card_crop', $metadata)) {
         $fields['cardCrop'] = entregas_validate_card_crop($metadata['card_crop']);
+    }
+    if (array_key_exists('photo_crop', $metadata)) {
+        $fields['photoCrop'] = entregas_validate_crop($metadata['photo_crop'], 'photo_crop');
+    }
+    if (isset($fields['imageKind']) && $fields['imageKind'] === 'photo') {
+        $fields['cardCrop'] = null;
     }
     return $fields;
 }
@@ -310,9 +388,13 @@ function entregas_optimize_image($path, $info, $id, $hash)
 function entregas_publish($metadata, $imagePath, $imageSize)
 {
     $fields = entregas_validate_metadata($metadata);
+    $expectedHash = isset($fields['expectedContentSha256']) ? $fields['expectedContentSha256'] : null;
+    unset($fields['expectedContentSha256']);
     $info = entregas_validate_image($imagePath, $imageSize);
-    if (isset($fields['cardCrop']) && abs($fields['cardCrop'][2] * $info[0] - $fields['cardCrop'][3] * $info[1]) > 1) {
-        throw new InvalidArgumentException('card_crop must describe a square in image pixels');
+    foreach (array('cardCrop' => 'card_crop', 'photoCrop' => 'photo_crop') as $key => $field) {
+        if (isset($fields[$key])) {
+            entregas_validate_crop_pixels($fields[$key], $info[0], $info[1], $field);
+        }
     }
     $hash = hash_file('sha256', $imagePath);
     $dir = entregas_data_dir();
@@ -337,6 +419,24 @@ function entregas_publish($metadata, $imagePath, $imageSize)
                 break;
             }
         }
+        $guardRetry = false;
+        if ($expectedHash !== null) {
+            if ($existingIndex === null) {
+                throw new EntregasPublishConflict('Repair target no longer exists');
+            }
+            $target = $data['deliveries'][$existingIndex];
+            $currentHash = isset($target['contentSha256']) && is_string($target['contentSha256']) ? $target['contentSha256'] : '';
+            if (!hash_equals($currentHash, $expectedHash)) {
+                if (!hash_equals($currentHash, $hash)) {
+                    throw new EntregasPublishConflict('Repair target changed; inspect before retrying');
+                }
+                // A lost response may be retried only as a strict no-op below.
+                $guardRetry = true;
+            }
+            if ($target['publishedAt'] !== $fields['publishedAt']) {
+                throw new EntregasPublishConflict('Repair cannot change the original publication date');
+            }
+        }
         // Same bytes received under a new event ID remain one gallery photo.
         if ($existingIndex === null) {
             foreach ($data['deliveries'] as $index => $item) {
@@ -344,8 +444,13 @@ function entregas_publish($metadata, $imagePath, $imageSize)
                     $aliases[$requestedId] = $item['id'];
                     $data['aliases'] = $aliases;
                     $action = 'duplicate';
-                    if (array_key_exists('cardCrop', $fields) && $fields['cardCrop'] != (isset($item['cardCrop']) ? $item['cardCrop'] : null)) {
-                        $item['cardCrop'] = $fields['cardCrop'];
+                    $framing = entregas_resolve_framing($fields, $item, true, $info);
+                    if ($framing['cardCrop'] != (isset($item['cardCrop']) ? $item['cardCrop'] : null)
+                        || $framing['photoCrop'] != (isset($item['photoCrop']) ? $item['photoCrop'] : null)
+                        || $framing['imageKind'] !== (isset($item['imageKind']) ? $item['imageKind'] : 'story_card')) {
+                        foreach (array('cardCrop', 'photoCrop', 'imageKind', 'imageWidth', 'imageHeight') as $key) {
+                            $item[$key] = $framing[$key];
+                        }
                         $data['deliveries'][$index] = $item;
                         $data['updatedAt'] = gmdate('Y-m-d\TH:i:s\Z');
                         $action = 'updated';
@@ -357,9 +462,13 @@ function entregas_publish($metadata, $imagePath, $imageSize)
         }
         $previous = $existingIndex === null ? null : $data['deliveries'][$existingIndex];
         $sameImage = $previous && isset($previous['contentSha256']) && hash_equals($previous['contentSha256'], $hash);
-        if (!array_key_exists('cardCrop', $fields)) {
-            $fields['cardCrop'] = $sameImage && isset($previous['cardCrop']) ? $previous['cardCrop'] : null;
+        if ($sameImage && $requestedId !== $fields['id']) {
+            // A retry through a deduplicated event must retain the original date too.
+            foreach (array('publishedAt', 'date', 'year', 'month') as $key) {
+                $fields[$key] = $previous[$key];
+            }
         }
+        $fields = entregas_resolve_framing($fields, $previous, $sameImage, $info);
         $filesExist = false;
         if ($sameImage) {
             $filesExist = true;
@@ -367,9 +476,14 @@ function entregas_publish($metadata, $imagePath, $imageSize)
                 $filesExist = $filesExist && is_file(entregas_media_dir() . '/' . $fields['id'] . '-' . substr($hash, 0, 16) . $suffix . '.webp');
             }
             if ($filesExist && $previous['publishedAt'] === $fields['publishedAt']
-                && (isset($previous['cardCrop']) ? $previous['cardCrop'] : null) == $fields['cardCrop']) {
+                && (isset($previous['cardCrop']) ? $previous['cardCrop'] : null) == $fields['cardCrop']
+                && (isset($previous['photoCrop']) ? $previous['photoCrop'] : null) == $fields['photoCrop']
+                && (isset($previous['imageKind']) ? $previous['imageKind'] : 'story_card') === $fields['imageKind']) {
                 return array('action' => 'unchanged', 'delivery' => entregas_public_delivery($previous));
             }
+        }
+        if ($guardRetry) {
+            throw new EntregasPublishConflict('Repair retry differs from the completed publication');
         }
         // A crop-only enrichment keeps the original and every immutable variant intact.
         $images = $filesExist ? array_intersect_key($previous, array_flip(array('imageUrl', 'previewImageUrl', 'previewSrcSet')))

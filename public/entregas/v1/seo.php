@@ -59,6 +59,23 @@ function entregas_photo_caption($delivery)
     return $date ? $label . $date->format('d/m/Y') : 'Entrega Netcar';
 }
 
+/** Public photoCrop has already passed pixel-square validation in the feed. */
+function entregas_thumbnail_framing($delivery)
+{
+    if (!isset($delivery['imageKind']) || $delivery['imageKind'] !== 'photo' || !isset($delivery['photoCrop'])) {
+        return null;
+    }
+    try {
+        $crop = entregas_validate_crop($delivery['photoCrop'], 'photo_crop');
+    } catch (InvalidArgumentException $error) {
+        return null;
+    }
+    $percent = function ($value) { return number_format($value, 6, '.', '') . '%'; };
+    return 'position:absolute;max-width:none!important;left:' . $percent(-100 * $crop[0] / $crop[2])
+        . ';top:' . $percent(-100 * $crop[1] / $crop[3]) . ';width:' . $percent(100 / $crop[2])
+        . ';height:' . $percent(100 / $crop[3]) . ';object-fit:fill';
+}
+
 /** Visible HTML for every visitor, replaced by React on mount. */
 function entregas_initial_html($deliveries, $page)
 {
@@ -73,10 +90,17 @@ function entregas_initial_html($deliveries, $page)
     foreach ($items as $index => $delivery) {
         $caption = entregas_photo_caption($delivery);
         $src = isset($delivery['previewImageUrl']) ? $delivery['previewImageUrl'] : $delivery['imageUrl'];
-        $srcSet = !empty($delivery['previewSrcSet']) ? ' srcset="' . entregas_escape($delivery['previewSrcSet']) . '" sizes="(max-width:600px) 90vw, (max-width:900px) 45vw, 280px"' : '';
+        $framing = entregas_thumbnail_framing($delivery);
+        $scale = $framing ? 1 / $delivery['photoCrop'][2] : 1;
+        $sizes = '(max-width:600px) ' . (int) ceil(90 * $scale) . 'vw, (max-width:900px) '
+            . (int) ceil(45 * $scale) . 'vw, ' . (int) ceil(280 * $scale) . 'px';
+        $srcSet = !empty($delivery['previewSrcSet']) ? ' srcset="' . entregas_escape($delivery['previewSrcSet']) . '" sizes="' . $sizes . '"' : '';
+        $imageStyle = $framing ?: 'width:100%;height:320px;object-fit:contain;background:#e5ece8;border-radius:12px';
         $html .= '<figure style="margin:0"><a href="' . entregas_escape(entregas_page_url($page) . '#foto=' . rawurlencode($delivery['id'])) . '">'
+            . ($framing ? '<span data-photo-crop="true" style="display:block;position:relative;padding-top:100%;overflow:hidden;background:#e5ece8;border-radius:12px">' : '')
             . '<img src="' . entregas_escape($src) . '"' . $srcSet
-            . ' alt="' . entregas_escape('Entrega de carro na Netcar em Esteio — ' . $caption) . '" loading="' . ($index < 3 ? 'eager' : 'lazy') . '" decoding="async" width="640" height="800" style="width:100%;height:320px;object-fit:cover;border-radius:12px">'
+            . ' alt="' . entregas_escape('Entrega de carro na Netcar em Esteio — ' . $caption) . '" loading="' . ($index < 3 ? 'eager' : 'lazy') . '" decoding="async" width="640" height="800" style="' . entregas_escape($imageStyle) . '">'
+            . ($framing ? '</span>' : '')
             . '</a><figcaption>' . entregas_escape($caption) . '</figcaption></figure>';
     }
     $html .= '</div><nav aria-label="Páginas do histórico" style="display:flex;gap:20px;margin:32px 0">';
