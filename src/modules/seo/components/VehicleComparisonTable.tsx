@@ -8,6 +8,7 @@ import {
   X,
 } from "lucide-react";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
+import { VehicleWarrantySummary } from "@/design-system/components/patterns/VehicleWarrantySummary";
 import { trackCompareInteraction } from "@/lib/analytics";
 import {
   comparisonVehicleLabel,
@@ -196,6 +197,7 @@ export function VehicleComparisonTable({
                       </p>
                     </div>
                   </div>
+                  <VehicleWarrantySummary vehicle={vehicle} className="mt-3 text-left" />
                 </th>
               ))}
               {!hasPair && (

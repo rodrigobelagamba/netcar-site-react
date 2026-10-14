@@ -24,6 +24,7 @@ import { resolvedVehicleCategory } from "../../src/lib/vehicleCategory";
 import { generateVehicleSlug } from "../../src/lib/slug";
 import { buildWhatsAppUrl } from "../../src/lib/whatsappMessages";
 import { ComparisonVehicleImage } from "../../src/modules/seo/components/ComparisonVehicleImage";
+import { loadWarrantySummary, type WarrantyStamps } from "./helpers/warranty-summary";
 
 type LandingModule =
   typeof import("../../src/modules/seo/pages/ComparisonLandingPage");
@@ -91,6 +92,7 @@ const landingSource = transpile(
 function renderLanding(
   query: QueryState = { data: [compass, hrv] },
   slug = firstDefinition.slug,
+  stampsById: Record<string, WarrantyStamps> = {},
 ) {
   const metadata: Record<string, unknown>[] = [];
   const dependencies: Record<string, unknown> = {
@@ -134,6 +136,7 @@ function renderLanding(
     "@/components/NotFoundRedirect": {
       NotFoundRedirect: () => <main data-not-found="true">404</main>,
     },
+    "@/design-system/components/patterns/VehicleWarrantySummary": loadWarrantySummary(stampsById),
     "@/lib/analytics": { trackCompareInteraction: () => {} },
     "@/lib/comparisonContact": {
       comparisonVehicleLabel,
@@ -331,6 +334,34 @@ test("one missing model shows only its available counterpart and keeps the full 
     const absent = available.id === compass.id ? hrv : compass;
     assert.ok(!html.includes(`href="/veiculo/${generateVehicleSlug(absent)}"`));
   }
+});
+
+test("available counterpart displays its warranty without nesting the manual in its detail link", () => {
+  const { html } = renderLanding(
+    { data: [compass] },
+    firstDefinition.slug,
+    {
+      [compass.id]: {
+        powertrainStamp: {
+          estimatedEndYear: 2029,
+          scope: "powertrain",
+          mode: "verified",
+          termYears: 5,
+          sourceUrl: "https://manufacturer.example/manual.pdf",
+          sourceLabel: "Manual do modelo",
+          sourceDescription: "Condições de motor e câmbio",
+        },
+      },
+    },
+  );
+  assert.match(html, /Garantia de fábrica de motor e câmbio até 2029/);
+  assert.match(html, /Consultar manual/);
+  assert.match(html, new RegExp(`data-vehicle-warranty-summary="${compass.id}"`));
+  const links = [...html.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/g)].map((match) => match[0]);
+  assert.ok(links.every((link) => [...link.matchAll(/<a\b/g)].length === 1));
+  const detailLink = links.find((link) => link.includes('class="comparison-available-car"'));
+  assert.ok(detailLink);
+  assert.doesNotMatch(detailLink, /Consultar manual|data-vehicle-warranty-summary/);
 });
 
 test("empty, loading and failed stock never invent cars or prices and keep editorial content", () => {

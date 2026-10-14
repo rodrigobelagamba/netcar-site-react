@@ -25,6 +25,7 @@ let renderer;
 let result;
 let requests;
 let payload;
+let respond;
 
 const vehicle = (changes = {}) => ({
   id: "42",
@@ -65,10 +66,7 @@ before(async () => {
   };
   globalThis.fetch = async (_url, options) => {
     requests.push(options);
-    return new Response(JSON.stringify(payload), {
-      status: 200,
-      headers: { "content-type": "application/json" },
-    });
+    return respond();
   };
   ({ QueryClient, QueryClientProvider } =
     await import("@tanstack/react-query"));
@@ -93,6 +91,10 @@ beforeEach(() => {
   requests = [];
   result = undefined;
   payload = { success: true, data: [vehicle()], total_results: 1 };
+  respond = async () => new Response(JSON.stringify(payload), {
+    status: 200,
+    headers: { "content-type": "application/json" },
+  });
   client = new QueryClient({
     defaultOptions: { queries: { retry: false, gcTime: Infinity } },
   });
@@ -174,6 +176,100 @@ async function poll() {
     callbacks.forEach((callback) => callback());
   });
 }
+
+function DefaultStockObserver({ enabled }) {
+  result = useVehiclesQuery(undefined, { enabled });
+  return React.createElement("output", {
+    "data-status": result.status,
+    "data-fetching": result.isFetching,
+  }, JSON.stringify(result.data));
+}
+
+async function renderDefaultStock({ enabled = true, copies = 1 } = {}) {
+  await act(async () => {
+    const element = React.createElement(
+      QueryClientProvider,
+      { client },
+      Array.from({ length: copies }, (_, index) =>
+        React.createElement(DefaultStockObserver, { key: index, enabled }),
+      ),
+    );
+    if (renderer) renderer.update(element);
+    else renderer = TestRenderer.create(element);
+  });
+}
+
+function seedOldBootstrap() {
+  const observedAt = Date.now() - 600_000;
+  window.__NETCAR_STOCK__ = {
+    generatedAt: new Date().toISOString(),
+    scope: "available",
+    vehicles: [{
+      id: "42",
+      name: "TEST VERSION A",
+      marca: "TEST",
+      modelo: "VERSION A",
+      year: 2025,
+      anoFabricacao: 2024,
+      km: 12_345,
+      price: 100_000,
+      images: [],
+      factoryWarrantyVehicle: { id: "42", observedAt },
+    }],
+  };
+  return observedAt;
+}
+
+test("default stock revalidates bootstrap immediately without renewing warranty evidence while loading", async () => {
+  const oldObservation = seedOldBootstrap();
+  let release;
+  const response = respond;
+  respond = () => new Promise((resolveResponse) => { release = resolveResponse; });
+
+  await renderDefaultStock();
+  assert.equal(requests.length, 1, "The first mount must request the API without a delay");
+  assert.equal(result.isFetching, true);
+  assert.equal(result.dataUpdatedAt, 0);
+  assert.equal(result.data[0].factoryWarrantyVehicle.observedAt, oldObservation);
+
+  await act(async () => release(await response()));
+  await settle(() => !result.isFetching && result.dataUpdatedAt > 0);
+  assert.ok(result.data[0].factoryWarrantyVehicle.observedAt > oldObservation);
+  assert.equal(window.__NETCAR_STOCK__.vehicles[0].factoryWarrantyVehicle.observedAt, oldObservation);
+  assert.equal(requests.length, 1);
+});
+
+test("default stock observers share the initial request and do not refetch fresh API data on later mounts", async () => {
+  seedOldBootstrap();
+  await renderDefaultStock({ copies: 2 });
+  await settle(() => result.isSuccess && !result.isFetching);
+  assert.equal(requests.length, 1);
+
+  await renderDefaultStock({ copies: 3 });
+  assert.equal(requests.length, 1, "A new card surface must reuse the fresh catalog query");
+});
+
+test("disabled default stock keeps bootstrap untouched until activated", async () => {
+  const oldObservation = seedOldBootstrap();
+  await renderDefaultStock({ enabled: false });
+  assert.equal(requests.length, 0);
+  assert.equal(result.data[0].factoryWarrantyVehicle.observedAt, oldObservation);
+
+  await renderDefaultStock({ enabled: true });
+  await settle(() => result.isSuccess && !result.isFetching);
+  assert.equal(requests.length, 1);
+  assert.ok(result.data[0].factoryWarrantyVehicle.observedAt > oldObservation);
+});
+
+test("failed initial bootstrap refresh preserves stale warranty evidence", async () => {
+  const oldObservation = seedOldBootstrap();
+  payload = { success: false, data: [] };
+  await renderDefaultStock();
+  await settle(() => result.isError && !result.isFetching);
+  assert.equal(requests.length, 1);
+  assert.equal(result.dataUpdatedAt, 0);
+  assert.equal(result.data[0].factoryWarrantyVehicle.observedAt, oldObservation);
+});
 
 for (const kind of ["stock", "detail"]) {
   test(`${kind}: the 60-second poll revalidates current flag while query data is fresh`, async () => {

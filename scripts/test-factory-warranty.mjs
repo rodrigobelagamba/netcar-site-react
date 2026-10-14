@@ -16,6 +16,7 @@ const result = spawnSync(process.execPath, [
   "scripts/tests/factory-warranty-published.test.mjs",
   "scripts/tests/warranty-reconciliation-audit.test.ts",
   "scripts/tests/factory-warranty-card.test.mjs",
+  "scripts/tests/factory-warranty-editorial-cards.test.mjs",
   "scripts/tests/factory-warranty-bootstrap.test.mjs",
 ], {
   cwd: fileURLToPath(new URL("../", import.meta.url)),

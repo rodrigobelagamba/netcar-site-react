@@ -19,6 +19,8 @@ import {
 } from "@/lib/whatsappMessages";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
+import { VehicleWarrantySummary } from "./VehicleWarrantySummary";
+import type { Vehicle } from "@/catalog/endpoints/vehicles";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const SWIPE_THRESHOLD_PX = 45;
@@ -43,6 +45,8 @@ export interface HomeHeroVehicle {
   combustivel?: string;
   cambio?: string;
   proofLabel?: string;
+  /** Preserve current catalog evidence instead of hero presentation fallbacks. */
+  warrantyVehicle?: Vehicle;
 }
 
 interface HomeHeroProps {
@@ -388,6 +392,11 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
             </div>
           </div>
         </div>
+
+        <VehicleWarrantySummary
+          vehicle={vehicle.warrantyVehicle?.id === vehicle.id ? vehicle.warrantyVehicle : undefined}
+          className="mt-4 w-full max-w-5xl rounded-2xl bg-white/80 p-3"
+        />
 
         {/* Navigation - Hidden on Mobile */}
         <div

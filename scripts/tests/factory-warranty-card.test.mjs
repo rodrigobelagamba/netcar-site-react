@@ -60,6 +60,9 @@ let factoryTractionBatteryStampFor;
 let factoryPowertrainStampFor;
 let FactoryWarrantyBadge;
 let FactoryWarrantyNote;
+let VehicleWarrantySummary;
+let HomeHero;
+let HomeWhatsAppConversionPanel;
 let renderer;
 let queryClient;
 const boundInventory = JSON.parse(readFileSync(resolve(root, "docs/audits/factory-warranty-reconciliation-2026-10-09.json"), "utf8")).publicVehicles;
@@ -166,6 +169,15 @@ before(async () => {
   ));
   ({ FactoryWarrantyBadge, FactoryWarrantyNote } = await server.ssrLoadModule(
     "/src/design-system/components/patterns/FactoryWarrantyBadge.tsx",
+  ));
+  ({ VehicleWarrantySummary } = await server.ssrLoadModule(
+    "/src/design-system/components/patterns/VehicleWarrantySummary.tsx",
+  ));
+  ({ HomeHero } = await server.ssrLoadModule(
+    "/src/design-system/components/patterns/HomeHero.tsx",
+  ));
+  ({ HomeWhatsAppConversionPanel } = await server.ssrLoadModule(
+    "/src/modules/home/components/HomeWhatsAppConversionPanel.tsx",
   ));
   ({ factoryWarrantyReviewFingerprint } = await server.ssrLoadModule(
     "/src/lib/factoryWarranty.ts",
@@ -837,3 +849,46 @@ test("Tiggo 7 20066: the final estimated year hides the stamp without a confirme
   await renderCard(raw, { base: raw });
   assertTiggoPowertrain(false);
 });
+
+for (const [id, expectedScopes] of [
+  ["19587", ["basic-vehicle"]],
+  ["19924", ["basic-vehicle", "traction-battery"]],
+  ["20029", ["powertrain"]],
+]) {
+  for (const surface of ["summary", "home-hero", "home-featured"]) {
+    test(`${surface}: current ${id} preserves exactly its approved coverage and note`, async () => {
+      const raw = approvedVehicle(id);
+      const catalog = { ...raw, name: raw.modelo, images: [], factoryWarrantyVehicle: raw };
+      queryClient.setQueryData(["site", "whatsapp"], { numero: "5551997293118" });
+      function element(vehicle) {
+        if (surface === "home-hero") return React.createElement(HomeHero, { vehicles: [{
+          id: raw.id, brand: raw.marca, model: raw.modelo, year: raw.year,
+          price: raw.price, image: "/images/semcapa.webp", warrantyVehicle: vehicle,
+        }] });
+        if (surface === "home-featured") return React.createElement(HomeWhatsAppConversionPanel, {
+          featuredVehicle: vehicle, onViewStock() {},
+        });
+        return React.createElement(VehicleWarrantySummary, { vehicle });
+      }
+      async function update(vehicle) {
+        await act(async () => {
+          const tree = React.createElement(QueryClientProvider, { client: queryClient }, element(vehicle));
+          if (renderer) renderer.update(tree);
+          else renderer = TestRenderer.create(tree);
+        });
+      }
+      const badges = () => renderer.root.findAll((node) =>
+        node.type === "div" && node.props["data-factory-warranty-badge"] === "card");
+      await update(catalog);
+      assert.deepEqual(badges().map((badge) => badge.props["data-warranty-scope"]), expectedScopes);
+      assert.equal(renderer.root.findAll((node) => node.type === "p" &&
+        Object.hasOwn(node.props, "data-factory-warranty-note")).length, 1);
+      for (const factoryWarrantyVehicle of [null, { ...raw, diferenciais: [] }, { ...raw, observedAt: currentNow - 300_000 }]) {
+        await update({ ...catalog, factoryWarrantyVehicle });
+        assert.equal(badges().length, 0, "Missing, withdrawn or stale source cannot inherit a visual badge");
+      }
+      await update({ ...catalog, price: 0 });
+      assert.equal(badges().length, 0, "Sold car cannot display a warranty");
+    });
+  }
+}

@@ -21,6 +21,7 @@ import {
 } from "../../src/lib/slug";
 import { buildWhatsAppUrl } from "../../src/lib/whatsappMessages";
 import { ComparisonVehicleImage } from "../../src/modules/seo/components/ComparisonVehicleImage";
+import { loadWarrantySummary, type WarrantyStamps } from "./helpers/warranty-summary";
 
 type TableModule =
   typeof import("../../src/modules/seo/components/VehicleComparisonTable");
@@ -80,7 +81,7 @@ const { outputText } = ts.transpileModule(
 
 // Exercise the real component and React state with only navigation and tracking
 // isolated. Images, contact messages, categories and slugs use production helpers.
-function loadTable() {
+function loadTable(stampsById: Record<string, WarrantyStamps> = {}) {
   const events: TrackedEvent[] = [];
   const dependencies: Record<string, unknown> = {
     react: React,
@@ -112,6 +113,7 @@ function loadTable() {
     "@/lib/slug": { generateVehicleSlug },
     "@/lib/whatsappMessages": { buildWhatsAppUrl },
     "./ComparisonVehicleImage": { ComparisonVehicleImage },
+    "@/design-system/components/patterns/VehicleWarrantySummary": loadWarrantySummary(stampsById),
   };
   const exports: Record<string, unknown> = {};
   runInNewContext(outputText, {
@@ -131,8 +133,8 @@ const defaultProps: TableProps = {
   whatsAppNumber: " (51) 98888-7777 ",
 };
 
-function renderTable(props: Partial<TableProps> = {}) {
-  const { VehicleComparisonTable } = loadTable();
+function renderTable(props: Partial<TableProps> = {}, stampsById: Record<string, WarrantyStamps> = {}) {
+  const { VehicleComparisonTable } = loadTable(stampsById);
   return renderToStaticMarkup(
     <VehicleComparisonTable {...defaultProps} {...props} />,
   );
@@ -245,6 +247,40 @@ test("SSR renders one photo per unit with table headers and no mileage or trade 
     /quilometragem|\bkm\b|preço com troca|12345|12\.345|139\.900/i,
   );
   assert.equal([...html.matchAll(/Menor preço desta seleção/g)].length, 1);
+});
+
+test("each comparison header displays all its warranty scopes without adding equipment rows", () => {
+  const html = renderTable({}, {
+    [first.id]: {
+      warrantyStamp: { estimatedEndYear: 2029, mode: "verified" },
+      tractionBatteryStamp: {
+        estimatedEndYear: 2032,
+        scope: "traction-battery",
+        mode: "verified",
+      },
+    },
+    [second.id]: {
+      powertrainStamp: {
+        estimatedEndYear: 2028,
+        scope: "powertrain",
+        mode: "verified",
+        termYears: 5,
+        sourceUrl: "https://manufacturer.example/manual.pdf",
+        sourceLabel: "Manual do modelo",
+        sourceDescription: "Condições de motor e câmbio",
+      },
+    },
+  });
+  const headers = [...html.matchAll(/<th\b[^>]*class="comparison-vehicle"[\s\S]*?<\/th>/g)].map((match) => match[0]);
+  assert.equal(headers.length, 2);
+  assert.match(headers[0], /Garantia de fábrica até 2029/);
+  assert.match(headers[0], /Garantia de fábrica da bateria de tração até 2032/);
+  assert.doesNotMatch(headers[0], /Garantia de fábrica de motor e câmbio/);
+  assert.match(headers[1], /Garantia de fábrica de motor e câmbio até 2028/);
+  assert.match(headers[1], /Consultar manual/);
+  assert.doesNotMatch(headers[1], /Garantia de fábrica da bateria/);
+  assert.equal([...html.matchAll(/<th\b[^>]*scope="row"/g)].length, 9);
+  assert.equal([...html.matchAll(/data-factory-warranty-badge=/g)].length, 3);
 });
 
 test("identical models retain distinct detail links, unit contacts and comparison intent", () => {

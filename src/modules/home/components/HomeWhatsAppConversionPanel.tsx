@@ -24,6 +24,7 @@ import {
 } from "@/lib/whatsappMessages";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { getVehicleMerchandising } from "@/lib/vehicleMerchandising";
+import { VehicleWarrantySummary } from "@/design-system/components/patterns/VehicleWarrantySummary";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
@@ -302,6 +303,8 @@ export function HomeWhatsAppConversionPanel({
               decoding="async"
             />
           </button>
+
+          <VehicleWarrantySummary vehicle={featuredVehicle} className="mt-3" />
 
           <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs font-bold text-gray-600">
             <div className="rounded-2xl bg-gray-50 px-2 py-3">

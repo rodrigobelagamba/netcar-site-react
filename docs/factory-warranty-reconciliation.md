@@ -1,5 +1,26 @@
 # Reconciliação de garantias — 09/10/2026
 
+## Cards de todas as páginas — 14/10/2026
+
+O bootstrap do catálogo passa a ser revalidado imediatamente ao abrir a página,
+sem a espera anterior de 15 segundos e sem renovar artificialmente `observedAt`.
+O carimbo continua aguardando uma observação válida da API e o registro publicado.
+
+Além dos cards compartilhados do estoque, home, páginas regionais, páginas de
+busca e similares, `VehicleWarrantySummary` aplica o mesmo gate nos destaques da
+home, seleção e tabela do comparador, comparações prontas, catálogo/prévia do
+tablet, cards editoriais e barra de contato da ficha. Coberturas geral, de bateria
+e de motor/câmbio preservam os respectivos selos e ressalvas.
+
+Cards editoriais consultam o veículo atual pela URL interna validada, sem usar
+o texto histórico do artigo como evidência. Respostas 404 na ficha, blog e prévia
+do tablet suprimem o carimbo mesmo quando existe um resumo em cache. Os links
+dos manuais ficam fora dos botões e links principais dos cards.
+
+Esta correção de apresentação não altera a matriz nem amplia regras de garantia.
+Os testes cobrem carregamento imediato, deduplicação, dados vencidos, retirada da
+flag, venda, identidade divergente, 404 e separação das coberturas.
+
 ## Vencimento com precisão mensal
 
 `confirmedExpiryMonth: YYYY-MM` preserva uma confirmação individual sem

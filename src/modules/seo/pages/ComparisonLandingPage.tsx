@@ -5,6 +5,7 @@ import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
+import { VehicleWarrantySummary } from "@/design-system/components/patterns/VehicleWarrantySummary";
 import { generateVehicleSlug } from "@/lib/slug";
 import { comparisonVehicleLabel } from "@/lib/comparisonContact";
 import {
@@ -153,23 +154,25 @@ export function ComparisonLandingPage() {
                 : `No momento não encontramos os dois modelos anunciados com preço. Você pode conhecer as opções abaixo ou montar outra comparação.`}
             </p>
             {available.map((vehicle) => (
-              <Link
-                key={vehicle.id}
-                to="/veiculo/$slug"
-                params={{ slug: generateVehicleSlug(vehicle) }}
-                className="comparison-available-car"
-              >
-                <span>
-                  <ComparisonVehicleImage vehicle={vehicle} sizes="160px" />
-                </span>
-                <span>
-                  <strong>{comparisonVehicleLabel(vehicle)}</strong>
-                  <br />
-                  {comparisonPrice(vehicle)}
-                  <br />
-                  Ver ficha <ArrowRight size={14} aria-hidden="true" />
-                </span>
-              </Link>
+              <div key={vehicle.id}>
+                <Link
+                  to="/veiculo/$slug"
+                  params={{ slug: generateVehicleSlug(vehicle) }}
+                  className="comparison-available-car"
+                >
+                  <span>
+                    <ComparisonVehicleImage vehicle={vehicle} sizes="160px" />
+                  </span>
+                  <span>
+                    <strong>{comparisonVehicleLabel(vehicle)}</strong>
+                    <br />
+                    {comparisonPrice(vehicle)}
+                    <br />
+                    Ver ficha <ArrowRight size={14} aria-hidden="true" />
+                  </span>
+                </Link>
+                <VehicleWarrantySummary vehicle={vehicle} className="mt-2" />
+              </div>
             ))}
             <Link to="/comparar" className="comparison-return">
               Ver outras opções do estoque{" "}

@@ -519,6 +519,7 @@ function TradeInTextLink({
 }
 
 interface DetalheFloatingWhatsAppProps {
+  warrantyVehicle?: Parameters<typeof VehicleWhatsAppCard>[0]["warrantyVehicle"];
   price: string;
   modeloCompleto: string;
   vehicleId?: string | number;
@@ -531,6 +532,7 @@ interface DetalheFloatingWhatsAppProps {
 
 /** Sticky flutuante com carro identificado — substitui bolinha iAN no detalhe. */
 function DetalheFloatingWhatsApp({
+  warrantyVehicle,
   price,
   modeloCompleto,
   vehicleId,
@@ -602,6 +604,7 @@ function DetalheFloatingWhatsApp({
       >
         <div className="pointer-events-auto w-full max-w-sm md:max-w-[44rem]">
           <VehicleWhatsAppCard
+            warrantyVehicle={warrantyVehicle}
             vehicle={{
               id: String(vehicleId),
               label,
@@ -2636,6 +2639,7 @@ export function DetalhesPage() {
       </div>
 
       <DetalheFloatingWhatsApp
+        warrantyVehicle={isPlaceholderData || isVehicleGone(error) ? undefined : vehicle}
         price={price}
         modeloCompleto={modeloCompleto}
         vehicleId={vehicle.id}

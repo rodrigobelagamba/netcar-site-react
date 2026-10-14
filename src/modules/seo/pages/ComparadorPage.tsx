@@ -16,6 +16,7 @@ import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
+import { VehicleWarrantySummary } from "@/design-system/components/patterns/VehicleWarrantySummary";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
 import {
@@ -314,6 +315,7 @@ export function ComparadorPage() {
                             : "+ Adicionar à comparação"}
                       </span>
                     </button>
+                    <VehicleWarrantySummary vehicle={vehicle} className="mt-3" />
                     <Link
                       to="/veiculo/$slug"
                       params={{ slug: generateVehicleSlug(vehicle) }}

@@ -4,6 +4,7 @@ import type { BlogCar, BlogPost, BlogSection } from "@/data/seo/types";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { trackBlogDiscoveryClick } from "@/lib/analytics";
 import { getBlogVehicleTarget } from "@/lib/blogNavigation";
+import { BlogVehicleWarranty } from "./BlogVehicleWarranty";
 
 function BlogVehicleLink({
   car,
@@ -16,8 +17,7 @@ function BlogVehicleLink({
 }) {
   const target = getBlogVehicleTarget(car.url);
   const props = {
-    className:
-      "group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl",
+    className: "flex flex-1 flex-col",
     onClick: () =>
       trackBlogDiscoveryClick({
         articleSlug,
@@ -27,20 +27,25 @@ function BlogVehicleLink({
       }),
   };
 
-  return target ? (
-    <Link
-      to="/veiculo/$slug"
-      params={{ slug: target.slug }}
-      search={target.search}
-      hash={target.hash}
-      {...props}
-    >
-      {children}
-    </Link>
-  ) : (
-    <a href={car.url} {...props}>
-      {children}
-    </a>
+  return (
+    <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl">
+      {target ? (
+        <Link
+          to="/veiculo/$slug"
+          params={{ slug: target.slug }}
+          search={target.search}
+          hash={target.hash}
+          {...props}
+        >
+          {children}
+        </Link>
+      ) : (
+        <a href={car.url} {...props}>
+          {children}
+        </a>
+      )}
+      {target ? <BlogVehicleWarranty href={car.url} /> : null}
+    </div>
   );
 }
 
