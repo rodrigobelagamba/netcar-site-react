@@ -1,7 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, ExternalLink, X } from "lucide-react";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
-import { useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
+import { isVehicleGone, useVehicleQuery } from "@/catalog/queries/useVehicleQuery";
+import { VehicleWarrantySummary } from "@/design-system/components/patterns/VehicleWarrantySummary";
 import { optimizeStockImage, stockGalleryPreviewSource } from "@/lib/images";
 import { resolveVehicleCoverImage, VEHICLE_COVER_PLACEHOLDER } from "@/lib/vehicleCoverImage";
 import { generateVehicleSlug } from "@/lib/slug";
@@ -299,6 +300,10 @@ export default function TabletVehiclePreview({
               ? currency.format(vehicle.price)
               : "Consulte o valor"}
           </p>
+          <VehicleWarrantySummary
+            vehicle={isVehicleGone(detailQuery.error) ? undefined : vehicle}
+            className="mb-4"
+          />
           <dl className="tablet-preview-facts">
             {facts.map(([label, value]) => (
               <div key={label} className="tablet-preview-fact">

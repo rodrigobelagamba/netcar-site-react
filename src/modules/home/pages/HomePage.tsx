@@ -286,6 +286,7 @@ export function HomePage() {
         placa: vehicle.placa,
         combustivel: vehicle.combustivel,
         cambio: vehicle.cambio,
+        warrantyVehicle: vehicle,
       };
     });
   }, [vehicles, initialHeroVehicle, rotationDay]);

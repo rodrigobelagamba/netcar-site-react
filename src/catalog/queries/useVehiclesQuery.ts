@@ -80,32 +80,21 @@ export function useVehiclesQuery(
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     initialData: bootstrapVehicles,
-    initialDataUpdatedAt: bootstrapVehicles ? Date.now() : undefined,
-    refetchOnMount: bootstrapVehicles
-      ? options?.refreshImmediately
-        ? "always"
-        : false
-      : undefined,
+    // O HTML permite o primeiro paint, mas não é uma observação atual da API.
+    // Mantê-lo stale inicia a revalidação sem renovar a evidência de garantia.
+    initialDataUpdatedAt: bootstrapVehicles ? 0 : undefined,
+    refetchOnMount: options?.refreshImmediately ? "always" : true,
     enabled: options?.enabled ?? true,
   });
 
   useEffect(() => {
-    if (options?.enabled === false) return;
-    if (options?.refreshImmediately) {
-      // Abrir/reabrir a busca também precisa atualizar um cache ainda "fresco".
-      // refetchOnMount não cobre a transição de enabled: false para true.
-      // Reaproveita a requisição que o React Query já possa ter iniciado.
-      void result.refetch({ cancelRefetch: false });
-      return;
-    }
-    if (!bootstrapVehicles) return;
-    const timer = window.setTimeout(() => {
-      void result.refetch();
-    }, 15_000);
-    return () => window.clearTimeout(timer);
+    if (options?.enabled === false || !options?.refreshImmediately) return;
+    // Abrir/reabrir a busca também precisa atualizar um cache ainda "fresco".
+    // refetchOnMount não cobre a transição de enabled: false para true.
+    // Reaproveita a requisição que o React Query já possa ter iniciado.
+    void result.refetch({ cancelRefetch: false });
   }, [
     queryKey,
-    bootstrapVehicles,
     options?.enabled,
     options?.refreshImmediately,
     result.refetch,

@@ -1,8 +1,44 @@
 import assert from "node:assert/strict";
-import { test } from "node:test";
+import { after, before, test } from "node:test";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { VehicleWhatsAppCard } from "../../src/design-system/components/patterns/VehicleWhatsAppCard";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createServer, type ViteDevServer } from "vite";
+import type { VehicleWhatsAppCard as VehicleWhatsAppCardComponent } from "../../src/design-system/components/patterns/VehicleWhatsAppCard";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const cacheDir = mkdtempSync(resolve(tmpdir(), "whatsapp-card-vite-"));
+let server: ViteDevServer;
+let VehicleWhatsAppCard: typeof VehicleWhatsAppCardComponent;
+
+before(async () => {
+  server = await createServer({
+    root,
+    cacheDir,
+    configFile: false,
+    envFile: false,
+    appType: "custom",
+    server: { middlewareMode: true, hmr: false, ws: false, watch: null },
+    logLevel: "error",
+    resolve: { alias: { "@": resolve(root, "src") } },
+    define: {
+      "import.meta.env.DEV": "false",
+      "import.meta.env.VITE_WARRANTY_PREVIEW": JSON.stringify("0"),
+    },
+  });
+  ({ VehicleWhatsAppCard } = await server.ssrLoadModule(
+    "/src/design-system/components/patterns/VehicleWhatsAppCard.tsx",
+  ));
+});
+
+after(async () => {
+  await server?.close();
+  rmSync(cacheDir, { recursive: true, force: true });
+});
 
 const vehicle = {
   id: "19857",
@@ -16,14 +52,21 @@ const tradeHref = "https://wa.me/5551997293118?text=Quero%20avaliar%20a%20troca"
 function renderCard(
   props: Partial<React.ComponentProps<typeof VehicleWhatsAppCard>> = {},
 ) {
-  return renderToStaticMarkup(
-    <VehicleWhatsAppCard
-      vehicle={vehicle}
-      href={href}
-      source="detalhe_sticky"
-      {...props}
-    />,
-  );
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: 0 } } });
+  try {
+    return renderToStaticMarkup(
+      <QueryClientProvider client={client}>
+        <VehicleWhatsAppCard
+          vehicle={vehicle}
+          href={href}
+          source="detalhe_sticky"
+          {...props}
+        />
+      </QueryClientProvider>,
+    );
+  } finally {
+    client.clear();
+  }
 }
 
 function anchors(html: string) {

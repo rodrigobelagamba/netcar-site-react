@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
+import { VehicleWarrantySummary } from "@/design-system/components/patterns/VehicleWarrantySummary";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { formatKm, formatPrice } from "@/lib/formatters";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
@@ -99,9 +100,10 @@ const TabletCard = memo(function TabletCard({
     ? "Automático"
     : vehicle.cambio || "Câmbio a confirmar";
   return (
-    <article className="tablet-card">
+    <article className="tablet-card flex flex-col">
       <button
         className="tablet-card-open"
+        style={{ height: "auto", flex: 1 }}
         onClick={() => onSelect(vehicle.id)}
         aria-label={`Ver ${vehicle.name}, ano-modelo ${yearLabel}, ${formatPrice(vehicle.price)}`}
       >
@@ -157,6 +159,7 @@ const TabletCard = memo(function TabletCard({
           <span className="tablet-card-hint">Ver fotos e detalhes</span>
         </div>
       </button>
+      <VehicleWarrantySummary vehicle={vehicle} className="px-3 pb-3 sm:px-4" />
     </article>
   );
 });
