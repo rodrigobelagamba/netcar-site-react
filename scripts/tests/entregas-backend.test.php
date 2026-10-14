@@ -262,6 +262,8 @@ try {
     check(file_get_contents($temp . '/data/live.json') === $afterGuard, 'rejected altered retries preserve completed record');
     $publishEntrypoint = file_get_contents(__DIR__ . '/../../public/entregas/v1/publish.php');
     check(strpos($publishEntrypoint, 'catch (EntregasPublishConflict') !== false && strpos($publishEntrypoint, '409);') !== false, 'authenticated endpoint maps repair conflicts to HTTP 409');
+    $statusEntrypoint = file_get_contents(__DIR__ . '/../../public/entregas/v1/status.php');
+    check(strpos($statusEntrypoint, "'repairCompareAndSwap' => true") !== false && strpos($statusEntrypoint, 'entregas_require_publish_auth();') !== false, 'authenticated read-only status advertises guarded repair support');
     file_put_contents($temp . '/data/live.json', '{broken');
     $rejectedCorrupt = false;
     try {

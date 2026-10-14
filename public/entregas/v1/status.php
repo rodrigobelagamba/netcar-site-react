@@ -13,6 +13,7 @@ $gdWebp = extension_loaded('gd') && function_exists('imagewebp') && !empty(gd_in
 $storage = entregas_directory_writable(entregas_data_dir()) && entregas_directory_writable(entregas_media_dir());
 entregas_json_response(array(
     'ok' => true,
+    'repairCompareAndSwap' => true,
     'ready' => $gdWebp && $storage && $upload >= 12 * 1024 * 1024 && ($post === 0 || $post >= 13 * 1024 * 1024) && ($memory === null || $memory >= 128 * 1024 * 1024),
     'sapi' => PHP_SAPI,
     'gdWebp' => $gdWebp,
