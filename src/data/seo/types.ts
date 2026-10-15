@@ -1,5 +1,7 @@
 // Carro real do estoque embutido numa matéria (propaganda do estoque).
 export interface BlogCar {
+  /** Historical cards remain in source; unavailable units are not offers. */
+  available?: boolean;
   modelo: string;
   ano: string;
   km: string;

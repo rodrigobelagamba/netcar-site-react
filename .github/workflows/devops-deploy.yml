@@ -75,6 +75,37 @@ jobs:
               *) echo "Modo social invalido: $SOCIAL_MODE"; exit 1 ;;
             esac
 
+            # Inline bootstrap: the first rollout still has an older checkout
+            # without scripts/lib/site-publish-lock.sh. Same mkdir/token protocol.
+            SITE_LOCK_DIR="$REPO_DIR/.devops/site-publish.lock"
+            SITE_LOCK_OWNED=0
+            acquire_site_lock() {
+              started="$SECONDS"
+              mkdir -p "$REPO_DIR/.devops"
+              while ! (umask 077; mkdir "$SITE_LOCK_DIR") 2>/dev/null; do
+                if [ "$((SECONDS - started))" -ge 2400 ]; then
+                  echo "NETCAR_SITE_PUBLISH_BUSY" >&2
+                  return 75
+                fi
+                sleep 2
+              done
+              SITE_LOCK_TOKEN="$(cat /proc/sys/kernel/random/uuid)"
+              (umask 077; printf '%s\n' "$SITE_LOCK_TOKEN" > "$SITE_LOCK_DIR/token")
+              SITE_LOCK_OWNED=1
+            }
+            release_site_lock() {
+              if [ "$SITE_LOCK_OWNED" = 1 ] && [ -r "$SITE_LOCK_DIR/token" ] &&
+                [ "$(cat "$SITE_LOCK_DIR/token")" = "$SITE_LOCK_TOKEN" ]; then
+                rm "$SITE_LOCK_DIR/token"
+                rmdir "$SITE_LOCK_DIR"
+              fi
+              SITE_LOCK_OWNED=0
+            }
+            acquire_site_lock
+            # Interruptions leave the lock closed until its worker is inspected.
+            trap 'trap - EXIT; exit 143' TERM
+            trap 'trap - EXIT; exit 130' INT
+
             # Dispatches de uma branch usam o codigo daquela branch, mas nunca
             # deixam a copia operacional da VPS presa nela, inclusive em erro.
             RESTORE_DEFAULT=0
@@ -88,13 +119,25 @@ jobs:
               if [ "$RESTORE_DEFAULT" = "1" ] && [ "$SYNC_STARTED" = "1" ]; then
                 set +e
                 cd "$REPO_DIR"
-                git reset --hard origin/master || git reset --hard origin/main
-                restore_rc=$?
+                if [ "$SITE_LOCK_OWNED" != 1 ]; then acquire_site_lock; fi
+                if [ "$SITE_LOCK_OWNED" = 1 ] && [ ! -f "$REPO_DIR/.devops/offer-reconciliation/pending-push.json" ]; then
+                  git reset --hard origin/master || git reset --hard origin/main
+                  restore_rc=$?
+                else
+                  echo "Restauracao de checkout bloqueada: publicacao ou commit pendente" >&2
+                  restore_rc=1
+                fi
                 if [ "$rc" -eq 0 ] && [ "$restore_rc" -ne 0 ]; then rc=$restore_rc; fi
               fi
+              release_site_lock
               exit "$rc"
             }
             trap restore_checkout EXIT
+
+            if [ -f "$REPO_DIR/.devops/offer-reconciliation/pending-push.json" ]; then
+              echo "Sincronizacao bloqueada: commit de ofertas aguarda push/revisao" >&2
+              exit 1
+            fi
 
             BEFORE="$(git rev-parse HEAD)"
             echo "BEFORE=$BEFORE"
@@ -175,6 +218,10 @@ jobs:
               docker logs netcar-devops --tail 50 || true
               exit 1
             fi
+
+            # The independent panel job acquires its own filesystem lock.
+            # Release before dispatch so a synchronous workflow cannot deadlock it.
+            release_site_lock
 
             if [ "$PUBLISH_SITE" = "true" ]; then
               echo "Disparando deploy:local no painel"

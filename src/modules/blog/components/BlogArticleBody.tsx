@@ -97,9 +97,11 @@ function renderSection(
   }
 
   if (section.type === "cars" && section.cars && section.cars.length > 0) {
+    const availableCars = section.cars.filter((car) => car.available !== false);
+    if (availableCars.length === 0) return null;
     return (
       <div key={index} className="not-prose my-8 grid gap-5 sm:grid-cols-2">
-        {section.cars.map((car) => (
+        {availableCars.map((car) => (
           <BlogVehicleLink
             key={car.url}
             car={car}

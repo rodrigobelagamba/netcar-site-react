@@ -21,11 +21,12 @@ import {
   vehicleSitemapUrlsFromVehicles,
 } from "./lib/vehicle-sitemap-urls.js";
 import {
-  clearSeoBuildStockSnapshot,
-  readFreshSeoStockCache,
   readSeoBuildStockSnapshot,
-  readVersionedSeoStock,
 } from "./lib/seo-stock-cache.js";
+import {
+  fetchCompleteSeoStock,
+  validateSeoStockVehicles,
+} from "./lib/seo-stock-source.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
@@ -491,7 +492,9 @@ function renderSections(sections) {
         return `<ol>${section.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>`;
       }
       if (section.type === "cars" && section.cars) {
-        return `<div class="blog-cars">${section.cars
+        const availableCars = section.cars.filter((car) => car.available !== false);
+        if (availableCars.length === 0) return "";
+        return `<div class="blog-cars">${availableCars
           .map((car) => {
             const specs = [car.ano, car.km, car.cambio]
               .filter(Boolean)
@@ -522,67 +525,17 @@ async function fetchStock() {
   const buildSnapshot = readSeoBuildStockSnapshot(rootDir, {
     includeSold: true,
   });
-  if (buildSnapshot?.vehicles.length) {
+  if (buildSnapshot?.source === "api-complete") {
+    validateSeoStockVehicles(buildSnapshot.vehicles, { rootDir });
     return buildSnapshot.vehicles;
   }
-
-  try {
-    const apiUrl = new URL(STOCK_API_URL);
-    const pageSize = Math.max(
-      Number(apiUrl.searchParams.get("limit")) || 0,
-      500,
+  if (process.env.NETCAR_REUSE_SEO_BUILD_STOCK === "1") {
+    throw new Error(
+      "Estoque SEO: snapshot completo da reconciliação ausente ou expirado; build interrompido",
     );
-    const vehicles = [];
-    const seenIds = new Set();
-    let offset = 0;
-
-    while (true) {
-      apiUrl.searchParams.set("limit", String(pageSize));
-      apiUrl.searchParams.set("offset", String(offset));
-      const res = await fetch(apiUrl, {
-        headers: { Accept: "application/json" },
-        signal: AbortSignal.timeout(20000),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
-      if (!json.success || !Array.isArray(json.data))
-        throw new Error("resposta inválida");
-
-      const page = json.data;
-      let added = 0;
-      for (const vehicle of page) {
-        const id = String(vehicle.id);
-        if (seenIds.has(id)) continue;
-        seenIds.add(id);
-        vehicles.push(vehicle);
-        added += 1;
-      }
-
-      if (page.length < pageSize || added === 0) break;
-      offset += page.length;
-    }
-
-    return vehicles;
-  } catch (error) {
-    const cached =
-      readFreshSeoStockCache(rootDir, { includeSold: true }) ??
-      readVersionedSeoStock(rootDir, { includeSold: true });
-    if (cached?.vehicles.length) {
-      const ageMinutes = Math.max(0, Math.round(cached.ageMs / 60000));
-      const sourceLabel =
-        cached.source === "versioned-bootstrap"
-          ? "manifesto versionado"
-          : "cache efêmero";
-      console.warn(
-        `Aviso: estoque indisponível (${error.message}); usando ${sourceLabel} de ${ageMinutes} min com ${cached.vehicles.length} veículos.`,
-      );
-      return cached.vehicles;
-    }
-    console.warn(
-      `Aviso: estoque indisponível (${error.message}) e estoque de contingência válido ausente; validação interromperá o build.`,
-    );
-    return [];
   }
+  const accepted = await fetchCompleteSeoStock({ rootDir, apiUrl: STOCK_API_URL });
+  return accepted.vehicles;
 }
 
 const completeStock = (await fetchStock()).map(sanitizeVehicleImages);
@@ -2254,4 +2207,5 @@ const sellPages = cities.filter((city) => city.sell).length;
 console.log(
   `SEO assets gerados: ${blogPosts.length} posts, ${cities.length} cidades compra, ${sellPages} cidades venda, ${landings.length} landings marca/categoria, ${contentPages.length} páginas de conteúdo, ${vehicleUrls.length} veículos preservados, sitemap com ${urls.length} URLs`,
 );
-clearSeoBuildStockSnapshot(rootDir);
+// Keep the accepted snapshot for the following offer validator and publication
+// audit. generate-landings clears it before the next independent feed read.

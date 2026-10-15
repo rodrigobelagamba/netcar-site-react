@@ -7,6 +7,7 @@
  */
 
 import { execFileSync, execSync } from 'child_process';
+import { acquireSitePublishLock } from './lib/site-publish-lock.mjs';
 import {
   existsSync,
   mkdtempSync,
@@ -508,47 +509,6 @@ function toPosixPath(filePath) {
   return normalized;
 }
 
-function commitBlogAutoIfChanged() {
-  const blogRelPath = 'src/data/seo/blog-auto.json';
-  const blogPath = join(rootDir, blogRelPath);
-
-  if (!existsSync(blogPath)) {
-    return;
-  }
-
-  try {
-    const status = execSync(`git status --porcelain -- ${blogRelPath}`, {
-      encoding: 'utf-8',
-      cwd: rootDir,
-      stdio: 'pipe',
-    }).trim();
-
-    if (!status) {
-      return;
-    }
-
-    execSync(`git add -- ${blogRelPath}`, { cwd: rootDir, stdio: 'pipe' });
-
-    const date = new Date().toISOString().slice(0, 10);
-    const commitMessage = `chore(blog): rodada weekly ${date}`;
-    const commitMsgFile = join(rootDir, '.git-commit-msg.txt');
-
-    try {
-      writeFileSync(commitMsgFile, commitMessage, 'utf-8');
-      execSync('git commit -F .git-commit-msg.txt', { cwd: rootDir, stdio: 'pipe' });
-      unlinkSync(commitMsgFile);
-      log(`📝 blog-auto.json commitado (${commitMessage})`, 'green');
-    } catch (commitError) {
-      try {
-        if (existsSync(commitMsgFile)) unlinkSync(commitMsgFile);
-      } catch (e) {}
-      throw commitError;
-    }
-  } catch (error) {
-    log(`⚠️  Não foi possível commitar blog-auto.json: ${error.message}`, 'yellow');
-  }
-}
-
 async function deployViaSsh(sshConfig, distPath) {
   const remote = `${sshConfig.user}@${sshConfig.host}`;
   const remoteDir = sshConfig.remoteDir.replace(/\/$/, '');
@@ -892,9 +852,6 @@ async function deploy() {
       'green'
     );
 
-    commitBlogAutoIfChanged();
-    log('', 'reset');
-
     // 3. Gerar build
     log('🔨 Gerando build de produção...', 'blue');
     process.env.VITE_API_BASE_URL = env.VITE_API_BASE_URL;
@@ -939,6 +896,16 @@ setDefaultAutoSelectFamilyAttemptTimeout(
 );
 
 const cli = parseCliArgs(process.argv);
+
+if (!(cli.help && cli.fromDist)) {
+  try {
+    const releaseSiteLock = acquireSitePublishLock(rootDir);
+    process.once('exit', releaseSiteLock);
+  } catch (error) {
+    console.error(error.code === 'NETCAR_SITE_PUBLISH_BUSY' ? error.code : 'NETCAR_SITE_LOCK_FAILED');
+    process.exit(error.exitCode || 1);
+  }
+}
 
 if (cli.help && cli.fromDist) {
   printDeployDistHelp();

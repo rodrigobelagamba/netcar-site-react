@@ -1,5 +1,13 @@
 # Automação SEO — Netcar
 
+> Operação atual (15/10/2026): a rotina `weekly-persist.sh` agora reconcilia
+> preços e disponibilidade, preservando os textos editoriais, às 7h de
+> segunda/quarta/sexta em `America/Sao_Paulo`. O procedimento vigente,
+> validações, dry-run e reversão estão em [offer-reconciliation.md](offer-reconciliation.md).
+> As seções abaixo sobre geração de novas pautas descrevem a ferramenta editorial
+> manual; ela não faz parte da reconciliação agendada. Leituras incompletas
+> interrompem o build; um fallback antigo não autoriza alterações nas ofertas.
+
 Sistema **data-driven**: páginas e pautas nascem dos dados reais (estoque via API),
 não de texto escrito à mão um a um. Objetivo: capturar busca **não-marca**
 ("volkswagen usado esteio", "suv seminovo", "como financiar carro usado") sem

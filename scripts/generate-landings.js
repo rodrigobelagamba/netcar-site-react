@@ -8,9 +8,8 @@
  * disponíveis quando o estoque gira, mas ficam noindex até recuperarem oferta.
  *
  * Roda no build ANTES de generate-seo-assets.js (que gera o HTML estático
- * para crawlers e o sitemap). Se a API falhar, usa primeiro o cache efêmero e
- * depois o último manifesto completo versionado. Sem nenhuma fonte válida, a
- * falha interrompe a publicação para não misturar fotografias do estoque.
+ * para crawlers e o sitemap). Só aceita leitura completa e estável da API;
+ * qualquer falha interrompe a publicação e preserva o estoque já publicado.
  *
  * Uso: node scripts/generate-landings.js
  */
@@ -19,11 +18,15 @@ import { writeFileSync } from "fs";
 import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import {
-  readFreshSeoStockCache,
-  readVersionedSeoStock,
+  clearSeoBuildStockSnapshot,
+  readSeoBuildStockSnapshot,
   writeSeoBuildStockSnapshot,
   writeSeoStockCache,
 } from "./lib/seo-stock-cache.js";
+import {
+  fetchCompleteSeoStock,
+  validateSeoStockVehicles,
+} from "./lib/seo-stock-source.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
@@ -811,34 +814,6 @@ function assignRelatedSlugs(landings) {
   }
 }
 
-async function fetchVehicles() {
-  let lastError;
-  for (let attempt = 1; attempt <= 3; attempt += 1) {
-    try {
-      const res = await fetch(API_URL, {
-        headers: { Accept: "application/json" },
-        signal: AbortSignal.timeout(20000),
-      });
-      if (!res.ok) throw new Error(`API HTTP ${res.status}`);
-      const json = await res.json();
-      if (
-        !json.success ||
-        !Array.isArray(json.data) ||
-        json.data.length === 0
-      ) {
-        throw new Error("resposta inválida");
-      }
-      return json.data;
-    } catch (error) {
-      lastError = error;
-      if (attempt < 3) {
-        await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
-      }
-    }
-  }
-  throw lastError;
-}
-
 function tally(vehicles, field) {
   const map = new Map();
   for (const v of vehicles) {
@@ -854,41 +829,25 @@ function tally(vehicles, field) {
 
 async function main() {
   let allVehicles;
-  let snapshotSource = "api";
-  let snapshotSourceAgeMs = 0;
-  try {
-    allVehicles = await fetchVehicles();
-    writeSeoStockCache(rootDir, allVehicles);
-  } catch (err) {
-    const cached =
-      readFreshSeoStockCache(rootDir, { includeSold: true }) ??
-      readVersionedSeoStock(rootDir, { includeSold: true });
-    if (!cached?.vehicles.length) {
+  if (process.env.NETCAR_REUSE_SEO_BUILD_STOCK === "1") {
+    const snapshot = readSeoBuildStockSnapshot(rootDir, { includeSold: true });
+    if (!snapshot || snapshot.source !== "api-complete") {
       throw new Error(
-        `API indisponível (${err.message}) e estoque de contingência válido ausente; build interrompido para evitar contagens divergentes`,
+        "Estoque SEO: snapshot completo da reconciliação ausente ou expirado; build interrompido",
       );
     }
-
-    const ageMinutes = Math.max(0, Math.round(cached.ageMs / 60000));
-    const sourceLabel =
-      cached.source === "versioned-bootstrap"
-        ? "manifesto versionado"
-        : "cache efêmero";
-    allVehicles = cached.vehicles;
-    snapshotSource = cached.source;
-    snapshotSourceAgeMs = cached.ageMs;
-    const activeCount = allVehicles.filter(
-      (vehicle) => Number(vehicle.valor) > 0,
-    ).length;
-    console.warn(
-      `Aviso: API indisponível (${err.message}); landings regeneradas pelo ${sourceLabel} de ${ageMinutes} min com ${activeCount} veículos ativos.`,
-    );
+    validateSeoStockVehicles(snapshot.vehicles, { rootDir });
+    allVehicles = snapshot.vehicles;
+  } else {
+    clearSeoBuildStockSnapshot(rootDir);
+    const accepted = await fetchCompleteSeoStock({ rootDir, apiUrl: API_URL });
+    allVehicles = accepted.vehicles;
+    writeSeoStockCache(rootDir, allVehicles);
+    writeSeoBuildStockSnapshot(rootDir, allVehicles, {
+      source: accepted.source,
+      sourceAgeMs: accepted.sourceAgeMs,
+    });
   }
-
-  writeSeoBuildStockSnapshot(rootDir, allVehicles, {
-    source: snapshotSource,
-    sourceAgeMs: snapshotSourceAgeMs,
-  });
   const vehicles = allVehicles.filter((vehicle) => Number(vehicle.valor) > 0);
 
   const landings = [];
