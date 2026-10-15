@@ -1,11 +1,9 @@
 import { ArrowLeftRight, MessageCircle } from "lucide-react";
 import type { VehicleFocusPayload } from "./VehicleCard";
 import { optimizeStockImage } from "@/lib/images";
-import { VehicleWarrantySummary } from "./VehicleWarrantySummary";
 
 interface VehicleWhatsAppCardProps {
   vehicle: VehicleFocusPayload;
-  warrantyVehicle?: Parameters<typeof VehicleWarrantySummary>[0]["vehicle"];
   href: string;
   source: string;
   tradeHref?: string;
@@ -19,7 +17,6 @@ interface VehicleWhatsAppCardProps {
 /** Barra de contato compacta: horizontal no desktop, duas linhas no celular. */
 export function VehicleWhatsAppCard({
   vehicle,
-  warrantyVehicle,
   href,
   source,
   tradeHref,
@@ -89,10 +86,6 @@ export function VehicleWhatsAppCard({
           </a>
         )}
       </div>
-      <VehicleWarrantySummary
-        vehicle={String(warrantyVehicle?.id) === vehicle.id ? warrantyVehicle : undefined}
-        className="md:col-span-2"
-      />
     </div>
   );
 }

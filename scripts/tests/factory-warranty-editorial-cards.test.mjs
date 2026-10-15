@@ -117,6 +117,10 @@ function stamps() {
   return renderer.root.findAll((node) =>
     node.type === "div" && node.props["data-factory-warranty-badge"] === "card");
 }
+function elementsWithAttribute(attribute) {
+  return renderer.root.findAll((node) =>
+    typeof node.type === "string" && Object.hasOwn(node.props, attribute));
+}
 const editorialHref = "/veiculo/nissan-kicks-sense-turbo-20019";
 
 test("editorial car resolves the current unit and renders its approved warranty", async () => {
@@ -124,6 +128,8 @@ test("editorial car resolves the current unit and renders its approved warranty"
   assert.equal(apiRequests.length, 1);
   assert.equal(stamps().length, 1);
   assert.match(stamps()[0].findByType("svg").props["aria-label"], /2028/);
+  assert.equal(elementsWithAttribute("data-factory-warranty-note").length, 1);
+  assert.equal(elementsWithAttribute("data-vehicle-warranty-summary").length, 1);
 });
 
 for (const [label, changes] of [
@@ -155,18 +161,44 @@ test("editorial 404 removes the stamp even with a fresh cached approved vehicle"
   assert.equal(stamps().length, 0);
 });
 
-for (const [label, warrantyVehicle, expected] of [
-  ["approved current unit", currentVehicle(), 1],
-  ["missing original vehicle", undefined, 0],
-  ["different card ID", currentVehicle("20066"), 0],
-  ["sold unit", currentVehicle("20019", { price: 0 }), 0],
-  ["stale unit", currentVehicle("20019", { observedAt: fixedNow - 6 * 60_000 }), 0],
+for (const [label, warrantyVehicle] of [
+  ["approved current unit", currentVehicle()],
+  ["missing original vehicle", undefined],
+  ["different card ID", currentVehicle("20066")],
+  ["sold unit", currentVehicle("20019", { price: 0 })],
+  ["stale unit", currentVehicle("20019", { observedAt: fixedNow - 6 * 60_000 })],
 ]) {
-  test(`sticky vehicle card: ${label}`, async () => {
+  test(`sticky vehicle card stays compact without warranty: ${label}`, async () => {
+    const vehicle = { id: "20019", label: "Kicks", priceLabel: "R$ 149.900", image: "/car.jpg" };
     await mount(VehicleWhatsAppCard, {
-      vehicle: { id: "20019", label: "Kicks", priceLabel: "R$ 149.900", image: "/car.jpg" },
+      vehicle,
+      // Legacy inputs and a populated warranty cache must not restore the stamp.
       warrantyVehicle, href: "https://wa.me/1", source: "detalhe_sticky",
+      tradeHref: "https://wa.me/1?text=troca", tradeSource: "detalhe_sticky_trade",
+      tradeCtaLabel: "Avaliar troca",
     });
-    assert.equal(stamps().length, expected);
+    assert.equal(elementsWithAttribute("data-factory-warranty-badge").length, 0);
+    assert.equal(elementsWithAttribute("data-factory-warranty-note").length, 0);
+    assert.equal(elementsWithAttribute("data-vehicle-warranty-summary").length, 0);
+    assert.equal(renderer.root.findByProps({ title: vehicle.label }).children.join(""), vehicle.label);
+    assert(renderer.root.findAllByType("p").some((node) => node.children.join("") === vehicle.priceLabel));
+
+    const links = renderer.root.findAllByType("a");
+    assert.equal(links.length, 2);
+    for (const link of links) {
+      assert.equal(link.props["data-wa-vehicle-id"], vehicle.id);
+      assert.equal(link.props["data-wa-vehicle-name"], vehicle.label);
+      assert.equal(link.props.target, "_blank");
+      assert.equal(link.props.rel, "noopener noreferrer");
+    }
+    assert.equal(links[0].props.href, "https://wa.me/1");
+    assert.equal(links[0].props["data-wa-source"], "detalhe_sticky");
+    assert.equal(links[0].props["data-wa-intent"], "vehicle_inquiry");
+    assert.equal(links[0].findByType("span").children.join(""), "Falar deste carro");
+    assert.equal(links[1].props.href, "https://wa.me/1?text=troca");
+    assert.equal(links[1].props["data-wa-source"], "detalhe_sticky_trade");
+    assert.equal(links[1].props["data-wa-intent"], "trade_in");
+    assert.equal(links[1].findByType("span").children.join(""), "Avaliar troca");
+    assert.equal(links[1].props["aria-label"], `Avaliar troca: meu carro por ${vehicle.label}`);
   });
 }
