@@ -22,6 +22,8 @@ type RegionalActionCtasProps = {
   /** ID da seção local, sem #; quando definido, tem prioridade sobre as rotas. */
   sellAnchor?: string;
   sellLabel?: string;
+  /** ID do estoque nesta página, sem #; omitido mantém o link do catálogo. */
+  stockAnchor?: string;
   stockSearch?: StockSearch;
   stockLabel?: string;
   stockSubtitle?: string;
@@ -72,6 +74,7 @@ export function RegionalActionCtas({
   sellCitySlug,
   sellAnchor,
   sellLabel = "Vender meu carro",
+  stockAnchor,
   stockSearch = emptySeminovosSearch,
   stockLabel = "Ver estoque",
   stockSubtitle = "Fotos, preço e km do anúncio",
@@ -115,7 +118,25 @@ export function RegionalActionCtas({
     />
   );
 
-  const stockLink = (
+  const stockContent = (
+    <CtaContent
+      icon={Car}
+      title={stockLabel}
+      subtitle={stockSubtitle}
+      dark={primary === "stock"}
+    />
+  );
+  const stockAnchorId = stockAnchor?.trim();
+  const stockLink = stockAnchorId ? (
+    <a
+      key="stock"
+      href={`#${stockAnchorId}`}
+      data-regional-action="view_stock"
+      className={stockBtn}
+    >
+      {stockContent}
+    </a>
+  ) : (
     <Link
       key="stock"
       to="/seminovos"
@@ -123,12 +144,7 @@ export function RegionalActionCtas({
       data-regional-action="view_stock"
       className={stockBtn}
     >
-      <CtaContent
-        icon={Car}
-        title={stockLabel}
-        subtitle={stockSubtitle}
-        dark={primary === "stock"}
-      />
+      {stockContent}
     </Link>
   );
 

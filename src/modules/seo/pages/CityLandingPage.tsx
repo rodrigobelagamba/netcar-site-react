@@ -82,6 +82,7 @@ export function CityLandingPage() {
           waText={`moro em ${city.name} e estou procurando um seminovo.`}
           sellCitySlug={city.slug}
           primary="stock"
+          stockAnchor="estoque-regional"
           stockLabel="Ver carros e preços"
           stockSubtitle="Estoque das duas lojas em Esteio"
           waSubtitle="Consulte compra, troca e financiamento"
@@ -89,6 +90,7 @@ export function CityLandingPage() {
       </RegionalSeoHero>
 
       <RegionalStockPreview
+        id="estoque-regional"
         title={`Seminovos para quem vem de ${city.name}`}
         limit={8}
       />

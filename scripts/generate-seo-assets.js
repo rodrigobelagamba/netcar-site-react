@@ -1336,7 +1336,7 @@ for (const city of cities) {
       <p>${escapeHtml(city.intro)}</p>
       ${regionalInventoryHtml(city.name, "intro")}
       <p data-regional-ctas>
-        <a href="${SITE}/seminovos" data-regional-action="view_stock">Ver carros e preços</a>
+        <a href="#estoque-regional" data-regional-action="view_stock">Ver carros e preços</a>
         ·
         <a href="${cityWhatsAppLink(city.name)}" data-wa-source="landing" data-wa-intent="regional_help" data-regional-action="whatsapp">Falar com a Netcar</a>
       </p>

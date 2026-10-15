@@ -30,8 +30,8 @@ export function HomeRegionsNav() {
             Seminovos para toda a região metropolitana
           </h2>
           <p className="mt-1 text-sm text-gray-600">
-            Lojas em Esteio, na BR-116. Veja rota, tempo de viagem e estoque
-            para a sua cidade.
+            Lojas na Av. Presidente Vargas, em Esteio, próximas à BR-116.
+            Veja o estoque e planeje a rota a partir da sua cidade.
           </p>
         </div>
       </div>

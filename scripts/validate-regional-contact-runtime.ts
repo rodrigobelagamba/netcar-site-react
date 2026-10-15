@@ -72,6 +72,13 @@ function createHarness(path: string, apiData: ApiData, routePath = pagePath) {
     "@/catalog/queries/useVehiclesQuery": {
       useVehiclesQuery: () => ({ data: [] }),
     },
+    "@/design-system/components/patterns/VehicleCard": {
+      VehicleCard: "vehicle-card",
+    },
+    "@/lib/homeStock": { isAvailableHomeStockVehicle: () => true },
+    "@/lib/showroomStock": {
+      sortShowroomVehicles: (vehicles: unknown[]) => vehicles,
+    },
     "@/lib/whatsappMessages": whatsappMessages,
     "@/lib/vehicleSearch": vehicleSearch,
     "@/lib/analytics": {
@@ -373,6 +380,97 @@ for (const [props, target, action] of [
     assert.equal(first.props.params.citySlug, "canoas");
 }
 
+// Compra regional mantém o visitante no estoque da cidade; consumidores sem
+// âncora (hub e páginas de venda) continuam abrindo o catálogo com seus filtros.
+const regionalCtas = ctas.render("RegionalActionCtas", {
+  waText: "moro em Sapucaia do Sul e estou procurando um seminovo.",
+  primary: "stock",
+  stockAnchor: "estoque-regional",
+  stockLabel: "Ver carros e preços",
+  sellCitySlug: "sapucaia-do-sul",
+});
+const stockAnchor = find(
+  regionalCtas,
+  (element) => element.props["data-regional-action"] === "view_stock",
+);
+assert.equal(stockAnchor.type, "a");
+assert.equal(stockAnchor.props.href, "#estoque-regional");
+assert.equal(stockAnchor.props.target, undefined);
+assert.equal(stockAnchor.props.to, undefined);
+assert.ok(text(stockAnchor).includes("Ver carros e preços"));
+assert.equal(
+  descendants(regionalCtas).filter(
+    (element) => element.props["data-regional-action"],
+  )[0],
+  stockAnchor,
+);
+assert.equal(
+  find(regionalCtas, (element) => element.props["data-regional-action"] === "sell_city")
+    .props.params.citySlug,
+  "sapucaia-do-sul",
+);
+const regionalWhatsApp = find(
+  regionalCtas,
+  (element) => element.props["data-regional-action"] === "whatsapp",
+);
+assert.match(
+  assertWhatsApp(regionalWhatsApp.props.href, "5551997293118"),
+  /moro em Sapucaia do Sul/,
+);
+assert.equal(regionalWhatsApp.props["data-wa-intent"], "regional_help");
+
+const filteredSearch = { ...emptySeminovosSearch, busca: "automático" };
+for (const anchor of [undefined, "", "  "]) {
+  const fallback = find(
+    ctas.render("RegionalActionCtas", {
+      waText: "quero ver o estoque.",
+      stockAnchor: anchor,
+      stockSearch: filteredSearch,
+    }),
+    (element) => element.props["data-regional-action"] === "view_stock",
+  );
+  assert.equal(fallback.type, "router-link");
+  assert.equal(fallback.props.to, "/seminovos");
+  assert.deepEqual(fallback.props.search, filteredSearch);
+}
+
+const previewHarness = createHarness(
+  "src/modules/seo/components/RegionalStockPreview.tsx",
+  undefined,
+);
+const preview = previewHarness.render("RegionalStockPreview", {
+  id: "estoque-regional",
+});
+assert.equal(preview.type, "section");
+assert.equal(preview.props.id, "estoque-regional");
+assert.match(preview.props.className, /\bscroll-mt-28\b/);
+assert.equal(
+  find(preview, (element) => element.props["data-regional-action"] === "view_stock_more")
+    .props.to,
+  "/seminovos",
+);
+assert.equal(
+  previewHarness.render("RegionalStockPreview").props.id,
+  undefined,
+  "Outros consumidores não devem ganhar IDs duplicados implicitamente",
+);
+const cityPageSource = readFileSync(
+  new URL("../src/modules/seo/pages/CityLandingPage.tsx", import.meta.url),
+  "utf8",
+);
+assert.match(cityPageSource, /<RegionalActionCtas[\s\S]*?stockAnchor="estoque-regional"/);
+assert.match(cityPageSource, /<RegionalStockPreview\s+id="estoque-regional"/);
+const generatedSeoSource = readFileSync(
+  new URL("../scripts/generate-seo-assets.js", import.meta.url),
+  "utf8",
+);
+assert.ok(
+  generatedSeoSource.includes(
+    '<a href="#estoque-regional" data-regional-action="view_stock">Ver carros e preços</a>',
+  ),
+  "O HTML rastreável deve preservar a mesma ação local do React",
+);
+
 // Plataformas que emitem change sem foco ainda devem registrar troca corretamente.
 const noFocus = createHarness("src/components/QuickSellForm.tsx", undefined);
 const tradeRadio = find(
@@ -439,5 +537,5 @@ for (const route of ["/compra", "/compramos-seu-usado", "/vender-meu-carro"]) {
 }
 
 console.log(
-  "Contato regional validado: 4 estados de API, compra/troca, intenção inicial, cabeçalho desktop/mobile, destinos dos CTAs e sincronia dos atalhos de /compra e aliases.",
+  "Contato regional validado: 4 estados de API, compra/troca, intenção inicial, cabeçalho desktop/mobile, destinos dos CTAs, âncora de estoque com fallback e sincronia dos atalhos de /compra e aliases.",
 );

@@ -10,6 +10,7 @@ import { sortShowroomVehicles } from "@/lib/showroomStock";
 type StockSearch = typeof emptySeminovosSearch;
 
 type RegionalStockPreviewProps = {
+  id?: string;
   title?: string;
   limit?: number;
   stockSearch?: StockSearch;
@@ -18,6 +19,7 @@ type RegionalStockPreviewProps = {
 
 /** Grade de seminovos reais da loja — páginas SEO regionais. */
 export function RegionalStockPreview({
+  id,
   title = "Seminovos disponíveis agora em Esteio",
   limit = 8,
   stockSearch = emptySeminovosSearch,
@@ -56,7 +58,7 @@ export function RegionalStockPreview({
   );
 
   return (
-    <section className="relative pb-16">
+    <section id={id} className="relative scroll-mt-28 pb-16">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-slate-50 to-transparent"

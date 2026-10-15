@@ -128,13 +128,15 @@ const expectedRegionalFocusSlugs = [
   "nova-santa-rita",
   "sao-leopoldo",
   "gravatai",
+  "cachoeirinha",
+  "novo-hamburgo",
 ];
 if (
   regionalFocusSlugs.length !== expectedRegionalFocusSlugs.length ||
   new Set(regionalFocusSlugs).size !== expectedRegionalFocusSlugs.length ||
   expectedRegionalFocusSlugs.some((slug) => !regionalFocusSlugs.includes(slug))
 ) {
-  errors.push("Foco regional: preservar as 5 cidades prioritárias únicas");
+  errors.push("Foco regional: preservar as 7 cidades prioritárias únicas");
 }
 for (const slug of regionalFocusSlugs) {
   if (!cities.some((city) => city.slug === slug)) {
@@ -331,8 +333,22 @@ function validateRegionalExperience(html, city, variant, label) {
         `${label}: estoque e seleção devem preceder os textos da cidade`,
       );
     }
-    if (!anchorHrefs(ctas).includes(`${site}/seminovos`)) {
-      errors.push(`${label}: estoque precisa estar nos CTAs iniciais`);
+    const stockActions = (ctas.match(/<a\b[^>]*>/gi) || []).filter((tag) =>
+      /\bdata-regional-action=(["'])view_stock\1/.test(tag),
+    );
+    const stockTargets = [
+      ...body.matchAll(/<[^>]+\sid=(["'])estoque-regional\1[^>]*>/gi),
+    ];
+    if (
+      stockActions.length !== 1 ||
+      anchorHrefs(stockActions[0] || "")[0] !== "#estoque-regional" ||
+      stockTargets.length !== 1 ||
+      stockTargets[0]?.index !== stockPosition ||
+      !stockSection
+    ) {
+      errors.push(
+        `${label}: CTA inicial de estoque precisa apontar para a única vitrine #estoque-regional da página`,
+      );
     }
   } else {
     const evaluation =
