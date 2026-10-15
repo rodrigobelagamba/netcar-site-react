@@ -18,6 +18,8 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run lint
+      - name: Validate offer reconciliation and scheduling safeguards
+        run: npm run offers:test
       - name: Validate stock search refresh
         run: npm run stock:test-search
       - name: Validate reviewed factory warranty stamps
