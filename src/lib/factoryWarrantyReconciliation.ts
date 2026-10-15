@@ -1,5 +1,6 @@
 import {
   factoryWarrantyReviewFingerprint,
+  factoryTractionBatteryReviewFingerprint,
   factoryWarrantyToday,
   resolveFactoryWarranty,
   resolveFactoryPowertrainWarranty,
@@ -41,8 +42,11 @@ export function factoryWarrantyRuleFingerprint(
     templateRecordId: rule.templateRecordId,
     match: rule.match,
     allowNewUnits: rule.allowNewUnits,
-    // Bind the complete existing approval, including manual revocation and any
-    // supplemental coverage that makes a template non-transferable.
+    ...(rule.privateUsePolicy !== undefined
+      ? { privateUsePolicy: rule.privateUsePolicy }
+      : {}),
+    // Bind the complete existing approval, including manual revocation and
+    // every separately reviewed supplemental coverage.
     templates,
   });
 }
@@ -104,6 +108,79 @@ function eligible(
     resolveFactoryWarranty(vehicle, matrix, today) ||
     resolveFactoryPowertrainWarranty(vehicle, matrix, today) ||
     resolveFactoryTractionBatteryWarranty(vehicle, matrix, today)
+  );
+}
+
+function validPrivateUsePolicy(
+  rule: FactoryWarrantyAutomationRule,
+  today: string,
+): boolean {
+  const policy = rule.privateUsePolicy;
+  return !!(
+    policy &&
+    policy.scope === "netcar-stock" &&
+    policy.coverageBasis === "documented-model-policy" &&
+    text(policy.attestationId) &&
+    !/\b(PENDENTE|PENDING|UNKNOWN|TBD|A CONFIRMAR|NAO VERIFICAD[AO])\b/.test(
+      normalize(policy.attestationId),
+    ) &&
+    /^\d{4}-\d{2}-\d{2}$/.test(policy.confirmedAt) &&
+    Number.isFinite(Date.parse(policy.confirmedAt)) &&
+    new Date(policy.confirmedAt).toISOString().slice(0, 10) === policy.confirmedAt &&
+    policy.confirmedAt <= today
+  );
+}
+
+function reusableTemplate(
+  template: FactoryWarrantyRecord,
+  rule: FactoryWarrantyAutomationRule,
+  today: string,
+): boolean {
+  if (
+    template.status !== "approved" ||
+    template.confirmedExpiryDate !== undefined ||
+    template.confirmedExpiryMonth !== undefined ||
+    template.approvedFingerprint !== factoryWarrantyReviewFingerprint(template)
+  )
+    return false;
+  if (rule.privateUsePolicy === undefined)
+    return (
+      template.scope === "basic-vehicle" &&
+      template.usage === "unknown" &&
+      !!template.commonPolicy &&
+      template.supplementalCoverages === undefined &&
+      template.powertrainReview === undefined
+    );
+  if (
+    !validPrivateUsePolicy(rule, today) ||
+    template.usage !== "private" ||
+    template.commonPolicy !== undefined ||
+    !["basic-vehicle", "powertrain"].includes(template.scope)
+  )
+    return false;
+  if (template.scope === "powertrain")
+    return (
+      template.powertrainReview?.coverageSubtype === "engine-and-transmission" &&
+      template.powertrainReview.displayLabel === "Motor e câmbio" &&
+      text(template.powertrainReview.usageAttestationId) &&
+      template.supplementalCoverages === undefined
+    );
+  if (template.powertrainReview !== undefined) return false;
+  const coverages = template.supplementalCoverages;
+  return (
+    coverages === undefined ||
+    (Array.isArray(coverages) &&
+      coverages.length === 1 &&
+      coverages.every(
+        (coverage) =>
+          coverage.status === "approved" &&
+          coverage.scope === "traction-battery" &&
+          coverage.usage === "private" &&
+          coverage.confirmedExpiryDate === undefined &&
+          coverage.confirmedExpiryMonth === undefined &&
+          coverage.approvedFingerprint ===
+            factoryTractionBatteryReviewFingerprint(template, coverage),
+      ))
   );
 }
 
@@ -286,17 +363,7 @@ function reconcileFactoryWarrantyVehicleUnchecked(
   if (templates.length !== 1)
     return result("pending", "rule-template-conflict", provenance);
   const template = templates[0];
-  if (
-    template.status !== "approved" ||
-    template.scope !== "basic-vehicle" ||
-    template.usage !== "unknown" ||
-    !template.commonPolicy ||
-    template.supplementalCoverages !== undefined ||
-    template.powertrainReview !== undefined ||
-    template.confirmedExpiryDate !== undefined ||
-    template.confirmedExpiryMonth !== undefined ||
-    template.approvedFingerprint !== factoryWarrantyReviewFingerprint(template)
-  )
+  if (!reusableTemplate(template, rule, today))
     return result("pending", "rule-template-not-reusable", provenance);
   // The approved match must describe this exact template, including its engine.
   // An edited rule cannot reclassify an unrelated manual/model as compatible.
@@ -316,7 +383,7 @@ function reconcileFactoryWarrantyVehicleUnchecked(
   )
     return result("pending", "rule-template-identity-conflict", provenance);
   const derived: FactoryWarrantyRecord = {
-    ...template,
+    ...structuredClone(template),
     recordId: `rule:${rule.ruleId}:${rule.version}:${vehicle.id}:${vehicle.unitKey}`,
     vehicle: { ...template.vehicle, vehicleId: vehicle.id },
     unitBinding: {
@@ -327,9 +394,20 @@ function reconcileFactoryWarrantyVehicleUnchecked(
     reviewedMileageKm: vehicle.km,
     approvedFingerprint: "",
   };
+  if (derived.powertrainReview && rule.privateUsePolicy)
+    derived.powertrainReview.usageAttestationId =
+      rule.privateUsePolicy.attestationId;
   derived.approvedFingerprint = factoryWarrantyReviewFingerprint(derived);
+  for (const coverage of derived.supplementalCoverages ?? []) {
+    coverage.recordId = `${derived.recordId}:traction-battery`;
+    coverage.reviewedMileageKm = vehicle.km;
+    coverage.approvedFingerprint = factoryTractionBatteryReviewFingerprint(
+      derived,
+      coverage,
+    );
+  }
   const effective = { ...matrix, records: [...matrix.records, derived] };
-  if (!resolveFactoryWarranty(vehicle, effective, today))
+  if (!eligible(vehicle, effective, today))
     return result(
       "blocked",
       existingReason(vehicle, derived, today),

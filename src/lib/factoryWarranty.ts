@@ -13,6 +13,8 @@ export type WarrantyMileage =
 
 export interface WarrantySource {
   sourceId: string;
+  /** Accurate public attribution when the evidence is not an owner's manual. */
+  label?: string;
   url: string;
   locator: string;
   revision: string;
@@ -88,7 +90,7 @@ export interface FactoryWarrantyTractionBatteryCoverage {
   scope: "traction-battery";
   conditionsConfirmed: boolean;
   termYears: number;
-  /** This first implementation supports only individually confirmed private use. */
+  /** Private use may be confirmed for this unit or by an approved stock policy. */
   usage: "private";
   reviewedMileageKm: number;
   mileage: WarrantyMileage;
@@ -115,7 +117,14 @@ export interface FactoryWarrantyAutomationRule {
     engine: string;
     transmission: string;
   };
-  /** Only documented common basic-vehicle policies may opt in. */
+  /** Explicit model-policy approval; private use alone never approves the terms. */
+  privateUsePolicy?: {
+    scope: "netcar-stock";
+    attestationId: string;
+    confirmedAt: string;
+    coverageBasis: "documented-model-policy";
+  };
+  /** Only explicitly reviewed, documented exact model policies may opt in. */
   allowNewUnits: boolean;
   approvedFingerprint: string;
 }
@@ -396,6 +405,7 @@ function resolveFactoryWarrantyCoverage(
       (source) =>
         !source ||
         !nonempty(source.sourceId) ||
+        (source.label !== undefined && !nonempty(source.label)) ||
         typeof source.url !== "string" ||
         !/^https:\/\/[^/\s]+\/\S+$/i.test(source.url) ||
         !nonempty(source.locator) ||
@@ -551,7 +561,7 @@ export function resolveFactoryPowertrainWarranty(
       scope: "powertrain" as const,
       termYears: record.termYears,
       sourceUrl: source.url,
-      sourceLabel: `Manual ${source.verification.documentCode}`,
+      sourceLabel: source.label || `Manual ${source.verification.documentCode}`,
       sourceDescription: `${source.revision} ${source.locator}`,
     };
   });

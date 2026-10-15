@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-15",
+  "reviewId": "warranty-automation-private-20261015",
+  "authorization": {
+    "date": "2026-10-15",
+    "quote": "sim... e tu nao deve ficar me questionando cada carro que entra... achou o carro ... tem a info da garantia . adiciona carimbo... simples",
+    "scope": "Aplicar e publicar carimbos de novos veículos com informação completa e compatível, sem aprovação por carro; pesquisar fontes quando faltar regra.",
+    "usage": "Uso particular já atestado para todo estoque Netcar em10/10/2026.",
+    "individualExceptionsRemainIndividual": true
+  },
+  "privateUsePolicy": {
+    "scope": "netcar-stock",
+    "attestationId": "netcar-private-stock-20261010",
+    "confirmedAt": "2026-10-10",
+    "coverageBasis": "documented-model-policy"
+  },
+  "addedRules": [
+    {
+      "ruleId": "documented-19924-private-exact-variant",
+      "version": "2026-10-15.1",
+      "status": "approved",
+      "templateRecordId": "reviewed-v2-20261005-19924",
+      "allowNewUnits": true,
+      "match": {
+        "brand": "BYD",
+        "modelVersion": "SONG PRO GS",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "privateUsePolicy": {
+        "scope": "netcar-stock",
+        "attestationId": "netcar-private-stock-20261010",
+        "confirmedAt": "2026-10-10",
+        "coverageBasis": "documented-model-policy"
+      },
+      "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-19924-private-exact-variant\",\"version\":\"2026-10-15.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261005-19924\",\"match\":{\"brand\":\"BYD\",\"modelVersion\":\"SONG PRO GS\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2024,\"modelYear\":2025},\"allowNewUnits\":true,\"privateUsePolicy\":{\"scope\":\"netcar-stock\",\"attestationId\":\"netcar-private-stock-20261010\",\"confirmedAt\":\"2026-10-10\",\"coverageBasis\":\"documented-model-policy\"},\"templates\":[{\"recordId\":\"reviewed-v2-20261005-19924\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-05\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261005-19924\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"19924\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"BYD\\\",\\\"modelVersion\\\":\\\"SONG PRO GS\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:e66828b1c6ab47281a5d318cf7e9a1f6e3b605806c3b95b449a5c299ed203d27\\\",\\\"engine\\\":\\\"1.5\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":6,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":9385,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"19924-manual-general-20261005\\\",\\\"url\\\":\\\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\\\",\\\"locator\\\":\\\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressas 32 (prazo geral), 33 (início e transferência), 36–37 (uso e limitações). Edição conferida na contracapa, PDF 46.\\\",\\\"revision\\\":\\\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"DM_MG_25046\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261005-19924\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"19924\",\"brand\":\"BYD\",\"modelVersion\":\"SONG PRO GS\",\"manufactureYear\":2024,\"modelYear\":2025},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":6,\"usage\":\"private\",\"reviewedMileageKm\":9385,\"mileage\":{\"kind\":\"unlimited\"},\"sources\":[{\"sourceId\":\"19924-manual-general-20261005\",\"url\":\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\",\"locator\":\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressas 32 (prazo geral), 33 (início e transferência), 36–37 (uso e limitações). Edição conferida na contracapa, PDF 46.\",\"revision\":\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"DM_MG_25046\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-19924\",\"reviewedAt\":\"2026-10-05\"}}],\"supplementalCoverages\":[{\"recordId\":\"reviewed-20261005-19924-traction-battery\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-05\",\"approvedFingerprint\":\"{\\\"primaryApprovedFingerprint\\\":\\\"{\\\\\\\"recordId\\\\\\\":\\\\\\\"reviewed-v2-20261005-19924\\\\\\\",\\\\\\\"reviewedAt\\\\\\\":\\\\\\\"2026-10-05\\\\\\\",\\\\\\\"vehicle\\\\\\\":{\\\\\\\"vehicleId\\\\\\\":\\\\\\\"19924\\\\\\\",\\\\\\\"manufactureYear\\\\\\\":2024,\\\\\\\"modelYear\\\\\\\":2025,\\\\\\\"brand\\\\\\\":\\\\\\\"BYD\\\\\\\",\\\\\\\"modelVersion\\\\\\\":\\\\\\\"SONG PRO GS\\\\\\\"},\\\\\\\"unitBinding\\\\\\\":{\\\\\\\"unitKey\\\\\\\":\\\\\\\"plate-sha256:e66828b1c6ab47281a5d318cf7e9a1f6e3b605806c3b95b449a5c299ed203d27\\\\\\\",\\\\\\\"engine\\\\\\\":\\\\\\\"1.5\\\\\\\",\\\\\\\"transmission\\\\\\\":\\\\\\\"AUTOMATICO\\\\\\\"},\\\\\\\"optionalId\\\\\\\":108,\\\\\\\"optionalConfirmed\\\\\\\":true,\\\\\\\"conditionsConfirmed\\\\\\\":true,\\\\\\\"scope\\\\\\\":\\\\\\\"basic-vehicle\\\\\\\",\\\\\\\"termYears\\\\\\\":6,\\\\\\\"usage\\\\\\\":\\\\\\\"private\\\\\\\",\\\\\\\"commonPolicy\\\\\\\":null,\\\\\\\"reviewedMileageKm\\\\\\\":9385,\\\\\\\"mileage\\\\\\\":{\\\\\\\"kind\\\\\\\":\\\\\\\"unlimited\\\\\\\"},\\\\\\\"confirmedExpiryDate\\\\\\\":null,\\\\\\\"sources\\\\\\\":[{\\\\\\\"sourceId\\\\\\\":\\\\\\\"19924-manual-general-20261005\\\\\\\",\\\\\\\"url\\\\\\\":\\\\\\\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\\\\\\\",\\\\\\\"locator\\\\\\\":\\\\\\\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressas 32 (prazo geral), 33 (início e transferência), 36–37 (uso e limitações). Edição conferida na contracapa, PDF 46.\\\\\\\",\\\\\\\"revision\\\\\\\":\\\\\\\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\\\\\\\",\\\\\\\"verification\\\\\\\":{\\\\\\\"status\\\\\\\":\\\\\\\"verified\\\\\\\",\\\\\\\"documentCode\\\\\\\":\\\\\\\"DM_MG_25046\\\\\\\",\\\\\\\"modelYear\\\\\\\":2025,\\\\\\\"reviewId\\\\\\\":\\\\\\\"warranty-20261005-19924\\\\\\\",\\\\\\\"reviewedAt\\\\\\\":\\\\\\\"2026-10-05\\\\\\\"}}]}\\\",\\\"coverage\\\":{\\\"recordId\\\":\\\"reviewed-20261005-19924-traction-battery\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"19924\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"BYD\\\",\\\"modelVersion\\\":\\\"SONG PRO GS\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:e66828b1c6ab47281a5d318cf7e9a1f6e3b605806c3b95b449a5c299ed203d27\\\",\\\"engine\\\":\\\"1.5\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"traction-battery\\\",\\\"termYears\\\":8,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":9385,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"19924-manual-traction-battery-20261005\\\",\\\"url\\\":\\\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\\\",\\\"locator\\\":\\\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressa 34 (PDF 35), tabela da bateria de tração; impressa 33 (início e transferência); impressas 36–37 (uso, capacidade e limitações).\\\",\\\"revision\\\":\\\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"DM_MG_25046\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261005-19924-traction-battery\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\"}}]}}\",\"scope\":\"traction-battery\",\"conditionsConfirmed\":true,\"termYears\":8,\"usage\":\"private\",\"reviewedMileageKm\":9385,\"mileage\":{\"kind\":\"unlimited\"},\"sources\":[{\"sourceId\":\"19924-manual-traction-battery-20261005\",\"url\":\"https://www.byd.com/material/byd-site/br/manuais-auto-byd/updates-24-06-2025/DM_MG_25046_scr_Site.pdf\",\"locator\":\"Portal oficial: Song Pro DM-i / Até 2026/2026, inclui MY2025. Manual DM_MG_25046: impressa 34 (PDF 35), tabela da bateria de tração; impressa 33 (início e transferência); impressas 36–37 (uso, capacidade e limitações).\",\"revision\":\"DM_MG_25046; B4911*66-DM-MG06; edição 04/2025; vínculo oficial do grupo Song Pro DM-i até MY2026/2026 conferido em 2026-10-05.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"DM_MG_25046\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-19924-traction-battery\",\"reviewedAt\":\"2026-10-05\"}}]}],\"unitBinding\":{\"unitKey\":\"plate-sha256:e66828b1c6ab47281a5d318cf7e9a1f6e3b605806c3b95b449a5c299ed203d27\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"}}]}"
+    },
+    {
+      "ruleId": "documented-20066-private-exact-variant",
+      "version": "2026-10-15.1",
+      "status": "approved",
+      "templateRecordId": "reviewed-v2-20261005-20066-powertrain",
+      "allowNewUnits": true,
+      "match": {
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 7 PRO MAX DRIVE TURBO",
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "privateUsePolicy": {
+        "scope": "netcar-stock",
+        "attestationId": "netcar-private-stock-20261010",
+        "confirmedAt": "2026-10-10",
+        "coverageBasis": "documented-model-policy"
+      },
+      "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-20066-private-exact-variant\",\"version\":\"2026-10-15.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261005-20066-powertrain\",\"match\":{\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\",\"engine\":\"1.6\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2024,\"modelYear\":2025},\"allowNewUnits\":true,\"privateUsePolicy\":{\"scope\":\"netcar-stock\",\"attestationId\":\"netcar-private-stock-20261010\",\"confirmedAt\":\"2026-10-10\",\"coverageBasis\":\"documented-model-policy\"},\"templates\":[{\"recordId\":\"reviewed-v2-20261005-20066-powertrain\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-05\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261005-20066-powertrain\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20066\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"CHERY\\\",\\\"modelVersion\\\":\\\"TIGGO 7 PRO MAX DRIVE TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:1023fdd4418837451b753923f27b6308dd1befa871dd15b10690c49d12ce9aae\\\",\\\"engine\\\":\\\"1.6\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"powertrain\\\",\\\"powertrainReview\\\":{\\\"coverageSubtype\\\":\\\"engine-and-transmission\\\",\\\"usageAttestationId\\\":\\\"Sentinel_288a06854d888191ba9530283b115526\\\",\\\"displayLabel\\\":\\\"Motor e câmbio\\\"},\\\"termYears\\\":5,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":36000,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"chery-B09999T7303-20066-powertrain\\\",\\\"url\\\":\\\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298\\\",\\\"locator\\\":\\\"Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.\\\",\\\"revision\\\":\\\"B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"B09999T7303\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261005-20066-powertrain\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"20066\",\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\",\"manufactureYear\":2024,\"modelYear\":2025},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"termYears\":5,\"usage\":\"private\",\"reviewedMileageKm\":36000,\"mileage\":{\"kind\":\"unlimited\"},\"sources\":[{\"sourceId\":\"chery-B09999T7303-20066-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298\",\"locator\":\"Manual Tiggo 7 Pro Max Drive, portal brasileiro 2024/2025. PDF 298 / impressa 10-3, item c: 36 meses gerais + 24 complementares para motor/transmissão no uso não comercial. PDF 299 / impressa 10-4, linha 20: 60 meses sem limite de km, exceto uso comercial; linha 21: demais peças 36 meses. PDF 326: edição.\",\"revision\":\"B09999T7303; Janeiro de 2024/1; Tiggo 7 Pro Max Drive Brasil 2024/2025; vínculo oficial preservado em 03/10/2026 e original conferido visualmente em 05/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T7303\",\"modelYear\":2025,\"reviewId\":\"warranty-20261005-20066-powertrain\",\"reviewedAt\":\"2026-10-05\"}}],\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_288a06854d888191ba9530283b115526\",\"displayLabel\":\"Motor e câmbio\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:1023fdd4418837451b753923f27b6308dd1befa871dd15b10690c49d12ce9aae\",\"engine\":\"1.6\",\"transmission\":\"AUTOMATICO\"}}]}"
+    },
+    {
+      "ruleId": "documented-20029-private-exact-variant",
+      "version": "2026-10-15.1",
+      "status": "approved",
+      "templateRecordId": "reviewed-v2-20261005-20029-powertrain",
+      "allowNewUnits": true,
+      "match": {
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 8 MAX DRIVE TURBO",
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2023,
+        "modelYear": 2024
+      },
+      "privateUsePolicy": {
+        "scope": "netcar-stock",
+        "attestationId": "netcar-private-stock-20261010",
+        "confirmedAt": "2026-10-10",
+        "coverageBasis": "documented-model-policy"
+      },
+      "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-20029-private-exact-variant\",\"version\":\"2026-10-15.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261005-20029-powertrain\",\"match\":{\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\",\"engine\":\"1.6\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2023,\"modelYear\":2024},\"allowNewUnits\":true,\"privateUsePolicy\":{\"scope\":\"netcar-stock\",\"attestationId\":\"netcar-private-stock-20261010\",\"confirmedAt\":\"2026-10-10\",\"coverageBasis\":\"documented-model-policy\"},\"templates\":[{\"recordId\":\"reviewed-v2-20261005-20029-powertrain\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-05\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261005-20029-powertrain\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20029\\\",\\\"manufactureYear\\\":2023,\\\"modelYear\\\":2024,\\\"brand\\\":\\\"CHERY\\\",\\\"modelVersion\\\":\\\"TIGGO 8 MAX DRIVE TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:d5231098ccb79c41d4d3bcfa23e781834b0c2e04178b17d9c9c513bf615a591c\\\",\\\"engine\\\":\\\"1.6\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"powertrain\\\",\\\"powertrainReview\\\":{\\\"coverageSubtype\\\":\\\"engine-and-transmission\\\",\\\"usageAttestationId\\\":\\\"Sentinel_a25f6c73a8bc81918847dca70dc01c42\\\",\\\"displayLabel\\\":\\\"Motor e câmbio\\\"},\\\"termYears\\\":5,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":38900,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"chery-B09999T8006-20029-powertrain\\\",\\\"url\\\":\\\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298\\\",\\\"locator\\\":\\\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\\\",\\\"revision\\\":\\\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"B09999T8006\\\",\\\"modelYear\\\":2024,\\\"reviewId\\\":\\\"warranty-20261005-20029-powertrain\\\",\\\"reviewedAt\\\":\\\"2026-10-05\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"20029\",\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 8 MAX DRIVE TURBO\",\"manufactureYear\":2023,\"modelYear\":2024},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"termYears\":5,\"usage\":\"private\",\"reviewedMileageKm\":38900,\"mileage\":{\"kind\":\"unlimited\"},\"sources\":[{\"sourceId\":\"chery-B09999T8006-20029-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/69f/810/6a469f8101d3d793499526.pdf#page=298\",\"locator\":\"Manual TIGGO8MAXDRIVE, portal brasileiro2023/2024. PDF298/impressa10-3(c):36meses gerais+24complementares motor/transmissão não comercial. PDF299/impressa10-4,linha20:60meses motor/transmissão exceto comercial;linha21:36meses demais peças. PDF326:edição.\",\"revision\":\"B09999T8006; Janeiro de2024; Tiggo8MaxDrive Brasil2023/2024; capa e cláusulas conferidas visualmente no original preservado.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T8006\",\"modelYear\":2024,\"reviewId\":\"warranty-20261005-20029-powertrain\",\"reviewedAt\":\"2026-10-05\"}}],\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"Sentinel_a25f6c73a8bc81918847dca70dc01c42\",\"displayLabel\":\"Motor e câmbio\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:d5231098ccb79c41d4d3bcfa23e781834b0c2e04178b17d9c9c513bf615a591c\",\"engine\":\"1.6\",\"transmission\":\"AUTOMATICO\"}}]}"
+    },
+    {
+      "ruleId": "documented-19854-private-exact-variant",
+      "version": "2026-10-15.1",
+      "status": "approved",
+      "templateRecordId": "reviewed-v2-20261009-19854",
+      "allowNewUnits": true,
+      "match": {
+        "brand": "HONDA",
+        "modelVersion": "HRV ADVANCE TURBO",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "manufactureYear": 2024,
+        "modelYear": 2024
+      },
+      "privateUsePolicy": {
+        "scope": "netcar-stock",
+        "attestationId": "netcar-private-stock-20261010",
+        "confirmedAt": "2026-10-10",
+        "coverageBasis": "documented-model-policy"
+      },
+      "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-19854-private-exact-variant\",\"version\":\"2026-10-15.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261009-19854\",\"match\":{\"brand\":\"HONDA\",\"modelVersion\":\"HRV ADVANCE TURBO\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2024,\"modelYear\":2024},\"allowNewUnits\":true,\"privateUsePolicy\":{\"scope\":\"netcar-stock\",\"attestationId\":\"netcar-private-stock-20261010\",\"confirmedAt\":\"2026-10-10\",\"coverageBasis\":\"documented-model-policy\"},\"templates\":[{\"recordId\":\"reviewed-v2-20261009-19854\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-09\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261009-19854\\\",\\\"reviewedAt\\\":\\\"2026-10-09\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"19854\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2024,\\\"brand\\\":\\\"HONDA\\\",\\\"modelVersion\\\":\\\"HRV ADVANCE TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:32165b322dcdcae306a552e25f09545fcecc6a3c2a36b5f3b0eb80190533dd30\\\",\\\"engine\\\":\\\"1.5\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":59000,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"19854-official-my2024-20261009\\\",\\\"url\\\":\\\"https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/qr_code/ManualCompleto2GNAP2DiAP2T/10_Garantia_2GN-1.html\\\",\\\"locator\\\":\\\"Manual online ligado pelo seletor oficial Honda HR-V2024; Garantia / Termos de Garantia item1; introdução e itens1.1,2.4,3,4.\\\",\\\"revision\\\":\\\"ManualCompleto2GNAP2DiAP2T; manual online vinculado oficialmente ao HR-V brasileiroMY2024; cláusula lida em09/10/2026\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"ManualCompleto2GNAP2DiAP2T\\\",\\\"modelYear\\\":2024,\\\"reviewId\\\":\\\"warranty-20261009-19854\\\",\\\"reviewedAt\\\":\\\"2026-10-09\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"19854\",\"brand\":\"HONDA\",\"modelVersion\":\"HRV ADVANCE TURBO\",\"manufactureYear\":2024,\"modelYear\":2024},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"reviewedMileageKm\":59000,\"mileage\":{\"kind\":\"unlimited\"},\"sources\":[{\"sourceId\":\"19854-official-my2024-20261009\",\"url\":\"https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/qr_code/ManualCompleto2GNAP2DiAP2T/10_Garantia_2GN-1.html\",\"locator\":\"Manual online ligado pelo seletor oficial Honda HR-V2024; Garantia / Termos de Garantia item1; introdução e itens1.1,2.4,3,4.\",\"revision\":\"ManualCompleto2GNAP2DiAP2T; manual online vinculado oficialmente ao HR-V brasileiroMY2024; cláusula lida em09/10/2026\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"ManualCompleto2GNAP2DiAP2T\",\"modelYear\":2024,\"reviewId\":\"warranty-20261009-19854\",\"reviewedAt\":\"2026-10-09\"}}],\"unitBinding\":{\"unitKey\":\"plate-sha256:32165b322dcdcae306a552e25f09545fcecc6a3c2a36b5f3b0eb80190533dd30\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"}}]}"
+    }
+  ],
+  "templateVehicleIds": [
+    "19924",
+    "20066",
+    "20029",
+    "19854"
+  ],
+  "evidence": [
+    {
+      "id": "19924",
+      "audit": "factory-warranty-2026-10-05.json",
+      "basis": "Manual BYD DM_MG_25046 para Song Pro FAB2024/MY2025: geral6anos e bateria8anos semlimitekm particular."
+    },
+    {
+      "id": "20066",
+      "audit": "factory-warranty-tiggo7-powertrain-2026-10-05.json",
+      "basis": "Manual B09999T7303 Tiggo7ProMaxDrive FAB2024/MY2025: motor/câmbio5anos semlimitekm particular."
+    },
+    {
+      "id": "20029",
+      "audit": "factory-warranty-tiggo-powertrain-2026-10-05.json",
+      "basis": "Manual B09999T8006 Tiggo8MaxDrive FAB2023/MY2024: motor/câmbio5anos semlimitekm particular. ID20041 tem o mesmo match; somente uma regra evita conflito."
+    },
+    {
+      "id": "19854",
+      "audit": "factory-warranty-month-precision-2026-10-09.json",
+      "basis": "Manual Honda ManualCompleto2GNAP2DiAP2T HRVAdvance FAB2024/MY2024: geral3anos semlimitekm particular; sem vencimento individual copiado."
+    }
+  ],
+  "excludedIndividualTemplates": [
+    {
+      "id": "20049",
+      "reason": "Exclusão R8C/R8Z só confirmada para a unidade."
+    },
+    {
+      "id": "19779",
+      "reason": "Vencimento individual confirmado."
+    },
+    {
+      "id": "19898",
+      "reason": "Vencimento individual confirmado."
+    },
+    {
+      "id": "19866",
+      "reason": "Km ilimitada atestada somente para a unidade."
+    },
+    {
+      "id": "20075",
+      "reason": "Km ilimitada atestada somente para a unidade."
+    },
+    {
+      "id": "20067",
+      "reason": "Aplicabilidade histórica da edição BYD atual atestada para a unidade."
+    },
+    {
+      "id": "20084",
+      "reason": "Km ilimitada atestada para a unidade; fonte confirma prazo/escopo."
+    },
+    {
+      "id": "20018",
+      "reason": "Registro pendente e identidade incompleta."
+    }
+  ],
+  "preservation": {
+    "existingRulesCount": 5,
+    "existingRuleIds": [
+      "documented-19994-exact-variant",
+      "documented-20038-exact-variant",
+      "documented-19857-exact-variant",
+      "documented-19587-exact-variant",
+      "nissan-kicks-advance-my2026-hr10ddt-basic"
+    ],
+    "existingRulesSha256": "8728412455bf98f80b7c40c68330919f4330886c5be8366b6e213116595f84d0",
+    "individualRecordsUnchangedByAutomation": true
+  },
+  "processing": {
+    "knownExactRule": "Aplicada no render/auditor sem novo deploy por unidade.",
+    "newDocumentedVariant": "Rotina existente deste chat pesquisa, registra, testa e publica sob autorização contínua.",
+    "incompleteOrConflicting": "Somente a unidade fica pendente; pedir apenas informação indisponível em dados/fontes/atestes.",
+    "scheduledReview": "Heartbeat existente a cada hora; auditoria existente VPS às9h; sem cron/importador novo."
+  },
+  "publication": {
+    "authorized": true,
+    "executed": false
+  }
+}

@@ -186,7 +186,7 @@ export function FactoryWarrantyNote({
             className="underline underline-offset-2"
             onClick={(event) => event.stopPropagation()}
           >
-            Consultar manual
+            Consultar fonte
           </a>.
         </>
       )}

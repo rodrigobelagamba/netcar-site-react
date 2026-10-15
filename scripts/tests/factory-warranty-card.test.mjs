@@ -65,7 +65,11 @@ let HomeHero;
 let HomeWhatsAppConversionPanel;
 let renderer;
 let queryClient;
-const boundInventory = JSON.parse(readFileSync(resolve(root, "docs/audits/factory-warranty-reconciliation-2026-10-09.json"), "utf8")).publicVehicles;
+const newUnitsAudit = JSON.parse(readFileSync(resolve(root, "docs/audits/factory-warranty-songplus-tiggo5x-2026-10-15.json"), "utf8"));
+const boundInventory = [
+  ...JSON.parse(readFileSync(resolve(root, "docs/audits/factory-warranty-reconciliation-2026-10-09.json"), "utf8")).publicVehicles,
+  ...newUnitsAudit.publicVehicles,
+];
 const registryResponse = () => new Response(JSON.stringify(factoryWarrantyMatrix), { status: 200, headers: { "Content-Type": "application/json" } });
 
 class FixedDate extends OriginalDate {
@@ -711,11 +715,11 @@ function assertPowertrainPresentation(badge, note, stamp, { estimatedEndYear, ma
   assert.ok(stampText.includes(`GARANTIA MOTOR E CÂMBIO ATÉ ${estimatedEndYear} *`));
   assert.doesNotMatch(stampText, /BATERIA|GARANTIA DE FÁBRICA/);
   const noteText = renderedText(note);
-  assert.equal(noteText, "*Ano estimado pela fabricação. Prazo original e condições conforme manual da montadora. Consultar manual.");
+  assert.equal(noteText, "*Ano estimado pela fabricação. Prazo original e condições conforme manual da montadora. Consultar fonte.");
   assert.doesNotMatch(noteText, /bateria de tração|garantia geral/i);
   const links = note.findAllByType("a");
   assert.equal(links.length, 1);
-  assert.equal(renderedText(links[0]), "Consultar manual");
+  assert.equal(renderedText(links[0]), "Consultar fonte");
   assert.equal(links[0].props.href, manualUrl);
   assert.equal(links[0].props.title, `Manual ${manualCode}`);
   assert.equal(links[0].props.target, "_blank");
@@ -854,9 +858,13 @@ for (const [id, expectedScopes] of [
   ["19587", ["basic-vehicle"]],
   ["19924", ["basic-vehicle", "traction-battery"]],
   ["20029", ["powertrain"]],
+  ["20067", ["basic-vehicle", "traction-battery"]],
+  ["20084", ["powertrain"]],
 ]) {
   for (const surface of ["summary", "home-hero", "home-featured"]) {
     test(`${surface}: current ${id} preserves exactly its approved coverage and note`, async () => {
+      currentNow = OriginalDate.parse("2026-10-15T18:00:00Z");
+      queryClient.setQueryData(["factory-warranty-registry"], factoryWarrantyMatrix);
       const raw = approvedVehicle(id);
       const catalog = { ...raw, name: raw.modelo, images: [], factoryWarrantyVehicle: raw };
       queryClient.setQueryData(["site", "whatsapp"], { numero: "5551997293118" });
@@ -889,6 +897,29 @@ for (const [id, expectedScopes] of [
       }
       await update({ ...catalog, price: 0 });
       assert.equal(badges().length, 0, "Sold car cannot display a warranty");
+    });
+  }
+}
+
+for (const compact of [false, true]) {
+  for (const id of ["20067", "20084"]) {
+    test(`new unit ${id} renders its exact coverage in ${compact ? "compact" : "normal"} production cards`, async () => {
+      currentNow = OriginalDate.parse("2026-10-15T18:00:00Z");
+      const raw = await mappedApiVehicle(id);
+      await renderCard(raw, { base: approvedVehicle(id), compact });
+      const badges = renderer.root.findAll((node) => node.type === "div" && node.props["data-factory-warranty-badge"] === "card");
+      const labels = badges.map((badge) => badge.findByType("svg").props["aria-label"]);
+      if (id === "20067") {
+        assert.equal(labels.length, 2);
+        assert.ok(labels.some((label) => /2029/.test(label) && !/bateria/i.test(label)));
+        assert.ok(labels.some((label) => /2031/.test(label) && /bateria/i.test(label)));
+      } else {
+        assert.equal(labels.length, 1);
+        assert.match(labels[0], /motor e câmbio até 2028/);
+        const links = renderer.root.findAll((node) => node.type === "a" && node.props.title === "Resposta da CAOA Chery");
+        assert.equal(links.length, 1);
+        assert.equal(renderedText(links[0]), "Consultar fonte");
+      }
     });
   }
 }

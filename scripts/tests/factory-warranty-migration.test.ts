@@ -29,6 +29,7 @@ const baseline = read(
 const current = read(
   "../../src/data/factoryWarrantyMatrix.json",
 ) as FactoryWarrantyMatrix;
+const newUnitsAudit = read("../../docs/audits/factory-warranty-songplus-tiggo5x-2026-10-15.json");
 const compassAudit = read("../../docs/audits/factory-warranty-compass-19866-2026-10-10.json");
 
 test("confirmed Compass displays its five-year general stamp without approving other Jeep units", () => {
@@ -60,7 +61,9 @@ test("confirmed Compass displays its five-year general stamp without approving o
 });
 
 test("Compass release preserves all other records and separates owner confirmation from official evidence", () => {
-  const others = current.records.filter((entry) => entry.vehicle.vehicleId !== "19866");
+  // Keep the October10 preservation comparison scoped to its original units.
+  const others = current.records.filter((entry) => entry.vehicle.vehicleId !== "19866" &&
+    baseline.matrix.records.some((prior) => prior.vehicle.vehicleId === entry.vehicle.vehicleId));
   assert.equal(others.length, compassAudit.preservation.otherRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), compassAudit.preservation.otherRecordsSha256);
   assert.equal(compassAudit.ownerAttestations.publicationAuthorized, true);
@@ -147,7 +150,8 @@ const oldRecord = (id: string) =>
 const currentRecord = (id: string) =>
   current.records.find((record) => record.vehicle.vehicleId === id)!;
 const observed = (id: string) => {
-  const vehicle = migration.publicVehicles.find((entry) => entry.id === id);
+  const vehicle = migration.publicVehicles.find((entry) => entry.id === id)
+    ?? (newUnitsAudit.publicVehicles as WarrantyCatalogVehicle[]).find((entry) => entry.id === id);
   assert.ok(vehicle, `Current public snapshot missing vehicle ${id}`);
   return vehicle;
 };
@@ -396,7 +400,7 @@ test("Tracker conditions, private attestations and scoped coverages never apply 
     "20066",
     "20075",
   ]);
-  for (const id of migration.preservedIndividualOnly) {
+  for (const id of migration.preservedIndividualOnly.filter((id) => !["19924", "20029", "20041", "20066"].includes(id))) {
     const record = currentRecord(id);
     assert.equal(
       current.automation!.rules.some(
@@ -437,7 +441,8 @@ test("Kicks 20019 has a separate audited approval while its original pending dec
     factoryWarrantyReviewFingerprint(approved),
   );
   assert.equal(
-    current.records.filter((record) => record.status === "approved").length,
+    current.records.filter((record) => record.status === "approved" &&
+      baseline.matrix.records.some((prior) => prior.vehicle.vehicleId === record.vehicle.vehicleId)).length,
     15,
   );
   assert.equal(OLD_APPROVED.length, 10);
@@ -458,7 +463,7 @@ test("later approved units leave pending while absent Nivus remains pending", ()
     assert.deepEqual(record.mileage, { kind: "unlimited" }, id);
     assert.ok(record.sources.every((source) => source.verification.status === "verified" && source.verification.modelYear === 2024), id);
     assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record), id);
-    assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false, id);
+    assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), id === "19854", id);
   }
 });
 
@@ -609,7 +614,7 @@ test("the fifth exact Kicks rule approves a new matching unit but never a Nissan
   );
   assert.ok(rule);
   assert.deepEqual(rule, kicksAudit.approvedRule);
-  assert.equal(current.automation!.rules.length, 5);
+  assert.equal(current.automation!.rules.filter((rule) => !rule.privateUsePolicy).length, 5);
   assert.equal(
     rule.approvedFingerprint,
     factoryWarrantyRuleFingerprint(rule, current),
@@ -654,4 +659,104 @@ test("the fifth exact Kicks rule approves a new matching unit but never a Nissan
     reconcileFactoryWarrantyVehicle(sameKnownKey, current, TODAY).reason,
     "unit-id-changed",
   );
+});
+
+const NEW_UNIT_IDS = ["20067", "20084"];
+test("Song Plus and Tiggo 5X review preserves the sixteen previous decisions and automatic rules", () => {
+  const others = current.records.filter((record) => !NEW_UNIT_IDS.includes(record.vehicle.vehicleId));
+  assert.equal(others.length, newUnitsAudit.preservation.otherRecordCount);
+  assert.deepEqual(others.map((r) => r.vehicle.vehicleId), newUnitsAudit.preservation.otherRecordIds);
+  assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), newUnitsAudit.preservation.otherRecordsSha256);
+  for (const id of NEW_UNIT_IDS) {
+    assert.deepEqual(currentRecord(id), newUnitsAudit.records.find((r: FactoryWarrantyRecord) => r.vehicle.vehicleId === id));
+    assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === currentRecord(id).recordId), false);
+  }
+  assert.equal(newUnitsAudit.publication.executed, false);
+});
+
+test("Song Plus has distinct general and Blade coverage without a powertrain claim or invented expiry", () => {
+  const vehicle = observed("20067");
+  const record = currentRecord("20067");
+  const date = newUnitsAudit.reviewedAt;
+  assert.equal(record.usage, "private");
+  assert.deepEqual(record.mileage, { kind: "unlimited" });
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, date).status, "eligible");
+  assert.equal(resolveFactoryWarranty(vehicle, current, date)?.estimatedEndYear, 2029);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, date)?.estimatedEndYear, 2031);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, date), undefined);
+  assert.equal(resolveFactoryWarranty({ ...vehicle, km: 250000 }, current, date)?.estimatedEndYear, 2029);
+  assert.equal(resolveFactoryTractionBatteryWarranty({ ...vehicle, km: 250000 }, current, date)?.estimatedEndYear, 2031);
+  assert.equal(record.confirmedExpiryDate, undefined);
+  assert.equal(record.confirmedExpiryMonth, undefined);
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2029-01-01"), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, "2029-01-01")?.estimatedEndYear, 2031);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, "2031-01-01"), undefined);
+  assert.equal(record.supplementalCoverages![0].approvedFingerprint, factoryTractionBatteryReviewFingerprint(record, record.supplementalCoverages![0]));
+  // The current manual is evidence for the terms; the owner confirms applicability to this unit.
+  assert.match(record.sources[0].locator, /responsável/);
+  assert.match(record.sources[0].locator, /não declara retroatividade/);
+});
+
+test("Tiggo 5X shows only reviewed motor and transmission coverage with correctly attributed evidence", () => {
+  const vehicle = observed("20084");
+  const record = currentRecord("20084");
+  assert.equal(record.status, "approved");
+  assert.equal(record.scope, "powertrain");
+  assert.equal(record.termYears, 5);
+  assert.deepEqual(record.mileage, { kind: "unlimited" });
+  assert.equal(record.usage, "private");
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, newUnitsAudit.reviewedAt).status, "eligible");
+  const powertrain = resolveFactoryPowertrainWarranty(vehicle, current, newUnitsAudit.reviewedAt);
+  assert.equal(powertrain?.estimatedEndYear, 2028);
+  assert.equal(powertrain?.sourceLabel, "Resposta da CAOA Chery");
+  assert.equal(resolveFactoryPowertrainWarranty({ ...vehicle, km: 250000 }, current, newUnitsAudit.reviewedAt)?.estimatedEndYear, 2028);
+  assert.equal(resolveFactoryWarranty(vehicle, current, newUnitsAudit.reviewedAt), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, newUnitsAudit.reviewedAt), undefined);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, "2028-01-01"), undefined);
+  assert.deepEqual(newUnitsAudit.ownerAttestations.tiggo5x.mileage, { kind: "unlimited" });
+  // Removing the attested km condition closes the gate, even with a fresh fingerprint.
+  const fixture = structuredClone(current);
+  const uncertain = fixture.records.find((r) => r.vehicle.vehicleId === "20084")!;
+  uncertain.mileage = { kind: "unknown" };
+  uncertain.approvedFingerprint = factoryWarrantyReviewFingerprint(uncertain);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, fixture, newUnitsAudit.reviewedAt), undefined);
+});
+
+for (const id of NEW_UNIT_IDS) {
+  test(`reviewed new unit ${id} cannot lend coverage after identity, flag or availability changes`, () => {
+    const source = observed(id);
+    for (const changes of [{ id: `another-${id}` }, { unitKey: keyFor(`other-${id}`) }, { motor: "other-engine" },
+      { year: 2025 }, { diferenciais: [] }, { price: 0 }, { km: source.km - 1 }]) {
+      const vehicle = { ...source, ...changes };
+      const result = reconcileFactoryWarrantyVehicle(vehicle, current, newUnitsAudit.reviewedAt);
+      assert.notEqual(result.status, "eligible");
+      for (const resolver of [resolveFactoryWarranty, resolveFactoryPowertrainWarranty, resolveFactoryTractionBatteryWarranty])
+        assert.equal(resolver(vehicle, result.matrix, newUnitsAudit.reviewedAt), undefined);
+    }
+  });
+}
+
+const automationReview = read("../../docs/audits/factory-warranty-automation-2026-10-15.json");
+test("private-stock automation adds only the four documentary matches and preserves previous rules", () => {
+  const rules = current.automation!.rules;
+  const previous = rules.filter((rule) => automationReview.preservation.existingRuleIds.includes(rule.ruleId));
+  assert.equal(rules.length, 9);
+  assert.equal(previous.length, 5);
+  assert.equal(createHash("sha256").update(JSON.stringify(previous)).digest("hex"), automationReview.preservation.existingRulesSha256);
+  for (const id of automationReview.templateVehicleIds as string[]) {
+    const template = currentRecord(id);
+    const rule = rules.find((r) => r.templateRecordId === template.recordId)!;
+    assert.ok(rule, id);
+    assert.deepEqual(rule.privateUsePolicy, automationReview.privateUsePolicy);
+    assert.equal(rule.approvedFingerprint, factoryWarrantyRuleFingerprint(rule, current));
+    const source = { ...observed(id), id: `new-private-${id}`, unitKey: keyFor(`new-private-${id}`), km: 1000 };
+    const result = reconcileFactoryWarrantyVehicle(source, current, "2026-10-15");
+    assert.equal(result.status, "eligible", id);
+    assert.equal(!!resolveFactoryWarranty(source, result.matrix, "2026-10-15"), template.scope === "basic-vehicle");
+    assert.equal(!!resolveFactoryPowertrainWarranty(source, result.matrix, "2026-10-15"), template.scope === "powertrain");
+    assert.equal(!!resolveFactoryTractionBatteryWarranty(source, result.matrix, "2026-10-15"), id === "19924");
+  }
+  for (const item of automationReview.excludedIndividualTemplates as Array<{ id: string }>)
+    assert.equal(rules.some((rule) => rule.templateRecordId === currentRecord(item.id).recordId), false, item.id);
 });

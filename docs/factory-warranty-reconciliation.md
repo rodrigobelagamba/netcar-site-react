@@ -1,5 +1,29 @@
 # Reconciliação de garantias — 09/10/2026
 
+## Atualização de 15/10/2026 — aplicação sem aprovação por carro
+
+O responsável autorizou aplicar e publicar carimbos de veículos novos com
+informação completa e compatível. Uso particular já vale para todo o estoque
+Netcar. A rotina deste chat pesquisa combinações novas e conclui o cadastro,
+testes e publicação sem nova autorização; pergunta somente por dado necessário
+que não consegue obter ou conflito real. Mantém os avisos neste chat sem
+repetir pendências. A auditoria diária da VPS e o heartbeat existente são
+reutilizados, sem novo importador ou cron.
+
+Além das cinco regras anteriores, quatro regras exatas passam a reutilizar a
+documentação de uso particular: Song Pro GS FAB2024/MY2025 (geral + bateria),
+Tiggo 7 Pro Max Drive FAB2024/MY2025 e Tiggo 8 Max Drive FAB2023/MY2024
+(motor/câmbio), HRV Advance Turbo FAB2024/MY2024 (geral). `privateUsePolicy`
+registra o ateste global e a revisão de que os termos são documentais. Esses
+campos fazem parte do fingerprint; não basta marcar um template como privado.
+Coberturas derivadas recebem vínculo e fingerprints da nova unidade. Nenhum
+vencimento individual é copiado e motor/câmbio nunca vira garantia geral.
+
+Condições atestadas somente para uma unidade continuam individuais. Os novos
+Song Plus20067 e Tiggo5X20084 têm aprovações próprias. Evidência e exceções:
+[auditoria de automação](audits/factory-warranty-automation-2026-10-15.json).
+Os estados e limites descritos nas seções históricas abaixo refletem suas datas.
+
 ## Cards de todas as páginas — 14/10/2026
 
 O bootstrap do catálogo passa a ser revalidado imediatamente ao abrir a página,

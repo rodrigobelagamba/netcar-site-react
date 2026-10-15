@@ -1,5 +1,19 @@
 # Carimbo de garantia de fábrica
 
+> Revisão de 15/10/2026, publicação autorizada pelo responsável: Song Plus
+> GS 20067 (FAB2023/MY2024) aprovado para garantia geral de 6 anos e bateria de
+> tração de 8 anos, ambas sem limite de km; estimativas 2029*/2031*. Tiggo 5X
+> Sport 20084 (FAB2023/MY2024) aprovado somente para motor e câmbio por 5 anos,
+> sem limite de km, estimativa 2028*. Uso particular já atestado pela Netcar.
+> No BYD, os termos vêm do manual atual e a aplicação à unidade foi confirmada
+> pelo responsável. No Tiggo, a resposta pública da CAOA confirma prazo e
+> escopo; a condição de km foi confirmada pelo responsável. Fontes, limites e
+> confirmações estão na [auditoria das duas unidades](audits/factory-warranty-songplus-tiggo5x-2026-10-15.json).
+> Os 16 registros anteriores permanecem inalterados. A autorização contínua
+> também permite concluir novos carimbos com informação completa, sem nova
+> aprovação por carro; regras documentais de uso particular passam a ser
+> reutilizáveis conforme a revisão de automação de 15/10/2026.
+
 > Revisão de10/10/2026: Compass19866 aprovado para garantia geral até2029*,
 > com uso particular e quilometragem ilimitada confirmados pelo responsável.
 > O prazo de5 anos para MY2025 foi conferido no comunicado oficial Jeep de

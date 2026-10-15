@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   factoryWarrantyReviewFingerprint,
+  factoryTractionBatteryReviewFingerprint,
   factoryWarrantyToday,
   resolveFactoryWarranty,
   resolveFactoryPowertrainWarranty,
@@ -14,6 +15,7 @@ import {
   factoryWarrantyRuleFingerprint,
   reconcileFactoryWarrantyVehicle,
 } from "../../src/lib/factoryWarrantyReconciliation";
+import { parsePublishedWarrantyRegistry } from "../../src/lib/factoryWarrantyRegistryShape";
 
 const TODAY = "2026-10-09";
 const key = (value: string) => `vin-sha256:${value.repeat(64)}`;
@@ -282,7 +284,7 @@ test("manual pending, rejection and revocation always take precedence over an au
   }
 });
 
-test("private use, powertrain, battery and individual expiry are never reusable templates", () => {
+test("private use, powertrain and battery are not reusable without an explicit model policy", () => {
   for (const patch of [
     { usage: "private" as const, commonPolicy: undefined },
     { scope: "powertrain" as const },
@@ -294,6 +296,195 @@ test("private use, powertrain, battery and individual expiry are never reusable 
     Object.assign(matrix.records[0], patch);
     approveTemplate(matrix);
     assert.equal(run(candidate(), matrix).reason, "rule-template-not-reusable");
+  }
+});
+
+function privateFixture(scope: "basic-vehicle" | "powertrain" = "basic-vehicle", battery = false) {
+  const matrix = fixture();
+  const template = matrix.records[0];
+  template.usage = "private";
+  template.scope = scope;
+  template.mileage = { kind: "unlimited" };
+  delete template.commonPolicy;
+  if (scope === "powertrain")
+    template.powertrainReview = {
+      coverageSubtype: "engine-and-transmission",
+      usageAttestationId: "individual-use-template",
+      displayLabel: "Motor e câmbio",
+    };
+  template.approvedFingerprint = factoryWarrantyReviewFingerprint(template);
+  if (battery) {
+    const coverage = {
+      recordId: "template-battery",
+      status: "approved" as const,
+      reviewedAt: TODAY,
+      approvedFingerprint: "",
+      scope: "traction-battery" as const,
+      conditionsConfirmed: true,
+      termYears: 8,
+      usage: "private" as const,
+      reviewedMileageKm: 5100,
+      mileage: { kind: "unlimited" as const },
+      sources: structuredClone(template.sources),
+    };
+    coverage.approvedFingerprint = factoryTractionBatteryReviewFingerprint(template, coverage);
+    template.supplementalCoverages = [coverage];
+  }
+  matrix.automation!.rules[0].privateUsePolicy = {
+    scope: "netcar-stock",
+    attestationId: "netcar-private-use-confirmed-20261009",
+    confirmedAt: TODAY,
+    coverageBasis: "documented-model-policy",
+  };
+  approveRule(matrix);
+  return matrix;
+}
+
+test("an approved private model policy reuses the general term without asking each new unit", () => {
+  const matrix = privateFixture();
+  const before = JSON.stringify(matrix);
+  const vehicle = candidate({ km: 7200 });
+  const result = run(vehicle, matrix);
+  assert.equal(result.status, "eligible");
+  assert.equal(result.reason, "approved-exact-rule-applied");
+  assert.ok(resolveFactoryWarranty(vehicle, result.matrix, TODAY));
+  assert.equal(result.matrix.records[1].reviewedMileageKm, 7200);
+  assert.equal(result.matrix.records[1].usage, "private");
+  assert.equal(JSON.stringify(matrix), before);
+  assert.deepEqual(parsePublishedWarrantyRegistry(matrix), matrix);
+});
+
+test("private powertrain reuse binds the standing attestation and cannot become general coverage", () => {
+  const matrix = privateFixture("powertrain");
+  const before = JSON.stringify(matrix);
+  const result = run(candidate(), matrix);
+  assert.equal(result.status, "eligible");
+  assert.ok(resolveFactoryPowertrainWarranty(candidate(), result.matrix, TODAY));
+  assert.equal(resolveFactoryWarranty(candidate(), result.matrix, TODAY), undefined);
+  assert.equal(result.matrix.records[1].powertrainReview!.usageAttestationId,
+    matrix.automation!.rules[0].privateUsePolicy!.attestationId);
+  assert.equal(JSON.stringify(matrix), before);
+});
+
+test("private battery reuse binds its review to the new primary unit and current mileage", () => {
+  const matrix = privateFixture("basic-vehicle", true);
+  const before = JSON.stringify(matrix);
+  const vehicle = candidate({ km: 4200 });
+  const result = run(vehicle, matrix);
+  assert.equal(result.status, "eligible");
+  assert.ok(resolveFactoryWarranty(vehicle, result.matrix, TODAY));
+  assert.ok(resolveFactoryTractionBatteryWarranty(vehicle, result.matrix, TODAY));
+  const derived = result.matrix.records[1];
+  const battery = derived.supplementalCoverages![0];
+  assert.equal(derived.unitBinding!.unitKey, vehicle.unitKey);
+  assert.notEqual(battery.recordId, matrix.records[0].supplementalCoverages![0].recordId);
+  assert.equal(battery.reviewedMileageKm, vehicle.km);
+  assert.equal(battery.approvedFingerprint, factoryTractionBatteryReviewFingerprint(derived, battery));
+  assert.equal(JSON.stringify(matrix), before);
+  derived.sources[0].locator = "derived primary edit";
+  battery.sources[0].locator = "derived battery edit";
+  assert.equal(JSON.stringify(matrix), before);
+});
+
+test("battery coverage survives uncertain or expired general coverage on an exact new private unit", () => {
+  for (const today of ["2028-01-01", "2029-01-01"]) {
+    const result = run(candidate(), privateFixture("basic-vehicle", true), today);
+    assert.equal(result.status, "eligible");
+    assert.equal(resolveFactoryWarranty(candidate(), result.matrix, today), undefined);
+    assert.equal(resolveFactoryTractionBatteryWarranty(candidate(), result.matrix, today)?.estimatedEndYear, 2033);
+  }
+});
+
+test("the private policy is bound into the rule approval and rejected when incomplete or invalid", () => {
+  const changed = privateFixture();
+  changed.automation!.rules[0].privateUsePolicy!.attestationId = "different-attestation";
+  assert.equal(run(candidate(), changed).reason, "rule-approval-required");
+  for (const patch of [
+    { scope: "individual-unit" },
+    { attestationId: "" },
+    { attestationId: "PENDENTE" },
+    { confirmedAt: "2026-02-30" },
+    { confirmedAt: "2030-01-01" },
+    { coverageBasis: "individual-attestation" },
+  ]) {
+    const matrix = privateFixture();
+    Object.assign(matrix.automation!.rules[0].privateUsePolicy!, patch);
+    approveRule(matrix);
+    assert.equal(run(candidate(), matrix).reason, "rule-template-not-reusable");
+  }
+});
+
+test("published transport validates the private stock policy instead of accepting arbitrary opt-ins", () => {
+  for (const patch of [
+    { scope: "individual-unit" },
+    { attestationId: "" },
+    { confirmedAt: "2026-02-30" },
+    { coverageBasis: "individual-attestation" },
+  ]) {
+    const matrix = privateFixture();
+    Object.assign(matrix.automation!.rules[0].privateUsePolicy!, patch);
+    assert.throws(() => parsePublishedWarrantyRegistry(matrix), /Registro de garantias/);
+  }
+});
+
+test("private rules preserve original template and battery approvals rather than manufacturing a fresh review", () => {
+  for (const mutate of [
+    (matrix: FactoryWarrantyMatrix) => { matrix.records[0].approvedFingerprint = "changed"; },
+    (matrix: FactoryWarrantyMatrix) => { matrix.records[0].supplementalCoverages![0].termYears = 12; },
+    (matrix: FactoryWarrantyMatrix) => { matrix.records[0].supplementalCoverages![0].status = "revoked"; },
+  ]) {
+    const matrix = privateFixture("basic-vehicle", true);
+    mutate(matrix);
+    approveRule(matrix);
+    assert.equal(run(candidate(), matrix).reason, "rule-template-not-reusable");
+  }
+});
+
+test("neither primary nor battery expiry dates or months transfer to a new private unit", () => {
+  for (const supplemental of [false, true]) {
+    for (const expiry of [{ confirmedExpiryDate: "2028-12-31" }, { confirmedExpiryMonth: "2028-12" }]) {
+      const matrix = privateFixture("basic-vehicle", true);
+      const template = matrix.records[0];
+      Object.assign(supplemental ? template.supplementalCoverages![0] : template, expiry);
+      template.approvedFingerprint = factoryWarrantyReviewFingerprint(template);
+      template.supplementalCoverages![0].approvedFingerprint =
+        factoryTractionBatteryReviewFingerprint(template, template.supplementalCoverages![0]);
+      approveRule(matrix);
+      assert.equal(run(candidate(), matrix).reason, "rule-template-not-reusable");
+    }
+  }
+});
+
+test("private rules still require the warranty flag and obey pending or revoked manual records", () => {
+  const matrix = privateFixture("basic-vehicle", true);
+  assert.equal(run(candidate({ diferenciais: [] }), matrix).reason, "warranty-flag-removed");
+  assert.equal(run(candidate({ diferenciais: undefined }), matrix).reason, "warranty-flag-unknown");
+  for (const status of ["pending", "revoked"] as const) {
+    const edited = structuredClone(matrix);
+    const manual = structuredClone(edited.records[0]);
+    manual.recordId = "manual-block";
+    manual.vehicle.vehicleId = "new-unit";
+    manual.unitBinding!.unitKey = key("b");
+    manual.status = status;
+    edited.records.push(manual);
+    assert.equal(run(candidate(), edited).reason, `manual-${status}`);
+  }
+});
+
+test("a standing private-use attestation does not replace mileage caps or missing documentary review", () => {
+  const limited = privateFixture();
+  limited.records[0].mileage = { kind: "limited", limitKm: 100000 };
+  approveTemplate(limited);
+  assert.equal(run(candidate({ km: 99999 }), limited).status, "eligible");
+  assert.equal(run(candidate({ km: 100000 }), limited).reason, "mileage-limit-reached");
+  for (const missing of [true, false]) {
+    const matrix = privateFixture("powertrain");
+    if (missing) matrix.records[0].sources = [];
+    else matrix.records[0].sources[0].verification.status = "pending";
+    approveTemplate(matrix);
+    const result = run(candidate(), matrix);
+    assert.equal(result.status, "blocked");
+    assert.equal(resolveFactoryPowertrainWarranty(candidate(), result.matrix, TODAY), undefined);
   }
 });
 

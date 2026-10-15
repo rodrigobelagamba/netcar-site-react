@@ -9,6 +9,7 @@ const mileage = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("limited"), limitKm: z.number().finite() }),
 ]);
 const source = z.object({
+  label: z.string().optional(),
   sourceId: z.string(), url: z.string(), locator: z.string(), revision: z.string(),
   verification: z.object({ status: z.enum(["verified", "pending"]), documentCode: z.string(),
     modelYear: z.number().finite(), reviewId: z.string(), reviewedAt: z.string() }).passthrough(),
@@ -40,6 +41,13 @@ const schema = z.object({
   automation: z.object({ schemaVersion: z.literal(1), rules: z.array(z.object({
     ruleId: z.string(), version: z.string(), status: z.enum(["approved", "pending", "revoked"]),
     templateRecordId: z.string(), allowNewUnits: z.boolean(), approvedFingerprint: z.string(),
+    privateUsePolicy: z.object({
+      scope: z.literal("netcar-stock"),
+      attestationId: z.string().trim().min(1),
+      confirmedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) =>
+        Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value),
+      coverageBasis: z.literal("documented-model-policy"),
+    }).strict().optional(),
     match: identity.extend({ engine: z.string(), transmission: z.string() }),
   })).max(1000) }).optional(),
 }).passthrough();
