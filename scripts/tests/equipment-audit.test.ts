@@ -918,17 +918,18 @@ test("powertrain source changes and conflicting records remain blocked and reope
   }
 });
 
-test("the registry audit keeps twelve general coverages, three powertrain coverages and the BYD battery separate", () => {
-  const report = buildEquipmentAudit(
-    parseStockResponse(
-      apiResponse(
-        warrantyRegistry.records.map((record) =>
-          warrantyApiVehicle(record.vehicle.vehicleId),
-        ),
+test("the registry audit keeps thirteen general, four powertrain and two BYD battery coverages separate", () => {
+  const vehicles = parseStockResponse(
+    apiResponse(
+      warrantyRegistry.records.map((record) =>
+        warrantyApiVehicle(record.vehicle.vehicleId),
       ),
     ),
+  );
+  const report = buildEquipmentAudit(
+    vehicles,
     null,
-    "2026-10-10T12:00:00.000Z",
+    "2026-10-15T12:00:00.000Z",
   );
   const general = report.vehicles.filter(
     (row) => row.warranty?.status === "eligible",
@@ -941,12 +942,12 @@ test("the registry audit keeps twelve general coverages, three powertrain covera
   );
   assert.deepEqual(general.map((row) => row.id).sort(), [
     "19587", "19779", "19854", "19857", "19866", "19898", "19924", "19994",
-    "20019", "20038", "20049", "20075",
+    "20019", "20038", "20049", "20067", "20075",
   ]);
-  assert.deepEqual(powertrain.map((row) => row.id).sort(), powertrainWarrantyIds);
-  assert.deepEqual(battery.map((row) => row.id), ["19924"]);
-  assert.equal(general.length + powertrain.length + battery.length, 16);
-  assert.equal(new Set([...general, ...powertrain, ...battery].map((row) => row.id)).size, 15);
+  assert.deepEqual(powertrain.map((row) => row.id).sort(), [...powertrainWarrantyIds, "20084"]);
+  assert.deepEqual(battery.map((row) => row.id).sort(), ["19924", "20067"]);
+  assert.equal(general.length + powertrain.length + battery.length, 19);
+  assert.equal(new Set([...general, ...powertrain, ...battery].map((row) => row.id)).size, 17);
   for (const id of ["19779", "19854", "19898", "19866"]) {
     const coverage = report.vehicles.find((row) => row.id === id)!.warranty!;
     assert.equal(coverage.status, "eligible");
@@ -958,6 +959,16 @@ test("the registry audit keeps twelve general coverages, three powertrain covera
       ?.scope,
     "traction-battery",
   );
+  const song = report.vehicles.find((row) => row.id === "20067")!.warranty!;
+  assert.equal(song.status, "eligible");
+  assert.equal(song.supplemental?.scope, "traction-battery");
+  assert.equal(song.supplemental?.status, "eligible");
+  assert.notEqual(song.powertrain?.status, "eligible");
+  const tiggo = report.vehicles.find((row) => row.id === "20084")!.warranty!;
+  assert.equal(tiggo.powertrain?.status, "eligible");
+  assert.equal(tiggo.powertrain?.estimatedEndYear, 2028);
+  assert.notEqual(tiggo.status, "eligible");
+  assert.notEqual(tiggo.supplemental?.status, "eligible");
   // This complete registry fixture also includes Nivus20018, which is absent
   // from the current public catalog and remains unapproved.
   assert.deepEqual(
@@ -971,6 +982,21 @@ test("the registry audit keeps twelve general coverages, three powertrain covera
     assert.notEqual(coverage.supplemental?.status, "eligible");
   }
   assert.equal(report.counts.withAlerts, 1);
+
+  // Later approvals cannot be applied retroactively to a historical audit.
+  const beforeReview = buildEquipmentAudit(
+    vehicles,
+    null,
+    "2026-10-10T12:00:00.000Z",
+  );
+  for (const id of ["20067", "20084"]) {
+    const coverage = beforeReview.vehicles.find((row) => row.id === id)!.warranty!;
+    assert.equal(coverage.reason, "approval-evidence-incompatible");
+    assert.notEqual(coverage.status, "eligible");
+    assert.notEqual(coverage.powertrain?.status, "eligible");
+    assert.notEqual(coverage.supplemental?.status, "eligible");
+  }
+  assert.equal(beforeReview.counts.withAlerts, 3);
 });
 
 test("warranty identity, FAB, MY, mileage and flag changes reopen only the candidate", () => {
