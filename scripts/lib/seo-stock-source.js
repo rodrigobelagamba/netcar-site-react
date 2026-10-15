@@ -1,6 +1,10 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import {
+  getDefaultAutoSelectFamilyAttemptTimeout,
+  setDefaultAutoSelectFamilyAttemptTimeout,
+} from "node:net";
 import { publicVehicle } from "./seo-stock-cache.js";
 
 const DEFAULT_API_URL =
@@ -8,6 +12,86 @@ const DEFAULT_API_URL =
 const PAGE_SIZE = 500;
 const MAX_PAGES = 100;
 const MAX_REDUCTION = 0.2;
+const HTTP_FAILURE = Symbol("seoStockHttpFailure");
+const TRANSIENT_TRANSPORT_CODES = new Set([
+  "ECONNRESET",
+  "ECONNREFUSED",
+  "ETIMEDOUT",
+  "EAI_AGAIN",
+  "ENOTFOUND",
+  "ENETUNREACH",
+  "EHOSTUNREACH",
+  "EPIPE",
+  "UND_ERR_SOCKET",
+  "UND_ERR_CONNECT_TIMEOUT",
+  "UND_ERR_HEADERS_TIMEOUT",
+  "UND_ERR_BODY_TIMEOUT",
+]);
+const TLS_CODES = new Set([
+  "CERT_HAS_EXPIRED",
+  "DEPTH_ZERO_SELF_SIGNED_CERT",
+  "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+  "UNABLE_TO_GET_ISSUER_CERT_LOCALLY",
+  "ERR_TLS_CERT_ALTNAME_INVALID",
+]);
+
+/** Same bounded dual-stack policy as the existing i-CHECK CLI. Importing this
+ * module must not change its host process's network configuration. */
+export function configureSeoStockNetwork() {
+  setDefaultAutoSelectFamilyAttemptTimeout(
+    Math.max(2_000, getDefaultAutoSelectFamilyAttemptTimeout()),
+  );
+}
+
+function readFailure(error) {
+  const codes = [];
+  const queue = [error];
+  const visited = new Set();
+  let invalidJson = false;
+  let timedOut = false;
+  let unclassified = false;
+  for (let index = 0; index < queue.length && index < 16; index += 1) {
+    const current = queue[index];
+    if (!current || typeof current !== "object" || visited.has(current)) {
+      unclassified = true;
+      continue;
+    }
+    visited.add(current);
+    if (current.name === "SyntaxError") invalidJson = true;
+    const timeout = ["TimeoutError", "AbortError"].includes(current.name);
+    if (timeout) timedOut = true;
+    if (typeof current.code === "string") codes.push(current.code);
+    const hasCause = current.cause !== undefined;
+    const children = Array.isArray(current.errors) ? current.errors : [];
+    if (hasCause) queue.push(current.cause);
+    if (children.length > 8) unclassified = true;
+    if (children.length) queue.push(...children.slice(0, 8));
+    if (
+      !hasCause &&
+      children.length === 0 &&
+      typeof current.code !== "string" &&
+      !timeout &&
+      current.name !== "SyntaxError"
+    ) {
+      unclassified = true;
+    }
+  }
+  if (queue.length > 16) unclassified = true;
+  const tlsCode = codes.find((code) => TLS_CODES.has(code));
+  if (tlsCode) return { code: tlsCode, retryable: false };
+  if (invalidJson) return { code: "invalid_json", retryable: false };
+  // Never accept a partially inspected error graph as allowlisted transport.
+  if (unclassified) return { code: "unknown_read_error", retryable: false };
+  if (
+    codes.length &&
+    codes.every((code) => TRANSIENT_TRANSPORT_CODES.has(code))
+  ) {
+    return { code: codes[0], retryable: true };
+  }
+  if (timedOut && codes.length === 0)
+    return { code: "request_timeout", retryable: true };
+  return { code: "unknown_read_error", retryable: false };
+}
 
 function stockError(message) {
   return new Error(`Estoque SEO: ${message}; publicação interrompida`);
@@ -115,7 +199,41 @@ function fingerprint(vehicles) {
     .digest("hex");
 }
 
-async function readPass(apiUrl, fetchImpl) {
+async function fetchPage(url, fetchImpl, retryDelay, page) {
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      const response = await fetchImpl(url, {
+        headers: { Accept: "application/json", "Cache-Control": "no-cache" },
+        cache: "no-store",
+        signal: AbortSignal.timeout(20_000),
+      });
+      // HTTP errors are not transport failures. Only a successfully parsed
+      // endpoint-specific empty 404 may later prove the end of pagination.
+      if (!response.ok && response.status !== 404) {
+        await response.body?.cancel().catch(() => {});
+        throw Object.assign(stockError(`página ${page} inválida ou vazia`), {
+          [HTTP_FAILURE]: true,
+        });
+      }
+      const payload = await response.json();
+      return { response, payload };
+    } catch (error) {
+      if (error?.[HTTP_FAILURE]) throw error;
+      const diagnostic = readFailure(error);
+      if (!diagnostic.retryable || attempt === 3) {
+        throw Object.assign(
+          stockError(
+            `falha de leitura na página ${page} (${diagnostic.code}; tentativas ${attempt})`,
+          ),
+          { code: `seo_stock_${diagnostic.code}`, page, attempts: attempt },
+        );
+      }
+      await retryDelay(1_000 * 2 ** (attempt - 1));
+    }
+  }
+}
+
+async function readPass(apiUrl, fetchImpl, retryDelay) {
   const vehicles = [];
   const seenIds = new Set();
   let offset = 0;
@@ -123,18 +241,12 @@ async function readPass(apiUrl, fetchImpl) {
     const url = new URL(apiUrl);
     url.searchParams.set("limit", String(PAGE_SIZE));
     url.searchParams.set("offset", String(offset));
-    let response;
-    let payload;
-    try {
-      response = await fetchImpl(url, {
-        headers: { Accept: "application/json", "Cache-Control": "no-cache" },
-        cache: "no-store",
-        signal: AbortSignal.timeout(20_000),
-      });
-      payload = await response.json();
-    } catch {
-      throw stockError(`falha de leitura na página ${pageIndex + 1}`);
-    }
+    const { response, payload } = await fetchPage(
+      url,
+      fetchImpl,
+      retryDelay,
+      pageIndex + 1,
+    );
     if (
       !Array.isArray(payload?.data) ||
       !Number.isSafeInteger(payload.total_results) ||
@@ -181,6 +293,7 @@ export async function fetchCompleteSeoStock({
   rootDir,
   apiUrl = process.env.NETCAR_SEO_STOCK_API_URL || DEFAULT_API_URL,
   fetchImpl = globalThis.fetch,
+  retryDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 } = {}) {
   let parsedUrl;
   try {
@@ -197,9 +310,9 @@ export async function fetchCompleteSeoStock({
   ) {
     throw stockError("feed com filtros não comprova estoque completo");
   }
-  const first = await readPass(parsedUrl, fetchImpl);
+  const first = await readPass(parsedUrl, fetchImpl, retryDelay);
   const counts = validateSeoStockVehicles(first.vehicles, { rootDir });
-  const confirmed = await readPass(parsedUrl, fetchImpl);
+  const confirmed = await readPass(parsedUrl, fetchImpl, retryDelay);
   if (fingerprint(first.vehicles) !== fingerprint(confirmed.vehicles)) {
     throw stockError("estoque mudou durante a leitura; tente novamente");
   }

@@ -24,6 +24,7 @@ import {
   writeSeoStockCache,
 } from "./lib/seo-stock-cache.js";
 import {
+  configureSeoStockNetwork,
   fetchCompleteSeoStock,
   validateSeoStockVehicles,
 } from "./lib/seo-stock-source.js";
@@ -936,6 +937,7 @@ if (
   process.argv[1] &&
   resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 ) {
+  configureSeoStockNetwork();
   main().catch((err) => {
     console.error("Erro ao gerar landings:", err);
     process.exitCode = 1;

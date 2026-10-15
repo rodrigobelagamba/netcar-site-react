@@ -269,4 +269,8 @@ async function main() {
   if (!report.ok) process.exitCode = 1;
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const { configureSeoStockNetwork } = await import("./lib/seo-stock-source.js");
+  configureSeoStockNetwork();
+  await main();
+}

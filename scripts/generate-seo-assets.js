@@ -6,7 +6,7 @@
  */
 
 import { readFileSync, mkdirSync, readdirSync, unlinkSync } from "fs";
-import { join, dirname } from "path";
+import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
 import { factoryWarrantyCatalogFromApi } from "./lib/factory-warranty-catalog.js";
@@ -24,6 +24,7 @@ import {
   readSeoBuildStockSnapshot,
 } from "./lib/seo-stock-cache.js";
 import {
+  configureSeoStockNetwork,
   fetchCompleteSeoStock,
   validateSeoStockVehicles,
 } from "./lib/seo-stock-source.js";
@@ -538,6 +539,9 @@ async function fetchStock() {
   return accepted.vehicles;
 }
 
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  configureSeoStockNetwork();
+}
 const completeStock = (await fetchStock()).map(sanitizeVehicleImages);
 // Todas as vitrines SEO continuam transacionais. O conjunto completo existe
 // apenas para o showroom humano de /seminovos e nunca alimenta sitemap,

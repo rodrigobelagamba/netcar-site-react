@@ -9,6 +9,7 @@ import {
 } from "./lib/offer-reconciliation.js";
 import { readSeoBuildStockSnapshot } from "./lib/seo-stock-cache.js";
 import { acquireSitePublishLock } from "./lib/site-publish-lock.mjs";
+import { configureSeoStockNetwork } from "./lib/seo-stock-source.js";
 
 const defaultRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -58,6 +59,7 @@ async function main() {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  configureSeoStockNetwork();
   main().catch((error) => {
     // No vehicle payloads, URLs, plate numbers, credentials or response bodies.
     const code = /^[a-z][a-z0-9_]+$/i.test(error?.code || error?.message || "")

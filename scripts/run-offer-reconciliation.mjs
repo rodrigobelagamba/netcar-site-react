@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
 import { acquireSitePublishLock } from './lib/site-publish-lock.mjs';
-import { fetchCompleteSeoStock } from './lib/seo-stock-source.js';
+import { configureSeoStockNetwork, fetchCompleteSeoStock } from './lib/seo-stock-source.js';
 import { writeSeoBuildStockSnapshot } from './lib/seo-stock-cache.js';
 import { runOfferReconciliation } from './reconcile-offers.mjs';
 
@@ -112,7 +112,8 @@ export async function runScheduledOfferReconciliation({
     return report;
   } catch (error) {
     report.status = 'failed';
-    report.error = /^[a-z][a-z0-9_]+$/.test(error?.message || '') ? error.message : 'scheduled_reconciliation_failed';
+    const failureCode = error?.code || error?.message || '';
+    report.error = /^[a-z][a-z0-9_]+$/i.test(failureCode) ? failureCode : 'scheduled_reconciliation_failed';
     report.productionMayHaveChanged = report.phase === 'build_and_deploy' || deployed;
     if (!deployed && reconciliation?.backupId) {
       try {
@@ -141,6 +142,7 @@ export async function runScheduledOfferReconciliation({
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  configureSeoStockNetwork();
   const args = process.argv.slice(2);
   if (args.length > 1 || args.some((arg) => !['--apply', '--dry-run'].includes(arg))) {
     process.stderr.write('invalid_scheduled_reconciliation_argument\n');

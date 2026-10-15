@@ -15,6 +15,11 @@ a 20% frente ao manifesto anterior. Esse limite interrompe a publicação para
 revisão; não transforma falha em venda. Valor zero identifica vendido; ID ausente
 só é conclusivo após uma leitura completa validada.
 
+Os CLIs usam timeout mínimo de conexão de 2 segundos, sem reduzir valor maior já
+configurado, e até 3 tentativas apenas para falhas transitórias de transporte;
+HTTP, TLS, JSON, schema e completude não são repetidos. Cada requisição continua
+limitada a 20 segundos, com as duas passagens completas e interrupção segura.
+
 Um snapshot público reduzido fica em `.devops/seo-build-stock.json`, válido por
 15 minutos e identificado como `api-complete`. O runner usa a mesma fonte e
 `NETCAR_REUSE_SEO_BUILD_STOCK=1` mantém esse snapshot no build. Snapshot expirado
