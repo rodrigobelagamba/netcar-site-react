@@ -355,13 +355,13 @@ test("available counterpart displays its warranty without nesting the manual in 
     },
   );
   assert.match(html, /Garantia de fábrica de motor e câmbio até 2029/);
-  assert.match(html, /Consultar manual/);
+  assert.match(html, /Consultar fonte/);
   assert.match(html, new RegExp(`data-vehicle-warranty-summary="${compass.id}"`));
   const links = [...html.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/g)].map((match) => match[0]);
   assert.ok(links.every((link) => [...link.matchAll(/<a\b/g)].length === 1));
   const detailLink = links.find((link) => link.includes('class="comparison-available-car"'));
   assert.ok(detailLink);
-  assert.doesNotMatch(detailLink, /Consultar manual|data-vehicle-warranty-summary/);
+  assert.doesNotMatch(detailLink, /Consultar fonte|data-vehicle-warranty-summary/);
 });
 
 test("empty, loading and failed stock never invent cars or prices and keep editorial content", () => {

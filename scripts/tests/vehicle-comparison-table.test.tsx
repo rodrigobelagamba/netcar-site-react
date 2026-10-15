@@ -277,7 +277,7 @@ test("each comparison header displays all its warranty scopes without adding equ
   assert.match(headers[0], /Garantia de fábrica da bateria de tração até 2032/);
   assert.doesNotMatch(headers[0], /Garantia de fábrica de motor e câmbio/);
   assert.match(headers[1], /Garantia de fábrica de motor e câmbio até 2028/);
-  assert.match(headers[1], /Consultar manual/);
+  assert.match(headers[1], /Consultar fonte/);
   assert.doesNotMatch(headers[1], /Garantia de fábrica da bateria/);
   assert.equal([...html.matchAll(/<th\b[^>]*scope="row"/g)].length, 9);
   assert.equal([...html.matchAll(/data-factory-warranty-badge=/g)].length, 3);
