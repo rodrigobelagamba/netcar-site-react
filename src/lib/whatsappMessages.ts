@@ -105,7 +105,7 @@ export function quickSellWhatsAppMessage(details: {
   if (details.modelo?.trim()) lines.push(`Modelo: ${details.modelo.trim()}`);
   if (details.ano?.trim()) lines.push(`Ano: ${details.ano.trim()}`);
   if (details.km?.trim()) lines.push(`KM: ${details.km.trim()}`);
-  if (details.cityName) lines.push(`Cidade: ${details.cityName}`);
+  if (details.cityName) lines.push(`Página consultada: ${details.cityName}`);
   return lines.join("\n");
 }
 

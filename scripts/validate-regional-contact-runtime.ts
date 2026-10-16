@@ -271,7 +271,7 @@ for (const fixture of cases) {
       "Modelo: Onix LT",
       "Ano: 2021",
       "KM: 45.000",
-      "Cidade: Canoas",
+      "Página consultada: Canoas",
     ]) {
       assert.ok(message.includes(detail), `Mensagem perdeu ${detail}`);
     }
@@ -292,7 +292,7 @@ for (const fixture of cases) {
     fixture.data,
   );
   const defaultCtas = ctas.render("RegionalActionCtas", {
-    waText: "moro em Canoas.",
+    waText: "vi a página da Netcar para Canoas e estou procurando um seminovo.",
   });
   const wa = find(
     defaultCtas,
@@ -366,7 +366,7 @@ for (const [props, target, action] of [
   ],
 ] as const) {
   const tree = ctas.render("RegionalActionCtas", {
-    waText: "moro em Canoas.",
+    waText: "vi a página da Netcar para Canoas e estou procurando um seminovo.",
     primary: "sell",
     ...props,
   });
@@ -383,7 +383,8 @@ for (const [props, target, action] of [
 // Compra regional mantém o visitante no estoque da cidade; consumidores sem
 // âncora (hub e páginas de venda) continuam abrindo o catálogo com seus filtros.
 const regionalCtas = ctas.render("RegionalActionCtas", {
-  waText: "moro em Sapucaia do Sul e estou procurando um seminovo.",
+  waText:
+    "vi a página da Netcar para Sapucaia do Sul e estou procurando um seminovo.",
   primary: "stock",
   stockAnchor: "estoque-regional",
   stockLabel: "Ver carros e preços",
@@ -415,7 +416,7 @@ const regionalWhatsApp = find(
 );
 assert.match(
   assertWhatsApp(regionalWhatsApp.props.href, "5551997293118"),
-  /moro em Sapucaia do Sul/,
+  /vi a página da Netcar para Sapucaia do Sul/,
 );
 assert.equal(regionalWhatsApp.props["data-wa-intent"], "regional_help");
 
@@ -460,6 +461,21 @@ const cityPageSource = readFileSync(
 );
 assert.match(cityPageSource, /<RegionalActionCtas[\s\S]*?stockAnchor="estoque-regional"/);
 assert.match(cityPageSource, /<RegionalStockPreview\s+id="estoque-regional"/);
+// O site sabe qual página foi consultada, não onde o visitante mora.
+for (const sourcePath of [
+  "../src/modules/seo/pages/CityLandingPage.tsx",
+  "../src/modules/seo/pages/SellCityLandingPage.tsx",
+  "../src/app/router/routes.tsx",
+  "../scripts/generate-seo-assets.js",
+]) {
+  const source = readFileSync(new URL(sourcePath, import.meta.url), "utf8");
+  assert.doesNotMatch(source, /moro em \$\{city(?:\.name|Name)\}/);
+  assert.match(source, /vi a página da Netcar para \$\{city(?:\.name|Name)\}/);
+}
+assert.doesNotMatch(
+  assertWhatsApp(regionalWhatsApp.props.href, "5551997293118"),
+  /moro em|\([MGODSRU][A-Z0-9]+\)/i,
+);
 const generatedSeoSource = readFileSync(
   new URL("../scripts/generate-seo-assets.js", import.meta.url),
   "utf8",

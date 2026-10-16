@@ -160,7 +160,7 @@ function getContextualMessage(pathname: string): string {
     const city = getContextualCityPage(pathname.replace("/vender-carro-", ""));
     if (city) {
       return siteWhatsAppMessage(
-        `moro em ${city.name} e quero vender meu carro para a Netcar.`,
+        `vi a página da Netcar para ${city.name} e quero vender meu carro para a Netcar.`,
       );
     }
   }
@@ -171,7 +171,7 @@ function getContextualMessage(pathname: string): string {
     const city = getContextualCityPage(pathname.replace("/seminovos-", ""));
     if (city) {
       return siteWhatsAppMessage(
-        `moro em ${city.name} e estou procurando um seminovo.`,
+        `vi a página da Netcar para ${city.name} e estou procurando um seminovo.`,
       );
     }
   }

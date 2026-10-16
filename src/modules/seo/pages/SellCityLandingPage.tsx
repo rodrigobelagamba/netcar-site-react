@@ -57,7 +57,7 @@ export function SellCityLandingPage() {
       >
         <RegionalActionCtas
           className="mt-8"
-          waText={`moro em ${city.name} e quero vender meu carro para a Netcar.`}
+          waText={`vi a página da Netcar para ${city.name} e quero vender meu carro para a Netcar.`}
           waSubtitle="Envie os dados e tire suas dúvidas"
           sellAnchor="pre-avaliacao"
           sellLabel="Pedir avaliação do meu carro"

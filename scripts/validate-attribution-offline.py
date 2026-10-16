@@ -444,6 +444,129 @@ class OfflineAttributionTests(unittest.TestCase):
         )
         self.assertEqual(context["vehicle_name"], "Fiat Fastback")
 
+    def test_regional_page_is_not_customer_residence(self):
+        for city in ("Canoas", "Sapucaia do Sul", "São Leopoldo", "Gravataí"):
+            for request, intent in (
+                ("estou procurando um seminovo", "vehicle_inquiry"),
+                ("quero vender meu carro para a Netcar", "sell_evaluation"),
+            ):
+                with self.subTest(city=city, request=request):
+                    context = evolution.infer_message_context(
+                        f"Estava olhando o site da Netcar e vi a página da Netcar "
+                        f"para {city} e {request}."
+                    )
+                    self.assertEqual(context["intent"], intent)
+                    self.assertEqual(context["city"], "")
+                    self.assertEqual(context["city_confidence"], "unknown")
+                    self.assertEqual(context["page_city"], city)
+                    self.assertEqual(context["page_city_source"], "regional_page_template")
+
+    def test_legacy_residence_prefill_is_unverified(self):
+        for request in (
+            "estou procurando um seminovo",
+            "quero vender meu carro para a Netcar",
+        ):
+            for prefix in ("", "Estava olhando o site da Netcar e "):
+                with self.subTest(request=request, prefix=prefix):
+                    context = evolution.infer_message_context(
+                        f"{prefix}moro em Sapucaia do Sul e {request}."
+                    )
+                    self.assertEqual(context["city"], "")
+                    self.assertEqual(context["city_source"], "legacy_prefill_unverified")
+                    self.assertEqual(context["city_confidence"], "unknown")
+                    self.assertEqual(context["page_city"], "Sapucaia do Sul")
+                    self.assertEqual(context["page_city_source"], "legacy_regional_prefill")
+
+    def test_legacy_prefill_with_line_break_or_short_message_stays_unverified(self):
+        for message in (
+            "Estava olhando o site da Netcar e moro em Canoas.",
+            "moro em Canoas e\nestou procurando um seminovo.",
+        ):
+            with self.subTest(message=message):
+                context = evolution.infer_message_context(message)
+                self.assertEqual(context["city"], "")
+                self.assertEqual(context["page_city"], "Canoas")
+
+    def test_form_city_is_page_context_not_customer_residence(self):
+        for label, source in (
+            ("Página consultada", "regional_page_template"),
+            ("Cidade", "legacy_regional_prefill"),
+        ):
+            with self.subTest(label=label):
+                context = evolution.infer_message_context(
+                    "Estava olhando o site da Netcar e quero avaliar meu carro "
+                    "para venda direta à Netcar:.\nNegociação: Venda direta à Netcar\n"
+                    f"Modelo: Onix LT\nAno: 2021\nKM: 45.000\n{label}: Canoas"
+                )
+                self.assertEqual(context["intent"], "sell_evaluation")
+                self.assertEqual(context["city"], "")
+                self.assertEqual(context["page_city"], "Canoas")
+                self.assertEqual(context["page_city_source"], source)
+
+    def test_declared_city_is_separate_and_not_marked_confirmed(self):
+        for page_message in (
+            "Vi a página da Netcar para Canoas e estou procurando um seminovo.",
+            "Estava olhando o site da Netcar e moro em Canoas e estou procurando um seminovo.",
+        ):
+            with self.subTest(page_message=page_message):
+                context = evolution.infer_message_context(
+                    f"{page_message}\nMoro em Esteio e quero visitar a loja."
+                )
+                self.assertEqual(context["page_city"], "Canoas")
+                self.assertEqual(context["city"], "Esteio")
+                self.assertEqual(context["city_source"], "message_self_reported")
+                self.assertEqual(context["city_confidence"], "self_reported")
+
+    def test_city_name_does_not_absorb_rest_of_message(self):
+        context = evolution.infer_message_context("Moro em São Leopoldo e quero ver o Polo.")
+        self.assertEqual(context["city"], "São Leopoldo")
+        self.assertEqual(context["page_city"], "")
+
+    def test_negated_residence_and_car_location_do_not_identify_customer(self):
+        for message in (
+            "Não moro em Canoas.",
+            "O carro está em Esteio. Quero conhecer a loja.",
+            "Quero mais informações sobre Fiat Fastback - (U2345678).",
+        ):
+            with self.subTest(message=message):
+                context = evolution.infer_message_context(message)
+                self.assertEqual(context["city"], "")
+                self.assertEqual(context["page_city"], "")
+
+    def test_city_evidence_survives_enrichment_without_schema_break(self):
+        context = evolution.infer_message_context(
+            "Vi a página da Netcar para Canoas e estou procurando um seminovo."
+        )
+        lead = {
+            "primeiro_contato": "2026-10-16T12:00:00Z",
+            "lead_session_id": "synthetic-regional-session",
+            **context,
+        }
+        row = enrich.enrich_rows([lead], [], [], [])[0]
+        for key in ("city", "city_source", "city_confidence", "page_city", "page_city_source"):
+            self.assertEqual(row[key], context[key])
+        self.assertEqual(row["attribution_id"], "synthetic-regional-session")
+
+    def test_city_context_is_extracted_before_first_message_truncation(self):
+        message = (
+            "Estava olhando o site da Netcar e quero avaliar meu carro para venda direta à Netcar:.\n"
+            "Negociação: Venda direta à Netcar\nModelo: Volkswagen Virtus Comfortline 1.0 Turbo Automático\n"
+            "Ano: 2024\nKM: 45.000\nPágina consultada: Sapucaia do Sul"
+        )
+        self.assertGreater(message.index("Página consultada:"), 200)
+        with mock.patch.object(evolution, "api", return_value={
+            "messages": {"records": [{
+                "messageTimestamp": 1_788_170_400,
+                "key": {"fromMe": False},
+                "message": {"conversation": message},
+            }]}
+        }):
+            sessions = evolution.analyze_chat("synthetic@s.whatsapp.net")["sessions"]
+        first = sessions[0]["first"]
+        self.assertEqual(len(first["txt"]), 200)
+        self.assertEqual(first["city_context"]["page_city"], "Sapucaia do Sul")
+        self.assertEqual(first["city_context"]["city"], "")
+
     def test_click_sync_uses_headers_and_json_array(self):
         captured = []
 

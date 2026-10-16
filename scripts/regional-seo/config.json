@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "businessCity": "Esteio",
+  "commercialRadiusKm": 50,
+  "radiusStatus": "planning_scope_not_measured",
+  "pilotCities": [
+    { "slug": "sapucaia-do-sul", "name": "Sapucaia do Sul" },
+    { "slug": "canoas", "name": "Canoas" },
+    { "slug": "sao-leopoldo", "name": "São Leopoldo" },
+    { "slug": "gravatai", "name": "Gravataí" },
+    { "slug": "esteio", "name": "Esteio", "role": "reference" }
+  ],
+  "genericTerms": [
+    "loja de carros",
+    "revenda de veículos",
+    "carros seminovos",
+    "carros usados",
+    "comprar carro",
+    "veículos seminovos",
+    "loja de veículos",
+    "carros à venda"
+  ],
+  "intentSlugs": [
+    "automaticos-ate-80-mil",
+    "automaticos-ate-100-mil",
+    "carros-de-100-a-150-mil",
+    "jeep-compass",
+    "honda-hr-v",
+    "volkswagen-t-cross"
+  ],
+  "devices": ["mobile", "desktop"],
+  "surfaces": ["organic", "map_pack", "google_maps"],
+  "pointsPerCity": 5,
+  "competitorsToWatch": [
+    {
+      "name": "R2 Motors",
+      "city": "Canoas",
+      "reason": "user_requested",
+      "dominance": null
+    },
+    {
+      "name": "Dotto Veículos",
+      "city": "Canoas",
+      "reason": "user_requested",
+      "dominance": null
+    },
+    {
+      "name": "Carrodez",
+      "city": "Novo Hamburgo",
+      "reason": "user_requested",
+      "dominance": null
+    }
+  ]
+}

@@ -115,8 +115,83 @@ def phone_of(jid, recs=None):
     return ""
 
 
+def infer_city_context(text):
+    """Separa a página consultada de uma cidade declarada na mensagem.
+
+    Os templates antigos diziam "moro em" sem perguntar a cidade ao visitante.
+    Nunca promover esse texto para residência confirmada. Mesmo uma declaração
+    fora do template continua sendo autodeclarada, não validada pelo CRM.
+    """
+    raw = text or ""
+    normalized = re.sub(r"\s+", " ", raw).strip()
+    context = {
+        "city": "",
+        "city_source": "not_provided",
+        "city_confidence": "unknown",
+        "page_city": "",
+        "page_city_source": "",
+    }
+    page_match = re.search(
+        r"\bvi a p[áa]gina da netcar para ([^,.!?\n]{2,80}?) "
+        r"e (?:estou procurando|quero)\b",
+        normalized, re.I,
+    )
+    form_match = re.search(
+        r"^\s*P[áa]gina consultada:\s*([^\n]{2,80})\s*$", raw, re.I | re.M
+    )
+    if page_match or form_match:
+        context["page_city"] = (page_match or form_match).group(1).strip()
+        context["page_city_source"] = "regional_page_template"
+
+    legacy_match = re.search(
+        r"\bmoro em ([^,.!?\n]{2,80}?) e "
+        r"(?:estou procurando um seminovo|quero vender meu carro para a Netcar)\b",
+        normalized, re.I,
+    )
+    legacy_form_match = re.search(
+        r"^\s*Cidade:\s*([^\n]{2,80})\s*$", raw, re.I | re.M
+    ) if "quero avaliar meu carro" in normalized.lower() else None
+    if legacy_match or legacy_form_match:
+        if not context["page_city"]:
+            context["page_city"] = (legacy_match or legacy_form_match).group(1).strip()
+            context["page_city_source"] = "legacy_regional_prefill"
+        context["city_source"] = "legacy_prefill_unverified"
+
+    city_statements = re.finditer(
+        r"\bmoro em ([A-Za-zÀ-ÖØ-öø-ÿ][A-Za-zÀ-ÖØ-öø-ÿ'’ -]{1,79}?)"
+        r"(?=\s+(?:e|mas|porém)\b|[,.;!?\n/]|$)",
+        raw, re.I,
+    )
+    for match in city_statements:
+        if re.search(r"\b(?:não|nao)\s*$", raw[:match.start()], re.I):
+            continue
+        city = match.group(1).strip()
+        # Sem evidência adicional, o prefixo do site também torna um "moro em"
+        # isolado ambíguo. Um segundo enunciado independente pode ser declaração.
+        statement_prefix = re.sub(r"\s+", " ", raw[:match.start()]).strip().lower()
+        is_site_prefill = statement_prefix == "estava olhando o site da netcar e"
+        is_legacy_prefill = bool(
+            re.match(
+                r"moro em .{2,80}? e (?:estou procurando um seminovo|"
+                r"quero vender meu carro para a Netcar)\b",
+                re.sub(r"\s+", " ", raw[match.start():]), re.I,
+            )
+        )
+        if is_site_prefill or is_legacy_prefill:
+            if not context["page_city"]:
+                context["page_city"] = city
+                context["page_city_source"] = "legacy_regional_prefill"
+            if not context["city"]:
+                context["city_source"] = "legacy_prefill_unverified"
+            continue
+        context["city"] = city
+        context["city_source"] = "message_self_reported"
+        context["city_confidence"] = "self_reported"
+    return context
+
+
 def infer_message_context(text):
-    """Extrai apenas contexto comercial de templates conhecidos, sem PII."""
+    """Extrai intenção, contexto de página e declarações sem confirmar residência."""
     normalized = re.sub(r"\s+", " ", text or "").strip()
     lower = normalized.lower()
     if "financ" in lower or "entrada e parcelas" in lower:
@@ -134,11 +209,6 @@ def infer_message_context(text):
     else:
         intent = "vehicle_inquiry" if "seminovo" in lower or "carro" in lower else "general"
 
-    city = ""
-    city_match = re.search(r"\bmoro em ([^,.\n-]{2,80})", normalized, re.I)
-    if city_match:
-        city = city_match.group(1).strip()
-
     vehicle_name = ""
     suffix = rf"(?:\s+-\s+\({WA_REF_PATTERN}\)|[.!?]|$)"
     vehicle_patterns = (
@@ -150,7 +220,7 @@ def infer_message_context(text):
         if match:
             vehicle_name = match.group(1).strip()[:160]
             break
-    return {"intent": intent, "city": city, "vehicle_name": vehicle_name}
+    return {"intent": intent, **infer_city_context(text), "vehicle_name": vehicle_name}
 
 
 def message_text(message):
@@ -272,6 +342,9 @@ def analyze_chat(jid):
                     "ts": ts_to_iso(timestamp),
                     "ts_epoch": timestamp,
                     "txt": txt[:200],
+                    # O texto histórico segue limitado; o rótulo da cidade pode
+                    # estar no fim do formulário, depois dos 200 caracteres.
+                    "city_context": infer_city_context(txt),
                     "phone": phone_of(jid, recs),
                     "push": m.get("pushName") or "",
                 },
@@ -477,6 +550,12 @@ def main():
             code = session.get("code") or {}
             ctwa = session.get("ctwa") or {}
             context = infer_message_context(first.get("txt") or "")
+            stored_city_context = first.get("city_context") or {}
+            for field in (
+                "city", "city_source", "city_confidence", "page_city", "page_city_source"
+            ):
+                if field in stored_city_context:
+                    context[field] = stored_city_context[field]
             wa_ref = code.get("codigo", "")
             origem = "Meta CTWA (anuncio direto)" if ctwa else code.get("origem", "Direto/organico (sem marcacao)")
             rows.append({
@@ -496,6 +575,10 @@ def main():
                 "wa_source": code.get("origem", "") if code else (ctwa.get("fonte") or ""),
                 "intent": context["intent"],
                 "city": context["city"],
+                "city_source": context["city_source"],
+                "city_confidence": context["city_confidence"],
+                "page_city": context["page_city"],
+                "page_city_source": context["page_city_source"],
                 "vehicle_id": "",
                 "vehicle_name": context["vehicle_name"],
                 "store": "",

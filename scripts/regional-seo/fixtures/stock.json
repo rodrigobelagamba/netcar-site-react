@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-10-15T21:16:36Z",
+  "vehicles": [
+    {
+      "marca": "HONDA",
+      "modelo": "HR-V EX",
+      "cambio": "AUTOMATICO",
+      "categoria": "SUV",
+      "price": 99900
+    },
+    {
+      "marca": "JEEP",
+      "modelo": "COMPASS T270",
+      "cambio": "AUTOMATICO",
+      "categoria": "SUV",
+      "price": 129900
+    },
+    {
+      "marca": "JEEP",
+      "modelo": "COMPASS LIMITED",
+      "cambio": "AUTOMATICO",
+      "categoria": "SUV",
+      "price": 0
+    },
+    {
+      "marca": "FIAT",
+      "modelo": "ARGO",
+      "cambio": "MANUAL",
+      "categoria": "HATCH",
+      "price": 69900
+    },
+    {
+      "marca": "FIAT",
+      "modelo": "PULSE",
+      "cambio": "AUTOMATICO",
+      "categoria": "SUV",
+      "price": 79900,
+      "sold": true
+    }
+  ]
+}

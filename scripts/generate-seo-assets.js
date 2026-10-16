@@ -145,8 +145,8 @@ function siteWhatsAppMessage(body) {
 function cityWhatsAppLink(cityName, intent = "buy") {
   const text = siteWhatsAppMessage(
     intent === "sell"
-      ? `moro em ${cityName} e quero vender meu carro para a Netcar.`
-      : `moro em ${cityName} e estou procurando um seminovo.`,
+      ? `vi a página da Netcar para ${cityName} e quero vender meu carro para a Netcar.`
+      : `vi a página da Netcar para ${cityName} e estou procurando um seminovo.`,
   );
   return `https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(text)}`;
 }

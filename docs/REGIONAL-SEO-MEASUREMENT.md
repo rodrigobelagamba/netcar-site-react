@@ -86,6 +86,12 @@ passar pelo estoque completo. Esse caminho também deve entrar na análise.
 Usar exploração de funil/sequência e usuários ou sessões, não apenas dividir
 totais soltos de eventos. Separar mobile/desktop, período e canal de aquisição.
 
+Desde a publicação regional de 15/10/2026, a ação `view_stock` do botão
+principal nas páginas de compra leva ao estoque da própria página
+(`#estoque-regional`). Não exigir uma visualização de `/seminovos` para contar
+esse avanço. A ação `view_stock_more` leva ao catálogo completo. Comparações
+com o período anterior precisam considerar essa mudança de destino.
+
 Regras para evitar números inflados:
 
 - `regional_cta_click` e `regional_stock_click` descrevem o mesmo gesto nos
@@ -127,6 +133,17 @@ Referência da limpeza sem nova visualização: [configuração `update` do Goog
 Analytics](https://developers.google.com/analytics/devguides/collection/ga4/reference/config#update).
 
 ### CRM / iAN
+
+Atualização de 16/10/2026 (verificar publicação pelo recibo de deploy): as
+mensagens regionais passam a informar "vi a página da Netcar para [cidade]" e
+o formulário usa "Página consultada". Não preenchem residência automaticamente.
+No coletor de atribuição, `page_city`/`page_city_source` identificam esse contexto;
+`city` só recebe declaração independente, com `city_source` e
+`city_confidence = self_reported`. Isso ainda não é confirmação no CRM.
+Templates antigos com "moro em" são marcados como preenchimento não verificado,
+não como residência. Eventos `city_name`/`regional_city_slug` continuam sendo
+contexto da página por compatibilidade. Nenhum histórico já exportado foi
+reprocessado por esta correção.
 
 Registrar em cada conversa:
 

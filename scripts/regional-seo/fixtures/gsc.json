@@ -1,0 +1,47 @@
+{
+  "observed_at": "2026-10-16T09:15:00-03:00",
+  "source": "Synthetic test fixture, not market evidence",
+  "source_url": "https://example.invalid/gsc-fixture",
+  "property": "sc-domain:example.invalid",
+  "search_type": "Web",
+  "current_period": ["2026-09-16", "2026-10-13"],
+  "previous_period": ["2026-08-19", "2026-09-15"],
+  "city_page_rows": [
+    {
+      "slug": "sapucaia-do-sul",
+      "clicks_current": 11,
+      "clicks_previous": 8,
+      "impressions_current": 1211,
+      "impressions_previous": 1406,
+      "position_current": 6.3
+    },
+    {
+      "slug": "sao-leopoldo",
+      "clicks_current": 1,
+      "clicks_previous": 6,
+      "impressions_current": 552,
+      "impressions_previous": 540
+    },
+    {
+      "slug": "canoas",
+      "clicks_current": 3,
+      "clicks_previous": 0,
+      "impressions_current": 735,
+      "impressions_previous": 0
+    },
+    {
+      "slug": "gramado",
+      "clicks_current": 1,
+      "clicks_previous": 0,
+      "impressions_current": 145
+    }
+  ],
+  "selected_commercial_query_rows": [
+    {
+      "query": "carros usados sapucaia do sul",
+      "clicks_current": 0,
+      "impressions_current": 28,
+      "position_current": 8
+    }
+  ]
+}

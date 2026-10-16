@@ -13,7 +13,7 @@ import { cn } from "@/lib/cn";
 export type SellEvaluationType = "direct_purchase" | "trade_in";
 
 interface QuickSellFormProps {
-  /** Cidade de origem do lead, quando a página é uma landing de cidade */
+  /** Cidade da página consultada; não comprova a residência do visitante. */
   cityName?: string;
   /** Evita repetir os critérios quando a página já os apresenta antes do formulário. */
   showCriteria?: boolean;

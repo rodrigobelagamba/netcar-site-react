@@ -1,0 +1,44 @@
+{
+  "collected_at": "2026-10-16T14:01:11.548Z",
+  "source": "Synthetic Keyword Planner fixture, not real market data",
+  "source_url": "https://example.invalid/keyword-planner",
+  "measurement_kind": "historical_search_demand_estimate_not_ranking",
+  "period": ["2025-10", "2026-09"],
+  "network": "Google",
+  "language": "Portuguese",
+  "query_method": "Unmodified terms without city suffix, one municipal filter at a time",
+  "cities": [
+    {
+      "slug": "canoas",
+      "name": "Canoas",
+      "selected_location_label": "Canoas, Rio Grande do Sul, Brasil cidade",
+      "rows": [
+        {
+          "keyword": "carros usados",
+          "average_monthly_searches_display": "170",
+          "average_monthly_searches": 170,
+          "kind": "supplied_keyword",
+          "status": "observed_estimate"
+        },
+        {
+          "keyword": "seminovos",
+          "average_monthly_searches_display": "0",
+          "average_monthly_searches": 0,
+          "kind": "suggested_keyword",
+          "status": "rounded_zero_not_proof_no_demand"
+        },
+        {
+          "keyword": "carros automáticos até 80 mil",
+          "average_monthly_searches_display": "—",
+          "average_monthly_searches": null,
+          "kind": "supplied_keyword",
+          "status": "not_available"
+        }
+      ],
+      "not_returned_seeds": ["carros automáticos até 100 mil"]
+    }
+  ],
+  "pending": [
+    { "city": "Esteio", "reason": "Fixture: geographic identity not resolved" }
+  ]
+}
