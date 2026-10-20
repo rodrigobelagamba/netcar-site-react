@@ -918,10 +918,18 @@ test("powertrain source changes and conflicting records remain blocked and reope
   }
 });
 
-test("the registry audit keeps thirteen general, four powertrain and two BYD battery coverages separate", () => {
+test("the October15 registry audit keeps thirteen general, four powertrain and two BYD battery coverages separate", () => {
+  // This historical stock snapshot predates later unit reviews. Keep those
+  // units out of this fixture rather than counting them as October15 failures.
+  const historicalRegistry = {
+    ...warrantyRegistry,
+    records: warrantyRegistry.records.filter(
+      (record) => record.reviewedAt <= "2026-10-15",
+    ),
+  };
   const vehicles = parseStockResponse(
     apiResponse(
-      warrantyRegistry.records.map((record) =>
+      historicalRegistry.records.map((record) =>
         warrantyApiVehicle(record.vehicle.vehicleId),
       ),
     ),
@@ -930,6 +938,7 @@ test("the registry audit keeps thirteen general, four powertrain and two BYD bat
     vehicles,
     null,
     "2026-10-15T12:00:00.000Z",
+    historicalRegistry,
   );
   const general = report.vehicles.filter(
     (row) => row.warranty?.status === "eligible",
@@ -972,7 +981,7 @@ test("the registry audit keeps thirteen general, four powertrain and two BYD bat
   // This complete registry fixture also includes Nivus20018, which is absent
   // from the current public catalog and remains unapproved.
   assert.deepEqual(
-    warrantyRegistry.records.filter((record) => record.status === "pending").map((record) => record.vehicle.vehicleId).sort(),
+    historicalRegistry.records.filter((record) => record.status === "pending").map((record) => record.vehicle.vehicleId).sort(),
     ["20018"],
   );
   for (const id of ["20018"]) {
@@ -988,6 +997,7 @@ test("the registry audit keeps thirteen general, four powertrain and two BYD bat
     vehicles,
     null,
     "2026-10-10T12:00:00.000Z",
+    historicalRegistry,
   );
   for (const id of ["20067", "20084"]) {
     const coverage = beforeReview.vehicles.find((row) => row.id === id)!.warranty!;
@@ -997,6 +1007,40 @@ test("the registry audit keeps thirteen general, four powertrain and two BYD bat
     assert.notEqual(coverage.supplemental?.status, "eligible");
   }
   assert.equal(beforeReview.counts.withAlerts, 3);
+});
+
+test("the October20 owner-confirmed Renegade audit keeps its actual missing flag and cannot backdate approval", () => {
+  const review = JSON.parse(readFileSync(new URL(
+    "../../docs/audits/factory-warranty-renegade-20094-2026-10-20.json",
+    import.meta.url,
+  ), "utf8"));
+  const snapshot = review.publicVehicle;
+  const vehicles = parseStockResponse(apiResponse([{
+    id: snapshot.id,
+    marca: snapshot.marca,
+    modelo: snapshot.modelo,
+    ano_fabricacao: snapshot.anoFabricacao,
+    ano: snapshot.year,
+    km: snapshot.km,
+    valor: snapshot.price,
+    motor: snapshot.motor,
+    cambio: snapshot.cambio,
+    chassi: fixtureVin(snapshot.id),
+    opcionais: [],
+    diferenciais: snapshot.diferenciais,
+  }]));
+  assert.deepEqual(snapshot.diferenciais, []);
+  const beforeReview = buildEquipmentAudit(vehicles, null, "2026-10-19T12:00:00.000Z");
+  assert.equal(beforeReview.vehicles[0].warranty?.status, "blocked");
+  const afterReview = buildEquipmentAudit(vehicles, beforeReview, review.publicStockCheckedAt);
+  const coverage = afterReview.vehicles[0].warranty!;
+  assert.equal(afterReview.vehicles[0].id, "20094");
+  assert.equal(coverage.status, "eligible");
+  assert.equal(coverage.flagPresent, false);
+  assert.deepEqual(coverage.recordIds, [review.approvedRecord.recordId]);
+  assert.equal(coverage.powertrain, undefined);
+  assert.equal(coverage.supplemental, undefined);
+  assert.equal(afterReview.newWarrantyAlerts?.length, 0);
 });
 
 test("warranty identity, FAB, MY, mileage and flag changes reopen only the candidate", () => {
