@@ -191,6 +191,15 @@ test("crawler metadata, canonical and application schema use the shared comparat
   assert.ok(!schemas.some((schema) => schema["@type"] === "FAQPage"));
 });
 
+test("comparator search intent remains clear without promising vehicles outside Netcar stock", () => {
+  assert.match(comparison.title, /^Comparar carros lado a lado \|/);
+  assert.equal(comparison.h1, "Compare carros lado a lado");
+  assert.match(comparison.description, /carros seminovos da Netcar em Esteio\/RS/);
+  assert.match(comparison.intro, /carros do estoque da Netcar em Esteio\/RS/);
+  assert.match(comparison.intro, /2 a 4/);
+  assert.match(renderCrawlerPage(), /Compare carros lado a lado/);
+});
+
 test("React and crawler render every guide criterion and research link from the shared source", () => {
   assert.equal(comparison.criteria.length, 3);
   assertSharedGuideContent(renderGuide(), comparison);

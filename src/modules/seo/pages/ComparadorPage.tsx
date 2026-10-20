@@ -41,11 +41,18 @@ import "./comparador.css";
 const MAX_COMPARE = 4;
 
 export function ComparadorPage() {
-  const { data: vehicles, isLoading } = useVehiclesQuery({ limit: 500 });
+  const {
+    data: vehicles,
+    isLoading,
+    isError,
+    isFetching,
+    refetch,
+  } = useVehiclesQuery({ limit: 500 });
   const { data: whatsapp } = useWhatsAppQuery();
   const { veiculo: initialVehicleId } = useSearch({ from: "/comparar" });
   const [selected, setSelected] = useState<string[]>([]);
   const [query, setQuery] = useState("");
+  const [retryingStock, setRetryingStock] = useState(false);
   const [selectionInView, setSelectionInView] = useState(false);
   const comparisonRef = useRef<HTMLDivElement>(null);
   const selectionRef = useRef<HTMLElement>(null);
@@ -78,6 +85,18 @@ export function ComparadorPage() {
     () => list.filter((vehicle) => matchesComparisonSearch(vehicle, query)),
     [list, query],
   );
+  const stockUnavailable = list.length === 0 && (isError || retryingStock);
+  const stockRetryPending = retryingStock || isFetching;
+
+  async function retryStock() {
+    if (stockRetryPending) return;
+    setRetryingStock(true);
+    try {
+      await refetch({ throwOnError: false });
+    } finally {
+      setRetryingStock(false);
+    }
+  }
 
   useEffect(() => {
     const vehicleId = String(initialVehicleId || "").trim();
@@ -242,15 +261,34 @@ export function ComparadorPage() {
             </div>
           </div>
           <p className="comparison-selection-status" role="status">
-            {selected.length === MAX_COMPARE
-              ? "4 carros selecionados. Remova um para escolher outro."
-              : selected.length
-                ? `${selected.length} de ${MAX_COMPARE} carros selecionados${selected.length === 1 ? " — escolha mais um para comparar." : "."}`
-                : isLoading
-                  ? "Carregando estoque…"
-                  : `${filtered.length} carros disponíveis para comparar`}
+            {stockUnavailable
+              ? stockRetryPending
+                ? "Carregando estoque…"
+                : "Estoque temporariamente indisponível."
+              : selected.length === MAX_COMPARE
+                ? "4 carros selecionados. Remova um para escolher outro."
+                : selected.length
+                  ? `${selected.length} de ${MAX_COMPARE} carros selecionados${selected.length === 1 ? " — escolha mais um para comparar." : "."}`
+                  : isLoading
+                    ? "Carregando estoque…"
+                    : `${filtered.length} carros disponíveis para comparar`}
           </p>
-          {isLoading ? (
+          {stockUnavailable ? (
+            <div
+              className="rounded-xl border border-[#DFE8E3] bg-white p-6 text-sm"
+              aria-busy={stockRetryPending}
+            >
+              <p>Não foi possível carregar os carros agora. Tente novamente.</p>
+              <button
+                type="button"
+                onClick={() => void retryStock()}
+                disabled={stockRetryPending}
+                className="mt-3 min-h-11 font-bold text-[#146857] underline disabled:cursor-wait disabled:opacity-60"
+              >
+                {stockRetryPending ? "Tentando novamente…" : "Tentar novamente"}
+              </button>
+            </div>
+          ) : isLoading ? (
             <div
               className="comparison-stock"
               aria-busy="true"
@@ -336,7 +374,7 @@ export function ComparadorPage() {
               })}
             </div>
           )}
-          {!isLoading && filtered.length === 0 && (
+          {!isLoading && !stockUnavailable && filtered.length === 0 && (
             <div className="rounded-xl border border-[#DFE8E3] bg-white p-6 text-sm">
               <p>Nenhum carro encontrado para “{query}”.</p>
               <button
