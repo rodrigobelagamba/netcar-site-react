@@ -2,6 +2,7 @@ import {
   factoryWarrantyReviewFingerprint,
   factoryTractionBatteryReviewFingerprint,
   factoryWarrantyToday,
+  hasFactoryWarrantyCatalogConfirmation,
   resolveFactoryWarranty,
   resolveFactoryPowertrainWarranty,
   resolveFactoryTractionBatteryWarranty,
@@ -138,6 +139,8 @@ function reusableTemplate(
 ): boolean {
   if (
     template.status !== "approved" ||
+    // Owner confirmation belongs to one physical unit, never to a model policy.
+    template.catalogConfirmation !== undefined ||
     template.confirmedExpiryDate !== undefined ||
     template.confirmedExpiryMonth !== undefined ||
     template.approvedFingerprint !== factoryWarrantyReviewFingerprint(template)
@@ -292,7 +295,13 @@ function reconcileFactoryWarrantyVehicleUnchecked(
     return result("blocked", "vehicle-unavailable");
   if (!Array.isArray(vehicle.diferenciais))
     return result("pending", "warranty-flag-unknown");
-  if (!vehicle.diferenciais.some((entry) => entry?.tag === "garantia_fabrica"))
+  if (
+    !vehicle.diferenciais.some((entry) => entry?.tag === "garantia_fabrica") &&
+    !(
+      principals.length === 1 &&
+      hasFactoryWarrantyCatalogConfirmation(principals[0], today)
+    )
+  )
     return result("blocked", "warranty-flag-removed");
   // A changed catalog ID must not bypass an existing decision for this unit.
   if (

@@ -31,6 +31,29 @@ const current = read(
 ) as FactoryWarrantyMatrix;
 const newUnitsAudit = read("../../docs/audits/factory-warranty-songplus-tiggo5x-2026-10-15.json");
 const compassAudit = read("../../docs/audits/factory-warranty-compass-19866-2026-10-10.json");
+const renegadeAudit = read("../../docs/audits/factory-warranty-renegade-20094-2026-10-20.json");
+
+test("owner-confirmed Renegade20094 has its own five-year stamp and preserves prior decisions", () => {
+  const record = current.records.find((entry) => entry.vehicle.vehicleId === "20094")!;
+  const vehicle = renegadeAudit.publicVehicle as WarrantyCatalogVehicle;
+  assert.deepEqual(record, renegadeAudit.approvedRecord);
+  assert.deepEqual(vehicle.diferenciais, []);
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, "2026-10-20").status, "eligible");
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2026-10-20")?.estimatedEndYear, 2029);
+  assert.equal(resolveFactoryWarranty({ ...vehicle, km: 200000 }, current, "2026-10-20")?.estimatedEndYear, 2029);
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2029-01-01"), undefined);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, "2026-10-20"), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, "2026-10-20"), undefined);
+  const others = current.records.filter((entry) => entry !== record);
+  assert.equal(others.length, renegadeAudit.preservation.previousRecordCount);
+  assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), renegadeAudit.preservation.previousRecordsSha256);
+  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), renegadeAudit.preservation.automationRulesSha256);
+  assert.equal(renegadeAudit.ownerAttestations.referenceVehicleId, "20075");
+  assert.equal(renegadeAudit.timing.actualStartDate, null);
+  assert.equal(renegadeAudit.timing.confirmedExpiryDate, null);
+  assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
+});
 
 test("confirmed Compass displays its five-year general stamp without approving other Jeep units", () => {
   const record = current.records.find((entry) => entry.vehicle.vehicleId === "19866")!;
@@ -151,7 +174,8 @@ const currentRecord = (id: string) =>
   current.records.find((record) => record.vehicle.vehicleId === id)!;
 const observed = (id: string) => {
   const vehicle = migration.publicVehicles.find((entry) => entry.id === id)
-    ?? (newUnitsAudit.publicVehicles as WarrantyCatalogVehicle[]).find((entry) => entry.id === id);
+    ?? (newUnitsAudit.publicVehicles as WarrantyCatalogVehicle[]).find((entry) => entry.id === id)
+    ?? (id === "20094" ? renegadeAudit.publicVehicle as WarrantyCatalogVehicle : undefined);
   assert.ok(vehicle, `Current public snapshot missing vehicle ${id}`);
   return vehicle;
 };
@@ -663,7 +687,7 @@ test("the fifth exact Kicks rule approves a new matching unit but never a Nissan
 
 const NEW_UNIT_IDS = ["20067", "20084"];
 test("Song Plus and Tiggo 5X review preserves the sixteen previous decisions and automatic rules", () => {
-  const others = current.records.filter((record) => !NEW_UNIT_IDS.includes(record.vehicle.vehicleId));
+  const others = current.records.filter((record) => newUnitsAudit.preservation.otherRecordIds.includes(record.vehicle.vehicleId));
   assert.equal(others.length, newUnitsAudit.preservation.otherRecordCount);
   assert.deepEqual(others.map((r) => r.vehicle.vehicleId), newUnitsAudit.preservation.otherRecordIds);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), newUnitsAudit.preservation.otherRecordsSha256);

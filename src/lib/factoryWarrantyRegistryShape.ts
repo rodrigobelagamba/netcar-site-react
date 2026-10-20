@@ -27,6 +27,13 @@ const identity = z.object({ brand: z.string(), modelVersion: z.string(), manufac
 const record = coverage.extend({
   vehicle: identity.extend({ vehicleId: z.string() }).passthrough(),
   optionalId: z.number().finite(), optionalConfirmed: z.boolean(),
+  catalogConfirmation: z.object({
+    source: z.literal("netcar-owner"),
+    attestationId: z.string().trim().min(1),
+    confirmedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) =>
+      Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value),
+    basis: z.literal("explicit-unit-warranty-authorization"),
+  }).strict().optional(),
   unitBinding: z.object({ unitKey: z.string(), engine: z.string(), transmission: z.string() }).optional(),
   supplementalCoverages: z.array(coverage).max(10).optional(),
   powertrainReview: z.object({ coverageSubtype: z.string(), usageAttestationId: z.string(), displayLabel: z.string() }).optional(),

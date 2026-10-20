@@ -272,6 +272,26 @@ uma caixa de perguntas com notificações. A tarefa paralela de revisão de
 equipamentos prepara sua própria evolução na VPS; não se alterou sua agenda
 nem se presumiu que ela fosse a rotina de garantias das 08h/14h/18h.
 
+## Indicação individual pelo responsável
+
+Uma autorização explícita para uma unidade sem a tag de garantia pode ser
+registrada em `catalogConfirmation`, separada das fontes da montadora. O campo
+contém a origem `netcar-owner`, o identificador do ateste, sua data e a base
+`explicit-unit-warranty-authorization`. A ausência da tag continua registrada
+na auditoria como `flagPresent: false`; o XML/ERP não é modificado.
+
+Essa confirmação substitui somente a indicação de catálogo para a garantia
+geral daquela unidade. Exige registro único aprovado, vínculo à identidade
+física e aos dados mecânicos, fontes verificadas, prazo e km compatíveis e
+fingerprint incluindo o ateste. Informação incompleta, revogação, conflito de
+registros, mudança de identidade e os bloqueios do ano final continuam válidos.
+Registros com esse ateste não podem ser usados como modelos de regras
+automáticas para outras unidades. Os demais registros continuam dependendo
+da tag do cadastro e perdem o carimbo quando ela é retirada.
+
+Para revogar a indicação individual, revogar o registro canônico da unidade;
+a ausência de uma tag que já não existia não é uma nova revogação.
+
 ## Publicação e reversão
 
 Usar exclusivamente o fluxo documentado: master aprovado → workflow do painel →

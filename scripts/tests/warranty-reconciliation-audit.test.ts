@@ -448,3 +448,33 @@ test("audit honors the reconciliation unit-ID block for general, powertrain and 
     assert.ok(report.newWarrantyAlerts?.some((alert) => alert.reason === "unit-id-changed"));
   }
 });
+
+
+test("audit retains explicitly owner-confirmed units without reporting a synthetic API flag or flag removal", () => {
+  const matrix = fixture();
+  const source = raw({ id: "90001", diferenciais: [] });
+  const record = matrix.records[0];
+  record.unitBinding!.unitKey = factoryWarrantyCatalogFromApi(source)!.unitKey!;
+  record.catalogConfirmation = {
+    source: "netcar-owner",
+    attestationId: "explicit-unit-owner-confirmation",
+    confirmedAt: NOW.slice(0, 10),
+    basis: "explicit-unit-warranty-authorization",
+  };
+  approve(matrix);
+  const input = parse([source]);
+  const report = buildEquipmentAudit(input, null, NOW, matrix);
+  assert.equal(report.vehicles[0].warranty?.status, "eligible");
+  assert.equal(report.vehicles[0].warranty?.flagPresent, false);
+  assert.equal(report.newWarrantyAlerts?.length, 0);
+  const repeat = buildEquipmentAudit(input, report, LATER, matrix);
+  assert.equal(repeat.vehicles[0].warranty?.status, "eligible");
+  assert.equal(repeat.vehicles[0].warranty?.flagPresent, false);
+  assert.equal(repeat.warrantyHistory?.[0].states.length, 1);
+  assert.equal(repeat.newWarrantyAlerts?.length, 0);
+  record.status = "revoked";
+  const revoked = buildEquipmentAudit(input, repeat, LATER, matrix);
+  assert.equal(revoked.vehicles[0].warranty?.status, "blocked");
+  assert.equal(revoked.vehicles[0].warranty?.reason, "manual-revoked");
+  assert.equal(revoked.newWarrantyAlerts?.length, 1);
+});

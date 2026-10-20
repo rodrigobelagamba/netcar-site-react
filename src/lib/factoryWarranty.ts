@@ -52,6 +52,13 @@ export interface FactoryWarrantyRecord {
   unitBinding?: { unitKey: string; engine: string; transmission: string };
   optionalId: number;
   optionalConfirmed: boolean;
+  /** Explicit authorization for this reviewed unit; never changes the API flag. */
+  catalogConfirmation?: {
+    source: "netcar-owner";
+    attestationId: string;
+    confirmedAt: string;
+    basis: "explicit-unit-warranty-authorization";
+  };
   conditionsConfirmed: boolean;
   scope:
     | "basic-vehicle"
@@ -192,6 +199,26 @@ const knownMileage = (rule: WarrantyMileage | undefined) =>
     Number.isFinite(rule.limitKm) &&
     rule.limitKm > 0);
 
+/** Only the missing catalog flag may be replaced; all coverage gates still apply. */
+export function hasFactoryWarrantyCatalogConfirmation(
+  record: FactoryWarrantyRecord,
+  today: string,
+): boolean {
+  const confirmation = record.catalogConfirmation;
+  return !!(
+    confirmation &&
+    record.scope === "basic-vehicle" &&
+    record.unitBinding &&
+    confirmation.source === "netcar-owner" &&
+    confirmation.basis === "explicit-unit-warranty-authorization" &&
+    nonempty(confirmation.attestationId) &&
+    !unresolvedText(confirmation.attestationId) &&
+    validDate(confirmation.confirmedAt) &&
+    confirmation.confirmedAt <= record.reviewedAt &&
+    confirmation.confirmedAt <= today
+  );
+}
+
 /** Coverage can be common without asserting either actual usage or ownership. */
 function validCommonPolicy(record: FactoryWarrantyRecord): boolean {
   const policy = record.commonPolicy;
@@ -266,6 +293,9 @@ export function factoryWarrantyReviewFingerprint(
     ...(record.unitBinding ? { unitBinding: record.unitBinding } : {}),
     optionalId: record.optionalId,
     optionalConfirmed: record.optionalConfirmed,
+    ...(record.catalogConfirmation !== undefined
+      ? { catalogConfirmation: record.catalogConfirmation }
+      : {}),
     conditionsConfirmed: record.conditionsConfirmed,
     scope: record.scope,
     ...(record.scope === "powertrain"
@@ -341,17 +371,24 @@ function resolveFactoryWarrantyCoverage(
   )
     return undefined;
   if (!Number.isFinite(vehicle.price) || vehicle.price <= 0) return undefined;
-  if (
-    !Array.isArray(vehicle.diferenciais) ||
-    !vehicle.diferenciais.some((item) => item?.tag === "garantia_fabrica")
-  )
-    return undefined;
+  // An omitted collection is a partial/unknown read, not a known missing flag.
+  if (!Array.isArray(vehicle.diferenciais)) return undefined;
   // Inspect all records first: a revocation must not leave an old approval active.
   const candidates = matrix.records.filter(
     (entry) => entry?.vehicle?.vehicleId === vehicle.id,
   );
   if (candidates.length !== 1) return undefined;
   const record = candidates[0];
+  const catalogConfirmed = hasFactoryWarrantyCatalogConfirmation(record, today);
+  if (
+    (record.catalogConfirmation !== undefined && !catalogConfirmed) ||
+    (catalogConfirmed && matrix.records.some((entry) =>
+      entry !== record &&
+      entry?.unitBinding?.unitKey === record.unitBinding!.unitKey)) ||
+    (!vehicle.diferenciais.some((item) => item?.tag === "garantia_fabrica") &&
+      !(expectedScope === "basic-vehicle" && catalogConfirmed))
+  )
+    return undefined;
   const binding = record.unitBinding;
   if (matrix.requireUnitBinding === true && !binding) return undefined;
   if (

@@ -714,3 +714,161 @@ test("reply notes and month facts do not override the pending manual decision", 
   assert.equal(run(vehicle, matrix).reason, "manual-pending");
   assert.equal(resolveFactoryWarranty(vehicle, matrix, TODAY), undefined);
 });
+
+
+function ownerConfirmedFixture() {
+  const matrix = fixture();
+  matrix.records[0].catalogConfirmation = {
+    source: "netcar-owner",
+    attestationId: "explicit-reviewed-unit-owner-confirmation",
+    confirmedAt: TODAY,
+    basis: "explicit-unit-warranty-authorization",
+  };
+  approveTemplate(matrix);
+  return matrix;
+}
+const ownerConfirmedVehicle = () => candidate({
+  id: "reviewed-unit", unitKey: key("a"), diferenciais: [],
+});
+
+test("an explicit owner confirmation permits only its fully reviewed unit without changing the catalog flag", () => {
+  const matrix = ownerConfirmedFixture();
+  const vehicle = ownerConfirmedVehicle();
+  const before = JSON.stringify({ matrix, vehicle });
+  assert.equal(run(vehicle, matrix).status, "eligible");
+  assert.equal(resolveFactoryWarranty(vehicle, matrix, TODAY)?.estimatedEndYear, 2028);
+  assert.deepEqual(parsePublishedWarrantyRegistry(matrix), matrix);
+  assert.equal(JSON.stringify({ matrix, vehicle }), before);
+  assert.deepEqual(vehicle.diferenciais, []);
+  assert.equal(run({ ...vehicle, diferenciais: undefined }, matrix).reason, "warranty-flag-unknown");
+  assert.equal(resolveFactoryWarranty({ ...vehicle, diferenciais: undefined }, matrix, TODAY), undefined);
+});
+
+test("existing and new unconfirmed units retain their missing-flag block", () => {
+  for (const vehicle of [ownerConfirmedVehicle(), candidate({ diferenciais: [] })]) {
+    assert.equal(run(vehicle, fixture()).reason, "warranty-flag-removed");
+    assert.equal(resolveFactoryWarranty(vehicle, fixture(), TODAY), undefined);
+  }
+  const matrix = fixture();
+  const oldFingerprint = matrix.records[0].approvedFingerprint;
+  matrix.records[0].catalogConfirmation = undefined;
+  assert.equal(factoryWarrantyReviewFingerprint(matrix.records[0]), oldFingerprint);
+});
+
+test("owner confirmation is bound to its reviewed fingerprint and cannot be silently changed or removed", () => {
+  for (const patch of [
+    { attestationId: "different-owner-confirmation" },
+    { confirmedAt: "2026-10-08" },
+    { source: "manufacturer" },
+    { basis: "model-policy" },
+  ]) {
+    const matrix = ownerConfirmedFixture();
+    Object.assign(matrix.records[0].catalogConfirmation!, patch);
+    assert.notEqual(run(ownerConfirmedVehicle(), matrix).status, "eligible");
+    assert.equal(resolveFactoryWarranty(ownerConfirmedVehicle(), matrix, TODAY), undefined);
+  }
+  const matrix = ownerConfirmedFixture();
+  delete matrix.records[0].catalogConfirmation;
+  assert.equal(run(ownerConfirmedVehicle(), matrix).reason, "warranty-flag-removed");
+  assert.equal(resolveFactoryWarranty(ownerConfirmedVehicle(), matrix, TODAY), undefined);
+});
+
+test("invalid confirmation cannot bypass the gate even after a fingerprint refresh", () => {
+  for (const patch of [
+    { attestationId: "" }, { attestationId: "PENDENTE" },
+    { confirmedAt: "2026-02-30" }, { confirmedAt: "2026-10-10" },
+    { source: "manufacturer" }, { basis: "automatic-model-policy" },
+  ]) {
+    const matrix = ownerConfirmedFixture();
+    Object.assign(matrix.records[0].catalogConfirmation!, patch);
+    approveTemplate(matrix);
+    assert.notEqual(run(ownerConfirmedVehicle(), matrix).status, "eligible");
+    assert.equal(resolveFactoryWarranty(ownerConfirmedVehicle(), matrix, TODAY), undefined);
+  }
+  const matrix = ownerConfirmedFixture();
+  delete matrix.records[0].unitBinding;
+  matrix.requireUnitBinding = false;
+  approveTemplate(matrix);
+  assert.notEqual(run(ownerConfirmedVehicle(), matrix).status, "eligible");
+  assert.equal(resolveFactoryWarranty(ownerConfirmedVehicle(), matrix, TODAY), undefined);
+});
+
+test("published transport rejects malformed or broadened owner confirmations", () => {
+  for (const patch of [
+    { attestationId: "" }, { confirmedAt: "2026-02-30" },
+    { source: "manufacturer" }, { basis: "model-policy" },
+    { allowNewUnits: true },
+  ]) {
+    const matrix = ownerConfirmedFixture();
+    Object.assign(matrix.records[0].catalogConfirmation!, patch);
+    assert.throws(() => parsePublishedWarrantyRegistry(matrix), /Registro de garantias/);
+  }
+});
+
+test("owner confirmation preserves revoked, pending, conflicting and physical identity gates", () => {
+  for (const status of ["pending", "revoked", "ineligible"] as const) {
+    const matrix = ownerConfirmedFixture();
+    matrix.records[0].status = status;
+    assert.notEqual(run(ownerConfirmedVehicle(), matrix).status, "eligible");
+    assert.equal(resolveFactoryWarranty(ownerConfirmedVehicle(), matrix, TODAY), undefined);
+  }
+  for (const changedId of [false, true]) {
+    const matrix = ownerConfirmedFixture();
+    const conflict = structuredClone(matrix.records[0]);
+    conflict.recordId = "conflicting-decision";
+    conflict.status = "revoked";
+    if (changedId) conflict.vehicle.vehicleId = "previous-id";
+    matrix.records.push(conflict);
+    assert.notEqual(run(ownerConfirmedVehicle(), matrix).status, "eligible");
+    assert.equal(resolveFactoryWarranty(ownerConfirmedVehicle(), matrix, TODAY), undefined);
+  }
+  for (const patch of [
+    { id: "different-id" }, { unitKey: key("b") },
+    { motor: "1.6" }, { cambio: "Manual" },
+    { marca: "OTHER" }, { modelo: "KICKS SENSE" },
+    { anoFabricacao: 2024 }, { year: 2025 },
+    { km: 5099 }, { km: 100000 }, { km: NaN }, { price: 0 },
+  ]) {
+    const vehicle = { ...ownerConfirmedVehicle(), ...patch };
+    assert.notEqual(run(vehicle, ownerConfirmedFixture()).status, "eligible");
+    assert.equal(resolveFactoryWarranty(vehicle, ownerConfirmedFixture(), TODAY), undefined);
+  }
+});
+
+test("owner confirmation preserves documentary, approval-date and final-year checks", () => {
+  for (const patch of [
+    { sources: [] }, { optionalConfirmed: false }, { conditionsConfirmed: false },
+    { reviewedAt: "2026-10-10" }, { confirmedExpiryDate: "2026-10-08" },
+    { confirmedExpiryMonth: "2026-10" },
+  ]) {
+    const matrix = ownerConfirmedFixture();
+    Object.assign(matrix.records[0], patch);
+    approveTemplate(matrix);
+    assert.notEqual(run(ownerConfirmedVehicle(), matrix).status, "eligible");
+    assert.equal(resolveFactoryWarranty(ownerConfirmedVehicle(), matrix, TODAY), undefined);
+  }
+  const matrix = ownerConfirmedFixture();
+  assert.equal(run(ownerConfirmedVehicle(), matrix, "2028-01-01").reason, "confirmed-expiry-required");
+  assert.equal(resolveFactoryWarranty(ownerConfirmedVehicle(), matrix, "2028-01-01"), undefined);
+});
+
+test("one owner's unit confirmation cannot become a reusable model template or another coverage scope", () => {
+  for (const matrix of [fixture(), privateFixture()]) {
+    matrix.records[0].catalogConfirmation = ownerConfirmedFixture().records[0].catalogConfirmation;
+    approveTemplate(matrix);
+    assert.equal(run(candidate(), matrix).reason, "rule-template-not-reusable");
+    assert.equal(run(candidate({ diferenciais: [] }), matrix).reason, "warranty-flag-removed");
+    assert.equal(matrix.records.length, 1);
+  }
+  const powertrain = privateFixture("powertrain");
+  powertrain.records[0].catalogConfirmation = ownerConfirmedFixture().records[0].catalogConfirmation;
+  approveTemplate(powertrain);
+  assert.equal(resolveFactoryPowertrainWarranty(ownerConfirmedVehicle(), powertrain, TODAY), undefined);
+  const battery = privateFixture("basic-vehicle", true);
+  const record = battery.records[0];
+  record.catalogConfirmation = ownerConfirmedFixture().records[0].catalogConfirmation;
+  approveTemplate(battery);
+  record.supplementalCoverages![0].approvedFingerprint = factoryTractionBatteryReviewFingerprint(record, record.supplementalCoverages![0]);
+  assert.ok(resolveFactoryWarranty(ownerConfirmedVehicle(), battery, TODAY));
+  assert.equal(resolveFactoryTractionBatteryWarranty(ownerConfirmedVehicle(), battery, TODAY), undefined);
+});

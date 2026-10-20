@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "warranty-20261020-20094",
+  "reviewedAt": "2026-10-20",
+  "previousSourceCommit": "ba7d0f6a1e378a3edfefe43237041c78434e2520",
+  "approvedRecord": {
+    "recordId": "reviewed-v2-20261020-20094",
+    "status": "approved",
+    "reviewedAt": "2026-10-20",
+    "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261020-20094\",\"reviewedAt\":\"2026-10-20\",\"vehicle\":{\"vehicleId\":\"20094\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"JEEP\",\"modelVersion\":\"RENEGADE T270 TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:b35f170bf8f7ae7ae2aaf3863b5a03a2f52250eb8bd36181c6da792fe113809f\",\"engine\":\"1.3\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"catalogConfirmation\":{\"source\":\"netcar-owner\",\"attestationId\":\"netcar-owner-20261020-renegade-20094\",\"confirmedAt\":\"2026-10-20\",\"basis\":\"explicit-unit-warranty-authorization\"},\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":40964,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"jeep-renegade-my2025-term-20240726\",\"label\":\"Comunicado oficial Jeep\",\"url\":\"https://www.media.stellantis.com/br-pt/jeep/press/com-uma-gama-ainda-mais-competitiva-jeep-renegade-ganha-novas-versoes-na-linha-2025\",\"locator\":\"Comunicado de 26/07/2024 da linha brasileira Renegade MY2025: garantia de fábrica de cinco anos em todas as versões; inclui a versão de entrada 1.3 Turbo T270 com câmbio automático. Fonte para prazo e abrangência; condição de quilometragem desta unidade confirmada separadamente pelo responsável em20/10/2026.\",\"revision\":\"Jeep/Stellantis Brasil 2024-07-26; Renegade MY2025, todas as versões, incluindo 1.3 Turbo T270; prazo geral de cinco anos.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"2024-07-26\",\"modelYear\":2025,\"reviewId\":\"warranty-20261020-20094\",\"reviewedAt\":\"2026-10-20\"}}]}",
+    "vehicle": {
+      "vehicleId": "20094",
+      "brand": "JEEP",
+      "modelVersion": "RENEGADE T270 TURBO",
+      "manufactureYear": 2024,
+      "modelYear": 2025
+    },
+    "unitBinding": {
+      "unitKey": "plate-sha256:b35f170bf8f7ae7ae2aaf3863b5a03a2f52250eb8bd36181c6da792fe113809f",
+      "engine": "1.3",
+      "transmission": "AUTOMATICO"
+    },
+    "optionalId": 108,
+    "optionalConfirmed": true,
+    "catalogConfirmation": {
+      "source": "netcar-owner",
+      "attestationId": "netcar-owner-20261020-renegade-20094",
+      "confirmedAt": "2026-10-20",
+      "basis": "explicit-unit-warranty-authorization"
+    },
+    "conditionsConfirmed": true,
+    "scope": "basic-vehicle",
+    "termYears": 5,
+    "usage": "private",
+    "reviewedMileageKm": 40964,
+    "mileage": {
+      "kind": "unlimited"
+    },
+    "sources": [
+      {
+        "sourceId": "jeep-renegade-my2025-term-20240726",
+        "label": "Comunicado oficial Jeep",
+        "url": "https://www.media.stellantis.com/br-pt/jeep/press/com-uma-gama-ainda-mais-competitiva-jeep-renegade-ganha-novas-versoes-na-linha-2025",
+        "locator": "Comunicado de 26/07/2024 da linha brasileira Renegade MY2025: garantia de fábrica de cinco anos em todas as versões; inclui a versão de entrada 1.3 Turbo T270 com câmbio automático. Fonte para prazo e abrangência; condição de quilometragem desta unidade confirmada separadamente pelo responsável em20/10/2026.",
+        "revision": "Jeep/Stellantis Brasil 2024-07-26; Renegade MY2025, todas as versões, incluindo 1.3 Turbo T270; prazo geral de cinco anos.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "2024-07-26",
+          "modelYear": 2025,
+          "reviewId": "warranty-20261020-20094",
+          "reviewedAt": "2026-10-20"
+        }
+      }
+    ]
+  },
+  "publicVehicle": {
+    "id": "20094",
+    "marca": "JEEP",
+    "modelo": "RENEGADE T270 TURBO",
+    "motor": "1.3",
+    "cambio": "AUTOMATICO",
+    "year": 2025,
+    "anoFabricacao": 2024,
+    "km": 40964,
+    "price": 107900,
+    "unitKey": "plate-sha256:b35f170bf8f7ae7ae2aaf3863b5a03a2f52250eb8bd36181c6da792fe113809f",
+    "observedAt": 1792528537947,
+    "diferenciais": []
+  },
+  "publicStockCheckedAt": "2026-10-20T20:35:37.947Z",
+  "ownerAttestations": {
+    "publicationAuthorized": true,
+    "publicationAuthorizationText": "pode colocar",
+    "catalogIndication": "Explicit authorization for ID20094 after being told its upstream warranty flag is absent.",
+    "usage": "private",
+    "usageIsEstablishedNetcarPolicy": true,
+    "mileage": {
+      "kind": "unlimited"
+    },
+    "mileageConfirmationText": "quais sao das outras renegades? a condicao eh a mesma",
+    "mileageConfirmationBasis": "Responsible party confirmed that ID20094 has the same warranty conditions as the other Renegades. Existing reviewed Renegade20075 is basic-vehicle, five years, unlimited mileage. This explicit confirmation applies to20094 only; it is not a model-wide automatic policy.",
+    "referenceVehicleId": "20075"
+  },
+  "officialEvidence": {
+    "url": "https://www.media.stellantis.com/br-pt/jeep/press/com-uma-gama-ainda-mais-competitiva-jeep-renegade-ganha-novas-versoes-na-linha-2025",
+    "publicationDate": "2024-07-26",
+    "supports": [
+      "Brazilian Renegade MY2025 including base1.3Turbo T270 automatic.",
+      "Five-year basic factory warranty in all versions."
+    ],
+    "doesNotEstablish": [
+      "Unlimited mileage: attested by the responsible party for this unit.",
+      "Exact first-delivery or expiry date, or independent unit maintenance verification."
+    ]
+  },
+  "timing": {
+    "estimatedEndYear": 2029,
+    "method": "Manufacture2024 plus original five-year term; existing estimate footnote.",
+    "actualStartDate": null,
+    "confirmedExpiryDate": null,
+    "resaleRestartsTerm": false,
+    "finalYearRequiresConfirmedUnexpiredDate": true
+  },
+  "catalog": {
+    "upstreamWarrantyFlagPresent": false,
+    "upstreamUnchanged": true,
+    "indicationSource": "netcar-owner"
+  },
+  "preservation": {
+    "previousRecordCount": 18,
+    "previousRecordsSha256": "d098d02bd318a299cc268852fa95744a6aff28543b347634eeb0158c29dd42d0",
+    "automationRulesSha256": "ccbdd7315ffafe3c646ba068274f814c422e7da6efb18f299c980eb5ee4d7908",
+    "automationRulesUnchanged": true,
+    "individualOnly": true
+  },
+  "publication": {
+    "authorized": true,
+    "executedByThisAudit": false
+  }
+}

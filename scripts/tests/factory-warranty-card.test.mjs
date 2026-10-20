@@ -923,3 +923,37 @@ for (const compact of [false, true]) {
     });
   }
 }
+
+
+test("a reviewed owner's no-flag authorization still requires fresh stock and respects revocation", async () => {
+  currentNow = OriginalDate.parse("2026-10-20T19:00:00.000Z");
+  const record = factoryWarrantyMatrix.records.find((entry) => entry.vehicle.vehicleId === "19587");
+  const original = structuredClone(record);
+  const vehicle = { ...approvedVehicle(), diferenciais: [] };
+  try {
+    record.catalogConfirmation = {
+      source: "netcar-owner",
+      attestationId: "explicit-unit-owner-confirmation-card-fixture",
+      confirmedAt: record.reviewedAt,
+      basis: "explicit-unit-warranty-authorization",
+    };
+    record.approvedFingerprint = factoryWarrantyReviewFingerprint(record);
+    await renderCard(vehicle);
+    assertStamp(true);
+    assert.deepEqual(vehicle.diferenciais, []);
+    await renderCard({ ...vehicle, observedAt: Date.now() - 300_000 });
+    assertStamp(false);
+    await renderCard({ ...vehicle, observedAt: Date.now() + 1 });
+    assertStamp(false);
+    await renderCard({ ...vehicle, diferenciais: undefined });
+    assertStamp(false);
+    await renderCard(vehicle);
+    assertStamp(true);
+    record.status = "revoked";
+    await renderCard(vehicle);
+    assertStamp(false);
+  } finally {
+    delete record.catalogConfirmation;
+    Object.assign(record, original);
+  }
+});
