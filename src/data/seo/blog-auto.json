@@ -734,7 +734,8 @@
             "combustivel": "Flex",
             "destaque": "Eleito Melhor Compra",
             "url": "https://www.netcarmultimarcas.com.br/veiculo/aircross-shine-2017-ixn-xx25-20065",
-            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png"
+            "img": "https://www.netcarmultimarcas.com.br/imagens/banner/271_172032271_143360A38D92F5-9A8B-4A5F-AD68-C6CA164ED9F7-4.png",
+            "available": false
           },
           {
             "modelo": "Volkswagen Fox Comfortline",
