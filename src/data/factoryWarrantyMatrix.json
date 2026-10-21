@@ -1089,6 +1089,64 @@
           }
         }
       ]
+    },
+    {
+      "recordId": "reviewed-v2-20261021-20068",
+      "status": "approved",
+      "reviewedAt": "2026-10-21",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261021-20068\",\"reviewedAt\":\"2026-10-21\",\"vehicle\":{\"vehicleId\":\"20068\",\"manufactureYear\":2025,\"modelYear\":2025,\"brand\":\"PEUGEOT\",\"modelVersion\":\"2008 ACTIVE T200 TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:59bdd15123e307fcff6bd1a2d9a52a99904977f9d9968dcf967800adc5275be5\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":18500,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"peugeot-2008-my2025-manual-202406\",\"label\":\"Manual oficial Peugeot 2008 AM24–25\",\"url\":\"https://carros.peugeot.com.br/content/dam/peugeot/brazil/b2c/owners/maintain-your-car/manuais/2024/setembro/Peugeot-2008-II-2024-06-br.pdf\",\"locator\":\"Portal oficial de manuais Peugeot, seção 2008 AM/24-25. Manual brasileiro: PDF245 / Manutenção e Garantia p.5, veículos de passeio combustão/flex: 36 meses, sem limite de quilometragem, desde a entrega original; reparação/substituição de peças defeituosas reconhecidas pela Peugeot e mão de obra. PDF243/p.3: certificado individual de início e expiração. PDF209/p.205: motor 1.0 Turbo200 e câmbio CVT. PDF252–253: condições de manutenção e exclusões.\",\"revision\":\"Peugeot-2008-II-2024-06-br; edição 2024-06, Brasil, AM24-25, novo 2008 1.0 Turbo200 CVT flex.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"Peugeot-2008-II-2024-06-br\",\"modelYear\":2025,\"reviewId\":\"warranty-20261021-20068\",\"reviewedAt\":\"2026-10-21\"}},{\"sourceId\":\"peugeot-2008-my2025-launch-20240807\",\"label\":\"Lançamento oficial Peugeot 2008\",\"url\":\"https://www.media.stellantis.com/br-pt/peugeot/press/novo-peugeot-2008-design-magnetico-com-atitude-sofisticacao-e-tecnologia\",\"locator\":\"Comunicado brasileiro de 07/08/2024: novo Peugeot 2008, incluindo versão Active, motor 1.0 Turbo200 e câmbio CVT, com três anos de garantia. Confirma a aplicação à geração e versão; quilometragem e início documentados no manual AM24-25.\",\"revision\":\"Peugeot/Stellantis Brasil 2024-08-07; lançamento do novo 2008, Active Turbo200 CVT, três anos de garantia.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"2024-08-07\",\"modelYear\":2025,\"reviewId\":\"warranty-20261021-20068\",\"reviewedAt\":\"2026-10-21\"}}]}",
+      "vehicle": {
+        "vehicleId": "20068",
+        "brand": "PEUGEOT",
+        "modelVersion": "2008 ACTIVE T200 TURBO",
+        "manufactureYear": 2025,
+        "modelYear": 2025
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:59bdd15123e307fcff6bd1a2d9a52a99904977f9d9968dcf967800adc5275be5",
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "usage": "private",
+      "reviewedMileageKm": 18500,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "sources": [
+        {
+          "sourceId": "peugeot-2008-my2025-manual-202406",
+          "label": "Manual oficial Peugeot 2008 AM24–25",
+          "url": "https://carros.peugeot.com.br/content/dam/peugeot/brazil/b2c/owners/maintain-your-car/manuais/2024/setembro/Peugeot-2008-II-2024-06-br.pdf",
+          "locator": "Portal oficial de manuais Peugeot, seção 2008 AM/24-25. Manual brasileiro: PDF245 / Manutenção e Garantia p.5, veículos de passeio combustão/flex: 36 meses, sem limite de quilometragem, desde a entrega original; reparação/substituição de peças defeituosas reconhecidas pela Peugeot e mão de obra. PDF243/p.3: certificado individual de início e expiração. PDF209/p.205: motor 1.0 Turbo200 e câmbio CVT. PDF252–253: condições de manutenção e exclusões.",
+          "revision": "Peugeot-2008-II-2024-06-br; edição 2024-06, Brasil, AM24-25, novo 2008 1.0 Turbo200 CVT flex.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "Peugeot-2008-II-2024-06-br",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261021-20068",
+            "reviewedAt": "2026-10-21"
+          }
+        },
+        {
+          "sourceId": "peugeot-2008-my2025-launch-20240807",
+          "label": "Lançamento oficial Peugeot 2008",
+          "url": "https://www.media.stellantis.com/br-pt/peugeot/press/novo-peugeot-2008-design-magnetico-com-atitude-sofisticacao-e-tecnologia",
+          "locator": "Comunicado brasileiro de 07/08/2024: novo Peugeot 2008, incluindo versão Active, motor 1.0 Turbo200 e câmbio CVT, com três anos de garantia. Confirma a aplicação à geração e versão; quilometragem e início documentados no manual AM24-25.",
+          "revision": "Peugeot/Stellantis Brasil 2024-08-07; lançamento do novo 2008, Active Turbo200 CVT, três anos de garantia.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "2024-08-07",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261021-20068",
+            "reviewedAt": "2026-10-21"
+          }
+        }
+      ]
     }
   ],
   "requireUnitBinding": true,

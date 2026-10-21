@@ -32,6 +32,82 @@ const current = read(
 const newUnitsAudit = read("../../docs/audits/factory-warranty-songplus-tiggo5x-2026-10-15.json");
 const compassAudit = read("../../docs/audits/factory-warranty-compass-19866-2026-10-10.json");
 const renegadeAudit = read("../../docs/audits/factory-warranty-renegade-20094-2026-10-20.json");
+const peugeotAudit = read("../../docs/audits/factory-warranty-peugeot-20068-2026-10-21.json");
+
+test("Peugeot20068 uses the official three-year unlimited general warranty with its original catalog flag", () => {
+  const record = current.records.find((entry) => entry.vehicle.vehicleId === "20068")!;
+  const vehicle = peugeotAudit.publicVehicle as WarrantyCatalogVehicle;
+  const date = peugeotAudit.reviewedAt;
+  assert.deepEqual(record, peugeotAudit.approvedRecord);
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(record.catalogConfirmation, undefined);
+  assert.equal(vehicle.diferenciais?.some((entry) => entry.tag === "garantia_fabrica"), true);
+  assert.equal(record.termYears, 3);
+  assert.equal(record.scope, "basic-vehicle");
+  assert.deepEqual(record.mileage, { kind: "unlimited" });
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, date).status, "eligible");
+  assert.equal(resolveFactoryWarranty(vehicle, current, date)?.estimatedEndYear, 2028);
+  assert.equal(resolveFactoryWarranty({ ...vehicle, km: 200000 }, current, date)?.estimatedEndYear, 2028);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, date), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, date), undefined);
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, "2028-01-01").reason, "confirmed-expiry-required");
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2028-01-01"), undefined);
+  assert.equal(record.confirmedExpiryDate, undefined);
+  assert.equal(record.confirmedExpiryMonth, undefined);
+  assert.equal(peugeotAudit.timing.actualStartDate, null);
+  assert.equal(peugeotAudit.timing.confirmedExpiryDate, null);
+  assert.equal(peugeotAudit.timing.resaleRestartsTerm, false);
+});
+
+test("Peugeot20068 keeps documentary mileage distinct from operational use and preserves all nineteen prior records", () => {
+  const record = current.records.find((entry) => entry.vehicle.vehicleId === "20068")!;
+  const manual = record.sources.find((source) => source.url === peugeotAudit.officialEvidence.manual.url)!;
+  assert.ok(manual);
+  assert.equal(manual.verification.status, "verified");
+  assert.equal(manual.verification.modelYear, 2025);
+  assert.equal(manual.verification.documentCode, "Peugeot-2008-II-2024-06-br");
+  assert.equal(peugeotAudit.officialEvidence.manual.coveragePdfPage, 245);
+  assert.equal(peugeotAudit.ownerAttestations.mileageFromOfficialManual, true);
+  assert.equal(record.usage, "private");
+  assert.equal(peugeotAudit.ownerAttestations.usageIsEstablishedNetcarPolicy, true);
+  assert.equal(peugeotAudit.catalog.upstreamWarrantyFlagPresent, true);
+  assert.equal(peugeotAudit.catalog.indicationSource, "upstream-warranty-flag");
+  const others = current.records.filter((entry) =>
+    entry !== record && entry.reviewedAt <= peugeotAudit.reviewedAt);
+  assert.equal(others.length, peugeotAudit.preservation.previousRecordCount);
+  assert.equal(others.length, 19);
+  assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), peugeotAudit.preservation.previousRecordsSha256);
+  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), peugeotAudit.preservation.automationRulesSha256);
+  assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
+});
+
+test("Peugeot20068 blocks flag removal, changed live identity, regressed mileage and revoked or unverified approval", () => {
+  const vehicle = peugeotAudit.publicVehicle as WarrantyCatalogVehicle;
+  const date = peugeotAudit.reviewedAt;
+  for (const patch of [
+    { diferenciais: [] }, { diferenciais: undefined }, { id: "different-peugeot" },
+    { unitKey: undefined }, { unitKey: `vin-sha256:${"f".repeat(64)}` },
+    { marca: "OTHER" }, { modelo: "2008 ALLURE T200 TURBO" },
+    { motor: "1.6" }, { cambio: "MANUAL" },
+    { anoFabricacao: 2024 }, { year: 2024 },
+    { km: vehicle.km - 1 }, { km: NaN }, { price: 0 },
+  ]) {
+    const changed = { ...vehicle, ...patch };
+    const decision = reconcileFactoryWarrantyVehicle(changed, current, date);
+    assert.notEqual(decision.status, "eligible");
+    assert.equal(resolveFactoryWarranty(changed, decision.matrix, date), undefined);
+  }
+  for (const change of ["revoked", "document-pending", "document-year"] as const) {
+    const matrix = structuredClone(current);
+    const record = matrix.records.find((entry) => entry.vehicle.vehicleId === "20068")!;
+    if (change === "revoked") record.status = "revoked";
+    if (change === "document-pending") record.sources[0].verification.status = "pending";
+    if (change === "document-year") record.sources[0].verification.modelYear = 2024;
+    record.approvedFingerprint = factoryWarrantyReviewFingerprint(record);
+    assert.notEqual(reconcileFactoryWarrantyVehicle(vehicle, matrix, date).status, "eligible");
+    assert.equal(resolveFactoryWarranty(vehicle, matrix, date), undefined);
+  }
+});
 
 test("owner-confirmed Renegade20094 has its own five-year stamp and preserves prior decisions", () => {
   const record = current.records.find((entry) => entry.vehicle.vehicleId === "20094")!;
@@ -45,7 +121,10 @@ test("owner-confirmed Renegade20094 has its own five-year stamp and preserves pr
   assert.equal(resolveFactoryWarranty(vehicle, current, "2029-01-01"), undefined);
   assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, "2026-10-20"), undefined);
   assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, "2026-10-20"), undefined);
-  const others = current.records.filter((entry) => entry !== record);
+  // Later unit approvals are outside the October20 preservation snapshot.
+  // Its original record count and complete-content hash remain mandatory.
+  const others = current.records.filter((entry) =>
+    entry !== record && entry.reviewedAt <= renegadeAudit.reviewedAt);
   assert.equal(others.length, renegadeAudit.preservation.previousRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), renegadeAudit.preservation.previousRecordsSha256);
   assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), renegadeAudit.preservation.automationRulesSha256);
@@ -175,7 +254,8 @@ const currentRecord = (id: string) =>
 const observed = (id: string) => {
   const vehicle = migration.publicVehicles.find((entry) => entry.id === id)
     ?? (newUnitsAudit.publicVehicles as WarrantyCatalogVehicle[]).find((entry) => entry.id === id)
-    ?? (id === "20094" ? renegadeAudit.publicVehicle as WarrantyCatalogVehicle : undefined);
+    ?? (id === "20094" ? renegadeAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
+    ?? (id === "20068" ? peugeotAudit.publicVehicle as WarrantyCatalogVehicle : undefined);
   assert.ok(vehicle, `Current public snapshot missing vehicle ${id}`);
   return vehicle;
 };

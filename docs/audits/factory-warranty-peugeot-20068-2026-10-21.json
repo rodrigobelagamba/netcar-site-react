@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "warranty-20261021-20068",
+  "reviewedAt": "2026-10-21",
+  "previousSourceCommit": "fd1f632051319f2bf0587739b1438708728b5b96",
+  "approvedRecord": {
+    "recordId": "reviewed-v2-20261021-20068",
+    "status": "approved",
+    "reviewedAt": "2026-10-21",
+    "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261021-20068\",\"reviewedAt\":\"2026-10-21\",\"vehicle\":{\"vehicleId\":\"20068\",\"manufactureYear\":2025,\"modelYear\":2025,\"brand\":\"PEUGEOT\",\"modelVersion\":\"2008 ACTIVE T200 TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:59bdd15123e307fcff6bd1a2d9a52a99904977f9d9968dcf967800adc5275be5\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":18500,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"peugeot-2008-my2025-manual-202406\",\"label\":\"Manual oficial Peugeot 2008 AM24–25\",\"url\":\"https://carros.peugeot.com.br/content/dam/peugeot/brazil/b2c/owners/maintain-your-car/manuais/2024/setembro/Peugeot-2008-II-2024-06-br.pdf\",\"locator\":\"Portal oficial de manuais Peugeot, seção 2008 AM/24-25. Manual brasileiro: PDF245 / Manutenção e Garantia p.5, veículos de passeio combustão/flex: 36 meses, sem limite de quilometragem, desde a entrega original; reparação/substituição de peças defeituosas reconhecidas pela Peugeot e mão de obra. PDF243/p.3: certificado individual de início e expiração. PDF209/p.205: motor 1.0 Turbo200 e câmbio CVT. PDF252–253: condições de manutenção e exclusões.\",\"revision\":\"Peugeot-2008-II-2024-06-br; edição 2024-06, Brasil, AM24-25, novo 2008 1.0 Turbo200 CVT flex.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"Peugeot-2008-II-2024-06-br\",\"modelYear\":2025,\"reviewId\":\"warranty-20261021-20068\",\"reviewedAt\":\"2026-10-21\"}},{\"sourceId\":\"peugeot-2008-my2025-launch-20240807\",\"label\":\"Lançamento oficial Peugeot 2008\",\"url\":\"https://www.media.stellantis.com/br-pt/peugeot/press/novo-peugeot-2008-design-magnetico-com-atitude-sofisticacao-e-tecnologia\",\"locator\":\"Comunicado brasileiro de 07/08/2024: novo Peugeot 2008, incluindo versão Active, motor 1.0 Turbo200 e câmbio CVT, com três anos de garantia. Confirma a aplicação à geração e versão; quilometragem e início documentados no manual AM24-25.\",\"revision\":\"Peugeot/Stellantis Brasil 2024-08-07; lançamento do novo 2008, Active Turbo200 CVT, três anos de garantia.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"2024-08-07\",\"modelYear\":2025,\"reviewId\":\"warranty-20261021-20068\",\"reviewedAt\":\"2026-10-21\"}}]}",
+    "vehicle": {
+      "vehicleId": "20068",
+      "brand": "PEUGEOT",
+      "modelVersion": "2008 ACTIVE T200 TURBO",
+      "manufactureYear": 2025,
+      "modelYear": 2025
+    },
+    "unitBinding": {
+      "unitKey": "plate-sha256:59bdd15123e307fcff6bd1a2d9a52a99904977f9d9968dcf967800adc5275be5",
+      "engine": "1.0",
+      "transmission": "AUTOMATICO"
+    },
+    "optionalId": 108,
+    "optionalConfirmed": true,
+    "conditionsConfirmed": true,
+    "scope": "basic-vehicle",
+    "termYears": 3,
+    "usage": "private",
+    "reviewedMileageKm": 18500,
+    "mileage": {
+      "kind": "unlimited"
+    },
+    "sources": [
+      {
+        "sourceId": "peugeot-2008-my2025-manual-202406",
+        "label": "Manual oficial Peugeot 2008 AM24–25",
+        "url": "https://carros.peugeot.com.br/content/dam/peugeot/brazil/b2c/owners/maintain-your-car/manuais/2024/setembro/Peugeot-2008-II-2024-06-br.pdf",
+        "locator": "Portal oficial de manuais Peugeot, seção 2008 AM/24-25. Manual brasileiro: PDF245 / Manutenção e Garantia p.5, veículos de passeio combustão/flex: 36 meses, sem limite de quilometragem, desde a entrega original; reparação/substituição de peças defeituosas reconhecidas pela Peugeot e mão de obra. PDF243/p.3: certificado individual de início e expiração. PDF209/p.205: motor 1.0 Turbo200 e câmbio CVT. PDF252–253: condições de manutenção e exclusões.",
+        "revision": "Peugeot-2008-II-2024-06-br; edição 2024-06, Brasil, AM24-25, novo 2008 1.0 Turbo200 CVT flex.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "Peugeot-2008-II-2024-06-br",
+          "modelYear": 2025,
+          "reviewId": "warranty-20261021-20068",
+          "reviewedAt": "2026-10-21"
+        }
+      },
+      {
+        "sourceId": "peugeot-2008-my2025-launch-20240807",
+        "label": "Lançamento oficial Peugeot 2008",
+        "url": "https://www.media.stellantis.com/br-pt/peugeot/press/novo-peugeot-2008-design-magnetico-com-atitude-sofisticacao-e-tecnologia",
+        "locator": "Comunicado brasileiro de 07/08/2024: novo Peugeot 2008, incluindo versão Active, motor 1.0 Turbo200 e câmbio CVT, com três anos de garantia. Confirma a aplicação à geração e versão; quilometragem e início documentados no manual AM24-25.",
+        "revision": "Peugeot/Stellantis Brasil 2024-08-07; lançamento do novo 2008, Active Turbo200 CVT, três anos de garantia.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "2024-08-07",
+          "modelYear": 2025,
+          "reviewId": "warranty-20261021-20068",
+          "reviewedAt": "2026-10-21"
+        }
+      }
+    ]
+  },
+  "publicVehicle": {
+    "id": "20068",
+    "marca": "PEUGEOT",
+    "modelo": "2008 ACTIVE T200 TURBO",
+    "motor": "1.0",
+    "cambio": "AUTOMATICO",
+    "year": 2025,
+    "anoFabricacao": 2025,
+    "km": 18500,
+    "price": 109900,
+    "unitKey": "plate-sha256:59bdd15123e307fcff6bd1a2d9a52a99904977f9d9968dcf967800adc5275be5",
+    "observedAt": 1792592314397,
+    "diferenciais": [
+      {
+        "tag": "garantia_fabrica",
+        "descricao": ""
+      }
+    ]
+  },
+  "publicStockCheckedAt": "2026-10-21T14:18:34.397Z",
+  "ownerAttestations": {
+    "publicationAuthorized": true,
+    "publicationAuthorizationText": "arrumei ...esssa 2008 tem garantia ...pode carimbar",
+    "catalogIndication": "Responsible party confirmed factory warranty and authorized ID20068. The complete live API now includes the original warranty flag; the record uses that flag without an override.",
+    "usage": "private",
+    "usageIsEstablishedNetcarPolicy": true,
+    "mileageFromOfficialManual": true
+  },
+  "officialEvidence": {
+    "manual": {
+      "url": "https://carros.peugeot.com.br/content/dam/peugeot/brazil/b2c/owners/maintain-your-car/manuais/2024/setembro/Peugeot-2008-II-2024-06-br.pdf",
+      "portalUrl": "https://carros.peugeot.com.br/servicos-e-manutencao/manutencao-do-veiculo/manuais.html/_tel_08007032424",
+      "portalSection": "2008 AM/24-25",
+      "sha256": "a804ee7d1620b931d474f195eee8cdc6360a092c6bc0c84b7a65d4484db7d0d9",
+      "pages": 316,
+      "coveragePdfPage": 245,
+      "coveragePrintedPage": 5,
+      "supports": [
+        "Brazilian new 2008 AM24-25, 1.0 Turbo200 flex CVT.",
+        "General vehicle warranty: 36 months, unlimited mileage, from original delivery.",
+        "Contractual coverage and exclusions; maintenance conditions remain applicable."
+      ],
+      "doesNotEstablish": [
+        "Individual first-delivery or expiry date.",
+        "Independent verification of this unit maintenance history."
+      ]
+    },
+    "launch": {
+      "url": "https://www.media.stellantis.com/br-pt/peugeot/press/novo-peugeot-2008-design-magnetico-com-atitude-sofisticacao-e-tecnologia",
+      "publicationDate": "2024-08-07",
+      "supports": [
+        "Active version with 1.0 Turbo200 CVT.",
+        "Three-year factory warranty."
+      ]
+    }
+  },
+  "timing": {
+    "estimatedEndYear": 2028,
+    "method": "Manufacture2025 plus original three-year term; existing estimate footnote.",
+    "actualStartDate": null,
+    "confirmedExpiryDate": null,
+    "resaleRestartsTerm": false,
+    "finalYearRequiresConfirmedUnexpiredDate": true
+  },
+  "catalog": {
+    "upstreamWarrantyFlagPresent": true,
+    "upstreamUnchanged": true,
+    "indicationSource": "upstream-warranty-flag"
+  },
+  "preservation": {
+    "previousRecordCount": 19,
+    "previousRecordsSha256": "460eee2e398efdb535605d92cb60387933a3f5833bea15bda315584871a28105",
+    "automationRulesSha256": "ccbdd7315ffafe3c646ba068274f814c422e7da6efb18f299c980eb5ee4d7908",
+    "automationRulesUnchanged": true,
+    "individualOnly": true
+  },
+  "publication": {
+    "authorized": true,
+    "executedByThisAudit": false
+  }
+}
