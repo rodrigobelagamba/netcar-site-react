@@ -19,6 +19,10 @@ import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 import { NearbyMarketsNav } from "@/modules/seo/components/RegionalCrossLinks";
 import { generateVehicleSlug } from "@/lib/slug";
 import { sortShowroomVehicles } from "@/lib/showroomStock";
+import {
+  resolveLandingFaq,
+  resolveLandingParagraphs,
+} from "@/lib/landingStockCopy.mjs";
 
 export function EstoqueLandingPage() {
   const { landingSlug } = useParams({ from: "/comprar-{$landingSlug}" });
@@ -62,6 +66,16 @@ export function EstoqueLandingPage() {
   const hasStockData = Array.isArray(vehicles);
   const waitingForStock =
     isLoading || (isFetching && availableVehicles.length === 0);
+  const currentStock =
+    hasStockData && !isError && !waitingForStock ? availableVehicles : null;
+  const paragraphs = useMemo(
+    () => (landing ? resolveLandingParagraphs(landing, currentStock) : []),
+    [landing, currentStock],
+  );
+  const faq = useMemo(
+    () => (landing ? resolveLandingFaq(landing, currentStock) : []),
+    [landing, currentStock],
+  );
 
   useMetaTags({
     title: landing?.title,
@@ -78,7 +92,7 @@ export function EstoqueLandingPage() {
     const faqSchema = {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: landing.faq.map((item) => ({
+      mainEntity: faq.map((item) => ({
         "@type": "Question",
         name: item.q,
         acceptedAnswer: { "@type": "Answer", text: item.a },
@@ -128,6 +142,7 @@ export function EstoqueLandingPage() {
     hasStockData,
     isError,
     landing,
+    faq,
     visibleVehicles,
     waitingForStock,
   ]);
@@ -342,7 +357,7 @@ export function EstoqueLandingPage() {
             <h2 className="text-2xl font-bold text-fg">
               Compare antes de escolher
             </h2>
-            {landing.paragraphs.map((paragraph) => (
+            {paragraphs.map((paragraph) => (
               <p key={paragraph} className="leading-relaxed text-gray-600">
                 {paragraph}
               </p>
@@ -361,7 +376,7 @@ export function EstoqueLandingPage() {
             Perguntas frequentes
           </h2>
           <div className="space-y-4">
-            {landing.faq.map((item) => (
+            {faq.map((item) => (
               <div
                 key={item.q}
                 className="rounded-2xl bg-white p-5 shadow-sm border border-gray-100"

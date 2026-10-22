@@ -14,7 +14,7 @@ Requisição
    ├─ bot (Googlebot, WhatsApp, curl…) ─┬─ /                     → seo-pagina.php
    │                                    ├─ /veiculo/{slug}       → detalhe-veiculo.php
    │                                    ├─ /seminovos-{cidade}   → seo-static/city-*.html
-   │                                    ├─ /comprar-{slug}       → seo-static/landing-*.html
+   │                                    ├─ /comprar-{slug}       → seo-landing.php (template + estoque atual)
    │                                    ├─ /vender-carro-{cid}   → seo-static/sell-city-*.html
    │                                    ├─ /blog/{slug}          → seo-static/blog-*.html
    │                                    └─ /financiamento, /atendimento-24h,
@@ -23,6 +23,12 @@ Requisição
    │
    └─ pessoa ─────────────────────────── index.html (SPA React)
 ```
+
+Desde 22/10/2026, as seleções `/comprar-*` consultam a API no pedido inicial:
+cards, preços e schema usam a mesma seleção disponível. O navegador recebe
+bootstrap atual pelo `index.php`. Falha da fonte devolve 503 ao crawler e
+omite o bootstrap antigo no navegador; as duas respostas usam `no-store`.
+Ver [contrato e validação das seleções](landing-current-availability.md).
 
 ## Ficha de veículo — `/veiculo/{slug}`
 

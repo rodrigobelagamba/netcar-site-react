@@ -129,5 +129,7 @@ export interface LandingSeoPage {
   h1: string;
   intro: string;
   paragraphs: string[];
+  /** Live stock profile tokens; paragraphs remain a stock-independent fallback. */
+  paragraphTemplates?: string[];
   faq: CityFaq[];
 }

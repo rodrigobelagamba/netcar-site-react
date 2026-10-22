@@ -17,6 +17,7 @@
 import { writeFileSync } from "fs";
 import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
+import { LANDING_PROFILE_TOKENS } from "../src/lib/landingStockCopy.mjs";
 import {
   clearSeoBuildStockSnapshot,
   readSeoBuildStockSnapshot,
@@ -374,25 +375,17 @@ function pickVariant(arr, index) {
   return arr[index % arr.length];
 }
 
-function marcaLanding(name, count, profile, variantIndex) {
+export function marcaLanding(name, count, profile, variantIndex) {
   const nice = titleCase(name);
   const slug = slugify(name);
   const hasStock = count >= MIN_MARCA;
-  const hasData =
-    profile.minPrice && profile.maxPrice && profile.minYear && profile.maxYear;
   const intro = hasStock
     ? pickVariant(MARCA_INTROS, variantIndex)(nice, profile)
     : `Veja nesta página os ${nice} que estiverem disponíveis na Netcar. Quando houver variedade suficiente no estoque, as unidades aparecem com foto, preço e ficha para comparação.`;
-  const paragrafos =
-    hasStock && hasData
-      ? [
-          pickVariant(MARCA_PARAGRAFOS, variantIndex)(nice, profile),
-          pickVariant(MARCA_FECHO, variantIndex)(nice),
-        ]
-      : [
-          `A disponibilidade de ${nice} muda conforme as entradas e vendas do estoque. As unidades anunciadas passam por checklist técnico antes da vitrine; enquanto houver poucas opções, você também pode comparar modelos equivalentes e outras marcas.`,
-          pickVariant(MARCA_FECHO, variantIndex)(nice),
-        ];
+  const paragrafos = [
+    `A disponibilidade de ${nice} muda conforme as entradas e vendas do estoque. As unidades anunciadas passam por checklist técnico antes da vitrine; você também pode comparar modelos equivalentes e outras marcas.`,
+    pickVariant(MARCA_FECHO, variantIndex)(nice),
+  ];
   return {
     slug,
     type: "marca",
@@ -409,6 +402,10 @@ function marcaLanding(name, count, profile, variantIndex) {
     h1: `${nice} seminovos em Esteio/RS`,
     intro,
     paragraphs: paragrafos,
+    paragraphTemplates: [
+      pickVariant(MARCA_PARAGRAFOS, variantIndex)(nice, LANDING_PROFILE_TOKENS),
+      paragrafos[1],
+    ],
     faq: hasStock
       ? pickVariant(
           [
@@ -575,25 +572,18 @@ const CATEGORIA_PARAGRAFOS = [
     `Entre os ${l} disponíveis, os preços partem de ${p.minPrice} e chegam a ${p.maxPrice}, com anos entre ${p.minYear} e ${p.maxYear}. Compare os anúncios e confirme os finalistas pelo WhatsApp.`,
 ];
 
-function categoriaLanding(name, count, profile, variantIndex) {
+export function categoriaLanding(name, count, profile, variantIndex) {
   const nice = name.toUpperCase() === name ? name : titleCase(name);
   const lower = String(name).toLowerCase();
   const slug = slugify(name);
   const hasStock = count >= MIN_CATEGORIA;
-  const hasData =
-    profile.minPrice && profile.maxPrice && profile.minYear && profile.maxYear;
   const intro = hasStock
     ? pickVariant(CATEGORIA_INTROS, variantIndex)(lower, profile)
     : `Acompanhe nesta página quando houver variedade de ${lower} no estoque da Netcar. Enquanto isso, compare categorias e faixas de preço disponíveis.`;
-  const paragrafos = hasData
-    ? [
-        pickVariant(CATEGORIA_PARAGRAFOS, variantIndex)(lower, profile),
-        pickVariant(MARCA_FECHO, variantIndex)(lower),
-      ]
-    : [
-        `No estoque você encontra ${lower} de diferentes marcas e faixas de preço. Compare os anúncios e confirme a disponibilidade antes da visita.`,
-        pickVariant(MARCA_FECHO, variantIndex)(lower),
-      ];
+  const paragrafos = [
+    `Consulte os anúncios de ${lower}, compare as fichas e confirme a disponibilidade antes da visita.`,
+    pickVariant(MARCA_FECHO, variantIndex)(lower),
+  ];
   return {
     slug,
     type: "categoria",
@@ -610,6 +600,10 @@ function categoriaLanding(name, count, profile, variantIndex) {
     h1: `${nice} seminovos em Esteio/RS`,
     intro,
     paragraphs: paragrafos,
+    paragraphTemplates: [
+      pickVariant(CATEGORIA_PARAGRAFOS, variantIndex)(lower, LANDING_PROFILE_TOKENS),
+      paragrafos[1],
+    ],
     faq: [
       {
         q: `Quais ${lower} a Netcar tem em estoque?`,
@@ -717,7 +711,7 @@ export function priceLanding(config, vehicles) {
   };
 }
 
-function hybridLanding(vehicles) {
+export function hybridLanding(vehicles) {
   const filters = { combustivel: "HIBRIDO" };
   const profile = stockProfile(vehicles, filters);
   const hasStock = profile.count >= MIN_COMBUSTIVEL;
@@ -731,13 +725,14 @@ function hybridLanding(vehicles) {
     filters,
     relatedSlugs: [],
     title: "Carros híbridos seminovos em Esteio/RS | Netcar",
-    description: hasStock
-      ? `${profile.count} carros híbridos seminovos no estoque atual da Netcar em Esteio/RS. Compare ano, preço, km e ficha de cada veículo.`
-      : "Carros híbridos seminovos na Netcar, em Esteio/RS. Acompanhe novas entradas e compare alternativas eletrificadas disponíveis no estoque.",
+    description: "Carros híbridos seminovos na Netcar, em Esteio/RS. Consulte os anúncios e compare ano, preço, km e ficha de cada veículo.",
     h1: "Carros híbridos seminovos em Esteio/RS",
-    intro: hasStock
-      ? `A seleção atual tem ${profile.count} híbridos de ${profile.minYear} a ${profile.maxYear}, entre ${profile.minPrice} e ${profile.maxPrice}. Veja cada ficha antes de decidir.`
-      : "A página permanece disponível para acompanhar novas entradas de híbridos. Enquanto a seleção não tiver variedade suficiente, veja alternativas reais do estoque.",
+    intro: "Consulte os híbridos anunciados pela Netcar. Veja ano, preço e ficha de cada unidade antes de decidir.",
+    paragraphTemplates: [
+      "A seleção atual tem {{count}} híbridos de {{minYear}} a {{maxYear}}, entre {{minPrice}} e {{maxPrice}}. Veja cada ficha antes de decidir.",
+      "Híbridos não são todos iguais: arquitetura, bateria, motor a combustão e forma de recarga variam por modelo. Confirme histórico, manutenção prevista e cobertura do fabricante para a unidade escolhida.",
+      "Alguns veículos eletrificados podem atender programas específicos de crédito, mas elegibilidade depende do ano, tecnologia, valor e regras vigentes. A Netcar não promete enquadramento ou aprovação.",
+    ],
     paragraphs: [
       `Híbridos não são todos iguais: arquitetura, bateria, motor a combustão e forma de recarga variam por modelo. Confirme histórico, manutenção prevista e cobertura do fabricante para a unidade escolhida.`,
       `Alguns veículos eletrificados podem atender programas específicos de crédito, mas elegibilidade depende do ano, tecnologia, valor e regras vigentes. A Netcar não promete enquadramento ou aprovação.`,
@@ -745,7 +740,7 @@ function hybridLanding(vehicles) {
     faq: [
       {
         q: "Quais híbridos estão disponíveis agora?",
-        a: `As ${profile.count} unidades atuais aparecem nesta página com ano, preço e ficha individual. Confirme a disponibilidade antes da visita.`,
+        a: "Os híbridos disponíveis aparecem nesta página com ano, preço e ficha individual. Confirme a disponibilidade antes da visita.",
       },
       {
         q: "O que conferir em um híbrido seminovo?",

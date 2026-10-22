@@ -295,6 +295,15 @@ function netcar_stock_bootstrap_value()
     }
     $loaded = true;
 
+    // Purchase landings must not advertise yesterday's build while the API
+    // already knows a unit was sold. Failure leaves React to load/retry; it
+    // never falls back to the stale commercial snapshot on these routes.
+    if (preg_match('#^/comprar-[a-z0-9-]+$#', (string) netcar_request_path())) {
+        require_once __DIR__ . '/seo/landing-stock.php';
+        $value = netcar_landing_bootstrap();
+        return $value;
+    }
+
     $file = __DIR__ . '/seo/stock-bootstrap.json';
     if (!is_readable($file)) {
         return null;
@@ -315,7 +324,7 @@ function netcar_stock_bootstrap_value()
 function netcar_stock_bootstrap_script($path)
 {
     $value = netcar_stock_bootstrap_value();
-    if (!is_array($value) || empty($value['vehicles']) || !is_array($value['vehicles'])) {
+    if (!is_array($value) || !isset($value['vehicles']) || !is_array($value['vehicles'])) {
         return null;
     }
 
@@ -934,9 +943,13 @@ header('Content-Type: text/html; charset=UTF-8');
 $browserMaxAge = 60;
 $sharedMaxAge = 300;
 $staleWhileRevalidate = 60;
-header(
-    'Cache-Control: public, max-age=' . $browserMaxAge
-    . ', s-maxage=' . $sharedMaxAge
-    . ', stale-while-revalidate=' . $staleWhileRevalidate
-);
+if (preg_match('#^/comprar-[a-z0-9-]+$#', (string) $path)) {
+    header('Cache-Control: no-store');
+} else {
+    header(
+        'Cache-Control: public, max-age=' . $browserMaxAge
+        . ', s-maxage=' . $sharedMaxAge
+        . ', stale-while-revalidate=' . $staleWhileRevalidate
+    );
+}
 echo $html;

@@ -941,6 +941,20 @@ function validateDemandLanding(landing) {
     return;
   }
 
+  // The request-time renderer must replace every commercial fact together.
+  for (const block of ["stock", "paragraphs", "faq"]) {
+    for (const edge of ["start", "end"]) {
+      if (occurrences(html, `<!--netcar:landing-${block}:${edge}-->`) !== 1) {
+        errors.push(`${label}: marcador de estoque atual ausente ou duplicado (${block}/${edge})`);
+      }
+    }
+  }
+  for (const schema of ["collection", "faq"]) {
+    if (occurrences(html, `data-netcar-landing-${schema}`) !== 1) {
+      errors.push(`${label}: schema atualizável ausente ou duplicado (${schema})`);
+    }
+  }
+
   if (!/^[a-z0-9-]+$/.test(landing.slug)) {
     errors.push(`${label}: slug inválido`);
   }

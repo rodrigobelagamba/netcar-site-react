@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
 import { factoryWarrantyCatalogFromApi } from "./lib/factory-warranty-catalog.js";
 import { sanitizeVehicleImages } from "../src/lib/vehicleImagePolicy.mjs";
+import { resolveLandingParagraphs, resolveLandingFaq } from "../src/lib/landingStockCopy.mjs";
 import {
   homeHeroRotationDay,
   selectHomeHeroVehicles,
@@ -901,7 +902,7 @@ function pageShell({
       schemas
         .map(
           (schema) =>
-            `  <script type="application/ld+json">${JSON.stringify(schema)}</script>`,
+            `  <script type="application/ld+json"${canonical.includes("/comprar-") && schema["@type"] === "CollectionPage" ? " data-netcar-landing-collection" : canonical.includes("/comprar-") && schema["@type"] === "FAQPage" ? " data-netcar-landing-faq" : ""}>${JSON.stringify(schema)}</script>`,
         )
         .join("\n")
     : "";
@@ -1559,15 +1560,16 @@ function landingStockHref(landing) {
 
 for (const landing of landings) {
   const canonical = `${SITE}/comprar-${landing.slug}`;
-  const faqHtml = landing.faq
-    .map((item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`)
-    .join("");
-  const paragraphs = landing.paragraphs
-    .map((p) => `<p>${escapeHtml(p)}</p>`)
-    .join("");
   const landingStock = landingStockOrder(
     stock.filter((vehicle) => matchesLandingFilters(vehicle, landing.filters)),
   );
+  const currentFaq = resolveLandingFaq(landing, landingStock);
+  const faqHtml = currentFaq
+    .map((item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`)
+    .join("");
+  const paragraphs = resolveLandingParagraphs(landing, landingStock)
+    .map((p) => `<p>${escapeHtml(p)}</p>`)
+    .join("");
   const availability = landingStock.length
     ? stockShowcase({
         heading: "Veículos desta seleção",
@@ -1587,11 +1589,11 @@ for (const landing of landings) {
       <p>${escapeHtml(landing.intro)}</p>
       <p><a href="${escapeHtml(landingStockHref(landing))}">Ver seleção completa</a> · <a href="${landingWhatsAppLink(landing.name)}">Falar com a Netcar</a></p>
       ${landing.type === "faixa" ? "<p>O filtro considera o preço total anunciado do carro.</p>" : ""}
-      ${availability}
+      <!--netcar:landing-stock:start-->${availability}<!--netcar:landing-stock:end-->
       ${relatedLandingsHtml(landing.slug)}
       <h2>Compare antes de escolher</h2>
-      ${paragraphs}
-      ${faqHtml}
+      <!--netcar:landing-paragraphs:start-->${paragraphs}<!--netcar:landing-paragraphs:end-->
+      <!--netcar:landing-faq:start-->${faqHtml}<!--netcar:landing-faq:end-->
       <p>
         <a href="${SITE}/seminovos">Ver estoque completo</a>
         ·
@@ -1610,7 +1612,7 @@ for (const landing of landings) {
       schemas: [
         ORG_SCHEMA,
         landingCollectionSchema(landing, canonical, landingStock),
-        faqSchema(landing.faq),
+        faqSchema(currentFaq),
         breadcrumbSchema([
           HOME_CRUMB,
           { name: "Seminovos", url: `${SITE}/seminovos` },

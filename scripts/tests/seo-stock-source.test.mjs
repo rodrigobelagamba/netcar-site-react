@@ -405,6 +405,7 @@ function generatorFixture() {
     "scripts/lib/seo-stock-cache.js",
     "scripts/lib/factory-warranty-catalog.js",
     "src/lib/factoryWarrantyCatalog.js",
+    "src/lib/landingStockCopy.mjs",
   ]) {
     const target = join(rootDir, relative);
     mkdirSync(join(target, ".."), { recursive: true });
