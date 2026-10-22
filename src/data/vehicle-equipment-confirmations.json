@@ -89,6 +89,98 @@
           ]
         }
       ]
+    },
+    {
+      "id": "equipment-review-unit-20092-2026-10-22",
+      "approved": true,
+      "source": "responsible-confirmation",
+      "confirmedAt": "2026-10-22",
+      "claim": "Responsável confirmou a presença de Airbags laterais nesta unidade e autorizou sua publicação em 2026-10-22; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/uploads/br/model-document/ft_peugeot_suv2008_my2223_v2-62bb19ce7a713.pdf (2026-10-22, p.1, Segurança, coluna STYLE 1.6 AT.). Texto aprovado: Airbags laterais; Bolsas de proteção nas laterais da cabine..\nResponsável confirmou a presença de ISOFIX nesta unidade e autorizou sua publicação em 2026-10-22; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/uploads/br/model-document/ft_peugeot_suv2008_my2223_v2-62bb19ce7a713.pdf (2026-10-22, p.1, Segurança, coluna STYLE 1.6 AT.). Texto aprovado: ISOFIX; Pontos de fixação para cadeirinhas compatíveis..",
+      "schemaVersion": 2,
+      "marketSource": "responsible-confirmation",
+      "match": {
+        "vehicleId": "20092",
+        "physicalIdentityKey": "1652ff4f2e88b30f10b997ee9caf6f9b530ac93501eb6a2e44021cc28540d350",
+        "brand": "PEUGEOT",
+        "model": "2008 STYLE",
+        "modelYear": 2023,
+        "manufactureYear": 2022,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "presentTags": [
+        "air_bag_lateral",
+        "isofix"
+      ],
+      "absentTags": []
+    },
+    {
+      "id": "equipment-review-unit-20090-2026-10-22",
+      "approved": true,
+      "source": "responsible-confirmation",
+      "confirmedAt": "2026-10-22",
+      "claim": "Responsável confirmou a presença de 6 airbags nesta unidade e autorizou sua publicação em 2026-10-22; o mercado brasileiro da unidade foi confirmado. Fonte: https://brazil.nissannews.com/pt-BR/releases/novo-nissan-kicks-ative-sua-atitude (2021-02-25, Lista Sense, herdada por Sense CVT → Advance → Exclusive.). Texto aprovado: 6 airbags; 6 bolsas de proteção informadas para este veículo..\nResponsável confirmou a presença de Câmera 360° nesta unidade e autorizou sua publicação em 2026-10-22; o mercado brasileiro da unidade foi confirmado. Fonte: https://brazil.nissannews.com/pt-BR/releases/novo-nissan-kicks-ative-sua-atitude (2021-02-25, Lista Exclusive: Visão 360° Inteligente.). Texto aprovado: Câmera 360°; Exibe imagens ao redor do veículo para auxiliar nas manobras..",
+      "schemaVersion": 2,
+      "marketSource": "responsible-confirmation",
+      "match": {
+        "vehicleId": "20090",
+        "physicalIdentityKey": "672d9e6b7a12eaa0a2cb2e2c886a2dc03728fcd2e846b9ce8ecb73f037d84cdd",
+        "brand": "NISSAN",
+        "model": "KICKS EXCLUSIVE",
+        "modelYear": 2022,
+        "manufactureYear": 2021,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "presentTags": [
+        "airbags_6",
+        "camera_360"
+      ],
+      "absentTags": []
+    },
+    {
+      "id": "equipment-review-unit-20068-2026-10-22",
+      "approved": true,
+      "source": "responsible-confirmation",
+      "confirmedAt": "2026-10-22",
+      "claim": "Responsável confirmou a presença de Controle de estabilidade nesta unidade e autorizou sua publicação em 2026-10-22; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf (2026-10-22, Matriz p.2, Segurança, primeira coluna Active.). Texto aprovado: Controle de estabilidade; Auxilia a estabilidade do veículo em situações detectadas pelo sistema..\nResponsável confirmou a presença de Assistente de partida em rampa nesta unidade e autorizou sua publicação em 2026-10-22; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf (2026-10-22, Matriz p.2, Hill Assist, primeira coluna Active.). Texto aprovado: Assistente de partida em rampa; Ajuda a manter o veículo parado por instantes ao iniciar uma subida..",
+      "schemaVersion": 2,
+      "marketSource": "responsible-confirmation",
+      "match": {
+        "vehicleId": "20068",
+        "physicalIdentityKey": "60638a599b4cbc9fef5e384bec0555fe9890e68046613c9dbcc335b8190826ba",
+        "brand": "PEUGEOT",
+        "model": "2008 ACTIVE T200 TURBO",
+        "modelYear": 2025,
+        "manufactureYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "presentTags": [
+        "controle_estabilidade",
+        "assistente_partida_rampa"
+      ],
+      "absentTags": [],
+      "reviewedDefinitions": [
+        {
+          "id": "hill-start-assist",
+          "tag": "assistente_partida_rampa",
+          "sourceDescription": "Assistente de partida em rampa",
+          "description": "Assistente de partida em rampa",
+          "priority": 700,
+          "category": "Condução",
+          "benefit": "Ajuda a manter o veículo parado por instantes ao iniciar uma subida.",
+          "reviewedAt": "2026-10-22",
+          "reviewNote": "Definição revisada para Peugeot 2008 Active T200 CVT MY2025: ficha técnica MY24/25 p.2 e comunicado brasileiro de 07/08/2024. Não transfere aprovação de outra unidade nem atesta mercado.",
+          "aliases": [
+            "Auxílio de partida em rampa",
+            "Hill Start Assist"
+          ]
+        }
+      ]
     }
   ]
 }
