@@ -1147,6 +1147,82 @@
           }
         }
       ]
+    },
+    {
+      "recordId": "reviewed-v2-20261022-20086",
+      "status": "approved",
+      "reviewedAt": "2026-10-22",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261022-20086\",\"reviewedAt\":\"2026-10-22\",\"vehicle\":{\"vehicleId\":\"20086\",\"manufactureYear\":2026,\"modelYear\":2026,\"brand\":\"NISSAN\",\"modelVersion\":\"KICKS ADVANCE TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:f3bbd4e7dd823f3a6eb8324e236845e1a1de1e60e7b503120c6199f0d5d68e23\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261022-20086\",\"basis\":\"Manual oficial brasileiro do Novo Kicks MY2026: 36 meses desde a primeira entrega, CPF sem limite de km e CNPJ até100.000km. A unidade20086 usa a interseção documental conservadora de100.000km, sem inferir titularidadeCPF/CNPJ. Uso particular é ateste operacional Netcar existente, registrado separadamente na auditoria; a flag atual indica garantia. A revisão não inspeciona o histórico individual de manutenção; condições e exclusões do manual permanecem aplicáveis.\",\"branches\":[{\"category\":\"cpf\",\"condition\":\"CPF conforme manual10-5/10-6\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"20086-manual-my2026-v3\"]},{\"category\":\"cnpj\",\"condition\":\"CNPJ:36meses ou100.000km, o que ocorrer primeiro\",\"scope\":\"basic-vehicle\",\"termYears\":3,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"20086-manual-my2026-v3\"]}]},\"reviewedMileageKm\":4400,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20086-manual-my2026-v3\",\"url\":\"https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf\",\"locator\":\"Motor HR10DDT 999cm³: 9-5 (PDF382). Garantia geral 36 meses desde a primeira entrega; CPF sem limite de km / CNPJ 100.000km: 10-5/10-6 (PDF392/393). Componentes: 10-7/10-8; transferência do saldo: 10-9; manutenção: 10-11/10-13/10-15. Revalidado em22/10/2026; SHA256 e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab.\",\"revision\":\"MPPT-P13C00; Novo Kicks brasileiro MY2026; arquivo v3; metadados técnicos não tratados como data editorial\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"MPPT-P13C00\",\"modelYear\":2026,\"reviewId\":\"warranty-20261022-20086\",\"reviewedAt\":\"2026-10-22\"}}]}",
+      "vehicle": {
+        "vehicleId": "20086",
+        "brand": "NISSAN",
+        "modelVersion": "KICKS ADVANCE TURBO",
+        "manufactureYear": 2026,
+        "modelYear": 2026
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:f3bbd4e7dd823f3a6eb8324e236845e1a1de1e60e7b503120c6199f0d5d68e23",
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "usage": "unknown",
+      "reviewedMileageKm": 4400,
+      "mileage": {
+        "kind": "limited",
+        "limitKm": 100000
+      },
+      "sources": [
+        {
+          "sourceId": "20086-manual-my2026-v3",
+          "url": "https://www.nissan.com.br/content/dam/Nissan/br/site/servicos/manuais/kicks/2026/Manual_de_Propriet%C3%A1rio_-_Kicks_2026_v3.pdf",
+          "locator": "Motor HR10DDT 999cm³: 9-5 (PDF382). Garantia geral 36 meses desde a primeira entrega; CPF sem limite de km / CNPJ 100.000km: 10-5/10-6 (PDF392/393). Componentes: 10-7/10-8; transferência do saldo: 10-9; manutenção: 10-11/10-13/10-15. Revalidado em22/10/2026; SHA256 e789db37b79e0dcc254b4fddfb0fa4ca4c80074de9793df1ccdc09189a2d00ab.",
+          "revision": "MPPT-P13C00; Novo Kicks brasileiro MY2026; arquivo v3; metadados técnicos não tratados como data editorial",
+          "verification": {
+            "status": "verified",
+            "documentCode": "MPPT-P13C00",
+            "modelYear": 2026,
+            "reviewId": "warranty-20261022-20086",
+            "reviewedAt": "2026-10-22"
+          }
+        }
+      ],
+      "commonPolicy": {
+        "kind": "documented-regime-intersection",
+        "reviewId": "warranty-20261022-20086",
+        "basis": "Manual oficial brasileiro do Novo Kicks MY2026: 36 meses desde a primeira entrega, CPF sem limite de km e CNPJ até100.000km. A unidade20086 usa a interseção documental conservadora de100.000km, sem inferir titularidadeCPF/CNPJ. Uso particular é ateste operacional Netcar existente, registrado separadamente na auditoria; a flag atual indica garantia. A revisão não inspeciona o histórico individual de manutenção; condições e exclusões do manual permanecem aplicáveis.",
+        "branches": [
+          {
+            "category": "cpf",
+            "condition": "CPF conforme manual10-5/10-6",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "unlimited"
+            },
+            "sourceIds": [
+              "20086-manual-my2026-v3"
+            ]
+          },
+          {
+            "category": "cnpj",
+            "condition": "CNPJ:36meses ou100.000km, o que ocorrer primeiro",
+            "scope": "basic-vehicle",
+            "termYears": 3,
+            "mileage": {
+              "kind": "limited",
+              "limitKm": 100000
+            },
+            "sourceIds": [
+              "20086-manual-my2026-v3"
+            ]
+          }
+        ]
+      }
     }
   ],
   "requireUnitBinding": true,

@@ -33,6 +33,98 @@ const newUnitsAudit = read("../../docs/audits/factory-warranty-songplus-tiggo5x-
 const compassAudit = read("../../docs/audits/factory-warranty-compass-19866-2026-10-10.json");
 const renegadeAudit = read("../../docs/audits/factory-warranty-renegade-20094-2026-10-20.json");
 const peugeotAudit = read("../../docs/audits/factory-warranty-peugeot-20068-2026-10-21.json");
+const kicks20086Audit = read("../../docs/audits/factory-warranty-kicks-20086-2026-10-22.json");
+
+test("Kicks20086 has only three-year general coverage estimated to 2029 with the conservative mileage cap", () => {
+  const record = current.records.find((entry) => entry.vehicle.vehicleId === "20086")!;
+  const vehicle = kicks20086Audit.publicVehicle as WarrantyCatalogVehicle;
+  const date = kicks20086Audit.reviewedAt;
+  assert.deepEqual(record, kicks20086Audit.approvedRecord);
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(record.catalogConfirmation, undefined);
+  assert.equal(record.vehicle.manufactureYear, 2026);
+  assert.equal(record.vehicle.modelYear, 2026);
+  assert.equal(record.termYears, 3);
+  assert.equal(record.scope, "basic-vehicle");
+  assert.deepEqual(record.mileage, { kind: "limited", limitKm: 100000 });
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, date).status, "eligible");
+  assert.equal(resolveFactoryWarranty(vehicle, current, date)?.estimatedEndYear, 2029);
+  assert.equal(resolveFactoryWarranty({ ...vehicle, km: 99999 }, current, date)?.estimatedEndYear, 2029);
+  assert.equal(resolveFactoryWarranty({ ...vehicle, km: 100000 }, current, date), undefined);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, date), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, date), undefined);
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, "2029-01-01").reason, "confirmed-expiry-required");
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2029-01-01"), undefined);
+  assert.equal(record.confirmedExpiryDate, undefined);
+  assert.equal(record.confirmedExpiryMonth, undefined);
+  assert.equal(kicks20086Audit.timing.actualStartDate, null);
+  assert.equal(kicks20086Audit.timing.confirmedExpiryDate, null);
+  assert.equal(kicks20086Audit.timing.resaleRestartsTerm, false);
+});
+
+test("Kicks20086 separates private use from CPF ownership and preserves twenty records and nine exact rules", () => {
+  const record = current.records.find((entry) => entry.vehicle.vehicleId === "20086")!;
+  const source = record.sources[0];
+  assert.equal(record.usage, "unknown");
+  assert.equal(record.commonPolicy?.kind, "documented-regime-intersection");
+  assert.equal(record.commonPolicy?.reviewId, kicks20086Audit.reviewId);
+  assert.deepEqual(record.commonPolicy?.branches.map((branch) => branch.category).sort(), ["cnpj", "cpf"]);
+  for (const branch of record.commonPolicy!.branches) {
+    assert.equal(branch.scope, "basic-vehicle");
+    assert.equal(branch.termYears, 3);
+    assert.deepEqual(branch.sourceIds, [source.sourceId]);
+    assert.deepEqual(branch.mileage, branch.category === "cpf"
+      ? { kind: "unlimited" }
+      : { kind: "limited", limitKm: 100000 });
+  }
+  assert.equal(source.verification.status, "verified");
+  assert.equal(source.verification.documentCode, "MPPT-P13C00");
+  assert.equal(source.verification.modelYear, 2026);
+  assert.equal(source.verification.reviewId, kicks20086Audit.reviewId);
+  assert.equal(kicks20086Audit.ownerAttestations.usage, "private");
+  assert.equal(kicks20086Audit.ownerAttestations.usageIsEstablishedNetcarPolicy, true);
+  assert.equal(kicks20086Audit.ownerAttestations.ownershipCpfCnpj, "unknown");
+  assert.equal(kicks20086Audit.ownerAttestations.privateUseDoesNotEstablishCpf, true);
+  assert.equal(kicks20086Audit.ownerAttestations.individualMaintenanceIndependentlyInspected, false);
+  assert.equal(kicks20086Audit.catalog.upstreamWarrantyFlagPresent, true);
+  assert.equal(kicks20086Audit.catalog.indicationSource, "upstream-warranty-flag");
+  const others = current.records.filter((entry) =>
+    entry !== record && entry.reviewedAt <= kicks20086Audit.reviewedAt);
+  assert.equal(others.length, 20);
+  assert.equal(others.length, kicks20086Audit.preservation.previousRecordCount);
+  assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), kicks20086Audit.preservation.previousRecordsSha256);
+  assert.equal(current.automation!.rules.length, 9);
+  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), kicks20086Audit.preservation.automationRulesSha256);
+  assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
+});
+
+test("Kicks20086 blocks changed identity, removed flag, invalid mileage and revoked or unverified approval", () => {
+  const vehicle = kicks20086Audit.publicVehicle as WarrantyCatalogVehicle;
+  const date = kicks20086Audit.reviewedAt;
+  for (const patch of [
+    { diferenciais: [] }, { diferenciais: undefined }, { id: "different-kicks" },
+    { unitKey: undefined }, { unitKey: `vin-sha256:${"f".repeat(64)}` },
+    { marca: "OTHER" }, { modelo: "KICKS SENSE TURBO" },
+    { motor: "1.6" }, { cambio: "MANUAL" },
+    { anoFabricacao: 2025 }, { year: 2025 },
+    { km: 4399 }, { km: NaN }, { km: 100000 }, { price: 0 },
+  ]) {
+    const changed = { ...vehicle, ...patch };
+    const decision = reconcileFactoryWarrantyVehicle(changed, current, date);
+    assert.notEqual(decision.status, "eligible");
+    assert.equal(resolveFactoryWarranty(changed, decision.matrix, date), undefined);
+  }
+  for (const change of ["revoked", "document-pending", "document-year"] as const) {
+    const matrix = structuredClone(current);
+    const record = matrix.records.find((entry) => entry.vehicle.vehicleId === "20086")!;
+    if (change === "revoked") record.status = "revoked";
+    if (change === "document-pending") record.sources[0].verification.status = "pending";
+    if (change === "document-year") record.sources[0].verification.modelYear = 2025;
+    record.approvedFingerprint = factoryWarrantyReviewFingerprint(record);
+    assert.notEqual(reconcileFactoryWarrantyVehicle(vehicle, matrix, date).status, "eligible");
+    assert.equal(resolveFactoryWarranty(vehicle, matrix, date), undefined);
+  }
+});
 
 test("Peugeot20068 uses the official three-year unlimited general warranty with its original catalog flag", () => {
   const record = current.records.find((entry) => entry.vehicle.vehicleId === "20068")!;
@@ -255,7 +347,8 @@ const observed = (id: string) => {
   const vehicle = migration.publicVehicles.find((entry) => entry.id === id)
     ?? (newUnitsAudit.publicVehicles as WarrantyCatalogVehicle[]).find((entry) => entry.id === id)
     ?? (id === "20094" ? renegadeAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
-    ?? (id === "20068" ? peugeotAudit.publicVehicle as WarrantyCatalogVehicle : undefined);
+    ?? (id === "20068" ? peugeotAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
+    ?? (id === "20086" ? kicks20086Audit.publicVehicle as WarrantyCatalogVehicle : undefined);
   assert.ok(vehicle, `Current public snapshot missing vehicle ${id}`);
   return vehicle;
 };
