@@ -39,6 +39,15 @@ Classes: `standard` (série documentada), `package` (pacote/opcional), `accessor
 Manual “se equipado”, configuração de outro ano, foto de botão ou pré-disposição
 não comprovam presença. Incerteza e manual genérico bloqueiam a aplicação.
 
+As fontes revisadas em 22/10/2026 estão em
+`scripts/lib/equipmentReviewedSources.ts`: somente três URLs exatas, vinculadas
+à Nissan ou à Peugeot, compartilhadas pela revisão e pelo monitor de fontes.
+Essa lista não libera outros documentos, diretórios, domínios ou marcas.
+Reconhecer a origem não confirma equipamento, identidade, ano-modelo ou mercado
+da unidade; os demais requisitos permanecem obrigatórios. PDFs continuam
+exigindo leitura humana. Evidências e escopo em
+`docs/audits/equipment-approved-six-2026-10-22.md`.
+
 O relatório compara XML, API e observação pública. O resultado do resolver local
 não é chamado de ficha pública. Para verificar a ficha, abrir `/veiculo/ID`,
 rolar até equipamentos e expandir a lista completa. Registrar as descrições,

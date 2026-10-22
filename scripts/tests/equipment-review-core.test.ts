@@ -100,6 +100,95 @@ for (const [name, mutate, blocker] of [
   });
 }
 
+const reviewedOfficialSources = [
+  ["NISSAN", "https://brazil.nissannews.com/pt-BR/releases/novo-nissan-kicks-ative-sua-atitude"],
+  ["PEUGEOT", "https://www.media.stellantis.com/uploads/br/model-document/ft_peugeot_suv2008_my2223_v2-62bb19ce7a713.pdf"],
+  ["PEUGEOT", "https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf"],
+] as const;
+
+function reviewedSourceCandidate(brand: string, url: string, vehicleId = "99001"): ReviewCandidate {
+  const c = candidate("controle_estabilidade", vehicleId);
+  c.identity.brand = brand;
+  c.evidence.match.brand = brand;
+  c.evidence.url = url;
+  return c;
+}
+
+for (const [brand, url] of reviewedOfficialSources) {
+  const sourceName = new URL(url).pathname.split("/").at(-1)!;
+
+  test(`reviewed official source ${sourceName} accepts only its exact URL and brand`, () => {
+    const s = approved([reviewedSourceCandidate(brand, url)]);
+    assert.deepEqual(s.proposal.includedKeys, [s.ledger.revisions[0].key]);
+
+    const wrongBrand = approved([reviewedSourceCandidate("FIAT", url)]);
+    assert.equal(wrongBrand.proposal.includedKeys.length, 0);
+    assert.ok(wrongBrand.proposal.blocked[0].reasons.includes("official_source_review_required"));
+
+    const variants = [
+      ["lookalike host", (u: URL) => { u.hostname += ".example.com"; }],
+      ["unreviewed document", (u: URL) => { u.pathname = u.pathname.replace(/[^/]+$/, "other-document.pdf"); }],
+      ["extra path", (u: URL) => { u.pathname += "/"; }],
+      ["query", (u: URL) => { u.search = "?revision=2"; }],
+      ["fragment", (u: URL) => { u.hash = "#unreviewed"; }],
+      ["nondefault port", (u: URL) => { u.port = "8443"; }],
+    ] as const;
+    for (const [label, mutate] of variants) {
+      const changedUrl = new URL(url); mutate(changedUrl);
+      const changed = approved([reviewedSourceCandidate(brand, changedUrl.href)]);
+      assert.equal(changed.proposal.includedKeys.length, 0, label);
+      assert.ok(changed.proposal.blocked[0].reasons.includes("official_source_review_required"), label);
+    }
+
+    for (const mutate of [
+      (u: URL) => { u.protocol = "http:"; },
+      (u: URL) => { u.username = "synthetic-user"; },
+      (u: URL) => { u.password = "synthetic-password"; },
+      (u: URL) => { u.search = "?api_key=synthetic"; },
+    ]) {
+      const unsafeUrl = new URL(url); mutate(unsafeUrl);
+      assert.throws(() => setup([reviewedSourceCandidate(brand, unsafeUrl.href)]), /invalid_source_url/);
+    }
+  });
+
+  test(`reviewed official source ${sourceName} preserves evidence and unit approval gates`, () => {
+    const first = reviewedSourceCandidate(brand, url);
+    const sibling = reviewedSourceCandidate(brand, url, "99002");
+    const s = setup([first, sibling]);
+    for (const missing of ["present", "authorizePublication", "marketConfirmed"] as const) {
+      assert.throws(
+        () => decideReviewCandidate(s.ledger, answer(s.ledger, 0, { [missing]: false }), at),
+        /explicit_unit_presence_publication_market_required/,
+        missing,
+      );
+    }
+    const ledger = decideReviewCandidate(s.ledger, answer(s.ledger), at);
+    const proposal = prepareReviewProposal(ledger, s.stock, base, at);
+    assert.deepEqual(proposal.includedKeys, [s.ledger.revisions[0].key]);
+    assert.equal(ledger.revisions[1].status, "pending", "same source does not approve the sibling unit");
+    assert.ok(proposal.blocked.find(r => r.key === s.ledger.revisions[1].key)?.reasons.includes("decision_pending"));
+
+    const wrongEdition = structuredClone(first);
+    wrongEdition.evidence.match.modelYear--;
+    const wrongEditionReview = approved([wrongEdition]);
+    assert.equal(wrongEditionReview.proposal.includedKeys.length, 0);
+    assert.ok(wrongEditionReview.proposal.blocked[0].reasons.includes("evidence_identity_mismatch"));
+
+    const manual = structuredClone(first);
+    manual.evidence.kind = "generic-manual";
+    const manualReview = approved([manual]);
+    assert.equal(manualReview.proposal.includedKeys.length, 0);
+    assert.ok(manualReview.proposal.blocked[0].reasons.includes("generic_manual_not_equipment_proof"));
+
+    const changedUnit = structuredClone(s.stock);
+    changedUnit.observedAt = later;
+    changedUnit.vehicles[0].physicalIdentityKey = vehiclePhysicalIdentityKey(first.identity.id, "DEF4G56");
+    const changedUnitProposal = prepareReviewProposal(ledger, changedUnit, base, later);
+    assert.equal(changedUnitProposal.includedKeys.length, 0, "an exact source cannot authorize a changed physical unit");
+    assert.ok(changedUnitProposal.blocked[0].reasons.includes("stale_snapshot"));
+  });
+}
+
 test("a documented package still requires the exact unit and no approval transfers to its sibling", () => {
   const first = candidate(); first.classification = "package";
   const second = candidate("assistencia_faixa", "99002"); second.classification = "package";

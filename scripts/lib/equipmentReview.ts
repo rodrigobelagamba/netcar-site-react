@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { isReviewedEquipmentSource } from "./equipmentReviewedSources";
 import {
   definitionForEquipmentTag,
   definitionForUnitEquipmentTag,
@@ -253,6 +254,7 @@ function mappingMatches(c: ReviewCandidate): boolean {
 function officialSource(c: ReviewCandidate): boolean {
   const url = new URL(c.evidence.url); const brand = norm(c.identity.brand);
   if (url.port) return false;
+  if (isReviewedEquipmentSource(url, brand)) return true;
   if (["www.media.stellantis.com", "media.stellantis.com"].includes(url.hostname)) {
     return ["jeep", "fiat", "peugeot", "citroen", "ram"].includes(brand) && url.pathname.startsWith(`/br-pt/${brand}/`);
   }

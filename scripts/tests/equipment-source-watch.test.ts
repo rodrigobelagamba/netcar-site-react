@@ -52,6 +52,68 @@ test("nonofficial hosts and insecure or credential URLs are never fetched", asyn
   }
 });
 
+for (const [brand, url] of [
+  ["NISSAN", "https://brazil.nissannews.com/pt-BR/releases/novo-nissan-kicks-ative-sua-atitude"],
+  ["PEUGEOT", "https://www.media.stellantis.com/uploads/br/model-document/ft_peugeot_suv2008_my2223_v2-62bb19ce7a713.pdf"],
+  ["PEUGEOT", "https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf"],
+] as const) {
+  const sourceName = new URL(url).pathname.split("/").at(-1)!;
+  const reviewedInput = (sourceUrl: string = url, sourceBrand: string = brand): ReviewInput => {
+    const source = structuredClone(input(sourceUrl));
+    source.candidates[0].identity.brand = sourceBrand;
+    source.candidates[0].evidence.match.brand = sourceBrand;
+    return source;
+  };
+
+  test(`reviewed source watch ${sourceName} fetches only the reviewed document without approving equipment`, async () => {
+    const source = reviewedInput(); const before = structuredClone(source);
+    let requests = 0;
+    const pdf = url.endsWith(".pdf");
+    const result = await watchEquipmentSources(source, emptyEquipmentSourceWatch(), async (requested, init) => {
+      requests++;
+      assert.equal(requested, url);
+      assert.equal(init?.redirect, "error");
+      return new Response(pdf ? "%PDF-1.7 synthetic" : html(initial), {
+        headers: { "content-type": pdf ? "application/pdf" : "text/html" },
+      });
+    }, at);
+    assert.equal(requests, 1);
+    assert.equal(result.checks[0].status, pdf ? "manual_pdf_review_required" : "ok");
+    assert.equal(result.ledger.sources[0].url, url);
+    assert.equal(result.ledger.sources[0].match.brand, brand);
+    assert.ok(result.updates.length > 0);
+    assert.ok(result.updates.every(update => update.classification === "information-insufficient" && update.status === "source-change-needs-review"));
+    if (pdf) assert.deepEqual(result.ledger.sources[0].paragraphs, [], "reviewed PDF trust does not automate document interpretation");
+    assert.deepEqual(source, before, "source observation cannot mutate equipment candidates or approval");
+  });
+
+  test(`reviewed source watch ${sourceName} rejects other brands and URL variations before fetching`, async () => {
+    const rejected = [reviewedInput(url, "FIAT")];
+    for (const mutate of [
+      (u: URL) => { u.hostname += ".example.com"; },
+      (u: URL) => { u.pathname = u.pathname.replace(/[^/]+$/, "other-document.pdf"); },
+      (u: URL) => { u.pathname += "/"; },
+      (u: URL) => { u.search = "?revision=2"; },
+      (u: URL) => { u.hash = "#unreviewed"; },
+      (u: URL) => { u.port = "8443"; },
+      (u: URL) => { u.protocol = "http:"; },
+      (u: URL) => { u.username = "synthetic-user"; },
+      (u: URL) => { u.search = "?api_key=synthetic"; },
+    ]) {
+      const changed = new URL(url); mutate(changed);
+      rejected.push(reviewedInput(changed.href));
+    }
+    let requests = 0;
+    for (const source of rejected) {
+      const result = await watchEquipmentSources(source, emptyEquipmentSourceWatch(), async () => { requests++; return new Response("no"); }, at);
+      assert.equal(result.checks[0].status, "failed");
+      assert.deepEqual(result.ledger.sources, []);
+      assert.deepEqual(result.updates, []);
+    }
+    assert.equal(requests, 0);
+  });
+}
+
 test("PDFs and oversize documents never become inferred equipment", async () => {
   const pdf = await watchEquipmentSources(input(), emptyEquipmentSourceWatch(), async () => new Response("%PDF-1.7 synthetic", { headers: { "content-type": "application/pdf" } }), at);
   assert.equal(pdf.checks[0].status, "manual_pdf_review_required"); assert.equal(pdf.ledger.sources[0].paragraphs.length, 0); assert.equal(pdf.updates[0].classification, "information-insufficient");

@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { isReviewedEquipmentSource } from "./equipmentReviewedSources";
 import type { ReviewInput, ReviewMatch } from "./equipmentReview";
 
 const MAX_BYTES = 2 * 1024 * 1024;
@@ -36,6 +37,7 @@ function validParagraphs(value: unknown): value is WatchedParagraph[] {
 function isOfficialUrl(url: URL, brand: string): boolean {
   if (url.protocol !== "https:" || url.port || url.username || url.password || [...url.searchParams.keys()].some(k => /token|secret|password|signature|credential|api.?key/i.test(k))) return false;
   const normalized = brand.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "_");
+  if (isReviewedEquipmentSource(url, normalized)) return true;
   const official: Record<string, string[]> = { nissan: ["nissan.com.br", "www.nissan.com.br"], fiat: ["fiat.com.br", "www.fiat.com.br"], jeep: ["jeep.com.br", "www.jeep.com.br"], volkswagen: ["vw.com.br", "www.vw.com.br"], ford: ["ford.com.br", "www.ford.com.br"], honda: ["honda.com.br", "www.honda.com.br"], chevrolet: ["chevrolet.com.br", "www.chevrolet.com.br"], hyundai: ["hyundai.com.br", "www.hyundai.com.br"], chery: ["caoachery.com.br", "www.caoachery.com.br"], caoa_chery: ["caoachery.com.br", "www.caoachery.com.br"] };
   if (["media.stellantis.com", "www.media.stellantis.com"].includes(url.hostname)) return ["fiat", "jeep", "peugeot", "citroen", "ram"].includes(normalized) && url.pathname.startsWith(`/br-pt/${normalized}/`);
   if (normalized === "byd") return ["byd.com", "www.byd.com"].includes(url.hostname) && /^\/br(?:\/|$)/.test(url.pathname);

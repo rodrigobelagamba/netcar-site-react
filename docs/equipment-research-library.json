@@ -759,6 +759,225 @@
         },
         "kind": "exact-equipment"
       }
+    },
+    {
+      "identity": {
+        "brand": "NISSAN",
+        "model": "KICKS EXCLUSIVE",
+        "modelYear": 2022,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20090",
+        "manufactureYear": 2021
+      },
+      "item": {
+        "key": "airbags-6",
+        "label": "6 airbags",
+        "tag": "airbags_6"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://brazil.nissannews.com/pt-BR/releases/novo-nissan-kicks-ative-sua-atitude",
+        "title": "Novo Nissan Kicks: Ative sua Atitude",
+        "date": "2021-02-25",
+        "locator": "Lista Sense, herdada por Sense CVT → Advance → Exclusive.",
+        "claim": "Comunicado brasileiro de25/02/2021 e anexo identificado como Kicks2022: herança Sense→SenseCVT→Advance→Exclusive para seis airbags; câmera360 explicitamente na Exclusive1.6CVT. O catálogo não é ateste físico ou de mercado da unidade; decisões específicas ficam no ledger.",
+        "match": {
+          "brand": "NISSAN",
+          "model": "KICKS EXCLUSIVE",
+          "modelYear": 2022,
+          "engine": "1.6",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "brand": "NISSAN",
+        "model": "KICKS EXCLUSIVE",
+        "modelYear": 2022,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20090",
+        "manufactureYear": 2021
+      },
+      "item": {
+        "key": "camera-360",
+        "label": "Câmera 360°",
+        "tag": "camera_360"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://brazil.nissannews.com/pt-BR/releases/novo-nissan-kicks-ative-sua-atitude",
+        "title": "Novo Nissan Kicks: Ative sua Atitude",
+        "date": "2021-02-25",
+        "locator": "Lista Exclusive: Visão 360° Inteligente.",
+        "claim": "Comunicado brasileiro de25/02/2021 e anexo identificado como Kicks2022: herança Sense→SenseCVT→Advance→Exclusive para seis airbags; câmera360 explicitamente na Exclusive1.6CVT. O catálogo não é ateste físico ou de mercado da unidade; decisões específicas ficam no ledger.",
+        "match": {
+          "brand": "NISSAN",
+          "model": "KICKS EXCLUSIVE",
+          "modelYear": 2022,
+          "engine": "1.6",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "brand": "PEUGEOT",
+        "model": "2008 ACTIVE T200 TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20068",
+        "manufactureYear": 2025
+      },
+      "item": {
+        "key": "stability-control",
+        "label": "Controle de estabilidade",
+        "tag": "controle_estabilidade"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf",
+        "title": "Peugeot 2008 — ficha brasileira MY24/25, coluna Active Turbo 200 CVT",
+        "date": "2026-10-22",
+        "locator": "Matriz p.2, Segurança, primeira coluna Active.",
+        "claim": "Matriz brasileira MY24/25, p.2, coluna Active Turbo 200 CVT, marca o item de série. Fabricação/modelo da unidade:2025/2025, motor1.0 automático. Data deste registro é a revisão documental em22/10/2026; metadados do PDF indicam07/08/2024. Comunicado oficial Peugeot de07/08/2024 corrobora ESP e Hill Assist na gama. O catálogo não é ateste físico ou de mercado da unidade; decisões específicas ficam no ledger.",
+        "match": {
+          "brand": "PEUGEOT",
+          "model": "2008 ACTIVE T200 TURBO",
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "brand": "PEUGEOT",
+        "model": "2008 ACTIVE T200 TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20068",
+        "manufactureYear": 2025
+      },
+      "item": {
+        "key": "hill-start-assist",
+        "label": "Assistente de partida em rampa",
+        "tag": "assistente_partida_rampa",
+        "reviewedDefinition": {
+          "id": "hill-start-assist",
+          "tag": "assistente_partida_rampa",
+          "sourceDescription": "Assistente de partida em rampa",
+          "description": "Assistente de partida em rampa",
+          "priority": 700,
+          "category": "Condução",
+          "benefit": "Ajuda a manter o veículo parado por instantes ao iniciar uma subida.",
+          "reviewedAt": "2026-10-22",
+          "reviewNote": "Definição revisada para Peugeot 2008 Active T200 CVT MY2025: ficha técnica MY24/25 p.2 e comunicado brasileiro de 07/08/2024. Não transfere aprovação de outra unidade nem atesta mercado.",
+          "aliases": [
+            "Auxílio de partida em rampa",
+            "Hill Start Assist"
+          ]
+        }
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf",
+        "title": "Peugeot 2008 — ficha brasileira MY24/25, coluna Active Turbo 200 CVT",
+        "date": "2026-10-22",
+        "locator": "Matriz p.2, Hill Assist, primeira coluna Active.",
+        "claim": "Matriz brasileira MY24/25, p.2, coluna Active Turbo 200 CVT, marca o item de série. Fabricação/modelo da unidade:2025/2025, motor1.0 automático. Data deste registro é a revisão documental em22/10/2026; metadados do PDF indicam07/08/2024. Comunicado oficial Peugeot de07/08/2024 corrobora ESP e Hill Assist na gama. O catálogo não é ateste físico ou de mercado da unidade; decisões específicas ficam no ledger.",
+        "match": {
+          "brand": "PEUGEOT",
+          "model": "2008 ACTIVE T200 TURBO",
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "brand": "PEUGEOT",
+        "model": "2008 STYLE",
+        "modelYear": 2023,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20092",
+        "manufactureYear": 2022
+      },
+      "item": {
+        "key": "side-airbags",
+        "label": "Airbags laterais",
+        "tag": "air_bag_lateral"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/uploads/br/model-document/ft_peugeot_suv2008_my2223_v2-62bb19ce7a713.pdf",
+        "title": "Peugeot 2008 — equipamentos, ano modelo 2022/2023",
+        "date": "2026-10-22",
+        "locator": "p.1, Segurança, coluna STYLE 1.6 AT.",
+        "claim": "Matriz brasileira MY2022/2023, coluna STYLE 1.6 AT, comprova o item de série. Data do registro representa revisão documental em22/10/2026; o PDF tem metadados de28/06/2022. O catálogo não é ateste físico ou de mercado da unidade; decisões específicas ficam no ledger.",
+        "match": {
+          "brand": "PEUGEOT",
+          "model": "2008 STYLE",
+          "modelYear": 2023,
+          "engine": "1.6",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "brand": "PEUGEOT",
+        "model": "2008 STYLE",
+        "modelYear": 2023,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20092",
+        "manufactureYear": 2022
+      },
+      "item": {
+        "key": "isofix",
+        "label": "ISOFIX",
+        "tag": "isofix"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/uploads/br/model-document/ft_peugeot_suv2008_my2223_v2-62bb19ce7a713.pdf",
+        "title": "Peugeot 2008 — equipamentos, ano modelo 2022/2023",
+        "date": "2026-10-22",
+        "locator": "p.1, Segurança, coluna STYLE 1.6 AT.",
+        "claim": "Matriz brasileira MY2022/2023, coluna STYLE 1.6 AT, comprova o item de série. Data do registro representa revisão documental em22/10/2026; o PDF tem metadados de28/06/2022. O catálogo não é ateste físico ou de mercado da unidade; decisões específicas ficam no ledger.",
+        "match": {
+          "brand": "PEUGEOT",
+          "model": "2008 STYLE",
+          "modelYear": 2023,
+          "engine": "1.6",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
     }
   ]
 }
