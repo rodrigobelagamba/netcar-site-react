@@ -15,6 +15,19 @@ $stock = array(live_vehicle(11, 'FIAT', 'FASTBACK', 125900), live_vehicle(12, 'V
 $page = array('slug' => 'nivus-x-fastback', 'left' => array('brand' => 'VOLKSWAGEN', 'model' => 'NIVUS', 'label' => 'Nivus'), 'right' => array('brand' => 'FIAT', 'model' => 'FASTBACK', 'label' => 'Fastback'), 'stockNote' => 'Confira estas unidades.');
 $pair = netcar_comparison_selection($stock, $page);
 check_stock(array_column($pair['pair'], 'id') === array('14', '11'), 'closest current-price pair selected, sold unit ignored');
+$relativePhoto = './imagens/veiculos_automacar/02102026COMPASS LIMITED IXN3G56CAPA_small.png';
+$absolutePhoto = SEO_SITE_URL . '/imagens/veiculos_automacar/02102026COMPASS%20LIMITED%20IXN3G56CAPA_small.png';
+foreach (array($relativePhoto, substr($relativePhoto, 1), substr($relativePhoto, 2), $absolutePhoto) as $raw) {
+    check_stock(netcar_comparison_image_url($raw) === $absolutePhoto, 'relative/root/absolute media resolve to the same canonical root URL without double encoding');
+}
+check_stock(netcar_comparison_image_url('https://cdn.example.com/a%20b (1).png?v=2&fit=cover') === 'https://cdn.example.com/a%20b%20%281%29.png?v=2&fit=cover', 'absolute external photo retains origin/query and encodes its path once');
+check_stock(netcar_comparison_image_url('//cdn.example.com/foto.png') === 'https://cdn.example.com/foto.png', 'protocol-relative image is made HTTPS absolute');
+check_stock(netcar_comparison_image_url('http://cdn.example.com/foto.png') === 'https://cdn.example.com/foto.png', 'legacy HTTP image follows existing HTTPS media policy');
+foreach (array('javascript:alert(1)', 'data:image/svg+xml,unsafe', '../private.png', 'https://user:secret@cdn.example.com/a.png', "https://cdn.example.com/a\n.png") as $invalid) {
+    check_stock(netcar_comparison_image_url($invalid) === '', 'unsupported/unsafe media URL rejected');
+}
+$pictured = array_replace_recursive($stock[0], array('imagens_site' => array('tem_fotos' => 1, 'capa_thumb' => $relativePhoto)));
+check_stock(netcar_comparison_image($pictured) === $absolutePhoto, 'existing vehicle image policy passes through the URL normalizer');
 $head = '<html><head><title>Comparação</title><link rel="canonical" href="' . SEO_SITE_URL . '/comparar"><meta property="og:image" content="https://example.com/old-sold.jpg"></head><body>';
 $stockMarker = '<!--netcar:comparison-stock:start-->stale-sold-13-price-999999<!--netcar:comparison-stock:end-->';
 $examplesMarker = '<!--netcar:comparison-examples:start-->stale-sold-13<!--netcar:comparison-examples:end-->';
@@ -28,6 +41,10 @@ check_stock(strpos($pairHtml, 'data-comparison-stock="complete"') !== false, 'co
 check_stock(strpos($pairHtml, '<table>') !== false && strpos($pairHtml, 'numberOfItems":2') !== false, 'table/schema same current pair');
 check_stock(strpos($pairHtml, 'old-sold.jpg') === false && strpos($pairHtml, '/images/loja1.jpg') !== false, 'pair social cover does not retain a sold vehicle');
 check_stock(strpos($pairHtml, '<th scope="row">Km') === false && strpos($pairHtml, 'Quilometragem') === false, 'keeps prior decision not to show km in comparator');
+$picturedPair = netcar_comparison_html($head . $stockMarker . '</body></html>', array(array_replace_recursive($stock[1], array('imagens_site' => array('tem_fotos' => 1, 'capa_thumb' => $relativePhoto))), $stock[0]), array($page), $page);
+check_stock(strpos($picturedPair, '<meta property="og:image" content="' . $absolutePhoto . '"') !== false && strpos($picturedPair, '<img src="' . $absolutePhoto . '"') !== false, 'pair OG and visible photo use the same absolute encoded media URL');
+$picturedHub = netcar_comparison_html($head . $examplesMarker . $stockMarker . '</body></html>', array($pictured), array($page));
+check_stock(strpos($picturedHub, '<img src="' . $absolutePhoto . '"') !== false, 'hub card photo resolves independently of the route path');
 $partial = netcar_comparison_html($head . $stockMarker . '</body></html>', array($stock[0], $stock[2]), array($page), $page);
 check_stock(strpos($partial, 'data-comparison-stock="partial"') !== false && strpos($partial, '<table>') === false && strpos($partial, 'numberOfItems":1') !== false, 'one available model gives partial guide, not fake pair');
 $empty = netcar_comparison_html($head . $stockMarker . '</body></html>', array($stock[2]), array($page), $page);

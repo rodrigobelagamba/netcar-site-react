@@ -16,6 +16,7 @@ const slug = "nivus-x-fastback";
 const pair = { slug, left: { brand: "VOLKSWAGEN", model: "NIVUS", label: "Nivus" }, right: { brand: "FIAT", model: "FASTBACK", label: "Fastback" }, stockNote: "Confira estas unidades." };
 const vehicle = (id, model, price) => ({ id, marca: model === "NIVUS" ? "VOLKSWAGEN" : "FIAT", modelo: model, valor: price, ano: 2024, km: 10000, cambio: "AUTOMATICO", imagens_site: { tem_fotos: 0 } });
 const current = [vehicle("90001", "NIVUS", 120000), vehicle("90002", "FASTBACK", 125000), vehicle("90003", "FASTBACK", 126000), vehicle("90004", "FASTBACK", 0)];
+current[0].imagens_site = { tem_fotos: 1, capa_thumb: "./imagens/veiculos_automacar/fixture photo (1).png" };
 
 function fixture(apiBase) {
   const directory = mkdtempSync(join(tmpdir(), "netcar-live-seo-"));
@@ -25,7 +26,7 @@ function fixture(apiBase) {
   writeFileSync(join(directory, "seo/comparisons.json"), JSON.stringify([pair]));
   for (const isPair of [false, true]) {
     const path = `/comparar${isPair ? `/${slug}` : ""}`;
-    const template = `<!doctype html><html><head><title>Fixture ${isPair ? "pair" : "hub"}</title><link rel="canonical" href="${site}${path}"><script type="application/ld+json">{"@type":"WebPage","name":"Preserved editorial"}</script></head><body><h1>Compare carros</h1>${isPair ? "" : "<!--netcar:comparison-examples:start--><a href='/veiculo/sold-90004'>Stale example</a><!--netcar:comparison-examples:end-->"}<!--netcar:comparison-stock:start--><a href="/veiculo/sold-90004">Stale R$ 999.999</a><!--netcar:comparison-stock:end--><p>Preserved editorial copy.</p></body></html>`;
+    const template = `<!doctype html><html><head><title>Fixture ${isPair ? "pair" : "hub"}</title><link rel="canonical" href="${site}${path}"><meta property="og:image" content="${site}/images/loja1.jpg"><script type="application/ld+json">{"@type":"WebPage","name":"Preserved editorial"}</script></head><body><h1>Compare carros</h1>${isPair ? "" : "<!--netcar:comparison-examples:start--><a href='/veiculo/sold-90004'>Stale example</a><!--netcar:comparison-examples:end-->"}<!--netcar:comparison-stock:start--><a href="/veiculo/sold-90004">Stale R$ 999.999</a><!--netcar:comparison-stock:end--><p>Preserved editorial copy.</p></body></html>`;
     writeFileSync(join(directory, "seo-static", isPair ? `comparison-${slug}.html` : "page-comparar.html"), template);
   }
   writeFileSync(join(directory, "sitemap.xml"), `<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${site}/seminovos-canoas</loc><lastmod>2026-10-01</lastmod></url><url><loc>${site}/veiculo/sold-90004</loc><lastmod>2026-10-01</lastmod></url></urlset>`);
@@ -76,7 +77,7 @@ test("live stock routing precedes stale files and uses bounded successful HTTP c
 test("live SEO PHP render and XML unit checks", phpOnly, () => {
   const result = spawnSync(php, [join(root, "scripts/tests/seo-live-stock.test.php")], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr + result.stdout);
-  assert.match(result.stdout, /23 checks passed/);
+  assert.match(result.stdout, /38 checks passed/);
 });
 
 test("real controllers reconcile stale build artifacts on every complete API read", phpOnly, async (t) => {
@@ -107,6 +108,9 @@ test("real controllers reconcile stale build artifacts on every complete API rea
     assert.match(result.html, /Preserved editorial copy/);
     assert.match(result.html, /"name":"Preserved editorial"/);
     assert.match(result.html, /\/veiculo\/fastback-2024-90002/);
+    const photo = `${site}/imagens/veiculos_automacar/fixture%20photo%20%281%29.png`;
+    assert.ok(result.html.includes(`<img src="${photo}"`), "actual controller resolves the API photo against site root, not the nested route");
+    if (route.startsWith(`/comparar/${slug}`)) assert.ok(result.html.includes(`property="og:image" content="${photo}"`));
     assert.deepEqual(requests, [0, 2, 4], "one complete read, no per-car API request");
     const canonical = result.html.match(/rel="canonical" href="([^"]+)"/)[1];
     assert.equal(canonical, site + route.split("?")[0].replace(/\/$/, ""));

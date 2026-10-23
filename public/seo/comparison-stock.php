@@ -19,7 +19,36 @@ function netcar_comparison_image($vehicle)
 {
     $vehicle = netcarSanitizeVehicleImages($vehicle);
     if (empty($vehicle['imagens_site']['tem_fotos'])) return '';
-    return $vehicle['imagens_site']['capa_thumb'] ?? $vehicle['imagens_site']['capa'] ?? $vehicle['imagens']['thumb'][0] ?? '';
+    $raw = $vehicle['imagens_site']['capa_thumb'] ?? $vehicle['imagens_site']['capa'] ?? $vehicle['imagens']['thumb'][0] ?? '';
+    return netcar_comparison_image_url($raw);
+}
+
+/** API media paths are relative to the site root, never to /comparar/{pair}. */
+function netcar_comparison_image_url($raw)
+{
+    if (!is_string($raw) || trim($raw) === '') return '';
+    $url = str_replace('\\', '/', trim($raw));
+    if (preg_match('/[\x00-\x1F\x7F]/', $url)) return '';
+    if (strpos($url, '//') === 0) $url = 'https:' . $url;
+    elseif (preg_match('#^https?://#i', $url)) $url = preg_replace('#^http:#i', 'https:', $url);
+    elseif (preg_match('#^[a-z][a-z0-9+.-]*:#i', $url)) return '';
+    else $url = SEO_SITE_URL . '/' . ltrim(preg_replace('#^(?:\./)+#', '', $url), '/');
+    $parts = parse_url($url);
+    if (!is_array($parts) || empty($parts['host']) || strtolower($parts['scheme'] ?? '') !== 'https'
+        || isset($parts['user']) || isset($parts['pass'])) return '';
+    $segments = explode('/', $parts['path'] ?? '');
+    $encoded = array();
+    foreach ($segments as $segment) {
+        $decoded = rawurldecode($segment);
+        if ($decoded === '.' || $decoded === '..') return '';
+        // Decode then encode each segment once: %20 must not become %2520.
+        $encoded[] = rawurlencode($decoded);
+    }
+    $url = 'https://' . $parts['host'] . (isset($parts['port']) ? ':' . $parts['port'] : '') . implode('/', $encoded);
+    foreach (array('query' => '?', 'fragment' => '#') as $key => $separator) {
+        if (isset($parts[$key])) $url .= $separator . str_replace(array(' ', '"', '<', '>'), array('%20', '%22', '%3C', '%3E'), $parts[$key]);
+    }
+    return $url;
 }
 
 function netcar_comparison_selection($stock, $page)
