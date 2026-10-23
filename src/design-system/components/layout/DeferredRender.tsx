@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { Suspense, type ReactNode, useEffect, useRef, useState } from "react";
 
 type DeferredRenderProps = {
   children: ReactNode;
@@ -8,8 +8,9 @@ type DeferredRenderProps = {
 };
 
 /**
- * Mantém conteúdo pesado fora do primeiro render e reserva o espaço necessário
- * para que a entrada da seção não desloque o restante da página.
+ * Adia o conteúdo pesado e mantém a mesma reserva enquanto seu chunk carrega.
+ * Os filhos lazy devem usar esta fronteira, não um Suspense com fallback nulo.
+ * Depois do carregamento, a altura volta a ser a natural do conteúdo.
  */
 export function DeferredRender({
   children,
@@ -42,13 +43,15 @@ export function DeferredRender({
     return () => observer.disconnect();
   }, [rootMargin]);
 
+  const placeholder = <div style={{ minHeight }} aria-hidden="true" />;
+
   return (
-    <div
-      ref={containerRef}
-      className={className}
-      style={shouldRender ? undefined : { minHeight }}
-    >
-      {shouldRender ? children : null}
+    <div ref={containerRef} className={className}>
+      {shouldRender ? (
+        <Suspense fallback={placeholder}>{children}</Suspense>
+      ) : (
+        placeholder
+      )}
     </div>
   );
 }

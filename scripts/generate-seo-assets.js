@@ -956,6 +956,13 @@ function pageShell({
 
 mkdirSync(seoStaticDir, { recursive: true });
 
+// Request-time comparison rendering reuses these exact editorial definitions.
+// Availability never comes from the generated HTML snapshot.
+writeTextFile(
+  join(publicDir, "seo", "comparisons.json"),
+  readFileSync(join(rootDir, "src/data/seo/comparisons.json"), "utf8"),
+);
+
 // O sitemap preserva lastmod para não fingir atualização em todo deploy. Quando
 // o HTML realmente muda (copy, estoque exibido, links ou schema), esta coleção
 // permite atualizar somente a URL afetada.
@@ -1697,20 +1704,20 @@ const comparatorBody = `
       <ul>${comparisonLinks()}</ul>
     </nav>
     <h2>Comparações com carros do estoque atual</h2>
-    ${comparisonExamplesHtml}
+    <!--netcar:comparison-examples:start-->${comparisonExamplesHtml}<!--netcar:comparison-examples:end-->
     <h2>Como usar o comparador</h2>
     <ol>
       <li>Busque uma marca ou um modelo e selecione o primeiro carro.</li>
       <li>Adicione outros veículos que resolvam o mesmo tipo de uso.</li>
       <li>Compare ficha e preço; depois abra os detalhes ou envie a comparação pronta para a equipe da Netcar.</li>
     </ol>
-    ${stockShowcase({
+    <!--netcar:comparison-stock:start-->${stockShowcase({
       heading: "Carros disponíveis para comparar agora",
       vehicles: stock,
       limit: 10,
       ctaLabel: "Abrir o comparador interativo",
       ctaHref: comparatorCanonical,
-    })}
+    })}<!--netcar:comparison-stock:end-->
     <p><a href="${SITE}/seminovos">Ver estoque completo</a> · <a href="${comparatorWhatsAppLink()}">Pedir ajuda para comparar</a></p>
     <section aria-labelledby="comparison-guide-title">
       <h2 id="comparison-guide-title">${escapeHtml(comparatorPage.guideTitle)}</h2>
@@ -1831,7 +1838,7 @@ for (const page of comparisonPages) {
     <article>
       <h1>${escapeHtml(page.h1)}</h1>
       <p>${escapeHtml(page.intro)}</p>
-      ${stockHtml}
+      <!--netcar:comparison-stock:start-->${stockHtml}<!--netcar:comparison-stock:end-->
       ${page.sections.map((section) => `<section><h2>${escapeHtml(section.title)}</h2><p>${escapeHtml(section.text)}</p></section>`).join("\n")}
       <section><h2>O que conferir antes da visita</h2><ul>${page.checks.map((check) => `<li>${escapeHtml(check)}</li>`).join("")}</ul></section>
       <p><a href="${SITE}/como-selecionamos-nossos-carros">Como selecionamos nossos carros</a></p>

@@ -447,7 +447,7 @@ function netcar_stock_initial_lcp($path)
         $srcset[] = htmlspecialchars(netcar_banner_variant($cover, $width), ENT_QUOTES, 'UTF-8') . ' ' . $width . 'w';
     }
     $name = is_array($vehicle) && !empty($vehicle['name']) ? (string) $vehicle['name'] : 'Veículo seminovo';
-    $sizes = $isStock ? '(max-width: 767px) 50vw, 25vw' : '100vw';
+    $sizes = $isStock ? '(max-width: 767px) 50vw, 25vw' : '(max-width: 1023px) 100vw, 70vw';
     $style = $isStock ? ' style="width:50vw;max-width:380px"' : '';
     return '<img src="'
         . htmlspecialchars(netcar_banner_variant($cover, $fallbackWidth), ENT_QUOTES, 'UTF-8')

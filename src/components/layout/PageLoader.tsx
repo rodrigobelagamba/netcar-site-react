@@ -20,9 +20,11 @@ function routeCriticalImage(): CriticalImage | null {
     return {
       image: hero.image,
       alt: `${hero.marca || ""} ${hero.modelo || hero.name || "seminovo em destaque"}`.trim(),
-      sizes: "100vw",
-      widths: [480, 768, 960, 1280, 1600],
-      fallbackWidth: 1280,
+      // Iguais ao preload PHP e ao HomeHero: o fallback não deve iniciar
+      // o download de outra variante enquanto o chunk da página carrega.
+      sizes: "(max-width: 767px) 50vw, 70vw",
+      widths: [480, 640, 768, 960, 1280],
+      fallbackWidth: 960,
     };
   }
 
@@ -37,7 +39,7 @@ function routeCriticalImage(): CriticalImage | null {
     return {
       image,
       alt: `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name || "seminovo"}`.trim(),
-      sizes: "100vw",
+      sizes: "(max-width: 1023px) 100vw, 70vw",
       widths: [480, 640, 768, 960, 1280],
       fallbackWidth: 960,
     };

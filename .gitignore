@@ -49,6 +49,7 @@ public/netcar-config.php
 public/seo-static/
 public/sitemap.xml
 public/seo/landings.json
+public/seo/comparisons.json
 public/seo/blog-index.json
 public/seo/vehicle-equipment.json
 public/seo/factory-warranty-registry.json

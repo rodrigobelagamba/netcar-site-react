@@ -2548,9 +2548,7 @@ export function DetalhesPage() {
       <section className="w-full py-3 sm:py-4 bg-surface" aria-label="Preparação do veículo">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <DeferredRender minHeight={112}>
-            <React.Suspense fallback={null}>
-              <FabricaDeValor />
-            </React.Suspense>
+            <FabricaDeValor />
           </DeferredRender>
         </div>
       </section>

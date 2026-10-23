@@ -104,7 +104,7 @@ expect(
     "RewriteCond %{DOCUMENT_ROOT}/seo-static/comparison-$1.html -f",
   ) &&
     htaccess.includes(
-      "RewriteRule ^comparar/([a-z0-9-]+)/?$ seo-static/comparison-$1.html [L]",
+      "RewriteRule ^comparar/([a-z0-9-]+)/?$ seo-comparison.php [L]",
     ) &&
     htaccess.includes("blog/[^/]+|comparar/[^/]+|") &&
     htaccess.includes("[R=404,L]"),
@@ -124,9 +124,9 @@ expect(
   "privacidade não está registrada como rota válida no servidor",
 );
 expect(
-  htaccess.includes("politica-editorial|comparar") &&
-    htaccess.includes("seo-static/page-$1.html"),
-  "crawler não recebe o HTML estático do comparador",
+  htaccess.includes("RewriteRule ^comparar/?$ seo-comparison.php [L]") &&
+    existsSync(join(root, "public/seo-comparison.php")),
+  "crawler não recebe o comparador com estoque atual",
 );
 expect(
   controller.includes("imagesrcset="),
@@ -421,17 +421,31 @@ for (const path of [
   "public/seo-static/blog-seminovos-em-esteio-guia-completo.html",
   "public/seo-static/page-comparar.html",
   "public/seo/landings.json",
+  "public/seo/comparisons.json",
 ]) {
   expect(existsSync(join(root, path)), `${path} não foi gerado`);
 }
 
 const comparisonDefinitions = JSON.parse(read("src/data/seo/comparisons.json"));
+if (existsSync(join(root, "public/seo/comparisons.json"))) {
+  expect(
+    JSON.stringify(JSON.parse(read("public/seo/comparisons.json"))) === JSON.stringify(comparisonDefinitions),
+    "definições do comparador PHP divergem da fonte React/editorial",
+  );
+}
+if (existsSync(join(root, "public/seo-static/page-comparar.html"))) {
+  const html = read("public/seo-static/page-comparar.html");
+  for (const name of ["examples", "stock"]) {
+    expect(html.includes(`<!--netcar:comparison-${name}:start-->`) && html.includes(`<!--netcar:comparison-${name}:end-->`), "comparador sem marcadores de atualização do estoque");
+  }
+}
 for (const comparison of comparisonDefinitions) {
   const slug = comparison.slug;
   expect(/^[a-z0-9-]+$/.test(slug), "slug inválido no catálogo de comparações");
   const path = `public/seo-static/comparison-${slug}.html`;
   expect(existsSync(join(root, path)), `${path} não foi gerado`);
   if (existsSync(join(root, path))) {
+    expect(read(path).includes("<!--netcar:comparison-stock:start-->") && read(path).includes("<!--netcar:comparison-stock:end-->"), `${path} sem bloco de estoque atualizável`);
     expect(
       read(path).includes(
         `rel="canonical" href="https://www.netcarmultimarcas.com.br/comparar/${slug}"`,

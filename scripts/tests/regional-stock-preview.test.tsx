@@ -174,20 +174,34 @@ test("refresh failure preserves prior cards with a warning and disables a pendin
   assert.equal(findElement(result.element, "button").props.disabled, true);
 });
 
-test("regional focus adds Nova Santa Rita once without removing the existing markets", () => {
+test("regional focus preserves existing markets and resolves every unique city slug", () => {
   const focus = JSON.parse(
     readFileSync(
       new URL("../../src/data/seo/regional-focus.json", import.meta.url),
       "utf8",
     ),
   );
-  assert.deepEqual(focus.citySlugs, [
+  const cities = JSON.parse(
+    readFileSync(
+      new URL("../../src/data/seo/cities.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  const citySlugs = new Set(cities.map((city: { slug: string }) => city.slug));
+  const focusSlugs = new Set(focus.citySlugs);
+  assert.equal(focusSlugs.size, focus.citySlugs.length, "Duplicate focus city");
+  for (const slug of [
     "canoas",
     "sapucaia-do-sul",
     "nova-santa-rita",
     "sao-leopoldo",
     "gravatai",
-  ]);
+  ]) {
+    assert.ok(focusSlugs.has(slug), `Existing priority market removed: ${slug}`);
+  }
+  for (const slug of focusSlugs) {
+    assert.ok(citySlugs.has(slug), `Unknown priority city: ${slug}`);
+  }
   const generator = readFileSync(
     new URL("../generate-seo-assets.js", import.meta.url),
     "utf8",

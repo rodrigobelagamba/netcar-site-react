@@ -115,7 +115,7 @@ test("the controller fixture includes its image-policy dependencies even without
 
 test("crawler pair routes require their published HTML and precede the real 404 rule", () => {
   const rule =
-    "RewriteRule ^comparar/([a-z0-9-]+)/?$ seo-static/comparison-$1.html [L]";
+    "RewriteRule ^comparar/([a-z0-9-]+)/?$ seo-comparison.php [L]";
   const position = htaccess.indexOf(rule);
   assert.ok(position > 0);
   const block = htaccess.slice(

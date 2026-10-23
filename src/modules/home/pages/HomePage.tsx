@@ -12,7 +12,7 @@ import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { HomeWhatsAppConversionPanel } from "../components/HomeWhatsAppConversionPanel";
 import { HomeMobileWhatsAppBar } from "../components/HomeMobileWhatsAppBar";
 import { HomeRegionsNav } from "../components/HomeRegionsNav";
-import { lazy, Suspense, useMemo, useEffect, useState } from "react";
+import { lazy, useMemo, useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import {
@@ -374,9 +374,7 @@ export function HomePage() {
       </div>
 
       <DeferredRender minHeight={96} rootMargin="100px">
-        <Suspense fallback={null}>
-          <SearchBar />
-        </Suspense>
+        <SearchBar />
       </DeferredRender>
 
       {/* Estoque sobe na rolagem: prioridade no mobile */}
@@ -398,13 +396,11 @@ export function HomePage() {
           </p>
         </div>
         <DeferredRender minHeight={900} rootMargin="0px">
-          <Suspense fallback={null}>
-            <ProductList
-              vehicles={vehiclesWithPhotos}
-              isLoading={isLoadingVehicles}
-              showWhatsAppInterest
-            />
-          </Suspense>
+          <ProductList
+            vehicles={vehiclesWithPhotos}
+            isLoading={isLoadingVehicles}
+            showWhatsAppInterest
+          />
         </DeferredRender>
         <div className="mt-8 flex justify-center md:mt-10">
           <button
@@ -421,15 +417,11 @@ export function HomePage() {
       </section>
 
       <DeferredRender minHeight={520} rootMargin="300px">
-        <Suspense fallback={null}>
-          <HomeSelectionPromise />
-        </Suspense>
+        <HomeSelectionPromise />
       </DeferredRender>
 
       <DeferredRender minHeight={480}>
-        <Suspense fallback={null}>
-          <ServicesSection />
-        </Suspense>
+        <ServicesSection />
       </DeferredRender>
 
       <HomeRegionsNav />
@@ -437,23 +429,17 @@ export function HomePage() {
       {/* Desktop only: evita repetir benefícios e DNA longos no mobile */}
       <div className="hidden md:block">
         <DeferredRender minHeight={900}>
-          <Suspense fallback={null}>
-            <HomePurchaseBenefits />
-            <DNASection />
-          </Suspense>
+          <HomePurchaseBenefits />
+          <DNASection />
         </DeferredRender>
       </div>
 
       <DeferredRender minHeight={360} rootMargin="300px">
-        <Suspense fallback={null}>
-          <HomeCustomerDeliveries />
-        </Suspense>
+        <HomeCustomerDeliveries />
       </DeferredRender>
 
       <DeferredRender minHeight={800}>
-        <Suspense fallback={null}>
-          <NetcarSocialSection />
-        </Suspense>
+        <NetcarSocialSection />
       </DeferredRender>
 
       <div className="w-full space-y-8 bg-muted px-4 py-8 font-sans text-muted-foreground antialiased sm:px-6 md:py-8 lg:px-8 xl:px-12 2xl:px-16">
