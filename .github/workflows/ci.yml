@@ -31,6 +31,8 @@ jobs:
           php -l public/index.php
           php -l public/home-hero.php
           node --test scripts/tests/home-hero-selection.test.mjs
+      - name: Validate stock image preload selection
+        run: node --test scripts/tests/stock-critical-preload.test.mjs
       - name: Validate tablet catalog filters and routing
         run: |
           npx tsx --test scripts/tests/tablet-stock.test.ts scripts/tests/vehicle-cover-image.test.ts

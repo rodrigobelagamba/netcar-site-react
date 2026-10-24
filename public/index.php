@@ -350,9 +350,41 @@ function netcar_stock_bootstrap_script($path)
         . ';</script>';
 }
 
+/** Não antecipar uma capa sem aplicar os mesmos filtros da página React. */
+function netcar_stock_request_has_filters()
+{
+    $requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+    $query = (string) parse_url($requestUri, PHP_URL_QUERY);
+    // Manter alinhado ao validateSearch da rota /seminovos. Parâmetros de
+    // atribuição (UTM, gclid, fbclid etc.) não mudam a seleção do estoque.
+    $filterKeys = array(
+        'busca', 'marca', 'modelo', 'precoMin', 'precoMax', 'anoMin', 'anoMax',
+        'cambio', 'combustivel', 'cor', 'categoria',
+    );
+    foreach (explode('&', $query) as $pair) {
+        $parts = explode('=', $pair, 2);
+        $name = urldecode($parts[0]);
+        $baseName = explode('[', $name, 2)[0];
+        if (!in_array($baseName, $filterKeys, true)) {
+            continue;
+        }
+        // Não usar parse_str: marca=FIAT&marca= perderia o primeiro filtro.
+        // Arrays também são ambíguos; deixar a imagem real receber prioridade.
+        if ($baseName !== $name || (isset($parts[1]) && urldecode($parts[1]) !== '')) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /** Veículo cuja capa será o LCP nas rotas de estoque e detalhe. */
 function netcar_stock_critical_vehicle($path)
 {
+    if ($path === '/seminovos' && netcar_stock_request_has_filters()) {
+        // Evita tanto o preload quanto a imagem eager do shell oculto. O
+        // primeiro card efetivamente exibido continua com fetchpriority=high.
+        return null;
+    }
     $stock = netcar_stock_bootstrap_value();
     if (!is_array($stock) || empty($stock['vehicles'])) {
         return null;
