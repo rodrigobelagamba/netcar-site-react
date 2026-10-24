@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { factoryWarrantyToday, type FactoryWarrantyMatrix, type WarrantyCatalogVehicle } from "./factoryWarranty";
 import { parsePublishedWarrantyRegistry } from "./factoryWarrantyRegistryShape";
@@ -13,18 +13,16 @@ export const WARRANTY_REFRESH_MS = 60_000;
 // Leave one clock tick of margin: an active tab hides stale badges within 5min.
 export const WARRANTY_MAX_AGE_MS = 5 * WARRANTY_REFRESH_MS - 15_000;
 
-// A single clock for all cards also expires stamps when every request fails.
+// A single safety tick also expires stamps when every request fails. Consumers
+// observe freshness/day changes, not the timestamp of each tick.
 const listeners = new Set<() => void>();
-let clock = Date.now();
 let timer: ReturnType<typeof setInterval> | undefined;
 function updateClock() {
-  clock = Date.now();
   listeners.forEach((notify) => notify());
 }
 function subscribe(listener: () => void) {
   listeners.add(listener);
   if (!timer) {
-    clock = Date.now();
     timer = setInterval(updateClock, 15_000);
     if (typeof window !== "undefined") window.addEventListener("focus", updateClock);
     if (typeof document !== "undefined") document.addEventListener("visibilitychange", updateClock);
@@ -38,6 +36,22 @@ function subscribe(listener: () => void) {
       if (typeof document !== "undefined") document.removeEventListener("visibilitychange", updateClock);
     }
   };
+}
+
+const noop = () => {};
+const subscribeWithoutClock = () => noop;
+const getServerDay = () => null;
+let cachedMinute: number | undefined;
+let cachedDay: string;
+function warrantyDay(now: number) {
+  // The Sao Paulo civil day changes on a minute boundary. Share formatting
+  // across all cards, including multiple snapshot reads in the same render.
+  const minute = Math.floor(now / 60_000);
+  if (minute !== cachedMinute) {
+    cachedDay = factoryWarrantyToday(new Date(now));
+    cachedMinute = minute;
+  }
+  return cachedDay;
 }
 
 export function warrantySnapshotIsFresh(observedAt: unknown, now = Date.now()) {
@@ -69,8 +83,6 @@ export async function fetchPublishedWarrantyRegistry(signal?: AbortSignal): Prom
 export function useFactoryWarrantyStamps(vehicle?: WarrantyCatalogVehicle & {
   factoryWarrantyVehicle?: WarrantyCatalogVehicle | null;
 }) {
-  useSyncExternalStore(subscribe, () => clock, () => 0);
-  const now = Date.now();
   const query = useQuery({
     queryKey: ["factory-warranty-registry"],
     queryFn: ({ signal }) => fetchPublishedWarrantyRegistry(signal),
@@ -82,10 +94,22 @@ export function useFactoryWarrantyStamps(vehicle?: WarrantyCatalogVehicle & {
     retry: 1,
   });
   const original = vehicle && factoryWarrantyVehicleFor(vehicle);
-  if (!original || !query.data ||
-    !warrantySnapshotIsFresh(original.observedAt, now) ||
-    !warrantySnapshotIsFresh(query.dataUpdatedAt, now)) return {};
-  const today = factoryWarrantyToday(new Date(now));
+  const observedAt = original?.observedAt;
+  const hasRegistry = Boolean(query.data);
+  const registryUpdatedAt = query.dataUpdatedAt;
+  const getDaySnapshot = useCallback(() => {
+    const now = Date.now();
+    if (!hasRegistry ||
+      !warrantySnapshotIsFresh(observedAt, now) ||
+      !warrantySnapshotIsFresh(registryUpdatedAt, now)) return null;
+    return warrantyDay(now);
+  }, [observedAt, hasRegistry, registryUpdatedAt]);
+  const today = useSyncExternalStore(
+    original && hasRegistry ? subscribe : subscribeWithoutClock,
+    getDaySnapshot,
+    getServerDay,
+  );
+  if (!original || !query.data || !today) return {};
   return {
     warrantyStamp: factoryWarrantyStampFor(vehicle!, query.data, today),
     powertrainStamp: factoryPowertrainStampFor(vehicle!, query.data, today),

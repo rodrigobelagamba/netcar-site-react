@@ -134,6 +134,9 @@ aprovados não foram alterados.
 ## Cache e proteção antes da exibição
 
 - Cada render reconcilia os dados e passa pelo resolver documental canônico.
+- O relógio compartilhado verifica o frescor a cada 15s, mas só provoca novo
+  render quando muda a disponibilidade dos dados ou o dia em São Paulo. Cards
+  sem veículo original válido ou sem registro não mantêm esse relógio ativo.
 - API de veículos e registro publicado são consultados a cada 60s em abas ativas,
   com `no-store`. A ficha revalida ao abrir e ao recuperar foco/conexão.
 - Snapshot de build/cache não ganha data nova de observação. Sem observação

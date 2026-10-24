@@ -14,6 +14,7 @@ const result = spawnSync(process.execPath, [
   "scripts/tests/factory-warranty-catalog-adapter.test.mjs",
   "scripts/tests/factory-warranty-query-refresh.test.mjs",
   "scripts/tests/factory-warranty-published.test.mjs",
+  "scripts/tests/factory-warranty-clock.test.mjs",
   "scripts/tests/warranty-reconciliation-audit.test.ts",
   "scripts/tests/factory-warranty-card.test.mjs",
   "scripts/tests/factory-warranty-editorial-cards.test.mjs",
