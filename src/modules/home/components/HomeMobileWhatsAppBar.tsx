@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useId } from "react";
+import { useEffect, useId, useState } from "react";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { buildWhatsAppUrl, homeWhatsAppMessages } from "@/lib/whatsappMessages";
@@ -29,8 +29,42 @@ export function HomeMobileWhatsAppBar({
 }: HomeMobileWhatsAppBarProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const hintId = useId();
+  const [inlineActionsVisible, setInlineActionsVisible] = useState(false);
 
-  if (!visible || !whatsapp?.numero) return null;
+  useEffect(() => {
+    if (!visible || typeof document === "undefined") return;
+
+    const actionGroups = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-home-conversion-cta]"),
+    );
+    if (actionGroups.length === 0) return;
+
+    const updateVisibility = () => {
+      setInlineActionsVisible(actionGroups.some((group) => {
+        const rect = group.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0 &&
+          rect.bottom > 0 && rect.top < window.innerHeight;
+      }));
+    };
+    updateVisibility();
+
+    if (typeof IntersectionObserver === "undefined") {
+      window.addEventListener("scroll", updateVisibility, { passive: true });
+      window.addEventListener("resize", updateVisibility);
+      return () => {
+        window.removeEventListener("scroll", updateVisibility);
+        window.removeEventListener("resize", updateVisibility);
+      };
+    }
+
+    const observer = new IntersectionObserver(updateVisibility, {
+      threshold: [0, 1],
+    });
+    actionGroups.forEach((group) => observer.observe(group));
+    return () => observer.disconnect();
+  }, [visible]);
+
+  if (!visible || inlineActionsVisible || !whatsapp?.numero) return null;
 
   const href =
     coldHref ||

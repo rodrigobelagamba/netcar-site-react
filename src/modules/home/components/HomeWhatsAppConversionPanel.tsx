@@ -104,7 +104,7 @@ export function HomeWhatsAppConversionPanel({
   const ctaDisabled = false;
 
   const quickActionClass =
-    "inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-white/16";
+    "inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-3 py-2 text-sm font-bold text-white transition-colors hover:bg-white/16";
 
   return (
     <section className="relative overflow-hidden bg-[#00283C] px-4 py-4 md:py-6 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
@@ -112,7 +112,7 @@ export function HomeWhatsAppConversionPanel({
       <div className="pointer-events-none absolute -right-16 bottom-0 hidden h-64 w-64 rounded-full bg-white/10 blur-3xl md:block" />
 
       <div className="container-main relative grid gap-4 md:gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.07] p-4 text-white shadow-2xl md:backdrop-blur md:p-7 lg:p-8">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.07] p-3 text-white shadow-sm md:backdrop-blur md:p-5 lg:p-6">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#5CD29D]/30 bg-[#5CD29D]/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#5CD29D]">
             <MessageCircle className="h-4 w-4" />
             <span className="md:hidden">Fale pelo WhatsApp</span>
@@ -125,12 +125,10 @@ export function HomeWhatsAppConversionPanel({
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/78 md:mt-3 md:text-lg">
             <span className="md:hidden">
-              Veja o estoque ou chame no WhatsApp — mensagem pronta.
+              Veja o estoque ou fale com a Netcar.
             </span>
             <span className="hidden md:inline">
-              Escolha um carro do estoque ou diga o que procura. No WhatsApp
-              você também pode enviar os dados da troca e iniciar uma simulação
-              de financiamento, sujeita à análise.
+              Escolha um carro ou conte o que procura. A Netcar ajuda na compra.
             </span>
           </p>
 
@@ -155,7 +153,7 @@ export function HomeWhatsAppConversionPanel({
           </div>
 
           {/* CTAs mobile: WhatsApp primeiro */}
-          <div className="mt-4 flex flex-col gap-2.5 md:hidden">
+          <div data-home-conversion-cta className="mt-3 grid grid-cols-2 gap-2 md:hidden">
             <a
               href={primaryHref}
               target="_blank"
@@ -165,27 +163,26 @@ export function HomeWhatsAppConversionPanel({
               data-wa-vehicle-id={featuredVehicle?.id}
               data-wa-vehicle-name={label}
               aria-disabled={ctaDisabled}
-              className={`inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-base font-black shadow-[0_14px_34px_rgba(92,210,157,0.28)] transition-transform hover:scale-[1.02] ${
+              className={`inline-flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-2xl px-1.5 py-2 text-sm font-black transition-colors ${
                 ctaDisabled
                   ? "pointer-events-none bg-white/20 text-white/60"
                   : "bg-[#087A37] text-white"
               }`}
             >
-              <MessageCircle className="h-5 w-5" />
+              <MessageCircle className="h-4 w-4 shrink-0" />
               WhatsApp
             </a>
             <button
               type="button"
               onClick={onViewStock}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-base font-black text-[#00283C] shadow-[0_10px_28px_rgba(92,210,157,0.35)] transition-colors hover:bg-white/90"
+              className="inline-flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-2xl bg-white px-1.5 py-2 text-sm font-black text-[#00283C] transition-colors hover:bg-white/90"
             >
-              <span className="button-text-shimmer">Ver estoque</span>
-              <ArrowRight className="h-5 w-5 text-[#00283C]" />
+              <span>Ver estoque</span>
             </button>
           </div>
 
-          {/* CTAs desktop — igual master */}
-          <div className="mt-6 hidden flex-col gap-3 md:flex md:flex-row">
+          {/* CTAs desktop */}
+          <div data-home-conversion-cta className="mt-4 hidden flex-col gap-2 md:flex md:flex-row">
             <a
               href={primaryHref}
               target="_blank"
@@ -195,29 +192,27 @@ export function HomeWhatsAppConversionPanel({
               data-wa-vehicle-id={featuredVehicle?.id}
               data-wa-vehicle-name={label}
               aria-disabled={ctaDisabled}
-              className={`inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-4 text-base font-black shadow-[0_14px_34px_rgba(92,210,157,0.28)] transition-transform hover:scale-[1.02] ${
+              className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-base font-black transition-colors ${
                 ctaDisabled
                   ? "pointer-events-none bg-white/20 text-white/60"
                   : "bg-[#087A37] text-white"
               }`}
             >
               <MessageCircle className="h-5 w-5" />
-              Tenho interesse neste
+              Tenho interesse
             </a>
             <button
               type="button"
               onClick={onViewStock}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-4 text-base font-black text-white transition-colors hover:bg-white/18"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-4 py-2.5 text-base font-black text-white transition-colors hover:bg-white/18"
             >
-              <span className="button-text-shimmer-on-dark">
-                Ver estoque completo
-              </span>
+              <span>Ver estoque</span>
               <ArrowRight className="h-5 w-5" />
             </button>
           </div>
 
           {/* Quick actions — só desktop */}
-          <div className="mt-4 hidden gap-2 md:grid md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-3 hidden gap-2 md:grid md:grid-cols-2 lg:grid-cols-4">
             <a
               href={financeHref}
               target="_blank"
@@ -229,7 +224,7 @@ export function HomeWhatsAppConversionPanel({
               className={quickActionClass}
             >
               <Calculator className="h-4 w-4 text-[#5CD29D]" />
-              Consultar financiamento
+              Financiamento
             </a>
             <a
               href={kmHref}
@@ -242,7 +237,7 @@ export function HomeWhatsAppConversionPanel({
               className={quickActionClass}
             >
               <Gauge className="h-4 w-4 text-[#5CD29D]" />
-              Confirmar quilometragem
+              Quilometragem
             </a>
             <a
               href={similarHref}
@@ -271,7 +266,7 @@ export function HomeWhatsAppConversionPanel({
         </div>
 
         {/* Card destaque — só md+ (no mobile poluia rolagem) */}
-        <div className="hidden rounded-3xl border border-white/12 bg-white p-4 shadow-2xl md:block md:p-5">
+        <div className="hidden rounded-3xl border border-white/12 bg-white p-4 shadow-sm md:block md:p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
               <span className="text-xs font-black uppercase tracking-[0.18em] text-[#128C7E]">
@@ -304,7 +299,7 @@ export function HomeWhatsAppConversionPanel({
             />
           </button>
 
-          <VehicleWarrantySummary vehicle={featuredVehicle} className="mt-3" />
+          <VehicleWarrantySummary vehicle={featuredVehicle} className="mt-3" showNote={false} />
 
           <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs font-bold text-gray-600">
             <div className="rounded-2xl bg-gray-50 px-2 py-3">
@@ -336,7 +331,7 @@ export function HomeWhatsAppConversionPanel({
                 {price || "Consulte"}
               </p>
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div data-home-conversion-cta className="flex flex-col gap-2 sm:flex-row">
               <a
                 href={primaryHref}
                 target="_blank"
@@ -345,7 +340,7 @@ export function HomeWhatsAppConversionPanel({
                 data-wa-intent="featured_card_whatsapp"
                 data-wa-vehicle-id={featuredVehicle?.id}
                 data-wa-vehicle-name={label}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#087A37] px-4 py-3 text-sm font-black text-white"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#087A37] px-3 py-2 text-sm font-black text-white"
               >
                 <MessageCircle className="h-4 w-4" />
                 Tenho interesse
@@ -353,7 +348,7 @@ export function HomeWhatsAppConversionPanel({
               <button
                 type="button"
                 onClick={goToFeaturedVehicle}
-                className="rounded-xl bg-[#00283C] px-4 py-3 text-sm font-black text-white transition-colors hover:bg-[#00435a]"
+                className="min-h-11 rounded-xl bg-[#00283C] px-3 py-2 text-sm font-black text-white transition-colors hover:bg-[#00435a]"
               >
                 Ver detalhes
               </button>

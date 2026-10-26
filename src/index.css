@@ -311,7 +311,7 @@
   }
 
   .info-model {
-    font-size: 2em;
+    font-size: 1.75em;
   }
 
   @media (min-width: 640px) {
@@ -391,7 +391,7 @@
   }
 
   .info-price {
-    font-size: 2.835em;
+    font-size: 2.25em;
   }
 
   @media (min-width: 640px) {

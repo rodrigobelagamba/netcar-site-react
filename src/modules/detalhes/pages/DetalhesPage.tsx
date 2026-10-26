@@ -414,36 +414,30 @@ function ContactButton({
   // Um botão largo em fluxo. O card com miniatura + preço fica só no sticky
   // (DetalheFloatingWhatsApp), quando o carro já saiu da tela.
   return (
-    <div className="flex w-full flex-col items-center gap-2.5">
+    <div className="flex w-full flex-col items-center gap-1">
       {href && (
-        <div className="w-full">
-          <WhatsAppPulseRing>
-            <CTAButton
-              text="Falar deste carro"
-              icon={MessageCircleMore}
-              borderColor="border-[#25D366]"
-              textColor="text-white"
-              hoverBgColor="bg-green-dark"
-              filled
-              className="w-full info-contact-button-wrapper !bg-[#087A37] !border-[#087A37] shadow-[0_8px_24px_rgba(8,122,55,0.3)]"
-              initialAnimation={true}
-              href={href}
-              waSource="hero"
-              waIntent="vehicle_inquiry"
-              waVehicleId={vehicleId}
-              waVehicleName={modeloCompleto}
-              disabled={!whatsapp?.numero}
-            />
-          </WhatsAppPulseRing>
-        </div>
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-wa-source="hero"
+          data-wa-intent="vehicle_inquiry"
+          data-wa-vehicle-id={vehicleId}
+          data-wa-vehicle-name={modeloCompleto}
+          className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[#087A37] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-green-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#087A37] sm:min-h-12"
+        >
+          <MessageCircleMore className="h-4 w-4 shrink-0" aria-hidden="true" />
+          Falar deste carro
+        </a>
       )}
 
-      <div className="flex w-full gap-2 [&>*]:flex-1">
+      <div className="flex w-full items-center justify-center gap-5">
         <TradeInTextLink
           href={tradeHref}
           modeloCompleto={modeloCompleto}
           vehicleId={vehicleId}
-          pill
+          compact
+          className="min-h-11"
         />
         {vehicleId != null && (
           <Link
@@ -456,7 +450,7 @@ function ContactButton({
                 vehicleNames: [label],
               })
             }
-            className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#00283C]/15 bg-white px-3 text-[13px] font-bold text-[#00283C] transition-colors hover:border-[#00283C]/40"
+            className="inline-flex min-h-11 items-center justify-center gap-1.5 text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
           >
             Comparar
             <ArrowRight className="h-3.5 w-3.5" />
@@ -511,7 +505,7 @@ function TradeInTextLink({
         "Usado na troca"
       ) : (
         <span className="underline underline-offset-4">
-          Tenho um usado na troca
+          {compact ? "Usado na troca" : "Tenho um usado na troca"}
         </span>
       )}
     </a>
@@ -525,7 +519,7 @@ interface DetalheFloatingWhatsAppProps {
   isSold?: boolean;
   vehicleLabel?: string;
   image?: string;
-  mobileVisible?: boolean;
+  visible?: boolean;
   waRef?: VehicleWhatsAppRef;
 }
 
@@ -537,7 +531,7 @@ function DetalheFloatingWhatsApp({
   isSold = false,
   vehicleLabel,
   image,
-  mobileVisible = false,
+  visible = false,
   waRef,
 }: DetalheFloatingWhatsAppProps) {
   const { data: whatsapp } = useWhatsAppQuery();
@@ -550,7 +544,7 @@ function DetalheFloatingWhatsApp({
     return (
       <FloatingPortal>
         <div
-          className={`pointer-events-none fixed inset-x-0 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[60] justify-center px-3 md:bottom-3 md:flex ${mobileVisible ? "flex" : "hidden"}`}
+          className={`pointer-events-none fixed inset-x-0 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-[60] justify-center px-3 md:bottom-3 ${visible ? "flex" : "hidden"}`}
         >
           <div className="pointer-events-auto w-full max-w-sm rounded-2xl border border-[#00283C]/15 bg-white/95 px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.16)] backdrop-blur-md">
             <p className="mb-2 text-center text-sm font-black text-[#00283C]">
@@ -598,7 +592,7 @@ function DetalheFloatingWhatsApp({
   return (
     <FloatingPortal>
       <div
-        className={`pointer-events-none fixed inset-x-0 bottom-[calc(0.5rem+env(safe-area-inset-bottom))] z-[60] justify-center px-2 md:bottom-3 md:flex md:px-3 ${mobileVisible ? "flex" : "hidden"}`}
+        className={`pointer-events-none fixed inset-x-0 bottom-[calc(0.5rem+env(safe-area-inset-bottom))] z-[60] justify-center px-2 md:bottom-3 md:px-3 ${visible ? "flex" : "hidden"}`}
       >
         <div className="pointer-events-auto w-full max-w-sm md:max-w-[44rem]">
           <VehicleWhatsAppCard
@@ -614,6 +608,7 @@ function DetalheFloatingWhatsApp({
             tradeSource="detalhe_sticky_trade"
             eyebrow="Este carro"
             tradeCtaLabel="Avaliar troca"
+            compact
           />
         </div>
       </div>
@@ -682,23 +677,6 @@ interface CTASidebarProps {
   isSold?: boolean;
   /** Slug da URL atual (/veiculo/$slug) — NÃO usar vehicle.slug (link legado .html da API). */
   pageSlug?: string;
-}
-
-function WhatsAppPulseRing({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative w-full">
-      <motion.span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-[65px] border-2 border-[#25D366]/50"
-        animate={{
-          scale: [1, 1.04, 1],
-          opacity: [0.55, 0.15, 0.55],
-        }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-      />
-      {children}
-    </div>
-  );
 }
 
 function WhatsAppQuickAction({
@@ -983,7 +961,7 @@ function CTASidebar({
                 Como prefere falar?
               </h3>
               <p className="mb-4 text-left text-[13px] leading-relaxed text-muted-foreground">
-                Escolha o assunto e já abra a conversa certa no WhatsApp.
+                Escolha o assunto para falar no WhatsApp.
               </p>
 
               <div className="grid w-full grid-cols-1 gap-2">
@@ -1486,7 +1464,7 @@ function RelatedVehiclesSection({
   );
 }
 
-function PriceWithShimmer({
+function VehiclePrice({
   price,
   previousPrice,
   showComparison = false,
@@ -1495,8 +1473,6 @@ function PriceWithShimmer({
   previousPrice?: string;
   showComparison?: boolean;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -1522,21 +1498,13 @@ function PriceWithShimmer({
             Para:
           </span>
           <p
-            className={`font-bold whitespace-nowrap cursor-pointer text-[#087A37] leading-tight info-price info-price-shimmer ${
-              isHovered ? "info-price-shimmer-hover" : ""
-            }`}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            className="font-bold whitespace-nowrap text-[#087A37] leading-tight info-price"
             dangerouslySetInnerHTML={{ __html: price }}
           />
         </div>
       ) : (
         <p
-          className={`font-bold whitespace-nowrap cursor-pointer text-[#087A37] leading-tight info-price info-price-shimmer ${
-            isHovered ? "info-price-shimmer-hover" : ""
-          }`}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          className="font-bold whitespace-nowrap text-[#087A37] leading-tight info-price"
           dangerouslySetInnerHTML={{ __html: price }}
         />
       )}
@@ -1703,7 +1671,7 @@ export function DetalhesPage() {
   const primaryCtaRef = useRef<HTMLDivElement>(null);
   const [isPrimaryCtaPastHeader, setIsPrimaryCtaPastHeader] = useState(false);
 
-  // No mobile, o card flutuante só entra depois que o CTA principal sai pelo
+  // O card flutuante só entra depois que o CTA principal sai pelo
   // topo. Assim ele não encobre preço e links enquanto o usuário avalia o carro.
   useEffect(() => {
     if (!vehicle) {
@@ -2158,10 +2126,10 @@ export function DetalhesPage() {
         </ol>
       </nav>
       {/* Hero Section */}
-      <section className="relative w-full max-w-full overflow-hidden py-0 pb-8 pt-0 lg:min-h-[820px] lg:pb-12 lg:pt-0 xl:min-h-[820px] 2xl:min-h-[830px] 3xl:min-h-[850px] 4xl:min-h-[1200px] 5xl:min-h-[1500px] 6xl:min-h-[1900px]">
+      <section className="relative w-full max-w-full overflow-hidden py-0 pb-5 pt-0 lg:min-h-[700px] lg:pb-8 lg:pt-0 xl:min-h-[700px] 2xl:min-h-[760px] 3xl:min-h-[800px] 4xl:min-h-[1200px] 5xl:min-h-[1500px] 6xl:min-h-[1900px]">
         {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
         <div
-          className="w-full mb-6 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
+          className="w-full mb-2 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
                         lg:w-[70vw] lg:top-[-3rem] lg:right-0
                         xl:top-[-10rem]
                         2xl:top-[-15rem]
@@ -2208,18 +2176,17 @@ export function DetalhesPage() {
           {(warrantyStamp || tractionBatteryStamp || powertrainStamp) && (
             <div className="flex items-start justify-end gap-3 px-4 pt-1 sm:px-6 lg:hidden">
               {warrantyStamp && (
-                <div className="w-[84px] shrink-0 sm:w-[112px]">
+                <div className="w-[68px] shrink-0 sm:w-[96px]">
                   <FactoryWarrantyBadge {...warrantyStamp} variant="hero" />
                 </div>
               )}
               {tractionBatteryStamp && (
-                <div className="w-[84px] shrink-0 sm:w-[112px]">
+                <div className="w-[68px] shrink-0 sm:w-[96px]">
                   <FactoryWarrantyBadge {...tractionBatteryStamp} variant="hero" />
-                  <p className="mt-1 text-center text-[10.5px] font-semibold leading-snug text-[#505A5F]">Bateria de tração</p>
                 </div>
               )}
               {powertrainStamp && (
-                <div className="w-[84px] shrink-0 sm:w-[112px]">
+                <div className="w-[68px] shrink-0 sm:w-[96px]">
                   <FactoryWarrantyBadge {...powertrainStamp} variant="hero" />
                 </div>
               )}
@@ -2237,7 +2204,6 @@ export function DetalhesPage() {
             {tractionBatteryStamp && (
               <div className="w-[10.5vw] max-w-[164px]">
                 <FactoryWarrantyBadge {...tractionBatteryStamp} variant="hero" />
-                <p className="mt-1 text-center text-xs font-semibold text-[#505A5F]">Bateria de tração</p>
               </div>
             )}
             {powertrainStamp && (
@@ -2305,7 +2271,7 @@ export function DetalhesPage() {
                 delay: 0.2,
                 ease: [0.25, 0.1, 0.25, 1],
               }}
-              className="text-fg font-bold leading-[1.15] mb-3 sm:mb-8 max-w-full  break-words info-model"
+              className="text-fg font-bold leading-[1.15] mb-3 sm:mb-5 max-w-full break-words info-model"
             >
               {modeloCompleto}
             </motion.h1>
@@ -2380,15 +2346,15 @@ export function DetalhesPage() {
             </div>
 
             {/* Price & CTA - Melhorado */}
-            <div className="order-1 sm:order-none flex flex-col items-center gap-3 w-full">
+            <div className="order-1 sm:order-none flex flex-col items-center gap-1 w-full">
               {!isSold && (
                 <div className="flex w-full flex-col items-center">
-                  <PriceWithShimmer
+                  <VehiclePrice
                     price={price}
                     previousPrice={previousPrice}
                     showComparison={showPriceComparison}
                   />
-                  <GoogleRatingBadge className="mb-1" />
+                  <GoogleRatingBadge className="[&>summary]:border-0 [&>summary]:bg-transparent [&>summary]:shadow-none" />
                 </div>
               )}
               <div ref={primaryCtaRef} className="w-full">
@@ -2401,22 +2367,13 @@ export function DetalhesPage() {
                 />
               </div>
               {!isSold && (
-                <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
-                  Consulte as condições aprovadas por bancos e financeiras
-                  parceiras. Taxa, entrada e prazo dependem da análise.
+                <p className="mb-3 text-center text-[11px] leading-relaxed text-muted-foreground">
+                  Financiamento sujeito à análise. Consulte taxa, entrada e prazo.
                 </p>
               )}
             </div>
           </motion.div>
         </div>
-        {(warrantyStamp || tractionBatteryStamp || powertrainStamp) && (
-          <div
-            className="container-main relative z-10 mt-4 px-4 sm:px-6 lg:absolute lg:bottom-3 lg:left-0 lg:right-0 lg:mt-0 lg:px-8 xl:px-12 2xl:px-16"
-            data-factory-warranty-footer="hero"
-          >
-            <FactoryWarrantyNote compact tractionBattery={!!tractionBatteryStamp} powertrain={powertrainStamp} />
-          </div>
-        )}
       </section>
 
       {/* One media gallery: the verified video stays available without photos. */}
@@ -2503,6 +2460,9 @@ export function DetalhesPage() {
           vehicle={vehicle}
           isSold={isSold}
           pageSlug={slug}
+          warrantyConditions={(warrantyStamp || tractionBatteryStamp || powertrainStamp) ? (
+            <FactoryWarrantyNote compact tractionBattery={!!tractionBatteryStamp} powertrain={powertrainStamp} />
+          ) : undefined}
         />
       </DeferredRender>
 
@@ -2640,7 +2600,7 @@ export function DetalhesPage() {
         isSold={isSold}
         vehicleLabel={vehicleLabel}
         image={mainImage}
-        mobileVisible={isPrimaryCtaPastHeader}
+        visible={isPrimaryCtaPastHeader}
         waRef={waRef}
       />
     </main>
@@ -2738,12 +2698,14 @@ interface DetailsSectionProps {
   vehicle: any;
   isSold?: boolean;
   pageSlug?: string;
+  warrantyConditions?: React.ReactNode;
 }
 
 function DetailsSection({
   vehicle,
   isSold = false,
   pageSlug,
+  warrantyConditions,
 }: DetailsSectionProps) {
   const [showMoreOptionals, setShowMoreOptionals] = useState(false);
 
@@ -2823,9 +2785,6 @@ function DetailsSection({
                   <h2 className="text-[17px] font-black text-[#00283C] sm:text-[18px] lg:text-[19px]">
                     Resumo técnico
                   </h2>
-                  <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
-                    Os dados objetivos deste veículo.
-                  </p>
                 </div>
               </div>
 
@@ -2840,6 +2799,11 @@ function DetailsSection({
                   />
                 ))}
               </div>
+              {warrantyConditions && (
+                <div className="mt-4" data-factory-warranty-footer="specifications">
+                  {warrantyConditions}
+                </div>
+              )}
             </motion.div>
 
             <VehicleDifferentialHighlights
@@ -2865,9 +2829,6 @@ function DetailsSection({
                     <h2 className="text-[17px] font-black text-[#00283C] sm:text-[18px] lg:text-[19px]">
                       Outros equipamentos
                     </h2>
-                    <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
-                      Itens do cadastro, organizados por relevância e sem repetições.
-                    </p>
                   </div>
                 </div>
 

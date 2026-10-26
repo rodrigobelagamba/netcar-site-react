@@ -394,6 +394,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
         </div>
 
         <VehicleWarrantySummary
+          showNote={false}
           vehicle={vehicle.warrantyVehicle?.id === vehicle.id ? vehicle.warrantyVehicle : undefined}
           className="mt-4 w-full max-w-5xl rounded-2xl bg-white/80 p-3"
         />

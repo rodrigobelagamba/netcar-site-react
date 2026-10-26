@@ -388,10 +388,7 @@ export function HomePage() {
               Escolha um carro e fale no WhatsApp.
             </span>
             <span className="hidden md:inline">
-              Quer trocar de carro? Avaliamos seu usado, mesmo financiado,
-              simulamos opções em até 60x e cuidamos da transferência com
-              despachante credenciado. A entrada pode ser parcelada no cartão,
-              conforme análise.
+              Veja fotos, preços e os principais dados de cada carro.
             </span>
           </p>
         </div>

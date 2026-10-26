@@ -241,6 +241,12 @@ async function renderCard(raw, { base = approvedVehicle(), ...overrides } = {}) 
     else renderer = TestRenderer.create(element);
   });
   assert.equal(renderer.root.findByType(CardsHero).props.year, "2026");
+  assert.equal(renderer.root.findAll((node) =>
+    node.type === "p" && Object.hasOwn(node.props, "data-factory-warranty-note")).length, 0,
+  "Stock cards keep their stamps without explanatory notes");
+  assert.equal(renderer.root.findAll((node) =>
+    node.type === "a" && renderedText(node) === "Consultar fonte").length, 0,
+  "Warranty source links belong to the vehicle details, not the stock card");
 }
 
 function assertStamp(expected, year = 2028) {
@@ -253,6 +259,7 @@ function assertStamp(expected, year = 2028) {
       badges[0].findByType("svg").props["aria-label"],
       `Garantia de fábrica até ${year}*. Ano estimado pela fabricação.`,
     );
+    assert.match(badges[0].findAllByType("text").map(renderedText).join(" "), /\*/);
   } else {
     assert.equal(renderer.root.findByType(CardsHero).props.warrantyStamp, undefined);
   }
@@ -260,7 +267,7 @@ function assertStamp(expected, year = 2028) {
 
 for (const [id, year] of [["19779", 2026], ["19854", 2027], ["19898", 2026]]) {
   for (const compact of [false, true]) {
-    test(`authorized ${id}: ${compact ? "compact" : "normal"} card renders only general ${year} with approved footnote`, async () => {
+    test(`authorized ${id}: ${compact ? "compact" : "normal"} card renders only general ${year} with an asterisk and no explanatory note`, async () => {
       currentNow = OriginalDate.parse("2026-10-09T21:00:00.000Z");
       const current = { ...boundInventory.find((entry) => entry.id === id), observedAt: Date.now() };
       assert.equal(current.id, id);
@@ -270,8 +277,7 @@ for (const [id, year] of [["19779", 2026], ["19854", 2027], ["19898", 2026]]) {
       assert.equal(hero.powertrainStamp, undefined);
       assert.equal(hero.tractionBatteryStamp, undefined);
       const notes = renderer.root.findAll((node) => node.type === "p" && Object.hasOwn(node.props, "data-factory-warranty-note"));
-      assert.equal(notes.length, 1);
-      assert.equal(notes[0].children.join(""), "*Estimativa pela fabricação e documentação oficial da montadora. Validade, cobertura e km conforme manual do modelo/ano.");
+      assert.equal(notes.length, 0);
     });
   }
   test(`authorized ${id}: an owner reply does not bypass revoked/pending decisions in the real card`, async () => {
@@ -587,6 +593,7 @@ function assertBydCoverages({ general = false, battery = false } = {}) {
     assert.equal(badge.findByType("svg").props["aria-label"], item.label);
     const visibleText = badge.findAllByType("text").map((node) => node.children.join("")).join(" ");
     assert.match(visibleText, item.visible);
+    assert.match(visibleText, /\*/);
     if (item.scope === "traction-battery") assert.doesNotMatch(visibleText, /DE FÁBRICA/);
   }
   const hero = renderer.root.findByType(CardsHero).props;
@@ -595,7 +602,7 @@ function assertBydCoverages({ general = false, battery = false } = {}) {
   const notes = renderer.root.findAll(
     (node) => node.type === "p" && Object.hasOwn(node.props, "data-factory-warranty-note"),
   );
-  assert.equal(notes.length, general || battery ? 1 : 0);
+  assert.equal(notes.length, 0);
 }
 
 test("reviewed BYD API -> mapper -> card renders distinct general 2030 and traction battery 2032 labels", async () => {
@@ -693,20 +700,21 @@ function assertTiggoPowertrain(expected, expectation = tiggo8PowertrainExpectati
     (node) => node.type === "p" && Object.hasOwn(node.props, "data-factory-warranty-note"),
   );
   assert.equal(captions.length, 0);
-  assert.equal(notes.length, expected ? 1 : 0);
+  assert.equal(notes.length, 0);
   if (!expected) {
     assert.equal(hero.powertrainStamp, undefined);
     return;
   }
 
-  assertPowertrainPresentation(badges[0], notes[0], hero.powertrainStamp, expectation);
+  assertPowertrainBadge(badges[0], hero.powertrainStamp, expectation);
 }
 
-function assertPowertrainPresentation(badge, note, stamp, { estimatedEndYear, manualUrl, manualCode }) {
+function assertPowertrainBadge(badge, stamp, { estimatedEndYear, manualUrl, manualCode }) {
   assert.equal(stamp.scope, "powertrain");
   assert.equal(stamp.estimatedEndYear, estimatedEndYear);
   assert.equal(stamp.termYears, 5);
   assert.equal(stamp.sourceUrl, manualUrl);
+  assert.equal(stamp.sourceLabel, `Manual ${manualCode}`);
   assert.equal(
     badge.findByType("svg").props["aria-label"],
     `Garantia de fábrica de motor e câmbio até ${estimatedEndYear}*. Ano estimado pela fabricação.`,
@@ -714,6 +722,11 @@ function assertPowertrainPresentation(badge, note, stamp, { estimatedEndYear, ma
   const stampText = badge.findAllByType("text").map(renderedText).join(" ");
   assert.ok(stampText.includes(`GARANTIA MOTOR E CÂMBIO ATÉ ${estimatedEndYear} *`));
   assert.doesNotMatch(stampText, /BATERIA|GARANTIA DE FÁBRICA/);
+}
+
+function assertPowertrainPresentation(badge, note, stamp, expectation) {
+  assertPowertrainBadge(badge, stamp, expectation);
+  const { manualUrl, manualCode } = expectation;
   const noteText = renderedText(note);
   assert.equal(noteText, "*Ano estimado pela fabricação. Prazo original e condições conforme manual da montadora. Consultar fonte.");
   assert.doesNotMatch(noteText, /bateria de tração|garantia geral/i);
@@ -862,7 +875,7 @@ for (const [id, expectedScopes] of [
   ["20084", ["powertrain"]],
 ]) {
   for (const surface of ["summary", "home-hero", "home-featured"]) {
-    test(`${surface}: current ${id} preserves exactly its approved coverage and note`, async () => {
+    test(`${surface}: current ${id} preserves exactly its approved coverage with notes only in the general summary`, async () => {
       currentNow = OriginalDate.parse("2026-10-15T18:00:00Z");
       queryClient.setQueryData(["factory-warranty-registry"], factoryWarrantyMatrix);
       const raw = approvedVehicle(id);
@@ -889,8 +902,12 @@ for (const [id, expectedScopes] of [
         node.type === "div" && node.props["data-factory-warranty-badge"] === "card");
       await update(catalog);
       assert.deepEqual(badges().map((badge) => badge.props["data-warranty-scope"]), expectedScopes);
+      for (const badge of badges()) {
+        assert.match(badge.findByType("svg").props["aria-label"], /\*/);
+        assert.match(badge.findAllByType("text").map(renderedText).join(" "), /\*/);
+      }
       assert.equal(renderer.root.findAll((node) => node.type === "p" &&
-        Object.hasOwn(node.props, "data-factory-warranty-note")).length, 1);
+        Object.hasOwn(node.props, "data-factory-warranty-note")).length, surface === "summary" ? 1 : 0);
       for (const factoryWarrantyVehicle of [null, { ...raw, diferenciais: [] }, { ...raw, observedAt: currentNow - 300_000 }]) {
         await update({ ...catalog, factoryWarrantyVehicle });
         assert.equal(badges().length, 0, "Missing, withdrawn or stale source cannot inherit a visual badge");
@@ -909,6 +926,9 @@ for (const compact of [false, true]) {
       await renderCard(raw, { base: approvedVehicle(id), compact });
       const badges = renderer.root.findAll((node) => node.type === "div" && node.props["data-factory-warranty-badge"] === "card");
       const labels = badges.map((badge) => badge.findByType("svg").props["aria-label"]);
+      for (const badge of badges) {
+        assert.match(badge.findAllByType("text").map(renderedText).join(" "), /\*/);
+      }
       if (id === "20067") {
         assert.equal(labels.length, 2);
         assert.ok(labels.some((label) => /2029/.test(label) && !/bateria/i.test(label)));
@@ -916,9 +936,13 @@ for (const compact of [false, true]) {
       } else {
         assert.equal(labels.length, 1);
         assert.match(labels[0], /motor e câmbio até 2028/);
+        const stamp = renderer.root.findByType(CardsHero).props.powertrainStamp;
+        assert.equal(stamp.scope, "powertrain");
+        assert.equal(stamp.termYears, 5);
+        assert.equal(stamp.sourceLabel, "Resposta da CAOA Chery");
+        assert.equal(stamp.sourceUrl, "https://www.reclameaqui.com.br/chery-brasil/tiggo-5x-sport-2024-ma-qualidade-falhas-recorrentes-e-pos-venda-ineficiente_aI8TnTbw3cP4uxFW/");
         const links = renderer.root.findAll((node) => node.type === "a" && node.props.title === "Resposta da CAOA Chery");
-        assert.equal(links.length, 1);
-        assert.equal(renderedText(links[0]), "Consultar fonte");
+        assert.equal(links.length, 0);
       }
     });
   }

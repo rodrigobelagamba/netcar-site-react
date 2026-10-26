@@ -8,9 +8,11 @@ import {
 export function VehicleWarrantySummary({
   vehicle,
   className = "",
+  showNote = true,
 }: {
   vehicle?: Parameters<typeof useFactoryWarrantyStamps>[0];
   className?: string;
+  showNote?: boolean;
 }) {
   const { warrantyStamp, tractionBatteryStamp, powertrainStamp } =
     useFactoryWarrantyStamps(vehicle);
@@ -31,13 +33,15 @@ export function VehicleWarrantySummary({
           </div>
         ))}
       </div>
-      <div className="min-w-[8rem] flex-1 text-left">
-        <FactoryWarrantyNote
-          compact
-          tractionBattery={!!tractionBatteryStamp}
-          powertrain={powertrainStamp}
-        />
-      </div>
+      {showNote && (
+        <div className="min-w-[8rem] flex-1 text-left">
+          <FactoryWarrantyNote
+            compact
+            tractionBattery={!!tractionBatteryStamp}
+            powertrain={powertrainStamp}
+          />
+        </div>
+      )}
     </div>
   );
 }

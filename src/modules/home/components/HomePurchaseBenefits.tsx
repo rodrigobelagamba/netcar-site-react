@@ -5,7 +5,7 @@ const benefits = [
   {
     icon: Calculator,
     title: "Financiamento em até 60x",
-    desc: "Simule parcelas e compare condições entre bancos e financeiras parceiras.",
+    desc: "Consulte parcelas e condições com bancos parceiros, sujeito à análise.",
   },
   {
     icon: CreditCard,

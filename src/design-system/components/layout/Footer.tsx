@@ -14,6 +14,7 @@ import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import logoNetcar from "@/assets/images/logo-netcar.png";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { openPrivacyPreferences } from "@/components/PrivacyConsent";
+import { FACTORY_WARRANTY_NOTE, FACTORY_TRACTION_BATTERY_NOTE } from "@/design-system/components/patterns/FactoryWarrantyBadge";
 
 const menuLinks = [
   { to: "/como-selecionamos-nossos-carros", label: "Por que Netcar" },
@@ -411,9 +412,18 @@ export function Footer() {
 
         <div className="border-t border-border pt-6 pb-4">
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Netcar Multimarcas — duas lojas integradas e estoque de seminovos em
-            Esteio/RS. O atendimento pode começar pelo site ou WhatsApp; as
-            lojas físicas ficam somente na Av. Presidente Vargas, em Esteio.
+            Netcar Multimarcas — duas lojas na Av. Presidente Vargas, em Esteio/RS.
+            Atendimento pelo site, WhatsApp e nas lojas.
+          </p>
+        </div>
+
+        <div className="border-t border-border pt-6 pb-4" id="condicoes-dos-carimbos">
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            <strong>Carimbos de garantia:</strong> {FACTORY_WARRANTY_NOTE}{" "}
+            {FACTORY_TRACTION_BATTERY_NOTE}{" "}
+            Os carimbos de motor e câmbio ou de bateria de tração se referem
+            somente à cobertura indicada. Consulte as condições e fontes na
+            página de cada veículo.
           </p>
         </div>
 

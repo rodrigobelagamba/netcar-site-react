@@ -41,8 +41,7 @@ export function SeminovosWhatsAppHelpPanel({
               Ainda em dúvida?
             </p>
             <p className="mt-1 text-sm font-black leading-snug sm:text-base">
-              Manda o que procura — a gente responde no WhatsApp com opções do
-              estoque.
+              Conte o que procura. Ajudamos você a escolher.
             </p>
           </div>
           <a

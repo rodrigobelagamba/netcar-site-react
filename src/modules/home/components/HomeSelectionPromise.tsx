@@ -55,10 +55,7 @@ export function HomeSelectionPromise() {
             Nem todo carro entra na Netcar.
           </h2>
           <p className="mt-5 hidden max-w-2xl text-base leading-relaxed text-white/80 sm:block sm:text-lg">
-            Na compra de um seminovo, preço e aparência não contam toda a
-            história. Origem e registros anteriores podem pesar no seguro, no
-            financiamento e numa futura revenda. Nosso estoque é comprado no RS
-            e não tem veículos de locadora, leilão, sinistro, furto ou roubo.
+            Critérios de origem e histórico orientam cada compra.
           </p>
 
           <div className="mt-4 flex flex-wrap gap-2 sm:mt-7 sm:gap-2.5">

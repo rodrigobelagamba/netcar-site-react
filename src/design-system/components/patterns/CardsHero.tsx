@@ -4,7 +4,6 @@ import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { isFactoryWarrantyLayoutEnabled } from "@/lib/factoryWarrantyStamp";
 import {
   FactoryWarrantyBadge,
-  FactoryWarrantyNote,
   type FactoryWarrantyBadgeProps,
 } from "./FactoryWarrantyBadge";
 
@@ -100,6 +99,10 @@ export function CardsHero({
   const specsLine = [year, mileage, shortTransmission]
     .filter(Boolean)
     .join(" · ");
+  const hasCompactBadgeRow = Boolean(proofBadge || mileageBadge);
+  // Keep the title below an overlaid warranty stamp even without a badge row.
+  const needsCompactStampSpace =
+    !hasCompactBadgeRow && Boolean(warrantyStamp || powertrainStamp);
   const content = (
     <div
       className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center h-full ${
@@ -196,44 +199,46 @@ export function CardsHero({
       <div
         className={`!border-0 w-full flex flex-col items-start text-left flex-1 ${
           compact
-            ? "pt-16 space-y-2"
+            ? `${needsCompactStampSpace ? "pt-24" : "pt-16"} space-y-2`
             : "pt-28 md:pt-32 space-y-4 short1600:pt-24 short1600:space-y-2"
         }`}
       >
         {/* Mesma estrutura em todo card: selos fixos, título, marca · ano · km · câmbio.
             Sem selo de marketing variável ("150 CV", "ano · km") pra não desalinhar.
             No compact a marca vai pra linha de specs (3 pílulas não cabem em 2 colunas). */}
-        <div
-          className={`!border-0 flex w-full flex-nowrap items-center overflow-hidden ${
-            compact ? "min-h-[1.5rem] gap-1" : "min-h-[1.75rem] gap-1.5"
-          }`}
-        >
-          {!compact && (
-            <span className="!border-0 inline-block w-fit shrink-0 rounded-md bg-[#00283C] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white short1600:px-2.5 short1600:py-0.5 short1600:text-[9px]">
-              {brand}
-            </span>
-          )}
-          {proofBadge && (
-            <span
-              className={`shrink-0 rounded-full border border-[#087A37]/25 bg-white font-extrabold uppercase tracking-wide text-[#087A37] ${
-                compact
-                  ? "px-1.5 py-0.5 text-[9px]"
-                  : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
-              }`}
-            >
-              {proofBadge}
-            </span>
-          )}
-          {/* Compact: pílula de km/ano sobe pra linha de selos (a de specs não cabe em 2 colunas). */}
-          {compact && mileageBadge && (
-            <span
-              className="shrink-0 rounded-full bg-[#004C5C] px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wide text-white"
-              title={MILEAGE_BADGE_TITLE}
-            >
-              {mileageBadge}
-            </span>
-          )}
-        </div>
+        {(!compact || hasCompactBadgeRow) && (
+          <div
+            className={`!border-0 flex w-full items-center ${
+              compact ? "min-h-[1.5rem] flex-wrap gap-1" : "min-h-[1.75rem] flex-nowrap gap-1.5 overflow-hidden"
+            }`}
+          >
+            {!compact && (
+              <span className="!border-0 inline-block w-fit shrink-0 rounded-md bg-[#00283C] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white short1600:px-2.5 short1600:py-0.5 short1600:text-[9px]">
+                {brand}
+              </span>
+            )}
+            {proofBadge && (
+              <span
+                className={`shrink-0 rounded-full border border-[#087A37]/25 bg-white font-extrabold uppercase tracking-wide text-[#087A37] ${
+                  compact
+                    ? "px-1.5 py-0.5 text-[9px]"
+                    : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
+                }`}
+              >
+                {proofBadge}
+              </span>
+            )}
+            {/* Compact: pílula de km/ano sobe pra linha de selos (a de specs não cabe em 2 colunas). */}
+            {compact && mileageBadge && (
+              <span
+                className="shrink-0 rounded-full bg-[#004C5C] px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wide text-white"
+                title={MILEAGE_BADGE_TITLE}
+              >
+                {mileageBadge}
+              </span>
+            )}
+          </div>
+        )}
 
         <div className="!border-0 w-full space-y-0.5">
           {compact && brand && (
@@ -252,12 +257,12 @@ export function CardsHero({
             {model}
           </h3>
           <div
-            className={`!border-0 flex w-full min-w-0 flex-nowrap items-center overflow-hidden ${
+            className={`!border-0 flex w-full min-w-0 flex-wrap items-center ${
               compact ? "gap-1.5" : "gap-2"
             }`}
           >
             <p
-              className={`!border-0 shrink-0 font-semibold text-gray-500 ${
+              className={`!border-0 min-w-0 max-w-full whitespace-normal font-semibold text-gray-500 ${
                 compact ? "text-[11px]" : "text-sm short1600:text-xs"
               }`}
             >
@@ -297,7 +302,7 @@ export function CardsHero({
               </p>
             ) : showPriceComparison && previousPrice ? (
               <div className="flex flex-col items-start gap-1 short1600:gap-0.5">
-                <p className="!border-0 font-semibold text-gray-500 leading-none text-xs">
+                <p className={`!border-0 font-semibold text-gray-500 leading-none text-xs ${compact ? "whitespace-nowrap" : ""}`}>
                   De: <span className="line-through">{previousPrice}</span>
                 </p>
                 <div className="flex flex-col items-start leading-none gap-0.5">
@@ -305,7 +310,7 @@ export function CardsHero({
                     Para:
                   </span>
                   <p
-                    className="!border-0 font-bold font-sans tracking-tight text-base leading-tight short1600:text-sm"
+                    className={`!border-0 font-bold font-sans tracking-tight leading-tight ${compact ? "whitespace-nowrap text-[clamp(14px,4.35vw,17px)]" : "text-base short1600:text-sm"}`}
                     style={{ color: "#0B6B4B" }}
                   >
                     {price}
@@ -315,7 +320,7 @@ export function CardsHero({
             ) : (
               <p
                 className={`!border-0 font-bold font-sans tracking-tight leading-tight ${
-                  compact ? "text-[17px]" : "text-[24px] short1600:text-xl"
+                  compact ? "whitespace-nowrap text-[clamp(14px,4.35vw,17px)]" : "text-[24px] short1600:text-xl"
                 }`}
                 style={{ color: "#0B6B4B" }}
               >
@@ -328,8 +333,8 @@ export function CardsHero({
             <div
               className={`!border-0 box-border flex w-full min-w-0 items-center justify-center rounded-full border border-[#00283C]/15 bg-[#F3F5F6] font-bold text-[#00283C] ${
                 compact
-                  ? "h-10 px-3 text-xs"
-                  : "h-10 px-4 text-[12px] short1600:h-9 short1600:px-3 short1600:text-[11px]"
+                  ? "h-11 px-3 text-xs"
+                  : "h-11 px-3 text-[12px] md:h-9 [@media(pointer:coarse)]:min-h-11 short1600:text-[11px]"
               }`}
             >
               Ver detalhes
@@ -345,10 +350,10 @@ export function CardsHero({
                   e.stopPropagation();
                   onOpen?.("button");
                 }}
-                className={`!border-0 inline-flex min-w-0 flex-1 items-center justify-center gap-1 rounded-full bg-[#00283C] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#003d5c] ${
+                className={`!border-0 inline-flex min-w-0 flex-1 items-center justify-center gap-1 rounded-full bg-[#00283C] font-bold uppercase text-white transition-colors hover:bg-[#003d5c] ${
                   compact
-                    ? "h-10 px-2 text-[11px] tracking-normal whitespace-nowrap"
-                    : "h-10 px-3 text-[11px] tracking-wide short1600:h-9 short1600:text-[10px] short1600:whitespace-nowrap"
+                    ? "h-11 px-2 text-[11px] tracking-normal whitespace-nowrap"
+                    : "h-11 px-3 text-[11px] tracking-wide md:h-9 [@media(pointer:coarse)]:min-h-11 short1600:text-[10px] short1600:whitespace-nowrap"
                 }`}
               >
                 Ver carro
@@ -364,10 +369,10 @@ export function CardsHero({
                   data-wa-vehicle-id={whatsAppVehicleId}
                   data-wa-vehicle-name={whatsAppVehicleName}
                   onClick={(e) => e.stopPropagation()}
-                  className={`!border-0 inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-[#087A37] font-black uppercase text-white shadow-lg transition-colors hover:bg-[#075E54] ${
+                  className={`!border-0 inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-[#087A37] font-bold uppercase text-white transition-colors hover:bg-[#075E54] ${
                     compact
-                      ? "h-10 w-10"
-                      : "h-10 px-3 text-[11px] tracking-wide short1600:h-9 short1600:px-2.5 short1600:text-[10px]"
+                      ? "h-11 w-11"
+                      : "h-11 px-3 text-[11px] tracking-wide md:h-9 [@media(pointer:coarse)]:min-h-11 short1600:px-2.5 short1600:text-[10px]"
                   }`}
                 >
                   <MessageCircle
@@ -379,97 +384,54 @@ export function CardsHero({
             </div>
           )}
 
-          {/* Desktop normal: textos longos; short1600: linha compacta */}
-          {!compact ? (
-            <>
-              <div className="flex min-h-[2.75rem] flex-col justify-start gap-2 short1600:hidden">
-                {!isSold && whatsAppHref && tradeInHref ? (
-                  <a
-                    href={tradeInHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-wa-source={`${whatsAppSource}_trade`}
-                    data-wa-intent="trade_in"
-                    data-wa-vehicle-id={whatsAppVehicleId}
-                    data-wa-vehicle-name={whatsAppVehicleName}
-                    onClick={(e) => e.stopPropagation()}
-                    className="!border-0 w-full text-center text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
-                  >
-                    Avaliar meu carro na troca deste →
-                  </a>
-                ) : null}
-                {!isSold && whatsAppHref && financeHref ? (
-                  <a
-                    href={financeHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-wa-source={`${whatsAppSource}_finance`}
-                    data-wa-intent="simulate_finance"
-                    data-wa-vehicle-id={whatsAppVehicleId}
-                    data-wa-vehicle-name={whatsAppVehicleName}
-                    onClick={(e) => e.stopPropagation()}
-                    className="!border-0 w-full text-center text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
-                  >
-                    Consultar financiamento →
-                  </a>
-                ) : null}
-              </div>
-
-              {!isSold && whatsAppHref && (tradeInHref || financeHref) ? (
-                <div className="hidden short1600:flex items-center justify-center gap-1.5 text-[10px] font-bold leading-none">
-                  {tradeInHref ? (
-                    <a
-                      href={tradeInHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-wa-source={`${whatsAppSource}_trade`}
-                      data-wa-intent="trade_in"
-                      data-wa-vehicle-id={whatsAppVehicleId}
-                      data-wa-vehicle-name={whatsAppVehicleName}
-                      onClick={(e) => e.stopPropagation()}
-                      className="text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D]"
-                    >
-                      Troca →
-                    </a>
-                  ) : null}
-                  {tradeInHref && financeHref ? (
-                    <span className="text-gray-300" aria-hidden="true">
-                      ·
-                    </span>
-                  ) : null}
-                  {financeHref ? (
-                    <a
-                      href={financeHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-wa-source={`${whatsAppSource}_finance`}
-                      data-wa-intent="simulate_finance"
-                      data-wa-vehicle-id={whatsAppVehicleId}
-                      data-wa-vehicle-name={whatsAppVehicleName}
-                      onClick={(e) => e.stopPropagation()}
-                      className="text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D]"
-                    >
-                      Financiar →
-                    </a>
-                  ) : null}
-                </div>
+          {/* Ações secundárias ficam em uma única linha discreta no desktop. */}
+          {!compact && !isSold && whatsAppHref && (tradeInHref || financeHref) ? (
+            <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[11px] font-bold leading-none">
+              {tradeInHref ? (
+                <a
+                  href={tradeInHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-wa-source={`${whatsAppSource}_trade`}
+                  data-wa-intent="trade_in"
+                  data-wa-vehicle-id={whatsAppVehicleId}
+                  data-wa-vehicle-name={whatsAppVehicleName}
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex min-h-6 items-center whitespace-nowrap text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D] [@media(pointer:coarse)]:min-h-11"
+                >
+                  Troca →
+                </a>
               ) : null}
-            </>
+              {tradeInHref && financeHref ? (
+                <span className="text-gray-300" aria-hidden="true">
+                  ·
+                </span>
+              ) : null}
+              {financeHref ? (
+                <a
+                  href={financeHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-wa-source={`${whatsAppSource}_finance`}
+                  data-wa-intent="simulate_finance"
+                  data-wa-vehicle-id={whatsAppVehicleId}
+                  data-wa-vehicle-name={whatsAppVehicleName}
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex min-h-6 items-center whitespace-nowrap text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D] [@media(pointer:coarse)]:min-h-11"
+                >
+                  Financiar →
+                </a>
+              ) : null}
+            </div>
           ) : null}
         </div>
-        {(warrantyStamp || tractionBatteryStamp || powertrainStamp) && (
+        {tractionBatteryStamp && (
           <div className="mt-3 w-full" data-factory-warranty-footer="card">
-            {tractionBatteryStamp && (
-              <div className="mb-2 flex items-center justify-center gap-2">
-                <div className="w-[64px] shrink-0">
-                  <FactoryWarrantyBadge {...tractionBatteryStamp} variant="card" />
-                </div>
-                <span className="max-w-[6rem] text-left text-[10.5px] font-semibold leading-snug text-[#505A5F]">
-                  Bateria de tração
-                </span>
+            <div className="mb-2 flex items-center justify-center gap-2">
+              <div className="w-[64px] shrink-0">
+                <FactoryWarrantyBadge {...tractionBatteryStamp} variant="card" />
               </div>
-            )}
-            <FactoryWarrantyNote compact tractionBattery={!!tractionBatteryStamp} powertrain={powertrainStamp} />
+            </div>
           </div>
         )}
       </div>
