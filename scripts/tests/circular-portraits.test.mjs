@@ -52,7 +52,7 @@ test("mobile overflow guard does not override explicitly sized image heights", (
   const css = postcss.parse(read("src/index.css"));
   let checked = 0;
   css.walkRules((rule) => {
-    if (!rule.selector.includes("img:not(.social-story-cover)")) return;
+    if (!rule.selector.includes("img:not(") || !rule.selector.includes(".social-story-cover")) return;
     assert.equal(rule.parent.type, "atrule");
     assert.equal(rule.parent.params, "(max-width: 393px)");
     const declarations = rule.nodes.filter((node) => node.type === "decl");

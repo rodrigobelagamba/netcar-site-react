@@ -71,8 +71,9 @@
     }
 
     /* Limita a largura sem sobrescrever alturas explícitas (avatares/capas).
-       O Preflight já mantém height:auto nas imagens sem altura definida. */
-    img:not(.social-story-cover):not(.home-hero-car-image),
+       O Preflight já mantém height:auto nas imagens sem altura definida.
+       Agrupe exceções para não sobrepor recortes com largura explícita. */
+    img:not(.social-story-cover, .home-hero-car-image),
     picture,
     video {
       max-width: 100% !important;
