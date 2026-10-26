@@ -61,3 +61,31 @@ Testar identidade exata, mudanças/ausências de equipamento, partição dos ite
 reordenação das fotos e preservação dos vídeos. Conferir a página renderizada
 no desktop e no celular. A prévia local não representa publicação; deploy segue
 o procedimento e o escopo aprovado pelo responsável.
+
+## Ampliação pesquisada em 26/10/2026
+
+A revisão dos 58 cadastros antes sem perfil considera também motor e câmbio.
+Por exemplo, Cronos Drive 1.3 2025 manual e automático têm identidades distintas.
+A correspondência exige esses dados quando definidos no perfil; dados ausentes,
+outro mercado informado ou outra configuração não herdam a seleção.
+
+`research.status` separa fonte exata, pesquisa parcial e divergência documental.
+As conclusões, URLs e limites ficam em `docs/audits/editorial-profiles-2026-10-26.json`.
+`profile-applied` significa apenas que os temas da curadoria puderam ser montados
+com os equipamentos resolvidos. Não certifica a configuração de fábrica nem
+resolve pendências documentais. Um perfil sem tema defensável fica identificado
+como `no-supported-topics`, sem fabricar cards ou equipamentos.
+
+As legendas do Tera19587 e Tracker20088 usam chaves SHA-256 da localização dos
+arquivos revisados. O registro guarda separadamente o SHA-256 dos bytes vistos,
+para detectar substituição na revisão operacional. O navegador não baixa as
+fotos novamente para calcular esse checksum. Arquivo novo ou URL diferente não
+herda legenda; os checksums de conteúdo devem ser conferidos antes da publicação
+e em revisões posteriores. A primeira foto continua sem legenda visível.
+
+Os textos específicos do Tera19587 foram conferidos no lançamento brasileiro
+oficial (https://www.vwnews.com.br/news/2428). A aplicação exige unidade, versão,
+ano, motor, câmbio e conjunto exato de equipamentos explicados pelo card.
+Mudança nesses fatos volta à descrição canônica, sem prometer recursos ausentes
+ou serviços conectados por assinatura. A legenda traseira do HR-V19854 descreve
+o enquadramento da foto, sem inferir presença ou ausência da câmera.

@@ -56,7 +56,1194 @@
         "model": "TRACKER LT TURBO",
         "modelYear": 2018
       },
-      "topics": ["rear-camera", "cruise-control", "mylink", "navigation"]
+      "topics": [
+        "rear-camera",
+        "cruise-control",
+        "mylink",
+        "navigation"
+      ]
+    },
+    {
+      "id": "honda-hrv-ex-2017-1-8-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HONDA",
+        "model": "HRV EX",
+        "modelYear": 2017,
+        "engine": "1.8",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "rear-camera",
+        "cruise-control",
+        "paddle-shift",
+        "multimedia"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "honda-hrv-ex-2017-1-8-automatico"
+      }
+    },
+    {
+      "id": "honda-city-exl-2023-1-5-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HONDA",
+        "model": "CITY EXL",
+        "modelYear": 2023,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "cabin-comfort",
+        "parking-aids",
+        "phone-connectivity",
+        "paddle-shift"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "honda-city-exl-2023-1-5-automatico"
+      }
+    },
+    {
+      "id": "nissan-kicks-sense-turbo-2026-1-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "NISSAN",
+        "model": "KICKS SENSE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "adaptive-cruise-control",
+        "everyday-convenience",
+        "phone-connectivity",
+        "airbag-protection"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "nissan-kicks-sense-turbo-2026-1-0-automatico"
+      }
+    },
+    {
+      "id": "hyundai-creta-prestige-2018-2-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "CRETA PRESTIGE",
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "cabin-comfort",
+        "parking-aids",
+        "cruise-control",
+        "push-start"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "hyundai-creta-prestige-2018-2-0-automatico"
+      }
+    },
+    {
+      "id": "hyundai-creta-nline-turbo-2023-1-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "CRETA NLINE TURBO",
+        "modelYear": 2023,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "driving-assistance",
+        "panoramic-roof",
+        "phone-connectivity",
+        "parking-aids"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "hyundai-creta-nline-turbo-2023-1-0-automatico"
+      }
+    },
+    {
+      "id": "toyota-corolla-cross-xrx-2022-1-8-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "TOYOTA",
+        "model": "COROLLA CROSS XRX",
+        "modelYear": 2022,
+        "engine": "1.8",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "sunroof",
+        "driving-assistance",
+        "cabin-comfort",
+        "parking-aids"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "toyota-corolla-cross-xrx-2022-1-8-automatico"
+      }
+    },
+    {
+      "id": "hyundai-tucson-turbo-gls-2021-2-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "TUCSON TURBO GLS",
+        "modelYear": 2021,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "panoramic-roof",
+        "cabin-comfort",
+        "power-seat",
+        "parking-aids"
+      ],
+      "research": {
+        "status": "conflict",
+        "evidenceId": "hyundai-tucson-turbo-gls-2021-2-0-automatico"
+      }
+    },
+    {
+      "id": "hyundai-hb20-comfort-2016-1-0-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "HB20 COMFORT",
+        "modelYear": 2016,
+        "engine": "1.0",
+        "transmission": "MANUAL"
+      },
+      "topics": [],
+      "research": {
+        "status": "insufficient-data",
+        "evidenceId": "hyundai-hb20-comfort-2016-1-0-manual"
+      }
+    },
+    {
+      "id": "toyota-yaris-xs-connect-multidrive-2024-1-5-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "TOYOTA",
+        "model": "YARIS XS CONNECT MULTIDRIVE",
+        "modelYear": 2024,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "phone-connectivity",
+        "rear-camera",
+        "cruise-control",
+        "leather-seats"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "toyota-yaris-xs-connect-multidrive-2024-1-5-automatico"
+      }
+    },
+    {
+      "id": "chery-tiggo-7-pro-hibrida-turbo-2023-1-5-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CHERY",
+        "model": "TIGGO 7 PRO HIBRIDA TURBO",
+        "modelYear": 2023,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "panoramic-roof",
+        "cabin-comfort",
+        "power-seat",
+        "parking-aids"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "chery-tiggo-7-pro-hibrida-turbo-2023-1-5-automatico"
+      }
+    },
+    {
+      "id": "chery-tiggo-8-max-drive-turbo-2024-1-6-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CHERY",
+        "model": "TIGGO 8 MAX DRIVE TURBO",
+        "modelYear": 2024,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "seven-seats",
+        "driving-assistance",
+        "panoramic-roof",
+        "electric-tailgate"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "chery-tiggo-8-max-drive-turbo-2024-1-6-automatico"
+      }
+    },
+    {
+      "id": "hyundai-hb20-limited-2025-1-0-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "HB20 LIMITED",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "multimedia",
+        "cruise-control",
+        "traction-control",
+        "parking-aids"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "hyundai-hb20-limited-2025-1-0-manual"
+      }
+    },
+    {
+      "id": "honda-civic-exl-2018-2-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HONDA",
+        "model": "CIVIC EXL",
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "cabin-comfort",
+        "parking-aids",
+        "auto-hold",
+        "phone-connectivity"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "honda-civic-exl-2018-2-0-automatico"
+      }
+    },
+    {
+      "id": "hyundai-creta-sport-2018-2-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "CRETA SPORT",
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "phone-connectivity",
+        "parking-aids",
+        "cruise-control",
+        "leather-seats"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "hyundai-creta-sport-2018-2-0-automatico"
+      }
+    },
+    {
+      "id": "byd-song-plus-gs-2024-1-5-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "BYD",
+        "model": "SONG PLUS GS",
+        "modelYear": 2024,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "panoramic-roof",
+        "cabin-comfort",
+        "power-seat",
+        "driving-assistance"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "byd-song-plus-gs-2024-1-5-automatico"
+      }
+    },
+    {
+      "id": "honda-wrv-ex-2018-1-5-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HONDA",
+        "model": "WRV EX",
+        "modelYear": 2018,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "rear-camera",
+        "cruise-control",
+        "isofix"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "honda-wrv-ex-2018-1-5-automatico"
+      }
+    },
+    {
+      "id": "honda-civic-exl-2021-2-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HONDA",
+        "model": "CIVIC EXL",
+        "modelYear": 2021,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "cabin-comfort",
+        "rear-camera",
+        "cruise-control",
+        "electric-parking-brake"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "honda-civic-exl-2021-2-0-automatico"
+      }
+    },
+    {
+      "id": "nissan-kicks-advance-turbo-2026-1-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "NISSAN",
+        "model": "KICKS ADVANCE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "adaptive-cruise-control",
+        "parking-aids",
+        "auto-hold",
+        "phone-connectivity"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "nissan-kicks-advance-turbo-2026-1-0-automatico"
+      }
+    },
+    {
+      "id": "nissan-kicks-exclusive-2022-1-6-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "NISSAN",
+        "model": "KICKS EXCLUSIVE",
+        "modelYear": 2022,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "camera-360",
+        "airbags-6"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "nissan-kicks-exclusive-2022-1-6-automatico"
+      }
+    },
+    {
+      "id": "jeep-compass-longitude-t270-turbo-2022-1-3-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "JEEP",
+        "model": "COMPASS LONGITUDE T270 TURBO",
+        "modelYear": 2022,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "cabin-comfort",
+        "phone-connectivity",
+        "auto-hold",
+        "airbag-protection"
+      ],
+      "research": {
+        "status": "conflict",
+        "evidenceId": "jeep-compass-longitude-t270-turbo-2022-1-3-automatico"
+      }
+    },
+    {
+      "id": "fiat-argo-drive-2024-1-3-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "FIAT",
+        "model": "ARGO DRIVE",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "phone-connectivity",
+        "traction-control",
+        "isofix"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "fiat-argo-drive-2024-1-3-automatico"
+      }
+    },
+    {
+      "id": "jeep-compass-sport-2020-2-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "JEEP",
+        "model": "COMPASS SPORT",
+        "modelYear": 2020,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "push-start",
+        "phone-connectivity",
+        "cruise-control",
+        "electric-parking-brake"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "jeep-compass-sport-2020-2-0-automatico"
+      }
+    },
+    {
+      "id": "jeep-compass-limited-t270-turbo-2023-1-3-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "JEEP",
+        "model": "COMPASS LIMITED T270 TURBO",
+        "modelYear": 2023,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "cabin-comfort",
+        "parking-aids",
+        "cruise-control",
+        "phone-connectivity"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "jeep-compass-limited-t270-turbo-2023-1-3-automatico"
+      }
+    },
+    {
+      "id": "jeep-compass-serie-s-t270-turbo-2025-1-3-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "JEEP",
+        "model": "COMPASS SERIE S T270 TURBO",
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "driving-assistance",
+        "park-assist",
+        "airbag-protection",
+        "panoramic-roof"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "jeep-compass-serie-s-t270-turbo-2025-1-3-automatico"
+      }
+    },
+    {
+      "id": "citroen-c4-cactus-shine-pack-turbo-2024-1-6-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CITROEN",
+        "model": "C4 CACTUS SHINE PACK TURBO",
+        "modelYear": 2024,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "phone-connectivity",
+        "rear-camera",
+        "cruise-control",
+        "push-start"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "citroen-c4-cactus-shine-pack-turbo-2024-1-6-automatico"
+      }
+    },
+    {
+      "id": "fiat-cronos-drive-2025-1-3-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "FIAT",
+        "model": "CRONOS DRIVE",
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "multimedia",
+        "parking-sensors",
+        "traction-control",
+        "isofix"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "fiat-cronos-drive-2025-1-3-manual"
+      }
+    },
+    {
+      "id": "fiat-toro-endurance-turbo-2024-1-3-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "FIAT",
+        "model": "TORO ENDURANCE TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "phone-connectivity",
+        "cruise-control",
+        "parking-sensors",
+        "traction-control"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "fiat-toro-endurance-turbo-2024-1-3-automatico"
+      }
+    },
+    {
+      "id": "jeep-commander-overland-turbo-2023-1-3-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "JEEP",
+        "model": "COMMANDER OVERLAND TURBO",
+        "modelYear": 2023,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "seven-seats",
+        "panoramic-roof",
+        "park-assist",
+        "phone-connectivity"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "jeep-commander-overland-turbo-2023-1-3-automatico"
+      }
+    },
+    {
+      "id": "fiat-palio-sporting-2016-1-6-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "FIAT",
+        "model": "PALIO SPORTING",
+        "modelYear": 2016,
+        "engine": "1.6",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "rear-camera"
+      ],
+      "research": {
+        "status": "conflict",
+        "evidenceId": "fiat-palio-sporting-2016-1-6-manual"
+      }
+    },
+    {
+      "id": "fiat-fastback-impetus-turbo-2025-1-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "FIAT",
+        "model": "FASTBACK IMPETUS TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "driving-assistance",
+        "cabin-comfort",
+        "auto-hold",
+        "phone-connectivity"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "fiat-fastback-impetus-turbo-2025-1-0-automatico"
+      }
+    },
+    {
+      "id": "fiat-cronos-drive-2025-1-3-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "FIAT",
+        "model": "CRONOS DRIVE",
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "cruise-control",
+        "phone-connectivity",
+        "tire-pressure",
+        "traction-control"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "fiat-cronos-drive-2025-1-3-automatico"
+      }
+    },
+    {
+      "id": "jeep-compass-limited-2017-2-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "JEEP",
+        "model": "COMPASS LIMITED",
+        "modelYear": 2017,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "airbag-protection",
+        "cruise-control",
+        "multimedia",
+        "isofix"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "jeep-compass-limited-2017-2-0-automatico"
+      }
+    },
+    {
+      "id": "renault-captur-intense-2018-1-6-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "RENAULT",
+        "model": "CAPTUR INTENSE",
+        "modelYear": 2018,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "airbag-protection",
+        "parking-aids",
+        "cruise-control",
+        "everyday-convenience"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "renault-captur-intense-2018-1-6-automatico"
+      }
+    },
+    {
+      "id": "peugeot-2008-active-t200-turbo-2025-1-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "PEUGEOT",
+        "model": "2008 ACTIVE T200 TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "parking-aids",
+        "phone-connectivity",
+        "digital-climate",
+        "stability-control"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "peugeot-2008-active-t200-turbo-2025-1-0-automatico"
+      }
+    },
+    {
+      "id": "jeep-renegade-longitude-2021-1-8-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE",
+        "modelYear": 2021,
+        "engine": "1.8",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "parking-aids",
+        "cabin-comfort",
+        "phone-connectivity",
+        "cruise-control"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "jeep-renegade-longitude-2021-1-8-automatico"
+      }
+    },
+    {
+      "id": "renault-captur-intense-2019-1-6-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "RENAULT",
+        "model": "CAPTUR INTENSE",
+        "modelYear": 2019,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "airbag-protection",
+        "parking-aids",
+        "digital-climate",
+        "cruise-control"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "renault-captur-intense-2019-1-6-automatico"
+      }
+    },
+    {
+      "id": "peugeot-2008-style-2023-1-6-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "PEUGEOT",
+        "model": "2008 STYLE",
+        "modelYear": 2023,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "airbag-protection",
+        "cruise-control",
+        "dual-zone-climate",
+        "phone-connectivity"
+      ],
+      "research": {
+        "status": "conflict",
+        "evidenceId": "peugeot-2008-style-2023-1-6-automatico"
+      }
+    },
+    {
+      "id": "jeep-renegade-t270-turbo-2025-1-3-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "JEEP",
+        "model": "RENEGADE T270 TURBO",
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "airbag-protection",
+        "rear-camera",
+        "phone-connectivity",
+        "traction-control"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "jeep-renegade-t270-turbo-2025-1-3-automatico"
+      }
+    },
+    {
+      "id": "renault-stepway-iconic-2022-1-6-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "RENAULT",
+        "model": "STEPWAY ICONIC",
+        "modelYear": 2022,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "parking-aids",
+        "cruise-control",
+        "cabin-comfort"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "renault-stepway-iconic-2022-1-6-automatico"
+      }
+    },
+    {
+      "id": "citroen-c3-attraction-2015-1-5-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CITROEN",
+        "model": "C3 ATTRACTION",
+        "modelYear": 2015,
+        "engine": "1.5",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "parking-sensors"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "citroen-c3-attraction-2015-1-5-manual"
+      }
+    },
+    {
+      "id": "volkswagen-t-cross-highline-turbo-2021-1-4-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "T CROSS HIGHLINE TURBO",
+        "modelYear": 2021,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "panoramic-roof",
+        "parking-aids",
+        "paddle-shift",
+        "phone-connectivity"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "volkswagen-t-cross-highline-turbo-2021-1-4-automatico"
+      }
+    },
+    {
+      "id": "ford-territory-titanium-turbo-2024-1-5-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "FORD",
+        "model": "TERRITORY TITANIUM TURBO",
+        "modelYear": 2024,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "driving-assistance",
+        "park-assist",
+        "panoramic-roof",
+        "automatic-tailgate"
+      ],
+      "research": {
+        "status": "exact",
+        "evidenceId": "ford-territory-titanium-turbo-2024-1-5-automatico"
+      }
+    },
+    {
+      "id": "volkswagen-nivus-highline-turbo-2024-1-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "NIVUS HIGHLINE TURBO",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "driving-assistance",
+        "parking-aids",
+        "everyday-convenience",
+        "phone-connectivity"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "volkswagen-nivus-highline-turbo-2024-1-0-automatico"
+      }
+    },
+    {
+      "id": "volkswagen-fox-comfortline-2017-1-0-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "FOX COMFORTLINE",
+        "modelYear": 2017,
+        "engine": "1.0",
+        "transmission": "MANUAL"
+      },
+      "topics": [],
+      "research": {
+        "status": "insufficient-data",
+        "evidenceId": "volkswagen-fox-comfortline-2017-1-0-manual"
+      }
+    },
+    {
+      "id": "volkswagen-t-cross-highline-turbo-2024-1-4-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "T CROSS HIGHLINE TURBO",
+        "modelYear": 2024,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "park-assist",
+        "panoramic-roof",
+        "everyday-convenience",
+        "paddle-shift"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "volkswagen-t-cross-highline-turbo-2024-1-4-automatico"
+      }
+    },
+    {
+      "id": "volkswagen-virtus-msi-2020-1-6-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "VIRTUS MSI",
+        "modelYear": 2020,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "cruise-control",
+        "parking-sensors",
+        "traction-control",
+        "isofix"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "volkswagen-virtus-msi-2020-1-6-automatico"
+      }
+    },
+    {
+      "id": "volkswagen-polo-track-first-edition-2023-1-0-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "POLO TRACK FIRST EDITION",
+        "modelYear": 2023,
+        "engine": "1.0",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "traction-control",
+        "abs-ebd",
+        "isofix"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "volkswagen-polo-track-first-edition-2023-1-0-manual"
+      }
+    },
+    {
+      "id": "volkswagen-polo-highline-turbo-2024-1-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "POLO HIGHLINE TURBO",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "push-start",
+        "phone-connectivity",
+        "parking-aids",
+        "paddle-shift"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "volkswagen-polo-highline-turbo-2024-1-0-automatico"
+      }
+    },
+    {
+      "id": "chevrolet-onix-premier-plus-turbo-2025-1-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "ONIX PREMIER PLUS TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "everyday-convenience",
+        "parking-aids",
+        "phone-connectivity",
+        "airbag-protection"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "chevrolet-onix-premier-plus-turbo-2025-1-0-automatico"
+      }
+    },
+    {
+      "id": "chevrolet-cruze-lt-sedan-turbo-2017-1-4-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "CRUZE LT SEDAN TURBO",
+        "modelYear": 2017,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "phone-connectivity",
+        "parking-aids",
+        "cruise-control",
+        "traction-control"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "chevrolet-cruze-lt-sedan-turbo-2017-1-4-automatico"
+      }
+    },
+    {
+      "id": "chevrolet-onix-premier-plus-turbo-2024-1-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "ONIX PREMIER PLUS TURBO",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "everyday-convenience",
+        "parking-aids",
+        "phone-connectivity",
+        "airbag-protection"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "chevrolet-onix-premier-plus-turbo-2024-1-0-automatico"
+      }
+    },
+    {
+      "id": "chevrolet-onix-lt-2014-1-4-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "ONIX LT",
+        "modelYear": 2014,
+        "engine": "1.4",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "multimedia"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "chevrolet-onix-lt-2014-1-4-manual"
+      }
+    },
+    {
+      "id": "volkswagen-fox-pepper-2017-1-6-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "FOX PEPPER",
+        "modelYear": 2017,
+        "engine": "1.6",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "parking-sensors"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "volkswagen-fox-pepper-2017-1-6-manual"
+      }
+    },
+    {
+      "id": "ford-ecosport-freestyle-2020-1-5-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "FORD",
+        "model": "ECOSPORT FREESTYLE",
+        "modelYear": 2020,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "phone-connectivity",
+        "parking-aids",
+        "cruise-control",
+        "traction-control"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "ford-ecosport-freestyle-2020-1-5-automatico"
+      }
+    },
+    {
+      "id": "volkswagen-nivus-highline-turbo-2022-1-0-automatico",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "NIVUS HIGHLINE TURBO",
+        "modelYear": 2022,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "multimedia",
+        "parking-aids",
+        "push-start",
+        "paddle-shift"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "volkswagen-nivus-highline-turbo-2022-1-0-automatico"
+      }
+    },
+    {
+      "id": "chevrolet-onix-ltz-2019-1-4-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "ONIX LTZ",
+        "modelYear": 2019,
+        "engine": "1.4",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "mylink",
+        "parking-aids",
+        "tire-pressure"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "chevrolet-onix-ltz-2019-1-4-manual"
+      }
+    },
+    {
+      "id": "chevrolet-prisma-ltz-2015-1-4-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "PRISMA LTZ",
+        "modelYear": 2015,
+        "engine": "1.4",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "mylink",
+        "parking-sensors"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "chevrolet-prisma-ltz-2015-1-4-manual"
+      }
+    },
+    {
+      "id": "volkswagen-gol-2013-1-0-manual",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "GOL",
+        "modelYear": 2013,
+        "engine": "1.0",
+        "transmission": "MANUAL"
+      },
+      "topics": [],
+      "research": {
+        "status": "insufficient-data",
+        "evidenceId": "volkswagen-gol-2013-1-0-manual"
+      }
     }
   ]
 }

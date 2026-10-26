@@ -9,6 +9,7 @@ import {
   selectVehicleEditorialTopics,
   type VehicleEditorialReview,
 } from "./vehicleEditorialProfiles";
+import { resolveVehicleEditorialCopy } from "./vehicleEditorialCopy";
 
 export interface VehicleHighlight {
   id: string;
@@ -160,6 +161,24 @@ function complementaryGroups(items: EquipmentItem[]): EquipmentGroup[] {
   return groups;
 }
 
+/** Research may choose any factual candidate, not only the four fallback cards. */
+export function getVehicleEditorialTopicIds(
+  vehicle: EquipmentVehicle,
+): string[] {
+  const items = resolveVehicleEquipment(vehicle).items;
+  const groups = complementaryGroups(items);
+  return [
+    ...new Set(
+      items
+        .filter((item) => item.benefit)
+        .map(
+          (item) =>
+            groups.find((group) => group.items.includes(item))?.id || item.id,
+        ),
+    ),
+  ];
+}
+
 /** Promote verified seating capacity without inferring it from model names. */
 export function getVehicleHeroEquipmentLabels(
   vehicle: EquipmentVehicle,
@@ -199,11 +218,16 @@ export function buildVehicleHighlights(
     if (editorial.topics && !editorial.topics.has(group?.id || item.id))
       continue;
     const explained = group?.items || [item];
+    const copy = resolveVehicleEditorialCopy(
+      vehicle,
+      group?.id || item.id,
+      explained.map((entry) => entry.id),
+    );
     highlights.push({
       id: group?.id || item.id,
       category: group?.category || item.category,
-      title: group?.title || item.description,
-      description: group?.description || item.benefit,
+      title: copy?.title || group?.title || item.description,
+      description: copy?.description || group?.description || item.benefit,
       sourceTags: [...new Set(explained.flatMap((entry) => entry.sourceTags))],
       equipmentIds: explained.map((entry) => entry.id),
       equipmentLabels: explained.map((entry) => entry.description),

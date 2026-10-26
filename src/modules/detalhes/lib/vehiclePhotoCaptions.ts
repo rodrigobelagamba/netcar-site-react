@@ -2,6 +2,10 @@ import {
   resolveVehicleEquipment,
   type EquipmentVehicle,
 } from "../../../lib/vehicleEquipment";
+import { sha256 } from "@noble/hashes/sha256";
+import { bytesToHex } from "@noble/hashes/utils";
+import photoReviews from "../../../data/vehicle-photo-reviews.json";
+import { matchesEditorialIdentity } from "./vehicleEditorialIdentity";
 
 type ReviewedCaption = {
   visual: string;
@@ -51,8 +55,6 @@ const HRV_19854_CAPTIONS: Record<string, ReviewedCaption> = {
   "9": { visual: "Vista traseira e lateral" },
   "10": {
     visual: "Traseira e para-choque",
-    equipmentId: "rear-camera",
-    withEquipment: "Câmera de ré nas manobras",
   },
   "8": { visual: "Outro ângulo da traseira" },
   "11": {
@@ -88,13 +90,15 @@ const reviewedPhotoSets = [
   {
     vehicleId: "19898",
     model: /^HR[ -]?V TOURING TURBO$/i,
-    filename: /^25072026HRV TOURING JCI5J59(CAPA|\d+)(?:_small)?\.(?:avif|jpg|jpeg|png|webp)$/i,
+    filename:
+      /^25072026HRV TOURING JCI5J59(CAPA|\d+)(?:_small)?\.(?:avif|jpg|jpeg|png|webp)$/i,
     captions: HRV_19898_CAPTIONS,
   },
   {
     vehicleId: "19854",
     model: /^HR[ -]?V ADVANCE TURBO$/i,
-    filename: /^15062026HRV JCN8I74(CAPA|\d+)(?:_small)?\.(?:avif|jpg|jpeg|png|webp)$/i,
+    filename:
+      /^15062026HRV JCN8I74(CAPA|\d+)(?:_small)?\.(?:avif|jpg|jpeg|png|webp)$/i,
     captions: HRV_19854_CAPTIONS,
   },
 ];
@@ -102,11 +106,7 @@ const reviewedPhotoSets = [
 function reviewedImageKey(image: string, filename: RegExp): string | undefined {
   try {
     const path = decodeURIComponent(image.split(/[?#]/, 1)[0]);
-    return path
-      .split("/")
-      .pop()
-      ?.match(filename)?.[1]
-      .toUpperCase();
+    return path.split("/").pop()?.match(filename)?.[1].toUpperCase();
   } catch {
     return undefined;
   }
@@ -116,18 +116,41 @@ export function buildVehiclePhotoCaptions(
   vehicle: EquipmentVehicle | undefined,
   images: readonly string[],
 ): string[] {
-  const reviewedPhotos = reviewedPhotoSets.find((review) =>
-    String(vehicle?.id) === review.vehicleId &&
-    String(vehicle?.marca).toUpperCase() === "HONDA" &&
-    review.model.test(vehicle?.modelo || vehicle?.name || "") &&
-    String(vehicle?.year) === "2024",
+  const hashedReview =
+    vehicle &&
+    photoReviews.units.find(
+      (unit) =>
+        String(vehicle.id) === unit.vehicleId &&
+        matchesEditorialIdentity(vehicle, unit.match),
+    );
+  const equipmentIds = new Set(
+    vehicle
+      ? resolveVehicleEquipment(vehicle).items.map((item) => item.id)
+      : [],
+  );
+  if (hashedReview) {
+    const captions: Record<string, ReviewedCaption | undefined> = hashedReview.captions;
+    return images.map((image) => {
+      const key = reviewedPhotoLocationKey(image);
+      const caption = key ? captions[key] : undefined;
+      if (!caption) return "";
+      return caption.equipmentId &&
+        caption.withEquipment &&
+        equipmentIds.has(caption.equipmentId)
+        ? caption.withEquipment
+        : caption.visual;
+    });
+  }
+  const reviewedPhotos = reviewedPhotoSets.find(
+    (review) =>
+      String(vehicle?.id) === review.vehicleId &&
+      String(vehicle?.marca).toUpperCase() === "HONDA" &&
+      review.model.test(vehicle?.modelo || vehicle?.name || "") &&
+      String(vehicle?.year) === "2024",
   );
   if (!reviewedPhotos) {
     return images.map(() => "");
   }
-  const equipmentIds = new Set(
-    vehicle ? resolveVehicleEquipment(vehicle).items.map((item) => item.id) : [],
-  );
 
   return images.map((image) => {
     const key = reviewedImageKey(image, reviewedPhotos.filename);
@@ -142,4 +165,21 @@ export function buildVehiclePhotoCaptions(
     }
     return caption.visual;
   });
+}
+
+/** Opaque file-location identity, not an image-content checksum. */
+export function reviewedPhotoLocationKey(image: string): string | undefined {
+  try {
+    const url = new URL(image, "https://www.netcarmultimarcas.com.br");
+    if (
+      url.origin !== "https://www.netcarmultimarcas.com.br" ||
+      url.username ||
+      url.password
+    )
+      return undefined;
+    url.hash = "";
+    return bytesToHex(sha256(new TextEncoder().encode(url.href)));
+  } catch {
+    return undefined;
+  }
 }

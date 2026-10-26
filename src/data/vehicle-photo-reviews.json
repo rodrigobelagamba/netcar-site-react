@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "note": "Location hashes bind captions to reviewed files. Content hashes record the inspected bytes for monitoring; the browser does not rehash remote image bytes.",
+  "units": [
+    {
+      "vehicleId": "19587",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "TERA HIGH TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedAt": "2026-10-26T20:18:57.870Z",
+      "captions": {
+        "a1072c9ea28a5531bb5e05fbd2dd098f35131a7082b2c36ebc4f71d7550615e0": {
+          "visual": "Grade e faróis dianteiros",
+          "contentSha256": "a088f4514b38d3647e5c1e992ea42aaa8b343c0a232188be4511ea98e3f9c3af"
+        },
+        "86bdc221c8dea691c8b88b9acc69c9446d7ae038b127ccba07d923081a7f1e48": {
+          "visual": "Vista dianteira e lateral",
+          "contentSha256": "757d6676bb6fdcc100044a391329ca4f1b4e06b1cfbb6226e212269a9fdef1ea"
+        },
+        "f23813f8f78e3f96c8d95c320c3c30ba65ed3ea2e8c7b9428aa872e4d56e4cd7": {
+          "visual": "Traseira em três quartos",
+          "contentSha256": "6e1d431804c48c208122abab0afd7ae8210531f7219f823d2c11d0462127610a"
+        },
+        "c3aec98cf833500b31e7354d7dac453d632f46f991de940fefa7bd83a8a28cc1": {
+          "visual": "Vista traseira",
+          "contentSha256": "3790331d41cba29c7dfed917c480ecddcf6f3e0134ca1795ddc9c961e1f84797"
+        },
+        "9f374452e537cf5cc21cb4700578dc7a2f2310e8822d40600566b14fb2023fc2": {
+          "visual": "Traseira em outro ângulo",
+          "contentSha256": "c15cb5f1f1bcf2b9228033211012df650ba8c6ca6043bf39b4759427bd531dbc"
+        },
+        "8dd82dc82b16ac9e919108ef09ced271536c0f0aa94e4ba0959678152095e5e2": {
+          "visual": "Volante e painel de instrumentos",
+          "contentSha256": "11bb163c678502f79a3b828f9308daefe8ce886e78fa6421dc89d0604a29c76c"
+        },
+        "3fe9e2f0f58a6118c122b624d6930051e38344c703688f734b255e5abbd48c10": {
+          "visual": "Seletor de câmbio e console",
+          "contentSha256": "6b727e3ac4b364c4e7590494ca7cb33670cb9299c1f3b10631d527f55dd52cae"
+        },
+        "5f53d09837ee36ec9671c73cf48f8a1976609290bda77a306ea7303c800cb93a": {
+          "visual": "Central multimídia",
+          "contentSha256": "d35c81506583ba467eb39e2b0da2ec1f78eb26d0d19bdd1987e68d287f4bd096"
+        },
+        "9ba784c4f32278f10fb14dae1877a70fb4dcdef4a754c797d4dda343d521cbcf": {
+          "visual": "Painel e comandos da cabine",
+          "contentSha256": "d43ff2feb0ea9cea03439d05e6ad0e58f454e50df5f3b5afd554c4224af389a4"
+        },
+        "167f48967069991c2cf9c513305107dcfde158833c0b4710d49cd9a607fa2b59": {
+          "visual": "Visão geral do interior",
+          "contentSha256": "ef79955de0d4ad7e62976e55bb815a7b5365d9ac6752b5b282b89e691eb86640"
+        },
+        "5a353e2ece3d56e0be3a1466eeae560d83f0bdac5fdca565aa0168ad3cc09254": {
+          "visual": "Comandos junto ao volante",
+          "contentSha256": "033c53d4fddbc488da65302ad864c299b3a159111b9b8f76dd685249b55ae089",
+          "equipmentId": "push-start",
+          "withEquipment": "Partida por botão"
+        }
+      }
+    },
+    {
+      "vehicleId": "20088",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "TRACKER LT TURBO",
+        "modelYear": 2018,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedAt": "2026-10-26T20:18:57.870Z",
+      "captions": {
+        "f36656ae624323d76d9c5e01e42ba1270b778a35b8da64658cbe42b59dfe73fd": {
+          "visual": "Grade e faróis dianteiros",
+          "contentSha256": "65393939000c34ca31d5c6c7d1b137704265a8ef1993748e068cf555332c20ef"
+        },
+        "2befa4ae87e2558a9c1c85f6fb410d3d2f6e4b608ebe6a1a973009d451ccaaf5": {
+          "visual": "Vista dianteira e lateral",
+          "contentSha256": "6baf02ef1c0702996644cca158fcf47fb5a185ade1647ad0623e49797fff8538"
+        },
+        "9e532c8f65f5cbad37278f811b7e145006dfedd4180b0b9e1accb1a2c58875de": {
+          "visual": "Traseira em três quartos",
+          "contentSha256": "63ecaa128103cae5b169a8bd96ab4ac4f3da9731b8f27c770bbccced42a93037"
+        },
+        "643a37e522d3eae125c0b942a40ea3fe2aa67730a8875813e62533da54c7ff6c": {
+          "visual": "Vista traseira",
+          "contentSha256": "e516714b9353b314e77bce886b37ecc8b714029ab708f5a1966efe84192e1ad1"
+        },
+        "6dd44ab94b88e06e2480e0b6d25157bf2c7cde7e90f0c49f5651c130928499e4": {
+          "visual": "Traseira em outro ângulo",
+          "contentSha256": "f2b486d3b8b50263f49396d7455155a1c23142de3a61da57d8a268c22a566c56"
+        },
+        "4b4915960f035bb47cd0ac6abc48d263b12d1273017a2c9d9a420de429c713aa": {
+          "visual": "Volante e painel de instrumentos",
+          "contentSha256": "816ed59528403faba27953375e9a29926a37087097bd253e8f07d045c19a39e1"
+        },
+        "a49a8e8394abacd38c22d8f12258faf4222dfca7b16ef892904220d8d7d3e8e8": {
+          "visual": "Seletor de câmbio e console",
+          "contentSha256": "c3c8081b290f2841c90179ea0b6055648564d9d6c90003724fca52b132d041bd"
+        },
+        "a45ca34fa156208b0d82bd01255403c10ba3da674adec392aa7bb3889236a699": {
+          "visual": "Tela da central multimídia",
+          "contentSha256": "7a3225bd3dd61f149a818043071ea6bbe00767e3a44684e6958f05ed145d268f"
+        },
+        "56ee44670d44691770435cb41d92481284ef403e7992d48d54e1464dd04865cd": {
+          "visual": "Painel e comandos da cabine",
+          "contentSha256": "4625d1b9c982f51b72f91a4189060703f92d54c764132b3cd3a83b6311b10f11"
+        },
+        "7c8792f010b2fc05ffd2f928fe315cb23e214022d9f31e3d5af47d3a696337cf": {
+          "visual": "Visão geral do interior",
+          "contentSha256": "e8133eb971aa2c7ebfe1181437764d03bcd6185df536f7b409b64feb67da203c"
+        }
+      }
+    }
+  ]
+}

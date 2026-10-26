@@ -23,19 +23,22 @@ const stockVehicle = (id: string): EquipmentVehicle => {
   return vehicle;
 };
 
-test("reviewed profiles cover only four exact combinations and contain no equipment enrichment", () => {
-  assert.equal(vehicleEditorialProfiles.length, 4);
+test("reviewed profiles cover exact combinations without equipment enrichment", () => {
+  assert.equal(vehicleEditorialProfiles.length, 62);
   const identities = new Set<string>();
   for (const profile of vehicleEditorialProfiles) {
     const identity = JSON.stringify(profile.match);
     assert.ok(!identities.has(identity));
     identities.add(identity);
     assert.equal(typeof profile.match.modelYear, "number");
-    assert.ok(profile.topics.length > 0 && profile.topics.length <= 4);
+    assert.ok(profile.topics.length <= 4);
+    if (!profile.topics.length)
+      assert.equal(profile.research?.status, "insufficient-data");
     assert.equal(new Set(profile.topics).size, profile.topics.length);
     assert.deepEqual(Object.keys(profile).sort(), [
       "id",
       "match",
+      ...(profile.research ? ["research"] : []),
       "reviewedAt",
       "topics",
     ]);
@@ -214,4 +217,76 @@ test("Tracker 2018 topics use its registered MyLink and navigation without inher
       .topics,
     null,
   );
+});
+
+test("58 researched identities retain evidence, partial limits and exact drivetrain gates", () => {
+  const audit = JSON.parse(
+    readFileSync(
+      new URL(
+        "../../docs/audits/editorial-profiles-2026-10-26.json",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
+  assert.equal(audit.records.length, 58);
+  const researched = vehicleEditorialProfiles.filter(
+    (profile) => profile.research,
+  );
+  assert.equal(researched.length, 58);
+  for (const profile of researched) {
+    const evidence = audit.records.find(
+      (row: { id: string }) => row.id === profile.research!.evidenceId,
+    );
+    assert.ok(evidence);
+    assert.ok(evidence.evidenceUrls.length);
+    assert.ok(evidence.evidenceSummary);
+    assert.ok(evidence.scopeLimitations.length);
+    assert.ok(profile.match.engine && profile.match.transmission);
+    const vehicle = {
+      id: "editorial-test",
+      marca: profile.match.brand,
+      modelo: profile.match.model,
+      year: profile.match.modelYear,
+      motor: profile.match.engine,
+      cambio: profile.match.transmission,
+      opcionais: [],
+    };
+    const empty = buildVehicleHighlights(vehicle);
+    assert.deepEqual(empty.highlights, []);
+    assert.deepEqual(empty.remainingOptionals, []);
+    assert.equal(empty.editorialReview.profileId, profile.id);
+    for (const change of [
+      { motor: undefined },
+      { cambio: undefined },
+      { market: "AR" },
+    ]) {
+      assert.notEqual(
+        buildVehicleHighlights({ ...vehicle, ...change }).editorialReview
+          .profileId,
+        profile.id,
+      );
+    }
+  }
+});
+
+test("researched units without supported topics stay pending instead of inventing cards", () => {
+  for (const [id, brand, model, year, engine] of [
+    ["19840", "VOLKSWAGEN", "FOX COMFORTLINE", 2017, "1.0"],
+    ["19985", "HYUNDAI", "HB20 COMFORT", 2016, "1.0"],
+    ["20104", "VOLKSWAGEN", "GOL", 2013, "1.0"],
+  ] as const) {
+    const result = buildVehicleHighlights({
+      id,
+      marca: brand,
+      modelo: model,
+      year,
+      motor: engine,
+      cambio: "MANUAL",
+      opcionais: ["isofix"],
+    });
+    assert.deepEqual(result.highlights, []);
+    assert.equal(result.editorialReview.reason, "no-supported-topics");
+    assert.ok(result.remainingOptionals.includes("ISOFIX"));
+  }
 });

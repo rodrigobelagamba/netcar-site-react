@@ -116,9 +116,11 @@ test("the audited Tiggo retains its lower seven-seat highlight without duplicati
   assert.deepEqual(vehicle, original);
 });
 
-test("hero seven-seat label remains eligible alongside higher-ranked safety equipment", () => {
+test("unprofiled hero seven-seat label remains eligible alongside higher-ranked safety equipment", () => {
   const vehicle: EquipmentVehicle = {
     ...tiggo,
+    // Exercise the canonical fallback independently of the researched MY2024 profile.
+    year: 2030,
     opcionais: [
       "6 airbags",
       "piloto_adaptativo",

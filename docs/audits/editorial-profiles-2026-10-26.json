@@ -1,0 +1,1982 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-26",
+  "scope": "Editorial selection only; does not add, remove or certify equipment, change warranty, price, XML/ERP, or photo order.",
+  "sourcePolicy": "Official Brazilian references with explicit identity/year/trim and limitations. Manuals/homologation tables do not certify trim equipment. All topics require current canonical facts.",
+  "summary": {
+    "reviewedVehicles": 58,
+    "withSelectedTopics": 55,
+    "withoutSupportedTopics": [
+      "19985",
+      "19840",
+      "20104"
+    ],
+    "researchStatusCounts": {
+      "partial": 43,
+      "exact": 11,
+      "conflict": 4
+    }
+  },
+  "records": [
+    {
+      "ids": [
+        "19356"
+      ],
+      "match": {
+        "brand": "HONDA",
+        "model": "HRV EX",
+        "modelYear": 2017,
+        "engine": "1.8",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "rear-camera",
+        "cruise-control",
+        "paddle-shift",
+        "multimedia"
+      ],
+      "evidenceUrls": [
+        "https://www.honda.com.br/automoveis/sites/hab/files/2025-04/Tabela_de_Ru%C3%ADdo_parado_Portaria_85_4W_2025_03_31.pdf",
+        "https://www.gov.br/inmetro/pt-br/assuntos/regulamentacao/avaliacao-da-conformidade/programa-brasileiro-de-etiquetagem/tabelas-de-eficiencia-energetica/veiculos-automotivos-pbe-veicular/veiculos-leves-2017",
+        "https://saladeimprensa.honda.com.br/releases/honda-lanca-linha-2020-do-hr-v"
+      ],
+      "evidenceSummary": "Identidade brasileira HR-V EX 1.8 CVT localizada nas tabelas oficiais de homologação/eficiência. A nota Honda da linha 2020 é útil para impedir retroação de Smart Entry e conectividade nova ao EX 2017; não é catálogo do ano 2017. Curadoria mantém os quatro tópicos disponíveis, com câmera, cruzeiro convencional e aletas antes do entretenimento.",
+      "scopeLimitations": [
+        "Não foi localizada nesta revisão uma matriz de equipamentos EX ano-modelo 2017 em hospedagem oficial. Tabela de homologação identifica versão e conjunto mecânico, não os equipamentos da unidade.",
+        "Multimídia pode ser equipamento da unidade; não afirmar Android Auto/CarPlay, tela específica, Smart Entry ou Honda Sensing. Cruzeiro convencional não é ACC."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [
+        "docs/audits/equipment-conflicts-2026-10-26.md"
+      ],
+      "id": "honda-hrv-ex-2017-1-8-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19688"
+      ],
+      "match": {
+        "brand": "HONDA",
+        "model": "CITY EXL",
+        "modelYear": 2023,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "cabin-comfort",
+        "parking-aids",
+        "phone-connectivity",
+        "paddle-shift"
+      ],
+      "evidenceUrls": [
+        "https://www.honda.com.br/automoveis/sites/hab/files/2025-04/Tabela_de_Ru%C3%ADdo_parado_Portaria_85_4W_2025_03_31.pdf",
+        "https://saladeimprensa.honda.com.br/releases/o-myhonda-connect-plataforma-de-conectividade-da-honda-chega-ao-new-city-e-new-city",
+        "https://saladeimprensa.honda.com.br/releases/honda-apresenta-linha-2024-do-new-city-e-new-city-hatchback"
+      ],
+      "evidenceSummary": "A tabela Honda identifica City EXL L15C6 de 2022 a 2024. As notas oficiais delimitam a evolução: myHonda Connect em 2023/2023 era Touring; EXL recebeu a novidade na linha 2024. Os tópicos selecionados já existem no inventário e valorizam conforto, manobras, conectividade e comandos de câmbio sem importar o pacote Touring.",
+      "scopeLimitations": [
+        "Não tratar notícia de lançamento da linha 2024 como matriz integral do EXL 2023. Ausente catálogo exato de equipamentos EXL 2023 nesta revisão.",
+        "Não acrescentar myHonda Connect, ACC ou Honda Sensing; não especificar conexão sem fio se o fato canônico só diz Android Auto/CarPlay. Identidade não deve ser ampliada ao City Hatch."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [],
+      "id": "honda-city-exl-2023-1-5-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19857"
+      ],
+      "match": {
+        "brand": "NISSAN",
+        "model": "KICKS SENSE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "adaptive-cruise-control",
+        "everyday-convenience",
+        "phone-connectivity",
+        "airbag-protection"
+      ],
+      "evidenceUrls": [
+        "https://www.nissan-cdn.net/content/dam/Nissan/br/site/veiculos/kicks-my26/documentos/ficha_tecnica.pdf",
+        "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html"
+      ],
+      "evidenceSummary": "Matriz brasileira NISSAN KICKS 2026 separa Sense, Advance, Exclusive e Platinum: Sense 220T corresponde ao 1.0 turbo/DCT; ICC adaptativo, I-Key/Push Start e conectividade constam na coluna Sense. Curadoria prioriza assistente de cruzeiro, acesso/partida e conexão do celular, usando apenas fatos já presentes.",
+      "scopeLimitations": [
+        "Não herdar câmera 360, revestimento premium ou carregador por indução do Advance. Não usar matriz 2027: há alterações de pacote entre anos.",
+        "Preservar número/posição de airbags conforme fato canônico, sem calcular quantidade a partir de nomes."
+      ],
+      "researchStatus": "exact",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [
+        "docs/audits/equipment-conflicts-2026-10-26.md"
+      ],
+      "id": "nissan-kicks-sense-turbo-2026-1-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19868"
+      ],
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "CRETA PRESTIGE",
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "cabin-comfort",
+        "parking-aids",
+        "cruise-control",
+        "push-start"
+      ],
+      "evidenceUrls": [
+        "https://www.gov.br/inmetro/pt-br/assuntos/regulamentacao/avaliacao-da-conformidade/programa-brasileiro-de-etiquetagem/tabelas-de-eficiencia-energetica/veiculos-automotivos-pbe-veicular/veiculos-leves-2018",
+        "https://hyundai.com.br/content/dam/hmb/cars/creta/creta-action-2023/catalogos/Catalogo_Acess%C3%B3rios_Creta.pdf"
+      ],
+      "evidenceSummary": "PBEV 2018 confirma Creta Prestige 2.0-16V com transmissão A-6 no Brasil. Catálogo Hyundai de acessórios contém identificação Creta Prestige e copyright 2018, mas trata de acessórios, não prova composição de série. Curadoria de inventário enfatiza cabine, manobras, cruzeiro e partida por botão.",
+      "scopeLimitations": [
+        "Não foi localizada matriz de série Prestige MY2018 nesta revisão. PBEV não certifica couro, câmera, sensores ou partida por botão.",
+        "Não transferir equipamentos de Creta Ultimate/N Line ou versões atuais. Catálogo de acessórios não comprova instalação nesta unidade."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [],
+      "id": "hyundai-creta-prestige-2018-2-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19932"
+      ],
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "CRETA NLINE TURBO",
+        "modelYear": 2023,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "driving-assistance",
+        "panoramic-roof",
+        "phone-connectivity",
+        "parking-aids"
+      ],
+      "evidenceUrls": [
+        "https://www.hyundai.com.br/content/dam/hmb/cars/creta/n-line/Catalogo_N_Line_2022.pdf"
+      ],
+      "evidenceSummary": "Catálogo brasileiro N Line válido fabricação/modelo 2022/2023 identifica Kappa 1.0 TGDI Flex e automático de seis marchas. Descreve frenagem autônoma, permanência/centralização em faixa, teto panorâmico, blueNav e câmeras. Os destaques escolhidos refletem tecnologia e teto, mantendo o cruzeiro canônico como convencional.",
+      "scopeLimitations": [
+        "Não renomear piloto automático como ACC: o conjunto canônico é cruzeiro convencional com outras assistências.",
+        "Não transformar câmera traseira/sensores canônicos em 360, nem acrescentar Bluelink ou tamanho de tela por meio deste perfil."
+      ],
+      "researchStatus": "exact",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [],
+      "id": "hyundai-creta-nline-turbo-2023-1-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19954"
+      ],
+      "match": {
+        "brand": "TOYOTA",
+        "model": "COROLLA CROSS XRX",
+        "modelYear": 2022,
+        "engine": "1.8",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "sunroof",
+        "driving-assistance",
+        "cabin-comfort",
+        "parking-aids"
+      ],
+      "evidenceUrls": [
+        "https://www.toyotacomunica.com.br/toyota-do-brasil-lanca-novo-corolla-cross/",
+        "https://www.gov.br/inmetro/pt-br/assuntos/regulamentacao/avaliacao-da-conformidade/programa-brasileiro-de-etiquetagem/tabelas-de-eficiencia-energetica/veiculos-automotivos-pbe-veicular/veiculos-leves-2021"
+      ],
+      "evidenceSummary": "Lançamento brasileiro de março de 2021 distingue XRX Hybrid do 2.0, descreve Toyota Safety Sense e teto solar elétrico no XRX. É a configuração híbrida 1.8 da primeira linha, compatível com o cadastro MY2022; a revisão não obteve uma matriz explicitamente datada MY2022. Seleção editorial valoriza teto, assistências e conforto já cadastrados.",
+      "scopeLimitations": [
+        "A abertura direta da notícia retornou 403; conteúdo relevante foi consultado no índice da própria fonte oficial. Recorte temporal é lançamento 2021, não prova unitária MY2022.",
+        "Não usar novidades 2025/2026 nem tratar XRX 2.0 lançado posteriormente como esta versão. Não elevar cruzeiro canônico a ACC ou somar airbag de joelho."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [],
+      "id": "toyota-corolla-cross-xrx-2022-1-8-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19963"
+      ],
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "TUCSON TURBO GLS",
+        "modelYear": 2021,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "panoramic-roof",
+        "cabin-comfort",
+        "power-seat",
+        "parking-aids"
+      ],
+      "evidenceUrls": [
+        "https://www.gov.br/inmetro/pt-br/assuntos/regulamentacao/avaliacao-da-conformidade/programa-brasileiro-de-etiquetagem/tabelas-de-eficiencia-energetica/veiculos-automotivos-pbe-veicular/veiculos-leves-2021",
+        "https://www.hyundai.com.br/content/dam/hmb/ibama/Tabela_PBEV-2024-30-SET_2.pdf"
+      ],
+      "evidenceSummary": "Conflito de identidade documentado: PBEV/Inmetro 2021, página 10, identifica TUCSON TURBO GLS 1.6-16V e A-7, enquanto o cadastro exato da unidade informa 2.0 AUTOMATICO. Documento Hyundai posterior também identifica GLS 1.6T/DCT-7. Perfil pode somente organizar conforto/manobras já presentes no inventário, sem descrever motor ou alegar correspondência fabril exata.",
+      "scopeLimitations": [
+        "Não corrigir XML/ERP, motor, versão, preço ou dados canônicos nesta tarefa. Manter match com 2.0 para espelhar o cadastro e registrar o conflito.",
+        "Não promover lane-assist sem comprovação específica; falta de fonte não prova ausência nem autoriza remoção.",
+        "Teto, bancos e sensores permanecem informações do inventário; esta pesquisa não certifica sua origem de fábrica."
+      ],
+      "researchStatus": "conflict",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [
+        "lane-assist"
+      ],
+      "existingAuditPaths": [
+        "docs/audits/equipment-conflicts-2026-10-26.md"
+      ],
+      "id": "hyundai-tucson-turbo-gls-2021-2-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19985"
+      ],
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "HB20 COMFORT",
+        "modelYear": 2016,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "suggestedTopics": [],
+      "evidenceUrls": [
+        "https://www.gov.br/inmetro/pt-br/assuntos/regulamentacao/avaliacao-da-conformidade/programa-brasileiro-de-etiquetagem/tabelas-de-eficiencia-energetica/veiculos-automotivos-pbe-veicular/veiculos-leves-2016",
+        "https://www.hyundai.com.br/content/dam/hmb/download-manuais/manual-hb20-v2.pdf",
+        "https://www.hyundai.com.br/content/dam/hmb/cat%C3%A1logos/HB20_2019.pdf",
+        "https://www.hyundai.com.br/content/dam/hmb/cat%C3%A1logos/HB20Rspec_2018.pdf"
+      ],
+      "evidenceSummary": "PBEV 2016, página 6, confirma HB20 Comfort 1.0-12V/M-5, mas não comprova ISOFIX. Nova busca por manual MY2016 e documentação histórica encontrou manual oficial multiversão, catálogo brasileiro HB20 2019 com ISOFIX e folheto R spec válido 2018/2018. Nenhum deles fecha a presença de ISOFIX no Comfort 1.0 manual MY2016. Como ISOFIX é o único tópico editorial disponível e é uma alegação de segurança sem suporte exato, não há tópico sustentado para publicar neste perfil.",
+      "scopeLimitations": [
+        "Lacuna: documento brasileiro aplicável ao HB20 Comfort 1.0 manual ano-modelo 2016 ou evidência específica da unidade que confirme ancoragens ISOFIX. PBEV comprova apenas identidade mecânica.",
+        "O manual oficial disponível é multiversão, inclui opcionais e não estabelece aplicabilidade MY2016; os catálogos 2018 R spec e 2019 não podem ser retroagidos ao Comfort 2016. Não foi localizada fonte primária que permita fixar com segurança o ano de introdução.",
+        "Bloqueio somente editorial: suggestedTopics vazio. Não remover ISOFIX do equipamento canônico, não alterar XML/ERP e não afirmar ausência física por insuficiência documental."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [
+        "isofix"
+      ],
+      "existingAuditPaths": [],
+      "editorialEligibility": "blocked-insufficient-data",
+      "id": "hyundai-hb20-comfort-2016-1-0-manual",
+      "curationStatus": "no-supported-topics"
+    },
+    {
+      "ids": [
+        "19998"
+      ],
+      "match": {
+        "brand": "TOYOTA",
+        "model": "YARIS XS CONNECT MULTIDRIVE",
+        "modelYear": 2024,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "phone-connectivity",
+        "rear-camera",
+        "cruise-control",
+        "leather-seats"
+      ],
+      "evidenceUrls": [
+        "https://www.toyota.com.br/ofertas/yaris-hatch-xs-2024-branco-polar-040-aov3estadosselecionados2",
+        "https://media.toyota.com.br/dbff4f05-d6ed-47e8-bb7d-073369a7cff7.pdf"
+      ],
+      "evidenceSummary": "Oferta Toyota XS 2024 e tabela oficial de maio de 2024 confirmam Yaris XS 1.5 com CVT/Multidrive; a tabela distingue hatch e sedã. Cadastro não explicita carroceria. Seleção de conectividade, câmera, cruzeiro e revestimento permanece baseada nos fatos da unidade.",
+      "scopeLimitations": [
+        "Não assumir hatch ou sedã apenas pelo nome abreviado XS CONNECT MULTIDRIVE; a oferta encontrada é hatch. Não generalizar volume do porta-malas ou dimensões.",
+        "A página de oferta não comprova todos os equipamentos selecionados; abertura direta retornou 403 e a pesquisa consultou o conteúdo indexado. Não acrescentar Toyota Safety Sense, teto ou navegação."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [],
+      "id": "toyota-yaris-xs-connect-multidrive-2024-1-5-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20027"
+      ],
+      "match": {
+        "brand": "CHERY",
+        "model": "TIGGO 7 PRO HIBRIDA TURBO",
+        "modelYear": 2023,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "panoramic-roof",
+        "cabin-comfort",
+        "power-seat",
+        "parking-aids"
+      ],
+      "evidenceUrls": [
+        "https://www.caoachery.com.br/public/pdf/ficha-tec-tiggo-7-pro-hybrid-max-drive-23.pdf",
+        "https://www.caoachery.com.br/public/pdf/2025/FICHA_TECNICA_ONLINE_TIGGO_7_PRO_HYBRID_MAX_DRIVE.pdf"
+      ],
+      "evidenceSummary": "Ficha oficial localizada é Tiggo 7 Pro Hybrid Max Drive, motor 1.5 TCI + 48 V, CVT de nove relações simuladas. O cadastro MY2023 diz HIBRIDA TURBO sem Max Drive; não fecha a correspondência de pacote ADAS. Por isso a seleção privilegia teto, cabine, ajuste de banco e manobras já presentes.",
+      "scopeLimitations": [
+        "Não herdar AEB/alerta de colisão/faixa do Max Drive apenas por ser Tiggo 7 Pro Hybrid. A pesquisa não conclui ausência; pacote precisa identificação documental antes de alegação de série.",
+        "Ficha de 2025 não comprova MY2023; arquivo com sufixo 23 foi localizado em índice oficial, mas abertura direta retornou 403.",
+        "Não confundir híbrido leve 48 V com plug-in nem acrescentar autonomia elétrica."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [
+        "driving-assistance"
+      ],
+      "existingAuditPaths": [],
+      "id": "chery-tiggo-7-pro-hibrida-turbo-2023-1-5-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20029"
+      ],
+      "match": {
+        "brand": "CHERY",
+        "model": "TIGGO 8 MAX DRIVE TURBO",
+        "modelYear": 2024,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "seven-seats",
+        "driving-assistance",
+        "panoramic-roof",
+        "electric-tailgate"
+      ],
+      "evidenceUrls": [
+        "https://caoachery.com.br/pdf/Tiggo_8_TXS_Max-Drive_Ficha_tecnica_31.10.2022.pdf",
+        "https://www.caoa.com.br/noticia/tiggo-8-e-o-suv-com-melhor-revenda-2024"
+      ],
+      "evidenceSummary": "Ficha oficial Tiggo 8 TXS Max Drive identifica 1.6 TGDi, transmissão 7DCT e sete ocupantes. Comunicado CAOA de abril de 2024 confirma comercialização da versão Max Drive e seu ADAS. Seleção destaca os sete lugares, assistências, teto e tampa elétrica já cadastrados.",
+      "scopeLimitations": [
+        "A ficha é datada 31/10/2022, sem ano-modelo 2024 explícito; combinada com notícia de 2024 identifica a versão, mas não certifica lote/unidade. Abertura do PDF retornou 403; texto foi consultado no índice oficial.",
+        "Não herdar ficha Tiggo 8 PRO lançado em agosto de 2024, câmera 540 ou conjunto 1.5 PHEV. Curadoria não altera fatos nem os promove a manufacturer-standard."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [],
+      "id": "chery-tiggo-8-max-drive-turbo-2024-1-6-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20038"
+      ],
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "HB20 LIMITED",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "multimedia",
+        "cruise-control",
+        "traction-control",
+        "parking-aids"
+      ],
+      "evidenceUrls": [
+        "https://hyundai.com.br/content/dam/hmb/cars/hb20/2024-2025/catalog/20241113/Catalogo_Digital_Novo_HB20_Limited_Plus_2025.pdf",
+        "https://www.hyundai.com.br/content/dam/hmb/etiquetas-de-consumo/novo-hyundai-hb20/2025/pdf/ENSV_HB20_10M_LIMITED_L8_2025.pdf"
+      ],
+      "evidenceSummary": "Catálogo Limited Plus fabricação/modelo 2024/2025 identifica Kappa 1.0 aspirado/MT5 e lista câmera, Smart Key, piloto automático e multimídia. A etiqueta oficial HB20 10M Limited 2025 tem nome diferente e não esclarece a abreviação LIMITED do cadastro. Seleção usa somente fatos canônicos, sem afirmar pacote Plus.",
+      "scopeLimitations": [
+        "Não assumir que LIMITED equivale a Limited Plus. A etiqueta e o catálogo têm escopos distintos; não resolver o pacote por aproximação de nome.",
+        "Não remover chave presencial nem partida por botão por falta de versão completa. Retirar everyday-convenience apenas da prioridade editorial proposta até identificação específica, preservando equipamentos canônicos.",
+        "Câmera/sensores selecionados continuam inventory; catálogo Plus não é prova de série do Limited abreviado."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [
+        "everyday-convenience"
+      ],
+      "existingAuditPaths": [
+        "docs/audits/equipment-conflicts-2026-10-26.md"
+      ],
+      "id": "hyundai-hb20-limited-2025-1-0-manual",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20051"
+      ],
+      "match": {
+        "brand": "HONDA",
+        "model": "CIVIC EXL",
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "cabin-comfort",
+        "parking-aids",
+        "auto-hold",
+        "phone-connectivity"
+      ],
+      "evidenceUrls": [
+        "https://www.honda.com.br/automoveis/sites/hab/files/2019-04/%5BHONDA%5DCampanha%20Civic%202018_Folheto%20EXL_R8.pdf",
+        "https://www.honda.com.br/automoveis/sites/hab/files/2025-04/Tabela_de_Ru%C3%ADdo_parado_Portaria_85_4W_2025_03_31.pdf"
+      ],
+      "evidenceSummary": "Folheto Honda Civic 2018 com versão EXL e tabela de especificações identifica 2.0 FlexOne/CVT. O conteúdo distingue câmera e sensores dianteiros/traseiros a partir do EXL, multimídia com interface para smartphone, climatização e freio eletrônico com Brake Hold. Curadoria prioriza conforto, manobras, retenção em parada e conectividade.",
+      "scopeLimitations": [
+        "Não acrescentar teto solar: confirmação específica anterior da unidade é negativa e deve ser preservada. Não herdar Touring ou Honda Sensing.",
+        "Android Auto/CarPlay são compatíveis com folheto EXL 2018, mas não especificar operação sem fio. Manter a origem dos fatos já cadastrados."
+      ],
+      "researchStatus": "exact",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [
+        "docs/audits/equipment-conflicts-2026-10-26.md",
+        "docs/audits/equipment-factory-research-2026-09-28.md"
+      ],
+      "id": "honda-civic-exl-2018-2-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20059"
+      ],
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "CRETA SPORT",
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "phone-connectivity",
+        "parking-aids",
+        "cruise-control",
+        "leather-seats"
+      ],
+      "evidenceUrls": [
+        "https://www.gov.br/inmetro/pt-br/assuntos/regulamentacao/avaliacao-da-conformidade/programa-brasileiro-de-etiquetagem/tabelas-de-eficiencia-energetica/veiculos-automotivos-pbe-veicular/veiculos-leves-2018",
+        "https://www.gov.br/inmetro/pt-br/assuntos/regulamentacao/avaliacao-da-conformidade/programa-brasileiro-de-etiquetagem/tabelas-de-eficiencia-energetica/veiculos-automotivos-pbe-veicular/veiculos-leves-2017"
+      ],
+      "evidenceSummary": "PBEV brasileiro 2018 distingue Creta Sport 2.0-16V/A-6; a tabela de 2017 também inclui Sport no conjunto 2.0. Sem matriz histórica de série acessível, os quatro tópicos são curadoria do inventário: conectividade, manobras, cruzeiro e revestimento.",
+      "scopeLimitations": [
+        "Não transferir cabine/airbags da Prestige à Sport. Couro pode refletir acabamento da unidade e não é certificado como série nesta pesquisa.",
+        "Não transformar cruzeiro convencional em ACC nem atribuir BlueLink ou tecnologia N Line. PBEV não confirma equipamentos de conforto."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [],
+      "id": "hyundai-creta-sport-2018-2-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20067"
+      ],
+      "match": {
+        "brand": "BYD",
+        "model": "SONG PLUS GS",
+        "modelYear": 2024,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "panoramic-roof",
+        "cabin-comfort",
+        "power-seat",
+        "driving-assistance"
+      ],
+      "evidenceUrls": [
+        "https://www.byd.com/sc/news-list/BYD-Launches-SONG-PLUS-DM-i-and-YUAN-PLUS-EV-in-Brazil",
+        "https://www.byd.com/br/noticias-byd-brasil/Novo-BYD-Song-Plus-DMi-chega-ao-Brasil-com-maior-capacidade-na-bateria-e-alcance.html",
+        "https://www.byd.com/content/dam/byd-site/br/Support/etiquetagem-veicular/updates-29-11-2024/BYD_SONG_PLUS_001_PT-BR.pdf"
+      ],
+      "evidenceSummary": "Lançamento oficial brasileiro em novembro de 2022 identifica Song Plus DM-i; atualização oficial de maio de 2024 refere-se expressamente a 2024/2025 e altera bateria/multimídia. Cadastro é GS MY2024, portanto o perfil usa somente conforto, teto e assistências já presentes na unidade, sem importar números do modelo atualizado.",
+      "scopeLimitations": [
+        "Não foi obtida matriz brasileira GS MY2024 que feche todos os equipamentos. A ficha de resgate abrange Song Plus 2022 em diante e não certifica acabamento ou ADAS de cada versão.",
+        "Não copiar bateria 18,3 kWh, tela 15,6, NFC, autonomia, motorização turbo de 2027 ou itens Premium para o GS 2024. Não usar catálogo de outro mercado.",
+        "O tópico driving-assistance permanece derivado dos fatos inventory; sem ampliação de sistemas ou promessa de condução autônoma."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [],
+      "id": "byd-song-plus-gs-2024-1-5-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20073"
+      ],
+      "match": {
+        "brand": "HONDA",
+        "model": "WRV EX",
+        "modelYear": 2018,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "rear-camera",
+        "cruise-control",
+        "isofix"
+      ],
+      "evidenceUrls": [
+        "https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/2017-07/WR-V%202018%20-%20Manual%20do%20Propriet%C3%A1rio%20%282%29.pdf",
+        "https://www.honda.com.br/automoveis/sites/hab/files/2025-04/Tabela_de_Ru%C3%ADdo_parado_Portaria_85_4W_2025_03_31.pdf"
+      ],
+      "evidenceSummary": "Manual oficial WR-V 2018 localizado e tabela de homologação Honda identifica EX Flex CVT L15Z9 para 2018–2021, compatível com 1.5 automático. Perfil conserva os três tópicos disponíveis, valorizando manobra e uso cotidiano sem importar a versão EXL.",
+      "scopeLimitations": [
+        "Manual é multiversão e não prova equipamento de série EX; a abertura integral excedeu limite de tamanho da ferramenta. Identidade foi conferida na tabela oficial.",
+        "Não acrescentar couro, seis airbags, multimedia/CarPlay ou tecnologia do novo WR-V 2026. Cruzeiro é convencional, sem ACC."
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [],
+      "id": "honda-wrv-ex-2018-1-5-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20083"
+      ],
+      "match": {
+        "brand": "HONDA",
+        "model": "CIVIC EXL",
+        "modelYear": 2021,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "cabin-comfort",
+        "rear-camera",
+        "cruise-control",
+        "electric-parking-brake"
+      ],
+      "evidenceUrls": [
+        "https://www.honda.com.br/automoveis/sites/hab/files/2020-10/%5BHONDA%5DCAMPANHA%20CIVIC%202021_FOLHETO%20COMPLETO_MOBILE_R9-SIMPLES.pdf",
+        "https://www.honda.com.br/automoveis/sites/hab/files/2025-04/Tabela_de_Ru%C3%ADdo_parado_Portaria_85_4W_2025_03_31.pdf"
+      ],
+      "evidenceSummary": "Catálogo oficial Civic 2021 distingue EXL 2.0/CVT de Touring. Descreve câmera multivisão, piloto automático, climatização digital com Dual Zone para EXL e freio eletrônico EPB. Esses quatro temas estão disponíveis no inventário e substituem a prioridade editorial do porta-malas elétrico.",
+      "scopeLimitations": [
+        "Comando remoto de destravamento/abertura não comprova tampa com abertura e fechamento motorizados. Não promover electric-tailgate sem evidência da unidade; não remover fato canônico nesta tarefa.",
+        "Não herdar teto, ajuste elétrico do banco, som premium ou carregador da Touring. Não ampliar digital-climate para dual-zone no cadastro por meio do perfil."
+      ],
+      "researchStatus": "exact",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [
+        "electric-tailgate"
+      ],
+      "existingAuditPaths": [],
+      "id": "honda-civic-exl-2021-2-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20086"
+      ],
+      "match": {
+        "brand": "NISSAN",
+        "model": "KICKS ADVANCE TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "adaptive-cruise-control",
+        "parking-aids",
+        "auto-hold",
+        "phone-connectivity"
+      ],
+      "evidenceUrls": [
+        "https://www.nissan-cdn.net/content/dam/Nissan/br/site/veiculos/kicks-my26/documentos/ficha_tecnica.pdf",
+        "https://www.nissan.com.br/veiculos/dst-home/kicks-my26.html"
+      ],
+      "evidenceSummary": "Matriz Kicks MY2026 brasileira identifica Advance 220T com 1.0 turbo/DCT, ICC adaptativo, recursos de manobra, EPB/Auto Hold e conectividade. A versão possui revestimento premium identificado na nota da matriz como sintético; por isso cabin-comfort com título couro não é prioridade nesta proposta.",
+      "scopeLimitations": [
+        "Não transformar revestimento sintético premium em couro natural. Perfil não corrige a descrição inventory; apenas evita reforçá-la como prova fabril.",
+        "Não substituir câmera/sensores canônicos por câmera 360 via perfil e não importar pacote Platinum/ProPILOT. Não usar matriz 2027, cujo pacote mudou."
+      ],
+      "researchStatus": "exact",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [
+        "cabin-comfort"
+      ],
+      "existingAuditPaths": [
+        "docs/audits/equipment-conflicts-2026-10-26.md"
+      ],
+      "id": "nissan-kicks-advance-turbo-2026-1-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20090"
+      ],
+      "match": {
+        "brand": "NISSAN",
+        "model": "KICKS EXCLUSIVE",
+        "modelYear": 2022,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "camera-360",
+        "airbags-6"
+      ],
+      "evidenceUrls": [
+        "https://brazil.nissannews.com/pt-BR/releases/novo-nissan-kicks-ative-sua-atitude"
+      ],
+      "evidenceSummary": "Lançamento Nissan de 25/02/2021 inclui ficha Kicks 2022, motor HR16DE 1.6 e Xtronic CVT. Seis airbags vêm desde Sense; visão 360 está listada no Exclusive. Ambos já têm confirmação individual equipment-review-unit-20090-2026-10-22. São os únicos dois tópicos elegíveis; câmera precede proteção no perfil.",
+      "scopeLimitations": [
+        "Não incorporar Pack Tech, ADAS ou equipamentos de anos seguintes. Não inventar dois tópicos para preencher o limite quatro.",
+        "Preservar a origem unit-confirmation e a evidência específica; pesquisa editorial não muda sua classificação."
+      ],
+      "researchStatus": "exact",
+      "curationBasis": "existing-canonical-equipment-only",
+      "excludedEditorialTopics": [],
+      "existingAuditPaths": [
+        "docs/audits/equipment-approved-six-2026-10-22.md"
+      ],
+      "id": "nissan-kicks-exclusive-2022-1-6-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19379"
+      ],
+      "match": {
+        "brand": "JEEP",
+        "model": "COMPASS LONGITUDE T270 TURBO",
+        "modelYear": 2022,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "cabin-comfort",
+        "phone-connectivity",
+        "auto-hold",
+        "airbag-protection"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/conheca-o-novo-jeep-compass-mais-performance-design-sofisticacao-e-tecnologia",
+        "https://www.media.stellantis.com/br-pt/download-model-document/133?v=1774006099"
+      ],
+      "evidenceSummary": "O lançamento brasileiro MY2022 descreve seis airbags, ar de duas zonas e Auto Hold desde o Sport; o Longitude acrescenta bancos em couro e central de 10,1 polegadas com conectividade. A ficha Longitude T270 informa tração dianteira.",
+      "scopeLimitations": [
+        "Curadoria dos fatos canônicos atuais; a fonte não comprova o equipamento instalado nesta unidade.",
+        "Preservar a retenção canônica existente do item AWD, que conflita com a ficha de tração dianteira.",
+        "O release associa o conjunto ADAS ao Limited com pacote e à Série S; não valida AEB para este Longitude. Não inferir ausência física por essa lacuna."
+      ],
+      "researchStatus": "conflict",
+      "excludedTopics": [
+        {
+          "id": "automatic-emergency-braking",
+          "reason": "Não validado na configuração Longitude T270 MY2022 pela fonte consultada; fica fora da seleção editorial."
+        },
+        {
+          "id": "power-seat",
+          "reason": "Não comprovado para a versão exata nesta pesquisa."
+        }
+      ],
+      "id": "jeep-compass-longitude-t270-turbo-2022-1-3-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19687"
+      ],
+      "match": {
+        "brand": "FIAT",
+        "model": "ARGO DRIVE",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "phone-connectivity",
+        "traction-control",
+        "isofix"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-argo-ganha-novo-cambio-cvt-e-se-torna-referencia-em-economia-entre-os-hatches-automaticos"
+      ],
+      "evidenceSummary": "O comunicado brasileiro de janeiro de 2023 identifica Argo Drive 1.3 Firefly com CVT e distingue os equipamentos do pacote opcional S-Design. Os três tópicos propostos já existem no inventário resolvido.",
+      "scopeLimitations": [
+        "Não foi localizada tabela oficial específica do Drive automático MY2024 que comprove os três itens como série.",
+        "A fonte identifica a variante mecânica, mas a seleção preserva a origem inventory; não transforma pacote opcional em equipamento de série.",
+        "Há somente três tópicos canônicos disponíveis; não preencher o quarto com inferência."
+      ],
+      "researchStatus": "partial",
+      "id": "fiat-argo-drive-2024-1-3-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19698"
+      ],
+      "match": {
+        "brand": "JEEP",
+        "model": "COMPASS SPORT",
+        "modelYear": 2020,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "push-start",
+        "phone-connectivity",
+        "cruise-control",
+        "electric-parking-brake"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/jeep-compass-chega-a-linha-2020-com-150-mil-unidades-vendidas-no-brasil"
+      ],
+      "evidenceSummary": "O comunicado brasileiro do Compass MY2020 confirma Keyless Entry N Go como novidade de série do Sport, além dos sensores de chuva e luminosidade. A configuração Sport automática permanece distinta dos pacotes de versões superiores.",
+      "scopeLimitations": [
+        "O release MY2020 não oferece matriz completa para todos os tópicos selecionados; conectividade, piloto convencional e freio elétrico permanecem fatos do inventário atual.",
+        "Não transferir Park Assist ou ADAS de Longitude, Limited ou Série S para Sport."
+      ],
+      "researchStatus": "partial",
+      "id": "jeep-compass-sport-2020-2-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19724"
+      ],
+      "match": {
+        "brand": "JEEP",
+        "model": "COMPASS LIMITED T270 TURBO",
+        "modelYear": 2023,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "cabin-comfort",
+        "parking-aids",
+        "cruise-control",
+        "phone-connectivity"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/jeep-compass-e-commander-apresentam-linha-2023-com-mais-tecnologia-e-novos-equipamentos-de-serie"
+      ],
+      "evidenceSummary": "O comunicado da linha brasileira 2023 identifica a gama Compass e atualizações de conectividade e conforto. Os quatro tópicos sugeridos são agrupamentos já resolvidos para este Limited T270.",
+      "scopeLimitations": [
+        "O documento não constitui matriz completa do Limited MY2023 nem prova a instalação de todos os equipamentos da unidade.",
+        "O pacote Premium citado para Longitude não comprova Park Assist no Limited; o tópico fica fora da curadoria.",
+        "Piloto automático aqui é o tópico convencional já disponível; não promover a ACC."
+      ],
+      "researchStatus": "partial",
+      "excludedTopics": [
+        {
+          "id": "park-assist",
+          "reason": "A documentação consultada não resolve a configuração exata instalada no Limited MY2023."
+        }
+      ],
+      "id": "jeep-compass-limited-t270-turbo-2023-1-3-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19866"
+      ],
+      "match": {
+        "brand": "JEEP",
+        "model": "COMPASS SERIE S T270 TURBO",
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "driving-assistance",
+        "park-assist",
+        "airbag-protection",
+        "panoramic-roof"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/novo-jeep-compass-2025-mais-performance-mais-seguranca-garantia-total-de-5-anos-e-versoes-ineditas-para-uma-oferta-ainda-mais-completa-e-imbativel"
+      ],
+      "evidenceSummary": "O lançamento brasileiro MY2025 identifica Série S T270 automática como evolução da Limited, com teto panorâmico e Park Assist. A cadeia de versões documenta os sete airbags e o conjunto de assistência de condução herdado.",
+      "scopeLimitations": [
+        "A correspondência documental é de versão/ano; a presença na unidade continua sustentada pelos fatos canônicos existentes.",
+        "Não transferir motorização, tração ou câmbio da versão Hurricane.",
+        "Nenhuma conclusão de garantia ou quilometragem é acrescentada por esta pesquisa editorial."
+      ],
+      "researchStatus": "exact",
+      "id": "jeep-compass-serie-s-t270-turbo-2025-1-3-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19906"
+      ],
+      "match": {
+        "brand": "CITROEN",
+        "model": "C4 CACTUS SHINE PACK TURBO",
+        "modelYear": 2024,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "phone-connectivity",
+        "rear-camera",
+        "cruise-control",
+        "push-start"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/citroen/press/novo-suv-citroen-c4-cactus-2024-chega-repleto-de-novidades-de-conectividade-e-conforto-com-performance-acessivel"
+      ],
+      "evidenceSummary": "O release brasileiro do C4 Cactus 2024 discrimina Shine Pack 1.6 THP AT6 e a herança de equipamentos da gama: central conectada, câmera traseira, regulador de velocidade e acesso/partida sem chave.",
+      "scopeLimitations": [
+        "A seleção utiliza fatos presentes no inventário e não certifica a unidade individual.",
+        "O documento chama o revestimento de TEP. Não usar esta fonte para certificar couro natural nem selecionar cabin-comfort sob essa interpretação.",
+        "Não transferir a terminologia de ADAS para o piloto automático convencional."
+      ],
+      "researchStatus": "exact",
+      "excludedTopics": [
+        {
+          "id": "cabin-comfort",
+          "reason": "A fonte especifica TEP; não sustenta tratar o material como couro natural."
+        }
+      ],
+      "id": "citroen-c4-cactus-shine-pack-turbo-2024-1-6-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19915"
+      ],
+      "match": {
+        "brand": "FIAT",
+        "model": "CRONOS DRIVE",
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "MANUAL"
+      },
+      "suggestedTopics": [
+        "multimedia",
+        "parking-sensors",
+        "traction-control",
+        "isofix"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-cronos-ganha-novo-cambio-cvt-motor-firefly-1-0-e-traz-mudancas-no-design-na-linha-2023",
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-cronos-chega-as-200-mil-unidades-comercializadas-no-brasil",
+        "https://www.media.stellantis.com/br-pt/fiat/press/cronos-e-nova-strada-ganham-equipamentos-de-seguranca-de-serie"
+      ],
+      "evidenceSummary": "As publicações brasileiras distinguem Cronos Drive 1.3 manual da configuração CVT e descrevem conectividade e a evolução dos itens de segurança. Os quatro tópicos já constam desta unidade manual no resolvedor atual.",
+      "scopeLimitations": [
+        "Não foi localizada tabela oficial exata MY2025 para esta combinação manual; a documentação é contextual, não certificação de série.",
+        "Manter match MANUAL para impedir aplicar perfil CVT ao mesmo modelo/ano.",
+        "Sensor e ISOFIX permanecem fatos do inventário; não inferir recursos exclusivos do automático ou de pacotes opcionais.",
+        "Não usar novidades da linha 2026 para esta unidade."
+      ],
+      "researchStatus": "partial",
+      "id": "fiat-cronos-drive-2025-1-3-manual",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19946"
+      ],
+      "match": {
+        "brand": "FIAT",
+        "model": "TORO ENDURANCE TURBO",
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "phone-connectivity",
+        "cruise-control",
+        "parking-sensors",
+        "traction-control"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-toro-2024-chega-com-design-mais-robusto"
+      ],
+      "evidenceSummary": "O comunicado oficial da Toro 2024 identifica Endurance Turbo 270 AT6, motor 1.3, e informa a composição comercial dessa versão, separando-a das versões superiores.",
+      "scopeLimitations": [
+        "A publicação não contém matriz integral de equipamentos do Endurance; os quatro tópicos propostos são curadoria dos fatos atuais de inventory.",
+        "Não atribuir ao Endurance ADAS, acabamento ou recursos descritos para Volcano, Ranch e Ultra.",
+        "A afirmação de ausência de opcionais da linha não é prova individual dos equipamentos desta unidade."
+      ],
+      "researchStatus": "partial",
+      "id": "fiat-toro-endurance-turbo-2024-1-3-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19960"
+      ],
+      "match": {
+        "brand": "JEEP",
+        "model": "COMMANDER OVERLAND TURBO",
+        "modelYear": 2023,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "seven-seats",
+        "panoramic-roof",
+        "park-assist",
+        "phone-connectivity"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/jeep-compass-e-commander-apresentam-linha-2023-com-mais-tecnologia-e-novos-equipamentos-de-serie",
+        "https://www.media.stellantis.com/br-pt/jeep/press/o-jeep-commander-lider-absoluto-da-sua-categoria-no-pais-ganha-nova-versao",
+        "https://www.media.stellantis.com/br-pt/jeep/press/jeep-commander-comemora-um-ano-de-mercado-e-mais-de-16-mil-unidades-vendidas-no-brasil"
+      ],
+      "evidenceSummary": "As publicações brasileiras identificam Commander Overland Turbo Flex AT6 na linha 2023 e o projeto de sete lugares. As referências da gama descrevem conectividade e assistência de estacionamento, com diferenciação dos acabamentos Overland.",
+      "scopeLimitations": [
+        "As fontes não entregam uma matriz completa, exclusiva do Overland MY2023, para todos os quatro tópicos; teto e Park Assist mantêm base no inventário atual.",
+        "A lista detalhada de equipamentos Longitude no release de junho de 2023 não deve ser apresentada como prova de série do Overland.",
+        "Não transferir motor diesel, tração 4x4 ou câmbio AT9 de outra configuração."
+      ],
+      "researchStatus": "partial",
+      "id": "jeep-commander-overland-turbo-2023-1-3-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20039"
+      ],
+      "match": {
+        "brand": "FIAT",
+        "model": "PALIO SPORTING",
+        "modelYear": 2016,
+        "engine": "1.6",
+        "transmission": "MANUAL"
+      },
+      "suggestedTopics": [
+        "rear-camera"
+      ],
+      "evidenceUrls": [
+        "https://servicos.fiat.com.br/content/dam/fiat/products/handbooks/196/2016/handbook-2016-palio.pdf"
+      ],
+      "evidenceSummary": "O manual oficial Fiat Palio 2016 registra, na página impressa A-18 (página 30 do PDF), incompatibilidade com dispositivos infantis de instalação exclusivamente ISOFIX/LATCH. Isso conflita com o tópico ISOFIX atualmente disponível. Câmera de ré permanece somente como fato do inventário.",
+      "scopeLimitations": [
+        "O manual abrange a gama; não comprova câmera de ré de fábrica no Sporting 1.6 manual.",
+        "Excluir ISOFIX da seleção editorial até resolver o conflito por mecanismo canônico; esta pesquisa não modifica a lista de equipamentos.",
+        "Não afirmar que a câmera é original nem que foi visualmente inspecionada nesta pesquisa.",
+        "Somente um tópico pode ser recomendado dentre os dois atuais sem repetir o conflito."
+      ],
+      "researchStatus": "conflict",
+      "excludedTopics": [
+        {
+          "id": "isofix",
+          "reason": "Contradição explícita do manual brasileiro 2016, página A-18, sobre instalação exclusivamente ISOFIX/LATCH.",
+          "evidenceUrl": "https://servicos.fiat.com.br/content/dam/fiat/products/handbooks/196/2016/handbook-2016-palio.pdf",
+          "documentPage": 30
+        }
+      ],
+      "id": "fiat-palio-sporting-2016-1-6-manual",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20050"
+      ],
+      "match": {
+        "brand": "FIAT",
+        "model": "FASTBACK IMPETUS TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "driving-assistance",
+        "cabin-comfort",
+        "auto-hold",
+        "phone-connectivity"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-apresenta-fastback-com-a-melhor-combinacao-de-design-performance-seguranca-e-tecnologia-em-um-suv-coupe",
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-apresenta-fastback-e-pulse-hibridos-para-combinar-performance-eficiencia-e-custo-beneficio-e-se-consolidar-como-protagonista-no-futuro-da-mobilidade"
+      ],
+      "evidenceSummary": "O lançamento brasileiro do Fastback T200 CVT descreve Impetus com os recursos herdados do Audace, incluindo assistência de condução, Auto Hold e conectividade, mais acabamento e central próprios. Outra publicação anuncia a transição para versões híbridas em novembro de 2024.",
+      "scopeLimitations": [
+        "A fonte de equipamentos da configuração T200 não híbrida é de lançamento, sem tabela exata MY2025; pesquisa parcial.",
+        "O ano-modelo e a cilindrada não bastam para declarar esta unidade híbrida. Não aplicar o pacote técnico MHEV automaticamente.",
+        "Os tópicos continuam baseados no inventário atual; o conjunto driving-assistance deve permanecer com seus membros canônicos, sem acrescentar ACC."
+      ],
+      "researchStatus": "partial",
+      "id": "fiat-fastback-impetus-turbo-2025-1-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20052"
+      ],
+      "match": {
+        "brand": "FIAT",
+        "model": "CRONOS DRIVE",
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "cruise-control",
+        "phone-connectivity",
+        "tire-pressure",
+        "traction-control"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-cronos-ganha-novo-cambio-cvt-motor-firefly-1-0-e-traz-mudancas-no-design-na-linha-2023",
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-cronos-chega-as-200-mil-unidades-comercializadas-no-brasil",
+        "https://www.media.stellantis.com/br-pt/fiat/press/cronos-e-nova-strada-ganham-equipamentos-de-seguranca-de-serie"
+      ],
+      "evidenceSummary": "A documentação brasileira diferencia Drive 1.3 CVT do manual e descreve piloto convencional e controles de estabilidade/tração na configuração automática. A publicação de maio de 2024 descreve a central conectada e separa o pacote opcional S-Design.",
+      "scopeLimitations": [
+        "Não foi localizada matriz oficial específica MY2025; pressão dos pneus e demais itens permanecem fatos do inventário atual.",
+        "Manter match AUTOMATICO separado do Cronos Drive 1.3 manual MY2025.",
+        "Não apresentar câmera, ar digital ou pacote S-Design como série com base nesses textos.",
+        "Não transferir novidades de iluminação ou conectividade da linha 2026."
+      ],
+      "researchStatus": "partial",
+      "id": "fiat-cronos-drive-2025-1-3-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20053"
+      ],
+      "match": {
+        "brand": "JEEP",
+        "model": "COMPASS LIMITED",
+        "modelYear": 2017,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "airbag-protection",
+        "cruise-control",
+        "multimedia",
+        "isofix"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/jeep-compass-um-novo-norte-para-o-segmento-de-suvs"
+      ],
+      "evidenceSummary": "O lançamento brasileiro do Compass identifica sete airbags para Limited, multimídia Uconnect, piloto convencional e ISOFIX. A documentação distingue 2.0 flex AT6 e 2.0 diesel AT9, evitando confundir as configurações mecânicas.",
+      "scopeLimitations": [
+        "A seleção é restrita aos quatro tópicos comuns documentados e existentes no inventário.",
+        "O match público 2.0/AUTOMATICO não informa combustível; não acrescentar alegações de tração ou combustível.",
+        "Bancos aquecidos não foram validados para a configuração exata e ficam fora da curadoria."
+      ],
+      "researchStatus": "exact",
+      "excludedTopics": [
+        {
+          "id": "heated-seats",
+          "reason": "Não validado para esta configuração pelo documento consultado."
+        }
+      ],
+      "id": "jeep-compass-limited-2017-2-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20061"
+      ],
+      "match": {
+        "brand": "RENAULT",
+        "model": "CAPTUR INTENSE",
+        "modelYear": 2018,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "airbag-protection",
+        "parking-aids",
+        "cruise-control",
+        "everyday-convenience"
+      ],
+      "evidenceUrls": [
+        "https://cdn.group.renault.com/ren/br/renault-new-cars/editorial/manuais/manuais-captur/2018/NU1264-3-XHA-PTB.pdf",
+        "https://cdn.group.renault.com/ren/br/renault-new-cars/product-plans/captur/catalogo/rm005319-folheto-captur-07-2019.pdf.asset.pdf/1581712475552.pdf"
+      ],
+      "evidenceSummary": "O manual brasileiro Captur 2018 explica regulador de velocidade convencional e auxílio de estacionamento. O catálogo de julho de 2019 identifica Intense 1.6 SCe X-Tronic e descreve quatro airbags, câmera/sensores e cartão de acesso.",
+      "scopeLimitations": [
+        "O manual cobre múltiplas versões e não prova itens de série; o catálogo é da gama 2019/2020 e não certifica MY2018.",
+        "A curadoria retém os fatos atuais do inventário e não converte o regulador convencional em ACC.",
+        "Couro é opcional no catálogo posterior e mistura materiais naturais/sintéticos; não certificar revestimento deste MY2018.",
+        "Não substituir Media Nav por Media Evolution com base no catálogo posterior."
+      ],
+      "researchStatus": "partial",
+      "id": "renault-captur-intense-2018-1-6-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20068"
+      ],
+      "match": {
+        "brand": "PEUGEOT",
+        "model": "2008 ACTIVE T200 TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "parking-aids",
+        "phone-connectivity",
+        "digital-climate",
+        "stability-control"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/peugeot/press/novo-peugeot-2008-design-magnetico-com-atitude-sofisticacao-e-tecnologia"
+      ],
+      "evidenceSummary": "O lançamento brasileiro do novo 2008 identifica Active Turbo 200 CVT, central de 10,3 polegadas com integração de smartphone, ar digital e câmera/sensor traseiro. Também descreve estabilidade entre os recursos de segurança da gama.",
+      "scopeLimitations": [
+        "Preservar a origem canônica unit-confirmation do controle de estabilidade; a pesquisa não reclassifica o ateste existente como manufacturer-standard.",
+        "A confirmação individual registrada é equipment-review-unit-20068-2026-10-22; não a estender a outras unidades.",
+        "Não incluir ADAS do GT, ACC do elétrico ou airbags adicionais ausentes desta configuração.",
+        "A existência do perfil não significa revisão visual das fotos."
+      ],
+      "researchStatus": "exact",
+      "id": "peugeot-2008-active-t200-turbo-2025-1-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20070"
+      ],
+      "match": {
+        "brand": "JEEP",
+        "model": "RENEGADE LONGITUDE",
+        "modelYear": 2021,
+        "engine": "1.8",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "parking-aids",
+        "cabin-comfort",
+        "phone-connectivity",
+        "cruise-control"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-e-compass-chegam-a-linha-2021-ainda-mais-completos",
+        "https://www.media.stellantis.com/br-pt/download-model-document/140?v=1774006197"
+      ],
+      "evidenceSummary": "O lançamento brasileiro MY2021 e a ficha técnica identificam Longitude 1.8 Flex AT6 com tração dianteira. A ficha técnica documenta a configuração mecânica e segurança dinâmica, mas não fornece lista completa de conforto.",
+      "scopeLimitations": [
+        "Os quatro tópicos selecionados continuam fatos do inventário; a documentação não comprova todos como série do Longitude MY2021.",
+        "Não usar parágrafo do Compass ou lista de opcionais Sport como prova de equipamento do Renegade Longitude.",
+        "Não selecionar o agrupamento de airbags sem resolver a abrangência exata das posições para esta versão."
+      ],
+      "researchStatus": "partial",
+      "excludedTopics": [
+        {
+          "id": "airbag-protection",
+          "reason": "A pesquisa não confirmou a composição completa de airbags do Longitude 1.8 MY2021; evita promover a composição do inventário como prova de fábrica."
+        }
+      ],
+      "id": "jeep-renegade-longitude-2021-1-8-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20091"
+      ],
+      "match": {
+        "brand": "RENAULT",
+        "model": "CAPTUR INTENSE",
+        "modelYear": 2019,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "airbag-protection",
+        "parking-aids",
+        "digital-climate",
+        "cruise-control"
+      ],
+      "evidenceUrls": [
+        "https://cdn.group.renault.com/ren/br/renault-new-cars/editorial/manuais/manuais-captur/2018/NU1264-3-XHA-PTB.pdf",
+        "https://cdn.group.renault.com/ren/br/renault-new-cars/product-plans/captur/catalogo/rm005319-folheto-captur-07-2019.pdf.asset.pdf/1581712475552.pdf"
+      ],
+      "evidenceSummary": "O catálogo brasileiro de julho de 2019 identifica Intense 1.6 SCe X-Tronic com quatro airbags, câmera/sensores, ar automático e regulador de velocidade. O manual explica os limites do regulador convencional.",
+      "scopeLimitations": [
+        "O catálogo se refere à gama 2019/2020; não estabelece sozinho a correspondência exata de toda unidade MY2019.",
+        "A curadoria mantém a origem inventory e não faz certificação de fabricação.",
+        "Não promover o regulador convencional a ACC; não inferir couro de série a partir do catálogo."
+      ],
+      "researchStatus": "partial",
+      "id": "renault-captur-intense-2019-1-6-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20092"
+      ],
+      "match": {
+        "brand": "PEUGEOT",
+        "model": "2008 STYLE",
+        "modelYear": 2023,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "airbag-protection",
+        "cruise-control",
+        "dual-zone-climate",
+        "phone-connectivity"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/peugeot/press/peugeot-apresenta-novidades-para-linha-2023-do-suv-2008",
+        "https://www.media.stellantis.com/uploads/br/model-document/ft_peugeot_suv2008_my2223_v2-62bb19ce7a713.pdf"
+      ],
+      "evidenceSummary": "A tabela brasileira MY22/23 separa Style 1.6 AT6 da Style THP e confirma airbags frontais/laterais, regulador convencional, climatização de duas zonas e integração de smartphone. O sensor traseiro está ausente na coluna Style e presente na Griffe, enquanto câmera traseira consta para ambas.",
+      "scopeLimitations": [
+        "O sensor de estacionamento do agrupamento parking-aids diverge da tabela de série; acessório posterior é possível, mas não comprovado por esta pesquisa.",
+        "Não remover equipamentos nem criar regra de conflito neste artefato; excluir o agrupamento da seleção editorial por ora.",
+        "Não acrescentar cortina, Grip Control da THP ou teto da Griffe ao Style 1.6 AT6.",
+        "A fonte é exata para versão/ano, mas não certifica modificações da unidade."
+      ],
+      "researchStatus": "conflict",
+      "excludedTopics": [
+        {
+          "id": "parking-aids",
+          "reason": "O grupo inclui parking-sensors; a tabela oficial MY22/23 marca ausência do sensor traseiro para Style, embora a câmera conste. Instalação posterior não foi validada.",
+          "evidenceUrl": "https://www.media.stellantis.com/uploads/br/model-document/ft_peugeot_suv2008_my2223_v2-62bb19ce7a713.pdf"
+        }
+      ],
+      "id": "peugeot-2008-style-2023-1-6-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20094"
+      ],
+      "match": {
+        "brand": "JEEP",
+        "model": "RENEGADE T270 TURBO",
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "airbag-protection",
+        "rear-camera",
+        "phone-connectivity",
+        "traction-control"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/com-uma-gama-ainda-mais-competitiva-jeep-renegade-ganha-novas-versoes-na-linha-2025"
+      ],
+      "evidenceSummary": "O release brasileiro MY2025 identifica Renegade T270 de entrada com 1.3 AT6, seis airbags e controles de tração/estabilidade. Câmera e central conectada aparecem no Pack Tech opcional, junto de algumas assistências.",
+      "scopeLimitations": [
+        "Câmera e conectividade são fatos presentes no inventário desta unidade; a fonte não prova por si só instalação de Pack Tech.",
+        "A lista do modelo de entrada não valida ACC. A falta de menção não prova ausência física, mas não sustenta selecioná-lo como destaque revisado.",
+        "Não transferir recursos de Sahara, Willys ou Trailhawk para a versão de entrada.",
+        "Manter intacta a confirmação individual de garantia; esta pesquisa é editorial."
+      ],
+      "researchStatus": "partial",
+      "excludedTopics": [
+        {
+          "id": "adaptive-cruise-control",
+          "reason": "Não sustentado pela descrição oficial do T270 de entrada MY2025 nem pelo Pack Tech descrito; requer evidência individual antes de destaque revisado."
+        }
+      ],
+      "id": "jeep-renegade-t270-turbo-2025-1-3-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20095"
+      ],
+      "match": {
+        "brand": "RENAULT",
+        "model": "STEPWAY ICONIC",
+        "modelYear": 2022,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "parking-aids",
+        "cruise-control",
+        "cabin-comfort"
+      ],
+      "evidenceUrls": [
+        "https://cdn.group.renault.com/ren/br/renault-new-cars/editorial/2022/catalogos/stepway/outubro/catalogo-stepway-outubro22.pdf.asset.pdf/6f875cff42.pdf"
+      ],
+      "evidenceSummary": "O catálogo brasileiro de outubro de 2022 descreve Stepway Iconic 1.6 CVT com câmera/sensor, regulador de velocidade, climatização automática e revestimento Premium.",
+      "scopeLimitations": [
+        "O arquivo é publicado em 2022, sem comprovação suficiente de correspondência exclusiva ao ano-modelo desta unidade; pesquisa parcial.",
+        "Premium não comprova couro natural. O componente de bancos do grupo cabin-comfort mantém apenas a origem inventory, sem certificação do material pela montadora.",
+        "Há somente três tópicos canônicos disponíveis; não inventar quarto tópico."
+      ],
+      "researchStatus": "partial",
+      "id": "renault-stepway-iconic-2022-1-6-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20096"
+      ],
+      "match": {
+        "brand": "CITROEN",
+        "model": "C3 ATTRACTION",
+        "modelYear": 2015,
+        "engine": "1.5",
+        "transmission": "MANUAL"
+      },
+      "suggestedTopics": [
+        "parking-sensors"
+      ],
+      "evidenceUrls": [
+        "https://www.media.stellantis.com/br-pt/citroen/press/novo-citroen-c3-2015-novas-versoes",
+        "https://www.media.stellantis.com/br-pt/citroen/press/citroen-do-brasil-encerra-dezembro-com-a-melhor-participacao-de-mercado-do-ano"
+      ],
+      "evidenceSummary": "O comunicado brasileiro da linha C3 2015 confirma a reorganização das versões. Outra publicação oficial sobre o período descreve itens do Attraction, mas não valida sensor de estacionamento nessa versão. O único tópico proposto já existe no inventário da unidade.",
+      "scopeLimitations": [
+        "Não foi localizada matriz ou manual oficial exato Attraction 1.5 manual MY2015 que confirme sensor traseiro de série.",
+        "Recomendar o tópico apenas como curadoria de fato inventory; não afirmar originalidade, instalação de fábrica ou inspeção visual.",
+        "Não transferir sensores de Tendance/Exclusive ou de anos posteriores para Attraction.",
+        "Há um único tópico canônico disponível; não preencher o perfil com inferências."
+      ],
+      "researchStatus": "partial",
+      "id": "citroen-c3-attraction-2015-1-5-manual",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19750"
+      ],
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "T CROSS HIGHLINE TURBO",
+        "modelYear": 2021,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "panoramic-roof",
+        "parking-aids",
+        "paddle-shift",
+        "phone-connectivity"
+      ],
+      "evidenceUrls": [
+        "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-t-cross/T-Cross_MY%202021_21C.5B1.TCR.66.pdf"
+      ],
+      "evidenceSummary": "Manual brasileiro T-Cross MY2021, 21C.5B1.TCR.66: explica teto solar panorâmico, câmera/auxílio de estacionamento, operação Tiptronic e conectividade. A seleção destaca recursos já presentes no cadastro desta Highline 1.4 automática.",
+      "scopeLimitations": [
+        "Manual multiversão explica funcionamento; não certifica a lista de série da Highline nem a instalação nesta unidade.",
+        "Teto panorâmico permanece fato de inventário; não tratar como padrão de todo T-Cross.",
+        "Não ampliar conectividade para conexão sem fio nem converter piloto convencional em ACC."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "volkswagen-t-cross-highline-turbo-2021-1-4-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19779"
+      ],
+      "match": {
+        "brand": "FORD",
+        "model": "TERRITORY TITANIUM TURBO",
+        "modelYear": 2024,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "driving-assistance",
+        "park-assist",
+        "panoramic-roof",
+        "automatic-tailgate"
+      ],
+      "evidenceUrls": [
+        "https://www.ford.com.br/content/dam/Ford/website-assets/latam/br/nameplate/2024/nova-territory/pdf/fbr-territory-2024-ficha-tecnica.pdf"
+      ],
+      "evidenceSummary": "Ficha Ford Territory 2024, publicada 08/2023, identifica Titanium 1.5 EcoBoost com automática DCT de sete marchas. A lista de série inclui alerta de colisão/AEB, auxílio de faixa, ACC Stop & Go, estacionamento automático, teto panorâmico e porta-malas elétrico.",
+      "scopeLimitations": [
+        "Documento da versão não comprova conservação ou funcionamento da unidade.",
+        "A curadoria preserva os textos e fatos atuais; não adiciona ACC, câmera 360 ou outras capacidades ao cadastro.",
+        "Não usar a ficha 2023 CVT nem a linha 2025 para esta unidade."
+      ],
+      "researchStatus": "exact",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "evidenceLocators": [
+        "PDF p.2: Modelos Titanium AT; Motor 1.5L EcoBoost; transmissão DCT automática de 7 velocidades; Principais equipamentos de série."
+      ],
+      "id": "ford-territory-titanium-turbo-2024-1-5-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19788"
+      ],
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "NIVUS HIGHLINE TURBO",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "driving-assistance",
+        "parking-aids",
+        "everyday-convenience",
+        "phone-connectivity"
+      ],
+      "evidenceUrls": [
+        "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-nivus/my24/24C_5B1_NIV_66_manual_de_instrucoes_nivus.pdf",
+        "https://www.vwnews.com.br/news/2260"
+      ],
+      "evidenceSummary": "O manual brasileiro Nivus MY2024 explica ACC e Front Assist, manobras com câmera/sensores, Keyless/partida e conectividade. O lançamento seguinte separa o novo pacote ADAS da linha 2025, portanto a curadoria MY2024 conserva a assistência já resolvida sem Lane Assist.",
+      "scopeLimitations": [
+        "Manual MY2024 é multiversão; fatos de equipamento permanecem com a origem canônica atual.",
+        "Preservar a regra held vw-nivus-highline-my2024-lane-assist; não reintroduzir lane-assist por editorial.",
+        "Pacotes Outfit/ADAS e funções da linha 2025 não são evidência de equipamento MY2024."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "volkswagen-nivus-highline-turbo-2024-1-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19840"
+      ],
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "FOX COMFORTLINE",
+        "modelYear": 2017,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "suggestedTopics": [],
+      "evidenceUrls": [
+        "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-fox/my-2017_172-5b1-fox-66.pdf"
+      ],
+      "evidenceSummary": "Manual brasileiro Novo Fox MY2017, 172.5B1.FOX.66, consultado. A seção de transporte infantil descreve fixação por cinto; não foi localizada sustentação para o único tópico disponível, ISOFIX, nesta Comfortline 1.0 manual.",
+      "scopeLimitations": [
+        "A omissão do manual não prova ausência física; não remover equipamentos nem alterar o feed nesta pesquisa.",
+        "Falta evidência exata de ISOFIX na unidade/versão ou outro fato atual que possa alimentar um tópico canônico.",
+        "Não importar ISOFIX de Fox posterior ou de outro modelo."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "blocked-insufficient-data",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "evidenceLocators": [
+        "PDF pp.72–76: transporte infantil e fixação por cinto; busca textual ISOFIX sem ocorrência."
+      ],
+      "id": "volkswagen-fox-comfortline-2017-1-0-manual",
+      "curationStatus": "no-supported-topics",
+      "photoReviewNote": "Fotos atuais do Fox revisadas: nenhuma mostra as ancoragens do banco traseiro; não confirmam ISOFIX."
+    },
+    {
+      "ids": [
+        "19903"
+      ],
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "T CROSS HIGHLINE TURBO",
+        "modelYear": 2024,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "park-assist",
+        "panoramic-roof",
+        "everyday-convenience",
+        "paddle-shift"
+      ],
+      "evidenceUrls": [
+        "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-t-cross/my24/T-Cross_BR_24B.5B1.TCR_66_LOW.pdf"
+      ],
+      "evidenceSummary": "Manual T-Cross MY2024, 24B.5B1.TCR.66, explica Park Assist, teto panorâmico, Keyless/partida e transmissão automática. A tabela específica do 1.4 TSI informa automática de seis marchas. A seleção usa somente os recursos atuais da unidade Highline.",
+      "scopeLimitations": [
+        "Manual multiversão não prova que Park Assist e teto eram de série: preservar origem de inventário/atestes existentes.",
+        "Não transferir Lane Assist ou pacote ADAS da reestilização MY2025.",
+        "Não selecionar navegação nativa por mera presença de Discover Media no manual, que também cobre outro rádio."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "evidenceLocators": [
+        "Páginas impressas72,83,124,153 e333; abertura do manual ressalva variações por equipamento."
+      ],
+      "id": "volkswagen-t-cross-highline-turbo-2024-1-4-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19938"
+      ],
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "VIRTUS MSI",
+        "modelYear": 2020,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "cruise-control",
+        "parking-sensors",
+        "traction-control",
+        "isofix"
+      ],
+      "evidenceUrls": [
+        "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-virtus/MY%202020_20A.5B1.VIR.%2066.pdf"
+      ],
+      "evidenceSummary": "Manual brasileiro Virtus MY2020, 20A.5B1.VIR.66, com fechamento 04/01/2019, explica regulador de velocidade, estacionamento, controle de tração e ISOFIX. Contém a motorização 1.6 e configurações de transmissão; serve de referência funcional para os fatos atuais do MSI automático.",
+      "scopeLimitations": [
+        "A lista de série exata MSI 1.6 automático não foi comprovada por catálogo de versão; classificação parcial.",
+        "Não transferir pacotes do MSI manual2018 ou do TSI para o MSI automático2020.",
+        "Couro ficou fora da seleção porque o manual não valida material/origem do revestimento."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "volkswagen-virtus-msi-2020-1-6-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19978"
+      ],
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "POLO TRACK FIRST EDITION",
+        "modelYear": 2023,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "traction-control",
+        "abs-ebd",
+        "isofix"
+      ],
+      "evidenceUrls": [
+        "https://www.vwnews.com.br/news/1675",
+        "https://www.vwnews.com.br/news/2018"
+      ],
+      "evidenceSummary": "Lançamento oficial Polo Track identifica motor1.0 MPI e manual de cinco marchas, com ISOFIX e controle de estabilidade entre os recursos de segurança. A retrospectiva oficial2023 identifica a First Edition como edição especial do Track. A seleção permanece nos três tópicos atuais de segurança.",
+      "scopeLimitations": [
+        "A descrição da First Edition confirma a identidade da edição, mas não oferece matriz completa por item.",
+        "ABS/EBD e controle de tração são curadoria de fatos do inventário; não rotular todos como comprovados por ficha de série da First Edition.",
+        "Não transportar multimídia ou conteúdo da edição Rock in Rio2024."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "volkswagen-polo-track-first-edition-2023-1-0-manual",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19982"
+      ],
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "POLO HIGHLINE TURBO",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "push-start",
+        "phone-connectivity",
+        "parking-aids",
+        "paddle-shift"
+      ],
+      "evidenceUrls": [
+        "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-novo-polo/my24/_Polo_BR_24B.5B1.POL_66_LOW.pdf"
+      ],
+      "evidenceSummary": "Manual brasileiro Polo MY2024,24B.5B1.POL.66, explica Keyless/partida, VW Play e interfaces do telefone, câmera/Park Pilot e operação da transmissão. O perfil prioriza conveniência e manobras registradas nesta Highline1.0 automática.",
+      "scopeLimitations": [
+        "Manual multiversão não certifica série ou opcionais da Highline específica.",
+        "Não selecionar airbag-protection: o título atual inclui cortina, enquanto o manual consultado descreve airbags frontais e laterais nos bancos; falta comprovação específica para cortina. Isso não é autorização de excluir o item do cadastro.",
+        "Não afirmar conexão sem fio ou revestimento integralmente em couro a partir de referências genéricas."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "volkswagen-polo-highline-turbo-2024-1-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "19994"
+      ],
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "ONIX PREMIER PLUS TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "everyday-convenience",
+        "parking-aids",
+        "phone-connectivity",
+        "airbag-protection"
+      ],
+      "evidenceUrls": [
+        "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/onix/01-pdfs/2025/onix-2025-manual-do-propietario.pdf",
+        "https://www.chevrolet.com.br/help-me-find-new-way/2025-onix-vsr"
+      ],
+      "evidenceSummary": "Página oficial Onix2025 identifica Premier AT e seis airbags na linha; manual brasileiro divulgado para2025 explica chave/partida, câmera/auxílios, projeção de smartphone e airbags laterais/cortina. A seleção usa fatos já registrados no Premier Plus Turbo1.0 automático.",
+      "scopeLimitations": [
+        "A designação cadastral PREMIER PLUS TURBO precisa ser preservada; não presumir que Plus signifique carroceria sedã.",
+        "Manual tem revisão25.5 e é multiversão; não comprova pacote Premier de cada data de produção nem instalação na unidade.",
+        "Não transferir facelift ou equipamentos MY2026; conectividade depende da central/dispositivo."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "chevrolet-onix-premier-plus-turbo-2025-1-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20008"
+      ],
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "CRUZE LT SEDAN TURBO",
+        "modelYear": 2017,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "phone-connectivity",
+        "parking-aids",
+        "cruise-control",
+        "traction-control"
+      ],
+      "evidenceUrls": [
+        "https://meu.chevrolet.com.br/content/dam/gmownercenter/gmsa/gmbr/dynamic/manuals/2017/chevrolet/Cruze/pt/om_ng-chevrolet_Cruze_my17-pt_BR.pdf"
+      ],
+      "evidenceSummary": "Manual brasileiro Cruze MY2017,52140006, explica projeção Android Auto/CarPlay, câmera/auxílio de estacionamento, controle de cruzeiro e tração. A seção técnica contempla1.4 turbo. A seleção privilegia esses fatos atuais do LT sedã automático.",
+      "scopeLimitations": [
+        "Manual cobre mais de uma versão: não comprova equipamentos de série do LT.",
+        "Airbag-protection não foi selecionado porque o agrupamento inclui cortina, cuja aplicabilidade exata ao LT não foi demonstrada.",
+        "Não transferir assistências do LTZ, quantidade de airbags ou navegação nativa ao LT."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "chevrolet-cruze-lt-sedan-turbo-2017-1-4-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20013"
+      ],
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "ONIX PREMIER PLUS TURBO",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "everyday-convenience",
+        "parking-aids",
+        "phone-connectivity",
+        "airbag-protection"
+      ],
+      "evidenceUrls": [
+        "https://meu.chevrolet.com.br/content/dam/gmownercenter/gmsa/gmbr/dynamic/manuals/2024/chevrolet/Onix/pt/om_ng-chevrolet_Onix_my24-pt_BR.pdf"
+      ],
+      "evidenceSummary": "Manual brasileiro Onix/Onix Plus divulgado comoMY2024 explica Keyless, partida, câmera/auxílios, projeção smartphone e airbags frontais/laterais/cortina. A seleção é curadoria dos fatos existentes para Premier Plus Turbo1.0 automático.",
+      "scopeLimitations": [
+        "Manual multiversão, revisão interna2024APR05; não comprova matriz de série/pacote da unidade.",
+        "Preservar a identificação cadastral, sem transformar Plus em afirmação de carroceria sedã.",
+        "Não transportar opções de2025/2026 nem tratar Wi-Fi/OnStar ativo como garantido."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "chevrolet-onix-premier-plus-turbo-2024-1-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20033"
+      ],
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "ONIX LT",
+        "modelYear": 2014,
+        "engine": "1.4",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "multimedia"
+      ],
+      "evidenceUrls": [
+        "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/services/owner-manuals/05-pdf/onix/my14-Onix-pt-br-110913-Site.pdf"
+      ],
+      "evidenceSummary": "Manual Onix MY2014 brasileiro explica o sistema de conforto/conveniência e MyLink com Bluetooth. Isso permite dar contexto ao único destaque conservador, multimídia, já declarado no LT1.4 manual.",
+      "scopeLimitations": [
+        "Manual multiversão não prova MyLink de série no LT; usar apenas o tópico genérico multimedia já disponível.",
+        "ISOFIX não foi localizado no manualMY2014 e não foi selecionado; omissão não prova ausência ou autoriza exclusão.",
+        "Não atribuir Android Auto/CarPlay ao sistema desta geração."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "chevrolet-onix-lt-2014-1-4-manual",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20037"
+      ],
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "FOX PEPPER",
+        "modelYear": 2017,
+        "engine": "1.6",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "parking-sensors"
+      ],
+      "evidenceUrls": [
+        "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-fox/my-2017_172-5b1-fox-66.pdf"
+      ],
+      "evidenceSummary": "Manual brasileiro Fox MY2017 explica o Park Pilot, que usa sensores ultrassônicos para avisar sobre obstáculos. O tópico conserva o sensor já cadastrado no Pepper1.6 manual.",
+      "scopeLimitations": [
+        "O próprio manual ressalva disponibilidade conforme versão; não afirmar item de série do Pepper.",
+        "ISOFIX ficou fora da seleção por falta de suporte exato neste manual/versão.",
+        "Não acrescentar câmera, sensores dianteiros ou quantidade de sensores por mera ilustração do manual."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "volkswagen-fox-pepper-2017-1-6-manual",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20043"
+      ],
+      "match": {
+        "brand": "FORD",
+        "model": "ECOSPORT FREESTYLE",
+        "modelYear": 2020,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "phone-connectivity",
+        "parking-aids",
+        "cruise-control",
+        "traction-control"
+      ],
+      "evidenceUrls": [
+        "https://www.ford.com.br/content/dam/Ford/website-assets/latam/br/servico-ao-cliente/manuais/2020/manuais-do-proprietario/fbr-manual-proprietario-ecosport-2020.pdf",
+        "https://www.ford.com.br/servico-ao-cliente/sync/comparativo-sync/ecosport/"
+      ],
+      "evidenceSummary": "Manual Ford EcoSport2020 inclui Freestyle1.5 com automática de seis marchas e capítulos de assistência, câmera e SYNC3. A página Ford específica EcoSport2020 explica as interfaces Android Auto/Apple CarPlay. A curadoria seleciona fatos atuais de conectividade, manobras e condução.",
+      "scopeLimitations": [
+        "Manual e comparativoSYNC abrangem configurações; não certificam lista de série da Freestyle desta unidade.",
+        "A ficha com nome de arquivo2020 encontrada contém título internoECOSPORT2021 e não foi usada para transferir equipamentos.",
+        "Não promover conexão sem fio, navegação nativa, couro ou pacote da Titanium/Storm."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "ford-ecosport-freestyle-2020-1-5-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20093"
+      ],
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "NIVUS HIGHLINE TURBO",
+        "modelYear": 2022,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "multimedia",
+        "parking-aids",
+        "push-start",
+        "paddle-shift"
+      ],
+      "evidenceUrls": [
+        "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-nivus/my22/Manual_de_instrucoes-Nivus_2022-22B.5B1.NIV.66.pdf",
+        "https://www.vwnews.com.br/news/1352"
+      ],
+      "evidenceSummary": "Manual Nivus MY2022 explica VW Play, manobras, partida e transmissão automática. Comunicado brasileiro de janeiro2022 confirma a atualização da linha e diferencia a Highline. A seleção destaca multimídia e conveniência já cadastradas na1.0 automática.",
+      "scopeLimitations": [
+        "A matriz completa da Highline não foi verificada; manual multiversão é referência funcional.",
+        "Não acrescentar ACC/AEB só porque o comunicado os menciona: eles não fazem parte dos tópicos atuais desta unidade.",
+        "Não transportar Lane Assist/Park Assist da linha2025."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "volkswagen-nivus-highline-turbo-2022-1-0-automatico",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20097"
+      ],
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "ONIX LTZ",
+        "modelYear": 2019,
+        "engine": "1.4",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "mylink",
+        "parking-aids",
+        "tire-pressure"
+      ],
+      "evidenceUrls": [
+        "https://meu.chevrolet.com.br/content/dam/gmownercenter/gmsa/gmbr/dynamic/manuals/2019/chevrolet/Onix/pt/om_ng-chevrolet_Onix_my19-pt_BR.pdf.pdf"
+      ],
+      "evidenceSummary": "Manual brasileiro OnixMY2019,52156033, inclui MyLink, assistência de estacionamento e monitoramento da pressão dos pneus. A seção técnica contempla1.4 e transmissão manual. Os três destaques vêm do cadastro atual do LTZ.",
+      "scopeLimitations": [
+        "Manual cobre versões e opcionais; não certifica câmera/sensor/monitoramento como série do LTZ.",
+        "Couro não foi selecionado sem comprovação do revestimento exato.",
+        "Não transferir motor turbo, seis airbags ou funções do Novo OnixMY2020."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "chevrolet-onix-ltz-2019-1-4-manual",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20098"
+      ],
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "PRISMA LTZ",
+        "modelYear": 2015,
+        "engine": "1.4",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "suggestedTopics": [
+        "mylink",
+        "parking-sensors"
+      ],
+      "evidenceUrls": [
+        "https://meu.chevrolet.com.br/content/dam/gmownercenter/gmsa/gmbr/dynamic/manuals/2015/chevrolet/Prisma/pt/om_ng-chevrolet_Prisma_my15-pt_BR.pdf"
+      ],
+      "evidenceSummary": "Manual brasileiro Prisma MY2015.5,52101247, documenta MyLink e assistência ultrassônica de estacionamento. O1.4 e transmissão manual constam das especificações. A curadoria mantém os dois tópicos disponíveis do LTZ.",
+      "scopeLimitations": [
+        "Manual multiversão não comprova série nem instalação na unidade.",
+        "Preservar MyLink desta geração sem afirmar Android Auto/CarPlay, Wi-Fi ou navegação integrada.",
+        "Não transferir recursos de Prisma posteriores/Onix Plus."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "curation-of-existing-facts",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "chevrolet-prisma-ltz-2015-1-4-manual",
+      "curationStatus": "topics-selected"
+    },
+    {
+      "ids": [
+        "20104"
+      ],
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "GOL",
+        "modelYear": 2013,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "suggestedTopics": [],
+      "evidenceUrls": [
+        "https://www.vw.com.br/pt/servicos-e-acessorios/servicos-e-produtos/manuais-e-garantia/manuais.html"
+      ],
+      "evidenceSummary": "Gol1.0 manual MY2013 foi revisado como identidade do cadastro. Nenhum tópico canônico está disponível para os fatos atuais; a busca oficial retornou manuais posteriores, sem documento exato suficiente para enriquecer o perfil.",
+      "scopeLimitations": [
+        "Faltam identificação da versão e fato diferenciador comprovado compatível com um tópico canônico.",
+        "Não usar manualGol2015, Last Edition ou outro ano como comprovação de2013.",
+        "Não criar tópico ou acrescentar equipamento para preencher quatro posições."
+      ],
+      "researchStatus": "partial",
+      "editorialEligibility": "blocked-insufficient-data",
+      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "id": "volkswagen-gol-2013-1-0-manual",
+      "curationStatus": "no-supported-topics"
+    }
+  ]
+}

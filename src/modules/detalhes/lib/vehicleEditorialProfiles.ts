@@ -1,15 +1,20 @@
 import profileData from "../../../data/vehicle-editorial-profiles.json";
+import { type EquipmentVehicle } from "../../../lib/vehicleEquipment";
 import {
-  normalizeEquipmentTag,
-  type EquipmentVehicle,
-} from "../../../lib/vehicleEquipment";
+  matchesEditorialIdentity,
+  type VehicleEditorialIdentity,
+} from "./vehicleEditorialIdentity";
 
 export interface VehicleEditorialProfile {
   id: string;
   reviewedAt: string;
-  match: { brand: string; model: string; modelYear: number };
+  match: VehicleEditorialIdentity;
   /** Membership only: order always comes from the shared equipment resolver. */
   topics: readonly string[];
+  research?: {
+    status: "exact" | "partial" | "conflict" | "insufficient-data";
+    evidenceId: string;
+  };
 }
 
 export interface VehicleEditorialReview {
@@ -18,12 +23,17 @@ export interface VehicleEditorialReview {
   provenance: string;
   profileId?: string;
   reviewedAt?: string;
-  reason?: "no-exact-profile" | "ambiguous-profile" | "unavailable-topics";
+  reason?:
+    | "no-exact-profile"
+    | "ambiguous-profile"
+    | "unavailable-topics"
+    | "no-supported-topics";
   unavailableTopics: string[];
+  researchStatus?: NonNullable<VehicleEditorialProfile["research"]>["status"];
 }
 
 export const vehicleEditorialProfiles: readonly VehicleEditorialProfile[] =
-  profileData.profiles;
+  profileData.profiles as readonly VehicleEditorialProfile[];
 
 /**
  * Select only among candidate topics already built from resolved equipment.
@@ -34,13 +44,8 @@ export function selectVehicleEditorialTopics(
   vehicle: EquipmentVehicle,
   availableTopics: readonly string[],
 ): { topics: ReadonlySet<string> | null; review: VehicleEditorialReview } {
-  const matches = vehicleEditorialProfiles.filter(
-    ({ match }) =>
-      normalizeEquipmentTag(vehicle.marca || "") ===
-        normalizeEquipmentTag(match.brand) &&
-      normalizeEquipmentTag(vehicle.modelo || "") ===
-        normalizeEquipmentTag(match.model) &&
-      Number(vehicle.year) === match.modelYear,
+  const matches = vehicleEditorialProfiles.filter(({ match }) =>
+    matchesEditorialIdentity(vehicle, match),
   );
   if (matches.length !== 1) {
     return {
@@ -62,12 +67,17 @@ export function selectVehicleEditorialTopics(
   return {
     topics: new Set(profile.topics.filter((topic) => available.has(topic))),
     review: {
-      status: unavailableTopics.length
-        ? "needs-editorial-review"
-        : "profile-applied",
+      status:
+        unavailableTopics.length || !profile.topics.length
+          ? "needs-editorial-review"
+          : "profile-applied",
       provenance: profileData.provenance,
       profileId: profile.id,
       reviewedAt: profile.reviewedAt,
+      ...(profile.research ? { researchStatus: profile.research.status } : {}),
+      ...(!profile.topics.length
+        ? { reason: "no-supported-topics" as const }
+        : {}),
       ...(unavailableTopics.length
         ? { reason: "unavailable-topics" as const }
         : {}),

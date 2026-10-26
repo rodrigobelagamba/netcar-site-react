@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "units": [
+    {
+      "vehicleId": "19587",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "TERA HIGH TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedAt": "2026-10-26",
+      "copies": [
+        {
+          "topic": "everyday-convenience",
+          "title": "Acesso e partida sem tirar a chave do bolso",
+          "description": "Sistema Kessy e partida por botão para facilitar a rotina.",
+          "equipmentIds": [
+            "keyless",
+            "push-start"
+          ],
+          "sourceUrl": "https://www.vwnews.com.br/news/2428"
+        },
+        {
+          "topic": "phone-connectivity",
+          "title": "Seu celular na central",
+          "description": "VW Play Connect de 10,1″ com Android Auto e Apple CarPlay sem fio, para aparelhos compatíveis.",
+          "equipmentIds": [
+            "multimedia",
+            "wireless-carplay-android"
+          ],
+          "sourceUrl": "https://www.vwnews.com.br/news/2428"
+        }
+      ]
+    }
+  ]
+}

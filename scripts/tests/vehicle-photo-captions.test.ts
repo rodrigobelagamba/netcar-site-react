@@ -121,7 +121,7 @@ test("Advance equipment captions retain a visual fallback when current facts dis
     opcionais: ["camera_de_re", "bancos_de_couro", "comandos_no_volante", "cambio_cvt", "sem-_fio", "botao"],
   };
   assert.deepEqual(buildVehiclePhotoCaptions(equipped, pictures), [
-    "Câmera de ré nas manobras",
+    "Traseira e para-choque",
     "Bancos em couro claro",
     "Comandos no volante",
     "Câmbio CVT ao alcance",
