@@ -5,7 +5,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { Button } from "@/design-system/components/ui/button";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
@@ -21,6 +21,9 @@ import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { VehicleWarrantySummary } from "./VehicleWarrantySummary";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
+import { HERO_PHOTO_FADE_MS, useHomeHeroCarousel } from "./useHomeHeroCarousel";
+import { HomeHeroCarImage } from "./HomeHeroCarImage";
+import "./HomeHero.css";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const SWIPE_THRESHOLD_PX = 45;
@@ -54,7 +57,14 @@ interface HomeHeroProps {
 }
 
 export function HomeHero({ vehicles }: HomeHeroProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const {
+    active: vehicle,
+    slides,
+    hasSwitched,
+    step,
+    ready,
+    failed,
+  } = useHomeHeroCarousel(vehicles);
   const pointerStart = useRef<{
     pointerId: number;
     x: number;
@@ -64,34 +74,12 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
   const queryClient = useQueryClient();
   const { data: whatsapp } = useWhatsAppQuery();
 
-  useEffect(() => {
-    if (vehicles.length <= 1) return;
-
-    const timer = window.setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % vehicles.length);
-    }, 12000);
-
-    return () => window.clearInterval(timer);
-  }, [currentIndex, vehicles.length]);
-
-  useEffect(() => {
-    setCurrentIndex((prev) => (prev < vehicles.length ? prev : 0));
-  }, [vehicles.length]);
-
-  if (!vehicles || vehicles.length === 0) {
+  if (!vehicle) {
     return null;
   }
 
-  // O estoque pode encolher antes de o efeito acima corrigir o índice.
-  const vehicle = vehicles[currentIndex < vehicles.length ? currentIndex : 0];
-
-  const next = () => {
-    setCurrentIndex((prev) => (prev + 1) % vehicles.length);
-  };
-
-  const prev = () => {
-    setCurrentIndex((prev) => (prev - 1 + vehicles.length) % vehicles.length);
-  };
+  const next = () => step(1);
+  const prev = () => step(-1);
 
   const vehicleSlug = generateVehicleSlug({
     modelo: vehicle.modelo || vehicle.model,
@@ -190,25 +178,29 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
     : "";
 
   return (
-    <div className="relative w-full bg-[#F6F6F6] overflow-hidden max-w-full min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
+    <div className="home-hero-stage relative w-full bg-[#F6F6F6] overflow-hidden max-w-full flex flex-col items-center justify-center">
+      <div
+        aria-hidden="true"
+        className="home-hero-spotlight pointer-events-none absolute inset-0"
+      />
       {/* Background Typography */}
       <div
         key={vehicle.id}
-        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-        style={{ opacity: 0.04, transform: "scale(1.2)" }}
+        className="home-hero-background-type absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+        style={{ opacity: 0.14 }}
       >
         <div
           aria-hidden="true"
-          className="text-[25vw] md:text-[32vw] font-black tracking-tighter whitespace-nowrap leading-none text-center overflow-hidden max-w-full w-full"
+          className="home-hero-word-enter text-[25vw] md:text-[32vw] font-black tracking-tighter whitespace-nowrap leading-none text-center overflow-hidden max-w-full w-full"
           style={{ color: "#00283C" }}
         >
           {primeiroNomeModelo}
         </div>
       </div>
 
-      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">
+      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex h-full min-h-0 flex-col items-center w-full">
         {/* Brand Label */}
-        <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
+        <div className="h-8 md:h-6 mb-1 shrink-0 overflow-visible relative w-full flex justify-center z-20">
           <div key={`${vehicle.id}-brand`} className="flex items-center gap-3">
             <div
               className="h-[1px] w-8 md:w-12"
@@ -227,10 +219,9 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
           </div>
         </div>
 
-        <div className="relative w-full container-main flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
+        <div className="relative w-full container-main flex flex-1 min-h-0 items-center justify-center">
           {/* Main Car Image - MAXIMIZED SIZE */}
           <div
-            key={`${vehicle.id}-image`}
             className="absolute inset-0 flex touch-pan-y items-center justify-center cursor-grab active:cursor-grabbing"
             onPointerEnter={(event) => {
               if (event.pointerType === "mouse") preloadDetails();
@@ -244,77 +235,126 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
           >
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-[72%] h-10 w-[78%] -translate-x-1/2 rounded-[50%] md:top-[76%] md:h-14 md:w-[68%]"
+              className="pointer-events-none absolute left-1/2 bottom-0 h-10 w-[78%] -translate-x-1/2 rounded-[50%] md:h-14 md:w-[68%]"
               style={{
                 background:
                   "radial-gradient(ellipse at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.08) 44%, rgba(0, 0, 0, 0) 74%)",
               }}
             />
-            <img
-              src={optimizeStockImage(
-                vehicle.image || CAR_COVERED_PLACEHOLDER_URL,
-                960,
-              )}
-              srcSet={stockImageSrcSet(
-                vehicle.image,
-                [480, 640, 768, 960, 1280],
-              )}
-              sizes="(max-width: 767px) 50vw, 70vw"
-              alt={vehicle.model}
-              width={1280}
-              height={960}
-              loading={currentIndex === 0 ? "eager" : "lazy"}
-              decoding={currentIndex === 0 ? "sync" : "async"}
-              {...(currentIndex === 0 && { fetchPriority: "high" as const })}
-              className="relative z-10 w-full h-auto hover:scale-[1.02] transition-transform duration-700 ease-out max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125 cursor-pointer"
-              draggable={false}
-            />
+            {slides.map(({ vehicle: photo, state, request }) => (
+              <div
+                key={photo.id}
+                data-home-hero-photo={state}
+                aria-hidden={state !== "active"}
+                className="home-hero-photo pointer-events-none absolute inset-0 flex items-center justify-center"
+                style={{ transitionDuration: `${HERO_PHOTO_FADE_MS}ms` }}
+              >
+                <HomeHeroCarImage
+                  sourceKey={photo.image || CAR_COVERED_PLACEHOLDER_URL}
+                  overlay={
+                    <VehicleWarrantySummary
+                      showNote={false}
+                      vehicle={
+                        photo.warrantyVehicle?.id === photo.id
+                          ? photo.warrantyVehicle
+                          : undefined
+                      }
+                      className="home-hero-warranty"
+                    />
+                  }
+                  src={optimizeStockImage(
+                    photo.image || CAR_COVERED_PLACEHOLDER_URL,
+                    960,
+                  )}
+                  srcSet={stockImageSrcSet(
+                    photo.image,
+                    [480, 640, 768, 960, 1280],
+                  )}
+                  sizes="(max-width: 767px) 50vw, 70vw"
+                  alt={state === "active" ? photo.model : ""}
+                  width={1280}
+                  height={960}
+                  loading="eager"
+                  decoding={
+                    !hasSwitched && state === "active" ? "sync" : "async"
+                  }
+                  {...(!hasSwitched &&
+                    state === "active" && { fetchPriority: "high" as const })}
+                  onLoad={
+                    state === "pending"
+                      ? async (event) => {
+                          const image = event.currentTarget;
+                          try {
+                            await image.decode();
+                            // Let a cached photo paint at opacity 0 before fading it in.
+                            window.requestAnimationFrame(() => {
+                              window.requestAnimationFrame(() => {
+                                if (request !== undefined) ready(request);
+                              });
+                            });
+                          } catch {
+                            if (request !== undefined) failed(request);
+                          }
+                        }
+                      : undefined
+                  }
+                  onError={
+                    state === "pending" && request !== undefined
+                      ? () => failed(request)
+                      : undefined
+                  }
+                  draggable={false}
+                />
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Info Bar */}
-        <div className="relative w-full max-w-5xl h-[300px] md:h-[150px] mx-4 mt-8 md:mt-24 z-20">
+        <div className="home-hero-info relative w-full max-w-5xl h-32 md:h-24 shrink-0 mt-1 md:mt-2 z-20">
           <div
             key={`${vehicle.id}-info`}
-            className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 w-full bg-white/70 backdrop-blur-2xl rounded-2xl md:rounded-2xl overflow-hidden border border-white/50 shadow-2xl"
+            className="absolute inset-0 grid grid-cols-2 grid-rows-2 md:grid-cols-3 md:grid-rows-1 w-full bg-white/70 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/50 shadow-lg"
           >
             <div
-              className="p-3 md:p-4 lg:p-8 flex flex-col justify-center items-center text-white h-full"
+              className="col-span-2 md:col-span-1 px-3 py-2 md:px-4 flex justify-between items-center gap-2 md:flex-col md:justify-center md:gap-0 lg:flex-row lg:justify-between lg:gap-2 text-white h-full"
               style={{ backgroundColor: "#00283C" }}
             >
-              <span className="text-[8px] md:text-[10px] uppercase tracking-widest opacity-60 mb-0.5 md:mb-1 font-bold">
-                {vehicle.model}
-              </span>
-              <div className="flex items-center gap-2 md:gap-3 flex-wrap justify-center">
-                <span className="text-base md:text-xl lg:text-2xl font-bold whitespace-nowrap">
-                  {yearFormatted}
+              <div className="min-w-0 max-w-full md:text-center lg:text-left">
+                <span className="block truncate text-[8px] md:text-[9px] leading-tight uppercase tracking-widest opacity-60 mb-0.5 font-bold">
+                  {vehicle.model}
                 </span>
-                {tag && (
-                  <>
-                    <span
-                      className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full shrink-0"
-                      style={{ backgroundColor: "#5CD29D" }}
-                    />
-                    <span className="text-base md:text-xl lg:text-2xl font-bold text-gray-400 whitespace-nowrap">
-                      {tag}
-                    </span>
-                  </>
-                )}
+                <div className="flex items-center gap-1.5 flex-wrap md:justify-center lg:justify-start">
+                  <span className="text-sm lg:text-base font-bold whitespace-nowrap">
+                    {yearFormatted}
+                  </span>
+                  {tag && (
+                    <>
+                      <span
+                        className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full shrink-0"
+                        style={{ backgroundColor: "#5CD29D" }}
+                      />
+                      <span className="text-sm lg:text-base font-bold text-gray-400 whitespace-nowrap">
+                        {tag}
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
-              <div className="mt-1 md:mt-2 lg:mt-4">
+              <div className="shrink-0">
                 {showPriceComparison ? (
                   <div className="flex flex-col items-center">
-                    <span className="text-[15px] md:text-base font-semibold text-gray-300">
+                    <span className="text-[10px] leading-tight font-semibold text-gray-300">
                       De:{" "}
                       <span className="line-through">
                         {previousPriceFormatted}
                       </span>
                     </span>
-                    <span className="text-[11px] md:text-xs font-semibold uppercase text-gray-400 leading-none">
+                    <span className="text-[9px] font-semibold uppercase text-gray-400 leading-none">
                       Para:
                     </span>
                     <span
-                      className="text-xl md:text-2xl lg:text-3xl font-black whitespace-nowrap"
+                      className="text-xl lg:text-2xl leading-tight font-black whitespace-nowrap"
                       style={{ color: "#5CD29D" }}
                     >
                       {priceFormatted}
@@ -322,7 +362,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                   </div>
                 ) : (
                   <span
-                    className="text-xl md:text-2xl lg:text-3xl font-black whitespace-nowrap"
+                    className="text-xl lg:text-2xl leading-tight font-black whitespace-nowrap"
                     style={{ color: "#5CD29D" }}
                   >
                     {priceFormatted}
@@ -331,12 +371,13 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
               </div>
             </div>
 
-            <div
-              className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center border-y md:border-y-0 md:border-x border-black/5 hover:bg-white/40 transition-colors cursor-pointer group h-full"
+            <button
+              type="button"
+              className="p-2 flex min-h-11 justify-center items-center gap-2 border-r md:border-x border-black/5 hover:bg-white/40 transition-colors cursor-pointer group h-full"
               onClick={handleViewDetails}
             >
               <Maximize2
-                className="w-5 h-5 md:w-6 lg:w-8 md:h-6 lg:h-8 mb-0.5 md:mb-2 transition-colors group-hover:text-secondary"
+                className="w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:text-secondary"
                 style={{ color: "#00283C" }}
               />
               <span
@@ -345,21 +386,21 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
               >
                 Ver Fotos
               </span>
-            </div>
+            </button>
 
-            <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center hover:bg-white/40 transition-colors group h-full">
-              <div className="flex items-center gap-2 mb-0.5 md:mb-2 justify-center">
+            <div className="p-1 md:p-2 flex flex-col justify-center items-center hover:bg-white/40 transition-colors group h-full">
+              <div className="flex items-center gap-1.5 mb-0.5 justify-center">
                 <div
-                  className="w-3 h-3 md:w-3.5 lg:w-4 md:h-3.5 lg:h-4 rounded-full flex items-center justify-center shrink-0 animate-pulse"
+                  className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full flex items-center justify-center shrink-0"
                   style={{ border: "2px solid #5CD29D" }}
                 >
                   <div
-                    className="w-1.5 h-1.5 md:w-1.5 lg:w-2 md:h-1.5 lg:h-2 rounded-full shadow-[0_0_12px_rgba(92,210,157,1)]"
+                    className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full"
                     style={{ backgroundColor: "#5CD29D" }}
                   />
                 </div>
                 <span
-                  className="text-[9px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap"
+                  className="text-[8px] leading-[10px] md:text-[9px] font-bold uppercase tracking-wider whitespace-nowrap"
                   style={{ color: "#0B6B4B" }}
                 >
                   {vehicle.proofLabel || "Critérios Netcar"}
@@ -374,7 +415,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                   data-wa-intent="vehicle_interest"
                   data-wa-vehicle-id={vehicle.id}
                   data-wa-vehicle-name={heroVehicleLabel}
-                  className="inline-flex items-center gap-1 font-black text-xs md:text-sm lg:text-base whitespace-nowrap text-[#087A37] hover:text-[#075E54]"
+                  className="inline-flex min-h-11 w-full justify-center items-center gap-1 font-black text-xs md:text-sm whitespace-nowrap text-[#087A37] hover:text-[#075E54]"
                 >
                   <MessageCircle className="h-4 w-4" />
                   TENHO INTERESSE
@@ -382,7 +423,7 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
               ) : (
                 <Button
                   variant="ghost"
-                  className="font-black hover:text-secondary p-0 h-auto text-xs md:text-sm lg:text-base whitespace-nowrap"
+                  className="font-black hover:text-secondary p-0 h-11 w-full text-xs md:text-sm whitespace-nowrap"
                   style={{ color: "#00283C" }}
                   onClick={handleViewDetails}
                 >
@@ -392,12 +433,6 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
             </div>
           </div>
         </div>
-
-        <VehicleWarrantySummary
-          showNote={false}
-          vehicle={vehicle.warrantyVehicle?.id === vehicle.id ? vehicle.warrantyVehicle : undefined}
-          className="mt-4 w-full max-w-5xl rounded-2xl bg-white/80 p-3"
-        />
 
         {/* Navigation - Hidden on Mobile */}
         <div

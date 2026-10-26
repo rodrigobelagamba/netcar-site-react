@@ -1,64 +1,55 @@
 import { Calculator, CreditCard, RefreshCw, FileCheck } from "lucide-react";
-import { motion } from "framer-motion";
 
 const benefits = [
   {
     icon: Calculator,
-    title: "Financiamento em até 60x",
-    desc: "Consulte parcelas e condições com bancos parceiros, sujeito à análise.",
+    title: "Financiamento até 60x",
+    desc: "Com bancos parceiros, sujeito à análise de crédito.",
   },
   {
     icon: CreditCard,
-    title: "Entrada parcelada no cartão",
-    desc: "A entrada pode ser parcelada no cartão de crédito, conforme disponibilidade e análise.",
+    title: "Entrada no cartão",
+    desc: "Parcelamento conforme disponibilidade e análise.",
   },
   {
     icon: RefreshCw,
-    title: "Avaliamos seu veículo na troca",
-    desc: "Seu usado entra na negociação — inclusive com parcela em aberto.",
+    title: "Seu usado na troca",
+    desc: "Inclusive com parcelas em aberto.",
   },
   {
     icon: FileCheck,
-    title: "Levamos ao Detran",
-    desc: "A transferência é conduzida com despachante credenciado.",
+    title: "Documentação",
+    desc: "Transferência com despachante credenciado.",
   },
 ] as const;
 
 export function HomePurchaseBenefits() {
   return (
-    <section className="container-main px-4 py-10 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 md:py-14">
-      <div className="mb-8 max-w-2xl">
-        <h2 className="text-2xl font-bold text-fg md:text-3xl">
-          Da simulação à documentação
-        </h2>
-        <p className="mt-2 text-base font-medium text-gray-600 md:text-lg">
-          Compare o financiamento, avalie seu usado, consulte a entrada no
-          cartão e encaminhe a transferência com a equipe da Netcar.
-        </p>
-      </div>
+    <section className="container-main px-4 py-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <h2 className="mb-3 text-lg font-bold text-fg">
+        Da simulação à documentação
+      </h2>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {benefits.map((item, i) => (
-          <motion.div
+      <ul className="grid gap-px overflow-hidden rounded-2xl border border-gray-100 bg-gray-100 sm:grid-cols-2 lg:grid-cols-4">
+        {benefits.map((item) => (
+          <li
             key={item.title}
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.35, delay: i * 0.06 }}
-            className="rounded-3xl border border-gray-100 bg-gradient-to-b from-white to-gray-50/80 p-5 shadow-sm"
+            className="flex items-start gap-3 bg-white p-3 sm:p-4"
           >
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-[#00283C] text-[#5CD29D]">
-              <item.icon className="h-5 w-5" aria-hidden="true" />
+            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#00283C] text-[#5CD29D]">
+              <item.icon className="h-4 w-4" aria-hidden="true" />
             </span>
-            <h3 className="mt-4 text-base font-bold leading-snug text-fg">
-              {item.title}
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-gray-600">
-              {item.desc}
-            </p>
-          </motion.div>
+            <div className="min-w-0">
+              <h3 className="text-sm font-bold leading-snug text-fg">
+                {item.title}
+              </h3>
+              <p className="mt-1 text-xs leading-relaxed text-gray-600">
+                {item.desc}
+              </p>
+            </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }

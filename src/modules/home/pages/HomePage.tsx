@@ -8,6 +8,7 @@ import {
   HomeHero,
   HomeHeroVehicle,
 } from "@/design-system/components/patterns/HomeHero";
+import { HomeHeroCarImage } from "@/design-system/components/patterns/HomeHeroCarImage";
 import { BannerHero } from "@/design-system/components/patterns/BannerHero";
 import { HomeWhatsAppConversionPanel } from "../components/HomeWhatsAppConversionPanel";
 import { HomeMobileWhatsAppBar } from "../components/HomeMobileWhatsAppBar";
@@ -141,9 +142,9 @@ function HomeHeroSkeleton() {
   const initialLcpImage = readInitialHomeLcpImage();
 
   return (
-    <div className="relative w-full bg-[#F6F6F6] overflow-visible min-h-[600px] md:min-h-[90vh] flex flex-col items-center justify-center pt-16 pb-8 md:pt-16 md:pb-8">
-      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex flex-col items-center justify-center w-full">
-        <div className="h-8 md:h-6 mb-1 overflow-visible relative w-full flex justify-center z-20">
+    <div className="home-hero-stage relative w-full bg-[#F6F6F6] overflow-hidden flex flex-col items-center justify-center">
+      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative z-10 flex h-full min-h-0 flex-col items-center w-full">
+        <div className="h-8 md:h-6 mb-1 shrink-0 overflow-visible relative w-full flex justify-center z-20">
           <div className="flex items-center gap-3">
             <div className="h-[1px] w-8 md:w-12 bg-gray-300 animate-pulse" />
             <div className="h-4 w-24 bg-gray-300 rounded animate-pulse" />
@@ -151,9 +152,12 @@ function HomeHeroSkeleton() {
           </div>
         </div>
 
-        <div className="relative w-full container-main flex items-center justify-center mb-2 md:mb-4 min-h-[45vh] md:min-h-[60vh]">
+        <div className="relative w-full container-main flex flex-1 min-h-0 items-center justify-center">
           {initialLcpImage ? (
-            <img
+            <HomeHeroCarImage
+              sourceKey={
+                readInitialHomeHeroVehicle()?.image || initialLcpImage.src
+              }
               src={initialLcpImage.src}
               srcSet={initialLcpImage.srcSet}
               sizes={initialLcpImage.sizes}
@@ -163,18 +167,17 @@ function HomeHeroSkeleton() {
               loading="eager"
               decoding="sync"
               fetchPriority="high"
-              className="w-full h-auto max-h-[55vh] md:max-h-[75vh] lg:max-h-[80vh] object-contain px-0 scale-[1.4] md:scale-125"
             />
           ) : (
-            <div className="w-full h-[45vh] md:h-[60vh] bg-gray-200 rounded-lg animate-pulse" />
+            <div className="w-full h-full bg-gray-200 rounded-lg animate-pulse" />
           )}
         </div>
 
-        <div className="relative w-full max-w-5xl h-[300px] md:h-[150px] mx-4 mt-8 md:mt-24 z-20">
-          <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 w-full bg-white/70 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/50 shadow-2xl">
-            <div className="p-3 md:p-4 lg:p-8 flex flex-col justify-center items-center bg-gray-200 animate-pulse" />
-            <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center border-y md:border-y-0 md:border-x border-gray-200 bg-gray-100 animate-pulse" />
-            <div className="p-2 md:p-4 lg:p-8 flex flex-col justify-center items-center bg-gray-100 animate-pulse" />
+        <div className="relative w-full max-w-5xl h-32 md:h-24 shrink-0 mt-1 md:mt-2 z-20">
+          <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 md:grid-cols-3 md:grid-rows-1 w-full bg-white/70 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/50 shadow-lg">
+            <div className="col-span-2 md:col-span-1 bg-gray-200 animate-pulse" />
+            <div className="border-r md:border-x border-gray-200 bg-gray-100 animate-pulse" />
+            <div className="bg-gray-100 animate-pulse" />
           </div>
         </div>
       </div>
@@ -356,7 +359,7 @@ export function HomePage() {
 
   return (
     <main className="flex-1 overflow-x-hidden max-w-full">
-      <div>
+      <div data-home-conversion-cta>
         {isLoadingHero ? (
           <HomeHeroSkeleton />
         ) : showBanners ? (
