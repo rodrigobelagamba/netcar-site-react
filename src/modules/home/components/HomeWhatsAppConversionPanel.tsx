@@ -1,29 +1,9 @@
-import {
-  MessageCircle,
-  ShieldCheck,
-  MapPin,
-  Clock,
-  Car,
-  ArrowRight,
-  Calculator,
-  Sparkles,
-  Gauge,
-  Bot,
-  FileCheck,
-} from "lucide-react";
-import { useNavigate } from "@tanstack/react-router";
-import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
+import { ArrowRight } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { formatKm, formatPrice, formatYear } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
-import {
-  buildWhatsAppUrl,
-  DEFAULT_SALES_WHATSAPP,
-  homeWhatsAppMessages,
-  vehicleWhatsAppMessages,
-} from "@/lib/whatsappMessages";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
-import { getVehicleMerchandising } from "@/lib/vehicleMerchandising";
 import { VehicleWarrantySummary } from "@/design-system/components/patterns/VehicleWarrantySummary";
 
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
@@ -59,31 +39,15 @@ export function HomeWhatsAppConversionPanel({
   featuredVehicle,
   onViewStock,
 }: HomeWhatsAppConversionPanelProps) {
-  const { data: whatsapp } = useWhatsAppQuery();
   const navigate = useNavigate();
   const label = vehicleLabel(featuredVehicle);
+  const title = featuredVehicle
+    ? [featuredVehicle.marca, featuredVehicle.modelo || featuredVehicle.name]
+        .filter(Boolean)
+        .join(" ")
+    : "Destaque do estoque";
   const image = vehicleImage(featuredVehicle);
   const price = vehiclePrice(featuredVehicle);
-  const featuredReason = featuredVehicle
-    ? getVehicleMerchandising(featuredVehicle)?.cardLabel
-    : undefined;
-  const homeMessages = homeWhatsAppMessages({
-    vehicleLabel: label,
-  });
-  const vehicleMessages = featuredVehicle
-    ? vehicleWhatsAppMessages(label)
-    : null;
-
-  const wa = (message: string) =>
-    buildWhatsAppUrl(whatsapp?.numero || DEFAULT_SALES_WHATSAPP, message);
-
-  const primaryHref = wa(homeMessages.vehicleInterest);
-  const financeHref = wa(
-    vehicleMessages?.finance ?? homeMessages.simulateFinance,
-  );
-  const similarHref = wa(homeMessages.similarOptions);
-  const ianHref = wa(homeMessages.talkToIan);
-  const kmHref = wa(vehicleMessages?.km ?? homeMessages.askKm);
 
   const goToFeaturedVehicle = () => {
     if (!featuredVehicle) {
@@ -98,259 +62,99 @@ export function HomeWhatsAppConversionPanel({
       placa: featuredVehicle.placa,
       id: featuredVehicle.id,
     });
-    navigate({ to: `/veiculo/${slug}` });
+    navigate({ to: "/veiculo/$slug", params: { slug } });
   };
 
-  const ctaDisabled = false;
-
-  const quickActionClass =
-    "inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-3 py-2 text-sm font-bold text-white transition-colors hover:bg-white/16";
-
   return (
-    <section className="relative overflow-hidden bg-[#00283C] px-4 py-4 md:py-6 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+    <section className="relative overflow-hidden bg-[#00283C] px-4 py-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
       <div className="pointer-events-none absolute -left-20 top-0 hidden h-56 w-56 rounded-full bg-[#5CD29D]/20 blur-3xl md:block" />
       <div className="pointer-events-none absolute -right-16 bottom-0 hidden h-64 w-64 rounded-full bg-white/10 blur-3xl md:block" />
 
-      <div className="container-main relative grid gap-4 md:gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.07] p-3 text-white shadow-sm md:backdrop-blur md:p-5 lg:p-6">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#5CD29D]/30 bg-[#5CD29D]/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#5CD29D]">
-            <MessageCircle className="h-4 w-4" />
-            <span className="md:hidden">Fale pelo WhatsApp</span>
-            <span className="hidden md:inline">Atendimento pelo WhatsApp</span>
-          </span>
+      <div className="container-main relative grid gap-4 md:grid-cols-2 md:items-stretch">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.07] p-3 text-white shadow-sm md:flex md:flex-col md:justify-between md:p-5 md:backdrop-blur">
+          <div>
+            <h1 className="text-xl font-black leading-tight [text-wrap:balance] md:text-[30px] xl:text-[32px]">
+              Seu próximo carro, com o cuidado Netcar.
+            </h1>
+            <p className="mt-2 text-sm leading-relaxed text-white/78 md:text-base">
+              Seminovos selecionados no RS e preparados na Fábrica de Valor.
+            </p>
+          </div>
 
-          <h1 className="mt-3 text-2xl font-black leading-tight md:mt-4 md:text-4xl lg:text-[2.75rem]">
-            <span className="md:hidden">Seminovos em Esteio/RS</span>
-            <span className="hidden md:inline">Seminovos em Esteio/RS</span>
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/78 md:mt-3 md:text-lg">
-            <span className="md:hidden">
-              Veja o estoque ou fale com a Netcar.
-            </span>
-            <span className="hidden md:inline">
-              Escolha um carro ou conte o que procura. A Netcar ajuda na compra.
-            </span>
+          <div
+            data-home-conversion-cta
+            className="mt-3 grid grid-cols-2 gap-2 md:mt-4 md:flex md:flex-wrap"
+          >
+            <button
+              type="button"
+              onClick={onViewStock}
+              className="inline-flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-2xl bg-[#087A37] px-3 py-2 text-sm font-black text-white transition-colors"
+            >
+              Ver estoque
+              <ArrowRight className="hidden h-4 w-4 shrink-0 md:block" aria-hidden="true" />
+            </button>
+            <Link
+              to="/sobre"
+              className="inline-flex min-h-11 min-w-0 items-center justify-center rounded-2xl border border-white/20 bg-white px-3 py-2 text-center text-sm font-black leading-tight text-[#00283C] transition-colors hover:bg-white/90 md:bg-white/10 md:text-white md:hover:bg-white/18"
+            >
+              Conheça a Netcar
+            </Link>
+          </div>
+
+          <p className="mt-3 text-xs leading-relaxed text-white/90">
+            Desde 1997 · 2 lojas em Esteio
           </p>
-
-          {/* Chips — só desktop (md+), igual master */}
-          <div className="mt-5 hidden gap-3 text-sm font-semibold text-white/90 md:grid md:grid-cols-2 lg:grid-cols-4">
-            <div className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-3">
-              <MapPin className="h-4 w-4 shrink-0 text-[#5CD29D]" />2 lojas
-              Esteio
-            </div>
-            <div className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-3">
-              <ShieldCheck className="h-4 w-4 shrink-0 text-[#5CD29D]" />
-              Fábrica de Valor
-            </div>
-            <div className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-3">
-              <Clock className="h-4 w-4 shrink-0 text-[#5CD29D]" />
-              Mensagem recebida 24h
-            </div>
-            <div className="flex items-center gap-2 rounded-2xl bg-white/10 px-3 py-3">
-              <FileCheck className="h-4 w-4 shrink-0 text-[#5CD29D]" />
-              Despachante credenciado
-            </div>
-          </div>
-
-          {/* CTAs mobile: WhatsApp primeiro */}
-          <div data-home-conversion-cta className="mt-3 grid grid-cols-2 gap-2 md:hidden">
-            <a
-              href={primaryHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source="home_conversion"
-              data-wa-intent="vehicle_interest"
-              data-wa-vehicle-id={featuredVehicle?.id}
-              data-wa-vehicle-name={label}
-              aria-disabled={ctaDisabled}
-              className={`inline-flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-2xl px-1.5 py-2 text-sm font-black transition-colors ${
-                ctaDisabled
-                  ? "pointer-events-none bg-white/20 text-white/60"
-                  : "bg-[#087A37] text-white"
-              }`}
-            >
-              <MessageCircle className="h-4 w-4 shrink-0" />
-              WhatsApp
-            </a>
-            <button
-              type="button"
-              onClick={onViewStock}
-              className="inline-flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-2xl bg-white px-1.5 py-2 text-sm font-black text-[#00283C] transition-colors hover:bg-white/90"
-            >
-              <span>Ver estoque</span>
-            </button>
-          </div>
-
-          {/* CTAs desktop */}
-          <div data-home-conversion-cta className="mt-4 hidden flex-col gap-2 md:flex md:flex-row">
-            <a
-              href={primaryHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source="home_conversion"
-              data-wa-intent="vehicle_interest"
-              data-wa-vehicle-id={featuredVehicle?.id}
-              data-wa-vehicle-name={label}
-              aria-disabled={ctaDisabled}
-              className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-base font-black transition-colors ${
-                ctaDisabled
-                  ? "pointer-events-none bg-white/20 text-white/60"
-                  : "bg-[#087A37] text-white"
-              }`}
-            >
-              <MessageCircle className="h-5 w-5" />
-              Tenho interesse
-            </a>
-            <button
-              type="button"
-              onClick={onViewStock}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-4 py-2.5 text-base font-black text-white transition-colors hover:bg-white/18"
-            >
-              <span>Ver estoque</span>
-              <ArrowRight className="h-5 w-5" />
-            </button>
-          </div>
-
-          {/* Quick actions — só desktop */}
-          <div className="mt-3 hidden gap-2 md:grid md:grid-cols-2 lg:grid-cols-4">
-            <a
-              href={financeHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source="home_conversion"
-              data-wa-intent="simulate_finance"
-              data-wa-vehicle-id={featuredVehicle?.id}
-              data-wa-vehicle-name={label}
-              className={quickActionClass}
-            >
-              <Calculator className="h-4 w-4 text-[#5CD29D]" />
-              Financiamento
-            </a>
-            <a
-              href={kmHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source="home_conversion"
-              data-wa-intent="ask_km"
-              data-wa-vehicle-id={featuredVehicle?.id}
-              data-wa-vehicle-name={label}
-              className={quickActionClass}
-            >
-              <Gauge className="h-4 w-4 text-[#5CD29D]" />
-              Quilometragem
-            </a>
-            <a
-              href={similarHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source="home_conversion"
-              data-wa-intent="similar_options"
-              data-wa-vehicle-name={label}
-              className={quickActionClass}
-            >
-              <Sparkles className="h-4 w-4 text-[#5CD29D]" />
-              Opções parecidas
-            </a>
-            <a
-              href={ianHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-wa-source="home_conversion"
-              data-wa-intent="talk_to_ian"
-              className={quickActionClass}
-            >
-              <Bot className="h-4 w-4 text-[#5CD29D]" />
-              Falar com o iAN
-            </a>
-          </div>
         </div>
 
-        {/* Card destaque — só md+ (no mobile poluia rolagem) */}
-        <div className="hidden rounded-3xl border border-white/12 bg-white p-4 shadow-sm md:block md:p-5">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <span className="text-xs font-black uppercase tracking-[0.18em] text-[#128C7E]">
-                {featuredReason || "Destaque do estoque"}
-              </span>
-              <h2 className="mt-1 text-2xl font-black leading-tight text-[#00283C]">
-                {label}
-              </h2>
-            </div>
-            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#5CD29D]/15 text-[#128C7E]">
-              <Car className="h-5 w-5" />
-            </span>
-          </div>
+        <div className="hidden min-w-0 rounded-3xl border border-white/12 bg-white p-4 shadow-sm md:block">
+          <h2 className="text-lg font-black leading-snug text-[#00283C]" title={label}>
+            {title}
+          </h2>
+          <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-bold text-gray-600">
+            <span>{featuredVehicle ? formatYear(featuredVehicle.year) : "—"}</span>
+            <span aria-hidden="true">·</span>
+            <span>{featuredVehicle ? formatKm(featuredVehicle.km) : "—"}</span>
+            <span aria-hidden="true">·</span>
+            <span>{featuredVehicle?.cambio || "—"}</span>
+          </p>
 
-          <button
-            type="button"
-            onClick={goToFeaturedVehicle}
-            className="mt-4 block h-56 w-full overflow-hidden rounded-2xl bg-transparent p-0 transition-transform hover:scale-[1.01] md:h-64"
-          >
-            <img
-              src={optimizeStockImage(image, 768)}
-              srcSet={stockImageSrcSet(image, [480, 640, 768, 960])}
-              sizes="(min-width: 768px) 45vw, 100vw"
-              alt={label}
-              width={960}
-              height={640}
-              className="mx-auto h-full w-full origin-bottom scale-[1.35] object-contain drop-shadow-[0_24px_28px_rgba(0,0,0,0.16)]"
-              loading="eager"
-              decoding="async"
+          <div className="mt-1 flex min-w-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={goToFeaturedVehicle}
+              className="block h-[168px] min-w-0 flex-1 overflow-hidden rounded-2xl bg-transparent p-0"
+            >
+              <img
+                src={optimizeStockImage(image, 768)}
+                srcSet={stockImageSrcSet(image, [480, 640, 768, 960])}
+                sizes="(min-width: 768px) 35vw, 100vw"
+                alt={label}
+                width={960}
+                height={640}
+                className="mx-auto h-full w-full -translate-y-3 scale-[1.6] object-contain"
+                loading="eager"
+                decoding="async"
+              />
+            </button>
+            <VehicleWarrantySummary
+              vehicle={featuredVehicle}
+              className="shrink-0 [&>div]:flex-col [&>div>div]:w-[60px]"
+              showNote={false}
             />
-          </button>
-
-          <VehicleWarrantySummary vehicle={featuredVehicle} className="mt-3" showNote={false} />
-
-          <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs font-bold text-gray-600">
-            <div className="rounded-2xl bg-gray-50 px-2 py-3">
-              <span className="block text-[10px] uppercase tracking-wider text-gray-400">
-                Ano
-              </span>
-              {featuredVehicle ? formatYear(featuredVehicle.year) : "—"}
-            </div>
-            <div className="rounded-2xl bg-gray-50 px-2 py-3">
-              <span className="block text-[10px] uppercase tracking-wider text-gray-400">
-                KM
-              </span>
-              {featuredVehicle ? formatKm(featuredVehicle.km) : "—"}
-            </div>
-            <div className="rounded-2xl bg-gray-50 px-2 py-3">
-              <span className="block text-[10px] uppercase tracking-wider text-gray-400">
-                Câmbio
-              </span>
-              {featuredVehicle?.cambio || "—"}
-            </div>
           </div>
 
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                Até 60x · entrada no cartão · troca
-              </span>
-              <p className="text-2xl font-black text-[#00283C]">
-                {price || "Consulte"}
-              </p>
-            </div>
-            <div data-home-conversion-cta className="flex flex-col gap-2 sm:flex-row">
-              <a
-                href={primaryHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-wa-source="home_conversion"
-                data-wa-intent="featured_card_whatsapp"
-                data-wa-vehicle-id={featuredVehicle?.id}
-                data-wa-vehicle-name={label}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#087A37] px-3 py-2 text-sm font-black text-white"
-              >
-                <MessageCircle className="h-4 w-4" />
-                Tenho interesse
-              </a>
+          <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
+            <p className="whitespace-nowrap text-xl font-black leading-tight text-[#00283C]">
+              {price || "Consulte"}
+            </p>
+            <div data-home-conversion-cta>
               <button
                 type="button"
                 onClick={goToFeaturedVehicle}
-                className="min-h-11 rounded-xl bg-[#00283C] px-3 py-2 text-sm font-black text-white transition-colors hover:bg-[#00435a]"
+                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-[#00283C] px-3 py-2 text-sm font-black text-white transition-colors hover:bg-[#00435a]"
               >
-                Ver detalhes
+                Ver carro
+                <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
               </button>
             </div>
           </div>
