@@ -142,7 +142,14 @@ before(async () => {
         },
         load(id) {
           if (id === routerModule) {
-            return 'export function useNavigate() { return () => { throw new Error("Unexpected navigation"); }; }';
+            return `
+              import { createElement } from "react";
+              function unexpectedNavigation() { throw new Error("Unexpected navigation"); }
+              export function useNavigate() { return unexpectedNavigation; }
+              export function Link({ to, children, ...props }) {
+                return createElement("a", { ...props, href: to, onClick: unexpectedNavigation }, children);
+              }
+            `;
           }
         },
       },
