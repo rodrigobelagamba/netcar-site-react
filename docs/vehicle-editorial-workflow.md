@@ -74,7 +74,11 @@ As conclusões, URLs e limites ficam em `docs/audits/editorial-profiles-2026-10-
 `profile-applied` significa apenas que os temas da curadoria puderam ser montados
 com os equipamentos resolvidos. Não certifica a configuração de fábrica nem
 resolve pendências documentais. Um perfil sem tema defensável fica identificado
-como `no-supported-topics`, sem fabricar cards ou equipamentos.
+como `no-supported-topics`, sem fabricar cards ou equipamentos. Quando a revisão
+concluiu que não há temas elegíveis, `emptySelectionReason: no-eligible-topics`
+permite concluir a seleção vazia apenas enquanto o resolver não oferecer nenhum
+tema. Um novo fato elegível reabre a revisão. Fox19840 e HB2019985 usam esse
+estado após a confirmação individual de ausência de ISOFIX pelo responsável.
 
 As legendas do Tera19587 e Tracker20088 usam chaves SHA-256 da localização dos
 arquivos revisados. O registro guarda separadamente o SHA-256 dos bytes vistos,

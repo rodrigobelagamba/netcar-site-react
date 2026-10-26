@@ -1,16 +1,24 @@
 # Revisão editorial do estoque — 26/10/2026
 
-58 cadastros antes sem perfil foram pesquisados por marca, versão, ano-modelo, motor e câmbio. 55 receberam temas selecionados; três ficaram sem cards novos por falta de informação suficiente. Com os quatro perfis anteriores, 59 dos 62 veículos ativos têm perfil aplicável.
+58 cadastros antes sem perfil foram pesquisados por marca, versão, ano-modelo, motor e câmbio. 55 receberam temas selecionados. Com os quatro perfis anteriores, 59 dos 62 veículos ativos têm temas para cards; três não têm tópicos canônicos atuais. A ausência de ISOFIX do Fox e do HB20 foi resolvida por confirmação individual do responsável, registrada abaixo. O Gol continua sem dados suficientes para um destaque.
 
-Os perfis apenas selecionam temas dos equipamentos já resolvidos. Nenhum equipamento, preço, garantia ou dado do XML/ERP foi alterado. As fontes não são uma certificação de fábrica de todo o estoque: há 11 pesquisas exatas, 43 parciais e quatro com divergências documentais. URLs, conclusões e limites estão no [registro completo](editorial-profiles-2026-10-26.json).
+Os perfis apenas selecionam temas dos equipamentos já resolvidos. Após a pesquisa, o responsável confirmou a ausência de ISOFIX nas unidades 19840 e 19985: somente esse item é suprimido pelo mecanismo canônico de confirmação individual. Os demais equipamentos, preços, garantias e dados do XML/ERP foram preservados. As fontes não são uma certificação de fábrica de todo o estoque: há 11 pesquisas exatas, 43 parciais e quatro com divergências documentais. URLs, conclusões e limites estão no [registro completo](editorial-profiles-2026-10-26.json).
 
-## Casos que precisam de informação da unidade
+## Confirmação individual de ausência — 26/10/2026
 
-- Fox Comfortline 1.0 manual 2017, ID19840: ISOFIX é o único tema disponível, sem comprovação exata. As fotos consultadas não mostram as ancoragens traseiras.
-- HB20 Comfort 1.0 manual 2016, ID19985: ISOFIX é o único tema disponível; os documentos localizados não comprovam sua presença nessa unidade/versão.
+À pergunta sobre Fox Comfortline 1.0 manual 2017, ID19840, e HB20 Comfort 1.0 manual 2016, ID19985, o responsável respondeu: “nao tem isofix”. A resposta confirma a ausência nas duas unidades e encerra a pendência desse equipamento.
+
+Os registros `equipment-review-unit-19840-no-isofix-2026-10-26` e `equipment-review-unit-19985-no-isofix-2026-10-26`, em `src/data/vehicle-equipment-confirmations.json`, usam schema v2 e identidade física calculada pelo parser canônico sobre a API consultada sem cache. A vinculação também exige ID, marca, versão, fabricação/ano-modelo, motor, câmbio e mercado brasileiro. Não foram persistidos placa nem resposta bruta.
+
+Essa é uma confirmação operacional do responsável, não uma declaração da montadora nem uma conclusão por omissão em manual. Não se transfere a outras unidades. O XML/ERP permanece intacto; a lista, os destaques e as demais superfícies que usam o resolver passam a suprimir somente ISOFIX nesses dois carros. A pesquisa documental anterior foi preservada no histórico do registro JSON.
+
+Sem ISOFIX, as duas unidades não têm tópicos canônicos atuais para cards. A resolução documental é `resolved-no-current-topics`; o perfil usa `emptySelectionReason: no-eligible-topics` e fica `profile-applied` somente enquanto não houver temas elegíveis. Um novo tema reabre a revisão. Assim, 57 dos 58 cadastros pesquisados estão concluídos, sendo 55 com temas e dois com seleção vazia justificada. No estoque completo, são 61 perfis aplicados e apenas o Gol pendente.
+
+## Caso que ainda precisa de informação
+
 - Gol 1.0 manual 2013, ID20104: versão incompleta, sem fotos da unidade e sem fatos suficientes para montar um destaque.
 
-Esses perfis permanecem identificados como `no-supported-topics`. Falta de prova não significa ausência do equipamento; a lista canônica foi preservada.
+A falta de dados no Gol não prova ausência de equipamentos. O registro permanece `no-supported-topics`.
 
 ## Divergências registradas na pesquisa
 
@@ -32,7 +40,7 @@ Esses perfis permanecem identificados como `no-supported-topics`. Falta de prova
 | 19750 | VOLKSWAGEN T CROSS HIGHLINE TURBO | 2021 | 1.4 / AUTOMATICO | panoramic-roof, parking-aids, paddle-shift, phone-connectivity | partial |
 | 19779 | FORD TERRITORY TITANIUM TURBO | 2024 | 1.5 / AUTOMATICO | driving-assistance, park-assist, panoramic-roof, automatic-tailgate | exact |
 | 19788 | VOLKSWAGEN NIVUS HIGHLINE TURBO | 2024 | 1.0 / AUTOMATICO | driving-assistance, parking-aids, everyday-convenience, phone-connectivity | partial |
-| 19840 | VOLKSWAGEN FOX COMFORTLINE | 2017 | 1.0 / MANUAL | Pendente: dados insuficientes | partial |
+| 19840 | VOLKSWAGEN FOX COMFORTLINE | 2017 | 1.0 / MANUAL | Sem tópicos; ausência de ISOFIX confirmada | partial; resolução operacional |
 | 19857 | NISSAN KICKS SENSE TURBO | 2026 | 1.0 / AUTOMATICO | adaptive-cruise-control, everyday-convenience, phone-connectivity, airbag-protection | exact |
 | 19866 | JEEP COMPASS SERIE S T270 TURBO | 2025 | 1.3 / AUTOMATICO | driving-assistance, park-assist, airbag-protection, panoramic-roof | exact |
 | 19868 | HYUNDAI CRETA PRESTIGE | 2018 | 2.0 / AUTOMATICO | cabin-comfort, parking-aids, cruise-control, push-start | partial |
@@ -47,7 +55,7 @@ Esses perfis permanecem identificados como `no-supported-topics`. Falta de prova
 | 19963 | HYUNDAI TUCSON TURBO GLS | 2021 | 2.0 / AUTOMATICO | panoramic-roof, cabin-comfort, power-seat, parking-aids | conflict |
 | 19978 | VOLKSWAGEN POLO TRACK FIRST EDITION | 2023 | 1.0 / MANUAL | traction-control, abs-ebd, isofix | partial |
 | 19982 | VOLKSWAGEN POLO HIGHLINE TURBO | 2024 | 1.0 / AUTOMATICO | push-start, phone-connectivity, parking-aids, paddle-shift | partial |
-| 19985 | HYUNDAI HB20 COMFORT | 2016 | 1.0 / MANUAL | Pendente: dados insuficientes | partial |
+| 19985 | HYUNDAI HB20 COMFORT | 2016 | 1.0 / MANUAL | Sem tópicos; ausência de ISOFIX confirmada | partial; resolução operacional |
 | 19994 | CHEVROLET ONIX PREMIER PLUS TURBO | 2025 | 1.0 / AUTOMATICO | everyday-convenience, parking-aids, phone-connectivity, airbag-protection | partial |
 | 19998 | TOYOTA YARIS XS CONNECT MULTIDRIVE | 2024 | 1.5 / AUTOMATICO | phone-connectivity, rear-camera, cruise-control, leather-seats | partial |
 | 20008 | CHEVROLET CRUZE LT SEDAN TURBO | 2017 | 1.4 / AUTOMATICO | phone-connectivity, parking-aids, cruise-control, traction-control | partial |
@@ -92,5 +100,5 @@ As 21 localizações e os checksums dos bytes foram reconferidos na API pública
 
 - Coleção pública completa: 75 registros, 62 ativos; todos passam pelo parser e resolvedores canônicos.
 - Validação dos 62: seleção de até quatro temas, sem novos equipamentos, sem duplicação e com ordem/partição preservadas.
-- Testes de equipamentos, identidade, textos, legendas e galeria: 161 passaram, quatro pulados por condições já existentes do ambiente.
+- Testes de equipamentos, identidade, textos, legendas e galeria: 167 passaram, quatro pulados por condições já existentes do ambiente. Incluem a ausência individual de ISOFIX e a reabertura de seleção vazia diante de um novo tema elegível.
 - Lint e build de produção concluídos. A publicação só será confirmada após job terminal, assets públicos e navegador.

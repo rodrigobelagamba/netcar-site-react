@@ -32,10 +32,11 @@ test("reviewed profiles cover exact combinations without equipment enrichment", 
     identities.add(identity);
     assert.equal(typeof profile.match.modelYear, "number");
     assert.ok(profile.topics.length <= 4);
-    if (!profile.topics.length)
+    if (!profile.topics.length && !profile.emptySelectionReason)
       assert.equal(profile.research?.status, "insufficient-data");
     assert.equal(new Set(profile.topics).size, profile.topics.length);
     assert.deepEqual(Object.keys(profile).sort(), [
+      ...(profile.emptySelectionReason ? ["emptySelectionReason"] : []),
       "id",
       "match",
       ...(profile.research ? ["research"] : []),

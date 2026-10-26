@@ -181,6 +181,54 @@
           ]
         }
       ]
+    },
+    {
+      "schemaVersion": 2,
+      "id": "equipment-review-unit-19840-no-isofix-2026-10-26",
+      "approved": true,
+      "source": "responsible-confirmation",
+      "confirmedAt": "2026-10-26",
+      "claim": "Em 26/10/2026, em resposta direta à pergunta sobre o Fox Comfortline ID19840 e o HB20 Comfort ID19985, o responsável informou: \"nao tem isofix\". Confirmação de ausência de ISOFIX nesta unidade brasileira, restrita ao ID e à identidade física vinculados. Não é documento da montadora, não se estende a outra unidade e não altera o XML/ERP de origem.",
+      "marketSource": "responsible-confirmation",
+      "match": {
+        "vehicleId": "19840",
+        "physicalIdentityKey": "2caaa74af5d4aefacd97e780a461baf2175e395a156a2a28774646bab91b4de4",
+        "brand": "VOLKSWAGEN",
+        "model": "FOX COMFORTLINE",
+        "modelYear": 2017,
+        "manufactureYear": 2016,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "presentTags": [],
+      "absentTags": [
+        "isofix"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "id": "equipment-review-unit-19985-no-isofix-2026-10-26",
+      "approved": true,
+      "source": "responsible-confirmation",
+      "confirmedAt": "2026-10-26",
+      "claim": "Em 26/10/2026, em resposta direta à pergunta sobre o Fox Comfortline ID19840 e o HB20 Comfort ID19985, o responsável informou: \"nao tem isofix\". Confirmação de ausência de ISOFIX nesta unidade brasileira, restrita ao ID e à identidade física vinculados. Não é documento da montadora, não se estende a outra unidade e não altera o XML/ERP de origem.",
+      "marketSource": "responsible-confirmation",
+      "match": {
+        "vehicleId": "19985",
+        "physicalIdentityKey": "985350e6c740920bc932f0e0559854424c58b1d8ae0065e5622f5feee9a463c8",
+        "brand": "HYUNDAI",
+        "model": "HB20 COMFORT",
+        "modelYear": 2016,
+        "manufactureYear": 2015,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "market": "BR"
+      },
+      "presentTags": [],
+      "absentTags": [
+        "isofix"
+      ]
     }
   ]
 }

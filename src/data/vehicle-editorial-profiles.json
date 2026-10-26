@@ -222,9 +222,10 @@
       },
       "topics": [],
       "research": {
-        "status": "insufficient-data",
+        "status": "partial",
         "evidenceId": "hyundai-hb20-comfort-2016-1-0-manual"
-      }
+      },
+      "emptySelectionReason": "no-eligible-topics"
     },
     {
       "id": "toyota-yaris-xs-connect-multidrive-2024-1-5-automatico",
@@ -962,9 +963,10 @@
       },
       "topics": [],
       "research": {
-        "status": "insufficient-data",
+        "status": "partial",
         "evidenceId": "volkswagen-fox-comfortline-2017-1-0-manual"
-      }
+      },
+      "emptySelectionReason": "no-eligible-topics"
     },
     {
       "id": "volkswagen-t-cross-highline-turbo-2024-1-4-automatico",

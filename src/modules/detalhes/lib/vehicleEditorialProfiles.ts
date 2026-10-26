@@ -11,6 +11,8 @@ export interface VehicleEditorialProfile {
   match: VehicleEditorialIdentity;
   /** Membership only: order always comes from the shared equipment resolver. */
   topics: readonly string[];
+  /** A completed review may legitimately have no differentiating facts. */
+  emptySelectionReason?: "no-eligible-topics";
   research?: {
     status: "exact" | "partial" | "conflict" | "insufficient-data";
     evidenceId: string;
@@ -64,20 +66,24 @@ export function selectVehicleEditorialTopics(
   const unavailableTopics = profile.topics.filter(
     (topic) => !available.has(topic),
   );
+  const unsupportedEmpty =
+    !profile.topics.length &&
+    !(
+      profile.emptySelectionReason === "no-eligible-topics" &&
+      available.size === 0
+    );
   return {
     topics: new Set(profile.topics.filter((topic) => available.has(topic))),
     review: {
       status:
-        unavailableTopics.length || !profile.topics.length
+        unavailableTopics.length || unsupportedEmpty
           ? "needs-editorial-review"
           : "profile-applied",
       provenance: profileData.provenance,
       profileId: profile.id,
       reviewedAt: profile.reviewedAt,
       ...(profile.research ? { researchStatus: profile.research.status } : {}),
-      ...(!profile.topics.length
-        ? { reason: "no-supported-topics" as const }
-        : {}),
+      ...(unsupportedEmpty ? { reason: "no-supported-topics" as const } : {}),
       ...(unavailableTopics.length
         ? { reason: "unavailable-topics" as const }
         : {}),

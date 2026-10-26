@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "reviewedAt": "2026-10-26",
-  "scope": "Editorial selection only; does not add, remove or certify equipment, change warranty, price, XML/ERP, or photo order.",
+  "scope": "Editorial selection with a subsequent responsible-person confirmation of ISOFIX absence restricted to units 19840 and 19985. Preserves prior research, other equipment, warranty, price, XML/ERP and photo order.",
   "sourcePolicy": "Official Brazilian references with explicit identity/year/trim and limitations. Manuals/homologation tables do not certify trim equipment. All topics require current canonical facts.",
   "summary": {
     "reviewedVehicles": 58,
@@ -15,7 +15,14 @@
       "partial": 43,
       "exact": 11,
       "conflict": 4
-    }
+    },
+    "resolvedByUnitConfirmation": [
+      "19840",
+      "19985"
+    ],
+    "unresolvedInsufficientData": [
+      "20104"
+    ]
   },
   "records": [
     {
@@ -285,21 +292,43 @@
         "https://www.hyundai.com.br/content/dam/hmb/cat%C3%A1logos/HB20_2019.pdf",
         "https://www.hyundai.com.br/content/dam/hmb/cat%C3%A1logos/HB20Rspec_2018.pdf"
       ],
-      "evidenceSummary": "PBEV 2016, página 6, confirma HB20 Comfort 1.0-12V/M-5, mas não comprova ISOFIX. Nova busca por manual MY2016 e documentação histórica encontrou manual oficial multiversão, catálogo brasileiro HB20 2019 com ISOFIX e folheto R spec válido 2018/2018. Nenhum deles fecha a presença de ISOFIX no Comfort 1.0 manual MY2016. Como ISOFIX é o único tópico editorial disponível e é uma alegação de segurança sem suporte exato, não há tópico sustentado para publicar neste perfil.",
+      "evidenceSummary": "Em 26/10/2026, o responsável respondeu \"nao tem isofix\" à pergunta conjunta sobre Fox ID19840 e HB20 ID19985. A ausência foi confirmada individualmente para esta unidade e registrada no mecanismo canônico v2, com identidade física obtida da API atual. A insuficiência documental anterior permanece no histórico; a resolução atual tem origem operacional, não documental de fábrica.",
       "scopeLimitations": [
-        "Lacuna: documento brasileiro aplicável ao HB20 Comfort 1.0 manual ano-modelo 2016 ou evidência específica da unidade que confirme ancoragens ISOFIX. PBEV comprova apenas identidade mecânica.",
-        "O manual oficial disponível é multiversão, inclui opcionais e não estabelece aplicabilidade MY2016; os catálogos 2018 R spec e 2019 não podem ser retroagidos ao Comfort 2016. Não foi localizada fonte primária que permita fixar com segurança o ano de introdução.",
-        "Bloqueio somente editorial: suggestedTopics vazio. Não remover ISOFIX do equipamento canônico, não alterar XML/ERP e não afirmar ausência física por insuficiência documental."
+        "A confirmação se limita ao ISOFIX desta unidade, vinculada a ID, identidade física, marca, versão, ano-modelo, fabricação, motor, câmbio e mercado brasileiro.",
+        "Não se aplica a outro Fox, HB20 ou unidade da mesma versão; não é prova de ausência por omissão de manual.",
+        "O XML/ERP original permanece intacto. Os demais equipamentos e a garantia não são alterados.",
+        "Sem ISOFIX resolvido, não há tópico canônico atual para cards; isso não representa falta de resposta do responsável nem impede registrar um perfil editorial sem tópicos."
       ],
       "researchStatus": "partial",
-      "curationBasis": "existing-canonical-equipment-only",
+      "curationBasis": "canonical-equipment-after-unit-confirmed-absence",
       "excludedEditorialTopics": [
         "isofix"
       ],
       "existingAuditPaths": [],
-      "editorialEligibility": "blocked-insufficient-data",
+      "editorialEligibility": "resolved-no-current-topics",
       "id": "hyundai-hb20-comfort-2016-1-0-manual",
-      "curationStatus": "no-supported-topics"
+      "curationStatus": "no-current-canonical-topics",
+      "previousDocumentaryReview": {
+        "evidenceSummary": "PBEV 2016, página 6, confirma HB20 Comfort 1.0-12V/M-5, mas não comprova ISOFIX. Nova busca por manual MY2016 e documentação histórica encontrou manual oficial multiversão, catálogo brasileiro HB20 2019 com ISOFIX e folheto R spec válido 2018/2018. Nenhum deles fecha a presença de ISOFIX no Comfort 1.0 manual MY2016. Como ISOFIX é o único tópico editorial disponível e é uma alegação de segurança sem suporte exato, não há tópico sustentado para publicar neste perfil.",
+        "scopeLimitations": [
+          "Lacuna: documento brasileiro aplicável ao HB20 Comfort 1.0 manual ano-modelo 2016 ou evidência específica da unidade que confirme ancoragens ISOFIX. PBEV comprova apenas identidade mecânica.",
+          "O manual oficial disponível é multiversão, inclui opcionais e não estabelece aplicabilidade MY2016; os catálogos 2018 R spec e 2019 não podem ser retroagidos ao Comfort 2016. Não foi localizada fonte primária que permita fixar com segurança o ano de introdução.",
+          "Bloqueio somente editorial: suggestedTopics vazio. Não remover ISOFIX do equipamento canônico, não alterar XML/ERP e não afirmar ausência física por insuficiência documental."
+        ],
+        "editorialEligibility": "blocked-insufficient-data"
+      },
+      "operationalResolution": {
+        "status": "resolved",
+        "source": "responsible-confirmation",
+        "confirmedAt": "2026-10-26",
+        "claim": "nao tem isofix",
+        "absentEquipmentIds": [
+          "isofix"
+        ],
+        "confirmationId": "equipment-review-unit-19985-no-isofix-2026-10-26",
+        "canonicalPath": "src/data/vehicle-equipment-confirmations.json"
+      },
+      "evidenceRole": "manufacturer-references-preserved-as-research-history; absence-resolved-by-responsible-confirmation"
     },
     {
       "ids": [
@@ -1508,21 +1537,43 @@
       "evidenceUrls": [
         "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-fox/my-2017_172-5b1-fox-66.pdf"
       ],
-      "evidenceSummary": "Manual brasileiro Novo Fox MY2017, 172.5B1.FOX.66, consultado. A seção de transporte infantil descreve fixação por cinto; não foi localizada sustentação para o único tópico disponível, ISOFIX, nesta Comfortline 1.0 manual.",
+      "evidenceSummary": "Em 26/10/2026, o responsável respondeu \"nao tem isofix\" à pergunta conjunta sobre Fox ID19840 e HB20 ID19985. A ausência foi confirmada individualmente para esta unidade e registrada no mecanismo canônico v2, com identidade física obtida da API atual. A insuficiência documental anterior permanece no histórico; a resolução atual tem origem operacional, não documental de fábrica.",
       "scopeLimitations": [
-        "A omissão do manual não prova ausência física; não remover equipamentos nem alterar o feed nesta pesquisa.",
-        "Falta evidência exata de ISOFIX na unidade/versão ou outro fato atual que possa alimentar um tópico canônico.",
-        "Não importar ISOFIX de Fox posterior ou de outro modelo."
+        "A confirmação se limita ao ISOFIX desta unidade, vinculada a ID, identidade física, marca, versão, ano-modelo, fabricação, motor, câmbio e mercado brasileiro.",
+        "Não se aplica a outro Fox, HB20 ou unidade da mesma versão; não é prova de ausência por omissão de manual.",
+        "O XML/ERP original permanece intacto. Os demais equipamentos e a garantia não são alterados.",
+        "Sem ISOFIX resolvido, não há tópico canônico atual para cards; isso não representa falta de resposta do responsável nem impede registrar um perfil editorial sem tópicos."
       ],
       "researchStatus": "partial",
-      "editorialEligibility": "blocked-insufficient-data",
-      "evidenceRole": "manufacturer-reference-for-editorial-curation; does-not-change-equipment-source",
+      "editorialEligibility": "resolved-no-current-topics",
+      "evidenceRole": "manufacturer-references-preserved-as-research-history; absence-resolved-by-responsible-confirmation",
       "evidenceLocators": [
         "PDF pp.72–76: transporte infantil e fixação por cinto; busca textual ISOFIX sem ocorrência."
       ],
       "id": "volkswagen-fox-comfortline-2017-1-0-manual",
-      "curationStatus": "no-supported-topics",
-      "photoReviewNote": "Fotos atuais do Fox revisadas: nenhuma mostra as ancoragens do banco traseiro; não confirmam ISOFIX."
+      "curationStatus": "no-current-canonical-topics",
+      "photoReviewNote": "Fotos atuais do Fox revisadas: nenhuma mostra as ancoragens do banco traseiro; não confirmam ISOFIX.",
+      "previousDocumentaryReview": {
+        "evidenceSummary": "Manual brasileiro Novo Fox MY2017, 172.5B1.FOX.66, consultado. A seção de transporte infantil descreve fixação por cinto; não foi localizada sustentação para o único tópico disponível, ISOFIX, nesta Comfortline 1.0 manual.",
+        "scopeLimitations": [
+          "A omissão do manual não prova ausência física; não remover equipamentos nem alterar o feed nesta pesquisa.",
+          "Falta evidência exata de ISOFIX na unidade/versão ou outro fato atual que possa alimentar um tópico canônico.",
+          "Não importar ISOFIX de Fox posterior ou de outro modelo."
+        ],
+        "editorialEligibility": "blocked-insufficient-data"
+      },
+      "operationalResolution": {
+        "status": "resolved",
+        "source": "responsible-confirmation",
+        "confirmedAt": "2026-10-26",
+        "claim": "nao tem isofix",
+        "absentEquipmentIds": [
+          "isofix"
+        ],
+        "confirmationId": "equipment-review-unit-19840-no-isofix-2026-10-26",
+        "canonicalPath": "src/data/vehicle-equipment-confirmations.json"
+      },
+      "curationBasis": "canonical-equipment-after-unit-confirmed-absence"
     },
     {
       "ids": [

@@ -88,6 +88,8 @@ test("approved reviewed IDs survive an absent stock snapshot to block unsafe raw
   assert.equal(empty.schemaVersion, 4);
   assert.deepEqual(empty.confirmedVehicleIds, expected);
   assert.deepEqual(empty.confirmedVehicleIds, [
+    "19840",
+    "19985",
     "20050",
     "20051",
     "20068",
