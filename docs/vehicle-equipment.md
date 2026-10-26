@@ -40,9 +40,28 @@ Essa camada prevalece sobre XML/API desatualizados, sem modificar os dados bruto
 
 Confirmado em 28/09/2026: Fastback 20050 tem assistência de permanência em faixa, mas não Park Assist nem piloto adaptativo. No Civic 20051, a única correção confirmada é a ausência de teto solar/panorâmico; não acrescentar assistência de faixa nem alterar os demais equipamentos. Piloto convencional e sensores de estacionamento não são equivalentes a ACC e Park Assist.
 
+## Conflitos documentais e prevenção — 26/10/2026
+
+O responsável autorizou corrigir os erros confirmados e publicar a proteção na
+rotina existente. `vehicle-equipment-conflicts.json` registra incompatibilidades
+com a configuração original, com fonte oficial e identidade exata. Não é um
+ateste de ausência física nem uma autorização para inferir equipamentos de
+outros anos, versões ou mercados.
+
+O resolver impede que uma alegação em conflito apareça nos destaques, na lista,
+na descrição e nas demais superfícies que usam a mesma regra. Uma confirmação
+aprovada e compatível da unidade pode justificar um acessório instalado; essa
+exceção nunca é transportada para outro carro. A reimportação do mesmo erro no
+XML não revoga a proteção. O XML/ERP permanece intacto.
+
+Equipamentos sensíveis ainda sem verificação são pendências, não erros
+confirmados. A ausência de menção numa lista resumida não autoriza exclusão.
+As três correções e os limites da pesquisa estão em
+`audits/equipment-conflicts-2026-10-26.md`.
+
 ## Novos veículos e novas tags
 
-O site **não pesquisa a internet nem acrescenta equipamentos automaticamente** quando recebe um carro. Itens ainda não verificados permanecem como informados pelo cadastro. Ao revisar uma nova combinação de modelo/ano/versão, repetir o procedimento acima; uma evidência antiga não certifica todo o veículo.
+O site **não pesquisa a internet nem acrescenta equipamentos automaticamente** quando recebe um carro. As regras documentais exatas já revisadas também protegem novos IDs compatíveis. Itens sensíveis sem respaldo entram na auditoria diária como pendentes; não são certificados pelo XML. Os demais itens ainda não verificados permanecem como informados pelo cadastro. Ao revisar uma nova combinação de modelo/ano/versão, repetir o procedimento acima; uma evidência antiga não certifica todo o veículo.
 
 Ao surgir uma tag nova, conferir o significado na taxonomia real da API, adicionar peso explícito e testes, sem adivinhar pelo nome. Há aliases históricos contraintuitivos (documentados na auditoria de 28/09/2026).
 
@@ -50,7 +69,14 @@ A rotina diária do DevOps gerencia essa conferência: coleta o cadastro, sinali
 
 ## SEO e testes
 
-O HTML para crawlers usa um snapshot de equipamentos gerado pelo mesmo resolver. Só pode aproveitá-lo quando a assinatura do cadastro atual coincide; dados alterados precisam de novo build e não devem receber complementos antigos. O manifesto schema 2 identifica também as unidades com confirmação: em caso de divergência nessas unidades, a lista de equipamentos SEO é omitida até a regeneração, em vez de republicar informações já negadas. Manifesto ausente, inválido ou antigo também omite a lista. Nas demais unidades, um snapshot desatualizado pode usar a lista bruta conservadora. Os demais dados da página não são removidos.
+O HTML para crawlers usa um snapshot de equipamentos gerado pelo mesmo resolver.
+O manifesto **schema 4** só é aproveitado quando a assinatura do cadastro atual
+coincide. Em qualquer unidade, manifesto ausente, inválido, antigo ou divergente
+omite a lista SEO até a regeneração; nunca retorna ao XML/API bruto. Isso também
+protege carros recém-importados que ainda não constam do manifesto e evita que
+um novo ID contorne uma restrição documental. Nome, preço, fotos e demais dados
+da página permanecem. As confirmações individuais continuam identificadas no
+manifesto como informação de procedência.
 
 Executar `npm run stock:test-equipment`, `npm run lint` e `npm run build`. Conferir a ficha no navegador. Não publicar sem aprovação; seguir as instruções de deploy do projeto.
 

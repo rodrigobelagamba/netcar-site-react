@@ -73,6 +73,7 @@ function validReport(report) {
       ['brand', 'model', 'engine', 'transmission', 'researchQuery'].every((key) => typeof vehicle[key] === 'string') &&
       (vehicle.modelYear === null || ['string', 'number'].includes(typeof vehicle.modelYear)) &&
       ['new', 'changed', 'unchanged'].includes(vehicle.change) &&
+      (vehicle.inventoryStatus === undefined || ['active', 'sold'].includes(vehicle.inventoryStatus)) &&
       strings(vehicle.inventoryDescriptions) && strings(vehicle.displayedDescriptions) &&
       strings(vehicle.confirmationIds) && Array.isArray(vehicle.findings) &&
       vehicle.findings.every((finding) => finding && typeof finding.code === 'string' &&
@@ -249,6 +250,8 @@ export function createEquipmentService({
       if (saved !== null) {
         const counts = saved.counts;
         const statuses = ['passed', 'divergent', 'inconclusive'];
+        const validVerification = (value) => value === undefined || (objectFields(value, ['factoryConflicts', 'sensitiveReviewRequired']) &&
+          ['factoryConflicts', 'sensitiveReviewRequired'].every((key) => Number.isSafeInteger(value[key]) && value[key] >= 0 && value[key] <= 300));
         if (saved.schemaVersion !== 1 || !validInstant(saved.generatedAt) || !counts ||
           !['vehicles', ...statuses].every((key) => Number.isSafeInteger(counts[key]) && counts[key] >= 0 && counts[key] <= 500) ||
           !Array.isArray(saved.vehicles) || saved.vehicles.length !== counts.vehicles ||
@@ -257,15 +260,17 @@ export function createEquipmentService({
           !saved.vehicles.every((vehicle) => vehicle && typeof vehicle.vehicleId === 'string' && /^\d{1,20}$/.test(vehicle.vehicleId) &&
             vehicle.publicUrl === `https://www.netcarmultimarcas.com.br/veiculo/${vehicle.vehicleId}` &&
             boundedText(vehicle.model, 400) && statuses.includes(vehicle.status) &&
+            (vehicle.inventoryStatus === undefined || ['active', 'sold'].includes(vehicle.inventoryStatus)) && validVerification(vehicle.verification) &&
             Array.isArray(vehicle.differences) && vehicle.differences.length <= 1000 &&
             vehicle.differences.every((difference) => boundedText(difference, 2000))) ||
           !statuses.every((status) => counts[status] === saved.vehicles.filter((vehicle) => vehicle.status === status).length))
           throw new EquipmentError(503, 'Relatório da conferência semanal inválido; preserve o arquivo e execute novamente.');
         return {
           schemaVersion: saved.schemaVersion, generatedAt: saved.generatedAt,
+          ...(saved.scope === 'public-source-consistency' ? { scope: saved.scope } : {}),
           counts: Object.fromEntries(['vehicles', ...statuses].map((key) => [key, counts[key]])),
           vehicles: saved.vehicles.map((vehicle) => Object.fromEntries(
-            ['vehicleId', 'publicUrl', 'model', 'status', 'differences'].map((key) => [key, vehicle[key]]))),
+            ['vehicleId', 'publicUrl', 'model', 'status', 'differences', 'inventoryStatus', 'verification'].filter((key) => vehicle[key] !== undefined).map((key) => [key, vehicle[key]]))),
         };
       }
       return null;

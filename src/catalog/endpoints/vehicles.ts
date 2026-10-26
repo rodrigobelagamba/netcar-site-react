@@ -26,6 +26,8 @@ export interface Vehicle {
   preco_com_troca?: number;
   year: number; // Ano modelo
   anoFabricacao?: number; // Ano de fabricação
+  /** Preserve an explicit source market; never infer BR from missing data. */
+  market?: string;
   km: number;
   /** Dados originais do gate; nunca incluem identificadores administrativos. */
   factoryWarrantyVehicle?: WarrantyCatalogVehicle | null;
@@ -65,6 +67,7 @@ export interface ApiVehicleResponse {
     modelo: string;
     ano: number; // Ano modelo
     ano_fabricacao?: number | null; // Ano de fabricação
+    market?: string;
     valor: number;
     valor_formatado: string;
     preco_com_troca: number;
@@ -388,6 +391,7 @@ export async function fetchVehicles(query?: VehiclesQuery): Promise<Vehicle[]> {
         preco_com_troca: apiVehicle.preco_com_troca,
         year: apiVehicle.ano, // Ano modelo
         anoFabricacao: apiVehicle.ano_fabricacao || undefined, // Ano de fabricação
+        ...(typeof apiVehicle.market === "string" ? { market: apiVehicle.market } : {}),
         km: apiVehicle.km,
         factoryWarrantyVehicle: factoryWarrantyCatalogFromApi(rawVehicle, {
           observedAt,
@@ -501,6 +505,7 @@ export async function fetchVehicleById(id: string | number): Promise<Vehicle> {
       preco_com_troca: apiVehicle.preco_com_troca,
       year: apiVehicle.ano, // Ano modelo
       anoFabricacao: apiVehicle.ano_fabricacao || undefined, // Ano de fabricação
+      ...(typeof apiVehicle.market === "string" ? { market: apiVehicle.market } : {}),
       km: apiVehicle.km,
       factoryWarrantyVehicle: factoryWarrantyCatalogFromApi(rawVehicle, {
         observedAt,

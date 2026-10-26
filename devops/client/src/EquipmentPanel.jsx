@@ -83,6 +83,7 @@ function EquipmentVehicle({ vehicle, review, onSave }) {
           </span>
         </span>
         <span className="equipment-badges">
+          {vehicle.inventoryStatus === 'sold' ? <span className="pill">Vendido / página pública</span> : null}
           {vehicle.change !== 'unchanged' ? <span className="pill">{CHANGE_LABELS[vehicle.change] || vehicle.change}</span> : null}
           {hasEquipmentAlerts(vehicle) ? <span className="pill bad">Com alerta</span> : null}
           <span className={`pill ${reviewed ? 'ok' : 'warn'}`}>{reviewed ? 'Revisado' : 'Pendente'}</span>
@@ -118,7 +119,7 @@ function EquipmentVehicle({ vehicle, review, onSave }) {
         <form className="equipment-review" onSubmit={(event) => { event.preventDefault(); save('reviewed'); }}>
           <h4>Registro da revisão</h4>
           <p id={`${fieldsId}-help`} className="equipment-muted">
-            A revisão registra sua análise deste relatório. Não acrescenta equipamentos, não confirma todos os itens de fábrica e não publica o site. Não aprova garantias; pendências de garantia continuam abertas.
+            A revisão registra sua análise deste relatório. Não acrescenta equipamentos, não confirma todos os itens de fábrica e não publica o site. Pendências documentais, de equipamentos sensíveis e de garantia continuam abertas até a decisão específica correspondente.
           </p>
           <label htmlFor={`${fieldsId}-note`}>Nota da revisão <span>(obrigatória para concluir)</span></label>
           <textarea
@@ -344,7 +345,10 @@ export default function EquipmentPanel({ token, onJob, busy = false, activeJob }
             <div><dt>Pendentes</dt><dd>{counts.pending}</dd></div>
             <div><dt>Revisados</dt><dd>{counts.reviewed}</dd></div>
             <div><dt>Com alertas</dt><dd>{counts.withAlerts}</dd></div>
+            {Number.isInteger(data.report.counts.sold) ? <div><dt>Vendidos com ficha</dt><dd>{data.report.counts.sold}</dd></div> : null}
+            {Number.isInteger(data.report.counts.factoryConflicts) ? <div><dt>Conflitos documentais</dt><dd>{data.report.counts.factoryConflicts}</dd></div> : null}
           </dl>
+          <p className="equipment-muted">A auditoria diária verifica conflitos documentados de versão/ano e encaminha equipamentos sensíveis sem comprovação para revisão. Um cadastro sem alerta não é certificação física do veículo.</p>
           <div className="equipment-filters">
             <label>Buscar veículo
               <input type="search" value={query} maxLength={160} onChange={(event) => { setQuery(event.target.value); setPage(1); }} placeholder="Código, marca, modelo, ano ou motor" />

@@ -14,6 +14,7 @@ function isReviewPending(vehicle, reviews) {
   // Use actionable findings so an eligible restricted coverage is not treated
   // as pending merely because general vehicle coverage is out of scope.
   return reviews[vehicle.reviewKey]?.status !== 'reviewed' ||
+    (vehicle.findings?.some(({ code }) => ['factory-configuration-conflict', 'sensitive-equipment-review-required'].includes(code)) || false) ||
     (vehicle.findings?.some(({ code, severity }) => code?.startsWith('factory-warranty-') &&
       (severity === 'high' || severity === 'medium')) || false);
 }

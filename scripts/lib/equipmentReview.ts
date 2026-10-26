@@ -35,6 +35,7 @@ export interface ReviewCandidate {
 }
 export interface ReviewInput { schemaVersion: 1; candidates: ReviewCandidate[] }
 export interface ReviewStockVehicle {
+  inventoryStatus?: "active" | "sold";
   id: string; brand: string; model: string; modelYear: number | null;
   manufactureYear: number | null; physicalIdentityKey?: string | null; engine: string; transmission: string;
   market: string | null; seats: string; options: Array<{ tag: string; descricao: string }>;
@@ -171,6 +172,7 @@ function normalizedOptions(options: readonly (string | { tag?: string | null; de
 export function snapshotFromStock(vehicles: readonly EquipmentAuditInput[], observedAt: string): ReviewSnapshot {
   if (!Array.isArray(vehicles) || !vehicles.length || vehicles.length > 500) fail("invalid_stock");
   const rows: ReviewStockVehicle[] = vehicles.map((vehicle) => ({
+    ...(vehicle.inventoryStatus ? { inventoryStatus: vehicle.inventoryStatus } : {}),
     id: id(String(vehicle.id)), brand: optionalText(vehicle.marca), model: optionalText(vehicle.modelo),
     modelYear: nullableYear(vehicle.year), manufactureYear: nullableYear(vehicle.anoFabricacao ?? vehicle.warrantySnapshot?.manufactureYear),
     physicalIdentityKey: vehicle.physicalIdentityKey ?? null,
@@ -280,7 +282,8 @@ function validateSnapshot(snapshot: ReviewSnapshot): void {
   instant(snapshot.observedAt);
   const ids = new Set<string>();
   for (const v of snapshot.vehicles) {
-    exact(v, ["id", "brand", "model", "modelYear", "manufactureYear", "physicalIdentityKey", "engine", "transmission", "market", "seats", "options", "xml"]);
+    exact(v, ["id", "brand", "model", "modelYear", "manufactureYear", "physicalIdentityKey", "engine", "transmission", "market", "seats", "options", "xml", "inventoryStatus"]);
+    if (v.inventoryStatus !== undefined && !["active", "sold"].includes(v.inventoryStatus)) fail("invalid_inventory_status");
     id(v.id);
     if (ids.has(v.id)) fail("duplicate_stock_id");
     ids.add(v.id);
@@ -304,7 +307,7 @@ function validateSnapshot(snapshot: ReviewSnapshot): void {
 function context(c: ReviewCandidate, snapshot: ReviewSnapshot) {
   const stock = snapshot.vehicles.find((v) => v.id === c.identity.id);
   const blockers: string[] = [];
-  if (!stock) blockers.push("unit_not_active");
+  if (!stock || stock.inventoryStatus === "sold") blockers.push("unit_not_active");
   if (stock && (!matching(c.identity, stock) || (c.identity.manufactureYear !== undefined && c.identity.manufactureYear !== stock.manufactureYear))) blockers.push("identity_mismatch");
   if (stock?.market && stock.market !== c.identity.market) blockers.push("market_mismatch");
   if (!matching(c.identity, c.evidence.match)) blockers.push("evidence_identity_mismatch");

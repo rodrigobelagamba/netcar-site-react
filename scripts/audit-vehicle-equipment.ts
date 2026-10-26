@@ -27,9 +27,11 @@ import {
   isApprovedUnitEquipmentConfirmation,
   normalizeEquipmentTag,
   resolveVehicleEquipment,
+  assessVehicleEquipmentVerification,
   type EquipmentVehicle,
   type UnitEquipmentConfirmation,
 } from "../src/lib/vehicleEquipment";
+import { equipmentConflictRegistry } from "../src/lib/vehicleEquipmentVerification";
 import { mapVehicleOptional } from "../src/catalog/lib/mapVehicleOptional";
 import warrantyRegistry from "../src/data/factoryWarrantyMatrix.json";
 import {
@@ -72,6 +74,8 @@ export interface WarrantyAuditSnapshot {
 }
 
 export interface EquipmentAuditInput extends EquipmentVehicle {
+  /** Equipment coverage includes public sold fichas without reopening warranty. */
+  inventoryStatus?: "active" | "sold";
   warrantySnapshot?: WarrantyAuditSnapshot;
   /** Shared safe projection; carries only an opaque unit digest, never a plate/VIN. */
   warrantyCatalog?: ReturnType<typeof factoryWarrantyCatalogFromApi>;
@@ -120,6 +124,8 @@ export interface EquipmentAuditVehicle {
   displayedDescriptions: string[];
   confirmationIds: string[];
   researchQuery: string;
+  inventoryStatus?: "active" | "sold";
+  equipmentVerification?: ReturnType<typeof assessVehicleEquipmentVerification>;
   warranty?: EquipmentWarrantyAudit;
 }
 
@@ -156,6 +162,10 @@ export interface EquipmentAuditReport {
     changed: number;
     unchanged: number;
     withAlerts: number;
+    active?: number;
+    sold?: number;
+    factoryConflicts?: number;
+    sensitiveReviewRequired?: number;
   };
   vehicles: EquipmentAuditVehicle[];
   /** Bounded state transitions per unit, retained when absent from later feeds. */
@@ -223,7 +233,10 @@ function warrantySnapshot(
 
 /** Reject partial/error data instead of making a failed feed look like an empty
  * stock. All rows, including sold units, are validated before filtering. */
-export function parseStockResponse(payload: unknown): EquipmentAuditInput[] {
+export function parseStockResponse(
+  payload: unknown,
+  { includeSold = false }: { includeSold?: boolean } = {},
+): EquipmentAuditInput[] {
   const source = payload as Record<string, unknown> | null;
   if (!source || source.success !== true || !Array.isArray(source.data))
     throw new StockInputError(
@@ -281,6 +294,7 @@ export function parseStockResponse(payload: unknown): EquipmentAuditInput[] {
       throw new StockInputError("Mercado explícito inválido na fonte.");
     const candidate: EquipmentAuditInput = {
       id,
+      inventoryStatus: price > 0 ? "active" : "sold",
       ...(market !== undefined ? { market } : {}),
       physicalIdentityKey: vehiclePhysicalIdentityKey(id, vehicle.placa),
       marca: shortText(vehicle.marca),
@@ -305,11 +319,11 @@ export function parseStockResponse(payload: unknown): EquipmentAuditInput[] {
       warrantySnapshot: warrantySnapshot(vehicle),
       warrantyCatalog: factoryWarrantyCatalogFromApi(vehicle),
     };
-    if (price > 0) vehicles.push(candidate);
+    if (price > 0 || includeSold) vehicles.push(candidate);
   }
   if (!vehicles.length)
     throw new StockInputError(
-      "Nenhum veículo ativo na consulta; relatório anterior preservado.",
+      "Nenhum veículo no escopo da consulta; relatório anterior preservado.",
     );
   return vehicles;
 }
@@ -418,6 +432,9 @@ function reconcileWarrantyAuditHistory(
   const newWarrantyAlerts: WarrantyAuditAlert[] = [];
   const inputById = new Map(inputs.map((input) => [String(input.id), input]));
   for (const originalRow of rows) {
+    // Sold units are covered only for equipment/public claims. Preserve their
+    // last warranty history exactly as when they were outside active inventory.
+    if (originalRow.inventoryStatus === "sold") continue;
     let row = originalRow;
     // A previously automatic candidate can lose its flag before it has a
     // persisted manual record. Keep its explicit current state in history,
@@ -511,6 +528,11 @@ export function buildEquipmentAudit(
     catalog: equipmentCatalog,
     evidence: equipmentEvidenceRegistry,
     confirmations: unitEquipmentConfirmations,
+    factoryConflicts: equipmentConflictRegistry,
+    verification: readFileSync(
+      join(rootDir, "src/lib/vehicleEquipmentVerification.ts"),
+      "utf8",
+    ),
     resolver: readFileSync(
       join(rootDir, "src/lib/vehicleEquipment.ts"),
       "utf8",
@@ -569,7 +591,8 @@ export function buildEquipmentAudit(
     const old = former.get(id);
     const previouslyFlaggedButUnknown = flagPresent === null && !!old?.warranty;
     let warranty: EquipmentWarrantyAudit | undefined;
-    if (flagPresent || warrantyRecords.length || previouslyFlaggedButUnknown) {
+    if (vehicle.inventoryStatus !== "sold" &&
+        (flagPresent || warrantyRecords.length || previouslyFlaggedButUnknown)) {
       const warrantyVehicle = {
         id,
         marca: identity.brand,
@@ -701,12 +724,30 @@ export function buildEquipmentAudit(
         ? "unchanged"
         : "changed";
     const result = resolveVehicleEquipment({ ...vehicle, opcionais: mapped });
+    const equipmentVerification = assessVehicleEquipmentVerification(
+      { ...vehicle, opcionais: mapped }, result,
+    );
     const findings: EquipmentAuditFinding[] = [];
     const add = (
       code: string,
       severity: EquipmentAuditFinding["severity"],
       message: string,
     ) => findings.push({ code, severity, message });
+
+    for (const conflict of equipmentVerification.conflicts) {
+      if (conflict.status === "unit-confirmed") continue;
+      add(
+        "factory-configuration-conflict",
+        "high",
+        `${conflict.description}: ${conflict.reason} O item permanece oculto até confirmação específica da unidade. A nova importação não revoga esta proteção. Fonte: ${conflict.sourceUrl}`,
+      );
+    }
+    if (equipmentVerification.unverifiedSensitiveItems.length)
+      add(
+        "sensitive-equipment-review-required",
+        "medium",
+        `Equipamentos sensíveis informados somente pelo cadastro: ${equipmentVerification.unverifiedSensitiveItems.map((item) => item.description).join("; ")}. Conferir versão/ano e a unidade. Esta pendência não prova ausência e não autoriza retirar ou acrescentar itens.`,
+      );
 
     if (warranty) {
       const context = `FAB ${warranty.manufactureYear ?? "não informado"}; ano-modelo ${warranty.modelYear ?? "não informado"}; km ${warranty.mileageKm ?? "não informado"}; tag garantia_fabrica ${warranty.flagPresent === null ? "não informada" : warranty.flagPresent ? "presente" : "ausente"}.`;
@@ -884,6 +925,8 @@ export function buildEquipmentAudit(
     );
     return {
       ...identity,
+      inventoryStatus: vehicle.inventoryStatus ?? "active",
+      equipmentVerification,
       reviewKey,
       change,
       findings,
@@ -933,6 +976,10 @@ export function buildEquipmentAudit(
       withAlerts: rows.filter((row) =>
         row.findings.some((finding) => finding.severity !== "info"),
       ).length,
+      active: rows.filter((row) => row.inventoryStatus !== "sold").length,
+      sold: rows.filter((row) => row.inventoryStatus === "sold").length,
+      factoryConflicts: rows.filter((row) => row.equipmentVerification?.conflicts.some((item) => item.status !== "unit-confirmed")).length,
+      sensitiveReviewRequired: rows.filter((row) => row.equipmentVerification?.unverifiedSensitiveItems.length).length,
     },
     vehicles: rows,
     ...reconcileWarrantyAuditHistory(rows, vehicles, previous, now),
@@ -952,6 +999,7 @@ export function configureEquipmentAuditNetwork(): void {
 
 export async function fetchEquipmentStock(
   fetcher: typeof fetch = fetch,
+  options: { includeSold?: boolean } = {},
 ): Promise<EquipmentAuditInput[]> {
   // The fixed public endpoint cannot be changed to an internal URL by a web form.
   // No credentials or arbitrary URL from the inventory are followed.
@@ -987,7 +1035,7 @@ export async function fetchEquipmentStock(
       } catch {
         throw new StockInputError("Resposta não é JSON válido.");
       }
-      return parseStockResponse(payload);
+      return parseStockResponse(payload, options);
     } catch (error) {
       // Do not print response bodies, administrative data or arbitrary remote
       // error strings. Failure never replaces the most recent valid report.
@@ -1211,7 +1259,7 @@ function acquireLock(directory: string) {
 
 export async function runEquipmentAudit({
   stateDir = join(rootDir, ".devops/equipment"),
-  loadStock = fetchEquipmentStock,
+  loadStock = () => fetchEquipmentStock(fetch, { includeSold: true }),
 }: {
   stateDir?: string;
   loadStock?: () => Promise<EquipmentAuditInput[]>;

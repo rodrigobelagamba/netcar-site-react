@@ -5,6 +5,7 @@ import {
   definitionForEquipmentTag,
   normalizeEquipmentTag,
   resolveVehicleEquipment,
+  assessVehicleEquipmentVerification,
   type EquipmentVehicle,
 } from "../../src/lib/vehicleEquipment";
 import { discoveryVehicleFingerprint } from "./equipmentDiscovery";
@@ -35,6 +36,12 @@ export interface PublicEquipmentBrowser {
   close(): Promise<void>;
 }
 export interface PublicCheckVehicle {
+  inventoryStatus?: "active" | "sold";
+  /** Separate from DOM/source consistency; neither status certifies the unit. */
+  verification?: {
+    factoryConflicts: number;
+    sensitiveReviewRequired: number;
+  };
   vehicleId: string;
   publicUrl: string;
   model: string;
@@ -49,6 +56,7 @@ export interface PublicCheckVehicle {
 export interface PublicCheckReport {
   schemaVersion: 1;
   generatedAt: string;
+  scope?: "public-source-consistency";
   counts: {
     vehicles: number;
     passed: number;
@@ -142,6 +150,7 @@ export function publicVehicleFingerprint(
 ): string {
   return hash([
     discoveryVehicleFingerprint(vehicle),
+    vehicle.inventoryStatus ?? "active",
     vehicle.market,
     vehicle.seats,
     normalizePublicText(fuel),
@@ -302,6 +311,7 @@ export function comparePublicEquipment(
   if (!validObservation(observation))
     throw new Error("Observação pública incompleta ou inválida.");
   const expected = expectedPublicEquipment(vehicle, fuel);
+  const verification = assessVehicleEquipmentVerification(toDescriptionVehicle(vehicle, fuel));
   const differences = xmlApiDifferences(vehicle);
   const expectedNames = names(expected.equipmentNames);
   const observedNames = names(observation.equipmentNames);
@@ -362,6 +372,11 @@ export function comparePublicEquipment(
     vehicleId: vehicle.id,
     publicUrl: `${PUBLIC_CHECK_ORIGIN}/veiculo/${vehicle.id}`,
     model: safePublicLabel(vehicle.model),
+    inventoryStatus: vehicle.inventoryStatus,
+    verification: {
+      factoryConflicts: verification.conflicts.filter((item) => item.status !== "unit-confirmed").length,
+      sensitiveReviewRequired: verification.unverifiedSensitiveItems.length,
+    },
     status: differences.length ? "divergent" : "passed",
     differences,
     observedAt: observation.observedAt,
@@ -410,6 +425,7 @@ export function buildPublicCheckReport(
   return {
     schemaVersion: 1,
     generatedAt,
+    scope: "public-source-consistency",
     counts: {
       vehicles: vehicles.length,
       passed: vehicles.filter((v) => v.status === "passed").length,

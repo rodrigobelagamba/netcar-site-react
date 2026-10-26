@@ -11,13 +11,13 @@ import { mapVehicleOptional } from "../src/catalog/lib/mapVehicleOptional";
 import { vehiclePhysicalIdentityKey } from "../src/lib/vehiclePhysicalIdentity";
 import { readSeoBuildStockSnapshot } from "./lib/seo-stock-cache.js";
 
-export const EQUIPMENT_SEO_SCHEMA = 3;
+export const EQUIPMENT_SEO_SCHEMA = 4;
 type RawVehicle = Record<string, unknown>;
 export interface EquipmentSeoManifest {
   schemaVersion: number;
   generatedAt: string;
-  /** Present even without a complete stock snapshot: raw API fallback must not
-   * restore equipment that was explicitly denied for a reviewed unit. */
+  /** Provenance metadata only. All stale snapshots now fail closed, including
+   * new inventory IDs affected by an exact factory-configuration conflict. */
   confirmedVehicleIds: string[];
   vehicles: Record<string, { fingerprint: string; descriptions: string[] }>;
 }
@@ -44,6 +44,7 @@ export function equipmentFingerprint(vehicle: RawVehicle): string | null {
     vehicle.motor,
     vehicle.cambio,
     vehicle.lugares,
+    vehicle.market,
   ].map(scalar);
   if (values.some((value) => value === null)) return null;
   const encode = (value: string) =>
@@ -65,7 +66,7 @@ export function equipmentFingerprint(vehicle: RawVehicle): string | null {
   return createHash("sha256")
     .update(
       JSON.stringify([
-        "netcar-equipment-v2",
+        "netcar-equipment-v3",
         ...values.map((value) => encode(value!)),
         encode(vehiclePhysicalIdentityKey(vehicle.id, vehicle.placa) || ""),
         options,
@@ -102,6 +103,7 @@ export function createEquipmentManifest(
         id,
         marca: text(vehicle.marca),
         modelo: text(vehicle.modelo),
+        market: text(vehicle.market),
         name: `${text(vehicle.marca)} ${text(vehicle.modelo)}`,
         year: text(vehicle.ano),
         anoFabricacao: text(vehicle.ano_fabricacao),
@@ -148,7 +150,7 @@ export function generateEquipmentSeo(rootDir: string): EquipmentSeoManifest {
   const count = Object.keys(manifest.vehicles).length;
   if (!count)
     console.warn(
-      "Opcionais SEO: fonte completa ausente; unidades com confirmação revisada ficarão sem lista SEO até o próximo build completo.",
+      "Opcionais SEO: fonte completa ausente; listas omitidas até o próximo build completo, sem retornar aos equipamentos brutos.",
     );
   else
     console.log(

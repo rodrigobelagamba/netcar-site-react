@@ -2,6 +2,11 @@ import catalogData from "../data/vehicle-equipment-catalog.json";
 import evidenceData from "../data/vehicle-equipment-evidence.json";
 import confirmationData from "../data/vehicle-equipment-confirmations.json";
 import { vehiclePhysicalIdentityKey } from "./vehiclePhysicalIdentity";
+import {
+  equipmentConflictRegistry,
+  isSensitiveEquipmentClaim,
+  matchingEquipmentConflicts,
+} from "./vehicleEquipmentVerification";
 
 export interface EquipmentOptional {
   tag?: string | null;
@@ -64,6 +69,7 @@ export interface EquipmentSuppression {
     | "conflicting-presence"
     | "manufacturer-correction"
     | "manufacturer-blocked-by-absence"
+    | "factory-configuration-conflict"
     | "unit-confirmed-absence";
   replacedBy?: string;
   evidenceIds?: string[];
@@ -669,6 +675,7 @@ export function resolveVehicleEquipment(
   vehicle: EquipmentVehicle,
   evidenceRecords: readonly unknown[] = equipmentEvidenceRegistry,
   unitConfirmations: readonly unknown[] = unitEquipmentConfirmations,
+  conflictRules: readonly unknown[] = equipmentConflictRegistry,
 ): {
   items: EquipmentItem[];
   suppressed: EquipmentSuppression[];
@@ -900,6 +907,39 @@ export function resolveVehicleEquipment(
     }
   }
 
+  // A factory conflict does not prove physical absence. Retain the source in the
+  // audit trail but do not turn it into a customer claim. Only a valid, physically
+  // bound confirmation can establish a retrofit on this particular unit; a new
+  // XML, another ID or an old model-level approval cannot remove the hold.
+  const confirmedFactoryExceptions = new Set(
+    confirmations
+      .filter((record) => record.schemaVersion === 2)
+      .flatMap((record) =>
+        record.presentTags.map(
+          (tag) => definitionForUnitEquipmentTag(record, tag)!.id,
+        ),
+      ),
+  );
+  for (const rule of matchingEquipmentConflicts(vehicle, conflictRules)) {
+    for (const id of rule.equipmentIds) {
+      const item = items.get(id);
+      if (
+        !item ||
+        (item.source === "unit-confirmation" &&
+          confirmedFactoryExceptions.has(id))
+      )
+        continue;
+      items.delete(id);
+      suppressed.push({
+        id: item.id,
+        tag: item.tag,
+        description: item.description,
+        reason: "factory-configuration-conflict",
+        evidenceIds: [rule.id],
+      });
+    }
+  }
+
   const replace = (dominantId: string, subordinateIds: string[]) => {
     const dominant = items.get(dominantId);
     if (!dominant) return;
@@ -1016,5 +1056,56 @@ export function resolveVehicleEquipment(
         a.id.localeCompare(b.id),
     ),
     suppressed,
+  };
+}
+
+export interface EquipmentVerificationAssessment {
+  conflicts: Array<{
+    ruleId: string;
+    itemId: string;
+    description: string;
+    status: "held" | "unit-confirmed";
+    sourceUrl: string;
+    reason: string;
+  }>;
+  unverifiedSensitiveItems: Array<{ id: string; description: string }>;
+}
+
+/** Independent publication/evidence state, not XML-to-page consistency. */
+export function assessVehicleEquipmentVerification(
+  vehicle: EquipmentVehicle,
+  result = resolveVehicleEquipment(vehicle),
+): EquipmentVerificationAssessment {
+  const conflicts: EquipmentVerificationAssessment["conflicts"] = [];
+  for (const rule of matchingEquipmentConflicts(vehicle)) {
+    for (const itemId of rule.equipmentIds) {
+      const held = result.suppressed.find(
+        (item) =>
+          item.id === itemId &&
+          item.reason === "factory-configuration-conflict" &&
+          item.evidenceIds?.includes(rule.id),
+      );
+      const confirmed = result.items.find(
+        (item) => item.id === itemId && item.source === "unit-confirmation",
+      );
+      if (!held && !confirmed) continue;
+      conflicts.push({
+        ruleId: rule.id,
+        itemId,
+        description: (held || confirmed)!.description,
+        status: held ? "held" : "unit-confirmed",
+        sourceUrl: rule.sourceUrl,
+        reason: rule.reason,
+      });
+    }
+  }
+  return {
+    conflicts,
+    unverifiedSensitiveItems: result.items
+      .filter(
+        (item) =>
+          item.source === "inventory" && isSensitiveEquipmentClaim(item.id),
+      )
+      .map(({ id, description }) => ({ id, description })),
   };
 }

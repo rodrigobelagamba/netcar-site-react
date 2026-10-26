@@ -87,14 +87,18 @@ async function fetchXml(fetcher: typeof fetch): Promise<string> {
 }
 
 /** Called by the existing review command; no extra scheduler or importer. */
-export async function fetchReviewDiscoverySnapshot(fetcher: typeof fetch = fetch): Promise<ReviewSnapshot> {
+export async function fetchReviewDiscoverySnapshot(fetcher: typeof fetch = fetch, options: { includeSold?: boolean } = {}): Promise<ReviewSnapshot> {
   configureEquipmentAuditNetwork();
-  const [stock, xmlText] = await Promise.all([fetchEquipmentStock(fetcher), fetchXml(fetcher)]);
+  const [stock, xmlText] = await Promise.all([fetchEquipmentStock(fetcher, options), fetchXml(fetcher)]);
   const snapshot = snapshotFromStock(stock, new Date().toISOString());
   const xml = parseEquipmentXml(xmlText);
   const apiIds = snapshot.vehicles.map(v => v.id).sort();
-  if (JSON.stringify(apiIds) !== JSON.stringify(xml.filter(v => v.active).map(v => v.id).sort())) fail("xml_api_active_ids_differ");
-  for (const vehicle of snapshot.vehicles) { const source = xml.find(v => v.id === vehicle.id)!; vehicle.xml = { identity: source.identity, flags: source.flags }; }
+  if (JSON.stringify(apiIds) !== JSON.stringify(xml.filter(v => options.includeSold || v.active).map(v => v.id).sort())) fail(options.includeSold ? "xml_api_all_ids_differ" : "xml_api_active_ids_differ");
+  for (const vehicle of snapshot.vehicles) {
+    const source = xml.find(v => v.id === vehicle.id)!;
+    if (source.active !== (vehicle.inventoryStatus !== "sold")) fail("xml_api_inventory_status_differs");
+    vehicle.xml = { identity: source.identity, flags: source.flags };
+  }
   return snapshot;
 }
 
@@ -105,6 +109,7 @@ export function expandExactResearchCandidates(input: ReviewInput, snapshot: Revi
   const candidates: ReviewInput["candidates"] = [];
   const seen = new Set<string>();
   for (const vehicle of snapshot.vehicles) {
+    if (vehicle.inventoryStatus === "sold") continue;
     if (vehicle.modelYear === null || vehicle.manufactureYear === null || (vehicle.market !== null && vehicle.market !== "BR")) continue;
     for (const template of templates) {
       const match = template.evidence.match;
