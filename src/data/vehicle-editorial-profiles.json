@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "provenance": "Curadoria editorial dos equipamentos cadastrados",
+  "note": "Estes perfis escolhem temas para a apresentação. Não comprovam equipamentos de fábrica, não acrescentam fatos e não alteram o ranking do catálogo.",
+  "profiles": [
+    {
+      "id": "honda-hrv-advance-turbo-2024",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HONDA",
+        "model": "HRV ADVANCE TURBO",
+        "modelYear": 2024
+      },
+      "topics": [
+        "driving-assistance",
+        "parking-aids",
+        "cabin-comfort",
+        "phone-connectivity"
+      ]
+    },
+    {
+      "id": "honda-hrv-touring-turbo-2024",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "HONDA",
+        "model": "HRV TOURING TURBO",
+        "modelYear": 2024
+      },
+      "topics": [
+        "driving-assistance",
+        "cabin-comfort",
+        "everyday-convenience",
+        "parking-aids"
+      ]
+    },
+    {
+      "id": "volkswagen-tera-high-turbo-2026",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "TERA HIGH TURBO",
+        "modelYear": 2026
+      },
+      "topics": [
+        "cabin-comfort",
+        "phone-connectivity",
+        "everyday-convenience",
+        "parking-aids"
+      ]
+    },
+    {
+      "id": "chevrolet-tracker-lt-turbo-2018",
+      "reviewedAt": "2026-10-26",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "TRACKER LT TURBO",
+        "modelYear": 2018
+      },
+      "topics": ["rear-camera", "cruise-control", "mylink", "navigation"]
+    }
+  ]
+}

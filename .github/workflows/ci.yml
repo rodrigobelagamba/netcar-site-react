@@ -71,13 +71,17 @@ jobs:
       - name: Validate weekly audit Chromium runtime
         run: |
           docker build --tag netcar-devops-weekly-check devops
-          docker run --rm --network none --entrypoint node netcar-devops-weekly-check server/tests/chromium-smoke.mjs
+          # The isolated DevOps image has no repository-level scripts directory.
+          # Mount only the real extractor for this offline smoke test.
+          docker run --rm --network none \
+            --mount "type=bind,source=$PWD/scripts/lib/equipmentPublicBrowser.mjs,target=/scripts/lib/equipmentPublicBrowser.mjs,readonly" \
+            --entrypoint node netcar-devops-weekly-check server/tests/chromium-smoke.mjs
       - name: Validate compact vehicle contact bar
         run: npx tsx --test scripts/tests/vehicle-whatsapp-card.test.tsx
       - name: Validate compact home contact bar
         run: npx tsx --test scripts/tests/home-whatsapp-bar.test.tsx
-      - name: Validate vehicle description preview
-        run: npx tsx --test scripts/tests/vehicle-description.test.tsx
+      - name: Validate vehicle description and photo presentation
+        run: npx tsx --test scripts/tests/vehicle-description.test.tsx scripts/tests/vehicle-hero-gallery.test.ts scripts/tests/vehicle-photo-captions.test.ts
       - name: Validate comparison photos and layout
         run: npx tsx --test scripts/tests/comparison-vehicle-image.test.tsx scripts/tests/vehicle-comparison-table.test.tsx scripts/tests/comparison-pages.test.tsx src/lib/comparisonContact.test.ts
       - name: Validate delivery gallery and deployment preservation

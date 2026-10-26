@@ -26,6 +26,8 @@ export interface PublicCheckState {
 }
 export interface PublicEquipmentObservation {
   observedAt: string;
+  /** Explicit DOM marker; an absent legacy description must still fail validation. */
+  presentation?: "legacy" | "editorial";
   descriptionText: string;
   equipmentNames: string[];
   highlights: Array<{ name: string; category: string; benefit: string }>;
@@ -164,6 +166,7 @@ export function publicVehicleFingerprint(
 export function expectedPublicEquipment(
   vehicle: ReviewStockVehicle,
   fuel: string,
+  presentation: "legacy" | "editorial" = "legacy",
 ) {
   const input = toDescriptionVehicle(vehicle, fuel);
   const description = buildVehicleDescription(input);
@@ -182,7 +185,7 @@ export function expectedPublicEquipment(
       fragments.push(item.label ?? "", String(item.texto));
   }
   return {
-    descriptionText: normalizePublicText(fragments.join(" ")),
+    descriptionText: presentation === "editorial" ? "" : normalizePublicText(fragments.join(" ")),
     equipmentNames: resolveVehicleEquipment(input).items.map(
       (item) => item.description,
     ),
@@ -284,6 +287,7 @@ function validObservation(observation: PublicEquipmentObservation) {
   return (
     observation &&
     Number.isFinite(Date.parse(observation.observedAt)) &&
+    (observation.presentation === undefined || observation.presentation === "legacy" || observation.presentation === "editorial") &&
     typeof observation.descriptionText === "string" &&
     observation.descriptionText.length <= 200000 &&
     Array.isArray(observation.equipmentNames) &&
@@ -310,7 +314,7 @@ export function comparePublicEquipment(
 ): PublicCheckVehicle {
   if (!validObservation(observation))
     throw new Error("Observação pública incompleta ou inválida.");
-  const expected = expectedPublicEquipment(vehicle, fuel);
+  const expected = expectedPublicEquipment(vehicle, fuel, observation.presentation);
   const verification = assessVehicleEquipmentVerification(toDescriptionVehicle(vehicle, fuel));
   const differences = xmlApiDifferences(vehicle);
   const expectedNames = names(expected.equipmentNames);

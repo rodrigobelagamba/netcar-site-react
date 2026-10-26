@@ -575,12 +575,21 @@ assert.ok(photoGate, "A galeria mantém sua própria condição de fotos dispon�
 assert.ok(videoRegion.end < photoGate.pos, "O vídeo deve aparecer antes e fora da condição de fotos");
 const mediaSection = enclosingSection(videoRegion);
 assert.ok(mediaSection, "A mídia de vídeo deve fazer parte de uma seção da página");
-assert.equal(enclosingSection(photoGate), mediaSection, "Vídeo e fotos devem compartilhar a mesma seção de galeria");
+// Compare identity as a boolean: formatting unequal ASTs expands their large,
+// circular parent graphs and can exhaust the heap before reporting the failure.
+assert.ok(enclosingSection(photoGate) === mediaSection, "Vídeo e fotos devem compartilhar a mesma seção de galeria");
 const mobileCarousels = detailsNodes.filter((node): node is ts.JsxSelfClosingElement =>
   ts.isJsxSelfClosingElement(node) && node.tagName.getText(detailsAst) === "MobileGalleryCarousel");
 assert.equal(mobileCarousels.length, 1, "A galeria conserva um único carrossel de fotos no celular");
-assert.equal(enclosingSection(mobileCarousels[0]), mediaSection, "O carrossel deve continuar na mesma seção de mídia");
-assert.ok(mobileCarousels[0].pos > videoRegion.end, "No celular, o vídeo deve vir antes do carrossel de fotos");
+const mobileHeroSection = enclosingSection(mobileCarousels[0]);
+assert.ok(mobileHeroSection, "O carrossel deve fazer parte de uma seção da página");
+const mobileHeroRef = jsxAttribute(mobileHeroSection.openingElement, "ref")?.initializer;
+assert.ok(
+  mobileHeroRef && ts.isJsxExpression(mobileHeroRef) &&
+    mobileHeroRef.expression?.getText(detailsAst) === "heroRef",
+  "O carrossel mobile deve permanecer no hero do veículo",
+);
+assert.ok(mobileCarousels[0].end < videoRegion.pos, "No celular, as fotos do hero antecedem a mídia de vídeo");
 const videoShortcuts = detailsNodes.filter((node): node is ts.JsxElement =>
   ts.isJsxElement(node) && node.openingElement.tagName.getText(detailsAst) === "a" &&
   literalAttribute(node.openingElement, "href") === "#video-do-carro");

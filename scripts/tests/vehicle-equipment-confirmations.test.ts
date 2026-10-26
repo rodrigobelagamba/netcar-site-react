@@ -77,7 +77,7 @@ test("the correction reaches both highlight cards and the list without repeating
   for (const id of ["20050", "20051"]) {
     const presentation = buildVehicleHighlights(stockVehicle(id));
     const descriptions = [
-      ...presentation.highlights.map((item) => item.title),
+      ...presentation.highlights.flatMap((item) => item.equipmentLabels),
       ...presentation.remainingOptionals,
     ];
     assert.equal(
@@ -92,7 +92,9 @@ test("the correction reaches both highlight cards and the list without repeating
       id,
     );
     assert.equal(
-      presentation.highlights.some((item) => item.id === "lane-assist"),
+      presentation.highlights.some((item) =>
+        item.equipmentIds.includes("lane-assist"),
+      ),
       id === "20050",
       id,
     );

@@ -6,19 +6,35 @@
 
 O ranking considera utilidade e diferenciação na compra: quantidade comprovada de airbags, ACC, frenagem automática, sete lugares e Park Assist no topo; teto, câmeras e conforto relevante vêm antes de equipamentos básicos e documentos. ABS, travas e airbags genéricos não devem ocupar todos os destaques só por serem itens de segurança.
 
-Itens já explicados nos destaques não se repetem na lista. Câmbio automático e motor turbo genéricos não reaparecem quando a informação já está explícita na ficha. Recursos específicos (ex.: quantidade de marchas) não são descartados como se fossem sinônimos do câmbio genérico.
+Itens já explicados nos destaques não se repetem na lista. Recursos complementares podem compor um único destaque de benefício, mantendo a ordem do resolver pelo primeiro item encontrado e consumindo somente IDs presentes no resultado conferido. Os nomes canônicos continuam visíveis e disponíveis ao auditor em `data-equipment-label`; o título comercial não substitui essa identificação. Câmbio automático e motor turbo genéricos não reaparecem quando a informação já está explícita na ficha. Recursos específicos (ex.: quantidade de marchas) não são descartados como se fossem sinônimos do câmbio genérico.
+
+Os títulos comerciais devem nomear a combinação efetiva de cada cadastro, em vez
+de repetir chamadas vagas como “Mais apoio” ou “Proteção a bordo”. Por exemplo,
+ACC, alerta de colisão, frenagem automática e assistência de faixa só aparecem
+na chamada quando seus IDs estiverem resolvidos naquela unidade. O contexto
+acima dos cards usa os dados atuais de motor, potência e quilometragem disponíveis;
+não transforma o nome da versão em prova de equipamento ou estado de conservação.
+Unidades com a mesma combinação real podem compartilhar a explicação do recurso.
 
 Descrições explícitas têm precedência sobre tags legadas. Desconhecidos continuam visíveis, no final, sem benefícios inventados. Não converter sensores em Park Assist, controlador de velocidade em ACC, multimídia em CarPlay sem fio, nem teto panorâmico em teto com abertura.
 
-A seção “Descrição do veículo” também usa o cadastro atual: identidade, motor,
-combustível e câmbio vêm dos campos estruturados; equipamentos vêm exclusivamente
-de `resolveVehicleEquipment`, inclusive as correções já aprovadas por unidade.
-`buildVehicleDescription` não recebe o texto livre de `anuncio.php`. A releitura de
-13/10/2026 encontrou nele afirmações sem respaldo e contradições com o XML; filtrar
-algumas frases deixaria outras alegações sem conferência. O endpoint e o ERP
-permanecem intactos. Todas as fichas passam a apresentar uma descrição baseada
-nesses dados, mesmo quando não havia anúncio livre. Alterações no cadastro se
-refletem na descrição ao atualizar a ficha, sem nova geração de texto por modelo.
+O template reúne os dados no resumo técnico, nos destaques e nos demais equipamentos.
+A seção “Descrição do veículo” deixou de ser renderizada, pois repetia esses mesmos
+dados. O helper anterior permanece coberto pelos testes de compatibilidade;
+ele não recebe texto livre de `anuncio.php`. A releitura de 13/10/2026 encontrou nesse
+texto afirmações sem respaldo e contradições com o XML. O endpoint e o ERP permanecem
+intactos. O marcador `data-equipment-presentation="editorial"` permite ao auditor
+reconhecer o template sem descrição duplicada, preservando a validação das páginas antigas.
+
+Legendas de fotos revisadas dependem da identidade da unidade e do arquivo exato.
+Quando mencionam equipamento, sua presença deve continuar autorizada pelo resolver.
+Fotos ainda não revisadas ficam sem legenda visual específica; a ordem e as imagens
+originais são preservadas. A revisão inicial abrange o HR-V Touring 19898 e o
+HR-V Advance 19854, com fotos conferidas individualmente por unidade.
+
+Os perfis editoriais usam marca, versão e ano-modelo exatos para selecionar temas
+entre os equipamentos resolvidos. Não adicionam fatos nem substituem evidências.
+O fluxo e os limites dessa curadoria estão em `vehicle-editorial-workflow.md`.
 
 ## Pesquisa obrigatória antes de complementar um cadastro
 

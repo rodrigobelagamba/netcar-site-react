@@ -130,11 +130,6 @@ test("hero seven-seat label remains eligible alongside higher-ranked safety equi
   assert.deepEqual(getVehicleHeroEquipmentLabels(vehicle), ["7 lugares"]);
   assert.deepEqual(
     buildVehicleHighlights(vehicle).highlights.map((item) => item.id),
-    [
-      "airbags-6",
-      "adaptive-cruise-control",
-      "automatic-emergency-braking",
-      "seven-seats",
-    ],
+    ["airbags-6", "driving-assistance", "seven-seats", "park-assist"],
   );
 });

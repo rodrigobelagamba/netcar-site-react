@@ -39,20 +39,30 @@ function safeError(category, vehicleId) {
 
 const remaining = (deadline) => Math.max(1, deadline - Date.now());
 
-function readRenderedEquipment() {
+// Exported so the Chromium smoke test exercises the same DOM extraction as the audit.
+export function readRenderedEquipment() {
   const visible = (node) => Boolean(node && node.getClientRects().length && !node.closest('[hidden]'));
   const headings = [...document.querySelectorAll('h2,h3')];
   const description = headings.find((node) => node.textContent.trim() === 'Descrição do veículo')?.closest('section');
   const otherHeading = headings.find((node) => node.textContent.trim() === 'Outros equipamentos');
   const others = otherHeading?.parentElement?.parentElement?.parentElement;
   const hero = document.getElementById('vehicle-differentials-title')?.closest('section');
-  const highlights = [...(hero?.querySelectorAll('article') || [])].filter(visible).map((card) => ({
+  const editorial = Boolean(document.querySelector('[data-equipment-presentation="editorial"]'));
+  const cards = [...(hero?.querySelectorAll('article') || [])].filter(visible);
+  const highlights = cards.map((card) => ({
     name: card.querySelector('h4')?.innerText.trim() || '',
     category: card.querySelector('p')?.textContent.trim() || '',
-    benefit: card.querySelector('p:last-child')?.innerText.trim() || '',
+    benefit: (card.querySelector('[data-equipment-benefit]') || card.querySelector('p:last-child'))?.innerText.trim() || '',
   }));
+  const highlightedNames = cards.flatMap((card) => {
+    const labels = [...card.querySelectorAll('[data-equipment-label]')];
+    // Editorial titles describe benefits; each visible canonical label is a fact.
+    // Preserve duplicates for the comparator to report, including across sections.
+    if (labels.length) return labels.filter(visible).map((node) => node.innerText.trim()).filter(Boolean);
+    return [card.querySelector('h4')?.innerText.trim() || ''].filter(Boolean);
+  });
   const otherNames = [...(others?.querySelectorAll('span') || [])].filter(visible).map((node) => node.innerText.trim()).filter(Boolean);
-  const equipmentNames = [...highlights.map((item) => item.name), ...otherNames];
+  const equipmentNames = [...highlightedNames, ...otherNames];
   const descriptionExpanded = description?.querySelector('button')?.getAttribute('aria-expanded') === 'true';
   const otherButton = others?.querySelector('button');
   const othersExpanded = !otherButton || otherButton.getAttribute('aria-expanded') === 'true';
@@ -60,16 +70,17 @@ function readRenderedEquipment() {
     ? [...description.querySelectorAll('h4')].filter((node) => node.innerText.trim() !== 'Dados do veículo')
       .flatMap((node) => [...node.parentElement.querySelectorAll('li')].filter(visible).map((item) => item.innerText.trim()))
     : [];
-  const descriptionText = descriptionExpanded ? description.innerText.trim() : '';
+  const descriptionText = descriptionExpanded || (editorial && description) ? description.innerText.trim() : '';
   const servedAssets = [...new Set([
     ...[...document.scripts].map((node) => node.getAttribute('src')),
     ...[...document.querySelectorAll('link[rel="modulepreload"]')].map((node) => node.getAttribute('href')),
   ].filter((value) => /^\/assets\/[\w.-]+\.(?:js|css)$/.test(value || '')))];
   return {
-    ready: Boolean(descriptionText && descriptionExpanded && othersExpanded && equipmentNames.length),
+    ready: Boolean((editorial || (descriptionText && descriptionExpanded)) && othersExpanded && (editorial || equipmentNames.length)),
+    presentation: editorial ? 'editorial' : 'legacy',
     descriptionText, equipmentNames, highlights, servedAssets,
     // Compare the two rendered sections only to detect an intermediate React render.
-    matchingRenderedCounts: equipmentNames.length === descriptionItems.length,
+    matchingRenderedCounts: editorial || equipmentNames.length === descriptionItems.length,
   };
 }
 

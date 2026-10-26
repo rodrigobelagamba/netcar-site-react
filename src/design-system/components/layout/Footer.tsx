@@ -36,6 +36,44 @@ const menuLinks = [
   },
 ];
 
+const essentialMenuPaths = new Set([
+  "/como-selecionamos-nossos-carros",
+  "/seminovos",
+  "/entregas",
+  "/financiamento",
+  "/compra",
+  "/contato",
+]);
+
+function FooterMenuLinks({ links }: { links: typeof menuLinks }) {
+  return (
+    <ul className="space-y-2.5">
+      {links.map((link) => (
+        <li key={link.to}>
+          {link.external ? (
+            <a
+              href={link.to}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              {link.label}
+            </a>
+          ) : (
+            <Link
+              to={link.to}
+              search={"search" in link ? link.search : undefined}
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              {link.label}
+            </Link>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function Footer() {
   const { data: bannersLoja1 } = useBannersLoja1Query();
   const { data: bannersLoja2 } = useBannersLoja2Query();
@@ -85,8 +123,8 @@ export function Footer() {
   // não cobrir o rodapé. Antes ficava no <main> e virava buraco antes do footer.
   return (
     <footer className="w-full font-sans antialiased text-muted-foreground bg-muted px-4 pt-0 pb-[calc(6rem+env(safe-area-inset-bottom))] md:px-8 md:pb-0">
-      <section className="container-main w-full bg-white rounded-[32px] shadow-sm border border-white pt-10 pb-8 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[220px_1fr_140px_120px] gap-x-10 gap-y-10 mb-10">
+      <section className="container-main w-full bg-white rounded-[32px] shadow-sm border border-white pt-8 pb-6 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[220px_1fr_140px_120px] gap-x-10 gap-y-8 mb-6">
           {/* Coluna 1: Contato & Nethelp */}
           <div className="flex flex-col space-y-6 items-start">
             <img
@@ -293,38 +331,25 @@ export function Footer() {
             <h2 className="text-[10px] font-bold text-muted-foreground mb-5 uppercase tracking-widest">
               Menu
             </h2>
-            <ul className="space-y-2.5">
-              {menuLinks.map((link) => (
-                <li key={link.to}>
-                  {link.external ? (
-                    <a
-                      href={link.to}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
-                    <Link
-                      to={link.to}
-                      search={"search" in link ? link.search : undefined}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  )}
-                </li>
-              ))}
-              <li>
+            <FooterMenuLinks
+              links={menuLinks.filter((link) => essentialMenuPaths.has(link.to))}
+            />
+            <details className="mt-3">
+              <summary className="cursor-pointer py-1 text-xs font-semibold text-[#00616A] hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">
+                Mais páginas
+              </summary>
+              <div className="pt-3">
+                <FooterMenuLinks
+                  links={menuLinks.filter((link) => !essentialMenuPaths.has(link.to))}
+                />
                 <a
                   href="/vagas/consultor-vendas-seminovos/"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="mt-2.5 inline-block text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   Trabalhe conosco
                 </a>
-              </li>
-            </ul>
+              </div>
+            </details>
           </div>
 
           {/* Coluna 4: Social */}
@@ -356,12 +381,12 @@ export function Footer() {
         </div>
 
         {/* O hub concentra a arquitetura regional; o rodapé destaca só mercados próximos. */}
-        <div className="border-t border-border pt-6 pb-2">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-              Atendimento regional
-            </h2>
-            <div className="flex flex-wrap gap-4 text-xs font-semibold">
+        <details className="border-t border-border">
+          <summary className="cursor-pointer py-3.5 text-xs font-semibold text-fg hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">
+            Atendimento regional
+          </summary>
+          <div className="pb-4">
+            <div className="mb-3 flex flex-wrap gap-4 text-xs font-semibold">
               <Link
                 to="/regioes-atendidas"
                 className="text-[#00616A] hover:underline"
@@ -372,29 +397,29 @@ export function Footer() {
                 Vender meu carro
               </Link>
             </div>
+            <ul className="flex flex-wrap gap-x-5 gap-y-2">
+              {priorityCityPages.map((city) => (
+                <li key={city.slug}>
+                  <Link
+                    to="/seminovos-{$citySlug}"
+                    params={{ citySlug: city.slug }}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    Seminovos perto de {city.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul className="flex flex-wrap gap-x-5 gap-y-2">
-            {priorityCityPages.map((city) => (
-              <li key={city.slug}>
-                <Link
-                  to="/seminovos-{$citySlug}"
-                  params={{ citySlug: city.slug }}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Seminovos perto de {city.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        </details>
 
         {/* Seminovos por marca/categoria (gerado do estoque real) */}
         {priorityLandingPages.length > 0 && (
-          <div className="border-t border-border pt-6 pb-2">
-            <h2 className="text-[10px] font-bold text-muted-foreground mb-4 uppercase tracking-widest">
+          <details className="border-t border-border">
+            <summary className="cursor-pointer py-3.5 text-xs font-semibold text-fg hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">
               Seminovos por modelo, perfil e orçamento
-            </h2>
-            <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            </summary>
+            <ul className="flex flex-wrap gap-x-5 gap-y-2 pb-4">
               {priorityLandingPages.map((landing) => (
                 <li key={landing.slug}>
                   <Link
@@ -407,37 +432,39 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </details>
         )}
 
-        <div className="border-t border-border pt-6 pb-4">
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Netcar Multimarcas — duas lojas na Av. Presidente Vargas, em Esteio/RS.
-            Atendimento pelo site, WhatsApp e nas lojas.
-          </p>
-        </div>
-
-        <div className="border-t border-border pt-6 pb-4" id="condicoes-dos-carimbos">
-          <p className="text-xs text-muted-foreground leading-relaxed">
+        <details className="border-t border-border">
+          <summary className="cursor-pointer py-3.5 text-xs font-semibold text-fg hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">
+            Garantia e política de reserva
+          </summary>
+          <p id="condicoes-dos-carimbos" className="text-xs text-muted-foreground leading-relaxed">
             <strong>Carimbos de garantia:</strong> {FACTORY_WARRANTY_NOTE}{" "}
             {FACTORY_TRACTION_BATTERY_NOTE}{" "}
             Os carimbos de motor e câmbio ou de bateria de tração se referem
             somente à cobertura indicada. Consulte as condições e fontes na
             página de cada veículo.
           </p>
-        </div>
+          <p className="mt-3 pb-4 text-xs text-muted-foreground leading-relaxed">
+            <strong>Política de reserva:</strong> devido à grande rotatividade de nosso estoque e
+            dinâmica da nossa equipe comercial, informamos que só será aceita
+            reserva de veículo mediante pagamento de sinal de negócio e aceite
+            do Termo de Sinal de Negócio.
+          </p>
+        </details>
 
         {/* Texto Legal */}
-        <div className="border-t border-border pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="border-t border-border pt-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex-1">
+            <p className="mb-2 text-xs text-muted-foreground leading-relaxed">
+              Netcar Multimarcas — duas lojas na Av. Presidente Vargas, em Esteio/RS.
+              Atendimento pelo site, WhatsApp e nas lojas.
+            </p>
             <p className="text-[10px] text-muted-foreground leading-relaxed">
-              <span className="font-bold block mb-1">
+              <span className="font-bold">
                 R&C VEÍCULOS LTDA - CNPJ: 02.237.969/0001-06
               </span>
-              Política de Reserva: devido à grande rotatividade de nosso estoque e
-              dinâmica da nossa equipe comercial, informamos que só será aceita
-              reserva de veículo mediante pagamento de sinal de negócio e aceite
-              do Termo de Sinal de Negócio.
             </p>
             <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-[#00616A]">
               <a

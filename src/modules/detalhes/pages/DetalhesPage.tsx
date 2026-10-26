@@ -75,13 +75,16 @@ import { useMetaTags } from "@/hooks/useMetaTags";
 import { VehicleSchemaOrg } from "@/components/seo/VehicleSchemaOrg";
 import { VehicleUnavailablePage } from "@/components/VehicleUnavailablePage";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
-import { buildVehicleDescription } from "../lib/vehicleDescription";
+import { buildVehiclePhotoCaptions } from "../lib/vehiclePhotoCaptions";
+import { buildVehicleEditorialSummary } from "../lib/vehicleEditorialSummary";
+import { buildVehicleHeroGallery, type HeroGallerySlide } from "../lib/vehicleHeroGallery";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { landingPages, matchesLandingFilters } from "@/data/seo";
 import {
   buildVehicleHighlights,
   getVehicleHeroEquipmentLabels,
   normalizeVehicleFeatureTag,
+  type VehicleHighlight,
   type VehicleHighlightsPresentation,
 } from "@/modules/detalhes/lib/vehicleHighlights";
 import {
@@ -92,7 +95,6 @@ import {
 } from "@/lib/vehicleMerchandising";
 import { VehicleVideoLink } from "../components/VehicleVideoLink";
 import { CustomerDeliveriesCallout } from "../components/CustomerDeliveriesCallout";
-import { VehicleDescription } from "../components/VehicleDescription";
 import { selectVehicleInstagramVideo } from "../lib/vehicleInstagramVideos";
 import { useVehicleVideosQuery } from "../queries/useVehicleVideosQuery";
 import { vehicleVideosForDisplay } from "../lib/vehicleVideosResponse";
@@ -109,6 +111,8 @@ const ANIMATION_DURATION = {
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
 const LOW_MILEAGE_HIGHLIGHT_THRESHOLD_KM = 10_000;
+const HIDDEN_RESPONSIVE_IMAGE =
+  "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 type EngineVehicle = {
   modelo?: string;
@@ -988,6 +992,7 @@ function CTASidebar({
 
 interface LightboxProps {
   images: string[];
+  captions: string[];
   currentIndex: number;
   onClose: () => void;
   vehicleName: string;
@@ -995,6 +1000,7 @@ interface LightboxProps {
 
 function Lightbox({
   images,
+  captions,
   currentIndex,
   onClose,
   vehicleName,
@@ -1015,7 +1021,7 @@ function Lightbox({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-black flex items-center justify-center"
+        className="fixed inset-0 z-[70] bg-black flex items-center justify-center"
         onClick={onClose}
       >
         {/* Close Button */}
@@ -1042,13 +1048,19 @@ function Lightbox({
         >
           <img
             src={images[index]}
-            alt={`${vehicleName} - Foto ${index + 1} de ${images.length} - Netcar Multimarcas`}
+            alt={`${vehicleName} - ${captions[index] || `Foto ${index + 1}`} - Netcar Multimarcas`}
             className="w-full h-full max-w-full object-contain"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = "none";
             }}
           />
         </motion.div>
+
+        {index > 0 && captions[index] && (
+          <p className="pointer-events-none absolute bottom-3 left-3 right-3 z-10 mx-auto w-fit max-w-[calc(100%-1.5rem)] rounded-md bg-black/65 px-2.5 py-1 text-center text-xs leading-tight text-white sm:bottom-4">
+            {captions[index]}
+          </p>
+        )}
 
         {/* Navigation Arrows */}
         {images.length > 1 && (
@@ -1083,51 +1095,59 @@ interface GalleryItemProps {
   index: number;
   onClick: () => void;
   alt: string;
+  caption: string;
   rounded?: boolean;
 }
 
-function GalleryItem({ image, index, onClick, alt, rounded = false }: GalleryItemProps) {
+function GalleryItem({ image, index, onClick, alt, caption, rounded = true }: GalleryItemProps) {
   const previewSource = stockGalleryPreviewSource(image);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{
-        duration: 0.7,
-        delay: index * 0.04,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
-      className={`relative overflow-hidden cursor-pointer bg-gray-200 group aspect-[1920/1441] ${rounded ? "rounded-xl" : ""}`}
-      onClick={onClick}
-    >
-      <div className="relative w-full h-full">
-        <img
-          src={optimizeStockImage(previewSource, 640)}
-          srcSet={stockImageSrcSet(previewSource, [320, 480, 640, 768, 960])}
-          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, (max-width: 1535px) 25vw, (max-width: 1919px) 20vw, (max-width: 2559px) 17vw, (max-width: 3839px) 14vw, 13vw"
-          alt={alt}
-          width={1920}
-          height={1441}
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-          onError={(event) => {
-            const target = event.currentTarget;
-            if (target.dataset.originalFallback === "true") {
-              target.style.display = "none";
-              return;
-            }
-            target.dataset.originalFallback = "true";
-            target.removeAttribute("srcset");
-            target.src = image;
-          }}
-        />
-        {/* Overlay on hover */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 ease-out" />
-      </div>
-    </motion.div>
+    <figure className={`relative min-w-0 ${rounded ? "overflow-hidden rounded-2xl" : ""}`}>
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{
+          duration: 0.7,
+          delay: index * 0.04,
+          ease: [0.25, 0.1, 0.25, 1],
+        }}
+        className={`relative overflow-hidden cursor-pointer bg-gray-200 group aspect-[1920/1441] ${rounded ? "rounded-2xl" : ""}`}
+        onClick={onClick}
+      >
+        <div className="relative w-full h-full">
+          <img
+            src={optimizeStockImage(previewSource, 640)}
+            srcSet={stockImageSrcSet(previewSource, [320, 480, 640, 768, 960])}
+            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, (max-width: 1535px) 25vw, (max-width: 1919px) 20vw, (max-width: 2559px) 17vw, (max-width: 3839px) 14vw, 13vw"
+            alt={alt}
+            width={1920}
+            height={1441}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            onError={(event) => {
+              const target = event.currentTarget;
+              if (target.dataset.originalFallback === "true") {
+                target.style.display = "none";
+                return;
+              }
+              target.dataset.originalFallback = "true";
+              target.removeAttribute("srcset");
+              target.src = image;
+            }}
+          />
+          {/* Overlay on hover */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 ease-out" />
+        </div>
+      </motion.div>
+      {index > 0 && caption && (
+        <figcaption className="pointer-events-none absolute bottom-1.5 left-2 right-2 mx-auto w-fit max-w-[calc(100%-1rem)] rounded bg-black/60 px-2 py-1 text-center text-[11px] leading-tight text-white">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
   );
 }
 
@@ -1136,16 +1156,24 @@ function GalleryItem({ image, index, onClick, alt, rounded = false }: GalleryIte
  * 1 coluna eram 13 × 293px = 4,6 telas antes da ficha técnica.
  */
 function MobileGalleryCarousel({
-  images,
+  slides,
   altBase,
   onOpen,
+  isSold = false,
 }: {
-  images: string[];
+  slides: HeroGallerySlide[];
   altBase: string;
   onOpen: (index: number) => void;
+  isSold?: boolean;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
+  const firstImage = slides[0]?.image;
+
+  useEffect(() => {
+    setCurrent(0);
+    if (trackRef.current) trackRef.current.scrollLeft = 0;
+  }, [firstImage, slides.length]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -1155,10 +1183,10 @@ function MobileGalleryCarousel({
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const slide = track.firstElementChild as HTMLElement | null;
-        const step = slide ? slide.offsetWidth + 8 : track.clientWidth;
-        setCurrent(
-          Math.min(images.length - 1, Math.round(track.scrollLeft / step)),
-        );
+        const step = slide?.offsetWidth || track.clientWidth;
+        if (!step) return;
+        const next = Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / step)));
+        setCurrent(next);
       });
     };
     track.addEventListener("scroll", onScroll, { passive: true });
@@ -1166,47 +1194,65 @@ function MobileGalleryCarousel({
       cancelAnimationFrame(frame);
       track.removeEventListener("scroll", onScroll);
     };
-  }, [images.length]);
+  }, [slides.length]);
 
   return (
     <div className="relative">
       <div
         ref={trackRef}
-        className="flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label={`Fotos do ${altBase}`}
       >
-        {images.map((image, index) => {
-          const previewSource = stockGalleryPreviewSource(image);
+        {slides.map((slide, index) => {
+          const image = slide.image;
+          const previewSource = slide.isCover ? image : stockGalleryPreviewSource(image);
           return (
-            <button
-              key={index}
-              type="button"
-              onClick={() => onOpen(index)}
-              aria-label={`Abrir foto ${index + 1} de ${images.length}`}
-              className="relative aspect-[4/3] w-[86vw] shrink-0 snap-center overflow-hidden rounded-2xl bg-gray-200"
-            >
-              <img
-                src={optimizeStockImage(previewSource, 640)}
-                srcSet={stockImageSrcSet(previewSource, [480, 640, 960])}
-                sizes="86vw"
-                alt={`${altBase} - Foto ${index + 1} - Netcar Multimarcas`}
-                width={1920}
-                height={1441}
-                loading="lazy"
-                decoding="async"
-                className="absolute inset-0 h-full w-full object-cover"
-                onError={(event) => {
-                  const target = event.currentTarget;
-                  if (target.dataset.originalFallback === "true") {
-                    target.style.display = "none";
-                    return;
-                  }
-                  target.dataset.originalFallback = "true";
-                  target.removeAttribute("srcset");
-                  target.src = image;
-                }}
-              />
-            </button>
+            <figure key={index} className="relative w-full shrink-0 snap-start overflow-hidden">
+              <button
+                type="button"
+                onClick={() => onOpen(index)}
+                aria-label={`Abrir foto ${index + 1} de ${slides.length}`}
+                className={`relative block h-[260px] w-full overflow-hidden sm:h-[400px] ${slide.isCover ? "bg-gray-50" : "bg-gray-200"}`}
+              >
+                {isSold && (
+                  <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+                    <span className="-rotate-[18deg] rounded-2xl border-[7px] border-[#E10600]/70 bg-white/40 px-8 py-3 text-5xl font-black uppercase tracking-[0.1em] text-[#E10600]/80 shadow-[0_10px_32px_rgba(0,0,0,0.14)] sm:rounded-[1.25rem] sm:border-[8px] sm:px-10 sm:py-4 sm:text-6xl">
+                      Vendido
+                    </span>
+                  </span>
+                )}
+                <picture className="contents">
+                  {slide.isCover && <source media="(min-width: 1024px)" srcSet={HIDDEN_RESPONSIVE_IMAGE} />}
+                  <img
+                    src={optimizeStockImage(previewSource, 640)}
+                    srcSet={stockImageSrcSet(previewSource, [480, 640, 960])}
+                    sizes="100vw"
+                    alt={`${altBase} - ${slide.caption || `Foto ${index + 1}`} - Netcar Multimarcas`}
+                    width={1920}
+                    height={1441}
+                    loading={slide.isCover ? "eager" : "lazy"}
+                    decoding={slide.isCover ? "sync" : "async"}
+                    fetchPriority={slide.isCover ? "high" : undefined}
+                    className={`absolute inset-0 h-full w-full ${slide.isCover ? "origin-bottom object-contain object-center scale-[1.18] sm:scale-110" : "object-cover"} ${isSold ? "grayscale-[0.25]" : ""}`}
+                    onError={(event) => {
+                      const target = event.currentTarget;
+                      if (target.dataset.originalFallback === "true") {
+                        target.style.display = "none";
+                        return;
+                      }
+                      target.dataset.originalFallback = "true";
+                      target.removeAttribute("srcset");
+                      target.src = image;
+                    }}
+                  />
+                </picture>
+              </button>
+              {index > 0 && slide.caption && (
+                <figcaption className="pointer-events-none absolute bottom-1.5 left-3 right-3 mx-auto w-fit max-w-[calc(100%-1.5rem)] rounded bg-black/60 px-2 py-1 text-center text-[11px] leading-tight text-white">
+                  {slide.caption}
+                </figcaption>
+              )}
+            </figure>
           );
         })}
       </div>
@@ -1214,8 +1260,16 @@ function MobileGalleryCarousel({
         className="pointer-events-none absolute right-7 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-bold text-white"
         aria-live="polite"
       >
-        {current + 1}/{images.length}
+        {current + 1}/{slides.length}
       </p>
+      <div className="flex h-6 items-center px-4 pr-24 text-[11px] text-slate-500 sm:px-6 sm:pr-32">
+        {slides.length > 1 && (
+          <p className="flex items-center gap-1.5">
+            <ArrowLeftRight aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+            Deslize para ver mais fotos
+          </p>
+        )}
+      </div>
     </div>
   );
 }
@@ -1668,6 +1722,9 @@ export function DetalhesPage() {
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [lightboxOrigin, setLightboxOrigin] = useState<"gallery" | "hero">("gallery");
+  const heroRef = useRef<HTMLElement>(null);
+  const heroMediaRef = useRef<HTMLDivElement>(null);
   const primaryCtaRef = useRef<HTMLDivElement>(null);
   const [isPrimaryCtaPastHeader, setIsPrimaryCtaPastHeader] = useState(false);
 
@@ -1681,8 +1738,10 @@ export function DetalhesPage() {
 
     const updateFloatingCta = () => {
       const primaryCta = primaryCtaRef.current;
+      const footer = document.querySelector("footer");
+      const footerVisible = footer !== null && footer.getBoundingClientRect().top < window.innerHeight;
       setIsPrimaryCtaPastHeader(
-        Boolean(primaryCta && primaryCta.getBoundingClientRect().bottom < 64),
+        Boolean(primaryCta && primaryCta.getBoundingClientRect().bottom < 64 && !footerVisible),
       );
     };
 
@@ -1766,6 +1825,11 @@ export function DetalhesPage() {
     );
   }, [images, vehicle?.imagens_site?.galeria]);
 
+  const photoCaptions = useMemo(
+    () => buildVehiclePhotoCaptions(vehicle, avifImages),
+    [vehicle, avifImages],
+  );
+
   // PRIORIDADE 1: Usa imagens_site.capa se disponível
   const mainImage = useMemo(() => {
     if (vehicle?.imagens_site?.capa) {
@@ -1791,6 +1855,36 @@ export function DetalhesPage() {
       ? firstPng
       : CAR_COVERED_PLACEHOLDER_URL;
   }, [images, vehicle?.imagens_site?.capa]);
+
+  const heroGallery = useMemo(
+    () => buildVehicleHeroGallery(
+      mainImage,
+      avifImages,
+      photoCaptions,
+      buildVehiclePhotoCaptions(vehicle, [mainImage])[0] || "",
+    ),
+    [mainImage, avifImages, photoCaptions, vehicle],
+  );
+
+  useLayoutEffect(() => {
+    const hero = heroRef.current;
+    const media = heroMediaRef.current;
+    if (!hero || !media) return;
+    const reserveMediaSpace = () => {
+      const minimumHeight = window.matchMedia("(min-width: 1024px)").matches
+        ? Math.ceil(media.getBoundingClientRect().bottom - hero.getBoundingClientRect().top + 32)
+        : 0;
+      hero.style.setProperty("--hero-media-min-height", `${minimumHeight}px`);
+    };
+    reserveMediaSpace();
+    const observer = new ResizeObserver(reserveMediaSpace);
+    observer.observe(media);
+    window.addEventListener("resize", reserveMediaSpace);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", reserveMediaSpace);
+    };
+  }, [mainImage, vehicle?.id, warrantyStamp, tractionBatteryStamp, powertrainStamp]);
 
   // Converte imagem para URL absoluta para metatags (Open Graph)
   // USA APENAS imagens_site.capa_opengraph (sem fallback)
@@ -2126,9 +2220,10 @@ export function DetalhesPage() {
         </ol>
       </nav>
       {/* Hero Section */}
-      <section className="relative w-full max-w-full overflow-hidden py-0 pb-5 pt-0 lg:min-h-[700px] lg:pb-8 lg:pt-0 xl:min-h-[700px] 2xl:min-h-[760px] 3xl:min-h-[800px] 4xl:min-h-[1200px] 5xl:min-h-[1500px] 6xl:min-h-[1900px]">
-        {/* Uma única imagem responsiva: evita baixar uma versão mobile e outra desktop. */}
+      <section ref={heroRef} className="relative w-full max-w-full overflow-hidden py-0 pb-5 pt-0 lg:min-h-[max(700px,var(--hero-media-min-height,0px))] lg:pb-8 lg:pt-0 xl:min-h-[max(700px,var(--hero-media-min-height,0px))] 2xl:min-h-[max(760px,var(--hero-media-min-height,0px))] 3xl:min-h-[max(800px,var(--hero-media-min-height,0px))] 4xl:min-h-[max(1200px,var(--hero-media-min-height,0px))] 5xl:min-h-[max(1500px,var(--hero-media-min-height,0px))] 6xl:min-h-[max(1900px,var(--hero-media-min-height,0px))]">
+        {/* Mobile starts with the same cover and continues through the existing photos. */}
         <div
+          ref={heroMediaRef}
           className="w-full mb-2 relative lg:mb-0 lg:absolute lg:pointer-events-none lg:select-none lg:z-[2]
                         lg:w-[70vw] lg:top-[-3rem] lg:right-0
                         xl:top-[-10rem]
@@ -2137,8 +2232,21 @@ export function DetalhesPage() {
                         4xl:w-[58vw] 4xl:top-[-15rem] 4xl:right-[3vw]
                         5xl:top-[-35rem]"
         >
+          <div className="lg:hidden">
+            <MobileGalleryCarousel
+              key={vehicle.id}
+              slides={heroGallery}
+              altBase={`${marca} ${modeloCompleto} ${vehicle.year || ""}`.trim()}
+              isSold={isSold}
+              onOpen={(index) => {
+                setLightboxOrigin("hero");
+                setLightboxIndex(index);
+                setLightboxOpen(true);
+              }}
+            />
+          </div>
           {mainImage && (
-            <div className="w-full h-[240px] sm:h-[400px] lg:h-auto flex items-center lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
+            <div className="w-full h-[240px] sm:h-[400px] lg:h-auto hidden items-center lg:flex lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
               {isSold && (
                 <div
                   aria-hidden="true"
@@ -2149,32 +2257,34 @@ export function DetalhesPage() {
                   </span>
                 </div>
               )}
-              {SHOW_CAMPAIGN_STAMP && !isSold && (
+              <picture className="contents">
+                <source media="(max-width: 1023px)" srcSet={HIDDEN_RESPONSIVE_IMAGE} />
                 <img
-                  src="/selos/selo_campanha.png"
-                  alt="Selo de campanha"
-                  className="absolute bottom-[6%] right-[10%] z-50 h-auto w-20 sm:bottom-[8%] sm:right-[14%] sm:w-24 pointer-events-none select-none"
+                  src={optimizeStockImage(mainImage, 960)}
+                  srcSet={stockImageSrcSet(mainImage, [480, 640, 768, 960, 1280])}
+                  sizes="(max-width: 1023px) 100vw, 70vw"
+                  alt={`${marca} ${modeloCompleto} ${vehicle.year || ""} - Frente - Netcar Multimarcas`}
+                  width={1600}
+                  height={900}
+                  loading="eager"
+                  decoding="sync"
+                  fetchPriority="high"
+                  className={`w-full h-full lg:h-auto max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
                 />
-              )}
-              <img
-                src={optimizeStockImage(mainImage, 960)}
-                srcSet={stockImageSrcSet(mainImage, [480, 640, 768, 960, 1280])}
-                sizes="(max-width: 1023px) 100vw, 70vw"
-                alt={`${marca} ${modeloCompleto} ${vehicle.year || ""} - Frente - Netcar Multimarcas`}
-                width={1600}
-                height={900}
-                loading="eager"
-                decoding="sync"
-                fetchPriority="high"
-                className={`w-full h-full lg:h-auto max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                }}
-              />
+              </picture>
             </div>
           )}
-          {(warrantyStamp || tractionBatteryStamp || powertrainStamp) && (
-            <div className="flex items-start justify-end gap-3 px-4 pt-1 sm:px-6 lg:hidden">
+          {(warrantyStamp || tractionBatteryStamp || powertrainStamp || (SHOW_CAMPAIGN_STAMP && !isSold)) && (
+            <div
+              className={`relative flex items-start justify-end gap-3 px-4 sm:px-6 lg:hidden ${[warrantyStamp, tractionBatteryStamp, powertrainStamp, SHOW_CAMPAIGN_STAMP && !isSold].filter(Boolean).length === 1 ? "-mt-6" : "pt-1"}`}
+              data-vehicle-stamps="mobile-near-floor"
+            >
+              {SHOW_CAMPAIGN_STAMP && !isSold && (
+                <img src="/selos/selo_campanha.png" alt="Selo de campanha" className="h-auto w-20 shrink-0 pointer-events-none select-none sm:w-24" />
+              )}
               {warrantyStamp && (
                 <div className="w-[68px] shrink-0 sm:w-[96px]">
                   <FactoryWarrantyBadge {...warrantyStamp} variant="hero" />
@@ -2192,27 +2302,32 @@ export function DetalhesPage() {
               )}
             </div>
           )}
+          {(warrantyStamp || tractionBatteryStamp || powertrainStamp || (SHOW_CAMPAIGN_STAMP && !isSold)) && (
+            <div
+              className={`relative hidden items-start justify-end gap-4 px-[8%] lg:flex ${[warrantyStamp, tractionBatteryStamp, powertrainStamp, SHOW_CAMPAIGN_STAMP && !isSold].filter(Boolean).length === 1 ? "-mt-[min(10.5vw,164px)]" : "pt-1"}`}
+              data-vehicle-stamps="near-floor"
+            >
+              {SHOW_CAMPAIGN_STAMP && !isSold && (
+                <img src="/selos/selo_campanha.png" alt="Selo de campanha" className="h-auto w-24 shrink-0 pointer-events-none select-none" />
+              )}
+              {warrantyStamp && (
+                <div className="w-[10.5vw] max-w-[164px]">
+                  <FactoryWarrantyBadge {...warrantyStamp} variant="hero" />
+                </div>
+              )}
+              {tractionBatteryStamp && (
+                <div className="w-[10.5vw] max-w-[164px]">
+                  <FactoryWarrantyBadge {...tractionBatteryStamp} variant="hero" />
+                </div>
+              )}
+              {powertrainStamp && (
+                <div className="w-[10.5vw] max-w-[164px]">
+                  <FactoryWarrantyBadge {...powertrainStamp} variant="hero" />
+                </div>
+              )}
+            </div>
+          )}
         </div>
-
-        {(warrantyStamp || tractionBatteryStamp || powertrainStamp) && (
-          <div className="absolute bottom-12 right-[4%] z-20 hidden items-start gap-4 lg:flex">
-            {warrantyStamp && (
-              <div className="w-[10.5vw] max-w-[164px]">
-                <FactoryWarrantyBadge {...warrantyStamp} variant="hero" />
-              </div>
-            )}
-            {tractionBatteryStamp && (
-              <div className="w-[10.5vw] max-w-[164px]">
-                <FactoryWarrantyBadge {...tractionBatteryStamp} variant="hero" />
-              </div>
-            )}
-            {powertrainStamp && (
-              <div className="w-[10.5vw] max-w-[164px]">
-                <FactoryWarrantyBadge {...powertrainStamp} variant="hero" />
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Left Content - 50% com posicionamento absoluto */}
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 relative">
@@ -2379,13 +2494,13 @@ export function DetalhesPage() {
       {/* One media gallery: the verified video stays available without photos. */}
       {(instagramVideo || avifImages.length > 0) && (
         <section
-          className="w-full py-6 sm:py-12 lg:py-16"
+          className={`${instagramVideo ? "" : "hidden lg:block "}w-full py-6 sm:py-12 lg:py-16`}
           aria-label="Fotos e vídeo do veículo"
         >
           <div
             className={
               instagramVideo
-                ? `grid grid-cols-1 gap-2 sm:gap-3 sm:px-4 lg:px-6 ${avifImages.length > 0 ? "sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8" : "mx-auto max-w-3xl"}`
+                ? `grid grid-cols-1 gap-2 sm:gap-3 sm:px-4 lg:px-6 ${avifImages.length > 0 ? "lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8" : "mx-auto max-w-3xl"}`
                 : "contents"
             }
           >
@@ -2393,7 +2508,7 @@ export function DetalhesPage() {
               <section
                 id="video-do-carro"
                 aria-label="Vídeo deste veículo"
-                className={`min-w-0 scroll-mt-24 px-4 sm:px-0 ${avifImages.length > 0 ? "sm:col-span-2 sm:row-span-2" : "sm:aspect-[4/3]"}`}
+                className={`min-w-0 scroll-mt-24 px-4 sm:px-0 ${avifImages.length > 0 ? "lg:col-span-2 lg:row-span-2" : "sm:aspect-[4/3]"}`}
               >
                 <VehicleVideoLink
                   permalink={instagramVideo.permalink}
@@ -2406,22 +2521,12 @@ export function DetalhesPage() {
             )}
             {avifImages.length > 0 && (
               <>
-                <div className="sm:hidden">
-                  <MobileGalleryCarousel
-                    images={avifImages}
-                    altBase={`${marca} ${modeloCompleto} ${vehicle.year || ""}`.trim()}
-                    onOpen={(index) => {
-                      setLightboxIndex(index);
-                      setLightboxOpen(true);
-                    }}
-                  />
-                </div>
                 {/* Desktop photos share the video grid when one is available. */}
                 <div
                   className={
                     instagramVideo
-                      ? "hidden sm:contents"
-                      : "hidden w-full grid-cols-1 gap-1 sm:grid sm:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8"
+                      ? "hidden lg:contents"
+                      : "hidden w-full grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8"
                   }
                 >
                   {avifImages.map((image, index) => (
@@ -2429,9 +2534,11 @@ export function DetalhesPage() {
                       key={index}
                       image={image}
                       index={index}
-                      rounded={Boolean(instagramVideo)}
+                      rounded
                       alt={`${marca} ${modeloCompleto} ${vehicle.year || ""} - Foto ${index + 1} - Netcar Multimarcas`}
+                      caption={photoCaptions[index]}
                       onClick={() => {
+                        setLightboxOrigin("gallery");
                         setLightboxIndex(index);
                         setLightboxOpen(true);
                       }}
@@ -2447,7 +2554,8 @@ export function DetalhesPage() {
       {/* Lightbox Modal */}
       {lightboxOpen && (
         <Lightbox
-          images={avifImages}
+          images={lightboxOrigin === "hero" ? heroGallery.map((slide) => slide.canonicalIndex === null ? slide.image : avifImages[slide.canonicalIndex]) : avifImages}
+          captions={lightboxOrigin === "hero" ? heroGallery.map((slide) => slide.caption) : photoCaptions}
           currentIndex={lightboxIndex}
           onClose={() => setLightboxOpen(false)}
           vehicleName={modeloCompleto}
@@ -2607,12 +2715,18 @@ export function DetalhesPage() {
   );
 }
 
+function isCanonicalHighlightTitle(highlight: VehicleHighlight): boolean {
+  return highlight.equipmentLabels.length === 1 && highlight.title === highlight.equipmentLabels[0];
+}
+
 function VehicleDifferentialHighlights({
   modelo,
   presentation,
+  context,
 }: {
   modelo: string;
   presentation: VehicleHighlightsPresentation;
+  context: string;
 }) {
   const featuredHighlight = presentation.highlights.find(
     (highlight) => highlight.metric,
@@ -2626,6 +2740,7 @@ function VehicleDifferentialHighlights({
   return (
     <motion.section
       aria-labelledby="vehicle-differentials-title"
+      data-equipment-presentation="editorial"
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -2637,17 +2752,19 @@ function VehicleDifferentialHighlights({
     >
       <div className="max-w-2xl">
         <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#23747C]">
-          Equipamentos deste veículo
+          Diferenciais deste veículo
         </p>
         <h3
           id="vehicle-differentials-title"
           className="mt-1 text-2xl font-black tracking-[-0.025em] text-[#00283C] sm:text-3xl"
         >
-          O que vale notar neste {modelo}
+          Por que escolher este {modelo}
         </h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
-          Os equipamentos informados para esta unidade, em ordem de relevância.
-        </p>
+        {context && (
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
+            {context}
+          </p>
+        )}
       </div>
 
       {featuredHighlight?.metric && (
@@ -2662,12 +2779,20 @@ function VehicleDifferentialHighlights({
             <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#23747C]">
               {featuredHighlight.category}
             </p>
-            <h4 className="mt-1 text-lg font-black leading-snug text-[#00283C] sm:text-xl">
+            <h4 data-equipment-label={isCanonicalHighlightTitle(featuredHighlight) ? true : undefined} className="mt-1 text-lg font-black leading-snug text-[#00283C] sm:text-xl">
               {featuredHighlight.title}
             </h4>
-            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+            <p data-equipment-benefit className="mt-1.5 text-xs leading-relaxed text-muted-foreground sm:text-sm">
               {featuredHighlight.description}
             </p>
+            {!isCanonicalHighlightTitle(featuredHighlight) && <p className="mt-2 text-xs leading-relaxed text-[#365565]">
+              {featuredHighlight.equipmentLabels.map((label, index) => (
+                <React.Fragment key={label}>
+                  {index > 0 && <span aria-hidden="true"> · </span>}
+                  <span data-equipment-label>{label}</span>
+                </React.Fragment>
+              ))}
+            </p>}
           </div>
         </article>
       )}
@@ -2681,12 +2806,20 @@ function VehicleDifferentialHighlights({
             <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#23747C]">
               {highlight.category}
             </p>
-            <h4 className="mt-1.5 text-base font-black leading-snug text-[#00283C] sm:text-lg">
+            <h4 data-equipment-label={isCanonicalHighlightTitle(highlight) ? true : undefined} className="mt-1.5 text-base font-black leading-snug text-[#00283C] sm:text-lg">
               {highlight.title}
             </h4>
-            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+            <p data-equipment-benefit className="mt-1.5 text-xs leading-relaxed text-muted-foreground sm:text-sm">
               {highlight.description}
             </p>
+            {!isCanonicalHighlightTitle(highlight) && <p className="mt-2 text-xs leading-relaxed text-[#365565]">
+              {highlight.equipmentLabels.map((label, index) => (
+                <React.Fragment key={label}>
+                  {index > 0 && <span aria-hidden="true"> · </span>}
+                  <span data-equipment-label>{label}</span>
+                </React.Fragment>
+              ))}
+            </p>}
           </article>
         ))}
       </div>
@@ -2713,7 +2846,6 @@ function DetailsSection({
   const year = vehicle.year || 0;
   const mileageFormatted = formatCatalogMileage(vehicle.km);
 
-  const description = useMemo(() => buildVehicleDescription(vehicle), [vehicle]);
   const highlightPresentation = useMemo(
     () => buildVehicleHighlights(vehicle),
     [vehicle],
@@ -2763,7 +2895,7 @@ function DetailsSection({
   );
 
   return (
-    <section className="w-full py-8 sm:py-12 lg:py-16">
+    <section className="w-full py-8 sm:py-12 lg:py-16" data-equipment-presentation="editorial">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,410px)] lg:gap-10">
           {/* Main Content */}
@@ -2809,6 +2941,7 @@ function DetailsSection({
             <VehicleDifferentialHighlights
               modelo={modeloCompleto}
               presentation={highlightPresentation}
+              context={buildVehicleEditorialSummary(vehicle)}
             />
 
             {/* Opcionais secundários */}
@@ -2874,11 +3007,6 @@ function DetailsSection({
               <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
                 {VEHICLE_EQUIPMENT_NOTICE}
               </p>
-            )}
-
-            {/* A descrição acompanha os mesmos dados conferidos da ficha. */}
-            {description && (
-              <VehicleDescription key={vehicle.id} content={description} />
             )}
           </div>
 

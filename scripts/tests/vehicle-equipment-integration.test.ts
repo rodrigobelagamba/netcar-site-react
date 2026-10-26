@@ -99,45 +99,56 @@ test("cards and list partition the same resolved inventory, without repeated equ
     const label = context(vehicle);
     const equipment = resolveVehicleEquipment(vehicle);
     const presentation = buildVehicleHighlights(vehicle);
-    const expectedCards = equipment.items
-      .filter((item) => item.benefit)
-      .slice(0, 4);
-    assert.deepEqual(
-      presentation.highlights.map((item) => item.id),
-      expectedCards.map((item) => item.id),
-      label,
+    const selectedIds = presentation.highlights.flatMap(
+      (item) => item.equipmentIds,
+    );
+    const selectedLabels = presentation.highlights.flatMap(
+      (item) => item.equipmentLabels,
+    );
+    assert.ok(presentation.highlights.length <= 4, label);
+    assert.equal(new Set(selectedIds).size, selectedIds.length, label);
+    const indexes = presentation.highlights.map((card) =>
+      Math.min(
+        ...card.equipmentIds.map((id) =>
+          equipment.items.findIndex((item) => item.id === id),
+        ),
+      ),
     );
     assert.deepEqual(
-      presentation.highlights.map((item) => item.title),
-      expectedCards.map((item) => item.description),
+      indexes,
+      [...indexes].sort((a, b) => a - b),
       label,
     );
-    const shownInCards = new Set(
-      presentation.highlights.map((item) => item.title),
-    );
-    assert.ok(
-      presentation.remainingOptionals.every((item) => !shownInCards.has(item)),
-      label,
-    );
+    for (const card of presentation.highlights) {
+      assert.deepEqual(
+        card.equipmentLabels,
+        card.equipmentIds.map((id) => {
+          const resolved = equipment.items.find((item) => item.id === id);
+          assert.ok(resolved, `${label}: unproven ${id}`);
+          return resolved.description;
+        }),
+        label,
+      );
+    }
     assert.deepEqual(
-      sorted([
-        ...presentation.highlights.map((item) => item.title),
-        ...presentation.remainingOptionals,
-      ]),
+      sorted([...selectedLabels, ...presentation.remainingOptionals]),
       sorted(equipment.items.map((item) => item.description)),
       label,
     );
-    const selectedIds = new Set(expectedCards.map((item) => item.id));
     assert.deepEqual(
       presentation.remainingOptionals,
       equipment.items
-        .filter((item) => !selectedIds.has(item.id))
+        .filter((item) => !selectedIds.includes(item.id))
         .map((item) => item.description),
       label,
     );
     assert.deepEqual(
       presentation.explainedTags,
-      new Set(expectedCards.flatMap((item) => item.sourceTags)),
+      new Set(
+        equipment.items
+          .filter((item) => selectedIds.includes(item.id))
+          .flatMap((item) => item.sourceTags),
+      ),
       label,
     );
   }
@@ -234,7 +245,7 @@ test("all audited vehicles omit generic automatic transmission and turbo already
     const ids = new Set(equipment.items.map((item) => item.id));
     const presentation = buildVehicleHighlights(vehicle);
     const descriptions = [
-      ...presentation.highlights.map((item) => item.title),
+      ...presentation.highlights.flatMap((item) => item.equipmentLabels),
       ...presentation.remainingOptionals,
     ];
     if (/automatic[oa]|cvt|dsg/i.test(String(vehicle.cambio))) {
@@ -268,7 +279,7 @@ test("T-Cross 19903 keeps its supplier-confirmed Park Assist and sunroof exactly
     assert.ok(item, id);
     assert.equal(
       [
-        ...presentation.highlights.map((card) => card.title),
+        ...presentation.highlights.flatMap((card) => card.equipmentLabels),
         ...presentation.remainingOptionals,
       ].filter((description) => description === item.description).length,
       1,
@@ -345,6 +356,12 @@ test("model, year, old metric IDs and marketing text cannot add equipment or a t
       highlights: [],
       explainedTags: new Set(),
       remainingOptionals: [],
+      editorialReview: {
+        status: "needs-editorial-review",
+        provenance: "Curadoria editorial dos equipamentos cadastrados",
+        reason: "no-exact-profile",
+        unavailableTopics: [],
+      },
     });
     // Guard runtime callers left over from the old (vehicle, anuncio) API.
     assert.deepEqual(
@@ -422,7 +439,7 @@ test("airbag positions are consolidated into one display item throughout the rea
     assert.equal(airbags.length, 1, label);
     const presentation = buildVehicleHighlights(vehicle);
     const displayed = [
-      ...presentation.highlights.map((item) => item.title),
+      ...presentation.highlights.flatMap((item) => item.equipmentLabels),
       ...presentation.remainingOptionals,
     ].filter((description) => /airbag/i.test(description));
     assert.equal(displayed.length, 1, label);
@@ -475,7 +492,7 @@ test("only the exact documented Nivus replaces the supplier's seven-speed claim,
   assert.equal(suppressed.replacedBy, "automatic-6");
   const presentation = buildVehicleHighlights(vehicle);
   const displayed = [
-    ...presentation.highlights.map((item) => item.title),
+    ...presentation.highlights.flatMap((item) => item.equipmentLabels),
     ...presentation.remainingOptionals,
   ];
   assert.ok(displayed.includes(corrected.description));

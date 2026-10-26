@@ -82,7 +82,9 @@ test("the three reviewed factory conflicts hold only disputed claims, without in
     const presentation = buildVehicleHighlights(vehicle);
     assert.ok(
       !presentation.highlights.some((item) =>
-        (held as readonly string[]).includes(item.id),
+        item.equipmentIds.some((id) =>
+          (held as readonly string[]).includes(id),
+        ),
       ),
     );
     const assessment = assessVehicleEquipmentVerification(vehicle, result);

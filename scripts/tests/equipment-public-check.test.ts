@@ -174,6 +174,35 @@ test("matching equipment alone cannot hide renewed unsupported announcement pros
   ]);
 });
 
+test("editorial presentation permits the removed description only with its explicit DOM marker", () => {
+  const current = observation();
+  current.descriptionText = "";
+  assert.equal(comparePublicEquipment(vehicle(), "FLEX", current).status, "divergent",
+    "A missing legacy description is still a regression");
+  current.presentation = "editorial";
+  assert.equal(comparePublicEquipment(vehicle(), "FLEX", current).status, "passed");
+  current.descriptionText = observation().descriptionText;
+  assert.deepEqual(comparePublicEquipment(vehicle(), "FLEX", current).differences, [
+    "Descrição pública difere dos campos do cadastro e dos equipamentos revisados.",
+  ], "Reintroducing the repeated description is not accepted as the editorial layout");
+});
+
+test("editorial canonical labels still detect missing and repeated equipment independently of benefit titles", () => {
+  const current = observation(vehicle("20075"));
+  current.presentation = "editorial";
+  current.descriptionText = "";
+  assert.equal(comparePublicEquipment(vehicle("20075"), "FLEX", current).status, "passed");
+  const missing = current.equipmentNames.pop();
+  assert.ok(missing);
+  current.equipmentNames.push(current.equipmentNames[0]);
+  const result = comparePublicEquipment(vehicle("20075"), "FLEX", current);
+  assert.equal(result.status, "divergent");
+  assert.ok(result.differences.some((difference) => difference.includes(`ausente na página: ${missing}`)));
+  assert.ok(result.differences.some((difference) => difference.includes("adicional ou repetido")));
+  assert.ok(!result.differences.some((difference) => difference.includes("benefício")),
+    "The changed equipment collection does not manufacture a title/benefit discrepancy");
+});
+
 test("a matching public page confirms source consistency, never physical equipment or factory configuration", () => {
   const candidate: ReviewStockVehicle = {
     id: "99997", brand: "HONDA", model: "HRV EX", manufactureYear: 2017,
