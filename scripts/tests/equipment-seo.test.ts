@@ -496,7 +496,11 @@ test(
       const reviewed = vehicles.filter((vehicle: Record<string, unknown>) =>
         manifest.confirmedVehicleIds.includes(String(vehicle.id)),
       );
-      assert.equal(reviewed.length, 2);
+      assert.deepEqual(
+        reviewed.map((vehicle: Record<string, unknown>) => String(vehicle.id)).sort(),
+        ["19840", "19985", "20050", "20051"],
+      );
+      const noReviewedEquipment = reviewed.map(() => []);
       const manifestFile = resolve(directory, "manifest.json");
       const runPhp = (rows: Record<string, unknown>[]) => {
         const result = spawnSync(
@@ -515,15 +519,16 @@ test(
       const stale = reviewed.map((vehicle: Record<string, unknown>) => ({
         ...vehicle,
         // Even unrelated inventory changes make the snapshot stale. The raw
-        // records still carry denied Park Assist/ACC: do not fall back to them.
+        // records can carry denied Park Assist/ACC/ISOFIX: never restore them.
         opcionais: [
           ...(vehicle.opcionais as unknown[]),
           { tag: "park_assist", descricao: "Park Assist" },
           { tag: "piloto_adaptativo", descricao: "Piloto adaptativo" },
+          { tag: "isofix", descricao: "ISOFIX" },
         ],
       }));
       writeFileSync(manifestFile, JSON.stringify(manifest));
-      assert.deepEqual(runPhp(stale), [[], []]);
+      assert.deepEqual(runPhp(stale), noReviewedEquipment);
       assert.deepEqual(
         runPhp(
           reviewed.map((vehicle: Record<string, unknown>) => ({
@@ -531,7 +536,7 @@ test(
             opcionais: null,
           })),
         ),
-        [[], []],
+        noReviewedEquipment,
       );
 
       for (const entry of [
@@ -546,7 +551,7 @@ test(
           manifestFile,
           JSON.stringify({ ...manifest, vehicles: { "20050": entry } }),
         );
-        assert.deepEqual(runPhp(reviewed), [[], []]);
+        assert.deepEqual(runPhp(reviewed), noReviewedEquipment);
       }
 
       // Fail closed when the artifact itself is unavailable or untrustworthy.
@@ -568,10 +573,10 @@ test(
         JSON.stringify({ ...manifest, confirmedVehicleIds: ["invalid-id"] }),
       ]) {
         writeFileSync(manifestFile, invalid);
-        assert.deepEqual(runPhp(raw), [[], [], []]);
+        assert.deepEqual(runPhp(raw), raw.map(() => []));
       }
       rmSync(manifestFile);
-      assert.deepEqual(runPhp(raw), [[], [], []]);
+      assert.deepEqual(runPhp(raw), raw.map(() => []));
     });
   },
 );
