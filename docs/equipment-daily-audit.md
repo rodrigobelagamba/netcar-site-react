@@ -4,9 +4,9 @@
 
 O painel agenda uma auditoria diária às **09:00 em `America/Sao_Paulo`**. Ela usa a mesma fila serial dos jobs de build/deploy, mas **não faz build, deploy, commit nem alterações no XML/API**. A agenda roda dentro do processo do painel na VPS, via `node-cron`, sem depender de um computador pessoal ou de uma automação do Codex. O horário substitui a agenda anterior das 07h; não há segundo cron.
 
-1. Consulta a API pública de estoque com timeout, limite de resposta e três tentativas. Aceita somente coleção completa e válida; separa os veículos ativos pelos mesmos preços positivos usados pelo estoque.
+1. Consulta a API pública de estoque com timeout, limite de resposta e três tentativas. Aceita somente coleção completa e válida. A auditoria de equipamentos inclui ativos e vendidos com páginas públicas; pesquisa de novos complementos e reconciliação de garantia continuam restritas aos ativos.
 2. Aplica os resolvers compartilhados de equipamentos e garantia e compara com a última auditoria. Não armazena XML/API integral, placas, chassi, Renavam, fotos, contatos ou credenciais.
-3. Gera a fila autenticada **Equipamentos** no DevOps, com cadastro recebido, apresentação resolvida, alertas e busca preparada para pesquisar a versão exata.
+3. Gera a fila autenticada **Equipamentos** no DevOps, com cadastro recebido, apresentação resolvida, alertas e busca preparada para pesquisar a versão exata. A camada documental aplica as incompatibilidades exatas revisadas em `vehicle-equipment-conflicts.json` e sinaliza alegações sensíveis que ainda dependem somente do cadastro. Pendência não prova ausência nem autoriza inclusão automática.
 4. No mesmo job, `scripts/run-equipment-daily.mjs` executa a descoberta pelo CLI existente: lê XML/API e reavalia `docs/equipment-research-library.json` somente para identidades exatas. Registra candidatos e lacunas em `research-discovery.json`, o retrato sanitizado em `research-stock.json` e o histórico por item em `research-review.json`. Uma combinação nova sem fonte compatível fica explicitamente pendente de pesquisa; a biblioteca não certifica todo o estoque.
 5. A terceira etapa do mesmo wrapper, `scripts/audit-equipment-public.ts`, confere as fichas públicas **às segundas-feiras às 09:00 de São Paulo**. O próprio comando verifica se a semana está pendente; os demais dias conservam a auditoria diária. Não existe outro cron, coletor independente ou automação no Codex. A próxima segunda prevista na implantação de 13/10/2026 é **19/10/2026**.
 
@@ -15,12 +15,16 @@ O painel agenda uma auditoria diária às **09:00 em `America/Sao_Paulo`**. Ela 
 A conferência usa o retrato XML/API recém-produzido pela descoberta, as regras
 compartilhadas de equipamentos e as correções já aprovadas por unidade. Abre as
 fichas do estoque no navegador da VPS, expande equipamentos e descrição, e
-compara o conteúdo apresentado com os dados esperados para aquele carro.
+compara o conteúdo apresentado com os dados esperados para aquele carro, incluindo
+os registros vendidos. Essa coleta completa usa o mesmo coletor XML/API existente;
+não altera o retrato ativo usado para decisões de inclusão.
 Uma ausência no XML não revoga uma correção específica já aprovada, como a
 retirada de Park Assist do Renegade 20075. A conferência detecta divergências;
 não concede novas aprovações nem altera XML, ERP, registros ou site.
 
-O painel mostra os totais de veículos conformes, divergentes e inconclusivos,
+O painel separa correspondência com o cadastro de respaldo documental. O resultado
+**Corresponde ao cadastro** nunca certifica equipamentos de fábrica ou presença
+física na unidade. Mostra os totais correspondentes, divergentes e inconclusivos,
 a data da tentativa, a última conclusão, a próxima segunda e um link
 `https://www.netcarmultimarcas.com.br/veiculo/ID` para cada resultado. A agenda
 única controla ambas as etapas. **Executar agora** também força uma nova
@@ -53,6 +57,12 @@ Na primeira execução, todos os carros entram como pendentes de conferência. N
 
 ## Alertas e revisão
 
+- Conflito documental exato: mantém a alegação retida pelo resolver compartilhado,
+  com fonte e motivo visíveis. Novo XML ou outro ID da mesma configuração não
+  retira a proteção. Confirmação física específica aprovada pode justificar um
+  acessório, sem generalização para as outras unidades.
+- Equipamento sensível sem respaldo registrado: permanece pendente de conferência
+  de versão/ano e unidade. O cron não infere ausência nem inventa uma fonte.
 - Unidade nova ou cadastro alterado: conferir equipamentos e, se necessário, pesquisar documentação oficial.
 - Tag/descrição ainda não classificada: verificar significado antes de definir prioridade ou benefício.
 - Fonte contrariando confirmação: corrigir o cadastro de origem. Ex.: teto do Civic 20051; Park Assist/ACC do Fastback 20050.
@@ -137,7 +147,7 @@ O volume precisa ser incluído no backup da VPS. Recriar o container preserva o 
 
 ## SEO e limites
 
-A auditoria não regenera nem envia o manifesto de equipamentos SEO: isso continua pertencendo ao build/deploy aprovado. Assim, o cron não publica silenciosamente conteúdo. Relatórios i-CHECK e frontend continuam usando o resolver compartilhado. Uma fonte oficial precisa dizer que o item é de série para a versão brasileira e ano-modelo exatos; um manual multiversões ou anúncio de outra loja não é prova suficiente.
+A auditoria não regenera nem envia o manifesto de equipamentos SEO: isso continua pertencendo ao build/deploy aprovado. Assim, o cron não publica silenciosamente conteúdo. Relatórios i-CHECK e frontend continuam usando o resolver compartilhado. O manifesto SEO schema4 só oferece a lista quando o cadastro corresponde ao snapshot resolvido; dados divergentes não retornam à lista bruta. Uma fonte oficial precisa dizer que o item é de série para a versão brasileira e ano-modelo exatos; um manual multiversões ou anúncio de outra loja não é prova suficiente.
 
 A consulta atual aceita até 500 registros e exige que `total_results` corresponda à coleção recebida. Se a loja superar esse limite, a rotina falha de modo conservador até implementar paginação completa. Zero carros ativos também pede conferência antes de substituir a base anterior.
 

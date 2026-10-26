@@ -174,6 +174,47 @@ test("matching equipment alone cannot hide renewed unsupported announcement pros
   ]);
 });
 
+test("a matching public page confirms source consistency, never physical equipment or factory configuration", () => {
+  const candidate: ReviewStockVehicle = {
+    id: "99997", brand: "HONDA", model: "HRV EX", manufactureYear: 2017,
+    modelYear: 2017, physicalIdentityKey: null, engine: "1.8", transmission: "AUTOMATICO",
+    market: "BR", seats: "", options: [{ tag: "chave_inteligente", descricao: "Chave Inteligente Keyless" }],
+  };
+  const addXml = (v: ReviewStockVehicle) => {
+    v.xml = { identity: { id: v.id, brand: v.brand, model: v.model,
+      manufactureYear: v.manufactureYear, modelYear: v.modelYear, engine: v.engine, transmission: v.transmission },
+      flags: { chave_inteligente: true } };
+  };
+  addXml(candidate);
+  const unknown = comparePublicEquipment(candidate, "FLEX", observation(candidate));
+  assert.equal(unknown.status, "passed");
+  assert.equal(unknown.verification?.factoryConflicts, 0);
+  assert.equal(unknown.verification?.sensitiveReviewRequired, 1);
+  const held = { ...candidate, id: "19739", modelYear: 2018, manufactureYear: 2018, inventoryStatus: "sold" as const };
+  addXml(held);
+  const checked = comparePublicEquipment(held, "FLEX", observation(held));
+  assert.equal(checked.status, "passed", "DOM must reflect the resolver's suppression");
+  assert.equal(checked.inventoryStatus, "sold");
+  assert.equal(checked.verification?.factoryConflicts, 1, "A hidden claim remains a review finding");
+});
+
+test("a sold unit still receives a rendered public check without entering active research", async () => {
+  const env = setup();
+  try {
+    env.snapshot.vehicles[0].inventoryStatus = "sold";
+    const result = await runPublicEquipmentCheck({
+      ...env.options,
+      createBrowser: async () => ({
+        observe: async (id) => { assert.equal(id, "19687"); return observation(env.snapshot.vehicles[0]); },
+        close: async () => {},
+      }),
+    });
+    assert.equal(result.report?.scope, "public-source-consistency");
+    assert.equal(result.report?.vehicles[0].inventoryStatus, "sold");
+    assert.equal(result.report?.counts.passed, 1);
+  } finally { env.cleanup(); }
+});
+
 test("published unit confirmations, Park Assist exclusion and Nivus correction remain authoritative", () => {
   for (const id of ["20075", "19788"]) {
     const v = vehicle(id);
@@ -237,6 +278,9 @@ test("fuel and physical identity changes invalidate stale proof even with identi
     [...changedPublicVehicleIds(before, {}, after, {})],
     ["19687"],
   );
+  const sold = structuredClone(before);
+  sold.vehicles[0].inventoryStatus = "sold";
+  assert.deepEqual([...changedPublicVehicleIds(before, {}, sold, {})], ["19687"]);
 });
 
 test("the API model TURBO suffix is equivalent only with its explicit positive XML flag", () => {
@@ -498,7 +542,7 @@ test("global deadline closes the browser and retains complete proof", async () =
 test("API supplement uses fixed HTTPS GET without redirects and retains only allowed fields", async () => {
   const raw = {
     success: true,
-    total_results: 1,
+    total_results: 2,
     data: [
       {
         id: 19687,
@@ -514,6 +558,8 @@ test("API supplement uses fixed HTTPS GET without redirects and retains only all
         contato: "PRIVATE",
         opcionais: [],
       },
+      { id: 19739, marca: "HONDA", modelo: "HRV EX", ano: 2018, ano_fabricacao: 2018,
+        motor: "1.8", cambio: "AUTOMATICO", combustivel: "FLEX", valor: 0, opcionais: [], placa: "PRIVATE" },
     ],
   };
   const fetched = await fetchPublicCheckApi((async (url, init) => {
@@ -527,7 +573,8 @@ test("API supplement uses fixed HTTPS GET without redirects and retains only all
   }) as typeof fetch);
   assert.equal(fetched.fuels["19687"], "FLEX");
   assert.ok(!JSON.stringify(fetched).includes("PRIVATE"));
-  assert.equal(fetched.snapshot.vehicles.length, 1);
+  assert.equal(fetched.snapshot.vehicles.length, 2);
+  assert.equal(fetched.snapshot.vehicles.find((row) => row.id === "19739")?.inventoryStatus, "sold");
 });
 
 test("a browser launch completing after the deadline is closed without observing a vehicle", async () => {

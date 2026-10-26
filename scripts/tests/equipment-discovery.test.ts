@@ -49,6 +49,22 @@ test("existing API fetch and XML merge reject incomplete or mismatched active st
   await assert.rejects(fetchReviewDiscoverySnapshot(wrong), /active_ids_differ/);
 });
 
+test("equipment public scope can include sold pages while research defaults remain active-only", async () => {
+  const active = { id: 99, marca: "JEEP", modelo: "RENEGADE LONGITUDE", ano: 2024, ano_fabricacao: 2023, motor: "1.3", cambio: "AUTOMATICO", valor: 100000, opcionais: [] };
+  const sold = { ...active, id: 100, valor: 0 };
+  const api = { success: true, total_results: 2, data: [active, sold] };
+  const bothXml = `<dataroot>${row}${row.replace("revenda>99", "revenda>100").replace("<preco>100000</preco>", "<preco>0</preco>")}</dataroot>`;
+  const fetcher = (async (url: unknown) => new Response(String(url) === EQUIPMENT_XML_URL ? bothXml : JSON.stringify(api), { status: 200 })) as typeof fetch;
+  const research = await fetchReviewDiscoverySnapshot(fetcher);
+  assert.deepEqual(research.vehicles.map(v => v.id), ["99"]);
+  const publicScope = await fetchReviewDiscoverySnapshot(fetcher, { includeSold: true });
+  assert.deepEqual(publicScope.vehicles.map(v => v.id), ["99", "100"]);
+  assert.equal(publicScope.vehicles[1].inventoryStatus, "sold");
+  assert.deepEqual(expandExactResearchCandidates(input, publicScope).candidates.map(c => c.identity.id), ["99"]);
+  const mismatched = (async (url: unknown) => new Response(String(url) === EQUIPMENT_XML_URL ? bothXml.replace("<preco>0</preco>", "<preco>100000</preco>") : JSON.stringify(api), { status: 200 })) as typeof fetch;
+  await assert.rejects(fetchReviewDiscoverySnapshot(mismatched, { includeSold: true }), /inventory_status_differs/);
+});
+
  test("changed identity invalidates old research and public observation", () => {
   const changed = structuredClone(snapshot); changed.vehicles[0].modelYear = 2025;
   const observation = { stockFingerprint: discoveryVehicleFingerprint(snapshot.vehicles[0]), vehicleId: "99", url: "https://www.netcarmultimarcas.com.br/veiculo/99", observedAt: "2026-10-09T17:00:00Z", method: "rendered-dom" as const, expanded: true as const, descriptions: ["Sensor de chuva"], evidencePath: "/private/evidence.json" };

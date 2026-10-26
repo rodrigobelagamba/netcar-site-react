@@ -88,13 +88,13 @@ export async function fetchPublicCheckApi(
       }
       const payload = JSON.parse(Buffer.concat(chunks).toString("utf8"));
       const snapshot = snapshotFromStock(
-        parseStockResponse(payload),
+        parseStockResponse(payload, { includeSold: true }),
         new Date().toISOString(),
       );
-      const activeIds = new Set(snapshot.vehicles.map((v) => v.id));
+      const includedIds = new Set(snapshot.vehicles.map((v) => v.id));
       const fuels: Record<string, string> = Object.create(null);
       for (const row of payload.data)
-        if (activeIds.has(String(row.id))) {
+        if (includedIds.has(String(row.id))) {
           if (
             row.combustivel != null &&
             (typeof row.combustivel !== "string" ||
@@ -262,6 +262,7 @@ function matchingApiIds(
       discoveryVehicleFingerprint(vehicle),
       vehicle.seats,
       vehicle.market ?? null,
+      vehicle.inventoryStatus ?? "active",
     ]);
   const current = new Map(api.vehicles.map((v) => [v.id, fingerprint(v)]));
   return new Set(
@@ -274,12 +275,10 @@ export async function runPublicEquipmentCheck({
   stateDir,
   force = false,
   now = () => new Date(),
-  loadBaseline = () =>
-    parseReviewSnapshot(
-      readJson(join(stateDir, "research-stock.json")),
-      now().toISOString(),
-    ),
-  loadSnapshot = fetchReviewDiscoverySnapshot,
+  // Reuse the same collector with broader equipment-only coverage. Research
+  // approval snapshots stay active-only; sold pages still require verification.
+  loadBaseline = () => fetchReviewDiscoverySnapshot(fetch, { includeSold: true }),
+  loadSnapshot = () => fetchReviewDiscoverySnapshot(fetch, { includeSold: true }),
   loadApi = fetchPublicCheckApi,
   createBrowser = async () =>
     (
@@ -372,6 +371,7 @@ export async function runPublicEquipmentCheck({
         vehicleId: vehicle.id,
         publicUrl: `${PUBLIC_CHECK_ORIGIN}/veiculo/${vehicle.id}`,
         model: safePublicLabel(vehicle.model),
+        inventoryStatus: vehicle.inventoryStatus,
         status: "inconclusive",
         differences: [],
       };
@@ -431,6 +431,7 @@ export async function runPublicEquipmentCheck({
           vehicleId: vehicle.id,
           publicUrl: `${PUBLIC_CHECK_ORIGIN}/veiculo/${vehicle.id}`,
           model: safePublicLabel(vehicle.model),
+          inventoryStatus: vehicle.inventoryStatus,
           status: "inconclusive",
           differences: [
             "Unidade entrou no estoque durante a conferência; ainda não foi verificada.",

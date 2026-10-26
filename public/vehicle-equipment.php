@@ -1,7 +1,7 @@
 <?php
 // The resolver lives in TypeScript. PHP only verifies a build snapshot against
-// the current API input. Reviewed units fail closed when stale so the raw API
-// cannot restore equipment denied by a unit-specific confirmation.
+// the current API input. Every stale snapshot fails closed: newly imported IDs
+// may also be affected by a reviewed factory conflict, not just confirmed units.
 function netcarEquipmentScalar($value) {
     if ($value === null) return '';
     if (is_string($value) || is_int($value)) return (string) $value;
@@ -30,8 +30,8 @@ function netcarEquipmentPhysicalIdentityKey($vehicle) {
 
 function netcarEquipmentFingerprint($vehicle) {
     if (!is_array($vehicle) || !isset($vehicle['opcionais']) || !is_array($vehicle['opcionais'])) return null;
-    $input = array('netcar-equipment-v2');
-    foreach (array('id', 'marca', 'modelo', 'ano', 'ano_fabricacao', 'motor', 'cambio', 'lugares') as $field) {
+    $input = array('netcar-equipment-v3');
+    foreach (array('id', 'marca', 'modelo', 'ano', 'ano_fabricacao', 'motor', 'cambio', 'lugares', 'market') as $field) {
         $value = netcarEquipmentScalar($vehicle[$field] ?? null);
         if ($value === null) return null;
         $input[] = base64_encode($value);
@@ -55,38 +55,20 @@ function netcarEquipmentFingerprint($vehicle) {
     return $json === false ? null : hash('sha256', $json);
 }
 
-function netcarRawEquipmentDescriptions($vehicle) {
-    $descriptions = array();
-    if (!is_array($vehicle) || !isset($vehicle['opcionais']) || !is_array($vehicle['opcionais'])) return $descriptions;
-    foreach ($vehicle['opcionais'] as $optional) {
-        $raw = is_array($optional)
-            ? (isset($optional['descricao']) && $optional['descricao'] !== '' ? $optional['descricao'] : ($optional['nome'] ?? ''))
-            : $optional;
-        if (!is_string($raw)) continue;
-        // Formatting cleanup and exact deduplication only. No aliases, ranking,
-        // feature additions or model/year guesses in the fallback path.
-        $description = trim(ltrim(trim($raw), '.'));
-        if ($description !== '' && !in_array($description, $descriptions, true)) $descriptions[] = $description;
-    }
-    return $descriptions;
-}
-
 function netcarEquipmentDescriptions($vehicle, $manifestFile = null) {
     if (!is_array($vehicle)) return array();
     $file = $manifestFile === null ? __DIR__ . '/seo/vehicle-equipment.json' : $manifestFile;
-    // Without a valid reviewed-ID list, no raw fallback is safe: even a missing
-    // build artifact must not silently reintroduce a known incorrect claim.
+    // Schema 4 contains the shared factory-conflict gates. Older artifacts or
+    // changed inventory must never reintroduce the original unreviewed claim.
     if (!is_readable($file)) return array();
     $manifest = json_decode((string) @file_get_contents($file), true);
-    if (!is_array($manifest) || ($manifest['schemaVersion'] ?? null) !== 3 || !is_array($manifest['vehicles'] ?? null) || !is_array($manifest['confirmedVehicleIds'] ?? null)) return array();
+    if (!is_array($manifest) || ($manifest['schemaVersion'] ?? null) !== 4 || !is_array($manifest['vehicles'] ?? null) || !is_array($manifest['confirmedVehicleIds'] ?? null)) return array();
     foreach ($manifest['confirmedVehicleIds'] as $confirmedId) {
         if (!is_string($confirmedId) || !preg_match('/^\d+$/', $confirmedId)) return array();
     }
     $id = netcarEquipmentScalar($vehicle['id'] ?? null);
     if ($id === null || !preg_match('/^\d+$/', $id)) return array();
-    $fallback = in_array($id, $manifest['confirmedVehicleIds'], true)
-        ? array()
-        : netcarRawEquipmentDescriptions($vehicle);
+    $fallback = array();
     $fingerprint = netcarEquipmentFingerprint($vehicle);
     if ($fingerprint === null) return $fallback;
     $entry = $manifest['vehicles'][$id] ?? null;

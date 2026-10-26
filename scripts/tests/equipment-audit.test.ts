@@ -493,6 +493,58 @@ test("the API parser filters sold vehicles after validating a complete response"
   const sold = { ...apiVehicle(), id: "99998", valor: 0 };
   assert.equal(parseStockResponse(apiResponse([active, sold])).length, 1);
   assert.throws(() => parseStockResponse(apiResponse([sold])));
+  const all = parseStockResponse(apiResponse([active, sold]), { includeSold: true });
+  assert.equal(all.length, 2);
+  assert.equal(all.find((vehicle) => vehicle.id === "99998")?.inventoryStatus, "sold");
+  assert.equal(parseStockResponse(apiResponse([sold]), { includeSold: true }).length, 1);
+});
+
+test("daily audit holds known factory conflicts on sold pages and repeats without losing the decision", () => {
+  const raw = {
+    id: "19739", marca: "HONDA", modelo: "HRV EX", ano: 2018,
+    ano_fabricacao: 2018, motor: "1.8", cambio: "AUTOMATICO", valor: 0,
+    opcionais: [
+      { tag: "chave_inteligente", descricao: "Chave Inteligente Keyless" },
+      { tag: "android", descricao: "Android Auto" },
+      { tag: "apple", descricao: "Apple CarPlay" },
+    ],
+  };
+  const parsed = parseStockResponse(apiResponse([raw]), { includeSold: true });
+  const first = buildEquipmentAudit(parsed, null, firstRunAt);
+  assert.equal(first.counts.sold, 1);
+  assert.equal(first.counts.active, 0);
+  assert.equal(first.counts.factoryConflicts, 1);
+  assert.ok(first.vehicles[0].findings.some((finding) => finding.code === "factory-configuration-conflict"));
+  assert.equal(first.vehicles[0].warranty, undefined);
+  assert.ok(!first.vehicles[0].displayedDescriptions.some((label) => /keyless|android|carplay/i.test(label)));
+  const repeated = buildEquipmentAudit(parsed, first, secondRunAt);
+  assert.equal(repeated.counts.unchanged, 1);
+  assert.deepEqual(repeated.vehicles[0].equipmentVerification, first.vehicles[0].equipmentVerification);
+  assert.equal(repeated.vehicles[0].reviewKey, first.vehicles[0].reviewKey);
+});
+
+test("sensitive inventory claims become review findings rather than a factory certification", () => {
+  const raw = {
+    id: "99997", marca: "HONDA", modelo: "HRV EX", ano: 2017,
+    ano_fabricacao: 2017, motor: "1.8", cambio: "AUTOMATICO", valor: 100000,
+    opcionais: [{ tag: "chave_inteligente", descricao: "Chave Inteligente Keyless" }],
+  };
+  const report = buildEquipmentAudit(parseStockResponse(apiResponse([raw])));
+  assert.equal(report.counts.factoryConflicts, 0, "An adjacent model year cannot inherit an unreviewed exclusion");
+  assert.equal(report.counts.sensitiveReviewRequired, 1);
+  assert.ok(report.vehicles[0].findings.some((finding) => finding.code === "sensitive-equipment-review-required"));
+  assert.ok(report.vehicles[0].displayedDescriptions.some((label) => /keyless/i.test(label)), "Unverified does not prove absent");
+});
+
+test("including a sold page for equipment does not reconcile or revoke its warranty history", () => {
+  const raw = warrantyApiVehicle();
+  const previous = buildEquipmentAudit(parseStockResponse(apiResponse([raw])), null, warrantyRunAt);
+  const sold = parseStockResponse(apiResponse([{ ...raw, valor: 0, diferenciais: [] }]), { includeSold: true });
+  const next = buildEquipmentAudit(sold, previous, warrantyRunAt);
+  assert.equal(next.vehicles[0].warranty, undefined);
+  assert.deepEqual(next.newWarrantyAlerts, []);
+  assert.deepEqual(next.warrantyHistory?.[0].lastWarranty, previous.warrantyHistory?.[0].lastWarranty);
+  assert.deepEqual(next.warrantyHistory?.[0].states, previous.warrantyHistory?.[0].states);
 });
 
 test("warranty source fields use a separate allowlisted snapshot without inventing missing data", () => {
@@ -1066,10 +1118,10 @@ test("warranty identity, FAB, MY, mileage and flag changes reopen only the candi
     const next = buildEquipmentAudit(parsed, first, warrantyRunAt);
     assert.equal(next.counts.changed, 1, JSON.stringify(change));
     assert.equal(next.counts.unchanged, 1);
-    assert.notEqual(next.vehicles[0].reviewKey, first.vehicles[0].reviewKey);
-    assert.equal(next.vehicles[1].reviewKey, first.vehicles[1].reviewKey);
+    assert.notEqual(next.vehicles.find(v => v.id === String(raw.id))!.reviewKey, first.vehicles.find(v => v.id === String(raw.id))!.reviewKey);
+    assert.equal(next.vehicles.find(v => v.id === ordinary.id)!.reviewKey, first.vehicles.find(v => v.id === ordinary.id)!.reviewKey);
     assert.equal(
-      next.vehicles[0].warranty?.status,
+      next.vehicles.find(v => v.id === String(raw.id))!.warranty?.status,
       "km" in change && change.km === 24501 ? "eligible" : "blocked",
     );
     const repeated = buildEquipmentAudit(parsed, next, warrantyRunAt);
@@ -1211,7 +1263,8 @@ test("supplemental traction battery review is explicit and never expands the gen
   assert.equal(blocked.counts.changed, 1);
   assert.equal(blocked.vehicles[0].warranty?.supplemental?.status, "blocked");
   assert.equal(blocked.vehicles[0].warranty?.status, "eligible");
-  assert.equal(blocked.vehicles[1].reviewKey, first.vehicles[1].reviewKey);
+  const unchangedVehicle = first.vehicles.find(v => !v.warranty)!;
+  assert.equal(blocked.vehicles.find(v => v.id === unchangedVehicle.id)!.reviewKey, unchangedVehicle.reviewKey);
 });
 
 test("positive price, photos and unrelated differential order do not reopen warranty review", () => {

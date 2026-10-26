@@ -65,6 +65,21 @@ test("generic legacy OK cannot enter a proposal, and one malformed batch changes
   assert.ok(prepareReviewProposal(legacy, s.stock, base, at).blocked[0].reasons.includes("exact_approval_reference_and_text_required"));
 });
 
+test("sold equipment audit coverage never reopens research publication and preserves existing decisions", () => {
+  const s = approved();
+  const before = structuredClone(s.ledger);
+  const sold = structuredClone(s.stock);
+  sold.observedAt = later;
+  sold.vehicles[0].inventoryStatus = "sold";
+  const parsed = parseReviewSnapshot(sold, later);
+  const proposal = prepareReviewProposal(s.ledger, parsed, base, later);
+  assert.deepEqual(proposal.includedKeys, []);
+  assert.ok(proposal.blocked[0].reasons.includes("unit_not_active"));
+  assert.deepEqual(s.ledger, before, "Equipment coverage must not rewrite or revoke past decisions");
+  assert.throws(() => applyReviewProposal(s.ledger, parsed, base, s.proposal, s.proposal.proposalSha256, later));
+  assert.deepEqual(prepareReviewProposal(s.ledger, s.stock, base, at).includedKeys, [s.ledger.revisions[0].key]);
+});
+
 test("new technology starts outside taxonomy and works through reviewed unit definition", () => {
   const unknown = candidate();
   unknown.item = { key: "head-up-display", label: "Head-up display" };

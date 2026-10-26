@@ -183,6 +183,9 @@ test('weekly reports reject incomplete data, unsafe links and mismatched totals 
     (value) => { value.vehicles[0].differences = [null]; },
     (value) => { value.generatedAt = 'yesterday'; },
     (value) => { value.vehicles[0].status = 'published'; },
+    (value) => { value.vehicles[0].inventoryStatus = 'archived'; },
+    (value) => { value.vehicles[0].verification = { factoryConflicts: -1, sensitiveReviewRequired: 0 }; },
+    (value) => { value.vehicles[0].verification = { factoryConflicts: 0, sensitiveReviewRequired: 'certified' }; },
   ]) {
     const value = publicCheckReport(); patch(value);
     const source = JSON.stringify(value);
@@ -193,6 +196,21 @@ test('weekly reports reject incomplete data, unsafe links and mismatched totals 
     assert.equal(result.report.vehicles[0].id, '20050', 'a corrupt weekly report does not hide daily findings');
     assert.equal(readFileSync(join(h.stateDir, 'public-check-report.json'), 'utf8'), source);
   }
+});
+
+test('public source consistency preserves sold scope and separate documentary review counters', (t) => {
+  const h = harness(t);
+  h.saveReport();
+  const complete = publicCheckReport();
+  complete.scope = 'public-source-consistency';
+  complete.vehicles[0].inventoryStatus = 'sold';
+  complete.vehicles[0].verification = { factoryConflicts: 1, sensitiveReviewRequired: 2 };
+  writeFileSync(join(h.stateDir, 'public-check-report.json'), JSON.stringify(complete));
+  const result = h.service.getState();
+  assert.deepEqual(result.publicCheck.report, complete);
+  assert.equal(result.publicCheck.report.vehicles[0].status, 'passed');
+  assert.equal(result.publicCheck.report.vehicles[0].verification.factoryConflicts, 1);
+  assert.equal(h.options.length, 0);
 });
 
 test('interrupted weekly check is not displayed as running forever and manual retry remains available', (t) => {

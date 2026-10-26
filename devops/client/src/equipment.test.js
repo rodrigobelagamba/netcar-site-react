@@ -74,6 +74,16 @@ test('reviewing equipment cannot remove unresolved warranty findings from pendin
   assert.equal(filterEquipmentVehicles(rows, reviews, 'reviewed').length, rows.length);
 });
 
+test('generic review cannot certify sensitive claims or clear a factory conflict', () => {
+  const rows = ['factory-configuration-conflict', 'sensitive-equipment-review-required'].map((code, index) => ({
+    ...vehicles[0], id: String(index), reviewKey: `verification-${index}`,
+    findings: [{ code, severity: index ? 'medium' : 'high' }],
+  }));
+  const reviews = Object.fromEntries(rows.map(row => [row.reviewKey, { status: 'reviewed', note: 'Cadastro corresponde ao site.' }]));
+  assert.deepEqual(filterEquipmentVehicles(rows, reviews, 'pending').map(row => row.id), ['0', '1']);
+  assert.equal(equipmentReviewCounts(rows, reviews).pending, 2);
+});
+
 test('eligible restricted coverage and informational warranty findings do not reopen an equipment review', () => {
   const row = {
     ...vehicles[0], warranty: { status: 'blocked', powertrain: { status: 'eligible' } },

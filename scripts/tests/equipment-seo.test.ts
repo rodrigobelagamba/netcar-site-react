@@ -85,9 +85,16 @@ test("approved reviewed IDs survive an absent stock snapshot to block unsafe raw
     ),
   ].sort();
   const empty = createEquipmentManifest([]);
-  assert.equal(empty.schemaVersion, 3);
+  assert.equal(empty.schemaVersion, 4);
   assert.deepEqual(empty.confirmedVehicleIds, expected);
-  assert.deepEqual(empty.confirmedVehicleIds, ["20050", "20051", "20068", "20075", "20090", "20092"]);
+  assert.deepEqual(empty.confirmedVehicleIds, [
+    "20050",
+    "20051",
+    "20068",
+    "20075",
+    "20090",
+    "20092",
+  ]);
   assert.deepEqual(
     createEquipmentManifest(vehicles).confirmedVehicleIds,
     expected,
@@ -108,6 +115,7 @@ test("fingerprints reject stale equipment, specs, identity and raw optional orde
     "motor",
     "cambio",
     "lugares",
+    "market",
   ]) {
     assert.notEqual(
       equipmentFingerprint({ ...vehicle, [key]: `${vehicle[key]} changed` }),
@@ -395,7 +403,7 @@ test("versioned public bootstrap empty equipment is never considered a complete 
 });
 
 test(
-  "PHP fingerprint parity, exact snapshot and conservative fallback",
+  "PHP fingerprint parity, exact snapshot and no unreviewed stale fallback",
   {
     skip:
       !hasPhp &&
@@ -409,6 +417,7 @@ test(
         marca: "Ação 😀",
         modelo: "A\u2028B\u2029C/e\u0301",
         motor: "1.0",
+        market: "US",
         placa: "abc-1d23",
         opcionais: [
           "😀 /çã",
@@ -435,6 +444,7 @@ test(
         ...all,
         modified,
         { ...vehicles[0], opcionais: undefined },
+        { ...unicode, market: "BR" },
       ];
       const result = spawnSync(
         "php",
@@ -460,8 +470,13 @@ test(
           String(vehicle.id),
         );
       });
-      assert.deepEqual(output[all.length].items, ["Teto especial"]);
+      assert.deepEqual(output[all.length].items, []);
       assert.deepEqual(output[all.length + 1], { hash: null, items: [] });
+      assert.equal(
+        output[all.length + 2].hash,
+        equipmentFingerprint({ ...unicode, market: "BR" }),
+      );
+      assert.deepEqual(output[all.length + 2].items, []);
     });
   },
 );
@@ -532,8 +547,8 @@ test(
         assert.deepEqual(runPhp(reviewed), [[], []]);
       }
 
-      // Fail closed globally only if the protection list itself is unavailable
-      // or untrustworthy. Normal unreviewed stale fallback is tested above.
+      // Fail closed when the artifact itself is unavailable or untrustworthy.
+      // Stale unreviewed and newly imported units also omit their equipment.
       const raw = [
         ...reviewed,
         vehicles.find(
@@ -545,6 +560,7 @@ test(
         "not JSON",
         JSON.stringify({ ...manifest, schemaVersion: 1 }),
         JSON.stringify({ ...manifest, schemaVersion: 2 }),
+        JSON.stringify({ ...manifest, schemaVersion: 3 }),
         JSON.stringify({ ...manifest, confirmedVehicleIds: undefined }),
         JSON.stringify({ ...manifest, confirmedVehicleIds: [20050] }),
         JSON.stringify({ ...manifest, confirmedVehicleIds: ["invalid-id"] }),
@@ -554,6 +570,112 @@ test(
       }
       rmSync(manifestFile);
       assert.deepEqual(runPhp(raw), [[], [], []]);
+    });
+  },
+);
+
+test("confirmed factory conflicts cannot enter a fresh SEO snapshot", () => {
+  const rows = [
+    {
+      id: "19739",
+      marca: "HONDA",
+      modelo: "HRV EX",
+      ano: 2018,
+      motor: "1.8",
+      opcionais: ["chave_inteligente", "android", "apple"],
+    },
+    {
+      id: "19788",
+      marca: "VOLKSWAGEN",
+      modelo: "NIVUS HIGHLINE TURBO",
+      ano: 2024,
+      motor: "1.0",
+      opcionais: ["assistencia_faixa"],
+    },
+    {
+      id: "19379",
+      marca: "JEEP",
+      modelo: "COMPASS LONGITUDE T270 TURBO",
+      ano: 2022,
+      motor: "1.3",
+      opcionais: ["tracao_awd"],
+    },
+  ].map((vehicle) => ({
+    ...vehicle,
+    cambio: "AUTOMATICO",
+    equipmentSourceComplete: true,
+  }));
+  const manifest = createEquipmentManifest(rows);
+  for (const row of rows)
+    assert.deepEqual(manifest.vehicles[row.id].descriptions, [], row.id);
+});
+
+test("SEO preserves an explicit foreign market and invalidates a changed market", () => {
+  const row = {
+    id: "99701",
+    marca: "HONDA",
+    modelo: "HRV EX",
+    ano: 2018,
+    motor: "1.8",
+    cambio: "AUTOMATICO",
+    market: "US",
+    opcionais: ["android"],
+    equipmentSourceComplete: true,
+  };
+  const cached = publicVehicle(row);
+  assert.equal(cached.market, "US");
+  const foreign = createEquipmentManifest([cached]);
+  assert.deepEqual(foreign.vehicles[row.id].descriptions, ["Android Auto"]);
+  const brazil = createEquipmentManifest([{ ...cached, market: "BR" }]);
+  assert.deepEqual(brazil.vehicles[row.id].descriptions, []);
+  assert.notEqual(
+    foreign.vehicles[row.id].fingerprint,
+    brazil.vehicles[row.id].fingerprint,
+  );
+  withDirectory((directory) => {
+    writeSeoBuildStockSnapshot(directory, [{ ...row, valor: 1 }]);
+    assert.deepEqual(
+      generateEquipmentSeo(directory).vehicles[row.id].descriptions,
+      ["Android Auto"],
+    );
+  });
+});
+
+test(
+  "PHP omits stale and new IDs even when no unit confirmation exists",
+  { skip: !hasPhp && "PHP CLI unavailable; exercised in CI" },
+  () => {
+    withDirectory((directory) => {
+      const vehicle = {
+        id: "19739",
+        marca: "HONDA",
+        modelo: "HRV EX",
+        ano: 2018,
+        motor: "1.8",
+        cambio: "AUTOMATICO",
+        opcionais: ["chave_inteligente"],
+        equipmentSourceComplete: true,
+      };
+      const manifest = createEquipmentManifest([vehicle], undefined, []);
+      const file = resolve(directory, "manifest.json");
+      writeFileSync(file, JSON.stringify(manifest));
+      const rows = [
+        vehicle,
+        { ...vehicle, opcionais: ["chave_inteligente", "Android Auto"] },
+        { ...vehicle, id: "99999" },
+      ];
+      const result = spawnSync(
+        "php",
+        [
+          "-r",
+          "require $argv[1]; $rows=json_decode(stream_get_contents(STDIN),true); echo json_encode(array_map(function($v) use ($argv) { return netcarEquipmentDescriptions($v,$argv[2]); },$rows));",
+          phpFile,
+          file,
+        ],
+        { input: JSON.stringify(rows), encoding: "utf8" },
+      );
+      assert.equal(result.status, 0, result.stderr);
+      assert.deepEqual(JSON.parse(result.stdout), [[], [], []]);
     });
   },
 );

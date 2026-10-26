@@ -68,6 +68,7 @@ export function publicVehicle(vehicle) {
     id: vehicle.id,
     marca: vehicle.marca,
     modelo: vehicle.modelo,
+    ...(typeof vehicle.market === "string" ? { market: vehicle.market } : {}),
     ano: vehicle.ano,
     ano_fabricacao: vehicle.ano_fabricacao,
     valor: vehicle.valor,
