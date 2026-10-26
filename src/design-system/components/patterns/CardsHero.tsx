@@ -155,7 +155,7 @@ export function CardsHero({
             : "-top-32 md:-top-44 h-64 md:h-80 short1600:-top-24 short1600:h-52"
         }`}
       >
-        <div className="!border-0 relative w-full h-full">
+        <div className={`!border-0 relative w-full h-full ${compact ? "origin-bottom scale-[1.2]" : ""}`}>
           <img
             src={optimizeStockImage(image, compact ? 640 : 960)}
             srcSet={stockImageSrcSet(image, [320, 480, 640, 768, 960])}
