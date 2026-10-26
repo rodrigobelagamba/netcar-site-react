@@ -1,11 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import {
   fetchVehicles,
   fetchOpcionais,
   type VehiclesQuery,
 } from "../endpoints/vehicles";
-import { getBootstrapVehicles } from "@/lib/stockBootstrap";
+import {
+  fetchShowroomBootstrap,
+  getBootstrapVehicles,
+} from "@/lib/stockBootstrap";
 
 export function useVehiclesQuery(
   query?: VehiclesQuery,
@@ -72,6 +75,34 @@ export function useVehiclesQuery(
     () => getBootstrapVehicles(query),
     [queryKey],
   );
+  const queryClient = useQueryClient();
+  const needsShowroomSnapshot = Boolean(
+    options?.enabled !== false &&
+    query?.includeSold &&
+    query.fetchAll &&
+    !query.opcional &&
+    !query.opcionais &&
+    query.limit === undefined &&
+    !query.offset &&
+    !bootstrapVehicles &&
+    !queryClient.getQueryData(queryKey),
+  );
+  const showroomSnapshot = useQuery({
+    queryKey: ["stock", "showroom-bootstrap"],
+    queryFn: ({ signal }) => fetchShowroomBootstrap(signal),
+    enabled: needsShowroomSnapshot,
+    staleTime: 5 * 60_000,
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+  const showroomPlaceholder = useMemo(
+    () =>
+      needsShowroomSnapshot && showroomSnapshot.data
+        ? getBootstrapVehicles(query, showroomSnapshot.data)
+        : undefined,
+    [needsShowroomSnapshot, showroomSnapshot.data, queryKey],
+  );
   const result = useQuery({
     queryKey,
     queryFn: () => fetchVehicles(query),
@@ -80,6 +111,9 @@ export function useVehiclesQuery(
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     initialData: bootstrapVehicles,
+    // Não gravar o snapshot no cache da API: a resposta atual sempre prevalece
+    // e observedAt das garantias permanece o original, sem renovar evidência.
+    placeholderData: showroomPlaceholder,
     // O HTML permite o primeiro paint, mas não é uma observação atual da API.
     // Mantê-lo stale inicia a revalidação sem renovar a evidência de garantia.
     initialDataUpdatedAt: bootstrapVehicles ? 0 : undefined,
@@ -93,12 +127,7 @@ export function useVehiclesQuery(
     // refetchOnMount não cobre a transição de enabled: false para true.
     // Reaproveita a requisição que o React Query já possa ter iniciado.
     void result.refetch({ cancelRefetch: false });
-  }, [
-    queryKey,
-    options?.enabled,
-    options?.refreshImmediately,
-    result.refetch,
-  ]);
+  }, [queryKey, options?.enabled, options?.refreshImmediately, result.refetch]);
 
   return result;
 }

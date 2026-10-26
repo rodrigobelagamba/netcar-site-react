@@ -21,6 +21,8 @@ let renderer;
 let result;
 let requests;
 let respond;
+let snapshotRequests;
+let respondSnapshot;
 
 const sport = apiVehicle("19974", "RENEGADE SPORT TURBO", 99_900, "BRANCA");
 const longitude = apiVehicle(
@@ -119,6 +121,7 @@ before(async () => {
 beforeEach(() => {
   scheduledDelays = [];
   requests = [];
+  snapshotRequests = [];
   result = undefined;
   renderer = undefined;
   client = new QueryClient({
@@ -132,9 +135,18 @@ beforeEach(() => {
     vehicles: [bootstrapVehicle(sport)],
   };
   respond = async () => apiResponse([sport, longitude, sold]);
+  respondSnapshot = async () => new Response(JSON.stringify({
+    generatedAt: "2026-01-01T00:00:00.000Z",
+    vehicles: [bootstrapVehicle(sport)],
+    showroomVehicles: [sport, longitude, sold].map(bootstrapVehicle),
+  }));
   globalThis.fetch = async (input, options) => {
-    const url = new URL(String(input));
+    const url = new URL(String(input), "https://catalog.test");
     assert.equal(url.origin, "https://catalog.test", "Unexpected network request");
+    if (url.pathname === "/seo/stock-bootstrap.json") {
+      snapshotRequests.push(url);
+      return respondSnapshot(url, options);
+    }
     assert.equal(url.pathname, "/api/v1/veiculos.php");
     requests.push(url);
     return respond(url, options);
@@ -224,6 +236,138 @@ test("opening search immediately replaces the old bootstrap with all available m
   assert.equal(requests[0].searchParams.get("limit"), "500");
   assert.equal(requests[0].searchParams.get("offset"), "0");
   assert.ok(!scheduledDelays.includes(15_000), "Immediate refresh kept the delay timer");
+  assert.equal(snapshotRequests.length, 0, "Home search must not fetch a showroom snapshot");
+});
+
+function ShowroomProbe({ query = {}, enabled = true }) {
+  result = useVehiclesQuery(
+    { fetchAll: true, includeSold: true, ...query },
+    { enabled, refreshImmediately: true },
+  );
+  return React.createElement("output", {
+    "data-loading": result.isLoading,
+    "data-fetching": result.isFetching,
+    "data-placeholder": result.isPlaceholderData,
+  }, result.data?.map((vehicle) => vehicle.id).join(",") ?? "");
+}
+
+async function renderShowroom(query, enabled = true) {
+  await act(async () => {
+    renderer = TestRenderer.create(React.createElement(
+      QueryClientProvider,
+      { client },
+      React.createElement(ShowroomProbe, { query, enabled }),
+    ));
+  });
+}
+
+function deferred() {
+  let resolve;
+  const promise = new Promise((done) => { resolve = done; });
+  return { promise, resolve };
+}
+
+test("SPA showroom displays the complete snapshot while API refreshes, without making warranty evidence fresh", async () => {
+  const api = deferred();
+  respond = () => api.promise;
+  const observedAt = Date.parse("2026-01-01T00:00:00Z");
+  const oldVehicle = { ...bootstrapVehicle(sport), factoryWarrantyVehicle: { id: sport.id, observedAt } };
+  respondSnapshot = async () => new Response(JSON.stringify({
+    vehicles: [oldVehicle],
+    showroomVehicles: [oldVehicle, bootstrapVehicle(longitude), bootstrapVehicle(sold)],
+  }));
+
+  await renderShowroom();
+  await waitForResult((query) => query.isPlaceholderData);
+  assert.deepEqual(ids(), [sport.id, longitude.id, sold.id]);
+  assert.equal(result.isLoading, false);
+  assert.equal(result.isFetching, true);
+  assert.equal(result.dataUpdatedAt, 0);
+  assert.equal(result.data[0].factoryWarrantyVehicle.observedAt, observedAt);
+  assert.equal(result.data[1].factoryWarrantyVehicle, null, "Legacy fallback must not become warranty evidence");
+  assert.equal(client.getQueryData(["vehicles", "fetchAll", 1, "includeSold", 1]), undefined);
+  assert.equal(snapshotRequests.length, 1);
+  assert.equal(requests.length, 1, "The snapshot must not delay or duplicate the live query");
+
+  await act(async () => api.resolve(apiResponse([longitude, sold])));
+  await waitForResult((query) => !query.isFetching && !query.isPlaceholderData);
+  assert.deepEqual(ids(), [longitude.id, sold.id]);
+});
+
+test("direct showroom opening uses inline data without another snapshot request", async () => {
+  window.__NETCAR_STOCK__ = {
+    scope: "showroom",
+    vehicles: [sport, longitude, sold].map(bootstrapVehicle),
+  };
+  respond = () => deferred().promise;
+  await renderShowroom();
+  assert.deepEqual(ids(), [sport.id, longitude.id, sold.id]);
+  assert.equal(result.isLoading, false);
+  assert.equal(snapshotRequests.length, 0);
+});
+
+test("a snapshot arriving after the live API cannot replace its current stock", async () => {
+  const snapshot = deferred();
+  respondSnapshot = () => snapshot.promise;
+  respond = async () => apiResponse([longitude]);
+  await renderShowroom();
+  await waitForResult((query) => !query.isFetching && query.data?.length === 1);
+  assert.deepEqual(ids(), [longitude.id]);
+  await act(async () => snapshot.resolve(new Response(JSON.stringify({
+    showroomVehicles: [sport, longitude, sold].map(bootstrapVehicle),
+  }))));
+  assert.deepEqual(ids(), [longitude.id]);
+  assert.equal(result.isPlaceholderData, false);
+});
+
+for (const [name, response] of [
+  ["failed", () => new Response("Unavailable", { status: 503 })],
+  ["active-only", () => new Response(JSON.stringify({ vehicles: [bootstrapVehicle(sport)] }))],
+  ["malformed", () => new Response(JSON.stringify({ showroomVehicles: [null] }))],
+]) {
+  test(`${name} snapshot leaves the live API loading normally`, async () => {
+    const api = deferred();
+    respond = () => api.promise;
+    respondSnapshot = async () => response();
+    await renderShowroom();
+    await waitForResult(() => client.getQueryState(["stock", "showroom-bootstrap"])?.status === "error");
+    assert.equal(result.data, undefined, "Home collection must not stand in for the showroom");
+    assert.equal(result.isLoading, true);
+    await act(async () => api.resolve(apiResponse([longitude, sold])));
+    await waitForResult((query) => !query.isFetching && query.data?.length === 2);
+    assert.deepEqual(ids(), [longitude.id, sold.id]);
+  });
+}
+
+test("SPA snapshot respects the same stock filters as inline bootstrap", async () => {
+  respond = () => deferred().promise;
+  await renderShowroom({ marca: "JEEP", modelo: "LONGITUDE", cor: "CINZA", precoMin: "90000", anoMin: "2024" });
+  await waitForResult((query) => query.isPlaceholderData);
+  assert.deepEqual(ids(), [longitude.id]);
+  assert.equal(requests[0].searchParams.get("modelo"), "LONGITUDE");
+});
+
+test("equipment queries skip snapshots that cannot evaluate optional tags", async () => {
+  respond = () => deferred().promise;
+  await renderShowroom({ opcional: "teto-solar" });
+  assert.equal(snapshotRequests.length, 0);
+  assert.equal(result.data, undefined);
+  assert.equal(requests[0].searchParams.get("opcional"), "teto-solar");
+});
+
+test("an existing API cache avoids fetching the static snapshot", async () => {
+  client.setQueryData(["vehicles", "fetchAll", 1, "includeSold", 1], [bootstrapVehicle(longitude)]);
+  respond = () => deferred().promise;
+  await renderShowroom();
+  assert.deepEqual(ids(), [longitude.id]);
+  assert.equal(snapshotRequests.length, 0);
+});
+
+test("a disabled showroom query starts neither snapshot nor API requests", async () => {
+  await renderShowroom({}, false);
+  assert.equal(snapshotRequests.length, 0);
+  assert.equal(requests.length, 0);
+  assert.equal(result.data, undefined);
 });
 
 test("typing keeps the current query and reopening refreshes even a fresh cache", async () => {

@@ -2,7 +2,7 @@ import type { Vehicle, VehiclesQuery } from "@/catalog/endpoints/vehicles";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
 import { sanitizeVehicleImages } from "@/lib/vehicleImagePolicy.mjs";
 
-type StockBootstrap = {
+export type StockBootstrap = {
   generatedAt?: string;
   scope?: "available" | "showroom";
   vehicles?: Vehicle[];
@@ -14,9 +14,14 @@ declare global {
   }
 }
 
-function allBootstrapVehicles(): Vehicle[] | undefined {
-  if (typeof window === "undefined") return undefined;
-  const vehicles = window.__NETCAR_STOCK__?.vehicles;
+function inlineStockBootstrap(): StockBootstrap | undefined {
+  return typeof window === "undefined" ? undefined : window.__NETCAR_STOCK__;
+}
+
+function allBootstrapVehicles(
+  bootstrap = inlineStockBootstrap(),
+): Vehicle[] | undefined {
+  const vehicles = bootstrap?.vehicles;
   return Array.isArray(vehicles)
     ? vehicles.map((vehicle) =>
         sanitizeVehicleImages({
@@ -53,10 +58,11 @@ function numericFilter(value: unknown): number | undefined {
 
 export function getBootstrapVehicles(
   query?: VehiclesQuery,
+  bootstrap = inlineStockBootstrap(),
 ): Vehicle[] | undefined {
-  const bootstrap =
-    typeof window === "undefined" ? undefined : window.__NETCAR_STOCK__;
-  const vehicles = allBootstrapVehicles();
+  // O snapshot não contém tags suficientes para filtrar opcionais com rigor.
+  if (query?.opcional || query?.opcionais) return undefined;
+  const vehicles = allBootstrapVehicles(bootstrap);
   if (!vehicles) return undefined;
   // Em navegação SPA, o bootstrap permanece sendo o da primeira rota. Nunca
   // trate a coleção active-only da Home/ficha como showroom completo: isso
@@ -103,6 +109,36 @@ export function getBootstrapVehicles(
     if (maxYear !== undefined && year > maxYear) return false;
     return true;
   });
+}
+
+/** Mesmo showroom do HTML, usado somente quando a navegação SPA vem da Home. */
+export async function fetchShowroomBootstrap(
+  signal?: AbortSignal,
+): Promise<StockBootstrap> {
+  const response = await fetch("/seo/stock-bootstrap.json", { signal });
+  if (!response.ok) throw new Error("Snapshot do estoque indisponível");
+  const manifest = await response.json();
+  const vehicles: unknown = manifest?.showroomVehicles;
+  // Nunca substituir o showroom pela coleção disponível/parcial da Home.
+  if (
+    !Array.isArray(vehicles) ||
+    !vehicles.every(
+      (vehicle) =>
+        vehicle &&
+        typeof vehicle.id === "string" &&
+        vehicle.id.length > 0 &&
+        Number.isFinite(vehicle.price) &&
+        Number.isFinite(vehicle.year) &&
+        Array.isArray(vehicle.images),
+    )
+  ) {
+    throw new Error("Snapshot do showroom inválido");
+  }
+  return {
+    scope: "showroom",
+    generatedAt: manifest.generatedAt,
+    vehicles,
+  };
 }
 
 export function getBootstrapVehicle(slug: string): Vehicle | undefined {

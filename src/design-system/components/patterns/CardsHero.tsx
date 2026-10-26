@@ -76,8 +76,6 @@ export function CardsHero({
   eagerImage = false,
   onClick,
   whatsAppHref,
-  tradeInHref,
-  financeHref,
   whatsAppVehicleId,
   whatsAppVehicleName,
   whatsAppSource = "home_destaques",
@@ -99,10 +97,10 @@ export function CardsHero({
   const specsLine = [year, mileage, shortTransmission]
     .filter(Boolean)
     .join(" · ");
-  const hasCompactBadgeRow = Boolean(proofBadge || mileageBadge);
-  // Keep the title below an overlaid warranty stamp even without a badge row.
-  const needsCompactStampSpace =
-    !hasCompactBadgeRow && Boolean(warrantyStamp || powertrainStamp);
+  const hasMultipleCoverages = Boolean(
+    tractionBatteryStamp && (warrantyStamp || powertrainStamp),
+  );
+  const stampClassName = `shrink-0 rounded-full bg-white/95 ${compact ? "w-[clamp(46px,14.25vw,56px)]" : "w-[68px]"}`;
   const content = (
     <div
       className={`group relative bg-white shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center h-full ${
@@ -125,10 +123,25 @@ export function CardsHero({
         />
       )}
 
-      {(warrantyStamp || powertrainStamp) && (
-        <div className={`pointer-events-none select-none absolute z-20 ${compact ? "right-0 top-12 w-[60px] md:right-1 md:top-16 md:w-[78px]" : "right-1 top-[5.75rem] w-[78px]"}`}>
-          {warrantyStamp && <FactoryWarrantyBadge {...warrantyStamp} variant="card" />}
-          {powertrainStamp && <FactoryWarrantyBadge {...powertrainStamp} variant="card" />}
+      {(warrantyStamp || powertrainStamp || tractionBatteryStamp) && (
+        <div
+          className={`pointer-events-none select-none absolute z-20 flex gap-1 ${compact ? "right-1 top-0" : "right-3 top-8 short1600:top-3"}`}
+        >
+          {warrantyStamp && (
+            <div className={stampClassName}>
+              <FactoryWarrantyBadge {...warrantyStamp} variant="card" />
+            </div>
+          )}
+          {powertrainStamp && (
+            <div className={stampClassName}>
+              <FactoryWarrantyBadge {...powertrainStamp} variant="card" />
+            </div>
+          )}
+          {tractionBatteryStamp && (
+            <div className={stampClassName}>
+              <FactoryWarrantyBadge {...tractionBatteryStamp} variant="card" />
+            </div>
+          )}
         </div>
       )}
 
@@ -138,7 +151,7 @@ export function CardsHero({
           aria-hidden="true"
           className={`pointer-events-none absolute z-20 inline-flex items-center gap-1 rounded-full bg-black/55 font-bold text-white backdrop-blur-sm ${
             compact
-              ? "left-2 top-11 px-1.5 py-0.5 text-[10px]"
+              ? `left-2 ${hasMultipleCoverages ? "-top-6" : "top-11"} px-1.5 py-0.5 text-[10px]`
               : "left-3 top-24 px-2 py-1 text-[11px] md:top-28 short1600:top-20"
           }`}
         >
@@ -155,7 +168,9 @@ export function CardsHero({
             : "-top-32 md:-top-44 h-64 md:h-80 short1600:-top-24 short1600:h-52"
         }`}
       >
-        <div className={`!border-0 relative w-full h-full ${compact ? "origin-bottom scale-[1.2]" : ""}`}>
+        <div
+          className={`!border-0 relative w-full h-full origin-bottom ${compact ? "scale-[1.2]" : "scale-[1.15]"}`}
+        >
           <img
             src={optimizeStockImage(image, compact ? 640 : 960)}
             srcSet={stockImageSrcSet(image, [320, 480, 640, 768, 960])}
@@ -172,7 +187,7 @@ export function CardsHero({
               delay === 0 ? "high" : deferOffscreenPaint ? "low" : "auto"
             }
             decoding={delay === 0 ? "sync" : "async"}
-            className={`!border-0 w-full h-full object-contain transition-transform duration-700 ${warrantyStamp || powertrainStamp ? "" : "group-hover:scale-110 group-hover:-rotate-2"} drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] ${isSold ? "grayscale-[0.25]" : ""}`}
+            className={`!border-0 w-full h-full object-contain transition-transform duration-700 ${warrantyStamp || powertrainStamp ? "" : "group-hover:scale-105"} drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] ${isSold ? "grayscale-[0.25]" : ""}`}
           />
           {isSold && (
             <div
@@ -199,27 +214,30 @@ export function CardsHero({
       <div
         className={`!border-0 w-full flex flex-col items-start text-left flex-1 ${
           compact
-            ? `${needsCompactStampSpace ? "pt-24" : "pt-16"} space-y-2`
-            : "pt-28 md:pt-32 space-y-4 short1600:pt-24 short1600:space-y-2"
+            ? "pt-16 gap-2"
+            : "pt-28 md:pt-32 gap-3 short1600:pt-24 short1600:gap-2"
         }`}
       >
-        {/* Mesma estrutura em todo card: selos fixos, título, marca · ano · km · câmbio.
-            Sem selo de marketing variável ("150 CV", "ano · km") pra não desalinhar.
-            No compact a marca vai pra linha de specs (3 pílulas não cabem em 2 colunas). */}
-        {(!compact || hasCompactBadgeRow) && (
+        {/* Identidade com altura estável, inclusive quando não há i-CHECK. */}
+        <div className="!border-0 w-full space-y-1">
           <div
             className={`!border-0 flex w-full items-center ${
-              compact ? "min-h-[1.5rem] flex-wrap gap-1" : "min-h-[1.75rem] flex-nowrap gap-1.5 overflow-hidden"
+              compact ? "min-h-5 gap-1" : "min-h-7 gap-2"
             }`}
           >
-            {!compact && (
-              <span className="!border-0 inline-block w-fit shrink-0 rounded-md bg-[#00283C] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white short1600:px-2.5 short1600:py-0.5 short1600:text-[9px]">
-                {brand}
-              </span>
-            )}
+            <span
+              title={brand}
+              className={
+                compact
+                  ? "min-w-0 truncate text-[10px] font-bold uppercase tracking-wider text-gray-400"
+                  : "min-w-0 truncate rounded-md bg-[#00283C] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white short1600:px-2.5 short1600:py-0.5 short1600:text-[9px]"
+              }
+            >
+              {brand}
+            </span>
             {proofBadge && (
               <span
-                className={`shrink-0 rounded-full border border-[#087A37]/25 bg-white font-extrabold uppercase tracking-wide text-[#087A37] ${
+                className={`ml-auto shrink-0 rounded-full border border-[#087A37]/25 bg-white font-extrabold uppercase tracking-wide text-[#087A37] ${
                   compact
                     ? "px-1.5 py-0.5 text-[9px]"
                     : "px-2.5 py-1 text-[10px] short1600:px-2 short1600:text-[9px]"
@@ -228,24 +246,7 @@ export function CardsHero({
                 {proofBadge}
               </span>
             )}
-            {/* Compact: pílula de km/ano sobe pra linha de selos (a de specs não cabe em 2 colunas). */}
-            {compact && mileageBadge && (
-              <span
-                className="shrink-0 rounded-full bg-[#004C5C] px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wide text-white"
-                title={MILEAGE_BADGE_TITLE}
-              >
-                {mileageBadge}
-              </span>
-            )}
           </div>
-        )}
-
-        <div className="!border-0 w-full space-y-0.5">
-          {compact && brand && (
-            <p className="!border-0 line-clamp-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-              {brand}
-            </p>
-          )}
           <h3
             className={`!border-0 line-clamp-2 font-bold leading-snug ${
               compact
@@ -256,27 +257,27 @@ export function CardsHero({
           >
             {model}
           </h3>
-          <div
-            className={`!border-0 flex w-full min-w-0 flex-wrap items-center ${
-              compact ? "gap-1.5" : "gap-2"
+        </div>
+        <div
+          className={`!border-0 flex w-full min-w-0 flex-wrap content-start items-start ${
+            compact ? "min-h-6 gap-x-1.5 gap-y-1" : "min-h-6 gap-x-2 gap-y-1"
+          }`}
+        >
+          <p
+            className={`!border-0 min-w-0 max-w-full whitespace-normal font-semibold text-gray-500 ${
+              compact ? "text-[11px] leading-4" : "text-sm short1600:text-xs"
             }`}
           >
-            <p
-              className={`!border-0 min-w-0 max-w-full whitespace-normal font-semibold text-gray-500 ${
-                compact ? "text-[11px]" : "text-sm short1600:text-xs"
-              }`}
+            {specsLine}
+          </p>
+          {mileageBadge && (
+            <span
+              className={`inline-flex shrink-0 items-center rounded-full bg-[#004C5C] py-0.5 font-extrabold uppercase tracking-wide text-white ${compact ? "px-1.5 text-[9px]" : "px-2.5 text-[10px] short1600:px-2 short1600:text-[9px]"}`}
+              title={MILEAGE_BADGE_TITLE}
             >
-              {specsLine}
-            </p>
-            {!compact && mileageBadge && (
-              <span
-                className="inline-flex shrink-0 items-center rounded-full bg-[#004C5C] px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-white short1600:px-2 short1600:text-[9px]"
-                title={MILEAGE_BADGE_TITLE}
-              >
-                {mileageBadge}
-              </span>
-            )}
-          </div>
+              {mileageBadge}
+            </span>
+          )}
         </div>
 
         {/* Price and Action — altura reservada pra alinhar CTA entre cards */}
@@ -302,7 +303,9 @@ export function CardsHero({
               </p>
             ) : showPriceComparison && previousPrice ? (
               <div className="flex flex-col items-start gap-1 short1600:gap-0.5">
-                <p className={`!border-0 font-semibold text-gray-500 leading-none text-xs ${compact ? "whitespace-nowrap" : ""}`}>
+                <p
+                  className={`!border-0 font-semibold text-gray-500 leading-none text-xs ${compact ? "whitespace-nowrap" : ""}`}
+                >
                   De: <span className="line-through">{previousPrice}</span>
                 </p>
                 <div className="flex flex-col items-start leading-none gap-0.5">
@@ -320,7 +323,9 @@ export function CardsHero({
             ) : (
               <p
                 className={`!border-0 font-bold font-sans tracking-tight leading-tight ${
-                  compact ? "whitespace-nowrap text-[clamp(14px,4.35vw,17px)]" : "text-[24px] short1600:text-xl"
+                  compact
+                    ? "whitespace-nowrap text-[clamp(14px,4.35vw,17px)]"
+                    : "text-[24px] short1600:text-xl"
                 }`}
                 style={{ color: "#0B6B4B" }}
               >
@@ -372,68 +377,17 @@ export function CardsHero({
                   className={`!border-0 inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-[#087A37] font-bold uppercase text-white transition-colors hover:bg-[#075E54] ${
                     compact
                       ? "h-11 w-11"
-                      : "h-11 px-3 text-[11px] tracking-wide md:h-9 [@media(pointer:coarse)]:min-h-11 short1600:px-2.5 short1600:text-[10px]"
+                      : "h-11 w-11 md:h-9 md:w-9 [@media(pointer:coarse)]:min-h-11 [@media(pointer:coarse)]:min-w-11"
                   }`}
                 >
                   <MessageCircle
                     className={`shrink-0 ${compact ? "h-4 w-4" : "h-4 w-4 short1600:h-3.5 short1600:w-3.5"}`}
                   />
-                  {!compact && <span>WhatsApp</span>}
                 </a>
               )}
             </div>
           )}
-
-          {/* Ações secundárias ficam em uma única linha discreta no desktop. */}
-          {!compact && !isSold && whatsAppHref && (tradeInHref || financeHref) ? (
-            <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[11px] font-bold leading-none">
-              {tradeInHref ? (
-                <a
-                  href={tradeInHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-wa-source={`${whatsAppSource}_trade`}
-                  data-wa-intent="trade_in"
-                  data-wa-vehicle-id={whatsAppVehicleId}
-                  data-wa-vehicle-name={whatsAppVehicleName}
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex min-h-6 items-center whitespace-nowrap text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D] [@media(pointer:coarse)]:min-h-11"
-                >
-                  Troca →
-                </a>
-              ) : null}
-              {tradeInHref && financeHref ? (
-                <span className="text-gray-300" aria-hidden="true">
-                  ·
-                </span>
-              ) : null}
-              {financeHref ? (
-                <a
-                  href={financeHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-wa-source={`${whatsAppSource}_finance`}
-                  data-wa-intent="simulate_finance"
-                  data-wa-vehicle-id={whatsAppVehicleId}
-                  data-wa-vehicle-name={whatsAppVehicleName}
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex min-h-6 items-center whitespace-nowrap text-[#00283C] underline underline-offset-2 transition-colors hover:text-[#5CD29D] [@media(pointer:coarse)]:min-h-11"
-                >
-                  Financiar →
-                </a>
-              ) : null}
-            </div>
-          ) : null}
         </div>
-        {tractionBatteryStamp && (
-          <div className="mt-3 w-full" data-factory-warranty-footer="card">
-            <div className="mb-2 flex items-center justify-center gap-2">
-              <div className="w-[64px] shrink-0">
-                <FactoryWarrantyBadge {...tractionBatteryStamp} variant="card" />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
