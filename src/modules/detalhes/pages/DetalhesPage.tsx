@@ -1212,7 +1212,7 @@ function MobileGalleryCarousel({
                 type="button"
                 onClick={() => onOpen(index)}
                 aria-label={`Abrir foto ${index + 1} de ${slides.length}`}
-                className={`relative block h-[260px] w-full overflow-hidden sm:h-[400px] ${slide.isCover ? "bg-gray-50" : "bg-gray-200"}`}
+                className={`relative block h-[260px] max-h-[55svh] w-full overflow-hidden sm:h-[400px] ${slide.isCover ? "bg-gray-50" : "bg-gray-200"}`}
               >
                 {isSold && (
                   <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
@@ -1233,7 +1233,7 @@ function MobileGalleryCarousel({
                     loading={slide.isCover ? "eager" : "lazy"}
                     decoding={slide.isCover ? "sync" : "async"}
                     fetchPriority={slide.isCover ? "high" : undefined}
-                    className={`absolute inset-0 h-full w-full ${slide.isCover ? "origin-bottom object-contain object-center scale-[1.18] sm:scale-110" : "object-cover"} ${isSold ? "grayscale-[0.25]" : ""}`}
+                    className={`absolute inset-0 h-full w-full ${slide.isCover ? "origin-bottom object-contain object-center scale-[1.18] sm:scale-110 landscape:!scale-100" : "object-cover landscape:object-contain"} ${isSold ? "grayscale-[0.25]" : ""}`}
                     onError={(event) => {
                       const target = event.currentTarget;
                       if (target.dataset.originalFallback === "true") {
@@ -2134,7 +2134,7 @@ export function DetalhesPage() {
         ]
   ).slice(0, 4);
   return (
-    <main className="max-w-full min-w-0 overflow-x-clip pb-28 pt-16 md:pb-32 md:pt-0">
+    <main className="max-w-full min-w-0 overflow-x-clip pt-16 md:pt-0">
       {vehicle && (
         <VehicleSchemaOrg
           marca={marca}
@@ -2220,7 +2220,7 @@ export function DetalhesPage() {
         </ol>
       </nav>
       {/* Hero Section */}
-      <section ref={heroRef} className="relative w-full max-w-full overflow-hidden py-0 pb-5 pt-0 lg:min-h-[max(700px,var(--hero-media-min-height,0px))] lg:pb-8 lg:pt-0 xl:min-h-[max(700px,var(--hero-media-min-height,0px))] 2xl:min-h-[max(760px,var(--hero-media-min-height,0px))] 3xl:min-h-[max(800px,var(--hero-media-min-height,0px))] 4xl:min-h-[max(1200px,var(--hero-media-min-height,0px))] 5xl:min-h-[max(1500px,var(--hero-media-min-height,0px))] 6xl:min-h-[max(1900px,var(--hero-media-min-height,0px))]">
+      <section ref={heroRef} className="relative w-full max-w-full overflow-hidden py-0 pb-5 pt-0 lg:min-h-[var(--hero-media-min-height,0px)] lg:pb-8 lg:pt-0">
         {/* Mobile starts with the same cover and continues through the existing photos. */}
         <div
           ref={heroMediaRef}
@@ -2494,7 +2494,7 @@ export function DetalhesPage() {
       {/* One media gallery: the verified video stays available without photos. */}
       {(instagramVideo || avifImages.length > 0) && (
         <section
-          className={`${instagramVideo ? "" : "hidden lg:block "}w-full py-6 sm:py-12 lg:py-16`}
+          className={`${instagramVideo ? "" : "hidden lg:block "}w-full py-6 sm:py-12 lg:pb-16 lg:pt-4`}
           aria-label="Fotos e vídeo do veículo"
         >
           <div
@@ -2696,7 +2696,7 @@ export function DetalhesPage() {
         />
       </DeferredRender>
 
-      <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 md:px-8 space-y-8">
+      <div className="w-full font-sans antialiased text-muted-foreground bg-muted pt-12 pb-8 px-4 md:px-8 space-y-8">
         <LazyLocalizacao />
         <IanBot />
       </div>
