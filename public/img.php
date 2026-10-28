@@ -48,7 +48,8 @@ $cacheFile = $cacheDir . '/' . $cacheKey . '.webp';
 $serve = function ($path, $type) {
     header('Content-Type: ' . $type);
     header('Content-Length: ' . filesize($path));
-    header('Cache-Control: public, max-age=31536000, immutable');
+    header('Cache-Control: ' . (defined('NETCAR_IMAGE_CACHE_CONTROL')
+        ? NETCAR_IMAGE_CACHE_CONTROL : 'public, max-age=31536000, immutable'));
     readfile($path);
     exit;
 };

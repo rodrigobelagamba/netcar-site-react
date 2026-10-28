@@ -68,6 +68,7 @@ import { VEHICLE_EQUIPMENT_NOTICE } from "@/lib/vehicleEquipmentNotice";
 import { canonicalUrl } from "@/lib/seo";
 import {
   optimizeStockImage,
+  stockDetailAvifSrcSet,
   stockGalleryPreviewSource,
   stockImageSrcSet,
 } from "@/lib/images";
@@ -1125,27 +1126,35 @@ function GalleryItem({ image, index, onClick, alt, caption, rounded = true }: Ga
         onClick={onClick}
       >
         <div className="relative w-full h-full">
-          <img
-            src={optimizeStockImage(previewSource, 640)}
-            srcSet={stockImageSrcSet(previewSource, [320, 480, 640, 768, 960])}
-            sizes="(max-width: 1023px) 50vw, (max-width: 1279px) 33vw, (max-width: 1535px) 25vw, (max-width: 1919px) 20vw, (max-width: 2559px) 17vw, (max-width: 3839px) 14vw, 13vw"
-            alt={alt}
-            width={1920}
-            height={1441}
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-contain lg:object-cover transition-transform duration-500 ease-out lg:group-hover:scale-105"
-            onError={(event) => {
-              const target = event.currentTarget;
-              if (target.dataset.originalFallback === "true") {
-                target.style.display = "none";
-                return;
-              }
-              target.dataset.originalFallback = "true";
-              target.removeAttribute("srcset");
-              target.src = image;
-            }}
-          />
+          <picture>
+            <source
+              type="image/avif"
+              srcSet={stockDetailAvifSrcSet(previewSource, [320, 480, 640, 768, 960])}
+              sizes="(max-width: 1023px) 50vw, (max-width: 1279px) 33vw, (max-width: 1535px) 25vw, (max-width: 1919px) 20vw, (max-width: 2559px) 17vw, (max-width: 3839px) 14vw, 13vw"
+            />
+            <img
+              src={optimizeStockImage(previewSource, 640)}
+              srcSet={stockImageSrcSet(previewSource, [320, 480, 640, 768, 960])}
+              sizes="(max-width: 1023px) 50vw, (max-width: 1279px) 33vw, (max-width: 1535px) 25vw, (max-width: 1919px) 20vw, (max-width: 2559px) 17vw, (max-width: 3839px) 14vw, 13vw"
+              alt={alt}
+              width={1920}
+              height={1441}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-contain lg:object-cover transition-transform duration-500 ease-out lg:group-hover:scale-105"
+              onError={(event) => {
+                const target = event.currentTarget;
+                if (target.dataset.originalFallback === "true") {
+                  target.style.display = "none";
+                  return;
+                }
+                target.dataset.originalFallback = "true";
+                target.closest("picture")?.querySelectorAll("source").forEach((source) => source.removeAttribute("srcset"));
+                target.removeAttribute("srcset");
+                target.src = image;
+              }}
+            />
+          </picture>
           {/* Overlay on hover */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 ease-out" />
         </div>
@@ -1230,6 +1239,11 @@ function MobileGalleryCarousel({
                 )}
                 <picture className="contents">
                   {slide.isCover && <source media="(min-width: 1024px)" srcSet={HIDDEN_RESPONSIVE_IMAGE} />}
+                  <source
+                    type="image/avif"
+                    srcSet={stockDetailAvifSrcSet(previewSource, [480, 640, 960])}
+                    sizes="100vw"
+                  />
                   <img
                     src={optimizeStockImage(previewSource, 640)}
                     srcSet={stockImageSrcSet(previewSource, [480, 640, 960])}
@@ -1248,6 +1262,7 @@ function MobileGalleryCarousel({
                         return;
                       }
                       target.dataset.originalFallback = "true";
+                      target.closest("picture")?.querySelectorAll("source").forEach((source) => source.removeAttribute("srcset"));
                       target.removeAttribute("srcset");
                       target.src = image;
                     }}
@@ -2266,6 +2281,11 @@ export function DetalhesPage() {
               )}
               <picture className="contents">
                 <source media="(max-width: 1023px)" srcSet={HIDDEN_RESPONSIVE_IMAGE} />
+                <source
+                  type="image/avif"
+                  srcSet={stockDetailAvifSrcSet(mainImage, [480, 640, 768, 960, 1280])}
+                  sizes="(max-width: 1023px) 100vw, 70vw"
+                />
                 <img
                   src={optimizeStockImage(mainImage, 960)}
                   srcSet={stockImageSrcSet(mainImage, [480, 640, 768, 960, 1280])}
@@ -2278,7 +2298,15 @@ export function DetalhesPage() {
                   fetchPriority="high"
                   className={`w-full h-full lg:h-auto max-w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
                   onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
+                    const target = e.currentTarget;
+                    if (target.dataset.originalFallback === "true") {
+                      target.style.display = "none";
+                      return;
+                    }
+                    target.dataset.originalFallback = "true";
+                    target.closest("picture")?.querySelectorAll("source").forEach((source) => source.removeAttribute("srcset"));
+                    target.removeAttribute("srcset");
+                    target.src = mainImage;
                   }}
                 />
               </picture>

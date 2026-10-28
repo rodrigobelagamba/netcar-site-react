@@ -436,6 +436,19 @@ function netcar_vehicle_cover($vehicle, $preferThumb)
 }
 
 /** Preload responsivo idêntico ao <img> que o React renderiza. */
+function netcar_detail_photo_srcset($cover, $widths, $avif)
+{
+    $parts = array();
+    foreach ($widths as $width) {
+        $url = netcar_banner_variant($cover, $width);
+        if ($avif && strpos($url, '/img.php?') === 0) {
+            $url = str_replace('/img.php?', '/vehicle-photo.php?', $url) . '&v=1';
+        }
+        $parts[] = htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . ' ' . $width . 'w';
+    }
+    return implode(', ', $parts);
+}
+
 function netcar_stock_critical_preload($path)
 {
     if ($path !== '/seminovos' && !preg_match('#^/veiculo/#', (string) $path)) {
@@ -446,6 +459,19 @@ function netcar_stock_critical_preload($path)
     $cover = netcar_vehicle_cover($vehicle, $isStock);
     if ($cover === null) {
         return '';
+    }
+
+    if (!$isStock) {
+        $href = netcar_banner_variant($cover, 960);
+        if (strpos($href, '/img.php?') === 0) {
+            $href = str_replace('/img.php?', '/vehicle-photo.php?', $href) . '&v=1';
+        }
+        $base = '<link rel="preload" as="image" type="image/avif" href="'
+            . htmlspecialchars($href, ENT_QUOTES, 'UTF-8') . '" fetchpriority="high"';
+        return $base . ' media="(max-width: 1023px)" imagesizes="100vw" imagesrcset="'
+            . netcar_detail_photo_srcset($cover, array(480, 640, 960), true) . '">'
+            . $base . ' media="(min-width: 1024px)" imagesizes="70vw" imagesrcset="'
+            . netcar_detail_photo_srcset($cover, array(480, 640, 768, 960, 1280), true) . '">';
     }
 
     $widths = $isStock ? array(320, 480, 640, 768, 960) : array(480, 640, 768, 960, 1280);
@@ -481,13 +507,21 @@ function netcar_stock_initial_lcp($path)
     $name = is_array($vehicle) && !empty($vehicle['name']) ? (string) $vehicle['name'] : 'Veículo seminovo';
     $sizes = $isStock ? '(max-width: 767px) 50vw, 25vw' : '(max-width: 1023px) 100vw, 70vw';
     $style = $isStock ? ' style="width:50vw;max-width:380px"' : '';
-    return '<img src="'
+    $image = '<img src="'
         . htmlspecialchars(netcar_banner_variant($cover, $fallbackWidth), ENT_QUOTES, 'UTF-8')
         . '" srcset="' . implode(', ', $srcset)
         . '" sizes="' . $sizes
         . '" alt="' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8')
         . '" width="1600" height="900" loading="eager" decoding="sync" fetchpriority="high"'
         . $style . '>';
+    if ($isStock) return $image;
+    return '<picture style="display:block;width:100%"><source type="image/avif" media="(max-width: 1023px)" sizes="100vw" srcset="'
+        . netcar_detail_photo_srcset($cover, array(480, 640, 960), true)
+        . '"><source type="image/avif" media="(min-width: 1024px)" sizes="70vw" srcset="'
+        . netcar_detail_photo_srcset($cover, array(480, 640, 768, 960, 1280), true)
+        . '"><source media="(max-width: 1023px)" sizes="100vw" srcset="'
+        . netcar_detail_photo_srcset($cover, array(480, 640, 960), false)
+        . '">' . $image . '</picture>';
 }
 
 function netcar_route_manifest_entry($path)

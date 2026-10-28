@@ -12,6 +12,10 @@ node_modules/
 
 # Build output
 dist/
+.cache/vehicle-photo-variants/
+public/images/vehicle-photo-variants/
+public/seo/vehicle-photo-variants.json
+public/seo/vehicle-photo-variants/
 
 # PDF i-CHECK gerado localmente
 output/

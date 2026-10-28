@@ -56,6 +56,30 @@ export function stockImageSrcSet(
     .join(", ");
 }
 
+/** Detail-only, prebuilt AVIF variants; the endpoint falls back to the same WebP. */
+export function stockDetailAvifSrcSet(
+  url: string | null | undefined,
+  widths: number[],
+): string | undefined {
+  if (!url) return undefined;
+  try {
+    const source = new URL(url, "https://www.netcarmultimarcas.com.br");
+    if (!["netcarmultimarcas.com.br", "www.netcarmultimarcas.com.br"].includes(source.hostname)
+      || source.username || source.password || source.port) return undefined;
+  } catch {
+    return undefined;
+  }
+  const variants = widths.map((width) => {
+    const optimized = optimizeStockImage(url, width);
+    if (optimized === url) return undefined;
+    const variant = new URL(optimized);
+    variant.pathname = "/vehicle-photo.php";
+    variant.searchParams.set("v", "1");
+    return `${variant.pathname}${variant.search} ${width}w`;
+  });
+  return variants.every(Boolean) ? variants.join(", ") : undefined;
+}
+
 /**
  * A API da galeria entrega AVIFs originais de até ~1 MB por foto. O servidor
  * também mantém um JPG irmão em /big/, que pode passar pelo img.php e virar um
