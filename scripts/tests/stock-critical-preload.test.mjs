@@ -231,7 +231,12 @@ test(
     ]) {
       const html = render(route);
       assert.match(html, /<link rel="preload" as="image"[^>]*argo\.jpg/);
-      assert.match(html, /<div id="netcar-initial-lcp"><img[^>]+argo\.jpg/);
+      assert.match(html, /<div id="netcar-initial-lcp"><picture[^>]*><source[^>]+argo\.jpg/);
+      assert.match(html, /<picture[^>]*>[\s\S]*?<img[^>]+argo\.jpg[^>]*>[\s\S]*?<\/picture>/);
+      const preloads = html.match(/<link rel="preload" as="image" type="image\/avif"[^>]+argo\.jpg[^>]*>/g) || [];
+      assert.equal(preloads.length, 2, "mobile and desktop preload the requested vehicle's AVIF");
+      assert.ok(preloads.some((tag) => tag.includes('media="(max-width: 1023px)"')));
+      assert.ok(preloads.some((tag) => tag.includes('media="(min-width: 1024px)"')));
       assert.doesNotMatch(
         html,
         /<link rel="preload" as="image"[^>]*peugeot\.jpg/,
