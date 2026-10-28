@@ -1166,13 +1166,11 @@ function MobileGalleryCarousel({
   slides,
   altBase,
   onOpen,
-  hasGallery,
   isSold = false,
 }: {
   slides: HeroGallerySlide[];
   altBase: string;
   onOpen: (index: number) => void;
-  hasGallery: boolean;
   isSold?: boolean;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -1221,7 +1219,7 @@ function MobileGalleryCarousel({
                 type="button"
                 onClick={() => onOpen(index)}
                 aria-label={`Abrir foto ${index + 1} de ${slides.length}`}
-                className={`relative block h-[260px] max-h-[55svh] w-full overflow-hidden sm:h-[400px] ${slide.isCover ? "bg-gray-50" : "bg-gray-200"}`}
+                className={`relative block aspect-[1920/1441] max-h-[55svh] w-full overflow-hidden ${slide.isCover ? "bg-gray-50" : "bg-gray-200"}`}
               >
                 {isSold && (
                   <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
@@ -1271,25 +1269,12 @@ function MobileGalleryCarousel({
       >
         {current + 1}/{slides.length}
       </p>
-      <div className="flex min-h-11 flex-wrap items-center gap-x-3 px-4 pr-24 text-[11px] text-slate-500 sm:px-6 sm:pr-32">
+      <div className="flex h-6 items-center px-4 pr-24 text-[11px] text-slate-500 sm:px-6 sm:pr-32">
         {slides.length > 1 && (
           <p className="flex items-center gap-1.5">
             <ArrowLeftRight aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
             Deslize as fotos
           </p>
-        )}
-        {hasGallery && (
-          <a
-            href="#galeria-fotos"
-            onClick={(event) => {
-              event.preventDefault();
-              document.getElementById("galeria-fotos")?.scrollIntoView({ block: "start" });
-            }}
-            className="inline-flex min-h-11 items-center gap-1 font-semibold text-[#00283C] underline underline-offset-2"
-          >
-            Ver galeria
-            <ImageIcon aria-hidden="true" className="h-3.5 w-3.5" />
-          </a>
         )}
       </div>
     </div>
@@ -2258,7 +2243,6 @@ export function DetalhesPage() {
             <MobileGalleryCarousel
               key={vehicle.id}
               slides={heroGallery}
-              hasGallery={avifImages.length > 0}
               altBase={`${marca} ${modeloCompleto} ${vehicle.year || ""}`.trim()}
               isSold={isSold}
               onOpen={(index) => {
