@@ -3,7 +3,7 @@
  * A failed inventory read never replaces a valid manifest. Per-photo failures
  * fall back to the existing public img.php endpoint; originals are untouched. */
 import { createHash, randomUUID } from 'node:crypto';
-import { mkdir, readFile, writeFile, rename } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, rename, readdir, unlink } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -28,6 +28,16 @@ async function atomic(path, value) {
   const temporary = `${path}.${process.pid}.${randomUUID()}.tmp`;
   await writeFile(temporary, value);
   await rename(temporary, path);
+}
+
+export async function clearDownloadedPhotoBodies(directory = CACHE) {
+  let removed = 0;
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    if (!entry.isFile() || !/^[a-f0-9]{64}\.body$/.test(entry.name)) continue;
+    await unlink(join(directory, entry.name));
+    removed++;
+  }
+  return removed;
 }
 
 export function sourcePath(value) {
@@ -238,11 +248,15 @@ export async function main(args = process.argv.slice(2)) {
       JSON.stringify({ schemaVersion: 1, entries: { [requested]: row } }));
   }
   await atomic(MANIFEST, `${JSON.stringify({ schemaVersion: 1, generatedAt: new Date().toISOString(), entries }, null, 2)}\n`);
+  // Keep costly encodes, but do not retain another stock-wide copy of the
+  // downloaded originals. Missing bodies make download() fetch fresh bytes.
+  const removedBodies = await clearDownloadedPhotoBodies();
   console.log(`Vehicle photos: ${vehicles.length} vehicles, ${processed} photos, ${failed} skipped, ${count} variants.`);
+  console.log(`Vehicle photos: released ${removedBodies} temporary download bodies; encoded cache retained.`);
   if (failed) console.log(`Vehicle photo skips: ${JSON.stringify(failureReasons)}`);
   return { vehicles: vehicles.length, processed, failed, count };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  main().catch(() => { console.error('Vehicle photos: generation failed; previous manifest preserved.'); process.exitCode = 1; });
+  main().catch(() => { console.error('Vehicle photos: generation or cache cleanup failed; build stopped.'); process.exitCode = 1; });
 }

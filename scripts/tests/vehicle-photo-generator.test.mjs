@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { main, sourcePath, photoJobs, sameGeometry } from '../generate-vehicle-photo-variants.mjs';
+import { mkdtemp, mkdir, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { main, sourcePath, photoJobs, sameGeometry, clearDownloadedPhotoBodies } from '../generate-vehicle-photo-variants.mjs';
 
 const prefix = '/imagens/veiculos_automacar/';
 test('source allowlist rejects foreign origins and encoded traversal', () => {
@@ -39,5 +42,22 @@ test('invalid CI sample limits fail before any inventory request', async () => {
   } finally {
     if (previous === undefined) delete process.env.NETCAR_PHOTO_BUILD_LIMIT;
     else process.env.NETCAR_PHOTO_BUILD_LIMIT = previous;
+  }
+});
+test('download cleanup preserves encoded cache, metadata and unrelated paths', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'netcar-photo-cleanup-'));
+  const hash = 'a'.repeat(64), linkHash = 'b'.repeat(64), directoryHash = 'c'.repeat(64);
+  try {
+    for (const name of [`${hash}.body`, `${hash}.avif`, `${hash}.avif.json`, `${hash}.json`, 'original.jpg', 'unrelated.body']) {
+      await writeFile(join(directory, name), name);
+    }
+    await symlink(join(directory, 'original.jpg'), join(directory, `${linkHash}.body`));
+    await mkdir(join(directory, `${directoryHash}.body`));
+    assert.equal(await clearDownloadedPhotoBodies(directory), 1);
+    assert.equal((await readdir(directory)).length, 7);
+    assert.equal(await readFile(join(directory, `${hash}.avif`), 'utf8'), `${hash}.avif`);
+    assert.equal(await readFile(join(directory, 'original.jpg'), 'utf8'), 'original.jpg');
+  } finally {
+    await rm(directory, { recursive: true, force: true });
   }
 });
