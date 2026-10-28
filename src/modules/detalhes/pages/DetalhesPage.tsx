@@ -1026,6 +1026,8 @@ function Lightbox({
       >
         {/* Close Button */}
         <button
+          type="button"
+          aria-label="Fechar galeria"
           onClick={onClose}
           className="absolute top-4 right-4 sm:top-6 sm:right-6 text-white hover:text-gray-300 transition-colors z-10"
         >
@@ -1066,6 +1068,8 @@ function Lightbox({
         {images.length > 1 && (
           <>
             <button
+              type="button"
+              aria-label="Foto anterior"
               onClick={(e) => {
                 e.stopPropagation();
                 handlePrev();
@@ -1075,6 +1079,8 @@ function Lightbox({
               <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
             </button>
             <button
+              type="button"
+              aria-label="Próxima foto"
               onClick={(e) => {
                 e.stopPropagation();
                 handleNext();
@@ -1104,7 +1110,9 @@ function GalleryItem({ image, index, onClick, alt, caption, rounded = true }: Ga
 
   return (
     <figure className={`relative min-w-0 ${rounded ? "overflow-hidden rounded-2xl" : ""}`}>
-      <motion.div
+      <motion.button
+        type="button"
+        aria-label={`Ampliar foto ${index + 1}`}
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
@@ -1113,20 +1121,20 @@ function GalleryItem({ image, index, onClick, alt, caption, rounded = true }: Ga
           delay: index * 0.04,
           ease: [0.25, 0.1, 0.25, 1],
         }}
-        className={`relative overflow-hidden cursor-pointer bg-gray-200 group aspect-[1920/1441] ${rounded ? "rounded-2xl" : ""}`}
+        className={`relative block w-full overflow-hidden cursor-pointer bg-gray-200 group aspect-[1920/1441] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#008B95] ${rounded ? "rounded-2xl" : ""}`}
         onClick={onClick}
       >
         <div className="relative w-full h-full">
           <img
             src={optimizeStockImage(previewSource, 640)}
             srcSet={stockImageSrcSet(previewSource, [320, 480, 640, 768, 960])}
-            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, (max-width: 1535px) 25vw, (max-width: 1919px) 20vw, (max-width: 2559px) 17vw, (max-width: 3839px) 14vw, 13vw"
+            sizes="(max-width: 1023px) 50vw, (max-width: 1279px) 33vw, (max-width: 1535px) 25vw, (max-width: 1919px) 20vw, (max-width: 2559px) 17vw, (max-width: 3839px) 14vw, 13vw"
             alt={alt}
             width={1920}
             height={1441}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            className="absolute inset-0 w-full h-full object-contain lg:object-cover transition-transform duration-500 ease-out lg:group-hover:scale-105"
             onError={(event) => {
               const target = event.currentTarget;
               if (target.dataset.originalFallback === "true") {
@@ -1141,7 +1149,7 @@ function GalleryItem({ image, index, onClick, alt, caption, rounded = true }: Ga
           {/* Overlay on hover */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 ease-out" />
         </div>
-      </motion.div>
+      </motion.button>
       {index > 0 && caption && (
         <figcaption className="pointer-events-none absolute bottom-1.5 left-2 right-2 mx-auto w-fit max-w-[calc(100%-1rem)] rounded bg-black/60 px-2 py-1 text-center text-[11px] leading-tight text-white">
           {caption}
@@ -1152,18 +1160,19 @@ function GalleryItem({ image, index, onClick, alt, caption, rounded = true }: Ga
 }
 
 /**
- * Mobile: fotos em carrossel horizontal com swipe + contador. Empilhadas em
- * 1 coluna eram 13 × 293px = 4,6 telas antes da ficha técnica.
+ * Mobile: deslize na abertura ou veja a galeria em duas colunas abaixo do resumo.
  */
 function MobileGalleryCarousel({
   slides,
   altBase,
   onOpen,
+  hasGallery,
   isSold = false,
 }: {
   slides: HeroGallerySlide[];
   altBase: string;
   onOpen: (index: number) => void;
+  hasGallery: boolean;
   isSold?: boolean;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -1233,7 +1242,7 @@ function MobileGalleryCarousel({
                     loading={slide.isCover ? "eager" : "lazy"}
                     decoding={slide.isCover ? "sync" : "async"}
                     fetchPriority={slide.isCover ? "high" : undefined}
-                    className={`absolute inset-0 h-full w-full ${slide.isCover ? "origin-bottom object-contain object-center scale-[1.18] sm:scale-110 landscape:!scale-100" : "object-cover landscape:object-contain"} ${isSold ? "grayscale-[0.25]" : ""}`}
+                    className={`absolute inset-0 h-full w-full object-contain object-center ${isSold ? "grayscale-[0.25]" : ""}`}
                     onError={(event) => {
                       const target = event.currentTarget;
                       if (target.dataset.originalFallback === "true") {
@@ -1257,17 +1266,30 @@ function MobileGalleryCarousel({
         })}
       </div>
       <p
-        className="pointer-events-none absolute right-7 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-bold text-white"
+        className="pointer-events-none absolute left-4 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-bold text-white"
         aria-live="polite"
       >
         {current + 1}/{slides.length}
       </p>
-      <div className="flex h-6 items-center px-4 pr-24 text-[11px] text-slate-500 sm:px-6 sm:pr-32">
+      <div className="flex min-h-11 flex-wrap items-center gap-x-3 px-4 pr-24 text-[11px] text-slate-500 sm:px-6 sm:pr-32">
         {slides.length > 1 && (
           <p className="flex items-center gap-1.5">
             <ArrowLeftRight aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
-            Deslize para ver mais fotos
+            Deslize as fotos
           </p>
+        )}
+        {hasGallery && (
+          <a
+            href="#galeria-fotos"
+            onClick={(event) => {
+              event.preventDefault();
+              document.getElementById("galeria-fotos")?.scrollIntoView({ block: "start" });
+            }}
+            className="inline-flex min-h-11 items-center gap-1 font-semibold text-[#00283C] underline underline-offset-2"
+          >
+            Ver galeria
+            <ImageIcon aria-hidden="true" className="h-3.5 w-3.5" />
+          </a>
         )}
       </div>
     </div>
@@ -2236,6 +2258,7 @@ export function DetalhesPage() {
             <MobileGalleryCarousel
               key={vehicle.id}
               slides={heroGallery}
+              hasGallery={avifImages.length > 0}
               altBase={`${marca} ${modeloCompleto} ${vehicle.year || ""}`.trim()}
               isSold={isSold}
               onOpen={(index) => {
@@ -2494,13 +2517,17 @@ export function DetalhesPage() {
       {/* One media gallery: the verified video stays available without photos. */}
       {(instagramVideo || avifImages.length > 0) && (
         <section
-          className={`${instagramVideo ? "" : "hidden lg:block "}w-full py-6 sm:py-12 lg:pb-16 lg:pt-4`}
+          id="galeria-fotos"
+          className="w-full scroll-mt-20 py-6 sm:py-12 lg:pb-16 lg:pt-4"
           aria-label="Fotos e vídeo do veículo"
         >
+          <h2 className="mb-3 px-4 text-sm font-semibold text-[#00283C] lg:hidden">
+            {avifImages.length > 0 ? "Galeria de fotos" : "Vídeo do veículo"}
+          </h2>
           <div
             className={
               instagramVideo
-                ? `grid grid-cols-1 gap-2 sm:gap-3 sm:px-4 lg:px-6 ${avifImages.length > 0 ? "lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8" : "mx-auto max-w-3xl"}`
+                ? `grid gap-2 px-4 sm:gap-3 lg:px-6 ${avifImages.length > 0 ? "grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8" : "mx-auto max-w-3xl grid-cols-1"}`
                 : "contents"
             }
           >
@@ -2508,7 +2535,7 @@ export function DetalhesPage() {
               <section
                 id="video-do-carro"
                 aria-label="Vídeo deste veículo"
-                className={`min-w-0 scroll-mt-24 px-4 sm:px-0 ${avifImages.length > 0 ? "lg:col-span-2 lg:row-span-2" : "sm:aspect-[4/3]"}`}
+                className={`min-w-0 scroll-mt-24 ${avifImages.length > 0 ? "col-span-2 lg:row-span-2" : "sm:aspect-[4/3]"}`}
               >
                 <VehicleVideoLink
                   permalink={instagramVideo.permalink}
@@ -2521,12 +2548,12 @@ export function DetalhesPage() {
             )}
             {avifImages.length > 0 && (
               <>
-                {/* Desktop photos share the video grid when one is available. */}
+                {/* Photos share the video grid on mobile and desktop. */}
                 <div
                   className={
                     instagramVideo
-                      ? "hidden lg:contents"
-                      : "hidden w-full grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8"
+                      ? "contents"
+                      : "grid w-full grid-cols-2 gap-2 px-4 lg:px-0 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 5xl:grid-cols-8"
                   }
                 >
                   {avifImages.map((image, index) => (

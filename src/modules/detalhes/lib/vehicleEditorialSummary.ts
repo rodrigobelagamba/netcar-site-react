@@ -1,4 +1,5 @@
 import type { EquipmentVehicle } from "../../../lib/vehicleEquipment";
+import { formatCatalogMileage } from "../../../lib/formatters";
 
 export interface VehicleEditorialSummaryInput extends EquipmentVehicle {
   /** The catalog supplies power in cv unless it includes an explicit unit. */
@@ -25,9 +26,7 @@ function mileageLabel(value: unknown): string {
   // Zero often represents a missing value in the feed; it is not a 0 km claim.
   if (!/^\d+$/.test(raw)) return "";
   const mileage = Number(raw);
-  return Number.isSafeInteger(mileage) && mileage > 0
-    ? `${mileage.toLocaleString("pt-BR")} km`
-    : "";
+  return Number.isSafeInteger(mileage) ? formatCatalogMileage(mileage) : "";
 }
 
 /**

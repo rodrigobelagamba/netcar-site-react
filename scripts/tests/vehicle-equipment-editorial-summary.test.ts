@@ -10,7 +10,7 @@ test("unit context reflects current engine, power and mileage without repeating 
       modelo: "HRV ADVANCE TURBO",
       km: 59000,
     }),
-    "Motor 1.5 de 177 cv nesta unidade com 59.000 km.",
+    "Motor 1.5 de 177 cv nesta unidade com 59 mil km.",
   );
   assert.equal(
     buildVehicleEditorialSummary({
@@ -18,7 +18,7 @@ test("unit context reflects current engine, power and mileage without repeating 
       modelo: "HRV TOURING TURBO",
       km: 58975,
     }),
-    "Motor 1.5 de 177 cv nesta unidade com 58.975 km.",
+    "Motor 1.5 de 177 cv nesta unidade com 58 mil km.",
   );
   const context = buildVehicleEditorialSummary({
     ...common,
@@ -38,7 +38,7 @@ test("missing fields never inherit claims from model names or previously rendere
       potencia: "250",
       km: 42000,
     }),
-    "Motor 2.0 turbo de 250 cv nesta unidade com 42.000 km.",
+    "Motor 2.0 turbo de 250 cv nesta unidade com 42 mil km.",
   );
   assert.equal(
     buildVehicleEditorialSummary({
@@ -65,11 +65,11 @@ test("zero and invalid numeric data are omitted without changing the explicit po
   );
   assert.equal(
     buildVehicleEditorialSummary({ potencia: "177 cv", km: "58975" }),
-    "Potência de 177 cv nesta unidade com 58.975 km.",
+    "Potência de 177 cv nesta unidade com 58 mil km.",
   );
   assert.equal(
     buildVehicleEditorialSummary({ motor: " 1.5 ", km: 59000 }),
-    "Motor 1.5 nesta unidade com 59.000 km.",
+    "Motor 1.5 nesta unidade com 59 mil km.",
   );
 });
 
@@ -85,7 +85,7 @@ test("single-owner context requires the same exact current differential tag used
       ...vehicle,
       diferenciais: [{ tag: "unico_dono" }],
     }),
-    "Motor 1.5 de 177 cv nesta unidade de único dono com 58.975 km.",
+    "Motor 1.5 de 177 cv nesta unidade de único dono com 58 mil km.",
   );
   for (const diferenciais of [undefined, null, [], [{ tag: "unico" }]]) {
     assert.doesNotMatch(
@@ -96,5 +96,44 @@ test("single-owner context requires the same exact current differential tag used
   assert.doesNotMatch(
     buildVehicleEditorialSummary({ ...vehicle, modelo: "Touring único dono" }),
     /único dono/,
+  );
+});
+
+test("editorial mileage follows the catalog visibility and rounding rules", () => {
+  for (const [km, expected] of [
+    [9_999, "Esta unidade tem 9.999 km."],
+    [10_000, "Esta unidade tem 10 mil km."],
+    [25_999, "Esta unidade tem 25 mil km."],
+    [89_999, "Esta unidade tem 89 mil km."],
+    [90_000, ""],
+    [99_106, ""],
+  ] as const) {
+    assert.equal(buildVehicleEditorialSummary({ km }), expected);
+    assert.equal(buildVehicleEditorialSummary({ km: String(km) }), expected);
+  }
+});
+
+test("hidden mileage does not leak into the Tracker summary or erase supplied facts", () => {
+  const tracker = {
+    modelo: "TRACKER LT TURBO",
+    motor: "1.4",
+    potencia: "153",
+    year: 2018,
+    km: 99_106,
+  };
+  assert.equal(
+    buildVehicleEditorialSummary(tracker),
+    "Motor 1.4 de 153 cv nesta unidade.",
+  );
+  assert.equal(
+    buildVehicleEditorialSummary({
+      ...tracker,
+      diferenciais: [{ tag: "unico_dono" }],
+    }),
+    "Motor 1.4 de 153 cv nesta unidade de único dono.",
+  );
+  assert.equal(
+    buildVehicleEditorialSummary({ year: 2018, km: 99_106 }),
+    "Conheça os diferenciais desta unidade ano-modelo 2018.",
   );
 });

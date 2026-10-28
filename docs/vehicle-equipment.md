@@ -12,8 +12,11 @@ Os títulos comerciais devem nomear a combinação efetiva de cada cadastro, em 
 de repetir chamadas vagas como “Mais apoio” ou “Proteção a bordo”. Por exemplo,
 ACC, alerta de colisão, frenagem automática e assistência de faixa só aparecem
 na chamada quando seus IDs estiverem resolvidos naquela unidade. O contexto
-acima dos cards usa os dados atuais de motor, potência e quilometragem disponíveis;
-não transforma o nome da versão em prova de equipamento ou estado de conservação.
+acima dos cards usa os dados atuais de motor e potência. A quilometragem segue
+`formatCatalogMileage`, a mesma regra da vitrine e da ficha: só aparece quando
+positiva e abaixo de 90 mil km, exata abaixo de 10 mil e em milhares inteiros
+para baixo a partir daí. Não transforma o nome da versão em prova de equipamento
+ou estado de conservação.
 Unidades com a mesma combinação real podem compartilhar a explicação do recurso.
 
 Descrições explícitas têm precedência sobre tags legadas. Desconhecidos continuam visíveis, no final, sem benefícios inventados. Não converter sensores em Park Assist, controlador de velocidade em ACC, multimídia em CarPlay sem fio, nem teto panorâmico em teto com abertura.
