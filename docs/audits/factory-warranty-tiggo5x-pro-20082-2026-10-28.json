@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "factory-warranty-tiggo5x-pro-20082-2026-10-28",
+  "reviewedAt": "2026-10-28",
+  "sourceCommit": "f9bfed902e0576385c70c9fd8bd37810a9f2f270",
+  "researchStatus": "complete-official-model-year-evidence",
+  "vehicle": {
+    "id": "20082",
+    "brand": "CHERY",
+    "model": "TIGGO 5X PRO TURBO",
+    "manufactureYear": 2022,
+    "modelYear": 2023,
+    "engine": "1.5",
+    "transmission": "AUTOMATICO",
+    "mileageKm": 57340,
+    "factoryWarrantyFlagPresent": true,
+    "catalogObservedAt": "2026-10-28T21:08:39.788Z"
+  },
+  "officialEvidence": [
+    {
+      "kind": "manufacturer-manual-index",
+      "url": "https://caoachery.com.br/manuais",
+      "accessedAt": "2026-10-28T21:14:25Z",
+      "method": "Rendered official portal in Chrome; opened TIGGO 5X PRO and expanded Manuais 2022/2023.",
+      "model": "Tiggo 5X Pro",
+      "editionLabel": "Manuais 2022/2023",
+      "documentLinkLabel": "Manual do Proprietário",
+      "documentUrl": "https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf",
+      "authority": "Official Brazilian manufacturer portal directly associates this PDF with Tiggo 5X Pro 2022/2023."
+    },
+    {
+      "kind": "manufacturer-owner-manual",
+      "url": "https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf",
+      "accessedAt": "2026-10-28T21:14:25Z",
+      "documentTitle": "CAOA CHERY TIGGO 5X — Manual do Proprietário",
+      "publicationCode": "B09999T5300",
+      "printedRevision": "Abril de 2023",
+      "market": "Brasil",
+      "pdfPages": 327,
+      "byteLength": 44484539,
+      "sha256": "2b93d4df237ebe47da928ebccefd663e04476014cf9770370c19d38d0a54addf",
+      "identityPages": [
+        1,
+        2,
+        327
+      ],
+      "warrantyPages": [
+        {
+          "pdfPage": 297,
+          "printedPage": "10-3",
+          "section": "Período de Validade da Garantia",
+          "findings": [
+            "General contractual coverage is 36 months without a mileage limit, including the initial statutory period, subject to the manual’s specific limitations and exclusions.",
+            "Coverage starts on delivery of the zero-kilometer vehicle to its first owner. Rights transfer to subsequent owners only until the original term ends.",
+            "Combustion engine and transmission receive a further 24 months without a mileage limit."
+          ]
+        },
+        {
+          "pdfPage": 298,
+          "printedPage": "10-4",
+          "section": "Commercial use, validation and limitations",
+          "findings": [
+            "Commercial use is limited to 36 months or 100,000 km, whichever occurs first.",
+            "Warranty validation requires the authorized dealer sale invoice and updated warranty/revision records; prescribed maintenance and operating recommendations remain conditions.",
+            "Optional 48 V battery has a separate 60-month / 120,000-km provision, not adopted as coverage for this unit."
+          ]
+        },
+        {
+          "pdfPage": 299,
+          "printedPage": "10-5",
+          "section": "Período de Garantia para Peças Especiais, item 20",
+          "findings": [
+            "The table independently states 60 months without a mileage limit for combustion engine and transmission, excluding commercial vehicles.",
+            "Other components and wear items have separate durations and/or mileage limits; this is not five-year general coverage."
+          ]
+        }
+      ],
+      "verification": "Extracted complete relevant pages and visually inspected rendered PDF pages 297, 298 and 299; table item 20 and adjacent exclusions checked.",
+      "metadataNote": "PDF metadata reports creation in April 2023 and modification in May 2026; applicability comes from the official portal edition link and the printed April 2023 publication, not from modification metadata."
+    }
+  ],
+  "coverageConclusion": {
+    "scope": "powertrain",
+    "coverageType": "engine-and-transmission",
+    "coverageLabel": "Motor e câmbio",
+    "termMonths": 60,
+    "termYears": 5,
+    "compositionMonths": {
+      "base": 36,
+      "complementary": 24
+    },
+    "mileagePolicy": "unlimited",
+    "mileageLimitKm": null,
+    "usage": "private",
+    "startEvent": "first-new-vehicle-delivery-to-first-owner",
+    "resaleRestartsTerm": false,
+    "transferableUntilOriginalTermEnd": true,
+    "maintenanceConditionsRemainApplicable": true,
+    "maintenanceRecordsIndependentlyVerified": false,
+    "generalCoverageTermMonths": 36,
+    "generalCoverageNotExtendedToFiveYears": true,
+    "batteryCoverageNotApplied": true
+  },
+  "ownerAttestations": [
+    {
+      "fact": "Netcar only purchases private-use vehicles.",
+      "source": "Existing global responsible-owner operational confirmation, reiterated 2026-10-10 and preserved in AGENTS.md and the warranty monitoring instructions.",
+      "scope": "All Netcar stock",
+      "type": "operational-attestation",
+      "manufacturerEvidence": false,
+      "newQuestionRequired": false
+    }
+  ],
+  "timing": {
+    "firstDeliveryDate": null,
+    "actualWarrantyEndDate": null,
+    "actualDatesKnown": false,
+    "conservativeBasis": "manufactureYear + termYears; use existing resolver and final-year guard",
+    "manufactureYear": 2022,
+    "termYears": 5,
+    "estimatedFinalYear": 2027,
+    "currentReviewYear": 2026,
+    "withinConservativePeriodBeforeFinalYear": true,
+    "publicLabelMustRetainEstimateMarker": true,
+    "finalYearGuard": "In 2027, do not infer continued coverage from year-only data. Require the actual dates or the existing exact-unit valid-to-year confirmation required by the resolver.",
+    "resaleDateNotUsed": true,
+    "generalCoverageConservativeFinalYear": 2025
+  },
+  "recommendation": {
+    "action": "Register the exact 20082 profile for powertrain coverage and let the existing reconciliation and rendering resolvers determine eligibility.",
+    "basis": "Official exact-model/year manual supplies scope, term, unlimited mileage and first-delivery start; existing operational attestation supplies private use.",
+    "noAdditionalOwnerQuestionRequiredForTheseRuleFields": true,
+    "publication": "Not performed by this research task; parent agent handles scoped implementation, testing and authorized publication."
+  },
+  "preservation": {
+    "noRawInventoryStored": true,
+    "noPlateOrChassisStored": true,
+    "noAdministrativeDataStored": true,
+    "noEquipmentOrPriceChanges": true,
+    "noDatesInvented": true,
+    "noCoverageTransferredFromSport20084": true,
+    "noCompassMileageAttestationReused": true,
+    "noCanonicalMatrixEditsByResearcher": true,
+    "previousRecordCount": 21,
+    "previousRecordsSha256": "1f34075bb0dbd2e3df359dde6262b4487cc3dcbb9d307891bfa89f3eece6e8d4",
+    "previousRuleIds": [
+      "documented-19994-exact-variant",
+      "documented-20038-exact-variant",
+      "documented-19857-exact-variant",
+      "documented-19587-exact-variant",
+      "nissan-kicks-advance-my2026-hr10ddt-basic",
+      "documented-19924-private-exact-variant",
+      "documented-20066-private-exact-variant",
+      "documented-20029-private-exact-variant",
+      "documented-19854-private-exact-variant"
+    ],
+    "automationRulesSha256": "ccbdd7315ffafe3c646ba068274f814c422e7da6efb18f299c980eb5ee4d7908"
+  },
+  "researchCompletedAt": "2026-10-28T21:14:25Z",
+  "publicVehicle": {
+    "id": "20082",
+    "modelo": "TIGGO 5X PRO TURBO",
+    "marca": "CHERY",
+    "year": 2023,
+    "anoFabricacao": 2022,
+    "motor": "1.5",
+    "cambio": "AUTOMATICO",
+    "km": 57340,
+    "price": 108900,
+    "unitKey": "plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626",
+    "diferenciais": [
+      {
+        "tag": "garantia_fabrica",
+        "descricao": ""
+      }
+    ],
+    "observedAt": 1793221719788
+  },
+  "approvedRecord": {
+    "recordId": "reviewed-v2-20261028-20082-powertrain",
+    "status": "approved",
+    "reviewedAt": "2026-10-28",
+    "vehicle": {
+      "vehicleId": "20082",
+      "brand": "CHERY",
+      "modelVersion": "TIGGO 5X PRO TURBO",
+      "manufactureYear": 2022,
+      "modelYear": 2023
+    },
+    "unitBinding": {
+      "unitKey": "plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626",
+      "engine": "1.5",
+      "transmission": "AUTOMATICO"
+    },
+    "optionalId": 108,
+    "optionalConfirmed": true,
+    "conditionsConfirmed": true,
+    "scope": "powertrain",
+    "termYears": 5,
+    "usage": "private",
+    "reviewedMileageKm": 57340,
+    "mileage": {
+      "kind": "unlimited"
+    },
+    "powertrainReview": {
+      "coverageSubtype": "engine-and-transmission",
+      "usageAttestationId": "netcar-private-stock-20261010",
+      "displayLabel": "Motor e câmbio"
+    },
+    "sources": [
+      {
+        "sourceId": "chery-B09999T5300-20082-powertrain",
+        "url": "https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf#page=297",
+        "locator": "Portal oficial brasileiro: Tiggo 5X Pro, Manuais 2022/2023. PDF 297 / impressa 10-3: 36 meses gerais desde a primeira entrega + 24 complementares para motor a combustão e transmissão, sem reinício na revenda. PDF 299 / impressa 10-5, item 20: 60 meses sem limite de km, exceto uso comercial; condições e exclusões preservadas. PDF 327: edição.",
+        "revision": "B09999T5300; Abril de 2023; vínculo oficial Tiggo 5X Pro Brasil 2022/2023 e páginas de garantia conferidos em 28/10/2026.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "B09999T5300",
+          "modelYear": 2023,
+          "reviewId": "factory-warranty-tiggo5x-pro-20082-2026-10-28",
+          "reviewedAt": "2026-10-28"
+        }
+      }
+    ],
+    "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261028-20082-powertrain\",\"reviewedAt\":\"2026-10-28\",\"vehicle\":{\"vehicleId\":\"20082\",\"manufactureYear\":2022,\"modelYear\":2023,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 5X PRO TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"netcar-private-stock-20261010\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":57340,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T5300-20082-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf#page=297\",\"locator\":\"Portal oficial brasileiro: Tiggo 5X Pro, Manuais 2022/2023. PDF 297 / impressa 10-3: 36 meses gerais desde a primeira entrega + 24 complementares para motor a combustão e transmissão, sem reinício na revenda. PDF 299 / impressa 10-5, item 20: 60 meses sem limite de km, exceto uso comercial; condições e exclusões preservadas. PDF 327: edição.\",\"revision\":\"B09999T5300; Abril de 2023; vínculo oficial Tiggo 5X Pro Brasil 2022/2023 e páginas de garantia conferidos em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T5300\",\"modelYear\":2023,\"reviewId\":\"factory-warranty-tiggo5x-pro-20082-2026-10-28\",\"reviewedAt\":\"2026-10-28\"}}]}"
+  },
+  "approvedRule": {
+    "ruleId": "documented-20082-private-exact-variant",
+    "version": "2026-10-28.1",
+    "status": "approved",
+    "templateRecordId": "reviewed-v2-20261028-20082-powertrain",
+    "allowNewUnits": true,
+    "match": {
+      "brand": "CHERY",
+      "modelVersion": "TIGGO 5X PRO TURBO",
+      "engine": "1.5",
+      "transmission": "AUTOMATICO",
+      "manufactureYear": 2022,
+      "modelYear": 2023
+    },
+    "privateUsePolicy": {
+      "scope": "netcar-stock",
+      "attestationId": "netcar-private-stock-20261010",
+      "confirmedAt": "2026-10-10",
+      "coverageBasis": "documented-model-policy"
+    },
+    "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-20082-private-exact-variant\",\"version\":\"2026-10-28.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261028-20082-powertrain\",\"match\":{\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 5X PRO TURBO\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2022,\"modelYear\":2023},\"allowNewUnits\":true,\"privateUsePolicy\":{\"scope\":\"netcar-stock\",\"attestationId\":\"netcar-private-stock-20261010\",\"confirmedAt\":\"2026-10-10\",\"coverageBasis\":\"documented-model-policy\"},\"templates\":[{\"recordId\":\"reviewed-v2-20261028-20082-powertrain\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-28\",\"vehicle\":{\"vehicleId\":\"20082\",\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 5X PRO TURBO\",\"manufactureYear\":2022,\"modelYear\":2023},\"unitBinding\":{\"unitKey\":\"plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"termYears\":5,\"usage\":\"private\",\"reviewedMileageKm\":57340,\"mileage\":{\"kind\":\"unlimited\"},\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"netcar-private-stock-20261010\",\"displayLabel\":\"Motor e câmbio\"},\"sources\":[{\"sourceId\":\"chery-B09999T5300-20082-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf#page=297\",\"locator\":\"Portal oficial brasileiro: Tiggo 5X Pro, Manuais 2022/2023. PDF 297 / impressa 10-3: 36 meses gerais desde a primeira entrega + 24 complementares para motor a combustão e transmissão, sem reinício na revenda. PDF 299 / impressa 10-5, item 20: 60 meses sem limite de km, exceto uso comercial; condições e exclusões preservadas. PDF 327: edição.\",\"revision\":\"B09999T5300; Abril de 2023; vínculo oficial Tiggo 5X Pro Brasil 2022/2023 e páginas de garantia conferidos em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T5300\",\"modelYear\":2023,\"reviewId\":\"factory-warranty-tiggo5x-pro-20082-2026-10-28\",\"reviewedAt\":\"2026-10-28\"}}],\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261028-20082-powertrain\\\",\\\"reviewedAt\\\":\\\"2026-10-28\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20082\\\",\\\"manufactureYear\\\":2022,\\\"modelYear\\\":2023,\\\"brand\\\":\\\"CHERY\\\",\\\"modelVersion\\\":\\\"TIGGO 5X PRO TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626\\\",\\\"engine\\\":\\\"1.5\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"powertrain\\\",\\\"powertrainReview\\\":{\\\"coverageSubtype\\\":\\\"engine-and-transmission\\\",\\\"usageAttestationId\\\":\\\"netcar-private-stock-20261010\\\",\\\"displayLabel\\\":\\\"Motor e câmbio\\\"},\\\"termYears\\\":5,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":57340,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"chery-B09999T5300-20082-powertrain\\\",\\\"url\\\":\\\"https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf#page=297\\\",\\\"locator\\\":\\\"Portal oficial brasileiro: Tiggo 5X Pro, Manuais 2022/2023. PDF 297 / impressa 10-3: 36 meses gerais desde a primeira entrega + 24 complementares para motor a combustão e transmissão, sem reinício na revenda. PDF 299 / impressa 10-5, item 20: 60 meses sem limite de km, exceto uso comercial; condições e exclusões preservadas. PDF 327: edição.\\\",\\\"revision\\\":\\\"B09999T5300; Abril de 2023; vínculo oficial Tiggo 5X Pro Brasil 2022/2023 e páginas de garantia conferidos em 28/10/2026.\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"B09999T5300\\\",\\\"modelYear\\\":2023,\\\"reviewId\\\":\\\"factory-warranty-tiggo5x-pro-20082-2026-10-28\\\",\\\"reviewedAt\\\":\\\"2026-10-28\\\"}}]}\"}]}"
+  }
+}

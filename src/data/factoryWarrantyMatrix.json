@@ -1223,6 +1223,54 @@
           }
         ]
       }
+    },
+    {
+      "recordId": "reviewed-v2-20261028-20082-powertrain",
+      "status": "approved",
+      "reviewedAt": "2026-10-28",
+      "vehicle": {
+        "vehicleId": "20082",
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 5X PRO TURBO",
+        "manufactureYear": 2022,
+        "modelYear": 2023
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "powertrain",
+      "termYears": 5,
+      "usage": "private",
+      "reviewedMileageKm": 57340,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "powertrainReview": {
+        "coverageSubtype": "engine-and-transmission",
+        "usageAttestationId": "netcar-private-stock-20261010",
+        "displayLabel": "Motor e câmbio"
+      },
+      "sources": [
+        {
+          "sourceId": "chery-B09999T5300-20082-powertrain",
+          "url": "https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf#page=297",
+          "locator": "Portal oficial brasileiro: Tiggo 5X Pro, Manuais 2022/2023. PDF 297 / impressa 10-3: 36 meses gerais desde a primeira entrega + 24 complementares para motor a combustão e transmissão, sem reinício na revenda. PDF 299 / impressa 10-5, item 20: 60 meses sem limite de km, exceto uso comercial; condições e exclusões preservadas. PDF 327: edição.",
+          "revision": "B09999T5300; Abril de 2023; vínculo oficial Tiggo 5X Pro Brasil 2022/2023 e páginas de garantia conferidos em 28/10/2026.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "B09999T5300",
+            "modelYear": 2023,
+            "reviewId": "factory-warranty-tiggo5x-pro-20082-2026-10-28",
+            "reviewedAt": "2026-10-28"
+          }
+        }
+      ],
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261028-20082-powertrain\",\"reviewedAt\":\"2026-10-28\",\"vehicle\":{\"vehicleId\":\"20082\",\"manufactureYear\":2022,\"modelYear\":2023,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 5X PRO TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"netcar-private-stock-20261010\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":57340,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T5300-20082-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf#page=297\",\"locator\":\"Portal oficial brasileiro: Tiggo 5X Pro, Manuais 2022/2023. PDF 297 / impressa 10-3: 36 meses gerais desde a primeira entrega + 24 complementares para motor a combustão e transmissão, sem reinício na revenda. PDF 299 / impressa 10-5, item 20: 60 meses sem limite de km, exceto uso comercial; condições e exclusões preservadas. PDF 327: edição.\",\"revision\":\"B09999T5300; Abril de 2023; vínculo oficial Tiggo 5X Pro Brasil 2022/2023 e páginas de garantia conferidos em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T5300\",\"modelYear\":2023,\"reviewId\":\"factory-warranty-tiggo5x-pro-20082-2026-10-28\",\"reviewedAt\":\"2026-10-28\"}}]}"
     }
   ],
   "requireUnitBinding": true,
@@ -1396,6 +1444,28 @@
           "coverageBasis": "documented-model-policy"
         },
         "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-19854-private-exact-variant\",\"version\":\"2026-10-15.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261009-19854\",\"match\":{\"brand\":\"HONDA\",\"modelVersion\":\"HRV ADVANCE TURBO\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2024,\"modelYear\":2024},\"allowNewUnits\":true,\"privateUsePolicy\":{\"scope\":\"netcar-stock\",\"attestationId\":\"netcar-private-stock-20261010\",\"confirmedAt\":\"2026-10-10\",\"coverageBasis\":\"documented-model-policy\"},\"templates\":[{\"recordId\":\"reviewed-v2-20261009-19854\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-09\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261009-19854\\\",\\\"reviewedAt\\\":\\\"2026-10-09\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"19854\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2024,\\\"brand\\\":\\\"HONDA\\\",\\\"modelVersion\\\":\\\"HRV ADVANCE TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:32165b322dcdcae306a552e25f09545fcecc6a3c2a36b5f3b0eb80190533dd30\\\",\\\"engine\\\":\\\"1.5\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":59000,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"19854-official-my2024-20261009\\\",\\\"url\\\":\\\"https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/qr_code/ManualCompleto2GNAP2DiAP2T/10_Garantia_2GN-1.html\\\",\\\"locator\\\":\\\"Manual online ligado pelo seletor oficial Honda HR-V2024; Garantia / Termos de Garantia item1; introdução e itens1.1,2.4,3,4.\\\",\\\"revision\\\":\\\"ManualCompleto2GNAP2DiAP2T; manual online vinculado oficialmente ao HR-V brasileiroMY2024; cláusula lida em09/10/2026\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"ManualCompleto2GNAP2DiAP2T\\\",\\\"modelYear\\\":2024,\\\"reviewId\\\":\\\"warranty-20261009-19854\\\",\\\"reviewedAt\\\":\\\"2026-10-09\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"19854\",\"brand\":\"HONDA\",\"modelVersion\":\"HRV ADVANCE TURBO\",\"manufactureYear\":2024,\"modelYear\":2024},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"reviewedMileageKm\":59000,\"mileage\":{\"kind\":\"unlimited\"},\"sources\":[{\"sourceId\":\"19854-official-my2024-20261009\",\"url\":\"https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/qr_code/ManualCompleto2GNAP2DiAP2T/10_Garantia_2GN-1.html\",\"locator\":\"Manual online ligado pelo seletor oficial Honda HR-V2024; Garantia / Termos de Garantia item1; introdução e itens1.1,2.4,3,4.\",\"revision\":\"ManualCompleto2GNAP2DiAP2T; manual online vinculado oficialmente ao HR-V brasileiroMY2024; cláusula lida em09/10/2026\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"ManualCompleto2GNAP2DiAP2T\",\"modelYear\":2024,\"reviewId\":\"warranty-20261009-19854\",\"reviewedAt\":\"2026-10-09\"}}],\"unitBinding\":{\"unitKey\":\"plate-sha256:32165b322dcdcae306a552e25f09545fcecc6a3c2a36b5f3b0eb80190533dd30\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"}}]}"
+      },
+      {
+        "ruleId": "documented-20082-private-exact-variant",
+        "version": "2026-10-28.1",
+        "status": "approved",
+        "templateRecordId": "reviewed-v2-20261028-20082-powertrain",
+        "allowNewUnits": true,
+        "match": {
+          "brand": "CHERY",
+          "modelVersion": "TIGGO 5X PRO TURBO",
+          "engine": "1.5",
+          "transmission": "AUTOMATICO",
+          "manufactureYear": 2022,
+          "modelYear": 2023
+        },
+        "privateUsePolicy": {
+          "scope": "netcar-stock",
+          "attestationId": "netcar-private-stock-20261010",
+          "confirmedAt": "2026-10-10",
+          "coverageBasis": "documented-model-policy"
+        },
+        "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-20082-private-exact-variant\",\"version\":\"2026-10-28.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261028-20082-powertrain\",\"match\":{\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 5X PRO TURBO\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2022,\"modelYear\":2023},\"allowNewUnits\":true,\"privateUsePolicy\":{\"scope\":\"netcar-stock\",\"attestationId\":\"netcar-private-stock-20261010\",\"confirmedAt\":\"2026-10-10\",\"coverageBasis\":\"documented-model-policy\"},\"templates\":[{\"recordId\":\"reviewed-v2-20261028-20082-powertrain\",\"status\":\"approved\",\"reviewedAt\":\"2026-10-28\",\"vehicle\":{\"vehicleId\":\"20082\",\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 5X PRO TURBO\",\"manufactureYear\":2022,\"modelYear\":2023},\"unitBinding\":{\"unitKey\":\"plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"termYears\":5,\"usage\":\"private\",\"reviewedMileageKm\":57340,\"mileage\":{\"kind\":\"unlimited\"},\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"netcar-private-stock-20261010\",\"displayLabel\":\"Motor e câmbio\"},\"sources\":[{\"sourceId\":\"chery-B09999T5300-20082-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf#page=297\",\"locator\":\"Portal oficial brasileiro: Tiggo 5X Pro, Manuais 2022/2023. PDF 297 / impressa 10-3: 36 meses gerais desde a primeira entrega + 24 complementares para motor a combustão e transmissão, sem reinício na revenda. PDF 299 / impressa 10-5, item 20: 60 meses sem limite de km, exceto uso comercial; condições e exclusões preservadas. PDF 327: edição.\",\"revision\":\"B09999T5300; Abril de 2023; vínculo oficial Tiggo 5X Pro Brasil 2022/2023 e páginas de garantia conferidos em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T5300\",\"modelYear\":2023,\"reviewId\":\"factory-warranty-tiggo5x-pro-20082-2026-10-28\",\"reviewedAt\":\"2026-10-28\"}}],\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261028-20082-powertrain\\\",\\\"reviewedAt\\\":\\\"2026-10-28\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20082\\\",\\\"manufactureYear\\\":2022,\\\"modelYear\\\":2023,\\\"brand\\\":\\\"CHERY\\\",\\\"modelVersion\\\":\\\"TIGGO 5X PRO TURBO\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626\\\",\\\"engine\\\":\\\"1.5\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"powertrain\\\",\\\"powertrainReview\\\":{\\\"coverageSubtype\\\":\\\"engine-and-transmission\\\",\\\"usageAttestationId\\\":\\\"netcar-private-stock-20261010\\\",\\\"displayLabel\\\":\\\"Motor e câmbio\\\"},\\\"termYears\\\":5,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":57340,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"chery-B09999T5300-20082-powertrain\\\",\\\"url\\\":\\\"https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf#page=297\\\",\\\"locator\\\":\\\"Portal oficial brasileiro: Tiggo 5X Pro, Manuais 2022/2023. PDF 297 / impressa 10-3: 36 meses gerais desde a primeira entrega + 24 complementares para motor a combustão e transmissão, sem reinício na revenda. PDF 299 / impressa 10-5, item 20: 60 meses sem limite de km, exceto uso comercial; condições e exclusões preservadas. PDF 327: edição.\\\",\\\"revision\\\":\\\"B09999T5300; Abril de 2023; vínculo oficial Tiggo 5X Pro Brasil 2022/2023 e páginas de garantia conferidos em 28/10/2026.\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"B09999T5300\\\",\\\"modelYear\\\":2023,\\\"reviewId\\\":\\\"factory-warranty-tiggo5x-pro-20082-2026-10-28\\\",\\\"reviewedAt\\\":\\\"2026-10-28\\\"}}]}\"}]}"
       }
     ]
   }

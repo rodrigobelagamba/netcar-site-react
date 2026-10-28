@@ -1,0 +1,152 @@
+{
+  "reviewId": "warranty-20261028-20100-powertrain-pending",
+  "reviewedAt": "2026-10-28",
+  "checkedAt": "2026-10-28T21:16:07.585320Z",
+  "status": "pending",
+  "scope": "Document the unresolved mileage policy for Tiggo 7 Pro Max Drive unit 20100, without creating an approved warranty record, broadening rule 20066 or declaring absence of coverage.",
+  "vehicle": {
+    "vehicleId": "20100",
+    "brand": "CHERY",
+    "modelVersion": "TIGGO 7 PRO MAX DRIVE TURBO",
+    "manufactureYear": 2023,
+    "modelYear": 2024,
+    "engine": "1.6",
+    "transmission": "AUTOMATICO"
+  },
+  "catalogObservation": {
+    "observedAt": "2026-10-28T21:08:55.283Z",
+    "collectionComplete": true,
+    "flagPresent": true,
+    "mileageKm": 26178,
+    "validOpaqueUnitBinding": true,
+    "canonicalStatus": "pending",
+    "canonicalReason": "no-approved-compatible-rule",
+    "rawFeedPersisted": false
+  },
+  "confirmedTerms": {
+    "scope": "powertrain",
+    "coverageSubtype": "engine-and-transmission",
+    "termYears": 5,
+    "startBasis": "first-delivery-to-consumer",
+    "maintenanceRequired": true,
+    "sourceIds": [
+      "caoa-reply-20260302-tiggo7-maxdrive-2024",
+      "caoa-reply-20251114-tiggo7-maxdrive-2024"
+    ],
+    "limitations": "The manufacturer replies establish the five-year engine/transmission term for a case identified as Tiggo 7 Pro Max Drive 2023/2024. They do not state its mileage policy or establish any date or maintenance history for Netcar unit 20100."
+  },
+  "operationalAttestation": {
+    "source": "netcar-owner",
+    "attestationId": "netcar-private-stock-20261010",
+    "confirmedAt": "2026-10-10",
+    "scope": "netcar-stock",
+    "usage": "private",
+    "manufacturerDocument": false
+  },
+  "unresolved": {
+    "mileagePolicy": "No conclusive manufacturer source tied to the Brazilian Max Drive 1.6 MY2024 was found for unlimited mileage or a numerical limit. Do not borrow unit-specific attestations or adjacent model years.",
+    "confirmedExpiryDate": null,
+    "confirmedExpiryMonth": null,
+    "firstDeliveryDate": null,
+    "requiredToApprove": "Manufacturer/manual evidence linking the mileage policy to this exact version and model year, or an existing applicable operational confirmation not yet found."
+  },
+  "sources": [
+    {
+      "sourceId": "caoa-reply-20260302-tiggo7-maxdrive-2024",
+      "kind": "manufacturer-public-response",
+      "publisher": "CAOA Chery",
+      "publishedAt": "2026-03-02T16:29:00-03:00",
+      "url": "https://www.reclameaqui.com.br/chery-brasil/desgaste-do-volante-e-barulho-no-teto-em-tiggo-7-pro-max-drive-com-baixa-quilometragem_ixjrjP92xCBLZcNi/",
+      "locator": "Resposta da empresa, 02/03/2026, 16:29; case identifies Tiggo 7 Pro Max Drive 2023/2024; response references Manual do Proprietario, chapter 10, page 10-4.",
+      "supports": [
+        "five years for engine and transmission",
+        "term begins on delivery to consumer",
+        "conditions and scheduled maintenance follow the manual"
+      ],
+      "doesNotSupport": [
+        "unlimited mileage",
+        "specific numerical mileage limit",
+        "individual expiry for 20100"
+      ],
+      "retrieval": "Manufacturer response text returned by web search; direct HTTP fetch returned 403. No customer names, contacts, vehicle identifiers or protocol data retained."
+    },
+    {
+      "sourceId": "caoa-reply-20251114-tiggo7-maxdrive-2024",
+      "kind": "manufacturer-public-response",
+      "publisher": "CAOA Chery",
+      "publishedAt": "2025-11-14T11:17:00-03:00",
+      "url": "https://www.reclameaqui.com.br/chery-brasil/ferrugem-prematura-nos-discos-de-freio-do-tiggo-7-pro-max-drive-20232024_I_0tFKtb7DpUX46Z/",
+      "locator": "Resposta da empresa, 14/11/2025, 11:17, in a case identified as Tiggo 7 Pro Max Drive 2023/2024.",
+      "supports": [
+        "five-year engine and transmission coverage conditional on maintenance"
+      ],
+      "doesNotSupport": [
+        "mileage policy",
+        "individual dates for 20100"
+      ],
+      "retrieval": "Manufacturer response text returned by web search; customer-specific expiry was deliberately not retained or reused."
+    },
+    {
+      "sourceId": "caoa-manuals-portal-20261028",
+      "kind": "manufacturer-manual-selector",
+      "url": "https://caoachery.com.br/manuais",
+      "locator": "Live Chrome page: TIGGO 7 PRO MAX DRIVE modal; year buttons Manuais 2026/2027, 2025/2026, 2024/2025 and 2022/2023.",
+      "observedYearGroups": [
+        "2026/2027",
+        "2025/2026",
+        "2024/2025",
+        "2022/2023"
+      ],
+      "missingExactYearGroup": "2023/2024",
+      "limitation": "The selector has no exact 2023/2024 group. Adjacent groups are not treated as an exact MY2024 approval."
+    },
+    {
+      "sourceId": "caoa-tiggo7-2022-2023-adjacent-only",
+      "kind": "manufacturer-manual-adjacent-year-not-approved",
+      "url": "https://cloudfront.alpes.one/public/6aa/d96/4cb/6aad964cb3f57451539406.pdf",
+      "sha256": "5e2cce0920fb29dab34f9c4c7aaf6cb0c10f7d28bddb04eefce92cd6842b8db8",
+      "bytes": 14625591,
+      "pages": 324,
+      "portalYearGroup": "2022/2023",
+      "printedIdentity": "CAOA Chery - TIGGO 7 PRO; copyright 2022",
+      "locator": "PDF page 297 / printed 10-3, clause c; PDF page 298 / printed 10-4, row 20.",
+      "visualPagesChecked": [
+        297,
+        298
+      ],
+      "observedTerms": "36-month general period plus 24 complementary months for engine/transmission; row 20 states 60 months with unlimited km except commercial use. Start is first zero-km delivery; resale transfers remaining rights.",
+      "applicableToTarget": false,
+      "reason": "The current official selector ties this file to 2022/2023 and the PDF says TIGGO 7 PRO. No exact Max Drive MY2024 linkage established."
+    },
+    {
+      "sourceId": "existing-20066-manual-my2025-not-transferred",
+      "kind": "existing-reviewed-adjacent-year",
+      "auditPath": "docs/audits/factory-warranty-tiggo7-powertrain-2026-10-05.json",
+      "url": "https://cloudfront.alpes.one/public/6a4/693/d01/6a4693d011f5e785772375.pdf#page=298",
+      "documentCode": "B09999T7303",
+      "edition": "Janeiro de 2024/1",
+      "reviewedModelYear": 2025,
+      "portalYearGroup": "2024/2025",
+      "applicableToTarget": false,
+      "reason": "Existing reviewed record and exact automation rule bind FAB2024/MY2025. No extension to FAB2023/MY2024 without documentary evidence."
+    }
+  ],
+  "decision": {
+    "approvedRecordCreated": false,
+    "automationRuleCreated": false,
+    "template20066Modified": false,
+    "coverageAbsent": false,
+    "publicationEligible": false,
+    "reason": "Exact MY2024 mileage policy remains unverified. Five-year engine/transmission coverage is supported; the incomplete review does not prove lack of warranty.",
+    "expectedConservativeEndYearIfCoverageCompleted": 2028,
+    "estimateIsExpiryDate": false,
+    "generalCoverageNotExpanded": true
+  },
+  "privacy": {
+    "rawFeedStored": false,
+    "platesOrChassisStored": false,
+    "credentialsStored": false,
+    "customerPersonalDataStored": false,
+    "photoUrlsStored": false
+  }
+}

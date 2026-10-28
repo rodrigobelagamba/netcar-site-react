@@ -34,6 +34,14 @@ const compassAudit = read("../../docs/audits/factory-warranty-compass-19866-2026
 const renegadeAudit = read("../../docs/audits/factory-warranty-renegade-20094-2026-10-20.json");
 const peugeotAudit = read("../../docs/audits/factory-warranty-peugeot-20068-2026-10-21.json");
 const kicks20086Audit = read("../../docs/audits/factory-warranty-kicks-20086-2026-10-22.json");
+const tiggo5xProAudit = read("../../docs/audits/factory-warranty-tiggo5x-pro-20082-2026-10-28.json");
+
+// Preserve each historical snapshot in full while allowing later reviewed rules.
+const automationThrough = (reviewedAt: string) => ({
+  ...current.automation!,
+  rules: current.automation!.rules.filter((rule) =>
+    rule.version.slice(0, 10) <= reviewedAt.slice(0, 10)),
+});
 
 test("Kicks20086 has only three-year general coverage estimated to 2029 with the conservative mileage cap", () => {
   const record = current.records.find((entry) => entry.vehicle.vehicleId === "20086")!;
@@ -93,8 +101,9 @@ test("Kicks20086 separates private use from CPF ownership and preserves twenty r
   assert.equal(others.length, 20);
   assert.equal(others.length, kicks20086Audit.preservation.previousRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), kicks20086Audit.preservation.previousRecordsSha256);
-  assert.equal(current.automation!.rules.length, 9);
-  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), kicks20086Audit.preservation.automationRulesSha256);
+  const originalAutomation = automationThrough(kicks20086Audit.reviewedAt);
+  assert.equal(originalAutomation.rules.length, 9);
+  assert.equal(createHash("sha256").update(JSON.stringify(originalAutomation)).digest("hex"), kicks20086Audit.preservation.automationRulesSha256);
   assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
 });
 
@@ -169,7 +178,7 @@ test("Peugeot20068 keeps documentary mileage distinct from operational use and p
   assert.equal(others.length, peugeotAudit.preservation.previousRecordCount);
   assert.equal(others.length, 19);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), peugeotAudit.preservation.previousRecordsSha256);
-  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), peugeotAudit.preservation.automationRulesSha256);
+  assert.equal(createHash("sha256").update(JSON.stringify(automationThrough(peugeotAudit.reviewedAt))).digest("hex"), peugeotAudit.preservation.automationRulesSha256);
   assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
 });
 
@@ -219,7 +228,7 @@ test("owner-confirmed Renegade20094 has its own five-year stamp and preserves pr
     entry !== record && entry.reviewedAt <= renegadeAudit.reviewedAt);
   assert.equal(others.length, renegadeAudit.preservation.previousRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), renegadeAudit.preservation.previousRecordsSha256);
-  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), renegadeAudit.preservation.automationRulesSha256);
+  assert.equal(createHash("sha256").update(JSON.stringify(automationThrough(renegadeAudit.reviewedAt))).digest("hex"), renegadeAudit.preservation.automationRulesSha256);
   assert.equal(renegadeAudit.ownerAttestations.referenceVehicleId, "20075");
   assert.equal(renegadeAudit.timing.actualStartDate, null);
   assert.equal(renegadeAudit.timing.confirmedExpiryDate, null);
@@ -348,7 +357,8 @@ const observed = (id: string) => {
     ?? (newUnitsAudit.publicVehicles as WarrantyCatalogVehicle[]).find((entry) => entry.id === id)
     ?? (id === "20094" ? renegadeAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20068" ? peugeotAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
-    ?? (id === "20086" ? kicks20086Audit.publicVehicle as WarrantyCatalogVehicle : undefined);
+    ?? (id === "20086" ? kicks20086Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
+    ?? (id === "20082" ? tiggo5xProAudit.publicVehicle as WarrantyCatalogVehicle : undefined);
   assert.ok(vehicle, `Current public snapshot missing vehicle ${id}`);
   return vehicle;
 };
@@ -936,7 +946,7 @@ for (const id of NEW_UNIT_IDS) {
 
 const automationReview = read("../../docs/audits/factory-warranty-automation-2026-10-15.json");
 test("private-stock automation adds only the four documentary matches and preserves previous rules", () => {
-  const rules = current.automation!.rules;
+  const rules = automationThrough(automationReview.reviewedAt).rules;
   const previous = rules.filter((rule) => automationReview.preservation.existingRuleIds.includes(rule.ruleId));
   assert.equal(rules.length, 9);
   assert.equal(previous.length, 5);
@@ -956,4 +966,117 @@ test("private-stock automation adds only the four documentary matches and preser
   }
   for (const item of automationReview.excludedIndividualTemplates as Array<{ id: string }>)
     assert.equal(rules.some((rule) => rule.templateRecordId === currentRecord(item.id).recordId), false, item.id);
+});
+
+test("Tiggo5X Pro20082 has only five-year engine and transmission coverage estimated to 2027", () => {
+  const vehicle = observed("20082");
+  const record = currentRecord("20082");
+  const date = tiggo5xProAudit.reviewedAt;
+  assert.deepEqual(record, tiggo5xProAudit.approvedRecord);
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(record.vehicle.manufactureYear, 2022);
+  assert.equal(record.vehicle.modelYear, 2023);
+  assert.equal(record.scope, "powertrain");
+  assert.equal(record.termYears, 5);
+  assert.deepEqual(record.mileage, { kind: "unlimited" });
+  assert.equal(record.powertrainReview?.coverageSubtype, "engine-and-transmission");
+  assert.equal(record.powertrainReview?.displayLabel, "Motor e câmbio");
+  assert.equal(record.usage, "private");
+  assert.equal(record.catalogConfirmation, undefined);
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, date).status, "eligible");
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, date)?.estimatedEndYear, 2027);
+  assert.equal(resolveFactoryPowertrainWarranty({ ...vehicle, km: 250000 }, current, date)?.estimatedEndYear, 2027);
+  assert.equal(resolveFactoryWarranty(vehicle, current, date), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, date), undefined);
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, "2027-01-01").reason, "confirmed-expiry-required");
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, "2027-01-01"), undefined);
+  assert.equal(record.confirmedExpiryDate, undefined);
+  assert.equal(record.confirmedExpiryMonth, undefined);
+  assert.equal(tiggo5xProAudit.timing.firstDeliveryDate, null);
+  assert.equal(tiggo5xProAudit.timing.actualWarrantyEndDate, null);
+  assert.equal(tiggo5xProAudit.coverageConclusion.resaleRestartsTerm, false);
+});
+
+test("Tiggo5X Pro20082 fails closed on changed unit facts, revoked approval and unverified documentary terms", () => {
+  const vehicle = observed("20082");
+  const date = tiggo5xProAudit.reviewedAt;
+  for (const patch of [
+    { diferenciais: [] }, { diferenciais: undefined }, { price: 0 },
+    { unitKey: undefined }, { unitKey: keyFor("different-tiggo5x-pro") },
+    { marca: "OTHER" }, { modelo: "TIGGO 5X SPORT TURBO" },
+    { motor: "1.6" }, { cambio: "MANUAL" },
+    { anoFabricacao: 2023 }, { year: 2024 },
+    { km: vehicle.km - 1 }, { km: NaN }, { km: -1 },
+  ]) {
+    const changed = { ...vehicle, ...patch };
+    const decision = reconcileFactoryWarrantyVehicle(changed, current, date);
+    assert.notEqual(decision.status, "eligible", JSON.stringify(patch));
+    for (const resolver of [resolveFactoryWarranty, resolveFactoryPowertrainWarranty, resolveFactoryTractionBatteryWarranty])
+      assert.equal(resolver(changed, decision.matrix, date), undefined);
+  }
+  for (const change of ["revoked", "document-pending", "document-year", "mileage-unknown"] as const) {
+    const matrix = structuredClone(current);
+    const record = matrix.records.find((entry) => entry.vehicle.vehicleId === "20082")!;
+    if (change === "revoked") record.status = "revoked";
+    if (change === "document-pending") record.sources[0].verification.status = "pending";
+    if (change === "document-year") record.sources[0].verification.modelYear = 2024;
+    if (change === "mileage-unknown") record.mileage = { kind: "unknown" };
+    record.approvedFingerprint = factoryWarrantyReviewFingerprint(record);
+    assert.notEqual(reconcileFactoryWarrantyVehicle(vehicle, matrix, date).status, "eligible", change);
+    assert.equal(resolveFactoryPowertrainWarranty(vehicle, matrix, date), undefined);
+  }
+});
+
+test("Tiggo5X Pro exact rule reuses documentary terms for a new bound unit without borrowing its mileage or changing scopes", () => {
+  const record = currentRecord("20082");
+  const rule = current.automation!.rules.find((entry) => entry.ruleId === "documented-20082-private-exact-variant")!;
+  assert.deepEqual(rule, tiggo5xProAudit.approvedRule);
+  assert.equal(rule.version, "2026-10-28.1");
+  assert.equal(rule.templateRecordId, record.recordId);
+  assert.equal(rule.approvedFingerprint, factoryWarrantyRuleFingerprint(rule, current));
+  assert.deepEqual(rule.match, {
+    brand: "CHERY", modelVersion: "TIGGO 5X PRO TURBO", engine: "1.5",
+    transmission: "AUTOMATICO", manufactureYear: 2022, modelYear: 2023,
+  });
+  assert.equal(rule.privateUsePolicy?.attestationId, "netcar-private-stock-20261010");
+  const newcomer = { ...observed("20082"), id: "new-tiggo5x-pro", unitKey: keyFor("new-tiggo5x-pro"), km: 1000 };
+  const date = tiggo5xProAudit.reviewedAt;
+  const decision = reconcileFactoryWarrantyVehicle(newcomer, current, date);
+  assert.equal(decision.status, "eligible");
+  assert.equal(decision.reason, "approved-exact-rule-applied");
+  assert.equal(decision.ruleId, rule.ruleId);
+  const derived = decision.matrix.records.find((entry) => entry.vehicle.vehicleId === newcomer.id)!;
+  assert.equal(derived.unitBinding?.unitKey, newcomer.unitKey);
+  assert.equal(derived.reviewedMileageKm, 1000);
+  assert.deepEqual(derived.sources, record.sources);
+  assert.equal(derived.confirmedExpiryDate, undefined);
+  assert.equal(derived.confirmedExpiryMonth, undefined);
+  assert.equal(resolveFactoryPowertrainWarranty(newcomer, decision.matrix, date)?.estimatedEndYear, 2027);
+  assert.equal(resolveFactoryWarranty(newcomer, decision.matrix, date), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(newcomer, decision.matrix, date), undefined);
+  assert.notEqual(reconcileFactoryWarrantyVehicle(newcomer, current, "2027-01-01").status, "eligible");
+  assert.equal(reconcileFactoryWarrantyVehicle({ ...newcomer, unitKey: record.unitBinding!.unitKey }, current, date).reason, "unit-id-changed");
+  for (const patch of [
+    { anoFabricacao: 2023 }, { year: 2024 }, { motor: "1.6" }, { cambio: "MANUAL" },
+    { modelo: "TIGGO 5X SPORT TURBO" }, { modelo: "TIGGO 5X PRO HYBRID" },
+    { diferenciais: [] }, { price: 0 }, { unitKey: undefined }, { km: NaN }, { km: -1 },
+  ]) assert.notEqual(reconcileFactoryWarrantyVehicle({ ...newcomer, ...patch }, current, date).status, "eligible", JSON.stringify(patch));
+});
+
+test("Tiggo5X Pro documentary approval preserves the previous twenty-one records and nine rules", () => {
+  const record = currentRecord("20082");
+  const previousRecords = current.records.filter((entry) => entry !== record && entry.reviewedAt <= tiggo5xProAudit.reviewedAt);
+  assert.equal(previousRecords.length, 21);
+  assert.equal(previousRecords.length, tiggo5xProAudit.preservation.previousRecordCount);
+  assert.equal(createHash("sha256").update(JSON.stringify(previousRecords)).digest("hex"), tiggo5xProAudit.preservation.previousRecordsSha256);
+  const previousRules = current.automation!.rules.filter((rule) => tiggo5xProAudit.preservation.previousRuleIds.includes(rule.ruleId));
+  assert.equal(previousRules.length, 9);
+  assert.deepEqual(previousRules.map((rule) => rule.ruleId), tiggo5xProAudit.preservation.previousRuleIds);
+  assert.equal(createHash("sha256").update(JSON.stringify({ ...current.automation!, rules: previousRules })).digest("hex"), tiggo5xProAudit.preservation.automationRulesSha256);
+  assert.ok(record.sources.every((source) => source.verification.status === "verified" && source.verification.modelYear === 2023));
+  assert.ok(record.sources.some((source) => source.verification.documentCode === "B09999T5300"));
+  assert.equal(tiggo5xProAudit.coverageConclusion.generalCoverageNotExtendedToFiveYears, true);
+  assert.equal(tiggo5xProAudit.coverageConclusion.batteryCoverageNotApplied, true);
+  assert.equal(tiggo5xProAudit.preservation.noCoverageTransferredFromSport20084, true);
+  assert.equal(tiggo5xProAudit.preservation.noCompassMileageAttestationReused, true);
 });
