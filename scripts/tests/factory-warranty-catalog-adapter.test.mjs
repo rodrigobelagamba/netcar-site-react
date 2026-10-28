@@ -228,7 +228,7 @@ before(async () => {
     cacheDir,
     configFile: false,
     appType: "custom",
-    server: { middlewareMode: true, hmr: false, ws: false },
+    server: { middlewareMode: true, hmr: false, ws: false, watch: null },
     logLevel: "silent",
     resolve: { alias: { "@": resolve(root, "src") } },
   });
