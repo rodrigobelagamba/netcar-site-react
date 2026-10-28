@@ -113,6 +113,67 @@
           "contentSha256": "e8133eb971aa2c7ebfe1181437764d03bcd6185df536f7b409b64feb67da203c"
         }
       }
+    },
+    {
+      "vehicleId": "20102",
+      "match": {
+        "brand": "CHERY",
+        "model": "TIGGO 5X PRO TURBO",
+        "modelYear": 2023,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedAt": "2026-10-27T18:51:14.675Z",
+      "captions": {
+        "894648a71668cfe1425878d2a18062b3465e819c2eb1e4773a968a7e47b90040": {
+          "visual": "Grade e faróis dianteiros",
+          "contentSha256": "f55e5632d5dadf03a81813c45409dfcbb4472681feef6efbd183beb15af1b017"
+        },
+        "3662d80f9a4a5a2034de2fe68c6019edd3f4c5cf68638082b1c011e0269f1a90": {
+          "visual": "Vista dianteira e lateral",
+          "contentSha256": "7aa7b43b95d9499aecd5a8ac268edd8e4d2f7da0b9a41df8024b3c7804a1e64b"
+        },
+        "da1a0ffbea206e1d110435d6bdd9e3e3b56b994174fed14f86ec447458725d6c": {
+          "visual": "Traseira em três quartos",
+          "contentSha256": "af47036fd4be2d6beb95722e3849cb4f77ed814a76308798b10d01f88bab7a53"
+        },
+        "85e770ed651def3a2fd073cfa207d630041c5365bec07104ef80698685f4a675": {
+          "visual": "Vista traseira",
+          "contentSha256": "57bfdc22a0a665946007875bb627d48f2c3d2c43389696d4d8c30c754535401d"
+        },
+        "7b7a526d68b4cc33ec2ace495804b04a889e59debdc438024a91d7671b4f6cfb": {
+          "visual": "Traseira em outro ângulo",
+          "contentSha256": "dbe38cdaf5d93aed5a9b27b5ce944942a8155b7a27fcf6fbd29fa71474da7c40"
+        },
+        "5761b272cfbd5a1b681048e6407af97249c444b18089c1689db3e322a71d9a9b": {
+          "visual": "Volante e painel",
+          "contentSha256": "69b70eef4e75e85547a10c7f6670fc4b3dde6cf228c655d8af3f4d778033e7c0"
+        },
+        "950055457868406870831c9d024f69de94820db3ae74acaaa2aa98e94931af67": {
+          "visual": "Visão geral da cabine",
+          "contentSha256": "6d23bd7aee55cd32bdf6f46fa7dd23297ec0c3eac02abc3b132c6ae2ba99f59f"
+        },
+        "6482ed7fc1db6ccdea2ad69bdf2d4e5a8badc9226938896a11d2389c167cf6cc": {
+          "visual": "Seletor de câmbio e console",
+          "contentSha256": "ce0ec058d0e6f21be9d124a2bccc9981426ceeafaaf525812eebfd5854c3a2f0"
+        },
+        "a6a79848fa19d810553dde13c234f620aef13c082ba080f130ab15c5b4aa7167": {
+          "visual": "Vista do teto por dentro",
+          "contentSha256": "29e9461db80cc9cc21bbe2c1da02ef537ae1642553c57b33ccd6514a61e89f0c"
+        },
+        "19739db7792af77b3e3cf2eaee584b17b5d3eb919447eae8e81b4936d9a5e2f2": {
+          "visual": "Painel e console central",
+          "contentSha256": "56921e8eaf6a3451fcc37e8023ae62c9d0daef5ae8dc58fc3159329c3eb633df"
+        },
+        "e6e8d5ea33dbe15be49e5c4c4ee41b53fac19a1ec8eeae6835c6255f9be7b761": {
+          "visual": "Central multimídia",
+          "contentSha256": "83796179bc7a4a5e1f99e8e4d0d6c4836c142ae66900a6d43894d14a9bff1162"
+        },
+        "7827b491146b90365c3af83f86a675cfa4b6464ed1fa47d4c2a5d3806a7b0995": {
+          "visual": "Comandos junto à central",
+          "contentSha256": "7cb4fb1f9dc930cef84964ea9cd8b6ab091fa78ad22445a6f3bac121886054b7"
+        }
+      }
     }
   ]
 }

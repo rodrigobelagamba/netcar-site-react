@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-27",
+  "scope": "Editorial selection and individually inspected photo captions for Tiggo 5X Pro Turbo 2023 ID20102. Approved for publication on 2026-10-28; no equipment enrichment or warranty change.",
+  "sourcePolicy": "Current canonical inventory facts determine eligibility; visual captions describe inspected unit images; manufacturer-year evidence remains partial.",
+  "records": [
+    {
+      "id": "chery-tiggo-5x-pro-turbo-2023-1-5-automatico",
+      "ids": [
+        "20102"
+      ],
+      "match": {
+        "brand": "CHERY",
+        "model": "TIGGO 5X PRO TURBO",
+        "modelYear": 2023,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "airbag-protection",
+        "panoramic-roof",
+        "parking-aids",
+        "cruise-control"
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "evidenceUrls": [
+        "https://www.caoacherysalvador.com.br/fotos/novos/20220217_143917_83.pdf",
+        "https://www.gov.br/inmetro/pt-br/assuntos/regulamentacao/avaliacao-da-conformidade/programa-brasileiro-de-etiquetagem/tabelas-de-eficiencia-energetica/veiculos-automotivos-pbe-veicular/pbe-veicular-2023.pdf/@@download/file"
+      ],
+      "evidenceSummary": "Ficha CAOA Chery Pro convencional AF 09FEV22 documenta 1.5 turbo flex CVT, seis airbags, teto panorâmico fixo com cortina elétrica e piloto convencional. PBEV2023 distingue o Pro de combustão das variantes híbridas. Os quatro temas escolhidos já são gerados pelo resolvedor da unidade.",
+      "scopeLimitations": [
+        "A ficha não explicita ano-modelo 2023; não certifica equipamentos de série desta unidade.",
+        "Não acrescentar câmeras360, ADAS, teto com abertura, conectividade sem fio ou piloto adaptativo.",
+        "A falta de flag de garantia não prova ausência de cobertura; esta proposta não altera garantia."
+      ],
+      "curationStatus": "reviewed"
+    }
+  ],
+  "publicationApprovedAt": "2026-10-28"
+}

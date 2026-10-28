@@ -123,7 +123,7 @@ test("reviewed locations are origin-bound and distinct from content checksums", 
   );
   assert.equal(
     reviews.units.reduce((n, unit) => n + Object.keys(unit.captions).length, 0),
-    21,
+    33,
   );
   for (const unit of reviews.units)
     for (const [key, caption] of Object.entries(unit.captions)) {

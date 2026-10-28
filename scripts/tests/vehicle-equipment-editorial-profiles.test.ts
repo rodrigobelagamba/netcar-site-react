@@ -24,7 +24,7 @@ const stockVehicle = (id: string): EquipmentVehicle => {
 };
 
 test("reviewed profiles cover exact combinations without equipment enrichment", () => {
-  assert.equal(vehicleEditorialProfiles.length, 62);
+  assert.equal(vehicleEditorialProfiles.length, 64);
   const identities = new Set<string>();
   for (const profile of vehicleEditorialProfiles) {
     const identity = JSON.stringify(profile.match);
@@ -220,23 +220,27 @@ test("Tracker 2018 topics use its registered MyLink and navigation without inher
   );
 });
 
-test("58 researched identities retain evidence, partial limits and exact drivetrain gates", () => {
-  const audit = JSON.parse(
-    readFileSync(
-      new URL(
-        "../../docs/audits/editorial-profiles-2026-10-26.json",
-        import.meta.url,
-      ),
-      "utf8",
-    ),
+test("60 researched identities retain evidence, partial limits and exact drivetrain gates", () => {
+  const records = [
+    "editorial-profiles-2026-10-26.json",
+    "editorial-profiles-2026-10-27.json",
+    "editorial-profiles-2026-10-28-renegade-20110.json",
+  ].flatMap(
+    (file) =>
+      JSON.parse(
+        readFileSync(
+          new URL(`../../docs/audits/${file}`, import.meta.url),
+          "utf8",
+        ),
+      ).records,
   );
-  assert.equal(audit.records.length, 58);
+  assert.equal(records.length, 60);
   const researched = vehicleEditorialProfiles.filter(
     (profile) => profile.research,
   );
-  assert.equal(researched.length, 58);
+  assert.equal(researched.length, 60);
   for (const profile of researched) {
-    const evidence = audit.records.find(
+    const evidence = records.find(
       (row: { id: string }) => row.id === profile.research!.evidenceId,
     );
     assert.ok(evidence);
