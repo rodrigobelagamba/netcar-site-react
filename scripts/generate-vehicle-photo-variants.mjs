@@ -195,15 +195,16 @@ async function inventory() {
 
 export async function main(args = process.argv.slice(2)) {
   const vehicle = args.find((arg) => arg.startsWith('--vehicle='))?.slice(10);
-  const limitText = args.find((arg) => arg.startsWith('--limit='))?.slice(8);
+  const limitText = args.find((arg) => arg.startsWith('--limit='))?.slice(8)
+    ?? process.env.NETCAR_PHOTO_BUILD_LIMIT;
   if (args.some((arg) => !/^--(vehicle|limit)=\d+$/.test(arg)) ||
-      (limitText !== undefined && Number(limitText) < 1)) throw new Error('photo-arguments');
+      (limitText !== undefined && (!/^\d+$/.test(limitText) || Number(limitText) < 1))) throw new Error('photo-arguments');
   configureSeoStockNetwork();
   sharp.concurrency(1);
   await mkdir(CACHE, { recursive: true });
   let vehicles = await inventory();
   if (vehicle) vehicles = vehicles.filter((row) => String(row.id) === vehicle);
-  if (limitText) vehicles = vehicles.slice(0, Number(limitText));
+  if (limitText) vehicles = vehicles.filter((row) => photoJobs([row]).length > 0).slice(0, Number(limitText));
   if (!vehicles.length) throw new Error('photo-empty-selection');
   const jobs = photoJobs(vehicles), previous = await json(MANIFEST, emptyManifest());
   if (!jobs.length) throw new Error('photo-no-sources');

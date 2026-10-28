@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sourcePath, photoJobs, sameGeometry } from '../generate-vehicle-photo-variants.mjs';
+import { main, sourcePath, photoJobs, sameGeometry } from '../generate-vehicle-photo-variants.mjs';
 
 const prefix = '/imagens/veiculos_automacar/';
 test('source allowlist rejects foreign origins and encoded traversal', () => {
@@ -28,4 +28,16 @@ test('JPEG sibling selection rejects dimension or EXIF orientation conflicts', (
 });
 test('malformed galleries do not become unintended download requests', () => {
   assert.deepEqual(photoJobs([{ id: '123', imagens_site: { galeria: { arbitrary: 'value' } } }]), []);
+});
+test('invalid CI sample limits fail before any inventory request', async () => {
+  const previous = process.env.NETCAR_PHOTO_BUILD_LIMIT;
+  try {
+    for (const value of ['0', '-1', '1.5', 'many', '']) {
+      process.env.NETCAR_PHOTO_BUILD_LIMIT = value;
+      await assert.rejects(main([]), /photo-arguments/);
+    }
+  } finally {
+    if (previous === undefined) delete process.env.NETCAR_PHOTO_BUILD_LIMIT;
+    else process.env.NETCAR_PHOTO_BUILD_LIMIT = previous;
+  }
 });

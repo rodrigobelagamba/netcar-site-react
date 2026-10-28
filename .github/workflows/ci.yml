@@ -94,7 +94,10 @@ jobs:
           npx tsx --test src/modules/entregas/lib/deliveries.test.ts src/modules/entregas/components/viewerFocus.test.ts
       - name: Validate i-CHECK metadata and reports
         run: npm run icheck:validate
-      - run: npm run build
+      - name: Build production with a vehicle photo sample
+        env:
+          NETCAR_PHOTO_BUILD_LIMIT: "1"
+        run: npm run build
       - name: Validate generated comparison SEO and routing
         env:
           NETCAR_VERIFY_GENERATED_SEO: "1"
