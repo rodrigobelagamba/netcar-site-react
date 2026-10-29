@@ -12,6 +12,8 @@
     "blog:rotate": "node scripts/generate-blog.js",
     "weekly": "npm run deploy:local",
     "seo:generate": "node scripts/generate-seo-assets.js",
+    "seo:monitor-stock": "node scripts/monitor-stock-google.mjs",
+    "seo:test-stock-monitor": "node --test scripts/tests/stock-google-discovery.test.mjs devops/server/tests/equipment-daily-run.test.js",
     "seo:validate-regional": "node scripts/validate-regional-seo.js",
     "seo:validate-regional-contact": "tsx scripts/validate-regional-contact-runtime.ts",
     "seo:validate-generated": "node scripts/validate-generated-seo.js",

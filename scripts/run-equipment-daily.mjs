@@ -7,19 +7,30 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 /** One existing runner job; the public stage owns its weekly gate. No publishing. */
 export async function runEquipmentDaily({ stateDir, input, forcePublic = false, execute = executeNode, workspaceRoot = root, pathExists = existsSync }) {
-  await execute(['--import', 'tsx', 'scripts/audit-vehicle-equipment.ts', '--state-dir', stateDir], workspaceRoot);
-  const discover = ['--import', 'tsx', 'scripts/review-vehicle-equipment.ts', 'discover', '--input', input,
-    '--expand-exact-matches', '--state-dir', stateDir];
-  for (const [privateFile, flag, seed] of [
-    ['research-progress.json', '--research-progress', 'equipment-research-progress-2026-10-09.json'],
-    ['research-public-observations.json', '--public-observations', 'equipment-public-observations-2026-10-09.json'],
-  ]) {
-    // Bootstrap once. Later discoveries must preserve newer operator evidence.
-    if (!pathExists(join(stateDir, privateFile))) discover.push(flag, join(workspaceRoot, 'docs', 'audits', seed));
+  try {
+    await execute(['--import', 'tsx', 'scripts/audit-vehicle-equipment.ts', '--state-dir', stateDir], workspaceRoot);
+    const discover = ['--import', 'tsx', 'scripts/review-vehicle-equipment.ts', 'discover', '--input', input,
+      '--expand-exact-matches', '--state-dir', stateDir];
+    for (const [privateFile, flag, seed] of [
+      ['research-progress.json', '--research-progress', 'equipment-research-progress-2026-10-09.json'],
+      ['research-public-observations.json', '--public-observations', 'equipment-public-observations-2026-10-09.json'],
+    ]) {
+      // Bootstrap once. Later discoveries must preserve newer operator evidence.
+      if (!pathExists(join(stateDir, privateFile))) discover.push(flag, join(workspaceRoot, 'docs', 'audits', seed));
+    }
+    await execute(discover, workspaceRoot);
+    await execute(['--import', 'tsx', 'scripts/audit-equipment-public.ts', '--state-dir', stateDir,
+      ...(forcePublic ? ['--force'] : [])], workspaceRoot);
+  } finally {
+    // Reuse the existing daily scheduler and its exclusion lock. SEO has its
+    // own private ledger; an unavailable Google connection cannot block a
+    // warranty/equipment review or overwrite its last successful reports.
+    try {
+      await execute(['scripts/monitor-stock-google.mjs', '--state-dir', join(stateDir, 'seo-discovery')], workspaceRoot);
+    } catch {
+      process.stderr.write('Etapa SEO incompleta; consultar seo-discovery/run-status.json. Auditoria de equipamentos preservada.\n');
+    }
   }
-  await execute(discover, workspaceRoot);
-  await execute(['--import', 'tsx', 'scripts/audit-equipment-public.ts', '--state-dir', stateDir,
-    ...(forcePublic ? ['--force'] : [])], workspaceRoot);
 }
 
 async function executeNode(args, cwd) {
