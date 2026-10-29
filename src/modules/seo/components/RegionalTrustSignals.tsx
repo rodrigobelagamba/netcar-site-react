@@ -13,6 +13,7 @@ type RegionalTrustSignalsProps = {
   className?: string;
   /** compact = faixa sob o hero; full = seção com título */
   variant?: "compact" | "full";
+  includeGoogle?: boolean;
 };
 
 type TrustItem = {
@@ -34,6 +35,7 @@ type TrustItem = {
 export function RegionalTrustSignals({
   className = "",
   variant = "full",
+  includeGoogle = true,
 }: RegionalTrustSignalsProps) {
   const { data } = useGoogleReviewsQuery();
   const summary = data?.summary;
@@ -77,54 +79,60 @@ export function RegionalTrustSignals({
   ];
 
   const grid = (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      {items.map((item) => {
-        const Icon = item.icon;
-        return (
-          <article
-            key={item.key}
-            className="group relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,40,60,0.06)] backdrop-blur-sm transition-transform hover:-translate-y-0.5"
-          >
-            <div className="mb-3 flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#00283C]/5 text-[#00283C]">
-                {item.google ? (
-                  <GoogleGIcon className="h-5 w-5" />
-                ) : (
-                  <Icon className="h-5 w-5" />
-                )}
-              </span>
-              {item.google && item.ratingLabel && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-800">
-                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                  {item.ratingLabel}
+    <div
+      className={`grid gap-3 sm:grid-cols-2 ${includeGoogle ? "xl:grid-cols-4" : "lg:grid-cols-3"}`}
+    >
+      {items
+        .filter((item) => includeGoogle || !item.google)
+        .map((item) => {
+          const Icon = item.icon;
+          return (
+            <article
+              key={item.key}
+              className="group relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 p-5 shadow-[0_8px_30px_rgb(0,40,60,0.06)] backdrop-blur-sm transition-transform hover:-translate-y-0.5"
+            >
+              <div className="mb-3 flex items-center gap-3">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#00283C]/5 text-[#00283C]">
+                  {item.google ? (
+                    <GoogleGIcon className="h-5 w-5" />
+                  ) : (
+                    <Icon className="h-5 w-5" />
+                  )}
                 </span>
+                {item.google && item.ratingLabel && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-800">
+                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                    {item.ratingLabel}
+                  </span>
+                )}
+              </div>
+              <h3 className="mb-2 text-sm font-bold leading-snug text-[#00283C]">
+                {item.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-gray-600">
+                {item.text}
+              </p>
+              {item.href && item.linkLabel && (
+                <Link
+                  to={item.href}
+                  className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
+                >
+                  {item.linkLabel}
+                </Link>
               )}
-            </div>
-            <h3 className="mb-2 text-sm font-bold leading-snug text-[#00283C]">
-              {item.title}
-            </h3>
-            <p className="text-sm leading-relaxed text-gray-600">{item.text}</p>
-            {item.href && item.linkLabel && (
-              <Link
-                to={item.href}
-                className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
-              >
-                {item.linkLabel}
-              </Link>
-            )}
-            {item.externalHref && (
-              <a
-                href={item.externalHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
-              >
-                Ver avaliações no Google
-              </a>
-            )}
-          </article>
-        );
-      })}
+              {item.externalHref && (
+                <a
+                  href={item.externalHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
+                >
+                  Ver avaliações no Google
+                </a>
+              )}
+            </article>
+          );
+        })}
     </div>
   );
 

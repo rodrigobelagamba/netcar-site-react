@@ -1,5 +1,5 @@
 import { Link, useParams } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import {
   getLandingPage,
@@ -8,6 +8,7 @@ import {
 } from "@/data/seo";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
@@ -15,18 +16,33 @@ import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { RegionalActionCtas } from "@/modules/seo/components/RegionalActionCtas";
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
+import { GoogleReviewsHighlight } from "@/modules/seo/components/GoogleReviewsHighlight";
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 import { NearbyMarketsNav } from "@/modules/seo/components/RegionalCrossLinks";
 import { generateVehicleSlug } from "@/lib/slug";
 import { sortShowroomVehicles } from "@/lib/showroomStock";
 import {
+  buildWhatsAppUrl,
+  DEFAULT_SALES_WHATSAPP,
+  siteWhatsAppMessage,
+} from "@/lib/whatsappMessages";
+import {
   resolveLandingFaq,
   resolveLandingParagraphs,
+  resolveModelSearchContact,
 } from "@/lib/landingStockCopy.mjs";
 
 export function EstoqueLandingPage() {
   const { landingSlug } = useParams({ from: "/comprar-{$landingSlug}" });
   const landing = getLandingPage(landingSlug);
+  const { data: whatsapp } = useWhatsAppQuery();
+  const modelSearch = resolveModelSearchContact(landing);
+  const modelSearchHref = modelSearch
+    ? buildWhatsAppUrl(
+        whatsapp?.numero?.trim() || DEFAULT_SALES_WHATSAPP,
+        siteWhatsAppMessage(modelSearch.messageBody),
+      )
+    : undefined;
 
   const {
     data: vehicles,
@@ -64,9 +80,10 @@ export function EstoqueLandingPage() {
     [landing],
   );
   const brandModels = useMemo(
-    () => (landing?.modelSlugs || [])
-      .map(getLandingPage)
-      .filter((model) => model?.indexable),
+    () =>
+      (landing?.modelSlugs || [])
+        .map(getLandingPage)
+        .filter((model) => model?.indexable),
     [landing],
   );
   const hasStockData = Array.isArray(vehicles);
@@ -176,23 +193,34 @@ export function EstoqueLandingPage() {
         />
       </RegionalSeoHero>
 
+      {(landing.type === "marca" || landing.type === "modelo") && (
+        <div className="container-main px-4 pb-7 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <GoogleReviewsHighlight />
+        </div>
+      )}
+
       {brandModels.length > 0 && (
         <nav
           aria-label={`Modelos da ${landing.name}`}
           className="container-main px-4 pb-6 sm:px-6 lg:px-8 xl:px-12 2xl:px-16"
         >
-          <h2 className="mb-3 text-base font-bold text-fg">Escolha seu {landing.name}</h2>
+          <h2 className="mb-3 text-base font-bold text-fg">
+            Escolha seu {landing.name}
+          </h2>
           <div className="flex flex-wrap gap-2">
-            {brandModels.map((model) => model && (
-              <Link
-                key={model.slug}
-                to="/comprar-{$landingSlug}"
-                params={{ landingSlug: model.slug }}
-                className="inline-flex min-h-11 items-center rounded-full border border-[#00283C]/20 bg-white px-4 py-2 text-sm font-bold text-[#00283C] transition-colors hover:border-[#008C95] hover:bg-[#F0F9F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008C95]"
-              >
-                {model.name}
-              </Link>
-            ))}
+            {brandModels.map(
+              (model) =>
+                model && (
+                  <Link
+                    key={model.slug}
+                    to="/comprar-{$landingSlug}"
+                    params={{ landingSlug: model.slug }}
+                    className="inline-flex min-h-11 items-center rounded-full border border-[#00283C]/20 bg-white px-4 py-2 text-sm font-bold text-[#00283C] transition-colors hover:border-[#008C95] hover:bg-[#F0F9F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008C95]"
+                  >
+                    {model.name}
+                  </Link>
+                ),
+            )}
           </div>
         </nav>
       )}
@@ -333,8 +361,42 @@ export function EstoqueLandingPage() {
               </Link>
             </div>
           )}
+
+          {modelSearch && (
+            <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-[#00283C]/10 bg-[#F5F8F8] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+              <div>
+                <h3 className="text-base font-bold text-[#00283C]">
+                  {modelSearch.heading}
+                </h3>
+                <p className="mt-1 text-sm text-gray-600">
+                  {modelSearch.description}
+                </p>
+              </div>
+              <a
+                href={modelSearchHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-wa-source="landing_model_search"
+                data-wa-intent="stock_help"
+                data-regional-action="whatsapp_model_search"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#087A37]/25 bg-white px-5 py-3 text-sm font-bold text-[#087A37] transition-colors hover:bg-[#EAF7F0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008C95] focus-visible:ring-offset-2 sm:shrink-0"
+              >
+                <MessageCircle
+                  className="h-4 w-4 shrink-0"
+                  aria-hidden="true"
+                />
+                {modelSearch.label}
+              </a>
+            </div>
+          )}
         </div>
       </section>
+
+      {(landing.type === "marca" || landing.type === "modelo") && (
+        <div className="container-main px-4 pb-12 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <GoogleReviewsHighlight variant="reviews" />
+        </div>
+      )}
 
       {relatedLandings.length > 0 && (
         <section className="pb-16">
@@ -380,9 +442,16 @@ export function EstoqueLandingPage() {
               </p>
             ))}
             {!!landing.guideLinks?.length && (
-              <nav aria-label={`Guias para escolher ${landing.name}`} className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
+              <nav
+                aria-label={`Guias para escolher ${landing.name}`}
+                className="flex flex-wrap gap-x-6 gap-y-3 pt-2"
+              >
                 {landing.guideLinks.map((link) => (
-                  <a key={link.href} href={link.href} className="inline-flex min-h-11 items-center gap-2 font-semibold text-[#00283C] underline underline-offset-4">
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="inline-flex min-h-11 items-center gap-2 font-semibold text-[#00283C] underline underline-offset-4"
+                  >
                     {link.label} <ArrowRight className="h-4 w-4" />
                   </a>
                 ))}
@@ -392,7 +461,9 @@ export function EstoqueLandingPage() {
         </div>
       </section>
 
-      <RegionalTrustSignals />
+      <RegionalTrustSignals
+        includeGoogle={landing.type !== "marca" && landing.type !== "modelo"}
+      />
 
       <NearbyMarketsNav selectionName={landing.name} />
 

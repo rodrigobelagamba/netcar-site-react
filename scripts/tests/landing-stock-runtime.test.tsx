@@ -12,7 +12,9 @@ import { emptySeminovosSearch } from "../../src/lib/seminovos-search";
 import {
   resolveLandingFaq,
   resolveLandingParagraphs,
+  resolveModelSearchContact,
 } from "../../src/lib/landingStockCopy.mjs";
+import { buildWhatsAppUrl, DEFAULT_SALES_WHATSAPP, siteWhatsAppMessage } from "../../src/lib/whatsappMessages";
 import { marcaLanding } from "../generate-landings.js";
 
 type State = {
@@ -87,7 +89,7 @@ const source = ts.transpileModule(
 
 // Mount the real page and effects; isolate only query transport and UI leaves.
 // The mutable query state models bootstrap -> API refresh in a single mount.
-function loadPage(initial: State) {
+function loadPage(initial: State, currentLanding = landing) {
   let state = initial;
   const scripts = new Map<
     string,
@@ -98,17 +100,19 @@ function loadPage(initial: State) {
   const deps: Record<string, unknown> = {
     react: React,
     "react/jsx-runtime": jsxRuntime,
-    "lucide-react": { ArrowRight: "svg" },
+    "lucide-react": { ArrowRight: "svg", MessageCircle: "svg" },
     "@tanstack/react-router": {
       useParams: () => ({ landingSlug: "chery" }),
       Link: ({ children }: any) => <a>{children}</a>,
     },
     "@/data/seo": {
-      getLandingPage: () => landing,
+      getLandingPage: () => currentLanding,
       getRelatedLandingPages: () => [],
       matchesLandingFilters: (vehicle: Vehicle) => vehicle.marca === "CHERY",
     },
     "@/hooks/useMetaTags": { useMetaTags: empty },
+    "@/catalog/queries/useSiteQuery": { useWhatsAppQuery: () => ({ data: { numero: DEFAULT_SALES_WHATSAPP } }) },
+    "@/lib/whatsappMessages": { buildWhatsAppUrl, DEFAULT_SALES_WHATSAPP, siteWhatsAppMessage },
     "@/catalog/queries/useVehiclesQuery": {
       useVehiclesQuery: () => ({
         isError: false,
@@ -137,6 +141,9 @@ function loadPage(initial: State) {
     "@/modules/seo/components/RegionalTrustSignals": {
       RegionalTrustSignals: empty,
     },
+    "@/modules/seo/components/GoogleReviewsHighlight": {
+      GoogleReviewsHighlight: empty,
+    },
     "@/modules/seo/components/RegionalSeoHero": { RegionalSeoHero: empty },
     "@/modules/seo/components/RegionalCrossLinks": { NearbyMarketsNav: empty },
     "@/lib/slug": { generateVehicleSlug: (vehicle: Vehicle) => vehicle.id },
@@ -144,6 +151,7 @@ function loadPage(initial: State) {
     "@/lib/landingStockCopy.mjs": {
       resolveLandingFaq,
       resolveLandingParagraphs,
+      resolveModelSearchContact,
     },
   };
   const exports: Record<string, any> = {};
@@ -187,6 +195,26 @@ function loadPage(initial: State) {
 function text(renderer: TestRenderer.ReactTestRenderer) {
   return JSON.stringify(renderer.toJSON());
 }
+
+test("model page offers a contextual WhatsApp contact even when the model has no units", () => {
+  const model = { ...landing, type: "modelo", name: "Hyundai HB20 hatch", filters: { marca: "HYUNDAI", modelo: "HB20" } };
+  const page = loadPage({ data: [] }, model);
+  let renderer!: TestRenderer.ReactTestRenderer;
+  act(() => { renderer = TestRenderer.create(<page.Component />); });
+  const contact = renderer.root.findByProps({ "data-wa-source": "landing_model_search" });
+  assert.equal(contact.props["data-wa-intent"], "stock_help");
+  const url = new URL(contact.props.href);
+  assert.equal(url.hostname, "wa.me");
+  assert.equal(url.pathname, `/${DEFAULT_SALES_WHATSAPP}`);
+  assert.equal(url.searchParams.get("text"), siteWhatsAppMessage("estou procurando um Hyundai HB20 hatch de outro ano ou versão e quero conversar com a equipe."));
+  assert.match(text(renderer), /Procuro outro HB20/);
+  act(() => { renderer.unmount(); });
+
+  const brandPage = loadPage({ data: stock });
+  act(() => { renderer = TestRenderer.create(<brandPage.Component />); });
+  assert.equal(renderer.root.findAllByProps({ "data-wa-source": "landing_model_search" }).length, 0);
+  act(() => { renderer.unmount(); });
+});
 
 test("mounted landing replaces sold bootstrap card and price/year range together, then tracks a price change", () => {
   const page = loadPage({ data: stock, isFetching: true });
