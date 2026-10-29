@@ -9,6 +9,7 @@ import * as jsxRuntime from "react/jsx-runtime";
 import { renderToStaticMarkup } from "react-dom/server";
 import ts from "typescript";
 import { generateVehicleSlug } from "../lib/vehicle-sitemap-urls.js";
+import { matchesLandingModel } from "../../src/lib/landingModelMatch.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const site = "https://www.netcarmultimarcas.com.br";
@@ -58,6 +59,7 @@ function renderCrawlerPages(
     },
     stock: vehicles,
     generateVehicleSlug,
+    matchesLandingModel,
     ORG_SCHEMA: { "@type": "Organization", name: "Netcar Multimarcas" },
     HOME_CRUMB: { name: "Home", url: `${site}/` },
     breadcrumbSchema: (items) => ({
