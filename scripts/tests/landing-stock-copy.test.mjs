@@ -9,6 +9,7 @@ import {
 import {
   resolveLandingFaq,
   resolveLandingParagraphs,
+  resolveModelSearchContact,
 } from "../../src/lib/landingStockCopy.mjs";
 
 const staleProfile = {
@@ -23,6 +24,24 @@ const current = [
   { valor: 149900, ano: 2024 },
   { valor: 0, ano: 2025 },
 ];
+
+test("model search contact preserves the family and never carries unit or offer data", () => {
+  for (const [name, marca, label] of [
+    ["Hyundai HB20 hatch", "HYUNDAI", "HB20"],
+    ["Chevrolet Onix Plus", "CHEVROLET", "Onix Plus"],
+    ["Citroën C4 Cactus", "CITROEN", "C4 Cactus"],
+    ["CAOA Chery Tiggo 7 Pro", "CHERY", "Tiggo 7 Pro"],
+  ]) {
+    const contact = resolveModelSearchContact({ type: "modelo", name, filters: { marca }, id: "20052", price: 93900, placa: "AAA0000" });
+    assert.equal(contact.label, `Procuro outro ${label}`);
+    assert.ok(contact.messageBody.includes(name));
+    assert.doesNotMatch(JSON.stringify(contact), /20052|93900|AAA0000|avisa|alerta|reserva/i);
+  }
+  for (const type of ["marca", "categoria", "faixa", "combustivel"]) {
+    assert.equal(resolveModelSearchContact({ type, name: "Volkswagen", filters: { marca: "VOLKSWAGEN" } }), null);
+  }
+  assert.equal(resolveModelSearchContact(null), null);
+});
 
 test("all brand/category variants derive ranges from current offers, never the build profile", () => {
   for (const make of [marcaLanding, categoriaLanding]) {

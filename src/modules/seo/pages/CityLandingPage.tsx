@@ -16,7 +16,10 @@ import { RegionalBreadcrumbs } from "@/modules/seo/components/RegionalBreadcrumb
 import { RegionalInventoryNav } from "@/modules/seo/components/RegionalCrossLinks";
 import { RegionalVisitPlanner } from "@/modules/seo/components/RegionalVisitPlanner";
 import { RegionalSelectionNote } from "@/modules/seo/components/RegionalSelectionNote";
+import { RegionalCustomerProof } from "@/modules/seo/components/RegionalCustomerProof";
+import { GoogleReviewsHighlight } from "@/modules/seo/components/GoogleReviewsHighlight";
 import { useRegionalPageSchema } from "@/modules/seo/useRegionalPageSchema";
+import { getRegionalCustomerStories } from "@/lib/regionalCustomerProof";
 
 export function CityLandingPage() {
   const { citySlug } = useParams({ from: "/seminovos-{$citySlug}" });
@@ -87,6 +90,7 @@ export function CityLandingPage() {
           stockSubtitle="Estoque das duas lojas em Esteio"
           waSubtitle="Consulte compra, troca e financiamento"
         />
+        <GoogleReviewsHighlight className="mt-5" />
       </RegionalSeoHero>
 
       <RegionalStockPreview
@@ -96,8 +100,14 @@ export function CityLandingPage() {
       />
 
       <RegionalSelectionNote />
+      <RegionalCustomerProof citySlug={city.slug} cityName={city.name} />
+      {getRegionalCustomerStories(city.slug).length === 0 && (
+        <div className="container-main px-4 pb-12 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <GoogleReviewsHighlight variant="reviews" />
+        </div>
+      )}
       <RegionalInventoryNav cityName={city.name} />
-      <RegionalTrustSignals />
+      <RegionalTrustSignals includeGoogle={false} />
 
       <section className="pb-12" aria-labelledby="regional-city-details">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">

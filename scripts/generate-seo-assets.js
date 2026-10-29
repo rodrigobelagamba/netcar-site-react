@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
 import { factoryWarrantyCatalogFromApi } from "./lib/factory-warranty-catalog.js";
 import { sanitizeVehicleImages } from "../src/lib/vehicleImagePolicy.mjs";
-import { resolveLandingParagraphs, resolveLandingFaq } from "../src/lib/landingStockCopy.mjs";
+import { resolveLandingParagraphs, resolveLandingFaq, resolveModelSearchContact } from "../src/lib/landingStockCopy.mjs";
 import { matchesLandingModel } from "../src/lib/landingModelMatch.mjs";
 import {
   homeHeroRotationDay,
@@ -123,6 +123,9 @@ const expointerPage = JSON.parse(
 );
 const regionalSelection = JSON.parse(
   readFileSync(join(rootDir, "src/data/seo/regional-selection.json"), "utf8"),
+);
+const regionalCustomerProof = JSON.parse(
+  readFileSync(join(rootDir, "src/data/seo/regional-customer-proof.json"), "utf8"),
 );
 const STOCK_API_URL =
   process.env.NETCAR_SEO_STOCK_API_URL ||
@@ -1324,6 +1327,43 @@ function nearbyMarketsHtml(landingName) {
   return `<nav aria-label="Atendimento regional para ${escapeHtml(landingName)}"><h2>${escapeHtml(landingName)} para quem busca na Região Metropolitana</h2><p>As duas lojas ficam em Esteio. Escolha sua cidade para consultar o caminho até a Netcar e fale com a equipe sobre o carro que quer conhecer.</p><ul>${links}</ul></nav>`;
 }
 
+function regionalCustomerProofHtml(city) {
+  const stories = regionalCustomerProof.stories
+    .filter((story) => story.citySlug === city.slug)
+    .slice(0, 3);
+  if (!stories.length) return "";
+  const hasGoogle = stories.some((story) => story.sourceType !== "delivery_testimonial");
+  const hasAlbum = stories.some((story) => story.sourceType === "delivery_testimonial");
+  const hasAlbumText = stories.some((story) => story.sourceType === "delivery_testimonial" && story.text?.trim());
+  const title = hasGoogle
+    ? hasAlbum && !hasAlbumText
+      ? `Clientes de ${city.name} na Netcar`
+      : `Clientes de ${city.name} contam como foi`
+    : hasAlbumText
+      ? `Clientes de ${city.name} contam como foi`
+      : `Clientes de ${city.name} no álbum da Netcar`;
+  const sourceDescription = hasGoogle && hasAlbum
+    ? hasAlbumText
+      ? "Avaliações publicadas no Google e depoimentos do álbum de clientes da Netcar."
+      : "Avaliações publicadas no Google e fotos do álbum de entregas da Netcar."
+    : hasAlbum
+      ? hasAlbumText
+        ? "Depoimentos do álbum de clientes da Netcar, com a data original de cada registro."
+        : "Fotos do nosso álbum de entregas."
+      : "Comentários que nossos clientes publicaram no Google sobre a experiência com a Netcar.";
+  return `<section aria-labelledby="regional-customer-proof-title">
+    <h2 id="regional-customer-proof-title">${escapeHtml(title)}</h2>
+    <p>${sourceDescription}</p>
+    ${stories.map((story) => `<article>
+      ${story.photoUrl ? `<img src="${escapeHtml(story.photoUrl)}" alt="Foto publicada no ${story.sourceType === "delivery_testimonial" ? "depoimento" : "comentário"} de ${escapeHtml(story.displayName)}" width="480" height="360" loading="lazy">` : ""}
+      ${story.sourceType === "delivery_testimonial" ? "<p>Álbum da Netcar</p>" : ""}
+      ${story.text?.trim() ? `<blockquote>${escapeHtml(story.text)}</blockquote>` : ""}
+      <p>${escapeHtml(story.displayName)}${story.sourceType !== "delivery_testimonial" && Number.isFinite(story.rating) ? ` · ${escapeHtml(String(story.rating))}/5` : ""} · <time datetime="${escapeHtml(story.publishedAt)}">${escapeHtml(/^\d{4}-\d{2}-\d{2}$/.test(story.publishedAt) ? formatDateBr(story.publishedAt) : new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo" }).format(new Date(story.publishedAt)))}</time></p>
+      <p><a href="${escapeHtml(story.sourceUrl)}">${escapeHtml(story.sourceLabel)}</a></p>
+    </article>`).join("")}
+  </section>`;
+}
+
 for (const city of cities) {
   const canonical = `${SITE}/seminovos-${city.slug}`;
   const faqHtml = city.faq
@@ -1358,6 +1398,7 @@ for (const city of cities) {
         <p>${escapeHtml(regionalSelection.text)}</p>
         <p><a href="${SITE}${escapeHtml(regionalSelection.href)}">${escapeHtml(regionalSelection.linkLabel)}</a></p>
       </section>
+      ${regionalCustomerProofHtml(city)}
       <h2>${escapeHtml(city.contentHeading || `Como comparar seminovos saindo de ${city.name}`)}</h2>
       ${paragraphs}
       ${
@@ -1544,6 +1585,10 @@ function landingStockOrder(vehicles) {
 
 for (const landing of landings) {
   const canonical = `${SITE}/comprar-${landing.slug}`;
+  const modelSearch = resolveModelSearchContact(landing);
+  const modelSearchHtml = modelSearch
+    ? `<aside><h3>${escapeHtml(modelSearch.heading)}</h3><p>${escapeHtml(modelSearch.description)}</p><p><a href="https://wa.me/${WHATSAPP_IAN}?text=${encodeURIComponent(siteWhatsAppMessage(modelSearch.messageBody))}" data-wa-source="landing_model_search" data-wa-intent="stock_help" data-regional-action="whatsapp_model_search">${escapeHtml(modelSearch.label)}</a></p></aside>`
+    : "";
   const landingStock = landingStockOrder(
     stock.filter((vehicle) => matchesLandingFilters(vehicle, landing.filters)),
   );
@@ -1573,6 +1618,7 @@ for (const landing of landings) {
       ${landing.type === "faixa" ? "<p>O filtro considera o preço total anunciado do carro.</p>" : ""}
       <p><a href="${SITE}/seminovos">Ver todo o estoque</a></p>
       <!--netcar:landing-stock:start-->${availability}<!--netcar:landing-stock:end-->
+      ${modelSearchHtml}
       ${relatedLandingsHtml(landing.slug)}
       <h2>${escapeHtml(landing.guideTitle || "Compare antes de escolher")}</h2>
       <!--netcar:landing-paragraphs:start-->${paragraphs}<!--netcar:landing-paragraphs:end-->

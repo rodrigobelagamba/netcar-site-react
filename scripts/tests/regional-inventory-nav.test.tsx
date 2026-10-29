@@ -65,6 +65,7 @@ function renderCity(citySlug: string, pages = regionalInventoryPages) {
     "@/hooks/useMetaTags": { useMetaTags: () => {} },
     "@/modules/seo/useRegionalPageSchema": { useRegionalPageSchema: () => {} },
     "@/lib/analytics": { trackTrustSectionView: () => {} },
+    "@/lib/regionalCustomerProof": { getRegionalCustomerStories: () => [] },
     "@/modules/seo/components/RegionalStockPreview": {
       RegionalStockPreview: () => <section data-test-stock="true" />,
     },
@@ -77,6 +78,8 @@ function renderCity(citySlug: string, pages = regionalInventoryPages) {
       "RelatedCitiesNav",
       "RegionalActionCtas",
       "RegionalTrustSignals",
+      "GoogleReviewsHighlight",
+      "RegionalCustomerProof",
       "RegionalBreadcrumbs",
       "RegionalVisitPlanner",
       "RegionalSelectionNote",

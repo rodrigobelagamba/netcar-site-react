@@ -6,6 +6,27 @@ export const LANDING_PROFILE_TOKENS = Object.fromEntries(
   PROFILE_FIELDS.map((field) => [field, `{{${field}}}`]),
 );
 
+// The contact is about a model family, never a vehicle ID, price or plate.
+// Keep the same copy in the rendered page and its crawler HTML.
+export function resolveModelSearchContact(landing) {
+  if (landing?.type !== "modelo" || !landing.name?.trim()) return null;
+  const name = landing.name.trim();
+  const brand = landing.filters?.marca?.trim() || "";
+  const normalize = (value) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const brandPrefix = normalize(name).startsWith(`caoa ${normalize(brand)} `)
+    ? `CAOA ${brand} `
+    : `${brand} `;
+  const model = (brand && normalize(name).startsWith(normalize(brandPrefix))
+    ? name.slice(brandPrefix.length)
+    : name).replace(/\s+(hatch|sed[aã]n)$/i, "").trim();
+  return {
+    label: `Procuro outro ${model || name}`,
+    heading: "Quer outra versão ou ano?",
+    description: "Conte à equipe qual você procura.",
+    messageBody: `estou procurando um ${name} de outro ano ou versão e quero conversar com a equipe.`,
+  };
+}
+
 export function resolveLandingParagraphs(landing, vehicles) {
   const fallback = landing.paragraphs;
   if (!Array.isArray(landing.paragraphTemplates) || !Array.isArray(vehicles)) {
