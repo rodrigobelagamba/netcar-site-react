@@ -605,7 +605,7 @@ function getAllDistFiles(dirPath, arrayOfFiles = []) {
 async function uploadDist(distPath, deployConfig) {
   // Also checks --from-dist snapshots: rollback must not unpublish /entregas.
   // Runs before any connection/upload, for both SSH and FTP.
-  const { assertDeliveryGalleryBuild, isDeliveryRuntimePath, isCertificatePdfPath } = await loadSshDeploy();
+  const { assertDeliveryGalleryBuild, isDeliveryRuntimePath, isCertificatePdfPath, isCarclickSourcePath } = await loadSshDeploy();
   const gallery = assertDeliveryGalleryBuild(distPath);
   log(`🛡️  Galeria validada: ${gallery.deliveries} registros; dados ao vivo excluídos do deploy.`, 'green');
   if (deployConfig.method === 'ssh') {
@@ -628,7 +628,8 @@ async function uploadDist(distPath, deployConfig) {
 
       const allFiles = getAllDistFiles(distPath)
         .filter((file) => !isDeliveryRuntimePath(relative(distPath, file))
-          && !isCertificatePdfPath(relative(distPath, file)))
+          && !isCertificatePdfPath(relative(distPath, file))
+          && !isCarclickSourcePath(relative(distPath, file)))
         .sort((a, b) => {
         const aName = a.replace(/\\/g, '/').split('/').pop() || '';
         const bName = b.replace(/\\/g, '/').split('/').pop() || '';

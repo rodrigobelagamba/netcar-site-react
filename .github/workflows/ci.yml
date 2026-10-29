@@ -33,6 +33,15 @@ jobs:
           node --test scripts/tests/home-hero-selection.test.mjs
       - name: Validate brand and model landing PHP
         run: php -l public/seo/landing-stock.php
+      - name: Validate Carclick descriptions and field preservation
+        run: |
+          php -l public/feeds/carclick.php
+          php -l public/feeds/carclick-description.php
+          php -l public/feeds/carclick-warranty.php
+          php scripts/tests/carclick-description.test.php
+          php scripts/tests/carclick-warranty.test.php
+          npx tsx --test scripts/tests/carclick-warranty.test.ts
+          node --test scripts/tests/carclick-routing.test.mjs
       - name: Validate stock image preload selection
         run: node --test scripts/tests/stock-critical-preload.test.mjs
       - name: Validate bounded detail photo variants

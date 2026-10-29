@@ -1,0 +1,86 @@
+[
+  {
+    "vehicleId": "19994",
+    "canonicalModel": "ONIX PREMIER PLUS TURBO",
+    "rawModel": "ONIX PREMIER PLUS",
+    "unitKey": "plate-sha256:5c91521e98fcb8fe92b6636710b563728a6cc4100899d3416eacba1000668c19"
+  },
+  {
+    "vehicleId": "20094",
+    "canonicalModel": "RENEGADE T270 TURBO",
+    "rawModel": "RENEGADE T270",
+    "unitKey": "plate-sha256:b35f170bf8f7ae7ae2aaf3863b5a03a2f52250eb8bd36181c6da792fe113809f"
+  },
+  {
+    "vehicleId": "20082",
+    "canonicalModel": "TIGGO 5X PRO TURBO",
+    "rawModel": "TIGGO 5X PRO",
+    "unitKey": "plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626"
+  },
+  {
+    "vehicleId": "20068",
+    "canonicalModel": "2008 ACTIVE T200 TURBO",
+    "rawModel": "2008 ACTIVE T200",
+    "unitKey": "plate-sha256:59bdd15123e307fcff6bd1a2d9a52a99904977f9d9968dcf967800adc5275be5"
+  },
+  {
+    "vehicleId": "19587",
+    "canonicalModel": "TERA HIGH TURBO",
+    "rawModel": "TERA HIGH",
+    "unitKey": "plate-sha256:e68591b3e122e8059fa2dc88c32a633cbba973a19e5c21194d45f782e8828b8f"
+  },
+  {
+    "vehicleId": "20100",
+    "canonicalModel": "TIGGO 7 PRO MAX DRIVE TURBO",
+    "rawModel": "TIGGO 7 PRO MAX DRIVE",
+    "unitKey": "plate-sha256:1a30e1a3fe2e5ad255fc53267fcbbf971cf79ad0fc339903b61d0e1b86e2f5dc"
+  },
+  {
+    "vehicleId": "19857",
+    "canonicalModel": "KICKS SENSE TURBO",
+    "rawModel": "KICKS SENSE",
+    "unitKey": "plate-sha256:5c2c1a299f027e7a48abb90b81ae99beb86ac64f5b4de3b97feaa2e4d66f40b9"
+  },
+  {
+    "vehicleId": "20086",
+    "canonicalModel": "KICKS ADVANCE TURBO",
+    "rawModel": "KICKS ADVANCE",
+    "unitKey": "plate-sha256:f3bbd4e7dd823f3a6eb8324e236845e1a1de1e60e7b503120c6199f0d5d68e23"
+  },
+  {
+    "vehicleId": "19854",
+    "canonicalModel": "HRV ADVANCE TURBO",
+    "rawModel": "HRV ADVANCE",
+    "unitKey": "plate-sha256:32165b322dcdcae306a552e25f09545fcecc6a3c2a36b5f3b0eb80190533dd30"
+  },
+  {
+    "vehicleId": "20109",
+    "canonicalModel": "TIGGO 7 PRO MAX DRIVE TURBO",
+    "rawModel": "TIGGO 7 PRO MAX DRIVE",
+    "unitKey": "plate-sha256:af0c74fb3e3578b1e8e7c75723782f8680d0d0c9f0a1304d7336dcad2a07a98b"
+  },
+  {
+    "vehicleId": "20029",
+    "canonicalModel": "TIGGO 8 MAX DRIVE TURBO",
+    "rawModel": "TIGGO 8 MAX DRIVE",
+    "unitKey": "plate-sha256:d5231098ccb79c41d4d3bcfa23e781834b0c2e04178b17d9c9c513bf615a591c"
+  },
+  {
+    "vehicleId": "19898",
+    "canonicalModel": "HRV TOURING TURBO",
+    "rawModel": "HRV TOURING",
+    "unitKey": "plate-sha256:c22dc577e58b7cd8b2bf38dfcbcfc74d27e7a2258200af04823667dcc84d3330"
+  },
+  {
+    "vehicleId": "19779",
+    "canonicalModel": "TERRITORY TITANIUM TURBO",
+    "rawModel": "TERRITORY TITANIUM",
+    "unitKey": "plate-sha256:df20aad6836198a350c5405d9471d7bb207b18c1204442bb2442564aca8dad79"
+  },
+  {
+    "vehicleId": "19866",
+    "canonicalModel": "COMPASS SERIE S T270 TURBO",
+    "rawModel": "COMPASS SERIE S T270",
+    "unitKey": "plate-sha256:435d90c576cbd38b7d85002c5fb8a830f72a5665700b25ca55da66522434684c"
+  }
+]

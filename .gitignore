@@ -58,6 +58,9 @@ public/seo/blog-index.json
 public/seo/vehicle-equipment.json
 public/seo/factory-warranty-registry.json
 public/feeds/*
+!public/feeds/carclick.php
+!public/feeds/carclick-description.php
+!public/feeds/carclick-warranty.php
 src/data/seo/landings.json
 
 # Social sync — credenciais e tokens (KingHost)

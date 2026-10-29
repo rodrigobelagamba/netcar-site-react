@@ -10,7 +10,11 @@ import { Client } from 'ssh2';
 const TAR_EXCLUDES = ['.git', '.gitignore', '.git-commit-msg.txt',
   'entregas-data/live.json', 'entregas-data/.publish.lock',
   'entregas-data/.entregas-*', 'entregas-media/live',
-  'arquivos/autocheck/*.pdf'];
+  'arquivos/autocheck/*.pdf', 'feeds/carclick.xml'];
+
+export function isCarclickSourcePath(path) {
+  return String(path).replaceAll('\\', '/').replace(/^(\.\/)+/, '') === 'feeds/carclick.xml';
+}
 
 export function isCertificatePdfPath(path) {
   const normalized = String(path).replaceAll('\\', '/').replace(/^(\.\/)+/, '');
@@ -32,6 +36,7 @@ function excludesBuildPermissions(path) {
   return path === 'entregas-data' || path.startsWith('entregas-data/')
     || path === 'entregas-media/live' || path.startsWith('entregas-media/live/')
     || isCertificatePdfPath(path)
+    || isCarclickSourcePath(path)
     || path.split('/').some((part) => ['.git', '.gitignore', '.git-commit-msg.txt'].includes(part));
 }
 
