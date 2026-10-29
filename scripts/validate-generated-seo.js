@@ -131,13 +131,14 @@ const expectedRegionalFocusSlugs = [
   "gravatai",
   "cachoeirinha",
   "novo-hamburgo",
+  "porto-alegre",
 ];
 if (
   regionalFocusSlugs.length !== expectedRegionalFocusSlugs.length ||
   new Set(regionalFocusSlugs).size !== expectedRegionalFocusSlugs.length ||
   expectedRegionalFocusSlugs.some((slug) => !regionalFocusSlugs.includes(slug))
 ) {
-  errors.push("Foco regional: preservar as 7 cidades prioritárias únicas");
+  errors.push("Foco regional: preservar as 8 cidades prioritárias únicas");
 }
 for (const slug of regionalFocusSlugs) {
   if (!cities.some((city) => city.slug === slug)) {
