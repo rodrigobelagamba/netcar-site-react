@@ -401,11 +401,15 @@ function generatorFixture() {
   const project = fileURLToPath(new URL("../../", import.meta.url));
   for (const relative of [
     "scripts/generate-landings.js",
+    "scripts/lib/model-buyer-guides.mjs",
+    "scripts/lib/brand-buyer-guides.mjs",
+    "scripts/lib/stock-model-hubs.mjs",
     "scripts/lib/seo-stock-source.js",
     "scripts/lib/seo-stock-cache.js",
     "scripts/lib/factory-warranty-catalog.js",
     "src/lib/factoryWarrantyCatalog.js",
     "src/lib/landingStockCopy.mjs",
+    "src/lib/landingModelMatch.mjs",
   ]) {
     const target = join(rootDir, relative);
     mkdirSync(join(target, ".."), { recursive: true });
