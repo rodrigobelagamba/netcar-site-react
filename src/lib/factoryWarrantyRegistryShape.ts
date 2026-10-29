@@ -34,6 +34,14 @@ const record = coverage.extend({
       Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value),
     basis: z.literal("explicit-unit-warranty-authorization"),
   }).strict().optional(),
+  currentCoverageConfirmation: z.object({
+    source: z.literal("netcar-owner"),
+    attestationId: z.string().trim().min(1),
+    confirmedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) =>
+      Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value),
+    basis: z.literal("explicit-current-unit-coverage"),
+    mileageKm: z.number().finite().nonnegative(),
+  }).strict().optional(),
   unitBinding: z.object({ unitKey: z.string(), engine: z.string(), transmission: z.string() }).optional(),
   supplementalCoverages: z.array(coverage).max(10).optional(),
   powertrainReview: z.object({ coverageSubtype: z.string(), usageAttestationId: z.string(), displayLabel: z.string() }).optional(),

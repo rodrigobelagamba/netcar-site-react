@@ -1271,6 +1271,76 @@
         }
       ],
       "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261028-20082-powertrain\",\"reviewedAt\":\"2026-10-28\",\"vehicle\":{\"vehicleId\":\"20082\",\"manufactureYear\":2022,\"modelYear\":2023,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 5X PRO TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:9f7810232e356789b6e278770ceba8458aa71689847c7b853513c51d5a840626\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"netcar-private-stock-20261010\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":57340,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chery-B09999T5300-20082-powertrain\",\"url\":\"https://cloudfront.alpes.one/public/6a4/6a7/271/6a46a7271ddd7317284492.pdf#page=297\",\"locator\":\"Portal oficial brasileiro: Tiggo 5X Pro, Manuais 2022/2023. PDF 297 / impressa 10-3: 36 meses gerais desde a primeira entrega + 24 complementares para motor a combustão e transmissão, sem reinício na revenda. PDF 299 / impressa 10-5, item 20: 60 meses sem limite de km, exceto uso comercial; condições e exclusões preservadas. PDF 327: edição.\",\"revision\":\"B09999T5300; Abril de 2023; vínculo oficial Tiggo 5X Pro Brasil 2022/2023 e páginas de garantia conferidos em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"B09999T5300\",\"modelYear\":2023,\"reviewId\":\"factory-warranty-tiggo5x-pro-20082-2026-10-28\",\"reviewedAt\":\"2026-10-28\"}}]}"
+    },
+    {
+      "recordId": "reviewed-v2-20261029-20100-powertrain",
+      "status": "approved",
+      "reviewedAt": "2026-10-29",
+      "vehicle": {
+        "vehicleId": "20100",
+        "brand": "CHERY",
+        "modelVersion": "TIGGO 7 PRO MAX DRIVE TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:1a30e1a3fe2e5ad255fc53267fcbbf971cf79ad0fc339903b61d0e1b86e2f5dc",
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "powertrain",
+      "termYears": 5,
+      "usage": "private",
+      "reviewedMileageKm": 26178,
+      "mileage": {
+        "kind": "unknown"
+      },
+      "currentCoverageConfirmation": {
+        "source": "netcar-owner",
+        "attestationId": "netcar-owner-current-tiggo7-20100-20109-20261029",
+        "confirmedAt": "2026-10-29",
+        "basis": "explicit-current-unit-coverage",
+        "mileageKm": 26178
+      },
+      "powertrainReview": {
+        "coverageSubtype": "engine-and-transmission",
+        "usageAttestationId": "netcar-private-stock-20261010",
+        "displayLabel": "Motor e câmbio"
+      },
+      "sources": [
+        {
+          "sourceId": "caoa-reply-20260302-tiggo7-maxdrive-2024",
+          "label": "Resposta oficial CAOA Chery",
+          "url": "https://www.reclameaqui.com.br/chery-brasil/desgaste-do-volante-e-barulho-no-teto-em-tiggo-7-pro-max-drive-com-baixa-quilometragem_ixjrjP92xCBLZcNi/",
+          "locator": "Resposta da empresa, 02/03/2026, 16:29; case identifies Tiggo 7 Pro Max Drive 2023/2024; response references Manual do Proprietario, chapter 10, page 10-4. A resposta sustenta cinco anos para motor e transmissão desde a primeira entrega, condicionados ao manual e às revisões. A vigência atual desta unidade foi confirmada separadamente pelo responsável da Netcar; esta fonte não informa a política de quilometragem.",
+          "revision": "CAOA-20260302; resposta pública oficial CAOA Chery; Tiggo 7 Pro Max Drive Brasil 2023/2024; prazo e escopo revisados em 28/10/2026.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "CAOA-20260302",
+            "modelYear": 2024,
+            "reviewId": "warranty-20261029-20100-current-powertrain",
+            "reviewedAt": "2026-10-28"
+          }
+        },
+        {
+          "sourceId": "caoa-reply-20251114-tiggo7-maxdrive-2024",
+          "label": "Resposta oficial CAOA Chery",
+          "url": "https://www.reclameaqui.com.br/chery-brasil/ferrugem-prematura-nos-discos-de-freio-do-tiggo-7-pro-max-drive-20232024_I_0tFKtb7DpUX46Z/",
+          "locator": "Resposta da empresa, 14/11/2025, 11:17, in a case identified as Tiggo 7 Pro Max Drive 2023/2024. A resposta sustenta cinco anos para motor e transmissão desde a primeira entrega, condicionados ao manual e às revisões. A vigência atual desta unidade foi confirmada separadamente pelo responsável da Netcar; esta fonte não informa a política de quilometragem.",
+          "revision": "CAOA-20251114; resposta pública oficial CAOA Chery; Tiggo 7 Pro Max Drive Brasil 2023/2024; prazo e escopo revisados em 28/10/2026.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "CAOA-20251114",
+            "modelYear": 2024,
+            "reviewId": "warranty-20261029-20100-current-powertrain",
+            "reviewedAt": "2026-10-28"
+          }
+        }
+      ],
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261029-20100-powertrain\",\"reviewedAt\":\"2026-10-29\",\"vehicle\":{\"vehicleId\":\"20100\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:1a30e1a3fe2e5ad255fc53267fcbbf971cf79ad0fc339903b61d0e1b86e2f5dc\",\"engine\":\"1.6\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"currentCoverageConfirmation\":{\"source\":\"netcar-owner\",\"attestationId\":\"netcar-owner-current-tiggo7-20100-20109-20261029\",\"confirmedAt\":\"2026-10-29\",\"basis\":\"explicit-current-unit-coverage\",\"mileageKm\":26178},\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"netcar-private-stock-20261010\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":26178,\"mileage\":{\"kind\":\"unknown\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"caoa-reply-20260302-tiggo7-maxdrive-2024\",\"label\":\"Resposta oficial CAOA Chery\",\"url\":\"https://www.reclameaqui.com.br/chery-brasil/desgaste-do-volante-e-barulho-no-teto-em-tiggo-7-pro-max-drive-com-baixa-quilometragem_ixjrjP92xCBLZcNi/\",\"locator\":\"Resposta da empresa, 02/03/2026, 16:29; case identifies Tiggo 7 Pro Max Drive 2023/2024; response references Manual do Proprietario, chapter 10, page 10-4. A resposta sustenta cinco anos para motor e transmissão desde a primeira entrega, condicionados ao manual e às revisões. A vigência atual desta unidade foi confirmada separadamente pelo responsável da Netcar; esta fonte não informa a política de quilometragem.\",\"revision\":\"CAOA-20260302; resposta pública oficial CAOA Chery; Tiggo 7 Pro Max Drive Brasil 2023/2024; prazo e escopo revisados em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"CAOA-20260302\",\"modelYear\":2024,\"reviewId\":\"warranty-20261029-20100-current-powertrain\",\"reviewedAt\":\"2026-10-28\"}},{\"sourceId\":\"caoa-reply-20251114-tiggo7-maxdrive-2024\",\"label\":\"Resposta oficial CAOA Chery\",\"url\":\"https://www.reclameaqui.com.br/chery-brasil/ferrugem-prematura-nos-discos-de-freio-do-tiggo-7-pro-max-drive-20232024_I_0tFKtb7DpUX46Z/\",\"locator\":\"Resposta da empresa, 14/11/2025, 11:17, in a case identified as Tiggo 7 Pro Max Drive 2023/2024. A resposta sustenta cinco anos para motor e transmissão desde a primeira entrega, condicionados ao manual e às revisões. A vigência atual desta unidade foi confirmada separadamente pelo responsável da Netcar; esta fonte não informa a política de quilometragem.\",\"revision\":\"CAOA-20251114; resposta pública oficial CAOA Chery; Tiggo 7 Pro Max Drive Brasil 2023/2024; prazo e escopo revisados em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"CAOA-20251114\",\"modelYear\":2024,\"reviewId\":\"warranty-20261029-20100-current-powertrain\",\"reviewedAt\":\"2026-10-28\"}}]}"
     }
   ],
   "requireUnitBinding": true,

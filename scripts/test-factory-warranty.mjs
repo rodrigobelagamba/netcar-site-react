@@ -9,6 +9,7 @@ if (generated.status !== 0) process.exit(generated.status ?? 1);
 const result = spawnSync(process.execPath, [
   "--import", "tsx", "--test",
   "scripts/tests/factory-warranty.test.ts",
+  "scripts/tests/factory-warranty-current-confirmation.test.ts",
   "scripts/tests/factory-warranty-reconciliation.test.ts",
   "scripts/tests/factory-warranty-migration.test.ts",
   "scripts/tests/factory-warranty-catalog-adapter.test.mjs",

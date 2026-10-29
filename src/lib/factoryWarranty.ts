@@ -59,6 +59,14 @@ export interface FactoryWarrantyRecord {
     confirmedAt: string;
     basis: "explicit-unit-warranty-authorization";
   };
+  /** Current coverage of this physical unit, not a model mileage policy. */
+  currentCoverageConfirmation?: {
+    source: "netcar-owner";
+    attestationId: string;
+    confirmedAt: string;
+    basis: "explicit-current-unit-coverage";
+    mileageKm: number;
+  };
   conditionsConfirmed: boolean;
   scope:
     | "basic-vehicle"
@@ -219,6 +227,38 @@ export function hasFactoryWarrantyCatalogConfirmation(
   );
 }
 
+/** An unknown mileage policy stays unknown; only the confirmed odometer is eligible. */
+export function hasFactoryWarrantyCurrentCoverageConfirmation(
+  record: FactoryWarrantyRecord,
+  vehicle: WarrantyCatalogVehicle,
+  today: string,
+): boolean {
+  const confirmation = record.currentCoverageConfirmation;
+  return !!(
+    confirmation &&
+    Object.keys(confirmation).every((key) =>
+      ["source", "attestationId", "confirmedAt", "basis", "mileageKm"].includes(key)) &&
+    record.scope === "powertrain" &&
+    record.usage === "private" &&
+    record.mileage?.kind === "unknown" &&
+    record.unitBinding &&
+    record.catalogConfirmation === undefined &&
+    record.commonPolicy === undefined &&
+    record.supplementalCoverages === undefined &&
+    confirmation.source === "netcar-owner" &&
+    confirmation.basis === "explicit-current-unit-coverage" &&
+    nonempty(confirmation.attestationId) &&
+    !unresolvedText(confirmation.attestationId) &&
+    validDate(confirmation.confirmedAt) &&
+    confirmation.confirmedAt <= record.reviewedAt &&
+    confirmation.confirmedAt <= today &&
+    Number.isFinite(confirmation.mileageKm) &&
+    confirmation.mileageKm >= 0 &&
+    confirmation.mileageKm === record.reviewedMileageKm &&
+    confirmation.mileageKm === vehicle.km
+  );
+}
+
 /** Coverage can be common without asserting either actual usage or ownership. */
 function validCommonPolicy(record: FactoryWarrantyRecord): boolean {
   const policy = record.commonPolicy;
@@ -295,6 +335,9 @@ export function factoryWarrantyReviewFingerprint(
     optionalConfirmed: record.optionalConfirmed,
     ...(record.catalogConfirmation !== undefined
       ? { catalogConfirmation: record.catalogConfirmation }
+      : {}),
+    ...(record.currentCoverageConfirmation !== undefined
+      ? { currentCoverageConfirmation: record.currentCoverageConfirmation }
       : {}),
     conditionsConfirmed: record.conditionsConfirmed,
     scope: record.scope,
@@ -380,9 +423,11 @@ function resolveFactoryWarrantyCoverage(
   if (candidates.length !== 1) return undefined;
   const record = candidates[0];
   const catalogConfirmed = hasFactoryWarrantyCatalogConfirmation(record, today);
+  const currentCoverageConfirmed = hasFactoryWarrantyCurrentCoverageConfirmation(record, vehicle, today);
   if (
     (record.catalogConfirmation !== undefined && !catalogConfirmed) ||
-    (catalogConfirmed && matrix.records.some((entry) =>
+    (record.currentCoverageConfirmation !== undefined && !currentCoverageConfirmed) ||
+    ((catalogConfirmed || currentCoverageConfirmed) && matrix.records.some((entry) =>
       entry !== record &&
       entry?.unitBinding?.unitKey === record.unitBinding!.unitKey)) ||
     (!vehicle.diferenciais.some((item) => item?.tag === "garantia_fabrica") &&
@@ -475,7 +520,7 @@ function resolveFactoryWarrantyCoverage(
     !normalize(record.vehicle.brand) ||
     !normalize(record.vehicle.modelVersion) ||
     !record.mileage ||
-    !["unlimited", "limited"].includes(record.mileage.kind)
+    (!["unlimited", "limited"].includes(record.mileage.kind) && !currentCoverageConfirmed)
   )
     return undefined;
   if (record.commonPolicy) {
@@ -520,7 +565,7 @@ function resolveFactoryWarrantyCoverage(
     vehicle.km < record.reviewedMileageKm
   )
     return undefined;
-  if (record.mileage.kind === "unknown") return undefined;
+  if (record.mileage.kind === "unknown" && !currentCoverageConfirmed) return undefined;
   if (
     record.mileage.kind === "limited" &&
     (!Number.isFinite(record.mileage.limitKm) ||

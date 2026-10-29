@@ -141,6 +141,7 @@ function reusableTemplate(
     template.status !== "approved" ||
     // Owner confirmation belongs to one physical unit, never to a model policy.
     template.catalogConfirmation !== undefined ||
+    template.currentCoverageConfirmation !== undefined ||
     template.confirmedExpiryDate !== undefined ||
     template.confirmedExpiryMonth !== undefined ||
     template.approvedFingerprint !== factoryWarrantyReviewFingerprint(template)
@@ -220,6 +221,13 @@ function existingReason(
     return "vehicle-identity-changed";
   if (!Number.isFinite(vehicle.km) || vehicle.km < record.reviewedMileageKm)
     return "mileage-invalid-or-regressed";
+  if (
+    record.mileage.kind === "unknown" &&
+    record.currentCoverageConfirmation &&
+    Number.isFinite(record.currentCoverageConfirmation.mileageKm) &&
+    vehicle.km !== record.currentCoverageConfirmation.mileageKm
+  )
+    return "current-coverage-mileage-changed";
   if (record.mileage.kind === "limited" && vehicle.km >= record.mileage.limitKm)
     return "mileage-limit-reached";
   if (record.confirmedExpiryMonth !== undefined) {

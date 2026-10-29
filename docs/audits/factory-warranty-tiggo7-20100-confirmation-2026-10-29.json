@@ -1,0 +1,192 @@
+{
+  "reviewId": "warranty-20261029-20100-current-powertrain",
+  "reviewedAt": "2026-10-29",
+  "checkedAt": "2026-10-29T12:17:29.230Z",
+  "status": "approved-current-unit-coverage",
+  "scope": "Individual current powertrain coverage for 20100; preserve documented exact-model policy and stamp for 20109. No automatic model rule, unlimited mileage statement, general warranty or actual expiry is inferred.",
+  "priorResearch": "docs/audits/factory-warranty-tiggo7-20100-pending-2026-10-28.json",
+  "ownerConfirmation": {
+    "attestationId": "netcar-owner-current-tiggo7-20100-20109-20261029",
+    "source": "netcar-owner",
+    "confirmedAt": "2026-10-29",
+    "quote": "tiggo 7 ambas em garantia pode colocar",
+    "vehicleIds": [
+      "20100",
+      "20109"
+    ],
+    "coverageCurrentlyActive": true,
+    "publicationAuthorized": true,
+    "manufacturerDocument": false,
+    "mileageLimitSpecified": false,
+    "unlimitedMileageConfirmed": false
+  },
+  "existingUsageAttestation": {
+    "source": "netcar-owner",
+    "attestationId": "netcar-private-stock-20261010",
+    "confirmedAt": "2026-10-10",
+    "scope": "netcar-stock",
+    "usage": "private",
+    "manufacturerDocument": false
+  },
+  "documentaryTerms": {
+    "scope": "powertrain",
+    "coverageSubtype": "engine-and-transmission",
+    "termYears": 5,
+    "startBasis": "first-delivery-to-consumer",
+    "maintenanceRequired": true,
+    "sourceIds": [
+      "caoa-reply-20260302-tiggo7-maxdrive-2024",
+      "caoa-reply-20251114-tiggo7-maxdrive-2024"
+    ],
+    "limitations": "The manufacturer replies establish the five-year engine/transmission term for a case identified as Tiggo 7 Pro Max Drive 2023/2024. They do not state its mileage policy or establish any date or maintenance history for Netcar unit 20100."
+  },
+  "publicVehicle": {
+    "id": "20100",
+    "unitKey": "plate-sha256:1a30e1a3fe2e5ad255fc53267fcbbf971cf79ad0fc339903b61d0e1b86e2f5dc",
+    "marca": "CHERY",
+    "modelo": "TIGGO 7 PRO MAX DRIVE TURBO",
+    "motor": "1.6",
+    "cambio": "AUTOMATICO",
+    "anoFabricacao": 2023,
+    "year": 2024,
+    "km": 26178,
+    "price": 1,
+    "diferenciais": [
+      {
+        "tag": "garantia_fabrica",
+        "descricao": "Garantia de fábrica"
+      }
+    ]
+  },
+  "otherPublicVehicle": {
+    "id": "20109",
+    "unitKey": "plate-sha256:af0c74fb3e3578b1e8e7c75723782f8680d0d0c9f0a1304d7336dcad2a07a98b",
+    "marca": "CHERY",
+    "modelo": "TIGGO 7 PRO MAX DRIVE TURBO",
+    "motor": "1.6",
+    "cambio": "AUTOMATICO",
+    "anoFabricacao": 2024,
+    "year": 2025,
+    "km": 16148,
+    "price": 1,
+    "diferenciais": [
+      {
+        "tag": "garantia_fabrica",
+        "descricao": "Garantia de fábrica"
+      }
+    ]
+  },
+  "approvedRecord": {
+    "recordId": "reviewed-v2-20261029-20100-powertrain",
+    "status": "approved",
+    "reviewedAt": "2026-10-29",
+    "vehicle": {
+      "vehicleId": "20100",
+      "brand": "CHERY",
+      "modelVersion": "TIGGO 7 PRO MAX DRIVE TURBO",
+      "manufactureYear": 2023,
+      "modelYear": 2024
+    },
+    "unitBinding": {
+      "unitKey": "plate-sha256:1a30e1a3fe2e5ad255fc53267fcbbf971cf79ad0fc339903b61d0e1b86e2f5dc",
+      "engine": "1.6",
+      "transmission": "AUTOMATICO"
+    },
+    "optionalId": 108,
+    "optionalConfirmed": true,
+    "conditionsConfirmed": true,
+    "scope": "powertrain",
+    "termYears": 5,
+    "usage": "private",
+    "reviewedMileageKm": 26178,
+    "mileage": {
+      "kind": "unknown"
+    },
+    "currentCoverageConfirmation": {
+      "source": "netcar-owner",
+      "attestationId": "netcar-owner-current-tiggo7-20100-20109-20261029",
+      "confirmedAt": "2026-10-29",
+      "basis": "explicit-current-unit-coverage",
+      "mileageKm": 26178
+    },
+    "powertrainReview": {
+      "coverageSubtype": "engine-and-transmission",
+      "usageAttestationId": "netcar-private-stock-20261010",
+      "displayLabel": "Motor e câmbio"
+    },
+    "sources": [
+      {
+        "sourceId": "caoa-reply-20260302-tiggo7-maxdrive-2024",
+        "label": "Resposta oficial CAOA Chery",
+        "url": "https://www.reclameaqui.com.br/chery-brasil/desgaste-do-volante-e-barulho-no-teto-em-tiggo-7-pro-max-drive-com-baixa-quilometragem_ixjrjP92xCBLZcNi/",
+        "locator": "Resposta da empresa, 02/03/2026, 16:29; case identifies Tiggo 7 Pro Max Drive 2023/2024; response references Manual do Proprietario, chapter 10, page 10-4. A resposta sustenta cinco anos para motor e transmissão desde a primeira entrega, condicionados ao manual e às revisões. A vigência atual desta unidade foi confirmada separadamente pelo responsável da Netcar; esta fonte não informa a política de quilometragem.",
+        "revision": "CAOA-20260302; resposta pública oficial CAOA Chery; Tiggo 7 Pro Max Drive Brasil 2023/2024; prazo e escopo revisados em 28/10/2026.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "CAOA-20260302",
+          "modelYear": 2024,
+          "reviewId": "warranty-20261029-20100-current-powertrain",
+          "reviewedAt": "2026-10-28"
+        }
+      },
+      {
+        "sourceId": "caoa-reply-20251114-tiggo7-maxdrive-2024",
+        "label": "Resposta oficial CAOA Chery",
+        "url": "https://www.reclameaqui.com.br/chery-brasil/ferrugem-prematura-nos-discos-de-freio-do-tiggo-7-pro-max-drive-20232024_I_0tFKtb7DpUX46Z/",
+        "locator": "Resposta da empresa, 14/11/2025, 11:17, in a case identified as Tiggo 7 Pro Max Drive 2023/2024. A resposta sustenta cinco anos para motor e transmissão desde a primeira entrega, condicionados ao manual e às revisões. A vigência atual desta unidade foi confirmada separadamente pelo responsável da Netcar; esta fonte não informa a política de quilometragem.",
+        "revision": "CAOA-20251114; resposta pública oficial CAOA Chery; Tiggo 7 Pro Max Drive Brasil 2023/2024; prazo e escopo revisados em 28/10/2026.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "CAOA-20251114",
+          "modelYear": 2024,
+          "reviewId": "warranty-20261029-20100-current-powertrain",
+          "reviewedAt": "2026-10-28"
+        }
+      }
+    ],
+    "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261029-20100-powertrain\",\"reviewedAt\":\"2026-10-29\",\"vehicle\":{\"vehicleId\":\"20100\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:1a30e1a3fe2e5ad255fc53267fcbbf971cf79ad0fc339903b61d0e1b86e2f5dc\",\"engine\":\"1.6\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"currentCoverageConfirmation\":{\"source\":\"netcar-owner\",\"attestationId\":\"netcar-owner-current-tiggo7-20100-20109-20261029\",\"confirmedAt\":\"2026-10-29\",\"basis\":\"explicit-current-unit-coverage\",\"mileageKm\":26178},\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"netcar-private-stock-20261010\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":26178,\"mileage\":{\"kind\":\"unknown\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"caoa-reply-20260302-tiggo7-maxdrive-2024\",\"label\":\"Resposta oficial CAOA Chery\",\"url\":\"https://www.reclameaqui.com.br/chery-brasil/desgaste-do-volante-e-barulho-no-teto-em-tiggo-7-pro-max-drive-com-baixa-quilometragem_ixjrjP92xCBLZcNi/\",\"locator\":\"Resposta da empresa, 02/03/2026, 16:29; case identifies Tiggo 7 Pro Max Drive 2023/2024; response references Manual do Proprietario, chapter 10, page 10-4. A resposta sustenta cinco anos para motor e transmissão desde a primeira entrega, condicionados ao manual e às revisões. A vigência atual desta unidade foi confirmada separadamente pelo responsável da Netcar; esta fonte não informa a política de quilometragem.\",\"revision\":\"CAOA-20260302; resposta pública oficial CAOA Chery; Tiggo 7 Pro Max Drive Brasil 2023/2024; prazo e escopo revisados em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"CAOA-20260302\",\"modelYear\":2024,\"reviewId\":\"warranty-20261029-20100-current-powertrain\",\"reviewedAt\":\"2026-10-28\"}},{\"sourceId\":\"caoa-reply-20251114-tiggo7-maxdrive-2024\",\"label\":\"Resposta oficial CAOA Chery\",\"url\":\"https://www.reclameaqui.com.br/chery-brasil/ferrugem-prematura-nos-discos-de-freio-do-tiggo-7-pro-max-drive-20232024_I_0tFKtb7DpUX46Z/\",\"locator\":\"Resposta da empresa, 14/11/2025, 11:17, in a case identified as Tiggo 7 Pro Max Drive 2023/2024. A resposta sustenta cinco anos para motor e transmissão desde a primeira entrega, condicionados ao manual e às revisões. A vigência atual desta unidade foi confirmada separadamente pelo responsável da Netcar; esta fonte não informa a política de quilometragem.\",\"revision\":\"CAOA-20251114; resposta pública oficial CAOA Chery; Tiggo 7 Pro Max Drive Brasil 2023/2024; prazo e escopo revisados em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"CAOA-20251114\",\"modelYear\":2024,\"reviewId\":\"warranty-20261029-20100-current-powertrain\",\"reviewedAt\":\"2026-10-28\"}}]}"
+  },
+  "mileageDecision": {
+    "policy": "unknown",
+    "currentEligibilityBasis": "owner-confirmed-active-coverage-at-current-unit-mileage",
+    "confirmedMileageKm": 26178,
+    "numericManufacturerLimit": null,
+    "unlimitedMileage": false,
+    "recheckIfMileageChanges": true,
+    "mayAuthorizeOtherUnits": false
+  },
+  "timing": {
+    "actualStartDate": null,
+    "confirmedExpiryDate": null,
+    "confirmedExpiryMonth": null,
+    "resaleRestartsTerm": false,
+    "conservativeEstimatedEndYear": 2028,
+    "finalYearRequiresConfirmedExpiry": true
+  },
+  "existing20109": {
+    "ruleId": "documented-20066-private-exact-variant",
+    "status": "eligible",
+    "scope": "powertrain",
+    "conservativeEstimatedEndYear": 2029,
+    "documentedMileagePolicyUnchanged": true
+  },
+  "preservation": {
+    "baseCommit": "1342c42735aad3eda1b332028c8e39c3b488e328",
+    "previousRecordCount": 22,
+    "previousRecordsSha256": "192cb54f7e71f6ee710b6fae877012898ebca22b12dfa9f9eff0ce51ae207852",
+    "automationRulesSha256": "9293a17a28e8db243317d523659adadcf3928a345b39e0bf362a7db38021c242",
+    "automationRulesUnchanged": true,
+    "upstreamFlagsUnchanged": true,
+    "equipmentAndEditorialUnchanged": true
+  },
+  "privacy": {
+    "rawFeedStored": false,
+    "platesOrChassisStored": false,
+    "credentialsStored": false,
+    "photoUrlsStored": false
+  },
+  "publication": {
+    "state": "prepared",
+    "publicVerificationRequired": true
+  }
+}

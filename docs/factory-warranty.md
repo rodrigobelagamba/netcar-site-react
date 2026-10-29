@@ -250,6 +250,26 @@ preservados. Extensões e bateria genérica continuam sem caminho de selo produt
 
 ## Ano estimado e vigência
 
+### Confirmação de vigência da unidade sem política de km documentada
+
+Em 29/10/2026, o responsável confirmou que os Tiggo 7 IDs20100 e 20109 estão
+em garantia e autorizou os carimbos. O ID20109 conserva a regra documental
+exata já existente. Para o ID20100, as respostas oficiais da CAOA Chery
+sustentam cinco anos de motor/câmbio; a política de quilometragem permanece
+`unknown`, sem afirmar limite numérico ou quilometragem ilimitada.
+
+O campo individual `currentCoverageConfirmation` registra a confirmação
+operacional de vigência aos 26.178 km. Esse caminho exige identidade física,
+versão, anos, motor, câmbio e quilometragem exatamente iguais aos revisados;
+uma mudança de km exige nova revisão. Não substitui a flag de origem, não
+aprova garantia geral ou bateria e não pode servir de modelo para outras
+unidades. Fontes oficiais, fingerprint, revogações e bloqueios de vencimento
+continuam obrigatórios. O ano 2028 é apenas FAB2023 + cinco anos; no próprio
+ano final, permanece necessária a confirmação do vencimento efetivo.
+
+O ateste do responsável e a evidência documental ficam separados em
+`docs/audits/factory-warranty-tiggo7-20100-confirmation-2026-10-29.json`.
+
 O ano exibido é fabricação + prazo da unidade revisada, com a nota:
 
 > *Estimativa pela fabricação e documentação oficial da montadora. Validade, cobertura e km conforme manual do modelo/ano.
