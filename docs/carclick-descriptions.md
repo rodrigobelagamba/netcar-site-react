@@ -38,6 +38,39 @@ são apresentadas como vencimentos efetivos. Falta de comprovação ou falha na
 consulta atual apenas omite a chamada de garantia; o carro continua no feed.
 Novas afirmações de equipamento ou mudança editorial exigem revisão própria.
 
+## Atualização da garantia e acompanhamento
+
+O texto padrão de um carro novo é gerado na consulta do XML. A abertura de
+garantia depende também de uma projeção já publicada das aprovações canônicas:
+
+- `scripts/generate-carclick-warranty.ts` usa os mesmos resolvers de garantia do
+  site e o snapshot completo e recente produzido pelo build existente. Não
+  consulta outro estoque nem cria aprovações.
+- `npm run feeds:carclick-warranty` gera
+  `public/feeds/carclick-warranty.json`. Esse comando já faz parte do build,
+  depois da preparação do estoque e do registro canônico. Executá-lo sozinho
+  com snapshot ausente ou antigo não habilita garantias; a saída fica sem
+  afirmações aprovadas.
+- `src/data/carclick-warranty-model-aliases.json` registra somente diferenças
+  de nome XML/API conferidas por unidade e vinculadas à identidade física em
+  hash. Não autoriza retirar sufixos genericamente nem deduzir versões.
+- Em cada consulta, `carclick-warranty.php` confere a projeção publicada contra
+  o registro canônico, os dados atuais e a validade. Uma divergência omite
+  somente a afirmação de garantia, preservando o carro e a descrição padrão.
+
+O acompanhamento pertence à automação existente **Carimbos e entradas do
+estoque Netcar (CARIMBO)**. A conferência do feed ocorre uma vez por dia, após
+09:00 no fuso `America/Sao_Paulo`, aproveitando a coleta já realizada. Ela não
+gera novamente os textos nem substitui a transformação feita pela hospedagem.
+
+Um carro novo pode ser elegível por uma regra canônica já aprovada, sem mudar
+o arquivo do registro de garantias. Mesmo nesse caso, se a unidade ainda não
+estiver no manifesto publicado, o CARIMBO deve regenerar e publicar a projeção
+pelo build e deploy existentes. Não é necessário alterar a regra ou o registro
+apenas para provocar esse build. Se também houver uma publicação de garantia
+em andamento, incluir a projeção nesse mesmo fluxo, sem deploy concorrente ou
+duplicado. Até a publicação ser comprovada, o carro continua com o texto padrão.
+
 ## Conferência
 
 Cabeçalhos públicos de diagnóstico:
