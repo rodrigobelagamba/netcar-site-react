@@ -44,6 +44,16 @@ let getBootstrapVehicles;
 before(async () => {
   server = await createServer({
     root,
+    // The matcher is independent of generated navigation metadata. A clean
+    // checkout runs these tests before the stock-backed landings generator.
+    plugins: [{
+      name: "isolated-landing-navigation",
+      enforce: "pre",
+      resolveId(source, importer) {
+        if (source === "./landings.json" && importer?.endsWith("/src/data/seo/index.ts")) return "\0test-landing-navigation";
+      },
+      load(id) { if (id === "\0test-landing-navigation") return "export default []"; },
+    }],
     configFile: false,
     envFile: false,
     appType: "custom",
