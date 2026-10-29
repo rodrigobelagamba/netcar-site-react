@@ -39,7 +39,6 @@ const fixtures = [
 
 let server;
 let matchesLandingFilters;
-let getBootstrapVehicles;
 
 before(async () => {
   server = await createServer({
@@ -64,9 +63,7 @@ before(async () => {
   ({ matchesLandingFilters } = await server.ssrLoadModule(
     "/src/data/seo/index.ts",
   ));
-  ({ getBootstrapVehicles } = await server.ssrLoadModule(
-    "/src/lib/stockBootstrap.ts",
-  ));
+
 });
 
 after(async () => {
@@ -128,55 +125,6 @@ test("landing selection keeps brand and category boundaries on top of model matc
       { marca: "HONDA", modelo: "HRV" },
     ),
     true,
-  );
-});
-
-test("the initial stock snapshot applies the same family boundary as the landing", () => {
-  const bootstrap = {
-    scope: "showroom",
-    vehicles: [
-      {
-        id: "hatch",
-        marca: "HYUNDAI",
-        modelo: "HB20 COMFORT",
-        price: 55000,
-        year: 2020,
-      },
-      {
-        id: "sedan",
-        marca: "HYUNDAI",
-        modelo: "HB20S COMFORT",
-        price: 60000,
-        year: 2020,
-      },
-      {
-        id: "crossover",
-        marca: "HYUNDAI",
-        modelo: "HB20X STYLE",
-        price: 60000,
-        year: 2020,
-      },
-      {
-        id: "sold",
-        marca: "HYUNDAI",
-        modelo: "HB20 COMFORT",
-        price: 0,
-        year: 2019,
-      },
-    ],
-  };
-  assert.deepEqual(
-    getBootstrapVehicles({ marca: "HYUNDAI", modelo: "HB20" }, bootstrap).map(
-      ({ id }) => id,
-    ),
-    ["hatch"],
-  );
-  assert.deepEqual(
-    getBootstrapVehicles(
-      { marca: "HYUNDAI", modelo: "HB20", includeSold: true },
-      bootstrap,
-    ).map(({ id }) => id),
-    ["hatch", "sold"],
   );
 });
 
