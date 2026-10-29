@@ -103,7 +103,7 @@ export interface ContentSeoPage {
 // de veículos na página, garantindo conteúdo único (o estoque de verdade).
 export interface LandingSeoFilters {
   marca?: string;
-  /** Busca parcial no nome do modelo (ex.: "HRV" encontra todas as versões). */
+  /** Família/versão por prefixo delimitado, com aliases como HRV/HR-V. */
   modelo?: string;
   categoria?: string;
   cambio?: string;
@@ -124,6 +124,10 @@ export interface LandingSeoPage {
   filters: LandingSeoFilters;
   /** Malha curta e editorial; evita ligar todas as landings entre si. */
   relatedSlugs: string[];
+  /** Todos os modelos disponíveis desta marca, sem limite da malha de sugestões. */
+  modelSlugs?: string[];
+  /** Categoria editorial para navegação, sem substituir o cadastro da unidade. */
+  category?: string;
   title: string;
   description: string;
   h1: string;

@@ -109,7 +109,7 @@ test("the whole-inventory button runs the reset callback without submitting", as
   let clearCalls = 0;
   await renderNotice({ onClear: () => clearCalls++ });
   const button = renderer.root.findByType("button");
-  assert.equal(button.children.join(""), "Ver todos");
+  assert.equal(button.children.join(""), "Ver todo o estoque");
   assert.equal(button.props["aria-label"], "Ver todos os veículos do estoque");
   assert.equal(button.props.type, "button");
   await act(async () => button.props.onClick());

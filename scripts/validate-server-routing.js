@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { isHomeHeroCandidate } from "../src/lib/homeHeroSelection.mjs";
+import { matchesLandingModel } from "../src/lib/landingModelMatch.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(join(root, path), "utf8");
@@ -339,8 +340,11 @@ for (const queryField of ["combustivel", "motor", "limit", "offset"]) {
   );
 }
 expect(
-  landingFilters.includes("function compact(") &&
-    landingFilters.includes("matchesLandingFilters"),
+  landingFilters.includes("matchesLandingModel(") &&
+    matchesLandingModel("HR-V ADVANCE", "HRV") &&
+    matchesLandingModel("TCROSS HIGHLINE", "T CROSS") &&
+    !matchesLandingModel("HB20S COMFORT", "HB20") &&
+    !matchesLandingModel("CROSSFOX", "FOX"),
   "filtro único de landings não normaliza aliases de modelo",
 );
 expect(

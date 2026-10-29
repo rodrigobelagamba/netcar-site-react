@@ -80,6 +80,70 @@ function validReport(report) {
         typeof finding.message === 'string' && ['high', 'medium', 'info'].includes(finding.severity)));
 }
 
+const SEO_SITE = 'https://www.netcarmultimarcas.com.br';
+const SEO_ACCESS = ['configured', 'not_configured', 'authentication_failed', 'quota_exceeded'];
+const SEO_GOOGLE_STATUS = ['indexed', 'not_indexed', 'unknown'];
+const SEO_IMAGE_STATUS = ['awaiting_photos', 'vehicle_image_present', 'wrong_or_missing_vehicle_image', 'unknown'];
+const SEO_COUNT_KEYS = ['active', 'checked', 'googleInspections', 'indexed', 'notIndexed', 'unknown', 'withPublicIssues', 'awaitingPhotos'];
+const seoVehicleUrl = (value, id) => typeof value === 'string' && value.length <= 1000 &&
+  new RegExp(`^${SEO_SITE.replaceAll('.', '\\.')}\/veiculo\/[a-z0-9-]+-${id}$`).test(value);
+const seoIssues = (values) => Array.isArray(values) && values.length <= 20 && values.every((value) =>
+  typeof value === 'string' && /^(?:http_\d{3}|missing_sitemap|robots_disallow|noindex|canonical_mismatch|missing_vehicle_content|wrong_or_missing_vehicle_image|public_check_unavailable)$/.test(value));
+
+// The authenticated heartbeat needs a queue and findings, not the private
+// ledger, image URLs, response bodies, arbitrary error strings or credentials.
+function projectSeoDiscoveryReport(saved) {
+  const invalid = () => { throw new EquipmentError(503, 'Relatório SEO inválido; preserve o arquivo para investigação.'); };
+  if (saved?.schemaVersion !== 1 || !validInstant(saved.generatedAt) ||
+    !['checked', 'google_access_required'].includes(saved.status) || !SEO_ACCESS.includes(saved.googleAccess) ||
+    !saved.counts || !SEO_COUNT_KEYS.every((key) => Number.isSafeInteger(saved.counts[key]) && saved.counts[key] >= 0 && saved.counts[key] <= 500) ||
+    saved.counts.indexed + saved.counts.notIndexed + saved.counts.unknown !== saved.counts.active ||
+    !Array.isArray(saved.inspectionQueue) || saved.inspectionQueue.length > saved.counts.active ||
+    !Array.isArray(saved.vehicles) || saved.vehicles.length !== saved.counts.active ||
+    !Array.isArray(saved.events) || saved.events.length > 1000) invalid();
+  const google = (value) => {
+    if (value == null) return null;
+    if (!SEO_GOOGLE_STATUS.includes(value.status) || !validInstant(value.checkedAt) ||
+      !['gsc-api', 'gsc-ui'].includes(value.source) ||
+      (value.coverageState != null && !boundedText(value.coverageState, 500))) invalid();
+    return { source: value.source, status: value.status, checkedAt: value.checkedAt,
+      coverageState: value.coverageState ?? null };
+  };
+  const vehicles = saved.vehicles.map((row) => {
+    if (typeof row?.id !== 'string' || !/^\d{1,20}$/.test(row.id) || !seoVehicleUrl(row.url, row.id) ||
+      !boundedText(row.name, 500) || !validInstant(row.firstSeenAt) || typeof row.firstSeenIsBaseline !== 'boolean' ||
+      !validInstant(row.nextCheckAt) || !SEO_GOOGLE_STATUS.includes(row.google?.status) ||
+      !seoIssues(row.public?.issues) || !SEO_IMAGE_STATUS.includes(row.public?.imageStatus)) invalid();
+    return { vehicleId: row.id, url: row.url, name: row.name, firstSeenAt: row.firstSeenAt,
+      firstSeenIsBaseline: row.firstSeenIsBaseline, nextCheckAt: row.nextCheckAt,
+      googleStatus: row.google.status, publicIssues: row.public.issues, imageStatus: row.public.imageStatus };
+  });
+  const currentIds = new Set(vehicles.map((row) => row.vehicleId));
+  if (currentIds.size !== vehicles.length) invalid();
+  const inspectionQueue = saved.inspectionQueue.map((row) => {
+    if (typeof row?.vehicleId !== 'string' || !currentIds.has(row.vehicleId) || !seoVehicleUrl(row.url, row.vehicleId) ||
+      !boundedText(row.name, 500) || !validInstant(row.firstSeenAt) || typeof row.firstSeenIsBaseline !== 'boolean' ||
+      !(row.lastInspectionAt === null || validInstant(row.lastInspectionAt))) invalid();
+    return { vehicleId: row.vehicleId, url: row.url, name: row.name, firstSeenAt: row.firstSeenAt,
+      firstSeenIsBaseline: row.firstSeenIsBaseline, lastInspectionAt: row.lastInspectionAt,
+      lastKnownGoogle: google(row.lastKnownGoogle) };
+  });
+  if (new Set(inspectionQueue.map((row) => row.vehicleId)).size !== inspectionQueue.length) invalid();
+  const events = saved.events.map((event) => {
+    if (!validHash(event?.id) || !validInstant(event.at)) invalid();
+    if (event.type === 'google_access' && SEO_ACCESS.includes(event.status))
+      return { id: event.id, at: event.at, type: event.type, status: event.status };
+    if (event.type !== 'vehicle_status' || typeof event.vehicleId !== 'string' || !/^\d{1,20}$/.test(event.vehicleId) ||
+      !seoVehicleUrl(event.url, event.vehicleId) || !seoIssues(event.publicIssues) ||
+      !SEO_GOOGLE_STATUS.includes(event.googleStatus) || !SEO_IMAGE_STATUS.includes(event.imageStatus) ||
+      ![null, 0, 3, 7, 14].includes(event.pendingBandDays)) invalid();
+    return Object.fromEntries(['id', 'at', 'type', 'vehicleId', 'url', 'publicIssues', 'imageStatus', 'googleStatus', 'pendingBandDays']
+      .map((key) => [key, event[key]]));
+  });
+  return { schemaVersion: 1, generatedAt: saved.generatedAt, status: saved.status, googleAccess: saved.googleAccess,
+    counts: Object.fromEntries(SEO_COUNT_KEYS.map((key) => [key, saved.counts[key]])), vehicles, inspectionQueue, events };
+}
+
 function retainedReviews(reviews, currentKeys) {
   const entries = Object.entries(reviews);
   const current = entries.filter(([key]) => currentKeys.has(key));
@@ -280,6 +344,29 @@ export function createEquipmentService({
     return { state, report, partial, error: errors.length ? errors.join(' ') : null };
   }
 
+  function readSeoDiscovery() {
+    let runStatus = null;
+    let report = null;
+    const errors = [];
+    try {
+      const saved = readJson('seo-discovery/run-status.json', null);
+      if (saved !== null) {
+        if (saved.schemaVersion !== 1 || !validInstant(saved.at) || !['completed', 'failed'].includes(saved.status) ||
+          (saved.status === 'completed' && !SEO_ACCESS.includes(saved.googleAccess)))
+          throw new EquipmentError(503, 'Estado SEO inválido; preserve o arquivo para investigação.');
+        runStatus = { schemaVersion: 1, at: saved.at, status: saved.status,
+          ...(saved.status === 'completed' ? { googleAccess: saved.googleAccess } :
+            { reason: 'Monitor SEO não concluído; último relatório válido preservado.' }) };
+      }
+    } catch (error) { errors.push(error.message); }
+    try {
+      const saved = readJson('seo-discovery/report.json', null);
+      if (saved !== null) report = projectSeoDiscoveryReport(saved);
+    } catch (error) { errors.push(error.message); }
+    return { runStatus, report, matchesLastRun: !!(report && runStatus?.status === 'completed' && report.generatedAt === runStatus.at),
+      error: errors.length ? errors.join(' ') : null };
+  }
+
   function getState() {
     let schedule;
     try { schedule = getSchedule(); } catch (error) {
@@ -313,7 +400,7 @@ export function createEquipmentService({
       }));
     } catch (error) { researchError = error.message; discovery = null; }
     return { schedule, report, reviews, research: { discovery, revisions: researchReviews, error: researchError },
-      publicCheck: readPublicCheck() };
+      publicCheck: readPublicCheck(), seoDiscovery: readSeoDiscovery() };
   }
 
   function readResearchLedger() {

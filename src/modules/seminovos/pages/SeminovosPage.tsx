@@ -16,6 +16,7 @@ import { ChevronDown, Filter, MessageCircle, ShieldCheck } from "lucide-react";
 import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
 import { matchesVehicleSearch, parseVehicleSearch } from "@/lib/vehicleSearch";
 import { matchesVehicleBrand } from "@/lib/vehicleBrand";
+import { matchesLandingModel } from "@/lib/landingModelMatch.mjs";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
@@ -526,6 +527,12 @@ export function SeminovosPage() {
 
     let filtered = [...vehicles];
 
+    if (search.modelo) {
+      filtered = filtered.filter((vehicle) =>
+        matchesLandingModel(vehicle.modelo || vehicle.name, search.modelo, vehicle.marca),
+      );
+    }
+
     // Filtro por categoria (fallback caso a API não filtre corretamente)
     if (search.categoria) {
       const categoriaUpper = search.categoria.toUpperCase();
@@ -550,7 +557,7 @@ export function SeminovosPage() {
     }
 
     return filtered;
-  }, [vehicles, search.categoria, search.combustivel]);
+  }, [vehicles, search.modelo, search.categoria, search.combustivel]);
 
   const filteredAndSortedVehicles = useMemo(() => {
     const filtered = search.busca
@@ -1000,7 +1007,7 @@ export function SeminovosPage() {
               </div>
             </details>
           </div>
-          <div className="flex flex-wrap items-center gap-x-3">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <p
               className="text-xs text-muted-foreground sm:text-sm"
               role="status"

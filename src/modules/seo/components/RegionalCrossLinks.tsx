@@ -69,11 +69,11 @@ export function NearbyMarketsNav({ selectionName }: { selectionName: string }) {
     <section className="pb-16">
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <h2 className="text-2xl font-bold text-fg">
-          Planeje a visita para ver {selectionName}
+          {selectionName} para quem busca na Região Metropolitana
         </h2>
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-600">
-          O estoque e as duas lojas ficam em Esteio. Consulte distância, rota e
-          atendimento para os mercados mais próximos antes de se deslocar.
+          As duas lojas ficam em Esteio. Escolha sua cidade para consultar o caminho
+          até a Netcar e fale com a equipe sobre o carro que quer conhecer.
         </p>
         <nav
           aria-label={`Atendimento regional para ${selectionName}`}

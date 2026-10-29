@@ -1,6 +1,7 @@
 import type { Vehicle, VehiclesQuery } from "@/catalog/endpoints/vehicles";
 import { extractVehicleIdFromSlug } from "@/lib/slug";
 import { sanitizeVehicleImages } from "@/lib/vehicleImagePolicy.mjs";
+import { matchesLandingModel } from "@/lib/landingModelMatch.mjs";
 
 export type StockBootstrap = {
   generatedAt?: string;
@@ -43,10 +44,6 @@ function normalized(value: unknown): string {
     .replace(/[^A-Z0-9]+/g, " ")
     .trim()
     .replace(/\s+/g, " ");
-}
-
-function compact(value: unknown): string {
-  return normalized(value).replace(/\s+/g, "");
 }
 
 function numericFilter(value: unknown): number | undefined {
@@ -94,7 +91,7 @@ export function getBootstrapVehicles(
     if (brand && normalized(vehicle.marca) !== brand) return false;
     if (
       model &&
-      !compact(vehicle.modelo || vehicle.name).includes(compact(model))
+      !matchesLandingModel(vehicle.modelo || vehicle.name, model, vehicle.marca)
     )
       return false;
     if (category && normalized(vehicle.categoria) !== category) return false;

@@ -47,8 +47,9 @@ test("normalized prices, new vehicles and singleton ranges update without rebuil
   const copy = resolveLandingParagraphs(landing, [
     { price: 123456, year: 2026 },
   ]).join(" ");
-  assert.match(copy, /R\$ 123\.456 a R\$ 123\.456/);
-  assert.match(copy, /2026 a 2026/);
+  assert.match(copy, /R\$ 123\.456/);
+  assert.match(copy, /de 2026,/);
+  assert.doesNotMatch(copy, /123\.456 a R\$ 123\.456|2026 a 2026/);
   assert.doesNotMatch(copy, /151\.900|2025/);
 });
 

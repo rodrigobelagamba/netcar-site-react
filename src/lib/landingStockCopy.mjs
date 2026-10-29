@@ -1,4 +1,4 @@
-const PROFILE_FIELDS = ["minPrice", "maxPrice", "minYear", "maxYear", "years", "count"];
+const PROFILE_FIELDS = ["minPrice", "maxPrice", "prices", "minYear", "maxYear", "years", "count"];
 
 // Templates preserve editorial wording, while commercial values are always
 // derived from the same current selection used to render the vehicle cards.
@@ -29,6 +29,9 @@ export function resolveLandingParagraphs(landing, vehicles) {
   const profile = {
     minPrice: formatPrice(Math.min(...prices)),
     maxPrice: formatPrice(Math.max(...prices)),
+    prices: Math.min(...prices) === Math.max(...prices)
+      ? formatPrice(Math.min(...prices))
+      : `${formatPrice(Math.min(...prices))} a ${formatPrice(Math.max(...prices))}`,
     minYear: completeYears ? Math.min(...years) : null,
     maxYear: completeYears ? Math.max(...years) : null,
     years: completeYears

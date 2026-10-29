@@ -147,6 +147,91 @@ function publicCheckReport({ generatedAt = '2026-10-12T12:03:00.000Z', status = 
   };
 }
 
+function seoDiscoveryReport() {
+  const at = '2026-10-29T12:00:00.000Z';
+  const url = 'https://www.netcarmultimarcas.com.br/veiculo/fiat-fastback-2025-20050';
+  const observed = { source: 'gsc-ui', status: 'not_indexed', checkedAt: at,
+    coverageState: 'Detectada, mas não indexada', privateToken: 'NEVER_EXPOSE' };
+  return { schemaVersion: 1, generatedAt: at, status: 'google_access_required', googleAccess: 'not_configured',
+    counts: { active: 1, checked: 1, googleInspections: 0, indexed: 0, notIndexed: 0, unknown: 1, withPublicIssues: 1, awaitingPhotos: 0 },
+    vehicles: [{ id: '20050', url, name: 'Fiat Fastback 2025', firstSeenAt: at, firstSeenIsBaseline: true,
+      nextCheckAt: '2026-10-30T12:00:00.000Z', google: { status: 'unknown', error: 'private error NEVER_EXPOSE' },
+      public: { issues: ['missing_sitemap'], imageStatus: 'vehicle_image_present', ogImage: 'NEVER_EXPOSE', carImages: ['NEVER_EXPOSE'] },
+      plate: 'NEVER_EXPOSE', vin: 'NEVER_EXPOSE' }],
+    inspectionQueue: [{ vehicleId: '20050', url, name: 'Fiat Fastback 2025', firstSeenAt: at,
+      firstSeenIsBaseline: true, lastInspectionAt: at, lastKnownGoogle: observed, raw: 'NEVER_EXPOSE' }],
+    events: [{ id: KEY, key: '20050', at, type: 'vehicle_status', vehicleId: '20050', url,
+      publicIssues: ['missing_sitemap'], imageStatus: 'vehicle_image_present', googleStatus: 'unknown', pendingBandDays: null, raw: 'NEVER_EXPOSE' },
+    { id: NEW_KEY, key: 'google_access', at, type: 'google_access', status: 'not_configured', token: 'NEVER_EXPOSE' }],
+    raw: 'NEVER_EXPOSE' };
+}
+
+function saveSeoDiscovery(h, value = seoDiscoveryReport(), runStatus = { schemaVersion: 1,
+  at: value.generatedAt, status: 'completed', googleAccess: value.googleAccess, token: 'NEVER_EXPOSE' }) {
+  mkdirSync(join(h.stateDir, 'seo-discovery'), { recursive: true });
+  writeFileSync(join(h.stateDir, 'seo-discovery', 'report.json'), JSON.stringify(value));
+  writeFileSync(join(h.stateDir, 'seo-discovery', 'run-status.json'), JSON.stringify(runStatus));
+}
+
+test('SEO discovery exposes bounded queue and findings without private ledger fields or new jobs', (t) => {
+  const h = harness(t);
+  assert.deepEqual(h.service.getState().seoDiscovery, { runStatus: null, report: null, matchesLastRun: false, error: null });
+  saveSeoDiscovery(h);
+  const result = h.service.getState().seoDiscovery;
+  assert.equal(result.matchesLastRun, true);
+  assert.equal(result.error, null);
+  assert.equal(result.report.counts.active, 1);
+  assert.equal(result.report.vehicles[0].googleStatus, 'unknown');
+  assert.deepEqual(result.report.vehicles[0].publicIssues, ['missing_sitemap']);
+  assert.equal(result.report.inspectionQueue[0].lastKnownGoogle.status, 'not_indexed');
+  assert.equal(result.report.events.length, 2);
+  assert.ok(!JSON.stringify(result).includes('NEVER_EXPOSE'));
+  assert.equal(h.options.length, 0, 'reading SEO results must not trigger collection or publishing');
+});
+
+test('failed or mismatched SEO run keeps its prior report visibly separate from current success', (t) => {
+  const h = harness(t);
+  h.saveReport();
+  saveSeoDiscovery(h, seoDiscoveryReport(), { schemaVersion: 1, at: '2026-10-30T12:00:00.000Z',
+    status: 'failed', reason: 'Error with credential NEVER_EXPOSE' });
+  const before = readFileSync(join(h.stateDir, 'seo-discovery', 'report.json'), 'utf8');
+  const result = h.service.getState();
+  assert.equal(result.seoDiscovery.runStatus.status, 'failed');
+  assert.equal(result.seoDiscovery.matchesLastRun, false);
+  assert.equal(result.seoDiscovery.report.generatedAt, '2026-10-29T12:00:00.000Z');
+  assert.equal(result.report.vehicles[0].id, '20050');
+  assert.ok(!JSON.stringify(result.seoDiscovery).includes('NEVER_EXPOSE'));
+  assert.equal(readFileSync(join(h.stateDir, 'seo-discovery', 'report.json'), 'utf8'), before);
+  saveSeoDiscovery(h, seoDiscoveryReport(), { schemaVersion: 1, at: '2026-10-30T12:00:00.000Z',
+    status: 'completed', googleAccess: 'not_configured' });
+  assert.equal(h.service.getState().seoDiscovery.matchesLastRun, false);
+});
+
+test('malformed SEO totals, unsafe URLs and states do not hide equipment reports or overwrite files', (t) => {
+  const h = harness(t);
+  h.saveReport();
+  for (const patch of [
+    (value) => { value.counts.indexed = 1; },
+    (value) => { value.counts.active = 501; },
+    (value) => { value.vehicles[0].url = 'https://user:NEVER_EXPOSE@www.netcarmultimarcas.com.br/veiculo/fiat-20050'; },
+    (value) => { value.inspectionQueue[0].url += '?token=NEVER_EXPOSE'; },
+    (value) => { value.inspectionQueue.push(value.inspectionQueue[0]); },
+    (value) => { value.vehicles[0].public.issues = ['NEVER_EXPOSE']; },
+    (value) => { value.events[0].pendingBandDays = 1000; },
+    (value) => { value.generatedAt = 'yesterday'; },
+  ]) {
+    const source = seoDiscoveryReport(); patch(source); saveSeoDiscovery(h, source);
+    const before = readFileSync(join(h.stateDir, 'seo-discovery', 'report.json'), 'utf8');
+    const result = h.service.getState();
+    assert.equal(result.seoDiscovery.report, null);
+    assert.match(result.seoDiscovery.error, /inválido/);
+    assert.ok(!JSON.stringify(result.seoDiscovery).includes('NEVER_EXPOSE'));
+    assert.equal(result.report.vehicles[0].id, '20050');
+    assert.equal(readFileSync(join(h.stateDir, 'seo-discovery', 'report.json'), 'utf8'), before);
+  }
+  assert.equal(h.options.length, 0);
+});
+
 test('weekly state exposes the last complete result separately from a failed partial attempt', (t) => {
   const h = harness(t);
   h.saveReport();

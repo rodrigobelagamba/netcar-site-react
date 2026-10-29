@@ -1,12 +1,9 @@
 import citiesJson from "./cities.json";
 import regionalFocusJson from "./regional-focus.json";
 import landingsJson from "./landings.json";
-import type {
-  CitySeoPage,
-  LandingSeoPage,
-  LandingSeoFilters,
-} from "./types";
+import type { CitySeoPage, LandingSeoPage, LandingSeoFilters } from "./types";
 import { resolvedVehicleCategory } from "@/lib/vehicleCategory";
+import { matchesLandingModel } from "@/lib/landingModelMatch.mjs";
 
 // Módulos separados permitem ao build carregar artigos e páginas editoriais
 // somente nas rotas que os usam, preservando a API pública deste arquivo.
@@ -65,10 +62,6 @@ function normalized(value: unknown): string {
     .replace(/\s+/g, " ");
 }
 
-function compact(value: unknown): string {
-  return normalized(value).replace(/\s+/g, "");
-}
-
 /** Predicado único usado pela landing React e pelos links de veículos. */
 export function matchesLandingFilters(
   vehicle: {
@@ -91,7 +84,11 @@ export function matchesLandingFilters(
   }
   if (
     filters.modelo &&
-    !compact(vehicle.modelo || vehicle.name).includes(compact(filters.modelo))
+    !matchesLandingModel(
+      vehicle.modelo || vehicle.name,
+      filters.modelo,
+      vehicle.marca,
+    )
   ) {
     return false;
   }

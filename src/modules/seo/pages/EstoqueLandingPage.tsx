@@ -63,6 +63,12 @@ export function EstoqueLandingPage() {
     () => (landing ? getRelatedLandingPages(landing.slug) : []),
     [landing],
   );
+  const brandModels = useMemo(
+    () => (landing?.modelSlugs || [])
+      .map(getLandingPage)
+      .filter((model) => model?.indexable),
+    [landing],
+  );
   const hasStockData = Array.isArray(vehicles);
   const waitingForStock =
     isLoading || (isFetching && availableVehicles.length === 0);
@@ -151,27 +157,10 @@ export function EstoqueLandingPage() {
     return <NotFoundRedirect />;
   }
 
-  const showroomSearch = {
-    ...emptySeminovosSearch,
-    marca: landing.filters.marca,
-    modelo: landing.filters.modelo,
-    precoMin:
-      landing.filters.precoMin !== undefined
-        ? String(landing.filters.precoMin)
-        : undefined,
-    precoMax:
-      landing.filters.precoMax !== undefined
-        ? String(landing.filters.precoMax)
-        : undefined,
-    cambio: landing.filters.cambio,
-    combustivel: landing.filters.combustivel,
-    categoria: landing.filters.categoria,
-  } as typeof emptySeminovosSearch;
-
   return (
     <main className="flex-1 overflow-x-hidden max-w-full bg-white pt-16 sm:pt-0">
       <RegionalSeoHero
-        eyebrow="Seminovos em Esteio/RS"
+        eyebrow="Esteio · Região Metropolitana de Porto Alegre"
         title={landing.h1}
         intro={landing.intro}
         className="!py-8 md:!py-12"
@@ -179,13 +168,34 @@ export function EstoqueLandingPage() {
         <RegionalActionCtas
           className="mt-6"
           waText={`estou procurando ${landing.name.toLowerCase()} em Esteio.`}
-          stockSearch={showroomSearch}
-          stockLabel="Ver seleção completa"
-          stockSubtitle="Continue com estes filtros no estoque"
+          stockSearch={emptySeminovosSearch}
+          stockLabel="Ver todo o estoque"
+          stockSubtitle="Confira todos os carros da Netcar"
           waSubtitle="Consulte troca ou financiamento"
           primary="stock"
         />
       </RegionalSeoHero>
+
+      {brandModels.length > 0 && (
+        <nav
+          aria-label={`Modelos da ${landing.name}`}
+          className="container-main px-4 pb-6 sm:px-6 lg:px-8 xl:px-12 2xl:px-16"
+        >
+          <h2 className="mb-3 text-base font-bold text-fg">Escolha seu {landing.name}</h2>
+          <div className="flex flex-wrap gap-2">
+            {brandModels.map((model) => model && (
+              <Link
+                key={model.slug}
+                to="/comprar-{$landingSlug}"
+                params={{ landingSlug: model.slug }}
+                className="inline-flex min-h-11 items-center rounded-full border border-[#00283C]/20 bg-white px-4 py-2 text-sm font-bold text-[#00283C] transition-colors hover:border-[#008C95] hover:bg-[#F0F9F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008C95]"
+              >
+                {model.name}
+              </Link>
+            ))}
+          </div>
+        </nav>
+      )}
 
       <section
         id="estoque-selecao"
@@ -209,6 +219,15 @@ export function EstoqueLandingPage() {
                     : "veículos anunciados"}
                 </span>
               )}
+              <Link
+                to="/seminovos"
+                search={emptySeminovosSearch}
+                data-regional-action="view_stock_all"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#00283C] px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[#00435a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008C95] focus-visible:ring-offset-2 sm:ml-auto sm:w-auto"
+              >
+                Ver todo o estoque
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </div>
             <p className="mt-2 text-sm text-gray-600">
               {availableVehicles.length > visibleVehicles.length
@@ -303,14 +322,12 @@ export function EstoqueLandingPage() {
             <div className="mt-10 flex justify-center">
               <Link
                 to="/seminovos"
-                search={showroomSearch}
+                search={emptySeminovosSearch}
                 data-regional-action="view_stock_more"
                 className="inline-flex w-full max-w-md items-center justify-center gap-2.5 rounded-full bg-[#00283C] px-8 py-4 text-base font-black uppercase tracking-wider text-white shadow-[0_12px_32px_rgba(0,40,60,0.28)] transition-all hover:bg-[#00435a] hover:shadow-[0_16px_40px_rgba(0,40,60,0.34)] active:scale-[0.98] sm:w-auto"
               >
                 <span className="button-text-shimmer-on-dark">
-                  {availableVehicles.length > visibleVehicles.length
-                    ? `Ver os ${availableVehicles.length} veículos desta seleção`
-                    : "Ajustar filtros no estoque"}
+                  Ver todo o estoque
                 </span>
                 <ArrowRight className="h-5 w-5" />
               </Link>

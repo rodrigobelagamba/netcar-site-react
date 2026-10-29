@@ -1,8 +1,9 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { modelLanding, priceLanding } from "../generate-landings.js";
+import { modelLanding, priceLanding, marcaLanding } from "../generate-landings.js";
 import { MODEL_BUYER_GUIDES } from "../lib/model-buyer-guides.mjs";
+import { MODEL_HUBS } from "../lib/stock-model-hubs.mjs";
 
 const compass = {
   slug: "jeep-compass",
@@ -43,13 +44,13 @@ function editorialContent(landing) {
 test("one model in stock remains visible without a false sold-out message", () => {
   const landing = modelLanding(compass, [vehicle()]);
   assert.equal(landing.count, 1);
-  assert.equal(landing.indexable, false);
+  assert.equal(landing.indexable, true);
   const content = JSON.stringify(editorialContent(landing));
   assert.doesNotMatch(content, /nenhum[a]? unidade|não há uma unidade/i);
   assert.match(content, /Jeep Compass/);
 });
 
-test("model index thresholds stay intact while copy survives stock rotation", () => {
+test("empty models are noindex and editorial copy survives stock rotation", () => {
   const empty = modelLanding(compass, []);
   const two = modelLanding(compass, [
     vehicle(),
@@ -97,18 +98,14 @@ test("budget copy does not retain the count or price range from a build", () => 
 });
 
 test("model guides use existing relevant comparison routes and survive stock rotation", () => {
-  const configs = [
-    compass,
-    { slug: "hyundai-creta", marca: "HYUNDAI", modelo: "CRETA", name: "Hyundai Creta" },
-    { slug: "nissan-kicks", marca: "NISSAN", modelo: "KICKS", name: "Nissan Kicks" },
-  ];
+  const configs = MODEL_HUBS;
   const comparisons = JSON.parse(readFileSync(new URL("../../src/data/seo/comparisons.json", import.meta.url), "utf8"));
   assert.deepEqual(Object.keys(MODEL_BUYER_GUIDES).sort(), configs.map(({ slug }) => slug).sort());
   for (const config of configs) {
     const empty = modelLanding(config, []);
     const stocked = modelLanding(config, [
-      vehicle({ marca: config.marca, modelo: config.modelo, valor: 123456, ano: 2023 }),
-      vehicle({ marca: config.marca, modelo: config.modelo, valor: 167890, ano: 2026 }),
+      vehicle({ marca: config.marca, modelo: config.modelo, categoria: config.categoria, valor: 123456, ano: 2023 }),
+      vehicle({ marca: config.marca, modelo: config.modelo, categoria: config.categoria, valor: 167890, ano: 2026 }),
     ]);
     assert.deepEqual(editorialContent(stocked), editorialContent(empty), `${config.slug}: editorial copy must not freeze a build's offers`);
     const editorial = JSON.stringify(MODEL_BUYER_GUIDES[config.slug]);
@@ -121,4 +118,34 @@ test("model guides use existing relevant comparison routes and survive stock rot
       assert.ok([comparison.left, comparison.right].some(({ brand, model }) => brand === config.marca && model === config.modelo), "linked comparison must include this model");
     }
   }
+});
+
+test("a brand with one real offer is indexable; an empty brand is not", () => {
+  assert.equal(marcaLanding("BYD", 1, {}, 0).indexable, true);
+  assert.equal(marcaLanding("BYD", 0, {}, 0).indexable, false);
+});
+
+test("a brand without its own guide stays out of the index even with stock", () => {
+  for (const name of ["MARCA SEM GUIA", "constructor", "toString"]) {
+    for (const count of [0, 1, 5]) {
+      const landing = marcaLanding(name, count, {}, 0);
+      assert.equal(landing.count, count);
+      assert.equal(landing.indexable, false);
+      assert.equal(landing.footerPriority, false);
+      assert.equal(landing.filters.marca, name);
+    }
+  }
+});
+
+test("Onix hatch and Onix Plus remain separate even when Plus follows the version name", () => {
+  const rows = [
+    vehicle({ marca: "CHEVROLET", modelo: "ONIX LTZ", categoria: "HATCH" }),
+    vehicle({ marca: "CHEVROLET", modelo: "ONIX PREMIER PLUS TURBO", categoria: "SEDAN" }),
+  ];
+  const onix = modelLanding(MODEL_HUBS.find((model) => model.slug === "chevrolet-onix"), rows);
+  const plus = modelLanding(MODEL_HUBS.find((model) => model.slug === "chevrolet-onix-plus"), rows);
+  assert.equal(onix.count, 1);
+  assert.equal(plus.count, 1);
+  assert.equal(onix.filters.categoria, "HATCH");
+  assert.equal(plus.filters.categoria, "SEDAN");
 });

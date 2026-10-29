@@ -19,6 +19,9 @@ import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { LANDING_PROFILE_TOKENS } from "../src/lib/landingStockCopy.mjs";
 import { MODEL_BUYER_GUIDES } from "./lib/model-buyer-guides.mjs";
+import { MODEL_HUBS } from "./lib/stock-model-hubs.mjs";
+import { BRAND_BUYER_GUIDES } from "./lib/brand-buyer-guides.mjs";
+import { matchesLandingModel } from "../src/lib/landingModelMatch.mjs";
 import {
   clearSeoBuildStockSnapshot,
   readSeoBuildStockSnapshot,
@@ -40,69 +43,14 @@ const API_URL =
   process.env.NETCAR_SEO_STOCK_API_URL ||
   `${SITE}/api/v1/veiculos.php?limit=500`;
 
-// Limiar mínimo para uma landing entrar no índice (evita página fraca).
-const MIN_MARCA = 3;
+// Uma marca/modelo com oferta real e guia próprio pode ser útil mesmo com uma
+// unidade. O número de carros não é um requisito de indexação do Google.
+const MIN_MARCA = 1;
 const MIN_CATEGORIA = 3;
-const MIN_MODELO = 2;
+const MIN_MODELO = 1;
 const MIN_FAIXA = 4;
 const MIN_COMBUSTIVEL = 3;
-const BRAND_HUBS = [
-  "VOLKSWAGEN",
-  "JEEP",
-  "HYUNDAI",
-  "FIAT",
-  "HONDA",
-  "NISSAN",
-  "CHEVROLET",
-  "CHERY",
-];
 const CATEGORY_HUBS = ["SUV", "HATCH", "SEDAN"];
-
-const MODEL_HUBS = [
-  {
-    slug: "jeep-compass",
-    marca: "JEEP",
-    modelo: "COMPASS",
-    name: "Jeep Compass",
-  },
-  { slug: "honda-hr-v", marca: "HONDA", modelo: "HRV", name: "Honda HR-V" },
-  {
-    slug: "volkswagen-t-cross",
-    marca: "VOLKSWAGEN",
-    modelo: "T CROSS",
-    name: "Volkswagen T-Cross",
-  },
-  {
-    slug: "chevrolet-tracker",
-    marca: "CHEVROLET",
-    modelo: "TRACKER",
-    name: "Chevrolet Tracker",
-  },
-  {
-    slug: "volkswagen-nivus",
-    marca: "VOLKSWAGEN",
-    modelo: "NIVUS",
-    name: "Volkswagen Nivus",
-  },
-  {
-    slug: "hyundai-creta",
-    marca: "HYUNDAI",
-    modelo: "CRETA",
-    name: "Hyundai Creta",
-  },
-  {
-    slug: "nissan-kicks",
-    marca: "NISSAN",
-    modelo: "KICKS",
-    name: "Nissan Kicks",
-  },
-  {
-    slug: "jeep-renegade",
-    marca: "JEEP",
-    modelo: "RENEGADE",
-    name: "Jeep Renegade",
-  },
-];
 
 const STOCK_CUTS = [
   {
@@ -218,10 +166,6 @@ function normalized(value) {
     .replace(/\s+/g, " ");
 }
 
-function compact(value) {
-  return normalized(value).replace(/\s+/g, "");
-}
-
 function resolvedVehicleCategory(vehicle) {
   const brand = normalized(vehicle.marca);
   const model = normalized(vehicle.modelo || vehicle.name);
@@ -238,7 +182,7 @@ function matchesFilters(vehicle, filters) {
     return false;
   if (
     filters.modelo &&
-    !compact(vehicle.modelo).includes(compact(filters.modelo))
+    !matchesLandingModel(vehicle.modelo || vehicle.name, filters.modelo, vehicle.marca)
   )
     return false;
   if (
@@ -291,63 +235,55 @@ function stockProfile(vehicles, filters) {
   };
 }
 
-// A moldura institucional (Fábrica de Valor, financiamento, região) é a mesma
-// em toda landing — se repetida na íntegra, o texto fica idêntico trocando só a
-// marca. Aqui cada marca cai numa das três redações pelo slug, e o dado do
-// estoque (preço, ano, km) muda o conteúdo de verdade.
-// A moldura institucional é curta de propósito: o que diferencia uma landing
-// da outra é o dado do estoque (preço, ano, km), não uma redação longa que se
-// repetiria trocando só a marca. Cada variante tem estrutura e vocabulário
-// próprios para que duas marcas nunca compartilhem o mesmo esqueleto.
-// Três redações com ESTRUTURA e VOCABULÁRIO distintos, não o mesmo esqueleto
-// com a marca trocada. Cada uma abre, desenvolve e fecha de um jeito, e o dado
-// do estoque entra em posição e forma diferentes. É o que impede que duas
-// marcas da mesma variante virem o mesmo texto.
-// Uma redação por marca: com 9 marcas e menos variantes que isso, duas marcas
-// sempre dividem o mesmo esqueleto e o texto fica quase igual. Cada variante
-// abre, desenvolve e fecha de um jeito, com o dado do estoque em posição e
-// forma próprias. Se entrar marca nova, o índice recicla (index % length) e a
-// similaridade volta a subir — sinal para escrever mais uma redação.
-const MARCA_INTROS = [
-  (n, p) => `Veja os ${n} disponíveis nas duas lojas da Netcar, em Esteio.`,
-  (n, p) =>
-    `Esta página reúne os ${n} anunciados no estoque da Netcar em Esteio.`,
-  (n, p) =>
-    `Compare ano, versão, quilometragem e preço dos ${n} disponíveis na Netcar.`,
-  (n, p) =>
-    `Consulte aqui os ${n} que estão anunciados nas lojas da Netcar em Esteio.`,
-  (n, p) =>
-    `Quem procura ${n} usado na região pode começar pelo estoque online da Netcar.`,
-  (n, p) =>
-    `Confira fotos, preço e ficha dos ${n} disponíveis na Netcar, em Esteio.`,
-  (n, p) =>
-    `Abra os anúncios dos ${n}, compare as unidades e confirme a disponibilidade antes da visita.`,
-  (n, p) =>
-    `O estoque de ${n} das duas lojas da Netcar aparece reunido nesta página.`,
-  (n, p) =>
-    `Veja quais ${n} estão disponíveis hoje na Netcar e compare cada anúncio.`,
-];
-const MARCA_PARAGRAFOS = [
-  (n, p) =>
-    `Os ${n} anunciados vão de ${p.minPrice} a ${p.maxPrice}, com anos entre ${p.minYear} e ${p.maxYear}. Abra cada ficha para comparar versão, quilometragem, fotos e itens disponíveis.`,
-  (n, p) =>
-    `Há ${n} de ${p.minYear} a ${p.maxYear}, com preços entre ${p.minPrice} e ${p.maxPrice}. Os veículos passam pela Fábrica de Valor antes da vitrine.`,
-  (n, p) =>
-    `Os preços dos ${n} em estoque partem de ${p.minPrice} e chegam a ${p.maxPrice}, cobrindo os anos ${p.minYear} a ${p.maxYear}. Quilometragem, versão e itens variam de uma unidade para outra.`,
-  (n, p) =>
-    `De ${p.minYear} a ${p.maxYear}, os ${n} disponíveis custam entre ${p.minPrice} e ${p.maxPrice}. Cada carro passa pela rotina de preparação da Netcar antes da vitrine.`,
-  (n, p) =>
-    `Entre ${p.minPrice} e ${p.maxPrice}, há ${n} de ${p.minYear} a ${p.maxYear} anunciados. Compare as fichas e confirme os finalistas antes de ir à loja.`,
-  (n, p) =>
-    `Os ${n} em estoque custam de ${p.minPrice} a ${p.maxPrice} e são de ${p.minYear} a ${p.maxYear}. Fotos, versão e quilometragem aparecem em cada anúncio.`,
-  (n, p) =>
-    `Com anos de ${p.minYear} a ${p.maxYear} e preços de ${p.minPrice} a ${p.maxPrice}, os ${n} disponíveis podem ser comparados pela ficha de cada unidade.`,
-  (n, p) =>
-    `Os ${n} vão de ${p.minPrice} a ${p.maxPrice}, com anos entre ${p.minYear} e ${p.maxYear}. Use as fotos e os dados do anúncio para montar sua lista.`,
-  (n, p) =>
-    `O estoque tem ${n} de ${p.minYear} a ${p.maxYear}, com preços entre ${p.minPrice} e ${p.maxPrice}. Confirme pelo WhatsApp os carros que deseja conhecer.`,
-];
-const MARCA_FECHO = [
+function pickVariant(arr, index) {
+  return arr[index % arr.length];
+}
+
+export function marcaLanding(name, count, profile, variantIndex) {
+  const guide = BRAND_BUYER_GUIDES[name];
+  const nice = guide?.name || titleCase(name);
+  const hasStock = count >= MIN_MARCA;
+  // A new brand may be browsed, but only reviewed brand copy enters the index.
+  const indexable =
+    hasStock && Object.hasOwn(BRAND_BUYER_GUIDES, name) && Boolean(guide);
+  const paragraphs = guide?.paragraphs || [
+    `Abra os anúncios de ${nice} para conferir ano, versão e preço de cada carro. Pelo WhatsApp da ficha, você pode consultar a disponibilidade e combinar a visita às lojas de Esteio.`,
+  ];
+  return {
+    slug: slugify(name),
+    type: "marca",
+    name: nice,
+    count,
+    indexable,
+    footerPriority: indexable,
+    filters: { marca: name },
+    relatedSlugs: [],
+    modelSlugs: [],
+    title: `${nice} seminovos na Grande Porto Alegre | Netcar`,
+    description: `Veja os ${nice} usados e seminovos da Netcar em Esteio, na Região Metropolitana de Porto Alegre. Fotos, preços e contato sobre cada carro.`,
+    h1: `${nice} usados e seminovos em Esteio/RS`,
+    intro: guide?.intro || `Escolha um ${nice} no estoque da Netcar. Veja as fotos e os detalhes de cada carro e fale com a equipe sobre o que chamou sua atenção.`,
+    guideTitle: guide?.guideTitle || `Como escolher seu ${nice}`,
+    paragraphs,
+    paragraphTemplates: [
+      `Os ${nice} anunciados nesta seleção são de {{years}}, com valores de {{prices}}. Confira versão e fotos na ficha de cada unidade.`,
+      ...paragraphs,
+    ],
+    faq: [
+      {
+        q: `Quais modelos da ${nice} estão à venda na Netcar?`,
+        a: `Os modelos e as unidades anunciadas aparecem nesta página. A disponibilidade acompanha as entradas e vendas; confirme o carro escolhido com a equipe antes da visita.`,
+      },
+      ...(guide?.faq || []),
+      {
+        q: `Posso dar meu carro na troca por um ${nice}?`,
+        a: "Sim. Envie os dados e as fotos do seu usado para iniciar a avaliação. Se houver financiamento em aberto, a equipe também analisa o saldo de quitação na negociação.",
+      },
+    ],
+  };
+}
+
+const CATEGORIA_FECHO = [
   (n) =>
     `Fale pelo WhatsApp, diga qual ${n} chamou sua atenção e confirme a disponibilidade antes de visitar as lojas em Esteio.`,
   (n) =>
@@ -367,194 +303,6 @@ const MARCA_FECHO = [
   (n) =>
     `O estoque das duas lojas aparece junto no site. Confirme pelo WhatsApp em qual unidade está o ${n} escolhido.`,
 ];
-
-// A variante vem da POSIÇÃO da marca no ranking de estoque, não de hash do
-// slug: com poucas marcas qualquer hash concentra várias na mesma redação, e
-// aí o texto volta a ser igual. index % N garante spread perfeito e muda
-// quando o ranking muda, o que é aceitável porque o conteúdo já muda junto.
-function pickVariant(arr, index) {
-  return arr[index % arr.length];
-}
-
-export function marcaLanding(name, count, profile, variantIndex) {
-  const nice = titleCase(name);
-  const slug = slugify(name);
-  const hasStock = count >= MIN_MARCA;
-  const intro = hasStock
-    ? pickVariant(MARCA_INTROS, variantIndex)(nice, profile)
-    : `Veja nesta página os ${nice} que estiverem disponíveis na Netcar. Quando houver variedade suficiente no estoque, as unidades aparecem com foto, preço e ficha para comparação.`;
-  const paragrafos = [
-    `A disponibilidade de ${nice} muda conforme as entradas e vendas do estoque. As unidades anunciadas passam por checklist técnico antes da vitrine; você também pode comparar modelos equivalentes e outras marcas.`,
-    pickVariant(MARCA_FECHO, variantIndex)(nice),
-  ];
-  return {
-    slug,
-    type: "marca",
-    name: nice,
-    count,
-    indexable: hasStock,
-    footerPriority: hasStock && variantIndex < 5,
-    filters: { marca: name },
-    relatedSlugs: [],
-    title: `${nice} usados e seminovos em Esteio/RS | Netcar Multimarcas`,
-    description: hasStock
-      ? `Veja os ${nice} seminovos disponíveis na Netcar em Esteio/RS. Compare fotos, ano, km e preço e consulte troca ou financiamento.`
-      : `${nice} seminovos na Netcar em Esteio/RS. Acompanhe novas entradas e compare modelos, marcas e faixas de preço disponíveis no estoque.`,
-    h1: `${nice} seminovos em Esteio/RS`,
-    intro,
-    paragraphs: paragrafos,
-    paragraphTemplates: [
-      pickVariant(MARCA_PARAGRAFOS, variantIndex)(nice, LANDING_PROFILE_TOKENS),
-      paragrafos[1],
-    ],
-    faq: hasStock
-      ? pickVariant(
-          [
-            [
-              {
-                q: `A Netcar tem ${nice} em estoque agora?`,
-                a: `Sim. O estoque muda conforme entradas e vendas, e os ${nice} disponíveis aparecem nesta página com foto e preço. Confirme a disponibilidade pelo WhatsApp antes de visitar.`,
-              },
-              {
-                q: `Posso financiar um ${nice} usado na Netcar?`,
-                a: `Sim. A simulação pode ser iniciada pelo WhatsApp e o prazo pode chegar a 60x, sempre sujeito à análise. O usado também pode ser avaliado na troca.`,
-              },
-              {
-                q: `Os ${nice} passam por revisão antes da venda?`,
-                a: `Todos os seminovos passam pela Fábrica de Valor, com mais de 60 itens técnicos e funcionais verificados antes da vitrine.`,
-              },
-            ],
-            [
-              {
-                q: `Quais ${nice} estão disponíveis hoje?`,
-                a: `A lista desta página reflete o estoque atual, com foto, ano e preço de cada unidade. Como seminovo é item único, confirme pelo WhatsApp antes de se deslocar.`,
-              },
-              {
-                q: `Dá para dar meu carro na troca de um ${nice}?`,
-                a: `Sim. A proposta depende da vistoria do usado. Se houver financiamento em aberto, o saldo para quitação entra no cálculo.`,
-              },
-              {
-                q: `O ${nice} é revisado antes de ser vendido?`,
-                a: `Sim. Cada seminovo passa pela Fábrica de Valor, que confere mais de 60 itens antes de o carro ir para a vitrine.`,
-              },
-            ],
-            [
-              {
-                q: `Como sei se o ${nice} ainda está disponível?`,
-                a: `O estoque muda conforme entradas e vendas. Os ${nice} desta página estão anunciados com foto e preço; o WhatsApp confirma a disponibilidade antes da sua visita.`,
-              },
-              {
-                q: `Qual a entrada para financiar um ${nice}?`,
-                a: `A entrada mínima é de 20% e o saldo pode ir em até 60x, sempre sujeito à análise de crédito. Seu usado pode compor a entrada, mediante avaliação.`,
-              },
-              {
-                q: `O que é a Fábrica de Valor?`,
-                a: `É o processo de preparação da Netcar: mais de 60 itens técnicos e funcionais são verificados antes de o carro ir para a vitrine.`,
-              },
-            ],
-            [
-              {
-                q: `O ${nice} ainda está no estoque?`,
-                a: `A lista desta página acompanha os ${nice} anunciados, com foto e preço. Como seminovo é item único, confirme pelo WhatsApp antes de ir.`,
-              },
-              {
-                q: `Posso trocar meu carro num ${nice}?`,
-                a: `Sim. O valor depende da vistoria. Carros com financiamento em aberto também podem ser analisados, com o saldo de quitação incluído na negociação.`,
-              },
-              {
-                q: `O ${nice} é revisado antes da venda?`,
-                a: `Sim. Todo seminovo passa pela Fábrica de Valor, que confere mais de 60 itens antes da vitrine.`,
-              },
-            ],
-            [
-              {
-                q: `Quais ${nice} estão à venda agora?`,
-                a: `Os ${nice} desta página refletem o estoque atual, com foto, ano e preço. Confirme a disponibilidade pelo WhatsApp antes de se deslocar.`,
-              },
-              {
-                q: `Qual a entrada para um ${nice}?`,
-                a: `A entrada mínima é de 20% e o restante pode ir em até 60x, sujeito à análise de crédito. Seu usado pode compor a entrada, mediante avaliação.`,
-              },
-              {
-                q: `O que a Fábrica de Valor verifica?`,
-                a: `Mais de 60 itens técnicos e funcionais antes de o carro ir para a vitrine.`,
-              },
-            ],
-            [
-              {
-                q: `A Netcar tem ${nice} disponíveis?`,
-                a: `Sim. O estoque muda conforme entradas e vendas, e os ${nice} aparecem nesta página com foto e preço. Confirme pelo WhatsApp antes de visitar.`,
-              },
-              {
-                q: `Como financiar um ${nice} usado?`,
-                a: `A simulação pode ser iniciada pelo WhatsApp e o prazo pode chegar a 60x, sujeito à análise. O usado também pode ser avaliado na troca.`,
-              },
-              {
-                q: `Os ${nice} são revisados?`,
-                a: `Todos passam pela Fábrica de Valor, com mais de 60 itens verificados antes da vitrine.`,
-              },
-            ],
-            [
-              {
-                q: `Quais ${nice} há no estoque?`,
-                a: `A lista desta página mostra os ${nice} disponíveis hoje, com foto, ano e preço. Como seminovo é item único, confirme pelo WhatsApp antes de ir.`,
-              },
-              {
-                q: `Dá para dar meu usado na troca de um ${nice}?`,
-                a: `Sim. O valor entra na negociação depois da vistoria. Se houver financiamento em aberto, o saldo para quitação é considerado.`,
-              },
-              {
-                q: `O ${nice} passa por revisão?`,
-                a: `Sim. Cada seminovo passa pela Fábrica de Valor, que confere mais de 60 itens antes da vitrine.`,
-              },
-            ],
-            [
-              {
-                q: `Como confirmar se o ${nice} está disponível?`,
-                a: `O estoque muda conforme entradas e vendas. Os ${nice} desta página estão anunciados com foto e preço; o WhatsApp confirma antes da sua visita.`,
-              },
-              {
-                q: `Qual a entrada mínima para um ${nice}?`,
-                a: `20% de entrada e o saldo em até 60x, sujeito à análise de crédito. Seu usado pode compor a entrada, mediante avaliação.`,
-              },
-              {
-                q: `O que é a Fábrica de Valor da Netcar?`,
-                a: `É o processo de preparação que verifica mais de 60 itens técnicos e funcionais antes de o carro ir para a vitrine.`,
-              },
-            ],
-            [
-              {
-                q: `O ${nice} ainda está à venda?`,
-                a: `A lista desta página acompanha os ${nice} anunciados, com foto e preço. Confirme pelo WhatsApp antes de se deslocar.`,
-              },
-              {
-                q: `Posso trocar meu carro por um ${nice}?`,
-                a: `Sim. O valor depende da vistoria. Se houver financiamento em aberto, o saldo para quitação entra na negociação.`,
-              },
-              {
-                q: `O ${nice} é inspecionado antes da venda?`,
-                a: `Sim. Todo seminovo passa pela Fábrica de Valor, com mais de 60 itens verificados antes da vitrine.`,
-              },
-            ],
-          ],
-          variantIndex,
-        )
-      : [
-          {
-            q: `Como acompanho novos ${nice} na Netcar?`,
-            a: `Esta página permanece ativa e mostra as unidades anunciadas quando entram no estoque. A disponibilidade pode mudar; confirme pelo WhatsApp antes de visitar.`,
-          },
-          {
-            q: `Posso financiar um ${nice} quando houver disponibilidade?`,
-            a: `Sim. A Netcar compara condições entre bancos e financeiras parceiras, com prazo de até 60x, sempre sujeito à análise de crédito.`,
-          },
-          {
-            q: `Posso comparar um ${nice} com modelos de outras marcas?`,
-            a: `Sim. Consulte o estoque completo ou use o comparador para avaliar ano, preço, quilometragem e ficha das opções disponíveis.`,
-          },
-        ],
-  };
-}
 
 const CATEGORIA_INTROS = [
   (l, p) =>
@@ -583,7 +331,7 @@ export function categoriaLanding(name, count, profile, variantIndex) {
     : `Acompanhe nesta página quando houver variedade de ${lower} no estoque da Netcar. Enquanto isso, compare categorias e faixas de preço disponíveis.`;
   const paragrafos = [
     `Consulte os anúncios de ${lower}, compare as fichas e confirme a disponibilidade antes da visita.`,
-    pickVariant(MARCA_FECHO, variantIndex)(lower),
+    pickVariant(CATEGORIA_FECHO, variantIndex)(lower),
   ];
   return {
     slug,
@@ -625,7 +373,7 @@ export function categoriaLanding(name, count, profile, variantIndex) {
 }
 
 export function modelLanding(config, vehicles) {
-  const filters = { marca: config.marca, modelo: config.modelo };
+  const filters = { marca: config.marca, modelo: config.modelo, ...(config.categoria ? { categoria: config.categoria } : {}) };
   const profile = stockProfile(vehicles, filters);
   const hasStock = profile.count >= MIN_MODELO;
   const guide = MODEL_BUYER_GUIDES[config.slug];
@@ -636,7 +384,8 @@ export function modelLanding(config, vehicles) {
     name: config.name,
     count: profile.count,
     indexable: hasStock,
-    footerPriority: hasStock,
+    footerPriority: hasStock && ["jeep-compass", "honda-hr-v", "volkswagen-t-cross", "chevrolet-tracker", "volkswagen-nivus", "hyundai-creta", "nissan-kicks", "jeep-renegade"].includes(config.slug),
+    category: config.category,
     filters,
     relatedSlugs: [],
     title: guide?.title ?? `${config.name} seminovo em Esteio/RS: preço e estoque | Netcar`,
@@ -645,7 +394,7 @@ export function modelLanding(config, vehicles) {
     intro: guide?.intro ?? `Veja os anúncios de ${config.name} da Netcar, em Esteio. Confira o preço, as fotos e a versão de cada carro e confirme com a equipe qual deseja conhecer.`,
     ...(guide ? {
       guideTitle: guide.guideTitle,
-      guideLinks: guide.guideLinks,
+      guideLinks: guide.guideLinks || [],
       paragraphTemplates: [
         `Veja as opções de ${config.name} de ${LANDING_PROFILE_TOKENS.years} nesta seleção. O preço e os detalhes de cada unidade estão nos anúncios acima.`,
         ...guide.paragraphs,
@@ -785,6 +534,7 @@ function assignRelatedSlugs(landings) {
     // Quem escolheu uma marca encontra primeiro os modelos dela em estoque.
     // Os pares de marcas e recortes abaixo continuam preenchendo os demais links.
     if (landing.type === "marca") {
+      landing.modelSlugs = indexable.filter((candidate) => candidate.type === "modelo" && normalized(candidate.filters.marca) === normalized(landing.filters.marca)).map((candidate) => candidate.slug);
       candidates.push(
         ...indexable
           .filter(
@@ -797,12 +547,15 @@ function assignRelatedSlugs(landings) {
       );
     }
     if (landing.filters.marca) candidates.push(slugify(landing.filters.marca));
-    if (landing.filters.categoria === "SUV" || landing.type === "modelo") {
-      candidates.push("suv");
-    }
-    const peers = indexable.filter(
-      (candidate) => candidate.type === landing.type,
-    );
+    const category = landing.category || landing.filters.categoria;
+    if (category) candidates.push(slugify(category));
+    const peers = indexable.filter((candidate) => {
+      if (candidate.type !== landing.type) return false;
+      if (landing.type !== "modelo") return true;
+      // Um hatch deve sugerir outros hatches, não o vizinho no registro.
+      const candidateCategory = candidate.category || candidate.filters.categoria;
+      return candidate.slug === landing.slug || (!!category && candidateCategory === category);
+    });
     const peerIndex = peers.findIndex(
       (candidate) => candidate.slug === landing.slug,
     );
@@ -814,7 +567,7 @@ function assignRelatedSlugs(landings) {
         );
       }
     }
-    candidates.push(...highIntent);
+    if (landing.type !== "modelo") candidates.push(...highIntent);
     landing.relatedSlugs = [...new Set(candidates)]
       .filter((slug) => slug !== landing.slug && available.has(slug))
       .slice(0, 4);
@@ -860,10 +613,10 @@ async function main() {
   const landings = [];
   const seen = new Set();
 
-  // Marcas já publicadas são hubs permanentes: sem variedade continuam 200,
-  // mas saem do índice. Novas marcas só nascem com estoque suficiente.
+  // Marcas publicadas mantêm a URL. Uma nova marca entra com oferta real;
+  // sem estoque, a página fica fora do índice até uma nova entrada.
   const brandCounts = tally(vehicles, "marca");
-  const brandNames = new Set(BRAND_HUBS);
+  const brandNames = new Set(Object.keys(BRAND_BUYER_GUIDES));
   for (const [name, count] of brandCounts) {
     if (count >= MIN_MARCA) brandNames.add(name);
   }

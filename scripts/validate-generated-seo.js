@@ -8,6 +8,7 @@
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { BRAND_BUYER_GUIDES } from "./lib/brand-buyer-guides.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -969,15 +970,19 @@ function validateDemandLanding(landing) {
     errors.push(`${label}: filtros ausentes`);
   }
   const expectedIndexable =
-    landing.type === "modelo"
-      ? Number(landing.count) >= 2
-      : landing.type === "faixa"
-        ? Number(landing.count) >= 4
-        : landing.type === "combustivel"
-          ? Number(landing.count) >= 3
-          : Number(landing.count) >= 3;
+    landing.type === "marca"
+      ? Number(landing.count) >= 1 &&
+        Object.hasOwn(BRAND_BUYER_GUIDES, landing.filters?.marca) &&
+        Boolean(BRAND_BUYER_GUIDES[landing.filters?.marca])
+      : landing.type === "modelo"
+        ? Number(landing.count) >= 1
+        : landing.type === "faixa"
+          ? Number(landing.count) >= 4
+          : landing.type === "combustivel"
+            ? Number(landing.count) >= 3
+            : Number(landing.count) >= 3;
   if (Boolean(landing.indexable) !== expectedIndexable) {
-    errors.push(`${label}: indexabilidade diverge do limiar do tipo`);
+    errors.push(`${label}: indexabilidade diverge dos critérios de estoque e conteúdo editorial`);
   }
   if (
     !Array.isArray(landing.relatedSlugs) ||
@@ -1102,7 +1107,7 @@ function validateDemandLanding(landing) {
   const relatedHrefs = hrefs.filter((href) =>
     href.startsWith(`${site}/comprar-`),
   );
-  const expectedRelated = landing.relatedSlugs.map(
+  const expectedRelated = [...(landing.modelSlugs || []), ...landing.relatedSlugs].map(
     (slug) => `${site}/comprar-${slug}`,
   );
   if (landing.relatedSlugs.length > 4) {
@@ -1181,6 +1186,9 @@ function validateBrandModelDiscovery(landing) {
       .map((candidate) => candidate.slug),
   );
   const expectedSlots = Math.min(4, ownModelSlugs.size);
+  if (JSON.stringify([...(landing.modelSlugs || [])].sort()) !== JSON.stringify([...ownModelSlugs].sort())) {
+    errors.push(`comprar-${landing.slug}: navegação da marca não cobre todos os modelos disponíveis`);
+  }
   const firstLinks = (landing.relatedSlugs || []).slice(0, expectedSlots);
   if (
     firstLinks.length !== expectedSlots ||
@@ -1206,8 +1214,7 @@ for (const landing of landings) {
     const inbound = landings.some(
       (source) =>
         source.indexable &&
-        Array.isArray(source.relatedSlugs) &&
-        source.relatedSlugs.includes(landing.slug),
+        [...(source.relatedSlugs || []), ...(source.modelSlugs || [])].includes(landing.slug),
     );
     if (!inbound && !landing.footerPriority) {
       errors.push(

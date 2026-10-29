@@ -103,13 +103,35 @@ function netcar_landing_vehicle_slug($vehicle)
     return seo_generate_vehicle_slug($vehicle);
 }
 
+/** Keep the model-family boundary and aliases aligned with landingModelMatch.mjs. */
+function netcar_landing_model_canonical($value)
+{
+    $model = netcar_landing_normalized($value);
+    $model = preg_replace('/^H\s*R\s*V(?=\s|$)/', 'HRV', $model);
+    $model = preg_replace('/^W\s*R\s*V(?=\s|$)/', 'WRV', $model);
+    $model = preg_replace('/^T\s*CROSS(?=\s|$)/', 'T CROSS', $model);
+    return preg_replace('/^TIGGO\s*5\s*X(?=\s|$)/', 'TIGGO 5X', $model);
+}
+
+function netcar_landing_model_matches($value, $filter, $brand = '')
+{
+    $model = netcar_landing_normalized($value);
+    $brandPrefix = netcar_landing_normalized($brand);
+    if ($brandPrefix !== '' && strpos($model, $brandPrefix . ' ') === 0) {
+        $model = substr($model, strlen($brandPrefix) + 1);
+    }
+    $model = netcar_landing_model_canonical($model);
+    $prefix = netcar_landing_model_canonical($filter);
+    return $prefix !== '' && ($model === $prefix || strpos($model, $prefix . ' ') === 0);
+}
+
 function netcar_landing_matches($vehicle, $filters)
 {
     if ((float) ($vehicle['valor'] ?? 0) <= 0) return false;
     foreach (array('marca', 'cambio', 'combustivel') as $field) {
         if (!empty($filters[$field]) && netcar_landing_normalized($vehicle[$field] ?? '') !== netcar_landing_normalized($filters[$field])) return false;
     }
-    if (!empty($filters['modelo']) && strpos(str_replace(' ', '', netcar_landing_normalized($vehicle['modelo'] ?? '')), str_replace(' ', '', netcar_landing_normalized($filters['modelo']))) === false) return false;
+    if (!empty($filters['modelo']) && !netcar_landing_model_matches($vehicle['modelo'] ?? $vehicle['name'] ?? '', $filters['modelo'], $vehicle['marca'] ?? '')) return false;
     $model = netcar_landing_normalized($vehicle['modelo'] ?? '');
     $category = netcar_landing_normalized($vehicle['categoria'] ?? '');
     if (preg_match('/\b(RENEGADE|KICKS)\b/', $model)) $category = 'SUV';
@@ -142,6 +164,7 @@ function netcar_landing_paragraphs($landing, $rows)
     $values = array(
         '{{minPrice}}' => 'R$ ' . number_format(round(min($prices)), 0, ',', '.'),
         '{{maxPrice}}' => 'R$ ' . number_format(round(max($prices)), 0, ',', '.'),
+        '{{prices}}' => min($prices) == max($prices) ? 'R$ ' . number_format(round(min($prices)), 0, ',', '.') : 'R$ ' . number_format(round(min($prices)), 0, ',', '.') . ' a R$ ' . number_format(round(max($prices)), 0, ',', '.'),
         '{{minYear}}' => $completeYears ? (string) min($years) : null, '{{maxYear}}' => $completeYears ? (string) max($years) : null,
         '{{years}}' => $completeYears ? (min($years) == max($years) ? (string) min($years) : min($years) . ' a ' . max($years)) : null,
         '{{count}}' => (string) count($rows),
@@ -238,8 +261,7 @@ function netcar_landing_html($source, $landing, $stock)
         $list[] = array('@type' => 'ListItem', 'position' => $index + 1, 'url' => $url, 'name' => $name);
     }
     if ($rows) $cards .= '</div>';
-    $query = http_build_query($landing['filters'] ?? array(), '', '&', PHP_QUERY_RFC3986);
-    $cards .= '<p><a href="' . seo_h(SEO_SITE_URL . '/seminovos' . ($query ? '?' . $query : '')) . '">' . (count($rows) > 12 ? 'Ver os ' . count($rows) . ' veículos desta seleção' : 'Ajustar filtros no estoque') . '</a></p>';
+    $cards .= '<p><a href="' . seo_h(SEO_SITE_URL . '/seminovos') . '">Ver todo o estoque</a></p>';
     $paragraphs = implode('', array_map(function ($text) { return '<p>' . seo_h($text) . '</p>'; }, netcar_landing_paragraphs($landing, $rows)));
     $faq = netcar_landing_faq($landing, $rows);
     $faqHtml = implode('', array_map(function ($item) { return '<h3>' . seo_h($item['q']) . '</h3><p>' . seo_h($item['a']) . '</p>'; }, $faq));

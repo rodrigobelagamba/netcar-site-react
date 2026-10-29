@@ -12,6 +12,7 @@ import { writeTextFile } from "./lib/write-text-file.js";
 import { factoryWarrantyCatalogFromApi } from "./lib/factory-warranty-catalog.js";
 import { sanitizeVehicleImages } from "../src/lib/vehicleImagePolicy.mjs";
 import { resolveLandingParagraphs, resolveLandingFaq } from "../src/lib/landingStockCopy.mjs";
+import { matchesLandingModel } from "../src/lib/landingModelMatch.mjs";
 import {
   homeHeroRotationDay,
   selectHomeHeroVehicles,
@@ -564,10 +565,6 @@ function normalizedFilterValue(value) {
     .replace(/\s+/g, " ");
 }
 
-function compactFilterValue(value) {
-  return normalizedFilterValue(value).replace(/\s+/g, "");
-}
-
 function resolvedVehicleCategory(vehicle) {
   const brand = normalizedFilterValue(vehicle.marca);
   const model = normalizedFilterValue(vehicle.modelo || vehicle.name);
@@ -589,9 +586,7 @@ function matchesLandingFilters(vehicle, filters = {}) {
     return false;
   if (
     filters.modelo &&
-    !compactFilterValue(vehicle.modelo).includes(
-      compactFilterValue(filters.modelo),
-    )
+    !matchesLandingModel(vehicle.modelo || vehicle.name, filters.modelo, vehicle.marca)
   )
     return false;
   if (
@@ -1326,7 +1321,7 @@ function nearbyMarketsHtml(landingName) {
     )
     .join("");
   if (!links) return "";
-  return `<nav aria-label="Atendimento regional para ${escapeHtml(landingName)}"><h2>Planeje a visita para ver ${escapeHtml(landingName)}</h2><p>O estoque e as duas lojas ficam em Esteio. Consulte distância, rota e atendimento antes de se deslocar.</p><ul>${links}</ul></nav>`;
+  return `<nav aria-label="Atendimento regional para ${escapeHtml(landingName)}"><h2>${escapeHtml(landingName)} para quem busca na Região Metropolitana</h2><p>As duas lojas ficam em Esteio. Escolha sua cidade para consultar o caminho até a Netcar e fale com a equipe sobre o carro que quer conhecer.</p><ul>${links}</ul></nav>`;
 }
 
 for (const city of cities) {
@@ -1547,24 +1542,6 @@ function landingStockOrder(vehicles) {
   });
 }
 
-function landingStockHref(landing) {
-  const query = new URLSearchParams();
-  for (const key of [
-    "marca",
-    "modelo",
-    "precoMin",
-    "precoMax",
-    "cambio",
-    "combustivel",
-    "categoria",
-  ]) {
-    const value = landing.filters[key];
-    if (value !== undefined && value !== null && value !== "")
-      query.set(key, String(value));
-  }
-  return `${SITE}/seminovos${query.size ? `?${query}` : ""}`;
-}
-
 for (const landing of landings) {
   const canonical = `${SITE}/comprar-${landing.slug}`;
   const landingStock = landingStockOrder(
@@ -1582,11 +1559,8 @@ for (const landing of landings) {
         heading: "Veículos desta seleção",
         vehicles: landingStock,
         limit: 12,
-        ctaLabel:
-          landingStock.length > 12
-            ? `Ver os ${landingStock.length} veículos desta seleção`
-            : "Ajustar filtros no estoque",
-        ctaHref: escapeHtml(landingStockHref(landing)),
+        ctaLabel: "Ver todo o estoque",
+        ctaHref: `${SITE}/seminovos`,
         preserveOrder: true,
       })
     : `<h2>Veículos desta seleção</h2><p>Nenhum veículo anunciado nesta seleção no momento.</p><p>Veja outras opções do estoque ou fale com a equipe sobre o carro e a faixa de preço que procura.</p><p><a href="${SITE}/seminovos">Ver estoque completo</a></p>`;
@@ -1594,8 +1568,10 @@ for (const landing of landings) {
     <article>
       <h1>${escapeHtml(landing.h1)}</h1>
       <p>${escapeHtml(landing.intro)}</p>
-      <p><a href="${escapeHtml(landingStockHref(landing))}">Ver seleção completa</a> · <a href="${landingWhatsAppLink(landing.name)}">Falar com a Netcar</a></p>
+      <p><a href="${SITE}/seminovos">Ver todo o estoque</a> · <a href="${landingWhatsAppLink(landing.name)}">Falar com a Netcar</a></p>
+      ${(landing.modelSlugs || []).length ? `<nav aria-label="${escapeHtml(`Modelos da ${landing.name}`)}"><h2>Escolha seu ${escapeHtml(landing.name)}</h2><ul>${landing.modelSlugs.map((slug) => landings.find((model) => model.slug === slug)).filter(Boolean).map((model) => `<li><a href="${SITE}/comprar-${escapeHtml(model.slug)}">${escapeHtml(model.name)}</a></li>`).join("")}</ul></nav>` : ""}
       ${landing.type === "faixa" ? "<p>O filtro considera o preço total anunciado do carro.</p>" : ""}
+      <p><a href="${SITE}/seminovos">Ver todo o estoque</a></p>
       <!--netcar:landing-stock:start-->${availability}<!--netcar:landing-stock:end-->
       ${relatedLandingsHtml(landing.slug)}
       <h2>${escapeHtml(landing.guideTitle || "Compare antes de escolher")}</h2>
