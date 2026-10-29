@@ -1598,8 +1598,9 @@ for (const landing of landings) {
       ${landing.type === "faixa" ? "<p>O filtro considera o preço total anunciado do carro.</p>" : ""}
       <!--netcar:landing-stock:start-->${availability}<!--netcar:landing-stock:end-->
       ${relatedLandingsHtml(landing.slug)}
-      <h2>Compare antes de escolher</h2>
+      <h2>${escapeHtml(landing.guideTitle || "Compare antes de escolher")}</h2>
       <!--netcar:landing-paragraphs:start-->${paragraphs}<!--netcar:landing-paragraphs:end-->
+      ${(landing.guideLinks || []).length ? `<nav aria-label="${escapeHtml(`Guias para escolher ${landing.name}`)}">${landing.guideLinks.map((link) => `<p><a href="${escapeHtml(link.href)}">${escapeHtml(link.label)}</a></p>`).join("")}</nav>` : ""}
       <!--netcar:landing-faq:start-->${faqHtml}<!--netcar:landing-faq:end-->
       <p>
         <a href="${SITE}/seminovos">Ver estoque completo</a>

@@ -143,6 +143,7 @@ function netcar_landing_paragraphs($landing, $rows)
         '{{minPrice}}' => 'R$ ' . number_format(round(min($prices)), 0, ',', '.'),
         '{{maxPrice}}' => 'R$ ' . number_format(round(max($prices)), 0, ',', '.'),
         '{{minYear}}' => $completeYears ? (string) min($years) : null, '{{maxYear}}' => $completeYears ? (string) max($years) : null,
+        '{{years}}' => $completeYears ? (min($years) == max($years) ? (string) min($years) : min($years) . ' a ' . max($years)) : null,
         '{{count}}' => (string) count($rows),
     );
     $complete = true;

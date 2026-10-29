@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { modelLanding, priceLanding } from "../generate-landings.js";
+import { MODEL_BUYER_GUIDES } from "../lib/model-buyer-guides.mjs";
 
 const compass = {
   slug: "jeep-compass",
@@ -92,4 +94,31 @@ test("budget copy does not retain the count or price range from a build", () => 
     JSON.stringify(editorialContent(full)),
     /79\.900|99\.900|4 opções/,
   );
+});
+
+test("model guides use existing relevant comparison routes and survive stock rotation", () => {
+  const configs = [
+    compass,
+    { slug: "hyundai-creta", marca: "HYUNDAI", modelo: "CRETA", name: "Hyundai Creta" },
+    { slug: "nissan-kicks", marca: "NISSAN", modelo: "KICKS", name: "Nissan Kicks" },
+  ];
+  const comparisons = JSON.parse(readFileSync(new URL("../../src/data/seo/comparisons.json", import.meta.url), "utf8"));
+  assert.deepEqual(Object.keys(MODEL_BUYER_GUIDES).sort(), configs.map(({ slug }) => slug).sort());
+  for (const config of configs) {
+    const empty = modelLanding(config, []);
+    const stocked = modelLanding(config, [
+      vehicle({ marca: config.marca, modelo: config.modelo, valor: 123456, ano: 2023 }),
+      vehicle({ marca: config.marca, modelo: config.modelo, valor: 167890, ano: 2026 }),
+    ]);
+    assert.deepEqual(editorialContent(stocked), editorialContent(empty), `${config.slug}: editorial copy must not freeze a build's offers`);
+    const editorial = JSON.stringify(MODEL_BUYER_GUIDES[config.slug]);
+    assert.doesNotMatch(editorial, /R\$|123[.,]456|167[.,]890|\b\d+\s+(?:unidades|anúncios|carros disponíveis)\b/i);
+    assert.ok(stocked.paragraphTemplates.some((paragraph) => paragraph.includes("{{years}}")), "year range must remain a live token");
+    for (const link of stocked.guideLinks) {
+      assert.match(link.href, /^\/comparar\/[a-z0-9-]+$/);
+      const comparison = comparisons.find(({ slug }) => link.href === `/comparar/${slug}`);
+      assert.ok(comparison, `Guide target must be a published comparison: ${link.href}`);
+      assert.ok([comparison.left, comparison.right].some(({ brand, model }) => brand === config.marca && model === config.modelo), "linked comparison must include this model");
+    }
+  }
 });

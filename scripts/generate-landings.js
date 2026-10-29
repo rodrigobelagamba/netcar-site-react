@@ -18,6 +18,7 @@ import { writeFileSync } from "fs";
 import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { LANDING_PROFILE_TOKENS } from "../src/lib/landingStockCopy.mjs";
+import { MODEL_BUYER_GUIDES } from "./lib/model-buyer-guides.mjs";
 import {
   clearSeoBuildStockSnapshot,
   readSeoBuildStockSnapshot,
@@ -627,6 +628,7 @@ export function modelLanding(config, vehicles) {
   const filters = { marca: config.marca, modelo: config.modelo };
   const profile = stockProfile(vehicles, filters);
   const hasStock = profile.count >= MIN_MODELO;
+  const guide = MODEL_BUYER_GUIDES[config.slug];
 
   return {
     slug: config.slug,
@@ -637,15 +639,24 @@ export function modelLanding(config, vehicles) {
     footerPriority: hasStock,
     filters,
     relatedSlugs: [],
-    title: `${config.name} seminovo em Esteio/RS: preço e estoque | Netcar`,
-    description: `${config.name} seminovo na Netcar, em Esteio/RS. Consulte os anúncios, compare preço e versão e fale sobre troca ou financiamento.`,
+    title: guide?.title ?? `${config.name} seminovo em Esteio/RS: preço e estoque | Netcar`,
+    description: guide?.description ?? `${config.name} seminovo na Netcar, em Esteio/RS. Consulte os anúncios, compare preço e versão e fale sobre troca ou financiamento.`,
     h1: `${config.name} seminovo em Esteio/RS`,
-    intro: `Veja os anúncios de ${config.name} da Netcar, em Esteio. Confira o preço, as fotos e a versão de cada carro e confirme com a equipe qual deseja conhecer.`,
-    paragraphs: [
+    intro: guide?.intro ?? `Veja os anúncios de ${config.name} da Netcar, em Esteio. Confira o preço, as fotos e a versão de cada carro e confirme com a equipe qual deseja conhecer.`,
+    ...(guide ? {
+      guideTitle: guide.guideTitle,
+      guideLinks: guide.guideLinks,
+      paragraphTemplates: [
+        `Veja as opções de ${config.name} de ${LANDING_PROFILE_TOKENS.years} nesta seleção. O preço e os detalhes de cada unidade estão nos anúncios acima.`,
+        ...guide.paragraphs,
+      ],
+    } : {}),
+    paragraphs: guide ? guide.paragraphs : [
       `Ao escolher um ${config.name}, compare ano, versão, motor e equipamentos na ficha de cada unidade. Pelo botão de WhatsApp do anúncio, você pode tirar dúvidas sobre aquele carro e confirmar em qual das duas lojas de Esteio ele está.`,
       `Seu usado pode entrar na troca, mediante avaliação. Se houver financiamento em aberto, a equipe analisa o saldo de quitação na negociação. Para financiar a compra, entrada, prazo e parcela dependem da análise de crédito.`,
     ],
     faq: [
+      ...(guide?.faq ?? []),
       {
         q: `Quais versões do ${config.name} estão disponíveis agora?`,
         a: `Os anúncios desta seleção mostram a versão, o ano e o preço de cada ${config.name}. A disponibilidade muda com as entradas e vendas; confirme pelo WhatsApp antes da visita. Se a seleção estiver vazia, veja as opções relacionadas ou consulte a equipe.`,

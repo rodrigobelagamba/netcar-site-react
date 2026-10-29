@@ -355,13 +355,22 @@ export function EstoqueLandingPage() {
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="max-w-3xl space-y-4">
             <h2 className="text-2xl font-bold text-fg">
-              Compare antes de escolher
+              {landing.guideTitle || "Compare antes de escolher"}
             </h2>
             {paragraphs.map((paragraph) => (
               <p key={paragraph} className="leading-relaxed text-gray-600">
                 {paragraph}
               </p>
             ))}
+            {!!landing.guideLinks?.length && (
+              <nav aria-label={`Guias para escolher ${landing.name}`} className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
+                {landing.guideLinks.map((link) => (
+                  <a key={link.href} href={link.href} className="inline-flex min-h-11 items-center gap-2 font-semibold text-[#00283C] underline underline-offset-4">
+                    {link.label} <ArrowRight className="h-4 w-4" />
+                  </a>
+                ))}
+              </nav>
+            )}
           </div>
         </div>
       </section>

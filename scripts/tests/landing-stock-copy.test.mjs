@@ -4,6 +4,7 @@ import {
   marcaLanding,
   categoriaLanding,
   hybridLanding,
+  modelLanding,
 } from "../generate-landings.js";
 import {
   resolveLandingFaq,
@@ -103,4 +104,22 @@ test("hybrid metadata, introduction and FAQ no longer freeze commercial facts", 
     JSON.stringify([landing.intro, landing.description, landing.faq]),
     /137\.900|149\.900|3 unidades|3 carros/,
   );
+});
+
+test("model years follow current units and disappear when the stock cannot be confirmed", () => {
+  const landing = modelLanding({
+    slug: "nissan-kicks", marca: "NISSAN", modelo: "KICKS", name: "Nissan Kicks",
+  }, [{ marca: "NISSAN", modelo: "KICKS", valor: 90000, ano: 2022 }]);
+  const range = resolveLandingParagraphs(landing, [
+    { price: 100000, year: 2023 }, { price: 140000, year: 2026 },
+    { price: 0, year: 2021 },
+  ])[0];
+  assert.match(range, /2023 a 2026/);
+  assert.doesNotMatch(range, /2021|2022|\{\{/);
+  const single = resolveLandingParagraphs(landing, [{ price: 140000, year: 2026 }])[0];
+  assert.match(single, /de 2026 nesta seleção/);
+  assert.doesNotMatch(single, /2026 a 2026/);
+  for (const unavailable of [null, [], [{ price: 140000 }]]) {
+    assert.deepEqual(resolveLandingParagraphs(landing, unavailable), landing.paragraphs);
+  }
 });

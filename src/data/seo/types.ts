@@ -131,5 +131,8 @@ export interface LandingSeoPage {
   paragraphs: string[];
   /** Live stock profile tokens; paragraphs remain a stock-independent fallback. */
   paragraphTemplates?: string[];
+  /** Editorial model-specific guidance, shared with the crawler HTML. */
+  guideTitle?: string;
+  guideLinks?: { href: string; label: string }[];
   faq: CityFaq[];
 }
