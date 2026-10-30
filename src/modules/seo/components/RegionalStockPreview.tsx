@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
@@ -15,6 +16,7 @@ type RegionalStockPreviewProps = {
   limit?: number;
   stockSearch?: StockSearch;
   moreLabel?: string;
+  filter?: (vehicle: Vehicle) => boolean;
 };
 
 /** Grade de seminovos reais da loja — páginas SEO regionais. */
@@ -24,6 +26,7 @@ export function RegionalStockPreview({
   limit = 8,
   stockSearch = emptySeminovosSearch,
   moreLabel = "Ver mais carros",
+  filter,
 }: RegionalStockPreviewProps) {
   const {
     data: vehicles,
@@ -35,10 +38,13 @@ export function RegionalStockPreview({
   const list = useMemo(
     () =>
       sortShowroomVehicles(
-        (vehicles ?? []).filter(isAvailableHomeStockVehicle),
-        "az",
+        (vehicles ?? []).filter(
+          (vehicle) =>
+            isAvailableHomeStockVehicle(vehicle) && (!filter || filter(vehicle)),
+        ),
+        "recomendados",
       ).slice(0, limit),
-    [vehicles, limit],
+    [vehicles, limit, filter],
   );
   const hasStockData = Array.isArray(vehicles);
   const waitingForStock = isLoading || (isFetching && list.length === 0);

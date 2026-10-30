@@ -94,6 +94,9 @@ export interface ContentSeoPage {
   ctaLabel: string;
   secondLabel: string;
   secondHref: string;
+  /** Sem `field`, a vitrine usa o estoque inteiro; listas como `diferenciais` casam pela `tag`. */
+  stock?: { field?: string; match?: string; heading?: string };
+  links?: { href: string; label: string }[];
   sections: BlogSection[];
   faq: CityFaq[];
 }

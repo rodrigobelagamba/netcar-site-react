@@ -117,7 +117,7 @@ const STOCK_CUTS = [
     slug: "automaticos-ate-80-mil",
     name: "Automáticos até R$ 80 mil",
     filters: { cambio: "AUTOMATICO", precoMax: 80000 },
-    title: "Carros automáticos usados até R$ 80 mil | Netcar em Esteio",
+    title: "Carros automáticos até 80 mil: seminovos em Esteio | Netcar",
     h1: "Carros automáticos usados até R$ 80 mil",
     intent: "um carro automático usado até R$ 80 mil",
     intro:
@@ -321,9 +321,12 @@ const CATEGORIA_PARAGRAFOS = [
     `Entre os ${l} disponíveis, os preços partem de ${p.minPrice} e chegam a ${p.maxPrice}, com anos entre ${p.minYear} e ${p.maxYear}. Compare os anúncios e confirme os finalistas pelo WhatsApp.`,
 ];
 
+const CATEGORY_ACRONYMS = new Set(["SUV"]);
+
 export function categoriaLanding(name, count, profile, variantIndex) {
-  const nice = name.toUpperCase() === name ? name : titleCase(name);
-  const lower = String(name).toLowerCase();
+  const acronym = CATEGORY_ACRONYMS.has(String(name).toUpperCase());
+  const nice = acronym ? String(name).toUpperCase() : titleCase(name);
+  const lower = acronym ? nice : String(name).toLowerCase();
   const slug = slugify(name);
   const hasStock = count >= MIN_CATEGORIA;
   const intro = hasStock

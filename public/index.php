@@ -81,6 +81,11 @@ function netcar_static_route_file($path)
         '/politica-editorial' => 'page-politica-editorial.html',
         '/comparar' => 'page-comparar.html',
         '/como-selecionamos-nossos-carros' => 'page-como-selecionamos-nossos-carros.html',
+        '/carro-de-locadora-vale-a-pena' => 'page-carro-de-locadora-vale-a-pena.html',
+        '/carro-de-leilao-vale-a-pena' => 'page-carro-de-leilao-vale-a-pena.html',
+        '/localiza-seminovos-vale-a-pena' => 'page-localiza-seminovos-vale-a-pena.html',
+        '/movida-seminovos-vale-a-pena' => 'page-movida-seminovos-vale-a-pena.html',
+        '/unidas-seminovos-vale-a-pena' => 'page-unidas-seminovos-vale-a-pena.html',
     ];
 
     $file = isset($exact[$path]) ? $exact[$path] : null;
@@ -278,7 +283,7 @@ function netcar_route_uses_stock_bootstrap($path)
         || preg_match('#^/comparar/[a-z0-9-]+$#', (string) $path)
         || $path === '/regioes-atendidas'
         || $path === '/expointer-esteio'
-        || in_array($path, array('/financiamento', '/atendimento-24h', '/move-brasil'), true)
+        || in_array($path, array('/financiamento', '/atendimento-24h', '/move-brasil', '/carro-de-locadora-vale-a-pena', '/carro-de-leilao-vale-a-pena', '/localiza-seminovos-vale-a-pena', '/movida-seminovos-vale-a-pena', '/unidas-seminovos-vale-a-pena'), true)
         || preg_match('#^/veiculo/#', (string) $path)
         || preg_match('#^/seminovos-[a-z0-9-]+$#', (string) $path)
         || preg_match('#^/vender-carro-[a-z0-9-]+$#', (string) $path)
@@ -549,7 +554,7 @@ function netcar_route_manifest_entry($path)
     if (preg_match('#^/seminovos-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/CityLandingPage.tsx';
     if (preg_match('#^/vender-carro-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/SellCityLandingPage.tsx';
     if (preg_match('#^/comprar-[a-z0-9-]+$#', (string) $path)) return 'src/modules/seo/pages/EstoqueLandingPage.tsx';
-    if (in_array($path, array('/financiamento', '/atendimento-24h', '/move-brasil', '/politica-editorial'), true)) {
+    if (in_array($path, array('/financiamento', '/atendimento-24h', '/move-brasil', '/politica-editorial', '/carro-de-locadora-vale-a-pena', '/carro-de-leilao-vale-a-pena', '/localiza-seminovos-vale-a-pena', '/movida-seminovos-vale-a-pena', '/unidas-seminovos-vale-a-pena'), true)) {
         return 'src/modules/seo/pages/contentSeoPages.tsx';
     }
     return null;

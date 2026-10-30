@@ -137,7 +137,7 @@ test("regional preview requests fresh full stock and sorts before applying the l
     [...result.html.matchAll(/data-vehicle-id="([^"]+)"/g)].map(
       (match) => match[1],
     ),
-    ["1", "2"],
+    ["3", "2"],
   );
   assert.match(result.html, /data-wa-source="regional_stock"/);
   assert.match(result.html, /data-interest="true"/);
@@ -235,7 +235,7 @@ test("regional filter links do not advertise build-time counts as current invent
   );
 });
 
-test("buy and sell crawler previews preserve the same filtered A–Z stock order", () => {
+test("buy and sell crawler previews preserve the same filtered recommended stock order", () => {
   const source = readFileSync(
     new URL("../generate-seo-assets.js", import.meta.url),
     "utf8",
@@ -251,7 +251,7 @@ test("buy and sell crawler previews preserve the same filtered A–Z stock order
   for (const [section] of sections) {
     assert.match(
       section,
-      /vehicles:\s*landingStockOrder\(stock\.filter\(hasHomePhoto\)\)/,
+      /vehicles:\s*recommendedStockOrder\(stock\.filter\(hasHomePhoto\)\)/,
     );
     assert.match(section, /preserveOrder:\s*true/);
     assert.match(section, /limit:\s*8/);
@@ -265,9 +265,27 @@ test("buy and sell crawler previews preserve the same filtered A–Z stock order
     true,
     ts.ScriptKind.JS,
   );
+  const variableNames = [
+    "merchandisingProfiles",
+    "minimumManualMerchandisingPriority",
+  ];
+  const variables = variableNames.map((name) => {
+    const statement = ast.statements.find(
+      (node) =>
+        ts.isVariableStatement(node) &&
+        node.declarationList.declarations.some(
+          (declaration) =>
+            ts.isIdentifier(declaration.name) && declaration.name.text === name,
+        ),
+    );
+    assert.ok(statement, `Generator variable missing: ${name}`);
+    return statement.getText(ast);
+  });
   const functionNames = [
     "hasHomePhoto",
     "landingStockOrder",
+    "automaticLowMileagePriority",
+    "recommendedStockOrder",
     "regionalInventoryHtml",
     "escapeHtml",
   ];
@@ -279,8 +297,14 @@ test("buy and sell crawler previews preserve the same filtered A–Z stock order
     return statement.getText(ast);
   });
   const generator = runInNewContext(
-    `${functions.join("\n")}\n({ ${functionNames.join(", ")} })`,
+    `${[...variables, ...functions].join("\n")}\n({ ${functionNames.join(", ")} })`,
     {
+      merchandisingConfig: JSON.parse(
+        readFileSync(
+          new URL("../../src/data/vehicle-merchandising.json", import.meta.url),
+          "utf8",
+        ),
+      ),
       SITE: "https://www.netcarmultimarcas.com.br",
       regionalInventorySlugs: ["automaticos-ate-80-mil", "suv", "hatch"],
       landings: [
@@ -296,16 +320,17 @@ test("buy and sell crawler previews preserve the same filtered A–Z stock order
     },
   );
   const fixtures = [
-    vehicle("3", "POLO"),
+    { ...vehicle("3", "POLO"), km: 40_000 },
     vehicle("1", "ARGO"),
-    vehicle("2", "KICKS"),
+    { ...vehicle("2", "KICKS"), km: 5_000 },
     vehicle("4", "A3", 0),
     { ...vehicle("5", "A1"), imagens_site: { tem_fotos: 0 } },
     { ...vehicle("6", "A2"), imagens_site: undefined },
     { ...vehicle("7", "A4"), modelo: "", marca: "AUDI", name: "AUDI A4" },
+    { ...vehicle("19948", "UP"), km: 60_000 },
   ] as Vehicle[];
   const crawlerIds = generator
-    .landingStockOrder(
+    .recommendedStockOrder(
       fixtures
         .map((item) => ({ ...item, valor: item.price }))
         .filter(generator.hasHomePhoto),
@@ -313,10 +338,10 @@ test("buy and sell crawler previews preserve the same filtered A–Z stock order
     .map((item: Vehicle) => item.id);
   const runtimeIds = sortShowroomVehicles(
     fixtures.filter(isAvailableHomeStockVehicle),
-    "az",
+    "recomendados",
   ).map((item) => item.id);
   assert.equal(JSON.stringify(crawlerIds), JSON.stringify(runtimeIds));
-  assert.deepEqual(runtimeIds, ["7", "1", "2", "3"]);
+  assert.deepEqual(runtimeIds, ["19948", "2", "7", "1", "3"]);
 
   const nav = generator.regionalInventoryHtml("Nova Santa Rita", "intro");
   assert.match(

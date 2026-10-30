@@ -166,7 +166,7 @@
   },
   {
     "slug": "move-brasil",
-    "title": "Move Brasil seminovos em Esteio/RS | Crédito para motoristas | Netcar",
+    "title": "Move Brasil seminovos: carros elegíveis e regras | Netcar",
     "description": "Move Brasil liberou financiamento de seminovos elétricos e híbridos flex (a partir de 2024) para motoristas de app e taxistas. Veja regras e fale com a Netcar em Esteio/RS pelo WhatsApp.",
     "h1": "Move Brasil: seminovos com linha de crédito do governo",
     "intro": "O programa federal Move Brasil ampliou a linha de crédito e passou a contemplar também veículos seminovos — com regras específicas. Na Netcar Multimarcas, em Esteio/RS, ajudamos motoristas de aplicativo e taxistas a entender a elegibilidade, ver carros do estoque que podem enquadrar e seguir pelo WhatsApp com o iAN. A aprovação do programa e do banco é sempre do governo e das instituições financeiras credenciadas.",
@@ -535,6 +535,714 @@
       {
         "q": "A Netcar publica conteúdo pago ou de parceiros?",
         "a": "Não. O blog é conteúdo próprio da loja, sobre compra, venda e financiamento de seminovos na região de Esteio e Grande Porto Alegre."
+      }
+    ]
+  },
+  {
+    "slug": "carro-de-locadora-vale-a-pena",
+    "title": "Carro de locadora vale a pena? O que conferir | Netcar",
+    "description": "Carro de locadora vale a pena? Confira quilometragem, revisões, garantia de fábrica e valor de revenda antes de fechar. Guia da Netcar, em Esteio/RS.",
+    "h1": "Carro de locadora vale a pena? O que conferir antes de comprar",
+    "intro": "Pode valer, desde que o desconto compense o que pesa depois. Carro de locadora não é automaticamente ruim. Mas pode ter muitos quilômetros para a idade, vários motoristas e revisões feitas fora da concessionária, e tudo isso volta a contar quando você for vender ou dar o carro na troca. Confira os seis pontos abaixo antes de fechar.",
+    "waText": "quero um seminovo sem origem de locadora e entender o histórico do carro.",
+    "ctaLabel": "Ver opções no WhatsApp",
+    "secondLabel": "Ver como a Netcar seleciona os carros",
+    "secondHref": "/como-selecionamos-nossos-carros",
+    "stock": {
+      "field": "diferenciais",
+      "match": "revisados_concessionaria|unico_dono|garantia_fabrica",
+      "heading": "Em estoque: revisados na concessionária, único dono ou com garantia de fábrica"
+    },
+    "links": [
+      {
+        "href": "/localiza-seminovos-vale-a-pena",
+        "label": "Localiza Seminovos: o que comparar"
+      },
+      {
+        "href": "/movida-seminovos-vale-a-pena",
+        "label": "Movida Seminovos: o que comparar"
+      },
+      {
+        "href": "/unidas-seminovos-vale-a-pena",
+        "label": "Unidas Seminovos: o que comparar"
+      },
+      {
+        "href": "/carro-de-leilao-vale-a-pena",
+        "label": "Carro de leilão vale a pena?"
+      }
+    ],
+    "sections": [
+      {
+        "type": "h2",
+        "text": "1. Quantas pessoas dirigiram esse carro?"
+      },
+      {
+        "type": "p",
+        "text": "Na locação, o carro passa por vários motoristas em pouco tempo. Cada um usa por alguns dias e devolve: não é dono, não paga a manutenção e não vai revender o carro. Isso não prova que o carro foi maltratado, mas ninguém consegue dizer como cada motorista usou embreagem, câmbio, freios e suspensão. Num carro de único dono, o uso vem de uma pessoa só e o histórico é mais fácil de reconstituir."
+      },
+      {
+        "type": "h2",
+        "text": "2. A quilometragem combina com a idade?"
+      },
+      {
+        "type": "p",
+        "text": "Divida a quilometragem pelos anos de uso. Carro de frota pode rodar bem mais do que um carro de família no mesmo período. Mais quilômetros significam mais desgaste e, na revenda, uma avaliação menor. Compare sempre com carros da mesma versão e do mesmo ano."
+      },
+      {
+        "type": "h2",
+        "text": "3. As revisões foram feitas na concessionária?"
+      },
+      {
+        "type": "p",
+        "text": "Peça o comprovante de cada revisão, com data, quilometragem e local, e compare com o plano do manual. Revisão fora da rede da marca não é proibida, mas pode pesar na avaliação de quem compra depois e, conforme a marca, nas condições da garantia de fábrica. Na Netcar, os carros com revisões feitas na concessionária mostram o selo Revisados na Concessionária na página do veículo."
+      },
+      {
+        "type": "h2",
+        "text": "4. Ainda tem garantia de fábrica?"
+      },
+      {
+        "type": "p",
+        "text": "Pode ter saldo, mas confira a regra do manual para carro cujo primeiro dono foi uma empresa. Em vários manuais, o uso comercial tem limite de quilometragem que o uso particular não tem."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Chevrolet Onix Plus e Tracker 2025: 3 anos; para empresa em atividade comercial, limite de 100.000 km",
+          "Hyundai HB20 e Creta: 5 anos; no uso comercial, limite de 100.000 km",
+          "Nissan Kicks 2026: 3 anos; para CNPJ, limite de 100.000 km",
+          "Chery Tiggo 5X, 7 e 8: o complemento de garantia de motor e câmbio não vale no uso comercial"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Locadora é empresa e usa o carro no próprio negócio. Confira no manual do modelo se a garantia ainda vale e até quando, e peça os comprovantes de revisão exigidos."
+      },
+      {
+        "type": "h2",
+        "text": "5. Quanto ele vai valer quando você for vender?"
+      },
+      {
+        "type": "p",
+        "text": "Quem compra de você, ou avalia seu carro na troca, olha origem, quilometragem e revisões. A origem de locadora pode ser identificada no histórico do veículo e afastar parte dos compradores particulares. Menos interessados costumam significar ofertas menores."
+      },
+      {
+        "type": "h2",
+        "text": "6. O desconto paga essa diferença?"
+      },
+      {
+        "type": "p",
+        "text": "Faça a conta: desconto na compra menos a perda provável na venda. Exemplo hipotético: se o carro custa R$ 5 mil a menos hoje e, daqui a três anos, a avaliação na troca vier R$ 5 mil menor por causa da origem e da quilometragem, o desconto acabou. Some também a manutenção que o desgaste pode antecipar."
+      },
+      {
+        "type": "h2",
+        "text": "Checklist antes de fechar"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Quilometragem dividida pelos anos de uso",
+          "Comprovantes de revisão com data, quilometragem e local",
+          "Regra de garantia do manual para carro que teve empresa como primeiro dono",
+          "Histórico do veículo: leilão, sinistro, recuperação de furto ou roubo",
+          "Pneus, freios, embreagem ou câmbio e suspensão no test-drive",
+          "Avaliação de um mecânico de sua confiança antes de assinar"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Por que a Netcar não compra carro de locadora"
+      },
+      {
+        "type": "p",
+        "text": "Não é porque todo carro de locadora seja ruim. É porque nem sempre dá para reconstituir como ele foi usado, e essa origem pode pesar na sua revenda. Por isso o estoque que a Netcar compra para revender vem do RS e não tem carro de locadora, leilão, sinistro, furto ou roubo."
+      },
+      {
+        "type": "h2",
+        "text": "O que você encontra na página de cada carro da Netcar"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Selos de Único Dono, Revisados na Concessionária e Garantia de Fábrica, quando o carro tem",
+          "i-CHECK com o histórico consultado, quando disponível",
+          "Preparação na Fábrica de Valor, com mais de 60 itens verificados antes da vitrine",
+          "Garantia e condições da venda explicadas antes do fechamento, com acompanhamento do Nethelp no pós-venda",
+          "Avaliação do seu usado na troca, inclusive com financiamento em aberto, mediante avaliação"
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "Carro de locadora vale a pena?",
+        "a": "Pode valer se o desconto compensar quilometragem, revisões, garantia e o valor de revenda. Faça a conta com os seis pontos desta página antes de decidir."
+      },
+      {
+        "q": "Carro de locadora desvaloriza mais?",
+        "a": "Não existe tabela oficial que separe carro de locadora. Mas quem compra de você e quem avalia na troca considera origem, quilometragem e revisões. Se esses pontos pesarem, a oferta tende a ser menor."
+      },
+      {
+        "q": "Carro de locadora tem garantia de fábrica?",
+        "a": "Pode ter saldo. Em vários manuais, carro de empresa ou com uso comercial tem limite de quilometragem na garantia, como 100.000 km. Confira no manual do modelo e peça os comprovantes de revisão."
+      },
+      {
+        "q": "Dá para saber se o carro foi de locadora?",
+        "a": "O documento emitido em seu nome não diz locadora. Mas a primeira venda foi feita por uma empresa, e isso pode aparecer em consultas de histórico do veículo. Pergunte ao vendedor e peça o histórico de proprietários."
+      },
+      {
+        "q": "Comprar carro de locadora é furada?",
+        "a": "Não necessariamente. O risco é comprar só pelo preço, sem conferir quilometragem, revisões, garantia e quanto o carro vai valer na revenda."
+      },
+      {
+        "q": "Seminovo de loja custa mais que carro de locadora?",
+        "a": "Pode custar. A diferença paga origem conhecida e preparação antes da venda. Compare carros da mesma versão, ano e quilometragem, e inclua na conta o valor de revenda."
+      },
+      {
+        "q": "A Netcar vende carro de locadora?",
+        "a": "Não. O estoque que a Netcar compra para revender vem do RS e não tem carro de locadora, leilão, sinistro, furto ou roubo."
+      }
+    ]
+  },
+  {
+    "slug": "localiza-seminovos-vale-a-pena",
+    "title": "Localiza Seminovos Porto Alegre? Compare antes | Netcar",
+    "description": "Vai ver carros da Localiza Seminovos em Porto Alegre ou Canoas? Compare origem, garantia de fábrica e revenda com um seminovo sem origem de locadora.",
+    "h1": "Localiza Seminovos em Porto Alegre e Canoas: compare antes de comprar",
+    "intro": "Todo carro vendido pela Localiza Seminovos veio da frota da própria Localiza: aluguel, gestão de frotas e assinatura. Isso não quer dizer carro ruim, mas muda quatro coisas que você vai sentir depois: quantas pessoas dirigiram, a regra da garantia de fábrica, o valor na revenda e o que sobra do desconto. Compare com um seminovo de dono particular antes de fechar.",
+    "waText": "estava pesquisando a Localiza Seminovos e quero comparar com um seminovo sem origem de locadora.",
+    "ctaLabel": "Comparar no WhatsApp",
+    "secondLabel": "Ver como a Netcar seleciona os carros",
+    "secondHref": "/como-selecionamos-nossos-carros",
+    "stock": {
+      "field": "diferenciais",
+      "match": "revisados_concessionaria|unico_dono|garantia_fabrica",
+      "heading": "Na Netcar: revisados na concessionária, único dono ou com garantia de fábrica"
+    },
+    "links": [
+      {
+        "href": "/carro-de-locadora-vale-a-pena",
+        "label": "Carro de locadora vale a pena? Guia completo"
+      },
+      {
+        "href": "/movida-seminovos-vale-a-pena",
+        "label": "Movida Seminovos: o que comparar"
+      },
+      {
+        "href": "/unidas-seminovos-vale-a-pena",
+        "label": "Unidas Seminovos: o que comparar"
+      },
+      {
+        "href": "/como-selecionamos-nossos-carros",
+        "label": "Como a Netcar seleciona os carros"
+      }
+    ],
+    "sections": [
+      {
+        "type": "h2",
+        "text": "O que a Localiza Seminovos informa"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Origem: 100% frota própria da Localiza, usada em aluguel de curta e longa duração, gestão de frotas corporativas e assinatura",
+          "Preparação: revisão de 360 itens antes da venda",
+          "Garantia: 90 dias para motor e câmbio; extensão paga até 12 meses, para carros com até 3 anos e 80.000 km",
+          "Seu usado na troca: avaliado por uma rede de lojistas parceiros"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Fonte: site seminovos.localiza.com (perguntas frequentes e blog), consultado em 30/10/2026."
+      },
+      {
+        "type": "h2",
+        "text": "1. Carro de aluguel passa por muitos motoristas"
+      },
+      {
+        "type": "p",
+        "text": "No aluguel, o carro troca de mão a cada poucos dias. Quem aluga não é dono, não paga a manutenção e devolve o carro no fim da reserva. A revisão periódica cuida de óleo e filtros; o jeito de cada motorista usar embreagem, câmbio, freios e suspensão ninguém consegue reconstituir. Num carro de único dono, o uso vem de uma pessoa só."
+      },
+      {
+        "type": "h2",
+        "text": "2. Garantia de fábrica de carro que teve empresa como dono"
+      },
+      {
+        "type": "p",
+        "text": "Locadora é empresa e usa o carro no próprio negócio. Em vários manuais, esse uso comercial tem limite de quilometragem que o uso particular não tem:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Chevrolet Onix Plus e Tracker 2025: 3 anos; para empresa em atividade comercial, limite de 100.000 km",
+          "Hyundai HB20 e Creta: 5 anos; no uso comercial, limite de 100.000 km",
+          "Nissan Kicks 2026: 3 anos; para CNPJ, limite de 100.000 km",
+          "Chery Tiggo 5X, 7 e 8: o complemento de garantia de motor e câmbio não vale no uso comercial"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Antes de fechar, confira no manual do modelo se ainda há garantia de fábrica e até quando."
+      },
+      {
+        "type": "h2",
+        "text": "3. Onde foram feitas as revisões?"
+      },
+      {
+        "type": "p",
+        "text": "Peça os comprovantes com data, quilometragem e local de cada revisão: concessionária da marca ou oficina contratada pela locadora. Quem avaliar o carro na sua próxima troca vai perguntar a mesma coisa."
+      },
+      {
+        "type": "h2",
+        "text": "4. Na revenda, o primeiro dono aparece"
+      },
+      {
+        "type": "p",
+        "text": "Quando você for vender, o comprador e quem avalia na troca podem ver no histórico que o primeiro dono foi uma locadora. Isso costuma entrar na conta da avaliação e afasta parte dos compradores particulares. O que você economizou na compra pode voltar como desconto na venda."
+      },
+      {
+        "type": "h2",
+        "text": "5. Faça a conta do desconto"
+      },
+      {
+        "type": "p",
+        "text": "Exemplo hipotético: se o carro sai R$ 5 mil mais barato hoje e, daqui a três anos, a avaliação na troca vier R$ 5 mil menor por causa da origem e da quilometragem, o desconto acabou. Compare com um carro do mesmo modelo, ano e versão de dono particular."
+      },
+      {
+        "type": "h2",
+        "text": "O que a Netcar oferece no lugar"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Carros comprados no RS, sem origem de locadora, leilão, sinistro, furto ou roubo",
+          "Selos na página de cada carro: Único Dono, Revisados na Concessionária e Garantia de Fábrica, quando o carro tem",
+          "Fábrica de Valor: mais de 60 itens verificados antes da vitrine",
+          "i-CHECK com o histórico consultado, quando disponível",
+          "Seu usado avaliado pela própria Netcar, inclusive com financiamento em aberto",
+          "Duas lojas em Esteio, a 12 km de Canoas e 28 km do Centro de Porto Alegre"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Localiza e Localiza Seminovos são marcas da Localiza. A Netcar Multimarcas não tem relação com a empresa."
+      }
+    ],
+    "faq": [
+      {
+        "q": "A Localiza Seminovos vende carro de aluguel?",
+        "a": "Sim. Segundo a própria empresa, os carros vêm 100% da frota da Localiza, que inclui aluguel de curta e longa duração, gestão de frotas e assinatura."
+      },
+      {
+        "q": "Carro da Localiza tem garantia de fábrica?",
+        "a": "Pode ter saldo, mas o primeiro dono foi uma empresa. Em manuais como Chevrolet Onix Plus e Tracker 2025, Hyundai HB20 e Creta e Nissan Kicks 2026, o uso comercial tem limite de 100.000 km. Confira o manual do modelo."
+      },
+      {
+        "q": "Vale a pena comprar carro da Localiza?",
+        "a": "Pode valer se o desconto compensar o uso por vários motoristas, a regra da garantia e o valor menor na revenda. Faça a conta com um carro igual de dono particular."
+      },
+      {
+        "q": "Qual a diferença para a Netcar?",
+        "a": "A Netcar não vende carro de locadora. Compra no RS, mostra os selos de único dono, revisões na concessionária e garantia de fábrica quando o carro tem, e avalia seu usado na própria loja."
+      },
+      {
+        "q": "A Netcar fica perto de Porto Alegre e Canoas?",
+        "a": "Sim. As duas lojas ficam na Av. Presidente Vargas, em Esteio, a 12 km de Canoas e 28 km do Centro de Porto Alegre."
+      }
+    ]
+  },
+  {
+    "slug": "movida-seminovos-vale-a-pena",
+    "title": "Movida Seminovos Porto Alegre? Compare antes | Netcar",
+    "description": "Vai ver carros da Movida Seminovos em Porto Alegre ou Canoas? Compare origem, garantia de fábrica e revenda com um seminovo sem origem de locadora.",
+    "h1": "Movida Seminovos em Porto Alegre e Canoas: compare antes de comprar",
+    "intro": "Os carros da Movida Seminovos saem da frota da própria Movida, de aluguel e de gestão de frotas para empresas, a partir de 12 meses de uso. Isso não quer dizer carro ruim, mas muda quatro coisas que você vai sentir depois: quantas pessoas dirigiram, a regra da garantia de fábrica, o valor na revenda e o que sobra do desconto. Compare com um seminovo de dono particular antes de fechar.",
+    "waText": "estava pesquisando a Movida Seminovos e quero comparar com um seminovo sem origem de locadora.",
+    "ctaLabel": "Comparar no WhatsApp",
+    "secondLabel": "Ver como a Netcar seleciona os carros",
+    "secondHref": "/como-selecionamos-nossos-carros",
+    "stock": {
+      "field": "diferenciais",
+      "match": "revisados_concessionaria|unico_dono|garantia_fabrica",
+      "heading": "Na Netcar: revisados na concessionária, único dono ou com garantia de fábrica"
+    },
+    "links": [
+      {
+        "href": "/carro-de-locadora-vale-a-pena",
+        "label": "Carro de locadora vale a pena? Guia completo"
+      },
+      {
+        "href": "/localiza-seminovos-vale-a-pena",
+        "label": "Localiza Seminovos: o que comparar"
+      },
+      {
+        "href": "/unidas-seminovos-vale-a-pena",
+        "label": "Unidas Seminovos: o que comparar"
+      },
+      {
+        "href": "/como-selecionamos-nossos-carros",
+        "label": "Como a Netcar seleciona os carros"
+      }
+    ],
+    "sections": [
+      {
+        "type": "h2",
+        "text": "O que a Movida Seminovos informa"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Origem: frota própria de aluguel e de gestão e terceirização de frotas para empresas",
+          "Venda: os carros saem da frota a partir de 12 meses após a compra pela Movida",
+          "Aluguel diário, mensal e anual para pessoas e empresas, com parcerias para motoristas de aplicativo",
+          "Garantia: 1 ano em todos os modelos"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Fonte: ri.movida.com.br (Quem Somos), movida.com.br/press-kit e movida.com.br/institucional, consultados em 30/10/2026."
+      },
+      {
+        "type": "h2",
+        "text": "1. Carro de aluguel passa por muitos motoristas"
+      },
+      {
+        "type": "p",
+        "text": "No aluguel, o carro troca de mão a cada poucos dias. Quem aluga não é dono, não paga a manutenção e devolve o carro no fim da reserva. A própria Movida informa que também aluga para motoristas de aplicativo: pergunte qual foi o uso do carro que você está olhando. Num carro de único dono, o uso vem de uma pessoa só."
+      },
+      {
+        "type": "h2",
+        "text": "2. Garantia de fábrica de carro que teve empresa como dono"
+      },
+      {
+        "type": "p",
+        "text": "Locadora é empresa e usa o carro no próprio negócio. Em vários manuais, esse uso comercial tem limite de quilometragem que o uso particular não tem:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Chevrolet Onix Plus e Tracker 2025: 3 anos; para empresa em atividade comercial, limite de 100.000 km",
+          "Hyundai HB20 e Creta: 5 anos; no uso comercial, limite de 100.000 km",
+          "Nissan Kicks 2026: 3 anos; para CNPJ, limite de 100.000 km",
+          "Chery Tiggo 5X, 7 e 8: o complemento de garantia de motor e câmbio não vale no uso comercial"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Antes de fechar, confira no manual do modelo se ainda há garantia de fábrica e até quando."
+      },
+      {
+        "type": "h2",
+        "text": "3. Onde foram feitas as revisões?"
+      },
+      {
+        "type": "p",
+        "text": "Peça os comprovantes com data, quilometragem e local de cada revisão: concessionária da marca ou oficina contratada pela locadora. Quem avaliar o carro na sua próxima troca vai perguntar a mesma coisa."
+      },
+      {
+        "type": "h2",
+        "text": "4. Na revenda, o primeiro dono aparece"
+      },
+      {
+        "type": "p",
+        "text": "Quando você for vender, o comprador e quem avalia na troca podem ver no histórico que o primeiro dono foi uma locadora. Isso costuma entrar na conta da avaliação e afasta parte dos compradores particulares. O que você economizou na compra pode voltar como desconto na venda."
+      },
+      {
+        "type": "h2",
+        "text": "5. Faça a conta do desconto"
+      },
+      {
+        "type": "p",
+        "text": "Exemplo hipotético: se o carro sai R$ 5 mil mais barato hoje e, daqui a três anos, a avaliação na troca vier R$ 5 mil menor por causa da origem e da quilometragem, o desconto acabou. Compare com um carro do mesmo modelo, ano e versão de dono particular."
+      },
+      {
+        "type": "h2",
+        "text": "O que a Netcar oferece no lugar"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Carros comprados no RS, sem origem de locadora, leilão, sinistro, furto ou roubo",
+          "Selos na página de cada carro: Único Dono, Revisados na Concessionária e Garantia de Fábrica, quando o carro tem",
+          "Fábrica de Valor: mais de 60 itens verificados antes da vitrine",
+          "i-CHECK com o histórico consultado, quando disponível",
+          "Seu usado avaliado pela própria Netcar, inclusive com financiamento em aberto",
+          "Duas lojas em Esteio, a 12 km de Canoas e 28 km do Centro de Porto Alegre"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Movida e Movida Seminovos são marcas da Movida. A Netcar Multimarcas não tem relação com a empresa."
+      }
+    ],
+    "faq": [
+      {
+        "q": "A Movida Seminovos vende carro de aluguel?",
+        "a": "Sim. Segundo a própria empresa, os seminovos saem da frota de aluguel e de gestão de frotas, a partir de 12 meses de uso."
+      },
+      {
+        "q": "Carro da Movida tem garantia de fábrica?",
+        "a": "Pode ter saldo, mas o primeiro dono foi uma empresa. Em manuais como Chevrolet Onix Plus e Tracker 2025, Hyundai HB20 e Creta e Nissan Kicks 2026, o uso comercial tem limite de 100.000 km. Confira o manual do modelo."
+      },
+      {
+        "q": "Vale a pena comprar carro da Movida?",
+        "a": "Pode valer se o desconto compensar o uso por vários motoristas, a regra da garantia e o valor menor na revenda. Faça a conta com um carro igual de dono particular."
+      },
+      {
+        "q": "Qual a diferença para a Netcar?",
+        "a": "A Netcar não vende carro de locadora. Compra no RS, mostra os selos de único dono, revisões na concessionária e garantia de fábrica quando o carro tem, e avalia seu usado na própria loja."
+      },
+      {
+        "q": "A Netcar fica perto de Porto Alegre e Canoas?",
+        "a": "Sim. As duas lojas ficam na Av. Presidente Vargas, em Esteio, a 12 km de Canoas e 28 km do Centro de Porto Alegre."
+      }
+    ]
+  },
+  {
+    "slug": "unidas-seminovos-vale-a-pena",
+    "title": "Unidas Seminovos Porto Alegre? Compare antes | Netcar",
+    "description": "Vai ver carros da Unidas Seminovos em Porto Alegre ou Canoas? Compare origem, garantia de fábrica e revenda com um seminovo sem origem de locadora.",
+    "h1": "Unidas Seminovos em Porto Alegre e Canoas: compare antes de comprar",
+    "intro": "Os carros da Unidas Seminovos vêm da frota da própria Unidas, de aluguel e de assinatura, e passam por um centro de preparação em Guarulhos (SP) antes de seguir para as lojas. Isso não quer dizer carro ruim, mas muda quatro coisas que você vai sentir depois: quantas pessoas dirigiram, a regra da garantia de fábrica, o valor na revenda e o que sobra do desconto. Compare com um seminovo de dono particular antes de fechar.",
+    "waText": "estava pesquisando a Unidas Seminovos e quero comparar com um seminovo sem origem de locadora.",
+    "ctaLabel": "Comparar no WhatsApp",
+    "secondLabel": "Ver como a Netcar seleciona os carros",
+    "secondHref": "/como-selecionamos-nossos-carros",
+    "stock": {
+      "field": "diferenciais",
+      "match": "revisados_concessionaria|unico_dono|garantia_fabrica",
+      "heading": "Na Netcar: revisados na concessionária, único dono ou com garantia de fábrica"
+    },
+    "links": [
+      {
+        "href": "/carro-de-locadora-vale-a-pena",
+        "label": "Carro de locadora vale a pena? Guia completo"
+      },
+      {
+        "href": "/localiza-seminovos-vale-a-pena",
+        "label": "Localiza Seminovos: o que comparar"
+      },
+      {
+        "href": "/movida-seminovos-vale-a-pena",
+        "label": "Movida Seminovos: o que comparar"
+      },
+      {
+        "href": "/como-selecionamos-nossos-carros",
+        "label": "Como a Netcar seleciona os carros"
+      }
+    ],
+    "sections": [
+      {
+        "type": "h2",
+        "text": "O que a Unidas Seminovos informa"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Origem: carros que saem da locação e da assinatura da Unidas",
+          "Preparação: centro em Guarulhos (SP), com cerca de 600 carros por mês, antes de seguir para as lojas",
+          "Revisões documentadas e peças originais, segundo a empresa"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Fonte: conteúdo da Unidas Seminovos publicado no g1 em 08/08/2025 e seminovos.unidas.com.br, consultados em 30/10/2026."
+      },
+      {
+        "type": "h2",
+        "text": "1. Carro de aluguel passa por muitos motoristas"
+      },
+      {
+        "type": "p",
+        "text": "No aluguel e na assinatura, o carro passa por motoristas que não são donos dele. Quem aluga não paga a manutenção e devolve o carro no fim do contrato. A revisão periódica cuida de óleo e filtros; o jeito de cada motorista usar embreagem, câmbio, freios e suspensão ninguém consegue reconstituir. Num carro de único dono, o uso vem de uma pessoa só."
+      },
+      {
+        "type": "h2",
+        "text": "2. Garantia de fábrica de carro que teve empresa como dono"
+      },
+      {
+        "type": "p",
+        "text": "Locadora é empresa e usa o carro no próprio negócio. Em vários manuais, esse uso comercial tem limite de quilometragem que o uso particular não tem:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Chevrolet Onix Plus e Tracker 2025: 3 anos; para empresa em atividade comercial, limite de 100.000 km",
+          "Hyundai HB20 e Creta: 5 anos; no uso comercial, limite de 100.000 km",
+          "Nissan Kicks 2026: 3 anos; para CNPJ, limite de 100.000 km",
+          "Chery Tiggo 5X, 7 e 8: o complemento de garantia de motor e câmbio não vale no uso comercial"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Antes de fechar, confira no manual do modelo se ainda há garantia de fábrica e até quando."
+      },
+      {
+        "type": "h2",
+        "text": "3. Onde foram feitas as revisões?"
+      },
+      {
+        "type": "p",
+        "text": "Peça os comprovantes com data, quilometragem e local de cada revisão: concessionária da marca ou oficina contratada pela locadora. Quem avaliar o carro na sua próxima troca vai perguntar a mesma coisa."
+      },
+      {
+        "type": "h2",
+        "text": "4. Na revenda, o primeiro dono aparece"
+      },
+      {
+        "type": "p",
+        "text": "Quando você for vender, o comprador e quem avalia na troca podem ver no histórico que o primeiro dono foi uma locadora. Isso costuma entrar na conta da avaliação e afasta parte dos compradores particulares. O que você economizou na compra pode voltar como desconto na venda."
+      },
+      {
+        "type": "h2",
+        "text": "5. Faça a conta do desconto"
+      },
+      {
+        "type": "p",
+        "text": "Exemplo hipotético: se o carro sai R$ 5 mil mais barato hoje e, daqui a três anos, a avaliação na troca vier R$ 5 mil menor por causa da origem e da quilometragem, o desconto acabou. Compare com um carro do mesmo modelo, ano e versão de dono particular."
+      },
+      {
+        "type": "h2",
+        "text": "O que a Netcar oferece no lugar"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Carros comprados no RS, sem origem de locadora, leilão, sinistro, furto ou roubo",
+          "Selos na página de cada carro: Único Dono, Revisados na Concessionária e Garantia de Fábrica, quando o carro tem",
+          "Fábrica de Valor: mais de 60 itens verificados antes da vitrine",
+          "i-CHECK com o histórico consultado, quando disponível",
+          "Seu usado avaliado pela própria Netcar, inclusive com financiamento em aberto",
+          "Duas lojas em Esteio, a 12 km de Canoas e 28 km do Centro de Porto Alegre"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Unidas e Unidas Seminovos são marcas da Unidas. A Netcar Multimarcas não tem relação com a empresa."
+      }
+    ],
+    "faq": [
+      {
+        "q": "A Unidas Seminovos vende carro de aluguel?",
+        "a": "Sim. Segundo a própria empresa, os carros vêm da locação e da assinatura da Unidas e passam pelo centro de preparação em Guarulhos (SP)."
+      },
+      {
+        "q": "Carro da Unidas tem garantia de fábrica?",
+        "a": "Pode ter saldo, mas o primeiro dono foi uma empresa. Em manuais como Chevrolet Onix Plus e Tracker 2025, Hyundai HB20 e Creta e Nissan Kicks 2026, o uso comercial tem limite de 100.000 km. Confira o manual do modelo."
+      },
+      {
+        "q": "Vale a pena comprar carro da Unidas?",
+        "a": "Pode valer se o desconto compensar o uso por vários motoristas, a regra da garantia e o valor menor na revenda. Faça a conta com um carro igual de dono particular."
+      },
+      {
+        "q": "Qual a diferença para a Netcar?",
+        "a": "A Netcar não vende carro de locadora. Compra no RS, mostra os selos de único dono, revisões na concessionária e garantia de fábrica quando o carro tem, e avalia seu usado na própria loja."
+      },
+      {
+        "q": "A Netcar fica perto de Porto Alegre e Canoas?",
+        "a": "Sim. As duas lojas ficam na Av. Presidente Vargas, em Esteio, a 12 km de Canoas e 28 km do Centro de Porto Alegre."
+      }
+    ]
+  },
+  {
+    "slug": "carro-de-leilao-vale-a-pena",
+    "title": "Carro de leilão vale a pena? O que pesa depois | Netcar",
+    "description": "Carro de leilão pode sair barato, mas o histórico pesa no seguro, no financiamento e na revenda. Veja de onde vêm esses carros e o que conferir antes.",
+    "h1": "Carro de leilão vale a pena? O que pesa depois da compra",
+    "intro": "O preço de leilão costuma ser menor por um motivo: o histórico acompanha o carro. Seguro, financiamento e a próxima venda podem ficar mais difíceis. Veja de onde vêm esses carros e o que conferir antes de dar um lance ou comprar de quem arrematou.",
+    "waText": "quero um seminovo sem passagem por leilão ou sinistro.",
+    "ctaLabel": "Ver opções no WhatsApp",
+    "secondLabel": "Carro de locadora vale a pena?",
+    "secondHref": "/carro-de-locadora-vale-a-pena",
+    "stock": {
+      "heading": "Em estoque: seminovos sem passagem por leilão"
+    },
+    "links": [
+      {
+        "href": "/carro-de-locadora-vale-a-pena",
+        "label": "Carro de locadora vale a pena?"
+      },
+      {
+        "href": "/como-selecionamos-nossos-carros",
+        "label": "Como a Netcar seleciona os carros"
+      }
+    ],
+    "sections": [
+      {
+        "type": "h2",
+        "text": "De onde vêm os carros de leilão"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Retomados por bancos e financeiras por falta de pagamento",
+          "Indenizados por seguradoras depois de sinistro, como colisão, alagamento, incêndio ou furto recuperado",
+          "Renovação de frota de empresas e órgãos públicos",
+          "Apreendidos e não retirados do pátio"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Leilão não é tudo igual"
+      },
+      {
+        "type": "p",
+        "text": "Carro retomado por financeira pode estar inteiro. Carro de seguradora normalmente passou por sinistro. Leia o edital: ele informa a origem e as condições do lote, inclusive se há dano registrado."
+      },
+      {
+        "type": "h2",
+        "text": "O que pesa depois da compra"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Seguro: algumas seguradoras recusam ou mudam as condições. Faça a cotação antes",
+          "Financiamento: alguns bancos não financiam carro com passagem por leilão",
+          "Revenda: o registro pode aparecer em consultas de histórico e reduzir o número de interessados",
+          "Dano de média monta exige regularização e permanece anotado no cadastro do veículo"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Se mesmo assim for comprar"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Leia o edital e veja as fotos do lote",
+          "Consulte o histórico pela placa e pelo chassi",
+          "Leve um mecânico ou faça uma vistoria cautelar independente",
+          "Consulte seguro e financiamento antes de pagar",
+          "Some ao lance as taxas, a documentação e o reparo"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Por que a Netcar não vende carro de leilão"
+      },
+      {
+        "type": "p",
+        "text": "O estoque que a Netcar compra para revender não tem passagem por leilão, sinistro, furto, roubo ou origem de locadora. Esse histórico pode pesar no seguro, no financiamento e na sua próxima venda, e a Netcar prefere não repassar essa dificuldade ao cliente."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Carro de leilão vale a pena?",
+        "a": "Pode valer para quem entende o risco e faz a conta inteira: lance, taxas, reparo, seguro e o valor menor na revenda. Para quem quer um carro para usar e trocar depois sem dor de cabeça, costuma não compensar."
+      },
+      {
+        "q": "Passagem por leilão aparece no histórico?",
+        "a": "Pode aparecer em consultas de histórico do veículo. Nos casos de dano de média monta, a anotação fica no cadastro. Quem comprar de você vai poder consultar."
+      },
+      {
+        "q": "Carro de leilão tem seguro?",
+        "a": "Depende da seguradora. Algumas recusam e outras aceitam com condições diferentes. Faça a cotação antes de comprar."
+      },
+      {
+        "q": "Dá para financiar carro de leilão?",
+        "a": "Depende do banco. Alguns não financiam. Consulte antes de fechar."
+      },
+      {
+        "q": "A Netcar vende carro de leilão?",
+        "a": "Não. A Netcar não compra para revenda carros com passagem por leilão, sinistro, furto, roubo ou origem de locadora."
       }
     ]
   }

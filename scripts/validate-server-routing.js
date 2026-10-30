@@ -119,6 +119,20 @@ expect(
     existsSync(join(root, "public/seo-static/page-expointer-esteio.html")),
   "Expointer sem rota no servidor, regra para crawler ou HTML gerado",
 );
+for (const slug of [
+  "carro-de-locadora-vale-a-pena",
+  "carro-de-leilao-vale-a-pena",
+  "localiza-seminovos-vale-a-pena",
+  "movida-seminovos-vale-a-pena",
+  "unidas-seminovos-vale-a-pena",
+]) {
+  expect(
+    controller.includes(`'/${slug}' => 'page-${slug}.html'`) &&
+      htaccess.includes(`|${slug}|`) &&
+      existsSync(join(root, `public/seo-static/page-${slug}.html`)),
+    `/${slug} sem rota no servidor, regra para crawler ou HTML gerado`,
+  );
+}
 expect(
   controller.includes("'/privacidade' => [") &&
     controller.includes("src/modules/legal/pages/PrivacyPage.tsx"),

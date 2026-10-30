@@ -24,3 +24,28 @@ export function PoliticaEditorialPage() {
   const page = getContentPage("politica-editorial");
   return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
 }
+
+export function CarroDeLocadoraPage() {
+  const page = getContentPage("carro-de-locadora-vale-a-pena");
+  return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
+}
+
+export function CarroDeLeilaoPage() {
+  const page = getContentPage("carro-de-leilao-vale-a-pena");
+  return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
+}
+
+export function LocalizaSeminovosPage() {
+  const page = getContentPage("localiza-seminovos-vale-a-pena");
+  return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
+}
+
+export function MovidaSeminovosPage() {
+  const page = getContentPage("movida-seminovos-vale-a-pena");
+  return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
+}
+
+export function UnidasSeminovosPage() {
+  const page = getContentPage("unidas-seminovos-vale-a-pena");
+  return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
+}
