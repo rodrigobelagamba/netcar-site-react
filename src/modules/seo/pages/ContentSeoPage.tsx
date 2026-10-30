@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import type { ContentSeoPage as ContentSeoPageData } from "@/data/seo/types";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
@@ -8,7 +9,22 @@ import { RegionalStockPreview } from "@/modules/seo/components/RegionalStockPrev
 import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSignals";
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 
+function stockFilter(stock: ContentSeoPageData["stock"]) {
+  if (!stock?.field || !stock.match) return undefined;
+  const { field } = stock;
+  const pattern = new RegExp(stock.match, "i");
+  return (vehicle: Vehicle) => {
+    const value = (vehicle as unknown as Record<string, unknown>)[field];
+    const values = Array.isArray(value)
+      ? value.map((item) => (item as { tag?: unknown })?.tag ?? item)
+      : [value];
+    return values.some((item) => pattern.test(String(item ?? "")));
+  };
+}
+
 export function ContentSeoPage({ page }: { page: ContentSeoPageData }) {
+  const filter = useMemo(() => stockFilter(page.stock), [page.stock]);
+
   useMetaTags({
     title: page.title,
     description: page.description,
@@ -105,6 +121,26 @@ export function ContentSeoPage({ page }: { page: ContentSeoPageData }) {
             return null;
           })}
 
+          {!!page.links?.length && (
+            <nav aria-label="Leia também">
+              <h2 className="text-xl md:text-2xl font-bold text-fg mt-8 mb-3">
+                Leia também
+              </h2>
+              <ul className="space-y-2 mb-4">
+                {page.links.map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      className="inline-flex min-h-11 items-center font-semibold text-[#00283C] underline underline-offset-4"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+
           {page.faq.length > 0 && (
             <>
               <h2 className="mt-10 mb-4 text-xl font-bold text-fg md:text-2xl">
@@ -128,7 +164,11 @@ export function ContentSeoPage({ page }: { page: ContentSeoPageData }) {
         </div>
       </section>
 
-      <RegionalStockPreview limit={8} />
+      <RegionalStockPreview
+        limit={8}
+        filter={filter}
+        {...(page.stock?.heading ? { title: page.stock.heading } : {})}
+      />
 
       <div className="w-full font-sans antialiased text-muted-foreground bg-muted py-12 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 space-y-8">
         <div className="container-main space-y-8">

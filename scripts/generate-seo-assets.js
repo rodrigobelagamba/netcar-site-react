@@ -679,7 +679,7 @@ function toBootstrapVehicle(vehicle) {
       : []
     )
       .filter((differential) =>
-        ["garantia_fabrica", "unico_dono"].includes(
+        ["garantia_fabrica", "unico_dono", "revisados_concessionaria"].includes(
           String(differential?.tag || ""),
         ),
       )
@@ -1386,7 +1386,7 @@ for (const city of cities) {
       <section id="estoque-regional">
         ${stockShowcase({
           heading: `Seminovos para quem vem de ${city.name}`,
-          vehicles: landingStockOrder(stock.filter(hasHomePhoto)),
+          vehicles: recommendedStockOrder(stock.filter(hasHomePhoto)),
           preserveOrder: true,
           limit: 8,
           ctaLabel: "Ver todo o estoque de seminovos",
@@ -1396,7 +1396,7 @@ for (const city of cities) {
       <section aria-labelledby="selecao-regional-titulo">
         <h2 id="selecao-regional-titulo">${escapeHtml(regionalSelection.heading)}</h2>
         <p>${escapeHtml(regionalSelection.text)}</p>
-        <p><a href="${SITE}${escapeHtml(regionalSelection.href)}">${escapeHtml(regionalSelection.linkLabel)}</a></p>
+        <p><a href="${SITE}${escapeHtml(regionalSelection.href)}">${escapeHtml(regionalSelection.linkLabel)}</a> · <a href="${SITE}${escapeHtml(regionalSelection.guideHref)}">${escapeHtml(regionalSelection.guideLabel)}</a></p>
       </section>
       ${regionalCustomerProofHtml(city)}
       <h2>${escapeHtml(city.contentHeading || `Como comparar seminovos saindo de ${city.name}`)}</h2>
@@ -1507,7 +1507,7 @@ for (const city of cities) {
       <section id="estoque-regional">
         ${stockShowcase({
           heading: `Seminovos disponíveis para usar seu carro na troca`,
-          vehicles: landingStockOrder(stock.filter(hasHomePhoto)),
+          vehicles: recommendedStockOrder(stock.filter(hasHomePhoto)),
           preserveOrder: true,
           limit: 8,
           ctaLabel: "Ver todo o estoque para troca",
@@ -1581,6 +1581,40 @@ function landingStockOrder(vehicles) {
       String(left.marca || "").localeCompare(String(right.marca || ""), "pt-BR")
     );
   });
+}
+
+// Mesmo critério "recomendados" de sortShowroomVehicles na vitrine React.
+function recommendedStockOrder(vehicles) {
+  const score = (vehicle) => {
+    const configured = Number(
+      merchandisingProfiles.get(String(vehicle?.id || ""))?.priority || 0,
+    );
+    const km = Number(vehicle?.km);
+    const merchandising =
+      configured > 0
+        ? configured
+        : Number.isFinite(km) && km > 0 && km < 25_000
+          ? automaticLowMileagePriority(km)
+          : 0;
+    return (
+      Number(vehicle?.destaque === 1) * 20_000 +
+      Number(vehicle?.promocao === 1) * 10_000 +
+      merchandising
+    );
+  };
+  const idDesc = (left, right) => {
+    const leftId = Number(left.id);
+    const rightId = Number(right.id);
+    if (!Number.isFinite(leftId) || !Number.isFinite(rightId)) return 0;
+    return rightId - leftId;
+  };
+  const az = landingStockOrder(vehicles);
+  return [...vehicles].sort(
+    (left, right) =>
+      score(right) - score(left) ||
+      idDesc(left, right) ||
+      az.indexOf(left) - az.indexOf(right),
+  );
 }
 
 for (const landing of landings) {
@@ -1984,18 +2018,32 @@ for (const page of contentPages) {
   const faqHtml = (page.faq || [])
     .map((item) => `<h3>${escapeHtml(item.q)}</h3><p>${escapeHtml(item.a)}</p>`)
     .join("");
+  const stockMatches = (vehicle) => {
+    if (!page.stock.field || !page.stock.match) return true;
+    const value = vehicle[page.stock.field];
+    const values = Array.isArray(value)
+      ? value.map((item) => item?.tag ?? item)
+      : [value];
+    const pattern = new RegExp(page.stock.match, "i");
+    return values.some((item) => pattern.test(String(item ?? "")));
+  };
   const pageStock = page.stock
-    ? stock.filter((vehicle) =>
-        new RegExp(page.stock.match, "i").test(
-          String(vehicle[page.stock.field] || ""),
-        ),
-      )
+    ? recommendedStockOrder(stock.filter(stockMatches))
     : [];
+  const linksHtml = page.links?.length
+    ? `<nav aria-label="Leia também"><h2>Leia também</h2><ul>${page.links
+        .map(
+          (link) =>
+            `<li><a href="${SITE}${escapeHtml(link.href)}">${escapeHtml(link.label)}</a></li>`,
+        )
+        .join("")}</ul></nav>`
+    : "";
   const body = `
     <article>
       <h1>${escapeHtml(page.h1)}</h1>
       <p>${escapeHtml(page.intro)}</p>
       ${renderContentSections(page.sections || [])}
+      ${linksHtml}
       ${stockShowcase({
         heading: page.stock?.heading || "Em estoque agora",
         vehicles: pageStock,
@@ -2049,6 +2097,11 @@ const staticPages = [
   { path: "/atendimento-24h", priority: "0.7", changefreq: "monthly" },
   { path: "/comparar", priority: "0.7", changefreq: "weekly" },
   { path: "/seminovos-automaticos", priority: "0.8", changefreq: "weekly" },
+  { path: "/carro-de-locadora-vale-a-pena", priority: "0.7", changefreq: "monthly" },
+  { path: "/localiza-seminovos-vale-a-pena", priority: "0.7", changefreq: "monthly" },
+  { path: "/movida-seminovos-vale-a-pena", priority: "0.7", changefreq: "monthly" },
+  { path: "/unidas-seminovos-vale-a-pena", priority: "0.7", changefreq: "monthly" },
+  { path: "/carro-de-leilao-vale-a-pena", priority: "0.6", changefreq: "monthly" },
   // Não vende nada, mas é a página que o blog cita como autor e onde o processo
   // editorial fica explícito. Precisa ser rastreável para valer como sinal.
   { path: "/politica-editorial", priority: "0.4", changefreq: "yearly" },

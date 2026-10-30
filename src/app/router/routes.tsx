@@ -118,6 +118,31 @@ const PoliticaEditorialPage = lazyWithRetry(() =>
     default: m.PoliticaEditorialPage,
   })),
 );
+const CarroDeLocadoraPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.CarroDeLocadoraPage,
+  })),
+);
+const CarroDeLeilaoPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.CarroDeLeilaoPage,
+  })),
+);
+const LocalizaSeminovosPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.LocalizaSeminovosPage,
+  })),
+);
+const MovidaSeminovosPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.MovidaSeminovosPage,
+  })),
+);
+const UnidasSeminovosPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.UnidasSeminovosPage,
+  })),
+);
 const PrivacyPage = lazyWithRetry(() =>
   import("@/modules/legal/pages/PrivacyPage").then((m) => ({
     default: m.PrivacyPage,
@@ -212,6 +237,19 @@ function getContextualMessage(pathname: string): string {
   }
   if (pathname === "/seminovos-automaticos") {
     return siteWhatsAppMessage("estou procurando um seminovo automático.");
+  }
+  if (
+    pathname.endsWith("-seminovos-vale-a-pena") ||
+    pathname === "/carro-de-locadora-vale-a-pena"
+  ) {
+    return siteWhatsAppMessage(
+      "quero um seminovo sem origem de locadora e entender o histórico do carro.",
+    );
+  }
+  if (pathname === "/carro-de-leilao-vale-a-pena") {
+    return siteWhatsAppMessage(
+      "quero um seminovo sem passagem por leilão ou sinistro.",
+    );
   }
   return siteWhatsAppMessage("estou procurando um seminovo.");
 }
@@ -531,6 +569,36 @@ const politicaEditorialRoute = createRoute({
   component: PoliticaEditorialPage,
 });
 
+const carroDeLocadoraRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/carro-de-locadora-vale-a-pena",
+  component: CarroDeLocadoraPage,
+});
+
+const carroDeLeilaoRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/carro-de-leilao-vale-a-pena",
+  component: CarroDeLeilaoPage,
+});
+
+const localizaSeminovosRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/localiza-seminovos-vale-a-pena",
+  component: LocalizaSeminovosPage,
+});
+
+const movidaSeminovosRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/movida-seminovos-vale-a-pena",
+  component: MovidaSeminovosPage,
+});
+
+const unidasSeminovosRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/unidas-seminovos-vale-a-pena",
+  component: UnidasSeminovosPage,
+});
+
 const privacyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/privacidade",
@@ -596,6 +664,11 @@ export const routeTree = rootRoute.addChildren([
   atendimento24hRoute,
   moveBrasilRoute,
   politicaEditorialRoute,
+  carroDeLocadoraRoute,
+  carroDeLeilaoRoute,
+  localizaSeminovosRoute,
+  movidaSeminovosRoute,
+  unidasSeminovosRoute,
   privacyRoute,
   comparadorRoute,
   comparisonLandingRoute,

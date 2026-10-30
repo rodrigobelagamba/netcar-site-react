@@ -510,7 +510,7 @@ $metaDescription .= '. ';
 $metaDescription .= $isSold
     ? 'Este seminovo foi vendido — veja similares disponíveis na Netcar Multimarcas, em Esteio/RS.'
     : ($precoCurto ? $precoCurto . ' na Netcar Multimarcas, em Esteio/RS. ' : 'Na Netcar Multimarcas, em Esteio/RS. ')
-        . 'Laudo de vistoria, garantia e financiamento com análise no mesmo dia.';
+        . 'Procedência verificada, garantia e financiamento com análise no mesmo dia.';
 
 // Busca imagem para Open Graph - USA APENAS imagens_site.capa_opengraph (sem fallback)
 // IMPORTANTE: WhatsApp precisa de pelo menos 300px de largura para mostrar imagem grande em cima
@@ -909,7 +909,8 @@ if ($placa) {
         <h2>Como a Netcar prepara este seminovo</h2>
         <p>Todo carro do nosso estoque passa pela Fábrica de Valor: avaliação mecânica,
         revisão dos itens de segurança e correção do que for necessário antes de entrar
-        na vitrine. Você recebe laudo de vistoria e garantia, e pode comparar condições
+        na vitrine. Você recebe garantia e, quando o carro tem i-CHECK, o histórico consultado
+        nas bases DEKRA / CheckAuto. Também pode comparar condições
         de financiamento entre bancos e financeiras parceiras — com entrada mínima de
         20% e possibilidade de dar seu usado na troca, sujeito à análise de crédito.</p>
 

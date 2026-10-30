@@ -28,6 +28,13 @@ export function RegionalSelectionNote() {
             >
               {selection.linkLabel}
             </Link>
+            <a
+              href={selection.guideHref}
+              data-regional-action="selection_rental_guide"
+              className="mt-3 ml-6 inline-flex min-h-11 items-center text-sm font-semibold text-primary underline underline-offset-4"
+            >
+              {selection.guideLabel}
+            </a>
           </div>
         </div>
       </div>

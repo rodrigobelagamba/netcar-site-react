@@ -50,6 +50,11 @@ const STATIC_PAGES = [
   { loc: "/financiamento", changefreq: "monthly", priority: "0.8" },
   { loc: "/move-brasil", changefreq: "weekly", priority: "0.8" },
   { loc: "/atendimento-24h", changefreq: "monthly", priority: "0.7" },
+  { loc: "/carro-de-locadora-vale-a-pena", changefreq: "monthly", priority: "0.7" },
+  { loc: "/localiza-seminovos-vale-a-pena", changefreq: "monthly", priority: "0.7" },
+  { loc: "/movida-seminovos-vale-a-pena", changefreq: "monthly", priority: "0.7" },
+  { loc: "/unidas-seminovos-vale-a-pena", changefreq: "monthly", priority: "0.7" },
+  { loc: "/carro-de-leilao-vale-a-pena", changefreq: "monthly", priority: "0.6" },
   { loc: "/politica-editorial", changefreq: "yearly", priority: "0.4" },
   { loc: "/privacidade", changefreq: "yearly", priority: "0.3" },
 ];
