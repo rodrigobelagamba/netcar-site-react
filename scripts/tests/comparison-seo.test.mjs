@@ -312,12 +312,10 @@ test("four permanent pair pages remain complete and discoverable when stock is e
   for (const field of ["title", "description", "h1", "intro"]) {
     assert.equal(new Set(comparisonPages.map((page) => page[field])).size, 4);
   }
-  assert.equal(
-    new Set(
-      comparisonPages.flatMap((page) => page.sections.map(({ text }) => text)),
-    ).size,
-    16,
+  const sectionTexts = comparisonPages.flatMap((page) =>
+    page.sections.map(({ text }) => text),
   );
+  assert.equal(new Set(sectionTexts).size, sectionTexts.length);
   const pages = renderCrawlerPages();
   for (const page of comparisonPages) {
     assert.ok(pages[0].html.includes(`href="${site}/comparar/${page.slug}"`));

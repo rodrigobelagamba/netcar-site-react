@@ -252,10 +252,13 @@ ErrorDocument 410 /410.html
   # Tours 3D antigos (2016) — Tour3D e Tour3DRC
   RewriteRule ^Tour3DR?C?(/.*)?$ / [R=301,L,NC]
   
+  # Claude-User e Perplexity-User não contêm "bot": o fetch sob demanda
+  # cairia no shell do React. Google-Extended fica de fora; AI Overviews
+  # chega como Googlebot.
   # Home para bots: precisa vir ANTES do short-circuit de arquivo/diretório,
   # senão a raiz "/" casa com o diretório docroot (-d) e o crawler recebe o
   # index.html (shell vazio do React) em vez do conteúdo real do seo-pagina.php.
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Google-Structured-Data-Testing-Tool|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Google-Structured-Data-Testing-Tool|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{REQUEST_URI} ^/?$ [NC]
   RewriteRule ^$ seo-pagina.php [L,QSA]
@@ -328,7 +331,7 @@ ErrorDocument 410 /410.html
   RewriteRule ^ - [L]
   
   # Sexto: interceptar rotas principais para bots (HTML com conteúdo real)
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Google-Structured-Data-Testing-Tool|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Google-Structured-Data-Testing-Tool|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{REQUEST_URI} ^/(seminovos|sobre|contato|compra|blog)/?$ [NC]
   RewriteRule ^ seo-pagina.php [L,QSA]
@@ -336,46 +339,46 @@ ErrorDocument 410 /410.html
   # SEO estático para crawlers (blog + páginas locais).
   # O -f garante que só post com HTML gerado é servido; slug inexistente cai na
   # regra 404 abaixo em vez de devolver o shell do SPA (soft 404).
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/blog-$1.html -f
   RewriteRule ^blog/([^/]+)/?$ seo-static/blog-$1.html [L]
 
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteRule ^regioes-atendidas/?$ seo-static/regions-hub.html [L]
 
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   # Sem o -f, /seminovos-automaticos casava aqui e apontava para um city-*.html
   # inexistente: o bot recebia o shell do SPA com o title da home.
   RewriteCond %{DOCUMENT_ROOT}/seo-static/city-$1.html -f
   RewriteRule ^seminovos-([a-z0-9-]+)/?$ seo-static/city-$1.html [L]
 
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/sell-city-$1.html -f
   RewriteRule ^vender-carro-([a-z0-9-]+)/?$ seo-static/sell-city-$1.html [L]
 
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/landing-$1.html -f
   RewriteRule ^comprar-([a-z0-9-]+)/?$ seo-landing.php [L]
 
   # Pares permanentes: só o HTML publicado comprova a existência da comparação.
   # A canônica do documento não inclui queries de seleção ou atribuição.
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/comparison-$1.html -f
   RewriteRule ^comparar/([a-z0-9-]+)/?$ seo-comparison.php [L]
 
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/page-comparar.html -f
   RewriteRule ^comparar/?$ seo-comparison.php [L]
 
   # Páginas de conteúdo SEO e institucional para crawlers
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/page-$1.html -f
   RewriteRule ^(financiamento|atendimento-24h|move-brasil|seminovos-automaticos|politica-editorial|comparar|como-selecionamos-nossos-carros|carro-de-locadora-vale-a-pena|carro-de-leilao-vale-a-pena|localiza-seminovos-vale-a-pena|movida-seminovos-vale-a-pena|unidas-seminovos-vale-a-pena|expointer-esteio)/?$ seo-static/page-$1.html [L]
@@ -384,14 +387,14 @@ ErrorDocument 410 /410.html
   # inválido (ex.: /blog/foo-bar, /comprar-moto, /seminovos-atlantis) caía no
   # fallback do SPA e devolvia 200 com o shell da home — soft 404 para o bot.
   # URL inventada/errada recebe 404. 410 fica reservado ao legado conhecido.
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteRule ^(blog/[^/]+|comparar/[^/]+|comprar-[a-z0-9-]+|seminovos-[a-z0-9-]+|vender-carro-[a-z0-9-]+)/?$ - [R=404,L]
 
   # Sétimo: interceptar /veiculo/{slug} APENAS quando for bot/crawler (meta tags para WhatsApp)
   # Usuários normais acessam diretamente o React app
   RewriteCond %{REQUEST_URI} ^/veiculo/ [NC]
-  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Slackbot|SkypeUriPreview|LinkedInBot|Twitterbot|WhatsApp|facebookexternalhit|Facebot|Google-Structured-Data-Testing-Tool|bot|crawler|spider|scraper) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Slackbot-LinkExpanding|Slack-ImgProxy|Slackbot|SkypeUriPreview|LinkedInBot|Twitterbot|WhatsApp|facebookexternalhit|Facebot|Google-Structured-Data-Testing-Tool|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteRule ^veiculo/(.+)$ detalhe-veiculo.php?slug=$1 [L,QSA]
   

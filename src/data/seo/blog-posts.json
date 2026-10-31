@@ -53,50 +53,91 @@
   {
     "slug": "como-financiar-carro-usado-rs",
     "title": "Como financiar carro usado no RS: documentos, entrada e análise",
-    "description": "Entenda documentos, entrada mínima de 20%, parcelamento no cartão e opções de financiamento para seminovos em Esteio. Tudo sujeito à análise de crédito.",
+    "description": "Documentos, entrada mínima de 20% e saldo em até 60 vezes para financiar seminovo no RS. A aprovação depende da análise de crédito.",
     "publishedAt": "2026-06-08",
     "readMinutes": 5,
     "sections": [
       {
         "type": "p",
-        "text": "Para financiar um seminovo, separe os documentos e defina quanto consegue dar de entrada. A proposta segue para bancos e financeiras e só avança depois da análise de crédito."
+        "text": "Financiar um seminovo no Rio Grande do Sul começa por três coisas que você controla: os documentos, o valor da entrada e o prazo que cabe no mês. A taxa, a aprovação e o limite saem da instituição financeira, depois que ela lê o seu cadastro. A Netcar reúne as propostas das parceiras. Não decide o crédito no lugar do banco."
       },
       {
         "type": "h2",
-        "text": "Documentos que a financeira pede"
+        "text": "Separe o dossiê antes de pedir número"
+      },
+      {
+        "type": "p",
+        "text": "Chegue com RG, CPF e um comprovante de residência recente. A renda entra com holerite, extrato ou a declaração que a instituição pedir. A CNH aparece quando o banco exige habilitação no nome de quem vai ficar com o carro. Nome divergente entre documento e comprovante atrasa a leitura. Corrija isso antes de enviar a pasta."
+      },
+      {
+        "type": "p",
+        "text": "Autônomo não fica de fora por ser autônomo. O que muda é a forma de mostrar renda: extrato, declaração ou o conjunto que a financeira aceitar naquele produto. Sem esse papel, a simulação fica incompleta e o número da parcela não serve para decidir."
+      },
+      {
+        "type": "h2",
+        "text": "Entrada mínima de 20%"
+      },
+      {
+        "type": "p",
+        "text": "Na Netcar o preço inteiro não é financiado. Toda proposta parte da entrada mínima. A entrada mínima é 20% do preço do seminovo. Na prática, muita proposta fica entre 20% e 30%, conforme o perfil e a instituição. Esse percentual é o piso da loja, não uma promessa de que toda ficha será aprovada nesse desenho."
+      },
+      {
+        "type": "p",
+        "text": "Parte da entrada pode ser lançada no cartão de crédito, se houver disponibilidade e se a análise autorizar. O cartão não substitui a entrada. Ele só muda a forma de pagar o que já é exigido à vista. O saldo que sobra é o que segue para o financiamento."
+      },
+      {
+        "type": "h2",
+        "text": "O saldo pode ir até 60 meses"
+      },
+      {
+        "type": "p",
+        "text": "O saldo financiado pode ser parcelado em até 60 vezes. Prazo maior reduz a parcela e aumenta o custo total. Prazo menor faz o contrário. Compare propostas com a mesma entrada e o mesmo número de meses. Misturar 36 vezes de um banco com 60 de outro esconde qual condição pesa mais no fim."
       },
       {
         "type": "ul",
         "items": [
-          "RG e CPF",
-          "Comprovante de residência atualizado",
-          "Comprovante de renda (holerite, extrato ou declaração)",
-          "CNH (quando solicitada pela instituição)"
+          "Entrada em reais e em percentual do preço do carro",
+          "Valor financiado, que é o preço menos a entrada",
+          "Quantidade de meses e valor de cada parcela",
+          "Custo total: entrada somada a todas as parcelas"
         ]
       },
       {
         "type": "h2",
-        "text": "Prazos e entrada mínima"
+        "text": "Quem aprova é a financeira"
       },
       {
         "type": "p",
-        "text": "Na Netcar não há financiamento 100% nem carro sem entrada. A entrada mínima é de 20% do valor (em geral 20% a 30%) e pode ser parcelada no cartão de crédito, conforme disponibilidade e análise. O financiamento do saldo pode ir em até 60x. Você ainda pode usar seu carro atual na troca — inclusive com parcelas em aberto, mediante avaliação. Tudo sujeito a análise de crédito."
+        "text": "Cada simulação passa pelos bancos e financeiras parceiras. A Netcar não tem linha própria para nome restrito e não garante aprovação. Dado errado de renda ou de endereço volta como recusa ou como condição pior. Use o número real. Se sair mais de uma proposta, escolha pelo custo total, não só pela parcela menor."
+      },
+      {
+        "type": "p",
+        "text": "Uma recusa numa instituição não fecha as outras. Também não vira, sozinha, um motivo para baixar a entrada abaixo de 20%. Se nenhuma parceira aprovar, o caminho é rever entrada, prazo ou o carro, e simular de novo. Não existe atalho verbal no balcão."
       },
       {
         "type": "h2",
-        "text": "Análise de crédito: o que esperar"
+        "text": "O usado pode compor a entrada"
       },
       {
         "type": "p",
-        "text": "Toda simulação passa pelas financeiras parceiras. A Netcar não oferece linha específica para negativados nem aprovação garantida. Use dados corretos e compare taxa, entrada, prazo e custo total das condições aprovadas."
+        "text": "O carro que você já tem pode entrar na conta, inclusive com parcelas em aberto, depois da avaliação. O valor aprovado na vistoria abate o que você precisaria trazer em dinheiro. O saldo devedor do financiamento antigo continua existindo: ele é quitado dentro da negociação, não some porque você escolheu outro seminovo."
       },
       {
         "type": "p",
-        "text": "Você pode iniciar a simulação pelo WhatsApp antes de ir à loja. A confirmação depende dos documentos e da análise da instituição financeira."
+        "text": "Dá para começar a simulação pelo WhatsApp, com o iAN ou com um consultor, antes de ir a Esteio. A confirmação só acontece com os documentos e com o retorno da instituição. A página de financiamento detalha entrada, cartão e troca. O estoque mostra os seminovos que podem entrar nessa conta."
+      },
+      {
+        "type": "h2",
+        "text": "O que levar anotado para a simulação"
+      },
+      {
+        "type": "p",
+        "text": "Anote o preço do seminovo, quanto você tem de entrada em dinheiro e se o cartão entra só como forma de pagar essa entrada. Leve também o prazo máximo que você aceita. Com esses três números, a loja pede condição às parceiras em vez de devolver uma parcela solta. Se a primeira resposta vier acima do que cabe no mês, mude entrada ou prazo e peça outra leitura. Não peça para a loja prometer taxa. Ela mostra o que a instituição devolveu."
       }
     ],
     "ctaLabel": "Simular financiamento",
-    "ctaHref": "/financiamento"
+    "ctaHref": "/financiamento",
+    "updatedAt": "2026-10-31"
   },
   {
     "slug": "o-que-verificar-antes-de-comprar-seminovo",
@@ -178,231 +219,491 @@
     "sections": [
       {
         "type": "p",
-        "text": "Esteio fica no coração da região metropolitana de Porto Alegre — perto de Canoas, Sapucaia do Sul, São Leopoldo e Novo Hamburgo. Por isso, muita gente da Grande POA busca seminovo aqui: deslocamento curto, estoque variado e negociação presencial."
+        "text": "Comprar seminovo em Esteio vale a viagem quando você já sabe qual carro quer ver e chega com horário combinado. A Netcar atende na Avenida Presidente Vargas, com duas lojas e o mesmo estoque. O site lista o que está à venda. A visita serve para dirigir, conferir a unidade e fechar o que a tela não resolve."
       },
       {
         "type": "h2",
-        "text": "Por que comprar seminovo em Esteio"
+        "text": "Duas lojas, um estoque"
+      },
+      {
+        "type": "p",
+        "text": "A matriz fica na Avenida Presidente Vargas, 740. A filial fica na mesma avenida, no número 1106. As duas mostram o estoque da Netcar. Um carro anunciado no site pode estar em qualquer uma delas. Pergunte o endereço da unidade antes de sair, para não estacionar na loja errada."
+      },
+      {
+        "type": "p",
+        "text": "O acesso mais usado é a BR-116, descendo para a Presidente Vargas. Esteio fica entre Canoas, Sapucaia do Sul, São Leopoldo e o caminho de Novo Hamburgo. Quem vem de Porto Alegre cruza a freeway e chega sem precisar entrar no centro da capital. O deslocamento é curto. A visita, se for de dois ou três carros, toma a manhã ou a tarde inteira."
+      },
+      {
+        "type": "h2",
+        "text": "O que resolver antes de pegar a freeway"
+      },
+      {
+        "type": "p",
+        "text": "Abra o estoque e separe no máximo três anúncios. Anote ano, versão e o que a ficha declara de câmbio e combustível. Mande essa lista no WhatsApp e peça para segurarem a informação de qual loja guarda cada carro. Anúncio sem confirmação pode ter saído de linha entre a pesquisa e a viagem."
       },
       {
         "type": "ul",
         "items": [
-          "Acesso rápido pela BR-116 e Av. Presidente Vargas",
-          "Concentração de lojas multimarcas com estoque atualizado",
-          "Possibilidade de comparar carros e fazer test drive na visita",
-          "Opções de financiamento e avaliação do usado na troca"
+          "Os anúncios que você quer ver, com o código ou o link",
+          "Documento pessoal e, se houver troca, o documento do seu carro",
+          "Uma noção de entrada, se a compra depender de financiamento",
+          "Tempo sobrando para test drive, não só para olhar a lataria"
         ]
       },
       {
         "type": "h2",
-        "text": "A Netcar em Esteio"
+        "text": "Como comparar dois carros na mesma ida"
       },
       {
         "type": "p",
-        "text": "A Netcar Multimarcas tem duas lojas integradas na Av. Presidente Vargas, com o mesmo estoque e a mesma equipe. Os veículos passam pela Fábrica de Valor antes da vitrine, e a empresa atua em Esteio desde 1997."
+        "text": "Olhe os dois com o mesmo roteiro. Sente, ajuste banco e retrovisor, abra o porta-malas com a bagagem que você realmente carrega e faça o mesmo percurso curto nos dois. Diferença de ano ou de versão explica preço melhor do que a marca sozinha. Não conclua por foto de outro anúncio."
+      },
+      {
+        "type": "p",
+        "text": "Pergunte o que foi preparada naquela unidade e quais papéis acompanham a venda. A Netcar prepara os seminovos na Fábrica de Valor antes da vitrine. O que foi feito varia de carro para carro. Peça o que se aplica ao exemplar, não um discurso genérico de loja."
       },
       {
         "type": "h2",
-        "text": "Como chegar e o que fazer na visita"
+        "text": "Financiamento e troca no mesmo dia"
       },
       {
         "type": "p",
-        "text": "Confirme a disponibilidade pelo WhatsApp antes de sair. Na visita, compare os carros escolhidos, faça o test drive e pergunte sobre garantia, documentos e preparação. Se houver troca, leve o carro e os documentos para a avaliação."
+        "text": "Se precisar financiar, a entrada mínima é 20% e a proposta depende da análise de crédito. Dá para adiantar documentos pelo WhatsApp. A assinatura e a escolha do banco acontecem com o retorno da financeira, não no primeiro oi."
+      },
+      {
+        "type": "p",
+        "text": "Se for dar o usado na troca, leve o carro. Avaliação por foto só orienta a conversa. O número que entra na compra é o da vistoria. Horário de loja: dias úteis das 9h às 18h e sábado das 9h às 16h30. Domingo a loja física não abre. Estoque e pré-avaliação seguem pelo WhatsApp."
+      },
+      {
+        "type": "h2",
+        "text": "O que não esperar desta visita"
+      },
+      {
+        "type": "p",
+        "text": "A Netcar não entrega o carro em domicílio e não mantém filial em Porto Alegre, Canoas ou Novo Hamburgo. Quem mora nessas cidades compra em Esteio. Consulta de estoque e simulação podem começar online. A decisão de levar o seminovo passa pela unidade que você viu, pelos documentos e, quando houver crédito, pela condição aprovada."
+      },
+      {
+        "type": "h2",
+        "text": "Feche a lista no estacionamento"
+      },
+      {
+        "type": "p",
+        "text": "Antes de ir embora, anote qual unidade você viu, o que falta de documento e se a proposta de crédito já voltou ou ainda depende de papel. Combinar retorno por mensagem evita uma segunda viagem só para repetir a mesma conversa. Se nenhum dos carros serviu, diga isso. O estoque muda, e a próxima pesquisa no site começa do zero, sem compromisso com o anúncio que você descartou na loja."
       }
     ],
-    "ctaLabel": "Falar com a Netcar",
-    "ctaHref": "/contato"
+    "ctaLabel": "Ver seminovos em estoque",
+    "ctaHref": "/seminovos",
+    "updatedAt": "2026-10-31"
   },
   {
     "slug": "trocar-carro-financiado",
     "title": "Como trocar carro financiado: passo a passo",
-    "description": "Seu carro ainda tem parcelas? Entenda como funcionam avaliação, quitação e uma nova proposta de financiamento.",
+    "description": "Troca com parcela em aberto: a avaliação menos a quitação vira entrada do seminovo. Veja a ordem da conta e os papéis da vistoria.",
     "publishedAt": "2026-06-01",
-    "readMinutes": 4,
+    "readMinutes": 5,
     "sections": [
       {
         "type": "p",
-        "text": "Ter parcelas em aberto não impede a troca. O saldo devedor entra na conta, junto com a avaliação do usado e o valor do próximo carro."
+        "text": "Trocar um carro que ainda tem parcelas é uma conta de três linhas: quanto a loja avalia o usado, quanto falta quitar no banco e quanto custa o seminovo seguinte. O saldo devedor não impede a troca. Ele entra na operação. O que sobra depois da quitação é o que abate o preço do próximo carro."
       },
       {
         "type": "h2",
-        "text": "Como funciona na Netcar"
+        "text": "A ordem que evita proposta furada"
       },
       {
         "type": "ol",
         "items": [
-          "Você informa modelo, ano, km e saldo devedor do seu carro",
-          "A loja avalia o usado e simula a quitação com a financeira",
-          "O valor aprovado entra como entrada no seminovo escolhido",
-          "Se houver diferença, você pode solicitar uma nova simulação, sujeita à análise de crédito"
+          "Escolha um ou dois seminovos no estoque, com preço visível",
+          "Informe modelo, ano, quilometragem e o saldo que o banco cobra para quitar",
+          "Traga o usado para a vistoria. Foto não fecha o valor",
+          "Some avaliação menos quitação. Esse resultado é a sua entrada real",
+          "Se faltar diferença para os 20% mínimos, ela entra em dinheiro ou no cartão, sujeita a análise"
         ]
       },
       {
+        "type": "p",
+        "text": "Pular a escolha do próximo carro e pedir só o valor do usado gera um número solto. A troca existe para ligar os dois lados. Sem o seminovo de destino, ninguém sabe se a sobra cobre a entrada daquele preço."
+      },
+      {
         "type": "h2",
-        "text": "O que acelera a negociação"
+        "text": "Quitação não é desconto mágico"
       },
       {
         "type": "p",
-        "text": "Tenha em mãos o extrato do financiamento, o documento do carro e fotos atuais. A proposta depende da vistoria e da conferência dos dados."
+        "text": "O banco do financiamento atual precisa receber o saldo. A loja organiza esse pagamento dentro da negociação, com o extrato de quitação. Você não dirige o seminovo novo enquanto o gravame do antigo segue no seu nome sem acerto. Peça para ver, por escrito, quanto vai ao banco e quanto fica como entrada."
       },
       {
         "type": "p",
-        "text": "A troca com parcela em aberto é rotina na Netcar. O consultor explica cada etapa antes de você assinar qualquer coisa."
+        "text": "Se a avaliação for menor que o saldo, a troca ainda pode existir, mas a diferença negativa soma ao que você precisa completar. Nesse caso o usado não gera entrada. Ele gera uma conta a mais. Vale saber isso antes de se apegar a um anúncio acima do que a sobra permite."
+      },
+      {
+        "type": "h2",
+        "text": "A análise do crédito novo é outra ficha"
+      },
+      {
+        "type": "p",
+        "text": "Quitar o contrato velho não aprova, sozinho, o financiamento do seminovo. A instituição parceira olha a proposta nova: entrada, prazo e cadastro. A entrada mínima continua 20% do seminovo. Prazo do saldo pode chegar a 60 meses. Aprovação não é garantida, e não há linha da loja para nome restrito."
+      },
+      {
+        "type": "p",
+        "text": "Compare as condições com a mesma entrada e o mesmo prazo. Uma parcela menor em 60 meses pode custar mais no total do que uma parcela maior em menos tempo. O consultor mostra as propostas que voltaram. A escolha é sua, com o custo total na mesa."
+      },
+      {
+        "type": "h2",
+        "text": "Papéis que destravam o dia"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Extrato com o valor de quitação e a validade dessa cotação",
+          "Documento do carro e suas chaves, inclusive a reserva se existir",
+          "RG, CPF e comprovante de residência de quem vai financiar o seminovo",
+          "Comprovante de renda no formato que a financeira pedir"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Manual, revisões e um histórico claro de funilaria ajudam a vistoria a não chutar estado. Nada disso substitui ver o carro na Avenida Presidente Vargas, em Esteio. A Netcar compra e recebe troca de usados nacionais, com até 7 anos, origem no RS e sem passagem por leilão. Fora dessa regra, a troca pode não ser aceita."
+      },
+      {
+        "type": "h2",
+        "text": "Quando a troca não é o melhor desenho"
+      },
+      {
+        "type": "p",
+        "text": "Se você não quer outro carro agora, o caminho é vender o financiado e receber a diferença, não usar a sobra como entrada. São operações vizinhas, com papéis diferentes. Nesta página o destino é um seminovo. Se a sobra da avaliação, depois da quitação, não chega perto da entrada do carro que você escolheu, troque o anúncio de destino ou aumente o que vem em dinheiro. Não estique o prazo para esconder um carro fora da conta."
+      },
+      {
+        "type": "p",
+        "text": "Se a conta fechar, o consultor separa o que quita o contrato antigo do que segue como entrada do seminovo e do que ainda depende de crédito novo. Peça para ler essas linhas em voz alta antes de assinar. Troca boa é aquela em que você consegue repetir os números sem olhar o papel do vendedor."
       }
     ],
     "ctaLabel": "Avaliar meu carro na troca",
-    "ctaHref": "/compra"
+    "ctaHref": "/compra",
+    "updatedAt": "2026-10-31"
   },
   {
     "slug": "fabrica-de-valor-netcar",
     "title": "O que é a Fábrica de Valor da Netcar?",
-    "description": "Veja como funciona a Fábrica de Valor da Netcar, com mais de 60 itens verificados antes do carro ir para a vitrine.",
+    "description": "A Fábrica de Valor é a preparação do seminovo antes da vitrine da Netcar. Veja o que perguntar sobre o seu carro e o pós-venda NetHelp.",
     "publishedAt": "2026-05-28",
     "readMinutes": 5,
     "sections": [
       {
         "type": "p",
-        "text": "A Fábrica de Valor é a etapa de avaliação e preparação pela qual os carros passam antes de ir para a vitrine da Netcar."
+        "text": "Fábrica de Valor é o nome do processo da Netcar que avalia e prepara o seminovo antes de ele ir para a vitrine. Não é uma garantia com prazo fixo anunciado nesta página e não é um selo que torna todos os carros iguais. É a etapa em que a loja decide o que aquele exemplar precisa para ser anunciado."
       },
       {
         "type": "h2",
-        "text": "O que acontece antes do carro ir para a vitrine"
+        "text": "O que a rotina cobre"
       },
       {
         "type": "p",
-        "text": "Cada seminovo passa por uma rotina com mais de 60 pontos, incluindo mecânica, elétrica, funilaria, pneus, fluidos, documentação e itens de segurança. O que precisa ser feito varia conforme o veículo."
+        "text": "Cada carro passa por uma checagem com mais de 60 pontos. Os grupos são mecânica, elétrica, funilaria, pneus, fluidos, documentação e itens de segurança. A lista do que será feito muda com o estado do veículo. Um carro pode precisar de pneu e outro de um reparo de lataria. Os dois passaram pela mesma rotina. Não receberam o mesmo serviço."
+      },
+      {
+        "type": "p",
+        "text": "Por isso o anúncio não deve prometer que todo item foi trocado. O que importa é o que foi verificado e o que foi corrigido naquela unidade. Peça esse recorte ao consultor, ligado à ficha do carro que você está vendo, não a um folheto genérico."
       },
       {
         "type": "h2",
-        "text": "E depois da entrega?"
+        "text": "O que perguntar na frente do carro"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Quais grupos tiveram apontamento neste exemplar",
+          "O que foi reparado e o que foi só conferido",
+          "Se pneus e fluidos foram trocados ou apenas medidos",
+          "Quais documentos de procedência acompanham a venda",
+          "Qual é a condição de pós-venda escrita para este carro"
+        ]
       },
       {
         "type": "p",
-        "text": "O Nethelp registra e acompanha as demandas de pós-venda conforme a garantia e as condições informadas na negociação. Esses limites são explicados antes do fechamento."
+        "text": "Foto de oficina e frase de preparação não respondem essas perguntas. A resposta útil cita a unidade: este carro, estes itens, esta condição. Se o consultor não souber, o caminho é esperar o retorno, não inventar tranquilidade."
       },
       {
         "type": "h2",
-        "text": "Por que isso importa na busca por seminovo"
+        "text": "Depois que o carro sai"
       },
       {
         "type": "p",
-        "text": "Antes da compra, pergunte o que foi verificado e preparado, consulte os documentos disponíveis e leia as condições de garantia e pós-venda."
+        "text": "O NetHelp registra e acompanha o que for demanda de pós-venda, dentro da garantia e das condições combinadas na negociação. Esses limites são ditos antes do fechamento. Não existe, aqui, um número único de meses que sirva para todo o estoque. Leia a condição do carro que você escolheu."
+      },
+      {
+        "type": "p",
+        "text": "Revisão de uso, peça de desgaste e mau uso ficam fora do que foi combinado como preparação de entrada. Guardar a ordem de serviço e o que foi assinado evita discussão depois. O NetHelp existe para organizar esse acompanhamento, não para reabrir o carro inteiro sem critério."
+      },
+      {
+        "type": "h2",
+        "text": "Como isso entra na decisão de compra"
+      },
+      {
+        "type": "p",
+        "text": "Use a Fábrica de Valor como pergunta, não como frase de conforto. Dois seminovos do mesmo modelo podem ter histórico de preparação diferente. O preço já tenta refletir ano, versão e estado. A preparação explica parte do estado. Ela não apaga quilometragem nem transforma o carro em zero."
+      },
+      {
+        "type": "p",
+        "text": "A Netcar faz isso em Esteio desde a rotina da casa, nas duas lojas da Avenida Presidente Vargas. O estoque publicado é o que já passou por essa etapa e está à venda. Se um anúncio ainda não mostra o que foi feito, pergunte antes de deslocar. A visita confirma o carro. O processo explica por que ele está na vitrine."
+      },
+      {
+        "type": "h2",
+        "text": "Não compare preparação com preço de anúncio alheio"
+      },
+      {
+        "type": "p",
+        "text": "Um carro mais barato em outro anúncio pode não ter passado por nada parecido, ou pode estar mais barato porque o estado é outro. A Fábrica de Valor não serve para ganhar discussão de internet. Serve para você saber, na unidade da Netcar, o que foi olhado antes de o carro entrar na linha de venda. Se essa resposta não vier clara, o desconto de outro lugar deixa de ser o assunto principal. O assunto volta a ser o exemplar que está na sua frente."
+      },
+      {
+        "type": "p",
+        "text": "Anote o que foi reparado e o que foi só medido. Leve essa nota para casa junto com a condição de pós-venda. Sem o papel, a memória da conversa no pátio não segura o que foi combinado. Com o papel, o NetHelp tem por onde começar se você precisar acionar o que ficou escrito."
       }
     ],
     "ctaLabel": "Conhecer o estoque",
-    "ctaHref": "/seminovos"
+    "ctaHref": "/seminovos",
+    "updatedAt": "2026-10-31"
   },
   {
     "slug": "onde-vender-carro-usado-regiao-porto-alegre",
     "title": "Onde vender carro usado na região de Porto Alegre?",
-    "description": "Compare venda particular, concessionária e loja multimarcas em preço, tempo, exposição e documentação.",
+    "description": "Onde vender o usado na Grande Porto Alegre: em casa, na concessionária ou na Netcar em Esteio. Veja o que cada balcão exige de você.",
     "publishedAt": "2026-06-11",
     "readMinutes": 5,
     "sections": [
       {
         "type": "p",
-        "text": "Vender carro usado na Grande POA gera três caminhos comuns: anúncio online, troca em concessionária ou venda para loja especializada. Cada um tem prazo, risco e valor líquido diferentes."
+        "text": "Na região de Porto Alegre, vender o usado tem três balcões diferentes: a sua garagem, uma concessionária da marca e uma loja multimarcas. O dinheiro líquido, o tempo e o tanto de estranho que entra na sua casa mudam conforme o balcão. A Netcar recebe essa venda em Esteio, na Avenida Presidente Vargas. Não há loja física em Porto Alegre."
       },
       {
         "type": "h2",
-        "text": "Venda particular: mais valor, mais trabalho"
+        "text": "Onde a avaliação da Netcar acontece"
       },
       {
         "type": "p",
-        "text": "Anunciar por conta própria pode permitir negociar diretamente o preço, mas exige fotos, contatos, visitas, conferência do pagamento e transferência. O prazo é imprevisível."
+        "text": "O carro precisa ser visto. A conversa pode começar no WhatsApp, com modelo, ano, quilometragem e fotos, pelo iAN ou por um consultor. A proposta que vale é a da vistoria na loja. Quem vem de Porto Alegre, Canoas, São Leopoldo, Novo Hamburgo, Gravataí ou Cachoeirinha faz o mesmo trajeto: BR-116 até a Presidente Vargas, na matriz 740 ou na filial 1106. Confirme qual unidade antes de sair."
+      },
+      {
+        "type": "p",
+        "text": "A casa compra usados nacionais com até 7 anos, de origem no Rio Grande do Sul e sem passagem por leilão. Carro de outra praça, importado fora dessa regra ou com histórico de leilão pode ficar de fora. Pergunte isso na primeira mensagem, antes de cruzar a freeway à toa."
       },
       {
         "type": "h2",
-        "text": "Vender para loja: menos exposição e uma negociação"
+        "text": "O que cada balcão cobra de você"
       },
       {
         "type": "p",
-        "text": "Na venda para a Netcar, a avaliação, a proposta e a documentação são tratadas com a loja. O valor final depende da vistoria, dos documentos e do interesse da empresa naquele modelo."
+        "text": "Venda particular deixa o anúncio na sua mão. Você tira foto, responde, marca visita em casa ou num posto e confere se o pagamento compensou antes de transferir. O preço pedido pode ser maior. O prazo é incerto e o risco de exposição é seu."
+      },
+      {
+        "type": "p",
+        "text": "Concessionária da marca costuma olhar o usado como parte da troca por um zero daquela montadora. Se você não quer o zero, o interesse dela muda. Loja multimarcas, como a Netcar, avalia para estoque próprio. O destino do seu carro é a vitrine de seminovos, não obrigatoriamente um carro novo da mesma marca."
       },
       {
         "type": "h2",
-        "text": "Quem atendemos"
+        "text": "Uma ida, uma proposta"
       },
       {
         "type": "p",
-        "text": "Clientes de Esteio, Canoas, Sapucaia, São Leopoldo, Novo Hamburgo, Gravataí e Cachoeirinha avaliam na Av. Presidente Vargas. Primeiro contato pelo WhatsApp — iAN ou consultor humano."
-      }
-    ],
-    "ctaLabel": "Avaliar meu carro",
-    "ctaHref": "/compra"
-  },
-  {
-    "slug": "vender-carro-financiado-como-funciona",
-    "title": "Vender carro financiado: quitação, avaliação e proposta",
-    "description": "Carro com parcela em aberto ainda pode ser vendido ou trocado. Entenda quitação, avaliação e documentação na Netcar.",
-    "publishedAt": "2026-06-09",
-    "readMinutes": 4,
-    "sections": [
-      {
-        "type": "p",
-        "text": "Um carro financiado pode ser vendido ou usado na troca. Primeiro é preciso confirmar o saldo de quitação e avaliar quanto sobra depois desse pagamento."
+        "text": "No balcão da loja, a vistoria, o número e a papelada ficam no mesmo lugar. Você não organiza visita de vários interessados. Também não controla o anúncio por semanas. O valor sai do estado real, dos documentos e do interesse da empresa naquele modelo naquele momento. Não é a tabela sozinha."
       },
       {
-        "type": "h2",
-        "text": "Passo a passo"
-      },
-      {
-        "type": "ol",
+        "type": "ul",
         "items": [
-          "Informe saldo devedor e parcelas restantes",
-          "Avaliamos o carro e calculamos valor de mercado",
-          "A loja quita com a financeira na negociação",
-          "Você recebe diferença na conta ou usa valor na troca"
+          "Documento do veículo e documento de quem está vendendo",
+          "Chaves e, se houver, o manual e as revisões que você guardou",
+          "Se o carro estiver financiado, o extrato de quanto o banco cobra para quitar",
+          "Fotos só para adiantar a triagem. A vistoria manda no número"
         ]
       },
       {
         "type": "h2",
-        "text": "Só vender ou trocar?"
+        "text": "Financiado também tem lugar marcado"
       },
       {
         "type": "p",
-        "text": "Os dois caminhos existem. Troca abate no seminovo escolhido. Venda pura paga transferência após vistoria e conferência documental."
+        "text": "Parcela em aberto não bloqueia a venda para a loja. O saldo de quitação entra na conta: a avaliação precisa cobrir esse saldo para sobrar diferença para você. Se não cobrir, a operação muda de figura e precisa ser explicada antes de qualquer assinatura. O banco recebe a quitação dentro da negociação. Você não transfere um carro ainda alienado por conta própria."
+      },
+      {
+        "type": "h2",
+        "text": "Como decidir sem visitar três cidades"
+      },
+      {
+        "type": "p",
+        "text": "Se o seu limite é tempo e você aceita uma proposta única depois da vistoria, marque Esteio. Se você quer testar o mercado particular primeiro, faça isso da sua casa e só então compare o líquido com a proposta da loja. Concessionária entra na lista quando a troca por zero da marca é o plano, não quando você só quer se desfazer do usado. Nenhum dos três caminhos paga o mesmo valor bruto. Compare o que sobra na conta, descontando o seu tempo e o risco de cada um."
+      },
+      {
+        "type": "p",
+        "text": "Marque um horário e diga de qual cidade você sai. Assim a loja confirma a unidade, 740 ou 1106, e se o carro cabe na regra de compra antes de você atravessar a região. Chegar sem aviso funciona quando a vistoria está livre. Não funciona quando as duas lojas estão em atendimento e o seu usado fica na fila sem alguém ter visto a triagem."
       }
     ],
-    "ctaLabel": "Compramos seu usado",
-    "ctaHref": "/compramos-seu-usado"
+    "ctaLabel": "Avaliar meu carro",
+    "ctaHref": "/compra",
+    "updatedAt": "2026-10-31"
+  },
+  {
+    "slug": "vender-carro-financiado-como-funciona",
+    "title": "Vender carro financiado: quitação, avaliação e proposta",
+    "description": "Vender carro financiado exige o extrato de quitação. Veja como a avaliação, o pagamento ao banco e a diferença para você se separam.",
+    "publishedAt": "2026-06-09",
+    "readMinutes": 5,
+    "sections": [
+      {
+        "type": "p",
+        "text": "Dá para vender um carro que ainda está financiado. O comprador sério, loja ou pessoa, precisa quitar o saldo com o banco antes de o documento ficar livre. Na Netcar essa quitação faz parte da proposta de compra. Você não recebe o preço cheio de tabela e depois resolve o banco sozinho, no escuro."
+      },
+      {
+        "type": "h2",
+        "text": "O número que importa é o de quitação"
+      },
+      {
+        "type": "p",
+        "text": "Parcela mensal não é saldo. O banco calcula um valor para encerrar o contrato naquela data, com validade curta. Peça esse extrato antes de ouvir qualquer proposta. Sem ele, a loja trabalha com chute e a diferença que você imagina receber não existe."
+      },
+      {
+        "type": "p",
+        "text": "A avaliação do carro vem em seguida, na vistoria. Proposta de compra menos valor de quitação é o que pode sobrar para a sua conta. Se a avaliação não cobre a quitação, não há diferença a receber. Há um buraco, e ele precisa ser dito com clareza antes de seguir."
+      },
+      {
+        "type": "h2",
+        "text": "Quem paga o banco"
+      },
+      {
+        "type": "p",
+        "text": "Na negociação com a loja, a quitação ao credor entra no fluxo do negócio. O gravame sai quando o contrato é encerrado, no rito do banco, não no instante em que você aperta a mão. Não assine transferência como se o carro já estivesse livre enquanto o extrato ainda mostra dívida."
+      },
+      {
+        "type": "p",
+        "text": "Guarde o comprovante de que o saldo foi pago. Ele protege você se o sistema do Detran demorar a baixar a alienação. A loja conduz a papelada combinada. Você confere se o valor enviado ao banco é o do extrato, não um número redondo de memória."
+      },
+      {
+        "type": "h2",
+        "text": "Vender não é a mesma ficha da troca"
+      },
+      {
+        "type": "p",
+        "text": "Venda pura termina quando você recebe a diferença, se houver, e o carro deixa de ser seu. Não nasce financiamento novo no seu CPF. Troca usa a sobra como entrada de outro seminovo e abre uma análise de crédito separada. Se você não quer outro carro, diga isso no primeiro contato. O roteiro de documentos e o destino do dinheiro mudam."
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Extrato de quitação com data de validade",
+          "Documento do veículo no nome de quem está vendendo",
+          "Identidade e CPF",
+          "Chaves. Reserva, se você tiver",
+          "Nada de simular renda: aqui não há parcela nova"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "O que a loja aceita comprar"
+      },
+      {
+        "type": "p",
+        "text": "A Netcar avalia usados nacionais com até 7 anos, origem no RS e sem passagem por leilão. A vistoria é em Esteio, na Avenida Presidente Vargas. Fotos servem para saber se vale o deslocamento. Elas não geram crédito na conta. O iAN ou um consultor recebe os dados no WhatsApp e marca a visão do carro."
+      },
+      {
+        "type": "p",
+        "text": "Modelo parado na região, quilometragem muito acima do uso comum ou funilaria pesada mudam o interesse e o preço. Isso aparece na vistoria, não numa frase de WhatsApp. Se a casa não for ficar com o carro, a resposta tem de ser direta, sem empurrar uma troca que você não pediu."
+      },
+      {
+        "type": "h2",
+        "text": "Antes de comemorar a diferença"
+      },
+      {
+        "type": "p",
+        "text": "Confira três linhas no papel: valor da avaliação, valor que vai ao banco e valor que cai para você. As três precisam somar. Desconto oral, multa de atraso esquecida no extrato ou IPVA em aberto muda a última linha. Resolva pendência de documento antes do dia da entrega do carro. Chegar sem o extrato válido faz a visita virar só um olhar, sem proposta fechada."
+      },
+      {
+        "type": "p",
+        "text": "Se o extrato vencer no meio do caminho, peça outro antes de entregar o carro. Quitação com número vencido redesenha a diferença. Não entregue chave e documento no mesmo dia em que o papel do banco já passou da validade. Esse cuidado é seu, mesmo com a loja conduzindo o pagamento. Sem um extrato vigente, a visita serve para ver o carro, não para combinar o que cai na sua conta."
+      }
+    ],
+    "ctaLabel": "Pedir proposta de venda",
+    "ctaHref": "/compra",
+    "updatedAt": "2026-10-31"
   },
   {
     "slug": "quanto-vale-meu-carro-usado",
     "title": "Quanto vale meu carro usado? O que entra na avaliação",
-    "description": "Km, ano, versão, estado e mercado regional definem o valor. Saiba o que a Netcar analisa antes de fazer proposta.",
+    "description": "Ano, versão, quilometragem e estado definem a proposta. Veja o que a vistoria da Netcar olha além da tabela e como pedir a avaliação.",
     "publishedAt": "2026-06-07",
     "readMinutes": 5,
     "sections": [
       {
         "type": "p",
-        "text": "Não dá para definir o valor final apenas por tabela. Ano, versão, quilometragem, estado, histórico disponível e procura pelo modelo entram na avaliação."
+        "text": "O valor do seu usado não sai de uma continha única. Ano, versão, quilometragem, estado da carroceria, pneus, histórico que você consegue mostrar e a procura por aquele modelo na região entram juntos. Tabela pública ajuda a ter uma referência. A proposta da Netcar sai da vistoria do exemplar, em Esteio."
       },
       {
         "type": "h2",
-        "text": "O que pesa mais"
+        "text": "Versão pesa tanto quanto o ano"
+      },
+      {
+        "type": "p",
+        "text": "Dois carros do mesmo nome e do mesmo ano podem estar longe no preço porque um é a versão de entrada e o outro traz o pacote que o mercado procura. Opcionais que você não usa ainda podem importar para quem compra depois. Opcionais que só você acha indispensáveis podem não voltar em dinheiro. Diga a versão completa, não só o modelo."
+      },
+      {
+        "type": "p",
+        "text": "Quilometragem entra comparada ao uso esperado daquele ano, não como um número moral. Um carro pouco rodado com funilaria ruim não vale, automaticamente, mais do que um bem cuidado com uso coerente. A vistoria olha os dois fatos ao mesmo tempo."
+      },
+      {
+        "type": "h2",
+        "text": "O que a foto mostra e o que ela esconde"
       },
       {
         "type": "ul",
         "items": [
-          "Ano e versão (opcionais valorizam ou desvalorizam)",
-          "Quilometragem coerente com uso",
-          "Pintura, funilaria e histórico",
-          "Pneus, revisões e itens de desgaste",
-          "Demanda do modelo na região"
+          "Fotos externas dos dois lados, frente, traseira e teto",
+          "Painel ligado, para quilometragem e luzes de advertência",
+          "Bancos, volante e porta-malas",
+          "Pneus, inclusive o estepe, se existir",
+          "Avaria que você já conhece. Esconder custa tempo na loja"
         ]
       },
       {
+        "type": "p",
+        "text": "Esse pacote serve para a loja dizer se faz sentido você ir até a Avenida Presidente Vargas. Não serve para depositar o dinheiro. Repintura, folga de suspensão, vazamento e documento com pendência aparecem com o carro no chão. A proposta final espera essa leitura."
+      },
+      {
         "type": "h2",
-        "text": "Como pedir avaliação na Netcar"
+        "text": "Estado e papel andam juntos"
       },
       {
         "type": "p",
-        "text": "Envie modelo, ano, quilometragem e fotos externas e internas pelo WhatsApp. Esses dados iniciam a conversa; a proposta final depende da vistoria na loja e dos documentos."
+        "text": "Pintura original ou reparo bem feito, pneus com borracha útil e revisões que você ainda tem em mãos sobem a confiança de quem avalia. Ausência de papel não zera o carro. Só impede que alguém pague por um histórico que não está provado. Manual vazio e barulho na dianteira puxam o número para baixo com mais força do que um arranhão isolado."
+      },
+      {
+        "type": "p",
+        "text": "Procura regional também mexe. Um modelo que a vitrine gira em Esteio e na região metropolitana interessa mais do que um que fica meses anunciado. Isso não é nota pessoal do seu carro. É mercado. A casa fala com franqueza quando o interesse está baixo."
+      },
+      {
+        "type": "h2",
+        "text": "Referência de tabela não é proposta"
+      },
+      {
+        "type": "p",
+        "text": "Consultar a tabela pública do mês mostra uma média. Ela não viu o seu banco rasgado nem o seu pneu careca, e também não viu se a versão está acima da média. Use a tabela para não chegar com um pedido absurdo. Use a vistoria para o número que a Netcar assina. As duas leituras podem discordar sem que uma delas esteja inventando."
+      },
+      {
+        "type": "p",
+        "text": "Se houver financiamento em aberto, separe o saldo de quitação do valor do carro. O que você embolsa, numa venda, é o que restar depois desse saldo. Misturar os dois é o erro mais comum de quem pergunta quanto vale."
+      },
+      {
+        "type": "h2",
+        "text": "Como pedir a avaliação"
+      },
+      {
+        "type": "p",
+        "text": "Mande versão, ano, quilometragem e as fotos pelo WhatsApp. A Netcar olha usados nacionais de até 7 anos, com origem no RS e sem passagem por leilão. Se o carro estiver dentro disso, marque a vistoria na Presidente Vargas, 740 ou 1106. Leve documento e chave. Saia com uma proposta ligada àquele dia e àquele estado, não com uma faixa eterna. Preço de seminovo na vitrine muda quando entra e sai carro. O do seu usado também."
+      },
+      {
+        "type": "p",
+        "text": "Se você já tem uma oferta de outra pessoa, leve o contexto, não como ultimato. A loja responde com a leitura dela do mesmo carro. Duas ofertas diferentes podem ser honestas se uma não viu funilaria ou se uma está comprando para estoque e a outra para uso. O que não cabe é tratar a primeira oferta como piso obrigatório sem mostrar o carro."
       }
     ],
     "ctaLabel": "Pedir avaliação",
-    "ctaHref": "/vender-meu-carro"
+    "ctaHref": "/compra",
+    "updatedAt": "2026-10-31"
   },
   {
     "slug": "comprar-seminovo-distancia-grande-porto-alegre",

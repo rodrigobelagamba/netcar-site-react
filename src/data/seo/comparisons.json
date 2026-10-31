@@ -6,8 +6,16 @@
     "description": "Jeep Compass ou Honda HR-V? Compare preço, ano, versão, câmbio e motor dos seminovos da Netcar em Esteio/RS e saiba o que conferir antes da visita.",
     "h1": "Jeep Compass x Honda HR-V: compare os seminovos",
     "intro": "Está entre um Jeep Compass e um Honda HR-V? Comece pelas unidades que cabem no seu orçamento. Ano, versão e conjunto mecânico mudam a comparação; aqui você encontra um roteiro para avaliar os dois modelos e os dados dos exemplares anunciados pela Netcar em Esteio/RS.",
-    "left": { "brand": "JEEP", "model": "COMPASS", "label": "Jeep Compass" },
-    "right": { "brand": "HONDA", "model": "HRV", "label": "Honda HR-V" },
+    "left": {
+      "brand": "JEEP",
+      "model": "COMPASS",
+      "label": "Jeep Compass"
+    },
+    "right": {
+      "brand": "HONDA",
+      "model": "HRV",
+      "label": "Honda HR-V"
+    },
     "sections": [
       {
         "title": "Compass ou HR-V: qual exemplar entra na sua conta?",
@@ -24,6 +32,18 @@
       {
         "title": "Use o test drive para fechar a seleção",
         "text": "Ao conhecer o Compass e o HR-V, observe visibilidade, facilidade de manobra, resposta do câmbio e conforto no trajeto. Use condições de avaliação semelhantes e anote o que faz diferença para você. Se a ficha não trouxer dados de consumo, não deduza um resultado apenas pela cilindrada, potência ou marca."
+      },
+      {
+        "title": "O que a tabela deste par entrega",
+        "text": "Quando há Compass e HR-V anunciados, a tabela aproxima uma unidade de cada pela menor diferença de preço. Ela não ranqueia os modelos e não representa todas as versões já fabricadas. Preço, ano, câmbio e motor exibidos são os daquelas duas fichas. Equipamento que você viu em outro Compass precisa estar escrito no anúncio escolhido, ou ser confirmado na loja."
+      },
+      {
+        "title": "O nome Compass ou HR-V não fixa a geração",
+        "text": "Um Compass de um ano e um HR-V de outro podem caber no mesmo orçamento por motivos diferentes: versão mais simples de um lado, ano mais recente do outro. Anote o nome completo da versão antes de dizer que um está mais equipado. A diferença de preço só faz sentido depois dessa leitura, não antes."
+      },
+      {
+        "title": "O que combinar para ver os dois no mesmo dia",
+        "text": "Peça à equipe se as duas unidades estão disponíveis para visita e em qual loja da Avenida Presidente Vargas cada uma está. Leve cadeirinha ou a bagagem habitual se isso for critério. No pátio, repita o mesmo roteiro curto nos dois: banco, visibilidade e porta-malas. Sem as duas unidades no dia, a comparação fica pela metade."
       }
     ],
     "checks": [
@@ -45,7 +65,11 @@
       "model": "TRACKER",
       "label": "Chevrolet Tracker"
     },
-    "right": { "brand": "HYUNDAI", "model": "CRETA", "label": "Hyundai Creta" },
+    "right": {
+      "brand": "HYUNDAI",
+      "model": "CRETA",
+      "label": "Hyundai Creta"
+    },
     "sections": [
       {
         "title": "Coloque ano, versão e preço na mesma comparação",
@@ -62,6 +86,18 @@
       {
         "title": "Separe o preço anunciado da negociação",
         "text": "A tabela aproxima um Tracker e um Creta pelo valor anunciado para facilitar a pesquisa. Depois de escolher as unidades, confirme com a equipe o preço e as condições aplicáveis à sua compra ou troca. Se houver financiamento, compare propostas para o mesmo cenário de entrada e prazo, considerando também o valor total."
+      },
+      {
+        "title": "A tabela não é um parecer entre Tracker e Creta",
+        "text": "O par exibido é o Tracker e o Creta anunciados com a menor diferença de preço entre si. Isso organiza a pesquisa. Não declara vencedor, não mede consumo e não copia itens de uma geração anterior do mesmo nome. Se o campo de um anúncio estiver vazio, trate como informação pendente, não como ausência definitiva do item."
+      },
+      {
+        "title": "Versão e ano mudam o Tracker tanto quanto mudam o Creta",
+        "text": "Tracker de uma linha e Creta de outra podem compartilhar a faixa de preço e divergir no que a ficha lista de segurança e conectividade. Marque só o que está descrito em cada anúncio. Confirme na visita o que você usa de fato, como câmera ou sensor, em vez de assumir que todo SUV desses nomes traz o mesmo pacote."
+      },
+      {
+        "title": "Visita com as duas fichas na mão",
+        "text": "Imprima ou salve os dois links antes de ir a Esteio. Na loja, confira se o carro do anúncio é o que está na vaga e se o preço informado ainda é o do anúncio. Se houver troca ou financiamento, use o mesmo cenário de entrada e prazo para os dois, senão a parcela não compara os carros. A condição comercial do dia a equipe confirma. A página não fecha negócio."
       }
     ],
     "checks": [
@@ -83,7 +119,11 @@
       "model": "NIVUS",
       "label": "Volkswagen Nivus"
     },
-    "right": { "brand": "FIAT", "model": "FASTBACK", "label": "Fiat Fastback" },
+    "right": {
+      "brand": "FIAT",
+      "model": "FASTBACK",
+      "label": "Fiat Fastback"
+    },
     "sections": [
       {
         "title": "Não trate nomes de versões como equivalentes",
@@ -100,6 +140,18 @@
       {
         "title": "Defina o que justifica a diferença de preço",
         "text": "Use o valor do Nivus e do Fastback para delimitar o orçamento e depois confira ano, versão e equipamentos. Liste quais diferenças têm utilidade para você e quais são apenas preferência visual. Um preço maior não demonstra, por si só, vantagem em desempenho, consumo ou conservação; esses pontos exigem informações próprias de cada carro."
+      },
+      {
+        "title": "Uma unidade de Nivus e uma de Fastback",
+        "text": "A seleção pega um Nivus e um Fastback anunciados, os de menor diferença de preço. Não é a linha inteira de cada marca. Outro Nivus do estoque pode ter ano e câmbio diferentes do que a tabela destacou. Abra a ficha se quiser trocar o exemplar da comparação. O texto desta página não acompanha sozinho essa troca."
+      },
+      {
+        "title": "Preço próximo não iguala Volkswagen e Fiat",
+        "text": "Nivus e Fastback organizam versão, motor e acabamento cada um do seu jeito. Um valor parecido não significa o mesmo ano nem a mesma lista de itens. Liste o que muda a sua decisão: acesso ao banco de trás, abertura do porta-malas, visibilidade. O que for só preferência de desenho, separe do que a ficha prova."
+      },
+      {
+        "title": "Confirme na unidade o que a foto não mede",
+        "text": "Fotos ajudam a chegar nos dois candidatos. Na Avenida Presidente Vargas, olhe a altura da tampa do porta-malas e o espaço de quem viaja atrás com a bagagem que você usa. Dados de motor e câmbio que não estiverem na ficha ficam em aberto. Não preencha com anúncio de outro Nivus ou de outro Fastback achado fora da Netcar."
       }
     ],
     "checks": [
@@ -142,6 +194,18 @@
       {
         "title": "Use os dados do anúncio para escolher o próximo passo",
         "text": "Confira preço, motor, combustível e câmbio do Tera e do T-Cross apresentados na tabela. A seleção por proximidade de preço facilita a pesquisa, mas não estabelece um vencedor. Abra as duas fichas, anote as diferenças relevantes e confirme quais exemplares poderão ser vistos na visita à Netcar."
+      },
+      {
+        "title": "A tabela aproxima duas unidades Volkswagen",
+        "text": "Quando Tera e T-Cross estão anunciados, a página escolhe uma unidade de cada com a menor diferença de preço. Mesma marca não significa mesmo pacote. Ano, versão e condições podem divergir. A tabela existe para você não comparar de memória. Ela não elege o modelo mais novo como melhor compra."
+      },
+      {
+        "title": "Perguntas que só a equipe responde",
+        "text": "Esta página não sabe, sozinha, se o Tera ou o T-Cross que você quer ainda está na vaga, nem em qual das duas lojas ele está. Também não confirma cobertura de garantia: isso é situação de cada carro. Pergunte antes de sair. Se um dos dois já foi vendido, a comparação da tabela deixa de valer e você recomeça pelo estoque."
+      },
+      {
+        "title": "Ordem da visita entre Tera e T-Cross",
+        "text": "Veja os dois antes de decidir. Ajuste o banco, teste o acesso de quem senta atrás e estacione no tipo de vaga que você enfrenta na semana. Anote uma diferença que importe para o seu uso, não uma lista infinita. Se a ficha técnica de medidas não estiver no anúncio, peça a da versão e do ano da unidade, não a de um material genérico da marca."
       }
     ],
     "checks": [
