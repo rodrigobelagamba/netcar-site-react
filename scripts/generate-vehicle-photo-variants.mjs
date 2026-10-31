@@ -3,7 +3,7 @@
  * A failed inventory read never replaces a valid manifest. Per-photo failures
  * fall back to the existing public img.php endpoint; originals are untouched. */
 import { createHash, randomUUID } from 'node:crypto';
-import { mkdir, readFile, writeFile, rename, readdir, unlink } from 'node:fs/promises';
+import { access, mkdir, readFile, writeFile, rename, readdir, unlink } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -203,12 +203,32 @@ async function inventory() {
   return accepted.vehicles.filter((row) => Number(row.valor) > 0).map((row) => photos.get(String(row.id)));
 }
 
+async function savedVariantsReady(row) {
+  if (!row || typeof row !== 'object') return false;
+  const variants = Object.values(row);
+  if (!variants.length) return false;
+  for (const variant of variants) {
+    const rel = String(variant?.file || '');
+    if (!/^\/images\/vehicle-photo-variants\/[a-f0-9]{64}\.avif$/.test(rel)) return false;
+    try {
+      await access(join(ROOT, 'public', rel.slice(1)));
+    } catch {
+      return false;
+    }
+  }
+  return true;
+}
+
 export async function main(args = process.argv.slice(2)) {
   const vehicle = args.find((arg) => arg.startsWith('--vehicle='))?.slice(10);
   const limitText = args.find((arg) => arg.startsWith('--limit='))?.slice(8)
     ?? process.env.NETCAR_PHOTO_BUILD_LIMIT;
   if (args.some((arg) => !/^--(vehicle|limit)=\d+$/.test(arg)) ||
       (limitText !== undefined && (!/^\d+$/.test(limitText) || Number(limitText) < 1))) throw new Error('photo-arguments');
+  if (process.env.NETCAR_SKIP_PHOTO_BUILD === '1') {
+    console.log('Vehicle photos: pulado. Este build não precisa gerar variantes.');
+    return { skipped: true, vehicles: 0, processed: 0, failed: 0, count: 0 };
+  }
   configureSeoStockNetwork();
   sharp.concurrency(1);
   await mkdir(CACHE, { recursive: true });
@@ -225,6 +245,12 @@ export async function main(args = process.argv.slice(2)) {
   await Promise.all(Array.from({ length: Math.min(3, jobs.length) }, async () => {
     while (index < jobs.length) {
       const job = jobs[index++];
+      const saved = previous.entries[job.requested];
+      if (await savedVariantsReady(saved)) {
+        entries[job.requested] = saved;
+        processed++;
+        continue;
+      }
       delete entries[job.requested];
       try {
         const result = await variants(job);
