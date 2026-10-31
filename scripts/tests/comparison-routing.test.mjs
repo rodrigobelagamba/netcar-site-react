@@ -113,6 +113,27 @@ test("the controller fixture includes its image-policy dependencies even without
     assert.equal(readFileSync(join(directory, file), "utf8"), read(`public/${file}`));
 });
 
+test("on-demand AI user agents reach prerender and browsers stay on the SPA", () => {
+  const conditions = htaccess.match(/RewriteCond %\{HTTP_USER_AGENT\} \(([^)]+)\)/g);
+  assert.ok(conditions?.length >= 12);
+  const agents = {
+    "Claude-User":
+      "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Claude-User/1.0; +https://support.anthropic.com)",
+    "Perplexity-User":
+      "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Perplexity-User/1.0; +https://perplexity.ai/perplexity-user)",
+    Googlebot:
+      "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+  };
+  const browser =
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+  for (const condition of conditions) {
+    const pattern = condition.match(/\(([^)]+)\)/)[1];
+    const regex = new RegExp(pattern, "i");
+    for (const ua of Object.values(agents)) assert.match(ua, regex);
+    assert.equal(regex.test(browser), false);
+  }
+});
+
 test("crawler pair routes require their published HTML and precede the real 404 rule", () => {
   const rule =
     "RewriteRule ^comparar/([a-z0-9-]+)/?$ seo-comparison.php [L]";
@@ -124,6 +145,8 @@ test("crawler pair routes require their published HTML and precede the real 404 
   );
   assert.match(block, /HTTP_USER_AGENT.*Googlebot/);
   assert.match(block, /HTTP_USER_AGENT.*WhatsApp/);
+  assert.match(block, /HTTP_USER_AGENT.*Claude-User/);
+  assert.match(block, /HTTP_USER_AGENT.*Perplexity-User/);
   assert.match(
     block,
     /RewriteCond %\{DOCUMENT_ROOT\}\/seo-static\/comparison-\$1\.html -f/,
