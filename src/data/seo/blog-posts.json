@@ -127,10 +127,6 @@
         "text": "Dá para começar a simulação pelo WhatsApp, com o iAN ou com um consultor, antes de ir a Esteio. A confirmação só acontece com os documentos e com o retorno da instituição. A página de financiamento detalha entrada, cartão e troca. O estoque mostra os seminovos que podem entrar nessa conta."
       },
       {
-        "type": "h2",
-        "text": "O que levar anotado para a simulação"
-      },
-      {
         "type": "p",
         "text": "Anote o preço do seminovo, quanto você tem de entrada em dinheiro e se o cartão entra só como forma de pagar essa entrada. Leve também o prazo máximo que você aceita. Com esses três números, a loja pede condição às parceiras em vez de devolver uma parcela solta. Se a primeira resposta vier acima do que cabe no mês, mude entrada ou prazo e peça outra leitura. Não peça para a loja prometer taxa. Ela mostra o que a instituição devolveu."
       }
@@ -283,16 +279,12 @@
         "text": "A Netcar não entrega o carro em domicílio e não mantém filial em Porto Alegre, Canoas ou Novo Hamburgo. Quem mora nessas cidades compra em Esteio. Consulta de estoque e simulação podem começar online. A decisão de levar o seminovo passa pela unidade que você viu, pelos documentos e, quando houver crédito, pela condição aprovada."
       },
       {
-        "type": "h2",
-        "text": "Feche a lista no estacionamento"
-      },
-      {
         "type": "p",
         "text": "Antes de ir embora, anote qual unidade você viu, o que falta de documento e se a proposta de crédito já voltou ou ainda depende de papel. Combinar retorno por mensagem evita uma segunda viagem só para repetir a mesma conversa. Se nenhum dos carros serviu, diga isso. O estoque muda, e a próxima pesquisa no site começa do zero, sem compromisso com o anúncio que você descartou na loja."
       }
     ],
-    "ctaLabel": "Ver seminovos em estoque",
-    "ctaHref": "/seminovos",
+    "ctaLabel": "Falar com a Netcar",
+    "ctaHref": "/contato",
     "updatedAt": "2026-10-31"
   },
   {
@@ -441,7 +433,7 @@
       },
       {
         "type": "p",
-        "text": "Use a Fábrica de Valor como pergunta, não como frase de conforto. Dois seminovos do mesmo modelo podem ter histórico de preparação diferente. O preço já tenta refletir ano, versão e estado. A preparação explica parte do estado. Ela não apaga quilometragem nem transforma o carro em zero."
+        "text": "Use essa etapa como pergunta, não como frase de conforto. Dois seminovos do mesmo modelo podem ter histórico de preparação diferente. O preço já tenta refletir ano, versão e estado. A preparação explica parte do estado. Ela não apaga quilometragem nem transforma o carro em zero."
       },
       {
         "type": "p",
@@ -453,7 +445,7 @@
       },
       {
         "type": "p",
-        "text": "Um carro mais barato em outro anúncio pode não ter passado por nada parecido, ou pode estar mais barato porque o estado é outro. A Fábrica de Valor não serve para ganhar discussão de internet. Serve para você saber, na unidade da Netcar, o que foi olhado antes de o carro entrar na linha de venda. Se essa resposta não vier clara, o desconto de outro lugar deixa de ser o assunto principal. O assunto volta a ser o exemplar que está na sua frente."
+        "text": "Um carro mais barato em outro anúncio pode não ter passado por nada parecido, ou pode estar mais barato porque o estado é outro. Essa etapa não serve para ganhar discussão de internet. Serve para você saber, na unidade da Netcar, o que foi olhado antes de o carro entrar na linha de venda. Se essa resposta não vier clara, o desconto de outro lugar deixa de ser o assunto principal. O assunto volta a ser o exemplar que está na sua frente."
       },
       {
         "type": "p",
@@ -619,8 +611,8 @@
         "text": "Se o extrato vencer no meio do caminho, peça outro antes de entregar o carro. Quitação com número vencido redesenha a diferença. Não entregue chave e documento no mesmo dia em que o papel do banco já passou da validade. Esse cuidado é seu, mesmo com a loja conduzindo o pagamento. Sem um extrato vigente, a visita serve para ver o carro, não para combinar o que cai na sua conta."
       }
     ],
-    "ctaLabel": "Pedir proposta de venda",
-    "ctaHref": "/compra",
+    "ctaLabel": "Compramos seu usado",
+    "ctaHref": "/compramos-seu-usado",
     "updatedAt": "2026-10-31"
   },
   {
@@ -702,7 +694,7 @@
       }
     ],
     "ctaLabel": "Pedir avaliação",
-    "ctaHref": "/compra",
+    "ctaHref": "/vender-meu-carro",
     "updatedAt": "2026-10-31"
   },
   {
