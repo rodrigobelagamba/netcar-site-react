@@ -284,12 +284,15 @@ ErrorDocument 410 /410.html
   # Sem Disallow + 410 rastreável = Google lê e tira do índice.
   RewriteRule ^backend(/|$) - [G,L]
 
-  # /api e /api/ não são página. Sem este 404 o Apache redireciona para o path físico.
-  RewriteRule ^api/?$ - [R=404,L]
+  # /api e /api/ não são página. [END] impede o Apache de reiniciar o rewrite
+  # e redirecionar o diretório real para o path físico (/home/.../api/v1/).
+  RewriteRule ^api/?$ - [R=404,END]
 
   # Pastas do servidor que NÃO são SPA (gerenciador PHP + API).
   # Sem isso, /admin/ e /sistema/ caem no index.php React (bug após remoção do -d abaixo).
-  RewriteRule ^(admin|sistema|api)(/|$) - [L]
+  # /api/v1/*.php continua passando. /api e /api/ exatos ficam no 404 acima.
+  RewriteRule ^(admin|sistema)(/|$) - [L]
+  RewriteRule ^api/. - [L]
 
   # Página da vaga: HTML completo para candidatos e buscadores, antes do SPA.
   RewriteRule ^vagas/consultor-vendas-seminovos/candidatura/?$ vagas/consultor-vendas-seminovos/candidatura.php [L]
