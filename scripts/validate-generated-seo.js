@@ -9,6 +9,7 @@ import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { BRAND_BUYER_GUIDES } from "./lib/brand-buyer-guides.mjs";
+import { MODEL_BUYER_GUIDES } from "./lib/model-buyer-guides.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -1667,6 +1668,59 @@ if (JSON.stringify(expointerSchemas).includes('"@type":"Event"')) {
   errors.push(
     "Expointer: página da loja não deve declarar organização do evento",
   );
+}
+
+function charLength(value) {
+  return Array.from(String(value || "")).length;
+}
+function checkSnippet(label, title, description) {
+  if (title && charLength(title) > 60) {
+    errors.push(`${label}: title com ${charLength(title)} caracteres (${title})`);
+  }
+  if (description && charLength(description) > 160) {
+    errors.push(
+      `${label}: description com ${charLength(description)} caracteres`,
+    );
+  }
+}
+for (const city of cities) {
+  checkSnippet(`Cidade ${city.slug}`, city.title, city.description);
+  if (city.sell) {
+    checkSnippet(`Venda ${city.slug}`, city.sell.title, city.sell.description);
+  }
+}
+for (const page of contentPages) {
+  checkSnippet(`Página ${page.slug}`, page.title, page.description);
+}
+for (const post of [...manualPosts, ...autoPosts]) {
+  checkSnippet(`Blog ${post.slug}`, post.title, post.description);
+}
+for (const [slug, guide] of Object.entries(MODEL_BUYER_GUIDES)) {
+  checkSnippet(`Guia ${slug}`, guide.title, guide.description);
+}
+for (const landing of landings) {
+  checkSnippet(`Landing ${landing.slug}`, landing.title, landing.description);
+}
+const blogHubTitle = "Blog de seminovos em Esteio | Netcar";
+for (const source of [
+  crawlerHome,
+  readFileSync(join(root, "public/index.php"), "utf8"),
+  readFileSync(join(root, "src/modules/blog/pages/BlogPage.tsx"), "utf8"),
+]) {
+  if (
+    !source.includes(blogHubTitle) ||
+    source.includes("Netcar - Blog de Seminovos")
+  ) {
+    errors.push("Blog: title do índice ainda usa o formato antigo");
+    break;
+  }
+}
+const privacyHtml = readFileSync(
+  join(root, "public/seo-static/page-privacidade.html"),
+  "utf8",
+);
+if (!privacyHtml.includes("<h1>Seus dados, sem letra miúda</h1>")) {
+  errors.push("Privacidade: HTML do bot sem o H1 da página");
 }
 
 if (errors.length) {

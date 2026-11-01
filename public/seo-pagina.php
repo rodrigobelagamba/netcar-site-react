@@ -131,7 +131,7 @@ switch ($page) {
         echo '<p><strong>Matriz</strong><br />Av. Presidente Vargas, 740 — Centro — Esteio/RS — CEP 93260-490<br /><a href="tel:+555134737900">Tel: (51) 3473-7900</a></p>';
         echo '<p><strong>Filial</strong><br />Av. Presidente Vargas, 1106 — Centro — Esteio/RS — CEP 93260-048<br /><a href="tel:+555130333900">Tel: (51) 3033-3900</a></p>';
         echo '</address>';
-        echo '<p><a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es.">WhatsApp: (51) 99729-3118</a><br /><a href="mailto:contato@netcarmultimarcas.com.br">E-mail: contato@netcarmultimarcas.com.br</a></p>';
+        echo '<p><a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es.">WhatsApp: (51) 99729-3118</a> · <a href="' . SEO_SITE_URL . '/atendimento-24h">Atendimento 24h</a><br /><a href="mailto:contato@netcarmultimarcas.com.br">E-mail: contato@netcarmultimarcas.com.br</a></p>';
         echo '<p>Horário: Seg–Sex 9h–18h · Sáb 9h–16h30</p>';
         break;
 
@@ -167,11 +167,11 @@ switch ($page) {
         break;
 
     case 'blog':
-        $title = 'Netcar - Blog de Seminovos';
+        $title = 'Blog de seminovos em Esteio | Netcar';
         $description = 'Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre.';
         $canonical = SEO_SITE_URL . '/blog';
         seo_render_head($title, $description, $canonical);
-        echo '<h1>Blog Netcar</h1>';
+        echo '<h1>Blog de seminovos em Esteio</h1>';
         echo '<p class="intro">Respostas para dúvidas sobre compra, troca e financiamento de seminovos na Grande Porto Alegre.</p>';
         $blogFile = __DIR__ . '/seo/blog-index.json';
         $posts = is_readable($blogFile) ? json_decode((string) file_get_contents($blogFile), true) : [];

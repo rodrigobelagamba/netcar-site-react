@@ -284,6 +284,9 @@ ErrorDocument 410 /410.html
   # Sem Disallow + 410 rastreável = Google lê e tira do índice.
   RewriteRule ^backend(/|$) - [G,L]
 
+  # /api e /api/ não são página. Sem este 404 o Apache redireciona para o path físico.
+  RewriteRule ^api/?$ - [R=404,L]
+
   # Pastas do servidor que NÃO são SPA (gerenciador PHP + API).
   # Sem isso, /admin/ e /sistema/ caem no index.php React (bug após remoção do -d abaixo).
   RewriteRule ^(admin|sistema|api)(/|$) - [L]
@@ -381,7 +384,7 @@ ErrorDocument 410 /410.html
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/page-$1.html -f
-  RewriteRule ^(financiamento|atendimento-24h|move-brasil|seminovos-automaticos|politica-editorial|comparar|como-selecionamos-nossos-carros|carro-de-locadora-vale-a-pena|carro-de-leilao-vale-a-pena|localiza-seminovos-vale-a-pena|movida-seminovos-vale-a-pena|unidas-seminovos-vale-a-pena|expointer-esteio)/?$ seo-static/page-$1.html [L]
+  RewriteRule ^(financiamento|atendimento-24h|move-brasil|seminovos-automaticos|politica-editorial|comparar|como-selecionamos-nossos-carros|carro-de-locadora-vale-a-pena|carro-de-leilao-vale-a-pena|localiza-seminovos-vale-a-pena|movida-seminovos-vale-a-pena|unidas-seminovos-vale-a-pena|privacidade|expointer-esteio)/?$ seo-static/page-$1.html [L]
 
   # 404 real para padrões SEO sem página correspondente. Sem isso, um slug
   # inválido (ex.: /blog/foo-bar, /comprar-moto, /seminovos-atlantis) caía no

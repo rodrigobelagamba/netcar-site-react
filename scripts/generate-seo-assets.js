@@ -12,6 +12,7 @@ import { writeTextFile } from "./lib/write-text-file.js";
 import { factoryWarrantyCatalogFromApi } from "./lib/factory-warranty-catalog.js";
 import { sanitizeVehicleImages } from "../src/lib/vehicleImagePolicy.mjs";
 import { resolveLandingParagraphs, resolveLandingFaq, resolveModelSearchContact } from "../src/lib/landingStockCopy.mjs";
+import { privacyPage } from "../src/data/legal/privacy.mjs";
 import { matchesLandingModel } from "../src/lib/landingModelMatch.mjs";
 import {
   homeHeroRotationDay,
@@ -2243,9 +2244,48 @@ writeTextFile(join(publicDir, "sitemap.xml"), sitemap);
 // escrevia, então o HTML de um slug removido continuava servido ao crawler com
 // 200 — fora do sitemap e sem nada apontando para ele. Foi assim que sobraram
 // blog-ford e blog-ix35-gl depois que os posts saíram do JSON.
+function renderPrivacySections(sections) {
+  return sections
+    .map((section) => {
+      const paragraphs = (section.paragraphs || [])
+        .map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`)
+        .join("\n");
+      const items = section.items
+        ? `<ul>${section.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`
+        : "";
+      return `<h2>${escapeHtml(section.title)}</h2>\n${paragraphs}\n${items}`;
+    })
+    .join("\n");
+}
+
+const privacyCanonical = `${SITE}/privacidade`;
+writeSeoPage(
+  join(seoStaticDir, "page-privacidade.html"),
+  privacyCanonical,
+  pageShell({
+    title: privacyPage.title,
+    description: privacyPage.description,
+    canonical: privacyCanonical,
+    body: `
+    <article>
+      <h1>${escapeHtml(privacyPage.h1)}</h1>
+      <p>${escapeHtml(privacyPage.intro)}</p>
+      <p>${escapeHtml(privacyPage.updated)}</p>
+      <h2>${escapeHtml(privacyPage.controllerTitle)}</h2>
+      <p>${escapeHtml(privacyPage.controller)}</p>
+      ${renderPrivacySections(privacyPage.sections)}
+      <h2>${escapeHtml(privacyPage.rightsTitle)}</h2>
+      <p>${escapeHtml(privacyPage.rights)}</p>
+      <p><a href="mailto:contato@netcarmultimarcas.com.br">contato@netcarmultimarcas.com.br</a></p>
+      <p>${escapeHtml(privacyPage.footnote)}</p>
+    </article>`,
+  }),
+);
+
 const expectedFiles = new Set([
   "regions-hub.html",
   "page-comparar.html",
+  "page-privacidade.html",
   ...comparisonPages.map((page) => `comparison-${page.slug}.html`),
   "page-expointer-esteio.html",
   ...blogPosts.map((post) => `blog-${post.slug}.html`),

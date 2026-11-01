@@ -86,6 +86,7 @@ function netcar_static_route_file($path)
         '/localiza-seminovos-vale-a-pena' => 'page-localiza-seminovos-vale-a-pena.html',
         '/movida-seminovos-vale-a-pena' => 'page-movida-seminovos-vale-a-pena.html',
         '/unidas-seminovos-vale-a-pena' => 'page-unidas-seminovos-vale-a-pena.html',
+        '/privacidade' => 'page-privacidade.html',
     ];
 
     $file = isset($exact[$path]) ? $exact[$path] : null;
@@ -154,7 +155,7 @@ function netcar_fixed_route_meta()
             'canonical' => 'https://www.netcarmultimarcas.com.br/compra',
         ],
         '/blog' => [
-            'title' => 'Netcar - Blog de Seminovos',
+            'title' => 'Blog de seminovos em Esteio | Netcar',
             'description' => 'Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/blog',
         ],
