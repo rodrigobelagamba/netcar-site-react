@@ -149,6 +149,11 @@ ErrorDocument 410 /410.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # /api e /api/ exatos. Casa o pedido original, antes de qualquer mapa de diretório,
+  # para o Apache não responder 301 com o path físico /home/.../api/v1/.
+  RewriteCond %{THE_REQUEST} \s/+api/?[?\s] [NC]
+  RewriteRule ^ - [R=404,END]
+
   # Material da campanha encerrada: o deploy não apaga assets antigos na hospedagem.
   RewriteRule ^images/campaigns/acelerou-levou/ - [G,L,NC]
 
