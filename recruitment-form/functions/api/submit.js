@@ -6,7 +6,7 @@ const ALLOWED_FIELDS = ['nome','idade','email','telefone','instagram','linkedin'
 export async function onRequestPost(context) {
     const { env, request } = context;
     const origin = request.headers.get('Origin');
-    const allowedOrigins = ['https://questionario-perfil.pages.dev','https://netcar-rc.com.br','https://www.netcarmultimarcas.com.br'];
+    const allowedOrigins = ['https://questionario-perfil.pages.dev','https://www.netcarmultimarcas.com.br'];
     const headers = { 'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store', 'Vary':'Origin' };
     if (allowedOrigins.includes(origin)) headers['Access-Control-Allow-Origin'] = origin;
     let id;
