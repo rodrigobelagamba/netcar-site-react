@@ -9,6 +9,11 @@
 ErrorDocument 404 /404.html
 ErrorDocument 410 /410.html
 
+# /api exato. O diretório real tem o próprio rewrite e não herda o RewriteRule
+# do docroot, então o 301 com path físico (/home/.../api/v1/) sai de lá.
+# RedirectMatch vale para a URL antes desse rewrite interno.
+RedirectMatch 404 ^/api/?$
+
 # Configuração de tipos MIME (deve vir primeiro)
 <IfModule mod_mime.c>
   # JavaScript modules
