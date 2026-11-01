@@ -60,7 +60,8 @@ dados da API) e leva para estoque e categorias.
 **Título sempre com marca, modelo, ano, km e preço.** Antes era
 `Creta prestige 2018 iyo-70` — fragmento de placa não é o que a pessoa digita no
 Google. Formato atual: `Hyundai Creta Prestige 2018 · 155 mil km — R$ 89.900 |
-Netcar Multimarcas Esteio`. O km diferencia dois carros do mesmo modelo e ano.
+Netcar`. O km diferencia dois carros do mesmo modelo e ano. A description fica
+em até 160 caracteres e conserva nome, km, preço e Esteio/RS.
 
 **O corpo entregue ao bot precisa ser a ficha, não um resumo.** Ficha técnica,
 opcionais, preparação, endereço e links internos para estoque e cidades. A versão

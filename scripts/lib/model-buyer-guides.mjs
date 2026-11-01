@@ -81,7 +81,7 @@ export const MODEL_BUYER_GUIDES = {
     ]
   },
   "volkswagen-t-cross": {
-    "title": "Volkswagen T-Cross à venda em Esteio: fotos e preços | Netcar",
+    "title": "Volkswagen T-Cross à venda em Esteio | Netcar",
     "description": "Volkswagen T-Cross usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
     "intro": "Encontre os Volkswagen T-Cross da Netcar, com fotos e preço para começar sua próxima compra.",
     "guideTitle": "Escolha seu T-Cross",
@@ -362,7 +362,7 @@ export const MODEL_BUYER_GUIDES = {
     ]
   },
   "chevrolet-onix": {
-    "title": "Chevrolet Onix hatch à venda em Esteio: fotos e preços | Netcar",
+    "title": "Chevrolet Onix hatch à venda em Esteio | Netcar",
     "description": "Chevrolet Onix hatch usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
     "intro": "Procurando um Chevrolet Onix hatch? Veja os anúncios da Netcar e escolha a unidade que quer conhecer.",
     "guideTitle": "Encontre seu Onix hatch",
@@ -378,7 +378,7 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chevrolet-onix-plus": {
-    "title": "Chevrolet Onix Plus à venda em Esteio: fotos e preços | Netcar",
+    "title": "Chevrolet Onix Plus à venda em Esteio | Netcar",
     "description": "Chevrolet Onix Plus usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
     "intro": "Encontre seu Chevrolet Onix Plus na Netcar, com fotos e preço de cada sedã anunciado.",
     "guideTitle": "Onix Plus à venda na Netcar",
@@ -410,7 +410,7 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chevrolet-cruze": {
-    "title": "Chevrolet Cruze sedan à venda em Esteio: fotos e preços | Netcar",
+    "title": "Chevrolet Cruze sedan à venda em Esteio | Netcar",
     "description": "Chevrolet Cruze sedan usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
     "intro": "Consulte os Chevrolet Cruze sedã da Netcar e encontre o carro que você quer comprar.",
     "guideTitle": "Encontre seu Cruze sedã",
@@ -426,7 +426,7 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "hyundai-hb20": {
-    "title": "Hyundai HB20 hatch à venda em Esteio: fotos e preços | Netcar",
+    "title": "Hyundai HB20 hatch à venda em Esteio | Netcar",
     "description": "Hyundai HB20 hatch usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
     "intro": "Encontre seu Hyundai HB20 na Netcar: veja os carros à venda e fale sobre a unidade que você gostou.",
     "guideTitle": "HB20 à venda na Netcar",
@@ -602,7 +602,7 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "toyota-yaris": {
-    "title": "Toyota Yaris hatch à venda em Esteio: fotos e preços | Netcar",
+    "title": "Toyota Yaris hatch à venda em Esteio | Netcar",
     "description": "Toyota Yaris hatch usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
     "intro": "Veja os Toyota Yaris hatch anunciados na Netcar e escolha o carro que quer conhecer.",
     "guideTitle": "Encontre seu Yaris hatch",
@@ -618,7 +618,7 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "toyota-corolla-cross": {
-    "title": "Toyota Corolla Cross à venda em Esteio: fotos e preços | Netcar",
+    "title": "Toyota Corolla Cross à venda em Esteio | Netcar",
     "description": "Toyota Corolla Cross usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
     "intro": "Procurando um Toyota Corolla Cross? Veja as opções da Netcar e fale sobre o carro que você gostou.",
     "guideTitle": "Seu próximo Corolla Cross",
@@ -634,7 +634,7 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chery-tiggo-5x": {
-    "title": "CAOA Chery Tiggo 5X à venda em Esteio: fotos e preços | Netcar",
+    "title": "CAOA Chery Tiggo 5X à venda em Esteio | Netcar",
     "description": "CAOA Chery Tiggo 5X usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
     "intro": "Encontre seu Tiggo 5X na Netcar e consulte o anúncio da unidade que chamou sua atenção.",
     "guideTitle": "Tiggo 5X à venda na Netcar",
@@ -650,7 +650,7 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chery-tiggo-7-pro": {
-    "title": "CAOA Chery Tiggo 7 Pro à venda em Esteio: fotos e preços | Netcar",
+    "title": "CAOA Chery Tiggo 7 Pro à venda em Esteio | Netcar",
     "description": "CAOA Chery Tiggo 7 Pro usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
     "intro": "Veja os Tiggo 7 Pro da Netcar e escolha a unidade sobre a qual quer conversar.",
     "guideTitle": "Encontre seu Tiggo 7 Pro",
@@ -666,7 +666,7 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chery-tiggo-8": {
-    "title": "CAOA Chery Tiggo 8 à venda em Esteio: fotos e preços | Netcar",
+    "title": "CAOA Chery Tiggo 8 à venda em Esteio | Netcar",
     "description": "CAOA Chery Tiggo 8 usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
     "intro": "Consulte os Tiggo 8 anunciados pela Netcar e veja qual unidade entra nos seus planos.",
     "guideTitle": "Seu próximo Tiggo 8",

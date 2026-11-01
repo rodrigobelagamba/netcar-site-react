@@ -1,15 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { Calendar, Clock } from "lucide-react";
-import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
+import { useMetaTags } from "@/hooks/useMetaTags";
 import { blogPosts } from "@/data/seo";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 
 export function BlogPage() {
-  useDefaultMetaTags(
-    "Blog de Seminovos",
-    "Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre.",
-  );
+  useMetaTags({
+    title: "Blog de seminovos em Esteio | Netcar",
+    description:
+      "Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre.",
+    url: "https://www.netcarmultimarcas.com.br/blog",
+  });
 
   const sortedPosts = [...blogPosts].sort(
     (a, b) =>
@@ -21,7 +23,7 @@ export function BlogPage() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-fg mb-2">
-            Blog Netcar
+            Blog de seminovos em Esteio
           </h1>
           <p className="text-gray-500 max-w-2xl">
             Respostas para dúvidas sobre compra, troca e financiamento de

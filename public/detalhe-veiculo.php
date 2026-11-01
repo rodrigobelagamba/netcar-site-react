@@ -435,7 +435,7 @@ if ($isSold) {
 } elseif ($precoCurto) {
     $pageTitleParts[] = '— ' . $precoCurto;
 }
-$pageTitle = implode(' ', $pageTitleParts) . ' | Netcar Multimarcas Esteio';
+$pageTitle = implode(' ', $pageTitleParts) . ' | Netcar';
 
 // Formata descrição detalhada: "2018 / 2019 - 135.000km • Flex • MANUAL • MARROM"
 $descriptionParts = [];
@@ -502,15 +502,24 @@ if ($combustivel) {
 if ($cor) {
     $detalhe[] = mb_strtolower($cor, 'UTF-8');
 }
-$metaDescription = implode(' ', $metaParts);
-if (!empty($detalhe)) {
-    $metaDescription .= ', ' . implode(', ', $detalhe);
-}
-$metaDescription .= '. ';
-$metaDescription .= $isSold
+$locationLine = $isSold
     ? 'Este seminovo foi vendido — veja similares disponíveis na Netcar Multimarcas, em Esteio/RS.'
-    : ($precoCurto ? $precoCurto . ' na Netcar Multimarcas, em Esteio/RS. ' : 'Na Netcar Multimarcas, em Esteio/RS. ')
-        . 'Procedência verificada, garantia e financiamento com análise no mesmo dia.';
+    : ($precoCurto ? $precoCurto . ' na Netcar Multimarcas, em Esteio/RS.' : 'Na Netcar Multimarcas, em Esteio/RS.');
+$withDetails = implode(' ', $metaParts);
+if (!empty($detalhe)) {
+    $withDetails .= ', ' . implode(', ', $detalhe);
+}
+$withDetails .= '. ' . $locationLine;
+$plain = implode(' ', $metaParts) . '. ' . $locationLine;
+$metaDescription = $isSold
+    ? $withDetails
+    : $withDetails . ' Procedência verificada, garantia e financiamento com análise no mesmo dia.';
+if (mb_strlen($metaDescription, 'UTF-8') > 160) {
+    $metaDescription = $withDetails;
+}
+if (mb_strlen($metaDescription, 'UTF-8') > 160) {
+    $metaDescription = $plain;
+}
 
 // Busca imagem para Open Graph - USA APENAS imagens_site.capa_opengraph (sem fallback)
 // IMPORTANTE: WhatsApp precisa de pelo menos 300px de largura para mostrar imagem grande em cima

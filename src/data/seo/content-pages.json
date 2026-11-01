@@ -9,6 +9,12 @@
     "ctaLabel": "Consultar financiamento no WhatsApp",
     "secondLabel": "Ver estoque",
     "secondHref": "/seminovos",
+    "links": [
+      {
+        "href": "/move-brasil",
+        "label": "Move Brasil: seminovos elegíveis e regras"
+      }
+    ],
     "sections": [
       {
         "type": "h2",
@@ -102,7 +108,7 @@
   {
     "slug": "atendimento-24h",
     "title": "Atendimento 24h com o iAN | Netcar Multimarcas Esteio",
-    "description": "O WhatsApp da Netcar recebe mensagens 24 horas por dia com o iAN. Consulte o estoque, envie dados para simulação ou troca e continue com a equipe no horário comercial.",
+    "description": "O WhatsApp da Netcar recebe mensagens 24 horas com o iAN. Consulte o estoque, envie dados para simulação ou troca e continue com a equipe no horário comercial.",
     "h1": "Comece o atendimento pelo WhatsApp a qualquer hora",
     "intro": "O iAN recebe sua mensagem no WhatsApp 24 horas por dia. Você pode informar o carro que procura, a faixa de preço, os dados do usado e o que deseja simular. Quando for preciso negociar ou confirmar uma condição, a equipe continua o atendimento no horário comercial.",
     "waText": "quero atendimento agora.",
@@ -167,7 +173,7 @@
   {
     "slug": "move-brasil",
     "title": "Move Brasil seminovos: carros elegíveis e regras | Netcar",
-    "description": "Move Brasil liberou financiamento de seminovos elétricos e híbridos flex (a partir de 2024) para motoristas de app e taxistas. Veja regras e fale com a Netcar em Esteio/RS pelo WhatsApp.",
+    "description": "Move Brasil financia seminovos elétricos e híbridos flex (a partir de 2024) para motoristas de app e taxistas. Veja as regras e fale com a Netcar em Esteio/RS.",
     "h1": "Move Brasil: seminovos com linha de crédito do governo",
     "intro": "O programa federal Move Brasil ampliou a linha de crédito e passou a contemplar também veículos seminovos — com regras específicas. Na Netcar Multimarcas, em Esteio/RS, ajudamos motoristas de aplicativo e taxistas a entender a elegibilidade, ver carros do estoque que podem enquadrar e seguir pelo WhatsApp com o iAN. A aprovação do programa e do banco é sempre do governo e das instituições financeiras credenciadas.",
     "waText": "sou motorista de aplicativo ou taxista e quero ver seminovos elegíveis ao Move Brasil.",

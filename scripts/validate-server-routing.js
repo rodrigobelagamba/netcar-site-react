@@ -135,7 +135,10 @@ for (const slug of [
 }
 expect(
   controller.includes("'/privacidade' => [") &&
-    controller.includes("src/modules/legal/pages/PrivacyPage.tsx"),
+    controller.includes("'/privacidade' => 'page-privacidade.html'") &&
+    controller.includes("src/modules/legal/pages/PrivacyPage.tsx") &&
+    htaccess.includes("|privacidade|") &&
+    existsSync(join(root, "public/seo-static/page-privacidade.html")),
   "privacidade não está registrada como rota válida no servidor",
 );
 expect(
