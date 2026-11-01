@@ -87,6 +87,8 @@ function seo_org_schema()
                 'sameAs' => [
                     'https://www.instagram.com/netcar_rc',
                     'https://www.facebook.com/NetcarRC',
+                    'https://maps.google.com/maps?cid=9144067949621682127',
+                    'https://maps.google.com/maps?cid=10839197980729051544',
                 ],
             ],
             [
