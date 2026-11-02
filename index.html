@@ -397,11 +397,32 @@
         border-color: #087a37;
         color: #fff;
       }
+      /* Home: o img do LCP é filho direto. Não mostrar antes do hero.
+         Não depende da classe do PHP (opcache pode servir o index.php antigo). */
+      #netcar-initial-lcp > img:not(.netcar-initial-banner) {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        max-height: none;
+        opacity: 0;
+        transform: none;
+        pointer-events: none;
+      }
+      #netcar-initial-shell:has(#netcar-initial-lcp > img:not(.netcar-initial-banner)) p,
+      #netcar-initial-shell:has(#netcar-initial-lcp > img:not(.netcar-initial-banner)) nav {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+      }
     </style>
     <noscript>
       <style>
-        #netcar-initial-shell:has(img.netcar-initial-hero) p,
-        #netcar-initial-shell:has(img.netcar-initial-hero) nav {
+        #netcar-initial-shell:has(#netcar-initial-lcp > img) p,
+        #netcar-initial-shell:has(#netcar-initial-lcp > img) nav {
           position: static;
           width: auto;
           height: auto;
