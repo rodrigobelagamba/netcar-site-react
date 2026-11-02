@@ -247,7 +247,11 @@ export function HomeHero({ vehicles }: HomeHeroProps) {
                 data-home-hero-photo={state}
                 aria-hidden={state !== "active"}
                 className="home-hero-photo pointer-events-none absolute inset-0 flex items-center justify-center"
-                style={{ transitionDuration: `${HERO_PHOTO_FADE_MS}ms` }}
+                style={
+                  hasSwitched
+                    ? { transitionDuration: `${HERO_PHOTO_FADE_MS}ms` }
+                    : { transition: "none" }
+                }
               >
                 <HomeHeroCarImage
                   sourceKey={photo.image || CAR_COVERED_PLACEHOLDER_URL}

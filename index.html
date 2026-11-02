@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <!-- Antes do preload responsivo: sem isto o Chrome assume viewport de 980px. -->
@@ -246,6 +246,11 @@
 
     <!-- Shell mínimo do primeiro paint; o React o substitui ao montar. -->
     <style>
+      html,
+      body {
+        margin: 0;
+        background: #f6f6f6;
+      }
       html[data-netcar-entry="stock"],
       html[data-netcar-entry="stock"] body {
         margin: 0;
@@ -293,6 +298,63 @@
         max-height: none;
         transform: none;
       }
+      /* Home: mesmo quadro do hero final. Sem scale no viewport, o carro não estoura e não salta quando o React monta. */
+      #netcar-initial-shell:has(img.netcar-initial-hero) main {
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-start;
+        place-content: stretch;
+        padding: 0;
+      }
+      #netcar-initial-shell:has(img.netcar-initial-hero) main > div {
+        box-sizing: border-box;
+        display: flex;
+        width: 100%;
+        height: min(100svh, calc(100vw + 150px));
+        max-height: 900px;
+        flex-direction: column;
+        align-items: center;
+        padding: 80px 0 12px;
+      }
+      #netcar-initial-lcp:has(img.netcar-initial-hero) {
+        position: relative;
+        width: min(94%, 65vh);
+        min-width: 0;
+        min-height: 0;
+        flex: 1 1 auto;
+        margin-top: 36px;
+        margin-bottom: 140px;
+      }
+      #netcar-initial-lcp img.netcar-initial-hero {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+      }
+      #netcar-initial-shell:has(img.netcar-initial-hero) p,
+      #netcar-initial-shell:has(img.netcar-initial-hero) nav {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+      }
+      @media (min-width: 640px) {
+        #netcar-initial-shell:has(img.netcar-initial-hero) main > div {
+          height: calc(100svh - 80px);
+          max-height: none;
+          margin-top: 80px;
+          padding: 24px 0 16px;
+        }
+        #netcar-initial-lcp:has(img.netcar-initial-hero) {
+          width: min(70%, 82vh);
+          margin-top: 28px;
+          margin-bottom: 112px;
+        }
+      }
       @media (min-width: 768px) {
         #netcar-initial-lcp {
           min-height: 60vh;
@@ -300,6 +362,16 @@
         #netcar-initial-lcp img {
           max-height: 75vh;
           transform: scale(1.25);
+        }
+        #netcar-initial-lcp:has(img.netcar-initial-hero) {
+          min-height: 0;
+        }
+        #netcar-initial-lcp img.netcar-initial-hero {
+          width: 1px;
+          height: 1px;
+          max-height: none;
+          opacity: 0;
+          transform: none;
         }
       }
       #netcar-initial-shell p {
@@ -325,7 +397,42 @@
         border-color: #087a37;
         color: #fff;
       }
+      /* Home: o img do LCP é filho direto. Não mostrar antes do hero.
+         Não depende da classe do PHP (opcache pode servir o index.php antigo). */
+      #netcar-initial-lcp > img:not(.netcar-initial-banner) {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        max-height: none;
+        opacity: 0;
+        transform: none;
+        pointer-events: none;
+      }
+      #netcar-initial-shell:has(#netcar-initial-lcp > img:not(.netcar-initial-banner)) p,
+      #netcar-initial-shell:has(#netcar-initial-lcp > img:not(.netcar-initial-banner)) nav {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+      }
     </style>
+    <noscript>
+      <style>
+        #netcar-initial-shell:has(#netcar-initial-lcp > img) p,
+        #netcar-initial-shell:has(#netcar-initial-lcp > img) nav {
+          position: static;
+          width: auto;
+          height: auto;
+          margin: 16px 0 0;
+          overflow: visible;
+          clip: auto;
+          white-space: normal;
+        }
+      </style>
+    </noscript>
 
     <!-- Meta tags padrão (atualizadas dinamicamente pelo React em cada rota) -->
     <meta

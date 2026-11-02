@@ -53,22 +53,32 @@ export function PageLoader() {
     return <div className="min-h-[calc(100dvh-5rem)]" aria-hidden="true" />;
   }
 
+  const homeHold = window.location.pathname === "/";
+
   return (
     <div
-      className="flex min-h-[calc(100dvh-5rem)] items-start justify-center overflow-hidden bg-gray-50"
+      className={
+        homeHold
+          ? "min-h-[calc(100dvh-5rem)] bg-[#F6F6F6]"
+          : "flex min-h-[calc(100dvh-5rem)] items-start justify-center overflow-hidden bg-gray-50"
+      }
       aria-hidden="true"
     >
       <img
         src={optimizeStockImage(critical.image, critical.fallbackWidth)}
         srcSet={stockImageSrcSet(critical.image, critical.widths)}
         sizes={critical.sizes}
-        alt={critical.alt}
+        alt={homeHold ? "" : critical.alt}
         width={1600}
         height={900}
         loading="eager"
         decoding="async"
         fetchPriority="high"
-        className="h-auto max-h-[55vh] w-full object-contain"
+        className={
+          homeHold
+            ? "pointer-events-none absolute h-px w-px opacity-0"
+            : "h-auto max-h-[55vh] w-full object-contain"
+        }
       />
     </div>
   );
