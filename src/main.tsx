@@ -5,6 +5,10 @@ import { recoverFromChunkLoadError } from "@/lib/lazyWithRetry";
 import { initAnalytics } from "@/lib/analytics";
 import "./index.css";
 
+const initialTheme = import.meta.env.VITE_DEFAULT_THEME || "light";
+document.documentElement.classList.add(initialTheme);
+document.documentElement.setAttribute("data-theme", initialTheme);
+
 window.addEventListener("vite:preloadError", (event) => {
   event.preventDefault();
   recoverFromChunkLoadError();

@@ -979,7 +979,7 @@ if ($isHome) {
         $heroSizes = $hasActiveBanner ? '100vw' : '(max-width: 767px) 50vw, 70vw';
         $heroWidth = $hasActiveBanner ? 1920 : 1280;
         $heroHeight = $hasActiveBanner ? 680 : 960;
-        $heroClass = $hasActiveBanner ? ' class="netcar-initial-banner"' : '';
+        $heroClass = $hasActiveBanner ? ' class="netcar-initial-banner"' : ' class="netcar-initial-hero"';
         $bannerFallback = netcar_banner_variant($bannerUrl, $fallbackWidth);
         $preload = '<link rel="preload" as="image" href="'
             . htmlspecialchars($bannerFallback, ENT_QUOTES, 'UTF-8')

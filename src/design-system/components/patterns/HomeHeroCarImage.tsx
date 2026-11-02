@@ -1,6 +1,6 @@
 import {
   useCallback,
-  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -98,7 +98,7 @@ export function HomeHeroCarImage({
     );
   }, [sourceKey]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const frame = frameRef.current;
     if (!frame) return;
     updateFraming();
@@ -132,7 +132,10 @@ export function HomeHeroCarImage({
         {...imageProps}
         ref={imageRef}
         className={`home-hero-car-image absolute max-w-none object-contain ${className}`}
-        style={framing || { left: 0, top: 0, width: "100%", height: "100%" }}
+        style={{
+          ...(framing || { left: 0, top: 0, width: "100%", height: "100%" }),
+          visibility: framing ? "visible" : "hidden",
+        }}
         onLoad={(event) => {
           updateFraming();
           onLoad?.(event);
