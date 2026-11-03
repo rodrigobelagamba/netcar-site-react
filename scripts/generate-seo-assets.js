@@ -13,6 +13,7 @@ import { factoryWarrantyCatalogFromApi } from "./lib/factory-warranty-catalog.js
 import { sanitizeVehicleImages } from "../src/lib/vehicleImagePolicy.mjs";
 import { resolveLandingParagraphs, resolveLandingFaq, resolveModelSearchContact } from "../src/lib/landingStockCopy.mjs";
 import { privacyPage } from "../src/data/legal/privacy.mjs";
+import { relatedReading } from "../src/lib/blogRelated.mjs";
 import { matchesLandingModel } from "../src/lib/landingModelMatch.mjs";
 import {
   homeHeroRotationDay,
@@ -1053,87 +1054,6 @@ writeSeoPage(
   }),
 );
 
-// Palavras-chave do slug para achar posts relacionados. Stopwords de intenção
-// (seminovo, esteio, 2026) não distinguem nada — o que liga dois posts é o
-// assunto (financiamento, troca, suv, documento).
-const POST_STOPWORDS = new Set([
-  "seminovo",
-  "seminovos",
-  "usado",
-  "usados",
-  "esteio",
-  "rs",
-  "2026",
-  "2025",
-  "carro",
-  "carros",
-  "netcar",
-  "como",
-  "qual",
-  "quanto",
-  "custa",
-  "vale",
-  "pena",
-  "guia",
-  "completo",
-  "grande",
-  "porto",
-  "alegre",
-  "regiao",
-  "o",
-  "a",
-  "de",
-  "do",
-  "da",
-  "em",
-  "e",
-  "ou",
-  "para",
-  "com",
-  "um",
-  "uma",
-  "no",
-  "na",
-]);
-
-function postKeywords(text) {
-  return String(text)
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .split(/[^a-z0-9]+/)
-    .filter((w) => w.length > 2 && !POST_STOPWORDS.has(w));
-}
-
-// Slug sozinho é pobre demais para casar posts (cada um tem vocabulário
-// próprio). Usa slug + título e, se mesmo assim não houver par, completa com
-// os posts mais recentes — link interno fraco é melhor que nenhum.
-function relatedPosts(current, all, limit = 3) {
-  const currentKw = new Set([
-    ...postKeywords(current.slug),
-    ...postKeywords(current.title),
-  ]);
-  const scored = all
-    .filter((p) => p.slug !== current.slug)
-    .map((p) => {
-      const kw = new Set([...postKeywords(p.slug), ...postKeywords(p.title)]);
-      const shared = [...currentKw].filter((w) => kw.has(w)).length;
-      return { post: p, score: shared };
-    })
-    .sort(
-      (a, b) =>
-        b.score - a.score ||
-        b.post.publishedAt.localeCompare(a.post.publishedAt),
-    );
-  const strong = scored.filter((r) => r.score > 0).map((r) => r.post);
-  if (strong.length >= limit) return strong.slice(0, limit);
-  const strongSlugs = new Set(strong.map((p) => p.slug));
-  const recent = scored
-    .filter((r) => !strongSlugs.has(r.post.slug))
-    .map((r) => r.post);
-  return [...strong, ...recent].slice(0, limit);
-}
-
 // Capa do post: primeira imagem real do estoque citado nas seções "cars", ou
 // a primeira do estoque geral. Post sem nenhuma imagem no HTML é snippet sem
 // thumbnail no Discover e nas redes.
@@ -1154,12 +1074,12 @@ for (const post of blogPosts) {
   const canonical = `${SITE}/blog/${post.slug}`;
   const updatedAt = post.updatedAt ?? post.publishedAt;
   const cover = postCoverImage(post, stock);
-  const related = relatedPosts(post, blogPosts);
+  const related = relatedReading(post, blogPosts);
   const relatedHtml = related.length
     ? `<nav aria-label="Leia também"><h2>Leia também</h2><ul>${related
         .map(
           (r) =>
-            `<li><a href="${SITE}/blog/${r.slug}">${escapeHtml(r.title)}</a></li>`,
+            `<li><a href="${escapeHtml(r.href)}">${escapeHtml(r.title)}</a></li>`,
         )
         .join("")}</ul></nav>`
     : "";

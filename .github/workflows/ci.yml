@@ -101,6 +101,8 @@ jobs:
         run: npx tsx --test scripts/tests/vehicle-description.test.tsx scripts/tests/vehicle-hero-gallery.test.ts scripts/tests/vehicle-photo-captions.test.ts
       - name: Validate comparison photos and layout
         run: npx tsx --test scripts/tests/comparison-vehicle-image.test.tsx scripts/tests/vehicle-comparison-table.test.tsx scripts/tests/comparison-pages.test.tsx src/lib/comparisonContact.test.ts
+      - name: Validate related blog reading and React navigation
+        run: node --test scripts/tests/blog-related.test.mjs
       - name: Validate delivery gallery and deployment preservation
         run: |
           node --test scripts/tests/entregas-deploy.test.mjs scripts/tests/icheck-deploy.test.mjs
@@ -115,6 +117,10 @@ jobs:
         env:
           NETCAR_VERIFY_GENERATED_SEO: "1"
         run: node --test scripts/tests/comparison-seo.test.mjs scripts/tests/comparison-routing.test.mjs
+      - name: Validate generated blog reading matches React
+        env:
+          NETCAR_VERIFY_GENERATED_SEO: "1"
+        run: node --test scripts/tests/blog-related.test.mjs
       - name: Validate vehicle video synchronization
         run: |
           find docs/social -name '*.php' -type f -print0 | xargs -0 -n1 php -l

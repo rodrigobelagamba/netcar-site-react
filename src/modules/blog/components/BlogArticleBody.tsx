@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import type { BlogCar, BlogPost, BlogSection } from "@/data/seo/types";
+import { blogPosts } from "@/data/seo/blog";
+import { relatedReading } from "@/lib/blogRelated.mjs";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { trackBlogDiscoveryClick } from "@/lib/analytics";
 import { getBlogVehicleTarget } from "@/lib/blogNavigation";
@@ -155,6 +157,7 @@ interface BlogArticleBodyProps {
 }
 
 export function BlogArticleBody({ post }: BlogArticleBodyProps) {
+  const reading = relatedReading(post, blogPosts);
   return (
     <article className="max-w-3xl">
       <header className="mb-8">
@@ -210,6 +213,30 @@ export function BlogArticleBody({ post }: BlogArticleBodyProps) {
           {post.ctaLabel}
         </Link>
       </div>
+      {reading.length > 0 && (
+        <nav aria-label="Leia também" className="mt-10">
+          <h2 className="text-xl font-bold text-fg mb-3">Leia também</h2>
+          <ul className="space-y-2">
+            {reading.map((item) => (
+              <li key={item.href}>
+                {item.href === "/compra" ? (
+                  <Link to="/compra" className="text-primary underline hover:no-underline">
+                    {item.title}
+                  </Link>
+                ) : (
+                  <Link
+                    to="/blog/$slug"
+                    params={{ slug: item.href.slice("/blog/".length) }}
+                    className="text-primary underline hover:no-underline"
+                  >
+                    {item.title}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
     </article>
   );
 }
