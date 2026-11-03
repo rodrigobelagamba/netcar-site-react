@@ -457,6 +457,22 @@ export const MODEL_BUYER_GUIDES = {
     ],
     "guideLinks": []
   },
+  "renault-kwid": {
+    "title": "Renault Kwid à venda em Esteio: fotos e preços | Netcar",
+    "description": "Veja os Renault Kwid usados e seminovos da Netcar em Esteio, na Grande Porto Alegre. Confira fotos e dados de cada carro e consulte seu usado na troca.",
+    "intro": "Procurando um Renault Kwid? Veja os anúncios da Netcar e escolha o carro que deseja conhecer.",
+    "guideTitle": "Encontre seu Renault Kwid",
+    "paragraphs": [
+      "Esta página reúne os Kwid anunciados pela Netcar. Abra a ficha do carro que chamou sua atenção para ver fotos, versão, ano e preço. Pelo contato do anúncio, você pode conversar sobre a compra, consultar a troca pelo seu usado e combinar uma visita às lojas de Esteio."
+    ],
+    "faq": [
+      {
+        "q": "Como consultar a compra de um Kwid específico?",
+        "a": "Escolha o anúncio e use o contato da ficha. Assim a equipe sabe qual Kwid você quer conhecer e pode esclarecer os detalhes daquela unidade."
+      }
+    ],
+    "guideLinks": []
+  },
   "renault-captur": {
     "title": "Renault Captur à venda em Esteio: fotos e preços | Netcar",
     "description": "Renault Captur usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",

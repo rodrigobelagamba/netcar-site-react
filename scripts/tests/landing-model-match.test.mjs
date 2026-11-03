@@ -9,6 +9,14 @@ import { matchesLandingModel } from "../../src/lib/landingModelMatch.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const fixtures = [
+  ["KWID OUTSIDER", "KWID", "RENAULT", true],
+  ["RENAULT KWID ZEN", "KWID", "RENAULT", true],
+  ["KWID INTENSE", "KWID E TECH", "RENAULT", false],
+  ["KWID E-TECH 100% ELÉTRICO", "KWID", "RENAULT", false],
+  ["RENAULT KWID ETECH", "KWID", "RENAULT", false],
+  ["KWID ETECH", "KWID E-TECH", "RENAULT", true],
+  ["SANDERO STEPWAY", "KWID", "RENAULT", false],
+  ["KWIDDER", "KWID", "RENAULT", false],
   ["FOX CONNECT", "FOX", "VOLKSWAGEN", true],
   ["CROSSFOX", "FOX", "VOLKSWAGEN", false],
   ["HB20 COMFORT", "HB20", "HYUNDAI", true],

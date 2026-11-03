@@ -12,7 +12,8 @@ function canonicalModel(value) {
     .replace(/^H\s*R\s*V(?=\s|$)/, "HRV")
     .replace(/^W\s*R\s*V(?=\s|$)/, "WRV")
     .replace(/^T\s*CROSS(?=\s|$)/, "T CROSS")
-    .replace(/^TIGGO\s*5\s*X(?=\s|$)/, "TIGGO 5X");
+    .replace(/^TIGGO\s*5\s*X(?=\s|$)/, "TIGGO 5X")
+    .replace(/^KWID E\s*TECH(?=\s|$)/, "KWID E TECH");
 }
 
 /**
@@ -29,6 +30,8 @@ export function matchesLandingModel(value, filter, brand = "") {
   }
   model = canonicalModel(model);
   const prefix = canonicalModel(filter);
+  // The electric E-Tech has a separate product identity from the Kwid hatch.
+  if (prefix === "KWID" && /^KWID E TECH(?: |$)/.test(model)) return false;
   return Boolean(
     prefix && (model === prefix || model.startsWith(`${prefix} `)),
   );
