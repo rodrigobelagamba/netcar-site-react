@@ -483,28 +483,39 @@ export function Footer() {
             </div>
           </div>
 
-          <a
-            href="https://app.zapsign.com.br/verificar/sustentabilidade/netcar"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-shrink-0 hover:opacity-80 transition-opacity"
-          >
+          <div className="flex shrink-0 items-center gap-2 sm:gap-4">
             <img
-              src={optimizeStockImage(
-                "/images/selo-sustentabilidade.webp",
-                200,
-              )}
-              alt="Selo Sustentabilidade"
-              width={160}
-              height={64}
+              src="/images/agenciauto-rs.webp"
+              alt="Agenciauto Rio Grande do Sul"
+              width={1210}
+              height={226}
               loading="lazy"
               decoding="async"
-              className="h-16 w-auto object-contain"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
+              className="h-auto w-28 shrink-0 object-contain sm:w-32"
             />
-          </a>
+            <a
+              href="https://app.zapsign.com.br/verificar/sustentabilidade/netcar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 hover:opacity-80 transition-opacity"
+            >
+              <img
+                src={optimizeStockImage(
+                  "/images/selo-sustentabilidade.webp",
+                  200,
+                )}
+                alt="Selo Sustentabilidade"
+                width={160}
+                height={64}
+                loading="lazy"
+                decoding="async"
+                className="h-12 w-auto object-contain sm:h-16"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            </a>
+          </div>
         </div>
       </section>
     </footer>
