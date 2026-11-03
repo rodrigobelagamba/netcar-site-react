@@ -37,6 +37,7 @@ import {
   type EquipmentVehicle,
 } from "../../src/lib/vehicleEquipment";
 import warrantyRegistrySeed from "../../src/data/factoryWarrantyMatrix.json";
+import novemberUnitsAudit from "../../docs/audits/factory-warranty-nivus-creta-2026-11-03.json";
 import { factoryWarrantyUnitKey } from "../lib/factory-warranty-catalog.js";
 import {
   factoryWarrantyReviewFingerprint,
@@ -44,6 +45,7 @@ import {
   resolveFactoryWarranty,
   resolveFactoryPowertrainWarranty,
   type FactoryWarrantyMatrix,
+  type FactoryWarrantyRecord,
 } from "../../src/lib/factoryWarranty";
 
 // Isolated identities keep these historic equipment tests independent of live
@@ -88,6 +90,10 @@ function warrantyApiVehicle(id = basicWarrantyId): Record<string, unknown> {
     (item) => item.vehicle.vehicleId === id,
   );
   assert.ok(record);
+  return warrantyApiVehicleFromRecord(record);
+}
+
+function warrantyApiVehicleFromRecord(record: FactoryWarrantyRecord): Record<string, unknown> {
   return {
     id: record.vehicle.vehicleId,
     marca: record.vehicle.brand,
@@ -971,19 +977,19 @@ test("powertrain source changes and conflicting records remain blocked and reope
 });
 
 test("the October15 registry audit keeps thirteen general, four powertrain and two BYD battery coverages separate", () => {
-  // This historical stock snapshot predates later unit reviews. Keep those
-  // units out of this fixture rather than counting them as October15 failures.
+  // Restore the decision active on October15 before excluding later additions.
+  // The Nivus approval replaces an older pending record archived by its audit.
   const historicalRegistry = {
     ...warrantyRegistry,
-    records: warrantyRegistry.records.filter(
-      (record) => record.reviewedAt <= "2026-10-15",
-    ),
+    records: warrantyRegistry.records
+      .map((record) => record.vehicle.vehicleId === "20018"
+        ? structuredClone(novemberUnitsAudit.previousRecord) as FactoryWarrantyRecord
+        : record)
+      .filter((record) => record.reviewedAt <= "2026-10-15"),
   };
   const vehicles = parseStockResponse(
     apiResponse(
-      historicalRegistry.records.map((record) =>
-        warrantyApiVehicle(record.vehicle.vehicleId),
-      ),
+      historicalRegistry.records.map(warrantyApiVehicleFromRecord),
     ),
   );
   const report = buildEquipmentAudit(
@@ -1030,8 +1036,8 @@ test("the October15 registry audit keeps thirteen general, four powertrain and t
   assert.equal(tiggo.powertrain?.estimatedEndYear, 2028);
   assert.notEqual(tiggo.status, "eligible");
   assert.notEqual(tiggo.supplemental?.status, "eligible");
-  // This complete registry fixture also includes Nivus20018, which is absent
-  // from the current public catalog and remains unapproved.
+  // Nivus20018 was pending in this historical registry; its November approval
+  // must not remove the original pending finding from the October audit.
   assert.deepEqual(
     historicalRegistry.records.filter((record) => record.status === "pending").map((record) => record.vehicle.vehicleId).sort(),
     ["20018"],
