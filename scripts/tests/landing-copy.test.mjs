@@ -149,3 +149,24 @@ test("Onix hatch and Onix Plus remain separate even when Plus follows the versio
   assert.equal(onix.filters.categoria, "HATCH");
   assert.equal(plus.filters.categoria, "SEDAN");
 });
+
+
+test("Kwid selection contains only its Renault hatch family and survives no stock", () => {
+  const config = MODEL_HUBS.find((model) => model.slug === "renault-kwid");
+  const rows = [
+    vehicle({ marca: "RENAULT", modelo: "KWID OUTSIDER", categoria: "HATCH" }),
+    vehicle({ marca: "RENAULT", modelo: "KWID INTENSE", categoria: "HATCH" }),
+    vehicle({ marca: "RENAULT", modelo: "KWID E-TECH", categoria: "HATCH" }),
+    vehicle({ marca: "RENAULT", modelo: "SANDERO STEPWAY", categoria: "HATCH" }),
+    vehicle({ marca: "OTHER", modelo: "KWID", categoria: "HATCH" }),
+    vehicle({ marca: "RENAULT", modelo: "KWID", categoria: "SEDAN" }),
+  ];
+  const stocked = modelLanding(config, rows);
+  assert.equal(stocked.count, 2);
+  assert.equal(stocked.indexable, true);
+  assert.deepEqual(stocked.filters, { marca: "RENAULT", modelo: "KWID", categoria: "HATCH" });
+  const empty = modelLanding(config, []);
+  assert.equal(empty.slug, stocked.slug);
+  assert.equal(empty.indexable, false);
+  assert.deepEqual(editorialContent(stocked), editorialContent(empty));
+});

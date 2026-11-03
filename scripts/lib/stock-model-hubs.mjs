@@ -30,6 +30,7 @@ export const MODEL_HUBS = [
   { slug: "chevrolet-cruze", marca: "CHEVROLET", modelo: "CRUZE", name: "Chevrolet Cruze sedan", categoria: "SEDAN", category: "SEDAN" },
   { slug: "hyundai-hb20", marca: "HYUNDAI", modelo: "HB20", name: "Hyundai HB20 hatch", categoria: "HATCH", category: "HATCH" },
   { slug: "hyundai-tucson", marca: "HYUNDAI", modelo: "TUCSON", name: "Hyundai Tucson", category: "SUV" },
+  { slug: "renault-kwid", marca: "RENAULT", modelo: "KWID", name: "Renault Kwid", categoria: "HATCH", category: "HATCH" },
   { slug: "renault-captur", marca: "RENAULT", modelo: "CAPTUR", name: "Renault Captur", category: "SUV" },
   { slug: "renault-stepway", marca: "RENAULT", modelo: "STEPWAY", name: "Renault Stepway", category: "HATCH" },
   { slug: "ford-ecosport", marca: "FORD", modelo: "ECOSPORT", name: "Ford EcoSport", category: "SUV" },

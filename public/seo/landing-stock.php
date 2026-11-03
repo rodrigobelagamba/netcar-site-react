@@ -110,7 +110,8 @@ function netcar_landing_model_canonical($value)
     $model = preg_replace('/^H\s*R\s*V(?=\s|$)/', 'HRV', $model);
     $model = preg_replace('/^W\s*R\s*V(?=\s|$)/', 'WRV', $model);
     $model = preg_replace('/^T\s*CROSS(?=\s|$)/', 'T CROSS', $model);
-    return preg_replace('/^TIGGO\s*5\s*X(?=\s|$)/', 'TIGGO 5X', $model);
+    $model = preg_replace('/^TIGGO\s*5\s*X(?=\s|$)/', 'TIGGO 5X', $model);
+    return preg_replace('/^KWID E\s*TECH(?=\s|$)/', 'KWID E TECH', $model);
 }
 
 function netcar_landing_model_matches($value, $filter, $brand = '')
@@ -122,6 +123,10 @@ function netcar_landing_model_matches($value, $filter, $brand = '')
     }
     $model = netcar_landing_model_canonical($model);
     $prefix = netcar_landing_model_canonical($filter);
+    // Keep the electric E-Tech out of the combustion Kwid family selection.
+    if ($prefix === 'KWID' && preg_match('/^KWID E TECH(?: |$)/', $model)) {
+        return false;
+    }
     return $prefix !== '' && ($model === $prefix || strpos($model, $prefix . ' ') === 0);
 }
 

@@ -32,7 +32,9 @@ jobs:
           php -l public/home-hero.php
           node --test scripts/tests/home-hero-selection.test.mjs
       - name: Validate brand and model landing PHP
-        run: php -l public/seo/landing-stock.php
+        run: |
+          php -l public/seo/landing-stock.php
+          npm run stock:test-landings
       - name: Validate Carclick descriptions and field preservation
         run: |
           php -l public/feeds/carclick.php

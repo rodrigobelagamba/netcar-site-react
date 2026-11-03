@@ -160,7 +160,7 @@ export const BRAND_BUYER_GUIDES = {
     "intro": "Veja os Renault à venda na Netcar, em Esteio, e encontre o modelo que procura.",
     "guideTitle": "Escolha seu próximo Renault",
     "paragraphs": [
-      "Captur e Stepway são modelos diferentes e têm seleções próprias. Para ampliar a escolha, confira todos os Renault anunciados nesta página. Cada carro tem ficha com fotos, versão e preço, além do contato para conversar sobre a compra e avaliar seu usado na troca."
+      "Kwid, Captur e Stepway têm seleções próprias para você chegar aos anúncios do modelo que procura. Para ampliar a escolha, confira todos os Renault anunciados nesta página. Cada carro tem ficha com fotos, versão e preço, além do contato para conversar sobre a compra e avaliar seu usado na troca."
     ],
     "faq": [
       {
