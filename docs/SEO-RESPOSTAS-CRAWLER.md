@@ -17,11 +17,13 @@ Requisição
    │                                    ├─ /comprar-{slug}       → seo-landing.php (template + estoque atual)
    │                                    ├─ /vender-carro-{cid}   → seo-static/sell-city-*.html
    │                                    ├─ /blog/{slug}          → seo-static/blog-*.html
+   │                                    ├─ /comparar e /comparar/{par}
+   │                                    │                        → seo-comparison.php (template + estoque atual)
    │                                    └─ /financiamento, /atendimento-24h,
    │                                       /move-brasil, /seminovos-automaticos
    │                                                             → seo-static/page-*.html
    │
-   └─ pessoa ─────────────────────────── index.html (SPA React)
+   └─ pessoa ─────────────────────────── index.php (shell React com metadados e bootstrap)
 ```
 
 Desde 22/10/2026, as seleções `/comprar-*` consultam a API no pedido inicial:

@@ -30,6 +30,7 @@ jobs:
         run: |
           php -l public/index.php
           php -l public/home-hero.php
+          php -l public/seo/helpers.php
           node --test scripts/tests/home-hero-selection.test.mjs
       - name: Validate brand and model landing PHP
         run: |
