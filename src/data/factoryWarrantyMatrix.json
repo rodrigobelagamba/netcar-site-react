@@ -775,39 +775,59 @@
       }
     },
     {
-      "recordId": "normalized-20261003-20018",
-      "status": "pending",
-      "reviewedAt": "2026-10-03",
-      "approvedFingerprint": "{\"recordId\":\"normalized-20261003-20018\",\"reviewedAt\":\"2026-10-03\",\"vehicle\":{\"vehicleId\":\"20018\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"VOLKSWAGEN\",\"modelVersion\":\"NIVUS GTS\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"unknown\",\"commonPolicy\":null,\"reviewedMileageKm\":15000,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"20018-manual-1\",\"url\":\"https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-nivus/my26/26B_5B1_NIV_66_Manual_de_Instrucoes_LOW.pdf\",\"locator\":\"Nivus MY2026, PDF p.247; herdado do task7\",\"revision\":\"Nivus MY2026; 26B_5B1_NIV_66; herdado do task7\",\"verification\":{\"status\":\"pending\",\"documentCode\":\"\",\"modelYear\":2026,\"reviewId\":\"warranty-20261003-20018\",\"reviewedAt\":\"2026-10-03\"}}]}",
+      "recordId": "reviewed-v2-20261103-20018",
+      "status": "approved",
+      "reviewedAt": "2026-11-03",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261103-20018\",\"reviewedAt\":\"2026-11-03\",\"vehicle\":{\"vehicleId\":\"20018\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"VOLKSWAGEN\",\"modelVersion\":\"NIVUS GTS TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:3794103a14e2217404c06454ba2d8b092570bbead61eb985f30b4c755081fb10\",\"engine\":\"1.4\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":15000,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"vw-nivus-my2026-basic-20018\",\"label\":\"Manual Volkswagen Nivus MY2026 Brasil\",\"url\":\"https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-nivus/my26/26B_5B1_NIV_66_Manual_de_Instrucoes_LOW.pdf\",\"locator\":\"PDF248 / impressa246: garantia do veículo completo por três anos sem limite de quilometragem, desde a entrega original pela concessionária ou licenciamento em venda direta; manutenção e exceções específicas. PDF249–250 / impressas247–248: exclusões, peças e corrosão. PDF259 / impressa257: motor1.4 TOTALFLEX TSI250Nm e transmissão automáticaAQ250 de seis marchas. Manual brasileiroMY2026 aplicável às versões descritas, incluindo esta motorização.\",\"revision\":\"26B.5B1.NIV.66; Nivus MY2026, Brasil; cobertura e dados técnicos conferidos em03/11/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"26B.5B1.NIV.66\",\"modelYear\":2026,\"reviewId\":\"warranty-20261103-nivus-creta\",\"reviewedAt\":\"2026-11-03\"}},{\"sourceId\":\"vw-nivus-gts-brazil-20018\",\"label\":\"Volkswagen Nivus GTS Brasil\",\"url\":\"https://www.vw.com.br/pt/carros/nivus.html\",\"locator\":\"Página brasileira oficial: versão Nivus GTS, motor250TSI e câmbio automático de seis velocidades. Confirma a versão; prazo, quilometragem e início vêm do manualMY2026.\",\"revision\":\"VW-BR-NIVUS-GTS-250TSI; Página oficial Volkswagen Brasil, consultada em03/11/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"VW-BR-NIVUS-GTS-250TSI\",\"modelYear\":2026,\"reviewId\":\"warranty-20261103-nivus-creta\",\"reviewedAt\":\"2026-11-03\"}}]}",
       "vehicle": {
         "vehicleId": "20018",
         "brand": "VOLKSWAGEN",
-        "modelVersion": "NIVUS GTS",
+        "modelVersion": "NIVUS GTS TURBO",
         "manufactureYear": 2025,
         "modelYear": 2026
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:3794103a14e2217404c06454ba2d8b092570bbead61eb985f30b4c755081fb10",
+        "engine": "1.4",
+        "transmission": "AUTOMATICO"
       },
       "optionalId": 108,
       "optionalConfirmed": true,
       "conditionsConfirmed": true,
       "scope": "basic-vehicle",
       "termYears": 3,
-      "usage": "unknown",
+      "usage": "private",
       "reviewedMileageKm": 15000,
       "mileage": {
         "kind": "unlimited"
       },
       "sources": [
         {
-          "sourceId": "20018-manual-1",
+          "sourceId": "vw-nivus-my2026-basic-20018",
+          "label": "Manual Volkswagen Nivus MY2026 Brasil",
           "url": "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-nivus/my26/26B_5B1_NIV_66_Manual_de_Instrucoes_LOW.pdf",
-          "locator": "Nivus MY2026, PDF p.247; herdado do task7",
-          "revision": "Nivus MY2026; 26B_5B1_NIV_66; herdado do task7",
+          "locator": "PDF248 / impressa246: garantia do veículo completo por três anos sem limite de quilometragem, desde a entrega original pela concessionária ou licenciamento em venda direta; manutenção e exceções específicas. PDF249–250 / impressas247–248: exclusões, peças e corrosão. PDF259 / impressa257: motor1.4 TOTALFLEX TSI250Nm e transmissão automáticaAQ250 de seis marchas. Manual brasileiroMY2026 aplicável às versões descritas, incluindo esta motorização.",
+          "revision": "26B.5B1.NIV.66; Nivus MY2026, Brasil; cobertura e dados técnicos conferidos em03/11/2026.",
           "verification": {
-            "status": "pending",
-            "documentCode": "",
+            "status": "verified",
+            "documentCode": "26B.5B1.NIV.66",
             "modelYear": 2026,
-            "reviewId": "warranty-20261003-20018",
-            "reviewedAt": "2026-10-03"
+            "reviewId": "warranty-20261103-nivus-creta",
+            "reviewedAt": "2026-11-03"
+          }
+        },
+        {
+          "sourceId": "vw-nivus-gts-brazil-20018",
+          "label": "Volkswagen Nivus GTS Brasil",
+          "url": "https://www.vw.com.br/pt/carros/nivus.html",
+          "locator": "Página brasileira oficial: versão Nivus GTS, motor250TSI e câmbio automático de seis velocidades. Confirma a versão; prazo, quilometragem e início vêm do manualMY2026.",
+          "revision": "VW-BR-NIVUS-GTS-250TSI; Página oficial Volkswagen Brasil, consultada em03/11/2026.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "VW-BR-NIVUS-GTS-250TSI",
+            "modelYear": 2026,
+            "reviewId": "warranty-20261103-nivus-creta",
+            "reviewedAt": "2026-11-03"
           }
         }
       ]
@@ -1341,6 +1361,97 @@
         }
       ],
       "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261029-20100-powertrain\",\"reviewedAt\":\"2026-10-29\",\"vehicle\":{\"vehicleId\":\"20100\",\"manufactureYear\":2023,\"modelYear\":2024,\"brand\":\"CHERY\",\"modelVersion\":\"TIGGO 7 PRO MAX DRIVE TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:1a30e1a3fe2e5ad255fc53267fcbbf971cf79ad0fc339903b61d0e1b86e2f5dc\",\"engine\":\"1.6\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"currentCoverageConfirmation\":{\"source\":\"netcar-owner\",\"attestationId\":\"netcar-owner-current-tiggo7-20100-20109-20261029\",\"confirmedAt\":\"2026-10-29\",\"basis\":\"explicit-current-unit-coverage\",\"mileageKm\":26178},\"conditionsConfirmed\":true,\"scope\":\"powertrain\",\"powertrainReview\":{\"coverageSubtype\":\"engine-and-transmission\",\"usageAttestationId\":\"netcar-private-stock-20261010\",\"displayLabel\":\"Motor e câmbio\"},\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":26178,\"mileage\":{\"kind\":\"unknown\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"caoa-reply-20260302-tiggo7-maxdrive-2024\",\"label\":\"Resposta oficial CAOA Chery\",\"url\":\"https://www.reclameaqui.com.br/chery-brasil/desgaste-do-volante-e-barulho-no-teto-em-tiggo-7-pro-max-drive-com-baixa-quilometragem_ixjrjP92xCBLZcNi/\",\"locator\":\"Resposta da empresa, 02/03/2026, 16:29; case identifies Tiggo 7 Pro Max Drive 2023/2024; response references Manual do Proprietario, chapter 10, page 10-4. A resposta sustenta cinco anos para motor e transmissão desde a primeira entrega, condicionados ao manual e às revisões. A vigência atual desta unidade foi confirmada separadamente pelo responsável da Netcar; esta fonte não informa a política de quilometragem.\",\"revision\":\"CAOA-20260302; resposta pública oficial CAOA Chery; Tiggo 7 Pro Max Drive Brasil 2023/2024; prazo e escopo revisados em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"CAOA-20260302\",\"modelYear\":2024,\"reviewId\":\"warranty-20261029-20100-current-powertrain\",\"reviewedAt\":\"2026-10-28\"}},{\"sourceId\":\"caoa-reply-20251114-tiggo7-maxdrive-2024\",\"label\":\"Resposta oficial CAOA Chery\",\"url\":\"https://www.reclameaqui.com.br/chery-brasil/ferrugem-prematura-nos-discos-de-freio-do-tiggo-7-pro-max-drive-20232024_I_0tFKtb7DpUX46Z/\",\"locator\":\"Resposta da empresa, 14/11/2025, 11:17, in a case identified as Tiggo 7 Pro Max Drive 2023/2024. A resposta sustenta cinco anos para motor e transmissão desde a primeira entrega, condicionados ao manual e às revisões. A vigência atual desta unidade foi confirmada separadamente pelo responsável da Netcar; esta fonte não informa a política de quilometragem.\",\"revision\":\"CAOA-20251114; resposta pública oficial CAOA Chery; Tiggo 7 Pro Max Drive Brasil 2023/2024; prazo e escopo revisados em 28/10/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"CAOA-20251114\",\"modelYear\":2024,\"reviewId\":\"warranty-20261029-20100-current-powertrain\",\"reviewedAt\":\"2026-10-28\"}}]}"
+    },
+    {
+      "recordId": "reviewed-v2-20261103-20101",
+      "status": "approved",
+      "reviewedAt": "2026-11-03",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261103-20101\",\"reviewedAt\":\"2026-11-03\",\"vehicle\":{\"vehicleId\":\"20101\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"HYUNDAI\",\"modelVersion\":\"CRETA PLATINUM TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:368f8977c61e0939d47a31da2bbf22aac849e638f47c9bbc77791eac9b26281b\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"unknown\",\"commonPolicy\":{\"kind\":\"documented-regime-intersection\",\"reviewId\":\"warranty-20261103-nivus-creta\",\"basis\":\"ManualHyundaiA1XC-PB2502A mantém cinco anos para CPF particular e CNPJ/comercial. O ateste operacional de uso particular não estabelece CPF no faturamento original. Aplicado teto conservador100.000km comum aos regimes, sem presumir propriedade ou transferir condições de outro modelo.\",\"branches\":[{\"category\":\"cpf\",\"condition\":\"Faturado emCPF, sem uso comercial, conforme impressa16\",\"scope\":\"basic-vehicle\",\"termYears\":5,\"mileage\":{\"kind\":\"unlimited\"},\"sourceIds\":[\"hyundai-A1XC-PB2502A-basic-20101\"]},{\"category\":\"cnpj\",\"condition\":\"Faturado emCNPJ ou uso comercial, conforme impressa16\",\"scope\":\"basic-vehicle\",\"termYears\":5,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"sourceIds\":[\"hyundai-A1XC-PB2502A-basic-20101\"]}]},\"reviewedMileageKm\":18143,\"mileage\":{\"kind\":\"limited\",\"limitKm\":100000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"hyundai-A1XC-PB2502A-basic-20101\",\"label\":\"Manual de garantia Hyundai Brasil\",\"url\":\"https://www.hyundai.com.br/content/dam/hmb/download-manuais/A1XC-PB2502A_SITE-WM.pdf\",\"locator\":\"Manual ligado pela página oficial Proprietários. PDF20 / impressa16: início na entrega ao primeiro proprietário; particular faturadoCPF sem uso comercial versus CNPJ/comercial. PDF21 / impressa17: cobertura básica de cinco anos, sem limite para particular e100.000km para comercial. PDF22 / impressa18: rádio e bateria12V têm coberturas próprias. PDF44: código e impressão02/2025. Utilizada a interseção de cinco anos/100.000km sem presumir CPF.\",\"revision\":\"A1XC-PB2502A; Português/Brasil; impresso02/2025. PDF20,21 e44 inspecionados visualmente em03/11/2026.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"A1XC-PB2502A\",\"modelYear\":2026,\"reviewId\":\"warranty-20261103-nivus-creta\",\"reviewedAt\":\"2026-11-03\"}},{\"sourceId\":\"hyundai-creta-platinum-my2026-identity-20101\",\"label\":\"Hyundai Brasil: identidade Creta Platinum MY2026\",\"url\":\"https://www.hyundai.com.br/bluelink.html\",\"locator\":\"Lista oficial de modelos: NOVO CRETA1.0 TURBO GDI AUTOMATIC PLATINUM2025-2026 e NOVO CRETA1.0 TGDI AT CRETA PLATINUM2025-2026/2026-2026. Usada somente para vincular versão brasileira, motor, transmissão e ano; não atesta equipamentos da unidade nem prazo de garantia.\",\"revision\":\"HMB-CRETA-PLATINUM-MY2026; Lista oficial Hyundai Brasil consultada em03/11/2026; garantia documentada separadamente no manualA1XC-PB2502A.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"HMB-CRETA-PLATINUM-MY2026\",\"modelYear\":2026,\"reviewId\":\"warranty-20261103-nivus-creta\",\"reviewedAt\":\"2026-11-03\"}}]}",
+      "vehicle": {
+        "vehicleId": "20101",
+        "brand": "HYUNDAI",
+        "modelVersion": "CRETA PLATINUM TURBO",
+        "manufactureYear": 2025,
+        "modelYear": 2026
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:368f8977c61e0939d47a31da2bbf22aac849e638f47c9bbc77791eac9b26281b",
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "basic-vehicle",
+      "termYears": 5,
+      "usage": "unknown",
+      "reviewedMileageKm": 18143,
+      "mileage": {
+        "kind": "limited",
+        "limitKm": 100000
+      },
+      "sources": [
+        {
+          "sourceId": "hyundai-A1XC-PB2502A-basic-20101",
+          "label": "Manual de garantia Hyundai Brasil",
+          "url": "https://www.hyundai.com.br/content/dam/hmb/download-manuais/A1XC-PB2502A_SITE-WM.pdf",
+          "locator": "Manual ligado pela página oficial Proprietários. PDF20 / impressa16: início na entrega ao primeiro proprietário; particular faturadoCPF sem uso comercial versus CNPJ/comercial. PDF21 / impressa17: cobertura básica de cinco anos, sem limite para particular e100.000km para comercial. PDF22 / impressa18: rádio e bateria12V têm coberturas próprias. PDF44: código e impressão02/2025. Utilizada a interseção de cinco anos/100.000km sem presumir CPF.",
+          "revision": "A1XC-PB2502A; Português/Brasil; impresso02/2025. PDF20,21 e44 inspecionados visualmente em03/11/2026.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "A1XC-PB2502A",
+            "modelYear": 2026,
+            "reviewId": "warranty-20261103-nivus-creta",
+            "reviewedAt": "2026-11-03"
+          }
+        },
+        {
+          "sourceId": "hyundai-creta-platinum-my2026-identity-20101",
+          "label": "Hyundai Brasil: identidade Creta Platinum MY2026",
+          "url": "https://www.hyundai.com.br/bluelink.html",
+          "locator": "Lista oficial de modelos: NOVO CRETA1.0 TURBO GDI AUTOMATIC PLATINUM2025-2026 e NOVO CRETA1.0 TGDI AT CRETA PLATINUM2025-2026/2026-2026. Usada somente para vincular versão brasileira, motor, transmissão e ano; não atesta equipamentos da unidade nem prazo de garantia.",
+          "revision": "HMB-CRETA-PLATINUM-MY2026; Lista oficial Hyundai Brasil consultada em03/11/2026; garantia documentada separadamente no manualA1XC-PB2502A.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "HMB-CRETA-PLATINUM-MY2026",
+            "modelYear": 2026,
+            "reviewId": "warranty-20261103-nivus-creta",
+            "reviewedAt": "2026-11-03"
+          }
+        }
+      ],
+      "commonPolicy": {
+        "kind": "documented-regime-intersection",
+        "reviewId": "warranty-20261103-nivus-creta",
+        "basis": "ManualHyundaiA1XC-PB2502A mantém cinco anos para CPF particular e CNPJ/comercial. O ateste operacional de uso particular não estabelece CPF no faturamento original. Aplicado teto conservador100.000km comum aos regimes, sem presumir propriedade ou transferir condições de outro modelo.",
+        "branches": [
+          {
+            "category": "cpf",
+            "condition": "Faturado emCPF, sem uso comercial, conforme impressa16",
+            "scope": "basic-vehicle",
+            "termYears": 5,
+            "mileage": {
+              "kind": "unlimited"
+            },
+            "sourceIds": [
+              "hyundai-A1XC-PB2502A-basic-20101"
+            ]
+          },
+          {
+            "category": "cnpj",
+            "condition": "Faturado emCNPJ ou uso comercial, conforme impressa16",
+            "scope": "basic-vehicle",
+            "termYears": 5,
+            "mileage": {
+              "kind": "limited",
+              "limitKm": 100000
+            },
+            "sourceIds": [
+              "hyundai-A1XC-PB2502A-basic-20101"
+            ]
+          }
+        ]
+      }
     }
   ],
   "requireUnitBinding": true,

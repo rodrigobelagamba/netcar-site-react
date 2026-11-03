@@ -36,6 +36,13 @@ const peugeotAudit = read("../../docs/audits/factory-warranty-peugeot-20068-2026
 const kicks20086Audit = read("../../docs/audits/factory-warranty-kicks-20086-2026-10-22.json");
 const tiggo5xProAudit = read("../../docs/audits/factory-warranty-tiggo5x-pro-20082-2026-10-28.json");
 const tiggo7CurrentAudit = read("../../docs/audits/factory-warranty-tiggo7-20100-confirmation-2026-10-29.json");
+const novemberUnitsAudit = read("../../docs/audits/factory-warranty-nivus-creta-2026-11-03.json");
+
+// Historical preservation checks use the archived decision that was active then.
+const recordsThrough = (reviewedAt: string) => current.records
+  .map((record) => record.vehicle.vehicleId === "20018" && reviewedAt < novemberUnitsAudit.reviewedAt
+    ? novemberUnitsAudit.previousRecord as FactoryWarrantyRecord : record)
+  .filter((record) => record.reviewedAt <= reviewedAt);
 
 // Preserve each historical snapshot in full while allowing later reviewed rules.
 const automationThrough = (reviewedAt: string) => ({
@@ -97,8 +104,7 @@ test("Kicks20086 separates private use from CPF ownership and preserves twenty r
   assert.equal(kicks20086Audit.ownerAttestations.individualMaintenanceIndependentlyInspected, false);
   assert.equal(kicks20086Audit.catalog.upstreamWarrantyFlagPresent, true);
   assert.equal(kicks20086Audit.catalog.indicationSource, "upstream-warranty-flag");
-  const others = current.records.filter((entry) =>
-    entry !== record && entry.reviewedAt <= kicks20086Audit.reviewedAt);
+  const others = recordsThrough(kicks20086Audit.reviewedAt).filter((entry) => entry !== record);
   assert.equal(others.length, 20);
   assert.equal(others.length, kicks20086Audit.preservation.previousRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), kicks20086Audit.preservation.previousRecordsSha256);
@@ -174,8 +180,7 @@ test("Peugeot20068 keeps documentary mileage distinct from operational use and p
   assert.equal(peugeotAudit.ownerAttestations.usageIsEstablishedNetcarPolicy, true);
   assert.equal(peugeotAudit.catalog.upstreamWarrantyFlagPresent, true);
   assert.equal(peugeotAudit.catalog.indicationSource, "upstream-warranty-flag");
-  const others = current.records.filter((entry) =>
-    entry !== record && entry.reviewedAt <= peugeotAudit.reviewedAt);
+  const others = recordsThrough(peugeotAudit.reviewedAt).filter((entry) => entry !== record);
   assert.equal(others.length, peugeotAudit.preservation.previousRecordCount);
   assert.equal(others.length, 19);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), peugeotAudit.preservation.previousRecordsSha256);
@@ -225,8 +230,7 @@ test("owner-confirmed Renegade20094 has its own five-year stamp and preserves pr
   assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, "2026-10-20"), undefined);
   // Later unit approvals are outside the October20 preservation snapshot.
   // Its original record count and complete-content hash remain mandatory.
-  const others = current.records.filter((entry) =>
-    entry !== record && entry.reviewedAt <= renegadeAudit.reviewedAt);
+  const others = recordsThrough(renegadeAudit.reviewedAt).filter((entry) => entry !== record);
   assert.equal(others.length, renegadeAudit.preservation.previousRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), renegadeAudit.preservation.previousRecordsSha256);
   assert.equal(createHash("sha256").update(JSON.stringify(automationThrough(renegadeAudit.reviewedAt))).digest("hex"), renegadeAudit.preservation.automationRulesSha256);
@@ -266,7 +270,7 @@ test("confirmed Compass displays its five-year general stamp without approving o
 
 test("Compass release preserves all other records and separates owner confirmation from official evidence", () => {
   // Keep the October10 preservation comparison scoped to its original units.
-  const others = current.records.filter((entry) => entry.vehicle.vehicleId !== "19866" &&
+  const others = recordsThrough(compassAudit.reviewedAt).filter((entry) => entry.vehicle.vehicleId !== "19866" &&
     baseline.matrix.records.some((prior) => prior.vehicle.vehicleId === entry.vehicle.vehicleId));
   assert.equal(others.length, compassAudit.preservation.otherRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), compassAudit.preservation.otherRecordsSha256);
@@ -354,7 +358,8 @@ const oldRecord = (id: string) =>
 const currentRecord = (id: string) =>
   current.records.find((record) => record.vehicle.vehicleId === id)!;
 const observed = (id: string) => {
-  const vehicle = migration.publicVehicles.find((entry) => entry.id === id)
+  const vehicle = (novemberUnitsAudit.publicVehicles as WarrantyCatalogVehicle[]).find((entry) => entry.id === id)
+    ?? migration.publicVehicles.find((entry) => entry.id === id)
     ?? (newUnitsAudit.publicVehicles as WarrantyCatalogVehicle[]).find((entry) => entry.id === id)
     ?? (id === "20094" ? renegadeAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20068" ? peugeotAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
@@ -406,7 +411,7 @@ for (const prior of baseline.matrix.records.filter(
 )) {
   const id = prior.vehicle.vehicleId;
   test(`migration preserves every prior coverage, source, condition and decision for ${id}`, () => {
-    const active = currentRecord(id);
+    const active = id === "20018" ? novemberUnitsAudit.previousRecord as FactoryWarrantyRecord : currentRecord(id);
     assert.ok(active);
     assert.deepEqual(beforeBinding(active), prior);
     if (active.status === "approved")
@@ -650,17 +655,19 @@ test("Kicks 20019 has a separate audited approval while its original pending dec
     factoryWarrantyReviewFingerprint(approved),
   );
   assert.equal(
-    current.records.filter((record) => record.status === "approved" &&
+    recordsThrough(tiggo7CurrentAudit.reviewedAt).filter((record) => record.status === "approved" &&
       baseline.matrix.records.some((prior) => prior.vehicle.vehicleId === record.vehicle.vehicleId)).length,
     15,
   );
   assert.equal(OLD_APPROVED.length, 10);
 });
 
-test("later approved units leave pending while absent Nivus remains pending", () => {
+test("later reviews resolve current pending units while preserving the original Nivus pending decision", () => {
+  assert.equal(novemberUnitsAudit.previousRecord.status, "pending");
+  assert.equal(novemberUnitsAudit.previousRecord.vehicle.vehicleId, "20018");
   assert.deepEqual(
     current.records.filter((record) => record.status === "pending").map((record) => record.vehicle.vehicleId).sort(),
-    ["20018"],
+    [],
   );
   for (const id of MONTH_RELEASE_IDS) {
     assert.equal(oldRecord(id).status, "pending", id);
@@ -872,7 +879,7 @@ test("the fifth exact Kicks rule approves a new matching unit but never a Nissan
 
 const NEW_UNIT_IDS = ["20067", "20084"];
 test("Song Plus and Tiggo 5X review preserves the sixteen previous decisions and automatic rules", () => {
-  const others = current.records.filter((record) => newUnitsAudit.preservation.otherRecordIds.includes(record.vehicle.vehicleId));
+  const others = recordsThrough(newUnitsAudit.reviewedAt).filter((record) => newUnitsAudit.preservation.otherRecordIds.includes(record.vehicle.vehicleId));
   assert.equal(others.length, newUnitsAudit.preservation.otherRecordCount);
   assert.deepEqual(others.map((r) => r.vehicle.vehicleId), newUnitsAudit.preservation.otherRecordIds);
   assert.equal(createHash("sha256").update(JSON.stringify(others)).digest("hex"), newUnitsAudit.preservation.otherRecordsSha256);
@@ -1067,7 +1074,7 @@ test("Tiggo5X Pro exact rule reuses documentary terms for a new bound unit witho
 
 test("Tiggo5X Pro documentary approval preserves the previous twenty-one records and nine rules", () => {
   const record = currentRecord("20082");
-  const previousRecords = current.records.filter((entry) => entry !== record && entry.reviewedAt <= tiggo5xProAudit.reviewedAt);
+  const previousRecords = recordsThrough(tiggo5xProAudit.reviewedAt).filter((entry) => entry !== record);
   assert.equal(previousRecords.length, 21);
   assert.equal(previousRecords.length, tiggo5xProAudit.preservation.previousRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(previousRecords)).digest("hex"), tiggo5xProAudit.preservation.previousRecordsSha256);
@@ -1105,9 +1112,71 @@ test("Tiggo7 20100 uses only its owner's current-coverage confirmation and prese
   assert.equal(result.status, "eligible");
   assert.equal(result.ruleId, "documented-20066-private-exact-variant");
   assert.equal(resolveFactoryPowertrainWarranty(other, result.matrix, today)?.estimatedEndYear, 2029);
-  const prior = current.records.filter((entry) => entry !== record && entry.reviewedAt <= today);
+  const prior = recordsThrough(today).filter((entry) => entry !== record);
   assert.equal(prior.length, 22);
   assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), tiggo7CurrentAudit.preservation.previousRecordsSha256);
   assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), tiggo7CurrentAudit.preservation.automationRulesSha256);
   assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
+});
+
+for (const [id, termYears, estimatedEndYear] of [["20018", 3, 2028], ["20101", 5, 2030]] as const) {
+  test(`November review binds ${id} to its current identity and original basic warranty term`, () => {
+    const vehicle = observed(id);
+    const record = currentRecord(id);
+    const date = novemberUnitsAudit.reviewedAt;
+    assert.deepEqual(record, novemberUnitsAudit.approvedRecords.find((r: FactoryWarrantyRecord) => r.vehicle.vehicleId === id));
+    assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+    assert.equal(record.scope, "basic-vehicle");
+    assert.equal(record.termYears, termYears);
+    assert.equal(record.vehicle.manufactureYear, 2025);
+    assert.equal(record.vehicle.modelYear, 2026);
+    assert.equal(record.catalogConfirmation, undefined);
+    assert.equal(record.currentCoverageConfirmation, undefined);
+    assert.equal(record.confirmedExpiryDate, undefined);
+    assert.equal(record.confirmedExpiryMonth, undefined);
+    assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, date).status, "eligible");
+    assert.equal(resolveFactoryWarranty(vehicle, current, date)?.estimatedEndYear, estimatedEndYear);
+    assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, date), undefined);
+    assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, date), undefined);
+    assert.equal(resolveFactoryWarranty(vehicle, current, `${estimatedEndYear}-01-01`), undefined);
+    assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, `${estimatedEndYear}-01-01`).reason, "confirmed-expiry-required");
+    for (const patch of [{ diferenciais: [] }, { unitKey: keyFor(`other-${id}`) }, { year: 2027 },
+      { motor: "other-engine" }, { km: vehicle.km - 1 }, { price: 0 }]) {
+      const changed = { ...vehicle, ...patch };
+      assert.notEqual(reconcileFactoryWarrantyVehicle(changed, current, date).status, "eligible");
+      assert.equal(resolveFactoryWarranty(changed, current, date), undefined);
+    }
+    assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
+    assert.equal(novemberUnitsAudit.timing[id].resaleRestartsTerm, false);
+    assert.equal(novemberUnitsAudit.timing[id].confirmedExpiryDate, null);
+  });
+}
+
+test("Creta keeps the documented CPF/CNPJ intersection while Nivus keeps its general unlimited policy", () => {
+  const creta = currentRecord("20101");
+  const date = novemberUnitsAudit.reviewedAt;
+  assert.equal(creta.usage, "unknown");
+  assert.equal(creta.commonPolicy?.kind, "documented-regime-intersection");
+  assert.deepEqual(creta.commonPolicy?.branches.map((b) => b.category).sort(), ["cnpj", "cpf"]);
+  assert.deepEqual(creta.mileage, { kind: "limited", limitKm: 100000 });
+  assert.equal(resolveFactoryWarranty({ ...observed("20101"), km: 99999 }, current, date)?.estimatedEndYear, 2030);
+  assert.equal(resolveFactoryWarranty({ ...observed("20101"), km: 100000 }, current, date), undefined);
+  assert.deepEqual(currentRecord("20018").mileage, { kind: "unlimited" });
+  assert.equal(resolveFactoryWarranty({ ...observed("20018"), km: 150000 }, current, date)?.estimatedEndYear, 2028);
+  assert.equal(novemberUnitsAudit.ownerAttestations.usage, "private");
+  assert.equal(novemberUnitsAudit.ownerAttestations.privateUseDoesNotEstablishCpf, true);
+  assert.equal(novemberUnitsAudit.officialEvidence.creta.ownershipAndStartPdfPage, 20);
+});
+
+test("November review preserves the old Nivus decision, every other record and all ten exact rules", () => {
+  const prior = current.records.filter((record) => record.vehicle.vehicleId !== "20101")
+    .map((record) => record.vehicle.vehicleId === "20018" ? novemberUnitsAudit.previousRecord : record);
+  assert.equal(prior.length, 23);
+  assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), novemberUnitsAudit.preservation.previousRecordsSha256);
+  assert.deepEqual(novemberUnitsAudit.previousRecord, baseline.matrix.records.find((record) => record.vehicle.vehicleId === "20018"));
+  assert.equal(novemberUnitsAudit.previousRecord.status, "pending");
+  assert.equal(novemberUnitsAudit.previousRecord.sources[0].verification.status, "pending");
+  assert.equal(current.records.length, 24);
+  assert.equal(current.automation!.rules.length, 10);
+  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), novemberUnitsAudit.preservation.automationRulesSha256);
 });

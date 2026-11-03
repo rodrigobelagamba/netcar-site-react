@@ -82,5 +82,17 @@
     "canonicalModel": "COMPASS SERIE S T270 TURBO",
     "rawModel": "COMPASS SERIE S T270",
     "unitKey": "plate-sha256:435d90c576cbd38b7d85002c5fb8a830f72a5665700b25ca55da66522434684c"
+  },
+  {
+    "vehicleId": "20101",
+    "canonicalModel": "CRETA PLATINUM TURBO",
+    "rawModel": "CRETA PLATINUM",
+    "unitKey": "plate-sha256:368f8977c61e0939d47a31da2bbf22aac849e638f47c9bbc77791eac9b26281b"
+  },
+  {
+    "vehicleId": "20018",
+    "canonicalModel": "NIVUS GTS TURBO",
+    "rawModel": "NIVUS GTS",
+    "unitKey": "plate-sha256:3794103a14e2217404c06454ba2d8b092570bbead61eb985f30b4c755081fb10"
   }
 ]
