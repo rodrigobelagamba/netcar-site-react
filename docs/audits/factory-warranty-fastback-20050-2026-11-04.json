@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "warranty-20261104-20050",
+  "reviewedAt": "2026-11-04",
+  "sourceCommit": "a17f942b569dd083cea85afbbd9b79c0fa6bdd04",
+  "approvedRecord": {
+    "recordId": "reviewed-v2-20261104-20050",
+    "status": "approved",
+    "reviewedAt": "2026-11-04",
+    "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261104-20050\",\"reviewedAt\":\"2026-11-04\",\"vehicle\":{\"vehicleId\":\"20050\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"FIAT\",\"modelVersion\":\"FASTBACK IMPETUS TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:354b97e57648daeab6769e3931818504e4f9264176fe2ca69877e11e2f014cd8\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":35084,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"fiat-fastback-my2025-context-owner-20050\",\"label\":\"Fiat e confirmação individual da Netcar\",\"url\":\"https://servicos.fiat.com.br/content/dam/fiat/products/handbooks/376/2025/handbook-fastback-2024_2025.pdf\",\"locator\":\"Manual brasileiro Fastback2024/2025: identifica o modelo e remete os termos ao Manual de Garantia separado. O comunicado de lançamento brasileiro corrobora três anos. Para esta unidade20050, o responsável confirmou em04/11/2026 a garantia geral de fábrica vigente, prazo de três anos e quilometragem ilimitada para uso particular. A aplicação à unidade e a condição de km são atestes operacionais, não condições transcritas deste manual. Sem data de primeira entrega ou vencimento confirmada.\",\"revision\":\"FASTBACK-2024-2025; Manual brasileiro do proprietário. Cobertura individual revisada em04/11/2026 com ateste netcar-owner-20261104-fastback-20050; sem extensão automática a outros veículos.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"FASTBACK-2024-2025\",\"modelYear\":2025,\"reviewId\":\"warranty-20261104-20050\",\"reviewedAt\":\"2026-11-04\"}}]}",
+    "vehicle": {
+      "vehicleId": "20050",
+      "brand": "FIAT",
+      "modelVersion": "FASTBACK IMPETUS TURBO",
+      "manufactureYear": 2024,
+      "modelYear": 2025
+    },
+    "unitBinding": {
+      "unitKey": "plate-sha256:354b97e57648daeab6769e3931818504e4f9264176fe2ca69877e11e2f014cd8",
+      "engine": "1.0",
+      "transmission": "AUTOMATICO"
+    },
+    "optionalId": 108,
+    "optionalConfirmed": true,
+    "conditionsConfirmed": true,
+    "scope": "basic-vehicle",
+    "termYears": 3,
+    "usage": "private",
+    "reviewedMileageKm": 35084,
+    "mileage": {
+      "kind": "unlimited"
+    },
+    "sources": [
+      {
+        "sourceId": "fiat-fastback-my2025-context-owner-20050",
+        "label": "Fiat e confirmação individual da Netcar",
+        "url": "https://servicos.fiat.com.br/content/dam/fiat/products/handbooks/376/2025/handbook-fastback-2024_2025.pdf",
+        "locator": "Manual brasileiro Fastback2024/2025: identifica o modelo e remete os termos ao Manual de Garantia separado. O comunicado de lançamento brasileiro corrobora três anos. Para esta unidade20050, o responsável confirmou em04/11/2026 a garantia geral de fábrica vigente, prazo de três anos e quilometragem ilimitada para uso particular. A aplicação à unidade e a condição de km são atestes operacionais, não condições transcritas deste manual. Sem data de primeira entrega ou vencimento confirmada.",
+        "revision": "FASTBACK-2024-2025; Manual brasileiro do proprietário. Cobertura individual revisada em04/11/2026 com ateste netcar-owner-20261104-fastback-20050; sem extensão automática a outros veículos.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "FASTBACK-2024-2025",
+          "modelYear": 2025,
+          "reviewId": "warranty-20261104-20050",
+          "reviewedAt": "2026-11-04"
+        }
+      }
+    ]
+  },
+  "publicVehicle": {
+    "id": "20050",
+    "marca": "FIAT",
+    "modelo": "FASTBACK IMPETUS TURBO",
+    "motor": "1.0",
+    "cambio": "AUTOMATICO",
+    "year": 2025,
+    "anoFabricacao": 2024,
+    "km": 35084,
+    "price": 119900,
+    "unitKey": "plate-sha256:354b97e57648daeab6769e3931818504e4f9264176fe2ca69877e11e2f014cd8",
+    "diferenciais": [
+      {
+        "tag": "garantia_fabrica",
+        "descricao": ""
+      }
+    ]
+  },
+  "publicStockCheckedAt": "2026-11-04T12:38:13.854Z",
+  "officialEvidence": {
+    "manual": {
+      "url": "https://servicos.fiat.com.br/content/dam/fiat/products/handbooks/376/2025/handbook-fastback-2024_2025.pdf",
+      "role": "Exact Brazilian2024/2025 owner-manual context; refers warranty terms to a separate booklet.",
+      "doesNotEstablish": [
+        "complete mileage policy",
+        "current individual coverage",
+        "confirmed expiry"
+      ]
+    },
+    "faq": {
+      "url": "https://servicos.fiat.com.br/central-de-servicos/faq.html#garantia",
+      "role": "Official context: consult model warranty booklet; exclusions and component-specific periods apply. Delivery reference occurs in the revalidation program.",
+      "doesNotEstablish": [
+        "exact FastbackMY2025 three-year unlimited policy",
+        "unit service history",
+        "individual coverage or expiry"
+      ]
+    },
+    "launch": {
+      "url": "https://www.media.stellantis.com/br-pt/fiat/press/fiat-apresenta-fastback-com-a-melhor-combinacao-de-design-performance-seguranca-e-tecnologia-em-um-suv-coupe",
+      "publicationYear": 2022,
+      "role": "Corroborates the three-year Fastback program; not an exactMY2025 warranty booklet."
+    }
+  },
+  "operationalAttestation": {
+    "source": "netcar-owner",
+    "attestationId": "netcar-owner-20261104-fastback-20050",
+    "confirmedAt": "2026-11-04",
+    "vehicleId": "20050",
+    "scopeConfirmed": "basic-vehicle",
+    "currentCoverageConfirmed": true,
+    "termYearsConfirmed": 3,
+    "mileageConfirmed": {
+      "kind": "unlimited"
+    },
+    "usageConfirmed": "private",
+    "usageBasis": "existing Netcar private-use stock attestation; reaffirmed in unit response",
+    "sourceFlagCorrectionReportedByOwner": true,
+    "sourceFlagCorrectionObserved": true,
+    "notManufacturerDocument": true,
+    "notReusableForOtherModels": true
+  },
+  "identityCorrespondence": {
+    "vehicleId": "20050",
+    "apiModel": "FASTBACK IMPETUS TURBO",
+    "xmlModel": "FASTBACK IMPETUS",
+    "unitKey": "plate-sha256:354b97e57648daeab6769e3931818504e4f9264176fe2ca69877e11e2f014cd8",
+    "brandMatches": true,
+    "manufactureYearMatches": true,
+    "modelYearMatches": true,
+    "engineMatches": true,
+    "transmissionMatches": true,
+    "notAGeneralAlias": true,
+    "sourceXmlSha256": "87f11766a305dbbc78bd26385ab1025346b7e0d4e771b54d102e7cc750ae97ae"
+  },
+  "timing": {
+    "estimatedEndYear": 2027,
+    "basis": "manufactureYear2024+termYears3; conservative estimate only",
+    "firstDeliveryDate": null,
+    "confirmedExpiryDate": null,
+    "confirmedExpiryMonth": null,
+    "resaleRestartsTerm": false,
+    "finalYearRequiresConfirmedExpiry": true
+  },
+  "preservation": {
+    "baselineCommit": "a17f942b569dd083cea85afbbd9b79c0fa6bdd04",
+    "previousRecordCount": 24,
+    "previousRecordsSha256": "a10a9cabf0ea07c17f1013410a38e67793778c5f65b626aa3fc513daa518dfb3",
+    "automationRulesSha256": "9293a17a28e8db243317d523659adadcf3928a345b39e0bf362a7db38021c242"
+  },
+  "scopeLimits": [
+    "Only individual general warranty20050 and Carclick projection.",
+    "No separate traction-battery or powertrain-extension claim.",
+    "No model automation rule from this individual attestation.",
+    "No source XML/ERP, equipment, captions, price or layout edit."
+  ],
+  "publicVehicleObservationNote": "Canonical catalog adapter over the complete snapshot frozen by the existing build at publicStockCheckedAt; source age retained separately. Raw administrative fields excluded.",
+  "sourceAgeMs": 0
+}

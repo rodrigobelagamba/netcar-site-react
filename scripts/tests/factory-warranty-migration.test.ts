@@ -37,6 +37,7 @@ const kicks20086Audit = read("../../docs/audits/factory-warranty-kicks-20086-202
 const tiggo5xProAudit = read("../../docs/audits/factory-warranty-tiggo5x-pro-20082-2026-10-28.json");
 const tiggo7CurrentAudit = read("../../docs/audits/factory-warranty-tiggo7-20100-confirmation-2026-10-29.json");
 const novemberUnitsAudit = read("../../docs/audits/factory-warranty-nivus-creta-2026-11-03.json");
+const fastbackAudit = read("../../docs/audits/factory-warranty-fastback-20050-2026-11-04.json");
 
 // Historical preservation checks use the archived decision that was active then.
 const recordsThrough = (reviewedAt: string) => current.records
@@ -1169,14 +1170,53 @@ test("Creta keeps the documented CPF/CNPJ intersection while Nivus keeps its gen
 });
 
 test("November review preserves the old Nivus decision, every other record and all ten exact rules", () => {
-  const prior = current.records.filter((record) => record.vehicle.vehicleId !== "20101")
+  const historical = recordsThrough(novemberUnitsAudit.reviewedAt);
+  const prior = historical.filter((record) => record.vehicle.vehicleId !== "20101")
     .map((record) => record.vehicle.vehicleId === "20018" ? novemberUnitsAudit.previousRecord : record);
   assert.equal(prior.length, 23);
   assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), novemberUnitsAudit.preservation.previousRecordsSha256);
   assert.deepEqual(novemberUnitsAudit.previousRecord, baseline.matrix.records.find((record) => record.vehicle.vehicleId === "20018"));
   assert.equal(novemberUnitsAudit.previousRecord.status, "pending");
   assert.equal(novemberUnitsAudit.previousRecord.sources[0].verification.status, "pending");
-  assert.equal(current.records.length, 24);
+  assert.equal(historical.length, 24);
   assert.equal(current.automation!.rules.length, 10);
   assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), novemberUnitsAudit.preservation.automationRulesSha256);
+});
+
+test("Fastback20050 uses the corrected source flag and individual confirmed general warranty", () => {
+  const vehicle = fastbackAudit.publicVehicle as WarrantyCatalogVehicle;
+  const record = currentRecord("20050");
+  const date = fastbackAudit.reviewedAt;
+  assert.deepEqual(record, fastbackAudit.approvedRecord);
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(record.catalogConfirmation, undefined);
+  assert.equal(record.currentCoverageConfirmation, undefined);
+  assert.equal(record.commonPolicy, undefined);
+  assert.equal(record.confirmedExpiryDate, undefined);
+  assert.equal(record.confirmedExpiryMonth, undefined);
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, date).status, "eligible");
+  assert.equal(resolveFactoryWarranty(vehicle, current, date)?.estimatedEndYear, 2027);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, date), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, date), undefined);
+  assert.equal(resolveFactoryWarranty({ ...vehicle, km: 200000 }, current, date)?.estimatedEndYear, 2027);
+  assert.equal(fastbackAudit.operationalAttestation.notManufacturerDocument, true);
+  assert.deepEqual(record.mileage, fastbackAudit.operationalAttestation.mileageConfirmed);
+  assert.match(record.sources[0].locator, /atestes operacionais/);
+  for (const patch of [{ diferenciais: [] }, { unitKey: keyFor("other-fastback") },
+    { year: 2026 }, { anoFabricacao: 2025 }, { motor: "1.3" },
+    { modelo: "FASTBACK IMPETUS HYBRID" }, { km: vehicle.km - 1 }, { price: 0 }]) {
+    assert.notEqual(reconcileFactoryWarrantyVehicle({ ...vehicle, ...patch }, current, date).status, "eligible");
+  }
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2026-12-31")?.estimatedEndYear, 2027);
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, "2027-01-01").reason, "confirmed-expiry-required");
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2027-01-01"), undefined);
+  assert.notEqual(reconcileFactoryWarrantyVehicle({ ...vehicle, id: "unreviewed-fastback", unitKey: keyFor("new-fastback") }, current, date).status, "eligible");
+});
+
+test("Fastback individual approval preserves every prior decision and all automation rules", () => {
+  const prior = current.records.filter((record) => record.vehicle.vehicleId !== "20050");
+  assert.equal(prior.length, fastbackAudit.preservation.previousRecordCount);
+  assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), fastbackAudit.preservation.previousRecordsSha256);
+  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), fastbackAudit.preservation.automationRulesSha256);
+  assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === currentRecord("20050").recordId), false);
 });

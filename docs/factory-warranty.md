@@ -1,5 +1,16 @@
 # Carimbo de garantia de fábrica
 
+> Revisão individual de 04/11/2026: Fastback Impetus Turbo 20050, fabricação
+> 2024/modelo 2025, aprovado para garantia geral de fábrica por três anos, sem
+> limite de quilometragem para uso particular. A vigência e as condições desta
+> unidade foram confirmadas pelo responsável; não são apresentadas como termos
+> extraídos do manual Fiat. O novo XML já refletiu a indicação de garantia na
+> API, sem necessidade de exceção à flag. Fontes oficiais contextuais e ateste
+> operacional estão separados na [auditoria individual](audits/factory-warranty-fastback-20050-2026-11-04.json).
+> O selo usa a estimativa conservadora 2027*, sem vencimento confirmado e com
+> bloqueio no ano final. A confirmação não cria regra para outros Fastback,
+> cobertura de bateria ou alteração no XML/ERP.
+
 > Revisão de 15/10/2026, publicação autorizada pelo responsável: Song Plus
 > GS 20067 (FAB2023/MY2024) aprovado para garantia geral de 6 anos e bateria de
 > tração de 8 anos, ambas sem limite de km; estimativas 2029*/2031*. Tiggo 5X
