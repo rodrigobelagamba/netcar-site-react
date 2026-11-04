@@ -13,13 +13,28 @@ import { RegionalTrustSignals } from "@/modules/seo/components/RegionalTrustSign
 import { RegionalSeoHero } from "@/modules/seo/components/RegionalSeoHero";
 
 export function SeminovosAutomaticosPage() {
-  const { data: vehicles, isLoading } = useVehiclesQuery({
-    cambio: "Automatico",
-  });
+  const {
+    data: vehicles,
+    isLoading,
+    isError,
+    isFetching,
+    refetch,
+  } = useVehiclesQuery({ fetchAll: true }, { refreshImmediately: true });
   const availableVehicles = useMemo(
-    () => (vehicles ?? []).filter(isAvailableHomeStockVehicle),
-    [vehicles],
+    () =>
+      (isError ? [] : (vehicles ?? [])).filter(
+        (vehicle) =>
+          isAvailableHomeStockVehicle(vehicle) &&
+          /automat|cvt/i.test(
+            (vehicle.cambio ?? "")
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, ""),
+          ),
+      ),
+    [vehicles, isError],
   );
+  const waitingForStock =
+    !isError && (isLoading || (isFetching && availableVehicles.length === 0));
 
   useDefaultMetaTags(
     "Seminovos Automáticos em Esteio",
@@ -46,7 +61,24 @@ export function SeminovosAutomaticosPage() {
 
       <section className="pb-16">
         <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          {isLoading ? (
+          {isError && (
+            <div role="status" className="mb-6 text-gray-600">
+              <p>
+                Não foi possível atualizar o estoque. Tente novamente ou
+                confirme a disponibilidade com a equipe.
+              </p>
+              <button
+                type="button"
+                onClick={() => void refetch()}
+                disabled={isFetching}
+                className="mt-3 min-h-11 font-semibold text-primary underline disabled:opacity-50"
+              >
+                {isFetching ? "Atualizando estoque..." : "Tentar novamente"}
+              </button>
+            </div>
+          )}
+
+          {waitingForStock ? (
             <p className="text-gray-500">Carregando estoque...</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -78,11 +110,14 @@ export function SeminovosAutomaticosPage() {
             </div>
           )}
 
-          {!isLoading && availableVehicles.length === 0 && (
-            <p className="text-gray-500">
-              Nenhum automático disponível no momento.
-            </p>
-          )}
+          {!waitingForStock &&
+            !isError &&
+            Array.isArray(vehicles) &&
+            availableVehicles.length === 0 && (
+              <p className="text-gray-500">
+                Nenhum automático disponível no momento.
+              </p>
+            )}
 
           {!isLoading && (
             <div className="mt-10 flex justify-center">

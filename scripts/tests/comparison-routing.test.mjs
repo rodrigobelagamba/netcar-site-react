@@ -1,3 +1,4 @@
+import { writePhpStockSource } from "./helpers/php-stock-source.mjs";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import {
@@ -63,16 +64,16 @@ function fixture() {
       `<!doctype html><title>Comparison ${slug || "hub"}</title><meta name="description" content="Fixture comparison"><meta name="robots" content="index, follow, max-image-preview:large"><link rel="canonical" href="${site}${route}">`,
     );
   }
-  writeFileSync(
-    join(directory, "seo/stock-bootstrap.json"),
-    JSON.stringify({
+  writePhpStockSource(
+    directory,
+    {
       generatedAt: "2026-09-26T00:00:00Z",
       vehicles: [{ id: "available-vehicle", price: 90000 }],
       showroomVehicles: [
         { id: "available-vehicle", price: 90000 },
         { id: "sold-vehicle", price: 0 },
       ],
-    }),
+    },
   );
   writeFileSync(
     join(directory, ".vite/manifest.json"),

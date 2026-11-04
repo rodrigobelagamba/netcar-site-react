@@ -1,3 +1,4 @@
+import { writePhpStockSource } from "./helpers/php-stock-source.mjs";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -28,11 +29,11 @@ function fixture() {
   for (const name of ["index.php", "home-hero.php", "vehicle-images.php", "vehicle-image-exclusions.json", "404.html"])
     copyFileSync(join(root, "public", name), join(directory, name));
   copyFileSync(join(root, "index.html"), join(directory, "index.html"));
-  writeFileSync(join(directory, "seo/stock-bootstrap.json"), JSON.stringify({
+  writePhpStockSource(directory, {
     generatedAt: "2026-10-01T12:00:00Z",
     vehicles: [{ id: "available-tablet-car", price: 80000 }],
     showroomVehicles: [{ id: "available-tablet-car", price: 80000 }, { id: "sold-tablet-car", price: 0 }],
-  }));
+  });
   writeFileSync(join(directory, ".vite/manifest.json"), JSON.stringify({
     [entry]: { file: "assets/tablet-fixture.js", imports: ["_shared.js"] },
     "_shared.js": { file: "assets/shared-fixture.js" },

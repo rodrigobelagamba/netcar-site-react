@@ -18,7 +18,13 @@ function stockFilter(stock: ContentSeoPageData["stock"]) {
     const values = Array.isArray(value)
       ? value.map((item) => (item as { tag?: unknown })?.tag ?? item)
       : [value];
-    return values.some((item) => pattern.test(String(item ?? "")));
+    return values.some((item) =>
+      pattern.test(
+        String(item ?? "")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, ""),
+      ),
+    );
   };
 }
 

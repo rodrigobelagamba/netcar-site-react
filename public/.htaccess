@@ -67,15 +67,14 @@ RedirectMatch 404 ^/api/?$
 
 # Headers de segurança
 <IfModule mod_headers.c>
-  # A hospedagem adiciona Expires/max-age=0 ao HTML e anulava o cache curto
-  # enviado pelo PHP. Remover as duas tabelas evita cabeçalhos conflitantes;
-  # s-maxage permite cache de borda sem deixar navegador com HTML antigo.
+  # O shell pode conter estoque atual. Não permitir que cabeçalhos herdados
+  # da hospedagem congelem o bootstrap, inclusive após rewrites internos.
   <Files "index.php">
     Header onsuccess unset Expires
     Header always unset Expires
     Header onsuccess unset Cache-Control
     Header always unset Cache-Control
-    Header always set Cache-Control "public, max-age=60, s-maxage=300, stale-while-revalidate=60"
+    Header always set Cache-Control "no-store"
   </Files>
 
   # O feed usa estoque e garantia atuais. A hospedagem aplica Expires e
@@ -96,6 +95,18 @@ RedirectMatch 404 ^/api/?$
     Header onsuccess unset Cache-Control
     Header always unset Cache-Control
     Header always set Cache-Control "no-store"
+  </If>
+
+  # Generated inventory pages and their bootstrap are reconciled per request.
+  <FilesMatch "^seo-(showcase|stock-bootstrap)\.php$">
+    Header onsuccess unset Expires
+    Header always unset Expires
+    Header onsuccess unset Cache-Control
+    Header always unset Cache-Control
+    Header always set Cache-Control "no-store"
+  </FilesMatch>
+  <If "%{THE_REQUEST} =~ m#^[A-Z]+[ ]/+(?:blog/|seminovos-|vender-carro-|seo-static/|regioes-atendidas|expointer-esteio|financiamento|atendimento-24h|move-brasil|carro-de-|localiza-seminovos-|movida-seminovos-|unidas-seminovos-)#">
+    Header always merge Vary "User-Agent"
   </If>
 
   # Live SEO stock is bounded to one minute; errors must never be cached as
@@ -284,6 +295,13 @@ RedirectMatch 404 ^/api/?$
   RewriteRule ^feeds/whatsapp-catalog\.xml$ feeds/whatsapp-catalog.php?format=xml [L,QSA]
   RewriteRule ^feeds/whatsapp-catalog\.php$ - [L]
 
+  # Never serve yesterday's stock bootstrap or generated inventory HTML directly.
+  RewriteRule ^seo/stock-bootstrap\.json$ seo-stock-bootstrap.php [L]
+  RewriteRule ^seo-static/landing-([a-z0-9-]+)\.html$ /comprar-$1 [R=301,L]
+  RewriteRule ^seo-static/comparison-([a-z0-9-]+)\.html$ /comparar/$1 [R=301,L]
+  RewriteRule ^seo-static/page-comparar\.html$ /comparar [R=301,L]
+  RewriteRule ^seo-static/[^/]+\.html$ seo-showcase.php [L]
+
   # Preserve the public sitemap URL, but reconcile vehicle URLs against the
   # current inventory before the existing static-file short circuit.
   RewriteRule ^sitemap\.xml$ seo-sitemap.php [L]
@@ -358,23 +376,23 @@ RedirectMatch 404 ^/api/?$
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/blog-$1.html -f
-  RewriteRule ^blog/([^/]+)/?$ seo-static/blog-$1.html [L]
+  RewriteRule ^blog/([^/]+)/?$ seo-showcase.php [L]
 
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
-  RewriteRule ^regioes-atendidas/?$ seo-static/regions-hub.html [L]
+  RewriteRule ^regioes-atendidas/?$ seo-showcase.php [L]
 
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   # Sem o -f, /seminovos-automaticos casava aqui e apontava para um city-*.html
   # inexistente: o bot recebia o shell do SPA com o title da home.
   RewriteCond %{DOCUMENT_ROOT}/seo-static/city-$1.html -f
-  RewriteRule ^seminovos-([a-z0-9-]+)/?$ seo-static/city-$1.html [L]
+  RewriteRule ^seminovos-([a-z0-9-]+)/?$ seo-showcase.php [L]
 
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/sell-city-$1.html -f
-  RewriteRule ^vender-carro-([a-z0-9-]+)/?$ seo-static/sell-city-$1.html [L]
+  RewriteRule ^vender-carro-([a-z0-9-]+)/?$ seo-showcase.php [L]
 
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
@@ -397,7 +415,7 @@ RedirectMatch 404 ^/api/?$
   RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|WhatsAppBot|Twitterbot|LinkedInBot|Slackbot|SkypeUriPreview|Googlebot|bingbot|Baiduspider|YandexBot|DuckDuckBot|curl|wget|facebook|Facebot|Slurp|ia_archiver|Mediapartners|Applebot|BingPreview|Claude-User|Perplexity-User|bot|crawler|spider|scraper) [NC,OR]
   RewriteCond %{QUERY_STRING} _escaped_fragment_= [NC]
   RewriteCond %{DOCUMENT_ROOT}/seo-static/page-$1.html -f
-  RewriteRule ^(financiamento|atendimento-24h|move-brasil|seminovos-automaticos|politica-editorial|comparar|como-selecionamos-nossos-carros|carro-de-locadora-vale-a-pena|carro-de-leilao-vale-a-pena|localiza-seminovos-vale-a-pena|movida-seminovos-vale-a-pena|unidas-seminovos-vale-a-pena|privacidade|expointer-esteio)/?$ seo-static/page-$1.html [L]
+  RewriteRule ^(financiamento|atendimento-24h|move-brasil|seminovos-automaticos|politica-editorial|comparar|como-selecionamos-nossos-carros|carro-de-locadora-vale-a-pena|carro-de-leilao-vale-a-pena|localiza-seminovos-vale-a-pena|movida-seminovos-vale-a-pena|unidas-seminovos-vale-a-pena|privacidade|expointer-esteio)/?$ seo-showcase.php [L]
 
   # 404 real para padrões SEO sem página correspondente. Sem isso, um slug
   # inválido (ex.: /blog/foo-bar, /comprar-moto, /seminovos-atlantis) caía no

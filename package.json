@@ -67,7 +67,8 @@
     "stock:test-landings": "node --test scripts/tests/landing-copy.test.mjs scripts/tests/landing-stock-copy.test.mjs scripts/tests/landing-model-match.test.mjs scripts/tests/stock-hub-coverage.test.mjs && cross-env NODE_ENV=test node --import tsx --test scripts/tests/landing-stock-runtime.test.tsx",
     "photos:generate": "node scripts/generate-vehicle-photo-variants.mjs",
     "seo:audit-hubs": "node scripts/audit-stock-hub-coverage.mjs",
-    "feeds:carclick-warranty": "tsx scripts/generate-carclick-warranty.ts"
+    "feeds:carclick-warranty": "tsx scripts/generate-carclick-warranty.ts",
+    "stock:test-pages": "node --test scripts/tests/showcase-stock-routing.test.mjs scripts/tests/landing-stock-routing.test.mjs && cross-env NODE_ENV=test node --import tsx --test scripts/tests/blog-live-stock.test.tsx scripts/tests/regional-stock-preview.test.tsx scripts/tests/automaticos-live-stock.test.tsx"
   },
   "dependencies": {
     "@noble/hashes": "^1.8.0",

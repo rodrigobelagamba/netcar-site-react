@@ -1,3 +1,4 @@
+import { writePhpStockSource } from "./helpers/php-stock-source.mjs";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import {
@@ -39,9 +40,9 @@ for (const name of [
 ])
   copyFileSync(join(root, "public", name), join(directory, name));
 copyFileSync(join(root, "index.html"), join(directory, "index.html"));
-writeFileSync(
-  join(directory, "seo/stock-bootstrap.json"),
-  JSON.stringify({
+writePhpStockSource(
+  directory,
+  {
     generatedAt: "2026-10-24T12:00:00Z",
     vehicles: [
       {
@@ -86,7 +87,7 @@ writeFileSync(
         images: ["/imagens/sold.jpg"],
       },
     ],
-  }),
+  },
 );
 writeFileSync(
   join(directory, ".vite/manifest.json"),
