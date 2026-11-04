@@ -229,6 +229,59 @@
       "absentTags": [
         "isofix"
       ]
+    },
+    {
+      "id": "equipment-review-unit-20101-2026-11-04",
+      "approved": true,
+      "source": "responsible-confirmation",
+      "confirmedAt": "2026-11-04",
+      "claim": "Responsável confirmou a presença de Frenagem automática de emergência nesta unidade e autorizou sua publicação em 2026-11-04; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf (2026-11-04, p.12: Platinum1.0TGDI AT6, FAB/MY2025/2026; pp.10e14: FCA. Data informada é revisão, não publicação.). Texto aprovado: Frenagem automática de emergência; Pode acionar os freios em uma situação de risco detectada pelo sistema..\nResponsável confirmou a presença de Piloto automático adaptativo (ACC) nesta unidade e autorizou sua publicação em 2026-11-04; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf (2026-11-04, p.12: identidade2025/2026; pp.10e14: controle adaptativo. Data informada é revisão, não publicação.). Texto aprovado: Piloto automático adaptativo (ACC); Ajusta a velocidade para acompanhar o veículo à frente, dentro dos limites do sistema..\nResponsável confirmou a presença de Câmera 360° nesta unidade e autorizou sua publicação em 2026-11-04; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf (2026-11-04, p.12: identidade2025/2026; pp.10e14: Smart Camera360º/SVM. Data informada é revisão, não publicação.). Texto aprovado: Câmera 360°; Exibe imagens ao redor do veículo para auxiliar nas manobras..\nResponsável confirmou a presença de Câmera de ponto cego nesta unidade e autorizou sua publicação em 2026-11-04; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf (2026-11-04, p.12: identidade2025/2026; pp.10e14: BVM. Data informada é revisão, não publicação.). Texto aprovado: Câmera de ponto cego; Mostra no painel a imagem lateral ao acionar a seta..\nResponsável confirmou a presença de Banco do motorista ventilado nesta unidade e autorizou sua publicação em 2026-11-04; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf (2026-11-04, p.12: identidade2025/2026; pp.4e14: ventilação do banco do motorista. Data informada é revisão, não publicação.). Texto aprovado: Banco do motorista ventilado; Ventila o assento do motorista..\nResponsável confirmou a presença de Auto Hold nesta unidade e autorizou sua publicação em 2026-11-04; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf (2026-11-04, p.12: identidade2025/2026; pp.7e14: AutoHold. Data informada é revisão, não publicação.). Texto aprovado: Auto Hold; Mantém o freio aplicado nas paradas, quando o sistema está ativo..",
+      "schemaVersion": 2,
+      "marketSource": "responsible-confirmation",
+      "match": {
+        "vehicleId": "20101",
+        "physicalIdentityKey": "d69cc3c283f92fe772e9d6c82993f311b3d7a8d8b3b67cb3a6ea42afa40c86f5",
+        "brand": "HYUNDAI",
+        "model": "CRETA PLATINUM TURBO",
+        "modelYear": 2026,
+        "manufactureYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "presentTags": [
+        "franagem_emergencia",
+        "piloto_adaptativo",
+        "camera_360",
+        "camera_ponto_cego",
+        "banco_motorista_ventilado",
+        "auto_hold"
+      ],
+      "absentTags": [],
+      "reviewedDefinitions": [
+        {
+          "id": "blind-spot-camera",
+          "tag": "camera_ponto_cego",
+          "sourceDescription": "Câmera para Monitoramento de Ponto Cego (BVM)",
+          "description": "Câmera de ponto cego",
+          "priority": 860,
+          "category": "Segurança",
+          "benefit": "Mostra no painel a imagem lateral ao acionar a seta.",
+          "reviewedAt": "2026-11-04",
+          "reviewNote": "Catálogo Hyundai da configuração2025/2026, pp.10e14, revisado em04/11/2026. Definição restrita à unidade20101: câmera com exibição no painel; não equivale a alerta ou intervenção de ponto cego. A presença e publicação dependem da decisão específica da unidade."
+        },
+        {
+          "id": "driver-seat-ventilation",
+          "tag": "banco_motorista_ventilado",
+          "sourceDescription": "Banco do motorista com ventilação",
+          "description": "Banco do motorista ventilado",
+          "priority": 680,
+          "category": "Conforto",
+          "benefit": "Ventila o assento do motorista.",
+          "reviewedAt": "2026-11-04",
+          "reviewNote": "Catálogo Hyundai da configuração2025/2026, pp.4e14, revisado em04/11/2026. Definição restrita à unidade20101 e ao banco do motorista; não implica aquecimento ou ventilação de outros bancos. A presença e publicação dependem da decisão específica da unidade."
+        }
+      ]
     }
   ]
 }
