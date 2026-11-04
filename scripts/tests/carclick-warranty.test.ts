@@ -112,6 +112,22 @@ test("battery remains a separate scope and never lengthens general coverage", ()
   assert.ok(claim.coverages[0].validBefore < claim.coverages[1].validBefore);
 });
 
+test("Tracker2026 general coverage requires the current source flag and never invents expiry", () => {
+  const { matrix, vehicle } = fixture("20113");
+  const live = { ...vehicle };
+  const build = () => buildCarclickWarrantyManifest(JSON.stringify(matrix), [live], [], "2026-11-04");
+  const claim = build().claims[0];
+  assert.equal(claim.requiresWarrantyFlag, true);
+  assert.equal(claim.rawModel, "TRACKER TURBO");
+  assert.equal(claim.engine, "1.0");
+  assert.equal(claim.coverages.length, 1);
+  assert.equal(claim.coverages[0].scope, "basic-vehicle");
+  assert.equal(claim.coverages[0].validBefore, "2028-01-01");
+  assert.equal(claim.coverages[0].advertisedExpiryMonth, undefined);
+  live.diferenciais = [];
+  assert.equal(build().claims.length, 0);
+});
+
 test("PHP7 runtime guards reject divergent or expired live data", (context) => {
   const php = process.env.PHP_BINARY || "php";
   const probe = spawnSync(php, ["-v"], { encoding: "utf8" });
