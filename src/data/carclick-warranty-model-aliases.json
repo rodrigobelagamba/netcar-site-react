@@ -94,5 +94,11 @@
     "canonicalModel": "NIVUS GTS TURBO",
     "rawModel": "NIVUS GTS",
     "unitKey": "plate-sha256:3794103a14e2217404c06454ba2d8b092570bbead61eb985f30b4c755081fb10"
+  },
+  {
+    "vehicleId": "20050",
+    "canonicalModel": "FASTBACK IMPETUS TURBO",
+    "rawModel": "FASTBACK IMPETUS",
+    "unitKey": "plate-sha256:354b97e57648daeab6769e3931818504e4f9264176fe2ca69877e11e2f014cd8"
   }
 ]
