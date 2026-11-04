@@ -170,3 +170,26 @@ test("Kwid selection contains only its Renault hatch family and survives no stoc
   assert.equal(empty.indexable, false);
   assert.deepEqual(editorialContent(stocked), editorialContent(empty));
 });
+
+test("Aircross keeps its own Citroën selection without guessing C3 or C4 aliases", () => {
+  const config = MODEL_HUBS.find((model) => model.slug === "citroen-aircross");
+  const rows = [
+    vehicle({ marca: "CITROEN", modelo: "AIRCROSS SHINE", categoria: "MINIVAN" }),
+    vehicle({ marca: "CITROEN", modelo: "AIRCROSS LIVE", categoria: "SUV" }),
+    vehicle({ marca: "CITROEN", modelo: "C3 AIRCROSS SHINE", categoria: "SUV" }),
+    vehicle({ marca: "CITROEN", modelo: "C4 AIRCROSS", categoria: "SUV" }),
+    vehicle({ marca: "CITROEN", modelo: "C4 CACTUS SHINE", categoria: "SUV" }),
+    vehicle({ marca: "CITROEN", modelo: "C3 TENDANCE", categoria: "HATCH" }),
+    vehicle({ marca: "OTHER", modelo: "AIRCROSS SHINE", categoria: "SUV" }),
+  ];
+  const stocked = modelLanding(config, rows);
+  assert.equal(stocked.count, 2);
+  assert.equal(stocked.indexable, true);
+  assert.deepEqual(stocked.filters, { marca: "CITROEN", modelo: "AIRCROSS" });
+  // The source still labels the active unit MINIVAN; a SUV link would exclude it.
+  assert.equal(stocked.category, undefined);
+  const empty = modelLanding(config, []);
+  assert.equal(empty.slug, stocked.slug);
+  assert.equal(empty.indexable, false);
+  assert.deepEqual(editorialContent(stocked), editorialContent(empty));
+});

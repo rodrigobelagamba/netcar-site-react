@@ -18,6 +18,8 @@ export const MODEL_HUBS = [
   { slug: "volkswagen-polo", marca: "VOLKSWAGEN", modelo: "POLO", name: "Volkswagen Polo", category: "HATCH" },
   { slug: "volkswagen-tera", marca: "VOLKSWAGEN", modelo: "TERA", name: "Volkswagen Tera", category: "SUV" },
   { slug: "citroen-c3", marca: "CITROEN", modelo: "C3", name: "Citroën C3", categoria: "HATCH", category: "HATCH" },
+  // A fonte classifica Aircross como MINIVAN; o recorte SUV ainda o exclui.
+  { slug: "citroen-aircross", marca: "CITROEN", modelo: "AIRCROSS", name: "Citroën Aircross" },
   { slug: "citroen-c4-cactus", marca: "CITROEN", modelo: "C4 CACTUS", name: "Citroën C4 Cactus", category: "SUV" },
   { slug: "fiat-palio", marca: "FIAT", modelo: "PALIO", name: "Fiat Palio", categoria: "HATCH", category: "HATCH" },
   { slug: "fiat-argo", marca: "FIAT", modelo: "ARGO", name: "Fiat Argo", category: "HATCH" },

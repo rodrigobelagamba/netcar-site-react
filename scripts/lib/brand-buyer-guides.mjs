@@ -118,7 +118,7 @@ export const BRAND_BUYER_GUIDES = {
     "intro": "Procurando um Citroën? Confira os anúncios da Netcar, em Esteio, e escolha o carro que quer conhecer.",
     "guideTitle": "Seu próximo Citroën",
     "paragraphs": [
-      "C3 e C4 Cactus têm seleções próprias para facilitar a busca pelo modelo. Os Citroën anunciados também ficam reunidos nesta página. Abra a unidade de interesse para ver fotos, versão e preço e fale com a equipe sobre as condições de compra ou a troca."
+      "C3, Aircross e C4 Cactus têm seleções próprias para facilitar a busca pelo modelo. Os Citroën anunciados também ficam reunidos nesta página. Abra a unidade de interesse para ver fotos, versão e preço e fale com a equipe sobre as condições de compra ou a troca."
     ],
     "faq": [
       {

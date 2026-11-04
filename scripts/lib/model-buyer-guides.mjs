@@ -260,6 +260,22 @@ export const MODEL_BUYER_GUIDES = {
     ],
     "guideLinks": []
   },
+  "citroen-aircross": {
+    "title": "Citroën Aircross à venda em Esteio: fotos e preços | Netcar",
+    "description": "Citroën Aircross usado e seminovo na Netcar, em Esteio. Confira fotos, versão e preço dos anúncios e consulte a avaliação do seu carro na troca.",
+    "intro": "Encontre seu Citroën Aircross na Netcar, em Esteio, e veja os detalhes do carro que você quer conhecer.",
+    "guideTitle": "Seu próximo Aircross",
+    "paragraphs": [
+      "Escolha um Aircross nesta página e abra o anúncio para conferir as fotos, o ano, a versão e o preço. Pelo contato da ficha, você pode tirar dúvidas sobre a unidade e conversar sobre a compra ou a avaliação do seu usado na troca."
+    ],
+    "faq": [
+      {
+        "q": "Como combinar uma visita para conhecer um Aircross?",
+        "a": "Use o contato do anúncio para confirmar a disponibilidade e a loja de Esteio onde está o carro. A equipe combina a visita com você."
+      }
+    ],
+    "guideLinks": []
+  },
   "citroen-c4-cactus": {
     "title": "Citroën C4 Cactus à venda em Esteio: fotos e preços | Netcar",
     "description": "Citroën C4 Cactus usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
