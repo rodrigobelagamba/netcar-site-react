@@ -978,6 +978,232 @@
         },
         "kind": "exact-equipment"
       }
+    },
+    {
+      "identity": {
+        "brand": "HYUNDAI",
+        "model": "CRETA PLATINUM TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20101",
+        "manufactureYear": 2025
+      },
+      "item": {
+        "key": "automatic-emergency-braking",
+        "label": "Frenagem automática de emergência",
+        "tag": "franagem_emergencia"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf",
+        "title": "Catálogo Hyundai CRETA Platinum FAB/MY2025/2026; ©2025; revisão em04/11/2026",
+        "date": "2026-11-04",
+        "locator": "p.12: Platinum1.0TGDI AT6, FAB/MY2025/2026; pp.10e14: FCA. Data informada é revisão, não publicação.",
+        "claim": "A configuração lista frenagem autônoma para veículos, pedestres e ciclistas. TURBO é o qualificador do modelo na API.",
+        "match": {
+          "brand": "HYUNDAI",
+          "model": "CRETA PLATINUM TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "brand": "HYUNDAI",
+        "model": "CRETA PLATINUM TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20101",
+        "manufactureYear": 2025
+      },
+      "item": {
+        "key": "adaptive-cruise-control",
+        "label": "Piloto automático adaptativo (ACC)",
+        "tag": "piloto_adaptativo"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf",
+        "title": "Catálogo Hyundai CRETA Platinum FAB/MY2025/2026; ©2025; revisão em04/11/2026",
+        "date": "2026-11-04",
+        "locator": "p.12: identidade2025/2026; pp.10e14: controle adaptativo. Data informada é revisão, não publicação.",
+        "claim": "O controle adaptativo atua na distância, parada e retomada; não é apenas piloto convencional.",
+        "match": {
+          "brand": "HYUNDAI",
+          "model": "CRETA PLATINUM TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "brand": "HYUNDAI",
+        "model": "CRETA PLATINUM TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20101",
+        "manufactureYear": 2025
+      },
+      "item": {
+        "key": "camera-360",
+        "label": "Câmera 360°",
+        "tag": "camera_360"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf",
+        "title": "Catálogo Hyundai CRETA Platinum FAB/MY2025/2026; ©2025; revisão em04/11/2026",
+        "date": "2026-11-04",
+        "locator": "p.12: identidade2025/2026; pp.10e14: Smart Camera360º/SVM. Data informada é revisão, não publicação.",
+        "claim": "A configuração oferece visão ao redor do veículo por combinação de câmeras; distinta da câmera traseira.",
+        "match": {
+          "brand": "HYUNDAI",
+          "model": "CRETA PLATINUM TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "brand": "HYUNDAI",
+        "model": "CRETA PLATINUM TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20101",
+        "manufactureYear": 2025
+      },
+      "item": {
+        "key": "blind-spot-camera",
+        "label": "Câmera de ponto cego",
+        "tag": "camera_ponto_cego",
+        "reviewedDefinition": {
+          "id": "blind-spot-camera",
+          "tag": "camera_ponto_cego",
+          "sourceDescription": "Câmera para Monitoramento de Ponto Cego (BVM)",
+          "description": "Câmera de ponto cego",
+          "priority": 860,
+          "category": "Segurança",
+          "benefit": "Mostra no painel a imagem lateral ao acionar a seta.",
+          "reviewedAt": "2026-11-04",
+          "reviewNote": "Catálogo Hyundai da configuração2025/2026, pp.10e14, revisado em04/11/2026. Definição restrita à unidade20101: câmera com exibição no painel; não equivale a alerta ou intervenção de ponto cego. A presença e publicação dependem da decisão específica da unidade."
+        }
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf",
+        "title": "Catálogo Hyundai CRETA Platinum FAB/MY2025/2026; ©2025; revisão em04/11/2026",
+        "date": "2026-11-04",
+        "locator": "p.12: identidade2025/2026; pp.10e14: BVM. Data informada é revisão, não publicação.",
+        "claim": "A câmera mostra no painel a lateral ao acionar a seta; não implica alerta automático de ponto cego.",
+        "match": {
+          "brand": "HYUNDAI",
+          "model": "CRETA PLATINUM TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "brand": "HYUNDAI",
+        "model": "CRETA PLATINUM TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20101",
+        "manufactureYear": 2025
+      },
+      "item": {
+        "key": "driver-seat-ventilation",
+        "label": "Banco do motorista ventilado",
+        "tag": "banco_motorista_ventilado",
+        "reviewedDefinition": {
+          "id": "driver-seat-ventilation",
+          "tag": "banco_motorista_ventilado",
+          "sourceDescription": "Banco do motorista com ventilação",
+          "description": "Banco do motorista ventilado",
+          "priority": 680,
+          "category": "Conforto",
+          "benefit": "Ventila o assento do motorista.",
+          "reviewedAt": "2026-11-04",
+          "reviewNote": "Catálogo Hyundai da configuração2025/2026, pp.4e14, revisado em04/11/2026. Definição restrita à unidade20101 e ao banco do motorista; não implica aquecimento ou ventilação de outros bancos. A presença e publicação dependem da decisão específica da unidade."
+        }
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf",
+        "title": "Catálogo Hyundai CRETA Platinum FAB/MY2025/2026; ©2025; revisão em04/11/2026",
+        "date": "2026-11-04",
+        "locator": "p.12: identidade2025/2026; pp.4e14: ventilação do banco do motorista. Data informada é revisão, não publicação.",
+        "claim": "A ventilação está especificada para o banco do motorista; não é aquecimento.",
+        "match": {
+          "brand": "HYUNDAI",
+          "model": "CRETA PLATINUM TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "brand": "HYUNDAI",
+        "model": "CRETA PLATINUM TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR",
+        "id": "20101",
+        "manufactureYear": 2025
+      },
+      "item": {
+        "key": "auto-hold",
+        "label": "Auto Hold",
+        "tag": "auto_hold"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.hyundai.com.br/content/dam/hmb/download-manuais/creta_25-26/Catalogo_Digital_-_Novo_CRETA_Platinum_MY_25-26.pdf",
+        "title": "Catálogo Hyundai CRETA Platinum FAB/MY2025/2026; ©2025; revisão em04/11/2026",
+        "date": "2026-11-04",
+        "locator": "p.12: identidade2025/2026; pp.7e14: AutoHold. Data informada é revisão, não publicação.",
+        "claim": "A função mantém o veículo parado após liberar o pedal; esta candidatura não acrescenta separadamente o freio eletrônico.",
+        "match": {
+          "brand": "HYUNDAI",
+          "model": "CRETA PLATINUM TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
     }
   ]
 }
