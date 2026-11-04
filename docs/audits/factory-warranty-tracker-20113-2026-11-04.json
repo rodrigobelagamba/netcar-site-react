@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "warranty-20261104-20113",
+  "reviewedAt": "2026-11-04",
+  "sourceCommit": "61297502f5bbe848e2dd33b8ca9dee9c3f68b165",
+  "publicStockCheckedAt": "2026-11-04T13:25:13.383Z",
+  "publicVehicle": {
+    "id": "20113",
+    "marca": "CHEVROLET",
+    "modelo": "TRACKER TURBO",
+    "motor": "1.0",
+    "cambio": "AUTOMATICO",
+    "year": 2026,
+    "anoFabricacao": 2025,
+    "km": 39872,
+    "price": 109900,
+    "unitKey": "plate-sha256:277bb21f60ea8a771042065cb1e6014dda8a787f371917173c0d3a74e2aa42d9",
+    "diferenciais": [
+      {
+        "tag": "garantia_fabrica",
+        "descricao": ""
+      }
+    ]
+  },
+  "approvedRecord": {
+    "recordId": "reviewed-v2-20261104-20113",
+    "status": "approved",
+    "reviewedAt": "2026-11-04",
+    "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261104-20113\",\"reviewedAt\":\"2026-11-04\",\"vehicle\":{\"vehicleId\":\"20113\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"CHEVROLET\",\"modelVersion\":\"TRACKER TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:277bb21f60ea8a771042065cb1e6014dda8a787f371917173c0d3a74e2aa42d9\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":39872,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chevrolet-tracker-my2026-manual-52201147\",\"label\":\"Manual oficial Chevrolet Tracker MY2026\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/01-pdfs/2026/tracker-2026-manual-do-propieatrio.pdf\",\"locator\":\"Manual brasileiro MY2026: página impressa 260 (PDF 265), Prazo de Garantia A/B: 36 meses para destinatário final, exceto transporte remunerado, sem limite de quilometragem; uso comercial tem limite de 100.000 km. Impressa 259 (PDF 264): início na primeira entrega e transferência mantendo o término original. A edição MY2026 não contém a antiga exceção R8C/R8Z do manual MY2025. Uso particular vem do ateste operacional já existente da Netcar; vigência da unidade e autorização individual para o carimbo foram confirmadas pelo responsável em 04/11/2026. O bônus condicionado de até 24 meses não foi aplicado.\",\"revision\":\"52201147; 26_CHEV_Tracker_OM_pt_BR_B_BR_52201147_2025OCT10; Brasil, MY2026; conferido em 2026-11-04.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"52201147\",\"modelYear\":2026,\"reviewId\":\"warranty-20261104-20113\",\"reviewedAt\":\"2026-11-04\"}}]}",
+    "vehicle": {
+      "vehicleId": "20113",
+      "brand": "CHEVROLET",
+      "modelVersion": "TRACKER TURBO",
+      "manufactureYear": 2025,
+      "modelYear": 2026
+    },
+    "unitBinding": {
+      "unitKey": "plate-sha256:277bb21f60ea8a771042065cb1e6014dda8a787f371917173c0d3a74e2aa42d9",
+      "engine": "1.0",
+      "transmission": "AUTOMATICO"
+    },
+    "optionalId": 108,
+    "optionalConfirmed": true,
+    "conditionsConfirmed": true,
+    "scope": "basic-vehicle",
+    "termYears": 3,
+    "usage": "private",
+    "reviewedMileageKm": 39872,
+    "mileage": {
+      "kind": "unlimited"
+    },
+    "sources": [
+      {
+        "sourceId": "chevrolet-tracker-my2026-manual-52201147",
+        "label": "Manual oficial Chevrolet Tracker MY2026",
+        "url": "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/01-pdfs/2026/tracker-2026-manual-do-propieatrio.pdf",
+        "locator": "Manual brasileiro MY2026: página impressa 260 (PDF 265), Prazo de Garantia A/B: 36 meses para destinatário final, exceto transporte remunerado, sem limite de quilometragem; uso comercial tem limite de 100.000 km. Impressa 259 (PDF 264): início na primeira entrega e transferência mantendo o término original. A edição MY2026 não contém a antiga exceção R8C/R8Z do manual MY2025. Uso particular vem do ateste operacional já existente da Netcar; vigência da unidade e autorização individual para o carimbo foram confirmadas pelo responsável em 04/11/2026. O bônus condicionado de até 24 meses não foi aplicado.",
+        "revision": "52201147; 26_CHEV_Tracker_OM_pt_BR_B_BR_52201147_2025OCT10; Brasil, MY2026; conferido em 2026-11-04.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "52201147",
+          "modelYear": 2026,
+          "reviewId": "warranty-20261104-20113",
+          "reviewedAt": "2026-11-04"
+        }
+      }
+    ]
+  },
+  "officialEvidence": {
+    "url": "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/01-pdfs/2026/tracker-2026-manual-do-propieatrio.pdf",
+    "documentCode": "52201147",
+    "revision": "26_CHEV_Tracker_OM_pt_BR_B_BR_52201147_2025OCT10",
+    "modelYear": 2026,
+    "pdfSha256": "c84e5fd8d8c546b044448fd465293a1fa102ddee5dc24931104704876e89dec0",
+    "generalWarrantyPrintedPage": 260,
+    "generalWarrantyPdfPage": 265,
+    "startAndTransferPrintedPage": 259,
+    "startAndTransferPdfPage": 264,
+    "privateTermYears": 3,
+    "privateMileage": {
+      "kind": "unlimited"
+    },
+    "commercialTermYears": 3,
+    "commercialMileage": {
+      "kind": "limited",
+      "limitKm": 100000
+    },
+    "oldMy2025ExceptionsNotImported": true,
+    "conditionalBonusNotApplied": true,
+    "conventionalBatteryPeriodNotGeneralCoverage": true
+  },
+  "operationalAttestation": {
+    "source": "netcar-owner",
+    "attestationId": "netcar-owner-20261104-tracker-20113",
+    "confirmedAt": "2026-11-04",
+    "vehicleId": "20113",
+    "currentCoverageConfirmed": true,
+    "explicitStampAuthorization": true,
+    "usageConfirmed": "private",
+    "usageBasis": "existing Netcar private-use stock attestation",
+    "catalogFlagObserved": true,
+    "catalogFlagPreserved": true,
+    "notManufacturerDocument": true,
+    "notReusableForOtherUnits": true,
+    "scopeClarification": "Owner explicitly limited this request to Tracker2025/2026; Tracker2017/2018 ID20088 excluded.",
+    "sourceFlagInitiallyObserved": false,
+    "sourceFlagPresentObservedAt": "2026-11-04T13:25:13.383Z",
+    "catalogConfirmationOverrideUsed": false
+  },
+  "identityCorrespondence": {
+    "vehicleId": "20113",
+    "apiModel": "TRACKER TURBO",
+    "xmlModel": "TRACKER TURBO",
+    "unitKey": "plate-sha256:277bb21f60ea8a771042065cb1e6014dda8a787f371917173c0d3a74e2aa42d9",
+    "brandMatches": true,
+    "manufactureYearMatches": true,
+    "modelYearMatches": true,
+    "engineMatches": true,
+    "transmissionMatches": true,
+    "aliasRequired": false,
+    "sourceXmlSha256": "235c05514724fc26b40e2dea24eb436d6654b92d66cfebadaee5d9bead7b18c9",
+    "engineCorrectionSource": "owner-corrected-XML; 1.0 observed in API and XML"
+  },
+  "timing": {
+    "estimatedEndYear": 2028,
+    "basis": "manufactureYear2025+termYears3; conservative estimate only",
+    "firstDeliveryDate": null,
+    "confirmedExpiryDate": null,
+    "confirmedExpiryMonth": null,
+    "resaleRestartsTerm": false,
+    "finalYearRequiresConfirmedExpiry": true
+  },
+  "preservation": {
+    "baselineCommit": "61297502f5bbe848e2dd33b8ca9dee9c3f68b165",
+    "previousRecordCount": 25,
+    "previousRecordsSha256": "75e62a1bf09a5892c228a8e87cbbf663111cb69608acdfb6f459134204e42d4f",
+    "automationRulesSha256": "9293a17a28e8db243317d523659adadcf3928a345b39e0bf362a7db38021c242"
+  },
+  "scopeLimits": [
+    "Only general factory warranty for Tracker20113 and canonical Carclick projection.",
+    "No conditional five-year bonus, new automation rule, or separate battery/powertrain claim.",
+    "Tracker20088 and all prior approvals remain unchanged.",
+    "No source flag, XML/ERP, equipment, captions, price or layout change."
+  ],
+  "publicVehicleObservationNote": "Canonical adapter over the complete snapshot from the existing build; raw administrative fields excluded.",
+  "sourceAgeMs": 0
+}

@@ -1496,6 +1496,50 @@
           }
         }
       ]
+    },
+    {
+      "recordId": "reviewed-v2-20261104-20113",
+      "status": "approved",
+      "reviewedAt": "2026-11-04",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261104-20113\",\"reviewedAt\":\"2026-11-04\",\"vehicle\":{\"vehicleId\":\"20113\",\"manufactureYear\":2025,\"modelYear\":2026,\"brand\":\"CHEVROLET\",\"modelVersion\":\"TRACKER TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:277bb21f60ea8a771042065cb1e6014dda8a787f371917173c0d3a74e2aa42d9\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":39872,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chevrolet-tracker-my2026-manual-52201147\",\"label\":\"Manual oficial Chevrolet Tracker MY2026\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/01-pdfs/2026/tracker-2026-manual-do-propieatrio.pdf\",\"locator\":\"Manual brasileiro MY2026: página impressa 260 (PDF 265), Prazo de Garantia A/B: 36 meses para destinatário final, exceto transporte remunerado, sem limite de quilometragem; uso comercial tem limite de 100.000 km. Impressa 259 (PDF 264): início na primeira entrega e transferência mantendo o término original. A edição MY2026 não contém a antiga exceção R8C/R8Z do manual MY2025. Uso particular vem do ateste operacional já existente da Netcar; vigência da unidade e autorização individual para o carimbo foram confirmadas pelo responsável em 04/11/2026. O bônus condicionado de até 24 meses não foi aplicado.\",\"revision\":\"52201147; 26_CHEV_Tracker_OM_pt_BR_B_BR_52201147_2025OCT10; Brasil, MY2026; conferido em 2026-11-04.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"52201147\",\"modelYear\":2026,\"reviewId\":\"warranty-20261104-20113\",\"reviewedAt\":\"2026-11-04\"}}]}",
+      "vehicle": {
+        "vehicleId": "20113",
+        "brand": "CHEVROLET",
+        "modelVersion": "TRACKER TURBO",
+        "manufactureYear": 2025,
+        "modelYear": 2026
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:277bb21f60ea8a771042065cb1e6014dda8a787f371917173c0d3a74e2aa42d9",
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "usage": "private",
+      "reviewedMileageKm": 39872,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "sources": [
+        {
+          "sourceId": "chevrolet-tracker-my2026-manual-52201147",
+          "label": "Manual oficial Chevrolet Tracker MY2026",
+          "url": "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/01-pdfs/2026/tracker-2026-manual-do-propieatrio.pdf",
+          "locator": "Manual brasileiro MY2026: página impressa 260 (PDF 265), Prazo de Garantia A/B: 36 meses para destinatário final, exceto transporte remunerado, sem limite de quilometragem; uso comercial tem limite de 100.000 km. Impressa 259 (PDF 264): início na primeira entrega e transferência mantendo o término original. A edição MY2026 não contém a antiga exceção R8C/R8Z do manual MY2025. Uso particular vem do ateste operacional já existente da Netcar; vigência da unidade e autorização individual para o carimbo foram confirmadas pelo responsável em 04/11/2026. O bônus condicionado de até 24 meses não foi aplicado.",
+          "revision": "52201147; 26_CHEV_Tracker_OM_pt_BR_B_BR_52201147_2025OCT10; Brasil, MY2026; conferido em 2026-11-04.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "52201147",
+            "modelYear": 2026,
+            "reviewId": "warranty-20261104-20113",
+            "reviewedAt": "2026-11-04"
+          }
+        }
+      ]
     }
   ],
   "requireUnitBinding": true,

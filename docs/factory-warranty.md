@@ -1,5 +1,17 @@
 # Carimbo de garantia de fábrica
 
+> Revisão individual de 04/11/2026: Tracker Turbo 20113, fabricação 2025/modelo
+> 2026, motor 1.0 automático, aprovado para garantia geral de três anos, sem
+> limite de quilometragem para uso particular. Prazo e km vêm do manual
+> brasileiro MY2026, código 52201147; uso particular é o ateste operacional
+> existente da Netcar. O responsável confirmou a garantia e autorizou o carimbo
+> desta unidade. A origem passou a trazer a flag de garantia durante a revisão;
+> o selo exige essa indicação atual, sem exceção individual à flag.
+> Estimativa conservadora 2028*, sem data
+> de vencimento inventada, sem bônus condicionado de cinco anos e com bloqueio
+> no ano final. O pedido exclui a Tracker 2017/2018 ID20088. Evidências e limites
+> estão na [auditoria individual](audits/factory-warranty-tracker-20113-2026-11-04.json).
+
 > Revisão individual de 04/11/2026: Fastback Impetus Turbo 20050, fabricação
 > 2024/modelo 2025, aprovado para garantia geral de fábrica por três anos, sem
 > limite de quilometragem para uso particular. A vigência e as condições desta
