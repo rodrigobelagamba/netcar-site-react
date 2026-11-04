@@ -486,7 +486,21 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;");
 }
 
-function renderSections(sections) {
+function liveShowcaseMarker(config, html) {
+  const encoded = Buffer.from(JSON.stringify({ version: 1, ...config }), "utf8").toString("base64");
+  return `<!--netcar:showcase:${encoded}:start-->${html}<!--netcar:showcase:end-->`;
+}
+
+function editorialVehicleIds(cars) {
+  return cars.map((car) => {
+    const url = new URL(car.url, SITE);
+    const match = url.pathname.match(/^\/veiculo\/(?:[a-z0-9]+-)*([1-9]\d*)\/?$/i);
+    if (url.origin !== SITE || !match) throw new Error("Invalid editorial stock URL");
+    return match[1];
+  });
+}
+
+function renderSections(sections, liveCars = false) {
   return sections
     .map((section) => {
       if (section.type === "h2") {
@@ -503,8 +517,7 @@ function renderSections(sections) {
       }
       if (section.type === "cars" && section.cars) {
         const availableCars = section.cars.filter((car) => car.available !== false);
-        if (availableCars.length === 0) return "";
-        return `<div class="blog-cars">${availableCars
+        const html = availableCars.length === 0 ? "" : `<div class="blog-cars">${availableCars
           .map((car) => {
             const specs = [car.ano, car.km, car.cambio]
               .filter(Boolean)
@@ -522,6 +535,9 @@ function renderSections(sections) {
             return `<a class="blog-car" href="${escapeHtml(car.url)}">${img}<span class="blog-car__info"><b>${escapeHtml(car.modelo)}</b><small>${specs}</small>${preco}${selo}</span></a>`;
           })
           .join("")}</div>`;
+        return liveCars
+          ? liveShowcaseMarker({ mode: "ids", ids: editorialVehicleIds(section.cars), limit: section.cars.length }, html)
+          : html;
       }
       return "";
     })
@@ -843,8 +859,9 @@ function stockShowcase({
   ctaLabel,
   ctaHref,
   preserveOrder = false,
+  liveSelection = null,
 }) {
-  if (!vehicles.length) return "";
+  if (!vehicles.length && !liveSelection) return "";
   // Carro com foto real na frente: vitrine sem imagem converte muito pior.
   const ordered = preserveOrder ? vehicles : showcaseVehicleOrder(vehicles);
   const cars = ordered.slice(0, limit).map((vehicle) => ({
@@ -862,9 +879,13 @@ function stockShowcase({
   const cta = ctaHref
     ? `<p><a href="${ctaHref}">${escapeHtml(ctaLabel || "Ver estoque completo")}</a></p>`
     : "";
-  return `<h2>${escapeHtml(heading)}</h2>
+  const html = `<h2>${escapeHtml(heading)}</h2>
       ${renderSections([{ type: "cars", cars }])}
       ${cta}`;
+  return liveSelection ? liveShowcaseMarker({
+    mode: "selection", heading, limit, ctaLabel, ctaHref,
+    ...liveSelection,
+  }, html) : html;
 }
 
 function landingCollectionSchema(landing, canonical, vehicles) {
@@ -904,7 +925,7 @@ function pageShell({
       schemas
         .map(
           (schema) =>
-            `  <script type="application/ld+json"${canonical.includes("/comprar-") && schema["@type"] === "CollectionPage" ? " data-netcar-landing-collection" : canonical.includes("/comprar-") && schema["@type"] === "FAQPage" ? " data-netcar-landing-faq" : ""}>${JSON.stringify(schema)}</script>`,
+            `  <script type="application/ld+json"${canonical.includes("/comprar-") && schema["@type"] === "CollectionPage" ? " data-netcar-landing-collection" : canonical.includes("/comprar-") && schema["@type"] === "FAQPage" ? " data-netcar-landing-faq" : schema["@type"] === "BlogPosting" ? " data-netcar-blog-post" : ""}>${JSON.stringify(schema)}</script>`,
         )
         .join("\n")
     : "";
@@ -957,6 +978,10 @@ function pageShell({
 }
 
 mkdirSync(seoStaticDir, { recursive: true });
+
+writeTextFile(join(publicDir, "seo", "showcase-priorities.json"), JSON.stringify(Object.fromEntries(
+  [...merchandisingProfiles.entries()].map(([id, profile]) => [id, Number(profile.priority) || 0]),
+)) + "\n");
 
 // Request-time comparison rendering reuses these exact editorial definitions.
 // Availability never comes from the generated HTML snapshot.
@@ -1054,26 +1079,24 @@ writeSeoPage(
   }),
 );
 
-// Capa do post: primeira imagem real do estoque citado nas seções "cars", ou
-// a primeira do estoque geral. Post sem nenhuma imagem no HTML é snippet sem
-// thumbnail no Discover e nas redes.
-function postCoverImage(post, fallbackStock) {
+// A capa acompanha as unidades citadas nas seções cars. Artigos sem
+// seleção comercial usam a imagem institucional, independente do estoque.
+function postCoverImage(post) {
   for (const section of post.sections || []) {
     if (section.type === "cars" && Array.isArray(section.cars)) {
       const withImg = section.cars.find((car) => car.img);
       if (withImg) return withImg.img;
     }
   }
-  const firstWithImg = fallbackStock.find((v) => vehicleCardImage(v));
-  return firstWithImg
-    ? vehicleCardImage(firstWithImg)
-    : `${SITE}/images/loja1.jpg`;
+  // An article without vehicle selections has no live inventory image to
+  // reconcile. Use the institutional image instead of freezing a random car.
+  return `${SITE}/images/loja1.jpg`;
 }
 
 for (const post of blogPosts) {
   const canonical = `${SITE}/blog/${post.slug}`;
   const updatedAt = post.updatedAt ?? post.publishedAt;
-  const cover = postCoverImage(post, stock);
+  const cover = postCoverImage(post);
   const related = relatedReading(post, blogPosts);
   const relatedHtml = related.length
     ? `<nav aria-label="Leia também"><h2>Leia também</h2><ul>${related
@@ -1092,9 +1115,9 @@ for (const post of blogPosts) {
   const body = `
     <article>
       <h1>${escapeHtml(post.title)}</h1>${byline}
-      ${cover ? `<img src="${escapeHtml(cover)}" alt="${escapeHtml(post.title)}" loading="lazy" style="width:100%;border-radius:16px;margin:16px 0" />` : ""}
+      <!--netcar:blog-cover:start-->${cover ? `<img src="${escapeHtml(cover)}" alt="${escapeHtml(post.title)}" loading="lazy" style="width:100%;border-radius:16px;margin:16px 0" />` : ""}<!--netcar:blog-cover:end-->
       <p>${escapeHtml(post.description)}</p>
-      ${renderSections(post.sections)}
+      ${renderSections(post.sections, true)}
       <p><a href="${SITE}${post.ctaHref}">${escapeHtml(post.ctaLabel)}</a></p>
       ${relatedHtml}
     </article>`;
@@ -1311,6 +1334,7 @@ for (const city of cities) {
           heading: `Seminovos para quem vem de ${city.name}`,
           vehicles: recommendedStockOrder(stock.filter(hasHomePhoto)),
           preserveOrder: true,
+          liveSelection: { order: "recommended", photosOnly: true },
           limit: 8,
           ctaLabel: "Ver todo o estoque de seminovos",
           ctaHref: `${SITE}/seminovos`,
@@ -1432,6 +1456,7 @@ for (const city of cities) {
           heading: `Seminovos disponíveis para usar seu carro na troca`,
           vehicles: recommendedStockOrder(stock.filter(hasHomePhoto)),
           preserveOrder: true,
+          liveSelection: { order: "recommended", photosOnly: true },
           limit: 8,
           ctaLabel: "Ver todo o estoque para troca",
           ctaHref: `${SITE}/seminovos`,
@@ -1873,7 +1898,7 @@ const expointerBody = `
       <p><a href="${expointerPage.event.officialUrl}">Datas e programação no site oficial</a></p>
       <p>${escapeHtml(expointerPage.hoursNote)}</p>
     </aside>
-    ${stockShowcase({ heading: expointerPage.stockHeading, vehicles: stock, limit: 8, ctaHref: `${SITE}/seminovos`, ctaLabel: expointerPage.stockLabel })}
+    ${stockShowcase({ heading: expointerPage.stockHeading, vehicles: stock, limit: 8, ctaHref: `${SITE}/seminovos`, ctaLabel: expointerPage.stockLabel, liveSelection: { order: "photos" } })}
     <h2>O que você encontra na Netcar</h2>
     ${expointerPage.benefits.map((benefit) => `<h3>${escapeHtml(benefit.title)}</h3><p>${escapeHtml(benefit.text)}</p>`).join("\n")}
     <p><a href="${SITE}/como-selecionamos-nossos-carros">Como selecionamos nossos carros</a></p>
@@ -1948,7 +1973,7 @@ for (const page of contentPages) {
       ? value.map((item) => item?.tag ?? item)
       : [value];
     const pattern = new RegExp(page.stock.match, "i");
-    return values.some((item) => pattern.test(String(item ?? "")));
+    return values.some((item) => pattern.test(String(item ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
   };
   const pageStock = page.stock
     ? recommendedStockOrder(stock.filter(stockMatches))
@@ -1967,13 +1992,14 @@ for (const page of contentPages) {
       <p>${escapeHtml(page.intro)}</p>
       ${renderContentSections(page.sections || [])}
       ${linksHtml}
-      ${stockShowcase({
+      ${page.stock ? stockShowcase({
         heading: page.stock?.heading || "Em estoque agora",
+        liveSelection: { order: "recommended", photosFirst: true, match: page.stock.field && page.stock.match ? { field: page.stock.field, pattern: page.stock.match } : null },
         vehicles: pageStock,
         limit: 12,
         ctaLabel: "Ver todo o estoque de seminovos",
         ctaHref: `${SITE}/seminovos`,
-      })}
+      }) : ""}
       ${faqHtml}
       <p><a href="${SITE}${page.secondHref}">${escapeHtml(page.secondLabel)}</a></p>
     </article>`;

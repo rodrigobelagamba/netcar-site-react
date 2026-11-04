@@ -23,7 +23,7 @@ const current = [vehicle("90001", 137900, 2023), vehicle("90002", 149900), vehic
 function fixtures(apiBase) {
   const directory = mkdtempSync(join(tmpdir(), "netcar-landing-routing-"));
   for (const folder of ["seo", "seo-static"]) mkdirSync(join(directory, folder));
-  for (const file of ["index.php", "home-hero.php", "vehicle-images.php", "vehicle-image-exclusions.json", "seo-landing.php", "seo/landing-stock.php", "seo/helpers.php", "detalhe-veiculo.php", "404.html"]) {
+  for (const file of ["index.php", "home-hero.php", "vehicle-images.php", "vehicle-image-exclusions.json", "seo-landing.php", "seo-stock-bootstrap.php", "seo/landing-stock.php", "seo/helpers.php", "detalhe-veiculo.php", "404.html"]) {
     copyFileSync(join(root, "public", file), join(directory, file));
   }
   copyFileSync(join(root, "index.html"), join(directory, "index.html"));
@@ -42,6 +42,9 @@ function fixtures(apiBase) {
   template = template.replace(/<!--netcar:landing-stock:start-->[\s\S]*?<!--netcar:landing-stock:end-->/, `<!--netcar:landing-stock:start--><a class="blog-car" href="/veiculo/tiggo-${soldId}">Sold fixture R$ 151.900</a><!--netcar:landing-stock:end-->`)
     .replace(/<!--netcar:landing-paragraphs:start-->[\s\S]*?<!--netcar:landing-paragraphs:end-->/, "<!--netcar:landing-paragraphs:start--><p>R$ 130.000 a R$ 151.900, anos 2023 a 2025.</p><!--netcar:landing-paragraphs:end-->");
   writeFileSync(join(directory, "seo-static/landing-chery.html"), template);
+  for (const file of ["sell-city-fixture.html", "city-fixture.html", "blog-fixture.html", "page-financiamento.html", "comparison-fixture.html"]) {
+    writeFileSync(join(directory, "seo-static", file), '<!doctype html><html><head><title>Fixture</title><meta name="description" content="Fixture"><link rel="canonical" href="https://www.netcarmultimarcas.com.br/fixture"></head><body></body></html>');
+  }
   const staleBootstrap = { generatedAt: "2026-01-01T00:00:00Z", vehicles: [
     { id: "90001", marca: "CHERY", modelo: "TIGGO 90001", price: 130000, year: 2023 },
     { id: "90002", marca: "CHERY", modelo: "TIGGO 90002", price: 149900, year: 2024 },
@@ -114,6 +117,24 @@ test("real landing controllers reconcile initial HTML and bootstrap against the 
     assert.ok(requests.every(({ path }) => path === "/api/v1/veiculos.php"));
   });
 
+  await t.test("all inventory routes receive current stock on first paint, independently of their build", async () => {
+    for (const route of ["/vender-carro-fixture", "/seminovos-fixture", "/blog/fixture", "/financiamento", "/comparar/fixture", "/tablet", "/seminovos"]) {
+      const result = await renderController(directory, "index.php", route);
+      assert.equal(result.status, 200, route);
+      const initial = bootstrap(result.html);
+      assert.equal(initial.scope, route === "/seminovos" ? "showroom" : "available", route);
+      assert.deepEqual(initial.vehicles.filter(({ price }) => price > 0).map(({ id, price }) => [id, price]), [["90001", 137900], ["90002", 149900], [arrivalId, 149900]], route);
+      assert.doesNotMatch(result.html, /151900|151\\.900|130000/, route);
+      if (route !== "/seminovos") assert.doesNotMatch(result.html, new RegExp(soldId), route);
+    }
+    const response = await renderController(directory, "seo-stock-bootstrap.php", "/seo/stock-bootstrap.json");
+    assert.equal(response.status, 200);
+    const payload = JSON.parse(response.html);
+    assert.equal(payload.scope, "showroom");
+    assert.deepEqual(payload.vehicles.map(({ id }) => id), ["90001", "90002", arrivalId]);
+    assert.deepEqual(payload.showroomVehicles.map(({ id }) => id), ["90001", "90002", arrivalId, soldId]);
+  });
+
   await t.test("crawler cards, live range and ItemList all describe the same three current vehicles", async () => {
     const result = await renderController(directory, "seo-landing.php");
     assert.equal(result.status, 200);
@@ -133,6 +154,15 @@ test("real landing controllers reconcile initial HTML and bootstrap against the 
       assert.equal(browser.status, 200);
       assert.equal(bootstrap(browser.html), null);
       assert.doesNotMatch(browser.html, /90004|151900|151\.900/);
+      for (const route of ["/vender-carro-fixture", "/seminovos-fixture", "/blog/fixture", "/financiamento", "/comparar/fixture", "/tablet", "/seminovos"]) {
+        const page = await renderController(directory, "index.php", route);
+        assert.equal(page.status, 200, route);
+        assert.equal(bootstrap(page.html), null, route);
+        assert.doesNotMatch(page.html, /90004|151900|151\\.900/, route);
+      }
+      const endpoint = await renderController(directory, "seo-stock-bootstrap.php", "/seo/stock-bootstrap.json");
+      assert.equal(endpoint.status, 503);
+      assert.doesNotMatch(endpoint.html, /90004|151900|vehicles/);
       const crawler = await renderController(directory, "seo-landing.php");
       assert.equal(crawler.status, 503);
       assert.match(crawler.html, /Não foi possível atualizar o estoque/);

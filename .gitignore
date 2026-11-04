@@ -100,3 +100,6 @@ public/arquivos/*
 public/arquivos/autocheck/*
 !public/arquivos/autocheck/*.pdf
 !public/arquivos/autocheck/*.meta.json
+
+# Request-time showcase ordering, generated with the SEO templates.
+public/seo/showcase-priorities.json

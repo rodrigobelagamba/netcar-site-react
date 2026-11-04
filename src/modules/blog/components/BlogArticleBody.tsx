@@ -7,6 +7,8 @@ import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { trackBlogDiscoveryClick } from "@/lib/analytics";
 import { getBlogVehicleTarget } from "@/lib/blogNavigation";
 import { BlogVehicleWarranty } from "./BlogVehicleWarranty";
+import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
+import { resolveBlogStockCars } from "@/lib/blogStock";
 
 function BlogVehicleLink({
   car,
@@ -55,6 +57,7 @@ function renderSection(
   section: BlogSection,
   index: number,
   articleSlug: string,
+  stock: ReturnType<typeof useVehiclesQuery>,
 ) {
   if (section.type === "h2" && section.text) {
     return (
@@ -99,16 +102,44 @@ function renderSection(
   }
 
   if (section.type === "cars" && section.cars && section.cars.length > 0) {
-    const availableCars = section.cars.filter((car) => car.available !== false);
-    if (availableCars.length === 0) return null;
+    if (stock.isError) {
+      return (
+        <div key={index} role="status" className="my-8 text-gray-600">
+          <p>
+            Não foi possível atualizar os veículos desta seleção. Tente
+            novamente ou confirme a disponibilidade com a equipe.
+          </p>
+          <button
+            type="button"
+            disabled={stock.isFetching}
+            onClick={() => void stock.refetch()}
+            className="mt-3 min-h-11 font-semibold text-primary underline disabled:opacity-50"
+          >
+            {stock.isFetching ? "Atualizando estoque..." : "Tentar novamente"}
+          </button>
+        </div>
+      );
+    }
+    if (!Array.isArray(stock.data)) {
+      return (
+        <p key={index} role="status" className="my-8 text-gray-600">
+          Carregando veículos desta seleção...
+        </p>
+      );
+    }
+    const availableCars = resolveBlogStockCars(section.cars, stock.data);
+    if (availableCars.length === 0) {
+      return (
+        <p key={index} className="my-8 text-gray-600">
+          Nenhum dos veículos desta seleção está anunciado no momento. Consulte
+          o estoque atualizado ou fale com a equipe.
+        </p>
+      );
+    }
     return (
       <div key={index} className="not-prose my-8 grid gap-5 sm:grid-cols-2">
         {availableCars.map((car) => (
-          <BlogVehicleLink
-            key={car.url}
-            car={car}
-            articleSlug={articleSlug}
-          >
+          <BlogVehicleLink key={car.url} car={car} articleSlug={articleSlug}>
             {car.img ? (
               <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
                 <img
@@ -158,6 +189,15 @@ interface BlogArticleBodyProps {
 
 export function BlogArticleBody({ post }: BlogArticleBodyProps) {
   const reading = relatedReading(post, blogPosts);
+  const stock = useVehiclesQuery(
+    { fetchAll: true },
+    {
+      enabled: post.sections.some(
+        (section) => section.type === "cars" && !!section.cars?.length,
+      ),
+      refreshImmediately: true,
+    },
+  );
   return (
     <article className="max-w-3xl">
       <header className="mb-8">
@@ -190,7 +230,7 @@ export function BlogArticleBody({ post }: BlogArticleBodyProps) {
 
       <div className="prose-netcar">
         {post.sections.map((section, index) =>
-          renderSection(section, index, post.slug),
+          renderSection(section, index, post.slug, stock),
         )}
       </div>
 
@@ -220,7 +260,10 @@ export function BlogArticleBody({ post }: BlogArticleBodyProps) {
             {reading.map((item) => (
               <li key={item.href}>
                 {item.href === "/compra" ? (
-                  <Link to="/compra" className="text-primary underline hover:no-underline">
+                  <Link
+                    to="/compra"
+                    className="text-primary underline hover:no-underline"
+                  >
                     {item.title}
                   </Link>
                 ) : (

@@ -36,6 +36,13 @@ jobs:
         run: |
           php -l public/seo/landing-stock.php
           npm run stock:test-landings
+      - name: Validate live stock across regional pages and articles
+        run: |
+          php -r "exit(extension_loaded('curl') ? 0 : 1);"
+          php -l public/seo-showcase.php
+          php -l public/seo-stock-bootstrap.php
+          php -l public/seo/showcase-stock.php
+          npm run stock:test-pages
       - name: Validate Carclick descriptions and field preservation
         run: |
           php -l public/feeds/carclick.php

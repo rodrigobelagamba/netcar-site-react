@@ -38,16 +38,18 @@ export function RegionalStockPreview({
   const list = useMemo(
     () =>
       sortShowroomVehicles(
-        (vehicles ?? []).filter(
+        (isError ? [] : (vehicles ?? [])).filter(
           (vehicle) =>
-            isAvailableHomeStockVehicle(vehicle) && (!filter || filter(vehicle)),
+            isAvailableHomeStockVehicle(vehicle) &&
+            (!filter || filter(vehicle)),
         ),
         "recomendados",
       ).slice(0, limit),
-    [vehicles, limit, filter],
+    [vehicles, isError, limit, filter],
   );
   const hasStockData = Array.isArray(vehicles);
-  const waitingForStock = isLoading || (isFetching && list.length === 0);
+  const waitingForStock =
+    !isError && (isLoading || (isFetching && list.length === 0));
 
   const moreCarsBtn = (
     <div className="mt-10 flex justify-center">
@@ -89,9 +91,8 @@ export function RegionalStockPreview({
             className="mb-6 rounded-2xl border border-gray-200 bg-gray-50 p-5"
           >
             <p className="text-gray-600">
-              {list.length > 0
-                ? "Não foi possível atualizar o estoque. Os anúncios já carregados continuam abaixo; confirme a disponibilidade com a equipe."
-                : "Não foi possível carregar o estoque. Tente novamente ou consulte os carros com a equipe."}
+              Não foi possível atualizar o estoque. Tente novamente ou confirme
+              a disponibilidade com a equipe.
             </p>
             <button
               type="button"

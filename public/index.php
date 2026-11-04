@@ -216,6 +216,18 @@ function netcar_extract_static_meta($file)
         return null;
     }
 
+    // Vehicle-linked article covers and social images follow the same current
+    // stock as the cards, even in the browser shell before React mounts.
+    $unconfirmedStockImage = false;
+    if (preg_match('#^/blog/[a-z0-9-]+$#', (string) netcar_request_path())
+        && strpos($source, '<!--netcar:showcase:') !== false) {
+        require_once __DIR__ . '/seo/showcase-stock.php';
+        $stock = netcar_landing_live_stock();
+        $current = $stock === null ? null : netcar_showcase_html($source, $stock, SEO_SITE_URL . netcar_request_path());
+        if ($current !== null) $source = $current;
+        else $unconfirmedStockImage = true;
+    }
+
     $patterns = [
         'title' => '#<title>(.*?)</title>#is',
         'description' => '#<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']\s*/?>#is',
@@ -229,6 +241,7 @@ function netcar_extract_static_meta($file)
             $meta[$key] = html_entity_decode(trim($matches[1]), ENT_QUOTES, 'UTF-8');
         }
     }
+    if ($unconfirmedStockImage) $meta['image'] = 'https://www.netcarmultimarcas.com.br/images/loja1.jpg';
 
     return isset($meta['title'], $meta['description'], $meta['canonical']) ? $meta : null;
 }
@@ -281,6 +294,7 @@ function netcar_route_uses_stock_bootstrap($path)
         || $path === '/seminovos'
         || $path === '/tablet'
         || $path === '/comparar'
+        || preg_match('#^/blog/[a-z0-9-]+$#', (string) $path)
         || preg_match('#^/comparar/[a-z0-9-]+$#', (string) $path)
         || $path === '/regioes-atendidas'
         || $path === '/expointer-esteio'
@@ -301,29 +315,16 @@ function netcar_stock_bootstrap_value()
     }
     $loaded = true;
 
-    // Purchase landings must not advertise yesterday's build while the API
-    // already knows a unit was sold. Failure leaves React to load/retry; it
-    // never falls back to the stale commercial snapshot on these routes.
-    if (preg_match('#^/comprar-[a-z0-9-]+$#', (string) netcar_request_path())) {
-        require_once __DIR__ . '/seo/landing-stock.php';
-        $value = netcar_landing_bootstrap();
-        return $value;
+    // Every stock surface uses one complete current API observation, including
+    // its first paint. A failed read must not revive a build-time offer.
+    if (!netcar_route_uses_stock_bootstrap(netcar_request_path())) return null;
+    require_once __DIR__ . '/seo/landing-stock.php';
+    $value = netcar_landing_bootstrap();
+    if ($value !== null && netcar_request_path() === '/seminovos') {
+        // Preserve explicit zero-price historical rows supplied by the API.
+        // Missing IDs are never inferred to be sold or synthesized here.
+        $value['showroomVehicles'] = array_map('netcar_landing_bootstrap_vehicle', netcar_landing_live_stock());
     }
-
-    $file = __DIR__ . '/seo/stock-bootstrap.json';
-    if (!is_readable($file)) {
-        return null;
-    }
-    $decoded = json_decode((string) @file_get_contents($file), true);
-    if (!is_array($decoded) || !isset($decoded['vehicles']) || !is_array($decoded['vehicles'])) {
-        return null;
-    }
-    foreach (array('vehicles', 'showroomVehicles') as $key) {
-        if (isset($decoded[$key]) && is_array($decoded[$key])) {
-            $decoded[$key] = array_map('netcarSanitizeVehicleImages', $decoded[$key]);
-        }
-    }
-    $value = $decoded;
     return $value;
 }
 
@@ -801,6 +802,10 @@ function netcar_get_build_home_lcp()
         return netcar_daily_home_lcp();
     }
 
+    // A failed current stock observation is not permission to advertise an old
+    // hero. This legacy manifest is only relevant outside inventory routes.
+    if (netcar_route_uses_stock_bootstrap(netcar_request_path())) return null;
+
     // O manifesto só cobre a ausência do bootstrap e precisa cumprir a regra atual.
     $file = __DIR__ . '/seo/home-lcp.json';
     if (!is_readable($file)) {
@@ -1015,7 +1020,7 @@ header('Content-Type: text/html; charset=UTF-8');
 $browserMaxAge = 60;
 $sharedMaxAge = 300;
 $staleWhileRevalidate = 60;
-if (preg_match('#^/comprar-[a-z0-9-]+$#', (string) $path)) {
+if (netcar_route_uses_stock_bootstrap($path)) {
     header('Cache-Control: no-store');
 } else {
     header(

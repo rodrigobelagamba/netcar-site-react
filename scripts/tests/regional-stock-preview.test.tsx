@@ -62,9 +62,12 @@ function renderPreview(state: QueryState, props: Record<string, unknown> = {}) {
       },
     },
     "@/design-system/components/patterns/VehicleCard": {
-      VehicleCard: ({ id, whatsAppSource, showWhatsAppInterest }: any) => (
+      VehicleCard: ({ id, price, year, km, whatsAppSource, showWhatsAppInterest }: any) => (
         <article
           data-vehicle-id={id}
+          data-price={price}
+          data-year={year}
+          data-km={km}
           data-wa-source={whatsAppSource}
           data-interest={showWhatsAppInterest}
         />
@@ -152,7 +155,7 @@ test("empty bootstrap refreshing shows loading, not a claim of no inventory", ()
 
 test("a failed first load is distinguishable from a successful empty result and can retry", () => {
   const failed = renderPreview({ isError: true });
-  assert.match(failed.html, /Não foi possível carregar o estoque/);
+  assert.match(failed.html, /Não foi possível atualizar o estoque/);
   assert.doesNotMatch(failed.html, /Não há veículos|Nenhum veículo/);
   findElement(failed.element, "button").props.onClick();
   assert.equal(failed.retryCount, 1);
@@ -161,17 +164,26 @@ test("a failed first load is distinguishable from a successful empty result and 
   assert.doesNotMatch(empty.html, /Não foi possível/);
 });
 
-test("refresh failure preserves prior cards with a warning and disables a pending retry", () => {
+test("refresh failure hides prior offers and disables a pending retry", () => {
   const result = renderPreview({
     data: [vehicle("1", "ARGO")],
     isError: true,
     isFetching: true,
   });
-  assert.match(result.html, /data-vehicle-id="1"/);
+  assert.doesNotMatch(result.html, /data-vehicle-id="1"/);
   assert.match(result.html, /Não foi possível atualizar o estoque/);
   assert.match(result.html, /confirme a disponibilidade com a equipe/);
   assert.doesNotMatch(result.html, /Não há veículos|Nenhum veículo/);
   assert.equal(findElement(result.element, "button").props.disabled, true);
+});
+
+test("regional preview follows inventory entry, removal and changed presentation data", () => {
+  const first = renderPreview({ data: [vehicle("20018", "NIVUS", 156900)] });
+  assert.match(first.html, /data-vehicle-id="20018"[^>]*data-price="156900"/);
+  const entered = vehicle("20019", "POLO", 89900);
+  const changed = renderPreview({ data: [{ ...entered, price: 87900, km: 23000, year: 2025 }] });
+  assert.doesNotMatch(changed.html, /20018|156900|vendid/i);
+  assert.match(changed.html, /data-vehicle-id="20019"[^>]*data-price="87900"[^>]*data-year="2025"[^>]*data-km="23000"/);
 });
 
 test("regional focus preserves existing markets and resolves every unique city slug", () => {

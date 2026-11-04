@@ -194,6 +194,8 @@ function loadArticle(corpus) {
     "@/lib/blogRelated.mjs": { relatedReading, saleReading },
     "@/data/seo/blog": { blogPosts: corpus },
     "./BlogVehicleWarranty": { BlogVehicleWarranty: () => null },
+    "@/catalog/queries/useVehiclesQuery": { useVehiclesQuery: () => ({ data: [] }) },
+    "@/lib/blogStock": { resolveBlogStockCars: () => [] },
   };
   runInNewContext(componentSource, {
     module,
