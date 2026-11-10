@@ -1540,6 +1540,78 @@
           }
         }
       ]
+    },
+    {
+      "recordId": "reviewed-v2-20261110-20119",
+      "status": "approved",
+      "reviewedAt": "2026-11-10",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261110-20119\",\"reviewedAt\":\"2026-11-10\",\"vehicle\":{\"vehicleId\":\"20119\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"PEUGEOT\",\"modelVersion\":\"208 STYLE\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:548ee71074226eb8daed97f3b56c1dd54172fde6a49ede5706d95ed23bb7f441\",\"engine\":\"1.0\",\"transmission\":\"MANUAL\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":27900,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"peugeot-brazil-contractual-policy-20261110\",\"label\":\"Política oficial Peugeot\",\"url\":\"https://carros.peugeot.com.br/owners/assistance-and-warranty/garantias-peugeot.html\",\"locator\":\"Seções introdutória e Garantia Contratual: cobertura de defeitos de fabricação e mão de obra, sem limite de quilometragem, desde a entrega original. Condições de manutenção, exclusões e prazos específicos de componentes permanecem aplicáveis. Prazo e identidade MY2025 conferidos nas fontes complementares desta revisão.\",\"revision\":\"peugeot-br-garantias-20261110; Página oficial brasileira de garantia contratual consultada em10/11/2026; política comum, não manual específico de ano-modelo.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"peugeot-br-garantias-20261110\",\"modelYear\":2025,\"reviewId\":\"warranty-20261110-20119\",\"reviewedAt\":\"2026-11-10\"}},{\"sourceId\":\"peugeot-208-style-my2025-official-offer\",\"label\":\"Oferta oficial histórica Peugeot 208 MY2025\",\"url\":\"https://carros.peugeot.com.br/gama/peugeot-208.html\",\"locator\":\"Conteúdo histórico oficial recuperado no índice de busca em10/11/2026: ofertas brasileiras Style24/25 de fevereiro2025 e Style25/25 de agosto2025 informam três anos de garantia conforme os manuais. Esta evidência comprova o prazo MY2025; não comprova data individual de primeira entrega. A abertura direta atual retornou404.\",\"revision\":\"peugeot-208-style-my2025-offers-202502-202508; Página comercial oficial Peugeot208, conteúdo histórico de2025 preservado no índice de busca; não tratada como oferta comercial atual.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"peugeot-208-style-my2025-offers-202502-202508\",\"modelYear\":2025,\"reviewId\":\"warranty-20261110-20119\",\"reviewedAt\":\"2026-11-10\"}},{\"sourceId\":\"peugeot-208-my2025-launch-20240913\",\"label\":\"Lançamento oficial Peugeot 208 MY2025\",\"url\":\"https://www.media.stellantis.com/br-pt/peugeot/press/peugeot-anuncia-os-precos-para-novo-208-2025\",\"locator\":\"Comunicado brasileiro de13/09/2024: linha208MY2025 inclui Style1.0MT, motor1.0 e transmissão manual de cinco marchas. Comprova versão, mercado e mecânica; prazo, quilometragem e início são sustentados pelas outras fontes desta revisão.\",\"revision\":\"2024-09-13; Peugeot/Stellantis Brasil13/09/2024; Novo208MY2025, Style1.0MT.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"2024-09-13\",\"modelYear\":2025,\"reviewId\":\"warranty-20261110-20119\",\"reviewedAt\":\"2026-11-10\"}}]}",
+      "vehicle": {
+        "vehicleId": "20119",
+        "brand": "PEUGEOT",
+        "modelVersion": "208 STYLE",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:548ee71074226eb8daed97f3b56c1dd54172fde6a49ede5706d95ed23bb7f441",
+        "engine": "1.0",
+        "transmission": "MANUAL"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "usage": "private",
+      "reviewedMileageKm": 27900,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "sources": [
+        {
+          "sourceId": "peugeot-brazil-contractual-policy-20261110",
+          "label": "Política oficial Peugeot",
+          "url": "https://carros.peugeot.com.br/owners/assistance-and-warranty/garantias-peugeot.html",
+          "locator": "Seções introdutória e Garantia Contratual: cobertura de defeitos de fabricação e mão de obra, sem limite de quilometragem, desde a entrega original. Condições de manutenção, exclusões e prazos específicos de componentes permanecem aplicáveis. Prazo e identidade MY2025 conferidos nas fontes complementares desta revisão.",
+          "revision": "peugeot-br-garantias-20261110; Página oficial brasileira de garantia contratual consultada em10/11/2026; política comum, não manual específico de ano-modelo.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "peugeot-br-garantias-20261110",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261110-20119",
+            "reviewedAt": "2026-11-10"
+          }
+        },
+        {
+          "sourceId": "peugeot-208-style-my2025-official-offer",
+          "label": "Oferta oficial histórica Peugeot 208 MY2025",
+          "url": "https://carros.peugeot.com.br/gama/peugeot-208.html",
+          "locator": "Conteúdo histórico oficial recuperado no índice de busca em10/11/2026: ofertas brasileiras Style24/25 de fevereiro2025 e Style25/25 de agosto2025 informam três anos de garantia conforme os manuais. Esta evidência comprova o prazo MY2025; não comprova data individual de primeira entrega. A abertura direta atual retornou404.",
+          "revision": "peugeot-208-style-my2025-offers-202502-202508; Página comercial oficial Peugeot208, conteúdo histórico de2025 preservado no índice de busca; não tratada como oferta comercial atual.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "peugeot-208-style-my2025-offers-202502-202508",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261110-20119",
+            "reviewedAt": "2026-11-10"
+          }
+        },
+        {
+          "sourceId": "peugeot-208-my2025-launch-20240913",
+          "label": "Lançamento oficial Peugeot 208 MY2025",
+          "url": "https://www.media.stellantis.com/br-pt/peugeot/press/peugeot-anuncia-os-precos-para-novo-208-2025",
+          "locator": "Comunicado brasileiro de13/09/2024: linha208MY2025 inclui Style1.0MT, motor1.0 e transmissão manual de cinco marchas. Comprova versão, mercado e mecânica; prazo, quilometragem e início são sustentados pelas outras fontes desta revisão.",
+          "revision": "2024-09-13; Peugeot/Stellantis Brasil13/09/2024; Novo208MY2025, Style1.0MT.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "2024-09-13",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261110-20119",
+            "reviewedAt": "2026-11-10"
+          }
+        }
+      ]
     }
   ],
   "requireUnitBinding": true,

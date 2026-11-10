@@ -193,3 +193,28 @@ test("Aircross keeps its own Citroën selection without guessing C3 or C4 aliase
   assert.equal(empty.indexable, false);
   assert.deepEqual(editorialContent(stocked), editorialContent(empty));
 });
+
+
+test("208 and ix35 hubs preserve the exact family, brand and body style", () => {
+  const cases = [
+    { slug: "peugeot-208", marca: "PEUGEOT", modelo: "208", categoria: "HATCH", accepted: ["208 STYLE", "PEUGEOT 208 ALLURE"], rejected: ["2008 ALLURE", "2080"] },
+    { slug: "hyundai-ix35", marca: "HYUNDAI", modelo: "IX35", categoria: "SUV", accepted: ["IX35 GL", "HYUNDAI IX35 GLS"], rejected: ["TUCSON GLS", "CRETA PLATINUM", "IX350"] },
+  ];
+  for (const { slug, marca, modelo, categoria, accepted, rejected } of cases) {
+    const config = MODEL_HUBS.find((model) => model.slug === slug);
+    const rows = [
+      ...accepted.map((name) => vehicle({ marca, modelo: name, categoria })),
+      ...rejected.map((name) => vehicle({ marca, modelo: name, categoria })),
+      vehicle({ marca: "OTHER", modelo, categoria }),
+      vehicle({ marca, modelo, categoria: "SEDAN" }),
+    ];
+    const stocked = modelLanding(config, rows);
+    assert.equal(stocked.count, accepted.length, slug);
+    assert.equal(stocked.indexable, true, slug);
+    assert.deepEqual(stocked.filters, { marca, modelo, categoria });
+    const empty = modelLanding(config, []);
+    assert.equal(empty.slug, stocked.slug);
+    assert.equal(empty.indexable, false);
+    assert.deepEqual(editorialContent(stocked), editorialContent(empty));
+  }
+});
