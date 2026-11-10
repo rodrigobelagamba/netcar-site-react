@@ -617,6 +617,38 @@ export const MODEL_BUYER_GUIDES = {
     ],
     "guideLinks": []
   },
+  "hyundai-ix35": {
+    "title": "Hyundai ix35 à venda em Esteio: fotos e preços | Netcar",
+    "description": "Veja os Hyundai ix35 usados e seminovos da Netcar, em Esteio. Confira as fotos e os dados de cada anúncio e consulte seu carro na troca.",
+    "intro": "Encontre seu Hyundai ix35 entre os anúncios da Netcar e converse sobre a unidade que você quer conhecer.",
+    "guideTitle": "Seu próximo Hyundai ix35",
+    "paragraphs": [
+      "Esta página reúne os ix35 anunciados pela Netcar. Abra a ficha para ver fotos, versão, ano e preço de cada carro. Pelo contato da unidade, você pode esclarecer suas dúvidas, combinar uma visita em Esteio ou pedir a avaliação do seu usado na troca."
+    ],
+    "faq": [
+      {
+        "q": "Como consultar a compra de um ix35 antes de visitar a Netcar?",
+        "a": "Escolha o anúncio do ix35 e use o contato da ficha. A equipe pode confirmar os dados da unidade e conversar sobre a compra ou a troca."
+      }
+    ],
+    "guideLinks": []
+  },
+  "peugeot-208": {
+    "title": "Peugeot 208 à venda em Esteio: fotos e preços | Netcar",
+    "description": "Peugeot 208 usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço nos anúncios e consulte a avaliação do seu usado na troca.",
+    "intro": "Veja os Peugeot 208 da Netcar e escolha o anúncio para começar sua próxima compra.",
+    "guideTitle": "Encontre seu Peugeot 208",
+    "paragraphs": [
+      "Os 208 à venda estão reunidos nesta página. Cada anúncio leva às fotos e aos dados daquela unidade, com acesso ao contato da equipe. Gostou de um deles? Consulte as condições de compra ou envie os dados do seu usado para avaliação na troca."
+    ],
+    "faq": [
+      {
+        "q": "Onde vejo a versão e o preço do Peugeot 208 anunciado?",
+        "a": "Abra a ficha do carro que chamou sua atenção. Ali estão a versão, o ano, as fotos e o preço da unidade, além do contato para conversar sobre a compra."
+      }
+    ],
+    "guideLinks": []
+  },
   "peugeot-2008": {
     "title": "Peugeot 2008 à venda em Esteio: fotos e preços | Netcar",
     "description": "Peugeot 2008 usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
