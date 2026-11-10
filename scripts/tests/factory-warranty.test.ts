@@ -1563,3 +1563,47 @@ test("Renegade 2028 is a fabrication-based estimate and requires confirmed valid
   assert.equal(resolveFactoryWarranty(current, matrix(reviewed), "2028-06-30")?.estimatedEndYear, 2028);
   assert.equal(resolveFactoryWarranty(current, matrix(reviewed), "2028-07-01"), undefined);
 });
+
+const peugeot208Registry = JSON.parse(readFileSync(
+  new URL("../../src/data/factoryWarrantyMatrix.json", import.meta.url), "utf8",
+)) as FactoryWarrantyMatrix;
+const peugeot208Audit = JSON.parse(readFileSync(
+  new URL("../../docs/audits/factory-warranty-peugeot-208-20119-2026-11-10.json", import.meta.url), "utf8",
+));
+const peugeot208Vehicle: WarrantyCatalogVehicle = {
+  ...peugeot208Audit.publicVehicle,
+  price: 1,
+  diferenciais: [{ tag: "garantia_fabrica", descricao: "" }],
+};
+
+test("Peugeot 208 Style MY2025 uses its general original warranty without transferring electric or powertrain coverage", () => {
+  const record = peugeot208Registry.records.find((entry) => entry.vehicle.vehicleId === "20119")!;
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(resolveFactoryWarranty(peugeot208Vehicle, peugeot208Registry, "2026-11-10")?.estimatedEndYear, 2027);
+  assert.equal(resolveFactoryPowertrainWarranty(peugeot208Vehicle, peugeot208Registry, "2026-11-10"), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(peugeot208Vehicle, peugeot208Registry, "2026-11-10"), undefined);
+  assert.equal(record.confirmedExpiryDate, undefined);
+  assert.equal(record.confirmedExpiryMonth, undefined);
+  assert.equal(record.catalogConfirmation, undefined);
+  assert.equal(peugeot208Audit.manualCrossCheck.notUsedAsExactMy2025Manual, true);
+});
+
+test("Peugeot 208 approval remains tied to the observed unit, manual powertrain, original flag and exact model year", () => {
+  for (const patch of [
+    { id: "another-208" }, { unitKey: `vin-sha256:${"f".repeat(64)}` },
+    { modelo: "208 STYLE TURBO" }, { motor: "1.2" }, { cambio: "AUTOMATICO" },
+    { year: 2024 }, { anoFabricacao: 2025 }, { diferenciais: [] }, { price: 0 },
+    { km: 27899 },
+  ]) assert.equal(resolveFactoryWarranty({ ...peugeot208Vehicle, ...patch }, peugeot208Registry, "2026-11-10"), undefined);
+  assert.equal(resolveFactoryWarranty({ ...peugeot208Vehicle, km: 150000 }, peugeot208Registry, "2026-11-10")?.estimatedEndYear, 2027);
+});
+
+test("Peugeot 208 does not restart its warranty at resale or invent a date in the final estimated year", () => {
+  assert.equal(resolveFactoryWarranty(peugeot208Vehicle, peugeot208Registry, "2026-12-31")?.estimatedEndYear, 2027);
+  assert.equal(resolveFactoryWarranty(peugeot208Vehicle, peugeot208Registry, "2027-01-01"), undefined);
+  assert.equal(resolveFactoryWarranty(peugeot208Vehicle, peugeot208Registry, "2028-01-01"), undefined);
+  const prior = peugeot208Registry.records.filter((entry) => entry.vehicle.vehicleId !== "20119");
+  assert.equal(prior.length, peugeot208Audit.preservation.previousRecordCount);
+  assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), peugeot208Audit.preservation.previousRecordsSha256);
+  assert.equal(createHash("sha256").update(JSON.stringify(peugeot208Registry.automation)).digest("hex"), peugeot208Audit.preservation.automationSha256);
+});
