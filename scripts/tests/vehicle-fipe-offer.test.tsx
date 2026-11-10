@@ -12,7 +12,7 @@ import { createServer, type ViteDevServer } from "vite";
 import type { FipeOfferVehicle, ReviewedFipeOffer, resolveVehicleFipeOffer as Resolver, VehicleFipeOffer } from "../../src/lib/vehicleFipeOffer";
 import type { useVehicleFipeOffer as Hook } from "../../src/lib/useVehicleFipeOffer";
 import type { CardsHero as Cards } from "../../src/design-system/components/patterns/CardsHero";
-import type { VehicleFipeOfferNote as Note } from "../../src/design-system/components/patterns/VehicleFipeOfferNote";
+import type { VehicleFipeOfferNote as Note, VehicleFipeReference as Reference } from "../../src/design-system/components/patterns/VehicleFipeOfferNote";
 import type { VehicleCardStatic as Card } from "../../src/design-system/components/patterns/VehicleCard";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -24,6 +24,7 @@ let resolveOffer: typeof Resolver;
 let useOffer: typeof Hook;
 let CardsHero: typeof Cards;
 let VehicleFipeOfferNote: typeof Note;
+let VehicleFipeReference: typeof Reference;
 let VehicleCardStatic: typeof Card;
 
 before(async () => {
@@ -38,7 +39,7 @@ before(async () => {
   ({ resolveVehicleFipeOffer: resolveOffer } = await server.ssrLoadModule("/src/lib/vehicleFipeOffer.ts"));
   ({ useVehicleFipeOffer: useOffer } = await server.ssrLoadModule("/src/lib/useVehicleFipeOffer.ts"));
   ({ CardsHero } = await server.ssrLoadModule("/src/design-system/components/patterns/CardsHero.tsx"));
-  ({ VehicleFipeOfferNote } = await server.ssrLoadModule("/src/design-system/components/patterns/VehicleFipeOfferNote.tsx"));
+  ({ VehicleFipeOfferNote, VehicleFipeReference } = await server.ssrLoadModule("/src/design-system/components/patterns/VehicleFipeOfferNote.tsx"));
   ({ VehicleCardStatic } = await server.ssrLoadModule("/src/design-system/components/patterns/VehicleCard.tsx"));
 });
 after(async () => { await server?.close(); rmSync(cacheDir, { recursive: true, force: true }); });
@@ -136,23 +137,54 @@ test("pending/revoked/unapproved claims never show even with matching inventory"
   assert.equal(resolveOffer(vehicle(), [], now), undefined);
 });
 
-test("compact card and full note both display the exact difference; sold cards omit the note", () => {
+test("card and detail render a commercial seal with a readable qualifier; explanatory figures stay out of the seal", () => {
   const offer = resolveOffer(vehicle(), records, now)!;
   const props = { vehicleId: "20138", image: "/images/vehicle-placeholder.webp", brand: "CHEVROLET", model: "TRACKER PREMIER TURBO", year: "2027", fuel: "FLEX", transmission: "AUTOMATICO", mileage: "1.200 km", price: "R$ 154.900", fipeOffer: offer };
   for (const compact of [true, false]) {
     const card = renderToStaticMarkup(<CardsHero {...props} compact={compact} />);
     assert.match(card, /aria-label="Aproximadamente R\$ 10 mil abaixo da FIPE"/);
-    assert.match(card, /<span class="block font-normal text-\[10px\]">Aproximadamente<\/span>/);
-    assert.match(card, /<strong class="block font-black[^>]+>R\$ 10 mil abaixo da FIPE<\/strong>/);
-    assert.match(card, /R\$ 9\.452/);
-    assert.match(card, /FIPE nov\/2026: R\$ 164\.352/);
+    assert.match(card, /role="img"/);
+    assert.match(card, /text-\[9px\]">Aproximadamente<\/span>/);
+    assert.match(card, /<strong[^>]+text-\[36px\]/);
+    assert.match(card, /<span>10<\/span>/);
+    assert.match(card, />mil<\/span>/);
+    assert.match(card, />Abaixo da FIPE<\/span>/);
+    assert.match(card, /w-\[140px\]/);
+    assert.match(card, /max-w-full/);
+    assert.doesNotMatch(card, /R\$ 9\.452|R\$ 164\.352|nov\/2026|Diferença:/);
     assert.match(card, /R\$ 154\.900/);
   }
   const detail = renderToStaticMarkup(<VehicleFipeOfferNote offer={offer} />);
   assert.match(detail, /Aproximadamente R\$ 10 mil abaixo da FIPE/);
-  assert.match(detail, /R\$ 9\.452/);
+  assert.match(detail, /w-\[210px\]/);
+  assert.match(detail, /<strong[^>]+text-\[54px\]/);
+  assert.doesNotMatch(detail, /R\$ 9\.452|R\$ 164\.352|nov\/2026|Diferença:/);
   assert.doesNotMatch(renderToStaticMarkup(<CardsHero {...props} isSold />), /data-fipe-offer-id/);
   assert.equal(renderToStaticMarkup(<VehicleFipeOfferNote />), "");
+});
+
+test("footer identifies the reviewed unit and exposes the exact comparison only for its approved reference month", () => {
+  const footer = renderToStaticMarkup(<VehicleFipeReference records={records} now={now} />);
+  assert.match(footer, /Referência FIPE/);
+  assert.match(footer, /Tracker Premier 1\.2 Turbo 12V Flex Aut\./);
+  assert.match(footer, /2026\/2027 \(ID 20138\)/);
+  assert.match(footer, /novembro\/2026/);
+  assert.match(footer, /R\$ 164\.352/);
+  assert.match(footer, /preço considerado foi R\$ 154\.900/);
+  assert.match(footer, /diferença exata de R\$ 9\.452/);
+  assert.match(footer, /somente a esta unidade enquanto o selo estiver exibido/);
+  assert.match(footer, /href="https:\/\/veiculos\.fipe\.org\.br\?/);
+  assert.match(footer, /código 004525-0/);
+  assert.ok(renderToStaticMarkup(<VehicleFipeReference records={records} now={Date.parse("2026-12-01T02:59:59Z")} />));
+  assert.equal(renderToStaticMarkup(<VehicleFipeReference records={records} now={Date.parse("2026-12-01T03:00:00Z")} />), "");
+  for (const patch of [{ status: "pending" }, { status: "revoked" }, { vehicleId: "20139" }, { claim: null }, { expectedPrice: 1 }]) {
+    const edited = structuredClone(records);
+    Object.assign(edited[0], patch);
+    assert.equal(renderToStaticMarkup(<VehicleFipeReference records={edited} now={now} />), "", JSON.stringify(patch));
+  }
+  const footerSource = readFileSync(resolve(root, "src/design-system/components/layout/Footer.tsx"), "utf8");
+  assert.ok(footerSource.indexOf("<VehicleFipeReference />") > footerSource.indexOf("Garantia e política de reserva"));
+  assert.doesNotMatch(footerSource, /164352|154900|9452/, "footer uses the reviewed registry rather than copied figures");
 });
 
 test("an open page removes the offer when the preserved observation ages, without a fetch", async () => {
