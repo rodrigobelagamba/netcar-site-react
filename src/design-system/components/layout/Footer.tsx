@@ -15,6 +15,7 @@ import logoNetcar from "@/assets/images/logo-netcar.png";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { openPrivacyPreferences } from "@/components/PrivacyConsent";
 import { FACTORY_WARRANTY_NOTE, FACTORY_TRACTION_BATTERY_NOTE } from "@/design-system/components/patterns/FactoryWarrantyBadge";
+import { VehicleFipeReference } from "@/design-system/components/patterns/VehicleFipeOfferNote";
 
 const menuLinks = [
   { to: "/como-selecionamos-nossos-carros", label: "Por que Netcar" },
@@ -453,6 +454,8 @@ export function Footer() {
             do Termo de Sinal de Negócio.
           </p>
         </details>
+
+        <VehicleFipeReference />
 
         {/* Texto Legal */}
         <div className="border-t border-border pt-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
