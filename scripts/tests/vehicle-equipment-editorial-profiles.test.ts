@@ -24,7 +24,7 @@ const stockVehicle = (id: string): EquipmentVehicle => {
 };
 
 test("reviewed profiles cover exact combinations without equipment enrichment", () => {
-  assert.equal(vehicleEditorialProfiles.length, 64);
+  assert.equal(vehicleEditorialProfiles.length, 69);
   const identities = new Set<string>();
   for (const profile of vehicleEditorialProfiles) {
     const identity = JSON.stringify(profile.match);
@@ -220,11 +220,12 @@ test("Tracker 2018 topics use its registered MyLink and navigation without inher
   );
 });
 
-test("60 researched identities retain evidence, partial limits and exact drivetrain gates", () => {
+test("65 curated identities retain evidence, partial limits and exact drivetrain gates", () => {
   const records = [
     "editorial-profiles-2026-10-26.json",
     "editorial-profiles-2026-10-27.json",
     "editorial-profiles-2026-10-28-renegade-20110.json",
+    "editorial-profiles-2026-11-10.json",
   ].flatMap(
     (file) =>
       JSON.parse(
@@ -234,11 +235,11 @@ test("60 researched identities retain evidence, partial limits and exact drivetr
         ),
       ).records,
   );
-  assert.equal(records.length, 60);
+  assert.equal(records.length, 65);
   const researched = vehicleEditorialProfiles.filter(
     (profile) => profile.research,
   );
-  assert.equal(researched.length, 60);
+  assert.equal(researched.length, 65);
   for (const profile of researched) {
     const evidence = records.find(
       (row: { id: string }) => row.id === profile.research!.evidenceId,
@@ -294,4 +295,183 @@ test("researched units without supported topics stay pending instead of inventin
     assert.equal(result.editorialReview.reason, "no-supported-topics");
     assert.ok(result.remainingOptionals.includes("ISOFIX"));
   }
+});
+
+const novemberCurationCases = [
+  {
+    id: "20117",
+    marca: "CITROEN",
+    modelo: "C4 CACTUS SHINE PACK TURBO",
+    year: 2022,
+    motor: "1.6",
+    cambio: "AUTOMATICO",
+    opcionais: [
+      "camera_de_re",
+      "sensor_de_estacionamento",
+      "piloto_automatico",
+      "bancos_de_couro",
+      "ar_condicionado_digital",
+    ],
+    topics: ["parking-aids", "cruise-control", "cabin-comfort"],
+    unselected: ["air_bag_duplo", "air_bag_lateral", "air_bag_cortina"],
+  },
+  {
+    id: "20119",
+    marca: "PEUGEOT",
+    modelo: "208 STYLE",
+    year: 2025,
+    motor: "1.0",
+    cambio: "MANUAL",
+    opcionais: [
+      "ar_condicionado_digital",
+      "sensor_de_estacionamento",
+      "controle_de_tracao",
+    ],
+    topics: ["digital-climate", "parking-sensors", "traction-control"],
+    unselected: ["multimidia", "android"],
+  },
+  {
+    id: "20126",
+    marca: "HYUNDAI",
+    modelo: "IX35 GL",
+    year: 2018,
+    motor: "2.0",
+    cambio: "AUTOMATICO",
+    opcionais: [
+      "camera_de_re",
+      "sensor_de_estacionamento",
+      "piloto_automatico",
+      "bancos_de_couro",
+    ],
+    topics: ["parking-aids", "cruise-control", "leather-seats"],
+    unselected: ["air_bag_duplo", "air_bag_lateral", "air_bag_cortina"],
+  },
+  {
+    id: "20127",
+    marca: "CHEVROLET",
+    modelo: "CRUZE LTZ TURBO",
+    year: 2019,
+    motor: "1.4",
+    cambio: "AUTOMATICO",
+    opcionais: [
+      "air_bag_duplo",
+      "air_bag_lateral",
+      "air_bag_cortina",
+      "camera_de_re",
+      "sensor_de_estacionamento",
+    ],
+    topics: ["airbag-protection", "parking-aids"],
+    unselected: ["park_assist", "alerta_colisao"],
+  },
+  {
+    id: "20134",
+    marca: "CHEVROLET",
+    modelo: "TRACKER LT TURBO",
+    year: 2023,
+    motor: "1.0",
+    cambio: "AUTOMATICO",
+    opcionais: [
+      "camera_de_re",
+      "sensor_de_estacionamento",
+      "piloto_automatico",
+      "bancos_de_couro",
+    ],
+    topics: ["parking-aids", "cruise-control", "leather-seats"],
+    unselected: ["air_bag_duplo", "air_bag_lateral", "air_bag_cortina"],
+  },
+];
+
+test("November curation selects the approved 14 cards while preserving every resolved fact", () => {
+  let cardCount = 0;
+  for (const { topics, unselected, ...identity } of novemberCurationCases) {
+    const vehicle = {
+      ...identity,
+      opcionais: [...identity.opcionais, ...unselected],
+    };
+    const original = structuredClone(vehicle);
+    const equipment = resolveVehicleEquipment(vehicle).items;
+    const result = buildVehicleHighlights(vehicle);
+    assert.deepEqual(
+      result.highlights.map((card) => card.id),
+      topics,
+    );
+    assert.equal(result.editorialReview.status, "profile-applied");
+    assert.equal(result.editorialReview.researchStatus, "partial");
+    assert.deepEqual(
+      [
+        ...result.highlights.flatMap((card) => card.equipmentLabels),
+        ...result.remainingOptionals,
+      ].sort(),
+      equipment.map((item) => item.description).sort(),
+    );
+    assert.deepEqual(vehicle, original);
+    cardCount += result.highlights.length;
+  }
+  assert.equal(cardCount, 14);
+});
+
+test("the five new profiles do not transfer to another trim, year, drivetrain or market", () => {
+  for (const {
+    topics,
+    unselected: _unselected,
+    ...vehicle
+  } of novemberCurationCases) {
+    const expectedProfile = selectVehicleEditorialTopics(vehicle, topics).review
+      .profileId;
+    assert.ok(expectedProfile);
+    for (const change of [
+      { modelo: `${vehicle.modelo} OUTRA VERSAO` },
+      { marca: "OUTRA" },
+      { year: vehicle.year + 1 },
+      { year: undefined, anoFabricacao: vehicle.year },
+      { motor: "9.9" },
+      { motor: undefined },
+      { cambio: vehicle.cambio === "MANUAL" ? "AUTOMATICO" : "MANUAL" },
+      { cambio: undefined },
+      { market: "AR" },
+    ]) {
+      assert.notEqual(
+        selectVehicleEditorialTopics({ ...vehicle, ...change }, topics).review
+          .profileId,
+        expectedProfile,
+      );
+    }
+  }
+});
+
+test("missing facts reopen November reviews without promoting excluded topics or inheriting equipment", () => {
+  for (const { topics, unselected, ...identity } of novemberCurationCases) {
+    const changedUnit = {
+      ...identity,
+      id: "another-unit",
+      opcionais: unselected,
+    };
+    const result = buildVehicleHighlights(changedUnit);
+    assert.deepEqual(result.highlights, []);
+    assert.equal(result.editorialReview.reason, "unavailable-topics");
+    assert.deepEqual(result.editorialReview.unavailableTopics, topics);
+    assert.deepEqual(
+      result.remainingOptionals,
+      resolveVehicleEquipment(changedUnit).items.map(
+        (item) => item.description,
+      ),
+    );
+  }
+  const partialCamera = buildVehicleHighlights({
+    ...novemberCurationCases[0],
+    opcionais: [
+      "camera_de_re",
+      "piloto_automatico",
+      "bancos_de_couro",
+      "ar_condicionado_digital",
+    ],
+  });
+  assert.deepEqual(
+    partialCamera.highlights.map((card) => card.id),
+    ["cruise-control", "cabin-comfort"],
+  );
+  assert.deepEqual(partialCamera.editorialReview.unavailableTopics, [
+    "parking-aids",
+  ]);
+  assert.ok(partialCamera.remainingOptionals.includes("Câmera de ré"));
 });

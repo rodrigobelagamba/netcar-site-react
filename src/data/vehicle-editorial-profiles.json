@@ -1288,6 +1288,105 @@
         "status": "partial",
         "evidenceId": "jeep-renegade-longitude-t270-turbo-2023-1-3-automatico"
       }
+    },
+    {
+      "id": "citroen-c4-cactus-shine-pack-turbo-2022-1-6-automatico",
+      "reviewedAt": "2026-11-10",
+      "match": {
+        "brand": "CITROEN",
+        "model": "C4 CACTUS SHINE PACK TURBO",
+        "modelYear": 2022,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "parking-aids",
+        "cruise-control",
+        "cabin-comfort"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "editorial-canonical-2026-11-10-20117"
+      }
+    },
+    {
+      "id": "peugeot-208-style-2025-1-0-manual",
+      "reviewedAt": "2026-11-10",
+      "match": {
+        "brand": "PEUGEOT",
+        "model": "208 STYLE",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "digital-climate",
+        "parking-sensors",
+        "traction-control"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "editorial-canonical-2026-11-10-20119"
+      }
+    },
+    {
+      "id": "hyundai-ix35-gl-2018-2-0-automatico",
+      "reviewedAt": "2026-11-10",
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "IX35 GL",
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "parking-aids",
+        "cruise-control",
+        "leather-seats"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "editorial-canonical-2026-11-10-20126"
+      }
+    },
+    {
+      "id": "chevrolet-cruze-ltz-turbo-2019-1-4-automatico",
+      "reviewedAt": "2026-11-10",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "CRUZE LTZ TURBO",
+        "modelYear": 2019,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "airbag-protection",
+        "parking-aids"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "editorial-canonical-2026-11-10-20127"
+      }
+    },
+    {
+      "id": "chevrolet-tracker-lt-turbo-2023-1-0-automatico",
+      "reviewedAt": "2026-11-10",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "TRACKER LT TURBO",
+        "modelYear": 2023,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "parking-aids",
+        "cruise-control",
+        "leather-seats"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "editorial-canonical-2026-11-10-20134"
+      }
     }
   ]
 }
