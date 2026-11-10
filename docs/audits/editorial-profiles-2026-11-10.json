@@ -1,0 +1,336 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-10",
+  "scope": "Approved editorial topic selection for five exact model/version/year/drivetrain combinations. No equipment, caption, warranty or XML change.",
+  "sourcePolicy": "Current canonical inventory facts determine eligibility. This review selects among existing resolved equipment; it does not certify manufacturer-standard equipment or newly confirm a unit accessory.",
+  "sourceAuditAt": "2026-11-10T13:41:21.865Z",
+  "sourceCommit": "15fd130085853d91423c18499bf477dfab3dca30",
+  "revalidatedAt": "2026-11-10T14:24:16.865Z",
+  "revalidationResult": "All five identity/equipment data signatures and editorial signatures match the approved proposal.",
+  "publicationApprovedAt": "2026-11-10",
+  "approvalScope": "Five editorial profiles and their 14 proposed cards only; photo captions remain outside this approval.",
+  "records": [
+    {
+      "id": "editorial-canonical-2026-11-10-20117",
+      "ids": [
+        "20117"
+      ],
+      "profileId": "citroen-c4-cactus-shine-pack-turbo-2022-1-6-automatico",
+      "match": {
+        "brand": "CITROEN",
+        "model": "C4 CACTUS SHINE PACK TURBO",
+        "modelYear": 2022,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "parking-aids",
+        "cruise-control",
+        "cabin-comfort"
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "evidenceKind": "inventory-canonical-resolver",
+      "evidenceUrls": [
+        "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500"
+      ],
+      "evidenceSummary": "Seleção de temas já gerados pelo cadastro atual e resolvedor canônico. Não classifica itens como série/opcional nem transfere equipamentos entre unidades. Revalidar os fatos e a identidade antes de aplicar.",
+      "manufacturerDocumentaryVerification": false,
+      "unitEquipmentNewlyConfirmed": false,
+      "dataSignature": "71e4689734324889d71c2513c9b9476721a14e282cadfc8eef1c28e5c95542c2",
+      "editorialSignature": "5691ce0a4a16bd4f4d60ec3367cf2838159b097a353b528ea8d2f7cd5125be1d",
+      "approvedCards": [
+        {
+          "id": "parking-aids",
+          "title": "Câmera de ré e sensor de estacionamento",
+          "description": "Exibe a imagem da área traseira durante a marcha à ré. O sensor avisa sobre obstáculos detectados durante as manobras.",
+          "equipmentIds": [
+            "rear-camera",
+            "parking-sensors"
+          ]
+        },
+        {
+          "id": "cruise-control",
+          "title": "Piloto automático",
+          "description": "Mantém a velocidade definida pelo motorista.",
+          "equipmentIds": [
+            "cruise-control"
+          ]
+        },
+        {
+          "id": "cabin-comfort",
+          "title": "Bancos em couro e ar digital",
+          "description": "Você escolhe os ajustes da climatização em comandos digitais.",
+          "equipmentIds": [
+            "leather-seats",
+            "digital-climate"
+          ]
+        }
+      ],
+      "excludedCurrentHighlightTopics": [
+        "airbag-protection"
+      ],
+      "scopeLimitations": [
+        "Os fatos vêm do cadastro e do resolvedor canônico, sem conclusão sobre equipamentos de série ou opcionais de fábrica.",
+        "O perfil compartilha apenas a seleção de temas entre identidades exatas; cada unidade depende de seus próprios equipamentos atuais.",
+        "Equipamentos ausentes, conflitantes ou alterados não são acrescentados pelo perfil. Fotos e legendas não fazem parte desta publicação."
+      ],
+      "curationStatus": "reviewed"
+    },
+    {
+      "id": "editorial-canonical-2026-11-10-20119",
+      "ids": [
+        "20119"
+      ],
+      "profileId": "peugeot-208-style-2025-1-0-manual",
+      "match": {
+        "brand": "PEUGEOT",
+        "model": "208 STYLE",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "MANUAL"
+      },
+      "suggestedTopics": [
+        "digital-climate",
+        "parking-sensors",
+        "traction-control"
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "evidenceKind": "inventory-canonical-resolver",
+      "evidenceUrls": [
+        "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500"
+      ],
+      "evidenceSummary": "Seleção de temas já gerados pelo cadastro atual e resolvedor canônico. Não classifica itens como série/opcional nem transfere equipamentos entre unidades. Revalidar os fatos e a identidade antes de aplicar.",
+      "manufacturerDocumentaryVerification": false,
+      "unitEquipmentNewlyConfirmed": false,
+      "dataSignature": "615bb24e53584b412c2a6be2161c0ccc0acdfa1224acf04cfed8863ff8059ff2",
+      "editorialSignature": "eff15be7d553b0d4312c152f9b9d67d4b115ca28eb9d5fa63dd10500a0b8526d",
+      "approvedCards": [
+        {
+          "id": "digital-climate",
+          "title": "Ar-condicionado digital",
+          "description": "Ajustes do ar-condicionado em comandos digitais.",
+          "equipmentIds": [
+            "digital-climate"
+          ]
+        },
+        {
+          "id": "parking-sensors",
+          "title": "Sensor de estacionamento",
+          "description": "Avisa sobre obstáculos detectados nas manobras.",
+          "equipmentIds": [
+            "parking-sensors"
+          ]
+        },
+        {
+          "id": "traction-control",
+          "title": "Controle de tração",
+          "description": "Auxilia o controle da tração nas rodas.",
+          "equipmentIds": [
+            "traction-control"
+          ]
+        }
+      ],
+      "excludedCurrentHighlightTopics": [
+        "phone-connectivity"
+      ],
+      "scopeLimitations": [
+        "Os fatos vêm do cadastro e do resolvedor canônico, sem conclusão sobre equipamentos de série ou opcionais de fábrica.",
+        "O perfil compartilha apenas a seleção de temas entre identidades exatas; cada unidade depende de seus próprios equipamentos atuais.",
+        "Equipamentos ausentes, conflitantes ou alterados não são acrescentados pelo perfil. Fotos e legendas não fazem parte desta publicação."
+      ],
+      "curationStatus": "reviewed"
+    },
+    {
+      "id": "editorial-canonical-2026-11-10-20126",
+      "ids": [
+        "20126"
+      ],
+      "profileId": "hyundai-ix35-gl-2018-2-0-automatico",
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "IX35 GL",
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "parking-aids",
+        "cruise-control",
+        "leather-seats"
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "evidenceKind": "inventory-canonical-resolver",
+      "evidenceUrls": [
+        "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500"
+      ],
+      "evidenceSummary": "Seleção de temas já gerados pelo cadastro atual e resolvedor canônico. Não classifica itens como série/opcional nem transfere equipamentos entre unidades. Revalidar os fatos e a identidade antes de aplicar.",
+      "manufacturerDocumentaryVerification": false,
+      "unitEquipmentNewlyConfirmed": false,
+      "dataSignature": "e77dcf1479094056c28a9cb946c8f5c14e386169890c81ea7c5ae5a3094185f9",
+      "editorialSignature": "8faf68ea695262dcf56948c096501e43de2b3e01b95f9ee540720aa52eac1699",
+      "approvedCards": [
+        {
+          "id": "parking-aids",
+          "title": "Câmera de ré e sensor de estacionamento",
+          "description": "Exibe a imagem da área traseira durante a marcha à ré. O sensor avisa sobre obstáculos detectados durante as manobras.",
+          "equipmentIds": [
+            "rear-camera",
+            "parking-sensors"
+          ]
+        },
+        {
+          "id": "cruise-control",
+          "title": "Piloto automático",
+          "description": "Mantém a velocidade definida pelo motorista.",
+          "equipmentIds": [
+            "cruise-control"
+          ]
+        },
+        {
+          "id": "leather-seats",
+          "title": "Bancos em couro",
+          "description": "Revestimento em couro nos bancos.",
+          "equipmentIds": [
+            "leather-seats"
+          ]
+        }
+      ],
+      "excludedCurrentHighlightTopics": [
+        "airbag-protection"
+      ],
+      "scopeLimitations": [
+        "Os fatos vêm do cadastro e do resolvedor canônico, sem conclusão sobre equipamentos de série ou opcionais de fábrica.",
+        "O perfil compartilha apenas a seleção de temas entre identidades exatas; cada unidade depende de seus próprios equipamentos atuais.",
+        "Equipamentos ausentes, conflitantes ou alterados não são acrescentados pelo perfil. Fotos e legendas não fazem parte desta publicação."
+      ],
+      "curationStatus": "reviewed"
+    },
+    {
+      "id": "editorial-canonical-2026-11-10-20127",
+      "ids": [
+        "20127"
+      ],
+      "profileId": "chevrolet-cruze-ltz-turbo-2019-1-4-automatico",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "CRUZE LTZ TURBO",
+        "modelYear": 2019,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "airbag-protection",
+        "parking-aids"
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "evidenceKind": "inventory-canonical-resolver",
+      "evidenceUrls": [
+        "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500"
+      ],
+      "evidenceSummary": "Seleção de temas já gerados pelo cadastro atual e resolvedor canônico. Não classifica itens como série/opcional nem transfere equipamentos entre unidades. Revalidar os fatos e a identidade antes de aplicar.",
+      "manufacturerDocumentaryVerification": false,
+      "unitEquipmentNewlyConfirmed": false,
+      "dataSignature": "2a80e62818dd0758f48cd70af7993a9ebbde6300a9eab21dbb39872cd2223a77",
+      "editorialSignature": "c9cba10d5a98b61e49fc31b587eb3e3da083403aa546d865237d35f2766b4219",
+      "approvedCards": [
+        {
+          "id": "airbag-protection",
+          "title": "Airbags frontais, laterais e de cortina",
+          "description": "Proteção por airbags nas posições indicadas.",
+          "equipmentIds": [
+            "airbag-protection"
+          ]
+        },
+        {
+          "id": "parking-aids",
+          "title": "Câmera de ré e sensor de estacionamento",
+          "description": "Exibe a imagem da área traseira durante a marcha à ré. O sensor avisa sobre obstáculos detectados durante as manobras.",
+          "equipmentIds": [
+            "rear-camera",
+            "parking-sensors"
+          ]
+        }
+      ],
+      "excludedCurrentHighlightTopics": [
+        "park-assist",
+        "collision-warning"
+      ],
+      "scopeLimitations": [
+        "Os fatos vêm do cadastro e do resolvedor canônico, sem conclusão sobre equipamentos de série ou opcionais de fábrica.",
+        "O perfil compartilha apenas a seleção de temas entre identidades exatas; cada unidade depende de seus próprios equipamentos atuais.",
+        "Equipamentos ausentes, conflitantes ou alterados não são acrescentados pelo perfil. Fotos e legendas não fazem parte desta publicação."
+      ],
+      "curationStatus": "reviewed"
+    },
+    {
+      "id": "editorial-canonical-2026-11-10-20134",
+      "ids": [
+        "20134"
+      ],
+      "profileId": "chevrolet-tracker-lt-turbo-2023-1-0-automatico",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "TRACKER LT TURBO",
+        "modelYear": 2023,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "parking-aids",
+        "cruise-control",
+        "leather-seats"
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "evidenceKind": "inventory-canonical-resolver",
+      "evidenceUrls": [
+        "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500"
+      ],
+      "evidenceSummary": "Seleção de temas já gerados pelo cadastro atual e resolvedor canônico. Não classifica itens como série/opcional nem transfere equipamentos entre unidades. Revalidar os fatos e a identidade antes de aplicar.",
+      "manufacturerDocumentaryVerification": false,
+      "unitEquipmentNewlyConfirmed": false,
+      "dataSignature": "2a56ab4ccb07455886934d087ff1d1eb4e722ed376a101ad6533bb7b933fc650",
+      "editorialSignature": "b6bcd21556a2e20ab235e7f1fe0c942b41c08416f6d94c7eade8f2573f3cb470",
+      "approvedCards": [
+        {
+          "id": "parking-aids",
+          "title": "Câmera de ré e sensor de estacionamento",
+          "description": "Exibe a imagem da área traseira durante a marcha à ré. O sensor avisa sobre obstáculos detectados durante as manobras.",
+          "equipmentIds": [
+            "rear-camera",
+            "parking-sensors"
+          ]
+        },
+        {
+          "id": "cruise-control",
+          "title": "Piloto automático",
+          "description": "Mantém a velocidade definida pelo motorista.",
+          "equipmentIds": [
+            "cruise-control"
+          ]
+        },
+        {
+          "id": "leather-seats",
+          "title": "Bancos em couro",
+          "description": "Revestimento em couro nos bancos.",
+          "equipmentIds": [
+            "leather-seats"
+          ]
+        }
+      ],
+      "excludedCurrentHighlightTopics": [
+        "airbag-protection"
+      ],
+      "scopeLimitations": [
+        "Os fatos vêm do cadastro e do resolvedor canônico, sem conclusão sobre equipamentos de série ou opcionais de fábrica.",
+        "O perfil compartilha apenas a seleção de temas entre identidades exatas; cada unidade depende de seus próprios equipamentos atuais.",
+        "Equipamentos ausentes, conflitantes ou alterados não são acrescentados pelo perfil. Fotos e legendas não fazem parte desta publicação."
+      ],
+      "curationStatus": "reviewed"
+    }
+  ]
+}
