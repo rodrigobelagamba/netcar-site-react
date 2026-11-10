@@ -1,5 +1,7 @@
 import { FactoryWarrantyBadge, FactoryWarrantyNote } from "@/design-system/components/patterns/FactoryWarrantyBadge";
 import { useFactoryWarrantyStamps } from "@/lib/useFactoryWarrantyStamps";
+import { useVehicleFipeOffer } from "@/lib/useVehicleFipeOffer";
+import { VehicleFipeOfferNote } from "@/design-system/components/patterns/VehicleFipeOfferNote";
 import {
   useParams,
   useLocation,
@@ -60,7 +62,7 @@ import { DeferredRender } from "@/design-system/components/layout/DeferredRender
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
 import { generateVehicleSlug, maskPlate } from "@/lib/slug";
-import { formatCatalogMileage } from "@/lib/formatters";
+import { formatCatalogMileage, formatPrice } from "@/lib/formatters";
 import { useIcheckMetadata } from "@/hooks/useIcheckMetadata";
 import { getHistorySummary } from "@/reports/icheck/icheckHistory";
 import { ICHECK_SOURCE_LABEL } from "@/reports/icheck/icheckCopy";
@@ -1651,6 +1653,7 @@ export function DetalhesPage() {
   } = useVehicleQuery(slug);
   const { warrantyStamp, tractionBatteryStamp, powertrainStamp } =
     useFactoryWarrantyStamps(isPlaceholderData || isVehicleGone(error) ? undefined : vehicle);
+  const fipeOffer = useVehicleFipeOffer(isPlaceholderData || isVehicleGone(error) ? undefined : vehicle);
   const { data: icheck } = useIcheckMetadata(
     isPlaceholderData ? undefined : vehicle,
   );
@@ -2500,10 +2503,11 @@ export function DetalhesPage() {
               {!isSold && (
                 <div className="flex w-full flex-col items-center">
                   <VehiclePrice
-                    price={price}
+                    price={fipeOffer && vehicle ? formatPrice(vehicle.price) : price}
                     previousPrice={previousPrice}
                     showComparison={showPriceComparison}
                   />
+                  <VehicleFipeOfferNote offer={fipeOffer} />
                   <GoogleRatingBadge className="[&>summary]:border-0 [&>summary]:bg-transparent [&>summary]:shadow-none" />
                 </div>
               )}

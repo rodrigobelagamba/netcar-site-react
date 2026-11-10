@@ -12,6 +12,8 @@ import { vehicleWhatsAppRef } from "@/lib/vehicleWhatsAppRef";
 import { trackVehicleCardOpen } from "@/lib/analytics";
 import { CardsHero } from "./CardsHero";
 import { useFactoryWarrantyStamps } from "@/lib/useFactoryWarrantyStamps";
+import { useVehicleFipeOffer } from "@/lib/useVehicleFipeOffer";
+import type { FipeOfferVehicle } from "@/lib/vehicleFipeOffer";
 import type { WarrantyCatalogVehicle } from "@/lib/factoryWarranty";
 import type { VehicleImagesSite } from "@/catalog/endpoints/vehicles";
 import { resolveVehicleCoverImage } from "@/lib/vehicleCoverImage";
@@ -56,7 +58,7 @@ export interface VehicleCardProps {
   pdf_url?: string;
   diferenciais?: Array<{ tag: string; descricao: string }>;
   /** Dados originais do catálogo, sem fallbacks de apresentação para a garantia. */
-  warrantyVehicle?: WarrantyCatalogVehicle;
+  warrantyVehicle?: WarrantyCatalogVehicle & Partial<FipeOfferVehicle>;
   delay?: number;
   fastAnimation?: boolean;
   eagerImage?: boolean;
@@ -158,6 +160,14 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   const isSold = !price || price <= 0;
   const { warrantyStamp, tractionBatteryStamp, powertrainStamp } =
     useFactoryWarrantyStamps(!isSold && warrantyVehicle?.id === id ? warrantyVehicle : undefined);
+  const fipeOffer = useVehicleFipeOffer(!isSold && warrantyVehicle?.id === id ? {
+    ...warrantyVehicle,
+    id, price, marca, modelo, year, anoFabricacao,
+    // Hub cards already carry the canonical vehicle but may omit these
+    // presentation props. An omitted prop must not erase observed source data.
+    ...(combustivel !== undefined ? { combustivel } : {}),
+    ...(cambio !== undefined ? { cambio } : {}),
+  } : undefined);
   const merchandising = getVehicleMerchandising({
     id,
     km,
@@ -254,9 +264,10 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
       tractionBatteryStamp={tractionBatteryStamp}
       powertrainStamp={powertrainStamp}
       proofBadge={isSold || !hasIcheck ? undefined : "i-CHECK"}
-      price={priceFormatted}
+      price={fipeOffer ? formatPrice(price) : priceFormatted}
       previousPrice={previousPriceFormatted}
       showPriceComparison={shouldShowPriceComparison}
+      fipeOffer={fipeOffer}
       delay={delay}
       fastAnimation={fastAnimation}
       eagerImage={eagerImage}

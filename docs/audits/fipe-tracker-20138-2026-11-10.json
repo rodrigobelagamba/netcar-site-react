@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-10",
+  "vehicleId": "20138",
+  "officialReference": {
+    "source": "FIPE official rendered website",
+    "url": "https://veiculos.fipe.org.br?carro/gm-chevrolet/11-2026/004525-0/2027/f/jj0089m3nsd52",
+    "referenceMonth": "2026-11",
+    "code": "004525-0",
+    "brand": "GM - Chevrolet",
+    "model": "TRACKER Premier 1.2 Turbo 12V Flex Aut.",
+    "modelYear": 2027,
+    "fuel": "Flex",
+    "valueBRL": 164352,
+    "displayedConsultationDate": "terça-feira, 10 de novembro de 2026 17:43",
+    "authentication": "jj0089m3nsd52"
+  },
+  "currentPublicPrice": {
+    "valueBRL": 154900,
+    "observedAt": "2026-11-10T20:42:39.500Z",
+    "source": "current full API collection through canonical adapter"
+  },
+  "savingBRL": 9452,
+  "approvedWording": "Aproximadamente R$ 10 mil abaixo da FIPE",
+  "approvalSource": "Direct owner response on2026-11-10 after official value and9452difference were presented",
+  "priceChangeAuthorized": false,
+  "referenceIsSalePrice": false,
+  "scope": "One vehicle on website cards and vehicle detail; no social ad campaign or channel message",
+  "requiredGuards": [
+    "Exact vehicle identity and expected corrected1.2engine",
+    "Current valid offer at154900",
+    "Reference current inAmerica/Sao_Paulo",
+    "Suppress expired or incompatible comparison"
+  ],
+  "sourceCorrection": {
+    "ownerConfirmedEngine": "1.2",
+    "ownerReportsXmlCorrected": true,
+    "assistantChangedXml": false
+  }
+}

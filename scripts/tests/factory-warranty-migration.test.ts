@@ -40,6 +40,7 @@ const novemberUnitsAudit = read("../../docs/audits/factory-warranty-nivus-creta-
 const fastbackAudit = read("../../docs/audits/factory-warranty-fastback-20050-2026-11-04.json");
 const peugeot208Audit = read("../../docs/audits/factory-warranty-peugeot-208-20119-2026-11-10.json");
 const tracker20113Audit = read("../../docs/audits/factory-warranty-tracker-20113-2026-11-04.json");
+const tracker20138Audit = read("../../docs/audits/factory-warranty-tracker-20138-2026-11-10.json");
 
 // Historical preservation checks use the archived decision that was active then.
 const recordsThrough = (reviewedAt: string) => current.records
@@ -361,7 +362,8 @@ const oldRecord = (id: string) =>
 const currentRecord = (id: string) =>
   current.records.find((record) => record.vehicle.vehicleId === id)!;
 const observed = (id: string) => {
-  const vehicle = (id === "20119" ? peugeot208Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
+  const vehicle = (id === "20138" ? tracker20138Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
+    ?? (id === "20119" ? peugeot208Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20113" ? tracker20113Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (novemberUnitsAudit.publicVehicles as WarrantyCatalogVehicle[]).find((entry) => entry.id === id)
     ?? migration.publicVehicles.find((entry) => entry.id === id)

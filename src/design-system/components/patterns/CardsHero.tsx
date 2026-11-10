@@ -2,6 +2,8 @@ import { Camera, MessageCircle } from "lucide-react";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { isFactoryWarrantyLayoutEnabled } from "@/lib/factoryWarrantyStamp";
+import type { VehicleFipeOffer } from "@/lib/vehicleFipeOffer";
+import { VehicleFipeOfferNote } from "./VehicleFipeOfferNote";
 import {
   FactoryWarrantyBadge,
   type FactoryWarrantyBadgeProps,
@@ -38,6 +40,7 @@ interface CardsHeroProps {
   price: string;
   previousPrice?: string;
   showPriceComparison?: boolean;
+  fipeOffer?: VehicleFipeOffer;
   delay?: number;
   fastAnimation?: boolean;
   eagerImage?: boolean;
@@ -64,6 +67,7 @@ export function CardsHero({
   price,
   previousPrice,
   showPriceComparison = false,
+  fipeOffer,
   year,
   transmission,
   mileage,
@@ -333,6 +337,8 @@ export function CardsHero({
               </p>
             )}
           </div>
+
+          {!isSold && <VehicleFipeOfferNote offer={fipeOffer} compact />}
 
           {isSold ? (
             <div

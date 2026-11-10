@@ -1,5 +1,15 @@
 # Carimbo de garantia de fábrica
 
+> Revisão individual de 10/11/2026: Tracker Premier Turbo 20138, fabricação
+> 2026/modelo 2027, motor 1.2 automático, aprovada para garantia geral de
+> três anos, sem limite de quilometragem para uso particular. O manual
+> brasileiro MY2027, código 52209840, documenta prazo, condições e transferência
+> até o término original. Uso particular é o ateste operacional existente da
+> Netcar; a vigência desta unidade e o carimbo foram confirmados pelo responsável.
+> Estimativa conservadora 2029*, sem data de vencimento inventada e com bloqueio
+> no ano final. A flag atual continua obrigatória; não foi aplicada extensão
+> condicionada de garantia. [Evidência individual](audits/factory-warranty-tracker-20138-2026-11-10.json).
+
 > Revisão individual de 04/11/2026: Tracker Turbo 20113, fabricação 2025/modelo
 > 2026, motor 1.0 automático, aprovado para garantia geral de três anos, sem
 > limite de quilometragem para uso particular. Prazo e km vêm do manual

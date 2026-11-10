@@ -1612,6 +1612,50 @@
           }
         }
       ]
+    },
+    {
+      "recordId": "reviewed-v2-20261110-20138",
+      "status": "approved",
+      "reviewedAt": "2026-11-10",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261110-20138\",\"reviewedAt\":\"2026-11-10\",\"vehicle\":{\"vehicleId\":\"20138\",\"manufactureYear\":2026,\"modelYear\":2027,\"brand\":\"CHEVROLET\",\"modelVersion\":\"TRACKER PREMIER TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:29ce4f5c9d047d93069081a53ae43acdd81549c54cb090fd7a98619b11efad2f\",\"engine\":\"1.2\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":1200,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chevrolet-tracker-my2027-manual-52209840\",\"label\":\"Manual oficial Chevrolet Tracker MY2027\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/2027/27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23_site.pdf\",\"locator\":\"Manual brasileiro MY2027, página impressa 271 (PDF 275), cobertura básica e Prazo de Garantia A/B: 36 meses para destinatário final de uso particular, sem teto de quilometragem; uso comercial tem limite de 100.000 km. Impressa 270 (PDF 274): início na entrega original; impressa 271: transferência ao novo proprietário preserva o término. Uso particular vem do ateste operacional existente da Netcar; vigência desta unidade e pedido de carimbo foram confirmados pelo responsável em 10/11/2026. O bônus condicionado não foi aplicado.\",\"revision\":\"52209840; 27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23; Brasil, MY2027; conferido em 2026-11-10.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"52209840\",\"modelYear\":2027,\"reviewId\":\"warranty-20261110-20138\",\"reviewedAt\":\"2026-11-10\"}}]}",
+      "vehicle": {
+        "vehicleId": "20138",
+        "brand": "CHEVROLET",
+        "modelVersion": "TRACKER PREMIER TURBO",
+        "manufactureYear": 2026,
+        "modelYear": 2027
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:29ce4f5c9d047d93069081a53ae43acdd81549c54cb090fd7a98619b11efad2f",
+        "engine": "1.2",
+        "transmission": "AUTOMATICO"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "usage": "private",
+      "reviewedMileageKm": 1200,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "sources": [
+        {
+          "sourceId": "chevrolet-tracker-my2027-manual-52209840",
+          "label": "Manual oficial Chevrolet Tracker MY2027",
+          "url": "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/2027/27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23_site.pdf",
+          "locator": "Manual brasileiro MY2027, página impressa 271 (PDF 275), cobertura básica e Prazo de Garantia A/B: 36 meses para destinatário final de uso particular, sem teto de quilometragem; uso comercial tem limite de 100.000 km. Impressa 270 (PDF 274): início na entrega original; impressa 271: transferência ao novo proprietário preserva o término. Uso particular vem do ateste operacional existente da Netcar; vigência desta unidade e pedido de carimbo foram confirmados pelo responsável em 10/11/2026. O bônus condicionado não foi aplicado.",
+          "revision": "52209840; 27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23; Brasil, MY2027; conferido em 2026-11-10.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "52209840",
+            "modelYear": 2027,
+            "reviewId": "warranty-20261110-20138",
+            "reviewedAt": "2026-11-10"
+          }
+        }
+      ]
     }
   ],
   "requireUnitBinding": true,

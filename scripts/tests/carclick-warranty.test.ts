@@ -128,6 +128,27 @@ test("Tracker2026 general coverage requires the current source flag and never in
   assert.equal(build().claims.length, 0);
 });
 
+test("Tracker Premier2027 uses only its corrected engine and unit-bound XML name", () => {
+  const { matrix, vehicle, record } = fixture("20138");
+  const aliases = [{ vehicleId: vehicle.id, canonicalModel: vehicle.modelo,
+    rawModel: "TRACKER PREMIER", unitKey: record.unitBinding!.unitKey }];
+  const build = (patch = {}, today = "2026-11-10") =>
+    buildCarclickWarrantyManifest(JSON.stringify(matrix), [{ ...vehicle, ...patch }], aliases, today);
+  const claim = build().claims[0];
+  assert.equal(claim.rawModel, "TRACKER PREMIER");
+  assert.equal(claim.engine, "1.2");
+  assert.equal(claim.requiresWarrantyFlag, true);
+  assert.deepEqual(claim.coverages.map(entry => entry.scope), ["basic-vehicle"]);
+  assert.equal(claim.coverages[0].validBefore, "2029-01-01");
+  assert.equal(claim.coverages[0].advertisedExpiryMonth, undefined);
+  assert.equal(build({ motor: "1.4" }).claims.length, 0);
+  assert.equal(build({ diferenciais: [] }).claims.length, 0);
+  assert.equal(build({}, "2029-01-01").claims.length, 0);
+  const wrongAlias = [{ ...aliases[0], unitKey: `plate-sha256:${"0".repeat(64)}` }];
+  const unaliased = buildCarclickWarrantyManifest(JSON.stringify(matrix), [vehicle], wrongAlias, "2026-11-10");
+  assert.equal(unaliased.claims[0].rawModel, "TRACKER PREMIER TURBO");
+});
+
 test("PHP7 runtime guards reject divergent or expired live data", (context) => {
   const php = process.env.PHP_BINARY || "php";
   const probe = spawnSync(php, ["-v"], { encoding: "utf8" });
