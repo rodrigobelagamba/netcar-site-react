@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "warranty-20261110-20138",
+  "reviewedAt": "2026-11-10",
+  "sourceCommit": "8c8cc1ab0c37bee91b3faffaf573030f6f4be503",
+  "approvedRecord": {
+    "recordId": "reviewed-v2-20261110-20138",
+    "status": "approved",
+    "reviewedAt": "2026-11-10",
+    "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261110-20138\",\"reviewedAt\":\"2026-11-10\",\"vehicle\":{\"vehicleId\":\"20138\",\"manufactureYear\":2026,\"modelYear\":2027,\"brand\":\"CHEVROLET\",\"modelVersion\":\"TRACKER PREMIER TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:29ce4f5c9d047d93069081a53ae43acdd81549c54cb090fd7a98619b11efad2f\",\"engine\":\"1.2\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":1200,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"chevrolet-tracker-my2027-manual-52209840\",\"label\":\"Manual oficial Chevrolet Tracker MY2027\",\"url\":\"https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/2027/27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23_site.pdf\",\"locator\":\"Manual brasileiro MY2027, página impressa 271 (PDF 275), cobertura básica e Prazo de Garantia A/B: 36 meses para destinatário final de uso particular, sem teto de quilometragem; uso comercial tem limite de 100.000 km. Impressa 270 (PDF 274): início na entrega original; impressa 271: transferência ao novo proprietário preserva o término. Uso particular vem do ateste operacional existente da Netcar; vigência desta unidade e pedido de carimbo foram confirmados pelo responsável em 10/11/2026. O bônus condicionado não foi aplicado.\",\"revision\":\"52209840; 27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23; Brasil, MY2027; conferido em 2026-11-10.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"52209840\",\"modelYear\":2027,\"reviewId\":\"warranty-20261110-20138\",\"reviewedAt\":\"2026-11-10\"}}]}",
+    "vehicle": {
+      "vehicleId": "20138",
+      "brand": "CHEVROLET",
+      "modelVersion": "TRACKER PREMIER TURBO",
+      "manufactureYear": 2026,
+      "modelYear": 2027
+    },
+    "unitBinding": {
+      "unitKey": "plate-sha256:29ce4f5c9d047d93069081a53ae43acdd81549c54cb090fd7a98619b11efad2f",
+      "engine": "1.2",
+      "transmission": "AUTOMATICO"
+    },
+    "optionalId": 108,
+    "optionalConfirmed": true,
+    "conditionsConfirmed": true,
+    "scope": "basic-vehicle",
+    "termYears": 3,
+    "usage": "private",
+    "reviewedMileageKm": 1200,
+    "mileage": {
+      "kind": "unlimited"
+    },
+    "sources": [
+      {
+        "sourceId": "chevrolet-tracker-my2027-manual-52209840",
+        "label": "Manual oficial Chevrolet Tracker MY2027",
+        "url": "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/2027/27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23_site.pdf",
+        "locator": "Manual brasileiro MY2027, página impressa 271 (PDF 275), cobertura básica e Prazo de Garantia A/B: 36 meses para destinatário final de uso particular, sem teto de quilometragem; uso comercial tem limite de 100.000 km. Impressa 270 (PDF 274): início na entrega original; impressa 271: transferência ao novo proprietário preserva o término. Uso particular vem do ateste operacional existente da Netcar; vigência desta unidade e pedido de carimbo foram confirmados pelo responsável em 10/11/2026. O bônus condicionado não foi aplicado.",
+        "revision": "52209840; 27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23; Brasil, MY2027; conferido em 2026-11-10.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "52209840",
+          "modelYear": 2027,
+          "reviewId": "warranty-20261110-20138",
+          "reviewedAt": "2026-11-10"
+        }
+      }
+    ]
+  },
+  "officialEvidence": {
+    "url": "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/2027/27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23_site.pdf",
+    "officialIndexUrl": "https://www.chevrolet.com.br/servicos/manuais",
+    "officialIndexLocator": "SUVs > Tracker > 2027 > Manual do proprietário",
+    "documentCode": "52209840",
+    "revision": "27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23",
+    "modelYear": 2027,
+    "country": "Brazil",
+    "language": "pt-BR",
+    "pdfPageCount": 320,
+    "pdfSha256": "2ae62964bcedd3e2d17c4c73312d29227dd7e69e8831eab138924ef667f5cb0a",
+    "pagesVisuallyChecked": [
+      274,
+      275,
+      276,
+      280,
+      320
+    ],
+    "pageNumberingNote": "PDF page numbers here are physical one-based pages, verified locally; web extraction page labels are one less.",
+    "manufacturerPolicy": {
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "termMonths": 36,
+      "privateMileage": {
+        "kind": "unlimited",
+        "basis": "Clause A specifies 36 months for final users without a mileage cap; clause B separately adds 100000 km for commercial/remunerated use. Same documentary interpretation as reviewed MY2026 Tracker20113; exact MY2027 clause independently verified."
+      },
+      "generalWarrantyLocator": "Printed p.271 / physical PDF p.275, general coverage paragraph and clauses A/B",
+      "commercialTermMonths": 36,
+      "commercialMileageLimitKm": 100000,
+      "commercialLimitFirstOccurrence": true,
+      "coverageSummary": "Base coverage for manufacturing/material defects in the vehicle and factory-installed equipment/accessories, subject to maintenance, natural-wear and other manual exclusions; not solely engine/transmission.",
+      "startBasis": "Original delivery date to owner in the manual identification table, which prevails over other dates.",
+      "startLocator": "Printed p.270 / physical PDF p.274",
+      "transferBasis": "Rights automatically pass to subsequent owners through the original term end.",
+      "transferLocator": "Printed p.271 / physical PDF p.275",
+      "resaleRestartsTerm": false,
+      "maintenanceConditions": "Follow preventive servicing through authorized Chevrolet network; retain properly completed service documentation. Printed pp.270 and273 / physical PDF pp.274 and277.",
+      "conditionalBonus": {
+        "additionalMonthsUpTo": 24,
+        "totalMonthsUpTo": 60,
+        "applied": false,
+        "reason": "Requires normal use, prescribed authorized-network maintenance, acceptance of OnStar terms and active Standard Connect; materially narrower exclusions. No unit bonus eligibility documented.",
+        "locator": "Printed pp.271-272 / physical PDF pp.275-276"
+      },
+      "conventionalBattery": {
+        "termMonths": 12,
+        "appliedAsSeparateStamp": false,
+        "locator": "Printed p.276 / physical PDF p.280"
+      },
+      "notImportedFromOtherYears": "MY2025 R8C/R8Z exceptions not imported; MY2026 serves as prior internal reference only, exact MY2027 manual supplies this policy."
+    }
+  },
+  "operationalAttestation": {
+    "source": "netcar-owner",
+    "confirmedAt": "2026-11-10",
+    "vehicleId": "20138",
+    "currentCoverageConfirmed": true,
+    "explicitStampAuthorization": true,
+    "usage": "private",
+    "usageBasis": "existing Netcar private-use stock attestation",
+    "engineConfirmed": "1.2",
+    "ownerReportsXmlCorrected": true,
+    "notManufacturerDocument": true,
+    "notReusableForOtherUnits": true,
+    "catalogFlagPreserved": true
+  },
+  "identityCorrespondence": {
+    "vehicleId": "20138",
+    "apiModel": "TRACKER PREMIER TURBO",
+    "expectedEngine": "1.2",
+    "sourceEngineInitiallyObserved": "1.4",
+    "unitKey": "plate-sha256:29ce4f5c9d047d93069081a53ae43acdd81549c54cb090fd7a98619b11efad2f",
+    "officialVersionSource": "https://news.chevrolet.com.br/newsroom.detail.html/Pages/news/br/pt/2026/may/0515-2027-tracker.html",
+    "sourceCorrectionState": "owner-corrected-XML-observed-in-API-and-XML",
+    "aliasRequired": true,
+    "publicApiCheckedAt": "2026-11-10T20:49:29.235Z",
+    "publicXmlCheckedAt": "2026-11-10T20:50:41.613243+00:00",
+    "xmlModel": "TRACKER PREMIER",
+    "brandMatches": true,
+    "manufactureYearMatches": true,
+    "modelYearMatches": true,
+    "engineMatches": true,
+    "transmissionMatches": true,
+    "unitIdentityHashMatches": true,
+    "unitIdentityHashScheme": "bound plate-sha256; raw identifiers not retained",
+    "alias": {
+      "vehicleId": "20138",
+      "canonicalModel": "TRACKER PREMIER TURBO",
+      "rawModel": "TRACKER PREMIER",
+      "unitKey": "plate-sha256:29ce4f5c9d047d93069081a53ae43acdd81549c54cb090fd7a98619b11efad2f"
+    },
+    "sourceXmlSha256": "27b6956aea1349eeffca71aead175dde110f1554eeef3cbf3a7c958406ff4fd0",
+    "publicXmlSha256": "f7d15d34ba18c0a5147f3d06221ba4f5be04ba97f4aa63360ed33bc28da9aa40",
+    "xmlFipeCode": "004525-0"
+  },
+  "timing": {
+    "estimatedEndYear": 2029,
+    "basis": "manufactureYear2026+termYears3; conservative estimate only",
+    "firstDeliveryDate": null,
+    "confirmedExpiryDate": null,
+    "confirmedExpiryMonth": null,
+    "resaleRestartsTerm": false,
+    "finalYearRequiresConfirmedExpiry": true
+  },
+  "preservation": {
+    "baselineRecordCount": 27,
+    "previousRecordsSha256": "f842617aa64047ea53791a923e34349f1ad14d562d785653b2f1f83287d38b0d",
+    "automationRulesSha256": "9293a17a28e8db243317d523659adadcf3928a345b39e0bf362a7db38021c242"
+  },
+  "scopeLimits": [
+    "General factory warranty for Tracker20138 and canonical Carclick warranty projection only.",
+    "No conditional five-year bonus or separate powertrain/battery stamp.",
+    "Existing records and automation rules unchanged.",
+    "The separate FIPE message was explicitly requested by the owner; its approval does not change the warranty terms.",
+    "No XML/ERP, source flag, equipment, photo captions or price change by this task."
+  ],
+  "publicStockCheckedAt": "2026-11-10T20:49:29.235Z",
+  "publicVehicle": {
+    "id": "20138",
+    "marca": "CHEVROLET",
+    "modelo": "TRACKER PREMIER TURBO",
+    "motor": "1.2",
+    "cambio": "AUTOMATICO",
+    "year": 2027,
+    "anoFabricacao": 2026,
+    "km": 1200,
+    "price": 154900,
+    "unitKey": "plate-sha256:29ce4f5c9d047d93069081a53ae43acdd81549c54cb090fd7a98619b11efad2f",
+    "diferenciais": [
+      {
+        "tag": "garantia_fabrica",
+        "descricao": ""
+      }
+    ]
+  }
+}

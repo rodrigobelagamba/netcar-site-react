@@ -1602,7 +1602,9 @@ test("Peugeot 208 does not restart its warranty at resale or invent a date in th
   assert.equal(resolveFactoryWarranty(peugeot208Vehicle, peugeot208Registry, "2026-12-31")?.estimatedEndYear, 2027);
   assert.equal(resolveFactoryWarranty(peugeot208Vehicle, peugeot208Registry, "2027-01-01"), undefined);
   assert.equal(resolveFactoryWarranty(peugeot208Vehicle, peugeot208Registry, "2028-01-01"), undefined);
-  const prior = peugeot208Registry.records.filter((entry) => entry.vehicle.vehicleId !== "20119");
+  // Audit the historical prefix; later individually reviewed units are additions.
+  const prior = peugeot208Registry.records.slice(0,
+    peugeot208Registry.records.findIndex((entry) => entry.vehicle.vehicleId === "20119"));
   assert.equal(prior.length, peugeot208Audit.preservation.previousRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), peugeot208Audit.preservation.previousRecordsSha256);
   assert.equal(createHash("sha256").update(JSON.stringify(peugeot208Registry.automation)).digest("hex"), peugeot208Audit.preservation.automationSha256);

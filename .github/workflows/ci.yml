@@ -26,6 +26,8 @@ jobs:
         env:
           NODE_ENV: production
         run: npm run stock:test-warranty
+      - name: Validate reviewed unit FIPE comparison
+        run: NODE_ENV=test node --import tsx --test scripts/tests/vehicle-fipe-offer.test.tsx
       - name: Validate homepage PHP
         run: |
           php -l public/index.php

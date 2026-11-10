@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "offers": [
+    {
+      "vehicleId": "20138",
+      "status": "approved",
+      "identity": {
+        "unitKey": "plate-sha256:29ce4f5c9d047d93069081a53ae43acdd81549c54cb090fd7a98619b11efad2f",
+        "brand": "CHEVROLET",
+        "modelVersion": "TRACKER PREMIER TURBO",
+        "manufactureYear": 2026,
+        "modelYear": 2027,
+        "engine": "1.2",
+        "transmission": "AUTOMATICO",
+        "fuel": "FLEX"
+      },
+      "expectedPrice": 154900,
+      "approvedSavings": 9452,
+      "claim": {
+        "kind": "approximately",
+        "amount": 10000,
+        "approvedOn": "2026-11-10",
+        "basis": "Confirmação do responsável neste chat: aproximadamente 10 mil abaixo da FIPE. A diferença exata permanece visível."
+      },
+      "reference": {
+        "code": "004525-0",
+        "model": "Tracker Premier 1.2 Turbo 12V Flex Aut.",
+        "modelYear": 2027,
+        "month": "2026-11",
+        "value": 164352,
+        "consultedAt": "2026-11-10T20:43:00.000Z",
+        "sourceUrl": "https://veiculos.fipe.org.br?carro/gm-chevrolet/11-2026/004525-0/2027/f/jj0089m3nsd52",
+        "evidence": "Consulta individual exibida na interface oficial FIPE, novembro de 2026."
+      }
+    }
+  ]
+}
