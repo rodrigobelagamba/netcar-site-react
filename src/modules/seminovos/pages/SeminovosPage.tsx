@@ -35,6 +35,8 @@ import {
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
 import { StockSearchField } from "../components/StockSearchField";
 import { StockFilterNotice } from "../components/StockFilterNotice";
+import { BlackFridayStockIntro } from "@/features/black-friday/CampaignSurfaces";
+import { useBlackFridayCampaign } from "@/features/black-friday/CampaignProvider";
 
 type StockLayout = {
   compact: boolean;
@@ -131,6 +133,7 @@ function useStockLayout(): StockLayout {
 }
 
 export function SeminovosPage() {
+  const { active: isBlackFriday } = useBlackFridayCampaign();
   const search = useSearch({ from: "/seminovos" });
   const navigate = useNavigate();
   const stockLayout = useStockLayout();
@@ -714,7 +717,11 @@ export function SeminovosPage() {
   ]);
 
   return (
-    <main className="flex-1 pt-16 sm:pt-0 overflow-x-hidden max-w-full pb-6">
+    <main
+      className="flex-1 pt-16 sm:pt-0 overflow-x-hidden max-w-full pb-6"
+      data-black-friday={isBlackFriday || undefined}
+    >
+      <BlackFridayStockIntro />
       <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-3 sm:py-4">
         <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start">
           <StockSearchField

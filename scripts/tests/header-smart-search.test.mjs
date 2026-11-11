@@ -105,6 +105,9 @@ function createHarness() {
     "@/catalog/queries/useVehiclesQuery": {
       useVehiclesQuery: () => ({ data: vehicles }),
     },
+    "@/features/black-friday/CampaignProvider": {
+      useBlackFridayCampaign: () => ({ active: false, config: null }),
+    },
     "@/contexts/SearchContext": {
       useSearchContext: () => ({
         searchTerm,

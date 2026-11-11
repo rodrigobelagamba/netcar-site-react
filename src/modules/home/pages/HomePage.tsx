@@ -16,6 +16,8 @@ import { HomeRegionsNav } from "../components/HomeRegionsNav";
 import { lazy, useMemo, useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { useBlackFridayCampaign } from "@/features/black-friday/CampaignProvider";
+import { BlackFridayHomeHero } from "@/features/black-friday/CampaignSurfaces";
 import {
   pickFeaturedHomeVehicle,
   pickHomeHighlightVehicles,
@@ -186,6 +188,7 @@ function HomeHeroSkeleton() {
 }
 
 export function HomePage() {
+  const { active: blackFridayActive } = useBlackFridayCampaign();
   const { data: vehicles, isLoading: isLoadingVehicles } = useVehiclesQuery();
   const { data: banners, isLoading: isLoadingBanners } = useBannersQuery();
   const navigate = useNavigate();
@@ -358,9 +361,11 @@ export function HomePage() {
   }, []);
 
   return (
-    <main className="flex-1 overflow-x-hidden max-w-full">
+    <main className="flex-1 overflow-x-hidden max-w-full" data-black-friday-home={blackFridayActive || undefined}>
       <div data-home-conversion-cta>
-        {isLoadingHero ? (
+        {blackFridayActive ? (
+          <BlackFridayHomeHero onViewStock={goToStock} />
+        ) : isLoadingHero ? (
           <HomeHeroSkeleton />
         ) : showBanners ? (
           <BannerHero banners={banners!} />
@@ -369,12 +374,12 @@ export function HomePage() {
         ) : null}
       </div>
 
-      <div>
+      {!blackFridayActive && <div>
         <HomeWhatsAppConversionPanel
           featuredVehicle={featuredVehicle}
           onViewStock={goToStock}
         />
-      </div>
+      </div>}
 
       <DeferredRender minHeight={96} rootMargin="100px">
         <SearchBar />
@@ -384,14 +389,14 @@ export function HomePage() {
       <section className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 md:py-12">
         <div className="mb-6 md:mb-8">
           <h2 className="text-2xl font-bold text-fg md:text-3xl">
-            Destaques do estoque
+            {blackFridayActive ? "Seu próximo carro está aqui." : "Destaques do estoque"}
           </h2>
           <p className="mt-2 max-w-2xl text-sm font-medium text-gray-600 md:text-lg">
             <span className="md:hidden">
-              Escolha um carro e fale no WhatsApp.
+              {blackFridayActive ? "Todo o estoque com os quatro benefícios Black Friday até 30/11." : "Escolha um carro e fale no WhatsApp."}
             </span>
             <span className="hidden md:inline">
-              Veja fotos, preços e os principais dados de cada carro.
+              {blackFridayActive ? "Escolha seu seminovo e aproveite os quatro benefícios juntos até 30/11." : "Veja fotos, preços e os principais dados de cada carro."}
             </span>
           </p>
         </div>

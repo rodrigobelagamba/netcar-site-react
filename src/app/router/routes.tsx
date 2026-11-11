@@ -18,6 +18,7 @@ import citiesJson from "@/data/seo/cities.json";
 import type { CitySeoPage } from "@/data/seo/types";
 import { NotFoundRedirect } from "@/components/NotFoundRedirect";
 import { PrivacyConsent } from "@/components/PrivacyConsent";
+import { BlackFridayFooterBanner } from "@/features/black-friday/CampaignSurfaces";
 
 const contextualCityPages = citiesJson as CitySeoPage[];
 const getContextualCityPage = (slug: string) =>
@@ -395,6 +396,7 @@ function RootComponent() {
       </div>
       {!isStandalone ? (
         <div className="print:hidden">
+          <BlackFridayFooterBanner />
           <LazyFooter />
           <WhatsAppButton />
         </div>

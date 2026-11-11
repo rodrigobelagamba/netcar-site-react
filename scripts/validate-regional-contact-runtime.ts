@@ -72,6 +72,9 @@ function createHarness(path: string, apiData: ApiData, routePath = pagePath) {
     "@/catalog/queries/useVehiclesQuery": {
       useVehiclesQuery: () => ({ data: [] }),
     },
+    "@/features/black-friday/CampaignProvider": {
+      useBlackFridayCampaign: () => ({ active: false, config: null }),
+    },
     "@/design-system/components/patterns/VehicleCard": {
       VehicleCard: "vehicle-card",
     },
