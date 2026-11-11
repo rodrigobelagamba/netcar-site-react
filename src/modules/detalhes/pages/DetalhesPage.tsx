@@ -1256,7 +1256,7 @@ function MobileGalleryCarousel({
                 className={`relative block aspect-[1920/1441] max-h-[55svh] w-full overflow-hidden ${slide.isCover ? "bg-gray-50" : "bg-gray-200"}`}
               >
                 {campaignActive && !isSold && slide.isCover && (
-                  <img className="bf-photo-arc" src="/images/campaigns/black-friday-2026/ribbon-turquoise.png" width={1080} height={406} alt="" aria-hidden="true" />
+                  <img className="bf-photo-arc" src="/images/campaigns/black-friday-2026/ribbon-black.png" width={1080} height={406} alt="" aria-hidden="true" />
                 )}
                 {isSold && (
                   <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
@@ -2311,7 +2311,7 @@ export function DetalhesPage() {
           {mainImage && (
             <div data-black-friday-photo={isBlackFriday && !isSold || undefined} className="bf-desktop-photo w-full h-[240px] sm:h-[400px] lg:h-auto hidden items-center lg:flex lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
               {isBlackFriday && !isSold && (
-                <img className="bf-photo-arc" src="/images/campaigns/black-friday-2026/ribbon-turquoise.png" width={1080} height={406} alt="" aria-hidden="true" />
+                <img className="bf-photo-arc" src="/images/campaigns/black-friday-2026/ribbon-black.png" width={1080} height={406} alt="" aria-hidden="true" />
               )}
               {isSold && (
                 <div
