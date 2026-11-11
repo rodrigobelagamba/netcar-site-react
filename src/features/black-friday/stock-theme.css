@@ -1,0 +1,315 @@
+/* Only the active campaign gets this showroom palette. Normal CSS stays intact. */
+[data-black-friday-stock] {
+  background: #080c0d;
+}
+
+[data-black-friday-stock] .bf-stock-intro {
+  border-bottom: 0;
+  background: radial-gradient(ellipse at 77% 20%, #173b3e 0, #080c0d 65%);
+}
+
+[data-black-friday-stock] .bf-stock-intro > .bf-wide-inner {
+  padding-top: 32px;
+  padding-bottom: 18px;
+}
+
+.bf-stock-campaign-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) auto;
+  align-items: center;
+  gap: 40px;
+}
+
+.bf-stock-campaign-heading h2 img {
+  display: block;
+  width: min(100%, 370px);
+  height: auto;
+}
+
+.bf-stock-campaign-promise strong {
+  display: block;
+  font-size: clamp(23px, 2.3vw, 33px);
+  font-weight: 750;
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+
+.bf-stock-campaign-promise > span {
+  display: block;
+  margin-top: 10px;
+  color: #9edfe1;
+  font-size: 14px;
+}
+
+.bf-stock-campaign-deadline {
+  padding: 14px 25px;
+  border: 1px solid #5cc5ca70;
+  color: #5cc5ca;
+  text-align: center;
+}
+
+.bf-stock-campaign-deadline span {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.bf-stock-campaign-deadline strong {
+  display: block;
+  font-size: 46px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -.05em;
+}
+
+.bf-stock-campaign-strip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  padding: 11px 20px;
+  background: #5cc5ca;
+  color: #052d30;
+  font-size: 12px;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.bf-stock-campaign-strip > span {
+  font-weight: 850;
+}
+
+.bf-stock-campaign-strip > b {
+  font-weight: 600;
+}
+
+.bf-stock-card-badge {
+  padding: 8px 10px;
+  border-left: 3px solid #5cc5ca;
+  border-radius: 4px;
+  background: #080c0d;
+  color: #fff;
+}
+
+.bf-stock-card-badge strong {
+  display: block;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 850;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: .035em;
+}
+
+.bf-stock-card-badge span {
+  display: block;
+  margin-top: 3px;
+  color: #8cdcdf;
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+[data-black-friday-stock] [data-bf-stock-catalog] {
+  position: relative;
+  padding-top: 25px;
+  padding-bottom: 50px;
+  background: radial-gradient(ellipse 80% 700px at 70% 0, #153336 0%, #0c1719 48%, transparent 100%);
+}
+
+[data-black-friday-stock] [data-bf-stock-toolbar] {
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+[data-black-friday-stock] [data-bf-stock-toolbar] [role="search"] {
+  border-color: #5cc5ca66;
+  background: #eaf4f3;
+  box-shadow: 0 0 0 1px #5cc5ca0d;
+}
+
+[data-black-friday-stock] [data-bf-stock-toolbar] button[aria-controls="stock-filters"] {
+  background: #5cc5ca;
+  color: #073b40;
+}
+
+[data-black-friday-stock] [data-bf-stock-toolbar] button[aria-controls="stock-filters"]:hover {
+  background: #8ce1e4;
+}
+
+[data-black-friday-stock] [data-bf-stock-toolbar] select {
+  border-color: #5cc5ca66;
+  background-color: #142b2e;
+  color: #e9f6f6;
+}
+
+[data-black-friday-stock] [data-bf-stock-toolbar] select + svg {
+  color: #75d2d5;
+}
+
+[data-black-friday-stock] [aria-label="Filtros ativos"] > span {
+  border-color: #5cc5ca66;
+  background: #173537;
+  color: #c7f1f2;
+}
+
+[data-black-friday-stock] #stock-filters {
+  border-color: #5cc5ca66;
+  background: #eaf2f1;
+  box-shadow: 0 15px 40px #0003;
+}
+
+[data-black-friday-stock] [data-bf-stock-heading] {
+  padding-bottom: 10px;
+}
+
+[data-black-friday-stock] [data-bf-stock-heading] h1 {
+  color: #f1f6f6;
+  letter-spacing: -.025em;
+}
+
+[data-black-friday-stock] [data-bf-stock-heading] [role="status"] {
+  color: #a6c1c3;
+}
+
+[data-black-friday-stock] [data-bf-stock-heading] summary {
+  padding-inline: 10px;
+  border: 1px solid #5cc5ca38;
+  background: #142b2e;
+  color: #a1e5e7;
+}
+
+[data-black-friday-stock] [data-bf-stock-heading] summary:hover {
+  background: #214246;
+}
+
+[data-black-friday-stock] [aria-label="Estoque filtrado"] > span {
+  color: #f4cc81;
+}
+
+[data-black-friday-stock] [aria-label="Estoque filtrado"] > button {
+  background: #5cc5ca;
+  color: #073b40;
+}
+
+[data-black-friday-stock] #stock-results > div > .text-muted-foreground,
+[data-black-friday-stock] [data-bf-stock-empty] .text-muted-foreground {
+  color: #a6c1c3;
+}
+
+[data-black-friday-stock] [data-bf-stock-empty] .text-fg {
+  color: #f1f6f6;
+}
+
+[data-black-friday-stock] [data-bf-stock-empty] > button {
+  color: #86d9dc;
+}
+
+/* Existing card/data hooks keep the color treatment local to this inventory. */
+[data-black-friday-stock] [data-showroom-vehicle-id] > .group {
+  background: linear-gradient(165deg, #f3f7f6 20%, #e5efee 100%);
+  box-shadow: 0 16px 45px #0005, 0 0 0 1px #5cc5ca26;
+}
+
+[data-black-friday-stock] [data-showroom-vehicle-id] > .group:hover {
+  box-shadow: 0 18px 45px #0006, 0 0 0 1px #5cc5ca8c;
+}
+
+[data-black-friday-stock] [data-card-action="ver_carro"] {
+  background: #5cc5ca;
+  color: #073b40;
+}
+
+[data-black-friday-stock] [data-card-action="ver_carro"]:hover {
+  background: #85dadd;
+}
+
+[data-black-friday-stock] [data-showroom-vehicle-id] a[data-wa-intent="vehicle_inquiry"] {
+  background: #073f43;
+  color: #a5ecec;
+}
+
+[data-black-friday-stock] [data-showroom-vehicle-id] a[data-wa-intent="vehicle_inquiry"]:hover {
+  background: #0a5b60;
+}
+
+[data-black-friday-stock] [data-bf-stock-help] > div {
+  background: #142b2e;
+  border-color: #5cc5ca66;
+  box-shadow: none;
+}
+
+[data-black-friday-stock] [data-bf-stock-help] a {
+  background: #5cc5ca;
+  color: #073b40;
+  box-shadow: none;
+}
+
+@media (max-width: 767px) {
+  [data-black-friday-stock] .bf-stock-intro > .bf-wide-inner {
+    padding-top: 24px;
+  }
+  .bf-stock-campaign-heading {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 18px 16px;
+  }
+  .bf-stock-campaign-heading h2 {
+    grid-column: 1;
+  }
+  .bf-stock-campaign-promise {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .bf-stock-campaign-promise strong {
+    font-size: 24px;
+  }
+  .bf-stock-campaign-promise > span {
+    margin-top: 6px;
+    font-size: 12px;
+  }
+  .bf-stock-campaign-deadline {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 9px 11px;
+  }
+  .bf-stock-campaign-deadline strong {
+    font-size: 34px;
+  }
+  .bf-stock-campaign-deadline span {
+    font-size: 8px;
+    letter-spacing: .03em;
+  }
+  .bf-stock-campaign-strip {
+    justify-content: space-between;
+    gap: 8px 14px;
+    font-size: 10px;
+    letter-spacing: .025em;
+  }
+  .bf-stock-campaign-strip > b {
+    display: none;
+  }
+  .bf-stock-card-badge {
+    padding: 7px;
+  }
+  .bf-stock-card-badge strong {
+    font-size: 11px;
+  }
+  .bf-stock-card-badge span {
+    font-size: 9px;
+  }
+  [data-black-friday-stock] [data-bf-stock-catalog] {
+    padding-top: 20px;
+    padding-bottom: 32px;
+  }
+  [data-black-friday-stock] [data-bf-stock-toolbar] {
+    gap: 10px;
+    margin-bottom: 17px;
+  }
+  [data-black-friday-stock] [data-bf-stock-heading] summary {
+    padding-inline: 6px;
+  }
+}

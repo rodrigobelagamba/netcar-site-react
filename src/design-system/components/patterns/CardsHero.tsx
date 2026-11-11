@@ -52,6 +52,7 @@ interface CardsHeroProps {
   whatsAppVehicleName?: string;
   whatsAppSource?: string;
   compact?: boolean;
+  blackFriday?: boolean;
   isSold?: boolean;
   /** Total de fotos: mostra pílula "N fotos" sobre a imagem. */
   photoCount?: number;
@@ -84,6 +85,7 @@ export function CardsHero({
   whatsAppVehicleName,
   whatsAppSource = "home_destaques",
   compact = false,
+  blackFriday = false,
   isSold = false,
   photoCount,
   onOpen,
@@ -292,6 +294,12 @@ export function CardsHero({
               : "gap-2 pt-4 short1600:gap-1.5 short1600:pt-2"
           }`}
         >
+          {blackFriday && !isSold && (
+            <div className="bf-stock-card-badge">
+              <strong>Black Friday</strong>
+              <span>4 benefícios · até 30/11</span>
+            </div>
+          )}
           <div
             className={`!border-0 w-full min-w-0 flex items-end ${
               compact

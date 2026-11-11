@@ -67,6 +67,8 @@ export interface VehicleCardProps {
   /** Número já resolvido pelo componente da lista, evitando uma query por card. */
   whatsAppNumber?: string;
   compact?: boolean;
+  /** Seasonal identity, explicitly enabled by the inventory page only. */
+  blackFriday?: boolean;
   /** Preserva o ponto exato do showroom ao abrir a ficha do veículo. */
   preserveShowroomPosition?: boolean;
   /** Marca o card pra sticky contextual (scroll / visibilidade). */
@@ -105,6 +107,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
   whatsAppSource = "home_destaques",
   whatsAppNumber = DEFAULT_SALES_WHATSAPP,
   compact = false,
+  blackFriday = false,
   preserveShowroomPosition = false,
   enableFocusTracking = false,
   onVehicleFocus,
@@ -279,6 +282,7 @@ export const VehicleCardStatic = memo(function VehicleCardStatic({
       whatsAppVehicleName={vehicleLabel}
       whatsAppSource={whatsAppSource}
       compact={compact}
+      blackFriday={blackFriday && !isSold}
       isSold={isSold}
       photoCount={imagens_site?.galeria?.length || images.length}
       onOpen={openVehicle}

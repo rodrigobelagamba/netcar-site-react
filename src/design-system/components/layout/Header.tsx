@@ -22,6 +22,7 @@ import {
   parseVehicleSearch,
 } from "@/lib/vehicleSearch";
 import logoNetcar from "@/assets/images/logo-netcar.png";
+import { useBlackFridayCampaign } from "@/features/black-friday/CampaignProvider";
 
 interface VehicleSuggestion {
   marca: string;
@@ -34,6 +35,7 @@ interface VehicleSuggestion {
 }
 
 export function Header() {
+  const { active: blackFridayActive } = useBlackFridayCampaign();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -385,7 +387,7 @@ export function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 overflow-x-hidden max-w-full isolate ${isMobileMenuOpen ? "z-[75]" : "z-50"}`}
+        className={`fixed top-0 left-0 right-0 overflow-x-hidden max-w-full isolate ${isMobileMenuOpen ? "z-[75]" : "z-50"}${blackFridayActive ? " bg-white" : ""}`}
       >
         {/* Fundo branco ao scroll — opacity (não clipPath): Safari iOS fantasma/duplicava o logo */}
         <div

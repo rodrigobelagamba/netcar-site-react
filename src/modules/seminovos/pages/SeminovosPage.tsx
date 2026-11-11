@@ -35,6 +35,9 @@ import {
 import { SeminovosWhatsAppHelpPanel } from "../components/SeminovosWhatsAppHelpPanel";
 import { StockSearchField } from "../components/StockSearchField";
 import { StockFilterNotice } from "../components/StockFilterNotice";
+import { BlackFridayStockIntro } from "@/features/black-friday/CampaignSurfaces";
+import { useBlackFridayCampaign } from "@/features/black-friday/CampaignProvider";
+import "@/features/black-friday/stock-theme.css";
 
 type StockLayout = {
   compact: boolean;
@@ -131,6 +134,7 @@ function useStockLayout(): StockLayout {
 }
 
 export function SeminovosPage() {
+  const { active: isBlackFriday } = useBlackFridayCampaign();
   const search = useSearch({ from: "/seminovos" });
   const navigate = useNavigate();
   const stockLayout = useStockLayout();
@@ -714,9 +718,14 @@ export function SeminovosPage() {
   ]);
 
   return (
-    <main className="flex-1 pt-16 sm:pt-0 overflow-x-hidden max-w-full pb-6">
-      <div className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-3 sm:py-4">
-        <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start">
+    <main
+      className="flex-1 pt-16 sm:pt-0 overflow-x-hidden max-w-full pb-6"
+      data-black-friday={isBlackFriday || undefined}
+      data-black-friday-stock={isBlackFriday || undefined}
+    >
+      <BlackFridayStockIntro />
+      <div data-bf-stock-catalog className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-3 sm:py-4">
+        <div data-bf-stock-toolbar className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start">
           <StockSearchField
             value={search.busca || ""}
             onChange={handleStockSearch}
@@ -945,7 +954,7 @@ export function SeminovosPage() {
           </div>
         </div>
 
-        <div className="mb-3">
+        <div data-bf-stock-heading className="mb-3">
           <div className="flex items-center justify-between gap-3">
             <h1 className="min-w-0 text-lg font-bold leading-tight text-fg sm:text-xl">
               Carros seminovos e usados
@@ -1033,7 +1042,7 @@ export function SeminovosPage() {
               <p className="text-muted-foreground">Carregando...</p>
             </div>
           ) : filteredAndSortedVehicles.length === 0 ? (
-            <div className="text-center py-12 space-y-4">
+            <div data-bf-stock-empty className="text-center py-12 space-y-4">
               <div>
                 <p className="text-fg text-lg font-semibold mb-2">
                   Nenhum veículo encontrado
@@ -1101,10 +1110,11 @@ export function SeminovosPage() {
                       whatsAppSource="seminovos_grid"
                       whatsAppNumber={whatsAppNumber}
                       compact={stockLayout.compact}
+                      blackFriday={isBlackFriday}
                       preserveShowroomPosition
                     />
                     {showMidGridBanner && index + 1 === midGridBreak && (
-                      <div className="col-span-full my-2 md:my-0">
+                      <div data-bf-stock-help className="col-span-full my-2 md:my-0">
                         <SeminovosWhatsAppHelpPanel
                           stockHelpHref={seminovosWhatsAppHref}
                           hasFilters={hasFilterParams}

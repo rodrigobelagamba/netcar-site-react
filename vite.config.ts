@@ -14,6 +14,11 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      // The detail page selects these responsive images again on viewport changes.
+      "/vehicle-photo.php": {
+        target: "https://www.netcarmultimarcas.com.br",
+        changeOrigin: true,
+      },
       "/entregas/v1/feed.php": {
         target: "https://www.netcarmultimarcas.com.br",
         changeOrigin: true,

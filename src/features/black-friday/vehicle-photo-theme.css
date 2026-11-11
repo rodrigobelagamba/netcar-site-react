@@ -1,0 +1,26 @@
+/* Agency artwork is a separate layer: source photos and the lightbox stay intact. */
+[data-black-friday-photo] { isolation: isolate; }
+[data-black-friday-photo] .bf-photo-arc {
+  position: absolute;
+  z-index: 1;
+  top: 3%;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+[data-black-friday-photo] picture > img { position: relative; z-index: 2; }
+.bf-detail-hero {
+  background-image: radial-gradient(ellipse at 72% 40%, #5cc5ca1f 0%, #5cc5ca08 38%, transparent 68%);
+}
+button[data-black-friday-photo] { background: transparent; }
+button[data-black-friday-photo] picture > img { position: absolute; }
+@media (min-width: 1024px) {
+  .bf-desktop-photo[data-black-friday-photo] .bf-photo-arc { top: 22%; left: 7%; width: 93%; }
+}
+@media print {
+  .bf-photo-arc { display: none !important; }
+  .bf-detail-hero, button[data-black-friday-photo] { background: transparent; }
+}

@@ -42,6 +42,7 @@ import {
   buildWhatsAppUrl,
   siteWhatsAppMessage,
   vehicleWhatsAppMessages,
+  withVehicleRef,
   type VehicleWhatsAppRef,
 } from "@/lib/whatsappMessages";
 import { vehicleWhatsAppRef } from "@/lib/vehicleWhatsAppRef";
@@ -101,6 +102,9 @@ import { CustomerDeliveriesCallout } from "../components/CustomerDeliveriesCallo
 import { selectVehicleInstagramVideo } from "../lib/vehicleInstagramVideos";
 import { useVehicleVideosQuery } from "../queries/useVehicleVideosQuery";
 import { vehicleVideosForDisplay } from "../lib/vehicleVideosResponse";
+import { BlackFridayVehicleOffer } from "@/features/black-friday/CampaignSurfaces";
+import { useBlackFridayCampaign } from "@/features/black-friday/CampaignProvider";
+import "@/features/black-friday/vehicle-photo-theme.css";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -115,7 +119,7 @@ const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
 const LOW_MILEAGE_HIGHLIGHT_THRESHOLD_KM = 10_000;
 const HIDDEN_RESPONSIVE_IMAGE =
-  "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 type EngineVehicle = {
   modelo?: string;
@@ -358,10 +362,18 @@ function ContactButton({
   waRef,
 }: ContactButtonProps) {
   const { data: whatsapp } = useWhatsAppQuery();
+  const { active: isBlackFriday } = useBlackFridayCampaign();
   const label = vehicleLabel || modeloCompleto || "veículo";
   const messages = vehicleWhatsAppMessages(label, modeloCompleto, waRef);
+  const inquiryMessage =
+    isBlackFriday && !isSold
+      ? withVehicleRef(
+          siteWhatsAppMessage(`quero conhecer as condições da Black Friday para o ${label}.`),
+          waRef,
+        )
+      : messages.info;
   const href = whatsapp?.numero
-    ? buildWhatsAppUrl(whatsapp.numero, messages.info)
+    ? buildWhatsAppUrl(whatsapp.numero, inquiryMessage)
     : undefined;
   const tradeHref = whatsapp?.numero
     ? buildWhatsAppUrl(whatsapp.numero, messages.trade)
@@ -434,7 +446,7 @@ function ContactButton({
           className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[#087A37] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-green-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#087A37] sm:min-h-12"
         >
           <MessageCircleMore className="h-4 w-4 shrink-0" aria-hidden="true" />
-          Falar deste carro
+          {isBlackFriday ? "Quero as condições Black Friday" : "Falar deste carro"}
         </a>
       )}
 
@@ -542,6 +554,7 @@ function DetalheFloatingWhatsApp({
   waRef,
 }: DetalheFloatingWhatsAppProps) {
   const { data: whatsapp } = useWhatsAppQuery();
+  const { active: isBlackFriday } = useBlackFridayCampaign();
   const label = vehicleLabel || modeloCompleto || "veículo";
   const messages = vehicleWhatsAppMessages(label, modeloCompleto, waRef);
   const ready = Boolean(whatsapp?.numero);
@@ -592,7 +605,13 @@ function DetalheFloatingWhatsApp({
 
   if (!ready || vehicleId == null || !priceLabel) return null;
 
-  const href = buildWhatsAppUrl(whatsapp!.numero, messages.info);
+  const inquiryMessage = isBlackFriday
+    ? withVehicleRef(
+        siteWhatsAppMessage(`quero conhecer as condições da Black Friday para o ${label}.`),
+        waRef,
+      )
+    : messages.info;
+  const href = buildWhatsAppUrl(whatsapp!.numero, inquiryMessage);
   const tradeHref = buildWhatsAppUrl(whatsapp!.numero, messages.trade);
   const cardImage = image || "/images/semcapa.webp";
 
@@ -614,6 +633,7 @@ function DetalheFloatingWhatsApp({
             tradeHref={tradeHref}
             tradeSource="detalhe_sticky_trade"
             eyebrow="Este carro"
+            ctaLabel={isBlackFriday ? "Condições Black Friday" : undefined}
             tradeCtaLabel="Avaliar troca"
             compact
           />
@@ -1178,11 +1198,13 @@ function MobileGalleryCarousel({
   altBase,
   onOpen,
   isSold = false,
+  campaignActive = false,
 }: {
   slides: HeroGallerySlide[];
   altBase: string;
   onOpen: (index: number) => void;
   isSold?: boolean;
+  campaignActive?: boolean;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
@@ -1230,8 +1252,12 @@ function MobileGalleryCarousel({
                 type="button"
                 onClick={() => onOpen(index)}
                 aria-label={`Abrir foto ${index + 1} de ${slides.length}`}
+                data-black-friday-photo={campaignActive && !isSold && slide.isCover || undefined}
                 className={`relative block aspect-[1920/1441] max-h-[55svh] w-full overflow-hidden ${slide.isCover ? "bg-gray-50" : "bg-gray-200"}`}
               >
+                {campaignActive && !isSold && slide.isCover && (
+                  <img className="bf-photo-arc" src="/images/campaigns/black-friday-2026/ribbon-black.png" width={1080} height={406} alt="" aria-hidden="true" />
+                )}
                 {isSold && (
                   <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
                     <span className="-rotate-[18deg] rounded-2xl border-[7px] border-[#E10600]/70 bg-white/40 px-8 py-3 text-5xl font-black uppercase tracking-[0.1em] text-[#E10600]/80 shadow-[0_10px_32px_rgba(0,0,0,0.14)] sm:rounded-[1.25rem] sm:border-[8px] sm:px-10 sm:py-4 sm:text-6xl">
@@ -1626,6 +1652,7 @@ function LoadingVehicleDetail({ slug }: { slug: string }) {
 }
 
 export function DetalhesPage() {
+  const { active: isBlackFriday } = useBlackFridayCampaign();
   const { slug: paramSlug } = useParams({ from: "/veiculo/$slug" });
   const location = useLocation();
   const navigate = useNavigate();
@@ -2159,7 +2186,10 @@ export function DetalhesPage() {
         ]
   ).slice(0, 4);
   return (
-    <main className="max-w-full min-w-0 overflow-x-clip pt-16 md:pt-0">
+    <main
+      className="max-w-full min-w-0 overflow-x-clip pt-16 md:pt-0"
+      data-black-friday={(isBlackFriday && !isSold) || undefined}
+    >
       {vehicle && (
         <VehicleSchemaOrg
           marca={marca}
@@ -2175,6 +2205,13 @@ export function DetalhesPage() {
           isSold={isSold}
           brandLandingSlug={brandLanding?.slug}
         />
+      )}
+      {isBlackFriday && !isSold && (
+        <a className="bf-vehicle-ribbon" href="#black-friday-beneficios">
+          <strong>Black Friday Netcar</strong>
+          <span>4 benefícios neste carro <span aria-hidden="true">↗</span></span>
+          <b>Só até 30/11</b>
+        </a>
       )}
       <nav
         aria-label="Navegação estrutural"
@@ -2245,7 +2282,7 @@ export function DetalhesPage() {
         </ol>
       </nav>
       {/* Hero Section */}
-      <section ref={heroRef} className="relative w-full max-w-full overflow-hidden py-0 pb-5 pt-0 lg:min-h-[var(--hero-media-min-height,0px)] lg:pb-8 lg:pt-0">
+      <section ref={heroRef} className={`relative w-full max-w-full overflow-hidden py-0 pb-5 pt-0 lg:min-h-[var(--hero-media-min-height,0px)] lg:pb-8 lg:pt-0${isBlackFriday && !isSold ? " bf-detail-hero" : ""}`}>
         {/* Mobile starts with the same cover and continues through the existing photos. */}
         <div
           ref={heroMediaRef}
@@ -2263,6 +2300,7 @@ export function DetalhesPage() {
               slides={heroGallery}
               altBase={`${marca} ${modeloCompleto} ${vehicle.year || ""}`.trim()}
               isSold={isSold}
+              campaignActive={isBlackFriday}
               onOpen={(index) => {
                 setLightboxOrigin("hero");
                 setLightboxIndex(index);
@@ -2271,7 +2309,10 @@ export function DetalhesPage() {
             />
           </div>
           {mainImage && (
-            <div className="w-full h-[240px] sm:h-[400px] lg:h-auto hidden items-center lg:flex lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
+            <div data-black-friday-photo={isBlackFriday && !isSold || undefined} className="bf-desktop-photo w-full h-[240px] sm:h-[400px] lg:h-auto hidden items-center lg:flex lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
+              {isBlackFriday && !isSold && (
+                <img className="bf-photo-arc" src="/images/campaigns/black-friday-2026/ribbon-black.png" width={1080} height={406} alt="" aria-hidden="true" />
+              )}
               {isSold && (
                 <div
                   aria-hidden="true"
@@ -2502,6 +2543,11 @@ export function DetalhesPage() {
             <div className="order-1 sm:order-none flex flex-col items-center gap-1 w-full">
               {!isSold && (
                 <div className="flex w-full flex-col items-center">
+                  {isBlackFriday && (
+                    <p className="bf-vehicle-price-note">
+                      Black Friday Netcar <span>· Até 30/11</span>
+                    </p>
+                  )}
                   <VehiclePrice
                     price={fipeOffer && vehicle ? formatPrice(vehicle.price) : price}
                     previousPrice={previousPrice}
@@ -2529,6 +2575,14 @@ export function DetalhesPage() {
           </motion.div>
         </div>
       </section>
+
+      {!isSold && (
+        <BlackFridayVehicleOffer
+          vehicleLabel={vehicleLabel}
+          vehicleId={vehicle.id}
+          waRef={waRef}
+        />
+      )}
 
       {/* One media gallery: the verified video stays available without photos. */}
       {(instagramVideo || avifImages.length > 0) && (

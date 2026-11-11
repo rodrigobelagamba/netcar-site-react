@@ -1,0 +1,107 @@
+/* Seasonal surfaces are opt-in. No baseline selectors or global theme overrides. */
+.bf-home-hero, .bf-stock-intro, .bf-vehicle-offer, .bf-footer-banner {
+  --bf-aqua: #5cc5ca;
+  --bf-ink: #080c0d;
+  color: #f7f8f8;
+  background: var(--bf-ink);
+}
+.bf-home-hero { position: relative; overflow: hidden; isolation: isolate; background: radial-gradient(ellipse at 82% 45%, #19373a 0%, #10191b 24%, #080c0d 62%); }
+.bf-home-inner { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 90px; max-width: 1270px; margin: 0 auto; padding: 42px 48px 58px; align-items: center; }
+.bf-eyebrow { display: flex; align-items: center; gap: 9px; color: var(--bf-aqua); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 25px; }
+.bf-eyebrow > span { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.bf-title-image { display: block; width: min(100%, 445px); height: auto; }
+.bf-home-headline { font-size: clamp(25px, 2.4vw, 35px); font-weight: 700; line-height: 1.17; letter-spacing: -.03em; margin: 25px 0 14px; }
+.bf-home-lead { color: #bbc7c9; font-size: 15px; line-height: 1.65; }
+.bf-home-lead strong { color: white; font-weight: 600; }
+.bf-benefits { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; list-style: none; padding: 0; margin: 22px 0 24px; }
+.bf-benefits li { display: flex; align-items: center; gap: 13px; padding: 17px 0; border-top: 1px solid #ffffff23; }
+.bf-benefits svg { flex: 0 0 auto; color: var(--bf-aqua); }
+.bf-benefits strong, .bf-benefits span { display: block; }
+.bf-benefits strong { font-size: 16px; font-weight: 700; letter-spacing: -.02em; line-height: 1.3; }
+.bf-benefits span { font-size: 13px; color: #bac6c7; margin-top: 3px; line-height: 1.4; }
+.bf-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.bf-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 13px 19px; border-radius: 7px; font-size: 13px; line-height: 1.3; font-weight: 700; text-decoration: none; transition: background-color .2s ease, color .2s ease; }
+.bf-button--primary { background: var(--bf-aqua); color: #063438; border: 1px solid var(--bf-aqua); }
+.bf-button--primary:hover { background: #91e1e4; color: #062b2f; }
+.bf-button--outline { color: white; border: 1px solid #94b8bb66; background: #08171966; }
+.bf-button--outline:hover { background: #1c3c3f; }
+.bf-button:focus-visible, .bf-stock-intro a:focus-visible, .bf-stock-intro summary:focus-visible { outline: 3px solid #b8f4f5; outline-offset: 4px; }
+.bf-terms { max-width: 620px; color: #a8b9bb; font-size: 11px; line-height: 1.65; margin-top: 17px; }
+.bf-home-film { width: 100%; position: relative; }
+.bf-film-label { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 10px; letter-spacing: .02em; color: #c5d6d7; margin-bottom: 10px; }
+.bf-film-label span:last-child { color: var(--bf-aqua); white-space: nowrap; }
+.bf-video-frame { overflow: hidden; border-radius: 15px; border: 1px solid #b9e7e64d; background: #183236; box-shadow: 0 20px 65px #0008; aspect-ratio: 9 / 16; }
+.bf-video-frame video { display: block; width: 100%; height: 100%; object-fit: contain; }
+.bf-video-caption { margin-top: 10px; text-align: center; font-size: 11px; color: #c0d3d4; }
+.bf-video-caption a { text-decoration: underline; }
+.bf-hero-ribbon { position: absolute; z-index: 0; width: 950px; max-width: none; height: auto; right: -440px; bottom: -85px; transform: rotate(-20deg); opacity: .7; pointer-events: none; }
+.bf-wide-inner { max-width: 1480px; padding-left: 48px; padding-right: 48px; margin: 0 auto; }
+.bf-stock-intro { border-bottom: 3px solid var(--bf-aqua); }
+.bf-stock-intro > .bf-wide-inner { padding-top: 25px; padding-bottom: 15px; }
+.bf-stock-heading { display: flex; align-items: center; justify-content: space-between; gap: 22px; }
+.bf-kicker { color: var(--bf-aqua); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 7px; }
+.bf-stock-heading h1, .bf-stock-heading h2 { font-size: clamp(20px, 2vw, 28px); font-weight: 650; letter-spacing: -.035em; line-height: 1.2; }
+.bf-deadline { flex-shrink: 0; color: var(--bf-aqua); font-size: 13px; font-weight: 700; border: 1px solid #5cc5ca66; border-radius: 5px; padding: 8px 12px; white-space: nowrap; }
+.bf-benefits--compact { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 17px 0 0; gap: 24px; }
+.bf-benefits--compact li { padding: 13px 0; }
+.bf-stock-bottom { display: flex; justify-content: space-between; gap: 16px; font-size: 11px; color: #a8b9bb; }
+.bf-stock-bottom a { display: inline-flex; gap: 6px; align-items: center; color: #c8edef; }
+.bf-stock-intro details { font-size: 11px; color: #a8b9bb; margin-top: 6px; scroll-margin-top: 80px; }
+.bf-stock-intro summary { cursor: pointer; width: fit-content; padding: 5px 0; }
+.bf-stock-intro details .bf-terms { margin-top: 6px; max-width: 1100px; }
+.bf-vehicle-offer { margin: 12px 0 20px; border-block: 1px solid #5cc5ca; scroll-margin-top: 80px; }
+.bf-vehicle-ribbon { display: flex; align-items: center; justify-content: center; gap: 30px; padding: 12px 20px; background: #080c0d; color: #dcebec; font-size: 12px; }
+.bf-vehicle-ribbon strong { color: #5cc5ca; font-size: 13px; font-style: italic; }
+.bf-vehicle-ribbon b { color: #5cc5ca; font-weight: 600; }
+.bf-vehicle-ribbon:hover { background: #143034; }
+.bf-vehicle-ribbon:focus-visible { outline: 3px solid #5cc5ca; outline-offset: -3px; }
+.bf-vehicle-offer > .bf-wide-inner { padding-top: 30px; padding-bottom: 30px; }
+.bf-offer-bottom { display: flex; gap: 40px; align-items: center; justify-content: space-between; margin-top: 13px; }
+.bf-offer-bottom .bf-terms { margin-top: 0; }
+.bf-offer-bottom .bf-button { flex-shrink: 0; }
+.bf-vehicle-price-note { color: #064b50; background: #d9f4f4; border: 1px solid #5cc5ca; border-radius: 4px; padding: 5px 12px; font-size: 11px; font-weight: 700; margin: 8px 0; }
+.bf-footer-banner { border-top: 1px solid #5cc5ca66; }
+.bf-footer-banner > .bf-wide-inner { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding-top: 32px; padding-bottom: 32px; }
+.bf-footer-banner strong { display: block; font-size: clamp(20px, 2vw, 29px); letter-spacing: -.03em; line-height: 1.2; }
+.bf-footer-banner strong + p { color: #b4c4c6; font-size: 13px; margin-top: 7px; }
+@media (min-width: 1600px) { .bf-home-inner { max-width: 1400px; grid-template-columns: minmax(0, 1fr) 340px; gap: 150px; } .bf-title-image { width: 490px; } .bf-home-headline { font-size: 38px; } }
+@media (max-width: 1000px) { .bf-home-inner { grid-template-columns: minmax(0, 1fr) 270px; gap: 35px; padding-inline: 32px; } .bf-benefits { column-gap: 12px; } .bf-benefits strong { font-size: 14px; } .bf-benefits span { font-size: 12px; } .bf-benefits--compact { gap: 15px; } .bf-wide-inner { padding-inline: 28px; } }
+@media (max-width: 767px) {
+  .bf-home-inner { display: flex; flex-direction: column; gap: 32px; padding: 30px 24px 38px; }
+  .bf-home-copy { width: 100%; max-width: 560px; }
+  .bf-eyebrow { font-size: 10px; letter-spacing: .08em; margin-bottom: 22px; }
+  .bf-title-image { width: min(100%, 365px); }
+  .bf-home-headline { font-size: 28px; margin-top: 23px; }
+  .bf-desktop-break { display: none; }
+  .bf-home-lead { font-size: 14px; }
+  .bf-benefits { margin-top: 20px; margin-bottom: 20px; gap: 0 16px; }
+  .bf-benefits li { gap: 9px; padding: 14px 0; align-items: flex-start; }
+  .bf-benefits svg { width: 20px; height: 20px; margin-top: 2px; }
+  .bf-benefits strong { font-size: 14px; }
+  .bf-benefits span { font-size: 12px; }
+  .bf-actions { display: grid; grid-template-columns: 1fr; }
+  .bf-button { min-height: 48px; font-size: 14px; }
+  .bf-terms { font-size: 10px; }
+  .bf-home-film { width: min(100%, 320px); }
+  .bf-hero-ribbon { width: 760px; right: -290px; bottom: -20px; opacity: .6; }
+  .bf-wide-inner { padding-inline: 20px; }
+  .bf-stock-intro > .bf-wide-inner { padding-top: 19px; }
+  .bf-stock-heading { gap: 12px; align-items: flex-start; }
+  .bf-stock-heading h1, .bf-stock-heading h2 { font-size: 21px; }
+  .bf-deadline { font-size: 10px; padding: 6px 8px; }
+  .bf-kicker { font-size: 10px; }
+  .bf-benefits--compact { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 15px; margin-bottom: 0; }
+  .bf-benefits--compact li { padding: 11px 0; }
+  .bf-benefits--compact strong { font-size: 12px; }
+  .bf-benefits--compact span { font-size: 11px; }
+  .bf-stock-bottom { font-size: 10px; }
+  .bf-vehicle-ribbon { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; padding: 10px 20px; font-size: 10px; }
+  .bf-vehicle-ribbon strong { grid-column: 1; font-size: 12px; }
+  .bf-vehicle-ribbon > span { grid-column: 1; }
+  .bf-vehicle-ribbon b { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+  .bf-offer-bottom { flex-direction: column; align-items: stretch; gap: 17px; margin-top: 12px; }
+  .bf-footer-banner > .bf-wide-inner { flex-direction: column; align-items: stretch; gap: 23px; }
+}
+@media (max-width: 639px) { [data-black-friday-home] .bf-home-hero { padding-top: 64px; } }
+@media (prefers-reduced-motion: reduce) { .bf-button { transition: none; } }
+@media print { .bf-home-hero, .bf-stock-intro, .bf-vehicle-offer, .bf-footer-banner, .bf-vehicle-price-note, .bf-vehicle-ribbon { display: none; } }
