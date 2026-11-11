@@ -1110,6 +1110,7 @@ export function SeminovosPage() {
                       whatsAppSource="seminovos_grid"
                       whatsAppNumber={whatsAppNumber}
                       compact={stockLayout.compact}
+                      blackFriday={isBlackFriday}
                       preserveShowroomPosition
                     />
                     {showMidGridBanner && index + 1 === midGridBreak && (

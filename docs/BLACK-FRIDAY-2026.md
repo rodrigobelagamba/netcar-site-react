@@ -41,7 +41,10 @@ similares; não recebem oferta nem mensagem de Black Friday para compra daquela
 unidade. O aviso geral de campanha no rodapé pode encaminhar ao estoque atual.
 
 Na revisão visual, a vitrine de seminovos ganhou fundo preto/carvão, cards em
-gelo e controles turquesa. A foto principal do veículo usa a faixa preta
+gelo e controles turquesa. O título original da agência e o prazo de 30/11
+aparecem em destaque, com uma faixa turquesa acima do catálogo. Cada carro
+disponível recebe o selo “Black Friday — 4 benefícios · até 30/11” junto ao
+preço; vendidos não recebem esse selo. A foto principal do veículo usa a faixa preta
 original da agência em uma camada decorativa atrás do carro, mantendo o fundo
 claro original. Essa composição aparece apenas na capa e não altera o arquivo da
 foto, as demais imagens ou a ampliação. Todas essas mudanças obedecem à mesma

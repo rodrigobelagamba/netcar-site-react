@@ -98,11 +98,16 @@ export function BlackFridayStockIntro() {
   return (
     <section className="bf-stock-intro" aria-labelledby="bf-stock-title" data-black-friday-surface="stock">
       <div className="bf-wide-inner">
-        <div className="bf-stock-heading"><div><p className="bf-kicker">Black Friday Netcar</p><h2 id="bf-stock-title">Escolha seu carro. Aproveite os quatro benefícios.</h2></div><span className="bf-deadline">Só até 30/11</span></div>
+        <div className="bf-stock-campaign-heading">
+          <h2 id="bf-stock-title"><img src={`${MEDIA}/title.png`} width="529" height="150" alt="Black Friday Netcar" /></h2>
+          <div className="bf-stock-campaign-promise"><strong>Escolha seu carro.<br />Leve os quatro benefícios.</strong><span>Juntos, em todo o estoque.</span></div>
+          <div className="bf-stock-campaign-deadline"><span>É só até</span><strong>30/11</strong><span>Por tempo limitado</span></div>
+        </div>
         <CampaignBenefits compact />
-        <div className="bf-stock-bottom"><span>Juntos, em todo o estoque.</span><a href="#bf-stock-conditions" onClick={() => { if (conditionsRef.current) conditionsRef.current.open = true; }}>Ver condições <ArrowRight size={14} aria-hidden="true" /></a></div>
+        <div className="bf-stock-bottom"><span>Seu próximo carro está aqui.</span><a href="#bf-stock-conditions" onClick={() => { if (conditionsRef.current) conditionsRef.current.open = true; }}>Ver condições <ArrowRight size={14} aria-hidden="true" /></a></div>
         <details id="bf-stock-conditions" ref={conditionsRef}><summary>Condições da campanha</summary><CampaignTerms /></details>
       </div>
+      <div className="bf-stock-campaign-strip" aria-hidden="true"><span>Black Friday</span><b>4 benefícios em todo o estoque</b><span>Só até 30/11</span></div>
     </section>
   );
 }
