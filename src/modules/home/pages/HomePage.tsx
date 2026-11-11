@@ -34,9 +34,9 @@ import {
 } from "@/lib/vehicleMerchandising";
 const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 
-const ProductList = lazy(() =>
-  import("@/design-system/components/patterns/ProductList").then((module) => ({
-    default: module.ProductList,
+const HomeStockGrid = lazy(() =>
+  import("../components/HomeStockGrid").then((module) => ({
+    default: module.HomeStockGrid,
   })),
 );
 const SearchBar = lazy(() =>
@@ -189,7 +189,13 @@ function HomeHeroSkeleton() {
 
 export function HomePage() {
   const { active: blackFridayActive } = useBlackFridayCampaign();
-  const { data: vehicles, isLoading: isLoadingVehicles } = useVehiclesQuery();
+  const {
+    data: vehicles,
+    isLoading: isLoadingVehicles,
+    isFetching: isFetchingVehicles,
+    isError: isVehiclesError,
+    refetch: refetchVehicles,
+  } = useVehiclesQuery();
   const { data: banners, isLoading: isLoadingBanners } = useBannersQuery();
   const navigate = useNavigate();
   const initialHeroVehicle = useMemo(readInitialHomeHeroVehicle, []);
@@ -401,10 +407,13 @@ export function HomePage() {
           </p>
         </div>
         <DeferredRender minHeight={900} rootMargin="0px">
-          <ProductList
+          <HomeStockGrid
             vehicles={vehiclesWithPhotos}
             isLoading={isLoadingVehicles}
-            showWhatsAppInterest
+            isFetching={isFetchingVehicles}
+            isError={isVehiclesError}
+            onRetry={() => { void refetchVehicles(); }}
+            onViewStock={goToStock}
           />
         </DeferredRender>
         <div className="mt-8 flex justify-center md:mt-10">

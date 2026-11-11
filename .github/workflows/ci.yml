@@ -106,7 +106,7 @@ jobs:
       - name: Validate compact vehicle contact bar
         run: npx tsx --test scripts/tests/vehicle-whatsapp-card.test.tsx
       - name: Validate compact home contact bar
-        run: npx tsx --test scripts/tests/home-whatsapp-bar.test.tsx
+        run: npx tsx --test scripts/tests/home-whatsapp-bar.test.tsx scripts/tests/home-stock-recovery.test.mjs
       - name: Validate vehicle description and photo presentation
         run: npx tsx --test scripts/tests/vehicle-description.test.tsx scripts/tests/vehicle-hero-gallery.test.ts scripts/tests/vehicle-photo-captions.test.ts
       - name: Validate comparison photos and layout
