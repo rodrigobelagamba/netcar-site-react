@@ -457,6 +457,22 @@ export const MODEL_BUYER_GUIDES = {
     ],
     "guideLinks": []
   },
+  "hyundai-hb20x": {
+    "title": "Hyundai HB20X à venda em Esteio: fotos e preços | Netcar",
+    "description": "Veja os Hyundai HB20X usados e seminovos da Netcar em Esteio, na Grande Porto Alegre. Confira os anúncios e consulte a avaliação do seu usado na troca.",
+    "intro": "Procurando um Hyundai HB20X? Encontre os anúncios da Netcar e escolha o carro que deseja conhecer.",
+    "guideTitle": "Seu próximo Hyundai HB20X",
+    "paragraphs": [
+      "Os HB20X à venda na Netcar estão reunidos nesta página. Abra a ficha para conhecer a versão, o ano, as fotos e o preço de cada unidade. Gostou de um deles? Fale com a equipe pelo anúncio para combinar uma visita em Esteio ou consultar seu usado na troca."
+    ],
+    "faq": [
+      {
+        "q": "Como conhecer o HB20X anunciado antes de visitar a Netcar?",
+        "a": "Abra a ficha do carro e consulte suas fotos e informações. Pelo contato do anúncio, a equipe pode esclarecer os detalhes daquela unidade e combinar sua visita."
+      }
+    ],
+    "guideLinks": []
+  },
   "hyundai-tucson": {
     "title": "Hyundai Tucson à venda em Esteio: fotos e preços | Netcar",
     "description": "Hyundai Tucson usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",

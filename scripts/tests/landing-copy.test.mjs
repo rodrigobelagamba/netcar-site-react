@@ -218,3 +218,27 @@ test("208 and ix35 hubs preserve the exact family, brand and body style", () => 
     assert.deepEqual(editorialContent(stocked), editorialContent(empty));
   }
 });
+
+test("HB20X keeps its own hatch family separate from HB20 and HB20S", () => {
+  const config = MODEL_HUBS.find((model) => model.slug === "hyundai-hb20x");
+  const rows = [
+    vehicle({ marca: "HYUNDAI", modelo: "HB20X EVOLUTION", categoria: "HATCH" }),
+    vehicle({ marca: "HYUNDAI", modelo: "HYUNDAI HB20X STYLE", categoria: "HATCH" }),
+    vehicle({ marca: "HYUNDAI", modelo: "HB20 LIMITED", categoria: "HATCH" }),
+    vehicle({ marca: "HYUNDAI", modelo: "HB20S EVOLUTION", categoria: "SEDAN" }),
+    vehicle({ marca: "HYUNDAI", modelo: "HB20X0", categoria: "HATCH" }),
+    vehicle({ marca: "OTHER", modelo: "HB20X EVOLUTION", categoria: "HATCH" }),
+    vehicle({ marca: "HYUNDAI", modelo: "HB20X EVOLUTION", categoria: "SEDAN" }),
+    vehicle({ marca: "HYUNDAI", modelo: "HB20X EVOLUTION", categoria: "HATCH", valor: 0 }),
+  ];
+  const stocked = modelLanding(config, rows);
+  assert.equal(stocked.count, 2);
+  assert.equal(stocked.indexable, true);
+  assert.deepEqual(stocked.filters, { marca: "HYUNDAI", modelo: "HB20X", categoria: "HATCH" });
+  const hb20 = modelLanding(MODEL_HUBS.find((model) => model.slug === "hyundai-hb20"), rows);
+  assert.equal(hb20.count, 1);
+  const empty = modelLanding(config, []);
+  assert.equal(empty.slug, stocked.slug);
+  assert.equal(empty.indexable, false);
+  assert.deepEqual(editorialContent(stocked), editorialContent(empty));
+});
