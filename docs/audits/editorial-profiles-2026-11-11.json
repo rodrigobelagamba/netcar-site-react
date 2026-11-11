@@ -1,0 +1,417 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-11",
+  "scope": "Approved selection of 16 existing highlights for four exact profiles and 11 visual captions for Tracker 20113 only. No equipment additions, XML, warranty, price or gallery order change.",
+  "sourcePolicy": "Facts remain governed by canonical current inventory; a profile selects topics and does not certify manufacturer-standard equipment. Photo captions describe previously inspected bytes.",
+  "sourceAuditAt": "2026-11-11T12:40:14.134Z",
+  "sourceCommit": "e1a7ad44c33bbb58c58e49df153fb47fb111a358",
+  "revalidatedAt": "2026-11-11T13:26:09.366Z",
+  "revalidationResult": "Four identity/equipment and editorial signatures, all 11 original photo content hashes, and gallery order exactly match the approved proposal.",
+  "publicationApprovedAt": "2026-11-11",
+  "approvalScope": "four-exact-editorial-profiles-and-eleven-unit-photo-captions",
+  "proposalFingerprint": "a1f2bd9ee1f670d6ff5e927da93e6de9de391856c01467a54362043167784bb4",
+  "records": [
+    {
+      "id": "editorial-canonical-2026-11-10-20128",
+      "ids": [
+        "20128"
+      ],
+      "profileId": "hyundai-hb20x-evolution-2021-1-6-automatico",
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "HB20X EVOLUTION",
+        "modelYear": 2021,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "airbag-protection",
+        "parking-aids",
+        "cruise-control",
+        "phone-connectivity"
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "evidenceKind": "inventory-canonical-resolver",
+      "evidenceSummary": "Selects existing canonical equipment topics only. Manufacturer documents retain their exact model-year and version limitations.",
+      "manufacturerDocumentaryVerification": false,
+      "unitEquipmentNewlyConfirmed": false,
+      "dataSignature": "b0a4ee07356a3fff4de76dd944584b2e8a093ec5bd5466ea7ff1f439c06e9000",
+      "editorialSignature": "97df954e42e6c91c6f7f4b3c238b123676f1bdec3d546c403ba9b167993cfb0d",
+      "approvedCards": [
+        {
+          "id": "airbag-protection",
+          "title": "Airbags frontais e laterais",
+          "description": "Proteção por airbags nas posições indicadas.",
+          "equipmentIds": [
+            "airbag-protection"
+          ]
+        },
+        {
+          "id": "parking-aids",
+          "title": "Câmera de ré e sensor de estacionamento",
+          "description": "Exibe a imagem da área traseira durante a marcha à ré. O sensor avisa sobre obstáculos detectados durante as manobras.",
+          "equipmentIds": [
+            "rear-camera",
+            "parking-sensors"
+          ]
+        },
+        {
+          "id": "cruise-control",
+          "title": "Piloto automático",
+          "description": "Mantém a velocidade definida pelo motorista.",
+          "equipmentIds": [
+            "cruise-control"
+          ]
+        },
+        {
+          "id": "phone-connectivity",
+          "title": "Central multimídia com Android Auto e Apple CarPlay",
+          "description": "Integra aplicativos compatíveis do celular à central do carro. Integra aplicativos compatíveis do iPhone à central do carro.",
+          "equipmentIds": [
+            "android-auto",
+            "apple-carplay",
+            "multimedia"
+          ]
+        }
+      ],
+      "sourceEvidence": [
+        {
+          "url": "https://hyundai.com.br/content/dam/hmb/download-manuais/A1SO-PB910A_Manual_do_Propriet%C3%A1rio_HB20-S-X_NovaGera%C3%A7%C3%A3o_Site_v2.pdf",
+          "title": "Manual do proprietário Hyundai HB20/S/X Nova Geração, edição copyright2020",
+          "pdfSha256": "f368ab2eb5f8cbf61fc89e815f0f59720185c2022495c359fad11a695e3289e3",
+          "relevantPdfPages": [
+            2,
+            293,
+            294,
+            295,
+            296
+          ],
+          "printedSection": "6-52 a6-55; aviso inicial",
+          "reviewedPagesVisually": [
+            2,
+            293
+          ],
+          "scope": "família e múltiplas versões; não comprova equipamentos desta configuração/unidade",
+          "finding": "O manual explica controle de cruzeiro que mantém velocidade ajustada e é cancelado pelo freio. Isso não equivale a ACC com controle de distância. O aviso inicial diz que equipamentos padrão/opcionais descritos podem não corresponder ao veículo. Não autoriza afirmar ausência física de ACC ou presença de alerta de colisão no ID20128."
+        },
+        {
+          "url": "https://www.hyundai.com.br/content/dam/hmb/cat%C3%A1logos/catalogo_HB20X_evolution_digital.pdf",
+          "title": "Catálogo oficial Hyundai HB20X Evolution1.6automático — fabricação/modelo2021/2022",
+          "pdfSha256": "0560c4257d3bee8e1461a8d8a71740b0b61c72e39bbdb27c8e7794c02cbc4a66",
+          "relevantPdfPages": [
+            8,
+            11,
+            15
+          ],
+          "reviewedPagesVisually": [
+            11,
+            15
+          ],
+          "exactRequestedModelYear": false,
+          "scope": "MY2022; excluído como evidência aplicável ao MY2021",
+          "finding": "A página11 delimita a aplicação a fabricação/modelo2021/2022. A lista da página15 distingue piloto automático/limitador de velocidade do sistema de alerta/frenagem autônomo. Não transferir essas especificações para o MY2021."
+        }
+      ],
+      "scopeLimitations": [
+        "Correção informada pelo responsável já conferida: piloto convencional. Nenhuma alegação de ACC ou alerta de colisão é proposta. Pesquisa de fábrica parcial; catálogo MY2022 excluído para MY2021.",
+        "No new equipment assertions or model/year inference."
+      ],
+      "curationStatus": "reviewed",
+      "evidenceUrls": [
+        "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500",
+        "https://hyundai.com.br/content/dam/hmb/download-manuais/A1SO-PB910A_Manual_do_Propriet%C3%A1rio_HB20-S-X_NovaGera%C3%A7%C3%A3o_Site_v2.pdf",
+        "https://www.hyundai.com.br/content/dam/hmb/cat%C3%A1logos/catalogo_HB20X_evolution_digital.pdf"
+      ]
+    },
+    {
+      "id": "editorial-canonical-2026-11-10-20133",
+      "ids": [
+        "20133"
+      ],
+      "profileId": "chevrolet-prisma-ltz-2019-1-4-manual",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "PRISMA LTZ 1.4",
+        "modelYear": 2019,
+        "engine": "1.4",
+        "transmission": "MANUAL"
+      },
+      "suggestedTopics": [
+        "parking-aids",
+        "leather-seats",
+        "mylink",
+        "tire-pressure"
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "evidenceKind": "inventory-canonical-resolver",
+      "evidenceSummary": "Selects existing canonical equipment topics only. Manufacturer documents retain their exact model-year and version limitations.",
+      "manufacturerDocumentaryVerification": false,
+      "unitEquipmentNewlyConfirmed": false,
+      "dataSignature": "1242ddcb38a3bf010fcbda2a163d36a732d1961d9e4d8bbca4879c32ec404046",
+      "editorialSignature": "154539946288d4aa9c7c76b13bdfd7530b0c07563813929360d14be38952f7ae",
+      "approvedCards": [
+        {
+          "id": "parking-aids",
+          "title": "Câmera de ré e sensor de estacionamento",
+          "description": "Exibe a imagem da área traseira durante a marcha à ré. O sensor avisa sobre obstáculos detectados durante as manobras.",
+          "equipmentIds": [
+            "rear-camera",
+            "parking-sensors"
+          ]
+        },
+        {
+          "id": "leather-seats",
+          "title": "Bancos em couro",
+          "description": "Revestimento em couro nos bancos.",
+          "equipmentIds": [
+            "leather-seats"
+          ]
+        },
+        {
+          "id": "mylink",
+          "title": "Central MyLink Chevrolet",
+          "description": "Central multimídia MyLink.",
+          "equipmentIds": [
+            "mylink"
+          ]
+        },
+        {
+          "id": "tire-pressure",
+          "title": "Monitor de pressão dos pneus",
+          "description": "Acompanha a pressão dos pneus e informa alterações detectadas.",
+          "equipmentIds": [
+            "tire-pressure"
+          ]
+        }
+      ],
+      "sourceEvidence": [
+        {
+          "title": "Manual do proprietário Chevrolet Prisma 2019 — versão brasileira",
+          "url": "https://meu.chevrolet.com.br/content/dam/gmownercenter/gmsa/gmbr/dynamic/manuals/2019/chevrolet/Prisma/pt/om_ng-chevrolet_Prisma_my19-pt_BR.pdf.pdf",
+          "documentId": "MY19_Prisma_52156031_POR_20180516_V0.2",
+          "printedPages": [
+            "179–183",
+            "228–230",
+            "258"
+          ],
+          "pdfPagesOneBased": [
+            182,
+            185,
+            186,
+            231,
+            232,
+            233,
+            261
+          ],
+          "evidenceSummary": "O manual brasileiro MY2019 descreve câmera e sensor de ré quando equipados, funcionamento do monitor de pressão e a transmissão manual do motor 1.4. É um documento multiversões: não comprova os itens de série da LTZ nem o revestimento específico desta unidade.",
+          "supports": "Contexto de funcionamento dos recursos e identidade do conjunto 1.4 manual; não enriquece o cadastro.",
+          "doesNotEstablish": [
+            "Lista de equipamentos de série da versão LTZ manual MY2019",
+            "Instalação física de acessórios nesta unidade",
+            "Material e composição exatos do revestimento dos bancos"
+          ]
+        }
+      ],
+      "scopeLimitations": [
+        "Quatro temas sustentados pelo cadastro atual. Manual MY2019 multiversões não comprova composição de série da LTZ nem o revestimento físico desta unidade.",
+        "No new equipment assertions or model/year inference."
+      ],
+      "curationStatus": "reviewed",
+      "evidenceUrls": [
+        "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500",
+        "https://meu.chevrolet.com.br/content/dam/gmownercenter/gmsa/gmbr/dynamic/manuals/2019/chevrolet/Prisma/pt/om_ng-chevrolet_Prisma_my19-pt_BR.pdf.pdf"
+      ]
+    },
+    {
+      "id": "editorial-canonical-2026-11-11-20135",
+      "ids": [
+        "20135"
+      ],
+      "profileId": "volkswagen-t-cross-comfortline-turbo-2024-1-0-automatico",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "T CROSS COMFORTLINE TURBO",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "airbag-protection",
+        "parking-aids",
+        "cruise-control",
+        "digital-climate"
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "evidenceKind": "inventory-canonical-resolver",
+      "evidenceSummary": "Selects existing canonical equipment topics only. Manufacturer documents retain their exact model-year and version limitations.",
+      "manufacturerDocumentaryVerification": false,
+      "unitEquipmentNewlyConfirmed": false,
+      "dataSignature": "035eaee1c6ae648f38475b4573afd1e925bfe2b1cd2032c4082a811470a92312",
+      "editorialSignature": "ae512d4989e891a393419778a36b38bdb481ac7c0b71d104bed627623a52b69e",
+      "approvedCards": [
+        {
+          "id": "airbag-protection",
+          "title": "Airbags frontais, laterais e de cortina",
+          "description": "Proteção por airbags nas posições indicadas.",
+          "equipmentIds": [
+            "airbag-protection"
+          ]
+        },
+        {
+          "id": "parking-aids",
+          "title": "Câmera de ré e sensor de estacionamento",
+          "description": "Exibe a imagem da área traseira durante a marcha à ré. O sensor avisa sobre obstáculos detectados durante as manobras.",
+          "equipmentIds": [
+            "rear-camera",
+            "parking-sensors"
+          ]
+        },
+        {
+          "id": "cruise-control",
+          "title": "Piloto automático",
+          "description": "Mantém a velocidade definida pelo motorista.",
+          "equipmentIds": [
+            "cruise-control"
+          ]
+        },
+        {
+          "id": "digital-climate",
+          "title": "Ar-condicionado digital",
+          "description": "Ajustes do ar-condicionado em comandos digitais.",
+          "equipmentIds": [
+            "digital-climate"
+          ]
+        }
+      ],
+      "sourceEvidence": [
+        {
+          "url": "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-t-cross/my24/T-Cross_BR_24B.5B1.TCR_66_LOW.pdf",
+          "scope": "Brazilian MY2024 manual, all versions",
+          "page": 6,
+          "supports": "Explains covered systems and explicitly warns that equipment varies by version.",
+          "limitation": "Does not establish the exact Comfortline factory specification. Current four topics remain inventory-based; do not transfer MY2025 ADAS."
+        }
+      ],
+      "scopeLimitations": [
+        "Source evidence supports only the topics and scope explicitly stated; all facts remain inventory based.",
+        "No new equipment assertions or model/year inference."
+      ],
+      "curationStatus": "reviewed",
+      "evidenceUrls": [
+        "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500",
+        "https://www.vw.com.br/idhub/content/dam/onehub_pkw/importers/br/literatura-de-bordo/manual-t-cross/my24/T-Cross_BR_24B.5B1.TCR_66_LOW.pdf"
+      ]
+    },
+    {
+      "id": "editorial-canonical-2026-11-11-20138",
+      "ids": [
+        "20138"
+      ],
+      "profileId": "chevrolet-tracker-premier-turbo-2027-1-2-automatico",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "TRACKER PREMIER TURBO",
+        "modelYear": 2027,
+        "engine": "1.2",
+        "transmission": "AUTOMATICO"
+      },
+      "suggestedTopics": [
+        "park-assist",
+        "driving-assistance",
+        "airbag-protection",
+        "sunroof"
+      ],
+      "researchStatus": "partial",
+      "curationBasis": "existing-canonical-equipment-only",
+      "evidenceKind": "inventory-canonical-resolver",
+      "evidenceSummary": "Selects existing canonical equipment topics only. Manufacturer documents retain their exact model-year and version limitations.",
+      "manufacturerDocumentaryVerification": false,
+      "unitEquipmentNewlyConfirmed": false,
+      "dataSignature": "f33471fde0baee6ef3c07ab798f6f0281e68eabb00076aec51cd64acd1bb7761",
+      "editorialSignature": "817752f2a5698c9d7cb765aaec35f2b60eb479118fbd8fb1832c2b8e868ecdd1",
+      "approvedCards": [
+        {
+          "id": "park-assist",
+          "title": "Park Assist",
+          "description": "Assistência de direção durante as manobras de estacionamento.",
+          "equipmentIds": [
+            "park-assist"
+          ]
+        },
+        {
+          "id": "driving-assistance",
+          "title": "Piloto automático e assistências de segurança",
+          "description": "Piloto automático com velocidade definida pelo motorista, alerta de risco de colisão frontal e auxílio para permanecer na faixa. Atuação dentro dos limites de cada sistema.",
+          "equipmentIds": [
+            "collision-warning",
+            "lane-assist",
+            "cruise-control"
+          ]
+        },
+        {
+          "id": "airbag-protection",
+          "title": "Airbags frontais, laterais e de cortina",
+          "description": "Proteção por airbags nas posições indicadas.",
+          "equipmentIds": [
+            "airbag-protection"
+          ]
+        },
+        {
+          "id": "sunroof",
+          "title": "Teto solar",
+          "description": "Entrada de luz natural pelo teto.",
+          "equipmentIds": [
+            "sunroof"
+          ]
+        }
+      ],
+      "sourceEvidence": [
+        {
+          "url": "https://news.chevrolet.com.br/newsroom.detail.html/Pages/news/br/pt/2026/may/0515-2027-tracker.html",
+          "publishedAt": "2026-05-15",
+          "scope": "Brazilian Tracker MY2027, Premier1.2 Turbo",
+          "supports": "Exact Premier list includes Easy Park, panoramic sunroof, frontal detection alert and lane assistance. Base equipment includes conventional cruise control and six airbags; no ACC claim proposed.",
+          "limitation": "Does not certify current physical condition or the full inventory."
+        },
+        {
+          "url": "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/2027/27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23_site.pdf",
+          "scope": "MY2027 owner manual, system operation",
+          "pdfPage": 185,
+          "printedPage": 181,
+          "supports": "APA assists steering into a parking space; the driver controls gear selection, brakes and accelerator.",
+          "limitation": "Manual alone does not establish version fitment; paired here with the exact Premier release."
+        }
+      ],
+      "scopeLimitations": [
+        "Source evidence supports only the topics and scope explicitly stated; all facts remain inventory based.",
+        "No new equipment assertions or model/year inference."
+      ],
+      "curationStatus": "reviewed",
+      "evidenceUrls": [
+        "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500",
+        "https://news.chevrolet.com.br/newsroom.detail.html/Pages/news/br/pt/2026/may/0515-2027-tracker.html",
+        "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/services/manuals/pdfs/tracker/2027/27_CHEV_Tracker_OM_pt_BR_52209840_2026FEB23_site.pdf"
+      ]
+    }
+  ],
+  "photoReviews": [
+    {
+      "vehicleId": "20113",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "TRACKER TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "captionCount": 11,
+      "coverCaptionVisible": false,
+      "originalContentHashesRevalidatedAt": "2026-11-11T13:26:09.366Z",
+      "galleryOrderPreserved": true,
+      "visualInspectionMethod": "Actual original image bytes inspected in a contact sheet; all eleven hashes exactly match the daily audit."
+    }
+  ]
+}

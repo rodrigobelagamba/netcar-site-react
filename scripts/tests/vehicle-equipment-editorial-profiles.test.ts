@@ -24,7 +24,7 @@ const stockVehicle = (id: string): EquipmentVehicle => {
 };
 
 test("reviewed profiles cover exact combinations without equipment enrichment", () => {
-  assert.equal(vehicleEditorialProfiles.length, 69);
+  assert.equal(vehicleEditorialProfiles.length, 73);
   const identities = new Set<string>();
   for (const profile of vehicleEditorialProfiles) {
     const identity = JSON.stringify(profile.match);
@@ -220,12 +220,13 @@ test("Tracker 2018 topics use its registered MyLink and navigation without inher
   );
 });
 
-test("65 curated identities retain evidence, partial limits and exact drivetrain gates", () => {
+test("69 curated identities retain evidence, partial limits and exact drivetrain gates", () => {
   const records = [
     "editorial-profiles-2026-10-26.json",
     "editorial-profiles-2026-10-27.json",
     "editorial-profiles-2026-10-28-renegade-20110.json",
     "editorial-profiles-2026-11-10.json",
+    "editorial-profiles-2026-11-11.json",
   ].flatMap(
     (file) =>
       JSON.parse(
@@ -235,11 +236,11 @@ test("65 curated identities retain evidence, partial limits and exact drivetrain
         ),
       ).records,
   );
-  assert.equal(records.length, 65);
+  assert.equal(records.length, 69);
   const researched = vehicleEditorialProfiles.filter(
     (profile) => profile.research,
   );
-  assert.equal(researched.length, 65);
+  assert.equal(researched.length, 69);
   for (const profile of researched) {
     const evidence = records.find(
       (row: { id: string }) => row.id === profile.research!.evidenceId,
