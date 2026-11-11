@@ -144,20 +144,21 @@ test("card and detail render a commercial seal with a readable qualifier; explan
     const card = renderToStaticMarkup(<CardsHero {...props} compact={compact} />);
     assert.match(card, /aria-label="Aproximadamente R\$ 10 mil abaixo da FIPE"/);
     assert.match(card, /role="img"/);
-    assert.match(card, /text-\[9px\]">Aproximadamente<\/span>/);
-    assert.match(card, /<strong[^>]+text-\[36px\]/);
+    assert.match(card, /<span[^>]+text-\[10px\][^>]*>Aproximadamente<\/span>/);
+    assert.match(card, /<strong[^>]+text-\[30px\]/);
     assert.match(card, /<span>10<\/span>/);
     assert.match(card, />mil<\/span>/);
-    assert.match(card, />Abaixo da FIPE<\/span>/);
-    assert.match(card, /w-\[140px\]/);
+    assert.match(card, />Abaixo da<\/span>/);
+    assert.match(card, />FIPE<\/span>/);
+    assert.match(card, /w-\[220px\]/);
     assert.match(card, /max-w-full/);
     assert.doesNotMatch(card, /R\$ 9\.452|R\$ 164\.352|nov\/2026|Diferença:/);
     assert.match(card, /R\$ 154\.900/);
   }
   const detail = renderToStaticMarkup(<VehicleFipeOfferNote offer={offer} />);
   assert.match(detail, /Aproximadamente R\$ 10 mil abaixo da FIPE/);
-  assert.match(detail, /w-\[210px\]/);
-  assert.match(detail, /<strong[^>]+text-\[54px\]/);
+  assert.match(detail, /w-\[280px\]/);
+  assert.match(detail, /<strong[^>]+text-\[42px\]/);
   assert.doesNotMatch(detail, /R\$ 9\.452|R\$ 164\.352|nov\/2026|Diferença:/);
   assert.doesNotMatch(renderToStaticMarkup(<CardsHero {...props} isSold />), /data-fipe-offer-id/);
   assert.equal(renderToStaticMarkup(<VehicleFipeOfferNote />), "");
