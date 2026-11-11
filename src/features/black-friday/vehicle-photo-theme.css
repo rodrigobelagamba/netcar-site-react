@@ -12,14 +12,12 @@
   user-select: none;
 }
 [data-black-friday-photo] picture > img { position: relative; z-index: 2; }
-button[data-black-friday-photo] {
-  background: radial-gradient(ellipse at 50% 70%, #304b4d 0, #152426 45%, #080d0e 85%);
+.bf-detail-hero {
+  background-image: radial-gradient(ellipse at 72% 40%, #5cc5ca1f 0%, #5cc5ca08 38%, transparent 68%);
 }
+button[data-black-friday-photo] { background: transparent; }
 button[data-black-friday-photo] picture > img { position: absolute; }
 @media (min-width: 1024px) {
-  .bf-detail-hero {
-    background: linear-gradient(90deg, #f0f3f5 0%, #f0f3f5 34%, #101b1d 34%, #080d0e 100%);
-  }
   .bf-desktop-photo[data-black-friday-photo] .bf-photo-arc { top: 22%; left: 7%; width: 93%; }
 }
 @media print {
