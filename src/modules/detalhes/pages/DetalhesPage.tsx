@@ -119,7 +119,7 @@ const CAR_COVERED_PLACEHOLDER_URL = "/images/semcapa.webp";
 const PROBLEMATIC_IMAGE_PATTERN = "271_131072img_8213";
 const LOW_MILEAGE_HIGHLIGHT_THRESHOLD_KM = 10_000;
 const HIDDEN_RESPONSIVE_IMAGE =
-  "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 type EngineVehicle = {
   modelo?: string;
