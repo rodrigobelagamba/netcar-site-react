@@ -174,6 +174,63 @@
           "contentSha256": "7cb4fb1f9dc930cef84964ea9cd8b6ab091fa78ad22445a6f3bac121886054b7"
         }
       }
+    },
+    {
+      "vehicleId": "20113",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "TRACKER TURBO",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedAt": "2026-11-11T12:51:52.851929+00:00",
+      "captions": {
+        "5e0aaa30e8927867af96d69618212bb0a91ed3ac0ec12c9731fb8ab718daf7dc": {
+          "visual": "Grade e faróis dianteiros",
+          "contentSha256": "45c05b1a2ebcae7d37d2620796a58d5ccca6bc802c58ca5365ce604647601e8c"
+        },
+        "bc9188049f7a92dbc4c06d1775357e366a67b767f4490c9914ebf20ca0262b9d": {
+          "visual": "Vista dianteira e lateral",
+          "contentSha256": "c62e629e36898857ba646a76b09f82f4cf48c9ef14b4fd5d1cd84a2c4db5a7bd"
+        },
+        "9f4a53ac0eb2a3eae52c9b7a6a9df42f22528b7e45b2d28c1eaedf364d03423e": {
+          "visual": "Traseira em três quartos",
+          "contentSha256": "1b4c40aa7702cb41a7cfce3f97211453517d6c9f6222347135c7799527500bb8"
+        },
+        "64a290a00cb3bd13c2b9ecdec331287f9c2480fce78b770fef092cdd09183214": {
+          "visual": "Vista traseira",
+          "contentSha256": "019513cce1503400b7f3c5703a50871da81c6d0535fd534b767823870ede270c"
+        },
+        "048c24484fefc7fad72c4fd5873c07406fa8a67dcb494c8dc8c2a346760ad009": {
+          "visual": "Traseira em outro ângulo",
+          "contentSha256": "bef5db7f0b5d9497f84180c7d40f3ed7037969aaad6cd1f77c6a31cb50d8b460"
+        },
+        "158889792fd62c9bc50da9a099c4b5091e66f8dcd8077d66f54629fe81aaa24d": {
+          "visual": "Painel e posto do motorista",
+          "contentSha256": "d445f61b215b96135fd67b2decb776e1528f26798ba77f8d1394846fe07900c4"
+        },
+        "bb11c85516793ab0608999d093f2edefab5c66b643ff7827e07233eb51525e04": {
+          "visual": "Cabine dianteira",
+          "contentSha256": "6f260df5576e7aead7d4f5ffaf6b6bff478bfc4dc0f9062f7a872b91032dfaa9"
+        },
+        "d61e6d3641210a1d96e374e036198c31cdc79ed92e564253bb20500dccae70c3": {
+          "visual": "Central multimídia",
+          "contentSha256": "c1e9abdf012b088dc302909be6a11796b8d8ee4e8ef4769543cb41438cc7eb48"
+        },
+        "7e58c3f06e9690ec9a73252f219c31133392a531079e141202ac1eacfb042c85": {
+          "visual": "Volante e instrumentos",
+          "contentSha256": "6bbe2abb6c56110cd7e12713e14bbaa7aa7e6509a7bb384e08267d211a5c0cbe"
+        },
+        "b347b414ef41283b7965086ebc3af73f058029c39db67b6c538879804bd58c02": {
+          "visual": "Seletor do câmbio",
+          "contentSha256": "df6812e40e8bda914bba86aac468d50793826adc54612d61a9edab05726dd805"
+        },
+        "44f3be8675cc87219da122a80556c41a1a1b221e5e26608a233249e86dc4efca": {
+          "visual": "Visão geral do painel",
+          "contentSha256": "4e5c33f68626b154f3c243e7ddadfe8d73659aa9a6a56326e5d8030c58e0ab3e"
+        }
+      }
     }
   ]
 }

@@ -1387,6 +1387,90 @@
         "status": "partial",
         "evidenceId": "editorial-canonical-2026-11-10-20134"
       }
+    },
+    {
+      "id": "hyundai-hb20x-evolution-2021-1-6-automatico",
+      "reviewedAt": "2026-11-10",
+      "match": {
+        "brand": "HYUNDAI",
+        "model": "HB20X EVOLUTION",
+        "modelYear": 2021,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "airbag-protection",
+        "parking-aids",
+        "cruise-control",
+        "phone-connectivity"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "editorial-canonical-2026-11-10-20128"
+      }
+    },
+    {
+      "id": "chevrolet-prisma-ltz-2019-1-4-manual",
+      "reviewedAt": "2026-11-10",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "PRISMA LTZ 1.4",
+        "modelYear": 2019,
+        "engine": "1.4",
+        "transmission": "MANUAL"
+      },
+      "topics": [
+        "parking-aids",
+        "leather-seats",
+        "mylink",
+        "tire-pressure"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "editorial-canonical-2026-11-10-20133"
+      }
+    },
+    {
+      "id": "volkswagen-t-cross-comfortline-turbo-2024-1-0-automatico",
+      "reviewedAt": "2026-11-11",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "T CROSS COMFORTLINE TURBO",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "airbag-protection",
+        "parking-aids",
+        "cruise-control",
+        "digital-climate"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "editorial-canonical-2026-11-11-20135"
+      }
+    },
+    {
+      "id": "chevrolet-tracker-premier-turbo-2027-1-2-automatico",
+      "reviewedAt": "2026-11-11",
+      "match": {
+        "brand": "CHEVROLET",
+        "model": "TRACKER PREMIER TURBO",
+        "modelYear": 2027,
+        "engine": "1.2",
+        "transmission": "AUTOMATICO"
+      },
+      "topics": [
+        "park-assist",
+        "driving-assistance",
+        "airbag-protection",
+        "sunroof"
+      ],
+      "research": {
+        "status": "partial",
+        "evidenceId": "editorial-canonical-2026-11-11-20138"
+      }
     }
   ]
 }
