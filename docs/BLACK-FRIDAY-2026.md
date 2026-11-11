@@ -40,6 +40,13 @@ Veículos já vendidos mantêm a indicação de indisponibilidade e a procura po
 similares; não recebem oferta nem mensagem de Black Friday para compra daquela
 unidade. O aviso geral de campanha no rodapé pode encaminhar ao estoque atual.
 
+Na revisão visual, a vitrine de seminovos ganhou fundo preto/carvão, cards em
+gelo e controles turquesa. A foto principal do veículo usa a faixa verde
+original da agência em uma camada decorativa atrás do carro, sobre fundo
+escuro. Essa composição aparece apenas na capa e não altera o arquivo da
+foto, as demais imagens ou a ampliação. Todas essas mudanças obedecem à mesma
+chave de campanha e desaparecem no rollback.
+
 ## Prazo e chave única
 
 Configuração pública: `public/campaigns/black-friday-2026.json`, servida em

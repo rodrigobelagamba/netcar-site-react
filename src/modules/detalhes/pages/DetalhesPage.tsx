@@ -104,6 +104,7 @@ import { useVehicleVideosQuery } from "../queries/useVehicleVideosQuery";
 import { vehicleVideosForDisplay } from "../lib/vehicleVideosResponse";
 import { BlackFridayVehicleOffer } from "@/features/black-friday/CampaignSurfaces";
 import { useBlackFridayCampaign } from "@/features/black-friday/CampaignProvider";
+import "@/features/black-friday/vehicle-photo-theme.css";
 
 // Constantes de animação
 const ANIMATION_EASING = [0.25, 0.1, 0.25, 1] as const;
@@ -1197,11 +1198,13 @@ function MobileGalleryCarousel({
   altBase,
   onOpen,
   isSold = false,
+  campaignActive = false,
 }: {
   slides: HeroGallerySlide[];
   altBase: string;
   onOpen: (index: number) => void;
   isSold?: boolean;
+  campaignActive?: boolean;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
@@ -1249,8 +1252,12 @@ function MobileGalleryCarousel({
                 type="button"
                 onClick={() => onOpen(index)}
                 aria-label={`Abrir foto ${index + 1} de ${slides.length}`}
+                data-black-friday-photo={campaignActive && !isSold && slide.isCover || undefined}
                 className={`relative block aspect-[1920/1441] max-h-[55svh] w-full overflow-hidden ${slide.isCover ? "bg-gray-50" : "bg-gray-200"}`}
               >
+                {campaignActive && !isSold && slide.isCover && (
+                  <img className="bf-photo-arc" src="/images/campaigns/black-friday-2026/ribbon-turquoise.png" width={1080} height={406} alt="" aria-hidden="true" />
+                )}
                 {isSold && (
                   <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
                     <span className="-rotate-[18deg] rounded-2xl border-[7px] border-[#E10600]/70 bg-white/40 px-8 py-3 text-5xl font-black uppercase tracking-[0.1em] text-[#E10600]/80 shadow-[0_10px_32px_rgba(0,0,0,0.14)] sm:rounded-[1.25rem] sm:border-[8px] sm:px-10 sm:py-4 sm:text-6xl">
@@ -2275,7 +2282,7 @@ export function DetalhesPage() {
         </ol>
       </nav>
       {/* Hero Section */}
-      <section ref={heroRef} className="relative w-full max-w-full overflow-hidden py-0 pb-5 pt-0 lg:min-h-[var(--hero-media-min-height,0px)] lg:pb-8 lg:pt-0">
+      <section ref={heroRef} className={`relative w-full max-w-full overflow-hidden py-0 pb-5 pt-0 lg:min-h-[var(--hero-media-min-height,0px)] lg:pb-8 lg:pt-0${isBlackFriday && !isSold ? " bf-detail-hero" : ""}`}>
         {/* Mobile starts with the same cover and continues through the existing photos. */}
         <div
           ref={heroMediaRef}
@@ -2293,6 +2300,7 @@ export function DetalhesPage() {
               slides={heroGallery}
               altBase={`${marca} ${modeloCompleto} ${vehicle.year || ""}`.trim()}
               isSold={isSold}
+              campaignActive={isBlackFriday}
               onOpen={(index) => {
                 setLightboxOrigin("hero");
                 setLightboxIndex(index);
@@ -2301,7 +2309,10 @@ export function DetalhesPage() {
             />
           </div>
           {mainImage && (
-            <div className="w-full h-[240px] sm:h-[400px] lg:h-auto hidden items-center lg:flex lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
+            <div data-black-friday-photo={isBlackFriday && !isSold || undefined} className="bf-desktop-photo w-full h-[240px] sm:h-[400px] lg:h-auto hidden items-center lg:flex lg:items-start justify-center bg-gray-50 lg:bg-transparent relative overflow-visible p-2 sm:p-5 lg:p-0">
+              {isBlackFriday && !isSold && (
+                <img className="bf-photo-arc" src="/images/campaigns/black-friday-2026/ribbon-turquoise.png" width={1080} height={406} alt="" aria-hidden="true" />
+              )}
               {isSold && (
                 <div
                   aria-hidden="true"
