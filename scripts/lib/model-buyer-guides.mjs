@@ -223,6 +223,22 @@ export const MODEL_BUYER_GUIDES = {
     ],
     "guideLinks": []
   },
+  "volkswagen-taos": {
+    "title": "Volkswagen Taos à venda em Esteio: fotos e preços | Netcar",
+    "description": "Volkswagen Taos usado e seminovo na Netcar, em Esteio. Confira fotos, versão, ano e preço dos anúncios e consulte a avaliação do seu carro na troca.",
+    "intro": "Procurando um Volkswagen Taos? Veja os anúncios da Netcar, em Esteio, e escolha o carro que quer conhecer.",
+    "guideTitle": "Encontre seu próximo Taos",
+    "paragraphs": [
+      "Esta página reúne os Taos anunciados pela Netcar. Abra a ficha de cada unidade para conferir as fotos, a versão, o ano e o preço. Pelo contato do anúncio, você pode conversar sobre a compra, tirar dúvidas sobre o carro e pedir a avaliação do seu usado na troca."
+    ],
+    "faq": [
+      {
+        "q": "Como combinar uma visita para conhecer um Taos?",
+        "a": "Use o contato da ficha do Taos escolhido para confirmar a disponibilidade e a loja de Esteio onde ele está. A equipe combina a visita com você."
+      }
+    ],
+    "guideLinks": []
+  },
   "volkswagen-tera": {
     "title": "Volkswagen Tera à venda em Esteio: fotos e preços | Netcar",
     "description": "Volkswagen Tera usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",

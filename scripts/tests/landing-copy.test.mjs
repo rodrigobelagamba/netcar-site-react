@@ -242,3 +242,24 @@ test("HB20X keeps its own hatch family separate from HB20 and HB20S", () => {
   assert.equal(empty.indexable, false);
   assert.deepEqual(editorialContent(stocked), editorialContent(empty));
 });
+
+test("Taos selection excludes nearby Volkswagen families and preserves its URL without stock", () => {
+  const config = MODEL_HUBS.find((model) => model.slug === "volkswagen-taos");
+  const rows = [
+    vehicle({ marca: "VOLKSWAGEN", modelo: "TAOS HIGHLINE TURBO", categoria: "SUV" }),
+    vehicle({ marca: "VOLKSWAGEN", modelo: "VOLKSWAGEN TAOS COMFORTLINE", categoria: "SUV" }),
+    ...["T CROSS HIGHLINE", "TIGUAN ALLSPACE", "NIVUS HIGHLINE", "TERA HIGH", "TAOSX"].map((modelo) =>
+      vehicle({ marca: "VOLKSWAGEN", modelo, categoria: "SUV" })),
+    vehicle({ marca: "OTHER", modelo: "TAOS HIGHLINE", categoria: "SUV" }),
+    vehicle({ marca: "VOLKSWAGEN", modelo: "TAOS HIGHLINE", categoria: "SEDAN" }),
+    vehicle({ marca: "VOLKSWAGEN", modelo: "TAOS HIGHLINE", categoria: "SUV", valor: 0 }),
+  ];
+  const stocked = modelLanding(config, rows);
+  assert.equal(stocked.count, 2);
+  assert.equal(stocked.indexable, true);
+  assert.deepEqual(stocked.filters, { marca: "VOLKSWAGEN", modelo: "TAOS", categoria: "SUV" });
+  const empty = modelLanding(config, []);
+  assert.equal(empty.slug, "volkswagen-taos");
+  assert.equal(empty.indexable, false);
+  assert.deepEqual(editorialContent(stocked), editorialContent(empty));
+});
