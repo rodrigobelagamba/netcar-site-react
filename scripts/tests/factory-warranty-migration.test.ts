@@ -38,6 +38,7 @@ const tiggo5xProAudit = read("../../docs/audits/factory-warranty-tiggo5x-pro-200
 const tiggo7CurrentAudit = read("../../docs/audits/factory-warranty-tiggo7-20100-confirmation-2026-10-29.json");
 const novemberUnitsAudit = read("../../docs/audits/factory-warranty-nivus-creta-2026-11-03.json");
 const fastbackAudit = read("../../docs/audits/factory-warranty-fastback-20050-2026-11-04.json");
+const fastback20137Audit = read("../../docs/audits/factory-warranty-fastback-20137-2026-11-12.json");
 const peugeot208Audit = read("../../docs/audits/factory-warranty-peugeot-208-20119-2026-11-10.json");
 const tracker20113Audit = read("../../docs/audits/factory-warranty-tracker-20113-2026-11-04.json");
 const tracker20138Audit = read("../../docs/audits/factory-warranty-tracker-20138-2026-11-10.json");
@@ -363,6 +364,7 @@ const currentRecord = (id: string) =>
   current.records.find((record) => record.vehicle.vehicleId === id)!;
 const observed = (id: string) => {
   const vehicle = (id === "20138" ? tracker20138Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
+    ?? (id === "20137" ? fastback20137Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20119" ? peugeot208Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20113" ? tracker20113Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (novemberUnitsAudit.publicVehicles as WarrantyCatalogVehicle[]).find((entry) => entry.id === id)
@@ -1226,6 +1228,68 @@ test("Fastback individual approval preserves every prior decision and all automa
   assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), fastbackAudit.preservation.previousRecordsSha256);
   assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), fastbackAudit.preservation.automationRulesSha256);
   assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === currentRecord("20050").recordId), false);
+});
+
+test("Fastback20137 uses its new Hybrid-specific owner attestation for general coverage only", () => {
+  const vehicle = fastback20137Audit.publicVehicle as WarrantyCatalogVehicle;
+  const record = currentRecord("20137");
+  const date = fastback20137Audit.reviewedAt;
+  assert.deepEqual(record, fastback20137Audit.approvedRecord);
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(record.catalogConfirmation, undefined);
+  assert.equal(record.currentCoverageConfirmation, undefined);
+  assert.equal(record.confirmedExpiryDate, undefined);
+  assert.equal(record.confirmedExpiryMonth, undefined);
+  assert.equal(record.scope, "basic-vehicle");
+  assert.equal(record.termYears, 3);
+  assert.deepEqual(record.mileage, { kind: "unlimited" });
+  assert.equal(record.reviewedMileageKm, 30732);
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, date).status, "eligible");
+  assert.equal(resolveFactoryWarranty(vehicle, current, date)?.estimatedEndYear, 2027);
+  assert.equal(resolveFactoryWarranty({ ...vehicle, km: 200000 }, current, date)?.estimatedEndYear, 2027);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, date), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, date), undefined);
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2026-12-31")?.estimatedEndYear, 2027);
+  assert.equal(reconcileFactoryWarrantyVehicle(vehicle, current, "2027-01-01").reason, "confirmed-expiry-required");
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2027-01-01"), undefined);
+  for (const patch of [{ id: "unreviewed-fastback" }, { diferenciais: [] },
+    { unitKey: keyFor("other-fastback-20137") }, { year: 2026 },
+    { anoFabricacao: 2025 }, { motor: "1.3" }, { cambio: "MANUAL" },
+    { modelo: "FASTBACK AUDACE TURBO" }, { km: vehicle.km - 1 }, { price: 0 }]) {
+    const changed = { ...vehicle, ...patch };
+    assert.notEqual(reconcileFactoryWarrantyVehicle(changed, current, date).status, "eligible");
+    assert.equal(resolveFactoryWarranty(changed, current, date), undefined);
+  }
+});
+
+test("Fastback20137 keeps operational and documentary origins separate without inheriting20050 or battery durability", () => {
+  const attestation = fastback20137Audit.operationalAttestation;
+  const record = currentRecord("20137");
+  assert.equal(attestation.vehicleId, "20137");
+  assert.equal(attestation.confirmedAt, "2026-11-12");
+  assert.equal(attestation.hybridVariantIncluded, true);
+  assert.equal(attestation.notManufacturerDocument, true);
+  assert.equal(attestation.notTransferredFromVehicleId, "20050");
+  assert.notEqual(attestation.attestationId, fastbackAudit.operationalAttestation.attestationId);
+  assert.equal(attestation.createsModelAutomationRule, false);
+  assert.equal(attestation.batteryComment.additionalClaimCreated, false);
+  assert.equal(attestation.batteryComment.typicalTermNotUsedAsSeparateWarranty, true);
+  assert.deepEqual(attestation.batteryComment.durabilityNotWarranty, { years: 8, mileageKm: 250000 });
+  assert.equal(record.supplementalCoverages, undefined);
+  assert.deepEqual(record.mileage, attestation.mileageConfirmed);
+  assert.ok(record.sources.some((source) => source.sourceId === attestation.attestationId));
+  assert.match(record.sources[0].locator, /não é usada como comprovação de quilometragem ilimitada/);
+  assert.equal(fastback20137Audit.timing.firstDeliveryDate, null);
+  assert.equal(fastback20137Audit.timing.confirmedExpiryDate, null);
+  assert.equal(fastback20137Audit.timing.resaleRestartsTerm, false);
+  const prior = current.records.slice(0, fastback20137Audit.preservation.previousRecordCount);
+  assert.equal(prior.length, 28);
+  assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), fastback20137Audit.preservation.previousRecordsSha256);
+  assert.equal(createHash("sha256").update(JSON.stringify(currentRecord("20050"))).digest("hex"), fastback20137Audit.preservation.previousFastback20050RecordSha256);
+  assert.deepEqual(currentRecord("20050"), fastbackAudit.approvedRecord);
+  assert.equal(current.automation!.rules.length, 10);
+  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), fastback20137Audit.preservation.automationRulesSha256);
+  assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
 });
 
 test("Tracker20113 uses the corrected source flag and reviewed MY2026 general warranty", () => {

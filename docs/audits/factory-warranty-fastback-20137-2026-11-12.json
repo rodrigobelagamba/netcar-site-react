@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "warranty-20261112-20137",
+  "reviewedAt": "2026-11-12",
+  "sourceCommit": "933d6d24701219d05d86f7ce6ea3348c0f0056cb",
+  "approvedRecord": {
+    "recordId": "reviewed-v2-20261112-20137",
+    "status": "approved",
+    "reviewedAt": "2026-11-12",
+    "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261112-20137\",\"reviewedAt\":\"2026-11-12\",\"vehicle\":{\"vehicleId\":\"20137\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"FIAT\",\"modelVersion\":\"FASTBACK IMPETUS TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:0ab28e374580f410e92cb024b33e29850e4c29e323ad62e28f587bbaf8f1ae2f\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":30732,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"fiat-fastback-my2025-context-20137\",\"label\":\"Fiat — manual brasileiro MY2025, somente contexto\",\"url\":\"https://servicos.fiat.com.br/content/dam/fiat/products/handbooks/376/2025/handbook-fastback-2024_2025.pdf\",\"locator\":\"Manual brasileiro Fastback2024/2025, edição10/10/2024, inclui versões Hybrid12V e remete as condições completas ao Manual de Garantia separado. Esta fonte identifica o contexto do modelo; não é usada como comprovação de quilometragem ilimitada ou de vigência individual.\",\"revision\":\"FASTBACK-2024-2025; contexto documental, sem transferência de termos de outras versões.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"FASTBACK-2024-2025\",\"modelYear\":2025,\"reviewId\":\"warranty-20261112-20137\",\"reviewedAt\":\"2026-11-12\"}},{\"sourceId\":\"netcar-owner-20261112-fastback-20137\",\"label\":\"Netcar — confirmação operacional da garantia geral de20137\",\"url\":\"https://www.netcarmultimarcas.com.br/veiculo/20137\",\"locator\":\"Em resposta à pendência específica do Fastback20137 neste chat em12/11/2026, o responsável confirmou garantia geral de três anos, sem limite de quilometragem para uso particular, incluindo a versão MHEV. A confirmação é operacional e não documento da Fiat. O cadastro e a ficha identificam esta unidade como Hybrid1.0 automático2024/2025; a flag atual de garantia permanece obrigatória. A menção à bateria auxiliar não cria cobertura adicional; durabilidade de oito anos ou250milkm não é prazo de garantia. Sem primeira entrega ou vencimento confirmado. Não utiliza nem transfere o ateste do Fastback20050.\",\"revision\":\"NETCAR-20137-20261112; ateste operacional individual netcar-owner-20261112-fastback-20137; escopo somente garantia geral, sem regra genérica de modelo.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"NETCAR-20137-20261112\",\"modelYear\":2025,\"reviewId\":\"warranty-20261112-20137\",\"reviewedAt\":\"2026-11-12\"}}]}",
+    "vehicle": {
+      "vehicleId": "20137",
+      "brand": "FIAT",
+      "modelVersion": "FASTBACK IMPETUS TURBO",
+      "manufactureYear": 2024,
+      "modelYear": 2025
+    },
+    "unitBinding": {
+      "unitKey": "plate-sha256:0ab28e374580f410e92cb024b33e29850e4c29e323ad62e28f587bbaf8f1ae2f",
+      "engine": "1.0",
+      "transmission": "AUTOMATICO"
+    },
+    "optionalId": 108,
+    "optionalConfirmed": true,
+    "conditionsConfirmed": true,
+    "scope": "basic-vehicle",
+    "termYears": 3,
+    "usage": "private",
+    "reviewedMileageKm": 30732,
+    "mileage": {
+      "kind": "unlimited"
+    },
+    "sources": [
+      {
+        "sourceId": "fiat-fastback-my2025-context-20137",
+        "label": "Fiat — manual brasileiro MY2025, somente contexto",
+        "url": "https://servicos.fiat.com.br/content/dam/fiat/products/handbooks/376/2025/handbook-fastback-2024_2025.pdf",
+        "locator": "Manual brasileiro Fastback2024/2025, edição10/10/2024, inclui versões Hybrid12V e remete as condições completas ao Manual de Garantia separado. Esta fonte identifica o contexto do modelo; não é usada como comprovação de quilometragem ilimitada ou de vigência individual.",
+        "revision": "FASTBACK-2024-2025; contexto documental, sem transferência de termos de outras versões.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "FASTBACK-2024-2025",
+          "modelYear": 2025,
+          "reviewId": "warranty-20261112-20137",
+          "reviewedAt": "2026-11-12"
+        }
+      },
+      {
+        "sourceId": "netcar-owner-20261112-fastback-20137",
+        "label": "Netcar — confirmação operacional da garantia geral de20137",
+        "url": "https://www.netcarmultimarcas.com.br/veiculo/20137",
+        "locator": "Em resposta à pendência específica do Fastback20137 neste chat em12/11/2026, o responsável confirmou garantia geral de três anos, sem limite de quilometragem para uso particular, incluindo a versão MHEV. A confirmação é operacional e não documento da Fiat. O cadastro e a ficha identificam esta unidade como Hybrid1.0 automático2024/2025; a flag atual de garantia permanece obrigatória. A menção à bateria auxiliar não cria cobertura adicional; durabilidade de oito anos ou250milkm não é prazo de garantia. Sem primeira entrega ou vencimento confirmado. Não utiliza nem transfere o ateste do Fastback20050.",
+        "revision": "NETCAR-20137-20261112; ateste operacional individual netcar-owner-20261112-fastback-20137; escopo somente garantia geral, sem regra genérica de modelo.",
+        "verification": {
+          "status": "verified",
+          "documentCode": "NETCAR-20137-20261112",
+          "modelYear": 2025,
+          "reviewId": "warranty-20261112-20137",
+          "reviewedAt": "2026-11-12"
+        }
+      }
+    ]
+  },
+  "publicVehicle": {
+    "id": "20137",
+    "marca": "FIAT",
+    "modelo": "FASTBACK IMPETUS TURBO",
+    "price": 119900,
+    "year": 2025,
+    "anoFabricacao": 2024,
+    "motor": "1.0",
+    "cambio": "AUTOMATICO",
+    "km": 30732,
+    "unitKey": "plate-sha256:0ab28e374580f410e92cb024b33e29850e4c29e323ad62e28f587bbaf8f1ae2f",
+    "diferenciais": [
+      {
+        "tag": "garantia_fabrica",
+        "descricao": ""
+      }
+    ]
+  },
+  "publicStockCheckedAt": "2026-11-12T17:12:22.044Z",
+  "variant": {
+    "observedFuel": "HIBRIDO",
+    "interpretedVariant": "Fastback Impetus T200 Hybrid 1.0 automatico",
+    "manufactureYear": 2024,
+    "modelYear": 2025,
+    "currentCatalogName": "FASTBACK IMPETUS TURBO",
+    "currentCatalogNameDoesNotEncodeHybrid": true,
+    "checkedBy": "API public fuel and rendered vehicle detail",
+    "previousReferenceNotReused": true,
+    "reason": "Reference20050 is currently reported as Flex1.3; this approval uses a new operational response specifically for20137."
+  },
+  "officialEvidence": {
+    "manual": {
+      "url": "https://servicos.fiat.com.br/content/dam/fiat/products/handbooks/376/2025/handbook-fastback-2024_2025.pdf",
+      "editionDate": "2024-10-10",
+      "role": "Exact BrazilianMY2025 owner-manual context, including Hybrid12V versions; refers complete warranty terms to a separate booklet.",
+      "doesNotEstablish": [
+        "unlimited mileage for this variant",
+        "individual current coverage",
+        "first delivery or confirmed expiry"
+      ]
+    },
+    "hybridLaunch": {
+      "url": "https://www.media.stellantis.com/br-pt/fiat/press/fiat-apresenta-fastback-e-pulse-hibridos-para-combinar-performance-eficiencia-e-custo-beneficio-e-se-consolidar-como-protagonista-no-futuro-da-mobilidade",
+      "publicationDate": "2024-11-06",
+      "role": "Identifies Brazilian Fastback Impetus T200 HybridMY2025; not used as proof of the general-warranty mileage condition."
+    }
+  },
+  "operationalAttestation": {
+    "source": "netcar-owner",
+    "attestationId": "netcar-owner-20261112-fastback-20137",
+    "confirmedAt": "2026-11-12",
+    "vehicleId": "20137",
+    "basis": "Owner response to the individual Hybrid20137 warranty clarification in CARIMBO",
+    "scopeConfirmed": "basic-vehicle",
+    "currentCoverageConfirmed": true,
+    "termYearsConfirmed": 3,
+    "mileageConfirmed": {
+      "kind": "unlimited"
+    },
+    "usageConfirmed": "private",
+    "usageBasis": "Existing Netcar stock-wide private-use attestation and owner response",
+    "hybridVariantIncluded": true,
+    "notManufacturerDocument": true,
+    "notTransferredFromVehicleId": "20050",
+    "createsModelAutomationRule": false,
+    "batteryComment": {
+      "additionalClaimCreated": false,
+      "generalWarrantyNotExpanded": true,
+      "auxiliaryBatteryTypicalTermYears": 3,
+      "typicalTermNotUsedAsSeparateWarranty": true,
+      "durabilityNotWarranty": {
+        "years": 8,
+        "mileageKm": 250000
+      }
+    }
+  },
+  "timing": {
+    "estimatedEndYear": 2027,
+    "basis": "manufactureYear2024+termYears3; conservative estimate only",
+    "firstDeliveryDate": null,
+    "confirmedExpiryDate": null,
+    "confirmedExpiryMonth": null,
+    "resaleRestartsTerm": false,
+    "finalYearRequiresConfirmedExpiry": true
+  },
+  "preservation": {
+    "baselineCommit": "933d6d24701219d05d86f7ce6ea3348c0f0056cb",
+    "previousRecordCount": 28,
+    "previousRecordsSha256": "ce5c3d4d426c91e101d3db54f2e65d0309b329e1cbe3c7c541fccad56523d4db",
+    "automationRuleCount": 10,
+    "automationRulesSha256": "9293a17a28e8db243317d523659adadcf3928a345b39e0bf362a7db38021c242",
+    "previousFastback20050RecordSha256": "3f024ead74464a810b7f6d69ed444d0d5f40eed03d23282c69ce205f2751a239"
+  },
+  "scopeLimits": [
+    "Only individual general warranty20137.",
+    "No supplemental traction-battery or powertrain warranty.",
+    "Eight years or250000km durability is not warranty and is not published as a benefit.",
+    "No reuse of the previous20050 attestation and no generic Fastback rule.",
+    "Current source warranty flag and physical unit binding remain required.",
+    "No source XML/ERP, equipment, captions, price or layout edit."
+  ],
+  "publicVehicleObservationNote": "Canonical catalog adapter from the complete no-cache stock collection; only public fields and opaque physical identity hash retained."
+}

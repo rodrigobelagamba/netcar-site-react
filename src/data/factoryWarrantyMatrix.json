@@ -1656,6 +1656,64 @@
           }
         }
       ]
+    },
+    {
+      "recordId": "reviewed-v2-20261112-20137",
+      "status": "approved",
+      "reviewedAt": "2026-11-12",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261112-20137\",\"reviewedAt\":\"2026-11-12\",\"vehicle\":{\"vehicleId\":\"20137\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"FIAT\",\"modelVersion\":\"FASTBACK IMPETUS TURBO\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:0ab28e374580f410e92cb024b33e29850e4c29e323ad62e28f587bbaf8f1ae2f\",\"engine\":\"1.0\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":30732,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"fiat-fastback-my2025-context-20137\",\"label\":\"Fiat — manual brasileiro MY2025, somente contexto\",\"url\":\"https://servicos.fiat.com.br/content/dam/fiat/products/handbooks/376/2025/handbook-fastback-2024_2025.pdf\",\"locator\":\"Manual brasileiro Fastback2024/2025, edição10/10/2024, inclui versões Hybrid12V e remete as condições completas ao Manual de Garantia separado. Esta fonte identifica o contexto do modelo; não é usada como comprovação de quilometragem ilimitada ou de vigência individual.\",\"revision\":\"FASTBACK-2024-2025; contexto documental, sem transferência de termos de outras versões.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"FASTBACK-2024-2025\",\"modelYear\":2025,\"reviewId\":\"warranty-20261112-20137\",\"reviewedAt\":\"2026-11-12\"}},{\"sourceId\":\"netcar-owner-20261112-fastback-20137\",\"label\":\"Netcar — confirmação operacional da garantia geral de20137\",\"url\":\"https://www.netcarmultimarcas.com.br/veiculo/20137\",\"locator\":\"Em resposta à pendência específica do Fastback20137 neste chat em12/11/2026, o responsável confirmou garantia geral de três anos, sem limite de quilometragem para uso particular, incluindo a versão MHEV. A confirmação é operacional e não documento da Fiat. O cadastro e a ficha identificam esta unidade como Hybrid1.0 automático2024/2025; a flag atual de garantia permanece obrigatória. A menção à bateria auxiliar não cria cobertura adicional; durabilidade de oito anos ou250milkm não é prazo de garantia. Sem primeira entrega ou vencimento confirmado. Não utiliza nem transfere o ateste do Fastback20050.\",\"revision\":\"NETCAR-20137-20261112; ateste operacional individual netcar-owner-20261112-fastback-20137; escopo somente garantia geral, sem regra genérica de modelo.\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"NETCAR-20137-20261112\",\"modelYear\":2025,\"reviewId\":\"warranty-20261112-20137\",\"reviewedAt\":\"2026-11-12\"}}]}",
+      "vehicle": {
+        "vehicleId": "20137",
+        "brand": "FIAT",
+        "modelVersion": "FASTBACK IMPETUS TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:0ab28e374580f410e92cb024b33e29850e4c29e323ad62e28f587bbaf8f1ae2f",
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "basic-vehicle",
+      "termYears": 3,
+      "usage": "private",
+      "reviewedMileageKm": 30732,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "sources": [
+        {
+          "sourceId": "fiat-fastback-my2025-context-20137",
+          "label": "Fiat — manual brasileiro MY2025, somente contexto",
+          "url": "https://servicos.fiat.com.br/content/dam/fiat/products/handbooks/376/2025/handbook-fastback-2024_2025.pdf",
+          "locator": "Manual brasileiro Fastback2024/2025, edição10/10/2024, inclui versões Hybrid12V e remete as condições completas ao Manual de Garantia separado. Esta fonte identifica o contexto do modelo; não é usada como comprovação de quilometragem ilimitada ou de vigência individual.",
+          "revision": "FASTBACK-2024-2025; contexto documental, sem transferência de termos de outras versões.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "FASTBACK-2024-2025",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261112-20137",
+            "reviewedAt": "2026-11-12"
+          }
+        },
+        {
+          "sourceId": "netcar-owner-20261112-fastback-20137",
+          "label": "Netcar — confirmação operacional da garantia geral de20137",
+          "url": "https://www.netcarmultimarcas.com.br/veiculo/20137",
+          "locator": "Em resposta à pendência específica do Fastback20137 neste chat em12/11/2026, o responsável confirmou garantia geral de três anos, sem limite de quilometragem para uso particular, incluindo a versão MHEV. A confirmação é operacional e não documento da Fiat. O cadastro e a ficha identificam esta unidade como Hybrid1.0 automático2024/2025; a flag atual de garantia permanece obrigatória. A menção à bateria auxiliar não cria cobertura adicional; durabilidade de oito anos ou250milkm não é prazo de garantia. Sem primeira entrega ou vencimento confirmado. Não utiliza nem transfere o ateste do Fastback20050.",
+          "revision": "NETCAR-20137-20261112; ateste operacional individual netcar-owner-20261112-fastback-20137; escopo somente garantia geral, sem regra genérica de modelo.",
+          "verification": {
+            "status": "verified",
+            "documentCode": "NETCAR-20137-20261112",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261112-20137",
+            "reviewedAt": "2026-11-12"
+          }
+        }
+      ]
     }
   ],
   "requireUnitBinding": true,
