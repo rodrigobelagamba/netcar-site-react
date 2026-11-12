@@ -1,5 +1,19 @@
 # Carimbo de garantia de fábrica
 
+> Revisão individual de 12/11/2026: Fastback Impetus Turbo 20137, fabricação
+> 2024/modelo 2025, Hybrid 1.0 automático, aprovado para garantia geral de três
+> anos e quilometragem ilimitada para uso particular. O responsável confirmou
+> essa condição em resposta à pendência específica desta unidade, incluindo a
+> versão MHEV. É um ateste operacional, não uma condição transcrita do manual
+> Fiat; o documento brasileiro MY2025 serve somente como contexto. Não foi
+> transferida a confirmação do Fastback 20050, cuja variante atual diverge.
+> O selo exige a flag atual e o vínculo físico de 20137, usa a estimativa
+> conservadora 2027* e mantém o bloqueio no ano final sem vencimento confirmado.
+> A menção à bateria auxiliar não cria cobertura adicional; durabilidade de
+> oito anos ou 250 mil km não é garantia. Os 28 registros e as dez regras
+> anteriores permanecem intactos, sem nova regra genérica para Fastback.
+> [Confirmação e limites da unidade](audits/factory-warranty-fastback-20137-2026-11-12.json).
+
 > Revisão individual de 10/11/2026: Tracker Premier Turbo 20138, fabricação
 > 2026/modelo 2027, motor 1.2 automático, aprovada para garantia geral de
 > três anos, sem limite de quilometragem para uso particular. O manual

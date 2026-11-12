@@ -106,5 +106,11 @@
     "canonicalModel": "TRACKER PREMIER TURBO",
     "rawModel": "TRACKER PREMIER",
     "unitKey": "plate-sha256:29ce4f5c9d047d93069081a53ae43acdd81549c54cb090fd7a98619b11efad2f"
+  },
+  {
+    "vehicleId": "20137",
+    "canonicalModel": "FASTBACK IMPETUS TURBO",
+    "rawModel": "FASTBACK IMPETUS",
+    "unitKey": "plate-sha256:0ab28e374580f410e92cb024b33e29850e4c29e323ad62e28f587bbaf8f1ae2f"
   }
 ]
