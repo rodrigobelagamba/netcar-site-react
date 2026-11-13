@@ -92,6 +92,9 @@ export function ReviewDetailModal({
               <AuthorAvatar review={review} />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-bold text-[#111827] truncate">{review.authorName}</p>
+                {review.locationTitle && (
+                  <p className="mt-1 text-xs text-[#6B7280]">{review.locationTitle}</p>
+                )}
                 {review.relativeTime && (
                   <p className="text-xs text-[#6B7280]">{review.relativeTime}</p>
                 )}

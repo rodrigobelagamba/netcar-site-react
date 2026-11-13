@@ -326,7 +326,6 @@ async function runPublisherDryRun({ config, pin, port, remoteRoot, phpBin }) {
 
     const expectedLocations = new Map([
       ["loja_1", "11161331340741727452"],
-      ["loja_2", "17013442122163034193"],
     ]);
     const locations = Array.isArray(posts.locations) ? posts.locations : [];
     const returnedSlugs = new Set(
@@ -346,14 +345,14 @@ async function runPublisherDryRun({ config, pin, port, remoteRoot, phpBin }) {
       )
     ) {
       throw new Error(
-        "Dry-run nao encontrou exatamente as duas locations Netcar.",
+        "Dry-run nao encontrou somente o perfil principal Netcar.",
       );
     }
 
     const items = Array.isArray(posts.items) ? posts.items : [];
-    if (items.length !== Number(posts.eligibleMedia ?? 0) * 2) {
+    if (items.length !== Number(posts.eligibleMedia ?? 0) * expectedLocations.size) {
       throw new Error(
-        "Dry-run nao gerou exatamente dois destinos por post elegivel.",
+        "Dry-run nao gerou somente o destino principal por post elegivel.",
       );
     }
 
@@ -418,7 +417,7 @@ async function runPublisherDryRun({ config, pin, port, remoteRoot, phpBin }) {
         (slugs) => slugs.size !== expectedLocations.size,
       )
     ) {
-      throw new Error("Dry-run nao confirmou as duas lojas em cada post.");
+      throw new Error("Dry-run nao confirmou o perfil principal em cada post.");
     }
 
     console.log(

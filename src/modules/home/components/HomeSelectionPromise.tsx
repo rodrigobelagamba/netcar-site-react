@@ -96,7 +96,7 @@ export function HomeSelectionPromise() {
         <div className="relative hidden min-h-[260px] overflow-hidden sm:block sm:min-h-[340px] lg:min-h-full">
           <img
             src="/images/loja1.webp"
-            alt="Fachada da Loja 1 da Netcar Multimarcas em Esteio"
+            alt="Fachada da Netcar Multimarcas na Av. Presidente Vargas, 740, em Esteio"
             width={1280}
             height={960}
             loading="lazy"
@@ -109,7 +109,7 @@ export function HomeSelectionPromise() {
               Esteio, desde 1997
             </p>
             <p className="mt-1.5 text-sm font-semibold leading-snug text-white">
-              Duas lojas na mesma avenida, com equipe e estoque integrados.
+              Netcar Multimarcas no nº 740 e filial no nº 1106 da Av. Presidente Vargas, com equipe e estoque integrados.
             </p>
           </div>
         </div>

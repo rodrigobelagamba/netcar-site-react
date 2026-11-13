@@ -87,14 +87,12 @@ function seo_org_schema()
                 'sameAs' => [
                     'https://www.instagram.com/netcar_rc',
                     'https://www.facebook.com/NetcarRC',
-                    'https://maps.google.com/maps?cid=9144067949621682127',
-                    'https://maps.google.com/maps?cid=10839197980729051544',
                 ],
             ],
             [
                 '@type' => 'AutoDealer',
                 '@id' => $loja1Id,
-                'name' => 'Netcar Multimarcas - Loja 1',
+                'name' => 'Netcar Multimarcas',
                 'branchCode' => 'Loja1',
                 'url' => SEO_SITE_URL . '/contato#loja-1',
                 'image' => SEO_SITE_URL . '/images/loja1.jpg',
@@ -334,7 +332,8 @@ function seo_render_foot()
     ?>
     </main>
     <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #e5e5e5; color: #666; font-size: 0.9rem;">
-        <p>Netcar Multimarcas · Av. Presidente Vargas, 740 e 1106 — Centro, Esteio/RS</p>
+        <p><strong>Netcar Multimarcas</strong> · Av. Presidente Vargas, 740 — Centro, Esteio/RS</p>
+        <p>Filial: Av. Presidente Vargas, 1106 — Centro, Esteio/RS · <a href="tel:+555130333900">(51) 3033-3900</a></p>
         <p><a href="tel:+555134737900">Tel: (51) 3473-7900</a> · <a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es.">WhatsApp: (51) 99729-3118</a> · <a href="mailto:contato@netcarmultimarcas.com.br">contato@netcarmultimarcas.com.br</a></p>
     </footer>
 </body>

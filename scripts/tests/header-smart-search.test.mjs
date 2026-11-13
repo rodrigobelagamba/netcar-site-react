@@ -15,6 +15,7 @@ let vehicleSearch;
 let whatsappMessages;
 let seminovosSearch;
 let slug;
+let formatters;
 
 const vehicles = [
   {
@@ -56,11 +57,12 @@ before(async () => {
     logLevel: "error",
     resolve: { alias: { "@": resolve(root, "src") } },
   });
-  [vehicleSearch, whatsappMessages, seminovosSearch, slug] = await Promise.all([
+  [vehicleSearch, whatsappMessages, seminovosSearch, slug, formatters] = await Promise.all([
     server.ssrLoadModule("/src/lib/vehicleSearch.ts"),
     server.ssrLoadModule("/src/lib/whatsappMessages.ts"),
     server.ssrLoadModule("/src/lib/seminovos-search.ts"),
     server.ssrLoadModule("/src/lib/slug.ts"),
+    server.ssrLoadModule("/src/lib/formatters.ts"),
   ]);
 });
 
@@ -118,6 +120,7 @@ function createHarness() {
     "@/lib/whatsappMessages": whatsappMessages,
     "@/lib/seminovos-search": seminovosSearch,
     "@/lib/slug": slug,
+    "@/lib/formatters": formatters,
     "@/assets/images/logo-netcar.png": "logo-test.png",
   };
   const path = "src/design-system/components/layout/Header.tsx";

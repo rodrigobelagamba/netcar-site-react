@@ -2,7 +2,7 @@ import { ExternalLink, Star } from "lucide-react";
 import { GoogleGIcon } from "@/design-system/components/patterns/social/GoogleGIcon";
 import { ReviewCard } from "@/design-system/components/patterns/social/ReviewCard";
 import { cn } from "@/lib/cn";
-import { GOOGLE_REVIEW_STORES } from "@/social/googlePlaces";
+import { GOOGLE_PRIMARY_PROFILE } from "@/social/googlePlaces";
 import { useGoogleReviewsQuery } from "@/social/queries/useGoogleReviewsQuery";
 import type { GoogleReview, GoogleReviewsResponse } from "@/social/types";
 
@@ -13,24 +13,16 @@ type GoogleReviewsHighlightProps = {
 
 function ReviewStoreLinks() {
   return (
-    <nav
-      aria-label="Avaliações de cada loja no Google"
-      className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1"
+    <a
+      href={GOOGLE_PRIMARY_PROFILE.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Ver perfil da Netcar Multimarcas, ${GOOGLE_PRIMARY_PROFILE.address} (nova aba)`}
+      className="inline-flex min-h-11 shrink-0 items-center gap-1.5 text-xs font-semibold text-[#007A83] underline decoration-[#007A83]/30 underline-offset-4 hover:decoration-current focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007A83]"
     >
-      {GOOGLE_REVIEW_STORES.map((store, index) => (
-        <a
-          key={store.id}
-          href={store.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`Ver avaliações da ${store.name} no Google (nova aba)`}
-          className="inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[#007A83] underline decoration-[#007A83]/30 underline-offset-4 hover:decoration-current focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#007A83]"
-        >
-          Loja {index + 1} no Google
-          <ExternalLink className="h-3 w-3" aria-hidden="true" />
-        </a>
-      ))}
-    </nav>
+      Netcar Multimarcas no Google
+      <ExternalLink className="h-3 w-3" aria-hidden="true" />
+    </a>
   );
 }
 
@@ -87,8 +79,8 @@ function SummaryStrip({
           </p>
           <p className="mt-0.5 text-xs leading-relaxed text-[#526974]">
             {summary
-              ? "Nota e total das duas lojas."
-              : "Consulte os comentários de cada loja."}
+              ? summary.scope === "all_locations" ? "Nota e total das duas unidades." : "Avaliações da Netcar."
+              : "Consulte os comentários da Netcar."}
           </p>
         </div>
       </div>
@@ -157,7 +149,6 @@ export function GoogleReviewsHighlight({
             <div key={review.id} className="h-[280px] min-w-0">
               <ReviewCard
                 review={review}
-                googlePlaceUrl={review.reviewUrl || data?.summary?.placeUrl}
               />
             </div>
           ))}

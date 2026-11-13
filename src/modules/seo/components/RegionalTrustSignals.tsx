@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { GoogleGIcon } from "@/design-system/components/patterns/social/GoogleGIcon";
 import { useGoogleReviewsQuery } from "@/social/queries/useGoogleReviewsQuery";
+import { GOOGLE_PRIMARY_PROFILE } from "@/social/googlePlaces";
 
 type RegionalTrustSignalsProps = {
   className?: string;
@@ -23,7 +24,6 @@ type TrustItem = {
   text: string;
   href?: "/compra";
   linkLabel?: string;
-  externalHref?: string;
   google?: boolean;
   ratingLabel?: string;
 };
@@ -40,7 +40,6 @@ export function RegionalTrustSignals({
   const { data } = useGoogleReviewsQuery();
   const summary = data?.summary;
   const totalCount = summary?.totalCount;
-  const placeUrl = summary?.placeUrl;
   const ratingLabel = summary?.rating.toFixed(1).replace(".", ",");
 
   const items: TrustItem[] = [
@@ -70,9 +69,8 @@ export function RegionalTrustSignals({
       title: "Avaliações publicadas no Google",
       text:
         summary && totalCount
-          ? `${ratingLabel} de 5 com ${totalCount.toLocaleString("pt-BR")} avaliações publicadas.`
+          ? `${ratingLabel} de 5 com ${totalCount.toLocaleString("pt-BR")} avaliações ${summary.scope === "all_locations" ? "das duas unidades" : "da Netcar"}.`
           : "Consulte as notas e os comentários publicados pelos clientes no Google.",
-      externalHref: placeUrl,
       google: true,
       ratingLabel,
     },
@@ -120,14 +118,15 @@ export function RegionalTrustSignals({
                   {item.linkLabel}
                 </Link>
               )}
-              {item.externalHref && (
+              {item.google && (
                 <a
-                  href={item.externalHref}
+                  href={GOOGLE_PRIMARY_PROFILE.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`Ver perfil da Netcar Multimarcas, ${GOOGLE_PRIMARY_PROFILE.address}`}
                   className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
                 >
-                  Ver avaliações no Google
+                  Netcar Multimarcas no Google
                 </a>
               )}
             </article>

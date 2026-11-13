@@ -1,3 +1,5 @@
+import { GOOGLE_REVIEW_STORES } from "@/social/googlePlaces";
+
 /**
  * Constrói uma URL do Google Maps a partir de um endereço em texto livre,
  * opcionalmente fixando o pino em coordenadas exatas (lat/lng).
@@ -49,14 +51,20 @@ export const LOJA_COORDS: {
   Loja2: { lat: -29.8411446, lng: -51.1721442 },
 };
 
-/** Texto de busca no Google Maps — abre a ficha da loja, não só o endereço. */
+/** Endereços de rota; os identificadores internos continuam estáveis. */
 export const LOJA_MAPS_QUERIES = {
-  Loja1: "Netcar Loja 1",
-  Loja2: "Netcar Loja 2",
+  Loja1: "Av. Presidente Vargas, 740, Centro, Esteio, RS",
+  Loja2: "Av. Presidente Vargas, 1106, Centro, Esteio, RS",
 } as const;
 
+/** Abre o perfil confirmado, independentemente do nome comercial exibido. */
 export function buildLojaMapsUrl(loja: keyof typeof LOJA_MAPS_QUERIES): string {
-  return buildMapsUrl(LOJA_MAPS_QUERIES[loja], LOJA_COORDS[loja]);
+  return GOOGLE_REVIEW_STORES[loja === "Loja1" ? 0 : 1].url;
+}
+
+/** Abre o trajeto até o endereço, sem confundir CID com Place ID. */
+export function buildLojaDirectionsUrl(loja: keyof typeof LOJA_MAPS_QUERIES): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(LOJA_MAPS_QUERIES[loja])}&travelmode=driving`;
 }
 
 export function formatPrice(value: number): string {

@@ -38,19 +38,27 @@ final class GoogleReviewsClient
         $totalCount = 0;
         $ratingSum = 0.0;
         $ratingWeight = 0;
-        $primaryPlaceUrl = SocialEnv::get(
-            'google.primary_place_url',
-            'https://www.google.com/maps/place/Netcar+Multimarcas'
-        );
-        $writeReviewUrl = SocialEnv::get(
-            'google.write_review_url',
-            'https://g.page/NetcarRC/review?rc'
-        );
+        $units = [];
+        // Regra comercial de 13/11/2026: novos convites seguem para o perfil
+        // principal confirmado, mesmo se a configuracao privada ainda for antiga.
+        $primaryPlaceUrl = 'https://maps.google.com/maps?cid=9144067949621682127';
+        $writeReviewUrl = 'https://g.page/r/Cc8fPFNaQeZ-EBM/review';
 
         foreach ($locations as $location) {
             $parent = $location['reviewsParent'] ?? $location['name'];
             $locationReviews = $this->fetchLocationReviews($accessToken, $parent);
             $totalCount += (int) ($locationReviews['totalReviewCount'] ?? count($locationReviews['reviews']));
+
+            // O resumo pertence ao conjunto das unidades. Os links oficiais de
+            // cada local permanecem separados para não atribuir tudo à matriz.
+            $units[] = [
+                'name' => (string) ($location['title'] ?? ''),
+                'address' => implode(', ', $location['storefrontAddress']['addressLines'] ?? []),
+                'placeUrl' => $location['metadata']['mapsUri'] ?? null,
+                'writeReviewUrl' => $location['metadata']['newReviewUri'] ?? null,
+                'rating' => $locationReviews['averageRating'],
+                'totalCount' => (int) $locationReviews['totalReviewCount'],
+            ];
 
             if (!empty($locationReviews['averageRating'])) {
                 $count = (int) ($locationReviews['totalReviewCount'] ?? count($locationReviews['reviews']));
@@ -66,9 +74,6 @@ final class GoogleReviewsClient
                 $allReviews[$mapped['id']] = $mapped;
             }
 
-            if (!empty($location['metadata']['mapsUri'])) {
-                $primaryPlaceUrl = $location['metadata']['mapsUri'];
-            }
         }
 
         $allReviews = array_values($allReviews);
@@ -91,6 +96,11 @@ final class GoogleReviewsClient
             'summary' => [
                 'rating' => $avgRating,
                 'totalCount' => $totalCount > 0 ? $totalCount : count($allReviews),
+                'scope' => count($units) === 1 ? 'single_location' : 'all_locations',
+                'locationCount' => count($units),
+                'units' => $units,
+                // Destino de novas interacoes comerciais; nao reatribui o total
+                // agregado nem os links historicos em units/reviews.
                 'placeUrl' => $primaryPlaceUrl,
                 'writeReviewUrl' => $writeReviewUrl,
             ],

@@ -1,3 +1,4 @@
+import { GOOGLE_PRIMARY_PROFILE } from "@/social/googlePlaces";
 /** @deprecated Use NetcarSocialSection — placeholder legado, não utilizado */
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -118,7 +119,7 @@ export function GoogleReviewsSection() {
                 Confira nossas avaliações diretamente no Google Maps.
               </p>
               <a
-                href="https://maps.google.com/?q=Netcar+Esteio"
+                href={GOOGLE_PRIMARY_PROFILE.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-white transition-colors hover:opacity-90"

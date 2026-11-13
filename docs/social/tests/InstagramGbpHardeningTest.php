@@ -207,16 +207,12 @@ class HardPagedGoogleClient extends GoogleLocalPostsClient
     }
 }
 
-$locationConfig = [
-    'loja_1' => '11161331340741727452',
-    'loja_2' => '17013442122163034193',
-];
+$locationConfig = GoogleLocalPostsClient::PUBLISHING_LOCATIONS;
 $pagedGoogle = new HardPagedGoogleClient();
 $targetLocations = $pagedGoogle->listTargetLocations($locationConfig);
-hardExpect(count($targetLocations) === 2, 'Google deve encontrar exatamente as duas locations configuradas.');
+hardExpect(count($targetLocations) === 1, 'Google deve retornar somente o principal, mesmo com filial disponivel na conta.');
 hardExpect($targetLocations[0]['slug'] === 'loja_1', 'Locations devem manter a ordem da configuracao.');
-hardExpect($targetLocations[1]['slug'] === 'loja_2', 'Segunda location deve manter a ordem da configuracao.');
-hardExpect(count($pagedGoogle->requests) === 5, 'Google deve paginar contas e locations ate encontrar as duas lojas.');
+hardExpect(count($pagedGoogle->requests) === 5, 'Google deve paginar contas e locations ate encontrar o perfil principal.');
 hardExpect(
     count(array_filter($pagedGoogle->requests, static function (string $url): bool {
         return strpos($url, 'pageToken=accounts-page-2') !== false;
@@ -232,7 +228,7 @@ hardExpectThrows(
             'loja1' => '17013442122163034193',
         ]);
     },
-    'slugs unicos',
+    'perfil principal',
     'Configuracao deve rejeitar slugs que colidem depois da normalizacao.'
 );
 hardExpect(count($invalidGoogle->requests) === 0, 'Configuracao invalida deve falhar antes de consultar o Google.');
@@ -245,9 +241,24 @@ hardExpectThrows(
             'loja_2' => '11161331340741727452',
         ]);
     },
-    'IDs unicos',
+    'perfil principal',
     'Configuracao deve rejeitar IDs de location duplicados.'
 );
+
+foreach ([
+    'accounts/1/locations/17013442122163034193',
+    'accounts/1/locations/99999999999999999999',
+    'accounts/1/locations/11161331340741727452/extra',
+] as $forbiddenParent) {
+    hardExpectThrows(
+        static function () use ($invalidGoogle, $forbiddenParent): void {
+            $invalidGoogle->create($forbiddenParent, []);
+        },
+        'perfil principal',
+        'O gateway deve recusar destino fora da allowlist antes de OAuth ou HTTP.'
+    );
+}
+hardExpect(count($invalidGoogle->requests) === 0, 'Destinos bloqueados nao devem acessar a API.');
 
 final class HardRepeatedPostTokenGoogleClient extends GoogleLocalPostsClient
 {
@@ -428,18 +439,13 @@ class HardGoogleClient extends GoogleLocalPostsClient
 
     public function listTargetLocations(array $configuredLocations): array
     {
+        hardExpect($configuredLocations === GoogleLocalPostsClient::PUBLISHING_LOCATIONS, 'Config antiga nao pode reativar a filial.');
         return [
             [
                 'slug' => 'loja_1',
                 'id' => '11161331340741727452',
                 'title' => 'Netcar Loja 1',
                 'parent' => 'accounts/1/locations/11161331340741727452',
-            ],
-            [
-                'slug' => 'loja_2',
-                'id' => '17013442122163034193',
-                'title' => 'Netcar Loja 2',
-                'parent' => 'accounts/1/locations/17013442122163034193',
             ],
         ];
     }
@@ -532,7 +538,7 @@ final class HardMediaCache extends InstagramPostMediaCache
     }
 }
 
-// Um estado parcialmente concluido (Loja 1 live) ainda precisa publicar na Loja 2.
+// Uma antiga pendencia da filial nao cria novo trabalho nem repete o principal.
 $missingPrivateDir = sys_get_temp_dir() . '/netcar-missing-location-private-' . getmypid();
 $missingStatePath = sys_get_temp_dir() . '/netcar-missing-location-' . getmypid() . '.json';
 $missingCutoff = time() - 120;
@@ -563,15 +569,12 @@ $missingPublisher = new InstagramGbpPublisher(
     new GooglePostsStateStore($missingStatePath)
 );
 $missingResult = $missingPublisher->sync(false);
-hardExpect($missingResult['created'] === 1, 'Post com apenas uma loja live deve criar a location ausente.');
-hardExpect($missingResult['alreadyLive'] === 1, 'Post parcial deve preservar a loja que ja esta live.');
-hardExpect(
-    strpos($missingGoogle->createdParents[0] ?? '', '17013442122163034193') !== false,
-    'Retry parcial deve escrever somente na Loja 2 ausente.'
-);
+hardExpect($missingResult['created'] === 0, 'Filial ausente nao pode ser preenchida.');
+hardExpect($missingResult['pendingMedia'] === 0, 'Principal live nao deve ocupar vaga por pendencia da filial.');
+hardExpect($missingGoogle->createCalls === 0, 'Retry parcial antigo nao deve fazer qualquer POST.');
 hardCleanupState($missingStatePath, $missingPrivateDir);
 
-// Trocar o ID por tras de um slug invalida somente a location alterada e exige novo handover.
+// Um gateway que devolve destino extra ou outro ID e rejeitado sem tocar no estado.
 $changedPrivateDir = sys_get_temp_dir() . '/netcar-changed-location-private-' . getmypid();
 $changedStatePath = sys_get_temp_dir() . '/netcar-changed-location-' . getmypid() . '.json';
 $changedCutoff = time() - 60;
@@ -616,18 +619,88 @@ $changedPublisher = new InstagramGbpPublisher(
     new HardMediaCache(),
     new GooglePostsStateStore($changedStatePath)
 );
-$changedResult = $changedPublisher->sync(false);
-hardExpect($changedResult['created'] === 1, 'Troca de ID deve recriar somente a location alterada.');
-hardExpect(
-    strpos($changedGoogle->createdParents[0] ?? '', '99999999999999999999') !== false,
-    'Troca de ID deve escrever exclusivamente no novo destino validado.'
+$beforeRejectedSync = (string) file_get_contents($changedStatePath);
+hardExpectThrows(
+    static function () use ($changedPublisher): void { $changedPublisher->sync(false); },
+    'perfil principal',
+    'Gateway com destino extra deve falhar antes de modificar estado ou publicar.'
 );
-$changedState = json_decode((string) file_get_contents($changedStatePath), true);
-hardExpect(
-    ($changedState['locationFingerprint']['loja_2'] ?? '') === '99999999999999999999',
-    'Estado deve persistir o novo fingerprint slug para ID.'
+hardExpect($changedGoogle->createCalls === 0, 'Destino nao autorizado nunca deve receber POST.');
+hardExpect((string) file_get_contents($changedStatePath) === $beforeRejectedSync, 'Rejeicao deve preservar estado byte a byte.');
+hardExpectThrows(
+    static function () use ($changedPublisher): void { $changedPublisher->sync(true); },
+    'perfil principal',
+    'Dry-run tambem deve rejeitar destino extra.'
 );
 hardCleanupState($changedStatePath, $changedPrivateDir);
+
+// Reducao 2->1 preserva ativacao antiga, retries, dedupe e historico da filial.
+$reducedPrivateDir = sys_get_temp_dir() . '/netcar-reduced-private-' . getmypid();
+$reducedStatePath = sys_get_temp_dir() . '/netcar-reduced-' . getmypid() . '.json';
+$reducedCutoff = time() - 30 * 86400;
+$completedAt = gmdate('c', $reducedCutoff + 10);
+$lastDiscoveryAt = gmdate('c', time() - 300);
+$primaryLive = [
+    'status' => 'live', 'googleState' => 'LIVE', 'attempts' => 1,
+    'locationId' => '11161331340741727452',
+    'googlePostName' => 'accounts/1/locations/11161331340741727452/localPosts/existing',
+    'marker' => 'utm_content=ig_branch-pending_loja_1',
+];
+$branchPending = [
+    'status' => 'error', 'retryable' => true, 'attempts' => 2,
+    'locationId' => '17013442122163034193',
+    'googlePostName' => 'accounts/1/locations/17013442122163034193/localPosts/existing',
+    'marker' => 'utm_content=ig_branch-pending_loja_2',
+    'nextAttemptAt' => gmdate('c', time() - 1),
+    'error' => 'Falha historica da filial',
+];
+$reducedPosts = [];
+foreach ([
+    'branch-pending' => time() - 120,
+    'old-history' => time() - 190 * 86400,
+    'primary-retry' => time() - 60,
+    'before-cutoff' => $reducedCutoff - 60,
+] as $mediaId => $publishedAt) {
+    $item = hardMedia($mediaId, $publishedAt);
+    $reducedPosts[$mediaId] = [
+        'instagramPermalink' => $item['permalink'], 'publishedAt' => $item['publishedAt'],
+        'source' => $item, 'locations' => ['loja_1' => $primaryLive, 'loja_2' => $branchPending],
+    ];
+}
+$reducedPosts['primary-retry']['locations']['loja_1'] = [
+    'status' => 'error', 'retryable' => true, 'attempts' => 2,
+    'nextAttemptAt' => gmdate('c', time() + 3600), 'error' => 'Retry principal ainda nao elegivel',
+    'locationId' => '11161331340741727452',
+];
+unset($reducedPosts['before-cutoff']['locations']['loja_1']);
+hardSetConfig($reducedPrivateDir, gmdate('c', $reducedCutoff));
+$reducedStore = new GooglePostsStateStore($reducedStatePath);
+$reducedStore->lock();
+$reducedStore->save([
+    'activationCutoff' => gmdate('c', $reducedCutoff), 'activationCompletedAt' => $completedAt,
+    'lastDiscoveryAt' => $lastDiscoveryAt, 'publisherEnabled' => true,
+    'locationFingerprint' => ['loja_1' => '11161331340741727452', 'loja_2' => '17013442122163034193'],
+    'posts' => $reducedPosts,
+]);
+$reducedStore->unlock();
+$reducedGoogle = new HardGoogleClient();
+$reducedFeed = new HardFeedClient([]);
+$reducedPublisher = new InstagramGbpPublisher(
+    $reducedFeed, $reducedGoogle, new HardMediaCache(), new GooglePostsStateStore($reducedStatePath)
+);
+$beforeReducedDryRun = (string) file_get_contents($reducedStatePath);
+$reducedPublisher->sync(true);
+hardExpect((string) file_get_contents($reducedStatePath) === $beforeReducedDryRun, 'Dry-run nao pode migrar o estado existente.');
+$reducedResult = $reducedPublisher->sync(false);
+$reducedState = json_decode((string) file_get_contents($reducedStatePath), true);
+hardExpect($reducedResult['pendingMedia'] === 0 && $reducedGoogle->createCalls === 0, 'Pendencia exclusiva da filial nao pode duplicar o principal ou liberar backlog.');
+hardExpect($reducedState['posts'] === $reducedPosts, 'Todos os IDs, marcadores, tentativas e registros antigos devem permanecer intactos.');
+hardExpect($reducedState['locationFingerprint'] === GoogleLocalPostsClient::PUBLISHING_LOCATIONS, 'Fingerprint deve refletir o destino atual.');
+hardExpect($reducedState['activationCutoff'] === gmdate('c', $reducedCutoff), 'Reducao nao pode alterar cutoff antigo.');
+hardExpect($reducedState['activationCompletedAt'] === $completedAt && $reducedState['publisherEnabled'] === true, 'Reducao nao deve reativar nem pausar o publicador.');
+hardExpect(strtotime($reducedState['lastDiscoveryAt']) >= strtotime($lastDiscoveryAt), 'Descoberta deve continuar do estado existente.');
+hardExpect(count($reducedResult['errors']) === 1 && $reducedResult['errors'][0]['location'] === 'loja_1', 'Erros da filial ficam no historico; retry do principal continua visivel.');
+hardCleanupState($reducedStatePath, $reducedPrivateDir);
 
 // O cutoff exclui posts antigos e o limite por execucao escoa backlog sem perda.
 $backlogPrivateDir = sys_get_temp_dir() . '/netcar-backlog-private-' . getmypid();
@@ -651,13 +724,13 @@ $backlogPublisher = new InstagramGbpPublisher(
 $backlogFirst = $backlogPublisher->sync(false);
 hardExpect($backlogFirst['pendingMedia'] === 3, 'Primeira execucao deve descobrir os tres posts elegiveis.');
 hardExpect($backlogFirst['backlogMedia'] === 2, 'Limite de um post deve deixar dois itens no backlog.');
-hardExpect($backlogFirst['created'] === 2, 'Um item do backlog deve ser publicado nas duas lojas.');
+hardExpect($backlogFirst['created'] === 1, 'Um item do backlog deve ser publicado somente no principal.');
 $backlogState = json_decode((string) file_get_contents($backlogStatePath), true);
 hardExpect(!isset($backlogState['posts']['before-handover']), 'Post anterior ao cutoff nao pode entrar no estado.');
 $backlogSecond = $backlogPublisher->sync(false);
 hardExpect($backlogSecond['pendingMedia'] === 2, 'Segunda execucao deve continuar do backlog restante.');
 hardExpect($backlogSecond['backlogMedia'] === 1, 'Backlog deve diminuir a cada execucao.');
-hardExpect($backlogGoogle->createCalls === 4, 'Duas execucoes devem criar dois posts, cada um em duas lojas.');
+hardExpect($backlogGoogle->createCalls === 2, 'Duas execucoes devem criar dois posts, ambos no principal.');
 hardCleanupState($backlogStatePath, $backlogPrivateDir);
 
 // Erro 4xx fica visivel em todas as execucoes, mas nao bloqueia posts novos nem repete POST.
@@ -667,7 +740,7 @@ $errorCutoff = time() - 120;
 $errorMedia = hardMedia('permanent-error', time() - 20);
 hardSetConfig($errorPrivateDir, gmdate('c', $errorCutoff));
 $errorGoogle = new HardGoogleClient();
-$errorGoogle->permanentFailureLocationId = '17013442122163034193';
+$errorGoogle->permanentFailureLocationId = '11161331340741727452';
 $errorPublisher = new InstagramGbpPublisher(
     new HardFeedClient([$errorMedia]),
     $errorGoogle,
@@ -676,16 +749,16 @@ $errorPublisher = new InstagramGbpPublisher(
 );
 $errorFirst = $errorPublisher->sync(false);
 hardExpect($errorFirst['success'] === false, 'Erro permanente deve falhar visivelmente na primeira execucao.');
-hardExpect($errorGoogle->createCalls === 2, 'Primeira execucao deve tentar cada loja uma unica vez.');
+hardExpect($errorGoogle->createCalls === 1, 'Primeira execucao deve tentar o principal uma unica vez.');
 $persistentState = json_decode((string) file_get_contents($errorStatePath), true);
 hardExpect(
-    ($persistentState['posts']['permanent-error']['locations']['loja_2']['attempts'] ?? 0) === 1,
+    ($persistentState['posts']['permanent-error']['locations']['loja_1']['attempts'] ?? 0) === 1,
     'Falha de criacao deve registrar exatamente uma tentativa.'
 );
 $errorSecond = $errorPublisher->sync(false);
 hardExpect($errorSecond['success'] === false, 'Erro persistente deve continuar visivel nas execucoes seguintes.');
 hardExpect($errorSecond['pendingMedia'] === 0, 'Erro permanente nao deve consumir vaga do backlog de retries.');
-hardExpect($errorGoogle->createCalls === 2, 'Erro permanente nao pode repetir o POST automaticamente.');
+hardExpect($errorGoogle->createCalls === 1, 'Erro permanente nao pode repetir o POST automaticamente.');
 hardExpect(!empty($errorSecond['errors'][0]['persistent']), 'Resposta deve identificar o erro persistente.');
 hardCleanupState($errorStatePath, $errorPrivateDir);
 
@@ -705,7 +778,7 @@ $timeoutPublisher = new InstagramGbpPublisher(
 );
 $timeoutFirst = $timeoutPublisher->sync(false);
 hardExpect($timeoutFirst['success'] === false, 'Timeout apos POST deve ser reportado como erro retryable.');
-hardExpect($timeoutGoogle->createCalls === 2, 'Primeira execucao deve fazer no maximo um POST por loja.');
+hardExpect($timeoutGoogle->createCalls === 1, 'Primeira execucao deve fazer no maximo um POST no principal.');
 $timeoutState = json_decode((string) file_get_contents($timeoutStatePath), true);
 hardExpect(
     ($timeoutState['posts']['timeout-after-post']['locations']['loja_1']['attempts'] ?? 0) === 1,
@@ -720,7 +793,7 @@ file_put_contents(
 $timeoutSecond = $timeoutPublisher->sync(false);
 hardExpect($timeoutSecond['success'] === true, 'Retry deve reconciliar o post remoto criado antes do timeout.');
 hardExpect($timeoutSecond['reconciled'] === 1, 'Retry deve localizar a publicacao pelo marcador UTM.');
-hardExpect($timeoutGoogle->createCalls === 2, 'Reconciliacao nao pode executar um segundo POST para a mesma loja.');
+hardExpect($timeoutGoogle->createCalls === 1, 'Reconciliacao nao pode executar um segundo POST para a mesma loja.');
 $reconciledState = json_decode((string) file_get_contents($timeoutStatePath), true);
 hardExpect(
     ($reconciledState['posts']['timeout-after-post']['locations']['loja_1']['attempts'] ?? 0) === 1,
@@ -743,9 +816,9 @@ $notFoundPublisher = new InstagramGbpPublisher(
     new GooglePostsStateStore($notFoundStatePath)
 );
 $notFoundFirst = $notFoundPublisher->sync(false);
-hardExpect($notFoundFirst['created'] === 2, 'Cenario 404 deve iniciar com um post PROCESSING por loja.');
+hardExpect($notFoundFirst['created'] === 1, 'Cenario 404 deve iniciar com um post PROCESSING no principal.');
 $notFoundState = json_decode((string) file_get_contents($notFoundStatePath), true);
-foreach (['loja_1', 'loja_2'] as $slug) {
+foreach (['loja_1'] as $slug) {
     $notFoundState['posts']['get-404-reconcile']['locations'][$slug]['nextAttemptAt'] = gmdate('c', time() - 1);
 }
 file_put_contents(
@@ -756,8 +829,8 @@ file_put_contents(
 $notFoundGoogle->forceGetNotFound = true;
 $notFoundSecond = $notFoundPublisher->sync(false);
 hardExpect($notFoundSecond['success'] === true, 'GET 404 deve cair na reconciliacao segura pelo marcador.');
-hardExpect($notFoundSecond['reconciled'] === 2, 'GET 404 deve reconciliar as duas lojas pelo marcador.');
-hardExpect($notFoundGoogle->createCalls === 2, 'GET 404 com marcador remoto nao pode duplicar POST.');
+hardExpect($notFoundSecond['reconciled'] === 1, 'GET 404 deve reconciliar o principal pelo marcador.');
+hardExpect($notFoundGoogle->createCalls === 1, 'GET 404 com marcador remoto nao pode duplicar POST.');
 hardCleanupState($notFoundStatePath, $notFoundPrivateDir);
 
 // O cutoff so e confirmado depois de uma primeira descoberta completa.

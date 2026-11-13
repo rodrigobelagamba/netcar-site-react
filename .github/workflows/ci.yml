@@ -137,3 +137,10 @@ jobs:
           php docs/social/tests/VehicleVideoSyncTest.php
           php docs/social/tests/InstagramGbpSyncTest.php
           php docs/social/tests/InstagramGbpHardeningTest.php
+      - name: Validate store identity and review attribution
+        env:
+          NODE_ENV: test
+        run: |
+          node --test scripts/tests/page-lastmod.test.mjs scripts/tests/gbp-primary-destination.test.mjs
+          node --import tsx --test scripts/tests/review-unit-choice.test.tsx scripts/tests/regional-trust-reviews.test.tsx
+          php docs/social/tests/GoogleReviewsAttributionTest.php

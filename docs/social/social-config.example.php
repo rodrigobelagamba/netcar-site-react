@@ -31,7 +31,8 @@ return [
         // ],
     ],
 
-    // Replica gratuita Instagram -> Google Business Profile (sem Zapier).
+    // Replica Instagram -> perfil principal GBP. Allowlist autoritativa no codigo;
+    // uma config privada legada com a filial nao a reativa para novas publicacoes.
     // A ativacao live exige enabled=true E not_before explicito.
     'google_posts' => [
         'enabled' => false,
@@ -41,7 +42,6 @@ return [
         'stock_api_url' => 'https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500',
         'locations' => [
             'loja_1' => '11161331340741727452',
-            'loja_2' => '17013442122163034193',
         ],
     ],
 

@@ -240,9 +240,9 @@ final class FakeGoogleLocalPostsClient extends GoogleLocalPostsClient
 
     public function listTargetLocations(array $configuredLocations): array
     {
+        expectTrue($configuredLocations === GoogleLocalPostsClient::PUBLISHING_LOCATIONS, 'Config antiga com filial deve ser limitada ao principal.');
         return [
             ['slug' => 'loja_1', 'id' => '11161331340741727452', 'title' => 'Netcar Loja 1', 'parent' => 'accounts/1/locations/11161331340741727452'],
-            ['slug' => 'loja_2', 'id' => '17013442122163034193', 'title' => 'Netcar Loja 2', 'parent' => 'accounts/1/locations/17013442122163034193'],
         ];
     }
 
@@ -358,7 +358,7 @@ $cleanPublisher = new InstagramGbpPublisher(
 $cleanDryRun = $cleanPublisher->sync(true);
 expectTrue($cleanResolver->resolveCalls === 1, 'Veiculo deve ser resolvido uma vez por post, nao uma vez por loja.');
 expectTrue(
-    count($cleanDryRun['items']) === 2
+    count($cleanDryRun['items']) === 1
         && $cleanDryRun['items'][0]['destinationSource'] === 'stock_reference'
         && $cleanDryRun['items'][0]['destinationReason'] === 'stock_reference'
         && $cleanDryRun['items'][0]['destinationWarning'] === null
@@ -393,8 +393,8 @@ $unavailablePublisher = new InstagramGbpPublisher(
 );
 $unavailableRun = $unavailablePublisher->sync(false);
 expectTrue(
-    $unavailableRun['created'] === 0 && count($unavailableRun['errors']) === 2,
-    'API de estoque indisponivel deve adiar as duas lojas sem publicar fallback definitivo.'
+    $unavailableRun['created'] === 0 && count($unavailableRun['errors']) === 1,
+    'API de estoque indisponivel deve adiar o perfil principal sem publicar fallback definitivo.'
 );
 expectTrue(
     $fakeGoogle->createCalls === $unavailableCreateCalls,
@@ -408,14 +408,14 @@ expectTrue(
 @unlink($unavailableStatePath . '.lock');
 
 $firstRun = $publisher->sync(false);
-expectTrue($firstRun['created'] === 2, 'Primeira execucao deve criar um post por loja.');
-expectTrue($fakeGoogle->createCalls === 2, 'Google deve receber exatamente duas criacoes.');
+expectTrue($firstRun['created'] === 1, 'Primeira execucao deve criar um post no principal.');
+expectTrue($fakeGoogle->createCalls === 1, 'Google deve receber exatamente uma criacao.');
 expectTrue($fakeMediaCache->cacheCalls === 1, 'A mesma imagem deve ser armazenada uma unica vez.');
 
 $secondRun = $publisher->sync(false);
-expectTrue($secondRun['pendingMedia'] === 0, 'Segunda execucao nao deve reenfileirar post live nas duas lojas.');
+expectTrue($secondRun['pendingMedia'] === 0, 'Segunda execucao nao deve reenfileirar post live no principal.');
 expectTrue($secondRun['created'] === 0, 'Segunda execucao nao deve criar novamente um post concluido.');
-expectTrue($fakeGoogle->createCalls === 2, 'Segunda execucao nao pode duplicar posts.');
+expectTrue($fakeGoogle->createCalls === 1, 'Segunda execucao nao pode duplicar posts.');
 
 @unlink($publisherStatePath);
 @unlink($publisherStatePath . '.lock');

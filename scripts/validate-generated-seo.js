@@ -189,6 +189,7 @@ const expectedDealers = {
   [`${site}/#loja-1`]: {
     url: `${site}/contato#loja-1`,
     branchCode: "Loja1",
+    name: "Netcar Multimarcas",
     telephone: "+55-51-3473-7900",
     streetAddress: "Av. Presidente Vargas, 740",
     postalCode: "93260-490",
@@ -199,6 +200,7 @@ const expectedDealers = {
   [`${site}/#loja-2`]: {
     url: `${site}/contato#loja-2`,
     branchCode: "Loja2",
+    name: "Netcar Multimarcas - Loja 2",
     telephone: "+55-51-3033-3900",
     streetAddress: "Av. Presidente Vargas, 1106",
     postalCode: "93260-048",
@@ -433,11 +435,11 @@ function validateRegionalExperience(html, city, variant, label) {
   }
   const stores = [
     {
-      name: "Loja 1",
+      name: "Netcar Multimarcas",
       address: "Av. Presidente Vargas, 740, Centro, Esteio, RS",
     },
     {
-      name: "Loja 2",
+      name: "Filial",
       address: "Av. Presidente Vargas, 1106, Centro, Esteio, RS",
     },
   ];
@@ -507,6 +509,10 @@ function validateOrganizationGraph(nodes, label) {
     }
   }
 
+  if ([...sameAs].some((url) => /maps\.google|google\.[^/]+\/maps/.test(url))) {
+    errors.push(`${label}: perfis físicos não devem declarar equivalência com a Organization`);
+  }
+
   const expectedDealerIds = Object.keys(expectedDealers).sort();
   const referencedDealerIds = (rootOrganization.subOrganization || [])
     .map((item) => item?.["@id"])
@@ -542,6 +548,7 @@ function validateOrganizationGraph(nodes, label) {
     const dealer = dealers.find((candidate) => candidate["@id"] === dealerId);
     if (!dealer) continue;
     if (
+      dealer.name !== expected.name ||
       dealer.url !== expected.url ||
       dealer.branchCode !== expected.branchCode ||
       dealer.telephone !== expected.telephone ||

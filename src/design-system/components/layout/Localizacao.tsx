@@ -1,7 +1,7 @@
 import { MapPin, ExternalLink } from "lucide-react";
 import { useMemo } from "react";
 import { useAddressQuery, usePhoneQuery } from "@/catalog/queries/useSiteQuery";
-import { buildLojaMapsUrl, buildMapsUrl } from "@/lib/formatters";
+import { buildLojaMapsUrl } from "@/lib/formatters";
 import { LojasMap } from "./LojasMap";
 
 type LojaData = {
@@ -16,15 +16,15 @@ type LojaData = {
 
 const DEFAULT_LOJAS = {
   1: {
-    nome: "LOJA 1",
-    tipo: "Matriz",
+    nome: "Netcar Multimarcas",
+    tipo: "Nº 740",
     address: "Av. Presidente Vargas, 740 - Centro - Esteio/RS",
     telefone: "(51) 3473-7900",
     cor: "primary" as const,
   },
   2: {
-    nome: "LOJA 2",
-    tipo: "Filial",
+    nome: "FILIAL",
+    tipo: "Nº 1106",
     address: "Av. Presidente Vargas, 1106 - Centro - Esteio/RS",
     telefone: "(51) 3033-3900",
     cor: "amber-500" as const,
@@ -79,12 +79,12 @@ function UnidadesCard({ lojas }: { lojas: LojaData[] }) {
 
       <div className="mt-6 pt-4 border-t border-gray-100">
         <a
-          href={buildMapsUrl("Netcar Multimarcas Esteio RS")}
+          href={buildLojaMapsUrl("Loja1")}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 text-xs font-bold text-primary hover:opacity-80 transition-colors group/link"
         >
-          ABRIR NO GOOGLE MAPS
+          ABRIR Nº 740 NO GOOGLE MAPS
           <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
         </a>
       </div>

@@ -2,6 +2,8 @@
 
 Início: 22/08/2026. Duração inicial: 30 dias. Perfis: Netcar Multimarcas - Loja 1 e Netcar Multimarcas - Loja 2.
 
+> Atualização operacional de 13/11/2026: novas interações comerciais concentram-se no perfil principal. O calendário e os envios de agosto/setembro abaixo são históricos; a filial continua ativa.
+
 ## Objetivo
 
 Manter fotos próprias e recentes de cada endereço e medir, sem atribuição causal prematura, se a presença da Loja 1 e da Loja 2 muda no Maps e no Map Pack de Esteio.
@@ -33,7 +35,7 @@ O arquivo `index.json` identifica `unidade=loja1` ou `unidade=loja2`. O lote ini
 2. Considerar somente imagens novas e identificadas para a unidade correta.
 3. Abrir e revisar visualmente cada candidata antes de publicar.
 4. Não publicar automaticamente arquivos com pessoas, documentos, telas, placas legíveis, promoções vencidas, garantias ou métricas sem validação.
-5. Publicar uma ou duas fotos por perfil. Não duplicar a mesma imagem nos dois perfis.
+5. Desde 13/11/2026, preparar fotos somente para o perfil principal da matriz (ID `11161331340741727452`). Não mover fotos exclusivas da filial para a matriz. Os registros dos ciclos anteriores permanecem históricos.
 6. Registrar o envio em `evidencias/gbp-photo-log.csv`, incluindo o estado exibido pelo Google.
 7. Conferir novamente o estado na semana seguinte. `Pendente` significa processamento, não rejeição.
 

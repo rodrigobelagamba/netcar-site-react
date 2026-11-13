@@ -3,8 +3,8 @@
  * Gera a lista de "Produtos" pro Perfil da Empresa (Google) a partir do estoque.
  *
  * O GBP não tem API pública de produtos — o cadastro é manual no editor do
- * perfil. Este CSV entrega nome, categoria, preço, descrição, foto e link com
- * UTM por loja, prontos pra copiar. Rodar semanalmente e remover do perfil os
+ * perfil principal. Este CSV entrega nome, categoria, preço, descrição, foto e
+ * link com UTM do perfil principal, prontos pra copiar. Rodar semanalmente e remover do perfil os
  * que saíram do estoque (coluna `id` facilita o cruzamento).
  *
  * Uso: node scripts/gbp-products-csv.mjs [--limit=20] [--out=docs/local-seo-project/gbp-produtos.csv]
@@ -15,8 +15,7 @@ import { dirname, resolve } from "node:path";
 const API = "https://www.netcarmultimarcas.com.br/api/v1/veiculos.php?limit=500";
 const SITE = "https://www.netcarmultimarcas.com.br";
 const LOJAS = [
-  { key: "loja_1", nome: "Netcar Multimarcas - Loja 1" },
-  { key: "loja_2", nome: "Netcar Multimarcas - Loja 2" },
+  { key: "loja_1", nome: "Netcar Multimarcas" },
 ];
 
 const args = Object.fromEntries(
@@ -147,5 +146,5 @@ for (const loja of LOJAS) {
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, `\uFEFF${rows.join("\n")}\n`, "utf8");
 console.log(
-  `GBP produtos: ${disponiveis.length} carros x ${LOJAS.length} lojas -> ${out}`,
+  `GBP produtos: ${disponiveis.length} carros x ${LOJAS.length} perfil -> ${out}`,
 );

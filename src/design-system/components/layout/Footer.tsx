@@ -31,7 +31,7 @@ const menuLinks = [
   { to: "/blog", label: "Atualidades" },
   { to: "/contato", label: "Contato" },
   {
-    to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9",
+    to: buildLojaMapsUrl("Loja1"),
     label: "Localização",
     external: true,
   },
@@ -86,6 +86,8 @@ export function Footer() {
   const { data: schedule } = useScheduleQuery();
   const loja1Phone = phoneLoja1?.telefone || "5134737900";
   const loja2Phone = phoneLoja2?.telefone || "5130333900";
+  const loja1Address = addressLoja1?.address || "Av. Presidente Vargas, 740 - Centro - Esteio/RS";
+  const loja2Address = addressLoja2?.address || "Av. Presidente Vargas, 1106 - Centro - Esteio/RS";
 
   const getFachadaImage = (
     banners: Array<{ titulo?: string; imagem: string }> | undefined,
@@ -210,7 +212,7 @@ export function Footer() {
           {/* Coluna 2: Lojas */}
           <div>
             <h2 className="text-[10px] font-bold text-muted-foreground mb-5 uppercase tracking-widest">
-              Nossas Lojas
+              Visite a Netcar
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* Loja 1 */}
@@ -224,7 +226,7 @@ export function Footer() {
                 >
                   <div className="aspect-[16/10] rounded-xl overflow-hidden mb-3 relative">
                     <div className="absolute top-2 left-2 bg-primary/90 backdrop-blur px-2.5 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wide z-10">
-                      Matriz
+                      Nº 740
                     </div>
                     <img
                       src={optimizeStockImage(imagemLoja1, 640)}
@@ -235,7 +237,7 @@ export function Footer() {
                       loading="lazy"
                       decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      alt="Loja 1"
+                      alt="Fachada da Netcar Multimarcas na Av. Presidente Vargas, 740"
                       onError={(e) => {
                         if (
                           !e.currentTarget.src.endsWith("/images/loja1.webp")
@@ -247,13 +249,13 @@ export function Footer() {
                     />
                   </div>
                   <h3 className="font-bold text-fg text-sm mb-1 group-hover:text-primary transition-colors">
-                    Loja 1
+                    Netcar Multimarcas
                   </h3>
-                  {addressLoja1?.address && (
+                  {loja1Address && (
                     <p
                       className="text-xs text-muted-foreground leading-relaxed mb-2"
                       dangerouslySetInnerHTML={{
-                        __html: addressLoja1.address.replace(/ - /g, "<br/>"),
+                        __html: loja1Address.replace(/ - /g, "<br/>"),
                       }}
                     />
                   )}
@@ -291,7 +293,7 @@ export function Footer() {
                       loading="lazy"
                       decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      alt="Loja 2"
+                      alt="Fachada da filial Netcar Multimarcas"
                       onError={(e) => {
                         if (
                           !e.currentTarget.src.endsWith("/images/loja2.webp")
@@ -303,13 +305,13 @@ export function Footer() {
                     />
                   </div>
                   <h3 className="font-bold text-fg text-sm mb-1 group-hover:text-primary transition-colors">
-                    Loja 2
+                    Filial
                   </h3>
-                  {addressLoja2?.address && (
+                  {loja2Address && (
                     <p
                       className="text-xs text-muted-foreground leading-relaxed mb-2"
                       dangerouslySetInnerHTML={{
-                        __html: addressLoja2.address.replace(/ - /g, "<br/>"),
+                        __html: loja2Address.replace(/ - /g, "<br/>"),
                       }}
                     />
                   )}

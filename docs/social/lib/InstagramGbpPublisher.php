@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Replica os posts novos do Instagram nos dois perfis GBP.
+ * Replica os posts novos do Instagram somente no perfil principal GBP.
  *
  * Garantias principais:
  * - cutoff obrigatorio no modo live (nunca faz backfill acidental);
@@ -53,6 +53,7 @@ final class InstagramGbpPublisher
             $notBefore = $this->notBefore($settings, true);
             $media = $this->instagram->fetchSince($notBefore, (int) $settings['max_feed_items']);
             $locations = $this->google->listTargetLocations($settings['locations']);
+            $this->targetLocationSlugs($locations);
             $result = $this->baseResult(true, $enabled, $notBefore, $media, $locations);
             foreach ($media as $item) {
                 $vehicleResolution = $this->vehicleResolution($item);
@@ -85,7 +86,7 @@ final class InstagramGbpPublisher
             return $result;
         }
 
-        // Valida as duas locations antes de alterar cutoff, descoberta ou estado local.
+        // Valida o destino principal antes de alterar cutoff, descoberta ou estado local.
         $locations = $this->google->listTargetLocations($settings['locations']);
         $expectedLocationSlugs = $this->targetLocationSlugs($locations);
 
@@ -123,7 +124,7 @@ final class InstagramGbpPublisher
             foreach ($selected as $item) {
                 $this->syncMedia($item, $locations, $settings, $state, $result);
             }
-            $this->collectPersistentErrors($state, $result);
+            $this->collectPersistentErrors($state, $result, $expectedLocationSlugs);
             $this->pruneState($state, $expectedLocationSlugs);
             $this->stateStore->save($state);
         } finally {
@@ -524,7 +525,7 @@ final class InstagramGbpPublisher
         return $next === false || $next <= time();
     }
 
-    private function collectPersistentErrors(array $state, array &$result): void
+    private function collectPersistentErrors(array $state, array &$result, array $locationSlugs): void
     {
         $seen = [];
         foreach ($result['errors'] as $error) {
@@ -533,6 +534,10 @@ final class InstagramGbpPublisher
 
         foreach ($state['posts'] ?? [] as $mediaId => $post) {
             foreach ($post['locations'] ?? [] as $slug => $entry) {
+                // Preservar erros historicos da filial sem reativa-los no publicador.
+                if (!in_array($slug, $locationSlugs, true)) {
+                    continue;
+                }
                 if (($entry['status'] ?? '') !== 'error') {
                     continue;
                 }
@@ -579,10 +584,7 @@ final class InstagramGbpPublisher
             'max_posts_per_run' => 3,
             'max_activation_age_seconds' => 1800,
             'fallback_url' => 'https://www.netcarmultimarcas.com.br/seminovos',
-            'locations' => [
-                'loja_1' => '11161331340741727452',
-                'loja_2' => '17013442122163034193',
-            ],
+            'locations' => GoogleLocalPostsClient::PUBLISHING_LOCATIONS,
         ];
         $configured = SocialEnv::get('google_posts', []);
         if (!is_array($configured)) {
@@ -602,9 +604,9 @@ final class InstagramGbpPublisher
 
         $settings = array_merge($defaults, $configured, $runtime);
         $settings['enabled'] = $settings['enabled'] === true || $settings['enabled'] === 1;
-        if (!is_array($settings['locations'])) {
-            $settings['locations'] = $defaults['locations'];
-        }
+        // Autoritativo: a config OAuth existente ainda pode listar as duas lojas.
+        // A politica de saida nao modifica a coleta de reviews nem o cadastro delas.
+        $settings['locations'] = GoogleLocalPostsClient::PUBLISHING_LOCATIONS;
 
         return $settings;
     }
@@ -613,6 +615,10 @@ final class InstagramGbpPublisher
     {
         $cutoff = time() - (180 * 86400);
         foreach ($state['posts'] as $mediaId => $post) {
+            // A reducao de destinos nao pode apagar o historico da antiga replica.
+            if (array_diff(array_keys($post['locations'] ?? []), $locationSlugs)) {
+                continue;
+            }
             $publishedAt = strtotime((string) ($post['publishedAt'] ?? ''));
             if ($publishedAt !== false
                 && $publishedAt < $cutoff
@@ -626,15 +632,17 @@ final class InstagramGbpPublisher
     private function targetLocationSlugs(array $locations): array
     {
         $slugs = [];
+        $ids = [];
         foreach ($locations as $location) {
             $safeSlug = preg_replace('/[^a-z0-9_-]/', '', strtolower((string) ($location['slug'] ?? '')));
             if ($safeSlug !== '') {
                 $slugs[] = $safeSlug;
+                $ids[$safeSlug] = (string) ($location['id'] ?? '');
             }
         }
         $slugs = array_values(array_unique($slugs));
-        if (count($slugs) !== 2) {
-            throw new RuntimeException('Sincronizador GBP exige exatamente duas locations com slugs unicos.');
+        if (count($locations) !== 1 || $ids !== GoogleLocalPostsClient::PUBLISHING_LOCATIONS) {
+            throw new RuntimeException('Sincronizador GBP exige somente o perfil principal Netcar.');
         }
         return $slugs;
     }
@@ -672,6 +680,20 @@ final class InstagramGbpPublisher
             throw new RuntimeException('Fingerprint das locations Google esta invalido.');
         }
         if ($stored === $current) {
+            return false;
+        }
+
+        // Remover destinos sem trocar a identidade remanescente nao e nova
+        // ativacao: preserva cutoff, descoberta, dedupe e retries da matriz.
+        // Entradas antigas da filial permanecem intactas e nunca sao reenfileiradas.
+        $onlyRemovedTargets = count($stored) > count($current);
+        foreach ($current as $slug => $locationId) {
+            if (($stored[$slug] ?? null) !== $locationId) {
+                $onlyRemovedTargets = false;
+            }
+        }
+        if ($onlyRemovedTargets) {
+            $state['locationFingerprint'] = $current;
             return false;
         }
 

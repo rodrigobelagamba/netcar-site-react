@@ -267,11 +267,16 @@ export function ContatoPage() {
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                   <MapPin className="w-5 h-5 text-primary" />
                 </div>
-                <h3 className="text-lg font-bold text-fg">Nossas Lojas</h3>
+                <h3 className="text-lg font-bold text-fg">Visite a Netcar</h3>
               </div>
 
+              <p className="mb-6 text-sm text-muted-foreground">
+                A Netcar Multimarcas fica no nº 740 e a filial no nº 1106,
+                com estoque e atendimento integrados. Confirme onde está o veículo
+                antes da visita.
+              </p>
               <div className="space-y-6">
-                <div id="loja-1" className="scroll-mt-28">
+                <div id="loja-1" className="scroll-mt-28 rounded-2xl border border-primary/15 bg-primary/5 p-4">
                   <a
                     href={buildLojaMapsUrl("Loja1")}
                     target="_blank"
@@ -279,7 +284,7 @@ export function ContatoPage() {
                     className="block group"
                   >
                     <p className="font-semibold text-fg group-hover:text-primary transition-colors">
-                      Loja 1
+                      Netcar Multimarcas
                     </p>
                     <p
                       className="text-muted-foreground text-sm"
@@ -309,7 +314,7 @@ export function ContatoPage() {
                     className="block group"
                   >
                     <p className="font-semibold text-fg group-hover:text-primary transition-colors">
-                      Loja 2
+                      Filial
                     </p>
                     <p
                       className="text-muted-foreground text-sm"
