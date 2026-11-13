@@ -446,7 +446,7 @@ export function ComoSelecionamosPage() {
           <div className="absolute -inset-4 rounded-[36px] bg-[#5CD29D]/12" />
           <img
             src="/images/loja2.webp"
-            alt="Showroom da Loja 2 da Netcar Multimarcas em Esteio"
+            alt="Showroom da filial Netcar Multimarcas em Esteio"
             width={1280}
             height={960}
             loading="lazy"

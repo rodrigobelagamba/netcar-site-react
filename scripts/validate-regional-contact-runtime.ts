@@ -16,6 +16,7 @@ import * as whatsappMessages from "../src/lib/whatsappMessages";
 import * as vehicleSearch from "../src/lib/vehicleSearch";
 import { cn } from "../src/lib/cn";
 import { emptySeminovosSearch } from "../src/lib/seminovos-search";
+import { buildLojaMapsUrl } from "../src/lib/formatters";
 
 type Props = Record<string, any>;
 type Element = React.ReactElement<Props>;
@@ -84,6 +85,7 @@ function createHarness(path: string, apiData: ApiData, routePath = pagePath) {
     },
     "@/lib/whatsappMessages": whatsappMessages,
     "@/lib/vehicleSearch": vehicleSearch,
+    "@/lib/formatters": { buildLojaMapsUrl },
     "@/lib/analytics": {
       trackSellEvaluation: (stage: string, city: string, intent: Intent) =>
         events.push({ stage, city, intent }),
@@ -324,6 +326,11 @@ for (const fixture of cases) {
     fixture.data,
   );
   let tree = header.render("Header");
+  assert.equal(
+    find(tree, (element) => element.props.href === buildLojaMapsUrl("Loja1")).props.href,
+    "https://maps.google.com/maps?cid=9144067949621682127",
+    "Localização institucional deve abrir o perfil confirmado da unidade nº 740",
+  );
   const desktop = find(
     tree,
     (element) => element.props["data-wa-intent"] === "header_contact",

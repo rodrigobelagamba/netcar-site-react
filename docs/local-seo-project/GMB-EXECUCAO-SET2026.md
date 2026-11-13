@@ -1,5 +1,7 @@
 # GMB — execução setembro/2026
 
+> Atualização operacional de 13/11/2026: este documento registra o plano de setembro. Para novas publicações, produtos, fotos e chamadas comerciais, usar somente o perfil principal `11161331340741727452`. Preservar os posts, avaliações e cadastros históricos da filial. O gerador `gbp-products-csv.mjs` agora produz somente a matriz. Não executar antigas instruções de replicação nos dois perfis.
+
 Decisão 8 do plano de posicionamento. Reclame Aqui fica fora: a página não é da Netcar e a desativação já foi pedida.
 
 ## Já em produção (não refazer)

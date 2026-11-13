@@ -35,3 +35,19 @@ Preserve mudanças de outras tarefas. Fora da autorização contínua de carimbo
 acima, publicação e deploy exigem aprovação específica do responsável.
 Seguir o procedimento de deploy definido no contexto
 do projeto; sucesso de build ou do GitHub isoladamente não confirma publicação.
+
+## Perfil comercial principal no Google — orientação de 13/11/2026
+
+- O perfil comercial principal é **Netcar Multimarcas**, Av. Presidente Vargas,
+  **740**, Esteio/RS: ID administrativo `11161331340741727452`,
+  CID `9144067949621682127`. Não usar “Matriz” como nome ou rótulo público.
+- Direcionar novas ações comerciais, pedidos de avaliação e publicações no Google
+  ao perfil principal, concentrando nele o esforço comercial. Nos fluxos já
+  autorizados, essa é a regra de destino; não oferecer escolha da filial em novos
+  convites gerais de avaliação. Link oficial: `https://g.page/r/Cc8fPFNaQeZ-EBM/review`.
+- A **Filial**, nº **1106**, continua ativa. Preservar seu cadastro, histórico,
+  avaliações legítimas e links específicos de localização/rota. Não transferir
+  atribuição histórica nem apresentar o total das duas unidades como exclusivo
+  do perfil principal. Não excluir ou marcar a filial como fechada.
+- A regra de destino não autoriza novos envios, campanhas, gastos ou deploys
+  fora do escopo já aprovado; preservar as associações existentes de anúncios.

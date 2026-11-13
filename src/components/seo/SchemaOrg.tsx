@@ -75,14 +75,12 @@ export function SchemaOrg() {
           sameAs: [
             "https://www.instagram.com/netcar_rc",
             "https://www.facebook.com/NetcarRC",
-            "https://maps.google.com/maps?cid=9144067949621682127",
-            "https://maps.google.com/maps?cid=10839197980729051544",
           ],
         },
         {
           "@type": "AutoDealer",
           "@id": loja1Id,
-          name: "Netcar Multimarcas - Loja 1",
+          name: "Netcar Multimarcas",
           branchCode: "Loja1",
           url: `${baseUrl}/contato#loja-1`,
           image: `${baseUrl}/images/loja1.jpg`,

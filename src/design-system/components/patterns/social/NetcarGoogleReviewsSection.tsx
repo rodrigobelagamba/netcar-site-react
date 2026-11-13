@@ -8,7 +8,7 @@ import {
   ReviewsMasonryGrid,
 } from "./ReviewsMasonryGrid";
 import { ReviewsSummaryHeader } from "./ReviewsSummaryHeader";
-import { GOOGLE_REVIEW_STORES } from "@/social/googlePlaces";
+import { GOOGLE_PRIMARY_PROFILE } from "@/social/googlePlaces";
 
 function ReviewsSkeleton() {
   return (
@@ -46,7 +46,7 @@ export function NetcarGoogleReviewsSection() {
       <div className="text-center py-8">
         <p className="text-[#6B7280] mb-4">Avaliações indisponíveis no momento.</p>
         <a
-          href="https://www.google.com/maps/place/Netcar+Multimarcas"
+          href={GOOGLE_PRIMARY_PROFILE.url}
           target="_blank"
           rel="noopener noreferrer"
           className="text-sm font-medium hover:underline"
@@ -61,29 +61,21 @@ export function NetcarGoogleReviewsSection() {
   return (
     <div>
       <ReviewsSummaryHeader summary={data.summary} />
-      <ReviewsMasonryGrid reviews={reviews} googlePlaceUrl={data.summary.placeUrl} />
+      <ReviewsMasonryGrid reviews={reviews} />
 
       <div className="mt-8 flex flex-col items-center gap-3">
-        <p className="text-sm text-[#6B7280]">Veja todas as avaliações no Google</p>
+        <p className="text-sm text-[#6B7280]">Conheça o perfil da Netcar no Google</p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <a
-            href={GOOGLE_REVIEW_STORES[0].url}
+            href={GOOGLE_PRIMARY_PROFILE.url}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-[5px] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
             style={{ backgroundColor: "#6cc4ca" }}
           >
-            Avaliações — Loja 1 (Matriz)
+            Perfil e avaliações — Netcar Multimarcas, nº 740
           </a>
-          <a
-            href={GOOGLE_REVIEW_STORES[1].url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-[5px] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#f59e0b" }}
-          >
-            Avaliações — Loja 2 (Filial)
-          </a>
+
         </div>
       </div>
     </div>

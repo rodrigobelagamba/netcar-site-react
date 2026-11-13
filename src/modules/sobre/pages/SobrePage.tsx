@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { IanBot } from "@/design-system/components/layout/IanBot";
-import { buildLojaMapsUrl } from "@/lib/formatters";
+import { buildLojaDirectionsUrl } from "@/lib/formatters";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
 import { StoreGallery } from "../components/StoreGallery";
 import { buildStoreGallery } from "../storeGallery";
@@ -364,8 +364,9 @@ export function SobrePage() {
               Nossas lojas
             </h2>
             <p className="text-muted-foreground max-w-2xl">
-              Duas lojas na Av. Presidente Vargas, em Esteio. Um só estoque e
-              uma equipe pronta para ajudar você a escolher seu próximo carro.
+              Conheça a Netcar Multimarcas no nº 740 da Av. Presidente Vargas, em Esteio.
+              A filial no nº 1106 tem atendimento e estoque integrados.
+              Confirme a unidade onde está o veículo antes da visita.
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
@@ -377,10 +378,10 @@ export function SobrePage() {
               transition={{ duration: 0.7 }}
               className="relative bg-white rounded-[20px] shadow-sm flex flex-col"
             >
-              <StoreGallery name="Loja 1" photos={loja1Photos} />
+              <StoreGallery name="Netcar Multimarcas — nº 740" photos={loja1Photos} />
               <div className="p-6">
                 <h3 className="text-lg font-bold text-fg mb-1">
-                  Loja 1 — Centro, Esteio/RS
+                  Netcar Multimarcas — Av. Presidente Vargas, 740
                 </h3>
                 <p className="text-muted-foreground text-sm mb-3">
                   {formatAddress(addressLoja1) ||
@@ -388,10 +389,10 @@ export function SobrePage() {
                   {formatPhone(phoneLoja1) && <> · {formatPhone(phoneLoja1)}</>}
                 </p>
                 <a
-                  href={buildLojaMapsUrl("Loja1")}
+                  href={buildLojaDirectionsUrl("Loja1")}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Como chegar à Loja 1 — abrir Google Maps"
+                  aria-label="Como chegar à Netcar Multimarcas, nº 740 — abrir Google Maps"
                   className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-fg underline-offset-4 hover:underline"
                 >
                   <MapPin className="h-4 w-4" aria-hidden="true" /> Como chegar
@@ -408,10 +409,10 @@ export function SobrePage() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="relative bg-white rounded-[20px] shadow-sm flex flex-col"
             >
-              <StoreGallery name="Loja 2" photos={loja2Photos} />
+              <StoreGallery name="Filial" photos={loja2Photos} />
               <div className="p-6">
                 <h3 className="text-lg font-bold text-fg mb-1">
-                  Loja 2 — Centro, Esteio/RS
+                  Filial — Av. Presidente Vargas, 1106
                 </h3>
                 <p className="text-muted-foreground text-sm mb-3">
                   {formatAddress(addressLoja2) ||
@@ -419,10 +420,10 @@ export function SobrePage() {
                   {formatPhone(phoneLoja2) && <> · {formatPhone(phoneLoja2)}</>}
                 </p>
                 <a
-                  href={buildLojaMapsUrl("Loja2")}
+                  href={buildLojaDirectionsUrl("Loja2")}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Como chegar à Loja 2 — abrir Google Maps"
+                  aria-label="Como chegar à filial — abrir Google Maps"
                   className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-fg underline-offset-4 hover:underline"
                 >
                   <MapPin className="h-4 w-4" aria-hidden="true" /> Como chegar

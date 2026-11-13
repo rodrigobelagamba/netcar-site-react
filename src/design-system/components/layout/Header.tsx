@@ -14,6 +14,7 @@ import {
   DEFAULT_SALES_WHATSAPP,
   siteWhatsAppMessage,
 } from "@/lib/whatsappMessages";
+import { buildLojaMapsUrl } from "@/lib/formatters";
 import { generateVehicleSlug } from "@/lib/slug";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import {
@@ -372,7 +373,7 @@ export function Header() {
     { to: "/blog", label: "Atualidades" },
     { to: "/contato", label: "Contato" },
     {
-      to: "https://maps.app.goo.gl/i8uHquE8tNMfoTHr9",
+      to: buildLojaMapsUrl("Loja1"),
       label: "Localização",
       external: true,
     },

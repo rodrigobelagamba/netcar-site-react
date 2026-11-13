@@ -9,7 +9,7 @@ import {
   storePhotoSrcSet,
   type StorePhoto,
 } from "../../src/modules/sobre/storeGallery";
-import { buildLojaMapsUrl } from "../../src/lib/formatters";
+import { buildLojaDirectionsUrl, buildLojaMapsUrl } from "../../src/lib/formatters";
 
 const origin = "https://www.netcarmultimarcas.com.br";
 
@@ -69,15 +69,25 @@ test("AVIF photos preserve their original source and do not advertise fake respo
   }
 });
 
-test("each store Maps URL identifies its own branch and coordinates", () => {
+test("each store profile link retains its confirmed CID after a name change", () => {
   assert.equal(
     buildLojaMapsUrl("Loja1"),
-    "https://www.google.com/maps/search/Netcar%20Loja%201/@-29.8380385,-51.1702399,18z",
+    "https://maps.google.com/maps?cid=9144067949621682127",
   );
   assert.equal(
     buildLojaMapsUrl("Loja2"),
-    "https://www.google.com/maps/search/Netcar%20Loja%202/@-29.8411446,-51.1721442,18z",
+    "https://maps.google.com/maps?cid=10839197980729051544",
   );
+});
+
+test("directions use each complete street address without treating a CID as Place ID", () => {
+  for (const [store, number] of [["Loja1", "740"], ["Loja2", "1106"]] as const) {
+    const url = new URL(buildLojaDirectionsUrl(store));
+    assert.equal(url.pathname, "/maps/dir/");
+    assert.equal(url.searchParams.get("api"), "1");
+    assert.equal(url.searchParams.get("destination"), `Av. Presidente Vargas, ${number}, Centro, Esteio, RS`);
+    assert.equal(url.searchParams.has("destination_place_id"), false);
+  }
 });
 
 test("each store starts with its own local cover and retains only its API photo group", () => {
@@ -91,7 +101,7 @@ test("each store starts with its own local cover and retains only its API photo 
   for (const number of [1, 2] as const) {
     const photos = buildStoreGallery(`Loja${number}`, banners);
     assert.equal(photos[0].src, `/images/loja${number}.webp`);
-    assert.equal(photos[0].alt, `Fachada da Loja ${number}`);
+    assert.equal(photos[0].alt, `Fachada da ${number === 1 ? "Netcar Multimarcas — nº 740" : "Filial — nº 1106"}`);
     assert.deepEqual(
       photos.slice(1).map((photo) => photo.src),
       [
@@ -99,7 +109,7 @@ test("each store starts with its own local cover and retains only its API photo 
         `${origin}/imagens/banner/loja${number}-extra.${number === 1 ? "png" : "webp"}`,
       ],
     );
-    assert.ok(photos.every((photo) => photo.alt.includes(`Loja ${number}`)));
+    assert.ok(photos.every((photo) => photo.alt.includes(number === 1 ? "Netcar Multimarcas — nº 740" : "Filial — nº 1106")));
   }
 });
 

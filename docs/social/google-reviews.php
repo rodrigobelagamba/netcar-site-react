@@ -73,16 +73,29 @@ function normalizeReviewsResponse(array $data, bool $stale = false, int $page = 
     $pageReviews = array_slice($reviews, $offset, $limit);
     $loadedCount = min($offset + count($pageReviews), count($reviews));
 
+    $summary = $data['summary'] ?? [
+        'rating' => 4.9,
+        'totalCount' => $totalCount,
+    ];
+    // Aplicar tambem aos caches/seed anteriores: o destino de novos convites e
+    // sempre o principal. As contagens e atribuicoes historicas ficam intactas.
+    $summary['placeUrl'] = 'https://maps.google.com/maps?cid=9144067949621682127';
+    $summary['writeReviewUrl'] = 'https://g.page/r/Cc8fPFNaQeZ-EBM/review';
+    if (!isset($summary['scope'])) {
+        // Caches anteriores ao campo scope já juntavam as unidades. Só afirmar
+        // escopo múltiplo quando o próprio cache identifica fontes distintas;
+        // uma amostra de uma loja não prova que o resumo veio apenas dela.
+        $locationTitles = array_unique(array_filter(array_column($reviews, 'locationTitle')));
+        if (count($locationTitles) > 1) {
+            $summary['scope'] = 'all_locations';
+        }
+    }
+
     return [
         'success' => true,
         'stale' => $stale,
         'syncedAt' => $data['syncedAt'] ?? null,
-        'summary' => $data['summary'] ?? [
-            'rating' => 4.9,
-            'totalCount' => $totalCount,
-            'placeUrl' => 'https://www.google.com/maps/place/Netcar+Multimarcas',
-            'writeReviewUrl' => 'https://g.page/NetcarRC/review?rc',
-        ],
+        'summary' => $summary,
         'pagination' => [
             'page' => $page,
             'pageSize' => $limit,

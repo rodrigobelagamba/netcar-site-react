@@ -3,6 +3,16 @@ export interface GoogleReviewsSummary {
   totalCount: number;
   placeUrl: string;
   writeReviewUrl: string;
+  scope?: "all_locations" | "single_location";
+  locationCount?: number;
+  units?: Array<{
+    name: string;
+    address: string;
+    placeUrl: string | null;
+    writeReviewUrl?: string | null;
+    rating?: number | null;
+    totalCount?: number;
+  }>;
 }
 
 export interface GoogleReviewsPagination {
@@ -24,6 +34,7 @@ export interface GoogleReview {
   photoUrl?: string;
   largePhotoUrl?: string;
   reviewUrl?: string;
+  locationTitle?: string;
   pinned?: boolean;
   hidden?: boolean;
   variant?: "text" | "photo" | "dark";

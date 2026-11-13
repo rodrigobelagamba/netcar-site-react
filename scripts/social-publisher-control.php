@@ -57,13 +57,10 @@ function publisherControlReadSettings(string $target): array
 
 function publisherControlValidateLocations(array $posts): array
 {
-    $expected = [
-        'loja_1' => '11161331340741727452',
-        'loja_2' => '17013442122163034193',
-    ];
+    $expected = GoogleLocalPostsClient::PUBLISHING_LOCATIONS;
     $locations = is_array($posts['locations'] ?? null) ? $posts['locations'] : [];
-    if (count($locations) !== 2) {
-        throw new RuntimeException('Operacao nao confirmou exatamente duas locations.');
+    if (count($locations) !== count($expected)) {
+        throw new RuntimeException('Operacao nao confirmou somente o perfil principal.');
     }
 
     $seenSlugs = [];
@@ -72,12 +69,12 @@ function publisherControlValidateLocations(array $posts): array
         $slug = (string) ($location['slug'] ?? '');
         $id = (string) ($location['id'] ?? '');
         if (!isset($expected[$slug]) || $expected[$slug] !== $id) {
-            throw new RuntimeException('Operacao encontrou uma location diferente das duas lojas Netcar.');
+            throw new RuntimeException('Operacao encontrou uma location diferente do perfil principal Netcar.');
         }
         $seenSlugs[$slug] = true;
         $seenIds[$id] = true;
     }
-    if (count($seenSlugs) !== 2 || count($seenIds) !== 2) {
+    if (count($seenSlugs) !== count($expected) || count($seenIds) !== count($expected)) {
         throw new RuntimeException('Operacao encontrou location duplicada.');
     }
 

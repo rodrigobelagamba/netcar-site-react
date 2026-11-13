@@ -11,12 +11,12 @@ type RegionalVisitPlannerProps = {
 const STORES = [
   {
     id: "loja_1",
-    name: "Loja 1",
+    name: "Netcar Multimarcas",
     address: "Av. Presidente Vargas, 740, Centro, Esteio, RS",
   },
   {
     id: "loja_2",
-    name: "Loja 2",
+    name: "Filial",
     address: "Av. Presidente Vargas, 1106, Centro, Esteio, RS",
   },
 ] as const;

@@ -35,8 +35,9 @@ export function buildStoreGallery(
   banners: StoreBanner[] = [],
 ): StorePhoto[] {
   const number = store === "Loja1" ? 1 : 2;
+  const label = store === "Loja1" ? "Netcar Multimarcas — nº 740" : "Filial — nº 1106";
   const cover = `/images/loja${number}.webp`;
-  const photos = [{ src: cover, alt: `Fachada da Loja ${number}` }];
+  const photos = [{ src: cover, alt: `Fachada da ${label}` }];
   const seen = new Set([new URL(cover, ORIGIN).pathname]);
 
   for (const banner of banners) {
@@ -58,7 +59,7 @@ export function buildStoreGallery(
       seen.add(url.pathname);
       photos.push({
         src: url.href,
-        alt: `Loja ${number} — foto ${photos.length + 1}`,
+        alt: `${label} — foto ${photos.length + 1}`,
       });
     } catch {
       // Um cadastro inválido não deve impedir a exibição das outras fotos.

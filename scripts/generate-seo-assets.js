@@ -9,6 +9,7 @@ import { readFileSync, mkdirSync, readdirSync, unlinkSync } from "fs";
 import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { writeTextFile } from "./lib/write-text-file.js";
+import { resolvePageLastmod } from "./lib/page-lastmod.js";
 import { factoryWarrantyCatalogFromApi } from "./lib/factory-warranty-catalog.js";
 import { sanitizeVehicleImages } from "../src/lib/vehicleImagePolicy.mjs";
 import { resolveLandingParagraphs, resolveLandingFaq, resolveModelSearchContact } from "../src/lib/landingStockCopy.mjs";
@@ -254,8 +255,6 @@ const ORG_ROOT_SCHEMA = {
   sameAs: [
     "https://www.instagram.com/netcar_rc",
     "https://www.facebook.com/NetcarRC",
-    "https://maps.google.com/maps?cid=9144067949621682127",
-    "https://maps.google.com/maps?cid=10839197980729051544",
   ],
 };
 
@@ -266,7 +265,7 @@ const ORG_SCHEMA = {
     {
       "@type": "AutoDealer",
       "@id": `${SITE}/#loja-1`,
-      name: "Netcar Multimarcas - Loja 1",
+      name: "Netcar Multimarcas",
       branchCode: "Loja1",
       url: `${SITE}/contato#loja-1`,
       image: `${SITE}/images/loja1.jpg`,
@@ -970,7 +969,8 @@ function pageShell({
   <main>${body}</main>
   <footer>
     <p><a href="${SITE}/vagas/consultor-vendas-seminovos/">Trabalhe conosco</a></p>
-    <p>Netcar Multimarcas — Av. Presidente Vargas, 740 e 1106, Esteio/RS</p>
+    <p><strong>Netcar Multimarcas</strong> — Av. Presidente Vargas, 740, Centro, Esteio/RS</p>
+    <p>Filial: Av. Presidente Vargas, 1106, Centro, Esteio/RS · <a href="tel:+555130333900">(51) 3033-3900</a></p>
     <p><a href="tel:+555134737900">Ligar: (51) 3473-7900</a> · <a href="https://wa.me/5551997293118?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Netcar%20e%20quero%20mais%20informa%C3%A7%C3%B5es.">WhatsApp: (51) 99729-3118</a></p>
   </footer>
 </body>
@@ -1214,11 +1214,11 @@ function regionalInventoryHtml(cityName, position = "after-stock") {
 
 const ROUTE_STORES = [
   {
-    name: "Loja 1",
+    name: "Netcar Multimarcas",
     address: "Av. Presidente Vargas, 740, Centro, Esteio, RS",
   },
   {
-    name: "Loja 2",
+    name: "Filial",
     address: "Av. Presidente Vargas, 1106, Centro, Esteio, RS",
   },
 ];
@@ -2175,7 +2175,7 @@ ${urls
   .map(
     (url) => `  <url>
     <loc>${url.loc}</loc>
-    <lastmod>${changedSeoUrls.has(url.loc) ? today : (previousLastmods.get(url.loc) ?? today)}</lastmod>
+    <lastmod>${changedSeoUrls.has(url.loc) ? today : resolvePageLastmod(url.loc, previousLastmods.get(url.loc), today)}</lastmod>
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority}</priority>
   </url>`,

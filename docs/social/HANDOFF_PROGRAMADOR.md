@@ -1,6 +1,8 @@
 # Handoff — integração social Netcar
 
-**Objetivo:** Google Reviews, Instagram Stories e réplica Instagram → dois perfis Google Business Profile (GBP), usando APIs oficiais e sem Zapier.
+**Regra vigente em 13/11/2026:** novas publicações comerciais somente no perfil principal. A redução de dois destinos para um preserva a ativação existente, cutoff, histórico e deduplicação; não reativar nem zerar o estado para aplicar esta atualização. Ver [política de destino](PRIMARY_PROFILE_POLICY.md).
+
+**Objetivo:** Google Reviews, Instagram Stories e réplica Instagram → perfil principal Google Business Profile (GBP), usando APIs oficiais e sem Zapier.
 
 ## Regra de segurança
 
@@ -34,13 +36,12 @@
    - `sync.secret`: segredo do cron/sync;
    - `oauth.admin_secret`: outro segredo forte, diferente de `sync.secret`;
    - credenciais Google e Meta;
-   - `google_posts.locations` com exatamente as duas lojas:
+   - `google_posts.locations` com somente o perfil principal:
 
      ```php
      'locations' => [
          'loja_1' => '11161331340741727452',
-         'loja_2' => '17013442122163034193',
-     ],
+      ],
      ```
 
    Mantenha o publicador inicialmente assim:
@@ -105,9 +106,9 @@ Armazene `NETCAR_SYNC_SECRET` em arquivo ou wrapper privado `0600`; não o grave
      'https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?posts_only=1&dry_run=1'
    ```
 
-2. Confirme no resultado as duas locations exatas e nenhum post antigo inesperado.
+2. Confirme no resultado somente a location principal exata e nenhum post antigo inesperado.
 3. Somente no momento da virada, defina `enabled=true` e `not_before` com timestamp ISO 8601 atual. O horário precisa ser recente; isso impede replay do histórico.
-4. Valide a primeira publicação natural nos dois perfis. Só então pause os Zaps antigos; não os exclua durante a transição.
+4. Valide a primeira publicação natural no perfil principal. Só então pause os Zaps antigos; não os exclua durante a transição.
 
 O arquivo opcional `/home/USUARIO/.netcar-social/google-posts-settings.json` pode sobrescrever apenas `enabled` e `not_before`, sem alterar credenciais.
 

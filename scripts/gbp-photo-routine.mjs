@@ -41,7 +41,9 @@ const log = parseSemicolonCsv(await readFile(logPath, 'utf8'));
 const media = Array.isArray(index.midias) ? index.midias : [];
 const usedIds = new Set(log.map((entry) => entry.media_bank_id).filter(Boolean));
 
-const units = ['loja1', 'loja2'];
+// Historico permanece por unidade; novas candidatas comerciais sao do perfil principal.
+const historicalUnits = ['loja1', 'loja2'];
+const units = ['loja1'];
 const safeCandidates = Object.fromEntries(
   units.map((unit) => {
     const candidates = media
@@ -59,7 +61,7 @@ const safeCandidates = Object.fromEntries(
 
 const errors = [];
 
-for (const unit of units) {
+for (const unit of historicalUnits) {
   const publishedThisCycle = log.filter(
     (entry) => entry.data === '2026-08-22' && entry.unidade === unit,
   );
@@ -82,13 +84,13 @@ if (errors.length > 0) {
 } else if (validateOnly) {
   console.log(`Rotina GBP válida: ${log.length} publicações registradas`);
 } else {
-  console.log('Rotina semanal de fotos do Google Business Profile');
+  console.log('Fotos para o perfil principal Netcar Multimarcas — nº 740');
   console.log(`Banco: ${bankPath}`);
   console.log(`Histórico: ${logPath}`);
   console.log(`Publicações registradas: ${log.length}`);
 
   for (const unit of units) {
-    console.log(`\n${unit === 'loja1' ? 'Loja 1' : 'Loja 2'} — candidatos seguros ainda não usados:`);
+    console.log('\nNetcar Multimarcas — nº 740 — candidatos seguros ainda não usados:');
     const candidates = safeCandidates[unit];
 
     if (candidates.length === 0) {
@@ -102,5 +104,6 @@ if (errors.length > 0) {
   }
 
   console.log('\nPróxima coleta fixa: sábado, 16h05, a partir do Centro de Esteio.');
-  console.log('A publicação continua condicionada à revisão visual e à confirmação da unidade.');
+  console.log('Publicar somente no perfil principal 11161331340741727452, após revisão visual.');
+  console.log('Não apresentar fotos exclusivas da filial como se fossem do endereço nº 740.');
 }

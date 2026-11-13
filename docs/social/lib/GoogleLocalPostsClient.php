@@ -29,6 +29,10 @@ final class GoogleLocalPostsException extends RuntimeException
 /** Gateway da API oficial do Google Business Profile para Local Posts. */
 class GoogleLocalPostsClient
 {
+    // Politica comercial de 13/11/2026: novos posts somente no perfil principal.
+    // Nao usar CIDs, nomes publicos ou configuracao privada antiga como destino.
+    public const PUBLISHING_LOCATIONS = ['loja_1' => '11161331340741727452'];
+
     private GoogleOAuth $oauth;
     private ?string $accessToken = null;
 
@@ -38,13 +42,13 @@ class GoogleLocalPostsClient
     }
 
     /**
-     * Retorna somente as duas locations explicitamente autorizadas na config.
+     * Retorna somente o perfil principal autorizado para novas publicacoes.
      * A validacao acontece antes de qualquer escrita para evitar publicar em local errado.
      */
     public function listTargetLocations(array $configuredLocations): array
     {
-        if (count($configuredLocations) !== 2) {
-            throw new RuntimeException('google_posts.locations deve conter exatamente as duas lojas Netcar.');
+        if ($configuredLocations !== self::PUBLISHING_LOCATIONS) {
+            throw new RuntimeException('Publicacao GBP permitida somente no perfil principal Netcar.');
         }
 
         $expectedById = [];
@@ -57,10 +61,10 @@ class GoogleLocalPostsClient
                 throw new RuntimeException('Slug ou ID de location Google invalido na configuracao.');
             }
             if (isset($seenSlugs[$safeSlug])) {
-                throw new RuntimeException('google_posts.locations deve conter dois slugs unicos.');
+                throw new RuntimeException('google_posts.locations deve conter slugs unicos.');
             }
             if (isset($expectedById[$safeLocationId])) {
-                throw new RuntimeException('google_posts.locations deve conter dois IDs unicos.');
+                throw new RuntimeException('google_posts.locations deve conter IDs unicos.');
             }
 
             $seenSlugs[$safeSlug] = true;
@@ -205,6 +209,9 @@ class GoogleLocalPostsClient
 
     public function create(string $parent, array $payload): array
     {
+        if (!preg_match('#^accounts/[0-9]+/locations/11161331340741727452$#', $parent)) {
+            throw new RuntimeException('Criacao GBP permitida somente no perfil principal Netcar.');
+        }
         $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         if ($json === false) {
             throw new RuntimeException('Nao foi possivel codificar o post do Google.');

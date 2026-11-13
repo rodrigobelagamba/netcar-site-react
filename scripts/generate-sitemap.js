@@ -15,6 +15,7 @@ import {
   vehicleSitemapUrlsFromVehicles,
 } from "./lib/vehicle-sitemap-urls.js";
 import { readSeoBuildStockSnapshot } from "./lib/seo-stock-cache.js";
+import { resolvePageLastmod } from "./lib/page-lastmod.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..");
@@ -137,7 +138,7 @@ async function main() {
 
   for (const page of STATIC_PAGES) {
     const loc = `${SITE_URL}${page.loc}`;
-    const lastmod = previousLastmods.get(loc) ?? today;
+    const lastmod = resolvePageLastmod(loc, previousLastmods.get(loc), today);
     entries.push(buildUrlEntry(loc, page.changefreq, page.priority, lastmod));
   }
 

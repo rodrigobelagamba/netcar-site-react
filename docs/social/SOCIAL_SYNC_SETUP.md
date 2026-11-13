@@ -1,5 +1,7 @@
 # Social Sync — Google Reviews, Instagram e GBP
 
+**Regra vigente em 13/11/2026:** novas publicações comerciais somente no perfil principal. A redução de dois destinos para um preserva a ativação existente, cutoff, histórico e deduplicação; não reativar nem zerar o estado para aplicar esta atualização. Ver [política de destino](PRIMARY_PROFILE_POLICY.md).
+
 Integração sem EmbedSocial e sem Zapier, baseada nas APIs oficiais do Google e da Meta.
 
 ## Arquitetura
@@ -9,7 +11,7 @@ Google Business Profile API ─┐
 Instagram Graph API ─────────┼─> sync-social.php (cron)
                              │
                              ├─> cache público de Reviews/Stories
-                             └─> Local Posts nas duas locations GBP
+                             └─> Local Posts somente no perfil principal GBP
 
 /home/USUARIO/.netcar-social/
   social-config.php
@@ -97,7 +99,7 @@ curl -fsS \
 
 Use reviews duas vezes ao dia e Stories a cada 15 minutos. O sync de Stories também verifica posts; enquanto o publicador estiver desabilitado, ele apenas informa `skipped`.
 
-## 6. Réplica Instagram → dois perfis GBP
+## 6. Réplica Instagram → perfil principal GBP
 
 Configuração inicial obrigatória:
 
@@ -107,12 +109,11 @@ Configuração inicial obrigatória:
     'not_before' => '',
     'locations' => [
         'loja_1' => '11161331340741727452',
-        'loja_2' => '17013442122163034193',
     ],
 ],
 ```
 
-O cliente recusa configuração diferente de exatamente duas locations únicas. Antes de ativar:
+O código restringe novas publicações ao ID `11161331340741727452` (slug `loja_1`), mesmo quando a configuração privada antiga ainda contém a filial. Antes de uma primeira ativação:
 
 ```bash
 curl -fsS \
@@ -120,7 +121,7 @@ curl -fsS \
   'https://www.netcarmultimarcas.com.br/social/v1/sync-social.php?posts_only=1&dry_run=1'
 ```
 
-No handover, defina `enabled=true` e um `not_before` ISO 8601 atual, dentro da janela recente de ativação. Isso evita republicar posts antigos. Valide a primeira publicação nas duas lojas antes de pausar o Zapier.
+No handover, defina `enabled=true` e um `not_before` ISO 8601 atual, dentro da janela recente de ativação. Isso evita republicar posts antigos. Valide a primeira publicação no perfil principal antes de pausar o Zapier.
 
 ## 7. APIs públicas
 

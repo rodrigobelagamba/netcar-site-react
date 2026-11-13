@@ -61,6 +61,9 @@ export function ReviewPhotoLightbox({
               {review.relativeTime && (
                 <p className="text-white/70 text-sm mt-1">{review.relativeTime}</p>
               )}
+              {review.locationTitle && (
+                <p className="mt-1 text-xs text-white/70">{review.locationTitle}</p>
+              )}
               {review.text && (
                 <p className="text-white/90 text-sm mt-3 leading-relaxed line-clamp-6">{review.text}</p>
               )}
