@@ -101,7 +101,10 @@ test("each store gallery uses its own API group and keeps Maps outside gallery c
     (prop) => ts.isJsxAttribute(prop) && prop.name.getText() === name,
   )?.initializer;
 
-  for (const number of [1, 2]) {
+  for (const [number, name, streetNumber] of [
+    [1, "Netcar Multimarcas — nº 740", "740"],
+    [2, "Filial", "1106"],
+  ]) {
     const queries = find(about, (node) => ts.isVariableDeclaration(node)
       && node.initializer && ts.isCallExpression(node.initializer)
       && node.initializer.expression.getText() === `useBannersLoja${number}Query`);
@@ -120,7 +123,7 @@ test("each store gallery uses its own API group and keeps Maps outside gallery c
 
     const galleries = find(about, (node) => ts.isJsxSelfClosingElement(node)
       && node.tagName.getText() === "StoreGallery"
-      && attribute(node, "name")?.text === `Loja ${number}`);
+      && attribute(node, "name")?.text === name);
     assert.equal(galleries.length, 1);
     const gallery = galleries[0];
     assert.equal(attribute(gallery, "photos")?.expression?.getText(), photoBinding.name.getText());
@@ -131,9 +134,13 @@ test("each store gallery uses its own API group and keeps Maps outside gallery c
     }
     assert.ok(card, "Gallery is inside its own non-link store card");
     assert.equal(attribute(card.openingElement, "href"), undefined);
+    const headings = find(card, (node) => ts.isJsxElement(node)
+      && node.openingElement.tagName.getText() === "h3");
+    assert.equal(headings.length, 1);
+    assert.ok(headings[0].getText().includes(`Av. Presidente Vargas, ${streetNumber}`));
     const mapsLinks = find(card, (node) => ts.isJsxOpeningElement(node)
       && node.tagName.getText() === "a"
-      && attribute(node, "href")?.expression?.expression?.getText() === "buildLojaMapsUrl");
+      && attribute(node, "href")?.expression?.expression?.getText() === "buildLojaDirectionsUrl");
     assert.equal(mapsLinks.length, 1);
     assert.equal(attribute(mapsLinks[0], "href").expression.arguments[0].text, `Loja${number}`);
     assert.equal(attribute(mapsLinks[0], "target")?.text, "_blank");
