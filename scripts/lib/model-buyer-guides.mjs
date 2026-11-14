@@ -713,6 +713,22 @@ export const MODEL_BUYER_GUIDES = {
     ],
     "guideLinks": []
   },
+  "toyota-corolla": {
+    "title": "Toyota Corolla à venda em Esteio: fotos e preços | Netcar",
+    "description": "Veja os Toyota Corolla sedã usados e seminovos da Netcar em Esteio. Confira fotos, ano, versão e preço e consulte seu usado na troca.",
+    "intro": "Encontre os Toyota Corolla sedã anunciados na Netcar e escolha a unidade que você quer conhecer.",
+    "guideTitle": "Encontre seu Corolla",
+    "paragraphs": [
+      "Esta seleção reúne os Corolla de carroceria sedã. Abra os anúncios para comparar fotos, ano, versão e preço. Pelo contato da ficha, você pode conversar sobre a compra e pedir a avaliação do seu usado na troca."
+    ],
+    "faq": [
+      {
+        "q": "Onde vejo os detalhes do Corolla que está à venda?",
+        "a": "Abra a ficha da unidade para consultar a versão, o ano, as fotos e o preço. Use o contato daquele anúncio para esclarecer dúvidas e combinar a visita em Esteio."
+      }
+    ],
+    "guideLinks": []
+  },
   "toyota-corolla-cross": {
     "title": "Toyota Corolla Cross à venda em Esteio | Netcar",
     "description": "Toyota Corolla Cross usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",

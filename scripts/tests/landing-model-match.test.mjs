@@ -17,6 +17,15 @@ const fixtures = [
   ["KWID ETECH", "KWID E-TECH", "RENAULT", true],
   ["SANDERO STEPWAY", "KWID", "RENAULT", false],
   ["KWIDDER", "KWID", "RENAULT", false],
+  ["COROLLA XEI", "COROLLA", "TOYOTA", true],
+  ["TOYOTA COROLLA ALTIS HYBRID", "COROLLA", "TOYOTA", true],
+  ["COROLLA CROSS XRE", "COROLLA", "TOYOTA", false],
+  ["TOYOTA COROLLA CROSS XRX HYBRID", "COROLLA", "TOYOTA", false],
+  ["COROLLA-CROSS XRE", "COROLLA", "TOYOTA", false],
+  ["COROLLA CROSS XRE", "COROLLA CROSS", "TOYOTA", true],
+  ["COROLLA XEI", "COROLLA CROSS", "TOYOTA", false],
+  ["COROLLAX", "COROLLA", "TOYOTA", false],
+  ["YARIS XLS", "COROLLA", "TOYOTA", false],
   ["FOX CONNECT", "FOX", "VOLKSWAGEN", true],
   ["CROSSFOX", "FOX", "VOLKSWAGEN", false],
   ["HB20 COMFORT", "HB20", "HYUNDAI", true],
@@ -164,6 +173,17 @@ test("landing selection keeps brand and category boundaries on top of model matc
     ),
     true,
   );
+});
+
+test("React filters separate Corolla sedan from Corolla Cross regardless of source category", () => {
+  const filters = { marca: "TOYOTA", modelo: "COROLLA", categoria: "SEDAN" };
+  const sedan = { marca: "TOYOTA", modelo: "COROLLA XEI", categoria: "SEDAN", price: 74900 };
+  assert.equal(matchesLandingFilters(sedan, filters), true);
+  for (const categoria of ["SUV", "SEDAN", ""]) {
+    assert.equal(matchesLandingFilters({ ...sedan, modelo: "COROLLA CROSS XRE", categoria }, filters), false);
+  }
+  assert.equal(matchesLandingFilters({ ...sedan, categoria: "HATCH" }, filters), false);
+  assert.equal(matchesLandingFilters({ ...sedan, marca: "OTHER" }, filters), false);
 });
 
 const phpAvailable =

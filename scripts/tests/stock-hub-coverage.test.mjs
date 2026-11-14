@@ -53,3 +53,17 @@ test('invalid, empty, partial and duplicate snapshots fail closed', () => {
     assert.throws(() => auditStockHubCoverage(input, options));
   }
 });
+
+test('the canonical Corolla and Corolla Cross families cover each Toyota exactly once', () => {
+  const result = auditStockHubCoverage(snapshot([
+    row({ id: 1, marca: 'TOYOTA', modelo: 'COROLLA XEI', categoria: 'SEDAN' }),
+    row({ id: 2, marca: 'TOYOTA', modelo: 'COROLLA CROSS XRE', categoria: 'SUV' }),
+    row({ id: 3, marca: 'TOYOTA', modelo: 'COROLLA CROSS XRX HYBRID', categoria: 'SEDAN' }),
+  ]));
+  assert.equal(result.status, 'covered');
+  assert.equal(result.counts.covered, 3);
+  assert.equal(result.counts.multiple, 0);
+  assert.deepEqual(result.vehicles.map(({ hubSlugs }) => hubSlugs), [
+    ['toyota-corolla'], ['toyota-corolla-cross'], ['toyota-corolla-cross'],
+  ]);
+});

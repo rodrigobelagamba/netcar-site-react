@@ -32,6 +32,8 @@ export function matchesLandingModel(value, filter, brand = "") {
   const prefix = canonicalModel(filter);
   // The electric E-Tech has a separate product identity from the Kwid hatch.
   if (prefix === "KWID" && /^KWID E TECH(?: |$)/.test(model)) return false;
+  // Corolla Cross is a separate family even when the source category is wrong.
+  if (prefix === "COROLLA" && /^COROLLA CROSS(?: |$)/.test(model)) return false;
   return Boolean(
     prefix && (model === prefix || model.startsWith(`${prefix} `)),
   );
