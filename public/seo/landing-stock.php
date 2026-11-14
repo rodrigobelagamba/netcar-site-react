@@ -127,6 +127,10 @@ function netcar_landing_model_matches($value, $filter, $brand = '')
     if ($prefix === 'KWID' && preg_match('/^KWID E TECH(?: |$)/', $model)) {
         return false;
     }
+    // Keep Corolla Cross separate even when the source category is wrong.
+    if ($prefix === 'COROLLA' && preg_match('/^COROLLA CROSS(?: |$)/', $model)) {
+        return false;
+    }
     return $prefix !== '' && ($model === $prefix || strpos($model, $prefix . ' ') === 0);
 }
 

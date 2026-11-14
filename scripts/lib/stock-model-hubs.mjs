@@ -48,6 +48,7 @@ export const MODEL_HUBS = [
   { slug: "peugeot-208", marca: "PEUGEOT", modelo: "208", name: "Peugeot 208", categoria: "HATCH", category: "HATCH" },
   { slug: "peugeot-2008", marca: "PEUGEOT", modelo: "2008", name: "Peugeot 2008", category: "SUV" },
   { slug: "toyota-yaris", marca: "TOYOTA", modelo: "YARIS", name: "Toyota Yaris hatch", categoria: "HATCH", category: "HATCH" },
+  { slug: "toyota-corolla", marca: "TOYOTA", modelo: "COROLLA", name: "Toyota Corolla", categoria: "SEDAN", category: "SEDAN" },
   { slug: "toyota-corolla-cross", marca: "TOYOTA", modelo: "COROLLA CROSS", name: "Toyota Corolla Cross", category: "SUV" },
   { slug: "chery-tiggo-5x", marca: "CHERY", modelo: "TIGGO 5X", name: "CAOA Chery Tiggo 5X", category: "SUV" },
   { slug: "chery-tiggo-7-pro", marca: "CHERY", modelo: "TIGGO 7 PRO", name: "CAOA Chery Tiggo 7 Pro", category: "SUV" },

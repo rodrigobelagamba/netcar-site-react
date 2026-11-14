@@ -151,6 +151,29 @@ test("Onix hatch and Onix Plus remain separate even when Plus follows the versio
 });
 
 
+test("Corolla sedan has its own permanent page and excludes Corolla Cross", () => {
+  const config = MODEL_HUBS.find((model) => model.slug === "toyota-corolla");
+  const rows = [
+    vehicle({ marca: "TOYOTA", modelo: "COROLLA XEI", categoria: "SEDAN" }),
+    vehicle({ marca: "TOYOTA", modelo: "TOYOTA COROLLA ALTIS HYBRID", categoria: "SEDAN" }),
+    vehicle({ marca: "TOYOTA", modelo: "COROLLA CROSS XRE", categoria: "SUV" }),
+    vehicle({ marca: "TOYOTA", modelo: "COROLLA CROSS XRE", categoria: "SEDAN" }),
+    vehicle({ marca: "TOYOTA", modelo: "YARIS XLS", categoria: "SEDAN" }),
+    vehicle({ marca: "TOYOTA", modelo: "COROLLA SPORT", categoria: "HATCH" }),
+    vehicle({ marca: "OTHER", modelo: "COROLLA XEI", categoria: "SEDAN" }),
+    vehicle({ marca: "TOYOTA", modelo: "COROLLA XEI", categoria: "SEDAN", valor: 0 }),
+  ];
+  const stocked = modelLanding(config, rows);
+  const empty = modelLanding(config, []);
+  assert.equal(stocked.count, 2);
+  assert.equal(stocked.indexable, true);
+  assert.deepEqual(stocked.filters, { marca: "TOYOTA", modelo: "COROLLA", categoria: "SEDAN" });
+  assert.equal(empty.slug, "toyota-corolla");
+  assert.equal(empty.indexable, false);
+  assert.deepEqual(editorialContent(stocked), editorialContent(empty));
+  assert.match(stocked.paragraphs[0], /carroceria sedã/);
+});
+
 test("Kwid selection contains only its Renault hatch family and survives no stock", () => {
   const config = MODEL_HUBS.find((model) => model.slug === "renault-kwid");
   const rows = [
