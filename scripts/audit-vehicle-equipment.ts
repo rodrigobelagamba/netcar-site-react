@@ -1,3 +1,4 @@
+import { resolveVehicleColor } from "../src/lib/vehicleColor";
 import { vehiclePhysicalIdentityKey } from "../src/lib/vehiclePhysicalIdentity";
 import { createHash, randomUUID } from "node:crypto";
 import {
@@ -74,6 +75,7 @@ export interface WarrantyAuditSnapshot {
 }
 
 export interface EquipmentAuditInput extends EquipmentVehicle {
+  cor?: string;
   /** Equipment coverage includes public sold fichas without reopening warranty. */
   inventoryStatus?: "active" | "sold";
   warrantySnapshot?: WarrantyAuditSnapshot;
@@ -111,6 +113,9 @@ export interface EquipmentWarrantyAudit {
 }
 
 export interface EquipmentAuditVehicle {
+  color?: ReturnType<typeof resolveVehicleColor>;
+  colorReviewKey?: string;
+  colorChange?: "new" | "changed" | "unchanged";
   id: string;
   brand: string;
   model: string;
@@ -297,6 +302,7 @@ export function parseStockResponse(
       inventoryStatus: price > 0 ? "active" : "sold",
       ...(market !== undefined ? { market } : {}),
       physicalIdentityKey: vehiclePhysicalIdentityKey(id, vehicle.placa),
+      cor: shortText(vehicle.cor),
       marca: shortText(vehicle.marca),
       modelo: shortText(vehicle.modelo),
       motor: shortText(vehicle.motor),
@@ -709,6 +715,9 @@ export function buildEquipmentAudit(
         };
       }
     }
+    const color = resolveVehicleColor(vehicle);
+    const colorReviewKey = hash(color.reviewInput);
+    const colorChange = !old?.colorReviewKey ? "new" : old.colorReviewKey === colorReviewKey ? "unchanged" : "changed";
     const reviewKey = hash({
       catalogFingerprint,
       identity,
@@ -733,6 +742,11 @@ export function buildEquipmentAudit(
       severity: EquipmentAuditFinding["severity"],
       message: string,
     ) => findings.push({ code, severity, message });
+
+    if (vehicle.inventoryStatus !== "sold" && color.status !== "confirmed") {
+      add("factory-color-review", "info",
+        `Cor de fábrica ${color.status === "blocked" ? "com confirmação incompatível" : "pendente de comprovação individual"}. Mantida a cor original. Pesquisar: ${color.researchQuery}. Catálogo ou foto não confirmam a pintura desta unidade; não publicar candidato.`);
+    }
 
     for (const conflict of equipmentVerification.conflicts) {
       if (conflict.status === "unit-confirmed") continue;
@@ -927,6 +941,9 @@ export function buildEquipmentAudit(
       ...identity,
       inventoryStatus: vehicle.inventoryStatus ?? "active",
       equipmentVerification,
+      color,
+      colorReviewKey,
+      colorChange,
       reviewKey,
       change,
       findings,

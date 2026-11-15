@@ -1,3 +1,4 @@
+import { resolveVehicleColor } from "@/lib/vehicleColor";
 import { FactoryWarrantyBadge, FactoryWarrantyNote } from "@/design-system/components/patterns/FactoryWarrantyBadge";
 import { useFactoryWarrantyStamps } from "@/lib/useFactoryWarrantyStamps";
 import { useVehicleFipeOffer } from "@/lib/useVehicleFipeOffer";
@@ -2963,7 +2964,7 @@ function DetailsSection({
   const specifications = [
     anoDisplay && { label: "Ano/modelo:", value: anoDisplay },
     mileageFormatted && { label: "Quilometragem:", value: mileageFormatted },
-    vehicle.cor && { label: "Cor:", value: vehicle.cor },
+    vehicle.cor && { label: "Cor:", value: resolveVehicleColor(vehicle).display },
     vehicle.portas && { label: "Portas:", value: `${vehicle.portas}` },
     vehicle.placa && { label: "Placa:", value: maskPlate(vehicle.placa) },
     vehicle.motor && {
