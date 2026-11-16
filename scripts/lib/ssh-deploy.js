@@ -153,7 +153,7 @@ export function assertDeliveryGalleryBuild(localDir) {
   const directoryRules = read('entregas/.htaccess');
   if (!/DirectorySlash\s+Off/.test(directoryRules) || !directoryRules.includes('AllowNoSlash')
       || !directoryRules.includes('^/entregas/?$')) fail('rota do diretório /entregas');
-  for (const file of ['lib.php', 'seo.php', 'feed.php', 'publish.php', 'status.php']) read(`entregas/v1/${file}`);
+  for (const file of ['lib.php', 'seo.php', 'feed.php', 'publish.php', 'buyer.php', 'status.php']) read(`entregas/v1/${file}`);
   const seed = parse('entregas-data/seed.json');
   if (!Array.isArray(seed?.deliveries) || !seed.deliveries.length
       || seed.deliveries.some((item) => !item?.id || typeof item.imageUrl !== 'string')) fail('histórico seed vazio ou inválido');

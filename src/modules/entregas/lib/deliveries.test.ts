@@ -97,6 +97,45 @@ test("publication feed accepts public cards and rejects malformed or external im
   assert.throws(() => parsePublishedDeliveries([null]));
 });
 
+test("a sale supplies the first name on the same photo without duplicating or changing its publication", () => {
+  const record = {
+    id: "delivery-1234567890abcdef12345678",
+    imageUrl: "/entregas-media/live/delivery-1234567890abcdef12345678-1234.webp",
+    publishedAt: "2026-11-16T14:00:00Z",
+    date: "2026-11-16",
+    imageKind: "photo",
+    name: "",
+  };
+  const before = parsePublishedDeliveries([record]);
+  const after = parsePublishedDeliveries([{ ...record, name: "José" }]);
+  const merged = mergePublishedDeliveries([...sample, ...before], after);
+  const named = merged.filter((item) => item.id === record.id);
+  assert.equal(before[0].name, "");
+  assert.equal(named.length, 1);
+  assert.deepEqual(named[0], { ...before[0], name: "José" });
+  assert.equal(resolveDeliveryId(record.id, merged), record.id);
+  assert.deepEqual(merged.filter((item) => sample.some((old) => old.id === item.id)), sample);
+  assert.equal(merged.find((item) => item.id === "one")?.name, "João da Silva");
+});
+
+test("live first names allow Unicode spelling but keep private or invalid values out of the viewer", () => {
+  const record = {
+    id: "delivery-1234567890abcdef12345678",
+    imageUrl: "/entregas-media/live/delivery-1234567890abcdef12345678-1234.webp",
+    publishedAt: "2026-11-16T14:00:00Z",
+    date: "2026-11-16",
+  };
+  for (const name of ["José", "Jose\u0301", "Ana-Maria", "D'Ávila", "D’Ávila", "李", "A".repeat(80)]) {
+    assert.equal(parsePublishedDeliveries([{ ...record, name }])[0].name, name);
+  }
+  for (const name of [undefined, null, "", 123, {}, [], "José Silva", " José", "José ",
+    "José\n", "José\u00a0Silva", "José\u200bSilva", "ABC1D23", "+5551999999999",
+    "<b>José</b>", "José@example.com", "-José", "José-", "Ana--Maria", "\u0301José",
+    "A".repeat(81), "\u{20000}".repeat(65)]) {
+    assert.equal(parsePublishedDeliveries([{ ...record, name }])[0].name, "", String(name));
+  }
+});
+
 test("native photos never reuse live or static artwork crops", () => {
   const record = {
     id: "delivery-1234567890abcdef12345678",
