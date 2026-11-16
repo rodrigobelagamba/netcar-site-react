@@ -1,4 +1,1049 @@
 {
   "schemaVersion": 1,
-  "records": []
+  "records": [
+    {
+      "id": "color-20261116-19587",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19587",
+        "brand": "VOLKSWAGEN",
+        "model": "TERA HIGH TURBO",
+        "manufactureYear": 2025,
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "PRATA",
+        "physicalIdentityKey": "b71e35364faf35bdbeaf4789e7b9392191b33a58e4dcb2491e28498f3ee313f8"
+      },
+      "officialName": "Prata Lunar",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-19587",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "VOLKSWAGEN",
+          "model": "TERA HIGH TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Ninja",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Cristal",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Platinum",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Vermelho Hypernova",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Prata Lunar",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Azul Ártico",
+              "genericColor": "AZUL"
+            }
+          ],
+          "sourceUrls": [
+            "https://newsroom-br.itd.vw.com.br/news/2444",
+            "https://vwsignanddrive.com.br/assinatura/carros/tera/tera-high-2026-2026"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19688",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19688",
+        "brand": "HONDA",
+        "model": "CITY EXL",
+        "manufactureYear": 2022,
+        "modelYear": 2023,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "PRETA",
+        "physicalIdentityKey": "002f2d7f4b0ad43fcfb46d7b271a3eaed343abda4449888528aebf8e370e042e"
+      },
+      "officialName": "Preto Cristal Perolizado",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-19688",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "HONDA",
+          "model": "CITY EXL",
+          "modelYear": 2023,
+          "engine": "1.5",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Azul Cósmico Metálico",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Branco Taffeta Sólido",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Preto Cristal Perolizado",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Cinza Barium Metálico",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Platinum Metálico",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Grafeno Perolizado",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Branco Topázio Perolizado",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Vermelho Mercúrio Perolizado",
+              "genericColor": "VERMELHA"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/2024-07/C%C3%B3digo%20de%20Cor_City.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19779",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19779",
+        "brand": "FORD",
+        "model": "TERRITORY TITANIUM TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "fuel": "GASOLINA",
+        "genericColor": "AZUL",
+        "physicalIdentityKey": "18d9d6baa406d68d58d806101710517a1decda5f1855fe00ee2f838d530234c5"
+      },
+      "officialName": "Azul Metálico",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-19779",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "FORD",
+          "model": "TERRITORY TITANIUM TURBO",
+          "modelYear": 2024,
+          "engine": "1.5",
+          "transmission": "AUTOMATICO",
+          "fuel": "GASOLINA",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Azul Metálico",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Branco Barriloche",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Marrom Roma",
+              "genericColor": "MARROM"
+            },
+            {
+              "officialName": "Cinza Catar",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Vermelho Vermont",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Preto Toronto",
+              "genericColor": "PRETA"
+            }
+          ],
+          "sourceUrls": [
+            "https://media.ford.com/content/dam/fordmedia/South%20America/Brazil/2023/08/SPEC_Territory_2024.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19788",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19788",
+        "brand": "VOLKSWAGEN",
+        "model": "NIVUS HIGHLINE TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "PRETA",
+        "physicalIdentityKey": "c39159cdc0db1b51f5464046ba56c17676a08be8d1ca077e4ee945fa7675d9af"
+      },
+      "officialName": "Preto Ninja",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-19788",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "VOLKSWAGEN",
+          "model": "NIVUS HIGHLINE TURBO",
+          "modelYear": 2024,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Ninja",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Cristal",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Platinum",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Azul Biscay",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Vermelho Sunset",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Cinza Moonstone",
+              "genericColor": "CINZA"
+            }
+          ],
+          "sourceUrls": [
+            "https://broto.com.br/media/datasheet/files/links/n/i/nivus_highline_200_tsi_1__sBYntb.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19840",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19840",
+        "brand": "VOLKSWAGEN",
+        "model": "FOX COMFORTLINE",
+        "manufactureYear": 2016,
+        "modelYear": 2017,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "fuel": "Flex",
+        "genericColor": "VERMELHA",
+        "physicalIdentityKey": "2caaa74af5d4aefacd97e780a461baf2175e395a156a2a28774646bab91b4de4"
+      },
+      "officialName": "Vermelho Tornado",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-19840",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "VOLKSWAGEN",
+          "model": "FOX COMFORTLINE",
+          "modelYear": 2017,
+          "engine": "1.0",
+          "transmission": "MANUAL",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Ninja",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Cristal",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Vermelho Tornado",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Azul Silk",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Cinza Platinum",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Sargas",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Prata Tungstênio",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Azul Night",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Preto Mystic",
+              "genericColor": "PRETA"
+            }
+          ],
+          "sourceUrls": [
+            "https://carroscomcamanzi.com.br/wp-content/uploads/2016/07/Fox-Highline-1.6-2017-Equipamentos-de-s%C3%A9rie-e-opcionais.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19857",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19857",
+        "brand": "NISSAN",
+        "model": "KICKS SENSE TURBO",
+        "manufactureYear": 2025,
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "eb3c941bba062fc2e0e8aec958b2be9ccb12a21c526df78ac93584e99f0bc882"
+      },
+      "officialName": "Branco Diamond",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-19857",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "NISSAN",
+          "model": "KICKS SENSE TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Prata Classic",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Grafite",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Preto Premium",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Vermelho Malbec",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Branco Diamond",
+              "genericColor": "BRANCA"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.nissan-cdn.net/content/dam/Nissan/br/site/veiculos/kicks-my26/documentos/ficha_tecnica.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19932",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19932",
+        "brand": "HYUNDAI",
+        "model": "CRETA NLINE TURBO",
+        "manufactureYear": 2022,
+        "modelYear": 2023,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "PRETA",
+        "physicalIdentityKey": "fbd6e222b43dd1418e7d432cce9995408cb49414f29db7397d6c556c80b36403"
+      },
+      "officialName": "Preto Onix",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-19932",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "HYUNDAI",
+          "model": "CRETA NLINE TURBO",
+          "modelYear": 2023,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Onix",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Atlas com teto preto",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Prata Brisk com teto preto",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Silk com teto preto",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Azul Sapphire",
+              "genericColor": "AZUL"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.hyundai.com.br/content/dam/hmb/cars/creta/n-line/Catalogo_N_Line_2022.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19960",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19960",
+        "brand": "JEEP",
+        "model": "COMMANDER OVERLAND TURBO",
+        "manufactureYear": 2022,
+        "modelYear": 2023,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "df52f78de55e6a42cee291ba2905828c05b047cd9796f4ab6d6ec4055aff1e59"
+      },
+      "officialName": "Branco Polar",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-19960",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "JEEP",
+          "model": "COMMANDER OVERLAND TURBO",
+          "modelYear": 2023,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Branco Polar",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Granite",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Billet",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Azul Jazz",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Preto Carbon",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Slash Gold",
+              "genericColor": "DOURADA"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.media.stellantis.com/br-pt/jeep/press/jeep-compass-e-commander-apresentam-linha-2023-com-mais-tecnologia-e-novos-equipamentos-de-serie"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19978",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19978",
+        "brand": "VOLKSWAGEN",
+        "model": "POLO TRACK FIRST EDITION",
+        "manufactureYear": 2023,
+        "modelYear": 2023,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "fuel": "Flex",
+        "genericColor": "VERMELHA",
+        "physicalIdentityKey": "006d4b55d8c113cdb6b1409e604fffe292e5107cb2fc57b4b86ee1e1e8e18ba9"
+      },
+      "officialName": "Vermelho Sunset",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-19978",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "VOLKSWAGEN",
+          "model": "POLO TRACK FIRST EDITION",
+          "modelYear": 2023,
+          "engine": "1.0",
+          "transmission": "MANUAL",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Vermelho Sunset",
+              "genericColor": "VERMELHA"
+            }
+          ],
+          "sourceUrls": [
+            "https://newsroom-br.itd.vw.com.br/news/2018",
+            "https://www.vwnews.com.br/news/2148"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19994",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19994",
+        "brand": "CHEVROLET",
+        "model": "ONIX PREMIER PLUS TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "PRATA",
+        "physicalIdentityKey": "9dd311ccb4848407b68af84d813a9fbebdc79e1bb91e30bd4660a84a3cd5e2fd"
+      },
+      "officialName": "Prata Shark",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-19994",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "CHEVROLET",
+          "model": "ONIX PREMIER PLUS TURBO",
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Azul Seeker",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Branco Summit",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Drake",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Shark",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Preto Ouro Negro",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Vermelho Carmin",
+              "genericColor": "VERMELHA"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/06-pdf/lista-de-precos-publicos-sugeridos04-03-2026.pdf",
+            "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/Lista-de-Pre%C3%A7os-P%C3%BAblicos-Sugeridos-03-de-dezembro-de-2024.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20013",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20013",
+        "brand": "CHEVROLET",
+        "model": "ONIX PREMIER PLUS TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "CINZA",
+        "physicalIdentityKey": "b0a9f5cb3ae3d7399592a83aff775b869980662a41eac813831e3a2d6063605b"
+      },
+      "officialName": "Cinza Drake",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-20013",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "CHEVROLET",
+          "model": "ONIX PREMIER PLUS TURBO",
+          "modelYear": 2024,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Azul Seeker",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Branco Summit",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Drake",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Shark",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Preto Ouro Negro",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Vermelho Carmin",
+              "genericColor": "VERMELHA"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/Lista-de-Pre%C3%A7os-P%C3%BAblicos-Sugeridos-03-de-dezembro-de-2024.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20068",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20068",
+        "brand": "PEUGEOT",
+        "model": "2008 ACTIVE T200 TURBO",
+        "manufactureYear": 2025,
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "PRETA",
+        "physicalIdentityKey": "60638a599b4cbc9fef5e384bec0555fe9890e68046613c9dbcc335b8190826ba"
+      },
+      "officialName": "Preto Perla Nera",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-20068",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "PEUGEOT",
+          "model": "2008 ACTIVE T200 TURBO",
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Perla Nera",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Nacré",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Artense",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Azul Quasar",
+              "genericColor": "AZUL"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.media.stellantis.com/uploads/br/attachment/5320/fichatecnicanovopeugeot2008my25-66b3809e034a2.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20086",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20086",
+        "brand": "NISSAN",
+        "model": "KICKS ADVANCE TURBO",
+        "manufactureYear": 2026,
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "CINZA",
+        "physicalIdentityKey": "42c6222f6e65158313fbce46729a87a00091d641a11b60e867ae7988ae9488ba"
+      },
+      "officialName": "Cinza Grafite",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-20086",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "NISSAN",
+          "model": "KICKS ADVANCE TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Prata Classic",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Grafite",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Preto Premium",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Vermelho Malbec",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Branco Diamond",
+              "genericColor": "BRANCA"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.nissan-cdn.net/content/dam/Nissan/br/site/veiculos/kicks-my26/documentos/ficha_tecnica.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20113",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20113",
+        "brand": "CHEVROLET",
+        "model": "TRACKER TURBO",
+        "manufactureYear": 2025,
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "PRATA",
+        "physicalIdentityKey": "61eda5055a8d8e6307864a1a0f129fa7b433c4f3f7472093f8764f0a7c820edc"
+      },
+      "officialName": "Prata Shark",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-20113",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "CHEVROLET",
+          "model": "TRACKER TURBO",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Branco Summit",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Rush",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Shark",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Preto Ouro Negro",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Vermelho Scarlet",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Azul Boreal",
+              "genericColor": "AZUL"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/06-pdf/lista-de-precos-publicos-sugeridos04-03-2026.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20137",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20137",
+        "brand": "FIAT",
+        "model": "FASTBACK IMPETUS TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "HIBRIDO",
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "26d9bff62271149888d8e1231236c3857b0e1310779e8a0548ea649c35f7f3ec"
+      },
+      "officialName": "Branco Banchisa",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-20137",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "FIAT",
+          "model": "FASTBACK IMPETUS TURBO",
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "HIBRIDO",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Vulcano",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Banchisa",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Silverstone",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Bari",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Strato",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Azul Amalfi",
+              "genericColor": "AZUL"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.media.stellantis.com/br-pt/fiat/press/fiat-apresenta-fastback-e-pulse-hibridos-para-combinar-performance-eficiencia-e-custo-beneficio-e-se-consolidar-como-protagonista-no-futuro-da-mobilidade",
+            "https://www.media.stellantis.com/br-pt/fiat/press/fiat-lanca-serie-especial-tributo-125"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20138",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20138",
+        "brand": "CHEVROLET",
+        "model": "TRACKER PREMIER TURBO",
+        "manufactureYear": 2026,
+        "modelYear": 2027,
+        "engine": "1.2",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "3e3e6861050f74c29b167e8b3c7f25a2166eaf85cba446dae1237f9b7f174d1d"
+      },
+      "officialName": "Branco Summit",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261116-20138",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "market": "BR",
+          "brand": "CHEVROLET",
+          "model": "TRACKER PREMIER TURBO",
+          "modelYear": 2027,
+          "engine": "1.2",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Branco Summit",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Âmbar",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Cinza Urbano",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Shark",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Preto Ouro Negro",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Vermelho Scarlet",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Azul Boreal",
+              "genericColor": "AZUL"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/08-pdf/lista-de-precos-publicos-sugeridos-03-06-2026.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    }
+  ]
 }

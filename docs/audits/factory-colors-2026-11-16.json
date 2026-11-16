@@ -1,0 +1,2782 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "factory-colors-20261116",
+  "reviewedAt": "2026-11-16T16:44:18.660162+00:00",
+  "authorization": "Continuous site-only color lookup publication authorized 16/11/2026. This is not an owner paint attestation.",
+  "sourceReconciliation": {
+    "checkedAt": "2026-11-16T16:34:59.528399+00:00",
+    "apiCount": 77,
+    "xmlCount": 77,
+    "activeCount": 62,
+    "conflicts": [],
+    "modelLabelEnrichment": {
+      "kind": "API appends literal TURBO to XML model; same ID, physical key, engine, years and color",
+      "ids": [
+        "20101",
+        "20141",
+        "20110",
+        "19750",
+        "20109",
+        "20117",
+        "20008",
+        "20118",
+        "20013",
+        "20134",
+        "19906",
+        "19994",
+        "19982",
+        "20093",
+        "20094",
+        "20102",
+        "20082",
+        "20068",
+        "19379",
+        "20135",
+        "19946",
+        "20137",
+        "19788",
+        "19587",
+        "19932",
+        "19903",
+        "20027",
+        "19857",
+        "20131",
+        "20086",
+        "19854",
+        "20029",
+        "20138",
+        "19779",
+        "19960",
+        "19866"
+      ]
+    },
+    "fuelRepresentation": {
+      "BI-COMBUSTIVEL": "API Flex, same fuel meaning",
+      "xmlMinusOne": {
+        "ids": [
+          "19954",
+          "20137",
+          "20027",
+          "20067"
+        ],
+        "meaning": "XML has no fuel label (-1); API identifies HIBRIDO. No claim that XML proves hybrid. Unit evidence reviewed separately where required."
+      }
+    }
+  },
+  "counts": {
+    "activeReviewed": 62,
+    "uniqueCatalogMatches": 16,
+    "pending": 46
+  },
+  "method": "Complete primary OEM palette for exact Brazilian model/year/version, unique compatible body-color name. Classification is documentary inference, not physical paint authentication. Public sources may be authored by OEM and mirrored externally; hosting is recorded.",
+  "research": [
+    {
+      "id": "19379",
+      "brand": "JEEP",
+      "model": "COMPASS LONGITUDE T270",
+      "manufactureYear": 2022,
+      "modelYear": 2022,
+      "genericColor": "CINZA",
+      "officialName": "Cinza Granite",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/conheca-o-novo-jeep-compass-mais-performance-design-sofisticacao-e-tecnologia"
+      ],
+      "sourceTitle": [
+        "Conheça o Novo Jeep Compass — lançamento brasileiro do T270, abril/2021"
+      ],
+      "applicability": "Fonte de lançamento T270 em abril/2021 especifica Longitude, mas ainda falta amarração primária explícita ao MY2022 observado.",
+      "matchedNames": [
+        "Cinza Granite"
+      ],
+      "palette": [
+        "Cinza Granite",
+        "Branco Polar",
+        "Prata Billet",
+        "Marrom Deep",
+        "Verde Recon",
+        "Preto Carbon",
+        "Azul Jazz"
+      ],
+      "evidenceSummary": "Paleta inicial restringe Cinza Sting a Trailhawk/Série S e Cinza Granite inclui Longitude. Candidato forte, mas publicação requer comprovar vigência exata MY2022, sem generalizar lançamento por anos.",
+      "reason": "Paleta inicial restringe Cinza Sting a Trailhawk/Série S e Cinza Granite inclui Longitude. Candidato forte, mas publicação requer comprovar vigência exata MY2022, sem generalizar lançamento por anos.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "19587",
+      "brand": "VOLKSWAGEN",
+      "model": "TERA HIGH",
+      "manufactureYear": 2025,
+      "modelYear": 2026,
+      "genericColor": "PRATA",
+      "officialName": "Prata Lunar",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://newsroom-br.itd.vw.com.br/news/2444",
+        "https://vwsignanddrive.com.br/assinatura/carros/tera/tera-high-2026-2026"
+      ],
+      "sourceTitle": [
+        "Volkswagen quebra novo recorde e tem 12 mil pedidos em 50 minutos — 6 junho 2025",
+        "VW Sign&Drive — Tera 1.0 170 TSI High Auto 26/26"
+      ],
+      "applicability": "Brasil, Tera High 170 TSI automático, MY2026. Paleta integral do lançamento em 2025 cruzada com oferta oficial da mesma versão MY2026.",
+      "matchedNames": [
+        "Prata Lunar"
+      ],
+      "palette": [
+        {
+          "officialName": "Preto Ninja",
+          "genericColor": "PRETA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Branco Cristal",
+          "genericColor": "BRANCA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Cinza Platinum",
+          "genericColor": "CINZA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Vermelho Hypernova",
+          "genericColor": "VERMELHA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Prata Lunar",
+          "genericColor": "PRATA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Azul Ártico",
+          "genericColor": "AZUL",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        }
+      ],
+      "evidenceExcerpt": "Tera 1.0 170 TSI High Auto 26/26; Pintura Metálica Prata Lunar",
+      "evidenceSummary": "A paleta integral de seis cores do lançamento inclui uma única prata; o serviço oficial Volkswagen identifica a versão High MY2026 e o mesmo nome.",
+      "reason": "A paleta integral de seis cores do lançamento inclui uma única prata; o serviço oficial Volkswagen identifica a versão High MY2026 e o mesmo nome.",
+      "relevantAlternatives": [],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "explicit_model_year",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [
+        "A página Sign&Drive foi lida no resultado indexado da busca; abertura direta retornou erro.",
+        "Não se infere presença do pacote Outfit ou teto contrastante."
+      ],
+      "completeApplicablePalette": true
+    },
+    {
+      "id": "19687",
+      "brand": "FIAT",
+      "model": "ARGO DRIVE",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "genericColor": "BRANCA",
+      "officialName": "Branco Banchisa",
+      "status": "pending",
+      "sourceUrls": [
+        "https://argo.fiat.com.br/",
+        "https://servicos.fiat.com.br/content/dam/mopar/services/catalogo/fiat/2023/catalogo-acessorios-argo.pdf"
+      ],
+      "sourceTitle": [
+        "Argo — página atual (não comprova MY2024)",
+        "Catálogo de acessórios Argo 2023 (não é paleta por versão/ano)"
+      ],
+      "applicability": "Fontes atuais e acessórios 2023 não comprovam paleta completa de Drive 1.3 AT MY2024.",
+      "matchedNames": [
+        "Branco Banchisa",
+        "Branco Alaska"
+      ],
+      "palette": "not_established",
+      "evidenceSummary": "Banchisa é candidato, mas catálogo de acessórios lista também Alaska em escopo multiano. Página comercial atual não substitui a ficha histórica 2024.",
+      "reason": "Banchisa é candidato, mas catálogo de acessórios lista também Alaska em escopo multiano. Página comercial atual não substitui a ficha histórica 2024.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "19688",
+      "brand": "HONDA",
+      "model": "CITY EXL",
+      "manufactureYear": 2022,
+      "modelYear": 2023,
+      "xmlColor": "PRETA",
+      "officialName": "Preto Cristal Perolizado",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/2024-07/C%C3%B3digo%20de%20Cor_City.pdf"
+      ],
+      "sourceTitle": "Honda — Lista de Códigos de Cor CITY",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2023,
+        "version": "CITY EXL",
+        "validated": true,
+        "scope": "Lista geral City de 2022–2025, sem divisão por versão/carroceria. Preservadas as oito opções para avaliação conservadora do City EXL 2023; uma só preta."
+      },
+      "matchedNames": [
+        "Preto Cristal Perolizado"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Preto Cristal Perolizado",
+      "evidenceSummary": "Tabela de todas as cores de City para 2022 a 2025: oito opções; apenas uma preta. Inclui explicitamente o ano-modelo 2023.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "A paleta OEM aplicável apresenta uma única opção compatível com a família de cor do XML. Inferência documental; não comprova a pintura física nem eventual repintura da unidade.",
+      "paletteComplete": true,
+      "physicallyConfirmed": false,
+      "verificationType": "unique_catalog_match",
+      "publishable": true,
+      "sourceLocator": "p. 3, seção Ano / Modelo 2022–2025",
+      "finish": "perolizada",
+      "catalogPaintCode": "NH731P",
+      "palette": [
+        {
+          "officialName": "Azul Cósmico Metálico",
+          "genericColor": "AZUL"
+        },
+        {
+          "officialName": "Branco Taffeta Sólido",
+          "genericColor": "BRANCA"
+        },
+        {
+          "officialName": "Preto Cristal Perolizado",
+          "genericColor": "PRETA"
+        },
+        {
+          "officialName": "Cinza Barium Metálico",
+          "genericColor": "CINZA"
+        },
+        {
+          "officialName": "Prata Platinum Metálico",
+          "genericColor": "PRATA"
+        },
+        {
+          "officialName": "Cinza Grafeno Perolizado",
+          "genericColor": "CINZA"
+        },
+        {
+          "officialName": "Branco Topázio Perolizado",
+          "genericColor": "BRANCA"
+        },
+        {
+          "officialName": "Vermelho Mercúrio Perolizado",
+          "genericColor": "VERMELHA"
+        }
+      ],
+      "paletteReviewedAt": "2026-11-16T16:43:08.184364+00:00",
+      "genericColor": "PRETA",
+      "familyMatchCount": 1,
+      "paletteScope": {
+        "country": "BR",
+        "model": "City",
+        "modelYears": [
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "versions": "Todas as versões abrangidas pela lista geral City; sem filtro de EXL.",
+        "bodyStyles": "O documento é intitulado CITY e não separa sedã/hatch. Conserva-se o conjunto integral do modelo, sem excluir cores por carroceria.",
+        "selectionPolicy": "União conservadora da paleta integral 2022–2025, página 3; preto continua único."
+      }
+    },
+    {
+      "id": "19779",
+      "brand": "FORD",
+      "model": "TERRITORY TITANIUM",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "genericColor": "AZUL",
+      "officialName": "Azul Metálico",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://media.ford.com/content/dam/fordmedia/South%20America/Brazil/2023/08/SPEC_Territory_2024.pdf"
+      ],
+      "sourceTitle": [
+        "Ford Territory 2024 — ficha técnica, agosto de 2023"
+      ],
+      "applicability": "Brasil, Territory Titanium 1.5 EcoBoost automático; documento identifica 2024 expressamente.",
+      "matchedNames": [
+        "Azul Metálico"
+      ],
+      "palette": [
+        {
+          "officialName": "Azul Metálico",
+          "genericColor": "AZUL",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Branco Barriloche",
+          "genericColor": "BRANCA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Marrom Roma",
+          "genericColor": "MARROM",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Cinza Catar",
+          "genericColor": "CINZA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Vermelho Vermont",
+          "genericColor": "VERMELHA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Preto Toronto",
+          "genericColor": "PRETA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        }
+      ],
+      "evidenceExcerpt": "FORD TERRITORY 2024; Azul Metálico",
+      "evidenceSummary": "Paleta integral de seis cores do modelo 2024; somente uma cor azul. A grafia oficial encontrada é Azul Metálico, sem inventar outro sufixo.",
+      "reason": "Paleta integral de seis cores do modelo 2024; somente uma cor azul. A grafia oficial encontrada é Azul Metálico, sem inventar outro sufixo.",
+      "relevantAlternatives": [
+        {
+          "name": "Azul Profundo",
+          "disposition": "excluded",
+          "reason": "Nome de linha posterior/current website; não aplicar ao MY2024."
+        }
+      ],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "explicit_model_year",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [],
+      "completeApplicablePalette": true
+    },
+    {
+      "id": "19788",
+      "brand": "VOLKSWAGEN",
+      "model": "NIVUS HIGHLINE",
+      "manufactureYear": 2024,
+      "modelYear": 2024,
+      "genericColor": "PRETA",
+      "officialName": "Preto Ninja",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://broto.com.br/media/datasheet/files/links/n/i/nivus_highline_200_tsi_1__sBYntb.pdf"
+      ],
+      "sourceTitle": [
+        "Volkswagen Marketing do Produto — Diagrama MY24 Nivus Highline 200 TSI, 27 abril 2023"
+      ],
+      "applicability": "Brasil, Nivus Highline 200 TSI automático, MY2024 expresso; modelo CH14BY.",
+      "matchedNames": [
+        "Preto Ninja"
+      ],
+      "palette": [
+        {
+          "officialName": "Preto Ninja",
+          "genericColor": "PRETA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Branco Cristal",
+          "genericColor": "BRANCA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Cinza Platinum",
+          "genericColor": "CINZA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Azul Biscay",
+          "genericColor": "AZUL",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Vermelho Sunset",
+          "genericColor": "VERMELHA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Cinza Moonstone",
+          "genericColor": "CINZA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        }
+      ],
+      "evidenceExcerpt": "Diagrama MY24 Nivus Highline 200 TSI; Preto Ninja",
+      "evidenceSummary": "O diagrama OEM contém paleta integral da versão MY2024, com uma única cor preta de carroceria (A1A1). As combinações bicolores usam preto apenas no teto e não viram alternativas para carroceria preta.",
+      "reason": "O diagrama OEM contém paleta integral da versão MY2024, com uma única cor preta de carroceria (A1A1). As combinações bicolores usam preto apenas no teto e não viram alternativas para carroceria preta.",
+      "relevantAlternatives": [
+        {
+          "name": "Branco Cristal / teto Preto Ninja",
+          "disposition": "excluded_body_white"
+        },
+        {
+          "name": "Vermelho Sunset / teto Preto Ninja",
+          "disposition": "excluded_body_red"
+        },
+        {
+          "name": "Cinza Moonstone / teto Preto Ninja",
+          "disposition": "excluded_body_gray"
+        }
+      ],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-authored_document_mirrored_by_marketplace",
+      "yearApplicabilityBasis": "explicit_model_year",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [
+        "Hospedagem: Broto; documento com autoria Marketing do Produto VW/B-MPM. Não é uma descrição de anúncio.",
+        "Documento traz ressalva geral de informações sujeitas a alteração; não se estende a outro ano-modelo.",
+        "Se a rotina exigir hospedagem OEM, manter pendente até obter original."
+      ],
+      "completeApplicablePalette": true,
+      "visualVerification": {
+        "pdfPath": "/tmp/netcar-colors-20261116/pdf-visual/nivus2024.pdf",
+        "renderedPageNumbers": [
+          1
+        ],
+        "printedPageNumbers": [
+          2
+        ],
+        "documentPages": 1,
+        "observations": "Página única mostra logotipo VW, Vendas&Marketing/Marketing do Produto, Diagrama MY24, Nivus Highline200TSI, transmissão automática, códigoCH14BY, emissão27.04.2023, ediçãoX9G/0; tabela integral com cores e opcionais bicolores; rodapé B-MPM e menção explícita Volkswagen do Brasil. Preto Ninja A1A1 é o único preto principal.",
+        "authorshipAssessment": "Conteúdo visualmente atribuível à Volkswagen; não é texto de anúncio de revendedor. Sem comparação criptográfica com original OEM ou assinatura digital.",
+        "integrityAssessment": "Página autocontida, completa e legível, mas o arquivo tem1p e está numerado2; portanto é um recorte da coleção de diagramas, não se afirma possuir o conjunto original integral. Rodapé declara tabela temporária/provisória e especificações sujeitas a alterações. Não há sinais visíveis de adulteração ou corte da página relevante.",
+        "checkedAt": "2026-11-16",
+        "method": "Rendered PDF locally using PyMuPDF at2x; inspected complete page PNGs using view_image",
+        "sha256": "5a07b7d591a9ec4ebf7f71aa9043b00e767b0243dc7d4c42d96133a12a43cc94"
+      },
+      "reviewNote": "Diagrama OEM MY24 completo para a versão; rodapé de informações provisórias/sujeitas a alteração é padrão encontrado em outros diagramas comerciais da VW, sem indicação de conceito ou protótipo. Cor tratada como correspondência documental; não confirmação física."
+    },
+    {
+      "id": "19840",
+      "brand": "VOLKSWAGEN",
+      "model": "FOX COMFORTLINE",
+      "manufactureYear": 2016,
+      "modelYear": 2017,
+      "genericColor": "VERMELHA",
+      "officialName": "Vermelho Tornado",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://carroscomcamanzi.com.br/wp-content/uploads/2016/07/Fox-Highline-1.6-2017-Equipamentos-de-s%C3%A9rie-e-opcionais.pdf"
+      ],
+      "sourceTitle": [
+        "Volkswagen Marketing do Produto — Diagramas de oferta Linha Fox 2017, status julho/2016"
+      ],
+      "applicability": "Brasil, seção Fox Comfortline 1.0 manual MY2017; a página da versão está no PDF da família apesar do nome Highline no arquivo.",
+      "matchedNames": [
+        "Vermelho Tornado"
+      ],
+      "palette": [
+        {
+          "officialName": "Preto Ninja",
+          "genericColor": "PRETA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Branco Cristal",
+          "genericColor": "BRANCA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Vermelho Tornado",
+          "genericColor": "VERMELHA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Azul Silk",
+          "genericColor": "AZUL",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Cinza Platinum",
+          "genericColor": "CINZA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Prata Sargas",
+          "genericColor": "PRATA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Prata Tungstênio",
+          "genericColor": "PRATA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Azul Night",
+          "genericColor": "AZUL",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Preto Mystic",
+          "genericColor": "PRETA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        }
+      ],
+      "evidenceExcerpt": "Fox Comfortline 1.0; Vermelho Tornado",
+      "evidenceSummary": "A página da versão traz paleta integral e apenas um vermelho. Documento de autoria da Volkswagen Marketing do Produto, datado 01/07/2016, identifica linha 2017.",
+      "reason": "A página da versão traz paleta integral e apenas um vermelho. Documento de autoria da Volkswagen Marketing do Produto, datado 01/07/2016, identifica linha 2017.",
+      "relevantAlternatives": [],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-authored_document_mirrored_by_automotive_press",
+      "yearApplicabilityBasis": "explicit_model_year",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [
+        "Hospedagem: Carros com Camanzi, não domínio VW. Evidência é o diagrama OEM integral, não afirmação editorial ou anúncio de revendedor.",
+        "Se a rotina exigir hospedagem OEM, manter pendente até obter o original."
+      ],
+      "completeApplicablePalette": true,
+      "visualVerification": {
+        "pdfPath": "/tmp/netcar-colors-20261116/pdf-visual/fox2017.pdf",
+        "renderedPageNumbers": [
+          5,
+          6
+        ],
+        "printedPageNumbers": [
+          5,
+          6
+        ],
+        "documentPages": 20,
+        "observations": "Página5 mostra logotipo VW, Linha2017, Fox Comfortline1.0, câmbio manual, tabela completa de cores, rodapé Marketing do Produto e data01.07.2016. Página6 repete identificação e contém opcionais sem outra cor. Não há cortes/ocultações visuais relevantes ou sinais visíveis de edição do conteúdo.",
+        "authorshipAssessment": "Documento visualmente atribuível à Volkswagen; hospedado por imprensa. Não houve comparação criptográfica com original OEM nem validação de assinatura.",
+        "integrityAssessment": "20 páginas baixadas; páginas5 e6 completas e legíveis. Vermelho Tornado é a única opção vermelha da tabela.",
+        "checkedAt": "2026-11-16",
+        "method": "Rendered PDF locally using PyMuPDF at2x; inspected complete page PNGs using view_image",
+        "sha256": "5946c0212125499311a0bb0c5e872dcdddc3da9dee0d9e18d1e8a3370ab288b7"
+      }
+    },
+    {
+      "id": "19854",
+      "brand": "HONDA",
+      "model": "HRV ADVANCE",
+      "manufactureYear": 2024,
+      "modelYear": 2024,
+      "xmlColor": "CINZA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.honda.com.br/pos-venda/automoveis/sites/customer_service/files/2026-02/C%C3%B3digo%20de%20Cor_HR-V_2024.pdf"
+      ],
+      "sourceTitle": "Honda — Lista de Códigos de Cor HR-V 2024",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2024,
+        "version": "HRV ADVANCE",
+        "validated": false,
+        "scope": "Ano-modelo 2024 exato; paleta geral HR-V, sem filtro de versão."
+      },
+      "matchedNames": [
+        "Cinza Grafeno Perolizado",
+        "Cinza Basalto Metálico"
+      ],
+      "alternatives": [
+        "Cinza Grafeno Perolizado",
+        "Cinza Basalto Metálico"
+      ],
+      "evidenceExcerpt": "Cinza Grafeno Perolizado; Cinza Basalto Metálico",
+      "evidenceSummary": "Tabela oficial para o ano-modelo exato contém dois nomes na família cinza; não diferencia Advance nesta lista.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Duas cores cinza na paleta oficial do modelo 2024. Falta restringir com fonte exata Advance ou obter a identificação da pintura da própria unidade.",
+      "paletteComplete": true,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "19857",
+      "brand": "NISSAN",
+      "model": "KICKS SENSE",
+      "manufactureYear": 2025,
+      "modelYear": 2026,
+      "xmlColor": "BRANCA",
+      "officialName": "Branco Diamond",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.nissan-cdn.net/content/dam/Nissan/br/site/veiculos/kicks-my26/documentos/ficha_tecnica.pdf"
+      ],
+      "sourceTitle": "Nissan Kicks 2026 — ficha técnica e equipamentos",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2026,
+        "version": "KICKS SENSE",
+        "validated": true,
+        "scope": "Nissan Kicks 2026 Sense 1.0T brasileiro."
+      },
+      "matchedNames": [
+        "Branco Diamond"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Branco Diamond",
+      "evidenceSummary": "A tabela de cores lista uma única cor branca na coluna Sense. O esquema bitone assinalado para outra versão não se aplica a Sense.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "A paleta OEM aplicável apresenta uma única opção compatível com a família de cor do XML. Inferência documental; não comprova a pintura física nem eventual repintura da unidade.",
+      "paletteComplete": true,
+      "physicallyConfirmed": false,
+      "verificationType": "unique_catalog_match",
+      "publishable": true,
+      "sourceLocator": "p. 1, tabela CORES, coluna SENSE",
+      "finish": "perolizada",
+      "palette": [
+        {
+          "officialName": "Prata Classic",
+          "genericColor": "PRATA"
+        },
+        {
+          "officialName": "Cinza Grafite",
+          "genericColor": "CINZA"
+        },
+        {
+          "officialName": "Preto Premium",
+          "genericColor": "PRETA"
+        },
+        {
+          "officialName": "Vermelho Malbec",
+          "genericColor": "VERMELHA"
+        },
+        {
+          "officialName": "Branco Diamond",
+          "genericColor": "BRANCA"
+        }
+      ],
+      "paletteReviewedAt": "2026-11-16T16:43:08.184364+00:00",
+      "genericColor": "BRANCA",
+      "familyMatchCount": 1,
+      "paletteScope": {
+        "country": "BR",
+        "model": "Kicks",
+        "modelYear": 2026,
+        "version": "Sense",
+        "selectionPolicy": "Coluna exata da versão na tabela CORES, conferida visualmente. As duas colunas têm cinco opções; Azul Oceânico e bicolores de versões superiores não entram."
+      }
+    },
+    {
+      "id": "19866",
+      "brand": "JEEP",
+      "model": "COMPASS SERIE S T270",
+      "manufactureYear": 2024,
+      "modelYear": 2025,
+      "genericColor": "BRANCA",
+      "officialName": "Branco Polar",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/novo-jeep-compass-2025-mais-performance-mais-seguranca-garantia-total-de-5-anos-e-versoes-ineditas-para-uma-oferta-ainda-mais-completa-e-imbativel"
+      ],
+      "sourceTitle": [
+        "Novo Jeep Compass 2025 — lançamento brasileiro"
+      ],
+      "applicability": "Lançamento brasileiro Compass Série S T270 MY2025 confirmado.",
+      "matchedNames": [
+        "Branco Polar"
+      ],
+      "palette": "not_established",
+      "evidenceSummary": "Fonte exata confirma versão/ano mas não fornece a paleta de cores; não estender automaticamente Branco Polar das gerações anteriores ou de configurador atual.",
+      "reason": "Fonte exata confirma versão/ano mas não fornece a paleta de cores; não estender automaticamente Branco Polar das gerações anteriores ou de configurador atual.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "19868",
+      "brand": "HYUNDAI",
+      "model": "CRETA PRESTIGE",
+      "manufactureYear": 2018,
+      "modelYear": 2018,
+      "xmlColor": "CINZA",
+      "officialName": "Cinza Titanium",
+      "status": "pending",
+      "sourceUrls": [
+        "https://hyundaimobis.com.br/wp-content/uploads/2022/10/Catalogo_Creta.pdf"
+      ],
+      "sourceTitle": "Hyundai Mobis — Catálogo de acessórios Creta",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2018,
+        "version": "CRETA PRESTIGE",
+        "validated": false
+      },
+      "matchedNames": [
+        "Cinza Titanium"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Cinza Titanium",
+      "evidenceSummary": "Catálogo OEM de acessórios inclui pintura de friso nessa cor, mas não comprova a paleta completa Prestige 2018.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Cor candidata em catálogo de acessórios. Não há delimitação suficiente de versão/ano-modelo nem garantia de paleta de fábrica completa.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "19903",
+      "brand": "VOLKSWAGEN",
+      "model": "T CROSS HIGHLINE",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "genericColor": "PRATA",
+      "officialName": "Prata Pyrit",
+      "status": "pending",
+      "sourceUrls": [
+        "https://newsroom-br.itd.vw.com.br/news/2141",
+        "https://newsroom-br.itd.vw.com.br/news/203"
+      ],
+      "sourceTitle": [
+        "Volkswagen — Novo T-Cross linha2025",
+        "Volkswagen — T-Cross linha inicial, paleta anterior"
+      ],
+      "applicability": "Estoque é T-Cross Highline 1.4 automático MY2024, fabricado2023. Fontes primárias localizadas são anterior e posterior ao ano-alvo.",
+      "matchedNames": [
+        "Prata Pyrit",
+        "Prata Sargas"
+      ],
+      "palette": [],
+      "evidenceExcerpt": "Prata Pyrit; Prata Sargas",
+      "evidenceSummary": "A nomenclatura prata variou entre fontes de anos distintos. Sem paleta primária completa MY2024 não é seguro escolher Pyrit nem prolongar Sargas.",
+      "reason": "A nomenclatura prata variou entre fontes de anos distintos. Sem paleta primária completa MY2024 não é seguro escolher Pyrit nem prolongar Sargas.",
+      "relevantAlternatives": [
+        {
+          "name": "Prata Pyrit",
+          "disposition": "candidate_not_proven_target_year",
+          "sourceUrl": "https://newsroom-br.itd.vw.com.br/news/2141"
+        },
+        {
+          "name": "Prata Sargas",
+          "disposition": "historical_name_not_proven_target_year",
+          "sourceUrl": "https://newsroom-br.itd.vw.com.br/news/203"
+        }
+      ],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "target_year_gap_between_different_palettes",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "19906",
+      "brand": "CITROEN",
+      "model": "C4 CACTUS SHINE PACK",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "genericColor": "BRANCA",
+      "officialName": "Branco Nacré",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/citroen/press/novo-suv-citroen-c4-cactus-2024-chega-repleto-de-novidades-de-conectividade-e-conforto-com-performance-acessivel",
+        "https://www.media.stellantis.com/br-pt/download-model-document/170"
+      ],
+      "sourceTitle": [
+        "Novo SUV Citroën C4 Cactus 2024: conectividade e conforto",
+        "Ficha técnica Citroën C4 Cactus 22/22 — Shine Pack nas páginas 3–4"
+      ],
+      "applicability": "Lançamento 2024 comprova Shine Pack THP; ficha de 2022 tem restrições por versão, sem extensão automática para 2024.",
+      "matchedNames": [
+        "Branco Nacré",
+        "Branco Banquise"
+      ],
+      "palette": "not_established",
+      "evidenceSummary": "Não localizada a tabela completa MY2024 da Shine Pack. Não promover restrição Branco Nacré de MY2022 a MY2024 sem documento exato.",
+      "reason": "Não localizada a tabela completa MY2024 da Shine Pack. Não promover restrição Branco Nacré de MY2022 a MY2024 sem documento exato.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "19915",
+      "brand": "FIAT",
+      "model": "CRONOS DRIVE",
+      "manufactureYear": 2024,
+      "modelYear": 2025,
+      "genericColor": "BRANCA",
+      "officialName": "Branco Banchisa",
+      "status": "pending",
+      "sourceUrls": [
+        "https://cronos.fiat.com.br/monte.html?mvs=359ATH1&openFundingPlans=true&year=2025"
+      ],
+      "sourceTitle": [
+        "Monte seu Cronos — parâmetro 2025 retorna MY2027, não usar como paleta histórica"
+      ],
+      "applicability": "Drive 1.3 MT brasileiro MY2025; configurador atual ignora year=2025 e exibe MY2027.",
+      "matchedNames": [
+        "Branco Banchisa",
+        "Branco Alaska"
+      ],
+      "palette": "not_established",
+      "evidenceSummary": "Falta paleta histórica primária MY2025; duas opções brancas são candidatas em material comercial não primário encontrado e não foram usadas para confirmar.",
+      "reason": "Falta paleta histórica primária MY2025; duas opções brancas são candidatas em material comercial não primário encontrado e não foram usadas para confirmar.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "19932",
+      "brand": "HYUNDAI",
+      "model": "CRETA NLINE",
+      "manufactureYear": 2022,
+      "modelYear": 2023,
+      "xmlColor": "PRETA",
+      "officialName": "Preto Onix",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.hyundai.com.br/content/dam/hmb/cars/creta/n-line/Catalogo_N_Line_2022.pdf"
+      ],
+      "sourceTitle": "Hyundai CRETA N Line — catálogo Junho/2022",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2023,
+        "version": "CRETA NLINE",
+        "validated": true,
+        "scope": "CRETA N Line 1.0 TGDI 12V Flex automático; fabricação/modelo 2022/2023."
+      },
+      "matchedNames": [
+        "Preto Onix"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Preto Onix",
+      "evidenceSummary": "Catálogo válido para fabricação/modelo 2022/2023, N Line 1.0 TGDI automático. A seção de cinco cores externas tem uma única pintura preta; opções com teto preto têm carroceria de outra cor.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "A paleta OEM aplicável apresenta uma única opção compatível com a família de cor do XML. Inferência documental; não comprova a pintura física nem eventual repintura da unidade.",
+      "paletteComplete": true,
+      "physicallyConfirmed": false,
+      "verificationType": "unique_catalog_match",
+      "publishable": true,
+      "sourceLocator": "p. 8, Cores externas e validade da ficha",
+      "finish": "sólida",
+      "palette": [
+        {
+          "officialName": "Preto Onix",
+          "genericColor": "PRETA"
+        },
+        {
+          "officialName": "Branco Atlas com teto preto",
+          "genericColor": "BRANCA"
+        },
+        {
+          "officialName": "Prata Brisk com teto preto",
+          "genericColor": "PRATA"
+        },
+        {
+          "officialName": "Cinza Silk com teto preto",
+          "genericColor": "CINZA"
+        },
+        {
+          "officialName": "Azul Sapphire",
+          "genericColor": "AZUL"
+        }
+      ],
+      "paletteReviewedAt": "2026-11-16T16:43:08.184364+00:00",
+      "genericColor": "PRETA",
+      "familyMatchCount": 1,
+      "paletteScope": {
+        "country": "BR",
+        "model": "Creta N Line",
+        "manufactureYear": 2022,
+        "modelYear": 2023,
+        "version": "N Line 1.0 TGDI automática",
+        "selectionPolicy": "Todas as cinco opções externas da página 8; família genérica considera a carroceria principal e preserva teto preto no nome oficial das opções bicolores."
+      }
+    },
+    {
+      "id": "19938",
+      "brand": "VOLKSWAGEN",
+      "model": "VIRTUS MSI",
+      "manufactureYear": 2019,
+      "modelYear": 2020,
+      "genericColor": "BRANCA",
+      "officialName": "Branco Cristal",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.vwnews.com.br/news/204"
+      ],
+      "sourceTitle": [
+        "Volkswagen — 5 motivos para você ter um Volkswagen Virtus"
+      ],
+      "applicability": "Estoque é Virtus MSI 1.6 automático MY2020. Material oficial da linha não fornece paleta comercial completa.",
+      "matchedNames": [
+        "Branco Cristal"
+      ],
+      "palette": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": "Não foi localizada paleta primária completa específica do Virtus MSI automático MY2020; nome candidato não deve ser publicado como confirmado.",
+      "reason": "Não foi localizada paleta primária completa específica do Virtus MSI automático MY2020; nome candidato não deve ser publicado como confirmado.",
+      "relevantAlternatives": [],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "target_year_paint_palette_missing",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [
+        "Branco Cristal é somente pista para pesquisa; o comunicado listado não confirma a correspondência."
+      ],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "19946",
+      "brand": "FIAT",
+      "model": "TORO ENDURANCE",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "genericColor": "PRATA",
+      "officialName": "Prata Billet",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-toro-2024-chega-com-design-mais-robusto"
+      ],
+      "sourceTitle": [
+        "Fiat Toro 2024 chega com design mais robusto"
+      ],
+      "applicability": "Toro Endurance Turbo 270 Flex AT6 MY2024 brasileiro confirmado no release.",
+      "matchedNames": [
+        "Prata Billet"
+      ],
+      "palette": "not_established",
+      "evidenceSummary": "Release exato não enumera paleta. Ficha técnica vinculada como Endurance pelo portal mostra Volcano no conteúdo e não contém cores; não usar para confirmar a pintura.",
+      "reason": "Release exato não enumera paleta. Ficha técnica vinculada como Endurance pelo portal mostra Volcano no conteúdo e não contém cores; não usar para confirmar a pintura.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "19960",
+      "brand": "JEEP",
+      "model": "COMMANDER OVERLAND",
+      "manufactureYear": 2022,
+      "modelYear": 2023,
+      "genericColor": "BRANCA",
+      "officialName": "Branco Polar",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/jeep-compass-e-commander-apresentam-linha-2023-com-mais-tecnologia-e-novos-equipamentos-de-serie"
+      ],
+      "sourceTitle": [
+        "Jeep Compass e Commander apresentam linha 2023"
+      ],
+      "applicability": "Linha brasileira Commander MY2023; Overland T270 e TD380 expressamente cobertas.",
+      "matchedNames": [
+        "Branco Polar"
+      ],
+      "palette": [
+        "Branco Polar",
+        "Cinza Granite",
+        "Prata Billet",
+        "Azul Jazz",
+        "Preto Carbon",
+        "Slash Gold"
+      ],
+      "evidenceSummary": "Lançamento MY2023 enumera seis cores externas e descreve acabamento Overland. Só Branco Polar é branco.",
+      "reason": "Lançamento MY2023 enumera seis cores externas e descreve acabamento Overland. Só Branco Polar é branco.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "19978",
+      "brand": "VOLKSWAGEN",
+      "model": "POLO TRACK FIRST EDITION",
+      "manufactureYear": 2023,
+      "modelYear": 2023,
+      "genericColor": "VERMELHA",
+      "officialName": "Vermelho Sunset",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://newsroom-br.itd.vw.com.br/news/2018",
+        "https://www.vwnews.com.br/news/2148"
+      ],
+      "sourceTitle": [
+        "Retrospectiva 2023: Volkswagen celebra 70 anos com ofensiva de vitória",
+        "Novo Polo Rock in Rio: a versão especial do líder de vendas no Brasil"
+      ],
+      "applicability": "Brasil, edição numerada Polo Track First Edition lançada em 2023, limitada a mil unidades; não transferir para Polo Track comum.",
+      "matchedNames": [
+        "Vermelho Sunset"
+      ],
+      "palette": [
+        {
+          "officialName": "Vermelho Sunset",
+          "genericColor": "VERMELHA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        }
+      ],
+      "evidenceExcerpt": "lataria pintada na cor Vermelho Sunset, teto em Preto Ninja",
+      "evidenceSummary": "A própria VW descreve a edição limitada inteira com a mesma cor de carroceria; não apresenta alternativas. Correspondência depende de o cadastro First Edition estar correto.",
+      "reason": "A própria VW descreve a edição limitada inteira com a mesma cor de carroceria; não apresenta alternativas. Correspondência depende de o cadastro First Edition estar correto.",
+      "relevantAlternatives": [
+        {
+          "name": "Preto Ninja",
+          "disposition": "roof_only",
+          "reason": "Teto da edição descrito pela montadora; não é alternativa de cor principal da carroceria."
+        }
+      ],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "exact_limited_edition_identified_by_manufacturer_in_2023",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [
+        "Descrição do catálogo não comprova fisicamente que a unidade preserva a pintura original."
+      ],
+      "completeApplicablePalette": true
+    },
+    {
+      "id": "19982",
+      "brand": "VOLKSWAGEN",
+      "model": "POLO HIGHLINE",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "genericColor": "PRETA",
+      "officialName": "Preto Ninja",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.vw.com.br/pt/servicos-e-acessorios/servicos-e-produtos/manuais-e-garantia/manuais.html"
+      ],
+      "sourceTitle": [
+        "Volkswagen — índice oficial de manuais por modelo/ano"
+      ],
+      "applicability": "Brasil, Polo Highline 1.0 automático MY2024. Índice de manuais identifica anos, mas não documenta paleta comercial.",
+      "matchedNames": [
+        "Preto Ninja"
+      ],
+      "palette": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": "Não foi encontrada fonte primária com a paleta integral do Polo Highline MY2024. Preto Ninja permanece candidato; nenhum catálogo de outra linha/versão foi usado como prova.",
+      "reason": "Não foi encontrada fonte primária com a paleta integral do Polo Highline MY2024. Preto Ninja permanece candidato; nenhum catálogo de outra linha/versão foi usado como prova.",
+      "relevantAlternatives": [],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "exact_year_paint_palette_missing",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [
+        "Nome candidato não foi confirmado por esta fonte de manuais."
+      ],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "19994",
+      "brand": "CHEVROLET",
+      "model": "ONIX PREMIER PLUS",
+      "manufactureYear": 2024,
+      "modelYear": 2025,
+      "xmlColor": "PRATA",
+      "officialName": "Prata Shark",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/06-pdf/lista-de-precos-publicos-sugeridos04-03-2026.pdf",
+        "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/Lista-de-Pre%C3%A7os-P%C3%BAblicos-Sugeridos-03-de-dezembro-de-2024.pdf"
+      ],
+      "sourceTitle": "General Motors do Brasil — Listas de preços públicos sugeridos 03/12/2024 e 04/03/2026",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2025,
+        "version": "ONIX PREMIER PLUS",
+        "validated": true,
+        "scope": "Onix Plus Premier Turbo 1.0, ano-modelo 2025. Nome do XML ONIX PREMIER PLUS corresponde à denominação comercial ordenada no catálogo."
+      },
+      "matchedNames": [
+        "Prata Shark"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Prata Shark",
+      "evidenceSummary": "Paleta completa de seis cores em Premier MY2025 R8R, confirmada nas listas OEM de dezembro/2024 e março/2026. A união das seções de toda a linha Onix Plus MY2025 em dezembro/2024 preserva as mesmas opções e uma só prata.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "A paleta OEM aplicável apresenta uma única opção compatível com a família de cor do XML. Inferência documental; não comprova a pintura física nem eventual repintura da unidade.",
+      "paletteComplete": true,
+      "physicallyConfirmed": false,
+      "verificationType": "unique_catalog_match",
+      "publishable": true,
+      "sourceLocator": "03/12/2024: p. 19 Premier 2025 e pp. 16–19 união Onix Plus 2025; 04/03/2026: p. 19 Premier 2025.",
+      "palette": [
+        {
+          "officialName": "Azul Seeker",
+          "genericColor": "AZUL"
+        },
+        {
+          "officialName": "Branco Summit",
+          "genericColor": "BRANCA"
+        },
+        {
+          "officialName": "Cinza Drake",
+          "genericColor": "CINZA"
+        },
+        {
+          "officialName": "Prata Shark",
+          "genericColor": "PRATA"
+        },
+        {
+          "officialName": "Preto Ouro Negro",
+          "genericColor": "PRETA"
+        },
+        {
+          "officialName": "Vermelho Carmin",
+          "genericColor": "VERMELHA"
+        }
+      ],
+      "paletteReviewedAt": "2026-11-16T16:43:08.184364+00:00",
+      "genericColor": "PRATA",
+      "familyMatchCount": 1,
+      "paletteScope": {
+        "country": "BR",
+        "model": "Onix Plus",
+        "modelYear": 2025,
+        "version": "Premier 5Y69HS R8R",
+        "selectionPolicy": "Paleta Premier conferida em duas listas OEM. Também conferida a união de todas as seções Onix Plus MY2025 na lista de dezembro/2024: as mesmas seis cores, sem segunda prata."
+      },
+      "configurationReview": {
+        "validatedConfigurations": [
+          "5Y69HS R8R"
+        ],
+        "requestedConfigurationNotFound": "R8Z",
+        "findings": "R8Z não aparece nas duas listas OEM completas nem foi localizado como Premier MY2025 nas buscas específicas. Não foi tratado como alias de R8R. A verificação ampliada abrange todas as seções Onix Plus MY2025 do documento contemporâneo: paletas iguais, único prata. No MY2024 o documento mostra R8M e R8R; ambos compartilham a mesma paleta externa, diferenciando acabamento interno."
+      }
+    },
+    {
+      "id": "19998",
+      "brand": "TOYOTA",
+      "model": "YARIS XS CONNECT MULTIDRIVE",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "xmlColor": "BRANCA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2024,
+        "version": "YARIS XS CONNECT MULTIDRIVE",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Não encontrada paleta Toyota primária completa para Yaris XS Connect Multidrive 2024. Branco não pode ser especificado só pelo XML: há pistas de mais de uma tonalidade branca na geração, exigindo fonte de versão/ano exatos.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20008",
+      "brand": "CHEVROLET",
+      "model": "CRUZE LT SEDAN",
+      "manufactureYear": 2017,
+      "modelYear": 2017,
+      "xmlColor": "VERMELHA",
+      "officialName": "Vermelho Edible Berries",
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2017,
+        "version": "CRUZE LT SEDAN",
+        "validated": false
+      },
+      "matchedNames": [
+        "Vermelho Edible Berries"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": "Ficha atribuída ao Marketing Chevrolet para Cruze 2017 arquivada por veículo de imprensa aponta nome candidato.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Não localizada cópia primária OEM da paleta completa LT sedan 2017. Documento em arquivo de imprensa permanece pista a verificar, não aprovação.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false,
+      "secondaryLeadUrls": [
+        "https://carroscomcamanzi.com.br/wp-content/uploads/2016/05/Ficha-T%C3%A9cnica-Novo-Cruze-2017.pdf"
+      ]
+    },
+    {
+      "id": "20013",
+      "brand": "CHEVROLET",
+      "model": "ONIX PREMIER PLUS",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "xmlColor": "CINZA",
+      "officialName": "Cinza Drake",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/Lista-de-Pre%C3%A7os-P%C3%BAblicos-Sugeridos-03-de-dezembro-de-2024.pdf"
+      ],
+      "sourceTitle": "General Motors do Brasil — Lista de preços públicos sugeridos 03/12/2024",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2024,
+        "version": "ONIX PREMIER PLUS",
+        "validated": true,
+        "scope": "Onix Plus Premier Turbo 1.0, ano-modelo 2024, modelos 5Y69HR/3Y69HR, pacotes R8M e R8R com paleta externa comum."
+      },
+      "matchedNames": [
+        "Cinza Drake"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Cinza Drake",
+      "evidenceSummary": "Página 15: Onix Plus Premier Turbo ano-modelo 2024, configurações R8M e R8R e modelos 5Y69HR/3Y69HR. Uma paleta externa comum de seis cores para ambos os pacotes, com uma única cinza.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Fonte primária OEM agora localizada com ano-modelo e versão exatos. A paleta comum às duas configurações Premier contém um único cinza. Inferência documental, sem confirmação física da unidade.",
+      "paletteComplete": true,
+      "physicallyConfirmed": false,
+      "verificationType": "unique_catalog_match",
+      "publishable": true,
+      "sourceLocator": "p. 15 (índice PDF 14), Onix Plus Premier Turbo Ano-Modelo 2024, Pintura",
+      "palette": [
+        {
+          "officialName": "Azul Seeker",
+          "genericColor": "AZUL"
+        },
+        {
+          "officialName": "Branco Summit",
+          "genericColor": "BRANCA"
+        },
+        {
+          "officialName": "Cinza Drake",
+          "genericColor": "CINZA"
+        },
+        {
+          "officialName": "Prata Shark",
+          "genericColor": "PRATA"
+        },
+        {
+          "officialName": "Preto Ouro Negro",
+          "genericColor": "PRETA"
+        },
+        {
+          "officialName": "Vermelho Carmin",
+          "genericColor": "VERMELHA"
+        }
+      ],
+      "paletteReviewedAt": "2026-11-16T16:43:08.184364+00:00",
+      "genericColor": "CINZA",
+      "familyMatchCount": 1,
+      "paletteScope": {
+        "country": "BR",
+        "model": "Onix Plus",
+        "modelYear": 2024,
+        "versions": [
+          "Premier R8M",
+          "Premier R8R"
+        ],
+        "selectionPolicy": "Seis opções externas comuns aos pacotes R8M e R8R na página 15; diferenças de acabamento interno não alteram esta tabela de pintura."
+      }
+    },
+    {
+      "id": "20027",
+      "brand": "CHERY",
+      "model": "TIGGO 7 PRO HIBRIDA",
+      "manufactureYear": 2022,
+      "modelYear": 2023,
+      "xmlColor": "BRANCA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2023,
+        "version": "TIGGO 7 PRO HIBRIDA",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisados modelo, versão e ano brasileiros: resultados de imprensa e concessionárias não constituem a paleta OEM completa exigida. Manter a família de cor original; não aplicar catálogos atuais ou de versão diferente.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20029",
+      "brand": "CHERY",
+      "model": "TIGGO 8 MAX DRIVE",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "xmlColor": "CINZA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2024,
+        "version": "TIGGO 8 MAX DRIVE",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisados modelo, versão e ano brasileiros: resultados de imprensa e concessionárias não constituem a paleta OEM completa exigida. Manter a família de cor original; não aplicar catálogos atuais ou de versão diferente.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20033",
+      "brand": "CHEVROLET",
+      "model": "ONIX LT",
+      "manufactureYear": 2014,
+      "modelYear": 2014,
+      "xmlColor": "CINZA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2014,
+        "version": "ONIX LT",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisa de modelo/versão/ano não localizou paleta OEM completa aplicável. Resultados de anos vizinhos, acessórios, imprensa ou revenda não foram usados para aprovar a cor da unidade.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20038",
+      "brand": "HYUNDAI",
+      "model": "HB20 LIMITED",
+      "manufactureYear": 2024,
+      "modelYear": 2025,
+      "xmlColor": "PRETA",
+      "officialName": "Preto Onix",
+      "status": "pending",
+      "sourceUrls": [
+        "https://hyundai.com.br/content/dam/hmb/cars/hb20/2024-2025/catalog/20241113/Catalogo_Digital_Novo_HB20_Limited_Plus_2025.pdf"
+      ],
+      "sourceTitle": "Hyundai Novo HB20 Limited Plus 2025",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2025,
+        "version": "HB20 LIMITED",
+        "validated": false,
+        "scope": "Fabricação/modelo exato 2024/2025 e motor/câmbio compatíveis; variante Limited vs Limited Plus ainda não reconciliada."
+      },
+      "matchedNames": [
+        "Preto Onix"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Preto Onix",
+      "evidenceSummary": "Catálogo 2024/2025 Limited Plus 1.0 manual tem uma única cor preta.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "O XML informa LIMITED, mas a fonte aplicável encontrada é LIMITED PLUS. Não equiparar versões sem validar essa abreviação. A cor é candidata, não autorizada para substituição.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20043",
+      "brand": "FORD",
+      "model": "ECOSPORT FREESTYLE",
+      "manufactureYear": 2019,
+      "modelYear": 2020,
+      "genericColor": "PRETA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [
+        "https://production.autoforce.com/uploads/model/datasheet/880/Ficha_T_cnica_-_Ford_EcoSport_2020.pdf",
+        "https://www.ford.com.br/content/dam/Ford/website-assets/latam/br/nameplate/2020/ecosport/pdf/fbr-ecosport-2020-ficha-tecnica.pdf"
+      ],
+      "sourceTitle": [
+        "Ford EcoSport 2020 — SPEC_ECOSPORT_31012019 (espelho do documento)",
+        "Ford EcoSport 2021 — conteúdo do PDF, apesar de URL 2020"
+      ],
+      "applicability": "Brasil, Freestyle 1.5 automático MY2020. Primeiro PDF é MY2020; segundo identifica MY2021 e não é aplicável por conter 2020 no caminho.",
+      "matchedNames": [
+        "Preto Bristol",
+        "Preto Ebony"
+      ],
+      "palette": [],
+      "evidenceExcerpt": "Preto Bristol; Preto Ebony",
+      "evidenceSummary": "Há mudança de nomenclatura/oferta entre documentos: a ficha MY2020 de janeiro/2019 traz Bristol e a ficha OEM hospedada hoje traz Ebony, mas é MY2021. Uma tabela de parceria de agosto/2019 lista ambos para linha 2019/2020; sem código de pintura da unidade não há exclusividade segura.",
+      "reason": "Há mudança de nomenclatura/oferta entre documentos: a ficha MY2020 de janeiro/2019 traz Bristol e a ficha OEM hospedada hoje traz Ebony, mas é MY2021. Uma tabela de parceria de agosto/2019 lista ambos para linha 2019/2020; sem código de pintura da unidade não há exclusividade segura.",
+      "relevantAlternatives": [
+        {
+          "name": "Preto Bristol",
+          "disposition": "plausible",
+          "sourceUrl": "https://production.autoforce.com/uploads/model/datasheet/880/Ficha_T_cnica_-_Ford_EcoSport_2020.pdf",
+          "finish": "perolizada"
+        },
+        {
+          "name": "Preto Ebony",
+          "disposition": "plausible_unresolved_MY2020",
+          "sourceUrl": "https://www.ford.com.br/content/dam/Ford/website-assets/latam/br/nameplate/2020/ecosport/pdf/fbr-ecosport-2020-ficha-tecnica.pdf",
+          "finish": "sólida",
+          "reason": "Não inferir aplicação MY2020 do caminho da URL; a possibilidade no ano-alvo aparece em tabela de parceria, não qualifica sozinha."
+        }
+      ],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "mixed_OEM_host_and_manufacturer_document_mirror",
+      "yearApplicabilityBasis": "explicit_model_year",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [
+        "Sinal de conflito adicional, não fonte qualificadora: https://www.apcefsp.org.br/wp-content/uploads/2019/08/TABELA-PESSOA-FISICA-AGOSTO-2019-PARCERIA-FORD-FUNC-FORNEC-FORD.pdf",
+        "O status pending impede que qualquer candidato seja apresentado como confirmado."
+      ],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "20052",
+      "brand": "FIAT",
+      "model": "CRONOS DRIVE",
+      "manufactureYear": 2024,
+      "modelYear": 2025,
+      "genericColor": "CINZA",
+      "officialName": "Cinza Silverstone",
+      "status": "pending",
+      "sourceUrls": [
+        "https://cronos.fiat.com.br/monte.html?mvs=359ATH1&openFundingPlans=true&year=2025"
+      ],
+      "sourceTitle": [
+        "Monte seu Cronos — parâmetro 2025 retorna MY2027, não usar como paleta histórica"
+      ],
+      "applicability": "Drive 1.3 AT brasileiro MY2025; configurador atual devolve MY2027.",
+      "matchedNames": [
+        "Cinza Silverstone"
+      ],
+      "palette": "not_established",
+      "evidenceSummary": "Candidato encontrado no configurador atual; não prova a paleta histórica completa da versão MY2025.",
+      "reason": "Candidato encontrado no configurador atual; não prova a paleta histórica completa da versão MY2025.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "20059",
+      "brand": "HYUNDAI",
+      "model": "CRETA SPORT",
+      "manufactureYear": 2018,
+      "modelYear": 2018,
+      "xmlColor": "MARROM",
+      "officialName": "Bronze Terra",
+      "status": "pending",
+      "sourceUrls": [
+        "https://hyundaimobis.com.br/wp-content/uploads/2022/10/Catalogo_Creta.pdf"
+      ],
+      "sourceTitle": "Hyundai Mobis — Catálogo de acessórios Creta",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2018,
+        "version": "CRETA SPORT",
+        "validated": false
+      },
+      "matchedNames": [
+        "Bronze Terra"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Bronze Terra",
+      "evidenceSummary": "Nome aparece em frisos da marca. A lista de acessórios não fixa a aplicação Sport 2018 e não estabelece equivalência de MARROM do XML com bronze.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Fonte de acessórios sem paleta completa do Sport 2018. MARROM versus bronze ainda requer comprovação; não substituir.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20067",
+      "brand": "BYD",
+      "model": "SONG PLUS GS",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "xmlColor": "PRETA",
+      "officialName": "Delan Black",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.byd.com/br/noticias-byd-brasil/Novo-BYD-Song-Plus-DMi-chega-ao-Brasil-com-maior-capacidade-na-bateria-e-alcance"
+      ],
+      "sourceTitle": "BYD — Novo Song Plus DM-i com maior bateria e alcance",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2024,
+        "version": "SONG PLUS GS",
+        "validated": false,
+        "scope": "Fonte auxiliar 2024/2025; unidade é 2023/2024."
+      },
+      "matchedNames": [
+        "Delan Black"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Delan Black",
+      "evidenceSummary": "Comunicado oficial inclui nome comercial preto, mas descreve a atualização 2024/2025 com bateria ampliada.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Fonte oficial encontrada refere-se a ano-modelo posterior. Não extrapolar para GS 2023/2024.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20068",
+      "brand": "PEUGEOT",
+      "model": "2008 ACTIVE T200",
+      "manufactureYear": 2025,
+      "modelYear": 2025,
+      "genericColor": "PRETA",
+      "officialName": "Preto Perla Nera",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/uploads/br/attachment/5320/fichatecnicanovopeugeot2008my25-66b3809e034a2.pdf"
+      ],
+      "sourceTitle": [
+        "Ficha técnica Novo Peugeot 2008 MY25 — tabela de cores Active/Allure/GT"
+      ],
+      "applicability": "MY2025 brasileiro Active Turbo 200 CVT expressamente na coluna da ficha.",
+      "matchedNames": [
+        "Preto Perla Nera"
+      ],
+      "palette": [
+        "Preto Perla Nera",
+        "Branco Nacré",
+        "Cinza Artense",
+        "Azul Quasar"
+      ],
+      "evidenceSummary": "Tabela de cores completa: Active admite Preto Perla Nera, Branco Nacré, Cinza Artense e Azul Quasar; Cinza Selenium restrito à GT. Única opção preta.",
+      "reason": "Tabela de cores completa: Active admite Preto Perla Nera, Branco Nacré, Cinza Artense e Azul Quasar; Cinza Selenium restrito à GT. Única opção preta.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "20082",
+      "brand": "CHERY",
+      "model": "TIGGO 5X PRO",
+      "manufactureYear": 2022,
+      "modelYear": 2023,
+      "xmlColor": "CINZA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2023,
+        "version": "TIGGO 5X PRO",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisados modelo, versão e ano brasileiros: resultados de imprensa e concessionárias não constituem a paleta OEM completa exigida. Manter a família de cor original; não aplicar catálogos atuais ou de versão diferente.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20086",
+      "brand": "NISSAN",
+      "model": "KICKS ADVANCE",
+      "manufactureYear": 2026,
+      "modelYear": 2026,
+      "xmlColor": "CINZA",
+      "officialName": "Cinza Grafite",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.nissan-cdn.net/content/dam/Nissan/br/site/veiculos/kicks-my26/documentos/ficha_tecnica.pdf"
+      ],
+      "sourceTitle": "Nissan Kicks 2026 — ficha técnica e equipamentos",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2026,
+        "version": "KICKS ADVANCE",
+        "validated": true,
+        "scope": "Nissan Kicks 2026 Advance 1.0T brasileiro."
+      },
+      "matchedNames": [
+        "Cinza Grafite"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Cinza Grafite",
+      "evidenceSummary": "Tabela de cores com colunas por versão. A coluna Advance contém uma única cor cinza; prata possui linha independente. Bitone fica indicado para outra versão.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "A paleta OEM aplicável apresenta uma única opção compatível com a família de cor do XML. Inferência documental; não comprova a pintura física nem eventual repintura da unidade.",
+      "paletteComplete": true,
+      "physicallyConfirmed": false,
+      "verificationType": "unique_catalog_match",
+      "publishable": true,
+      "sourceLocator": "p. 1, tabela CORES, coluna ADVANCE",
+      "finish": "metálica",
+      "palette": [
+        {
+          "officialName": "Prata Classic",
+          "genericColor": "PRATA"
+        },
+        {
+          "officialName": "Cinza Grafite",
+          "genericColor": "CINZA"
+        },
+        {
+          "officialName": "Preto Premium",
+          "genericColor": "PRETA"
+        },
+        {
+          "officialName": "Vermelho Malbec",
+          "genericColor": "VERMELHA"
+        },
+        {
+          "officialName": "Branco Diamond",
+          "genericColor": "BRANCA"
+        }
+      ],
+      "paletteReviewedAt": "2026-11-16T16:43:08.184364+00:00",
+      "genericColor": "CINZA",
+      "familyMatchCount": 1,
+      "paletteScope": {
+        "country": "BR",
+        "model": "Kicks",
+        "modelYear": 2026,
+        "version": "Advance",
+        "selectionPolicy": "Coluna exata da versão na tabela CORES, conferida visualmente. As duas colunas têm cinco opções; Azul Oceânico e bicolores de versões superiores não entram."
+      }
+    },
+    {
+      "id": "20088",
+      "brand": "CHEVROLET",
+      "model": "TRACKER LT TURBO",
+      "manufactureYear": 2017,
+      "modelYear": 2018,
+      "xmlColor": "BRANCA",
+      "officialName": "Branco Summit",
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2018,
+        "version": "TRACKER LT TURBO",
+        "validated": false
+      },
+      "matchedNames": [
+        "Branco Summit"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": "Ficha atribuída à Chevrolet, Tracker ano-modelo 2018, revisão outubro/2017, arquivada por imprensa indica nome candidato.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Paleta aparenta vir de ficha OEM, mas cópia canônica OEM não foi localizada. Não foi promovida a correspondência aprovada neste levantamento.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false,
+      "secondaryLeadUrls": [
+        "https://carroscomcamanzi.com.br/wp-content/uploads/2018/05/Tracker-Lista-de-equipamentos-de-serie-e-opcionais-e-ficha-tecnica.pdf"
+      ]
+    },
+    {
+      "id": "20092",
+      "brand": "PEUGEOT",
+      "model": "2008 STYLE",
+      "manufactureYear": 2022,
+      "modelYear": 2023,
+      "genericColor": "PRATA",
+      "officialName": "Cinza Artense",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/peugeot/press/peugeot-apresenta-novidades-para-linha-2023-do-suv-2008"
+      ],
+      "sourceTitle": [
+        "Peugeot apresenta novidades para linha 2023 do SUV 2008"
+      ],
+      "applicability": "MY2023 brasileiro, Style 1.6 AT6 explicitamente listado.",
+      "matchedNames": [
+        "Cinza Artense",
+        "Cinza Grafitto"
+      ],
+      "palette": [
+        "Vermelho Rubi",
+        "Branco Banquise",
+        "Branco Nacré",
+        "Cinza Artense",
+        "Preto Perla Nera",
+        "Cinza Grafitto"
+      ],
+      "evidenceSummary": "Paleta completa disponível, mas XML PRATA não tem correspondência nominal: fabricante chama ambos os tons neutros Cinza. Falta prova da equivalência cadastral PRATA -> Artense; não selecionar por foto.",
+      "reason": "Paleta completa disponível, mas XML PRATA não tem correspondência nominal: fabricante chama ambos os tons neutros Cinza. Falta prova da equivalência cadastral PRATA -> Artense; não selecionar por foto.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "20093",
+      "brand": "VOLKSWAGEN",
+      "model": "NIVUS HIGHLINE",
+      "manufactureYear": 2021,
+      "modelYear": 2022,
+      "genericColor": "VERMELHA",
+      "officialName": "Vermelho Sunset",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.vwnews.com.br/news/1305",
+        "https://broto.com.br/media/datasheet/files/links/n/i/nivus_highline_200_tsi_1__sBYntb.pdf"
+      ],
+      "sourceTitle": [
+        "Polo, Virtus, Nivus e T-Cross: mais seguros, tecnológicos e eficientes — novembro/2021",
+        "Diagrama Nivus Highline MY2024 — ano posterior"
+      ],
+      "applicability": "Estoque é Nivus Highline 1.0 automático MY2022. Comunicado de 2021 não fecha a paleta; diagrama de 2024 não é aplicável automaticamente.",
+      "matchedNames": [
+        "Vermelho Sunset"
+      ],
+      "palette": [],
+      "evidenceExcerpt": "Vermelho Sunset",
+      "evidenceSummary": "Há candidato conhecido em diagrama de ano posterior, mas não foi obtida paleta primária completa para Highline MY2022. Mantida cor genérica.",
+      "reason": "Há candidato conhecido em diagrama de ano posterior, mas não foi obtida paleta primária completa para Highline MY2022. Mantida cor genérica.",
+      "relevantAlternatives": [],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "target_year_palette_missing",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "20094",
+      "brand": "JEEP",
+      "model": "RENEGADE T270",
+      "manufactureYear": 2024,
+      "modelYear": 2025,
+      "genericColor": "CINZA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/com-uma-gama-ainda-mais-competitiva-jeep-renegade-ganha-novas-versoes-na-linha-2025"
+      ],
+      "sourceTitle": [
+        "Jeep Renegade ganha novas versões na linha 2025"
+      ],
+      "applicability": "Renegade MY2025 brasileiro; XML T270 equivale à entrada 1.3 Turbo somente se cadastro confirmar.",
+      "matchedNames": [
+        "Granite Crystal",
+        "Sting Gray"
+      ],
+      "palette": [
+        "Branco Polar",
+        "Granite Crystal",
+        "Jazz Blue",
+        "Preto Carbon",
+        "Sting Gray",
+        "Slash Gold (Sahara)",
+        "Verde Recon (Willys)"
+      ],
+      "evidenceSummary": "Paleta da gama tem dois cinzas. Release cita Sting Gray na Night Eagle, mas não define matriz completa de restrições para versão de entrada; não inferir exclusão.",
+      "reason": "Paleta da gama tem dois cinzas. Release cita Sting Gray na Night Eagle, mas não define matriz completa de restrições para versão de entrada; não inferir exclusão.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "20095",
+      "brand": "RENAULT",
+      "model": "STEPWAY ICONIC",
+      "manufactureYear": 2021,
+      "modelYear": 2022,
+      "genericColor": "BEGE",
+      "officialName": "Beige Dune",
+      "status": "pending",
+      "sourceUrls": [
+        "https://cdn.group.renault.com/ren/br/renault-new-cars/editorial/2022/catalogos/stepway/outubro/catalogo-stepway-outubro22.pdf.asset.pdf/6f875cff42.pdf",
+        "https://cdn.group.renault.com/ren/br/renault-new-cars/editorial/catalogos/2021/af-online-RMA005221-Folh-Stepway-SET-21.pdf.asset.pdf/d79a1b4c9d.pdf"
+      ],
+      "sourceTitle": [
+        "Renault Stepway — catálogo brasileiro outubro/2022",
+        "Renault Stepway — catálogo brasileiro setembro/2021"
+      ],
+      "applicability": "Brasil, Iconic 1.6 CVT consta nos catálogos; unidade fabricada2021/MY2022. Catálogo outubro2022 pode corresponder a linha posterior e o setembro2021 tem rodapé de gama2020/2021.",
+      "matchedNames": [
+        "Beige Dune"
+      ],
+      "palette": [
+        {
+          "officialName": "Branco Glacier",
+          "genericColor": "BRANCA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Vermelho Vivo",
+          "genericColor": "VERMELHA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Prata Étoile",
+          "genericColor": "PRATA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Cinza Cassiopée",
+          "genericColor": "CINZA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Preto Nacré",
+          "genericColor": "PRETA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Beige Dune",
+          "genericColor": "BEGE",
+          "classificationBasis": "inferred_lexical_translation",
+          "mappingIsInference": true
+        }
+      ],
+      "evidenceExcerpt": "Beige Dune",
+      "evidenceSummary": "A paleta do catálogo encontrado tem um candidato beige, mas o enquadramento no MY2022 não está expresso. A aproximação BEGE→Beige é tradução semântica e não classificação cadastral documental da montadora.",
+      "reason": "A paleta do catálogo encontrado tem um candidato beige, mas o enquadramento no MY2022 não está expresso. A aproximação BEGE→Beige é tradução semântica e não classificação cadastral documental da montadora.",
+      "relevantAlternatives": [],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "catalog_dates_do_not_establish_model_year",
+      "classificationBasis": "inferred_lexical_translation_beige_to_bege",
+      "classificationNote": "A classificação genérica não foi documentalmente fechada para esta unidade; nenhuma foto foi usada como prova.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "20096",
+      "brand": "CITROEN",
+      "model": "C3 ATTRACTION",
+      "manufactureYear": 2014,
+      "modelYear": 2015,
+      "genericColor": "BRANCA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.citroen.com.br/meu-citroen/manuais.html"
+      ],
+      "sourceTitle": [
+        "Manuais Citroën — catálogo histórico recente"
+      ],
+      "applicability": "C3 Attraction 1.5 brasileiro MY2015; não confundir com C3 europeu 2015.",
+      "matchedNames": [],
+      "palette": "not_established",
+      "evidenceSummary": "Não localizada fonte primária com paleta completa aplicável ao C3 brasileiro Attraction 1.5 MY2015; manter BRANCA.",
+      "reason": "Não localizada fonte primária com paleta completa aplicável ao C3 brasileiro Attraction 1.5 MY2015; manter BRANCA.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "20098",
+      "brand": "CHEVROLET",
+      "model": "PRISMA LTZ",
+      "manufactureYear": 2014,
+      "modelYear": 2015,
+      "xmlColor": "PRATA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2015,
+        "version": "PRISMA LTZ",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisa de modelo/versão/ano não localizou paleta OEM completa aplicável. Resultados de anos vizinhos, acessórios, imprensa ou revenda não foram usados para aprovar a cor da unidade.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20102",
+      "brand": "CHERY",
+      "model": "TIGGO 5X PRO",
+      "manufactureYear": 2022,
+      "modelYear": 2023,
+      "xmlColor": "PRETA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2023,
+        "version": "TIGGO 5X PRO",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisados modelo, versão e ano brasileiros: resultados de imprensa e concessionárias não constituem a paleta OEM completa exigida. Manter a família de cor original; não aplicar catálogos atuais ou de versão diferente.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20111",
+      "brand": "HYUNDAI",
+      "model": "TUCSON GLSB",
+      "manufactureYear": 2012,
+      "modelYear": 2013,
+      "xmlColor": "PRATA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2013,
+        "version": "TUCSON GLSB",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisa de modelo/versão/ano não localizou paleta OEM completa aplicável. Resultados de anos vizinhos, acessórios, imprensa ou revenda não foram usados para aprovar a cor da unidade.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20112",
+      "brand": "CITROEN",
+      "model": "AIRCROSS SHINE",
+      "manufactureYear": 2017,
+      "modelYear": 2018,
+      "genericColor": "PRATA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/citroen/press/citroen-c3-e-aircross-com-cambio-automatico-de-6-marchas-muito-mais-conforto-no-seu-dia-a-dia"
+      ],
+      "sourceTitle": [
+        "Citroën C3 e Aircross com câmbio automático de 6 marchas"
+      ],
+      "applicability": "Lançamento brasileiro C3/Aircross MY2018 com AT6; versão Shine no escopo.",
+      "matchedNames": [],
+      "palette": "not_established",
+      "evidenceSummary": "Fonte descreve a linha exata e nova Dark Carmin, mas não enumera a paleta completa nem confirma nome oficial para PRATA. Não utilizar paleta de Aircross europeu/C5/C3 Aircross.",
+      "reason": "Fonte descreve a linha exata e nova Dark Carmin, mas não enumera a paleta completa nem confirma nome oficial para PRATA. Não utilizar paleta de Aircross europeu/C5/C3 Aircross.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "20113",
+      "brand": "CHEVROLET",
+      "model": "TRACKER TURBO",
+      "manufactureYear": 2025,
+      "modelYear": 2026,
+      "xmlColor": "PRATA",
+      "officialName": "Prata Shark",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/06-pdf/lista-de-precos-publicos-sugeridos04-03-2026.pdf"
+      ],
+      "sourceTitle": "General Motors do Brasil — Lista de preços públicos sugeridos, 04/03/2026",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2026,
+        "version": "TRACKER TURBO",
+        "validated": true,
+        "scope": "Novo Tracker 1.0 Turbo automático, ano-modelo 2026."
+      },
+      "matchedNames": [
+        "Prata Shark"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Prata Shark",
+      "evidenceSummary": "Paleta do Novo Tracker ano-modelo 2026 apresenta seis cores, somente uma prata, tanto na configuração básica AT como PRO AT. O XML traz TURBO 1.0 automático sem subtipo; as variantes 1.0 consultadas compartilham a única opção prata.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "A paleta OEM aplicável apresenta uma única opção compatível com a família de cor do XML. Inferência documental; não comprova a pintura física nem eventual repintura da unidade.",
+      "paletteComplete": true,
+      "physicallyConfirmed": false,
+      "verificationType": "unique_catalog_match",
+      "publishable": true,
+      "sourceLocator": "Seção Novo Tracker Ano-Modelo 2026, configurações AT/PRO AT, Pintura",
+      "palette": [
+        {
+          "officialName": "Branco Summit",
+          "genericColor": "BRANCA"
+        },
+        {
+          "officialName": "Cinza Rush",
+          "genericColor": "CINZA"
+        },
+        {
+          "officialName": "Prata Shark",
+          "genericColor": "PRATA"
+        },
+        {
+          "officialName": "Preto Ouro Negro",
+          "genericColor": "PRETA"
+        },
+        {
+          "officialName": "Vermelho Scarlet",
+          "genericColor": "VERMELHA"
+        },
+        {
+          "officialName": "Azul Boreal",
+          "genericColor": "AZUL"
+        }
+      ],
+      "paletteReviewedAt": "2026-11-16T16:43:08.184364+00:00",
+      "genericColor": "PRATA",
+      "familyMatchCount": 1,
+      "paletteScope": {
+        "country": "BR",
+        "model": "Novo Tracker",
+        "modelYear": 2026,
+        "versions": [
+          "AT 5X76DT R8B",
+          "AT 5X76DT R8E",
+          "PRO AT 5X76DT RFB",
+          "LT 5B76DT/3B76DT R8D",
+          "LTZ 5N76DT/3N76DT R8F"
+        ],
+        "selectionPolicy": "Conjunto de seis cores comum nas seções 1.0 automático pesquisadas; não depende de presumir subconfiguração a partir de TURBO."
+      }
+    },
+    {
+      "id": "20115",
+      "brand": "RENAULT",
+      "model": "KWID OUTSIDER",
+      "manufactureYear": 2025,
+      "modelYear": 2026,
+      "genericColor": "PRETA",
+      "officialName": "Preto Nacré",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.renault.com.br/veiculos-de-passeio/kwid.html"
+      ],
+      "sourceTitle": [
+        "Renault Kwid — página atual da gama"
+      ],
+      "applicability": "Estoque é Kwid Outsider 1.0 manual MY2026, fabricado em 2025. Página atual não fecha a paleta integral MY2026.",
+      "matchedNames": [
+        "Preto Nacré"
+      ],
+      "palette": [],
+      "evidenceExcerpt": "Kwid Outsider",
+      "evidenceSummary": "Não foi localizado catálogo primário completo e inequívoco MY2026 da versão Outsider. Preto Nacré é candidato; página corrente e anúncios não provam exclusividade para o ano-alvo.",
+      "reason": "Não foi localizado catálogo primário completo e inequívoco MY2026 da versão Outsider. Preto Nacré é candidato; página corrente e anúncios não provam exclusividade para o ano-alvo.",
+      "relevantAlternatives": [],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "target_year_not_established",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [
+        "Não usar paleta do Kwid E-Tech, que é outro veículo.",
+        "Paletas de anos atuais e versões bicolores não substituem documento exato."
+      ],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "20116",
+      "brand": "HONDA",
+      "model": "HRV EX",
+      "manufactureYear": 2016,
+      "modelYear": 2016,
+      "xmlColor": "VERMELHA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.honda.com.br/pos-venda/automoveis/automovel/honda-hr-v-2016"
+      ],
+      "sourceTitle": "Honda Pós-venda — HR-V 2016",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2016,
+        "version": "HRV EX",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": "Página oficial do ano exato disponibiliza manuais; não foi encontrada ali lista de cores comerciais para a paleta do EX.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Manual/página oficial do ano exato sem paleta verificável. Vermelho Mercúrio citado por terceiros não basta para aprovação.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20117",
+      "brand": "CITROEN",
+      "model": "C4 CACTUS SHINE PACK",
+      "manufactureYear": 2021,
+      "modelYear": 2022,
+      "genericColor": "CINZA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/download-model-document/170"
+      ],
+      "sourceTitle": [
+        "Ficha técnica Citroën C4 Cactus 22/22 — Shine Pack nas páginas 3–4"
+      ],
+      "applicability": "Ficha 22/22 brasileira, coluna Shine Pack 1.6 THP nas páginas 3–4.",
+      "matchedNames": [
+        "Cinza aluminium",
+        "Cinza grafito"
+      ],
+      "palette": [
+        "Branco nacré",
+        "Cinza aluminium",
+        "Cinza grafito",
+        "Preto perla nera"
+      ],
+      "evidenceSummary": "Dois nomes contêm Cinza na paleta da versão. Mesmo que Aluminium seja conhecido comercialmente como prata, falta correspondência cadastral documentada para excluir esse tom a partir de CINZA.",
+      "reason": "Dois nomes contêm Cinza na paleta da versão. Mesmo que Aluminium seja conhecido comercialmente como prata, falta correspondência cadastral documentada para excluir esse tom a partir de CINZA.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "20118",
+      "brand": "RENAULT",
+      "model": "CAPTUR ICONIC",
+      "manufactureYear": 2021,
+      "modelYear": 2022,
+      "genericColor": "CINZA",
+      "officialName": "Cinza Cassiopée",
+      "status": "pending",
+      "sourceUrls": [
+        "https://cdn.group.renault.com/ren/br/renault-new-cars/editorial/catalogos/2021/AF_Brochure_Captur_HHA_2021_Pt_Digital.pdf",
+        "https://cdn.group.renault.com/ren/br/renault-new-cars/editorial/2022/catalogos/captur/fevereiro/af-RMA001422-CatalogoCaptur-Digital-fev22.pdf"
+      ],
+      "sourceTitle": [
+        "Renault Novo Captur — catálogo brasileiro, junho/2021",
+        "Renault Captur — catálogo brasileiro, janeiro/2022"
+      ],
+      "applicability": "Brasil, Iconic 1.3 CVT exato nos dois catálogos. As edições documentam o período de fabricação/modelo, mas não declaram expressamente MY2022.",
+      "matchedNames": [
+        "Cinza Cassiopée"
+      ],
+      "palette": [
+        {
+          "officialName": "Bronze Sable",
+          "genericColor": null,
+          "classificationBasis": "unresolved_generic_family_do_not_assume_marrom_or_bege",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Azul Iron",
+          "genericColor": "AZUL",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Vermelho Fogo",
+          "genericColor": "VERMELHA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Branco Glacier",
+          "genericColor": "BRANCA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Prata Étoile",
+          "genericColor": "PRATA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        },
+        {
+          "officialName": "Cinza Cassiopée",
+          "genericColor": "CINZA",
+          "classificationBasis": "documentary_portuguese_name_prefix",
+          "mappingIsInference": true
+        }
+      ],
+      "evidenceExcerpt": "Cinza Cassiopée com teto Prata Étoile - YQU",
+      "evidenceSummary": "A paleta integral brasileira de junho/2021 e janeiro/2022 possui só uma carroceria cinza; excelente candidato. Mantido pendente pelo critério estrito de ano-modelo: as datas editoriais não equivalem a uma declaração MY2022 e o texto extraído contém rodapé antigo de garantia 2019/2020.",
+      "reason": "A paleta integral brasileira de junho/2021 e janeiro/2022 possui só uma carroceria cinza; excelente candidato. Mantido pendente pelo critério estrito de ano-modelo: as datas editoriais não equivalem a uma declaração MY2022 e o texto extraído contém rodapé antigo de garantia 2019/2020.",
+      "relevantAlternatives": [
+        {
+          "name": "Cinza Cassiopée / teto Prata Étoile",
+          "disposition": "catalog_combination",
+          "reason": "A combinação YQU aparece nos dois catálogos. Não comprova o teto da unidade."
+        }
+      ],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "contemporaneous_catalog_dates_not_explicit_model_year",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [
+        "Não confundir com Captur europeu ou catálogo colombiano.",
+        "A limitação é documental de ano-modelo, não evidência de um segundo cinza.",
+        "Paleta por cor principal; branco e prata também aparecem sem teto contrastante."
+      ],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "20119",
+      "brand": "PEUGEOT",
+      "model": "208 STYLE",
+      "manufactureYear": 2024,
+      "modelYear": 2025,
+      "genericColor": "BRANCA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/peugeot/press/peugeot-anuncia-os-precos-para-novo-208-2025"
+      ],
+      "sourceTitle": [
+        "Peugeot anuncia os preços para Novo 208 2025"
+      ],
+      "applicability": "MY2025 brasileiro Style 1.0 manual listado no lançamento.",
+      "matchedNames": [
+        "Branco Banquise",
+        "Branco Nacré"
+      ],
+      "palette": [
+        "Branco Banquise",
+        "Branco Nacré",
+        "Preto Pérola Nera",
+        "Cinza Artense",
+        "Cinza Selenium"
+      ],
+      "evidenceSummary": "A gama MY2025 possui dois brancos. Fonte consultada não restringe um único branco à Style; XML BRANCA não distingue sólido/perolizado.",
+      "reason": "A gama MY2025 possui dois brancos. Fonte consultada não restringe um único branco à Style; XML BRANCA não distingue sólido/perolizado.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "20125",
+      "brand": "JEEP",
+      "model": "RENEGADE LONGITUDE",
+      "manufactureYear": 2020,
+      "modelYear": 2021,
+      "genericColor": "VERMELHA",
+      "officialName": "Vermelho Colorado",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/jeep/press/jeep-renegade-e-compass-chegam-a-linha-2021-ainda-mais-completos"
+      ],
+      "sourceTitle": [
+        "Jeep Renegade e Compass chegam à linha 2021"
+      ],
+      "applicability": "Renegade Longitude 1.8 AT6 MY2021 brasileiro explicitamente listado.",
+      "matchedNames": [
+        "Vermelho Colorado"
+      ],
+      "palette": "not_established",
+      "evidenceSummary": "Fonte confirma Vermelho Colorado e exclui versões 1.8 AT/STD/Sport, mas não enumera paleta completa da Longitude; falta verificar inexistência de outra opção vermelha naquela versão/ano.",
+      "reason": "Fonte confirma Vermelho Colorado e exclui versões 1.8 AT/STD/Sport, mas não enumera paleta completa da Longitude; falta verificar inexistência de outra opção vermelha naquela versão/ano.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false
+    },
+    {
+      "id": "20126",
+      "brand": "HYUNDAI",
+      "model": "IX35 GL",
+      "manufactureYear": 2017,
+      "modelYear": 2018,
+      "xmlColor": "PRETA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2018,
+        "version": "IX35 GL",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisa de modelo/versão/ano não localizou paleta OEM completa aplicável. Resultados de anos vizinhos, acessórios, imprensa ou revenda não foram usados para aprovar a cor da unidade.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20128",
+      "brand": "HYUNDAI",
+      "model": "HB20X EVOLUTION",
+      "manufactureYear": 2021,
+      "modelYear": 2021,
+      "xmlColor": "PRATA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.hyundai.com.br/content/dam/hmb/cat%C3%A1logos/catalogo_HB20X_vision_digital.pdf"
+      ],
+      "sourceTitle": "Hyundai HB20X Vision — catálogo digital",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2021,
+        "version": "HB20X EVOLUTION",
+        "validated": false,
+        "scope": "Fonte auxiliar de outra versão da geração; não valida Evolution 2021."
+      },
+      "matchedNames": [
+        "Prata Sand",
+        "Prata Brisk"
+      ],
+      "alternatives": [
+        "Prata Sand",
+        "Prata Brisk"
+      ],
+      "evidenceExcerpt": "Prata Sand; Prata Brisk",
+      "evidenceSummary": "Catálogo OEM da mesma geração contém duas opções prata. A versão pesquisada é Evolution, não Vision.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Família prata pode corresponder a dois nomes. Fonte Vision não resolve a paleta exata Evolution 2021; conservar PRATA.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20131",
+      "brand": "VOLKSWAGEN",
+      "model": "TAOS HIGHLINE",
+      "manufactureYear": 2023,
+      "modelYear": 2023,
+      "genericColor": "BRANCA",
+      "officialName": "Branco Puro",
+      "status": "pending",
+      "sourceUrls": [
+        "https://www.vwnews.com.br/news/1741"
+      ],
+      "sourceTitle": [
+        "VW Taos eleva patamar do segmento com atualizações na linha2023"
+      ],
+      "applicability": "Brasil, Taos Highline 1.4 automático MY2023 exato no comunicado; seção encontrada cobre cores do opcional Bi-Tone.",
+      "matchedNames": [
+        "Branco Puro"
+      ],
+      "palette": [],
+      "evidenceExcerpt": "Branco Puro",
+      "evidenceSummary": "Documento primário do ano correto cita Branco Puro entre quatro cores elegíveis ao Bi-Tone. Isso confirma oferta do nome, mas a seção não prova paleta integral da versão nem exclui outro branco fora do pacote.",
+      "reason": "Documento primário do ano correto cita Branco Puro entre quatro cores elegíveis ao Bi-Tone. Isso confirma oferta do nome, mas a seção não prova paleta integral da versão nem exclui outro branco fora do pacote.",
+      "relevantAlternatives": [
+        {
+          "name": "Branco Puro / teto preto",
+          "disposition": "package_specific",
+          "reason": "Não se presume pacote Bi-Tone na unidade."
+        },
+        {
+          "name": "outro branco fora do pacote",
+          "disposition": "not_excluded_by_source",
+          "reason": "Não foi encontrado nome alternativo concreto; lacuna é de cobertura da paleta."
+        }
+      ],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "exact_model_year_but_partial_palette",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "20132",
+      "brand": "CHEVROLET",
+      "model": "PRISMA ADVANTAGE",
+      "manufactureYear": 2015,
+      "modelYear": 2016,
+      "xmlColor": "BRANCA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2016,
+        "version": "PRISMA ADVANTAGE",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisa de modelo/versão/ano não localizou paleta OEM completa aplicável. Resultados de anos vizinhos, acessórios, imprensa ou revenda não foram usados para aprovar a cor da unidade.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20134",
+      "brand": "CHEVROLET",
+      "model": "TRACKER LT",
+      "manufactureYear": 2022,
+      "modelYear": 2023,
+      "xmlColor": "PRETA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2023,
+        "version": "TRACKER LT",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisa de modelo/versão/ano não localizou paleta OEM completa aplicável. Resultados de anos vizinhos, acessórios, imprensa ou revenda não foram usados para aprovar a cor da unidade.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    },
+    {
+      "id": "20135",
+      "brand": "VOLKSWAGEN",
+      "model": "T CROSS COMFORTLINE",
+      "manufactureYear": 2024,
+      "modelYear": 2024,
+      "genericColor": "CINZA",
+      "officialName": "Cinza Platinum",
+      "status": "pending",
+      "sourceUrls": [
+        "https://newsroom-br.itd.vw.com.br/news/2141"
+      ],
+      "sourceTitle": [
+        "Volkswagen — Novo T-Cross, lançamento da linha 2025 em maio/2024"
+      ],
+      "applicability": "Estoque é T-Cross Comfortline 1.0 automático MY2024. O comunicado publicado em2024 trata do facelift MY2025.",
+      "matchedNames": [
+        "Cinza Platinum"
+      ],
+      "palette": [],
+      "evidenceExcerpt": "Cinza Platinum",
+      "evidenceSummary": "Cinza Platinum aparece na paleta OEM da linha2025, mas não foi localizada paleta primária completa para Comfortline MY2024. Ano de publicação2024 não é ano-modelo2024.",
+      "reason": "Cinza Platinum aparece na paleta OEM da linha2025, mas não foi localizada paleta primária completa para Comfortline MY2024. Ano de publicação2024 não é ano-modelo2024.",
+      "relevantAlternatives": [
+        {
+          "name": "Cinza Ascot",
+          "disposition": "excluded_as_evidence_for_this_trim_year",
+          "reason": "Fonte posterior associa ao Highline/pacote Dark; não é prova de alternativa da Comfortline2024."
+        }
+      ],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "wrong_model_year_source",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "20136",
+      "brand": "FORD",
+      "model": "ECOSPORT FREESTYLE",
+      "manufactureYear": 2017,
+      "modelYear": 2017,
+      "genericColor": "PRATA",
+      "officialName": "Prata Dublin",
+      "status": "pending",
+      "sourceUrls": [
+        "https://production.autoforce.com/uploads/model/datasheet/880/Ficha_T_cnica_-_Ford_EcoSport_2020.pdf",
+        "https://www.ford.com.br/content/dam/Ford/website-assets/latam/br/nameplate/2020/ecosport/pdf/fbr-ecosport-2020-ficha-tecnica.pdf"
+      ],
+      "sourceTitle": [
+        "Ford EcoSport 2020 — ficha de ano posterior",
+        "Ford EcoSport 2021 — ficha de ano posterior"
+      ],
+      "applicability": "Estoque é Freestyle 1.6 manual MY2017; documentos encontrados são anos posteriores, outra configuração mecânica.",
+      "matchedNames": [
+        "Prata Dublin"
+      ],
+      "palette": [],
+      "evidenceExcerpt": "Prata Dublin",
+      "evidenceSummary": "Nome candidato aparece em catálogos Ford de anos posteriores. Não foi encontrada paleta primária completa e exata da versão MY2017; não se extrapola continuidade histórica.",
+      "reason": "Nome candidato aparece em catálogos Ford de anos posteriores. Não foi encontrada paleta primária completa e exata da versão MY2017; não se extrapola continuidade histórica.",
+      "relevantAlternatives": [],
+      "checkedAt": "2026-11-16",
+      "sourceHosting": "manufacturer-hosted",
+      "yearApplicabilityBasis": "wrong_year_sources_only",
+      "classificationBasis": "documentary_name_prefix",
+      "classificationNote": "O próprio nome comercial contém a família em português; a normalização para a cor genérica do XML é inferência semântica. Não é código de cor cadastral emitido pela montadora.",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "ownerConfirmed": false,
+      "notes": [
+        "Candidato é pista de pesquisa, não correspondência validada."
+      ],
+      "completeApplicablePalette": false
+    },
+    {
+      "id": "20137",
+      "brand": "FIAT",
+      "model": "FASTBACK IMPETUS",
+      "manufactureYear": 2024,
+      "modelYear": 2025,
+      "genericColor": "BRANCA",
+      "officialName": "Branco Banchisa",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-apresenta-fastback-e-pulse-hibridos-para-combinar-performance-eficiencia-e-custo-beneficio-e-se-consolidar-como-protagonista-no-futuro-da-mobilidade",
+        "https://www.media.stellantis.com/br-pt/fiat/press/fiat-lanca-serie-especial-tributo-125"
+      ],
+      "sourceTitle": [
+        "Fiat apresenta Fastback e Pulse híbridos — linha 2025",
+        "Fiat lança série especial Tributo 125 — distingue Fastback T200 de Impetus"
+      ],
+      "applicability": "Fastback Impetus Turbo 200 Hybrid MY2025 brasileiro. Conferir identidade de motorização já revisada no cadastro antes de publicar.",
+      "matchedNames": [
+        "Branco Banchisa"
+      ],
+      "palette": [
+        "Preto Vulcano",
+        "Branco Banchisa",
+        "Cinza Silverstone",
+        "Prata Bari",
+        "Cinza Strato",
+        "Azul Amalfi"
+      ],
+      "evidenceSummary": "Lançamento dos híbridos MY2025 enumera seis cores e cita Impetus. Branco Alaska era exclusivo Tributo 125 baseado no Fastback T200, não na Impetus.",
+      "reason": "Paleta completa MY2025 Hybrid Impetus tem um único branco. Variante individual Hybrid confirmada pela API atual e revisão existente de 12/11/2026; o XML codifica combustível como -1, sem nome.",
+      "checkedAt": "2026-11-16",
+      "classificationBasis": "Portuguese color-name semantics when explicit; no photographic inference; ambiguous generic mapping remains pending",
+      "evidenceType": "catalogue-correspondence-inference",
+      "physicalPaintConfirmed": false,
+      "variantEvidence": "docs/audits/factory-warranty-fastback-20137-2026-11-12.json, variant + confirmação operacional da versão (não da cor)."
+    },
+    {
+      "id": "20138",
+      "brand": "CHEVROLET",
+      "model": "TRACKER PREMIER",
+      "manufactureYear": 2026,
+      "modelYear": 2027,
+      "xmlColor": "BRANCA",
+      "officialName": "Branco Summit",
+      "status": "unique_catalog_match",
+      "sourceUrls": [
+        "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/08-pdf/lista-de-precos-publicos-sugeridos-03-06-2026.pdf"
+      ],
+      "sourceTitle": "General Motors do Brasil — Lista de preços públicos sugeridos, 03/06/2026",
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2027,
+        "version": "TRACKER PREMIER",
+        "validated": true,
+        "scope": "Novo Tracker Premier 1.2 Turbo, ano-modelo 2027, Brasil."
+      },
+      "matchedNames": [
+        "Branco Summit"
+      ],
+      "alternatives": [],
+      "evidenceExcerpt": "Branco Summit",
+      "evidenceSummary": "Tabela Premier 5Y76TV/3Y76TV R8I, vigência maio/2026 e ano-modelo 2027. Paleta completa de sete opções inclui apenas uma branca.",
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "A paleta OEM aplicável apresenta uma única opção compatível com a família de cor do XML. Inferência documental; não comprova a pintura física nem eventual repintura da unidade.",
+      "paletteComplete": true,
+      "physicallyConfirmed": false,
+      "verificationType": "unique_catalog_match",
+      "publishable": true,
+      "sourceLocator": "p. 37 (índice PDF 36), Novo Tracker Ano-Modelo 2027, PREMIER e Pintura",
+      "palette": [
+        {
+          "officialName": "Branco Summit",
+          "genericColor": "BRANCA"
+        },
+        {
+          "officialName": "Cinza Âmbar",
+          "genericColor": "CINZA"
+        },
+        {
+          "officialName": "Cinza Urbano",
+          "genericColor": "CINZA"
+        },
+        {
+          "officialName": "Prata Shark",
+          "genericColor": "PRATA"
+        },
+        {
+          "officialName": "Preto Ouro Negro",
+          "genericColor": "PRETA"
+        },
+        {
+          "officialName": "Vermelho Scarlet",
+          "genericColor": "VERMELHA"
+        },
+        {
+          "officialName": "Azul Boreal",
+          "genericColor": "AZUL"
+        }
+      ],
+      "paletteReviewedAt": "2026-11-16T16:43:08.184364+00:00",
+      "genericColor": "BRANCA",
+      "familyMatchCount": 1,
+      "paletteScope": {
+        "country": "BR",
+        "model": "Novo Tracker",
+        "modelYear": 2027,
+        "version": "PREMIER 5Y76TV/3Y76TV R8I",
+        "selectionPolicy": "Paleta integral com sete cores da página 37. Há dois cinzas, mas um só branco."
+      }
+    },
+    {
+      "id": "20145",
+      "brand": "TOYOTA",
+      "model": "COROLLA XEI",
+      "manufactureYear": 2013,
+      "modelYear": 2014,
+      "xmlColor": "CINZA",
+      "officialName": null,
+      "status": "pending",
+      "sourceUrls": [],
+      "sourceTitle": null,
+      "applicability": {
+        "country": "BR",
+        "modelYear": 2014,
+        "version": "COROLLA XEI",
+        "validated": false
+      },
+      "matchedNames": [],
+      "alternatives": [],
+      "evidenceExcerpt": null,
+      "evidenceSummary": null,
+      "checkedAt": "2026-11-16T16:36:45.422109+00:00",
+      "reason": "Pesquisas de Corolla XEi 2014 localizaram paletas reproduzidas por imprensa, mas não fonte Toyota primária com o conjunto completo. Nome não aprovado.",
+      "paletteComplete": false,
+      "physicallyConfirmed": false,
+      "verificationType": "catalog_research",
+      "publishable": false
+    }
+  ]
+}

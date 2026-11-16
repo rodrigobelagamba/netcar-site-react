@@ -76,6 +76,7 @@ export interface WarrantyAuditSnapshot {
 
 export interface EquipmentAuditInput extends EquipmentVehicle {
   cor?: string;
+  combustivel?: string;
   /** Equipment coverage includes public sold fichas without reopening warranty. */
   inventoryStatus?: "active" | "sold";
   warrantySnapshot?: WarrantyAuditSnapshot;
@@ -306,6 +307,7 @@ export function parseStockResponse(
       marca: shortText(vehicle.marca),
       modelo: shortText(vehicle.modelo),
       motor: shortText(vehicle.motor),
+      combustivel: shortText(vehicle.combustivel),
       cambio: shortText(vehicle.cambio),
       year:
         typeof vehicle.ano === "number" || typeof vehicle.ano === "string"
@@ -745,7 +747,7 @@ export function buildEquipmentAudit(
 
     if (vehicle.inventoryStatus !== "sold" && color.status !== "confirmed") {
       add("factory-color-review", "info",
-        `Cor de fábrica ${color.status === "blocked" ? "com confirmação incompatível" : "pendente de comprovação individual"}. Mantida a cor original. Pesquisar: ${color.researchQuery}. Catálogo ou foto não confirmam a pintura desta unidade; não publicar candidato.`);
+        `Nome de fábrica ${color.status === "blocked" ? "com confirmação incompatível" : "pendente de verificação"}. Mantida a cor original. Pesquisar: ${color.researchQuery}. Conferir a paleta oficial completa da versão/ano brasileiros: somente correspondência única com a cor do XML pode nomear a cor por catálogo. Ambiguidade exige evidência individual; foto ou candidato isolado não bastam.`);
     }
 
     for (const conflict of equipmentVerification.conflicts) {
