@@ -2964,7 +2964,7 @@ function DetailsSection({
   const specifications = [
     anoDisplay && { label: "Ano/modelo:", value: anoDisplay },
     mileageFormatted && { label: "Quilometragem:", value: mileageFormatted },
-    vehicle.cor && { label: "Cor:", value: resolveVehicleColor(vehicle).display },
+    vehicle.cor && { label: "Cor:", value: resolveVehicleColor(vehicle).display.toLocaleUpperCase("pt-BR") },
     vehicle.portas && { label: "Portas:", value: `${vehicle.portas}` },
     vehicle.placa && { label: "Placa:", value: maskPlate(vehicle.placa) },
     vehicle.motor && {
