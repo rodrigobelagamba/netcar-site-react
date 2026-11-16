@@ -12,6 +12,8 @@ A cor da API/XML/ERP permanece intacta, inclusive nos filtros, feeds e laudos.
 Somente o valor “Cor” da ficha usa o resolver compartilhado
 src/lib/vehicleColor.ts. Um nome validado substitui o texto genérico na ficha;
 ausência, incompatibilidade ou ambiguidade mantém a string original.
+Na ficha, exibir o valor em MAIÚSCULAS, conforme orientação de 16/11/2026.
+Preservar a grafia documental no registro; aplicar a formatação só na interface.
 Nenhuma imagem é recolorida. Não alterar preços, equipamentos ou outras tarefas.
 
 ## Evidência

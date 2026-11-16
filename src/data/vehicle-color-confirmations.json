@@ -2,6 +2,77 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "color-20261116-19379",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19379",
+        "brand": "JEEP",
+        "model": "COMPASS LONGITUDE T270 TURBO",
+        "manufactureYear": 2022,
+        "modelYear": 2022,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "CINZA",
+        "physicalIdentityKey": "0a5b48fe0e5047db91cee77d4c723972949d642039e5439b0af60a768936a25f"
+      },
+      "officialName": "Cinza Granite",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-19379",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "JEEP",
+          "model": "COMPASS LONGITUDE T270 TURBO",
+          "modelYear": 2022,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Cinza Granite",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Branco Polar",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Prata Billet",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Marrom Deep",
+              "genericColor": "MARROM"
+            },
+            {
+              "officialName": "Verde Recon",
+              "genericColor": "VERDE"
+            },
+            {
+              "officialName": "Preto Carbon",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Azul Jazz",
+              "genericColor": "AZUL"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.media.stellantis.com/br-en/jeep/compass-my-2022",
+            "https://www.media.stellantis.com/br-pt/jeep/press/conheca-o-novo-jeep-compass-mais-performance-design-sofisticacao-e-tecnologia"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
       "id": "color-20261116-19587",
       "status": "confirmed",
       "vehicle": {
@@ -415,6 +486,266 @@
       }
     },
     {
+      "id": "color-20261116-19866",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19866",
+        "brand": "JEEP",
+        "model": "COMPASS SERIE S T270 TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "bb5d00624a12b619c05790839f3ed1f2e953637bb46154f8c8c10e460c394e0c"
+      },
+      "officialName": "Branco Polar",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-19866",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "JEEP",
+          "model": "COMPASS SERIE S T270 TURBO",
+          "modelYear": 2025,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Carbon",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Polar",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Sting Gray",
+              "genericColor": "CINZA"
+            }
+          ],
+          "sourceUrls": [
+            "https://pt.scribd.com/document/818985693/Ficha-Tecnica-Compass",
+            "https://pt.scribd.com/document/854754455/ficha-tecnica-compass",
+            "https://www.media.stellantis.com/br-pt/jeep/press/novo-jeep-compass-2025-mais-performance-mais-seguranca-garantia-total-de-5-anos-e-versoes-ineditas-para-uma-oferta-ainda-mais-completa-e-imbativel"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19868",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19868",
+        "brand": "HYUNDAI",
+        "model": "CRETA PRESTIGE",
+        "manufactureYear": 2018,
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "CINZA",
+        "physicalIdentityKey": "d0f73a75782694d724246411c3e27071320eb992284fb84411e59a50ca91e034"
+      },
+      "officialName": "Cinza Titanium",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-19868",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "HYUNDAI",
+          "model": "CRETA PRESTIGE",
+          "modelYear": 2018,
+          "engine": "2.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Onix",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Polar",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Prata Sand",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Bronze Terra",
+              "genericColor": "BRONZE"
+            },
+            {
+              "officialName": "Prata Metal",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Titanium",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Verde Forest",
+              "genericColor": "VERDE"
+            },
+            {
+              "officialName": "Vermelho Chilli",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Prata Moonlight",
+              "genericColor": "PRATA"
+            }
+          ],
+          "sourceUrls": [
+            "https://pt.slideshare.net/slideshow/creta-sport-2018/110680698"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19903",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19903",
+        "brand": "VOLKSWAGEN",
+        "model": "T CROSS HIGHLINE TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "PRATA",
+        "physicalIdentityKey": "336e03725e8f401e1bb6333aa46dfd25d85c61e130e321ed39f335c5641b7a02"
+      },
+      "officialName": "Prata Pyrit",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-19903",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "VOLKSWAGEN",
+          "model": "T CROSS HIGHLINE TURBO",
+          "modelYear": 2024,
+          "engine": "1.4",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Ninja",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Puro",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Platinum",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Pyrit",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Azul Norway",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Vermelho Sunset",
+              "genericColor": "VERMELHA"
+            }
+          ],
+          "sourceUrls": [
+            "https://broto.com.br/media/datasheet/files/links/t/-/t-cross_highline_250_tsi_autom_tico_-_150_cv_z0MHvT.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19906",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19906",
+        "brand": "CITROEN",
+        "model": "C4 CACTUS SHINE PACK TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "9128bbb6648021c46735a1845e0712c3110f69e5be01be8c1d08f5c6e84d4bbc"
+      },
+      "officialName": "Branco Banquise",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-19906",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "CITROEN",
+          "model": "C4 CACTUS SHINE PACK TURBO",
+          "modelYear": 2024,
+          "engine": "1.6",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Branco Banquise",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Preto Perla Nera",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Cinza Artense",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Cinza Grafito",
+              "genericColor": "CINZA"
+            }
+          ],
+          "sourceUrls": [
+            "https://pt.scribd.com/document/887049926/NOVO-C4-Catalogo-Citizen-AF3-1",
+            "https://www.media.stellantis.com/br-pt/citroen/press/novo-suv-citroen-c4-cactus-2024-chega-repleto-de-novidades-de-conectividade-e-conforto-com-performance-acessivel",
+            "https://pt.scribd.com/document/812290665/Monte-o-seu-Novo-C4-Cactus"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
       "id": "color-20261116-19932",
       "status": "confirmed",
       "vehicle": {
@@ -468,6 +799,69 @@
           ],
           "sourceUrls": [
             "https://www.hyundai.com.br/content/dam/hmb/cars/creta/n-line/Catalogo_N_Line_2022.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-19946",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "19946",
+        "brand": "FIAT",
+        "model": "TORO ENDURANCE TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2024,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "PRATA",
+        "physicalIdentityKey": "2f914e809ccdb0b0eee61296b127f41ab7118b13b850e039f1f00295ccbe3c5b"
+      },
+      "officialName": "Prata Billet",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-19946",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "FIAT",
+          "model": "TORO ENDURANCE TURBO",
+          "modelYear": 2024,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Vermelho Colorado",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Granite Crystal",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Billet",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Preto Carbon",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Ambiente",
+              "genericColor": "BRANCA"
+            }
+          ],
+          "sourceUrls": [
+            "https://pt.scribd.com/document/736761926/Linha-de-Produto-FIAT-Nacional-Mai-24",
+            "https://www.media.stellantis.com/br-pt/fiat/press/fiat-toro-2024-chega-com-design-mais-robusto"
           ]
         }
       },
@@ -657,6 +1051,72 @@
       }
     },
     {
+      "id": "color-20261116-20008",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20008",
+        "brand": "CHEVROLET",
+        "model": "CRUZE LT SEDAN TURBO",
+        "manufactureYear": 2017,
+        "modelYear": 2017,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "VERMELHA",
+        "physicalIdentityKey": "11da9e13f8ca58b1236b875b33fa55681fb7fb04a0eccc321e0fb8ddcf2b50a4"
+      },
+      "officialName": "Vermelho Edible Berries",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-20008",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "CHEVROLET",
+          "model": "CRUZE LT SEDAN TURBO",
+          "modelYear": 2017,
+          "engine": "1.4",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Cinza Satin Steel",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Branco Abalone",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Vermelho Edible Berries",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Preto Ouro Negro",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Summit",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Prata Switchblade",
+              "genericColor": "PRATA"
+            }
+          ],
+          "sourceUrls": [
+            "https://carroscomcamanzi.com.br/wp-content/uploads/2016/05/Ficha-T%C3%A9cnica-Novo-Cruze-2017.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
       "id": "color-20261116-20013",
       "status": "confirmed",
       "vehicle": {
@@ -714,6 +1174,73 @@
           ],
           "sourceUrls": [
             "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/Lista-de-Pre%C3%A7os-P%C3%BAblicos-Sugeridos-03-de-dezembro-de-2024.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20052",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20052",
+        "brand": "FIAT",
+        "model": "CRONOS DRIVE",
+        "manufactureYear": 2024,
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "CINZA",
+        "physicalIdentityKey": "1d00e3f19ab5216df64915f2dbd5189ea8ddf0fdea68e5d8d5c540889d9ed5df"
+      },
+      "officialName": "Cinza Silverstone",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-20052",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "FIAT",
+          "model": "CRONOS DRIVE",
+          "modelYear": 2025,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Vulcano",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Cinza Silverstone",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Bari",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Branco Alaska",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Branco Banchisa",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Vermelho Montecarlo",
+              "genericColor": "VERMELHA"
+            }
+          ],
+          "sourceUrls": [
+            "https://pt.scribd.com/document/820775362/GAMA-2025",
+            "https://www.passeidireto.com/arquivo/149093953/linha-de-produto-fiat-nacional-ago-24-3"
           ]
         }
       },
@@ -843,6 +1370,124 @@
       }
     },
     {
+      "id": "color-20261116-20088",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20088",
+        "brand": "CHEVROLET",
+        "model": "TRACKER LT TURBO",
+        "manufactureYear": 2017,
+        "modelYear": 2018,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "794bbf6889ef9767933870f9678d9532f08ec44d7594144640c114aa1ff503f0"
+      },
+      "officialName": "Branco Summit",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-20088",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "CHEVROLET",
+          "model": "TRACKER LT TURBO",
+          "modelYear": 2018,
+          "engine": "1.4",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Vermelho Glory",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Preto Ouro Negro",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Cinza Graphite",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Branco Summit",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Prata Switchblade",
+              "genericColor": "PRATA"
+            }
+          ],
+          "sourceUrls": [
+            "https://carroscomcamanzi.com.br/wp-content/uploads/2018/05/Tracker-Lista-de-equipamentos-de-serie-e-opcionais-e-ficha-tecnica.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20094",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20094",
+        "brand": "JEEP",
+        "model": "RENEGADE T270 TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2025,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "CINZA",
+        "physicalIdentityKey": "36aca3a3c15453601a5fb129c08850efc2f0b81665dc0722636049a23ff1aeea"
+      },
+      "officialName": "Cinza Granite",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-20094",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "JEEP",
+          "model": "RENEGADE T270 TURBO",
+          "modelYear": 2025,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Cinza Granite",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Branco Polar",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Preto Carbon",
+              "genericColor": "PRETA"
+            }
+          ],
+          "sourceUrls": [
+            "https://pt.scribd.com/document/871976879/Linha-de-Produto-Renegade-MY25",
+            "https://pt.scribd.com/document/845223955/Ficha-Tecnica-Renegade",
+            "https://www.media.stellantis.com/br-pt/jeep/press/com-uma-gama-ainda-mais-competitiva-jeep-renegade-ganha-novas-versoes-na-linha-2025"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
       "id": "color-20261116-20113",
       "status": "confirmed",
       "vehicle": {
@@ -900,6 +1545,336 @@
           ],
           "sourceUrls": [
             "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/portable-navigation/global-footer/lista-de-precos/06-pdf/lista-de-precos-publicos-sugeridos04-03-2026.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20118",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20118",
+        "brand": "RENAULT",
+        "model": "CAPTUR ICONIC TURBO",
+        "manufactureYear": 2021,
+        "modelYear": 2022,
+        "engine": "1.3",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "CINZA",
+        "physicalIdentityKey": "95b40d4b1ad8d5eba555b3d142138078ffb7077a319ea7d968f6fd5f7c81b209"
+      },
+      "officialName": "Cinza Cassiopée",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-20118",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "RENAULT",
+          "model": "CAPTUR ICONIC TURBO",
+          "modelYear": 2022,
+          "engine": "1.3",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Bronze Sable",
+              "genericColor": "BRONZE"
+            },
+            {
+              "officialName": "Azul Iron",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Branco Glacier",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Vermelho Fogo",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Prata Étoile",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Cassiopée",
+              "genericColor": "CINZA"
+            }
+          ],
+          "sourceUrls": [
+            "https://imprensa.renault.com.br/release/item/captur-2022-redefine-o-conceito-do-prazer-ao-dirigir",
+            "https://imprensa.renault.com.br/api/releases/public/captur-2022-redefine-o-conceito-do-prazer-ao-dirigir",
+            "https://cdn.group.renault.com/ren/br/renault-new-cars/editorial/catalogos/2021/AF_Brochure_Captur_HHA_2021_Pt_Digital.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20119",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20119",
+        "brand": "PEUGEOT",
+        "model": "208 STYLE",
+        "manufactureYear": 2024,
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "fuel": "Flex",
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "5844667490e7e36bff506cd71e25185de657276bbc6b2735c6da6549f0ef0014"
+      },
+      "officialName": "Branco Nacré",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-20119",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "PEUGEOT",
+          "model": "208 STYLE",
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "MANUAL",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Branco Nacré",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Preto Perla Nera",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Cinza Artense",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Azul Quasar",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Gris Selenium",
+              "genericColor": "CINZA"
+            }
+          ],
+          "sourceUrls": [
+            "https://pt.scribd.com/document/917900067/DETALHES-COMPLETO-DO-208-TURBO",
+            "https://www.media.stellantis.com/br-pt/peugeot/press/peugeot-anuncia-os-precos-para-novo-208-2025"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20131",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20131",
+        "brand": "VOLKSWAGEN",
+        "model": "TAOS HIGHLINE TURBO",
+        "manufactureYear": 2023,
+        "modelYear": 2023,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "61d1f285d6e9bb6c43b76347643a57a610e4d4ea9cc0cecbb8e3b1995c806d5a"
+      },
+      "officialName": "Branco Puro",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-20131",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "VOLKSWAGEN",
+          "model": "TAOS HIGHLINE TURBO",
+          "modelYear": 2023,
+          "engine": "1.4",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Branco Puro",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Prata Pyrit",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Indium",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Azul Atlantic",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Bege Mojawe",
+              "genericColor": "BEGE"
+            },
+            {
+              "officialName": "Preto Mystic",
+              "genericColor": "PRETA"
+            }
+          ],
+          "sourceUrls": [
+            "https://broto.com.br/media/datasheet/files/links/t/a/taos_highline_c0MB7y.pdf",
+            "https://www.vwnews.com.br/news/1741"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20134",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20134",
+        "brand": "CHEVROLET",
+        "model": "TRACKER LT TURBO",
+        "manufactureYear": 2022,
+        "modelYear": 2023,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "PRETA",
+        "physicalIdentityKey": "90322b3014b7fac09d7dd416115a9e86b45b721162c61eff279d5c1f4dea12c5"
+      },
+      "officialName": "Preto Ouro Negro",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-20134",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "CHEVROLET",
+          "model": "TRACKER LT TURBO",
+          "modelYear": 2023,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Branco Summit",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Satin Steel",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Azul Eclipse",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Prata Switchblade",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Preto Ouro Negro",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Vermelho Chili",
+              "genericColor": "VERMELHA"
+            }
+          ],
+          "sourceUrls": [
+            "https://crecisp.gov.br/Files/covenant/96cc9f80-a08f-4cea-8cfd-b0ee6044f8c3_lista-de-precos-publicos-sugeridos-17-de-agosto-de-2023.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261116-20135",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20135",
+        "brand": "VOLKSWAGEN",
+        "model": "T CROSS COMFORTLINE TURBO",
+        "manufactureYear": 2024,
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "CINZA",
+        "physicalIdentityKey": "ccac863595ea7d2a1e7715d1f16acfb5b90e84e696c56348adf7faae8b59a1da"
+      },
+      "officialName": "Cinza Platinum",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-followup-20261116-20135",
+        "verifiedAt": "2026-11-16",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "VOLKSWAGEN",
+          "model": "T CROSS COMFORTLINE TURBO",
+          "modelYear": 2024,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Ninja",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Puro",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Platinum",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Pyrit",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Azul Norway",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Vermelho Sunset",
+              "genericColor": "VERMELHA"
+            }
+          ],
+          "sourceUrls": [
+            "https://broto.com.br/media/datasheet/files/links/t/-/t-cross_comfortline_200_tsi_autom_tico_-_128_cv_-_116_cv.pdf"
           ]
         }
       },
