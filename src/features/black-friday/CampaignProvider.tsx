@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import {
   BLACK_FRIDAY_REFRESH_MS,
   fetchBlackFridayConfig,
+  getBootstrappedBlackFridayConfig,
   getBlackFridayBoundaryDelay,
   isBlackFridayActive,
   type BlackFridayCampaignConfig,
@@ -15,7 +16,7 @@ interface CampaignState {
 const CampaignContext = createContext<CampaignState>({ active: false, config: null });
 
 export function BlackFridayCampaignProvider({ children }: { children: ReactNode }) {
-  const [config, setConfig] = useState<BlackFridayCampaignConfig | null>(null);
+  const [config, setConfig] = useState<BlackFridayCampaignConfig | null>(getBootstrappedBlackFridayConfig);
   const [now, setNow] = useState(Date.now);
 
   useEffect(() => {

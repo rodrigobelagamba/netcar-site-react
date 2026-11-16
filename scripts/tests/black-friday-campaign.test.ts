@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { test } from "node:test";
+import { test, type TestContext } from "node:test";
 import { createElement } from "react";
 import TestRenderer, { act } from "react-test-renderer";
 import {
@@ -8,6 +8,7 @@ import {
   BLACK_FRIDAY_END,
   BLACK_FRIDAY_START,
   fetchBlackFridayConfig,
+  getBootstrappedBlackFridayConfig,
   getBlackFridayBoundaryDelay,
   isBlackFridayActive,
   parseBlackFridayConfig,
@@ -87,6 +88,95 @@ test("HTTP, JSON, network and missing-file HTML failures fail closed", async () 
   assert.equal(await fetchBlackFridayConfig(async () => ({ ok: true, json: async () => null })), null);
   assert.equal(await fetchBlackFridayConfig(async () => ({ ok: true, json: async () => { throw new SyntaxError("HTML fallback"); } })), null);
   assert.equal(await fetchBlackFridayConfig(async () => { throw new Error("offline"); }), null);
+});
+
+async function mountBootstrappedProvider(t: TestContext, bootstrap: unknown, now = start + 1_000) {
+  const oldWindow = Object.getOwnPropertyDescriptor(globalThis, "window");
+  const oldDocument = Object.getOwnPropertyDescriptor(globalThis, "document");
+  t.mock.timers.enable({ apis: ["Date", "setTimeout", "setInterval"], now });
+  const browser = Object.assign(new EventTarget(), {
+    __NETCAR_BLACK_FRIDAY__: bootstrap,
+    setTimeout: (callback: () => void, delay: number) => setTimeout(callback, delay),
+    clearTimeout: (timer: ReturnType<typeof setTimeout>) => clearTimeout(timer),
+    setInterval: (callback: () => void, delay: number) => setInterval(callback, delay),
+    clearInterval: (timer: ReturnType<typeof setInterval>) => clearInterval(timer),
+  });
+  Object.defineProperty(globalThis, "window", { configurable: true, value: browser });
+  Object.defineProperty(globalThis, "document", {
+    configurable: true,
+    value: Object.assign(new EventTarget(), { visibilityState: "visible" }),
+  });
+  const requests: { resolve: (value: unknown) => void; reject: (error: Error) => void }[] = [];
+  t.mock.method(globalThis, "fetch", () => new Promise((resolve, reject) => {
+    requests.push({ resolve: (value) => resolve({ ok: true, json: async () => value }), reject });
+  }));
+  const renders: boolean[] = [];
+  function Consumer() {
+    renders.push(useBlackFridayCampaign().active);
+    return null;
+  }
+  let renderer: TestRenderer.ReactTestRenderer;
+  t.after(() => {
+    act(() => renderer?.unmount());
+    if (oldWindow) Object.defineProperty(globalThis, "window", oldWindow);
+    else Reflect.deleteProperty(globalThis, "window");
+    if (oldDocument) Object.defineProperty(globalThis, "document", oldDocument);
+    else Reflect.deleteProperty(globalThis, "document");
+  });
+  await act(async () => {
+    renderer = TestRenderer.create(createElement(BlackFridayCampaignProvider, {
+      children: createElement(Consumer),
+    }));
+  });
+  return { browser, requests, renders, active: () => renders.at(-1) };
+}
+
+test("validated bootstrap is active on the first render before refresh resolves", async (t) => {
+  const provider = await mountBootstrappedProvider(t, { ...enabled, unrelated: "ignored" });
+  assert.deepEqual(getBootstrappedBlackFridayConfig(), enabled);
+  assert.equal(provider.requests.length, 1, "Bootstrap must still revalidate the public flag");
+  assert.equal(provider.renders[0], true, "Do not paint the ordinary hero first");
+  assert.equal(provider.active(), true);
+});
+
+for (const [label, bootstrap, now] of [
+  ["missing", undefined, start + 1_000],
+  ["malformed", { ...enabled, enabled: "true" }, start + 1_000],
+  ["disabled", { ...enabled, enabled: false }, start + 1_000],
+  ["before start", enabled, start - 1],
+  ["expired", enabled, end],
+] as const) {
+  test(`${label} bootstrap never paints an active campaign while refresh is pending`, async (t) => {
+    const provider = await mountBootstrappedProvider(t, bootstrap, now);
+    assert.ok(provider.renders.every((active) => !active));
+    assert.equal(provider.requests.length, 1);
+  });
+}
+
+test("bootstrapped campaign expires even if its initial refresh is still pending", async (t) => {
+  const provider = await mountBootstrappedProvider(t, enabled, end - 500);
+  assert.equal(provider.active(), true);
+  await act(async () => { t.mock.timers.tick(500); });
+  assert.equal(provider.active(), false);
+  await act(async () => { provider.requests[0].resolve(enabled); });
+  assert.equal(provider.active(), false, "A late enabled response cannot extend the approved window");
+});
+
+test("runtime rollback overrides bootstrap and a superseded response cannot reactivate it", async (t) => {
+  const provider = await mountBootstrappedProvider(t, enabled);
+  await act(async () => { provider.browser.dispatchEvent(new Event("focus")); });
+  assert.equal(provider.requests.length, 2);
+  await act(async () => { provider.requests[1].resolve({ ...enabled, enabled: false }); });
+  assert.equal(provider.active(), false);
+  await act(async () => { provider.requests[0].resolve(enabled); });
+  assert.equal(provider.active(), false);
+});
+
+test("a failed refresh disables an initially bootstrapped offer", async (t) => {
+  const provider = await mountBootstrappedProvider(t, enabled);
+  assert.equal(provider.active(), true);
+  await act(async () => { provider.requests[0].reject(new Error("offline")); });
+  assert.equal(provider.active(), false);
 });
 
 test("mounted provider expires without navigation and refreshes rollback/failure", async (t) => {

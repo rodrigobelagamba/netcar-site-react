@@ -920,8 +920,9 @@ if ($placa) {
         revisão dos itens de segurança e correção do que for necessário antes de entrar
         na vitrine. Você recebe garantia e, quando o carro tem i-CHECK, o histórico consultado
         nas bases DEKRA / CheckAuto. Também pode comparar condições
-        de financiamento entre bancos e financeiras parceiras — com entrada mínima de
-        20% e possibilidade de dar seu usado na troca, sujeito à análise de crédito.</p>
+        de financiamento entre bancos e financeiras parceiras, conforme análise de crédito.
+        Avaliamos seu usado na troca por qualquer carro do estoque, inclusive com possibilidade de troco.
+        O recebimento depende do modelo, do estado, da documentação e do interesse da loja.</p>
 
         <h2>Onde ver este carro</h2>
         <p>Netcar Multimarcas — Av. Presidente Vargas, Esteio/RS. Duas lojas na mesma

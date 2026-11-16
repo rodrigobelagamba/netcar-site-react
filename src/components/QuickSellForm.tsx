@@ -57,9 +57,11 @@ export function PurchaseCriteriaCard({ className }: { className?: string }) {
         garante a compra.
       </p>
       <p className="mt-3 rounded-lg bg-secondary/10 px-3 py-2 text-sm leading-relaxed text-fg">
-        <strong>Vai usar o carro na troca?</strong> Esses limites não se aplicam.
-        O veículo pode ser avaliado dentro da negociação, conforme vistoria e
-        documentação.
+        <strong>Vai usar o carro na troca?</strong> Os limites de ano e
+        quilometragem não se aplicam.
+        Avaliamos seu usado por qualquer carro do estoque, inclusive com
+        possibilidade de troco. O recebimento depende do modelo, do estado,
+        da documentação e do interesse da loja.
       </p>
     </div>
   );
@@ -199,9 +201,10 @@ export function QuickSellForm({
       )}
       {evaluationType === "trade_in" && (
         <p className="mb-5 rounded-xl border border-secondary/20 bg-secondary/10 p-4 text-sm leading-relaxed text-fg">
-          Na troca, os limites de idade, quilometragem, primeiro emplacamento e
-          histórico da compra direta não se aplicam. O veículo será avaliado na
-          negociação, conforme vistoria e documentação.
+          Na troca, os limites de ano e quilometragem da compra direta não se
+          aplicam. Avaliamos seu usado por qualquer carro do estoque, inclusive
+          com possibilidade de troco. O recebimento depende do modelo, do estado,
+          da documentação e do interesse da loja.
         </p>
       )}
 

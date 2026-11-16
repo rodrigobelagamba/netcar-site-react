@@ -25,6 +25,25 @@ define('NETCAR_BANNER_CACHE_TTL', 600);   // 10 min — evita bloquear o HTML a 
 define('NETCAR_BANNER_FAIL_TTL', 60);     // não martelar a API quando ela falhar
 define('NETCAR_BANNER_HTTP_TIMEOUT', 0.20); // fail-fast: manifesto de build cobre a imagem se a API demorar
 
+/** Same strict window as the client; never activate an unknown campaign. */
+function netcar_black_friday_config($file)
+{
+    if (!is_readable($file)) return null;
+    $value = json_decode((string) @file_get_contents($file), true);
+    if (!is_array($value)
+        || ($value['id'] ?? null) !== 'black-friday-2026'
+        || !isset($value['enabled']) || !is_bool($value['enabled'])
+        || ($value['startsAt'] ?? null) !== '2026-11-11T00:00:00-03:00'
+        || ($value['endsAt'] ?? null) !== '2026-12-01T00:00:00-03:00') return null;
+    return array_intersect_key($value, array_flip(array('id', 'enabled', 'startsAt', 'endsAt')));
+}
+
+function netcar_black_friday_active($config, $now)
+{
+    return $config !== null && $config['enabled']
+        && $now >= strtotime($config['startsAt']) && $now < strtotime($config['endsAt']);
+}
+
 /**
  * Coloca o preload crítico no início do head, logo após o viewport.
  * Inserir perto de </head> faz o navegador descobrir a imagem somente depois
@@ -125,7 +144,7 @@ function netcar_fixed_route_meta()
         ],
         '/seminovos' => [
             'title' => 'Carros Seminovos e Usados em Esteio/RS | Netcar Multimarcas',
-            'description' => 'Veja carros seminovos e usados à venda na Netcar em Esteio/RS. Consulte fotos, preço e ano dos veículos disponíveis.',
+            'description' => 'Carros seminovos e usados em Esteio, com fotos e preços. Avaliamos seu usado na troca por qualquer carro do estoque, com possibilidade de troco.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/seminovos',
         ],
         '/tablet' => [
@@ -151,7 +170,7 @@ function netcar_fixed_route_meta()
         ],
         '/compra' => [
             'title' => 'Netcar - Venda ou troque seu carro em Esteio',
-            'description' => 'Venda ou troque seu carro na Netcar, em Esteio. Aceitamos veículos financiados, sujeitos à avaliação presencial e à análise dos documentos.',
+            'description' => 'Venda ou troque seu carro na Netcar, em Esteio. Avaliamos veículos financiados; a proposta considera o modelo, o estado e a documentação.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/compra',
         ],
         '/blog' => [
@@ -914,6 +933,11 @@ if ($path === '/entregas') {
 }
 $html = netcar_apply_route_meta($html, $routeMeta);
 $isHome = $path === '/';
+$blackFridayConfig = netcar_black_friday_config(__DIR__ . '/campaigns/black-friday-2026.json');
+$blackFridayActive = netcar_black_friday_active($blackFridayConfig, time());
+$html = str_replace('</head>', '<script>window.__NETCAR_BLACK_FRIDAY__='
+    . json_encode($blackFridayConfig, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
+    . ';</script></head>', $html);
 
 $modulePreloads = netcar_route_modulepreloads($path);
 $stockBootstrapScript = netcar_route_uses_stock_bootstrap($path)
@@ -944,7 +968,11 @@ if ($stockInitialLcp !== '') {
     $html = str_replace('<div id="netcar-initial-lcp"></div>', '<div id="netcar-initial-lcp">' . $stockInitialLcp . '</div>', $html);
 }
 
-if ($isHome) {
+if ($isHome && $blackFridayActive) {
+    // Do not fetch/preload the stock hero that the campaign replaces.
+    $html = netcar_prepend_critical_head_markup($html,
+        '<link rel="preload" as="image" href="/images/campaigns/black-friday-2026/title-v2.webp" fetchpriority="high">');
+} elseif ($isHome) {
     $bannerUrl = netcar_get_active_banner_url();
     $hasActiveBanner = $bannerUrl !== null;
     $buildHomeLcp = netcar_get_build_home_lcp();
@@ -986,7 +1014,7 @@ if ($isHome) {
         $heroHeight = $hasActiveBanner ? 680 : 960;
         $heroClass = $hasActiveBanner ? ' class="netcar-initial-banner"' : ' class="netcar-initial-hero"';
         $bannerFallback = netcar_banner_variant($bannerUrl, $fallbackWidth);
-        $preload = '<link rel="preload" as="image" href="'
+        $preload = '<link rel="preload" as="image" data-netcar-home-lcp href="'
             . htmlspecialchars($bannerFallback, ENT_QUOTES, 'UTF-8')
             . '" imagesrcset="'
             . $responsiveSrcset

@@ -88,7 +88,7 @@ switch ($page) {
 
     case 'seminovos':
         $title = 'Carros Seminovos e Usados em Esteio/RS | Netcar Multimarcas';
-        $description = 'Veja carros seminovos e usados à venda na Netcar em Esteio/RS. Consulte fotos, preço e ano dos veículos disponíveis.';
+        $description = 'Carros seminovos e usados em Esteio, com fotos e preços. Avaliamos seu usado na troca por qualquer carro do estoque, com possibilidade de troco.';
         $canonical = SEO_SITE_URL . '/seminovos';
         seo_render_head($title, $description, $canonical);
         echo '<h1>Carros seminovos e usados em Esteio/RS</h1>';
@@ -137,7 +137,7 @@ switch ($page) {
 
     case 'compra':
         $title = 'Netcar - Venda ou troque seu carro em Esteio';
-        $description = 'Venda ou troque seu carro na Netcar, em Esteio. Aceitamos veículos financiados, sujeitos à avaliação presencial e à análise dos documentos.';
+        $description = 'Venda ou troque seu carro na Netcar, em Esteio. Avaliamos veículos financiados; a proposta considera o modelo, o estado e a documentação.';
         $canonical = SEO_SITE_URL . '/compra';
         seo_render_head($title, $description, $canonical);
         echo '<h1>Quer vender ou trocar seu carro?</h1>';
@@ -149,7 +149,7 @@ switch ($page) {
         echo '<li>Se houver acordo, escolha entre vender ou usar o valor na troca</li></ol>';
         echo '<p>Atendemos vendedores de Esteio, Canoas, Sapucaia do Sul, São Leopoldo, Novo Hamburgo, Gravataí, Cachoeirinha e região metropolitana de Porto Alegre.</p>';
         echo '<h2>O que a Netcar resolve na negociação</h2>';
-        echo '<p>Venda direta ou troca por um carro do estoque.</p>';
+        echo '<p>Avaliamos seu carro para compra direta ou troca por qualquer veículo do estoque, inclusive com possibilidade de troco.</p>';
         echo '<ul><li><strong>Sem anúncio particular:</strong> Você negocia diretamente com a loja, sem receber visitas de desconhecidos.</li>';
         echo '<li><strong>Avaliação explicada:</strong> Estado do carro, versão, quilometragem e mercado entram na análise.</li>';
         echo '<li><strong>Financiamento em aberto:</strong> O saldo para quitação pode ser calculado dentro da negociação.</li>';
@@ -159,7 +159,7 @@ switch ($page) {
         echo '<ul><li>No máximo 6 anos de uso</li><li>Até 80.000 km rodados</li>';
         echo '<li>Primeiro emplacamento no Rio Grande do Sul</li><li>Sem origem de locadora</li>';
         echo '<li>Sem passagem por leilão, sinistro, furto ou roubo</li></ul>';
-        echo '<p><strong>Na troca, esses limites não se aplicam.</strong> O seu carro pode ser avaliado como parte da negociação, conforme vistoria e documentação.</p>';
+        echo '<p><strong>Na troca, os limites de ano e quilometragem não se aplicam.</strong> Avaliamos seu usado por qualquer carro do estoque, inclusive com possibilidade de troco. O recebimento depende do modelo, do estado, da documentação e do interesse da loja.</p>';
         echo '<h2>Começar avaliação pelo WhatsApp</h2>';
         echo '<p>Envie modelo, ano e quilometragem. A equipe usa esses dados para iniciar a avaliação e combinar a vistoria.</p>';
         $purchaseMessage = 'Estava olhando o site da Netcar e gostaria de vender meu carro para a Netcar.';

@@ -150,6 +150,14 @@ RedirectMatch 404 ^/api/?$
     Header set Cache-Control "public, max-age=31536000, immutable"
   </If>
 
+  # Apenas estas imagens têm versão na URL. Configuração, vídeos e imagens
+  # originais da campanha continuam com a política de cache existente.
+  <If "%{REQUEST_URI} =~ m#^/images/campaigns/black-friday-2026/(?:title|poster|ribbon-turquoise)-v2\.webp$#">
+    Header onsuccess unset Cache-Control "expr=%{REQUEST_STATUS} == 200 || %{REQUEST_STATUS} == 304"
+    Header always unset Cache-Control "expr=%{REQUEST_STATUS} == 200 || %{REQUEST_STATUS} == 304"
+    Header always set Cache-Control "public, max-age=31536000, immutable" "expr=%{REQUEST_STATUS} == 200 || %{REQUEST_STATUS} == 304"
+  </If>
+
   # Pastas internas: não indexar mesmo se crawler achar URL
   <If "%{REQUEST_URI} =~ m#^/(admin|sistema|api|backend)(/|$)#">
     Header set X-Robots-Tag "noindex, nofollow"

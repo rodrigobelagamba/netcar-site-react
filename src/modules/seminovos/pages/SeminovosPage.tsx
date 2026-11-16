@@ -13,7 +13,7 @@ import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { VehicleCardStatic } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
 import { ChevronDown, Filter, MessageCircle, ShieldCheck } from "lucide-react";
-import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
+import { useMetaTags } from "@/hooks/useMetaTags";
 import { matchesVehicleSearch, parseVehicleSearch } from "@/lib/vehicleSearch";
 import { matchesVehicleBrand } from "@/lib/vehicleBrand";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
@@ -85,7 +85,7 @@ type StockFilterValues = Record<
   string | undefined
 >;
 
-function stockFilterSignature(filters: StockFilterValues): string {
+function stockFilterSignature(filters: Partial<StockFilterValues>): string {
   return [
     filters.marca,
     filters.modelo,
@@ -237,14 +237,13 @@ export function SeminovosPage() {
     search.categoria,
   ]);
 
-  useDefaultMetaTags(
-    "Carros Seminovos e Usados em Esteio/RS",
-    "Veja carros seminovos e usados à venda na Netcar em Esteio/RS. Consulte fotos, preço e ano dos veículos disponíveis.",
-    {
-      canonicalPath: "/seminovos",
-      robots: hasFilterParams ? "noindex, follow" : undefined,
-    },
-  );
+  useMetaTags({
+    title: "Carros Seminovos e Usados em Esteio/RS | Netcar Multimarcas",
+    description:
+      "Carros seminovos e usados em Esteio, com fotos e preços. Avaliamos seu usado na troca por qualquer carro do estoque, com possibilidade de troco.",
+    url: "https://www.netcarmultimarcas.com.br/seminovos",
+    robots: hasFilterParams ? "noindex, follow" : undefined,
+  });
 
   type ShowroomReturnState = {
     vehicleId?: string;
@@ -728,6 +727,7 @@ export function SeminovosPage() {
         <div data-bf-stock-toolbar className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start">
           <StockSearchField
             value={search.busca || ""}
+            resetKey={stockFilterSignature(search)}
             onChange={handleStockSearch}
             vehicles={structuredVehicles}
           />
@@ -981,7 +981,8 @@ export function SeminovosPage() {
                 </p>
                 <p>
                   Estoque disponível nas duas lojas da Netcar, na Av. Presidente
-                  Vargas, em Esteio. Veja fotos, preço e ano antes de escolher.
+                  Vargas, em Esteio. Avaliamos seu usado na troca por qualquer
+                  carro do estoque, inclusive com possibilidade de troco.
                 </p>
                 <nav
                   aria-label="Atalhos do estoque"

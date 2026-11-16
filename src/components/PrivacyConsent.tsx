@@ -32,7 +32,7 @@ export function PrivacyConsent({
   showPersistentControl?: boolean;
 }) {
   const [open, setOpen] = useState(() => !hasStoredChoice());
-  const dialogRef = useRef<HTMLElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const persistentButtonRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
 
@@ -92,7 +92,7 @@ export function PrivacyConsent({
   // Uma linha só. Mobile: faixa fina colada no header (rodapé cobria preço e
   // WhatsApp). Tablet/desktop: pílula pequena no canto inferior direito.
   return (
-    <aside
+    <div
       ref={dialogRef}
       role="dialog"
       aria-modal="false"
@@ -130,6 +130,6 @@ export function PrivacyConsent({
           Aceitar
         </button>
       </div>
-    </aside>
+    </div>
   );
 }

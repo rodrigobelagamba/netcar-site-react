@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { getVehicleSearchAssist } from "@/lib/vehicleSearchAssist";
@@ -7,6 +7,7 @@ type StockSearchFieldProps = {
   value: string;
   onChange: (value: string) => void;
   vehicles?: readonly Partial<Vehicle>[];
+  resetKey?: string;
 };
 
 const NO_VEHICLES: readonly Partial<Vehicle>[] = [];
@@ -15,24 +16,69 @@ export function StockSearchField({
   value,
   onChange,
   vehicles = NO_VEHICLES,
+  resetKey = "",
 }: StockSearchFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectedOptionRef = useRef<HTMLLIElement>(null);
+  const [draftValue, setDraftValue] = useState(value);
+  const pendingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingRouteValues = useRef<string[]>([]);
+  const lastRequestedValue = useRef(value);
+  const previousRoute = useRef({ value, resetKey });
+  const changeRef = useRef(onChange);
+  changeRef.current = onChange;
   const [focused, setFocused] = useState(false);
   const [selectedQuery, setSelectedQuery] = useState<{
     value: string;
     query: string;
   } | null>(null);
-  const assist = useMemo(
-    () => getVehicleSearchAssist(value, vehicles),
-    [value, vehicles],
+  const cancelPendingChange = useCallback(() => {
+    if (pendingTimer.current !== null) clearTimeout(pendingTimer.current);
+    pendingTimer.current = null;
+  }, []);
+
+  const commitDraft = useCallback(
+    (nextValue: string) => {
+      cancelPendingChange();
+      setDraftValue(nextValue);
+      if (nextValue === lastRequestedValue.current) return;
+      lastRequestedValue.current = nextValue;
+      pendingRouteValues.current.push(nextValue);
+      changeRef.current(nextValue);
+    },
+    [cancelPendingChange],
   );
-  const hasValue = Boolean(value.trim());
+
+  useEffect(() => {
+    const previous = previousRoute.current;
+    if (previous.value === value && previous.resetKey === resetKey) return;
+    previousRoute.current = { value, resetKey };
+    const acknowledged = pendingRouteValues.current.indexOf(value);
+    if (previous.resetKey === resetKey && acknowledged >= 0) {
+      // A delayed URL update must not overwrite characters typed after it.
+      pendingRouteValues.current.splice(0, acknowledged + 1);
+      return;
+    }
+    // Back/forward and clearing applied filters replace any unfinished query.
+    cancelPendingChange();
+    pendingRouteValues.current = [];
+    lastRequestedValue.current = value;
+    setDraftValue(value);
+    setSelectedQuery(null);
+  }, [value, resetKey, cancelPendingChange]);
+
+  useEffect(() => cancelPendingChange, [cancelPendingChange]);
+
+  const assist = useMemo(
+    () => getVehicleSearchAssist(draftValue, vehicles),
+    [draftValue, vehicles],
+  );
+  const hasValue = Boolean(draftValue.trim());
   const suggestions = hasValue ? assist.suggestions.slice(0, 4) : [];
   const showSuggestions = focused && suggestions.length > 0;
   const selectedIndex = suggestions.findIndex(
     (item) =>
-      selectedQuery?.value === value && item.query === selectedQuery.query,
+      selectedQuery?.value === draftValue && item.query === selectedQuery.query,
   );
   const understanding = [
     assist.uncertain || assist.invalid ? "Vamos refinar:" : "Entendi assim:",
@@ -49,10 +95,10 @@ export function StockSearchField({
         inline: "nearest",
       });
     }
-  }, [showSuggestions, selectedIndex, value]);
+  }, [showSuggestions, selectedIndex, draftValue]);
 
   const chooseSuggestion = (query: string) => {
-    onChange(query);
+    commitDraft(query);
     setSelectedQuery(null);
     setFocused(false);
     inputRef.current?.focus();
@@ -68,6 +114,7 @@ export function StockSearchField({
           chooseSuggestion(suggestions[selectedIndex].query);
           return;
         }
+        commitDraft(draftValue);
         setFocused(false);
         inputRef.current?.blur();
       }}
@@ -95,11 +142,23 @@ export function StockSearchField({
             type="search"
             role="combobox"
             name="busca"
-            value={value}
+            value={draftValue}
             onChange={(event) => {
+              const nextValue = event.target.value;
               setSelectedQuery(null);
               setFocused(true);
-              onChange(event.target.value);
+              setDraftValue(nextValue);
+              cancelPendingChange();
+              if (!nextValue) {
+                commitDraft(nextValue);
+                return;
+              }
+              // Paint the typed text now; update the route and full grid once
+              // the user pauses, instead of doing that work on every keypress.
+              pendingTimer.current = setTimeout(
+                () => commitDraft(nextValue),
+                200,
+              );
             }}
             onClick={() => setFocused(true)}
             onKeyDown={(event) => {
@@ -118,7 +177,9 @@ export function StockSearchField({
                     ? Math.min(selectedIndex + 1, suggestions.length - 1)
                     : Math.max(selectedIndex - 1, -1);
                 setSelectedQuery(
-                  next < 0 ? null : { value, query: suggestions[next].query },
+                  next < 0
+                    ? null
+                    : { value: draftValue, query: suggestions[next].query },
                 );
               }
             }}
@@ -142,12 +203,12 @@ export function StockSearchField({
             className="block w-full min-w-0 appearance-none border-0 bg-transparent p-0 text-base leading-7 text-[#00283C] outline-none placeholder:text-[#627780] [&::-webkit-search-cancel-button]:appearance-none"
           />
         </div>
-        {value && (
+        {draftValue && (
           <button
             type="button"
             aria-label="Limpar busca"
             onClick={() => {
-              onChange("");
+              commitDraft("");
               setSelectedQuery(null);
               inputRef.current?.focus();
             }}

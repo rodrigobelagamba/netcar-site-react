@@ -104,7 +104,7 @@ for (const text of [
   "Primeiro emplacamento no Rio Grande do Sul",
   "Sem origem de locadora",
   "Sem passagem por leilão, sinistro, furto ou roubo",
-  "Na troca, esses limites não se aplicam.",
+  "Na troca, os limites de ano e quilometragem não se aplicam.",
   "calculamos a quitação dentro da negociação.",
 ]) {
   if (!purchaseReact.includes(text) || !crawlerHome.includes(text)) {
@@ -381,8 +381,11 @@ function validateRegionalExperience(html, city, variant, label) {
       "Sem origem de locadora",
       "Sem passagem por leilão, sinistro, furto ou roubo",
       "Vai usar o carro na troca?",
-      "Esses limites não se aplicam",
-      "conforme vistoria e documentação",
+      "Os limites de ano e quilometragem não se aplicam",
+      "qualquer carro do estoque",
+      "Avaliamos seu usado",
+      "inclusive com possibilidade de troco",
+      "O recebimento depende do modelo, do estado, da documentação e do interesse da loja",
     ]) {
       if (!evaluation.includes(criterion)) {
         errors.push(

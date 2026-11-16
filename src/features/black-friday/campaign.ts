@@ -31,6 +31,14 @@ export function parseBlackFridayConfig(value: unknown): BlackFridayCampaignConfi
   };
 }
 
+/** The PHP entry point reads the same public flag before React starts. */
+export function getBootstrappedBlackFridayConfig(): BlackFridayCampaignConfig | null {
+  if (typeof window === "undefined") return null;
+  return parseBlackFridayConfig(
+    (window as Window & { __NETCAR_BLACK_FRIDAY__?: unknown }).__NETCAR_BLACK_FRIDAY__,
+  );
+}
+
 export function isBlackFridayActive(
   config: BlackFridayCampaignConfig | null,
   now = Date.now(),
