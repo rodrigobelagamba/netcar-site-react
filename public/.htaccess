@@ -25,6 +25,9 @@ RedirectMatch 404 ^/api/?$
   
   # CSS
   AddType text/css css
+
+  # A hospedagem não reconhece WebP na tabela MIME padrão.
+  AddType image/webp .webp
 </IfModule>
 
 # Configurações de cache para assets estáticos
