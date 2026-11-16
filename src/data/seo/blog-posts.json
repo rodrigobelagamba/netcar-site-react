@@ -53,7 +53,7 @@
   {
     "slug": "como-financiar-carro-usado-rs",
     "title": "Como financiar carro usado no RS: documentos e entrada",
-    "description": "Documentos, entrada mínima de 20% e saldo em até 60 vezes para financiar seminovo no RS. A aprovação depende da análise de crédito.",
+    "description": "Veja os documentos para financiar um carro usado no RS. Consulte entrada, parcelas em até 60x e a avaliação do seu usado na troca, sujeitos à análise.",
     "publishedAt": "2026-06-08",
     "readMinutes": 5,
     "sections": [
@@ -75,11 +75,11 @@
       },
       {
         "type": "h2",
-        "text": "Entrada mínima de 20%"
+        "text": "Como definir a entrada"
       },
       {
         "type": "p",
-        "text": "Na Netcar o preço inteiro não é financiado. Toda proposta parte da entrada mínima. A entrada mínima é 20% do preço do seminovo. Na prática, muita proposta fica entre 20% e 30%, conforme o perfil e a instituição. Esse percentual é o piso da loja, não uma promessa de que toda ficha será aprovada nesse desenho."
+        "text": "A entrada depende do carro escolhido e das condições aprovadas pelo banco. Informe quanto pretende dar de entrada e se vai usar um carro na troca. Com esses dados, a equipe consulta as financeiras e apresenta as opções para você comparar."
       },
       {
         "type": "p",
@@ -108,11 +108,11 @@
       },
       {
         "type": "p",
-        "text": "Cada simulação passa pelos bancos e financeiras parceiras. A Netcar não tem linha própria para nome restrito e não garante aprovação. Dado errado de renda ou de endereço volta como recusa ou como condição pior. Use o número real. Se sair mais de uma proposta, escolha pelo custo total, não só pela parcela menor."
+        "text": "A aprovação e as condições do financiamento são definidas pelos bancos e financeiras parceiras. Envie os dados atualizados para a simulação e compare entrada, parcelas e custo total das propostas recebidas."
       },
       {
         "type": "p",
-        "text": "Uma recusa numa instituição não fecha as outras. Também não vira, sozinha, um motivo para baixar a entrada abaixo de 20%. Se nenhuma parceira aprovar, o caminho é rever entrada, prazo ou o carro, e simular de novo. Não existe atalho verbal no balcão."
+        "text": "Se a proposta não for aprovada, a equipe pode consultar outras instituições ou simular outra combinação de entrada, prazo e veículo. Cada proposta passa por uma nova análise."
       },
       {
         "type": "h2",
@@ -133,7 +133,7 @@
     ],
     "ctaLabel": "Simular financiamento",
     "ctaHref": "/financiamento",
-    "updatedAt": "2026-10-31"
+    "updatedAt": "2026-11-16"
   },
   {
     "slug": "o-que-verificar-antes-de-comprar-seminovo",
@@ -264,7 +264,7 @@
       },
       {
         "type": "p",
-        "text": "Se precisar financiar, a entrada mínima é 20% e a proposta depende da análise de crédito. Dá para adiantar documentos pelo WhatsApp. A assinatura e a escolha do banco acontecem com o retorno da financeira, não no primeiro oi."
+        "text": "Se precisar financiar, consulte as condições para o carro escolhido. Você pode adiantar a simulação pelo WhatsApp; entrada, taxa e prazo dependem da análise dos bancos e financeiras parceiras."
       },
       {
         "type": "p",
@@ -285,94 +285,93 @@
     ],
     "ctaLabel": "Falar com a Netcar",
     "ctaHref": "/contato",
-    "updatedAt": "2026-10-31"
+    "updatedAt": "2026-11-16"
   },
   {
     "slug": "trocar-carro-financiado",
     "title": "Como trocar carro financiado: passo a passo",
-    "description": "Troca com parcela em aberto: a avaliação menos a quitação vira entrada do seminovo. Veja a ordem da conta e os papéis da vistoria.",
+    "description": "Quer trocar um carro ainda financiado? Veja como entram a avaliação, a quitação e o troco na negociação. Escolha qualquer carro do estoque Netcar.",
     "publishedAt": "2026-06-01",
     "readMinutes": 5,
     "sections": [
       {
         "type": "p",
-        "text": "Trocar um carro que ainda tem parcelas é uma conta de três linhas: quanto a loja avalia o usado, quanto falta quitar no banco e quanto custa o seminovo seguinte. O saldo devedor não impede a troca. Ele entra na operação. O que sobra depois da quitação é o que abate o preço do próximo carro."
+        "text": "Avaliamos seu usado, inclusive financiado, na troca por qualquer carro do estoque da Netcar. A negociação considera o modelo, o estado, a documentação e o interesse da loja. Se escolher um carro de menor valor, consulte também a possibilidade de troco."
       },
       {
         "type": "h2",
-        "text": "A ordem que evita proposta furada"
+        "text": "Como funciona a troca de um carro financiado"
       },
       {
         "type": "ol",
         "items": [
-          "Escolha um ou dois seminovos no estoque, com preço visível",
-          "Informe modelo, ano, quilometragem e o saldo que o banco cobra para quitar",
-          "Traga o usado para a vistoria. Foto não fecha o valor",
-          "Some avaliação menos quitação. Esse resultado é a sua entrada real",
-          "Se faltar diferença para os 20% mínimos, ela entra em dinheiro ou no cartão, sujeita a análise"
+          "Escolha o carro que quer no estoque da Netcar.",
+          "Envie modelo, ano, quilometragem, fotos e o saldo para quitação do seu usado.",
+          "Combine a vistoria presencial e a conferência dos documentos.",
+          "Receba a proposta com o valor do usado, a quitação e a diferença a pagar ou receber."
         ]
       },
       {
+        "type": "h2",
+        "text": "Quanto do meu carro entra na troca?"
+      },
+      {
         "type": "p",
-        "text": "Pular a escolha do próximo carro e pedir só o valor do usado gera um número solto. A troca existe para ligar os dois lados. Sem o seminovo de destino, ninguém sabe se a sobra cobre a entrada daquele preço."
+        "text": "O valor da avaliação é comparado ao saldo que falta quitar. Se o usado for avaliado acima desse saldo, a diferença entra na compra do próximo carro. Peça a proposta detalhada para conferir quanto será pago ao banco e quanto fica disponível para a troca."
+      },
+      {
+        "type": "p",
+        "text": "Se o saldo devedor superar a avaliação, será preciso acertar essa diferença na negociação. Informe o valor atualizado de quitação para a equipe analisar a operação antes da visita."
       },
       {
         "type": "h2",
-        "text": "Quitação não é desconto mágico"
+        "text": "Posso escolher um carro mais barato e receber troco?"
       },
       {
         "type": "p",
-        "text": "O banco do financiamento atual precisa receber o saldo. A loja organiza esse pagamento dentro da negociação, com o extrato de quitação. Você não dirige o seminovo novo enquanto o gravame do antigo segue no seu nome sem acerto. Peça para ver, por escrito, quanto vai ao banco e quanto fica como entrada."
-      },
-      {
-        "type": "p",
-        "text": "Se a avaliação for menor que o saldo, a troca ainda pode existir, mas a diferença negativa soma ao que você precisa completar. Nesse caso o usado não gera entrada. Ele gera uma conta a mais. Vale saber isso antes de se apegar a um anúncio acima do que a sobra permite."
+        "text": "Existe essa possibilidade. Se o valor líquido do usado aprovado na avaliação, após eventual quitação, superar o valor do carro escolhido, a diferença pode ser paga a você. A equipe confirma a proposta após avaliar o modelo, o estado e a documentação."
       },
       {
         "type": "h2",
-        "text": "A análise do crédito novo é outra ficha"
+        "text": "A troca tem limite de ano ou quilometragem?"
       },
       {
         "type": "p",
-        "text": "Quitar o contrato velho não aprova, sozinho, o financiamento do seminovo. A instituição parceira olha a proposta nova: entrada, prazo e cadastro. A entrada mínima continua 20% do seminovo. Prazo do saldo pode chegar a 60 meses. Aprovação não é garantida, e não há linha da loja para nome restrito."
-      },
-      {
-        "type": "p",
-        "text": "Compare as condições com a mesma entrada e o mesmo prazo. Uma parcela menor em 60 meses pode custar mais no total do que uma parcela maior em menos tempo. O consultor mostra as propostas que voltaram. A escolha é sua, com o custo total na mesa."
+        "text": "Não aplicamos à troca os limites de ano e quilometragem usados na compra direta. Avaliamos seu usado na negociação de qualquer carro do estoque. O recebimento depende do modelo, do estado, da documentação e do interesse da loja."
       },
       {
         "type": "h2",
-        "text": "Papéis que destravam o dia"
+        "text": "E se eu precisar financiar a diferença?"
+      },
+      {
+        "type": "p",
+        "text": "A equipe consulta bancos e financeiras parceiras para o carro escolhido. Entrada, taxa, prazo e aprovação dependem da análise de crédito. É possível consultar parcelas em até 60x e entrada no cartão, conforme as condições disponíveis."
+      },
+      {
+        "type": "h2",
+        "text": "O que levar para a avaliação"
       },
       {
         "type": "ul",
         "items": [
-          "Extrato com o valor de quitação e a validade dessa cotação",
-          "Documento do carro e suas chaves, inclusive a reserva se existir",
-          "RG, CPF e comprovante de residência de quem vai financiar o seminovo",
-          "Comprovante de renda no formato que a financeira pedir"
+          "Documento do veículo e informações do financiamento.",
+          "Valor atualizado para quitação, informado pelo banco.",
+          "Documento de identificação do proprietário.",
+          "Chaves, manual e registros de manutenção que você tiver."
         ]
       },
       {
-        "type": "p",
-        "text": "Manual, revisões e um histórico claro de funilaria ajudam a vistoria a não chutar estado. Nada disso substitui ver o carro na Avenida Presidente Vargas, em Esteio. A Netcar compra e recebe troca de usados nacionais, com até 7 anos, origem no RS e sem passagem por leilão. Fora dessa regra, a troca pode não ser aceita."
-      },
-      {
         "type": "h2",
-        "text": "Quando a troca não é o melhor desenho"
+        "text": "Quer apenas vender, sem comprar outro carro?"
       },
       {
         "type": "p",
-        "text": "Se você não quer outro carro agora, o caminho é vender o financiado e receber a diferença, não usar a sobra como entrada. São operações vizinhas, com papéis diferentes. Nesta página o destino é um seminovo. Se a sobra da avaliação, depois da quitação, não chega perto da entrada do carro que você escolheu, troque o anúncio de destino ou aumente o que vem em dinheiro. Não estique o prazo para esconder um carro fora da conta."
-      },
-      {
-        "type": "p",
-        "text": "Se a conta fechar, o consultor separa o que quita o contrato antigo do que segue como entrada do seminovo e do que ainda depende de crédito novo. Peça para ler essas linhas em voz alta antes de assinar. Troca boa é aquela em que você consegue repetir os números sem olhar o papel do vendedor."
+        "text": "Na compra direta, sem escolher outro carro, trabalhamos com veículos de até 6 anos de uso, até 80.000 km, primeiro emplacamento no RS e sem origem de locadora ou passagem por leilão, sinistro, furto ou roubo. Os limites de ano e quilometragem da compra direta não se aplicam à troca. Informe qual opção você prefere ao pedir a avaliação."
       }
     ],
     "ctaLabel": "Avaliar meu carro na troca",
     "ctaHref": "/compra",
-    "updatedAt": "2026-10-31"
+    "updatedAt": "2026-11-16"
   },
   {
     "slug": "fabrica-de-valor-netcar",
@@ -477,7 +476,7 @@
       },
       {
         "type": "p",
-        "text": "A casa compra usados nacionais com até 7 anos, de origem no Rio Grande do Sul e sem passagem por leilão. Carro de outra praça, importado fora dessa regra ou com histórico de leilão pode ficar de fora. Pergunte isso na primeira mensagem, antes de cruzar a freeway à toa."
+        "text": "Na compra direta, sem escolher outro carro, trabalhamos com veículos de até 6 anos de uso, até 80.000 km, primeiro emplacamento no RS e sem origem de locadora ou passagem por leilão, sinistro, furto ou roubo. Se a ideia for trocar, você pode escolher qualquer carro do estoque. O usado será avaliado na negociação, sem os limites de ano e km da compra direta."
       },
       {
         "type": "h2",
@@ -531,7 +530,7 @@
     ],
     "ctaLabel": "Avaliar meu carro",
     "ctaHref": "/compra",
-    "updatedAt": "2026-10-31"
+    "updatedAt": "2026-11-16"
   },
   {
     "slug": "vender-carro-financiado-como-funciona",
@@ -592,7 +591,7 @@
       },
       {
         "type": "p",
-        "text": "A Netcar avalia usados nacionais com até 7 anos, origem no RS e sem passagem por leilão. A vistoria é em Esteio, na Avenida Presidente Vargas. Fotos servem para saber se vale o deslocamento. Elas não geram crédito na conta. O iAN ou um consultor recebe os dados no WhatsApp e marca a visão do carro."
+        "text": "Na compra direta, sem escolher outro carro, trabalhamos com veículos de até 6 anos de uso, até 80.000 km, primeiro emplacamento no RS e sem origem de locadora ou passagem por leilão, sinistro, furto ou roubo. Envie os dados e fotos pelo WhatsApp para combinar a vistoria nas lojas de Esteio. Se houver financiamento, informe também o saldo para quitação."
       },
       {
         "type": "p",
@@ -613,7 +612,7 @@
     ],
     "ctaLabel": "Compramos seu usado",
     "ctaHref": "/compramos-seu-usado",
-    "updatedAt": "2026-10-31"
+    "updatedAt": "2026-11-16"
   },
   {
     "slug": "quanto-vale-meu-carro-usado",
@@ -686,7 +685,7 @@
       },
       {
         "type": "p",
-        "text": "Mande versão, ano, quilometragem e as fotos pelo WhatsApp. A Netcar olha usados nacionais de até 7 anos, com origem no RS e sem passagem por leilão. Se o carro estiver dentro disso, marque a vistoria na Presidente Vargas, 740 ou 1106. Leve documento e chave. Saia com uma proposta ligada àquele dia e àquele estado, não com uma faixa eterna. Preço de seminovo na vitrine muda quando entra e sai carro. O do seu usado também."
+        "text": "Envie versão, ano, quilometragem e fotos pelo WhatsApp e diga se quer vender ou trocar. Na compra direta, sem escolher outro carro, trabalhamos com veículos de até 6 anos de uso, até 80.000 km, primeiro emplacamento no RS e sem origem de locadora ou passagem por leilão, sinistro, furto ou roubo. Na troca, avaliamos seu usado por qualquer carro do estoque, inclusive com possibilidade de troco. Os limites de ano e quilometragem da compra direta não se aplicam. A proposta final considera o modelo, o estado, a documentação e o interesse da loja."
       },
       {
         "type": "p",
@@ -695,7 +694,7 @@
     ],
     "ctaLabel": "Pedir avaliação",
     "ctaHref": "/vender-meu-carro",
-    "updatedAt": "2026-10-31"
+    "updatedAt": "2026-11-16"
   },
   {
     "slug": "comprar-seminovo-distancia-grande-porto-alegre",
@@ -1315,13 +1314,14 @@
       },
       {
         "type": "p",
-        "text": "Financiamento de seminovo pode ir a 60 meses, com entrada mínima de 20%. Entrada no cartão e o restante da condição passam por análise de crédito. Não há aprovação prometida. Alongar o prazo reduz a parcela e aumenta o total pago. O teste útil é outro: sobra dinheiro para combustível, seguro e um pneu no mesmo mês?"
+        "text": "O financiamento pode chegar a 60 meses, conforme a análise de crédito. Consulte também a entrada parcelada no cartão. Compare o valor total das propostas e reserve parte do orçamento para combustível, seguro e manutenção."
       },
       {
         "type": "p",
         "text": "Faça essa conta e só então olhe o estoque. O carro certo é o que o mês inteiro aguenta, não o que a simulação isolada deixa bonito."
       }
-    ]
+    ],
+    "updatedAt": "2026-11-16"
   },
   {
     "slug": "carro-para-aplicativo-grande-poa",

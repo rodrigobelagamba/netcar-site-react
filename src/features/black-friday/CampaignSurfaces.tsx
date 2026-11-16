@@ -63,7 +63,7 @@ export function BlackFridayHomeHero({ onViewStock }: { onViewStock: () => void }
       <div className="bf-home-inner">
         <div className="bf-home-copy">
           <p className="bf-eyebrow"><span /> Só até 30 de novembro de 2026</p>
-          <h1 id="bf-home-title"><img className="bf-title-image" src={`${MEDIA}/title.png`} width="529" height="150" alt="Black Friday Netcar" fetchPriority="high" /></h1>
+          <h1 id="bf-home-title"><img className="bf-title-image" src={`${MEDIA}/title-v2.webp`} width="529" height="150" alt="Black Friday Netcar" fetchPriority="high" /></h1>
           <h2 className="bf-home-headline">Condições especiais para<br className="bf-desktop-break" /> acelerar sua escolha.</h2>
           <p className="bf-home-lead">Seu próximo carro com <strong>quatro benefícios juntos.</strong><br />Em todo o estoque. Por tempo limitado.</p>
           <CampaignBenefits />
@@ -76,7 +76,7 @@ export function BlackFridayHomeHero({ onViewStock }: { onViewStock: () => void }
         <div className="bf-home-film">
           <div className="bf-film-label"><span>É hora de atualizar a garagem.</span><span>▶ 19 s</span></div>
           <div className="bf-video-frame">
-            <video controls playsInline preload="none" poster={`${MEDIA}/poster.jpg`} width="720" height="1280"
+            <video controls playsInline preload="none" poster={`${MEDIA}/poster-v2.webp`} width="720" height="1280"
               aria-label="Vídeo da campanha Black Friday Netcar com os quatro benefícios" onError={() => setVideoError(true)}>
               <source src={`${MEDIA}/black-friday-netcar-2026.mp4`} type="video/mp4" />
               <track kind="captions" src={`${MEDIA}/black-friday-pt-BR.vtt`} srcLang="pt-BR" label="Português" />
@@ -86,7 +86,7 @@ export function BlackFridayHomeHero({ onViewStock }: { onViewStock: () => void }
           <p className="bf-video-caption">{videoError ? <a href={`${MEDIA}/black-friday-netcar-2026.mp4`}>Abrir o vídeo da campanha</a> : "Dê o play e conheça a campanha."}</p>
         </div>
       </div>
-      <img className="bf-hero-ribbon" src={`${MEDIA}/ribbon-turquoise.png`} alt="" width="1080" height="410" aria-hidden="true" />
+      <img className="bf-hero-ribbon" src={`${MEDIA}/ribbon-turquoise-v2.webp`} alt="" width="1080" height="410" aria-hidden="true" />
     </section>
   );
 }
@@ -99,7 +99,7 @@ export function BlackFridayStockIntro() {
     <section className="bf-stock-intro" aria-labelledby="bf-stock-title" data-black-friday-surface="stock">
       <div className="bf-wide-inner">
         <div className="bf-stock-campaign-heading">
-          <h2 id="bf-stock-title"><img src={`${MEDIA}/title.png`} width="529" height="150" alt="Black Friday Netcar" /></h2>
+          <h2 id="bf-stock-title"><img src={`${MEDIA}/title-v2.webp`} width="529" height="150" alt="Black Friday Netcar" /></h2>
           <div className="bf-stock-campaign-promise"><strong>Escolha seu carro.<br />Leve os quatro benefícios.</strong><span>Juntos, em todo o estoque.</span></div>
           <div className="bf-stock-campaign-deadline"><span>É só até</span><strong>30/11</strong><span>Por tempo limitado</span></div>
         </div>

@@ -18,11 +18,11 @@
     "sections": [
       {
         "type": "h2",
-        "text": "Entrada mínima de 20%"
+        "text": "Entrada conforme a sua negociação"
       },
       {
         "type": "p",
-        "text": "Não há financiamento 100% nem carro sem entrada. A entrada mínima é de 20% do valor do veículo (em geral entre 20% e 30%). Quanto maior a entrada, menores os juros totais. O valor do seu usado na troca pode compor parte dessa entrada, sempre sujeito à análise de crédito."
+        "text": "Informe o carro que você quer e o valor que pretende dar de entrada. A equipe consulta bancos e financeiras parceiras e apresenta as condições aprovadas. Seu usado também pode entrar nessa negociação."
       },
       {
         "type": "h2",
@@ -42,11 +42,11 @@
       },
       {
         "type": "h2",
-        "text": "Aceitamos seu usado na troca"
+        "text": "Avaliamos seu usado para troca"
       },
       {
         "type": "p",
-        "text": "Tem carro para dar na troca? O valor entra como parte da entrada e pode abater o desembolso inicial, mantendo a regra de entrada mínima de 20% no financiamento. Aceitamos inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo."
+        "text": "Avaliamos seu usado na troca por qualquer carro do estoque, inclusive com possibilidade de troco. A negociação depende do modelo, do estado, da documentação e do interesse da loja. Se houver financiamento em aberto, conferimos o saldo para quitação."
       },
       {
         "type": "h2",
@@ -67,7 +67,7 @@
       },
       {
         "type": "p",
-        "text": "Autônomos podem comprovar renda por extrato bancário e demais documentos pedidos pela financeira. Cada caso passa por análise de crédito das instituições parceiras — a Netcar não oferece linha específica para negativados nem aprovação sem análise."
+        "text": "Autônomos podem apresentar extratos bancários e os demais documentos solicitados pela financeira. A equipe orienta o envio para a análise de crédito."
       },
       {
         "type": "h2",
@@ -81,15 +81,15 @@
     "faq": [
       {
         "q": "Qual a entrada mínima para financiar?",
-        "a": "Mínimo de 20% do valor do veículo (em geral 20% a 30%). Não trabalhamos com financiamento 100% nem sem entrada. O percentual exato depende do perfil de crédito e do banco; o valor do usado na troca pode compor parte dessa entrada."
+        "a": "A entrada depende do veículo, da proposta e da análise do banco. Informe quanto pretende dar de entrada e se vai usar um carro na troca para receber as condições disponíveis."
       },
       {
         "q": "A entrada pode ser parcelada no cartão?",
         "a": "Sim, a entrada pode ser parcelada no cartão de crédito, conforme disponibilidade e análise. Simule pelo WhatsApp para confirmar as condições do seu caso."
       },
       {
-        "q": "Vocês financiam para negativado ou nome restrito?",
-        "a": "Não. Não temos linha de crédito específica para negativados. Toda simulação depende de análise de crédito das financeiras parceiras — sem garantia de aprovação."
+        "q": "Quem aprova o financiamento?",
+        "a": "A aprovação é feita pelos bancos e financeiras parceiras após análise de crédito. A Netcar encaminha a simulação e apresenta as condições recebidas."
       },
       {
         "q": "Em quantas vezes posso financiar?",
@@ -101,7 +101,7 @@
       },
       {
         "q": "Posso usar meu carro como entrada?",
-        "a": "Sim. Avaliamos seu usado e o valor entra na negociação, inclusive se ainda estiver financiado, mediante quitação do saldo. A entrada mínima de 20% no financiamento continua valendo."
+        "a": "Avaliamos seu usado na troca por qualquer carro do estoque, inclusive financiado e com possibilidade de troco. O recebimento depende do modelo, do estado, da documentação e do interesse da loja; eventual financiamento passa por análise de crédito."
       }
     ]
   },
@@ -245,7 +245,7 @@
       },
       {
         "type": "p",
-        "text": "Não é motorista de app nem taxista? Ou o carro que você quer não entra no Move Brasil? A Netcar continua oferecendo simulação de financiamento tradicional com entrada mínima de 20% e comparação entre bancos parceiros — veja a página de financiamento ou fale no WhatsApp."
+        "text": "Não é motorista de app nem taxista? Ou o carro que você quer não entra no Move Brasil? A Netcar continua oferecendo simulação de financiamento tradicional com comparação entre bancos parceiros, conforme análise de crédito — veja a página de financiamento ou fale no WhatsApp."
       }
     ],
     "faq": [
@@ -334,7 +334,7 @@
       },
       {
         "type": "p",
-        "text": "Comparamos condições entre bancos e financeiras parceiras, com entrada mínima de 20% e possibilidade de parcelar a entrada no cartão, sujeito a análise de crédito. Seu usado pode compor a entrada — inclusive carro com financiamento em aberto, mediante avaliação e quitação do saldo."
+        "text": "Consulte as condições dos bancos e financeiras parceiras e a entrada parcelada no cartão, conforme análise de crédito. Avaliamos seu usado na troca por qualquer carro do estoque, inclusive financiado e com possibilidade de troco. A proposta considera o modelo, o estado e a documentação."
       },
       {
         "type": "h2",
@@ -360,7 +360,7 @@
       },
       {
         "q": "Consigo financiar um automático dando meu carro na troca?",
-        "a": "Sim. Avaliamos seu usado e o valor entra como parte da entrada, respeitando a entrada mínima de 20% do financiamento e sujeito à análise de crédito."
+        "a": "Avaliamos seu usado na troca por qualquer carro do estoque, inclusive financiado e com possibilidade de troco. O recebimento depende do modelo, do estado, da documentação e do interesse da loja; eventual financiamento passa por análise de crédito."
       },
       {
         "q": "Vocês vendem para quem mora em outra cidade?",
@@ -515,7 +515,7 @@
         "items": [
           "Se o texto responde a dúvida logo no começo, sem enrolação",
           "Se cada dado sobre veículo confere com o estoque no momento da publicação",
-          "Se não há promessa de crédito: não trabalhamos com financiamento 100%, sem entrada ou aprovação garantida, e toda condição depende de análise",
+          "Se entrada, taxa e prazo estão sujeitos à análise de crédito, sem promessa de aprovação",
           "Se nenhuma marca ou modelo é detratado — comparamos usos e perfis, não destruímos produto",
           "Se não há depoimento, nota, prazo ou número inventado para preencher espaço"
         ]

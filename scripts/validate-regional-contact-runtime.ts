@@ -240,7 +240,7 @@ for (const fixture of cases) {
     );
     if (intent === "trade_in")
       assert.ok(
-        text(form).includes("histórico da compra direta não se aplicam"),
+        text(form).includes("limites de ano e quilometragem da compra direta não se"),
       );
 
     for (const [name, value] of [

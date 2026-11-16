@@ -277,7 +277,7 @@ export function marcaLanding(name, count, profile, variantIndex) {
       ...(guide?.faq || []),
       {
         q: `Posso dar meu carro na troca por um ${nice}?`,
-        a: "Sim. Envie os dados e as fotos do seu usado para iniciar a avaliação. Se houver financiamento em aberto, a equipe também analisa o saldo de quitação na negociação.",
+        a: "Avaliamos seu usado na troca por qualquer carro do estoque, inclusive com possibilidade de troco. A proposta considera o modelo, o estado, a documentação e o interesse da loja. Se houver financiamento, informe o saldo para quitação.",
       },
     ],
   };
@@ -419,7 +419,7 @@ export function modelLanding(config, vehicles) {
       },
       {
         q: `A Netcar aceita meu carro na troca por um ${config.name}?`,
-        a: `Sim. A avaliação considera estado, documentos e mercado. Veículo com financiamento em aberto também pode ser analisado, com quitação do saldo na negociação.`,
+        a: `Avaliamos seu usado na troca por qualquer carro do estoque, inclusive com possibilidade de troco. O recebimento depende do modelo, do estado, da documentação e do interesse da loja. Se houver financiamento, informe o saldo para quitação.`,
       },
     ],
   };

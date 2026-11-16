@@ -14,7 +14,7 @@ const benefits = [
   {
     icon: RefreshCw,
     title: "Seu usado na troca",
-    desc: "Inclusive com parcelas em aberto.",
+    desc: "Avaliamos seu usado na troca, inclusive com possibilidade de troco.",
   },
   {
     icon: FileCheck,

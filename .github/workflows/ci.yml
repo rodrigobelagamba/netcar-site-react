@@ -34,6 +34,10 @@ jobs:
           php -l public/home-hero.php
           php -l public/seo/helpers.php
           node --test scripts/tests/home-hero-selection.test.mjs
+      - name: Validate campaign bootstrap, expiry and rollback
+        run: |
+          node --test scripts/tests/black-friday-bootstrap.test.mjs
+          NODE_ENV=test node --import tsx --test scripts/tests/black-friday-campaign.test.ts scripts/tests/black-friday-surfaces.test.tsx
       - name: Validate brand and model landing PHP
         run: |
           php -l public/seo/landing-stock.php

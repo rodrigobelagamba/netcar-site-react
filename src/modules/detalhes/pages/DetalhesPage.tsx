@@ -477,6 +477,12 @@ function ContactButton({
           </Link>
         )}
       </div>
+      {tradeHref && (
+        <p className="text-center text-xs leading-relaxed text-[#365565]">
+          Avaliamos seu usado na troca por qualquer carro do estoque, inclusive
+          com possibilidade de troco.
+        </p>
+      )}
     </div>
   );
 }

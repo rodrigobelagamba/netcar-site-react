@@ -29,7 +29,7 @@ if ($route === '/compra') {
         'Primeiro emplacamento no Rio Grande do Sul',
         'Sem origem de locadora',
         'Sem passagem por leilão, sinistro, furto ou roubo',
-        'Na troca, esses limites não se aplicam.',
+        'Na troca, os limites de ano e quilometragem não se aplicam.',
         'conforme vistoria e documentação.',
     ] as $text) {
         check_content(strpos($html, $text) !== false, 'Conteúdo ausente: ' . $text);

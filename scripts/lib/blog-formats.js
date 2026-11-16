@@ -114,13 +114,13 @@ function maybeFinanceBlock(slug, hashStr, allowed) {
     H2("O que levar para a simulação"),
     P(lead),
     UL([
-      "Entrada mínima de 20% (em geral 20% a 30%) — sem financiamento 100%",
+      "Entrada conforme o veículo escolhido e a análise de crédito",
       "Entrada parcelável no cartão de crédito, conforme análise",
       "Parcelas do saldo em 24x, 36x, 48x ou 60x",
       "Usado na troca como parte da entrada",
     ]),
     P(
-      "Tudo mediante análise de crédito. Sem linha específica para negativados e sem aprovação garantida.",
+      "Taxa, entrada, prazo e aprovação dependem da análise dos bancos e financeiras parceiras.",
     ),
   ];
 }
@@ -398,11 +398,11 @@ function formatFaq(ctx) {
       ),
       H2("Vale financiar ou pagar à vista?"),
       P(
-        "Compare o valor à vista com o custo total das condições de financiamento aprovadas. A entrada mínima é de 20% e pode ser parcelada no cartão, conforme disponibilidade e análise.",
+        "Compare o valor à vista com o custo total das condições de financiamento aprovadas. Consulte também a entrada parcelada no cartão, conforme disponibilidade e análise.",
       ),
       H2("Posso dar meu carro na troca?"),
       P(
-        "Sim — inclusive financiado. Avaliamos seu usado e o valor entra na negociação do seminovo escolhido.",
+        "Avaliamos seu usado na troca por qualquer carro do estoque, inclusive financiado e com possibilidade de troco. A proposta depende do modelo, do estado, da documentação e do interesse da loja.",
       ),
       H2("Como sei se ainda está disponível?"),
       P(

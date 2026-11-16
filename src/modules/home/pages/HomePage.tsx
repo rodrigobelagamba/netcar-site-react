@@ -95,7 +95,7 @@ function readInitialHomeLcpImage(): InitialHomeLcpImage | null {
   if (typeof document === "undefined") return null;
 
   const preload = document.querySelector<HTMLLinkElement>(
-    'link[rel="preload"][as="image"][fetchpriority="high"]',
+    'link[data-netcar-home-lcp][rel="preload"][as="image"][fetchpriority="high"]',
   );
   if (!preload?.href) return null;
 

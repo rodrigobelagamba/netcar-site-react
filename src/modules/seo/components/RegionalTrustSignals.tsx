@@ -46,7 +46,7 @@ export function RegionalTrustSignals({
     {
       key: "trade",
       icon: ArrowLeftRight,
-      title: "Aceitamos seu usado na troca",
+      title: "Avaliamos seu usado para troca",
       text: "Envie os dados do seu carro e combine a vistoria em Esteio. Veículos financiados também podem ser avaliados.",
       href: "/compra",
       linkLabel: "Avaliar usado",

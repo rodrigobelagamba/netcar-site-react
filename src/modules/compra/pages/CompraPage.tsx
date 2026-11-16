@@ -43,7 +43,7 @@ export function CompraPage() {
       : "Venda ou troque seu carro em Esteio",
     isCompramosAlias
       ? "Quer vender ou trocar seu carro? A Netcar avalia veículos financiados em Esteio/RS. A proposta depende da vistoria e dos documentos."
-      : "Venda ou troque seu carro na Netcar, em Esteio. Aceitamos veículos financiados, sujeitos à avaliação presencial e à análise dos documentos.",
+      : "Venda ou troque seu carro na Netcar, em Esteio. Avaliamos veículos financiados; a proposta considera o modelo, o estado e a documentação.",
   );
 
   const requirements = [
@@ -190,7 +190,8 @@ export function CompraPage() {
               O que a Netcar resolve na negociação
             </h2>
             <p className="text-muted-foreground">
-              Venda direta ou troca por um carro do estoque.
+              Avaliamos seu carro para compra direta ou troca por qualquer
+              veículo do estoque, inclusive com possibilidade de troco.
             </p>
           </div>
 
@@ -277,9 +278,10 @@ export function CompraPage() {
                 ))}
               </div>
               <p className="mt-6 rounded-xl border border-secondary/20 bg-secondary/10 p-4 text-sm leading-relaxed text-fg">
-                <strong>Na troca, esses limites não se aplicam.</strong> O seu
-                carro pode ser avaliado como parte da negociação, conforme
-                vistoria e documentação.
+                <strong>Na troca, os limites de ano e quilometragem não se aplicam.</strong>{" "}
+                Avaliamos seu usado por qualquer carro do estoque, inclusive com
+                possibilidade de troco. O recebimento depende do modelo, do
+                estado, da documentação e do interesse da loja.
               </p>
             </div>
 

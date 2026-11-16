@@ -1438,7 +1438,7 @@ for (const city of cities) {
           <li>Sem passagem por leilão, sinistro, furto ou roubo.</li>
         </ul>
         <p>Carro financiado pode ser avaliado; o saldo para quitação entra na negociação. Atender aos critérios permite iniciar a análise, mas não garante a compra.</p>
-        <p><strong>Vai usar o carro na troca?</strong> Esses limites não se aplicam. O veículo pode ser avaliado dentro da negociação, conforme vistoria e documentação.</p>
+        <p><strong>Vai usar o carro na troca?</strong> Os limites de ano e quilometragem não se aplicam. Avaliamos seu usado por qualquer carro do estoque, inclusive com possibilidade de troco. O recebimento depende do modelo, do estado, da documentação e do interesse da loja.</p>
         <p><a href="${cityWhatsAppLink(city.name, "sell")}" data-wa-source="form" data-wa-intent="sell_evaluation">Enviar dados no WhatsApp</a></p>
         <p>A proposta final depende da vistoria, dos documentos e do interesse da loja no veículo.</p>
       </section>

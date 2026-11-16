@@ -122,24 +122,80 @@ async function renderField(props, createNodeMock) {
   return renderer.root.findByType("input");
 }
 
-test("visible search is controlled by the current route value", async () => {
+async function waitForSearchCommit() {
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 240));
+  });
+}
+
+test("typing paints immediately and commits a rapid sequence only once", async () => {
   const changes = [];
   const onChange = (value) => changes.push(value);
   let input = await renderField({ value: "Jeep", onChange });
   assert.equal(input.props.value, "Jeep");
 
-  await act(async () => {
-    input.props.onChange({ target: { value: "Jeep 2024 Cinza" } });
-  });
+  for (const value of ["Jeep 2", "Jeep 2024", "Jeep 2024 Cinza"]) {
+    await act(async () => input.props.onChange({ target: { value } }));
+    assert.equal(input.props.value, value);
+  }
+  assert.deepEqual(changes, [], "Typing must not navigate on each keypress");
+  await waitForSearchCommit();
   assert.deepEqual(changes, ["Jeep 2024 Cinza"]);
 
   input = await renderField({ value: "Jeep 2024 Cinza", onChange });
   assert.equal(input.props.value, "Jeep 2024 Cinza");
 
-  // A history change must replace the displayed term, without local draft state.
+  // A history change must replace the displayed term.
   input = await renderField({ value: "T-Cross", onChange });
   assert.equal(input.props.value, "T-Cross");
   assert.deepEqual(changes, ["Jeep 2024 Cinza"]);
+});
+
+test("late route acknowledgement does not erase newer typing", async () => {
+  const changes = [];
+  const onChange = (value) => changes.push(value);
+  let input = await renderField({ value: "", onChange });
+  await act(async () => input.props.onChange({ target: { value: "Re" } }));
+  await waitForSearchCommit();
+  await act(async () => input.props.onChange({ target: { value: "Rene" } }));
+  input = await renderField({ value: "Re", onChange });
+  assert.equal(input.props.value, "Rene");
+  await waitForSearchCommit();
+  assert.deepEqual(changes, ["Re", "Rene"]);
+});
+
+test("history and applied filter changes cancel an unfinished search", async () => {
+  const changes = [];
+  const onChange = (value) => changes.push(value);
+  let input = await renderField({ value: "Jeep", onChange, resetKey: "SUV" });
+  await act(async () =>
+    input.props.onChange({ target: { value: "Jeep 2024" } }),
+  );
+  input = await renderField({ value: "T-Cross", onChange, resetKey: "SUV" });
+  assert.equal(input.props.value, "T-Cross");
+  await waitForSearchCommit();
+  assert.deepEqual(changes, []);
+
+  await act(async () =>
+    input.props.onChange({ target: { value: "T-Cross 2023" } }),
+  );
+  input = await renderField({ value: "T-Cross", onChange, resetKey: "" });
+  assert.equal(input.props.value, "T-Cross");
+  await waitForSearchCommit();
+  assert.deepEqual(changes, []);
+});
+
+test("leaving the page cancels a pending route update", async () => {
+  const changes = [];
+  const input = await renderField({
+    value: "",
+    onChange: (value) => changes.push(value),
+  });
+  await act(async () => input.props.onChange({ target: { value: "Onix" } }));
+  await act(async () => renderer.unmount());
+  renderer = undefined;
+  await waitForSearchCommit();
+  assert.deepEqual(changes, []);
 });
 
 test("clearing search emits an empty term and returns focus to the input", async () => {
@@ -156,20 +212,36 @@ test("clearing search emits an empty term and returns focus to the input", async
   assert.ok(clear, "Search must provide an accessible clear button");
   assert.equal(clear.props.type, "button", "Clearing must not submit the form");
   const previousFocusCalls = focusCalls;
+  await act(async () =>
+    renderer.root.findByType("input").props.onChange({
+      target: { value: "Renegade" },
+    }),
+  );
   await act(async () => clear.props.onClick());
   assert.deepEqual(changes, [""]);
   assert.equal(focusCalls, previousFocusCalls + 1);
+  await waitForSearchCommit();
+  assert.deepEqual(
+    changes,
+    [""],
+    "An earlier draft must not restore the cleared search",
+  );
 
   const input = await renderField({ value: "", onChange: () => {} });
   assert.equal(input.props.value, "");
 });
 
-test("submitting visible search prevents a page reload and retains the term", async () => {
+test("Enter commits unfinished typing immediately without reloading or duplicate updates", async () => {
   const changes = [];
   await renderField({
     value: "Jeep 2024",
     onChange: (value) => changes.push(value),
   });
+  await act(async () =>
+    renderer.root.findByType("input").props.onChange({
+      target: { value: "Jeep 2024 Cinza" },
+    }),
+  );
   const form = renderer.root.findByType("form");
   let prevented = false;
   await act(async () => {
@@ -180,8 +252,13 @@ test("submitting visible search prevents a page reload and retains the term", as
     });
   });
   assert.equal(prevented, true, "Enter must not reload the page");
-  assert.equal(renderer.root.findByType("input").props.value, "Jeep 2024");
-  assert.ok(!changes.includes(""), "Submitting must not clear the search");
+  assert.equal(
+    renderer.root.findByType("input").props.value,
+    "Jeep 2024 Cinza",
+  );
+  assert.deepEqual(changes, ["Jeep 2024 Cinza"]);
+  await waitForSearchCommit();
+  assert.deepEqual(changes, ["Jeep 2024 Cinza"]);
 });
 
 function nodeText(node) {
@@ -285,7 +362,7 @@ test("editing clears the highlighted choice before the next Enter", async () => 
   await act(async () =>
     input.props.onChange({ target: { value: "50 mil km" } }),
   );
-  input = await renderField({ value: "50 mil km", onChange });
+  input = renderer.root.findByType("input");
   assert.equal(input.props["aria-activedescendant"], undefined);
   await act(async () =>
     renderer.root.findByType("form").props.onSubmit({ preventDefault() {} }),
