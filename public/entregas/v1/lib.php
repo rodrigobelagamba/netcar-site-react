@@ -2,6 +2,7 @@
 /** Shared delivery feed and publishing primitives. No network requests. */
 
 class EntregasPublishConflict extends RuntimeException {}
+class EntregasDeliveryNotFound extends RuntimeException {}
 
 function entregas_public_root()
 {
@@ -489,7 +490,7 @@ function entregas_publish($metadata, $imagePath, $imageSize)
         $images = $filesExist ? array_intersect_key($previous, array_flip(array('imageUrl', 'previewImageUrl', 'previewSrcSet')))
             : entregas_optimize_image($imagePath, $info, $fields['id'], $hash);
         $delivery = array_merge($fields, $images, array(
-            'name' => '',
+            'name' => $previous && isset($previous['name']) && is_string($previous['name']) ? $previous['name'] : '',
             'caption' => 'Entrega Netcar',
             'source' => 'marketing',
             'sourceLabel' => 'Entregas Netcar',
@@ -506,6 +507,60 @@ function entregas_publish($metadata, $imagePath, $imageSize)
         $data['aliases'] = $aliases;
         entregas_atomic_json($dir . '/live.json', $data);
         return array('action' => $previous ? 'updated' : 'created', 'delivery' => entregas_public_delivery($delivery));
+    } finally {
+        flock($lock, LOCK_UN);
+        fclose($lock);
+    }
+}
+
+/** Names arrive separately, only after the factory has resolved the vehicle's sale. */
+function entregas_validate_buyer($metadata)
+{
+    if (!is_array($metadata) || count($metadata) !== 2
+        || !isset($metadata['delivery_public_id'], $metadata['first_name'])
+        || !is_string($metadata['delivery_public_id'])
+        || !preg_match('/^delivery-[a-f0-9]{24}$/D', $metadata['delivery_public_id'])) {
+        throw new InvalidArgumentException('Send only delivery_public_id and first_name');
+    }
+    $name = $metadata['first_name'];
+    // Reject full names, phone numbers, plates, markup and invisible separators.
+    if (!is_string($name) || strlen($name) > 256
+        || !preg_match('/^\p{L}[\p{L}\p{M}]*(?:[\x{0027}\x{2019}-]\p{L}[\p{L}\p{M}]*)*$/uD', $name)
+        || preg_match_all('/./us', $name) > 80) {
+        throw new InvalidArgumentException('first_name must contain only a first name');
+    }
+    return array('id' => $metadata['delivery_public_id'], 'name' => $name);
+}
+
+/** Same lock as photo publishing: neither writer can overwrite the other's update. */
+function entregas_update_buyer($metadata)
+{
+    $fields = entregas_validate_buyer($metadata);
+    $dir = entregas_data_dir();
+    if (!is_dir($dir)) {
+        throw new EntregasDeliveryNotFound('Delivery not found');
+    }
+    $lock = fopen($dir . '/.publish.lock', 'c');
+    if (!$lock || !flock($lock, LOCK_EX)) {
+        throw new RuntimeException('Cannot lock delivery data');
+    }
+    try {
+        $data = entregas_json_read($dir . '/live.json');
+        foreach ($data['deliveries'] as $index => $delivery) {
+            // This is the public ID already returned by publish, not its source ID.
+            if ($delivery['id'] !== $fields['id']) {
+                continue;
+            }
+            $action = 'unchanged';
+            if (!isset($delivery['name']) || $delivery['name'] !== $fields['name']) {
+                $data['deliveries'][$index]['name'] = $fields['name'];
+                $data['updatedAt'] = gmdate('Y-m-d\TH:i:s\Z');
+                entregas_atomic_json($dir . '/live.json', $data);
+                $action = 'updated';
+            }
+            return array('id' => $fields['id'], 'name' => $fields['name'], 'action' => $action);
+        }
+        throw new EntregasDeliveryNotFound('Delivery not found');
     } finally {
         flock($lock, LOCK_UN);
         fclose($lock);

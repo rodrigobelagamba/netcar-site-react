@@ -142,6 +142,18 @@ export function deliveryGridCardCrop(
     : deliveryCardCrop(item, archiveCrops);
 }
 
+/** Live deliveries expose only the buyer's validated first name. */
+function parsePublishedFirstName(value: unknown): string {
+  if (
+    typeof value !== "string" ||
+    Array.from(value).length > 80 ||
+    new TextEncoder().encode(value).length > 256 ||
+    !/^(?:\p{L}\p{M}*)+(?:[-'’](?:\p{L}\p{M}*)+)*$/u.test(value)
+  )
+    return "";
+  return value;
+}
+
 export function parsePublishedDeliveries(value: unknown): Delivery[] {
   if (!Array.isArray(value)) throw new Error("Invalid publication feed");
   return value.map((item) => {
@@ -163,7 +175,7 @@ export function parsePublishedDeliveries(value: unknown): Delivery[] {
       throw new Error("Invalid publication record");
     const result: Delivery = {
       id: item.id,
-      name: "",
+      name: parsePublishedFirstName(item.name),
       imageUrl: item.imageUrl,
       date: item.date,
       year: item.date.slice(0, 4),

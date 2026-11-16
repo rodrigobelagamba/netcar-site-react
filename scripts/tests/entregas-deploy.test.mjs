@@ -14,7 +14,7 @@ function fixture(t) {
   put('index.php', `<?php if ($path === '/entregas') { require __DIR__.'/entregas/v1/seo.php'; entregas_inject_initial_html(); }`);
   put('.htaccess', 'RewriteRule ^entregas/?$ index.php [L,QSA]');
   put('entregas/.htaccess', 'DirectorySlash Off\nRewriteOptions AllowNoSlash\nRewriteCond %{REQUEST_URI} ^/entregas/?$');
-  for (const file of ['lib.php', 'seo.php', 'feed.php', 'publish.php', 'status.php']) put('entregas/v1/' + file, '<?php');
+  for (const file of ['lib.php', 'seo.php', 'feed.php', 'publish.php', 'buyer.php', 'status.php']) put('entregas/v1/' + file, '<?php');
   put('entregas-data/seed.json', JSON.stringify({ deliveries: [{ id: 'historic', imageUrl: '/entregas-media/existing.webp' }] }));
   put('index.html', '<script src="/assets/main.js"></script>');
   put('assets/main.js', 'const route="/entregas"; import("./gallery.js");');

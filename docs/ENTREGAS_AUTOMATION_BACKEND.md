@@ -41,8 +41,9 @@ por manter uma fila persistente e repetir somente o envio ao site se houver falh
   A galeria inicia em **Mais perto**, usando esse recorte só na miniatura.
   Ao abrir a foto nativa, a imagem aparece inteira. **Foto inteira** continua
   disponível também na grade; ausência de recorte seguro não força zoom central.
-- Outros textos não são persistidos: nome, placa, legenda livre e dados de venda
-  não fazem parte desse contrato público.
+- Outros textos do upload não são persistidos: nome, placa, legenda livre e dados
+  de venda não fazem parte do contrato de publicação de imagem. Uma correção
+  preserva o `name` já confirmado pelo fluxo separado descrito abaixo.
 - Correções históricas podem enviar `metadata.expected_content_sha256`: hash
   SHA-256 do arquivo anteriormente recebido. A comparação ocorre sob a trava de
   publicação; alvo ausente, conteúdo diferente ou mudança de data retorna 409
@@ -126,7 +127,8 @@ O status mostra o limite efetivo, que pode diferir do PHP da linha de comando.
   não são artefatos de build. O gerador altera somente `seed.json`.
 - `GET /entregas/v1/feed.php`: `{deliveries: [...], updatedAt: ...}` das
   publicações ao vivo; o frontend mescla com o histórico empacotado. Cache de
-  30 segundos. Não há token no frontend nem nomes de cliente nesse endpoint.
+  30 segundos. Não há token no frontend; `name` contém somente o primeiro nome
+  confirmado após a venda, ou fica vazio enquanto não houver vínculo confirmado.
 - `live.json` tem gravação atômica e trava exclusiva durante atualização. Caso o
   arquivo esteja corrompido, o backend recusa a gravação e preserva os bytes para
   recuperação. Fazer backup do arquivo e da pasta de mídia em conjunto.
@@ -145,6 +147,68 @@ com imagens, sem avaliações ou resultados comerciais inventados.
 Executar `php scripts/tests/entregas-backend.test.php` para validar publicação,
 repetições, correções, datas, variantes, proteção de dados e paginação usando
 arquivos temporários isolados. Não publica fotos reais nem altera o feed do site.
+
+## Primeiro nome após a venda no Automacar
+
+`POST https://www.netcarmultimarcas.com.br/entregas/v1/buyer.php`
+
+Usa o mesmo Bearer privado da publicação, `Content-Type: application/json` e
+corpo de até 1024 bytes com **exatamente** estes campos:
+
+```json
+{
+  "delivery_public_id": "delivery-0123456789abcdef01234567",
+  "first_name": "José"
+}
+```
+
+O ID é o público, já retornado por `publish.php` e guardado pela Fábrica em
+`posv_entrega_foto.delivery_public_id`. Não enviar `seqveiculo`, placa, telefone,
+nome completo ou o ID original do evento. O endpoint aceita somente um primeiro
+nome (letras e acentos, hífen/apóstrofo internos; até 80 caracteres e 256 bytes).
+Nomes com espaços, números, marcação ou caracteres invisíveis são recusados.
+O remetente extrai o primeiro nome de `cadclientes.nome` após resolver
+`vendidos.seqveiculo` → `vendidos.codgeralcomprador` → `cadclientes`.
+
+Resposta 200:
+
+```json
+{
+  "ok": true,
+  "id": "delivery-0123456789abcdef01234567",
+  "name": "José",
+  "action": "updated"
+}
+```
+
+`action: unchanged` confirma uma repetição já aplicada. O endpoint procura
+somente o ID exato em `live.json`, sob a mesma trava exclusiva da publicação.
+Altera apenas `name` e a atualização do feed; não cria entregas, gera imagens,
+muda datas/ordem, chama Instagram ou envia WhatsApp. Repetir após uma resposta
+perdida é seguro. Uma correção posterior de imagem ou recorte preserva o nome.
+O frontend aceita o primeiro nome válido no feed e mantém “Uma nova conquista”
+para nomes vazios ou inválidos. A atualização aparece no próximo carregamento
+do feed, respeitando seu cache de até 30 segundos.
+
+Erros: 400 JSON inválido, 401 sem autenticação, 404 entrega ainda ausente,
+405 método inválido, 413 tamanho excedido, 415 tipo de conteúdo inválido,
+422 campos inválidos e 503 indisponibilidade. Não reenviar WhatsApp ou imagem
+para repetir essa atualização; manter tentativa independente na Fábrica.
+Fotos sem `seqveiculo`, com `notify_client=0` ou `cliente_status=nao_avisar`
+não entram nessa sincronização. O site não tem acesso à base Automacar e depende
+dessas verificações na origem.
+
+Ordem de ativação: publicar primeiro o endpoint e o frontend do site; depois
+configurar a credencial privada e ativar a integração na Fábrica. Para alcançar
+entregas cujo WhatsApp já foi enviado, usar a sincronização exclusiva de nomes,
+sem resetar `cliente_status` nem executar uma rotina de reenvio de mensagens.
+Rollback de código não exige restaurar `live.json`; preservar fotos e nomes
+confirmados, bem como os recibos da Fábrica. Não publicar o token no repositório.
+
+Validação adicional: `php scripts/tests/entregas-buyer.test.php` cobre rejeições,
+idempotência, integridade dos demais campos e preservação do nome em correções.
+`node --import tsx --test src/modules/entregas/lib/deliveries.test.ts` verifica
+a transição do título vazio ao primeiro nome sem duplicar a entrega.
 
 ## Enquadramento automático do bot
 
