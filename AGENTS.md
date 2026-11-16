@@ -31,8 +31,17 @@ por família/ano, contagens de airbags por soma de tags ou opcionais de pacote
 sem comprovação da unidade. Pesquise a versão brasileira e o ano-modelo exatos
 antes de acrescentar dados ao cadastro e registre a evidência.
 
-Preserve mudanças de outras tarefas. Fora da autorização contínua de carimbos
-acima, publicação e deploy exigem aprovação específica do responsável.
+## Cores na ficha — autorização contínua de 16/11/2026
+
+O responsável autorizou o ROTINAS a conferir a cor padrão do XML atual,
+pesquisar a pintura oficial da versão/ano brasileiros e aplicar/publicar nomes
+confirmados somente na ficha do site, incluindo novas entradas, sem nova
+aprovação por unidade. Seguir `docs/vehicle-colors.md`: distinguir correspondência
+única de catálogo de prova física; ambiguidades preservam a cor original.
+Não alterar XML/ERP, filtros, fotos ou feeds. Reutilizar a rotina existente.
+
+Preserve mudanças de outras tarefas. Fora das autorizações contínuas de carimbos
+e cores acima, publicação e deploy exigem aprovação específica do responsável.
 Seguir o procedimento de deploy definido no contexto
 do projeto; sucesso de build ou do GitHub isoladamente não confirma publicação.
 
