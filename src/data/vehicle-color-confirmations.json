@@ -2019,6 +2019,88 @@
         "approved": true,
         "publicReference": "netcar-colors-continuous-20261116"
       }
+    },
+    {
+      "id": "color-20261117-20152",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20152",
+        "brand": "HYUNDAI",
+        "model": "CRETA PRESTIGE",
+        "manufactureYear": 2017,
+        "modelYear": 2018,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "VERMELHA",
+        "physicalIdentityKey": "fbf5c66116f90fd1782a8368ac76a5a46d7d801ecca937060c81382f0c8a6e8d"
+      },
+      "officialName": "Vermelho Chilli",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261117-20152",
+        "verifiedAt": "2026-11-17",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "HYUNDAI",
+          "model": "CRETA PRESTIGE",
+          "modelYear": 2018,
+          "engine": "2.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Onix",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Polar",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Prata Sand",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Bronze Terra",
+              "genericColor": "BRONZE"
+            },
+            {
+              "officialName": "Prata Metal",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Titanium",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Verde Forest",
+              "genericColor": "VERDE"
+            },
+            {
+              "officialName": "Vermelho Chilli",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Prata Moonlight",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Azul Sky",
+              "genericColor": "AZUL"
+            }
+          ],
+          "sourceUrls": [
+            "https://pt.slideshare.net/slideshow/hyundai-creta-1718/79397116"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
     }
   ]
 }

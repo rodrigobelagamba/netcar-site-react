@@ -1,0 +1,28 @@
+{
+  "publicReference": "factory-colors-20261117-20152",
+  "checkedAt": "2026-11-17T20:25:48.853Z",
+  "vehicleId": "20152",
+  "scope": "Hyundai Creta Prestige 2.0 Flex automático, Brasil, fabricação 2017 / modelo 2018.",
+  "genericColor": "VERMELHA",
+  "officialName": "Vermelho Chilli",
+  "basis": "catalog-match",
+  "sourceCompatibility": "Identidade física opaca e campos públicos compatíveis entre API e Carclick XML no ciclo; sem conflito de cor.",
+  "sourceTitle": "Hyundai — Lista de equipamentos, Creta MY17/18, página 3",
+  "sourceUrl": "https://pt.slideshare.net/slideshow/hyundai-creta-1718/79397116",
+  "documentDisplayUrl": "https://image.slidesharecdn.com/20170802-cretamy1718fichatcnica-pulseplus-170903225714/75/Hyundai-Creta-17-18-3-2048.jpg",
+  "sourceProvenance": "Documento da Hyundai com cabeçalho MY17/18 e marca da fabricante no rodapé. Cópia em plataforma de terceiros; a descrição da plataforma não é evidência.",
+  "matrixReview": "Inspeção visual da tabela PINTURA na coluna Prestige, motor Nu 2.0l 16V, automática: dez opções de pintura marcadas. A única correspondente a VERMELHA é Vermelho Chilli, perolizada, código de catálogo RR3.",
+  "palette": [
+    "Preto Onix",
+    "Branco Polar",
+    "Prata Sand",
+    "Bronze Terra",
+    "Prata Metal",
+    "Cinza Titanium",
+    "Verde Forest",
+    "Vermelho Chilli",
+    "Prata Moonlight",
+    "Azul Sky"
+  ],
+  "limits": "Inferência documental para esta unidade: RR3 é o código do catálogo; não foi lido na carroceria. Não utilizar tabela de outro ano-modelo nem alegar vistoria física."
+}
