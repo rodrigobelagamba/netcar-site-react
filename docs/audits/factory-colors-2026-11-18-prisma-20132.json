@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-18",
+  "publicReference": "factory-colors-20261118-20132",
+  "vehicleId": "20132",
+  "model": "Chevrolet Prisma Advantage 1.4 Flex automático 2015/2016",
+  "verificationBasis": "catalog-match",
+  "genericColor": "BRANCA",
+  "officialName": "Branco Summit",
+  "sourceReconciliation": "API e XML Automacar completos e concordantes para a unidade, incluindo identidade física opaca, versão, anos, motor, câmbio, combustível e família de cor.",
+  "issuer": "General Motors do Brasil / Chevrolet",
+  "document": "Comunicado de lançamento do Chevrolet Prisma brasileiro ano-modelo 2016, de outubro de 2015. A série Advantage é identificada com motor 1.4 e câmbio automático de seis marchas.",
+  "sourceProvenance": [
+    {
+      "url": "https://alphaautos.com.br/2015/10/alpha-noticias-chevrolet-apresenta-a-linha-prisma-2016",
+      "role": "Reprodução integral de 9/10/2015 com crédito de texto e foto à assessoria de imprensa. A seção Linha 2016 discrimina as três cores exclusivas da série Advantage.",
+      "inspectedPageSha256": "3d0808db1874808aeec6fbe6a170be47aedcd7d6387513cb4e260b9ace637574"
+    },
+    {
+      "url": "https://sorocabamotors.com.br/noticias/noticia.asp?id=3701",
+      "role": "Segunda reprodução integral contemporânea do comunicado. O título informa a versão Advantage 1.4. O parágrafo sobre as cores traz a mesma lista de três opções.",
+      "inspectedPageSha256": "246858e2be9161bca7e585a25d941ab39c0e0e0e05bf8d74318ad2a1bdbd8dc8"
+    },
+    {
+      "url": "https://www.memoriamotor.com.br/prisma-2016-ganha-versao-advantage-1-4/",
+      "role": "Reprodução parcial que atribui a fonte nominalmente à GM do Brasil. Coincidem os parágrafos sobre o ano-modelo, a configuração mecânica e a declaração da presidência da GM. O trecho sobre cores consta nas duas reproduções integrais.",
+      "inspectedPageSha256": "928a40aa9186b0d75a9937ee51bc5ff571ad93104d2fa9c52a9c5be1e06ef7e3"
+    }
+  ],
+  "palette": [
+    "Cinza Graphite",
+    "Prata Switchblade",
+    "Branco Summit"
+  ],
+  "scope": "A série Advantage tem uma única opção branca nessa paleta. Nome comercial inferido documentalmente para esta unidade, sem vistoria da pintura física."
+}
