@@ -2101,6 +2101,60 @@
         "approved": true,
         "publicReference": "netcar-colors-continuous-20261116"
       }
+    },
+    {
+      "id": "color-20261118-20132",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20132",
+        "brand": "CHEVROLET",
+        "model": "PRISMA ADVANTAGE",
+        "modelYear": 2016,
+        "engine": "1.4",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "manufactureYear": 2015,
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "5371d1087c7ba44fd82222c91e11314f0df4b6a51b4e18218dfa034e050584dd"
+      },
+      "officialName": "Branco Summit",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261118-20132",
+        "verifiedAt": "2026-11-18",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "CHEVROLET",
+          "model": "PRISMA ADVANTAGE",
+          "modelYear": 2016,
+          "engine": "1.4",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Cinza Graphite",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Switchblade",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Branco Summit",
+              "genericColor": "BRANCA"
+            }
+          ],
+          "sourceUrls": [
+            "https://alphaautos.com.br/2015/10/alpha-noticias-chevrolet-apresenta-a-linha-prisma-2016"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
     }
   ]
 }
