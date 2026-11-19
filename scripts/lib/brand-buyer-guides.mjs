@@ -76,7 +76,7 @@ export const BRAND_BUYER_GUIDES = {
     "intro": "Consulte os Nissan à venda na Netcar, em Esteio, e fale sobre o carro que você gostou.",
     "guideTitle": "Encontre seu próximo Nissan",
     "paragraphs": [
-      "Se o Kicks está na sua busca, a seleção do modelo leva aos seus anúncios. Para conhecer outras opções Nissan, veja os carros da marca nesta página. Cada unidade tem ficha própria, com fotos, versão e preço, além do contato para conversar sobre a compra e a troca."
+      "Se você procura um sedã como o Sentra ou um SUV como o Kicks, escolha o modelo para ver os anúncios. A ficha de cada Nissan reúne fotos, versão, preço e o contato da equipe para conversar sobre a compra e a troca."
     ],
     "faq": [
       {

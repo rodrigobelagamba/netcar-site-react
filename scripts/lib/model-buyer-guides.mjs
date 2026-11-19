@@ -59,6 +59,22 @@ export const MODEL_BUYER_GUIDES = {
     ],
     "guideLinks": []
   },
+  "nissan-sentra": {
+    "title": "Nissan Sentra à venda em Esteio | Netcar",
+    "description": "Consulte os Nissan Sentra usados e seminovos da Netcar em Esteio. Veja fotos, versão e preço de cada sedã e converse com a loja sobre a troca.",
+    "intro": "Veja os Nissan Sentra anunciados em Esteio e abra a ficha do sedã que chamou sua atenção.",
+    "guideTitle": "Conheça o Sentra antes de visitar a loja",
+    "paragraphs": [
+      "As fotos de cada Sentra mostram a carroceria e o interior daquela unidade. Na mesma ficha, você encontra a versão, o ano e o preço. Se quiser ver o carro de perto, fale com a equipe pelo WhatsApp do anúncio e combine sua visita à Netcar em Esteio."
+    ],
+    "faq": [
+      {
+        "q": "Como consultar meu usado na troca por um Sentra?",
+        "a": "Abra o anúncio do Sentra que você escolheu e peça uma avaliação pelo contato da ficha. Informe o modelo e o ano do seu usado para iniciar a conversa."
+      }
+    ],
+    "guideLinks": []
+  },
   "honda-hr-v": {
     "title": "Honda HR-V à venda em Esteio: fotos e preços | Netcar",
     "description": "Honda HR-V usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",

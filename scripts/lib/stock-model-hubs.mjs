@@ -11,6 +11,7 @@ export const MODEL_HUBS = [
   { slug: "volkswagen-nivus", marca: "VOLKSWAGEN", modelo: "NIVUS", name: "Volkswagen Nivus", category: "SUV" },
   { slug: "hyundai-creta", marca: "HYUNDAI", modelo: "CRETA", name: "Hyundai Creta", category: "SUV" },
   { slug: "nissan-kicks", marca: "NISSAN", modelo: "KICKS", name: "Nissan Kicks", category: "SUV" },
+  { slug: "nissan-sentra", marca: "NISSAN", modelo: "SENTRA", name: "Nissan Sentra", categoria: "SEDAN", category: "SEDAN" },
   { slug: "jeep-renegade", marca: "JEEP", modelo: "RENEGADE", name: "Jeep Renegade", category: "SUV" },
   { slug: "volkswagen-gol", marca: "VOLKSWAGEN", modelo: "GOL", name: "Volkswagen Gol", category: "HATCH" },
   { slug: "volkswagen-fox", marca: "VOLKSWAGEN", modelo: "FOX", name: "Volkswagen Fox", category: "HATCH" },
