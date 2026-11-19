@@ -8,6 +8,21 @@ const hub = { slug: 'honda-city', marca: 'HONDA', modelo: 'CITY', name: 'Honda C
 const options = { hubs: [hub], brandGuides: { HONDA: { intro: 'Honda' } }, modelGuides: { 'honda-city': { intro: 'City' } } };
 const snapshot = (vehicles = [row()]) => ({ generatedAt: at, vehicles });
 
+test('the Nissan Sentra hub selects only Nissan Sentra sedans', () => {
+  const nissan = { marca: 'NISSAN', categoria: 'SEDAN' };
+  const result = auditStockHubCoverage(snapshot([
+    row({ ...nissan, id: 1, modelo: 'SENTRA SV' }),
+    row({ ...nissan, id: 2, modelo: 'NISSAN SENTRA EXCLUSIVE' }),
+    row({ ...nissan, id: 3, modelo: 'VERSA SV' }),
+    row({ ...nissan, id: 4, modelo: 'KICKS ADVANCE', categoria: 'SUV' }),
+    row({ ...nissan, id: 5, modelo: 'SENTRAX' }),
+    row({ ...nissan, id: 6, modelo: 'SENTRA', categoria: 'HATCH' }),
+    row({ ...nissan, id: 7, modelo: 'SENTRA', marca: 'OUTRA' }),
+  ]));
+  assert.deepEqual(result.vehicles.filter(v => v.hubSlugs.includes('nissan-sentra')).map(v => v.id), ['1', '2']);
+  assert.equal(result.counts.multiple, 0);
+});
+
 test('uses generator category correction and only reports whitelisted public fields', () => {
   const result = auditStockHubCoverage(snapshot([row({ placa: 'PRIVATE-PLATE', chassi: 'PRIVATE-VIN', renavam: 'PRIVATE-RENAVAM' })]), options);
   assert.equal(result.status, 'covered');
