@@ -1,0 +1,86 @@
+{
+  "reviewId": "warranty-20261119-20153",
+  "reviewedAt": "2026-11-19",
+  "vehicle": {
+    "vehicleId": "20153",
+    "brand": "CITROEN",
+    "modelVersion": "C3 XTR",
+    "manufactureYear": 2025,
+    "modelYear": 2026
+  },
+  "engine": "1.0",
+  "transmission": "MANUAL",
+  "officialDocuments": {
+    "manualIndex": "https://www.citroen.com.br/meu-citroen/manuais.html",
+    "manualSelector": "https://manual-service.k8s.fcalatam.com.br/v2/manual/search?modelYear=2026&mvsCode=1CSBSUG5I5GC63B5",
+    "manualEdition": "C3.07.2025 - ed.01",
+    "manualSha256": "3ef683faa3bcb2ca2846b6c80ce8b03b6f36369940315457297a8b6aa61a0e52",
+    "warrantyBookPage": 5,
+    "pdfPage": 205,
+    "sources": [
+      {
+        "sourceId": "citroen-c3-2025-2026-manutencao-garantia",
+        "label": "Manual brasileiro Citroën C3 2025/2026",
+        "url": "https://document-uploader-service.k8s.fcalatam.com.br/v1/file/download/MANUAL_SERVICE/69fb2fc031a40b368818377f?file_name=MANUAIS-DE-BORDO_CITRO%3FN_C3_25-26.pdf",
+        "locator": "Caderno Manutenção e Garantia, página 5 (PDF, página 205). Para veículos de passeio a combustão, a cobertura geral de defeitos de fabricação dura 36 meses sem limite de quilometragem a partir da entrega original. Aplicam-se as condições de manutenção e as exclusões do manual.",
+        "revision": "C3.07.2025-ed.01",
+        "verification": {
+          "status": "verified",
+          "documentCode": "C3.07.2025-ed.01",
+          "modelYear": 2026,
+          "reviewId": "warranty-20261119-20153",
+          "reviewedAt": "2026-11-19"
+        }
+      },
+      {
+        "sourceId": "citroen-c3-xtr-10-2025-2026-ficha",
+        "label": "Ficha técnica Citroën C3 XTR 1.0 2025/2026",
+        "url": "https://www.media.stellantis.com/uploads/br/attachment/5920/fichatecnicacitroenc3xtr102025_2026-68b87561d1373.pdf",
+        "locator": "Ficha técnica brasileira do C3 XTR 1.0 2025/2026. Identifica o motor flex e a transmissão manual de cinco marchas dessa versão.",
+        "revision": "C3-XTR-1.0-2025-2026",
+        "verification": {
+          "status": "verified",
+          "documentCode": "C3-XTR-1.0-2025-2026",
+          "modelYear": 2026,
+          "reviewId": "warranty-20261119-20153",
+          "reviewedAt": "2026-11-19"
+        }
+      }
+    ]
+  },
+  "coverage": {
+    "scope": "basic-vehicle",
+    "termYears": 3,
+    "mileage": {
+      "kind": "unlimited"
+    },
+    "startsAt": "original-delivery",
+    "firstDeliveryDate": null,
+    "confirmedExpiryDate": null,
+    "estimatedEndYear": 2028,
+    "finalYearRequiresConfirmedExpiry": true
+  },
+  "operationalEvidence": {
+    "privateUseAttestation": "netcar-private-stock-20261010",
+    "individualFactoryWarrantyFlag": true,
+    "reviewedMileageKm": 13000
+  },
+  "reusableRule": "documented-20153-private-exact-variant",
+  "publicVehicle": {
+    "id": "20153",
+    "marca": "CITROEN",
+    "modelo": "C3 XTR",
+    "price": 82900,
+    "year": 2026,
+    "anoFabricacao": 2025,
+    "motor": "1.0",
+    "cambio": "MANUAL",
+    "km": 13000,
+    "unitKey": "plate-sha256:d2bfe9de36b3abf994f8574ae583d76079dac4fcc072e65fe3aa1ee9e118ffbe",
+    "diferenciais": [
+      {
+        "tag": "garantia_fabrica"
+      }
+    ]
+  }
+}
