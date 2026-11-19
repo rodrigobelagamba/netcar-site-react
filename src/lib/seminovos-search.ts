@@ -10,7 +10,6 @@ export const emptySeminovosSearch = {
   combustivel: undefined,
   cor: undefined,
   categoria: undefined,
-  ordem: undefined,
 } as const;
 
 export const automaticSeminovosSearch = {

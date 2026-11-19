@@ -84,60 +84,35 @@ function formatCompactPriceLabel(value: string | undefined): string {
   return `R$ ${num.toLocaleString("pt-BR")}`;
 }
 
-function resolveShowroomSort(value: string | undefined): ShowroomSortOption {
-  if (
-    value === "recomendados" ||
-    value === "ano-desc" ||
-    value === "az" ||
-    value === "preco-asc" ||
-    value === "preco-desc"
-  ) {
-    return value;
-  }
-  return "recomendados";
-}
-
 function isAvailableVehicle(vehicle: { price?: number | null }): boolean {
   const price = Number(vehicle.price);
   return Number.isFinite(price) && price > 0;
 }
 
 /**
- * Mantém a primeira dobra 100% com carros disponíveis e intercala vendidos
- * organicamente a partir da 2ª linha (1 vendido a cada ~5 cards) para prova
- * social de giro sem desperdiçar o topo da vitrine.
+ * Garante a 1ª linha da vitrine 100% com carros disponíveis sem quebrar a ordem
+ * alfabética no restante do estoque: vendidos que cairiam na 1ª dobra são
+ * deslocados para logo após os primeiros `leadAvailable` disponíveis.
  */
-function interleaveSoldAfterFirstRow<T extends { price?: number | null }>(
+function keepFirstRowAvailable<T extends { price?: number | null }>(
   sortedVehicles: T[],
   leadAvailable = 5,
-  availablePerSold = 4,
 ): T[] {
-  const available: T[] = [];
-  const sold: T[] = [];
-  for (const vehicle of sortedVehicles) {
-    if (isAvailableVehicle(vehicle)) available.push(vehicle);
-    else sold.push(vehicle);
-  }
-  if (available.length === 0 || sold.length === 0) return sortedVehicles;
+  const firstRow: T[] = [];
+  const deferredSold: T[] = [];
+  let splitIndex = 0;
 
-  const result: T[] = [];
-  let availIdx = 0;
-  let soldIdx = 0;
-
-  while (availIdx < available.length && availIdx < leadAvailable) {
-    result.push(available[availIdx++]);
-  }
-
-  while (availIdx < available.length || soldIdx < sold.length) {
-    if (soldIdx < sold.length) {
-      result.push(sold[soldIdx++]);
-    }
-    for (let step = 0; step < availablePerSold && availIdx < available.length; step++) {
-      result.push(available[availIdx++]);
+  while (splitIndex < sortedVehicles.length && firstRow.length < leadAvailable) {
+    const vehicle = sortedVehicles[splitIndex++];
+    if (isAvailableVehicle(vehicle)) {
+      firstRow.push(vehicle);
+    } else {
+      deferredSold.push(vehicle);
     }
   }
 
-  return result;
+  if (deferredSold.length === 0) return sortedVehicles;
+  return [...firstRow, ...deferredSold, ...sortedVehicles.slice(splitIndex)];
 }
 
 function toSelectOptions(values: Array<string | null | undefined>) {
@@ -436,9 +411,7 @@ export function SeminovosPage() {
   const [cambio, setCambio] = useState(search.cambio || "");
   const [combustivel, setCombustivel] = useState(search.combustivel || "");
   const [cor, setCor] = useState(search.cor || "");
-  const [sortBy, setSortBy] = useState<ShowroomSortOption>(() =>
-    resolveShowroomSort(search.ordem),
-  );
+  const [sortBy, setSortBy] = useState<ShowroomSortOption>("az");
   const [areFiltersVisible, setAreFiltersVisible] = useState(false);
   const pendingFilterTrackingRef = useRef<string | null>(null);
 
@@ -454,7 +427,6 @@ export function SeminovosPage() {
     setCambio(search.cambio || "");
     setCombustivel(search.combustivel || "");
     setCor(search.cor || "");
-    setSortBy(resolveShowroomSort(search.ordem));
   }, [
     search.marca,
     search.modelo,
@@ -466,21 +438,7 @@ export function SeminovosPage() {
     search.cambio,
     search.combustivel,
     search.cor,
-    search.ordem,
   ]);
-
-  const handleSortChange = (nextSort: ShowroomSortOption) => {
-    setSortBy(nextSort);
-    void navigate({
-      to: "/seminovos",
-      search: (previous) => ({
-        ...previous,
-        ordem: nextSort === "recomendados" ? undefined : nextSort,
-      }),
-      replace: true,
-      resetScroll: false,
-    });
-  };
 
   const applySearchPatch = (patch: Partial<StockFilterValues>) => {
     const nextFilters: StockFilterValues = {
@@ -502,7 +460,6 @@ export function SeminovosPage() {
       search: {
         ...nextFilters,
         busca: search.busca,
-        ordem: sortBy === "recomendados" ? undefined : sortBy,
       },
       resetScroll: false,
     });
@@ -528,7 +485,6 @@ export function SeminovosPage() {
       search: {
         ...nextFilters,
         busca: search.busca,
-        ordem: sortBy === "recomendados" ? undefined : sortBy,
       },
     });
     setAreFiltersVisible(false);
@@ -548,10 +504,7 @@ export function SeminovosPage() {
     setCor("");
     navigate({
       to: "/seminovos",
-      search: {
-        ...emptySeminovosSearch,
-        ordem: sortBy === "recomendados" ? undefined : sortBy,
-      },
+      search: emptySeminovosSearch,
     });
     setAreFiltersVisible(false);
   };
@@ -779,7 +732,7 @@ export function SeminovosPage() {
     [filteredAndSortedVehicles],
   );
   const displayVehicles = useMemo(
-    () => interleaveSoldAfterFirstRow(filteredAndSortedVehicles, 5, 5),
+    () => keepFirstRowAvailable(filteredAndSortedVehicles, 5),
     [filteredAndSortedVehicles],
   );
 
@@ -1126,7 +1079,7 @@ export function SeminovosPage() {
                 <select
                   value={sortBy}
                   onChange={(event) =>
-                    handleSortChange(event.target.value as ShowroomSortOption)
+                    setSortBy(event.target.value as ShowroomSortOption)
                   }
                   className="min-h-[34px] max-w-[190px] appearance-none rounded-lg border border-[#00283C]/10 bg-white px-2.5 pr-7 text-xs font-semibold text-fg focus:outline-none focus:ring-2 focus:ring-primary/20 sm:min-h-11 sm:px-3 sm:pr-8 sm:text-sm"
                 >
