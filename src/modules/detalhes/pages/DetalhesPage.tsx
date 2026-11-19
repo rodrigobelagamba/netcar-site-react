@@ -28,6 +28,13 @@ import {
   LucideIcon,
   Check,
   Play,
+  MapPin,
+  Clock,
+  PhoneCall,
+  ExternalLink,
+  ShieldCheck,
+  KeyRound,
+  Sparkles,
 } from "lucide-react";
 import React, {
   useState,
@@ -54,6 +61,10 @@ import {
   trackViewItem,
   type WhatsAppClickSource,
 } from "@/lib/analytics";
+import {
+  submitVehicleCallbackLead,
+  type CrmLeadPayload,
+} from "@/lib/leadCallback";
 import icon1 from "@/assets/images/icon-1.svg";
 import { ProductList } from "@/design-system/components/patterns/ProductList";
 import type { VehicleCardProps } from "@/design-system/components/patterns/VehicleCard";
@@ -169,37 +180,62 @@ type BadgeVariant =
 interface Badge {
   text: string;
   variant: BadgeVariant;
+  onClick?: () => void;
+  title?: string;
 }
 
-/** Cores pill (screenshot selos). */
-const BADGE_COLORS: Record<BadgeVariant, string> = {
-  oportunidade: "#8A5E00",
-  icheck: "#087A37",
-  garantia: "#23747C",
-  "baixa-km": "#004C5C",
-  capacidade: "#217F88",
-  "green-dark": "#00363B",
+/** Estilo refinado para selos do Hero (família visual única, sem disputar com preço/CTA). */
+const BADGE_CLASSES: Record<BadgeVariant, string> = {
+  oportunidade:
+    "border-[#D99B26]/30 bg-[#FEF7E6] text-[#7A4D00]",
+  icheck:
+    "border-[#087A37]/30 bg-[#EAF7F0] text-[#065E2B] hover:bg-[#DCF1E5]",
+  garantia:
+    "border-[#23747C]/25 bg-[#EAF5F6] text-[#0F5257]",
+  "baixa-km":
+    "border-[#23747C]/25 bg-[#EAF5F6] text-[#0F5257]",
+  capacidade:
+    "border-[#23747C]/25 bg-[#EAF5F6] text-[#0F5257]",
+  "green-dark":
+    "border-[#00283C]/12 bg-[#00283C]/[0.06] text-[#00283C]",
 };
 
-function Badge({ text, variant }: Badge) {
+function Badge({ text, variant, onClick, title }: Badge) {
+  const baseClass =
+    "inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-[11px] font-bold uppercase tracking-[0.04em] leading-none transition-colors";
+  const variantClass = BADGE_CLASSES[variant];
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        title={title}
+        className={`${baseClass} ${variantClass} cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#087A37]`}
+      >
+        {variant === "icheck" && (
+          <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#087A37]" aria-hidden="true" />
+        )}
+        <span className="whitespace-nowrap">{text}</span>
+        <ExternalLink className="h-3 w-3 shrink-0 opacity-75" aria-hidden="true" />
+      </button>
+    );
+  }
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 6 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{
         duration: ANIMATION_DURATION.normal,
         ease: ANIMATION_EASING,
       }}
-      className="rounded-[45px] flex items-center uppercase font-bold tracking-wide text-white info-badge"
-      style={{
-        backgroundColor: BADGE_COLORS[variant],
-        ...(variant === "capacidade" && {
-          color: "#FFFFFF",
-          boxShadow: "inset 0 0 0 1px #1C727A",
-        }),
-      }}
+      className={`${baseClass} ${variantClass}`}
     >
+      {variant === "icheck" && (
+        <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#087A37]" aria-hidden="true" />
+      )}
       <span className="whitespace-nowrap">{text}</span>
     </motion.div>
   );
@@ -350,35 +386,317 @@ function CTAButton({
 interface ContactButtonProps {
   modeloCompleto?: string;
   vehicleId?: string | number;
+  vehiclePrice?: number;
   isSold?: boolean;
   vehicleLabel?: string;
   waRef?: VehicleWhatsAppRef;
+  onIntentContextChange?: (context: {
+    summary: string;
+    whatsappUrl?: string;
+  }) => void;
+}
+
+type HeroConversionTab = "financiar" | "troca" | "visita";
+type VisitOption = "hoje" | "amanha" | "sabado" | "video";
+
+function formatShortBRL(value: number): string {
+  return value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    maximumFractionDigits: 0,
+  });
+}
+
+function buildDownPaymentPresets(price?: number): Array<{ value: number; label: string }> {
+  if (!price || !Number.isFinite(price) || price <= 0) {
+    return [
+      { value: 0, label: "Sem entrada" },
+      { value: 15000, label: "R$ 15 mil" },
+      { value: 25000, label: "R$ 25 mil" },
+      { value: 40000, label: "R$ 40 mil" },
+    ];
+  }
+  const roundTo5k = (amount: number) => Math.max(5000, Math.round(amount / 5000) * 5000);
+  const rawValues = [0, roundTo5k(price * 0.2), roundTo5k(price * 0.3), roundTo5k(price * 0.45)];
+  const unique = Array.from(new Set(rawValues)).filter((v) => v === 0 || v < price * 0.85);
+  return unique.map((value) => ({
+    value,
+    label: value === 0 ? "Sem entrada" : `R$ ${Math.round(value / 1000)} mil`,
+  }));
+}
+
+function formatBrazilPhoneInput(raw: string): string {
+  const digits = raw.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 2) return digits ? `(${digits}` : "";
+  if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  if (digits.length <= 10) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  }
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+}
+
+interface QuickCallbackFormProps {
+  inputId: string;
+  vehicleId?: string | number;
+  vehicleName: string;
+  intentSummary?: string;
+  contextLabel?: string;
+  fallbackWhatsAppUrl?: string;
+  compact?: boolean;
+}
+
+function QuickCallbackForm({
+  inputId,
+  vehicleId,
+  vehicleName,
+  intentSummary,
+  contextLabel,
+  fallbackWhatsAppUrl,
+  compact = false,
+}: QuickCallbackFormProps) {
+  const [phone, setPhone] = useState("");
+  const [honeypot, setHoneypot] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [result, setResult] = useState<{
+    sent: boolean;
+    duplicate?: boolean;
+    dryRun?: boolean;
+    payload?: CrmLeadPayload;
+  } | null>(null);
+  const [showDryPayload, setShowDryPayload] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (submitting) return;
+
+    const digits = phone.replace(/\D/g, "");
+    if (digits.length < 10) {
+      setError("Informe seu WhatsApp com DDD.");
+      return;
+    }
+
+    setError("");
+    setSubmitting(true);
+    const response = await submitVehicleCallbackLead({
+      phone,
+      vehicleId,
+      vehicleName,
+      intentSummary: intentSummary || contextLabel,
+      website: honeypot,
+    });
+    setSubmitting(false);
+
+    if (!response.ok) {
+      setError(
+        response.error ||
+          "Não foi possível confirmar agora. Chame direto no WhatsApp.",
+      );
+      return;
+    }
+
+    setResult({
+      sent: true,
+      duplicate: response.duplicate,
+      dryRun: response.dryRun,
+      payload: response.payload,
+    });
+  };
+
+  if (result?.sent) {
+    return (
+      <div className="relative rounded-xl bg-[#EAF7F0] px-3 py-2 text-left">
+        <p className="text-[11px] font-bold text-[#075E54]">
+          {result.duplicate
+            ? `Pedido já registrado: ${phone}`
+            : `Recebemos seu número: ${phone}`}
+        </p>
+        <p className="mt-0.5 text-[11px] leading-snug text-[#365565]">
+          {result.duplicate
+            ? "Um consultor da Netcar já recebeu seu contato para este carro."
+            : `Nossa equipe chama no WhatsApp em ~1 min${contextLabel ? ` (${contextLabel})` : ""}.`}
+        </p>
+        {result.dryRun && (
+          <div className="mt-1.5 border-t border-[#087A37]/15 pt-1.5">
+            <div className="flex flex-wrap items-center justify-between gap-1">
+              <span className="text-[10px] font-bold uppercase tracking-[0.04em] text-[#075E54]">
+                Dry-run local · fila CRM intacta
+              </span>
+              {result.payload && (
+                <button
+                  type="button"
+                  onClick={() => setShowDryPayload((prev) => !prev)}
+                  className="text-[10px] font-bold text-[#00283C] underline underline-offset-2"
+                >
+                  {showDryPayload ? "Ocultar payload" : "Ver payload crmleads"}
+                </button>
+              )}
+            </div>
+            {showDryPayload && result.payload && (
+              <pre className="mt-1.5 max-h-52 overflow-auto rounded-lg border border-white/15 bg-[#00283C] p-2.5 text-[10px] leading-relaxed text-[#D8F3E5] shadow-xl lg:absolute lg:bottom-full lg:right-0 lg:z-40 lg:mb-2 lg:mt-0 lg:w-[420px]">
+                {JSON.stringify(result.payload, null, 2)}
+              </pre>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-1">
+      <input
+        type="text"
+        name="website"
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+      />
+      <label
+        htmlFor={inputId}
+        className="flex items-center gap-1 text-[11px] font-semibold text-[#526974]"
+      >
+        <PhoneCall className="h-3 w-3 shrink-0 text-[#23747C]" aria-hidden="true" />
+        Sem WhatsApp aberto? A Netcar te chama:
+      </label>
+      <div className="flex gap-1.5">
+        <input
+          id={inputId}
+          type="tel"
+          inputMode="tel"
+          value={phone}
+          disabled={submitting}
+          onChange={(e) => {
+            setPhone(formatBrazilPhoneInput(e.target.value));
+            if (error) setError("");
+          }}
+          placeholder="(51) 99999-9999"
+          className={`${compact ? "h-8" : "h-9"} min-w-0 flex-1 rounded-full border border-slate-200 bg-white px-3 text-xs text-[#00283C] placeholder:text-slate-400 focus:border-[#00283C] focus:outline-none disabled:opacity-60`}
+        />
+        <button
+          type="submit"
+          disabled={submitting}
+          className={`${compact ? "h-8 px-3.5" : "h-9 px-4"} shrink-0 rounded-full bg-[#00283C] text-xs font-bold text-white transition-colors hover:bg-[#003E5C] disabled:opacity-60`}
+        >
+          {submitting ? "Enviando..." : "Me chamar"}
+        </button>
+      </div>
+      {error && (
+        <div className="space-y-1">
+          <p className="text-[11px] font-medium text-red-600">{error}</p>
+          {fallbackWhatsAppUrl && (
+            <a
+              href={fallbackWhatsAppUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-wa-source="hero_callback_fallback"
+              data-wa-intent="callback_fallback"
+              data-wa-vehicle-id={vehicleId}
+              data-wa-vehicle-name={vehicleName}
+              className="inline-flex items-center gap-1 text-[11px] font-bold text-[#087A37] underline underline-offset-2"
+            >
+              <MessageCircleMore className="h-3 w-3 shrink-0" aria-hidden="true" />
+              Chamar direto no WhatsApp
+            </a>
+          )}
+        </div>
+      )}
+    </form>
+  );
 }
 
 function ContactButton({
   modeloCompleto,
   vehicleId,
+  vehiclePrice,
   isSold = false,
   vehicleLabel,
   waRef,
+  onIntentContextChange,
 }: ContactButtonProps) {
   const { data: whatsapp } = useWhatsAppQuery();
   const { active: isBlackFriday } = useBlackFridayCampaign();
   const label = vehicleLabel || modeloCompleto || "veículo";
-  const messages = vehicleWhatsAppMessages(label, modeloCompleto, waRef);
-  const inquiryMessage =
-    isBlackFriday && !isSold
-      ? withVehicleRef(
-          siteWhatsAppMessage(`quero conhecer as condições da Black Friday para o ${label}.`),
-          waRef,
-        )
-      : messages.info;
+  const presets = useMemo(() => buildDownPaymentPresets(vehiclePrice), [vehiclePrice]);
+
+  const [activeTab, setActiveTab] = useState<HeroConversionTab>("financiar");
+  const [downPayment, setDownPayment] = useState<number>(() => presets[1]?.value ?? 0);
+  const [months, setMonths] = useState<number>(48);
+  const [tradeModel, setTradeModel] = useState("");
+  const [tradeYear, setTradeYear] = useState("");
+  const [tradeKm, setTradeKm] = useState("");
+  const [visitOption, setVisitOption] = useState<VisitOption>("hoje");
+
+  useEffect(() => {
+    setDownPayment(presets[1]?.value ?? 0);
+  }, [vehicleId, presets]);
+
+  const activeMessage = (() => {
+    if (activeTab === "financiar") {
+      const entradaText =
+        downPayment > 0
+          ? `entrada de ${formatShortBRL(downPayment)}`
+          : "sem entrada";
+      const bfPrefix = isBlackFriday
+        ? `quero consultar o valor real da parcela nos bancos parceiros para o ${label} nas condições Black Friday, com ${entradaText} em ${months}x.`
+        : `quero consultar o valor real da parcela nos bancos parceiros para o ${label}, com ${entradaText} em ${months}x.`;
+      return withVehicleRef(siteWhatsAppMessage(bfPrefix), waRef);
+    }
+
+    if (activeTab === "troca") {
+      const parts = [
+        tradeModel.trim(),
+        tradeYear.trim(),
+        tradeKm.trim() ? `${tradeKm.trim()} km` : "",
+      ].filter(Boolean);
+      const body = parts.length
+        ? `quero avaliar meu ${parts.join(", ")} na troca pelo ${label}.`
+        : `quero avaliar meu carro usado na troca pelo ${label}.`;
+      return withVehicleRef(siteWhatsAppMessage(body), waRef);
+    }
+
+    if (visitOption === "video") {
+      return withVehicleRef(
+        siteWhatsAppMessage(`quero receber um vídeo atual do showroom do ${label}.`),
+        waRef,
+      );
+    }
+
+    const dayLabel =
+      visitOption === "hoje"
+        ? "hoje"
+        : visitOption === "amanha"
+          ? "amanhã"
+          : "no sábado";
+    return withVehicleRef(
+      siteWhatsAppMessage(
+        `quero agendar uma visita em Esteio/RS ${dayLabel} para ver o ${label}.`,
+      ),
+      waRef,
+    );
+  })();
+
   const href = whatsapp?.numero
-    ? buildWhatsAppUrl(whatsapp.numero, inquiryMessage)
+    ? buildWhatsAppUrl(whatsapp.numero, activeMessage)
     : undefined;
-  const tradeHref = whatsapp?.numero
-    ? buildWhatsAppUrl(whatsapp.numero, messages.trade)
-    : undefined;
+
+  const callbackContext =
+    activeTab === "financiar"
+      ? `Financiar · ${downPayment > 0 ? `Entrada ${formatShortBRL(downPayment)}` : "Sem entrada"} em ${months}x`
+      : activeTab === "troca"
+        ? `Troca · ${[tradeModel.trim(), tradeYear.trim(), tradeKm.trim() ? `${tradeKm.trim()} km` : ""].filter(Boolean).join(" ") || "usado na troca"}`
+        : visitOption === "video"
+          ? "Pedido de vídeo do showroom"
+          : `Visita · ${visitOption === "hoje" ? "Hoje" : visitOption === "amanha" ? "Amanhã" : "Sábado"}`;
+
+  useEffect(() => {
+    if (isSold) return;
+    onIntentContextChange?.({ summary: callbackContext, whatsappUrl: href });
+  }, [isSold, callbackContext, href, onIntentContextChange]);
+
   const similarHref = whatsapp?.numero
     ? buildWhatsAppUrl(
         whatsapp.numero,
@@ -431,35 +749,229 @@ function ContactButton({
     );
   }
 
-  // Um botão largo em fluxo. O card com miniatura + preço fica só no sticky
-  // (DetalheFloatingWhatsApp), quando o carro já saiu da tela.
-  return (
-    <div className="flex w-full flex-col items-center gap-1">
-      {href && (
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-wa-source="hero"
-          data-wa-intent="vehicle_inquiry"
-          data-wa-vehicle-id={vehicleId}
-          data-wa-vehicle-name={modeloCompleto}
-          className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[#087A37] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-green-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#087A37] sm:min-h-12"
-        >
-          <MessageCircleMore className="h-4 w-4 shrink-0" aria-hidden="true" />
-          {isBlackFriday ? "Quero as condições Black Friday" : "Falar deste carro"}
-        </a>
-      )}
+  const activeIntent =
+    activeTab === "financiar"
+      ? "simulate_finance"
+      : activeTab === "troca"
+        ? "trade_in"
+        : visitOption === "video"
+          ? "request_photos"
+          : "schedule_visit";
 
-      <div className="flex w-full items-center justify-center gap-5">
-        <TradeInTextLink
-          href={tradeHref}
-          modeloCompleto={modeloCompleto}
+  const ctaLabel =
+    activeTab === "financiar"
+      ? isBlackFriday
+        ? "Simular parcela Black Friday no WhatsApp"
+        : "Consultar parcela nos bancos no WhatsApp"
+      : activeTab === "troca"
+        ? "Avaliar meu usado no WhatsApp"
+        : visitOption === "video"
+          ? "Pedir vídeo do showroom no WhatsApp"
+          : "Confirmar visita no WhatsApp";
+
+  return (
+    <div className="mt-2 flex w-full flex-col gap-2">
+      {/* Seletor leve de intenção — integrado ao Hero, sem caixona pesada */}
+      <div
+        role="tablist"
+        aria-label="Como prefere falar sobre este carro"
+        className="grid grid-cols-3 gap-1 rounded-full border border-slate-200/90 bg-white/90 p-1"
+      >
+        {(
+          [
+            { id: "financiar", label: "Financiar", icon: Calculator },
+            { id: "troca", label: "Na troca", icon: ArrowLeftRight },
+            { id: "visita", label: "Visita", icon: CalendarDays },
+          ] as const
+        ).map(({ id, label: tabLabel, icon: Icon }) => {
+          const isSelected = activeTab === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={isSelected}
+              onClick={() => setActiveTab(id)}
+              className={`flex min-h-8 items-center justify-center gap-1 rounded-full px-1.5 py-1 text-[11px] font-bold leading-tight whitespace-nowrap transition-colors ${
+                isSelected
+                  ? "bg-[#00283C] text-white"
+                  : "text-[#365565] hover:bg-slate-100 hover:text-[#00283C]"
+              }`}
+            >
+              <Icon className="h-3 w-3 shrink-0" aria-hidden="true" />
+              <span>{tabLabel}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Opções compactas por intenção — sem inventar parcela */}
+      <div className="space-y-2">
+        {activeTab === "financiar" && (
+          <div className="space-y-2">
+            <div>
+              <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.08em] text-[#526974]">
+                Entrada desejada
+              </p>
+              <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+                {presets.map((preset) => {
+                  const active = downPayment === preset.value;
+                  return (
+                    <button
+                      key={preset.value}
+                      type="button"
+                      onClick={() => setDownPayment(preset.value)}
+                      className={`rounded-full border px-2 py-1 text-[11px] font-bold whitespace-nowrap transition-colors ${
+                        active
+                          ? "border-[#087A37] bg-[#EAF7F0] text-[#075E54]"
+                          : "border-slate-200 bg-white/90 text-[#365565] hover:border-[#23747C]/50"
+                      }`}
+                    >
+                      {preset.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5">
+                <span className="mr-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#526974]">
+                  Prazo:
+                </span>
+                {[36, 48, 60].map((term) => {
+                  const active = months === term;
+                  return (
+                    <button
+                      key={term}
+                      type="button"
+                      onClick={() => setMonths(term)}
+                      className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold transition-colors ${
+                        active
+                          ? "border-[#087A37] bg-[#EAF7F0] text-[#075E54]"
+                          : "border-slate-200 bg-white/90 text-[#365565] hover:border-[#23747C]/50"
+                      }`}
+                    >
+                      {term}x
+                    </button>
+                  );
+                })}
+              </div>
+              <span className="text-[10px] font-medium text-[#526974]">
+                {isBlackFriday
+                  ? "Entrada até 10x s/ juros no cartão"
+                  : "Entrada em até 21x no cartão"}
+              </span>
+            </div>
+
+            <p className="text-[11px] leading-snug text-[#526974]">
+              Consultamos a parcela real nos bancos parceiros conforme seu perfil. Sujeito à análise de crédito.
+            </p>
+          </div>
+        )}
+
+        {activeTab === "troca" && (
+          <div className="space-y-2">
+            <p className="text-[11px] font-semibold text-[#075E54]">
+              Avaliação na hora · Aceita financiado · Troco na troca
+            </p>
+            <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-[1.4fr_0.7fr_0.9fr]">
+              <input
+                type="text"
+                value={tradeModel}
+                onChange={(e) => setTradeModel(e.target.value)}
+                placeholder="Seu carro (ex: Onix)"
+                aria-label="Modelo do seu carro para troca"
+                className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-xs text-[#00283C] placeholder:text-slate-400 focus:border-[#087A37] focus:outline-none"
+              />
+              <input
+                type="text"
+                inputMode="numeric"
+                value={tradeYear}
+                onChange={(e) => setTradeYear(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                placeholder="Ano"
+                aria-label="Ano do seu carro para troca"
+                className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-xs text-[#00283C] placeholder:text-slate-400 focus:border-[#087A37] focus:outline-none"
+              />
+              <input
+                type="text"
+                inputMode="numeric"
+                value={tradeKm}
+                onChange={(e) => setTradeKm(e.target.value)}
+                placeholder="KM"
+                aria-label="Quilometragem do seu carro para troca"
+                className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-xs text-[#00283C] placeholder:text-slate-400 focus:border-[#087A37] focus:outline-none"
+              />
+            </div>
+          </div>
+        )}
+
+        {activeTab === "visita" && (
+          <div className="space-y-2">
+            <div className="flex flex-wrap gap-1.5">
+              {(
+                [
+                  { id: "hoje", label: "Ver hoje" },
+                  { id: "amanha", label: "Ver amanhã" },
+                  { id: "sabado", label: "Ver no sábado" },
+                  { id: "video", label: "Pedir vídeo do showroom" },
+                ] as const
+              ).map((option) => {
+                const active = visitOption === option.id;
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setVisitOption(option.id)}
+                    className={`rounded-full border px-3 py-1 text-[11px] font-bold transition-colors ${
+                      active
+                        ? "border-[#087A37] bg-[#EAF7F0] text-[#075E54]"
+                        : "border-slate-200 bg-white/90 text-[#365565] hover:border-[#23747C]/50"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="flex items-center gap-1.5 text-[11px] text-[#526974]">
+              <MapPin className="h-3.5 w-3.5 shrink-0 text-[#23747C]" aria-hidden="true" />
+              Av. Pres. Vargas 740 e 1106 · Esteio/RS
+            </p>
+          </div>
+        )}
+
+        {href && (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-wa-source="hero"
+            data-wa-intent={activeIntent}
+            data-wa-vehicle-id={vehicleId}
+            data-wa-vehicle-name={modeloCompleto}
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[#087A37] px-4 py-2.5 text-center text-sm font-bold leading-snug text-white transition-colors hover:bg-green-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#087A37] sm:min-h-12"
+          >
+            <MessageCircleMore className="h-4 w-4 shrink-0" aria-hidden="true" />
+            {ctaLabel}
+          </a>
+        )}
+      </div>
+
+      {/* Captura anti-abandono no mobile/tablet (no desktop fica abaixo do carro para equilibrar o Hero) */}
+      <div className="border-t border-slate-200/80 pt-2 lg:hidden">
+        <QuickCallbackForm
+          inputId={`wa-callback-mobile-${vehicleId ?? "carro"}`}
           vehicleId={vehicleId}
-          compact
-          className="min-h-11"
+          vehicleName={label}
+          intentSummary={callbackContext}
+          contextLabel={callbackContext}
+          fallbackWhatsAppUrl={href}
         />
-        {vehicleId != null && (
+      </div>
+
+      {vehicleId != null && (
+        <div className="flex w-full items-center justify-center">
           <Link
             to="/comparar"
             search={{ veiculo: String(vehicleId) }}
@@ -470,71 +982,14 @@ function ContactButton({
                 vehicleNames: [label],
               })
             }
-            className="inline-flex min-h-11 items-center justify-center gap-1.5 text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
+            className="inline-flex min-h-8 items-center justify-center gap-1.5 text-xs font-bold text-[#00283C] underline underline-offset-4 transition-colors hover:text-[#5CD29D]"
           >
-            Comparar
+            Comparar com outros carros
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
-        )}
-      </div>
-      {tradeHref && (
-        <p className="text-center text-xs leading-relaxed text-[#365565]">
-          Avaliamos seu usado na troca por qualquer carro do estoque, inclusive
-          com possibilidade de troco.
-        </p>
+        </div>
       )}
     </div>
-  );
-}
-
-interface TradeInTextLinkProps {
-  href?: string;
-  modeloCompleto?: string;
-  vehicleId?: string | number;
-  className?: string;
-  compact?: boolean;
-  /** Botão secundário em pílula (hero); default é link de texto. */
-  pill?: boolean;
-}
-
-function TradeInTextLink({
-  href,
-  modeloCompleto,
-  vehicleId,
-  className = "",
-  compact = false,
-  pill = false,
-}: TradeInTextLinkProps) {
-  if (!href) return null;
-
-  const pillClass =
-    "inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#00283C]/15 bg-white px-3 text-[13px] font-bold text-[#00283C] transition-colors hover:border-[#00283C]/40";
-  const textClass = `inline-flex items-center gap-1.5 font-bold text-[#00283C] transition-colors hover:text-[#5CD29D] ${compact ? "text-xs" : "text-sm"}`;
-
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      data-wa-source="detalhe_trade"
-      data-wa-intent="trade_in"
-      data-wa-vehicle-id={vehicleId}
-      data-wa-vehicle-name={modeloCompleto}
-      className={`${pill ? pillClass : textClass} ${className}`}
-    >
-      <ArrowLeftRight
-        className={
-          compact || pill ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4 shrink-0"
-        }
-      />
-      {pill ? (
-        "Usado na troca"
-      ) : (
-        <span className="underline underline-offset-4">
-          {compact ? "Usado na troca" : "Tenho um usado na troca"}
-        </span>
-      )}
-    </a>
   );
 }
 
@@ -1575,6 +2030,29 @@ function RelatedVehiclesSection({
   );
 }
 
+function formatHeroSpecValue(raw?: string): string {
+  const value = String(raw ?? "").trim();
+  if (!value) return "";
+  const map: Record<string, string> = {
+    AUTOMATICO: "Automático",
+    AUTOMÁTICO: "Automático",
+    MANUAL: "Manual",
+    AUTOMATIZADO: "Automatizado",
+    CVT: "CVT",
+    FLEX: "Flex",
+    GASOLINA: "Gasolina",
+    DIESEL: "Diesel",
+    ETANOL: "Etanol",
+    HIBRIDO: "Híbrido",
+    HÍBRIDO: "Híbrido",
+    ELETRICO: "Elétrico",
+    ELÉTRICO: "Elétrico",
+  };
+  const upper = value.toUpperCase();
+  if (map[upper]) return map[upper];
+  return value.replace(/\bTURBO\b/g, "Turbo");
+}
+
 function VehiclePrice({
   price,
   previousPrice,
@@ -1598,24 +2076,21 @@ function VehiclePrice({
     >
       {showComparison && previousPrice ? (
         <div className="flex flex-col items-start gap-1">
-          <p className="text-fg/70 text-[16px] font-semibold leading-none whitespace-nowrap">
+          <p className="text-sm font-semibold leading-none text-[#526974] whitespace-nowrap">
             De:{" "}
             <span
               className="line-through"
               dangerouslySetInnerHTML={{ __html: previousPrice }}
             />
           </p>
-          <span className="text-fg/60 text-[11px] font-semibold uppercase leading-none whitespace-nowrap">
-            Para:
-          </span>
           <p
-            className="font-bold whitespace-nowrap text-[#087A37] leading-tight info-price"
+            className="text-[32px] font-extrabold leading-none tracking-[-0.03em] tabular-nums whitespace-nowrap text-[#00283C] sm:text-[36px]"
             dangerouslySetInnerHTML={{ __html: price }}
           />
         </div>
       ) : (
         <p
-          className="font-bold whitespace-nowrap text-[#087A37] leading-tight info-price"
+          className="text-[32px] font-extrabold leading-none tracking-[-0.03em] tabular-nums whitespace-nowrap text-[#00283C] sm:text-[36px]"
           dangerouslySetInnerHTML={{ __html: price }}
         />
       )}
@@ -1782,6 +2257,12 @@ export function DetalhesPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [lightboxOrigin, setLightboxOrigin] = useState<"gallery" | "hero">("gallery");
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [heroIntentContext, setHeroIntentContext] = useState<{
+    summary: string;
+    whatsappUrl?: string;
+  }>({ summary: "" });
+  const { data: heroWhatsApp } = useWhatsAppQuery();
   const heroRef = useRef<HTMLElement>(null);
   const heroMediaRef = useRef<HTMLDivElement>(null);
   const primaryCtaRef = useRef<HTMLDivElement>(null);
@@ -2123,6 +2604,10 @@ export function DetalhesPage() {
   }
 
   const isSold = !vehicle.price || vehicle.price <= 0;
+  const hasRealPhotos =
+    vehicle.imagens_site?.tem_fotos === 1 ||
+    (vehicle.imagens_site?.tem_fotos !== 0 &&
+      (avifImages.length > 0 || mainImage !== CAR_COVERED_PLACEHOLDER_URL));
   const instagramVideo = selectVehicleInstagramVideo(
     String(vehicle.id),
     vehicle.price,
@@ -2143,6 +2628,39 @@ export function DetalhesPage() {
   const hasDiferencial = (tag: string) =>
     diferenciais.some((diff) => diff.tag === tag);
   const hasIcheckSeal = getHistorySummary(icheck?.protocol?.history).approved;
+  const canOpenHeroLaudo = Boolean(hasIcheckSeal && hasVehicleIcheck(vehicle) && !isSold);
+  const handleOpenHeroLaudo = () => {
+    const laudoSlug =
+      (slug && String(slug).trim()) ||
+      (vehicle?.id != null ? String(vehicle.id) : "");
+    if (!laudoSlug) return;
+    window.open(`/laudo/${laudoSlug}`, "_blank", "noopener,noreferrer");
+  };
+  const videoWhatsappHref = heroWhatsApp?.numero
+    ? buildWhatsAppUrl(
+        heroWhatsApp.numero,
+        vehicleWhatsAppMessages(vehicleLabel, modeloCompleto, waRef).info,
+      )
+    : undefined;
+  const quickProvenanceItems = (() => {
+    const items = ["Origem RS", "Sem locadora", "Sem leilão"];
+    const optionalTexts = [
+      ...(vehicle.opcionais ?? []).map((item) =>
+        typeof item === "string" ? item : `${item.tag ?? ""} ${item.descricao ?? ""}`,
+      ),
+      ...diferenciais.map((item) => `${item.tag ?? ""} ${item.descricao ?? ""}`),
+    ]
+      .join(" ")
+      .toLowerCase();
+    if (/manual|chave reserva/.test(optionalTexts)) {
+      items.push("Manual e chave reserva");
+    } else if (/revis[aã]o|revis[oõ]es|revisado/.test(optionalTexts)) {
+      items.push("Revisões conferidas");
+    } else if (/ipva/.test(optionalTexts)) {
+      items.push("IPVA verificado");
+    }
+    return items;
+  })();
   const merchandising = getVehicleMerchandising(vehicle);
   const isCommercialHighlight =
     Number(vehicle?.km) > 0 &&
@@ -2188,7 +2706,18 @@ export function DetalhesPage() {
             ? [{ text: "Único Dono", variant: "green-dark" as const }]
             : []),
           ...(hasIcheckSeal
-            ? [{ text: "I-CHECK APROVADO", variant: "icheck" as const }]
+            ? [
+                {
+                  text: "I-CHECK APROVADO",
+                  variant: "icheck" as const,
+                  ...(canOpenHeroLaudo
+                    ? {
+                        onClick: handleOpenHeroLaudo,
+                        title: "Abrir certificado DEKRA / CheckAuto em nova aba",
+                      }
+                    : {}),
+                },
+              ]
             : []),
         ]
   ).slice(0, 4);
@@ -2413,6 +2942,65 @@ export function DetalhesPage() {
               )}
             </div>
           )}
+          {/* Faixa sob a foto do carro no Desktop: elimina espaço vazio e destaca entrega imediata + procedência + Me chamar */}
+          {!isSold && (
+            <div className="pointer-events-auto select-auto relative z-20 mt-2 hidden pl-[8%] pr-[4%] lg:block xl:pl-[9%] xl:pr-[5%]">
+              <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white/90 px-4 py-3.5 backdrop-blur-sm xl:flex-row xl:items-center xl:justify-between xl:gap-5 xl:px-5">
+                <div className="min-w-0 flex-1 space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#00283C] px-3 py-1 text-[11px] font-black uppercase tracking-[0.07em] text-white">
+                      <Sparkles className="h-3 w-3 shrink-0 text-[#5CD29D]" aria-hidden="true" />
+                      Única unidade
+                    </span>
+                    {hasRealPhotos && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#087A37]/30 bg-[#EAF7F0] px-3 py-1 text-[12px] font-black uppercase tracking-[0.04em] text-[#065E2B]">
+                        <KeyRound className="h-3.5 w-3.5 shrink-0 text-[#087A37]" aria-hidden="true" />
+                        Saia de carro ainda hoje
+                      </span>
+                    )}
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#526974]">
+                      <MapPin className="h-3 w-3 text-[#23747C]" aria-hidden="true" />
+                      Esteio/RS
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#526974]">
+                      <Clock className="h-3 w-3 text-[#23747C]" aria-hidden="true" />
+                      Resposta ~1 min
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {quickProvenanceItems.map((item) => (
+                      <span
+                        key={item}
+                        className="inline-flex items-center gap-1 rounded-full border border-[#23747C]/15 bg-[#F4FAF8] px-2.5 py-0.5 text-[11px] font-semibold text-[#23545B]"
+                      >
+                        <ShieldCheck className="h-3 w-3 shrink-0 text-[#087A37]" aria-hidden="true" />
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="w-full shrink-0 border-t border-slate-200/80 pt-2.5 xl:w-[270px] xl:border-l xl:border-t-0 xl:pl-4 xl:pt-0">
+                  <QuickCallbackForm
+                    inputId={`wa-callback-desktop-${vehicle.id}`}
+                    vehicleId={vehicle.id}
+                    vehicleName={vehicleLabel}
+                    intentSummary={heroIntentContext.summary}
+                    contextLabel={heroIntentContext.summary || vehicleLabel}
+                    fallbackWhatsAppUrl={
+                      heroIntentContext.whatsappUrl ||
+                      (heroWhatsApp?.numero
+                        ? buildWhatsAppUrl(
+                            heroWhatsApp.numero,
+                            vehicleWhatsAppMessages(vehicleLabel, modeloCompleto, waRef).info,
+                          )
+                        : undefined)
+                    }
+                    compact
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Left Content - 50% com posicionamento absoluto */}
@@ -2425,7 +3013,7 @@ export function DetalhesPage() {
               duration: ANIMATION_DURATION.slow,
               ease: ANIMATION_EASING,
             }}
-            className="relative z-10 flex w-full min-w-0 flex-col pt-2 sm:py-6 lg:w-[32%] lg:max-w-[28rem] lg:pb-6 lg:pt-16 xl:w-[30%] xl:max-w-[32rem] 2xl:w-[32%] 2xl:max-w-[36rem]"
+            className="relative z-10 flex w-full min-w-0 flex-col pt-2 sm:py-4 lg:w-[32%] lg:max-w-[28rem] lg:pb-5 lg:pt-6 xl:w-[30%] xl:max-w-[32rem] 2xl:w-[32%] 2xl:max-w-[36rem]"
           >
             {/* Brand and a direct route to the verified video, when available. */}
             <div
@@ -2449,8 +3037,12 @@ export function DetalhesPage() {
                 {marca}
               </motion.p>
               {instagramVideo && (
-                <a
-                  href="#video-do-carro"
+                <button
+                  type="button"
+                  onClick={() => {
+                    trackVehicleVideoClick(String(vehicle.id));
+                    setVideoModalOpen(true);
+                  }}
                   className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full border border-[#23747C]/25 bg-white px-3 py-2 text-xs font-bold text-[#075E64] transition-colors hover:bg-[#E5F3F2] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#008B95]"
                 >
                   <Play
@@ -2458,7 +3050,7 @@ export function DetalhesPage() {
                     aria-hidden="true"
                   />
                   Ver vídeo
-                </a>
+                </button>
               )}
             </div>
 
@@ -2472,7 +3064,7 @@ export function DetalhesPage() {
                 delay: 0.2,
                 ease: [0.25, 0.1, 0.25, 1],
               }}
-              className="text-fg font-bold leading-[1.15] mb-3 sm:mb-5 max-w-full break-words info-model"
+              className="text-fg font-bold leading-[1.15] mb-2.5 sm:mb-3 max-w-full break-words info-model"
             >
               {modeloCompleto}
             </motion.h1>
@@ -2483,7 +3075,7 @@ export function DetalhesPage() {
             {badges.length > 0 && (
               <div
                 aria-label="Destaques do veículo"
-                className={`${heroEquipmentLabels.length > 0 ? "order-none mt-0" : "order-3 sm:order-none mt-4 sm:mt-0"} flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5`}
+                className={`${heroEquipmentLabels.length > 0 ? "order-none mt-0" : "order-3 sm:order-none mt-2 sm:mt-0"} mb-3.5 flex flex-wrap gap-1.5`}
               >
                 {badges.map((badge, idx) => (
                   <Badge key={idx} {...badge} />
@@ -2491,93 +3083,151 @@ export function DetalhesPage() {
               </div>
             )}
 
-            {/* Details Grid - Melhorado */}
-            <div className="order-4 sm:order-none grid grid-cols-2 items-end gap-x-4 gap-y-2 mb-3 sm:mb-4 pb-3 border-b border-border/60">
-              {year && (
-                <div className="flex min-w-0 flex-col">
-                  <span className="text-muted-foreground uppercase tracking-[0.08em] mb-0.5 font-medium info-label">
-                    Modelo
-                  </span>
-                  <span className="text-fg font-semibold info-value">
-                    {year}
-                  </span>
-                </div>
-              )}
-              {mileageFormatted && (
-                <div className="flex w-fit max-w-full flex-col justify-end justify-self-start rounded-lg border border-[#23747C]/15 bg-[#e5f3ec] px-2 py-1">
-                  <span className="mb-0.5 flex items-center gap-1 font-medium uppercase tracking-[0.08em] text-[#23747C] info-label">
-                    <Gauge className="h-3 w-3 shrink-0" aria-hidden="true" />
-                    Quilometragem
-                  </span>
-                  <span className="font-semibold leading-none text-[#075E54] info-value">
-                    {mileageFormatted}
-                  </span>
-                </div>
-              )}
-              {combustivel && (
-                <div className="flex min-w-0 flex-col">
-                  <span className="text-muted-foreground uppercase tracking-[0.08em] mb-0.5 font-medium info-label">
-                    Combustível
-                  </span>
-                  <span className="text-fg font-semibold uppercase info-value">
-                    {combustivel}
-                  </span>
-                </div>
-              )}
-              {cambio && (
-                <div className="flex min-w-0 flex-col">
-                  <span className="text-muted-foreground uppercase tracking-[0.08em] mb-0.5 font-medium info-label">
-                    Câmbio
-                  </span>
-                  <span className="text-fg font-semibold info-value">
-                    {cambio}
-                  </span>
-                </div>
-              )}
-              {motorFormatado && (
-                <div className="flex min-w-0 flex-col">
-                  <span className="text-muted-foreground uppercase tracking-[0.08em] mb-0.5 font-medium info-label">
-                    Motor
-                  </span>
-                  <span className="text-fg font-semibold info-value">
-                    {motorFormatado}
-                  </span>
+            {/* Ficha técnica resumida — alinhada em 2 linhas balanceadas sem célula órfã */}
+            <div className="order-4 sm:order-none mb-3.5 space-y-2.5 border-y border-slate-200/80 py-3">
+              <div className="grid grid-cols-3 gap-x-3">
+                {year && (
+                  <div className="flex min-w-0 flex-col">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#647B86]">
+                      Modelo
+                    </span>
+                    <span className="mt-0.5 text-[14px] font-bold leading-snug tabular-nums text-[#00283C] sm:text-[15px]">
+                      {year}
+                    </span>
+                  </div>
+                )}
+                {mileageFormatted && (
+                  <div className="flex min-w-0 flex-col">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#23747C]">
+                      <Gauge className="h-3 w-3 shrink-0" aria-hidden="true" />
+                      Km
+                    </span>
+                    <span className="mt-0.5 text-[14px] font-bold leading-snug tabular-nums text-[#075E54] sm:text-[15px]">
+                      {mileageFormatted}
+                    </span>
+                  </div>
+                )}
+                {cambio && (
+                  <div className="flex min-w-0 flex-col">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#647B86]">
+                      Câmbio
+                    </span>
+                    <span className="mt-0.5 truncate text-[14px] font-bold leading-snug text-[#00283C] sm:text-[15px]">
+                      {formatHeroSpecValue(cambio)}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {(combustivel || motorFormatado) && (
+                <div
+                  className={`grid gap-x-3 border-t border-slate-200/70 pt-2.5 ${
+                    combustivel && motorFormatado ? "grid-cols-2" : "grid-cols-1"
+                  }`}
+                >
+                  {combustivel && (
+                    <div className="flex min-w-0 flex-col">
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#647B86]">
+                        Combustível
+                      </span>
+                      <span className="mt-0.5 text-[14px] font-bold leading-snug text-[#00283C] sm:text-[15px]">
+                        {formatHeroSpecValue(combustivel)}
+                      </span>
+                    </div>
+                  )}
+                  {motorFormatado && (
+                    <div className="flex min-w-0 flex-col">
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#647B86]">
+                        Motor
+                      </span>
+                      <span className="mt-0.5 text-[14px] font-bold leading-snug text-[#00283C] sm:text-[15px]">
+                        {formatHeroSpecValue(motorFormatado)}
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Price & CTA - Melhorado */}
-            <div className="order-1 sm:order-none flex flex-col items-center gap-1 w-full">
+            {/* Preço, confiança e CTA — tudo alinhado à esquerda com hierarquia limpa */}
+            <div className="order-1 sm:order-none flex w-full flex-col items-start gap-1.5">
               {!isSold && (
-                <div className="flex w-full flex-col items-center">
-                  {isBlackFriday && (
-                    <p className="bf-vehicle-price-note">
-                      Black Friday Netcar <span>· Até 30/11</span>
-                    </p>
-                  )}
-                  <VehiclePrice
-                    price={fipeOffer && vehicle ? formatPrice(vehicle.price) : price}
-                    previousPrice={previousPrice}
-                    showComparison={showPriceComparison}
-                  />
-                  <VehicleFipeOfferNote offer={fipeOffer} />
-                  <GoogleRatingBadge className="[&>summary]:border-0 [&>summary]:bg-transparent [&>summary]:shadow-none" />
+                <div className="flex w-full flex-col items-start gap-2">
+                  {/* Destaque de escassez real + entrega imediata no mobile/tablet (no desktop aparece sob a foto do carro) */}
+                  <div className="mb-1 flex w-full flex-col items-start gap-1.5 lg:hidden">
+                    <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[#00283C] px-3 py-1 text-[11px] font-black uppercase tracking-[0.07em] text-white">
+                        <Sparkles className="h-3 w-3 shrink-0 text-[#5CD29D]" aria-hidden="true" />
+                        Única unidade
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#526974]">
+                        <MapPin className="h-3 w-3 text-[#23747C]" aria-hidden="true" />
+                        Esteio/RS
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#526974]">
+                        <Clock className="h-3 w-3 text-[#23747C]" aria-hidden="true" />
+                        Resposta ~1 min
+                      </span>
+                    </div>
+
+                    {hasRealPhotos && (
+                      <div className="flex w-full items-center gap-2.5 rounded-xl border border-[#087A37]/30 border-l-4 border-l-[#087A37] bg-[#EAF7F0] px-3 py-2 text-left">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#087A37] text-white">
+                          <KeyRound className="h-4 w-4" aria-hidden="true" />
+                        </span>
+                        <div className="min-w-0 leading-tight">
+                          <p className="text-[12px] font-black uppercase tracking-[0.04em] text-[#065E2B] sm:text-[13px]">
+                            Saia de carro ainda hoje
+                          </p>
+                          <p className="mt-0.5 text-[11px] font-semibold text-[#23545B]">
+                            Veículo pronto no showroom para entrega imediata
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex w-full flex-col items-start gap-1.5">
+                    {isBlackFriday && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#23747C]/25 bg-[#E6F5F6] px-2.5 py-0.5 text-[11px] font-bold text-[#064B50]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#087A37]" aria-hidden="true" />
+                        Black Friday Netcar · Até 30/11
+                      </span>
+                    )}
+                    <VehiclePrice
+                      price={fipeOffer && vehicle ? formatPrice(vehicle.price) : price}
+                      previousPrice={previousPrice}
+                      showComparison={showPriceComparison}
+                    />
+                    <VehicleFipeOfferNote offer={fipeOffer} />
+                    <GoogleRatingBadge variant="inline" />
+                  </div>
+
+                  {/* Procedência e documentação rápida no mobile/tablet (no desktop fica sob o carro) */}
+                  <div className="flex flex-wrap items-center gap-1.5 lg:hidden">
+                    {quickProvenanceItems.map((item) => (
+                      <span
+                        key={item}
+                        className="inline-flex items-center gap-1 rounded-full border border-[#23747C]/15 bg-[#F4FAF8] px-2 py-0.5 text-[10px] font-semibold text-[#23545B]"
+                      >
+                        <ShieldCheck className="h-3 w-3 shrink-0 text-[#087A37]" aria-hidden="true" />
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               )}
               <div ref={primaryCtaRef} className="w-full">
                 <ContactButton
                   modeloCompleto={modeloCompleto}
                   vehicleId={vehicle?.id}
+                  vehiclePrice={vehicle?.price}
                   isSold={isSold}
                   vehicleLabel={vehicleLabel}
                   waRef={waRef}
+                  onIntentContextChange={setHeroIntentContext}
                 />
               </div>
-              {!isSold && (
-                <p className="mb-3 text-center text-[11px] leading-relaxed text-muted-foreground">
-                  Financiamento sujeito à análise. Consulte taxa, entrada e prazo.
-                </p>
-              )}
             </div>
           </motion.div>
         </div>
@@ -2620,6 +3270,9 @@ export function DetalhesPage() {
                   displayModel={instagramVideo.displayModel}
                   coverImage={instagramVideo.coverImage}
                   onOpen={() => trackVehicleVideoClick(String(vehicle.id))}
+                  isOpen={videoModalOpen}
+                  onOpenChange={setVideoModalOpen}
+                  whatsappHref={videoWhatsappHref}
                 />
               </section>
             )}

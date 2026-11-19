@@ -223,6 +223,9 @@ type LinkProps = {
   displayModel?: string;
   coverImage?: string;
   onOpen?: () => void;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  whatsappHref?: string;
 };
 const { VehicleVideoLink } = loadModule<{
   VehicleVideoLink: (props: LinkProps) => React.ReactElement<{
@@ -235,6 +238,7 @@ const { VehicleVideoLink } = loadModule<{
     children?: React.ReactNode;
   }> | null;
 }>("src/modules/detalhes/components/VehicleVideoLink.tsx", {
+  react: React,
   "react/jsx-runtime": jsxRuntime,
   "lucide-react": icons,
   "../lib/vehicleInstagramVideos": videos,
@@ -590,17 +594,40 @@ assert.ok(
   "O carrossel mobile deve permanecer no hero do veículo",
 );
 assert.ok(mobileCarousels[0].end < videoRegion.pos, "No celular, as fotos do hero antecedem a mídia de vídeo");
+// Modo modal inline: fechado nunca carrega iframe/Meta; aberto usa embed canônico.
+const inlineClosed = renderToStaticMarkup(
+  React.createElement(VehicleVideoLink, {
+    permalink: incoming,
+    vehicleName: "Carro de teste",
+    coverImage: localCover,
+    isOpen: false,
+    onOpenChange: () => {},
+  }),
+);
+assert.doesNotMatch(inlineClosed, /<iframe\b/i, "Player modal fechado não pode carregar iframe");
+assert.match(inlineClosed, /Assistir aqui na página/);
+const inlineOpen = renderToStaticMarkup(
+  React.createElement(VehicleVideoLink, {
+    permalink: incoming,
+    vehicleName: "Carro de teste",
+    coverImage: localCover,
+    isOpen: true,
+    onOpenChange: () => {},
+  }),
+);
+assert.match(inlineOpen, new RegExp(`src="${canonical.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}embed/captioned/"`), "Embed deve usar apenas o permalink canônico");
+assert.match(inlineOpen, /Abrir no Instagram/);
+
 const videoShortcuts = detailsNodes.filter((node): node is ts.JsxElement =>
-  ts.isJsxElement(node) && node.openingElement.tagName.getText(detailsAst) === "a" &&
-  literalAttribute(node.openingElement, "href") === "#video-do-carro");
-assert.equal(videoShortcuts.length, 1, "O início do anúncio oferece um atalho para o vídeo");
+  ts.isJsxElement(node) &&
+  node.openingElement.tagName.getText(detailsAst) === "button" &&
+  /Ver vídeo/.test(node.getText(detailsAst)) &&
+  /setVideoModalOpen\(true\)/.test(node.getText(detailsAst)));
+assert.equal(videoShortcuts.length, 1, "O início do anúncio oferece um atalho para abrir o vídeo");
 const videoShortcut = videoShortcuts[0];
 assert.ok(hasVideoGate(videoShortcut), "Sem vídeo, o anúncio não oferece um atalho vazio");
 assert.ok(videoShortcut.end < videoRegion.pos, "O atalho deve antecipar a mídia de vídeo");
 assert.match(videoShortcut.getText(detailsAst), /Ver vídeo/);
-for (const name of ["onClick", "onOpen", "target"]) {
-  assert.equal(jsxAttribute(videoShortcut.openingElement, name), undefined, "O atalho apenas rola a página, sem medir abertura externa");
-}
 const pageVideoLinks = detailsNodes.filter((node): node is ts.JsxSelfClosingElement =>
   ts.isJsxSelfClosingElement(node) && node.tagName.getText(detailsAst) === "VehicleVideoLink");
 assert.equal(pageVideoLinks.length, 1, "A unidade mantém uma única mídia principal de vídeo");

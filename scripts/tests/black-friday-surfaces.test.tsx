@@ -54,15 +54,26 @@ function loadComponents(active: boolean) {
   // detail page's network, maps and gallery dependencies.
   const pageText = readFileSync(new URL("../../src/modules/detalhes/pages/DetalhesPage.tsx", import.meta.url), "utf8");
   const page = ts.createSourceFile("DetalhesPage.tsx", pageText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const helperNames = ["formatShortBRL", "buildDownPaymentPresets", "formatBrazilPhoneInput", "QuickCallbackForm"];
   const names = ["ContactButton", "DetalheFloatingWhatsApp"];
-  const functions = page.statements.filter((node) => ts.isFunctionDeclaration(node) && names.includes(node.name?.text || ""));
-  assert.equal(functions.length, 2);
+  const needed = [...helperNames, ...names];
+  const functions = page.statements.filter((node) => ts.isFunctionDeclaration(node) && needed.includes(node.name?.text || ""));
+  assert.equal(functions.length, needed.length);
   const contacts = evaluate(`${functions.map((node) => node.getText(page)).join("\n")}\nexport { ${names.join(", ")} };`, {
     ...hooks,
     ...whatsappMessages,
+    useState: React.useState,
+    useMemo: React.useMemo,
+    useEffect: React.useEffect,
     Link,
     ArrowRight: Icon,
+    ArrowLeftRight: Icon,
+    Calculator: Icon,
+    CalendarDays: Icon,
+    MapPin: Icon,
     MessageCircleMore: Icon,
+    PhoneCall: Icon,
+    submitVehicleCallbackLead: async () => ({ ok: true, crmConfirmed: false, dryRun: true }),
     TradeInTextLink: ({ href }: any) => <a href={href}>Avaliar troca</a>,
     FloatingPortal: ({ children }: any) => children,
     VehicleWhatsAppCard: (props: any) => <a href={props.href} data-card-label={props.ctaLabel} data-card-source={props.source} />,
@@ -128,8 +139,11 @@ test("rollback restores the normal vehicle contact text and message in the same 
   state.active = false;
   act(() => renderer.update(<ContactButton {...props} />));
   anchor = renderer.root.findByProps({ "data-wa-source": "hero" });
-  assert.ok(anchor.children.includes("Falar deste carro"));
-  assert.equal(new URL(anchor.props.href).searchParams.get("text"), whatsappMessages.vehicleWhatsAppMessages("Tracker Premier", "Tracker Premier", props.waRef).info);
+  assert.ok(anchor.children.includes("Consultar parcela nos bancos no WhatsApp"));
+  const normalMessage = new URL(anchor.props.href).searchParams.get("text") || "";
+  assert.match(normalMessage, /Tracker Premier/);
+  assert.match(normalMessage, /Placa: JCD0J59/);
+  assert.doesNotMatch(normalMessage, /Black Friday/);
   assert.doesNotMatch(JSON.stringify(renderer.toJSON()), /Black Friday/);
   renderer.unmount();
 });
