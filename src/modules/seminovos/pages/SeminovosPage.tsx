@@ -12,7 +12,7 @@ import { useAllStockDataQuery } from "@/catalog/queries/useStockQuery";
 import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { VehicleCardStatic } from "@/design-system/components/patterns/VehicleCard";
 import { AutocompleteSelect } from "@/design-system/components/ui/AutocompleteSelect";
-import { ChevronDown, Filter, MessageCircle, ShieldCheck } from "lucide-react";
+import { ChevronDown, Filter, MessageCircle, ShieldCheck, X } from "lucide-react";
 import { useMetaTags } from "@/hooks/useMetaTags";
 import { matchesVehicleSearch, parseVehicleSearch } from "@/lib/vehicleSearch";
 import { matchesVehicleBrand } from "@/lib/vehicleBrand";
@@ -60,6 +60,85 @@ const vehicleCategoryLabels: Record<string, string> = {
   MINIVAN: "Minivan",
   COUPE: "Cupê",
 };
+
+function normalizeComparableText(value: string | null | undefined): string {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toUpperCase();
+}
+
+function parseNumericPriceInput(value: string | undefined): number | null {
+  if (!value) return null;
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return null;
+  const parsed = Number(digits);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
+function formatCompactPriceLabel(value: string | undefined): string {
+  const num = parseNumericPriceInput(value);
+  if (!num) return value || "…";
+  if (num >= 1000 && num % 1000 === 0) return `R$ ${num / 1000} mil`;
+  return `R$ ${num.toLocaleString("pt-BR")}`;
+}
+
+function resolveShowroomSort(value: string | undefined): ShowroomSortOption {
+  if (
+    value === "recomendados" ||
+    value === "ano-desc" ||
+    value === "az" ||
+    value === "preco-asc" ||
+    value === "preco-desc"
+  ) {
+    return value;
+  }
+  return "recomendados";
+}
+
+function isAvailableVehicle(vehicle: { price?: number | null }): boolean {
+  const price = Number(vehicle.price);
+  return Number.isFinite(price) && price > 0;
+}
+
+/**
+ * Mantém a primeira dobra 100% com carros disponíveis e intercala vendidos
+ * organicamente a partir da 2ª linha (1 vendido a cada ~5 cards) para prova
+ * social de giro sem desperdiçar o topo da vitrine.
+ */
+function interleaveSoldAfterFirstRow<T extends { price?: number | null }>(
+  sortedVehicles: T[],
+  leadAvailable = 5,
+  availablePerSold = 4,
+): T[] {
+  const available: T[] = [];
+  const sold: T[] = [];
+  for (const vehicle of sortedVehicles) {
+    if (isAvailableVehicle(vehicle)) available.push(vehicle);
+    else sold.push(vehicle);
+  }
+  if (available.length === 0 || sold.length === 0) return sortedVehicles;
+
+  const result: T[] = [];
+  let availIdx = 0;
+  let soldIdx = 0;
+
+  while (availIdx < available.length && availIdx < leadAvailable) {
+    result.push(available[availIdx++]);
+  }
+
+  while (availIdx < available.length || soldIdx < sold.length) {
+    if (soldIdx < sold.length) {
+      result.push(sold[soldIdx++]);
+    }
+    for (let step = 0; step < availablePerSold && availIdx < available.length; step++) {
+      result.push(available[availIdx++]);
+    }
+  }
+
+  return result;
+}
 
 function toSelectOptions(values: Array<string | null | undefined>) {
   return [
@@ -357,7 +436,9 @@ export function SeminovosPage() {
   const [cambio, setCambio] = useState(search.cambio || "");
   const [combustivel, setCombustivel] = useState(search.combustivel || "");
   const [cor, setCor] = useState(search.cor || "");
-  const [sortBy, setSortBy] = useState<ShowroomSortOption>("az");
+  const [sortBy, setSortBy] = useState<ShowroomSortOption>(() =>
+    resolveShowroomSort(search.ordem),
+  );
   const [areFiltersVisible, setAreFiltersVisible] = useState(false);
   const pendingFilterTrackingRef = useRef<string | null>(null);
 
@@ -373,6 +454,7 @@ export function SeminovosPage() {
     setCambio(search.cambio || "");
     setCombustivel(search.combustivel || "");
     setCor(search.cor || "");
+    setSortBy(resolveShowroomSort(search.ordem));
   }, [
     search.marca,
     search.modelo,
@@ -384,7 +466,47 @@ export function SeminovosPage() {
     search.cambio,
     search.combustivel,
     search.cor,
+    search.ordem,
   ]);
+
+  const handleSortChange = (nextSort: ShowroomSortOption) => {
+    setSortBy(nextSort);
+    void navigate({
+      to: "/seminovos",
+      search: (previous) => ({
+        ...previous,
+        ordem: nextSort === "recomendados" ? undefined : nextSort,
+      }),
+      replace: true,
+      resetScroll: false,
+    });
+  };
+
+  const applySearchPatch = (patch: Partial<StockFilterValues>) => {
+    const nextFilters: StockFilterValues = {
+      marca: search.marca,
+      modelo: search.modelo,
+      precoMin: search.precoMin,
+      precoMax: search.precoMax,
+      anoMin: search.anoMin,
+      anoMax: search.anoMax,
+      cambio: search.cambio,
+      combustivel: search.combustivel,
+      cor: search.cor,
+      categoria: search.categoria,
+      ...patch,
+    };
+    pendingFilterTrackingRef.current = stockFilterSignature(nextFilters);
+    void navigate({
+      to: "/seminovos",
+      search: {
+        ...nextFilters,
+        busca: search.busca,
+        ordem: sortBy === "recomendados" ? undefined : sortBy,
+      },
+      resetScroll: false,
+    });
+  };
 
   // Aplica filtros
   const handleFilter = () => {
@@ -403,7 +525,11 @@ export function SeminovosPage() {
     pendingFilterTrackingRef.current = stockFilterSignature(nextFilters);
     navigate({
       to: "/seminovos",
-      search: { ...nextFilters, busca: search.busca },
+      search: {
+        ...nextFilters,
+        busca: search.busca,
+        ordem: sortBy === "recomendados" ? undefined : sortBy,
+      },
     });
     setAreFiltersVisible(false);
   };
@@ -422,7 +548,10 @@ export function SeminovosPage() {
     setCor("");
     navigate({
       to: "/seminovos",
-      search: emptySeminovosSearch,
+      search: {
+        ...emptySeminovosSearch,
+        ordem: sortBy === "recomendados" ? undefined : sortBy,
+      },
     });
     setAreFiltersVisible(false);
   };
@@ -484,26 +613,50 @@ export function SeminovosPage() {
     ? draftFiltersCount
     : appliedFiltersCount;
 
-  const activeFilterLabels = useMemo(() => {
-    const labels: string[] = [];
-    if (search.marca) labels.push(search.marca);
-    if (search.modelo) labels.push(search.modelo);
-    if (search.categoria) {
-      labels.push(
-        vehicleCategoryLabels[search.categoria.toUpperCase()] ||
-          search.categoria,
-      );
+  const activeFilterChips = useMemo(() => {
+    const chips: Array<{ key: string; label: string; patch: Partial<StockFilterValues> }> = [];
+    if (search.marca) {
+      chips.push({ key: "marca", label: search.marca, patch: { marca: undefined, modelo: undefined } });
     }
-    if (search.cambio) labels.push(search.cambio);
-    if (search.combustivel) labels.push(search.combustivel);
-    if (search.cor) labels.push(search.cor);
+    if (search.modelo) {
+      chips.push({ key: "modelo", label: search.modelo, patch: { modelo: undefined } });
+    }
+    if (search.categoria) {
+      chips.push({
+        key: "categoria",
+        label: vehicleCategoryLabels[search.categoria.toUpperCase()] || search.categoria,
+        patch: { categoria: undefined },
+      });
+    }
+    if (search.cambio) {
+      const cambioLabel = /autom/i.test(search.cambio) ? "Automático" : search.cambio;
+      chips.push({ key: "cambio", label: cambioLabel, patch: { cambio: undefined } });
+    }
+    if (search.combustivel) {
+      chips.push({ key: "combustivel", label: search.combustivel, patch: { combustivel: undefined } });
+    }
+    if (search.cor) {
+      chips.push({ key: "cor", label: search.cor, patch: { cor: undefined } });
+    }
     if (search.anoMin || search.anoMax) {
-      labels.push(`Ano ${search.anoMin || "…"}–${search.anoMax || "…"}`);
+      const anoLabel =
+        search.anoMin && !search.anoMax
+          ? `A partir de ${search.anoMin}`
+          : !search.anoMin && search.anoMax
+            ? `Até ${search.anoMax}`
+            : `Ano ${search.anoMin}–${search.anoMax}`;
+      chips.push({ key: "ano", label: anoLabel, patch: { anoMin: undefined, anoMax: undefined } });
     }
     if (search.precoMin || search.precoMax) {
-      labels.push(`R$ ${search.precoMin || "…"}–${search.precoMax || "…"}`);
+      const precoLabel =
+        !search.precoMin && search.precoMax
+          ? `Até ${formatCompactPriceLabel(search.precoMax)}`
+          : search.precoMin && !search.precoMax
+            ? `A partir de ${formatCompactPriceLabel(search.precoMin)}`
+            : `${formatCompactPriceLabel(search.precoMin)}–${formatCompactPriceLabel(search.precoMax)}`;
+      chips.push({ key: "preco", label: precoLabel, patch: { precoMin: undefined, precoMax: undefined } });
     }
-    return labels;
+    return chips;
   }, [
     search.marca,
     search.modelo,
@@ -516,6 +669,13 @@ export function SeminovosPage() {
     search.precoMin,
     search.precoMax,
   ]);
+
+  const filterSummaryText = useMemo(() => {
+    const bits: string[] = [];
+    if (search.busca?.trim()) bits.push(`"${search.busca.trim()}"`);
+    for (const chip of activeFilterChips) bits.push(chip.label);
+    return bits.join(", ");
+  }, [search.busca, activeFilterChips]);
 
   const parsedStockSearch = useMemo(
     () => parseVehicleSearch(search.busca || ""),
@@ -610,12 +770,57 @@ export function SeminovosPage() {
     search.categoria,
   ]);
 
-  const visibleVehicles = filteredAndSortedVehicles;
+  const availableVehicles = useMemo(
+    () => filteredAndSortedVehicles.filter(isAvailableVehicle),
+    [filteredAndSortedVehicles],
+  );
+  const soldVehicles = useMemo(
+    () => filteredAndSortedVehicles.filter((vehicle) => !isAvailableVehicle(vehicle)),
+    [filteredAndSortedVehicles],
+  );
+  const displayVehicles = useMemo(
+    () => interleaveSoldAfterFirstRow(filteredAndSortedVehicles, 5, 5),
+    [filteredAndSortedVehicles],
+  );
+
+  // Contagens ao vivo pros chips rápidos quando o estoque base está carregado sem filtros.
+  const baseChipCounts = useMemo(() => {
+    if (appliedFiltersCount > 0 || search.busca?.trim() || !vehicles) return null;
+    const active = vehicles.filter(isAvailableVehicle);
+    let suv = 0;
+    let hatch = 0;
+    let sedan = 0;
+    let automatic = 0;
+    let under80k = 0;
+    let under100k = 0;
+    let year2024Plus = 0;
+    for (const vehicle of active) {
+      const cat = resolvedVehicleCategory(vehicle);
+      if (cat === "SUV") suv++;
+      else if (cat === "HATCH") hatch++;
+      else if (cat === "SEDAN") sedan++;
+      if (/autom/i.test(vehicle.cambio || "")) automatic++;
+      const price = Number(vehicle.price || 0);
+      if (price > 0 && price <= 80_000) under80k++;
+      if (price > 0 && price <= 100_000) under100k++;
+      if (Number(vehicle.year || 0) >= 2024) year2024Plus++;
+    }
+    return {
+      all: active.length,
+      suv,
+      hatch,
+      sedan,
+      automatic,
+      under80k,
+      under100k,
+      year2024Plus,
+    };
+  }, [vehicles, appliedFiltersCount, search.busca]);
 
   // Insere a ajuda depois de duas linhas completas, sem abrir lacunas no grid.
   const midGridBreak = stockLayout.compact ? 6 : stockLayout.columns * 2;
   const showMidGridBanner =
-    visibleVehicles.length > midGridBreak + stockLayout.columns;
+    displayVehicles.length > midGridBreak + stockLayout.columns;
 
   // Anos para o dropdown (do mais recente para o mais antigo)
   const sortedYears = useMemo(() => {
@@ -632,7 +837,67 @@ export function SeminovosPage() {
     return toSelectOptions(brands);
   }, [brands]);
 
-  const modelOptions = useMemo(() => toSelectOptions(models), [models]);
+  // Quando uma marca é escolhida, limita modelos àquela marca.
+  const modelOptions = useMemo(() => {
+    if (marca && vehicles && vehicles.length > 0) {
+      const targetBrand = normalizeComparableText(marca);
+      const brandModels = vehicles
+        .filter((vehicle) => normalizeComparableText(vehicle.marca) === targetBrand)
+        .map((vehicle) => vehicle.modelo || vehicle.name);
+      if (brandModels.length > 0) {
+        return toSelectOptions(brandModels);
+      }
+    }
+    return toSelectOptions(models);
+  }, [marca, vehicles, models]);
+
+  // Contagem ao vivo para o botão do painel de filtros quando o estoque completo está disponível.
+  const draftPreviewCount = useMemo(() => {
+    if (appliedFiltersCount > 0 || !vehicles || vehicles.length === 0) return null;
+    const minP = parseNumericPriceInput(precoMin);
+    const maxP = parseNumericPriceInput(precoMax);
+    const minY = anoMin ? Number(anoMin) : null;
+    const maxY = anoMax ? Number(anoMax) : null;
+    const normMarca = normalizeComparableText(marca);
+    const normModelo = normalizeComparableText(modelo);
+    const normCat = normalizeComparableText(categoria);
+    const normCambio = normalizeComparableText(cambio);
+    const normComb = normalizeComparableText(combustivel);
+    const normCor = normalizeComparableText(cor);
+
+    return vehicles.filter((vehicle) => {
+      if (!isAvailableVehicle(vehicle)) return false;
+      if (normMarca && normalizeComparableText(vehicle.marca) !== normMarca) return false;
+      if (normModelo && !normalizeComparableText(vehicle.modelo || vehicle.name).includes(normModelo)) return false;
+      if (normCat && resolvedVehicleCategory(vehicle) !== normCat) return false;
+      if (normCambio && normalizeComparableText(vehicle.cambio) !== normCambio) return false;
+      if (normComb && normalizeComparableText(vehicle.combustivel) !== normComb) return false;
+      if (normCor && normalizeComparableText(vehicle.cor) !== normCor) return false;
+      const yearNum = Number(vehicle.year || 0);
+      if (minY && yearNum < minY) return false;
+      if (maxY && yearNum > maxY) return false;
+      const priceNum = Number(vehicle.price || 0);
+      if (minP && priceNum < minP) return false;
+      if (maxP && priceNum > maxP) return false;
+      if (search.busca?.trim() && !matchesVehicleSearch(vehicle, parsedStockSearch)) return false;
+      return true;
+    }).length;
+  }, [
+    appliedFiltersCount,
+    vehicles,
+    marca,
+    modelo,
+    categoria,
+    cambio,
+    combustivel,
+    cor,
+    anoMin,
+    anoMax,
+    precoMin,
+    precoMax,
+    search.busca,
+    parsedStockSearch,
+  ]);
   const colorOptions = useMemo(() => toSelectOptions(colors), [colors]);
   const fuelOptions = useMemo(() => toSelectOptions(fuels), [fuels]);
   const transmissionOptions = useMemo(
@@ -716,6 +981,114 @@ export function SeminovosPage() {
     search.anoMax,
   ]);
 
+  const quickFilterChips = useMemo(() => {
+    const activeCategoria = normalizeComparableText(search.categoria);
+    const isAutomatic = /autom/i.test(search.cambio || "");
+    const maxPriceNum = parseNumericPriceInput(search.precoMax);
+    const minYearNum = search.anoMin ? Number(search.anoMin) : null;
+    const isAllActive = appliedFiltersCount === 0 && !search.busca?.trim();
+
+    return [
+      {
+        id: "todos",
+        label: "Todos",
+        count: baseChipCounts?.all,
+        active: isAllActive,
+        onClick: handleClearFilters,
+      },
+      {
+        id: "suv",
+        label: "SUV",
+        count: baseChipCounts?.suv,
+        active: activeCategoria === "SUV",
+        onClick: () =>
+          applySearchPatch({
+            categoria: activeCategoria === "SUV" ? undefined : "SUV",
+          }),
+      },
+      {
+        id: "hatch",
+        label: "Hatch",
+        count: baseChipCounts?.hatch,
+        active: activeCategoria === "HATCH",
+        onClick: () =>
+          applySearchPatch({
+            categoria: activeCategoria === "HATCH" ? undefined : "HATCH",
+          }),
+      },
+      {
+        id: "sedan",
+        label: "Sedã",
+        count: baseChipCounts?.sedan,
+        active: activeCategoria === "SEDAN",
+        onClick: () =>
+          applySearchPatch({
+            categoria: activeCategoria === "SEDAN" ? undefined : "SEDAN",
+          }),
+      },
+      {
+        id: "automatico",
+        label: "Automático",
+        count: baseChipCounts?.automatic,
+        active: isAutomatic,
+        onClick: () =>
+          applySearchPatch({
+            cambio: isAutomatic ? undefined : "Automatico",
+          }),
+      },
+      {
+        id: "ate-80",
+        label: "Até R$ 80 mil",
+        count: baseChipCounts?.under80k,
+        active: maxPriceNum === 80_000 && !search.precoMin,
+        onClick: () =>
+          applySearchPatch({
+            precoMin: undefined,
+            precoMax: maxPriceNum === 80_000 && !search.precoMin ? undefined : "80000",
+          }),
+      },
+      {
+        id: "ate-100",
+        label: "Até R$ 100 mil",
+        count: baseChipCounts?.under100k,
+        active: maxPriceNum === 100_000 && !search.precoMin,
+        onClick: () =>
+          applySearchPatch({
+            precoMin: undefined,
+            precoMax: maxPriceNum === 100_000 && !search.precoMin ? undefined : "100000",
+          }),
+      },
+      {
+        id: "ano-2024",
+        label: "2024+",
+        count: baseChipCounts?.year2024Plus,
+        active: minYearNum === 2024 && !search.anoMax,
+        onClick: () =>
+          applySearchPatch({
+            anoMin: minYearNum === 2024 && !search.anoMax ? undefined : "2024",
+            anoMax: undefined,
+          }),
+      },
+    ];
+  }, [
+    appliedFiltersCount,
+    baseChipCounts,
+    search.anoMax,
+    search.anoMin,
+    search.busca,
+    search.cambio,
+    search.categoria,
+    search.precoMax,
+    search.precoMin,
+  ]);
+
+  const submitFiltersLabel =
+    draftPreviewCount !== null
+      ? draftPreviewCount === 0
+        ? "Nenhum disponível"
+        : `Ver ${draftPreviewCount} ${draftPreviewCount === 1 ? "carro" : "carros"}`
+      : "Aplicar filtros";
+
   return (
     <main
       className="flex-1 pt-16 sm:pt-0 overflow-x-hidden max-w-full pb-6"
@@ -724,7 +1097,7 @@ export function SeminovosPage() {
     >
       <BlackFridayStockIntro />
       <div data-bf-stock-catalog className="container-main px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-3 sm:py-4">
-        <div data-bf-stock-toolbar className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start">
+        <div data-bf-stock-toolbar className="mb-2.5 flex flex-col gap-2 sm:flex-row sm:items-start">
           <StockSearchField
             value={search.busca || ""}
             resetKey={stockFilterSignature(search)}
@@ -737,7 +1110,7 @@ export function SeminovosPage() {
               onClick={() => setAreFiltersVisible((visible) => !visible)}
               aria-expanded={areFiltersVisible}
               aria-controls="stock-filters"
-              className="inline-flex min-h-[30px] items-center justify-center gap-1 rounded-md bg-[#00283C] px-2.5 text-xs font-bold text-white sm:min-h-11 sm:gap-2 sm:rounded-lg sm:px-4 sm:text-sm"
+              className="inline-flex min-h-[34px] items-center justify-center gap-1.5 rounded-lg bg-[#00283C] px-3 text-xs font-bold text-white sm:min-h-11 sm:gap-2 sm:px-4 sm:text-sm"
             >
               <Filter className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Filtros
@@ -753,9 +1126,9 @@ export function SeminovosPage() {
                 <select
                   value={sortBy}
                   onChange={(event) =>
-                    setSortBy(event.target.value as ShowroomSortOption)
+                    handleSortChange(event.target.value as ShowroomSortOption)
                   }
-                  className="min-h-[30px] max-w-[190px] appearance-none rounded-md border border-[#00283C]/10 bg-white px-2 pr-6 text-xs font-semibold text-fg focus:outline-none focus:ring-2 focus:ring-primary/20 sm:min-h-11 sm:rounded-lg sm:px-3 sm:pr-8 sm:text-sm"
+                  className="min-h-[34px] max-w-[190px] appearance-none rounded-lg border border-[#00283C]/10 bg-white px-2.5 pr-7 text-xs font-semibold text-fg focus:outline-none focus:ring-2 focus:ring-primary/20 sm:min-h-11 sm:px-3 sm:pr-8 sm:text-sm"
                 >
                   <option value="recomendados">Recomendados</option>
                   <option value="ano-desc">Mais novos (ano)</option>
@@ -763,204 +1136,297 @@ export function SeminovosPage() {
                   <option value="preco-desc">Maior preço</option>
                   <option value="az">Modelo A–Z</option>
                 </select>
-                <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground sm:right-2 sm:h-4 sm:w-4" />
+                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground sm:right-2.5 sm:h-4 sm:w-4" />
               </div>
             </label>
           </div>
         </div>
 
-        {activeFilterLabels.length > 0 ? (
+        {/* Atalhos de 1 clique pros recortes mais buscados */}
+        <nav
+          aria-label="Atalhos rápidos de filtro"
+          className="mb-3 flex items-center gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:overflow-visible sm:pb-0"
+        >
+          {quickFilterChips.map((chip) => {
+            const activeClass = isBlackFriday
+              ? "border-[#5cc5ca] bg-[#5cc5ca] text-[#052d30] shadow-sm"
+              : "border-[#00283C] bg-[#00283C] text-white shadow-sm";
+            const idleClass = isBlackFriday
+              ? "border-[#5cc5ca]/30 bg-[#122629] text-[#cfeaea] hover:border-[#5cc5ca]/70 hover:bg-[#193539]"
+              : "border-[#00283C]/12 bg-white text-[#00283C] hover:border-[#008C95]/45 hover:bg-[#F3F8F8]";
+            const countClass = chip.active
+              ? isBlackFriday
+                ? "text-[#052d30]/80"
+                : "text-white/80"
+              : isBlackFriday
+                ? "text-[#8acfd2]"
+                : "text-[#627780]";
+
+            return (
+              <button
+                key={chip.id}
+                type="button"
+                aria-pressed={chip.active}
+                onClick={chip.onClick}
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${chip.active ? activeClass : idleClass}`}
+              >
+                <span>{chip.label}</span>
+                {typeof chip.count === "number" && (
+                  <span className={`text-[11px] font-semibold tabular-nums ${countClass}`}>
+                    {chip.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </nav>
+
+        {activeFilterChips.length > 0 ? (
           <div
-            className="mb-2 flex flex-wrap items-center gap-2"
+            className="mb-2.5 flex flex-wrap items-center gap-2"
             aria-label="Filtros ativos"
           >
-            {activeFilterLabels.map((label, index) => (
-              <span
-                key={`${label}-${index}`}
-                className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-bold text-fg"
+            {activeFilterChips.map((chip) => (
+              <button
+                key={chip.key}
+                type="button"
+                onClick={() => applySearchPatch(chip.patch)}
+                aria-label={`Remover filtro ${chip.label}`}
+                className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-bold text-fg transition-colors hover:opacity-85"
               >
-                {label}
-              </span>
+                <span>{chip.label}</span>
+                <X className="h-3.5 w-3.5 opacity-75" aria-hidden="true" />
+              </button>
             ))}
           </div>
         ) : null}
 
-        {/* Filtros em Card Minimalista - Desktop */}
+        {/* Filtros: Bottom Sheet no mobile + Card expansível no desktop */}
         <div
           id="stock-filters"
-          className={`${areFiltersVisible ? "block" : "hidden"} bg-bg rounded-2xl border border-[#00283C]/10 shadow-sm p-5 mb-6`}
+          className={
+            areFiltersVisible
+              ? "fixed inset-0 z-[70] flex flex-col justify-end bg-black/60 backdrop-blur-[2px] sm:static sm:z-auto sm:mb-5 sm:block sm:bg-transparent sm:backdrop-blur-none"
+              : "hidden"
+          }
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              setAreFiltersVisible(false);
+            }
+          }}
         >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-fg">Filtros</h2>
-            <button
-              onClick={handleClearFilters}
-              disabled={draftFiltersCount === 0}
-              className={`text-xs font-medium uppercase tracking-wider transition-colors ${
-                draftFiltersCount > 0
-                  ? "text-primary hover:text-primary/80 cursor-pointer"
-                  : "text-muted-foreground cursor-not-allowed opacity-50"
-              }`}
-            >
-              Limpar filtros
-            </button>
-          </div>
-          <div className="flex flex-wrap items-end gap-6">
-            {/* Marca */}
-            <div className="flex-1 min-w-[140px]">
-              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Marca
-              </label>
-              <AutocompleteSelect
-                options={brandOptions}
-                matchesOption={matchesVehicleBrand}
-                value={marca}
-                onChange={setMarca}
-                placeholder="Selecione"
-                label=""
-              />
+          <div className="max-h-[85vh] overflow-y-auto rounded-t-2xl border border-[#00283C]/10 bg-bg p-5 shadow-2xl sm:max-h-none sm:overflow-visible sm:rounded-2xl sm:shadow-sm">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h2 className="text-sm font-bold text-fg">Filtros avançados</h2>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  disabled={draftFiltersCount === 0}
+                  className={`text-xs font-semibold uppercase tracking-wider transition-colors ${
+                    draftFiltersCount > 0
+                      ? "cursor-pointer text-primary hover:text-primary/80"
+                      : "cursor-not-allowed text-muted-foreground opacity-50"
+                  }`}
+                >
+                  Limpar filtros
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAreFiltersVisible(false)}
+                  aria-label="Fechar filtros"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#00283C]/15 text-[#00283C] sm:hidden"
+                >
+                  <X className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
             </div>
+            <div className="flex flex-wrap items-end gap-5">
+              {/* Marca */}
+              <div className="min-w-[140px] flex-1">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Marca
+                </label>
+                <AutocompleteSelect
+                  options={brandOptions}
+                  matchesOption={matchesVehicleBrand}
+                  value={marca}
+                  onChange={(nextBrand) => {
+                    setMarca(nextBrand);
+                    if (nextBrand !== marca) setModelo("");
+                  }}
+                  placeholder="Selecione"
+                  label=""
+                />
+              </div>
 
-            <div className="flex-1 min-w-[170px]">
-              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Modelo
-              </label>
-              <AutocompleteSelect
-                options={modelOptions}
-                value={modelo}
-                onChange={setModelo}
-                placeholder="Selecione"
-              />
+              <div className="min-w-[170px] flex-1">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Modelo
+                </label>
+                <AutocompleteSelect
+                  options={modelOptions}
+                  value={modelo}
+                  onChange={setModelo}
+                  placeholder={marca ? `Modelos ${marca}` : "Selecione"}
+                />
+              </div>
+
+              <div className="min-w-[140px] flex-1">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Carroceria
+                </label>
+                <AutocompleteSelect
+                  options={categoryOptions}
+                  value={categoria}
+                  onChange={setCategoria}
+                  placeholder="Selecione"
+                />
+              </div>
+
+              <div className="min-w-[140px] flex-1">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Câmbio
+                </label>
+                <AutocompleteSelect
+                  options={transmissionOptions}
+                  value={cambio}
+                  onChange={setCambio}
+                  placeholder="Selecione"
+                />
+              </div>
+
+              <div className="min-w-[140px] flex-1">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Combustível
+                </label>
+                <AutocompleteSelect
+                  options={fuelOptions}
+                  value={combustivel}
+                  onChange={setCombustivel}
+                  placeholder="Selecione"
+                />
+              </div>
+
+              <div className="min-w-[140px] flex-1">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Cor
+                </label>
+                <AutocompleteSelect
+                  options={colorOptions}
+                  value={cor}
+                  onChange={setCor}
+                  placeholder="Selecione"
+                />
+              </div>
+
+              {/* Ano mínimo */}
+              <div className="min-w-[120px] flex-1">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Ano de
+                </label>
+                <AutocompleteSelect
+                  options={yearOptions}
+                  value={anoMin}
+                  onChange={setAnoMin}
+                  placeholder="Selecione"
+                  label=""
+                />
+              </div>
+
+              {/* Ano máximo */}
+              <div className="min-w-[120px] flex-1">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Ano até
+                </label>
+                <AutocompleteSelect
+                  options={yearOptions}
+                  value={anoMax}
+                  onChange={setAnoMax}
+                  placeholder="Selecione"
+                  label=""
+                />
+              </div>
+
+              {/* Valor de */}
+              <div className="min-w-[120px] flex-1">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Valor de
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={precoMin}
+                  onChange={(e) => setPrecoMin(e.target.value.replace(/[^\d.,]/g, ""))}
+                  placeholder={
+                    minPrice > 0
+                      ? `R$ ${minPrice.toLocaleString("pt-BR")}`
+                      : "R$ 0"
+                  }
+                  className="w-full rounded-none border-0 border-b border-border bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                />
+              </div>
+
+              {/* Valor até */}
+              <div className="min-w-[120px] flex-1">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Valor até
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={precoMax}
+                  onChange={(e) => setPrecoMax(e.target.value.replace(/[^\d.,]/g, ""))}
+                  placeholder={
+                    maxPrice > 0
+                      ? `R$ ${maxPrice.toLocaleString("pt-BR")}`
+                      : "R$ 500.000"
+                  }
+                  className="w-full rounded-none border-0 border-b border-border bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                />
+              </div>
+
+              {/* Botão Filtrar */}
+              <button
+                type="button"
+                onClick={handleFilter}
+                className="w-full rounded-lg bg-fg px-6 py-3 text-sm font-bold uppercase text-white transition-all duration-200 hover:bg-fg/90 hover:shadow-md sm:w-auto sm:py-2.5"
+              >
+                {submitFiltersLabel}
+              </button>
             </div>
-
-            <div className="flex-1 min-w-[140px]">
-              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Carroceria
-              </label>
-              <AutocompleteSelect
-                options={categoryOptions}
-                value={categoria}
-                onChange={setCategoria}
-                placeholder="Selecione"
-              />
-            </div>
-
-            <div className="flex-1 min-w-[140px]">
-              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Câmbio
-              </label>
-              <AutocompleteSelect
-                options={transmissionOptions}
-                value={cambio}
-                onChange={setCambio}
-                placeholder="Selecione"
-              />
-            </div>
-
-            <div className="flex-1 min-w-[140px]">
-              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Combustível
-              </label>
-              <AutocompleteSelect
-                options={fuelOptions}
-                value={combustivel}
-                onChange={setCombustivel}
-                placeholder="Selecione"
-              />
-            </div>
-
-            <div className="flex-1 min-w-[140px]">
-              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Cor
-              </label>
-              <AutocompleteSelect
-                options={colorOptions}
-                value={cor}
-                onChange={setCor}
-                placeholder="Selecione"
-              />
-            </div>
-
-            {/* Ano mínimo */}
-            <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Ano de
-              </label>
-              <AutocompleteSelect
-                options={yearOptions}
-                value={anoMin}
-                onChange={setAnoMin}
-                placeholder="Selecione"
-                label=""
-              />
-            </div>
-
-            {/* Ano máximo */}
-            <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Ano até
-              </label>
-              <AutocompleteSelect
-                options={yearOptions}
-                value={anoMax}
-                onChange={setAnoMax}
-                placeholder="Selecione"
-                label=""
-              />
-            </div>
-
-            {/* Valor de */}
-            <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Valor de
-              </label>
-              <input
-                type="text"
-                value={precoMin}
-                onChange={(e) => setPrecoMin(e.target.value)}
-                placeholder={
-                  minPrice > 0
-                    ? `R$ ${minPrice.toLocaleString("pt-BR")}`
-                    : "R$ 0"
-                }
-                className="w-full border-0 border-b border-border rounded-none bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:outline-none focus:border-primary"
-              />
-            </div>
-
-            {/* Valor até */}
-            <div className="flex-1 min-w-[120px]">
-              <label className="mb-2 block text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Valor até
-              </label>
-              <input
-                type="text"
-                value={precoMax}
-                onChange={(e) => setPrecoMax(e.target.value)}
-                placeholder={
-                  maxPrice > 0
-                    ? `R$ ${maxPrice.toLocaleString("pt-BR")}`
-                    : "R$ 500.000"
-                }
-                className="w-full border-0 border-b border-border rounded-none bg-transparent px-0 py-2 text-sm text-fg placeholder:text-muted-foreground focus:outline-none focus:border-primary"
-              />
-            </div>
-
-            {/* Botão Filtrar */}
-            <button
-              onClick={handleFilter}
-              className="px-6 py-2.5 rounded-lg bg-fg text-white text-sm font-semibold uppercase hover:bg-fg/90 transition-all duration-200 hover:shadow-md"
-            >
-              Filtrar
-            </button>
           </div>
         </div>
 
-        <div data-bf-stock-heading className="mb-3">
+        <div data-bf-stock-heading className="mb-2">
           <div className="flex items-center justify-between gap-3">
-            <h1 className="min-w-0 text-lg font-bold leading-tight text-fg sm:text-xl">
-              Carros seminovos e usados
-            </h1>
+            <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h1 className="min-w-0 text-lg font-bold leading-tight text-fg sm:text-xl">
+                Carros seminovos e usados
+              </h1>
+              <p
+                className="text-xs text-muted-foreground sm:text-sm"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {isLoading || isRefreshingVehicles ? (
+                  "Atualizando estoque…"
+                ) : (
+                  <>
+                    <strong className={isBlackFriday ? "font-bold text-[#9df0f2]" : "font-bold text-[#00283C]"}>
+                      {availableVehicles.length}
+                    </strong>{" "}
+                    {availableVehicles.length === 1 ? "disponível" : "disponíveis"}
+                    {soldVehicles.length > 0 && (
+                      <> · {soldVehicles.length} vendidos recentemente</>
+                    )}
+                  </>
+                )}
+              </p>
+            </div>
             <details className="group relative shrink-0">
-              <summary className="flex min-h-[30px] min-w-[30px] cursor-pointer list-none items-center justify-center gap-1.5 rounded-lg text-xs font-semibold text-[#007A83] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008C95] sm:min-h-11 sm:min-w-11 [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-[30px] min-w-[30px] cursor-pointer list-none items-center justify-center gap-1.5 rounded-lg text-xs font-semibold text-[#007A83] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008C95] sm:min-h-10 sm:min-w-10 [&::-webkit-details-marker]:hidden">
                 <ShieldCheck className="h-4 w-4" aria-hidden="true" />
                 <span className="sr-only sm:not-sr-only">Sobre o estoque</span>
                 <ChevronDown
@@ -1010,26 +1476,10 @@ export function SeminovosPage() {
               </div>
             </details>
           </div>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <p
-              className="text-xs text-muted-foreground sm:text-sm"
-              role="status"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {isLoading || isRefreshingVehicles ? (
-                "Atualizando estoque…"
-              ) : (
-                <>
-                  {filteredAndSortedVehicles.length} veículo
-                  {filteredAndSortedVehicles.length !== 1 ? "s" : ""} encontrado
-                  {filteredAndSortedVehicles.length !== 1 ? "s" : ""}
-                </>
-              )}
-            </p>
+          <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2">
             <StockFilterNotice
               active={Boolean(search.busca?.trim()) || appliedFiltersCount > 0}
-              resultCount={filteredAndSortedVehicles.length}
+              resultCount={availableVehicles.length}
               updating={isLoading || isRefreshingVehicles}
               onClear={handleClearFilters}
             />
@@ -1039,48 +1489,85 @@ export function SeminovosPage() {
         {/* Grid de Veículos */}
         <div id="stock-results">
           {isLoading ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">Carregando...</p>
+            <div
+              className="grid grid-cols-2 gap-3 py-4 md:gap-6 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4 2xl:grid-cols-5"
+              aria-label="Carregando veículos"
+            >
+              {Array.from({ length: 8 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className={`h-[340px] animate-pulse rounded-[24px] p-4 sm:h-[430px] sm:rounded-[32px] ${
+                    isBlackFriday ? "bg-white/10" : "bg-slate-100"
+                  }`}
+                />
+              ))}
             </div>
-          ) : filteredAndSortedVehicles.length === 0 ? (
-            <div data-bf-stock-empty className="text-center py-12 space-y-4">
+          ) : availableVehicles.length === 0 && soldVehicles.length === 0 ? (
+            <div data-bf-stock-empty className="mx-auto max-w-2xl space-y-4 py-10 text-center">
               <div>
-                <p className="text-fg text-lg font-semibold mb-2">
-                  Nenhum veículo encontrado
+                <p className="mb-2 text-lg font-semibold text-fg">
+                  Nenhum veículo encontrado com essa busca
                 </p>
                 <p className="text-muted-foreground">
-                  Tente outra busca ou ajuste os filtros — ou peça opções no
-                  WhatsApp.
+                  Ajuste os filtros ou deixe seu WhatsApp — buscamos opções parecidas no showroom pra você.
                 </p>
               </div>
               {hasFilterParams && (
                 <button
                   type="button"
                   onClick={handleClearFilters}
-                  className="block mx-auto min-h-11 px-4 text-sm font-bold text-primary underline underline-offset-4"
+                  className="mx-auto block min-h-11 px-4 text-sm font-bold text-primary underline underline-offset-4"
                 >
                   Limpar busca e filtros
                 </button>
               )}
-              <a
-                href={seminovosWhatsAppHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-wa-source="seminovos_empty"
-                data-wa-intent="stock_help"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#087A37] px-5 py-3 text-sm font-black text-white shadow-[0_6px_18px_rgba(8,122,55,0.30)]"
-              >
-                <MessageCircle className="h-4 w-4" />
-                Pedir opções no WhatsApp
-              </a>
+              <div data-bf-stock-help className="pt-2 text-left">
+                <SeminovosWhatsAppHelpPanel
+                  stockHelpHref={seminovosWhatsAppHref}
+                  hasFilters={hasFilterParams}
+                  filterSummary={filterSummaryText}
+                  variant="inline"
+                />
+              </div>
             </div>
           ) : (
             <>
+              {availableVehicles.length === 0 && soldVehicles.length > 0 && (
+                <div data-bf-stock-empty className="mb-6 rounded-2xl border border-[#5cc5ca]/35 bg-[#122629] p-5 text-center text-white">
+                  <p className="text-base font-bold">
+                    As unidades dessa busca foram vendidas recentemente
+                  </p>
+                  <p className="mt-1 text-sm text-white/75">
+                    Veja abaixo ou fale no WhatsApp para receber opções semelhantes que acabaram de entrar.
+                  </p>
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={handleClearFilters}
+                      className="min-h-10 rounded-xl border border-white/25 px-4 text-xs font-bold text-white hover:bg-white/10"
+                    >
+                      Ver todo o estoque
+                    </button>
+                    <a
+                      href={seminovosWhatsAppHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-wa-source="seminovos_empty"
+                      data-wa-intent="stock_help"
+                      className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#087A37] px-4 text-xs font-black text-white"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Pedir similares no WhatsApp
+                    </a>
+                  </div>
+                </div>
+              )}
+
               <div
-                className="grid grid-cols-2 items-stretch gap-2 md:gap-6 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4 xl:gap-10 2xl:grid-cols-5"
+                className="grid grid-cols-2 items-stretch gap-2 md:gap-6 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4 xl:gap-8 2xl:grid-cols-5"
                 style={{ overflow: "visible" }}
               >
-                {visibleVehicles.map((vehicle, index) => (
+                {displayVehicles.map((vehicle, index) => (
                   <Fragment key={vehicle.id}>
                     <VehicleCardStatic
                       id={vehicle.id}
@@ -1119,6 +1606,7 @@ export function SeminovosPage() {
                         <SeminovosWhatsAppHelpPanel
                           stockHelpHref={seminovosWhatsAppHref}
                           hasFilters={hasFilterParams}
+                          filterSummary={filterSummaryText}
                           variant="inline"
                         />
                       </div>

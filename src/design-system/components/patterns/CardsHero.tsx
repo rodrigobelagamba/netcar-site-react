@@ -297,7 +297,7 @@ export function CardsHero({
           {blackFriday && !isSold && (
             <div className="bf-stock-card-badge">
               <strong>Black Friday</strong>
-              <span>4 benefícios · até 30/11</span>
+              <span>{compact ? "· até 30/11" : "· 4 benefícios"}</span>
             </div>
           )}
           <div

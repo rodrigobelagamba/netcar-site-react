@@ -435,13 +435,23 @@ type SeminovosRouteSearch = {
   combustivel?: string;
   cor?: string;
   categoria?: string;
+  ordem?: string;
 };
+
+const VALID_SHOWROOM_SORTS = new Set([
+  "recomendados",
+  "ano-desc",
+  "az",
+  "preco-asc",
+  "preco-desc",
+]);
 
 const seminovosRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/seminovos",
   component: SeminovosPage,
   validateSearch: (search: Record<string, unknown>): SeminovosRouteSearch => {
+    const rawOrdem = typeof search.ordem === "string" ? search.ordem : "";
     return {
       busca:
         typeof search.busca === "string"
@@ -457,6 +467,9 @@ const seminovosRoute = createRoute({
       combustivel: (search.combustivel as string) || undefined,
       cor: (search.cor as string) || undefined,
       categoria: (search.categoria as string) || undefined,
+      ordem: VALID_SHOWROOM_SORTS.has(rawOrdem)
+        ? (rawOrdem as SeminovosRouteSearch["ordem"])
+        : undefined,
     };
   },
 });
