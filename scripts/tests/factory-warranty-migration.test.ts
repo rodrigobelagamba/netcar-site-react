@@ -39,6 +39,7 @@ const tiggo7CurrentAudit = read("../../docs/audits/factory-warranty-tiggo7-20100
 const novemberUnitsAudit = read("../../docs/audits/factory-warranty-nivus-creta-2026-11-03.json");
 const fastbackAudit = read("../../docs/audits/factory-warranty-fastback-20050-2026-11-04.json");
 const c3XtrAudit = read("../../docs/audits/factory-warranty-c3-xtr-20153-2026-11-19.json");
+const havalPhevAudit = read("../../docs/audits/factory-warranty-haval-20149-2026-11-19.json");
 const fastback20137Audit = read("../../docs/audits/factory-warranty-fastback-20137-2026-11-12.json");
 const peugeot208Audit = read("../../docs/audits/factory-warranty-peugeot-208-20119-2026-11-10.json");
 const tracker20113Audit = read("../../docs/audits/factory-warranty-tracker-20113-2026-11-04.json");
@@ -364,7 +365,8 @@ const oldRecord = (id: string) =>
 const currentRecord = (id: string) =>
   current.records.find((record) => record.vehicle.vehicleId === id)!;
 const observed = (id: string) => {
-  const vehicle = (id === "20153" ? c3XtrAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
+  const vehicle = (id === "20149" ? havalPhevAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
+    ?? (id === "20153" ? c3XtrAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20138" ? tracker20138Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20137" ? fastback20137Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20119" ? peugeot208Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
@@ -1352,5 +1354,33 @@ test("C3 XTR MY2026 has documented general coverage before the conservative fina
   assert.equal(reconcileFactoryWarrantyVehicle(otherUnit, current, today).status, "eligible");
   for (const change of [{ modelo: "C3 LIVE" }, { cambio: "AUTOMATICO" }, { year: 2025 }, { diferenciais: [] }]) {
     assert.notEqual(reconcileFactoryWarrantyVehicle({ ...otherUnit, ...change }, current, today).status, "eligible");
+  }
+});
+
+test("Haval H6 PHEV MY2025 has independent general and high-voltage battery terms", () => {
+  const vehicle = observed("20149");
+  const decisionDate = havalPhevAudit.reviewedAt;
+  const record = currentRecord("20149");
+  const [battery] = record.supplementalCoverages!;
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.equal(battery.approvedFingerprint, factoryTractionBatteryReviewFingerprint(record, battery));
+  assert.equal(resolveFactoryWarranty(vehicle, current, decisionDate)?.estimatedEndYear, 2029);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, decisionDate)?.estimatedEndYear, 2032);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, decisionDate), undefined);
+
+  const atLimit = { ...vehicle, km: 200000 };
+  assert.ok(resolveFactoryWarranty(atLimit, current, decisionDate));
+  assert.equal(resolveFactoryTractionBatteryWarranty(atLimit, current, decisionDate), undefined);
+  assert.ok(resolveFactoryTractionBatteryWarranty({ ...vehicle, km: 199999 }, current, decisionDate));
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2029-01-01"), undefined);
+  assert.ok(resolveFactoryTractionBatteryWarranty(vehicle, current, "2029-01-01"));
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, "2032-01-01"), undefined);
+
+  const otherUnit = { ...vehicle, id: "99999", unitKey: "plate-sha256:" + "c".repeat(64) };
+  const reviewed = reconcileFactoryWarrantyVehicle(otherUnit, current, decisionDate);
+  assert.equal(reviewed.status, "eligible");
+  assert.ok(resolveFactoryTractionBatteryWarranty(otherUnit, reviewed.matrix, decisionDate));
+  for (const change of [{ modelo: "HAVAL H6 HEV" }, { year: 2026 }, { diferenciais: [] }]) {
+    assert.notEqual(reconcileFactoryWarrantyVehicle({ ...otherUnit, ...change }, current, decisionDate).status, "eligible");
   }
 });

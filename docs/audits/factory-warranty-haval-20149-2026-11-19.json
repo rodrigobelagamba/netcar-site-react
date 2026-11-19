@@ -1,0 +1,80 @@
+{
+  "reviewId": "warranty-20261119-20149",
+  "reviewedAt": "2026-11-19",
+  "vehicle": {
+    "vehicleId": "20149",
+    "brand": "GWM",
+    "modelVersion": "HAVAL H6 PHEV E-TRACTION",
+    "manufactureYear": 2024,
+    "modelYear": 2025
+  },
+  "officialDocuments": {
+    "index": "https://www.gwmmotors.com.br/pt/servicos/manuais",
+    "indexEntries": [
+      "HAVAL H6 PHEV19 — Manual 2024/2025",
+      "HAVAL H6 PHEV34 — Manual 2024/2025"
+    ],
+    "bothLinkToSameManual": true,
+    "manual": "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf",
+    "sha256": "0c86de435d472084984556f70e7167d4b665a68bb2f80f7ae981bf24ca899379",
+    "pdfPages": 328,
+    "general": "PDF, página 298. Defeitos de fabricação ou montagem em uso normal: 60 meses sem limite de quilometragem a partir da entrega ao primeiro proprietário. O saldo é transferível e segue as condições do manual.",
+    "highVoltage": "PDF, página 299. O sistema híbrido HV inclui expressamente a bateria de alta tensão. A cobertura para defeitos de fabricação ou montagem é de 96 meses ou 200.000 km, o que ocorrer primeiro, a partir da primeira entrega. A bateria auxiliar tem regra própria."
+  },
+  "scope": {
+    "general": {
+      "years": 5,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "conservativeFinalYear": 2029
+    },
+    "tractionBattery": {
+      "years": 8,
+      "mileage": {
+        "kind": "limited",
+        "limitKm": 200000
+      },
+      "conservativeFinalYear": 2032
+    },
+    "mechanicalPowertrainClaim": false,
+    "startsAt": "original-first-delivery",
+    "transferable": true,
+    "firstDeliveryDate": null,
+    "confirmedExpiryDate": null,
+    "confirmedExpiryMonth": null,
+    "finalYearRequiresDocumentedExpiry": true
+  },
+  "identity": {
+    "apiAndCarclickModelMatch": true,
+    "individualModelAliasNeeded": false,
+    "apiFuel": "HIBRIDO",
+    "supplierFuel": "-1",
+    "supplierFuelMeaning": "Não informado. Não determina a capacidade da bateria nem uma variante diferente.",
+    "applicability": "O mesmo manual brasileiro cobre as duas configurações PHEV da linha 2024/2025. O cadastro não diferencia PHEV19 e PHEV34. Só foram registradas condições comuns.",
+    "batteryCapacityInferred": false
+  },
+  "operationalEvidence": {
+    "individualFactoryWarrantyFlag": true,
+    "privateUseAttestation": "netcar-private-stock-20261010",
+    "reviewedMileageKm": 49225
+  },
+  "reusableRule": "documented-20149-private-exact-variant",
+  "publicVehicle": {
+    "id": "20149",
+    "marca": "GWM",
+    "modelo": "HAVAL H6 PHEV E-TRACTION",
+    "price": 189900,
+    "year": 2025,
+    "anoFabricacao": 2024,
+    "motor": "1.5",
+    "cambio": "AUTOMATICO",
+    "km": 49225,
+    "unitKey": "plate-sha256:9b05141ab4620325018e01ab851c0b20400d3d6674552f910f13bf539124db46",
+    "diferenciais": [
+      {
+        "tag": "garantia_fabrica"
+      }
+    ]
+  }
+}

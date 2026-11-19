@@ -1772,6 +1772,83 @@
           }
         }
       ]
+    },
+    {
+      "recordId": "reviewed-v2-20261119-20149",
+      "status": "approved",
+      "reviewedAt": "2026-11-19",
+      "approvedFingerprint": "{\"recordId\":\"reviewed-v2-20261119-20149\",\"reviewedAt\":\"2026-11-19\",\"vehicle\":{\"vehicleId\":\"20149\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"GWM\",\"modelVersion\":\"HAVAL H6 PHEV E-TRACTION\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:9b05141ab4620325018e01ab851c0b20400d3d6674552f910f13bf539124db46\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":49225,\"mileage\":{\"kind\":\"unlimited\"},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"gwm-h6-phev-my24-25-geral\",\"label\":\"Manual do Proprietário GWM HAVAL H6 PHEV brasileiro 2024/2025\",\"url\":\"https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf\",\"locator\":\"PDF, página 298. Defeitos de fabricação ou montagem em uso normal: 60 meses sem limite de quilometragem a partir da entrega ao primeiro proprietário. O saldo é transferível e segue as condições do manual.\",\"revision\":\"Manual-do-proprietario-H6PHEV-MY24-25\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"Manual-do-proprietario-H6PHEV-MY24-25\",\"modelYear\":2025,\"reviewId\":\"warranty-20261119-20149\",\"reviewedAt\":\"2026-11-19\"}}]}",
+      "vehicle": {
+        "vehicleId": "20149",
+        "brand": "GWM",
+        "modelVersion": "HAVAL H6 PHEV E-TRACTION",
+        "manufactureYear": 2024,
+        "modelYear": 2025
+      },
+      "unitBinding": {
+        "unitKey": "plate-sha256:9b05141ab4620325018e01ab851c0b20400d3d6674552f910f13bf539124db46",
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "optionalId": 108,
+      "optionalConfirmed": true,
+      "conditionsConfirmed": true,
+      "scope": "basic-vehicle",
+      "termYears": 5,
+      "usage": "private",
+      "reviewedMileageKm": 49225,
+      "mileage": {
+        "kind": "unlimited"
+      },
+      "sources": [
+        {
+          "sourceId": "gwm-h6-phev-my24-25-geral",
+          "label": "Manual do Proprietário GWM HAVAL H6 PHEV brasileiro 2024/2025",
+          "url": "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf",
+          "locator": "PDF, página 298. Defeitos de fabricação ou montagem em uso normal: 60 meses sem limite de quilometragem a partir da entrega ao primeiro proprietário. O saldo é transferível e segue as condições do manual.",
+          "revision": "Manual-do-proprietario-H6PHEV-MY24-25",
+          "verification": {
+            "status": "verified",
+            "documentCode": "Manual-do-proprietario-H6PHEV-MY24-25",
+            "modelYear": 2025,
+            "reviewId": "warranty-20261119-20149",
+            "reviewedAt": "2026-11-19"
+          }
+        }
+      ],
+      "supplementalCoverages": [
+        {
+          "recordId": "reviewed-20261119-20149-traction-battery",
+          "status": "approved",
+          "reviewedAt": "2026-11-19",
+          "approvedFingerprint": "{\"primaryApprovedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261119-20149\\\",\\\"reviewedAt\\\":\\\"2026-11-19\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20149\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"GWM\\\",\\\"modelVersion\\\":\\\"HAVAL H6 PHEV E-TRACTION\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:9b05141ab4620325018e01ab851c0b20400d3d6674552f910f13bf539124db46\\\",\\\"engine\\\":\\\"1.5\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":5,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":49225,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"gwm-h6-phev-my24-25-geral\\\",\\\"label\\\":\\\"Manual do Proprietário GWM HAVAL H6 PHEV brasileiro 2024/2025\\\",\\\"url\\\":\\\"https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf\\\",\\\"locator\\\":\\\"PDF, página 298. Defeitos de fabricação ou montagem em uso normal: 60 meses sem limite de quilometragem a partir da entrega ao primeiro proprietário. O saldo é transferível e segue as condições do manual.\\\",\\\"revision\\\":\\\"Manual-do-proprietario-H6PHEV-MY24-25\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"Manual-do-proprietario-H6PHEV-MY24-25\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261119-20149\\\",\\\"reviewedAt\\\":\\\"2026-11-19\\\"}}]}\",\"coverage\":{\"recordId\":\"reviewed-20261119-20149-traction-battery\",\"reviewedAt\":\"2026-11-19\",\"vehicle\":{\"vehicleId\":\"20149\",\"manufactureYear\":2024,\"modelYear\":2025,\"brand\":\"GWM\",\"modelVersion\":\"HAVAL H6 PHEV E-TRACTION\"},\"unitBinding\":{\"unitKey\":\"plate-sha256:9b05141ab4620325018e01ab851c0b20400d3d6674552f910f13bf539124db46\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"traction-battery\",\"termYears\":8,\"usage\":\"private\",\"commonPolicy\":null,\"reviewedMileageKm\":49225,\"mileage\":{\"kind\":\"limited\",\"limitKm\":200000},\"confirmedExpiryDate\":null,\"sources\":[{\"sourceId\":\"gwm-h6-phev-my24-25-bateria\",\"label\":\"Manual do Proprietário GWM HAVAL H6 PHEV brasileiro 2024/2025\",\"url\":\"https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf\",\"locator\":\"PDF, página 299. O sistema híbrido HV inclui expressamente a bateria de alta tensão. A cobertura para defeitos de fabricação ou montagem é de 96 meses ou 200.000 km, o que ocorrer primeiro, a partir da primeira entrega. A bateria auxiliar tem regra própria.\",\"revision\":\"Manual-do-proprietario-H6PHEV-MY24-25\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"Manual-do-proprietario-H6PHEV-MY24-25\",\"modelYear\":2025,\"reviewId\":\"warranty-20261119-20149\",\"reviewedAt\":\"2026-11-19\"}}]}}",
+          "scope": "traction-battery",
+          "conditionsConfirmed": true,
+          "termYears": 8,
+          "usage": "private",
+          "reviewedMileageKm": 49225,
+          "mileage": {
+            "kind": "limited",
+            "limitKm": 200000
+          },
+          "sources": [
+            {
+              "sourceId": "gwm-h6-phev-my24-25-bateria",
+              "label": "Manual do Proprietário GWM HAVAL H6 PHEV brasileiro 2024/2025",
+              "url": "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf",
+              "locator": "PDF, página 299. O sistema híbrido HV inclui expressamente a bateria de alta tensão. A cobertura para defeitos de fabricação ou montagem é de 96 meses ou 200.000 km, o que ocorrer primeiro, a partir da primeira entrega. A bateria auxiliar tem regra própria.",
+              "revision": "Manual-do-proprietario-H6PHEV-MY24-25",
+              "verification": {
+                "status": "verified",
+                "documentCode": "Manual-do-proprietario-H6PHEV-MY24-25",
+                "modelYear": 2025,
+                "reviewId": "warranty-20261119-20149",
+                "reviewedAt": "2026-11-19"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "requireUnitBinding": true,
@@ -1989,6 +2066,28 @@
           "coverageBasis": "documented-model-policy"
         },
         "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-20153-private-exact-variant\",\"version\":\"2026-11-19.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261119-20153\",\"match\":{\"brand\":\"CITROEN\",\"modelVersion\":\"C3 XTR\",\"engine\":\"1.0\",\"transmission\":\"MANUAL\",\"manufactureYear\":2025,\"modelYear\":2026},\"allowNewUnits\":true,\"privateUsePolicy\":{\"scope\":\"netcar-stock\",\"attestationId\":\"netcar-private-stock-20261010\",\"confirmedAt\":\"2026-10-10\",\"coverageBasis\":\"documented-model-policy\"},\"templates\":[{\"recordId\":\"reviewed-v2-20261119-20153\",\"status\":\"approved\",\"reviewedAt\":\"2026-11-19\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261119-20153\\\",\\\"reviewedAt\\\":\\\"2026-11-19\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20153\\\",\\\"manufactureYear\\\":2025,\\\"modelYear\\\":2026,\\\"brand\\\":\\\"CITROEN\\\",\\\"modelVersion\\\":\\\"C3 XTR\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:d2bfe9de36b3abf994f8574ae583d76079dac4fcc072e65fe3aa1ee9e118ffbe\\\",\\\"engine\\\":\\\"1.0\\\",\\\"transmission\\\":\\\"MANUAL\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":3,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":13000,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"citroen-c3-2025-2026-manutencao-garantia\\\",\\\"label\\\":\\\"Manual brasileiro Citroën C3 2025/2026\\\",\\\"url\\\":\\\"https://document-uploader-service.k8s.fcalatam.com.br/v1/file/download/MANUAL_SERVICE/69fb2fc031a40b368818377f?file_name=MANUAIS-DE-BORDO_CITRO%3FN_C3_25-26.pdf\\\",\\\"locator\\\":\\\"Caderno Manutenção e Garantia, página 5 (PDF, página 205). Para veículos de passeio a combustão, a cobertura geral de defeitos de fabricação dura 36 meses sem limite de quilometragem a partir da entrega original. Aplicam-se as condições de manutenção e as exclusões do manual.\\\",\\\"revision\\\":\\\"C3.07.2025-ed.01\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"C3.07.2025-ed.01\\\",\\\"modelYear\\\":2026,\\\"reviewId\\\":\\\"warranty-20261119-20153\\\",\\\"reviewedAt\\\":\\\"2026-11-19\\\"}},{\\\"sourceId\\\":\\\"citroen-c3-xtr-10-2025-2026-ficha\\\",\\\"label\\\":\\\"Ficha técnica Citroën C3 XTR 1.0 2025/2026\\\",\\\"url\\\":\\\"https://www.media.stellantis.com/uploads/br/attachment/5920/fichatecnicacitroenc3xtr102025_2026-68b87561d1373.pdf\\\",\\\"locator\\\":\\\"Ficha técnica brasileira do C3 XTR 1.0 2025/2026. Identifica o motor flex e a transmissão manual de cinco marchas dessa versão.\\\",\\\"revision\\\":\\\"C3-XTR-1.0-2025-2026\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"C3-XTR-1.0-2025-2026\\\",\\\"modelYear\\\":2026,\\\"reviewId\\\":\\\"warranty-20261119-20153\\\",\\\"reviewedAt\\\":\\\"2026-11-19\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"20153\",\"brand\":\"CITROEN\",\"modelVersion\":\"C3 XTR\",\"manufactureYear\":2025,\"modelYear\":2026},\"unitBinding\":{\"unitKey\":\"plate-sha256:d2bfe9de36b3abf994f8574ae583d76079dac4fcc072e65fe3aa1ee9e118ffbe\",\"engine\":\"1.0\",\"transmission\":\"MANUAL\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":3,\"usage\":\"private\",\"reviewedMileageKm\":13000,\"mileage\":{\"kind\":\"unlimited\"},\"sources\":[{\"sourceId\":\"citroen-c3-2025-2026-manutencao-garantia\",\"label\":\"Manual brasileiro Citroën C3 2025/2026\",\"url\":\"https://document-uploader-service.k8s.fcalatam.com.br/v1/file/download/MANUAL_SERVICE/69fb2fc031a40b368818377f?file_name=MANUAIS-DE-BORDO_CITRO%3FN_C3_25-26.pdf\",\"locator\":\"Caderno Manutenção e Garantia, página 5 (PDF, página 205). Para veículos de passeio a combustão, a cobertura geral de defeitos de fabricação dura 36 meses sem limite de quilometragem a partir da entrega original. Aplicam-se as condições de manutenção e as exclusões do manual.\",\"revision\":\"C3.07.2025-ed.01\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"C3.07.2025-ed.01\",\"modelYear\":2026,\"reviewId\":\"warranty-20261119-20153\",\"reviewedAt\":\"2026-11-19\"}},{\"sourceId\":\"citroen-c3-xtr-10-2025-2026-ficha\",\"label\":\"Ficha técnica Citroën C3 XTR 1.0 2025/2026\",\"url\":\"https://www.media.stellantis.com/uploads/br/attachment/5920/fichatecnicacitroenc3xtr102025_2026-68b87561d1373.pdf\",\"locator\":\"Ficha técnica brasileira do C3 XTR 1.0 2025/2026. Identifica o motor flex e a transmissão manual de cinco marchas dessa versão.\",\"revision\":\"C3-XTR-1.0-2025-2026\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"C3-XTR-1.0-2025-2026\",\"modelYear\":2026,\"reviewId\":\"warranty-20261119-20153\",\"reviewedAt\":\"2026-11-19\"}}]}]}"
+      },
+      {
+        "ruleId": "documented-20149-private-exact-variant",
+        "version": "2026-11-19.1",
+        "status": "approved",
+        "templateRecordId": "reviewed-v2-20261119-20149",
+        "allowNewUnits": true,
+        "match": {
+          "brand": "GWM",
+          "modelVersion": "HAVAL H6 PHEV E-TRACTION",
+          "engine": "1.5",
+          "transmission": "AUTOMATICO",
+          "manufactureYear": 2024,
+          "modelYear": 2025
+        },
+        "privateUsePolicy": {
+          "scope": "netcar-stock",
+          "attestationId": "netcar-private-stock-20261010",
+          "confirmedAt": "2026-10-10",
+          "coverageBasis": "documented-model-policy"
+        },
+        "approvedFingerprint": "{\"schemaVersion\":1,\"ruleId\":\"documented-20149-private-exact-variant\",\"version\":\"2026-11-19.1\",\"status\":\"approved\",\"templateRecordId\":\"reviewed-v2-20261119-20149\",\"match\":{\"brand\":\"GWM\",\"modelVersion\":\"HAVAL H6 PHEV E-TRACTION\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\",\"manufactureYear\":2024,\"modelYear\":2025},\"allowNewUnits\":true,\"privateUsePolicy\":{\"scope\":\"netcar-stock\",\"attestationId\":\"netcar-private-stock-20261010\",\"confirmedAt\":\"2026-10-10\",\"coverageBasis\":\"documented-model-policy\"},\"templates\":[{\"recordId\":\"reviewed-v2-20261119-20149\",\"status\":\"approved\",\"reviewedAt\":\"2026-11-19\",\"approvedFingerprint\":\"{\\\"recordId\\\":\\\"reviewed-v2-20261119-20149\\\",\\\"reviewedAt\\\":\\\"2026-11-19\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20149\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"GWM\\\",\\\"modelVersion\\\":\\\"HAVAL H6 PHEV E-TRACTION\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:9b05141ab4620325018e01ab851c0b20400d3d6674552f910f13bf539124db46\\\",\\\"engine\\\":\\\"1.5\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"basic-vehicle\\\",\\\"termYears\\\":5,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":49225,\\\"mileage\\\":{\\\"kind\\\":\\\"unlimited\\\"},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"gwm-h6-phev-my24-25-geral\\\",\\\"label\\\":\\\"Manual do Proprietário GWM HAVAL H6 PHEV brasileiro 2024/2025\\\",\\\"url\\\":\\\"https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf\\\",\\\"locator\\\":\\\"PDF, página 298. Defeitos de fabricação ou montagem em uso normal: 60 meses sem limite de quilometragem a partir da entrega ao primeiro proprietário. O saldo é transferível e segue as condições do manual.\\\",\\\"revision\\\":\\\"Manual-do-proprietario-H6PHEV-MY24-25\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"Manual-do-proprietario-H6PHEV-MY24-25\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261119-20149\\\",\\\"reviewedAt\\\":\\\"2026-11-19\\\"}}]}\",\"vehicle\":{\"vehicleId\":\"20149\",\"brand\":\"GWM\",\"modelVersion\":\"HAVAL H6 PHEV E-TRACTION\",\"manufactureYear\":2024,\"modelYear\":2025},\"unitBinding\":{\"unitKey\":\"plate-sha256:9b05141ab4620325018e01ab851c0b20400d3d6674552f910f13bf539124db46\",\"engine\":\"1.5\",\"transmission\":\"AUTOMATICO\"},\"optionalId\":108,\"optionalConfirmed\":true,\"conditionsConfirmed\":true,\"scope\":\"basic-vehicle\",\"termYears\":5,\"usage\":\"private\",\"reviewedMileageKm\":49225,\"mileage\":{\"kind\":\"unlimited\"},\"sources\":[{\"sourceId\":\"gwm-h6-phev-my24-25-geral\",\"label\":\"Manual do Proprietário GWM HAVAL H6 PHEV brasileiro 2024/2025\",\"url\":\"https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf\",\"locator\":\"PDF, página 298. Defeitos de fabricação ou montagem em uso normal: 60 meses sem limite de quilometragem a partir da entrega ao primeiro proprietário. O saldo é transferível e segue as condições do manual.\",\"revision\":\"Manual-do-proprietario-H6PHEV-MY24-25\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"Manual-do-proprietario-H6PHEV-MY24-25\",\"modelYear\":2025,\"reviewId\":\"warranty-20261119-20149\",\"reviewedAt\":\"2026-11-19\"}}],\"supplementalCoverages\":[{\"recordId\":\"reviewed-20261119-20149-traction-battery\",\"status\":\"approved\",\"reviewedAt\":\"2026-11-19\",\"approvedFingerprint\":\"{\\\"primaryApprovedFingerprint\\\":\\\"{\\\\\\\"recordId\\\\\\\":\\\\\\\"reviewed-v2-20261119-20149\\\\\\\",\\\\\\\"reviewedAt\\\\\\\":\\\\\\\"2026-11-19\\\\\\\",\\\\\\\"vehicle\\\\\\\":{\\\\\\\"vehicleId\\\\\\\":\\\\\\\"20149\\\\\\\",\\\\\\\"manufactureYear\\\\\\\":2024,\\\\\\\"modelYear\\\\\\\":2025,\\\\\\\"brand\\\\\\\":\\\\\\\"GWM\\\\\\\",\\\\\\\"modelVersion\\\\\\\":\\\\\\\"HAVAL H6 PHEV E-TRACTION\\\\\\\"},\\\\\\\"unitBinding\\\\\\\":{\\\\\\\"unitKey\\\\\\\":\\\\\\\"plate-sha256:9b05141ab4620325018e01ab851c0b20400d3d6674552f910f13bf539124db46\\\\\\\",\\\\\\\"engine\\\\\\\":\\\\\\\"1.5\\\\\\\",\\\\\\\"transmission\\\\\\\":\\\\\\\"AUTOMATICO\\\\\\\"},\\\\\\\"optionalId\\\\\\\":108,\\\\\\\"optionalConfirmed\\\\\\\":true,\\\\\\\"conditionsConfirmed\\\\\\\":true,\\\\\\\"scope\\\\\\\":\\\\\\\"basic-vehicle\\\\\\\",\\\\\\\"termYears\\\\\\\":5,\\\\\\\"usage\\\\\\\":\\\\\\\"private\\\\\\\",\\\\\\\"commonPolicy\\\\\\\":null,\\\\\\\"reviewedMileageKm\\\\\\\":49225,\\\\\\\"mileage\\\\\\\":{\\\\\\\"kind\\\\\\\":\\\\\\\"unlimited\\\\\\\"},\\\\\\\"confirmedExpiryDate\\\\\\\":null,\\\\\\\"sources\\\\\\\":[{\\\\\\\"sourceId\\\\\\\":\\\\\\\"gwm-h6-phev-my24-25-geral\\\\\\\",\\\\\\\"label\\\\\\\":\\\\\\\"Manual do Proprietário GWM HAVAL H6 PHEV brasileiro 2024/2025\\\\\\\",\\\\\\\"url\\\\\\\":\\\\\\\"https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf\\\\\\\",\\\\\\\"locator\\\\\\\":\\\\\\\"PDF, página 298. Defeitos de fabricação ou montagem em uso normal: 60 meses sem limite de quilometragem a partir da entrega ao primeiro proprietário. O saldo é transferível e segue as condições do manual.\\\\\\\",\\\\\\\"revision\\\\\\\":\\\\\\\"Manual-do-proprietario-H6PHEV-MY24-25\\\\\\\",\\\\\\\"verification\\\\\\\":{\\\\\\\"status\\\\\\\":\\\\\\\"verified\\\\\\\",\\\\\\\"documentCode\\\\\\\":\\\\\\\"Manual-do-proprietario-H6PHEV-MY24-25\\\\\\\",\\\\\\\"modelYear\\\\\\\":2025,\\\\\\\"reviewId\\\\\\\":\\\\\\\"warranty-20261119-20149\\\\\\\",\\\\\\\"reviewedAt\\\\\\\":\\\\\\\"2026-11-19\\\\\\\"}}]}\\\",\\\"coverage\\\":{\\\"recordId\\\":\\\"reviewed-20261119-20149-traction-battery\\\",\\\"reviewedAt\\\":\\\"2026-11-19\\\",\\\"vehicle\\\":{\\\"vehicleId\\\":\\\"20149\\\",\\\"manufactureYear\\\":2024,\\\"modelYear\\\":2025,\\\"brand\\\":\\\"GWM\\\",\\\"modelVersion\\\":\\\"HAVAL H6 PHEV E-TRACTION\\\"},\\\"unitBinding\\\":{\\\"unitKey\\\":\\\"plate-sha256:9b05141ab4620325018e01ab851c0b20400d3d6674552f910f13bf539124db46\\\",\\\"engine\\\":\\\"1.5\\\",\\\"transmission\\\":\\\"AUTOMATICO\\\"},\\\"optionalId\\\":108,\\\"optionalConfirmed\\\":true,\\\"conditionsConfirmed\\\":true,\\\"scope\\\":\\\"traction-battery\\\",\\\"termYears\\\":8,\\\"usage\\\":\\\"private\\\",\\\"commonPolicy\\\":null,\\\"reviewedMileageKm\\\":49225,\\\"mileage\\\":{\\\"kind\\\":\\\"limited\\\",\\\"limitKm\\\":200000},\\\"confirmedExpiryDate\\\":null,\\\"sources\\\":[{\\\"sourceId\\\":\\\"gwm-h6-phev-my24-25-bateria\\\",\\\"label\\\":\\\"Manual do Proprietário GWM HAVAL H6 PHEV brasileiro 2024/2025\\\",\\\"url\\\":\\\"https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf\\\",\\\"locator\\\":\\\"PDF, página 299. O sistema híbrido HV inclui expressamente a bateria de alta tensão. A cobertura para defeitos de fabricação ou montagem é de 96 meses ou 200.000 km, o que ocorrer primeiro, a partir da primeira entrega. A bateria auxiliar tem regra própria.\\\",\\\"revision\\\":\\\"Manual-do-proprietario-H6PHEV-MY24-25\\\",\\\"verification\\\":{\\\"status\\\":\\\"verified\\\",\\\"documentCode\\\":\\\"Manual-do-proprietario-H6PHEV-MY24-25\\\",\\\"modelYear\\\":2025,\\\"reviewId\\\":\\\"warranty-20261119-20149\\\",\\\"reviewedAt\\\":\\\"2026-11-19\\\"}}]}}\",\"scope\":\"traction-battery\",\"conditionsConfirmed\":true,\"termYears\":8,\"usage\":\"private\",\"reviewedMileageKm\":49225,\"mileage\":{\"kind\":\"limited\",\"limitKm\":200000},\"sources\":[{\"sourceId\":\"gwm-h6-phev-my24-25-bateria\",\"label\":\"Manual do Proprietário GWM HAVAL H6 PHEV brasileiro 2024/2025\",\"url\":\"https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/service/manuais/haval-h6-phev-19-e-34/Manual-do-proprietario-H6PHEV-MY24-25.pdf\",\"locator\":\"PDF, página 299. O sistema híbrido HV inclui expressamente a bateria de alta tensão. A cobertura para defeitos de fabricação ou montagem é de 96 meses ou 200.000 km, o que ocorrer primeiro, a partir da primeira entrega. A bateria auxiliar tem regra própria.\",\"revision\":\"Manual-do-proprietario-H6PHEV-MY24-25\",\"verification\":{\"status\":\"verified\",\"documentCode\":\"Manual-do-proprietario-H6PHEV-MY24-25\",\"modelYear\":2025,\"reviewId\":\"warranty-20261119-20149\",\"reviewedAt\":\"2026-11-19\"}}]}]}]}"
       }
     ]
   }
