@@ -38,6 +38,7 @@ const tiggo5xProAudit = read("../../docs/audits/factory-warranty-tiggo5x-pro-200
 const tiggo7CurrentAudit = read("../../docs/audits/factory-warranty-tiggo7-20100-confirmation-2026-10-29.json");
 const novemberUnitsAudit = read("../../docs/audits/factory-warranty-nivus-creta-2026-11-03.json");
 const fastbackAudit = read("../../docs/audits/factory-warranty-fastback-20050-2026-11-04.json");
+const c3XtrAudit = read("../../docs/audits/factory-warranty-c3-xtr-20153-2026-11-19.json");
 const fastback20137Audit = read("../../docs/audits/factory-warranty-fastback-20137-2026-11-12.json");
 const peugeot208Audit = read("../../docs/audits/factory-warranty-peugeot-208-20119-2026-11-10.json");
 const tracker20113Audit = read("../../docs/audits/factory-warranty-tracker-20113-2026-11-04.json");
@@ -363,7 +364,8 @@ const oldRecord = (id: string) =>
 const currentRecord = (id: string) =>
   current.records.find((record) => record.vehicle.vehicleId === id)!;
 const observed = (id: string) => {
-  const vehicle = (id === "20138" ? tracker20138Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
+  const vehicle = (id === "20153" ? c3XtrAudit.publicVehicle as WarrantyCatalogVehicle : undefined)
+    ?? (id === "20138" ? tracker20138Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20137" ? fastback20137Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20119" ? peugeot208Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
     ?? (id === "20113" ? tracker20113Audit.publicVehicle as WarrantyCatalogVehicle : undefined)
@@ -1124,7 +1126,7 @@ test("Tiggo7 20100 uses only its owner's current-coverage confirmation and prese
   const prior = recordsThrough(today).filter((entry) => entry !== record);
   assert.equal(prior.length, 22);
   assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), tiggo7CurrentAudit.preservation.previousRecordsSha256);
-  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), tiggo7CurrentAudit.preservation.automationRulesSha256);
+  assert.equal(createHash("sha256").update(JSON.stringify(automationThrough(tiggo7CurrentAudit.reviewedAt))).digest("hex"), tiggo7CurrentAudit.preservation.automationRulesSha256);
   assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
 });
 
@@ -1187,8 +1189,8 @@ test("November review preserves the old Nivus decision, every other record and a
   assert.equal(novemberUnitsAudit.previousRecord.status, "pending");
   assert.equal(novemberUnitsAudit.previousRecord.sources[0].verification.status, "pending");
   assert.equal(historical.length, 24);
-  assert.equal(current.automation!.rules.length, 10);
-  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), novemberUnitsAudit.preservation.automationRulesSha256);
+  assert.equal(automationThrough(novemberUnitsAudit.reviewedAt).rules.length, 10);
+  assert.equal(createHash("sha256").update(JSON.stringify(automationThrough(novemberUnitsAudit.reviewedAt))).digest("hex"), novemberUnitsAudit.preservation.automationRulesSha256);
 });
 
 test("Fastback20050 uses the corrected source flag and individual confirmed general warranty", () => {
@@ -1226,7 +1228,7 @@ test("Fastback individual approval preserves every prior decision and all automa
   const prior = current.records.slice(0, fastbackAudit.preservation.previousRecordCount);
   assert.equal(prior.length, fastbackAudit.preservation.previousRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), fastbackAudit.preservation.previousRecordsSha256);
-  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), fastbackAudit.preservation.automationRulesSha256);
+  assert.equal(createHash("sha256").update(JSON.stringify(automationThrough(fastbackAudit.reviewedAt))).digest("hex"), fastbackAudit.preservation.automationRulesSha256);
   assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === currentRecord("20050").recordId), false);
 });
 
@@ -1287,8 +1289,8 @@ test("Fastback20137 keeps operational and documentary origins separate without i
   assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), fastback20137Audit.preservation.previousRecordsSha256);
   assert.equal(createHash("sha256").update(JSON.stringify(currentRecord("20050"))).digest("hex"), fastback20137Audit.preservation.previousFastback20050RecordSha256);
   assert.deepEqual(currentRecord("20050"), fastbackAudit.approvedRecord);
-  assert.equal(current.automation!.rules.length, 10);
-  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), fastback20137Audit.preservation.automationRulesSha256);
+  assert.equal(automationThrough(fastback20137Audit.reviewedAt).rules.length, 10);
+  assert.equal(createHash("sha256").update(JSON.stringify(automationThrough(fastback20137Audit.reviewedAt))).digest("hex"), fastback20137Audit.preservation.automationRulesSha256);
   assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === record.recordId), false);
 });
 
@@ -1326,11 +1328,29 @@ test("Tracker20113 approval preserves all prior units, MY2025 decisions and exac
   const prior = current.records.slice(0, tracker20113Audit.preservation.previousRecordCount);
   assert.equal(prior.length, 25);
   assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), tracker20113Audit.preservation.previousRecordsSha256);
-  assert.equal(createHash("sha256").update(JSON.stringify(current.automation)).digest("hex"), tracker20113Audit.preservation.automationRulesSha256);
+  assert.equal(createHash("sha256").update(JSON.stringify(automationThrough(tracker20113Audit.reviewedAt))).digest("hex"), tracker20113Audit.preservation.automationRulesSha256);
   assert.equal(current.records.some((record) => record.vehicle.vehicleId === "20088"), false);
   assert.equal(current.automation!.rules.some((rule) => rule.templateRecordId === currentRecord("20113").recordId), false);
   assert.equal(tracker20113Audit.officialEvidence.modelYear, 2026);
   assert.equal(tracker20113Audit.officialEvidence.conditionalBonusNotApplied, true);
   assert.equal(tracker20113Audit.operationalAttestation.notManufacturerDocument, true);
   assert.equal(tracker20113Audit.identityCorrespondence.aliasRequired, false);
+});
+
+test("C3 XTR MY2026 has documented general coverage before the conservative final year", () => {
+  const record = currentRecord("20153");
+  const vehicle = observed("20153");
+  const today = "2026-11-19";
+  assert.equal(record.approvedFingerprint, factoryWarrantyReviewFingerprint(record));
+  assert.deepEqual(record.mileage, { kind: "unlimited" });
+  assert.equal(resolveFactoryWarranty({ ...vehicle, km: 175000 }, current, today)?.estimatedEndYear, 2028);
+  assert.equal(resolveFactoryWarranty(vehicle, current, "2028-01-01"), undefined);
+  assert.equal(resolveFactoryWarranty({ ...vehicle, diferenciais: [] }, current, today), undefined);
+  assert.equal(resolveFactoryTractionBatteryWarranty(vehicle, current, today), undefined);
+  assert.equal(resolveFactoryPowertrainWarranty(vehicle, current, today), undefined);
+  const otherUnit = { ...vehicle, id: "99999", unitKey: "plate-sha256:" + "b".repeat(64) };
+  assert.equal(reconcileFactoryWarrantyVehicle(otherUnit, current, today).status, "eligible");
+  for (const change of [{ modelo: "C3 LIVE" }, { cambio: "AUTOMATICO" }, { year: 2025 }, { diferenciais: [] }]) {
+    assert.notEqual(reconcileFactoryWarrantyVehicle({ ...otherUnit, ...change }, current, today).status, "eligible");
+  }
 });

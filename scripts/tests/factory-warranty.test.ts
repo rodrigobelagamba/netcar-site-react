@@ -1607,5 +1607,7 @@ test("Peugeot 208 does not restart its warranty at resale or invent a date in th
     peugeot208Registry.records.findIndex((entry) => entry.vehicle.vehicleId === "20119"));
   assert.equal(prior.length, peugeot208Audit.preservation.previousRecordCount);
   assert.equal(createHash("sha256").update(JSON.stringify(prior)).digest("hex"), peugeot208Audit.preservation.previousRecordsSha256);
-  assert.equal(createHash("sha256").update(JSON.stringify(peugeot208Registry.automation)).digest("hex"), peugeot208Audit.preservation.automationSha256);
+  const historicalRules = { ...peugeot208Registry.automation!, rules: peugeot208Registry.automation!.rules
+    .filter((rule) => rule.version.slice(0, 10) <= peugeot208Audit.reviewedAt) };
+  assert.equal(createHash("sha256").update(JSON.stringify(historicalRules)).digest("hex"), peugeot208Audit.preservation.automationSha256);
 });
