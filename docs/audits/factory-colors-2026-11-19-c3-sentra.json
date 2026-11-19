@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-19",
+  "verificationBasis": "catalog-match",
+  "sourceReconciliation": "A API completa da Netcar e o XML Automacar coincidem na identidade e na configuração destas duas unidades. O nome comercial da carroceria foi inferido da paleta brasileira aplicável e da cor genérica cadastrada.",
+  "vehicles": [
+    {
+      "vehicleId": "20153",
+      "publicReference": "factory-colors-20261119-20153",
+      "model": "CITROEN C3 XTR",
+      "manufactureYear": 2025,
+      "modelYear": 2026,
+      "genericColor": "BRANCA",
+      "officialName": "Branco Banquise",
+      "issuer": "Citroën / Stellantis Brasil",
+      "sourceProvenance": [
+        {
+          "url": "https://www.media.stellantis.com/br-pt/citroen/press/linha-2026-do-citroen-c3-ganha-evolucoes-e-fica-ainda-mais-atrativa",
+          "role": "Comunicado de 3 de setembro de 2025. A seção do C3 XTR ano-modelo 2026 enumera três cores de carroceria. Cinza Artense e Branco Banquise admitem teto preto opcional."
+        },
+        {
+          "url": "https://www.media.stellantis.com/uploads/br/attachment/5920/fichatecnicacitroenc3xtr102025_2026-68b87561d1373.pdf",
+          "role": "A ficha técnica identifica o C3 XTR 1.0 2025/2026 flex de câmbio manual."
+        }
+      ],
+      "palette": [
+        "Preto Perla Nera",
+        "Cinza Artense",
+        "Branco Banquise"
+      ],
+      "scope": "Branco Banquise é a única pintura de carroceria branca na paleta do XTR. A cor do teto desta unidade permanece desconhecida."
+    },
+    {
+      "vehicleId": "20158",
+      "publicReference": "factory-colors-20261119-20158",
+      "model": "NISSAN SENTRA SV",
+      "manufactureYear": 2013,
+      "modelYear": 2014,
+      "genericColor": "AZUL",
+      "officialName": "Azul Grafite",
+      "issuer": "Nissan do Brasil",
+      "sourceProvenance": [
+        {
+          "url": "https://download.uol.com.br/carros/equipamentos_sentra_2014.pdf",
+          "role": "Tabela da Nissan do Brasil reproduzida pela UOL. A página 1 identifica o Nissan Sentra Flex 2013/2014 e credita NBA – Product Marketing (AR MP). O PDF foi produzido em outubro de 2013. A coluna Sentra 2.0 SV assinala quatro cores opcionais, incluindo Azul Grafite. Branco Diamond aparece com o acabamento perolizado.",
+          "inspectedDocumentSha256": "a475d046c1cf25d340c9968f52fb0a7665a6bd869c8d3af0ea628cda1ec233cd"
+        },
+        {
+          "url": "https://brazil.nissannews.com/pt-BR/releases/nissan-novo-sentra-flex-2014-especifica-es-tecnicas",
+          "role": "A Nissan Brasil confirma o Sentra Flex ano-modelo 2014 na versão 2.0 SV com câmbio automático Xtronic CVT."
+        }
+      ],
+      "palette": [
+        "Preto Premium",
+        "Prata Classic",
+        "Azul Grafite",
+        "Branco Diamond"
+      ],
+      "scope": "Azul Grafite é a única pintura azul na coluna da versão SV."
+    }
+  ]
+}

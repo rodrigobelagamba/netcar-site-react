@@ -2155,6 +2155,120 @@
         "approved": true,
         "publicReference": "netcar-colors-continuous-20261116"
       }
+    },
+    {
+      "id": "color-20261119-20153",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20153",
+        "brand": "CITROEN",
+        "model": "C3 XTR",
+        "modelYear": 2026,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "fuel": "Flex",
+        "manufactureYear": 2025,
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "1deeb3381155da08c5909e3b8e8cf24ba71c154322de877cca11dcbc5a12adf9"
+      },
+      "officialName": "Branco Banquise",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261119-20153",
+        "verifiedAt": "2026-11-19",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "CITROEN",
+          "model": "C3 XTR",
+          "modelYear": 2026,
+          "engine": "1.0",
+          "transmission": "MANUAL",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Perla Nera",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Cinza Artense",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Branco Banquise",
+              "genericColor": "BRANCA"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.media.stellantis.com/br-pt/citroen/press/linha-2026-do-citroen-c3-ganha-evolucoes-e-fica-ainda-mais-atrativa",
+            "https://www.media.stellantis.com/uploads/br/attachment/5920/fichatecnicacitroenc3xtr102025_2026-68b87561d1373.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261119-20158",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20158",
+        "brand": "NISSAN",
+        "model": "SENTRA SV",
+        "modelYear": 2014,
+        "engine": "2.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "manufactureYear": 2013,
+        "genericColor": "AZUL",
+        "physicalIdentityKey": "d7594d3cfdc43491b9d70f555eae5130c574ce29073cf933ba130664199a5dc5"
+      },
+      "officialName": "Azul Grafite",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261119-20158",
+        "verifiedAt": "2026-11-19",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "NISSAN",
+          "model": "SENTRA SV",
+          "modelYear": 2014,
+          "engine": "2.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Premium",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Prata Classic",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Azul Grafite",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Branco Diamond",
+              "genericColor": "BRANCA"
+            }
+          ],
+          "sourceUrls": [
+            "https://download.uol.com.br/carros/equipamentos_sentra_2014.pdf",
+            "https://brazil.nissannews.com/pt-BR/releases/nissan-novo-sentra-flex-2014-especifica-es-tecnicas"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
     }
   ]
 }
