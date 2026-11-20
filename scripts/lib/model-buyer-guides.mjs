@@ -1,6 +1,22 @@
 // Permanent model entry pages lead to live stock, the exact vehicle listing and contact.
 // Titles and metadata are independent of the offers available on a particular day.
 export const MODEL_BUYER_GUIDES = {
+  "gwm-haval-h6": {
+    "title": "GWM Haval H6 à venda em Esteio | Netcar",
+    "description": "Consulte os GWM Haval H6 usados e seminovos anunciados pela Netcar em Esteio. Veja versão, ano e preço e converse com a loja sobre a troca.",
+    "intro": "Encontre os Haval H6 anunciados pela Netcar e abra a ficha do SUV que chamou sua atenção.",
+    "guideTitle": "Compare as versões do Haval H6",
+    "paragraphs": [
+      "A família Haval H6 inclui versões híbridas autocarregáveis e híbridas plug-in. Confira a versão da unidade anunciada para entender como ela se encaixa na sua rotina. Pela ficha, você pode falar com a equipe, combinar uma visita em Esteio ou consultar a troca."
+    ],
+    "faq": [
+      {
+        "q": "Onde vejo se o Haval H6 anunciado é plug-in?",
+        "a": "Consulte a versão completa na ficha do carro. A sigla PHEV identifica um híbrido plug-in. Se a ficha deixar alguma dúvida, use o contato da unidade para confirmar."
+      }
+    ],
+    "guideLinks": []
+  },
   "jeep-compass": {
     "title": "Jeep Compass à venda em Esteio: versões e preços | Netcar",
     "description": "Veja os Jeep Compass usados e seminovos da Netcar em Esteio. Compare ano, versão e motor, consulte as fotos e avalie seu usado na troca.",
