@@ -55,4 +55,5 @@ export const MODEL_HUBS = [
   { slug: "chery-tiggo-7-pro", marca: "CHERY", modelo: "TIGGO 7 PRO", name: "CAOA Chery Tiggo 7 Pro", category: "SUV" },
   { slug: "chery-tiggo-8", marca: "CHERY", modelo: "TIGGO 8", name: "CAOA Chery Tiggo 8", category: "SUV" },
   { slug: "byd-song-plus", marca: "BYD", modelo: "SONG PLUS", name: "BYD Song Plus", category: "SUV" },
+  { slug: "gwm-haval-h6", marca: "GWM", modelo: "HAVAL H6", name: "GWM Haval H6", categoria: "SUV", category: "SUV" },
 ];

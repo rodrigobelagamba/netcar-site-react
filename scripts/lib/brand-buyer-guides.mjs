@@ -1,6 +1,20 @@
 // Permanent brand entry pages lead to model selections and the current listings.
 // The stock, rather than editorial copy, defines which vehicles are available.
 export const BRAND_BUYER_GUIDES = {
+  "GWM": {
+    "name": "GWM",
+    "intro": "Veja os veículos GWM anunciados pela Netcar, em Esteio, e abra a ficha do modelo que você procura.",
+    "guideTitle": "Escolha seu GWM",
+    "paragraphs": [
+      "Se você procura um Haval H6, comece pela seleção do modelo. Para comparar outros GWM disponíveis, confira os anúncios desta página. A ficha de cada carro reúne a versão, o ano e o preço, com contato para conversar sobre compra, visita ou troca."
+    ],
+    "faq": [
+      {
+        "q": "Onde confirmo a versão de um GWM anunciado?",
+        "a": "Abra a ficha da unidade para consultar a versão e a motorização cadastradas. Use o contato da ficha se quiser confirmar um detalhe antes da visita."
+      }
+    ]
+  },
   "VOLKSWAGEN": {
     "name": "Volkswagen",
     "intro": "Encontre seu próximo Volkswagen na Netcar, em Esteio: escolha o modelo e veja os carros à venda.",
