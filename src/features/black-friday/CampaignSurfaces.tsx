@@ -291,6 +291,7 @@ export function BlackFridayHomeHero({ onViewStock }: { onViewStock: () => void }
 
 export function BlackFridayStockIntro() {
   const { active } = useBlackFridayCampaign();
+  const { target, snapshot } = useBlackFridayCountdown(active);
   const conditionsRef = useRef<HTMLDetailsElement>(null);
   if (!active) return null;
   return (
@@ -301,18 +302,45 @@ export function BlackFridayStockIntro() {
             <h2 id="bf-stock-title">
               <img src={`${MEDIA}/title-v2.webp`} width="529" height="150" alt="Black Friday Netcar" />
             </h2>
-            <span className="bf-stock-campaign-deadline">Só até <strong>30/11</strong></span>
+            <span className="bf-stock-countdown-pill" aria-label={snapshot.accessibleSummary} data-bf-stock-countdown="pill">
+              <span className="bf-live-dot" aria-hidden="true" />
+              <span className="bf-stock-countdown-pill-digits">
+                {snapshot.daysText}d · {snapshot.hoursText}h · {snapshot.minutesText}m · {snapshot.secondsText}s
+              </span>
+            </span>
           </div>
           <CampaignBenefits compact />
           <div className="bf-stock-campaign-meta">
-            <span className="bf-stock-campaign-deadline bf-stock-campaign-deadline--desktop">
-              <span>É só até</span>
-              <strong>30/11</strong>
-            </span>
-            <details id="bf-stock-conditions" ref={conditionsRef}>
-              <summary>Condições da campanha</summary>
-              <CampaignTerms />
-            </details>
+            <div
+              className={`bf-stock-countdown${snapshot.isLastDay ? " bf-stock-countdown--urgent" : ""}${snapshot.expired ? " bf-stock-countdown--expired" : ""}`}
+              role="region"
+              aria-label="Contagem regressiva da Black Friday Netcar"
+              data-bf-stock-countdown="true"
+            >
+              <div className="bf-stock-countdown-head">
+                <span className="bf-countdown-status">
+                  <span className="bf-live-dot" aria-hidden="true" />
+                  {snapshot.expired ? "Encerrada" : snapshot.isLastDay ? "Último dia" : "Acaba em"}
+                </span>
+                <span className="bf-stock-countdown-closing">
+                  Até {target.dateLabel} · {target.timeLabel}
+                </span>
+              </div>
+              <p className="bf-sr-only" role="status" aria-live="off">{snapshot.accessibleSummary}</p>
+              <div className="bf-stock-countdown-grid" aria-label={snapshot.accessibleSummary}>
+                <CountdownUnit value={snapshot.daysText} label={snapshot.days === 1 ? "Dia" : "Dias"} />
+                <CountdownUnit value={snapshot.hoursText} label="Hrs" />
+                <CountdownUnit value={snapshot.minutesText} label="Min" />
+                <CountdownUnit value={snapshot.secondsText} label="Seg" accent />
+              </div>
+            </div>
+            <div className="bf-stock-meta-footer">
+              <span className="bf-stock-mobile-closing">Encerra {target.closingSummary}</span>
+              <details id="bf-stock-conditions" ref={conditionsRef}>
+                <summary>Condições da campanha</summary>
+                <CampaignTerms />
+              </details>
+            </div>
           </div>
         </div>
       </div>

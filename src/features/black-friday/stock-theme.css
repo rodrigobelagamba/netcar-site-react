@@ -32,8 +32,28 @@
   height: auto;
 }
 
-.bf-stock-campaign-brand > .bf-stock-campaign-deadline {
+.bf-stock-campaign-brand > .bf-stock-countdown-pill {
   display: none;
+}
+
+.bf-stock-countdown-pill {
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid #5cc5ca59;
+  background: #0d2124;
+  white-space: nowrap;
+}
+
+.bf-stock-countdown-pill-digits {
+  font-family: var(--bf-font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: #f4fbfb;
+  font-variant-numeric: tabular-nums;
 }
 
 .bf-stock-campaign-bar .bf-benefits--compact {
@@ -67,30 +87,88 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 4px;
+  gap: 6px;
 }
 
-.bf-stock-campaign-deadline {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid #5cc5ca66;
-  background: #5cc5ca14;
-  color: #5cc5ca;
-  font-size: 11px;
+.bf-stock-countdown {
+  min-width: 242px;
+  padding: 8px 10px 7px;
+  border-radius: 12px;
+  border: 1px solid #5cc5ca52;
+  background: linear-gradient(160deg, #11282bf0 0%, #091315f2 60%, #070b0cf5 100%);
+  box-shadow: 0 10px 26px #00000055, inset 0 1px 0 #b8f4f524;
+  font-family: var(--bf-font-sans);
+}
+
+.bf-stock-countdown--urgent {
+  border-color: #5cc5ca99;
+  box-shadow: 0 10px 28px #00000055, 0 0 18px #5cc5ca24;
+}
+
+.bf-stock-countdown--expired .bf-live-dot {
+  animation: none;
+  background: #8aa3a6;
+  box-shadow: none;
+}
+
+.bf-stock-countdown-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.bf-stock-countdown-head .bf-countdown-status {
+  font-size: 9px;
+  gap: 5px;
+}
+
+.bf-stock-countdown-closing {
+  font-size: 9.5px;
   font-weight: 700;
+  letter-spacing: .05em;
   text-transform: uppercase;
-  letter-spacing: .06em;
+  color: #b7dfe1;
   white-space: nowrap;
 }
 
-.bf-stock-campaign-deadline strong {
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: -.02em;
-  color: #9df0f2;
+.bf-stock-countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(46px, 1fr));
+  gap: 6px;
+}
+
+.bf-stock-countdown-grid .bf-countdown-unit {
+  gap: 3px;
+}
+
+.bf-stock-countdown-grid .bf-countdown-plate {
+  min-height: 36px;
+  border-radius: 8px;
+}
+
+.bf-stock-countdown-grid .bf-countdown-digit {
+  font-size: 19px;
+  padding-right: 2px;
+}
+
+.bf-stock-countdown-grid .bf-countdown-unit-label {
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+
+.bf-stock-meta-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bf-stock-mobile-closing {
+  display: none;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #a6c9cc;
 }
 
 .bf-stock-campaign-meta details {
@@ -295,14 +373,22 @@
   .bf-stock-campaign-brand {
     justify-content: space-between;
   }
-  .bf-stock-campaign-brand > .bf-stock-campaign-deadline {
+  .bf-stock-campaign-brand > .bf-stock-countdown-pill {
     display: inline-flex;
   }
-  .bf-stock-campaign-deadline--desktop {
+  .bf-stock-countdown {
     display: none;
   }
   .bf-stock-campaign-meta {
-    align-items: flex-start;
+    align-items: stretch;
+  }
+  .bf-stock-meta-footer {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+  }
+  .bf-stock-mobile-closing {
+    display: inline;
   }
   .bf-stock-campaign-meta details {
     text-align: left;
@@ -319,14 +405,14 @@
     padding-bottom: 10px;
   }
   .bf-stock-campaign-brand h2 img {
-    width: 128px;
+    width: 124px;
   }
-  .bf-stock-campaign-deadline {
-    padding: 4px 10px;
-    font-size: 10px;
+  .bf-stock-countdown-pill {
+    padding: 4px 8px;
+    gap: 5px;
   }
-  .bf-stock-campaign-deadline strong {
-    font-size: 13px;
+  .bf-stock-countdown-pill-digits {
+    font-size: 11px;
   }
   .bf-stock-campaign-bar .bf-benefits--compact {
     gap: 8px 12px;

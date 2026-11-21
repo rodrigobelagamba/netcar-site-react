@@ -142,6 +142,15 @@ test("home renders approved countdown stage, stock callback and accessible campa
   renderer.unmount();
 });
 
+test("stock intro displays live Black Friday countdown and closing schedule", () => {
+  const { BlackFridayStockIntro } = loadComponents(true);
+  const html = renderToStaticMarkup(<BlackFridayStockIntro />);
+  assert.match(html, /data-bf-stock-countdown="true"/);
+  assert.match(html, /Até 30\/11 · 18h/);
+  assert.match(html, /Encerra segunda, 30\/11 às 18h/);
+  assert.match(html, /\d{2}d · \d{2}h · \d{2}m · \d{2}s/);
+});
+
 test("vehicle offer contact keeps the unit identity and campaign inquiry", () => {
   const { BlackFridayVehicleOffer, BlackFridayVehicleRibbon } = loadComponents(true);
   const renderer = TestRenderer.create(<BlackFridayVehicleOffer vehicleLabel="Tracker Premier" vehicleId="20138" waRef={{ placa: "JCD0J59" }} />);
