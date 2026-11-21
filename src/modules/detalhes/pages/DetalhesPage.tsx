@@ -114,7 +114,7 @@ import { CustomerDeliveriesCallout } from "../components/CustomerDeliveriesCallo
 import { selectVehicleInstagramVideo } from "../lib/vehicleInstagramVideos";
 import { useVehicleVideosQuery } from "../queries/useVehicleVideosQuery";
 import { vehicleVideosForDisplay } from "../lib/vehicleVideosResponse";
-import { BlackFridayVehicleOffer } from "@/features/black-friday/CampaignSurfaces";
+import { BlackFridayVehicleOffer, BlackFridayVehicleRibbon } from "@/features/black-friday/CampaignSurfaces";
 import { useBlackFridayCampaign } from "@/features/black-friday/CampaignProvider";
 import "@/features/black-friday/vehicle-photo-theme.css";
 
@@ -2742,13 +2742,7 @@ export function DetalhesPage() {
           brandLandingSlug={brandLanding?.slug}
         />
       )}
-      {isBlackFriday && !isSold && (
-        <a className="bf-vehicle-ribbon" href="#black-friday-beneficios">
-          <strong>Black Friday Netcar</strong>
-          <span>4 benefícios neste carro <span aria-hidden="true">↗</span></span>
-          <b>Só até 30/11</b>
-        </a>
-      )}
+      {!isSold && <BlackFridayVehicleRibbon />}
       <nav
         aria-label="Navegação estrutural"
         className="border-b border-slate-100 bg-white"

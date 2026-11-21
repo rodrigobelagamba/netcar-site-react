@@ -9,6 +9,7 @@ import TestRenderer, { act } from "react-test-renderer";
 import ts from "typescript";
 import * as whatsappMessages from "../../src/lib/whatsappMessages";
 import { emptySeminovosSearch } from "../../src/lib/seminovos-search";
+import * as countdown from "../../src/features/black-friday/countdown";
 
 const Icon = () => <svg aria-hidden="true" />;
 const Link = ({ to, children, search: _search, ...props }: any) => <a href={to} {...props}>{children}</a>;
@@ -18,6 +19,7 @@ function loadComponents(active: boolean) {
   const hooks = {
     useBlackFridayCampaign: () => state,
     useWhatsAppQuery: () => ({ data: { numero: "5551997293118" } }),
+    useScheduleQuery: () => ({ data: { dias_semana: "Seg a Sex: 9h às 18h", sabado: "Sábado: 9h às 16h30" } }),
   };
   const deps: Record<string, unknown> = {
     react: React,
@@ -28,6 +30,7 @@ function loadComponents(active: boolean) {
     "@/lib/whatsappMessages": whatsappMessages,
     "@/lib/seminovos-search": { emptySeminovosSearch },
     "./CampaignProvider": hooks,
+    "./countdown": countdown,
     "./black-friday.css": {},
   };
   function evaluate(source: string, extra: Record<string, unknown> = {}) {
@@ -84,7 +87,7 @@ function loadComponents(active: boolean) {
 
 test("disabled campaign removes all seasonal surfaces and video from the DOM", () => {
   const components = loadComponents(false);
-  for (const name of ["BlackFridayHomeHero", "BlackFridayStockIntro", "BlackFridayVehicleOffer", "BlackFridayFooterBanner"]) {
+  for (const name of ["BlackFridayHomeHero", "BlackFridayStockIntro", "BlackFridayVehicleRibbon", "BlackFridayVehicleOffer", "BlackFridayFooterBanner"]) {
     assert.equal(renderToStaticMarkup(React.createElement(components[name], {
       onViewStock: () => {}, vehicleLabel: "Tracker Premier", vehicleId: "20138",
     })), "", name);
@@ -103,23 +106,44 @@ test("home, stock and vehicle present all four confirmed benefits and the common
   }
 });
 
-test("home offers the supplied video, captions and working stock navigation callback", () => {
+test("home renders approved countdown stage, stock callback and accessible campaign video with captions", () => {
   const { BlackFridayHomeHero } = loadComponents(true);
   let calls = 0;
   const renderer = TestRenderer.create(<BlackFridayHomeHero onViewStock={() => calls++} />);
+
+  // Initial state shows countdown stage with approved ribbon and closing schedule
+  const stage = renderer.root.findByProps({ "data-bf-stage-mode": "countdown" });
+  assert.ok(stage);
+  const html = renderToStaticMarkup(<BlackFridayHomeHero onViewStock={() => {}} />);
+  assert.match(html, /ribbon-turquoise-v2\.webp/);
+  assert.match(html, /Encerra segunda, 30\/11 às 18h/);
+  assert.match(html, /Assistir vídeo da campanha/);
+
+  // Primary CTA still navigates to stock
+  const stockButton = renderer.root.findByProps({ className: "bf-button bf-button--primary" });
+  act(() => stockButton.props.onClick());
+  assert.equal(calls, 1);
+
+  // Clicking video dock switches stage to official video player with captions
+  const openVideoButton = renderer.root.findByProps({ "data-bf-action": "open-video" });
+  act(() => openVideoButton.props.onClick());
   const video = renderer.root.findByType("video");
   assert.equal(video.props.controls, true);
   assert.equal(video.props.playsInline, true);
   assert.equal(video.props.preload, "none");
   assert.equal(video.findByType("source").props.src, "/images/campaigns/black-friday-2026/black-friday-netcar-2026.mp4");
   assert.equal(video.findByType("track").props.srcLang, "pt-BR");
-  act(() => renderer.root.findByType("button").props.onClick());
-  assert.equal(calls, 1);
+
+  // Back button restores countdown stage
+  const closeVideoButton = renderer.root.findByProps({ "data-bf-action": "close-video" });
+  act(() => closeVideoButton.props.onClick());
+  assert.ok(renderer.root.findByProps({ "data-bf-stage-mode": "countdown" }));
+
   renderer.unmount();
 });
 
 test("vehicle offer contact keeps the unit identity and campaign inquiry", () => {
-  const { BlackFridayVehicleOffer } = loadComponents(true);
+  const { BlackFridayVehicleOffer, BlackFridayVehicleRibbon } = loadComponents(true);
   const renderer = TestRenderer.create(<BlackFridayVehicleOffer vehicleLabel="Tracker Premier" vehicleId="20138" waRef={{ placa: "JCD0J59" }} />);
   const anchor = renderer.root.findByType("a");
   const url = new URL(anchor.props.href);
@@ -127,6 +151,14 @@ test("vehicle offer contact keeps the unit identity and campaign inquiry", () =>
   assert.match(url.searchParams.get("text") || "", /quatro benefícios da Black Friday no Tracker Premier/);
   assert.match(url.searchParams.get("text") || "", /Placa: JCD0J59/);
   assert.equal(anchor.props["data-wa-vehicle-id"], "20138");
+  assert.ok(renderer.root.findByProps({ "data-bf-vehicle-countdown": "true" }));
+  const offerHtml = renderToStaticMarkup(<BlackFridayVehicleOffer vehicleLabel="Tracker Premier" vehicleId="20138" />);
+  assert.match(offerHtml, /Encerra segunda, 30\/11 às 18h/);
+  assert.match(offerHtml, /ribbon-turquoise-v2\.webp/);
+  const ribbonHtml = renderToStaticMarkup(<BlackFridayVehicleRibbon />);
+  assert.match(ribbonHtml, /href="#black-friday-beneficios"/);
+  assert.match(ribbonHtml, /Até 30\/11 · 18h/);
+  assert.match(ribbonHtml, /\d{2}d · \d{2}h · \d{2}m · \d{2}s/);
   renderer.unmount();
 });
 
