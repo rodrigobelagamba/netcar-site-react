@@ -224,6 +224,8 @@ if (!$vehicleFound && !$vehicleMissing) {
     http_response_code(503);
     header('Retry-After: 3600');
     header('Cache-Control: no-store');
+    header('Vary: User-Agent');
+    header('X-Robots-Tag: noindex, follow');
     header('Content-Type: text/html; charset=UTF-8');
     echo '<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8">'
         . '<title>Estoque temporariamente indisponível | Netcar Multimarcas</title>'
@@ -240,6 +242,7 @@ if ($vehicleMissing) {
     http_response_code(410);
     header('Content-Type: text/html; charset=UTF-8');
     header('Cache-Control: public, max-age=86400');
+    header('Vary: User-Agent');
     ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -425,7 +428,7 @@ if ($isSold) {
     $ogTitle .= ' — ' . $precoCurto;
 }
 
-// <title> do Google: nome + km + preço + loja. Km diferencia dois carros iguais.
+// <title> do Google: nome + km + preço + loja. Mantém até 65 caracteres sem truncar no SERP.
 $pageTitleParts = [$vehicleName];
 if (!$isSold && $kmCurto) {
     $pageTitleParts[] = '· ' . $kmCurto;
@@ -436,6 +439,21 @@ if ($isSold) {
     $pageTitleParts[] = '— ' . $precoCurto;
 }
 $pageTitle = implode(' ', $pageTitleParts) . ' | Netcar';
+if (mb_strlen($pageTitle, 'UTF-8') > 65) {
+    $compactSuffix = $isSold
+        ? ' — vendido | Netcar'
+        : ($precoCurto ? ' — ' . $precoCurto . ' | Netcar' : ' | Netcar');
+    $pageTitle = $vehicleName . $compactSuffix;
+    if (mb_strlen($pageTitle, 'UTF-8') > 65) {
+        $maxNameLen = max(12, 65 - mb_strlen($compactSuffix, 'UTF-8'));
+        $trimmedName = rtrim(mb_substr($vehicleName, 0, $maxNameLen, 'UTF-8'));
+        $lastSpace = mb_strrpos($trimmedName, ' ', 0, 'UTF-8');
+        if ($lastSpace !== false && $lastSpace >= 12) {
+            $trimmedName = mb_substr($trimmedName, 0, $lastSpace, 'UTF-8');
+        }
+        $pageTitle = $trimmedName . $compactSuffix;
+    }
+}
 
 // Formata descrição detalhada: "2018 / 2019 - 135.000km • Flex • MANUAL • MARROM"
 $descriptionParts = [];
@@ -503,8 +521,8 @@ if ($cor) {
     $detalhe[] = mb_strtolower($cor, 'UTF-8');
 }
 $locationLine = $isSold
-    ? 'Este seminovo foi vendido — veja similares disponíveis na Netcar Multimarcas, em Esteio/RS.'
-    : ($precoCurto ? $precoCurto . ' na Netcar Multimarcas, em Esteio/RS.' : 'Na Netcar Multimarcas, em Esteio/RS.');
+    ? 'Este seminovo foi vendido — veja similares na Netcar, em Esteio/RS (Grande POA).'
+    : ($precoCurto ? $precoCurto . ' na Netcar, em Esteio/RS (Grande POA).' : 'Na Netcar, em Esteio/RS (Grande POA).');
 $withDetails = implode(' ', $metaParts);
 if (!empty($detalhe)) {
     $withDetails .= ', ' . implode(', ', $detalhe);
@@ -628,6 +646,7 @@ if ($placa) {
         $placaRetailer = $placaUpper;
     }
 }
+header('Vary: User-Agent');
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -673,11 +692,11 @@ if ($placa) {
     <meta property="og:image:type" content="<?php echo htmlspecialchars($imageType, ENT_QUOTES, 'UTF-8'); ?>" />
     <meta property="og:image:secure_url" content="<?php echo htmlspecialchars($imagemUrl, ENT_QUOTES, 'UTF-8'); ?>" />
     <meta property="og:url" content="<?php echo htmlspecialchars($pageUrl, ENT_QUOTES, 'UTF-8'); ?>" />
-    <meta property="og:type" content="article" />
+    <meta property="og:type" content="product" />
     <meta property="og:locale" content="pt_BR" />
     
     <!-- Product tags -->
-    <meta property="product:brand" content="Netcar" />
+    <meta property="product:brand" content="<?php echo htmlspecialchars(titleCase($marca) ?: 'Netcar', ENT_QUOTES, 'UTF-8'); ?>" />
     <meta property="product:availability" content="<?php echo $isSold ? 'out of stock' : 'in stock'; ?>" />
     <meta property="product:condition" content="used_like_new" />
     <meta property="product:price:amount" content="<?php echo intval($preco); ?>" />

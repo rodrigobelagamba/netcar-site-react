@@ -236,7 +236,7 @@ const ORG_ROOT_SCHEMA = {
   taxID: "02.237.969/0001-06",
   foundingDate: "1997",
   description:
-    "Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.",
+    "Revenda de carros seminovos em Esteio/RS para toda a Região Metropolitana de Porto Alegre. 2 lojas na Av. Presidente Vargas, garantia, vistoria e financiamento.",
   url: SITE,
   logo: {
     "@type": "ImageObject",
@@ -957,7 +957,7 @@ function pageShell({
 </head>
 <body>
   <header>
-    <p><strong>Netcar Multimarcas</strong> — Seminovos em Esteio/RS</p>
+    <p><strong>Netcar Multimarcas</strong> — Seminovos na Grande Porto Alegre (Esteio/RS)</p>
     <nav>
       <a href="${SITE}/">Home</a>
       <a href="${SITE}/seminovos">Seminovos</a>

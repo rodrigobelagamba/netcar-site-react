@@ -57,11 +57,11 @@ const STOCK_CUTS = [
     slug: "carros-ate-80-mil",
     name: "Carros até R$ 80 mil",
     filters: { precoMax: 80000 },
-    title: "Carros seminovos até R$ 80 mil em Esteio/RS | Netcar",
+    title: "Carros seminovos até R$ 80 mil na Grande POA | Netcar",
     h1: "Carros seminovos até R$ 80 mil",
     intent: "um seminovo até R$ 80 mil",
     intro:
-      "Veja os seminovos anunciados por até R$ 80 mil na Netcar, em Esteio. Compare fotos, versões e preço antes de escolher quais carros conhecer.",
+      "Veja os seminovos anunciados por até R$ 80 mil na Netcar, em Esteio (Grande Porto Alegre). Compare fotos, versões e preço antes de escolher quais carros conhecer.",
     guide:
       "Defina quanto pretende investir no carro e abra as fichas das opções que cabem nesse valor. Ano, versão e equipamentos ajudam a decidir entre os modelos da seleção.",
   },
@@ -69,11 +69,11 @@ const STOCK_CUTS = [
     slug: "carros-ate-100-mil",
     name: "Carros até R$ 100 mil",
     filters: { precoMax: 100000 },
-    title: "Carros seminovos até R$ 100 mil em Esteio/RS | Netcar",
+    title: "Carros seminovos até R$ 100 mil na Grande POA | Netcar",
     h1: "Carros seminovos até R$ 100 mil",
     intent: "um seminovo até R$ 100 mil",
     intro:
-      "Encontre no estoque da Netcar os seminovos com preço anunciado de até R$ 100 mil. Compare os modelos e consulte a troca ou o financiamento do carro que escolher.",
+      "Encontre no estoque da Netcar, em Esteio (Grande Porto Alegre), os seminovos anunciados por até R$ 100 mil. Compare os modelos e consulte troca ou financiamento.",
     guide:
       "Com um limite de R$ 100 mil, compare o que cada carro oferece pelo preço anunciado. Uma versão mais equipada e um carro de ano mais recente podem ter valores próximos; confira a ficha de cada um.",
   },
@@ -81,11 +81,11 @@ const STOCK_CUTS = [
     slug: "automaticos-ate-100-mil",
     name: "Automáticos até R$ 100 mil",
     filters: { cambio: "AUTOMATICO", precoMax: 100000 },
-    title: "Carros automáticos até R$ 100 mil em Esteio/RS | Netcar",
+    title: "Automáticos até R$ 100 mil na Grande POA | Netcar",
     h1: "Carros automáticos até R$ 100 mil",
     intent: "um carro automático até R$ 100 mil",
     intro:
-      "Veja os carros automáticos com preço anunciado de até R$ 100 mil na Netcar, em Esteio. Abra a ficha para conferir a versão, o câmbio e as fotos de cada opção.",
+      "Veja os carros automáticos anunciados por até R$ 100 mil na Netcar, em Esteio (Grande Porto Alegre). Abra a ficha para conferir versão, câmbio e fotos.",
     guide:
       "A seleção combina câmbio automático e preço de até R$ 100 mil. Confirme na ficha o tipo de câmbio, o motor e os equipamentos da versão; esses detalhes podem mudar entre carros do mesmo modelo.",
   },
@@ -93,11 +93,11 @@ const STOCK_CUTS = [
     slug: "suv-ate-100-mil",
     name: "SUVs até R$ 100 mil",
     filters: { categoria: "SUV", precoMax: 100000 },
-    title: "SUVs seminovos até R$ 100 mil em Esteio/RS | Netcar",
+    title: "SUVs seminovos até R$ 100 mil na Grande POA | Netcar",
     h1: "SUVs seminovos até R$ 100 mil",
     intent: "um SUV até R$ 100 mil",
     intro:
-      "Compare os SUVs anunciados por até R$ 100 mil nas duas lojas da Netcar, em Esteio. Veja preço, versão e fotos para escolher os carros que deseja conhecer.",
+      "Compare os SUVs anunciados por até R$ 100 mil nas duas lojas da Netcar, em Esteio (Grande Porto Alegre). Veja preço, versão e fotos antes da visita.",
     guide:
       "Além do preço, confira câmbio, versão e equipamentos dos SUVs que chamaram sua atenção. Na visita, veja se o espaço para passageiros e bagagem atende ao seu uso.",
   },
@@ -105,11 +105,11 @@ const STOCK_CUTS = [
     slug: "carros-de-100-a-150-mil",
     name: "Carros de R$ 100 mil a R$ 150 mil",
     filters: { precoMin: 100000, precoMax: 150000 },
-    title: "Seminovos de R$ 100 mil a R$ 150 mil em Esteio/RS | Netcar",
+    title: "Seminovos de R$ 100 a 150 mil na Grande POA | Netcar",
     h1: "Seminovos de R$ 100 mil a R$ 150 mil",
     intent: "um seminovo de R$ 100 mil a R$ 150 mil",
     intro:
-      "Veja os seminovos com preço anunciado entre R$ 100 mil e R$ 150 mil na Netcar. Compare os modelos da seleção e fale com a equipe sobre o carro que escolher.",
+      "Veja os seminovos entre R$ 100 mil e R$ 150 mil na Netcar, em Esteio (Grande Porto Alegre). Compare os modelos da seleção e fale com a equipe.",
     guide:
       "Nesta faixa, vale comparar versões e equipamentos junto com o ano do carro. Abra as fichas dos seus favoritos e use o comparador para conferir os dados lado a lado.",
   },
@@ -117,11 +117,11 @@ const STOCK_CUTS = [
     slug: "automaticos-ate-80-mil",
     name: "Automáticos até R$ 80 mil",
     filters: { cambio: "AUTOMATICO", precoMax: 80000 },
-    title: "Carros automáticos até 80 mil: seminovos em Esteio | Netcar",
+    title: "Automáticos até R$ 80 mil na Grande POA | Netcar",
     h1: "Carros automáticos usados até R$ 80 mil",
     intent: "um carro automático usado até R$ 80 mil",
     intro:
-      "Veja os carros automáticos usados com preço anunciado de até R$ 80 mil na Netcar, em Esteio. Confira as fotos e a versão de cada carro antes de combinar a visita.",
+      "Veja os carros automáticos usados por até R$ 80 mil na Netcar, em Esteio (Grande Porto Alegre). Confira fotos e versão antes de combinar a visita.",
     guide:
       "Para escolher um automático até R$ 80 mil, confira o tipo de câmbio e o histórico de manutenção de cada opção. Os equipamentos variam conforme o ano e a versão; abra a ficha e tire as dúvidas sobre o carro que escolher.",
     faq: [
@@ -261,7 +261,7 @@ export function marcaLanding(name, count, profile, variantIndex) {
     modelSlugs: [],
     title: `${nice} seminovos na Grande Porto Alegre | Netcar`,
     description: `Veja os ${nice} usados e seminovos da Netcar em Esteio, na Região Metropolitana de Porto Alegre. Fotos, preços e contato sobre cada carro.`,
-    h1: `${nice} usados e seminovos em Esteio/RS`,
+    h1: `${nice} usados e seminovos na Grande Porto Alegre`,
     intro: guide?.intro || `Escolha um ${nice} no estoque da Netcar. Veja as fotos e os detalhes de cada carro e fale com a equipe sobre o que chamou sua atenção.`,
     guideTitle: guide?.guideTitle || `Como escolher seu ${nice}`,
     paragraphs,
@@ -345,11 +345,11 @@ export function categoriaLanding(name, count, profile, variantIndex) {
     footerPriority: hasStock,
     filters: { categoria: name },
     relatedSlugs: [],
-    title: `${nice} seminovos em Esteio/RS | Netcar Multimarcas`,
+    title: `${nice} seminovos na Grande Porto Alegre | Netcar`,
     description: hasStock
-      ? `Veja os ${lower} seminovos disponíveis na Netcar em Esteio/RS. Compare fotos, ano, km e preço e consulte troca ou financiamento.`
-      : `${nice} seminovos na Netcar em Esteio/RS. Acompanhe novas entradas e compare categorias, modelos e faixas de preço disponíveis no estoque.`,
-    h1: `${nice} seminovos em Esteio/RS`,
+      ? `Veja os ${lower} seminovos na Netcar em Esteio, na Grande Porto Alegre. Compare fotos, ano, km e preço e consulte troca ou financiamento.`
+      : `${nice} seminovos na Netcar em Esteio, na Grande Porto Alegre. Acompanhe novas entradas e compare categorias, modelos e faixas de preço.`,
+    h1: `${nice} seminovos na Grande Porto Alegre`,
     intro,
     paragraphs: paragrafos,
     paragraphTemplates: [
@@ -391,9 +391,9 @@ export function modelLanding(config, vehicles) {
     category: config.category,
     filters,
     relatedSlugs: [],
-    title: guide?.title ?? `${config.name} seminovo em Esteio/RS: preço e estoque | Netcar`,
-    description: guide?.description ?? `${config.name} seminovo na Netcar, em Esteio/RS. Consulte os anúncios, compare preço e versão e fale sobre troca ou financiamento.`,
-    h1: `${config.name} seminovo em Esteio/RS`,
+    title: guide?.title ?? `${config.name} na Grande Porto Alegre | Netcar`,
+    description: guide?.description ?? `${config.name} seminovo na Netcar em Esteio, na Grande Porto Alegre. Consulte anúncios, compare preço e versão e fale sobre troca ou financiamento.`,
+    h1: `${config.name} seminovo na Grande Porto Alegre`,
     intro: guide?.intro ?? `Veja os anúncios de ${config.name} da Netcar, em Esteio. Confira o preço, as fotos e a versão de cada carro e confirme com a equipe qual deseja conhecer.`,
     ...(guide ? {
       guideTitle: guide.guideTitle,
@@ -446,7 +446,7 @@ export function priceLanding(config, vehicles) {
     filters: config.filters,
     relatedSlugs: [],
     title: config.title,
-    description: `${config.h1} na Netcar, em Esteio/RS. Veja preço total, fotos e ficha dos carros da seleção e consulte troca ou financiamento.`,
+    description: `${config.h1} na Netcar em Esteio (Grande POA). Veja preço total, fotos e ficha dos carros e consulte troca ou financiamento.`,
     h1: config.h1,
     intro:
       config.intro ||
@@ -487,9 +487,9 @@ export function hybridLanding(vehicles) {
     footerPriority: hasStock,
     filters,
     relatedSlugs: [],
-    title: "Carros híbridos seminovos em Esteio/RS | Netcar",
-    description: "Carros híbridos seminovos na Netcar, em Esteio/RS. Consulte os anúncios e compare ano, preço, km e ficha de cada veículo.",
-    h1: "Carros híbridos seminovos em Esteio/RS",
+    title: "Carros híbridos na Grande Porto Alegre | Netcar",
+    description: "Carros híbridos seminovos na Netcar em Esteio, na Grande Porto Alegre. Consulte os anúncios e compare ano, preço, km e ficha de cada veículo.",
+    h1: "Carros híbridos seminovos na Grande Porto Alegre",
     intro: "Consulte os híbridos anunciados pela Netcar. Veja ano, preço e ficha de cada unidade antes de decidir.",
     paragraphTemplates: [
       "A seleção atual tem {{count}} híbridos de {{minYear}} a {{maxYear}}, entre {{minPrice}} e {{maxPrice}}. Veja cada ficha antes de decidir.",

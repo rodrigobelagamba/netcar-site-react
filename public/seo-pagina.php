@@ -6,6 +6,8 @@
 
 require_once __DIR__ . '/seo/helpers.php';
 
+header('Vary: User-Agent');
+
 function netcar_render_demand_links($limit = null)
 {
     $file = __DIR__ . '/seo/landings.json';
@@ -48,6 +50,28 @@ function netcar_render_demand_links($limit = null)
     echo '</ul>';
 }
 
+function netcar_seminovos_has_filters()
+{
+    $requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+    $query = (string) parse_url($requestUri, PHP_URL_QUERY);
+    $filterKeys = array(
+        'busca', 'marca', 'modelo', 'precoMin', 'precoMax', 'anoMin', 'anoMax',
+        'cambio', 'combustivel', 'cor', 'categoria',
+    );
+    foreach (explode('&', $query) as $pair) {
+        $parts = explode('=', $pair, 2);
+        $name = urldecode($parts[0]);
+        $baseName = explode('[', $name, 2)[0];
+        if (!in_array($baseName, $filterKeys, true)) {
+            continue;
+        }
+        if ($baseName !== $name || (isset($parts[1]) && urldecode($parts[1]) !== '')) {
+            return true;
+        }
+    }
+    return false;
+}
+
 $page = seo_resolve_page();
 if ($page === null) {
     header('Location: /');
@@ -58,18 +82,43 @@ $vehicles = in_array($page, ['home', 'seminovos'], true) ? seo_fetch_available_v
 
 switch ($page) {
     case 'home':
-        $title = 'Carros Seminovos em Esteio | Netcar Multimarcas';
-        $description = 'Encontre carros seminovos em Esteio, com estoque selecionado, financiamento, garantia e o pós-venda Nethelp. Consulte a equipe da Netcar.';
+        $title = 'Seminovos na Grande Porto Alegre | Netcar Multimarcas';
+        $description = 'Carros seminovos na Grande Porto Alegre com estoque nas 2 lojas da Netcar em Esteio/RS. Fotos, preços, garantia, financiamento e pós-venda Nethelp.';
         $canonical = SEO_SITE_URL . '/';
         seo_render_head($title, $description, $canonical);
-        echo '<h1>Seminovos em Esteio/RS com Garantia</h1>';
-        echo '<p class="intro">A Netcar Multimarcas vende seminovos vistoriados em Esteio/RS desde 1997. ';
-        echo 'Duas lojas na Av. Presidente Vargas (740 e 1106), financiamento facilitado, Fábrica de Valor e pós-venda Nethelp.</p>';
+        echo '<h1>Seminovos na Grande Porto Alegre com Garantia</h1>';
+        echo '<p class="intro">A Netcar Multimarcas vende seminovos vistoriados na Região Metropolitana de Porto Alegre desde 1997. ';
+        echo 'Duas lojas na Av. Presidente Vargas (740 e 1106), em Esteio/RS, financiamento facilitado, Fábrica de Valor e pós-venda Nethelp.</p>';
         echo '<h2>Destaques do estoque</h2>';
         seo_render_vehicle_list($vehicles, 12);
         echo '<p><a href="' . SEO_SITE_URL . '/seminovos">Ver todos os seminovos disponíveis</a></p>';
         echo '<h2>Encontre por modelo, perfil ou orçamento</h2>';
         netcar_render_demand_links(14);
+        echo '<h2>Guias para decidir com segurança</h2>';
+        echo '<ul>';
+        echo '<li><a href="' . SEO_SITE_URL . '/como-selecionamos-nossos-carros">Como selecionamos nossos carros</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/carro-de-locadora-vale-a-pena">Carro de locadora vale a pena?</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/localiza-seminovos-vale-a-pena">Localiza Seminovos em Porto Alegre e Canoas: compare antes</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/movida-seminovos-vale-a-pena">Movida Seminovos em Porto Alegre e Canoas: compare antes</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/unidas-seminovos-vale-a-pena">Unidas Seminovos em Porto Alegre e Canoas: compare antes</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/carro-de-leilao-vale-a-pena">Carro de leilão vale a pena?</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/financiamento">Financiamento de seminovos na Grande Porto Alegre</a></li>';
+        echo '</ul>';
+        $homeBlogFile = __DIR__ . '/seo/blog-index.json';
+        $homePosts = is_readable($homeBlogFile) ? json_decode((string) file_get_contents($homeBlogFile), true) : [];
+        if (is_array($homePosts) && count($homePosts) > 0) {
+            echo '<h2>Artigos do blog</h2><ul>';
+            $shownPosts = 0;
+            foreach ($homePosts as $post) {
+                if ($shownPosts >= 6) break;
+                if (!is_array($post) || empty($post['title']) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', (string) ($post['slug'] ?? ''))) {
+                    continue;
+                }
+                echo '<li><a href="' . SEO_SITE_URL . '/blog/' . rawurlencode($post['slug']) . '">' . seo_h($post['title']) . '</a></li>';
+                $shownPosts++;
+            }
+            echo '</ul><p><a href="' . SEO_SITE_URL . '/blog">Ver todos os artigos do blog</a></p>';
+        }
         echo '<h2>Atendimento regional</h2>';
         echo '<p>Consulte estoque e pré-avaliação antes de viajar. As lojas físicas ficam somente na Av. Presidente Vargas, em Esteio.</p>';
         echo '<p><a href="' . SEO_SITE_URL . '/regioes-atendidas">Ver regiões atendidas</a></p>';
@@ -87,12 +136,17 @@ switch ($page) {
         break;
 
     case 'seminovos':
-        $title = 'Carros Seminovos e Usados em Esteio/RS | Netcar Multimarcas';
-        $description = 'Carros seminovos e usados em Esteio, com fotos e preços. Avaliamos seu usado na troca por qualquer carro do estoque, com possibilidade de troco.';
+        $title = 'Seminovos e Usados na Grande Porto Alegre | Netcar';
+        $description = 'Carros seminovos e usados na Grande Porto Alegre com fotos e preços. 2 lojas em Esteio/RS; avaliamos seu usado na troca por qualquer carro do estoque.';
         $canonical = SEO_SITE_URL . '/seminovos';
-        seo_render_head($title, $description, $canonical);
-        echo '<h1>Carros seminovos e usados em Esteio/RS</h1>';
-        echo '<p class="intro">Estoque disponível nas duas lojas da Netcar, na Av. Presidente Vargas, em Esteio. Veja fotos, preço e ano. ';
+        $extraHead = '';
+        if (netcar_seminovos_has_filters()) {
+            header('X-Robots-Tag: noindex, follow');
+            $extraHead = '<meta name="robots" content="noindex, follow" />';
+        }
+        seo_render_head($title, $description, $canonical, $extraHead);
+        echo '<h1>Carros seminovos e usados na Grande Porto Alegre</h1>';
+        echo '<p class="intro">Estoque disponível nas duas lojas da Netcar, na Av. Presidente Vargas, em Esteio/RS, atendendo toda a Região Metropolitana de Porto Alegre. Veja fotos, preço e ano. ';
         echo count($vehicles) . ' veículos disponíveis.</p>';
         seo_render_vehicle_list($vehicles);
         echo '<h2>Outras formas de encontrar seu carro</h2>';
@@ -167,11 +221,11 @@ switch ($page) {
         break;
 
     case 'blog':
-        $title = 'Blog de seminovos em Esteio | Netcar';
+        $title = 'Blog de seminovos na Grande Porto Alegre | Netcar';
         $description = 'Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre.';
         $canonical = SEO_SITE_URL . '/blog';
         seo_render_head($title, $description, $canonical);
-        echo '<h1>Blog de seminovos em Esteio</h1>';
+        echo '<h1>Blog de seminovos na Grande Porto Alegre</h1>';
         echo '<p class="intro">Respostas para dúvidas sobre compra, troca e financiamento de seminovos na Grande Porto Alegre.</p>';
         $blogFile = __DIR__ . '/seo/blog-index.json';
         $posts = is_readable($blogFile) ? json_decode((string) file_get_contents($blogFile), true) : [];

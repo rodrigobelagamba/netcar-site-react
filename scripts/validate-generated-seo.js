@@ -1397,6 +1397,10 @@ function validateComparisonPages() {
     "chevrolet-tracker-x-hyundai-creta",
     "volkswagen-nivus-x-fiat-fastback",
     "volkswagen-tera-x-volkswagen-t-cross",
+    "volkswagen-t-cross-x-hyundai-creta",
+    "honda-hr-v-x-nissan-kicks",
+    "jeep-renegade-x-volkswagen-t-cross",
+    "byd-song-plus-x-gwm-haval-h6",
   ];
   if (
     comparisonPages.length !== expectedSlugs.length ||
@@ -1407,7 +1411,7 @@ function validateComparisonPages() {
     )
   ) {
     errors.push(
-      "comparações: preservar os quatro confrontos e seus slugs únicos",
+      "comparações: preservar os confrontos permanentes e seus slugs únicos",
     );
   }
   for (const page of comparisonPages) {
@@ -1711,7 +1715,7 @@ for (const [slug, guide] of Object.entries(MODEL_BUYER_GUIDES)) {
 for (const landing of landings) {
   checkSnippet(`Landing ${landing.slug}`, landing.title, landing.description);
 }
-const blogHubTitle = "Blog de seminovos em Esteio | Netcar";
+const blogHubTitle = "Blog de seminovos na Grande Porto Alegre | Netcar";
 for (const source of [
   crawlerHome,
   readFileSync(join(root, "public/index.php"), "utf8"),

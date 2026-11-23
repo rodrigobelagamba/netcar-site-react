@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
+import { useMetaTags } from "@/hooks/useMetaTags";
 import { useVehiclesQuery } from "@/catalog/queries/useVehiclesQuery";
 import { VehicleCard } from "@/design-system/components/patterns/VehicleCard";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
@@ -36,17 +36,19 @@ export function SeminovosAutomaticosPage() {
   const waitingForStock =
     !isError && (isLoading || (isFetching && availableVehicles.length === 0));
 
-  useDefaultMetaTags(
-    "Seminovos Automáticos em Esteio",
-    "Veja os carros automáticos e CVT disponíveis na Netcar, em Esteio/RS. Consulte fotos, preço, km, troca e financiamento.",
-  );
+  useMetaTags({
+    title: "Seminovos automáticos na Grande Porto Alegre | Netcar",
+    description:
+      "Veja os seminovos automáticos e CVT na Netcar em Esteio, na Grande Porto Alegre. Consulte fotos, preço, km, troca e financiamento.",
+    url: "https://www.netcarmultimarcas.com.br/seminovos-automaticos",
+  });
 
   return (
     <main className="flex-1 overflow-x-hidden max-w-full bg-white">
       <RegionalSeoHero
-        eyebrow="Câmbio automático · Esteio/RS"
-        title="Seminovos automáticos em Esteio"
-        intro="Veja os automáticos e CVT disponíveis nas duas lojas da Netcar. Confira fotos, preço e quilometragem antes de falar sobre troca ou financiamento."
+        eyebrow="Câmbio automático · Grande Porto Alegre (Esteio/RS)"
+        title="Seminovos automáticos na Grande Porto Alegre"
+        intro="Veja os automáticos e CVT disponíveis nas duas lojas da Netcar, em Esteio/RS. Confira fotos, preço e quilometragem antes de falar sobre troca ou financiamento."
       >
         <RegionalActionCtas
           className="mt-8"

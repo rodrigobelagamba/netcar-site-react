@@ -117,7 +117,7 @@ function render(route) {
 function assertStockPreserved(html) {
   assert.match(
     html,
-    /<title>Carros Seminovos e Usados em Esteio\/RS \| Netcar Multimarcas<\/title>/,
+    /<title>Seminovos e Usados na Grande Porto Alegre \| Netcar<\/title>/,
   );
   assert.match(
     html,

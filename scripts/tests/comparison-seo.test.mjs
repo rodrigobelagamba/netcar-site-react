@@ -298,19 +298,26 @@ function assertPairPage(html, page) {
   assert.ok(!schemas.some((schema) => schema["@type"] === "FAQPage"));
 }
 
-test("four permanent pair pages remain complete and discoverable when stock is empty", () => {
+test("permanent pair pages remain complete and discoverable when stock is empty", () => {
   const expectedSlugs = [
     "jeep-compass-x-honda-hr-v",
     "chevrolet-tracker-x-hyundai-creta",
     "volkswagen-nivus-x-fiat-fastback",
     "volkswagen-tera-x-volkswagen-t-cross",
+    "volkswagen-t-cross-x-hyundai-creta",
+    "honda-hr-v-x-nissan-kicks",
+    "jeep-renegade-x-volkswagen-t-cross",
+    "byd-song-plus-x-gwm-haval-h6",
   ];
   assert.deepEqual(
     comparisonPages.map(({ slug }) => slug),
     expectedSlugs,
   );
   for (const field of ["title", "description", "h1", "intro"]) {
-    assert.equal(new Set(comparisonPages.map((page) => page[field])).size, 4);
+    assert.equal(
+      new Set(comparisonPages.map((page) => page[field])).size,
+      expectedSlugs.length,
+    );
   }
   const sectionTexts = comparisonPages.flatMap((page) =>
     page.sections.map(({ text }) => text),

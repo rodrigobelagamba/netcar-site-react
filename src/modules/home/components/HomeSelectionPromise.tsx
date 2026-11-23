@@ -9,10 +9,15 @@ import {
 
 const trustPoints = [
   { icon: MapPin, label: "Comprados no RS" },
-  { icon: ShieldCheck, label: "Sem origem de locadora" },
+  {
+    icon: ShieldCheck,
+    label: "Sem origem de locadora",
+    to: "/carro-de-locadora-vale-a-pena",
+  },
   {
     icon: FileSearch,
     label: "Sem leilão, sinistro, furto ou roubo",
+    to: "/carro-de-leilao-vale-a-pena",
   },
 ] as const;
 
@@ -59,18 +64,36 @@ export function HomeSelectionPromise() {
           </p>
 
           <div className="mt-4 flex flex-wrap gap-2 sm:mt-7 sm:gap-2.5">
-            {trustPoints.map((point) => (
-              <span
-                key={point.label}
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3.5 py-2 text-xs font-bold text-white/90 sm:text-sm"
-              >
-                <point.icon
-                  className="h-4 w-4 shrink-0 text-[#5CD29D]"
-                  aria-hidden="true"
-                />
-                {point.label}
-              </span>
-            ))}
+            {trustPoints.map((point) => {
+              const content = (
+                <>
+                  <point.icon
+                    className="h-4 w-4 shrink-0 text-[#5CD29D]"
+                    aria-hidden="true"
+                  />
+                  {point.label}
+                </>
+              );
+              if ("to" in point) {
+                return (
+                  <Link
+                    key={point.label}
+                    to={point.to}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3.5 py-2 text-xs font-bold text-white/90 transition hover:border-[#5CD29D]/50 hover:bg-white/[0.14] hover:text-white sm:text-sm"
+                  >
+                    {content}
+                  </Link>
+                );
+              }
+              return (
+                <span
+                  key={point.label}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3.5 py-2 text-xs font-bold text-white/90 sm:text-sm"
+                >
+                  {content}
+                </span>
+              );
+            })}
           </div>
 
           <div className="mt-5 flex flex-col gap-3 sm:mt-8 sm:flex-row">

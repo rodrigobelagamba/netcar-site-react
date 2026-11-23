@@ -23,10 +23,10 @@ function entregas_requested_page()
 function entregas_page_meta($page)
 {
     return array(
-        'title' => 'Netcar - Entregas de carros e clientes | Esteio/RS' . ($page > 1 ? ' — Página ' . $page : ''),
-        'description' => 'Conheça as entregas de carros da Netcar Multimarcas em Esteio/RS. Explore as fotos por mês e ano, reveja sua entrega e compartilhe esse momento.' . ($page > 1 ? ' Página ' . $page . ' do histórico.' : ''),
+        'title' => 'Entregas de carros Netcar | Grande Porto Alegre' . ($page > 1 ? ' — Página ' . $page : ''),
+        'description' => 'Conheça as entregas de carros da Netcar Multimarcas em Esteio/RS, na Grande Porto Alegre. Explore as fotos por mês e ano e reveja sua entrega.' . ($page > 1 ? ' Página ' . $page . ' do histórico.' : ''),
         'canonical' => 'https://www.netcarmultimarcas.com.br' . entregas_page_url($page),
-        'robots' => 'index, follow, max-image-preview:large',
+        'robots' => $page > 1 ? 'noindex, follow' : 'index, follow, max-image-preview:large',
         'image' => 'https://www.netcarmultimarcas.com.br/entregas-media/mkt-f70fefc7.webp',
     );
 }
@@ -83,7 +83,7 @@ function entregas_initial_html($deliveries, $page)
     $items = array_slice($deliveries, ($page - 1) * 24, 24);
     $html = '<main id="entregas-initial" style="max-width:1200px;margin:0 auto;padding:32px 20px;color:#153c40;font-family:Arial,sans-serif">'
         . '<nav aria-label="Navegação principal"><a href="/">Netcar</a> · <a href="/seminovos">Estoque</a> · <a href="/sobre">Sobre a Netcar</a></nav>'
-        . '<p>ENTREGAS NETCAR · ESTEIO/RS</p><h1>O carro muda. A história fica.</h1>'
+        . '<p>ENTREGAS NETCAR · ESTEIO/RS</p><h1>O carro muda. A história fica.' . ($page > 1 ? ' — Página ' . $page : '') . '</h1>'
         . '<p>Conheça as entregas de carros da Netcar Multimarcas. Encontre seu momento por mês e ano e compartilhe essa história.</p>'
         . '<h2>Cada entrega, uma história.</h2><p>' . count($deliveries) . ' fotos · Página ' . $page . ' de ' . $pageCount . '</p>'
         . '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px">';

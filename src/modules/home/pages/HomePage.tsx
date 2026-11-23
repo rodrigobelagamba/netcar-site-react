@@ -3,7 +3,7 @@ import { useBannersQuery } from "@/catalog/queries/useSiteQuery";
 import { LazyLocalizacao } from "@/design-system/components/layout/LazyLocalizacao";
 import { DeferredRender } from "@/design-system/components/layout/DeferredRender";
 import { IanBot } from "@/design-system/components/layout/IanBot";
-import { useDefaultMetaTags } from "@/hooks/useDefaultMetaTags";
+import { useMetaTags } from "@/hooks/useMetaTags";
 import {
   HomeHero,
   HomeHeroVehicle,
@@ -243,11 +243,12 @@ export function HomePage() {
     return () => window.removeEventListener("resize", updateColumns);
   }, []);
 
-  useDefaultMetaTags(
-    "Carros Seminovos em Esteio",
-    "Veja carros seminovos nas duas lojas integradas da Netcar em Esteio. Consulte fotos, preços, troca, financiamento e i-CHECK quando disponível.",
-    { canonicalPath: "/" },
-  );
+  useMetaTags({
+    title: "Seminovos na Grande Porto Alegre | Netcar Multimarcas",
+    description:
+      "Carros seminovos na Grande Porto Alegre com estoque nas 2 lojas da Netcar em Esteio/RS. Fotos, preços, garantia, financiamento e pós-venda Nethelp.",
+    url: "https://www.netcarmultimarcas.com.br/",
+  });
 
   const featuredVehicle = useMemo(
     () => (vehicles ? pickFeaturedHomeVehicle(vehicles) : undefined),

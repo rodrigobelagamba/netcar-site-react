@@ -61,7 +61,7 @@ function seo_org_schema()
                 'legalName' => 'R&C Veículos Ltda',
                 'taxID' => '02.237.969/0001-06',
                 'foundingDate' => '1997',
-                'description' => 'Loja de seminovos em Esteio/RS. Carros com garantia, vistoriados e financiamento facilitado. 2 lojas na Av. Presidente Vargas. Compra de usados, mesmo financiados.',
+                'description' => 'Revenda de carros seminovos em Esteio/RS para toda a Região Metropolitana de Porto Alegre. 2 lojas na Av. Presidente Vargas, garantia, vistoria e financiamento.',
                 'url' => SEO_SITE_URL,
                 'logo' => [
                     '@type' => 'ImageObject',

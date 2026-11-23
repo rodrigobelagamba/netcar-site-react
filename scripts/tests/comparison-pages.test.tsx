@@ -198,10 +198,10 @@ function assertEditorial(html: string, definition = firstDefinition) {
   }
 }
 
-test("pair definitions use the shared four-page JSON contract", () => {
-  assert.equal(comparisonDefinitions.length, 4);
+test("pair definitions use the shared eight-page JSON contract", () => {
+  assert.equal(comparisonDefinitions.length, 8);
   assert.deepEqual(comparisonDefinitions, definitions);
-  assert.equal(new Set(comparisonDefinitions.map((item) => item.slug)).size, 4);
+  assert.equal(new Set(comparisonDefinitions.map((item) => item.slug)).size, 8);
 });
 
 test("model matching accepts HR-V and T-Cross punctuation without crossing brands", () => {
