@@ -33,6 +33,127 @@
           "sourceUrl": "https://www.vwnews.com.br/news/2428"
         }
       ]
+    },
+    {
+      "vehicleId": "20147",
+      "match": {
+        "brand": "BYD",
+        "model": "SONG PRO GS",
+        "modelYear": 2026,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedAt": "2026-11-23",
+      "copies": [
+        {
+          "topic": "parking-aids",
+          "title": "Câmera de ré e sensor de estacionamento",
+          "description": "A câmera mostra a área atrás do carro e o sensor avisa quando há um obstáculo.",
+          "equipmentIds": [
+            "rear-camera",
+            "parking-sensors"
+          ]
+        },
+        {
+          "topic": "cabin-comfort",
+          "title": "Ar-condicionado de duas zonas",
+          "description": "Motorista e passageiro da frente podem ajustar a temperatura separadamente.",
+          "equipmentIds": [
+            "dual-zone-climate",
+            "leather-seats"
+          ]
+        }
+      ]
+    },
+    {
+      "vehicleId": "20148",
+      "match": {
+        "brand": "VOLKSWAGEN",
+        "model": "FOX COMFORTLINE",
+        "modelYear": 2016,
+        "engine": "1.6",
+        "transmission": "MANUAL"
+      },
+      "reviewedAt": "2026-11-23",
+      "copies": [
+        {
+          "topic": "parking-sensors",
+          "title": "Sensor de estacionamento",
+          "description": "O aviso sonoro ajuda a perceber obstáculos nas manobras.",
+          "equipmentIds": [
+            "parking-sensors"
+          ]
+        }
+      ]
+    },
+    {
+      "vehicleId": "20160",
+      "match": {
+        "brand": "TOYOTA",
+        "model": "YARIS SEDAN XS",
+        "modelYear": 2023,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedAt": "2026-11-23",
+      "copies": [
+        {
+          "topic": "rear-camera",
+          "title": "Câmera de ré",
+          "description": "A imagem da área traseira ajuda nas manobras em marcha à ré.",
+          "equipmentIds": [
+            "rear-camera"
+          ]
+        },
+        {
+          "topic": "cruise-control",
+          "title": "Piloto automático",
+          "description": "Mantém a velocidade definida pelo motorista.",
+          "equipmentIds": [
+            "cruise-control"
+          ]
+        }
+      ]
+    },
+    {
+      "vehicleId": "20164",
+      "match": {
+        "brand": "PEUGEOT",
+        "model": "208 STYLE",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "MANUAL"
+      },
+      "reviewedAt": "2026-11-23",
+      "copies": [
+        {
+          "topic": "parking-aids",
+          "title": "Câmera de ré e sensor de estacionamento",
+          "description": "Ao engatar a ré, veja a área traseira na tela e acompanhe os alertas do sensor.",
+          "equipmentIds": [
+            "rear-camera",
+            "parking-sensors"
+          ]
+        },
+        {
+          "topic": "phone-connectivity",
+          "title": "Android Auto e Apple CarPlay",
+          "description": "Use aplicativos compatíveis do celular na central multimídia.",
+          "equipmentIds": [
+            "android-auto",
+            "apple-carplay",
+            "multimedia"
+          ]
+        },
+        {
+          "topic": "traction-control",
+          "title": "Controle de tração",
+          "description": "Ajuda a reduzir a patinagem das rodas na aceleração.",
+          "equipmentIds": [
+            "traction-control"
+          ]
+        }
+      ]
     }
   ]
 }

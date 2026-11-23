@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { test } from "node:test";
+import reviewedCopy from "../../src/data/vehicle-editorial-copy.json";
 import reviews from "../../src/data/vehicle-photo-reviews.json";
 import { matchesEditorialIdentity } from "../../src/modules/detalhes/lib/vehicleEditorialIdentity";
 import { resolveVehicleEditorialCopy } from "../../src/modules/detalhes/lib/vehicleEditorialCopy";
@@ -122,7 +123,8 @@ test("reviewed locations are origin-bound and distinct from content checksums", 
     undefined,
   );
   assert.equal(
-    reviews.units.reduce((n, unit) => n + Object.keys(unit.captions).length, 0),
+    reviews.units.filter((unit) => unit.vehicleId !== "20137")
+      .reduce((n, unit) => n + Object.keys(unit.captions).length, 0),
     44,
   );
   for (const unit of reviews.units)
@@ -131,6 +133,27 @@ test("reviewed locations are origin-bound and distinct from content checksums", 
       assert.match(caption!.contentSha256, /^[a-f0-9]{64}$/);
       assert.notEqual(key, caption!.contentSha256);
     }
+});
+
+test("the approved November batch binds eight copies and eleven non-cover captions to exact units", () => {
+  const expected = new Map([["20147", 2], ["20148", 1], ["20160", 2], ["20164", 3]]);
+  for (const [id, count] of expected) {
+    const rows = reviewedCopy.units.filter((unit) => unit.vehicleId === id);
+    assert.equal(rows.length, 1);
+    const [{ match, copies }] = rows;
+    assert.equal(copies.length, count);
+    const vehicle = { id, marca: match.brand, modelo: match.model, year: match.modelYear,
+      motor: match.engine, cambio: match.transmission };
+    for (const copy of copies) {
+      assert.deepEqual(resolveVehicleEditorialCopy(vehicle, copy.topic, copy.equipmentIds), copy);
+      assert.equal(resolveVehicleEditorialCopy({ ...vehicle, id: "99999" }, copy.topic, copy.equipmentIds), undefined);
+      assert.equal(resolveVehicleEditorialCopy(vehicle, copy.topic, copy.equipmentIds.slice(1)), undefined);
+    }
+  }
+  const fastback = reviews.units.filter((unit) => unit.vehicleId === "20137");
+  assert.equal(fastback.length, 1);
+  assert.equal(Object.keys(fastback[0].captions).length, 11);
+  assert.equal(Object.values(fastback[0].captions).filter(Boolean).length, 11);
 });
 
 test("hash-bound captions follow files across order changes and retain equipment fallback", () => {

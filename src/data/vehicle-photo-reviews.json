@@ -231,6 +231,63 @@
           "contentSha256": "4e5c33f68626b154f3c243e7ddadfe8d73659aa9a6a56326e5d8030c58e0ab3e"
         }
       }
+    },
+    {
+      "vehicleId": "20137",
+      "match": {
+        "brand": "FIAT",
+        "model": "FASTBACK IMPETUS TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO"
+      },
+      "reviewedAt": "2026-11-23",
+      "captions": {
+        "e7de57e173d4b858eda94864b13e2f2edd6c911d7076fa0904129af484022d09": {
+          "visual": "Grade e faróis dianteiros",
+          "contentSha256": "21ab4b74739867cb2184b7614b47437c86b83eb8f821bd5d132b2934ba99023c"
+        },
+        "ff584f81d717c843ced425b89c6487a98252ffd66cc0dd4a905f93df9a7c93b0": {
+          "visual": "Frente e rodas em três quartos",
+          "contentSha256": "1f3d6943a2c748f78f6936bcfd7dc0a33c0adc32f904d273cd81360c3dc9fa5e"
+        },
+        "7472b1811eb3b6bc583201454c384ce8ee6c957e9b5ee5facb5cc57a5b54bd69": {
+          "visual": "Traseira e perfil lateral",
+          "contentSha256": "a11394014d5decb82fc39b8e30f19edcb9bec7b9a074566306341a69c525fadf"
+        },
+        "2b79706e043e288a05b4f9375d26e4ee5dd6aa3257bbded1450403b58c43b6fd": {
+          "visual": "Lanternas e tampa traseira",
+          "contentSha256": "173cc8e3973b128bc8651f5a4d74b720c7c00b30c1a8c6be4fb0fddce74d9737"
+        },
+        "fd3f850af91109a56cc9164d5d68782a70c6614b40c9e45c5b9d0f2ba7b2d708": {
+          "visual": "Traseira vista pelo outro lado",
+          "contentSha256": "c8c650f856e640731694dc32523f94305fe7ba9e72cb9eab534db6a8e051fbfb"
+        },
+        "79f48dfb01867478af965188c468008f281136addaf64283e95c64d46e5fa8c4": {
+          "visual": "Volante e console central",
+          "contentSha256": "5117570e4d3b53d4e0015f423683a22034dba8dcabbbb1ec20f8afd890f41286"
+        },
+        "06f051e537ca9494a15f8086b3ddbbe2a349af38ddee5ac10b5d129d97639fa3": {
+          "visual": "Volante e painel de instrumentos",
+          "contentSha256": "16b88c27ba11d955c61f3bf8b204332632b0abcaf486859b60755da742277885"
+        },
+        "fa08e79a70e2a7462a99694c05b0c57cb7db75145a760f106b66f95dd5879d29": {
+          "visual": "Seletor de câmbio",
+          "contentSha256": "e5fb3c793f45607c2710d5282906dac01a6c8e6f35c0626678c42db6ae0943b7"
+        },
+        "aaa5694e08ed2f3d89e397c62c1c8e931bb75743f8bfa65487db9152fee7301b": {
+          "visual": "Bancos dianteiros e painel",
+          "contentSha256": "8b515f56c87d5d3e7259853f9650c30a478b14b37ac7a62dc47c4e9d54fa7687"
+        },
+        "6062bdcd772e6a93686f10ee91d15a28fb5f17c1d728b9fae89aca78759169bd": {
+          "visual": "Vista frontal do painel",
+          "contentSha256": "79d9db041927acafc55a84e985739e21514d59e089b3838c29d831a93d10802e"
+        },
+        "adf81d253fe30ae8e4db0a6d0ad7608ebbf6d609f68e41dfae010e5dd6b247c8": {
+          "visual": "Rádio na central multimídia",
+          "contentSha256": "d3c7ba9b3da75e9ddbbbc5c443ddb6d4ed57d58dabfca761af943bbcef419fa4"
+        }
+      }
     }
   ]
 }
