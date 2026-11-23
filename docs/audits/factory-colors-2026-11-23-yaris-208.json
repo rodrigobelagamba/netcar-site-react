@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-23",
+  "verificationBasis": "catalog-match",
+  "sourceReconciliation": "A cor genérica, a chave física e a configuração de cada unidade foram conciliadas entre a API completa de estoque e o XML Automacar. O nome comercial da pintura da carroceria foi identificado por correspondência única com a paleta brasileira da versão e do ano-modelo.",
+  "vehicles": [
+    {
+      "vehicleId": "20160",
+      "publicReference": "factory-colors-20261123-20160",
+      "model": "TOYOTA YARIS SEDAN XS",
+      "manufactureYear": 2022,
+      "modelYear": 2023,
+      "genericColor": "PRATA",
+      "officialName": "Prata Lua Nova",
+      "issuer": "Toyota do Brasil",
+      "sourceProvenance": [
+        {
+          "url": "https://cdn.appdealersites.com.br/modelo-toyota/conteudo-online/catalogo-yaris-sed%C3%A3.pdf",
+          "role": "Catálogo de produto Toyota distribuído pela rede brasileira de concessionárias. A página 3 identifica a linha Yaris 2023. A página 8 apresenta seis cores do sedã e seus códigos, incluindo Prata Lua Nova (1H6).",
+          "inspectedDocumentSha256": "8497511bed4e67e54aab360a9805c63a528d4248fb19cb02122f96db94421322"
+        },
+        {
+          "url": "https://portaldaautopeca.com.br/noticias/local/toyota-apresenta-linha-yaris-2023/",
+          "role": "Comunicado da Toyota do Brasil sobre a linha brasileira 2023, reproduzido pelo Sincopeças. Identifica o sedã XS 1.5 automático, confirma os nomes das cores e reserva a cor vermelha ao hatchback."
+        }
+      ],
+      "palette": [
+        "Branco Polar",
+        "Branco Lunar",
+        "Cinza Granito",
+        "Prata Lua Nova",
+        "Preto Infinito",
+        "Azul Titã"
+      ],
+      "scope": "O sedã XS oferece um único prata, Prata Lua Nova. O código 1H6 pertence ao catálogo."
+    },
+    {
+      "vehicleId": "20164",
+      "publicReference": "factory-colors-20261123-20164",
+      "model": "PEUGEOT 208 STYLE",
+      "manufactureYear": 2023,
+      "modelYear": 2024,
+      "genericColor": "PRETA",
+      "officialName": "Preto Perla Nera",
+      "issuer": "Peugeot / Stellantis Brasil",
+      "sourceProvenance": [
+        {
+          "url": "https://www.media.stellantis.com/uploads/br/attachment/4721/fichatecnicapeugeot208my24-64b187187f997.pdf",
+          "role": "A página 2 da ficha técnica brasileira identifica o Peugeot 208 Style 1.0L 23/24 MT5 e enumera as quatro cores de carroceria da versão.",
+          "inspectedDocumentSha256": "8683fc944b594071fdc13a786311cb5123477d78b3c7e6fce9bc64c69a1e8aed"
+        },
+        {
+          "url": "https://www.media.stellantis.com/br-pt/peugeot/press/peugeot-208-simbolo-de-uma-revolucao-urbana-hatch-fica-ainda-mais-competitivo-com-chegada-da-linha-2024",
+          "role": "O comunicado de lançamento da Peugeot Brasil apresenta o 208 Style 1.0 da linha 2024 e acompanha a ficha técnica da linha."
+        }
+      ],
+      "palette": [
+        "Preto Perla Nera",
+        "Azul Quasar",
+        "Cinza Artense",
+        "Branco Nacré"
+      ],
+      "scope": "Preto Perla Nera é a única pintura preta de carroceria na ficha do Style 1.0 manual 2023/2024."
+    }
+  ]
+}
