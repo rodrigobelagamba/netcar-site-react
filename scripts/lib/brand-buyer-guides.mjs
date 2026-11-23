@@ -193,7 +193,7 @@ export const BRAND_BUYER_GUIDES = {
     "faq": [
       {
         "q": "A seleção de Yaris mostra hatch ou sedã?",
-        "a": "A página de Yaris disponível no site reúne o hatch. Esta página Toyota e o estoque completo permitem consultar outras opções da marca quando estiverem anunciadas."
+        "a": "Hatch e sedã têm seleções próprias. Escolha a carroceria que você procura para ver as unidades anunciadas."
       }
     ]
   },
@@ -202,7 +202,7 @@ export const BRAND_BUYER_GUIDES = {
     "intro": "Veja os BYD anunciados na Netcar, em Esteio, e fale sobre o carro que você quer comprar.",
     "guideTitle": "Seu próximo BYD",
     "paragraphs": [
-      "Se você procura um Song Plus, pode começar pela seleção do modelo. Para conhecer outros BYD, veja os anúncios da marca nesta página. A ficha de cada unidade reúne fotos, versão e preço, com contato para esclarecer os detalhes da compra ou consultar seu usado na troca."
+      "Song Pro e Song Plus têm seleções próprias para facilitar a sua busca. Para conhecer outros BYD, veja os anúncios da marca nesta página. A ficha de cada unidade reúne fotos, versão e preço, com contato para esclarecer os detalhes da compra ou consultar seu usado na troca."
     ],
     "faq": [
       {

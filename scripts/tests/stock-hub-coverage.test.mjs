@@ -82,3 +82,21 @@ test('the canonical Corolla and Corolla Cross families cover each Toyota exactly
     ['toyota-corolla'], ['toyota-corolla-cross'], ['toyota-corolla-cross'],
   ]);
 });
+
+test('Song Pro, Yaris sedã and Fiesta hatch keep nearby families distinct', () => {
+  const cases = [
+    ['BYD', 'SONG PRO GS', 'SUV', ['byd-song-pro']],
+    ['BYD', 'SONG PLUS DM-I', 'SUV', ['byd-song-plus']],
+    ['TOYOTA', 'YARIS SEDAN XS', 'SEDAN', ['toyota-yaris-sedan']],
+    ['TOYOTA', 'YARIS XL', 'HATCH', ['toyota-yaris']],
+    ['FORD', 'FIESTA 1.6 FLEX', 'HATCH', ['ford-fiesta']],
+    ['FORD', 'FIESTA SEDAN 1.6', 'SEDAN', []],
+  ];
+  const vehicles = cases.map(([marca, modelo, categoria], index) =>
+    row({ id: index + 1, marca, modelo, categoria }),
+  );
+  const report = auditStockHubCoverage(snapshot(vehicles));
+  for (const vehicle of report.vehicles) {
+    assert.deepEqual(vehicle.hubSlugs, cases[Number(vehicle.id) - 1][3]);
+  }
+});
