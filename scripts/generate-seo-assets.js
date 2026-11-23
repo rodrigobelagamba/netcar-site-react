@@ -917,8 +917,20 @@ function pageShell({
   body,
   schemas = [],
   ogImage,
+  ogType = "website",
+  articlePublishedTime,
+  articleModifiedTime,
   robots = "index, follow, max-image-preview:large",
 }) {
+  const resolvedImage = ogImage || `${SITE}/images/loja1.jpg`;
+  const articleMetaTags = [
+    articlePublishedTime
+      ? `\n  <meta property="article:published_time" content="${escapeHtml(articlePublishedTime)}" />`
+      : "",
+    articleModifiedTime
+      ? `\n  <meta property="article:modified_time" content="${escapeHtml(articleModifiedTime)}" />`
+      : "",
+  ].join("");
   const schemaTags = schemas.length
     ? "\n" +
       schemas
@@ -937,12 +949,16 @@ function pageShell({
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}" />
   <link rel="canonical" href="${canonical}" />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="${escapeHtml(ogType)}" />
   <meta property="og:site_name" content="Netcar Multimarcas" />
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:url" content="${canonical}" />
-  <meta property="og:image" content="${escapeHtml(ogImage || `${SITE}/images/loja1.jpg`)}" />${schemaTags}
+  <meta property="og:image" content="${escapeHtml(resolvedImage)}" />${articleMetaTags}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${escapeHtml(resolvedImage)}" />${schemaTags}
   <style>
     .blog-cars{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin:32px 0}
     .blog-car{display:flex;flex-direction:column;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;background:#fff;transition:box-shadow .2s}
@@ -1160,6 +1176,9 @@ for (const post of blogPosts) {
         ]),
       ],
       ogImage: cover,
+      ogType: "article",
+      articlePublishedTime: post.publishedAt,
+      articleModifiedTime: updatedAt,
     }),
   );
 }
@@ -2281,6 +2300,97 @@ if (brokenTargets.length > 0) {
 }
 
 const sellPages = cities.filter((city) => city.sell).length;
+
+const llmsPriorityCities = cities.filter((city) => city.priorityMarket);
+const llmsIndexableLandings = landings.filter(
+  (landing) => landing.indexable && landing.count > 0,
+);
+const llmsPriceAndCategory = llmsIndexableLandings.filter((landing) =>
+  ["faixa", "categoria", "combustivel"].includes(landing.type),
+);
+const llmsTopModels = llmsIndexableLandings
+  .filter((landing) => landing.type === "modelo")
+  .slice(0, 15);
+const llmsTopBlogs = [
+  ...blogPosts.filter((post) =>
+    [
+      "trocar-carro-financiado",
+      "hatch-ou-sedan-qual-escolher",
+      "documentacao-compra-seminovo-rs",
+    ].includes(post.slug),
+  ),
+  ...blogPosts.filter(
+    (post) =>
+      ![
+        "trocar-carro-financiado",
+        "hatch-ou-sedan-qual-escolher",
+        "documentacao-compra-seminovo-rs",
+      ].includes(post.slug),
+  ),
+].slice(0, 12);
+
+const llmsTxt = [
+  "# Netcar Multimarcas",
+  "",
+  "> Revenda de carros seminovos em Esteio/RS (Região Metropolitana de Porto Alegre) desde 1997. Duas lojas físicas na Av. Presidente Vargas (740 e 1106), estoque comprado no Rio Grande do Sul, sem carros de locadora e sem passagem por leilão ou sinistro, vistoria Fábrica de Valor, garantia, financiamento, avaliação de usado na troca e pós-venda Nethelp.",
+  "",
+  "## Lojas físicas e atendimento",
+  "- Loja 1 (Matriz): Av. Presidente Vargas, 740 — Centro, Esteio/RS — CEP 93260-490 — Tel: (51) 3473-7900",
+  "- Loja 2 (Filial): Av. Presidente Vargas, 1106 — Centro, Esteio/RS — CEP 93260-048 — Tel: (51) 3033-3900",
+  "- WhatsApp Vendas: (51) 99729-3118 · Pós-venda Nethelp: (51) 99510-9169 · Horário: seg–sex 9h às 18h, sáb 9h às 16h30 (sem fechar ao meio-dia)",
+  "- Razão social: R&C Veículos Ltda — CNPJ 02.237.969/0001-06 — Site: https://www.netcarmultimarcas.com.br",
+  "",
+  "## Páginas principais",
+  `- [Home — Seminovos na Grande Porto Alegre](${SITE}/)`,
+  `- [Estoque completo de seminovos](${SITE}/seminovos)`,
+  `- [Comparar carros lado a lado (até 4 veículos)](${SITE}/comparar)`,
+  `- [Como selecionamos nossos carros (sem locadora nem leilão)](${SITE}/como-selecionamos-nossos-carros)`,
+  `- [Financiamento de seminovos na Grande Porto Alegre](${SITE}/financiamento)`,
+  `- [Move Brasil para seminovos](${SITE}/move-brasil)`,
+  `- [Venda seu usado para a Netcar](${SITE}/compra)`,
+  `- [Sobre a Netcar Multimarcas](${SITE}/sobre)`,
+  `- [Regiões atendidas na Grande POA, Vale dos Sinos e Serra](${SITE}/regioes-atendidas)`,
+  `- [Entregas de veículos](${SITE}/entregas)`,
+  `- [Blog e guias de compra](${SITE}/blog)`,
+  "",
+  "## Comparativos permanentes de modelos",
+  ...comparisonPages.map(
+    (page) => `- [${page.label}](${SITE}/comparar/${page.slug}): ${page.description}`,
+  ),
+  "",
+  "## Seleções por categoria e faixa de preço",
+  ...llmsPriceAndCategory.map(
+    (landing) => `- [${landing.name}](${SITE}/comprar-${landing.slug}): ${landing.description}`,
+  ),
+  "",
+  "## Principais modelos em estoque",
+  ...llmsTopModels.map(
+    (landing) => `- [${landing.name}](${SITE}/comprar-${landing.slug})`,
+  ),
+  "",
+  "## Atendimento regional (Grande Porto Alegre e Vale dos Sinos)",
+  ...llmsPriorityCities.map(
+    (city) =>
+      `- [Seminovos para ${city.name}](${SITE}/seminovos-${city.slug}) (${city.distanceKm} km de Esteio)` +
+      (city.sell ? ` · [Vender carro em ${city.name}](${SITE}/vender-carro-${city.slug})` : ""),
+  ),
+  "",
+  "## Guias de decisão e procedência",
+  `- [Carro de locadora vale a pena?](${SITE}/carro-de-locadora-vale-a-pena)`,
+  `- [Carro de leilão vale a pena?](${SITE}/carro-de-leilao-vale-a-pena)`,
+  `- [Localiza Seminovos: compare antes](${SITE}/localiza-seminovos-vale-a-pena)`,
+  `- [Movida Seminovos: compare antes](${SITE}/movida-seminovos-vale-a-pena)`,
+  `- [Unidas Seminovos: compare antes](${SITE}/unidas-seminovos-vale-a-pena)`,
+  ...llmsTopBlogs.map(
+    (post) => `- [${post.title}](${SITE}/blog/${post.slug})`,
+  ),
+  "",
+  "## Sitemap",
+  `- [XML Sitemap](${SITE}/sitemap.xml)`,
+  "",
+].join("\n");
+writeTextFile(join(publicDir, "llms.txt"), llmsTxt);
+
 console.log(
   `SEO assets gerados: ${blogPosts.length} posts, ${cities.length} cidades compra, ${sellPages} cidades venda, ${landings.length} landings marca/categoria, ${contentPages.length} páginas de conteúdo, ${vehicleUrls.length} veículos preservados, sitemap com ${urls.length} URLs`,
 );

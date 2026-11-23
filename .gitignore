@@ -52,6 +52,7 @@ public/netcar-config.php
 # Gerado no build (generate-landings / generate-seo-assets / generate-sitemap)
 public/seo-static/
 public/sitemap.xml
+public/llms.txt
 public/seo/landings.json
 public/seo/comparisons.json
 public/seo/blog-index.json
