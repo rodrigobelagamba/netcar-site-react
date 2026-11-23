@@ -2269,6 +2269,132 @@
         "approved": true,
         "publicReference": "netcar-colors-continuous-20261116"
       }
+    },
+    {
+      "id": "color-20261123-20160",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20160",
+        "brand": "TOYOTA",
+        "model": "YARIS SEDAN XS",
+        "modelYear": 2023,
+        "engine": "1.5",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "manufactureYear": 2022,
+        "genericColor": "PRATA",
+        "physicalIdentityKey": "86232671f085b61cc16254cf8a11ee8e03136fa1819a466bcc06e0cd5244a5f8"
+      },
+      "officialName": "Prata Lua Nova",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261123-20160",
+        "verifiedAt": "2026-11-23",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "TOYOTA",
+          "model": "YARIS SEDAN XS",
+          "modelYear": 2023,
+          "engine": "1.5",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Branco Polar",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Branco Lunar",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Granito",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Prata Lua Nova",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Preto Infinito",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Azul Titã",
+              "genericColor": "AZUL"
+            }
+          ],
+          "sourceUrls": [
+            "https://cdn.appdealersites.com.br/modelo-toyota/conteudo-online/catalogo-yaris-sed%C3%A3.pdf",
+            "https://portaldaautopeca.com.br/noticias/local/toyota-apresenta-linha-yaris-2023/"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
+    },
+    {
+      "id": "color-20261123-20164",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20164",
+        "brand": "PEUGEOT",
+        "model": "208 STYLE",
+        "modelYear": 2024,
+        "engine": "1.0",
+        "transmission": "MANUAL",
+        "fuel": "Flex",
+        "manufactureYear": 2023,
+        "genericColor": "PRETA",
+        "physicalIdentityKey": "3b43c82cb4a803c441f9008b5040e454534cdc9ec7db76d36b474da214679512"
+      },
+      "officialName": "Preto Perla Nera",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261123-20164",
+        "verifiedAt": "2026-11-23",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "PEUGEOT",
+          "model": "208 STYLE",
+          "modelYear": 2024,
+          "engine": "1.0",
+          "transmission": "MANUAL",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Perla Nera",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Azul Quasar",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Cinza Artense",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Branco Nacré",
+              "genericColor": "BRANCA"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.media.stellantis.com/uploads/br/attachment/4721/fichatecnicapeugeot208my24-64b187187f997.pdf",
+            "https://www.media.stellantis.com/br-pt/peugeot/press/peugeot-208-simbolo-de-uma-revolucao-urbana-hatch-fica-ainda-mais-competitivo-com-chegada-da-linha-2024"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
     }
   ]
 }
