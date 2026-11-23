@@ -1171,6 +1171,10 @@
     },
     "links": [
       {
+        "href": "/carro-de-enchente-como-identificar-rs",
+        "label": "Carro de enchente no RS: como identificar"
+      },
+      {
         "href": "/carro-de-locadora-vale-a-pena",
         "label": "Carro de locadora vale a pena?"
       },
@@ -1257,6 +1261,209 @@
       {
         "q": "A Netcar vende carro de leilão?",
         "a": "Não. A Netcar não compra para revenda carros com passagem por leilão, sinistro, furto, roubo ou origem de locadora."
+      }
+    ]
+  },
+  {
+    "slug": "carro-de-enchente-como-identificar-rs",
+    "title": "Carro de enchente no RS: como identificar | Netcar",
+    "description": "Como identificar carro de enchente no RS antes de fechar negócio: 8 sinais físicos no interior e chicote, consulta de histórico e critérios da Netcar.",
+    "h1": "Carro de enchente no RS: 8 sinais para identificar antes de comprar",
+    "intro": "Depois das enchentes no Rio Grande do Sul, muitos carros atingidos por água voltaram ao mercado após higienização pesada ou troca de bancos. O problema é que nem sempre o alagamento aparece na consulta de histórico — especialmente quando não houve seguro acionado. Veja o checklist prático para inspecionar um seminovo na Grande Porto Alegre antes de fechar negócio.",
+    "waText": "quero ver seminovos com procedência verificada e sem histórico de enchente ou sinistro.",
+    "ctaLabel": "Ver seminovos verificados",
+    "secondLabel": "Como selecionamos os carros",
+    "secondHref": "/como-selecionamos-nossos-carros",
+    "stock": {
+      "heading": "Em estoque: seminovos revisados com procedência verificada"
+    },
+    "links": [
+      {
+        "href": "/como-selecionamos-nossos-carros",
+        "label": "Como a Netcar seleciona os carros"
+      },
+      {
+        "href": "/carro-de-leilao-vale-a-pena",
+        "label": "Carro de leilão vale a pena?"
+      },
+      {
+        "href": "/carro-de-locadora-vale-a-pena",
+        "label": "Carro de locadora vale a pena?"
+      },
+      {
+        "href": "/indice-seminovos-rs",
+        "label": "Panorama de seminovos na Grande Porto Alegre"
+      }
+    ],
+    "sections": [
+      {
+        "type": "h2",
+        "text": "Por que só consultar a placa não basta no RS"
+      },
+      {
+        "type": "p",
+        "text": "Quando o carro tinha seguro e foi indenizado por alagamento, o registro costuma aparecer em consultas de sinistro, leilão ou média/grande monta. Mas carros sem seguro ou reparados fora da seguradora podem continuar com documentação limpa. Por isso, a vistoria física detalhada é indispensável."
+      },
+      {
+        "type": "h2",
+        "text": "8 sinais físicos de carro que passou por enchente"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Cinto de segurança puxado até o fim: puxe toda a faixa e observe se há marca de barro, mofo ou linha d'água na base que fica recolhida na coluna",
+          "Trilhos, molas e parafusos sob os bancos dianteiros: pontos de ferrugem recente ou lodo seco em peças metálicas protegidas da chuva normal",
+          "Carpete do porta-malas e compartimento do estepe: levante o forro, procure resíduo fino de lama nos cantos, nas borrachas de vedação e no dreno",
+          "Caixa de fusíveis, conectores e porta OBD sob o painel: azinhavre (oxidação esverdeada ou branca) nos pinos metálicos denuncia contato com água",
+          "Faróis, lanternas e painel de instrumentos: condensação persistente, marcas internas de sujeira seca ou iluminação irregular",
+          "Cheiro forte de aromatizante ou ozônio mascarando mofo: ligue o ar-condicionado no quente e depois no frio com recirculação para sentir o odor real dos dutos",
+          "Parafusos de bancos, console central e forros de porta com marcas de chave recente sem justificativa técnica",
+          "Falhas intermitentes em sensores, vidros elétricos, airbags, multimídia ou módulos eletrônicos durante a avaliação"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Por que os defeitos aparecem meses depois"
+      },
+      {
+        "type": "p",
+        "text": "A água com barro penetra nos chicotes elétricos e nos módulos sob o assoalho e o painel. Mesmo depois de seco e higienizado, o processo de corrosão nos conectores continua lento. Meses após a compra surgem falhas de injeção, travamento de painel, pane no módulo de airbag ou perda de comunicação na rede eletrônica do carro — reparos caros e difíceis de diagnosticar."
+      },
+      {
+        "type": "h2",
+        "text": "O que conferir na documentação e no histórico"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Consulta de histórico completo (leilão, sinistro, indício de sinistro, média/grande monta, roubo e furto)",
+          "Histórico de revisões na concessionária ou notas fiscais coerentes com a quilometragem e o período",
+          "Vistoria cautelar com verificação de estrutura, assoalho, numeração e vestígios de desmontagem interna",
+          "Cotação prévia de seguro pela placa e chassi antes de assinar o contrato"
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Como a Netcar seleciona cada seminovo"
+      },
+      {
+        "type": "p",
+        "text": "Na Netcar, em Esteio, desde 1997, o estoque para revenda passa por triagem rigorosa de origem, inspeção física e verificação de histórico antes de ir para o pátio. Não trabalhamos com carros de leilão, sinistro, alagamento, furto, roubo ou origem de locadora. Além disso, o anúncio exibe as informações do carro com transparência para você avaliar pessoalmente antes de decidir."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Todo carro de enchente aparece na consulta de histórico?",
+        "a": "Não. Carros sem seguro ou recuperados fora da seguradora podem não ter apontamento de sinistro ou leilão. Por isso é fundamental somar consulta de histórico e inspeção física detalhada."
+      },
+      {
+        "q": "Qual o lugar mais fácil de achar sinal de água no carro?",
+        "a": "Puxar o cinto de segurança até o fim, levantar o carpete do estepe e olhar os trilhos e parafusos sob os bancos dianteiros costumam revelar resíduo de barro e oxidação que a lavagem superficial não remove."
+      },
+      {
+        "q": "Carro que pegou enchente tem cobertura de seguro?",
+        "a": "Se houver histórico de sinistro, leilão ou indício de alagamento, muitas seguradoras recusam a apólice ou reduzem a cobertura. Faça sempre a cotação antes de fechar."
+      },
+      {
+        "q": "A Netcar aceita vistoria independente ou teste no carro?",
+        "a": "Sim. Você pode conhecer o carro pessoalmente nas nossas lojas na Av. Presidente Vargas, em Esteio, conferir a documentação e tirar todas as dúvidas com a equipe antes da compra."
+      }
+    ]
+  },
+  {
+    "slug": "indice-seminovos-rs",
+    "title": "Panorama de seminovos na Grande Porto Alegre | Netcar",
+    "description": "Panorama do mercado de seminovos na Grande Porto Alegre: categorias mais buscadas, faixas de preço, híbridos e impacto de procedência na revenda.",
+    "h1": "Panorama de seminovos na Grande Porto Alegre",
+    "intro": "Atuando na Região Metropolitana de Porto Alegre desde 1997, a Netcar acompanha diariamente o que o comprador gaúcho realmente busca, compara e rejeita na hora de trocar de carro. Esta página reúne a leitura prática de mercado da nossa equipe em Esteio sobre demanda, categorias, câmbio automático, híbridos e critérios de procedência no RS.",
+    "waText": "li o Panorama de Seminovos na Grande Porto Alegre e quero ajuda para escolher um seminovo.",
+    "ctaLabel": "Falar com um consultor",
+    "secondLabel": "Comparar seminovos lado a lado",
+    "secondHref": "/comparar",
+    "stock": {
+      "heading": "Destaques atuais do estoque na Grande Porto Alegre"
+    },
+    "links": [
+      {
+        "href": "/comparar",
+        "label": "Comparar seminovos lado a lado"
+      },
+      {
+        "href": "/como-selecionamos-nossos-carros",
+        "label": "Como selecionamos nossos carros"
+      },
+      {
+        "href": "/carro-de-enchente-como-identificar-rs",
+        "label": "Carro de enchente no RS: como identificar"
+      },
+      {
+        "href": "/regioes-atendidas",
+        "label": "Cidades atendidas na Grande Porto Alegre"
+      }
+    ],
+    "sections": [
+      {
+        "type": "h2",
+        "text": "1. SUVs compactos e médios lideram a intenção de troca"
+      },
+      {
+        "type": "p",
+        "text": "Na Grande Porto Alegre e no Vale dos Sinos, o SUV compacto deixou de ser aspiracional e virou a principal escolha de famílias que saem de hatches ou sedans compactos. Altura do solo para ruas irregulares, posição de dirigir elevada e liquidez forte na revenda explicam por que modelos como Hyundai Creta, Volkswagen T-Cross, Volkswagen Nivus, Chevrolet Tracker, Honda HR-V, Jeep Renegade e Jeep Compass concentram a maior parte das comparações no pátio."
+      },
+      {
+        "type": "h2",
+        "text": "2. Câmbio automático virou requisito básico a partir de R$ 70 mil"
+      },
+      {
+        "type": "p",
+        "text": "No deslocamento diário entre Esteio, Canoas, São Leopoldo, Novo Hamburgo e Porto Alegre pela BR-116, BR-448 e RS-118, o trânsito pesado consolidou a preferência pelo câmbio automático ou CVT. Hoje, a busca por automáticos até R$ 80 mil e até R$ 100 mil está entre as mais concorridas do mercado regional, e carros manuais ficam cada vez mais restritos à faixa de entrada."
+      },
+      {
+        "type": "h2",
+        "text": "3. Híbridos entram no radar de quem roda mais na RMPA"
+      },
+      {
+        "type": "p",
+        "text": "A procura por SUVs híbridos seminovos — especialmente linhas como BYD Song Plus, BYD Song Pro e GWM Haval H6 — cresceu de forma consistente entre compradores da faixa acima de R$ 150 mil. O principal argumento não é apenas consumo urbano, mas o pacote de tecnologia, garantia de fábrica remanescente e custo previsível para quem alterna trajeto metropolitano e estrada."
+      },
+      {
+        "type": "h2",
+        "text": "4. Procedência virou filtro eliminatório no pós-enchente RS"
+      },
+      {
+        "type": "p",
+        "text": "O comprador gaúcho passou a investigar muito mais o histórico antes da visita. Passagem por leilão, sinistro, indício de alagamento ou uso anterior em locadora pesa diretamente na aceitação de seguro, no financiamento bancário e no valor de revenda futura. Por isso, carros particulares comprados no RS, com histórico limpo e revisões registradas, têm giro mais rápido e menor desvalorização."
+      },
+      {
+        "type": "h2",
+        "text": "5. Como usar essas referências na sua compra"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Compare dois ou três modelos da mesma faixa lado a lado considerando ano, quilometragem, câmbio e histórico — não apenas a tabela FIPE",
+          "Exija verificação de procedência antes de pagar sinal e faça a cotação de seguro pela placa",
+          "Avalie seu carro atual na troca de forma presencial para conhecer a diferença líquida real da operação",
+          "Para imprensa ou pesquisas sobre o mercado de seminovos no RS, nossa equipe editorial e comercial atende diretamente pelas lojas de Esteio"
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "Qual categoria de seminovo vende mais rápido na Grande Porto Alegre?",
+        "a": "SUVs compactos e hatches automáticos com histórico limpo, baixa quilometragem e revisões em dia têm a maior procura e liquidez na Região Metropolitana."
+      },
+      {
+        "q": "Vale mais comprar seminovo particular/de loja selecionada ou ex-locadora?",
+        "a": "Depende do objetivo, mas o histórico de locadora costuma ser apontado na revenda futura e o uso anterior envolve múltiplos condutores. Compare sempre o custo total considerando a revenda."
+      },
+      {
+        "q": "A Netcar atende compradores de toda a Grande Porto Alegre?",
+        "a": "Sim. As duas lojas ficam na Av. Presidente Vargas, em Esteio (nº 740 e nº 1106), com acesso rápido pela BR-116 e BR-448 para clientes de Porto Alegre, Canoas, Sapucaia do Sul, São Leopoldo, Novo Hamburgo, Cachoeirinha, Gravataí e Serra Gaúcha."
+      },
+      {
+        "q": "Jornalistas podem citar o Panorama de Seminovos da Netcar?",
+        "a": "Sim, mediante crédito à Netcar Multimarcas (Esteio/RS) com link para esta página. Para pautas ou entrevistas sobre o mercado de seminovos no RS, entre em contato pelo canal oficial em /contato."
       }
     ]
   }

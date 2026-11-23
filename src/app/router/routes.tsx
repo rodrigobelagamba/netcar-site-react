@@ -144,6 +144,16 @@ const UnidasSeminovosPage = lazyWithRetry(() =>
     default: m.UnidasSeminovosPage,
   })),
 );
+const CarroDeEnchentePage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.CarroDeEnchentePage,
+  })),
+);
+const IndiceSeminovosRsPage = lazyWithRetry(() =>
+  import("@/modules/seo/pages/contentSeoPages").then((m) => ({
+    default: m.IndiceSeminovosRsPage,
+  })),
+);
 const PrivacyPage = lazyWithRetry(() =>
   import("@/modules/legal/pages/PrivacyPage").then((m) => ({
     default: m.PrivacyPage,
@@ -250,6 +260,16 @@ function getContextualMessage(pathname: string): string {
   if (pathname === "/carro-de-leilao-vale-a-pena") {
     return siteWhatsAppMessage(
       "quero um seminovo sem passagem por leilão ou sinistro.",
+    );
+  }
+  if (pathname === "/carro-de-enchente-como-identificar-rs") {
+    return siteWhatsAppMessage(
+      "quero ver seminovos com procedência verificada e sem histórico de enchente ou sinistro.",
+    );
+  }
+  if (pathname === "/indice-seminovos-rs") {
+    return siteWhatsAppMessage(
+      "li o Panorama de Seminovos na Grande Porto Alegre e quero ajuda para escolher um seminovo.",
     );
   }
   return siteWhatsAppMessage("estou procurando um seminovo.");
@@ -601,6 +621,18 @@ const unidasSeminovosRoute = createRoute({
   component: UnidasSeminovosPage,
 });
 
+const carroDeEnchenteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/carro-de-enchente-como-identificar-rs",
+  component: CarroDeEnchentePage,
+});
+
+const indiceSeminovosRsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/indice-seminovos-rs",
+  component: IndiceSeminovosRsPage,
+});
+
 const privacyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/privacidade",
@@ -609,6 +641,7 @@ const privacyRoute = createRoute({
 
 type ComparadorRouteSearch = {
   veiculo?: string;
+  ids?: string;
 };
 
 const comparadorRoute = createRoute({
@@ -617,6 +650,7 @@ const comparadorRoute = createRoute({
   component: ComparadorPage,
   validateSearch: (search: Record<string, unknown>): ComparadorRouteSearch => ({
     veiculo: (search.veiculo as string) || undefined,
+    ids: (search.ids as string) || undefined,
   }),
 });
 
@@ -671,6 +705,8 @@ export const routeTree = rootRoute.addChildren([
   localizaSeminovosRoute,
   movidaSeminovosRoute,
   unidasSeminovosRoute,
+  carroDeEnchenteRoute,
+  indiceSeminovosRsRoute,
   privacyRoute,
   comparadorRoute,
   comparisonLandingRoute,

@@ -11,6 +11,8 @@ import { parse as parseCss } from "postcss";
 import ts from "typescript";
 import type { Vehicle } from "../../src/catalog/endpoints/vehicles";
 import {
+  comparisonShareUrl,
+  comparisonShareWhatsAppUrl,
   comparisonVehicleLabel,
   comparisonWhatsAppMessage,
 } from "../../src/lib/comparisonContact";
@@ -106,6 +108,8 @@ function loadTable(stampsById: Record<string, WarrantyStamps> = {}) {
       trackCompareInteraction: (event: TrackedEvent) => events.push(event),
     },
     "@/lib/comparisonContact": {
+      comparisonShareUrl,
+      comparisonShareWhatsAppUrl,
       comparisonVehicleLabel,
       comparisonWhatsAppMessage,
     },
@@ -417,7 +421,10 @@ test("one selected unit offers the next selection and unavailable WhatsApp falls
   act(() => add.props.onClick());
   assert.equal(added, 1);
   const html = renderTable({ whatsAppNumber: undefined });
-  assert.doesNotMatch(html, /wa\.me|data-wa-intent/);
+  assert.doesNotMatch(
+    html,
+    /wa\.me\/\d|data-wa-intent="(?:vehicle_inquiry|comparison_help)"/,
+  );
   assert.match(html, /href="\/contato"/);
 });
 
@@ -604,4 +611,25 @@ test("lowest-price badge appears only when the selection has different prices", 
   // Empty, hidden slots align the prices without showing a badge on other units.
   assert.match(html, /<p class="comparison-vehicle__price-note"><\/p>/);
   assert.doesNotMatch(html, /Preço anunciado/);
+});
+
+test("pair selection exposes family share link marked as non-commercial", () => {
+  const html = renderTable();
+  const links = anchors(html);
+  const shareLink = links.find((tag) =>
+    attribute(tag, "href")?.startsWith("https://wa.me/?text="),
+  );
+  assert.ok(shareLink, "family WhatsApp share link must be rendered for pairs");
+  assert.equal(attribute(shareLink, "data-wa-conversion"), "non_commercial");
+  assert.equal(attribute(shareLink, "data-wa-intent"), "share_comparison");
+  const sharedText = new URL(attribute(shareLink, "href")!).searchParams.get(
+    "text",
+  )!;
+  assert.ok(
+    sharedText.includes(
+      "https://www.netcarmultimarcas.com.br/comparar?ids=19801%2C19802",
+    ),
+  );
+  assert.match(html, /Copiar link/);
+  assert.doesNotMatch(renderTable({ vehicles: [first] }), /Copiar link/);
 });

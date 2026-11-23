@@ -25,6 +25,8 @@ const menuLinks = [
   { to: "/comparar", label: "Comparar seminovos" },
   { to: "/carro-de-locadora-vale-a-pena", label: "Carro de locadora vale a pena?" },
   { to: "/carro-de-leilao-vale-a-pena", label: "Carro de leilão vale a pena?" },
+  { to: "/carro-de-enchente-como-identificar-rs", label: "Carro de enchente no RS" },
+  { to: "/indice-seminovos-rs", label: "Panorama de seminovos RS" },
   { to: "/financiamento", label: "Financiamento" },
   { to: "/move-brasil", label: "Move Brasil" },
   { to: "/compra", label: "Netcar compra" },

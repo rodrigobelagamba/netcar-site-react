@@ -17,6 +17,8 @@ import {
   matchesComparisonSearch,
 } from "../../src/lib/vehicleComparisons";
 import {
+  comparisonShareUrl,
+  comparisonShareWhatsAppUrl,
   comparisonVehicleLabel,
   comparisonWhatsAppMessage,
 } from "../../src/lib/comparisonContact";
@@ -139,6 +141,8 @@ function renderLanding(
     "@/design-system/components/patterns/VehicleWarrantySummary": loadWarrantySummary(stampsById),
     "@/lib/analytics": { trackCompareInteraction: () => {} },
     "@/lib/comparisonContact": {
+      comparisonShareUrl,
+      comparisonShareWhatsAppUrl,
       comparisonVehicleLabel,
       comparisonWhatsAppMessage,
     },
@@ -198,10 +202,10 @@ function assertEditorial(html: string, definition = firstDefinition) {
   }
 }
 
-test("pair definitions use the shared eight-page JSON contract", () => {
-  assert.equal(comparisonDefinitions.length, 8);
+test("pair definitions use the shared sixteen-page JSON contract", () => {
+  assert.equal(comparisonDefinitions.length, 16);
   assert.deepEqual(comparisonDefinitions, definitions);
-  assert.equal(new Set(comparisonDefinitions.map((item) => item.slug)).size, 8);
+  assert.equal(new Set(comparisonDefinitions.map((item) => item.slug)).size, 16);
 });
 
 test("model matching accepts HR-V and T-Cross punctuation without crossing brands", () => {

@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  comparisonShareUrl,
+  comparisonShareWhatsAppUrl,
   comparisonVehicleLabel,
   comparisonWhatsAppMessage,
 } from "./comparisonContact";
@@ -69,4 +71,19 @@ test("mensagem não carrega quilometragem ou condições de troca do estoque", (
     comparisonVehicleLabel({ ...first, marca: undefined, modelo: undefined }),
     "Honda HR-V EX 2022",
   );
+});
+
+test("link compartilhável preserva os IDs e gera mensagem neutra para WhatsApp", () => {
+  const url = comparisonShareUrl([first, second, first]);
+  assert.equal(
+    url,
+    "https://www.netcarmultimarcas.com.br/comparar?ids=19801%2C19802",
+  );
+  const wa = new URL(comparisonShareWhatsAppUrl([first, second]));
+  assert.equal(wa.origin, "https://wa.me");
+  assert.equal(wa.pathname, "/");
+  const text = wa.searchParams.get("text") || "";
+  assert.ok(text.includes("Honda HR-V EX 2022"));
+  assert.ok(text.includes(url));
+  assert.ok(!text.includes(first.placa));
 });

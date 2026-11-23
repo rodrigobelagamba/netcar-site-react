@@ -38,3 +38,33 @@ export function comparisonWhatsAppMessage(
 
   return [intro, ...references].join("\n\n");
 }
+
+/** Link direto que abre o comparador já preenchido com os mesmos veículos. */
+export function comparisonShareUrl(
+  vehicles: readonly Pick<Vehicle, "id">[],
+): string {
+  const ids = [
+    ...new Set(
+      vehicles
+        .map((vehicle) => String(vehicle.id || "").trim())
+        .filter((id) => /^[1-9][0-9]*$/.test(id)),
+    ),
+  ];
+  if (ids.length === 0) {
+    return "https://www.netcarmultimarcas.com.br/comparar";
+  }
+  return `https://www.netcarmultimarcas.com.br/comparar?ids=${encodeURIComponent(ids.join(","))}`;
+}
+
+/** Mensagem neutra para compartilhar o comparativo com família ou amigos no WhatsApp. */
+export function comparisonShareWhatsAppUrl(
+  vehicles: readonly ComparisonVehicle[],
+): string {
+  const names = vehicles.map((vehicle) => comparisonVehicleLabel(vehicle));
+  const summary =
+    names.length > 0
+      ? `Estou comparando estas opções na Netcar: ${names.join(" x ")}.`
+      : "Veja esta comparação de seminovos na Netcar:";
+  const text = `${summary}\n${comparisonShareUrl(vehicles)}`;
+  return `https://wa.me/?text=${encodeURIComponent(text)}`;
+}

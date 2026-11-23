@@ -3,14 +3,19 @@ import { Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   ArrowLeftRight,
+  Check,
+  Copy,
   MessageCircle,
   Plus,
+  Share2,
   X,
 } from "lucide-react";
 import type { Vehicle } from "@/catalog/endpoints/vehicles";
 import { VehicleWarrantySummary } from "@/design-system/components/patterns/VehicleWarrantySummary";
 import { trackCompareInteraction } from "@/lib/analytics";
 import {
+  comparisonShareUrl,
+  comparisonShareWhatsAppUrl,
   comparisonVehicleLabel,
   comparisonWhatsAppMessage,
 } from "@/lib/comparisonContact";
@@ -67,7 +72,26 @@ export function VehicleComparisonTable({
   title?: string;
 }) {
   const [onlyDifferences, setOnlyDifferences] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
   const hasPair = vehicles.length >= 2;
+  const shareUrl = hasPair ? comparisonShareUrl(vehicles) : "";
+  const shareWhatsAppUrl = hasPair ? comparisonShareWhatsAppUrl(vehicles) : "";
+
+  async function handleCopyShareLink() {
+    if (!shareUrl) return;
+    try {
+      await navigator.clipboard?.writeText(shareUrl);
+      setCopiedLink(true);
+      window.setTimeout(() => setCopiedLink(false), 2500);
+    } catch {
+      setCopiedLink(false);
+    }
+    trackCompareInteraction({
+      action: "copy_link",
+      vehicleIds: vehicles.map((vehicle) => vehicle.id),
+      vehicleNames: vehicles.map(comparisonVehicleLabel),
+    });
+  }
   const rows = comparisonRows.map((row) => ({
     ...row,
     differs: comparisonValuesDiffer(vehicles.map(row.get)),
@@ -318,33 +342,72 @@ export function VehicleComparisonTable({
           <div>
             <h3>Ficou entre essas opções?</h3>
             <p>
-              A equipe ajuda a comparar. A mensagem leva os carros que você
-              escolheu.
+              A equipe ajuda a comparar, ou compartilhe esta seleção com quem
+              decide com você.
             </p>
           </div>
-          {comparisonWhatsAppUrl ? (
+          <div className="comparison-help__actions">
+            {comparisonWhatsAppUrl ? (
+              <a
+                href={comparisonWhatsAppUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="comparison-help__primary"
+                data-wa-source="comparison"
+                data-wa-intent="comparison_help"
+                onClick={() =>
+                  trackCompareInteraction({
+                    action: "whatsapp",
+                    vehicleIds: vehicles.map((vehicle) => vehicle.id),
+                    vehicleNames: vehicles.map(comparisonVehicleLabel),
+                  })
+                }
+              >
+                <MessageCircle size={18} aria-hidden="true" /> Quero ajuda para
+                escolher
+              </a>
+            ) : (
+              <Link to="/contato" className="comparison-help__primary">
+                Ver formas de contato{" "}
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            )}
             <a
-              href={comparisonWhatsAppUrl}
+              href={shareWhatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              data-wa-source="comparison"
-              data-wa-intent="comparison_help"
+              className="comparison-help__secondary"
+              data-wa-source="comparison_share"
+              data-wa-intent="share_comparison"
+              data-wa-conversion="non_commercial"
+              aria-label="Compartilhar esta comparação no WhatsApp"
               onClick={() =>
                 trackCompareInteraction({
-                  action: "whatsapp",
+                  action: "share_whatsapp",
                   vehicleIds: vehicles.map((vehicle) => vehicle.id),
                   vehicleNames: vehicles.map(comparisonVehicleLabel),
                 })
               }
             >
-              <MessageCircle size={18} aria-hidden="true" /> Quero ajuda para
-              escolher
+              <Share2 size={16} aria-hidden="true" /> Compartilhar
             </a>
-          ) : (
-            <Link to="/contato">
-              Ver formas de contato <ArrowRight size={16} aria-hidden="true" />
-            </Link>
-          )}
+            <button
+              type="button"
+              className="comparison-help__secondary"
+              onClick={() => void handleCopyShareLink()}
+              aria-label="Copiar link desta comparação"
+            >
+              {copiedLink ? (
+                <>
+                  <Check size={16} aria-hidden="true" /> Link copiado
+                </>
+              ) : (
+                <>
+                  <Copy size={16} aria-hidden="true" /> Copiar link
+                </>
+              )}
+            </button>
+          </div>
         </div>
       )}
     </section>

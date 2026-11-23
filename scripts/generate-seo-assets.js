@@ -2070,6 +2070,8 @@ const staticPages = [
   { path: "/movida-seminovos-vale-a-pena", priority: "0.7", changefreq: "monthly" },
   { path: "/unidas-seminovos-vale-a-pena", priority: "0.7", changefreq: "monthly" },
   { path: "/carro-de-leilao-vale-a-pena", priority: "0.6", changefreq: "monthly" },
+  { path: "/carro-de-enchente-como-identificar-rs", priority: "0.75", changefreq: "monthly" },
+  { path: "/indice-seminovos-rs", priority: "0.75", changefreq: "monthly" },
   // Não vende nada, mas é a página que o blog cita como autor e onde o processo
   // editorial fica explícito. Precisa ser rastreável para valer como sinal.
   { path: "/politica-editorial", priority: "0.4", changefreq: "yearly" },
@@ -2378,6 +2380,8 @@ const llmsTxt = [
   "## Guias de decisão e procedência",
   `- [Carro de locadora vale a pena?](${SITE}/carro-de-locadora-vale-a-pena)`,
   `- [Carro de leilão vale a pena?](${SITE}/carro-de-leilao-vale-a-pena)`,
+  `- [Carro de enchente no RS: 8 sinais para identificar antes de comprar](${SITE}/carro-de-enchente-como-identificar-rs)`,
+  `- [Panorama de seminovos na Grande Porto Alegre](${SITE}/indice-seminovos-rs)`,
   `- [Localiza Seminovos: compare antes](${SITE}/localiza-seminovos-vale-a-pena)`,
   `- [Movida Seminovos: compare antes](${SITE}/movida-seminovos-vale-a-pena)`,
   `- [Unidas Seminovos: compare antes](${SITE}/unidas-seminovos-vale-a-pena)`,

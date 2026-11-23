@@ -56,6 +56,8 @@ const STATIC_PAGES = [
   { loc: "/movida-seminovos-vale-a-pena", changefreq: "monthly", priority: "0.7" },
   { loc: "/unidas-seminovos-vale-a-pena", changefreq: "monthly", priority: "0.7" },
   { loc: "/carro-de-leilao-vale-a-pena", changefreq: "monthly", priority: "0.6" },
+  { loc: "/carro-de-enchente-como-identificar-rs", changefreq: "monthly", priority: "0.75" },
+  { loc: "/indice-seminovos-rs", changefreq: "monthly", priority: "0.75" },
   { loc: "/politica-editorial", changefreq: "yearly", priority: "0.4" },
   { loc: "/privacidade", changefreq: "yearly", priority: "0.3" },
 ];

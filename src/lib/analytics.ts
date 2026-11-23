@@ -506,6 +506,8 @@ export function trackCompareInteraction(params: {
     | "preset"
     | "view_details"
     | "whatsapp"
+    | "share_whatsapp"
+    | "copy_link"
     | "from_vehicle"
     | "preselect";
   vehicleIds: Array<string | number>;
