@@ -3,15 +3,21 @@
 require_once __DIR__ . '/helpers.php';
 require_once dirname(__DIR__) . '/vehicle-images.php';
 
+function netcar_landing_api_base()
+{
+    $config = dirname(__DIR__) . '/netcar-config.php';
+    if (is_readable($config)) require_once $config;
+    return rtrim(defined('NETCAR_API_BASE_URL') ? NETCAR_API_BASE_URL : SEO_SITE_URL . '/api/v1', '/');
+}
+
 function netcar_landing_request_page($offset, $remainingMs = 5000)
 {
     if (!function_exists('curl_init')) return null;
-    $config = dirname(__DIR__) . '/netcar-config.php';
-    if (is_readable($config)) require_once $config;
-    $base = defined('NETCAR_API_BASE_URL') ? NETCAR_API_BASE_URL : SEO_SITE_URL . '/api/v1';
-    $ch = curl_init(rtrim($base, '/') . '/veiculos.php?limit=500&offset=' . (int) $offset);
+    $base = netcar_landing_api_base();
+    $ch = curl_init($base . '/veiculos.php?limit=500&offset=' . (int) $offset);
     curl_setopt_array($ch, array(
         CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
         CURLOPT_CONNECTTIMEOUT_MS => min(2000, $remainingMs),
         CURLOPT_TIMEOUT_MS => min(5000, $remainingMs),
         CURLOPT_HTTPHEADER => array('Accept: application/json', 'Cache-Control: no-cache'),
@@ -71,13 +77,65 @@ function netcar_landing_fetch_stock($requestPage = null)
     return null;
 }
 
+function netcar_landing_stock_cache_ttl()
+{
+    return defined('NETCAR_STOCK_CACHE_TTL') ? max(0, (int) NETCAR_STOCK_CACHE_TTL) : 60;
+}
+
+function netcar_landing_stock_cache_file($base = null)
+{
+    $ttl = netcar_landing_stock_cache_ttl();
+    if ($ttl <= 0) return null;
+    $base = is_string($base) ? $base : netcar_landing_api_base();
+    $host = strtolower((string) parse_url($base, PHP_URL_HOST));
+    if ($host === '' || $host === 'localhost' || $host === '127.0.0.1' || $host === '::1') return null;
+    return rtrim(sys_get_temp_dir(), '/\\') . '/netcar_live_stock_' . substr(md5($base), 0, 12) . '.json';
+}
+
+function netcar_landing_stock_cache_read($file, $ttl)
+{
+    if (!is_string($file) || !is_readable($file)) return null;
+    $mtime = @filemtime($file);
+    if ($mtime === false || (time() - (int) $mtime) >= $ttl) return null;
+    $raw = @file_get_contents($file);
+    if (!is_string($raw) || $raw === '') return null;
+    $cached = json_decode($raw, true);
+    if (!is_array($cached) || !isset($cached['expires']) || (int) $cached['expires'] <= time()) return null;
+    if (!isset($cached['rows']) || !is_array($cached['rows']) || count($cached['rows']) === 0) return null;
+    return $cached['rows'];
+}
+
+function netcar_landing_stock_cache_write($file, $rows, $ttl)
+{
+    if (!is_string($file) || !is_array($rows) || count($rows) === 0 || $ttl <= 0) return false;
+    $encoded = json_encode(array('expires' => time() + $ttl, 'rows' => $rows), JSON_UNESCAPED_SLASHES);
+    if (!is_string($encoded) || $encoded === '') return false;
+    $tmp = $file . '.' . getmypid() . '.' . mt_rand(1000, 999999) . '.tmp';
+    if (@file_put_contents($tmp, $encoded, LOCK_EX) === false) return false;
+    if (!@rename($tmp, $file)) {
+        @unlink($tmp);
+        return false;
+    }
+    return true;
+}
+
 function netcar_landing_live_stock()
 {
     static $loaded = false;
     static $stock = null;
     if (!$loaded) {
         $loaded = true;
+        $ttl = netcar_landing_stock_cache_ttl();
+        $cacheFile = netcar_landing_stock_cache_file();
+        $cached = $cacheFile !== null ? netcar_landing_stock_cache_read($cacheFile, $ttl) : null;
+        if (is_array($cached)) {
+            $stock = $cached;
+            return $stock;
+        }
         $stock = netcar_landing_fetch_stock();
+        if (is_array($stock) && count($stock) > 0 && $cacheFile !== null) {
+            netcar_landing_stock_cache_write($cacheFile, $stock, $ttl);
+        }
     }
     return $stock;
 }
