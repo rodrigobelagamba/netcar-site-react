@@ -2,8 +2,8 @@
 // Titles and metadata are independent of the offers available on a particular day.
 export const MODEL_BUYER_GUIDES = {
   "ford-fiesta": {
-    "title": "Ford Fiesta hatch à venda em Esteio | Netcar",
-    "description": "Confira os Fiesta hatch anunciados pela Netcar em Esteio. Abra a unidade para consultar versão, ano e preço.",
+    "title": "Ford Fiesta hatch na Grande Porto Alegre | Netcar",
+    "description": "Confira os Fiesta hatch na Netcar em Esteio, na Grande Porto Alegre. Abra a unidade para consultar versão, ano e preço.",
     "intro": "Confira os Fiesta hatch anunciados pela Netcar em Esteio. Abra a unidade para consultar versão, ano e preço.",
     "guideTitle": "Escolha seu Fiesta hatch",
     "paragraphs": [
@@ -18,8 +18,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "toyota-yaris-sedan": {
-    "title": "Toyota Yaris Sedã à venda em Esteio | Netcar",
-    "description": "Veja os Toyota Yaris de carroceria sedã anunciados na Netcar. Cada unidade tem ficha com fotos, versão, ano e preço.",
+    "title": "Toyota Yaris Sedã na Grande Porto Alegre | Netcar",
+    "description": "Veja os Toyota Yaris sedã na Netcar em Esteio, na Grande Porto Alegre. Cada unidade tem ficha com fotos, versão, ano e preço.",
     "intro": "Veja os Toyota Yaris de carroceria sedã anunciados na Netcar. Cada unidade tem ficha com fotos, versão, ano e preço.",
     "guideTitle": "Conheça o Yaris Sedã",
     "paragraphs": [
@@ -34,8 +34,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "byd-song-pro": {
-    "title": "BYD Song Pro à venda em Esteio | Netcar",
-    "description": "Consulte os BYD Song Pro à venda na Netcar em Esteio e veja as fotos e o preço de cada SUV anunciado.",
+    "title": "BYD Song Pro seminovo na Grande Porto Alegre | Netcar",
+    "description": "Consulte os BYD Song Pro na Netcar em Esteio, na Grande Porto Alegre, e veja fotos e preço de cada SUV anunciado.",
     "intro": "Consulte os BYD Song Pro à venda na Netcar em Esteio e veja as fotos e o preço de cada SUV anunciado.",
     "guideTitle": "Encontre seu Song Pro",
     "paragraphs": [
@@ -50,8 +50,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "gwm-haval-h6": {
-    "title": "GWM Haval H6 à venda em Esteio | Netcar",
-    "description": "Consulte os GWM Haval H6 usados e seminovos anunciados pela Netcar em Esteio. Veja versão, ano e preço e converse com a loja sobre a troca.",
+    "title": "GWM Haval H6 seminovo na Grande Porto Alegre | Netcar",
+    "description": "Consulte os GWM Haval H6 seminovos na Netcar em Esteio, na Grande Porto Alegre. Veja versão, ano, preço e fale sobre a troca.",
     "intro": "Encontre os Haval H6 anunciados pela Netcar e abra a ficha do SUV que chamou sua atenção.",
     "guideTitle": "Compare as versões do Haval H6",
     "paragraphs": [
@@ -66,8 +66,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "jeep-compass": {
-    "title": "Jeep Compass à venda em Esteio: versões e preços | Netcar",
-    "description": "Veja os Jeep Compass usados e seminovos da Netcar em Esteio. Compare ano, versão e motor, consulte as fotos e avalie seu usado na troca.",
+    "title": "Jeep Compass seminovo na Grande Porto Alegre | Netcar",
+    "description": "Veja os Jeep Compass seminovos da Netcar em Esteio, na Grande Porto Alegre. Compare ano, versão, fotos e avalie seu usado na troca.",
     "intro": "Encontre seu Jeep Compass na Netcar: veja os anúncios e fale com a equipe sobre o carro que você gostou.",
     "guideTitle": "Encontre seu Jeep Compass",
     "paragraphs": [
@@ -87,8 +87,8 @@ export const MODEL_BUYER_GUIDES = {
     ]
   },
   "hyundai-creta": {
-    "title": "Hyundai Creta à venda em Esteio: versões e preços | Netcar",
-    "description": "Compare os Hyundai Creta usados e seminovos da Netcar em Esteio. Veja ano, versão, motor, fotos e preço de cada carro e consulte a troca.",
+    "title": "Hyundai Creta seminovo na Grande Porto Alegre | Netcar",
+    "description": "Compare os Hyundai Creta seminovos da Netcar em Esteio, na Grande Porto Alegre. Veja ano, versão, fotos, preço e consulte a troca.",
     "intro": "Procurando um Hyundai Creta? Veja o estoque da Netcar e encontre o anúncio que combina com a sua compra.",
     "guideTitle": "Encontre o Creta que você procura",
     "paragraphs": [
@@ -108,8 +108,8 @@ export const MODEL_BUYER_GUIDES = {
     ]
   },
   "nissan-kicks": {
-    "title": "Nissan Kicks à venda em Esteio: versões e preços | Netcar",
-    "description": "Veja os Nissan Kicks usados e seminovos da Netcar em Esteio. Compare ano, versão e motor nas fichas e consulte seu usado na troca.",
+    "title": "Nissan Kicks seminovo na Grande Porto Alegre | Netcar",
+    "description": "Veja os Nissan Kicks seminovos da Netcar em Esteio, na Grande Porto Alegre. Compare ano, versão e motor e consulte seu usado na troca.",
     "intro": "Veja os Nissan Kicks à venda na Netcar e fale com a equipe sobre a unidade que você quer comprar.",
     "guideTitle": "Encontre seu Nissan Kicks",
     "paragraphs": [
@@ -124,8 +124,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "nissan-sentra": {
-    "title": "Nissan Sentra à venda em Esteio | Netcar",
-    "description": "Consulte os Nissan Sentra usados e seminovos da Netcar em Esteio. Veja fotos, versão e preço de cada sedã e converse com a loja sobre a troca.",
+    "title": "Nissan Sentra seminovo na Grande Porto Alegre | Netcar",
+    "description": "Consulte os Nissan Sentra seminovos da Netcar em Esteio, na Grande Porto Alegre. Veja fotos, versão e preço e converse sobre a troca.",
     "intro": "Veja os Nissan Sentra anunciados em Esteio e abra a ficha do sedã que chamou sua atenção.",
     "guideTitle": "Conheça o Sentra antes de visitar a loja",
     "paragraphs": [
@@ -140,8 +140,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "honda-hr-v": {
-    "title": "Honda HR-V à venda em Esteio: fotos e preços | Netcar",
-    "description": "Honda HR-V usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Honda HR-V seminovo na Grande Porto Alegre | Netcar",
+    "description": "Honda HR-V usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Veja os Honda HR-V anunciados na Netcar e escolha o carro sobre o qual quer conversar.",
     "guideTitle": "Seu próximo Honda HR-V",
     "paragraphs": [
@@ -161,8 +161,8 @@ export const MODEL_BUYER_GUIDES = {
     ]
   },
   "volkswagen-t-cross": {
-    "title": "Volkswagen T-Cross à venda em Esteio | Netcar",
-    "description": "Volkswagen T-Cross usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Volkswagen T-Cross na Grande Porto Alegre | Netcar",
+    "description": "Volkswagen T-Cross usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Encontre os Volkswagen T-Cross da Netcar, com fotos e preço para começar sua próxima compra.",
     "guideTitle": "Escolha seu T-Cross",
     "paragraphs": [
@@ -182,8 +182,8 @@ export const MODEL_BUYER_GUIDES = {
     ]
   },
   "chevrolet-tracker": {
-    "title": "Chevrolet Tracker à venda em Esteio: fotos e preços | Netcar",
-    "description": "Chevrolet Tracker usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Chevrolet Tracker na Grande Porto Alegre | Netcar",
+    "description": "Chevrolet Tracker usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Procurando um Chevrolet Tracker? Consulte os anúncios da Netcar e escolha sua próxima opção de compra.",
     "guideTitle": "Tracker à venda na Netcar",
     "paragraphs": [
@@ -203,8 +203,8 @@ export const MODEL_BUYER_GUIDES = {
     ]
   },
   "volkswagen-nivus": {
-    "title": "Volkswagen Nivus à venda em Esteio: fotos e preços | Netcar",
-    "description": "Volkswagen Nivus usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Volkswagen Nivus na Grande Porto Alegre | Netcar",
+    "description": "Volkswagen Nivus usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Veja os Volkswagen Nivus da Netcar e encontre a unidade que você quer conhecer.",
     "guideTitle": "Encontre seu Nivus",
     "paragraphs": [
@@ -224,8 +224,8 @@ export const MODEL_BUYER_GUIDES = {
     ]
   },
   "jeep-renegade": {
-    "title": "Jeep Renegade à venda em Esteio: fotos e preços | Netcar",
-    "description": "Jeep Renegade usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Jeep Renegade seminovo na Grande Porto Alegre | Netcar",
+    "description": "Jeep Renegade usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Encontre seu Jeep Renegade entre os anúncios da Netcar e consulte as condições da unidade escolhida.",
     "guideTitle": "Seu Renegade na Netcar",
     "paragraphs": [
@@ -240,8 +240,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "volkswagen-gol": {
-    "title": "Volkswagen Gol à venda em Esteio: fotos e preços | Netcar",
-    "description": "Volkswagen Gol usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Volkswagen Gol seminovo na Grande Porto Alegre | Netcar",
+    "description": "Volkswagen Gol usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Procurando um Volkswagen Gol usado? Veja os anúncios da Netcar e fale sobre o carro que você gostou.",
     "guideTitle": "Encontre um Gol para sua próxima compra",
     "paragraphs": [
@@ -256,8 +256,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "volkswagen-fox": {
-    "title": "Volkswagen Fox à venda em Esteio: fotos e preços | Netcar",
-    "description": "Volkswagen Fox usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Volkswagen Fox seminovo na Grande Porto Alegre | Netcar",
+    "description": "Volkswagen Fox usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Veja os Volkswagen Fox à venda na Netcar e abra o anúncio da unidade que chamou sua atenção.",
     "guideTitle": "Seu próximo Fox",
     "paragraphs": [
@@ -272,8 +272,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "volkswagen-virtus": {
-    "title": "Volkswagen Virtus à venda em Esteio: fotos e preços | Netcar",
-    "description": "Volkswagen Virtus usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Volkswagen Virtus na Grande Porto Alegre | Netcar",
+    "description": "Volkswagen Virtus usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Consulte os Volkswagen Virtus da Netcar e encontre seu próximo sedã.",
     "guideTitle": "Encontre seu Volkswagen Virtus",
     "paragraphs": [
@@ -288,8 +288,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "volkswagen-polo": {
-    "title": "Volkswagen Polo à venda em Esteio: fotos e preços | Netcar",
-    "description": "Volkswagen Polo usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Volkswagen Polo seminovo na Grande Porto Alegre | Netcar",
+    "description": "Volkswagen Polo usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Encontre seu Volkswagen Polo na Netcar e consulte as condições do carro que você escolher.",
     "guideTitle": "Polo à venda na Netcar",
     "paragraphs": [
@@ -304,8 +304,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "volkswagen-taos": {
-    "title": "Volkswagen Taos à venda em Esteio: fotos e preços | Netcar",
-    "description": "Volkswagen Taos usado e seminovo na Netcar, em Esteio. Confira fotos, versão, ano e preço dos anúncios e consulte a avaliação do seu carro na troca.",
+    "title": "Volkswagen Taos seminovo na Grande Porto Alegre | Netcar",
+    "description": "Volkswagen Taos usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Confira fotos, versão, ano e preço e consulte a troca.",
     "intro": "Procurando um Volkswagen Taos? Veja os anúncios da Netcar, em Esteio, e escolha o carro que quer conhecer.",
     "guideTitle": "Encontre seu próximo Taos",
     "paragraphs": [
@@ -320,8 +320,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "volkswagen-tera": {
-    "title": "Volkswagen Tera à venda em Esteio: fotos e preços | Netcar",
-    "description": "Volkswagen Tera usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Volkswagen Tera seminovo na Grande Porto Alegre | Netcar",
+    "description": "Volkswagen Tera usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Veja os Volkswagen Tera anunciados pela Netcar e converse sobre a unidade que você quer comprar.",
     "guideTitle": "Seu próximo Tera",
     "paragraphs": [
@@ -341,8 +341,8 @@ export const MODEL_BUYER_GUIDES = {
     ]
   },
   "citroen-c3": {
-    "title": "Citroën C3 à venda em Esteio: fotos e preços | Netcar",
-    "description": "Citroën C3 usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Citroën C3 seminovo na Grande Porto Alegre | Netcar",
+    "description": "Citroën C3 usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Procurando um Citroën C3? Veja os anúncios da Netcar e escolha a unidade que quer conhecer.",
     "guideTitle": "C3 à venda na Netcar",
     "paragraphs": [
@@ -357,8 +357,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "citroen-aircross": {
-    "title": "Citroën Aircross à venda em Esteio: fotos e preços | Netcar",
-    "description": "Citroën Aircross usado e seminovo na Netcar, em Esteio. Confira fotos, versão e preço dos anúncios e consulte a avaliação do seu carro na troca.",
+    "title": "Citroën Aircross na Grande Porto Alegre | Netcar",
+    "description": "Citroën Aircross usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Confira fotos, versão e preço e consulte a troca.",
     "intro": "Encontre seu Citroën Aircross na Netcar, em Esteio, e veja os detalhes do carro que você quer conhecer.",
     "guideTitle": "Seu próximo Aircross",
     "paragraphs": [
@@ -373,8 +373,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "citroen-c4-cactus": {
-    "title": "Citroën C4 Cactus à venda em Esteio: fotos e preços | Netcar",
-    "description": "Citroën C4 Cactus usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Citroën C4 Cactus na Grande Porto Alegre | Netcar",
+    "description": "Citroën C4 Cactus usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Veja os Citroën C4 Cactus da Netcar e encontre o anúncio que combina com a sua compra.",
     "guideTitle": "Encontre seu C4 Cactus",
     "paragraphs": [
@@ -389,8 +389,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "fiat-palio": {
-    "title": "Fiat Palio à venda em Esteio: fotos e preços | Netcar",
-    "description": "Fiat Palio usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Fiat Palio seminovo na Grande Porto Alegre | Netcar",
+    "description": "Fiat Palio usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Encontre os Fiat Palio usados da Netcar e consulte o anúncio do carro que você gostou.",
     "guideTitle": "Procurando um Palio?",
     "paragraphs": [
@@ -405,8 +405,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "fiat-argo": {
-    "title": "Fiat Argo à venda em Esteio: fotos e preços | Netcar",
-    "description": "Fiat Argo usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Fiat Argo seminovo na Grande Porto Alegre | Netcar",
+    "description": "Fiat Argo usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Veja os Fiat Argo anunciados na Netcar e escolha seu próximo hatch.",
     "guideTitle": "Encontre seu Fiat Argo",
     "paragraphs": [
@@ -421,8 +421,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "fiat-cronos": {
-    "title": "Fiat Cronos à venda em Esteio: fotos e preços | Netcar",
-    "description": "Fiat Cronos usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Fiat Cronos seminovo na Grande Porto Alegre | Netcar",
+    "description": "Fiat Cronos usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Procurando um Fiat Cronos? Veja as opções da Netcar e fale sobre o carro que chamou sua atenção.",
     "guideTitle": "Seu próximo Fiat Cronos",
     "paragraphs": [
@@ -437,8 +437,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "fiat-toro": {
-    "title": "Fiat Toro à venda em Esteio: fotos e preços | Netcar",
-    "description": "Fiat Toro usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Fiat Toro seminova na Grande Porto Alegre | Netcar",
+    "description": "Fiat Toro usada e seminova na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Encontre sua próxima Fiat Toro entre os anúncios da Netcar e veja os detalhes de cada picape.",
     "guideTitle": "Toro à venda na Netcar",
     "paragraphs": [
@@ -453,8 +453,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "fiat-fastback": {
-    "title": "Fiat Fastback à venda em Esteio: fotos e preços | Netcar",
-    "description": "Fiat Fastback usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Fiat Fastback seminovo na Grande Porto Alegre | Netcar",
+    "description": "Fiat Fastback usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Veja os Fiat Fastback da Netcar e consulte as condições da unidade que você gostou.",
     "guideTitle": "Escolha seu Fastback",
     "paragraphs": [
@@ -474,8 +474,8 @@ export const MODEL_BUYER_GUIDES = {
     ]
   },
   "chevrolet-onix": {
-    "title": "Chevrolet Onix hatch à venda em Esteio | Netcar",
-    "description": "Chevrolet Onix hatch usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Chevrolet Onix hatch na Grande Porto Alegre | Netcar",
+    "description": "Chevrolet Onix hatch usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Procurando um Chevrolet Onix hatch? Veja os anúncios da Netcar e escolha a unidade que quer conhecer.",
     "guideTitle": "Encontre seu Onix hatch",
     "paragraphs": [
@@ -490,8 +490,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chevrolet-onix-plus": {
-    "title": "Chevrolet Onix Plus à venda em Esteio | Netcar",
-    "description": "Chevrolet Onix Plus usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Chevrolet Onix Plus na Grande Porto Alegre | Netcar",
+    "description": "Chevrolet Onix Plus usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Encontre seu Chevrolet Onix Plus na Netcar, com fotos e preço de cada sedã anunciado.",
     "guideTitle": "Onix Plus à venda na Netcar",
     "paragraphs": [
@@ -506,8 +506,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chevrolet-prisma": {
-    "title": "Chevrolet Prisma à venda em Esteio: fotos e preços | Netcar",
-    "description": "Chevrolet Prisma usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Chevrolet Prisma na Grande Porto Alegre | Netcar",
+    "description": "Chevrolet Prisma usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Veja os Chevrolet Prisma usados da Netcar e escolha o anúncio sobre o qual quer conversar.",
     "guideTitle": "Seu próximo Prisma",
     "paragraphs": [
@@ -522,8 +522,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chevrolet-cruze": {
-    "title": "Chevrolet Cruze sedan à venda em Esteio | Netcar",
-    "description": "Chevrolet Cruze sedan usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Chevrolet Cruze sedan na Grande Porto Alegre | Netcar",
+    "description": "Chevrolet Cruze sedan usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Consulte os Chevrolet Cruze sedã da Netcar e encontre o carro que você quer comprar.",
     "guideTitle": "Encontre seu Cruze sedã",
     "paragraphs": [
@@ -538,8 +538,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "hyundai-hb20": {
-    "title": "Hyundai HB20 hatch à venda em Esteio | Netcar",
-    "description": "Hyundai HB20 hatch usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Hyundai HB20 hatch na Grande Porto Alegre | Netcar",
+    "description": "Hyundai HB20 hatch usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Encontre seu Hyundai HB20 na Netcar: veja os carros à venda e fale sobre a unidade que você gostou.",
     "guideTitle": "HB20 à venda na Netcar",
     "paragraphs": [
@@ -554,7 +554,7 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "hyundai-hb20x": {
-    "title": "Hyundai HB20X à venda em Esteio: fotos e preços | Netcar",
+    "title": "Hyundai HB20X seminovo na Grande Porto Alegre | Netcar",
     "description": "Veja os Hyundai HB20X usados e seminovos da Netcar em Esteio, na Grande Porto Alegre. Confira os anúncios e consulte a avaliação do seu usado na troca.",
     "intro": "Procurando um Hyundai HB20X? Encontre os anúncios da Netcar e escolha o carro que deseja conhecer.",
     "guideTitle": "Seu próximo Hyundai HB20X",
@@ -570,8 +570,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "hyundai-tucson": {
-    "title": "Hyundai Tucson à venda em Esteio: fotos e preços | Netcar",
-    "description": "Hyundai Tucson usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Hyundai Tucson seminovo na Grande Porto Alegre | Netcar",
+    "description": "Hyundai Tucson usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Veja os Hyundai Tucson da Netcar e consulte o anúncio do carro que você quer conhecer.",
     "guideTitle": "Seu próximo Hyundai Tucson",
     "paragraphs": [
@@ -586,7 +586,7 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "renault-kwid": {
-    "title": "Renault Kwid à venda em Esteio: fotos e preços | Netcar",
+    "title": "Renault Kwid seminovo na Grande Porto Alegre | Netcar",
     "description": "Veja os Renault Kwid usados e seminovos da Netcar em Esteio, na Grande Porto Alegre. Confira fotos e dados de cada carro e consulte seu usado na troca.",
     "intro": "Procurando um Renault Kwid? Veja os anúncios da Netcar e escolha o carro que deseja conhecer.",
     "guideTitle": "Encontre seu Renault Kwid",
@@ -602,8 +602,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "renault-captur": {
-    "title": "Renault Captur à venda em Esteio: fotos e preços | Netcar",
-    "description": "Renault Captur usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Renault Captur seminovo na Grande Porto Alegre | Netcar",
+    "description": "Renault Captur usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Encontre os Renault Captur à venda na Netcar e consulte as condições do carro escolhido.",
     "guideTitle": "Escolha seu Captur",
     "paragraphs": [
@@ -618,8 +618,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "renault-stepway": {
-    "title": "Renault Stepway à venda em Esteio: fotos e preços | Netcar",
-    "description": "Renault Stepway usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Renault Stepway seminovo na Grande Porto Alegre | Netcar",
+    "description": "Renault Stepway usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Procurando um Renault Stepway? Veja os anúncios da Netcar e fale sobre o carro que você gostou.",
     "guideTitle": "Stepway à venda na Netcar",
     "paragraphs": [
@@ -634,8 +634,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "ford-ecosport": {
-    "title": "Ford EcoSport à venda em Esteio: fotos e preços | Netcar",
-    "description": "Ford EcoSport usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Ford EcoSport seminovo na Grande Porto Alegre | Netcar",
+    "description": "Ford EcoSport usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Consulte os Ford EcoSport da Netcar e encontre a unidade para sua próxima compra.",
     "guideTitle": "Encontre sua EcoSport",
     "paragraphs": [
@@ -650,8 +650,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "ford-territory": {
-    "title": "Ford Territory à venda em Esteio: fotos e preços | Netcar",
-    "description": "Ford Territory usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Ford Territory seminovo na Grande Porto Alegre | Netcar",
+    "description": "Ford Territory usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Veja os Ford Territory da Netcar e converse sobre a unidade que você quer conhecer.",
     "guideTitle": "Seu próximo Ford Territory",
     "paragraphs": [
@@ -666,8 +666,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "honda-wr-v": {
-    "title": "Honda WR-V à venda em Esteio: fotos e preços | Netcar",
-    "description": "Honda WR-V usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Honda WR-V seminovo na Grande Porto Alegre | Netcar",
+    "description": "Honda WR-V usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Encontre os Honda WR-V anunciados na Netcar e veja os detalhes da unidade que você gostou.",
     "guideTitle": "WR-V à venda na Netcar",
     "paragraphs": [
@@ -682,8 +682,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "honda-city": {
-    "title": "Honda City à venda em Esteio: fotos e preços | Netcar",
-    "description": "Honda City usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Honda City seminovo na Grande Porto Alegre | Netcar",
+    "description": "Honda City usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Veja os Honda City da Netcar e escolha o anúncio para sua próxima compra.",
     "guideTitle": "Encontre seu Honda City",
     "paragraphs": [
@@ -698,8 +698,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "honda-civic": {
-    "title": "Honda Civic à venda em Esteio: fotos e preços | Netcar",
-    "description": "Honda Civic usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Honda Civic seminovo na Grande Porto Alegre | Netcar",
+    "description": "Honda Civic usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte seu carro na troca.",
     "intro": "Procurando um Honda Civic? Veja os anúncios da Netcar e fale sobre a unidade que você gostou.",
     "guideTitle": "Seu próximo Civic",
     "paragraphs": [
@@ -714,8 +714,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "jeep-commander": {
-    "title": "Jeep Commander à venda em Esteio: fotos e preços | Netcar",
-    "description": "Jeep Commander usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Jeep Commander seminovo na Grande Porto Alegre | Netcar",
+    "description": "Jeep Commander usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Veja os Jeep Commander anunciados na Netcar e consulte as condições do carro que escolher.",
     "guideTitle": "Encontre seu Commander",
     "paragraphs": [
@@ -730,8 +730,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "hyundai-ix35": {
-    "title": "Hyundai ix35 à venda em Esteio: fotos e preços | Netcar",
-    "description": "Veja os Hyundai ix35 usados e seminovos da Netcar, em Esteio. Confira as fotos e os dados de cada anúncio e consulte seu carro na troca.",
+    "title": "Hyundai ix35 seminovo na Grande Porto Alegre | Netcar",
+    "description": "Veja os Hyundai ix35 seminovos da Netcar em Esteio, na Grande Porto Alegre. Confira fotos e dados de cada anúncio e consulte a troca.",
     "intro": "Encontre seu Hyundai ix35 entre os anúncios da Netcar e converse sobre a unidade que você quer conhecer.",
     "guideTitle": "Seu próximo Hyundai ix35",
     "paragraphs": [
@@ -746,8 +746,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "peugeot-208": {
-    "title": "Peugeot 208 à venda em Esteio: fotos e preços | Netcar",
-    "description": "Peugeot 208 usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço nos anúncios e consulte a avaliação do seu usado na troca.",
+    "title": "Peugeot 208 seminovo na Grande Porto Alegre | Netcar",
+    "description": "Peugeot 208 usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Veja os Peugeot 208 da Netcar e escolha o anúncio para começar sua próxima compra.",
     "guideTitle": "Encontre seu Peugeot 208",
     "paragraphs": [
@@ -762,8 +762,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "peugeot-2008": {
-    "title": "Peugeot 2008 à venda em Esteio: fotos e preços | Netcar",
-    "description": "Peugeot 2008 usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Peugeot 2008 seminovo na Grande Porto Alegre | Netcar",
+    "description": "Peugeot 2008 usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Encontre seu Peugeot 2008 na Netcar e veja as fotos e o preço da unidade que você gostou.",
     "guideTitle": "Peugeot 2008 à venda na Netcar",
     "paragraphs": [
@@ -778,8 +778,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "toyota-yaris": {
-    "title": "Toyota Yaris hatch à venda em Esteio | Netcar",
-    "description": "Toyota Yaris hatch usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Toyota Yaris hatch na Grande Porto Alegre | Netcar",
+    "description": "Toyota Yaris hatch usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Veja os Toyota Yaris hatch anunciados na Netcar e escolha o carro que quer conhecer.",
     "guideTitle": "Encontre seu Yaris hatch",
     "paragraphs": [
@@ -794,8 +794,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "toyota-corolla": {
-    "title": "Toyota Corolla à venda em Esteio: fotos e preços | Netcar",
-    "description": "Veja os Toyota Corolla sedã usados e seminovos da Netcar em Esteio. Confira fotos, ano, versão e preço e consulte seu usado na troca.",
+    "title": "Toyota Corolla seminovo na Grande Porto Alegre | Netcar",
+    "description": "Veja os Toyota Corolla sedã seminovos da Netcar em Esteio, na Grande Porto Alegre. Confira fotos, ano, versão, preço e consulte a troca.",
     "intro": "Encontre os Toyota Corolla sedã anunciados na Netcar e escolha a unidade que você quer conhecer.",
     "guideTitle": "Encontre seu Corolla",
     "paragraphs": [
@@ -810,8 +810,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "toyota-corolla-cross": {
-    "title": "Toyota Corolla Cross à venda em Esteio | Netcar",
-    "description": "Toyota Corolla Cross usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "Toyota Corolla Cross na Grande Porto Alegre | Netcar",
+    "description": "Toyota Corolla Cross usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Procurando um Toyota Corolla Cross? Veja as opções da Netcar e fale sobre o carro que você gostou.",
     "guideTitle": "Seu próximo Corolla Cross",
     "paragraphs": [
@@ -826,8 +826,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chery-tiggo-5x": {
-    "title": "CAOA Chery Tiggo 5X à venda em Esteio | Netcar",
-    "description": "CAOA Chery Tiggo 5X usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "CAOA Chery Tiggo 5X na Grande Porto Alegre | Netcar",
+    "description": "CAOA Chery Tiggo 5X usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Encontre seu Tiggo 5X na Netcar e consulte o anúncio da unidade que chamou sua atenção.",
     "guideTitle": "Tiggo 5X à venda na Netcar",
     "paragraphs": [
@@ -842,8 +842,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chery-tiggo-7-pro": {
-    "title": "CAOA Chery Tiggo 7 Pro à venda em Esteio | Netcar",
-    "description": "CAOA Chery Tiggo 7 Pro usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "CAOA Chery Tiggo 7 Pro na Grande Porto Alegre | Netcar",
+    "description": "CAOA Chery Tiggo 7 Pro usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Veja os Tiggo 7 Pro da Netcar e escolha a unidade sobre a qual quer conversar.",
     "guideTitle": "Encontre seu Tiggo 7 Pro",
     "paragraphs": [
@@ -858,8 +858,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "chery-tiggo-8": {
-    "title": "CAOA Chery Tiggo 8 à venda em Esteio | Netcar",
-    "description": "CAOA Chery Tiggo 8 usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "CAOA Chery Tiggo 8 na Grande Porto Alegre | Netcar",
+    "description": "CAOA Chery Tiggo 8 usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Consulte os Tiggo 8 anunciados pela Netcar e veja qual unidade entra nos seus planos.",
     "guideTitle": "Seu próximo Tiggo 8",
     "paragraphs": [
@@ -874,8 +874,8 @@ export const MODEL_BUYER_GUIDES = {
     "guideLinks": []
   },
   "byd-song-plus": {
-    "title": "BYD Song Plus à venda em Esteio: fotos e preços | Netcar",
-    "description": "BYD Song Plus usado e seminovo na Netcar, em Esteio. Veja fotos, ano, versão e preço das unidades anunciadas e consulte seu carro na troca.",
+    "title": "BYD Song Plus seminovo na Grande Porto Alegre | Netcar",
+    "description": "BYD Song Plus usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",
     "intro": "Encontre os BYD Song Plus da Netcar e converse sobre a unidade que você quer comprar.",
     "guideTitle": "Song Plus à venda na Netcar",
     "paragraphs": [

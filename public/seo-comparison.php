@@ -25,7 +25,8 @@ $html = $stock === null ? null : netcar_comparison_html((string) file_get_conten
 if ($html === null) {
     http_response_code(503);
     header('Retry-After: 60');
-    echo '<!doctype html><html lang="pt-BR"><title>Estoque temporariamente indisponível | Netcar</title><h1>Não foi possível atualizar o estoque</h1><p>Tente novamente em instantes ou fale com a equipe para confirmar a disponibilidade.</p><a href="/seminovos">Ver estoque completo</a></html>';
+    header('X-Robots-Tag: noindex, follow');
+    echo '<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="robots" content="noindex, follow"><title>Estoque temporariamente indisponível | Netcar</title></head><body><h1>Não foi possível atualizar o estoque</h1><p>Tente novamente em instantes ou fale com a equipe para confirmar a disponibilidade.</p><a href="/seminovos">Ver estoque completo</a></body></html>';
     exit;
 }
 // Only successful complete reads may be reused, for at most one minute.

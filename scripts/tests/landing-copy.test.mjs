@@ -15,7 +15,7 @@ const compass = {
 const budget = {
   slug: "automaticos-ate-100-mil",
   name: "Automáticos até R$ 100 mil",
-  title: "Carros automáticos até R$ 100 mil em Esteio/RS | Netcar",
+  title: "Automáticos até R$ 100 mil na Grande POA | Netcar",
   h1: "Carros automáticos até R$ 100 mil",
   filters: { cambio: "AUTOMATICO", precoMax: 100000 },
 };

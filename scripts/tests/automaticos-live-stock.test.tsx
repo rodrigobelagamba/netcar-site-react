@@ -41,7 +41,7 @@ function loadPage(initial: State) {
     "@tanstack/react-router": {
       Link: ({ children }: any) => <a>{children}</a>,
     },
-    "@/hooks/useDefaultMetaTags": { useDefaultMetaTags: empty },
+    "@/hooks/useMetaTags": { useMetaTags: empty },
     "@/catalog/queries/useVehiclesQuery": {
       useVehiclesQuery: (...args: unknown[]) => {
         calls.push(args);

@@ -138,13 +138,13 @@ function netcar_fixed_route_meta()
 {
     return [
         '/' => [
-            'title' => 'Carros Seminovos em Esteio | Netcar Multimarcas',
-            'description' => 'Encontre carros seminovos em Esteio, com estoque selecionado, financiamento, garantia e o pós-venda Nethelp. Consulte a equipe da Netcar.',
+            'title' => 'Seminovos na Grande Porto Alegre | Netcar Multimarcas',
+            'description' => 'Carros seminovos na Grande Porto Alegre com estoque nas 2 lojas da Netcar em Esteio/RS. Fotos, preços, garantia, financiamento e pós-venda Nethelp.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/',
         ],
         '/seminovos' => [
-            'title' => 'Carros Seminovos e Usados em Esteio/RS | Netcar Multimarcas',
-            'description' => 'Carros seminovos e usados em Esteio, com fotos e preços. Avaliamos seu usado na troca por qualquer carro do estoque, com possibilidade de troco.',
+            'title' => 'Seminovos e Usados na Grande Porto Alegre | Netcar',
+            'description' => 'Carros seminovos e usados na Grande Porto Alegre com fotos e preços. 2 lojas em Esteio/RS; avaliamos seu usado na troca por qualquer carro do estoque.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/seminovos',
         ],
         '/tablet' => [
@@ -159,8 +159,8 @@ function netcar_fixed_route_meta()
             'canonical' => 'https://www.netcarmultimarcas.com.br/sobre',
         ],
         '/entregas' => [
-            'title' => 'Netcar - Entregas de carros e clientes | Esteio/RS',
-            'description' => 'Conheça as entregas de carros da Netcar Multimarcas em Esteio/RS. Explore as fotos por mês e ano, reveja sua entrega e compartilhe esse momento.',
+            'title' => 'Entregas de carros Netcar | Grande Porto Alegre',
+            'description' => 'Conheça as entregas de carros da Netcar Multimarcas em Esteio/RS, na Grande Porto Alegre. Explore as fotos por mês e ano e reveja sua entrega.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/entregas',
         ],
         '/contato' => [
@@ -174,7 +174,7 @@ function netcar_fixed_route_meta()
             'canonical' => 'https://www.netcarmultimarcas.com.br/compra',
         ],
         '/blog' => [
-            'title' => 'Blog de seminovos em Esteio | Netcar',
+            'title' => 'Blog de seminovos na Grande Porto Alegre | Netcar',
             'description' => 'Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre.',
             'canonical' => 'https://www.netcarmultimarcas.com.br/blog',
         ],
@@ -914,6 +914,13 @@ $routeMeta = netcar_route_meta($path);
 if ($path === '/tablet') {
     header('X-Robots-Tag: noindex, follow');
 }
+// Filtros por query string em /seminovos não devem gerar URLs duplicadas no índice.
+if ($path === '/seminovos' && netcar_stock_request_has_filters()) {
+    header('X-Robots-Tag: noindex, follow');
+    if (is_array($routeMeta)) {
+        $routeMeta['robots'] = 'noindex, follow';
+    }
+}
 if ($path === '/entregas') {
     require_once __DIR__ . '/entregas/v1/seo.php';
     $entregasPage = entregas_requested_page();
@@ -926,6 +933,9 @@ if ($path === '/entregas') {
     }
     if ($entregasPage === null || $entregasPage > max(1, (int) ceil(count($entregasItems) / 24))) {
         netcar_render_error(404);
+    }
+    if ($entregasPage > 1) {
+        header('X-Robots-Tag: noindex, follow');
     }
     $routeMeta = entregas_page_meta($entregasPage);
     $html = entregas_inject_initial_html($html, entregas_initial_html($entregasItems, $entregasPage));

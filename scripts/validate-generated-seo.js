@@ -1711,7 +1711,7 @@ for (const [slug, guide] of Object.entries(MODEL_BUYER_GUIDES)) {
 for (const landing of landings) {
   checkSnippet(`Landing ${landing.slug}`, landing.title, landing.description);
 }
-const blogHubTitle = "Blog de seminovos em Esteio | Netcar";
+const blogHubTitle = "Blog de seminovos na Grande Porto Alegre | Netcar";
 for (const source of [
   crawlerHome,
   readFileSync(join(root, "public/index.php"), "utf8"),

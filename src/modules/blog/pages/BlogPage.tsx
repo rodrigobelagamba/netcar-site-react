@@ -7,7 +7,7 @@ import { IanBot } from "@/design-system/components/layout/IanBot";
 
 export function BlogPage() {
   useMetaTags({
-    title: "Blog de seminovos em Esteio | Netcar",
+    title: "Blog de seminovos na Grande Porto Alegre | Netcar",
     description:
       "Dicas de compra, financiamento e guias para quem busca seminovo em Esteio e região metropolitana de Porto Alegre.",
     url: "https://www.netcarmultimarcas.com.br/blog",
@@ -23,7 +23,7 @@ export function BlogPage() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-fg mb-2">
-            Blog de seminovos em Esteio
+            Blog de seminovos na Grande Porto Alegre
           </h1>
           <p className="text-gray-500 max-w-2xl">
             Respostas para dúvidas sobre compra, troca e financiamento de

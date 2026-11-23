@@ -292,9 +292,9 @@ export function SeminovosPage() {
   ]);
 
   useMetaTags({
-    title: "Carros Seminovos e Usados em Esteio/RS | Netcar Multimarcas",
+    title: "Seminovos e Usados na Grande Porto Alegre | Netcar",
     description:
-      "Carros seminovos e usados em Esteio, com fotos e preços. Avaliamos seu usado na troca por qualquer carro do estoque, com possibilidade de troco.",
+      "Carros seminovos e usados na Grande Porto Alegre com fotos e preços. 2 lojas em Esteio/RS; avaliamos seu usado na troca por qualquer carro do estoque.",
     url: "https://www.netcarmultimarcas.com.br/seminovos",
     robots: hasFilterParams ? "noindex, follow" : undefined,
   });

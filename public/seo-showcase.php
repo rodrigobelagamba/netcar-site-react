@@ -26,7 +26,8 @@ if (strpos($source, '<!--netcar:showcase:') === false) {
 if ($html === null) {
     http_response_code(503);
     header('Retry-After: 60');
-    echo '<!doctype html><html lang="pt-BR"><title>Estoque temporariamente indisponível | Netcar</title><h1>Não foi possível atualizar o estoque</h1><p>Tente novamente em instantes ou consulte a disponibilidade com a equipe.</p><a href="/seminovos">Ver estoque</a></html>';
+    header('X-Robots-Tag: noindex, follow');
+    echo '<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="robots" content="noindex, follow"><title>Estoque temporariamente indisponível | Netcar</title></head><body><h1>Não foi possível atualizar o estoque</h1><p>Tente novamente em instantes ou consulte a disponibilidade com a equipe.</p><a href="/seminovos">Ver estoque</a></body></html>';
     exit;
 }
 echo $html;

@@ -366,8 +366,34 @@ expect(
 );
 expect(
   crawlerPageRenderer.includes("netcar_render_demand_links") &&
-    crawlerPageRenderer.includes("/comparar"),
-  "Home/estoque do crawler sem links para demanda e comparador",
+    crawlerPageRenderer.includes("/comparar") &&
+    crawlerPageRenderer.includes("/carro-de-locadora-vale-a-pena") &&
+    crawlerPageRenderer.includes("netcar_seminovos_has_filters"),
+  "Home/estoque do crawler sem links para demanda, comparador, locadora ou noindex em filtros",
+);
+expect(
+  controller.includes("if ($path === '/seminovos' && netcar_stock_request_has_filters())") &&
+    controller.includes("$routeMeta['robots'] = 'noindex, follow';"),
+  "filtros em /seminovos precisam receber X-Robots-Tag e meta noindex, follow no servidor",
+);
+for (const file of [
+  "public/seo-showcase.php",
+  "public/seo-landing.php",
+  "public/seo-comparison.php",
+]) {
+  const source = read(file);
+  expect(
+    source.includes("http_response_code(503)") &&
+      source.includes("X-Robots-Tag: noindex, follow") &&
+      source.includes('<meta name="robots" content="noindex, follow">'),
+    `${file} precisa proteger fallback 503 com X-Robots-Tag e meta noindex, follow`,
+  );
+}
+expect(
+  vehicleSeoRenderer.includes('<meta property="og:type" content="product" />') &&
+    vehicleSeoRenderer.includes('titleCase($marca)') &&
+    !vehicleSeoRenderer.includes('<meta property="product:brand" content="Netcar" />'),
+  "detalhe-veiculo.php deve emitir og:type product e product:brand da marca do carro",
 );
 expect(
   vehiclesEndpoint.includes(

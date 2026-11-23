@@ -2536,14 +2536,14 @@ export function DetalhesPage() {
     const isSold = !vehicle.price || vehicle.price <= 0;
     const priceText = vehicle.valor_formatado?.replace(/<[^>]*>/g, "") || "";
     const description = isSold
-      ? `${marca} ${modeloCompleto} ${vehicle.year || ""} — veículo vendido. Confira seminovos similares na Netcar Multimarcas, Esteio/RS.`.trim()
-      : `${marca} ${modeloCompleto} ${vehicle.year || ""} por ${priceText}, com ${vehicle.km?.toLocaleString("pt-BR") || 0} km, na Netcar em Esteio/RS. Veja fotos, ficha e opcionais.`.trim();
+      ? `${marca} ${modeloCompleto} ${vehicle.year || ""} — veículo vendido. Confira seminovos similares na Netcar, em Esteio/RS (Grande POA).`.trim()
+      : `${marca} ${modeloCompleto} ${vehicle.year || ""} por ${priceText}, com ${vehicle.km?.toLocaleString("pt-BR") || 0} km, na Netcar em Esteio/RS (Grande POA). Veja fotos e ficha.`.trim();
 
     const pageTitle = isSold
-      ? `${ogTitle} - Vendido | Netcar Esteio/RS`
+      ? `${ogTitle} — vendido | Netcar`
       : priceText
-        ? `${ogTitle} - ${priceText} | Netcar Esteio/RS`
-        : `${ogTitle} | Netcar Esteio/RS`;
+        ? `${ogTitle} — ${priceText} | Netcar`
+        : `${ogTitle} | Netcar`;
 
     return {
       title: pageTitle,
@@ -2554,7 +2554,7 @@ export function DetalhesPage() {
         (typeof window !== "undefined"
           ? `${window.location.origin}${window.location.pathname}`
           : ""),
-      type: "article" as const,
+      type: "product" as const,
       imageWidth: 1200,
       imageHeight: 900,
       productBrand: marca,
