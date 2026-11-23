@@ -30,6 +30,10 @@ const slugs = [
   "chevrolet-tracker-x-hyundai-creta",
   "volkswagen-nivus-x-fiat-fastback",
   "volkswagen-tera-x-volkswagen-t-cross",
+  "volkswagen-t-cross-x-hyundai-creta",
+  "honda-hr-v-x-nissan-kicks",
+  "jeep-renegade-x-volkswagen-t-cross",
+  "byd-song-plus-x-gwm-haval-h6",
 ];
 const site = "https://www.netcarmultimarcas.com.br";
 const comparisonEntry = "src/modules/seo/pages/ComparisonLandingPage.tsx";
@@ -118,6 +122,8 @@ test("on-demand AI user agents reach prerender and browsers stay on the SPA", ()
   const conditions = htaccess.match(/RewriteCond %\{HTTP_USER_AGENT\} \(([^)]+)\)/g);
   assert.ok(conditions?.length >= 12);
   const agents = {
+    "ChatGPT-User":
+      "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/chatgpt-user",
     "Claude-User":
       "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Claude-User/1.0; +https://support.anthropic.com)",
     "Perplexity-User":

@@ -63,7 +63,12 @@ export const MODEL_BUYER_GUIDES = {
         "a": "Consulte a versão completa na ficha do carro. A sigla PHEV identifica um híbrido plug-in. Se a ficha deixar alguma dúvida, use o contato da unidade para confirmar."
       }
     ],
-    "guideLinks": []
+    "guideLinks": [
+      {
+        "href": "/comparar/byd-song-plus-x-gwm-haval-h6",
+        "label": "Haval H6 ou Song Plus? Veja o comparativo"
+      }
+    ]
   },
   "jeep-compass": {
     "title": "Jeep Compass seminovo na Grande Porto Alegre | Netcar",
@@ -104,6 +109,10 @@ export const MODEL_BUYER_GUIDES = {
       {
         "href": "/comparar/chevrolet-tracker-x-hyundai-creta",
         "label": "Creta ou Tracker? Compare os carros"
+      },
+      {
+        "href": "/comparar/volkswagen-t-cross-x-hyundai-creta",
+        "label": "Creta ou T-Cross? Veja o comparativo"
       }
     ]
   },
@@ -121,7 +130,12 @@ export const MODEL_BUYER_GUIDES = {
         "a": "Abra a ficha e confira a versão completa, o ano e a motorização. Se precisar confirmar algum detalhe daquela unidade, use o WhatsApp do anúncio."
       }
     ],
-    "guideLinks": []
+    "guideLinks": [
+      {
+        "href": "/comparar/honda-hr-v-x-nissan-kicks",
+        "label": "Kicks ou HR-V? Compare os carros"
+      }
+    ]
   },
   "nissan-sentra": {
     "title": "Nissan Sentra seminovo na Grande Porto Alegre | Netcar",
@@ -157,6 +171,10 @@ export const MODEL_BUYER_GUIDES = {
       {
         "href": "/comparar/jeep-compass-x-honda-hr-v",
         "label": "HR-V ou Compass? Veja o comparativo"
+      },
+      {
+        "href": "/comparar/honda-hr-v-x-nissan-kicks",
+        "label": "HR-V ou Kicks? Compare os modelos"
       }
     ]
   },
@@ -178,6 +196,14 @@ export const MODEL_BUYER_GUIDES = {
       {
         "href": "/comparar/volkswagen-tera-x-volkswagen-t-cross",
         "label": "T-Cross ou Tera? Compare as opções"
+      },
+      {
+        "href": "/comparar/volkswagen-t-cross-x-hyundai-creta",
+        "label": "T-Cross ou Creta? Veja o comparativo"
+      },
+      {
+        "href": "/comparar/jeep-renegade-x-volkswagen-t-cross",
+        "label": "T-Cross ou Renegade? Compare os modelos"
       }
     ]
   },
@@ -237,7 +263,12 @@ export const MODEL_BUYER_GUIDES = {
         "a": "Veja os dados da ficha e use o contato daquele carro para confirmar motor, tração ou outro detalhe que seja importante para sua compra."
       }
     ],
-    "guideLinks": []
+    "guideLinks": [
+      {
+        "href": "/comparar/jeep-renegade-x-volkswagen-t-cross",
+        "label": "Renegade ou T-Cross? Veja o comparativo"
+      }
+    ]
   },
   "volkswagen-gol": {
     "title": "Volkswagen Gol seminovo na Grande Porto Alegre | Netcar",
@@ -887,6 +918,11 @@ export const MODEL_BUYER_GUIDES = {
         "a": "Use o contato da ficha para confirmar com a equipe os acessórios e documentos daquela unidade antes da compra."
       }
     ],
-    "guideLinks": []
+    "guideLinks": [
+      {
+        "href": "/comparar/byd-song-plus-x-gwm-haval-h6",
+        "label": "Song Plus ou Haval H6? Veja o comparativo"
+      }
+    ]
   }
 };

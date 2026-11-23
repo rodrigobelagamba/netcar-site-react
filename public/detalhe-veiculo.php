@@ -224,6 +224,8 @@ if (!$vehicleFound && !$vehicleMissing) {
     http_response_code(503);
     header('Retry-After: 3600');
     header('Cache-Control: no-store');
+    header('Vary: User-Agent');
+    header('X-Robots-Tag: noindex, follow');
     header('Content-Type: text/html; charset=UTF-8');
     echo '<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8">'
         . '<title>Estoque temporariamente indisponível | Netcar Multimarcas</title>'
@@ -240,6 +242,7 @@ if ($vehicleMissing) {
     http_response_code(410);
     header('Content-Type: text/html; charset=UTF-8');
     header('Cache-Control: public, max-age=86400');
+    header('Vary: User-Agent');
     ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -643,6 +646,7 @@ if ($placa) {
         $placaRetailer = $placaUpper;
     }
 }
+header('Vary: User-Agent');
 ?>
 <!doctype html>
 <html lang="pt-BR">

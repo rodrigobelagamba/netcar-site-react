@@ -12,6 +12,7 @@ if (preg_match('#^/comprar-([a-z0-9-]+)/?$#D', (string) $path, $matches)) {
 $file = $landing ? __DIR__ . '/seo-static/landing-' . $landing['slug'] . '.html' : null;
 header('Content-Type: text/html; charset=UTF-8');
 header('Cache-Control: no-store');
+header('Vary: User-Agent');
 if (!$file || !is_readable($file)) {
     http_response_code(404);
     header('X-Robots-Tag: noindex, follow');

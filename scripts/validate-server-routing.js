@@ -486,6 +486,31 @@ if (existsSync(join(root, "public/seo-static/page-comparar.html"))) {
     expect(html.includes(`<!--netcar:comparison-${name}:start-->`) && html.includes(`<!--netcar:comparison-${name}:end-->`), "comparador sem marcadores de atualização do estoque");
   }
 }
+
+// Headers de segurança e Vary: User-Agent nas rotas com renderização dinâmica
+expect(
+  htaccess.includes('Header set Referrer-Policy "strict-origin-when-cross-origin"'),
+  ".htaccess sem Referrer-Policy",
+);
+expect(
+  htaccess.includes('Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"'),
+  ".htaccess sem Permissions-Policy",
+);
+expect(
+  htaccess.includes("ChatGPT-User|Claude-User|Perplexity-User"),
+  ".htaccess precisa incluir ChatGPT-User nas regras de bots",
+);
+for (const phpFile of [
+  "public/seo-pagina.php",
+  "public/seo-landing.php",
+  "public/seo-comparison.php",
+  "public/detalhe-veiculo.php",
+]) {
+  expect(
+    read(phpFile).includes("header('Vary: User-Agent');"),
+    `${phpFile} precisa emitir Vary: User-Agent`,
+  );
+}
 for (const comparison of comparisonDefinitions) {
   const slug = comparison.slug;
   expect(/^[a-z0-9-]+$/.test(slug), "slug inválido no catálogo de comparações");

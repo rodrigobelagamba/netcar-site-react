@@ -6,6 +6,8 @@
 
 require_once __DIR__ . '/seo/helpers.php';
 
+header('Vary: User-Agent');
+
 function netcar_render_demand_links($limit = null)
 {
     $file = __DIR__ . '/seo/landings.json';
