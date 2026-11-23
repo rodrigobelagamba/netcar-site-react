@@ -7,7 +7,7 @@ function netcar_showcase_file($path, $root)
     if (!is_string($path) || strpos($path, '%') !== false || strpos($path, '..') !== false) return null;
     $path = rtrim($path, '/');
     $exact = array('regioes-atendidas' => 'regions-hub', 'expointer-esteio' => 'page-expointer-esteio');
-    $content = array('financiamento', 'atendimento-24h', 'move-brasil', 'seminovos-automaticos', 'politica-editorial', 'privacidade', 'como-selecionamos-nossos-carros', 'carro-de-locadora-vale-a-pena', 'carro-de-leilao-vale-a-pena', 'localiza-seminovos-vale-a-pena', 'movida-seminovos-vale-a-pena', 'unidas-seminovos-vale-a-pena');
+    $content = array('financiamento', 'atendimento-24h', 'move-brasil', 'seminovos-automaticos', 'politica-editorial', 'privacidade', 'como-selecionamos-nossos-carros', 'carro-de-locadora-vale-a-pena', 'carro-de-leilao-vale-a-pena', 'carro-de-enchente-como-identificar-rs', 'indice-seminovos-rs', 'localiza-seminovos-vale-a-pena', 'movida-seminovos-vale-a-pena', 'unidas-seminovos-vale-a-pena');
     foreach ($content as $slug) $exact[$slug] = 'page-' . $slug;
     $canonical = null;
     $file = null;

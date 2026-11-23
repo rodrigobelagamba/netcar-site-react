@@ -19,6 +19,11 @@ const trustPoints = [
     label: "Sem leilão, sinistro, furto ou roubo",
     to: "/carro-de-leilao-vale-a-pena",
   },
+  {
+    icon: ShieldCheck,
+    label: "Sem histórico de enchente",
+    to: "/carro-de-enchente-como-identificar-rs",
+  },
 ] as const;
 
 export function HomeSelectionPromise() {

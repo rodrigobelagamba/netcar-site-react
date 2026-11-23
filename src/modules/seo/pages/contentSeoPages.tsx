@@ -49,3 +49,13 @@ export function UnidasSeminovosPage() {
   const page = getContentPage("unidas-seminovos-vale-a-pena");
   return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
 }
+
+export function CarroDeEnchentePage() {
+  const page = getContentPage("carro-de-enchente-como-identificar-rs");
+  return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
+}
+
+export function IndiceSeminovosRsPage() {
+  const page = getContentPage("indice-seminovos-rs");
+  return page ? <ContentSeoPage page={page} /> : <NotFoundRedirect />;
+}

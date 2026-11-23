@@ -308,6 +308,14 @@ test("permanent pair pages remain complete and discoverable when stock is empty"
     "honda-hr-v-x-nissan-kicks",
     "jeep-renegade-x-volkswagen-t-cross",
     "byd-song-plus-x-gwm-haval-h6",
+    "volkswagen-nivus-x-volkswagen-t-cross",
+    "hyundai-creta-x-nissan-kicks",
+    "chevrolet-tracker-x-volkswagen-t-cross",
+    "honda-hr-v-x-hyundai-creta",
+    "volkswagen-polo-x-hyundai-hb20",
+    "volkswagen-polo-x-fiat-argo",
+    "jeep-compass-x-volkswagen-taos",
+    "byd-song-plus-x-byd-song-pro",
   ];
   assert.deepEqual(
     comparisonPages.map(({ slug }) => slug),

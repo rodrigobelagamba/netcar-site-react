@@ -47,7 +47,12 @@ export const MODEL_BUYER_GUIDES = {
         "a": "Use o contato na ficha do carro escolhido. A equipe pode confirmar a disponibilidade para a visita e avaliar seu usado na troca."
       }
     ],
-    "guideLinks": []
+    "guideLinks": [
+      {
+        "href": "/comparar/byd-song-plus-x-byd-song-pro",
+        "label": "Song Pro ou Song Plus? Compare os híbridos"
+      }
+    ]
   },
   "gwm-haval-h6": {
     "title": "GWM Haval H6 seminovo na Grande Porto Alegre | Netcar",
@@ -88,6 +93,10 @@ export const MODEL_BUYER_GUIDES = {
       {
         "href": "/comparar/jeep-compass-x-honda-hr-v",
         "label": "Compass ou HR-V? Veja o comparativo"
+      },
+      {
+        "href": "/comparar/jeep-compass-x-volkswagen-taos",
+        "label": "Compass ou Taos? Compare os SUVs médios"
       }
     ]
   },
@@ -113,6 +122,14 @@ export const MODEL_BUYER_GUIDES = {
       {
         "href": "/comparar/volkswagen-t-cross-x-hyundai-creta",
         "label": "Creta ou T-Cross? Veja o comparativo"
+      },
+      {
+        "href": "/comparar/hyundai-creta-x-nissan-kicks",
+        "label": "Creta ou Kicks? Compare os SUVs"
+      },
+      {
+        "href": "/comparar/honda-hr-v-x-hyundai-creta",
+        "label": "Creta ou HR-V? Veja o comparativo"
       }
     ]
   },
@@ -134,6 +151,10 @@ export const MODEL_BUYER_GUIDES = {
       {
         "href": "/comparar/honda-hr-v-x-nissan-kicks",
         "label": "Kicks ou HR-V? Compare os carros"
+      },
+      {
+        "href": "/comparar/hyundai-creta-x-nissan-kicks",
+        "label": "Kicks ou Creta? Veja o comparativo"
       }
     ]
   },
@@ -175,6 +196,10 @@ export const MODEL_BUYER_GUIDES = {
       {
         "href": "/comparar/honda-hr-v-x-nissan-kicks",
         "label": "HR-V ou Kicks? Compare os modelos"
+      },
+      {
+        "href": "/comparar/honda-hr-v-x-hyundai-creta",
+        "label": "HR-V ou Creta? Compare os SUVs"
       }
     ]
   },
@@ -198,8 +223,16 @@ export const MODEL_BUYER_GUIDES = {
         "label": "T-Cross ou Tera? Compare as opções"
       },
       {
+        "href": "/comparar/volkswagen-nivus-x-volkswagen-t-cross",
+        "label": "T-Cross ou Nivus? Compare os SUVs VW"
+      },
+      {
         "href": "/comparar/volkswagen-t-cross-x-hyundai-creta",
         "label": "T-Cross ou Creta? Veja o comparativo"
+      },
+      {
+        "href": "/comparar/chevrolet-tracker-x-volkswagen-t-cross",
+        "label": "T-Cross ou Tracker? Compare os SUVs"
       },
       {
         "href": "/comparar/jeep-renegade-x-volkswagen-t-cross",
@@ -225,6 +258,10 @@ export const MODEL_BUYER_GUIDES = {
       {
         "href": "/comparar/chevrolet-tracker-x-hyundai-creta",
         "label": "Tracker ou Creta? Veja o comparativo"
+      },
+      {
+        "href": "/comparar/chevrolet-tracker-x-volkswagen-t-cross",
+        "label": "Tracker ou T-Cross? Compare os SUVs"
       }
     ]
   },
@@ -246,6 +283,10 @@ export const MODEL_BUYER_GUIDES = {
       {
         "href": "/comparar/volkswagen-nivus-x-fiat-fastback",
         "label": "Nivus ou Fastback? Compare os carros"
+      },
+      {
+        "href": "/comparar/volkswagen-nivus-x-volkswagen-t-cross",
+        "label": "Nivus ou T-Cross? Compare os SUVs VW"
       }
     ]
   },
@@ -332,7 +373,16 @@ export const MODEL_BUYER_GUIDES = {
         "a": "Sim. As unidades anunciadas ficam reunidas aqui, e a versão de cada Polo aparece no anúncio e na ficha do carro."
       }
     ],
-    "guideLinks": []
+    "guideLinks": [
+      {
+        "href": "/comparar/volkswagen-polo-x-hyundai-hb20",
+        "label": "Polo ou HB20? Compare os hatches"
+      },
+      {
+        "href": "/comparar/volkswagen-polo-x-fiat-argo",
+        "label": "Polo ou Argo? Veja o comparativo"
+      }
+    ]
   },
   "volkswagen-taos": {
     "title": "Volkswagen Taos seminovo na Grande Porto Alegre | Netcar",
@@ -348,7 +398,12 @@ export const MODEL_BUYER_GUIDES = {
         "a": "Use o contato da ficha do Taos escolhido para confirmar a disponibilidade e a loja de Esteio onde ele está. A equipe combina a visita com você."
       }
     ],
-    "guideLinks": []
+    "guideLinks": [
+      {
+        "href": "/comparar/jeep-compass-x-volkswagen-taos",
+        "label": "Taos ou Compass? Compare os SUVs médios"
+      }
+    ]
   },
   "volkswagen-tera": {
     "title": "Volkswagen Tera seminovo na Grande Porto Alegre | Netcar",
@@ -449,7 +504,12 @@ export const MODEL_BUYER_GUIDES = {
         "a": "Consulte o campo câmbio na ficha do carro escolhido. Pelo contato do anúncio, a equipe pode esclarecer os detalhes da unidade."
       }
     ],
-    "guideLinks": []
+    "guideLinks": [
+      {
+        "href": "/comparar/volkswagen-polo-x-fiat-argo",
+        "label": "Argo ou Polo? Compare os hatches"
+      }
+    ]
   },
   "fiat-cronos": {
     "title": "Fiat Cronos seminovo na Grande Porto Alegre | Netcar",
@@ -582,7 +642,12 @@ export const MODEL_BUYER_GUIDES = {
         "a": "Não. Aqui estão os anúncios de HB20 hatch. O HB20S é o sedã da família e pode ser encontrado no estoque completo quando estiver disponível."
       }
     ],
-    "guideLinks": []
+    "guideLinks": [
+      {
+        "href": "/comparar/volkswagen-polo-x-hyundai-hb20",
+        "label": "HB20 ou Polo? Compare os hatches"
+      }
+    ]
   },
   "hyundai-hb20x": {
     "title": "Hyundai HB20X seminovo na Grande Porto Alegre | Netcar",
@@ -922,6 +987,10 @@ export const MODEL_BUYER_GUIDES = {
       {
         "href": "/comparar/byd-song-plus-x-gwm-haval-h6",
         "label": "Song Plus ou Haval H6? Veja o comparativo"
+      },
+      {
+        "href": "/comparar/byd-song-plus-x-byd-song-pro",
+        "label": "Song Plus ou Song Pro? Compare os híbridos"
       }
     ]
   }

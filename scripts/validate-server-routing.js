@@ -122,6 +122,8 @@ expect(
 for (const slug of [
   "carro-de-locadora-vale-a-pena",
   "carro-de-leilao-vale-a-pena",
+  "carro-de-enchente-como-identificar-rs",
+  "indice-seminovos-rs",
   "localiza-seminovos-vale-a-pena",
   "movida-seminovos-vale-a-pena",
   "unidas-seminovos-vale-a-pena",

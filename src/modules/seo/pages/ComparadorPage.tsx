@@ -49,7 +49,9 @@ export function ComparadorPage() {
     refetch,
   } = useVehiclesQuery({ limit: 500 });
   const { data: whatsapp } = useWhatsAppQuery();
-  const { veiculo: initialVehicleId } = useSearch({ from: "/comparar" });
+  const { veiculo: initialVehicleId, ids: initialIdsParam } = useSearch({
+    from: "/comparar",
+  });
   const [selected, setSelected] = useState<string[]>([]);
   const [query, setQuery] = useState("");
   const [retryingStock, setRetryingStock] = useState(false);
@@ -99,26 +101,46 @@ export function ComparadorPage() {
   }
 
   useEffect(() => {
-    const vehicleId = String(initialVehicleId || "").trim();
-    if (!vehicleId || list.length === 0) return;
-    const vehicle = list.find((item) => String(item.id) === vehicleId);
-    if (!vehicle) return;
-    setSelected((current) =>
-      current.includes(vehicleId)
-        ? current
-        : [vehicleId, ...current].slice(0, MAX_COMPARE),
-    );
-    if (trackedPreselectionRef.current !== vehicleId) {
-      trackedPreselectionRef.current = vehicleId;
+    if (list.length === 0) return;
+    const rawIds = [
+      ...(initialIdsParam ? String(initialIdsParam).split(",") : []),
+      ...(initialVehicleId ? [String(initialVehicleId)] : []),
+    ]
+      .map((item) => item.trim())
+      .filter((item) => /^[1-9][0-9]*$/.test(item));
+    const uniqueIds = [...new Set(rawIds)];
+    if (uniqueIds.length === 0) return;
+    const matched = uniqueIds
+      .map((id) => list.find((item) => String(item.id) === id))
+      .filter((vehicle): vehicle is Vehicle => Boolean(vehicle))
+      .slice(0, MAX_COMPARE);
+    if (matched.length === 0) return;
+    const matchedIds = matched.map((vehicle) => String(vehicle.id));
+    setSelected((current) => {
+      const merged = [...new Set([...matchedIds, ...current])].slice(
+        0,
+        MAX_COMPARE,
+      );
+      if (
+        merged.length === current.length &&
+        merged.every((id, index) => id === current[index])
+      ) {
+        return current;
+      }
+      return merged;
+    });
+    const preselectionKey = matchedIds.join(",");
+    if (trackedPreselectionRef.current !== preselectionKey) {
+      trackedPreselectionRef.current = preselectionKey;
       trackCompareInteraction({
         action: "preselect",
-        vehicleIds: [vehicleId],
-        vehicleNames: [
+        vehicleIds: matchedIds,
+        vehicleNames: matched.map((vehicle) =>
           `${vehicle.marca || ""} ${vehicle.modelo || vehicle.name}`.trim(),
-        ],
+        ),
       });
     }
-  }, [initialVehicleId, list]);
+  }, [initialIdsParam, initialVehicleId, list]);
 
   const chosen = selected
     .map((id) => list.find((vehicle) => vehicle.id === id))

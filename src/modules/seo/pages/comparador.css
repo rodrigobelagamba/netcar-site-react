@@ -449,8 +449,16 @@
   color: #526972;
   line-height: 1.6;
 }
-.comparison-help > a {
+.comparison-help__actions {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.comparison-help__primary,
+.comparison-help > a {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -463,6 +471,27 @@
   text-decoration: none;
   font-size: 13px;
   font-weight: 750;
+}
+.comparison-help__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 10px 14px;
+  min-height: 44px;
+  color: #0b4a3d;
+  background: #fff;
+  border: 1px solid #bfd5cb;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.comparison-help__secondary:hover {
+  background: #f5faf7;
+  border-color: #8eb8a6;
 }
 .comparison-selection {
   scroll-margin-top: 100px;
@@ -967,8 +996,15 @@
   .comparison-help {
     padding: 18px 16px;
   }
+  .comparison-help__actions {
+    width: 100%;
+  }
+  .comparison-help__primary,
   .comparison-help > a {
     width: 100%;
+  }
+  .comparison-help__secondary {
+    flex: 1 1 calc(50% - 5px);
   }
   .comparison-selection__toolbar {
     flex-direction: column;

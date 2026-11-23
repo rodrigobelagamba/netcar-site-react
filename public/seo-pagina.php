@@ -102,6 +102,8 @@ switch ($page) {
         echo '<li><a href="' . SEO_SITE_URL . '/movida-seminovos-vale-a-pena">Movida Seminovos em Porto Alegre e Canoas: compare antes</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/unidas-seminovos-vale-a-pena">Unidas Seminovos em Porto Alegre e Canoas: compare antes</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/carro-de-leilao-vale-a-pena">Carro de leilão vale a pena?</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/carro-de-enchente-como-identificar-rs">Carro de enchente no RS: como identificar</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/indice-seminovos-rs">Panorama de seminovos na Grande Porto Alegre</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/financiamento">Financiamento de seminovos na Grande Porto Alegre</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/blog/trocar-carro-financiado">Trocar carro financiado por outro: como funciona</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/blog/hatch-ou-sedan-qual-escolher">Carro hatch ou sedan: diferenças e qual escolher</a></li>';
