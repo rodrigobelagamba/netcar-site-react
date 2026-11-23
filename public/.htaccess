@@ -316,6 +316,11 @@ RedirectMatch 404 ^/api/?$
   RewriteRule ^feeds/whatsapp-catalog\.xml$ feeds/whatsapp-catalog.php?format=xml [L,QSA]
   RewriteRule ^feeds/whatsapp-catalog\.php$ - [L]
 
+  # Feed Google Vehicle Ads (Merchant Center) — sempre ao vivo via API
+  RewriteRule ^feeds/google-vehicle-ads\.tsv$ feeds/google-vehicle-ads.php [L,QSA]
+  RewriteRule ^feeds/google-vehicle-stores\.tsv$ feeds/google-vehicle-ads.php?type=store [L,QSA]
+  RewriteRule ^feeds/google-vehicle-ads\.php$ - [L]
+
   # Never serve yesterday's stock bootstrap or generated inventory HTML directly.
   RewriteRule ^seo/stock-bootstrap\.json$ seo-stock-bootstrap.php [L]
   RewriteRule ^seo-static/landing-([a-z0-9-]+)\.html$ /comprar-$1 [R=301,L]
