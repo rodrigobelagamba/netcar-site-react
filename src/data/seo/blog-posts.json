@@ -289,8 +289,8 @@
   },
   {
     "slug": "trocar-carro-financiado",
-    "title": "Como trocar carro financiado: passo a passo",
-    "description": "Quer trocar um carro ainda financiado? Veja como entram a avaliação, a quitação e o troco na negociação. Escolha qualquer carro do estoque Netcar.",
+    "title": "Trocar carro financiado por outro: como funciona (2026)",
+    "description": "Posso trocar carro financiado por outro (até mais barato)? Entenda avaliação, quitação do saldo devedor, troco na troca e o que levar para negociar no RS.",
     "publishedAt": "2026-06-01",
     "readMinutes": 5,
     "sections": [
@@ -1094,8 +1094,8 @@
   },
   {
     "slug": "documentacao-compra-seminovo-rs",
-    "title": "Transferência de veículo no RS: documentos",
-    "description": "Documentos da transferência de veículo no RS: o que separar e o que conferir na placa antes de pagar o seminovo em Esteio.",
+    "title": "Transferência de veículo e ATPV-e no RS: documentos",
+    "description": "Lista de documentos para transferência de veículo no RS: CRLV-e, ATPV-e, consulta de placa e débitos no DETRAN-RS para comprar seminovo sem travar.",
     "publishedAt": "2026-09-24",
     "readMinutes": 6,
     "ctaLabel": "Ver seminovos no estoque",
@@ -1460,12 +1460,12 @@
   },
   {
     "slug": "hatch-ou-sedan-qual-escolher",
-    "title": "Hatch ou sedan: qual escolher? Porta-malas, vaga e viagem",
-    "description": "Hatch ou sedan, qual o melhor para o seu uso? Compare porta-malas, vaga e viagem curta no RS e veja seminovos lado a lado em Esteio.",
+    "title": "Carro hatch ou sedan: diferenças e qual escolher",
+    "description": "Carro hatch ou sedan: qual a diferença na prática? Compare porta-malas, banco traseiro, vaga de garagem e viagens na Grande POA antes de escolher.",
     "publishedAt": "2026-09-24",
     "readMinutes": 5,
-    "ctaLabel": "Comparar no estoque",
-    "ctaHref": "/seminovos",
+    "ctaLabel": "Comparar carros lado a lado",
+    "ctaHref": "/comparar",
     "sections": [
       {
         "type": "p",

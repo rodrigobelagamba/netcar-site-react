@@ -13,6 +13,14 @@
       {
         "href": "/move-brasil",
         "label": "Move Brasil: seminovos elegíveis e regras"
+      },
+      {
+        "href": "/blog/trocar-carro-financiado",
+        "label": "Trocar carro financiado por outro: como funciona"
+      },
+      {
+        "href": "/blog/documentacao-compra-seminovo-rs",
+        "label": "Transferência e ATPV-e no DETRAN-RS: documentos"
       }
     ],
     "sections": [
@@ -1150,8 +1158,8 @@
   },
   {
     "slug": "carro-de-leilao-vale-a-pena",
-    "title": "Carro de leilão vale a pena? O que pesa depois | Netcar",
-    "description": "Carro de leilão pode sair barato, mas o histórico pesa no seguro, no financiamento e na revenda. Veja de onde vêm esses carros e o que conferir antes.",
+    "title": "Carro de leilão vale a pena? Seguro e revenda | Netcar",
+    "description": "Carro de leilão ou seguradora compensa? Veja como passagem por leilão e média monta afetam seguro, financiamento e revenda, e 5 pontos pra checar antes.",
     "h1": "Carro de leilão vale a pena? O que pesa depois da compra",
     "intro": "O preço de leilão costuma ser menor por um motivo: o histórico acompanha o carro. Seguro, financiamento e a próxima venda podem ficar mais difíceis. Veja de onde vêm esses carros e o que conferir antes de dar um lance ou comprar de quem arrematou.",
     "waText": "quero um seminovo sem passagem por leilão ou sinistro.",
