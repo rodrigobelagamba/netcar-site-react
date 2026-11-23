@@ -42,6 +42,7 @@ const menuLinks = [
 const essentialMenuPaths = new Set([
   "/como-selecionamos-nossos-carros",
   "/seminovos",
+  "/comparar",
   "/entregas",
   "/financiamento",
   "/compra",

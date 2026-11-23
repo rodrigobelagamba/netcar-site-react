@@ -19,6 +19,8 @@ interface MetaTagsProps {
   productRetailerItemId?: string;
   // Título específico para Open Graph (se diferente do title)
   ogTitle?: string;
+  // Usa title exatamente como passado, sem prefixar "Netcar - " (ex.: artigos de blog)
+  rawTitle?: boolean;
 }
 
 /**
@@ -39,6 +41,7 @@ export function useMetaTags({
   productPriceCurrency,
   productRetailerItemId,
   ogTitle,
+  rawTitle = false,
   robots,
 }: MetaTagsProps) {
   useEffect(() => {
@@ -54,9 +57,9 @@ export function useMetaTags({
       "Netcar Multimarcas - Seminovos com procedência e qualidade. Desde 1997 oferecendo os melhores veículos em Esteio/RS.";
     const defaultImage = `${baseUrl}/images/loja1.jpg`;
 
-    // Título no formato "Netcar - [Nome da Página]" (ou apenas o título se já incluir Netcar)
+    // Título no formato "Netcar - [Nome da Página]" (ou exato se rawTitle ou já incluir Netcar)
     const finalTitle = title
-      ? title.toLowerCase().includes("netcar")
+      ? rawTitle || title.toLowerCase().includes("netcar")
         ? title
         : `Netcar - ${title}`
       : defaultTitle;
@@ -202,6 +205,7 @@ export function useMetaTags({
     productPriceCurrency,
     productRetailerItemId,
     ogTitle,
+    rawTitle,
     robots,
   ]);
 }

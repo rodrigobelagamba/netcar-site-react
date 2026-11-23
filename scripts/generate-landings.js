@@ -81,7 +81,7 @@ const STOCK_CUTS = [
     slug: "automaticos-ate-100-mil",
     name: "Automáticos até R$ 100 mil",
     filters: { cambio: "AUTOMATICO", precoMax: 100000 },
-    title: "Automáticos até R$ 100 mil na Grande POA | Netcar",
+    title: "Carros automáticos até R$ 100 mil na Grande POA | Netcar",
     h1: "Carros automáticos até R$ 100 mil",
     intent: "um carro automático até R$ 100 mil",
     intro:
@@ -117,7 +117,7 @@ const STOCK_CUTS = [
     slug: "automaticos-ate-80-mil",
     name: "Automáticos até R$ 80 mil",
     filters: { cambio: "AUTOMATICO", precoMax: 80000 },
-    title: "Automáticos até R$ 80 mil na Grande POA | Netcar",
+    title: "Carros automáticos até R$ 80 mil na Grande POA | Netcar",
     h1: "Carros automáticos usados até R$ 80 mil",
     intent: "um carro automático usado até R$ 80 mil",
     intro:
@@ -446,7 +446,7 @@ export function priceLanding(config, vehicles) {
     filters: config.filters,
     relatedSlugs: [],
     title: config.title,
-    description: `${config.h1} na Netcar em Esteio (Grande POA). Veja preço total, fotos e ficha dos carros e consulte troca ou financiamento.`,
+    description: `${config.h1} na Netcar em Esteio (Grande POA): fotos, preço real, ficha e avaliação na troca. Estoque sem locadora ou leilão.`,
     h1: config.h1,
     intro:
       config.intro ||

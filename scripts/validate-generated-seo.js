@@ -1736,6 +1736,39 @@ const privacyHtml = readFileSync(
 if (!privacyHtml.includes("<h1>Seus dados, sem letra miúda</h1>")) {
   errors.push("Privacidade: HTML do bot sem o H1 da página");
 }
+if (!privacyHtml.includes('<meta name="twitter:card" content="summary_large_image" />')) {
+  errors.push("Páginas estáticas SEO devem emitir meta twitter:card");
+}
+const sampleBlogPost = manualPosts[0];
+if (sampleBlogPost) {
+  const sampleBlogHtml = readFileSync(
+    join(root, `public/seo-static/blog-${sampleBlogPost.slug}.html`),
+    "utf8",
+  );
+  if (!sampleBlogHtml.includes('<meta property="og:type" content="article" />')) {
+    errors.push(`Blog ${sampleBlogPost.slug}: HTML estático deve emitir og:type article`);
+  }
+  if (!sampleBlogHtml.includes('<meta property="article:published_time"')) {
+    errors.push(`Blog ${sampleBlogPost.slug}: HTML estático deve emitir article:published_time`);
+  }
+}
+try {
+  const llmsTxt = readFileSync(join(root, "public/llms.txt"), "utf8");
+  for (const requiredUrl of [
+    `${site}/seminovos`,
+    `${site}/comparar`,
+    `${site}/como-selecionamos-nossos-carros`,
+    `${site}/seminovos-porto-alegre`,
+    `${site}/financiamento`,
+    `${site}/sitemap.xml`,
+  ]) {
+    if (!llmsTxt.includes(requiredUrl)) {
+      errors.push(`llms.txt: link obrigatório ausente (${requiredUrl})`);
+    }
+  }
+} catch {
+  errors.push("llms.txt ausente em public/llms.txt");
+}
 
 if (errors.length) {
   console.error("SEO gerado inválido:\n");

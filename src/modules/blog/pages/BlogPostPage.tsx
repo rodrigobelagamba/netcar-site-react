@@ -20,6 +20,7 @@ export function BlogPostPage() {
       ? `https://www.netcarmultimarcas.com.br/blog/${post.slug}`
       : undefined,
     type: "article",
+    rawTitle: true,
     robots: post ? undefined : "noindex, nofollow",
   });
 
