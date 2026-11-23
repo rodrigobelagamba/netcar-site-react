@@ -34,7 +34,7 @@ function netcar_black_friday_config($file)
         || ($value['id'] ?? null) !== 'black-friday-2026'
         || !isset($value['enabled']) || !is_bool($value['enabled'])
         || ($value['startsAt'] ?? null) !== '2026-11-11T00:00:00-03:00'
-        || ($value['endsAt'] ?? null) !== '2026-12-01T00:00:00-03:00') return null;
+        || ($value['endsAt'] ?? null) !== '2026-11-30T18:00:00-03:00') return null;
     return array_intersect_key($value, array_flip(array('id', 'enabled', 'startsAt', 'endsAt')));
 }
 

@@ -1,10 +1,11 @@
 import { ArrowLeft, ArrowRight, CalendarDays, Clock, CreditCard, FileCheck2, Fuel, MessageCircle, Play } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { useScheduleQuery, useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
+import { useWhatsAppQuery } from "@/catalog/queries/useSiteQuery";
 import { buildWhatsAppUrl, DEFAULT_SALES_WHATSAPP, siteWhatsAppMessage, withVehicleRef, type VehicleWhatsAppRef } from "@/lib/whatsappMessages";
 import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { useBlackFridayCampaign } from "./CampaignProvider";
+import { BLACK_FRIDAY_END_LABEL, BLACK_FRIDAY_END_SHORT_LABEL } from "./campaign";
 import {
   getBlackFridayCountdownSnapshot,
   resolveBlackFridayClosingTarget,
@@ -14,6 +15,7 @@ import {
 import "./black-friday.css";
 
 const MEDIA = "/images/campaigns/black-friday-2026";
+const CLOSING_TARGET = resolveBlackFridayClosingTarget();
 
 export const BLACK_FRIDAY_BENEFITS = [
   { icon: FileCheck2, title: "Transferência", detail: "por nossa conta" },
@@ -36,7 +38,7 @@ function CampaignBenefits({ compact = false }: { compact?: boolean }) {
 }
 
 function CampaignTerms() {
-  return <p className="bf-terms">Os quatro benefícios valem juntos para todo o estoque até 30/11/2026. Entrada em até 10x sem juros no cartão, sem limite adicional de valor. Financiamento sujeito à análise de crédito.</p>;
+  return <p className="bf-terms">Os quatro benefícios valem juntos para todo o estoque até {BLACK_FRIDAY_END_LABEL}. Entrada em até 10x sem juros no cartão, sem limite adicional de valor. Financiamento sujeito à análise de crédito.</p>;
 }
 
 function CampaignContact({ vehicleLabel, vehicleId, waRef, source = "black_friday_home" }: {
@@ -217,13 +219,9 @@ function BlackFridayCountdownStage({
 }
 
 function useBlackFridayCountdown(active: boolean) {
-  const scheduleQuery = useScheduleQuery?.();
   const [nowMs, setNowMs] = useState(() => Date.now());
 
-  const target = useMemo(
-    () => resolveBlackFridayClosingTarget({ schedule: scheduleQuery?.data }),
-    [scheduleQuery?.data],
-  );
+  const target = CLOSING_TARGET;
 
   useEffect(() => {
     if (!active || typeof window === "undefined") return;
@@ -263,7 +261,7 @@ export function BlackFridayHomeHero({ onViewStock }: { onViewStock: () => void }
     <section className="bf-home-hero" aria-labelledby="bf-home-title" data-black-friday-surface="home">
       <div className="bf-home-inner">
         <div className="bf-home-copy">
-          <p className="bf-eyebrow"><span /> Só até {target.fullDateLabel} às {target.timeLabel} · Fechamento das lojas</p>
+          <p className="bf-eyebrow"><span /> Só até {target.fullDateLabel} às {target.timeLabel} · Horário de Brasília</p>
           <h1 id="bf-home-title"><img className="bf-title-image" src={`${MEDIA}/title-v2.webp`} width="529" height="150" alt="Black Friday Netcar" fetchPriority="high" /></h1>
           <h2 className="bf-home-headline">Condições especiais para<br className="bf-desktop-break" /> acelerar sua escolha.</h2>
           <p className="bf-home-lead">Seu próximo carro com <strong>quatro benefícios juntos.</strong><br />Em todo o estoque. Por tempo limitado.</p>
@@ -436,7 +434,7 @@ export function BlackFridayFooterBanner() {
   return (
     <aside className="bf-footer-banner" aria-label="Black Friday Netcar" data-black-friday-surface="footer">
       <div className="bf-wide-inner">
-        <div><p className="bf-kicker">Black Friday Netcar · Até 30/11</p><strong>A hora de trocar de carro é agora.</strong><p>Quatro benefícios juntos em todo o estoque.</p></div>
+        <div><p className="bf-kicker">Black Friday Netcar · Até {BLACK_FRIDAY_END_SHORT_LABEL}</p><strong>A hora de trocar de carro é agora.</strong><p>Quatro benefícios juntos em todo o estoque.</p></div>
         <Link to="/seminovos" search={emptySeminovosSearch} className="bf-button bf-button--primary">Confira o estoque <ArrowRight size={20} aria-hidden="true" /></Link>
       </div>
     </aside>

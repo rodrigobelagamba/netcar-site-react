@@ -116,6 +116,7 @@ import { useVehicleVideosQuery } from "../queries/useVehicleVideosQuery";
 import { vehicleVideosForDisplay } from "../lib/vehicleVideosResponse";
 import { BlackFridayVehicleOffer, BlackFridayVehicleRibbon } from "@/features/black-friday/CampaignSurfaces";
 import { useBlackFridayCampaign } from "@/features/black-friday/CampaignProvider";
+import { BLACK_FRIDAY_END_SHORT_LABEL } from "@/features/black-friday/campaign";
 import "@/features/black-friday/vehicle-photo-theme.css";
 
 // Constantes de animação
@@ -3185,7 +3186,7 @@ export function DetalhesPage() {
                     {isBlackFriday && (
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-[#23747C]/25 bg-[#E6F5F6] px-2.5 py-0.5 text-[11px] font-bold text-[#064B50]">
                         <span className="h-1.5 w-1.5 rounded-full bg-[#087A37]" aria-hidden="true" />
-                        Black Friday Netcar · Até 30/11
+                        Black Friday Netcar · Até {BLACK_FRIDAY_END_SHORT_LABEL}
                       </span>
                     )}
                     <VehiclePrice
