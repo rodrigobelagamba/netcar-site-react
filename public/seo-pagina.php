@@ -103,7 +103,11 @@ switch ($page) {
         echo '<li><a href="' . SEO_SITE_URL . '/unidas-seminovos-vale-a-pena">Unidas Seminovos em Porto Alegre e Canoas: compare antes</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/carro-de-leilao-vale-a-pena">Carro de leilão vale a pena?</a></li>';
         echo '<li><a href="' . SEO_SITE_URL . '/financiamento">Financiamento de seminovos na Grande Porto Alegre</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/blog/trocar-carro-financiado">Trocar carro financiado por outro: como funciona</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/blog/hatch-ou-sedan-qual-escolher">Carro hatch ou sedan: diferenças e qual escolher</a></li>';
+        echo '<li><a href="' . SEO_SITE_URL . '/blog/documentacao-compra-seminovo-rs">Transferência de veículo e ATPV-e no RS: documentos</a></li>';
         echo '</ul>';
+        $pinnedBlogSlugs = ['trocar-carro-financiado', 'hatch-ou-sedan-qual-escolher', 'documentacao-compra-seminovo-rs'];
         $homeBlogFile = __DIR__ . '/seo/blog-index.json';
         $homePosts = is_readable($homeBlogFile) ? json_decode((string) file_get_contents($homeBlogFile), true) : [];
         if (is_array($homePosts) && count($homePosts) > 0) {
@@ -112,6 +116,9 @@ switch ($page) {
             foreach ($homePosts as $post) {
                 if ($shownPosts >= 6) break;
                 if (!is_array($post) || empty($post['title']) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', (string) ($post['slug'] ?? ''))) {
+                    continue;
+                }
+                if (in_array($post['slug'], $pinnedBlogSlugs, true)) {
                     continue;
                 }
                 echo '<li><a href="' . SEO_SITE_URL . '/blog/' . rawurlencode($post['slug']) . '">' . seo_h($post['title']) . '</a></li>';
