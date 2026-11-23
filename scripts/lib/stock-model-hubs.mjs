@@ -39,6 +39,7 @@ export const MODEL_HUBS = [
   { slug: "renault-kwid", marca: "RENAULT", modelo: "KWID", name: "Renault Kwid", categoria: "HATCH", category: "HATCH" },
   { slug: "renault-captur", marca: "RENAULT", modelo: "CAPTUR", name: "Renault Captur", category: "SUV" },
   { slug: "renault-stepway", marca: "RENAULT", modelo: "STEPWAY", name: "Renault Stepway", category: "HATCH" },
+  { slug: "ford-fiesta", marca: "FORD", modelo: "FIESTA", name: "Ford Fiesta hatch", categoria: "HATCH", category: "HATCH" },
   { slug: "ford-ecosport", marca: "FORD", modelo: "ECOSPORT", name: "Ford EcoSport", category: "SUV" },
   { slug: "ford-territory", marca: "FORD", modelo: "TERRITORY", name: "Ford Territory", category: "SUV" },
   // A fonte ainda classifica WR-V como HATCH. Não ligar a um recorte que o exclui.
@@ -49,10 +50,13 @@ export const MODEL_HUBS = [
   { slug: "peugeot-208", marca: "PEUGEOT", modelo: "208", name: "Peugeot 208", categoria: "HATCH", category: "HATCH" },
   { slug: "peugeot-2008", marca: "PEUGEOT", modelo: "2008", name: "Peugeot 2008", category: "SUV" },
   { slug: "toyota-yaris", marca: "TOYOTA", modelo: "YARIS", name: "Toyota Yaris hatch", categoria: "HATCH", category: "HATCH" },
+  { slug: "toyota-yaris-sedan", marca: "TOYOTA", modelo: "YARIS", name: "Toyota Yaris Sedã", categoria: "SEDAN", category: "SEDAN" },
   { slug: "toyota-corolla", marca: "TOYOTA", modelo: "COROLLA", name: "Toyota Corolla", categoria: "SEDAN", category: "SEDAN" },
   { slug: "toyota-corolla-cross", marca: "TOYOTA", modelo: "COROLLA CROSS", name: "Toyota Corolla Cross", category: "SUV" },
   { slug: "chery-tiggo-5x", marca: "CHERY", modelo: "TIGGO 5X", name: "CAOA Chery Tiggo 5X", category: "SUV" },
   { slug: "chery-tiggo-7-pro", marca: "CHERY", modelo: "TIGGO 7 PRO", name: "CAOA Chery Tiggo 7 Pro", category: "SUV" },
   { slug: "chery-tiggo-8", marca: "CHERY", modelo: "TIGGO 8", name: "CAOA Chery Tiggo 8", category: "SUV" },
+  { slug: "byd-song-pro", marca: "BYD", modelo: "SONG PRO", name: "BYD Song Pro", categoria: "SUV", category: "SUV" },
   { slug: "byd-song-plus", marca: "BYD", modelo: "SONG PLUS", name: "BYD Song Plus", category: "SUV" },
+  { slug: "gwm-haval-h6", marca: "GWM", modelo: "HAVAL H6", name: "GWM Haval H6", categoria: "SUV", category: "SUV" },
 ];

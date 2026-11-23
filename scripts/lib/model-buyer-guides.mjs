@@ -1,6 +1,70 @@
 // Permanent model entry pages lead to live stock, the exact vehicle listing and contact.
 // Titles and metadata are independent of the offers available on a particular day.
 export const MODEL_BUYER_GUIDES = {
+  "ford-fiesta": {
+    "title": "Ford Fiesta hatch à venda em Esteio | Netcar",
+    "description": "Confira os Fiesta hatch anunciados pela Netcar em Esteio. Abra a unidade para consultar versão, ano e preço.",
+    "intro": "Confira os Fiesta hatch anunciados pela Netcar em Esteio. Abra a unidade para consultar versão, ano e preço.",
+    "guideTitle": "Escolha seu Fiesta hatch",
+    "paragraphs": [
+      "Se o Fiesta entrou na sua lista, comece pelas fotos do interior e do porta-malas. Pela ficha, converse com a equipe sobre o histórico do carro e combine uma visita para conhecê-lo em Esteio."
+    ],
+    "faq": [
+      {
+        "q": "Posso oferecer meu carro na troca por um Fiesta?",
+        "a": "Sim. Abra a ficha do Fiesta que interessou e use o contato da unidade para pedir uma avaliação do seu usado."
+      }
+    ],
+    "guideLinks": []
+  },
+  "toyota-yaris-sedan": {
+    "title": "Toyota Yaris Sedã à venda em Esteio | Netcar",
+    "description": "Veja os Toyota Yaris de carroceria sedã anunciados na Netcar. Cada unidade tem ficha com fotos, versão, ano e preço.",
+    "intro": "Veja os Toyota Yaris de carroceria sedã anunciados na Netcar. Cada unidade tem ficha com fotos, versão, ano e preço.",
+    "guideTitle": "Conheça o Yaris Sedã",
+    "paragraphs": [
+      "Para quem procura um Yaris com porta-malas separado da cabine, a seleção reúne os sedãs da família. Compare os anúncios e fale com a equipe de Esteio se quiser ver de perto o espaço interno do carro."
+    ],
+    "faq": [
+      {
+        "q": "Como encontro o Yaris hatch?",
+        "a": "Na página da Toyota, escolha o Yaris hatch. Cada carroceria tem sua própria seleção, e as fichas mostram os detalhes de cada unidade."
+      }
+    ],
+    "guideLinks": []
+  },
+  "byd-song-pro": {
+    "title": "BYD Song Pro à venda em Esteio | Netcar",
+    "description": "Consulte os BYD Song Pro à venda na Netcar em Esteio e veja as fotos e o preço de cada SUV anunciado.",
+    "intro": "Consulte os BYD Song Pro à venda na Netcar em Esteio e veja as fotos e o preço de cada SUV anunciado.",
+    "guideTitle": "Encontre seu Song Pro",
+    "paragraphs": [
+      "Os anúncios desta seleção reúnem o Song Pro. Abra a ficha do SUV que chamou sua atenção para consultar a versão e o ano. Se quiser comparar com o Song Plus, você também encontra a seleção dessa família na página da BYD."
+    ],
+    "faq": [
+      {
+        "q": "Como combinar uma visita para ver um Song Pro?",
+        "a": "Use o contato na ficha do carro escolhido. A equipe pode confirmar a disponibilidade para a visita e avaliar seu usado na troca."
+      }
+    ],
+    "guideLinks": []
+  },
+  "gwm-haval-h6": {
+    "title": "GWM Haval H6 à venda em Esteio | Netcar",
+    "description": "Consulte os GWM Haval H6 usados e seminovos anunciados pela Netcar em Esteio. Veja versão, ano e preço e converse com a loja sobre a troca.",
+    "intro": "Encontre os Haval H6 anunciados pela Netcar e abra a ficha do SUV que chamou sua atenção.",
+    "guideTitle": "Compare as versões do Haval H6",
+    "paragraphs": [
+      "A família Haval H6 inclui versões híbridas autocarregáveis e híbridas plug-in. Confira a versão da unidade anunciada para entender como ela se encaixa na sua rotina. Pela ficha, você pode falar com a equipe, combinar uma visita em Esteio ou consultar a troca."
+    ],
+    "faq": [
+      {
+        "q": "Onde vejo se o Haval H6 anunciado é plug-in?",
+        "a": "Consulte a versão completa na ficha do carro. A sigla PHEV identifica um híbrido plug-in. Se a ficha deixar alguma dúvida, use o contato da unidade para confirmar."
+      }
+    ],
+    "guideLinks": []
+  },
   "jeep-compass": {
     "title": "Jeep Compass à venda em Esteio: versões e preços | Netcar",
     "description": "Veja os Jeep Compass usados e seminovos da Netcar em Esteio. Compare ano, versão e motor, consulte as fotos e avalie seu usado na troca.",
@@ -724,7 +788,7 @@ export const MODEL_BUYER_GUIDES = {
     "faq": [
       {
         "q": "Esta página também inclui o Yaris sedã?",
-        "a": "Não. Aqui estão os Yaris hatch. Para outras opções, consulte os Toyota anunciados ou o estoque completo."
+        "a": "Esta seleção reúne os hatch. Você encontra o Yaris Sedã entre os modelos na página da Toyota."
       }
     ],
     "guideLinks": []
