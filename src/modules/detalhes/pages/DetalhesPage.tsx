@@ -94,6 +94,7 @@ import { emptySeminovosSearch } from "@/lib/seminovos-search";
 import { buildVehiclePhotoCaptions } from "../lib/vehiclePhotoCaptions";
 import { buildVehicleEditorialSummary } from "../lib/vehicleEditorialSummary";
 import { buildVehicleHeroGallery, type HeroGallerySlide } from "../lib/vehicleHeroGallery";
+import { ProvenanceSealBadge } from "../components/ProvenanceSealBadge";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { landingPages, matchesLandingFilters } from "@/data/seo";
 import {
@@ -2644,7 +2645,7 @@ export function DetalhesPage() {
       )
     : undefined;
   const quickProvenanceItems = (() => {
-    const items = ["Origem RS", "Sem locadora", "Sem leilão"];
+    const items = ["Origem RS", "Sem enchente", "Sem leilão ou sinistro", "Sem locadora"];
     const optionalTexts = [
       ...(vehicle.opcionais ?? []).map((item) =>
         typeof item === "string" ? item : `${item.tag ?? ""} ${item.descricao ?? ""}`,
@@ -3331,27 +3332,48 @@ export function DetalhesPage() {
           <CustomerDeliveriesCallout />
           {!isSold && (
             <div className="flex flex-col rounded-2xl border border-[#23747C]/15 bg-[#F7FBFA] p-4 text-left shadow-[0_3px_16px_rgba(0,40,60,0.03)] sm:p-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#23747C] sm:text-[11px]">
-                Seleção Netcar
-              </p>
-              <p className="mt-2 text-lg font-bold leading-snug tracking-[-0.02em] text-fg sm:text-xl">
-                Este carro atende aos critérios da Netcar.
-              </p>
+              <ProvenanceSealBadge />
               <div className="mt-4 grid flex-1 grid-cols-1 gap-2 text-sm font-semibold leading-snug text-[#365565] sm:grid-cols-2">
-                {[
-                  "Comprado no RS",
-                  "Sem origem de locadora",
-                  "Sem leilão, sinistro, furto ou roubo",
-                  "Preparado antes da vitrine",
-                ].map((item) => (
-                  <span
-                    key={item}
-                    className="flex items-start gap-2 rounded-xl bg-white px-3 py-2.5"
-                  >
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#087A37]" />
-                    {item}
-                  </span>
-                ))}
+                {(
+                  [
+                    { label: "Comprado no RS" },
+                    {
+                      label: "Sem histórico de enchente",
+                      to: "/carro-de-enchente-como-identificar-rs",
+                    },
+                    {
+                      label: "Sem leilão ou sinistro",
+                      to: "/carro-de-leilao-vale-a-pena",
+                    },
+                    { label: "Sem furto ou roubo" },
+                    {
+                      label: "Sem origem de locadora",
+                      to: "/carro-de-locadora-vale-a-pena",
+                    },
+                    { label: "Preparado antes da vitrine" },
+                  ] as const
+                ).map((item) =>
+                  "to" in item ? (
+                    <Link
+                      key={item.label}
+                      to={item.to}
+                      className="flex items-start gap-2 rounded-xl bg-white px-3 py-2.5 transition-colors hover:bg-[#EAF7F0] hover:text-[#00283C]"
+                    >
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#087A37]" />
+                      <span className="underline decoration-[#075E54]/25 underline-offset-4">
+                        {item.label}
+                      </span>
+                    </Link>
+                  ) : (
+                    <span
+                      key={item.label}
+                      className="flex items-start gap-2 rounded-xl bg-white px-3 py-2.5"
+                    >
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#087A37]" />
+                      {item.label}
+                    </span>
+                  ),
+                )}
               </div>
               <Link
                 to="/como-selecionamos-nossos-carros"
