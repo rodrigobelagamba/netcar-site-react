@@ -1,8 +1,9 @@
 export const BLACK_FRIDAY_CAMPAIGN_ID = "black-friday-2026";
 export const BLACK_FRIDAY_CONFIG_URL = "/campaigns/black-friday-2026.json";
 export const BLACK_FRIDAY_START = "2026-11-11T00:00:00-03:00";
-export const BLACK_FRIDAY_END = "2026-12-01T00:00:00-03:00";
-export const BLACK_FRIDAY_END_LABEL = "30/11/2026";
+export const BLACK_FRIDAY_END = "2026-11-30T18:00:00-03:00";
+export const BLACK_FRIDAY_END_LABEL = "30/11/2026 às 18h (horário de Brasília)";
+export const BLACK_FRIDAY_END_SHORT_LABEL = "30/11 às 18h";
 export const BLACK_FRIDAY_REFRESH_MS = 60_000;
 
 export interface BlackFridayCampaignConfig {

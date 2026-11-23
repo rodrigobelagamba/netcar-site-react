@@ -1,3 +1,4 @@
+import { BLACK_FRIDAY_END_SHORT_LABEL } from "@/features/black-friday/campaign";
 import { Camera, MessageCircle } from "lucide-react";
 import { SHOW_CAMPAIGN_STAMP } from "@/config/features";
 import { optimizeStockImage, stockImageSrcSet } from "@/lib/images";
@@ -297,7 +298,7 @@ export function CardsHero({
           {blackFriday && !isSold && (
             <div className="bf-stock-card-badge">
               <strong>Black Friday</strong>
-              <span>{compact ? "· até 30/11" : "· 4 benefícios"}</span>
+              <span>{compact ? `· até ${BLACK_FRIDAY_END_SHORT_LABEL}` : "· 4 benefícios"}</span>
             </div>
           )}
           <div

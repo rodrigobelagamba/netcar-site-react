@@ -16,6 +16,7 @@ import { HomeRegionsNav } from "../components/HomeRegionsNav";
 import { lazy, useMemo, useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { BLACK_FRIDAY_END_SHORT_LABEL } from "@/features/black-friday/campaign";
 import { useBlackFridayCampaign } from "@/features/black-friday/CampaignProvider";
 import { BlackFridayHomeHero } from "@/features/black-friday/CampaignSurfaces";
 import {
@@ -399,10 +400,10 @@ export function HomePage() {
           </h2>
           <p className="mt-2 max-w-2xl text-sm font-medium text-gray-600 md:text-lg">
             <span className="md:hidden">
-              {blackFridayActive ? "Todo o estoque com os quatro benefícios Black Friday até 30/11." : "Escolha um carro e fale no WhatsApp."}
+              {blackFridayActive ? `Todo o estoque com os quatro benefícios Black Friday até ${BLACK_FRIDAY_END_SHORT_LABEL}.` : "Escolha um carro e fale no WhatsApp."}
             </span>
             <span className="hidden md:inline">
-              {blackFridayActive ? "Escolha seu seminovo e aproveite os quatro benefícios juntos até 30/11." : "Veja fotos, preços e os principais dados de cada carro."}
+              {blackFridayActive ? `Escolha seu seminovo e aproveite os quatro benefícios juntos até ${BLACK_FRIDAY_END_SHORT_LABEL}.` : "Veja fotos, preços e os principais dados de cada carro."}
             </span>
           </p>
         </div>

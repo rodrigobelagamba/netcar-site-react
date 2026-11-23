@@ -28,16 +28,22 @@ const end = Date.parse(BLACK_FRIDAY_END);
 test("public configuration is valid and has the approved November window", () => {
   assert.ok(parseBlackFridayConfig(source));
   assert.equal(start, Date.parse("2026-11-11T03:00:00Z"));
-  assert.equal(end, Date.parse("2026-12-01T03:00:00Z"));
+  assert.equal(end, Date.parse("2026-11-30T21:00:00Z"));
 });
 
-test("campaign begins inclusively and ends at midnight in São Paulo", () => {
+test("campaign begins inclusively and ends at 18h in São Paulo", () => {
   const config = parseBlackFridayConfig(enabled);
   assert.equal(isBlackFridayActive(config, start - 1), false);
   assert.equal(isBlackFridayActive(config, start), true);
   assert.equal(isBlackFridayActive(config, end - 1), true);
   assert.equal(isBlackFridayActive(config, end), false);
-  assert.equal(isBlackFridayActive(config, end + 86_400_000), false);
+  for (const [stamp, expected] of [
+    ["2026-11-30T17:59:00-03:00", true],
+    ["2026-11-30T17:59:59-03:00", true],
+    ["2026-11-30T18:00:00-03:00", false],
+    ["2026-11-30T23:59:00-03:00", false],
+    ["2026-12-01T00:00:00-03:00", false],
+  ] as const) assert.equal(isBlackFridayActive(config, Date.parse(stamp)), expected, stamp);
 });
 
 test("rollback hides the campaign for the full date window", () => {
@@ -54,6 +60,7 @@ test("missing, invalid and extended configurations fail closed", () => {
     { ...enabled, id: "acelerou-levou" },
     { ...enabled, startsAt: "2026-11-10T00:00:00-03:00" },
     { ...enabled, endsAt: "2026-12-31T00:00:00-03:00" },
+    { ...enabled, endsAt: "2026-12-01T00:00:00-03:00" },
     { ...enabled, endsAt: "bad date" },
   ];
   for (const value of invalid) {

@@ -9,6 +9,7 @@ import TestRenderer, { act } from "react-test-renderer";
 import ts from "typescript";
 import * as whatsappMessages from "../../src/lib/whatsappMessages";
 import { emptySeminovosSearch } from "../../src/lib/seminovos-search";
+import * as campaign from "../../src/features/black-friday/campaign";
 import * as countdown from "../../src/features/black-friday/countdown";
 
 const Icon = () => <svg aria-hidden="true" />;
@@ -19,7 +20,7 @@ function loadComponents(active: boolean) {
   const hooks = {
     useBlackFridayCampaign: () => state,
     useWhatsAppQuery: () => ({ data: { numero: "5551997293118" } }),
-    useScheduleQuery: () => ({ data: { dias_semana: "Seg a Sex: 9h às 18h", sabado: "Sábado: 9h às 16h30" } }),
+    useScheduleQuery: () => { throw new Error("Campaign must not read the store schedule (fixture: 19h30)"); },
   };
   const deps: Record<string, unknown> = {
     react: React,
@@ -31,6 +32,7 @@ function loadComponents(active: boolean) {
     "@/lib/seminovos-search": { emptySeminovosSearch },
     "./CampaignProvider": hooks,
     "./countdown": countdown,
+    "./campaign": campaign,
     "./black-friday.css": {},
   };
   function evaluate(source: string, extra: Record<string, unknown> = {}) {
@@ -100,7 +102,7 @@ test("home, stock and vehicle present all four confirmed benefits and the common
     const html = renderToStaticMarkup(React.createElement(components[name], {
       onViewStock: () => {}, vehicleLabel: "Tracker Premier", vehicleId: "20138",
     }));
-    for (const text of ["Transferência", "por nossa conta", "Entrada em até 10x", "sem juros no cartão", "Tanque cheio", "1ª parcela em janeiro", "de 2027 no financiamento", "valem juntos para todo o estoque até 30/11/2026", "sem limite adicional de valor", "Financiamento sujeito à análise de crédito"]) {
+    for (const text of ["Transferência", "por nossa conta", "Entrada em até 10x", "sem juros no cartão", "Tanque cheio", "1ª parcela em janeiro", "de 2027 no financiamento", "valem juntos para todo o estoque até 30/11/2026 às 18h (horário de Brasília)", "sem limite adicional de valor", "Financiamento sujeito à análise de crédito"]) {
       assert.ok(html.includes(text), `${name}: ${text}`);
     }
   }

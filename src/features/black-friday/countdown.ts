@@ -1,18 +1,7 @@
-import { BLACK_FRIDAY_START } from "./campaign";
+import { BLACK_FRIDAY_END, BLACK_FRIDAY_START } from "./campaign";
 
 export const BRAZIL_UTC_OFFSET_HOURS = -3;
 const BRAZIL_UTC_OFFSET_MS = BRAZIL_UTC_OFFSET_HOURS * 60 * 60 * 1000;
-
-export interface StoreScheduleInput {
-  dias_semana?: string | null;
-  sabado?: string | null;
-  domingo?: string | null;
-}
-
-export interface StoreClosingTime {
-  hour: number;
-  minute: number;
-}
 
 export interface BlackFridayClosingTarget {
   targetMs: number;
@@ -46,9 +35,6 @@ export interface BlackFridayCountdownSnapshot {
   accessibleSummary: string;
 }
 
-const DEFAULT_WEEKDAY_CLOSING: StoreClosingTime = { hour: 18, minute: 0 };
-const DEFAULT_SATURDAY_CLOSING: StoreClosingTime = { hour: 16, minute: 30 };
-
 const WEEKDAY_LABELS = [
   "domingo",
   "segunda-feira",
@@ -73,105 +59,25 @@ function pad2(value: number): string {
   return String(Math.max(0, Math.floor(value))).padStart(2, "0");
 }
 
-/**
- * Extrai o horário de fechamento de textos como:
- * "Seg a Sex: 9h às 18h", "9h às 16h30", "09:00 - 18:00" ou "Fechado".
- */
-export function parseStoreClosingTime(raw?: string | null): StoreClosingTime | null {
-  if (!raw || typeof raw !== "string") return null;
-  const normalized = raw.trim().toLowerCase();
-  if (!normalized || normalized.includes("fechado") || normalized.includes("sem expediente")) {
-    return null;
-  }
-
-  const timeMatches = [...normalized.matchAll(/(\d{1,2})\s*(?:h|:)\s*(\d{2})?/g)];
-  if (timeMatches.length === 0) return null;
-
-  const lastMatch = timeMatches[timeMatches.length - 1];
-  const hour = Number(lastMatch[1]);
-  const minute = lastMatch[2] ? Number(lastMatch[2]) : 0;
-
-  if (!Number.isInteger(hour) || hour < 0 || hour > 23) return null;
-  if (!Number.isInteger(minute) || minute < 0 || minute > 59) return null;
-
-  return { hour, minute };
-}
-
-export function formatClosingTimeLabel({ hour, minute }: StoreClosingTime): string {
-  return minute > 0 ? `${hour}h${pad2(minute)}` : `${hour}h`;
-}
-
-function getClosingTimeForWeekday(
-  dayOfWeek: number,
-  schedule?: StoreScheduleInput | null,
-): StoreClosingTime | null {
-  if (dayOfWeek === 0) {
-    return schedule?.domingo ? parseStoreClosingTime(schedule.domingo) : null;
-  }
-  if (dayOfWeek === 6) {
-    if (schedule?.sabado !== undefined && schedule?.sabado !== null && schedule.sabado.trim() !== "") {
-      return parseStoreClosingTime(schedule.sabado);
-    }
-    return DEFAULT_SATURDAY_CLOSING;
-  }
-  if (schedule?.dias_semana !== undefined && schedule?.dias_semana !== null && schedule.dias_semana.trim() !== "") {
-    return parseStoreClosingTime(schedule.dias_semana) ?? DEFAULT_WEEKDAY_CLOSING;
-  }
-  return DEFAULT_WEEKDAY_CLOSING;
-}
-
-/**
- * Calcula o encerramento da Black Friday no último dia aberto do mês
- * (novembro/2026 por padrão), contando até o horário de fechamento da loja em UTC-3.
- */
-export function resolveBlackFridayClosingTarget(options?: {
-  year?: number;
-  month?: number;
-  schedule?: StoreScheduleInput | null;
-}): BlackFridayClosingTarget {
-  const year = options?.year ?? 2026;
-  const month = options?.month ?? 11;
-  const schedule = options?.schedule;
-  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
-
-  let selectedDay = daysInMonth;
-  let selectedDayOfWeek = new Date(Date.UTC(year, month - 1, daysInMonth)).getUTCDay();
-  let closingTime: StoreClosingTime = DEFAULT_WEEKDAY_CLOSING;
-
-  for (let day = daysInMonth; day >= 1; day -= 1) {
-    const dayOfWeek = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
-    const candidate = getClosingTimeForWeekday(dayOfWeek, schedule);
-    if (candidate) {
-      selectedDay = day;
-      selectedDayOfWeek = dayOfWeek;
-      closingTime = candidate;
-      break;
-    }
-  }
-
-  const isoString = `${year}-${pad2(month)}-${pad2(selectedDay)}T${pad2(closingTime.hour)}:${pad2(closingTime.minute)}:00-03:00`;
-  const targetMs =
-    Date.UTC(year, month - 1, selectedDay, closingTime.hour, closingTime.minute, 0, 0) -
-    BRAZIL_UTC_OFFSET_MS;
-
-  const weekdayLabel = WEEKDAY_LABELS[selectedDayOfWeek];
-  const weekdayShort = WEEKDAY_SHORTS[selectedDayOfWeek];
-  const dateLabel = `${pad2(selectedDay)}/${pad2(month)}`;
+/** Usa o mesmo limite comercial do PHP e do predicado de campanha. */
+export function resolveBlackFridayClosingTarget(): BlackFridayClosingTarget {
+  const targetMs = Date.parse(BLACK_FRIDAY_END);
+  const local = new Date(targetMs + BRAZIL_UTC_OFFSET_MS);
+  const year = local.getUTCFullYear();
+  const month = local.getUTCMonth() + 1;
+  const day = local.getUTCDate();
+  const dayOfWeek = local.getUTCDay();
+  const hour = local.getUTCHours();
+  const minute = local.getUTCMinutes();
+  const weekdayLabel = WEEKDAY_LABELS[dayOfWeek];
+  const weekdayShort = WEEKDAY_SHORTS[dayOfWeek];
+  const dateLabel = `${pad2(day)}/${pad2(month)}`;
   const fullDateLabel = `${dateLabel}/${year}`;
-  const timeLabel = formatClosingTimeLabel(closingTime);
+  const timeLabel = minute ? `${hour}h${pad2(minute)}` : `${hour}h`;
 
   return {
-    targetMs,
-    isoString,
-    year,
-    month,
-    day: selectedDay,
-    dayOfWeek: selectedDayOfWeek,
-    weekdayLabel,
-    weekdayShort,
-    dateLabel,
-    fullDateLabel,
-    timeLabel,
+    targetMs, isoString: BLACK_FRIDAY_END, year, month, day, dayOfWeek,
+    weekdayLabel, weekdayShort, dateLabel, fullDateLabel, timeLabel,
     closingSummary: `${weekdayShort}, ${dateLabel} às ${timeLabel}`,
   };
 }

@@ -19,7 +19,7 @@ Não fazer `reset`/deploy integral do commit antigo para encerrar a campanha.
 ## Condições confirmadas e materiais
 
 O responsável confirmou nesta tarefa que os quatro benefícios valem **juntos
-para todo o estoque**, até 30/11/2026:
+para todo o estoque**, até 30/11/2026 às 18h (horário de Brasília):
 
 1. Transferência por conta da Netcar.
 2. Entrada em até 10 vezes sem juros no cartão, sem limite adicional de valor
@@ -43,7 +43,7 @@ unidade. O aviso geral de campanha no rodapé pode encaminhar ao estoque atual.
 Na revisão visual, a vitrine de seminovos ganhou fundo preto/carvão, cards em
 gelo e controles turquesa. O título original da agência e o prazo de 30/11
 aparecem em destaque, com uma faixa turquesa acima do catálogo. Cada carro
-disponível recebe o selo “Black Friday — 4 benefícios · até 30/11” junto ao
+disponível recebe o selo “Black Friday — 4 benefícios · até 30/11 às 18h” junto ao
 preço; vendidos não recebem esse selo. A foto principal do veículo usa a faixa preta
 original da agência em uma camada decorativa atrás do carro, mantendo o fundo
 claro original. Essa composição aparece apenas na capa e não altera o arquivo da
@@ -57,8 +57,9 @@ Configuração pública: `public/campaigns/black-friday-2026.json`, servida em
 
 - `enabled: true`: permite a campanha somente dentro do prazo validado.
 - Início: 11/11/2026, 00:00, São Paulo (`2026-11-11T00:00:00-03:00`).
-- Último dia: 30/11/2026. Encerramento exclusivo:
-  `2026-12-01T00:00:00-03:00` (03:00 UTC).
+- Encerramento exclusivo: **30/11/2026 às 18h**, São Paulo/Brasília,
+  `2026-11-30T18:00:00-03:00` (21:00 UTC). O contador segue esse mesmo
+  limite, sem depender dos horários da loja.
 - `enabled: false`: rollback visual de toda a campanha.
 
 O provider lê esse arquivo em tempo de execução com `cache: no-store`, a cada
@@ -67,6 +68,19 @@ uma aba já aberta. Configuração ausente, erro de rede, JSON inválido ou data
 divergentes deixam a campanha desativada. Não há parâmetro de URL que permita
 reativar uma campanha encerrada ou desabilitada. As datas usam o relógio do
 navegador; as verificações devem usar um dispositivo com a hora correta.
+
+## Publicação da correção de horário
+
+Publicar antecipadamente, antes de 30/11 às 18h, pelo fluxo autorizado. O
+JSON, o PHP e o JavaScript desta versão devem entrar juntos nos dois domínios.
+Um bundle antigo aceita somente o limite anterior e desativa a campanha quando
+vê o novo JSON na próxima atualização ou ao voltar à aba. Para voltar a ver a
+oferta antes das 18h na versão nova, o visitante deve recarregar. Uma aba antiga
+suspensa ou offline não pode ser atualizada à força; ao voltar ao foco deve
+buscar o JSON novamente. Não manter configuração pública antiga em paralelo:
+isso poderia prolongar a oferta indevidamente. Depois da troca, conferir os
+dois domínios, preferindo verificar com uma aba nova e outra já aberta. Em
+caso de incidente, usar `enabled: false` sem restaurar o limite de meia-noite.
 
 ## Rollback manual
 

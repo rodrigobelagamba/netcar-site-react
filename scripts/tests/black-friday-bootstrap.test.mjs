@@ -13,7 +13,7 @@ const controller = readFileSync(resolve(root, "public/index.php"), "utf8");
 const surfaces = readFileSync(resolve(root, "src/features/black-friday/CampaignSurfaces.tsx"), "utf8");
 const enabled = {
   id: "black-friday-2026", enabled: true,
-  startsAt: "2026-11-11T00:00:00-03:00", endsAt: "2026-12-01T00:00:00-03:00",
+  startsAt: "2026-11-11T00:00:00-03:00", endsAt: "2026-11-30T18:00:00-03:00",
 };
 const start = Date.parse(enabled.startsAt) / 1000;
 const end = Date.parse(enabled.endsAt) / 1000;
@@ -68,7 +68,8 @@ test("PHP controller syntax remains valid", phpOptions, async () => {
 
 test("PHP bootstrap validates the same approved flag and date boundaries", phpOptions, async () => {
   const inputs = [enabled, { ...enabled, enabled: false }, null, {}, { ...enabled, enabled: "true" },
-    { ...enabled, id: "another-campaign" }, { ...enabled, endsAt: "2026-12-31T00:00:00-03:00" }];
+    { ...enabled, id: "another-campaign" }, { ...enabled, endsAt: "2026-12-31T00:00:00-03:00" },
+    { ...enabled, endsAt: "2026-12-01T00:00:00-03:00" }];
   const results = await runPhp(`
     ${functions}
     $file = tempnam(sys_get_temp_dir(), 'campaign-');
@@ -77,7 +78,7 @@ test("PHP bootstrap validates the same approved flag and date boundaries", phpOp
       file_put_contents($file, json_encode($input));
       $config = netcar_black_friday_config($file);
       $states = array();
-      foreach (array(${start - 1}, ${start}, ${end - 1}, ${end}) as $now) {
+      foreach (array(${start - 1}, ${start}, ${end - 60}, ${end - 1}, ${end}, ${end + 21540}, ${end + 21600}) as $now) {
         $states[] = netcar_black_friday_active($config, $now);
       }
       $results[] = array('config' => $config, 'states' => $states);
@@ -86,11 +87,11 @@ test("PHP bootstrap validates the same approved flag and date boundaries", phpOp
     $results[] = netcar_black_friday_config($file);
     echo json_encode($results);
   `);
-  assert.deepEqual(results[0], { config: enabled, states: [false, true, true, false] });
-  assert.deepEqual(results[1].states, [false, false, false, false]);
+  assert.deepEqual(results[0], { config: enabled, states: [false, true, true, true, false, false, false] });
+  assert.deepEqual(results[1].states, [false, false, false, false, false, false, false]);
   for (const result of results.slice(2, -1)) {
     assert.equal(result.config, null);
-    assert.deepEqual(result.states, [false, false, false, false]);
+    assert.deepEqual(result.states, [false, false, false, false, false, false, false]);
   }
   assert.equal(results.at(-1), null);
 });
@@ -124,7 +125,7 @@ test("active campaign skips the unused car hero and preloads the image actually 
 });
 
 test("rollback, invalid config and expiry restore the normal home image/preload", phpOptions, async () => {
-  for (const [config, now] of [[{ ...enabled, enabled: false }, start + 1], [enabled, end], [enabled, start - 1], [null, start + 1]]) {
+  for (const [config, now] of [[{ ...enabled, enabled: false }, start + 1], [enabled, end], [enabled, end + 21540], [enabled, end + 21600], [enabled, start - 1], [null, start + 1]]) {
     const result = await renderHome(config, now);
     assert.equal(result.bannerRequests, 1);
     assert.match(result.html, /__NETCAR_HOME_HERO__/);
