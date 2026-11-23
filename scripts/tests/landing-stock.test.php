@@ -91,4 +91,17 @@ check_landing(strpos($htaccess, 'RewriteRule ^comprar-([a-z0-9-]+)/?$ seo-landin
 check_landing(strpos($htaccess, 'RewriteCond %{DOCUMENT_ROOT}/seo-static/landing-$1.html -f') !== false, 'unknown landing retains existing404 route guard');
 check_landing(preg_match('#<If "%\{THE_REQUEST\} =~ m\#\^\[A-Z\]\+.*?comprar-.*?</If>#s', $htaccess, $cacheBlock) === 1 && strpos($cacheBlock[0], 'Header always set Cache-Control "no-store"') !== false, 'original landing request overrides Apache default HTML cache');
 check_landing(strpos($htaccess, 'Header always set Cache-Control "public, max-age=60, s-maxage=300, stale-while-revalidate=60"') !== false, 'other route cache policy preserved');
+
+$landingStockSource = file_get_contents(__DIR__ . '/../../public/seo/landing-stock.php');
+check_landing(strpos($landingStockSource, "CURLOPT_ENCODING => ''") !== false, 'internal stock cURL requests gzip compression');
+check_landing(netcar_landing_stock_cache_file('http://127.0.0.1:8080/api/v1') === null, 'loopback test mocks bypass disk cache');
+check_landing(netcar_landing_stock_cache_file('https://www.netcarmultimarcas.com.br/api/v1') !== null, 'production API enables bounded disk cache');
+$tmpCache = rtrim(sys_get_temp_dir(), '/\\') . '/netcar_stock_cache_test_' . getmypid() . '.json';
+@unlink($tmpCache);
+check_landing(netcar_landing_stock_cache_write($tmpCache, array(), 60) === false, 'empty stock is never cached');
+check_landing(netcar_landing_stock_cache_write($tmpCache, $current, 60) === true, 'valid stock writes atomically');
+check_landing(netcar_landing_stock_cache_read($tmpCache, 60) === $current, 'fresh disk cache returns exact rows');
+check_landing(netcar_landing_stock_cache_read($tmpCache, 0) === null, 'expired disk cache fails closed');
+@unlink($tmpCache);
+
 echo 'Landing stock PHP: ' . $checks . " checks passed\n";
