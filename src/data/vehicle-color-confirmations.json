@@ -2395,6 +2395,83 @@
         "approved": true,
         "publicReference": "netcar-colors-continuous-20261116"
       }
+    },
+    {
+      "id": "color-20261124-20130",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20130",
+        "brand": "FIAT",
+        "model": "CRONOS DRIVE",
+        "modelYear": 2019,
+        "engine": "1.3",
+        "transmission": "MANUAL",
+        "fuel": "Flex",
+        "manufactureYear": 2018,
+        "genericColor": "CINZA",
+        "physicalIdentityKey": "26b4de649e15f602ac5485652c94dcb9e1c2a4faa46f18b6302f290de5505f98"
+      },
+      "officialName": "Cinza Scandium",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261124-20130",
+        "verifiedAt": "2026-11-24",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "FIAT",
+          "model": "CRONOS DRIVE",
+          "modelYear": 2019,
+          "engine": "1.3",
+          "transmission": "MANUAL",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Vermelho Alpine",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Branco Banchisa",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Prata Bari",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Scandium",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Preto Vesúvio",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Alaska",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Vermelho Marsala",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Preto Vulcano",
+              "genericColor": "PRETA"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.media.stellantis.com/br-pt/fiat/press/fiat-cronos-marca-novo-tempo-para-os-sedas-no-mercado-brasileiro",
+            "https://www.scribd.com/document/631715362/GAMA-25-09-FIAT-pdf",
+            "https://www.media.stellantis.com/br-pt/fiat/press/fiat-cronos-mostra-toda-sua-versatilidade-no-salao-do-automovel-de-sao-paulo",
+            "https://www.media.stellantis.com/br-pt/fiat/press/linha-2020-do-fiat-cronos-chega-com-nova-versao-hgt-1-8-at"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
     }
   ]
 }
