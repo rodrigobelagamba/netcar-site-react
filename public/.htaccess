@@ -82,13 +82,13 @@ RedirectMatch 404 ^/api/?$
 
   # O feed usa estoque e garantia atuais. A hospedagem aplica Expires e
   # max-age=0 por padrão; preservar no-store também após o rewrite do XML.
-  <Files "carclick.php">
+  <FilesMatch "^(carclick|google-merchant)\.php$">
     Header onsuccess unset Expires
     Header always unset Expires
     Header onsuccess unset Cache-Control
     Header always unset Cache-Control
     Header always set Cache-Control "no-store"
-  </Files>
+  </FilesMatch>
 
   # Disponibilidade das seleções é consultada em cada requisição. THE_REQUEST
   # conserva a URL original após o rewrite para index.php/seo-landing.php.
@@ -210,13 +210,27 @@ RedirectMatch 404 ^/api/?$
   RewriteCond %{HTTP_HOST} !^www\. [NC]
   RewriteRule ^ https://www.netcarmultimarcas.com.br%{REQUEST_URI} [R=301,L]
 
-  # Keep the importer URL and supplier-owned XML. The controller changes only
-  # OBSERVACAO at read time, including newly exported vehicles. Before -f rules.
+  # Os importadores mantêm as URLs do Automacar. Ler os XMLs do fornecedor
+  # pelos controladores antes de servir arquivos estáticos existentes.
   RewriteCond %{DOCUMENT_ROOT}/feeds/carclick.xml -f
   RewriteCond %{DOCUMENT_ROOT}/feeds/carclick.php -f
   RewriteCond %{DOCUMENT_ROOT}/feeds/carclick-description.php -f
   RewriteCond %{DOCUMENT_ROOT}/feeds/carclick-warranty.php -f
+  RewriteCond %{DOCUMENT_ROOT}/feeds/carclick-photos.php -f
   RewriteRule ^feeds/carclick\.xml$ feeds/carclick.php [L]
+
+  RewriteCond %{DOCUMENT_ROOT}/feeds/google_merchant.xml -f
+  RewriteCond %{DOCUMENT_ROOT}/feeds/google-merchant.php -f
+  RewriteCond %{DOCUMENT_ROOT}/feeds/google-merchant-feed.php -f
+  RewriteCond %{DOCUMENT_ROOT}/feeds/carclick-description.php -f
+  RewriteCond %{DOCUMENT_ROOT}/seo/landing-stock.php -f
+  RewriteRule ^feeds/google_merchant\.xml$ feeds/google-merchant.php [L]
+
+  # O CarClick resolve nomes JPG na pasta de imagens do Automacar. Se o
+  # fornecedor voltar a enviar o JPG, o arquivo dele tem precedência.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{DOCUMENT_ROOT}/images/carclick-gallery/$1 -f
+  RewriteRule ^imagens/veiculos_automacar/([^/]+\.jpg)$ images/carclick-gallery/$1 [END]
   
   # Canônico da home: /index.html ou /index.php acessado direto -> / (301).
   # THE_REQUEST garante que só o request externo do browser/crawler é

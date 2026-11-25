@@ -62,6 +62,9 @@ public/feeds/*
 !public/feeds/carclick.php
 !public/feeds/carclick-description.php
 !public/feeds/carclick-warranty.php
+!public/feeds/carclick-photos.php
+!public/feeds/google-merchant.php
+!public/feeds/google-merchant-feed.php
 !public/feeds/google-vehicle-ads.php
 src/data/seo/landings.json
 

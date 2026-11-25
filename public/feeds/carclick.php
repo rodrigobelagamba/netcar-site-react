@@ -1,8 +1,8 @@
 <?php
 /**
- * Same Carclick URL and original supplier file, with approved descriptions.
+ * Same Carclick URL and original supplier file, with approved descriptions and missing JPEG views.
  * Reads the local XML directly (never calls its rewritten HTTP URL).
- * Never writes the source file, ERP, prices, photos or inventory identifiers.
+ * Never writes the source file, ERP, photo files, prices or inventory identifiers.
  */
 header('Content-Type: application/xml; charset=UTF-8');
 header('Cache-Control: no-store');
@@ -11,6 +11,7 @@ header('X-Robots-Tag: noindex');
 try {
     require_once __DIR__ . '/carclick-description.php';
     require_once __DIR__ . '/carclick-warranty.php';
+    require_once __DIR__ . '/carclick-photos.php';
     $raw = netcar_carclick_read_source(__DIR__ . '/carclick.xml');
     $parsed = netcar_carclick_parse_source($raw);
     $liveById = array();
@@ -23,6 +24,7 @@ try {
     } catch (Throwable $error) {
         $liveById = array();
     }
+    $addedPhotos = netcar_carclick_complete_photos($parsed, $liveById, dirname(__DIR__));
     $manifestPath = __DIR__ . '/carclick-warranty.json';
     $registryPath = dirname(__DIR__) . '/seo/factory-warranty-registry.json';
     $manifest = is_readable($manifestPath) ? json_decode((string) file_get_contents($manifestPath), true) : null;
@@ -32,6 +34,7 @@ try {
         return netcar_carclick_warranty_claim($row, $manifest, $registryHash, $liveById[$id] ?? null);
     });
     header('X-Netcar-Carclick-Descriptions: v1');
+    header('X-Netcar-Carclick-Added-Photos: ' . $addedPhotos);
     header('X-Netcar-Carclick-Vehicles: ' . $result['vehicles']);
     header('X-Netcar-Carclick-Warranties: ' . $result['warranties']);
     header('X-Netcar-Carclick-Source-SHA256: ' . hash('sha256', $raw));

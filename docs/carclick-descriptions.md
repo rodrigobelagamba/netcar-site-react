@@ -2,7 +2,7 @@
 
 Autorização: em 29/10/2026 o responsável aprovou o texto com Nethelp, retirou
 quilometragem da descrição e pediu a alteração no próprio XML distribuído.
-Preços, km estruturada, opcionais, fotos, códigos e identificadores não mudam.
+Em 25/11/2026 o responsável pediu também a correção dos JPG ausentes na galeria do CarClick.
 
 ## Onde roda
 
@@ -10,11 +10,18 @@ URL de importação preservada: `https://www.netcarmultimarcas.com.br/feeds/carc
 
 - `public/.htaccess`: reescreve internamente somente essa URL para `feeds/carclick.php`.
 - `public/feeds/carclick.php`: lê o arquivo local `feeds/carclick.xml` recebido do
-  exportador original e entrega XML com a descrição nova. Não escreve nesse arquivo.
+  exportador original e entrega as descrições e galerias do CarClick.
 - `public/feeds/carclick-description.php`: texto aprovado, validação XML e alteração
-  exclusiva de `OBSERVACAO` em cada registro `veiculo`.
+  de `OBSERVACAO` em cada registro `veiculo`.
 - `public/feeds/carclick-warranty.php`: seleciona somente afirmações de garantia
   aprovadas e compatíveis com a unidade, a fonte atual e o relógio.
+- `public/feeds/carclick-photos.php` compara o ID e a placa da unidade com o estoque
+  atual. Para cada AVIF da galeria sem equivalente no feed, acrescenta o nome
+  relativo do JPG após a última foto preenchida, se houver um JPEG válido. A capa
+  e as fotos existentes mantêm sua posição. O JPG do Automacar tem prioridade.
+  Quando ele falta, o mesmo endereço pode servir um dos originais conferidos de
+  `public/images/carclick-gallery/`. Uma galeria retirada do estoque deixa de
+  fornecer complementos na próxima leitura dos dados atuais.
 
 Não existe cron novo: a transformação acontece em cada consulta do importador.
 Carros que entrarem no próximo arquivo de origem recebem a descrição padrão na
@@ -78,10 +85,12 @@ Cabeçalhos públicos de diagnóstico:
 - `X-Netcar-Carclick-Descriptions: v1`
 - `X-Netcar-Carclick-Vehicles`: quantidade preservada da origem.
 - `X-Netcar-Carclick-Warranties`: descrições com garantia aprovada.
+- `X-Netcar-Carclick-Added-Photos` informa quantos JPGs foram acrescentados na resposta.
 - `X-Netcar-Carclick-Source-SHA256`: hash do arquivo bruto lido, sem seus valores.
 
-O relatório de publicação compara todos os registros e todos os campos fora de
-`OBSERVACAO`, incluindo campos desconhecidos e atributos, sem expor placa,
+A conferência compara todos os registros e campos, descontando as alterações
+aprovadas em `OBSERVACAO` e nos campos de foto complementados. Inclui campos
+desconhecidos e atributos, sem expor placa,
 chassi ou Renavam. Esses valores não entram em logs, exemplos ou Git.
 
 XML inválido, vazio, truncado, com entidade externa ou códigos duplicados retorna
@@ -90,7 +99,7 @@ não usa cache que possa manter garantia vencida ou descrição antiga.
 
 Testes: `php scripts/tests/carclick-description.test.php` e
 `node --test scripts/tests/carclick-routing.test.mjs`, além dos testes de garantia
-do feed e do build de produção. A CI executa PHP de verdade; teste ignorado por
+do feed, de `php scripts/tests/carclick-photos.test.php` e do build de produção. A CI executa PHP de verdade; teste ignorado por
 falta de PHP local não é aprovação para publicar.
 
 ## Reversão
