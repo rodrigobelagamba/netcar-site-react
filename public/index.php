@@ -634,25 +634,6 @@ function netcar_route_modulepreloads($path)
     return implode("\n  ", $tags);
 }
 
-/**
- * Replica a normalização do frontend (normalizeImageUrl em site.ts):
- * "./imagens/banner/x.jpg" -> "/imagens/banner/x.jpg" (root-relative resolve
- * para a mesma URL absoluta que o <img> do React usa, então o browser deduplica).
- */
-function netcar_normalize_banner_path($url)
-{
-    if (!is_string($url) || $url === '') {
-        return null;
-    }
-    $normalized = str_replace('\\', '/', trim($url));
-    $normalized = preg_replace('#^\./+#', '', $normalized);
-
-    if (preg_match('#^https?://#i', $normalized)) {
-        return $normalized;
-    }
-    return '/' . ltrim($normalized, '/');
-}
-
 /** Espelha o filtro do frontend para materiais retirados que a API ainda lista. */
 function netcar_is_retired_banner_image($url)
 {
@@ -683,7 +664,7 @@ function netcar_fetch_banner_url()
     }
     foreach ($json['data'] as $banner) {
         $url = is_array($banner) && isset($banner['imagem'])
-            ? netcar_normalize_banner_path($banner['imagem'])
+            ? netcarNormalizeImagePath($banner['imagem'])
             : null;
         if ($url !== null && !netcar_is_retired_banner_image($url)) {
             return $url;
@@ -712,7 +693,7 @@ function netcar_get_active_banner_url()
     if (is_readable($cacheFile)) {
         $cache = json_decode((string) @file_get_contents($cacheFile), true);
         if (is_array($cache) && isset($cache['expires']) && $cache['expires'] > time()) {
-            $cachedUrl = isset($cache['url']) ? netcar_normalize_banner_path($cache['url']) : null;
+            $cachedUrl = isset($cache['url']) ? netcarNormalizeImagePath($cache['url']) : null;
             // Cache anterior ao encerramento pode ainda apontar para a campanha.
             // Ignorá-lo força a busca do próximo banner válido ou do hero habitual.
             if (!netcar_is_retired_banner_image($cachedUrl)) {
@@ -745,7 +726,7 @@ function netcar_home_lcp_from_vehicle($vehicle)
         ? $vehicle['imagens_site']
         : array();
     $rawImage = isset($siteImages['capa']) ? $siteImages['capa'] : null;
-    $image = netcar_normalize_banner_path($rawImage);
+    $image = netcarNormalizeImagePath($rawImage);
     $brand = isset($vehicle['marca']) ? trim((string) $vehicle['marca']) : '';
     $model = isset($vehicle['modelo']) ? trim((string) $vehicle['modelo']) : '';
     $year = isset($vehicle['year']) ? (int) $vehicle['year'] : (isset($vehicle['ano']) ? (int) $vehicle['ano'] : 0);
@@ -856,7 +837,7 @@ function netcar_get_build_home_lcp()
     ) {
         return null;
     }
-    $image = netcar_normalize_banner_path($value['image']);
+    $image = netcarNormalizeImagePath($value['image']);
     if ($image === null) {
         return null;
     }

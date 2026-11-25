@@ -268,10 +268,17 @@ function netcar_landing_bootstrap_vehicle($vehicle)
     foreach (array('valor' => 'price', 'ano' => 'year', 'ano_fabricacao' => 'anoFabricacao', 'km' => 'km', 'preco_com_troca' => 'preco_com_troca', 'portas' => 'portas', 'lugares' => 'lugares', 'destaque' => 'destaque', 'promocao' => 'promocao') as $source => $target) {
         if (isset($vehicle[$source]) && is_numeric($vehicle[$source])) $result[$target] = (float) $vehicle[$source];
     }
-    $result['images'] = isset($vehicle['imagens']['thumb']) && is_array($vehicle['imagens']['thumb']) ? array_slice($vehicle['imagens']['thumb'], 0, 1) : array();
+    $thumbs = $vehicle['imagens']['thumb'] ?? array();
+    $thumb = netcarNormalizeImagePath(is_array($thumbs) ? ($thumbs[0] ?? null) : null);
+    $result['images'] = $thumb === null ? array() : array($thumb);
     $result['imagens_site'] = array();
-    foreach (array('capa', 'capa_thumb', 'capa_opengraph', 'tem_fotos') as $key) {
-        if (isset($vehicle['imagens_site'][$key]) && is_scalar($vehicle['imagens_site'][$key])) $result['imagens_site'][$key] = $vehicle['imagens_site'][$key];
+    foreach (array('capa', 'capa_thumb', 'capa_opengraph') as $key) {
+        if (isset($vehicle['imagens_site'][$key])) {
+            $result['imagens_site'][$key] = netcarNormalizeImagePath($vehicle['imagens_site'][$key]) ?? '';
+        }
+    }
+    if (isset($vehicle['imagens_site']['tem_fotos']) && is_scalar($vehicle['imagens_site']['tem_fotos'])) {
+        $result['imagens_site']['tem_fotos'] = $vehicle['imagens_site']['tem_fotos'];
     }
     $result['imagens_site']['galeria'] = array();
     $result['opcionais'] = array();

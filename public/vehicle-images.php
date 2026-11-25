@@ -1,4 +1,12 @@
 <?php
+/** Catalog image paths are relative to the site root, including on nested routes. */
+function netcarNormalizeImagePath($url) {
+    if (!is_string($url) || trim($url) === '') return null;
+    $path = str_replace(array('\\', ' '), array('/', '%20'), trim($url));
+    if (preg_match('#^(?:https?:)?//#i', $path)) return $path;
+    return '/' . ltrim(preg_replace('#^(?:\./)+#', '', $path), '/');
+}
+
 // Unit-scoped quarantine, shared with React and the SEO build. Never delete
 // source images: the same file may correctly belong to a different vehicle.
 function netcarVehicleImageStem($value) {
