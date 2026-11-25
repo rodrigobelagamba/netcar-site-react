@@ -38,7 +38,10 @@ await php.run({ code: `<?php
   mkdir('/www/seo/vehicle-photo-variants', 0777, true);
   mkdir('/outside', 0777, true);
 ` });
-for (const name of ["vehicle-photo.php", "img.php"]) {
+for (const name of [
+  "vehicle-photo.php", "img.php", "vehicle-images.php", "seo/helpers.php",
+  "seo/landing-stock.php", "vehicle-image-exclusions.json", "vehicle-cover-recovery.json",
+]) {
   php.writeFile(`${root}/${name}`, await readFile(resolve(repo, "public", name)));
 }
 
@@ -243,14 +246,27 @@ function htmlTags(html, name) {
   ));
 }
 await check("PHP detail preloads, initial picture and React variants share mobile/desktop URLs", async () => {
-  const cover = "https://www.netcarmultimarcas.com.br/imagens/fixture%20photo.png";
-  const fixture = Buffer.from(JSON.stringify({ vehicles: [{ id: "101", name: "Fixture car", images: [cover] }] })).toString("base64");
+  const cover = "./imagens/veiculos_automacar/fixture photo.png";
+  const thumbnail = "https://www.netcarmultimarcas.com.br/imagens/fixture%20thumb.jpg";
+  const fixture = Buffer.from(JSON.stringify({
+    id: "101", marca: "Fixture", modelo: "Car",
+    imagens: { thumb: ["imagens/first thumb.jpg", "imagens/second.jpg"] },
+    imagens_site: {
+      capa: cover, capa_thumb: thumbnail, capa_opengraph: "/imagens/og photo.jpg",
+      tem_fotos: 1, galeria: ["./imagens/first.jpg"],
+    },
+  })).toString("base64");
   const functions = ["netcar_stock_critical_vehicle", "netcar_vehicle_cover", "netcar_detail_photo_srcset", "netcar_stock_critical_preload", "netcar_stock_initial_lcp", "netcar_banner_variant"].map(controllerFunction).join("\n");
   const result = await php.run({ code: `<?php
+    require '/www/seo/landing-stock.php';
     ${functions}
-    function netcar_stock_bootstrap_value() { return json_decode(base64_decode('${fixture}'), true); }
+    function netcar_stock_bootstrap_value() {
+      $raw = json_decode(base64_decode('${fixture}'), true);
+      return array('vehicles' => array(netcar_landing_bootstrap_vehicle($raw)));
+    }
     function netcar_stock_request_has_filters() { return false; }
     echo json_encode(array(
+      'vehicle' => netcar_stock_bootstrap_value()['vehicles'][0],
       'detailPreload' => netcar_stock_critical_preload('/veiculo/fixture-car-101'),
       'detailInitial' => netcar_stock_initial_lcp('/veiculo/fixture-car-101'),
       'stockPreload' => netcar_stock_critical_preload('/seminovos'),
@@ -261,6 +277,11 @@ await check("PHP detail preloads, initial picture and React variants share mobil
   ` });
   assert.equal(result.errors, "");
   const rendered = result.json;
+  assert.deepEqual(rendered.vehicle.images, ["/imagens/first%20thumb.jpg"]);
+  assert.deepEqual(rendered.vehicle.imagens_site, {
+    capa: "/imagens/veiculos_automacar/fixture%20photo.png",
+    capa_thumb: thumbnail, capa_opengraph: "/imagens/og%20photo.jpg", tem_fotos: 1, galeria: [],
+  });
   const preloads = htmlTags(rendered.detailPreload, "link");
   const sources = htmlTags(rendered.detailInitial, "source");
   assert.equal(preloads.length, 2);
@@ -290,7 +311,9 @@ await check("PHP detail preloads, initial picture and React variants share mobil
   assert.equal(absolute(sources[2].srcset), stockImageSrcSet(cover, [480, 640, 960]));
   const initialImg = htmlTags(rendered.detailInitial, "img")[0];
   assert.equal(absolute(initialImg.srcset), stockImageSrcSet(cover, [480, 640, 768, 960, 1280]));
-  assert.equal(htmlTags(rendered.stockPreload, "link").length, 1);
+  const stockPreloads = htmlTags(rendered.stockPreload, "link");
+  assert.equal(stockPreloads.length, 1);
+  assert.equal(absolute(stockPreloads[0].imagesrcset), stockImageSrcSet(thumbnail, [320, 480, 640, 768, 960]));
   assert.doesNotMatch(rendered.stockPreload + rendered.stockInitial, /vehicle-photo\.php|image\/avif|<picture/);
   assert.equal(rendered.homePreload, "");
   assert.equal(rendered.homeInitial, "");
