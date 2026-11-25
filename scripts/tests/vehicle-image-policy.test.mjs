@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { sanitizeVehicleImages } from "../../src/lib/vehicleImagePolicy.mjs";
+import { publicVehicle } from "../lib/seo-stock-cache.js";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const policy = JSON.parse(readFileSync(new URL("../../public/vehicle-image-exclusions.json", import.meta.url), "utf8"));
@@ -42,6 +43,9 @@ test("an omitted cover is restored only for its verified unit and current galler
   assert.equal(renegade.imagens_site.capa_thumb, null);
   assert.equal(renegade.imagens_site.capa_opengraph, "/imagens/veiculos_automacar/small/soasos (12).jpg");
   assert.strictEqual(sanitizeVehicleImages(c3), c3);
+  const buildImages = publicVehicle(missingC3Cover).imagens_site;
+  assert.equal(buildImages.capa, c3.imagens_site.capa);
+  assert.equal(buildImages.galeria, undefined);
   for (const changes of [
     { capa: "/imagens/new-cover.png" }, { capa_thumb: "/imagens/new-thumb.png" },
     { tem_fotos: 0 }, { galeria: [] }, { galeria: [source("another-photo")] },

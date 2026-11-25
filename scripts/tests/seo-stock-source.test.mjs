@@ -410,6 +410,9 @@ function generatorFixture() {
     "src/lib/factoryWarrantyCatalog.js",
     "src/lib/landingStockCopy.mjs",
     "src/lib/landingModelMatch.mjs",
+    "src/lib/vehicleImagePolicy.mjs",
+    "public/vehicle-cover-recovery.json",
+    "public/vehicle-image-exclusions.json",
   ]) {
     const target = join(rootDir, relative);
     mkdirSync(join(target, ".."), { recursive: true });
