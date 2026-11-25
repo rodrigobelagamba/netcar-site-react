@@ -255,6 +255,8 @@ function netcar_landing_faq($landing, $rows)
 
 function netcar_landing_bootstrap_vehicle($vehicle)
 {
+    // Match the current gallery before the compact bootstrap drops it.
+    $vehicle = netcarRestoreVerifiedCover($vehicle);
     // Project only public presentation fields; never embed supplier/admin data.
     $result = array();
     foreach (array('marca', 'modelo', 'cor', 'motor', 'combustivel', 'cambio', 'potencia', 'placa', 'categoria', 'valor_formatado', 'preco_com_troca_formatado', 'pdf', 'pdf_url') as $key) {
