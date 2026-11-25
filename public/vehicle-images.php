@@ -10,8 +10,32 @@ function netcarVehicleImageStem($value) {
     return preg_replace('/_small$/i', '', $name);
 }
 
+// Match the live gallery before restoring a previously published cover.
+function netcarRestoreVerifiedCover($vehicle) {
+    $images = $vehicle['imagens_site'] ?? null;
+    if (!is_array($images) || (int) ($images['tem_fotos'] ?? 0) !== 1
+        || !empty($images['capa']) || !empty($images['capa_thumb']) || empty($images['galeria'])
+        || !is_array($images['galeria'])) return $vehicle;
+    static $covers = null;
+    if ($covers === null) {
+        $covers = json_decode((string) @file_get_contents(__DIR__ . '/vehicle-cover-recovery.json'), true) ?: array();
+    }
+    $files = $covers[(string) ($vehicle['id'] ?? '')] ?? null;
+    if (!$files) return $vehicle;
+    $stem = netcarVehicleImageStem($files['capa']);
+    foreach ($images['galeria'] as $photo) {
+        if (netcarVehicleImageStem($photo) !== $stem) continue;
+        foreach ($files as $field => $filename) {
+            if (empty($images[$field])) $vehicle['imagens_site'][$field] = '/imagens/veiculos_automacar/' . $filename;
+        }
+        break;
+    }
+    return $vehicle;
+}
+
 function netcarSanitizeVehicleImages($vehicle) {
     if (!is_array($vehicle)) return $vehicle;
+    $vehicle = netcarRestoreVerifiedCover($vehicle);
     static $policy = null;
     if ($policy === null) {
         $policy = json_decode((string) @file_get_contents(__DIR__ . '/vehicle-image-exclusions.json'), true);

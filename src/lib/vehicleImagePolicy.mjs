@@ -1,4 +1,5 @@
 import exclusions from "../../public/vehicle-image-exclusions.json" with { type: "json" };
+import verifiedCovers from "../../public/vehicle-cover-recovery.json" with { type: "json" };
 
 const excludedStemsByVehicle = new Map(
   Object.entries(exclusions.vehicles).map(([id, entry]) => [
@@ -25,6 +26,22 @@ function imageStem(value) {
   }
 }
 
+// The November 25 export omitted these published PNGs. Use the previous
+// cover only while its own photo still belongs to this unit's live gallery.
+function restoreVerifiedCover(vehicle) {
+  const images = vehicle.imagens_site;
+  const files = verifiedCovers[vehicle.id];
+  if (!files?.capa || Number(images?.tem_fotos) !== 1 || images.capa || images.capa_thumb) return vehicle;
+  const stem = imageStem(files.capa);
+  if (!Array.isArray(images.galeria) || !images.galeria.some((photo) => imageStem(photo) === stem)) return vehicle;
+
+  const restored = { ...images };
+  for (const [field, filename] of Object.entries(files)) {
+    if (!restored[field]) restored[field] = "/imagens/veiculos_automacar/" + filename;
+  }
+  return { ...vehicle, imagens_site: restored };
+}
+
 /**
  * Quarantine only known wrong source files for a specific stock unit. New
  * filenames pass through immediately, including when mixed with stale images.
@@ -32,6 +49,7 @@ function imageStem(value) {
  */
 export function sanitizeVehicleImages(vehicle) {
   if (!vehicle || typeof vehicle !== "object") return vehicle;
+  vehicle = restoreVerifiedCover(vehicle);
   const excludedStems = excludedStemsByVehicle.get(String(vehicle.id));
   if (!excludedStems) return vehicle;
 

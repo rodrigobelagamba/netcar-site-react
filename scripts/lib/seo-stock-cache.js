@@ -1,6 +1,7 @@
 import { mkdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { factoryWarrantyCatalogFromApi } from "./factory-warranty-catalog.js";
+import { sanitizeVehicleImages } from "../../src/lib/vehicleImagePolicy.mjs";
 
 const MAX_CACHE_AGE_MS = 30 * 60 * 1000;
 const MAX_VERSIONED_STOCK_AGE_MS = 14 * 24 * 60 * 60 * 1000;
@@ -64,6 +65,7 @@ function publicEquipment(vehicle) {
 // Mantém somente os campos públicos usados nas vitrines SEO. Assim o cache não
 // replica chassi, Renavam ou outros dados administrativos retornados pela API.
 export function publicVehicle(vehicle) {
+  vehicle = sanitizeVehicleImages(vehicle);
   return {
     id: vehicle.id,
     marca: vehicle.marca,

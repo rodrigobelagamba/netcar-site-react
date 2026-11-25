@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { sanitizeVehicleImages } from "../../src/lib/vehicleImagePolicy.mjs";
+import { publicVehicle } from "../lib/seo-stock-cache.js";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const policy = JSON.parse(readFileSync(new URL("../../public/vehicle-image-exclusions.json", import.meta.url), "utf8"));
@@ -18,6 +19,43 @@ const oldImages = stems.map((stem) => source(stem));
 const replacement = source("01102026208 GRIFFE IUL0D121");
 const replacementCover = source("01102026208 GRIFFE IUL0D12CAPA", "png");
 const oldCover = stems.at(-1);
+
+const c3Stem = "04112026c3 attraction IVT6G47CAPA";
+const missingC3Cover = {
+  id: "20096",
+  imagens_site: { capa: null, capa_thumb: null, capa_opengraph: null, tem_fotos: 1, galeria: [source(c3Stem)] },
+};
+const missingRenegadeCover = {
+  id: "20094",
+  imagens_site: { capa: null, capa_thumb: null, tem_fotos: 1, galeria: [source("soasos (12)"), source("soasos (1)")] },
+};
+
+test("an omitted cover is restored only for its verified unit and current gallery", () => {
+  const c3 = sanitizeVehicleImages(missingC3Cover);
+  assert.deepEqual(c3.imagens_site, {
+    ...missingC3Cover.imagens_site,
+    capa: "/imagens/veiculos_automacar/" + c3Stem + ".png",
+    capa_thumb: "/imagens/veiculos_automacar/" + c3Stem + "_small.png",
+    capa_opengraph: "/imagens/veiculos_automacar/small/" + c3Stem + ".jpg",
+  });
+  const renegade = sanitizeVehicleImages(missingRenegadeCover);
+  assert.equal(renegade.imagens_site.capa, "/imagens/veiculos_automacar/soasos (1).png");
+  assert.equal(renegade.imagens_site.capa_thumb, null);
+  assert.equal(renegade.imagens_site.capa_opengraph, "/imagens/veiculos_automacar/small/soasos (12).jpg");
+  assert.strictEqual(sanitizeVehicleImages(c3), c3);
+  const buildImages = publicVehicle(missingC3Cover).imagens_site;
+  assert.equal(buildImages.capa, c3.imagens_site.capa);
+  assert.equal(buildImages.galeria, undefined);
+  for (const changes of [
+    { capa: "/imagens/new-cover.png" }, { capa_thumb: "/imagens/new-thumb.png" },
+    { tem_fotos: 0 }, { galeria: [] }, { galeria: [source("another-photo")] },
+  ]) {
+    const vehicle = { ...missingC3Cover, imagens_site: { ...missingC3Cover.imagens_site, ...changes } };
+    assert.strictEqual(sanitizeVehicleImages(vehicle), vehicle);
+  }
+  const otherUnit = { ...missingC3Cover, id: "123" };
+  assert.strictEqual(sanitizeVehicleImages(otherUnit), otherUnit);
+});
 
 function rawVehicle(id = "20023") {
   return {
@@ -221,6 +259,7 @@ test("PHP and JavaScript apply exactly the same policy to API, bootstrap and new
   skip: hasPhp ? false : "PHP CLI unavailable; set NETCAR_PHP_BINARY to run server parity locally",
 }, () => {
   const fixtures = [
+    missingC3Cover, missingRenegadeCover,
     rawVehicle(), rawVehicle(20023), rawVehicle("19900"), normalizedVehicle(),
     mixedVehicle(), newVehicle(),
     { id: "20023", images: imageVariants },
