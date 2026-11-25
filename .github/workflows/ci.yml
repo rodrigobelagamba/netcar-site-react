@@ -49,14 +49,19 @@ jobs:
           php -l public/seo-stock-bootstrap.php
           php -l public/seo/showcase-stock.php
           npm run stock:test-pages
-      - name: Validate Carclick descriptions and field preservation
+      - name: Validate supplier feeds, field preservation and public URLs
         run: |
           php -l public/feeds/carclick.php
           php -l public/feeds/carclick-description.php
           php -l public/feeds/carclick-warranty.php
+          php -l public/feeds/carclick-photos.php
+          php -l public/feeds/google-merchant.php
+          php -l public/feeds/google-merchant-feed.php
           php -l public/feeds/google-vehicle-ads.php
           php scripts/tests/carclick-description.test.php
           php scripts/tests/carclick-warranty.test.php
+          php scripts/tests/carclick-photos.test.php
+          php scripts/tests/google-merchant-feed.test.php
           npx tsx --test scripts/tests/carclick-warranty.test.ts
           node --test scripts/tests/carclick-routing.test.mjs
       - name: Validate stock image preload selection

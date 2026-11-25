@@ -7,13 +7,15 @@ import { Client } from 'ssh2';
 // Runtime deliveries belong to the publisher, never to a build or dist rollback.
 // CheckAuto certificates belong to Automacar: the i-CHECK sync parses the
 // published PDF, so a build copy must never replace it.
+const SUPPLIER_FEEDS = ['feeds/carclick.xml', 'feeds/google_merchant.xml'];
 const TAR_EXCLUDES = ['.git', '.gitignore', '.git-commit-msg.txt',
   'entregas-data/live.json', 'entregas-data/.publish.lock',
   'entregas-data/.entregas-*', 'entregas-media/live',
-  'arquivos/autocheck/*.pdf', 'feeds/carclick.xml'];
+  'arquivos/autocheck/*.pdf', ...SUPPLIER_FEEDS];
 
-export function isCarclickSourcePath(path) {
-  return String(path).replaceAll('\\', '/').replace(/^(\.\/)+/, '') === 'feeds/carclick.xml';
+export function isSupplierFeedPath(path) {
+  const normalized = String(path).replaceAll('\\', '/').replace(/^(\.\/)+/, '');
+  return SUPPLIER_FEEDS.includes(normalized);
 }
 
 export function isCertificatePdfPath(path) {
@@ -36,7 +38,7 @@ function excludesBuildPermissions(path) {
   return path === 'entregas-data' || path.startsWith('entregas-data/')
     || path === 'entregas-media/live' || path.startsWith('entregas-media/live/')
     || isCertificatePdfPath(path)
-    || isCarclickSourcePath(path)
+    || isSupplierFeedPath(path)
     || path.split('/').some((part) => ['.git', '.gitignore', '.git-commit-msg.txt'].includes(part));
 }
 
