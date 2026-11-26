@@ -2542,6 +2542,65 @@
         "approved": true,
         "publicReference": "netcar-colors-continuous-20261116"
       }
+    },
+    {
+      "id": "color-20261126-20140",
+      "status": "confirmed",
+      "vehicle": {
+        "manufactureYear": 2024,
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "BRANCA",
+        "physicalIdentityKey": "f03d98e09de537444d45f3177cd51fd7646fb7accdba267e5ee69ab8f80c677f",
+        "id": "20140",
+        "brand": "PEUGEOT",
+        "model": "2008 ALLURE TURBO"
+      },
+      "officialName": "Branco Nacré",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261126-20140",
+        "verifiedAt": "2026-11-26",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "PEUGEOT",
+          "model": "2008 ALLURE TURBO",
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Perla Nera",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Branco Nacré",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Cinza Artense",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Azul Quasar",
+              "genericColor": "AZUL"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf",
+            "https://www.media.stellantis.com/br-pt/peugeot/press/novo-peugeot-2008-design-magnetico-com-atitude-sofisticacao-e-tecnologia"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
     }
   ]
 }

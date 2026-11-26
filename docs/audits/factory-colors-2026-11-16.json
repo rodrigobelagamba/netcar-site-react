@@ -47,7 +47,21 @@
         "20138",
         "19779",
         "19960",
-        "19866"
+        "19866",
+        "20140"
+      ],
+      "subsequentIndividualReviews": [
+        {
+          "id": "20140",
+          "reviewedAt": "2026-11-26",
+          "apiModel": "2008 ALLURE TURBO",
+          "xmlModel": "2008 ALLURE",
+          "manufactureYear": 2024,
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "evidence": "ID e chave física coincidem. A ficha Peugeot Brasil 24/25 identifica a única versão Allure como Turbo 200 CVT. A paleta e as fontes constam na confirmação color-20261126-20140."
+        }
       ]
     },
     "fuelRepresentation": {
