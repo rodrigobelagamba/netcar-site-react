@@ -151,13 +151,6 @@ export function SobrePage() {
         },
         { name: "Filipe", role: "Consultor", image: "/team/filipe.jpg" },
         { name: "Gilnei", role: "Consultor", image: "/team/gilnei.jpg" },
-        {
-          name: "Alexandre",
-          role: "Consultor",
-          image: "/team/alexandre.jpg",
-          imageTransform: "scale(2)",
-          imageTransformOrigin: "82% 32%",
-        },
       ],
     },
     {
