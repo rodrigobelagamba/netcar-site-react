@@ -2472,6 +2472,76 @@
         "approved": true,
         "publicReference": "netcar-colors-continuous-20261116"
       }
+    },
+    {
+      "id": "color-20261126-20180",
+      "status": "confirmed",
+      "vehicle": {
+        "id": "20180",
+        "manufactureYear": 2018,
+        "modelYear": 2018,
+        "engine": "1.6",
+        "transmission": "AUTOMATICO",
+        "fuel": "Flex",
+        "genericColor": "CINZA",
+        "physicalIdentityKey": "417f0627f58a6cfba06f9ca84731b332d93a1090e28e66f4b8a925cfee59516a",
+        "brand": "NISSAN",
+        "model": "MARCH SL"
+      },
+      "officialName": "Cinza Magnetic",
+      "evidence": {
+        "kind": "catalog-unique-match",
+        "publicReference": "factory-colors-20261126-20180",
+        "verifiedAt": "2026-11-26",
+        "verifiedBy": "catalog-review",
+        "catalog": {
+          "brand": "NISSAN",
+          "model": "MARCH SL",
+          "modelYear": 2018,
+          "engine": "1.6",
+          "transmission": "AUTOMATICO",
+          "fuel": "Flex",
+          "market": "BR",
+          "complete": true,
+          "palette": [
+            {
+              "officialName": "Preto Premium",
+              "genericColor": "PRETA"
+            },
+            {
+              "officialName": "Vermelho Alert",
+              "genericColor": "VERMELHA"
+            },
+            {
+              "officialName": "Branco Aspen",
+              "genericColor": "BRANCA"
+            },
+            {
+              "officialName": "Prata Classic",
+              "genericColor": "PRATA"
+            },
+            {
+              "officialName": "Cinza Magnetic",
+              "genericColor": "CINZA"
+            },
+            {
+              "officialName": "Azul Pacific",
+              "genericColor": "AZUL"
+            },
+            {
+              "officialName": "Branco Diamond",
+              "genericColor": "BRANCA"
+            }
+          ],
+          "sourceUrls": [
+            "https://www.nissan-cdn.net/content/dam/Nissan/br/PDF/2018/march/Catalogo_March_2018.pdf"
+          ]
+        }
+      },
+      "publication": {
+        "approved": true,
+        "publicReference": "netcar-colors-continuous-20261116"
+      }
     }
   ]
 }
