@@ -282,6 +282,32 @@
           "reviewNote": "Catálogo Hyundai da configuração2025/2026, pp.4e14, revisado em04/11/2026. Definição restrita à unidade20101 e ao banco do motorista; não implica aquecimento ou ventilação de outros bancos. A presença e publicação dependem da decisão específica da unidade."
         }
       ]
+    },
+    {
+      "id": "equipment-review-unit-20140-2026-11-27",
+      "approved": true,
+      "source": "responsible-confirmation",
+      "confirmedAt": "2026-11-27",
+      "claim": "Responsável confirmou a presença de Câmera 360° nesta unidade e autorizou sua publicação em 2026-11-27; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf (2026-11-27, Página 3, coluna Allure Turbo 200 CVT. Data é revisão documental.). Texto aprovado: Câmera 360°; Exibe imagens ao redor do veículo para auxiliar nas manobras..\nResponsável confirmou a presença de Carregador de celular por indução nesta unidade e autorizou sua publicação em 2026-11-27; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf (2026-11-27, Página 3, coluna Allure Turbo 200 CVT. Data é revisão documental.). Texto aprovado: Carregador de celular por indução; Recarga sem cabo para celulares compatíveis..\nResponsável confirmou a presença de Alerta de ponto cego nesta unidade e autorizou sua publicação em 2026-11-27; o mercado brasileiro da unidade foi confirmado. Fonte: https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf (2026-11-27, Página 2, coluna Allure Turbo 200 CVT. Data é revisão documental.). Texto aprovado: Alerta de ponto cego; Avisa sobre veículos detectados na região de ponto cego..",
+      "schemaVersion": 2,
+      "marketSource": "responsible-confirmation",
+      "match": {
+        "vehicleId": "20140",
+        "physicalIdentityKey": "f03d98e09de537444d45f3177cd51fd7646fb7accdba267e5ee69ab8f80c677f",
+        "brand": "PEUGEOT",
+        "model": "2008 ALLURE TURBO",
+        "modelYear": 2025,
+        "manufactureYear": 2024,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "presentTags": [
+        "camera_360",
+        "carregador_inducao",
+        "alerta_ponto_cego"
+      ],
+      "absentTags": []
     }
   ]
 }

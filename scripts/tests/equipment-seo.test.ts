@@ -97,6 +97,7 @@ test("approved reviewed IDs survive an absent stock snapshot to block unsafe raw
     "20090",
     "20092",
     "20101",
+    "20140",
   ]);
   assert.deepEqual(
     createEquipmentManifest(vehicles).confirmedVehicleIds,
