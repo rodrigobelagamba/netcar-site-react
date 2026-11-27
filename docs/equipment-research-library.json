@@ -1204,6 +1204,108 @@
         },
         "kind": "exact-equipment"
       }
+    },
+    {
+      "identity": {
+        "id": "20140",
+        "manufactureYear": 2024,
+        "brand": "PEUGEOT",
+        "model": "2008 ALLURE TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "item": {
+        "key": "camera-360",
+        "tag": "camera_360",
+        "label": "Câmera 360°"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf",
+        "title": "Peugeot 2008 MY24/25, ficha técnica brasileira",
+        "date": "2026-11-27",
+        "locator": "Página 3, coluna Allure Turbo 200 CVT. Data é revisão documental.",
+        "claim": "Câmera 360° é listado de série para a versão Allure Turbo 200 CVT.",
+        "match": {
+          "brand": "PEUGEOT",
+          "model": "2008 ALLURE TURBO",
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20140",
+        "manufactureYear": 2024,
+        "brand": "PEUGEOT",
+        "model": "2008 ALLURE TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "item": {
+        "key": "wireless-charging",
+        "tag": "carregador_inducao",
+        "label": "Carregador de celular por indução"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf",
+        "title": "Peugeot 2008 MY24/25, ficha técnica brasileira",
+        "date": "2026-11-27",
+        "locator": "Página 3, coluna Allure Turbo 200 CVT. Data é revisão documental.",
+        "claim": "Carregador de celular por indução é listado de série para a versão Allure Turbo 200 CVT.",
+        "match": {
+          "brand": "PEUGEOT",
+          "model": "2008 ALLURE TURBO",
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
+    },
+    {
+      "identity": {
+        "id": "20140",
+        "manufactureYear": 2024,
+        "brand": "PEUGEOT",
+        "model": "2008 ALLURE TURBO",
+        "modelYear": 2025,
+        "engine": "1.0",
+        "transmission": "AUTOMATICO",
+        "market": "BR"
+      },
+      "item": {
+        "key": "blind-spot",
+        "tag": "alerta_ponto_cego",
+        "label": "Alerta de ponto cego"
+      },
+      "classification": "standard",
+      "evidence": {
+        "url": "https://www.media.stellantis.com/uploads/br/model-document/fichatecnicapeugeot2008my2425-695bcce52dbda.pdf",
+        "title": "Peugeot 2008 MY24/25, ficha técnica brasileira",
+        "date": "2026-11-27",
+        "locator": "Página 2, coluna Allure Turbo 200 CVT. Data é revisão documental.",
+        "claim": "Alerta de ponto cego é listado de série para a versão Allure Turbo 200 CVT.",
+        "match": {
+          "brand": "PEUGEOT",
+          "model": "2008 ALLURE TURBO",
+          "modelYear": 2025,
+          "engine": "1.0",
+          "transmission": "AUTOMATICO",
+          "market": "BR"
+        },
+        "kind": "exact-equipment"
+      }
     }
   ]
 }
