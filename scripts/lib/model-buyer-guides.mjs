@@ -158,6 +158,22 @@ export const MODEL_BUYER_GUIDES = {
       }
     ]
   },
+  "nissan-march": {
+    "title": "Nissan March seminovo em Esteio | Netcar",
+    "description": "Veja os Nissan March disponíveis na Netcar em Esteio. Consulte fotos, versões e preços na Grande Porto Alegre.",
+    "intro": "Veja os Nissan March disponíveis na Netcar em Esteio.",
+    "guideTitle": "Escolha seu Nissan March",
+    "paragraphs": [
+      "Se você procura um hatch compacto, abra a ficha de um March para ver as fotos, o ano e a versão. Pelo WhatsApp da ficha, você pode combinar uma visita à loja para conhecer aquele carro."
+    ],
+    "faq": [
+      {
+        "q": "Posso avaliar meu usado na troca por um March?",
+        "a": "Sim. Informe o modelo e o ano do seu usado à equipe pelo contato do March que você escolheu."
+      }
+    ],
+    "guideLinks": []
+  },
   "nissan-sentra": {
     "title": "Nissan Sentra seminovo na Grande Porto Alegre | Netcar",
     "description": "Consulte os Nissan Sentra seminovos da Netcar em Esteio, na Grande Porto Alegre. Veja fotos, versão e preço e converse sobre a troca.",
@@ -709,6 +725,22 @@ export const MODEL_BUYER_GUIDES = {
       {
         "q": "Como falar sobre um Captur específico?",
         "a": "Abra o anúncio do carro que você gostou e use o contato da ficha. A mensagem identifica a unidade de interesse para a equipe."
+      }
+    ],
+    "guideLinks": []
+  },
+  "renault-sandero": {
+    "title": "Renault Sandero seminovo em Esteio | Netcar",
+    "description": "Encontre os anúncios de Renault Sandero e consulte a ficha da unidade que chamou sua atenção. Consulte fotos, versões e preços na Grande Porto Alegre.",
+    "intro": "Encontre os anúncios de Renault Sandero e consulte a ficha da unidade que chamou sua atenção.",
+    "guideTitle": "Conheça os Renault Sandero em Esteio",
+    "paragraphs": [
+      "Ao escolher um Sandero, confira nas fotos o espaço da cabine e do porta-malas. Na ficha você encontra o preço e o contato da equipe para tirar dúvidas antes de vir à Netcar."
+    ],
+    "faq": [
+      {
+        "q": "Como saber se posso ver um Sandero hoje?",
+        "a": "Abra a ficha da unidade e fale com a equipe pelo WhatsApp para confirmar a disponibilidade e combinar o horário."
       }
     ],
     "guideLinks": []
