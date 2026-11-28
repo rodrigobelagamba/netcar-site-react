@@ -218,9 +218,10 @@ test("Aircross keeps its own Citroën selection without guessing C3 or C4 aliase
 });
 
 
-test("208 and ix35 hubs preserve the exact family, brand and body style", () => {
+test("208, 3008 and ix35 hubs preserve the exact family, brand and body style", () => {
   const cases = [
     { slug: "peugeot-208", marca: "PEUGEOT", modelo: "208", categoria: "HATCH", accepted: ["208 STYLE", "PEUGEOT 208 ALLURE"], rejected: ["2008 ALLURE", "2080"] },
+    { slug: "peugeot-3008", marca: "PEUGEOT", modelo: "3008", categoria: "SUV", accepted: ["3008 GRIFFE PACK TURBO", "PEUGEOT 3008 ALLURE"], rejected: ["2008 ALLURE", "208 STYLE", "5008 GRIFFE", "30080"] },
     { slug: "hyundai-ix35", marca: "HYUNDAI", modelo: "IX35", categoria: "SUV", accepted: ["IX35 GL", "HYUNDAI IX35 GLS"], rejected: ["TUCSON GLS", "CRETA PLATINUM", "IX350"] },
   ];
   for (const { slug, marca, modelo, categoria, accepted, rejected } of cases) {

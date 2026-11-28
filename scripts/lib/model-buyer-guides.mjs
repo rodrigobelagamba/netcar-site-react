@@ -905,6 +905,22 @@ export const MODEL_BUYER_GUIDES = {
     ],
     "guideLinks": []
   },
+  "peugeot-3008": {
+    "title": "Peugeot 3008 seminovo na Grande Porto Alegre | Netcar",
+    "description": "Conheça o Peugeot 3008 usado ou seminovo na Netcar em Esteio. Veja fotos e preços das unidades e converse sobre seu carro na troca.",
+    "intro": "Veja os Peugeot 3008 disponíveis na Netcar, em Esteio.",
+    "guideTitle": "Conheça o Peugeot 3008 de perto",
+    "paragraphs": [
+      "Abra a ficha do SUV que você quer conhecer. Nas fotos, confira o interior e o porta-malas. Pelo WhatsApp do anúncio, você pode combinar uma visita à loja para ver o carro de perto."
+    ],
+    "faq": [
+      {
+        "q": "Posso oferecer meu usado na compra de um Peugeot 3008?",
+        "a": "Sim. Na ficha do 3008, escolha a opção de avaliar seu carro na troca e envie os dados do seu usado à equipe da Netcar."
+      }
+    ],
+    "guideLinks": []
+  },
   "toyota-yaris": {
     "title": "Toyota Yaris hatch na Grande Porto Alegre | Netcar",
     "description": "Toyota Yaris hatch usado e seminovo na Netcar em Esteio, na Grande Porto Alegre. Veja fotos, ano, versão e preço e consulte a troca.",

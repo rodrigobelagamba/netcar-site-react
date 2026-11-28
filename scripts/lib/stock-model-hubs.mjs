@@ -51,6 +51,7 @@ export const MODEL_HUBS = [
   { slug: "jeep-commander", marca: "JEEP", modelo: "COMMANDER", name: "Jeep Commander", category: "SUV" },
   { slug: "peugeot-208", marca: "PEUGEOT", modelo: "208", name: "Peugeot 208", categoria: "HATCH", category: "HATCH" },
   { slug: "peugeot-2008", marca: "PEUGEOT", modelo: "2008", name: "Peugeot 2008", category: "SUV" },
+  { slug: "peugeot-3008", marca: "PEUGEOT", modelo: "3008", name: "Peugeot 3008", categoria: "SUV", category: "SUV" },
   { slug: "toyota-yaris", marca: "TOYOTA", modelo: "YARIS", name: "Toyota Yaris hatch", categoria: "HATCH", category: "HATCH" },
   { slug: "toyota-yaris-sedan", marca: "TOYOTA", modelo: "YARIS", name: "Toyota Yaris Sedã", categoria: "SEDAN", category: "SEDAN" },
   { slug: "toyota-corolla", marca: "TOYOTA", modelo: "COROLLA", name: "Toyota Corolla", categoria: "SEDAN", category: "SEDAN" },
